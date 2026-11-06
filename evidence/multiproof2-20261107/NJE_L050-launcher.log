@@ -1,0 +1,45 @@
+{"attempt": "NJE_L050", "exit_status": 0, "wall_seconds": 4.553165379911661, "peak_rss_kib": "4293532", "swaps": "0", "print_axioms": ["'NJE_CountGroup.total' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_CountGroup.total : ∀ (a : Std.Array U32 16#usize) (n i : Usize) (hn : ↑n ≤ 16) (active : ↑i < ↑n),
+  List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) →
+    ∃ q,
+      multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n ((↑a)[↑i].wrapping_shr 1#u32) i = ok q ∧
+        ↑q = MultiproofConeLiveOrder.advance (NJA_CountDrop.keys a) ↑n ↑i ∧ ↑i + 1 ≤ ↑q ∧ ↑q ≤ ↑n ∧ ↑q ≤ ↑i + 2 :=
+fun a n i hn active sorted =>
+  have head := unread_cons (NJA_CountDrop.keys a) (↑n) (↑i) active;
+  have sorted' :=
+    id (fun sorted => Eq.mp (congrArg (fun _a => List.Pairwise (fun x1 x2 => x1 < x2) _a) head) sorted) sorted;
+  let ⟨q, h✝⟩ := NJA_CountSorted.group a n i h
+...
+           (congrArg (Eq ↑q)
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg hp) x_0 x_1 x_2 x_3)
+                      (MultiproofConeLiveOrder.instDecidablePairAt (NJA_CountDrop.keys a) ↑n ↑i) ℕ (↑i + 2) (↑i + 1))))
+                (Decidable.byContradiction fun a_1 =>
+                  total._proof_6 a n i q lower upper x xs
+                    (Eq.mp (congrFun' (congrArg Eq (congrArg List.length rest_eq)) (↑n - (↑i + 1))) rest_length) next
+                    (Eq.mp
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans (List.length_map fun j => NJA_CountDrop.keys a (↑q + j)) List.length_range))
+                        (xs.length + 1))
+                      lengths)
+                    a_1))
+          (Eq.symm h) (Eq.refl (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1))))
+      (Eq.refl (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1)));
+  have adv := advance_bounds (NJA_CountDrop.keys a) (↑n) (↑i) active;
+  Exists.intro q
+    ⟨hq,
+      ⟨eq,
+        ⟨Decidable.byContradiction fun a_1 => total._proof_7 a n i q eq adv a_1,
+          ⟨upper,
+            Eq.mpr (id (congrArg (fun _a => _a ≤ ↑i + 2) eq))
+              (id
+                (Decidable.casesOn (MultiproofConeLiveOrder.instDecidablePairAt (NJA_CountDrop.keys a) ↑n ↑i)
+                  (fun h =>
+                    Eq.mpr (id (congrFun' (congrArg LE.le (if_neg h)) (↑i + 2)))
+                      (Decidable.byContradiction fun a_1 => total._proof_9 a n i q a_1))
+                  fun h =>
+                  Eq.mpr (id (congrFun' (congrArg LE.le (if_pos h)) (↑i + 2)))
+                    (Decidable.byContradiction fun a_1 => total._proof_8 a n i q a_1)))⟩⟩⟩⟩
+'NJE_CountGroup.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2e48af5e40eb45508be9269ba1f4cee2.scope; invocation ID: 3e88dcf4b13f47b2b35738a4d894b93f

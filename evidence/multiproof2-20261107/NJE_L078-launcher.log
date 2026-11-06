@@ -1,0 +1,48 @@
+{"attempt": "NJE_L078", "exit_status": 0, "wall_seconds": 3.6605003718286753, "peak_rss_kib": "4319580", "swaps": "0", "print_axioms": ["'NJE_CountLevels.total' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_CountLevels.total : ∀ (height : ℕ) (start : U32) (a : Std.Array U32 16#usize) (n c : Usize),
+  ↑start + height = 18 →
+    ↑n ≤ 16 →
+      List.Pairwise (fun x1 x2 => x1 < x2) (cells (NJA_CountDrop.keys a) 0 ↑n) →
+        (∀ x ∈ cells (NJA_CountDrop.keys a) 0 ↑n, x < 262144) →
+          ↑c + 16 * height ≤ 576 →
+            ∃ d,
+              multiproof.node_count_loop0 { start := start, «end» := 18#u32 } multiproof.Arity.Two a n c = ok d ∧
+                ↑d = ↑c + nodeCount height (cells (NJA_CountDrop.keys a) 0 ↑n) :=
+fun height start a n c clock hn sorted range budget =>
+  Nat.recAux (motive := fun height =>
+    ∀ (start : U32) (a : Std.Array U32 16#usize) (n c : Usize),
+      
+...
+)))
+                                    (List.range ↑n)))
+                                (List.length_map fun j => NJA_CountDrop.keys a j))
+                              List.length_range))
+                          ↑n)
+                        (eq_self ↑n));
+                  Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          ↑c + (countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).2 +
+                              nodeCount height (countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).1 =
+                            ↑c +
+                              ((countLevel _a (cells (NJA_CountDrop.keys a) 0 ↑n)).2 +
+                                nodeCount height (countLevel _a (cells (NJA_CountDrop.keys a) 0 ↑n)).1))
+                        len))
+                    (of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Nat.add_assoc (↑c) (countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).2
+                              (nodeCount height (countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).1)))
+                          (↑c +
+                            ((countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).2 +
+                              nodeCount height (countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).1)))
+                        (eq_self
+                          (↑c +
+                            ((countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).2 +
+                              nodeCount height (countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).1)))))))))⟩)
+    height start a n c clock hn sorted range budget
+'NJE_CountLevels.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r583b97b6651b413f9d80cb67279a0a05.scope; invocation ID: ef23b48a5f0c412cbcac88c42c38e9de

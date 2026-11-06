@@ -1,0 +1,80 @@
+NJE_lean/NJE_CountRange.lean:17:34: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  0 ≤ a ≤ 17
+  a - b ≥ 0
+where
+ a := ↑↑s
+ b := ↑U32.max
+NJE_lean/NJE_CountRange.lean:22:1: error: Tactic `apply` failed: could not unify the conclusion of `@UScalar.eq_of_val_eq`
+  ?i = ?j
+with the goal
+  ↑s + 1 = (s.bv.toNat + 1#u32.bv.toNat) % 2 ^ UScalarTy.U32.numBits
+
+Note: The full type of `@UScalar.eq_of_val_eq` is
+  ∀ {ty : UScalarTy} {i j : UScalar ty}, ↑i = ↑j → i = j
+
+s : U32
+bound : ↑s < 18
+small : ↑s < U32.max
+⊢ ↑s + 1 = (s.bv.toNat + 1#u32.bv.toNat) % 2 ^ UScalarTy.U32.numBits
+theorem NJE_CountRange.value : ∀ (s : U32), ↑s < 18 → ↑(successor s) = ↑s + 1 :=
+fun s bound => id (id (id (id (Nat.mod_eq_of_lt (Decidable.byContradiction fun a => value._proof_1 s bound a)))))
+'NJE_CountRange.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountRange.active : ∀ (s : U32),
+  ↑s < 18 →
+    core.iter.range.IteratorRange.next core.iter.range.StepU32 { start := s, «end» := 18#u32 } =
+      ok (some s, { start := successor s, «end» := 18#u32 }) :=
+fun s bound =>
+  have small := sorry;
+  sorry small
+'NJE_CountRange.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CountRange.exit : core.iter.range.IteratorRange.next core.iter.range.StepU32
+    { start := 18#u32, «end» := 18#u32 } =
+  ok (none, { start := 18#u32, «end» := 18#u32 }) :=
+of_eq_true
+  (Eq.trans
+    (congrFun'
+      (congrArg Eq
+        (Eq.trans
+          (Eq.trans
+            (congr
+              (congrArg Bind.bind
+                (congrArg ok
+                  (Eq.trans
+                    (Decidable.decide.congr_simp (↑18#u32 < ↑18#u32) False
+                      (Eq.trans
+                        (congr
+                          (congrArg LT.lt
+                            (UScalar.ofNatCore_val_eq
+                              (UScalar.bound_suffices UScalarTy.U32 18 (of_decide_eq_true (id (Eq.refl true))))))
+                          (UScalar.ofNatCore_val_eq
+                            (UScalar.bound_suffices UScalarTy.U32 18 (of_decide_eq_true (id (Eq.refl true))))))
+                        (lt_self_iff_false._simp_1 18)))
+                    (decide_false instDecidableFalse))))
+              (funext fun cmp =>
+                ite_congr (Eq.refl (cmp = true))
+                  (fun a =>
+                    bind_tc_ok 18#u32 fun y => do
+                      let n ← core.iter.range.UScalarStep.forward_checked y 1#usize
+                      match n with
+                        | none => fail Error.panic
+                        | some n => ok (some y, { start := n, «end» := 18#u32 }))
+                  fun a => Eq.refl (ok (none, { start := 18#u32, «end» := 18#u32 }))))
+            (bind_tc_ok false fun y =>
+              if y = true then do
+                let n ← core.iter.range.UScalarStep.forward_checked 18#u32 1#usize
+                match n with
+                  | none => fail Error.panic
+                  | some n => ok (some 18#u32, { start := n, «end» := 18#u32 })
+              else ok (none, { start := 18#u32, «end» := 18#u32 })))
+          (ite_cond_eq_false
+            (do
+              let n ← core.iter.range.UScalarStep.forward_checked 18#u32 1#usize
+              match n with
+                | none => fail Error.panic
+                | some n => ok (some 18#u32, { start := n, «end» := 18#u32 }))
+            (ok (none, { start := 18#u32, «end» := 18#u32 })) Bool.false_eq_true)))
+      (ok (none, { start := 18#u32, «end» := 18#u32 })))
+    (eq_self (ok (none, { start := 18#u32, «end» := 18#u32 }))))
+'NJE_CountRange.exit' depends on axioms: [propext, Classical.choice, Quot.sound]

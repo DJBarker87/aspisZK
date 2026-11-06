@@ -1,0 +1,26 @@
+NJE_lean/NJE_PermutationFold.lean:21:17: error: Application type mismatch: The argument
+  proof
+has type
+  Expr
+but is expected to have type
+  Name
+in the application
+  @closeMainGoal proof
+NJE_lean/NJE_PermutationFold.lean:32:17: error: Application type mismatch: The argument
+  __do_lift✝
+has type
+  Expr
+but is expected to have type
+  Name
+in the application
+  @closeMainGoal __do_lift✝
+theorem NJE_PermutationFold.folded : ∀ {K : Type} [inst : Field K] (state : Fin 16 → K),
+  List.foldl (fun s r => R0P.poseidonApplyRound r s) (R0P.poseidonExternalLinear state) (List.ofFn fun r => r) =
+    R0P.poseidonPermutation state :=
+fun {K} [Field K] state => id sorry
+'NJE_PermutationFold.folded' depends on axioms: [propext, sorryAx, Quot.sound]
+theorem NJE_PermutationFold.compose : ∀ {σ : Type} {n : ℕ} (states : Fin (n + 1) → σ) (steps : Fin n → σ → σ),
+  (∀ (i : Fin n), states i.succ = steps i (states i.castSucc)) →
+    List.foldl (fun s step => step s) (states 0) (List.ofFn steps) = states (Fin.last n) :=
+fun {σ} {n} states steps next => sorry
+'NJE_PermutationFold.compose' depends on axioms: [propext, sorryAx]

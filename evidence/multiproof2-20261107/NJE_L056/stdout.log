@@ -1,0 +1,31 @@
+theorem NJE_AddValue.law : ∀ (x c : U32),
+  ↑x < 2147483647 →
+    ↑c < 2147483647 →
+      AspisR1SemanticCallExtraction.aspis_core.field.M31.add x c = ok (add x c) ∧
+        ↑(add x c) < 2147483647 ∧ ↑↑(add x c) = ↑↑x + ↑↑c :=
+fun x c hx hc =>
+  Eq.mpr
+    (id
+      (congr
+        (congrArg And
+          (congrArg (Eq (AspisR1SemanticCallExtraction.aspis_core.field.M31.add x c))
+            (congrArg ok
+              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos ⟨hx, hc⟩) x_0 x_1 x_2 x_3) instDecidableAnd U32
+                (fun h => Classical.choose (add._proof_1 x c h)) fun h => 0#u32))))
+        (congr
+          (congrArg And
+            (congrFun'
+              (congrArg LT.lt
+                (congrArg UScalar.val
+                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos ⟨hx, hc⟩) x_0 x_1 x_2 x_3) instDecidableAnd
+                    U32 (fun h => Classical.choose (add._proof_1 x c h)) fun h => 0#u32)))
+              2147483647))
+          (congrFun'
+            (congrArg Eq
+              (congrArg Nat.cast
+                (congrArg UScalar.val
+                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos ⟨hx, hc⟩) x_0 x_1 x_2 x_3) instDecidableAnd
+                    U32 (fun h => Classical.choose (add._proof_1 x c h)) fun h => 0#u32))))
+            (↑↑x + ↑↑c)))))
+    (Classical.choose_spec (NJA_Compress.add_law x c hx hc))
+'NJE_AddValue.law' depends on axioms: [propext, Classical.choice, Quot.sound]

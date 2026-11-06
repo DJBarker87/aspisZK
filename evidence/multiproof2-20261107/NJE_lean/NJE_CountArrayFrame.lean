@@ -8,7 +8,7 @@ open Aeneas Aeneas.Std
 
 theorem get_set {α : Type} [Inhabited α] (a : Array α 16#usize) (w : Usize) (x : α)
     (bound : w.val<16) (j : Nat) (hj : j<16) :
-    (a.set w x).val[j]!=(if j=w.val then x else a.val[j]!) := by
+    (a.set w x).val[j]! = (if j=w.val then x else a.val[j]!) := by
  have len : a.val.length=16 := a.property
  by_cases same : j=w.val
  · subst j

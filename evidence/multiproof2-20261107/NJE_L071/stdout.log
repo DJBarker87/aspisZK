@@ -1,0 +1,91 @@
+NJE_lean/NJE_CountRange.lean:17:13: error: Application type mismatch: The argument
+  successor s
+has type
+  U32
+but is expected to have type
+  Result (UScalar UScalarTy.U32)
+in the application
+  s + 1#u32 = successor s
+NJE_lean/NJE_CountRange.lean:22:1: error: Tactic `apply` failed: could not unify the conclusion of `@UScalar.eq_of_val_eq`
+  ?i = ?j
+with the goal
+  (if core.cmp.impls.PartialOrdU32.lt s 18#u32 = true then do
+      let n ← if h : ↑s < U32.max then ok (some (UScalar.ofNatCore (↑s + 1) ⋯)) else ok none
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some s, { start := n, «end» := 18#u32 })
+    else ok (none, { start := s, «end» := 18#u32 })) =
+    ok (some s, { start := successor s, «end» := 18#u32 })
+
+Note: The full type of `@UScalar.eq_of_val_eq` is
+  ∀ {ty : UScalarTy} {i j : UScalar ty}, ↑i = ↑j → i = j
+
+s : U32
+bound : ↑s < 18
+word : s + 1#u32 = sorry
+⊢ (if core.cmp.impls.PartialOrdU32.lt s 18#u32 = true then do
+      let n ← if h : ↑s < U32.max then ok (some (UScalar.ofNatCore (↑s + 1) ⋯)) else ok none
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some s, { start := n, «end» := 18#u32 })
+    else ok (none, { start := s, «end» := 18#u32 })) =
+    ok (some s, { start := successor s, «end» := 18#u32 })
+NJE_lean/NJE_CountRange.lean:20:46: warning: This simp argument is unused:
+  bound
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵r̵a̵n̵g̵e̵.̵I̵t̵e̵r̵a̵t̵o̵r̵R̵a̵n̵g̵e̵.̵n̵e̵x̵t̵,̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵r̵a̵n̵g̵e̵.̵S̵t̵e̵p̵U̵3̵2̵,̵
+  ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵r̵a̵n̵g̵e̵.̵U̵S̵c̵a̵l̵a̵r̵S̵t̵e̵p̵,̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵r̵a̵n̵g̵e̵.̵U̵S̵c̵a̵l̵a̵r̵S̵t̵e̵p̵.̵f̵o̵r̵w̵a̵r̵d̵_̵c̵h̵e̵c̵k̵e̵d̵,̵
+  ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵O̵r̵d̵U̵3̵2̵,̵c̵o̵r̵e̵.̵c̵l̵o̵n̵e̵.̵C̵l̵o̵n̵e̵U̵3̵2̵,̵b̵o̵u̵n̵d̵]̵[̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲r̲a̲n̲g̲e̲.̲I̲t̲e̲r̲a̲t̲o̲r̲R̲a̲n̲g̲e̲.̲n̲e̲x̲t̲,̲ ̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲r̲a̲n̲g̲e̲.̲S̲t̲e̲p̲U̲3̲2̲,̲ ̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲r̲a̲n̲g̲e̲.̲U̲S̲c̲a̲l̲a̲r̲S̲t̲e̲p̲,̲
+  ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲r̲a̲n̲g̲e̲.̲U̲S̲c̲a̲l̲a̲r̲S̲t̲e̲p̲.̲f̲o̲r̲w̲a̲r̲d̲_̲c̲h̲e̲c̲k̲e̲d̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲O̲r̲d̲U̲3̲2̲,̲ ̲c̲o̲r̲e̲.̲c̲l̲o̲n̲e̲.̲C̲l̲o̲n̲e̲U̲3̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJE_lean/NJE_CountRange.lean:28:47: error: unsolved goals
+⊢ core.cmp.impls.PartialOrdU32.lt 18#u32 18#u32 = true →
+    (do
+        let n ← core.iter.range.UScalarStep.forward_checked 18#u32 1#usize
+        match n with
+          | none => fail Error.panic
+          | some n => ok (some 18#u32, { start := n, «end» := 18#u32 })) =
+      ok (none, { start := 18#u32, «end» := 18#u32 })
+theorem NJE_CountRange.value : ∀ (s : U32), ↑s < 18 → ↑(successor s) = ↑s + 1 :=
+fun s bound => id (id (id (id (Nat.mod_eq_of_lt (Decidable.byContradiction fun a => value._proof_1 s bound a)))))
+'NJE_CountRange.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountRange.active : ∀ (s : U32),
+  ↑s < 18 →
+    core.iter.range.IteratorRange.next core.iter.range.StepU32 { start := s, «end» := 18#u32 } =
+      ok (some s, { start := successor s, «end» := 18#u32 }) :=
+fun s bound =>
+  have word := sorry;
+  sorry word
+'NJE_CountRange.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CountRange.exit : core.iter.range.IteratorRange.next core.iter.range.StepU32
+    { start := 18#u32, «end» := 18#u32 } =
+  ok (none, { start := 18#u32, «end» := 18#u32 }) :=
+Eq.mpr
+  (id
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (Bind.bind (ok (core.cmp.impls.PartialOrdU32.lt 18#u32 18#u32)))
+              (funext fun cmp =>
+                ite_congr (Eq.refl (cmp = true))
+                  (fun a =>
+                    bind_tc_ok 18#u32 fun y => do
+                      let n ← core.iter.range.UScalarStep.forward_checked y 1#usize
+                      match n with
+                        | none => fail Error.panic
+                        | some n => ok (some y, { start := n, «end» := 18#u32 }))
+                  fun a => Eq.refl (ok (none, { start := 18#u32, «end» := 18#u32 }))))
+            (bind_tc_ok (core.cmp.impls.PartialOrdU32.lt 18#u32 18#u32) fun y =>
+              if y = true then do
+                let n ← core.iter.range.UScalarStep.forward_checked 18#u32 1#usize
+                match n with
+                  | none => fail Error.panic
+                  | some n => ok (some 18#u32, { start := n, «end» := 18#u32 })
+              else ok (none, { start := 18#u32, «end» := 18#u32 }))))
+        (ok (none, { start := 18#u32, «end» := 18#u32 })))
+      ite_eq_right_iff._simp_1))
+  sorry
+'NJE_CountRange.exit' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

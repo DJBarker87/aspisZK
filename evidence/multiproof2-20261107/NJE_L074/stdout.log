@@ -1,0 +1,375 @@
+theorem NJE_CountRange.value : ∀ (s : U32), ↑s < 18 → ↑(successor s) = ↑s + 1 :=
+fun s bound => id (id (id (id (Nat.mod_eq_of_lt (Decidable.byContradiction fun a => value._proof_1 s bound a)))))
+'NJE_CountRange.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountRange.active : ∀ (s : U32),
+  ↑s < 18 →
+    core.iter.range.IteratorRange.next core.iter.range.StepU32 { start := s, «end» := 18#u32 } =
+      ok (some s, { start := successor s, «end» := 18#u32 }) :=
+fun s bound =>
+  have small := active._proof_1 s bound;
+  Eq.mpr
+    (id
+      (Eq.trans
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congr
+                    (congrArg Bind.bind
+                      (congrArg ok
+                        (Eq.trans
+                          (Decidable.decide.congr_simp (↑s < ↑18#u32) True
+                            (Eq.trans
+                              (congrArg (LT.lt ↑s)
+                                (UScalar.ofNatCore_val_eq
+                                  (UScalar.bound_suffices UScalarTy.U32 18 (of_decide_eq_true (id (Eq.refl true))))))
+                              (eq_true bound)))
+                          (decide_true instDecidableTrue))))
+                    (funext fun cmp =>
+                      ite_congr (Eq.refl (cmp = true))
+                        (fun a =>
+                          Eq.trans
+                            (Eq.trans
+                              (congrArg (Bind.bind (ok s))
+                                (funext fun range' =>
+                                  congrFun'
+                                    (congrArg Bind.bind
+                                      (dite_congr
+                                        (Eq.trans
+                                          (congr
+                                            (congrArg LE.le
+                                              (congrArg (HAdd.hAdd ↑range')
+                                                (UScalar.ofNatCore_val_eq
+                                                  (UScalar.bound_suffices UScalarTy.Usize 1
+                                                    core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                                            UScalar.max_UScalarTy_U32_eq)
+                                          Order.add_one_le_iff._simp_1)
+                                        (fun h =>
+                                          congrArg ok
+                                            (congrArg some
+                                              (UScalar.ofNatCore.congr_simp (↑range' + ↑1#usize) (↑range' + 1)
+                                                (congrArg (HAdd.hAdd ↑range')
+                                                  (UScalar.ofNatCore_val_eq
+                                                    (UScalar.bound_suffices UScalarTy.Usize 1
+                                                      core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)))
+                                                (core.iter.range.UScalarStep.forward_checked._proof_7 range' 1#usize
+                                                  (Eq.mpr_prop
+                                                    (Eq.trans
+                                                      (congr
+                                                        (congrArg LE.le
+                                                          (congrArg (HAdd.hAdd ↑range')
+                                                            (UScalar.ofNatCore_val_eq
+                                                              (UScalar.bound_suffices UScalarTy.Usize 1
+                                                                core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                                                        UScalar.max_UScalarTy_U32_eq)
+                                                      Order.add_one_le_iff._simp_1)
+                                                    h)))))
+                                        fun h => Eq.refl (ok none)))
+                                    fun n =>
+                                    match n with
+                                    | none => fail Error.panic
+                                    | some n => ok (some range', { start := n, «end» := 18#u32 })))
+                              (bind_tc_ok s fun y => do
+                                let n ←
+                                  if h : ↑y < U32.max then
+                                      ok
+                                        (some
+                                          (UScalar.ofNatCore (↑y + 1)
+                                            (congrArg (HAdd.hAdd ↑y)
+                                                (UScalar.ofNatCore_val_eq
+                                                  (UScalar.bound_suffices UScalarTy.Usize 1
+                                                    core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+                                              core.iter.range.UScalarStep.forward_checked._proof_7 y 1#usize
+                                                (Eq.mpr_prop
+                                                  (Eq.trans
+                                                    (congr
+                                                      (congrArg LE.le
+                                                        (congrArg (HAdd.hAdd ↑y)
+                                                          (UScalar.ofNatCore_val_eq
+                                                            (UScalar.bound_suffices UScalarTy.Usize 1
+                                                              core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                                                      UScalar.max_UScalarTy_U32_eq)
+                                                    Order.add_one_le_iff._simp_1)
+                                                  h))))
+                                    else ok none
+                                match n with
+                                  | none => fail Error.panic
+                                  | some n => ok (some y, { start := n, «end» := 18#u32 })))
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind (dite_cond_eq_true (eq_true small))) fun n =>
+                                match n with
+                                | none => fail Error.panic
+                                | some n => ok (some s, { start := n, «end» := 18#u32 }))
+                              (bind_tc_ok
+                                (some
+                                  (UScalar.ofNatCore (↑s + 1)
+                                    (congrArg (HAdd.hAdd ↑s)
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.Usize 1
+                                            core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+                                      core.iter.range.UScalarStep.forward_checked._proof_7 s 1#usize
+                                        (Eq.mpr_prop
+                                          (Eq.trans
+                                            (congr
+                                              (congrArg LE.le
+                                                (congrArg (HAdd.hAdd ↑s)
+                                                  (UScalar.ofNatCore_val_eq
+                                                    (UScalar.bound_suffices UScalarTy.Usize 1
+                                                      core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                                              UScalar.max_UScalarTy_U32_eq)
+                                            Order.add_one_le_iff._simp_1)
+                                          (of_eq_true (eq_true small))))))
+                                fun y =>
+                                match y with
+                                | none => fail Error.panic
+                                | some n => ok (some s, { start := n, «end» := 18#u32 }))))
+                        fun a => Eq.refl (ok (none, { start := s, «end» := 18#u32 }))))
+                  (bind_tc_ok true fun y =>
+                    if y = true then
+                      ok
+                        (some s,
+                          {
+                            start :=
+                              UScalar.ofNatCore (↑s + 1)
+                                (congrArg (HAdd.hAdd ↑s)
+                                    (UScalar.ofNatCore_val_eq
+                                      (UScalar.bound_suffices UScalarTy.Usize 1
+                                        core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+                                  core.iter.range.UScalarStep.forward_checked._proof_7 s 1#usize
+                                    (Eq.mpr_prop
+                                      (Eq.trans
+                                        (congr
+                                          (congrArg LE.le
+                                            (congrArg (HAdd.hAdd ↑s)
+                                              (UScalar.ofNatCore_val_eq
+                                                (UScalar.bound_suffices UScalarTy.Usize 1
+                                                  core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                                          UScalar.max_UScalarTy_U32_eq)
+                                        Order.add_one_le_iff._simp_1)
+                                      (of_eq_true (eq_true small)))),
+                            «end» := 18#u32 })
+                    else ok (none, { start := s, «end» := 18#u32 })))
+                (ite_cond_eq_true
+                  (ok
+                    (some s,
+                      {
+                        start :=
+                          UScalar.ofNatCore (↑s + 1)
+                            (congrArg (HAdd.hAdd ↑s)
+                                (UScalar.ofNatCore_val_eq
+                                  (UScalar.bound_suffices UScalarTy.Usize 1
+                                    core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+                              core.iter.range.UScalarStep.forward_checked._proof_7 s 1#usize
+                                (Eq.mpr_prop
+                                  (Eq.trans
+                                    (congr
+                                      (congrArg LE.le
+                                        (congrArg (HAdd.hAdd ↑s)
+                                          (UScalar.ofNatCore_val_eq
+                                            (UScalar.bound_suffices UScalarTy.Usize 1
+                                              core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                                      UScalar.max_UScalarTy_U32_eq)
+                                    Order.add_one_le_iff._simp_1)
+                                  (of_eq_true (eq_true small)))),
+                        «end» := 18#u32 }))
+                  (ok (none, { start := s, «end» := 18#u32 })) (eq_self true))))
+            (ok (some s, { start := successor s, «end» := 18#u32 })))
+          (ok.injEq
+            (some s,
+              {
+                start :=
+                  UScalar.ofNatCore (↑s + 1)
+                    (congrArg (HAdd.hAdd ↑s)
+                        (UScalar.ofNatCore_val_eq
+                          (UScalar.bound_suffices UScalarTy.Usize 1
+                            core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+                      core.iter.range.UScalarStep.forward_checked._proof_7 s 1#usize
+                        (Eq.mpr_prop
+                          (Eq.trans
+                            (congr
+                              (congrArg LE.le
+                                (congrArg (HAdd.hAdd ↑s)
+                                  (UScalar.ofNatCore_val_eq
+                                    (UScalar.bound_suffices UScalarTy.Usize 1
+                                      core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                              UScalar.max_UScalarTy_U32_eq)
+                            Order.add_one_le_iff._simp_1)
+                          (of_eq_true (eq_true small)))),
+                «end» := 18#u32 })
+            (some s, { start := successor s, «end» := 18#u32 })))
+        (Eq.trans
+          (Prod.mk.injEq (some s)
+            {
+              start :=
+                UScalar.ofNatCore (↑s + 1)
+                  (congrArg (HAdd.hAdd ↑s)
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 1
+                          core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+                    core.iter.range.UScalarStep.forward_checked._proof_7 s 1#usize
+                      (Eq.mpr_prop
+                        (Eq.trans
+                          (congr
+                            (congrArg LE.le
+                              (congrArg (HAdd.hAdd ↑s)
+                                (UScalar.ofNatCore_val_eq
+                                  (UScalar.bound_suffices UScalarTy.Usize 1
+                                    core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                            UScalar.max_UScalarTy_U32_eq)
+                          Order.add_one_le_iff._simp_1)
+                        (of_eq_true (eq_true small)))),
+              «end» := 18#u32 }
+            (some s) { start := successor s, «end» := 18#u32 })
+          (Eq.trans
+            (congr (congrArg And (eq_self (some s)))
+              (Eq.trans
+                (core.ops.range.Range.mk.injEq
+                  (UScalar.ofNatCore (↑s + 1)
+                    (congrArg (HAdd.hAdd ↑s)
+                        (UScalar.ofNatCore_val_eq
+                          (UScalar.bound_suffices UScalarTy.Usize 1
+                            core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+                      core.iter.range.UScalarStep.forward_checked._proof_7 s 1#usize
+                        (Eq.mpr_prop
+                          (Eq.trans
+                            (congr
+                              (congrArg LE.le
+                                (congrArg (HAdd.hAdd ↑s)
+                                  (UScalar.ofNatCore_val_eq
+                                    (UScalar.bound_suffices UScalarTy.Usize 1
+                                      core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                              UScalar.max_UScalarTy_U32_eq)
+                            Order.add_one_le_iff._simp_1)
+                          (of_eq_true (eq_true small)))))
+                  18#u32 (successor s) 18#u32)
+                (Eq.trans
+                  (congrArg
+                    (And
+                      (UScalar.ofNatCore (↑s + 1)
+                          (congrArg (HAdd.hAdd ↑s)
+                              (UScalar.ofNatCore_val_eq
+                                (UScalar.bound_suffices UScalarTy.Usize 1
+                                  core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+                            core.iter.range.UScalarStep.forward_checked._proof_7 s 1#usize
+                              (Eq.mpr_prop
+                                (Eq.trans
+                                  (congr
+                                    (congrArg LE.le
+                                      (congrArg (HAdd.hAdd ↑s)
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.Usize 1
+                                            core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                                    UScalar.max_UScalarTy_U32_eq)
+                                  Order.add_one_le_iff._simp_1)
+                                (of_eq_true (eq_true small)))) =
+                        successor s))
+                    (eq_self 18#u32))
+                  (and_true
+                    (UScalar.ofNatCore (↑s + 1)
+                        (congrArg (HAdd.hAdd ↑s)
+                            (UScalar.ofNatCore_val_eq
+                              (UScalar.bound_suffices UScalarTy.Usize 1
+                                core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+                          core.iter.range.UScalarStep.forward_checked._proof_7 s 1#usize
+                            (Eq.mpr_prop
+                              (Eq.trans
+                                (congr
+                                  (congrArg LE.le
+                                    (congrArg (HAdd.hAdd ↑s)
+                                      (UScalar.ofNatCore_val_eq
+                                        (UScalar.bound_suffices UScalarTy.Usize 1
+                                          core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                                  UScalar.max_UScalarTy_U32_eq)
+                                Order.add_one_le_iff._simp_1)
+                              (of_eq_true (eq_true small)))) =
+                      successor s)))))
+            (true_and
+              (UScalar.ofNatCore (↑s + 1)
+                  (congrArg (HAdd.hAdd ↑s)
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 1
+                          core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+                    core.iter.range.UScalarStep.forward_checked._proof_7 s 1#usize
+                      (Eq.mpr_prop
+                        (Eq.trans
+                          (congr
+                            (congrArg LE.le
+                              (congrArg (HAdd.hAdd ↑s)
+                                (UScalar.ofNatCore_val_eq
+                                  (UScalar.bound_suffices UScalarTy.Usize 1
+                                    core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                            UScalar.max_UScalarTy_U32_eq)
+                          Order.add_one_le_iff._simp_1)
+                        (of_eq_true (eq_true small)))) =
+                successor s))))))
+    ((fun {ty} x x_1 e_x =>
+        Eq.rec (motive := fun x_2 e_x =>
+          ∀ (h : x < 2 ^ ty.numBits), UScalar.ofNatCore x h = UScalar.ofNatCore x_2 (e_x ▸ h))
+          (fun h => Eq.refl (UScalar.ofNatCore x h)) e_x)
+      (↑s + 1) ((s.bv.toNat + 1#u32.bv.toNat) % 2 ^ UScalarTy.U32.numBits) (id (Eq.symm (value s bound)))
+      (congrArg (HAdd.hAdd ↑s)
+          (UScalar.ofNatCore_val_eq
+            (UScalar.bound_suffices UScalarTy.Usize 1 core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1)) ▸
+        core.iter.range.UScalarStep.forward_checked._proof_7 s 1#usize
+          (Eq.mpr_prop
+            (Eq.trans
+              (congr
+                (congrArg LE.le
+                  (congrArg (HAdd.hAdd ↑s)
+                    (UScalar.ofNatCore_val_eq
+                      (UScalar.bound_suffices UScalarTy.Usize 1
+                        core.iter.adapters.enumerate.IteratorEnumerate.next._proof_1))))
+                UScalar.max_UScalarTy_U32_eq)
+              Order.add_one_le_iff._simp_1)
+            (of_eq_true (eq_true small)))))
+'NJE_CountRange.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountRange.exit : core.iter.range.IteratorRange.next core.iter.range.StepU32
+    { start := 18#u32, «end» := 18#u32 } =
+  ok (none, { start := 18#u32, «end» := 18#u32 }) :=
+of_eq_true
+  (Eq.trans
+    (congrFun'
+      (congrArg Eq
+        (Eq.trans
+          (Eq.trans
+            (congr
+              (congrArg Bind.bind
+                (congrArg ok
+                  (Eq.trans
+                    (Decidable.decide.congr_simp (↑18#u32 < ↑18#u32) False
+                      (Eq.trans
+                        (congr
+                          (congrArg LT.lt
+                            (UScalar.ofNatCore_val_eq
+                              (UScalar.bound_suffices UScalarTy.U32 18 (of_decide_eq_true (id (Eq.refl true))))))
+                          (UScalar.ofNatCore_val_eq
+                            (UScalar.bound_suffices UScalarTy.U32 18 (of_decide_eq_true (id (Eq.refl true))))))
+                        (lt_self_iff_false._simp_1 18)))
+                    (decide_false instDecidableFalse))))
+              (funext fun cmp =>
+                ite_congr (Eq.refl (cmp = true))
+                  (fun a =>
+                    bind_tc_ok 18#u32 fun y => do
+                      let n ← core.iter.range.UScalarStep.forward_checked y 1#usize
+                      match n with
+                        | none => fail Error.panic
+                        | some n => ok (some y, { start := n, «end» := 18#u32 }))
+                  fun a => Eq.refl (ok (none, { start := 18#u32, «end» := 18#u32 }))))
+            (bind_tc_ok false fun y =>
+              if y = true then do
+                let n ← core.iter.range.UScalarStep.forward_checked 18#u32 1#usize
+                match n with
+                  | none => fail Error.panic
+                  | some n => ok (some 18#u32, { start := n, «end» := 18#u32 })
+              else ok (none, { start := 18#u32, «end» := 18#u32 })))
+          (ite_cond_eq_false
+            (do
+              let n ← core.iter.range.UScalarStep.forward_checked 18#u32 1#usize
+              match n with
+                | none => fail Error.panic
+                | some n => ok (some 18#u32, { start := n, «end» := 18#u32 }))
+            (ok (none, { start := 18#u32, «end» := 18#u32 })) Bool.false_eq_true)))
+      (ok (none, { start := 18#u32, «end» := 18#u32 })))
+    (eq_self (ok (none, { start := 18#u32, «end» := 18#u32 }))))
+'NJE_CountRange.exit' depends on axioms: [propext, Classical.choice, Quot.sound]

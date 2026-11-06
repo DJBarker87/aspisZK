@@ -1,0 +1,382 @@
+theorem NJE_WellFrozen.window_pair : ∀ (xs : List U32),
+  ∀ s ∈ NJA_WellIteration.windows xs, ∃ a b, s = NJA_WellPredicateLaws.pair a b :=
+fun xs =>
+  List.rec (motive := fun xs => ∀ s ∈ NJA_WellIteration.windows xs, ∃ a b, s = NJA_WellPredicateLaws.pair a b)
+    (of_eq_true
+      (Eq.trans
+        (forall_congr fun s =>
+          Eq.trans (implies_congr List.not_mem_nil._simp_1 (Eq.refl (∃ a b, s = NJA_WellPredicateLaws.pair a b)))
+            IsEmpty.forall_iff._simp_1)
+        (implies_true (Slice U32))))
+    (fun a xs ih =>
+      List.casesOn (motive := fun t =>
+        xs = t → ∀ s ∈ NJA_WellIteration.windows (a :: xs), ∃ a b, s = NJA_WellPredicateLaws.pair a b) xs
+        (fun h =>
+          Eq.ndrec (motive := fun xs =>
+            (∀ s ∈ NJA_WellIteration.windows xs, ∃ a b, s = NJA_WellPredicateLaws.pair a b) →
+              ∀ s ∈ NJA_WellIteration.windows (a :: xs), ∃ a b, s = NJA_WellPredicateLaws.pair a b)
+            (fun ih =>
+              of_eq_true
+                (Eq.trans
+                  (forall_congr fun s =>
+                    Eq.trans
+                      (implies_congr List.not_mem_nil._simp_1 (Eq.refl (∃ a b, s = NJA_WellPredicateLaws.pair a b)))
+                      IsEmpty.forall_iff._simp_1)
+                  (implies_true (Slice U32))))
+            (Eq.symm h) ih)
+        (fun b bs h =>
+          Eq.ndrec (motive := fun xs =>
+            (∀ s ∈ NJA_WellIteration.windows xs, ∃ a b, s = NJA_WellPredicateLaws.pair a b) →
+              ∀ s ∈ NJA_WellIteration.windows (a :: xs), ∃ a b, s = NJA_WellPredicateLaws.pair a b)
+            (fun ih s hs =>
+              Or.casesOn (Eq.mp window_pair._simp_1 hs) (fun h => Eq.symm h ▸ Exists.intro a (Exists.intro b rfl))
+                fun hs => ih s hs)
+            (Eq.symm h) ih)
+        (Eq.refl xs))
+    xs
+'NJE_WellFrozen.window_pair' depends on axioms: [propext, Quot.sound]
+theorem NJE_WellFrozen.order_all : ∀ (xs : List U32),
+  allCalls orderFn (NJA_WellIteration.windows xs) = ok ((NJA_WellIteration.windows xs).all NJE_WellSource.order) :=
+fun xs =>
+  let ⟨tail, h⟩ :=
+    NJE_AllCalls.default_all orderFn NJE_WellSource.order (NJA_WellIteration.windows xs) fun s hs =>
+      let ⟨a, h✝⟩ := window_pair xs s hs
+      let ⟨b, h✝¹⟩ := h✝
+      Eq.ndrec (motive := fun s =>
+        s ∈ NJA_WellIteration.windows xs → orderFn.call_mut () s = ok (NJE_WellSource.order s, ()))
+        (fun hs =>
+          Eq.mpr
+            (id
+              (congrArg
+                (Eq
+                  (multiproof.well_formed.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU32Bool.call_mut ()
+                    (NJA_WellPredicateLaws.pair a b)))
+                (congrArg ok (congrFun' (congrArg Prod.mk (NJE_WellSource.order_pair a b)) ()))))
+            (NJA_WellPredicateLaws.order a b ()))
+        (Eq.symm h✝¹) hs
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans (congrFun' (congrArg Bind.bind h) (uncurry fun b _ => ok b))
+            (bind_tc_ok ((NJA_WellIteration.windows xs).all NJE_WellSource.order, tail) (uncurry fun b _ => ok b))))
+        (ok ((NJA_WellIteration.windows xs).all NJE_WellSource.order))))
+    (Eq.refl
+      (let (b, _) := ((NJA_WellIteration.windows xs).all NJE_WellSource.order, tail)
+      ok b))
+'NJE_WellFrozen.order_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellFrozen.domain_all : ∀ (xs : List U32), allCalls domainFn xs = ok (xs.all NJE_WellSource.domain) :=
+fun xs =>
+  let ⟨tail, h⟩ :=
+    NJE_AllCalls.default_all domainFn NJE_WellSource.domain xs fun x hx => NJA_WellPredicateLaws.domain x ()
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans (congrFun' (congrArg Bind.bind h) (uncurry fun b _ => ok b))
+            (bind_tc_ok (xs.all NJE_WellSource.domain, tail) (uncurry fun b _ => ok b))))
+        (ok (xs.all NJE_WellSource.domain))))
+    (Eq.refl
+      (let (b, _) := (xs.all NJE_WellSource.domain, tail)
+      ok b))
+'NJE_WellFrozen.domain_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellFrozen.association : ∀ (indices : Slice U32), emitted indices = NJE_WellSource.emitted ↑indices :=
+fun indices =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congrArg (Bind.bind (core.slice.Slice.is_empty indices))
+            (funext fun empty =>
+              congr
+                (congrArg Bind.bind
+                  (ite_congr (Eq.refl (empty = true)) (fun a => congrArg ok (eq_self true)) fun a =>
+                    Eq.refl (ok (indices.len > 16#usize))))
+                (funext fun reject =>
+                  ite_congr (Eq.refl reject) (fun a => Eq.refl (ok false)) fun a =>
+                    Eq.trans
+                      (congr (congrArg Bind.bind (order_all ↑indices))
+                        (funext fun ordered =>
+                          ite_congr (Eq.refl (ordered = true)) (fun a => domain_all ↑indices) fun a =>
+                            Eq.refl (ok false)))
+                      (bind_tc_ok ((NJA_WellIteration.windows ↑indices).all NJE_WellSource.order) fun y =>
+                        if y = true then ok ((↑indices).all NJE_WellSource.domain) else ok false)))))
+        (NJE_WellSource.emitted ↑indices)))
+    (Eq.mpr
+      (id
+        (congr
+          (congrArg Eq
+            (congrArg (Bind.bind (ok (decide (indices.length = 0))))
+              (funext fun empty =>
+                congrFun'
+                  (congrArg Bind.bind
+                    (ite_congr (Eq.refl (empty = true)) (fun a => Eq.refl (ok True)) fun a =>
+                      Eq.refl (ok (Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices) > 16#usize))))
+                  fun reject =>
+                  if reject then ok false
+                  else
+                    if (NJA_WellIteration.windows ↑indices).all NJE_WellSource.order = true then
+                      ok ((↑indices).all NJE_WellSource.domain)
+                    else ok false)))
+          (ite_congr (Eq.refl ((↑indices).isEmpty = true)) (fun a => Eq.refl (ok false)) fun a =>
+            ite_congr (Eq.refl ((↑indices).length ≤ 16))
+              (fun a =>
+                congr
+                  (congrArg Bind.bind
+                    (NJE_WellSource.all_result NJE_WellSource.order (NJA_WellIteration.windows ↑indices)))
+                  (funext fun ordered =>
+                    ite_congr (Eq.refl (ordered = true))
+                      (fun a => NJE_WellSource.all_result NJE_WellSource.domain ↑indices) fun a => Eq.refl (ok false)))
+              fun a => Eq.refl (ok false))))
+      (if empty : ↑indices = [] then
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (Eq.trans
+                    (congr
+                      (congrArg Bind.bind
+                        (congrArg ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp (indices.length = 0) True
+                              (Eq.trans (congrFun' (congrArg Eq (congrArg List.length empty)) 0) (eq_self 0)))
+                            (decide_true instDecidableTrue))))
+                      (funext fun empty_1 =>
+                        congr
+                          (congrArg Bind.bind
+                            (ite_congr (Eq.refl (empty_1 = true)) (fun a => Eq.refl (ok True)) fun a =>
+                              congrArg ok
+                                (Eq.trans
+                                  (Eq.trans
+                                    (congrFun'
+                                      (congrArg GT.gt
+                                        (Usize.ofNatCore.congr_simp (↑indices).length 0 (congrArg List.length empty)
+                                          (Slice.len._proof_1 indices)))
+                                      16#usize)
+                                    gt_iff_lt._simp_1)
+                                  (Eq.trans
+                                    (UScalar.lt_equiv._simp_1 16#usize
+                                      (Usize.ofNatCore 0 (congrArg List.length empty ▸ Slice.len._proof_1 indices)))
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg LT.lt
+                                          (UScalar.ofNatCore_val_eq
+                                            (UScalar.bound_suffices UScalarTy.Usize 16 emitted._proof_1)))
+                                        (Usize.ofNatCore_val_eq
+                                          (congrArg List.length empty ▸ Slice.len._proof_1 indices)))
+                                      not_lt_zero._simp_1)))))
+                          (funext fun reject =>
+                            ite_congr (Eq.refl reject) (fun a => Eq.refl (ok false)) fun a =>
+                              ite_congr
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (congrFun' (congrArg List.all (congrArg NJA_WellIteration.windows empty))
+                                        NJE_WellSource.order))
+                                    true)
+                                  List.all_eq_true._simp_1)
+                                (fun a => congrArg ok (congrFun' (congrArg List.all empty) NJE_WellSource.domain))
+                                fun a => Eq.refl (ok false))))
+                    (bind_tc_ok true fun y => do
+                      let reject ← if y = true then ok True else ok False
+                      if reject then ok false
+                        else
+                          if ∀ x ∈ NJA_WellIteration.windows [], NJE_WellSource.order x = true then ok true
+                          else ok false))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind (ite_cond_eq_true (ok True) (ok False) (eq_self true)))
+                        fun reject =>
+                        if reject then ok false
+                        else
+                          if ∀ x ∈ NJA_WellIteration.windows [], NJE_WellSource.order x = true then ok true
+                          else ok false)
+                      (bind_tc_ok True fun y =>
+                        if y then ok false
+                        else
+                          if ∀ x ∈ NJA_WellIteration.windows [], NJE_WellSource.order x = true then ok true
+                          else ok false))
+                    (ite_cond_eq_true (ok false)
+                      (if ∀ x ∈ NJA_WellIteration.windows [], NJE_WellSource.order x = true then ok true else ok false)
+                      (Eq.refl True)))))
+              (ite_cond_eq_true (ok false)
+                (if (↑indices).length ≤ 16 then do
+                  let ordered ← ok ((NJA_WellIteration.windows ↑indices).all NJE_WellSource.order)
+                  if ordered = true then ok ((↑indices).all NJE_WellSource.domain) else ok false
+                else ok false)
+                (Eq.trans (congrFun' (congrArg Eq (congrArg List.isEmpty empty)) true) (eq_self true))))
+            (eq_self (ok false)))
+      else
+        if small : (↑indices).length ≤ 16 then
+          of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans
+                      (congr
+                        (congrArg Bind.bind
+                          (congrArg ok
+                            (Eq.trans
+                              (Decidable.decide.congr_simp (indices.length = 0) False
+                                (Eq.trans List.length_eq_zero_iff._simp_1 (eq_false empty)))
+                              (decide_false instDecidableFalse))))
+                        (funext fun empty =>
+                          congr
+                            (congrArg Bind.bind
+                              (ite_congr (Eq.refl (empty = true)) (fun a => Eq.refl (ok True)) fun a =>
+                                congrArg ok
+                                  (Eq.trans gt_iff_lt._simp_1
+                                    (Eq.trans
+                                      (UScalar.lt_equiv._simp_1 16#usize
+                                        (Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices)))
+                                      (Eq.trans
+                                        (congr
+                                          (congrArg LT.lt
+                                            (UScalar.ofNatCore_val_eq
+                                              (UScalar.bound_suffices UScalarTy.Usize 16 emitted._proof_1)))
+                                          (Usize.ofNatCore_val_eq (Slice.len._proof_1 indices)))
+                                        (eq_false
+                                          (have this := fun a => association._proof_3 indices small a;
+                                          this)))))))
+                            (funext fun reject =>
+                              ite_congr (Eq.refl reject) (fun a => Eq.refl (ok false)) fun a =>
+                                ite_congr List.all_eq_true._simp_1
+                                  (fun a => Eq.refl (ok ((↑indices).all NJE_WellSource.domain))) fun a =>
+                                  Eq.refl (ok false))))
+                      (bind_tc_ok false fun y => do
+                        let reject ← if y = true then ok True else ok False
+                        if reject then ok false
+                          else
+                            if ∀ x ∈ NJA_WellIteration.windows ↑indices, NJE_WellSource.order x = true then
+                              ok ((↑indices).all NJE_WellSource.domain)
+                            else ok false))
+                    (Eq.trans
+                      (Eq.trans
+                        (congrFun' (congrArg Bind.bind (ite_cond_eq_false (ok True) (ok False) Bool.false_eq_true))
+                          fun reject =>
+                          if reject then ok false
+                          else
+                            if ∀ x ∈ NJA_WellIteration.windows ↑indices, NJE_WellSource.order x = true then
+                              ok ((↑indices).all NJE_WellSource.domain)
+                            else ok false)
+                        (bind_tc_ok False fun y =>
+                          if y then ok false
+                          else
+                            if ∀ x ∈ NJA_WellIteration.windows ↑indices, NJE_WellSource.order x = true then
+                              ok ((↑indices).all NJE_WellSource.domain)
+                            else ok false))
+                      (ite_cond_eq_false (ok false)
+                        (if ∀ x ∈ NJA_WellIteration.windows ↑indices, NJE_WellSource.order x = true then
+                          ok ((↑indices).all NJE_WellSource.domain)
+                        else ok false)
+                        (Eq.refl False)))))
+                (Eq.trans
+                  (ite_cond_eq_false (ok false)
+                    (if (↑indices).length ≤ 16 then do
+                      let ordered ← ok ((NJA_WellIteration.windows ↑indices).all NJE_WellSource.order)
+                      if ordered = true then ok ((↑indices).all NJE_WellSource.domain) else ok false
+                    else ok false)
+                    (Eq.trans List.isEmpty_iff._simp_1 (eq_false empty)))
+                  (Eq.trans
+                    (ite_cond_eq_true
+                      (do
+                        let ordered ← ok ((NJA_WellIteration.windows ↑indices).all NJE_WellSource.order)
+                        if ordered = true then ok ((↑indices).all NJE_WellSource.domain) else ok false)
+                      (ok false) (eq_true small))
+                    (Eq.trans
+                      (bind_tc_ok ((NJA_WellIteration.windows ↑indices).all NJE_WellSource.order) fun y =>
+                        if y = true then ok ((↑indices).all NJE_WellSource.domain) else ok false)
+                      (ite_congr List.all_eq_true._simp_1 (fun a => Eq.refl (ok ((↑indices).all NJE_WellSource.domain)))
+                        fun a => Eq.refl (ok false))))))
+              (eq_self
+                (if ∀ x ∈ NJA_WellIteration.windows ↑indices, NJE_WellSource.order x = true then
+                  ok ((↑indices).all NJE_WellSource.domain)
+                else ok false)))
+        else
+          of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg Eq
+                  (Eq.trans
+                    (congr
+                      (congrArg Bind.bind
+                        (congrArg ok
+                          (Eq.trans
+                            (Decidable.decide.congr_simp (indices.length = 0) False
+                              (Eq.trans List.length_eq_zero_iff._simp_1 (eq_false empty)))
+                            (decide_false instDecidableFalse))))
+                      (funext fun empty =>
+                        Eq.trans
+                          (Eq.trans
+                            (congr
+                              (congrArg Bind.bind
+                                (Eq.trans
+                                  (ite_congr (Eq.refl (empty = true)) (fun a => Eq.refl (ok True)) fun a =>
+                                    congrArg ok
+                                      (Eq.trans gt_iff_lt._simp_1
+                                        (Eq.trans
+                                          (UScalar.lt_equiv._simp_1 16#usize
+                                            (Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices)))
+                                          (Eq.trans
+                                            (congr
+                                              (congrArg LT.lt
+                                                (UScalar.ofNatCore_val_eq
+                                                  (UScalar.bound_suffices UScalarTy.Usize 16 emitted._proof_1)))
+                                              (Usize.ofNatCore_val_eq (Slice.len._proof_1 indices)))
+                                            (eq_true
+                                              (have this :=
+                                                Decidable.byContradiction fun a => association._proof_4 indices small a;
+                                              this))))))
+                                  (ite_self (ok True))))
+                              (funext fun reject =>
+                                ite_congr (Eq.refl reject) (fun a => Eq.refl (ok false)) fun a =>
+                                  ite_congr List.all_eq_true._simp_1
+                                    (fun a => Eq.refl (ok ((↑indices).all NJE_WellSource.domain))) fun a =>
+                                    Eq.refl (ok false)))
+                            (bind_tc_ok True fun y =>
+                              if y then ok false
+                              else
+                                if ∀ x ∈ NJA_WellIteration.windows ↑indices, NJE_WellSource.order x = true then
+                                  ok ((↑indices).all NJE_WellSource.domain)
+                                else ok false))
+                          (ite_cond_eq_true (ok false)
+                            (if ∀ x ∈ NJA_WellIteration.windows ↑indices, NJE_WellSource.order x = true then
+                              ok ((↑indices).all NJE_WellSource.domain)
+                            else ok false)
+                            (Eq.refl True))))
+                    (bind_tc_ok false fun y => ok false)))
+                (Eq.trans
+                  (ite_cond_eq_false (ok false)
+                    (if (↑indices).length ≤ 16 then do
+                      let ordered ← ok ((NJA_WellIteration.windows ↑indices).all NJE_WellSource.order)
+                      if ordered = true then ok ((↑indices).all NJE_WellSource.domain) else ok false
+                    else ok false)
+                    (Eq.trans List.isEmpty_iff._simp_1 (eq_false empty)))
+                  (ite_cond_eq_false
+                    (do
+                      let ordered ← ok ((NJA_WellIteration.windows ↑indices).all NJE_WellSource.order)
+                      if ordered = true then ok ((↑indices).all NJE_WellSource.domain) else ok false)
+                    (ok false) (eq_false small))))
+              (eq_self (ok false)))))
+'NJE_WellFrozen.association' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellFrozen.TX1_128 : ∀ (indices : Slice U32) (out : Bool) (calls : ℕ),
+  NJE_WellPacket.Cut (↑indices) (NJE_WellPacket.ordered ↑indices) (NJE_WellPacket.domain ↑indices) out calls →
+    emitted indices = ok out ∧
+      out = decide (AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) ↑indices)) :=
+fun indices out calls cut =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a = ok out ∧ out = decide (AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) ↑indices)))
+        (association indices)))
+    (NJE_WellPacket.TX1_128 (↑indices) out calls cut)
+'NJE_WellFrozen.TX1_128' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellFrozen.TX2_094 : ∀ (indices : Slice U32) (out : Bool) (calls : ℕ),
+  NJE_WellPacket.Cut (↑indices) (NJE_WellPacket.ordered ↑indices) (NJE_WellPacket.domain ↑indices) out calls →
+    emitted indices = ok out ∧
+      out = decide (AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) ↑indices)) :=
+fun indices out calls cut => TX1_128 indices out calls cut
+'NJE_WellFrozen.TX2_094' depends on axioms: [propext, Classical.choice, Quot.sound]

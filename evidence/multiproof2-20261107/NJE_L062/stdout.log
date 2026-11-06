@@ -1,0 +1,805 @@
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Slice T × (Slice T → Slice T)) :=
+fun {T} r s =>
+  if ↑r.end ≤ s.length then ok (⟨List.slice 0 ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! 0 ↑s', ⋯⟩) else fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T × (Slice T → Slice T)) :=
+fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+    ok (⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩)
+  else fail Error.panic
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α → Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+def List.setSlice!.{u_1} : {α : Type u_1} → List α → ℕ → List α → List α :=
+fun {α} s i s' =>
+  have s0 := List.take i s;
+  have n := min s'.length (s.length - i);
+  have s1 := List.take n s';
+  have s2 := List.drop (i + n) s;
+  s0 ++ s1 ++ s2
+NJE_lean/NJE_CountInit.lean:27:47: error: unsolved goals
+indices : Slice U32
+bound : (↑indices).length ≤ 16
+⊢ ⟨↑indices ++
+        List.drop (↑indices).length
+          [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+            0#u32],
+      ⋯⟩ =
+    ⟨↑indices ++ List.replicate (16 - (↑indices).length) 0#u32, ⋯⟩
+NJE_lean/NJE_CountInit.lean:31:3: warning: This simp argument is unused:
+  core.slice.index.SliceIndexRangeUsizeSlice.index_mut
+
+Hint: Omit it from the simp argument list.
+  simp [̵s̵o̵u̵r̵c̵e̵,̵c̵o̵r̵e̵.̵a̵r̵r̵a̵y̵.̵A̵r̵r̵a̵y̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵c̵o̵r̵e̵.̵o̵p̵s̵.̵i̵n̵d̵e̵x̵.̵I̵n̵d̵e̵x̵M̵u̵t̵S̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵T̵o̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵,̵[̲s̲o̲u̲r̲c̲e̲,̲ ̲c̲o̲r̲e̲.̲a̲r̲r̲a̲y̲.̲A̲r̲r̲a̲y̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲ ̲c̲o̲r̲e̲.̲o̲p̲s̲.̲i̲n̲d̲e̲x̲.̲I̲n̲d̲e̲x̲M̲u̲t̲S̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲T̲o̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲,̲
+     core.slice.index.SliceIndexRangeToUsizeSlice.index_mut, c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵r̵e̵p̵e̵a̵t̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵v̵a̵l̵u̵e̵,̵b̵o̵u̵n̵d̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵L̵i̵s̵t̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵]̵c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲r̲e̲p̲e̲a̲t̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲ ̲v̲a̲l̲u̲e̲,̲ ̲b̲o̲u̲n̲d̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲L̲i̲s̲t̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJE_CountInit.result : ∀ (indices : Slice U32) (bound : (↑indices).length ≤ 16),
+  source indices = ok (value indices bound) :=
+fun indices bound =>
+  Eq.mpr
+    (id
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (congrFun'
+                  (congrArg Bind.bind
+                    (Eq.trans
+                      (Eq.trans
+                        (congr
+                          (congrArg Bind.bind
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg
+                                  {
+                                      indexInst :=
+                                        core.ops.index.IndexSlice
+                                          { sealedInst := core.slice.index.private_slice_index.SealedRangeToUsize,
+                                            get := core.slice.index.SliceIndexRangeToUsizeSlice.get,
+                                            get_mut := core.slice.index.SliceIndexRangeToUsizeSlice.get_mut,
+                                            get_unchecked := core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked,
+                                            get_unchecked_mut :=
+                                              core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked_mut,
+                                            index := core.slice.index.SliceIndexRangeToUsizeSlice.index,
+                                            index_mut := core.slice.index.SliceIndexRangeToUsizeSlice.index_mut },
+                                      index_mut :=
+                                        core.slice.index.Slice.index_mut
+                                          { sealedInst := core.slice.index.private_slice_index.SealedRangeToUsize,
+                                            get := core.slice.index.SliceIndexRangeToUsizeSlice.get,
+                                            get_mut := core.slice.index.SliceIndexRangeToUsizeSlice.get_mut,
+                                            get_unchecked := core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked,
+                                            get_unchecked_mut :=
+                                              core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked_mut,
+                                            index := core.slice.index.SliceIndexRangeToUsizeSlice.index,
+                                            index_mut :=
+                                              core.slice.index.SliceIndexRangeToUsizeSlice.index_mut } }.index_mut
+                                  (Subtype.mk.congr_simp ↑(Array.repeat 16#usize 0#u32)
+                                    [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                      0#u32, 0#u32, 0#u32, 0#u32]
+                                    (congrArg Subtype.val
+                                      (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                        [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                          0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                        (congrFun'
+                                          (congrArg List.replicate
+                                            (UScalar.ofNatCore_val_eq
+                                              (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                          0#u32)
+                                        (Array.repeat._proof_1 16#usize 0#u32)))
+                                    (Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32))))
+                                { «end» := Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices) })
+                              (Eq.trans
+                                (ite_cond_eq_true
+                                  (ok
+                                    (⟨List.slice 0
+                                          ↑{
+                                                «end» :=
+                                                  Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices) }.end
+                                          ↑⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                                0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32],
+                                              congrArg Subtype.val
+                                                  (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                                    [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                                      0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                                    (congrFun'
+                                                      (congrArg List.replicate
+                                                        (UScalar.ofNatCore_val_eq
+                                                          (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                                      0#u32)
+                                                    (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                                Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩,
+                                        core.slice.index.SliceIndexRangeToUsizeSlice.get._proof_1
+                                          { «end» := Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices) }
+                                          ⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                              0#u32, 0#u32, 0#u32, 0#u32, 0#u32],
+                                            congrArg Subtype.val
+                                                (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                                  [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                                    0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                                  (congrFun'
+                                                    (congrArg List.replicate
+                                                      (UScalar.ofNatCore_val_eq
+                                                        (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                                    0#u32)
+                                                  (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                              Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩⟩,
+                                      fun s' =>
+                                      ⟨(↑⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                                  0#u32, 0#u32, 0#u32, 0#u32, 0#u32],
+                                                congrArg Subtype.val
+                                                    (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                                      [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                                        0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                                      (congrFun'
+                                                        (congrArg List.replicate
+                                                          (UScalar.ofNatCore_val_eq
+                                                            (UScalar.bound_suffices UScalarTy.Usize 16
+                                                              source._proof_1)))
+                                                        0#u32)
+                                                      (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                                  Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩).setSlice!
+                                          0 ↑s',
+                                        core.slice.index.SliceIndexRangeToUsizeSlice.index_mut._proof_1
+                                          ⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                              0#u32, 0#u32, 0#u32, 0#u32, 0#u32],
+                                            congrArg Subtype.val
+                                                (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                                  [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                                    0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                                  (congrFun'
+                                                    (congrArg List.replicate
+                                                      (UScalar.ofNatCore_val_eq
+                                                        (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                                    0#u32)
+                                                  (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                              Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩
+                                          s'⟩))
+                                  (fail Error.panic)
+                                  (Eq.trans
+                                    (congr (congrArg LE.le (Usize.ofNatCore_val_eq (Slice.len._proof_1 indices)))
+                                      (congrFun'
+                                        (congrArg HAdd.hAdd
+                                          (congrFun'
+                                            (congrArg HAdd.hAdd
+                                              (congrFun'
+                                                (congrArg HAdd.hAdd
+                                                  (congrFun'
+                                                    (congrArg HAdd.hAdd
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun'
+                                                                (congrArg HAdd.hAdd
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd
+                                                                                  (congrFun'
+                                                                                    (congrArg HAdd.hAdd
+                                                                                      (congrFun'
+                                                                                        (congrArg HAdd.hAdd
+                                                                                          (congrFun'
+                                                                                            (congrArg HAdd.hAdd
+                                                                                              (congrFun'
+                                                                                                (congrArg HAdd.hAdd
+                                                                                                  (zero_add 1))
+                                                                                                1))
+                                                                                            1))
+                                                                                        1))
+                                                                                    1))
+                                                                                1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                1))
+                                                            1))
+                                                        1))
+                                                    1))
+                                                1))
+                                            1))
+                                        1))
+                                    (eq_true bound)))
+                                (congrArg ok
+                                  (congr
+                                    (congrArg Prod.mk
+                                      (Subtype.mk.congr_simp
+                                        (List.slice 0
+                                          ↑{
+                                                «end» :=
+                                                  Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices) }.end
+                                          ↑⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                                0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32],
+                                              congrArg Subtype.val
+                                                  (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                                    [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                                      0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                                    (congrFun'
+                                                      (congrArg List.replicate
+                                                        (UScalar.ofNatCore_val_eq
+                                                          (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                                      0#u32)
+                                                    (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                                Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩)
+                                        (List.take (↑indices).length
+                                          [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                            0#u32, 0#u32, 0#u32, 0#u32, 0#u32])
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg (List.slice 0)
+                                              (Usize.ofNatCore_val_eq (Slice.len._proof_1 indices)))
+                                            [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                              0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32])
+                                          (List.slice_zero_j
+                                            [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                              0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]))
+                                        (core.slice.index.SliceIndexRangeToUsizeSlice.get._proof_1
+                                          { «end» := Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices) }
+                                          ⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                              0#u32, 0#u32, 0#u32, 0#u32, 0#u32],
+                                            congrArg Subtype.val
+                                                (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                                  [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                                    0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                                  (congrFun'
+                                                    (congrArg List.replicate
+                                                      (UScalar.ofNatCore_val_eq
+                                                        (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                                    0#u32)
+                                                  (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                              Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩)))
+                                    (funext fun s' =>
+                                      Subtype.mk.congr_simp
+                                        ((↑⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                                  0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32],
+                                                congrArg Subtype.val
+                                                    (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                                      [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                                        0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                                      (congrFun'
+                                                        (congrArg List.replicate
+                                                          (UScalar.ofNatCore_val_eq
+                                                            (UScalar.bound_suffices UScalarTy.Usize 16
+                                                              source._proof_1)))
+                                                        0#u32)
+                                                      (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                                  Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩).setSlice!
+                                          0 ↑s')
+                                        (List.take (min (↑s').length 16) ↑s' ++
+                                          List.drop (min (↑s').length 16)
+                                            [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                              0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32])
+                                        (congr
+                                          (congrArg HAppend.hAppend
+                                            (congrArg (HAppend.hAppend [])
+                                              (congrFun'
+                                                (congrArg List.take
+                                                  (congrArg (min (↑s').length)
+                                                    (Eq.trans
+                                                      (congrFun'
+                                                        (congrArg HSub.hSub
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun'
+                                                                (congrArg HAdd.hAdd
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd
+                                                                                  (congrFun'
+                                                                                    (congrArg HAdd.hAdd
+                                                                                      (congrFun'
+                                                                                        (congrArg HAdd.hAdd
+                                                                                          (congrFun'
+                                                                                            (congrArg HAdd.hAdd
+                                                                                              (congrFun'
+                                                                                                (congrArg HAdd.hAdd
+                                                                                                  (congrFun' ⋯ 1))
+                                                                                                1))
+                                                                                            1))
+                                                                                        1))
+                                                                                    1))
+                                                                                1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                1))
+                                                            1))
+                                                        0)
+                                                      (tsub_zero 16))))
+                                                ↑s')))
+                                          (congrFun'
+                                            (congrArg List.drop
+                                              (Eq.trans
+                                                (congrArg (HAdd.hAdd 0)
+                                                  (congrArg (min (↑s').length)
+                                                    (Eq.trans
+                                                      (congrFun'
+                                                        (congrArg HSub.hSub
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun'
+                                                                (congrArg HAdd.hAdd
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd
+                                                                                  (congrFun'
+                                                                                    (congrArg HAdd.hAdd
+                                                                                      (congrFun'
+                                                                                        (congrArg HAdd.hAdd
+                                                                                          (congrFun'
+                                                                                            (congrArg HAdd.hAdd
+                                                                                              (congrFun'
+                                                                                                (congrArg HAdd.hAdd
+                                                                                                  (congrFun' ⋯ 1))
+                                                                                                1))
+                                                                                            1))
+                                                                                        1))
+                                                                                    1))
+                                                                                1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                1))
+                                                            1))
+                                                        0)
+                                                      (tsub_zero 16))))
+                                                (zero_add (min (↑s').length 16))))
+                                            [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                              0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]))
+                                        (core.slice.index.SliceIndexRangeToUsizeSlice.index_mut._proof_1
+                                          ⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                              0#u32, 0#u32, 0#u32, 0#u32, 0#u32],
+                                            congrArg Subtype.val
+                                                (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                                  [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                                    0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                                  (congrFun'
+                                                    (congrArg List.replicate
+                                                      (UScalar.ofNatCore_val_eq
+                                                        (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                                    0#u32)
+                                                  (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                              Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩
+                                          s')))))))
+                          (funext fun __x =>
+                            congrArg ok
+                              (congrArg (Prod.mk __x.1)
+                                (funext fun o =>
+                                  dite_congr
+                                    (congrArg (Eq (↑(__x.2 o)).length)
+                                      (UScalar.ofNatCore_val_eq
+                                        (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                    (fun h =>
+                                      Eq.refl
+                                        ⟨↑(__x.2 o),
+                                          Array.from_slice._proof_1 (__x.2 o)
+                                            (Eq.mpr_prop
+                                              (congrArg (Eq (↑(__x.2 o)).length)
+                                                (UScalar.ofNatCore_val_eq
+                                                  (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                              h)⟩)
+                                    fun h =>
+                                    Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                      [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                        0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                      (congrFun'
+                                        (congrArg List.replicate
+                                          (UScalar.ofNatCore_val_eq
+                                            (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                        0#u32)
+                                      (Array.repeat._proof_1 16#usize 0#u32)))))
+                        (bind_tc_ok
+                          (⟨List.take (↑indices).length
+                                [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                  0#u32, 0#u32, 0#u32, 0#u32],
+                              Eq.trans
+                                  (congrFun'
+                                    (congrArg (List.slice 0) (Usize.ofNatCore_val_eq (Slice.len._proof_1 indices)))
+                                    [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                      0#u32, 0#u32, 0#u32, 0#u32])
+                                  (List.slice_zero_j
+                                    [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                      0#u32, 0#u32, 0#u32, 0#u32]) ▸
+                                core.slice.index.SliceIndexRangeToUsizeSlice.get._proof_1
+                                  { «end» := Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices) }
+                                  ⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                      0#u32, 0#u32, 0#u32, 0#u32],
+                                    congrArg Subtype.val
+                                        (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                          [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                            0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                          (congrFun'
+                                            (congrArg List.replicate
+                                              (UScalar.ofNatCore_val_eq
+                                                (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                            0#u32)
+                                          (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                      Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩⟩,
+                            fun s' =>
+                            ⟨List.take (min (↑s').length 16) ↑s' ++
+                                List.drop (min (↑s').length 16)
+                                  [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                    0#u32, 0#u32, 0#u32, 0#u32],
+                              congr
+                                  (congrArg HAppend.hAppend
+                                    (congrArg (HAppend.hAppend [])
+                                      (congrFun'
+                                        (congrArg List.take
+                                          (congrArg (min (↑s').length)
+                                            (Eq.trans
+                                              (congrFun'
+                                                (congrArg HSub.hSub
+                                                  (congrFun'
+                                                    (congrArg HAdd.hAdd
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun'
+                                                                (congrArg HAdd.hAdd
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd
+                                                                                  (congrFun'
+                                                                                    (congrArg HAdd.hAdd
+                                                                                      (congrFun'
+                                                                                        (congrArg HAdd.hAdd
+                                                                                          (congrFun'
+                                                                                            (congrArg HAdd.hAdd
+                                                                                              (congrFun'
+                                                                                                (congrArg HAdd.hAdd
+                                                                                                  (congrFun' ⋯ 1))
+                                                                                                1))
+                                                                                            1))
+                                                                                        1))
+                                                                                    1))
+                                                                                1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                1))
+                                                            1))
+                                                        1))
+                                                    1))
+                                                0)
+                                              (tsub_zero 16))))
+                                        ↑s')))
+                                  (congrFun'
+                                    (congrArg List.drop
+                                      (Eq.trans
+                                        (congrArg (HAdd.hAdd 0)
+                                          (congrArg (min (↑s').length)
+                                            (Eq.trans
+                                              (congrFun'
+                                                (congrArg HSub.hSub
+                                                  (congrFun'
+                                                    (congrArg HAdd.hAdd
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun'
+                                                                (congrArg HAdd.hAdd
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd
+                                                                                  (congrFun'
+                                                                                    (congrArg HAdd.hAdd
+                                                                                      (congrFun'
+                                                                                        (congrArg HAdd.hAdd
+                                                                                          (congrFun'
+                                                                                            (congrArg HAdd.hAdd
+                                                                                              (congrFun'
+                                                                                                (congrArg HAdd.hAdd
+                                                                                                  (congrFun' ⋯ 1))
+                                                                                                1))
+                                                                                            1))
+                                                                                        1))
+                                                                                    1))
+                                                                                1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                1))
+                                                            1))
+                                                        1))
+                                                    1))
+                                                0)
+                                              (tsub_zero 16))))
+                                        (zero_add (min (↑s').length 16))))
+                                    [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                      0#u32, 0#u32, 0#u32, 0#u32]) ▸
+                                core.slice.index.SliceIndexRangeToUsizeSlice.index_mut._proof_1
+                                  ⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                      0#u32, 0#u32, 0#u32, 0#u32],
+                                    congrArg Subtype.val
+                                        (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                          [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                            0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                          (congrFun'
+                                            (congrArg List.replicate
+                                              (UScalar.ofNatCore_val_eq
+                                                (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                            0#u32)
+                                          (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                      Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩
+                                  s'⟩)
+                          fun y =>
+                          ok
+                            (y.1, fun o =>
+                              if h : (↑(y.2 o)).length = 16 then
+                                ⟨↑(y.2 o),
+                                  Array.from_slice._proof_1 (y.2 o)
+                                    (Eq.mpr_prop
+                                      (congrArg (Eq (↑(y.2 o)).length)
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                      h)⟩
+                              else
+                                ⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                    0#u32, 0#u32, 0#u32, 0#u32],
+                                  congrFun'
+                                      (congrArg List.replicate
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                      0#u32 ▸
+                                    Array.repeat._proof_1 16#usize 0#u32⟩)))
+                      (congrArg ok
+                        (congrArg
+                          (Prod.mk
+                            ⟨List.take (↑indices).length
+                                [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                  0#u32, 0#u32, 0#u32, 0#u32],
+                              Eq.trans
+                                  (congrFun'
+                                    (congrArg (List.slice 0) (Usize.ofNatCore_val_eq (Slice.len._proof_1 indices)))
+                                    [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                      0#u32, 0#u32, 0#u32, 0#u32])
+                                  (List.slice_zero_j
+                                    [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                      0#u32, 0#u32, 0#u32, 0#u32]) ▸
+                                core.slice.index.SliceIndexRangeToUsizeSlice.get._proof_1
+                                  { «end» := Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices) }
+                                  ⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                      0#u32, 0#u32, 0#u32, 0#u32],
+                                    congrArg Subtype.val
+                                        (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                          [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                            0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                          (congrFun'
+                                            (congrArg List.replicate
+                                              (UScalar.ofNatCore_val_eq
+                                                (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                            0#u32)
+                                          (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                      Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩⟩)
+                          (funext fun o =>
+                            dite_cond_eq_true
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg Eq
+                                    (Eq.trans List.length_append
+                                      (Eq.trans
+                                        (congr
+                                          (congrArg HAdd.hAdd
+                                            (Eq.trans List.length_take
+                                              (inf_of_le_left (of_eq_true inf_le_left._simp_1))))
+                                          (Eq.trans List.length_drop
+                                            (congrFun'
+                                              (congrArg HSub.hSub
+                                                (congrFun'
+                                                  (congrArg HAdd.hAdd
+                                                    (congrFun'
+                                                      (congrArg HAdd.hAdd
+                                                        (congrFun'
+                                                          (congrArg HAdd.hAdd
+                                                            (congrFun'
+                                                              (congrArg HAdd.hAdd
+                                                                (congrFun'
+                                                                  (congrArg HAdd.hAdd
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun'
+                                                                              (congrArg HAdd.hAdd
+                                                                                (congrFun'
+                                                                                  (congrArg HAdd.hAdd
+                                                                                    (congrFun'
+                                                                                      (congrArg HAdd.hAdd
+                                                                                        (congrFun'
+                                                                                          (congrArg HAdd.hAdd
+                                                                                            (congrFun'
+                                                                                              (congrArg HAdd.hAdd
+                                                                                                (congrFun'
+                                                                                                  (congrArg HAdd.hAdd ⋯)
+                                                                                                  1))
+                                                                                              1))
+                                                                                          1))
+                                                                                      1))
+                                                                                  1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  1))
+                                                              1))
+                                                          1))
+                                                      1))
+                                                  1))
+                                              (min (↑o).length 16))))
+                                        (add_tsub_cancel_of_le (of_eq_true inf_le_right._simp_1)))))
+                                  16)
+                                (eq_self 16)))))))
+                  (uncurry fun part back => do
+                    let copied ←
+                      if
+                            Usize.ofNatCore (↑part).length (Slice.len._proof_1 part) =
+                              Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices) then
+                          ok indices
+                        else fail Error.panic
+                    ok (back copied)))
+                (bind_tc_ok
+                  (⟨List.take (↑indices).length
+                        [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                          0#u32, 0#u32, 0#u32],
+                      Eq.trans
+                          (congrFun' (congrArg (List.slice 0) (Usize.ofNatCore_val_eq (Slice.len._proof_1 indices)))
+                            [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                              0#u32, 0#u32, 0#u32])
+                          (List.slice_zero_j
+                            [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                              0#u32, 0#u32, 0#u32]) ▸
+                        core.slice.index.SliceIndexRangeToUsizeSlice.get._proof_1
+                          { «end» := Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices) }
+                          ⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                              0#u32, 0#u32, 0#u32],
+                            congrArg Subtype.val
+                                (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                  [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                    0#u32, 0#u32, 0#u32, 0#u32]
+                                  (congrFun'
+                                    (congrArg List.replicate
+                                      (UScalar.ofNatCore_val_eq
+                                        (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                    0#u32)
+                                  (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                              Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩⟩,
+                    fun o =>
+                    ⟨List.take (min (↑o).length 16) ↑o ++
+                        List.drop (min (↑o).length 16)
+                          [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                            0#u32, 0#u32, 0#u32],
+                      Array.from_slice._proof_1
+                        ((⟨List.take (↑indices).length
+                                  [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                    0#u32, 0#u32, 0#u32, 0#u32],
+                                Eq.trans
+                                    (congrFun'
+                                      (congrArg (List.slice 0) (Usize.ofNatCore_val_eq (Slice.len._proof_1 indices)))
+                                      [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                        0#u32, 0#u32, 0#u32, 0#u32, 0#u32])
+                                    (List.slice_zero_j
+                                      [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                        0#u32, 0#u32, 0#u32, 0#u32, 0#u32]) ▸
+                                  core.slice.index.SliceIndexRangeToUsizeSlice.get._proof_1
+                                    { «end» := Usize.ofNatCore (↑indices).length (Slice.len._proof_1 indices) }
+                                    ⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                        0#u32, 0#u32, 0#u32, 0#u32, 0#u32],
+                                      congrArg Subtype.val
+                                          (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                            [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                              0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                            (congrFun'
+                                              (congrArg List.replicate
+                                                (UScalar.ofNatCore_val_eq
+                                                  (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                              0#u32)
+                                            (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                        Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩⟩,
+                              fun s' =>
+                              ⟨List.take (min (↑s').length 16) ↑s' ++
+                                  List.drop (min (↑s').length 16)
+                                    [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                      0#u32, 0#u32, 0#u32, 0#u32],
+                                congr
+                                    (congrArg HAppend.hAppend
+                                      (congrArg (HAppend.hAppend [])
+                                        (congrFun'
+                                          (congrArg List.take
+                                            (congrArg (min (↑s').length)
+                                              (Eq.trans
+                                                (congrFun'
+                                                  (congrArg HSub.hSub
+                                                    (congrFun'
+                                                      (congrArg HAdd.hAdd
+                                                        (congrFun'
+                                                          (congrArg HAdd.hAdd
+                                                            (congrFun'
+                                                              (congrArg HAdd.hAdd
+                                                                (congrFun'
+                                                                  (congrArg HAdd.hAdd
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun'
+                                                                              (congrArg HAdd.hAdd
+                                                                                (congrFun'
+                                                                                  (congrArg HAdd.hAdd
+                                                                                    (congrFun'
+                                                                                      (congrArg HAdd.hAdd
+                                                                                        (congrFun'
+                                                                                          (congrArg HAdd.hAdd
+                                                                                            (congrFun'
+                                                                                              (congrArg HAdd.hAdd
+                                                                                                (congrFun'
+                                                                                                  (congrArg HAdd.hAdd ⋯)
+                                                                                                  1))
+                                                                                              ⋯))
+                                                                                          ⋯))
+                                                                                      ⋯))
+                                                                                  ⋯))
+                                                                              ⋯))
+                                                                          ⋯))
+                                                                      ⋯))
+                                                                  ⋯))
+                                                              ⋯))
+                                                          ⋯))
+                                                      ⋯))
+                                                  ⋯)
+                                                ⋯)))
+                                          ⋯)))
+                                    ⋯ ▸
+                                  core.slice.index.SliceIndexRangeToUsizeSlice.index_mut._proof_1
+                                    ⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                        0#u32, 0#u32, 0#u32, 0#u32, 0#u32],
+                                      congrArg Subtype.val
+                                          (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                            [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                              0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                            (congrFun'
+                                              (congrArg List.replicate
+                                                (UScalar.ofNatCore_val_eq
+                                                  (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                              0#u32)
+                                            (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                        Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩
+                                    s'⟩).2
+                          ⋯)
+                        ⋯⟩)
+                  ⋯))
+              ⋯))
+          ⋯)
+        ⋯))
+    ⋯
+'NJE_CountInit.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,58 @@
+{"attempt": "NJE_L067", "exit_status": 0, "wall_seconds": 3.3602777710184455, "peak_rss_kib": "4326080", "swaps": "0", "print_axioms": ["'NJE_AllCalls.loop_total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_AllCalls.default_all' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_AllCalls.loop_total : ∀ {α : Type} (f : core.ops.function.FnMut Unit α Bool) (p : α → Bool) (xs : List α),
+  (∀ x ∈ xs, f.call_mut () x = ok (p x, ())) → ∃ tail, loop (body f) (xs, ()) = ok (xs.all p, tail, ()) :=
+fun {α} f p xs =>
+  List.rec (motive := fun xs =>
+    (∀ x ∈ xs, f.call_mut () x = ok (p x, ())) → ∃ tail, loop (body f) (xs, ()) = ok (xs.all p, tail, ()))
+    (fun laws =>
+      Exists.intro []
+        (Eq.mpr (id (congrArg (fun _a => _a = ok ([].all p, [], ())) (loop.eq_def (body f) ([], ()))))
+          (of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (congrArg
+                    (fun x =>
+                   
+...
+d_tc_ok (false, ())
+                                (uncurry fun b u => if b = true then ok (cont (xs, u)) else ok (done (false, xs, u)))))
+                            (Eq.trans
+                              (uncurry_apply_pair
+                                (fun b u => if b = true then ok (cont (xs, u)) else ok (done (false, xs, u))) false ())
+                              (ite_cond_eq_false (ok (cont (xs, ()))) (ok (done (false, xs, ())))
+                                Bool.false_eq_true)))))))
+                  (congrArg ok
+                    (congrFun'
+                      (congrArg Prod.mk
+                        (Eq.trans (congrFun' (congrArg and (Bool.of_not_eq_true holds)) (xs.all p))
+                          (Bool.false_and (xs.all p))))
+                      (xs, ()))))
+                (eq_self (ok (false, xs, ())))))))
+    xs
+'NJE_AllCalls.loop_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_AllCalls.default_all : ∀ {α : Type} (f : core.ops.function.FnMut Unit α Bool) (p : α → Bool) (xs : List α),
+  (∀ x ∈ xs, f.call_mut () x = ok (p x, ())) →
+    ∃ tail,
+      NFU_Retarget.core.iter.traits.iterator.Iterator.all.default (NJE_AllAdapter.listInst α) f xs () =
+        ok (xs.all p, tail) :=
+fun {α} f p xs laws =>
+  let ⟨tail, h⟩ := loop_total f p xs laws
+  Exists.intro tail
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let outcome ← _a
+                    ok (outcome.1, outcome.2.1)) =
+                  ok (xs.all p, tail))
+              h))
+          (Eq.refl do
+            let outcome ← ok (xs.all p, tail, ())
+            ok (outcome.1, outcome.2.1)))))
+'NJE_AllCalls.default_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf5c038d1b18040da94afd34a4a08882c.scope; invocation ID: 5c9b872889bb4177bcd815f161ed7d36

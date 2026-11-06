@@ -1,0 +1,18 @@
+NJE_lean/NJE_PermutationFold.lean:17:1: error(lean.unknownIdentifier): Unknown identifier `state✝`
+NJE_lean/NJE_PermutationFold.lean:17:1: error: failed to synthesize
+  Field ?m.98
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NJE_lean/NJE_PermutationFold.lean:28:1: error(lean.unknownIdentifier): Unknown identifier `states✝`
+NJE_lean/NJE_PermutationFold.lean:28:1: error(lean.unknownIdentifier): Unknown identifier `steps✝`
+NJE_lean/NJE_PermutationFold.lean:28:1: error(lean.unknownIdentifier): Unknown identifier `next✝`
+theorem NJE_PermutationFold.folded : ∀ {K : Type} [inst : Field K] (state : Fin 16 → K),
+  List.foldl (fun s r => R0P.poseidonApplyRound r s) (R0P.poseidonExternalLinear state) (List.ofFn fun r => r) =
+    R0P.poseidonPermutation state :=
+fun {K} [Field K] state => id sorry
+'NJE_PermutationFold.folded' depends on axioms: [propext, sorryAx, Quot.sound]
+theorem NJE_PermutationFold.compose : ∀ {σ : Type} {n : ℕ} (states : Fin (n + 1) → σ) (steps : Fin n → σ → σ),
+  (∀ (i : Fin n), states i.succ = steps i (states i.castSucc)) →
+    List.foldl (fun s step => step s) (states 0) (List.ofFn steps) = states (Fin.last n) :=
+fun {σ} {n} states steps next => sorry
+'NJE_PermutationFold.compose' depends on axioms: [propext, sorryAx]

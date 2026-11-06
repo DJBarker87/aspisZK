@@ -1,0 +1,59 @@
+{"attempt": "NJE_L087", "exit_status": 1, "wall_seconds": 4.196435790043324, "peak_rss_kib": "4303036", "swaps": "0", "print_axioms": ["'NJE_CountPacket.continuation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_CountPacket.initial_view' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_CountPacket.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_CountPacket.TX1_122' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_CountPacket.TX2_088' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_CountPacket.lean:42:11: error: unsolved goals
+case ok
+α : Type
+indices : Slice U32
+g : Std.Array U32 16#usize → Result α
+part : Slice U32
+back : Slice U32 → Std.Array U32 16#usize
+h :
+  core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+      (Array.repeat 16#usize 0#u32) { «end» := indices.len } =
+    ok (part, back)
+⊢ (do
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+      g (back copied)) =
+    do
+    let a ←
+      let (part, back) := (part, back)
+        do
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+        ok (back copied)
+    g a
+NJE_
+...
+x.SliceIndexRangeToUsizeSlice U32))
+                                    (Array.repeat 16#usize 0#u32) { «end» := indices.len }
+                              let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU32 s indices
+                              let i1 ← multiproof.Arity.Two.levels
+                              let count ←
+                                multiproof.node_count_loop0 { start := 0#u32, «end» := i1 } multiproof.Arity.Two
+                                    (index_mut_back s1) indices.len 0#usize
+                              ok (some count))
+                          fun a => Eq.refl (ok none))))
+                    (ok none))
+                  (eq_self (ok none)))))),
+        of_eq_true
+          (Eq.trans
+            (congrArg (Eq none)
+              (ite_cond_eq_false (some (nodeCount 18 (List.map (fun x => ↑x) ↑indices))) none (eq_false valid)))
+            (eq_self none))⟩
+'NJE_CountPacket.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CountPacket.TX1_122 : ∀ (indices : Slice U32),
+  ∃ out,
+    source indices = ok out ∧
+      Option.map (fun x => ↑x) out =
+        if wellFormed (List.map (fun x => ↑x) ↑indices) then some (nodeCount 18 (List.map (fun x => ↑x) ↑indices))
+        else none :=
+fun indices => result indices
+'NJE_CountPacket.TX1_122' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CountPacket.TX2_088 : ∀ (indices : Slice U32),
+  ∃ out,
+    source indices = ok out ∧
+      Option.map (fun x => ↑x) out =
+        if wellFormed (List.map (fun x => ↑x) ↑indices) then some (nodeCount 18 (List.map (fun x => ↑x) ↑indices))
+        else none :=
+fun indices => result indices
+'NJE_CountPacket.TX2_088' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc50c2cf07305468cafb43989b4e93ca0.scope; invocation ID: 4a0a812db4904de09d8aa7a12d916ac4

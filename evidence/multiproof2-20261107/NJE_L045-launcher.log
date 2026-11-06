@@ -1,0 +1,52 @@
+{"attempt": "NJE_L045", "exit_status": 1, "wall_seconds": 3.2519274989608675, "peak_rss_kib": "4284888", "swaps": "0", "print_axioms": ["'NJE_CountArrayFrame.keys_write' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_CountArrayFrame.lean:11:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  BEq α
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NJE_lean/NJE_CountArrayFrame.lean:11:4: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+α : Type
+inst✝ : Inhabited α
+a : Std.
+...
+
+  List.getElem?_set_ne (Ne.symm same)
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵r̵r̵a̵y̵.̵s̵e̵t̵_̵v̵a̵l̵_̵e̵q̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵s̵e̵t̵_̵n̵e̵ ̵(̵N̵e̵.̵s̵y̵m̵m̵ ̵s̵a̵m̵e̵)̵,̵s̵a̵m̵e̵]̵[̲A̲r̲r̲a̲y̲.̲s̲e̲t̲_̲v̲a̲l̲_̲e̲q̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲!̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲?̲_̲g̲e̲t̲D̲,̲ ̲s̲a̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJE_lean/NJE_CountArrayFrame.lean:18:41: warning: This simp argument is unused:
+  same
+
+Hint: Omit it from the simp argument list.
+  simp [Array.set_val_eq, ̲List.getElem!_eq_getElem?_getD,
+  ̵  ̵ ̵ ̵ ̵List.getElem?_set_ne (Ne.symm same),̵s̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJE_lean/NJE_CountArrayFrame.lean:25:5: error(lean.unknownIdentifier): Unknown identifier `get_set`
+NJE_lean/NJE_CountArrayFrame.lean:23:84: error: unsolved goals
+a : Std.Array U32 16#usize
+i w : Usize
+ib : ↑i < 16
+wb : ↑w < 16
+j : ℕ
+jb : j < 16
+⊢ ↑(↑(a.set w ((↑a)[↑i]!.wrapping_shr 1#u32)))[j]! =
+    AspisR1.MultiproofConeLiveOrder.write (fun i => ↑(↑a)[i]!) (↑i) (↑w) j
+NJE_lean/NJE_CountArrayFrame.lean:29:7: error(lean.unknownIdentifier): Unknown constant `get_set`
+NJE_lean/NJE_CountArrayFrame.lean:30:14: error(lean.unknownIdentifier): Unknown constant `get_set`
+theorem NJE_CountArrayFrame.keys_write : ∀ (a : Std.Array U32 16#usize) (i w : Usize),
+  ↑i < 16 →
+    ↑w < 16 →
+      ∀ j < 16,
+        NJA_CountDrop.keys (a.set w ((↑a)[↑i]!.wrapping_shr 1#u32)) j =
+          AspisR1.MultiproofConeLiveOrder.write (NJA_CountDrop.keys a) (↑i) (↑w) j :=
+fun a i w ib wb j jb => id sorry
+'NJE_CountArrayFrame.keys_write' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf98e5c49b730463cb3315c885eb75239.scope; invocation ID: 75554a0c00614ac4862c4ea870137b30

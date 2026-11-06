@@ -1,0 +1,53 @@
+{"attempt": "NJE_L043", "exit_status": 0, "wall_seconds": 3.316169135970995, "peak_rss_kib": "4315272", "swaps": "0", "print_axioms": ["'NJE_CountRow.step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_CountRow.exit' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_CountRow.lean:29:23: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵l̵i̵f̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJE_CountRow.step : ∀ (a : Std.Array U32 16#usize) (n i w c : Usize) (hn : ↑n ≤ 16) (active : i < n),
+  ↑w ≤ ↑i →
+    List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) →
+      have p := (↑a)[↑i].wrapping_shr 1#u32;
+      ∃ q,
+        ↑q = AspisR1.MultiproofConeLiveOrder.advance (NJA_CountDrop.keys a) ↑n ↑i ∧
+          ↑i + 1 ≤ ↑q ∧
+            ↑q ≤ ↑n ∧
+              ↑q ≤ ↑i + 2 ∧
+                multiproof.node_count_loop0
+...
+                             let level1 ← ok (a.set w ((↑a)[↑i].wrapping_shr 1#u32))
+                                  ok
+                                      (cont
+                                        (level1, c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)),
+                                          w.wrapping_add 1#usize, q)))))))))))⟩⟩⟩⟩)
+'NJE_CountRow.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountRow.exit : ∀ (a : Std.Array U32 16#usize) (n i w c : Usize),
+  ¬i < n → multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n a c w i = ok (ControlFlow.done (a, c, w)) :=
+fun a n i w c done =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg done) x_0 x_1 x_2 x_3) (UScalar.decLt i n)
+            (Result
+              (ControlFlow (Std.Array U32 16#usize × Usize × Usize × Usize) (Std.Array U32 16#usize × Usize × Usize)))
+            (do
+              let i1 ← multiproof.index_at a i
+              let i2 ← multiproof.Arity.Two.bits
+              let parent ← lift (i1.wrapping_shr i2)
+              let j ← multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n parent i
+              let i3 ← multiproof.Arity.Two.width
+              let i4 ← lift (j.wrapping_sub i)
+              let i5 ← lift (i3.wrapping_sub i4)
+              let count1 ← lift (c.wrapping_add i5)
+              let level1 ← a.update w parent
+              let w1 ← lift (w.wrapping_add 1#usize)
+              ok (cont (level1, count1, w1, j)))
+            (ok (ControlFlow.done (a, c, w)))))
+        (ok (ControlFlow.done (a, c, w))))
+      (eq_self (ok (ControlFlow.done (a, c, w)))))
+'NJE_CountRow.exit' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb7984eb54c8d48ce8e2c7b955e8c935b.scope; invocation ID: 3ac400a136ed4ea1bca74a6e6bc25ddb

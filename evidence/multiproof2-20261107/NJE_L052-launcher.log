@@ -1,0 +1,50 @@
+{"attempt": "NJE_L052", "exit_status": 1, "wall_seconds": 6.020010906970128, "peak_rss_kib": "4283108", "swaps": "0", "print_axioms": ["'NJE_CountKeyFrame.whole' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_CountKeyFrame.lean:14:1: error: unsolved goals
+case neg
+a : Std.Array U32 16#usize
+i w : Usize
+ib : ↑i < 16
+wb : ↑w < 16
+j : ℕ
+jb : ¬j < 16
+len : (↑a).length = 16
+setlen : (↑(a.set w ((↑a)[↑i]!.wrapping_shr 1#u32))).length = 16
+noWrite : j ≠ ↑w
+⊢ ↑((↑(a.set w (((↑a)[↑i]?.getD default).wrapping_shr 1#u32)))[j]?.getD default) = ↑(none.getD default)
+NJE_lean/NJE_CountKeyFrame.lean:21:5: warning: This simp argument is unused:
+  List.getElem?_eq_none (by omega : (a.set w (U32.wrapping_shr (a.val[i.val]!) 1#u32)).val.length ≤ j)
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg n̵o̵W̵r̵i̵t̵e̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵n̲o̲W̲r̲i̲t̲e̲,̲
+...
+NJE_lean/NJE_CountKeyFrame.lean:14:1: error: unsolved goals
+case neg
+a : Std.Array U32 16#usize
+i w : Usize
+ib : ↑i < 16
+wb : ↑w < 16
+j : ℕ
+jb : ¬j < 16
+len : (↑a).length = 16
+setlen : (↑(a.set w ((↑a)[↑i]!.wrapping_shr 1#u32))).length = 16
+noWrite : j ≠ ↑w
+⊢ ↑((↑(a.set w (((↑a)[↑i]?.getD default).wrapping_shr 1#u32)))[j]?.getD default) = ↑(none.getD default)
+NJE_lean/NJE_CountKeyFrame.lean:21:5: warning: This simp argument is unused:
+  List.getElem?_eq_none (by omega : (a.set w (U32.wrapping_shr (a.val[i.val]!) 1#u32)).val.length ≤ j)
+
+Hint: Omit it from the simp argument list.
+  simp only [if_neg n̵o̵W̵r̵i̵t̵e̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵!̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵?̵_̵g̵e̵t̵D̵,̵n̲o̲W̲r̲i̲t̲e̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲!̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲?̲_̲g̲e̲t̲D̲,̲
+       List.getElem?_eq_none (by omega : a̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵≤̵j̵)̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵n̵o̵n̵e̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵ ̵:̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵(̵a̵.̵s̵e̵t̵ ̵w̵ ̵(̵U̵3̵2̵.̵w̵r̵a̵p̵p̵i̵n̵g̵_̵s̵h̵r̵ ̵(̵a̵.̵v̵a̵l̵[̵i̵.̵v̵a̵l̵]̵!̵)̵ ̵1̵#̵u̵3̵2̵)̵)̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵≤̵j̵)̵]̵a̲.̲v̲a̲l̲.̲l̲e̲n̲g̲t̲h̲ ̲≤̲ ̲j̲)̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJE_CountKeyFrame.whole : ∀ (a : Std.Array U32 16#usize) (i w : Usize),
+  ↑i < 16 →
+    ↑w < 16 →
+      NJA_CountDrop.keys (a.set w ((↑a)[↑i]!.wrapping_shr 1#u32)) =
+        AspisR1.MultiproofConeLiveOrder.write (NJA_CountDrop.keys a) ↑i ↑w :=
+fun a i w ib wb => funext fun j => if jb : j < 16 then NJE_CountArrayFrame.keys_write a i w ib wb j jb else sorry
+'NJE_CountKeyFrame.whole' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r79ec676585724377bb6a9c98f2044b8e.scope; invocation ID: 8e903f684de34adfab89754b32b6109f

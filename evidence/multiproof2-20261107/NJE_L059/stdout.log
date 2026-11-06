@@ -1,0 +1,37 @@
+theorem NJE_CountKeyFrame.outside : ∀ (a : Std.Array U32 16#usize) (j : ℕ), 16 ≤ j → NJA_CountDrop.keys a j = 0 :=
+fun a j bound =>
+  id
+    (Eq.mpr (id (congrArg (fun _a => ↑_a = 0) List.getElem!_eq_getElem?_getD))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => ↑(_a.getD default) = 0)
+            (List.getElem?_eq_none
+              (have h := a.property;
+              Decidable.byContradiction fun a_1 => outside._proof_1 a j bound h a_1))))
+        (Eq.refl ↑(none.getD default))))
+'NJE_CountKeyFrame.outside' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountKeyFrame.whole : ∀ (a : Std.Array U32 16#usize) (i w : Usize),
+  ↑i < 16 →
+    ↑w < 16 →
+      NJA_CountDrop.keys (a.set w ((↑a)[↑i]!.wrapping_shr 1#u32)) =
+        AspisR1.MultiproofConeLiveOrder.write (NJA_CountDrop.keys a) ↑i ↑w :=
+fun a i w ib wb =>
+  funext fun j =>
+    if jb : j < 16 then NJE_CountArrayFrame.keys_write a i w ib wb j jb
+    else
+      have noWrite := fun a => whole._proof_1 i w wb j jb a;
+      id
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => NJA_CountDrop.keys (a.set w ((↑a)[↑i]!.wrapping_shr 1#u32)) j = _a) (if_neg noWrite)))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = NJA_CountDrop.keys a j)
+                (outside (a.set w ((↑a)[↑i]!.wrapping_shr 1#u32)) j
+                  (Decidable.byContradiction fun a => whole._proof_2 i w j jb a))))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => 0 = _a)
+                  (outside a j (Decidable.byContradiction fun a => whole._proof_2 i w j jb a))))
+              (Eq.refl 0))))
+'NJE_CountKeyFrame.whole' depends on axioms: [propext, Classical.choice, Quot.sound]

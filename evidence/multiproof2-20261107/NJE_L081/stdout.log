@@ -1,0 +1,97 @@
+NJE_lean/NJE_CountPacket.lean:57:5: error: `dsimp` made no progress
+NJE_lean/NJE_CountPacket.lean:62:5: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NJE_lean/NJE_CountPacket.lean:34:82: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NJE_lean/NJE_CountPacket.lean:73:82: error(lean.unknownIdentifier): Unknown identifier `result`
+NJE_lean/NJE_CountPacket.lean:79:82: error(lean.unknownIdentifier): Unknown identifier `result`
+theorem NJE_CountPacket.initial_view : ∀ (indices : Slice U32) (bound : (↑indices).length ≤ 16),
+  cells (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) 0 (↑indices).length =
+    List.map (fun x => ↑x) ↑indices :=
+fun indices bound =>
+  List.ext_getElem
+    (of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (congrArg List.length
+                  (congrFun'
+                    (congrArg List.map
+                      (funext fun j => congrArg (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) (zero_add j)))
+                    (List.range (↑indices).length)))
+                (List.length_map fun j => NJA_CountDrop.keys (NJE_CountInit.value indices bound) j))
+              List.length_range))
+          (List.length_map fun x => ↑x))
+        (eq_self (↑indices).length)))
+    fun j hj hj' =>
+    have jb := Eq.mp (congrArg (LT.lt j) (List.length_map fun x => ↑x)) hj';
+    Eq.mpr
+      (id
+        (congr
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (GetElem.getElem.congr_simp
+                  (cells (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) 0 (↑indices).length)
+                  (List.map (fun j => NJA_CountDrop.keys (NJE_CountInit.value indices bound) j)
+                    (List.range (↑indices).length))
+                  (congrFun'
+                    (congrArg List.map
+                      (funext fun j =>
+                        congrArg (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) (Nat.zero_add j)))
+                    (List.range (↑indices).length))
+                  j j (Eq.refl j) hj)
+                (List.getElem_map fun j => NJA_CountDrop.keys (NJE_CountInit.value indices bound) j))
+              (congrArg (NJA_CountDrop.keys (NJE_CountInit.value indices bound))
+                (List.getElem_range
+                  ((List.length_map fun j => NJA_CountDrop.keys (NJE_CountInit.value indices bound) j) ▸
+                    congrFun'
+                        (congrArg List.map
+                          (funext fun j =>
+                            congrArg (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) (Nat.zero_add j)))
+                        (List.range (↑indices).length) ▸
+                      Eq.refl j ▸ hj)))))
+          (List.getElem_map fun x => ↑x)))
+      (id
+        (id
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => ↑_a = ↑(↑indices)[j])
+                (getElem!_pos
+                  (↑⟨↑indices ++ List.replicate (16 - (↑indices).length) 0#u32,
+                      NJE_CountInit.value._proof_2 indices bound⟩)
+                  j
+                  (Eq.mpr
+                    (id
+                      (congrArg (LT.lt j)
+                        (Eq.trans List.length_append (congrArg (HAdd.hAdd (↑indices).length) List.length_replicate))))
+                    (Decidable.byContradiction fun a => initial_view._proof_2 indices bound j jb a)))))
+            (Eq.mpr (id (congrArg (fun _a => ↑_a = ↑(↑indices)[j]) (List.getElem_append_left jb)))
+              (Eq.refl ↑(↑indices)[j])))))
+'NJE_CountPacket.initial_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJE_lean/NJE_CountPacket.lean:83:7: error(lean.unknownIdentifier): Unknown constant `result`
+NJE_lean/NJE_CountPacket.lean:84:14: error(lean.unknownIdentifier): Unknown constant `result`
+theorem NJE_CountPacket.TX1_122 : ∀ (indices : Slice U32),
+  ∃ out,
+    source indices = ok out ∧
+      Option.map (fun x => ↑x) out =
+        if wellFormed (List.map (fun x => ↑x) ↑indices) then some (nodeCount 18 (List.map (fun x => ↑x) ↑indices))
+        else none :=
+fun indices => sorry
+'NJE_CountPacket.TX1_122' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CountPacket.TX2_088 : ∀ (indices : Slice U32),
+  ∃ out,
+    source indices = ok out ∧
+      Option.map (fun x => ↑x) out =
+        if wellFormed (List.map (fun x => ↑x) ↑indices) then some (nodeCount 18 (List.map (fun x => ↑x) ↑indices))
+        else none :=
+fun indices => sorry
+'NJE_CountPacket.TX2_088' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

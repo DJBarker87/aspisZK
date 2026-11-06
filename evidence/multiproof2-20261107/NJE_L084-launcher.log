@@ -1,0 +1,51 @@
+{"attempt": "NJE_L084", "exit_status": 1, "wall_seconds": 2.681164246983826, "peak_rss_kib": "3834856", "swaps": "0", "print_axioms": ["'NJE_RoundComposition.cell_law' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_RoundComposition.full_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_RoundComposition.full_round' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_RoundComposition.lean:37:23: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Field ℕ
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NJE_lean/NJE_RoundComposition.lean:55:14: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Field ℕ
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+theorem NJE_RoundComposition.cell_law : ∀ (x c : U32),
+  ↑x < 2147483647 →
+    ↑c < 2147483647 →
+      NJA_RoundCell.reference x c = ok (cell x c) ∧
+        ↑(cell x c) < 2147483647 ∧ ↑↑(cell 
+...
+(i : Fin 16), ↑(constants i) < 2147483647) →
+        ∀ (i : Fin 16), ↑(states 16 i) < 2147483647 ∧ ↑↑(states 16 i) = sorry :=
+fun input constants states cut canonical constants_domain =>
+  have complete := NJA_PointStaging.complete input (fun i x => cell x (constants i)) states cut.start cut.next;
+  sorry complete
+'NJE_RoundComposition.full_cells' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_RoundComposition.full_round : ∀ (input constants : State) (states bs : ℕ → State) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (post : ℕ → State),
+  (∀ (i : Fin 16), ↑(input i) < 2147483647) →
+    (∀ (i : Fin 16), ↑(constants i) < 2147483647) →
+      FullCut input constants states →
+        NJE_ExternalStages.Cut (states 16) bs sums args post →
+          ∀ (i : Fin 16),
+            ↑(post 16 i) < 2147483647 ∧
+              ↑↑(post 16 i) = R0P.poseidonFullRound (fun j => ↑↑(input j)) (fun j => ↑↑(constants j)) i :=
+fun input constants states bs sums args post canonical constants_domain cut linear =>
+  have cells := full_cells input constants states cut canonical constants_domain;
+  have layer := NJE_ExternalTotal.result (states 16) bs sums args post linear;
+  have converted := funext fun i => (cells i).right;
+  fun i =>
+  ⟨(layer.right i).left,
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = R0P.poseidonFullRound (fun j => ↑↑(input j)) (fun j => ↑↑(constants j)) i)
+          (layer.right i).right))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              R0P.poseidonExternalLinear _a i =
+                R0P.poseidonFullRound (fun j => ↑↑(input j)) (fun j => ↑↑(constants j)) i)
+            converted))
+        sorry)⟩
+'NJE_RoundComposition.full_round' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5f2ee8fca67e40f78d145df606914f16.scope; invocation ID: 63a947861b404894ae1d44e75d690bf0

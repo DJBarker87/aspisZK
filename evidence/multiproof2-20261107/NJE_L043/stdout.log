@@ -1,0 +1,276 @@
+NJE_lean/NJE_CountRow.lean:29:23: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵l̵i̵f̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJE_CountRow.step : ∀ (a : Std.Array U32 16#usize) (n i w c : Usize) (hn : ↑n ≤ 16) (active : i < n),
+  ↑w ≤ ↑i →
+    List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) →
+      have p := (↑a)[↑i].wrapping_shr 1#u32;
+      ∃ q,
+        ↑q = AspisR1.MultiproofConeLiveOrder.advance (NJA_CountDrop.keys a) ↑n ↑i ∧
+          ↑i + 1 ≤ ↑q ∧
+            ↑q ≤ ↑n ∧
+              ↑q ≤ ↑i + 2 ∧
+                multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n a c w i =
+                  ok
+                    (cont
+                      (a.set w p, c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)),
+                        w.wrapping_add 1#usize, q)) :=
+fun a n i w c hn active safe sorted =>
+  id
+    (have ib := step._proof_2 n i w hn active;
+    have wb := step._proof_3 n i w safe ib;
+    let ⟨q, h✝⟩ := NJE_CountGroup.total a n i hn (step._proof_4 n i w active) sorted
+    let ⟨hq, right✝⟩ := h✝
+    let ⟨eq, right✝¹⟩ := right✝
+    let ⟨lower, right✝²⟩ := right✝¹
+    let ⟨upper, delta⟩ := right✝²
+    Exists.intro q
+      ⟨eq,
+        ⟨lower,
+          ⟨upper,
+            ⟨delta,
+              id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        _a =
+                          ok
+                            (cont
+                              (a.set w ((↑a)[↑i].wrapping_shr 1#u32),
+                                c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)), w.wrapping_add 1#usize,
+                                q)))
+                      (if_pos active)))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          (do
+                              let i1 ← _a
+                              let i2 ← multiproof.Arity.Two.bits
+                              let parent ← lift (i1.wrapping_shr i2)
+                              let j ← multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n parent i
+                              let i3 ← multiproof.Arity.Two.width
+                              let i4 ← lift (j.wrapping_sub i)
+                              let i5 ← lift (i3.wrapping_sub i4)
+                              let count1 ← lift (c.wrapping_add i5)
+                              let level1 ← a.update w parent
+                              let w1 ← lift (w.wrapping_add 1#usize)
+                              ok (cont (level1, count1, w1, j))) =
+                            ok
+                              (cont
+                                (a.set w ((↑a)[↑i].wrapping_shr 1#u32),
+                                  c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)),
+                                  w.wrapping_add 1#usize, q)))
+                        (NJA_Arity.index_result a i)))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            (do
+                                let i1 ← _a
+                                let i2 ← multiproof.Arity.Two.bits
+                                let parent ← lift (i1.wrapping_shr i2)
+                                let j ← multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n parent i
+                                let i3 ← multiproof.Arity.Two.width
+                                let i4 ← lift (j.wrapping_sub i)
+                                let i5 ← lift (i3.wrapping_sub i4)
+                                let count1 ← lift (c.wrapping_add i5)
+                                let level1 ← a.update w parent
+                                let w1 ← lift (w.wrapping_add 1#usize)
+                                ok (cont (level1, count1, w1, j))) =
+                              ok
+                                (cont
+                                  (a.set w ((↑a)[↑i].wrapping_shr 1#u32),
+                                    c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)),
+                                    w.wrapping_add 1#usize, q)))
+                          (NJA_Reads.index_ok a i ib)))
+                      (Eq.mpr
+                        (id
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans
+                                (congrArg (Bind.bind (ok (↑a)[↑i]))
+                                  (funext fun i1 =>
+                                    Eq.trans
+                                      (congrArg (Bind.bind (ok 1#u32))
+                                        (funext fun i2 =>
+                                          Eq.trans
+                                            (congrArg (Bind.bind (ok (i1.wrapping_shr i2)))
+                                              (funext fun parent =>
+                                                congrArg
+                                                  (Bind.bind
+                                                    (multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n
+                                                      parent i))
+                                                  (funext fun j =>
+                                                    congrArg (Bind.bind multiproof.Arity.Two.width)
+                                                      (funext fun i3 =>
+                                                        Eq.trans
+                                                          (congrArg (Bind.bind (ok (j.wrapping_sub i)))
+                                                            (funext fun i4 =>
+                                                              Eq.trans
+                                                                (congrArg (Bind.bind (ok (i3.wrapping_sub i4)))
+                                                                  (funext fun i5 =>
+                                                                    Eq.trans
+                                                                      (congrArg (Bind.bind (ok (c.wrapping_add i5)))
+                                                                        (funext ⋯))
+                                                                      (bind_tc_ok (c.wrapping_add i5) fun y => ⋯)))
+                                                                (bind_tc_ok (i3.wrapping_sub i4) fun y => do
+                                                                  let level1 ← a.update w parent
+                                                                  ok
+                                                                      (cont
+                                                                        (level1, c.wrapping_add y,
+                                                                          w.wrapping_add 1#usize, j)))))
+                                                          (bind_tc_ok (j.wrapping_sub i) fun y => do
+                                                            let level1 ← a.update w parent
+                                                            ok
+                                                                (cont
+                                                                  (level1, c.wrapping_add (i3.wrapping_sub y),
+                                                                    w.wrapping_add 1#usize, j)))))))
+                                            (bind_tc_ok (i1.wrapping_shr i2) fun y => do
+                                              let j ←
+                                                multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n y i
+                                              let i3 ← multiproof.Arity.Two.width
+                                              let level1 ← a.update w y
+                                              ok
+                                                  (cont
+                                                    (level1, c.wrapping_add (i3.wrapping_sub (j.wrapping_sub i)),
+                                                      w.wrapping_add 1#usize, j)))))
+                                      (bind_tc_ok 1#u32 fun y => do
+                                        let j ←
+                                          multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n
+                                              (i1.wrapping_shr y) i
+                                        let i3 ← multiproof.Arity.Two.width
+                                        let level1 ← a.update w (i1.wrapping_shr y)
+                                        ok
+                                            (cont
+                                              (level1, c.wrapping_add (i3.wrapping_sub (j.wrapping_sub i)),
+                                                w.wrapping_add 1#usize, j)))))
+                                (bind_tc_ok (↑a)[↑i] fun y => do
+                                  let j ←
+                                    multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n
+                                        (y.wrapping_shr 1#u32) i
+                                  let i3 ← multiproof.Arity.Two.width
+                                  let level1 ← a.update w (y.wrapping_shr 1#u32)
+                                  ok
+                                      (cont
+                                        (level1, c.wrapping_add (i3.wrapping_sub (j.wrapping_sub i)),
+                                          w.wrapping_add 1#usize, j)))))
+                            (ok
+                              (cont
+                                (a.set w ((↑a)[↑i].wrapping_shr 1#u32),
+                                  c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)),
+                                  w.wrapping_add 1#usize, q)))))
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                (do
+                                    let j ← _a
+                                    let i3 ← multiproof.Arity.Two.width
+                                    let level1 ← a.update w ((↑a)[↑i].wrapping_shr 1#u32)
+                                    ok
+                                        (cont
+                                          (level1, c.wrapping_add (i3.wrapping_sub (j.wrapping_sub i)),
+                                            w.wrapping_add 1#usize, j))) =
+                                  ok
+                                    (cont
+                                      (a.set w ((↑a)[↑i].wrapping_shr 1#u32),
+                                        c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)),
+                                        w.wrapping_add 1#usize, q)))
+                              hq))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  (do
+                                      let j ← ok q
+                                      let i3 ← _a
+                                      let level1 ← a.update w ((↑a)[↑i].wrapping_shr 1#u32)
+                                      ok
+                                          (cont
+                                            (level1, c.wrapping_add (i3.wrapping_sub (j.wrapping_sub i)),
+                                              w.wrapping_add 1#usize, j))) =
+                                    ok
+                                      (cont
+                                        (a.set w ((↑a)[↑i].wrapping_shr 1#u32),
+                                          c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)),
+                                          w.wrapping_add 1#usize, q)))
+                                NJA_Arity.two_width))
+                            (Eq.mpr
+                              (id
+                                (congrFun'
+                                  (congrArg Eq
+                                    (Eq.trans
+                                      (congrArg (Bind.bind (ok q))
+                                        (funext fun j =>
+                                          bind_tc_ok 2#usize fun y => do
+                                            let level1 ← a.update w ((↑a)[↑i].wrapping_shr 1#u32)
+                                            ok
+                                                (cont
+                                                  (level1, c.wrapping_add (y.wrapping_sub (j.wrapping_sub i)),
+                                                    w.wrapping_add 1#usize, j))))
+                                      (bind_tc_ok q fun y => do
+                                        let level1 ← a.update w ((↑a)[↑i].wrapping_shr 1#u32)
+                                        ok
+                                            (cont
+                                              (level1, c.wrapping_add (Usize.wrapping_sub 2#usize (y.wrapping_sub i)),
+                                                w.wrapping_add 1#usize, y)))))
+                                  (ok
+                                    (cont
+                                      (a.set w ((↑a)[↑i].wrapping_shr 1#u32),
+                                        c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)),
+                                        w.wrapping_add 1#usize, q)))))
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      (do
+                                          let level1 ← _a
+                                          ok
+                                              (cont
+                                                (level1, c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)),
+                                                  w.wrapping_add 1#usize, q))) =
+                                        ok
+                                          (cont
+                                            (a.set w ((↑a)[↑i].wrapping_shr 1#u32),
+                                              c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)),
+                                              w.wrapping_add 1#usize, q)))
+                                    (NJE_CountArithmetic.update_result a w ((↑a)[↑i].wrapping_shr 1#u32) wb)))
+                                (Eq.refl do
+                                  let level1 ← ok (a.set w ((↑a)[↑i].wrapping_shr 1#u32))
+                                  ok
+                                      (cont
+                                        (level1, c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)),
+                                          w.wrapping_add 1#usize, q)))))))))))⟩⟩⟩⟩)
+'NJE_CountRow.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountRow.exit : ∀ (a : Std.Array U32 16#usize) (n i w c : Usize),
+  ¬i < n → multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n a c w i = ok (ControlFlow.done (a, c, w)) :=
+fun a n i w c done =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg done) x_0 x_1 x_2 x_3) (UScalar.decLt i n)
+            (Result
+              (ControlFlow (Std.Array U32 16#usize × Usize × Usize × Usize) (Std.Array U32 16#usize × Usize × Usize)))
+            (do
+              let i1 ← multiproof.index_at a i
+              let i2 ← multiproof.Arity.Two.bits
+              let parent ← lift (i1.wrapping_shr i2)
+              let j ← multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n parent i
+              let i3 ← multiproof.Arity.Two.width
+              let i4 ← lift (j.wrapping_sub i)
+              let i5 ← lift (i3.wrapping_sub i4)
+              let count1 ← lift (c.wrapping_add i5)
+              let level1 ← a.update w parent
+              let w1 ← lift (w.wrapping_add 1#usize)
+              ok (cont (level1, count1, w1, j)))
+            (ok (ControlFlow.done (a, c, w)))))
+        (ok (ControlFlow.done (a, c, w))))
+      (eq_self (ok (ControlFlow.done (a, c, w)))))
+'NJE_CountRow.exit' depends on axioms: [propext, Classical.choice, Quot.sound]

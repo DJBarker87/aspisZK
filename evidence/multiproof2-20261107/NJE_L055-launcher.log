@@ -1,0 +1,50 @@
+{"attempt": "NJE_L055", "exit_status": 0, "wall_seconds": 3.452005258994177, "peak_rss_kib": "4307884", "swaps": "0", "print_axioms": ["'NJE_CountRowBounds.deficit' depends on axioms: [propext, Quot.sound]", "'NJE_CountRowBounds.cost_bound' depends on axioms: [propext, Quot.sound]", "'NJE_CountRowBounds.progress' depends on axioms: [propext, Quot.sound]", "'NJE_CountRowBounds.count_value' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_CountRowBounds.deficit : ∀ (k : ℕ → ℕ) (n i : ℕ), 2 - (advance k n i - i) = cost k n i :=
+fun k n i =>
+  id
+    (id
+      (Decidable.casesOn (instDecidablePairAt k n i)
+        (fun h =>
+          Eq.mpr
+            (id (congr (congrArg Eq (congrArg (HSub.hSub 2) (congrFun' (congrArg HSub.hSub (if_neg h)) i))) (if_neg h)))
+            (Decidable.byContradiction fun a => deficit._proof_2 i a))
+        fun h =>
+        Eq.mpr
+          (id (congr (congrArg Eq (congrArg (HSub.hSub 2) (congrFun' (congrArg HSub.hSub (if_pos h)) i))) (if_pos h)))
+          (Decidable.byContradiction fun a => deficit._proof_1 i a)))
+'NJE_CountRowBounds.deficit' depends on axioms: [propext, Quot.sound]
+t
+...
+(if_pos h)) (congrFun' (congrArg HSub.hSub (if_pos h)) i)))
+          (Decidable.byContradiction fun a => progress._proof_1 i a)))
+'NJE_CountRowBounds.progress' depends on axioms: [propext, Quot.sound]
+theorem NJE_CountRowBounds.count_value : ∀ (k : ℕ → ℕ) (n : ℕ) (c i q : Usize),
+  ↑c ≤ 576 →
+    ↑q = advance k n ↑i → ↑(c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i))) = ↑c + cost k n ↑i :=
+fun k n c i q cb q_value =>
+  have lower :=
+    Eq.mpr (id (congrArg (fun _a => ↑i ≤ _a) q_value))
+      (id
+        (Decidable.casesOn (instDecidablePairAt k n ↑i)
+          (fun h =>
+            Eq.mpr (id (congrArg (LE.le ↑i) (if_neg h)))
+              (Decidable.byContradiction fun a => count_value._proof_2 k n c i q a))
+          fun h =>
+          Eq.mpr (id (congrArg (LE.le ↑i) (if_pos h)))
+            (Decidable.byContradiction fun a => count_value._proof_1 k n c i q a)));
+  have upper :=
+    Eq.mpr (id (congrArg (fun _a => _a ≤ ↑i + 2) q_value))
+      (id
+        (Decidable.casesOn (instDecidablePairAt k n ↑i)
+          (fun h =>
+            Eq.mpr (id (congrFun' (congrArg LE.le (if_neg h)) (↑i + 2)))
+              (Decidable.byContradiction fun a => count_value._proof_4 k n c i q a))
+          fun h =>
+          Eq.mpr (id (congrFun' (congrArg LE.le (if_pos h)) (↑i + 2)))
+            (Decidable.byContradiction fun a => count_value._proof_3 k n c i q a)));
+  Eq.mpr (id (congrArg (fun _a => _a = ↑c + cost k n ↑i) (NJE_CountArithmetic.count_value c i q cb lower upper)))
+    (Eq.mpr (id (congrArg (fun _a => ↑c + (2 - (_a - ↑i)) = ↑c + cost k n ↑i) q_value))
+      (Eq.mpr (id (congrArg (fun _a => ↑c + _a = ↑c + cost k n ↑i) (deficit k n ↑i))) (Eq.refl (↑c + cost k n ↑i))))
+'NJE_CountRowBounds.count_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r02b653e38c3a4daaa64f7ebe66547d00.scope; invocation ID: 8cebc12e8a83491aa1acd7e7c9adccb5

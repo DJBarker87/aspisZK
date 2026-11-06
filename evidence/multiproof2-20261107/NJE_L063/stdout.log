@@ -1,0 +1,323 @@
+NJE_lean/NJE_CountRows.lean:30:3: error: No goals to be solved
+NJE_lean/NJE_CountRows.lean:86:7: error: No goals to be solved
+theorem NJE_CountRows.total : ∀ (fuel : ℕ) (a : Std.Array U32 16#usize) (n i w c : Usize),
+  ↑n ≤ 16 →
+    ↑w ≤ ↑i →
+      ↑i ≤ ↑n →
+        List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) →
+          (∀ x ∈ unread (NJA_CountDrop.keys a) ↑n ↑i, x < 262144) →
+            ↑c + (↑n - ↑i) ≤ 576 →
+              ↑n - ↑i ≤ fuel →
+                ∃ b d v,
+                  multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c w i = ok (b, d, v) ∧
+                    ↑v ≤ ↑n ∧
+                      ↑d ≤ ↑c + (↑n - ↑i) ∧
+                        cells (NJA_CountDrop.keys b) 0 ↑v = (rows fuel (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c).1 ∧
+                          ↑d = (rows fuel (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c).2 :=
+fun fuel a n i w c hn safe end_bound sorted range budget enough =>
+  Nat.recAux (motive := fun fuel =>
+    ∀ (a : Std.Array U32 16#usize) (i w c : Usize),
+      ↑w ≤ ↑i →
+        ↑i ≤ ↑n →
+          List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) →
+            (∀ x ∈ unread (NJA_CountDrop.keys a) ↑n ↑i, x < 262144) →
+              ↑c + (↑n - ↑i) ≤ 576 →
+                ↑n - ↑i ≤ fuel →
+                  ∃ b d v,
+                    multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c w i = ok (b, d, v) ∧
+                      ↑v ≤ ↑n ∧
+                        ↑d ≤ ↑c + (↑n - ↑i) ∧
+                          cells (NJA_CountDrop.keys b) 0 ↑v = (rows fuel (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c).1 ∧
+                            ↑d = (rows fuel (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c).2)
+    (fun a i w c safe end_bound sorted range budget enough => sorry)
+    (fun fuel ih a i w c safe end_bound sorted range budget enough =>
+      if active : i < n then
+        have nat_active := total._proof_4 n i w c active;
+        have ib := Decidable.byContradiction fun a => total._proof_5 n hn fuel i w c nat_active a;
+        have wb := Decidable.byContradiction fun a => total._proof_6 n fuel i w c safe ib a;
+        let ⟨q, h✝⟩ := NJE_CountRow.step a n i w c hn active safe sorted
+        let ⟨qvalue, right✝⟩ := h✝
+        let ⟨lower, right✝¹⟩ := right✝
+        let ⟨upper, right✝²⟩ := right✝¹
+        let ⟨delta, body⟩ := right✝²
+        let p := (↑a)[↑i].wrapping_shr 1#u32;
+        let a1 := a.set w p;
+        let c1 := c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i));
+        let w1 := w.wrapping_add 1#usize;
+        have body' := body;
+        have parent :=
+          Eq.mpr
+            (id
+              (congrArg (fun _a => p = _a.wrapping_shr 1#u32)
+                (getElem!_pos (↑a) (↑i)
+                  (have h := a.property;
+                  Decidable.byContradiction fun a_1 => total._proof_7 n fuel a i w c ib q h a_1))))
+            (Eq.refl p);
+        have keys :=
+          id
+            (Eq.mpr
+              (id (congrArg (fun _a => NJA_CountDrop.keys (a.set w _a) = write (NJA_CountDrop.keys a) ↑i ↑w) parent))
+              (NJE_CountKeyFrame.whole a i w ib wb));
+        have wvalue := NJA_CountStep.advance w wb;
+        have cvalue :=
+          have h :=
+            NJE_CountRowBounds.count_value (NJA_CountDrop.keys a) (↑n) c i q
+              (Decidable.byContradiction fun a_1 => total._proof_8 n fuel a i w c budget q a_1) qvalue;
+          if paired : pairAt (NJA_CountDrop.keys a) ↑n ↑i then
+            Eq.mpr
+              (id
+                (congr
+                  (congrArg Eq
+                    (Eq.trans (Usize.wrapping_add_val_eq c (Usize.wrapping_sub 2#usize (q.wrapping_sub i)))
+                      (Eq.trans
+                        (congr
+                          (congrArg HMod.hMod
+                            (congrArg (HAdd.hAdd ↑c)
+                              (Eq.trans (Usize.wrapping_sub_val_eq 2#usize (q.wrapping_sub i))
+                                (congr
+                                  (congrArg HMod.hMod
+                                    (congr
+                                      (congrArg HAdd.hAdd
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.Usize 2
+                                            (of_decide_eq_true (id (Eq.refl true))))))
+                                      (congr (congrArg HSub.hSub UScalar.size_UScalarTyUsize)
+                                        (Eq.trans (Usize.wrapping_sub_val_eq q i)
+                                          (congr
+                                            (congrArg HMod.hMod
+                                              (congrArg (HAdd.hAdd ↑q)
+                                                (congrFun' (congrArg HSub.hSub UScalar.size_UScalarTyUsize) ↑i)))
+                                            UScalar.size_UScalarTyUsize)))))
+                                  UScalar.size_UScalarTyUsize))))
+                          UScalar.size_UScalarTyUsize)
+                        (Nat.add_mod_mod (↑c) (2 + (Usize.size - (↑q + (Usize.size - ↑i)) % Usize.size)) Usize.size))))
+                  (Eq.trans (congrArg (HAdd.hAdd ↑c) (ite_cond_eq_true 0 1 (eq_true paired))) (add_zero ↑c))))
+              (Eq.mp
+                (congr
+                  (congrArg Eq
+                    (Eq.trans (Usize.wrapping_add_val_eq c (Usize.wrapping_sub 2#usize (q.wrapping_sub i)))
+                      (Eq.trans
+                        (congr
+                          (congrArg HMod.hMod
+                            (congrArg (HAdd.hAdd ↑c)
+                              (Eq.trans (Usize.wrapping_sub_val_eq 2#usize (q.wrapping_sub i))
+                                (congr
+                                  (congrArg HMod.hMod
+                                    (congr
+                                      (congrArg HAdd.hAdd
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.Usize 2
+                                            (of_decide_eq_true (id (Eq.refl true))))))
+                                      (congr (congrArg HSub.hSub UScalar.size_UScalarTyUsize)
+                                        (Eq.trans (Usize.wrapping_sub_val_eq q i)
+                                          (congr
+                                            (congrArg HMod.hMod
+                                              (congrArg (HAdd.hAdd ↑q)
+                                                (congrFun' (congrArg HSub.hSub UScalar.size_UScalarTyUsize) ↑i)))
+                                            UScalar.size_UScalarTyUsize)))))
+                                  UScalar.size_UScalarTyUsize))))
+                          UScalar.size_UScalarTyUsize)
+                        (Nat.add_mod_mod (↑c) (2 + (Usize.size - (↑q + (Usize.size - ↑i)) % Usize.size)) Usize.size))))
+                  (Eq.trans (congrArg (HAdd.hAdd ↑c) (ite_cond_eq_true 0 1 (eq_true paired))) (add_zero ↑c)))
+                h)
+          else
+            Eq.mpr
+              (id
+                (congr
+                  (congrArg Eq
+                    (Eq.trans (Usize.wrapping_add_val_eq c (Usize.wrapping_sub 2#usize (q.wrapping_sub i)))
+                      (Eq.trans
+                        (congr
+                          (congrArg HMod.hMod
+                            (congrArg (HAdd.hAdd ↑c)
+                              (Eq.trans (Usize.wrapping_sub_val_eq 2#usize (q.wrapping_sub i))
+                                (congr
+                                  (congrArg HMod.hMod
+                                    (congr
+                                      (congrArg HAdd.hAdd
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.Usize 2
+                                            (of_decide_eq_true (id (Eq.refl true))))))
+                                      (congr (congrArg HSub.hSub UScalar.size_UScalarTyUsize)
+                                        (Eq.trans (Usize.wrapping_sub_val_eq q i)
+                                          (congr
+                                            (congrArg HMod.hMod
+                                              (congrArg (HAdd.hAdd ↑q)
+                                                (congrFun' (congrArg HSub.hSub UScalar.size_UScalarTyUsize) ↑i)))
+                                            UScalar.size_UScalarTyUsize)))))
+                                  UScalar.size_UScalarTyUsize))))
+                          UScalar.size_UScalarTyUsize)
+                        (Nat.add_mod_mod (↑c) (2 + (Usize.size - (↑q + (Usize.size - ↑i)) % Usize.size)) Usize.size))))
+                  (congrArg (HAdd.hAdd ↑c) (ite_cond_eq_false 0 1 (eq_false paired)))))
+              (Eq.mp
+                (congr
+                  (congrArg Eq
+                    (Eq.trans (Usize.wrapping_add_val_eq c (Usize.wrapping_sub 2#usize (q.wrapping_sub i)))
+                      (Eq.trans
+                        (congr
+                          (congrArg HMod.hMod
+                            (congrArg (HAdd.hAdd ↑c)
+                              (Eq.trans (Usize.wrapping_sub_val_eq 2#usize (q.wrapping_sub i))
+                                (congr
+                                  (congrArg HMod.hMod
+                                    (congr
+                                      (congrArg HAdd.hAdd
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.Usize 2
+                                            (of_decide_eq_true (id (Eq.refl true))))))
+                                      (congr (congrArg HSub.hSub UScalar.size_UScalarTyUsize)
+                                        (Eq.trans (Usize.wrapping_sub_val_eq q i)
+                                          (congr
+                                            (congrArg HMod.hMod
+                                              (congrArg (HAdd.hAdd ↑q)
+                                                (congrFun' (congrArg HSub.hSub UScalar.size_UScalarTyUsize) ↑i)))
+                                            UScalar.size_UScalarTyUsize)))))
+                                  UScalar.size_UScalarTyUsize))))
+                          UScalar.size_UScalarTyUsize)
+                        (Nat.add_mod_mod (↑c) (2 + (Usize.size - (↑q + (Usize.size - ↑i)) % Usize.size)) Usize.size))))
+                  (congrArg (HAdd.hAdd ↑c) (ite_cond_eq_false 0 1 (eq_false paired))))
+                h);
+        have progress := NJE_CountRowBounds.progress (NJA_CountDrop.keys a) ↑n ↑i;
+        have growth :=
+          if paired : pairAt (NJA_CountDrop.keys a) ↑n ↑i then
+            Decidable.byContradiction fun a_1 =>
+              total._proof_9 n fuel a i w c nat_active q qvalue lower upper delta
+                (Eq.mp
+                  (congrArg (Eq ↑c1)
+                    (Eq.trans (congrArg (HAdd.hAdd ↑c) (ite_cond_eq_true 0 1 (eq_true paired))) (add_zero ↑c)))
+                  cvalue)
+                a_1
+          else
+            Decidable.byContradiction fun a_1 =>
+              total._proof_10 n hn fuel a i w c budget nat_active ib q qvalue lower upper delta
+                (Eq.mp (congrArg (Eq ↑c1) (congrArg (HAdd.hAdd ↑c) (ite_cond_eq_false 0 1 (eq_false paired)))) cvalue)
+                a_1;
+        have domains :=
+          MultiproofConeCountPhysicalLevels.unread_domain (NJA_CountDrop.keys a) (↑n) (↑i) (↑w) safe nat_active sorted
+            range;
+        have next_sorted :=
+          Eq.mpr (id (congrArg (fun _a => List.Pairwise (fun x1 x2 => x1 < x2) (unread _a ↑n ↑q)) keys))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a => List.Pairwise (fun x1 x2 => x1 < x2) (unread (write (NJA_CountDrop.keys a) ↑i ↑w) (↑n) _a))
+                  qvalue))
+              domains.left);
+        have next_range :=
+          Eq.mpr (id (congrArg (fun _a => ∀ x ∈ unread _a ↑n ↑q, x < 262144) keys))
+            (Eq.mpr
+              (id (congrArg (fun _a => ∀ x ∈ unread (write (NJA_CountDrop.keys a) ↑i ↑w) (↑n) _a, x < 262144) qvalue))
+              domains.right);
+        let ⟨b, h✝¹⟩ :=
+          ih a1 q w1 c1
+            (Decidable.byContradiction fun a_1 => total._proof_11 n fuel a i w c safe q qvalue lower delta wvalue a_1)
+            upper next_sorted next_range
+            (Decidable.byContradiction fun a_1 => total._proof_12 n fuel a i w c budget q cvalue growth a_1)
+            (Decidable.byContradiction fun a_1 =>
+              total._proof_13 n fuel a i w c enough nat_active q qvalue lower upper delta cvalue growth a_1)
+        let ⟨d, h✝²⟩ := h✝¹
+        let ⟨v, h✝³⟩ := h✝²
+        let ⟨exec, right✝³⟩ := h✝³
+        let ⟨vb, right✝⁴⟩ := right✝³
+        let ⟨db, right✝⁵⟩ := right✝⁴
+        let ⟨prefix_eq, count_eq⟩ := right✝⁵
+        have model_step :=
+          Eq.mpr
+            (id
+              (congrArg (fun _a => _a = rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1)
+                (rows.eq_2 (NJA_CountDrop.keys a) (↑n) (↑i) (↑w) (↑c) fuel)))
+            (Eq.mpr (id (congrArg (fun _a => _a = rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1) (if_pos nat_active)))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      rows fuel _a (↑n) (advance (NJA_CountDrop.keys a) ↑n ↑i) (↑w + 1)
+                          (↑c + if pairAt (NJA_CountDrop.keys a) ↑n ↑i then 0 else 1) =
+                        rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1)
+                    (Eq.symm keys)))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        rows fuel (NJA_CountDrop.keys a1) (↑n) _a (↑w + 1)
+                            (↑c + if pairAt (NJA_CountDrop.keys a) ↑n ↑i then 0 else 1) =
+                          rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1)
+                      (Eq.symm qvalue)))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          rows fuel (NJA_CountDrop.keys a1) (↑n) (↑q) _a
+                              (↑c + if pairAt (NJA_CountDrop.keys a) ↑n ↑i then 0 else 1) =
+                            rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1)
+                        (Eq.symm wvalue)))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            rows fuel (NJA_CountDrop.keys a1) (↑n) (↑q) (↑w1) _a =
+                              rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1)
+                          (Eq.symm cvalue)))
+                      (Eq.refl (rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1)))))));
+        Exists.intro b
+          (Exists.intro d
+            (Exists.intro v
+              ⟨Eq.mpr
+                  (id
+                    (congrArg (fun _a => _a = ok (b, d, v))
+                      (multiproof.node_count_loop0_loop0.eq_1 multiproof.Arity.Two a n c w i)))
+                  (Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = ok (b, d, v))
+                        (loop.eq_def
+                          (fun x =>
+                            match x with
+                            | (level1, count1, w1, i1) =>
+                              multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1)
+                          (a, c, w, i))))
+                    (id
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              (match _a with
+                                | ok r =>
+                                  match r with
+                                  | cont x =>
+                                    loop
+                                      (fun x =>
+                                        multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n x.1 x.2.1 x.2.2.1
+                                          x.2.2.2)
+                                      x
+                                  | done x => ok x
+                                | fail e => fail e
+                                | div => div) =
+                                ok (b, d, v))
+                            body'))
+                        (id exec)))),
+                ⟨vb,
+                  ⟨Decidable.byContradiction fun a_1 =>
+                      total._proof_14 n fuel a i w c ib q cvalue growth d v db count_eq a_1,
+                    ⟨Eq.mpr (id (congrArg (fun _a => cells (NJA_CountDrop.keys b) 0 ↑v = _a.1) model_step)) prefix_eq,
+                      Eq.mpr (id (congrArg (fun _a => ↑d = _a.2) model_step)) count_eq⟩⟩⟩⟩))
+      else
+        have nat_inactive := total._proof_15 n i w c active;
+        Exists.intro a
+          (Exists.intro c
+            (Exists.intro w
+              ⟨sorry,
+                ⟨Decidable.byContradiction fun a => total._proof_16 n fuel i w c safe end_bound nat_inactive a,
+                  ⟨Decidable.byContradiction fun a => total._proof_17 n fuel i w c a,
+                    ⟨Eq.mpr
+                        (id
+                          (congrArg (fun _a => cells (NJA_CountDrop.keys a) 0 ↑w = _a.1)
+                            (rows.eq_2 (NJA_CountDrop.keys a) (↑n) (↑i) (↑w) (↑c) fuel)))
+                        (Eq.mpr
+                          (id (congrArg (fun _a => cells (NJA_CountDrop.keys a) 0 ↑w = _a.1) (if_neg nat_inactive)))
+                          (Eq.refl (cells (NJA_CountDrop.keys a) 0 ↑w))),
+                      Eq.mpr
+                        (id
+                          (congrArg (fun _a => ↑c = _a.2) (rows.eq_2 (NJA_CountDrop.keys a) (↑n) (↑i) (↑w) (↑c) fuel)))
+                        (Eq.mpr (id (congrArg (fun _a => ↑c = _a.2) (if_neg nat_inactive))) (Eq.refl ↑c))⟩⟩⟩⟩)))
+    fuel a i w c safe end_bound sorted range budget enough
+'NJE_CountRows.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

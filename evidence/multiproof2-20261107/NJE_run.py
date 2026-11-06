@@ -5,6 +5,10 @@ E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker
 a=sys.argv[1];cfg=json.loads((E/(a+'.json')).read_text());assert cfg['attempt']==a
 assert not cfg.get('cancelled'),cfg.get('cancelled')
 assert not (E/a).exists()
+history=[json.loads(line) for line in (E/'NJE_ATTEMPTS.jsonl').read_text().splitlines() if line.strip()]
+assert cfg['kind'] in ('lean','link','audit','kani'), 'No extraction or unbudgeted proof kind admitted'
+if cfg['kind']=='kani':assert sum(x['kind']=='kani' for x in history)<60,'Kani budget exhausted'
+else:assert sum(x['kind'] in ('lean','link','audit') for x in history)<100,'Lean/link/audit budget exhausted'
 cfg['configuration_source_revision']=cfg.get('source_revision')
 cfg['source_revision']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=E,text=True).strip()
 cfg['source_tree_dirty']=bool(subprocess.check_output(['git','status','--porcelain'],cwd=E,text=True).strip())
