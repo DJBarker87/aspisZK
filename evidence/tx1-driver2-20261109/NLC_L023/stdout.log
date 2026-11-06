@@ -1,0 +1,20 @@
+NLC_generated/NLC_Step_original.lean:10:1: error: Type mismatch. The `do` element has monadic result type
+  Unit
+but the rest of the `do` block has monadic result type
+  Post H
+NLC_generated/NLC_Step_original.lean:11:0: error: unexpected identifier; expected command
+NLC_generated/NLC_Step_original.lean:17:1: error: Tactic `rfl` failed: The left-hand side
+  step { input := i, locals := l, next := Event.original }
+is not definitionally equal to the right-hand side
+  window_original { input := i, locals := l, next := Event.original }
+
+case refl
+H : Type
+i : Input H
+l : Locals H
+⊢ step { input := i, locals := l, next := Event.original } =
+    window_original { input := i, locals := l, next := Event.original }
+'AspisR1.NLC_Finish.step_original' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.step_original : ∀ {H : Type} (s : State H),
+  s.next = Event.original → step s = window_original s :=
+fun {H} s atSite => sorry s atSite

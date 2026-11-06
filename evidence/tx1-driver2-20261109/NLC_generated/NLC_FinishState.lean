@@ -26,6 +26,7 @@ structure Locals (H : Type) where
  alpha : Option Alpha := none
  transcript : Option (r1_wire.SemanticTranscript H) := none
  claims : Option Claims := none
+ terminalReply : Option (core.result.Result Q aspis_core.state_only_prefix.r0.Error) := none
  terminal : Option Q := none
  low : Option Low := none
  high : Option High := none
@@ -39,6 +40,10 @@ structure Locals (H : Type) where
  z0 : Option Point := none
  beforeZ1 : Option Words := none
  z1 : Option Point := none
+ record25 : Option r1_wire.ValidatedRecord := none
+ record26 : Option r1_wire.ValidatedRecord := none
+ payload : Option (Slice U8) := none
+ extraCell : Option Q := none
  root : Option (Array U8 32#usize) := none
 /-- Separate repeated source occurrences; arguments are read from the SAME state. -/
 inductive Event where

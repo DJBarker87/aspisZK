@@ -1,0 +1,69 @@
+{"attempt": "NLC_L010", "exit_status": 1, "wall_seconds": 20.25284692714922, "peak_rss_kib": "6318700", "swaps": "0", "print_axioms": ["'AspisR1.NLC_Finish.fold_from_steps' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLC_generated/NLC_FinishFold.lean:37:17: error: unsolved goals
+case returned
+H : Type
+n : ℕ
+s : State H
+out : Result (Out H)
+log : Log
+events : List Event
+n✝ : ℕ
+s✝ : State H
+out✝ : Out H
+log✝ : Log
+head : run (step s✝) = (log✝, ok (Sum.inl out✝))
+⊢ (log✝, (run (pure out✝)).2) = (log✝, ok out✝)
+'AspisR1.NLC_Finish.fold_from_steps' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.fold_from_steps : ∀ {H : Type} {n : ℕ} {s : State H} {out : Result (Out H)} {log : Log}
+  {events : List Event}, Invocation n s out log events → run (fold n s) = (log, out) :=
+fun {H} {n} {s} {out} {log} {events} cuts =>
+  Invocation.rec (fun {n} {s} {out} {log} head => s
+...
+     (congrArg (fun _a => _a = (log, fail error))
+                (AuS1_Trace.run_bind (step s) fun next =>
+                  match next with
+                  | Sum.inl out => pure out
+                  | Sum.inr after => fold n after)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (AuS1_Trace.continueRun _a.1 _a.2 fun next =>
+                        match next with
+                        | Sum.inl out => pure out
+                        | Sum.inr after => fold n after) =
+                      (log, fail error))
+                  head))
+              (Eq.refl
+                (AuS1_Trace.continueRun (log, fail error).1 (log, fail error).2 fun next =>
+                  match next with
+                  | Sum.inl out => pure out
+                  | Sum.inr after => fold n after))))))
+    (fun {n} {s} {log} head =>
+      id
+        (id
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = (log, div))
+                (AuS1_Trace.run_bind (step s) fun next =>
+                  match next with
+                  | Sum.inl out => pure out
+                  | Sum.inr after => fold n after)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (AuS1_Trace.continueRun _a.1 _a.2 fun next =>
+                        match next with
+                        | Sum.inl out => pure out
+                        | Sum.inr after => fold n after) =
+                      (log, div))
+                  head))
+              (Eq.refl
+                (AuS1_Trace.continueRun (log, div).1 (log, div).2 fun next =>
+                  match next with
+                  | Sum.inl out => pure out
+                  | Sum.inr after => fold n after))))))
+    cuts
+
+Running as unit: run-r0f01ffb7a72649398db4fd8d389364f4.scope; invocation ID: fd2a86879c264974b0bd56ff5556ba2a
