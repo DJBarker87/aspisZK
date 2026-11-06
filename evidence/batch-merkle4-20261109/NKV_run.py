@@ -7,10 +7,27 @@ assert not cfg.get('cancelled'),cfg.get('cancelled')
 for name,wanted in cfg.get('inputs_expected',{}).items():assert hashlib.sha256((E/name).read_bytes()).hexdigest()==wanted,'STOP owned input drift '+name
 assert not (E/a).exists()
 history=[json.loads(line) for line in (E/'NKV_ATTEMPTS.jsonl').read_text().splitlines() if line.strip()]
+# Exactly pinned pre-checker infrastructure failure: no proof/binary was run.
+# It remains in the append-only attempt history, with zero proof-budget charge.
+def proof_charge(x):
+ if x['attempt']!='NKV_L110':return 1
+ z=json.loads((E/'NKV_INFRA_CLASSIFICATION.json').read_text())
+ assert hashlib.sha256((E/'NKV_L110/receipt.json').read_bytes()).hexdigest()==z['receipt_sha256']
+ assert hashlib.sha256((E/'NKV_L110/infra/NKV_FINAL_scan.stderr.log').read_bytes()).hexdigest()==z['stderr_sha256']
+ assert z['budget_charge']==0
+ return 0
+
 assert cfg['kind'] in ('lean','link','audit','kani','extract'), 'No extraction or unbudgeted proof kind admitted'
 if cfg['kind']=='extract':raise AssertionError('NKV extraction forbidden')
 elif cfg['kind']=='kani':assert sum(x['kind']=='kani' for x in history)<70,'Kani budget exhausted'
-else:assert sum(x['kind'] in ('lean','link','audit') for x in history)<110,'Lean/link/audit budget exhausted'
+elif cfg['kind']=='audit':
+ # Read-only native checker executions invoke no Lean compiler. The JOB permits
+ # at most TWO actual full binary audits, independently of compiler/link budget.
+ assert cfg['command']==['python3','NKV_final_binary_gates.py',a+'.json']
+ actual=[x for x in history if x['kind']=='audit' and proof_charge(x)]
+ assert len(actual)<2,'Two actual binary audits exhausted'
+ assert hashlib.sha256((E/'NKV_COMBINED_IMPORT.lean').read_bytes()).hexdigest()==json.loads((E/'NKV_L109/receipt.json').read_text())['source_hashes']['NKV_COMBINED_IMPORT.lean']
+else:assert sum(x['kind'] in ('lean','link') for x in history)<110,'Lean/compiler-link budget exhausted'
 cfg['configuration_source_revision']=cfg.get('source_revision')
 cfg['source_revision']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=E,text=True).strip()
 cfg['source_tree_dirty']=bool(subprocess.check_output(['git','status','--porcelain'],cwd=E,text=True).strip())
@@ -96,7 +113,16 @@ for n,t in json.loads(r.stdout).items():
  p=E/n;p.parent.mkdir(parents=True,exist_ok=True);raw=base64.b64decode(t)
  original=next((top for top in E.iterdir() if top.is_file() and top.name==p.name and top.stat().st_size==len(raw) and hashlib.sha256(top.read_bytes()).digest()==hashlib.sha256(raw).digest()),None)
  if len(raw)>1000000 and original is not None:
-  p.with_name(p.name+'.ref.json').write_text(json.dumps(dict(owned_input=original.name,sha256=hashlib.sha256(raw).hexdigest(),bytes=len(raw)))+'\n')
+  raw_sha=hashlib.sha256(raw).hexdigest()
+  ref=dict(owned_input=original.name,sha256=raw_sha,bytes=len(raw))
+  if 'EXPECTED_IMPORTS' in original.name:
+   immutable=E/'NKV_pinned_inputs'/('NKV_'+raw_sha+'.jsonl.xz');immutable.parent.mkdir(exist_ok=True)
+   if not immutable.exists():immutable.write_bytes(lzma.compress(raw,preset=6))
+   assert hashlib.sha256(lzma.decompress(immutable.read_bytes())).hexdigest()==raw_sha
+   stored_sha=hashlib.sha256(immutable.read_bytes()).hexdigest()
+   immutable.with_suffix(immutable.suffix+'.sha256').write_text(stored_sha+'\n')
+   ref.update(original_owned_input=original.name,owned_input=str(immutable.relative_to(E)),compression='xz',stored_sha256=stored_sha)
+  p.with_name(p.name+'.ref.json').write_text(json.dumps(ref)+'\n')
  elif len(raw)>1000000:
   p.with_name(p.name+'.xz').write_bytes(lzma.compress(raw,preset=6));p.with_name(p.name+'.sha256').write_text(hashlib.sha256(raw).hexdigest()+'\n')
  else:p.write_bytes(raw)

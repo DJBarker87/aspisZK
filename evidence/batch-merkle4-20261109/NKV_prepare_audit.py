@@ -33,6 +33,13 @@ for m,r in selected.items():
  src=next(n for n in r['sources'] if n.endswith('.lean'))
  imports=['Init']+re.findall(r'^import (?:all )?([A-Za-z0-9_.]+)',(P/src).read_text(),re.M)
  records[m]={'module':m,'imports':list(dict.fromkeys(imports))}
+# Source-backed completion of unchanged newly reached dependency headers.
+for module, pin in json.loads((P/'NKV_AUDIT_HEADER_PINS.json').read_text()).items():
+ source=Path(pin['source']);assert hashlib.sha256(source.read_bytes()).hexdigest()==pin['sha256']
+ assert module not in records
+ actual=list(dict.fromkeys(['Init']+re.findall(r'^import (?:all )?([A-Za-z0-9_.]+)',source.read_text(),re.M)))
+ assert actual==pin['imports']
+ records[module]={'module':module,'imports':actual}
 records['NKV_COMBINED_IMPORT']={'module':'NKV_COMBINED_IMPORT','imports':['Init']+modules}
 (P/'NKV_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(records[m])+'\n' for m in sorted(records)))
 (P/'NKV_AUDIT_ROOTS.json').write_text(json.dumps({'roots':sorted(roots),'groups':[sorted(roots)]},indent=2)+'\n')

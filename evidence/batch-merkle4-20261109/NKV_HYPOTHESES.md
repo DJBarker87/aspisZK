@@ -1,6 +1,6 @@
 # NKV hypothesis inventory
 
-Target not yet established. There is NO proposed positive NDT row root. NKV_COMBINED_IMPORT prints the full statement and axioms of every selected top theorem (157 roots including the deployed headline); NKV_PROOF_SET.json binds each statement's module to its successful exact source hash and receipt. NKV_L108's stdout is the statement artifact.
+Target not yet established. There is NO proposed positive NDT row root. NKV_COMBINED_IMPORT prints the full statement and axioms of every selected top theorem (157 roots including the deployed headline); NKV_PROOF_SET.json binds each statement's module to its successful exact source hash and receipt. NKV_L109's stdout is the statement artifact.
 
 The (aq)(2) permitted positive-root inventory is: headline hypotheses; reviewed parent harness cut transcription (ai)(5); retained SAME-call NIG_FinishInput.Domain. Every NKV theorem below is SUPPORT rather than an assertion that its own local hypotheses are automatically headline facts.
 
