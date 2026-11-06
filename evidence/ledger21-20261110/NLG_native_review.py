@@ -28,6 +28,13 @@ def receipt(d,a,positive):
  assert g['graph_matches_frozen'] and not g.get('edge_errors') and l['unchanged']and l['before']==l['after']==LOCK,a
  assert ad['exit']==0 and ad['reservation']['allowed']is True,a
  assert r['exit_status']==(0 if positive else 1)and 'VERIFICATION:- '+('SUCCESSFUL'if positive else'FAILED')in log,a
+ features={z['name']:set(z['features'])for z in g['selected_closure']}
+ assert {'default','optimized-terminal','private-leaf-salts','program-build'}<=features['aspis-r1-cost-probe'],a
+ assert {'r0','pool-v1-kernel'}<=features['aspis-statement'] and len([f for f in features['aspis-statement']if f.endswith('-audit')])==12,a
+ if 'aspis-r1-cost-probe-program'in features:assert {'pool-adapter','private-leaf-salts'}<=features['aspis-r1-cost-probe-program'] and 'no-entrypoint'not in features['aspis-r1-cost-probe-program'],a
+ erasure=None
+ if d.name=='row-bridges-20261109':
+  erasure=J(d/(a+'-erasure-check.json'));assert erasure['passed']and not erasure['changed'],a
  # Every original input is retained and its receipt hash checked.
  verified=[]
  for n,h in r['source_hashes'].items():
@@ -42,7 +49,7 @@ def receipt(d,a,positive):
    assert b is not None,(a,n,'missing retained hash')
   assert H(b)==h,(a,n)
   verified.append(dict(source=n,sha256=h,bytes=len(b)))
- x=dict(attempt=a,positive=positive,exit=r['exit_status'],receipt_sha256=H(raw(d/a/'receipt.json')),graph_sha256=H(raw(d/(a+'-graph-check.json'))),lock_sha256=H(raw(d/(a+'-lock-check.json'))),source_inputs=verified,selected_features=g.get('selected_closure'),all_features=g.get('all_features'),copy_patch_sha256=KMX)
+ x=dict(attempt=a,positive=positive,exit=r['exit_status'],receipt_sha256=H(raw(d/a/'receipt.json')),graph_sha256=H(raw(d/(a+'-graph-check.json'))),lock_sha256=H(raw(d/(a+'-lock-check.json'))),source_inputs=verified,deployed_feature_parity_checked=True,erasure_sha256=H(raw(d/(a+'-erasure-check.json')))if erasure else None,selected_features=g.get('selected_closure'),all_features=g.get('all_features'),copy_patch_sha256=KMX)
  seen[key]=x;checks.append(x);return x
 # NKU consumes this exact pre-existing table; K045 is variant-only and never used for Prepared payload.
 p=E.parent/'tx2-resume2-20261109';table=J(p/'NKU_NATIVE_CUT_TABLE.json')
