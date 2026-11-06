@@ -1,0 +1,195 @@
+NKE_generated/NKE_CommonNative.lean:41:68: error: Application type mismatch: The argument
+  width
+has type
+  Event.pending weights reply = Event.pending weights✝ reply✝
+but is expected to have type
+  (↑weights).length = 64
+in the application
+  NKE_PendingNative.source r weights (zeros weights) width
+NKE_generated/NKE_CommonNative.lean:42:9: error: Type mismatch: After simplification, term
+  width
+ has type
+  Event.pending weights reply = Event.pending weights✝ reply✝
+but is expected to have type
+  (↑weights).length = 64
+NKE_generated/NKE_CommonNative.lean:43:4: error: 'change' tactic failed, pattern
+  NJJ_Common.pending r weights = pendingG r weights
+is not definitionally equal to target
+  NJJ_Common.pending r weights =
+    match r with
+    | core.result.Result.Ok PUnit.unit =>
+      ok (core.result.Result.Ok { raw := NKE_PendingNative.states weights (zeros weights) 64, terms := 0#usize })
+    | core.result.Result.Err a => ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation)
+NKE_generated/NKE_CommonNative.lean:45:4: error: Tactic `rfl` failed: The left-hand side
+  Event.flush pending✝ weights✝
+    (if (↑pending✝.raw).length = 64 ∧ (↑weights✝).length = 64 then ok (NJJ_Flush.output pending✝) else reply✝)
+is not definitionally equal to the right-hand side
+  Event.pending weights reply
+
+case h_2
+r : NP6_StdModel.Reservation
+weights : Slice NJU_CommonObserved.K
+reply : R verifier.BatchedWeights
+clause : reply = NJJ_Common.pending r weights
+x✝ : Event
+pending✝ : verifier.BatchedWeights
+weights✝ : Slice NJU_CommonObserved.K
+reply✝ : Result (Slice NJU_CommonObserved.K)
+heq✝ : Event.pending weights reply = Event.flush pending✝ weights✝ reply✝
+⊢ Event.flush pending✝ weights✝
+      (if (↑pending✝.raw).length = 64 ∧ (↑weights✝).length = 64 then ok (NJJ_Flush.output pending✝) else reply✝) =
+    Event.pending weights reply
+NKE_generated/NKE_CommonNative.lean:36:25: error: unsolved goals
+case h_3
+r : NP6_StdModel.Reservation
+weights : Slice NJU_CommonObserved.K
+reply : R verifier.BatchedWeights
+clause : reply = NJJ_Common.pending r weights
+x✝ : Event
+proof✝ : Slice U8
+p✝ : verifier.Prepared
+a✝ : verifier.Accumulator
+g✝ : Std.Array E 29#usize
+geometry✝ : verifier.QueryGeometry
+pending✝ : verifier.BatchedWeights
+reply✝ : R (verifier.Accumulator × verifier.BatchedWeights)
+heq✝ : Event.pending weights reply = Event.query proof✝ p✝ a✝ g✝ geometry✝ pending✝ reply✝
+⊢ Event.query proof✝ p✝ a✝ g✝ geometry✝ pending✝ (NKE_QueryReturn.observed reply✝) = Event.pending weights reply
+
+case h_4
+r : NP6_StdModel.Reservation
+weights : Slice NJU_CommonObserved.K
+reply : R verifier.BatchedWeights
+clause : reply = NJJ_Common.pending r weights
+x✝³ : Event
+x✝² :
+  ∀ (weights_1 : Slice NJU_CommonObserved.K) (reply_1 : R verifier.BatchedWeights),
+    Event.pending weights reply = Event.pending weights_1 reply_1 → False
+x✝¹ :
+  ∀ (pending : verifier.BatchedWeights) (weights_1 : Slice NJU_CommonObserved.K)
+    (reply_1 : Result (Slice NJU_CommonObserved.K)),
+    Event.pending weights reply = Event.flush pending weights_1 reply_1 → False
+x✝ :
+  ∀ (proof : Slice U8) (p : verifier.Prepared) (a : verifier.Accumulator) (g : Std.Array E 29#usize)
+    (geometry : verifier.QueryGeometry) (pending : verifier.BatchedWeights)
+    (reply_1 : R (verifier.Accumulator × verifier.BatchedWeights)),
+    Event.pending weights reply = Event.query proof p a g geometry pending reply_1 → False
+⊢ Event.pending weights (if (↑weights).length = 64 then pendingG r weights else reply) = Event.pending weights reply
+NKE_generated/NKE_CommonNative.lean:50:62: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  width
+has type
+  Event.flush pending weights reply = Event.pending weights✝ reply✝
+which has no fields.
+NKE_generated/NKE_CommonNative.lean:50:70: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  width
+has type
+  Event.flush pending weights reply = Event.pending weights✝ reply✝
+which has no fields.
+NKE_generated/NKE_CommonNative.lean:51:4: error: Tactic `rfl` failed: The left-hand side
+  Event.flush pending✝ weights✝
+    (if (↑pending✝.raw).length = 64 ∧ (↑weights✝).length = 64 then ok (NJJ_Flush.output pending✝) else reply✝)
+is not definitionally equal to the right-hand side
+  Event.flush pending weights reply
+
+case h_2
+r : NP6_StdModel.Reservation
+pending : verifier.BatchedWeights
+weights : Slice NJU_CommonObserved.K
+reply : Result (Slice NJU_CommonObserved.K)
+clause : reply = Port3_FlushInstall.flush pending weights
+x✝ : Event
+pending✝ : verifier.BatchedWeights
+weights✝ : Slice NJU_CommonObserved.K
+reply✝ : Result (Slice NJU_CommonObserved.K)
+heq✝ : Event.flush pending weights reply = Event.flush pending✝ weights✝ reply✝
+⊢ Event.flush pending✝ weights✝
+      (if (↑pending✝.raw).length = 64 ∧ (↑weights✝).length = 64 then ok (NJJ_Flush.output pending✝) else reply✝) =
+    Event.flush pending weights reply
+NKE_generated/NKE_CommonNative.lean:46:31: error: unsolved goals
+case h_3
+r : NP6_StdModel.Reservation
+pending : verifier.BatchedWeights
+weights : Slice NJU_CommonObserved.K
+reply : Result (Slice NJU_CommonObserved.K)
+clause : reply = Port3_FlushInstall.flush pending weights
+x✝ : Event
+proof✝ : Slice U8
+p✝ : verifier.Prepared
+a✝ : verifier.Accumulator
+g✝ : Std.Array E 29#usize
+geometry✝ : verifier.QueryGeometry
+pending✝ : verifier.BatchedWeights
+reply✝ : R (verifier.Accumulator × verifier.BatchedWeights)
+heq✝ : Event.flush pending weights reply = Event.query proof✝ p✝ a✝ g✝ geometry✝ pending✝ reply✝
+⊢ Event.query proof✝ p✝ a✝ g✝ geometry✝ pending✝ (NKE_QueryReturn.observed reply✝) = Event.flush pending weights reply
+
+case h_4
+r : NP6_StdModel.Reservation
+pending : verifier.BatchedWeights
+weights : Slice NJU_CommonObserved.K
+reply : Result (Slice NJU_CommonObserved.K)
+clause : reply = Port3_FlushInstall.flush pending weights
+x✝³ : Event
+x✝² :
+  ∀ (weights_1 : Slice NJU_CommonObserved.K) (reply_1 : R verifier.BatchedWeights),
+    Event.flush pending weights reply = Event.pending weights_1 reply_1 → False
+x✝¹ :
+  ∀ (pending_1 : verifier.BatchedWeights) (weights_1 : Slice NJU_CommonObserved.K)
+    (reply_1 : Result (Slice NJU_CommonObserved.K)),
+    Event.flush pending weights reply = Event.flush pending_1 weights_1 reply_1 → False
+x✝ :
+  ∀ (proof : Slice U8) (p : verifier.Prepared) (a : verifier.Accumulator) (g : Std.Array E 29#usize)
+    (geometry : verifier.QueryGeometry) (pending_1 : verifier.BatchedWeights)
+    (reply_1 : R (verifier.Accumulator × verifier.BatchedWeights)),
+    Event.flush pending weights reply = Event.query proof p a g geometry pending_1 reply_1 → False
+⊢ Event.flush pending weights
+      (if (↑pending.raw).length = 64 ∧ (↑weights).length = 64 then ok (NJJ_Flush.output pending) else reply) =
+    Event.flush pending weights reply
+NKE_generated/NKE_CommonNative.lean:54:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NKE_QueryReturn.observed ?reply
+in the target expression
+  (match Event.query proof p a g geometry pending reply with
+    | Event.pending weights reply =>
+      Event.pending weights (if (↑weights).length = 64 then pendingG r weights else reply)
+    | Event.flush pending weights reply =>
+      Event.flush pending weights
+        (if (↑pending.raw).length = 64 ∧ (↑weights).length = 64 then ok (NJJ_Flush.output pending) else reply)
+    | Event.query proof p a g geometry pending reply =>
+      Event.query proof p a g geometry pending (NKE_QueryReturn.observed reply)
+    | e => e) =
+    Event.query proof p a g geometry pending reply
+
+case query
+r : NP6_StdModel.Reservation
+proof : Slice U8
+p : verifier.Prepared
+a : verifier.Accumulator
+g : Std.Array E 29#usize
+geometry : verifier.QueryGeometry
+pending : verifier.BatchedWeights
+reply : R (verifier.Accumulator × verifier.BatchedWeights)
+clause : NKE_CommonClauses.Clause r (Event.query proof p a g geometry pending reply)
+⊢ (match Event.query proof p a g geometry pending reply with
+    | Event.pending weights reply =>
+      Event.pending weights (if (↑weights).length = 64 then pendingG r weights else reply)
+    | Event.flush pending weights reply =>
+      Event.flush pending weights
+        (if (↑pending.raw).length = 64 ∧ (↑weights).length = 64 then ok (NJJ_Flush.output pending) else reply)
+    | Event.query proof p a g geometry pending reply =>
+      Event.query proof p a g geometry pending (NKE_QueryReturn.observed reply)
+    | e => e) =
+    Event.query proof p a g geometry pending reply
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    weights
+  has type
+    Slice NJU_CommonObserved.K
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑weights
+'NKE_CommonNative.event_exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKE_CommonNative.fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKE_CommonNative.actual' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

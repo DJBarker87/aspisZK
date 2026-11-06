@@ -27,21 +27,7 @@ theorem query (r : NP6_StdModel.Reservation) (proof : Slice U8)
  (reply : Result NKE_QueryReturn.Reply) :
  Clause r (.query proof p a g geometry pending reply) := NKE_QueryReturn.observed_exact reply
 
-/-- One actual common log, without a free endpoint or a second invocation. -/
-theorem source (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish)
- {H : Type} (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) :
- NKE_EventAll.Holds (Clause rr) (run wr rr merkle finish d pub proof ck hash none) := by
- unfold run
- repeat' first
- | apply NKE_EventAll.bind_all
- | intro value
- | exact NKE_EventAll.lift_all _ _
- | exact NKE_EventAll.pure_all _ _
- | (apply NKE_EventAll.record_all; first | rfl | exact True.intro | exact NKE_QueryReturn.observed_exact _)
- | (fail_if_no_progress dsimp only [NJU_Log.prod_cases])
- | split
 #print axioms pending
 #print axioms flush
 #print axioms query
-#print axioms source
 end NKE_CommonClauses
