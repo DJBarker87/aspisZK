@@ -1,0 +1,91 @@
+{
+ "status": "PASS_FOUR_CANDIDATE_BODIES_EMITTED",
+ "rows": [
+  {
+   "row": "TX2:150",
+   "definition": "NJI_Extracted.aspis_statement.pool_v1.format.decode_verifier_policy_v1",
+   "emitted": true,
+   "template": false,
+   "opaque": false,
+   "raw_emitted_file": "/Users/dominic/ZK/.worktrees/cx-ledger16/evidence/tx2-decoders-20261108/NJI_EMITTED/raw/NJI_Extracted/Funs.lean",
+   "raw_file_sha256": "460c519e4f062a0fcd115954bc23006b80d5c4ce9b2fc65476b59d99950e9b37",
+   "raw_declaration_sha256": "a14b446baeddc9577096e0b96c40125acbb149e9ea53c332eab8f9213d2dc8b1",
+   "selected_source": "/Users/dominic/ZK/.worktrees/cx-ledger16/evidence/tx2-decoders-20261108/NJI_Extracted.Core.lean",
+   "selected_file_sha256": "92694c175fdb4d31f1e32ee7e08bfbf60c724ea6eaec55a62742ab633b6356c6",
+   "selected_declaration_sha256": "d34561c7b504fd9adc221e046d835c4b0499f49a00bd40a644009a6d6571aa13",
+   "root_definition_chain": [
+    "NJI_PolicyTotal.native_source",
+    "NJI_PolicyParser.raw",
+    "NJI_Extracted.aspis_statement.pool_v1.format.decode_verifier_policy_v1"
+   ],
+   "exact_selected_declaration": "def aspis_statement.pool_v1.format.decode_verifier_policy_v1\n  (bytes : Slice Std.U8) :\n  Result (core.result.Result aspis_statement.pool_v1.format.VerifierPolicyV1\n    aspis_statement.pool_v1.format.PoolV1FormatError)\n  := do\n  let i := Slice.len bytes\n  if i != aspis_statement.pool_v1.format.POOL_V1_VERIFIER_POLICY_BYTES\n  then\n    ok (core.result.Result.Err\n      aspis_statement.pool_v1.format.PoolV1FormatError.WrongLength)\n  else\n    let s \u2190\n      core.slice.index.Slice.index\n        (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8) bytes\n        { \u00abend\u00bb := 4#usize }\n    let b \u2190\n      NJI_call_0 core.cmp.PartialEqU8 s\n        aspis_statement.pool_v1.format.POOL_V1_VERIFIER_POLICY_MAGIC\n    if b\n    then\n      ok (core.result.Result.Err\n        aspis_statement.pool_v1.format.PoolV1FormatError.WrongMagic)\n    else\n      let i1 \u2190 Slice.index_usize bytes 4#usize\n      if i1 != aspis_statement.pool_v1.format.POOL_V1_VERIFIER_POLICY_VERSION\n      then\n        ok (core.result.Result.Err\n          aspis_statement.pool_v1.format.PoolV1FormatError.WrongVersion)\n      else\n        let s1 \u2190\n          core.slice.index.Slice.index\n            (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes\n            { start := 6#usize, \u00abend\u00bb := 8#usize }\n        let a := Array.repeat 2#usize 0#u8\n        let b1 \u2190\n          NJI_call_0 core.cmp.PartialEqU8 s1 a\n        if b1\n        then\n          ok (core.result.Result.Err\n            aspis_statement.pool_v1.format.PoolV1FormatError.NonZeroReserved)\n        else\n          let i2 \u2190 Slice.index_usize bytes 5#usize\n          let s2 \u2190\n            core.slice.index.Slice.index\n              (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes\n              { start := 8#usize, \u00abend\u00bb := 40#usize }\n          let r \u2190\n            core.array.TryFromArrayCopySlice.try_from 32#usize\n              core.marker.CopyU8 s2\n          let a1 \u2190\n            core.result.Result.unwrap core.fmt.DebugTryFromSliceError r\n          let s3 \u2190\n            core.slice.index.Slice.index\n              (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes\n              { start := 40#usize, \u00abend\u00bb := 72#usize }\n          let r1 \u2190\n            core.array.TryFromArrayCopySlice.try_from 32#usize\n              core.marker.CopyU8 s3\n          let a2 \u2190\n            core.result.Result.unwrap core.fmt.DebugTryFromSliceError r1\n          let s4 \u2190\n            core.slice.index.Slice.index\n              (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes\n              { start := 72#usize, \u00abend\u00bb := 104#usize }\n          let r2 \u2190\n            core.array.TryFromArrayCopySlice.try_from 32#usize\n              core.marker.CopyU8 s4\n          let a3 \u2190\n            core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2\n          let r3 \u2190\n            NJI_call_7\n              {\n                flags := i2,\n                registry_program := a1,\n                registry_authority := a2,\n                policy_binding := a3\n              }\n          let cf \u2190 core.result.Result.Insts.CoreOpsTry.branch r3\n          match cf with\n          | core.ops.control_flow.ControlFlow.Continue _ =>\n            ok (core.result.Result.Ok\n              {\n                flags := i2,\n                registry_program := a1,\n                registry_authority := a2,\n                policy_binding := a3\n              })\n          | core.ops.control_flow.ControlFlow.Break residual =>\n            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n              aspis_statement.pool_v1.format.VerifierPolicyV1\n              (core.convert.FromSame\n              aspis_statement.pool_v1.format.PoolV1FormatError) residual\n\n",
+   "parameterization": "Explicit resolved concrete callee parameters; instantiated internally by root, never external template axioms. Review source SCC parameter propagation in NJI diffs."
+  },
+  {
+   "row": "TX2:157",
+   "definition": "NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.validate_master",
+   "emitted": true,
+   "template": false,
+   "opaque": false,
+   "raw_emitted_file": "/Users/dominic/ZK/.worktrees/cx-ledger16/evidence/tx2-decoders-20261108/NJI_EMITTED/raw/NJI_Extracted/Funs.lean",
+   "raw_file_sha256": "460c519e4f062a0fcd115954bc23006b80d5c4ce9b2fc65476b59d99950e9b37",
+   "raw_declaration_sha256": "db30124cbfc5796637ed22191f284d771a386dd7a67400c953561eb05948ae53",
+   "selected_source": "/Users/dominic/ZK/.worktrees/cx-ledger16/evidence/tx2-decoders-20261108/NJI_Extracted.Master.lean",
+   "selected_file_sha256": "8bc0da0b62391ee96ab2a674d987a399171a34ae103ba32fd7ee1ab8c8c0647d",
+   "selected_declaration_sha256": "bfb08142337ee0ca15a881b328a65989168ba280dc4e5eafd37ba0c74d7849a2",
+   "root_definition_chain": [
+    "NJI_MasterCut.native_source",
+    "NJI_MasterModel.raw",
+    "NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.validate_master"
+   ],
+   "exact_selected_declaration": "def aspis_statement.pool_v1.pair_forest_accounts.validate_master\n  (master :\n  aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1) :\n  Result (core.result.Result Unit\n    aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)\n  := do\n  let a := Array.repeat 32#usize 0#u8\n  let b \u2190\n    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8\n      master.identity.pool a\n  if b\n  then\n    ok (core.result.Result.Err\n      aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)\n  else\n    let a1 := Array.repeat 32#usize 0#u8\n    let b1 \u2190\n      core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8\n        master.identity.asset_mint a1\n    if b1\n    then\n      ok (core.result.Result.Err\n        aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)\n    else\n      let a2 := Array.repeat 32#usize 0#u8\n      let b2 \u2190\n        core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8\n          master.identity.token_program a2\n      if b2\n      then\n        ok (core.result.Result.Err\n          aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)\n      else\n        let a3 := Array.repeat 32#usize 0#u8\n        let b3 \u2190\n          core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8\n            master.identity.deployment_domain a3\n        if b3\n        then\n          ok (core.result.Result.Err\n            aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)\n        else\n          let r \u2190\n            NJI_call_7\n              master.verifier_policy\n          let r1 \u2190\n            NJI_call_2\n              aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1FormatErrorPoolV1PairForestAccountErrorV1\n              r ()\n          let cf \u2190 core.result.Result.Insts.CoreOpsTry.branch r1\n          match cf with\n          | core.ops.control_flow.ControlFlow.Continue _ =>\n            let s \u2190\n              lift (Array.to_slice master.last_checkpoint_lane_sequences)\n            let i \u2190 core.slice.Slice.iter s\n            let (b4, _) \u2190\n              NJI_call_4\n                (aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1.Insts.CoreOpsFunctionFnMutTupleSharedU64Bool NJI_call_8)\n                i ()\n            if b4\n            then\n              ok (core.result.Result.Err\n                aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidMasterState)\n            else\n              if master.has_checkpoint\n              then\n                if master.next_checkpoint_sequence = 0#u64\n                then\n                  ok (core.result.Result.Err\n                    aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidMasterState)\n                else ok (core.result.Result.Ok ())\n              else\n                if master.next_checkpoint_sequence != 0#u64\n                then\n                  ok (core.result.Result.Err\n                    aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidMasterState)\n                else\n                  let a4 := Array.repeat 8#usize 0#u64\n                  let b5 \u2190\n                    core.array.equality.PartialEqArray.ne core.cmp.PartialEqU64\n                      master.last_checkpoint_lane_sequences a4\n                  if b5\n                  then\n                    ok (core.result.Result.Err\n                      aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidMasterState)\n                  else ok (core.result.Result.Ok ())\n          | core.ops.control_flow.ControlFlow.Break residual =>\n            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n              Unit (core.convert.FromSame\n              aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)\n              residual\n\n\n",
+   "parameterization": "Explicit resolved concrete callee parameters; instantiated internally by root, never external template axioms. Review source SCC parameter propagation in NJI diffs."
+  },
+  {
+   "row": "TX2:206",
+   "definition": "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_entry_v1",
+   "emitted": true,
+   "template": false,
+   "opaque": false,
+   "raw_emitted_file": "/Users/dominic/ZK/.worktrees/cx-ledger16/evidence/tx2-decoders-20261108/NJI_EMITTED/raw/NJI_Extracted/Funs.lean",
+   "raw_file_sha256": "460c519e4f062a0fcd115954bc23006b80d5c4ce9b2fc65476b59d99950e9b37",
+   "raw_declaration_sha256": "d49e1ae78b290c45e0daa486d7968f9c72732ffa7012d95b179f2f30384a2b2f",
+   "selected_source": "/Users/dominic/ZK/.worktrees/cx-ledger16/evidence/tx2-decoders-20261108/NJI_Extracted.Core.lean",
+   "selected_file_sha256": "92694c175fdb4d31f1e32ee7e08bfbf60c724ea6eaec55a62742ab633b6356c6",
+   "selected_declaration_sha256": "d49e1ae78b290c45e0daa486d7968f9c72732ffa7012d95b179f2f30384a2b2f",
+   "root_definition_chain": [
+    "NJI_V1Join.entry_source",
+    "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_entry_v1"
+   ],
+   "exact_selected_declaration": "def\n  aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_entry_v1\n  (entry : aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1) :\n  Result (core.result.Result Unit\n    aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError)\n  := do\n  if entry.statement_version = 0#u8\n  then\n    ok (core.result.Result.Err\n      aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.InvalidStatementVersion)\n  else\n    let b \u2190\n      aspis_statement.pool_v1.verifier_registry.required_binding_is_zero\n        entry.pool\n    if b\n    then\n      ok (core.result.Result.Err\n        aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)\n    else\n      let b1 \u2190\n        aspis_statement.pool_v1.verifier_registry.required_binding_is_zero\n          entry.verifier_program\n      if b1\n      then\n        ok (core.result.Result.Err\n          aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)\n      else\n        let b2 \u2190\n          aspis_statement.pool_v1.verifier_registry.required_binding_is_zero\n            entry.profile_binding\n        if b2\n        then\n          ok (core.result.Result.Err\n            aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)\n        else\n          let b3 \u2190\n            aspis_statement.pool_v1.verifier_registry.required_binding_is_zero\n              entry.release_binding\n          if b3\n          then\n            ok (core.result.Result.Err\n              aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)\n          else\n            let b4 \u2190\n              aspis_statement.pool_v1.verifier_registry.required_binding_is_zero\n                entry.policy_binding\n            if b4\n            then\n              ok (core.result.Result.Err\n                aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)\n            else\n              let b5 \u2190\n                aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.has_no_retirement_slot\n                  entry\n              if b5\n              then ok (core.result.Result.Ok ())\n              else\n                if entry.retirement_slot <= entry.activation_slot\n                then\n                  ok (core.result.Result.Err\n                    aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.InvalidRetirementSlot)\n                else ok (core.result.Result.Ok ())\n\n",
+   "parameterization": "Explicit resolved concrete callee parameters; instantiated internally by root, never external template axioms. Review source SCC parameter propagation in NJI diffs."
+  },
+  {
+   "row": "TX2:208",
+   "definition": "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_v1",
+   "emitted": true,
+   "template": false,
+   "opaque": false,
+   "raw_emitted_file": "/Users/dominic/ZK/.worktrees/cx-ledger16/evidence/tx2-decoders-20261108/NJI_EMITTED/raw/NJI_Extracted/Funs.lean",
+   "raw_file_sha256": "460c519e4f062a0fcd115954bc23006b80d5c4ce9b2fc65476b59d99950e9b37",
+   "raw_declaration_sha256": "3859644da0afa76c8df5c1ed170ab31ae1789b42f7a7fc2efadea042c2bdaa4c",
+   "selected_source": "/Users/dominic/ZK/.worktrees/cx-ledger16/evidence/tx2-decoders-20261108/NJI_Extracted.Core.lean",
+   "selected_file_sha256": "92694c175fdb4d31f1e32ee7e08bfbf60c724ea6eaec55a62742ab633b6356c6",
+   "selected_declaration_sha256": "3859644da0afa76c8df5c1ed170ab31ae1789b42f7a7fc2efadea042c2bdaa4c",
+   "root_definition_chain": [
+    "NJI_V1Join.registry_source",
+    "NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_v1"
+   ],
+   "exact_selected_declaration": "def aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_v1\n  (registry : aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1) :\n  Result (core.result.Result Unit\n    aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError)\n  := do\n  let i \u2190\n    aspis_statement.pool_v1.verifier_registry.POOL_V1_VERIFIER_REGISTRY_FLAGS_MASK\n  let i1 \u2190 lift (~~~ i)\n  let i2 \u2190 lift (registry.flags &&& i1)\n  if i2 != 0#u8\n  then\n    ok (core.result.Result.Err\n      aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.UnsupportedFlags)\n  else\n    let b \u2190\n      aspis_statement.pool_v1.verifier_registry.required_binding_is_zero\n        registry.pool\n    if b\n    then\n      ok (core.result.Result.Err\n        aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)\n    else\n      let b1 \u2190\n        aspis_statement.pool_v1.verifier_registry.required_binding_is_zero\n          registry.policy_binding\n      if b1\n      then\n        ok (core.result.Result.Err\n          aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)\n      else\n        let b2 \u2190\n          aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1.is_immutable\n            registry\n        let b3 \u2190\n          aspis_statement.pool_v1.verifier_registry.required_binding_is_zero\n            registry.authority\n        if b2 != b3\n        then\n          ok (core.result.Result.Err\n            aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.InvalidAuthorityMode)\n        else\n          if registry.minimum_activation_delay_slots = 0#u64\n          then\n            ok (core.result.Result.Err\n              aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.InvalidActivationDelay)\n          else ok (core.result.Result.Ok ())\n\n",
+   "parameterization": "Explicit resolved concrete callee parameters; instantiated internally by root, never external template axioms. Review source SCC parameter propagation in NJI diffs."
+  }
+ ],
+ "finding": "NJI-F1 four omitted decoder bodies concern OTHER OPEN rows TX2:152/153/201/203. No opaque/template body substitutes for these candidates.",
+ "omitted_decoder_names": [
+  "decode_pair_forest_checkpoint_v1",
+  "decode_pair_forest_master_v1",
+  "decode_verifier_registry_entry_v1",
+  "decode_verifier_registry_v1"
+ ],
+ "compiled_template": false
+}
