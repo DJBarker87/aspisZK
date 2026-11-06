@@ -1,0 +1,25 @@
+NJP_lean/NJP_PermutationPacket.lean:30:5: warning: Variable name `i` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+theorem NJP_PermutationPacket.TX1_306 : ∀ (input : State) (states : Fin 23 → State)
+  (control : Fin 22 → ℕ × NJA_Trace.Kind),
+  NJP_ControllerTrace.Cut input states control →
+    states (Fin.last 22) = model input ∧
+      ok ((), states (Fin.last 22)) = ok ((), model input) ∧
+        ∀ (r : Fin 22),
+          ((NJE_RoundTrace.observed input states r).round, (NJE_RoundTrace.observed input states r).kind) = control r :=
+fun input states control cut =>
+  let ⟨canonical, right✝⟩ := NJP_ControllerTrace.result input states control cut
+  let ⟨value, right✝¹⟩ := right✝
+  let ⟨left✝, descriptors⟩ := right✝¹
+  have raw :=
+    funext fun i =>
+      NJP_FieldEncoding.unique (states (Fin.last 22) i) (R0P.poseidonPermutation (NJE_RoundTrace.cast input) i)
+        (canonical i) (congrFun value i);
+  ⟨raw, ⟨congrArg (fun s => ok ((), s)) raw, descriptors⟩⟩
+'NJP_PermutationPacket.TX1_306' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_PermutationPacket.model_domain : ∀ (input : State), NJE_RoundTrace.Canonical (model input) :=
+fun input i => NJP_FieldEncoding.canonical (R0P.poseidonPermutation (NJE_RoundTrace.cast input) i)
+'NJP_PermutationPacket.model_domain' depends on axioms: [propext, Classical.choice, Quot.sound]

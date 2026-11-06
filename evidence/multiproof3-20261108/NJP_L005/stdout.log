@@ -1,0 +1,25 @@
+NJP_lean/NJP_CompressionPacket.lean:35:3: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NJP_lean/NJP_CompressionPacket.lean:29:54: error: (deterministic) timeout at `«tactic execution»`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+theorem NJP_CompressionPacket.TX1_305 : ∀ (left right : Digest),
+  (∀ (i : Fin 8), ↑(left i) < 2147483647) →
+    (∀ (i : Fin 8), ↑(right i) < 2147483647) →
+      ∀ (seeded : State) (out : Digest) (calls : ℕ),
+        CallerCut left right seeded (NJP_PermutationPacket.model seeded) out calls →
+          out = model left right ∧ calls = 1 ∧ ok out = ok (model left right) :=
+fun left right hl hr seeded out calls cut =>
+  have seed_value := (NJE_CompressSeed.value left right hl hr).right;
+  sorry seed_value
+'NJP_CompressionPacket.TX1_305' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJP_CompressionPacket.child_domain : ∀ (left right : Digest),
+  (∀ (i : Fin 8), ↑(left i) < 2147483647) →
+    (∀ (i : Fin 8), ↑(right i) < 2147483647) → NJE_RoundTrace.Canonical (NJE_CompressSeed.seed left right) :=
+fun left right hl hr => (NJE_CompressSeed.value left right hl hr).left
+'NJP_CompressionPacket.child_domain' depends on axioms: [propext, Classical.choice, Quot.sound]

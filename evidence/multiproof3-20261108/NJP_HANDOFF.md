@@ -15,3 +15,5 @@ Validation: initial read-only source/rule review only; no prover launched. Exact
 Next deliverable: actual frozen permutation controller harness plus perturbation control. Four rows remain OPEN pending native cuts, Lean composition, combined NJK+NJE+deployed import, NFX scan, raw ax2 and next ledger gate. No keys created or removed; no push; no other worktree modified.
 
 Controller stage: K006/K007 and stability K008/K009 semantic pass/fail. L002 compiles witness-threading and chronology (standard axioms only). K001 compiler failure and L001 unsolved Fin goal excluded. No combined audit/row admission yet. Seed copied 43 files / 7,347,304 bytes; hashes in NJP_SEED.json.
+
+Compression stage: K010 passes, K011 and K012 semantic controls fail; L003/L004/L006 pass standard axioms, including full raw permutation result and SAME-state compression root. L005 congr tactic heartbeat timeout excluded; replaced by symbolic seed congrArg in L006 without raising limits. K013 selected 32-byte borrow over all-arbitrary 9216 bytes passes; K014 failure selected its missing-window branch, so a payload-specific control remains required before payload credit.
