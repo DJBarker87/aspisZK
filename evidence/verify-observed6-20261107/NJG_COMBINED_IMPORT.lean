@@ -1,6 +1,7 @@
 import NJG_BASE_IMPORT
 import NJG_AlphaCarry
 import NJG_CallerInstall
+import NJG_CanonicalPrefix
 import NJG_CarrierBack
 import NJG_Carriers
 import NJG_ClaimsGeometry
@@ -33,6 +34,9 @@ import NJG_RowWindows
 #print axioms AspisR1.NJG_AlphaCarry.written
 #print axioms AspisR1.NJG_CallerInstall.prepare
 #print axioms AspisR1.NJG_CallerInstall.tx1
+#print axioms AspisR1.NJG_CanonicalPrefix.initial
+#print axioms AspisR1.NJG_CanonicalPrefix.set_prefix
+#print axioms AspisR1.NJG_CanonicalPrefix.step
 #print axioms AspisR1.NJG_CarrierBack.point
 #print axioms AspisR1.NJG_CarrierBack.challenge
 #print axioms AspisR1.NJG_CarrierBack.transcript

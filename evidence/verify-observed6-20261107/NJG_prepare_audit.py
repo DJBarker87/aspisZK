@@ -6,7 +6,7 @@ for p in sorted(E.glob('NJG_L[0-9][0-9][0-9]/receipt.json')):
  if r['kind']=='lean' and r['exit_status']==0:accepted[r['module']]=r
 mods=[];roots=['AspisR1.RPx_Deployed.deployed'];rejected=[]
 for p in sorted(E.glob('NJG_*.lean')):
- if p.stem in ['NJG_BASE_IMPORT','NJG_COMBINED_IMPORT','NJG_Driver','NJG_ProofDriver']:continue
+ if p.stem in ['NJG_BASE_IMPORT','NJG_COMBINED_IMPORT','NJG_Driver','NJG_ProofDriver','NJG_Statements','NJG_ConsumerImport']:continue
  r=accepted.get(p.stem);h=hashlib.sha256(p.read_bytes()).hexdigest()
  if not r or r['source_hashes'].get('NJG_generated/'+p.name)!=h:
   rejected.append(dict(module=p.stem,source_sha256=h,reason='No successful current-source receipt; never imported or credited'));continue
@@ -15,7 +15,7 @@ for p in sorted(E.glob('NJG_*.lean')):
   assert 'sorryAx' not in line,line
   m=re.match("'([^']+)'",line)
   if m and m[1]not in roots:roots.append(m[1])
-(E/'NJG_MODULES.json').write_text(json.dumps(mods,indent=2));(E/'NJG_REJECTED_DRAFTS.json').write_text(json.dumps(rejected,indent=2));(E/'NJG_AUDIT_ROOTS.json').write_text(json.dumps(dict(groups=[roots[i:i+32] for i in range(0,len(roots),32)]),indent=2))
+(E/'NJG_MODULES.json').write_text(json.dumps(mods,indent=2));(E/'NJG_REJECTED_DRAFTS.json').write_text(json.dumps(rejected,indent=2));(E/'NJG_AUDIT_ROOTS.json').write_text(json.dumps(dict(groups=[(roots+['AspisR1.JFw_Validator.loop_valid','AspisR1.JFw_Record.success','AspisR1.JFw_Record.index'])[i:i+32] for i in range(0,len(roots)+3,32)]),indent=2))
 (E/'NJG_BASE_IMPORT.lean').write_text('import NGK_COMBINED_IMPORT\nimport NIU_COMBINED_IMPORT\nimport NIX_COMBINED_IMPORT\n#print axioms AspisR1.RPx_Deployed.deployed\n')
 (E/'NJG_COMBINED_IMPORT.lean').write_text('\n'.join('import '+n for n in ['NJG_BASE_IMPORT',*[m['module'] for m in mods]])+'\n'+'\n'.join('#print axioms '+n for n in roots)+'\n')
 rows={};variants=[]

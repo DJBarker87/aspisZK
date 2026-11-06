@@ -1,0 +1,42 @@
+{"attempt": "NJG_L085", "exit_status": 0, "wall_seconds": 9.101490745088086, "peak_rss_kib": "6003736", "swaps": "0", "print_axioms": ["'AspisR1.NJG_FinishInstall.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJG_ObservedInstall.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJG_CurrentEquation.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJG_CurrentEquation.slot' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJG_CallerInstall.prepare' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJG_CallerInstall.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJG_FinishInstall.source : ∀ {H : Type} (R : AspisR1PublicPreparation.RoundModel.Boundaries)
+  (F : AspisR1PublicPreparation.FinishModel.Boundaries) (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (pubdata : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pre : AspisR1PublicPreparation.r1_wire.Prefix) (t : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (challenges : AspisR1PublicPreparation.r1_wire.Challenges),
+  AspisR1.NJG_FinishBody.r1_semantic.verify_finish (AspisR1.NJG_FinishInstall.install R F) D pubdata pre t challenges
+      none =
+    AspisR1PublicPreparation.FinishModel.finish R (AspisR1.NJG_FinishInstall.model F) D pubd
+...
+sR1.NJG_FinishBody.r1_wire.Prefix →
+        Aeneas.Std.U8 →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result (Aeneas.Std.Slice Aeneas.Std.U8) AspisR1.NJG_FinishBody.r1_wire.Error))
+    (circle :
+      AspisR1.NJG_FinishBody.aspis_core.digest.Digest32 H →
+        AspisR1.NJG_FinishBody.r1_wire.SemanticTranscript H →
+          AspisR1.NJG_FinishBody.r1_wire.ValidatedRecord →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result AspisR1.NJG_FinishBody.aspis_core.circle.SecureCirclePoint
+                  AspisR1.NJG_FinishBody.r1_wire.Error ×
+                AspisR1.NJG_FinishBody.r1_wire.SemanticTranscript H))
+    (state :
+      AspisR1.NJG_FinishBody.aspis_core.digest.Digest32 H →
+        AspisR1.NJG_FinishBody.r1_wire.SemanticTranscript H →
+          Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+    (decode :
+      (N : Aeneas.Std.Usize) →
+        AspisR1.NJG_FinishBody.r1_wire.ValidatedRecord →
+          Aeneas.Std.Usize →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result (Aeneas.Std.Array AspisR1.NJG_FinishBody.aspis_core.field.QM31 N)
+                AspisR1.NJG_FinishBody.r1_wire.Error)) :
+    AspisR1.NJG_FinishBody.Boundaries H
+'AspisR1.NJG_FinishInstall.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJG_ObservedInstall.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJG_CurrentEquation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJG_CurrentEquation.slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJG_CallerInstall.prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJG_CallerInstall.tx1' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8515c87b9243425f9b917907579d02f4.scope; invocation ID: cf05d2593ee640aba77c058c6393c0db
