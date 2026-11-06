@@ -1,18 +1,122 @@
 {
- "status": "SEMANTIC_REVIEW_GATE_PENDING",
+ "admissible": 4,
+ "rejected": 0,
  "rows": [
   {
-   "row": "TX1:261",
-   "provider": "NLH",
-   "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::semantic_packed",
    "basis_obligation_statement_hash": "fca1b6d3ca64251409da65b285bcbf484f7a11970caa6415393987111eff6ebe",
+   "callee_occurrences": [
+    {
+     "arguments": "before.packed, pub, o, s",
+     "bridge_roots": [
+      "AspisR1.NKR_ScheduleRoot.source",
+      "AspisR1.NKR_ScheduleAssociation.source"
+     ],
+     "child": "TX1:232",
+     "cohort": "add_schedule_lanes",
+     "domain_installation": "NLH_SemanticChild0.step; NKR_TermSemanticSource packet canonical stages; initial zero vector",
+     "native_pairs": [
+      [
+       "NLH_K002",
+       "NLH_K003"
+      ],
+      [
+       "NLH_K004",
+       "NLH_K005"
+      ],
+      [
+       "NLH_K014",
+       "NLH_K015"
+      ]
+     ],
+     "occurrence": "child 0",
+     "parent": "TX1:261"
+    },
+    {
+     "arguments": "immediately preceding packed, SAME o, SAME s",
+     "child": "TX1:229",
+     "cohort": "add_path_lanes",
+     "domain_installation": "NLH_SemanticChild1.step; exact source packet stage 1",
+     "native_pairs": [
+      [
+       "NLH_K002",
+       "NLH_K003"
+      ],
+      [
+       "NLH_K004",
+       "NLH_K005"
+      ]
+     ],
+     "occurrence": "child 1",
+     "parent": "TX1:261",
+     "status": "CLOSED baseline"
+    },
+    {
+     "arguments": "immediately preceding packed, SAME o, SAME s",
+     "bridge_roots": [
+      "AspisR1.NKI_ValueRoot.source"
+     ],
+     "child": "TX1:233",
+     "cohort": "add_value_lanes",
+     "domain_installation": "NLH_SemanticChild2.step; exact source packet stage 2; canonical input arrays/selectors",
+     "native_pairs": [
+      [
+       "NLH_K002",
+       "NLH_K003"
+      ],
+      [
+       "NLH_K004",
+       "NLH_K005"
+      ]
+     ],
+     "occurrence": "child 2",
+     "parent": "TX1:261"
+    },
+    {
+     "arguments": "immediately preceding packed, SAME pub/o/s",
+     "child": "TX1:228",
+     "cohort": "add_occupancy_lanes",
+     "domain_installation": "NLH_SemanticChild3.step; exact source packet stage 3",
+     "native_pairs": [
+      [
+       "NLH_K002",
+       "NLH_K003"
+      ],
+      [
+       "NLH_K004",
+       "NLH_K005"
+      ]
+     ],
+     "occurrence": "child 3",
+     "parent": "TX1:261",
+     "status": "CLOSED baseline"
+    },
+    {
+     "arguments": "SAME pub/o/s; full two-digest reply",
+     "bridge_roots": [
+      "AspisR1.NKR_DigestComposed.source"
+     ],
+     "child": "TX1:250",
+     "domain_installation": "NLH_TermSemanticRoot.source, NLH_DigestChain.cuts; NKR_DigestChildren.Domain pub and canonical o/selectors",
+     "native_pairs": [
+      [
+       "NLH_K006",
+       "NLH_K007"
+      ],
+      [
+       "NLH_K008",
+       "NLH_K009"
+      ]
+     ],
+     "occurrence": "digest",
+     "parent": "TX1:261"
+    }
+   ],
    "certificate": {
-    "row": "TX1:261",
-    "status": "CANDIDATE",
-    "root": "AspisR1.NLH_SemanticFold.source",
-    "module": "NLH_SemanticFold",
-    "source_sha256": "3f71903fa3bae404742e1f58bb468e507850e286b2ce2265cc116bbbe7352eda",
-    "receipt": "NLH_L049/receipt.json",
+    "callee_substitutions": "NLH_CALLEE_COMPOSITION.json",
+    "candidate_child_dependencies": [
+     "TX1:232",
+     "TX1:250"
+    ],
     "children": [
      "TX1:232",
      "TX1:233",
@@ -20,19 +124,21 @@
      "TX1:228",
      "TX1:229"
     ],
-    "conditional_on_next_ledger_gate": true,
-    "rows": [
-     "TX1:261"
+    "closed_children": [
+     "TX1:233",
+     "TX1:228",
+     "TX1:229"
     ],
-    "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::semantic_packed",
+    "complete_carrier": true,
+    "conditional_on_next_ledger_gate": true,
+    "credit_waits_next_ledger_gate": true,
     "frozen_body_sha256": "59b34976f029d802a74e13a69a1f7a066cd8fc5da77753d0bfa093a5fb2dc635",
-    "route": "(y)/(ad)/(ai)(5)/(aq)/(aq)(5)/(au)/(bd)/(be) direct hybrid P6 parent fold",
-    "root_domain": "SAME Public/openings/selectors; digest Domain; canonical z/succ/xor/high/low; asset_id<p and unwrap_or(amount,0)<p",
+    "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::semantic_packed",
     "lean_roots": [
      "AspisR1.NLH_SemanticFold.source"
     ],
-    "owner_module": "NLH_SemanticFold",
-    "root_attempt": "NLH_L049",
+    "local_gate": "PASS_NEXT_LEDGER_GATE",
+    "module": "NLH_SemanticFold",
     "native_pairs": [
      [
       "NLH_K002",
@@ -63,147 +169,102 @@
       "NLH_K015"
      ]
     ],
-    "complete_carrier": true,
+    "owner_module": "NLH_SemanticFold",
     "premise_policy": "Only actual typed root inputs and explicit canonical/domain invariants; every child Result, SAME argument, frame, prefix and cohort value is instantiated internally. Generic package lemmas are SUPPORT, never row roots.",
-    "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; inherited ABI/std/allocator/compiler/source-to-ELF and runtime digest trust retained; no new or removed trust row",
-    "local_gate": "PASS_NEXT_LEDGER_GATE",
-    "credit_waits_next_ledger_gate": true,
-    "callee_substitutions": "NLH_CALLEE_COMPOSITION.json",
-    "closed_children": [
-     "TX1:233",
-     "TX1:228",
-     "TX1:229"
+    "receipt": "NLH_L049/receipt.json",
+    "root": "AspisR1.NLH_SemanticFold.source",
+    "root_attempt": "NLH_L049",
+    "root_domain": "SAME Public/openings/selectors; digest Domain; canonical z/succ/xor/high/low; asset_id<p and unwrap_or(amount,0)<p",
+    "route": "(y)/(ad)/(ai)(5)/(aq)/(aq)(5)/(au)/(bd)/(be) direct hybrid P6 parent fold",
+    "row": "TX1:261",
+    "rows": [
+     "TX1:261"
     ],
-    "candidate_child_dependencies": [
-     "TX1:232",
-     "TX1:250"
-    ]
+    "source_sha256": "3f71903fa3bae404742e1f58bb468e507850e286b2ce2265cc116bbbe7352eda",
+    "status": "CANDIDATE",
+    "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; inherited ABI/std/allocator/compiler/source-to-ELF and runtime digest trust retained; no new or removed trust row"
    },
-   "roots": [
-    "AspisR1.NLH_SemanticFold.source"
+   "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::semantic_packed",
+   "gate_admitted": true,
+   "hypothesis_inventory": [
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hd",
+      "verbatim": "NKR_DigestChildren.Domain pub"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hz",
+      "verbatim": "canonical o.z"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hs",
+      "verbatim": "canonical o.succ_z"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hx",
+      "verbatim": "canonical o.xor12_z"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hh",
+      "verbatim": "canonical s.high"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hl",
+      "verbatim": "canonical s.low"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "asset",
+      "verbatim": "pub.asset_id.val < 2147483647"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "amount",
+      "verbatim": "(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32).val < 2147483647"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    }
    ],
-   "primary_root": "AspisR1.NLH_SemanticFold.source",
    "kernel_statements": [
     {
      "obligation_statement": "\u2200 (pub : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)\n  (s : AspisR1.NKI_InitialPrefix.Selectors) (hd : AspisR1.NKR_DigestChildren.Domain pub)\n  (hz :\n    @AspisR1.FIw_ArrayValue.canonical\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true))))\n      (FIq_Native.state_only_poseidon.StateOnlyPoseidonOpenings.z o))\n  (hs :\n    @AspisR1.FIw_ArrayValue.canonical\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true))))\n      (FIq_Native.state_only_poseidon.StateOnlyPoseidonOpenings.succ_z o))\n  (hx :\n    @AspisR1.FIw_ArrayValue.canonical\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true))))\n      (FIq_Native.state_only_poseidon.StateOnlyPoseidonOpenings.xor12_z o))\n  (hh :\n    @AspisR1.FIw_ArrayValue.canonical\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true))))\n      (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.high s))\n  (hl :\n    @AspisR1.FIw_ArrayValue.canonical\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true))))\n      (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.low s))\n  (asset :\n    @LT.lt.{0} Nat instLTNat\n      (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.U32\n        (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.asset_id pub))\n      (@OfNat.ofNat.{0} Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647))))\n  (amount :\n    @LT.lt.{0} Nat instLTNat\n      (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.U32\n        (@Aeneas.Std.core.option.Option.unwrap_or.{0} Aeneas.Std.U32\n          (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.withdrawal_amount pub)\n          (Aeneas.Std.U32.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n            (@of_decide_eq_true\n              (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U32))\n              (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U32))\n              (@id.{0}\n                (@Eq.{1} Bool\n                  (@Decidable.decide\n                    (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U32))\n                    (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))\n                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.U32)))\n                  Bool.true)\n                (@Eq.refl.{1} Bool Bool.true))))))\n      (@OfNat.ofNat.{0} Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))),\n  @Exists.{1} AspisR1.NLH_SemanticState.State fun (final : AspisR1.NLH_SemanticState.State) =>\n    And\n      (@AspisR1.NLH_FoldCore.Cuts AspisR1.NLH_SemanticState.State AspisR1.NLH_SemanticState.Event\n        (AspisR1.NLH_SemanticState.step pub o s) AspisR1.NLH_SemanticState.order AspisR1.NLH_SemanticFold.initial\n        (@Aeneas.Std.Result.ok.{0} AspisR1.NLH_SemanticState.State final) AspisR1.NLH_SemanticState.order)\n      (And\n        (@Eq.{1} (Aeneas.Std.Result.{0} AspisR1.NLH_SemanticState.State)\n          (AspisR1.NLH_SemanticState.run pub o s AspisR1.NLH_SemanticFold.initial)\n          (@Aeneas.Std.Result.ok.{0} AspisR1.NLH_SemanticState.State final))\n        (And\n          (@AspisR1.FIw_ArrayValue.canonical\n            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24)))\n              AspisR1.NKR_TermSemanticSource.Packed._proof_1)\n            (AspisR1.NLH_SemanticState.State.packed final))\n          (And\n            (@Eq.{1}\n              (Aeneas.Std.Result.{0}\n                (Aeneas.Std.Array.{0} FIq_Native.field.QM31\n                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24)))\n                    (@of_decide_eq_true\n                      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24)))\n                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                      (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24)))\n                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                      (@id.{0}\n                        (@Eq.{1} Bool\n                          (@Decidable.decide\n                            (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24)))\n                              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                            (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24)))\n                              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n                          Bool.true)\n                        (@Eq.refl.{1} Bool Bool.true))))))\n              (FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_packed pub o s)\n              (@Aeneas.Std.Result.ok.{0} AspisR1.NKR_TermSemanticSource.Packed\n                (AspisR1.NLH_SemanticState.State.packed final)))\n            (@Eq.{1}\n              (Aeneas.Std.Result.{0}\n                (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24)))\n                    (@of_decide_eq_true\n                      (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24)))\n                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                      (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24)))\n                        (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                      (@id.{0}\n                        (@Eq.{1} Bool\n                          (@Decidable.decide\n                            (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24)))\n                              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                            (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24)))\n                              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n                          Bool.true)\n                        (@Eq.refl.{1} Bool Bool.true))))))\n              (AspisR1.NLH_TermSemanticRoot.reference pub o s)\n              (@Aeneas.Std.Result.ok.{0} AspisR1.NKR_TermSemanticSource.Packed\n                (AspisR1.NLH_SemanticState.State.packed final))))))",
      "owner_module": "NLH_SemanticFold",
      "root": "AspisR1.NLH_SemanticFold.source"
-    }
-   ],
-   "root_domain": [
-    {
-     "name": "hd",
-     "verbatim": "NKR_DigestChildren.Domain pub",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hz",
-     "verbatim": "canonical o.z",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hs",
-     "verbatim": "canonical o.succ_z",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hx",
-     "verbatim": "canonical o.xor12_z",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hh",
-     "verbatim": "canonical s.high",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hl",
-     "verbatim": "canonical s.low",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "asset",
-     "verbatim": "pub.asset_id.val < 2147483647",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "amount",
-     "verbatim": "(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32).val < 2147483647",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    }
-   ],
-   "hypothesis_inventory": [
-    {
-     "clause": {
-      "name": "hd",
-      "verbatim": "NKR_DigestChildren.Domain pub",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hz",
-      "verbatim": "canonical o.z",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hs",
-      "verbatim": "canonical o.succ_z",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hx",
-      "verbatim": "canonical o.xor12_z",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hh",
-      "verbatim": "canonical s.high",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hl",
-      "verbatim": "canonical s.low",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "asset",
-      "verbatim": "pub.asset_id.val < 2147483647",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "amount",
-      "verbatim": "(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32).val < 2147483647",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
     }
    ],
    "original_clauses": {
@@ -10856,147 +10917,151 @@
     "kernel_roots": [],
     "named_hypotheses": []
    },
+   "primary_root": "AspisR1.NLH_SemanticFold.source",
+   "provider": "NLH",
+   "recommendation": "ADMIT_ONLY_AFTER_GATE",
    "review": "ONE21-event fold. SemanticPrefix starts packed24 at zero; source packet supplies exact canonical consecutive232/229/233/228 results at unchanged Public/openings/selectors. NKR_DigestRoot/Wrapper supplies CLOSED250 two-cell result, not free replies; TermDigestFrame transports packed values. ScalarInvocation establishes all12 field operand domains and92 preweighted tail from asset/amount and actual arrays. Canonical full packed24, complete source/cohort Result, order and attempted prefix are conclusions. Native windows associate full pre/post state under reviewed option-A transport.",
-   "callee_occurrences": [
+   "root_domain": [
     {
-     "parent": "TX1:261",
-     "child": "TX1:232",
-     "occurrence": "child 0",
-     "arguments": "before.packed, pub, o, s",
-     "cohort": "add_schedule_lanes",
-     "bridge_roots": [
-      "AspisR1.NKR_ScheduleRoot.source",
-      "AspisR1.NKR_ScheduleAssociation.source"
-     ],
-     "domain_installation": "NLH_SemanticChild0.step; NKR_TermSemanticSource packet canonical stages; initial zero vector",
-     "native_pairs": [
-      [
-       "NLH_K002",
-       "NLH_K003"
-      ],
-      [
-       "NLH_K004",
-       "NLH_K005"
-      ],
-      [
-       "NLH_K014",
-       "NLH_K015"
-      ]
-     ]
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hd",
+     "verbatim": "NKR_DigestChildren.Domain pub"
     },
     {
-     "parent": "TX1:261",
-     "child": "TX1:229",
-     "occurrence": "child 1",
-     "arguments": "immediately preceding packed, SAME o, SAME s",
-     "cohort": "add_path_lanes",
-     "domain_installation": "NLH_SemanticChild1.step; exact source packet stage 1",
-     "status": "CLOSED baseline",
-     "native_pairs": [
-      [
-       "NLH_K002",
-       "NLH_K003"
-      ],
-      [
-       "NLH_K004",
-       "NLH_K005"
-      ]
-     ]
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hz",
+     "verbatim": "canonical o.z"
     },
     {
-     "parent": "TX1:261",
-     "child": "TX1:233",
-     "occurrence": "child 2",
-     "arguments": "immediately preceding packed, SAME o, SAME s",
-     "cohort": "add_value_lanes",
-     "bridge_roots": [
-      "AspisR1.NKI_ValueRoot.source"
-     ],
-     "domain_installation": "NLH_SemanticChild2.step; exact source packet stage 2; canonical input arrays/selectors",
-     "native_pairs": [
-      [
-       "NLH_K002",
-       "NLH_K003"
-      ],
-      [
-       "NLH_K004",
-       "NLH_K005"
-      ]
-     ]
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hs",
+     "verbatim": "canonical o.succ_z"
     },
     {
-     "parent": "TX1:261",
-     "child": "TX1:228",
-     "occurrence": "child 3",
-     "arguments": "immediately preceding packed, SAME pub/o/s",
-     "cohort": "add_occupancy_lanes",
-     "domain_installation": "NLH_SemanticChild3.step; exact source packet stage 3",
-     "status": "CLOSED baseline",
-     "native_pairs": [
-      [
-       "NLH_K002",
-       "NLH_K003"
-      ],
-      [
-       "NLH_K004",
-       "NLH_K005"
-      ]
-     ]
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hx",
+     "verbatim": "canonical o.xor12_z"
     },
     {
-     "parent": "TX1:261",
-     "child": "TX1:250",
-     "occurrence": "digest",
-     "arguments": "SAME pub/o/s; full two-digest reply",
-     "bridge_roots": [
-      "AspisR1.NKR_DigestComposed.source"
-     ],
-     "domain_installation": "NLH_TermSemanticRoot.source, NLH_DigestChain.cuts; NKR_DigestChildren.Domain pub and canonical o/selectors",
-     "native_pairs": [
-      [
-       "NLH_K006",
-       "NLH_K007"
-      ],
-      [
-       "NLH_K008",
-       "NLH_K009"
-      ]
-     ]
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hh",
+     "verbatim": "canonical s.high"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hl",
+     "verbatim": "canonical s.low"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "asset",
+     "verbatim": "pub.asset_id.val < 2147483647"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "amount",
+     "verbatim": "(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32).val < 2147483647"
     }
    ],
-   "recommendation": "ADMIT_ONLY_AFTER_GATE",
-   "gate_admitted": false
+   "roots": [
+    "AspisR1.NLH_SemanticFold.source"
+   ],
+   "row": "TX1:261"
   },
   {
-   "row": "TX1:237",
-   "provider": "NLH",
-   "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::composition_parts",
    "basis_obligation_statement_hash": "006bc96c210e5b5883c25a707d8d7fa46f8b67069f6ef198b052e75cb74a65d0",
+   "callee_occurrences": [
+    {
+     "arguments": "exact p.z/p.succ/p.xor12 and p.poseidonSelectors produced by SAME gathers",
+     "child": "TX1:308",
+     "domain_installation": "NKR_TermGatherPoseidon.source, NLH_CompPoseidon.step; canonical exact openings, block and local16",
+     "native_pairs": [
+      [
+       "NLH_K026",
+       "NLH_K027"
+      ],
+      [
+       "NLH_K032",
+       "NLH_K033"
+      ],
+      [
+       "NLH_K034",
+       "NLH_K035"
+      ],
+      [
+       "NLH_K036",
+       "NLH_K037"
+      ]
+     ],
+     "occurrence": "poseidon",
+     "parent": "TX1:237",
+     "status": "CLOSED deterministic baseline"
+    },
+    {
+     "arguments": "pub, current openings, current selectors",
+     "bridge_roots": [
+      "AspisR1.NLH_SemanticFold.source"
+     ],
+     "child": "TX1:261",
+     "domain_installation": "NLH_CompSemantic.source; gathers prove canonical child arrays/selectors; CompRoot derives amount<p from precheck; asset bound is explicit root input",
+     "native_pairs": [
+      [
+       "NLH_K028",
+       "NLH_K029"
+      ]
+     ],
+     "occurrence": "semantic",
+     "parent": "TX1:237"
+    },
+    {
+     "arguments": "current openings.z, current H1, current selectors, SAME lambda/chi, pub.transition.live_snapshot.next_pair_index, actual copy_variant(pub.variant)",
+     "bridge_roots": [
+      "AspisR1.NKR_SumCopyRoot.source"
+     ],
+     "child": "TX1:218",
+     "domain_installation": "NLH_CompCopy.source; p.zCanonical/p.selectorHigh/p.selectorLow, SAME selected H1 canonicality and lambda/chi canonicality; primitive lookup/constant metadata cuts and their exact frozen meaning remain the predecessor's reviewed P6 boundary, not a new caller premise",
+     "native_pairs": [
+      [
+       "NLH_K030",
+       "NLH_K031"
+      ],
+      [
+       "NLH_K040",
+       "NLH_K041"
+      ],
+      [
+       "NLH_K042",
+       "NLH_K043"
+      ]
+     ],
+     "occurrence": "copy",
+     "parent": "TX1:237"
+    }
+   ],
    "certificate": {
-    "row": "TX1:237",
-    "status": "CANDIDATE",
-    "root": "AspisR1.NLH_CompRoot.source",
-    "module": "NLH_CompRoot",
-    "source_sha256": "ccabc17b6297673f3318051d6a72f8744181e7d7abddd30a46947fdd2175cae7",
-    "receipt": "NLH_L107/receipt.json",
+    "callee_substitutions": "NLH_CALLEE_COMPOSITION.json",
+    "candidate_child_dependencies": [
+     "TX1:218",
+     "TX1:261"
+    ],
     "children": [
      "TX1:218",
      "TX1:261",
      "TX1:308"
     ],
-    "conditional_on_next_ledger_gate": true,
-    "rows": [
-     "TX1:237"
+    "closed_children": [
+     "TX1:308"
     ],
-    "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::composition_parts",
+    "complete_carrier": true,
+    "conditional_on_next_ledger_gate": true,
+    "credit_waits_next_ledger_gate": true,
     "frozen_body_sha256": "499f65133b57e879a1f3ed024c17945fb0d975887ad8e131bc0ce054bfb27bc0",
-    "route": "(y)/(ad)/(ai)(5)/(aq)/(aq)(5)/(au)/(bd)/(be) direct hybrid P6 parent fold",
-    "root_domain": "SAME Public/claims84/point10/lambda/chi/theta; digest Domain; canonical claims/point/challenges; asset_id<p; amount domain established by its own precheck",
+    "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::composition_parts",
     "lean_roots": [
      "AspisR1.NLH_CompRoot.source"
     ],
-    "owner_module": "NLH_CompRoot",
-    "root_attempt": "NLH_L107",
+    "local_gate": "PASS_NEXT_LEDGER_GATE",
+    "module": "NLH_CompRoot",
     "native_pairs": [
      [
       "NLH_K016",
@@ -11047,131 +11112,93 @@
       "NLH_K043"
      ]
     ],
-    "complete_carrier": true,
+    "owner_module": "NLH_CompRoot",
     "premise_policy": "Only actual typed root inputs and explicit canonical/domain invariants; every child Result, SAME argument, frame, prefix and cohort value is instantiated internally. Generic package lemmas are SUPPORT, never row roots.",
-    "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; inherited ABI/std/allocator/compiler/source-to-ELF and runtime digest trust retained; no new or removed trust row",
-    "local_gate": "PASS_NEXT_LEDGER_GATE",
-    "credit_waits_next_ledger_gate": true,
-    "callee_substitutions": "NLH_CALLEE_COMPOSITION.json",
-    "closed_children": [
-     "TX1:308"
+    "receipt": "NLH_L107/receipt.json",
+    "root": "AspisR1.NLH_CompRoot.source",
+    "root_attempt": "NLH_L107",
+    "root_domain": "SAME Public/claims84/point10/lambda/chi/theta; digest Domain; canonical claims/point/challenges; asset_id<p; amount domain established by its own precheck",
+    "route": "(y)/(ad)/(ai)(5)/(aq)/(aq)(5)/(au)/(bd)/(be) direct hybrid P6 parent fold",
+    "row": "TX1:237",
+    "rows": [
+     "TX1:237"
     ],
-    "candidate_child_dependencies": [
-     "TX1:218",
-     "TX1:261"
-    ]
+    "source_sha256": "ccabc17b6297673f3318051d6a72f8744181e7d7abddd30a46947fdd2175cae7",
+    "status": "CANDIDATE",
+    "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; inherited ABI/std/allocator/compiler/source-to-ELF and runtime digest trust retained; no new or removed trust row"
    },
-   "roots": [
-    "AspisR1.NLH_CompRoot.source"
+   "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::composition_parts",
+   "gate_admitted": true,
+   "hypothesis_inventory": [
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hd",
+      "verbatim": "NKR_DigestChildren.Domain pub"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hc",
+      "verbatim": "canonical claims"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hp",
+      "verbatim": "canonical point"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hl",
+      "verbatim": "Canon lambda"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hchi",
+      "verbatim": "Canon chi"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "ht",
+      "verbatim": "Canon theta"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "asset",
+      "verbatim": "pub.asset_id.val < 2147483647"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    }
    ],
-   "primary_root": "AspisR1.NLH_CompRoot.source",
    "kernel_statements": [
     {
      "obligation_statement": "\u2200 (pub : AspisR1.NKI_InitialPrefix.Public)\n  (claims :\n    Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true)))))\n  (point :\n    Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true)))))\n  (lambda chi theta : AspisR1.FIv_NativeArithmetic.NQ) (hd : AspisR1.NKR_DigestChildren.Domain pub)\n  (hc :\n    @AspisR1.FIw_ArrayValue.canonical\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true))))\n      claims)\n  (hp :\n    @AspisR1.FIw_ArrayValue.canonical\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true))))\n      point)\n  (hl : AspisR1.FIv_NativeValue.Canon lambda) (hchi : AspisR1.FIv_NativeValue.Canon chi)\n  (ht : AspisR1.FIv_NativeValue.Canon theta)\n  (asset :\n    @LT.lt.{0} Nat instLTNat\n      (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.U32\n        (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.asset_id pub))\n      (@OfNat.ofNat.{0} Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))),\n  @Exists.{1}\n    (Aeneas.Std.Result.{0}\n      (Aeneas.Std.core.result.Result.{0, 0} AspisR1.NLH_CompositionState.State AspisR1.NLH_CompositionState.Error))\n    fun\n      (result :\n        Aeneas.Std.Result.{0}\n          (Aeneas.Std.core.result.Result.{0, 0} AspisR1.NLH_CompositionState.State\n            AspisR1.NLH_CompositionState.Error)) =>\n    @Exists.{1} (List.{0} AspisR1.NLH_CompositionState.Event)\n      fun (events : List.{0} AspisR1.NLH_CompositionState.Event) =>\n      And\n        (@AspisR1.NLH_RustCuts.Cuts AspisR1.NLH_CompositionState.State AspisR1.NLH_CompositionState.Event\n          AspisR1.NLH_CompositionState.Error (AspisR1.NLH_CompositionState.step pub claims point lambda chi theta)\n          AspisR1.NLH_CompositionState.order AspisR1.NLH_CompRun.initial result events)\n        (And (@List.IsPrefix.{0} AspisR1.NLH_CompositionState.Event events AspisR1.NLH_CompositionState.order)\n          (And (AspisR1.NLH_CompRoot.Canonical result)\n            (And\n              (@Eq.{1}\n                (Aeneas.Std.Result.{0}\n                  (Aeneas.Std.core.result.Result.{0, 0} AspisR1.NKR_TermTail.Carrier\n                    AspisR1.NLH_CompositionState.Error))\n                (AspisR1.NLH_CompRoot.projected result)\n                (FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta))\n              (@Eq.{1}\n                (Aeneas.Std.Result.{0}\n                  (Aeneas.Std.core.result.Result.{0, 0} AspisR1.NKR_TermTail.Carrier\n                    AspisR1.NLH_CompositionState.Error))\n                (AspisR1.NLH_CompRun.reference pub claims point lambda chi theta)\n                (FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi\n                  theta)))))",
      "owner_module": "NLH_CompRoot",
      "root": "AspisR1.NLH_CompRoot.source"
-    }
-   ],
-   "root_domain": [
-    {
-     "name": "hd",
-     "verbatim": "NKR_DigestChildren.Domain pub",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hc",
-     "verbatim": "canonical claims",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hp",
-     "verbatim": "canonical point",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hl",
-     "verbatim": "Canon lambda",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hchi",
-     "verbatim": "Canon chi",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "ht",
-     "verbatim": "Canon theta",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "asset",
-     "verbatim": "pub.asset_id.val < 2147483647",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    }
-   ],
-   "hypothesis_inventory": [
-    {
-     "clause": {
-      "name": "hd",
-      "verbatim": "NKR_DigestChildren.Domain pub",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hc",
-      "verbatim": "canonical claims",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hp",
-      "verbatim": "canonical point",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hl",
-      "verbatim": "Canon lambda",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hchi",
-      "verbatim": "Canon chi",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "ht",
-      "verbatim": "Canon theta",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "asset",
-      "verbatim": "pub.asset_id.val < 2147483647",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
     }
    ],
    "original_clauses": {
@@ -16877,122 +16904,86 @@
     "kernel_roots": [],
     "named_hypotheses": []
    },
+   "primary_root": "AspisR1.NLH_CompRoot.source",
+   "provider": "NLH",
+   "recommendation": "ADMIT_ONLY_AFTER_GATE",
    "review": "ONE parent state, amount/validation then4gathers/selectors/308/261/H1/variant/218/prepared/28Horner/G. CompRoot handles InvalidPublicAmount and every validation Err/fail/div without suffix; TermAmount.canonical derives261 amount bound at actual pub amount. GatherPoseidon constructs canonical z/succ/xor/high/low, block/local16 and DETERMINISTIC CLOSED308 call at those arguments. CompCopy uses actual z/H1/selectors/lambda/chi/next_pair_index/copy_variant and NKR218 native-to-cohort law; inherited primitive registry metadata/lookup cut transcription stays explicit P6 trust. Prepared theta/domain, accumulator/canonical remaining and length28 are derived internally. Full six channels and attempted prefix on every Result are retained.",
-   "callee_occurrences": [
+   "root_domain": [
     {
-     "parent": "TX1:237",
-     "child": "TX1:308",
-     "occurrence": "poseidon",
-     "arguments": "exact p.z/p.succ/p.xor12 and p.poseidonSelectors produced by SAME gathers",
-     "domain_installation": "NKR_TermGatherPoseidon.source, NLH_CompPoseidon.step; canonical exact openings, block and local16",
-     "status": "CLOSED deterministic baseline",
-     "native_pairs": [
-      [
-       "NLH_K026",
-       "NLH_K027"
-      ],
-      [
-       "NLH_K032",
-       "NLH_K033"
-      ],
-      [
-       "NLH_K034",
-       "NLH_K035"
-      ],
-      [
-       "NLH_K036",
-       "NLH_K037"
-      ]
-     ]
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hd",
+     "verbatim": "NKR_DigestChildren.Domain pub"
     },
     {
-     "parent": "TX1:237",
-     "child": "TX1:261",
-     "occurrence": "semantic",
-     "arguments": "pub, current openings, current selectors",
-     "bridge_roots": [
-      "AspisR1.NLH_SemanticFold.source"
-     ],
-     "domain_installation": "NLH_CompSemantic.source; gathers prove canonical child arrays/selectors; CompRoot derives amount<p from precheck; asset bound is explicit root input",
-     "native_pairs": [
-      [
-       "NLH_K028",
-       "NLH_K029"
-      ]
-     ]
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hc",
+     "verbatim": "canonical claims"
     },
     {
-     "parent": "TX1:237",
-     "child": "TX1:218",
-     "occurrence": "copy",
-     "arguments": "current openings.z, current H1, current selectors, SAME lambda/chi, pub.transition.live_snapshot.next_pair_index, actual copy_variant(pub.variant)",
-     "bridge_roots": [
-      "AspisR1.NKR_SumCopyRoot.source"
-     ],
-     "domain_installation": "NLH_CompCopy.source; p.zCanonical/p.selectorHigh/p.selectorLow, SAME selected H1 canonicality and lambda/chi canonicality; primitive lookup/constant metadata cuts and their exact frozen meaning remain the predecessor's reviewed P6 boundary, not a new caller premise",
-     "native_pairs": [
-      [
-       "NLH_K030",
-       "NLH_K031"
-      ],
-      [
-       "NLH_K040",
-       "NLH_K041"
-      ],
-      [
-       "NLH_K042",
-       "NLH_K043"
-      ]
-     ]
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hp",
+     "verbatim": "canonical point"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hl",
+     "verbatim": "Canon lambda"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hchi",
+     "verbatim": "Canon chi"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "ht",
+     "verbatim": "Canon theta"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "asset",
+     "verbatim": "pub.asset_id.val < 2147483647"
     }
    ],
-   "recommendation": "ADMIT_ONLY_AFTER_GATE",
-   "gate_admitted": false
+   "roots": [
+    "AspisR1.NLH_CompRoot.source"
+   ],
+   "row": "TX1:237"
   },
   {
-   "row": "TX1:263",
-   "provider": "NLH",
-   "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::terminal_parts",
    "basis_obligation_statement_hash": "c7efb641d059a9fec46b35db6dfcfa6b5b981820fca50b389b379d0d045f00a7",
+   "callee_occurrences": [
+    {
+     "arguments": "SAME pub/claims/point/lambda/chi/theta; complete six-channel Result",
+     "bridge_roots": [
+      "AspisR1.NLH_CompRoot.source"
+     ],
+     "child": "TX1:237",
+     "domain_installation": "NLH_PartsRoot.source applies child internally at unchanged actual inputs, preserves Err/fail/div and proves every arithmetic argument canonical",
+     "native_pairs": [
+      [
+       "NLH_K044",
+       "NLH_K045"
+      ]
+     ],
+     "occurrence": "composition",
+     "parent": "TX1:263"
+    }
+   ],
    "certificate": {
-    "row": "TX1:263",
-    "status": "CANDIDATE",
-    "root": "AspisR1.NLH_PartsRoot.source",
-    "module": "NLH_PartsRoot",
-    "source_sha256": "297d6fd8c629e3cbc59d06492739820cae4e22f513af3150f72c14b910d8ee64",
-    "receipt": "NLH_L109/receipt.json",
-    "children": [
-     "TX1:237"
-    ],
-    "conditional_on_next_ledger_gate": true,
-    "rows": [
-     "TX1:263"
-    ],
-    "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::terminal_parts",
-    "frozen_body_sha256": "9ca63ef7b7895b4f276329eadef663600f700fa26656a68a809c6e1d04059304",
-    "route": "(y)/(ad)/(ai)(5)/(aq)/(aq)(5)/(au)/(bd)/(be) direct hybrid P6 parent fold",
-    "root_domain": "SAME237 inputs plus canonical zc10/mu; complete237 Result and tuple channels preserved",
-    "lean_roots": [
-     "AspisR1.NLH_PartsRoot.source"
-    ],
-    "owner_module": "NLH_PartsRoot",
-    "root_attempt": "NLH_L109",
-    "native_pairs": [
-     [
-      "NLH_K044",
-      "NLH_K045"
-     ]
-    ],
-    "complete_carrier": true,
-    "premise_policy": "Only actual typed root inputs and explicit canonical/domain invariants; every child Result, SAME argument, frame, prefix and cohort value is instantiated internally. Generic package lemmas are SUPPORT, never row roots.",
-    "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; inherited ABI/std/allocator/compiler/source-to-ELF and runtime digest trust retained; no new or removed trust row",
-    "local_gate": "PASS_NEXT_LEDGER_GATE",
-    "credit_waits_next_ledger_gate": true,
     "callee_substitutions": "NLH_CALLEE_COMPOSITION.json",
-    "closed_children": [],
     "candidate_child_dependencies": [
      "TX1:237"
     ],
+    "children": [
+     "TX1:237"
+    ],
+    "closed_children": [],
+    "complete_carrier": true,
+    "conditional_on_next_ledger_gate": true,
+    "credit_waits_next_ledger_gate": true,
+    "frozen_body_sha256": "9ca63ef7b7895b4f276329eadef663600f700fa26656a68a809c6e1d04059304",
+    "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::terminal_parts",
     "inherited_native_pairs": [
      [
       "NKR_K030",
@@ -17002,147 +16993,123 @@
       "NKR_K032",
       "NKR_K033"
      ]
-    ]
+    ],
+    "lean_roots": [
+     "AspisR1.NLH_PartsRoot.source"
+    ],
+    "local_gate": "PASS_NEXT_LEDGER_GATE",
+    "module": "NLH_PartsRoot",
+    "native_pairs": [
+     [
+      "NLH_K044",
+      "NLH_K045"
+     ]
+    ],
+    "owner_module": "NLH_PartsRoot",
+    "premise_policy": "Only actual typed root inputs and explicit canonical/domain invariants; every child Result, SAME argument, frame, prefix and cohort value is instantiated internally. Generic package lemmas are SUPPORT, never row roots.",
+    "receipt": "NLH_L109/receipt.json",
+    "root": "AspisR1.NLH_PartsRoot.source",
+    "root_attempt": "NLH_L109",
+    "root_domain": "SAME237 inputs plus canonical zc10/mu; complete237 Result and tuple channels preserved",
+    "route": "(y)/(ad)/(ai)(5)/(aq)/(aq)(5)/(au)/(bd)/(be) direct hybrid P6 parent fold",
+    "row": "TX1:263",
+    "rows": [
+     "TX1:263"
+    ],
+    "source_sha256": "297d6fd8c629e3cbc59d06492739820cae4e22f513af3150f72c14b910d8ee64",
+    "status": "CANDIDATE",
+    "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; inherited ABI/std/allocator/compiler/source-to-ELF and runtime digest trust retained; no new or removed trust row"
    },
-   "roots": [
-    "AspisR1.NLH_PartsRoot.source"
+   "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::terminal_parts",
+   "gate_admitted": true,
+   "hypothesis_inventory": [
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hd",
+      "verbatim": "NKR_DigestChildren.Domain pub"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hc",
+      "verbatim": "canonical claims"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hp",
+      "verbatim": "canonical point"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hl",
+      "verbatim": "Canon lambda"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hchi",
+      "verbatim": "Canon chi"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "ht",
+      "verbatim": "Canon theta"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "asset",
+      "verbatim": "pub.asset_id.val < 2147483647"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hz",
+      "verbatim": "canonical zc"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hm",
+      "verbatim": "Canon mu"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    }
    ],
-   "primary_root": "AspisR1.NLH_PartsRoot.source",
    "kernel_statements": [
     {
      "obligation_statement": "\u2200 (pub : AspisR1.NKI_InitialPrefix.Public)\n  (claims :\n    Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true)))))\n  (point zc :\n    Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true)))))\n  (lambda chi theta mu : AspisR1.FIv_NativeArithmetic.NQ) (hd : AspisR1.NKR_DigestChildren.Domain pub)\n  (hc :\n    @AspisR1.FIw_ArrayValue.canonical\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 84) (instOfNatNat (nat_lit 84)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true))))\n      claims)\n  (hp :\n    @AspisR1.FIw_ArrayValue.canonical\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true))))\n      point)\n  (hz :\n    @AspisR1.FIw_ArrayValue.canonical\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true))))\n      zc)\n  (hl : AspisR1.FIv_NativeValue.Canon lambda) (hchi : AspisR1.FIv_NativeValue.Canon chi)\n  (ht : AspisR1.FIv_NativeValue.Canon theta) (hm : AspisR1.FIv_NativeValue.Canon mu)\n  (asset :\n    @LT.lt.{0} Nat instLTNat\n      (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.U32\n        (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.asset_id pub))\n      (@OfNat.ofNat.{0} Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))),\n  @Exists.{1}\n    (Aeneas.Std.Result.{0}\n      (Aeneas.Std.core.result.Result.{0, 0} AspisR1.NLH_PartsState.State AspisR1.NKR_TermTail.Error))\n    fun\n      (result :\n        Aeneas.Std.Result.{0}\n          (Aeneas.Std.core.result.Result.{0, 0} AspisR1.NLH_PartsState.State AspisR1.NKR_TermTail.Error)) =>\n    @Exists.{1} (List.{0} AspisR1.NLH_PartsState.Event) fun (events : List.{0} AspisR1.NLH_PartsState.Event) =>\n      And\n        (@AspisR1.NLH_RustCuts.Cuts AspisR1.NLH_PartsState.State AspisR1.NLH_PartsState.Event AspisR1.NKR_TermTail.Error\n          (AspisR1.NLH_PartsState.step pub claims point zc lambda chi theta mu) AspisR1.NLH_PartsState.order\n          AspisR1.NLH_PartsRoot.initial result events)\n        (And (@List.IsPrefix.{0} AspisR1.NLH_PartsState.Event events AspisR1.NLH_PartsState.order)\n          (And (AspisR1.NLH_PartsRoot.Canonical result)\n            (And\n              (@Eq.{1}\n                (Aeneas.Std.Result.{0}\n                  (Aeneas.Std.core.result.Result.{0, 0} AspisR1.NKR_TermTail.Output AspisR1.NKR_TermTail.Error))\n                (AspisR1.NLH_PartsRoot.projected result)\n                (FIq_Native.pool_v1.pair_forest_semantic_terminal.terminal_parts pub claims point lambda chi theta zc\n                  mu))\n              (@Eq.{1}\n                (Aeneas.Std.Result.{0}\n                  (Aeneas.Std.core.result.Result.{0, 0} AspisR1.NKR_TermTail.Output AspisR1.NKR_TermTail.Error))\n                (AspisR1.NLH_PartsRoot.reference pub claims point zc lambda chi theta mu)\n                (FIq_Native.pool_v1.pair_forest_semantic_terminal.terminal_parts pub claims point lambda chi theta zc\n                  mu)))))",
      "owner_module": "NLH_PartsRoot",
      "root": "AspisR1.NLH_PartsRoot.source"
-    }
-   ],
-   "root_domain": [
-    {
-     "name": "hd",
-     "verbatim": "NKR_DigestChildren.Domain pub",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hc",
-     "verbatim": "canonical claims",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hp",
-     "verbatim": "canonical point",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hl",
-     "verbatim": "Canon lambda",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hchi",
-     "verbatim": "Canon chi",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "ht",
-     "verbatim": "Canon theta",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "asset",
-     "verbatim": "pub.asset_id.val < 2147483647",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hz",
-     "verbatim": "canonical zc",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hm",
-     "verbatim": "Canon mu",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    }
-   ],
-   "hypothesis_inventory": [
-    {
-     "clause": {
-      "name": "hd",
-      "verbatim": "NKR_DigestChildren.Domain pub",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hc",
-      "verbatim": "canonical claims",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hp",
-      "verbatim": "canonical point",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hl",
-      "verbatim": "Canon lambda",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hchi",
-      "verbatim": "Canon chi",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "ht",
-      "verbatim": "Canon theta",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "asset",
-      "verbatim": "pub.asset_id.val < 2147483647",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hz",
-      "verbatim": "canonical zc",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hm",
-      "verbatim": "Canon mu",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
     }
    ],
    "original_clauses": {
@@ -17922,57 +17889,122 @@
     "kernel_roots": [],
     "named_hypotheses": []
    },
+   "primary_root": "AspisR1.NLH_PartsRoot.source",
+   "provider": "NLH",
+   "recommendation": "ADMIT_ONLY_AFTER_GATE",
    "review": "Applies237 internally at identical pub/claims/point/lambda/chi/theta and identical own-input predicates. Every fail/div/Err is mapped with no arithmetic suffix; on Ok all six channels retained and NKR_TermTail.result derives suffix canonical operands for SAME zc/point/mu. ONE nine-event arithmetic suffix; full four-channel Result/order/frame is concluded.",
-   "callee_occurrences": [
+   "root_domain": [
     {
-     "parent": "TX1:263",
-     "child": "TX1:237",
-     "occurrence": "composition",
-     "arguments": "SAME pub/claims/point/lambda/chi/theta; complete six-channel Result",
-     "bridge_roots": [
-      "AspisR1.NLH_CompRoot.source"
-     ],
-     "domain_installation": "NLH_PartsRoot.source applies child internally at unchanged actual inputs, preserves Err/fail/div and proves every arithmetic argument canonical",
-     "native_pairs": [
-      [
-       "NLH_K044",
-       "NLH_K045"
-      ]
-     ]
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hd",
+     "verbatim": "NKR_DigestChildren.Domain pub"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hc",
+     "verbatim": "canonical claims"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hp",
+     "verbatim": "canonical point"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hl",
+     "verbatim": "Canon lambda"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hchi",
+     "verbatim": "Canon chi"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "ht",
+     "verbatim": "Canon theta"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "asset",
+     "verbatim": "pub.asset_id.val < 2147483647"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hz",
+     "verbatim": "canonical zc"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hm",
+     "verbatim": "Canon mu"
     }
    ],
-   "recommendation": "ADMIT_ONLY_AFTER_GATE",
-   "gate_admitted": false
+   "roots": [
+    "AspisR1.NLH_PartsRoot.source"
+   ],
+   "row": "TX1:263"
   },
   {
-   "row": "TX1:256",
-   "provider": "NLH",
-   "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::terminal_qm31",
    "basis_obligation_statement_hash": "e30f10ac093e77406c6ef8b0bc1690c6ddfd68338a43992215d02b7e9add7307",
+   "callee_occurrences": [
+    {
+     "arguments": "the original r0 Public",
+     "child": "TX1:255",
+     "domain_installation": "NLH_WrapperState.semantic_step; existing NKR_TermPublic.source projection",
+     "native_pairs": [
+      [
+       "NLH_K024",
+       "NLH_K025"
+      ]
+     ],
+     "occurrence": "semantic public",
+     "parent": "TX1:256",
+     "status": "CLOSED baseline"
+    },
+    {
+     "arguments": "SAME semantic public, gathered claims84, point, c.lambda/c.chi/c.theta/c.zc/c.mu; complete four-channel Result",
+     "bridge_roots": [
+      "AspisR1.NLH_PartsRoot.source"
+     ],
+     "child": "TX1:263",
+     "domain_installation": "NLH_WrapperRoot.source; gather84 canonicality and exact claims identity, explicit canonical challenges/digest Public/asset input domain; both map/map_err arms retained",
+     "native_pairs": [
+      [
+       "NLH_K024",
+       "NLH_K025"
+      ],
+      [
+       "NLH_K046",
+       "NLH_K047"
+      ]
+     ],
+     "occurrence": "parts",
+     "parent": "TX1:256"
+    }
+   ],
    "certificate": {
-    "row": "TX1:256",
-    "status": "CANDIDATE",
-    "root": "AspisR1.NLH_WrapperRoot.source",
-    "module": "NLH_WrapperRoot",
-    "source_sha256": "637153c89a6b9f5cc1f0b0c37963492353d8658e1e08a2e6e7ab00710ab2dd12",
-    "receipt": "NLH_L117/receipt.json",
+    "callee_substitutions": "NLH_CALLEE_COMPOSITION.json",
+    "candidate_child_dependencies": [
+     "TX1:263"
+    ],
     "children": [
      "TX1:263",
      "TX1:255"
     ],
-    "conditional_on_next_ledger_gate": true,
-    "rows": [
-     "TX1:256"
+    "closed_children": [
+     "TX1:255"
     ],
-    "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::terminal_qm31",
+    "complete_carrier": true,
+    "conditional_on_next_ledger_gate": true,
+    "credit_waits_next_ledger_gate": true,
     "frozen_body_sha256": "87514ce6f38e341534ce3aa0a80e08b577c914e6b912c315f8f1e1c57c6a67a6",
-    "route": "(y)/(ad)/(ai)(5)/(aq)/(aq)(5)/(au)/(bd)/(be) direct hybrid P6 parent fold",
-    "root_domain": "SAME r0 Public/claims3x29/point10/Challenges; digest Domain and asset_id<p on actual semantic Public; canonical every claims row/point/zc/lambda/chi/theta/mu",
+    "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::terminal_qm31",
     "lean_roots": [
      "AspisR1.NLH_WrapperRoot.source"
     ],
-    "owner_module": "NLH_WrapperRoot",
-    "root_attempt": "NLH_L117",
+    "local_gate": "PASS_NEXT_LEDGER_GATE",
+    "module": "NLH_WrapperRoot",
     "native_pairs": [
      [
       "NLH_K018",
@@ -17987,158 +18019,111 @@
       "NLH_K047"
      ]
     ],
-    "complete_carrier": true,
+    "owner_module": "NLH_WrapperRoot",
     "premise_policy": "Only actual typed root inputs and explicit canonical/domain invariants; every child Result, SAME argument, frame, prefix and cohort value is instantiated internally. Generic package lemmas are SUPPORT, never row roots.",
-    "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; inherited ABI/std/allocator/compiler/source-to-ELF and runtime digest trust retained; no new or removed trust row",
-    "local_gate": "PASS_NEXT_LEDGER_GATE",
-    "credit_waits_next_ledger_gate": true,
-    "callee_substitutions": "NLH_CALLEE_COMPOSITION.json",
-    "closed_children": [
-     "TX1:255"
+    "receipt": "NLH_L117/receipt.json",
+    "root": "AspisR1.NLH_WrapperRoot.source",
+    "root_attempt": "NLH_L117",
+    "root_domain": "SAME r0 Public/claims3x29/point10/Challenges; digest Domain and asset_id<p on actual semantic Public; canonical every claims row/point/zc/lambda/chi/theta/mu",
+    "route": "(y)/(ad)/(ai)(5)/(aq)/(aq)(5)/(au)/(bd)/(be) direct hybrid P6 parent fold",
+    "row": "TX1:256",
+    "rows": [
+     "TX1:256"
     ],
-    "candidate_child_dependencies": [
-     "TX1:263"
-    ]
+    "source_sha256": "637153c89a6b9f5cc1f0b0c37963492353d8658e1e08a2e6e7ab00710ab2dd12",
+    "status": "CANDIDATE",
+    "trust": "P6/D188 option-A semantic transport RECLASSIFICATION; inherited ABI/std/allocator/compiler/source-to-ELF and runtime digest trust retained; no new or removed trust row"
    },
-   "roots": [
-    "AspisR1.NLH_WrapperRoot.source"
+   "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::terminal_qm31",
+   "gate_admitted": true,
+   "hypothesis_inventory": [
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hd",
+      "verbatim": "NKR_DigestChildren.Domain (NKR_TermPublic.value pub)"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hc",
+      "verbatim": "\u2200 row\u2208claims.val,canonical row"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hp",
+      "verbatim": "canonical point"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hz",
+      "verbatim": "canonical c.zc"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hl",
+      "verbatim": "Canon c.lambda"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hchi",
+      "verbatim": "Canon c.chi"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "ht",
+      "verbatim": "Canon c.theta"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "hm",
+      "verbatim": "Canon c.mu"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    },
+    {
+     "clause": {
+      "classification": "bf(2) own-input canonicality/range/projection/provenance",
+      "name": "asset",
+      "verbatim": "(NKR_TermPublic.value pub).asset_id.val < 2147483647"
+     },
+     "forbidden_conclusion_premise": false,
+     "inventory": "bf(2)"
+    }
    ],
-   "primary_root": "AspisR1.NLH_WrapperRoot.source",
    "kernel_statements": [
     {
      "obligation_statement": "\u2200 (pub : FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public) (claims : AspisR1.NLH_WrapperState.Claims)\n  (point :\n    Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true)))))\n  (c : AspisR1.NLH_WrapperState.Challenges) (hd : AspisR1.NKR_DigestChildren.Domain (AspisR1.NKR_TermPublic.value pub))\n  (hc :\n    \u2200\n      (row :\n        Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29)))\n            AspisR1.NLH_WrapperState.Claims._proof_1)),\n      @Membership.mem.{0, 0}\n          (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29)))\n              AspisR1.NLH_WrapperState.Claims._proof_1))\n          (List.{0}\n            (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29)))\n                AspisR1.NLH_WrapperState.Claims._proof_1)))\n          (@List.instMembership.{0}\n            (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29)))\n                AspisR1.NLH_WrapperState.Claims._proof_1)))\n          (@Subtype.val.{1}\n            (List.{0}\n              (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29)))\n                  AspisR1.NLH_WrapperState.Claims._proof_1)))\n            (fun\n                (l :\n                  List.{0}\n                    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29)))\n                        AspisR1.NLH_WrapperState.Claims._proof_1))) =>\n              @Eq.{1} Nat\n                (@List.length.{0}\n                  (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ\n                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29)))\n                      AspisR1.NLH_WrapperState.Claims._proof_1))\n                  l)\n                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize\n                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))\n                    AspisR1.NLH_WrapperState.Claims._proof_2)))\n            claims)\n          row \u2192\n        @AspisR1.FIw_ArrayValue.canonical\n          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 29) (instOfNatNat (nat_lit 29)))\n            AspisR1.NLH_WrapperState.Claims._proof_1)\n          row)\n  (hp :\n    @AspisR1.FIw_ArrayValue.canonical\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true))))\n      point)\n  (hz :\n    @AspisR1.FIw_ArrayValue.canonical\n      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n        (@of_decide_eq_true\n          (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n            (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n          (@id.{0}\n            (@Eq.{1} Bool\n              (@Decidable.decide\n                (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))\n                  (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n              Bool.true)\n            (@Eq.refl.{1} Bool Bool.true))))\n      (FIq_Native.state_only_prefix.r0.Challenges.zc c))\n  (hl : AspisR1.FIv_NativeValue.Canon (FIq_Native.state_only_prefix.r0.Challenges.lambda c))\n  (hchi : AspisR1.FIv_NativeValue.Canon (FIq_Native.state_only_prefix.r0.Challenges.chi c))\n  (ht : AspisR1.FIv_NativeValue.Canon (FIq_Native.state_only_prefix.r0.Challenges.theta c))\n  (hm : AspisR1.FIv_NativeValue.Canon (FIq_Native.state_only_prefix.r0.Challenges.mu c))\n  (asset :\n    @LT.lt.{0} Nat instLTNat\n      (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.U32\n        (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.asset_id (AspisR1.NKR_TermPublic.value pub)))\n      (@OfNat.ofNat.{0} Nat (nat_lit 2147483647) (instOfNatNat (nat_lit 2147483647)))),\n  @Exists.{1}\n    (Aeneas.Std.Result.{0}\n      (Aeneas.Std.core.result.Result.{0, 0} AspisR1.NLH_WrapperState.State AspisR1.NLH_WrapperState.Error))\n    fun\n      (result :\n        Aeneas.Std.Result.{0}\n          (Aeneas.Std.core.result.Result.{0, 0} AspisR1.NLH_WrapperState.State AspisR1.NLH_WrapperState.Error)) =>\n    @Exists.{1} (List.{0} AspisR1.NLH_WrapperState.Event) fun (events : List.{0} AspisR1.NLH_WrapperState.Event) =>\n      And\n        (@AspisR1.NLH_RustCuts.Cuts AspisR1.NLH_WrapperState.State AspisR1.NLH_WrapperState.Event\n          AspisR1.NLH_WrapperState.Error (AspisR1.NLH_WrapperState.step pub claims point c)\n          AspisR1.NLH_WrapperState.order (AspisR1.NLH_WrapperRoot.initial pub) result events)\n        (And (@List.IsPrefix.{0} AspisR1.NLH_WrapperState.Event events AspisR1.NLH_WrapperState.order)\n          (And (AspisR1.NLH_WrapperRoot.Canonical result)\n            (And\n              (@Eq.{1}\n                (Aeneas.Std.Result.{0}\n                  (Aeneas.Std.core.result.Result.{0, 0} AspisR1.FIv_NativeArithmetic.NQ AspisR1.NLH_WrapperState.Error))\n                (AspisR1.NLH_WrapperRoot.projected result)\n                (FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31 pub claims point c))\n              (@Eq.{1}\n                (Aeneas.Std.Result.{0}\n                  (Aeneas.Std.core.result.Result.{0, 0} AspisR1.FIv_NativeArithmetic.NQ AspisR1.NLH_WrapperState.Error))\n                (AspisR1.NLH_WrapperRoot.reference pub claims point c)\n                (FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31 pub claims point c)))))",
      "owner_module": "NLH_WrapperRoot",
      "root": "AspisR1.NLH_WrapperRoot.source"
-    }
-   ],
-   "root_domain": [
-    {
-     "name": "hd",
-     "verbatim": "NKR_DigestChildren.Domain (NKR_TermPublic.value pub)",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hc",
-     "verbatim": "\u2200 row\u2208claims.val,canonical row",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hp",
-     "verbatim": "canonical point",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hz",
-     "verbatim": "canonical c.zc",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hl",
-     "verbatim": "Canon c.lambda",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hchi",
-     "verbatim": "Canon c.chi",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "ht",
-     "verbatim": "Canon c.theta",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "hm",
-     "verbatim": "Canon c.mu",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    },
-    {
-     "name": "asset",
-     "verbatim": "(NKR_TermPublic.value pub).asset_id.val < 2147483647",
-     "classification": "bf(2) own-input canonicality/range/projection/provenance"
-    }
-   ],
-   "hypothesis_inventory": [
-    {
-     "clause": {
-      "name": "hd",
-      "verbatim": "NKR_DigestChildren.Domain (NKR_TermPublic.value pub)",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hc",
-      "verbatim": "\u2200 row\u2208claims.val,canonical row",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hp",
-      "verbatim": "canonical point",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hz",
-      "verbatim": "canonical c.zc",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hl",
-      "verbatim": "Canon c.lambda",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hchi",
-      "verbatim": "Canon c.chi",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "ht",
-      "verbatim": "Canon c.theta",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "hm",
-      "verbatim": "Canon c.mu",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
-    },
-    {
-     "clause": {
-      "name": "asset",
-      "verbatim": "(NKR_TermPublic.value pub).asset_id.val < 2147483647",
-      "classification": "bf(2) own-input canonicality/range/projection/provenance"
-     },
-     "inventory": "bf(2)",
-     "forbidden_conclusion_premise": false
     }
    ],
    "original_clauses": {
@@ -18525,47 +18510,62 @@
     "kernel_roots": [],
     "named_hypotheses": []
    },
+   "primary_root": "AspisR1.NLH_WrapperRoot.source",
+   "provider": "NLH",
+   "recommendation": "ADMIT_ONLY_AFTER_GATE",
    "review": "WrapperGathers proves84 actual selected cells with full logical array frame and canonicality from every own claims row; SAME255 public projection is NKR_TermPublic.value pub. PartsRoot applies263 at exactly gathered84,point,c.lambda/chi/theta/zc/mu. All domains discharged from own predicates; both Rust map/map_err arms plus outer fail/div are retained. Result is native/source/cohort four-channel projection to scalar; caller136 must establish every own-argument clause, never global success.",
-   "callee_occurrences": [
+   "root_domain": [
     {
-     "parent": "TX1:256",
-     "child": "TX1:255",
-     "occurrence": "semantic public",
-     "arguments": "the original r0 Public",
-     "domain_installation": "NLH_WrapperState.semantic_step; existing NKR_TermPublic.source projection",
-     "status": "CLOSED baseline",
-     "native_pairs": [
-      [
-       "NLH_K024",
-       "NLH_K025"
-      ]
-     ]
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hd",
+     "verbatim": "NKR_DigestChildren.Domain (NKR_TermPublic.value pub)"
     },
     {
-     "parent": "TX1:256",
-     "child": "TX1:263",
-     "occurrence": "parts",
-     "arguments": "SAME semantic public, gathered claims84, point, c.lambda/c.chi/c.theta/c.zc/c.mu; complete four-channel Result",
-     "bridge_roots": [
-      "AspisR1.NLH_PartsRoot.source"
-     ],
-     "domain_installation": "NLH_WrapperRoot.source; gather84 canonicality and exact claims identity, explicit canonical challenges/digest Public/asset input domain; both map/map_err arms retained",
-     "native_pairs": [
-      [
-       "NLH_K024",
-       "NLH_K025"
-      ],
-      [
-       "NLH_K046",
-       "NLH_K047"
-      ]
-     ]
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hc",
+     "verbatim": "\u2200 row\u2208claims.val,canonical row"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hp",
+     "verbatim": "canonical point"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hz",
+     "verbatim": "canonical c.zc"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hl",
+     "verbatim": "Canon c.lambda"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hchi",
+     "verbatim": "Canon c.chi"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "ht",
+     "verbatim": "Canon c.theta"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "hm",
+     "verbatim": "Canon c.mu"
+    },
+    {
+     "classification": "bf(2) own-input canonicality/range/projection/provenance",
+     "name": "asset",
+     "verbatim": "(NKR_TermPublic.value pub).asset_id.val < 2147483647"
     }
    ],
-   "recommendation": "ADMIT_ONLY_AFTER_GATE",
-   "gate_admitted": false
+   "roots": [
+    "AspisR1.NLH_WrapperRoot.source"
+   ],
+   "row": "TX1:256"
   }
  ],
- "admissible": 4,
- "rejected": 0
+ "status": "PASS_ALL_4_GATE_ADMITTED"
 }

@@ -60,6 +60,14 @@ for c in cs:
   if par['row']in ids:assert match
   for clause in domain:
    parents.append(dict(parent=par['row'],helper=rid,occurrences=match or ['Canonical caller occurrence; actual argument provenance remains OPEN'],caller_clause=dict(id=f'NLS-bf:{par["row"]}:{rid}:{clause["name"]}',caller=par['function'],callee=r['function'],required=clause['verbatim'],name=clause['name'],classification=clause['classification'],status='INTERNAL_DISCHARGED'if par['row']in ids else'OPEN',discharged_by=match[0]['domain_installation']if match else None,reason='Exact own-input clause retained at every actual caller. Source binder names are instantiated by the named SAME-argument occurrence. No parent promotion.')))
+# Carry the inherited semantic-eval lineage context to each new helper's parent too.
+for c in cs:
+ rid=c['row'];r=by[rid]
+ for par in b['rows']:
+  if par['transaction']!=r['transaction']or r['function']not in par['canonical_callees']:continue
+  match=[x for x in occ if x['parent']==par['row']and x['child']==rid]
+  for context in r['obligation']['inventory_domain_obligations']:
+   parents.append(dict(parent=par['row'],helper=rid,kind='inventory:'+context['unit'],occurrences=match or ['Actual native/source argument lineage at caller remains OPEN'],caller_clause=dict(id=f'NLS-context:{par["row"]}:{rid}:{context["unit"]}',caller=par['function'],callee=r['function'],required=context['domain'],classification='Retained original inventory argument provenance; not an extra root output/success premise',status='INTERNAL_DISCHARGED'if par['row']in ids else'OPEN',discharged_by=match[0]['domain_installation']if match else None,reason='Original unit/provenance context preserved alongside verbatim bf own-input domains.')))
 # Also discharge inherited child-domain occurrence clauses already recorded by predecessor ledgers.
 child_reviews=[]
 for x in occ:
