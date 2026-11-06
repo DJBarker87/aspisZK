@@ -1,0 +1,27 @@
+--- /dev/null
++++ b/NLA_lane_root.rs
+@@ -0,0 +1,24 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn digest()->[M31;8]{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn frontier()->[[M31;8];20]{let raw:[[u32;8];20]=kani::any();raw.map(|r|r.map(|x|M31(x)))}
++
++ struct Log{calls:u8,length:usize,byte:u8}
++ fn oracle(input:&[u8;32],log:&mut Log,i:usize,reply:Result<[M31;8],aspis_statement::AtomicStatementError>)->Result<[M31;8],aspis_statement::AtomicStatementError>{log.calls+=1;log.length=input.len();log.byte=input[i];reply}
++ #[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn root_stage(){
++ let tree:[u8;688]=kani::any();let coordinate:usize=kani::any();let word:usize=kani::any();kani::assume(coordinate<32&&word<8);
++ let ok:bool=kani::any();let words=digest();
++ let reply=if ok{Ok(words)}else{Err(aspis_statement::AtomicStatementError::NonCanonicalDigest)};
++ let mut log=Log{calls:0,length:0,byte:0};let mut suffix=0u8;
++ let mut result=(||->Result<[M31;8],ProgramError>{    let root = oracle(
++        tree[16..48]
++            .try_into()
++            .map_err(|_| ProgramError::InvalidAccountData)?,
++      &mut log, coordinate, reply)
++    .map_err(|_| ProgramError::InvalidAccountData)?;
++ suffix+=1;Ok(root)})();
++ suffix^=1;
++ let good=suffix==if ok{1}else{0};assert!(good,"root stage exact bytes Result and prefix");
++ }
