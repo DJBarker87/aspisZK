@@ -1,0 +1,6 @@
+theorem PV_W5_CopyContract.contract : ∀ (resources : PV_EVHB_OWNER.Resources)
+  (granted : PV_OWN2_FreshAllocation.GrantedRegions) (H : PV_W5_NativeFrame.Backend) (e : PV_W5_CopyContract.Entry)
+  (w : PV_EVHB_OWNER.OWNER) (prior : List PV_RJ4IDB.NativeEvent)
+  (pre : PV_W5_CopyContract.Pre (fun {A} => resources) e w)
+  (fresh : PV_OWN2_FreshAllocationRefinement.FreshAllocationValidity' (fun {A} => resources) granted e.allocationEntry)
+  (malloc_semantics : PV_STX2_IntrinsicSemantics_Malloc fun {A} => resources), PV_W5_CopyContract.Post H e w prior

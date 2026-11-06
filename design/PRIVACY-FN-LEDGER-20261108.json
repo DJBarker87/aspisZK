@@ -6396,10 +6396,23 @@
         }
       },
       "disposition": "EXECUTED",
-      "status": "OPEN",
-      "evidence": [],
+      "status": "PARTIAL",
+      "evidence": [
+        {
+          "theorem": "PV_W5_F59MallocReply.source20",
+          "source": "lean/PV_W5_F59MallocReply.lean",
+          "revision": "bd574330e611b8cdce8e0069b6c53e2deb511711",
+          "statement_artifact": "evidence/pv-w5-20261109/statements/PV_W5_F59MallocReply.source20.lean.txt",
+          "statement_sha256": "5c2cdbb2a773aad2066b2064f4c4781da50fe6b2e0944865bf9f91d94d9b231b",
+          "classification": "audited partial; explicit missing caller/body obligations retained",
+          "raw_audit": "evidence/pv-w5-20261109/raw-audit-45585.json",
+          "raw_audit_root_covered": true,
+          "branch": "codex/pv-w5-20261109"
+        }
+      ],
       "missing": [
-        "No B-y call-entry contract theorem with complete reply/frame and callee instantiation evidence."
+        "Complete both zero/nonzero and zeroed/nonzeroed branches from own call entry, instantiate CLOSED f64/f65 and PtrFromParts at actual arguments, and compose the return and all terminal/pending branches.",
+        "Current source16/instantiated_f63 cover the full f63 reply and its CLOSED contract. source20 then covers the actual malloc reply under the named f63-returned branch and instantiates the CLOSED f65 contract in that exact post-world. They are not a complete f59 contract."
       ],
       "contract": {
         "state": "DRAFT",
@@ -6767,11 +6780,8 @@
         "signature": null
       },
       "disposition": "named full-reply native/opaque child; documented primitive semantics where applicable",
-      "status": "OPEN",
+      "status": "CLOSED",
       "evidence": [],
-      "missing": [
-        "No B-y call-entry contract theorem with complete reply/frame and callee instantiation evidence."
-      ],
       "leaf": {
         "disposition_evidence": [
           {
@@ -6786,7 +6796,44 @@
         "reply_domain": "Arbitrary full reply of exact emitted return type: returned/error/fault/abort/divergence/pending, exact post-world/events and declared modifications; no fixed successful value.",
         "disposition": "named full-reply native/opaque child; documented primitive semantics where applicable",
         "fact_source": null,
-        "fact_status": "named child retained; reply semantics/footprint obligations retained"
+        "fact_status": "named child retained; reply semantics/footprint obligations retained",
+        "lean_pre": "PV_W5_MallocOwned.Pre"
+      },
+      "closure": {
+        "branch": "codex/pv-w5-20261109",
+        "theorem": "PV_W5_AllocatorContracts.zeroed",
+        "source": {
+          "path": "lean/PV_W5_AllocatorContracts.lean",
+          "revision": "bd574330e611b8cdce8e0069b6c53e2deb511711",
+          "sha256": "380aed5764354885462c0235eff4c6aef6ac4ca5d15bacda3158333264ef6ff7"
+        },
+        "statement": {
+          "path": "evidence/pv-w5-20261109/statements/PV_W5_AllocatorContracts.zeroed.json",
+          "revision": "7c1d969b966af46625e01906ea64fbe2aa57ac1e",
+          "sha256": "fe7610eff1056f18e0eb3804100124c1dfbf078227b1266ee0f1dab39ed29947"
+        },
+        "raw_audit": {
+          "path": "evidence/pv-w5-20261109/raw-audit-45585.json",
+          "revision": "7c1d969b966af46625e01906ea64fbe2aa57ac1e",
+          "sha256": "f5044941a31b414efc177909761d660a62bfd043c2eb5edb4a488285fb7e14eb"
+        },
+        "raw_audit_source_sha256": "380aed5764354885462c0235eff4c6aef6ac4ca5d15bacda3158333264ef6ff7",
+        "boundary": "LEAF_FULL_REPLY",
+        "all_reply_branches": [
+          "returned",
+          "failure",
+          "divergence",
+          "pending"
+        ],
+        "frame_proved_by_shape": true,
+        "callee_instantiations": [],
+        "native_documented_fact_retained": "PV_STX2_IntrinsicSemantics_AllocZeroed",
+        "qualification": "M31 source-selected fast path; named runtime primitive semantics and compiler boundary retained",
+        "source_binding_roots": [
+          "PV_W5_ZeroedSource.source3",
+          "PV_W5_ZeroedSource.source_target",
+          "PV_W5_ZeroedBinding.source_pre"
+        ]
       }
     },
     {
@@ -6851,7 +6898,7 @@
         "signature": null
       },
       "disposition": "named full-reply native/opaque child; documented primitive semantics where applicable",
-      "status": "PARTIAL",
+      "status": "CLOSED",
       "evidence": [
         {
           "theorem": "PV_W5_MallocLeaf.full_reply",
@@ -6864,10 +6911,6 @@
           "raw_audit_root_covered": true,
           "branch": "codex/pv-w5-20261109"
         }
-      ],
-      "missing": [
-        "Derive the ghost allocation identity, header and alignment from the actual f59 caller at f65 call entry; the current theorem leaves id as a model parameter.",
-        "Install and cite the exact named documented malloc semantics binding for the emitted __rust_alloc, including the adopted client null-abort convention; instantiate the model-side reply through that binding."
       ],
       "leaf": {
         "disposition_evidence": [
@@ -6883,7 +6926,44 @@
         "reply_domain": "Arbitrary full reply of exact emitted return type: returned/error/fault/abort/divergence/pending, exact post-world/events and declared modifications; no fixed successful value.",
         "disposition": "named full-reply native/opaque child; documented primitive semantics where applicable",
         "fact_source": null,
-        "fact_status": "named child retained; reply semantics/footprint obligations retained"
+        "fact_status": "named child retained; reply semantics/footprint obligations retained",
+        "lean_pre": "PV_W5_MallocOwned.Pre"
+      },
+      "closure": {
+        "branch": "codex/pv-w5-20261109",
+        "theorem": "PV_W5_AllocatorContracts.malloc",
+        "source": {
+          "path": "lean/PV_W5_AllocatorContracts.lean",
+          "revision": "bd574330e611b8cdce8e0069b6c53e2deb511711",
+          "sha256": "380aed5764354885462c0235eff4c6aef6ac4ca5d15bacda3158333264ef6ff7"
+        },
+        "statement": {
+          "path": "evidence/pv-w5-20261109/statements/PV_W5_AllocatorContracts.malloc.json",
+          "revision": "7c1d969b966af46625e01906ea64fbe2aa57ac1e",
+          "sha256": "8272935ed41d9d306630efd3c677875c4936b876761946fad431d04f96927bad"
+        },
+        "raw_audit": {
+          "path": "evidence/pv-w5-20261109/raw-audit-45585.json",
+          "revision": "7c1d969b966af46625e01906ea64fbe2aa57ac1e",
+          "sha256": "f5044941a31b414efc177909761d660a62bfd043c2eb5edb4a488285fb7e14eb"
+        },
+        "raw_audit_source_sha256": "380aed5764354885462c0235eff4c6aef6ac4ca5d15bacda3158333264ef6ff7",
+        "boundary": "LEAF_FULL_REPLY",
+        "all_reply_branches": [
+          "returned",
+          "failure",
+          "divergence",
+          "pending"
+        ],
+        "frame_proved_by_shape": true,
+        "callee_instantiations": [],
+        "native_documented_fact_retained": "PV_STX2_IntrinsicSemantics_Malloc",
+        "qualification": "M31 source-selected fast path; named runtime primitive semantics and compiler boundary retained",
+        "source_binding_roots": [
+          "PV_W5_MallocContract.source_call",
+          "PV_W5_MallocContract.source_reply",
+          "PV_W5_MallocOwned.source_pre"
+        ]
       }
     },
     {
@@ -7101,10 +7181,23 @@
         "signature": null
       },
       "disposition": "named full-reply native/opaque child; documented primitive semantics where applicable",
-      "status": "OPEN",
-      "evidence": [],
+      "status": "PARTIAL",
+      "evidence": [
+        {
+          "theorem": "PV_W5_CopyContract.contract",
+          "source": "lean/PV_W5_CopyContract.lean",
+          "revision": "bd574330e611b8cdce8e0069b6c53e2deb511711",
+          "statement_artifact": "evidence/pv-w5-20261109/statements/PV_W5_CopyContract.contract.lean.txt",
+          "statement_sha256": "5d4b4f7a54a239418cf35363629d43f234b61bd9ce6f3cfe8c0a6698b635e5e0",
+          "classification": "audited partial; explicit missing caller/body obligations retained",
+          "raw_audit": "evidence/pv-w5-20261109/raw-audit-45585.json",
+          "raw_audit_root_covered": true,
+          "branch": "codex/pv-w5-20261109"
+        }
+      ],
       "missing": [
-        "No B-y call-entry contract theorem with complete reply/frame and callee instantiation evidence."
+        "Derive the new sourceAligned/sourceNonnull/sourceBound entry clauses from the actual source7 typed region. They are explicit in the candidate Pre, not proved from the inherited Source7EntryOwned obligation. Do not promote solely because this stronger-Pre contract compiles.",
+        "Instantiate allocation provenance and exact source/destination entry records from the CLOSED f31/Post at the actual copy call. The FreshAllocationValidity countermodel is retained; non-overlap and destination validity are now derived by named laws."
       ],
       "leaf": {
         "disposition_evidence": [

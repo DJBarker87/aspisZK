@@ -1,0 +1,32 @@
+theorem PV_W5_F59MallocReply.source20 : ∀ (resources : PV_EVHB_OWNER.Resources) (encode : PV_EVHB_OWNER.Encode)
+  (base : PV_STX2_Store.Carrier PV_EVHB_OWNER.OWNER PV_STX2_Syntax.Data) (K : PV_STX2_SliceMachine.Control)
+  (external : PV_W5_NoAllocShim.External)
+  (fallback :
+    PV_STX2_Native.Request PV_STX2_Syntax.Data →
+      PV_EVHB_OWNER.OWNER → PV_STX_Machine.Reply PV_EVHB_OWNER.OWNER PV_RJ4IDB.NativeEvent PV_STX2_Syntax.Data)
+  (s : PV_STX2_Store.Store PV_STX2_Syntax.Data) (parents : List PV_STX2_SliceMachine.Frame) (a bytes : ℕ)
+  (w : PV_EVHB_OWNER.OWNER) (prior : List PV_RJ4IDB.NativeEvent) (pre : PV_W5_F59MallocReply.Pre s parents a bytes w)
+  (malloc_semantics : PV_STX2_IntrinsicSemantics_Malloc fun {A} => resources)
+  (shim :
+    (external s.nextActivation (PV_EVHB_OwnerMachine.world w)).answer =
+      PV_STX_Machine.Answer.returned (Aeneas.Std.Result.ok ())),
+  have H := PV_STX2_Source7QPreludeWorld.handler external fallback;
+  have B := PV_STX2_Source7CapacityLimit.primitives (PV_STX2_Source7AllocationRuntimeBranch.keys base);
+  have C := PV_STX2_Source7QOriginalLayoutCarrier.layoutCarrier B K H;
+  have raw := external s.nextActivation (PV_EVHB_OwnerMachine.world w);
+  have post := PV_EVHB_OwnerMachine.withWorld w raw.world;
+  have events := prior ++ raw.events;
+  PV_STX2_Source7IterationBindings.advance (fun {A} => resources) (fun {A} => encode) C K PV_W5_F59PreludeReply.programs
+        H 20
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              { frame := { activation := a, remaining := PV_STX2_Source7AllocF59.program.body }, callers := parents,
+                store := s },
+          world := w, events := prior } =
+      PV_STX2_SlicePrefixEvents.prepend events
+        (PV_STX2_Source7QRuntimeMallocReply.received (PV_W5_F59MallocCall.stored s a bytes) parents a bytes 4
+          PV_W5_F59Entry.after
+          (PV_W5_MallocContract.reply (fun {A} => resources) (fun {A} => encode) parents post bytes)) ∧
+    PV_W5_AllocatorContracts.MallocPost C (fun {A} => resources) (fun {A} => encode)
+      (PV_W5_F59MallocReply.entry s parents a bytes) post bytes events
