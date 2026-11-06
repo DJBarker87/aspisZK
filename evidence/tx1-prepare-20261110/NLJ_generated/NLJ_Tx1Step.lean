@@ -10,9 +10,9 @@ def nextOrError {A : Type} (s : State) (r : core.result.Result A verifier.Error)
  match r with | .Err e => .inl (.Err e) | .Ok a => .inr (advance s (k a))
 /-- Source-order transcription; its installed body slots are not a root-level
 Ops hypothesis. OPEN087/081 remain explicit packet obligations. -/
-def step (s : State) : Code Post := do
+def step (cfg : Configuration) (s : State) : Code Post := do
  let i := s.input
- let o := ops i
+ let o := ops cfg
  match s.locals with
  | .guard =>
    if i.k != compact.SPLIT then pure (.inl (.Err verifier.Error.Parse))
@@ -31,8 +31,8 @@ def step (s : State) : Code Post := do
    pure (.inr (advance s (.prepare (Array.repeat 29#usize zero))))
  | .prepare g =>
    let (r,after) ← SdkD_PrepareLower.lower (SdkD_PrepareSource.code
-    (Op5T_Concrete.current {i.base with op16:=Tx1Q_Install.writer})
-    i.boundaries i.std i.digest i.publicValue i.proof () g)
+    (Op5T_Concrete.current {cfg.base with op16:=Tx1Q_Install.writer})
+    cfg.boundaries cfg.std i.digest i.publicValue i.proof () g)
    pure (nextOrError s r (fun p => .accumulator after p))
  | .accumulator g p =>
    let r ← o.op20 transport.Variant.S2

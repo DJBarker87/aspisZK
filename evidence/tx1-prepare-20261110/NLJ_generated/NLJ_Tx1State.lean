@@ -7,17 +7,19 @@ open Aeneas Aeneas.Std Result AspisR1CurrentCaller
 abbrev Scratch := Array aspis_core.field.wide_exact.WideExact 29#usize
 abbrev Root := Array U8 32#usize
 abbrev Out := core.result.Result (alloc.vec.Vec U8) verifier.Error
-structure Input where
+structure Configuration where
  base : Ops
  boundaries : AspisR1PublicPreparation.FinishModel.Boundaries
  std : ClaimsUnrolledFinish.StdCalls
+structure Input where
  hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
  digest : aspis_core.digest.Digest32 Unit
  publicValue : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
- publicBytes proof : Slice U8
+ publicBytes : Slice U8
+ proof : Slice U8
  k : Usize
 
-def ops (i : Input) : Ops := GExp_FirstCode.installed i.base i.boundaries i.std
+def ops (c : Configuration) : Ops := GExp_FirstCode.installed c.base c.boundaries c.std
 inductive Local where
  | guard | parse | scan | markParsed | zero
  | prepare (scratch : Scratch)

@@ -1,0 +1,38 @@
+{"attempt": "NLJ_L092", "exit_status": 0, "wall_seconds": 13.522900676121935, "peak_rss_kib": "6027832", "swaps": "0", "print_axioms": ["'AspisR1.NLJ_ScanCaller.domain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLJ_ScanCaller.same_original' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLJ_ScanCaller.installed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLJ_ScanCaller.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLJ_ScanCaller.same_original' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLJ_ScanCaller.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_ScanCaller.installed : ∀ (proof : Slice U8) (variant : Op3I_Source.transport.Variant),
+  Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof = ok (core.result.Result.Ok variant) →
+    ∀ (out : Reply) (events : List Check) (after : Bytes),
+      Invoke (checks proof) out events (↑proof) after →
+        (ok out = do
+            let valid ← MultiproofParserRef.parser_reference.scan proof
+...
+'AspisR1.NLJ_ScanCaller.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLJ_ScanCaller.same_original' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLJ_ScanCaller.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_ScanCaller.installed : ∀ (proof : Slice U8) (variant : Op3I_Source.transport.Variant),
+  Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof = ok (core.result.Result.Ok variant) →
+    ∀ (out : Reply) (events : List Check) (after : Bytes),
+      Invoke (checks proof) out events (↑proof) after →
+        (ok out = do
+            let valid ← MultiproofParserRef.parser_reference.scan proof
+            ok (NKB_CanonicalOpening.reply valid)) ∧
+          after = ↑proof :=
+fun proof variant parsed out events after native =>
+  let p := original proof (domain proof variant parsed);
+  have same := rfl;
+  have pval := rfl;
+  have cut :=
+    Eq.mpr
+      (id (congrFun' (congr (congrFun' (congrFun' (congrArg Invoke (congrArg checks same)) out) events) pval) after))
+      native;
+  ⟨Eq.mp
+      (congrArg (Eq (ok out))
+        (congrFun' (congrArg Bind.bind (congrArg MultiproofParserRef.parser_reference.scan same)) fun valid =>
+          ok (NKB_CanonicalOpening.reply valid)))
+      (NKL_ScanRoot.adopted p out events after cut),
+    Eq.trans (NKL_ScanRoot.deployed p out events after cut).right.left pval⟩
+
+Running as unit: run-rece3adef931048c4b84ed803625e7529.scope; invocation ID: f70372528e1c4345a684ac75ca5b1cf1

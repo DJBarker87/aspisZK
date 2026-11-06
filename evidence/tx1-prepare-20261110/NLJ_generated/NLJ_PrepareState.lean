@@ -8,10 +8,11 @@ abbrev Scratch := Array aspis_core.field.wide_exact.WideExact 29#usize
 abbrev Out := core.result.Result verifier.Prepared verifier.Error × Scratch
 abbrev VecBack := Slice U8 → alloc.vec.Vec U8
 abbrev SplitBack := Slice U8 × Slice U8 → Slice U8
-structure Input (H : Type) where
+structure Configuration where
  base : Ops
  boundaries : AspisR1PublicPreparation.FinishModel.Boundaries
  std : ClaimsUnrolledFinish.StdCalls
+structure Input (H : Type) where
  digest : aspis_core.digest.Digest32 H
  publicValue : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
  proof : Slice U8
@@ -19,7 +20,7 @@ structure Input (H : Type) where
  scratch : Scratch
 /-- Source installation is fixed by this input. This is not an admissible
 arbitrary Ops premise in a native row root. -/
-def ops {H : Type} (i : Input H) : Ops := RowShape_InstalledSlots.verifierOps i.base i.boundaries i.std
+def ops (c : Configuration) : Ops := RowShape_InstalledSlots.verifierOps c.base c.boundaries c.std
 inductive Local (H : Type) where
  | allocate
  | split (length : Usize) (logical : alloc.vec.Vec U8)

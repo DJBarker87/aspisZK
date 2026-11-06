@@ -4,9 +4,9 @@ noncomputable section
 namespace AspisR1.NLJ_Prepare
 open Aeneas Aeneas.Std Result AspisR1CurrentCaller
 open AspisR1PublicPreparation.PreparedHashCode (Code)
-def step {H : Type} (s : State H) : Code (Post H) := do
+def step (cfg : Configuration) {H : Type} (s : State H) : Code (Post H) := do
  let i := s.input
- let o := ops i
+ let o := ops cfg
  match s.locals with
  | .allocate =>
    let n ← compact.LOGICAL_SEMANTIC o
@@ -55,7 +55,7 @@ def step {H : Type} (s : State H) : Code (Post H) := do
    | .Ok v => pure (.inr (advance s (.semantic logical v)))
  | .semantic logical v =>
    let r ← S1SemanticCodeInstallation.code AspisS1ExtractedRoundChildren.children
-    (ClaimsUnrolledFinish.install i.std i.boundaries) i.digest i.publicValue v.semantic i.hash
+    (ClaimsUnrolledFinish.install cfg.std cfg.boundaries) i.digest i.publicValue v.semantic i.hash
    pure (.inr (advance s (.mapSemantic logical v r)))
  | .mapSemantic logical v r =>
    match r with

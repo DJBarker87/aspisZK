@@ -1,0 +1,11 @@
+'AspisR1.NLJ_Tx1.source_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_Tx1.source_fold : ∀ (cfg : Configuration) (i : Input) (out : Result Out) (log : SdkC_Source.Log),
+  Cuts cfg i out log →
+    ∀ (before : SdkC_Source.Log),
+      SdkC_Source.run i.hashv (fold cfg 20 { input := i, locals := Local.guard }) before = (out, before ++ log) :=
+fun cfg i out log cuts before => NHZ_DRIVER.frame cuts before
+def AspisR1.NLJ_Tx1.SourceEquality : Configuration → Input → Prop :=
+fun cfg i =>
+  SdkC_Source.run i.hashv (fold cfg 20 { input := i, locals := Local.guard }) [] =
+    SdkC_Source.run i.hashv
+      (GExp_FirstCode.code cfg.base cfg.boundaries cfg.std i.hashv i.digest i.publicValue i.publicBytes i.proof i.k) []

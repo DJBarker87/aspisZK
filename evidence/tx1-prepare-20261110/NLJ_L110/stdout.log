@@ -1,0 +1,4 @@
+def AspisR1.NLJ_Prepare.SourceEquality : Configuration → {H : Type} → Input H → Prop :=
+fun cfg {H} i =>
+  run (fold cfg 12 (initial i)) =
+    run (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash i.scratch)

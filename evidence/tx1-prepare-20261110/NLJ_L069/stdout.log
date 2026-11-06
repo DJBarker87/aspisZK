@@ -1,0 +1,14 @@
+'AspisR1.NLJ_Observed.source_invocation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLJ_Observed.initial_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLJ_Observed.events_from_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLJ_Observed.initial_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_Observed.events_from_cuts : ∀ {H : Type} (i : Input H) (out : Result (Out H)) (log : Log)
+  (events : List Event),
+  Invocation 6 (initial i) out log events →
+    run
+        (S1SemanticCode.verify
+          (fun {H_1} => S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries i.reservation)) i.digest
+          i.publicValue i.bytes i.hash none) =
+      (log, out) :=
+fun {H} i out log events cuts =>
+  Eq.mpr (id (congrArg (fun _a => _a = (log, out)) (Eq.symm (initial_source i)))) (fold_from_steps cuts)

@@ -9,3 +9,9 @@ The complete native parent is still unproved. Existing fold_from_steps consumes 
 ## K023 retired native shape
 
 K023 observed_10_cut timed out at the unchanged90s solver cap (exit1,93.323s,1470444KiB,swap0). No native credit. The record comparison selected a cell by off%variable_length, introducing a64-bit variable divisor. Replacement installed byL059: an independently arbitrary direct index constrained below the SAME record length, one explicit byte plus length/address frame, with no division. The negative control and all later Prefix-record uses use this split shape. The shape is permanently in NLJ_native.rs.txt and the patch. Earlier constant-length original-buffer window K021/K022 remains its original configuration. No cap or timeout changed.
+
+## K028 retired finish-record shape
+
+K028 timed out (exit1,95.569s,1430988KiB,swap0) on the finish Prefix record window even after removal of variable division. The final split records one arbitrary record's length/address/byte at the entered finish occurrence, avoiding two full27-slice log snapshots. Original harness identifiers are retained; no cap/timeout changes. The Root part of the original composite assertion must remain explicit or be separately discharged; a record-only window is not silently a full Prefix-field pass.
+
+K029's selected-record split also timed out (exit1,93.650s,1364420KiB,swap0). It earns no credit. No unchanged retry is launched. This record-only partition additionally omitted the composite root part, so it could never alone close the original full Prefix carry; that Root obligation is retained. Continue independent transcript/challenge/success windows.

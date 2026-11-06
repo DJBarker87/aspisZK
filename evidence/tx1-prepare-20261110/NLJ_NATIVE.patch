@@ -10,7 +10,7 @@
 +pub(crate) mod NLJ_native;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NLJ_native.rs
-@@ -0,0 +1,307 @@
+@@ -0,0 +1,367 @@
 +//! Reviewed source-control-flow candidate for verify_observed. Local oracle
 +//! record only; all replies independent of original input bytes. Err-prefix
 +//! scope only: successful finish forwarding remains an explicit obligation.
@@ -52,6 +52,7 @@
 +fn same_record(a:&[u8],b:&[u8],offset:usize)->bool{a.len()==b.len()&&core::ptr::eq(a.as_ptr(),b.as_ptr())&&(b.is_empty()||a[offset%b.len()]==b[offset%b.len()])}
 +fn prefix_record(a:&[u8],b:&[u8])->bool{let structural=a.len()==b.len()&&core::ptr::eq(a.as_ptr(),b.as_ptr());if b.is_empty(){structural}else{let position:usize=kani::any();kani::assume(position<b.len());structural&&a[position]==b[position]}}
 +fn check(mode:u8,bad:bool){
++ if mode==12{check_prefix_split(bad);return;}
 + let bytes:[u8;13831]=kani::any();let root:[u8;32]=kani::any();let index:usize=kani::any();let row:usize=kani::any();let off:usize=kani::any();let j:usize=kani::any();kani::assume(index<bytes.len()&&row<27&&off<bytes.len()&&j<15);
 + let lo:[usize;27]=kani::any();let hi:[usize;27]=kani::any();
 + kani::assume(lo[0]<=hi[0]&&hi[0]<=bytes.len());
@@ -318,6 +319,65 @@
 +#[kani::proof] #[kani::unwind(90)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn independent_error_mutation_control(){let expected=error();let bytes:[u8;1]=kani::any();let coupled=if bytes[0]%2==0{Error::Terminal}else{Error::Public};assert_eq!(coupled,expected);}
++
++// Replacement for retired K028: record only the arbitrary selected byte at
++// the finish call, leaving all other Prefix cells as a Lean frame partition.
++struct WindowLog<'a>{prefix:Option<Prefix<'a>>,row:usize,position:usize,initial:([u8;32],Hash,u8),after:([u8;32],Hash,u8),error:Error,actual_byte:u8,actual_ptr:usize,actual_len:usize,entered:bool}
++impl<'a> WindowLog<'a>{
++ fn parse(&mut self,_:&'a[u8])->Result<Prefix<'a>,Error>{Ok(self.prefix.take().unwrap())}
++ fn public_transcript(&mut self,_:Public<'a>,_:Hash,_:&'a[u8;32])->Result<SemanticTranscript<Hash>,Error>{Ok(crate::r1_wire::NLJ_factory::make(self.initial.1,self.initial.0,self.initial.2))}
++ fn begin(&mut self,_:&Prefix<'a>,t:&mut SemanticTranscript<Hash>)->Result<Challenges,Error>{*t=crate::r1_wire::NLJ_factory::make(self.after.1,self.after.0,self.after.2);Ok(challenge())}
++ fn finish(&mut self,_:Public<'a>,p:Prefix<'a>,_:SemanticTranscript<Hash>,_:Challenges)->Result<Verified<Hash>,Error>{let record=crate::r1_wire::NLJ_factory::record(&p,self.row);self.actual_len=record.len();self.actual_ptr=record.as_ptr() as usize;self.actual_byte=if record.is_empty(){0}else{record[self.position]};self.entered=true;Err(self.error)}
++}
++fn source_window<'a>(public:Public<'a>,bytes:&'a[u8],hash:Hash,log:&mut WindowLog<'a>)->Result<Verified<Hash>,Error>{
++ let prefix=log.parse(bytes)?;super::mark(None,0);
++ let mut transcript=log.public_transcript(public,hash,prefix.c1_root)?;
++ let challenges=log.begin(&prefix,&mut transcript)?;super::mark(None,1);
++ log.finish(public,prefix,transcript,challenges)
++}
++fn check_prefix_split(bad:bool){
++ let bytes:[u8;13831]=kani::any();let root:[u8;32]=kani::any();let index:usize=kani::any();let row:usize=kani::any();let off:usize=kani::any();let j:usize=kani::any();kani::assume(index<bytes.len()&&row<27&&off<bytes.len()&&j<15);
++ let lo:[usize;27]=kani::any();let hi:[usize;27]=kani::any();
++ kani::assume(lo[0]<=hi[0]&&hi[0]<=bytes.len());
++ kani::assume(lo[1]<=hi[1]&&hi[1]<=bytes.len());
++ kani::assume(lo[2]<=hi[2]&&hi[2]<=bytes.len());
++ kani::assume(lo[3]<=hi[3]&&hi[3]<=bytes.len());
++ kani::assume(lo[4]<=hi[4]&&hi[4]<=bytes.len());
++ kani::assume(lo[5]<=hi[5]&&hi[5]<=bytes.len());
++ kani::assume(lo[6]<=hi[6]&&hi[6]<=bytes.len());
++ kani::assume(lo[7]<=hi[7]&&hi[7]<=bytes.len());
++ kani::assume(lo[8]<=hi[8]&&hi[8]<=bytes.len());
++ kani::assume(lo[9]<=hi[9]&&hi[9]<=bytes.len());
++ kani::assume(lo[10]<=hi[10]&&hi[10]<=bytes.len());
++ kani::assume(lo[11]<=hi[11]&&hi[11]<=bytes.len());
++ kani::assume(lo[12]<=hi[12]&&hi[12]<=bytes.len());
++ kani::assume(lo[13]<=hi[13]&&hi[13]<=bytes.len());
++ kani::assume(lo[14]<=hi[14]&&hi[14]<=bytes.len());
++ kani::assume(lo[15]<=hi[15]&&hi[15]<=bytes.len());
++ kani::assume(lo[16]<=hi[16]&&hi[16]<=bytes.len());
++ kani::assume(lo[17]<=hi[17]&&hi[17]<=bytes.len());
++ kani::assume(lo[18]<=hi[18]&&hi[18]<=bytes.len());
++ kani::assume(lo[19]<=hi[19]&&hi[19]<=bytes.len());
++ kani::assume(lo[20]<=hi[20]&&hi[20]<=bytes.len());
++ kani::assume(lo[21]<=hi[21]&&hi[21]<=bytes.len());
++ kani::assume(lo[22]<=hi[22]&&hi[22]<=bytes.len());
++ kani::assume(lo[23]<=hi[23]&&hi[23]<=bytes.len());
++ kani::assume(lo[24]<=hi[24]&&hi[24]<=bytes.len());
++ kani::assume(lo[25]<=hi[25]&&hi[25]<=bytes.len());
++ kani::assume(lo[26]<=hi[26]&&hi[26]<=bytes.len());
++ let records=[&bytes[lo[0]..hi[0]],&bytes[lo[1]..hi[1]],&bytes[lo[2]..hi[2]],&bytes[lo[3]..hi[3]],&bytes[lo[4]..hi[4]],&bytes[lo[5]..hi[5]],&bytes[lo[6]..hi[6]],&bytes[lo[7]..hi[7]],&bytes[lo[8]..hi[8]],&bytes[lo[9]..hi[9]],&bytes[lo[10]..hi[10]],&bytes[lo[11]..hi[11]],&bytes[lo[12]..hi[12]],&bytes[lo[13]..hi[13]],&bytes[lo[14]..hi[14]],&bytes[lo[15]..hi[15]],&bytes[lo[16]..hi[16]],&bytes[lo[17]..hi[17]],&bytes[lo[18]..hi[18]],&bytes[lo[19]..hi[19]],&bytes[lo[20]..hi[20]],&bytes[lo[21]..hi[21]],&bytes[lo[22]..hi[22]],&bytes[lo[23]..hi[23]],&bytes[lo[24]..hi[24]],&bytes[lo[25]..hi[25]],&bytes[lo[26]..hi[26]]];
++ let prefix=crate::r1_wire::NLJ_factory::prefix(&root,records);
++ let transition=super::NKQ_rejections::transition();let transfer=super::NKQ_rejections::transfer();let withdrawal=withdraw();let which:bool=kani::any();let public=if which{Public::Transfer(&transfer,&transition)}else{Public::Withdrawal(&withdrawal,&transition)};
++ let hash=Hash;let initial=(kani::any(),Hash,kani::any());let after=(kani::any(),Hash,kani::any());let e=error();
++
++ let old=bytes[index];let oldroot=root[off%32];
++ let expected=records[row];let position:usize=kani::any();kani::assume(expected.is_empty()||position<expected.len());
++ let cell=if expected.is_empty(){0}else{expected[position]};let address=expected.as_ptr() as usize;let length=expected.len();
++ let mut log=WindowLog{prefix:Some(prefix),row,position,initial,after,error:e,actual_byte:0,actual_ptr:0,actual_len:0,entered:false};
++ let out=source_window(public,&bytes,hash,&mut log);
++ let good=matches!(out,Err(err) if err==e)&&log.entered&&log.actual_len==length&&log.actual_ptr==address&&log.actual_byte==cell&&bytes[index]==old&&root[off%32]==oldroot;
++ if bad{assert!(!good)}else{assert!(good)}
++}
 --- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
 +++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
 @@ -855,3 +855,7 @@
@@ -330,9 +390,10 @@
 +pub(crate) mod NLJ_factory;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NLJ_factory.rs
-@@ -0,0 +1,5 @@
+@@ -0,0 +1,6 @@
 +use super::*;
 +pub(crate) fn prefix<'a>(root:&'a[u8;32],records:[&'a[u8];27])->Prefix<'a>{Prefix{c1_root:root,records}}
 +pub(crate) fn records<'a>(prefix:&Prefix<'a>)->[&'a[u8];27]{prefix.records}
 +pub(crate) fn make<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->SemanticTranscript<H>{SemanticTranscript{state,hash,next_row}}
 +pub(crate) fn snapshot<H:Digest32+Copy>(t:&SemanticTranscript<H>)->([u8;32],H,u8){(t.state,t.hash,t.next_row)}
++pub(crate) fn record<'a>(prefix:&Prefix<'a>,row:usize)->&'a[u8]{prefix.records[row]}

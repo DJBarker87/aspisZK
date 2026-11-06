@@ -27,9 +27,10 @@ theorem installed (proof : Slice U8) (variant : Op3I_Source.transport.Variant)
               ok (NKB_CanonicalOpening.reply valid)) ∧ after = proof.val := by
  let p := original proof (domain proof variant parsed)
  have same : p.to_slice = proof := rfl
- have cut : Invoke (checks p.to_slice) out events p.val after := by simpa only [same] using native
+ have pval : p.val = proof.val := rfl
+ have cut : Invoke (checks p.to_slice) out events p.val after := by simpa only [same,pval] using native
  exact ⟨by simpa only [same] using NKL_ScanRoot.adopted p out events after cut,
-  (NKL_ScanRoot.deployed p out events after cut).2.1⟩
+  (NKL_ScanRoot.deployed p out events after cut).2.1.trans pval⟩
 #print axioms domain
 #print axioms same_original
 #print axioms installed
