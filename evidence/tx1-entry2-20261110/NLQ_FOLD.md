@@ -15,3 +15,9 @@ Stage 1: NLD→NLF→NLO seed copied 8,004,344bytes. NLJ_RowSpec094 rebuilt priv
 Resume stage: L039 validates NLQ_FirstPacket.fold consuming the unchanged RowSpec_094; L040 validates full exclusive-conflict and live-guard wrong-length prefixes; L042 validates CLOSED error-row returning-value/byte-label support. These are intermediate theorems, not physical native parent certificates. L041 failed on missing type information in an owned local `let`; its recovery output is excluded.
 
 Review correction: TX1:343 snapshot is already CLOSED by NHY_SnapshotJoin.source, not an open full-carrier producer. Reuse that root for normal-return source observations at SAME Entry/account/l1/l2 and related/valid SDK state. Its normal-return statement alone does not supply allocator-abort prefixes or the enclosing native stage1 cut. NLQ_SnapshotThirdPrefix.abort now passes (L056); its prior L045/L047/L050/L052 elaboration failures are excluded.
+
+Owned-runner validation tightened during resume: every direct NLQ_/NLM_ import must have a PASS receipt for its CURRENT retained source hash before a dependent launches. This matches the stricter NLQ_formal path and prevents stale private objects. Shared launchers/admission/shims are unchanged.
+
+Sibling reuse correction: the pinned sibling commit already proves NLM_Snapshot.skip_allocation. NLQ_SnapshotSkip is being reduced to an import/delegation wrapper; additive NLM_SnapshotTrace/Skip sources are copied unchanged with provenance, and all existing retained NLM dependencies hash-match. No sibling worktree or cache is modified.
+
+Resume stage: complete stateful dispatch erasure and TX1 lifecycle/stage2 elimination passed (L103/L104); snapshot replay and guarded first-abort prefixes passed (L105/L114/L095–097). Metadata association is separately OPEN as NLQ-F3; L119 and K021/K022 do not establish a row bridge. Native K013–K018 remain qualified under NLQ-F2. No new row root or ledger promotion.

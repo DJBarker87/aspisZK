@@ -6,6 +6,17 @@ B='/home/dombarker/project-offloads/codex-cx-tx1-entry2-20261110';W='/home/domba
 if (E/'NLQ_HOLD').exists():sys.exit(75)
 guard=E/'NLQ_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 a,kind,target=sys.argv[1:];assert re.fullmatch('NLQ_L[0-9]{3}',a) and 1<=int(a[-3:])<=140 and not (E/a).exists()
+# Stricter owned-input validation: a dependent may not use a stale private object.
+if kind=='lean':
+ candidate=E/(target+'.lean')
+ if not candidate.exists():candidate=E/'NLQ_dependency_inputs'/(target+'.lean.txt')
+ receipts=[json.loads(line) for line in (E/'NLQ_ATTEMPTS.jsonl').read_text().splitlines()]
+ for dep in re.findall(r'^import ((?:NLQ|NLM)_[\w.]+)',candidate.read_text(),re.M):
+  source=E/(dep+'.lean')
+  if not source.exists():source=E/'NLQ_dependency_inputs'/(dep+'.lean.txt')
+  assert source.exists(), 'Missing pinned own dependency source: '+dep
+  expected=hashlib.sha256(source.read_bytes()).hexdigest()
+  assert any(r.get('module')==dep and r.get('exit_status')==0 and expected in r.get('source_hashes',{}).values() for r in receipts), 'Compile CURRENT dependency first: '+dep
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)

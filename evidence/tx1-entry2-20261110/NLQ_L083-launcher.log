@@ -1,0 +1,50 @@
+{"attempt": "NLQ_L083", "exit_status": 1, "wall_seconds": 14.904741005040705, "peak_rss_kib": "5990976", "swaps": "0", "print_axioms": ["'NLQ_ReplayNormal.normal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_ReplayNormal.lean:11:52: error: unsolved goals
+e : Entry
+t a lo hi : ℕ
+owned : List NLM_Snapshot.Owned
+⊢ List.foldl NLQ_SnapshotReplay.step
+      { input := (ready e t owned).input, sdk := acquired (ready e t owned) a, next := (ready e t owned).next + 1,
+        owned := (ready e t owned).owned }
+      (if
+            (NLF_SdkModel.deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)).bytes.length =
+                lo ∨
+              (NLF_SdkModel.deref (acquired (ready e t owned) a)
+                      (NLM_Snapshot.guard (ready e t owned) a)).bytes.length =
+                hi then
+          {
+            result :=
+              ok
+              
+...
+ t owned).owned }
+                  a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }
+        else
+          {
+            result :=
+              ok
+                ((ready e t owned).input.snapshot a lo hi,
+                  { input := (ready e t owned).input, sdk := (ready e t owned).sdk, next := (ready e t owned).next + 1,
+                    owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }),
+            events :=
+              [Event.release
+                  { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                    next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                  (NLM_Snapshot.guard (ready e t owned) a) (ok (Except.ok (ready e t owned).sdk)),
+                Event.returned
+                  { input := (ready e t owned).input, sdk := acquired (ready e t owned) a,
+                    next := (ready e t owned).next + 1, owned := (ready e t owned).owned }
+                  a lo hi (ok ((ready e t owned).input.snapshot a lo hi))] }).events =
+    { input := (ready e t owned).input, sdk := (ready e t owned).sdk, next := (ready e t owned).next + 1,
+      owned := (ready e t owned).owned ++ [(ready e t owned).input.snapshot a lo hi] }
+NLQ_generated/NLQ_ReplayNormal.lean:15:74: warning: This simp argument is unused:
+  NLM_Snapshot.live
+
+Hint: Omit it from the simp argument list.
+  simp [Bind.bind, ̲Pure.pure, ̲NJU_Log.bind, ̲NJU_Log.record, ̲NLM_Snapshot.release_current,
+     ̲NLQ_SnapshotReplay.replay, ̲NLQ_SnapshotReplay.step, ̲NLM_Snapshot.returned,̵N̵L̵M̵_̵S̵n̵a̵p̵s̵h̵o̵t̵.̵l̵i̵v̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NLQ_ReplayNormal.normal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb2040bb94d3544b6adf957d046b7e93b.scope; invocation ID: b57ca921bb6444cc8691ea1cd96d4dc1

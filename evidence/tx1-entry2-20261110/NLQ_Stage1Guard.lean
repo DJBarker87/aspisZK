@@ -19,10 +19,10 @@ theorem wrong_count (e : S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : Key)
  (d : Slice U8) (n : Nat) (a0 a1 a2 : Result Unit) (bad : n≠3) :
  (G e ops p d n a0 a1 a2).result=.ok (.Err .InvalidInstructionData) ∧
  (G e ops p d n a0 a1 a2).post=initial e := by
- unfold G
- split
- · simp [prepend,count,bad]
- · split <;> simp [prepend,count,bad]
+ by_cases ten : d.val=[3#u8,10#u8]
+ · simp [G,ten,prepend,count,bad]
+ · by_cases eleven : d.val=[3#u8,11#u8] <;> simp [G,ten,eleven,prepend,count,bad]
+
 #print rejected
 #print axioms rejected
 #print axioms wrong_count

@@ -1,0 +1,53 @@
+{"attempt": "NLQ_L081", "exit_status": 0, "wall_seconds": 15.217615109169856, "peak_rss_kib": "5965468", "swaps": "0", "print_axioms": ["'NLQ_EntryTx1.admitted_ten' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_EntryTx1.admitted_eleven' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_EntryTx1.admitted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_EntryTx1.fold' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_EntryTx1.complete' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLQ_EntryTx1.fold : ∀ {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSource.Key) (a : Slice A)
+  (d : Slice U8) (world : F),
+  NLQ_Route.Tx1 d →
+    entry children p a d world = prepend [Event.admitted world d (ok true)] (process children p a d world) :=
+fun {A F C} children p a d world tx1 =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg
+              (fun x =>
+                match x with
+                | fail e =>
+                  { result := fail e, post := world,
+                    events := [Event.admitted world d (Hiq_DispatchSource.pool_route.admitted d)] }
+                | div =>
+                  
+...
+ld, events := [] })
+                      x))
+              (admitted d tx1))
+            (congr
+              (congrArg prepend
+                (congrFun' (congrArg List.cons (congrArg (Event.admitted world d) (admitted d tx1))) []))
+              (ite_congr (eq_self true) (fun a_1 => Eq.refl (process children p a d world)) fun a =>
+                Eq.refl
+                  {
+                    result :=
+                      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                    post := world, events := [] }))))
+        (prepend [Event.admitted world d (ok true)] (process children p a d world)))
+      (eq_self (prepend [Event.admitted world d (ok true)] (process children p a d world))))
+theorem NLQ_EntryTx1.complete : ∀ {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSource.Key) (a : Slice A)
+  (d : Slice U8) (world : F),
+  NLQ_Route.Tx1 d →
+    ((entry children p a d world).result, (entry children p a d world).post) =
+      ((children.first p a d world).result, (children.first p a d world).post) :=
+fun {A F C} children p a d world tx1 =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => (_a.result, _a.post) = ((children.first p a d world).result, (children.first p a d world).post))
+        (fold children p a d world tx1)))
+    (NLQ_DispatchTx1.complete children p a d world tx1)
+'NLQ_EntryTx1.admitted_ten' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_EntryTx1.admitted_eleven' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_EntryTx1.admitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_EntryTx1.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_EntryTx1.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rba5207f6f5794aac8a0b8a1c64a74a1a.scope; invocation ID: fa781985d800460ca721bc1e7de86ca6

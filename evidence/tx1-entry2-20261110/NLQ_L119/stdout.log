@@ -1,0 +1,52 @@
+theorem NLQ_MetadataAdmission.admission : ∀ {F : Type} (h : S2Trust.Heap F) (records : ℕ → Account) (n : ℕ),
+  AdapterRw.RuntimeEntrypointAdmission h (fun a => (records a).key) n →
+    ∀ (flags : ℕ → Bool), AdapterRw.RuntimeEntrypointAdmission h (fun a => (withFlags records flags a).key) n :=
+fun {F} h records n runtime flags => runtime
+theorem NLQ_MetadataAdmission.different_flags : ∀ {F : Type} (h : S2Trust.Heap F) (records : ℕ → Account)
+  (money : ℕ → ℕ) (n a b : ℕ),
+  a ≠ b →
+    AdapterRw.RuntimeEntrypointAdmission h (fun i => (records i).key) n →
+      (h.accounts a).1 = (h.accounts b).1 →
+        have changed := withFlags records fun i => decide (i = b);
+        have state := (install h changed money).state;
+        AdapterRw.RuntimeEntrypointAdmission h (fun i => (changed i).key) n ∧
+          (state.accounts a).data = (state.accounts b).data ∧
+            (state.accounts a).writable = false ∧ (state.accounts b).writable = true :=
+fun {F} h records money n a b different runtime sameCell =>
+  id
+    ⟨admission h records n runtime fun i => decide (i = b),
+      ⟨sameCell,
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (congrArg Account.writable
+                    (congrFun'
+                      (congrFun'
+                        (congrArg
+                          (Account.mk (records a).key (records a).owner (h.accounts a).1 (h.accounts a).2
+                            (records a).signer)
+                          (Eq.trans (Decidable.decide.congr_simp (a = b) False (eq_false different))
+                            (decide_false instDecidableFalse)))
+                        (records a).executable)
+                      (records a).rentEpoch)))
+                false)
+              (eq_self false)),
+          of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (congrArg Account.writable
+                    (congrFun'
+                      (congrFun'
+                        (congrArg
+                          (Account.mk (records b).key (records b).owner (h.accounts b).1 (h.accounts b).2
+                            (records b).signer)
+                          (Eq.trans (Decidable.decide.congr_simp (b = b) True (eq_self b))
+                            (decide_true instDecidableTrue)))
+                        (records b).executable)
+                      (records b).rentEpoch)))
+                true)
+              (eq_self true))⟩⟩⟩
+'NLQ_MetadataAdmission.admission' does not depend on any axioms
+'NLQ_MetadataAdmission.different_flags' depends on axioms: [propext]

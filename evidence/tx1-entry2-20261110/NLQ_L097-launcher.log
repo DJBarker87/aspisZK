@@ -1,0 +1,53 @@
+{"attempt": "NLQ_L097", "exit_status": 0, "wall_seconds": 19.56824607611634, "peak_rss_kib": "6012932", "swaps": "0", "print_axioms": ["'NLQ_Stage1Abort.first_fail' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_Stage1Abort.first_div' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLQ_Stage1Abort.first_fail : ∀ (e : Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8) (err : Error)
+  (a1 a2 : Result Unit),
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles 0).1)).length = 58295 →
+    NLQ_Stage1Fold.G e ops p d (fail err) a1 a2 =
+      have s := ready e 0 [];
+      { result := fail err,
+        post := { snapshots := { input := s.input, sdk := acquired s 0, next := s.next + 1, owned := s.owned } },
+        events := List.map Event.snapshot (allocationPrefix s 0 (fail err)) } :=
+fun e ops p d err a1 a2 extent =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (have snapshots := _a;
+              have priorEvents := List.ma
+...
+ have tail := continuation ops p d { snapshots := post };
+                { result := tail.result, post := tail.post, events := priorEvents ++ tail.events }) =
+              let s := ready e 0 [];
+              { result := div,
+                post :=
+                  { snapshots := { input := s.input, sdk := acquired s 0, next := s.next + 1, owned := s.owned } },
+                events := List.map Event.snapshot (allocationPrefix s 0 div) })
+          (NLQ_SnapshotPrefixes.first_diverge e a1 a2 extent)))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                { result := div, post := { snapshots := _a },
+                    events := List.map Event.snapshot (allocationPrefix (ready e 0 []) 0 div) } =
+                  { result := div,
+                    post :=
+                      {
+                        snapshots :=
+                          { input := (ready e 0 []).input, sdk := acquired (ready e 0 []) 0,
+                            next := (ready e 0 []).next + 1, owned := (ready e 0 []).owned } },
+                    events := List.map Event.snapshot (allocationPrefix (ready e 0 []) 0 div) })
+              (NLQ_ReplayAbort.allocation (ready e 0 []) 0 div)))
+          (Eq.refl
+            { result := div,
+              post :=
+                {
+                  snapshots :=
+                    { input := (ready e 0 []).input, sdk := acquired (ready e 0 []) 0, next := (ready e 0 []).next + 1,
+                      owned := (ready e 0 []).owned } },
+              events := List.map Event.snapshot (allocationPrefix (ready e 0 []) 0 div) }))))
+'NLQ_Stage1Abort.first_fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Stage1Abort.first_div' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2feb582d6d104ec9b47c7d9511387dc0.scope; invocation ID: 1775eb590ec2429e8237e0f24ff61d0d

@@ -1,0 +1,32 @@
+{"attempt": "NLQ_L085", "exit_status": 0, "wall_seconds": 33.22617768100463, "peak_rss_kib": "6018360", "swaps": "0", "print_axioms": []}
+def NLQ_Stage1Parent.G : S2W_D189Entry.Entry →
+  AdapterRw.Ops → Key → Slice U8 → ℕ → Result Unit → Result Unit → Result Unit → Run :=
+fun e ops p d n a0 a1 a2 =>
+  have ten := decide (↑d = [3#u8, 10#u8]);
+  if ten = true then prepend [Event.instruction (initial e) d 10#u8 ten] (count e ops p d n a0 a1 a2)
+  else
+    have eleven := decide (↑d = [3#u8, 11#u8]);
+    if eleven = true then
+      prepend [Event.instruction (initial e) d 10#u8 ten, Event.instruction (initial e) d 11#u8 eleven]
+        (count e ops p d n a0 a1 a2)
+    else
+      { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+        post := initial e,
+        events := [E
+...
+def NLQ_Stage1Parent.G : S2W_D189Entry.Entry →
+  AdapterRw.Ops → Key → Slice U8 → ℕ → Result Unit → Result Unit → Result Unit → Run :=
+fun e ops p d n a0 a1 a2 =>
+  have ten := decide (↑d = [3#u8, 10#u8]);
+  if ten = true then prepend [Event.instruction (initial e) d 10#u8 ten] (count e ops p d n a0 a1 a2)
+  else
+    have eleven := decide (↑d = [3#u8, 11#u8]);
+    if eleven = true then
+      prepend [Event.instruction (initial e) d 10#u8 ten, Event.instruction (initial e) d 11#u8 eleven]
+        (count e ops p d n a0 a1 a2)
+    else
+      { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+        post := initial e,
+        events := [Event.instruction (initial e) d 10#u8 ten, Event.instruction (initial e) d 11#u8 eleven] }
+
+Running as unit: run-r057f7d3864b64623a27361dc8df01d88.scope; invocation ID: 28c26a8a3893476187246fb1e08154c8

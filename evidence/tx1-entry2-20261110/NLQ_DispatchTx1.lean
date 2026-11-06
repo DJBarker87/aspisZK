@@ -1,4 +1,4 @@
-import NLQ_DispatchState
+import NLQ_ByteDispatch
 set_option autoImplicit false
 noncomputable section
 namespace NLQ_DispatchTx1
@@ -15,7 +15,7 @@ theorem ten {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSource.K
   (invoke children.first p a NJD_Prefixes.ten world) := by
  simp [process,fallback,step,prepend,Hiq_DispatchSource.firstByte,Hiq_DispatchSource.copied,
   Hiq_DispatchSource.eqU8,NJD_Prefixes.ten,Array.make]
- all_goals rfl
+ all_goals repeat' first | contradiction | rfl | constructor | split
 theorem eleven {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSource.Key)
  (a : Slice A) (world : F) :
  process children p a NJD_Prefixes.eleven world =
@@ -26,7 +26,7 @@ theorem eleven {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSourc
   (invoke children.first p a NJD_Prefixes.eleven world) := by
  simp [process,fallback,step,prepend,Hiq_DispatchSource.firstByte,Hiq_DispatchSource.copied,
   Hiq_DispatchSource.eqU8,NJD_Prefixes.eleven,Array.make]
- all_goals rfl
+ all_goals repeat' first | contradiction | rfl | constructor | split
 theorem complete {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSource.Key)
  (a : Slice A) (d : Slice U8) (world : F) (tx1 : NLQ_Route.Tx1 d) :
  ((process children p a d world).result,(process children p a d world).post)=

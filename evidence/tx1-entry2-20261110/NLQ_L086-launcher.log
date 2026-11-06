@@ -1,0 +1,52 @@
+{"attempt": "NLQ_L086", "exit_status": 1, "wall_seconds": 19.8371071559377, "peak_rss_kib": "5988036", "swaps": "0", "print_axioms": ["'NLQ_Stage1Guard.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_Stage1Guard.wrong_count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_Stage1Guard.lean:23:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: If you meant to destruct this conjunction, use the `cases` tactic instead
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+e : S2W_D189Entry.Entry
+ops : AdapterRw.Ops
+p : Key
+d : Slice U8
+n : ℕ
+a0 a1 a2 : Result Unit
+bad : n ≠ 3
+⊢ (have ten := decide (↑d = [3#u8, 10#u8]);
+        if ten = true then prepend [Event.instruction (initial e) d 10#u8 ten] (count e ops p d n a0 a1 a2)
+        else
+          have eleven := decide (↑d = [3#u8, 11#u8]);
+          if eleven = true then
+            prepend [Event.instruction
+...
+
+                      (Eq.trans (Decidable.decide.congr_simp (↑d = [3#u8, 11#u8]) False (eq_false eleven))
+                        (decide_false instDecidableFalse)))
+                    true)
+                  Bool.false_eq_true))
+              (congrArg
+                (NLQ_Stage1Parent.Run.mk
+                  (ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData))
+                  (initial e))
+                (congr
+                  (congrArg List.cons
+                    (congrArg (Event.instruction (initial e) d 10#u8)
+                      (Eq.trans (Decidable.decide.congr_simp (↑d = [3#u8, 10#u8]) False (eq_false ten))
+                        (decide_false instDecidableFalse))))
+                  (congrFun'
+                    (congrArg List.cons
+                      (congrArg (Event.instruction (initial e) d 11#u8)
+                        (Eq.trans (Decidable.decide.congr_simp (↑d = [3#u8, 11#u8]) False (eq_false eleven))
+                          (decide_false instDecidableFalse))))
+                    []))))))
+        { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+          post := initial e,
+          events := [Event.instruction (initial e) d 10#u8 false, Event.instruction (initial e) d 11#u8 false] })
+      (eq_self
+        { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+          post := initial e,
+          events := [Event.instruction (initial e) d 10#u8 false, Event.instruction (initial e) d 11#u8 false] }))
+'NLQ_Stage1Guard.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Stage1Guard.wrong_count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r36f0e4e663cb421d93a32b4c5988fb00.scope; invocation ID: 4ab19fb3659046a38cda5a7d909a1f60

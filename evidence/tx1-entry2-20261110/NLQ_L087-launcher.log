@@ -1,0 +1,44 @@
+{"attempt": "NLQ_L087", "exit_status": 0, "wall_seconds": 33.29848614311777, "peak_rss_kib": "6018764", "swaps": "0", "print_axioms": ["'NLQ_Stage1Body.ten' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_Stage1Body.eleven' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_Stage1Body.result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLQ_Stage1Body.ten : ∀ (e : S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : Key) (a0 a1 a2 : Result Unit),
+  G e ops p NJD_Prefixes.ten 3 a0 a1 a2 =
+    have body := NLQ_Stage1Fold.G e ops p NJD_Prefixes.ten a0 a1 a2;
+    { result := body.result, post := body.post,
+      events :=
+        [Event.instruction (initial e) NJD_Prefixes.ten 10#u8 true, Event.count (initial e) 3] ++
+          List.map Event.body body.events } :=
+fun e ops p a0 a1 a2 =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (ite_cond_eq_true
+              (prepend
+                [Event.instruction (initial e) NJD_Prefixes.ten 10#u8 (decide (↑NJD_Prefixes.ten = [3#u
+...
+              ok
+                            (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                        post := initial e, events := [Event.count (initial e) 3] }
+                      (eq_self 3))))))))
+        { result := (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ a0 a1 a2).result,
+          post := (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ a0 a1 a2).post,
+          events :=
+            Event.instruction (initial e) ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ 10#u8 false ::
+              Event.instruction (initial e) ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ 11#u8 true ::
+                Event.count (initial e) 3 ::
+                  List.map Event.body
+                    (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ a0 a1 a2).events })
+      (eq_self
+        { result := (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ a0 a1 a2).result,
+          post := (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ a0 a1 a2).post,
+          events :=
+            Event.instruction (initial e) ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ 10#u8 false ::
+              Event.instruction (initial e) ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ 11#u8 true ::
+                Event.count (initial e) 3 ::
+                  List.map Event.body
+                    (NLQ_Stage1Fold.G e ops p ⟨[3#u8, 11#u8], NJD_Prefixes.eleven._proof_1⟩ a0 a1 a2).events }))
+'NLQ_Stage1Body.ten' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Stage1Body.eleven' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_Stage1Body.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rfb800206e1ed48ddbd6d6def26b9821e.scope; invocation ID: a38abfd7e832406aa13326341d6182ce

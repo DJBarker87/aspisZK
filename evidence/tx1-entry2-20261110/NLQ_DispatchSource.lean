@@ -26,7 +26,11 @@ theorem process {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSour
  cases copied with
  | none => exact fallback children p a d world
  | some i =>
-   split <;> first | rfl | exact fallback children p a d world
+   dsimp only
+   split <;> subst_vars
+   all_goals first
+    | rfl
+    | (split <;> first | contradiction | rfl | exact fallback children p a d world)
 theorem entry {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSource.Key)
  (a : Slice A) (d : Slice U8) (world : F) :
  (NLQ_DispatchState.entry children p a d world).result=
@@ -36,6 +40,7 @@ theorem entry {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSource
  congr 1
  funext admitted
  cases admitted <;> simp only [Bool.false_eq_true,ite_false,ite_true,process]
+ all_goals rfl
 #print process
 #print entry
 #print axioms fallback

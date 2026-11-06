@@ -1,0 +1,46 @@
+{"attempt": "NLQ_L093", "exit_status": 1, "wall_seconds": 15.153026401996613, "peak_rss_kib": "5935480", "swaps": "0", "print_axioms": ["'NLQ_DispatchSource.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLQ_DispatchSource.process' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLQ_DispatchSource.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_DispatchSource.lean:30:27: error: Type mismatch
+  fallback children p a d world
+has type
+  (NLQ_DispatchState.fallback children p a d world).result = do
+    let ten ← Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 10#u8] ⋯)
+    if ten = true then (children.first p a d world).result
+      else do
+        let eleven ← Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 11#u8] ⋯)
+        if eleven = true then (children.first p a d world).result else (children.second p a d world).result
+but is expected to have type
+  (NLQ_DispatchState.fallback children p a d world).result =
+    match i with
+    | 4#8#uscalar => (asOps children world).init p a d
+    | 5#8#uscalar => (asO
+...
+                       (ite_congr (eq_self true)
+                                  (fun a_1 => Eq.refl (NLQ_DispatchState.process children p a d world)) fun a =>
+                                  Eq.refl
+                                    {
+                                      result :=
+                                        ok
+                                          (core.result.Result.Err
+                                            AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                                      post := world, events := [] }))
+                              (process children p a d world)))
+                          (ite_congr (eq_self true)
+                            (fun a_1 =>
+                              Eq.refl
+                                (NIV_RawBoundary.process
+                                  { toOps := asOps children world, head := Hiq_DispatchSource.firstByte,
+                                    copy := Hiq_DispatchSource.copied, eq := fun {N} => Hiq_DispatchSource.eqU8,
+                                    admitted := Hiq_DispatchSource.pool_route.admitted }
+                                  p a d))
+                            fun a =>
+                            Eq.refl
+                              (ok
+                                (core.result.Result.Err
+                                  AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)))))
+                      sorry)
+                (Eq.refl admitted))))))
+'NLQ_DispatchSource.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_DispatchSource.process' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLQ_DispatchSource.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r226f4df01c954a24b37969515cfd2f1c.scope; invocation ID: 47120655f62347cda414fa78073c627d

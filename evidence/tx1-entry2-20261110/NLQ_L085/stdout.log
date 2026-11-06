@@ -1,0 +1,14 @@
+def NLQ_Stage1Parent.G : S2W_D189Entry.Entry →
+  AdapterRw.Ops → Key → Slice U8 → ℕ → Result Unit → Result Unit → Result Unit → Run :=
+fun e ops p d n a0 a1 a2 =>
+  have ten := decide (↑d = [3#u8, 10#u8]);
+  if ten = true then prepend [Event.instruction (initial e) d 10#u8 ten] (count e ops p d n a0 a1 a2)
+  else
+    have eleven := decide (↑d = [3#u8, 11#u8]);
+    if eleven = true then
+      prepend [Event.instruction (initial e) d 10#u8 ten, Event.instruction (initial e) d 11#u8 eleven]
+        (count e ops p d n a0 a1 a2)
+    else
+      { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+        post := initial e,
+        events := [Event.instruction (initial e) d 10#u8 ten, Event.instruction (initial e) d 11#u8 eleven] }

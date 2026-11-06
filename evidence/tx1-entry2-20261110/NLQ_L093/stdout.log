@@ -1,0 +1,375 @@
+NLQ_generated/NLQ_DispatchSource.lean:30:27: error: Type mismatch
+  fallback children p a d world
+has type
+  (NLQ_DispatchState.fallback children p a d world).result = do
+    let ten ← Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 10#u8] ⋯)
+    if ten = true then (children.first p a d world).result
+      else do
+        let eleven ← Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 11#u8] ⋯)
+        if eleven = true then (children.first p a d world).result else (children.second p a d world).result
+but is expected to have type
+  (NLQ_DispatchState.fallback children p a d world).result =
+    match i with
+    | 4#8#uscalar => (asOps children world).init p a d
+    | 5#8#uscalar => (asOps children world).write p a d
+    | 6#8#uscalar => (asOps children world).finalize p a d
+    | x => do
+      let b ← Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 10#u8] NIV_RawBoundary.process._proof_4)
+      if b = true then (asOps children world).first p a d
+        else do
+          let b1 ← Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 11#u8] NIV_RawBoundary.process._proof_6)
+          if b1 = true then (asOps children world).first p a d else (asOps children world).second p a d
+NLQ_generated/NLQ_DispatchSource.lean:34:81: error: unsolved goals
+case e_a.true
+A F C : Type
+children : Children A F C
+p : Hiq_DispatchSource.Key
+a : Slice A
+d : Slice U8
+world : F
+⊢ NIV_RawBoundary.process (NIV_RawBoundary.profile (asOps children world)) p a d =
+    NIV_RawBoundary.process
+      { toOps := asOps children world, head := Hiq_DispatchSource.firstByte, copy := Hiq_DispatchSource.copied,
+        eq := fun {N} => Hiq_DispatchSource.eqU8, admitted := Hiq_DispatchSource.pool_route.admitted }
+      p a d
+theorem NLQ_DispatchSource.process : ∀ {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSource.Key)
+  (a : Slice A) (d : Slice U8) (world : F),
+  (NLQ_DispatchState.process children p a d world).result =
+    NIV_RawBoundary.process (NIV_RawBoundary.profile (asOps children world)) p a d :=
+fun {A F C} children p a d world =>
+  id
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (step_result world (Event.head world d) (Hiq_DispatchSource.firstByte d) fun head =>
+                    step world (Event.copied world head) (Hiq_DispatchSource.copied head) fun copied =>
+                      match copied with
+                      | none => NLQ_DispatchState.fallback children p a d world
+                      | some i =>
+                        match i with
+                        | 4#8#uscalar => invoke children.init p a d world
+                        | 5#8#uscalar => invoke children.write p a d world
+                        | 6#8#uscalar => invoke children.finalize p a d world
+                        | x => NLQ_DispatchState.fallback children p a d world)
+                  (congrArg (Bind.bind (Hiq_DispatchSource.firstByte d))
+                    (funext fun x =>
+                      step_result world (Event.copied world x) (Hiq_DispatchSource.copied x) fun copied =>
+                        match copied with
+                        | none => NLQ_DispatchState.fallback children p a d world
+                        | some i =>
+                          match i with
+                          | 4#8#uscalar => invoke children.init p a d world
+                          | 5#8#uscalar => invoke children.write p a d world
+                          | 6#8#uscalar => invoke children.finalize p a d world
+                          | x => NLQ_DispatchState.fallback children p a d world))))
+              (congrArg (Bind.bind (Hiq_DispatchSource.firstByte d))
+                (funext fun o =>
+                  congrArg (Bind.bind (Hiq_DispatchSource.copied o))
+                    (funext fun o1 =>
+                      congr
+                        (congrArg
+                          (NIV_RawBoundary.process.match_1
+                            (fun o1 => Result (core.result.Result Unit Hiq_DispatchSource.PE)) o1)
+                          (funext fun _ =>
+                            congrArg
+                              (Bind.bind
+                                (Hiq_DispatchSource.eqU8 d
+                                  (Array.make 2#usize [3#u8, 10#u8] NIV_RawBoundary.process._proof_4)))
+                              (funext fun b =>
+                                ite_congr (Eq.refl (b = true)) (fun a_1 => Eq.refl ((asOps children world).first p a d))
+                                  fun a_1 =>
+                                  congrArg
+                                    (Bind.bind
+                                      (Hiq_DispatchSource.eqU8 d
+                                        (Array.make 2#usize [3#u8, 11#u8] NIV_RawBoundary.process._proof_6)))
+                                    (funext fun b1 =>
+                                      ite_congr (Eq.refl (b1 = true))
+                                        (fun a_2 => Eq.refl ((asOps children world).first p a d)) fun a_2 =>
+                                        Eq.refl ((asOps children world).second p a d)))))
+                        (funext fun i =>
+                          congrArg
+                            (NIV_RawBoundary.process.match_2
+                              (fun i => Result (core.result.Result Unit Hiq_DispatchSource.PE)) i
+                              (fun _ => (asOps children world).init p a d) (fun _ => (asOps children world).write p a d)
+                              fun _ => (asOps children world).finalize p a d)
+                            (funext fun x =>
+                              congrArg
+                                (Bind.bind
+                                  (Hiq_DispatchSource.eqU8 d
+                                    (Array.make 2#usize [3#u8, 10#u8] NIV_RawBoundary.process._proof_4)))
+                                (funext fun b =>
+                                  ite_congr (Eq.refl (b = true))
+                                    (fun a_1 => Eq.refl ((asOps children world).first p a d)) fun a_1 =>
+                                    congrArg
+                                      (Bind.bind
+                                        (Hiq_DispatchSource.eqU8 d
+                                          (Array.make 2#usize [3#u8, 11#u8] NIV_RawBoundary.process._proof_6)))
+                                      (funext fun b1 =>
+                                        ite_congr (Eq.refl (b1 = true))
+                                          (fun a_2 => Eq.refl ((asOps children world).first p a d)) fun a_2 =>
+                                          Eq.refl ((asOps children world).second p a d))))))))))
+          ((fun {m} [Bind m] {α β} a a_1 e_a =>
+              Eq.rec (motive := fun a_2 e_a => ∀ (a_3 a_4 : α → m β), a_3 = a_4 → a >>= a_3 = a_2 >>= a_4)
+                (fun a_2 a_3 e_a => e_a ▸ Eq.refl (a >>= a_2)) e_a)
+            (Hiq_DispatchSource.firstByte d) (Hiq_DispatchSource.firstByte d) (Eq.refl (Hiq_DispatchSource.firstByte d))
+            (fun x => do
+              let x ← Hiq_DispatchSource.copied x
+              (match x with
+                  | none => NLQ_DispatchState.fallback children p a d world
+                  | some i =>
+                    match i with
+                    | 4#8#uscalar => invoke children.init p a d world
+                    | 5#8#uscalar => invoke children.write p a d world
+                    | 6#8#uscalar => invoke children.finalize p a d world
+                    | x => NLQ_DispatchState.fallback children p a d world).result)
+            (fun o => do
+              let o1 ← Hiq_DispatchSource.copied o
+              match o1 with
+                | none => do
+                  let b ← Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 10#u8] NIV_RawBoundary.process._proof_4)
+                  if b = true then (asOps children world).first p a d
+                    else do
+                      let b1 ←
+                        Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 11#u8] NIV_RawBoundary.process._proof_6)
+                      if b1 = true then (asOps children world).first p a d else (asOps children world).second p a d
+                | some i =>
+                  match i with
+                  | 4#8#uscalar => (asOps children world).init p a d
+                  | 5#8#uscalar => (asOps children world).write p a d
+                  | 6#8#uscalar => (asOps children world).finalize p a d
+                  | x => do
+                    let b ←
+                      Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 10#u8] NIV_RawBoundary.process._proof_4)
+                    if b = true then (asOps children world).first p a d
+                      else do
+                        let b1 ←
+                          Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 11#u8] NIV_RawBoundary.process._proof_6)
+                        if b1 = true then (asOps children world).first p a d else (asOps children world).second p a d)
+            (funext fun head =>
+              (fun {m} [Bind m] {α β} a a_1 e_a =>
+                  Eq.rec (motive := fun a_2 e_a => ∀ (a_3 a_4 : α → m β), a_3 = a_4 → a >>= a_3 = a_2 >>= a_4)
+                    (fun a_2 a_3 e_a => e_a ▸ Eq.refl (a >>= a_2)) e_a)
+                (Hiq_DispatchSource.copied head) (Hiq_DispatchSource.copied head)
+                (Eq.refl (Hiq_DispatchSource.copied head))
+                (fun x =>
+                  (match x with
+                    | none => NLQ_DispatchState.fallback children p a d world
+                    | some i =>
+                      match i with
+                      | 4#8#uscalar => invoke children.init p a d world
+                      | 5#8#uscalar => invoke children.write p a d world
+                      | 6#8#uscalar => invoke children.finalize p a d world
+                      | x => NLQ_DispatchState.fallback children p a d world).result)
+                (fun o1 =>
+                  match o1 with
+                  | none => do
+                    let b ←
+                      Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 10#u8] NIV_RawBoundary.process._proof_4)
+                    if b = true then (asOps children world).first p a d
+                      else do
+                        let b1 ←
+                          Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 11#u8] NIV_RawBoundary.process._proof_6)
+                        if b1 = true then (asOps children world).first p a d else (asOps children world).second p a d
+                  | some i =>
+                    match i with
+                    | 4#8#uscalar => (asOps children world).init p a d
+                    | 5#8#uscalar => (asOps children world).write p a d
+                    | 6#8#uscalar => (asOps children world).finalize p a d
+                    | x => do
+                      let b ←
+                        Hiq_DispatchSource.eqU8 d (Array.make 2#usize [3#u8, 10#u8] NIV_RawBoundary.process._proof_4)
+                      if b = true then (asOps children world).first p a d
+                        else do
+                          let b1 ←
+                            Hiq_DispatchSource.eqU8 d
+                                (Array.make 2#usize [3#u8, 11#u8] NIV_RawBoundary.process._proof_6)
+                          if b1 = true then (asOps children world).first p a d else (asOps children world).second p a d)
+                (funext fun copied =>
+                  Option.casesOn (motive := fun t =>
+                    copied = t →
+                      (match copied with
+                          | none => NLQ_DispatchState.fallback children p a d world
+                          | some i =>
+                            match i with
+                            | 4#8#uscalar => invoke children.init p a d world
+                            | 5#8#uscalar => invoke children.write p a d world
+                            | 6#8#uscalar => invoke children.finalize p a d world
+                            | x => NLQ_DispatchState.fallback children p a d world).result =
+                        match copied with
+                        | none => do
+                          let b ←
+                            Hiq_DispatchSource.eqU8 d
+                                (Array.make 2#usize [3#u8, 10#u8] NIV_RawBoundary.process._proof_4)
+                          if b = true then (asOps children world).first p a d
+                            else do
+                              let b1 ←
+                                Hiq_DispatchSource.eqU8 d
+                                    (Array.make 2#usize [3#u8, 11#u8] NIV_RawBoundary.process._proof_6)
+                              if b1 = true then (asOps children world).first p a d
+                                else (asOps children world).second p a d
+                        | some i =>
+                          match i with
+                          | 4#8#uscalar => (asOps children world).init p a d
+                          | 5#8#uscalar => (asOps children world).write p a d
+                          | 6#8#uscalar => (asOps children world).finalize p a d
+                          | x => do
+                            let b ←
+                              Hiq_DispatchSource.eqU8 d
+                                  (Array.make 2#usize [3#u8, 10#u8] NIV_RawBoundary.process._proof_4)
+                            if b = true then (asOps children world).first p a d
+                              else do
+                                let b1 ←
+                                  Hiq_DispatchSource.eqU8 d
+                                      (Array.make 2#usize [3#u8, 11#u8] NIV_RawBoundary.process._proof_6)
+                                if b1 = true then (asOps children world).first p a d
+                                  else (asOps children world).second p a d)
+                    copied (fun h => Eq.symm h ▸ fallback children p a d world) (fun i h => Eq.symm h ▸ sorry)
+                    (Eq.refl copied)))))))
+theorem NLQ_DispatchSource.entry : ∀ {A F C : Type} (children : Children A F C) (p : Hiq_DispatchSource.Key)
+  (a : Slice A) (d : Slice U8) (world : F),
+  (NLQ_DispatchState.entry children p a d world).result =
+    NIV_RawBoundary.entry (NIV_RawBoundary.profile (asOps children world)) p a d :=
+fun {A F C} children p a d world =>
+  id
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                _a = do
+                  let b ←
+                    { toOps := asOps children world, head := Hiq_DispatchSource.firstByte,
+                            copy := Hiq_DispatchSource.copied, eq := fun {N} => Hiq_DispatchSource.eqU8,
+                            admitted := Hiq_DispatchSource.pool_route.admitted }.admitted
+                        d
+                  if b = true then
+                      NIV_RawBoundary.process
+                        { toOps := asOps children world, head := Hiq_DispatchSource.firstByte,
+                          copy := Hiq_DispatchSource.copied, eq := fun {N} => Hiq_DispatchSource.eqU8,
+                          admitted := Hiq_DispatchSource.pool_route.admitted }
+                        p a d
+                    else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData))
+              (step_result world (Event.admitted world d) (Hiq_DispatchSource.pool_route.admitted d) fun admitted =>
+                if admitted = true then NLQ_DispatchState.process children p a d world
+                else
+                  {
+                    result :=
+                      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                    post := world, events := [] })))
+          ((fun {m} [Bind m] {α β} a a_1 e_a =>
+              Eq.rec (motive := fun a_2 e_a => ∀ (a_3 a_4 : α → m β), a_3 = a_4 → a >>= a_3 = a_2 >>= a_4)
+                (fun a_2 a_3 e_a => e_a ▸ Eq.refl (a >>= a_2)) e_a)
+            (Hiq_DispatchSource.pool_route.admitted d)
+            ({ toOps := asOps children world, head := Hiq_DispatchSource.firstByte, copy := Hiq_DispatchSource.copied,
+                  eq := fun {N} => Hiq_DispatchSource.eqU8,
+                  admitted := Hiq_DispatchSource.pool_route.admitted }.admitted
+              d)
+            (Eq.refl (Hiq_DispatchSource.pool_route.admitted d))
+            (fun x =>
+              (if x = true then NLQ_DispatchState.process children p a d world
+                else
+                  {
+                    result :=
+                      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                    post := world, events := [] }).result)
+            (fun b =>
+              if b = true then
+                NIV_RawBoundary.process
+                  { toOps := asOps children world, head := Hiq_DispatchSource.firstByte,
+                    copy := Hiq_DispatchSource.copied, eq := fun {N} => Hiq_DispatchSource.eqU8,
+                    admitted := Hiq_DispatchSource.pool_route.admitted }
+                  p a d
+              else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData))
+            (funext fun admitted =>
+              Bool.casesOn (motive := fun t =>
+                admitted = t →
+                  (if admitted = true then NLQ_DispatchState.process children p a d world
+                      else
+                        {
+                          result :=
+                            ok
+                              (core.result.Result.Err
+                                AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                          post := world, events := [] }).result =
+                    if admitted = true then
+                      NIV_RawBoundary.process
+                        { toOps := asOps children world, head := Hiq_DispatchSource.firstByte,
+                          copy := Hiq_DispatchSource.copied, eq := fun {N} => Hiq_DispatchSource.eqU8,
+                          admitted := Hiq_DispatchSource.pool_route.admitted }
+                        p a d
+                    else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData))
+                admitted
+                (fun h =>
+                  Eq.symm h ▸
+                    of_eq_true
+                      (Eq.trans
+                        (congr
+                          (congrArg Eq
+                            (congrArg Run.result
+                              (ite_congr Bool.false_eq_true
+                                (fun a_1 => Eq.refl (NLQ_DispatchState.process children p a d world)) fun a =>
+                                Eq.refl
+                                  {
+                                    result :=
+                                      ok
+                                        (core.result.Result.Err
+                                          AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                                    post := world, events := [] })))
+                          (ite_congr Bool.false_eq_true
+                            (fun a_1 =>
+                              Eq.refl
+                                (NIV_RawBoundary.process
+                                  { toOps := asOps children world, head := Hiq_DispatchSource.firstByte,
+                                    copy := Hiq_DispatchSource.copied, eq := fun {N} => Hiq_DispatchSource.eqU8,
+                                    admitted := Hiq_DispatchSource.pool_route.admitted }
+                                  p a d))
+                            fun a =>
+                            Eq.refl
+                              (ok
+                                (core.result.Result.Err
+                                  AdapterRw.solana_program_error.ProgramError.InvalidInstructionData))))
+                        (eq_self
+                          (ok
+                            (core.result.Result.Err
+                              AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)))))
+                (fun h =>
+                  Eq.symm h ▸
+                    Eq.mpr
+                      (id
+                        (congr
+                          (congrArg Eq
+                            (Eq.trans
+                              (congrArg Run.result
+                                (ite_congr (eq_self true)
+                                  (fun a_1 => Eq.refl (NLQ_DispatchState.process children p a d world)) fun a =>
+                                  Eq.refl
+                                    {
+                                      result :=
+                                        ok
+                                          (core.result.Result.Err
+                                            AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                                      post := world, events := [] }))
+                              (process children p a d world)))
+                          (ite_congr (eq_self true)
+                            (fun a_1 =>
+                              Eq.refl
+                                (NIV_RawBoundary.process
+                                  { toOps := asOps children world, head := Hiq_DispatchSource.firstByte,
+                                    copy := Hiq_DispatchSource.copied, eq := fun {N} => Hiq_DispatchSource.eqU8,
+                                    admitted := Hiq_DispatchSource.pool_route.admitted }
+                                  p a d))
+                            fun a =>
+                            Eq.refl
+                              (ok
+                                (core.result.Result.Err
+                                  AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)))))
+                      sorry)
+                (Eq.refl admitted))))))
+'NLQ_DispatchSource.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLQ_DispatchSource.process' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLQ_DispatchSource.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -16,7 +16,10 @@ def native(a,target):
     # The unchanged scope runner runs the owned strict gate. Its config is a source input.
     adapter=base64.b64decode(frozen['NLF_src/programs/r1-cost-probe/src/r1_pool_adapter.rs']).decode()
     files['NLQ_src/programs/r1-cost-probe/src/r1_pool_adapter.rs']=adapter+'\n#[cfg(kani)]\n#[path="NLQ_adapter.rs"]\npub(crate) mod NLQ_adapter;\n'
-    files['NLQ_src/programs/r1-cost-probe/src/NLQ_adapter.rs']=''.join(l[1:] for l in (E/'NLQ_NATIVE.patch').read_text().split('+++ b/programs/r1-cost-probe/src/NLQ_adapter.rs\n',1)[1].splitlines(True) if l.startswith('+'))
+    files['NLQ_src/programs/r1-cost-probe/src/NLQ_adapter.rs']=''.join(l[1:] for l in (E/'NLQ_NATIVE.patch').read_text().split('+++ b/programs/r1-cost-probe/src/NLQ_adapter.rs\n',1)[1].split('--- ',1)[0].splitlines(True) if l.startswith('+'))
+    owned=base64.b64decode(frozen['NLF_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs']).decode()
+    files['NLQ_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs']=owned+'\n#[cfg(kani)]\n#[path="NLQ_owned.rs"]\nmod NLQ_owned;\n'
+    files['NLQ_src/programs/r1-cost-probe/src/NLQ_owned.rs']=''.join(l[1:] for l in (E/'NLQ_NATIVE.patch').read_text().split('+++ b/programs/r1-cost-probe/src/NLQ_owned.rs\n',1)[1].splitlines(True) if l.startswith('+'))
     files['NLQ_native_config.json']=json.dumps(dict(attempt=a,**config))
     rc=run(a,'kani',target,command=['python3','NLQ_gate.py','NLQ_native_config.json'],extra=files,env_extra=env)
     log=lzma.decompress((E/a/'stdout.log.xz').read_bytes()).decode()

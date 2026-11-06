@@ -19,6 +19,10 @@ for n,h in pins.items():
   suffix=b'\n#[cfg(kani)]\n#[path="NLQ_adapter.rs"]\npub(crate) mod NLQ_adapter;\n'
   assert raw.endswith(suffix)
   raw=raw[:-len(suffix)]
+ if n=='programs/r1-cost-probe/src/r1_pool_adapter_owned.rs':
+  suffix=b'\n#[cfg(kani)]\n#[path="NLQ_owned.rs"]\nmod NLQ_owned;\n'
+  assert raw.endswith(suffix)
+  raw=raw[:-len(suffix)]
  if hashlib.sha256(raw).hexdigest()!=h:errors.append(n)
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
 assert not errors,errors

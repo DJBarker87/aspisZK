@@ -13,16 +13,6 @@
 +#[cfg(kani)]
 +#[path="NLQ_native.rs"]
 +mod NLQ_native;
---- a/programs/r1-cost-probe/src/r1_pool_adapter.rs
-+++ b/programs/r1-cost-probe/src/r1_pool_adapter.rs
-@@ -971,3 +971,7 @@
- #[cfg(all(test, feature = "private-leaf-salts"))]
- #[path = "adapter_rw_tests.rs"]
- mod rw_tests;
-+
-+#[cfg(kani)]
-+#[path="NLQ_adapter.rs"]
-+pub(crate) mod NLQ_adapter;
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NLQ_native.rs
 @@ -0,0 +1,70 @@
@@ -96,6 +86,16 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(crate::error,error_reply)]
 +fn first_wrong_split_control(){check_first(true)}
+--- a/programs/r1-cost-probe/src/r1_pool_adapter.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter.rs
+@@ -971,3 +971,7 @@
+ #[cfg(all(test, feature = "private-leaf-salts"))]
+ #[path = "adapter_rw_tests.rs"]
+ mod rw_tests;
++
++#[cfg(kani)]
++#[path="NLQ_adapter.rs"]
++pub(crate) mod NLQ_adapter;
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NLQ_adapter.rs
 @@ -0,0 +1,83 @@
@@ -182,3 +182,44 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
 +#[kani::stub(crate::r1_pool_adapter::stage1,dispatch_oracle)]
 +fn process_tx1_frame_window_control(){dispatch_check(false,true,true)}
+--- a/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs
+@@ -479,3 +479,7 @@
+     let current_slot = match Clock::get() { Ok(clock) => Ok(clock.slot), Err(error) => Err(error) };
+     stage2_owned(program_id, &owned, data, current_slot)
+ }
++
++#[cfg(kani)]
++#[path="NLQ_owned.rs"]
++mod NLQ_owned;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NLQ_owned.rs
+@@ -0,0 +1,28 @@
++use super::*;
++fn metadata_reply(_: &Pubkey,accounts:&[OwnedAccount],_:&[u8])->Result<Vec<u8>,ProgramError>{
++ let value=(accounts[0].is_writable as u32)|((accounts[2].is_writable as u32)<<1);
++ Err(ProgramError::Custom(value))
++}
++fn metadata_check(coalesced:bool){
++ let program=Pubkey::new_from_array(kani::any());
++ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
++ let mut money:u64=kani::any();let original_money=money;
++ let mut data:[u8;2]=kani::any();let x=data[0];let y=data[1];
++ let first=AccountInfo::new(&key,false,false,&mut money,&mut data,&owner,false,0);
++ let second=first.clone();let mut third=first.clone();third.is_writable=true;
++ let accounts=[first,second,third];
++ let result=super::stage1(&program,&accounts,&[3,10]);
++ if coalesced {assert!(result==Err(ProgramError::Custom(0))||result==Err(ProgramError::Custom(3)));}
++ else {assert_eq!(result,Err(ProgramError::Custom(2)));}
++ assert!(!accounts[0].is_writable);assert!(accounts[2].is_writable);
++ let guard=accounts[0].try_borrow_mut_data().unwrap();assert_eq!(guard[0],x);assert_eq!(guard[1],y);drop(guard);
++ assert_eq!(accounts[0].lamports(),original_money);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::owned::stage1_owned,metadata_reply)]
++fn alias_metadata_arguments(){metadata_check(false)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NLQ_native::KMX_copy_nonoverlapping)]
++#[kani::stub(crate::r1_pool_adapter::owned::stage1_owned,metadata_reply)]
++fn alias_metadata_coalesced_control(){metadata_check(true)}

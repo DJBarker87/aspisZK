@@ -13,5 +13,6 @@ theorem normal (e : Entry) (t a lo hi : Nat) (owned : List NLM_Snapshot.Owned) :
  rw [NLM_Snapshot.acquire]
  simp [Bind.bind,Pure.pure,NJU_Log.bind,NJU_Log.record,NLM_Snapshot.release_current,
   NLQ_SnapshotReplay.replay,NLQ_SnapshotReplay.step,NLM_Snapshot.returned,NLM_Snapshot.live]
+ all_goals split <;> rfl
 #print axioms normal
 end NLQ_ReplayNormal
