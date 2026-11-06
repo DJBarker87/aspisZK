@@ -32,7 +32,9 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
 files={};sources=[]
-if kind=='finalcheck':
+if kind=='prune':
+ files['NJR_prune.py']=(E/'NJR_prune.py').read_text();sources=list(files);command=['python3','NJR_prune.py']
+elif kind=='finalcheck':
  for n in ['NJR_final_checks.py','NJR_MODULES.json','NJR_SOURCE_PINS.json','NJR_PATHS.json']:files[n]=(E/n).read_text()
  sources=list(files);command=['python3','NJR_final_checks.py']
 elif kind=='cleanup':
@@ -84,6 +86,12 @@ config['env']['LEAN_PATH']=':'.join(json.loads((E/'NJR_PATHS.json').read_text())
 if kind=='kani':
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NJR_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NJR_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  config['env'].update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1'+(' --cfg NJR_invert' if os.environ.get('NJR_INVERT') else ''))
+ if os.environ.get('NJR_BAD_QUERY_WEIGHT_OWNER'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_query_weight_owner'
+ if os.environ.get('NJR_BAD_QUERY_RAW_OWNER'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_query_raw_owner'
+ if os.environ.get('NJR_BAD_POWER'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_power'
+ if os.environ.get('NJR_BAD_NEXT'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_next'
+ if os.environ.get('NJR_BAD_TERMS'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_terms'
+ if os.environ.get('NJR_BAD_RECEIVER_POINTER'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_receiver_pointer'
  if os.environ.get('NJR_BAD_DESTINATION'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_destination'
  if os.environ.get('NJR_BAD_RECEIVER'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_receiver'
  if os.environ.get('NJR_BAD_BACKING'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_backing'
@@ -131,6 +139,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
+if {kind!r}=='prune': names += ['NJR_PRUNE.json']
 if {kind!r}=='finalcheck': names += ['NJR_SOURCE_VERIFICATION.json','NJR_TOOL_PINS.json','NJR_EXPORT.json','NJR_CLOSURE_PINS.json.xz','NJR_CLOSURE_PINS.json.sha256','NJR_RETENTION.json']
 if {kind!r}=='cleanup': names += ['NJR_CLEANUP.json']
 if {kind!r}=='projection': names += ['NJR_PROJECTION_CHECK.json']

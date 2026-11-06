@@ -3,6 +3,6 @@ import subprocess,time
 E=Path(__file__).resolve().parent
 # Wait only on this job's serial client; no host scope is opened by this wait.
 while (E/'NJR_CLIENT_ACTIVE').exists():time.sleep(1)
-for a,target in [('NJR_L007','NJR_ReservationSites'),('NJR_L008','NJR_ReaderCut'),('NJR_L009','NJR_FlushComposition'),('NJR_L010','NJR_FinishDomain')]:
+for a,target in [('NJR_L015','NJR_ReservationRaw'),('NJR_L016','NJR_FinishFromScan'),('NJR_L017','NJR_FinishInstall')]:
  r=subprocess.run(['python3',str(E/'NJR_run.py'),a,'lean',target])
  if r.returncode:break

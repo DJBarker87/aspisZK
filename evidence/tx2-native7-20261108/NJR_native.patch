@@ -25,7 +25,7 @@
 +mod NJR_parent;
 --- a/crates/aspis-r1-cost-probe/src/NJR_parent.rs
 +++ b/crates/aspis-r1-cost-probe/src/NJR_parent.rs
-@@ -0,0 +1,158 @@
+@@ -0,0 +1,167 @@
 +use super::*;
 +use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
 +use aspis_core::field::{M31,CM31};
@@ -112,16 +112,22 @@
 +}
 +fn any_e()->E{E::new(k(kani::any()),k(kani::any()))}
 +struct QueryReply{reply:Option<Result<(Accumulator,BatchedWeights),Error>>,calls:usize}
-+impl QueryReply{fn query(&mut self)->Result<(Accumulator,BatchedWeights),Error>{self.calls+=1;self.reply.take().unwrap()}}
++impl QueryReply{fn query(&mut self)->Result<(Accumulator,BatchedWeights),Error>{self.calls+=1;let r=self.reply.take().unwrap();if cfg!(NJR_bad_error){match r{Err(e)=>Err(if e==Error::Parse{Error::Query}else{Error::Parse}),other=>other}}else{r}}}
 +// M04 supplement at the SAME query-return boundary: the oracle full Result
 +// precedes the frozen ?/Accumulator destructuring, not a successful-only seed.
 +fn query_return(log:&mut QueryReply)->Result<(alloc::vec::Vec<K>,E,K,usize,BatchedWeights),Error>{
 + let (a,pending)=log.query()?;
-+ let Accumulator{weights,rhs,power,next}=a;
++ let Accumulator{mut weights,rhs,mut power,mut next}=a;
++ let mut pending=pending;
++ if cfg!(NJR_bad_query_weight_owner){let mut replacement=alloc::vec::Vec::with_capacity(64);for v in &weights{replacement.push(*v);}weights=replacement;}
++ if cfg!(NJR_bad_query_raw_owner){let mut replacement=alloc::vec::Vec::with_capacity(64);for v in &pending.raw{replacement.push(*v);}pending.raw=replacement;}
++ if cfg!(NJR_bad_power){power.c0.a.0^=1;}
++ if cfg!(NJR_bad_next){next^=1;}
++ if cfg!(NJR_bad_terms){pending.terms^=1;}
 + Ok((weights,rhs,power,next,pending))
 +}
 +fn query_check<const C:usize>(){
-+ let before:[[u32;4];64]=kani::any();let rows:[[u64;4];64]=kani::any();
++ let before:[[u32;4];64]=if cfg!(NJR_bad_query_weight_owner){[[0;4];64]}else{kani::any()};let rows:[[u64;4];64]=if cfg!(NJR_bad_query_raw_owner){[[0;4];64]}else{kani::any()};
 + let i:usize=kani::any();kani::assume(i<64);
 + let mut weights=alloc::vec::Vec::with_capacity(64);for row in before{weights.push(k(row));}
 + let mut raw=alloc::vec::Vec::with_capacity(64);for row in rows{raw.push(row);}
@@ -160,11 +166,14 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn flush_receiver_window(){
-+ let rows:[[u64;4];64]=kani::any();let terms:usize=kani::any();let index:usize=kani::any();let j:usize=kani::any();kani::assume(index<64&&j<64);
++ let rows:[[u64;4];64]=if cfg!(NJR_bad_receiver_pointer){[[0;4];64]}else{kani::any()};let terms:usize=kani::any();let index:usize=kani::any();let j:usize=kani::any();kani::assume(index<64&&j<64);
 + let mut raw=alloc::vec::Vec::with_capacity(64);for row in rows{raw.push(row);}
 + let b=BatchedWeights{raw,terms};let bp=&b as *const BatchedWeights;let rp=b.raw.as_ptr();let cap=b.raw.capacity();
 + let mut slot=k(kani::any());let slot_ptr=&mut slot as *mut K;let reply=k(kani::any());let mut log=ValueLog{expected:&b,seen:None,index:0,reply,calls:0};
-+ let w=&mut slot;assert_eq!(w as *mut K,slot_ptr);*w=log.value(&b,index^(if cfg!(NJR_bad_receiver){1}else{0}));
++ let other=if cfg!(NJR_bad_receiver_pointer){let mut other_raw=alloc::vec::Vec::with_capacity(64);for row in rows{other_raw.push(row);}Some(BatchedWeights{raw:other_raw,terms})}else{None};
++ let receiver=other.as_ref().unwrap_or(&b);
++ let w=&mut slot;assert_eq!(w as *mut K,slot_ptr);
++ *w=log.value(receiver,index^(if cfg!(NJR_bad_receiver){1}else{0}));
 + assert_eq!(log.calls,1);assert_eq!(log.index,index);let seen=log.seen.unwrap();assert_eq!(seen as *const BatchedWeights,bp);assert_eq!(seen.terms,terms);assert_eq!(seen.raw.as_ptr(),rp);assert_eq!(seen.raw.capacity(),cap);assert_eq!(seen.raw.len(),64);assert_eq!(seen.raw[j],rows[j]);
 + let mut expected=kw(reply);if cfg!(NJR_invert){expected[0]^=1;}assert_eq!(kw(slot),expected);
 +}
