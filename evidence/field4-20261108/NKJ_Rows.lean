@@ -25,9 +25,9 @@ theorem value (s : Sums) (l r : Cache)
  · simp only [run,ha,hb,hc,bind_tc_ok]
  · rintro ⟨i,j⟩
    fin_cases i
-   · simpa [get,at3,Array.make,NGA_Nine.product] using va j
-   · simpa [get,at3,Array.make,NGA_Nine.product] using vb j
-   · simpa [get,at3,Array.make,NGA_Nine.product] using vc j
+   · simpa [NGA_Cell.get,at3,Array.make,NGA_Nine.product] using va j
+   · simpa [NGA_Cell.get,at3,Array.make,NGA_Nine.product] using vb j
+   · simpa [NGA_Cell.get,at3,Array.make,NGA_Nine.product] using vc j
 
 theorem source (s : Sums) (l r : Cache)
  (hl : NGA_CacheDomain.Bounded l) (hr : NGA_CacheDomain.Bounded r)

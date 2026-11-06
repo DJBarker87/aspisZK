@@ -1,0 +1,28 @@
+--- evidence/ledger18-20261108/NKH_Driver.lean	2026-11-06 11:12:33
++++ evidence/field4-20261108/NKJ_Driver.lean	2026-11-06 11:48:14
+@@ -93,16 +93,22 @@
+   initSearchPath (← findSysroot)
+   enableInitializersExecution
+   let mode := args.headD "small"
+-  let (modules, roots) := if mode == "scan" then (#[`NKH_COMBINED_IMPORT], #[]) else (#[], #[])
++  let (modules, roots) := if mode == "scan" then (#[`NKJ_COMBINED_IMPORT], #[]) else if mode == "fixtures" then (#[`NEP_Planted, `NEP_Mutations], #[]) else (#[`NKJ_COMBINED_IMPORT], #[])
++  let mut roots : Array Name := roots
++  if mode != "scan" then
++    let rootFile := if mode == "fixtures" then "NKJ_FIXTURE_ROOTS.json" else "NKJ_AUDIT_ROOTS.json"
++    let j ← IO.ofExcept (Json.parse (← IO.FS.readFile rootFile))
++    let names ← IO.ofExcept (fromJson? j : Except String (Array String))
++    roots := names.map String.toName
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)
+   if mode == "scan" || mode == "queryscan" then
+     let mut expected : Std.HashMap String (Array String) := {}
+-    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NKH_EXPECTED_IMPORTS.jsonl") do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NKJ_EXPECTED_IMPORTS.jsonl") do
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NKH_LOADED_scan.jsonl") expected
++    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NKJ_LOADED_scan.jsonl") expected
+     IO.println (if failed then "NFN_SCAN_FAILED" else "NFN_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {

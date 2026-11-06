@@ -86,3 +86,81 @@ fn NKJ_cache_real_assert(){let s:[[[u32;3];3];2]=kani::any();let mut f=0;let o=N
 #[kani::stub_verified(NKJ_weak_cache)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NKJ_cache_unimplied(){let s:[[[u32;3];3];2]=kani::any();let mut f=0;let o=NKJ_weak_cache(s,&mut f);assert!(o[0][0][0]==s[0][0][0]);}
+
+// S: exact selected M31 word, before product cut P, arbitrary cache and indices.
+#[kani::requires(i<3&&j<3)]
+#[kani::ensures(|out| if cfg!(NKJ_invert) {*out!=cache[i][j].0}else{*out==cache[i][j].0})]
+fn NKJ_select_segment(cache:[[M31;3];3],i:usize,j:usize)->u32 {cache[i][j].0}
+#[kani::proof_for_contract(NKJ_select_segment)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_select_contract(){let w:[[u32;3];3]=kani::any();let c=[[M31(w[0][0]),M31(w[0][1]),M31(w[0][2])],[M31(w[1][0]),M31(w[1][1]),M31(w[1][2])],[M31(w[2][0]),M31(w[2][1]),M31(w[2][2])]];NKJ_select_segment(c,kani::any(),kani::any());}
+fn NKJ_range_ref(start:usize)->[usize;3] {if start<3 {[1,start,start+1]}else{[0,0,start]}}
+// I: one actual Range::next; all active and exhausted arms, arbitrary pre-state.
+#[kani::ensures(|out| if cfg!(NKJ_invert) {*out!=NKJ_range_ref(start)}else{*out==NKJ_range_ref(start)})]
+fn NKJ_range_segment(start:usize)->[usize;3] {let mut r=start..3;let v=r.next();match v {Some(i)=>[1,i,r.start],None=>[0,0,r.start]}}
+#[kani::proof_for_contract(NKJ_range_segment)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_range_contract(){NKJ_range_segment(kani::any());}
+// Outer while increment, where the frozen guard has established index<N<=4.
+#[kani::requires(index<n&&n>=2&&n<=4)]
+#[kani::ensures(|out| if cfg!(NKJ_invert) {*out!=index+1}else{*out==index+1})]
+fn NKJ_increment_segment(mut index:usize,n:usize)->usize {index+=1;index}
+#[kani::proof_for_contract(NKJ_increment_segment)]
+fn NKJ_increment_contract(){NKJ_increment_segment(kani::any(),kani::any());}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_word_cache_copy(){let s:[[u32;3];3]=kani::any();let mut d=[[0u32;3];3];d.copy_from_slice(&s);assert!(if cfg!(NKJ_invert){d[0][0]!=s[0][0]}else{d[0][0]==s[0][0]});}
+#[kani::ensures(|out| if cfg!(NKJ_invert){out[0][0]!=out[0][0]}else{out[0][0]==out[0][0]})]
+#[kani::modifies()]
+fn NKJ_weak_word_cache(s:[[u32;3];3],frame:&mut u8)->[[u32;3];3] {if cfg!(NKJ_modifies_bad){*frame=1;}s}
+#[kani::proof_for_contract(NKJ_weak_word_cache)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_word_cache_weak_contract(){let mut f=0;NKJ_weak_word_cache(kani::any(),&mut f);}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_word_cache_real_assert(){let s:[[u32;3];3]=kani::any();let mut f=0;let o=NKJ_weak_word_cache(s,&mut f);assert!(o[0][0]==s[0][0]);}
+#[kani::proof]
+#[kani::stub_verified(NKJ_weak_word_cache)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_word_cache_unimplied(){let s:[[u32;3];3]=kani::any();let mut f=0;let o=NKJ_weak_word_cache(s,&mut f);assert!(o[0][0]==s[0][0]);}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_range_copy(){let s:[usize;3]=kani::any();let mut d=[0usize;3];d.copy_from_slice(&s);assert!(if cfg!(NKJ_invert){d[0]!=s[0]}else{d[0]==s[0]});}
+#[kani::ensures(|out| if cfg!(NKJ_invert){out[0]!=out[0]}else{out[0]==out[0]})]
+#[kani::modifies()]
+fn NKJ_weak_range(s:[usize;3],frame:&mut u8)->[usize;3] {if cfg!(NKJ_modifies_bad){*frame=1;}s}
+#[kani::proof_for_contract(NKJ_weak_range)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_range_weak_contract(){let mut f=0;NKJ_weak_range(kani::any(),&mut f);}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_range_real_assert(){let s:[usize;3]=kani::any();let mut f=0;let o=NKJ_weak_range(s,&mut f);assert!(o[0]==s[0]);}
+#[kani::proof]
+#[kani::stub_verified(NKJ_weak_range)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_range_unimplied(){let s:[usize;3]=kani::any();let mut f=0;let o=NKJ_weak_range(s,&mut f);assert!(o[0]==s[0]);}
+
+// F: final converter's complete QM31 reply forwarded by the small helper.
+#[kani::ensures(|out| if cfg!(NKJ_invert){*out!=reply}else{*out==reply})]
+fn NKJ_return_segment(reply:QM31)->QM31 {reply}
+#[kani::proof_for_contract(NKJ_return_segment)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_return_contract(){NKJ_return_segment(NKJ_any_q());}
+#[kani::ensures(|out| if cfg!(NKJ_invert){out.c0.a.0!=out.c0.a.0}else{out.c0.a.0==out.c0.a.0})]
+#[kani::modifies()]
+fn NKJ_weak_q(s:QM31,frame:&mut u8)->QM31 {if cfg!(NKJ_modifies_bad){*frame=1;}s}
+#[kani::proof_for_contract(NKJ_weak_q)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_q_weak_contract(){let mut f=0;NKJ_weak_q(NKJ_any_q(),&mut f);}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_q_real_assert(){let q=NKJ_any_q();let mut f=0;let o=NKJ_weak_q(q,&mut f);assert!(o==q);}
+#[kani::proof]
+#[kani::stub_verified(NKJ_weak_q)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_q_unimplied(){let q=NKJ_any_q();let mut f=0;let o=NKJ_weak_q(q,&mut f);assert!(o==q);}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKJ_q_copy(){let s=[NKJ_any_q()];let mut d=[QM31::ZERO];d.copy_from_slice(&s);assert!(if cfg!(NKJ_invert){d[0]!=s[0]}else{d[0]==s[0]});}
+
+impl kani::Arbitrary for QM31 {fn any()->Self {NKJ_any_q()}}
