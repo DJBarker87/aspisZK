@@ -97,7 +97,20 @@ set_option pp.all true
 #print NJQ_Canonical.registry_result
 #print axioms NJQ_Canonical.registry_result
 #print NJV_CallerBounds.from_count
+#print NJV_UnitDomain.Domain
 #print NJY_Checkpoint.Cut
 #print NJY_Master.Cut
 #print NJY_Entry.Cut
 #print NJY_Registry.Cut
+#print NJQ_CheckpointTotal.Cut
+#print NJQ_CheckpointCut.Cut
+#print NJQ_MasterTotal.Cut
+#print NJQ_MasterCut.Cut
+#print NJQ_EntryTotal.Cut
+#print NJQ_EntryCut.Cut
+#print NJQ_RegistryTotal.Cut
+#print NJQ_RegistryCut.Cut
+#print NJQ_CheckpointCut.Coordinates
+#print NJQ_MasterCut.Coordinates
+#print NJQ_EntryCut.Coordinates
+#print NJQ_RegistryCut.Coordinates

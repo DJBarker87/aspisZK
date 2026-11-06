@@ -48,7 +48,8 @@ for p in E.glob('NKC_*.lean'):expected[p.stem]=list(dict.fromkeys(['Init']+re.fi
 paths=[C+'/'+pre+'_seed'for _,pre in specs]+extra
 (E/'NKC_PATHS.json').write_text(json.dumps(list(dict.fromkeys(paths)),indent=1)+'\n')
 for name in['run','batch','pin','setup','queue']:
- s=(P/f'NJW_{name}.py').read_text().replace('NJW_','NKC_').replace('codex-cx-ledger15-20261108','codex-cx-ledger17-20261108')
- if name=='run':s=s.replace("E.parent/'ledger14-20261108/NJK_CLOSURE_PINS.json.xz'","E.parent/'ledger15-20261108/NJW_CLOSURE_PINS.json.xz'")
+ s=(P/f'NJW_{name}.py').read_text().replace('NJW_','NKC_').replace('codex-cx-ledger16-20261108','codex-cx-ledger17-20261108')
+ if name=='run':s=s.replace("E.parent/'ledger15-20261108/NJO_CLOSURE_PINS.json.xz'","E.parent/'ledger16-20261108/NJW_CLOSURE_PINS.json.xz'")
+ if name=='setup':s=s.replace("bytes=sum(r['bytes']for r in rows)","bytes=sum(Path(r['destination']).stat().st_size for r in rows)")
  (E/f'NKC_{name}.py').write_text(s)
 print(json.dumps(dict(stage='prepare',roots=len(roots),seeds=len(seeds),conflicts=len(conflicts))))

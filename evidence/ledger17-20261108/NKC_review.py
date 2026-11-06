@@ -72,6 +72,6 @@ put('NKC_CANDIDATE_REVIEW.json',dict(status='PENDING_RAW_GATE',rows=rows,no_doub
 put('NKC_PARENT_CLAUSES.json',dict(status='EXACT_OWN_DOMAINS_AND_UNIT_CONTEXT_RECORDED',clauses=parents,parents=sorted({x['parent']for x in parents}),no_unsubmitted_parent_promotion=True))
 (E/'NKC_HYPOTHESIS_INVENTORY.md').write_text('# NKC root hypothesis inventory\n\nComplete kernel statements and owners: NKC_KERNEL_STATEMENTS.json.xz. Every new row retains original hypotheses, unit and caller clauses in NKC_CANDIDATE_REVIEW.json. Exact cuts are reviewed native transcriptions under(aq)(2), not new game assumptions. No arbitrary Ops, endpoint/success/Run premise admitted.\n\n'+''.join(f'- {r["row"]}: {r["hypothesis_inventory"]}. {r["review"]}\n\n'for r in rows))
 names=list(dict.fromkeys(n for r in rows for n in r['roots']))
-defs=['NJV_CallerBounds.from_count','NJY_Checkpoint.Cut','NJY_Master.Cut','NJY_Entry.Cut','NJY_Registry.Cut']
+defs=['NJV_CallerBounds.from_count','NJV_UnitDomain.Domain','NJY_Checkpoint.Cut','NJY_Master.Cut','NJY_Entry.Cut','NJY_Registry.Cut'] + [f'NJQ_{n}{k}.Cut' for n in ['Checkpoint','Master','Entry','Registry'] for k in ['Total','Cut']] + [f'NJQ_{n}Cut.Coordinates' for n in ['Checkpoint','Master','Entry','Registry']]
 (E/'NKC_HypothesisReview.lean').write_text('import NKC_COMBINED_IMPORT\nset_option pp.all true\n'+''.join('#print '+n+'\n#print axioms '+n+'\n'for n in names)+''.join('#print '+n+'\n'for n in defs))
 print(json.dumps(dict(stage='review',candidates=len(rows),parent_clauses=len(parents),predecessor_roots_unchanged=len(old))))
