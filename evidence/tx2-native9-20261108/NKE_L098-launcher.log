@@ -1,0 +1,37 @@
+{"attempt": "NKE_L098", "exit_status": 0, "wall_seconds": 10.726294833933935, "peak_rss_kib": "6335228", "swaps": "0", "print_axioms": ["'NKE_CommonAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_CommonAssociation.prefixes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_ResumeAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_ResumeAssociation.prefixes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_ResumeAssociation.at_common' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_CommonDomain.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_PendingAtSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_PendingAtSource.native_rows' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_ActualCuts.geometry_post' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_FinishSupplement.finish' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_FinishSupplement.ported' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_FinishSupplement.at_current' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_CommonCalls.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_ResumeAtCommon.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_RawAtSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_KAtSource.total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_KAtSource.bounded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_EAtSource.total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_EAtSource.bounded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_BorrowPrefix.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_BorrowPrefix.geometry' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKE_CommonAssociation.source : ∀ (wr rr : AspisR1.NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H),
+  NKE_FreeReplay.G (NKE_CommonProgram.run wr rr (fun {H} => merkle) finish d pub proof ck hash none)
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events =
+    NKE_FreeReplay.State.done (NJJ_Common.run wr rr (fun {H} => merkle) finish d pub proof ck hash none) [] :=
+⋯
+theorem NKE_CommonAssociation.prefixes : ∀ (wr rr : AspisR1.NP6_StdModel.Reservation)
+  (merkle : NJU_Common
+...
+.bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKE_BorrowPrefix.at_actual : ∀ (wr rr : AspisR1.NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (p nativeP : VTop_Stages.verifier.Prepared)
+  (a : VTop_Stages.verifier.Accumulator) (g nativeG : Aeneas.Std.Array NKE_BorrowPrefix.E 29#usize)
+  (geometry : VTop_Stages.verifier.QueryGeometry) (pending : VTop_Stages.verifier.BatchedWeights)
+  (reply : NJU_CommonObserved.R (VTop_Stages.verifier.Accumulator × VTop_Stages.verifier.BatchedWeights)),
+  NJU_CommonObserved.Event.query proof p a g geometry pending reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    NKE_BorrowPrefix.Cut p nativeP g nativeG →
+      NJJ_Common.query proof nativeP a nativeG none geometry pending 22#usize =
+        NJJ_Common.query proof p a g none geometry pending 22#usize :=
+⋯
+'NKE_BorrowPrefix.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKE_BorrowPrefix.geometry : ∀ (p : VTop_Stages.verifier.Prepared) (a : VTop_Stages.verifier.Accumulator)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (g : Aeneas.Std.Array NKE_BorrowPrefix.E 29#usize)
+  (before after : VTop_Stages.verifier.QueryGeometry) (pending : VTop_Stages.verifier.BatchedWeights),
+  (↑before.inverses).length = 12 →
+    (↑before.line_z).length = 12 →
+      NKE_GeometryCuts.Cut before after →
+        NJJ_Common.query proof p a g none after pending 22#usize =
+          NJJ_Common.query proof p a g none before pending 22#usize :=
+⋯
+'NKE_BorrowPrefix.geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0564240e791345d8bee6a1a16e17ec73.scope; invocation ID: 13e04e7d5ba742c4a10987ee9f1dc0a1

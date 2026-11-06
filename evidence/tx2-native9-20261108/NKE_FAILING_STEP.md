@@ -19,3 +19,12 @@ NKE_K028 query::borrowed timed out90s (scope96.780s, peak4993172KiB). Retired un
 K029: accumulator incoming-argument window timed out at the unchanged 90-second solver cap (scope 98.777 s, peak 4336212 KiB, swap 0). No native credit. Retired; K030 attempts independent geometry/pending fields.
 
 K030: independent combined geometry/pending query arguments timed out at90s (scope98.871s, peak4663844KiB, swap0). No credit; unchanged shape retired. Next independent scalar/fixed-array call boundaries avoid the four-owned-vector query window.
+
+K033 powers_call found an invalid harness expectation: WideExact::new canonicalizes its raw limb inputs, so comparing returned limbs to pre-construction raw words was false. Replacement K034 compares to the SAME complete pre-call constructed reply, with no stronger precondition. This is a harness correction, not a shipped-source finding.
+L070 pending existential declaration hit the standard200000 elaboration heartbeat limit. Retired that shape, split result and one-row association into NKE_PendingAtSource (L075 passed); no limits raised.
+
+K036 pending_call full64-cell owned/log-return boundary timed out at90s (scope94.819s, peak3880416KiB, swap0). No native credit, no unchanged rerun.
+
+L086 queryBlock reader-clause proof hit standard200000 heartbeats while trying unrelated tail lemmas by unification. Replacement uses head-guarded NKE_ResumeClausesTactic at literal tail names only; no limit increase or unchanged retry.
+
+K037 borrowed-handles/Prepared/powers query window (without proof-byte payload) timed out90s (scope96.760s, peak4479260KiB, swap0). Retired. K038 isolates ONLY borrowed argument expressions before owned transfer/callee result; deliberately no proof-byte payload/owned/drop claim. K039 control and K040 rename calibration are reserved if it passes.

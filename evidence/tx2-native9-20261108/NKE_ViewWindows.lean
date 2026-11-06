@@ -29,8 +29,6 @@ theorem slice_cells (proof output : Slice U8) (offset width : Nat)
  by_cases inside : i<width
  · rw [cells i inside]
    simp only [List.getElem?_take,inside,if_true,List.getElem?_drop]
-   congr 1
-   omega
  · rw [List.getElem?_eq_none (by omega),List.getElem?_eq_none (by omega)]
 #print axioms final_cells
 #print axioms slice_cells

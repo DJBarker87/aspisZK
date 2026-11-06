@@ -24,3 +24,6 @@ The geometry start/inverse/line and current-View round0/round1 plus the first th
 
 ## Stage 4 concrete parent
 NKE_CommonAssociation and NKE_ResumeAssociation compile: SAME actual source logs, full-result replay and every-prefix continuation equality, including each Err/abort. Native coverage remains distinct. K028–K030 query argument windows timed out (no credit); never rerun unchanged. Geometry and current-View have nine matched native window pairs. Actual common occurrence-domain proof is WIP; no root/ledger promotion.
+
+## Stage5 complete, before final audit
+65 current focused-green modules, all selected top roots standard axioms. Complete SAME-argument source clauses cover all9 common events; NKE_ResumeAtCommon installs THAT nested SAME-Reservation resume at C01. Reader raw/K/E actual-event laws retain complete replies/reader frames; bounded site domains remain explicit local obligations. All40 native scopes used:13 matched pairs plus borrowed-prefix rename stability. Generalized finish/current-View supplement compiled. No TX2:065 promotion; NKB merged but TX2:053 still OPEN. Full NKC+NJU+headline combined import/raw/NFX gate follows once.

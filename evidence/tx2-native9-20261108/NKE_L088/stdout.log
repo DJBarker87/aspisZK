@@ -1,0 +1,52 @@
+theorem NKE_FinishSupplement.finish : ∀ (r : NP6_StdModel.Reservation) (loc : Locations) (proof : Slice U8)
+  (v : verifier.View) (p : verifier.Prepared) (a : verifier.Accumulator),
+  NJU_FinishInput.Holds proof v p a →
+    have execution := NJF_FinishObserved.G r loc v p a;
+    Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none = execution.1 ∧
+      NIW_AlignFinishComposedLog.forget execution = NIW_AlignFinishExecution.run r v p a ∧
+        NIW_AlignFinishPrefix.Prefix execution.2.1 :=
+fun r loc proof v p a facts => NJU_GeneralFinishRoot.finish r loc proof v p a facts
+'NKE_FinishSupplement.finish' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKE_FinishSupplement.ported : ∀ (r : NP6_StdModel.Reservation) (loc : Locations) (proof : Slice U8)
+  (v : verifier.View) (p : verifier.Prepared) (a : verifier.Accumulator),
+  NJU_FinishInput.Holds proof v p a →
+    ∀ (port : PairPort) (afterOwner : ℕ),
+      NIW_AlignFinishPort.Cut p port afterOwner (NJF_FinishObserved.G r loc v p a).2.2 →
+        have execution := NJF_FinishObserved.G r loc v p a;
+        Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none = execution.1 ∧
+          NIW_AlignFinishComposedLog.forget execution = NIW_AlignFinishExecution.run r v p a ∧
+            NIW_AlignFinishPrefix.Prefix execution.2.1 ∧
+              NJU_WeakFinishPairCertificate.Bound r execution.2.2 ∧ NIW_AlignFinishPort.Bound r port execution.2.2 :=
+fun r loc proof v p a facts port afterOwner cut =>
+  NJU_GeneralFinishRoot.ported r loc proof v p a facts port afterOwner cut
+'NKE_FinishSupplement.ported' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKE_FinishSupplement.at_current : ∀ (reserved : Bool) (r : NP6_StdModel.Reservation) (loc : Locations)
+  {H : Type} (d : aspis_core.digest.Digest32 H) (ck proof pub : Slice U8) (hash : H) (p : verifier.Prepared)
+  (a after : verifier.Accumulator) (g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize)
+  (geometry : verifier.QueryGeometry) (pending : verifier.BatchedWeights)
+  (inactive : aspis_core.field.wide_exact.WideExact),
+  (↑ck).length = 1768 →
+    verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) d ck proof pub transport.Variant.S2 hash =
+        ok (core.result.Result.Ok (p, a)) →
+      ↑a.next = 10 →
+        Port3_NativeQueryBody.verifier.candidate.query_loop (NFS_QueryOps.installed NJJ_QueryOps.concrete) proof p a g
+              none geometry (NFW_QueryResume.pending a) 22#usize =
+            ok (core.result.Result.Ok (after, pending)) →
+          10055 ≤ (↑proof).length →
+            ∃ out,
+              Port3_FlushInstall.flush pending after.weights.deref = ok out ∧
+                have v := NJR_ViewFinish.view proof inactive;
+                have actual := { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next };
+                ∀ (port : PairPort) (afterOwner : ℕ),
+                  NIW_AlignFinishPort.Cut p port afterOwner (NJF_FinishObserved.G r loc v p actual).2.2 →
+                    have execution := NJF_FinishObserved.G r loc v p actual;
+                    Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p actual none =
+                        execution.1 ∧
+                      NIW_AlignFinishComposedLog.forget execution = NIW_AlignFinishExecution.run r v p actual ∧
+                        NIW_AlignFinishPrefix.Prefix execution.2.1 ∧
+                          NJU_WeakFinishPairCertificate.Bound r execution.2.2 ∧
+                            NIW_AlignFinishPort.Bound r port execution.2.2 :=
+fun reserved r loc {H} d ck proof pub hash p a after g geometry pending inactive ckSize resume start query size =>
+  NJU_FinishAtCurrent.source_view reserved r loc d ck proof pub hash p a after g geometry pending inactive ckSize resume
+    start query size
+'NKE_FinishSupplement.at_current' depends on axioms: [propext, Classical.choice, Quot.sound]

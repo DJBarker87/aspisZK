@@ -22,7 +22,7 @@ theorem source (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Fi
     rcases pair with ⟨p,a⟩
     have fields := NKE_ResumeWidth.returned wr d ck proof pub hash p a entered
     have width : a.weights.val.length=64 := fields.width
-    simp only [core.result.Result.Insts.CoreOpsTry.branch,NKE_Entered.lift_ok,NJU_Log.prod_cases]
+    simp only [core.result.Result.Insts.CoreOpsTry.branch,NKE_Entered.lift_ok]
     by_cases wrong : (a.next != NHT_Constants.compact.SPLIT)=true
     · rw [if_pos wrong]
       exact NKE_EventAll.lift_all _ _
@@ -34,7 +34,7 @@ theorem source (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Fi
        rw [same]
        unfold NHT_Constants.compact.SPLIT
        rfl
-      nke_domain_bind
+      apply NKE_EventAll.bind_all
       repeat' first
       | nke_zeta
       | nke_bind

@@ -15,5 +15,5 @@ for name,command in jobs:
  def metric(k):
   m=re.search(re.escape(k)+r':\s*(.*)',timing);return m[1] if m else None
  receipt=dict(target=name,command=command,exit_status=r.returncode,wall_seconds=time.monotonic()-start,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),print_axioms=[l for l in raw.splitlines() if 'depends on axioms' in l or 'does not depend on any axioms' in l],results=[json.loads(l[11:]) for l in raw.splitlines() if l.startswith('NEP_RESULT ')])
- (E/(name+'.json')).write_text(json.dumps(receipt,indent=1)+'\n');print(json.dumps(receipt),flush=True)
- if r.returncode:print(raw,flush=True);sys.exit(r.returncode)
+ (E/(name+'.json')).write_text(json.dumps(receipt,indent=1)+'\n');print(json.dumps(dict(target=name,exit_status=r.returncode,wall_seconds=receipt["wall_seconds"],peak_rss_kib=receipt["peak_rss_kib"],swaps=receipt["swaps"],raw_roots=len(receipt["results"]))),flush=True)
+ if r.returncode:sys.exit(r.returncode)

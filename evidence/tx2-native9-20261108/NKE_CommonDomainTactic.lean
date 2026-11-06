@@ -16,8 +16,3 @@ elab "nke_domain_record" : tactic => do
   evalTactic (← `(tactic| exact ⟨$(mkIdent `width),rfl⟩))
  else evalTactic (← `(tactic| exact True.intro))
 
-elab "nke_domain_bind" : tactic => do
- let t ← getMainTarget
- let m := t.getAppArgs.back!
- logInfo m.getAppFn
- evalTactic (← `(tactic| apply NKE_EventAll.bind_all))

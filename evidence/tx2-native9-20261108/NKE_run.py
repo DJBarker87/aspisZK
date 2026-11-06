@@ -5,7 +5,13 @@ E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-tx2-native9-20261108';C='/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 if (E/'NKE_HOLD').exists():sys.exit(75)
 guard=E/'NKE_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
-a,kind,target=sys.argv[1:];assert re.fullmatch('NKE_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=(40 if kind=='kani' else 0 if kind=='extract' else 120) and not (E/a).exists()
+a,kind,target=sys.argv[1:];assert re.fullmatch('NKE_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=(42 if kind=='kani' else 0 if kind=='extract' else 120) and not (E/a).exists()
+if kind=='kani':
+ completed=[json.loads(l) for l in (E/'NKE_ATTEMPTS.jsonl').read_text().splitlines()]
+ assert sum(r['kind']=='kani' for r in completed)<40,'Kani process budget exhausted'
+ # K001 and K018 are retained pre-launch failures, not native invocations.
+ assert not (E/'NKE_K001/receipt.json').exists() and not (E/'NKE_K018/receipt.json').exists()
+
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -59,6 +65,9 @@ elif kind=='export':
  files['NKE_export.py']=(E/'NKE_export.py').read_text();files['NKE_MODULES.json']=(E/'NKE_MODULES.json').read_text();sources=list(files);command=['python3','NKE_export.py']
 elif kind=='metadata':
  files['NKE_capture_graph.py']=(E/'NKE_capture_graph.py').read_text();files['NKE_EXPECTED_GRAPH_HASHES.json']=(E/'NKE_EXPECTED_GRAPH_HASHES.json').read_text();sources=list(files);command=['python3','NKE_capture_graph.py']
+elif kind=='review':
+ for n in ['NKE_review.py','NKE_HARNESS.patch','NKE_NATIVE_PAIRS.json','NKE_OCCURRENCES.json','NKE_CLOSED.json','NKE_LEDGER_DELTA.json','NKE_AUDIT_ROOTS.json']:files[n]=(E/n).read_text()
+ sources=list(files);command=['python3','NKE_review.py',target]
 elif kind in ['extract','preflight']:
  for n in ['NKE_extract.py','NKE_NHR_stage.py','NKE_EXTRACT_OPACITY.json','NKE_EXTRACT_INPUT_PINS.json']:files[n]=(E/n).read_text()
  sources=list(files);command=['python3','NKE_extract.py']+(['--preflight'] if kind=='preflight' else [])
@@ -142,6 +151,7 @@ b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if 
 if {kind!r}=='prune': names += ['NKE_PRUNE.json']
 if {kind!r}=='finalcheck': names += ['NKE_SOURCE_VERIFICATION.json','NKE_TOOL_PINS.json','NKE_EXPORT.json','NKE_CLOSURE_PINS.json.xz','NKE_CLOSURE_PINS.json.sha256','NKE_RETENTION.json','NKE_CLEANUP.json']
 if {kind!r}=='cleanup': names += ['NKE_CLEANUP.json']
+if {kind!r}=='review': names += ['NKE_REVIEW_'+{target!r}+'.json']
 if {kind!r}=='verify': names += ['NKE_EXPORT_VERIFY.json']
 if {kind!r}=='projection': names += ['NKE_PROJECTION_CHECK.json']
 if {kind!r}=='retention': names += ['NKE_RETENTION.json','NKE_CLEANUP.json']

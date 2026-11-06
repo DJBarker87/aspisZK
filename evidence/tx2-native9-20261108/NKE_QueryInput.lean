@@ -15,7 +15,8 @@ structure Args where
  geometry : verifier.QueryGeometry
  pending : verifier.BatchedWeights
 
-/-- Complete payload transcription of the three query-entry windows. Physical
+/-- Required payload specification for query-entry windows; NOT a native
+certificate (K028–K030 timed out). Physical
 allocation, capacity and borrow identity observations are retained in receipts.
 Each unselected cell is included by the arbitrary native observation index. -/
 structure Cut (before after : Args) : Prop where
@@ -57,6 +58,7 @@ theorem same (before after : Args)
   · exact cut.rawCells i inside
   · rw [List.getElem?_eq_none (by rw [cut.rawSize];omega),
      List.getElem?_eq_none (by rw [rawSize];omega)]
+ have terms := cut.terms
  have pending : after.pending=before.pending := by
   cases h : after.pending
   cases h1 : before.pending
