@@ -1,0 +1,25 @@
+{
+  "ood_token_erasure": true,
+  "map_exact_body_replacement": true,
+  "frozen_map_sha256": "6d41afe4b1e8cd73372a855d2466a933cb976df3e23016acd2afef1daaf75c43",
+  "new_cut_sha256": "7e7c46467f97387740024dca7192830072fb2df44434a01cf1d3c1eb4fa56299",
+  "replacements": [
+    [
+      "parameter.square()",
+      "unary(parameter,outputs[0],0,log)"
+    ],
+    [
+      "QM31::ONE\n        .add(square)\n        .try_inv()",
+      "inverse(binary(QM31::ONE,square,outputs[1],1,log),inv,log)"
+    ],
+    [
+      "QM31::ONE.sub(square).mul(inverse_denominator)",
+      "binary(binary(QM31::ONE,square,outputs[3],3,log),inverse_denominator,outputs[4],4,log)"
+    ],
+    [
+      "parameter.add(parameter).mul(inverse_denominator)",
+      "binary(binary(parameter,parameter,outputs[5],5,log),inverse_denominator,outputs[6],6,log)"
+    ]
+  ],
+  "product_execution": "NONE; local-record opaque call logs"
+}

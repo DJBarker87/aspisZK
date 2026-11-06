@@ -1,0 +1,35 @@
+#[cfg(kani)]
+mod NIX_claims_heap {
+ use super::*;use crate::field::QM31;
+ type Claims=[[QM31;29];3];
+ fn same(a:QM31,b:QM31)->bool {a.c0.a.0==b.c0.a.0 && a.c0.b.0==b.c0.b.0 && a.c1.a.0==b.c1.a.0 && a.c1.b.0==b.c1.b.0}
+ fn reserve(this:&mut Vec<MaybeUninit<Claims>>,n:usize)->Result<(),alloc::collections::TryReserveError>{
+  assert_eq!(this.len(),0);assert_eq!(n,1);
+  if kani::any() {this.try_reserve(n)}else{Vec::<u8>::new().try_reserve(usize::MAX)}
+ }
+ #[kani::proof] #[kani::unwind(1500)]
+ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
+ #[kani::stub(alloc::alloc::realloc, crate::NIX_kmx::KMX_realloc)]
+ #[kani::stub(Vec::<MaybeUninit<Claims>>::try_reserve_exact,reserve)]
+ fn row_window(){
+  let before:u64=kani::any();let frame=Box::new(before);
+  let p:usize=kani::any();kani::assume(p<3);
+  let k:usize=kani::any();kani::assume(k<29);
+  let row:[QM31;29]=kani::any();
+  match uninit::<Claims>() {
+   Err(e)=>{assert!(matches!(e,Error::Allocation));assert_eq!(*frame,before);},
+   Ok(mut out)=>unsafe{
+    let original=out.as_mut_ptr();
+    let dst=original.cast::<[QM31;29]>().add(p);
+    assert!(!core::ptr::eq(original.cast::<u8>(),(&*frame as *const u64).cast::<u8>()));
+    dst.write(row);
+    let got=(*dst)[k];
+    #[cfg(NIX_case_reply)] assert!(same(got,row[k]));
+    #[cfg(NIX_case_args)] {assert_eq!(dst.cast::<QM31>().add(k),original.cast::<QM31>().add(29*p+k));}
+    #[cfg(NIX_case_frame)] {assert_eq!(*frame,before);}
+    #[cfg(NIX_negative)] assert!(!same(got,row[k]));
+    drop(out);assert_eq!(*frame,before);
+   }
+  }
+ }
+}

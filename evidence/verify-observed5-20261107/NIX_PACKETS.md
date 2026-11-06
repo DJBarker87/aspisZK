@@ -1,0 +1,11 @@
+# Outside-slice packets
+
+F2 is OPEN. Native allocation-only cleanup K018 PASS/K019 memory-leak FAIL and constructor argument/frame controls are retained. The wrong preliminary CapacityOverflow constructor was replaced by a real Std AllocError constructor using the local Deny allocator. Neither host allocator observations nor NIX_HeapFrames/NIX_FlatGeometry proves arbitrary runtime allocator interpretation, physical SBF reclamation or the unsafe aggregate row-store association. Exact timeout shapes and abort-prefix obligations are in NIX_FAILING_STEP.md/NIX_REMAINING.md. No wallet/key operations occurred.
+
+F3 is assembled under the existing P6/D188/Std/runtime interpretation. The secure rational-map native log preserves all seven callees' exact operands, complete Result, canonical touched domains, skipped suffix and cached log frame. NIX_CircleLogLaw constructs and discharges the emitted field equations; no multiplication executes in Kani. The OOD packet preserves mapper errors before the CM31-subfield guard. The fallback packet selects the exact two native constants; existing named parameter canonicality/output laws and NIX_FallbackLaw.deployed supply their values.
+
+Sampler156 consumes that same sampled block and proves canonicality from the CLOSED sampler, not a success premise. Circle142 uses the actual program SolanaDigest/default features, the same borrowed record/state/next, complete errors and state, and the existing sample-block packet; fail/div are abort prefixes without a suffix. NIX_DispatchRun preserves complete ordered Code, never a SHA model. These are the two local caller-row candidates; outside-slice helper packets are not extra ledger rows.
+
+Residual215 is the independent third candidate:17 ordered native scalar calls and complete Q output/frame, with all same-row reads/intermediate domains and the emitted meaning derived by NIX_ResidualLog/NIX_ResidualCut. Additional native terminal stages and round133 cuts are supporting evidence only. The local gate is NIX_VALIDATION.json; exact domains and candidate rows are NIX_CLOSED.json.
+
+No new trust row, weakened bound, grinding/work-normalized credit, privacy change or two-transaction change. No source-derived actual program accepts a proof on the strength of these local helpers alone. Target not established.

@@ -1,0 +1,33 @@
+{"attempt": "NIX_L017", "exit_status": 0, "wall_seconds": 8.79731541289948, "peak_rss_kib": "6038848", "swaps": "0", "print_axioms": []}
+def AspisR1.NGX_RecordAt.computation : AspisR1.NGX_RecordAt.Parser →
+  Slice U8 → U8 → Usize → Result (core.result.Result (Slice U8 × Usize) AspisR1.NGX_RecordAt.Error) :=
+fun parse bytes row offset => do
+  let shape ← AspisR1PrefixAggregateParser.r1_wire.row_shape row
+  let (_, size) ← core.option.Option.unwrap shape
+  let length ← 5#usize + size
+  let next ← offset + length
+  let candidate ←
+    core.slice.Slice.get (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes { start := offset, «end» := next }
+  let result ←
+    AspisR1PrefixAggregateParser.core.option.Option.ok_or candidate
+        (AspisR1PrefixAggregateParser.r1_wire.Error.Length row)
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch result
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue framed => do
+      let parsed ← parse row framed
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch parsed
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (framed, next))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+            (core.convert.FromSame AspisR1.NGX_RecordAt.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8 × Usize)
+        (core.convert.FromSame AspisR1.NGX_RecordAt.Error) residual
+NIX_DECL AspisR1CircleFallback.circle.secure_ood_circle_point_from_parameter
+NIX_DECL AspisR72Sampler.circle.secure_circle_point_from_parameter
+NIX_DECL AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.secure_circle_eq_r72
+NIX_DECL AspisR1CircleFallback.transcript.circle_fallback_point
+NIX_DECL circle.secure_ood_circle_point_from_parameter
+NIX_DECL transcript.circle_fallback_point
+NIX_DECL AspisR72Sampler.circle.secure_ood_circle_point_from_parameter

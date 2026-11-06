@@ -1,0 +1,83 @@
+{
+  "attempt": "NIX_K047",
+  "kind": "kani",
+  "module": "sampler::NIX_sampler::caller",
+  "sources": [
+    "NIX_gate.py",
+    "NIX_SOURCE_PINS.json",
+    "NIX_FROZEN_FILE_PINS.json"
+  ],
+  "command": [
+    "python3",
+    "NIX_gate.py",
+    "NIX_K047.json"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107/NIX_target",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107/NIX_tmp"
+  },
+  "timeout": 180,
+  "expected_time": "optimized compilation then fixed caller dispatch with local opaque field replies; no field products or SHA body",
+  "root_package": "aspis-r1-cost-probe",
+  "metadata_features": "aspis-r1-cost-probe/private-leaf-salts,aspis-r1-cost-probe/optimized-terminal,aspis-r1-cost-probe/program-build",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107/NIX_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107/NIX_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "sampler::NIX_sampler::caller",
+    "--output-format",
+    "terse"
+  ],
+  "collect": [
+    "NIX_K047-graph-check.json",
+    "NIX_K047-graph.stderr",
+    "NIX_K047-graph.json",
+    "NIX_K047-source-check.json",
+    "NIX_K047-lock-check.json"
+  ],
+  "source_revision": "14c421c3891f6d130101cbe8ff651f08a6f3ecfa",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "exit_status": 1,
+  "wall_seconds": 4.443294322118163,
+  "peak_rss_kib": "560148",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rbc224b97c4dc499abe01f7d424e1d8be.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "660459520",
+  "source_hashes": {
+    "NIX_gate.py": "120a87cfe54729b8a33aed81b27e934671748e5d5de3b38c8172a5a3a45a1ae7",
+    "NIX_SOURCE_PINS.json": "eaecbef530f04cbe81602174f03c250aa0a358cee7384187335e9446d6d898cf",
+    "NIX_FROZEN_FILE_PINS.json": "49a45ea72856070b189abe346bb292d2ac508738bdbc4f66b2b4e5a6adfb51a4"
+  },
+  "print_axioms": "N/A: kani"
+}

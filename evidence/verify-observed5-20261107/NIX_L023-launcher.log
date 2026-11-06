@@ -1,0 +1,46 @@
+{"attempt": "NIX_L023", "exit_status": 0, "wall_seconds": 6.62212244188413, "peak_rss_kib": "5992800", "swaps": "0", "print_axioms": []}
+def circle.secure_ood_circle_point_from_parameter : AspisR1CircleSampleWrapper.field.QM31 →
+  Result
+    (core.result.Result AspisR1CircleSampleWrapper.circle.SecureCirclePoint
+      AspisR1CircleSampleWrapper.circle.CirclePointError) :=
+fun q => do
+  let r ← AspisR72Sampler.circle.secure_ood_circle_point_from_parameter (toR72QM q)
+  match r with
+    | core.result.Result.Ok p => ok (core.result.Result.Ok (fromR72Point p))
+    | core.result.Result.Err e => ok (core.result.Result.Err (fromR72Error e))
+def AspisR72Sampler.circle.secure_circle_point_from_parameter : AspisR72Sampler.field.QM31 →
+  Result (core.result.Result AspisR72Sampler.circle.SecureCirclePoint AspisR72Sampler.circle.CirclePoi
+...
+olFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        AspisR72Sampler.circle.SecureCirclePoint (core.convert.FromSame AspisR72Sampler.circle.CirclePointError)
+        residual
+def transcript.circle_fallback_point : Usize → Result AspisR1CircleSampleWrapper.circle.SecureCirclePoint :=
+fun i => do
+  let p ← AspisR1CircleFallback.transcript.circle_fallback_point i
+  ok (fromFallbackPoint p)
+def AspisR1CircleFallback.transcript.circle_fallback_point : Usize →
+  Result AspisR1CircleFallback.circle.SecureCirclePoint :=
+fun sample => do
+  let i ← sample % 2#usize
+  let parameter1 ← AspisR1CircleFallback.transcript.CIRCLE_FALLBACK_PARAMETERS.index_usize i
+  let r ← AspisR1CircleFallback.circle.secure_ood_circle_point_from_parameter parameter1
+  match r with
+    | core.result.Result.Ok point => ok point
+    | core.result.Result.Err a =>
+      ok { x := AspisR1CircleFallback.field.QM31.ONE, y := AspisR1CircleFallback.field.QM31.ZERO }
+@[defeq] theorem AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.secure_circle_eq_r72 : ∀
+  (q : AspisR1CircleSampleWrapper.field.QM31),
+  circle.secure_ood_circle_point_from_parameter q = do
+    let r ← AspisR72Sampler.circle.secure_ood_circle_point_from_parameter (toR72QM q)
+    match r with
+      | core.result.Result.Ok p => ok (core.result.Result.Ok (fromR72Point p))
+      | core.result.Result.Err e => ok (core.result.Result.Err (fromR72Error e)) :=
+fun q => rfl
+def AspisR1.NGX_PrefixGeometry.width : ℕ → ℕ :=
+fun row => 5 + NFU_PacketDomains.payloadSize row
+AspisR1.NGX_PrefixSource.source (bytes : Slice U8) :
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes =
+    AspisR1.NGX_PrefixSource.computation AspisR1PrefixAggregateParser.r1_wire.parse_record_at bytes
+
+Running as unit: run-r5320188cf3e14d3e808c8741d0c7446b.scope; invocation ID: a249c25fb28148ee8ea0e322dea773ee

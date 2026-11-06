@@ -1,0 +1,31 @@
+NIX_generated/NIX_CircleLogLaw.lean:44:7: error: unsolved goals
+case none
+q : Q
+r : Replies
+sq : field.QM31.square q = ok r.square
+den : field.QM31.ONE.add r.square = ok r.denominator
+inv : field.QM31.try_inv r.denominator = ok r.inverse
+tail :
+  ∀ (v : Q),
+    r.inverse = some v →
+      field.QM31.ONE.sub r.square = ok r.difference ∧
+        field.QM31.mul r.difference v = ok r.x ∧ field.QM31.add q q = ok r.twice ∧ field.QM31.mul r.twice v = ok r.y
+h : r.inverse = none
+⊢ ∃ x,
+    core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err circle.CirclePointError.SingularParameter) =
+        ok x ∧
+      (match x with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let q1 ← field.QM31.ONE.sub r.square
+          let q2 ← q1.mul val
+          let q3 ← field.QM31.add q q
+          let q4 ← q3.mul val
+          ok (core.result.Result.Ok { x := q2, y := q4 })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual circle.SecureCirclePoint
+            (core.convert.FromSame circle.CirclePointError) residual) =
+        ok (core.result.Result.Err circle.CirclePointError.SingularParameter)
+'AspisR1.NIX_CircleLogLaw.source_of_log' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NIX_CircleLogLaw.encoded_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIX_CircleLogLaw.encoded_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NIX_CircleLogLaw.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

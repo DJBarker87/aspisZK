@@ -1,0 +1,26 @@
+#[cfg(kani)]
+mod NIX_heap {
+ use super::*;
+ #[kani::proof] #[kani::unwind(3)]
+ #[kani::stub(core::ptr::copy_nonoverlapping, crate::NIX_kmx::KMX_copy_nonoverlapping)]
+ #[kani::stub(alloc::alloc::realloc, crate::NIX_kmx::KMX_realloc)]
+ fn initialization() {
+  let before: u32 = kani::any();
+  let frame=Box::new(before);
+  let reply=uninit::<u32>();
+  match reply {
+   Err(e) => { assert!(matches!(e, Error::Allocation)); assert_eq!(*frame,before); },
+   Ok(mut out) => {
+    let value:u32=kani::any();
+    assert!(!core::ptr::eq(out.as_ptr(), &*frame));
+    out.write(value);
+    let ready=unsafe {out.assume_init()};
+    assert_eq!(*ready,value);
+    assert_eq!(*frame,before);
+    #[cfg(NIX_negative)] assert_eq!(*ready,value.wrapping_add(1));
+    drop(ready);
+    assert_eq!(*frame,before);
+   }
+  }
+ }
+}

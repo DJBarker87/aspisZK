@@ -1,0 +1,58 @@
+{
+  "attempt": "NIX_L055",
+  "kind": "setup",
+  "module": "Pin recursive frozen builder reference inputs",
+  "sources": [
+    "NIX_src/tools/r1-builder-reference/drop.rs",
+    "NIX_src/tools/r1-builder-reference/drop_iterator.rs",
+    "NIX_src/tools/r1-builder-reference/empty_roots.rs",
+    "NIX_src/tools/r1-builder-reference/glue_append.rs",
+    "NIX_src/tools/r1-builder-reference/glue_leaves.rs",
+    "NIX_src/tools/r1-builder-reference/glue_tree.rs",
+    "NIX_src/tools/r1-builder-reference/src/lib.rs",
+    "NIX_src/tools/r1-builder-reference/tests/frozen_empty_roots.rs",
+    "NIX_src/tools/r1-builder-reference/tests/noncanonical_outputs.rs",
+    "NIX_SOURCE_PINS.json"
+  ],
+  "command": [
+    "python3",
+    "-c",
+    "import json,hashlib;from pathlib import Path;pins=json.loads(Path(\"NIX_SOURCE_PINS.json\").read_text());assert all(hashlib.sha256(Path(\"NIX_src\",n).read_bytes()).hexdigest()==h for n,h in pins.items());print(\"all scratch inputs pinned\")"
+  ],
+  "env": {
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107/NIX_target"
+  },
+  "timeout": 180,
+  "expected_time": "own caller input refresh only, erasure checked in following support target",
+  "collect": [],
+  "source_revision": "27623f0f804dfb91bc8361e508fc45f8738c7520",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "exit_status": 0,
+  "wall_seconds": 0.022430781973525882,
+  "peak_rss_kib": "15664",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-re5320ab2a2e34eb4bbddd078852b85c9.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "14057472",
+  "source_hashes": {
+    "NIX_src/tools/r1-builder-reference/drop.rs": "6987003726b24236be57e6eabca2aa21e1279f3f56a25105042c042e232d8b56",
+    "NIX_src/tools/r1-builder-reference/drop_iterator.rs": "ddca45bc2b4c3cd8fa7fe1cd002ef9c6ee05f121a62d6bdde242c5def5b39e04",
+    "NIX_src/tools/r1-builder-reference/empty_roots.rs": "d81258790a15d28dbcb0b543a2514de5bcc7a07ad94bbea48b3975f6b94d168f",
+    "NIX_src/tools/r1-builder-reference/glue_append.rs": "4ce3c6e8af3d29c786a8ab18eb963900cd306f5fbf5e627d34b11b0fcd6b78a0",
+    "NIX_src/tools/r1-builder-reference/glue_leaves.rs": "38ae497d06a8dea0b1fe451a2e0de700b916d646d10aa2df8dce36bf2e9bcb80",
+    "NIX_src/tools/r1-builder-reference/glue_tree.rs": "df1558c2557d059cb9f907bafbbcd3b07e5c77ae45cbb02c3c802d7f8ed9dc2a",
+    "NIX_src/tools/r1-builder-reference/src/lib.rs": "1f4a0f75bea4306f7e8581e7b4b5cfa9ee8549ca08cb4c8c2b486f38bb85e909",
+    "NIX_src/tools/r1-builder-reference/tests/frozen_empty_roots.rs": "0073707f6aef0711d0072c766c9f53c3f38b716d8ccb9c7866e740e02b44b3c2",
+    "NIX_src/tools/r1-builder-reference/tests/noncanonical_outputs.rs": "2768a6da91bc2e52073b13cbc25eb2c4734fa8cba23f6471cb7920453b9ecea6",
+    "NIX_SOURCE_PINS.json": "4bb5e972b413134b426f94ed53b5645cb6dd7d878952843d87d8451379facd1f"
+  },
+  "print_axioms": "N/A: setup"
+}

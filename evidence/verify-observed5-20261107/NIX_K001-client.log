@@ -1,0 +1,48 @@
+{"attempt": "NIX_K001", "exit_status": 1, "wall_seconds": 4.066798706073314, "peak_rss_kib": "503840", "swaps": "0", "print_axioms": "N/A: kani"}
+d`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(target_os, values(\"solana\"))");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/r0/onchain.rs:314:48
+    |
+314 |     #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                                ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(target_os, values(\"solana\"))");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+error[E0658]: use of unstable library feature `allocator_api`
+  --> crates/aspis-core/src/../../../KMX_stubs.rs:14:40
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |                                        ^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: see issue #32838 <https://github.com/rust-lang/rust/issues/32838> for more information
+   = help: add `#![feature(allocator_api)]` to the crate attributes to enable
+   = note: this compiler was built on 2025-11-20; consider upgrading it if it is out of date
+
+error[E0658]: use of unstable library feature `allocator_api`
+  --> crates/aspis-core/src/../../../KMX_stubs.rs:14:80
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |                                                                              --^
+   |                                                                              |
+   |                                                                              help: consider wrapping the inner types in tuple: `(T,A)`
+   |
+   = note: see issue #32838 <https://github.com/rust-lang/rust/issues/32838> for more information
+   = help: add `#![feature(allocator_api)]` to the crate attributes to enable
+   = note: this compiler was built on 2025-11-20; consider upgrading it if it is out of date
+
+For more information about this error, try `rustc --explain E0658`.
+error: could not compile `aspis-core` (lib) due to 2 previous errors; 16 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.

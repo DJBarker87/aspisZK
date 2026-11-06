@@ -1,0 +1,54 @@
+{"attempt": "NIX_K027", "exit_status": 0, "wall_seconds": 2.366656748112291, "peak_rss_kib": "501668", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-verify-observed5-20261107/NIX_src/crates/aspis-core)
+warning: unexpected `cfg` condition name: `NIX_negative`
+   --> crates/aspis-core/src/circle.rs:148:13
+    |
+148 |   #[cfg(all(NIX_negative,NIX_case_args))] {log.calls=log.calls.wrapping_add(1);}
+    |             ^^^^^^^^^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", 
+...
+  |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> crates/aspis-core/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> crates/aspis-core/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> crates/aspis-core/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> crates/aspis-core/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+    Finished `dev` profile [optimized] target(s) in 1.30s
+Checking harness circle::NIX_circle::fallback_dispatch...
+
+VERIFICATION RESULT:
+ ** 0 of 31 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.10528016s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rf993e17f816a4b70a5057cbd31845046.scope; invocation ID: 8206eadf48e443b095b990a7a2026a18

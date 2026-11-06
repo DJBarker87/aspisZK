@@ -1,0 +1,62 @@
+{"attempt": "NIX_L048", "exit_status": 1, "wall_seconds": 4.365699565038085, "peak_rss_kib": "5976760", "swaps": "0", "print_axioms": []}
+dex_usize 1#usize
+  let q7 ← chi.sub q6
+  let q8 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 0#usize
+  let q9 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 1#usize
+  let producer_denominator ← q8.mul q9
+  let q10 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 2#usize
+  let q11 ← (Array.make 4#usize [q1, q3, q5, q7] ⋯).index_usize 3#usize
+  let consumer_denominator ← q10.mul q11
+  let q12 ← row.producer_weights.index_usize 0#usize
+  let q13 ← q12.mul q9
+  let q14 ← row.producer_weights.index_usize 1#usize
+  let q15 ← q14.mul q8
+  let producer_numerator ← q13.add q15
+  let q16 ← row.consumer_weights.index_usize 0#usize
+  let q17 ← q16.mul q11
+  let q18 ← row.consumer_weights.index_usize 1#usize
+  let q19 ← q18.mul q10
+  let consumer_numerator ← q17.add q19
+  let q20 ← helper.mul consumer_denominator
+  let q21 ← q20.add consumer_numerator
+  let q22 ← producer_denominator.mul q21
+  let q23 ← consumer_denominator.mul producer_numerator
+  q22.sub q23
+structure FIq_Native.pool_v1.pair_forest_copy_terminal.CopyRowExtension : Type
+number of parameters: 0
+fields:
+  FIq_Native.pool_v1.pair_forest_copy_terminal.CopyRowExtension.producer_values : Std.Array FIq_Native.field.QM31
+      2#usize
+  FIq_Native.pool_v1.pair_forest_copy_terminal.CopyRowExtension.producer_weights : Std.Array FIq_Native.field.QM31
+      2#usize
+  FIq_Native.pool_v1.pair_forest_copy_terminal.CopyRowExtension.consumer_values : Std.Array FIq_Native.field.QM31
+      2#usize
+  FIq_Native.pool_v1.pair_forest_copy_terminal.CopyRowExtension.consumer_weights : Std.Array FIq_Native.field.QM31
+      2#usize
+constructor:
+  FIq_Native.pool_v1.pair_forest_copy_terminal.CopyRowExtension.mk
+    (producer_values producer_weights consumer_values consumer_weights : Std.Array FIq_Native.field.QM31 2#usize) :
+    FIq_Native.pool_v1.pair_forest_copy_terminal.CopyRowExtension
+NIX_generated/NIX_InspectAdditional.lean:5:7: error(lean.unknownIdentifier): Unknown constant `FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.active_mask_basis`
+NIX_generated/NIX_InspectAdditional.lean:6:7: error(lean.unknownIdentifier): Unknown constant `FIq_Native.pool_v1.pair_forest_copy_terminal.finish_pattern_basis_values`
+def AspisR1PublicPreparation.PrefixAdapter.parseAccepted : Slice U8 →
+  Result (core.result.Result AspisR1PublicPreparation.r1_wire.Prefix AspisR1PublicPreparation.r1_wire.Error) :=
+fun bytes => do
+  let result ← AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes
+  match result with
+    | core.result.Result.Ok pre => ok (core.result.Result.Ok (AspisR1PublicPreparation.PrefixAdapter.fromOld pre))
+    | core.result.Result.Err error =>
+      ok (core.result.Result.Err (AspisR1PublicPreparation.PrefixAdapter.errorFromOld error))
+def AspisR1PublicPreparation.r1_wire.Prefix.validated_record : AspisR1PublicPreparation.r1_wire.Prefix →
+  U8 →
+    Result
+      (core.result.Result AspisR1PublicPreparation.r1_wire.ValidatedRecord AspisR1PublicPreparation.r1_wire.Error) :=
+fun self row => do
+  let r ← self.record row
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => ok (core.result.Result.Ok { row := row, framed := val })
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        AspisR1PublicPreparation.r1_wire.ValidatedRecord (core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+        residual

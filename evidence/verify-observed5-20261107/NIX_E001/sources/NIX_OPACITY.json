@@ -1,0 +1,43 @@
+{
+  "include_types": [
+    "crate::verifier::Prepared",
+    "crate::verifier::Accumulator",
+    "crate::verifier::BatchedWeights",
+    "crate::verifier::View",
+    "crate::verifier::Error",
+    "crate::verifier::Variant",
+    "crate::verifier::Phase",
+    "crate::verifier::QueryGeometry",
+    "crate::r1_semantic::Verified",
+    "crate::r1_wire::SemanticTranscript",
+    "crate::r1_wire::Challenges",
+    "aspis_core::field::M31",
+    "aspis_core::field::CM31",
+    "aspis_core::field::QM31",
+    "aspis_core::field::wide_exact::WideExact",
+    "aspis_core::circle::SecureCirclePoint"
+  ],
+  "verify_observed": [
+    {
+      "path": "crate::verifier::mark",
+      "why": "Deployed observer boundary; retained phase-erasure packet, no callback implementation expanded."
+    },
+    {
+      "path": "crate::r1_semantic::verify_finish",
+      "why": "Finish packet remains OPEN; preserve its complete result as explicit callee boundary, never a success premise."
+    },
+    {
+      "path": "crate::r1_semantic::public_transcript",
+      "why": "Retained CLOSED NHG packet with same public/hash/root domain."
+    },
+    {
+      "path": "crate::r1_wire::begin",
+      "why": "Retained CLOSED NHG packet, original state/callee frame obligation remains."
+    },
+    {
+      "path": "crate::r1_wire::{impl crate::r1_wire::Prefix}::parse",
+      "selector": "crate::r1_wire::_::parse",
+      "why": "Retained CLOSED NGX packet, all rejected prefixes remain in complete result."
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+
+#[cfg(kani)] mod NIX_more {
+ use super::*;
+
+ fn same(a:QM31,b:QM31)->bool{a.c0.a.0==b.c0.a.0&&a.c0.b.0==b.c0.b.0&&a.c1.a.0==b.c1.a.0&&a.c1.b.0==b.c1.b.0}
+ fn q()->QM31{kani::any()}
+
+ struct PairLog{a:QM31,b:QM31,c:QM31,d:QM31,count:u8,frame:u64}
+ fn mul(a:QM31,b:QM31,out:QM31,l:&mut PairLog)->QM31{l.a=a;l.b=b;l.count+=1;out}
+ fn add(a:QM31,b:QM31,out:QM31,l:&mut PairLog)->QM31{l.c=a;l.d=b;l.count+=1;out}
+ fn pattern_step(values:&mut[QM31;4],pattern_selectors:&[QM31;26],patterns:&[QM31;14],group:usize,mut coordinate:usize,product:QM31,out:QM31,l:&mut PairLog)->usize{
+  let pattern=usize::from(COPY_PATTERN_COORDINATE_PATTERNS[coordinate]);
+  values[group]=add(values[group],mul(patterns[pattern],pattern_selectors[coordinate],product,l),out,l);
+  coordinate+=1;coordinate
+ }
+ fn pattern_check(negative:bool){
+  let mut values:[QM31;4]=kani::any();let selectors:[QM31;26]=kani::any();let patterns:[QM31;14]=kani::any();let group:usize=kani::any();kani::assume(group<4);let coordinate:usize=kani::any();kani::assume(coordinate>=COPY_PATTERN_GROUP_OFFSETS[group]&&coordinate<COPY_PATTERN_GROUP_OFFSETS[group+1]);let i:usize=kani::any();kani::assume(i<4);let before=values[i];let selected=values[group];let product=q();let out=q();let count:u8=kani::any();kani::assume(count<254);let frame:u64=kani::any();let mut l=PairLog{a:q(),b:q(),c:q(),d:q(),count,frame};
+  let next=pattern_step(&mut values,&selectors,&patterns,group,coordinate,product,out,&mut l);if negative{l.frame^=1;}
+  let pat=usize::from(COPY_PATTERN_COORDINATE_PATTERNS[coordinate]);assert!(pat<14);assert_eq!(next,coordinate+1);assert!(same(l.a,patterns[pat])&&same(l.b,selectors[coordinate])&&same(l.c,selected)&&same(l.d,product));assert_eq!(l.count,count+2);assert_eq!(l.frame,frame);assert!(same(values[i],if i==group{out}else{before}));
+ }
+ fn pattern_init(negative:bool){let mut values:[QM31;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);let before=values[i];let group=0usize;let coordinate=COPY_PATTERN_GROUP_OFFSETS[group];if negative{values[i].c0.a.0^=1;}assert_eq!(group,0);assert_eq!(coordinate,0);assert!(same(values[i],before));}
+ fn pattern_outer(negative:bool){let values:[QM31;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);let before=values[i];let mut group:usize=kani::any();kani::assume(group<4);let old=group;let coordinate=COPY_PATTERN_GROUP_OFFSETS[group+1];group+=1;if negative{group=old;}assert_eq!(group,old+1);assert!(group<=4);assert!(coordinate<=26);assert!(same(values[i],before));}
+ fn active_init(negative:bool){let mut sums=[QM31::ZERO;7];let sum=QM31::ZERO;let block=0usize;let coordinate=0usize;if negative{sums[0].c0.a.0=1;}let i:usize=kani::any();kani::assume(i<7);assert!(same(sums[i],QM31::ZERO));assert!(same(sum,QM31::ZERO));assert_eq!(block,0);assert_eq!(coordinate,0);}
+ fn active_exit(negative:bool){let sum=q();let mut out=sum;if negative{out.c0.a.0^=1;}assert!(same(out,sum));}
+ fn tag_geometry(negative:bool){let c:usize=kani::any();kani::assume(c<30);let mut start=usize::from(COPY_TAG_COORDINATE_OFFSETS[c]);let end=usize::from(COPY_TAG_COORDINATE_OFFSETS[c+1]);if negative{start=273;}assert!(start<=end&&end<=272);assert_eq!(COPY_TAG_COORDINATE_OFFSETS[0],0);assert_eq!(COPY_TAG_COORDINATE_OFFSETS[30],272);}
+ fn tag_terms(negative:bool){let i:usize=kani::any();kani::assume(i<272);let mut block=COPY_TAG_TERMS.0[i];let tag=COPY_TAG_TERMS.1[i];if negative{block=64;}assert!(block<64);assert!(tag<aspis_core::field::P);}
+ const B:u64=2147483646u64*2147483646u64;
+ fn raw_step(raw:&mut[u64;4],products:[u64;4],mut index:usize)->usize{raw[0]+=products[0];raw[1]+=products[1];raw[2]+=products[2];raw[3]+=products[3];index+=1;index}
+ fn raw_check(negative:bool){let mut raw:[u64;4]=kani::any();let products:[u64;4]=kani::any();let n:u64=kani::any();kani::assume(n<4);for v in raw{kani::assume(v<=n*B);}for p in products{kani::assume(p<=B);}let index:usize=kani::any();kani::assume(index<272);let i:usize=kani::any();kani::assume(i<4);let old=raw[i];let next=raw_step(&mut raw,products,index);if negative{raw[i]+=1;}assert_eq!(next,index+1);assert_eq!(raw[i],old+products[i]);assert!(raw[i]<=(n+1)*B);}
+ struct RedLog{raw:u64,a:M31,b:M31,count:u8,frame:u64}
+ fn reduce(x:u64,value:M31,l:&mut RedLog)->M31{l.raw=x;l.count+=1;value}
+ fn madd(a:M31,b:M31,value:M31,l:&mut RedLog)->M31{l.a=a;l.b=b;l.count+=1;value}
+ fn reduce_step(output:&mut[M31;4],raw:&[u64;4],mut limb:usize,reduced:M31,reply:M31,l:&mut RedLog)->usize{output[limb]=madd(output[limb],reduce(raw[limb],reduced,l),reply,l);limb+=1;limb}
+ fn reduce_check(negative:bool){let mut output:[M31;4]=kani::any();let raw:[u64;4]=kani::any();let limb:usize=kani::any();kani::assume(limb<4);let i:usize=kani::any();kani::assume(i<4);let old=output[i];let selected=output[limb];let reduced:M31=kani::any();let reply:M31=kani::any();kani::assume(selected.0<aspis_core::field::P&&reduced.0<aspis_core::field::P&&reply.0<aspis_core::field::P);let count:u8=kani::any();kani::assume(count<254);let frame:u64=kani::any();let mut l=RedLog{raw:kani::any(),a:kani::any(),b:kani::any(),count,frame};let next=reduce_step(&mut output,&raw,limb,reduced,reply,&mut l);if negative{l.frame^=1;}assert_eq!(l.raw,raw[limb]);assert_eq!(l.a.0,selected.0);assert_eq!(l.b.0,reduced.0);assert_eq!(l.count,count+2);assert_eq!(l.frame,frame);assert_eq!(next,limb+1);assert_eq!(output[i].0,if i==limb{reply.0}else{old.0});}
+ struct LowLog{args:[QM31;18],kinds:[u8;9],calls:usize,frame:u64}
+ fn op(a:QM31,b:QM31,kind:u8,o:&[QM31;9],l:&mut LowLog)->QM31{let i=l.calls;l.args[2*i]=a;l.args[2*i+1]=b;l.kinds[i]=kind;l.calls+=1;o[i]}
+ fn low_step(low:&[QM31;16],high:&[QM31;7],sum:QM31,mut coordinate:usize,o:&[QM31;9],l:&mut LowLog)->(usize,QM31){
+  let low_sum=match coordinate{
+  0=>op(low[11],low[12],0,o,l),
+1=>op(op(low[0],low[11],0,o,l),low[12],0,o,l),
+2=>op(low[0],low[12],0,o,l),
+3=>low[11],
+4=>op(low[0],low[11],0,o,l),
+5=>op(op(op(op(op(op(op(low[1],low[2],0,o,l),low[5],0,o,l),low[6],0,o,l),low[9],0,o,l),low[10],0,o,l),low[13],0,o,l),low[14],0,o,l),
+6=>op(op(op(op(op(op(low[0],low[2],0,o,l),low[4],0,o,l),low[6],0,o,l),low[7],0,o,l),low[9],0,o,l),low[10],0,o,l),
+  _=>unreachable!("coordinate outside frozen active-mask basis")};
+  let sum=op(sum,op(high[coordinate],low_sum,1,o,l),0,o,l);coordinate+=1;(coordinate,sum)
+ }
+ fn low_check(negative:bool){let low:[QM31;16]=kani::any();let high:[QM31;7]=kani::any();let sum=q();let c:usize=kani::any();kani::assume(c<7);let o:[QM31;9]=kani::any();let seed=q();let frame:u64=kani::any();let mut l=LowLog{args:[seed;18],kinds:[0;9],calls:0,frame};let (next,out)=low_step(&low,&high,sum,c,&o,&mut l);if negative{l.frame^=1;}let mut expected=[(seed,seed);9];let mut n=0usize;
+  match c {0=>{expected[0]=(low[11],low[12]);expected[1]=(high[0],o[0]);expected[2]=(sum,o[1]);n=3;},1=>{expected[0]=(low[0],low[11]);expected[1]=(o[0],low[12]);expected[2]=(high[1],o[1]);expected[3]=(sum,o[2]);n=4;},2=>{expected[0]=(low[0],low[12]);expected[1]=(high[2],o[0]);expected[2]=(sum,o[1]);n=3;},3=>{expected[0]=(high[3],low[11]);expected[1]=(sum,o[0]);n=2;},4=>{expected[0]=(low[0],low[11]);expected[1]=(high[4],o[0]);expected[2]=(sum,o[1]);n=3;},5=>{expected[0]=(low[1],low[2]);expected[1]=(o[0],low[5]);expected[2]=(o[1],low[6]);expected[3]=(o[2],low[9]);expected[4]=(o[3],low[10]);expected[5]=(o[4],low[13]);expected[6]=(o[5],low[14]);expected[7]=(high[5],o[6]);expected[8]=(sum,o[7]);n=9;},6=>{expected[0]=(low[0],low[2]);expected[1]=(o[0],low[4]);expected[2]=(o[1],low[6]);expected[3]=(o[2],low[7]);expected[4]=(o[3],low[9]);expected[5]=(o[4],low[10]);expected[6]=(high[6],o[5]);expected[7]=(sum,o[6]);n=8;}, _=>unreachable!()}
+  let i:usize=kani::any();kani::assume(i<18);assert_eq!(next,c+1);assert_eq!(l.calls,n);assert_eq!(l.frame,frame);if i<2*n{assert!(same(l.args[i],if i%2==0{expected[i/2].0}else{expected[i/2].1}));let j=i/2;assert_eq!(l.kinds[j],if j==n-2{1}else{0});}else{assert!(same(l.args[i],seed));}assert!(same(out,o[n-1]));}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn pattern_native(){pattern_check(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn pattern_control(){pattern_check(true);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn pattern_init_native(){pattern_init(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn pattern_init_control(){pattern_init(true);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn pattern_outer_native(){pattern_outer(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn pattern_outer_control(){pattern_outer(true);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn active_init_native(){active_init(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn active_init_control(){active_init(true);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn active_exit_native(){active_exit(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn active_exit_control(){active_exit(true);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn tag_geometry_native(){tag_geometry(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn tag_geometry_control(){tag_geometry(true);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn tag_terms_native(){tag_terms(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn tag_terms_control(){tag_terms(true);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn raw_native(){raw_check(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn raw_control(){raw_check(true);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn reduce_native(){reduce_check(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn reduce_control(){reduce_check(true);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn low_native(){low_check(false);}
+ #[kani::proof] #[kani::unwind(40)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NIX_kmx::KMX_copy_nonoverlapping)] fn low_control(){low_check(true);}
+}

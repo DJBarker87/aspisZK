@@ -1,0 +1,33 @@
+{"attempt": "NIX_L069", "exit_status": 1, "wall_seconds": 5.3433091109618545, "peak_rss_kib": "5978092", "swaps": "0", "print_axioms": []}
+def AspisR1PublicPreparation.PrefixAdapter.fromOld : AspisR1PublicPreparation.PrefixAdapter.OldPrefix →
+  AspisR1PublicPreparation.r1_wire.Prefix :=
+fun pre => { c1_root := pre.c1_root, records := pre.records }
+def AspisR1PublicPreparation.r1_wire.Prefix.record : AspisR1PublicPreparation.r1_wire.Prefix →
+  U8 → Result (core.result.Result (Slice U8) AspisR1PublicPreparation.r1_wire.Error) :=
+fun self row =>
+  if row ≥ 27#u8 then Result.ok (core.result.Result.Err AspisR1PublicPreparation.r1_wire.Error.InvalidRow)
+  else do
+    let i ← lift (UScalar.cast UScalarTy.Usize row)
+    let s ← self.records.index_usize i
+    Result.ok (core.result.Result.Ok s)
+def AspisR1PublicPreparation.r1_wire.Prefix.validated_record : AspisR1PublicPreparation.r1_wire.Prefix →
+  U8 →
+    Result
+      (core.result.Result AspisR1PublicPreparation.r1_wire.ValidatedRecord AspisR1PublicPreparation.r1_wire.Error) :=
+fun self row => do
+  let r ← self.record row
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => Result.ok (core.result.Result.Ok { row := row, framed := val })
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        AspisR1PublicPreparation.r1_wire.ValidatedRecord (core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+        residual
+NIX_generated/NIX_InspectProducer.lean:6:7: error(lean.unknownIdentifier): Unknown constant `FJb_TailCell.cell`
+AspisR1PublicPreparation.RawActualDecodeKMainAdapter.MainRecord : Type
+def AspisR1PublicPreparation.r1_wire.ValidatedRecord.impl.row : AspisR1PublicPreparation.r1_wire.ValidatedRecord →
+  Result U8 :=
+fun self => Result.ok self.row
+def AspisR1PublicPreparation.r1_wire.ValidatedRecord.impl.framed : AspisR1PublicPreparation.r1_wire.ValidatedRecord →
+  Result (Slice U8) :=
+fun self => Result.ok self.framed
