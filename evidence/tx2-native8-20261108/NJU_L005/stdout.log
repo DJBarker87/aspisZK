@@ -1,0 +1,46 @@
+theorem NJU_FinishInstall.at_call : ∀ (reserved : Bool) (r : NP6_StdModel.Reservation)
+  (loc : NIW_AlignFinishComposed.Locations) {H : Type} (d : aspis_core.digest.Digest32 H) (ck proof pub : Slice U8)
+  (hash : H) (p : verifier.Prepared) (a after : verifier.Accumulator)
+  (g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize) (geometry : verifier.QueryGeometry)
+  (pending : verifier.BatchedWeights) (v : verifier.View),
+  (↑ck).length = 1768 →
+    verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) d ck proof pub transport.Variant.S2 hash =
+        ok (core.result.Result.Ok (p, a)) →
+      ↑a.next = 10 →
+        Port3_NativeQueryBody.verifier.candidate.query_loop (NFS_QueryOps.installed NJJ_QueryOps.concrete) proof p a g
+              none geometry (NFW_QueryResume.pending a) 22#usize =
+            ok (core.result.Result.Ok (after, pending)) →
+          (↑proof).length = 57607 →
+            ↑v.round0 = List.take 224 (List.drop 7527 ↑proof) →
+              ↑v.round1 = List.take 224 (List.drop 7783 ↑proof) →
+                ↑v.final_message = List.take 2048 (List.drop 8007 ↑proof) →
+                  NJU_CurrentWindows.Holds v →
+                    ∃ out,
+                      Port3_FlushInstall.flush pending after.weights.deref = ok out ∧
+                        have actual :=
+                          { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next };
+                        ∀ (port : PairPort) (afterOwner : ℕ),
+                          NIW_AlignFinishPort.Cut p port afterOwner (NJF_FinishObserved.G r loc v p actual).2.2 →
+                            have execution := NJF_FinishObserved.G r loc v p actual;
+                            Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p actual none =
+                                execution.1 ∧
+                              (∀ event ∈ execution.2.1, NIW_AlignFinishInvocation.Clause r event) ∧
+                                (∀ event ∈ execution.2.1, NIW_AlignFinishDomains.Inputs p v actual event) ∧
+                                  NIW_AlignFinishPrefix.Prefix execution.2.1 ∧
+                                    NIW_AlignFinishPairCertificate.Bound r execution.2.2 ∧
+                                      NIW_AlignFinishInfoEvent.HasPair execution ∧
+                                        NIW_AlignFinishInfoNew.HasNew p execution ∧
+                                          NIW_AlignFinishPort.Bound r port execution.2.2 :=
+fun reserved r loc {H} d ck proof pub hash p a after g geometry pending v ckSize resume start query proofLength round0
+    round1 finalView windows =>
+  let ⟨out, h✝⟩ :=
+    NJU_FinishDomain.reached reserved d ck proof pub hash p a after g geometry pending v ckSize resume start query
+      (Decidable.byContradiction fun a_1 => at_call._proof_1 ck proof a proofLength a_1) round0 round1 finalView windows
+  let ⟨flush, domain⟩ := h✝
+  Exists.intro out
+    ⟨flush,
+      id fun port afterOwner cut =>
+        NJF_Root.finish r loc proof v p
+          { weights := ⟨↑out, out.property⟩, rhs := after.rhs, power := after.power, next := after.next } domain port
+          afterOwner cut⟩
+'NJU_FinishInstall.at_call' depends on axioms: [propext, Classical.choice, Quot.sound]
