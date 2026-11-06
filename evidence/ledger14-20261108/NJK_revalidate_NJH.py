@@ -1,6 +1,6 @@
 from pathlib import Path
 import json,hashlib,lzma,re
-E=Path('/Users/dominic/ZK/.worktrees/cx-ledger14/evidence/entry-leaves-20261107')
+E=Path(__file__).resolve().parent.parent/'entry-leaves-20261107'
 sha=lambda b:hashlib.sha256(b).hexdigest()
 idx=json.loads((E/'NJH_INPUTS.json').read_text());count=0
 for h,row in idx['objects'].items():
@@ -21,4 +21,4 @@ for n in ['NJH_Observer','NJH_Ref.Types','NJH_Ref.Funs','NJH_BorrowLaws','NJH_Bo
 assert not list(E.rglob('__pycache__'))
 assert not [p for p in E.rglob('*') if p.is_file() and p.stat().st_size>20*1024*1024]
 x=dict(status='PASS',pinned_inputs=count,attempts=len(ats),admissions='all exit0 AND allowed:true',negative_controls='intended assertion failures, not timeouts or compilation failures',current_accepted_sources='all match successful receipts',over20MB=0,source_changes='NJH evidence only',target_established=False)
-(Path('/Users/dominic/ZK/.worktrees/cx-ledger14/evidence/ledger14-20261108/NJK_NJH_REVALIDATION.json')).write_text(json.dumps(x,indent=1)+'\n');print(json.dumps(x))
+(Path(__file__).resolve().parent/'NJK_NJH_REVALIDATION.json').write_text(json.dumps(x,indent=1)+'\n');print(json.dumps(x))

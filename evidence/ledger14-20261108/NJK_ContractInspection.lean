@@ -1,6 +1,9 @@
 import NJK_COMBINED_IMPORT
 set_option pp.all true
 #print AdapterRw.observer
+#print AspisR1.NP6_StdModel.Reservation
+#print NIG_FilledCoverage.source
+#print NHM_Filled64.cohort
 #print NIG_FinishInput.Domain
 #print AspisR1.NIW_AlignFinishPort.Cut
 #print AspisR1.NIW_AlignFinishPairCertificate.Bound

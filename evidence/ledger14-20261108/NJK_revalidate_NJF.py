@@ -1,7 +1,7 @@
 """Read-only gate validation. Only NJF_VALIDATION.json is written in this directory."""
 from pathlib import Path
 import json,re,hashlib,lzma,copy
-E=Path('/Users/dominic/ZK/.worktrees/cx-ledger14/evidence/slice-d-pair8-20261107')
+E=Path(__file__).resolve().parent.parent/'slice-d-pair8-20261107'
 B='/home/dombarker/project-offloads/codex-cx-slice-d-pair8-20261107'
 sha=lambda x:hashlib.sha256(x).hexdigest()
 def require(v,msg):
@@ -107,4 +107,4 @@ if (E/'NJF_RETENTION.json').exists():
   local=E/Path(info['path']).relative_to(B);require(sha(local.read_bytes())==info['sha256'],'retention chunk')
  require(len(j(E/'NJF_EXPORT.json')['files'])==18,'semantic export')
 result=dict(status='PASS',kani_used=sum(r['kind']=='kani'for r in records),lean_link_audit_used=len(records)-sum(r['kind']=='kani'for r in records),extraction_used=0,pairs=[dict(window=w,positive=f'NJF_K{p:03}',negative=f'NJF_K{n:03}')for w,p,n,_ in pairs],semantic_modules=lean,raw_roots=len(raw),scan_modules=len(scan),rejected_mutations=rejected,credit_pending_next_ledger_gate=True)
-(Path('/Users/dominic/ZK/.worktrees/cx-ledger14/evidence/ledger14-20261108/NJK_NJF_REVALIDATION.json')).write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({k:result[k]for k in ['status','kani_used','lean_link_audit_used','raw_roots','scan_modules']}))
+(Path(__file__).resolve().parent/'NJK_NJF_REVALIDATION.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps({k:result[k]for k in ['status','kani_used','lean_link_audit_used','raw_roots','scan_modules']}))

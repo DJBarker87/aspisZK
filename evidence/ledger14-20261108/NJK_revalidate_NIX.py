@@ -1,6 +1,6 @@
 from pathlib import Path
 import json,hashlib,copy,lzma
-E=Path('/Users/dominic/ZK/.worktrees/cx-ledger14/evidence/verify-observed5-20261107')
+E=Path(__file__).resolve().parent.parent/'verify-observed5-20261107'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 def verify(c):
  assert c['security_target_established']is False and c['root137_closed']is False and c['finish136_closed']is False and c['prepare_op9_instantiated']is False,'parent overclaim'
@@ -49,4 +49,4 @@ for flag in ['root_domain','complete_carrier','callee_packets','lean_roots']:
  except AssertionError:denials.append(flag)
  else:raise AssertionError('packet denial did not fire')
 out['denial_controls']=denials
-(Path('/Users/dominic/ZK/.worktrees/cx-ledger14/evidence/ledger14-20261108/NJK_NIX_REVALIDATION.json')).write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out))
+(Path(__file__).resolve().parent/'NJK_NIX_REVALIDATION.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out))
