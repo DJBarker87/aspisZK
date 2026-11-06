@@ -1,0 +1,13 @@
+{
+ "function": "decode_checkpoint_box",
+ "source": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "frozen_body": "fn decode_checkpoint_box(bytes: &[u8]) -> Result<Box<PoolV1PairForestCheckpointV1>, ProgramError> {\n    Ok(Box::new(\n        decode_pool_v1_pair_forest_checkpoint_v1(bytes)\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    ))\n}",
+ "body_sha256": "a9736dc02b3469f748c6065239170ba6e534485ea7c2bdd9321d57c67b832548",
+ "segment": "fn step(raw: Result<PoolV1PairForestCheckpointV1, F>,field:u8,index:usize) -> Result<Box<PoolV1PairForestCheckpointV1>, ProgramError> {\n    Ok(Box::new(\n        raw\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    ))\n}",
+ "substitution": {
+  "decode_pool_v1_pair_forest_checkpoint_v1(bytes)": "raw: full arbitrary child Result at SAME bytes"
+ },
+ "modifies": [],
+ "domain": "every raw child Result, all success fields unrestricted, all21 account errors and13 Tree errors; immutable input bytes"
+}

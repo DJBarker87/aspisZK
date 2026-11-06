@@ -1,0 +1,32 @@
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NKF_master.rs
+@@ -0,0 +1,29 @@
++use super::*;
++use aspis_statement::pool_v1::{PoolV1PairForestAccountErrorV1 as F,PoolIdentityV1,VerifierPolicyV1};
++extern crate alloc;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_field()->M31{M31(kani::any())}
++fn any_digest()->[M31;8]{[any_field(),any_field(),any_field(),any_field(),any_field(),any_field(),any_field(),any_field()]}
++fn any_error()->F{
++ let i:u8=kani::any();kani::assume(i<=20);
++ match i{0=>F::WrongLength,1=>F::WrongMagic,2=>F::WrongVersion,3=>F::WrongLaneCount,4=>F::WrongDigestEncoding,5=>F::WrongDepth,6=>F::WrongFormatBinding,7=>F::NonZeroReserved,8=>F::ZeroRequiredBinding,9=>F::InvalidBoolean,10=>F::InvalidMasterState,11=>F::InvalidLane,12=>F::LaneMasterMismatch,13=>F::LaneOrderMismatch,14=>F::LaneSequenceDecreased,15=>F::DuplicateCheckpoint,16=>F::CheckpointSequenceOverflow,17=>F::NonCanonicalDigest,18=>F::Identity,19=>F::Policy,_=>{
++ use aspis_statement::pool_v1::PoolV1TreeError as T;let j:u8=kani::any();kani::assume(j<13);
++ F::Tree(match j{0=>T::TreeFull,1=>T::InsufficientCapacity,2=>T::IndexOutOfRange,3=>T::RootMismatch,4=>T::NonCanonicalFrontier,5=>T::WrongLength,6=>T::WrongMagic,7=>T::WrongVersion,8=>T::WrongDepth,9=>T::WrongTreeHash,10=>T::WrongDigestEncoding,11=>T::NonCanonicalDigest,_=>T::NonZeroReserved})}}
++}
++fn any_master()->PoolV1PairForestMasterV1{PoolV1PairForestMasterV1{
++ bump:kani::any(),identity:PoolIdentityV1{pool:kani::any(),asset_mint:kani::any(),token_program:kani::any(),asset_id:any_field(),deployment_domain:kani::any()},verifier_policy:VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()},initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()}}
++fn any_checkpoint()->PoolV1PairForestCheckpointV1{PoolV1PairForestCheckpointV1{bump:kani::any(),master:kani::any(),deployment_domain:kani::any(),checkpoint_sequence:kani::any(),global_root:any_digest(),lane_sequences:kani::any()}}
++
++fn coordinate(a:&PoolV1PairForestMasterV1,b:&PoolV1PairForestMasterV1,field:u8,index:usize)->bool{match field{0=>a.bump==b.bump,1=>a.identity.pool[index]==b.identity.pool[index],2=>a.identity.asset_mint[index]==b.identity.asset_mint[index],3=>a.identity.token_program[index]==b.identity.token_program[index],4=>a.identity.asset_id.0==b.identity.asset_id.0,5=>a.identity.deployment_domain[index]==b.identity.deployment_domain[index],6=>a.verifier_policy.flags==b.verifier_policy.flags,7=>a.verifier_policy.registry_program[index]==b.verifier_policy.registry_program[index],8=>a.verifier_policy.registry_authority[index]==b.verifier_policy.registry_authority[index],9=>a.verifier_policy.policy_binding[index]==b.verifier_policy.policy_binding[index],10=>a.initialized_lane_mask==b.initialized_lane_mask,11=>a.has_checkpoint==b.has_checkpoint,12=>a.next_checkpoint_sequence==b.next_checkpoint_sequence,13=>a.last_checkpoint_lane_sequences[index%8]==b.last_checkpoint_lane_sequences[index%8],_=>false}}
++#[kani::requires(field==3 && index<32)]
++#[kani::ensures(|out| {let good=match (raw,out){(Ok(v),Ok(b))=>coordinate(&v,&**b,field,index),(Err(_),Err(ProgramError::InvalidAccountData))=>true,_=>false};if cfg!(NKF_invert){!good}else{good}})]
++#[kani::modifies()]
++fn step(raw: Result<PoolV1PairForestMasterV1, F>,field:u8,index:usize) -> Result<Box<PoolV1PairForestMasterV1>, ProgramError> {
++    Ok(Box::new(
++        raw
++            .map_err(|_| ProgramError::InvalidAccountData)?,
++    ))
++}
++#[kani::proof_for_contract(step)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn wrapper_result(){let field:u8=3;let index:usize=kani::any();kani::assume(field==3 && index<32);let raw=if kani::any(){Ok(any_master())}else{Err(any_error())};let _=step(raw,field,index);}
