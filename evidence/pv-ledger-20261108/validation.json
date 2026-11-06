@@ -1,0 +1,36 @@
+{
+  "source_base_revision": "cfeb65fef79e859f3cd417f7b44572f9d46381fe",
+  "validation": [
+    {
+      "target": "python3 -m unittest discover -s tools/pv-ledger -p test_*.py",
+      "exit": 0,
+      "tests": 17
+    },
+    {
+      "target": "python3 tools/pv-ledger/check.py --check",
+      "exit": 0
+    },
+    {
+      "target": "python3 tools/pv-ledger/plan-jobs.py",
+      "exit": 0,
+      "partition": "123 rows exactly once"
+    },
+    {
+      "target": "git diff --check",
+      "exit": 0
+    }
+  ],
+  "formal_runs": [],
+  "proofs_written": false,
+  "endpoint_premises_removed": [],
+  "new_trust_fields": [],
+  "input_sha256": {
+    "tools/pv-ledger/check.py": "92c4b41cab644f0851a2f2b2c4096f693119f3f6f3b823dc380840f5f6bcdbeb",
+    "tools/pv-ledger/test_check.py": "548350e6488c688482e4cbf22fc5d3bdcf2b16d8622e45895da7ada587a243f1",
+    "tools/pv-ledger/enumerate.py": "30088277de82004760cde680f5504f4591dd1510fb244934eeeadbc3321ffd7f",
+    "tools/pv-ledger/build-ledger.py": "e7c7dc299866d92c94489dfdcc928cacec0101fd3a2172229923c1ea09d930d5",
+    "tools/pv-ledger/plan-jobs.py": "00d0928038340aeb50b9be2a2e7fdb6d3b39340e23547c2b5e96e10f0023f26d",
+    "design/PRIVACY-FN-LEDGER-20261108.json": "a4278e0ae64094da6f0682a7845f13b9fdd73906c323ee815046df3ddf408c55",
+    "design/PRIVACY-FN-JOBS-20261108.md": "2b9e53db927414a609ede876fdc60cc0b4bfae03309f8080ddc44a8a3ffecb9c"
+  }
+}

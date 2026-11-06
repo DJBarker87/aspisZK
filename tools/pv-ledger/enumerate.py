@@ -68,6 +68,7 @@ def target(c, path):
 def generate():
     rows, inputs = [], []
     for path, (branch, rev) in PINS.items():
+        native_signatures = {}
         if path == 'slice':
             base = 'evidence/pv-stx-20261104/SLICE/'
             cohorts = {}
@@ -92,6 +93,11 @@ def generate():
             semantic = {2: [5], 4: [7]}
             boundary = {}
         else:
+            meta_path = 'evidence/pv-evhB-20261103/thread-line/generated/N95807/OrderedFamilies.llbc.xz'
+            meta, meta_sha = load(rev, meta_path)
+            assert meta['has_errors'] is False
+            native_signatures = {f['def_id']: f['signature'] for f in meta['translated']['fun_decls'] if f}
+            inputs.append(dict(path=path, branch=branch, revision=rev, artifact=meta_path, sha256=meta_sha))
             p = 'evidence/pv-evhB-20261103/thread-line/generated/N95808/generated/NativeInstructions.json.xz'
             d, sha = load(rev, p)
             inputs.append(dict(path=path, branch=branch, revision=rev, artifact=p, sha256=sha))
@@ -143,7 +149,8 @@ def generate():
                        path=path, kind='BODY' if body else 'LEAF', emitted_kind=code_kind,
                        callees=sorted({c['row'] for c in calls}), call_sites=calls,
                        source=dict(branch=branch, revision=rev, syntax=syntax.get(i) if body else None,
-                                   item_meta=f['item_meta'] if f else None),
+                                   item_meta=f['item_meta'] if f else None,
+                                   signature=native_signatures.get(i) if path=='thread' else (f['code'].get('entry',{}).get('signature') if f else None)),
                        disposition=('EXECUTED' if body else boundary.get(i,
                            'named full-reply child; thread-2/3' if path == 'thread' else
                            'named full-reply native/opaque child; documented primitive semantics where applicable')),

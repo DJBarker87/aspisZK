@@ -84,7 +84,7 @@ CANDIDATES = {
 ('thread',218): [('PV_THR2_Packet218SourceReturn','run')],
 ('thread',315): [('PV_THR2_Packet315SourceReturn','run')],
 ('thread',222): [('PV_THR2_Packet222SemanticReturn','run')],
-('thread',361): [('PV_THR2_Source361Prologue',None), ('PV_THR2_PacketJoinedMetadataRun',None), ('PV_THR2_PacketJoinedBoxRun',None)],
+('thread',361): [('PV_THR2_Source361Prologue','run'), ('PV_THR2_PacketJoinedMetadataRun',None), ('PV_THR2_PacketJoinedBoxRun','run')],
 ('slice',21): [('PV_STX2_ToVecCallWrappers','source262'), ('PV_STX2_Source7QUniformReturn','PV_STX2_Source7QUniformReturn'), ('PV_STX2_Source7QColumnViewReturn','returned')],
 ('slice',31): [('PV_STX2_ToVecF31Return','source13')],
 ('slice',35): [('PV_STX2_ToVecConstructorReturn','source25')],
@@ -129,7 +129,9 @@ def main():
               parameters=ledger['contract_convention']['parameters'], callee_policy=ledger['contract_convention']['composition'])
         else:
             fact = FACTS.get((path,i))
-            row['leaf'] = dict(named_fact=fact, named_child='OF_child_f'+str(i) if isinstance(i,int) and path=='thread' and row['emitted_kind']!='Structured' else ns+'.full_reply_child',
+            callers = [dict(caller=parent['id'], site=c['site'], syntax=parent['source'].get('syntax'), revision=parent['source']['revision'])
+                       for parent in ledger['rows'] for c in parent['call_sites'] if c['row']==row['id']]
+            row['leaf'] = dict(disposition_evidence=callers, named_fact=fact, named_child='OF_child_f'+str(i) if isinstance(i,int) and path=='thread' and row['emitted_kind']!='Structured' else ns+'.full_reply_child',
               reply_domain='Arbitrary full reply of exact emitted return type: returned/error/fault/abort/divergence/pending, exact post-world/events and declared modifications; no fixed successful value.',
               disposition=row['disposition'], fact_source='lean/'+fact+'.lean' if fact else None,
               fact_status='documented semantics installed below endpoint; not a B-y raw-audited closed contract' if fact else 'named child retained; reply semantics/footprint obligations retained')

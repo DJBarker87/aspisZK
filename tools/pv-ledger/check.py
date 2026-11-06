@@ -62,6 +62,21 @@ def strip_comments(text):
     require(depth == 0, 'unterminated Lean comment')
     return ''.join(out)
 
+def declared_theorems(source):
+    scopes, result = [], set()
+    for match in re.finditer(r'^\s*(namespace\s+([^\s]+)|section(?:\s+[^\s]+)?|end(?:\s+[^\s]+)?|(?:protected\s+)?theorem\s+([^\s({:]+))', source, re.M):
+        token = match[1]
+        if token.startswith('namespace'):
+            scopes.append(match[2])
+        elif token.startswith('section'):
+            scopes.append('')
+        elif token.startswith('end'):
+            if scopes: scopes.pop()
+        elif match[3]:
+            result.add('.'.join([x for x in scopes if x] + [match[3]]))
+    return result
+
+
 def printed_binders(text, theorem):
     """Read named leading binders in #print output; reject unsupported syntax.
 
@@ -165,8 +180,7 @@ def check_closed(row, rows):
         require(c['theorem']==row['contract']['lean_theorem'], 'CLOSED theorem differs from expected contract theorem')
     git('merge-base', '--is-ancestor', rev, branch)
     source = strip_comments(read_ref(c['source']).decode())
-    short = c['theorem'].rsplit('.',1)[-1]
-    require(re.search(r'\btheorem\s+(?:'+re.escape(c['theorem'])+'|'+re.escape(short)+r')\b',source), 'named theorem absent at branch revision')
+    require(c['theorem'] in declared_theorems(source), 'named theorem absent at branch revision')
     require(c.get('boundary') == ('CALL_ENTRY_TO_RETURN' if row['kind']=='BODY' and row['emitted_kind']!='CompositionRoot' else
                                 'ORIGINAL_ENTRY_TO_OWNINIT_CASE_SPLIT' if row['emitted_kind']=='CompositionRoot' else 'LEAF_FULL_REPLY'),
             'wrong theorem entry/return boundary')

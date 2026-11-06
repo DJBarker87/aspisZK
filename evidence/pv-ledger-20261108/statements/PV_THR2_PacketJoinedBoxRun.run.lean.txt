@@ -1,0 +1,6 @@
+theorem run {E : Type} (C : Carrier OWNER Data) (K : Control)
+    (fallback : Data → Option PV_STX2_SliceSyntax.Program)
+    (H : PV_STX2_Native.Request Data → OWNER → Reply OWNER E Data)
+    (q : PV_THR2_IntrinsicState.State OWNER E) :
+    let P := PV_THR2_PacketJoinedTable.table fallback
+    PV_THR2_IntrinsicState.advance C K P H (PV_THR2_OwnUniformBoxRun.steps C K fallback H q) q = PV_THR2_OwnUniformBoxRun.after C K fallback H q 
