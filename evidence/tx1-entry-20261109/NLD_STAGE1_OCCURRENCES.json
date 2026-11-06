@@ -1,0 +1,586 @@
+{
+ "source": "docs/research/100bit-spend-path-20261013/lean/AdapterRwModel.lean",
+ "source_sha256": "c6aa4d351e409cc56ee59b64c573590fddca8831f7abba0634ac35ef80bcf497",
+ "calls": [
+  {
+   "occurrence": 2863,
+   "term": "    ops.op1 core.cmp.PartialEqU8 data\n      (Array.make 2#usize [ 3#u8, 10#u8 ])",
+   "binder": "b"
+  },
+  {
+   "occurrence": 2874,
+   "term": "Slice.index_usize accounts 0#usize",
+   "binder": "proof_account"
+  },
+  {
+   "occurrence": 2875,
+   "term": "Slice.index_usize accounts 1#usize",
+   "binder": "public_account"
+  },
+  {
+   "occurrence": 2876,
+   "term": "Slice.index_usize accounts 2#usize",
+   "binder": "checkpoint_account"
+  },
+  {
+   "occurrence": 2877,
+   "term": "        (r1_pool_adapter.owned.require_distinct_accounts ops)\n          (Array.make 3#usize [\n            proof_account, public_account, checkpoint_account\n            ])",
+   "binder": "r"
+  },
+  {
+   "occurrence": 2882,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r",
+   "binder": "cf"
+  },
+  {
+   "occurrence": 2885,
+   "term": "r1_pool_adapter.owned.require_readonly_buffer proof_account",
+   "binder": "r1"
+  },
+  {
+   "occurrence": 2886,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r1",
+   "binder": "cf1"
+  },
+  {
+   "occurrence": 2889,
+   "term": "            r1_pool_adapter.owned.require_readonly_buffer public_account",
+   "binder": "r2"
+  },
+  {
+   "occurrence": 2891,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r2",
+   "binder": "cf2"
+  },
+  {
+   "occurrence": 2894,
+   "term": "              (r1_pool_adapter.owned.require_verifier_checkpoint ops)\n                checkpoint_account program_id true",
+   "binder": "r3"
+  },
+  {
+   "occurrence": 2897,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r3",
+   "binder": "cf3"
+  },
+  {
+   "occurrence": 2900,
+   "term": "                (r1_pool_adapter.owned.OwnedAccount.data ops) checkpoint_account",
+   "binder": "r4"
+  },
+  {
+   "occurrence": 2902,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r4",
+   "binder": "cf4"
+  },
+  {
+   "occurrence": 2905,
+   "term": "r1_pool_adapter.owned.require_zero val",
+   "binder": "r5"
+  },
+  {
+   "occurrence": 2906,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r5",
+   "binder": "cf5"
+  },
+  {
+   "occurrence": 2909,
+   "term": "                    (r1_pool_adapter.owned.OwnedAccount.data ops) public_account",
+   "binder": "r6"
+  },
+  {
+   "occurrence": 2911,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r6",
+   "binder": "cf6"
+  },
+  {
+   "occurrence": 2914,
+   "term": "ops.op47 val1",
+   "binder": "r7"
+  },
+  {
+   "occurrence": 2915,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r7",
+   "binder": "cf7"
+  },
+  {
+   "occurrence": 2918,
+   "term": "                        ops.op21\n                          val2",
+   "binder": "r8"
+  },
+  {
+   "occurrence": 2921,
+   "term": "                        core.result.Result.map_err\n                          r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError\n                          r8 ()",
+   "binder": "r9"
+  },
+  {
+   "occurrence": 2925,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r9",
+   "binder": "cf8"
+  },
+  {
+   "occurrence": 2928,
+   "term": "                          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common\n                            val2",
+   "binder": "pvpftcv"
+  },
+  {
+   "occurrence": 2931,
+   "term": "                          ops.op24\n                            pvpftcv.lane_transition.candidate_afterstate",
+   "binder": "r10"
+  },
+  {
+   "occurrence": 2934,
+   "term": "                          core.result.Result.map_err\n                            r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError\n                            r10 ()",
+   "binder": "r11"
+  },
+  {
+   "occurrence": 2938,
+   "term": "                          core.result.Result.Insts.CoreOpsTry.branch r11",
+   "binder": "cf9"
+  },
+  {
+   "occurrence": 2942,
+   "term": "                            (r1_pool_adapter.owned.OwnedAccount.data ops)\n                              proof_account",
+   "binder": "r12"
+  },
+  {
+   "occurrence": 2945,
+   "term": "                            core.result.Result.Insts.CoreOpsTry.branch r12",
+   "binder": "cf10"
+  },
+  {
+   "occurrence": 2949,
+   "term": "                              aspis_r1_cost_probe.verifier.PROOF_BYTES",
+   "binder": "proof_length"
+  },
+  {
+   "occurrence": 2951,
+   "term": "                              (aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops)",
+   "binder": "proof_start"
+  },
+  {
+   "occurrence": 2953,
+   "term": "                              lift (Usize.checked_add proof_start proof_length)",
+   "binder": "o"
+  },
+  {
+   "occurrence": 2955,
+   "term": "                              core.option.Option.ok_or o\n                                solana_program_error.ProgramError.InvalidAccountData",
+   "binder": "r13"
+  },
+  {
+   "occurrence": 2958,
+   "term": "                              core.result.Result.Insts.CoreOpsTry.branch r13",
+   "binder": "cf11"
+  },
+  {
+   "occurrence": 2969,
+   "term": "                                  core.slice.index.Slice.index\n                                    (core.slice.index.SliceIndexRangeToUsizeSlice\n                                    Std.U8) val4 { \u00abend\u00bb := proof_start }",
+   "binder": "s"
+  },
+  {
+   "occurrence": 2973,
+   "term": "                                  ops.op0\n                                    core.cmp.PartialEqU8 s val3",
+   "binder": "b1"
+  },
+  {
+   "occurrence": 2981,
+   "term": "                                    lift (Std.Usize.wrapping_add proof_start\n                                      8#usize)",
+   "binder": "i2"
+  },
+  {
+   "occurrence": 2984,
+   "term": "Slice.index_usize val4 i2",
+   "binder": "i3"
+  },
+  {
+   "occurrence": 2985,
+   "term": "                                    aspis_r1_cost_probe.transport.Variant.tag\n                                      aspis_r1_cost_probe.transport.Variant.S2",
+   "binder": "i4"
+  },
+  {
+   "occurrence": 2993,
+   "term": "                                      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public\n                                        val2",
+   "binder": "p"
+  },
+  {
+   "occurrence": 2996,
+   "term": "                                      core.slice.index.Slice.index\n                                        (core.slice.index.SliceIndexRangeUsizeSlice\n                                        Std.U8) val4\n                                        { start := proof_start, \u00abend\u00bb := val5\n                                        }",
+   "binder": "s1"
+  },
+  {
+   "occurrence": 3002,
+   "term": "Slice.index_usize data 1#usize",
+   "binder": "i5"
+  },
+  {
+   "occurrence": 3003,
+   "term": "lift (UScalar.cast .Usize i5)",
+   "binder": "i6"
+  },
+  {
+   "occurrence": 3004,
+   "term": "(first_decoded ops) p val1 s1 i6",
+   "binder": "r14"
+  },
+  {
+   "occurrence": 3005,
+   "term": "                                      core.result.Result.Insts.CoreOpsTry.branch\n                                        r14",
+   "binder": "cf12"
+  },
+  {
+   "occurrence": 3021,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                                        (alloc.vec.Vec Std.U8)\n                                        (core.convert.FromSame\n                                        solana_program_error.ProgramError)\n                                        residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3028,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                                (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                                solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3032,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                              (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                              solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3036,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                            (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                            solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3040,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                          (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                          solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3044,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                        (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                        solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3048,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                      (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                      solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3052,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                    (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                    solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3056,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                  (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                  solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3060,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3064,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n              (alloc.vec.Vec Std.U8) (core.convert.FromSame\n              solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3068,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n            (alloc.vec.Vec Std.U8) (core.convert.FromSame\n            solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3072,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n          (alloc.vec.Vec Std.U8) (core.convert.FromSame\n          solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3076,
+   "term": "      ops.op1 core.cmp.PartialEqU8 data\n        (Array.make 2#usize [ 3#u8, 11#u8 ])",
+   "binder": "b1"
+  },
+  {
+   "occurrence": 3087,
+   "term": "Slice.index_usize accounts 0#usize",
+   "binder": "proof_account"
+  },
+  {
+   "occurrence": 3088,
+   "term": "Slice.index_usize accounts 1#usize",
+   "binder": "public_account"
+  },
+  {
+   "occurrence": 3089,
+   "term": "Slice.index_usize accounts 2#usize",
+   "binder": "checkpoint_account"
+  },
+  {
+   "occurrence": 3090,
+   "term": "          (r1_pool_adapter.owned.require_distinct_accounts ops)\n            (Array.make 3#usize [\n              proof_account, public_account, checkpoint_account\n              ])",
+   "binder": "r"
+  },
+  {
+   "occurrence": 3095,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r",
+   "binder": "cf"
+  },
+  {
+   "occurrence": 3098,
+   "term": "            r1_pool_adapter.owned.require_readonly_buffer proof_account",
+   "binder": "r1"
+  },
+  {
+   "occurrence": 3100,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r1",
+   "binder": "cf1"
+  },
+  {
+   "occurrence": 3103,
+   "term": "              r1_pool_adapter.owned.require_readonly_buffer public_account",
+   "binder": "r2"
+  },
+  {
+   "occurrence": 3105,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r2",
+   "binder": "cf2"
+  },
+  {
+   "occurrence": 3108,
+   "term": "                (r1_pool_adapter.owned.require_verifier_checkpoint ops)\n                  checkpoint_account program_id true",
+   "binder": "r3"
+  },
+  {
+   "occurrence": 3111,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r3",
+   "binder": "cf3"
+  },
+  {
+   "occurrence": 3114,
+   "term": "                  (r1_pool_adapter.owned.OwnedAccount.data ops) checkpoint_account",
+   "binder": "r4"
+  },
+  {
+   "occurrence": 3116,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r4",
+   "binder": "cf4"
+  },
+  {
+   "occurrence": 3119,
+   "term": "r1_pool_adapter.owned.require_zero val",
+   "binder": "r5"
+  },
+  {
+   "occurrence": 3120,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r5",
+   "binder": "cf5"
+  },
+  {
+   "occurrence": 3123,
+   "term": "                      (r1_pool_adapter.owned.OwnedAccount.data ops) public_account",
+   "binder": "r6"
+  },
+  {
+   "occurrence": 3125,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r6",
+   "binder": "cf6"
+  },
+  {
+   "occurrence": 3128,
+   "term": "                        ops.op47 val1",
+   "binder": "r7"
+  },
+  {
+   "occurrence": 3130,
+   "term": "core.result.Result.Insts.CoreOpsTry.branch r7",
+   "binder": "cf7"
+  },
+  {
+   "occurrence": 3133,
+   "term": "                          ops.op21\n                            val2",
+   "binder": "r8"
+  },
+  {
+   "occurrence": 3136,
+   "term": "                          core.result.Result.map_err\n                            r1_pool_adapter.owned.stage1_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError\n                            r8 ()",
+   "binder": "r9"
+  },
+  {
+   "occurrence": 3140,
+   "term": "                          core.result.Result.Insts.CoreOpsTry.branch r9",
+   "binder": "cf8"
+  },
+  {
+   "occurrence": 3144,
+   "term": "                            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common\n                              val2",
+   "binder": "pvpftcv"
+  },
+  {
+   "occurrence": 3147,
+   "term": "                            ops.op24\n                              pvpftcv.lane_transition.candidate_afterstate",
+   "binder": "r10"
+  },
+  {
+   "occurrence": 3150,
+   "term": "                            core.result.Result.map_err\n                              r1_pool_adapter.owned.stage1_owned.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1ProgramError\n                              r10 ()",
+   "binder": "r11"
+  },
+  {
+   "occurrence": 3154,
+   "term": "                            core.result.Result.Insts.CoreOpsTry.branch r11",
+   "binder": "cf9"
+  },
+  {
+   "occurrence": 3158,
+   "term": "                              (r1_pool_adapter.owned.OwnedAccount.data ops)\n                                proof_account",
+   "binder": "r12"
+  },
+  {
+   "occurrence": 3161,
+   "term": "                              core.result.Result.Insts.CoreOpsTry.branch r12",
+   "binder": "cf10"
+  },
+  {
+   "occurrence": 3166,
+   "term": "                                aspis_r1_cost_probe.verifier.PROOF_BYTES",
+   "binder": "proof_length"
+  },
+  {
+   "occurrence": 3168,
+   "term": "                                (aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops)",
+   "binder": "proof_start"
+  },
+  {
+   "occurrence": 3170,
+   "term": "                                lift (Usize.checked_add proof_start\n                                  proof_length)",
+   "binder": "o"
+  },
+  {
+   "occurrence": 3173,
+   "term": "                                core.option.Option.ok_or o\n                                  solana_program_error.ProgramError.InvalidAccountData",
+   "binder": "r13"
+  },
+  {
+   "occurrence": 3176,
+   "term": "                                core.result.Result.Insts.CoreOpsTry.branch r13",
+   "binder": "cf11"
+  },
+  {
+   "occurrence": 3187,
+   "term": "                                    core.slice.index.Slice.index\n                                      (core.slice.index.SliceIndexRangeToUsizeSlice\n                                      Std.U8) val4 { \u00abend\u00bb := proof_start }",
+   "binder": "s"
+  },
+  {
+   "occurrence": 3191,
+   "term": "                                    ops.op0\n                                      core.cmp.PartialEqU8 s val3",
+   "binder": "b2"
+  },
+  {
+   "occurrence": 3199,
+   "term": "                                      lift (Std.Usize.wrapping_add proof_start\n                                        8#usize)",
+   "binder": "i2"
+  },
+  {
+   "occurrence": 3202,
+   "term": "Slice.index_usize val4 i2",
+   "binder": "i3"
+  },
+  {
+   "occurrence": 3203,
+   "term": "                                      aspis_r1_cost_probe.transport.Variant.tag\n                                        aspis_r1_cost_probe.transport.Variant.S2",
+   "binder": "i4"
+  },
+  {
+   "occurrence": 3211,
+   "term": "                                        aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public\n                                          val2",
+   "binder": "p"
+  },
+  {
+   "occurrence": 3214,
+   "term": "                                        core.slice.index.Slice.index\n                                          (core.slice.index.SliceIndexRangeUsizeSlice\n                                          Std.U8) val4\n                                          {\n                                            start := proof_start,\n                                            \u00abend\u00bb := val5\n                                          }",
+   "binder": "s1"
+  },
+  {
+   "occurrence": 3222,
+   "term": "Slice.index_usize data 1#usize",
+   "binder": "i5"
+  },
+  {
+   "occurrence": 3223,
+   "term": "lift (UScalar.cast .Usize i5)",
+   "binder": "i6"
+  },
+  {
+   "occurrence": 3224,
+   "term": "(first_decoded ops) p val1 s1 i6",
+   "binder": "r14"
+  },
+  {
+   "occurrence": 3225,
+   "term": "                                        core.result.Result.Insts.CoreOpsTry.branch\n                                          r14",
+   "binder": "cf12"
+  },
+  {
+   "occurrence": 3241,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                                          (alloc.vec.Vec Std.U8)\n                                          (core.convert.FromSame\n                                          solana_program_error.ProgramError)\n                                          residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3248,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                                  (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                                  solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3253,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                                (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                                solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3257,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                              (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                              solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3261,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                            (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                            solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3265,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                          (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                          solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3269,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                        (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                        solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3273,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                      (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                      solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3277,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                    (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                    solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3281,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                  (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                  solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3285,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                (alloc.vec.Vec Std.U8) (core.convert.FromSame\n                solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3289,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n              (alloc.vec.Vec Std.U8) (core.convert.FromSame\n              solana_program_error.ProgramError) residual",
+   "binder": null
+  },
+  {
+   "occurrence": 3293,
+   "term": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n            (alloc.vec.Vec Std.U8) (core.convert.FromSame\n            solana_program_error.ProgramError) residual",
+   "binder": null
+  }
+ ]
+}
