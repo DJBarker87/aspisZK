@@ -44,3 +44,7 @@ No shipped source changed. Scratch-only cfg harness patch is experimental eviden
 ## Validation interpretation
 
 Focused new-module compiles precede one combined audit. Per-scope receipts record exact command/target, exit, wall seconds, peak RSS KiB, swaps, source revision, CARGO_TARGET_DIR and printed axioms; nested raw-audit receipts contain each root axiom list and reachable graph. Standard axioms only are allowed for selected theorem roots. Planted fixture axioms are expected controls in their separate environment. The raw inherited mismatch, if reproduced, retains its actual nonzero status and is not renamed away. No axioms audit or passing import promotes an OPEN row.
+
+Coherent SInt2 authority: replayed closure of AspisR1.RPx_Deployed.deployed; digest/error dictionary slots are op43/op44. Original generated-probe slot names are not substituted for those authoritative slots. The final predecessor object comparison pins the resolved SInt2/Aeneas closure.
+
+NKQ-F3 qualifies the typed mask hypotheses: their whole small-array window executions are not native one-iteration certificates. The conditional mathematical composition is audited; native loop-method admission remains OPEN. See NKQ_CUTS.md.
