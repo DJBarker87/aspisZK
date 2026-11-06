@@ -1,0 +1,47 @@
+{"attempt": "NLM_L049", "exit_status": 1, "wall_seconds": 16.82130677998066, "peak_rss_kib": "5981032", "swaps": "0", "print_axioms": ["'NLM_WrapperSnapshot0.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_WrapperSnapshot0.lean:14:1: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq (Run (NLM_Snapshot.Owned × State))
+    (G { input := e, sdk := (NLM_RuntimeInput.initial e).state } 0 58295 58295 (ok ()))
+    {
+      result :=
+        ok
+          (e.snapshot 0 58295 58295,
+            { input := e, sdk := (NLM_RuntimeInput.initial e).state, next := 0 + 1,
+              owned := [] ++ [e.snapshot 0 58295 58295] }),
+      events := normalEvents { input := e, sdk := (NLM_RuntimeInput.initial e).state } 0 58295 58295 }
+but is expected to have type
+  @Eq (Run (NLM_Snapshot.Owned × State))
+    (G { input := e, sdk := (NLM_RuntimeInput.initial e).state } 0 58295 58
+...
+NLM_generated/NLM_WrapperSnapshot0.lean:14:1: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq (Run (NLM_Snapshot.Owned × State))
+    (G { input := e, sdk := (NLM_RuntimeInput.initial e).state } 0 58295 58295 (ok ()))
+    {
+      result :=
+        ok
+          (e.snapshot 0 58295 58295,
+            { input := e, sdk := (NLM_RuntimeInput.initial e).state, next := 0 + 1,
+              owned := [] ++ [e.snapshot 0 58295 58295] }),
+      events := normalEvents { input := e, sdk := (NLM_RuntimeInput.initial e).state } 0 58295 58295 }
+but is expected to have type
+  @Eq (Run (NLM_Snapshot.Owned × State))
+    (G { input := e, sdk := (NLM_RuntimeInput.initial e).state } 0 58295 58295 (ok ()))
+    {
+      result :=
+        ok
+          (e.snapshot 0 58295 58295,
+            { input := e, sdk := (NLM_RuntimeInput.initial e).state, next := 1, owned := [e.snapshot 0 58295 58295] }),
+      events := normalEvents { input := e, sdk := (NLM_RuntimeInput.initial e).state } 0 58295 58295 }
+theorem NLM_WrapperSnapshot0.step : ∀ (e : Entry),
+  G (before e 0) 0 58295 58295 (ok ()) =
+    { result := ok (e.snapshot 0 58295 58295, before e 1), events := normalEvents (before e 0) 0 58295 58295 } :=
+fun e =>
+  have h := normal e 0 0 58295 58295 (NLM_SevenSnapshots.ownedValues e (List.take 0 sites));
+  sorry h
+'NLM_WrapperSnapshot0.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd08bb29cb4d243e6b63154a431e6fe5b.scope; invocation ID: e599c7934d0f4392a7cb07e5a08bd598

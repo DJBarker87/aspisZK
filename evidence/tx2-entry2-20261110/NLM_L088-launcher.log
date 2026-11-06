@@ -1,0 +1,62 @@
+{"attempt": "NLM_L088", "exit_status": 1, "wall_seconds": 0.33836781792342663, "peak_rss_kib": "748692", "swaps": "0", "print_axioms": ["'NLM_CopyFrames.adjacent' depends on axioms: [adjacent]", "'NLM_CopyFrames.inside' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_CopyFrames.outside' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_CopyFrames.lean:11:21: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isTrue.isTrue
+α : Type
+src dst : Nat → α
+start n m k : Nat
+h✝¹ : start + n ≤ k ∧ k < start + n + m
+h✝ : start ≤ k ∧ k < start + (n + m)
+⊢ src k = src k
+NLM_generated/NLM_CopyFrames.lean:11:21: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isTrue.isFalse
+α : Type
+src dst : Nat → α
+start n m k : Nat
+h✝¹ : start + n ≤ k ∧ k < star
+...
+ n ≤ k ∧ k < start + n + m
+h✝ : ¬(start ≤ k ∧ k < start + (n + m))
+⊢ src k = dst k
+NLM_generated/NLM_CopyFrames.lean:8:45: error: unsolved goals
+case isFalse.isFalse.isTrue
+α : Type
+src dst : Nat → α
+start n m k : Nat
+h✝² : ¬(start + n ≤ k ∧ k < start + n + m)
+h✝¹ : ¬(start ≤ k ∧ k < start + n)
+h✝ : start ≤ k ∧ k < start + (n + m)
+⊢ dst k = src k
+
+case isFalse.isFalse.isFalse
+α : Type
+src dst : Nat → α
+start n m k : Nat
+h✝² : ¬(start + n ≤ k ∧ k < start + n + m)
+h✝¹ : ¬(start ≤ k ∧ k < start + n)
+h✝ : ¬(start ≤ k ∧ k < start + (n + m))
+⊢ dst k = dst k
+NLM_generated/NLM_CopyFrames.lean:6:8: error: (kernel) declaration has metavariables 'NLM_CopyFrames.adjacent'
+theorem NLM_CopyFrames.adjacent : ∀ {α : Type} (src dst : Nat → α) (start n m : Nat),
+  KMX_CopyMeaning.loop src (KMX_CopyMeaning.loop src dst start n) (start + n) m =
+    KMX_CopyMeaning.loop src dst start (n + m) :=
+fun {α} src dst start n m => funext fun k => @?_mvar.2051 α src dst start n m k
+theorem NLM_CopyFrames.inside : ∀ {α : Type} (src dst : Nat → α) (n k : Nat),
+  k < n → KMX_CopyMeaning.loop src dst 0 n k = src k :=
+fun {α} src dst n k hk =>
+  Eq.mpr (id (congrArg (fun _a => _a = src k) (KMX_CopyMeaning.copy_prefix src dst n k)))
+    (Eq.mpr (id (congrArg (fun _a => _a = src k) (if_pos hk))) (Eq.refl (src k)))
+theorem NLM_CopyFrames.outside : ∀ {α : Type} (src dst : Nat → α) (n k : Nat),
+  n ≤ k → KMX_CopyMeaning.loop src dst 0 n k = dst k :=
+fun {α} src dst n k hk =>
+  KMX_CopyMeaning.copy_frame src dst 0 n k (Or.inr (Eq.mpr (id (congrFun' (congrArg LE.le (Nat.zero_add n)) k)) hk))
+'NLM_CopyFrames.adjacent' depends on axioms: [adjacent]
+'NLM_CopyFrames.inside' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_CopyFrames.outside' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r23ad105c460a467e874d8a31db31ed04.scope; invocation ID: 9b91610ee1204cfe94de9cc4161785ec

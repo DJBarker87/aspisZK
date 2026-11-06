@@ -1,0 +1,46 @@
+{"attempt": "NLM_L092", "exit_status": 1, "wall_seconds": 13.802137190941721, "peak_rss_kib": "5965472", "swaps": "0", "print_axioms": ["'NLM_TokenDeref.live' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLM_TokenDeref.deref' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_TokenDeref.lean:11:33: error: Invalid simp theorem: Expected a proposition, but found
+  NLM_Snapshot.State → ℕ → Guard
+NLM_generated/NLM_TokenDeref.lean:10:72: error: unsolved goals
+e : AspisR1.S2W_D189Entry.Entry
+t a : ℕ
+owned : List Owned
+⊢ match
+    (NLM_Snapshot.guard
+        { input := e,
+          sdk :=
+            {
+              accounts := fun a =>
+                { key := (NLM_RuntimeInput.records e a).key, owner := (NLM_RuntimeInput.records e a).owner,
+                  data := (e.heap.accounts a).1, lamports := (e.heap.accounts a).2,
+                  signer := (NLM_RuntimeInput.records e a).signer, writable := (NLM_RuntimeInput.records e a).writable,
+         
+...
+ owned) a))))
+                fun a => Eq.refl (Except.error Error.invalidToken))
+              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos (live e t a owned)) x_0 x_1 x_2 x_3)
+                (NLF_ParentModel.liveDecidable
+                  ((acquired (ready e t owned) a).cells (NLM_Snapshot.guard (ready e t owned) a).cell)
+                  (NLM_Snapshot.guard (ready e t owned) a).token (NLM_Snapshot.guard (ready e t owned) a).kind)
+                (Except NLF_RefCell.Error Payload)
+                (Except.ok (NLF_SdkModel.deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)))
+                (Except.error Error.invalidToken)))))
+        ({ state := acquired (ready e t owned) a, next := t + 1,
+            events :=
+              events ++
+                [NLF_ParentModel.Event.deref (NLM_Snapshot.guard (ready e t owned) a)
+                    (Except.ok
+                      (NLF_SdkModel.deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)))] },
+          Except.ok (NLF_SdkModel.deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a))))
+      (eq_self
+        ({ state := acquired (ready e t owned) a, next := t + 1,
+            events :=
+              events ++
+                [NLF_ParentModel.Event.deref (NLM_Snapshot.guard (ready e t owned) a)
+                    (Except.ok
+                      (NLF_SdkModel.deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)))] },
+          Except.ok (NLF_SdkModel.deref (acquired (ready e t owned) a) (NLM_Snapshot.guard (ready e t owned) a)))))
+'NLM_TokenDeref.live' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLM_TokenDeref.deref' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc0d77ea54879476792f8ae251862f5a3.scope; invocation ID: 62f20c9910cb49e38694b99796658584

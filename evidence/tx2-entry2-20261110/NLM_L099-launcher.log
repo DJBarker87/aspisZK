@@ -1,0 +1,33 @@
+{"attempt": "NLM_L099", "exit_status": 0, "wall_seconds": 18.08779726899229, "peak_rss_kib": "6021104", "swaps": "0", "print_axioms": ["'NLM_ReturnedSite1.extent' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_ReturnedSite1.extent : ∀ (ops : AdapterRw.Ops) (e : Entry) (allocation : Result Unit)
+  (value : NLM_Snapshot.Owned) (post : State) (bytes : Slice U8),
+  (G (NLM_SevenSites.before e 1) 1 384 384 allocation).result = Result.ok (value, post) →
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) value =
+        Result.ok (core.result.Result.Ok bytes) →
+      (↑bytes).length = 384 ∨ (↑bytes).length = 384 :=
+fun ops e allocation value post bytes entered read =>
+  have h :=
+    (NLM_ReturnedReads.data ops e 1 1 384 384 (NLM_SevenSnapshots.ownedValues e (List.take 1 NLM_SevenSites.sites))
+        allocation value post bytes entered read).left;
+  Decidable
+...
+theorem NLM_ReturnedSite1.extent : ∀ (ops : AdapterRw.Ops) (e : Entry) (allocation : Result Unit)
+  (value : NLM_Snapshot.Owned) (post : State) (bytes : Slice U8),
+  (G (NLM_SevenSites.before e 1) 1 384 384 allocation).result = Result.ok (value, post) →
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) value =
+        Result.ok (core.result.Result.Ok bytes) →
+      (↑bytes).length = 384 ∨ (↑bytes).length = 384 :=
+fun ops e allocation value post bytes entered read =>
+  have h :=
+    (NLM_ReturnedReads.data ops e 1 1 384 384 (NLM_SevenSnapshots.ownedValues e (List.take 1 NLM_SevenSites.sites))
+        allocation value post bytes entered read).left;
+  Decidable.casesOn instDecidableOr
+    (fun h_1 =>
+      let ⟨⟩ := core.result.Result.Ok bytes
+      Eq.mp (congrFun' (congrArg Eq (if_neg h_1)) (core.result.Result.Ok bytes)) h)
+    fun h_1 =>
+    let ⟨⟩ := core.result.Result.Ok bytes
+    Eq.mp (congrFun' (congrArg Eq (if_pos h_1)) (core.result.Result.Ok bytes)) h
+'NLM_ReturnedSite1.extent' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r029f01c96e95475cbbddf878861ea479.scope; invocation ID: 740f012d80f54e588c54b954a88b4bb7

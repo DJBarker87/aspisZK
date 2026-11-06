@@ -1,0 +1,47 @@
+{"attempt": "NLM_L112", "exit_status": 1, "wall_seconds": 25.770016588037834, "peak_rss_kib": "5989332", "swaps": "0", "print_axioms": ["'NLM_TokenChronology.projected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_TokenChronology.lean:21:16: error: unsolved goals
+case cons
+e : Entry
+c : Site
+cs : List Site
+ih :
+  ∀ (t : ℕ) (owned : List NLM_Snapshot.Owned),
+    List.filterMap NLM_TokenEvents.sdk (chronological e t owned cs) = tokens e t owned cs
+t : ℕ
+owned : List NLM_Snapshot.Owned
+⊢ [NLF_ParentModel.Event.acquire c.account (ready e t owned).next NLF_RefCell.Kind.shared
+          (Except.ok (NLM_Snapshot.guard (ready e t owned) c.account)),
+        NLF_ParentModel.Event.deref (NLM_Snapshot.guard (ready e t owned) c.account)
+          (Except.ok
+            (NLF_SdkModel.deref (acquired (ready e t owned) c.account)
+              (NLM_Snapshot.guard (ready e t owned) c.account))),
+   
+...
+Snapshot.Owned
+⊢ [NLF_ParentModel.Event.acquire c.account (ready e t owned).next NLF_RefCell.Kind.shared
+          (Except.ok (NLM_Snapshot.guard (ready e t owned) c.account)),
+        NLF_ParentModel.Event.deref (NLM_Snapshot.guard (ready e t owned) c.account)
+          (Except.ok
+            (NLF_SdkModel.deref (acquired (ready e t owned) c.account)
+              (NLM_Snapshot.guard (ready e t owned) c.account))),
+        NLF_ParentModel.Event.release (NLM_Snapshot.guard (ready e t owned) c.account) (Except.ok ())] ++
+      tokens e (t + 1) (owned ++ [e.snapshot c.account c.lo c.hi]) cs =
+    [NLF_ParentModel.Event.acquire c.account t NLF_RefCell.Kind.shared
+          (Except.ok (NLM_Snapshot.guard (ready e t owned) c.account)),
+        NLF_ParentModel.Event.deref (NLM_Snapshot.guard (ready e t owned) c.account)
+          (Except.ok
+            (NLF_SdkModel.deref (acquired (ready e t owned) c.account)
+              (NLM_Snapshot.guard (ready e t owned) c.account))),
+        NLF_ParentModel.Event.release (NLM_Snapshot.guard (ready e t owned) c.account) (Except.ok ())] ++
+      tokens e (t + 1) (owned ++ [e.snapshot c.account c.lo c.hi]) cs
+theorem NLM_TokenChronology.projected : ∀ (e : Entry) (t : ℕ) (owned : List NLM_Snapshot.Owned) (cs : List Site),
+  List.filterMap NLM_TokenEvents.sdk (chronological e t owned cs) = tokens e t owned cs :=
+fun e t owned cs =>
+  List.rec (motive := fun cs =>
+    ∀ (t : ℕ) (owned : List NLM_Snapshot.Owned),
+      List.filterMap NLM_TokenEvents.sdk (chronological e t owned cs) = tokens e t owned cs)
+    (fun t owned => Eq.refl (List.filterMap NLM_TokenEvents.sdk (chronological e t owned [])))
+    (fun c cs ih t owned => sorry) cs t owned
+'NLM_TokenChronology.projected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7be1ae7e17a844db90ba11b6895b16ee.scope; invocation ID: 0a4df136299f4536af2f93211aceaeff

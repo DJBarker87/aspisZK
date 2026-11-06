@@ -1,0 +1,45 @@
+{"attempt": "NLM_L076", "exit_status": 0, "wall_seconds": 13.854009502800182, "peak_rss_kib": "6022560", "swaps": "0", "print_axioms": ["'NLM_TokenEvents.normal' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_TokenEvents.abort_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_TokenEvents.normal : ∀ (s : NLM_Snapshot.State) (a lo hi : ℕ),
+  List.filterMap sdk (normalEvents s a lo hi) =
+    [NLF_ParentModel.Event.acquire a s.next NLF_RefCell.Kind.shared (Except.ok (NLM_Snapshot.guard s a)),
+      NLF_ParentModel.Event.deref (NLM_Snapshot.guard s a) (Except.ok (deref (acquired s a) (NLM_Snapshot.guard s a))),
+      NLF_ParentModel.Event.release (NLM_Snapshot.guard s a) (Except.ok ())] :=
+fun s a lo hi =>
+  id
+    (Decidable.casesOn instDecidableOr
+      (fun h =>
+        Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (congrArg (List.filterMap sdk)
+                  (congrFun'
+                    (congrArg HAppend.h
+...
+ a)))])
+                      (if_pos h)))
+                  [Event.release (live s a) (NLM_Snapshot.guard s a) (ok (Except.ok s.sdk)),
+                    Event.returned (live s a) a lo hi (ok (s.input.snapshot a lo hi))])))
+            [NLF_ParentModel.Event.acquire a s.next NLF_RefCell.Kind.shared (Except.ok (NLM_Snapshot.guard s a)),
+              NLF_ParentModel.Event.deref (NLM_Snapshot.guard s a)
+                (Except.ok (deref (acquired s a) (NLM_Snapshot.guard s a))),
+              NLF_ParentModel.Event.release (NLM_Snapshot.guard s a) (Except.ok ())]))
+        (Eq.refl
+          (List.filterMap sdk
+            ([Event.acquire s a s.next (acquired s a) (ok (Except.ok (NLM_Snapshot.guard s a))),
+                  Event.deref (live s a) (NLM_Snapshot.guard s a)
+                    (ok (deref (acquired s a) (NLM_Snapshot.guard s a)))] ++
+                [Event.allocate (live s a) (NLM_Snapshot.guard s a)
+                    (deref (acquired s a) (NLM_Snapshot.guard s a)).bytes.length (ok ())] ++
+              [Event.release (live s a) (NLM_Snapshot.guard s a) (ok (Except.ok s.sdk)),
+                Event.returned (live s a) a lo hi (ok (s.input.snapshot a lo hi))]))))
+@[defeq] theorem NLM_TokenEvents.abort_prefix : ∀ (s : NLM_Snapshot.State) (a : ℕ) (allocation : Result Unit),
+  List.filterMap sdk (allocationPrefix s a allocation) =
+    [NLF_ParentModel.Event.acquire a s.next NLF_RefCell.Kind.shared (Except.ok (NLM_Snapshot.guard s a)),
+      NLF_ParentModel.Event.deref (NLM_Snapshot.guard s a)
+        (Except.ok (deref (acquired s a) (NLM_Snapshot.guard s a)))] :=
+fun s a allocation => rfl
+'NLM_TokenEvents.normal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_TokenEvents.abort_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7b8fec95dcaa4395b3e56d00c3b40ffd.scope; invocation ID: b8e707c6d5fa4258b98361a3701e83c8

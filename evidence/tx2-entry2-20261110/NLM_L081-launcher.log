@@ -1,0 +1,49 @@
+{"attempt": "NLM_L081", "exit_status": 1, "wall_seconds": 18.340074424166232, "peak_rss_kib": "5982996", "swaps": "0", "print_axioms": ["'NLM_TokenAcquire.acquire' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_TokenAcquire.lean:18:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  try_borrow_data (ready ?e ?t ?owned).sdk ?a (ready ?e ?t ?owned).next
+in the target expression
+  (let r := try_borrow_data (ready e t owned).sdk a t;
+    ({ state := r.1, next := t + 1, events := events ++ [NLF_ParentModel.Event.acquire a t Kind.shared r.2] }, r.2)) =
+    ({ state := acquired (ready e t owned) a, next := t + 1,
+        events :=
+          events ++
+            [NLF_ParentModel.Event.acquire a t Kind.shared (Except.ok (NLM_Snapshot.guard (ready e t owned) a))] },
+      Except.ok (NLM_Snapshot.guard (ready e t owned) a))
+
+e : AspisR1.S2W_D189Entry.Entry
+t a : ℕ
+...
+an:18:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  try_borrow_data (ready ?e ?t ?owned).sdk ?a (ready ?e ?t ?owned).next
+in the target expression
+  (let r := try_borrow_data (ready e t owned).sdk a t;
+    ({ state := r.1, next := t + 1, events := events ++ [NLF_ParentModel.Event.acquire a t Kind.shared r.2] }, r.2)) =
+    ({ state := acquired (ready e t owned) a, next := t + 1,
+        events :=
+          events ++
+            [NLF_ParentModel.Event.acquire a t Kind.shared (Except.ok (NLM_Snapshot.guard (ready e t owned) a))] },
+      Except.ok (NLM_Snapshot.guard (ready e t owned) a))
+
+e : AspisR1.S2W_D189Entry.Entry
+t a : ℕ
+owned : List Owned
+events : List NLF_ParentModel.Event
+⊢ (let r := try_borrow_data (ready e t owned).sdk a t;
+    ({ state := r.1, next := t + 1, events := events ++ [NLF_ParentModel.Event.acquire a t Kind.shared r.2] }, r.2)) =
+    ({ state := acquired (ready e t owned) a, next := t + 1,
+        events :=
+          events ++
+            [NLF_ParentModel.Event.acquire a t Kind.shared (Except.ok (NLM_Snapshot.guard (ready e t owned) a))] },
+      Except.ok (NLM_Snapshot.guard (ready e t owned) a))
+theorem NLM_TokenAcquire.acquire : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a : ℕ) (owned : List Owned)
+  (events : List NLF_ParentModel.Event),
+  NLF_ParentModel.acquire (parent (ready e t owned) events) a Kind.shared =
+    ({ state := acquired (ready e t owned) a, next := t + 1,
+        events :=
+          events ++
+            [NLF_ParentModel.Event.acquire a t Kind.shared (Except.ok (NLM_Snapshot.guard (ready e t owned) a))] },
+      Except.ok (NLM_Snapshot.guard (ready e t owned) a)) :=
+fun e t a owned events => id (id sorry)
+'NLM_TokenAcquire.acquire' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rabf3d4eeb9ae4fc88b19ea19db4e1759.scope; invocation ID: 2ad90c9ebcb344f8a53aeaa5f93b8db7

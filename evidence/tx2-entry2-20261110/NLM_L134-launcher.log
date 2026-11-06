@@ -1,0 +1,53 @@
+{"attempt": "NLM_L134", "exit_status": 0, "wall_seconds": 30.431763699976727, "peak_rss_kib": "6025504", "swaps": "0", "print_axioms": ["'NLM_Entry213.model_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_Entry213.model_cuts : ∀ {Account Ambient : Type} (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (callee : ChildCode Account Ambient) (child : ChildObservation Account Ambient),
+  Packet hashv callee child →
+    ∀ (s : State Account Ambient),
+      NHZ_DRIVER.Cuts hashv (code callee s) (observation child s).result (observation child s).attempted :=
+fun {Account Ambient} hashv callee child packet s =>
+  id
+    (id
+      (NLM_CodeStep.cut hashv (Hiq_DispatchSource.pool_route.admitted s.frame.data)
+        (fun allowed =>
+          if allowed = true then NLM_Process221.code callee s
+          else
+            CheckpointBytes5Effect.Code.done
+              (core.result.Resu
+...
+).attempted)
+              (fun a =>
+                NHZ_DRIVER.Cuts.leaf
+                  (NGQ_Cuts.Trace.done
+                    (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData,
+                      s.world)))
+              (Eq.symm h) a)
+          (fun h =>
+            Eq.ndrec (motive := fun allowed =>
+              Hiq_DispatchSource.pool_route.admitted s.frame.data = Result.ok allowed →
+                NHZ_DRIVER.Cuts hashv
+                  (if allowed = true then NLM_Process221.code callee s
+                  else
+                    CheckpointBytes5Effect.Code.done
+                      (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData,
+                        s.world))
+                  (if allowed = true then NLM_Process221.observation child s
+                    else
+                      {
+                        result :=
+                          Result.ok
+                            (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData,
+                              s.world),
+                        attempted := [] }).result
+                  (if allowed = true then NLM_Process221.observation child s
+                    else
+                      {
+                        result :=
+                          Result.ok
+                            (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData,
+                              s.world),
+                        attempted := [] }).attempted)
+              (fun a => NLM_Process221.model_cuts hashv callee child packet s) (Eq.symm h) a)
+          (Eq.refl allowed)))
+'NLM_Entry213.model_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r42dc1d0cfddf4e9dbd01312b6709dc06.scope; invocation ID: 7f0a0ee254b549509a42c7edcb2624ea

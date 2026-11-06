@@ -1,0 +1,64 @@
+{"attempt": "NLM_L065", "exit_status": 1, "wall_seconds": 11.523131542140618, "peak_rss_kib": "5933840", "swaps": "0", "print_axioms": ["'NLM_StorageFacts.snapshot' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_StorageFacts.lean:21:3: error: unsolved goals
+case pos.refine_1
+e : Entry
+a : ℕ
+lo hi : Usize
+low : NGL_StorageCases.Allowed lo
+high : NGL_StorageCases.Allowed hi
+bytes : Slice U8 := e.buffers (e.handles a).1
+len : ↑bytes.len = (↑bytes).length
+selected : (↑bytes).length = ↑lo ∨ (↑bytes).length = ↑hi
+bound : (↑bytes).length ≤ 58295
+⊢ core.result.Result.Ok (e.buffers (e.handles a).1) = core.result.Result.Ok bytes
+NLM_generated/NLM_StorageFacts.lean:36:3: error: unsolved goals
+case neg.refine_1
+e : Entry
+a : ℕ
+lo hi : Usize
+low : NGL_StorageCases.Allowed lo
+high : NGL_StorageCases.Allowed hi
+bytes : Slice U8 := e.buffers (e.handles a).1
+len : ↑bytes.len = (↑bytes).length
+selec
+...
+orageCases.Allowed lo → NGL_StorageCases.Allowed hi → NGL_StorageCases.Domain (e.snapshot a ↑lo ↑hi) :=
+fun e a lo hi low high =>
+  let bytes := e.buffers (e.handles a).1;
+  have len := Slice.len_val bytes;
+  if selected : (↑bytes).length = ↑lo ∨ (↑bytes).length = ↑hi then
+    have bound :=
+      Or.casesOn selected (fun h => Eq.mpr (id (congrArg (fun _a => _a ≤ 58295) h)) (NGL_StorageCases.bounded lo low))
+        fun h => Eq.mpr (id (congrArg (fun _a => _a ≤ 58295) h)) (NGL_StorageCases.bounded hi high);
+    ⟨Or.inr (Or.inr (Exists.intro bytes.len (Exists.intro bytes ⟨rfl, ⟨sorry, ⟨len, Eq.trans_le len bound⟩⟩⟩))),
+      fun n v hn hv =>
+      have same := core.result.Result.Ok.inj hn;
+      id
+        (fun same =>
+          Eq.ndrec (motive := fun n =>
+            (e.snapshot a ↑lo ↑hi).length = core.result.Result.Ok n → NGL_StorageCases.Allowed n)
+            (fun hn =>
+              Or.casesOn selected
+                (fun h =>
+                  id
+                    (id
+                      (Eq.mpr
+                        (id
+                          (congrArg (Membership.mem [58295, 1768, 1880, 384, 192, 768, 128, 256, 320])
+                            (Eq.trans len h)))
+                        low)))
+                fun h =>
+                id
+                  (Eq.mpr
+                    (id (congrArg (Membership.mem [58295, 1768, 1880, 384, 192, 768, 128, 256, 320]) (Eq.trans len h)))
+                    high))
+            same hn)
+        same⟩
+  else
+    ⟨Or.inr (Or.inl (Exists.intro bytes.len ⟨rfl, sorry⟩)), fun n v hn hv =>
+      have bad := sorry;
+      let ⟨⟩ := core.result.Result.Ok v
+      Eq.mp (congrArg (fun _a => _a = core.result.Result.Ok v) bad) hv⟩
+'NLM_StorageFacts.snapshot' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3f6344fea9814f97beee5e21602b3f99.scope; invocation ID: d79c5282fa464c2d9ec44842b47480b4

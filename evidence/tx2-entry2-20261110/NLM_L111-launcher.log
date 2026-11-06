@@ -1,0 +1,43 @@
+{"attempt": "NLM_L111", "exit_status": 0, "wall_seconds": 20.870462495135143, "peak_rss_kib": "5997936", "swaps": "0", "print_axioms": ["'NLM_SevenAbortAt.failed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_SevenAbortAt.failed : ∀ (allocation : Site → Result Unit) (xs rest : List Site) (c : Site) (s mid : State)
+  (err : Error) (before tail : List Event),
+  NLM_SevenSnapshots.G allocation xs s = { result := Result.ok mid, events := before } →
+    NLM_Snapshot.G mid c.account c.lo c.hi (allocation c) = { result := Result.fail err, events := tail } →
+      NLM_SevenSnapshots.G allocation (xs ++ c :: rest) s = { result := Result.fail err, events := before ++ tail } :=
+fun allocation xs rest c s mid err before tail completed halt =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = { result := Result.fail err, events := before ++ tail })
+        (NLM_SevenSplit.split allocation xs (c :: 
+...
+theorem NLM_SevenAbortAt.failed : ∀ (allocation : Site → Result Unit) (xs rest : List Site) (c : Site) (s mid : State)
+  (err : Error) (before tail : List Event),
+  NLM_SevenSnapshots.G allocation xs s = { result := Result.ok mid, events := before } →
+    NLM_Snapshot.G mid c.account c.lo c.hi (allocation c) = { result := Result.fail err, events := tail } →
+      NLM_SevenSnapshots.G allocation (xs ++ c :: rest) s = { result := Result.fail err, events := before ++ tail } :=
+fun allocation xs rest c s mid err before tail completed halt =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = { result := Result.fail err, events := before ++ tail })
+        (NLM_SevenSplit.split allocation xs (c :: rest) s)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            NJU_Log.bind _a (NLM_SevenSnapshots.G allocation (c :: rest)) =
+              { result := Result.fail err, events := before ++ tail })
+          completed))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                { result := _a.result, events := before ++ _a.events } =
+                  { result := Result.fail err, events := before ++ tail })
+              (NLM_SevenAbort.failed allocation c rest mid err tail halt)))
+          (Eq.refl
+            { result := { result := Result.fail err, events := tail }.result,
+              events := before ++ { result := Result.fail err, events := tail }.events }))))
+'NLM_SevenAbortAt.failed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd2e4a03fa5254f07bd84163dc3d42bb1.scope; invocation ID: 945800d4cd2d4ef990fddcd6aa81b4f5

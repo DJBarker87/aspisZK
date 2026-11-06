@@ -1,0 +1,38 @@
+{"attempt": "NLM_L096", "exit_status": 0, "wall_seconds": 17.61856771213934, "peak_rss_kib": "6017848", "swaps": "0", "print_axioms": ["'NLM_AbortTokens.no_release' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_AbortTokens.no_release : ∀ (s : State) (a : ℕ) (allocation : Result Unit) (g : NLF_RefCell.Guard)
+  (reply : Except NLF_RefCell.Error Unit),
+  NLF_ParentModel.Event.release g reply ∉ List.filterMap NLM_TokenEvents.sdk (allocationPrefix s a allocation) :=
+fun s a allocation g reply =>
+  Eq.mpr
+    (id (congrArg (fun _a => NLF_ParentModel.Event.release g reply ∉ _a) (NLM_TokenEvents.abort_prefix s a allocation)))
+    (of_eq_true
+      (Eq.trans
+        (congrArg Not
+          (Eq.trans List.mem_cons._simp_1
+            (Eq.trans
+              (congr (congrArg Or (eq_false' fun h => False.elim (noConfusion_of_Nat NLF_ParentModel.Event.ctorIdx h)))
+                (Eq.trans List.mem_
+...
+theorem NLM_AbortTokens.no_release : ∀ (s : State) (a : ℕ) (allocation : Result Unit) (g : NLF_RefCell.Guard)
+  (reply : Except NLF_RefCell.Error Unit),
+  NLF_ParentModel.Event.release g reply ∉ List.filterMap NLM_TokenEvents.sdk (allocationPrefix s a allocation) :=
+fun s a allocation g reply =>
+  Eq.mpr
+    (id (congrArg (fun _a => NLF_ParentModel.Event.release g reply ∉ _a) (NLM_TokenEvents.abort_prefix s a allocation)))
+    (of_eq_true
+      (Eq.trans
+        (congrArg Not
+          (Eq.trans List.mem_cons._simp_1
+            (Eq.trans
+              (congr (congrArg Or (eq_false' fun h => False.elim (noConfusion_of_Nat NLF_ParentModel.Event.ctorIdx h)))
+                (Eq.trans List.mem_cons._simp_1
+                  (Eq.trans
+                    (congr
+                      (congrArg Or (eq_false' fun h => False.elim (noConfusion_of_Nat NLF_ParentModel.Event.ctorIdx h)))
+                      List.not_mem_nil._simp_1)
+                    (or_self False))))
+              (or_self False))))
+        not_false_eq_true))
+'NLM_AbortTokens.no_release' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2906baa7cfeb4bfd9ee56f12279f6982.scope; invocation ID: 1145686a78324b2f8f86e4bfe6227130

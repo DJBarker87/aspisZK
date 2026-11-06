@@ -1,0 +1,25 @@
+{"attempt": "NLM_L057", "exit_status": 0, "wall_seconds": 6.4311207390856, "peak_rss_kib": "4388584", "swaps": "0", "print_axioms": ["'NLM_ReadWindow.all_windows' depends on axioms: [propext, Quot.sound]"]}
+theorem NLM_ReadWindow.all_windows : ∀ (before after : Slice U8), (∀ (i : ℕ), Window before after i) → after = before :=
+fun before after windows =>
+  Subtype.ext
+    (List.ext_getElem (windows 0).left fun i hi hj =>
+      have same := (windows i).right hj;
+      Eq.mp
+        (Eq.trans (congr (congrArg Eq (List.getElem?_eq_getElem hi)) (List.getElem?_eq_getElem hj))
+          (Option.some.injEq (↑after)[i] (↑before)[i]))
+        same)
+'NLM_ReadWindow.all_windows' depends on axioms: [propext, Quot.sound]
+
+...
+theorem NLM_ReadWindow.all_windows : ∀ (before after : Slice U8), (∀ (i : ℕ), Window before after i) → after = before :=
+fun before after windows =>
+  Subtype.ext
+    (List.ext_getElem (windows 0).left fun i hi hj =>
+      have same := (windows i).right hj;
+      Eq.mp
+        (Eq.trans (congr (congrArg Eq (List.getElem?_eq_getElem hi)) (List.getElem?_eq_getElem hj))
+          (Option.some.injEq (↑after)[i] (↑before)[i]))
+        same)
+'NLM_ReadWindow.all_windows' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-rb2ce98a91ac149d88561a8d8c5fa9229.scope; invocation ID: f58b30c3bd4643c49444c84054ec2ee8

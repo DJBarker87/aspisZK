@@ -1,0 +1,52 @@
+{"attempt": "NLM_L070", "exit_status": 1, "wall_seconds": 14.874126399867237, "peak_rss_kib": "5931484", "swaps": "0", "print_axioms": ["'NLM_ActualRead.snapshot_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_ActualRead.lean:16:44: error: Type mismatch
+  h
+has type
+  (e.snapshot a lo hi).bytes = core.result.Result.Ok stored
+but is expected to have type
+  core.result.Result.Ok stored = core.result.Result.Ok stored.deref
+theorem NLM_ActualRead.snapshot_bytes : ∀ (ops : AdapterRw.Ops) (e : Entry) (a lo hi : ℕ) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot a lo hi) =
+      ok (core.result.Result.Ok bytes) →
+    (e.snapshot a lo hi).bytes = core.result.Result.Ok bytes :=
+fun ops e a lo hi bytes read =>
+  core.result.Result.casesOn (motive := fun t =>
+    (e.snapshot a lo hi).bytes = t → (e.snapshot a lo hi).bytes = c
+...
+
+  (e.snapshot a lo hi).bytes = core.result.Result.Ok stored
+but is expected to have type
+  core.result.Result.Ok stored = core.result.Result.Ok stored.deref
+theorem NLM_ActualRead.snapshot_bytes : ∀ (ops : AdapterRw.Ops) (e : Entry) (a lo hi : ℕ) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot a lo hi) =
+      ok (core.result.Result.Ok bytes) →
+    (e.snapshot a lo hi).bytes = core.result.Result.Ok bytes :=
+fun ops e a lo hi bytes read =>
+  core.result.Result.casesOn (motive := fun t =>
+    (e.snapshot a lo hi).bytes = t → (e.snapshot a lo hi).bytes = core.result.Result.Ok bytes)
+    (e.snapshot a lo hi).bytes
+    (fun stored h =>
+      Eq.ndrec (motive := fun x => (e.snapshot a lo hi).bytes = x → x = core.result.Result.Ok bytes) (fun h => sorry)
+        (Eq.symm h) (Eq.refl (e.snapshot a lo hi).bytes))
+    (fun err h =>
+      Eq.ndrec (motive := fun x => (e.snapshot a lo hi).bytes = x → x = core.result.Result.Ok bytes)
+        (fun h =>
+          let ⟨⟩ := ok (core.result.Result.Ok bytes)
+          Eq.mp
+            (congrArg
+              (fun _a =>
+                ok
+                    (match _a with
+                    | core.result.Result.Ok v => core.result.Result.Ok v.deref
+                    | core.result.Result.Err e => core.result.Result.Err e) =
+                  ok (core.result.Result.Ok bytes))
+              h)
+            (Eq.mp
+              (congrArg (fun _a => _a = ok (core.result.Result.Ok bytes))
+                (NGL_CloneDomain.data_result ops (e.snapshot a lo hi)))
+              read))
+        (Eq.symm h) (Eq.refl (e.snapshot a lo hi).bytes))
+    (Eq.refl (e.snapshot a lo hi).bytes)
+'NLM_ActualRead.snapshot_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7d922f30e46f4d86b00b82e4aecb9e9a.scope; invocation ID: 66a9f9b66c0049028b90990aaa7c86c3

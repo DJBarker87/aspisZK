@@ -1,0 +1,32 @@
+{"attempt": "NLM_L077", "exit_status": 0, "wall_seconds": 13.06066724495031, "peak_rss_kib": "6020108", "swaps": "0", "print_axioms": ["'NLM_ReadExtent.scope' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_ReadExtent.scope : ∀ (ops : AdapterRw.Ops) (e : Entry) (account proof checkpoint : Slice U8)
+  (publicBytes : Std.Array U8 1880#usize) (end_ : Usize) (publicAddress proofAddress checkpointAddress : ℕ),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot 0 58295 58295) =
+      ok (core.result.Result.Ok account) →
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot 6 1768 1768) =
+        ok (core.result.Result.Ok checkpoint) →
+      (↑account).length = ↑end_ →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) account
+              { start := 688#usize, «end» := e
+...
+theorem NLM_ReadExtent.scope : ∀ (ops : AdapterRw.Ops) (e : Entry) (account proof checkpoint : Slice U8)
+  (publicBytes : Std.Array U8 1880#usize) (end_ : Usize) (publicAddress proofAddress checkpointAddress : ℕ),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot 0 58295 58295) =
+      ok (core.result.Result.Ok account) →
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot 6 1768 1768) =
+        ok (core.result.Result.Ok checkpoint) →
+      (↑account).length = ↑end_ →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) account
+              { start := 688#usize, «end» := end_ } =
+            ok proof →
+          NLE_SafeCuts.Scope
+            (NLE_CallerScope.metadata publicAddress proofAddress checkpointAddress publicBytes.to_slice proof
+              checkpoint) :=
+fun ops e account proof checkpoint publicBytes end_ publicAddress proofAddress checkpointAddress readProof
+    readCheckpoint checkedLength range =>
+  NLE_CallerScope.scope e account proof checkpoint publicBytes end_ publicAddress proofAddress checkpointAddress
+    (NLM_ActualRead.snapshot_bytes ops e 0 58295 58295 account readProof)
+    (NLM_ActualRead.snapshot_bytes ops e 6 1768 1768 checkpoint readCheckpoint) checkedLength range
+'NLM_ReadExtent.scope' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf7c5e922c9564d3e97669e144192c6b5.scope; invocation ID: d3464dc7b7a447ed9f9b1b85f0e5ca07

@@ -1,0 +1,25 @@
+{"attempt": "NLM_L137", "exit_status": 0, "wall_seconds": 15.470359826926142, "peak_rss_kib": "5993964", "swaps": "0", "print_axioms": ["'NLM_AdmissionIdentity.cells' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_AdmissionIdentity.cells : ∀ (e : Entry),
+  AdapterRw.RuntimeEntrypointAdmission e.heap (fun a => (NLM_RuntimeInput.records e a).key) 7 →
+    ∀ (a b t : ℕ) (owned : List NLM_Snapshot.Owned),
+      a < 7 →
+        b < 7 →
+          ((NLM_Snapshot.guard (ready e t owned) a).cell = (NLM_Snapshot.guard (ready e t owned) b).cell ↔
+            (NLM_RuntimeInput.records e a).key = (NLM_RuntimeInput.records e b).key) :=
+fun e runtime a b t owned ha hb =>
+  NLF_SevenAccounts.tx2_cell_identity e.heap (NLM_RuntimeInput.records e) (NLM_RuntimeInput.money e) runtime a b ha hb
+'NLM_AdmissionIdentity.cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+theorem NLM_AdmissionIdentity.cells : ∀ (e : Entry),
+  AdapterRw.RuntimeEntrypointAdmission e.heap (fun a => (NLM_RuntimeInput.records e a).key) 7 →
+    ∀ (a b t : ℕ) (owned : List NLM_Snapshot.Owned),
+      a < 7 →
+        b < 7 →
+          ((NLM_Snapshot.guard (ready e t owned) a).cell = (NLM_Snapshot.guard (ready e t owned) b).cell ↔
+            (NLM_RuntimeInput.records e a).key = (NLM_RuntimeInput.records e b).key) :=
+fun e runtime a b t owned ha hb =>
+  NLF_SevenAccounts.tx2_cell_identity e.heap (NLM_RuntimeInput.records e) (NLM_RuntimeInput.money e) runtime a b ha hb
+'NLM_AdmissionIdentity.cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r802db7799257466f95f22c63ad3d473b.scope; invocation ID: 685ffe1cc3064b568422d592be285445

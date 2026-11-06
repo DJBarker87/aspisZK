@@ -1,0 +1,42 @@
+{"attempt": "NLM_L045", "exit_status": 1, "wall_seconds": 14.245271182851866, "peak_rss_kib": "5984136", "swaps": "0", "print_axioms": ["'NLM_SevenSnapshots.normal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_SevenTrace.lean:21:10: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+theorem NLM_SevenSnapshots.normal : ∀ (e : Entry) (t : ℕ) (owned : List NLM_Snapshot.Owned) (cs : List Site),
+  G (fun x => ok ()) cs (ready e t owned) =
+    { result := ok (ready e (t + cs.length) (owned ++ ownedValues e cs)), events := chronological e t owned cs } :=
+fun e t owned cs =>
+  List.rec (motive := fun cs =>
+    ∀ (t : ℕ) (owned : List NLM_Snapshot.Owned),
+      G (fun x => ok ()) cs (ready e t owned) =
+        { result := ok (ready e (t + cs.length) (owned ++ ownedValues e cs)), events := chronological e t owned cs })
+    (fun t owned =>
+      of_eq_tr
+...
+NLM_generated/NLM_SevenTrace.lean:21:10: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+theorem NLM_SevenSnapshots.normal : ∀ (e : Entry) (t : ℕ) (owned : List NLM_Snapshot.Owned) (cs : List Site),
+  G (fun x => ok ()) cs (ready e t owned) =
+    { result := ok (ready e (t + cs.length) (owned ++ ownedValues e cs)), events := chronological e t owned cs } :=
+fun e t owned cs =>
+  List.rec (motive := fun cs =>
+    ∀ (t : ℕ) (owned : List NLM_Snapshot.Owned),
+      G (fun x => ok ()) cs (ready e t owned) =
+        { result := ok (ready e (t + cs.length) (owned ++ ownedValues e cs)), events := chronological e t owned cs })
+    (fun t owned =>
+      of_eq_true
+        (Eq.trans
+          (congrArg
+            (Eq
+              { result := ok { input := e, sdk := (NLM_RuntimeInput.initial e).state, next := t, owned := owned },
+                events := [] })
+            (congrFun'
+              (congrArg NJU_Log.Run.mk
+                (congrArg ok
+                  (congr (congrArg (State.mk e (NLM_RuntimeInput.initial e).state) (add_zero t))
+                    (List.append_nil owned))))
+              []))
+          (eq_self
+            { result := ok { input := e, sdk := (NLM_RuntimeInput.initial e).state, next := t, owned := owned },
+              events := [] })))
+    (fun c cs ih t owned => sorry) cs t owned
+'NLM_SevenSnapshots.normal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1473408c84e84cffb8c362c99748c1fd.scope; invocation ID: 73e201c1c6ee411fb6d96301b474498b

@@ -1,0 +1,44 @@
+{"attempt": "NLM_L047", "exit_status": 0, "wall_seconds": 30.09578669583425, "peak_rss_kib": "6018456", "swaps": "0", "print_axioms": ["'NLM_SevenSnapshots.normal' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_SevenTrace.lean:25:35: warning: This simp argument is unused:
+  Nat.add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [̵c̵h̵r̵o̵n̵o̵l̵o̵g̵i̵c̵a̵l̵,̵o̵w̵n̵e̵d̵V̵a̵l̵u̵e̵s̵,̵N̵a̵t̵.̵a̵d̵d̵_̵a̵s̵s̵o̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵c̵o̵m̵m̵,̵N̵a̵t̵.̵a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲c̲h̲r̲o̲n̲o̲l̲o̲g̲i̲c̲a̲l̲,̲ ̲o̲w̲n̲e̲d̲V̲a̲l̲u̲e̲s̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲c̲o̲m̲m̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲l̲e̲f̲t̲_̲c̲o̲m̲m̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLM_SevenSnapshots.normal : ∀ (e : Entry) (t : ℕ) (owned : List NLM_Snapshot.Owned) (cs : List Site),
+  G (fun x => ok ()) 
+...
+ngrFun'
+                        (congrArg NJU_Log.Run.mk
+                          (congrArg ok
+                            (congr
+                              (congrArg (ready e)
+                                (Eq.trans (Nat.add_comm (t + 1) cs.length) (Nat.add_left_comm cs.length t 1)))
+                              (List.append_assoc owned [e.snapshot c.account c.lo c.hi]
+                                (List.map (fun c => e.snapshot c.account c.lo c.hi) cs)))))
+                        (normalEvents (ready e t owned) c.account c.lo c.hi ++
+                          chronological e (t + 1) (owned ++ [e.snapshot c.account c.lo c.hi]) cs)))
+                    {
+                      result :=
+                        ok
+                          (ready e (t + (cs.length + 1))
+                            (owned ++
+                              e.snapshot c.account c.lo c.hi :: List.map (fun c => e.snapshot c.account c.lo c.hi) cs)),
+                      events :=
+                        normalEvents (ready e t owned) c.account c.lo c.hi ++
+                          chronological e (t + 1) (owned ++ [e.snapshot c.account c.lo c.hi]) cs })
+                  (eq_self
+                    {
+                      result :=
+                        ok
+                          (ready e (t + (cs.length + 1))
+                            (owned ++
+                              e.snapshot c.account c.lo c.hi :: List.map (fun c => e.snapshot c.account c.lo c.hi) cs)),
+                      events :=
+                        normalEvents (ready e t owned) c.account c.lo c.hi ++
+                          chronological e (t + 1) (owned ++ [e.snapshot c.account c.lo c.hi]) cs })))))))
+    cs t owned
+'NLM_SevenSnapshots.normal' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r51da2e57461340758c8bb11c02cc9b87.scope; invocation ID: 108cef1a405444b09562195e43f14cf0

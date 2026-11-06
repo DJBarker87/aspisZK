@@ -1,0 +1,35 @@
+{"attempt": "NLM_L002", "exit_status": 1, "wall_seconds": 5.4411853000056, "peak_rss_kib": "4386884", "swaps": "0", "print_axioms": ["'NLM_RuntimeInput.payload_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLM_RuntimeInput.initial_payload' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_RuntimeInput.lean:24:1: error: unsolved goals
+case h
+e : Entry
+i j : ℕ
+hj : j < (NLF_RuntimeInterpretation.byteList e.heap i).length
+hk : j < (nativeBytes (e.buffers i)).length
+⊢ (nativeBytes (e.buffers i))[j]?.getD 0 = (nativeBytes (e.buffers i))[j]
+def NLM_RuntimeInput.records : Entry → ℕ → NLF_SdkModel.Account :=
+fun e a =>
+  have r := e.records (e.handles a).1;
+  { key := nativeBytes (Array.to_slice r.owned.key), owner := nativeBytes (Array.to_slice r.owned.owner),
+    data := (e.handles a).1, lamports := (e.handles a).2, signer := r.owned.is_signer, writable := r.owned.is_writable,
+    executable := r.owned.executable, rentEpoch := r.rentEpoch }
+def NLM_RuntimeInput.in
+...
+NLM_generated/NLM_RuntimeInput.lean:24:1: error: unsolved goals
+case h
+e : Entry
+i j : ℕ
+hj : j < (NLF_RuntimeInterpretation.byteList e.heap i).length
+hk : j < (nativeBytes (e.buffers i)).length
+⊢ (nativeBytes (e.buffers i))[j]?.getD 0 = (nativeBytes (e.buffers i))[j]
+def NLM_RuntimeInput.records : Entry → ℕ → NLF_SdkModel.Account :=
+fun e a =>
+  have r := e.records (e.handles a).1;
+  { key := nativeBytes (Array.to_slice r.owned.key), owner := nativeBytes (Array.to_slice r.owned.owner),
+    data := (e.handles a).1, lamports := (e.handles a).2, signer := r.owned.is_signer, writable := r.owned.is_writable,
+    executable := r.owned.executable, rentEpoch := r.rentEpoch }
+def NLM_RuntimeInput.initial : Entry → NLF_ParentModel.Parent :=
+fun e => NLF_RuntimeInterpretation.install e.heap (records e) (money e)
+'NLM_RuntimeInput.payload_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLM_RuntimeInput.initial_payload' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r391a7617d3a44088b930ad9e791e101a.scope; invocation ID: 038cacbf5eb643d28cfc59b8f07e8dbe

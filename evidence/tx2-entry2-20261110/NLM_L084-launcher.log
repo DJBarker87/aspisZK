@@ -1,0 +1,48 @@
+{"attempt": "NLM_L084", "exit_status": 0, "wall_seconds": 24.158299373928457, "peak_rss_kib": "5993364", "swaps": "0", "print_axioms": ["'NLM_TokenRelease.release' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_TokenRelease.release : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a : ℕ) (owned : List Owned)
+  (events : List NLF_ParentModel.Event),
+  NLF_ParentModel.release { state := acquired (ready e t owned) a, next := t + 1, events := events }
+      (NLM_Snapshot.guard (ready e t owned) a) =
+    ({ state := (ready e t owned).sdk, next := t + 1,
+        events := events ++ [NLF_ParentModel.Event.release (NLM_Snapshot.guard (ready e t owned) a) (Except.ok ())] },
+      Except.ok ()) :=
+fun e t a owned events =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (match _a with
+              | Except.error e_1 =>
+                ({ state := { state := acquired (ready e
+...
+cept.error e_1)
+              | Except.ok s =>
+                ({ state := s, next := { state := acquired (ready e t owned) a, next := t + 1, events := events }.next,
+                    events :=
+                      { state := acquired (ready e t owned) a, next := t + 1, events := events }.events ++
+                        [NLF_ParentModel.Event.release (NLM_Snapshot.guard (ready e t owned) a) (Except.ok ())] },
+                  Except.ok ())) =
+              ({ state := (ready e t owned).sdk, next := t + 1,
+                  events :=
+                    events ++ [NLF_ParentModel.Event.release (NLM_Snapshot.guard (ready e t owned) a) (Except.ok ())] },
+                Except.ok ()))
+          (release_current e t a owned)))
+      (Eq.refl
+        (match Except.ok (ready e t owned).sdk with
+        | Except.error e_1 =>
+          ({ state := { state := acquired (ready e t owned) a, next := t + 1, events := events }.state,
+              next := { state := acquired (ready e t owned) a, next := t + 1, events := events }.next,
+              events :=
+                { state := acquired (ready e t owned) a, next := t + 1, events := events }.events ++
+                  [NLF_ParentModel.Event.release (NLM_Snapshot.guard (ready e t owned) a) (Except.error e_1)] },
+            Except.error e_1)
+        | Except.ok s =>
+          ({ state := s, next := { state := acquired (ready e t owned) a, next := t + 1, events := events }.next,
+              events :=
+                { state := acquired (ready e t owned) a, next := t + 1, events := events }.events ++
+                  [NLF_ParentModel.Event.release (NLM_Snapshot.guard (ready e t owned) a) (Except.ok ())] },
+            Except.ok ()))))
+'NLM_TokenRelease.release' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2d172ef55d1043c6bbaf68efdeffe613.scope; invocation ID: 7f7441a455f049dba1a7295a135ae33b

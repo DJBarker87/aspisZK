@@ -1,0 +1,42 @@
+{"attempt": "NLM_L140", "exit_status": 1, "wall_seconds": 21.066564074950293, "peak_rss_kib": "5984540", "swaps": "0", "print_axioms": ["'NLM_StartScope.proof_start' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLM_StartScope.actual_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLM_StartScope.actual_scope' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_StartScope.lean:13:1: error: Tactic `rfl` failed: The left-hand side
+  8#usize + 680#usize
+is not definitionally equal to the right-hand side
+  Result.ok 688#usize
+
+ops : AdapterRw.Ops
+⊢ 8#usize + 680#usize = Result.ok 688#usize
+theorem NLM_StartScope.proof_start : ∀ (ops : AdapterRw.Ops),
+  AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = Result.ok 688#usize :=
+fun ops => id (id sorry)
+theorem NLM_StartScope.actual_length : ∀ (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8)
+  (start end_ length : Usize),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot 0 58295 58295) =
+      Result
+...
+al_scope : ∀ (ops : AdapterRw.Ops) (e : Entry) (bytes proof checkpoint : Slice U8)
+  (publicBytes : Std.Array U8 1880#usize)
+  (statement : AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1)
+  (start end_ : Usize) (publicAddress proofAddress checkpointAddress : ℕ),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot 0 58295 58295) =
+      Result.ok (core.result.Result.Ok bytes) →
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot 6 1768 1768) =
+        Result.ok (core.result.Result.Ok checkpoint) →
+      ops.op22 statement = Result.ok (core.result.Result.Ok publicBytes) →
+        AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = Result.ok start →
+          (bytes.len != end_) = false →
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                  { start := start, «end» := end_ } =
+                Result.ok proof →
+              NLE_SafeCuts.Scope
+                (NLE_CallerScope.metadata publicAddress proofAddress checkpointAddress publicBytes.to_slice proof
+                  checkpoint) :=
+fun ops e bytes proof checkpoint publicBytes statement start end_ publicAddress proofAddress checkpointAddress read
+    checkpointRead _encoded startCall guard range =>
+  let ⟨⟩ := Result.ok start
+  Eq.mp (congrArg (fun _a => _a = Result.ok start) (proof_start ops)) startCall
+'NLM_StartScope.proof_start' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLM_StartScope.actual_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLM_StartScope.actual_scope' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rdd0504f55e8e4fafb0f5427bb02b0329.scope; invocation ID: e7cc29db999341f29f7f9ce6eb5f4145

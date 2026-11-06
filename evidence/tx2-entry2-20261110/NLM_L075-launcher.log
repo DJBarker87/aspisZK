@@ -1,0 +1,55 @@
+{"attempt": "NLM_L075", "exit_status": 1, "wall_seconds": 11.889767888002098, "peak_rss_kib": "5983684", "swaps": "0", "print_axioms": ["'NLM_TokenEvents.normal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLM_TokenEvents.abort_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_TokenEvents.lean:16:20: error: Ambiguous term
+  State
+Possible interpretations:
+  NLF_SdkModel.State : Type
+  
+  NLM_Snapshot.State : Type
+NLM_generated/NLM_TokenEvents.lean:24:26: error: Ambiguous term
+  State
+Possible interpretations:
+  NLF_SdkModel.State : Type
+  
+  NLM_Snapshot.State : Type
+theorem NLM_TokenEvents.normal : ∀ (s : sorry) (a lo hi : ℕ),
+  List.filterMap sdk (normalEvents sorry a lo hi) =
+    [NLF_ParentModel.Event.acquire a sorry NLF_RefCell.Kind.shared (Except.ok sorry),
+      NLF_ParentModel.Event.deref sorry (Except.ok (deref (acquired sorry a) sorry)),
+      NLF_ParentModel.Event.release sorry (Except.ok ())] :=
+fun s a lo hi =>
+  id
+    (Decidable.ca
+...
+     NLF_ParentModel.Event.deref sorry (Except.ok (deref (acquired sorry a) sorry)),
+                NLF_ParentModel.Event.release sorry (Except.ok ())]))
+          sorry)
+      fun h =>
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (congrArg (List.filterMap sdk)
+                (congrFun'
+                  (congrArg HAppend.hAppend
+                    (congrArg
+                      (HAppend.hAppend
+                        [Event.acquire sorry a sorry.next (acquired sorry a)
+                            (ok (Except.ok (NLM_Snapshot.guard sorry a))),
+                          Event.deref (live sorry a) (NLM_Snapshot.guard sorry a)
+                            (ok (deref (acquired sorry a) (NLM_Snapshot.guard sorry a)))])
+                      (if_pos h)))
+                  [Event.release (live sorry a) (NLM_Snapshot.guard sorry a) (ok (Except.ok sorry.sdk)),
+                    Event.returned (live sorry a) a lo hi (ok (sorry.input.snapshot a lo hi))])))
+            [NLF_ParentModel.Event.acquire a sorry NLF_RefCell.Kind.shared (Except.ok sorry),
+              NLF_ParentModel.Event.deref sorry (Except.ok (deref (acquired sorry a) sorry)),
+              NLF_ParentModel.Event.release sorry (Except.ok ())]))
+        sorry)
+theorem NLM_TokenEvents.abort_prefix : ∀ (s : sorry) (a : ℕ) (allocation : Result Unit),
+  List.filterMap sdk (allocationPrefix sorry a allocation) =
+    [NLF_ParentModel.Event.acquire a sorry NLF_RefCell.Kind.shared (Except.ok sorry),
+      NLF_ParentModel.Event.deref sorry (Except.ok (deref (acquired sorry a) sorry))] :=
+sorry
+'NLM_TokenEvents.normal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLM_TokenEvents.abort_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re17034b54e304bf1b40f607582e00514.scope; invocation ID: d1ce0aff0cb9434bbb0922695ba04256

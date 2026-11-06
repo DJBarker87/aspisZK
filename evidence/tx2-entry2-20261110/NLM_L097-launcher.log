@@ -1,0 +1,28 @@
+{"attempt": "NLM_L097", "exit_status": 0, "wall_seconds": 32.917170469183475, "peak_rss_kib": "5998488", "swaps": "0", "print_axioms": ["'NLM_ReturnedReads.data' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_ReturnedReads.data : ∀ (ops : AdapterRw.Ops) (e : Entry) (t a lo hi : ℕ) (owned : List NLM_Snapshot.Owned)
+  (allocation : Result Unit) (value : NLM_Snapshot.Owned) (post : State) (bytes : Slice U8),
+  (G (ready e t owned) a lo hi allocation).result = Result.ok (value, post) →
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) value =
+        Result.ok (core.result.Result.Ok bytes) →
+      (e.snapshot a lo hi).bytes = core.result.Result.Ok bytes ∧ post = returned (ready e t owned) a lo hi :=
+fun ops e t a lo hi owned allocation value post bytes entered read =>
+  let ⟨same, frame⟩ := returned_state e t a lo hi owned allocation value post entered
+  
+...
+theorem NLM_ReturnedReads.data : ∀ (ops : AdapterRw.Ops) (e : Entry) (t a lo hi : ℕ) (owned : List NLM_Snapshot.Owned)
+  (allocation : Result Unit) (value : NLM_Snapshot.Owned) (post : State) (bytes : Slice U8),
+  (G (ready e t owned) a lo hi allocation).result = Result.ok (value, post) →
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) value =
+        Result.ok (core.result.Result.Ok bytes) →
+      (e.snapshot a lo hi).bytes = core.result.Result.Ok bytes ∧ post = returned (ready e t owned) a lo hi :=
+fun ops e t a lo hi owned allocation value post bytes entered read =>
+  let ⟨same, frame⟩ := returned_state e t a lo hi owned allocation value post entered
+  Eq.ndrec (motive := fun value =>
+    (G (ready e t owned) a lo hi allocation).result = Result.ok (value, post) →
+      AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) value =
+          Result.ok (core.result.Result.Ok bytes) →
+        (e.snapshot a lo hi).bytes = core.result.Result.Ok bytes ∧ post = returned (ready e t owned) a lo hi)
+    (fun entered read => ⟨NLM_ActualRead.snapshot_bytes ops e a lo hi bytes read, frame⟩) (Eq.symm same) entered read
+'NLM_ReturnedReads.data' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r441d98e02c8e4b4781e5730da92af1c4.scope; invocation ID: 6442d5750d0941a09a527a36df9da2d7

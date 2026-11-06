@@ -1,0 +1,47 @@
+{"attempt": "NLM_L026", "exit_status": 1, "wall_seconds": 12.196674145990983, "peak_rss_kib": "5987720", "swaps": "0", "print_axioms": ["'NLM_InvocationFold.bind_equal' depends on axioms: [sorryAx]", "'NLM_InvocationFold.abort_prefix' depends on axioms: [propext]", "'NLM_InvocationFold.diverge_prefix' depends on axioms: [propext]"]}
+NLM_generated/NLM_InvocationFold.lean:30:15: error: Tactic `rfl` failed: The left-hand side
+  have h := head' world;
+  match h.run.result with
+  | Result.fail err => { post := h.post, run := { result := Result.fail err, events := h.run.events } }
+  | Result.div => { post := h.post, run := { result := Result.div, events := h.run.events } }
+  | Result.ok value =>
+    have t := tail value h.post;
+    { post := t.post, run := { result := t.run.result, events := h.run.events ++ t.run.events } }
+is not definitionally equal to the right-hand side
+  have h := head' world;
+  match h.run.result with
+  | Result.fail err => { post := h.post, run := { result := Result.fail err, events := h.run.events } }
+...
+vents := (head world).run.events ++ t.run.events } })
+            aborted))
+        { post := (head world).post, run := { result := Result.fail err, events := (head world).run.events } })
+      (eq_self { post := (head world).post, run := { result := Result.fail err, events := (head world).run.events } }))
+theorem NLM_InvocationFold.diverge_prefix : ∀ {Ambient Event A B : Type} (head : Program Ambient Event A)
+  (tail : A → Program Ambient Event B) (world : World Ambient),
+  (head world).run.result = Result.div →
+    bind head tail world =
+      { post := (head world).post, run := { result := Result.div, events := (head world).run.events } } :=
+fun {Ambient Event A B} head tail world aborted =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (congrArg
+            (fun x =>
+              match x with
+              | Result.fail err =>
+                { post := (head world).post, run := { result := Result.fail err, events := (head world).run.events } }
+              | Result.div =>
+                { post := (head world).post, run := { result := Result.div, events := (head world).run.events } }
+              | Result.ok value =>
+                have t := tail value (head world).post;
+                { post := t.post,
+                  run := { result := t.run.result, events := (head world).run.events ++ t.run.events } })
+            aborted))
+        { post := (head world).post, run := { result := Result.div, events := (head world).run.events } })
+      (eq_self { post := (head world).post, run := { result := Result.div, events := (head world).run.events } }))
+'NLM_InvocationFold.bind_equal' depends on axioms: [sorryAx]
+'NLM_InvocationFold.abort_prefix' depends on axioms: [propext]
+'NLM_InvocationFold.diverge_prefix' depends on axioms: [propext]
+
+Running as unit: run-r1c76e7dd9eaa4fe596651d419fdf5203.scope; invocation ID: 7f0e65cddccf4d7d8e660b530a987a89

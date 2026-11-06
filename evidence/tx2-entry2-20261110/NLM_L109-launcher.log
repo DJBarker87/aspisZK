@@ -1,0 +1,65 @@
+{"attempt": "NLM_L109", "exit_status": 0, "wall_seconds": 19.77487644413486, "peak_rss_kib": "5999644", "swaps": "0", "print_axioms": ["'NLM_SevenAbort.failed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_SevenAbort.diverged' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_SevenAbort.failed : ∀ (allocation : Site → Result Unit) (c : Site) (rest : List Site) (s : State)
+  (err : Error) (events : List Event),
+  NLM_Snapshot.G s c.account c.lo c.hi (allocation c) = { result := Result.fail err, events := events } →
+    NLM_SevenSnapshots.G allocation (c :: rest) s = { result := Result.fail err, events := events } :=
+fun allocation c rest s err events head =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = { result := Result.fail err, events := events })
+        (NLM_SevenSnapshots.G.eq_2 allocation s c rest)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let __x ← _a
+                match __x with
+      
+...
+s head =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = { result := Result.fail err, events := events })
+        (NLM_SevenSnapshots.G.eq_2 allocation s c rest)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let __x ← _a
+                match __x with
+                  | (fst, post) => NLM_SevenSnapshots.G allocation rest post) =
+              { result := Result.fail err, events := events })
+          head))
+      (Eq.refl do
+        let __x ← { result := Result.fail err, events := events }
+        match __x with
+          | (fst, post) => NLM_SevenSnapshots.G allocation rest post))
+theorem NLM_SevenAbort.diverged : ∀ (allocation : Site → Result Unit) (c : Site) (rest : List Site) (s : State)
+  (events : List Event),
+  NLM_Snapshot.G s c.account c.lo c.hi (allocation c) = { result := Result.div, events := events } →
+    NLM_SevenSnapshots.G allocation (c :: rest) s = { result := Result.div, events := events } :=
+fun allocation c rest s events head =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = { result := Result.div, events := events })
+        (NLM_SevenSnapshots.G.eq_2 allocation s c rest)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let __x ← _a
+                match __x with
+                  | (fst, post) => NLM_SevenSnapshots.G allocation rest post) =
+              { result := Result.div, events := events })
+          head))
+      (Eq.refl do
+        let __x ← { result := Result.div, events := events }
+        match __x with
+          | (fst, post) => NLM_SevenSnapshots.G allocation rest post))
+'NLM_SevenAbort.failed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_SevenAbort.diverged' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r47d9127fb8c242709c0bc9a0cfda849e.scope; invocation ID: 730b47fee8614ee386aa6dbb9a728d47

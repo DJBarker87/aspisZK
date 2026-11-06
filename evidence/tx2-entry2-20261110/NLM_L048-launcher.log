@@ -1,0 +1,58 @@
+{"attempt": "NLM_L048", "exit_status": 0, "wall_seconds": 14.939479096094146, "peak_rss_kib": "6019428", "swaps": "0", "print_axioms": ["'NLM_SevenSites.all_results' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_SevenSites.all_results : ∀ (e : Entry),
+  (NLM_SevenSnapshots.G (fun x => ok ()) sites (ready e 0 [])).result = ok (ready e 7 (ownedValues e sites)) :=
+fun e =>
+  id
+    (Eq.mp
+      (congrArg
+        (Eq
+          (NLM_SevenSnapshots.G (fun x => ok ())
+              [{ account := 0, lo := 58295, hi := 58295 }, { account := 1, lo := 384, hi := 384 },
+                { account := 2, lo := 192, hi := 192 }, { account := 3, lo := 768, hi := 768 },
+                { account := 4, lo := 128, hi := 256 }, { account := 5, lo := 192, hi := 320 },
+                { account := 6, lo := 1768, hi := 1768 }]
+              (ready e 0 [])).result)
+        (congrArg ok
+          (congrFun'
+     
+...
+ 0 [])).result = ok (ready e 7 (ownedValues e sites)) :=
+fun e =>
+  id
+    (Eq.mp
+      (congrArg
+        (Eq
+          (NLM_SevenSnapshots.G (fun x => ok ())
+              [{ account := 0, lo := 58295, hi := 58295 }, { account := 1, lo := 384, hi := 384 },
+                { account := 2, lo := 192, hi := 192 }, { account := 3, lo := 768, hi := 768 },
+                { account := 4, lo := 128, hi := 256 }, { account := 5, lo := 192, hi := 320 },
+                { account := 6, lo := 1768, hi := 1768 }]
+              (ready e 0 [])).result)
+        (congrArg ok
+          (congrFun'
+            (congrArg (ready e)
+              (Eq.trans
+                (congrArg (HAdd.hAdd 0)
+                  (congrFun'
+                    (congrArg HAdd.hAdd
+                      (congrFun'
+                        (congrArg HAdd.hAdd
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (congrFun'
+                                (congrArg HAdd.hAdd
+                                  (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                1))
+                            1))
+                        1))
+                    1))
+                (zero_add 7)))
+            (ownedValues e
+              [{ account := 0, lo := 58295, hi := 58295 }, { account := 1, lo := 384, hi := 384 },
+                { account := 2, lo := 192, hi := 192 }, { account := 3, lo := 768, hi := 768 },
+                { account := 4, lo := 128, hi := 256 }, { account := 5, lo := 192, hi := 320 },
+                { account := 6, lo := 1768, hi := 1768 }]))))
+      (NLM_SevenSnapshots.normal_result e 0 [] sites))
+'NLM_SevenSites.all_results' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra2124768df164e58aa6cd93876730116.scope; invocation ID: c01636b7c9de404185c79d2e9ed5653e

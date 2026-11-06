@@ -1,0 +1,50 @@
+{"attempt": "NLM_L072", "exit_status": 0, "wall_seconds": 14.150030520977452, "peak_rss_kib": "5969324", "swaps": "0", "print_axioms": ["'NLM_ActualRead.snapshot_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_ActualRead.snapshot_bytes : ∀ (ops : AdapterRw.Ops) (e : Entry) (a lo hi : ℕ) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot a lo hi) =
+      ok (core.result.Result.Ok bytes) →
+    (e.snapshot a lo hi).bytes = core.result.Result.Ok bytes :=
+fun ops e a lo hi bytes read =>
+  if selected : (↑(e.buffers (e.handles a).1)).length = lo ∨ (↑(e.buffers (e.handles a).1)).length = hi then
+    Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (congrArg AdapterRw.r1_pool_adapter.owned.OwnedAccount.bytes
+              (congrArg
+                (AdapterRw.r1_pool_adapter.owned.OwnedAccount.mk (e.records (e.
+...
+neDomain.data_result ops (e.snapshot a lo hi)))
+          read))
+  else
+    False.elim
+      (Eq.mp
+        (Eq.trans
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congrArg ok
+                  (congrArg
+                    (fun x =>
+                      match
+                        { key := (e.records (e.handles a).1).owned.key,
+                            owner := (e.records (e.handles a).1).owned.owner,
+                            is_signer := (e.records (e.handles a).1).owned.is_signer,
+                            is_writable := (e.records (e.handles a).1).owned.is_writable,
+                            executable := (e.records (e.handles a).1).owned.executable,
+                            length := core.result.Result.Ok (e.buffers (e.handles a).1).len, bytes := x }.bytes with
+                      | core.result.Result.Ok v => core.result.Result.Ok v.deref
+                      | core.result.Result.Err e => core.result.Result.Err e)
+                    (ite_cond_eq_false (core.result.Result.Ok (e.buffers (e.handles a).1))
+                      (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                      (eq_false selected)))))
+              (ok (core.result.Result.Ok bytes)))
+            (ok.injEq (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+              (core.result.Result.Ok bytes)))
+          (eq_false' fun h => False.elim (noConfusion_of_Nat core.result.Result.ctorIdx h)))
+        (Eq.mp
+          (congrArg (fun _a => _a = ok (core.result.Result.Ok bytes))
+            (NGL_CloneDomain.data_result ops (e.snapshot a lo hi)))
+          read))
+'NLM_ActualRead.snapshot_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rec956e9d99e649da9230f802b066a350.scope; invocation ID: ee14fc0f120f402dae75e2126e456a2c

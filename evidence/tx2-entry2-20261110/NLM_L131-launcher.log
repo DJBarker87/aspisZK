@@ -1,0 +1,38 @@
+{"attempt": "NLM_L131", "exit_status": 0, "wall_seconds": 24.51666031917557, "peak_rss_kib": "6020488", "swaps": "0", "print_axioms": ["'NLM_Process221.model_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_Process221.model_cuts : ∀ {Account Ambient : Type} (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (callee : ChildCode Account Ambient) (child : ChildObservation Account Ambient),
+  Packet hashv callee child →
+    ∀ (s : State Account Ambient),
+      NHZ_DRIVER.Cuts hashv (code callee s) (observation child s).result (observation child s).attempted :=
+fun {Account Ambient} hashv callee child packet s =>
+  id
+    (id
+      (NLM_CodeStep.cut hashv (Hiq_DispatchSource.firstByte s.frame.data)
+        (fun head =>
+          CheckpointBytes5Effect.Code.step (Hiq_DispatchSource.copied head) fun value =>
+            dispatch callee { frame := s.frame, world := s.world, head := s
+...
+theorem NLM_Process221.model_cuts : ∀ {Account Ambient : Type} (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (callee : ChildCode Account Ambient) (child : ChildObservation Account Ambient),
+  Packet hashv callee child →
+    ∀ (s : State Account Ambient),
+      NHZ_DRIVER.Cuts hashv (code callee s) (observation child s).result (observation child s).attempted :=
+fun {Account Ambient} hashv callee child packet s =>
+  id
+    (id
+      (NLM_CodeStep.cut hashv (Hiq_DispatchSource.firstByte s.frame.data)
+        (fun head =>
+          CheckpointBytes5Effect.Code.step (Hiq_DispatchSource.copied head) fun value =>
+            dispatch callee { frame := s.frame, world := s.world, head := some head } value)
+        (fun head =>
+          NLM_CodeStep.select (Hiq_DispatchSource.copied head) fun value =>
+            dispatchObservation child { frame := s.frame, world := s.world, head := some head } value)
+        fun head a =>
+        NLM_CodeStep.cut hashv (Hiq_DispatchSource.copied head)
+          (fun value => dispatch callee { frame := s.frame, world := s.world, head := some head } value)
+          (fun value => dispatchObservation child { frame := s.frame, world := s.world, head := some head } value)
+          fun value a =>
+          dispatch_cuts hashv callee child packet { frame := s.frame, world := s.world, head := some head } value))
+'NLM_Process221.model_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1b3bea4a385a49b68b1e93fd4809fbf9.scope; invocation ID: cd1b66bc108e459690439cd89c321c48

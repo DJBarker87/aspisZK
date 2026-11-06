@@ -1,0 +1,46 @@
+{"attempt": "NLM_L121", "exit_status": 0, "wall_seconds": 35.008288118988276, "peak_rss_kib": "6038704", "swaps": "0", "print_axioms": ["'NLM_Auth064Cuts.fold' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_Auth064Cuts.fold : ∀ {Ambient H : Type} (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (common : ChildCode Ambient H) (child : ChildObservation Ambient H),
+  (∀ (f : NLM_RowSpec_065.Frame H) (world : World Ambient),
+      NLM_RowSpec_065.Domain f →
+        NHZ_DRIVER.Cuts hashv (common f world) (child f world).result (child f world).attempted) →
+    ∀ (s : State Ambient H),
+      NHZ_DRIVER.Cuts hashv (code common s) (observation child s).result (observation child s).attempted :=
+fun {Ambient H} hashv common child packet s =>
+  id
+    (id
+      (casesOn (motive := fun t =>
+        NLE_ParseInstall.parse s.input.proof = t →
+          NHZ_DRIVER.Cuts hashv
+            (C
+...
+                  | div => { result := div, attempted := [] }
+                  | ok (core.result.Result.Err err) =>
+                    { result := ok (core.result.Result.Err err, s.world), attempted := [] }
+                  | ok (core.result.Result.Ok variant) =>
+                    child (commonFrame { input := s.input, world := s.world, parsed := some variant }) s.world).result
+                (match x with
+                  | fail err => { result := fail err, attempted := [] }
+                  | div => { result := div, attempted := [] }
+                  | ok (core.result.Result.Err err) =>
+                    { result := ok (core.result.Result.Err err, s.world), attempted := [] }
+                  | ok (core.result.Result.Ok variant) =>
+                    child (commonFrame { input := s.input, world := s.world, parsed := some variant })
+                      s.world).attempted)
+            (fun parsed =>
+              NHZ_DRIVER.Cuts.leaf
+                (NGQ_Cuts.Trace.stepDiv div
+                  (fun result =>
+                    match result with
+                    | core.result.Result.Err err =>
+                      CheckpointBytes5Effect.Code.done (core.result.Result.Err err, s.world)
+                    | core.result.Result.Ok variant =>
+                      CheckpointBytes5Effect.Code.step
+                        (NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed) fun x =>
+                        common (commonFrame { input := s.input, world := s.world, parsed := some variant }) s.world)
+                  rfl))
+            (Eq.symm h) (Eq.refl (NLE_ParseInstall.parse s.input.proof)))
+        (Eq.refl (NLE_ParseInstall.parse s.input.proof))))
+'NLM_Auth064Cuts.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rbee1bbc0250946abaee4f6d922e9b8df.scope; invocation ID: 20ee8a115cb6483bba65379cf1191e32

@@ -1,0 +1,46 @@
+{"attempt": "NLM_L080", "exit_status": 1, "wall_seconds": 13.354566199937835, "peak_rss_kib": "5983112", "swaps": "0", "print_axioms": ["'NLM_TokenAcquire.acquire' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_TokenAcquire.lean:17:10: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+NLM_generated/NLM_TokenAcquire.lean:16:1: error: 'change' tactic failed, pattern
+  (let r := try_borrow_data (ready e t owned).sdk a t;
+    (?m.30, r.2)) =
+    ?m.36
+is not definitionally equal to target
+  (have r :=
+      wrap (parent (ready e t owned) events).state ((parent (ready e t owned) events).state.accounts a).data
+        (parent (ready e t owned) events).next Kind.shared;
+    ({ state := r.1, next := (parent (ready e t owned) events).next + 1,
+        events :=
+          (parent (ready e t owned) events).events ++
+            [NLF_ParentModel.Event.acq
+...
+NLM_generated/NLM_TokenAcquire.lean:17:10: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+NLM_generated/NLM_TokenAcquire.lean:16:1: error: 'change' tactic failed, pattern
+  (let r := try_borrow_data (ready e t owned).sdk a t;
+    (?m.30, r.2)) =
+    ?m.36
+is not definitionally equal to target
+  (have r :=
+      wrap (parent (ready e t owned) events).state ((parent (ready e t owned) events).state.accounts a).data
+        (parent (ready e t owned) events).next Kind.shared;
+    ({ state := r.1, next := (parent (ready e t owned) events).next + 1,
+        events :=
+          (parent (ready e t owned) events).events ++
+            [NLF_ParentModel.Event.acquire a (parent (ready e t owned) events).next Kind.shared r.2] },
+      r.2)) =
+    ({ state := acquired (ready e t owned) a, next := t + 1,
+        events :=
+          events ++
+            [NLF_ParentModel.Event.acquire a t Kind.shared (Except.ok (NLM_Snapshot.guard (ready e t owned) a))] },
+      Except.ok (NLM_Snapshot.guard (ready e t owned) a))
+theorem NLM_TokenAcquire.acquire : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a : ℕ) (owned : List Owned)
+  (events : List NLF_ParentModel.Event),
+  NLF_ParentModel.acquire (parent (ready e t owned) events) a Kind.shared =
+    ({ state := acquired (ready e t owned) a, next := t + 1,
+        events :=
+          events ++
+            [NLF_ParentModel.Event.acquire a t Kind.shared (Except.ok (NLM_Snapshot.guard (ready e t owned) a))] },
+      Except.ok (NLM_Snapshot.guard (ready e t owned) a)) :=
+fun e t a owned events => id sorry
+'NLM_TokenAcquire.acquire' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf2046552c21a403e93fe35f0741bcd96.scope; invocation ID: 165ce062d5a247e3b4072473c69b47f9

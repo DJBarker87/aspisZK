@@ -1,0 +1,27 @@
+{"attempt": "NLM_L118", "exit_status": 0, "wall_seconds": 20.019937434932217, "peak_rss_kib": "5923348", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Usize.checked_add : Usize → Usize → Option Usize :=
+fun x y => core.num.checked_add_UScalar x y
+def Aeneas.Std.core.num.checked_add_UScalar : {ty : UScalarTy} → UScalar ty → UScalar ty → Option (UScalar ty) :=
+fun {ty} x y => Option.ofResult (x + y)
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+def Aeneas.Std.Option.ofResult.{u} : {a : Type u} → Result a → Option a :=
+fun {a} x =>
+  match x with
+  | Result.ok x => some x
+  | x => none
+
+...
+def Aeneas.Std.Usize.checked_add : Usize → Usize → Option Usize :=
+fun x y => core.num.checked_add_UScalar x y
+def Aeneas.Std.core.num.checked_add_UScalar : {ty : UScalarTy} → UScalar ty → UScalar ty → Option (UScalar ty) :=
+fun {ty} x y => Option.ofResult (x + y)
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+def Aeneas.Std.Option.ofResult.{u} : {a : Type u} → Result a → Option a :=
+fun {a} x =>
+  match x with
+  | Result.ok x => some x
+  | x => none
+
+Running as unit: run-r4262f676da4a4ecba1c2289b2c997595.scope; invocation ID: 78dcc0558f3a40919de9888a5f02d177

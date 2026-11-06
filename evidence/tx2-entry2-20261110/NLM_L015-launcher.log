@@ -1,0 +1,45 @@
+{"attempt": "NLM_L015", "exit_status": 1, "wall_seconds": 15.262022949988022, "peak_rss_kib": "5992152", "swaps": "0", "print_axioms": ["'NLM_Snapshot.allocation_abort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLM_Snapshot.allocation_diverge' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_SnapshotPrefix.lean:15:65: error: unsolved goals
+e : Entry
+t a lo hi : ℕ
+owned : List Owned
+err : Std.Error
+copy :
+  (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = lo ∨
+    (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = hi
+allowed :
+  (deref (acquired (ready e t owned) a) (guard (ready e t owned) a)).bytes.length = lo ∨
+    (deref (acquired (ready e t owned) a) (guard (ready e t owned) a)).bytes.length = hi
+⊢ (if
+            (deref
+                      (put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                        { payload := ((ready e t owned).sdk.cells ((ready e t owned).sdk.accounts a).da
+...
+ :=
+                                                            (ready e t owned).next ::
+                                                              ((ready e t owned).sdk.cells
+                                                                  ((ready e t owned).sdk.accounts a).data).readers,
+                                                          writer :=
+                                                            ((ready e t owned).sdk.cells
+                                                                ((ready e t owned).sdk.accounts a).data).writer },
+                                                    next := (ready e t owned).next + 1,
+                                                    owned := (ready e t owned).owned }
+                                                  a lo hi (ok ((ready e t owned).input.snapshot a lo hi))])))))))))))))
+                { result := div,
+                  events :=
+                    [Event.acquire (ready e t owned) a (ready e t owned).next
+                        (put (ready e t owned).sdk ((ready e t owned).sdk.accounts a).data
+                          { payload := ((ready e t owned).sdk.cells ((ready e t owned).sdk.accounts a).data).payload,
+                            readers :=
+                              (ready e t owned).next ::
+                                ((ready e t owned).sdk.cells ((ready e t owned).sdk.accounts a).data).readers,
+                            writer := ((ready e t owned).sdk.cells ⋯).writer })
+                        ⋯,
+                      ⋯] })
+              ⋯)
+            ⋯))
+        ⋯))
+'NLM_Snapshot.allocation_abort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLM_Snapshot.allocation_diverge' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4d6b0e04baec42008dd65d47c1640b16.scope; invocation ID: 5a9a12891f3a4a2fb733981d3bf36bdf

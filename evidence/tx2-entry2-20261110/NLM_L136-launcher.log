@@ -1,0 +1,35 @@
+{"attempt": "NLM_L136", "exit_status": 0, "wall_seconds": 19.745361473876983, "peak_rss_kib": "5935288", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.UScalar.tryMk : (ty : UScalarTy) → ℕ → Result (UScalar ty) :=
+fun ty x => Result.ofOption (UScalar.tryMkOpt ty x) Error.integerOverflow
+def Aeneas.Std.UScalar.val : {ty : UScalarTy} → UScalar ty → ℕ :=
+fun {ty} x => x.bv.toNat
+def Aeneas.Std.UScalar.ofNatCore : {ty : UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+inductive Aeneas.Std.UScalarTy : Type
+number of parameters: 0
+constructors:
+Aeneas.Std.UScalarTy.Usize : UScalarTy
+Aeneas.Std.UScalarTy.U8 : UScalarTy
+Aeneas.Std.UScalarTy.U16 : UScalarTy
+Aeneas.Std.UScalarTy.U32 : UScalarTy
+Aeneas.Std.UScalarTy.U64 : UScalarTy
+Aeneas.Std.UScalarTy.U128 : UScalarTy
+
+...
+def Aeneas.Std.UScalar.tryMk : (ty : UScalarTy) → ℕ → Result (UScalar ty) :=
+fun ty x => Result.ofOption (UScalar.tryMkOpt ty x) Error.integerOverflow
+def Aeneas.Std.UScalar.val : {ty : UScalarTy} → UScalar ty → ℕ :=
+fun {ty} x => x.bv.toNat
+def Aeneas.Std.UScalar.ofNatCore : {ty : UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+inductive Aeneas.Std.UScalarTy : Type
+number of parameters: 0
+constructors:
+Aeneas.Std.UScalarTy.Usize : UScalarTy
+Aeneas.Std.UScalarTy.U8 : UScalarTy
+Aeneas.Std.UScalarTy.U16 : UScalarTy
+Aeneas.Std.UScalarTy.U32 : UScalarTy
+Aeneas.Std.UScalarTy.U64 : UScalarTy
+Aeneas.Std.UScalarTy.U128 : UScalarTy
+
+Running as unit: run-r5f72cb1373de49f1918aeb2502101256.scope; invocation ID: d2bcacfb25c642228ac067daea22dbb1

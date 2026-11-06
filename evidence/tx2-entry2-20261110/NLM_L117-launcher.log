@@ -1,0 +1,50 @@
+{"attempt": "NLM_L117", "exit_status": 0, "wall_seconds": 22.698689642129466, "peak_rss_kib": "6017832", "swaps": "0", "print_axioms": ["'NLM_DeferredContinuation.suffix' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_DeferredContinuation.suffix : ∀ (e : Entry) (t a lo hi : ℕ) (owned : List NLM_Snapshot.Owned)
+  (rest : List Site),
+  NLM_SevenSnapshots.G (fun x => Result.ok ()) ({ account := a, lo := lo, hi := hi } :: rest) (ready e t owned) =
+    { result := Result.ok (ready e (t + 1 + rest.length) (owned ++ [e.snapshot a lo hi] ++ ownedValues e rest)),
+      events :=
+        normalEvents (ready e t owned) a lo hi ++ chronological e (t + 1) (owned ++ [e.snapshot a lo hi]) rest } :=
+fun e t a lo hi owned rest =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            { result := Result.ok (ready e (t + 1 + rest.length) (owned ++ [e.snapshot a lo hi] ++ ownedValues e res
+...
+a lo hi] ++ ownedValues e rest)),
+                events :=
+                  normalEvents (ready e t owned) a lo hi ++
+                    chronological e (t + 1) (owned ++ [e.snapshot a lo hi]) rest })
+          (NLM_Snapshot.normal e t { account := a, lo := lo, hi := hi }.account { account := a, lo := lo, hi := hi }.lo
+            { account := a, lo := lo, hi := hi }.hi owned)))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                { result := _a.result, events := normalEvents (ready e t owned) a lo hi ++ _a.events } =
+                  {
+                    result :=
+                      Result.ok (ready e (t + 1 + rest.length) (owned ++ [e.snapshot a lo hi] ++ ownedValues e rest)),
+                    events :=
+                      normalEvents (ready e t owned) a lo hi ++
+                        chronological e (t + 1) (owned ++ [e.snapshot a lo hi]) rest })
+              (NLM_SevenSnapshots.normal e (t + 1) (owned ++ [e.snapshot a lo hi]) rest)))
+          (Eq.refl
+            {
+              result :=
+                {
+                    result :=
+                      Result.ok (ready e (t + 1 + rest.length) (owned ++ [e.snapshot a lo hi] ++ ownedValues e rest)),
+                    events := chronological e (t + 1) (owned ++ [e.snapshot a lo hi]) rest }.result,
+              events :=
+                normalEvents (ready e t owned) a lo hi ++
+                  {
+                      result :=
+                        Result.ok (ready e (t + 1 + rest.length) (owned ++ [e.snapshot a lo hi] ++ ownedValues e rest)),
+                      events := chronological e (t + 1) (owned ++ [e.snapshot a lo hi]) rest }.events }))))
+'NLM_DeferredContinuation.suffix' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r34a13c13953d48a5abdc7c7bdff9e200.scope; invocation ID: f0ce992392614f258f70496fb03355f9

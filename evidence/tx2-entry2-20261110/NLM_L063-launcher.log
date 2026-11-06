@@ -1,0 +1,46 @@
+{"attempt": "NLM_L063", "exit_status": 1, "wall_seconds": 15.231791808037087, "peak_rss_kib": "5932448", "swaps": "0", "print_axioms": ["'NLM_ScalarLaws.scalar_eq' depends on axioms: [sorryAx]", "'NLM_ScalarLaws.length_eq' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+NLM_generated/NLM_ScalarLaws.lean:12:5: error: Type mismatch
+  Fin.ext same
+has type
+  x#uscalar.bv.toFin = y#uscalar.bv.toFin
+but is expected to have type
+  x = y
+theorem NLM_ScalarLaws.scalar_eq : ∀ {ty : UScalarTy} (a b : UScalar ty), ↑a = ↑b → a = b :=
+fun {ty} a b same =>
+  let ⟨x, h✝⟩ := a
+  Eq.ndrec (motive := fun a => ↑a = ↑b → a = b)
+    (fun same =>
+      let ⟨y, h✝¹⟩ := b
+      Eq.ndrec (motive := fun b => ↑(x#uscalar) = ↑b → x#uscalar = b) (fun same => sorry) (Eq.symm h✝¹) same)
+    (Eq.symm h✝) same
+theorem NLM_ScalarLaws.length_eq : ∀ (bytes : Slice U8) (n : Usize), bytes.len = n ↔ (↑bytes).length = ↑n :=
+fun bytes n =>
+  {
+    mp := fun same =>
+      have h := congrArg (fun x 
+...
+NLM_generated/NLM_ScalarLaws.lean:12:5: error: Type mismatch
+  Fin.ext same
+has type
+  x#uscalar.bv.toFin = y#uscalar.bv.toFin
+but is expected to have type
+  x = y
+theorem NLM_ScalarLaws.scalar_eq : ∀ {ty : UScalarTy} (a b : UScalar ty), ↑a = ↑b → a = b :=
+fun {ty} a b same =>
+  let ⟨x, h✝⟩ := a
+  Eq.ndrec (motive := fun a => ↑a = ↑b → a = b)
+    (fun same =>
+      let ⟨y, h✝¹⟩ := b
+      Eq.ndrec (motive := fun b => ↑(x#uscalar) = ↑b → x#uscalar = b) (fun same => sorry) (Eq.symm h✝¹) same)
+    (Eq.symm h✝) same
+theorem NLM_ScalarLaws.length_eq : ∀ (bytes : Slice U8) (n : Usize), bytes.len = n ↔ (↑bytes).length = ↑n :=
+fun bytes n =>
+  {
+    mp := fun same =>
+      have h := congrArg (fun x => ↑x) same;
+      Eq.mp (congrFun' (congrArg Eq (Slice.len_val bytes)) ↑n) h,
+    mpr := fun same => scalar_eq bytes.len n (Eq.mpr (id (congrFun' (congrArg Eq (Slice.len_val bytes)) ↑n)) same) }
+'NLM_ScalarLaws.scalar_eq' depends on axioms: [sorryAx]
+'NLM_ScalarLaws.length_eq' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-rd2f7699dc67643a1b9add12eed3a82f5.scope; invocation ID: 346a4b216ce34c21892f554a54664ff9

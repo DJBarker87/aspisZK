@@ -1,0 +1,51 @@
+{"attempt": "NLM_L138", "exit_status": 0, "wall_seconds": 24.402757660951465, "peak_rss_kib": "5999440", "swaps": "0", "print_axioms": ["'NLM_SdkSnapshotEvents.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_SdkSnapshotEvents.source : ∀ (e : Entry) (t a lo hi : ℕ) (owned : List NLM_Snapshot.Owned),
+  List.filterMap NLM_TokenEvents.sdk (normalEvents (ready e t owned) a lo hi) =
+    NLF_SnapshotEvents.events (ready e t owned).sdk a t :=
+fun e t a lo hi owned =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = NLF_SnapshotEvents.events (ready e t owned).sdk a t)
+        (NLM_TokenEvents.normal (ready e t owned) a lo hi)))
+    (id
+      (have h := acquire e t a owned;
+      id
+        (fun h =>
+          Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  [NLF_ParentModel.Event.acquire a (ready e t owned).next NLF_RefCell.Kind.shared
+              
+...
+imeInput.initial e).state.accounts a).data, token := t,
+                          kind := NLF_RefCell.Kind.shared }),
+                    NLF_ParentModel.Event.deref
+                      { cell := ((NLM_RuntimeInput.initial e).state.accounts a).data, token := t,
+                        kind := NLF_RefCell.Kind.shared }
+                      (Except.ok
+                        ((NLM_RuntimeInput.initial e).state.cells
+                            ((NLM_RuntimeInput.initial e).state.accounts a).data).payload),
+                    NLF_ParentModel.Event.release
+                      { cell := ((NLM_RuntimeInput.initial e).state.accounts a).data, token := t,
+                        kind := NLF_RefCell.Kind.shared }
+                      (Except.ok ())])
+                (eq_self
+                  [NLF_ParentModel.Event.acquire a t NLF_RefCell.Kind.shared
+                      (Except.ok
+                        { cell := ((NLM_RuntimeInput.initial e).state.accounts a).data, token := t,
+                          kind := NLF_RefCell.Kind.shared }),
+                    NLF_ParentModel.Event.deref
+                      { cell := ((NLM_RuntimeInput.initial e).state.accounts a).data, token := t,
+                        kind := NLF_RefCell.Kind.shared }
+                      (Except.ok
+                        ((NLM_RuntimeInput.initial e).state.cells
+                            ((NLM_RuntimeInput.initial e).state.accounts a).data).payload),
+                    NLF_ParentModel.Event.release
+                      { cell := ((NLM_RuntimeInput.initial e).state.accounts a).data, token := t,
+                        kind := NLF_RefCell.Kind.shared }
+                      (Except.ok ())]))))
+        h))
+'NLM_SdkSnapshotEvents.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0a02abe9d0f349ea9c9f6cb83746dc55.scope; invocation ID: 7ddf0504b66949869b85edbe8af11899

@@ -1,0 +1,35 @@
+{"attempt": "NLM_L050", "exit_status": 0, "wall_seconds": 13.049316667951643, "peak_rss_kib": "6022344", "swaps": "0", "print_axioms": ["'NLM_WrapperSnapshot0.step' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_WrapperSnapshot0.step : ∀ (e : Entry),
+  G (before e 0) 0 58295 58295 (ok ()) =
+    { result := ok (e.snapshot 0 58295 58295, before e 1), events := normalEvents (before e 0) 0 58295 58295 } :=
+fun e =>
+  have h := normal e 0 0 58295 58295 (NLM_SevenSnapshots.ownedValues e (List.take 0 sites));
+  id
+    (Eq.mp
+      (congrArg (Eq (G { input := e, sdk := (NLM_RuntimeInput.initial e).state } 0 58295 58295 (ok ())))
+        (congrFun'
+          (congrArg NJU_Log.Run.mk
+            (congrArg ok
+              (congrArg (Prod.mk (e.snapshot 0 58295 58295))
+                (congrFun' (congrArg (State.mk e (NLM_RuntimeInput.initial e).state) (zero_add 1))
+                  [e.snapshot 0 
+...
+theorem NLM_WrapperSnapshot0.step : ∀ (e : Entry),
+  G (before e 0) 0 58295 58295 (ok ()) =
+    { result := ok (e.snapshot 0 58295 58295, before e 1), events := normalEvents (before e 0) 0 58295 58295 } :=
+fun e =>
+  have h := normal e 0 0 58295 58295 (NLM_SevenSnapshots.ownedValues e (List.take 0 sites));
+  id
+    (Eq.mp
+      (congrArg (Eq (G { input := e, sdk := (NLM_RuntimeInput.initial e).state } 0 58295 58295 (ok ())))
+        (congrFun'
+          (congrArg NJU_Log.Run.mk
+            (congrArg ok
+              (congrArg (Prod.mk (e.snapshot 0 58295 58295))
+                (congrFun' (congrArg (State.mk e (NLM_RuntimeInput.initial e).state) (zero_add 1))
+                  [e.snapshot 0 58295 58295]))))
+          (normalEvents { input := e, sdk := (NLM_RuntimeInput.initial e).state } 0 58295 58295)))
+      h)
+'NLM_WrapperSnapshot0.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra4a812721c614220807ac57b274e1ab5.scope; invocation ID: 0bdcc152a73d4e0898310b18fc68417e

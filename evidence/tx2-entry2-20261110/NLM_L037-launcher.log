@@ -1,0 +1,51 @@
+{"attempt": "NLM_L037", "exit_status": 0, "wall_seconds": 12.846142562106252, "peak_rss_kib": "6031596", "swaps": "0", "print_axioms": ["'NLM_SevenSnapshots.normal_result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_SevenSnapshots.lean:34:39: warning: This simp argument is unused:
+  Nat.add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp [̵o̵w̵n̵e̵d̵V̵a̵l̵u̵e̵s̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵a̵s̵s̵o̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵c̵o̵m̵m̵,̵N̵a̵t̵.̵a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵]̵[̲o̲w̲n̲e̲d̲V̲a̲l̲u̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲c̲o̲m̲m̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲l̲e̲f̲t̲_̲c̲o̲m̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+def NLM_SevenSnapshots.G : (Site → Result Unit) → List Site → State → Run State :=
+fun allocation x x_1 => List.brecOn (motive := fun x => State → Run State) x (G._f allocation) x_1
+the
+...
+k (ready e (t + (c :: cs).length) (owned ++ ownedValues e (c :: cs))))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let a ← _a
+                    (G (fun x => ok ()) cs a.2).result) =
+                  ok (ready e (t + (c :: cs).length) (owned ++ ownedValues e (c :: cs))))
+              (NLM_Snapshot.normal_result e t c.account c.lo c.hi owned)))
+          (id
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => _a = ok (ready e (t + (c :: cs).length) (owned ++ ownedValues e (c :: cs))))
+                  (ih (t + 1) (owned ++ [e.snapshot c.account c.lo c.hi]))))
+              (of_eq_true
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (congrArg ok
+                        (congr
+                          (congrArg (ready e)
+                            (Eq.trans (Nat.add_comm (t + 1) cs.length) (Nat.add_left_comm cs.length t 1)))
+                          (List.append_assoc owned [e.snapshot c.account c.lo c.hi]
+                            (List.map (fun c => e.snapshot c.account c.lo c.hi) cs)))))
+                    (ok
+                      (ready e (t + (cs.length + 1))
+                        (owned ++
+                          e.snapshot c.account c.lo c.hi :: List.map (fun c => e.snapshot c.account c.lo c.hi) cs))))
+                  (eq_self
+                    (ok
+                      (ready e (t + (cs.length + 1))
+                        (owned ++
+                          e.snapshot c.account c.lo c.hi ::
+                            List.map (fun c => e.snapshot c.account c.lo c.hi) cs))))))))))
+    cs t owned
+'NLM_SevenSnapshots.normal_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4b2e5f16e8ac4427903e274c905a0c91.scope; invocation ID: 31747e2a03e346e1b18f2e8b7bba71c2
