@@ -1,0 +1,11 @@
+// Owned safe reference for TX1:129. One allocation request for one Claims.
+// This is a scratch-only reference, not a replacement shipped implementation.
+pub fn NJM_claims_ref(prefix: &Prefix<'_>) -> Result<Box<[[[QM31; 29]; 3]]>, Error> {
+    let record = prefix.validated_record(25)?;
+    let mut out = aspis_core::r0::heap::filled(1, [[QM31::ZERO; 29]; 3])
+        .map_err(|_| Error::Allocation)?;
+    for p in 0..3 {
+        out[0][p] = record.decode_k::<29>(p * 29)?;
+    }
+    Ok(out.into_boxed_slice())
+}

@@ -1,0 +1,49 @@
+NJM_generated/NJM_RoundsStart.lean:39:23: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisS1ExtractedRoundChildren.decodeMain 1#usize record 0#usize
+in the target expression
+  ∃ running,
+    (match core.result.Result.Ok record with
+      | core.result.Result.Err error => ok (core.result.Result.Err error)
+      | core.result.Result.Ok record => do
+        let decoded ← AspisS1ExtractedRoundChildren.decodeMain 1#usize record 0#usize
+        match decoded with
+          | core.result.Result.Err error => ok (core.result.Result.Err error)
+          | core.result.Result.Ok values => do
+            let running ← values.index_usize 0#usize
+            ok (core.result.Result.Ok (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, t))) =
+      ok (core.result.Result.Ok (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, t))
+
+H : Type
+bytes : Slice U8
+pre : AspisR1PrefixAggregateParser.r1_wire.Prefix
+parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre)
+t : r1_wire.SemanticTranscript H
+parse : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok (PrefixAdapter.fromOld pre))
+record : r1_wire.ValidatedRecord
+values : Std.Array AspisS1ExtractedRoundChildren.MainQM 1#usize
+getter : (PrefixAdapter.fromOld pre).validated_record 14#u8 = ok (core.result.Result.Ok record)
+decode : AspisS1ExtractedRoundChildren.decodeMain 1#usize record 0#usize = ok (core.result.Result.Ok values)
+⊢ ∃ running,
+    (match core.result.Result.Ok record with
+      | core.result.Result.Err error => ok (core.result.Result.Err error)
+      | core.result.Result.Ok record => do
+        let decoded ← AspisS1ExtractedRoundChildren.decodeMain 1#usize record 0#usize
+        match decoded with
+          | core.result.Result.Err error => ok (core.result.Result.Err error)
+          | core.result.Result.Ok values => do
+            let running ← values.index_usize 0#usize
+            ok (core.result.Result.Ok (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, t))) =
+      ok (core.result.Result.Ok (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, t))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NJM_RoundsStart.initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJM_RoundsStart.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

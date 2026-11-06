@@ -1,0 +1,46 @@
+def AspisR1PublicPreparation.r1_wire.SemanticTranscript.semantic_validated : {H : Type} →
+  aspis_core.Digest32 H →
+    r1_wire.SemanticTranscript H →
+      r1_wire.ValidatedRecord →
+        Result (core.result.Result aspis_core.field.QM31 r1_wire.Error × r1_wire.SemanticTranscript H) :=
+fun {H} aspis_coreDigest32Inst self record1 => do
+  let row ← r1_wire.ValidatedRecord.impl.row record1
+  if row > 24#u8 then ok (core.result.Result.Err r1_wire.Error.InvalidRow, self)
+    else do
+      let s ← r1_wire.ValidatedRecord.impl.framed record1
+      let (r, self1) ← r1_wire.SemanticTranscript.sample_block_validated aspis_coreDigest32Inst self row s
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let q ← AspisR1PublicPreparation.sampler.qm31_sample val
+          ok (core.result.Result.Ok q, self1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+                (core.convert.FromSame r1_wire.Error) residual
+          ok (r1, self1)
+def AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated : {H : Type} →
+  aspis_core.Digest32 H →
+    r1_wire.SemanticTranscript H →
+      U8 →
+        Slice U8 → Result (core.result.Result (Std.Array U8 32#usize) r1_wire.Error × r1_wire.SemanticTranscript H) :=
+fun {H} aspis_coreDigest32Inst self row framed =>
+  if (row != self.next_row) = true then ok (core.result.Result.Err (r1_wire.Error.RowOrder self.next_row row), self)
+  else do
+    let s ← lift self.state.to_slice
+    let i ← 160#u8 + row
+    let s1 ← lift (Array.make 2#usize [0#u8, i] ⋯).to_slice
+    let s2 ← lift (Array.make 3#usize [s, s1, framed] ⋯).to_slice
+    let absorbed ← aspis_coreDigest32Inst.digest self.hash s2
+    let s3 ← lift absorbed.to_slice
+    let s4 ← lift (Array.make 1#usize [1#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice
+    let s5 ← lift (Array.make 2#usize [s3, s4] ⋯).to_slice
+    let block ← aspis_coreDigest32Inst.digest self.hash s5
+    let s6 ← lift absorbed.to_slice
+    let s7 ← lift (Array.make 1#usize [2#u8] r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice
+    let s8 ← lift (Array.make 2#usize [s6, s7] ⋯).to_slice
+    let a ← aspis_coreDigest32Inst.digest self.hash s8
+    let i1 ← self.next_row + 1#u8
+    ok (core.result.Result.Ok block, { state := a, hash := self.hash, next_row := i1 })
+NJM_generated/NJM_InspectDomain.lean:5:7: error(lean.unknownIdentifier): Unknown identifier `JFv_SemanticCall.success`
+NJM_generated/NJM_InspectDomain.lean:6:7: error(lean.unknownIdentifier): Unknown identifier `JFv_TranscriptTotal.Total`

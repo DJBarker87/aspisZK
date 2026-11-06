@@ -68,10 +68,12 @@ r=ssh('python3',f'''from pathlib import Path
 import json
 b=Path({B!r});names=[str(p.relative_to(b)) for p in (b/{a!r}).rglob('*') if p.is_file()]+[{(a+'.json')!r}]+{x.get('collect',[])!r}
 for pattern in {x.get('collect_globs',[])!r}:names += [str(p.relative_to(b)) for p in b.glob(pattern) if p.is_file()]
-print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).is_file()}}))
+print(json.dumps({{n:({{'base64':__import__('base64').b64encode((b/n).read_bytes()).decode()}} if n.endswith('.xz') else (b/n).read_text()) for n in names if (b/n).is_file()}}))
 ''');assert r.returncode==0,r.stderr
 for n,t in json.loads(r.stdout).items():
- p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+ p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
+ if isinstance(t,dict):p.write_bytes(__import__("base64").b64decode(t["base64"]))
+ else:p.write_text(t)
 assert (E/a/'receipt.json').exists(),'Missing receipt; recover, never resubmit'
 rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items() if k!='deps_fingerprint'};entry['full_receipt']=a+'/receipt.json'
 with (E/'NJM_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')

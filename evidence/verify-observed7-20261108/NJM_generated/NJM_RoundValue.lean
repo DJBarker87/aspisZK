@@ -14,7 +14,7 @@ theorem canonical {H : Type} (D : aspis_core.Digest32 H)
  (reply : (run (S1SemanticCode.semanticValidated D before record)).2=ok (.Ok q,after)) :
  JFv_RoundArithmetic.Canonical q := by
  have law : r1_wire.SemanticTranscript.semantic_validated D before record=ok (.Ok q,after) := by
-  rw [run_value,S1SemanticCode.semanticValidated_erasure] at reply
+  rw [PreparedHashCode.run_value,S1SemanticCode.semanticValidated_erasure] at reply
   exact reply
  exact (NJG_AlphaCarry.canonical_iff q).mpr
   (SemanticCallSelectedCanonical.semantic_success_selected_canonical D before after record q law)
@@ -22,10 +22,8 @@ theorem canonical {H : Type} (D : aspis_core.Digest32 H)
 /-- The update is the source writeback and changes precisely the active slot. -/
 theorem update (a : Alpha) (r : Usize) (bound : r.val<10) (q : Q) :
  Array.update a r q=ok (a.set r q) := by
- simp only [Array.update]
- split
- · rfl
- · omega
+ obtain ⟨v,call,hv⟩:=WP.spec_imp_exists (Array.update_spec a r q (by simpa using bound))
+ simpa only [hv] using call
 
 /-- Concrete value child is total on the active challenge obtained from the
 SAME semantic child. Every other alpha slot is arbitrary. -/
@@ -34,8 +32,9 @@ theorem value (p : Poly) (a : Alpha) (r : Usize) (bound : r.val<10) (q : Q)
  (polynomial : ∀ i : Fin 28,JFv_RoundArithmetic.Canonical (FJb_TailCell.cell p i)) :
  ∃ v, generatedMainValue p (a.set r q) r=ok v ∧ JFv_RoundArithmetic.Canonical v := by
  apply JFv_RoundArithmetic.value p (a.set r q) r bound
- · simpa only [FJb_TailCell.cell] using
-    (NJG_AlphaCarry.set_selected a r (by simpa using bound) q ▸ canonical)
+ · change JFv_RoundArithmetic.Canonical (FJb_TailCell.cell (a.set r q) ⟨r.val,by simpa using bound⟩)
+   rw [NJG_AlphaCarry.set_selected]
+   exact canonical
  · exact polynomial
 
 #print axioms canonical

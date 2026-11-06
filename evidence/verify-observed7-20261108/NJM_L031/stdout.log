@@ -1,0 +1,26 @@
+NJM_generated/NJM_RoundsJoin.lean:63:18: error: Type mismatch: After simplification, term
+  congrArg
+ has type
+  ∀ (f : ?m.131 → ?m.132), ?m.133 = ?m.134 → f ?m.133 = f ?m.134
+but is expected to have type
+  (log ++ (run (NJG_RoundsCode.chain NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) rest next)).1,
+      (run (NJG_RoundsCode.chain NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) rest next)).2) =
+    (log ++ (chain D bytes pre parsed rest next).1, (chain D bytes pre parsed rest next).2)
+NJM_generated/NJM_RoundsJoin.lean:52:18: error: unsolved goals
+case cons.parsed
+H : Type
+D : aspis_core.Digest32 H
+bytes : Slice U8
+pre : AspisR1PrefixAggregateParser.r1_wire.Prefix
+parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre)
+r : Usize
+rest : List Usize
+ih :
+  ∀ (carry : Carry H),
+    run (NJG_RoundsCode.chain NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) rest carry) =
+      chain D bytes pre parsed rest carry
+carry : Carry H
+⊢ AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre)
+NJM_generated/NJM_RoundsJoin.lean:64:16: error: unexpected token '('; expected command
+'AspisR1.NJM_RoundsJoin.step_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJM_RoundsJoin.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

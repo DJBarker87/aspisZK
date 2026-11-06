@@ -1,0 +1,32 @@
+{"attempt": "NJM_L016", "exit_status": 1, "wall_seconds": 7.357825913000852, "peak_rss_kib": "6097824", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+NJM_generated/NJM_InspectStd.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Array.getElem?_usize`
+Aeneas.Std.Array.update_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α)
+  (hbound : ↑i < v.length) : v.update i x ⦃ nv => nv = v.set i x ⦄
+Array.getElem?_eq_getElem.{u_1} {α : Type u_1} {xs : _root_.Array α} {i : ℕ} (h : i < xs.size) : xs[i]? = some xs[i]
+AspisR1PublicPreparation.PreparedHashCode.run_value {A : Type} (p : Pre
+...
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+NJM_generated/NJM_InspectStd.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Array.getElem?_usize`
+Aeneas.Std.Array.update_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α)
+  (hbound : ↑i < v.length) : v.update i x ⦃ nv => nv = v.set i x ⦄
+Array.getElem?_eq_getElem.{u_1} {α : Type u_1} {xs : _root_.Array α} {i : ℕ} (h : i < xs.size) : xs[i]? = some xs[i]
+AspisR1PublicPreparation.PreparedHashCode.run_value {A : Type} (p : PreparedHashCode.Code A) :
+  (PreparedHashCode.run p).2 = PreparedHashCode.erase p
+AspisR1PublicPreparation.S1SemanticCode.semanticValidated_erasure {H : Type} (D : aspis_core.Digest32 H)
+  (self : r1_wire.SemanticTranscript H) (record1 : r1_wire.ValidatedRecord) :
+  PreparedHashCode.erase (S1SemanticCode.semanticValidated D self record1) =
+    r1_wire.SemanticTranscript.semantic_validated D self record1
+def Array.set.{u_1} : {α : Type u_1} →
+  (xs : _root_.Array α) → (i : ℕ) → α → autoParam (i < xs.size) Array.set._auto_1 → _root_.Array α :=
+fun {α} xs i v h => { toList := xs.toList.set i v }
+
+Running as unit: run-r1da4b0e65c5c424fbd23e8628c026c36.scope; invocation ID: be67597c3d834533b67b4ae7df3e44f4
