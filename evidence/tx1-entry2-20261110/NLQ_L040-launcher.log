@@ -1,0 +1,35 @@
+{"attempt": "NLQ_L040", "exit_status": 0, "wall_seconds": 2.861479315906763, "peak_rss_kib": "3427492", "swaps": "0", "print_axioms": ["'NLQ_CopyCases.conflict' depends on axioms: [propext, Quot.sound]", "'NLQ_CopyCases.wrong_length' depends on axioms: [propext, Quot.sound]"]}
+conflict : ∀ (s : State) (a t : ℕ) (src : List UInt8),
+  ¬((s.cells (s.accounts a).data).writer = none ∧ (s.cells (s.accounts a).data).readers = []) →
+    G s a t src =
+      { outcome := NLF_CopyStep.Outcome.returned s (Except.error ProgramError.accountBorrowFailed),
+        events := [Event.acquire s s a t (Except.error ProgramError.accountBorrowFailed)] }
+wrong_length : ∀ (s : State) (a t : ℕ) (src : List UInt8),
+  (s.cells (s.accounts a).data).writer = none →
+    (s.cells (s.accounts a).data).readers = [] →
+      src.length ≠ (s.cells (s.accounts a).data).payload.bytes.length →
+        have held :=
+          put s (s.accounts a).data
+            (have __src := s.cells (s.accounts a).data
+...
+conflict : ∀ (s : State) (a t : ℕ) (src : List UInt8),
+  ¬((s.cells (s.accounts a).data).writer = none ∧ (s.cells (s.accounts a).data).readers = []) →
+    G s a t src =
+      { outcome := NLF_CopyStep.Outcome.returned s (Except.error ProgramError.accountBorrowFailed),
+        events := [Event.acquire s s a t (Except.error ProgramError.accountBorrowFailed)] }
+wrong_length : ∀ (s : State) (a t : ℕ) (src : List UInt8),
+  (s.cells (s.accounts a).data).writer = none →
+    (s.cells (s.accounts a).data).readers = [] →
+      src.length ≠ (s.cells (s.accounts a).data).payload.bytes.length →
+        have held :=
+          put s (s.accounts a).data
+            (have __src := s.cells (s.accounts a).data;
+            { payload := __src.payload, readers := __src.readers, writer := some t });
+        have g := { cell := (s.accounts a).data, token := t, kind := Kind.exclusive };
+        G s a t src =
+          { outcome := NLF_CopyStep.Outcome.abort held,
+            events := [Event.acquire s held a t (Except.ok g), Event.deref held g (deref held g), Event.abort held] }
+'NLQ_CopyCases.conflict' depends on axioms: [propext, Quot.sound]
+'NLQ_CopyCases.wrong_length' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-r181c584f20554d539f5540a841cb6c6e.scope; invocation ID: fc1780b4896e423d89bfba75d781276f

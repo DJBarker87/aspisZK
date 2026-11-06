@@ -1,0 +1,19 @@
+conflict : ∀ (s : State) (a t : ℕ) (src : List UInt8),
+  ¬((s.cells (s.accounts a).data).writer = none ∧ (s.cells (s.accounts a).data).readers = []) →
+    G s a t src =
+      { outcome := NLF_CopyStep.Outcome.returned s (Except.error ProgramError.accountBorrowFailed),
+        events := [Event.acquire s s a t (Except.error ProgramError.accountBorrowFailed)] }
+wrong_length : ∀ (s : State) (a t : ℕ) (src : List UInt8),
+  (s.cells (s.accounts a).data).writer = none →
+    (s.cells (s.accounts a).data).readers = [] →
+      src.length ≠ (s.cells (s.accounts a).data).payload.bytes.length →
+        have held :=
+          put s (s.accounts a).data
+            (have __src := s.cells (s.accounts a).data;
+            { payload := __src.payload, readers := __src.readers, writer := some t });
+        have g := { cell := (s.accounts a).data, token := t, kind := Kind.exclusive };
+        G s a t src =
+          { outcome := NLF_CopyStep.Outcome.abort held,
+            events := [Event.acquire s held a t (Except.ok g), Event.deref held g (deref held g), Event.abort held] }
+'NLQ_CopyCases.conflict' depends on axioms: [propext, Quot.sound]
+'NLQ_CopyCases.wrong_length' depends on axioms: [propext, Quot.sound]

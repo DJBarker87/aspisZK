@@ -12,18 +12,18 @@ theorem fold (native : Native094) (childPacket : RowSpec_094 native)
  (std : ClaimsUnrolledFinish.StdCalls)
  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
  (D : aspis_core.digest.Digest32 Unit)
- (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+ (statement : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
  (pub proof : Slice U8) (k : Usize) (pre post : Frame094)
  (child : NGP_L181.Observation (core.result.Result (alloc.vec.Vec U8) verifier.Error))
  (handler : verifier.Error → Result AdapterRw.solana_program_error.ProgramError)
  (proofInput : pre.proof=proof) (publicInput : pre.publicBytes=pub)
- (entered : native base B std hashv D public1 pub proof k pre post child) :
+ (entered : native base B std hashv D statement pub proof k pre post child) :
  NGP_L181.NativeAssociation hashv
   (CheckpointBytes5Effect.bind
-   (NGQ_Normalize.normalize (GExp_FirstCode.code base B std hashv D public1 pub proof k))
+   (NGQ_Normalize.normalize (GExp_FirstCode.code base B std hashv D statement pub proof k))
    (NLQ_FirstMap.continuation handler)) (NLQ_FirstMap.observed handler child) ∧
  post=pre := by
- have packet := childPacket base B std hashv D public1 pub proof k pre post child
+ have packet := childPacket base B std hashv D statement pub proof k pre post child
   proofInput publicInput entered
  exact ⟨NLQ_FirstMap.fold hashv _ handler child packet.1,packet.2⟩
 #check @fold

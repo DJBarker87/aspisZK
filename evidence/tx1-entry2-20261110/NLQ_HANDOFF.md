@@ -8,3 +8,5 @@ Budget:40 Kani,140 Lean,0 extraction; one admitted capped scope at a time. Works
 Next: seed NLD then NLF then NLO; inventory native windows and construct first_decoded fold.
 
 Stage correction: provisional NLQ-F1 emission mismatch RETRACTED (NLQ_CORRECTIONS.md). Full emitted else includes eleven. K002..K009 are retained native regression/control pairs, not counterexamples to the model. No row promotion; target not yet established.
+
+Resume audit: 31 Lean compiles, 10 Kani checks, 1 inspection recorded before resume; numbered gaps are not launches. L038 was a reserved `public1` token parse error. No active NLQ host process found; host free 70.99 GB. Continue at L039, counting inspection conservatively against Lean ceiling (32/140 used).
