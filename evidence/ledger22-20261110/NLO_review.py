@@ -7,7 +7,9 @@ def put(n,x):
  if n.endswith('.xz'):p.write_bytes(lzma.compress(b));Path(str(p)[:-3]+'.sha256').write_text(H(b)+'\n')
  else:p.write_bytes(b)
 statements={}
-for line in(E/'NLO_L002/stdout.log').read_text().splitlines():
+log=E/'NLO_L002/stdout.log'
+raw=log.read_bytes()if log.exists()else lzma.decompress(Path(str(log)+'.xz').read_bytes())
+for line in raw.decode().splitlines():
  if 'NLO_OWNER 'in line:
   x=json.loads(line.split('NLO_OWNER ',1)[1]);assert x['root']not in statements;statements[x['root']]=x
 old=J(P/'NLG_KERNEL_STATEMENTS.json.xz');wrong=[n for n in old if old[n]!=statements.get(n)];assert not wrong

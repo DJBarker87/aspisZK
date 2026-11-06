@@ -52,9 +52,11 @@ elif kind=='audit':
  if target in ['close','review-close']:
   files['NLO_pin.py']=(E/'NLO_pin.py').read_text();files['NLO_PREDECESSOR_PINS.json']=lzma.decompress((E.parent/'ledger21-20261110/NLG_CLOSURE_PINS.json.xz').read_bytes()).decode()
  if target=='review-close':files['NLO_generated/NLO_HypothesisReview.lean']=(E/'NLO_HypothesisReview.lean').read_text()
+ if target=='retention':files['NLO_scope40.py']=(E/'NLO_scope40.py').read_text();files['NLO_SEED_INPUTS.json']=(E/'NLO_SEED_INPUTS.json').read_text()
  sources=['NLO_generated/NLO_ProofDriver.lean','NLO_generated/NLO_Driver.lean','NLO_batch.py','NLO_AUDIT_ROOTS.json','NLO_AUDIT_MODULES.json','NLO_EXPECTED_IMPORTS.jsonl']+(['NLO_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NLO_pin.py','NLO_PREDECESSOR_PINS.json']if target in ['close','review-close']else[])+(['NLO_generated/NLO_HypothesisReview.lean']if target=='review-close'else[])
  for n in sources:
   if n not in files:files[n]=(E/Path(n).name).read_text()
+ if target=='retention':sources+=['NLO_scope40.py','NLO_SEED_INPUTS.json']
  command=['python3','NLO_batch.py',target]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NLO_tmp',CARGO_TARGET_DIR=B+'/NLO_target',LEAN_PATH=':'.join([B+'/NLO_objects']+json.loads((E/'NLO_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
@@ -98,6 +100,7 @@ out={{n:(b/n).read_text() for n in names}}
 if {target!r} in ['close','review-close']:
  for n in ['NLO_PREDECESSOR_COMPARISON.json','NLO_EXPORT.json','NLO_TOOL_PINS.json','NLO_CLOSURE_PINS.json.sha256']:out[n]=(b/n).read_text()
  out['NLO_CLOSURE_PINS.json.xz.hex']=(b/'NLO_CLOSURE_PINS.json.xz').read_bytes().hex()
+if {target!r}=='retention':out['NLO_FINAL_HOST.json']=(b/'NLO_FINAL_HOST.json').read_text()
 for name in ['NLO_Driver','NLO_ProofDriver','NLO_PoolProofDriver','NLO_PoolDriver']:
  p=b/'NLO_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))

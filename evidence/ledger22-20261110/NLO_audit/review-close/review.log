@@ -1,0 +1,1764 @@
+theorem AspisR1.NKR_SumCarrier.source : ∀ (l r : AspisR1.NKR_SumCarrier.A4) (count : Nat)
+  (lower : @LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) count)
+  (upper : @LE.le.{0} Nat instLENat count (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+  (hl :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+        AspisR1.NKR_SumCarrier.A4._proof_1)
+      l)
+  (hr :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+        AspisR1.NKR_SumCarrier.A4._proof_1)
+      r),
+  @Exists.{1} AspisR1.FIv_NativeArithmetic.NQ fun (out : AspisR1.FIv_NativeArithmetic.NQ) =>
+    And
+      (@Eq.{1} (Aeneas.Std.Result.{0} AspisR1.FIv_NativeArithmetic.NQ) (AspisR1.NKR_SumCarrier.native l r count)
+        (@Aeneas.Std.Result.ok.{0} AspisR1.FIv_NativeArithmetic.NQ out))
+      (And
+        (@Eq.{1} (Aeneas.Std.Result.{0} AspisR1.FIv_NativeArithmetic.NQ) (AspisR1.NKR_SumCarrier.reference l r count)
+          (@Aeneas.Std.Result.ok.{0} AspisR1.FIv_NativeArithmetic.NQ out))
+        (And (AspisR1.FIv_NativeValue.Canon out)
+          (And
+            (@Eq.{1} AspisR1.FIv_NativeValue.K (AspisR1.FIv_NativeValue.decode out)
+              (NGA_SumAlgebra.sumProducts
+                (@List.take.{0} NGA_PreparePairs.Input count
+                  (@List.zip.{0, 0} NKR_SumDispatch.Q NKR_SumDispatch.Q
+                    (@Subtype.val.{1} (List.{0} NKR_SumDispatch.Q)
+                      (fun (l : List.{0} NKR_SumDispatch.Q) =>
+                        @Eq.{1} Nat (@List.length.{0} NKR_SumDispatch.Q l)
+                          (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                              AspisR1.NKR_SumCarrier.A4._proof_1)))
+                      (@AspisR1.NKR_SumCarrier.encode
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                          AspisR1.NKR_SumCarrier.A4._proof_1)
+                        l))
+                    (@Subtype.val.{1} (List.{0} NKR_SumDispatch.Q)
+                      (fun (l : List.{0} NKR_SumDispatch.Q) =>
+                        @Eq.{1} Nat (@List.length.{0} NKR_SumDispatch.Q l)
+                          (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                              AspisR1.NKR_SumCarrier.A4._proof_1)))
+                      (@AspisR1.NKR_SumCarrier.encode
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                          AspisR1.NKR_SumCarrier.A4._proof_1)
+                        r))))))
+            (∀ (seek : Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))),
+              @LT.lt.{0} Nat instLTNat (@Fin.val (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) seek)
+                  count →
+                NKR_SumCuts.Cut
+                  (@AspisR1.NKR_SumCarrier.encode
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                      NKR_SumDispatch.A4._proof_1)
+                    l)
+                  (@AspisR1.NKR_SumCarrier.encode
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                      NKR_SumDispatch.A4._proof_1)
+                    r)
+                  count seek (AspisR1.FIv_NativeArithmetic.qm out) (AspisR1.FIv_NativeArithmetic.qm out)
+                  (@NGA_Indexed.selected
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                      AspisR1.NKR_SumCarrier.A4._proof_1)
+                    (@AspisR1.NKR_SumCarrier.encode
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                        AspisR1.NKR_SumCarrier.A4._proof_1)
+                      l)
+                    seek)
+                  (@NGA_Indexed.selected
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                      AspisR1.NKR_SumCarrier.A4._proof_1)
+                    (@AspisR1.NKR_SumCarrier.encode
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                        AspisR1.NKR_SumCarrier.A4._proof_1)
+                      r)
+                    seek)
+                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) count)))) :=
+⋯
+theorem NKR_SumDispatch.native_reference : ∀ (l r : NKR_SumDispatch.A4) (count : Nat)
+  (hl :
+    ∀ (q : NKR_SumDispatch.Q),
+      @Membership.mem.{0, 0} NKR_SumDispatch.Q (List.{0} NKR_SumDispatch.Q) (@List.instMembership.{0} NKR_SumDispatch.Q)
+          (@Subtype.val.{1} (List.{0} NKR_SumDispatch.Q)
+            (fun (l : List.{0} NKR_SumDispatch.Q) =>
+              @Eq.{1} Nat (@List.length.{0} NKR_SumDispatch.Q l)
+                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                    NKR_SumDispatch.A4._proof_1)))
+            l)
+          q →
+        NKR_SumDispatch.Canon q)
+  (hr :
+    ∀ (q : NKR_SumDispatch.Q),
+      @Membership.mem.{0, 0} NKR_SumDispatch.Q (List.{0} NKR_SumDispatch.Q) (@List.instMembership.{0} NKR_SumDispatch.Q)
+          (@Subtype.val.{1} (List.{0} NKR_SumDispatch.Q)
+            (fun (l : List.{0} NKR_SumDispatch.Q) =>
+              @Eq.{1} Nat (@List.length.{0} NKR_SumDispatch.Q l)
+                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                    NKR_SumDispatch.A4._proof_1)))
+            r)
+          q →
+        NKR_SumDispatch.Canon q),
+  @Eq.{1} (Aeneas.Std.Result.{0} NKR_SumDispatch.Q) (NKR_SumDispatch.native l r count)
+    (NKR_SumDispatch.reference l r count) :=
+⋯
+theorem NKR_SumDispatch.helper_domains : ∀ (l r : NKR_SumDispatch.A4)
+  (hl :
+    ∀ (q : NKR_SumDispatch.Q),
+      @Membership.mem.{0, 0} NKR_SumDispatch.Q (List.{0} NKR_SumDispatch.Q) (@List.instMembership.{0} NKR_SumDispatch.Q)
+          (@Subtype.val.{1} (List.{0} NKR_SumDispatch.Q)
+            (fun (l : List.{0} NKR_SumDispatch.Q) =>
+              @Eq.{1} Nat (@List.length.{0} NKR_SumDispatch.Q l)
+                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                    NKR_SumDispatch.A4._proof_1)))
+            l)
+          q →
+        NKR_SumDispatch.Canon q)
+  (hr :
+    ∀ (q : NKR_SumDispatch.Q),
+      @Membership.mem.{0, 0} NKR_SumDispatch.Q (List.{0} NKR_SumDispatch.Q) (@List.instMembership.{0} NKR_SumDispatch.Q)
+          (@Subtype.val.{1} (List.{0} NKR_SumDispatch.Q)
+            (fun (l : List.{0} NKR_SumDispatch.Q) =>
+              @Eq.{1} Nat (@List.length.{0} NKR_SumDispatch.Q l)
+                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))
+                    NKR_SumDispatch.A4._proof_1)))
+            r)
+          q →
+        NKR_SumDispatch.Canon q)
+  (n : Aeneas.Std.Usize)
+  (h :
+    @LE.le.{0} Nat instLENat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize n)
+      (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))),
+  And
+    (@Eq.{1} Nat
+      (@List.length.{0} (Prod.{0, 0} NKR_SumDispatch.Q NKR_SumDispatch.Q)
+        (@List.zip.{0, 0} NKR_SumDispatch.Q NKR_SumDispatch.Q
+          (@Subtype.val.{1} (List.{0} NKR_SumDispatch.Q)
+            (fun (l : List.{0} NKR_SumDispatch.Q) =>
+              @Eq.{1} Nat (@List.length.{0} NKR_SumDispatch.Q l) (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize n))
+            (NKR_SumDispatch.selectedPrefix n h l))
+          (@Subtype.val.{1} (List.{0} NKR_SumDispatch.Q)
+            (fun (l : List.{0} NKR_SumDispatch.Q) =>
+              @Eq.{1} Nat (@List.length.{0} NKR_SumDispatch.Q l) (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize n))
+            (NKR_SumDispatch.selectedPrefix n h r))))
+      (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize n))
+    (∀ (p : Prod.{0, 0} NKR_SumDispatch.Q NKR_SumDispatch.Q),
+      @Membership.mem.{0, 0} (Prod.{0, 0} NKR_SumDispatch.Q NKR_SumDispatch.Q)
+          (List.{0} (Prod.{0, 0} NKR_SumDispatch.Q NKR_SumDispatch.Q))
+          (@List.instMembership.{0} (Prod.{0, 0} NKR_SumDispatch.Q NKR_SumDispatch.Q))
+          (@List.zip.{0, 0} NKR_SumDispatch.Q NKR_SumDispatch.Q
+            (@Subtype.val.{1} (List.{0} NKR_SumDispatch.Q)
+              (fun (l : List.{0} NKR_SumDispatch.Q) =>
+                @Eq.{1} Nat (@List.length.{0} NKR_SumDispatch.Q l)
+                  (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize n))
+              (NKR_SumDispatch.selectedPrefix n h l))
+            (@Subtype.val.{1} (List.{0} NKR_SumDispatch.Q)
+              (fun (l : List.{0} NKR_SumDispatch.Q) =>
+                @Eq.{1} Nat (@List.length.{0} NKR_SumDispatch.Q l)
+                  (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize n))
+              (NKR_SumDispatch.selectedPrefix n h r)))
+          p →
+        And (NKR_SumDispatch.Canon (@Prod.fst.{0, 0} NKR_SumDispatch.Q NKR_SumDispatch.Q p))
+          (NKR_SumDispatch.Canon (@Prod.snd.{0, 0} NKR_SumDispatch.Q NKR_SumDispatch.Q p))) :=
+⋯
+theorem NKJ_NativeSmall.source : ∀ (xs : List.{0} NKJ_NativeSmall.Input) (s : NGA_Cell.Sums) (n : Nat)
+  (arity :
+    @LE.le.{0} Nat instLENat
+      (@HAdd.hAdd.{0, 0, 0} Nat Nat Nat (@instHAdd.{0} Nat instAddNat) n (@List.length.{0} NKJ_NativeSmall.Input xs))
+      (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+  (canonical :
+    ∀ (x : NKJ_NativeSmall.Input),
+      @Membership.mem.{0, 0} NKJ_NativeSmall.Input (List.{0} NKJ_NativeSmall.Input)
+          (@List.instMembership.{0} NKJ_NativeSmall.Input) xs x →
+        And (NGA_Cache.Canonical (@Prod.fst.{0, 0} NGA_PreparePairs.Q NGA_PreparePairs.Q x))
+          (NGA_Cache.Canonical (@Prod.snd.{0, 0} NGA_PreparePairs.Q NGA_PreparePairs.Q x)))
+  (budget :
+    ∀ (d : NGA_Cell.Cell),
+      @LE.le.{0} Nat instLENat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.U64 (@NGA_Cell.get Aeneas.Std.U64 s d))
+        (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat) n NGA_Small.bound)),
+  @Eq.{1} (Aeneas.Std.Result.{0} NGA_Cell.Sums) (NKJ_NativeSmall.loop xs s) (NGH_SmallRef.loop xs s) :=
+⋯
+theorem AspisR1.NKR_ScheduleRoot.source : ∀
+  (packed :
+    Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯))
+  (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors)
+  (hp :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯) packed)
+  (hz :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)
+      (FIq_Native.state_only_poseidon.StateOnlyPoseidonOpenings.z o))
+  (hh :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64))) ⋯)
+      (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.high s))
+  (hl :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)
+      (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.low s)),
+  @Exists.{1} AspisR1.NKI_InitialInvocation.Locals fun (l : AspisR1.NKI_InitialInvocation.Locals) =>
+    @Exists.{1}
+      (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+      fun
+        (absorption :
+          Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)) =>
+      @Exists.{1}
+        (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯))
+        fun
+          (middle :
+            Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯)) =>
+        @Exists.{1}
+          (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯))
+          fun
+            (out :
+              Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯)) =>
+          And (AspisR1.NKI_InitialInvocation.Clauses p o s l)
+            (And
+              (@Eq.{1}
+                (Aeneas.Std.Result.{0}
+                  (Prod.{0, 0}
+                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))))
+                (FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s)
+                (@Aeneas.Std.Result.ok.{0}
+                  (Prod.{0, 0}
+                    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+                    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)))
+                  (@Prod.mk.{0, 0}
+                    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+                    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+                    (AspisR1.NKI_InitialInvocation.Locals.initial2 l) absorption)))
+              (And
+                (@Eq.{1}
+                  (Aeneas.Std.Result.{0}
+                    (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯)))
+                  (@FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯) packed
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯)
+                    (AspisR1.NKI_InitialInvocation.Locals.initial2 l))
+                  (@Aeneas.Std.Result.ok.{0}
+                    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯))
+                    middle))
+                (And
+                  (@Eq.{1}
+                    (Aeneas.Std.Result.{0}
+                      (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯)))
+                    (@FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯) middle
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)
+                      absorption)
+                    (@Aeneas.Std.Result.ok.{0}
+                      (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯))
+                      out))
+                  (And
+                    (AspisR1.NKR_ScheduleCut.Cut packed p o s (AspisR1.NKI_InitialInvocation.Locals.initial2 l)
+                      absorption middle out
+                      (AspisR1.NKR_ScheduleCut.observations packed p o s
+                        (AspisR1.NKI_InitialInvocation.Locals.initial2 l) absorption middle out))
+                    (And
+                      (@Eq.{1}
+                        (Aeneas.Std.Result.{0}
+                          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯)))
+                        (FIq_Native.pool_v1.pair_forest_semantic_terminal.add_schedule_lanes packed p o s)
+                        (@Aeneas.Std.Result.ok.{0}
+                          (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯))
+                          out))
+                      (And
+                        (@AspisR1.FIw_ArrayValue.canonical
+                          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯)
+                          out)
+                        (∀
+                          (j :
+                            Fin
+                              (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24)))
+                                  ⋯))),
+                          @Eq.{1} AspisR1.FIv_NativeValue.K
+                            (@AspisR1.FIw_ArrayValue.decoded
+                              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯)
+                              out j)
+                            (@HAdd.hAdd.{0, 0, 0} AspisR1.FIv_NativeValue.K AspisR1.FIv_NativeValue.K
+                              AspisR1.FIv_NativeValue.K
+                              (@instHAdd.{0} AspisR1.FIv_NativeValue.K
+                                (@QuadraticAlgebra.instAdd.{0} AspisV8R15.ExactTowerBase.CM31Exact
+                                  AspisV8R15.ExactTowerBase.qm31R
+                                  (@OfNat.ofNat.{0} AspisV8R15.ExactTowerBase.CM31Exact (nat_lit 0)
+                                    (@Zero.toOfNat0.{0} AspisV8R15.ExactTowerBase.CM31Exact
+                                      (@QuadraticAlgebra.instZero.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                        (@Neg.neg.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                          (@NegZeroClass.toNeg.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@SubNegZeroMonoid.toNegZeroClass.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@SubtractionMonoid.toSubNegZeroMonoid.{0}
+                                                AspisV8R15.ExactTowerBase.M31Exact
+                                                (@SubtractionCommMonoid.toSubtractionMonoid.{0}
+                                                  AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@AddCommGroup.toDivisionAddCommMonoid.{0}
+                                                    AspisV8R15.ExactTowerBase.M31Exact
+                                                    (@Ring.toAddCommGroup.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                      (@DivisionRing.toRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                        (@Field.toDivisionRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                          (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                            AspisV8R15.ExactTowerBase.m31PrimeFact)))))))))
+                                          (@OfNat.ofNat.{0} AspisV8R15.ExactTowerBase.M31Exact (nat_lit 1)
+                                            (@One.toOfNat1.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@AddMonoidWithOne.toOne.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                (@AddGroupWithOne.toAddMonoidWithOne.{0}
+                                                  AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@Ring.toAddGroupWithOne.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                    (@DivisionRing.toRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                      (@Field.toDivisionRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                        (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                          AspisV8R15.ExactTowerBase.m31PrimeFact)))))))))
+                                        (@OfNat.ofNat.{0} AspisV8R15.ExactTowerBase.M31Exact (nat_lit 0)
+                                          (@Zero.toOfNat0.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@MulZeroClass.toZero.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@instMulZeroClassOfSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                (@DivisionSemiring.toSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@Semifield.toDivisionSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                    (@Field.toSemifield.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                      (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                        AspisV8R15.ExactTowerBase.m31PrimeFact))))))))
+                                        (@MulZeroClass.toZero.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                          (@instMulZeroClassOfSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@DivisionSemiring.toSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@Semifield.toDivisionSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                (@Field.toSemifield.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                    AspisV8R15.ExactTowerBase.m31PrimeFact)))))))))
+                                  (@QuadraticAlgebra.instAdd.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                    (@Neg.neg.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                      (@NegZeroClass.toNeg.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                        (@SubNegZeroMonoid.toNegZeroClass.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                          (@SubtractionMonoid.toSubNegZeroMonoid.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@SubtractionCommMonoid.toSubtractionMonoid.{0}
+                                              AspisV8R15.ExactTowerBase.M31Exact
+                                              (@AddCommGroup.toDivisionAddCommMonoid.{0}
+                                                AspisV8R15.ExactTowerBase.M31Exact
+                                                (@Ring.toAddCommGroup.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@DivisionRing.toRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                    (@Field.toDivisionRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                      (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                        AspisV8R15.ExactTowerBase.m31PrimeFact)))))))))
+                                      (@OfNat.ofNat.{0} AspisV8R15.ExactTowerBase.M31Exact (nat_lit 1)
+                                        (@One.toOfNat1.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                          (@AddMonoidWithOne.toOne.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@AddGroupWithOne.toAddMonoidWithOne.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@Ring.toAddGroupWithOne.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                (@DivisionRing.toRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@Field.toDivisionRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                    (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                      AspisV8R15.ExactTowerBase.m31PrimeFact)))))))))
+                                    (@OfNat.ofNat.{0} AspisV8R15.ExactTowerBase.M31Exact (nat_lit 0)
+                                      (@Zero.toOfNat0.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                        (@MulZeroClass.toZero.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                          (@instMulZeroClassOfSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@DivisionSemiring.toSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@Semifield.toDivisionSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                (@Field.toSemifield.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                    AspisV8R15.ExactTowerBase.m31PrimeFact))))))))
+                                    (@Distrib.toAdd.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                      (@instDistribOfSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                        (@DivisionSemiring.toSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                          (@Semifield.toDivisionSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@Field.toSemifield.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                AspisV8R15.ExactTowerBase.m31PrimeFact)))))))))
+                              (@HAdd.hAdd.{0, 0, 0} AspisR1.FIv_NativeValue.K AspisR1.FIv_NativeValue.K
+                                AspisR1.FIv_NativeValue.K
+                                (@instHAdd.{0} AspisR1.FIv_NativeValue.K
+                                  (@QuadraticAlgebra.instAdd.{0} AspisV8R15.ExactTowerBase.CM31Exact
+                                    AspisV8R15.ExactTowerBase.qm31R
+                                    (@OfNat.ofNat.{0} AspisV8R15.ExactTowerBase.CM31Exact (nat_lit 0)
+                                      (@Zero.toOfNat0.{0} AspisV8R15.ExactTowerBase.CM31Exact
+                                        (@QuadraticAlgebra.instZero.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                          (@Neg.neg.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@NegZeroClass.toNeg.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@SubNegZeroMonoid.toNegZeroClass.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                (@SubtractionMonoid.toSubNegZeroMonoid.{0}
+                                                  AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@SubtractionCommMonoid.toSubtractionMonoid.{0}
+                                                    AspisV8R15.ExactTowerBase.M31Exact
+                                                    (@AddCommGroup.toDivisionAddCommMonoid.{0}
+                                                      AspisV8R15.ExactTowerBase.M31Exact
+                                                      (@Ring.toAddCommGroup.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                        (@DivisionRing.toRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                          (@Field.toDivisionRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                            (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                              AspisV8R15.ExactTowerBase.m31PrimeFact)))))))))
+                                            (@OfNat.ofNat.{0} AspisV8R15.ExactTowerBase.M31Exact (nat_lit 1)
+                                              (@One.toOfNat1.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                (@AddMonoidWithOne.toOne.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@AddGroupWithOne.toAddMonoidWithOne.{0}
+                                                    AspisV8R15.ExactTowerBase.M31Exact
+                                                    (@Ring.toAddGroupWithOne.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                      (@DivisionRing.toRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                        (@Field.toDivisionRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                          (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                            AspisV8R15.ExactTowerBase.m31PrimeFact)))))))))
+                                          (@OfNat.ofNat.{0} AspisV8R15.ExactTowerBase.M31Exact (nat_lit 0)
+                                            (@Zero.toOfNat0.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@MulZeroClass.toZero.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                (@instMulZeroClassOfSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@DivisionSemiring.toSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                    (@Semifield.toDivisionSemiring.{0}
+                                                      AspisV8R15.ExactTowerBase.M31Exact
+                                                      (@Field.toSemifield.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                        (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                          AspisV8R15.ExactTowerBase.m31PrimeFact))))))))
+                                          (@MulZeroClass.toZero.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@instMulZeroClassOfSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@DivisionSemiring.toSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                (@Semifield.toDivisionSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@Field.toSemifield.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                    (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                      AspisV8R15.ExactTowerBase.m31PrimeFact)))))))))
+                                    (@QuadraticAlgebra.instAdd.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                      (@Neg.neg.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                        (@NegZeroClass.toNeg.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                          (@SubNegZeroMonoid.toNegZeroClass.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@SubtractionMonoid.toSubNegZeroMonoid.{0}
+                                              AspisV8R15.ExactTowerBase.M31Exact
+                                              (@SubtractionCommMonoid.toSubtractionMonoid.{0}
+                                                AspisV8R15.ExactTowerBase.M31Exact
+                                                (@AddCommGroup.toDivisionAddCommMonoid.{0}
+                                                  AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@Ring.toAddCommGroup.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                    (@DivisionRing.toRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                      (@Field.toDivisionRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                        (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                          AspisV8R15.ExactTowerBase.m31PrimeFact)))))))))
+                                        (@OfNat.ofNat.{0} AspisV8R15.ExactTowerBase.M31Exact (nat_lit 1)
+                                          (@One.toOfNat1.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@AddMonoidWithOne.toOne.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@AddGroupWithOne.toAddMonoidWithOne.{0}
+                                                AspisV8R15.ExactTowerBase.M31Exact
+                                                (@Ring.toAddGroupWithOne.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@DivisionRing.toRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                    (@Field.toDivisionRing.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                      (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                        AspisV8R15.ExactTowerBase.m31PrimeFact)))))))))
+                                      (@OfNat.ofNat.{0} AspisV8R15.ExactTowerBase.M31Exact (nat_lit 0)
+                                        (@Zero.toOfNat0.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                          (@MulZeroClass.toZero.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@instMulZeroClassOfSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@DivisionSemiring.toSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                (@Semifield.toDivisionSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                  (@Field.toSemifield.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                    (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                      AspisV8R15.ExactTowerBase.m31PrimeFact))))))))
+                                      (@Distrib.toAdd.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                        (@instDistribOfSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                          (@DivisionSemiring.toSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                            (@Semifield.toDivisionSemiring.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                              (@Field.toSemifield.{0} AspisV8R15.ExactTowerBase.M31Exact
+                                                (@ZMod.instField AspisV8R15.ExactTowerBase.P
+                                                  AspisV8R15.ExactTowerBase.m31PrimeFact)))))))))
+                                (@AspisR1.FIw_ArrayValue.decoded
+                                  (Aeneas.Std.Usize.ofNat
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯)
+                                  packed j)
+                                (@AspisR1.FIx_SelectedMeaning.contribution
+                                  (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                                    (Aeneas.Std.Usize.ofNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+                                  (@AspisR1.FIw_ArrayValue.decoded
+                                    (Aeneas.Std.Usize.ofNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)
+                                    (AspisR1.NKI_InitialInvocation.Locals.initial2 l))
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                  (@Fin.val
+                                    (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                                      (Aeneas.Std.Usize.ofNat
+                                        (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯))
+                                    j)))
+                              (@AspisR1.FIx_SelectedMeaning.contribution
+                                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                                  (Aeneas.Std.Usize.ofNat
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+                                (@AspisR1.FIw_ArrayValue.decoded
+                                  (Aeneas.Std.Usize.ofNat
+                                    (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)
+                                  absorption)
+                                (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16)))
+                                (@Fin.val
+                                  (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                                    (Aeneas.Std.Usize.ofNat
+                                      (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯))
+                                  j)))))))))) :=
+⋯
+theorem AspisR1.NKR_ScheduleAssociation.source : ∀
+  (packed :
+    Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯))
+  (p : AspisR1.NKI_InitialPrefix.Public) (o : AspisR1.NKI_InitialPrefix.Openings)
+  (s : AspisR1.NKI_InitialPrefix.Selectors)
+  (hp :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯) packed)
+  (hz :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)
+      (FIq_Native.state_only_poseidon.StateOnlyPoseidonOpenings.z o))
+  (hh :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64))) ⋯)
+      (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.high s))
+  (hl :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)
+      (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.low s)),
+  @Exists.{1}
+    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯))
+    fun
+      (out :
+        Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯)) =>
+    And
+      (@Eq.{1}
+        (Aeneas.Std.Result.{0}
+          (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯)))
+        (AspisR1.NKR_ScheduleAssociation.reference packed p o s)
+        (@Aeneas.Std.Result.ok.{0}
+          (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯))
+          out))
+      (And
+        (@Eq.{1}
+          (Aeneas.Std.Result.{0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯)))
+          (FIq_Native.pool_v1.pair_forest_semantic_terminal.add_schedule_lanes packed p o s)
+          (@Aeneas.Std.Result.ok.{0}
+            (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯))
+            out))
+        (@AspisR1.FIw_ArrayValue.canonical
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 24) (instOfNatNat (nat_lit 24))) ⋯) out)) :=
+⋯
+structure AspisR1.NKR_DigestChildren.Domain (p : AspisR1.NKI_InitialPrefix.Public) : Prop
+number of parameters: 1
+fields:
+  AspisR1.NKR_DigestChildren.Domain.anchor : AspisR1.NJX_DigestCohort.dc
+      (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.anchor p)
+  AspisR1.NKR_DigestChildren.Domain.nullifier : AspisR1.NJX_DigestCohort.dc
+      (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.nullifier p)
+  AspisR1.NKR_DigestChildren.Domain.recipient : ∀
+      (d :
+        Aeneas.Std.Array.{0} FIq_Native.field.M31
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)),
+      @Eq.{1}
+          (Option.{0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.M31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+          (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.recipient p)
+          (@Option.some.{0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.M31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))
+            d) →
+        AspisR1.NJX_DigestCohort.dc d
+  AspisR1.NKR_DigestChildren.Domain.change : AspisR1.NJX_DigestCohort.dc
+      (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.change p)
+  AspisR1.NKR_DigestChildren.Domain.frontier : ∀
+      (d :
+        Aeneas.Std.Array.{0} FIq_Native.field.M31
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)),
+      @Membership.mem.{0, 0}
+          (Aeneas.Std.Array.{0} FIq_Native.field.M31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))
+          (List.{0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.M31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+          (@List.instMembership.{0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.M31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+          (@Subtype.val.{1}
+            (List.{0}
+              (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+            (fun
+                (l :
+                  List.{0}
+                    (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))) =>
+              @Eq.{1} Nat
+                (@List.length.{0}
+                  (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))
+                  l)
+                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20))) ⋯)))
+            (FIq_Native.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1.frontier
+              (FIq_Native.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.live_snapshot
+                (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.transition p))))
+          d →
+        AspisR1.NJX_DigestCohort.dc d
+  AspisR1.NKR_DigestChildren.Domain.nextRoot : AspisR1.NJX_DigestCohort.dc
+      (FIq_Native.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1.next_root
+        (FIq_Native.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.candidate_afterstate
+          (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.transition p)))
+  AspisR1.NKR_DigestChildren.Domain.nextFrontier : ∀
+      (d :
+        Aeneas.Std.Array.{0} FIq_Native.field.M31
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)),
+      @Membership.mem.{0, 0}
+          (Aeneas.Std.Array.{0} FIq_Native.field.M31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))
+          (List.{0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.M31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+          (@List.instMembership.{0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.M31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+          (@Subtype.val.{1}
+            (List.{0}
+              (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+            (fun
+                (l :
+                  List.{0}
+                    (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))) =>
+              @Eq.{1} Nat
+                (@List.length.{0}
+                  (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))
+                  l)
+                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20))) ⋯)))
+            (FIq_Native.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1.next_frontier
+              (FIq_Native.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.candidate_afterstate
+                (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.transition p))))
+          d →
+        AspisR1.NJX_DigestCohort.dc d
+constructor:
+  AspisR1.NKR_DigestChildren.Domain.mk {p : AspisR1.NKI_InitialPrefix.Public}
+    (anchor : AspisR1.NJX_DigestCohort.dc (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.anchor p))
+    (nullifier :
+      AspisR1.NJX_DigestCohort.dc (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.nullifier p))
+    (recipient :
+      ∀
+        (d :
+          Aeneas.Std.Array.{0} FIq_Native.field.M31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)),
+        @Eq.{1}
+            (Option.{0}
+              (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+            (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.recipient p)
+            (@Option.some.{0}
+              (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))
+              d) →
+          AspisR1.NJX_DigestCohort.dc d)
+    (change : AspisR1.NJX_DigestCohort.dc (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.change p))
+    (frontier :
+      ∀
+        (d :
+          Aeneas.Std.Array.{0} FIq_Native.field.M31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)),
+        @Membership.mem.{0, 0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.M31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))
+            (List.{0}
+              (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+            (@List.instMembership.{0}
+              (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+            (@Subtype.val.{1}
+              (List.{0}
+                (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+              (fun
+                  (l :
+                    List.{0}
+                      (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))) =>
+                @Eq.{1} Nat
+                  (@List.length.{0}
+                    (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))
+                    l)
+                  (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20))) ⋯)))
+              (FIq_Native.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1.frontier
+                (FIq_Native.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.live_snapshot
+                  (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.transition p))))
+            d →
+          AspisR1.NJX_DigestCohort.dc d)
+    (nextRoot :
+      AspisR1.NJX_DigestCohort.dc
+        (FIq_Native.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1.next_root
+          (FIq_Native.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.candidate_afterstate
+            (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.transition p))))
+    (nextFrontier :
+      ∀
+        (d :
+          Aeneas.Std.Array.{0} FIq_Native.field.M31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)),
+        @Membership.mem.{0, 0}
+            (Aeneas.Std.Array.{0} FIq_Native.field.M31
+              (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))
+            (List.{0}
+              (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+            (@List.instMembership.{0}
+              (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+            (@Subtype.val.{1}
+              (List.{0}
+                (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+              (fun
+                  (l :
+                    List.{0}
+                      (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))) =>
+                @Eq.{1} Nat
+                  (@List.length.{0}
+                    (Aeneas.Std.Array.{0} FIq_Native.field.M31
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))
+                    l)
+                  (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 20) (instOfNatNat (nat_lit 20))) ⋯)))
+              (FIq_Native.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1.next_frontier
+                (FIq_Native.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.candidate_afterstate
+                  (FIq_Native.pool_v1.pair_forest_semantic_terminal.SemanticPublic.transition p))))
+            d →
+          AspisR1.NJX_DigestCohort.dc d) :
+    AspisR1.NKR_DigestChildren.Domain p
+theorem AspisR1.NKR_DigestComposed.source : ∀ (p : AspisR1.NKI_InitialPrefix.Public)
+  (o : AspisR1.NKI_InitialPrefix.Openings) (s : AspisR1.NKI_InitialPrefix.Selectors)
+  (hp : AspisR1.NKR_DigestChildren.Domain p)
+  (ho :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)
+      (FIq_Native.state_only_poseidon.StateOnlyPoseidonOpenings.z o))
+  (hh :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64))) ⋯)
+      (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.high s))
+  (hl :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)
+      (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.low s)),
+  @Exists.{1} AspisR1.NKR_DigestChildren.Children fun (c : AspisR1.NKR_DigestChildren.Children) =>
+    @Exists.{1} AspisR1.NKR_DigestCuts.Sums fun (sums : AspisR1.NKR_DigestCuts.Sums) =>
+      @Exists.{1} AspisR1.NKR_DigestChildren.Pair fun (out : AspisR1.NKR_DigestChildren.Pair) =>
+        @Exists.{1}
+          (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+            (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))
+          fun
+            (old :
+              Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)) =>
+          @Exists.{1} AspisR1.NKR_DigestCuts.PrefixFrames fun (v : AspisR1.NKR_DigestCuts.PrefixFrames) =>
+            @Exists.{1} AspisR1.NKR_DigestCuts.MiddleFrames fun (m : AspisR1.NKR_DigestCuts.MiddleFrames) =>
+              And (AspisR1.NKR_DigestChildren.Clauses p o s c)
+                (And (AspisR1.NKR_DigestChildren.Canonical c)
+                  (And (AspisR1.NKR_DigestInvocation.PrefixArithmetic c v)
+                    (And
+                      (AspisR1.NKR_DigestPrefixStep.Trace p o s c
+                        (List.finRange (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+                        (@Matrix.vecCons.{0} AspisR1.NKR_DigestChildren.Pair
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) AspisR1.NKR_DigestCuts.zero
+                          (@Matrix.vecCons.{0} AspisR1.NKR_DigestChildren.Pair
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) AspisR1.NKR_DigestCuts.zero
+                            (@Matrix.vecCons.{0} AspisR1.NKR_DigestChildren.Pair
+                              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) AspisR1.NKR_DigestCuts.zero
+                              (@Matrix.vecEmpty.{0} AspisR1.NKR_DigestChildren.Pair))))
+                        (@Matrix.vecCons.{0} AspisR1.NKR_DigestChildren.Pair
+                          (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) AspisR1.NKR_DigestCuts.zero
+                          (@Matrix.vecCons.{0} AspisR1.NKR_DigestChildren.Pair
+                            (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                            (v
+                              (@OfNat.ofNat.{0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+                                (nat_lit 3)
+                                (SimplexCategory.instOfNatToTypeOrderHomFinHAddNatLenOfNat
+                                  (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+                                  (nat_lit 3))))
+                            (@Matrix.vecCons.{0} AspisR1.NKR_DigestChildren.Pair
+                              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) AspisR1.NKR_DigestCuts.zero
+                              (@Matrix.vecEmpty.{0} AspisR1.NKR_DigestChildren.Pair)))))
+                      (And
+                        (AspisR1.NKR_DigestInvocation.MiddleArithmetic c
+                          (@Matrix.vecCons.{0} AspisR1.NKR_DigestChildren.Pair
+                            (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) AspisR1.NKR_DigestCuts.zero
+                            (@Matrix.vecCons.{0} AspisR1.NKR_DigestChildren.Pair
+                              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                              (v
+                                (@OfNat.ofNat.{0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+                                  (nat_lit 3)
+                                  (SimplexCategory.instOfNatToTypeOrderHomFinHAddNatLenOfNat
+                                    (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+                                    (nat_lit 3))))
+                              (@Matrix.vecCons.{0} AspisR1.NKR_DigestChildren.Pair
+                                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                AspisR1.NKR_DigestCuts.zero (@Matrix.vecEmpty.{0} AspisR1.NKR_DigestChildren.Pair))))
+                          m)
+                        (And
+                          (AspisR1.NKR_DigestCuts.MiddleNative p o s c
+                            (@Matrix.vecCons.{0} AspisR1.NKR_DigestChildren.Pair
+                              (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) AspisR1.NKR_DigestCuts.zero
+                              (@Matrix.vecCons.{0} AspisR1.NKR_DigestChildren.Pair
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))
+                                (v
+                                  (@OfNat.ofNat.{0} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))))
+                                    (nat_lit 3)
+                                    (SimplexCategory.instOfNatToTypeOrderHomFinHAddNatLenOfNat
+                                      (SimplexCategory.mk (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+                                      (nat_lit 3))))
+                                (@Matrix.vecCons.{0} AspisR1.NKR_DigestChildren.Pair
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                                  AspisR1.NKR_DigestCuts.zero (@Matrix.vecEmpty.{0} AspisR1.NKR_DigestChildren.Pair))))
+                            m)
+                          (And (@Eq.{1} AspisR1.NKR_DigestCuts.Sums (AspisR1.NKR_DigestCuts.afterCarry m) sums)
+                            (And
+                              (AspisR1.NKR_DigestWrapperView.NativeCut p o s p o s out out
+                                (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                              (And
+                                (AspisR1.NKR_DigestCuts.WrapperCut p o s p o s out out
+                                  (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                                (And
+                                  (@Eq.{1}
+                                    (Aeneas.Std.Result.{0}
+                                      (Prod.{0, 0} AspisR1.NKR_DigestChildren.Children AspisR1.NKR_DigestPrefix.Sums))
+                                    (AspisR1.NKR_DigestPrefix.run p o s)
+                                    (@Aeneas.Std.Result.ok.{0}
+                                      (Prod.{0, 0} AspisR1.NKR_DigestChildren.Children AspisR1.NKR_DigestCuts.Sums)
+                                      (@Prod.mk.{0, 0} AspisR1.NKR_DigestChildren.Children AspisR1.NKR_DigestCuts.Sums c
+                                        sums)))
+                                  (And (AspisR1.NKR_DigestPrefix.Frame c sums)
+                                    (And
+                                      (@Eq.{1} (Aeneas.Std.Result.{0} AspisR1.NKR_DigestChildren.Pair)
+                                        (AspisR1.NKR_DigestComplete.reference p o s)
+                                        (@Aeneas.Std.Result.ok.{0} AspisR1.NKR_DigestChildren.Pair out))
+                                      (And
+                                        (@Eq.{1} (Aeneas.Std.Result.{0} AspisR1.NKR_DigestChildren.Pair)
+                                          (AspisR1.NKR_DigestWrapper.reference p o s)
+                                          (@Aeneas.Std.Result.ok.{0} AspisR1.NKR_DigestChildren.Pair out))
+                                        (And
+                                          (@Eq.{1} (Aeneas.Std.Result.{0} AspisR1.NKR_DigestChildren.Pair)
+                                            (AspisR1.NKR_DigestWrapper.cohort p o s)
+                                            (@Aeneas.Std.Result.ok.{0} AspisR1.NKR_DigestChildren.Pair out))
+                                          (And
+                                            (∀ (j : Fin (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))),
+                                              AspisR1.FIv_NativeValue.Canon (out j))
+                                            (And
+                                              (@Eq.{1}
+                                                (Aeneas.Std.Result.{0}
+                                                  (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                    (Aeneas.Std.Usize.ofNat
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)))
+                                                (FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes p
+                                                  o s)
+                                                (@Aeneas.Std.Result.ok.{0}
+                                                  (Aeneas.Std.Array.{0} FIq_Native.field.QM31
+                                                    (Aeneas.Std.Usize.ofNat
+                                                      (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯))
+                                                  old))
+                                              (@AspisR1.FIw_ArrayValue.canonical
+                                                (Aeneas.Std.Usize.ofNat
+                                                  (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8))) ⋯)
+                                                old)))))))))))))))) :=
+⋯
+theorem AspisR1.NKR_SumFinishComposed.source : ∀ (scratch : AspisR1.NKR_SumFinishInvocation.Scratch)
+  (s : AspisR1.NKR_SumFinishInvocation.Selectors) (terms : AspisR1.NKR_SumFinishInvocation.Patterns)
+  (hsc :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 103) (instOfNatNat (nat_lit 103)))
+        AspisR1.NKR_SumFinishInvocation.Scratch._proof_1)
+      scratch)
+  (hh :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64))) ⋯)
+      (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.high s))
+  (hl :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)
+      (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.low s))
+  (ht :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 14) (instOfNatNat (nat_lit 14)))
+        AspisR1.NKR_SumFinishInvocation.Patterns._proof_1)
+      terms),
+  @Exists.{1} AspisR1.NKR_SumFinishBatch.State fun (dot : AspisR1.NKR_SumFinishBatch.State) =>
+    @Exists.{1} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 26) (instOfNatNat (nat_lit 26))) → AspisR1.FIv_NativeArithmetic.NQ)
+      fun
+        (coefficients :
+          Fin (@OfNat.ofNat.{0} Nat (nat_lit 26) (instOfNatNat (nat_lit 26))) → AspisR1.FIv_NativeArithmetic.NQ) =>
+      @Exists.{1} (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) → AspisR1.FIv_NativeArithmetic.NQ)
+        fun
+          (finished :
+            Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) → AspisR1.FIv_NativeArithmetic.NQ) =>
+        And
+          (AspisR1.NKR_SumFinishComposed.BatchTrace (AspisR1.NKR_SumFinishInvocation.tagValues s)
+            (AspisR1.NKR_SumFinishInvocation.weightValues scratch) (AspisR1.NKR_SumFinishInvocation.lowValues s)
+            AspisR1.NKR_SumFinishFold.order
+            (@Prod.mk.{0, 0}
+              (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) → AspisR1.FIv_NativeArithmetic.NQ)
+              (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) → AspisR1.FIv_NativeArithmetic.NQ)
+              AspisR1.NKR_SumFinishInvocation.zero4 AspisR1.NKR_SumFinishInvocation.zero4)
+            dot)
+          (And
+            (AspisR1.NKR_SumFinishComposed.PatternTrace
+              (@AspisR1.NJB_ArrayCarrier.cell AspisR1.FIv_NativeArithmetic.NQ
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 103) (instOfNatNat (nat_lit 103)))
+                  AspisR1.NKR_SumFinishInvocation.Scratch._proof_1)
+                scratch)
+              (@AspisR1.NJB_ArrayCarrier.cell FIq_Native.field.QM31
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)
+                (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.low s))
+              (List.finRange (@OfNat.ofNat.{0} Nat (nat_lit 43) (instOfNatNat (nat_lit 43))))
+              AspisR1.NKR_SumFinishInvocation.zero26 coefficients)
+            (And
+              (@Eq.{1}
+                (Aeneas.Std.Result.{0}
+                  (Prod.{0, 0}
+                    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) ⋯))
+                    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) ⋯))))
+                (AspisR1.NKR_SumFinishInvocation.reference scratch s terms)
+                (@Aeneas.Std.Result.ok.{0}
+                  (Prod.{0, 0}
+                    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) ⋯))
+                    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) ⋯)))
+                  (@Prod.mk.{0, 0}
+                    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) ⋯))
+                    (Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) ⋯))
+                    (@AspisR1.NJB_ArrayCarrier.array AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) ⋯) finished)
+                    (@AspisR1.NJB_ArrayCarrier.array AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) ⋯)
+                      (@Prod.snd.{0, 0}
+                        (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) →
+                          AspisR1.FIv_NativeArithmetic.NQ)
+                        (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) →
+                          AspisR1.FIv_NativeArithmetic.NQ)
+                        dot)))))
+              (And
+                (@AspisR1.FIw_ArrayValue.canonical
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) ⋯)
+                  (@AspisR1.NJB_ArrayCarrier.array AspisR1.FIv_NativeArithmetic.NQ
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) ⋯) finished))
+                (And
+                  (@AspisR1.FIw_ArrayValue.canonical
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) ⋯)
+                    (@AspisR1.NJB_ArrayCarrier.array AspisR1.FIv_NativeArithmetic.NQ
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) ⋯)
+                      (@Prod.snd.{0, 0}
+                        (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) →
+                          AspisR1.FIv_NativeArithmetic.NQ)
+                        (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) →
+                          AspisR1.FIv_NativeArithmetic.NQ)
+                        dot)))
+                  (And
+                    (∀ (g : Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))),
+                      @Eq.{1} AspisR1.FIv_NativeValue.K (AspisR1.FIv_NativeValue.decode (finished g))
+                        (AspisR1.NKR_SumFinishCohort.values scratch s terms g))
+                    (∀ (g : Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4)))),
+                      @Eq.{1} AspisR1.FIv_NativeValue.K
+                        (AspisR1.FIv_NativeValue.decode
+                          (@Prod.snd.{0, 0}
+                            (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) →
+                              AspisR1.FIv_NativeArithmetic.NQ)
+                            (Fin (@OfNat.ofNat.{0} Nat (nat_lit 4) (instOfNatNat (nat_lit 4))) →
+                              AspisR1.FIv_NativeArithmetic.NQ)
+                            dot g))
+                        (AspisR1.NKR_SumFinishCohort.baseWeights scratch s g))))))) :=
+⋯
+theorem AspisR1.NKR_SumCopyRoot.source : ∀ (lookup : AspisR1.NKR_SumCopyCollect.Lookups)
+  (keys : AspisR1.NKR_SumCopyAssociation.Keys) (domain : AspisR1.NKR_SumTagPermutation.Domain)
+  (permutation : AspisR1.NKR_SumTagPermutation.Cut) (metadata : AspisR1.NKR_SumTagAssociation.Cut domain)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (openings :
+    Aeneas.Std.Array.{0} AspisR1.FIv_NativeArithmetic.NQ
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+  (helper lambda chi : AspisR1.FIv_NativeArithmetic.NQ) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1)
+  (ho :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯) openings)
+  (hhelper : AspisR1.FIv_NativeValue.Canon helper) (hlambda : AspisR1.FIv_NativeValue.Canon lambda)
+  (hchi : AspisR1.FIv_NativeValue.Canon chi)
+  (hh :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 64) (instOfNatNat (nat_lit 64))) ⋯)
+      (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.high s))
+  (hl :
+    @AspisR1.FIw_ArrayValue.canonical
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)
+      (FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.low s)),
+  @Eq.{1} (Aeneas.Std.Result.{0} FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledCopyTerminalV1)
+    (AspisR1.NKR_SumCopyInvocation.reference lookup s openings helper lambda chi append variant)
+    (FIq_Native.pool_v1.pair_forest_copy_terminal.evaluate_with_selectors openings helper s lambda chi append
+      variant) :=
+⋯
+structure NLN.TreePacket (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (p : AspisR1.OraclePortCompactDraft.Parsed)
+  (raw :
+    Aeneas.Std.Array.{0} Aeneas.Std.U32
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯))
+  (root : NLL.Root) (batch kind : Aeneas.Std.Usize) : Prop
+number of parameters: 7
+fields:
+  NLN.TreePacket.returning : ∀ (idx : NLL.Indices) (val : NLL.Values) (events : List.{0} NLL.Event) (out : NLL.Answer),
+      NLL.Invocation H proof raw root batch kind idx val events out →
+        And
+          (@Eq.{1}
+            (Aeneas.Std.Result.{0}
+              (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1Stage2.verifier.Error)
+                (Prod.{0, 0}
+                  (Aeneas.Std.Array.{0} Aeneas.Std.U32
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+                  (Aeneas.Std.Array.{0}
+                    (Aeneas.Std.Array.{0} Aeneas.Std.U8
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯))
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)))))
+            (@NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) Unit (NKV_ConcreteChildren.digest H)
+              proof raw root batch kind idx val Unit.unit)
+            (@Aeneas.Std.Result.ok.{0} NLL.Answer out))
+          (And
+            (@Eq.{1} NLL.History (NLL.leafHistory kind events)
+              (NKV_QueryPlan.plan H p (AspisR1.Port4B_KeyInstall.queries raw)
+                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize batch)
+                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize kind)
+                (NLL.nodeView H proof
+                  (Aeneas.Std.Usize.wrapping_add
+                    (Aeneas.Std.Usize.wrapping_mul
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) ⋯) batch)
+                    kind))
+                root
+                (NJV_EntryABI.initial idx val
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯))))
+            (@Eq.{1}
+              (Prod.{0, 0} NLL.History
+                (Aeneas.Std.Result.{0} (Prod.{0, 0} Unit (Prod.{0, 0} NKV_StepErasure.Indices NKV_StepErasure.Values))))
+              (@Prod.mk.{0, 0} NLL.History
+                (Aeneas.Std.Result.{0} (Prod.{0, 0} Unit (Prod.{0, 0} NKV_StepErasure.Indices NKV_StepErasure.Values)))
+                (NLL.leafHistory kind events)
+                (NKV_ReturnBoundary.reject
+                  (@Aeneas.Std.Result.ok.{0}
+                    (Prod.{0, 0} NKV_StepErasure.Reply (Prod.{0, 0} NKV_StepErasure.Indices NKV_StepErasure.Values))
+                    out)))
+              (NLL_ObservedCalls.tree H proof p raw batch kind idx val)))
+  NLN.TreePacket.aborting : ∀ (idx : NLL.Indices) (val : NLL.Values) (events : List.{0} NLL.Event)
+      (pending : NLL.Pending),
+      NLL.AbortInvocation H proof raw root batch kind idx val events pending →
+        And
+          (NLL_Prefix.At
+            (NKV_QueryPlan.plan H p (AspisR1.Port4B_KeyInstall.queries raw)
+              (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize batch)
+              (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize kind)
+              (NLL.nodeView H proof
+                (Aeneas.Std.Usize.wrapping_add
+                  (Aeneas.Std.Usize.wrapping_mul
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) ⋯) batch)
+                  kind))
+              root
+              (NJV_EntryABI.initial idx val
+                (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯)))
+            (@HAppend.hAppend.{0, 0, 0} NLL.History NLL.History NLL.History
+              (@instHAppendOfAppend.{0} NLL.History
+                (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+              (NLL.leafHistory kind events) (NLL.Pending.answered pending))
+            (NLL.Pending.parts pending))
+          (NLL_Prefix.At
+            (@Prod.fst.{0, 0} NLL.History
+              (Aeneas.Std.Result.{0} (Prod.{0, 0} Unit (Prod.{0, 0} NLL.Indices NLL.Values)))
+              (NLL_ObservedCalls.tree H proof p raw batch kind idx val))
+            (@HAppend.hAppend.{0, 0, 0} NLL.History NLL.History NLL.History
+              (@instHAppendOfAppend.{0} NLL.History
+                (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+              (NLL.leafHistory kind events) (NLL.Pending.answered pending))
+            (NLL.Pending.parts pending))
+  NLN.TreePacket.counts : ∀ (idx : NLL.Indices) (val : NLL.Values) (events : List.{0} NLL.Event) (out : NLL.Answer),
+      NLL.Invocation H proof raw root batch kind idx val events out →
+        ∀ (nodes : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (count : Nat) (before : MultiproofConeRef.reference.Scratch)
+          (queries : List.{0} (Prod.{0, 0} NJP_RowModel.Request NJP_RowModel.Digest))
+          (answer : Prod.{0, 0} Bool NJP_RowModel.Scratch),
+          @Membership.mem.{0, 0} NLL.Event (List.{0} NLL.Event) (@List.instMembership.{0} NLL.Event) events
+              (NLL.Event.verify nodes count before queries answer) →
+            And
+              (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize (MultiproofConeRef.reference.Scratch.n before)))
+              (And
+                (@LE.le.{0} Nat instLENat
+                  (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize (MultiproofConeRef.reference.Scratch.n before))
+                  (@ite.{1} Nat
+                    (@Eq.{1} Nat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize batch)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                    (instDecidableEqNat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize batch)
+                      (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 12) (instOfNatNat (nat_lit 12)))))
+                (AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys before)))
+  NLN.TreePacket.abortCount : ∀ (idx : NLL.Indices) (val : NLL.Values) (events : List.{0} NLL.Event)
+      (pending : NLL.Pending),
+      NLL.AbortInvocation H proof raw root batch kind idx val events pending →
+        @LE.le.{0} Nat instLENat
+          (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+            (MultiproofConeRef.reference.Scratch.n (NLL.Frame.scratch (NLL.Pending.parent pending))))
+          (@ite.{1} Nat
+            (@Eq.{1} Nat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize batch)
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+            (instDecidableEqNat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize batch)
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+            (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))
+            (@OfNat.ofNat.{0} Nat (nat_lit 12) (instOfNatNat (nat_lit 12))))
+  NLN.TreePacket.bytes : ∀ (count : Nat),
+      @LE.le.{0} Nat instLENat
+        (@List.length.{0} Aeneas.Std.U8
+          (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+            (fun (l : List.{0} Aeneas.Std.U8) =>
+              @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+            (AspisR1.MultiproofConeSlotTail.prefixNodes
+              (NLL.nodeView H proof
+                (Aeneas.Std.Usize.wrapping_add
+                  (Aeneas.Std.Usize.wrapping_mul
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) ⋯) batch)
+                  kind))
+              count)))
+        (@OfNat.ofNat.{0} Nat (nat_lit 9216) (instOfNatNat (nat_lit 9216)))
+constructor:
+  NLN.TreePacket.mk {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8} {p : AspisR1.OraclePortCompactDraft.Parsed}
+    {raw :
+      Aeneas.Std.Array.{0} Aeneas.Std.U32
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯)}
+    {root : NLL.Root} {batch kind : Aeneas.Std.Usize}
+    (returning :
+      ∀ (idx : NLL.Indices) (val : NLL.Values) (events : List.{0} NLL.Event) (out : NLL.Answer),
+        NLL.Invocation H proof raw root batch kind idx val events out →
+          And
+            (@Eq.{1}
+              (Aeneas.Std.Result.{0}
+                (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1Stage2.verifier.Error)
+                  (Prod.{0, 0}
+                    (Aeneas.Std.Array.{0} Aeneas.Std.U32
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯))
+                    (Aeneas.Std.Array.{0}
+                      (Aeneas.Std.Array.{0} Aeneas.Std.U8
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯))
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 16) (instOfNatNat (nat_lit 16))) ⋯)))))
+              (@NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) Unit (NKV_ConcreteChildren.digest H)
+                proof raw root batch kind idx val Unit.unit)
+              (@Aeneas.Std.Result.ok.{0} NLL.Answer out))
+            (And
+              (@Eq.{1} NLL.History (NLL.leafHistory kind events)
+                (NKV_QueryPlan.plan H p (AspisR1.Port4B_KeyInstall.queries raw)
+                  (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize batch)
+                  (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize kind)
+                  (NLL.nodeView H proof
+                    (Aeneas.Std.Usize.wrapping_add
+                      (Aeneas.Std.Usize.wrapping_mul
+                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) ⋯) batch)
+                      kind))
+                  root
+                  (NJV_EntryABI.initial idx val
+                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯))))
+              (@Eq.{1}
+                (Prod.{0, 0} NLL.History
+                  (Aeneas.Std.Result.{0}
+                    (Prod.{0, 0} Unit (Prod.{0, 0} NKV_StepErasure.Indices NKV_StepErasure.Values))))
+                (@Prod.mk.{0, 0} NLL.History
+                  (Aeneas.Std.Result.{0}
+                    (Prod.{0, 0} Unit (Prod.{0, 0} NKV_StepErasure.Indices NKV_StepErasure.Values)))
+                  (NLL.leafHistory kind events)
+                  (NKV_ReturnBoundary.reject
+                    (@Aeneas.Std.Result.ok.{0}
+                      (Prod.{0, 0} NKV_StepErasure.Reply (Prod.{0, 0} NKV_StepErasure.Indices NKV_StepErasure.Values))
+                      out)))
+                (NLL_ObservedCalls.tree H proof p raw batch kind idx val))))
+    (aborting :
+      ∀ (idx : NLL.Indices) (val : NLL.Values) (events : List.{0} NLL.Event) (pending : NLL.Pending),
+        NLL.AbortInvocation H proof raw root batch kind idx val events pending →
+          And
+            (NLL_Prefix.At
+              (NKV_QueryPlan.plan H p (AspisR1.Port4B_KeyInstall.queries raw)
+                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize batch)
+                (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize kind)
+                (NLL.nodeView H proof
+                  (Aeneas.Std.Usize.wrapping_add
+                    (Aeneas.Std.Usize.wrapping_mul
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) ⋯) batch)
+                    kind))
+                root
+                (NJV_EntryABI.initial idx val
+                  (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯)))
+              (@HAppend.hAppend.{0, 0, 0} NLL.History NLL.History NLL.History
+                (@instHAppendOfAppend.{0} NLL.History
+                  (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+                (NLL.leafHistory kind events) (NLL.Pending.answered pending))
+              (NLL.Pending.parts pending))
+            (NLL_Prefix.At
+              (@Prod.fst.{0, 0} NLL.History
+                (Aeneas.Std.Result.{0} (Prod.{0, 0} Unit (Prod.{0, 0} NLL.Indices NLL.Values)))
+                (NLL_ObservedCalls.tree H proof p raw batch kind idx val))
+              (@HAppend.hAppend.{0, 0, 0} NLL.History NLL.History NLL.History
+                (@instHAppendOfAppend.{0} NLL.History
+                  (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+                (NLL.leafHistory kind events) (NLL.Pending.answered pending))
+              (NLL.Pending.parts pending)))
+    (counts :
+      ∀ (idx : NLL.Indices) (val : NLL.Values) (events : List.{0} NLL.Event) (out : NLL.Answer),
+        NLL.Invocation H proof raw root batch kind idx val events out →
+          ∀ (nodes : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (count : Nat) (before : MultiproofConeRef.reference.Scratch)
+            (queries : List.{0} (Prod.{0, 0} NJP_RowModel.Request NJP_RowModel.Digest))
+            (answer : Prod.{0, 0} Bool NJP_RowModel.Scratch),
+            @Membership.mem.{0, 0} NLL.Event (List.{0} NLL.Event) (@List.instMembership.{0} NLL.Event) events
+                (NLL.Event.verify nodes count before queries answer) →
+              And
+                (@LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+                  (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize (MultiproofConeRef.reference.Scratch.n before)))
+                (And
+                  (@LE.le.{0} Nat instLENat
+                    (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize (MultiproofConeRef.reference.Scratch.n before))
+                    (@ite.{1} Nat
+                      (@Eq.{1} Nat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize batch)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                      (instDecidableEqNat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize batch)
+                        (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 12) (instOfNatNat (nat_lit 12)))))
+                  (AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys before))))
+    (abortCount :
+      ∀ (idx : NLL.Indices) (val : NLL.Values) (events : List.{0} NLL.Event) (pending : NLL.Pending),
+        NLL.AbortInvocation H proof raw root batch kind idx val events pending →
+          @LE.le.{0} Nat instLENat
+            (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+              (MultiproofConeRef.reference.Scratch.n (NLL.Frame.scratch (NLL.Pending.parent pending))))
+            (@ite.{1} Nat
+              (@Eq.{1} Nat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize batch)
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+              (instDecidableEqNat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize batch)
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+              (@OfNat.ofNat.{0} Nat (nat_lit 10) (instOfNatNat (nat_lit 10)))
+              (@OfNat.ofNat.{0} Nat (nat_lit 12) (instOfNatNat (nat_lit 12)))))
+    (bytes :
+      ∀ (count : Nat),
+        @LE.le.{0} Nat instLENat
+          (@List.length.{0} Aeneas.Std.U8
+            (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+              (fun (l : List.{0} Aeneas.Std.U8) =>
+                @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+              (AspisR1.MultiproofConeSlotTail.prefixNodes
+                (NLL.nodeView H proof
+                  (Aeneas.Std.Usize.wrapping_add
+                    (Aeneas.Std.Usize.wrapping_mul
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) ⋯) batch)
+                    kind))
+                count)))
+          (@OfNat.ofNat.{0} Nat (nat_lit 9216) (instOfNatNat (nat_lit 9216)))) :
+    NLN.TreePacket H proof p raw root batch kind
+structure NLN.ValuesPacket (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (p : AspisR1.OraclePortCompactDraft.Parsed)
+  (raw :
+    Aeneas.Std.Array.{0} Aeneas.Std.U32
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯))
+  (roots : NLL_Parent.Roots) (batch : Aeneas.Std.Usize) : Prop
+number of parameters: 6
+fields:
+  NLN.ValuesPacket.returning : ∀ (history : NLL.History) (out : NLL.Reply),
+      NLL_Parent.Invocation H proof raw roots batch history out →
+        And
+          (@Eq.{1} (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1Stage2.verifier.Error))
+            (@NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H) Unit
+              (NKV_ConcreteChildren.digest H) proof raw roots batch Unit.unit)
+            (@Aeneas.Std.Result.ok.{0} NLL.Reply out))
+          (And
+            (@Eq.{1} NLL.History
+              (NLL_Parent.plan H proof p raw batch (NLL_Parent.sites roots) NKV_ParentSource.zeroI
+                NKV_ParentSource.zeroV)
+              history)
+            (@Eq.{1} (Prod.{0, 0} NLL.History (Aeneas.Std.Result.{0} Unit))
+              (NLL_ObservedCalls.calls H proof p raw batch (NLL_Parent.sites roots) NKV_ParentSource.zeroI
+                NKV_ParentSource.zeroV)
+              (@Prod.mk.{0, 0} NLL.History (Aeneas.Std.Result.{0} Unit) history
+                (NKV_ParentSource.observe (@Aeneas.Std.Result.ok.{0} NKV_StepErasure.Reply out)))))
+  NLN.ValuesPacket.aborting : ∀ (history : NLL.History) (pending : NLL.Pending),
+      NLL_Parent.AbortValues H proof raw roots batch history pending →
+        And
+          (NLL_Prefix.At
+            (NLL_Parent.plan H proof p raw batch (NLL_Parent.sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+            (@HAppend.hAppend.{0, 0, 0} NLL.History NLL.History NLL.History
+              (@instHAppendOfAppend.{0} NLL.History
+                (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+              history (NLL.Pending.answered pending))
+            (NLL.Pending.parts pending))
+          (NLL_Prefix.At
+            (@Prod.fst.{0, 0} NLL.History (Aeneas.Std.Result.{0} Unit)
+              (NLL_ObservedCalls.calls H proof p raw batch (NLL_Parent.sites roots) NKV_ParentSource.zeroI
+                NKV_ParentSource.zeroV))
+            (@HAppend.hAppend.{0, 0, 0} NLL.History NLL.History NLL.History
+              (@instHAppendOfAppend.{0} NLL.History
+                (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+              history (NLL.Pending.answered pending))
+            (NLL.Pending.parts pending))
+constructor:
+  NLN.ValuesPacket.mk {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8} {p : AspisR1.OraclePortCompactDraft.Parsed}
+    {raw :
+      Aeneas.Std.Array.{0} Aeneas.Std.U32
+        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯)}
+    {roots : NLL_Parent.Roots} {batch : Aeneas.Std.Usize}
+    (returning :
+      ∀ (history : NLL.History) (out : NLL.Reply),
+        NLL_Parent.Invocation H proof raw roots batch history out →
+          And
+            (@Eq.{1} (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1Stage2.verifier.Error))
+              (@NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H) Unit
+                (NKV_ConcreteChildren.digest H) proof raw roots batch Unit.unit)
+              (@Aeneas.Std.Result.ok.{0} NLL.Reply out))
+            (And
+              (@Eq.{1} NLL.History
+                (NLL_Parent.plan H proof p raw batch (NLL_Parent.sites roots) NKV_ParentSource.zeroI
+                  NKV_ParentSource.zeroV)
+                history)
+              (@Eq.{1} (Prod.{0, 0} NLL.History (Aeneas.Std.Result.{0} Unit))
+                (NLL_ObservedCalls.calls H proof p raw batch (NLL_Parent.sites roots) NKV_ParentSource.zeroI
+                  NKV_ParentSource.zeroV)
+                (@Prod.mk.{0, 0} NLL.History (Aeneas.Std.Result.{0} Unit) history
+                  (NKV_ParentSource.observe (@Aeneas.Std.Result.ok.{0} NKV_StepErasure.Reply out))))))
+    (aborting :
+      ∀ (history : NLL.History) (pending : NLL.Pending),
+        NLL_Parent.AbortValues H proof raw roots batch history pending →
+          And
+            (NLL_Prefix.At
+              (NLL_Parent.plan H proof p raw batch (NLL_Parent.sites roots) NKV_ParentSource.zeroI
+                NKV_ParentSource.zeroV)
+              (@HAppend.hAppend.{0, 0, 0} NLL.History NLL.History NLL.History
+                (@instHAppendOfAppend.{0} NLL.History
+                  (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+                history (NLL.Pending.answered pending))
+              (NLL.Pending.parts pending))
+            (NLL_Prefix.At
+              (@Prod.fst.{0, 0} NLL.History (Aeneas.Std.Result.{0} Unit)
+                (NLL_ObservedCalls.calls H proof p raw batch (NLL_Parent.sites roots) NKV_ParentSource.zeroI
+                  NKV_ParentSource.zeroV))
+              (@HAppend.hAppend.{0, 0, 0} NLL.History NLL.History NLL.History
+                (@instHAppendOfAppend.{0} NLL.History
+                  (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+                history (NLL.Pending.answered pending))
+              (NLL.Pending.parts pending))) :
+    NLN.ValuesPacket H proof p raw roots batch
+structure NLN.BatchPacket (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (parsed : AspisR1.OraclePortCompactDraft.Parsed)
+  (p : AspisR1Stage2.verifier.Prepared) (folded : NLL.Root) (batch : Aeneas.Std.Usize) : Prop
+number of parameters: 6
+fields:
+  NLN.BatchPacket.returning : ∀ (history : NLL.History) (out : NLL.Reply),
+      NLL_BatchSource.Invocation H proof p folded batch history out →
+        And
+          (@Eq.{1} (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1Stage2.verifier.Error))
+            (@NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) Unit (NKV_ConcreteChildren.digest H)
+              proof p folded batch Unit.unit)
+            (@Aeneas.Std.Result.ok.{0} NLL.Reply out))
+          (And
+            (@Eq.{1} NLL.History
+              (NLL_Parent.plan H proof parsed (AspisR1Stage2.verifier.Prepared.queries p) batch
+                (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+              history)
+            (@Eq.{1} (Prod.{0, 0} NLL.History (Aeneas.Std.Result.{0} Unit))
+              (NLL_ObservedCalls.calls H proof parsed (AspisR1Stage2.verifier.Prepared.queries p) batch
+                (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+              (@Prod.mk.{0, 0} NLL.History (Aeneas.Std.Result.{0} Unit) history
+                (NKV_ParentSource.observe (@Aeneas.Std.Result.ok.{0} NKV_StepErasure.Reply out)))))
+  NLN.BatchPacket.aborting : ∀ (history : NLL.History) (pending : NLL.Pending),
+      NLL_BatchAbort.Invocation H proof p folded batch history pending →
+        And
+          (NLL_Prefix.At
+            (NLL_Parent.plan H proof parsed (AspisR1Stage2.verifier.Prepared.queries p) batch
+              (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+            (@HAppend.hAppend.{0, 0, 0} NLL.History NLL.History NLL.History
+              (@instHAppendOfAppend.{0} NLL.History
+                (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+              history (NLL.Pending.answered pending))
+            (NLL.Pending.parts pending))
+          (NLL_Prefix.At
+            (@Prod.fst.{0, 0} NLL.History (Aeneas.Std.Result.{0} Unit)
+              (NLL_ObservedCalls.calls H proof parsed (AspisR1Stage2.verifier.Prepared.queries p) batch
+                (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV))
+            (@HAppend.hAppend.{0, 0, 0} NLL.History NLL.History NLL.History
+              (@instHAppendOfAppend.{0} NLL.History
+                (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+              history (NLL.Pending.answered pending))
+            (NLL.Pending.parts pending))
+constructor:
+  NLN.BatchPacket.mk {H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State}
+    {proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8} {parsed : AspisR1.OraclePortCompactDraft.Parsed}
+    {p : AspisR1Stage2.verifier.Prepared} {folded : NLL.Root} {batch : Aeneas.Std.Usize}
+    (returning :
+      ∀ (history : NLL.History) (out : NLL.Reply),
+        NLL_BatchSource.Invocation H proof p folded batch history out →
+          And
+            (@Eq.{1} (Aeneas.Std.Result.{0} (Aeneas.Std.core.result.Result.{0, 0} Unit AspisR1Stage2.verifier.Error))
+              (@NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) Unit
+                (NKV_ConcreteChildren.digest H) proof p folded batch Unit.unit)
+              (@Aeneas.Std.Result.ok.{0} NLL.Reply out))
+            (And
+              (@Eq.{1} NLL.History
+                (NLL_Parent.plan H proof parsed (AspisR1Stage2.verifier.Prepared.queries p) batch
+                  (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+                history)
+              (@Eq.{1} (Prod.{0, 0} NLL.History (Aeneas.Std.Result.{0} Unit))
+                (NLL_ObservedCalls.calls H proof parsed (AspisR1Stage2.verifier.Prepared.queries p) batch
+                  (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+                (@Prod.mk.{0, 0} NLL.History (Aeneas.Std.Result.{0} Unit) history
+                  (NKV_ParentSource.observe (@Aeneas.Std.Result.ok.{0} NKV_StepErasure.Reply out))))))
+    (aborting :
+      ∀ (history : NLL.History) (pending : NLL.Pending),
+        NLL_BatchAbort.Invocation H proof p folded batch history pending →
+          And
+            (NLL_Prefix.At
+              (NLL_Parent.plan H proof parsed (AspisR1Stage2.verifier.Prepared.queries p) batch
+                (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+              (@HAppend.hAppend.{0, 0, 0} NLL.History NLL.History NLL.History
+                (@instHAppendOfAppend.{0} NLL.History
+                  (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+                history (NLL.Pending.answered pending))
+              (NLL.Pending.parts pending))
+            (NLL_Prefix.At
+              (@Prod.fst.{0, 0} NLL.History (Aeneas.Std.Result.{0} Unit)
+                (NLL_ObservedCalls.calls H proof parsed (AspisR1Stage2.verifier.Prepared.queries p) batch
+                  (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV))
+              (@HAppend.hAppend.{0, 0, 0} NLL.History NLL.History NLL.History
+                (@instHAppendOfAppend.{0} NLL.History
+                  (@List.instAppend.{0} (Prod.{0, 0} AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State)))
+                history (NLL.Pending.answered pending))
+              (NLL.Pending.parts pending))) :
+    NLN.BatchPacket H proof parsed p folded batch
+theorem NLN_TX2_055.root : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (len :
+    @Eq.{1} Nat
+      (@List.length.{0} Aeneas.Std.U8
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          proof))
+      (@OfNat.ofNat.{0} Nat (nat_lit 57607) (instOfNatNat (nat_lit 57607))))
+  (p : AspisR1.OraclePortCompactDraft.Parsed)
+  (wire :
+    @Eq.{1} AspisV8R19.DuplexFrames.Bytes (AspisR1.OraclePortCompactDraft.Parsed.wire p)
+      (AspisR1.MultiproofConeCanonical.bytesOf
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          proof)))
+  (raw :
+    Aeneas.Std.Array.{0} Aeneas.Std.U32
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯))
+  (commitment : NLL.Root) (kind : Aeneas.Std.Usize)
+  (hk :
+    @LT.lt.{0} Nat instLTNat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize kind)
+      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+  (canonical :
+    ∀ (j : Nat),
+      @LT.lt.{0} Nat instLTNat j (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) →
+        @LT.lt.{0} Nat instLTNat
+          (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.U32
+            (@GetElem?.getElem!.{0, 0, 0} (List.{0} Aeneas.Std.U32) Nat Aeneas.Std.U32
+              (fun («as» : List.{0} Aeneas.Std.U32) (i : Nat) =>
+                @LT.lt.{0} Nat instLTNat i (@List.length.{0} Aeneas.Std.U32 «as»))
+              (@List.instGetElem?NatLtLength.{0} Aeneas.Std.U32)
+              (Aeneas.Std.instInhabitedUScalar Aeneas.Std.UScalarTy.U32)
+              (@Subtype.val.{1} (List.{0} Aeneas.Std.U32)
+                (fun (l : List.{0} Aeneas.Std.U32) =>
+                  @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U32 l)
+                    (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯)))
+                raw)
+              j))
+          (@OfNat.ofNat.{0} Nat (nat_lit 262144) (instOfNatNat (nat_lit 262144))))
+  (rootValue :
+    @Eq.{1} NLL.Root commitment
+      (AspisV8R19.SqueezeOracleBridge.encodeState
+        (AspisR1.OraclePortBatchDraft.committedRoot p (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize kind)))),
+  NLN.TreePacket H proof p raw commitment
+    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) ⋯) kind :=
+⋯
+theorem NLN_TX2_054.root : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (len :
+    @Eq.{1} Nat
+      (@List.length.{0} Aeneas.Std.U8
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          proof))
+      (@OfNat.ofNat.{0} Nat (nat_lit 57607) (instOfNatNat (nat_lit 57607))))
+  (p : AspisR1.OraclePortCompactDraft.Parsed)
+  (wire :
+    @Eq.{1} AspisV8R19.DuplexFrames.Bytes (AspisR1.OraclePortCompactDraft.Parsed.wire p)
+      (AspisR1.MultiproofConeCanonical.bytesOf
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          proof)))
+  (raw :
+    Aeneas.Std.Array.{0} Aeneas.Std.U32
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯))
+  (roots : NLL_Parent.Roots)
+  (canonical :
+    ∀ (j : Nat),
+      @LT.lt.{0} Nat instLTNat j (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) →
+        @LT.lt.{0} Nat instLTNat
+          (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.U32
+            (@GetElem?.getElem!.{0, 0, 0} (List.{0} Aeneas.Std.U32) Nat Aeneas.Std.U32
+              (fun («as» : List.{0} Aeneas.Std.U32) (i : Nat) =>
+                @LT.lt.{0} Nat instLTNat i (@List.length.{0} Aeneas.Std.U32 «as»))
+              (@List.instGetElem?NatLtLength.{0} Aeneas.Std.U32)
+              (Aeneas.Std.instInhabitedUScalar Aeneas.Std.UScalarTy.U32)
+              (@Subtype.val.{1} (List.{0} Aeneas.Std.U32)
+                (fun (l : List.{0} Aeneas.Std.U32) =>
+                  @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U32 l)
+                    (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯)))
+                raw)
+              j))
+          (@OfNat.ofNat.{0} Nat (nat_lit 262144) (instOfNatNat (nat_lit 262144))))
+  (rootValues :
+    ∀ (k : Fin (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))),
+      @Eq.{1}
+        (Aeneas.Std.Array.{0} Aeneas.Std.U8
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯))
+        (AspisR1.Port3_NativeBatchCalls.rootAt roots k)
+        (AspisV8R19.SqueezeOracleBridge.encodeState
+          (AspisR1.OraclePortBatchDraft.committedRoot p
+            (@Fin.val (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) k)))),
+  NLN.ValuesPacket H proof p raw roots
+    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) ⋯) :=
+⋯
+theorem NLN_TX2_053.root : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (len :
+    @Eq.{1} Nat
+      (@List.length.{0} Aeneas.Std.U8
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          proof))
+      (@OfNat.ofNat.{0} Nat (nat_lit 57607) (instOfNatNat (nat_lit 57607))))
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed)
+  (wire :
+    @Eq.{1} AspisV8R19.DuplexFrames.Bytes (AspisR1.OraclePortCompactDraft.Parsed.wire parsed)
+      (AspisR1.MultiproofConeCanonical.bytesOf
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          proof)))
+  (p : AspisR1Stage2.verifier.Prepared) (folded : NLL.Root)
+  (canonical :
+    ∀ (j : Nat),
+      @LT.lt.{0} Nat instLTNat j (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) →
+        @LT.lt.{0} Nat instLTNat
+          (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.U32
+            (@GetElem?.getElem!.{0, 0, 0} (List.{0} Aeneas.Std.U32) Nat Aeneas.Std.U32
+              (fun («as» : List.{0} Aeneas.Std.U32) (i : Nat) =>
+                @LT.lt.{0} Nat instLTNat i (@List.length.{0} Aeneas.Std.U32 «as»))
+              (@List.instGetElem?NatLtLength.{0} Aeneas.Std.U32)
+              (Aeneas.Std.instInhabitedUScalar Aeneas.Std.UScalarTy.U32)
+              (@Subtype.val.{1} (List.{0} Aeneas.Std.U32)
+                (fun (l : List.{0} Aeneas.Std.U32) =>
+                  @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U32 l)
+                    (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯)))
+                (AspisR1Stage2.verifier.Prepared.queries p))
+              j))
+          (@OfNat.ofNat.{0} Nat (nat_lit 262144) (instOfNatNat (nat_lit 262144))))
+  (rootValues :
+    ∀ (k : Fin (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))),
+      @Eq.{1}
+        (Aeneas.Std.Array.{0} Aeneas.Std.U8
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯))
+        (AspisR1.Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k)
+        (AspisV8R19.SqueezeOracleBridge.encodeState
+          (AspisR1.OraclePortBatchDraft.committedRoot parsed
+            (@Fin.val (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) k)))),
+  NLN.BatchPacket H proof parsed p folded
+    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) ⋯) :=
+⋯
+theorem NLN_TX1_083.root : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (len :
+    @Eq.{1} Nat
+      (@List.length.{0} Aeneas.Std.U8
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          proof))
+      (@OfNat.ofNat.{0} Nat (nat_lit 57607) (instOfNatNat (nat_lit 57607))))
+  (p : AspisR1.OraclePortCompactDraft.Parsed)
+  (wire :
+    @Eq.{1} AspisV8R19.DuplexFrames.Bytes (AspisR1.OraclePortCompactDraft.Parsed.wire p)
+      (AspisR1.MultiproofConeCanonical.bytesOf
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          proof)))
+  (raw :
+    Aeneas.Std.Array.{0} Aeneas.Std.U32
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯))
+  (commitment : NLL.Root) (kind : Aeneas.Std.Usize)
+  (hk :
+    @LT.lt.{0} Nat instLTNat (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize kind)
+      (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+  (canonical :
+    ∀ (j : Nat),
+      @LT.lt.{0} Nat instLTNat j (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) →
+        @LT.lt.{0} Nat instLTNat
+          (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.U32
+            (@GetElem?.getElem!.{0, 0, 0} (List.{0} Aeneas.Std.U32) Nat Aeneas.Std.U32
+              (fun («as» : List.{0} Aeneas.Std.U32) (i : Nat) =>
+                @LT.lt.{0} Nat instLTNat i (@List.length.{0} Aeneas.Std.U32 «as»))
+              (@List.instGetElem?NatLtLength.{0} Aeneas.Std.U32)
+              (Aeneas.Std.instInhabitedUScalar Aeneas.Std.UScalarTy.U32)
+              (@Subtype.val.{1} (List.{0} Aeneas.Std.U32)
+                (fun (l : List.{0} Aeneas.Std.U32) =>
+                  @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U32 l)
+                    (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯)))
+                raw)
+              j))
+          (@OfNat.ofNat.{0} Nat (nat_lit 262144) (instOfNatNat (nat_lit 262144))))
+  (rootValue :
+    @Eq.{1} NLL.Root commitment
+      (AspisV8R19.SqueezeOracleBridge.encodeState
+        (AspisR1.OraclePortBatchDraft.committedRoot p (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize kind)))),
+  NLN.TreePacket H proof p raw commitment
+    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯) kind :=
+⋯
+theorem NLN_TX1_082.root : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (len :
+    @Eq.{1} Nat
+      (@List.length.{0} Aeneas.Std.U8
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          proof))
+      (@OfNat.ofNat.{0} Nat (nat_lit 57607) (instOfNatNat (nat_lit 57607))))
+  (p : AspisR1.OraclePortCompactDraft.Parsed)
+  (wire :
+    @Eq.{1} AspisV8R19.DuplexFrames.Bytes (AspisR1.OraclePortCompactDraft.Parsed.wire p)
+      (AspisR1.MultiproofConeCanonical.bytesOf
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          proof)))
+  (raw :
+    Aeneas.Std.Array.{0} Aeneas.Std.U32
+      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯))
+  (roots : NLL_Parent.Roots)
+  (canonical :
+    ∀ (j : Nat),
+      @LT.lt.{0} Nat instLTNat j (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) →
+        @LT.lt.{0} Nat instLTNat
+          (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.U32
+            (@GetElem?.getElem!.{0, 0, 0} (List.{0} Aeneas.Std.U32) Nat Aeneas.Std.U32
+              (fun («as» : List.{0} Aeneas.Std.U32) (i : Nat) =>
+                @LT.lt.{0} Nat instLTNat i (@List.length.{0} Aeneas.Std.U32 «as»))
+              (@List.instGetElem?NatLtLength.{0} Aeneas.Std.U32)
+              (Aeneas.Std.instInhabitedUScalar Aeneas.Std.UScalarTy.U32)
+              (@Subtype.val.{1} (List.{0} Aeneas.Std.U32)
+                (fun (l : List.{0} Aeneas.Std.U32) =>
+                  @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U32 l)
+                    (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯)))
+                raw)
+              j))
+          (@OfNat.ofNat.{0} Nat (nat_lit 262144) (instOfNatNat (nat_lit 262144))))
+  (rootValues :
+    ∀ (k : Fin (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))),
+      @Eq.{1}
+        (Aeneas.Std.Array.{0} Aeneas.Std.U8
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯))
+        (AspisR1.Port3_NativeBatchCalls.rootAt roots k)
+        (AspisV8R19.SqueezeOracleBridge.encodeState
+          (AspisR1.OraclePortBatchDraft.committedRoot p
+            (@Fin.val (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) k)))),
+  NLN.ValuesPacket H proof p raw roots
+    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯) :=
+⋯
+theorem NLN_TX1_081.root : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice.{0} Aeneas.Std.U8)
+  (len :
+    @Eq.{1} Nat
+      (@List.length.{0} Aeneas.Std.U8
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          proof))
+      (@OfNat.ofNat.{0} Nat (nat_lit 57607) (instOfNatNat (nat_lit 57607))))
+  (parsed : AspisR1.OraclePortCompactDraft.Parsed)
+  (wire :
+    @Eq.{1} AspisV8R19.DuplexFrames.Bytes (AspisR1.OraclePortCompactDraft.Parsed.wire parsed)
+      (AspisR1.MultiproofConeCanonical.bytesOf
+        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)
+          (fun (l : List.{0} Aeneas.Std.U8) =>
+            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)
+          proof)))
+  (p : AspisR1Stage2.verifier.Prepared) (folded : NLL.Root)
+  (canonical :
+    ∀ (j : Nat),
+      @LT.lt.{0} Nat instLTNat j (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) →
+        @LT.lt.{0} Nat instLTNat
+          (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.U32
+            (@GetElem?.getElem!.{0, 0, 0} (List.{0} Aeneas.Std.U32) Nat Aeneas.Std.U32
+              (fun («as» : List.{0} Aeneas.Std.U32) (i : Nat) =>
+                @LT.lt.{0} Nat instLTNat i (@List.length.{0} Aeneas.Std.U32 «as»))
+              (@List.instGetElem?NatLtLength.{0} Aeneas.Std.U32)
+              (Aeneas.Std.instInhabitedUScalar Aeneas.Std.UScalarTy.U32)
+              (@Subtype.val.{1} (List.{0} Aeneas.Std.U32)
+                (fun (l : List.{0} Aeneas.Std.U32) =>
+                  @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U32 l)
+                    (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize
+                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22))) ⋯)))
+                (AspisR1Stage2.verifier.Prepared.queries p))
+              j))
+          (@OfNat.ofNat.{0} Nat (nat_lit 262144) (instOfNatNat (nat_lit 262144))))
+  (rootValues :
+    ∀ (k : Fin (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))),
+      @Eq.{1}
+        (Aeneas.Std.Array.{0} Aeneas.Std.U8
+          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 32) (instOfNatNat (nat_lit 32))) ⋯))
+        (AspisR1.Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k)
+        (AspisV8R19.SqueezeOracleBridge.encodeState
+          (AspisR1.OraclePortBatchDraft.committedRoot parsed
+            (@Fin.val (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) k)))),
+  NLN.BatchPacket H proof parsed p folded
+    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) ⋯) :=
+⋯

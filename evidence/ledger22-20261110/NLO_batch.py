@@ -4,7 +4,8 @@ import subprocess,json,time,hashlib,re,sys,os
 B=Path.cwd();mode=sys.argv[1];E=B/'NLO_audit'/mode;E.mkdir(parents=True,exist_ok=True)
 if mode=='close':
  exec(compile((B/'NLO_pin.py').read_text(),'NLO_pin.py','exec'));sys.exit(0)
-if mode=='review-close':jobs=[('review',[os.environ['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NLO_generated','-o','NLO_objects/NLO_HypothesisReview.olean','NLO_generated/NLO_HypothesisReview.lean'])]
+if mode=='retention':jobs=[('retention',['python3','NLO_scope40.py'])]
+elif mode=='review-close':jobs=[('review',[os.environ['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NLO_generated','-o','NLO_objects/NLO_HypothesisReview.olean','NLO_generated/NLO_HypothesisReview.lean'])]
 elif mode.startswith('inventory-'):jobs=[(mode,['NLO_native/NLO_InventoryDriver',mode.split('-')[1]])]
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NLO_native/'+('NLO_PoolDriver' if mode=='poolscan' else 'NLO_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
 elif mode in ['fixtures','scan','scan2']:jobs=[('scan' if mode=='scan2' else mode,['NLO_native/'+('NLO_Driver' if mode.startswith('scan') else 'NLO_ProofDriver'),'scan' if mode=='scan2' else mode])]

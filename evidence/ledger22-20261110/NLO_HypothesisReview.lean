@@ -1,5 +1,6 @@
 import NLO_COMBINED_IMPORT
 set_option pp.all true
+set_option pp.proofs false
 #print AspisR1.NKR_SumCarrier.source
 #print NKR_SumDispatch.native_reference
 #print NKR_SumDispatch.helper_domains
