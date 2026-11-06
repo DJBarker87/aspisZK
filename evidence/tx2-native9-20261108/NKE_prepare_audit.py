@@ -1,6 +1,7 @@
 """Select current focused-green sources; create one combined import/audit plan."""
 from pathlib import Path
 import hashlib,json,re
+from NKE_read import read_text
 E=Path(__file__).resolve().parent
 latest={}
 for p in sorted(E.glob('NKE_L*/receipt.json')):
@@ -22,7 +23,7 @@ for x in ['AspisR1.NJU_GeneralFinishRoot.finish','AspisR1.NJU_GeneralFinishRoot.
 (E/'NKE_SELECTED_SOURCES.json').write_text(json.dumps(source_rows,indent=2)+'\n')
 imports=['NKC_COMBINED_IMPORT','NJU_COMBINED_IMPORT']+modules
 (E/'NKE_COMBINED_IMPORT.lean').write_text(''.join('import '+m+'\n' for m in imports)+'\nset_option pp.proofs false\n#print AspisR1.RPx_Deployed.deployed\n#print axioms AspisR1.RPx_Deployed.deployed\n')
-rows={json.loads(l)['module']:json.loads(l) for l in (E/'NKE_BASE_EXPECTED_IMPORTS.jsonl').read_text().splitlines()}
+rows={json.loads(l)['module']:json.loads(l) for l in read_text(E/'NKE_BASE_EXPECTED_IMPORTS.jsonl').splitlines()}
 for m in modules+['NKE_COMBINED_IMPORT']:
  imp=['Init']+re.findall(r'^import (\S+)',(E/(m+'.lean')).read_text(),re.M)
  rows[m]={'module':m,'imports':list(dict.fromkeys(imp))}

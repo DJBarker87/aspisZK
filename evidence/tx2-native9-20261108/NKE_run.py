@@ -1,6 +1,7 @@
 """NFX-owned serial client for unchanged S2W launcher; no shared tool edits."""
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,re,os,atexit
+from NKE_read import read_text
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-tx2-native9-20261108';C='/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 if (E/'NKE_HOLD').exists():sys.exit(75)
@@ -73,7 +74,7 @@ elif kind in ['extract','preflight']:
  sources=list(files);command=['python3','NKE_extract.py']+(['--preflight'] if kind=='preflight' else [])
 elif kind=='kani':
  files['NKE_gate.py']=(E/'NKE_gate.py').read_text()
- for n,t in json.loads((E/'NKE_NATIVE_INPUTS.json').read_text()).items():files['NKE_src/'+n]=t
+ for n,t in json.loads(read_text(E/'NKE_NATIVE_INPUTS.json')).items():files['NKE_src/'+n]=t
  files['NKE_SOURCE_PINS.json']=(E/'NKE_SOURCE_PINS.json').read_text()
  sources=list(files);command=['python3','NKE_gate.py',a+'.json']
 elif kind=='lean':
@@ -86,7 +87,7 @@ elif kind=='link':
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NKE_native/'+target,*sources]
 elif kind=='audit':
  sources=['NKE_generated/NKE_ProofDriver.lean','NKE_generated/NKE_Driver.lean','NKE_batch.py','NKE_AUDIT_ROOTS.json','NKE_EXPECTED_IMPORTS.jsonl']+(['NKE_POOL_ROOTS.json'] if target.startswith('pool') else [])
- for n in sources:files[n]=(E/Path(n).name).read_text()
+ for n in sources:files[n]=read_text(E/Path(n).name)
  command=['python3','NKE_batch.py',target]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NKE_tmp',LEAN_PATH=':'.join([B+'/NKE_objects',C+'/NGI_exports_20261105',C+'/NFT_exports_20261104',C+'/NFU_exports_20261104',C+'/NFV_final_objects_20261104',C+'/NGE_exports_20261104',C+'/NGF_exports_20261104',C+'/NFY_exports_20261104',C+'/NFY_priority',W,W+'/objects',C+'/NKE_d_fallback/NFQ_exports_20261104',C+'/NKE_d_fallback',C+'/NKE_pool_fallback/NFR_final_objects_20261104',C+'/NKE_pool_fallback/NFO_final_objects_20261104',C+'/NKE_pool_fallback',C+'/NKE_pool_fallback/NEY_final_objects_20261104',C+'/NKE_pool_fallback/NEX_final_objects_20261104',C+'/NKE_pool_fallback/NEQ_final_objects_20261103',C+'/NKE_pool_fallback/NEM_final_objects_20261102',C+'/NKE_pool_fallback/NEU_final_objects_20261104',C,T+'/lib/lean'])),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')

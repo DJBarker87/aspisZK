@@ -55,9 +55,9 @@ Semantic expands to ten entered K reads at 408+16i, 0≤i<10. Weights expands to
 | Common event | Native cut or CLOSED child | Required frame / remaining association |
 |---|---|---|
 | C01 resume | R01–R45 above; NJU_ResumeRoot.source | SAME ck/proof/pub, actual wr, complete Prepared/Accumulator or Err/abort |
-| C02 powers | CLOSED powers child; gamma from SAME resumed Prepared | Missing native common call-entry window; full29 output and immutable p/a |
+| C02 powers | CLOSED powers child; gamma from SAME resumed Prepared | K034/K035 full29 reply/SAME gamma; immutable p/a caller frame still required |
 | C03 inactive | CLOSED WideExact::from_le_bytes | SAME proof[7495..7527], Option None→Err(Parse), malformed slice abort prefix |
-| C04 merkle | TX2:053 OPEN (NKB absent from research) | SAME proof,p,folded_root, batch1,hash; exact Result/effects |
+| C04 merkle | TX2:053 OPEN (NKB merged, NO_NEW_CLOSED_ROWS) | SAME proof,p,folded_root, batch1,hash; exact Result/effects |
 | C05 geometry | CLOSED QueryGeometry::for_range | SAME p.queries,a.next,22; full Result/owned reply |
 | C06 pending | NJJ allocation/start/end + NJR_Cuts.pending; NKE_PendingNative.source | SAME a.weights, rr; raw64 and terms0, no success premise |
 | C07 query | CLOSED query_loop; NJR_Cuts.queryReturn; NKE_QueryReturn.observed_exact | Full weights/raw64, rhs,power,next,terms; missing call-entry common arguments |
@@ -72,4 +72,6 @@ Missing native windows are findings until new matched controls pass: common call
 
 All45 resume calls and all9 common calls now have concrete typed program/codec instances. NKE_ResumeAssociation.source/prefixes/at_common and NKE_CommonAssociation.source/prefixes compile (L057/L058). Decoder laws accept every full reply, reject mismatched arguments, and G ignores child-model seeds. The prefix state is the entire residual caller continuation, not a free endpoint state. This is forward substitution at the same arguments, never an inverse association of separate native runs. Native scope/domain/frame coverage remains independently required. NKE_OCCURRENCES.json now assigns every source role/offset explicitly.
 
-Geometry has three matched native windows with the12/12 domain derived by NKE_GeometryDomain.returned. Current View has all six matched byte-window families (round0, round1, final groups0..3); natural byte/frame composition is being compiled. New query-entry argument windows are in progress; the retained NJR returning windows alone do not assert those arguments. No TX2:065 promotion.
+Geometry has three matched native windows with the12/12 domain derived by NKE_GeometryDomain.returned. Current View has all six matched byte-window families (round0, round1, final groups0..3); natural byte/frame composition compiled (NKE_ViewCut.same). Borrowed p/g and geometry prefixes passed controls; complete owned query-entry frame and proof bytes remain OPEN; the retained NJR returning windows alone do not assert those arguments. No TX2:065 promotion.
+
+Final JSON inventory includes all54 outer occurrences (45 resume+9 common), exact original source lines and explicit native cut/frame disposition. NKE_CommonCalls.source proves all9 SAME-argument source replies; NKE_ResumeAtCommon.source installs C01 from that SAME nested Program. Actual reader full replies/frame laws compile in NKE_RawAtSource/KAtSource/EAtSource; literal caller cursor/width installation remains OPEN.
