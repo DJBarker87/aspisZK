@@ -1,0 +1,88 @@
+theorem NLQ_SnapshotFold.returned : ∀ (e : Entry), (G e (ok ()) (ok ()) (ok ())).result = ok (e.first, final e) :=
+fun e =>
+  id
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (NJU_Log.erase_bind (NLM_Snapshot.G (ready e 0 []) 0 58295 58295 (ok ())) fun __x => do
+                let __x_1 ← NLM_Snapshot.G __x.2 1 1880 1880 (ok ())
+                let __x_2 ← NLM_Snapshot.G __x_1.2 2 1768 1768 (ok ())
+                pure (owned3 __x.1 __x_1.1 __x_2.1, __x_2.2))
+              (congrArg (Bind.bind (NLM_Snapshot.G (ready e 0 []) 0 58295 58295 (ok ())).result)
+                (funext fun a =>
+                  Eq.trans
+                    (NJU_Log.erase_bind (NLM_Snapshot.G a.2 1 1880 1880 (ok ())) fun __x => do
+                      let __x_1 ← NLM_Snapshot.G __x.2 2 1768 1768 (ok ())
+                      pure (owned3 a.1 __x.1 __x_1.1, __x_1.2))
+                    (congrArg (Bind.bind (NLM_Snapshot.G a.2 1 1880 1880 (ok ())).result)
+                      (funext fun a_1 =>
+                        NJU_Log.erase_bind (NLM_Snapshot.G a_1.2 2 1768 1768 (ok ())) fun __x =>
+                          pure (owned3 a.1 a_1.1 __x.1, __x.2)))))))
+          (ok (e.first, final e))))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let a ← _a
+                  let a_1 ← (NLM_Snapshot.G a.2 1 1880 1880 (ok ())).result
+                  let a_2 ← (NLM_Snapshot.G a_1.2 2 1768 1768 (ok ())).result
+                  ok (owned3 a.1 a_1.1 a_2.1, a_2.2)) =
+                ok (e.first, final e))
+            (normal_result e 0 0 58295 58295 [])))
+        (Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (bind_tc_ok (e.snapshot 0 58295 58295, NLM_Snapshot.returned (ready e 0 []) 0 58295 58295) fun y => do
+                  let a ← (NLM_Snapshot.G y.2 1 1880 1880 (ok ())).result
+                  let a_1 ← (NLM_Snapshot.G a.2 2 1768 1768 (ok ())).result
+                  ok (owned3 y.1 a.1 a_1.1, a_1.2)))
+              (ok (e.first, final e))))
+          (id
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (do
+                        let __x ← _a
+                        match __x with
+                          | (pub, s2) => do
+                            let __x ← (NLM_Snapshot.G s2 2 1768 1768 (ok ())).result
+                            match __x with
+                              | (cp, s3) => ok (owned3 (e.snapshot 0 58295 58295) pub cp, s3)) =
+                      ok (e.first, final e))
+                  (normal_result e 1 1 1880 1880 [e.snapshot 0 58295 58295])))
+              (Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (bind_tc_ok
+                        (e.snapshot 1 1880 1880,
+                          NLM_Snapshot.returned (ready e 1 [e.snapshot 0 58295 58295]) 1 1880 1880)
+                        fun y => do
+                        let __x ← (NLM_Snapshot.G y.2 2 1768 1768 (ok ())).result
+                        ok (owned3 (e.snapshot 0 58295 58295) y.1 __x.1, __x.2)))
+                    (ok (e.first, final e))))
+                (id
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          (do
+                              let __x ← _a
+                              match __x with
+                                | (cp, s3) => ok (owned3 (e.snapshot 0 58295 58295) (e.snapshot 1 1880 1880) cp, s3)) =
+                            ok (e.first, final e))
+                        (normal_result e 2 2 1768 1768 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880])))
+                    (Eq.refl do
+                      let __x ←
+                        ok
+                            (e.snapshot 2 1768 1768,
+                              NLM_Snapshot.returned (ready e 2 [e.snapshot 0 58295 58295, e.snapshot 1 1880 1880]) 2
+                                1768 1768)
+                      match __x with
+                        | (cp, s3) => ok (owned3 (e.snapshot 0 58295 58295) (e.snapshot 1 1880 1880) cp, s3))))))))))
+'NLQ_SnapshotFold.returned' depends on axioms: [propext, Classical.choice, Quot.sound]

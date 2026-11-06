@@ -1,0 +1,64 @@
+{"attempt": "NLQ_L012", "exit_status": 1, "wall_seconds": 22.263619703007862, "peak_rss_kib": "5997360", "swaps": "0", "print_axioms": ["'NLQ_SnapshotFold.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_SnapshotFold.lean:11:68: error: Ambiguous term
+  Owned
+Possible interpretations:
+  NLM_Snapshot.Owned : Type
+  
+  S2W_D189Entry.Owned : Type
+NLQ_generated/NLQ_SnapshotFold.lean:29:6: error: Invalid `⟨...⟩` notation: The expected type of this term could not be determined
+theorem NLQ_SnapshotFold.returned : ∀ (e : Entry), (G e (ok ()) (ok ()) (ok ())).result = ok (sorry, final e) :=
+fun e =>
+  id
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (NJU_Log.erase_bind (NLM_Snapshot.G (ready e 0 []) 0 58295 58295 (ok ())) fun __x => do
+                let __x ← NLM_Snapshot.G __x.2 1 1880 1880 (ok ())
+                let __x ← NLM
+...
+))))
+          (ok (sorry, final e))))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let a ← _a
+                  let a ← (NLM_Snapshot.G a.2 1 1880 1880 (ok ())).result
+                  let a ← (NLM_Snapshot.G a.2 2 1768 1768 (ok ())).result
+                  ok
+                      (⟨[sorry, sorry, sorry],
+                          Eq.mpr
+                            (id
+                              (congrFun'
+                                (congrArg LE.le
+                                  (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd G._proof_1) 1)) 1))
+                                Usize.max))
+                            G._proof_2⟩,
+                        a.2)) =
+                ok (sorry, final e))
+            (normal_result e 0 0 58295 58295 [])))
+        (Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (bind_tc_ok (e.snapshot 0 58295 58295, NLM_Snapshot.returned (ready e 0 []) 0 58295 58295) fun y => do
+                  let a ← (NLM_Snapshot.G y.2 1 1880 1880 (ok ())).result
+                  let a ← (NLM_Snapshot.G a.2 2 1768 1768 (ok ())).result
+                  ok
+                      (⟨[sorry, sorry, sorry],
+                          Eq.mpr
+                            (id
+                              (congrFun'
+                                (congrArg LE.le
+                                  (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd G._proof_1) 1)) 1))
+                                Usize.max))
+                            G._proof_2⟩,
+                        a.2)))
+              (ok (sorry, final e))))
+          sorry)))
+'NLQ_SnapshotFold.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0879a1ab88df4b55a3418945bbdee10a.scope; invocation ID: dd6c0663a47d49a0bb70622dc5061b10

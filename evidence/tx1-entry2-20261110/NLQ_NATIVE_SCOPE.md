@@ -1,0 +1,7 @@
+# NLQ native scope and exact limitations
+
+Native run K001 failed at compilation: a root child module could not access the private stage1 re-export. The OWN harness was repaired by adding a cfg(kani)-only adapter child module that forwards to super::stage1; no shared infrastructure changed. K002 uses the SAME harness name and passes on the ACTUAL frozen public entry. The witness uses [3,11],three aliases of one live2-byte AccountInfo, arbitrary key/owner/flags/money/content; the native Result is InvalidArgument and SDK guards/data/money/metadata restore. This malformed-extent/duplicate-key partition is a finding witness, not whole-domain row credit.
+
+K003 is the matched wrong-Result control (historical harness name retained): it asserts InvalidInstructionData on the SAME native inputs and must FAIL. K004/K005 run the canonical KMX pointer positive/negative controls in the same deployed configuration. K006-K009 isolate process and stage1 with the same pair. No contracts/stub_verified, child stubs, field multiplication,SHA,Option<fn>-dependent assertion or writable static is used. Reached copy builtins use EXACT KMX mitigation; its SHA and frozen source/lock/graph/features are checked before EVERY run and the lock rechecked afterward.
+
+No implementation/model mismatch was found: the complete emitted else includes eleven (NLQ_CORRECTIONS.md). These checks exercise the actual early duplicate-key rejection and SDK cleanup. No pending runtime item or new trust row is used. Native passes below are support/finding evidence; rows stay OPEN.

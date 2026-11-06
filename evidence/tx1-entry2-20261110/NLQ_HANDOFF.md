@@ -6,3 +6,5 @@ Method: fold-first, exact typed open-child packets, NLF SDK token events and cal
 Frozen source and security contract unchanged. No new trust, RuntimeCpiReadonlyEntry7 unused. No shipped-file changes or wallet actions. Commits local only.
 Budget:40 Kani,140 Lean,0 extraction; one admitted capped scope at a time. Workspace /home/dombarker/project-offloads/codex-cx-tx1-entry2-20261110; CARGO_TARGET_DIR=workspace/NLQ_target.
 Next: seed NLD then NLF then NLO; inventory native windows and construct first_decoded fold.
+
+Stage correction: provisional NLQ-F1 emission mismatch RETRACTED (NLQ_CORRECTIONS.md). Full emitted else includes eleven. K002..K009 are retained native regression/control pairs, not counterexamples to the model. No row promotion; target not yet established.

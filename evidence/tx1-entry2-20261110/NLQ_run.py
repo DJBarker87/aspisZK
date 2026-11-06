@@ -2,7 +2,7 @@
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,lzma,re,os,atexit
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
-B='/home/dombarker/project-offloads/codex-cx-tx1-entry2-20261110';C='/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NLQ_20261109';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
+B='/home/dombarker/project-offloads/codex-cx-tx1-entry2-20261110';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 if (E/'NLQ_HOLD').exists():sys.exit(75)
 guard=E/'NLQ_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 a,kind,target=sys.argv[1:];assert re.fullmatch('NLQ_L[0-9]{3}',a) and 1<=int(a[-3:])<=140 and not (E/a).exists()
@@ -42,7 +42,7 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
 files={};sources=[]
 if kind=='lean':
  if target=='NLQ_OwnerStatements':files['NLQ_AUDIT_ROOTS.json']=(E/'NLQ_AUDIT_ROOTS.json').read_text()
- n='NLQ_generated/'+target.replace('.','/')+'.lean';files[n]=((E/(target+'.lean'))if (E/(target+'.lean')).exists()else(E/'NLQ_dependency_inputs'/(target+'.lean'))).read_text();sources=[n]
+ n='NLQ_generated/'+target.replace('.','/')+'.lean';files[n]=((E/(target+'.lean'))if (E/(target+'.lean')).exists()else(E/'NLQ_dependency_inputs'/(target+'.lean.txt'))).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NLQ_generated','-o','NLQ_objects/'+target.replace('.','/')+'.olean',n]
  if target in ['NLQ_Driver','NLQ_ProofDriver','NLQ_PoolProofDriver','NLQ_PoolDriver']:command+=['-c','NLQ_native/'+target+'.c']
 elif kind=='link':
