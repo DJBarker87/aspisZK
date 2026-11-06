@@ -1,0 +1,7 @@
+theorem NLT_C04StopReseed.forward : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (left right : Program Event A),
+  NLT_Reseed.Same left right →
+    ∀ (records : List (Occurrence H d hash)) (cut : NLT_C04Stop.Cut H),
+      NLT_C04Stop.At H d hash left records cut → NLT_C04Stop.At H d hash right records cut :=
+⋯
+'NLT_C04StopReseed.forward' depends on axioms: [propext, Classical.choice, Quot.sound]

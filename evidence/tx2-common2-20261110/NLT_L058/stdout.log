@@ -1,0 +1,12 @@
+theorem NLT_C04StopPrefix.source : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (f : NLT_Interpreted.Uninstalled) (p : Program Event A) (records : List (Occurrence H d hash))
+  (cut : NLT_C04Stop.Cut H),
+  NLT_C04Stop.At H d hash p records cut →
+    (∀ r ∈ records, NLT_NativeWindows.Compatible f r.entered r.input) →
+      (∀ e ∈ (eval p).events, ∀ (observed : Event), NLT_EraseCompatible.Local f H d hash e observed → observed = e) →
+        ∃ e suffix,
+          (eval p).events = List.map actual records ++ e :: suffix ∧
+            NLT_NativeWindows.question e = NLT_C04Stop.question cut :=
+⋯
+'NLT_C04StopPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_C04StopPrefix.merkle_of_question' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,25 @@
+{"attempt": "NLT_L056", "exit_status": 0, "wall_seconds": 17.91297517903149, "peak_rss_kib": "6417932", "swaps": "0", "print_axioms": ["'NLT_C04StopOrder.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLT_C04StopOrder.ordered : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (p : Program Event A) (records : List (Occurrence H d hash)) (cut : NLT_C04Stop.Cut H),
+  NLT_C04Stop.At H d hash p records cut →
+    ∀ (n : ℕ),
+      Shape n p →
+        (∀ record ∈ records, n ≤ rank (actual record)) ∧
+          List.Pairwise (fun left right => rank (actual left) < rank (actual right)) records ∧
+            n ≤ 3 ∧ ∀ record ∈ records, rank (actual record) < 3 :=
+⋯
+'NLT_C04StopOrder.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+theorem NLT_C04StopOrder.ordered : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (p : Program Event A) (records : List (Occurrence H d hash)) (cut : NLT_C04Stop.Cut H),
+  NLT_C04Stop.At H d hash p records cut →
+    ∀ (n : ℕ),
+      Shape n p →
+        (∀ record ∈ records, n ≤ rank (actual record)) ∧
+          List.Pairwise (fun left right => rank (actual left) < rank (actual right)) records ∧
+            n ≤ 3 ∧ ∀ record ∈ records, rank (actual record) < 3 :=
+⋯
+'NLT_C04StopOrder.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r026a7ed19f6a491a89b2710dbc105696.scope; invocation ID: afcbf61343564664953fcf8ccb8cb874

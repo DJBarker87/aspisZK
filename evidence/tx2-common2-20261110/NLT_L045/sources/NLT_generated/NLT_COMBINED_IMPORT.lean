@@ -1,0 +1,41 @@
+import NLO_COMBINED_IMPORT
+import NLP_COMBINED_IMPORT
+import NLB_COMBINED_IMPORT
+import NKU_COMBINED_IMPORT
+import NLN_COMBINED_IMPORT
+import NLT_AllocationInstalled
+import NLT_C04Installed
+import NLT_C04NativeInstalled
+import NLT_Chronology
+import NLT_CodecQuestions
+import NLT_Continuation
+import NLT_EraseCompatible
+import NLT_FinishInstalled
+import NLT_FrameFromCuts
+import NLT_Interpreted
+import NLT_Invalid
+import NLT_InvalidTransport
+import NLT_NativeFacts
+import NLT_NativeInvocation
+import NLT_NativeOrder
+import NLT_NativeSource
+import NLT_NativeWindows
+import NLT_NoInvalid
+import NLT_ParentCuts
+import NLT_ParentInvocation
+import NLT_QueryInstalled
+import NLT_QuestionStep
+import NLT_RecordFrames
+import NLT_ReplyInstalled
+import NLT_Reseed
+import NLT_ReseedTransport
+import NLT_Root
+import NLT_RuntimeDigest
+import NLT_Select
+import NLT_SiteOrder
+import NLT_Subcuts
+set_option pp.proofs false
+#check AspisR1.RPx_Deployed.deployed
+#check NLT_Root.root
+#print axioms AspisR1.RPx_Deployed.deployed
+#print axioms NLT_Root.root

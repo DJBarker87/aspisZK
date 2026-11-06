@@ -1,0 +1,27 @@
+{"attempt": "NLT_L058", "exit_status": 0, "wall_seconds": 26.920992085943, "peak_rss_kib": "6394112", "swaps": "0", "print_axioms": ["'NLT_C04StopPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLT_C04StopPrefix.merkle_of_question' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLT_C04StopPrefix.source : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (f : NLT_Interpreted.Uninstalled) (p : Program Event A) (records : List (Occurrence H d hash))
+  (cut : NLT_C04Stop.Cut H),
+  NLT_C04Stop.At H d hash p records cut →
+    (∀ r ∈ records, NLT_NativeWindows.Compatible f r.entered r.input) →
+      (∀ e ∈ (eval p).events, ∀ (observed : Event), NLT_EraseCompatible.Local f H d hash e observed → observed = e) →
+        ∃ e suffix,
+          (eval p).events = List.map actual records ++ e :: suffix ∧
+            NLT_NativeWindows.question e = NLT_C04Stop.question cut :=
+⋯
+'NLT_C04StopPrefix.source' depends on axioms: [propext,
+...
+theorem NLT_C04StopPrefix.source : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (f : NLT_Interpreted.Uninstalled) (p : Program Event A) (records : List (Occurrence H d hash))
+  (cut : NLT_C04Stop.Cut H),
+  NLT_C04Stop.At H d hash p records cut →
+    (∀ r ∈ records, NLT_NativeWindows.Compatible f r.entered r.input) →
+      (∀ e ∈ (eval p).events, ∀ (observed : Event), NLT_EraseCompatible.Local f H d hash e observed → observed = e) →
+        ∃ e suffix,
+          (eval p).events = List.map actual records ++ e :: suffix ∧
+            NLT_NativeWindows.question e = NLT_C04Stop.question cut :=
+⋯
+'NLT_C04StopPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_C04StopPrefix.merkle_of_question' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd4927e4e68f849a98f4fcc5d07534856.scope; invocation ID: 4393f76ae15844708d21c9c0e48d96e8
