@@ -26,6 +26,7 @@ for n,h in actual.items():
     if v.startswith('#![cfg_attr(kani,feature(allocator_api))]'):continue
     if v.startswith('#[cfg_attr(kani,derive(kani::Arbitrary))]'):continue
     if v.startswith('#[cfg_attr(all(kani,'):continue
+    if v.startswith('#[cfg_attr(kani,kani::ensures('):continue
     if v:lines.append(line.rstrip())
    return '\n'.join(lines)
   assert erase(overlay.decode())==erase(frozen),'default source differs beyond cfg proof overlays: '+n

@@ -62,6 +62,7 @@ pub struct AppendTwoV1 {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[cfg_attr(kani,derive(kani::Arbitrary))]
 pub struct IncrementalMerkleTreeV1 {
     pub next_leaf_index: u64,
     pub root: Digest,
@@ -168,6 +169,8 @@ impl<'a> ValidatedIncrementalMerkleTreeV1<'a> {
         &self.inner
     }
 
+    #[cfg_attr(all(kani,not(PCB_NEG_181)),kani::ensures(|r| r.next_leaf_index==self.inner.next_leaf_index))]
+    #[cfg_attr(all(kani,PCB_NEG_181),kani::ensures(|r| r.next_leaf_index!=self.inner.next_leaf_index))]
     pub fn into_inner(self) -> IncrementalMerkleTreeV1 {
         self.inner
     }
@@ -769,3 +772,7 @@ pub mod tree_reference;
 #[cfg(kani)]
 #[path="PCB_178.rs"]
 mod PCB_178;
+
+#[cfg(kani)]
+#[path="PCB_181.rs"]
+mod PCB_181;

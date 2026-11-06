@@ -119,6 +119,7 @@ pub fn pool_v1_pair_forest_nullifier_marker_address(
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[cfg_attr(kani,derive(kani::Arbitrary))]
 pub enum NullifierMarkerPreparationV1 {
     /// A data-empty System-owned PDA. Future composition must perform the
     /// reviewed create/allocate/assign sequence with `invoke_signed`.
@@ -214,6 +215,7 @@ fn classify_nullifier_marker_account_v1(
 
 /// Fully validated but unapplied pair-forest (B1) marker plan.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[cfg_attr(kani,derive(kani::Arbitrary))]
 pub struct PlannedPairForestNullifierMarkerV1 {
     preparation: NullifierMarkerPreparationV1,
     seed: [u8; 32],
@@ -221,6 +223,8 @@ pub struct PlannedPairForestNullifierMarkerV1 {
 }
 
 impl PlannedPairForestNullifierMarkerV1 {
+    #[cfg_attr(all(kani,not(PCB_NEG_290)),kani::ensures(|r| *r==PCB_290::reference(self)))]
+    #[cfg_attr(all(kani,PCB_NEG_290),kani::ensures(|r| *r!=PCB_290::reference(self)))]
     pub(crate) fn preparation(self) -> NullifierMarkerPreparationV1 {
         self.preparation
     }
@@ -811,3 +815,11 @@ mod tests {
 #[cfg(kani)]
 #[path="PCB_291.rs"]
 mod PCB_291;
+
+#[cfg(kani)]
+#[path="PCB_290.rs"]
+mod PCB_290;
+
+#[cfg(kani)]
+#[path="PCB_293.rs"]
+mod PCB_293;

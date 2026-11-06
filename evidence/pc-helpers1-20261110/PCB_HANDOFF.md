@@ -1,61 +1,23 @@
-# PCB class-A helper handoff
+# PCB helper handoff
 
-IN PROGRESS. No Pool row is CLOSED by this job yet. Branch codex/pc-helpers1-20261110.
+Completed the authorized budget on branch `codex/pc-helpers1-20261110`. **11 Pool rows CLOSED:8 NEW and3 RE-GATED.** The latest four candidates are OPEN because aggregate raw audit060 exits1. No push, shipped-source changes, key creation, transaction, parent Pool closure, reachability or headline security claim.
 
-Scope: the 42 assigned NKZ Pool rows only; priority 165,246,279,280 for PCA_.
-Budgets: 100 Kani,60 Lean/link/audit,12 extraction; zero consumed at initialization.
-No shipped source changes, no ELF rebuild trigger, no push, no sibling writes.
-Frozen Pool b936275465600469312d1f058cdc91ea2a11f3dc; crates/lock 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387.
+Accepted rows:246,221,300,178,176,291,343,355 NEW;354,369,278 RE-GATED. Statements/body hashes are in PCB_CLOSED.json; caller occurrences/domains in PCB_CALLER_CLAUSES.json. Accepted gate is immutable PCB_AUDIT_ACCEPTED_STAGE6.json: combined043, NFX044 zero dangling/duplicate owners, raw045 all23 roots equal/standard; eight fixtures009 with the same binary.176 closes bottom-up over accepted178 using059/060 and its already-gated root, without a changed Lean declaration.
 
-Gate: headline AspisR1.RPx_Deployed.deployed plus NLG_COMBINED_IMPORT plus PCB roots;
-NFX loaded scan; NEP raw ax2 over every root with eight fixtures in the same binary.
-A native or local model result alone is not CLOSED. Caller clauses will be recorded
-per occurrence; op38 reply quantified; digest/error slots op43/op44.
+Priority for PCA_:246 is committed and CLOSED (`PCB_Location.result`).165 is OPEN on outside-batch272 `spend::note_commitment`; no duplicate shared proof.279 has one-window geometry/copy/count contracts, exact KMX controls, symbolic frame induction and extracted full reference, but no complete iterator/encoder/range-lens/tail association.280 is OPEN: exact PDA seed/program/op38 reply+bump transport not bridged. See PCB_REMAINING.md for every one of31 OPEN members.
 
-Rules read: root AGENTS Security and proof discipline; r1p-common/local-lean;
-S2 handoff/plan/diagnosis/route-B/interface; NKZ handoff/overlap/obligations;
-SInt2 handoff and NCO pilot. Standard axioms only; no new trust or security claim.
+Four native-complete candidates:370/371 registry Bool helpers (111/112,113/114),344 exact empty clear request (070/071 and unit controls115–119),290 preparation enum (072/078 and074–077). Extraction011/012 and Lean051/052 pass. Final combined058 PASS; NFX059 PASS, zero dangling/duplicates; raw060 examines29 roots and all use only standard axioms, but `PCB_FinalLaws.preparation` has collector[] versus raw[Classical.choice,Quot.sound,propext]. The aggregate exits1. **None of the four is promoted.** Candidate statements and exact blocker: PCB_CANDIDATES.json, PCB_AUDIT_LATEST.json. Repair a meaningful actual carrier/value-and-frame law and re-gate; do not pad axioms, weaken the walker or rerun native controls unchanged. The other three candidate roots individually agree, but no partial aggregate credit is assigned.
 
-Host cache /home/dombarker/project-offloads/codex-pc-helpers1-cache-20261110.
-One capped scope at a time, admission exit0 AND allowed:true, host free>=40GB.
-No retries of unchanged timed-out/killed shapes; all transport/admission retries retained.
+Budget used **100/100 Kani,60/60 Lean-link-audit,12/12 extraction**, recorded in PCB_BUDGET.json and PCB_ATTEMPTS.jsonl. One own capped scope at a time, admission exit0 AND allowed:true, free disk>=40GB before each scope; MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64, Lean-M7000, optimized Rust. Peak process RSS7650140KiB (044); zero swaps. No cap increase or unchanged timed-out/memory-killed replay. Exact targets, statuses, wall/RSS/swap, revision/dirty state, input/object hashes, features and axioms are retained per attempt. Compile-only failures never count as negative controls. Own upload/validation repairs are documented; no lead launcher/reservation/shim was modified.
 
-Initial observation: malformed combined sparse path entry required adding NKZ/NLG paths
-individually. Local free35GiB; host free83GB. No scope launched during inspection.
+Frozen Pool `b936275465600469312d1f058cdc91ea2a11f3dc`; crates/lock `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. Literal body hashes match all42 assignments (PCB_BODY_CHECKS.json); final scratch audit723 source files, zero drift beyond recorded cfg(kani) proof overlays. Every native run validates frozen dependency graph offline and unchanged lock; all-crate and actual selected feature lists are sidecars. Frozen lock SHA2565782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef. Default/devnet/Pool ELF pins in PCB_RELEASE_PINS.json are inherited, not rebuilt: no shipped input changed.
 
-PCB_L001: source elaborated, output directory missing in own client; exit1. Own client repaired to create nested output directory; no infrastructure edited, no timeout/memory kill. PCB_L002 retries with corrected output environment.
+Own cache: `/home/dombarker/project-offloads/codex-pc-helpers1-cache-20261110`; own workspace `/home/dombarker/project-offloads/codex-pc-helpers1-20261110`. Seed33141 pinned imports were copied, never linked; all hashes were revalidated at final export. Objects/source/audit binary were copied into own `PCB_exports_20261110`, manifest PCB_EXPORT_MANIFEST.json. The current29-root combined object is **CANDIDATE**, not a passed aggregate; accepted23-root combined source is supplied separately for consumer rebuild. Accepted helper objects are unchanged. Never write retained Stream-A/Stream-B exports or sibling trees; never delete this own cache.
 
-Stage1: POOL:246 CLOSED, PCB_Location.result; K006 positive/K007 inverted control, E001 extraction, L004 theorem, L005 combined, L009 eight fixtures, L010 scan, L011 raw ax2. P6 transport is RECLASSIFICATION. No parent closure. Gate also checked inherited loader root, pending separate body-identity receipt/commit for354. K001–K005 were preflight/compiler failures, not proofs. All historical static-mut warning sites are unreached by the scalar246 harness; no selected harness or stub writes a static.
+Assessment only: PCB_REACH.md/JSON query all71 OTHER class-A rows, shortest chains from the three ON roots, with zero Lean scopes.54 have an explicit conservative/trait cut on every recorded graph path;17 have a path avoiding those labels and remain ambiguous because UNIQUE_TYPED_OR_NAME does not prove resolved MIR calls. No reachability/exclusion claim follows.
 
-Stage2: POOL:354 RE-GATED, inherited NHC_NGG_Loader.result, exact frozen body identity PCB_354_IDENTITY.json; same L005/L009/L010/L011 combined/fixtures/scan/raw gate. No new native proof is attributed.
+Trust remains P6/D188 option-A native semantic-transport reclassification, compiler/ABI/source-to-ELF, standard axioms and approved runtime items. Headline remains AspisR1.RPx_Deployed.deployed; L154 remains a statement parameter and D188 narrowed. Frozen3, RuntimePersistence and approved two-transaction game are unchanged. No field multiplication in Kani; no Option<fn> credit; no custom copy stubs; no new runtime value realization. See PCB_STUBS.md, PCB_CERTIFICATES.md and PCB_FAILING_STEP.md.
 
-Stage3 partial: error159/160/189 extracted with actual native enum carriers (E002,
-108.53s,655652KiB,swap0). Types/Funs/Laws compile L012–L014, all three laws axiom-free.
-K008 missing trait name; K014 qualified trait path explicitly rejected by pinned Kani:
-"Kani does not currently support stubs or function contracts on generic functions in traits."
-K019/021/023 direct actual-body observations PASS; K020/022/024 inverted controls FAIL.
-These do NOT satisfy the demanded actual-function proof_for_contract route and are OPEN.
-No interface/contract credit is inferred from direct observations.
+Stage commits before this final handoff: a51015b3e2b initialization;1de8ab2386a close246;d497f6be1d0 re-gate354;ad687923da7 enum limitation/controls;b0582ad9d12 sentinel/inherited helpers;95af6f84a54 vault projection;1ce473bb452 borrowed getters;d7a4d29a4a5 dependent176. Final commit records candidates, failed final gate, assessment and exports. No push.
 
-246 additional exact returned-record controls: K015 weak contract PASS, K016 real body PASS,
-K017 unimplied assertion under stub_verified FAIL, K018 modifies violation FAIL.
-K007 is the inverted-ensures control. No borrowed/enum/large-record shape is imported by these.
-
-K025 RootHistoryPageV1::is_full timed out at the unchanged90s solver limit after an
-arbitrary8KiB page construction. K026 is retired UNLAUNCHED, not a negative-control failure;
-no retry of that whole-page shape is permitted. Next242 work must split the field footprint.
-221's small actual projection contract K027 PASS and inverted K028 FAIL; model/fidelity/gate pending.
-
-K040 transport dropped after submission. Never resubmit this attempt. Read-only recovery
-under local-lean rule10b is required before any next scope. K037 weakM31 record and
-K038 real-body controls PASS; K039 unimplied result under stub_verified FAIL.
-
-L025 catches duplicate global discriminant instance with canonical AspisR1TerminalDecoder.Types. PCB_ErrorRef.Types now aliases both TreeError and PairForestAccountError canonical owners (L028 PASS). L029 required constructor qualifications; L030 failed and L031 combined elaborated against stale dependent objects, so L031 grants NO gate credit. Own serial client now returns nonzero on Lean/link/audit failure, preventing dependent launch before green. L032–L034 rebuild the full changed dependent chain before scan/raw. No shared module/object edited.
-
-Stage4: refreshed combined L034, scanL026 zero dangling/duplicates/import mismatches, rawL027 all18 roots standard; same binary/eight fixtures L009. POOL:221 NEW CLOSED after K040 read-only recovery (no resubmission). POOL:278 and369 RE-GATED, byte-identical frozen helper bodies/54-error file and identical SDK ID owners. Total5 Pool rows CLOSED:2 NEW,3 RE-GATED. Canonical error retarget retains constructors and uses AspisR1TerminalDecoder.Types. No generic From root promoted. Native279 geometry/window/copy packets pass with failing controls K031–K036, but full loop/metadata association remains OPEN.
-
-Stage5: POOL:300 NEW CLOSED under carrier transcription after E004 compilation timeout, isolated E005 reference and five source/type/projection mutations rejected; native actual contract K055 PASS, inverted K056 FAIL, returned-record controls K041–044 pass/fail as required. K055/056 re-establish the exact Pool selected-feature receipts after the own cargo-tree selector repair; K029/030 historical body verdicts are retained but not relied on. Kernel root PCB_VaultLaw.result was included in L034/L026/L027 gate. ReviewedTranscription-PCB-RT-300-carriers is P6/D188 option-A RECLASSIFICATION, not trust removal. Total6 CLOSED Pool rows:3 new,3 re-gated.
-
-Stage6: four y-prime getters178/291/343/355 NEW CLOSED. Source identities reject20 wrong-place/effect mutations; E009 models/L035–037/L042, matched pointer controls067/058,061/062,063/064,065/066; actual canonical result carrier specialization fixes L040 generic summary mismatch without axiom padding or walker changes. CombinedL043, scanL044 zero dangling/duplicates, rawL045 all23 roots equal/standard. Total10 CLOSED Pool rows:7 new,3 re-gated.176 native caller tests remain pending until178 adoption; no borrowed stub_verified is used.
-
-Stage7: POOL:176 NEW CLOSED bottom-up over adopted178, same receiver/loan domain, source identity and four rejected mutations in PCB_GETTER_IDENTITIES.json. Native059 correct-place PASS /060 wrong-place FAIL, frozen graph/lock checks. Existing L043/L044/L04523-root gate includes PCB_GetterLaws.deref_tree; no changed Lean declaration or repeated gate. Total11 CLOSED (8new,3re-gated).
+Retention: own Rust target/ref-target and temporary build directories removed after exports; own source/Lean objects and entire own cache retained (PCB_RETENTION.json). No key or transaction was created. Final scratch harness patch is PCB_FINAL_HARNESS.patch, independently git-apply --check validated against the mixed frozen revisions; exact KMX patch remains a prerequisite.

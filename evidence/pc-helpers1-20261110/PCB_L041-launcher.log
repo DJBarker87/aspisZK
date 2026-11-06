@@ -1,0 +1,58 @@
+{"attempt": "PCB_L041", "exit_status": 0, "wall_seconds": 1.426576428115368, "peak_rss_kib": "2617000", "swaps": "0", "print_axioms": []}
+FOUND Aeneas.Std.core.slice.iter.Iter
+TYPE Type → Type
+VALUE <not-available>
+FOUND Aeneas.Std.core.iter.adapters.enumerate.Enumerate
+TYPE Type u → Type u
+VALUE <not-available>
+FOUND Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next
+TYPE {I Item : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator I Item →
+    Aeneas.Std.core.iter.adapters.enumerate.Enumerate I →
+      Aeneas.Std.Result (Option (Aeneas.Std.Usize × Item) × Aeneas.Std.core.iter.adapters.enumerate.Enumerate I)
+VALUE fun {I Item} IteratorInst self => do
+  let __x ← IteratorInst.next self.iter
+  match __x with
+    | (opt, iter') =>
+      match opt with
+      | none => Aeneas.Std.Result.ok (none, { iter := iter', 
+...
+SliceIndexRangeUsizeSlice.index_mut
+TYPE {T : Type} →
+  Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.Slice T))
+VALUE fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+    Aeneas.Std.Result.ok (⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+FOUND Aeneas.Std.core.slice.Slice.copy_from_slice
+TYPE {T : Type} →
+  Aeneas.Std.core.marker.Copy T → Aeneas.Std.Slice T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T)
+VALUE fun {T} x s src =>
+  if s.len = src.len then Aeneas.Std.Result.ok src else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+FOUND Aeneas.Std.Slice.setSlice!
+TYPE {α : Type u} → Aeneas.Std.Slice α → ℕ → List α → Aeneas.Std.Slice α
+VALUE fun {α} s i s' => ⟨(↑s).setSlice! i s', ⋯⟩
+FOUND List.length_setSlice!
+TYPE ∀ {α : Type u_1} (s : List α) (i : ℕ) (s' : List α), (s.setSlice! i s').length = s.length
+VALUE fun {α} s i s' =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (Eq.trans
+              (congrArg List.length
+                (List.append_assoc (List.take i s) (List.take (min s'.length (s.length - i)) s')
+                  (List.drop (i + min s'.length (s.length - i)) s)))
+              List.length_append)
+            (congr (congrArg HAdd.hAdd List.length_take)
+              (Eq.trans List.length_append
+                (congr
+                  (congrArg HAdd.hAdd
+                    (Eq.trans List.length_take (inf_of_le_left (of_eq_true List.length_setSlice!._simp_1_2))))
+                  List.length_drop)))))
+        s.length))
+    (Decidable.byContradiction fun a => List.length_setSlice!._proof_1_3 s i s' a)
+
+Running as unit: run-r0e8428f0d87d433ba2c16ce273f89e69.scope; invocation ID: da4c528a6b38438eb5e7934fc8dce204

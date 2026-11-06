@@ -1,28 +1,39 @@
-# PCB remaining work (rolling, not a closure claim)
+# PCB remaining obligations
 
-Priority165: dependency POOL:272 note_commitment, outside this proof batch; no CLOSED
-packet found in ledger21. Do not duplicate or call it Stream-A-owned without routing.
-Priority246: CLOSED and committed.
-Priority279: native geometry,32-byte write and2-byte filled-metadata cuts plus inverses
-pass; KMX copy controls pass. Generic frame/induction compiled. Full emitted reference
-exists E007; the remaining obligation is the emitted cursor/range-update/fold association
-and composition with the CLOSED encoder at SAME roots. E010 prepares exact frozen encoder
-structure to avoid re-proving that shared row. No full-page rerun.
-Priority280: exact SDK request/reply logging remains OPEN; never prove a PDA value or
-unwind curve/hash search. Source seed/program forwarding must be tied to quantified op38.
+11 rows remain CLOSED under the accepted23-root gate;31 remain OPEN. All100 Kani,60 Lean/link/audit and12 extraction scopes are spent. Kani exhaustion was not used to stop Lean work: scalar/loop/model work continued through final raw audit060. The four native-complete candidates are not promoted because that aggregate exits1. No source, budget, walker or axiom workaround is adopted.
 
-159/160/189: all native enum cases and matching inverses observed; extracted laws compiled
-and raw-audited after canonical retarget. Actual From proof_for_contract unsupported,
-therefore OPEN under the demanded method.287/288 inherit that generic-trait tooling
-obstruction until an approved caller/constructor route is supplied; no closure inferred.
-242: whole-page K025 TIMEOUT; no inverted/full-page retry. Needs a genuinely split
-field-footprint/native association.
+Kani column: NO means a Lean/aggregate repair only; LEAN_FIRST means complete the indicated Lean association before deciding whether any additional native cut is needed; DEPENDENCY means move bottom-up after the named real callee.
 
-344: exact empty SDK request probe prepared (constant input permits stateless stub
-assertion and nonvacuity); existing RuntimeReturnDataClear only, no new trust.
-345/368: arbitrary reply and exact SDK descriptor transport still need an admissible
-local-record boundary; no SHA/PDA unwinding, writable static or fn-pointer workaround.
-368 also has a reuse candidate: existing CLOSED TX1:327/TX2:210 SolanaDigest::digest,
-NGC_DigestBridge.forwarding, same hash expression but extra ignored unit receiver;
-bounds0..9 parts, each<=57607. Requires explicit signature/qualification port and all
-Pool caller clauses, not a new proof of the shared row.
+| Row | Additional Kani | Exact remaining obligation |
+|---|---|---|
+| POOL:159 | YES | Pinned Kani rejects generic From proof_for_contract. All16 source/reference arms and direct native positive/inverse controls019/020 exist; extracted receipt law passes. Need an admitted actual-trait segment/contract route, not more direct observations. |
+| POOL:160 | YES | Same unsupported generic From contract shape; all24 arms observed021/022 and extracted account law standard. Actual conversion contract obligation remains. |
+| POOL:165 | DEPENDENCY | Outside-batch POOL:272 spend::note_commitment has no CLOSED packet in ledger21; lead must route it. Wrapper can proceed only with SAME owner_key/value/asset_id/salt and proved callee clauses. No duplicate proof attempted. |
+| POOL:181 | YES | Arbitrary selected root/frontier/next-index observation107 PASS and wrong-place108 FAIL; no actual whole-output contract or extracted owned-return law. No copy-dependent native credit assigned; KMX configuration/control and owned record-frame association still required. |
+| POOL:184 | YES | CLOSED shared canonical encoder must be consumed at SAME nullifier. Prepared caller/stub is unrun; flat-reference-to-accepted bytes equality and fixed32 contract controls are unproved. Never re-prove encoder as a new row. |
+| POOL:186 | YES | Native one-limb predicate109 PASS and inverse110 FAIL. Need standard all iterator native/model step association and Lean suffix induction; no whole-digest Kani loop. |
+| POOL:189 | YES | Generic From proof_for_contract unsupported; all13 arms observed023/024; forest extraction law standard. Need admitted trait conversion composition. |
+| POOL:241 | YES | Child246 is CLOSED. Still needs both None branches and SAME slot borrowed-root return, loan/frame lifetime under y-prime. Avoid whole8KiB arbitrary-page shape025. |
+| POOL:242 | YES | Extracted scalar fullness theorem is standard and raw-gated as a utility. Native whole-page025 timed out90s;026 retired. Isolate unused page fields and scalar accessor association before a changed focused native shape; no unchanged retry. |
+| POOL:279 | LEAN_FIRST | Geometry031/032,32-byte copy window033/034, KMX035/036, two-byte finish053/054 and symbolic frame induction exist. Scalar extraction lemmas056 and full reference054/055 compile. Missing iterator-to-window association, accepted encoder/flat-ref equality, range lens/KMX association, and complete emitted-loop/tail proof. Source/native segment association must be checked; only then decide whether an additional minimal native cut is needed. Not CLOSED. |
+| POOL:280 | YES | Exact seeds domain/pool/page_number LE8, program id and quantified op38 reply+bump forwarding have no bridge. Do not unwind PDA derivation or prove a PDA value. |
+| POOL:287 | YES | All7 DepositInstructionFormatError arms map to InvalidDeposit in PCB_ERROR_MAPPING_287_288.json. Native094/095 stopped at own KMX allocator compilation; no semantic credit. Generic From contract shape already unsupported; need admitted trait/segment route. |
+| POOL:288 | YES | All13 PoolInstructionFormatError arms map to ProgramError::InvalidInstructionData. Native096/097 compiler failures give no semantic credit. Actual generic From contract route remains unsupported. |
+| POOL:290 | NO | Native contract072, inverse078 and enum controls074/075/076/077 pass expected verdicts; extraction012 and Lean052 pass. Final raw root has collector[] vs raw[Classical.choice,Quot.sound,propext]. Repair a meaningful actual carrier/value-and-frame theorem, not axiom padding; re-gate under a new lead budget. No unchanged native rerun needed. |
+| POOL:293 | LEAN_FIRST | One arbitrary byte-read079 PASS/080 inverse FAIL, group-value081 PASS/082 inverse FAIL, indexed write083 PASS/084 wrong-frame FAIL. Need extracted/reference one-step association and nested byte/group/chunk Lean invariants. No whole32-byte packing loop in Kani. Native cuts are outlined source statements, not a full frozen-function bridge. |
+| POOL:296 | DEPENDENCY | Depends on OPEN293 packing; also needs exact hash domain/pool/encoding slice order and reply unchanged using existing RuntimeSha256Value. Native hash implementation must not be unwound. |
+| POOL:318 | DEPENDENCY | Calls OPEN379 at exact master seed, asset_mint and bump. Preserve SAME program/key; discharge callee domain after379 bridge. |
+| POOL:323 | YES | PDA op38 seed list checkpoint-domain/master/checkpoint_sequence LE8, program, reply+bump forwarding not yet bridged. |
+| POOL:324 | YES | Shared pool_v1_tree_parent and merkle_node_compress_v3 are CLOSED in ledger21. Need seven SAME-argument uses, each canonicality/domain clause at both intermediate levels, and native caller composition. Never re-own shared callee rows. |
+| POOL:344 | NO | Native070 exact empty-request contract/cover and071 wrong-argument FAIL, unit controls115–119 expected verdicts, extracted unit012 and Lean clear052 all pass. Root individually raw-equal/axiom-free; aggregate060 fails at290. Re-gate only after aggregate fix; existing RuntimeReturnDataClear unchanged. |
+| POOL:345 | YES | Exact SDK get_return_data arbitrary Option<(Pubkey,Vec<u8>)> reply forwarding still unbridged. Preserve byte/order/length and existing RuntimeReturnData nonempty1..1024 trust domain; no fn-pointer/static-state surrogate or whole-buffer loops. |
+| POOL:368 | YES | Reusable CLOSED NGC_DigestBridge.forwarding for r1-cost-probe SolanaDigest::digest has bounded SAME ordered descriptors (0..9 parts, each<=57607), arbitrary32 reply unchanged. Pool signature/body association and every Pool caller clause still need porting/re-gating; source body is not literally identical. No SHA implementation proof. |
+| POOL:370 | NO | Actual contract111 PASS/inverse112 FAIL, extraction011 and laws051 pass. Individual final raw standard/equal and NFX059 pass; aggregate060 fails at290. No native rerun needed; re-gate coherent candidates after repair. |
+| POOL:371 | NO | Actual contract113 PASS/inverse114 FAIL covers None/Some expected owner; extraction011 and law051 pass. Individual raw standard/equal; aggregate060 fails at290. No native rerun needed. |
+| POOL:374 | YES | Exact verifier-entry-v1 domain/pool/profile/release seed order, registry program and quantified op38 reply+bump forwarding unbridged. |
+| POOL:375 | YES | Exact verifier-entry-v2 domain/pool/profile/release seed order, registry program and quantified op38 reply+bump forwarding unbridged. |
+| POOL:376 | YES | Exact verifier-registry-v1 domain/pool seeds, registry program and op38 reply+bump forwarding unbridged. |
+| POOL:377 | YES | Exact verifier-registry-v2 domain/pool seeds, registry program and op38 reply+bump forwarding unbridged. |
+| POOL:379 | YES | create_program_address needs exact arbitrary seed slices/program, quantified op38 Result, and is_ok_and equality with SAME key in Ok and false in Err. Do not compute PDA values; caller clauses must not exceed real callers. |
+| POOL:390 | YES | Exact vault-authority-domain/pool seeds, program and quantified op38 reply+bump forwarding unbridged. |
+| POOL:391 | YES | Exact vault-token-account-domain/pool seeds, program and quantified op38 reply+bump forwarding unbridged. |

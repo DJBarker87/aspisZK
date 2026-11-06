@@ -5,6 +5,7 @@ E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker
 a=sys.argv[1];task=json.loads((E/'PCB_TASKS.json').read_text())[a];kind=task['kind'];num=int(a[-3:]);used=[json.loads(l) for l in (E/'PCB_ATTEMPTS.jsonl').read_text().splitlines()]
 category=lambda k:'lean' if k in ['lean','link','audit'] else k
 assert sum(category(r['kind'])==category(kind) for r in used)<dict(lean=60,kani=100,extract=12)[category(kind)]
+assert 'extra_rustflags' not in task,'use explicit env.RUSTFLAGS; ignored flags forbidden'
 assert not (E/a/'receipt.json').exists(),'terminal receipt exists; no rerun'
 guard=E/'PCB_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 def ssh(code,data=None,submitted=False):
@@ -38,6 +39,13 @@ p=b/{(a+'-reservation.json')!r};print(p.read_text() if p.exists() else 'MISSING'
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print(a+' reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP infrastructure admission')
 files={n:(E/p).read_text() for n,p in task.get('files',{}).items()};sources=list(files)
+if kind=='kani':
+ import re
+ for n,text in files.items():
+  if n.endswith('.rs'):
+   for dep in re.findall(r'path="(PCB_[0-9]+\.rs)"',text):
+    assert str(Path(n).parent/dep) in files,'own cfg module missing upload: '+dep
+
 if kind=='lean':
  target=task['target'];n='PCB_generated/'+target.replace('.','/')+'.lean';files[n]=(E/(target+'.lean')).read_text();sources.append(n)
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','PCB_generated','-o','PCB_objects/'+target.replace('.','/')+'.olean',n]
