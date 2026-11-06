@@ -1,0 +1,59 @@
+{"attempt": "NKV_L051", "exit_status": 0, "wall_seconds": 11.618172877002507, "peak_rss_kib": "6046056", "swaps": "0", "print_axioms": ["'NKV_KeyInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_KeyInvocation.source : ∀ (H : Bytes → HashState) (raw : Std.Array U32 22#usize) (batch : ℕ) (kind : Usize),
+  batch < 2 →
+    ↑kind < 3 →
+      (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+        ∃ sorted,
+          (do
+                let keys ←
+                  (NKV_ConcreteChildren.ops H).op4 raw (NKB_KeyStream.lo batch) (NKB_KeyStream.count batch) kind
+                (NKV_ConcreteChildren.ops H).op5 keys (NKB_KeyStream.count batch)) =
+              ok sorted ∧
+            (OraclePortFrozenOrder.sortedPositions (Port4B_KeyInstall.queries raw) batch ↑kind).length =
+                ↑(NKB_KeyStream.count batch) ∧
+              Port4B_LeafLoop.KeyStream (Port4B_KeyInstall.queries raw) ba
+...
+._proof_1 batch kind positive a) initial
+  let ⟨run, right✝⟩ := h✝
+  let ⟨front, frame⟩ := right✝
+  have one :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = ok out)
+          (Eq.symm
+            (MultiproofConeSortOrder.source_start_one (Port4B_KeyInstall.keyArray raw batch ↑kind)
+              (NKB_KeyStream.count batch) positive.left))))
+      run;
+  have stream :=
+    Port4B_SortInstall.key_stream (NKV_ConcreteChildren.ops H) (Port4B_KeyInstall.queries raw) batch (↑kind)
+      (Port4B_KeyInstall.keyArray raw batch ↑kind) out (NKB_KeyStream.count batch)
+      (Decidable.byContradiction fun a => source._proof_1 batch kind positive a) positive.left initial one;
+  Exists.intro out
+    ⟨id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let keys ← _a
+                    NJS_Extract.verifier.candidate.sort_batch_keys keys (NKB_KeyStream.count batch)) =
+                  ok out)
+              (NKB_KeyStream.built raw batch kind hk hb canonical)))
+          (Eq.mpr
+            (id
+              (congrFun'
+                (congrArg Eq
+                  (bind_tc_ok (Port4B_KeyInstall.keyArray raw batch ↑kind) fun y =>
+                    NJS_Extract.verifier.candidate.sort_batch_keys y (NKB_KeyStream.count batch)))
+                (ok out)))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => _a = ok out)
+                  (NJS_Sort.source (Port4B_KeyInstall.keyArray raw batch ↑kind) (NKB_KeyStream.count batch)
+                    positive.left
+                    (Decidable.byContradiction fun a => source._proof_2 raw batch kind positive out stream a))))
+              one))),
+      stream⟩
+'NKV_KeyInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r99de8194cf9e45e0b93ff46ab1fd1421.scope; invocation ID: ef6f5b8a67c14e7a80e2c1234dd287bc

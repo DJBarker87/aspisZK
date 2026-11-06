@@ -1,0 +1,47 @@
+{"attempt": "NKV_L070", "exit_status": 1, "wall_seconds": 11.490035578841344, "peak_rss_kib": "6005912", "swaps": "0", "print_axioms": ["'NKV_TailReject.missing' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_TailReject.capacity' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_TailReject.lean:46:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (NKV_ConcreteChildren.ops H).op3 proof slot
+in the target expression
+  (do
+      let nodes ← NJS_Extract.verifier.candidate.slot NGD_SlotRef.slot_offset proof slot
+      let i ←
+        (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                NKV_ConcreteChildren.ops._proof_9).index_usize
+            slot
+      if count > i then ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true))
+        else do
+          let i1 ← lift (Usize.wrapping_mul 32#usize count)
+          let s2 ←
+            core.slice.index.Slice.index (core.sli
+...
+e application
+    id (Eq.refl true)
+theorem NKV_TailReject.missing : ∀ (H : Bytes → HashState) (proof : Slice U8) (root : Std.Array U8 32#usize)
+  (kind lo n slot : Usize) (keys : Std.Array U64 16#usize) (s : reference.Scratch),
+  ↑s.n ≤ 16 →
+    ¬OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+      NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+          proof root kind () lo n slot keys s.idx s.val s.n n =
+        ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Merkle, true)) :=
+⋯
+theorem NKV_TailReject.capacity : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (root : Std.Array U8 32#usize) (batch : ℕ) (kind lo n slot : Usize),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                ∀ (keys : Std.Array U64 16#usize) (s : reference.Scratch),
+                  ↑s.n ≤ 16 →
+                    OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+                      OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s) >
+                          OraclePortSelectedDraft.capacity (3 * batch + ↑kind) →
+                        NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+                            (NKV_ConcreteChildren.digest H) proof root kind () lo n slot keys s.idx s.val s.n n =
+                          ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true)) :=
+⋯
+'NKV_TailReject.missing' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TailReject.capacity' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r072e4d64a6484ac7b4ab3781b69b7929.scope; invocation ID: 8d9d5329705a4f3c9900529582296ad7

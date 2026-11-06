@@ -1,0 +1,54 @@
+{"attempt": "NKV_L084", "exit_status": 1, "wall_seconds": 15.843545797048137, "peak_rss_kib": "6000628", "swaps": "0", "print_axioms": ["'NKV_LeafSlot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKV_LeafSlot.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_LeafSlot.lean:30:10: error: unsolved goals
+case ok.false
+H : Bytes → State
+p : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+batch kind : ℕ
+nodes : Slice U8
+before s : reference.Scratch
+run :
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before)).2 =
+    ok (false, s)
+⊢ ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+            (MultiproofConeSlotState.reset before)).1 ++
+        (eval H
+            (match ok (if false = true then some s else none) with
+            | ok (some after) => MultiproofConeVerifyState.tailState p batch kind nodes after
+            | x =
+...
+ q batch kind)
+        (MultiproofConeSlotState.reset before)).2 =
+    ok (false, bad)
+⊢ (have leaf :=
+      NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before);
+    have tail := following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2)) =
+    ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).1,
+      false, before)
+theorem NKV_LeafSlot.source : ∀ (H : Bytes → State) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (batch kind : ℕ) (nodes : Slice U8) (before : reference.Scratch),
+  eval H (MultiproofConeSlotState.slotState p q batch kind nodes before) =
+    have leaf :=
+      NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before);
+    have tail := following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2) :=
+⋯
+theorem NKV_LeafSlot.rejected : ∀ (H : Bytes → State) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (batch kind : ℕ) (nodes : Slice U8) (before bad : reference.Scratch),
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).2 =
+      ok (false, bad) →
+    eval H (MultiproofConeSlotState.slotState p q batch kind nodes before) =
+      ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+            (MultiproofConeSlotState.reset before)).1,
+        false, before) :=
+⋯
+'NKV_LeafSlot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKV_LeafSlot.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra3a3f882cdaf48238553e273c762942c.scope; invocation ID: 31527b65d1d44c359e234ba194a06b59

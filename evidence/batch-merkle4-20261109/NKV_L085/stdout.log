@@ -1,0 +1,199 @@
+NKV_TailContinue.lean:12:48: error(lean.unknownIdentifier): Unknown identifier `Out`
+
+Note: It is not possible to treat `Out` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+NKV_TailContinue.lean:13:37: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+NKV_TailContinue.lean:13:49: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `NFY_NEQ_CommonDecode.Err`
+  [apply] `NIL_Carriers.Cohort.Err`
+  [apply] `NIL_Carriers.Fresh.Err`
+  [apply] `core.result.Result.Err`
+NKV_TailContinue.lean:83:9: error: unsolved goals
+case false
+H : Bytes → AspisV8R19.SourceDuplexStep.State
+proof : Slice U8
+len : (↑proof).length = 57607
+p : OraclePortCompactDraft.Parsed
+wire : p.wire = bytesOf ↑proof
+root : Std.Array U8 32#usize
+batch : ℕ
+kind lo n slot : Usize
+hb : batch < 2
+hk : ↑kind < 3
+value : ↑slot = 3 * batch + ↑kind
+keys : Std.Array U64 16#usize
+s : reference.Scratch
+bound : ↑s.n ≤ 16
+well : OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)
+fits : OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s) ≤ OraclePortSelectedDraft.capacity (3 * batch + ↑kind)
+count : Usize
+countRead :
+  NKV_ConcreteChildren.count Port3_NativeBatchBody.multiproof.Arity.Two (NKV_CountInvocation.front s) = ok (some count)
+countValue : ↑count = OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)
+nodes : Slice U8
+width : (↑nodes).length = 32 * OraclePortSelectedDraft.capacity (3 * batch + ↑kind)
+bytes :
+  bytesOf ↑nodes =
+    OraclePortCompactDraft.slice p.wire (OraclePortSelectedDraft.slotStart (3 * batch + ↑kind))
+      (32 * OraclePortSelectedDraft.capacity (3 * batch + ↑kind))
+cap : UScalar UScalarTy.Usize
+capRead :
+  (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize] ⋯).index_usize slot = ok cap
+capValue : ↑cap = OraclePortSelectedDraft.capacity ↑slot
+small : ↑cap ≤ 172
+capEq : ↑cap = OraclePortSelectedDraft.capacity (3 * batch + ↑kind)
+countBound : ↑count ≤ 172
+notexceeds : ¬count > cap
+scaled : ↑(Usize.wrapping_mul 32#usize count) = 32 * ↑count
+fit : ↑(Usize.wrapping_mul 32#usize count) ≤ (↑nodes).length
+padding : Slice U8 := nodes.drop (Usize.wrapping_mul 32#usize count)
+paddingRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+      { start := Usize.wrapping_mul 32#usize count } =
+    ok (nodes.drop (Usize.wrapping_mul 32#usize count))
+paddingLength :
+  (↑padding).length =
+    8 *
+      (4 *
+        (OraclePortSelectedDraft.capacity (3 * batch + ↑kind) -
+          OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))
+ce after : core.slice.iter.ChunksExact U8
+chunksRead : core.slice.Slice.chunks_exact padding 8#usize = ok ce
+scanRead :
+  Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorChunksExact U8)
+      (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+        { op0 := fun {Self F Clause0_Item} => Port3_BatchStd.anyDefault, op1 := fun {T E} => Port3_BatchStd.okOr,
+          op2 := NJS_Extract.verifier.candidate.opening,
+          op3 := NJS_Extract.verifier.candidate.slot NGD_SlotRef.slot_offset,
+          op4 := NJS_Extract.verifier.candidate.batch_keys, op5 := NJS_Extract.verifier.candidate.sort_batch_keys,
+          op6 := fun {H} D hash tree view =>
+            NJS_Extract.verifier.candidate.batch_leaf (ok 113#u8) (ok 241#u8) (fun {H} => NJS_BatchLeaf.privateLeaf)
+              (NKV_ConcreteChildren.toExtract D) hash tree view,
+          op7 := Port3_BatchStd.sameLeaf, op8 := Port3_BatchStd.sameIndex, op9 := Array.index_usize,
+          op10 := fun {H_1} => NKV_ConcreteChildren.verify H, op11 := NKV_ConcreteChildren.count,
+          op12 :=
+            ok
+              (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                NKV_ConcreteChildren.ops._proof_9),
+          op13 := ok 10#usize, unwrap8 := Port3_BatchStd.unwrap8 }
+        (NKV_ConcreteChildren.digest H))
+      ce () =
+    ok
+      (!MultiproofConePadding.scan
+            (4 *
+              (OraclePortSelectedDraft.capacity (3 * batch + ↑kind) -
+                OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))
+            (List.drop (32 * OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)) (bytesOf ↑nodes)),
+        after)
+paddingBytes :
+  bytesOf ↑padding = List.drop (32 * OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)) (bytesOf ↑nodes)
+prefixRead :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+      { «end» := Usize.wrapping_mul 32#usize count } =
+    ok (MultiproofConeSlotTail.prefixNodes nodes (OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))
+prefixEq :
+  sub nodes 0#usize (Usize.wrapping_mul 32#usize count) =
+    MultiproofConeSlotTail.prefixNodes nodes (OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s))
+nodeRead : NJS_Extract.verifier.candidate.slot NGD_SlotRef.slot_offset proof slot = ok nodes
+guard :
+  MultiproofConePadding.scan
+      (4 *
+        (OraclePortSelectedDraft.capacity (3 * batch + ↑kind) -
+          OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))
+      (List.drop (32 * OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)) (bytesOf ↑nodes)) =
+    false
+⊢ (let (b, _) := (true, after)
+    if b = true then ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true))
+    else do
+      let s3 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+            { «end» := Usize.wrapping_mul 32#usize count }
+      let (b1, idx1, val2) ←
+        NKV_ConcreteChildren.verify H (NKV_ConcreteChildren.digest H) () Port3_NativeBatchBody.multiproof.Arity.Two root
+            s.idx s.val s.n s3
+      if b1 = true then ok (done (idx1, val2, core.result.Result.Ok (), false))
+        else ok (done (idx1, val2, core.result.Result.Err verifier.Error.Merkle, true))) =
+    ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true))
+NKV_TailContinue.lean:83:23: warning: This simp argument is unused:
+  guard
+
+Hint: Omit it from the simp argument list.
+  simp only [g̵u̵a̵r̵d̵,̵Bool.not_false, ̲if_true, ̲Bool.false_eq_true, ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_TailContinue.lean:83:44: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [guard, ̲Bool.not_false,i̵f̵_̵t̵r̵u̵e̵,̵ ̲Bool.false_eq_true, ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_TailContinue.lean:85:14: warning: This simp argument is unused:
+  guard
+
+Hint: Omit it from the simp argument list.
+  simp only [g̵u̵a̵r̵d̵,̵Bool.not_true, ̲Bool.false_eq_true, ̲if_false, ̲if_true, ̲lift, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_TailContinue.lean:85:34: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵g̵u̵a̵r̵d̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲g̲u̲a̲r̲d̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_TailContinue.lean:85:53: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [guard, ̲Bool.not_true, ̲Bool.false_eq_true, ̲if_f̵a̵l̵s̵e̵,̵i̵f̵_̵true, ̲lift, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_TailContinue.lean:85:70: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [guard, ̲Bool.not_true, ̲Bool.false_eq_true, ̲if_false, ̲if_true,l̵i̵f̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_TailContinue.lean:85:75: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵g̵u̵a̵r̵d̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲g̲u̲a̲r̲d̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKV_TailContinue.source : ∀ (H : Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = bytesOf ↑proof →
+        ∀ (root : Std.Array U8 32#usize) (batch : ℕ) (kind lo n slot : Usize),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                ∀ (keys : Std.Array U64 16#usize) (s : reference.Scratch),
+                  ↑s.n ≤ 16 →
+                    OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+                      OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s) ≤
+                          OraclePortSelectedDraft.capacity (3 * batch + ↑kind) →
+                        ∃ nodes,
+                          (NKV_ConcreteChildren.ops H).op3 proof slot = ok nodes ∧
+                            (↑nodes).length = 32 * OraclePortSelectedDraft.capacity (3 * batch + ↑kind) ∧
+                              NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+                                  (NKV_ConcreteChildren.digest H) proof root kind () lo n slot keys s.idx s.val s.n n =
+                                if
+                                    MultiproofConePadding.scan
+                                        (4 *
+                                          (OraclePortSelectedDraft.capacity (3 * batch + ↑kind) -
+                                            OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))
+                                        (List.drop (32 * OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s))
+                                          (bytesOf ↑nodes)) =
+                                      true then
+                                  ok (done sorry)
+                                else ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true)) :=
+⋯
+'NKV_TailContinue.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

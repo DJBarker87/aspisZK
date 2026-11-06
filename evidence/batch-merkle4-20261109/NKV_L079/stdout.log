@@ -1,0 +1,27 @@
+theorem NKV_TailReject.missing : ∀ (H : Bytes → HashState) (proof : Slice U8) (root : Std.Array U8 32#usize)
+  (kind lo n slot : Usize) (keys : Std.Array U64 16#usize) (s : reference.Scratch),
+  ↑s.n ≤ 16 →
+    ¬OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+      NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+          proof root kind () lo n slot keys s.idx s.val s.n n =
+        ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Merkle, true)) :=
+⋯
+theorem NKV_TailReject.capacity : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (root : Std.Array U8 32#usize) (batch : ℕ) (kind lo n slot : Usize),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                ∀ (keys : Std.Array U64 16#usize) (s : reference.Scratch),
+                  ↑s.n ≤ 16 →
+                    OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+                      OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s) >
+                          OraclePortSelectedDraft.capacity (3 * batch + ↑kind) →
+                        NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+                            (NKV_ConcreteChildren.digest H) proof root kind () lo n slot keys s.idx s.val s.n n =
+                          ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true)) :=
+⋯
+'NKV_TailReject.missing' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TailReject.capacity' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,46 @@
+{"attempt": "NKV_L052", "exit_status": 0, "wall_seconds": 11.691051769070327, "peak_rss_kib": "6034752", "swaps": "0", "print_axioms": ["'NKV_LeafTraversal.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NKV_LeafTraversal.lean:50:14: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵body]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_LeafTraversal.lean:53:32: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵p̵l̵y̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵,̵N̵K̵V̵_̵L̵e̵a̵f̵B̵u̵i̵l̵d̵.̵b̵u̵i̵l̵d̵,̵f̵i̵n̵i̵s̵h̵]̵[̲r̲e̲p̲l̲y̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲f̲a̲i̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲d̲i̲v̲,̲ ̲N̲K̲V̲_̲L̲e̲a̲f̲B̲u̲i̲l̲d̲.̲b̲u̲i̲l̲d̲,̲ ̲f̲i̲n̲i̲s̲h̲]̲
+
+Note: This linter can 
+...
+̲n̲i̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_LeafTraversal.lean:54:40: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵p̵l̵y̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵,̵N̵K̵V̵_̵L̵e̵a̵f̵B̵u̵i̵l̵d̵.̵b̵u̵i̵l̵d̵,̵f̵i̵n̵i̵s̵h̵]̵[̲r̲e̲p̲l̲y̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲d̲i̲v̲,̲ ̲N̲K̲V̲_̲L̲e̲a̲f̲B̲u̲i̲l̲d̲.̲b̲u̲i̲l̲d̲,̲ ̲f̲i̲n̲i̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKV_LeafTraversal.source : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch : ℕ) (kind lo n slot : Usize) (root : Std.Array U8 32#usize)
+          (keys : Std.Array U64 16#usize) (positions : List ℕ) (s : reference.Scratch) (pos : Usize),
+          (∀ selected ∈ positions, selected ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+            (↑lo = if batch = 0 then 0 else 10) →
+              ↑pos + positions.length = ↑n →
+                ↑n ≤ 16 →
+                  ↑s.n + positions.length ≤ 16 →
+                    Port4B_LeafLoop.KeyStream q batch (↑kind) keys pos positions →
+                      NKV_FRef.verifier.candidate.batch_tree_loop (NKV_ConcreteChildren.ops H)
+                          (NKV_ConcreteChildren.digest H) proof root kind s.idx s.val () lo n slot keys s.n pos =
+                        finish H proof root kind lo n slot keys
+                          (NKV_LeafBuild.build H parsed q (↑kind) positions s).2 :=
+⋯
+'NKV_LeafTraversal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd955f99aa4a24a00bc633a272ed9752f.scope; invocation ID: db5803e1965b45ec877201b724ae873c

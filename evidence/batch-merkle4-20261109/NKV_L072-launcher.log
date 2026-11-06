@@ -1,0 +1,41 @@
+{"attempt": "NKV_L072", "exit_status": 1, "wall_seconds": 11.606287528993562, "peak_rss_kib": "5851036", "swaps": "0", "print_axioms": ["'NKV_PaddingChunks.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKV_PaddingChunks.scan' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_PaddingChunks.lean:19:3: error: Type mismatch
+  List.toChunksExact_chunk_length (of_decide_eq_true (id (Eq.refl true))) (↑padding) (↑raw) raw.property
+has type
+  (↑raw).length ≤ 8
+but is expected to have type
+  (↑(match raw with
+        | ⟨c, hc⟩ => ⟨c, ⋯⟩)).length =
+    8
+theorem NKV_PaddingChunks.total : ∀ (padding : Slice U8),
+  ∃ ce, core.slice.Slice.chunks_exact padding 8#usize = ok ce ∧ ∀ chunk ∈ ce.chunks, (↑chunk).length = 8 :=
+⋯
+theorem NKV_PaddingChunks.scan : ∀ (H : Bytes → HashState) (padding : Slice U8),
+  ∃ ce after verdict,
+    core.slice.Slice.chunks_exact padding 8#usize = ok ce ∧
+      (NKV_ConcreteChildren.ops H).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+ 
+...
+NKV_PaddingChunks.lean:19:3: error: Type mismatch
+  List.toChunksExact_chunk_length (of_decide_eq_true (id (Eq.refl true))) (↑padding) (↑raw) raw.property
+has type
+  (↑raw).length ≤ 8
+but is expected to have type
+  (↑(match raw with
+        | ⟨c, hc⟩ => ⟨c, ⋯⟩)).length =
+    8
+theorem NKV_PaddingChunks.total : ∀ (padding : Slice U8),
+  ∃ ce, core.slice.Slice.chunks_exact padding 8#usize = ok ce ∧ ∀ chunk ∈ ce.chunks, (↑chunk).length = 8 :=
+⋯
+theorem NKV_PaddingChunks.scan : ∀ (H : Bytes → HashState) (padding : Slice U8),
+  ∃ ce after verdict,
+    core.slice.Slice.chunks_exact padding 8#usize = ok ce ∧
+      (NKV_ConcreteChildren.ops H).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+            (NKV_PaddingInstall.predicate H) ce () =
+          ok (verdict, after) ∧
+        verdict = (NKB_AnyModel.scan ce.chunks).1 :=
+⋯
+'NKV_PaddingChunks.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKV_PaddingChunks.scan' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3d115794971946aa99cbf8dd402c2b41.scope; invocation ID: 95963670da8340c38701839d69d1a86e

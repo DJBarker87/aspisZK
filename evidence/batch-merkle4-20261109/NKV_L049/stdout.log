@@ -1,0 +1,77 @@
+NKV_ProducerDomain.lean:50:3: error(lean.unknownIdentifier): Unknown identifier `batchPositions`
+NKV_ProducerDomain.lean:49:1: error: Type mismatch: After simplification, term
+  count
+ has type
+  @LE.le ℕ instLENat (↑after.n) (OraclePortSelectedDraft.batchPositions 0).length
+but is expected to have type
+  @LE.le ℕ instLENat (↑after.n) 10
+theorem NKV_ProducerDomain.caller : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (batch kind : ℕ) (before after : reference.Scratch),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (sortedPositions q batch kind) before).2 = ok (true, after) →
+      0 < ↑after.n ∧ ↑after.n ≤ 12 ∧ wellFormed (NJV_UnitDomain.keys after) :=
+fun H p q batch kind before after empty accepted =>
+  have size := NKV_LeafOrder.size H p q batch kind;
+  have chain :=
+    NKV_LeafBuild.chain H p q kind (sortedPositions q batch kind) before after
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg LE.le
+              (Eq.trans (congrFun' (congrArg HAdd.hAdd empty) (sortedPositions q batch kind).length)
+                (Nat.zero_add (sortedPositions q batch kind).length)))
+            16))
+        (Eq.mp
+          (congrFun'
+            (congrArg LE.le
+              (List.length_map fun pos =>
+                (MultiproofConeLeafFold.key q kind pos,
+                  AspisV8R19.SqueezeOracleBridge.encodeState (H (OraclePortSelectedDraft.leaf p kind pos)))))
+            16)
+          (LE.le.trans size (of_decide_eq_true (id (Eq.refl true))))))
+      accepted;
+  let ⟨positive, right✝⟩ :=
+    NKB_ProducerChain.caller (NKV_LeafBuild.leaves H p q kind (sortedPositions q batch kind)) before after empty
+      (NKV_LeafOrder.nonempty H p q batch kind) size (NKV_LeafOrder.ordered H p q batch kind)
+      (NKV_LeafOrder.canonical H p q kind (sortedPositions q batch kind)) chain
+  let ⟨count, well⟩ := right✝
+  ⟨positive, ⟨LE.le.trans count size, well⟩⟩
+theorem NKV_ProducerDomain.tx2_bytes : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (batch kind : ℕ) (before after : reference.Scratch) (slot : Slice U8),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (sortedPositions q batch kind) before).2 = ok (true, after) →
+      32 * nodeCount 18 (NJV_UnitDomain.keys after) ≤ (↑slot).length →
+        (↑(MultiproofConeSlotTail.prefixNodes slot (nodeCount 18 (NJV_UnitDomain.keys after)))).length ≤ 9216 :=
+fun H p q batch kind before after slot empty accepted fits =>
+  have size := NKV_LeafOrder.size H p q batch kind;
+  NKB_ProducerChain.verifier_bytes (NKV_LeafBuild.leaves H p q kind (sortedPositions q batch kind)) before after slot
+    empty (NKV_LeafOrder.nonempty H p q batch kind) size (NKV_LeafOrder.ordered H p q batch kind)
+    (NKV_LeafOrder.canonical H p q kind (sortedPositions q batch kind))
+    (NKV_LeafBuild.chain H p q kind (sortedPositions q batch kind) before after
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg LE.le
+              (Eq.trans (congrFun' (congrArg HAdd.hAdd empty) (sortedPositions q batch kind).length)
+                (Nat.zero_add (sortedPositions q batch kind).length)))
+            16))
+        (Eq.mp
+          (congrFun'
+            (congrArg LE.le
+              (List.length_map fun pos =>
+                (MultiproofConeLeafFold.key q kind pos,
+                  AspisV8R19.SqueezeOracleBridge.encodeState (H (OraclePortSelectedDraft.leaf p kind pos)))))
+            16)
+          (LE.le.trans size (of_decide_eq_true (id (Eq.refl true))))))
+      accepted)
+    fits
+theorem NKV_ProducerDomain.tx1_count : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (kind : ℕ) (before after : reference.Scratch),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (sortedPositions q 0 kind) before).2 = ok (true, after) → ↑after.n ≤ 10 :=
+fun H p q kind before after empty accepted =>
+  have size := NKV_LeafOrder.size H p q 0 kind;
+  sorry size
+'NKV_ProducerDomain.caller' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ProducerDomain.tx2_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ProducerDomain.tx1_count' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,23 @@
+{"attempt": "NKV_L082", "exit_status": 0, "wall_seconds": 11.322658930905163, "peak_rss_kib": "5865524", "swaps": "0", "print_axioms": ["'NKV_PaddingValue.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_PaddingValue.source : ∀ (H : Bytes → HashState) (padding : Slice U8) (words : ℕ),
+  (↑padding).length = 8 * words →
+    ∃ ce after,
+      core.slice.Slice.chunks_exact padding 8#usize = ok ce ∧
+        (NKV_ConcreteChildren.ops H).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+            (NKV_PaddingInstall.predicate H) ce () =
+          ok (!MultiproofConePadding.scan words (MultiproofConeCanonical.bytesOf ↑padding), after) :=
+⋯
+'NKV_PaddingValue.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+theorem NKV_PaddingValue.source : ∀ (H : Bytes → HashState) (padding : Slice U8) (words : ℕ),
+  (↑padding).length = 8 * words →
+    ∃ ce after,
+      core.slice.Slice.chunks_exact padding 8#usize = ok ce ∧
+        (NKV_ConcreteChildren.ops H).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+            (NKV_PaddingInstall.predicate H) ce () =
+          ok (!MultiproofConePadding.scan words (MultiproofConeCanonical.bytesOf ↑padding), after) :=
+⋯
+'NKV_PaddingValue.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf0ca0750a8294fd19ecc60db5c1ac48f.scope; invocation ID: a9150544c7e04ef8837b2118e4c85470

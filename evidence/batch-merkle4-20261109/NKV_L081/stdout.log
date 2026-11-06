@@ -1,0 +1,229 @@
+NKV_LeafSlot.lean:28:13: error: Tactic `rfl` failed: The left-hand side
+  have first :=
+    ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).1,
+      NKV_StepErasure.mapResult NKV_LeafBuild.forget (fail e));
+  have second :=
+    eval H
+      (match first.2 with
+      | ok (some after) => MultiproofConeVerifyState.tailState p batch kind nodes after
+      | x => Program.done (false, before));
+  (first.1 ++ second.1, second.2)
+is not definitionally equal to the right-hand side
+  let leaf :=
+    NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+      (MultiproofConeSlotState.reset before);
+  let tail := following H p batch kind nodes before leaf.2;
+  (leaf.1 ++ tail.1, tail.2)
+
+case fail
+H : Bytes → State
+p : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+batch kind : ℕ
+nodes : Slice U8
+before : reference.Scratch
+e : Error
+run :
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before)).2 =
+    fail e
+⊢ (have first :=
+      ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+            (MultiproofConeSlotState.reset before)).1,
+        NKV_StepErasure.mapResult NKV_LeafBuild.forget (fail e));
+    have second :=
+      eval H
+        (match first.2 with
+        | ok (some after) => MultiproofConeVerifyState.tailState p batch kind nodes after
+        | x => Program.done (false, before));
+    (first.1 ++ second.1, second.2)) =
+    let leaf :=
+      NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before);
+    let tail := following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2)
+NKV_LeafSlot.lean:29:10: error: Tactic `rfl` failed: The left-hand side
+  have first :=
+    ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).1,
+      NKV_StepErasure.mapResult NKV_LeafBuild.forget div);
+  have second :=
+    eval H
+      (match first.2 with
+      | ok (some after) => MultiproofConeVerifyState.tailState p batch kind nodes after
+      | x => Program.done (false, before));
+  (first.1 ++ second.1, second.2)
+is not definitionally equal to the right-hand side
+  let leaf :=
+    NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+      (MultiproofConeSlotState.reset before);
+  let tail := following H p batch kind nodes before leaf.2;
+  (leaf.1 ++ tail.1, tail.2)
+
+case div
+H : Bytes → State
+p : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+batch kind : ℕ
+nodes : Slice U8
+before : reference.Scratch
+run :
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before)).2 =
+    div
+⊢ (have first :=
+      ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+            (MultiproofConeSlotState.reset before)).1,
+        NKV_StepErasure.mapResult NKV_LeafBuild.forget div);
+    have second :=
+      eval H
+        (match first.2 with
+        | ok (some after) => MultiproofConeVerifyState.tailState p batch kind nodes after
+        | x => Program.done (false, before));
+    (first.1 ++ second.1, second.2)) =
+    let leaf :=
+      NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before);
+    let tail := following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2)
+NKV_LeafSlot.lean:30:53: error: Tactic `rfl` failed: The left-hand side
+  have first :=
+    ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).1,
+      NKV_StepErasure.mapResult NKV_LeafBuild.forget (ok (false, s)));
+  have second :=
+    eval H
+      (match first.2 with
+      | ok (some after) => MultiproofConeVerifyState.tailState p batch kind nodes after
+      | x => Program.done (false, before));
+  (first.1 ++ second.1, second.2)
+is not definitionally equal to the right-hand side
+  let leaf :=
+    NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+      (MultiproofConeSlotState.reset before);
+  let tail := following H p batch kind nodes before leaf.2;
+  (leaf.1 ++ tail.1, tail.2)
+
+case ok.false
+H : Bytes → State
+p : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+batch kind : ℕ
+nodes : Slice U8
+before s : reference.Scratch
+run :
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before)).2 =
+    ok (false, s)
+⊢ (have first :=
+      ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+            (MultiproofConeSlotState.reset before)).1,
+        NKV_StepErasure.mapResult NKV_LeafBuild.forget (ok (false, s)));
+    have second :=
+      eval H
+        (match first.2 with
+        | ok (some after) => MultiproofConeVerifyState.tailState p batch kind nodes after
+        | x => Program.done (false, before));
+    (first.1 ++ second.1, second.2)) =
+    let leaf :=
+      NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before);
+    let tail := following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2)
+NKV_LeafSlot.lean:30:53: error: Tactic `rfl` failed: The left-hand side
+  have first :=
+    ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).1,
+      NKV_StepErasure.mapResult NKV_LeafBuild.forget (ok (true, s)));
+  have second :=
+    eval H
+      (match first.2 with
+      | ok (some after) => MultiproofConeVerifyState.tailState p batch kind nodes after
+      | x => Program.done (false, before));
+  (first.1 ++ second.1, second.2)
+is not definitionally equal to the right-hand side
+  let leaf :=
+    NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+      (MultiproofConeSlotState.reset before);
+  let tail := following H p batch kind nodes before leaf.2;
+  (leaf.1 ++ tail.1, tail.2)
+
+case ok.true
+H : Bytes → State
+p : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+batch kind : ℕ
+nodes : Slice U8
+before s : reference.Scratch
+run :
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before)).2 =
+    ok (true, s)
+⊢ (have first :=
+      ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+            (MultiproofConeSlotState.reset before)).1,
+        NKV_StepErasure.mapResult NKV_LeafBuild.forget (ok (true, s)));
+    have second :=
+      eval H
+        (match first.2 with
+        | ok (some after) => MultiproofConeVerifyState.tailState p batch kind nodes after
+        | x => Program.done (false, before));
+    (first.1 ++ second.1, second.2)) =
+    let leaf :=
+      NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before);
+    let tail := following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2)
+NKV_LeafSlot.lean:41:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+      (MultiproofConeSlotState.reset before)).2
+in the target expression
+  (have leaf :=
+      NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before);
+    have tail := following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2)) =
+    ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).1,
+      false, before)
+
+H : Bytes → State
+p : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+batch kind : ℕ
+nodes : Slice U8
+before bad : reference.Scratch
+reject :
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before)).2 =
+    ok (false, bad)
+⊢ (have leaf :=
+      NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before);
+    have tail := following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2)) =
+    ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).1,
+      false, before)
+theorem NKV_LeafSlot.source : ∀ (H : Bytes → State) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (batch kind : ℕ) (nodes : Slice U8) (before : reference.Scratch),
+  eval H (MultiproofConeSlotState.slotState p q batch kind nodes before) =
+    have leaf :=
+      NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before);
+    have tail := following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2) :=
+⋯
+theorem NKV_LeafSlot.rejected : ∀ (H : Bytes → State) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (batch kind : ℕ) (nodes : Slice U8) (before bad : reference.Scratch),
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).2 =
+      ok (false, bad) →
+    eval H (MultiproofConeSlotState.slotState p q batch kind nodes before) =
+      ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+            (MultiproofConeSlotState.reset before)).1,
+        false, before) :=
+⋯
+'NKV_LeafSlot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKV_LeafSlot.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,46 @@
+{"attempt": "NKV_L054", "exit_status": 0, "wall_seconds": 27.83453960996121, "peak_rss_kib": "6045460", "swaps": "0", "print_axioms": ["'NKV_LeafHistory.ordered_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_LeafHistory.complete' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_LeafHistory.ordered_prefix : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (kind : ℕ) (positions : List ℕ) (s : reference.Scratch),
+  ∃ remaining, (NKV_LeafBuild.build H p q kind positions s).1 ++ remaining = requests H p kind positions :=
+fun H p q kind positions s =>
+  List.rec (motive := fun positions =>
+    ∀ (s : reference.Scratch),
+      ∃ remaining, (NKV_LeafBuild.build H p q kind positions s).1 ++ remaining = requests H p kind positions)
+    (fun s => Exists.intro [] rfl)
+    (fun pos rest ih s =>
+      casesOn (motive := fun t =>
+        reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+              (encodeState (H
+...
+map
+                            (fun pos =>
+                              (OraclePortSelectedDraft.leaf p kind pos, H (OraclePortSelectedDraft.leaf p kind pos)))
+                            rest)))
+                      ((OraclePortSelectedDraft.leaf p kind pos, H (OraclePortSelectedDraft.leaf p kind pos)) ::
+                        List.map
+                          (fun pos =>
+                            (OraclePortSelectedDraft.leaf p kind pos, H (OraclePortSelectedDraft.leaf p kind pos)))
+                          rest))
+                    (eq_self
+                      ((OraclePortSelectedDraft.leaf p kind pos, H (OraclePortSelectedDraft.leaf p kind pos)) ::
+                        List.map
+                          (fun pos =>
+                            (OraclePortSelectedDraft.leaf p kind pos, H (OraclePortSelectedDraft.leaf p kind pos)))
+                          rest)))))
+            (Eq.symm h)
+            (Eq.refl
+              (reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+                (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))))))
+        (Eq.refl
+          (reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+            (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))))))
+    positions s
+theorem NKV_LeafHistory.complete : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (kind : ℕ) (positions : List ℕ) (s after : reference.Scratch),
+  (NKV_LeafBuild.build H p q kind positions s).2 = ok (true, after) →
+    (NKV_LeafBuild.build H p q kind positions s).1 = requests H p kind positions :=
+⋯
+'NKV_LeafHistory.ordered_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_LeafHistory.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r74497c7a8d5c44ccb7911b9fb2e28746.scope; invocation ID: 320df6be4a784a958d0dfb3a11a90947

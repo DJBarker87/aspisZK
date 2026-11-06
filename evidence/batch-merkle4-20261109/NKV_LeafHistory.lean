@@ -13,7 +13,7 @@ def requests (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
 
 /-- Every result, including a rejected duplicate or abort, has an exact ordered
 prefix of the SAME sorted-position requests. No counterfactual suffix query. -/
-theorem prefix (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+theorem ordered_prefix (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
  (q : Fin 22 → Fin 262144) (kind : Nat) (positions : List Nat) (s : reference.Scratch) :
  ∃ remaining,(NKV_LeafBuild.build H p q kind positions s).1++remaining=requests H p kind positions := by
  induction positions generalizing s with
@@ -29,8 +29,8 @@ theorem prefix (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
      | some t =>
        obtain ⟨remaining,joined⟩:=ih t
        exact ⟨remaining,by simpa only [NKV_LeafBuild.build,step,requests,List.map_cons,List.cons_append]
-         using congrArg (List.cons (OraclePortSelectedDraft.leaf p kind pos,
-           H (OraclePortSelectedDraft.leaf p kind pos))) joined⟩
+         using (congrArg (List.cons (OraclePortSelectedDraft.leaf p kind pos,
+           H (OraclePortSelectedDraft.leaf p kind pos))) joined)⟩
 
 theorem complete (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
  (q : Fin 22 → Fin 262144) (kind : Nat) (positions : List Nat) (s after : reference.Scratch)
@@ -53,9 +53,10 @@ theorem complete (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
          congrArg (List.cons (OraclePortSelectedDraft.leaf p kind pos,
            H (OraclePortSelectedDraft.leaf p kind pos))) (ih t tail)
 
-#print prefix
+#print ordered_prefix
+set_option pp.proofs false
 #print complete
-#print axioms prefix
+#print axioms ordered_prefix
 #print axioms complete
 end NKV_LeafHistory
 end

@@ -1,0 +1,50 @@
+NKV_OkTransport.lean:19:53: warning: This simp argument is unused:
+  NKV_ParentSource.observe
+
+Hint: Omit it from the simp argument list.
+  simp [NKV_ReturnBoundary.reject,̵N̵K̵V̵_̵P̵a̵r̵e̵n̵t̵S̵o̵u̵r̵c̵e̵.̵o̵b̵s̵e̵r̵v̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_OkTransport.lean:28:27: warning: This simp argument is unused:
+  NKV_ReturnBoundary.reject
+
+Hint: Omit it from the simp argument list.
+  simp [NKV_R̵e̵t̵u̵r̵n̵B̵o̵u̵n̵d̵a̵r̵y̵.̵r̵e̵j̵e̵c̵t̵,̵N̵K̵V̵_̵ParentSource.observe]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKV_OkTransport.tree : ∀ (H : Bytes → HashState) (proof : Slice U8) (raw : Std.Array U32 22#usize)
+  (root : Std.Array U8 32#usize) (batch kind : Usize),
+  ↑batch < 2 →
+    ∀ (idx outIdx : Indices) (val outVal : Values),
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H)
+            (NKV_ConcreteChildren.digest H) proof raw root batch kind idx val () =
+          ok (core.result.Result.Ok (), outIdx, outVal) ↔
+        NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof raw
+            root batch kind idx val () =
+          ok (core.result.Result.Ok (), outIdx, outVal) :=
+⋯
+theorem NKV_OkTransport.values : ∀ (H : Bytes → HashState) (proof : Slice U8) (raw : Std.Array U32 22#usize)
+  (roots : Std.Array (Std.Array U8 32#usize) 3#usize) (batch : Usize),
+  ↑batch < 2 →
+    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H)
+          (NKV_ConcreteChildren.digest H) proof raw roots batch () =
+        ok (core.result.Result.Ok ()) ↔
+      NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+          raw roots batch () =
+        ok (core.result.Result.Ok ())) :=
+⋯
+theorem NKV_OkTransport.batch : ∀ (H : Bytes → HashState) (proof : Slice U8) (p : verifier.Prepared)
+  (folded : Std.Array U8 32#usize) (batch : Usize),
+  ↑batch < 2 →
+    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H)
+          (NKV_ConcreteChildren.digest H) proof p folded batch () =
+        ok (core.result.Result.Ok ()) ↔
+      NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof p
+          folded batch () =
+        ok (core.result.Result.Ok ())) :=
+⋯
+'NKV_OkTransport.tree_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_OkTransport.parent_observation' depends on axioms: [propext]
+'NKV_OkTransport.tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_OkTransport.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_OkTransport.batch' depends on axioms: [propext, Classical.choice, Quot.sound]

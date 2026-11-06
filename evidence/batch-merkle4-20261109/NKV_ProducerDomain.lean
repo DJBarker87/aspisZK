@@ -47,8 +47,9 @@ theorem tx1_count (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
    (NKV_LeafOrder.nonempty H p q 0 kind) size (NKV_LeafOrder.ordered H p q 0 kind)
    (NKV_LeafOrder.canonical H p q kind _) chain).2.1
  simpa only [NKV_LeafBuild.leaves,List.length_map,sortedPositions,List.length_mergeSort,
-   batchPositions,if_pos rfl,List.length_range] using count
+   OraclePortSelectedDraft.batchPositions,if_pos rfl,if_true,List.length_range] using count
 
+set_option pp.proofs false
 #print caller
 #print tx2_bytes
 #print tx1_count

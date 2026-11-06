@@ -1,0 +1,162 @@
+NKV_TailReject.lean:46:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (NKV_ConcreteChildren.ops H).op3 proof slot
+in the target expression
+  (do
+      let nodes ← NJS_Extract.verifier.candidate.slot NGD_SlotRef.slot_offset proof slot
+      let i ←
+        (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                NKV_ConcreteChildren.ops._proof_9).index_usize
+            slot
+      if count > i then ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true))
+        else do
+          let i1 ← lift (Usize.wrapping_mul 32#usize count)
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes { start := i1 }
+          let ce ← core.slice.Slice.chunks_exact s2 8#usize
+          let (b, _) ←
+            Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorChunksExact U8)
+                (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                  { op0 := fun {Self F Clause0_Item} => Port3_BatchStd.anyDefault,
+                    op1 := fun {T E} => Port3_BatchStd.okOr, op2 := NJS_Extract.verifier.candidate.opening,
+                    op3 := NJS_Extract.verifier.candidate.slot NGD_SlotRef.slot_offset,
+                    op4 := NJS_Extract.verifier.candidate.batch_keys,
+                    op5 := NJS_Extract.verifier.candidate.sort_batch_keys,
+                    op6 := fun {H} D hash tree view =>
+                      NJS_Extract.verifier.candidate.batch_leaf (ok 113#u8) (ok 241#u8)
+                        (fun {H} => NJS_BatchLeaf.privateLeaf) (NKV_ConcreteChildren.toExtract D) hash tree view,
+                    op7 := Port3_BatchStd.sameLeaf, op8 := Port3_BatchStd.sameIndex, op9 := Array.index_usize,
+                    op10 := fun {H_1} => NKV_ConcreteChildren.verify H, op11 := NKV_ConcreteChildren.count,
+                    op12 :=
+                      ok
+                        (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                          NKV_ConcreteChildren.ops._proof_9),
+                    op13 := ok 10#usize, unwrap8 := Port3_BatchStd.unwrap8 }
+                  (NKV_ConcreteChildren.digest H))
+                ce ()
+          if b = true then ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true))
+            else do
+              let i2 ← lift (Usize.wrapping_mul 32#usize count)
+              let s3 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes { «end» := i2 }
+              let (b1, idx1, val2) ←
+                NKV_ConcreteChildren.verify H (NKV_ConcreteChildren.digest H) ()
+                    Port3_NativeBatchBody.multiproof.Arity.Two root s.idx s.val s.n s3
+              if b1 = true then ok (done (idx1, val2, core.result.Result.Ok (), false))
+                else ok (done (idx1, val2, core.result.Result.Err verifier.Error.Merkle, true))) =
+    ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true))
+
+H : Bytes → HashState
+proof : Slice U8
+len : (↑proof).length = 57607
+p : OraclePortCompactDraft.Parsed
+wire : p.wire = MultiproofConeCanonical.bytesOf ↑proof
+root : Std.Array U8 32#usize
+batch : ℕ
+kind lo n slot : Usize
+hb : batch < 2
+hk : ↑kind < 3
+value : ↑slot = 3 * batch + ↑kind
+keys : Std.Array U64 16#usize
+s : reference.Scratch
+bound : ↑s.n ≤ 16
+well : OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)
+excess :
+  OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s) > OraclePortSelectedDraft.capacity (3 * batch + ↑kind)
+count : Usize
+countRead :
+  NKV_ConcreteChildren.count Port3_NativeBatchBody.multiproof.Arity.Two (NKV_CountInvocation.front s) = ok (some count)
+countValue : ↑count = OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)
+nodes : Slice U8
+nodeRead : (NKV_ConcreteChildren.ops H).op3 proof slot = ok nodes
+width : (↑nodes).length = 32 * OraclePortSelectedDraft.capacity (3 * batch + ↑kind)
+bytes :
+  MultiproofConeCanonical.bytesOf ↑nodes =
+    OraclePortCompactDraft.slice p.wire (OraclePortSelectedDraft.slotStart (3 * batch + ↑kind))
+      (32 * OraclePortSelectedDraft.capacity (3 * batch + ↑kind))
+cap : UScalar UScalarTy.Usize
+capRead :
+  (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize] ⋯).index_usize slot = ok cap
+capValue : ↑cap = OraclePortSelectedDraft.capacity ↑slot
+small : ↑cap ≤ 172
+exceeds : count > cap
+⊢ (do
+      let nodes ← NJS_Extract.verifier.candidate.slot NGD_SlotRef.slot_offset proof slot
+      let i ←
+        (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                NKV_ConcreteChildren.ops._proof_9).index_usize
+            slot
+      if count > i then ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true))
+        else do
+          let i1 ← lift (Usize.wrapping_mul 32#usize count)
+          let s2 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes { start := i1 }
+          let ce ← core.slice.Slice.chunks_exact s2 8#usize
+          let (b, _) ←
+            Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorChunksExact U8)
+                (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                  { op0 := fun {Self F Clause0_Item} => Port3_BatchStd.anyDefault,
+                    op1 := fun {T E} => Port3_BatchStd.okOr, op2 := NJS_Extract.verifier.candidate.opening,
+                    op3 := NJS_Extract.verifier.candidate.slot NGD_SlotRef.slot_offset,
+                    op4 := NJS_Extract.verifier.candidate.batch_keys,
+                    op5 := NJS_Extract.verifier.candidate.sort_batch_keys,
+                    op6 := fun {H} D hash tree view =>
+                      NJS_Extract.verifier.candidate.batch_leaf (ok 113#u8) (ok 241#u8)
+                        (fun {H} => NJS_BatchLeaf.privateLeaf) (NKV_ConcreteChildren.toExtract D) hash tree view,
+                    op7 := Port3_BatchStd.sameLeaf, op8 := Port3_BatchStd.sameIndex, op9 := Array.index_usize,
+                    op10 := fun {H_1} => NKV_ConcreteChildren.verify H, op11 := NKV_ConcreteChildren.count,
+                    op12 :=
+                      ok
+                        (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                          NKV_ConcreteChildren.ops._proof_9),
+                    op13 := ok 10#usize, unwrap8 := Port3_BatchStd.unwrap8 }
+                  (NKV_ConcreteChildren.digest H))
+                ce ()
+          if b = true then ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true))
+            else do
+              let i2 ← lift (Usize.wrapping_mul 32#usize count)
+              let s3 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes { «end» := i2 }
+              let (b1, idx1, val2) ←
+                NKV_ConcreteChildren.verify H (NKV_ConcreteChildren.digest H) ()
+                    Port3_NativeBatchBody.multiproof.Arity.Two root s.idx s.val s.n s3
+              if b1 = true then ok (done (idx1, val2, core.result.Result.Ok (), false))
+                else ok (done (idx1, val2, core.result.Result.Err verifier.Error.Merkle, true))) =
+    ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+theorem NKV_TailReject.missing : ∀ (H : Bytes → HashState) (proof : Slice U8) (root : Std.Array U8 32#usize)
+  (kind lo n slot : Usize) (keys : Std.Array U64 16#usize) (s : reference.Scratch),
+  ↑s.n ≤ 16 →
+    ¬OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+      NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+          proof root kind () lo n slot keys s.idx s.val s.n n =
+        ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Merkle, true)) :=
+⋯
+theorem NKV_TailReject.capacity : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (root : Std.Array U8 32#usize) (batch : ℕ) (kind lo n slot : Usize),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                ∀ (keys : Std.Array U64 16#usize) (s : reference.Scratch),
+                  ↑s.n ≤ 16 →
+                    OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+                      OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s) >
+                          OraclePortSelectedDraft.capacity (3 * batch + ↑kind) →
+                        NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+                            (NKV_ConcreteChildren.digest H) proof root kind () lo n slot keys s.idx s.val s.n n =
+                          ok (done (s.idx, s.val, core.result.Result.Err verifier.Error.Parse, true)) :=
+⋯
+'NKV_TailReject.missing' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TailReject.capacity' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,108 @@
+NKV_LeafSlot.lean:30:10: error: unsolved goals
+case ok.false
+H : Bytes → State
+p : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+batch kind : ℕ
+nodes : Slice U8
+before s : reference.Scratch
+run :
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before)).2 =
+    ok (false, s)
+⊢ ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+            (MultiproofConeSlotState.reset before)).1 ++
+        (eval H
+            (match ok (if false = true then some s else none) with
+            | ok (some after) => MultiproofConeVerifyState.tailState p batch kind nodes after
+            | x => Program.done (false, before))).1,
+      (eval H
+          (match ok (if false = true then some s else none) with
+          | ok (some after) => MultiproofConeVerifyState.tailState p batch kind nodes after
+          | x => Program.done (false, before))).2) =
+    ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+            (MultiproofConeSlotState.reset before)).1 ++
+        [],
+      false, before)
+NKV_LeafSlot.lean:28:50: warning: This simp argument is unused:
+  NKV_LeafBuild.forget
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵K̵V̵_̵S̵t̵e̵p̵E̵r̵a̵s̵u̵r̵e̵.̵m̵a̵p̵R̵e̵s̵u̵l̵t̵,̵N̵K̵V̵_̵L̵e̵a̵f̵B̵u̵i̵l̵d̵.̵f̵o̵r̵g̵e̵t̵,̵f̵o̵l̵l̵o̵w̵i̵n̵g̵,̵r̵u̵n̵,̵e̵v̵a̵l̵]̵[̲N̲K̲V̲_̲S̲t̲e̲p̲E̲r̲a̲s̲u̲r̲e̲.̲m̲a̲p̲R̲e̲s̲u̲l̲t̲,̲ ̲f̲o̲l̲l̲o̲w̲i̲n̲g̲,̲ ̲r̲u̲n̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_LeafSlot.lean:29:47: warning: This simp argument is unused:
+  NKV_LeafBuild.forget
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵K̵V̵_̵S̵t̵e̵p̵E̵r̵a̵s̵u̵r̵e̵.̵m̵a̵p̵R̵e̵s̵u̵l̵t̵,̵N̵K̵V̵_̵L̵e̵a̵f̵B̵u̵i̵l̵d̵.̵f̵o̵r̵g̵e̵t̵,̵f̵o̵l̵l̵o̵w̵i̵n̵g̵,̵r̵u̵n̵,̵e̵v̵a̵l̵]̵[̲N̲K̲V̲_̲S̲t̲e̲p̲E̲r̲a̲s̲u̲r̲e̲.̲m̲a̲p̲R̲e̲s̲u̲l̲t̲,̲ ̲f̲o̲l̲l̲o̲w̲i̲n̲g̲,̲ ̲r̲u̲n̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_LeafSlot.lean:30:125: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [NKV_StepErasure.mapResult,
+  ̲ ̲ ̲ ̲NKV_LeafBuild.forget, ̲following, ̲run,e̵v̵a̵l̵,̵ ̲if_true, ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_LeafSlot.lean:30:138: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [NKV_StepErasure.mapResult,
+  ̲ ̲ ̲ ̲NKV_LeafBuild.forget, ̲following, ̲run, ̲eval, ̲if_true,̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_LeafSlot.lean:41:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+      (MultiproofConeSlotState.reset before)).2
+in the target expression
+  (have leaf :=
+      NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before);
+    have tail := following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2)) =
+    ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).1,
+      false, before)
+
+H : Bytes → State
+p : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+batch kind : ℕ
+nodes : Slice U8
+before bad : reference.Scratch
+reject :
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before)).2 =
+    ok (false, bad)
+⊢ (have leaf :=
+      NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before);
+    have tail := following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2)) =
+    ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).1,
+      false, before)
+theorem NKV_LeafSlot.source : ∀ (H : Bytes → State) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (batch kind : ℕ) (nodes : Slice U8) (before : reference.Scratch),
+  eval H (MultiproofConeSlotState.slotState p q batch kind nodes before) =
+    have leaf :=
+      NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before);
+    have tail := following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2) :=
+⋯
+theorem NKV_LeafSlot.rejected : ∀ (H : Bytes → State) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (batch kind : ℕ) (nodes : Slice U8) (before bad : reference.Scratch),
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).2 =
+      ok (false, bad) →
+    eval H (MultiproofConeSlotState.slotState p q batch kind nodes before) =
+      ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+            (MultiproofConeSlotState.reset before)).1,
+        false, before) :=
+⋯
+'NKV_LeafSlot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKV_LeafSlot.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
