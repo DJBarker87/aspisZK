@@ -1,0 +1,65 @@
+{"attempt": "NJP_L073", "exit_status": 1, "wall_seconds": 7.758156004128978, "peak_rss_kib": "5833112", "swaps": "0", "print_axioms": ["'NJP_CohortTotal.levels' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJP_lean/NJP_CohortTotal.lean:31:24: error: Application type mismatch: The argument
+  returned
+has type
+  (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 = ok out
+but is expected to have type
+  ok out = ok out
+in the application
+  Exists.intro out returned
+theorem NJP_CohortTotal.levels : ∀ (H : Slice (Slice U8) → RefDigest) (height : ℕ) (physical : Slice U8)
+  (s : reference.Scratch),
+  AspisR1.MultiproofConeLevelIteration.Domain physical s →
+    (↑physical).length ≤ 9216 →
+      ∃ out, (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 = ok out :=
+fun H height physical s domain bytes =>
+  have rawDomain := ⟨domain.left, ⟨domain.right.left,
+...
+t
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | ok x => ok (projectLevel x)
+                    | fail e => fail e
+                    | div => div)
+                  returned))
+              (ok rawOut))
+            (Eq.mp
+              (congrArg
+                (fun _a =>
+                  mapResult projectLevel (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 =
+                    _a)
+                rawReturned)
+              result))
+        (Eq.symm h) (Eq.refl (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 = x → ∃ out, x = ok out)
+        (fun returned =>
+          let ⟨⟩ := ok rawOut
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | ok x => ok (projectLevel x)
+                    | fail e => fail e
+                    | div => div)
+                  returned))
+              (ok rawOut))
+            (Eq.mp
+              (congrArg
+                (fun _a =>
+                  mapResult projectLevel (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 =
+                    _a)
+                rawReturned)
+              result))
+        (Eq.symm h) (Eq.refl (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2))
+    (Eq.refl (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2)
+'NJP_CohortTotal.levels' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r02b55d5c63fd4fea849fc05fb09d365a.scope; invocation ID: 7b37b98aced54c56adf76fa4a32b8536

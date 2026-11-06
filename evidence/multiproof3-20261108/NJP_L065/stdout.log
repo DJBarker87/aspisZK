@@ -1,0 +1,45 @@
+NJP_lean/NJP_CohortTerminal.lean:17:63: error: unsolved goals
+root : RefDigest
+physical : Slice U8
+s : reference.Scratch
+index0 : NJP_RowModel.index (raw s) 0 = ↑(↑s.idx)[0]!
+value0 : NJP_RowModel.value (raw s) 0 = decode (↑s.val)[0]!
+⊢ decide (↑s.n = 1 ∧ ↑(↑s.idx)[0]! = 0 ∧ decode (↑s.val)[0]! = decode root ∧ ↑s.at = (↑physical).length) =
+    decide (↑s.n = 1 ∧ ↑(↑s.idx)[0]! = 0 ∧ (↑s.val)[0]! = root ∧ ↑s.at = (↑physical).length)
+theorem NJP_CohortTerminal.digest_equal : ∀ (left right : RefDigest), decode left = decode right ↔ left = right :=
+fun left right => { mp := fun h => NJP_DigestCarrier.faithful left right h, mpr := fun h => congrArg decode h }
+'NJP_CohortTerminal.digest_equal' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CohortTerminal.same : ∀ (root : RefDigest) (physical : Slice U8) (s : reference.Scratch),
+  NJP_LoopModel.terminal (decode root) (↑physical).length (raw s) =
+    AspisR1.MultiproofConeRootGuard.sourceRoot root physical s :=
+fun root physical s =>
+  id
+    (id
+      (have index0 := NJP_CohortRead.index s 0#usize (of_decide_eq_true (id (Eq.refl true)));
+      have value0 := NJP_CohortRead.value s 0#usize (of_decide_eq_true (id (Eq.refl true)));
+      id
+        (fun index0 =>
+          id
+            (fun value0 =>
+              Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      decide
+                          ((raw s).n = 1 ∧
+                            _a = 0 ∧ NJP_RowModel.value (raw s) 0 = decode root ∧ (raw s).cursor = (↑physical).length) =
+                        decide (↑s.n = 1 ∧ ↑(↑s.idx)[0]! = 0 ∧ (↑s.val)[0]! = root ∧ ↑s.at = (↑physical).length))
+                    index0))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        decide
+                            ((raw s).n = 1 ∧
+                              ↑(↑s.idx)[0]! = 0 ∧ _a = decode root ∧ (raw s).cursor = (↑physical).length) =
+                          decide (↑s.n = 1 ∧ ↑(↑s.idx)[0]! = 0 ∧ (↑s.val)[0]! = root ∧ ↑s.at = (↑physical).length))
+                      value0))
+                  (id sorry)))
+            value0)
+        index0))
+'NJP_CohortTerminal.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

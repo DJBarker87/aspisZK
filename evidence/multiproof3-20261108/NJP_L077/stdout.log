@@ -1,0 +1,124 @@
+theorem NJP_NativeCohortStep.observation : ∀ (H : Slice (Slice U8) → RefDigest) (s : reference.Scratch)
+  (physical : Slice U8) (i w : Usize) (after : NJP_RowModel.Scratch) (ni nw : ℕ) (returned : Bool)
+  (log : NJP_NativeRowCut.Log),
+  AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w →
+    ↑i < ↑s.n →
+      NJP_NativeRowCut.Cut (raw s) (↑i) (↑w) (↑physical).length (fun n => (↑physical)[n]!)
+          (NJP_RequestTransport.hash H (NJP_NativeRowCut.request log)) after ni nw returned log →
+        have typed := eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w);
+        (typed.1, mapResult projectRow typed.2) =
+          (if log.calls = 0 then []
+            else
+              [(NJP_RequestTransport.address (NJP_NativeRowCut.request log),
+                  H (NJP_RequestTransport.address (NJP_NativeRowCut.request log)))],
+            ok (if returned = true then NJP_RowModel.Row.next after ni nw else NJP_RowModel.Row.stop after)) :=
+fun H s physical i w after ni nw returned log domain active cut =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a =
+              (if log.calls = 0 then []
+                else
+                  [(NJP_RequestTransport.address (NJP_NativeRowCut.request log),
+                      H (NJP_RequestTransport.address (NJP_NativeRowCut.request log)))],
+                ok (if returned = true then NJP_RowModel.Row.next after ni nw else NJP_RowModel.Row.stop after)))
+          (NJP_CohortNode.observation H s physical i w domain active)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a =
+                (if log.calls = 0 then []
+                  else
+                    [(NJP_RequestTransport.address (NJP_NativeRowCut.request log),
+                        H (NJP_RequestTransport.address (NJP_NativeRowCut.request log)))],
+                  ok (if returned = true then NJP_RowModel.Row.next after ni nw else NJP_RowModel.Row.stop after)))
+            (NJP_RequestTransport.observation H
+              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) _a.1, _a.2) =
+                  (if log.calls = 0 then []
+                    else
+                      [(NJP_RequestTransport.address (NJP_NativeRowCut.request log),
+                          H (NJP_RequestTransport.address (NJP_NativeRowCut.request log)))],
+                    ok (if returned = true then NJP_RowModel.Row.next after ni nw else NJP_RowModel.Row.stop after)))
+              (NJP_NativeStep.one (NJP_RequestTransport.hash H) (fun n => (↑physical)[n]!) (↑physical).length (raw s)
+                (↑i) (↑w) after ni nw returned log cut)))
+          (Decidable.casesOn (instDecidableEqNat log.calls 0)
+            (fun h =>
+              Eq.mpr
+                (id
+                  (congr
+                    (congrArg Eq
+                      (congr
+                        (congrArg Prod.mk
+                          (congrArg (List.map fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                            (congrArg Prod.fst
+                              (congrFun' (congrArg Prod.mk (if_neg h))
+                                (ok
+                                  (if returned = true then NJP_RowModel.Row.next after ni nw
+                                  else NJP_RowModel.Row.stop after))))))
+                        (congrArg Prod.snd
+                          (congrFun' (congrArg Prod.mk (if_neg h))
+                            (ok
+                              (if returned = true then NJP_RowModel.Row.next after ni nw
+                              else NJP_RowModel.Row.stop after))))))
+                    (congrFun' (congrArg Prod.mk (if_neg h))
+                      (ok
+                        (if returned = true then NJP_RowModel.Row.next after ni nw else NJP_RowModel.Row.stop after)))))
+                (of_eq_true
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (congrFun'
+                          (congrArg Prod.mk
+                            (congrFun'
+                              (congrArg List.cons
+                                (congrArg (Prod.mk (NJP_RequestTransport.address (NJP_NativeRowCut.request log)))
+                                  (encode_decode (H (NJP_RequestTransport.address (NJP_NativeRowCut.request log))))))
+                              []))
+                          (ok
+                            (if returned = true then NJP_RowModel.Row.next after ni nw
+                            else NJP_RowModel.Row.stop after))))
+                      ([(NJP_RequestTransport.address (NJP_NativeRowCut.request log),
+                            H (NJP_RequestTransport.address (NJP_NativeRowCut.request log)))],
+                        ok
+                          (if returned = true then NJP_RowModel.Row.next after ni nw else NJP_RowModel.Row.stop after)))
+                    (eq_self
+                      ([(NJP_RequestTransport.address (NJP_NativeRowCut.request log),
+                            H (NJP_RequestTransport.address (NJP_NativeRowCut.request log)))],
+                        ok
+                          (if returned = true then NJP_RowModel.Row.next after ni nw
+                          else NJP_RowModel.Row.stop after))))))
+            fun h =>
+            Eq.mpr
+              (id
+                (congr
+                  (congrArg Eq
+                    (congr
+                      (congrArg Prod.mk
+                        (congrArg (List.map fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                          (congrArg Prod.fst
+                            (congrFun' (congrArg Prod.mk (if_pos h))
+                              (ok
+                                (if returned = true then NJP_RowModel.Row.next after ni nw
+                                else NJP_RowModel.Row.stop after))))))
+                      (congrArg Prod.snd
+                        (congrFun' (congrArg Prod.mk (if_pos h))
+                          (ok
+                            (if returned = true then NJP_RowModel.Row.next after ni nw
+                            else NJP_RowModel.Row.stop after))))))
+                  (congrFun' (congrArg Prod.mk (if_pos h))
+                    (ok (if returned = true then NJP_RowModel.Row.next after ni nw else NJP_RowModel.Row.stop after)))))
+              (of_eq_true
+                (eq_self
+                  ([],
+                    ok
+                      (if returned = true then NJP_RowModel.Row.next after ni nw
+                      else NJP_RowModel.Row.stop after))))))))
+'NJP_NativeCohortStep.observation' depends on axioms: [propext, Classical.choice, Quot.sound]

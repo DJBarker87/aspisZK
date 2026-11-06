@@ -1,0 +1,809 @@
+NJP_lean/NJP_CohortOccupied.lean:25:95: error: unsolved goals
+H : Slice (Slice U8) → RefDigest
+s : reference.Scratch
+physical : Slice U8
+i w : Usize
+active : ↑i < ↑s.n
+both : NJP_RowModel.paired (raw s) ↑i
+positive : 0 < ↑s.n
+size : ↑s.n ≤ 16
+readBound : ↑i ≤ ↑s.n
+writeBound : ↑w ≤ ↑i
+cursorBound : ↑s.at ≤ (↑physical).length
+ib : ↑i < 16
+wb : ↑w < 16
+next : UScalar UScalarTy.Usize
+addition : i + 1#usize = ok next
+next_value : ↑next = ↑i + 1
+nextNat : ↑i + 1 < ↑s.n
+nb : ↑next < 16
+next_active : next < s.n
+equality : (↑s.idx)[↑next]! = (↑s.idx)[↑i]! ^^^ 1#u32
+next2 : UScalar UScalarTy.Usize
+addition2 : i + 2#usize = ok next2
+next2_value : ↑next2 = ↑i + 2
+address :
+  NJP_RequestTransport.address (NJP_RowModel.occupiedRequest (raw s) ↑i) =
+    AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!
+⊢ ([(AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!,
+          H (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!))],
+      ok
+        (NJP_RowModel.Row.next
+          (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at)
+            (decode (H (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!))))
+          (↑i + 2) (↑w + 1))) =
+    ([(AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!,
+          H (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!))],
+      ok
+        (NJP_RowModel.Row.next
+          (NJP_RowModel.write (raw s) (↑i) (↑w) (raw s).cursor
+            (decode (H (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!))))
+          (↑i + 2) (↑w + 1)))
+NJP_lean/NJP_CohortOccupied.lean:46:12: warning: This simp argument is unused:
+  AspisR1.MultiproofConePhysicalProgram.checked
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵A̵s̵p̵i̵s̵R̵1̵.̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵P̵h̵y̵s̵i̵c̵a̵l̵P̵r̵o̵g̵r̵a̵m̵.̵c̵h̵e̵c̵k̵e̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_CohortOccupied.lean:48:12: warning: This simp argument is unused:
+  AspisR1.MultiproofConePhysicalProgram.checked
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵A̵s̵p̵i̵s̵R̵1̵.̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵P̵h̵y̵s̵i̵c̵a̵l̵P̵r̵o̵g̵r̵a̵m̵.̵c̵h̵e̵c̵k̵e̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJP_CohortOccupied.read : ∀ {α : Type} [inst : Inhabited α] (a : Std.Array α 16#usize) (i : Usize),
+  ↑i < 16 → a.index_usize i = ok (↑a)[↑i]! :=
+fun {α} [Inhabited α] a i bound =>
+  have size := a.property;
+  Eq.mpr (id (congrArg (fun _a => _a = ok (↑a)[↑i]!) (NJA_Reads.index_ok a i (id bound))))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => ok (↑a)[↑i] = ok _a)
+          (getElem!_pos (↑a) (↑i) (Decidable.byContradiction fun a_1 => read._proof_1 a i bound size a_1))))
+      (Eq.refl (ok (↑a)[↑i])))
+'NJP_CohortOccupied.read' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CohortOccupied.occupied : ∀ (H : Slice (Slice U8) → RefDigest) (s : reference.Scratch) (physical : Slice U8)
+  (i w : Usize),
+  AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w →
+    ↑i < ↑s.n →
+      NJP_RowModel.paired (raw s) ↑i →
+        have typed := eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w);
+        (typed.1, mapResult projectRow typed.2) =
+          eval H
+            (NJP_RequestTransport.transport
+              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)) :=
+fun H s physical i w domain active both =>
+  let ⟨positive, right✝⟩ := domain
+  let ⟨size, right✝¹⟩ := right✝
+  let ⟨readBound, right✝²⟩ := right✝¹
+  let ⟨writeBound, cursorBound⟩ := right✝²
+  have ib := Decidable.byContradiction fun a => occupied._proof_1 s physical i w active positive size a;
+  have wb := Decidable.byContradiction fun a => occupied._proof_2 s physical i w writeBound ib a;
+  let ⟨next, h✝⟩ := NJP_CheckedWords.add_one i ib
+  let ⟨addition, next_value⟩ := h✝
+  have nextNat := both.left;
+  have nb :=
+    Decidable.byContradiction fun a => occupied._proof_3 s physical i w positive size ib next next_value nextNat a;
+  have next_active :=
+    id (Decidable.byContradiction fun a => occupied._proof_4 s physical i w next next_value nextNat a);
+  have equality :=
+    UScalar.eq_of_val_eq
+      (Eq.mpr (id (congrArg (fun _a => ↑(↑s.idx)[↑next]! = _a) (NJP_CohortRead.xor_one (↑s.idx)[↑i]!)))
+        (have values := both.right;
+        Eq.mp (congrArg (fun _a => ↑(↑s.idx)[↑next]! = _a.xor 1) (NJP_CohortRead.index s i ib))
+          (Eq.mp (congrArg (fun _a => _a = (NJP_RowModel.index (raw s) ↑i).xor 1) (NJP_CohortRead.index s next nb))
+            (Eq.mp
+              (congrArg (fun _a => NJP_RowModel.index (raw s) _a = (NJP_RowModel.index (raw s) ↑i).xor 1)
+                (Eq.symm next_value))
+              values))));
+  let ⟨next2, h✝¹⟩ :=
+    NJP_CheckedWords.add_two i
+      (Decidable.byContradiction fun a => occupied._proof_5 s physical i w ib next next_value nb a)
+  let ⟨addition2, next2_value⟩ := h✝¹
+  have address := NJP_CohortRead.occupied_address s i next ib nb next_value;
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              ((eval H
+                      (AspisR1.MultiproofConePhysicalProgram.checked _a fun index =>
+                        AspisR1.MultiproofConePhysicalProgram.checked (s.val.index_usize i) fun value =>
+                          AspisR1.MultiproofConePhysicalProgram.checked (i + 1#usize) fun ni =>
+                            have supplied :=
+                              AspisR1.MultiproofConePhysicalProgram.checked (physical.len - s.at) fun remaining =>
+                                if remaining < 32#usize then Program.done (ok (reference.Row.Stop s))
+                                else
+                                  AspisR1.MultiproofConePhysicalProgram.checked (s.at + 32#usize) fun cursor =>
+                                    AspisR1.MultiproofConePhysicalProgram.checked
+                                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                        physical { start := s.at, «end» := cursor })
+                                      fun chunk =>
+                                      AspisR1.MultiproofConePhysicalProgram.checked (reference.read32 chunk)
+                                        fun sibling =>
+                                        if index &&& 1#u32 = 0#u32 then
+                                          AspisR1.MultiproofConePhysicalProgram.writer s value sibling ni cursor index w
+                                        else
+                                          AspisR1.MultiproofConePhysicalProgram.writer s sibling value ni cursor index
+                                            w;
+                            if ni < s.n then
+                              AspisR1.MultiproofConePhysicalProgram.checked (s.idx.index_usize ni) fun nextIndex =>
+                                if nextIndex = index ^^^ 1#u32 then
+                                  AspisR1.MultiproofConePhysicalProgram.checked (s.val.index_usize ni) fun right =>
+                                    AspisR1.MultiproofConePhysicalProgram.checked (i + 2#usize) fun next =>
+                                      AspisR1.MultiproofConePhysicalProgram.writer s value right next s.at index w
+                                else supplied
+                            else supplied)).1,
+                  mapResult projectRow
+                    (eval H
+                        (AspisR1.MultiproofConePhysicalProgram.checked _a fun index =>
+                          AspisR1.MultiproofConePhysicalProgram.checked (s.val.index_usize i) fun value =>
+                            AspisR1.MultiproofConePhysicalProgram.checked (i + 1#usize) fun ni =>
+                              have supplied :=
+                                AspisR1.MultiproofConePhysicalProgram.checked (physical.len - s.at) fun remaining =>
+                                  if remaining < 32#usize then Program.done (ok (reference.Row.Stop s))
+                                  else
+                                    AspisR1.MultiproofConePhysicalProgram.checked (s.at + 32#usize) fun cursor =>
+                                      AspisR1.MultiproofConePhysicalProgram.checked
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                          physical { start := s.at, «end» := cursor })
+                                        fun chunk =>
+                                        AspisR1.MultiproofConePhysicalProgram.checked (reference.read32 chunk)
+                                          fun sibling =>
+                                          if index &&& 1#u32 = 0#u32 then
+                                            AspisR1.MultiproofConePhysicalProgram.writer s value sibling ni cursor index
+                                              w
+                                          else
+                                            AspisR1.MultiproofConePhysicalProgram.writer s sibling value ni cursor index
+                                              w;
+                              if ni < s.n then
+                                AspisR1.MultiproofConePhysicalProgram.checked (s.idx.index_usize ni) fun nextIndex =>
+                                  if nextIndex = index ^^^ 1#u32 then
+                                    AspisR1.MultiproofConePhysicalProgram.checked (s.val.index_usize ni) fun right =>
+                                      AspisR1.MultiproofConePhysicalProgram.checked (i + 2#usize) fun next =>
+                                        AspisR1.MultiproofConePhysicalProgram.writer s value right next s.at index w
+                                  else supplied
+                              else supplied)).2) =
+                eval H
+                  (NJP_RequestTransport.transport
+                    (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+            (read s.idx i ib)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                ((eval H
+                        (AspisR1.MultiproofConePhysicalProgram.checked (ok (↑s.idx)[↑i]!) fun index =>
+                          AspisR1.MultiproofConePhysicalProgram.checked _a fun value =>
+                            AspisR1.MultiproofConePhysicalProgram.checked (i + 1#usize) fun ni =>
+                              have supplied :=
+                                AspisR1.MultiproofConePhysicalProgram.checked (physical.len - s.at) fun remaining =>
+                                  if remaining < 32#usize then Program.done (ok (reference.Row.Stop s))
+                                  else
+                                    AspisR1.MultiproofConePhysicalProgram.checked (s.at + 32#usize) fun cursor =>
+                                      AspisR1.MultiproofConePhysicalProgram.checked
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                          physical { start := s.at, «end» := cursor })
+                                        fun chunk =>
+                                        AspisR1.MultiproofConePhysicalProgram.checked (reference.read32 chunk)
+                                          fun sibling =>
+                                          if index &&& 1#u32 = 0#u32 then
+                                            AspisR1.MultiproofConePhysicalProgram.writer s value sibling ni cursor index
+                                              w
+                                          else
+                                            AspisR1.MultiproofConePhysicalProgram.writer s sibling value ni cursor index
+                                              w;
+                              if ni < s.n then
+                                AspisR1.MultiproofConePhysicalProgram.checked (s.idx.index_usize ni) fun nextIndex =>
+                                  if nextIndex = index ^^^ 1#u32 then
+                                    AspisR1.MultiproofConePhysicalProgram.checked (s.val.index_usize ni) fun right =>
+                                      AspisR1.MultiproofConePhysicalProgram.checked (i + 2#usize) fun next =>
+                                        AspisR1.MultiproofConePhysicalProgram.writer s value right next s.at index w
+                                  else supplied
+                              else supplied)).1,
+                    mapResult projectRow
+                      (eval H
+                          (AspisR1.MultiproofConePhysicalProgram.checked (ok (↑s.idx)[↑i]!) fun index =>
+                            AspisR1.MultiproofConePhysicalProgram.checked _a fun value =>
+                              AspisR1.MultiproofConePhysicalProgram.checked (i + 1#usize) fun ni =>
+                                have supplied :=
+                                  AspisR1.MultiproofConePhysicalProgram.checked (physical.len - s.at) fun remaining =>
+                                    if remaining < 32#usize then Program.done (ok (reference.Row.Stop s))
+                                    else
+                                      AspisR1.MultiproofConePhysicalProgram.checked (s.at + 32#usize) fun cursor =>
+                                        AspisR1.MultiproofConePhysicalProgram.checked
+                                          (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                            physical { start := s.at, «end» := cursor })
+                                          fun chunk =>
+                                          AspisR1.MultiproofConePhysicalProgram.checked (reference.read32 chunk)
+                                            fun sibling =>
+                                            if index &&& 1#u32 = 0#u32 then
+                                              AspisR1.MultiproofConePhysicalProgram.writer s value sibling ni cursor
+                                                index w
+                                            else
+                                              AspisR1.MultiproofConePhysicalProgram.writer s sibling value ni cursor
+                                                index w;
+                                if ni < s.n then
+                                  AspisR1.MultiproofConePhysicalProgram.checked (s.idx.index_usize ni) fun nextIndex =>
+                                    if nextIndex = index ^^^ 1#u32 then
+                                      AspisR1.MultiproofConePhysicalProgram.checked (s.val.index_usize ni) fun right =>
+                                        AspisR1.MultiproofConePhysicalProgram.checked (i + 2#usize) fun next =>
+                                          AspisR1.MultiproofConePhysicalProgram.writer s value right next s.at index w
+                                    else supplied
+                                else supplied)).2) =
+                  eval H
+                    (NJP_RequestTransport.transport
+                      (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+              (read s.val i ib)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  ((eval H
+                          (AspisR1.MultiproofConePhysicalProgram.checked (ok (↑s.idx)[↑i]!) fun index =>
+                            AspisR1.MultiproofConePhysicalProgram.checked (ok (↑s.val)[↑i]!) fun value =>
+                              AspisR1.MultiproofConePhysicalProgram.checked _a fun ni =>
+                                have supplied :=
+                                  AspisR1.MultiproofConePhysicalProgram.checked (physical.len - s.at) fun remaining =>
+                                    if remaining < 32#usize then Program.done (ok (reference.Row.Stop s))
+                                    else
+                                      AspisR1.MultiproofConePhysicalProgram.checked (s.at + 32#usize) fun cursor =>
+                                        AspisR1.MultiproofConePhysicalProgram.checked
+                                          (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                            physical { start := s.at, «end» := cursor })
+                                          fun chunk =>
+                                          AspisR1.MultiproofConePhysicalProgram.checked (reference.read32 chunk)
+                                            fun sibling =>
+                                            if index &&& 1#u32 = 0#u32 then
+                                              AspisR1.MultiproofConePhysicalProgram.writer s value sibling ni cursor
+                                                index w
+                                            else
+                                              AspisR1.MultiproofConePhysicalProgram.writer s sibling value ni cursor
+                                                index w;
+                                if ni < s.n then
+                                  AspisR1.MultiproofConePhysicalProgram.checked (s.idx.index_usize ni) fun nextIndex =>
+                                    if nextIndex = index ^^^ 1#u32 then
+                                      AspisR1.MultiproofConePhysicalProgram.checked (s.val.index_usize ni) fun right =>
+                                        AspisR1.MultiproofConePhysicalProgram.checked (i + 2#usize) fun next =>
+                                          AspisR1.MultiproofConePhysicalProgram.writer s value right next s.at index w
+                                    else supplied
+                                else supplied)).1,
+                      mapResult projectRow
+                        (eval H
+                            (AspisR1.MultiproofConePhysicalProgram.checked (ok (↑s.idx)[↑i]!) fun index =>
+                              AspisR1.MultiproofConePhysicalProgram.checked (ok (↑s.val)[↑i]!) fun value =>
+                                AspisR1.MultiproofConePhysicalProgram.checked _a fun ni =>
+                                  have supplied :=
+                                    AspisR1.MultiproofConePhysicalProgram.checked (physical.len - s.at) fun remaining =>
+                                      if remaining < 32#usize then Program.done (ok (reference.Row.Stop s))
+                                      else
+                                        AspisR1.MultiproofConePhysicalProgram.checked (s.at + 32#usize) fun cursor =>
+                                          AspisR1.MultiproofConePhysicalProgram.checked
+                                            (core.slice.index.Slice.index
+                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                              { start := s.at, «end» := cursor })
+                                            fun chunk =>
+                                            AspisR1.MultiproofConePhysicalProgram.checked (reference.read32 chunk)
+                                              fun sibling =>
+                                              if index &&& 1#u32 = 0#u32 then
+                                                AspisR1.MultiproofConePhysicalProgram.writer s value sibling ni cursor
+                                                  index w
+                                              else
+                                                AspisR1.MultiproofConePhysicalProgram.writer s sibling value ni cursor
+                                                  index w;
+                                  if ni < s.n then
+                                    AspisR1.MultiproofConePhysicalProgram.checked (s.idx.index_usize ni)
+                                      fun nextIndex =>
+                                      if nextIndex = index ^^^ 1#u32 then
+                                        AspisR1.MultiproofConePhysicalProgram.checked (s.val.index_usize ni)
+                                          fun right =>
+                                          AspisR1.MultiproofConePhysicalProgram.checked (i + 2#usize) fun next =>
+                                            AspisR1.MultiproofConePhysicalProgram.writer s value right next s.at index w
+                                      else supplied
+                                  else supplied)).2) =
+                    eval H
+                      (NJP_RequestTransport.transport
+                        (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+                addition))
+            (Eq.mpr
+              (id
+                (congrFun'
+                  (congrArg Eq
+                    (congr
+                      (congrArg Prod.mk
+                        (congrArg Prod.fst
+                          (congrArg (eval H)
+                            (ite_congr (Eq.refl (next < s.n))
+                              (fun a =>
+                                congrFun'
+                                  (congrFun'
+                                    (congrArg
+                                      (AspisR1.MultiproofConePhysicalProgram.checked.match_1
+                                        (fun r => AspisR1.MultiproofConePhysicalProgram.Run reference.Row)
+                                        (s.idx.index_usize next))
+                                      (funext fun x =>
+                                        ite_congr (Eq.refl (x = (↑s.idx)[↑i]! ^^^ 1#u32))
+                                          (fun a =>
+                                            Eq.refl
+                                              (match s.val.index_usize next with
+                                              | ok x =>
+                                                match i + 2#usize with
+                                                | ok x_1 =>
+                                                  AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x x_1
+                                                    s.at (↑s.idx)[↑i]! w
+                                                | fail e => Program.done (fail e)
+                                                | div => Program.done div
+                                              | fail e => Program.done (fail e)
+                                              | div => Program.done div))
+                                          fun a =>
+                                          congrFun'
+                                            (congrFun'
+                                              (congrArg
+                                                (AspisR1.MultiproofConePhysicalProgram.checked.match_1
+                                                  (fun r => AspisR1.MultiproofConePhysicalProgram.Run reference.Row)
+                                                  (physical.len - s.at))
+                                                (funext fun x =>
+                                                  ite_congr (Eq.refl (x < 32#usize))
+                                                    (fun a => Eq.refl (Program.done (ok (reference.Row.Stop s))))
+                                                    fun a =>
+                                                    Eq.refl
+                                                      (match s.at + 32#usize with
+                                                      | ok x =>
+                                                        match
+                                                          core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                                            { start := s.at, «end» := x } with
+                                                        | ok x_1 =>
+                                                          match reference.read32 x_1 with
+                                                          | ok x_2 =>
+                                                            if ⋯ = 0#u32 then
+                                                              AspisR1.MultiproofConePhysicalProgram.writer s ⋯ x_2 next
+                                                                x ⋯ w
+                                                            else
+                                                              AspisR1.MultiproofConePhysicalProgram.writer s x_2 ⋯ next
+                                                                x ⋯ w
+                                                          | fail e => Program.done (fail e)
+                                                          | div => Program.done div
+                                                        | fail e => Program.done (fail e)
+                                                        | div => Program.done div
+                                                      | fail e => Program.done (fail e)
+                                                      | div => Program.done div)))
+                                              fun e => Program.done (fail e))
+                                            fun _ => Program.done div))
+                                    fun e => Program.done (fail e))
+                                  fun _ => Program.done div)
+                              fun a =>
+                              congrFun'
+                                (congrFun'
+                                  (congrArg
+                                    (AspisR1.MultiproofConePhysicalProgram.checked.match_1
+                                      (fun r => AspisR1.MultiproofConePhysicalProgram.Run reference.Row)
+                                      (physical.len - s.at))
+                                    (funext fun x =>
+                                      ite_congr (Eq.refl (x < 32#usize))
+                                        (fun a => Eq.refl (Program.done (ok (reference.Row.Stop s)))) fun a =>
+                                        Eq.refl
+                                          (match s.at + 32#usize with
+                                          | ok x =>
+                                            match
+                                              core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                                { start := s.at, «end» := x } with
+                                            | ok x_1 =>
+                                              match reference.read32 x_1 with
+                                              | ok x_2 =>
+                                                if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                                  AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x_2 next
+                                                    x (↑s.idx)[↑i]! w
+                                                else
+                                                  AspisR1.MultiproofConePhysicalProgram.writer s x_2 (↑s.val)[↑i]! next
+                                                    x (↑s.idx)[↑i]! w
+                                              | fail e => Program.done (fail e)
+                                              | div => Program.done div
+                                            | fail e => Program.done (fail e)
+                                            | div => Program.done div
+                                          | fail e => Program.done (fail e)
+                                          | div => Program.done div)))
+                                  fun e => Program.done (fail e))
+                                fun _ => Program.done div))))
+                      (congrArg (mapResult projectRow)
+                        (congrArg Prod.snd
+                          (congrArg (eval H)
+                            (ite_congr (Eq.refl (next < s.n))
+                              (fun a =>
+                                congrFun'
+                                  (congrFun'
+                                    (congrArg
+                                      (AspisR1.MultiproofConePhysicalProgram.checked.match_1
+                                        (fun r => AspisR1.MultiproofConePhysicalProgram.Run reference.Row)
+                                        (s.idx.index_usize next))
+                                      (funext fun x =>
+                                        ite_congr (Eq.refl (x = (↑s.idx)[↑i]! ^^^ 1#u32))
+                                          (fun a =>
+                                            Eq.refl
+                                              (match s.val.index_usize next with
+                                              | ok x =>
+                                                match i + 2#usize with
+                                                | ok x_1 =>
+                                                  AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x x_1
+                                                    s.at (↑s.idx)[↑i]! w
+                                                | fail e => Program.done (fail e)
+                                                | div => Program.done div
+                                              | fail e => Program.done (fail e)
+                                              | div => Program.done div))
+                                          fun a =>
+                                          congrFun'
+                                            (congrFun'
+                                              (congrArg
+                                                (AspisR1.MultiproofConePhysicalProgram.checked.match_1
+                                                  (fun r => AspisR1.MultiproofConePhysicalProgram.Run reference.Row)
+                                                  (physical.len - s.at))
+                                                (funext fun x =>
+                                                  ite_congr (Eq.refl (x < 32#usize))
+                                                    (fun a => Eq.refl (Program.done (ok (reference.Row.Stop s))))
+                                                    fun a =>
+                                                    Eq.refl
+                                                      (match s.at + 32#usize with
+                                                      | ok x =>
+                                                        match
+                                                          core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                                            { start := s.at, «end» := x } with
+                                                        | ok x_1 =>
+                                                          match reference.read32 x_1 with
+                                                          | ok x_2 =>
+                                                            if ⋯ = 0#u32 then
+                                                              AspisR1.MultiproofConePhysicalProgram.writer s ⋯ x_2 next
+                                                                x ⋯ w
+                                                            else
+                                                              AspisR1.MultiproofConePhysicalProgram.writer s x_2 ⋯ next
+                                                                x ⋯ w
+                                                          | fail e => Program.done (fail e)
+                                                          | div => Program.done div
+                                                        | fail e => Program.done (fail e)
+                                                        | div => Program.done div
+                                                      | fail e => Program.done (fail e)
+                                                      | div => Program.done div)))
+                                              fun e => Program.done (fail e))
+                                            fun _ => Program.done div))
+                                    fun e => Program.done (fail e))
+                                  fun _ => Program.done div)
+                              fun a =>
+                              congrFun'
+                                (congrFun'
+                                  (congrArg
+                                    (AspisR1.MultiproofConePhysicalProgram.checked.match_1
+                                      (fun r => AspisR1.MultiproofConePhysicalProgram.Run reference.Row)
+                                      (physical.len - s.at))
+                                    (funext fun x =>
+                                      ite_congr (Eq.refl (x < 32#usize))
+                                        (fun a => Eq.refl (Program.done (ok (reference.Row.Stop s)))) fun a =>
+                                        Eq.refl
+                                          (match s.at + 32#usize with
+                                          | ok x =>
+                                            match
+                                              core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                                { start := s.at, «end» := x } with
+                                            | ok x_1 =>
+                                              match reference.read32 x_1 with
+                                              | ok x_2 =>
+                                                if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                                  AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x_2 next
+                                                    x (↑s.idx)[↑i]! w
+                                                else
+                                                  AspisR1.MultiproofConePhysicalProgram.writer s x_2 (↑s.val)[↑i]! next
+                                                    x (↑s.idx)[↑i]! w
+                                              | fail e => Program.done (fail e)
+                                              | div => Program.done div
+                                            | fail e => Program.done (fail e)
+                                            | div => Program.done div
+                                          | fail e => Program.done (fail e)
+                                          | div => Program.done div)))
+                                  fun e => Program.done (fail e))
+                                fun _ => Program.done div))))))
+                  (eval H
+                    (NJP_RequestTransport.transport
+                      (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      ((eval H _a).1, mapResult projectRow (eval H _a).2) =
+                        eval H
+                          (NJP_RequestTransport.transport
+                            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+                    (if_pos next_active)))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        ((eval H
+                                (match _a with
+                                | ok x =>
+                                  if x = (↑s.idx)[↑i]! ^^^ 1#u32 then
+                                    match s.val.index_usize next with
+                                    | ok x =>
+                                      match i + 2#usize with
+                                      | ok x_1 =>
+                                        AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x x_1 s.at
+                                          (↑s.idx)[↑i]! w
+                                      | fail e => Program.done (fail e)
+                                      | div => Program.done div
+                                    | fail e => Program.done (fail e)
+                                    | div => Program.done div
+                                  else
+                                    match physical.len - s.at with
+                                    | ok x =>
+                                      if x < 32#usize then Program.done (ok (reference.Row.Stop s))
+                                      else
+                                        match s.at + 32#usize with
+                                        | ok x =>
+                                          match
+                                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                              physical { start := s.at, «end» := x } with
+                                          | ok x_1 =>
+                                            match reference.read32 x_1 with
+                                            | ok x_2 =>
+                                              if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                                AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x_2 next x
+                                                  (↑s.idx)[↑i]! w
+                                              else
+                                                AspisR1.MultiproofConePhysicalProgram.writer s x_2 (↑s.val)[↑i]! next x
+                                                  (↑s.idx)[↑i]! w
+                                            | fail e => Program.done (fail e)
+                                            | div => Program.done div
+                                          | fail e => Program.done (fail e)
+                                          | div => Program.done div
+                                        | fail e => Program.done (fail e)
+                                        | div => Program.done div
+                                    | fail e => Program.done (fail e)
+                                    | div => Program.done div
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div)).1,
+                            mapResult projectRow
+                              (eval H
+                                  (match _a with
+                                  | ok x =>
+                                    if x = (↑s.idx)[↑i]! ^^^ 1#u32 then
+                                      match s.val.index_usize next with
+                                      | ok x =>
+                                        match i + 2#usize with
+                                        | ok x_1 =>
+                                          AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x x_1 s.at
+                                            (↑s.idx)[↑i]! w
+                                        | fail e => Program.done (fail e)
+                                        | div => Program.done div
+                                      | fail e => Program.done (fail e)
+                                      | div => Program.done div
+                                    else
+                                      match physical.len - s.at with
+                                      | ok x =>
+                                        if x < 32#usize then Program.done (ok (reference.Row.Stop s))
+                                        else
+                                          match s.at + 32#usize with
+                                          | ok x =>
+                                            match
+                                              core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                                { start := s.at, «end» := x } with
+                                            | ok x_1 =>
+                                              match reference.read32 x_1 with
+                                              | ok x_2 =>
+                                                if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                                  AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x_2 next
+                                                    x (↑s.idx)[↑i]! w
+                                                else
+                                                  AspisR1.MultiproofConePhysicalProgram.writer s x_2 (↑s.val)[↑i]! next
+                                                    x (↑s.idx)[↑i]! w
+                                              | fail e => Program.done (fail e)
+                                              | div => Program.done div
+                                            | fail e => Program.done (fail e)
+                                            | div => Program.done div
+                                          | fail e => Program.done (fail e)
+                                          | div => Program.done div
+                                      | fail e => Program.done (fail e)
+                                      | div => Program.done div
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div)).2) =
+                          eval H
+                            (NJP_RequestTransport.transport
+                              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+                      (read s.idx next nb)))
+                  (id
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            ((eval H _a).1, mapResult projectRow (eval H _a).2) =
+                              eval H
+                                (NJP_RequestTransport.transport
+                                  (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+                          (if_pos equality)))
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              ((eval H
+                                      (match _a with
+                                      | ok x =>
+                                        match i + 2#usize with
+                                        | ok x_1 =>
+                                          AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x x_1 s.at
+                                            (↑s.idx)[↑i]! w
+                                        | fail e => Program.done (fail e)
+                                        | div => Program.done div
+                                      | fail e => Program.done (fail e)
+                                      | div => Program.done div)).1,
+                                  mapResult projectRow
+                                    (eval H
+                                        (match _a with
+                                        | ok x =>
+                                          match i + 2#usize with
+                                          | ok x_1 =>
+                                            AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x x_1 s.at
+                                              (↑s.idx)[↑i]! w
+                                          | fail e => Program.done (fail e)
+                                          | div => Program.done div
+                                        | fail e => Program.done (fail e)
+                                        | div => Program.done div)).2) =
+                                eval H
+                                  (NJP_RequestTransport.transport
+                                    (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+                            (read s.val next nb)))
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                ((eval H
+                                        (match ok (↑s.val)[↑next]! with
+                                        | ok x =>
+                                          match _a with
+                                          | ok x_1 =>
+                                            AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x x_1 s.at
+                                              (↑s.idx)[↑i]! w
+                                          | fail e => Program.done (fail e)
+                                          | div => Program.done div
+                                        | fail e => Program.done (fail e)
+                                        | div => Program.done div)).1,
+                                    mapResult projectRow
+                                      (eval H
+                                          (match ok (↑s.val)[↑next]! with
+                                          | ok x =>
+                                            match _a with
+                                            | ok x_1 =>
+                                              AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x x_1 s.at
+                                                (↑s.idx)[↑i]! w
+                                            | fail e => Program.done (fail e)
+                                            | div => Program.done div
+                                          | fail e => Program.done (fail e)
+                                          | div => Program.done div)).2) =
+                                  eval H
+                                    (NJP_RequestTransport.transport
+                                      (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+                              addition2))
+                          (id
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    _a =
+                                      eval H
+                                        (NJP_RequestTransport.transport
+                                          (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i
+                                            ↑w)))
+                                  (writer H s (↑s.val)[↑i]! (↑s.val)[↑next]! next2 s.at (↑s.idx)[↑i]! i w wb
+                                    (Eq.symm (NJP_CohortRead.index s i ib)))))
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      ([(AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!,
+                                              H
+                                                (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                                  (↑s.val)[↑next]!))],
+                                          ok
+                                            (NJP_RowModel.Row.next
+                                              (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at)
+                                                (decode
+                                                  (H
+                                                    (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                                      (↑s.val)[↑next]!))))
+                                              (↑next2) (↑w + 1))) =
+                                        _a)
+                                    (NJP_RequestTransport.observation H
+                                      (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w))))
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        ([(AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!,
+                                                H
+                                                  (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                                    (↑s.val)[↑next]!))],
+                                            ok
+                                              (NJP_RowModel.Row.next
+                                                (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at)
+                                                  (decode
+                                                    (H
+                                                      (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                                        (↑s.val)[↑next]!))))
+                                                (↑next2) (↑w + 1))) =
+                                          (List.map
+                                              (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                              _a.1,
+                                            _a.2))
+                                      (NJP_RowModel.occupied_observation (NJP_RequestTransport.hash H)
+                                        (fun n => (↑physical)[n]!) (↑physical).length (raw s) (↑i) (↑w) active both)))
+                                  (Eq.mpr
+                                    (id
+                                      (congr
+                                        (congrArg Eq
+                                          (congrArg
+                                            (Prod.mk
+                                              [(AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                                    (↑s.val)[↑next]!,
+                                                  H
+                                                    (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                                      (↑s.val)[↑next]!))])
+                                            (congrArg ok
+                                              (congrFun'
+                                                (congrArg
+                                                  (NJP_RowModel.Row.next
+                                                    (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at)
+                                                      (decode
+                                                        (H
+                                                          (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                                            (↑s.val)[↑next]!)))))
+                                                  next2_value)
+                                                (↑w + 1)))))
+                                        (congrFun'
+                                          (congrArg Prod.mk
+                                            (congrFun'
+                                              (congrArg List.cons
+                                                (congrArg
+                                                  (Prod.mk
+                                                    (NJP_RequestTransport.address
+                                                      (NJP_RowModel.occupiedRequest (raw s) ↑i)))
+                                                  (encode_decode
+                                                    (H
+                                                      (NJP_RequestTransport.address
+                                                        (NJP_RowModel.occupiedRequest (raw s) ↑i))))))
+                                              []))
+                                          (ok
+                                            (NJP_RowModel.Row.next
+                                              (NJP_RowModel.write (raw s) (↑i) (↑w) (raw s).cursor
+                                                (decode
+                                                  (H
+                                                    (NJP_RequestTransport.address
+                                                      (NJP_RowModel.occupiedRequest (raw s) ↑i)))))
+                                              (↑i + 2) (↑w + 1))))))
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            ([(AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                                      (↑s.val)[↑next]!,
+                                                    H
+                                                      (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                                        (↑s.val)[↑next]!))],
+                                                ok
+                                                  (NJP_RowModel.Row.next
+                                                    (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at)
+                                                      (decode
+                                                        (H
+                                                          (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                                            (↑s.val)[↑next]!))))
+                                                    (↑i + 2) (↑w + 1))) =
+                                              ([(_a, H _a)],
+                                                ok
+                                                  (NJP_RowModel.Row.next
+                                                    (NJP_RowModel.write (raw s) (↑i) (↑w) (raw s).cursor
+                                                      (decode (H _a)))
+                                                    (↑i + 2) (↑w + 1))))
+                                          address))
+                                      sorry)))))))))))))))))
+'NJP_CohortOccupied.occupied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

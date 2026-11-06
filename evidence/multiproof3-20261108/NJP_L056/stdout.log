@@ -1,0 +1,758 @@
+NJP_lean/NJP_CohortSupplied.lean:58:12: warning: This simp argument is unused:
+  checked
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵c̵h̵e̵c̵k̵e̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_CohortSupplied.lean:60:12: warning: This simp argument is unused:
+  checked
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵c̵h̵e̵c̵k̵e̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_CohortSupplied.lean:62:12: warning: This simp argument is unused:
+  checked
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵c̵h̵e̵c̵k̵e̵d̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJP_CohortSupplied.missing : ∀ (H : Slice (Slice U8) → RefDigest) (s : reference.Scratch) (physical : Slice U8)
+  (ni : Usize) (index : U32) (value : RefDigest) (w : Usize),
+  ↑s.at ≤ (↑physical).length →
+    (↑physical).length < ↑s.at + 32 → eval H (supplied s physical ni index value w) = ([], ok (reference.Row.Stop s)) :=
+fun H s physical ni index value w cursor short =>
+  let ⟨remaining, h✝⟩ :=
+    NJP_CheckedWords.subtract physical.len s.at (Eq.mpr (id (congrArg (LE.le ↑s.at) (Slice.len_val physical))) cursor)
+  let ⟨subtraction, remaining_value⟩ := h✝
+  have small :=
+    id
+      (Eq.mpr (id (congrArg (fun _a => _a < 32) remaining_value))
+        (id (Decidable.byContradiction fun a => missing._proof_1 s physical cursor short remaining a)));
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            eval H
+                (checked _a fun remaining =>
+                  if remaining < 32#usize then Program.done (ok (reference.Row.Stop s))
+                  else
+                    checked (s.at + 32#usize) fun cursor =>
+                      checked
+                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                          { start := s.at, «end» := cursor })
+                        fun chunk =>
+                        checked (reference.read32 chunk) fun sibling =>
+                          if index &&& 1#u32 = 0#u32 then
+                            AspisR1.MultiproofConePhysicalProgram.writer s value sibling ni cursor index w
+                          else AspisR1.MultiproofConePhysicalProgram.writer s sibling value ni cursor index w) =
+              ([], ok (reference.Row.Stop s)))
+          subtraction))
+      (of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (congrArg (eval H)
+                  (Eq.trans
+                    (ite_congr (Eq.refl (remaining < 32#usize))
+                      (fun a => Eq.refl (Program.done (ok (reference.Row.Stop s)))) fun a =>
+                      Eq.refl
+                        (match s.at + 32#usize with
+                        | ok x =>
+                          match
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                              { start := s.at, «end» := x } with
+                          | ok x_1 =>
+                            match reference.read32 x_1 with
+                            | ok x_2 =>
+                              if index &&& 1#u32 = 0#u32 then
+                                AspisR1.MultiproofConePhysicalProgram.writer s value x_2 ni x index w
+                              else AspisR1.MultiproofConePhysicalProgram.writer s x_2 value ni x index w
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div
+                          | fail e => Program.done (fail e)
+                          | div => Program.done div
+                        | fail e => Program.done (fail e)
+                        | div => Program.done div))
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos small) x_0 x_1 x_2 x_3)
+                      (remaining.decLt 32#usize) (Run reference.Row) (Program.done (ok (reference.Row.Stop s)))
+                      (match s.at + 32#usize with
+                      | ok x =>
+                        match
+                          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                            { start := s.at, «end» := x } with
+                        | ok x_1 =>
+                          match reference.read32 x_1 with
+                          | ok x_2 =>
+                            if index &&& 1#u32 = 0#u32 then
+                              AspisR1.MultiproofConePhysicalProgram.writer s value x_2 ni x index w
+                            else AspisR1.MultiproofConePhysicalProgram.writer s x_2 value ni x index w
+                          | fail e => Program.done (fail e)
+                          | div => Program.done div
+                        | fail e => Program.done (fail e)
+                        | div => Program.done div
+                      | fail e => Program.done (fail e)
+                      | div => Program.done div))))
+                (eval.eq_1 H (ok (reference.Row.Stop s)))))
+            ([], ok (reference.Row.Stop s)))
+          (eq_self ([], ok (reference.Row.Stop s))))))
+'NJP_CohortSupplied.missing' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CohortSupplied.available : ∀ (H : Slice (Slice U8) → RefDigest) (s : reference.Scratch)
+  (physical : Slice U8) (i ni w : Usize),
+  ↑ni = ↑i + 1 →
+    ↑i < 16 →
+      ↑w < 16 →
+        ↑s.at + 32 ≤ (↑physical).length →
+          have result := eval H (supplied s physical ni (↑s.idx)[↑i]! (↑s.val)[↑i]! w);
+          (result.1, mapResult projectRow result.2) =
+            have request := NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!;
+            ([(NJP_RequestTransport.address request, H (NJP_RequestTransport.address request))],
+              ok
+                (NJP_RowModel.Row.next
+                  (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                    (decode (H (NJP_RequestTransport.address request))))
+                  (↑i + 1) (↑w + 1))) :=
+fun H s physical i ni w next_value ib wb enough =>
+  let ⟨remaining, h✝⟩ :=
+    NJP_CheckedWords.subtract physical.len s.at
+      (id (Decidable.byContradiction fun a => available._proof_1 s physical i ni w enough a))
+  let ⟨subtraction, remaining_value⟩ := h✝
+  have large :=
+    id
+      (Eq.mpr (id (congrArg (fun _a => ¬_a < 32) remaining_value))
+        (id fun a => available._proof_2 s physical i ni w enough remaining a));
+  let ⟨cursor, h✝¹⟩ := AspisR1.MultiproofConeNodeWindow.physical_read physical s.at enough
+  let ⟨chunk, h✝²⟩ := h✝¹
+  let ⟨view, h✝³⟩ := h✝²
+  let ⟨addition, right✝⟩ := h✝³
+  let ⟨cursor_value, right✝¹⟩ := right✝
+  let ⟨rangeEq, right✝²⟩ := right✝¹
+  let ⟨readEq, chunk_value⟩ := right✝²
+  have chunk_eq :=
+    Subtype.ext
+      (Eq.mpr
+        (id (congrArg (fun _a => _a = ↑(encode (NJP_RowModel.window (fun n => (↑physical)[n]!) ↑s.at))) chunk_value))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => ↑(AspisR1.MultiproofConeNodeWindow.window physical s.at) = _a)
+              (NJP_WindowCarrier.contents physical (↑s.at) enough)))
+          (Eq.refl ↑(AspisR1.MultiproofConeNodeWindow.window physical s.at))));
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              ((eval H
+                      (checked _a fun remaining =>
+                        if remaining < 32#usize then Program.done (ok (reference.Row.Stop s))
+                        else
+                          checked (s.at + 32#usize) fun cursor =>
+                            checked
+                              (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                { start := s.at, «end» := cursor })
+                              fun chunk =>
+                              checked (reference.read32 chunk) fun sibling =>
+                                if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                  AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! sibling ni cursor
+                                    (↑s.idx)[↑i]! w
+                                else
+                                  AspisR1.MultiproofConePhysicalProgram.writer s sibling (↑s.val)[↑i]! ni cursor
+                                    (↑s.idx)[↑i]! w)).1,
+                  mapResult projectRow
+                    (eval H
+                        (checked _a fun remaining =>
+                          if remaining < 32#usize then Program.done (ok (reference.Row.Stop s))
+                          else
+                            checked (s.at + 32#usize) fun cursor =>
+                              checked
+                                (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                  { start := s.at, «end» := cursor })
+                                fun chunk =>
+                                checked (reference.read32 chunk) fun sibling =>
+                                  if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                    AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! sibling ni cursor
+                                      (↑s.idx)[↑i]! w
+                                  else
+                                    AspisR1.MultiproofConePhysicalProgram.writer s sibling (↑s.val)[↑i]! ni cursor
+                                      (↑s.idx)[↑i]! w)).2) =
+                ([(NJP_RequestTransport.address (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!),
+                      H
+                        (NJP_RequestTransport.address
+                          (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))],
+                  ok
+                    (NJP_RowModel.Row.next
+                      (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                        (decode
+                          (H
+                            (NJP_RequestTransport.address
+                              (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))))
+                      (↑i + 1) (↑w + 1))))
+            subtraction))
+        (Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (congr
+                  (congrArg Prod.mk
+                    (congrArg Prod.fst
+                      (congrArg (eval H)
+                        (Eq.trans
+                          (ite_congr (Eq.refl (remaining < 32#usize))
+                            (fun a => Eq.refl (Program.done (ok (reference.Row.Stop s)))) fun a =>
+                            Eq.refl
+                              (match s.at + 32#usize with
+                              | ok x =>
+                                match
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                    { start := s.at, «end» := x } with
+                                | ok x_1 =>
+                                  match reference.read32 x_1 with
+                                  | ok x_2 =>
+                                    if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                      AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x_2 ni x
+                                        (↑s.idx)[↑i]! w
+                                    else
+                                      AspisR1.MultiproofConePhysicalProgram.writer s x_2 (↑s.val)[↑i]! ni x
+                                        (↑s.idx)[↑i]! w
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div))
+                          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg large) x_0 x_1 x_2 x_3)
+                            (remaining.decLt 32#usize) (Run reference.Row) (Program.done (ok (reference.Row.Stop s)))
+                            (match s.at + 32#usize with
+                            | ok x =>
+                              match
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                  { start := s.at, «end» := x } with
+                              | ok x_1 =>
+                                match reference.read32 x_1 with
+                                | ok x_2 =>
+                                  if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                    AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x_2 ni x (↑s.idx)[↑i]!
+                                      w
+                                  else
+                                    AspisR1.MultiproofConePhysicalProgram.writer s x_2 (↑s.val)[↑i]! ni x (↑s.idx)[↑i]!
+                                      w
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div))))))
+                  (congrArg (mapResult projectRow)
+                    (congrArg Prod.snd
+                      (congrArg (eval H)
+                        (Eq.trans
+                          (ite_congr (Eq.refl (remaining < 32#usize))
+                            (fun a => Eq.refl (Program.done (ok (reference.Row.Stop s)))) fun a =>
+                            Eq.refl
+                              (match s.at + 32#usize with
+                              | ok x =>
+                                match
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                    { start := s.at, «end» := x } with
+                                | ok x_1 =>
+                                  match reference.read32 x_1 with
+                                  | ok x_2 =>
+                                    if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                      AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x_2 ni x
+                                        (↑s.idx)[↑i]! w
+                                    else
+                                      AspisR1.MultiproofConePhysicalProgram.writer s x_2 (↑s.val)[↑i]! ni x
+                                        (↑s.idx)[↑i]! w
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div))
+                          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg large) x_0 x_1 x_2 x_3)
+                            (remaining.decLt 32#usize) (Run reference.Row) (Program.done (ok (reference.Row.Stop s)))
+                            (match s.at + 32#usize with
+                            | ok x =>
+                              match
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                  { start := s.at, «end» := x } with
+                              | ok x_1 =>
+                                match reference.read32 x_1 with
+                                | ok x_2 =>
+                                  if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                    AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x_2 ni x (↑s.idx)[↑i]!
+                                      w
+                                  else
+                                    AspisR1.MultiproofConePhysicalProgram.writer s x_2 (↑s.val)[↑i]! ni x (↑s.idx)[↑i]!
+                                      w
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div))))))))
+              ([(NJP_RequestTransport.address (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!),
+                    H
+                      (NJP_RequestTransport.address
+                        (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))],
+                ok
+                  (NJP_RowModel.Row.next
+                    (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                      (decode
+                        (H
+                          (NJP_RequestTransport.address
+                            (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))))
+                    (↑i + 1) (↑w + 1)))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  ((eval H
+                          (match _a with
+                          | ok x =>
+                            match
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                { start := s.at, «end» := x } with
+                            | ok x_1 =>
+                              match reference.read32 x_1 with
+                              | ok x_2 =>
+                                if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                  AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x_2 ni x (↑s.idx)[↑i]! w
+                                else
+                                  AspisR1.MultiproofConePhysicalProgram.writer s x_2 (↑s.val)[↑i]! ni x (↑s.idx)[↑i]! w
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div
+                          | fail e => Program.done (fail e)
+                          | div => Program.done div)).1,
+                      mapResult projectRow
+                        (eval H
+                            (match _a with
+                            | ok x =>
+                              match
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                                  { start := s.at, «end» := x } with
+                              | ok x_1 =>
+                                match reference.read32 x_1 with
+                                | ok x_2 =>
+                                  if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                    AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x_2 ni x (↑s.idx)[↑i]!
+                                      w
+                                  else
+                                    AspisR1.MultiproofConePhysicalProgram.writer s x_2 (↑s.val)[↑i]! ni x (↑s.idx)[↑i]!
+                                      w
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div)).2) =
+                    ([(NJP_RequestTransport.address (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!),
+                          H
+                            (NJP_RequestTransport.address
+                              (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))],
+                      ok
+                        (NJP_RowModel.Row.next
+                          (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                            (decode
+                              (H
+                                (NJP_RequestTransport.address
+                                  (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))))
+                          (↑i + 1) (↑w + 1))))
+                addition))
+            (id
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      ((eval H
+                              (match _a with
+                              | ok x =>
+                                match reference.read32 x with
+                                | ok x =>
+                                  if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                    AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x ni cursor
+                                      (↑s.idx)[↑i]! w
+                                  else
+                                    AspisR1.MultiproofConePhysicalProgram.writer s x (↑s.val)[↑i]! ni cursor
+                                      (↑s.idx)[↑i]! w
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div)).1,
+                          mapResult projectRow
+                            (eval H
+                                (match _a with
+                                | ok x =>
+                                  match reference.read32 x with
+                                  | ok x =>
+                                    if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                      AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x ni cursor
+                                        (↑s.idx)[↑i]! w
+                                    else
+                                      AspisR1.MultiproofConePhysicalProgram.writer s x (↑s.val)[↑i]! ni cursor
+                                        (↑s.idx)[↑i]! w
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div)).2) =
+                        ([(NJP_RequestTransport.address
+                                (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!),
+                              H
+                                (NJP_RequestTransport.address
+                                  (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))],
+                          ok
+                            (NJP_RowModel.Row.next
+                              (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                                (decode
+                                  (H
+                                    (NJP_RequestTransport.address
+                                      (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))))
+                              (↑i + 1) (↑w + 1))))
+                    rangeEq))
+                (id
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          ((eval H
+                                  (match _a with
+                                  | ok x =>
+                                    if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                      AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x ni cursor
+                                        (↑s.idx)[↑i]! w
+                                    else
+                                      AspisR1.MultiproofConePhysicalProgram.writer s x (↑s.val)[↑i]! ni cursor
+                                        (↑s.idx)[↑i]! w
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div)).1,
+                              mapResult projectRow
+                                (eval H
+                                    (match _a with
+                                    | ok x =>
+                                      if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then
+                                        AspisR1.MultiproofConePhysicalProgram.writer s (↑s.val)[↑i]! x ni cursor
+                                          (↑s.idx)[↑i]! w
+                                      else
+                                        AspisR1.MultiproofConePhysicalProgram.writer s x (↑s.val)[↑i]! ni cursor
+                                          (↑s.idx)[↑i]! w
+                                    | fail e => Program.done (fail e)
+                                    | div => Program.done div)).2) =
+                            ([(NJP_RequestTransport.address
+                                    (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!),
+                                  H
+                                    (NJP_RequestTransport.address
+                                      (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))],
+                              ok
+                                (NJP_RowModel.Row.next
+                                  (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                                    (decode
+                                      (H
+                                        (NJP_RequestTransport.address
+                                          (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))))
+                                  (↑i + 1) (↑w + 1))))
+                        readEq))
+                    (id
+                      (have parity :=
+                        {
+                          mp := fun h =>
+                            have v := congrArg UScalar.val h;
+                            Eq.mp (congrArg (fun _a => _a % 2 = ↑0#u32) (Eq.symm (NJP_CohortRead.index s i ib)))
+                              (Eq.mp (congrArg (fun _a => _a = ↑0#u32) (NJP_CohortRead.parity (↑s.idx)[↑i]!)) v),
+                          mpr := fun h =>
+                            UScalar.eq_of_val_eq
+                              (Eq.mpr (id (congrArg (fun _a => _a = ↑0#u32) (NJP_CohortRead.parity (↑s.idx)[↑i]!)))
+                                (Eq.mpr
+                                  (id (congrArg (fun _a => _a % 2 = ↑0#u32) (Eq.symm (NJP_CohortRead.index s i ib))))
+                                  (Eq.mpr (id (congrArg (fun _a => _a = ↑0#u32) h)) (Eq.refl 0)))) };
+                      if even : NJP_RowModel.index (raw s) ↑i % 2 = 0 then
+                        Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                ((eval H _a).1, mapResult projectRow (eval H _a).2) =
+                                  ([(NJP_RequestTransport.address
+                                          (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!),
+                                        H
+                                          (NJP_RequestTransport.address
+                                            (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))],
+                                    ok
+                                      (NJP_RowModel.Row.next
+                                        (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                                          (decode
+                                            (H
+                                              (NJP_RequestTransport.address
+                                                (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))))
+                                        (↑i + 1) (↑w + 1))))
+                              (if_pos (parity.mpr even))))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  _a =
+                                    ([(NJP_RequestTransport.address
+                                            (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!),
+                                          H
+                                            (NJP_RequestTransport.address
+                                              (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))],
+                                      ok
+                                        (NJP_RowModel.Row.next
+                                          (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                                            (decode
+                                              (H
+                                                (NJP_RequestTransport.address
+                                                  (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))))
+                                          (↑i + 1) (↑w + 1))))
+                                (NJP_CohortWrite.writer H s (↑s.val)[↑i]! chunk ni cursor (↑s.idx)[↑i]! i w wb
+                                  (Eq.symm (NJP_CohortRead.index s i ib)))))
+                            (id
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      ([(AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! chunk,
+                                              H (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! chunk))],
+                                          ok
+                                            (NJP_RowModel.Row.next
+                                              (NJP_RowModel.write (raw s) (↑i) (↑w) (↑cursor)
+                                                (decode
+                                                  (H (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! chunk))))
+                                              (↑ni) (↑w + 1))) =
+                                        ([(NJP_RequestTransport.address _a, H (NJP_RequestTransport.address _a))],
+                                          ok
+                                            (NJP_RowModel.Row.next
+                                              (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                                                (decode (H (NJP_RequestTransport.address _a))))
+                                              (↑i + 1) (↑w + 1))))
+                                    (if_pos even)))
+                                (Eq.mpr
+                                  (id
+                                    (congr
+                                      (congrArg Eq
+                                        (congr
+                                          (congrArg Prod.mk
+                                            (congrFun'
+                                              (congrArg List.cons
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrArg (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!)
+                                                      chunk_eq))
+                                                  (congrArg H
+                                                    (congrArg (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!)
+                                                      chunk_eq))))
+                                              []))
+                                          (congrArg ok
+                                            (congrFun'
+                                              (congr
+                                                (congrArg NJP_RowModel.Row.next
+                                                  (congr (congrArg (NJP_RowModel.write (raw s) ↑i ↑w) cursor_value)
+                                                    (congrArg decode
+                                                      (congrArg H
+                                                        (congrArg
+                                                          (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!)
+                                                          chunk_eq)))))
+                                                next_value)
+                                              (↑w + 1)))))
+                                      (congr
+                                        (congrArg Prod.mk
+                                          (congrFun'
+                                            (congrArg List.cons
+                                              (congr
+                                                (congrArg Prod.mk
+                                                  (congrFun'
+                                                    (congrArg AspisR1.MultiproofConePhysicalDigest.parts
+                                                      (Eq.trans (congrArg encode (NJP_CohortRead.value s i ib))
+                                                        (encode_decode (↑s.val)[↑i]!)))
+                                                    (encode
+                                                      (NJP_RowModel.window (fun n => (↑physical)[n]!) (raw s).cursor))))
+                                                (congrArg H
+                                                  (congrFun'
+                                                    (congrArg AspisR1.MultiproofConePhysicalDigest.parts
+                                                      (Eq.trans (congrArg encode (NJP_CohortRead.value s i ib))
+                                                        (encode_decode (↑s.val)[↑i]!)))
+                                                    (encode
+                                                      (NJP_RowModel.window (fun n => (↑physical)[n]!)
+                                                        (raw s).cursor))))))
+                                            []))
+                                        (congrArg ok
+                                          (congrFun'
+                                            (congrFun'
+                                              (congrArg NJP_RowModel.Row.next
+                                                (congrArg (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32))
+                                                  (congrArg decode
+                                                    (congrArg H
+                                                      (congrFun'
+                                                        (congrArg AspisR1.MultiproofConePhysicalDigest.parts
+                                                          (Eq.trans (congrArg encode (NJP_CohortRead.value s i ib))
+                                                            (encode_decode (↑s.val)[↑i]!)))
+                                                        (encode
+                                                          (NJP_RowModel.window (fun n => (↑physical)[n]!)
+                                                            (raw s).cursor)))))))
+                                              (↑i + 1))
+                                            (↑w + 1))))))
+                                  (Eq.refl
+                                    ([(AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                            (encode (NJP_RowModel.window (fun n => (↑physical)[n]!) ↑s.at)),
+                                          H
+                                            (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                              (encode (NJP_RowModel.window (fun n => (↑physical)[n]!) ↑s.at))))],
+                                      ok
+                                        (NJP_RowModel.Row.next
+                                          (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                                            (decode
+                                              (H
+                                                (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!
+                                                  (encode (NJP_RowModel.window (fun n => (↑physical)[n]!) ↑s.at))))))
+                                          (↑i + 1) (↑w + 1))))))))
+                      else
+                        Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                ((eval H _a).1, mapResult projectRow (eval H _a).2) =
+                                  ([(NJP_RequestTransport.address
+                                          (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!),
+                                        H
+                                          (NJP_RequestTransport.address
+                                            (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))],
+                                    ok
+                                      (NJP_RowModel.Row.next
+                                        (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                                          (decode
+                                            (H
+                                              (NJP_RequestTransport.address
+                                                (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))))
+                                        (↑i + 1) (↑w + 1))))
+                              (if_neg fun h => even (parity.mp h))))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  _a =
+                                    ([(NJP_RequestTransport.address
+                                            (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!),
+                                          H
+                                            (NJP_RequestTransport.address
+                                              (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))],
+                                      ok
+                                        (NJP_RowModel.Row.next
+                                          (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                                            (decode
+                                              (H
+                                                (NJP_RequestTransport.address
+                                                  (NJP_RowModel.siblingRequest (raw s) ↑i fun n => (↑physical)[n]!)))))
+                                          (↑i + 1) (↑w + 1))))
+                                (NJP_CohortWrite.writer H s chunk (↑s.val)[↑i]! ni cursor (↑s.idx)[↑i]! i w wb
+                                  (Eq.symm (NJP_CohortRead.index s i ib)))))
+                            (id
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      ([(AspisR1.MultiproofConePhysicalDigest.parts chunk (↑s.val)[↑i]!,
+                                              H (AspisR1.MultiproofConePhysicalDigest.parts chunk (↑s.val)[↑i]!))],
+                                          ok
+                                            (NJP_RowModel.Row.next
+                                              (NJP_RowModel.write (raw s) (↑i) (↑w) (↑cursor)
+                                                (decode
+                                                  (H (AspisR1.MultiproofConePhysicalDigest.parts chunk (↑s.val)[↑i]!))))
+                                              (↑ni) (↑w + 1))) =
+                                        ([(NJP_RequestTransport.address _a, H (NJP_RequestTransport.address _a))],
+                                          ok
+                                            (NJP_RowModel.Row.next
+                                              (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                                                (decode (H (NJP_RequestTransport.address _a))))
+                                              (↑i + 1) (↑w + 1))))
+                                    (if_neg even)))
+                                (Eq.mpr
+                                  (id
+                                    (congr
+                                      (congrArg Eq
+                                        (congr
+                                          (congrArg Prod.mk
+                                            (congrFun'
+                                              (congrArg List.cons
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (congrFun'
+                                                      (congrArg AspisR1.MultiproofConePhysicalDigest.parts chunk_eq)
+                                                      (↑s.val)[↑i]!))
+                                                  (congrArg H
+                                                    (congrFun'
+                                                      (congrArg AspisR1.MultiproofConePhysicalDigest.parts chunk_eq)
+                                                      (↑s.val)[↑i]!))))
+                                              []))
+                                          (congrArg ok
+                                            (congrFun'
+                                              (congr
+                                                (congrArg NJP_RowModel.Row.next
+                                                  (congr (congrArg (NJP_RowModel.write (raw s) ↑i ↑w) cursor_value)
+                                                    (congrArg decode
+                                                      (congrArg H
+                                                        (congrFun'
+                                                          (congrArg AspisR1.MultiproofConePhysicalDigest.parts chunk_eq)
+                                                          (↑s.val)[↑i]!)))))
+                                                next_value)
+                                              (↑w + 1)))))
+                                      (congr
+                                        (congrArg Prod.mk
+                                          (congrFun'
+                                            (congrArg List.cons
+                                              (congr
+                                                (congrArg Prod.mk
+                                                  (congrArg
+                                                    (AspisR1.MultiproofConePhysicalDigest.parts
+                                                      (encode
+                                                        (NJP_RowModel.window (fun n => (↑physical)[n]!)
+                                                          (raw s).cursor)))
+                                                    (Eq.trans (congrArg encode (NJP_CohortRead.value s i ib))
+                                                      (encode_decode (↑s.val)[↑i]!))))
+                                                (congrArg H
+                                                  (congrArg
+                                                    (AspisR1.MultiproofConePhysicalDigest.parts
+                                                      (encode
+                                                        (NJP_RowModel.window (fun n => (↑physical)[n]!)
+                                                          (raw s).cursor)))
+                                                    (Eq.trans (congrArg encode (NJP_CohortRead.value s i ib))
+                                                      (encode_decode (↑s.val)[↑i]!))))))
+                                            []))
+                                        (congrArg ok
+                                          (congrFun'
+                                            (congrFun'
+                                              (congrArg NJP_RowModel.Row.next
+                                                (congrArg (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32))
+                                                  (congrArg decode
+                                                    (congrArg H
+                                                      (congrArg
+                                                        (AspisR1.MultiproofConePhysicalDigest.parts
+                                                          (encode
+                                                            (NJP_RowModel.window (fun n => (↑physical)[n]!)
+                                                              (raw s).cursor)))
+                                                        (Eq.trans (congrArg encode (NJP_CohortRead.value s i ib))
+                                                          (encode_decode (↑s.val)[↑i]!)))))))
+                                              (↑i + 1))
+                                            (↑w + 1))))))
+                                  (Eq.refl
+                                    ([(AspisR1.MultiproofConePhysicalDigest.parts
+                                            (encode (NJP_RowModel.window (fun n => (↑physical)[n]!) ↑s.at))
+                                            (↑s.val)[↑i]!,
+                                          H
+                                            (AspisR1.MultiproofConePhysicalDigest.parts
+                                              (encode (NJP_RowModel.window (fun n => (↑physical)[n]!) ↑s.at))
+                                              (↑s.val)[↑i]!))],
+                                      ok
+                                        (NJP_RowModel.Row.next
+                                          (NJP_RowModel.write (raw s) (↑i) (↑w) (↑s.at + 32)
+                                            (decode
+                                              (H
+                                                (AspisR1.MultiproofConePhysicalDigest.parts
+                                                  (encode (NJP_RowModel.window (fun n => (↑physical)[n]!) ↑s.at))
+                                                  (↑s.val)[↑i]!))))
+                                          (↑i + 1) (↑w + 1))))))))))))))))))
+'NJP_CohortSupplied.available' depends on axioms: [propext, Classical.choice, Quot.sound]

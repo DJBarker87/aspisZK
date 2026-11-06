@@ -49,7 +49,9 @@ theorem occupied (H : Slice (Slice U8) → RefDigest) (s : reference.Scratch)
  rw [NJP_CohortWrite.writer H s _ _ next2 s.«at» _ i w wb (NJP_CohortRead.index s i ib).symm]
  rw [NJP_RequestTransport.observation]
  rw [NJP_RowModel.occupied_observation _ _ _ _ _ _ active both]
- simp only [List.map_cons,List.map_nil,NJP_RequestTransport.hash,encode_decode,address,next2_value,raw]
+ simp only [List.map_cons,List.map_nil,NJP_RequestTransport.hash,encode_decode,next2_value]
+ rw [address]
+ rfl
 
 #print read
 #print axioms read

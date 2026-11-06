@@ -1,0 +1,51 @@
+{"attempt": "NJP_L068", "exit_status": 1, "wall_seconds": 3.0033953639212996, "peak_rss_kib": "4327264", "swaps": "0", "print_axioms": ["'NJP_CohortTerminal.digest_equal' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CohortTerminal.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJP_lean/NJP_CohortTerminal.lean:24:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    decide ((raw s).n = 1 ∧ ↑(↑s.idx)[0]! = 0 ∧ _a ∧ (raw s).cursor = (↑physical).length) =
+      decide (↑s.n = 1 ∧ ↑(↑s.idx)[0]! = 0 ∧ (↑s.val)[0]! = root ∧ ↑s.at = (↑physical).length)
+Error: Application type mismatch: The argument
+  Fintype.decidablePiFintype (decode (↑s.val)[0]!) (decode root)
+has type
+  Decidable (decode (↑s.val)[0]! = decode root)
+but is expected to have type
+  Decidable _a
+in the application
+  @instDecidableAnd _a ((raw s).cursor = (↑physical).length)
+    (Fintype.decidablePiFintype (decode (↑s.val)[0]!) (decode root))
+
+Explanation: The rewrite tactic rewrite
+...
+d 'simp' can apply user-defined '@[congr]' theorems as well).
+
+root : RefDigest
+physical : Slice U8
+s : reference.Scratch
+index0 : NJP_RowModel.index (raw s) 0 = ↑(↑s.idx)[0]!
+value0 : NJP_RowModel.value (raw s) 0 = decode (↑s.val)[0]!
+⊢ decide ((raw s).n = 1 ∧ ↑(↑s.idx)[0]! = 0 ∧ decode (↑s.val)[0]! = decode root ∧ (raw s).cursor = (↑physical).length) =
+    decide (↑s.n = 1 ∧ ↑(↑s.idx)[0]! = 0 ∧ (↑s.val)[0]! = root ∧ ↑s.at = (↑physical).length)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+theorem NJP_CohortTerminal.digest_equal : ∀ (left right : RefDigest), decode left = decode right ↔ left = right :=
+fun left right => { mp := fun h => NJP_DigestCarrier.faithful left right h, mpr := fun h => congrArg decode h }
+'NJP_CohortTerminal.digest_equal' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CohortTerminal.same : ∀ (root : RefDigest) (physical : Slice U8) (s : reference.Scratch),
+  NJP_LoopModel.terminal (decode root) (↑physical).length (raw s) =
+    AspisR1.MultiproofConeRootGuard.sourceRoot root physical s :=
+fun root physical s =>
+  id
+    (id
+      (have index0 := NJP_CohortRead.index s 0#usize (of_decide_eq_true (id (Eq.refl true)));
+      sorry index0))
+'NJP_CohortTerminal.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra03ae142187b4377b1cd0ca3d2735400.scope; invocation ID: 1df03341c25943068f8804aa3ef4f797
