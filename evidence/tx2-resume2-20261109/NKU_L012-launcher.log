@@ -1,0 +1,57 @@
+{"attempt": "NKU_L012", "exit_status": 1, "wall_seconds": 14.283594409003854, "peak_rss_kib": "5999340", "swaps": "0", "print_axioms": ["'NKU_DigestJoin.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKU_generated/NKU_DigestJoin.lean:20:121: error: unsolved goals
+case isTrue.isTrue
+H : Type
+d : AspisR1Stage2.aspis_core.digest.Digest32 H
+hash : H
+s : NKU.State
+next : U8
+end : Usize
+value✝¹ : Slice U8
+value✝ : Slice (Slice U8)
+value : Std.Array U8 32#usize
+h✝¹ : ↑value ≠ ↑value
+h✝ : ↑value✝¹ = ↑value
+⊢ liftM (ok (core.result.Result.Err verifier.Error.Checkpoint)) = do
+    let a ←
+      liftM
+          (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.frame.checkpoint
+            { start := 48#usize, «end» := 80#usize })
+    let a_1 ← liftM (lift (Array.make 1#usize [s.frame.publicBytes] ⋯).to_slice)
+    let a_2 ← recordDigest d hash a_1
+    let a ←
+      if ↑a
+...
+a2) = true then
+                                      liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                                    else
+                                      resumeBodyG s.frame.reservation d s.frame.checkpoint transport.Variant.S2 next
+                                        «end»)
+                        (fun a => do
+                          let a ← recordDigest d hash a
+                          let a ←
+                            if ↑value = ↑a then
+                                pure
+                                  (core.result.Result.Ok
+                                    ((),
+                                      { frame := s.frame, phase := NKU.Phase.publicDigest, decoded := s.decoded,
+                                        reader := s.reader, iterator := s.iterator, owned := s.owned,
+                                        returned := s.returned, history := s.history }))
+                              else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                          let reply ←
+                            match a with
+                              | ⋯ => do
+                                let a ←
+                                  liftM
+                                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                        x.2.frame.checkpoint { start := 48#usize, «end» := ⋯ })
+                                let a_1 ← ⋯
+                                let a_2 ← ⋯
+                                let reply ← ⋯
+                                ⋯
+                              | ⋯ => ⋯
+                          ⋯)
+                        ⋯)))))))))
+'NKU_DigestJoin.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd26b0a9997b54c168d28b2b827a02f8f.scope; invocation ID: bbe2d4feb740465980b0c4f45c6efde8

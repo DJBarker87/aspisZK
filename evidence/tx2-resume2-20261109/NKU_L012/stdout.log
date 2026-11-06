@@ -1,0 +1,1346 @@
+NKU_generated/NKU_DigestJoin.lean:20:121: error: unsolved goals
+case isTrue.isTrue
+H : Type
+d : AspisR1Stage2.aspis_core.digest.Digest32 H
+hash : H
+s : NKU.State
+next : U8
+end : Usize
+value✝¹ : Slice U8
+value✝ : Slice (Slice U8)
+value : Std.Array U8 32#usize
+h✝¹ : ↑value ≠ ↑value
+h✝ : ↑value✝¹ = ↑value
+⊢ liftM (ok (core.result.Result.Err verifier.Error.Checkpoint)) = do
+    let a ←
+      liftM
+          (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.frame.checkpoint
+            { start := 48#usize, «end» := 80#usize })
+    let a_1 ← liftM (lift (Array.make 1#usize [s.frame.publicBytes] ⋯).to_slice)
+    let a_2 ← recordDigest d hash a_1
+    let a ←
+      if ↑a = ↑a_2 then
+          pure
+            (core.result.Result.Ok
+              ((),
+                { frame := s.frame, phase := NKU.Phase.checkpointDigest, decoded := s.decoded, reader := s.reader,
+                  iterator := s.iterator, owned := s.owned, returned := s.returned, history := s.history }))
+        else pure (core.result.Result.Err verifier.Error.Checkpoint)
+    let reply ←
+      match a with
+        | core.result.Result.Ok x => do
+          let stored ←
+            liftM
+                (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) x.2.frame.checkpoint
+                  { start := «end» })
+          let tag ←
+            liftM
+                (lift
+                  (Array.make 22#usize
+                      [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 99#u8,
+                        104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                      NKU_DigestCheckpoint.label._proof_21).to_slice)
+          let cpView ←
+            liftM
+                (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) x.2.frame.checkpoint
+                  { «end» := «end» })
+          let chunks ← liftM (lift (Array.make 2#usize [tag, cpView] ⋯).to_slice)
+          let reply ← recordDigest d hash chunks
+          if ↑stored = ↑reply then
+              pure
+                (core.result.Result.Ok
+                  ((),
+                    { frame := x.2.frame, phase := NKU.Phase.roots, decoded := x.2.decoded, reader := x.2.reader,
+                      iterator := x.2.iterator, owned := x.2.owned, returned := x.2.returned, history := x.2.history }))
+            else pure (core.result.Result.Err verifier.Error.Checkpoint)
+        | core.result.Result.Err err => pure (core.result.Result.Err err)
+    match reply with
+      | core.result.Result.Ok x =>
+        resumeBodyG x.2.frame.reservation d x.2.frame.checkpoint transport.Variant.S2 next «end»
+      | core.result.Result.Err err => pure (core.result.Result.Err err)
+NKU_generated/NKU_DigestJoin.lean:23:38: warning: This simp argument is unused:
+  NKK_LogReduce.pure_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵K̵K̵_̵L̵o̵g̵A̵l̵g̵e̵b̵r̵a̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵N̵K̵K̵_̵L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵p̵u̵r̵e̵_̵b̵i̵n̵d̵,̵N̵K̵K̵_̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵N̵K̵K̵_̵C̵o̵m̵p̵a̵r̵e̵.̵n̵e̵_̵r̵e̵s̵u̵l̵t̵,̵N̵K̵K̵_̵L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵l̵i̵f̵t̵_̵o̵k̵_̵b̵i̵n̵d̵]̵[̲N̲K̲K̲_̲L̲o̲g̲A̲l̲g̲e̲b̲r̲a̲.̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲N̲K̲K̲_̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲N̲K̲K̲_̲C̲o̲m̲p̲a̲r̲e̲.̲n̲e̲_̲r̲e̲s̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲N̲K̲K̲_̲L̲o̲g̲R̲e̲d̲u̲c̲e̲.̲l̲i̲f̲t̲_̲o̲k̲_̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_DigestJoin.lean:28:57: warning: This simp argument is unused:
+  decide_eq_false_iff_not
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵d̵e̵c̵i̵d̵e̵_̵e̵q̵_̵t̵r̵u̵e̵_̵e̵q̵,̵d̵e̵c̵i̵d̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵_̵i̵f̵f̵_̵n̵o̵t̵,̵n̵o̵t̵_̵n̵o̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵N̵K̵K̵_̵L̵o̵g̵A̵l̵g̵e̵b̵r̵a̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵N̵K̵K̵_̵L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵p̵u̵r̵e̵_̵b̵i̵n̵d̵,̵N̵K̵K̵_̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵N̵K̵K̵_̵C̵o̵m̵p̵a̵r̵e̵.̵n̵e̵_̵r̵e̵s̵u̵l̵t̵,̵N̵K̵K̵_̵L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵l̵i̵f̵t̵_̵o̵k̵_̵b̵i̵n̵d̵]̵[̲d̲e̲c̲i̲d̲e̲_̲e̲q̲_̲t̲r̲u̲e̲_̲e̲q̲,̲ ̲n̲o̲t̲_̲n̲o̲t̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲N̲K̲K̲_̲L̲o̲g̲A̲l̲g̲e̲b̲r̲a̲.̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲N̲K̲K̲_̲L̲o̲g̲R̲e̲d̲u̲c̲e̲.̲p̲u̲r̲e̲_̲b̲i̲n̲d̲,̲ ̲N̲K̲K̲_̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲N̲K̲K̲_̲C̲o̲m̲p̲a̲r̲e̲.̲n̲e̲_̲r̲e̲s̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲N̲K̲K̲_̲L̲o̲g̲R̲e̲d̲u̲c̲e̲.̲l̲i̲f̲t̲_̲o̲k̲_̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_DigestJoin.lean:28:89: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp_all only [decide_eq_true_eq, ̲decide_eq_false_iff_not, ̲not_not,
+  ̲ ̲ ̲ ̲ite_t̵r̵u̵e̵,̵i̵t̵e̵_̵false, ̲NKK_LogAlgebra.bind_assoc, ̲NKK_LogReduce.pure_bind, ̲NKK_Try.branch,
+  ̲ ̲ ̲ ̲NKK_Compare.ne_result, ̲NKK_LogReduce.lift_ok_bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_DigestJoin.lean:28:98: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  simp_all only [decide_eq_true_eq, ̲decide_eq_false_iff_not, ̲not_not,
+  ̲ ̲ ̲ ̲ite_true,i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵ ̲NKK_LogAlgebra.bind_assoc, ̲NKK_LogReduce.pure_bind, ̲NKK_Try.branch,
+  ̲ ̲ ̲ ̲NKK_Compare.ne_result, ̲NKK_LogReduce.lift_ok_bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_DigestJoin.lean:28:158: warning: This simp argument is unused:
+  NKK_Try.branch
+
+Hint: Omit it from the simp argument list.
+  simp_all only [decide_eq_true_eq, ̲decide_eq_false_iff_not, ̲not_not,
+  ̲ ̲ ̲ ̲ite_true, ̲ite_false, ̲NKK_LogAlgebra.bind_assoc, ̲NKK_LogReduce.pure_bind, ̲NKK_T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵N̵K̵K̵_̵Compare.ne_result,
+  ̲ ̲ ̲ ̲NKK_LogReduce.lift_ok_bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_DigestJoin.lean:28:173: warning: This simp argument is unused:
+  NKK_Compare.ne_result
+
+Hint: Omit it from the simp argument list.
+  simp_all only [decide_eq_true_eq, ̲decide_eq_false_iff_not, ̲not_not,
+  ̲ ̲ ̲ ̲ite_true, ̲ite_false, ̲NKK_LogAlgebra.bind_assoc, ̲NKK_LogReduce.pure_bind, ̲NKK_Try.branch,
+  ̲ ̲ ̲ ̲NKK_C̵o̵m̵p̵a̵r̵e̵.̵n̵e̵_̵r̵e̵s̵u̵l̵t̵,̵N̵K̵K̵_̵LogReduce.lift_ok_bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKU_generated/NKU_DigestJoin.lean:28:195: warning: This simp argument is unused:
+  NKK_LogReduce.lift_ok_bind
+
+Hint: Omit it from the simp argument list.
+  simp_all only [̵d̵e̵c̵i̵d̵e̵_̵e̵q̵_̵t̵r̵u̵e̵_̵e̵q̵,̵d̵e̵c̵i̵d̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵_̵i̵f̵f̵_̵n̵o̵t̵,̵n̵o̵t̵_̵n̵o̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵N̵K̵K̵_̵L̵o̵g̵A̵l̵g̵e̵b̵r̵a̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵N̵K̵K̵_̵L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵p̵u̵r̵e̵_̵b̵i̵n̵d̵,̵N̵K̵K̵_̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵N̵K̵K̵_̵C̵o̵m̵p̵a̵r̵e̵.̵n̵e̵_̵r̵e̵s̵u̵l̵t̵,̵N̵K̵K̵_̵L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵l̵i̵f̵t̵_̵o̵k̵_̵b̵i̵n̵d̵]̵[̲d̲e̲c̲i̲d̲e̲_̲e̲q̲_̲t̲r̲u̲e̲_̲e̲q̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲_̲i̲f̲f̲_̲n̲o̲t̲,̲ ̲n̲o̲t̲_̲n̲o̲t̲,̲
+  ̲ ̲ ̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲N̲K̲K̲_̲L̲o̲g̲A̲l̲g̲e̲b̲r̲a̲.̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲N̲K̲K̲_̲L̲o̲g̲R̲e̲d̲u̲c̲e̲.̲p̲u̲r̲e̲_̲b̲i̲n̲d̲,̲ ̲N̲K̲K̲_̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲N̲K̲K̲_̲C̲o̲m̲p̲a̲r̲e̲.̲n̲e̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKU_DigestJoin.source : ∀ {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (s : NKU.State)
+  (next : U8) («end» : Usize),
+  NKK_HeaderSource.afterHeader s.frame.reservation d s.frame.checkpoint s.frame.proof s.frame.publicBytes
+      transport.Variant.S2 hash next «end» =
+    do
+    let reply ← run d hash «end» s
+    NKK_Try.emitted reply fun x =>
+        match x with
+        | (fst, post) => resumeBodyG post.frame.reservation d post.frame.checkpoint transport.Variant.S2 next «end» :=
+fun {H} d hash s next «end» =>
+  id
+    (id
+      (id
+        (id
+          (id
+            (id
+              (id
+                (id
+                  (Eq.mpr
+                    (id
+                      (congr
+                        (congrArg Eq
+                          (congrArg
+                            (Bind.bind
+                              (liftM
+                                (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                  s.frame.checkpoint { start := 16#usize, «end» := 48#usize })))
+                            (funext fun s2 =>
+                              congrArg
+                                (Bind.bind
+                                  (liftM
+                                    (lift
+                                      (Array.make 1#usize [s.frame.proof]
+                                          (NKK_HeaderSource.afterHeader._proof_3 s.frame.proof)).to_slice)))
+                                (funext fun s3 =>
+                                  congrArg (Bind.bind (recordDigest d hash s3))
+                                    (funext fun a =>
+                                      congr (congrArg Bind.bind (congrArg liftM (NKK_Compare.ne_result s2 a)))
+                                        (funext fun b2 =>
+                                          ite_congr (Eq.refl (b2 = true))
+                                            (fun a =>
+                                              Eq.refl (liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))))
+                                            fun a =>
+                                            congrArg
+                                              (Bind.bind
+                                                (liftM
+                                                  (core.slice.index.Slice.index
+                                                    (core.slice.index.SliceIndexRangeUsizeSlice U8) s.frame.checkpoint
+                                                    { start := 48#usize, «end» := 80#usize })))
+                                              (funext fun s4 =>
+                                                congrArg
+                                                  (Bind.bind
+                                                    (liftM
+                                                      (lift
+                                                        (Array.make 1#usize [s.frame.publicBytes]
+                                                            (NKK_HeaderSource.afterHeader._proof_3
+                                                              s.frame.publicBytes)).to_slice)))
+                                                  (funext fun s5 =>
+                                                    congrArg (Bind.bind (recordDigest d hash s5))
+                                                      (funext fun a1 =>
+                                                        congr
+                                                          (congrArg Bind.bind
+                                                            (congrArg liftM (NKK_Compare.ne_result s4 a1)))
+                                                          (funext fun b3 =>
+                                                            ite_congr (Eq.refl (b3 = true))
+                                                              (fun a =>
+                                                                Eq.refl
+                                                                  (liftM
+                                                                    (ok
+                                                                      (core.result.Result.Err
+                                                                        verifier.Error.Checkpoint))))
+                                                              fun a =>
+                                                              congrArg
+                                                                (Bind.bind
+                                                                  (liftM
+                                                                    (core.slice.index.Slice.index
+                                                                      (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                        U8)
+                                                                      s.frame.checkpoint { start := «end» })))
+                                                                (funext fun s6 =>
+                                                                  congrArg
+                                                                    (Bind.bind
+                                                                      (liftM
+                                                                        (lift
+                                                                          (Array.make 22#usize [85#u8, ⋯]
+                                                                              NKK_HeaderSource.afterHeader._proof_22).to_slice)))
+                                                                    (funext fun s7 =>
+                                                                      congrArg
+                                                                        (Bind.bind
+                                                                          (liftM
+                                                                            (core.slice.index.Slice.index
+                                                                              (core.slice.index.SliceIndexRangeToUsizeSlice
+                                                                                U8)
+                                                                              s.frame.checkpoint { «end» := «end» })))
+                                                                        (funext fun s8 => congrArg ⋯ ⋯)))))))))))))
+                        (Eq.trans
+                          (Eq.trans
+                            (congr
+                              (congrArg Bind.bind
+                                (Eq.trans
+                                  (Eq.trans
+                                    (congrArg
+                                      (Bind.bind do
+                                        let stored ←
+                                          liftM
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) s.frame.checkpoint
+                                                { start := 16#usize, «end» := 48#usize })
+                                        let chunks ←
+                                          liftM
+                                              (lift
+                                                (Array.make 1#usize [s.frame.proof]
+                                                    (NKU_DigestProof.run._proof_4 s)).to_slice)
+                                        let reply ← recordDigest d hash chunks
+                                        if ↑stored = ↑reply then
+                                            pure
+                                              (core.result.Result.Ok
+                                                ((),
+                                                  { frame := s.frame, phase := NKU.Phase.publicDigest,
+                                                    decoded := s.decoded, reader := s.reader, iterator := s.iterator,
+                                                    owned := s.owned, returned := s.returned, history := s.history }))
+                                          else pure (core.result.Result.Err verifier.Error.Checkpoint))
+                                      (funext fun reply =>
+                                        Eq.trans
+                                          (congrArg (NKK_Try.emitted reply)
+                                            (funext fun x =>
+                                              Eq.trans
+                                                (Eq.trans
+                                                  (congrArg
+                                                    (Bind.bind do
+                                                      let stored ←
+                                                        liftM
+                                                            (core.slice.index.Slice.index
+                                                              (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                              x.2.frame.checkpoint
+                                                              { start := 48#usize, «end» := 80#usize })
+                                                      let chunks ←
+                                                        liftM
+                                                            (lift
+                                                              (Array.make 1#usize [x.2.frame.publicBytes]
+                                                                  (NKU_DigestPublic.run._proof_4 x.2)).to_slice)
+                                                      let reply ← recordDigest d hash chunks
+                                                      if ↑stored = ↑reply then
+                                                          pure
+                                                            (core.result.Result.Ok
+                                                              ((),
+                                                                { frame := x.2.frame,
+                                                                  phase := NKU.Phase.checkpointDigest,
+                                                                  decoded := x.2.decoded, reader := x.2.reader,
+                                                                  iterator := x.2.iterator, owned := x.2.owned,
+                                                                  returned := x.2.returned, history := x.2.history }))
+                                                        else pure (core.result.Result.Err verifier.Error.Checkpoint))
+                                                    (funext fun reply =>
+                                                      NKK_Try.branch reply fun x => do
+                                                        let stored ←
+                                                          liftM
+                                                              (core.slice.index.Slice.index
+                                                                (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                                                x.2.frame.checkpoint { start := «end» })
+                                                        let tag ←
+                                                          liftM
+                                                              (lift
+                                                                (Array.make 22#usize
+                                                                    [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8,
+                                                                      68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8,
+                                                                      ⋯]
+                                                                    NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                                        let cpView ←
+                                                          liftM
+                                                              (core.slice.index.Slice.index
+                                                                (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                                x.2.frame.checkpoint { «end» := «end» })
+                                                        let chunks ←
+                                                          liftM
+                                                              (lift
+                                                                (Array.make 2#usize [tag, cpView]
+                                                                    (NKU_DigestCheckpoint.run._proof_2 tag
+                                                                      cpView)).to_slice)
+                                                        let reply ← recordDigest d hash chunks
+                                                        if ↑stored = ↑reply then
+                                                            pure
+                                                              (core.result.Result.Ok
+                                                                ((),
+                                                                  { frame := x.2.frame, phase := NKU.Phase.roots,
+                                                                    decoded := x.2.decoded, reader := x.2.reader,
+                                                                    iterator := x.2.iterator, owned := x.2.owned,
+                                                                    returned := x.2.returned, history := x.2.history }))
+                                                          else pure (core.result.Result.Err verifier.Error.Checkpoint)))
+                                                  (NKK_LogAlgebra.bind_assoc
+                                                    (liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                        x.2.frame.checkpoint { start := 48#usize, «end» := 80#usize }))
+                                                    (fun stored => do
+                                                      let chunks ←
+                                                        liftM
+                                                            (lift
+                                                              (Array.make 1#usize [x.2.frame.publicBytes]
+                                                                  (NKU_DigestPublic.run._proof_4 x.2)).to_slice)
+                                                      let reply ← recordDigest d hash chunks
+                                                      if ↑stored = ↑reply then
+                                                          pure
+                                                            (core.result.Result.Ok
+                                                              ((),
+                                                                { frame := x.2.frame,
+                                                                  phase := NKU.Phase.checkpointDigest,
+                                                                  decoded := x.2.decoded, reader := x.2.reader,
+                                                                  iterator := x.2.iterator, owned := x.2.owned,
+                                                                  returned := x.2.returned, history := x.2.history }))
+                                                        else pure (core.result.Result.Err verifier.Error.Checkpoint))
+                                                    fun reply =>
+                                                    match reply with
+                                                    | core.result.Result.Ok x => do
+                                                      let stored ←
+                                                        liftM
+                                                            (core.slice.index.Slice.index
+                                                              (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                                              x.2.frame.checkpoint { start := «end» })
+                                                      let tag ←
+                                                        liftM
+                                                            (lift
+                                                              (Array.make 22#usize
+                                                                  [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8,
+                                                                    68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8,
+                                                                    101#u8, 99#u8, ⋯]
+                                                                  NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                                      let cpView ←
+                                                        liftM
+                                                            (core.slice.index.Slice.index
+                                                              (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                              x.2.frame.checkpoint { «end» := «end» })
+                                                      let chunks ←
+                                                        liftM
+                                                            (lift
+                                                              (Array.make 2#usize [tag, cpView]
+                                                                  (NKU_DigestCheckpoint.run._proof_2 tag
+                                                                    cpView)).to_slice)
+                                                      let reply ← recordDigest d hash chunks
+                                                      if ↑stored = ↑reply then
+                                                          pure
+                                                            (core.result.Result.Ok
+                                                              ((),
+                                                                { frame := x.2.frame, phase := NKU.Phase.roots,
+                                                                  decoded := x.2.decoded, reader := x.2.reader,
+                                                                  iterator := x.2.iterator, owned := x.2.owned,
+                                                                  returned := x.2.returned, history := x.2.history }))
+                                                        else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                                    | core.result.Result.Err err => pure (core.result.Result.Err err)))
+                                                (congrArg
+                                                  (Bind.bind
+                                                    (liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                        x.2.frame.checkpoint { start := 48#usize, «end» := 80#usize })))
+                                                  (funext fun a =>
+                                                    Eq.trans
+                                                      (NKK_LogAlgebra.bind_assoc
+                                                        (liftM
+                                                          (lift
+                                                            (Array.make 1#usize [x.2.frame.publicBytes]
+                                                                (NKU_DigestPublic.run._proof_4 x.2)).to_slice))
+                                                        (fun chunks => do
+                                                          let reply ← recordDigest d hash chunks
+                                                          if ↑a = ↑reply then
+                                                              pure
+                                                                (core.result.Result.Ok
+                                                                  ((),
+                                                                    { frame := x.2.frame,
+                                                                      phase := NKU.Phase.checkpointDigest,
+                                                                      decoded := x.2.decoded, reader := x.2.reader,
+                                                                      iterator := x.2.iterator, owned := x.2.owned,
+                                                                      returned := x.2.returned,
+                                                                      history := x.2.history }))
+                                                            else
+                                                              pure (core.result.Result.Err verifier.Error.Checkpoint))
+                                                        fun reply =>
+                                                        match reply with
+                                                        | core.result.Result.Ok x => do
+                                                          let stored ←
+                                                            liftM
+                                                                (core.slice.index.Slice.index
+                                                                  (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                                                  x.2.frame.checkpoint { start := «end» })
+                                                          let tag ←
+                                                            liftM
+                                                                (lift
+                                                                  (Array.make 22#usize
+                                                                      [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8,
+                                                                        68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 99#u8, ⋯]
+                                                                      NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                                          let cpView ←
+                                                            liftM
+                                                                (core.slice.index.Slice.index
+                                                                  (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                                  x.2.frame.checkpoint { «end» := «end» })
+                                                          let chunks ←
+                                                            liftM
+                                                                (lift
+                                                                  (Array.make 2#usize [tag, cpView]
+                                                                      (NKU_DigestCheckpoint.run._proof_2 tag
+                                                                        cpView)).to_slice)
+                                                          let reply ← recordDigest d hash chunks
+                                                          if ↑stored = ↑reply then
+                                                              pure
+                                                                (core.result.Result.Ok
+                                                                  ((),
+                                                                    { frame := x.2.frame, phase := NKU.Phase.roots,
+                                                                      decoded := x.2.decoded, reader := x.2.reader,
+                                                                      iterator := x.2.iterator, owned := x.2.owned,
+                                                                      returned := x.2.returned,
+                                                                      history := x.2.history }))
+                                                            else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                                        | core.result.Result.Err err =>
+                                                          pure (core.result.Result.Err err))
+                                                      (congrArg
+                                                        (Bind.bind
+                                                          (liftM
+                                                            (lift
+                                                              (Array.make 1#usize [x.2.frame.publicBytes]
+                                                                  (NKU_DigestPublic.run._proof_4 x.2)).to_slice)))
+                                                        (funext fun a_1 =>
+                                                          NKK_LogAlgebra.bind_assoc (recordDigest d hash a_1)
+                                                            (fun reply =>
+                                                              if ↑a = ↑reply then
+                                                                pure
+                                                                  (core.result.Result.Ok
+                                                                    ((),
+                                                                      { frame := x.2.frame,
+                                                                        phase := NKU.Phase.checkpointDigest,
+                                                                        decoded := x.2.decoded, reader := x.2.reader,
+                                                                        iterator := x.2.iterator, owned := x.2.owned,
+                                                                        returned := x.2.returned,
+                                                                        history := x.2.history }))
+                                                              else
+                                                                pure (core.result.Result.Err verifier.Error.Checkpoint))
+                                                            fun reply =>
+                                                            match reply with
+                                                            | core.result.Result.Ok x => do
+                                                              let stored ←
+                                                                liftM
+                                                                    (core.slice.index.Slice.index
+                                                                      (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                        U8)
+                                                                      x.2.frame.checkpoint { start := «end» })
+                                                              let tag ←
+                                                                liftM
+                                                                    (lift
+                                                                      (Array.make 22#usize
+                                                                          [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8,
+                                                                            69#u8, 68#u8, 58#u8, 82#u8, ⋯]
+                                                                          NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                                              let cpView ←
+                                                                liftM
+                                                                    (core.slice.index.Slice.index
+                                                                      (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                                      x.2.frame.checkpoint { «end» := «end» })
+                                                              let chunks ←
+                                                                liftM
+                                                                    (lift
+                                                                      (Array.make 2#usize [tag, cpView]
+                                                                          (NKU_DigestCheckpoint.run._proof_2 tag
+                                                                            cpView)).to_slice)
+                                                              let reply ← recordDigest d hash chunks
+                                                              if ↑stored = ↑reply then
+                                                                  pure
+                                                                    (core.result.Result.Ok
+                                                                      ((),
+                                                                        { frame := x.2.frame, phase := NKU.Phase.roots,
+                                                                          decoded := x.2.decoded, reader := x.2.reader,
+                                                                          iterator := x.2.iterator, owned := x.2.owned,
+                                                                          returned := x.2.returned,
+                                                                          history := x.2.history }))
+                                                                else
+                                                                  pure
+                                                                    (core.result.Result.Err verifier.Error.Checkpoint)
+                                                            | core.result.Result.Err err =>
+                                                              pure (core.result.Result.Err err)))))))
+                                          (NKK_Try.branch reply fun x => do
+                                            let a ←
+                                              liftM
+                                                  (core.slice.index.Slice.index
+                                                    (core.slice.index.SliceIndexRangeUsizeSlice U8) x.2.frame.checkpoint
+                                                    { start := 48#usize, «end» := 80#usize })
+                                            let a_1 ←
+                                              liftM
+                                                  (lift
+                                                    (Array.make 1#usize [x.2.frame.publicBytes]
+                                                        (NKU_DigestPublic.run._proof_4 x.2)).to_slice)
+                                            let a_2 ← recordDigest d hash a_1
+                                            let reply ←
+                                              if ↑a = ↑a_2 then
+                                                  pure
+                                                    (core.result.Result.Ok
+                                                      ((),
+                                                        { frame := x.2.frame, phase := NKU.Phase.checkpointDigest,
+                                                          decoded := x.2.decoded, reader := x.2.reader,
+                                                          iterator := x.2.iterator, owned := x.2.owned,
+                                                          returned := x.2.returned, history := x.2.history }))
+                                                else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                            match reply with
+                                              | core.result.Result.Ok x => do
+                                                let stored ←
+                                                  liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                                        x.2.frame.checkpoint { start := «end» })
+                                                let tag ←
+                                                  liftM
+                                                      (lift
+                                                        (Array.make 22#usize
+                                                            [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8,
+                                                              58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8,
+                                                              107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                                                            NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                                let cpView ←
+                                                  liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                        x.2.frame.checkpoint { «end» := «end» })
+                                                let chunks ←
+                                                  liftM
+                                                      (lift
+                                                        (Array.make 2#usize [tag, cpView]
+                                                            (NKU_DigestCheckpoint.run._proof_2 tag cpView)).to_slice)
+                                                let reply ← recordDigest d hash chunks
+                                                if ↑stored = ↑reply then
+                                                    pure
+                                                      (core.result.Result.Ok
+                                                        ((),
+                                                          { frame := x.2.frame, phase := NKU.Phase.roots,
+                                                            decoded := x.2.decoded, reader := x.2.reader,
+                                                            iterator := x.2.iterator, owned := x.2.owned,
+                                                            returned := x.2.returned, history := x.2.history }))
+                                                  else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                              | core.result.Result.Err err => pure (core.result.Result.Err err))))
+                                    (NKK_LogAlgebra.bind_assoc
+                                      (liftM
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                          s.frame.checkpoint { start := 16#usize, «end» := 48#usize }))
+                                      (fun stored => do
+                                        let chunks ←
+                                          liftM
+                                              (lift
+                                                (Array.make 1#usize [s.frame.proof]
+                                                    (NKU_DigestProof.run._proof_4 s)).to_slice)
+                                        let reply ← recordDigest d hash chunks
+                                        if ↑stored = ↑reply then
+                                            pure
+                                              (core.result.Result.Ok
+                                                ((),
+                                                  { frame := s.frame, phase := NKU.Phase.publicDigest,
+                                                    decoded := s.decoded, reader := s.reader, iterator := s.iterator,
+                                                    owned := s.owned, returned := s.returned, history := s.history }))
+                                          else pure (core.result.Result.Err verifier.Error.Checkpoint))
+                                      fun reply =>
+                                      match reply with
+                                      | core.result.Result.Ok x => do
+                                        let a ←
+                                          liftM
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) x.2.frame.checkpoint
+                                                { start := 48#usize, «end» := 80#usize })
+                                        let a_1 ←
+                                          liftM
+                                              (lift
+                                                (Array.make 1#usize [x.2.frame.publicBytes]
+                                                    (NKU_DigestPublic.run._proof_4 x.2)).to_slice)
+                                        let a_2 ← recordDigest d hash a_1
+                                        let reply ←
+                                          if ↑a = ↑a_2 then
+                                              pure
+                                                (core.result.Result.Ok
+                                                  ((),
+                                                    { frame := x.2.frame, phase := NKU.Phase.checkpointDigest,
+                                                      decoded := x.2.decoded, reader := x.2.reader,
+                                                      iterator := x.2.iterator, owned := x.2.owned,
+                                                      returned := x.2.returned, history := x.2.history }))
+                                            else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                        match reply with
+                                          | core.result.Result.Ok x => do
+                                            let stored ←
+                                              liftM
+                                                  (core.slice.index.Slice.index
+                                                    (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                                    x.2.frame.checkpoint { start := «end» })
+                                            let tag ←
+                                              liftM
+                                                  (lift
+                                                    (Array.make 22#usize
+                                                        [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8,
+                                                          82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8,
+                                                          112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                                                        NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                            let cpView ←
+                                              liftM
+                                                  (core.slice.index.Slice.index
+                                                    (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                    x.2.frame.checkpoint { «end» := «end» })
+                                            let chunks ←
+                                              liftM
+                                                  (lift
+                                                    (Array.make 2#usize [tag, cpView]
+                                                        (NKU_DigestCheckpoint.run._proof_2 tag cpView)).to_slice)
+                                            let reply ← recordDigest d hash chunks
+                                            if ↑stored = ↑reply then
+                                                pure
+                                                  (core.result.Result.Ok
+                                                    ((),
+                                                      { frame := x.2.frame, phase := NKU.Phase.roots,
+                                                        decoded := x.2.decoded, reader := x.2.reader,
+                                                        iterator := x.2.iterator, owned := x.2.owned,
+                                                        returned := x.2.returned, history := x.2.history }))
+                                              else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                          | core.result.Result.Err err => pure (core.result.Result.Err err)
+                                      | core.result.Result.Err err => pure (core.result.Result.Err err)))
+                                  (congrArg
+                                    (Bind.bind
+                                      (liftM
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                          s.frame.checkpoint { start := 16#usize, «end» := 48#usize })))
+                                    (funext fun a =>
+                                      Eq.trans
+                                        (NKK_LogAlgebra.bind_assoc
+                                          (liftM
+                                            (lift
+                                              (Array.make 1#usize [s.frame.proof]
+                                                  (NKU_DigestProof.run._proof_4 s)).to_slice))
+                                          (fun chunks => do
+                                            let reply ← recordDigest d hash chunks
+                                            if ↑a = ↑reply then
+                                                pure
+                                                  (core.result.Result.Ok
+                                                    ((),
+                                                      { frame := s.frame, phase := NKU.Phase.publicDigest,
+                                                        decoded := s.decoded, reader := s.reader,
+                                                        iterator := s.iterator, owned := s.owned,
+                                                        returned := s.returned, history := s.history }))
+                                              else pure (core.result.Result.Err verifier.Error.Checkpoint))
+                                          fun reply =>
+                                          match reply with
+                                          | core.result.Result.Ok x => do
+                                            let a ←
+                                              liftM
+                                                  (core.slice.index.Slice.index
+                                                    (core.slice.index.SliceIndexRangeUsizeSlice U8) x.2.frame.checkpoint
+                                                    { start := 48#usize, «end» := 80#usize })
+                                            let a_1 ←
+                                              liftM
+                                                  (lift
+                                                    (Array.make 1#usize [x.2.frame.publicBytes]
+                                                        (NKU_DigestPublic.run._proof_4 x.2)).to_slice)
+                                            let a_2 ← recordDigest d hash a_1
+                                            let reply ←
+                                              if ↑a = ↑a_2 then
+                                                  pure
+                                                    (core.result.Result.Ok
+                                                      ((),
+                                                        { frame := x.2.frame, phase := NKU.Phase.checkpointDigest,
+                                                          decoded := x.2.decoded, reader := x.2.reader,
+                                                          iterator := x.2.iterator, owned := x.2.owned,
+                                                          returned := x.2.returned, history := x.2.history }))
+                                                else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                            match reply with
+                                              | core.result.Result.Ok x => do
+                                                let stored ←
+                                                  liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                                        x.2.frame.checkpoint { start := «end» })
+                                                let tag ←
+                                                  liftM
+                                                      (lift
+                                                        (Array.make 22#usize
+                                                            [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8,
+                                                              58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8,
+                                                              107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                                                            NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                                let cpView ←
+                                                  liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                        x.2.frame.checkpoint { «end» := «end» })
+                                                let chunks ←
+                                                  liftM
+                                                      (lift
+                                                        (Array.make 2#usize [tag, cpView]
+                                                            (NKU_DigestCheckpoint.run._proof_2 tag cpView)).to_slice)
+                                                let reply ← recordDigest d hash chunks
+                                                if ↑stored = ↑reply then
+                                                    pure
+                                                      (core.result.Result.Ok
+                                                        ((),
+                                                          { frame := x.2.frame, phase := NKU.Phase.roots,
+                                                            decoded := x.2.decoded, reader := x.2.reader,
+                                                            iterator := x.2.iterator, owned := x.2.owned,
+                                                            returned := x.2.returned, history := x.2.history }))
+                                                  else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                              | core.result.Result.Err err => pure (core.result.Result.Err err)
+                                          | core.result.Result.Err err => pure (core.result.Result.Err err))
+                                        (congrArg
+                                          (Bind.bind
+                                            (liftM
+                                              (lift
+                                                (Array.make 1#usize [s.frame.proof]
+                                                    (NKU_DigestProof.run._proof_4 s)).to_slice)))
+                                          (funext fun a_1 =>
+                                            NKK_LogAlgebra.bind_assoc (recordDigest d hash a_1)
+                                              (fun reply =>
+                                                if ↑a = ↑reply then
+                                                  pure
+                                                    (core.result.Result.Ok
+                                                      ((),
+                                                        { frame := s.frame, phase := NKU.Phase.publicDigest,
+                                                          decoded := s.decoded, reader := s.reader,
+                                                          iterator := s.iterator, owned := s.owned,
+                                                          returned := s.returned, history := s.history }))
+                                                else pure (core.result.Result.Err verifier.Error.Checkpoint))
+                                              fun reply =>
+                                              match reply with
+                                              | core.result.Result.Ok x => do
+                                                let a ←
+                                                  liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                        x.2.frame.checkpoint { start := 48#usize, «end» := 80#usize })
+                                                let a_2 ←
+                                                  liftM
+                                                      (lift
+                                                        (Array.make 1#usize [x.2.frame.publicBytes]
+                                                            (NKU_DigestPublic.run._proof_4 x.2)).to_slice)
+                                                let a_3 ← recordDigest d hash a_2
+                                                let reply ←
+                                                  if ↑a = ↑a_3 then
+                                                      pure
+                                                        (core.result.Result.Ok
+                                                          ((),
+                                                            { frame := x.2.frame, phase := NKU.Phase.checkpointDigest,
+                                                              decoded := x.2.decoded, reader := x.2.reader,
+                                                              iterator := x.2.iterator, owned := x.2.owned,
+                                                              returned := x.2.returned, history := x.2.history }))
+                                                    else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                                match reply with
+                                                  | core.result.Result.Ok x => do
+                                                    let stored ←
+                                                      liftM
+                                                          (core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                                            x.2.frame.checkpoint { start := «end» })
+                                                    let tag ←
+                                                      liftM
+                                                          (lift
+                                                            (Array.make 22#usize
+                                                                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8,
+                                                                  58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8,
+                                                                  99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                                                                NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                                    let cpView ←
+                                                      liftM
+                                                          (core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                            x.2.frame.checkpoint { «end» := «end» })
+                                                    let chunks ←
+                                                      liftM
+                                                          (lift
+                                                            (Array.make 2#usize [tag, cpView]
+                                                                (NKU_DigestCheckpoint.run._proof_2 tag
+                                                                  cpView)).to_slice)
+                                                    let reply ← recordDigest d hash chunks
+                                                    if ↑stored = ↑reply then
+                                                        pure
+                                                          (core.result.Result.Ok
+                                                            ((),
+                                                              { frame := x.2.frame, phase := NKU.Phase.roots,
+                                                                decoded := x.2.decoded, reader := x.2.reader,
+                                                                iterator := x.2.iterator, owned := x.2.owned,
+                                                                returned := x.2.returned, history := x.2.history }))
+                                                      else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                                  | core.result.Result.Err err => pure (core.result.Result.Err err)
+                                              | core.result.Result.Err err => pure (core.result.Result.Err err)))))))
+                              (funext fun reply =>
+                                NKK_Try.branch reply fun x =>
+                                  resumeBodyG x.2.frame.reservation d x.2.frame.checkpoint transport.Variant.S2 next
+                                    «end»))
+                            (NKK_LogAlgebra.bind_assoc
+                              (liftM
+                                (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                  s.frame.checkpoint { start := 16#usize, «end» := 48#usize }))
+                              (fun a => do
+                                let a_1 ←
+                                  liftM
+                                      (lift
+                                        (Array.make 1#usize [s.frame.proof] (NKU_DigestProof.run._proof_4 s)).to_slice)
+                                let a_2 ← recordDigest d hash a_1
+                                let reply ←
+                                  if ↑a = ↑a_2 then
+                                      pure
+                                        (core.result.Result.Ok
+                                          ((),
+                                            { frame := s.frame, phase := NKU.Phase.publicDigest, decoded := s.decoded,
+                                              reader := s.reader, iterator := s.iterator, owned := s.owned,
+                                              returned := s.returned, history := s.history }))
+                                    else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                match reply with
+                                  | core.result.Result.Ok x => do
+                                    let a ←
+                                      liftM
+                                          (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                            x.2.frame.checkpoint { start := 48#usize, «end» := 80#usize })
+                                    let a_3 ←
+                                      liftM
+                                          (lift
+                                            (Array.make 1#usize [x.2.frame.publicBytes]
+                                                (NKU_DigestPublic.run._proof_4 x.2)).to_slice)
+                                    let a_4 ← recordDigest d hash a_3
+                                    let reply ←
+                                      if ↑a = ↑a_4 then
+                                          pure
+                                            (core.result.Result.Ok
+                                              ((),
+                                                { frame := x.2.frame, phase := NKU.Phase.checkpointDigest,
+                                                  decoded := x.2.decoded, reader := x.2.reader,
+                                                  iterator := x.2.iterator, owned := x.2.owned,
+                                                  returned := x.2.returned, history := x.2.history }))
+                                        else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                    match reply with
+                                      | core.result.Result.Ok x => do
+                                        let stored ←
+                                          liftM
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeFromUsizeSlice U8) x.2.frame.checkpoint
+                                                { start := «end» })
+                                        let tag ←
+                                          liftM
+                                              (lift
+                                                (Array.make 22#usize
+                                                    [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8,
+                                                      82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8,
+                                                      111#u8, 105#u8, 110#u8, 116#u8]
+                                                    NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                        let cpView ←
+                                          liftM
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeToUsizeSlice U8) x.2.frame.checkpoint
+                                                { «end» := «end» })
+                                        let chunks ←
+                                          liftM
+                                              (lift
+                                                (Array.make 2#usize [tag, cpView]
+                                                    (NKU_DigestCheckpoint.run._proof_2 tag cpView)).to_slice)
+                                        let reply ← recordDigest d hash chunks
+                                        if ↑stored = ↑reply then
+                                            pure
+                                              (core.result.Result.Ok
+                                                ((),
+                                                  { frame := x.2.frame, phase := NKU.Phase.roots,
+                                                    decoded := x.2.decoded, reader := x.2.reader,
+                                                    iterator := x.2.iterator, owned := x.2.owned,
+                                                    returned := x.2.returned, history := x.2.history }))
+                                          else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                      | core.result.Result.Err err => pure (core.result.Result.Err err)
+                                  | core.result.Result.Err err => pure (core.result.Result.Err err))
+                              fun reply =>
+                              match reply with
+                              | core.result.Result.Ok x =>
+                                resumeBodyG x.2.frame.reservation d x.2.frame.checkpoint transport.Variant.S2 next «end»
+                              | core.result.Result.Err err => pure (core.result.Result.Err err)))
+                          (congrArg
+                            (Bind.bind
+                              (liftM
+                                (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                  s.frame.checkpoint { start := 16#usize, «end» := 48#usize })))
+                            (funext fun a =>
+                              Eq.trans
+                                (NKK_LogAlgebra.bind_assoc
+                                  (liftM
+                                    (lift
+                                      (Array.make 1#usize [s.frame.proof] (NKU_DigestProof.run._proof_4 s)).to_slice))
+                                  (fun a_1 => do
+                                    let a_2 ← recordDigest d hash a_1
+                                    let reply ←
+                                      if ↑a = ↑a_2 then
+                                          pure
+                                            (core.result.Result.Ok
+                                              ((),
+                                                { frame := s.frame, phase := NKU.Phase.publicDigest,
+                                                  decoded := s.decoded, reader := s.reader, iterator := s.iterator,
+                                                  owned := s.owned, returned := s.returned, history := s.history }))
+                                        else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                    match reply with
+                                      | core.result.Result.Ok x => do
+                                        let a ←
+                                          liftM
+                                              (core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) x.2.frame.checkpoint
+                                                { start := 48#usize, «end» := 80#usize })
+                                        let a_3 ←
+                                          liftM
+                                              (lift
+                                                (Array.make 1#usize [x.2.frame.publicBytes]
+                                                    (NKU_DigestPublic.run._proof_4 x.2)).to_slice)
+                                        let a_4 ← recordDigest d hash a_3
+                                        let reply ←
+                                          if ↑a = ↑a_4 then
+                                              pure
+                                                (core.result.Result.Ok
+                                                  ((),
+                                                    { frame := x.2.frame, phase := NKU.Phase.checkpointDigest,
+                                                      decoded := x.2.decoded, reader := x.2.reader,
+                                                      iterator := x.2.iterator, owned := x.2.owned,
+                                                      returned := x.2.returned, history := x.2.history }))
+                                            else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                        match reply with
+                                          | core.result.Result.Ok x => do
+                                            let stored ←
+                                              liftM
+                                                  (core.slice.index.Slice.index
+                                                    (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                                    x.2.frame.checkpoint { start := «end» })
+                                            let tag ←
+                                              liftM
+                                                  (lift
+                                                    (Array.make 22#usize
+                                                        [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8,
+                                                          82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8,
+                                                          112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                                                        NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                            let cpView ←
+                                              liftM
+                                                  (core.slice.index.Slice.index
+                                                    (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                    x.2.frame.checkpoint { «end» := «end» })
+                                            let chunks ←
+                                              liftM
+                                                  (lift
+                                                    (Array.make 2#usize [tag, cpView]
+                                                        (NKU_DigestCheckpoint.run._proof_2 tag cpView)).to_slice)
+                                            let reply ← recordDigest d hash chunks
+                                            if ↑stored = ↑reply then
+                                                pure
+                                                  (core.result.Result.Ok
+                                                    ((),
+                                                      { frame := x.2.frame, phase := NKU.Phase.roots,
+                                                        decoded := x.2.decoded, reader := x.2.reader,
+                                                        iterator := x.2.iterator, owned := x.2.owned,
+                                                        returned := x.2.returned, history := x.2.history }))
+                                              else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                          | core.result.Result.Err err => pure (core.result.Result.Err err)
+                                      | core.result.Result.Err err => pure (core.result.Result.Err err))
+                                  fun reply =>
+                                  match reply with
+                                  | core.result.Result.Ok x =>
+                                    resumeBodyG x.2.frame.reservation d x.2.frame.checkpoint transport.Variant.S2 next
+                                      «end»
+                                  | core.result.Result.Err err => pure (core.result.Result.Err err))
+                                (congrArg
+                                  (Bind.bind
+                                    (liftM
+                                      (lift
+                                        (Array.make 1#usize [s.frame.proof]
+                                            (NKU_DigestProof.run._proof_4 s)).to_slice)))
+                                  (funext fun a_1 =>
+                                    Eq.trans
+                                      (NKK_LogAlgebra.bind_assoc (recordDigest d hash a_1)
+                                        (fun a_2 => do
+                                          let reply ←
+                                            if ↑a = ↑a_2 then
+                                                pure
+                                                  (core.result.Result.Ok
+                                                    ((),
+                                                      { frame := s.frame, phase := NKU.Phase.publicDigest,
+                                                        decoded := s.decoded, reader := s.reader,
+                                                        iterator := s.iterator, owned := s.owned,
+                                                        returned := s.returned, history := s.history }))
+                                              else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                          match reply with
+                                            | core.result.Result.Ok x => do
+                                              let a ←
+                                                liftM
+                                                    (core.slice.index.Slice.index
+                                                      (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                      x.2.frame.checkpoint { start := 48#usize, «end» := 80#usize })
+                                              let a_3 ←
+                                                liftM
+                                                    (lift
+                                                      (Array.make 1#usize [x.2.frame.publicBytes]
+                                                          (NKU_DigestPublic.run._proof_4 x.2)).to_slice)
+                                              let a_4 ← recordDigest d hash a_3
+                                              let reply ←
+                                                if ↑a = ↑a_4 then
+                                                    pure
+                                                      (core.result.Result.Ok
+                                                        ((),
+                                                          { frame := x.2.frame, phase := NKU.Phase.checkpointDigest,
+                                                            decoded := x.2.decoded, reader := x.2.reader,
+                                                            iterator := x.2.iterator, owned := x.2.owned,
+                                                            returned := x.2.returned, history := x.2.history }))
+                                                  else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                              match reply with
+                                                | core.result.Result.Ok x => do
+                                                  let stored ←
+                                                    liftM
+                                                        (core.slice.index.Slice.index
+                                                          (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                                          x.2.frame.checkpoint { start := «end» })
+                                                  let tag ←
+                                                    liftM
+                                                        (lift
+                                                          (Array.make 22#usize
+                                                              [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8,
+                                                                58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8,
+                                                                99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                                                              NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                                  let cpView ←
+                                                    liftM
+                                                        (core.slice.index.Slice.index
+                                                          (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                          x.2.frame.checkpoint { «end» := «end» })
+                                                  let chunks ←
+                                                    liftM
+                                                        (lift
+                                                          (Array.make 2#usize [tag, cpView]
+                                                              (NKU_DigestCheckpoint.run._proof_2 tag cpView)).to_slice)
+                                                  let reply ← recordDigest d hash chunks
+                                                  if ↑stored = ↑reply then
+                                                      pure
+                                                        (core.result.Result.Ok
+                                                          ((),
+                                                            { frame := x.2.frame, phase := NKU.Phase.roots,
+                                                              decoded := x.2.decoded, reader := x.2.reader,
+                                                              iterator := x.2.iterator, owned := x.2.owned,
+                                                              returned := x.2.returned, history := x.2.history }))
+                                                    else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                                | core.result.Result.Err err => pure (core.result.Result.Err err)
+                                            | core.result.Result.Err err => pure (core.result.Result.Err err))
+                                        fun reply =>
+                                        match reply with
+                                        | core.result.Result.Ok x =>
+                                          resumeBodyG x.2.frame.reservation d x.2.frame.checkpoint transport.Variant.S2
+                                            next «end»
+                                        | core.result.Result.Err err => pure (core.result.Result.Err err))
+                                      (congrArg (Bind.bind (recordDigest d hash a_1))
+                                        (funext fun a_2 =>
+                                          NKK_LogAlgebra.bind_assoc
+                                            (if ↑a = ↑a_2 then
+                                              pure
+                                                (core.result.Result.Ok
+                                                  ((),
+                                                    { frame := s.frame, phase := NKU.Phase.publicDigest,
+                                                      decoded := s.decoded, reader := s.reader, iterator := s.iterator,
+                                                      owned := s.owned, returned := s.returned, history := s.history }))
+                                            else pure (core.result.Result.Err verifier.Error.Checkpoint))
+                                            (fun reply =>
+                                              match reply with
+                                              | core.result.Result.Ok x => do
+                                                let a ←
+                                                  liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                        x.2.frame.checkpoint { start := 48#usize, «end» := 80#usize })
+                                                let a_3 ←
+                                                  liftM
+                                                      (lift
+                                                        (Array.make 1#usize [x.2.frame.publicBytes]
+                                                            (NKU_DigestPublic.run._proof_4 x.2)).to_slice)
+                                                let a_4 ← recordDigest d hash a_3
+                                                let reply ←
+                                                  if ↑a = ↑a_4 then
+                                                      pure
+                                                        (core.result.Result.Ok
+                                                          ((),
+                                                            { frame := x.2.frame, phase := NKU.Phase.checkpointDigest,
+                                                              decoded := x.2.decoded, reader := x.2.reader,
+                                                              iterator := x.2.iterator, owned := x.2.owned,
+                                                              returned := x.2.returned, history := x.2.history }))
+                                                    else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                                match reply with
+                                                  | core.result.Result.Ok x => do
+                                                    let stored ←
+                                                      liftM
+                                                          (core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                                            x.2.frame.checkpoint { start := «end» })
+                                                    let tag ←
+                                                      liftM
+                                                          (lift
+                                                            (Array.make 22#usize
+                                                                [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8,
+                                                                  58#u8, 82#u8, 49#u8, 58#u8, 99#u8, 104#u8, 101#u8,
+                                                                  99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8, 116#u8]
+                                                                NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                                    let cpView ←
+                                                      liftM
+                                                          (core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                            x.2.frame.checkpoint { «end» := «end» })
+                                                    let chunks ←
+                                                      liftM
+                                                          (lift
+                                                            (Array.make 2#usize [tag, cpView]
+                                                                (NKU_DigestCheckpoint.run._proof_2 tag
+                                                                  cpView)).to_slice)
+                                                    let reply ← recordDigest d hash chunks
+                                                    if ↑stored = ↑reply then
+                                                        pure
+                                                          (core.result.Result.Ok
+                                                            ((),
+                                                              { frame := x.2.frame, phase := NKU.Phase.roots,
+                                                                decoded := x.2.decoded, reader := x.2.reader,
+                                                                iterator := x.2.iterator, owned := x.2.owned,
+                                                                returned := x.2.returned, history := x.2.history }))
+                                                      else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                                  | core.result.Result.Err err => pure (core.result.Result.Err err)
+                                              | core.result.Result.Err err => pure (core.result.Result.Err err))
+                                            fun reply =>
+                                            match reply with
+                                            | core.result.Result.Ok x =>
+                                              resumeBodyG x.2.frame.reservation d x.2.frame.checkpoint
+                                                transport.Variant.S2 next «end»
+                                            | core.result.Result.Err err => pure (core.result.Result.Err err))))))))))
+                    (NKK_LogAlgebra.bind_congr
+                      (liftM
+                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) s.frame.checkpoint
+                          { start := 16#usize, «end» := 48#usize }))
+                      (fun s2 => do
+                        let s3 ←
+                          liftM
+                              (lift
+                                (Array.make 1#usize [s.frame.proof]
+                                    (NKK_HeaderSource.afterHeader._proof_3 s.frame.proof)).to_slice)
+                        let a ← recordDigest d hash s3
+                        if decide (↑s2 ≠ ↑a) = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                          else do
+                            let s4 ←
+                              liftM
+                                  (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                    s.frame.checkpoint { start := 48#usize, «end» := 80#usize })
+                            let s5 ←
+                              liftM
+                                  (lift
+                                    (Array.make 1#usize [s.frame.publicBytes]
+                                        (NKK_HeaderSource.afterHeader._proof_3 s.frame.publicBytes)).to_slice)
+                            let a1 ← recordDigest d hash s5
+                            if decide (↑s4 ≠ ↑a1) = true then
+                                liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                              else do
+                                let s6 ←
+                                  liftM
+                                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                        s.frame.checkpoint { start := «end» })
+                                let s7 ←
+                                  liftM
+                                      (lift
+                                        (Array.make 22#usize
+                                            [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8,
+                                              49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8,
+                                              105#u8, 110#u8, 116#u8]
+                                            NKK_HeaderSource.afterHeader._proof_22).to_slice)
+                                let s8 ←
+                                  liftM
+                                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                        s.frame.checkpoint { «end» := «end» })
+                                let s9 ←
+                                  liftM
+                                      (lift
+                                        (Array.make 2#usize [s7, s8]
+                                            (NKK_HeaderSource.afterHeader._proof_24 s7 s8)).to_slice)
+                                let a2 ← recordDigest d hash s9
+                                if decide (↑s6 ≠ ↑a2) = true then
+                                    liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                                  else
+                                    resumeBodyG s.frame.reservation d s.frame.checkpoint transport.Variant.S2 next
+                                      «end»)
+                      (fun a => do
+                        let a_1 ←
+                          liftM (lift (Array.make 1#usize [s.frame.proof] (NKU_DigestProof.run._proof_4 s)).to_slice)
+                        let a_2 ← recordDigest d hash a_1
+                        let a ←
+                          if ↑a = ↑a_2 then
+                              pure
+                                (core.result.Result.Ok
+                                  ((),
+                                    { frame := s.frame, phase := NKU.Phase.publicDigest, decoded := s.decoded,
+                                      reader := s.reader, iterator := s.iterator, owned := s.owned,
+                                      returned := s.returned, history := s.history }))
+                            else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                        let reply ←
+                          match a with
+                            | core.result.Result.Ok x => do
+                              let a ←
+                                liftM
+                                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                      x.2.frame.checkpoint { start := 48#usize, «end» := 80#usize })
+                              let a_3 ←
+                                liftM
+                                    (lift
+                                      (Array.make 1#usize [x.2.frame.publicBytes]
+                                          (NKU_DigestPublic.run._proof_4 x.2)).to_slice)
+                              let a_4 ← recordDigest d hash a_3
+                              let reply ←
+                                if ↑a = ↑a_4 then
+                                    pure
+                                      (core.result.Result.Ok
+                                        ((),
+                                          { frame := x.2.frame, phase := NKU.Phase.checkpointDigest,
+                                            decoded := x.2.decoded, reader := x.2.reader, iterator := x.2.iterator,
+                                            owned := x.2.owned, returned := x.2.returned, history := x.2.history }))
+                                  else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                              match reply with
+                                | core.result.Result.Ok x => do
+                                  let stored ←
+                                    liftM
+                                        (core.slice.index.Slice.index
+                                          (core.slice.index.SliceIndexRangeFromUsizeSlice U8) x.2.frame.checkpoint
+                                          { start := «end» })
+                                  let tag ←
+                                    liftM
+                                        (lift
+                                          (Array.make 22#usize
+                                              [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8,
+                                                49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8,
+                                                105#u8, 110#u8, 116#u8]
+                                              NKU_DigestCheckpoint.label._proof_21).to_slice)
+                                  let cpView ←
+                                    liftM
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                          x.2.frame.checkpoint { «end» := «end» })
+                                  let chunks ←
+                                    liftM
+                                        (lift
+                                          (Array.make 2#usize [tag, cpView]
+                                              (NKU_DigestCheckpoint.run._proof_2 tag cpView)).to_slice)
+                                  let reply ← recordDigest d hash chunks
+                                  if ↑stored = ↑reply then
+                                      pure
+                                        (core.result.Result.Ok
+                                          ((),
+                                            { frame := x.2.frame, phase := NKU.Phase.roots, decoded := x.2.decoded,
+                                              reader := x.2.reader, iterator := x.2.iterator, owned := x.2.owned,
+                                              returned := x.2.returned, history := x.2.history }))
+                                    else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                | core.result.Result.Err err => pure (core.result.Result.Err err)
+                            | core.result.Result.Err err => pure (core.result.Result.Err err)
+                        match reply with
+                          | core.result.Result.Ok x =>
+                            resumeBodyG x.2.frame.reservation d x.2.frame.checkpoint transport.Variant.S2 next «end»
+                          | core.result.Result.Err err => pure (core.result.Result.Err err))
+                      fun value =>
+                      NKK_LogAlgebra.bind_congr
+                        (liftM
+                          (lift
+                            (Array.make 1#usize [s.frame.proof]
+                                (NKK_HeaderSource.afterHeader._proof_3 s.frame.proof)).to_slice))
+                        (fun s3 => do
+                          let a ← recordDigest d hash s3
+                          if decide (↑value ≠ ↑a) = true then
+                              liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                            else do
+                              let s4 ←
+                                liftM
+                                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                      s.frame.checkpoint { start := 48#usize, «end» := 80#usize })
+                              let s5 ←
+                                liftM
+                                    (lift
+                                      (Array.make 1#usize [s.frame.publicBytes]
+                                          (NKK_HeaderSource.afterHeader._proof_3 s.frame.publicBytes)).to_slice)
+                              let a1 ← recordDigest d hash s5
+                              if decide (↑s4 ≠ ↑a1) = true then
+                                  liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                                else do
+                                  let s6 ←
+                                    liftM
+                                        (core.slice.index.Slice.index
+                                          (core.slice.index.SliceIndexRangeFromUsizeSlice U8) s.frame.checkpoint
+                                          { start := «end» })
+                                  let s7 ←
+                                    liftM
+                                        (lift
+                                          (Array.make 22#usize
+                                              [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8,
+                                                49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8,
+                                                105#u8, 110#u8, 116#u8]
+                                              NKK_HeaderSource.afterHeader._proof_22).to_slice)
+                                  let s8 ←
+                                    liftM
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                          s.frame.checkpoint { «end» := «end» })
+                                  let s9 ←
+                                    liftM
+                                        (lift
+                                          (Array.make 2#usize [s7, s8]
+                                              (NKK_HeaderSource.afterHeader._proof_24 s7 s8)).to_slice)
+                                  let a2 ← recordDigest d hash s9
+                                  if decide (↑s6 ≠ ↑a2) = true then
+                                      liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                                    else
+                                      resumeBodyG s.frame.reservation d s.frame.checkpoint transport.Variant.S2 next
+                                        «end»)
+                        (fun a => do
+                          let a ← recordDigest d hash a
+                          let a ←
+                            if ↑value = ↑a then
+                                pure
+                                  (core.result.Result.Ok
+                                    ((),
+                                      { frame := s.frame, phase := NKU.Phase.publicDigest, decoded := s.decoded,
+                                        reader := s.reader, iterator := s.iterator, owned := s.owned,
+                                        returned := s.returned, history := s.history }))
+                              else pure (core.result.Result.Err verifier.Error.Checkpoint)
+                          let reply ←
+                            match a with
+                              | ⋯ => do
+                                let a ←
+                                  liftM
+                                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                        x.2.frame.checkpoint { start := 48#usize, «end» := ⋯ })
+                                let a_1 ← ⋯
+                                let a_2 ← ⋯
+                                let reply ← ⋯
+                                ⋯
+                              | ⋯ => ⋯
+                          ⋯)
+                        ⋯)))))))))
+'NKU_DigestJoin.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

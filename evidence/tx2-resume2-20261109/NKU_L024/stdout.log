@@ -1,0 +1,35 @@
+theorem NKU_Front.source : ∀ {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (s : NKU.State),
+  NJU_ResumeObserved.run s.frame.reservation d s.frame.checkpoint s.frame.proof s.frame.publicBytes transport.Variant.S2
+      hash =
+    run d hash s :=
+fun {H} d hash s =>
+  Eq.mpr (id (congrArg (fun _a => _a = run d hash s) (NKU_HeaderStep.source d hash s)))
+    (id
+      (NKK_LogAlgebra.bind_congr (NKU_HeaderStep.run d s)
+        (fun reply =>
+          NKK_Try.emitted reply fun x =>
+            match x with
+            | (fst, post) => NKU_HeaderStep.suffix d hash post)
+        (fun reply =>
+          NKK_Try.emitted reply fun x =>
+            match x with
+            | (fst, post) => suffix d hash post)
+        fun reply =>
+        core.result.Result.casesOn (motive := fun t =>
+          reply = t →
+            (NKK_Try.emitted reply fun x =>
+                match x with
+                | (fst, post) => NKU_HeaderStep.suffix d hash post) =
+              NKK_Try.emitted reply fun x =>
+                match x with
+                | (fst, post) => suffix d hash post)
+          reply (fun pair h => Eq.symm h ▸ suffix_eq d hash pair.2)
+          (fun err h =>
+            Eq.symm h ▸
+              Eq.refl
+                (NKK_Try.emitted (core.result.Result.Err err) fun x =>
+                  match x with
+                  | (fst, post) => NKU_HeaderStep.suffix d hash post))
+          (Eq.refl reply)))
+'NKU_Front.suffix_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKU_Front.source' depends on axioms: [propext, Classical.choice, Quot.sound]
