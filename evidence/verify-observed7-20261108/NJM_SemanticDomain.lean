@@ -21,7 +21,9 @@ theorem source {H : Type} (D : aspis_core.Digest32 H) (t : r1_wire.SemanticTrans
    cases inner with
    | Err error => cases error <;> exact good
    | Ok block =>
-     simp only [bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+     change NJM_ChildDomain.Good (do
+      let q ← AspisR1PublicPreparation.sampler.qm31_sample block
+      ok (.Ok q,after))
      apply NJM_ChildDomain.bind_good
      intro q
      trivial

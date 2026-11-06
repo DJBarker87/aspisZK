@@ -1,0 +1,36 @@
+#[cfg(kani)] pub mod NJM_claims_window {
+ use super::*;
+ use core::mem::MaybeUninit;
+ use aspis_core::field::{CM31,M31};
+ type Claims=[[QM31;29];3];
+ fn word(q:QM31,i:u8)->u32{match i{0=>q.c0.a.0,1=>q.c0.b.0,2=>q.c1.a.0,_=>q.c1.b.0}}
+ fn put(q:&mut QM31,i:u8,x:u32){match i{0=>q.c0.a.0=x,1=>q.c0.b.0=x,2=>q.c1.a.0=x,_=>q.c1.b.0=x}}
+ // Frozen claims loop's ONE original ptr::write, with the decoder reply explicit.
+ fn native(out:&mut MaybeUninit<Claims>,p:usize,reply:Result<[QM31;29],Error>)->Result<(),Error>{
+  unsafe{out.as_mut_ptr().cast::<[QM31;29]>().add(p).write(reply?);}
+  Ok(())
+ }
+ fn safe(out:&mut [Claims],p:usize,reply:Result<[QM31;29],Error>)->Result<(),Error>{
+  out[0][p]=reply?;
+  Ok(())
+ }
+ pub fn check(negative:bool){
+  let p:usize=kani::any();kani::assume(p<3);
+  let k:usize=kani::any();kani::assume(k<29);
+  let limb:u8=kani::any();kani::assume(limb<4);
+  let q=QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}};
+  let mut row=[QM31::ZERO;29];row[k]=q;
+  let ok:bool=kani::any();let tag:bool=kani::any();let bad:usize=kani::any();kani::assume(bad<29);
+  let reply=if ok{Ok(row)}else{Err(if tag{Error::Length{row:25}}else{Error::NonCanonical{row:25,value:p*29+bad}})};
+  let mut original=aspis_core::r0::heap::uninit::<Claims>().unwrap();
+  let mut reference=aspis_core::r0::heap::filled(1,[[QM31::ZERO;29];3]).unwrap();
+  let prior:usize=kani::any();let j:usize=kani::any();kani::assume(prior<3&&j<29);
+  let before:u32=kani::any();
+  if p>0{kani::assume(prior<p);unsafe{original.as_mut_ptr().cast::<u32>().add(4*(29*prior+j)+limb as usize).write(before);}put(&mut reference[0][prior][j],limb,before);}
+  let a=native(&mut original,p,reply);let b=safe(&mut reference,p,reply);
+  assert_eq!(a,b);
+  if a.is_ok(){let got=unsafe{original.as_mut_ptr().cast::<u32>().add(4*(29*p+k)+limb as usize).read()};let expected=word(reference[0][p][k],limb);if negative{assert_eq!(got,expected^1);}else{assert_eq!(got,expected);}}
+  else if negative{assert!(a.is_ok());}
+  if p>0{let got=unsafe{original.as_mut_ptr().cast::<u32>().add(4*(29*prior+j)+limb as usize).read()};assert_eq!(got,word(reference[0][prior][j],limb));}
+ }
+}

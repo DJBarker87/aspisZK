@@ -1,0 +1,51 @@
+{"attempt": "NJM_L039", "exit_status": 1, "wall_seconds": 7.967812437796965, "peak_rss_kib": "6127460", "swaps": "0", "print_axioms": ["'AspisR1.NJM_SemanticDomain.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJM_SemanticDomain.code' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJM_generated/NJM_SemanticDomain.lean:27:5: error: Tactic `assumption` failed
+
+case ok.Ok
+H : Type
+D : aspis_core.Digest32 H
+t : r1_wire.SemanticTranscript H
+record : r1_wire.ValidatedRecord
+bound : ↑record.row ≤ 24
+notInvalid : ¬record.row > 24#u8
+after : r1_wire.SemanticTranscript H
+block : Std.Array U8 32#usize
+call :
+  r1_wire.SemanticTranscript.sample_block_validated D t record.row record.framed =
+    ok (core.result.Result.Ok block, after)
+good : NJM_ChildDomain.Good (ok (core.result.Result.Ok block, after))
+q : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) (Std.Array U8 32#usize)
+⊢ NJM_ChildDomain.Good
+    (match q with
+    | core.ops.con
+...
+NJM_generated/NJM_SemanticDomain.lean:27:5: error: Tactic `assumption` failed
+
+case ok.Ok
+H : Type
+D : aspis_core.Digest32 H
+t : r1_wire.SemanticTranscript H
+record : r1_wire.ValidatedRecord
+bound : ↑record.row ≤ 24
+notInvalid : ¬record.row > 24#u8
+after : r1_wire.SemanticTranscript H
+block : Std.Array U8 32#usize
+call :
+  r1_wire.SemanticTranscript.sample_block_validated D t record.row record.framed =
+    ok (core.result.Result.Ok block, after)
+good : NJM_ChildDomain.Good (ok (core.result.Result.Ok block, after))
+q : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) (Std.Array U8 32#usize)
+⊢ NJM_ChildDomain.Good
+    (match q with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let q ← AspisR1PublicPreparation.sampler.qm31_sample val
+      ok (core.result.Result.Ok q, after)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r1 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+            (core.convert.FromSame r1_wire.Error) residual
+      ok (r1, after))
+'AspisR1.NJM_SemanticDomain.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJM_SemanticDomain.code' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r145f4e7682794f60a9f21e0de2fcef07.scope; invocation ID: dcac0c23e6744245935b6d81cdc60992

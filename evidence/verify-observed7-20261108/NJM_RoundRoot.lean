@@ -15,7 +15,7 @@ def Cases {H : Type} (D : aspis_core.Digest32 H) (record : r1_wire.ValidatedReco
  if b≠running then
   whole=([],ok (.Err (.Boundary r))) ∧
   ∀ (template : RoundPre) (post : RoundOutput),
-   (∀ j z,roundResult (NJM_RoundStage.install template record p b running a r before before (.Ok aspis_core.field.QM31.ZERO) aspis_core.field.QM31.ZERO) j z post) →
+   (∀ j z,roundResult (NJM_RoundStage.install {template with count:=0} record p b running a r before before (.Ok aspis_core.field.QM31.ZERO) aspis_core.field.QM31.ZERO) j z post) →
    post=.Err (.Boundary r)
  else
   let child:=run (S1SemanticCode.semanticValidated D before record)
@@ -25,14 +25,14 @@ def Cases {H : Type} (D : aspis_core.Digest32 H) (record : r1_wire.ValidatedReco
   | .ok (.Err error,after) =>
     whole=(child.1,ok (.Err error)) ∧
     ∀ (template : RoundPre) (post : RoundOutput),
-     (∀ j z,roundResult (NJM_RoundStage.install template record p b running a r before after (.Err error) aspis_core.field.QM31.ZERO) j z post) →
+     (∀ j z,roundResult (NJM_RoundStage.install {template with count:=0} record p b running a r before after (.Err error) aspis_core.field.QM31.ZERO) j z post) →
      post=.Err error
   | .ok (.Ok q,after) =>
     ∃ value,AspisS1ExtractedRoundChildren.generatedMainValue p (a.set r q) r=ok value ∧
      JFv_RoundArithmetic.Canonical value ∧
      whole=(child.1,ok (.Ok (value,a.set r q,after))) ∧
      ∀ (template : RoundPre) (post : RoundOutput),
-      (∀ j z,roundResult (NJM_RoundStage.install template record p b running a r before after (.Ok q) value) j z post) →
+      (∀ j z,roundResult (NJM_RoundStage.install {template with count:=0} record p b running a r before after (.Ok q) value) j z post) →
       post=.Ok (value,a.set r q,after.state,after.next_row)
 
 /-- Full concrete133 child/Code/result-cut join. Every child reply equation is
@@ -76,7 +76,7 @@ theorem source {H : Type} (D : aspis_core.Digest32 H) (bytes : Slice U8)
        constructor
        · simpa only [NGX_RunBind.appendResult,NJM_RoundContinuation.error,List.append_nil] using norm
        · intro template post cuts
-         exact NJM_RoundStage.semantic_error template record p b running a r before after error same _ post cuts
+         exact NJM_RoundStage.semantic_error {template with count:=0} record p b running a r before after error same _ post cuts
      | Ok q =>
        have semEq : (run (S1SemanticCode.semanticValidated D before record)).2=ok (.Ok q,after) := congrArg Prod.snd childEq
        obtain ⟨value,law,vc,cont⟩:=NJM_RoundContinuation.success D record before after p a r bound q canonical semEq

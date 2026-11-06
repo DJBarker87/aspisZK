@@ -1,0 +1,19 @@
+NJM_generated/NJM_SemanticDomain.lean:24:5: error: 'change' tactic failed, pattern
+  NJM_ChildDomain.Good do
+    let q ← sampler.qm31_sample block
+    ok (core.result.Result.Ok q, after)
+is not definitionally equal to target
+  NJM_ChildDomain.Good do
+    let (r, self1) ← ok (core.result.Result.Ok block, after)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let q ← AspisR1PublicPreparation.sampler.qm31_sample val
+        ok (core.result.Result.Ok q, self1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+              (core.convert.FromSame r1_wire.Error) residual
+        ok (r1, self1)
+'AspisR1.NJM_SemanticDomain.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJM_SemanticDomain.code' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
