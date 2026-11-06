@@ -1,0 +1,43 @@
+{"attempt": "NLV_L003", "exit_status": 0, "wall_seconds": 14.498126849997789, "peak_rss_kib": "6024052", "swaps": "0", "print_axioms": []}
+inductive AspisR1.CheckpointBytes5Effect.Code : Type → Type 1
+number of parameters: 1
+constructors:
+AspisR1.CheckpointBytes5Effect.Code.done : {A : Type} → A → AspisR1.CheckpointBytes5Effect.Code A
+AspisR1.CheckpointBytes5Effect.Code.step : {A B : Type} →
+  Aeneas.Std.Result B → (B → AspisR1.CheckpointBytes5Effect.Code A) → AspisR1.CheckpointBytes5Effect.Code A
+AspisR1.CheckpointBytes5Effect.Code.read : {A : Type} →
+  AspisR1.CheckpointBytes5Effect.Parts →
+    (AspisR1.CheckpointBytes5Effect.Digest → AspisR1.CheckpointBytes5Effect.Code A) →
+      AspisR1.CheckpointBytes5Effect.Code A
+def AspisR1.CheckpointBytes5Effect.bind : {A B : Type} →
+  AspisR1.CheckpointBytes5Effect.Code A →
+    (A → A
+...
+AspisR1.CheckpointBytes5Effect.Code A) → AspisR1.CheckpointBytes5Effect.Code A
+AspisR1.CheckpointBytes5Effect.Code.read : {A : Type} →
+  AspisR1.CheckpointBytes5Effect.Parts →
+    (AspisR1.CheckpointBytes5Effect.Digest → AspisR1.CheckpointBytes5Effect.Code A) →
+      AspisR1.CheckpointBytes5Effect.Code A
+def AspisR1.CheckpointBytes5Effect.bind : {A B : Type} →
+  AspisR1.CheckpointBytes5Effect.Code A →
+    (A → AspisR1.CheckpointBytes5Effect.Code B) → AspisR1.CheckpointBytes5Effect.Code B :=
+fun {A B} x x_1 =>
+  AspisR1.CheckpointBytes5Effect.Code.brecOn (motive := fun x =>
+    (A → AspisR1.CheckpointBytes5Effect.Code B) → AspisR1.CheckpointBytes5Effect.Code B) x
+    AspisR1.CheckpointBytes5Effect.bind._f x_1
+def AspisR1.CheckpointBytes5Effect.liftResult : {A : Type} →
+  Aeneas.Std.Result A → AspisR1.CheckpointBytes5Effect.Code A :=
+fun {A} r => AspisR1.CheckpointBytes5Effect.Code.step r AspisR1.CheckpointBytes5Effect.Code.done
+def AspisR1.NGQ_Normalize.normalize : {A : Type} →
+  AspisR1.CheckpointBytes5Effect.Code A → AspisR1.CheckpointBytes5Effect.Code A :=
+fun {A} x => AspisR1.CheckpointBytes5Effect.Code.brecOn x AspisR1.NGQ_Normalize.normalize._f
+AspisR1.NGP_L181.NativeAssociation {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (code : AspisR1.CheckpointBytes5Effect.Code A) (observed : AspisR1.NGP_L181.Observation A) : Prop
+AspisR1.NHZ_DRIVER.events_from_cuts {A : Type}
+  (hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (tx1 cutCode : AspisR1.CheckpointBytes5Effect.Code A) (observed : AspisR1.NGP_L181.Observation A)
+  (cuts : AspisR1.NHZ_DRIVER.Cuts hashv cutCode observed.result observed.attempted) (ordering : cutCode = tx1) :
+  AspisR1.NGP_L181.NativeAssociation hashv tx1 observed
+
+Running as unit: run-r9927b7fb47c6407b9a763ea326c7705b.scope; invocation ID: fb869af903ca4262988e93cf940c5345

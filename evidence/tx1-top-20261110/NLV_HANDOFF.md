@@ -13,3 +13,5 @@ Own host workspace: /home/dombarker/project-offloads/codex-cx-tx1-top-20261110; 
 Retained assumptions: approved runtime and P6/D188 trust inventory; no new trust item. Frozen verifier source and Cargo.lock 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; Pool b936275465, ELF e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc. Headline AspisR1.RPx_Deployed.deployed. Contract remains 100-bit per-attempt soundness, privacy, two transactions.
 
 Exact validation and remaining obligations will be updated after each stage. Next deliverable: reviewed RowSpec and parent fold, without treating a parameterized fold as row closure.
+
+Stage 1: all20 per-occurrence source continuation equations pass (L008-L028, excluding failed L022 replaced by L023). These are support only. Source/frame/native assembly and child domains remain OPEN; no row credit. Own prelaunch path correction L002 and client serialization refusal before L006 are retained. New native/reference/spec candidates are not yet validated.
