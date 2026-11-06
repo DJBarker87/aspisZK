@@ -67,3 +67,9 @@ Semantic expands to ten entered K reads at 408+16i, 0≤i<10. Weights expands to
 Literal std sites are not child rows under (au): common split guard; Try residuals; inactive checked slice; folded-root checked32-byte slice/try_into/unwrap; Vec deref/deref_mut and writeback; View empty slices and three checked ranges. They need native stage coverage and exact (an) abort prefixes. Profiling mark(None) is erased per (ae), never justified by a function-pointer comparison.
 
 Missing native windows are findings until new matched controls pass: common call-entry C02/C03/C04/C05/C06/C07, current View C09 and short-slice aborts, plus occurrence-to-prefix caller-domain installation. NKE proofs do not assume these windows.
+
+## Concrete instantiation update
+
+All45 resume calls and all9 common calls now have concrete typed program/codec instances. NKE_ResumeAssociation.source/prefixes/at_common and NKE_CommonAssociation.source/prefixes compile (L057/L058). Decoder laws accept every full reply, reject mismatched arguments, and G ignores child-model seeds. The prefix state is the entire residual caller continuation, not a free endpoint state. This is forward substitution at the same arguments, never an inverse association of separate native runs. Native scope/domain/frame coverage remains independently required. NKE_OCCURRENCES.json now assigns every source role/offset explicitly.
+
+Geometry has three matched native windows with the12/12 domain derived by NKE_GeometryDomain.returned. Current View has all six matched byte-window families (round0, round1, final groups0..3); natural byte/frame composition is being compiled. New query-entry argument windows are in progress; the retained NJR returning windows alone do not assert those arguments. No TX2:065 promotion.

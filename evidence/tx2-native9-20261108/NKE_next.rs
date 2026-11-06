@@ -5,7 +5,7 @@ impl<const PART:usize> ViewWindowLog<'_,PART>{fn finish(&mut self,v:&View)->Resu
  assert_eq!(v.round0.as_ptr(),self.proof.as_ptr().wrapping_add(7527));assert_eq!(v.round0.len(),224);assert_eq!(v.round1.as_ptr(),self.proof.as_ptr().wrapping_add(7783));assert_eq!(v.round1.len(),224);assert_eq!(v.final_message.as_ptr(),self.proof.as_ptr().wrapping_add(8007));assert_eq!(v.final_message.len(),2048);
  if PART==0{let i=kani::any::<u8>() as usize;kani::assume(i<224);assert_eq!(v.round0[i],self.proof[7527+i]^(if cfg!(NKE_invert){1}else{0}));}
  if PART==1{let i=kani::any::<u8>() as usize;kani::assume(i<224);assert_eq!(v.round1[i],self.proof[7783+i]^(if cfg!(NKE_invert){1}else{0}));}
- if PART==2{let i=(kani::any::<u16>()&2047) as usize;assert_eq!(v.final_message[i],self.proof[8007+i]^(if cfg!(NKE_invert){1}else{0}));}
+ if PART>=2{let i=(kani::any::<u16>()&511) as usize;let offset=(PART-2)*512;assert_eq!(v.final_message[offset+i],self.proof[8007+offset+i]^(if cfg!(NKE_invert){1}else{0}));}
  self.reply
 }}
 fn view_window<const PART:usize>(){
@@ -27,7 +27,7 @@ fn view_round1(){view_window::<1>();}
 #[kani::unwind(36)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-fn view_final(){view_window::<2>();}
+fn view_final0(){view_window::<2>();}
 
 // Full SAME-reader native call and Try prefix for K and E. Only cursor mutates.
 struct ReaderLog<'a,T:Copy>{bytes:&'a[u8],cursor:usize,post:usize,value:T,err:Option<Error>,seen:Option<&'a[u8]>,calls:usize}
@@ -74,3 +74,21 @@ fn powers_stage(gamma:E,log:&mut PowersLog)->[E;29]{let g=log.powers(gamma);g}
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn powers_call(){let gamma=any_e();let words:[[u32;8];29]=kani::any();let reply=words.map(|w|E::new(k([w[0],w[1],w[2],w[3]]),k([w[4],w[5],w[6],w[7]])));let mut log=PowersLog{gamma,reply,calls:0};let out=powers_stage(gamma,&mut log);assert_eq!(log.calls,1);let i=(kani::any::<u8>()&31) as usize;kani::assume(i<29);let j=(kani::any::<u8>()&7) as usize;assert_eq!(out[i].to_limbs()[j],words[i][j]^(if cfg!(NKE_invert){1}else{0}));}
+
+#[kani::proof]
+#[kani::unwind(36)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn view_final1(){view_window::<3>();}
+
+#[kani::proof]
+#[kani::unwind(36)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn view_final2(){view_window::<4>();}
+
+#[kani::proof]
+#[kani::unwind(36)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn view_final3(){view_window::<5>();}

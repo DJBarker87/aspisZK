@@ -1,0 +1,45 @@
+{"attempt": "NKE_L057", "exit_status": 0, "wall_seconds": 14.31048822705634, "peak_rss_kib": "6018076", "swaps": "0", "print_axioms": ["'NKE_CommonAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKE_CommonAssociation.prefixes' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKE_CommonAssociation.source : ∀ (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish)
+  {H : Type} (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+  NKE_FreeReplay.G (NKE_CommonProgram.run wr rr (fun {H} => merkle) finish d pub proof ck hash none)
+      (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events =
+    NKE_FreeReplay.State.done (NJJ_Common.run wr rr (fun {H} => merkle) finish d pub proof ck hash none) [] :=
+fun wr rr merkle finish {H} d pub proof ck hash =>
+  have actual :=
+    NKE_FreeReplay.source (NKE_CommonProgram.run wr rr (fun {H} => merkle) finish d pub proof ck hash none);
+  Eq.mp
+    (congrArg
+      (fun _
+...
+f ck hash none)
+            (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events =
+          NKE_FreeReplay.State.done _a [])
+      (NJU_CommonObserved.source wr rr merkle finish d pub proof ck hash))
+    (Eq.mp
+      (congrArg
+        (fun _a =>
+          NKE_FreeReplay.G (NKE_CommonProgram.run wr rr (fun {H} => merkle) finish d pub proof ck hash none) _a.events =
+            NKE_FreeReplay.State.done _a.result [])
+        (NKE_CommonEval.source wr rr merkle finish d pub proof ck hash))
+      actual)
+theorem NKE_CommonAssociation.prefixes : ∀ (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish)
+  {H : Type} (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) (n : ℕ),
+  NKE_FreeReplay.advance n (NKE_CommonProgram.run wr rr (fun {H} => merkle) finish d pub proof ck hash none)
+      (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events =
+    NKE_FreeReplay.sourcePrefix n (NKE_CommonProgram.run wr rr (fun {H} => merkle) finish d pub proof ck hash none) :=
+fun wr rr merkle finish {H} d pub proof ck hash n =>
+  have actual :=
+    NKE_FreeReplay.prefixes (NKE_CommonProgram.run wr rr (fun {H} => merkle) finish d pub proof ck hash none) n;
+  Eq.mp
+    (congrArg
+      (fun _a =>
+        NKE_FreeReplay.advance n (NKE_CommonProgram.run wr rr (fun {H} => merkle) finish d pub proof ck hash none)
+            _a.events =
+          NKE_FreeReplay.sourcePrefix n
+            (NKE_CommonProgram.run wr rr (fun {H} => merkle) finish d pub proof ck hash none))
+      (NKE_CommonEval.source wr rr merkle finish d pub proof ck hash))
+    actual
+'NKE_CommonAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKE_CommonAssociation.prefixes' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8cf903caea3c4ff6a9cf2b2d94fde688.scope; invocation ID: 4c26747a478d4298b114175823ca0f95

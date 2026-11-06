@@ -1,0 +1,66 @@
+theorem NKE_ResumeAssociation.source : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (ck proof pub : Slice U8) (v : transport.Variant) (hash : H),
+  NKE_FreeReplay.G (NKE_ResumeProgram.run reservation d ck proof pub v hash)
+      (NJU_ResumeObserved.run reservation d ck proof pub v hash).events =
+    NKE_FreeReplay.State.done (NJC_RawCalls.resume (NJC_FilledClause.reserved reservation) d ck proof pub v hash) [] :=
+fun reservation {H} d ck proof pub v hash =>
+  have actual := NKE_FreeReplay.source (NKE_ResumeProgram.run reservation d ck proof pub v hash);
+  Eq.mp
+    (congrArg
+      (fun _a =>
+        NKE_FreeReplay.G (NKE_ResumeProgram.run reservation d ck proof pub v hash)
+            (NJU_ResumeObserved.run reservation d ck proof pub v hash).events =
+          NKE_FreeReplay.State.done _a [])
+      (NJU_ResumeRoot.source reservation d ck proof pub v hash))
+    (Eq.mp
+      (congrArg
+        (fun _a =>
+          NKE_FreeReplay.G (NKE_ResumeProgram.run reservation d ck proof pub v hash) _a.events =
+            NKE_FreeReplay.State.done _a.result [])
+        (NKE_ResumeEval.run reservation d ck proof pub v hash))
+      actual)
+theorem NKE_ResumeAssociation.prefixes : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (ck proof pub : Slice U8) (v : transport.Variant) (hash : H) (n : ℕ),
+  NKE_FreeReplay.advance n (NKE_ResumeProgram.run reservation d ck proof pub v hash)
+      (NJU_ResumeObserved.run reservation d ck proof pub v hash).events =
+    NKE_FreeReplay.sourcePrefix n (NKE_ResumeProgram.run reservation d ck proof pub v hash) :=
+fun reservation {H} d ck proof pub v hash n =>
+  have actual := NKE_FreeReplay.prefixes (NKE_ResumeProgram.run reservation d ck proof pub v hash) n;
+  Eq.mp
+    (congrArg
+      (fun _a =>
+        NKE_FreeReplay.advance n (NKE_ResumeProgram.run reservation d ck proof pub v hash) _a.events =
+          NKE_FreeReplay.sourcePrefix n (NKE_ResumeProgram.run reservation d ck proof pub v hash))
+      (NKE_ResumeEval.run reservation d ck proof pub v hash))
+    actual
+theorem NKE_ResumeAssociation.at_common : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 H) (ck proof pub : Slice U8) (hash : H),
+  NHT_ResultPort.action
+      (NIL_StatePort.reply
+        (NKE_Free.eval
+            (NKE_ResumeProgram.run reservation (NJC_ResumeCalls.digest d) ck proof pub transport.Variant.S2
+              hash)).result) =
+    NJJ_Common.resume reservation d ck proof pub AspisR1Stage2.transport.Variant.S2 hash :=
+fun reservation {H} d ck proof pub hash =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          NHT_ResultPort.action (NIL_StatePort.reply _a.result) =
+            NJJ_Common.resume reservation d ck proof pub AspisR1Stage2.transport.Variant.S2 hash)
+        (NKE_ResumeEval.run reservation (NJC_ResumeCalls.digest d) ck proof pub transport.Variant.S2 hash)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            NHT_ResultPort.action (NIL_StatePort.reply _a) =
+              NJJ_Common.resume reservation d ck proof pub AspisR1Stage2.transport.Variant.S2 hash)
+          (NJU_ResumeRoot.source reservation (NJC_ResumeCalls.digest d) ck proof pub transport.Variant.S2 hash)))
+      (Eq.refl
+        (NHT_ResultPort.action
+          (NIL_StatePort.reply
+            (NJC_RawCalls.resume (NJC_FilledClause.reserved reservation) (NJC_ResumeCalls.digest d) ck proof pub
+              transport.Variant.S2 hash)))))
+'NKE_ResumeAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKE_ResumeAssociation.prefixes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKE_ResumeAssociation.at_common' depends on axioms: [propext, Classical.choice, Quot.sound]

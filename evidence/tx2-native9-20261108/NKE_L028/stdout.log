@@ -1,0 +1,32 @@
+NKE_generated/NKE_Free.lean:73:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval (next value >>= k)
+in the target expression
+  { result := (eval ((next value).bind k)).result,
+      events := codec.encode (ok value) :: (eval ((next value).bind k)).events } =
+    NJU_Log.bind
+      { result := (eval (next value)).result, events := codec.encode (ok value) :: (eval (next value)).events }
+      fun value => eval (k value)
+
+case call.ok
+E A B : Type
+k : A → Program E B
+B✝ : Type
+codec : Codec E B✝
+next : B✝ → Program E A
+ih :
+  ∀ (a : B✝),
+    eval (next a >>= k) = do
+      let value ← eval (next a)
+      eval (k value)
+value : B✝
+⊢ { result := (eval ((next value).bind k)).result,
+      events := codec.encode (ok value) :: (eval ((next value).bind k)).events } =
+    NJU_Log.bind
+      { result := (eval (next value)).result, events := codec.encode (ok value) :: (eval (next value)).events }
+      fun value => eval (k value)
+'NKE_Free.eval_bind' depends on axioms: [sorryAx]
+'NKE_Free.eval_record' does not depend on any axioms
+'NKE_Free.eval_liftM' does not depend on any axioms
+'NKE_Free.eval_pure' does not depend on any axioms
+'NKE_Free.eval_if' does not depend on any axioms
+'NKE_Free.eval_flow' does not depend on any axioms

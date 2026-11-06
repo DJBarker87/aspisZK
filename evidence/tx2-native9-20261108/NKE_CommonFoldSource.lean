@@ -66,6 +66,6 @@ theorem source (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Fi
  {H : Type} (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) :
  NJU_CommonObserved.run wr rr merkle finish d pub proof ck hash none=
  run wr rr merkle finish d pub proof ck hash := by
- simp only [NJU_CommonObserved.run,run,←NKE_RustBind.lower]
+ simp only [NJU_CommonObserved.run,run,←NKE_RustBind.lower,NJU_Log.prod_cases]
 #print axioms source
 end NKE_CommonFoldSource
