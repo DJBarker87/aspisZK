@@ -1,0 +1,36 @@
+theorem run {E : Type} (C : Carrier OWNER Data) (b : Bool) (K : Control)
+    (P : Data → Option PV_STX2_SliceSyntax.Program)
+    (child5 : P PV_THR2_Packet216Children.fn5 = none)
+    (child15 : P PV_THR2_Packet216Children.fn15 = none)
+    (H : PV_STX2_Native.Request Data → OWNER → Reply OWNER E Data)
+    (s : Store Data) (a dest : Nat) (parent : Frame) (parents : List Frame)
+    (wait : PV_STX2_Native.Waiting Data) (v kind allocator forgetValue : Data) (p : Address)
+    (w : OWNER) (es : List E) (stack : List Config)
+    (cell : s.cells ⟨a,6,[]⟩ = some v) (fresh : a < s.nextActivation)
+    (rawAnswer : (H (.child PV_THR2_Packet216Children.fn5 s.nextActivation [v]) w).answer =
+      .returned (.ok (PV_THR2_KeyValues.pack kind
+        [PV_STX2_TypedReferences.reference p .null,allocator])))
+    (forgetAnswer :
+      let pair := PV_THR2_KeyValues.pack kind [PV_STX2_TypedReferences.reference p .null,allocator]
+      let r := H (.child PV_THR2_Packet216Children.fn5 s.nextActivation [v]) w
+      let t := PV_THR2_StaticReply.returnedStore (write s ⟨a,6,[]⟩ none) a [v] 5 pair
+      let s1 := PV_THR2_Packet216Memory6To15.prepared t a kind
+        (PV_STX2_TypedReferences.reference p .null) allocator
+      (H (.child PV_THR2_Packet216Children.fn15 s1.nextActivation [allocator]) r.world).answer =
+        .returned (.ok forgetValue))
+    (saved : parent.waiting = some wait) (action : wait.action = .child a (.local dest)) :
+    let B := PV_THR2_OwnInitExactReturnedCases.carrier C b
+    let ptr := PV_STX2_TypedReferences.reference p .null
+    let pair := PV_THR2_KeyValues.pack kind [ptr,allocator]
+    let r1 := H (.child PV_THR2_Packet216Children.fn5 s.nextActivation [v]) w
+    let t := PV_THR2_StaticReply.returnedStore (write s ⟨a,6,[]⟩ none) a [v] 5 pair
+    let s1 := PV_THR2_Packet216Memory6To15.prepared t a kind ptr allocator
+    let r2 := H (.child PV_THR2_Packet216Children.fn15 s1.nextActivation [allocator]) r1.world
+    let s2 := PV_THR2_StaticReply.returnedStore (write s1 ⟨a,8,[]⟩ none) a [allocator] 7 forgetValue
+    let final := PV_THR2_Packet216Memory16To30.prepared s2 a p
+    let cost1 := 2+PV_THR2_IntrinsicFrameChain.steps B a r1.world PV_THR2_Packet216Chain6To15.chain t
+    let cost2 := PV_THR2_IntrinsicFrameChain.steps B a r2.world PV_THR2_Packet216Chain16To30.chain s2 + 1 + 1
+    PV_THR2_IntrinsicState.advance B K P H (cost1+2+cost2)
+      ⟨⟨.running ⟨{activation := a,remaining := PV_THR2_F216.live.body.drop 5},parent :: parents,s⟩,w,es⟩,stack⟩ =
+      ⟨PV_THR2_ChildBoundary.delivered B ⟨parent,parents,final⟩ wait
+        ⟨.returned (.ok ptr),r2.world,(es ++ r1.events) ++ r2.events⟩,stack⟩ 

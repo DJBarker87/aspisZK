@@ -1,0 +1,17 @@
+theorem run (B : Carrier OWNER Data) (resources : Resources) (encode : Encode)
+    (constructorStore derefStore : Store Data)
+    (shape : PV_THR2_TypedRepresentation_ArcInner.Shape) (K : Control)
+    (P : Data → Option PV_STX2_SliceSyntax.Program)
+    (H : PV_STX2_Native.Request Data → OWNER → Reply OWNER PV_RJ4IDB.NativeEvent Data)
+    (q : PV_THR2_IntrinsicState.State OWNER PV_RJ4IDB.NativeEvent)
+    (child63 : P PV_THR2_Source361PacketChildren.fn63 = none)
+    (child70 : P PV_THR2_Source361PacketChildren.fn70 = none) :
+    let J := PV_THR2_PacketJoinedHandler.handler B resources encode constructorStore derefStore shape H
+    let q63 := PV_THR2_Source361Chain59To63.after B q
+    let q64 := PV_THR2_Source361Full63.after B H q63
+    let q70 := PV_THR2_Source361Chain64To70.after B q64
+    let q71 := PV_THR2_Source361Full70.after B H q70
+    let q76 := PV_THR2_Source361Chain71To76.after B q71
+    let q77 := PV_THR2_Source361Aggregate76.after B q76
+    let q81 := PV_THR2_Source361Chain77To81.after B q77
+    ∃ n, PV_THR2_IntrinsicState.advance B K P J n q = q81 

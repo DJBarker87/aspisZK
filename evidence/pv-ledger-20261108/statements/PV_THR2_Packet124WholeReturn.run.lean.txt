@@ -1,0 +1,52 @@
+theorem run (C : Carrier OWNER Data) (b : Bool) (K : Control)
+    (P : Data → Option PV_STX2_SliceSyntax.Program)
+    (H : PV_STX2_Native.Request Data → OWNER → Reply OWNER PV_RJ4IDB.NativeEvent Data)
+    (resources : Resources) (encode : Encode) (shapeArcInner : PV_THR2_TypedRepresentation_ArcInner.Shape)
+    (heap : Nat) (s : Store Data) (a dest : Nat) (parent : Frame) (parents : List Frame)
+    (wait : PV_STX2_Native.Waiting Data) (strong weak packet kind allocator forget nonNull : Data)
+    (p : Address) (w : OWNER) (es : List PV_RJ4IDB.NativeEvent) (stack : List Config)
+    (cell : s.cells ⟨a,1,[]⟩ = some packet)
+    (fresh : a < s.nextActivation)
+    (child7 : P PV_THR2_Packet124Children.fn7 = none)
+    (child9 : P PV_THR2_Packet124Children.fn9 = none)
+    (strongAnswer : (strongReply H s w).answer = .returned (.ok strong))
+    (weakAnswer : (weakReply H s w).answer = .returned (.ok weak))
+    (answer : (resources (.malloc shapeArcInner.layout.width) (world (weakReply H s w).world)).answer = .returned (.ok heap))
+    (nonnull : heap ≠ 0)
+    (boxChild : P PV_THR2_Packet124BoxIssue17.fn = none)
+    (body216 : P PV_THR2_PacketEnter216.fn = some PV_THR2_F216.live)
+    (child312 : P PV_THR2_Packet216Children.fn5 = none)
+    (child313 : P PV_THR2_Packet216Children.fn15 = none)
+    (child217 : P PV_THR2_Packet124ReturnData.intoFn = none)
+    (body218 : P PV_THR2_Packet124ReturnData.arcFn = some PV_THR2_F218.live)
+    (body315 : P PV_THR2_Packet218ReturnData.fn = some PV_THR2_F315.live)
+    (rawAnswer :
+      let H' := PV_THR2_PacketBoxImageHandler.handler resources encode (issued (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a strong weak packet) shapeArcInner H
+      let out := boxReply resources encode shapeArcInner (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a strong weak packet (weakReply H s w).world
+      (H' (rawRequest (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a (parent :: parents) strong weak packet) out.world).answer =
+        .returned (.ok (PV_THR2_Packet124LeakData.pair kind allocator p)))
+    (forgetAnswer :
+      let H' := PV_THR2_PacketBoxImageHandler.handler resources encode (issued (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a strong weak packet) shapeArcInner H
+      let out := boxReply resources encode shapeArcInner (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a strong weak packet (weakReply H s w).world
+      let r1 := H' (rawRequest (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a (parent :: parents) strong weak packet) out.world
+      (H' (forgetRequest (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a (parent :: parents) strong weak packet kind allocator p) r1.world).answer = .returned (.ok forget))
+    (intoAnswer :
+      let H' := PV_THR2_PacketBoxImageHandler.handler resources encode (issued (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a strong weak packet) shapeArcInner H
+      let out := boxReply resources encode shapeArcInner (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a strong weak packet (weakReply H s w).world
+      let r1 := H' (rawRequest (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a (parent :: parents) strong weak packet) out.world
+      let r2 := H' (forgetRequest (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a (parent :: parents) strong weak packet kind allocator p) r1.world
+      (H' (intoRequest (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a (parent :: parents) strong weak packet kind allocator forget p) r2.world).answer =
+        .returned (.ok nonNull))
+    (saved : parent.waiting = some wait) (action : wait.action = .child a (.local dest)) :
+    let B := PV_THR2_OwnInitExactReturnedCases.carrier C b
+    let H' := PV_THR2_PacketBoxImageHandler.handler resources encode (issued (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a strong weak packet) shapeArcInner H
+    let out := boxReply resources encode shapeArcInner (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a strong weak packet (weakReply H s w).world
+    let r1 := H' (rawRequest (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a (parent :: parents) strong weak packet) out.world
+    let r2 := H' (forgetRequest (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a (parent :: parents) strong weak packet kind allocator p) r1.world
+    let r3 := H' (intoRequest (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a (parent :: parents) strong weak packet kind allocator forget p) r2.world
+    ∃ n, PV_THR2_IntrinsicState.advance B K P H' n
+      ⟨⟨.running ⟨{activation := a,remaining := PV_THR2_F124.live.body},parent :: parents,s⟩,w,es⟩,stack⟩ =
+      ⟨PV_THR2_ChildBoundary.delivered B
+        ⟨parent,parents,finalStore (PV_THR2_Packet124EntryData.finalStore s a strong weak packet) a (parent :: parents) strong weak packet kind allocator forget nonNull p⟩ wait
+        ⟨.returned (.ok (PV_THR2_Packet124ReturnData.value nonNull)),r3.world,
+          ((((es ++ (strongReply H s w).events) ++ (weakReply H s w).events) ++ out.events) ++ r1.events) ++ r2.events ++ r3.events⟩,stack⟩ 

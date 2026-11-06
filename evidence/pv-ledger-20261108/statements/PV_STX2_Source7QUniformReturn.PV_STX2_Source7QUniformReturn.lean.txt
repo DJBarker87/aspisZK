@@ -1,0 +1,26 @@
+theorem PV_STX2_Source7QUniformReturn (base : Carrier PV_STX_World.World Data) (ctrl : Control)
+    (resources : Resources) (encode : Encode)
+    (external : Nat → PV_STX_World.World → Reply PV_STX_World.World PV_RJ4IDB.NativeEvent Unit)
+    (fallback : PV_STX2_Native.Request Data → PV_STX_World.World → Reply PV_STX_World.World PV_RJ4IDB.NativeEvent Data)
+    {s : OWNER} {value : Foundation} (refined : PV_STX2_Source7EntryOwnedWellFormed.Source7EntryOwned'' s value)
+    (entry := refined.registered.owned)
+    (replies : PV_STX2_Source7QNativeCases base ctrl resources encode external fallback entry)
+    (refinedCopy : PV_STX2_Source7QNativeCopyCasesRefined base ctrl resources encode external fallback entry replies)
+    (copy := refinedCopy.native) :
+    let post := PV_STX2_Source7QUniformOriginal2.execution base ctrl resources encode external fallback entry 425
+    let n := PV_STX2_Source7QPositiveRequest.length entry
+    let hs := PV_STX2_Source7EntrySelection.header entry (PV_STX2_Source7EntryAddress.first value)
+    let h := PV_EVHB_RawVecOwner.capacityStore
+      (PV_EVHB_RawVecOwner.pointerStore PV_STX2_Source7QRegisteredCut.header replies.pointer) n
+    post.status = .running (PV_STX2_Source7QUniformOriginal425.config425 entry replies.unit replies.pointer) ∧
+    receiver post.world (PV_STX2_Source7QBinding.q entry) = some (s.next,{h with len := n}) ∧
+    (∀ granted : PV_OWN2_FreshAllocation.GrantedRegions,
+      PV_OWN2_ExportContracts.VecOwnership (Attr := Unit) (Data := Data) (Native := Unit)
+        (IoError := Unit) (OsString := Unit) (Scope := Unit) resources encode granted post.world
+        ⟨PV_STX2_Source7EntrySelection.place entry (PV_STX2_Source7EntryAddress.first value),
+          values value (PV_STX2_Source7EntryAddress.first value)⟩
+        (PV_STX2_Source7QBinding.q entry)
+        (PV_STX2_Source7EntrySelection.identity entry (PV_STX2_Source7EntryAddress.first value)) s.next
+        hs {h with len := n}) ∧
+    (∀ offset, offset < n*4 →
+      post.world.world.memory (replies.pointer+offset) = s.world.memory (hs.pointer+offset)) 

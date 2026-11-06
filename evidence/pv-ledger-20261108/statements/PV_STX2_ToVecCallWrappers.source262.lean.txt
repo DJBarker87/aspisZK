@@ -1,0 +1,44 @@
+theorem source262 (resources : Resources) (encode : Encode)
+    (base : Carrier PV_STX_World.World Data) (ctrl : Control)
+    (external : Nat → PV_STX_World.World → Reply PV_STX_World.World PV_RJ4IDB.NativeEvent Unit)
+    (fallback : PV_STX2_Native.Request Data → OWNER → Reply OWNER PV_RJ4IDB.NativeEvent Data)
+    (store : Store Data) (parents : List Frame) (w : OWNER) (a : Nat)
+    (p : Address) (n : Nat) (alloc : Data) (prior : List PV_RJ4IDB.NativeEvent)
+    (bounded : n < PV_STX2_Source7CapacityScalars.modulus)
+    (overflow : PV_STX2_Source7CapacityPaths.overflow n = false)
+    (fits : PV_STX2_Source7CapacityPaths.bytes n ≤ 2^63-4)
+    (positive : PV_STX2_Source7CapacityPaths.bytes n ≠ 0)
+    (post : PV_STX_World.World) (events : List PV_RJ4IDB.NativeEvent)
+    (reply : external (prepared store parents a p n alloc).nextActivation
+      (world (PV_STX2_ToVecCallRegister.registered w (start store parents a p n alloc).frame.activation)) =
+      ⟨.returned (.ok ()),post,events⟩)
+    (pointer : Nat) (nonnull : pointer ≠ 0)
+    (success : (PV_EVHB_AttemptAccounting.primitive resources encode w.next
+      (.malloc (PV_STX2_Source7CapacityPaths.bytes n))
+      (PV_EVHB_OwnerMachine.withWorld
+        (PV_STX2_ToVecCallRegister.registered w (start store parents a p n alloc).frame.activation) post)).answer =
+        .returned (.ok pointer)) :
+    let H := PV_STX2_Source7QPreludeWorld.handler external (PV_STX2_Source7QRuntimePartsReply.handler fallback)
+    let K := PV_STX2_Source7QUniformInstalledCarrier.K (PV_STX2_Source7QF31Assert.control ctrl)
+    let C := PV_STX2_Source7QUniformReturnCompatibility.C base K H
+    let c := start store parents a p n alloc
+    let root := PV_STX2_ToVecCallReturnState.root store parents a p n alloc
+    let source := PV_STX2_ToVecCallReturnState.source store parents a p n alloc
+    let postStore := PV_STX2_ToVecCallReturnState.post store parents a p n alloc pointer
+    let ptr := PV_STX2_Source7QHeaderOperands.pointerValue pointer
+    let inner := PV_STX2_Aggregates.pack PV_STX2_Source7QHeaderStep.kind [ptr,.number n,alloc]
+    let returned := PV_STX2_Source7QPositiveReturn.stored root source postStore c.frame.activation n ptr alloc
+    let registered := PV_STX2_ToVecCallRegister.registered w c.frame.activation
+    let allocated := PV_EVHB_AttemptAccounting.primitive resources encode w.next
+      (.malloc (PV_STX2_Source7CapacityPaths.bytes n)) (PV_EVHB_OwnerMachine.withWorld registered post)
+    let headerWorld := PV_STX2_Source7QHeaderBinding.install
+      (some (PV_STX2_Source7QBinding.ownerPlace ⟨c.frame.activation,8,[]⟩)) pointer n allocated.world
+    let moved := PV_STX2_Source7QRun.advance (PV_STX2_SliceClonePointers.carrier C) K
+      PV_STX2_SlicePrograms.dispatch H 6
+      ⟨.running ⟨{activation := c.frame.activation,remaining := PV_STX2_SliceF21.program.body.drop 10},c.callers,returned⟩,headerWorld,[]⟩
+    PV_STX2_Source7IterationBindings.advance resources encode C K
+      (PV_STX2_Source7QAllocationDispatch.dispatch PV_STX2_SlicePrograms.dispatch) H 262
+      ⟨.running c,w,prior⟩ =
+      ⟨.running ⟨{activation := c.frame.activation,remaining := PV_STX2_SliceF21.program.body.drop 16},
+        c.callers,PV_STX2_SliceToVecConstruct.constructed returned c.frame.activation inner⟩,
+        moved.world,(prior++events)++allocated.events⟩ 

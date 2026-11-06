@@ -1,0 +1,22 @@
+theorem run {E : Type} (C : Carrier OWNER Data) (b : Bool) (K : Control)
+    (P : Data → Option PV_STX2_SliceSyntax.Program)
+    (H : PV_STX2_Native.Request Data → OWNER → Reply OWNER E Data)
+    (s : Store Data) (a dest : Nat) (parent : Frame) (parents : List Frame)
+    (wait : PV_STX2_Native.Waiting Data) (receiver : Data) (p : Address)
+    (w : OWNER) (es : List E) (stack : List Config)
+    (cell : s.cells ⟨a,3,[]⟩ = some receiver)
+    (computed : PV_THR2_IntrinsicSemantics_NonNullAsRef.value
+      (PV_THR2_OwnInitExactReturnedCases.carrier C b) s w receiver =
+      some (PV_STX2_TypedReferences.reference p .null))
+    (child : P PV_THR2_PacketInner320.fn = none)
+    (saved : parent.waiting = some wait) (action : wait.action = .child a (.local dest)) :
+    let B := PV_THR2_OwnInitExactReturnedCases.carrier C b
+    let H' := PV_THR2_IntrinsicSemantics_NonNullAsRef.handler B s H
+    let t := PV_THR2_StaticReply.returnedStore (write s ⟨a,3,[]⟩ none) a [receiver] 2
+      (PV_STX2_TypedReferences.reference p .null)
+    let cost := PV_THR2_IntrinsicFrameChain.steps B a w PV_THR2_Packet222Chain5To9.chain t
+    PV_THR2_IntrinsicState.advance B K P H' (2+cost+1+1)
+      ⟨⟨.running ⟨{activation := a,remaining := PV_THR2_F222.live.body.drop 4},
+        parent :: parents,s⟩,w,es⟩,stack⟩ =
+      ⟨PV_THR2_ChildBoundary.delivered B ⟨parent,parents,finalStore s a receiver p⟩
+        wait ⟨.returned (.ok (PV_STX2_TypedReferences.reference p .null)),w,es⟩,stack⟩ 
