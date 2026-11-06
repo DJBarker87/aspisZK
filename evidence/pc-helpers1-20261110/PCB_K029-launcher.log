@@ -1,0 +1,76 @@
+{"attempt": "PCB_K029", "exit_status": 0, "wall_seconds": 63.183989868965, "peak_rss_kib": "482508", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling version_check v0.9.5
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.46
+   Compiling serde_core v1.0.228
+   Compiling syn v2.0.118
+   Compiling cfg-if v1.0.4
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling libc v0.2.186
+   Compiling zerocopy v0.8.52
+   Compiling serde v1.0.228
+   Compiling serde_derive v1.0.228
+   Compiling subtle v2.6.1
+   Compiling hashbrown v0.15.5
+   Compiling autocfg v1.5.1
+   Compiling equivalent v1.0.2
+   Compiling indexmap v2.7.1
+   Compiling toml_write v0.1.2
+   Compiling winnow v0.7.15
+   Compiling toml_datetime v0.6.11
+   Compiling toml_e
+...
+...
+188 |     pub(crate) fn apply_authenticated_afterstate_from_program_invariant(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+369 |     pub(crate) fn decode_from_program_invariant(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `solana_sha256` is never used
+   --> programs/aspis-pool/src/processor.rs:113:4
+    |
+113 | fn solana_sha256(inputs: &[&[u8]]) -> [u8; 32] {
+    |    ^^^^^^^^^^^^^
+
+warning: methods `matches_policy` and `authenticated_at_slot` are never used
+   --> programs/aspis-pool/src/registry.rs:106:19
+    |
+105 | impl AuthenticatedVerifierSelectionV1 {
+    | ------------------------------------- methods in this implementation
+106 |     pub(crate) fn matches_policy(self, policy: &VerifierPolicyV1) -> bool {
+    |                   ^^^^^^^^^^^^^^
+...
+129 |     pub(crate) fn authenticated_at_slot(self) -> u64 {
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `derive_verifier_dispatch_claim_v1` is never used
+  --> programs/aspis-pool/src/verifier_dispatch.rs:56:15
+   |
+56 | pub(crate) fn derive_verifier_dispatch_claim_v1(
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: module `PCB_300` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest.rs:5801:5
+     |
+5801 | mod PCB_300;
+     |     ^^^^^^^ help: convert the identifier to snake case: `pcb_300`
+     |
+     = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+    Finished `dev` profile [optimized] target(s) in 1m 01s
+Checking harness pair_forest::PCB_300::small_contract...
+
+VERIFICATION RESULT:
+ ** 0 of 73 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.06721678s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rb2bc5d889f504e18be24e945520df40b.scope; invocation ID: 0e8a526641ef4dbd818cbb34146f2e76

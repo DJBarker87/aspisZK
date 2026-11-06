@@ -38,9 +38,9 @@ def pool_v1.authorization_receipt_account.PCB_160.reference
 /-- [aspis_statement::pool_v1::pair_forest_accounts::PCB_189::reference]:
     Source: 'crates/aspis-statement/src/pool_v1/PCB_189.rs', lines 2:0-2:126 -/
 def pool_v1.pair_forest_accounts.PCB_189.reference
-  (error : pool_v1.incremental_merkle.PoolV1TreeError) :
-  Result pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+  (error : AspisR1TerminalDecoder.pool_v1.incremental_merkle.PoolV1TreeError) :
+  Result AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
   := do
-  ok (pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.Tree error)
+  ok (AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.Tree error)
 
 end PCB_ErrorRef

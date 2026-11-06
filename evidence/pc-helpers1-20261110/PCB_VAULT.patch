@@ -1,0 +1,10 @@
+--- a/programs/aspis-pool/src/vault.rs
++++ b/programs/aspis-pool/src/vault.rs
+@@ -376,6 +376,7 @@
+ /// R1 withdrawal). They are carried in Pool instruction data only; the master
+ /// format and the verifier are unchanged.
+ #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct VaultBumpHintsV1 {
+     pub vault_authority: u8,
+     pub vault_token_account: u8,

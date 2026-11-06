@@ -2,7 +2,9 @@
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,os,atexit,lzma
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-pc-helpers1-20261110';C='/home/dombarker/project-offloads/codex-pc-helpers1-cache-20261110';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
-a=sys.argv[1];task=json.loads((E/'PCB_TASKS.json').read_text())[a];kind=task['kind'];num=int(a[-3:]);assert num<=dict(lean=60,link=60,audit=60,kani=100,extract=12)[kind]
+a=sys.argv[1];task=json.loads((E/'PCB_TASKS.json').read_text())[a];kind=task['kind'];num=int(a[-3:]);used=[json.loads(l) for l in (E/'PCB_ATTEMPTS.jsonl').read_text().splitlines()]
+category=lambda k:'lean' if k in ['lean','link','audit'] else k
+assert sum(category(r['kind'])==category(kind) for r in used)<dict(lean=60,kani=100,extract=12)[category(kind)]
 assert not (E/a/'receipt.json').exists(),'terminal receipt exists; no rerun'
 guard=E/'PCB_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 def ssh(code,data=None,submitted=False):
@@ -82,3 +84,5 @@ rc=json.loads(out[a+'/receipt.json']);assert rc['attempt']==a
 with (E/'PCB_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
 print(json.dumps({k:rc.get(k) for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)
 # Details stay in evidence; terminal summary only.
+
+if kind in ['lean','link','audit'] and rc['exit_status']!=0:sys.exit(1)

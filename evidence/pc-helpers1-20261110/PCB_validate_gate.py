@@ -1,16 +1,16 @@
 """Validate the literal gate outputs, never infer closure from exit0 alone."""
 from pathlib import Path
-import json,hashlib
+import json,hashlib,lzma
 E=Path(__file__).resolve().parent
 std={'propext','Classical.choice','Quot.sound'}
 def results(a):return [json.loads(l[11:]) for l in (E/a/'stdout.log').read_text().splitlines() if l.startswith('NEP_RESULT ')]
 for a in ['PCB_L005','PCB_L007','PCB_L008','PCB_L009','PCB_L010','PCB_L011']:
  r=json.loads((E/a/'receipt.json').read_text());assert r['exit_status']==0,a
-scan=[json.loads(l) for l in (E/'PCB_LOADED_scan.jsonl').read_text().splitlines()]
+scan=[json.loads(l) for l in lzma.decompress((E/'PCB_STAGE1_LOADED_scan.jsonl.xz').read_bytes()).decode().splitlines()]
 assert scan and all(not r['dangling'] and not r.get('duplicate_owners',[]) and r['imports_match'] for r in scan)
 f=results('PCB_L009');assert len(f)==8
 for i,r in enumerate(f):assert r['equal'] and (len(r['walked_axioms'])==1 if i<4 else not r['walked_axioms']),r
-roots=results('PCB_L011');expected=json.loads((E/'PCB_AUDIT_ROOTS.json').read_text())['roots'];assert [r['root'] for r in roots]==expected
+roots=results('PCB_L011');expected=json.loads((E/'PCB_L011/sources/PCB_AUDIT_ROOTS.json').read_text())['roots'];assert [r['root'] for r in roots]==expected
 for r in roots:assert r['equal'] and set(r['walked_axioms'])<=std and r['walked_axioms']==r['collect_axioms'],r
 assert 'VERIFICATION:- SUCCESSFUL' in (E/'PCB_K006/stdout.log').read_text()
 assert 'VERIFICATION:- FAILED' in (E/'PCB_K007/stdout.log').read_text()
@@ -23,3 +23,22 @@ assert all(('[propext, Classical.choice, Quot.sound]' in l) for l in json.loads(
 audit=dict(status='PASS',combined='PCB_L005',scan='PCB_L010',scan_module_count=len(scan),dangling=0,duplicate_owners=0,fixtures='PCB_L009',fixture_count=8,raw='PCB_L011',roots=roots,native_positive='PCB_K006',matched_control='PCB_K007',print_axioms=[r['walked_axioms'] for r in roots],limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),claims='local helper packet only, no parent/reachability/headline security closure')
 (E/'PCB_AUDIT.json').write_text(json.dumps(audit,indent=1)+'\n')
 print('PCB gate PASS: '+str(len(roots))+' roots, eight fixtures, zero dangling/duplicates')
+
+# Current accepted forest: changed canonical aliases and every new top theorem.
+for a in ['PCB_L028','PCB_L032','PCB_L033','PCB_L034','PCB_L026','PCB_L027']:
+ assert json.loads((E/a/'receipt.json').read_text())['exit_status']==0,a
+scan=[json.loads(l) for l in (E/'PCB_LOADED_scan.jsonl').read_text().splitlines()]
+assert all(not r['dangling'] and not r.get('duplicate_owners',[]) and r['imports_match'] for r in scan)
+roots=results('PCB_L027');assert [r['root'] for r in roots]==json.loads((E/'PCB_AUDIT_ROOTS.json').read_text())['roots']
+for r in roots:assert r['equal'] and set(r['walked_axioms'])<=std and r['walked_axioms']==r['collect_axioms']
+for a in ['PCB_K027','PCB_K037','PCB_K038']:
+ assert 'VERIFICATION:- SUCCESSFUL' in (E/a/'stdout.log').read_text(),a
+for a in ['PCB_K028','PCB_K039','PCB_K040']:
+ assert 'VERIFICATION:- FAILED' in (E/a/'stdout.log').read_text() and 'timed out' not in (E/a/'stdout.log').read_text(),a
+for a in ['PCB_K027','PCB_K028','PCB_K037','PCB_K038','PCB_K039','PCB_K040']:
+ assert json.loads((E/(a+'-graph-check.json')).read_text())['graph_matches_frozen']
+ assert json.loads((E/(a+'-lock-check.json')).read_text())['unchanged']
+(E/'PCB_AUDIT_STAGE1.json').write_text(json.dumps(audit,indent=1)+'\n')
+audit.update(combined='PCB_L034',scan='PCB_L026',raw='PCB_L027',roots=roots,scan_module_count=len(scan),all_current_top_roots_raw_audited=True,canonical_retarget='PCB_CANONICAL_RETARGET.json',native_221=['PCB_K027','PCB_K028'],fidelity_221=['PCB_K037','PCB_K038','PCB_K039','PCB_K040'],source_replay='L029/L030/L031 stale dependent states excluded; L032/L033/L034 coherent rebuild')
+(E/'PCB_AUDIT.json').write_text(json.dumps(audit,indent=1)+'\n')
+print('PCB current gate PASS: '+str(len(roots))+' roots, zero dangling/duplicates; sentinel native/fidelity complete')

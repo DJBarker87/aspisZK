@@ -38,7 +38,7 @@ out=dict(graph_matches_frozen=not added and not(missing-allowed_missing) and not
 out['all_crate_features']=[dict(name=p['name'],version=p['version'],source=p.get('source'),features=nodes[p['id']]['features']) for p in m['packages']]
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n');assert out['graph_matches_frozen'],out
 assert sha(S/'Cargo.lock')==frozen,'STOP metadata changed lock'
-tree=subprocess.run(['/home/dombarker/.cargo/bin/cargo','tree','--locked','--offline','--manifest-path',str(S/'crates/aspis-statement/Cargo.toml'),'--features','pool-v1-kernel','--edges','normal,build','--prefix','none','--format','{p} FEATURES={f}'],cwd=S,capture_output=True,text=True)
+tree=subprocess.run(['/home/dombarker/.cargo/bin/cargo','tree','--locked','--offline','--manifest-path',x['native_command'][x['native_command'].index('--manifest-path')+1],'--features',x['native_command'][x['native_command'].index('--features')+1],'--edges','normal,build','--prefix','none','--format','{p} FEATURES={f}'],cwd=S,capture_output=True,text=True)
 assert tree.returncode==0,tree.stderr
 (B/(a+'-selected-features.txt')).write_text(tree.stdout)
 status=subprocess.run(x['native_command'],cwd=B).returncode

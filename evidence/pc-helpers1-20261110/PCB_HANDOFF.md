@@ -45,3 +45,11 @@ K025 RootHistoryPageV1::is_full timed out at the unchanged90s solver limit after
 arbitrary8KiB page construction. K026 is retired UNLAUNCHED, not a negative-control failure;
 no retry of that whole-page shape is permitted. Next242 work must split the field footprint.
 221's small actual projection contract K027 PASS and inverted K028 FAIL; model/fidelity/gate pending.
+
+K040 transport dropped after submission. Never resubmit this attempt. Read-only recovery
+under local-lean rule10b is required before any next scope. K037 weakM31 record and
+K038 real-body controls PASS; K039 unimplied result under stub_verified FAIL.
+
+L025 catches duplicate global discriminant instance with canonical AspisR1TerminalDecoder.Types. PCB_ErrorRef.Types now aliases both TreeError and PairForestAccountError canonical owners (L028 PASS). L029 required constructor qualifications; L030 failed and L031 combined elaborated against stale dependent objects, so L031 grants NO gate credit. Own serial client now returns nonzero on Lean/link/audit failure, preventing dependent launch before green. L032–L034 rebuild the full changed dependent chain before scan/raw. No shared module/object edited.
+
+Stage4: refreshed combined L034, scanL026 zero dangling/duplicates/import mismatches, rawL027 all18 roots standard; same binary/eight fixtures L009. POOL:221 NEW CLOSED after K040 read-only recovery (no resubmission). POOL:278 and369 RE-GATED, byte-identical frozen helper bodies/54-error file and identical SDK ID owners. Total5 Pool rows CLOSED:2 NEW,3 RE-GATED. Canonical error retarget retains constructors and uses AspisR1TerminalDecoder.Types. No generic From root promoted. Native279 geometry/window/copy packets pass with failing controls K031–K036, but full loop/metadata association remains OPEN.
