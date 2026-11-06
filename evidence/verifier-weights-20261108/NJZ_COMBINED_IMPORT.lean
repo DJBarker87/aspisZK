@@ -7,6 +7,9 @@ import NJZ_CheckpointReaders
 import NJZ_EmptyTree
 import NJZ_TreeParent
 import NJZ_Echeck
+import NJZ_CodecProjection
+import NJZ_CodecSemantics
+import NJZ_PoolRoot
 
 #print NJZ_Readers.raw
 #print axioms NJZ_Readers.raw
@@ -56,6 +59,8 @@ import NJZ_Echeck
 #print axioms NJZ_EmptyTree.empty_source
 #print NJZ_EmptyTree.empty_root
 #print axioms NJZ_EmptyTree.empty_root
+#print NJZ_EmptyTree.default_root
+#print axioms NJZ_EmptyTree.default_root
 #print NJZ_TreeParent.source
 #print axioms NJZ_TreeParent.source
 #print NJZ_Echeck.step_iff
@@ -68,5 +73,35 @@ import NJZ_Echeck
 #print axioms NJZ_Echeck.at_window
 #print NJZ_Echeck.result
 #print axioms NJZ_Echeck.result
+#print NJZ_Echeck.root
+#print axioms NJZ_Echeck.root
+#print NJZ_CodecProjection.word
+#print axioms NJZ_CodecProjection.word
+#print NJZ_CodecSemantics.canonical_shape
+#print axioms NJZ_CodecSemantics.canonical_shape
+#print NJZ_CodecSemantics.high_four
+#print axioms NJZ_CodecSemantics.high_four
+#print NJZ_CodecSemantics.high_shape
+#print axioms NJZ_CodecSemantics.high_shape
+#print NJZ_CodecSemantics.source
+#print axioms NJZ_CodecSemantics.source
+#print NJZ_CodecSemantics.domain
+#print axioms NJZ_CodecSemantics.domain
+#print NJZ_CodecSemantics.cut_projection
+#print axioms NJZ_CodecSemantics.cut_projection
+#print NJZ_CodecSemantics.root
+#print axioms NJZ_CodecSemantics.root
+#print NJZ_PoolRoot.reply_canonical
+#print axioms NJZ_PoolRoot.reply_canonical
+#print NJZ_PoolRoot.domains
+#print axioms NJZ_PoolRoot.domains
+#print NJZ_PoolRoot.parent_clauses
+#print axioms NJZ_PoolRoot.parent_clauses
+#print NJZ_PoolRoot.roots
+#print axioms NJZ_PoolRoot.roots
+#print NJZ_PoolRoot.empty
+#print axioms NJZ_PoolRoot.empty
+#print NJZ_PoolRoot.default
+#print axioms NJZ_PoolRoot.default
 #print AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.RPx_Deployed.deployed

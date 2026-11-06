@@ -1,0 +1,42 @@
+{"attempt": "NJZ_L031", "exit_status": 0, "wall_seconds": 3.644201499875635, "peak_rss_kib": "4336192", "swaps": "0", "print_axioms": ["'NJZ_PoolRoot.reply_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_PoolRoot.domains' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_PoolRoot.parent_clauses' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_PoolRoot.roots' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_PoolRoot.empty' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_PoolRoot.default' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NJZ_PoolRoot.reply_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_PoolRoot.domains' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJZ_PoolRoot.parent_clauses : ∀ (states : ℕ → Table),
+  (∀ (j : Fin 21), states 0 j = zero) →
+    (∀ (n : ℕ) (hn : n < 20),
+        StepCut (states n) (states (n + 1)) ⟨n, hn⟩ (NJZ_TreeParent.reply (states n ⟨n, ⋯⟩) (states n ⟨n, ⋯⟩))) →
+      ∀ (n : ℕ) (hn : n < 20),
+        StepCut (states n) (states (n + 1)) ⟨n, hn⟩ (parent (states n ⟨n, ⋯⟩) (states n ⟨n, ⋯⟩)) :=
+fun states initial cuts n hn =>
+  let current := states n ⟨n, Decidable.byContradiction fun a => domains._proof_1 n hn a⟩;
+  have domain :=
+    domains
+...
+utput := rfl, count := rfl };
+  Eq.mpr (id (congrArg (fun _a => StepCut (states n) (states (n + 1)) ⟨n, hn⟩ _a) (Eq.symm child.left))) (cuts n hn)
+'NJZ_PoolRoot.parent_clauses' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJZ_PoolRoot.roots : ∀ (states : ℕ → Table),
+  (∀ (j : Fin 21), states 0 j = zero) →
+    (∀ (n : ℕ) (hn : n < 20),
+        StepCut (states n) (states (n + 1)) ⟨n, hn⟩ (NJZ_TreeParent.reply (states n ⟨n, ⋯⟩) (states n ⟨n, ⋯⟩))) →
+      ∀ (j : Fin 21), states 20 j = root ↑j :=
+fun states initial cuts => NJZ_EmptyTree.roots states initial (parent_clauses states initial cuts)
+'NJZ_PoolRoot.roots' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJZ_PoolRoot.empty : ∀ (states : ℕ → Table),
+  (∀ (j : Fin 21), states 0 j = zero) →
+    (∀ (n : ℕ) (hn : n < 20),
+        StepCut (states n) (states (n + 1)) ⟨n, hn⟩ (NJZ_TreeParent.reply (states n ⟨n, ⋯⟩) (states n ⟨n, ⋯⟩))) →
+      ∀ (out : NJZ_EmptyTree.Tree), EmptyCut (states 20) out → out = NJZ_EmptyTree.empty :=
+fun states initial cuts out constructor => empty_source (states 20) (roots states initial cuts) out constructor
+'NJZ_PoolRoot.empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJZ_PoolRoot.default : ∀ (states : ℕ → Table),
+  (∀ (j : Fin 21), states 0 j = zero) →
+    (∀ (n : ℕ) (hn : n < 20),
+        StepCut (states n) (states (n + 1)) ⟨n, hn⟩ (NJZ_TreeParent.reply (states n ⟨n, ⋯⟩) (states n ⟨n, ⋯⟩))) →
+      ∀ (child out : NJZ_EmptyTree.Tree),
+        EmptyCut (states 20) child → DefaultCut child out → out = NJZ_EmptyTree.default :=
+fun states initial cuts child out constructor returnCut =>
+  Eq.trans returnCut (empty states initial cuts child constructor)
+'NJZ_PoolRoot.default' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r42bebfe3113c4b119b64c52ac1480213.scope; invocation ID: e7fb9bde49304c4ba8e854fc0bfe6bea

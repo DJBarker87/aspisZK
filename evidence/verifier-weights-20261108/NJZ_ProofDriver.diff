@@ -1,0 +1,25 @@
+--- NJR_ProofDriver.lean
++++ NJZ_ProofDriver.lean
+@@ -14,17 +14,15 @@
+        `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+        `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+     else if mode == "proof0" then
+-      (#[`NJR_COMBINED_IMPORT], #[`NJR_FinishWindows.word_window, `NJR_FinishWindows.windows, `NJR_FinishWindows.three, `NJR_Cuts.pending_store, `NJR_Cuts.query_reconstruct, `NJR_Cuts.flush_store, `NJR_FinishPrepared.returned, `NJR_ReservationSites.resume_filled, `NJR_ReservationSites.pending, `NJR_ReservationSites.pending_error])
++      (#[`NJZ_COMBINED_IMPORT], #[`NJZ_Readers.raw, `NJZ_Readers.raw_cut, `NJZ_Readers.k_window, `NJZ_Readers.e_window, `NJZ_Readers.k_source, `NJZ_Readers.e_source, `NJZ_Readers.k_reference, `NJZ_Readers.e_reference, `NJZ_Weights.new_source, `NJZ_Weights.value_source])
+     else if mode == "proof1" then
+-      (#[`NJR_COMBINED_IMPORT], #[`NJR_ReaderCut.error_prefix, `NJR_ReaderCut.backing, `NJR_FlushComposition.windows, `NJR_FlushComposition.source, `NJR_FinishDomain.reached, `NJR_HistoryFromScan.little_word, `NJR_HistoryFromScan.region, `NJR_HistoryFromScan.source, `NJR_ReservationRaw.zero, `NJR_ReservationRaw.pending])
++      (#[`NJZ_COMBINED_IMPORT], #[`NJZ_Weights.finish_source, `NJZ_Validator.members, `NJZ_Validator.unique, `NJZ_Validator.source, `NJZ_CheckpointReaders.scalar, `NJZ_CheckpointReaders.semantic, `NJZ_CheckpointReaders.weights, `NJZ_EmptyTree.parent_canonical, `NJZ_EmptyTree.root_canonical, `NJZ_EmptyTree.frame])
+     else if mode == "proof2" then
+-      (#[`NJR_COMBINED_IMPORT], #[`NJR_FinishFromScan.reached, `NJR_FinishInstall.at_call, `NJR_ViewFinish.ranges, `NJR_ViewFinish.windows, `NJR_FinishAtSourceView.at_source_view, `NJR_PayloadExt.injective, `NJR_PayloadExt.vector, `NJR_HistoryBinding.parsed, `NJR_HistoryBinding.current, `NJR_HistoryBinding.by_p2prime])
++      (#[`NJZ_COMBINED_IMPORT], #[`NJZ_EmptyTree.roots, `NJZ_EmptyTree.entered_domain, `NJZ_EmptyTree.empty_source, `NJZ_EmptyTree.empty_root, `NJZ_EmptyTree.default_root, `NJZ_TreeParent.source, `NJZ_Echeck.step_iff, `NJZ_Echeck.chunk_iff, `NJZ_Echeck.step_chunk, `NJZ_Echeck.at_window])
+     else if mode == "proof3" then
+-      (#[`NJR_COMBINED_IMPORT], #[`NJR_HistoryBinding.matches_without_binding, `NJR_ChecksumDomain.public_length, `NJR_ChecksumDomain.of_header, `NJR_ChecksumDomain.of_source_cuts, `NJR_ChecksumAtHeadline.accepted_pair, `NJR_SuccessReads.horner, `NJR_SuccessReads.polynomial, `NJR_SuccessReads.round, `NJR_SuccessReads.dot, `NJR_SourceFinishReads.rounds])
++      (#[`NJZ_COMBINED_IMPORT], #[`NJZ_Echeck.result, `NJZ_Echeck.root, `NJZ_CodecProjection.word, `NJZ_CodecSemantics.canonical_shape, `NJZ_CodecSemantics.high_four, `NJZ_CodecSemantics.high_shape, `NJZ_CodecSemantics.source, `NJZ_CodecSemantics.domain, `NJZ_CodecSemantics.cut_projection, `NJZ_CodecSemantics.root])
+     else if mode == "proof4" then
+-      (#[`NJR_COMBINED_IMPORT], #[`NJR_SourceFinishReads.source, `NJR_DecodedWords.decoded, `NJR_DecodedWords.window, `NJR_WindowsFromFinish.polynomial, `NJR_WindowsFromFinish.dot, `NJR_WindowsFromFinish.source, `NJR_AcceptedFinishDomain.lengths, `NJR_AcceptedFinishDomain.reached, `NJR_WeightFailure.loop, `NJR_WeightFailure.weights])
+-    else if mode == "proof5" then
+-      (#[`NJR_COMBINED_IMPORT], #[`AspisR1.NJF_Root.finish, `AspisR1.RPx_Deployed.deployed])
++      (#[`NJZ_COMBINED_IMPORT], #[`NJZ_PoolRoot.reply_canonical, `NJZ_PoolRoot.domains, `NJZ_PoolRoot.parent_clauses, `NJZ_PoolRoot.roots, `NJZ_PoolRoot.empty, `NJZ_PoolRoot.default, `AspisR1.RPx_Deployed.deployed])
+     else (#[], #[])
+   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+     {} (loadExts := true) (level := .private)

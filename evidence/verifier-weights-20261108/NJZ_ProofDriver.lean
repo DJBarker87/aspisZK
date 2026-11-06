@@ -18,9 +18,11 @@ unsafe def main (args : List String) : IO UInt32 := do
     else if mode == "proof1" then
       (#[`NJZ_COMBINED_IMPORT], #[`NJZ_Weights.finish_source, `NJZ_Validator.members, `NJZ_Validator.unique, `NJZ_Validator.source, `NJZ_CheckpointReaders.scalar, `NJZ_CheckpointReaders.semantic, `NJZ_CheckpointReaders.weights, `NJZ_EmptyTree.parent_canonical, `NJZ_EmptyTree.root_canonical, `NJZ_EmptyTree.frame])
     else if mode == "proof2" then
-      (#[`NJZ_COMBINED_IMPORT], #[`NJZ_EmptyTree.roots, `NJZ_EmptyTree.entered_domain, `NJZ_EmptyTree.empty_source, `NJZ_EmptyTree.empty_root, `NJZ_TreeParent.source, `NJZ_Echeck.step_iff, `NJZ_Echeck.chunk_iff, `NJZ_Echeck.step_chunk, `NJZ_Echeck.at_window, `NJZ_Echeck.result])
+      (#[`NJZ_COMBINED_IMPORT], #[`NJZ_EmptyTree.roots, `NJZ_EmptyTree.entered_domain, `NJZ_EmptyTree.empty_source, `NJZ_EmptyTree.empty_root, `NJZ_EmptyTree.default_root, `NJZ_TreeParent.source, `NJZ_Echeck.step_iff, `NJZ_Echeck.chunk_iff, `NJZ_Echeck.step_chunk, `NJZ_Echeck.at_window])
     else if mode == "proof3" then
-      (#[`NJZ_COMBINED_IMPORT], #[`AspisR1.RPx_Deployed.deployed])
+      (#[`NJZ_COMBINED_IMPORT], #[`NJZ_Echeck.result, `NJZ_Echeck.root, `NJZ_CodecProjection.word, `NJZ_CodecSemantics.canonical_shape, `NJZ_CodecSemantics.high_four, `NJZ_CodecSemantics.high_shape, `NJZ_CodecSemantics.source, `NJZ_CodecSemantics.domain, `NJZ_CodecSemantics.cut_projection, `NJZ_CodecSemantics.root])
+    else if mode == "proof4" then
+      (#[`NJZ_COMBINED_IMPORT], #[`NJZ_PoolRoot.reply_canonical, `NJZ_PoolRoot.domains, `NJZ_PoolRoot.parent_clauses, `NJZ_PoolRoot.roots, `NJZ_PoolRoot.empty, `NJZ_PoolRoot.default, `AspisR1.RPx_Deployed.deployed])
     else (#[], #[])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)

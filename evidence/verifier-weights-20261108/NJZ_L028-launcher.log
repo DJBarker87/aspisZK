@@ -1,0 +1,50 @@
+{"attempt": "NJZ_L028", "exit_status": 1, "wall_seconds": 10.332352966070175, "peak_rss_kib": "5991336", "swaps": "0", "print_axioms": ["'NJZ_CodecSemantics.canonical_shape' depends on axioms: [propext, Quot.sound]", "'NJZ_CodecSemantics.high_four' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_CodecSemantics.high_shape' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_CodecSemantics.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJZ_generated/NJZ_CodecSemantics.lean:14:5: warning: 'tauto' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NJZ_generated/NJZ_CodecSemantics.lean:14:5: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NJZ_generated/NJZ_CodecSemantics.lean:62:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (CheckpointBytes3Namespaces.fromE (eWords (CheckpointBytes3EDecode.word32 b.to_slice ⋯))).c1 = zero
+in the target expression
+  (match
+      core.result.Result.Ok
+        (CheckpointBytes3Namespaces.fromE (eWords (CheckpointBytes3EDecode.word32 b.to_slic
+...
+me w => !k || decide (NJZ_Echeck.HighZero w)
+
+case pos
+b : Std.Array U8 32#usize
+k : Bool
+word_eq : (fun i => ↑(CheckpointBytes3EDecode.word32 b.to_slice ⋯ i)) = NJZ_Echeck.words ↑b
+can : CanonicalWide (eWords (CheckpointBytes3EDecode.word32 b.to_slice ⋯)) ↔ NJZ_Echeck.Canonical (NJZ_Echeck.words ↑b)
+high :
+  (CheckpointBytes3Namespaces.fromE (eWords (CheckpointBytes3EDecode.word32 b.to_slice ⋯))).c1 = zero ↔
+    NJZ_Echeck.HighZero (NJZ_Echeck.words ↑b)
+h : NJZ_Echeck.Canonical (NJZ_Echeck.words ↑b)
+⊢ (match
+      core.result.Result.Ok
+        (CheckpointBytes3Namespaces.fromE (eWords (CheckpointBytes3EDecode.word32 b.to_slice ⋯))) with
+    | core.result.Result.Err a => false
+    | core.result.Result.Ok q => !k || decide (q.c1 = zero)) =
+    match some (NJZ_Echeck.words ↑b) with
+    | none => false
+    | some w => !k || decide (NJZ_Echeck.HighZero w)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    NJC_EReaderResults.naturalE._proof_2 b
+  has type
+    @Eq ℕ (↑b).length ↑32#usize
+  but is expected to have type
+    @Eq ℕ (↑b.to_slice).length 32
+  in the application
+    CheckpointBytes3EDecode.word32 b.to_slice ⋯
+'NJZ_CodecSemantics.canonical_shape' depends on axioms: [propext, Quot.sound]
+'NJZ_CodecSemantics.high_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.high_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r88434f102b5a4f09948f29f96e88dfde.scope; invocation ID: b5252171fa5f4d8f83d7dfa91b1f69cc

@@ -1,0 +1,45 @@
+{"attempt": "NJZ_L030", "exit_status": 1, "wall_seconds": 9.91449779085815, "peak_rss_kib": "5989124", "swaps": "0", "print_axioms": ["'NJZ_CodecSemantics.canonical_shape' depends on axioms: [propext, Quot.sound]", "'NJZ_CodecSemantics.high_four' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_CodecSemantics.high_shape' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_CodecSemantics.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_CodecSemantics.domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJZ_CodecSemantics.cut_projection' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_CodecSemantics.root' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJZ_generated/NJZ_CodecSemantics.lean:76:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+b : Std.Array U8 32#usize
+⊢ ReplyDomain
+    (have q := eWords (CheckpointBytes3EDecode.word32 b.to_slice ⋯);
+    if CanonicalWide q then core.result.Result.Ok (CheckpointBytes3Namespaces.fromE q)
+    else core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+'NJZ_CodecSemantics.canonical_shape' depends on axioms: [propext, Quot.sound]
+'NJZ_CodecSemantics.high_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.high_shape' depe
+...
+lit.failure true` to display additional diagnostic information
+
+b : Std.Array U8 32#usize
+⊢ ReplyDomain
+    (have q := eWords (CheckpointBytes3EDecode.word32 b.to_slice ⋯);
+    if CanonicalWide q then core.result.Result.Ok (CheckpointBytes3Namespaces.fromE q)
+    else core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint)
+'NJZ_CodecSemantics.canonical_shape' depends on axioms: [propext, Quot.sound]
+'NJZ_CodecSemantics.high_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.high_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.cut_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJZ_CodecSemantics.root : ∀ (bs : Slice U8) (k : Bool) (replies : ℕ → Bool),
+  (∀ i < (↑bs).length / 32, ∃ b, ↑b = List.take 32 (List.drop (32 * i) ↑bs) ∧ Cut b k (replies i)) →
+    LPt_External.verifier.echeck bs k =
+      ok
+        (if (List.range ((↑bs).length / 32)).all replies = true then core.result.Result.Ok ()
+        else core.result.Result.Err LPt_LPl_Kit_Release.verifier.Error.Parse) :=
+fun bs k replies cuts =>
+  NJZ_Echeck.root bs k replies fun i hi =>
+    let ⟨b, h✝⟩ := cuts i hi
+    let ⟨window, cut⟩ := h✝
+    id
+      (Eq.mpr
+        (id (congrArg (fun _a => replies i = _a) (NJZ_Echeck.step_chunk (List.take 32 (List.drop (32 * i) ↑bs)) k)))
+        (Eq.mpr (id (congrArg (fun _a => replies i = LPt_LPl.Echeck.chunk _a k) (Eq.symm window)))
+          (Eq.trans (cut_projection b k (replies i) cut) (source b k))))
+'NJZ_CodecSemantics.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc57300c547c54692967b2b571f716d93.scope; invocation ID: 50e98e20402644b3a1bcb093972c12fe
