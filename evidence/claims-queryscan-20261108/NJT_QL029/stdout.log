@@ -1,0 +1,10 @@
+'AspisR1.NJT_QClaimsCanonical.strict_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QClaimsCanonical.decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QClaimsCanonical.claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+claims : ∀ (bytes : Slice U8) (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix),
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre) →
+    ∃ record,
+      (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok record) ∧
+        record.row = 25#u8 ∧
+          ∀ (p off : Usize),
+            ↑p < 3 → ↑off = ↑p * 29 → ∃ out, decodeMain 29#usize record off = ok (core.result.Result.Ok out)

@@ -1,0 +1,11 @@
+#[cfg(kani)]
+mod NJT_Q_contract {
+ use super::*;
+ #[kani::proof_for_contract(super::block_rank)]
+ #[kani::unwind(34)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+ fn NJT_Q_block_rank_contract() {
+  let block:[u8;32]=kani::any();
+  let _=block_rank(&block);
+ }
+}

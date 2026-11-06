@@ -4,7 +4,7 @@ Target not yet established. All four candidate rows await the primary NJT combin
 
 | Row | Native certificate | Lean root | Exact domain |
 |---|---|---|---|
-| TX1:068 block_rank | NJT_QK003 positive; NJT_QK002 same-name inverted cell control | NJT_QLeaves.block_rank | All32 input bytes; arbitrary window0..7; all8 windows composed on the same output |
+| TX1:068 block_rank | NJT_QK004 actual proof_for_contract / QK005 inverted ensures; QK003/QK002 cell window pair | NJT_QLeaves.block_rank | All32 input bytes; arbitrary window0..7; all8 windows composed on the same output |
 | TX1:070 query_words | Retained NGQ_K042/043 | NJT_QLeaves.query_words | All32 input bytes; arbitrary window0..7; actual block_rank executes natively |
 | TX1:066 finish | Retained NGQ_K004/005 | NJT_QLeaves.finish | accepted_len<=22, draws<=64, arbitrary22-cell array; full Result including rejection |
 | TX1:067 scan | Retained NHK_K034/035, complete NHK membership table, NHB_K030/031 and NHB_K050/051 | NJT_QReached.scan | Source default and every SAME-block carry; bounded, canonical and inactive-zero domains derived internally |
@@ -17,3 +17,5 @@ The rank/model source is the existing coherent QueryScanConcreteWordsDecoder own
 Standard operations (from_fn, array.map, IntoIter, from_le_bytes, prefix contains, Result constructors) use the existing pinned Aeneas/P7 side and native cuts under (au); no new dictionary or producer-association hypothesis is introduced. Native code executes std operations with the exact prescribed KMX patch. All caller-domain claims are explicit in NJT_QDomains and the default/prefix root. No new stub_verified shape, writable static, function-pointer-dependent Kani property, multiplication or new runtime trust is used.
 
 NJT_QREUSE.json pins exact immutable receipt/control pairs and inherited source packets. Each new receipt pins selected Aeneas/library objects, source revision and source bytes. Frozen source remains4bb3b3f5; shipped files unchanged, so ELF pins are inherited, not rebuilt.
+
+Actual-function NCO strengthening: QK004 verifies the frozen block_rank body against the literal identifier-renamed retained reference; pure modifies(). QK005 changes only the ensures to inequality and fails that postcondition. NJT_Q_REF_IDENTITY.json pins exact normalized-body identity; NJT_QReference.reference_correct pairs the reused emitted definition with rank. No stub_verified substitution is used, so no new interface-shape composition is claimed.

@@ -24,6 +24,7 @@ theorem walk_source (native : NJT_QScan.Native) (cut : NJT_QScan.Cut native)
  | cons head tail ih =>
   have call:=NJT_QScan.scan native cut s domain.1 head.1
   simp only [NGQ_SamplerDriver.walk,NGQ_SamplerPacket.Scan,call,nativeScan,bind_tc_ok]
+  dsimp! only
   split
   · rfl
   · exact ih _ (NJT_QDomains.scan_preserved native cut head.1 s domain)
