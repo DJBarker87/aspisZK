@@ -1,0 +1,46 @@
+{"attempt": "PCB_K024", "exit_status": 1, "wall_seconds": 5.449572200886905, "peak_rss_kib": "573060", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`
+...
+static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 3.32s
+Checking harness pool_v1::pair_forest_accounts::PCB_189::error_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 74 failed
+Failed Checks: |r| *r != PCB_189::reference(error)
+ File: "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs", line 122, in <pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1 as core::convert::From<pool_v1::incremental_merkle::PoolV1TreeError>>::from::{closure#3}
+
+VERIFICATION:- FAILED
+Verification Time: 0.25932974s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_forest_accounts::PCB_189::error_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rd0e4aeafff574709a59352c3fcf6dd1f.scope; invocation ID: 3ce1368172494e2daa9a7fd238ef1ee7

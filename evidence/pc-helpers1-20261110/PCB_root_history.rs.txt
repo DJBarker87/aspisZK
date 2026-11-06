@@ -45,6 +45,7 @@ pub enum PoolV1RootHistoryError {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[cfg_attr(kani,derive(kani::Arbitrary))]
 pub struct RootHistoryLocationV1 {
     pub page_number: u64,
     pub slot: u16,
@@ -282,6 +283,7 @@ impl RootHistoryPageAddressV1 {
 /// Unfilled slots are canonical zero digests.  This makes the on-chain image
 /// unique and prevents stale bytes from being interpreted as retained roots.
 #[derive(Clone, Debug, PartialEq, Eq)]
+#[cfg_attr(kani,derive(kani::Arbitrary))]
 pub struct RootHistoryPageV1 {
     pub pool: [u8; 32],
     pub page_number: u64,
@@ -319,6 +321,8 @@ impl RootHistoryPageV1 {
         page
     }
 
+    #[cfg_attr(all(kani,not(PCB_NEG_242)),kani::ensures(|r| *r == PCB_242::reference(self)))]
+    #[cfg_attr(all(kani,PCB_NEG_242),kani::ensures(|r| *r != PCB_242::reference(self)))]
     pub fn is_full(&self) -> bool {
         usize::from(self.filled) == POOL_V1_ROOT_HISTORY_CAPACITY
     }
@@ -625,3 +629,7 @@ mod tests {
 #[cfg(kani)]
 #[path="PCB_246.rs"]
 mod PCB_246;
+
+#[cfg(any(kani,PCB_EXTRACT))]
+#[path="PCB_242.rs"]
+mod PCB_242;

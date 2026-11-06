@@ -1,0 +1,112 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -20,6 +20,7 @@
+ 
+ /// M31 base field element, canonical representation in [0, P).
+ #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct M31(pub u32);
+ 
+ /// 1/2 in M31 (P is odd, so (P+1)/2 = 2^30).
+--- a/crates/aspis-statement/src/pool_v1/root_history.rs
++++ b/crates/aspis-statement/src/pool_v1/root_history.rs
+@@ -45,6 +45,7 @@
+ }
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct RootHistoryLocationV1 {
+     pub page_number: u64,
+     pub slot: u16,
+@@ -58,6 +59,8 @@
+     }
+ }
+ 
++#[cfg_attr(all(kani,not(PCB_NEG_246)), kani::ensures(|r| {let e=PCB_246::reference::location(sequence); r.page_number==e.page_number && r.slot==e.slot}))]
++#[cfg_attr(all(kani,PCB_NEG_246), kani::ensures(|r| {let e=PCB_246::reference::location(sequence); r.page_number!=e.page_number || r.slot!=e.slot}))]
+ pub fn root_history_location(sequence: u64) -> RootHistoryLocationV1 {
+     RootHistoryLocationV1 {
+         page_number: sequence / POOL_V1_ROOT_HISTORY_CAPACITY as u64,
+@@ -280,6 +283,7 @@
+ /// Unfilled slots are canonical zero digests.  This makes the on-chain image
+ /// unique and prevents stale bytes from being interpreted as retained roots.
+ #[derive(Clone, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct RootHistoryPageV1 {
+     pub pool: [u8; 32],
+     pub page_number: u64,
+@@ -317,6 +321,8 @@
+         page
+     }
+ 
++    #[cfg_attr(all(kani,not(PCB_NEG_242)),kani::ensures(|r| *r == PCB_242::reference(self)))]
++    #[cfg_attr(all(kani,PCB_NEG_242),kani::ensures(|r| *r != PCB_242::reference(self)))]
+     pub fn is_full(&self) -> bool {
+         usize::from(self.filled) == POOL_V1_ROOT_HISTORY_CAPACITY
+     }
+@@ -619,3 +625,11 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCB_246.rs"]
++mod PCB_246;
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_242.rs"]
++mod PCB_242;
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -94,6 +94,7 @@
+ /// witnesses which prove whether that already-committed second digest is the
+ /// canonical empty digest.
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct PoolV1PairLeafWitnessV1 {
+     pub first_commitment: Digest,
+     pub second_occupied: M31,
+@@ -115,6 +116,8 @@
+ 
+ impl PoolV1PairLeafWitnessV1 {
+     #[inline]
++    #[cfg_attr(all(kani,not(PCB_NEG_221)),kani::ensures(|r| *r == PCB_221::reference(self)))]
++    #[cfg_attr(all(kani,PCB_NEG_221),kani::ensures(|r| *r != PCB_221::reference(self)))]
+     pub fn second_sentinel(&self) -> M31 {
+         self.second_commitment[POOL_V1_PAIR_SECOND_SENTINEL_LANE]
+     }
+@@ -982,3 +985,7 @@
+         ));
+     }
+ }
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_221.rs"]
++mod PCB_221;
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -110,6 +110,7 @@
+ pub const POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES: usize = 4;
+ 
+ #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct PoolV1PairForestTerminalBumpHintsV1 {
+     pub current_page: u8,
+     pub next_page: u8,
+@@ -127,6 +128,8 @@
+         ]
+     }
+ 
++    #[cfg_attr(all(kani,not(PCB_NEG_300)),kani::ensures(|r| *r == PCB_300::reference(self)))]
++    #[cfg_attr(all(kani,PCB_NEG_300),kani::ensures(|r| *r != PCB_300::reference(self)))]
+     fn vault(self) -> VaultBumpHintsV1 {
+         VaultBumpHintsV1 {
+             vault_authority: self.vault_authority,
+@@ -5792,3 +5795,7 @@
+         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
+     }
+ }
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_300.rs"]
++mod PCB_300;
