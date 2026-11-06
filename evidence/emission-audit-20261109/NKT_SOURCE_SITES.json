@@ -1,0 +1,401 @@
+[
+  {
+    "path": "crates/aspis-core/src/transcript.rs",
+    "lines": [
+      409,
+      447
+    ],
+    "definitions": [
+      "transcript.Transcript.challenge_qm31",
+      "transcript.Transcript.challenge_qm31_loop0",
+      "transcript.Transcript.challenge_qm31_loop0.body",
+      "transcript.Transcript.challenge_qm31_loop0_loop0",
+      "transcript.Transcript.challenge_qm31_loop0_loop0.body"
+    ],
+    "scan": {
+      "loop_count": 2,
+      "post_loop_exit_candidates": [
+        {
+          "line": 434,
+          "kind": "return",
+          "after_loop_end_lines": [
+            432
+          ],
+          "inside_another_loop": true
+        }
+      ]
+    },
+    "verdict": "PRESERVED_NESTED_POST_LOOP_RESULT",
+    "reason": "Failure after the inner retry loop is some(Result.Err()), outer exhaustion none executes normal QM31 reconstruction. AspisR72Sampler.Funs challenge_qm31_loop0.body explicitly retains Err; frozen transcript.rs:434."
+  },
+  {
+    "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+    "lines": [
+      173,
+      206
+    ],
+    "definitions": [
+      "verifier.candidate.batch_tree",
+      "verifier.candidate.batch_tree_loop",
+      "verifier.candidate.batch_tree_loop.body"
+    ],
+    "scan": {
+      "loop_count": 1,
+      "post_loop_exit_candidates": [
+        {
+          "line": 196,
+          "kind": "?",
+          "after_loop_end_lines": [
+            195
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 200,
+          "kind": "return",
+          "after_loop_end_lines": [
+            195
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 203,
+          "kind": "return",
+          "after_loop_end_lines": [
+            195
+          ],
+          "inside_another_loop": false
+        }
+      ]
+    },
+    "verdict": "CONFIRMED_LOST_RESULT",
+    "reason": "Frozen errors196/200/203 vs NJS966/980/992/997 and1046."
+  },
+  {
+    "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+    "lines": [
+      148,
+      177
+    ],
+    "definitions": [
+      "verifier.QueryGeometry.for_range",
+      "verifier.QueryGeometry.for_range_loop0",
+      "verifier.QueryGeometry.for_range_loop0.body",
+      "verifier.QueryGeometry.for_range_loop0_loop0",
+      "verifier.QueryGeometry.for_range_loop0_loop0.body"
+    ],
+    "scan": {
+      "loop_count": 2,
+      "post_loop_exit_candidates": [
+        {
+          "line": 164,
+          "kind": "return",
+          "after_loop_end_lines": [
+            163
+          ],
+          "inside_another_loop": false
+        }
+      ]
+    },
+    "verdict": "PRESERVED_DIRECT_RESULT",
+    "reason": "Empty-flat post-loop return is direct done(Result.Ok record), not Option none; Port3_NativeGeometryBody:296-300; later inversion loop also returns full record."
+  },
+  {
+    "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+    "lines": [
+      54,
+      73
+    ],
+    "definitions": [
+      "verifier.candidate.canonical_scan",
+      "verifier.candidate.canonical_scan_loop0",
+      "verifier.candidate.canonical_scan_loop0.body",
+      "verifier.candidate.canonical_scan_loop0_loop0",
+      "verifier.candidate.canonical_scan_loop0_loop0.body",
+      "verifier.candidate.canonical_scan_loop0_loop0_loop0",
+      "verifier.candidate.canonical_scan_loop0_loop0_loop0.body",
+      "verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0",
+      "verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0.body"
+    ],
+    "scan": {
+      "loop_count": 4,
+      "post_loop_exit_candidates": [
+        {
+          "line": 65,
+          "kind": "?",
+          "after_loop_end_lines": [
+            64
+          ],
+          "inside_another_loop": true
+        },
+        {
+          "line": 67,
+          "kind": "?",
+          "after_loop_end_lines": [
+            64
+          ],
+          "inside_another_loop": true
+        },
+        {
+          "line": 70,
+          "kind": "?",
+          "after_loop_end_lines": [
+            64,
+            68,
+            69
+          ],
+          "inside_another_loop": true
+        }
+      ]
+    },
+    "verdict": "FALSE_POSITIVE_NESTED_LOOP",
+    "reason": "All candidates are still inside an enclosing loop; no explicit outer post-loop exit. Tail Ok is preserved. NKL_ScanModel.source."
+  },
+  {
+    "path": "programs/r1-cost-probe/src/lib.rs",
+    "lines": [
+      56,
+      90
+    ],
+    "definitions": [
+      "entry",
+      "process_r1_cost_probe_instruction"
+    ],
+    "scan": {
+      "loop_count": 1,
+      "post_loop_exit_candidates": [
+        {
+          "line": 71,
+          "kind": "?",
+          "after_loop_end_lines": [
+            70
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 71,
+          "kind": "?",
+          "after_loop_end_lines": [
+            70
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 71,
+          "kind": "?",
+          "after_loop_end_lines": [
+            70
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 74,
+          "kind": "return",
+          "after_loop_end_lines": [
+            70
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 75,
+          "kind": "?",
+          "after_loop_end_lines": [
+            70
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 76,
+          "kind": "return",
+          "after_loop_end_lines": [
+            70
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 79,
+          "kind": "?",
+          "after_loop_end_lines": [
+            70
+          ],
+          "inside_another_loop": false
+        }
+      ]
+    },
+    "verdict": "DEPLOYED_FEATURE_FALSE_POSITIVE",
+    "reason": "Every loop in the instruction entry lies inside cfg(not(feature=pool-adapter)); deployed program enables pool-adapter and returns r1_pool_adapter::process before that block. Frozen lib.rs:57-68. Entry rows remain OPEN independently."
+  },
+  {
+    "path": "crates/aspis-r1-cost-probe/src/compact.rs",
+    "lines": [
+      148,
+      172
+    ],
+    "definitions": [
+      "compact.expand_semantic",
+      "compact.expand_semantic_loop",
+      "compact.expand_semantic_loop.body"
+    ],
+    "scan": {
+      "loop_count": 1,
+      "post_loop_exit_candidates": [
+        {
+          "line": 169,
+          "kind": "return",
+          "after_loop_end_lines": [
+            167
+          ],
+          "inside_another_loop": false
+        }
+      ]
+    },
+    "verdict": "PRESERVED_DIRECT_RESULT",
+    "reason": "Post-loop source/destination checks emit direct done(Err Length,out), and success done(Ok(),out); S1NativeCompactModelV1:142-151."
+  },
+  {
+    "path": "crates/aspis-r1-cost-probe/src/weights.rs",
+    "lines": [
+      268,
+      327
+    ],
+    "definitions": [
+      "_root_.FIo_Native.weights.Weights.pair",
+      "_root_.FIo_Native.weights.Weights.pair_loop0",
+      "_root_.FIo_Native.weights.Weights.pair_loop0.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop1",
+      "_root_.FIo_Native.weights.Weights.pair_loop1.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop10",
+      "_root_.FIo_Native.weights.Weights.pair_loop10.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop10_loop0",
+      "_root_.FIo_Native.weights.Weights.pair_loop10_loop0.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop11",
+      "_root_.FIo_Native.weights.Weights.pair_loop11.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop11_loop0",
+      "_root_.FIo_Native.weights.Weights.pair_loop11_loop0.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop12",
+      "_root_.FIo_Native.weights.Weights.pair_loop12.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop13",
+      "_root_.FIo_Native.weights.Weights.pair_loop13.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop13_loop0",
+      "_root_.FIo_Native.weights.Weights.pair_loop13_loop0.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop14",
+      "_root_.FIo_Native.weights.Weights.pair_loop14.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop15",
+      "_root_.FIo_Native.weights.Weights.pair_loop15.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop16",
+      "_root_.FIo_Native.weights.Weights.pair_loop16.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop17",
+      "_root_.FIo_Native.weights.Weights.pair_loop17.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop2",
+      "_root_.FIo_Native.weights.Weights.pair_loop2.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop2_loop0",
+      "_root_.FIo_Native.weights.Weights.pair_loop2_loop0.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop3",
+      "_root_.FIo_Native.weights.Weights.pair_loop3.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop3_loop0",
+      "_root_.FIo_Native.weights.Weights.pair_loop3_loop0.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop4",
+      "_root_.FIo_Native.weights.Weights.pair_loop4.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop5",
+      "_root_.FIo_Native.weights.Weights.pair_loop5.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop5_loop0",
+      "_root_.FIo_Native.weights.Weights.pair_loop5_loop0.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop6",
+      "_root_.FIo_Native.weights.Weights.pair_loop6.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop7",
+      "_root_.FIo_Native.weights.Weights.pair_loop7.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop8",
+      "_root_.FIo_Native.weights.Weights.pair_loop8.body",
+      "_root_.FIo_Native.weights.Weights.pair_loop9",
+      "_root_.FIo_Native.weights.Weights.pair_loop9.body"
+    ],
+    "scan": {
+      "loop_count": 15,
+      "post_loop_exit_candidates": [
+        {
+          "line": 270,
+          "kind": "return",
+          "after_loop_end_lines": [
+            270
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 273,
+          "kind": "return",
+          "after_loop_end_lines": [
+            270
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 279,
+          "kind": "?",
+          "after_loop_end_lines": [
+            270
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 286,
+          "kind": "?",
+          "after_loop_end_lines": [
+            270,
+            285
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 287,
+          "kind": "?",
+          "after_loop_end_lines": [
+            270,
+            285
+          ],
+          "inside_another_loop": false
+        }
+      ]
+    },
+    "verdict": "PRESERVED_DIRECT_RESULT",
+    "reason": "The expected_n loop returns Usize directly; its caller performs the length guard and allocations with explicit Result. Later errors likewise use direct Result, not pending none. FIo_Native.weights.Weights.pair_loop0.body and matching pair definition in RPz7_FIo_NativeFuns; TX2:129 root is AspisR1.NJF_PairInstantiation.source. Historical source/version identity is a separate pin check."
+  },
+  {
+    "path": "crates/aspis-r1-cost-probe/src/r1_semantic.rs",
+    "lines": [
+      232,
+      308
+    ],
+    "definitions": [
+      "r1_semantic.verify_finish"
+    ],
+    "scan": {
+      "loop_count": 4,
+      "post_loop_exit_candidates": [
+        {
+          "line": 289,
+          "kind": "return",
+          "after_loop_end_lines": [
+            272,
+            275,
+            279,
+            280
+          ],
+          "inside_another_loop": false
+        },
+        {
+          "line": 292,
+          "kind": "?",
+          "after_loop_end_lines": [
+            272,
+            275,
+            279,
+            280
+          ],
+          "inside_another_loop": false
+        }
+      ]
+    },
+    "verdict": "DEPLOYED_FEATURE_FALSE_POSITIVE",
+    "reason": "The loops are all cfg(feature=prover); deployed verifier excludes that block. NJG raw has no rust_loop; EqualCirclePoints Err and payload ? retain ordinary returned Results."
+  }
+]
