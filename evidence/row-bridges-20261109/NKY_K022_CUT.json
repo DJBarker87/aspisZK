@@ -1,0 +1,13 @@
+{
+ "kind": "checkpoint",
+ "mode": "value",
+ "edits": [
+  [
+   "fn decode_checkpoint_box(bytes: &[u8]) -> Result<Box<PoolV1PairForestCheckpointV1>, ProgramError> {\n    Ok(Box::new(\n        decode_pool_v1_pair_forest_checkpoint_v1(bytes)\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    ))\n}",
+   "fn decode_checkpoint_box(bytes: &[u8]) -> Result<Box<PoolV1PairForestCheckpointV1>, ProgramError> {\n    assert!(core::mem::size_of::<PoolV1PairForestCheckpointV1>()==176,\"exact Box layout bytes\");\n    assert!(core::mem::align_of::<PoolV1PairForestCheckpointV1>()==8,\"exact Box layout alignment\");\n    assert!(!core::mem::needs_drop::<PoolV1PairForestCheckpointV1>(),\"decoded record has no destructor\");\n    assert!(!core::mem::needs_drop::<aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1>(),\"raw decoder error has no destructor\");\n    let raw=decode_pool_v1_pair_forest_checkpoint_v1(bytes);\n    let mut allocated: *const PoolV1PairForestCheckpointV1=core::ptr::null();\n    let mut out=(|| {let b=Box::new(raw.map_err(|_| ProgramError::InvalidAccountData)?);allocated=&*b;Ok(b)})();\n    if let Ok(ref mut b)=out { **b = { let mut v=**b;v.bump^=1;v }; }\n    \n    match (&raw,&out) {\n     (Ok(a),Ok(b))=>{ assert!(core::ptr::eq(&**b,allocated),\"same Box allocation\");assert!(!core::ptr::eq(&**b,a),\"fresh owned carrier\");assert!(a.bump==b.bump,\"unchanged allocation payload\"); },\n     (Err(_),Err(e))=>{assert!(*e==ProgramError::InvalidAccountData,\"mapped error\");assert!(allocated.is_null(),\"no allocation on decoder error\");},\n     _=>assert!(false,\"same Result arm\")\n    }\n    out\n}"
+  ]
+ ],
+ "same_raw_call": true,
+ "allocation": "Box::new at the original success continuation",
+ "domain": "all typed raw Results; caller bytes unchanged, tail independent of byte length"
+}
