@@ -69,7 +69,7 @@
 +mod NJJ_parent;
 --- a/crates/aspis-r1-cost-probe/src/NJJ_parent.rs
 +++ b/crates/aspis-r1-cost-probe/src/NJJ_parent.rs
-@@ -0,0 +1,94 @@
+@@ -0,0 +1,372 @@
 +use super::*;
 +use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
 +use aspis_core::field::{M31,CM31};
@@ -163,4 +163,282 @@
 + let mut it=weights.iter_mut().enumerate();let (index,w)=it.nth(i).unwrap();assert_eq!(index,i);calls+=1;*w=value;drop(it);
 + assert_eq!(calls,1);assert_eq!(weights.len(),64);assert_eq!(weights.capacity(),cap);assert_eq!(weights.as_ptr(),ptr);
 + let mut expected=if i==j{kw(value)}else{before[j]};if cfg!(NJJ_invert){expected[0]^=1;}assert_eq!(kw(weights[j]),expected);
++}
++// Parent new(): full child Result carrier, map_err and source ? branch.
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn pending_start(){
++ let before:[[u64;4];64]=kani::any();let j:usize=kani::any();kani::assume(j<64);
++ let mut raw=alloc::vec::Vec::with_capacity(64);for row in before{raw.push(row);}
++ let p=raw.as_ptr();let cap=raw.capacity();let good:bool=kani::any();
++ let reply:Result<alloc::vec::Vec<[u64;4]>,aspis_core::r0::Error>=if good{Ok(raw)}else{Err(aspis_core::r0::Error::Allocation)};
++ let out=(||->Result<alloc::vec::Vec<[u64;4]>,Error>{let raw=reply.map_err(|_|Error::Allocation)?;Ok(raw)})();
++ match out{Err(e)=>{assert!(!good);assert_eq!(e,if cfg!(NJJ_invert){Error::Parse}else{Error::Allocation});},Ok(v)=>{
++ assert!(good);assert_eq!(v.len(),64);assert_eq!(v.capacity(),cap);assert_eq!(v.as_ptr(),p);let mut expected=before[j];if cfg!(NJJ_invert){expected[0]^=1;}assert_eq!(v[j],expected);
++ }}
++}
++// Final native construction after the loop invariant: arbitrary raw64 payload.
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn pending_end(){
++ let before:[[u64;4];64]=kani::any();let j:usize=kani::any();kani::assume(j<64);
++ let mut raw=alloc::vec::Vec::with_capacity(64);for row in before{raw.push(row);}
++ let ptr=raw.as_ptr();let cap=raw.capacity();let result=BatchedWeights{raw,terms:0};
++ assert_eq!(result.terms,if cfg!(NJJ_invert){1}else{0});assert_eq!(result.raw.len(),64);assert_eq!(result.raw.capacity(),cap);assert_eq!(result.raw.as_ptr(),ptr);assert_eq!(result.raw[j],before[j]);
++}
++fn fold_spec(x:u64)->u32{let a=(x&2147483647)+(x>>31);let b=(a&2147483647)+(a>>31);let c=b as u32;if c>=2147483647{c-2147483647}else{c}}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn value(){
++ let before:[[u64;4];64]=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<64&&j<64);
++ let mut raw=alloc::vec::Vec::with_capacity(64);for row in before{raw.push(row);}
++ let terms:usize=kani::any();let b=BatchedWeights{raw,terms};let ptr=b.raw.as_ptr();let cap=b.raw.capacity();let out=b.value(i);
++ let mut expected=[fold_spec(before[i][0]),fold_spec(before[i][1]),fold_spec(before[i][2]),fold_spec(before[i][3])];if cfg!(NJJ_invert){expected[0]^=1;}
++ assert_eq!(kw(out),expected);assert_eq!(b.raw[j],before[j]);assert_eq!(b.terms,terms);assert_eq!(b.raw.len(),64);assert_eq!(b.raw.capacity(),cap);assert_eq!(b.raw.as_ptr(),ptr);
++}
++// K015 replacement: one store window, not the timed-out two-vector shape.
++#[kani::proof]
++#[kani::unwind(10)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn pending_window(){
++ let old:[u64;4]=kani::any();let words:[u32;4]=kani::any();let index:usize=kani::any();kani::assume(index<64);
++ let mut row=old;let w=k(words);
++ row=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];
++ let next=index+1;let mut expected=[words[0] as u64,words[1] as u64,words[2] as u64,words[3] as u64];if cfg!(NJJ_invert){expected[0]^=1;}
++ assert_eq!(row[0],expected[0]);assert_eq!(row[1],expected[1]);assert_eq!(row[2],expected[2]);assert_eq!(row[3],expected[3]);assert_eq!(next,index+1);
++}
++fn raw_window<const N:usize>(){
++ let bytes:[u8;64]=kani::any();let start:usize=kani::any();let end:usize=kani::any();kani::assume(start<=end&&end<=64&&end-start>=N);
++ let mut reader=Reader{bytes:&bytes[..end],at:start};let out=reader.raw::<N>();let j:usize=kani::any();kani::assume(j<N);
++ assert_eq!(out[j],bytes[start+j]^(if cfg!(NJJ_invert){1}else{0}));assert_eq!(reader.at,start+N);assert_eq!(reader.bytes,&bytes[..end]);
++}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn raw4_window(){raw_window::<4>();}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn raw16_window(){raw_window::<16>();}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn raw32_window(){raw_window::<32>();}
++fn word(b:&[u8],at:usize)->u32{u32::from(b[at])|(u32::from(b[at+1])<<8)|(u32::from(b[at+2])<<16)|(u32::from(b[at+3])<<24)}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn k_window(){
++ let bytes:[u8;64]=kani::any();let start:usize=kani::any();kani::assume(start<=48);let mut r=Reader{bytes:&bytes,at:start};
++ let expected=[word(&bytes,start),word(&bytes,start+4),word(&bytes,start+8),word(&bytes,start+12)];let good=expected[0]<2147483647&&expected[1]<2147483647&&expected[2]<2147483647&&expected[3]<2147483647;
++ let out=r.k();assert_eq!(out.is_ok(),good^cfg!(NJJ_invert));assert_eq!(r.at,start+16);assert_eq!(r.bytes,&bytes);
++ match out{Ok(v)=>assert_eq!(kw(v),expected),Err(e)=>assert_eq!(e,Error::Checkpoint)}
++}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn e_window(){
++ let bytes:[u8;64]=kani::any();let start:usize=kani::any();kani::assume(start<=32);let mut r=Reader{bytes:&bytes,at:start};
++ let expected=[word(&bytes,start),word(&bytes,start+4),word(&bytes,start+8),word(&bytes,start+12),word(&bytes,start+16),word(&bytes,start+20),word(&bytes,start+24),word(&bytes,start+28)];let mut good=true;for w in expected{good=good&&w<2147483647;}
++ let out=r.e();assert_eq!(out.is_ok(),good^cfg!(NJJ_invert));assert_eq!(r.at,start+32);assert_eq!(r.bytes,&bytes);
++ match out{Ok(v)=>assert_eq!(v.to_limbs(),expected),Err(e)=>assert_eq!(e,Error::Checkpoint)}
++}
++// K025 replacement: actual value on ONE selected row. NJJ_Value.projection
++// proves its equality to the same function at any valid index in a full Vec.
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn value_window(){
++ let row:[u64;4]=kani::any();let terms:usize=kani::any();let mut raw=alloc::vec::Vec::with_capacity(1);raw.push(row);
++ let b=BatchedWeights{raw,terms};let ptr=b.raw.as_ptr();let cap=b.raw.capacity();let out=b.value(0);
++ let mut expected=[fold_spec(row[0]),fold_spec(row[1]),fold_spec(row[2]),fold_spec(row[3])];if cfg!(NJJ_invert){expected[0]^=1;}
++ assert_eq!(kw(out),expected);assert_eq!(b.raw[0],row);assert_eq!(b.terms,terms);assert_eq!(b.raw.len(),1);assert_eq!(b.raw.capacity(),cap);assert_eq!(b.raw.as_ptr(),ptr);
++}
++struct DigestLog<'a>{proof:&'a[u8],public:&'a[u8],checkpoint:&'a[u8],replies:[[u8;32];3],calls:usize}
++impl DigestLog<'_>{fn digest(&mut self,parts:&[&[u8]])->[u8;32]{
++ let n=self.calls;assert!(n<3);self.calls+=1;
++ if n==0{assert_eq!(parts.len(),1);assert_eq!(parts[0].as_ptr(),self.proof.as_ptr());assert_eq!(parts[0].len(),self.proof.len());}
++ else if n==1{assert_eq!(parts.len(),1);assert_eq!(parts[0].as_ptr(),self.public.as_ptr());assert_eq!(parts[0].len(),self.public.len());}
++ else{assert_eq!(parts.len(),2);assert_eq!(parts[0],b"UNPROVED:R1:checkpoint");assert_eq!(parts[1].as_ptr(),self.checkpoint.as_ptr());assert_eq!(parts[1].len(),self.checkpoint.len()-32);}
++ let mut reply=self.replies[n];if cfg!(NJJ_invert){reply[0]^=1;}reply
++}}
++// Exact frozen resume checksum conditional, CHILD digest calls as local oracles.
++fn checksum_cut(bytes:&[u8],proof:&[u8],public:&[u8],log:&mut DigestLog)->Result<(),Error>{
++ let end=bytes.len()-32;
++ if bytes[16..48]!=log.digest(&[proof])||bytes[48..80]!=log.digest(&[public])||bytes[end..]!=log.digest(&[b"UNPROVED:R1:checkpoint",&bytes[..end]]){return Err(Error::Checkpoint);}
++ Ok(())
++}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn checksum(){
++ let bytes:[u8;1768]=kani::any();let proof:[u8;57607]=kani::any();let public:[u8;1880]=kani::any();let replies:[[u8;32];3]=kani::any();let plen:usize=kani::any();kani::assume(plen<=1880);let public=&public[..plen];
++ let first=bytes[16..48]==replies[0];let second=bytes[48..80]==replies[1];let third=bytes[1736..]==replies[2];
++ let mut log=DigestLog{proof:&proof,public:&public,checkpoint:&bytes,replies,calls:0};let out=checksum_cut(&bytes,&proof,&public,&mut log);
++ assert_eq!(out,if first&&second&&third{Ok(())}else{Err(Error::Checkpoint)});assert_eq!(log.calls,if !first{1}else if !second{2}else{3});
++}
++fn source_k(at:usize){
++ let bytes:[u8;1768]=kani::any();let mut r=Reader{bytes:&bytes,at};
++ let words=[word(&bytes,at),word(&bytes,at+4),word(&bytes,at+8),word(&bytes,at+12)];
++ let good=words[0]<2147483647&&words[1]<2147483647&&words[2]<2147483647&&words[3]<2147483647;
++ let out=r.k();assert_eq!(out.is_ok(),good^cfg!(NJJ_invert));assert_eq!(r.at,at+16);assert_eq!(r.bytes.as_ptr(),bytes.as_ptr());assert_eq!(r.bytes.len(),1768);
++ match out{Ok(v)=>assert_eq!(kw(v),words),Err(e)=>assert_eq!(e,Error::Checkpoint)}
++}
++fn source_e(at:usize){
++ let bytes:[u8;1768]=kani::any();let mut r=Reader{bytes:&bytes,at};
++ let words=[word(&bytes,at),word(&bytes,at+4),word(&bytes,at+8),word(&bytes,at+12),word(&bytes,at+16),word(&bytes,at+20),word(&bytes,at+24),word(&bytes,at+28)];
++ let mut good=true;for w in words{good=good&&w<2147483647;}
++ let out=r.e();assert_eq!(out.is_ok(),good^cfg!(NJJ_invert));assert_eq!(r.at,at+32);assert_eq!(r.bytes.as_ptr(),bytes.as_ptr());assert_eq!(r.bytes.len(),1768);
++ match out{Ok(v)=>assert_eq!(v.to_limbs(),words),Err(e)=>assert_eq!(e,Error::Checkpoint)}
++}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn query_word(){
++ let bytes:[u8;1768]=kani::any();let i:usize=kani::any();kani::assume(i<22);let at=320+4*i;let mut r=Reader{bytes:&bytes,at};let out=u32::from_le_bytes(r.raw());
++ assert_eq!(out,word(&bytes,at)^(if cfg!(NJJ_invert){1}else{0}));assert_eq!(r.at,320+4*(i+1));assert_eq!(r.bytes.as_ptr(),bytes.as_ptr());assert_eq!(r.bytes.len(),1768);
++}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn state_roots(){
++ let bytes:[u8;1768]=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<3&&j<32);let at=80+32*i;let mut r=Reader{bytes:&bytes,at};let out=r.raw::<32>();
++ assert_eq!(out[j],bytes[at+j]^(if cfg!(NJJ_invert){1}else{0}));assert_eq!(r.at,80+32*(i+1));assert_eq!(r.bytes.as_ptr(),bytes.as_ptr());assert_eq!(r.bytes.len(),1768);
++}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn gamma_alpha(){let i:usize=kani::any();kani::assume(i<4);source_e(176+32*i);}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn rho(){source_k(304);}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn semantic_slot(){let i:usize=kani::any();kani::assume(i<10);source_k(408+16*i);}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn z_slot(){let i:usize=kani::any();kani::assume(i<4);source_k(568+16*i);}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn claim_rhs(){let i:usize=kani::any();kani::assume(i<2);source_e(632+32*i);}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn power(){source_k(696);}
++#[kani::proof]
++#[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn weight_slot(){let i:usize=kani::any();kani::assume(i<64);source_k(712+16*i);}
++#[kani::proof]
++#[kani::unwind(4)]
++fn tail_guard(){
++ let at:usize=kani::any();let end=1768usize-32;
++ let out:Result<(),Error>=if at!=end{Err(Error::Checkpoint)}else{Ok(())};
++ assert_eq!(out.is_ok(),(at==1736)^cfg!(NJJ_invert));if at!=1736{assert_eq!(out,Err(Error::Checkpoint));}
++}
++fn pack_p(roots:[[u8;32];2],gamma:E,kappa:E,alpha:[E;2],rho:K,queries:[u32;22],semantic_alpha:[K;10],z:[SecureCirclePoint;2],claim:E,state:[u8;32])->Box<Prepared>{
++ Box::new(Prepared{variant:Variant::S2,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state})
++}
++fn any_e()->E{let w:[u32;8]=kani::any();E::new(k([w[0],w[1],w[2],w[3]]),k([w[4],w[5],w[6],w[7]]))}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn prepared_tail(){
++ let roots:[[u8;32];2]=kani::any();let state:[u8;32]=kani::any();let gamma=any_e();let kappa=any_e();let alpha=[any_e(),any_e()];let rho=k(kani::any());let claim=any_e();let queries:[u32;22]=kani::any();
++ let semantic_alpha=core::array::from_fn(|_|k(kani::any()));let z=[SecureCirclePoint{x:k(kani::any()),y:k(kani::any())},SecureCirclePoint{x:k(kani::any()),y:k(kani::any())}];
++ let qi:usize=kani::any();let si:usize=kani::any();kani::assume(qi<22&&si<10);
++ let original=pack_p(roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state);let allocation=&*original as *const Prepared;
++ let mut out=if cfg!(NJJ_bad_alloc){pack_p(roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state)}else{original};if cfg!(NJJ_invert){out.rho.c0.a.0^=1;}
++ assert_eq!(&*out as *const Prepared,allocation);assert!(out.variant==Variant::S2);assert_eq!(out.roots,roots);assert_eq!(out.gamma,gamma);assert_eq!(out.kappa,kappa);assert_eq!(out.alpha,alpha);assert_eq!(out.rho,rho);assert_eq!(out.queries[qi],queries[qi]);assert_eq!(out.semantic_alpha[si],semantic_alpha[si]);assert_eq!(out.claim,claim);assert_eq!(out.state,state);
++ assert_eq!(out.z[0].x,z[0].x);assert_eq!(out.z[0].y,z[0].y);assert_eq!(out.z[1].x,z[1].x);assert_eq!(out.z[1].y,z[1].y);
++}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn accumulator_tail(){
++ let before:[[u32;4];64]=kani::any();let j:usize=kani::any();kani::assume(j<64);let mut weights=alloc::vec::Vec::with_capacity(64);for row in before{weights.push(k(row));}
++ let ptr=weights.as_ptr();let cap=weights.capacity();let rhs=any_e();let power=k(kani::any());let next:u8=kani::any();
++ let mut out=Accumulator{weights,rhs,power,next:next as usize};
++ if cfg!(NJJ_bad_alloc){let mut other=alloc::vec::Vec::with_capacity(64);for row in before{other.push(k(row));}out.weights=other;}
++ if cfg!(NJJ_invert){out.rhs=if rhs==E::ZERO{E::ONE}else{E::ZERO};}
++ assert_eq!(out.rhs,rhs);assert_eq!(out.power,power);assert_eq!(out.next,next as usize);assert_eq!(out.weights.len(),64);assert_eq!(out.weights.capacity(),cap);assert_eq!(out.weights.as_ptr(),ptr);assert_eq!(kw(out.weights[j]),before[j]);
++}
++fn r0_error(n:u8)->aspis_core::r0::Error{use aspis_core::r0::Error::*;match n%17{0=>IndexOutOfRange,1=>WrongLength,2=>ZeroDenominator,3=>Allocation,4=>NonCanonical,5=>WrongField,6=>InvalidPoints,7=>QuotientNotInImage,8=>RankDeficient,9=>Parse,10=>Semantic,11=>Schedule,12=>Sampler,13=>Commitment,14=>Authentication,15=>V1,_=>V2}}
++struct FilledLog<T>{reply:Option<Result<alloc::vec::Vec<T>,aspis_core::r0::Error>>,zero:T,calls:usize}
++impl<T:Copy+Eq+core::fmt::Debug> FilledLog<T>{fn filled(&mut self,n:usize,value:T)->Result<alloc::vec::Vec<T>,aspis_core::r0::Error>{assert_eq!(n,64);assert_eq!(value,self.zero);self.calls+=1;self.reply.take().unwrap()}}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn resume_allocation_site(){
++ let before:[[u32;4];64]=kani::any();let j:usize=kani::any();kani::assume(j<64);let mut values=alloc::vec::Vec::with_capacity(64);for w in before{values.push(k(w));}
++ let ptr=values.as_ptr();let cap=values.capacity();let good:bool=kani::any();let reply=if good{Ok(values)}else{Err(r0_error(kani::any()))};let mut log=FilledLog{reply:Some(reply),zero:K::ZERO,calls:0};
++ let out=(||->Result<alloc::vec::Vec<K>,Error>{let weights=log.filled(Variant::S2.final_len()^(if cfg!(NJJ_bad_alloc){1}else{0}),K::ZERO).map_err(|_|if cfg!(NJJ_bad_error){Error::Parse}else{Error::Allocation})?;Ok(weights)})();
++ assert_eq!(log.calls,1);match out{Err(e)=>{assert!(!good);assert_eq!(e,Error::Allocation);},Ok(v)=>{assert!(good);assert_eq!(v.len(),64);assert_eq!(v.as_ptr(),ptr);assert_eq!(v.capacity(),cap);let mut expected=before[j];if cfg!(NJJ_invert){expected[0]^=1;}assert_eq!(kw(v[j]),expected);}}
++}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn pending_allocation_site(){
++ let before:[[u64;4];64]=kani::any();let j:usize=kani::any();kani::assume(j<64);let mut values=alloc::vec::Vec::with_capacity(64);for w in before{values.push(w);}
++ let weights=[K::ZERO;64];let ptr=values.as_ptr();let cap=values.capacity();let good:bool=kani::any();let reply=if good{Ok(values)}else{Err(r0_error(kani::any()))};let mut log=FilledLog{reply:Some(reply),zero:[0u64;4],calls:0};
++ let out=(||->Result<alloc::vec::Vec<[u64;4]>,Error>{let raw=log.filled(weights.len()^(if cfg!(NJJ_bad_alloc){1}else{0}),[0u64;4]).map_err(|_|if cfg!(NJJ_bad_error){Error::Parse}else{Error::Allocation})?;Ok(raw)})();
++ assert_eq!(log.calls,1);match out{Err(e)=>{assert!(!good);assert_eq!(e,Error::Allocation);},Ok(v)=>{assert!(good);assert_eq!(v.len(),64);assert_eq!(v.as_ptr(),ptr);assert_eq!(v.capacity(),cap);let mut expected=before[j];if cfg!(NJJ_invert){expected[0]^=1;}assert_eq!(v[j],expected);}}
++}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn pending_stop(){
++ let before:[[u64;4];64]=kani::any();let j:usize=kani::any();let index:usize=kani::any();kani::assume(j<64&&index>=64);let mut raw=alloc::vec::Vec::with_capacity(64);for row in before{raw.push(row);}
++ let weights=[K::ZERO;64];let ptr=raw.as_ptr();let cap=raw.capacity();let entered=index<weights.len();assert!(!entered);let out=BatchedWeights{raw,terms:0};
++ assert_eq!(out.terms,if cfg!(NJJ_invert){1}else{0});assert_eq!(out.raw.len(),64);assert_eq!(out.raw.capacity(),cap);assert_eq!(out.raw.as_ptr(),ptr);assert_eq!(out.raw[j],before[j]);
++}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn finish_stop(){
++ let before:[[u32;4];64]=kani::any();let j:usize=kani::any();kani::assume(j<64);let mut weights=alloc::vec::Vec::with_capacity(64);for row in before{weights.push(k(row));}
++ let ptr=weights.as_ptr();let cap=weights.capacity();let mut it=weights.iter_mut().enumerate();let ended=it.nth(64).is_none();drop(it);
++ assert_eq!(ended,!cfg!(NJJ_invert));assert_eq!(weights.len(),64);assert_eq!(weights.capacity(),cap);assert_eq!(weights.as_ptr(),ptr);assert_eq!(kw(weights[j]),before[j]);
++}
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn weights_stop(){
++ let before:[[u32;4];64]=kani::any();let j:usize=kani::any();kani::assume(j<64);let mut weights=alloc::vec::Vec::with_capacity(64);for row in before{weights.push(k(row));}
++ let ptr=weights.as_ptr();let cap=weights.capacity();let cursor:usize=kani::any();let mut it=weights.iter_mut();let ended=it.nth(64).is_none();drop(it);assert!(ended);
++ let out:Result<(alloc::vec::Vec<K>,usize),Error>=Ok((weights,cursor));let (v,at)=out.unwrap();assert_eq!(at,cursor^(if cfg!(NJJ_invert){1}else{0}));assert_eq!(v.len(),64);assert_eq!(v.capacity(),cap);assert_eq!(v.as_ptr(),ptr);assert_eq!(kw(v[j]),before[j]);
 +}

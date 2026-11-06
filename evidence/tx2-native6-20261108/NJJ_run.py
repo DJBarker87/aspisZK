@@ -33,7 +33,7 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
  raise RuntimeError('STOP admission')
 files={};sources=[]
 if kind=='finalcheck':
- for n in ['NJJ_final_checks.py','NJJ_MODULES.json','NJJ_SOURCE_PINS.json']:files[n]=(E/n).read_text()
+ for n in ['NJJ_final_checks.py','NJJ_MODULES.json','NJJ_SOURCE_PINS.json','NJJ_PATHS.json']:files[n]=(E/n).read_text()
  sources=list(files);command=['python3','NJJ_final_checks.py']
 elif kind=='cleanup':
  files['NJJ_cleanup.py']=(E/'NJJ_cleanup.py').read_text();sources=list(files);command=['python3','NJJ_cleanup.py']
@@ -106,7 +106,7 @@ for n,t in files.items():
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=[]
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
-elif x['kind']=='audit':modules += ['NJJ_S_PACKET'] if x['module']=='inventory-s' else ['NJJ_D_ONLY'] if x['module']=='inventory-d' else ['NJJ_Q_ONLY'] if x['module']=='inventory-q' else ['NJJ_POOL_LEGACY_IMPORT'] if {target!r}.startswith('pool') else ['NJJ_COMBINED_IMPORT']
+elif x['kind']=='audit':modules += ['NEP_Planted','NEP_Mutations'] if x['module']=='fixtures' else ['NJJ_COMBINED_IMPORT']
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:

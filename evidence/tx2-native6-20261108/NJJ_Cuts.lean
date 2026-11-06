@@ -23,6 +23,7 @@ theorem pending_payload (weights : Slice K) (before after : alloc.vec.Vec Row)
  (size : before.val.length=64) (inside : i<64)
  (cut : pendingStep weights before after i next) :
  after.val=before.val.set i (Port3_PendingInstall.row w) := by
+ have afterSize : after.val.length=64 := cut.2.1
  apply List.ext_getElem?
  intro j
  by_cases bound : j<64
@@ -43,6 +44,7 @@ def pendingEnd (raw : alloc.vec.Vec Row) (out : verifier.BatchedWeights) : Prop 
 theorem pending_constructor (raw : alloc.vec.Vec Row) (out : verifier.BatchedWeights)
  (size : raw.val.length=64) (cut : pendingEnd raw out) :
  out=⟨raw,0#usize⟩ := by
+ have afterSize : out.raw.val.length=64 := cut.1
  have same : out.raw=raw := by
   apply Subtype.ext
   apply List.ext_getElem?
@@ -59,11 +61,11 @@ theorem pending_constructor (raw : alloc.vec.Vec Row) (out : verifier.BatchedWei
 /-- Each successful slot write changes exactly its selected cell. The
 Reader child Result remains the full supplied Result; errors do not advance
 parent at or write the slot. The native error prefix drops the owned Vec. -/
-def weightStep (before after : List K) (i at nextAt : Nat)
+def weightStep (before after : List K) (i cursor nextAt : Nat)
  (reply : core.result.Result (K × Nat) verifier.Error) : Prop :=
  after.length=before.length ∧
  match reply with
- | .Err _ => after=before ∧ nextAt=at
+ | .Err _ => after=before ∧ nextAt=cursor
  | .Ok (value,cursor) => after=before.set i value ∧ nextAt=cursor
 
 #print axioms pending_payload

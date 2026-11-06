@@ -9,18 +9,18 @@ The authoritative declaration has 25 fields: op0–op23 and unwrap32. The direct
 | Field | Frozen meaning | Class and disposition |
 |---|---|---|
 | op0 | Option::ok_or | Aeneas std model (au)(1), NHT_Constants.core.option.Option.ok_or; complete Some/None Result |
-| op1 | WideExact::ZERO | Unreached by TX2 common; literal constructor, no root obligation |
+| op1 | WideExact::ZERO | P7/literal constructor (au)(1); unreached by TX2 common, no root operation |
 | op2 | WideExact::from_le_bytes | CLOSED child TX2:031; NJC_ClosedCalls.inactive_clause / NET_WideModel; SAME proof[7495..7527] |
-| op3 | parse_shape | Unreached inside common; authenticated caller owns its invocation |
+| op3 | parse_shape | Genuine OPEN child TX2:057 in the authenticated caller; eliminated as unreached inside common |
 | op4 | canonical_scan | Unreached inside common; TX1:084 history obligation retained separately, not silently CLOSED |
 | op5 | batch_merkle | Genuine OPEN child TX2:053; NJE_ owns Merkle5 / verify_in_place; no assumed result |
 | op6 | query_loop | CLOSED child TX2:058; NFS_QueryLoopRoot.tx2 and NFW_QueryResume.tx2; caller must derive SAME input domain; no selected-address-to-payload inference |
-| op7 | Prepared::new | Unreached inside common; no replacement by a successful fixture |
-| op8 | checkpoint | Unreached inside common; no writer child at this site |
+| op7 | Prepared::new | CLOSED child TX1:179; eliminated as unreached inside common; no successful fixture replacement |
+| op8 | checkpoint | CLOSED child TX1:186; eliminated as unreached inside common; no writer at this site |
 | op9 | BatchedWeights::finish | Genuine OPEN child TX2:099; Port3_FlushInstall.flush is a model law, not a native CLOSED status. iter_mut/writeback itself is (au)(1)/(2) |
 | op10 | BatchedWeights::new | Genuine OPEN child TX2:100; NHV_PendingPacket.source proves complete emitted/model width64 Result; reserve/resize/index/push itself is (au)(1)/(2), not an additional child |
 | op11 | QueryGeometry::for_range | CLOSED TX2:104; NFN_NFB_GeometryComposed.result_state_effects / NJC_ClosedCalls.geometry_clause |
-| op12 | Accumulator::new | Unreached inside common; resume supplies the accumulator |
+| op12 | Accumulator::new | CLOSED child TX1:174; eliminated as unreached inside common; resume supplies the accumulator |
 | op13 | mark | CLOSED TX2:118 on deployed literal None; NJC_OrderedCalls.mark; no Option<fn> native credit |
 | op14 | OFF_ROUND1 | Emitted literal/constant model NHT_Constants, not a child |
 | op15 | OFF_FOLDED_ROOT | Same; 7751 |
@@ -53,3 +53,5 @@ The authoritative declaration has 25 fields: op0–op23 and unwrap32. The direct
 | M13 Prepared/Accumulator | Safe Box/Vec std (au)(1)/(2), Box returning/abort scope existing Allocator (aa) | Parent cut must assert full moved values and SAME allocation; not separate producer children. Any unsafe construction encountered requires P6 (au)(4), never covered by this classification |
 
 No unsafe MaybeUninit/raw-write construction is present in the frozen direct resume/common snippets above. This is not a claim that unrelated child implementations contain no unsafe code. Their own bridges retain P6 obligations.
+
+The fresh NHT body has already inlined the constants/ok_or/unwrap standard operations. Its remaining10 operation fields are installed explicitly by NJJ_Common.install; NJJ_Common.source proves that every other legacy field is irrelevant to run. No default operation or artificial successful stand-in is introduced for unused fields.
