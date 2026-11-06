@@ -16734,3 +16734,7 @@ D879. Package W5 (codex/pv-w5-20261109 at bc8d7038d1c; strict raw audits passed 
 ## D880 — W4 closes thread f289; 75 of 125 rows CLOSED (2026-11-06 16:09 UTC)
 
 D880. Package W4 (codex/pv-w4-20261108 at 240f33eb2c0; strict raw audits passed f289 and 25 new partial roots, standard axioms only) closed thread:f289 (core::cell replace, PV_FN_THREAD_f289.closed, sole hypothesis its leaf Pre) and advanced f170, f17, f5 and f2 (return and frame suffixes, the actual 207 invocation and the 289 store-effect join) and f15; f316, f220, f208, f219 and f125 remain OPEN. Entered by the lead; checker PASS: thread 57 CLOSED / 10 PARTIAL / 15 OPEN, slice 18 / 4 / 21; total 75 of 125 CLOSED. Endpoint premises removed 0. Privacy target not yet established.
+
+## D881 — composition job session 101: f6 reworked into own-instruction segments with one-step call boundaries per D877; callee instantiation and the loop, return and frame remain (2026-11-06 16:12 UTC)
+
+D881. pv-thread session 101 (d4cf46f9713 on codex/pv-evhB-20261103; strict raw audit 99517 passed 12 of 12 roots, standard axioms only) reworked f6 as D877 directs: its own instructions in generated segments and every call a one-step arbitrary full-reply boundary, with no callee internals. Remaining for f6: instantiating the callee contracts and its loop, return and frame; no row closed; OwnInit's open dependencies are unchanged (24 BODY rows). Session 102 continues. Endpoint premises removed 0. Ledger rows CLOSED 75 of 125. Privacy target not yet established.
