@@ -2,7 +2,12 @@
 from pathlib import Path
 import hashlib,json,re,subprocess,lzma
 E=Path(__file__).resolve().parent;P=E.parent/'multiproof3-20261108'
-sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+def blob(p):
+ if p.exists():return p.read_bytes()
+ b=lzma.decompress(Path(str(p)+'.xz').read_bytes())
+ assert hashlib.sha256(b).hexdigest()==Path(str(p)+'.sha256').read_text().strip()
+ return b
+sha=lambda p:hashlib.sha256(blob(p)).hexdigest()
 old=(P/'NJP_sourcecheck.py').read_text()
 # Re-run every unchanged predecessor assertion; redirect ONLY its own output.
 code=old.replace('E=Path(__file__).resolve().parent;',f'E=Path({str(P)!r});')
@@ -29,7 +34,7 @@ for a,expected in [('NJV_K002',0),('NJV_K003',1)]:
  cfg=json.loads((E/(a+'.json')).read_text());assert cfg['env']['CARGO_NET_OFFLINE']=='true'
  feats=next(x['features'] for x in g['features'] if x['name']=='aspis-r1-cost-probe')
  assert {'default','private-leaf-salts','optimized-terminal','program-build'}<=set(feats)
- log=(E/a/'stdout.log').read_text();assert 'timed out' not in log.lower()
+ log=blob(E/a/'stdout.log').decode();assert 'timed out' not in log.lower()
  assert ('VERIFICATION:- SUCCESSFUL' if expected==0 else 'VERIFICATION:- FAILED') in log
  controls.append(dict(attempt=a,exit=expected,feature_count=len(g['features']),lock_sha256=lock['after'],source_sha256=sha(v/'NJV_harness.patch')))
 result=dict(predecessor_validator_sha256=sha(P/'NJP_sourcecheck.py'),prefix_native_sha256=sha(E/'NJV_multiproof.rs'),frozen_source_sha256=sha(E/'NJV_frozen_multiproof.rs.txt'),controls=controls,pending_occupied_frame=True,new_trust_rows=[],native_semantic_transport='P6/D188 option-A RECLASSIFICATION',target_established=False)

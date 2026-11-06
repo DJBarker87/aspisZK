@@ -1,0 +1,36 @@
+{"attempt": "NJV_L068", "exit_status": 0, "wall_seconds": 13.774019319098443, "peak_rss_kib": "6316060", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_TX2.TX2_093' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_TX2.abort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_TX1.TX1_127' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_TX1.abort' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+AspisR1.RPx_Deployed.deployed {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7)
+  (missing : AspisR1.IDa_Deployed.U
+...
+ : Aeneas.Std.Array NJP_DigestCarrier.RefDigest 16#usize)
+  (n : Aeneas.Std.Usize),
+  (↑physical).length ≤ 9216 →
+    ∀ (events : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (q : NJP_RowModel.Request)
+      (pending : NJP_RowModel.Scratch),
+      NJV_AbortEntry.Invocation (NJP_RequestTransport.hash (AspisR1.MultiproofConePhysicalTransport.rawOracle H)) root
+          physical (NJV_EntryABI.initial idx val n) events q pending →
+        (have log := (AspisV8R19.MemoizedProgramLaw.eval H (NJV_TX1Returning.endpoint root physical idx val n)).1;
+          List.take events.length log = NJV_AdoptedObservation.history events ∧
+            Option.map Prod.fst log[events.length]? =
+              some (AspisV8R19.SqueezeOracleBridge.flatten (NJP_RequestTransport.address q))) ∧
+          NJP_AbortTransport.physicalPending (AspisR1.MultiproofConePhysicalTransport.rawOracle H) events.length
+                (NJP_RequestTransport.transport (NJV_Entry.rawProgram root physical (NJV_EntryABI.initial idx val n))) =
+              some (NJP_AbortTransport.history events, NJP_RequestTransport.address q) ∧
+            NJV_AbortDomains.LastDomain (fun j => (↑physical)[j]!) (↑physical).length q pending :=
+fun H root physical idx val n bytes events q pending native =>
+  ⟨NJV_AbortEntry.adopted_prefix H root physical (NJV_EntryABI.initial idx val n) rfl bytes events q pending native,
+    ⟨NJV_AbortEntry.physical_prefix (AspisR1.MultiproofConePhysicalTransport.rawOracle H) root physical
+        (NJV_EntryABI.initial idx val n) events q pending native,
+      NJV_AbortDomains.entry (AspisR1.MultiproofConePhysicalTransport.rawOracle H) root physical
+        (NJV_EntryABI.initial idx val n) bytes events q pending native⟩⟩
+'NJV_TX1.abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7dff0ab8862840f9a23f71a3eed791e0.scope; invocation ID: 4de5b79f47584b0e8168f844f4069a29
