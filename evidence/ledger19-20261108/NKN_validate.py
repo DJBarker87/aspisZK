@@ -35,6 +35,14 @@ if __name__=='__main__':
   except AssertionError:mutants.append(label);continue
   raise AssertionError('Mutation wrongly admitted '+label)
  # Verify all compressed source/log inputs losslessly and enforce rule12.
+ source_snapshots=0
+ for receipt in E.glob('NKN_L[0-9][0-9][0-9]/receipt.json'):
+  rc=J(receipt)
+  for name,h in rc['source_hashes'].items():
+   p=receipt.parent/'sources'/name
+   data=p.read_bytes()if p.exists()else lzma.decompress(Path(str(p)+'.xz').read_bytes())
+   assert H(data)==h,(rc['attempt'],name)
+   source_snapshots+=1
  compressed=0
  for p in E.rglob('*.xz'):
   q=Path(str(p)[:-3]+'.sha256');assert q.exists(),str(p)
@@ -44,5 +52,5 @@ if __name__=='__main__':
  # No shipped or unrelated paths changed in this branch.
  changed=subprocess.check_output(['git','diff','--name-only','fbe21af77e6^','HEAD'],text=True).splitlines()
  assert all(n.startswith('evidence/ledger19-20261108/')for n in changed)
- res=dict(status='PASS',gate_mutations_rejected=mutants,compressed_sha_pairs=compressed,rows=599,new_closed=11,closed=553,open=46,scopes=40,no_large_files=True,no_unrelated_changes=True)
+ res=dict(status='PASS',gate_mutations_rejected=mutants,compressed_sha_pairs=compressed,scope_source_snapshots=source_snapshots,rows=599,new_closed=11,closed=553,open=46,scopes=40,no_large_files=True,no_unrelated_changes=True)
  (E/'NKN_VALIDATION.json').write_text(json.dumps(res,indent=1)+'\n');print(json.dumps(res))

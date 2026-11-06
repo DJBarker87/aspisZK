@@ -36,16 +36,22 @@ for folder,pre in [('claims2','NKA'),('poseidon-state','NKG'),('field4','NKJ')]:
    g=dict(g,graph_matches_frozen=g['graph_matches_frozen'],lock_sha256=lock['before'])
    assert json.loads(raw(p/(n+'_validation/NKG_INPUTS.json')))['KMX_patch_sha256']==KMX
   assert rc['limits']==LIMITS and rc['env']['CARGO_NET_OFFLINE']=='true',n
+  assert rc['env']['CARGO_PROFILE_DEV_OPT_LEVEL']=='3',n
   assert g['graph_matches_frozen'] and g['lock_sha256']==LOCK,n
   assert lock['unchanged']and lock['before']==lock['after']==LOCK,n
   a=json.loads(raw(p/(n+'-admission.json')));assert a['exit']==0 and a['reservation']['allowed']is True,n
   assert rc['exit_status']in [0,1] and 'VERIFICATION:- '+('SUCCESSFUL'if rc['exit_status']==0 else'FAILED')in log,n
   if rc['exit_status']:assert 'Failed Checks:'in log or 'is assignable'in log,n
-  receipts.append(dict(provider=pre,attempt=n,exit=rc['exit_status'],receipt_sha256=H(raw(p/n/'receipt.json')),graph_sha256=H(raw(gp)),lock_sha256=H(raw(lp)),source_hashes=rc.get('source_hashes'),native_command=rc.get('native_command'),features=g.get('selected_closure')))
+  receipts.append(dict(provider=pre,attempt=n,exit=rc['exit_status'],receipt_sha256=H(raw(p/n/'receipt.json')),graph_sha256=H(raw(gp)),lock_sha256=H(raw(lp)),source_hashes=rc.get('source_hashes'),native_command=rc.get('native_command'),features=g.get('selected_closure',g.get('features'))))
  for pair in sorted(actual_pairs):
   assert json.loads(raw(p/pair[0]/'receipt.json'))['exit_status']==0
   assert all(json.loads(raw(p/n/'receipt.json'))['exit_status']==1 for n in pair[1:])
-  pairs.append(dict(provider=pre,positive=pair[0],matched_controls=list(pair[1:])))
+  a=json.loads(raw(p/pair[0]/'receipt.json'))
+  for n in pair[1:]:
+   b=json.loads(raw(p/n/'receipt.json'));common=set(a['source_hashes'])&set(b['source_hashes'])
+   for key in common:
+    if key.endswith(('.rs','.rs.txt')):assert a['source_hashes'][key]==b['source_hashes'][key],(pair,key)
+  pairs.append(dict(provider=pre,positive=pair[0],matched_controls=list(pair[1:]),common_native_source_hashes_identical=True))
  if pre=='NKJ':
   for family in families:
    expected=[0,1,0,1,1]
