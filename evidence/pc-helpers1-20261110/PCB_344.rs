@@ -1,5 +1,5 @@
 use super::*;
-fn reference()->() {()}
+pub(super) fn reference()->() {()}
 fn clear_empty(bytes:&[u8]) {assert!(bytes.is_empty());kani::cover!(bytes.is_empty(),"exact empty request reached");}
 fn clear_wrong(bytes:&[u8]) {assert!(!bytes.is_empty());}
 #[kani::proof_for_contract(<SolanaPairForestVerifierRuntimeV1 as PairForestVerifierRuntimeV1>::clear_return_data)]
