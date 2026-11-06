@@ -1,0 +1,47 @@
+{"attempt": "NLL_L015", "exit_status": 0, "wall_seconds": 13.309243785915896, "peak_rss_kib": "6051992", "swaps": "0", "print_axioms": ["'NLL_EntryStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLL_EntryStep.lean:45:93: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [NKV_ConcreteChildren.ops, ̲lift, ̲bind_tc_ok, ̲↓reduceIte, ̲Aeneas.Std.uncurry, ̲notzero,i̵f̵_̵f̵a̵l̵s̵e̵,̵
+       NKV_BatchGeometry.span0, ̲NKV_BatchGeometry.span1, ̲NKB_KeyStream.lo, ̲NKB_KeyStream.count,
+       zeroVal, ̲oneVal, ̲natnz] at keyRead sortRead ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLL_EntryStep.source : ∀ (H : Bytes → State) (proof : Slice U8) (raw : Std.Array U32 22#usize) (root : Root)
+  (batch kind : Usize),
+  ↑batch < 2 →
+    ↑kind < 3 →
+      (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+        ∀ (
+...
+NLL_EntryStep.lean:45:93: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [NKV_ConcreteChildren.ops, ̲lift, ̲bind_tc_ok, ̲↓reduceIte, ̲Aeneas.Std.uncurry, ̲notzero,i̵f̵_̵f̵a̵l̵s̵e̵,̵
+       NKV_BatchGeometry.span0, ̲NKV_BatchGeometry.span1, ̲NKB_KeyStream.lo, ̲NKB_KeyStream.count,
+       zeroVal, ̲oneVal, ̲natnz] at keyRead sortRead ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLL_EntryStep.source : ∀ (H : Bytes → State) (proof : Slice U8) (raw : Std.Array U32 22#usize) (root : Root)
+  (batch kind : Usize),
+  ↑batch < 2 →
+    ↑kind < 3 →
+      (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+        ∀ (idx : Indices) (val : Values),
+          (OraclePortFrozenOrder.sortedPositions (Port4B_KeyInstall.queries raw) ↑batch ↑kind).length =
+              ↑(NKB_KeyStream.count ↑batch) ∧
+            Port4B_LeafLoop.KeyStream (Port4B_KeyInstall.queries raw) (↑batch) (↑kind) (entryKeys H raw (↑batch) kind)
+                0#usize (OraclePortFrozenOrder.sortedPositions (Port4B_KeyInstall.queries raw) ↑batch ↑kind) ∧
+              NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+                  raw root batch kind idx val () =
+                NKV_FRef.verifier.candidate.batch_tree_loop (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                    proof root kind idx val () (NKB_KeyStream.lo ↑batch) (NKB_KeyStream.count ↑batch)
+                    ((Usize.wrapping_mul 3#usize batch).wrapping_add kind) (entryKeys H raw (↑batch) kind) 0#usize
+                    0#usize >>=
+                  NKV_ReturnBoundary.returned :=
+⋯
+'NLL_EntryStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rcd0198ca403c40fc9981c7428f911fdd.scope; invocation ID: 45d2992aaf814f27abd2a8b9e7a75565

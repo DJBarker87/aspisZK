@@ -1,0 +1,39 @@
+{"attempt": "NLL_L014", "exit_status": 1, "wall_seconds": 15.207062879111618, "peak_rss_kib": "6010088", "swaps": "0", "print_axioms": ["'NLL_LoopHistory.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLL_LoopHistory.lean:81:5: error: No goals to be solved
+theorem NLL_LoopHistory.source : ∀ (H : Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch : ℕ) (kind lo n slot : Usize) (root : Root),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                (↑lo = if batch = 0 then 0 else 10) →
+                  ↑n ≤ 16 →
+                    ∀ (positions : List ℕ) (f : Frame),
+                      (∀ selected ∈ positions, selected ∈ OraclePortFrozenOrder.sortedPositions q ba
+...
+NLL_LoopHistory.lean:81:5: error: No goals to be solved
+theorem NLL_LoopHistory.source : ∀ (H : Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch : ℕ) (kind lo n slot : Usize) (root : Root),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                (↑lo = if batch = 0 then 0 else 10) →
+                  ↑n ≤ 16 →
+                    ∀ (positions : List ℕ) (f : Frame),
+                      (∀ selected ∈ positions, selected ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+                        ↑f.position + positions.length = ↑n →
+                          ↑f.scratch.n + positions.length ≤ 16 →
+                            Port4B_LeafLoop.KeyStream q batch (↑kind) f.keys f.position positions →
+                              ∀ (events : List Event) (out : Answer),
+                                Loop H proof root batch kind lo n slot f events out →
+                                  leafHistory kind events =
+                                    expected H p q batch kind (nodeView H proof slot) root positions f.scratch :=
+⋯
+'NLL_LoopHistory.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0979b74033a94b169511e00bca2a82a6.scope; invocation ID: f42ff2c761244e2597ce60e389e2f849

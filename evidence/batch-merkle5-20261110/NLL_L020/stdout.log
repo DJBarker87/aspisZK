@@ -1,0 +1,19 @@
+theorem NLL_TreeReturning.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Root) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : Indices) (val : Values) (events : List Event) (out : Answer),
+                  Invocation H proof raw root batch kind idx val events out →
+                    NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                          proof raw root batch kind idx val () =
+                        ok out ∧
+                      leafHistory kind events =
+                        NKV_QueryPlan.plan H p (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+                          (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind)) root
+                          (NJV_EntryABI.initial idx val 0#usize) :=
+⋯
+'NLL_TreeReturning.source' depends on axioms: [propext, Classical.choice, Quot.sound]

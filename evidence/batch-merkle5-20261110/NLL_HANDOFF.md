@@ -9,3 +9,7 @@ Frozen verifier/Cargo.lock: 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Pool: b936
 Own host workspace: /home/dombarker/project-offloads/codex-cx-batch-merkle5-20261110; CARGO_TARGET_DIR: NLL_target inside it. Caps: MemoryHigh=6G MemoryMax=8G MemorySwapMax=0 TasksMax=64; Lean -M7000. Admission requires exit0 and allowed:true, free disk >=40GB. Budget:40 Kani,140 Lean,0 extraction; at most two combined audits. Serial scopes selected.
 
 Remaining: concrete entry/iteration/terminal state/event relation for055, every CLOSED child at SAME arguments including abort and full poststate; parent three-call fold and batch caller; then TX1 domain installation. All six remain OPEN. No native/security result claimed by this initial scope record.
+
+## Stage 1: returning fold
+
+NLL_TreeReturning.source (L020) associates ONE NLL.Invocation with the full explicit Rust Result, both arrays and exact NKV_QueryPlan. Entry stream, loop room/count, exact opening/digest bytes, terminal byte gate, CLOSED verifier poststate and ordered history are discharged inside the fold. Standard axioms only at every accepted top theorem. Local proof/length/wire/canonical-queries/batch/kind carrier premises remain; this is not an (aq)(2) row root. No rows promoted. AbortInvocation/Prefix files are drafts for stage2. No native probes or extraction repeated. Exact release fields in per-attempt receipts and NLL_ATTEMPTS.jsonl.

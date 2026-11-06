@@ -1,0 +1,14 @@
+theorem NLL_TerminalDomain.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (batch : ℕ) (kind slot : Usize),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                ∀ (count : ℕ),
+                  (NKV_ConcreteChildren.ops H).op3 proof slot = ok (nodeView H proof slot) ∧
+                    (↑(nodeView H proof slot)).length = 32 * OraclePortSelectedDraft.capacity (3 * batch + ↑kind) ∧
+                      (↑(MultiproofConeSlotTail.prefixNodes (nodeView H proof slot) count)).length ≤ 9216 :=
+⋯
+'NLL_TerminalDomain.source' depends on axioms: [propext, Classical.choice, Quot.sound]
