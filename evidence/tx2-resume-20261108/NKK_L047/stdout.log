@@ -1,0 +1,20 @@
+theorem NKK_ClauseRoot.source : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (ck proof pub : Slice U8) (v : transport.Variant) (hash : H),
+  NKK_LogClauses.Holds (NKK_Clauses.Clause reservation d hash)
+      (NJU_ResumeObserved.run reservation d ck proof pub v hash) ∧
+    (NJU_ResumeObserved.run reservation d ck proof pub v hash).result =
+      NJC_RawCalls.resume (NJC_FilledClause.reserved reservation) d ck proof pub v hash :=
+fun reservation {H} d ck proof pub v hash =>
+  ⟨NKK_ResumeClauses.run reservation d ck proof pub v hash, NJU_ResumeRoot.source reservation d ck proof pub v hash⟩
+theorem NKK_ClauseRoot.cohort : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (ck proof pub : Slice U8) (hash : H),
+  NKK_LogClauses.Holds (NKK_Clauses.Clause reservation d hash)
+      (NJU_ResumeObserved.run reservation d ck proof pub transport.Variant.S2 hash) ∧
+    NIL_StatePort.reply (NJU_ResumeObserved.run reservation d ck proof pub transport.Variant.S2 hash).result =
+      AspisR1Stage2.verifier.resumeWithOps (CheckpointBytes4Ops.ops (NJC_FilledClause.reserved reservation)) d ck proof
+        pub AspisR1Stage2.transport.Variant.S2 hash :=
+fun reservation {H} d ck proof pub hash =>
+  ⟨NKK_ResumeClauses.run reservation d ck proof pub transport.Variant.S2 hash,
+    NJU_ResumeRoot.cohort reservation d ck proof pub hash⟩
+'NKK_ClauseRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKK_ClauseRoot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]

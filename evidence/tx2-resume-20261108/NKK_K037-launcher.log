@@ -1,0 +1,51 @@
+{"attempt": "NKK_K037", "exit_status": 1, "wall_seconds": 2.5071775240357965, "peak_rss_kib": "440104", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+reference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: crates/aspis-r1-cost-probe/src/verifier.rs:19:27 in function <verifier::Error as core::cmp::PartialEq>::eq
+
+Check 122: <verifier::Error as core::cmp::PartialEq>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: crates/aspis-r1-cost-probe/src/verifier.rs:19:27 in function <verifier::Error as core::cmp::PartialEq>::eq
+
+Check 123: <verifier::Error as core::cmp::PartialEq>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: crates/aspis-r1-cost-probe/src/verifier.rs:19:27 in function <verifier::Error as core::cmp::PartialEq>::eq
+
+Check 124: <verifier::Error as core::cmp::PartialEq>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: crates/aspis-r1-cost-probe/src/verifier.rs:19:27 in function <verifier::Error as core::cmp::PartialEq>::eq
+
+Check 125: <verifier::Error as core::cmp::PartialEq>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: crates/aspis-r1-cost-probe/src/verifier.rs:19:27 in function <verifier::Error as core::cmp::PartialEq>::eq
+
+
+SUMMARY:
+ ** 1 of 125 failed
+Failed Checks: |out| (out.is_ok() || *out==Err(Error::Parse))^cfg!(NKK_invert)
+ File: "crates/aspis-r1-cost-probe/src/NKK_parent.rs", line 303, in verifier::NKK_parent::slice_fidelity_weak::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.07492952s
+
+Manual Harness Summary:
+Verification failed for - verifier::NKK_parent::slice_fidelity_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r0769055832ad448e9bb4df817677def9.scope; invocation ID: 44bf38ffa99a437d82efb9ec6fade575

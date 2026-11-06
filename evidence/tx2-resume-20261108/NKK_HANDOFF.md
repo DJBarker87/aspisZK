@@ -15,3 +15,9 @@ Next deliverable: NKK_OCCURRENCES.md and exact cut coverage before native-parent
 ## Stage 1 inventory checkpoint
 
 NKK_OCCURRENCES lists45 top-level and74 nested reads. Seed49 files /8,432,064 bytes pinned in NKK_SEED.json. L002 focused imports pass; L004 log-clause composition and L005 complete event clause definitions pass with standard axioms. L001 had one bad namespace #print (corrected in L002); L003 used nonexistent List.Forall constructor names (corrected in L004). No limits raised. Native segment candidates are being checked; no new row closure or combined audit yet.
+
+## Stage 2 native segment checkpoint
+
+All50 native attempts are terminal. Twelve segment/cut positives have matching failing controls; the6 borrowed-slice fidelity runs pass/fail in the required pattern. Full proof/stored/reply frame is supplied by the checked modifies set of proof_digest_frame_cut, replacing retiredK031. Four worker reference/control issues remain recorded in NKK_FINDINGS.md; none is a shipped-code finding.
+
+NKK_ResumeClauses.run now proves every child clause on the one actual resume source log, all Results/abort prefixes included and universally over the SAME Reservation. NKK_RawFold.association/synchronized and source mapping/domain work are being assembled. These do not yet instantiate a complete native parent G. TX2:124 remains OPEN; target not yet established.

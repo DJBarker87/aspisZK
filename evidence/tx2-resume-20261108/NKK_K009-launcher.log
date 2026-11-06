@@ -1,0 +1,43 @@
+{"attempt": "NKK_K009", "exit_status": 0, "wall_seconds": 30.156184524064884, "peak_rss_kib": "1309824", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <core::slice::IterMut<'_, ()> as core::iter::ExactSizeIterator>::len
+
+Check 424: <core::slice::IterMut<'_, ()> as core::iter::ExactSizeIterator>::len.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <core::slice::IterMut<'_, ()> as core::iter::ExactSizeIterator>::len
+
+Check 425: <core::slice::IterMut<'_, ()> as core::iter::ExactSizeIterator>::len.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <core::slice::IterMut<'_, ()> as core::iter::ExactSizeIterator>::len
+
+Check 426: <core::slice::IterMut<'_, ()> as core::iter::ExactSizeIterator>::len.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <core::slice::IterMut<'_, ()> as core::iter::ExactSizeIterator>::len
+
+
+SUMMARY:
+ ** 0 of 426 failed (8 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 25.719173s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rf253f480fa884208acba503c9988b4d6.scope; invocation ID: 95b006f25a7d4d10957d8a53cd3c0e80

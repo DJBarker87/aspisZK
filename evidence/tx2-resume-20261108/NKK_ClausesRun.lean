@@ -1,4 +1,4 @@
-import NKK_ClausesResumeBody
+import NKK_CloseTail
 set_option autoImplicit false
 noncomputable section
 namespace NKK_ResumeClauses
@@ -8,14 +8,11 @@ theorem run (reservation : NP6_StdModel.Reservation)
   {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H)
   (bytes : Slice Std.U8) (proof : Slice Std.U8) (public1 : Slice Std.U8)
   (v : transport.Variant) (hash : H) :
- NKK_LogClauses.Holds (NKK_Clauses.Clause reservation d hash) (run reservation d bytes proof public1 v hash) := by
- unfold run
+ NKK_LogClauses.Holds (NKK_Clauses.Clause reservation d hash) (NJU_ResumeObserved.run reservation d bytes proof public1 v hash) := by
+ unfold NJU_ResumeObserved.run
  repeat' first
- | (apply resumeBody)
- | (apply queryBlock)
- | (apply queryMid)
- | (apply queryEnd)
- | (apply finishTail)
+ | nkk_close_resume_tail
+ | (solve | (change List.Forall _ []; simp))
  | (apply NKK_Clauses.raw)
  | (apply NKK_Clauses.k)
  | (apply NKK_Clauses.e)
@@ -25,9 +22,6 @@ theorem run (reservation : NP6_StdModel.Reservation)
  | (apply NKK_Clauses.filled)
  | (apply NKK_Clauses.headerAny)
  | (apply NKK_Clauses.digest)
- | (apply NKK_LogClauses.pure)
- | (apply NKK_LogClauses.lift)
- | (apply NKK_LogClauses.liftM)
  | (apply NKK_LogClauses.bind)
  | (apply NKK_LogClauses.branch)
  | (apply NKK_LogClauses.flow)

@@ -12,6 +12,7 @@ theorem finishTail (reservation : NP6_StdModel.Reservation) {H : Type}
  NKK_LogClauses.Holds (NKK_Clauses.Clause reservation d hash) (finishTailG reservation d bytes v i4 end1 state a3 a4 val val1 val2 val3 val4 queryValues r34) := by
  unfold finishTailG
  repeat' first
+ | (solve | (change List.Forall _ []; simp))
  | (apply NKK_Clauses.raw)
  | (apply NKK_Clauses.k)
  | (apply NKK_Clauses.e)
@@ -21,9 +22,6 @@ theorem finishTail (reservation : NP6_StdModel.Reservation) {H : Type}
  | (apply NKK_Clauses.filled)
  | (apply NKK_Clauses.headerAny)
  | (apply NKK_Clauses.digest)
- | (apply NKK_LogClauses.pure)
- | (apply NKK_LogClauses.lift)
- | (apply NKK_LogClauses.liftM)
  | (apply NKK_LogClauses.bind)
  | (apply NKK_LogClauses.branch)
  | (apply NKK_LogClauses.flow)

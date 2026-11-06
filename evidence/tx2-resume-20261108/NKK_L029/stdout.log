@@ -1,0 +1,271 @@
+NKK_generated/NKK_RawAssociation.lean:15:8: error: unsolved goals
+case zero
+n : Usize
+r : Reader
+before : List (Std.Array U8 n)
+⊢ match (pure ([], r)).result with
+  | ok (bs, last) =>
+    List.foldl step { values := before, reader := r, status := ok () } (pure ([], r)).events =
+      { values := before ++ bs, reader := last, status := ok () }
+  | fail err =>
+    (List.foldl step { values := before, reader := r, status := ok () } (pure ([], r)).events).status = fail err
+  | div => (List.foldl step { values := before, reader := r, status := ok () } (pure ([], r)).events).status = div
+NKK_generated/NKK_RawAssociation.lean:18:13: error: unsolved goals
+case succ.fail
+n : Usize
+count : ℕ
+ih :
+  ∀ (r : Reader) (before : List (Std.Array U8 n)),
+    Matches before (fold (observed n count r).events { values := before, reader := r, status := ok () })
+      (observed n count r).result
+r : Reader
+before : List (Std.Array U8 n)
+err : Error
+call : NJC_ConcreteUnwrap.raw n r = fail err
+⊢ match
+    (do
+        let __x ← { result := fail err, events := [{ before := r, reply := fail err }] }
+        let __x_1 ← observed n count __x.2
+        pure (__x.1 :: __x_1.1, __x_1.2)).result with
+  | ok (bs, last) =>
+    List.foldl step { values := before, reader := r, status := ok () }
+        (do
+            let __x ← { result := fail err, events := [{ before := r, reply := fail err }] }
+            let __x_1 ← observed n count __x.2
+            pure (__x.1 :: __x_1.1, __x_1.2)).events =
+      { values := before ++ bs, reader := last, status := ok () }
+  | fail err_1 =>
+    (List.foldl step { values := before, reader := r, status := ok () }
+          (do
+              let __x ← { result := fail err, events := [{ before := r, reply := fail err }] }
+              let __x_1 ← observed n count __x.2
+              pure (__x.1 :: __x_1.1, __x_1.2)).events).status =
+      fail err_1
+  | div =>
+    (List.foldl step { values := before, reader := r, status := ok () }
+          (do
+              let __x ← { result := fail err, events := [{ before := r, reply := fail err }] }
+              let __x_1 ← observed n count __x.2
+              pure (__x.1 :: __x_1.1, __x_1.2)).events).status =
+      div
+NKK_generated/NKK_RawAssociation.lean:21:8: error: unsolved goals
+case succ.div
+n : Usize
+count : ℕ
+ih :
+  ∀ (r : Reader) (before : List (Std.Array U8 n)),
+    Matches before (fold (observed n count r).events { values := before, reader := r, status := ok () })
+      (observed n count r).result
+r : Reader
+before : List (Std.Array U8 n)
+call : NJC_ConcreteUnwrap.raw n r = div
+⊢ match
+    (do
+        let __x ← { result := div, events := [{ before := r, reply := div }] }
+        let __x_1 ← observed n count __x.2
+        pure (__x.1 :: __x_1.1, __x_1.2)).result with
+  | ok (bs, last) =>
+    List.foldl step { values := before, reader := r, status := ok () }
+        (do
+            let __x ← { result := div, events := [{ before := r, reply := div }] }
+            let __x_1 ← observed n count __x.2
+            pure (__x.1 :: __x_1.1, __x_1.2)).events =
+      { values := before ++ bs, reader := last, status := ok () }
+  | fail err =>
+    (List.foldl step { values := before, reader := r, status := ok () }
+          (do
+              let __x ← { result := div, events := [{ before := r, reply := div }] }
+              let __x_1 ← observed n count __x.2
+              pure (__x.1 :: __x_1.1, __x_1.2)).events).status =
+      fail err
+  | div =>
+    (List.foldl step { values := before, reader := r, status := ok () }
+          (do
+              let __x ← { result := div, events := [{ before := r, reply := div }] }
+              let __x_1 ← observed n count __x.2
+              pure (__x.1 :: __x_1.1, __x_1.2)).events).status =
+      div
+NKK_generated/NKK_RawAssociation.lean:29:4: error: Type mismatch: After simplification, term
+  tail
+ has type
+  (List.foldl step { values := before ++ [b], reader := next, status := ok () } (observed n count next).events).status =
+    fail err
+but is expected to have type
+  match
+    (do
+        let __x ← { result := ok (b, next), events := [{ before := r, reply := ok (b, next) }] }
+        let __x_1 ← observed n count __x.2
+        pure (__x.1 :: __x_1.1, __x_1.2)).result with
+  | ok (bs, last) =>
+    List.foldl step { values := before, reader := r, status := ok () }
+        (do
+            let __x ← { result := ok (b, next), events := [{ before := r, reply := ok (b, next) }] }
+            let __x_1 ← observed n count __x.2
+            pure (__x.1 :: __x_1.1, __x_1.2)).events =
+      { values := before ++ bs, reader := last, status := ok () }
+  | fail err =>
+    (List.foldl step { values := before, reader := r, status := ok () }
+          (do
+              let __x ← { result := ok (b, next), events := [{ before := r, reply := ok (b, next) }] }
+              let __x_1 ← observed n count __x.2
+              pure (__x.1 :: __x_1.1, __x_1.2)).events).status =
+      fail err
+  | div =>
+    (List.foldl step { values := before, reader := r, status := ok () }
+          (do
+              let __x ← { result := ok (b, next), events := [{ before := r, reply := ok (b, next) }] }
+              let __x_1 ← observed n count __x.2
+              pure (__x.1 :: __x_1.1, __x_1.2)).events).status =
+      div
+NKK_generated/NKK_RawAssociation.lean:32:4: error: Type mismatch: After simplification, term
+  tail
+ has type
+  (List.foldl step { values := before ++ [b], reader := next, status := ok () } (observed n count next).events).status =
+    div
+but is expected to have type
+  match
+    (do
+        let __x ← { result := ok (b, next), events := [{ before := r, reply := ok (b, next) }] }
+        let __x_1 ← observed n count __x.2
+        pure (__x.1 :: __x_1.1, __x_1.2)).result with
+  | ok (bs, last) =>
+    List.foldl step { values := before, reader := r, status := ok () }
+        (do
+            let __x ← { result := ok (b, next), events := [{ before := r, reply := ok (b, next) }] }
+            let __x_1 ← observed n count __x.2
+            pure (__x.1 :: __x_1.1, __x_1.2)).events =
+      { values := before ++ bs, reader := last, status := ok () }
+  | fail err =>
+    (List.foldl step { values := before, reader := r, status := ok () }
+          (do
+              let __x ← { result := ok (b, next), events := [{ before := r, reply := ok (b, next) }] }
+              let __x_1 ← observed n count __x.2
+              pure (__x.1 :: __x_1.1, __x_1.2)).events).status =
+      fail err
+  | div =>
+    (List.foldl step { values := before, reader := r, status := ok () }
+          (do
+              let __x ← { result := ok (b, next), events := [{ before := r, reply := ok (b, next) }] }
+              let __x_1 ← observed n count __x.2
+              pure (__x.1 :: __x_1.1, __x_1.2)).events).status =
+      div
+NKK_generated/NKK_RawAssociation.lean:36:4: error: Type mismatch: After simplification, term
+  tail
+ has type
+  List.foldl step { values := before ++ [b], reader := next, status := ok () } (observed n count next).events =
+    { values := before ++ b :: bs, reader := last, status := ok () }
+but is expected to have type
+  match
+    (do
+        let __x ← { result := ok (b, next), events := [{ before := r, reply := ok (b, next) }] }
+        let __x_1 ← observed n count __x.2
+        pure (__x.1 :: __x_1.1, __x_1.2)).result with
+  | ok (bs, last) =>
+    List.foldl step { values := before, reader := r, status := ok () }
+        (do
+            let __x ← { result := ok (b, next), events := [{ before := r, reply := ok (b, next) }] }
+            let __x_1 ← observed n count __x.2
+            pure (__x.1 :: __x_1.1, __x_1.2)).events =
+      { values := before ++ bs, reader := last, status := ok () }
+  | fail err =>
+    (List.foldl step { values := before, reader := r, status := ok () }
+          (do
+              let __x ← { result := ok (b, next), events := [{ before := r, reply := ok (b, next) }] }
+              let __x_1 ← observed n count __x.2
+              pure (__x.1 :: __x_1.1, __x_1.2)).events).status =
+      fail err
+  | div =>
+    (List.foldl step { values := before, reader := r, status := ok () }
+          (do
+              let __x ← { result := ok (b, next), events := [{ before := r, reply := ok (b, next) }] }
+              let __x_1 ← observed n count __x.2
+              pure (__x.1 :: __x_1.1, __x_1.2)).events).status =
+      div
+NKK_generated/NKK_RawAssociation.lean:15:44: warning: This simp argument is unused:
+  NJU_Log.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵d̵,̵M̵a̵t̵c̵h̵e̵s̵,̵f̵o̵l̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵n̵i̵l̵]̵[̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲,̲ ̲f̲o̲l̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKK_generated/NKK_RawAssociation.lean:15:57: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵d̵,̵M̵a̵t̵c̵h̵e̵s̵,̵f̵o̵l̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵n̵i̵l̵]̵[̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲,̲ ̲f̲o̲l̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKK_generated/NKK_RawAssociation.lean:15:73: warning: This simp argument is unused:
+  List.foldl_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵d̵,̵M̵a̵t̵c̵h̵e̵s̵,̵f̵o̵l̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵n̵i̵l̵]̵[̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲,̲ ̲f̲o̲l̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKK_generated/NKK_RawAssociation.lean:19:38: warning: This simp argument is unused:
+  NJU_Log.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵c̵a̵l̵l̵,̵M̵a̵t̵c̵h̵e̵s̵,̵f̵o̵l̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵n̵i̵l̵,̵s̵t̵e̵p̵]̵[̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲c̲a̲l̲l̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲,̲ ̲f̲o̲l̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲n̲i̲l̲,̲ ̲s̲t̲e̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKK_generated/NKK_RawAssociation.lean:20:4: warning: This simp argument is unused:
+  List.foldl_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵c̵a̵l̵l̵,̵M̵a̵t̵c̵h̵e̵s̵,̵f̵o̵l̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵n̵i̵l̵,̵s̵t̵e̵p̵]̵[̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲c̲a̲l̲l̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲,̲ ̲f̲o̲l̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲n̲i̲l̲,̲ ̲s̲t̲e̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKK_generated/NKK_RawAssociation.lean:20:20: warning: This simp argument is unused:
+  List.foldl_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵c̵a̵l̵l̵,̵M̵a̵t̵c̵h̵e̵s̵,̵f̵o̵l̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵n̵i̵l̵,̵s̵t̵e̵p̵]̵[̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲c̲a̲l̲l̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲,̲ ̲f̲o̲l̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲c̲o̲n̲s̲,̲ ̲s̲t̲e̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKK_generated/NKK_RawAssociation.lean:20:35: warning: This simp argument is unused:
+  step
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵c̵a̵l̵l̵,̵M̵a̵t̵c̵h̵e̵s̵,̵f̵o̵l̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵n̵i̵l̵,̵s̵t̵e̵p̵]̵[̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲c̲a̲l̲l̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲,̲ ̲f̲o̲l̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲c̲o̲n̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKK_generated/NKK_RawAssociation.lean:22:38: warning: This simp argument is unused:
+  NJU_Log.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵c̵a̵l̵l̵,̵M̵a̵t̵c̵h̵e̵s̵,̵f̵o̵l̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵n̵i̵l̵,̵s̵t̵e̵p̵]̵[̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲c̲a̲l̲l̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲,̲ ̲f̲o̲l̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲n̲i̲l̲,̲ ̲s̲t̲e̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKK_generated/NKK_RawAssociation.lean:23:4: warning: This simp argument is unused:
+  List.foldl_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵c̵a̵l̵l̵,̵M̵a̵t̵c̵h̵e̵s̵,̵f̵o̵l̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵n̵i̵l̵,̵s̵t̵e̵p̵]̵[̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲c̲a̲l̲l̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲,̲ ̲f̲o̲l̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲n̲i̲l̲,̲ ̲s̲t̲e̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKK_generated/NKK_RawAssociation.lean:23:20: warning: This simp argument is unused:
+  List.foldl_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵c̵a̵l̵l̵,̵M̵a̵t̵c̵h̵e̵s̵,̵f̵o̵l̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵n̵i̵l̵,̵s̵t̵e̵p̵]̵[̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲c̲a̲l̲l̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲,̲ ̲f̲o̲l̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲c̲o̲n̲s̲,̲ ̲s̲t̲e̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKK_generated/NKK_RawAssociation.lean:23:35: warning: This simp argument is unused:
+  step
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵b̵s̵e̵r̵v̵e̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵c̵a̵l̵l̵,̵M̵a̵t̵c̵h̵e̵s̵,̵f̵o̵l̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵f̵o̵l̵d̵l̵_̵n̵i̵l̵,̵s̵t̵e̵p̵]̵[̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲c̲a̲l̲l̲,̲ ̲M̲a̲t̲c̲h̲e̲s̲,̲ ̲f̲o̲l̲d̲,̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲c̲o̲n̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲f̲o̲l̲d̲l̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NKK_RawFold.association' depends on axioms: [propext, sorryAx, Quot.sound]

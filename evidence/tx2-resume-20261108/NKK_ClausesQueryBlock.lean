@@ -11,28 +11,32 @@ theorem queryBlock (reservation : NP6_StdModel.Reservation) {H : Type}
  (r12 : verifier.Reader) (hash : H) :
  NKK_LogClauses.Holds (NKK_Clauses.Clause reservation d hash) (queryBlockG reservation d bytes v i4 end1 state a3 a4 val val1 val2 val3 val4 r12) := by
  unfold queryBlockG
- repeat' first
- | (apply queryMid)
- | (apply queryEnd)
- | (apply finishTail)
- | (apply NKK_Clauses.raw)
- | (apply NKK_Clauses.k)
- | (apply NKK_Clauses.e)
- | (apply NKK_Clauses.semantic)
- | (apply NKK_Clauses.weights)
- | (apply NKK_Clauses.validate)
- | (apply NKK_Clauses.filled)
- | (apply NKK_Clauses.headerAny)
- | (apply NKK_Clauses.digest)
- | (apply NKK_LogClauses.pure)
- | (apply NKK_LogClauses.lift)
- | (apply NKK_LogClauses.liftM)
- | (apply NKK_LogClauses.bind)
- | (apply NKK_LogClauses.branch)
- | (apply NKK_LogClauses.flow)
- | (intro value)
- | split
- | (cases_type Unit)
+ simp only [lift,NKK_LogReduce.lift_ok_bind]
+ apply NKK_LogClauses.bind
+ · exact NKK_Clauses.raw reservation d hash _ _
+ · rintro ⟨a5,r13⟩
+   apply NKK_LogClauses.bind
+   · exact NKK_Clauses.raw reservation d hash _ _
+   · rintro ⟨a6,r14⟩
+     apply NKK_LogClauses.bind
+     · exact NKK_Clauses.raw reservation d hash _ _
+     · rintro ⟨a7,r15⟩
+       apply NKK_LogClauses.bind
+       · exact NKK_Clauses.raw reservation d hash _ _
+       · rintro ⟨a8,r16⟩
+         apply NKK_LogClauses.bind
+         · exact NKK_Clauses.raw reservation d hash _ _
+         · rintro ⟨a9,r17⟩
+           apply NKK_LogClauses.bind
+           · exact NKK_Clauses.raw reservation d hash _ _
+           · rintro ⟨a10,r18⟩
+             apply NKK_LogClauses.bind
+             · exact NKK_Clauses.raw reservation d hash _ _
+             · rintro ⟨a11,r19⟩
+               apply NKK_LogClauses.bind
+               · exact NKK_Clauses.raw reservation d hash _ _
+               · rintro ⟨a12,r20⟩
+                 apply queryMid
 
 #print axioms queryBlock
 end NKK_ResumeClauses

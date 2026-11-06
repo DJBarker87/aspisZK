@@ -10,6 +10,7 @@ theorem resumeBody (reservation : NP6_StdModel.Reservation) {H : Type}
  NKK_LogClauses.Holds (NKK_Clauses.Clause reservation d hash) (resumeBodyG reservation d bytes v i4 end1) := by
  unfold resumeBodyG
  repeat' first
+ | (solve | (change List.Forall _ []; simp))
  | (apply queryBlock)
  | (apply queryMid)
  | (apply queryEnd)
@@ -23,9 +24,6 @@ theorem resumeBody (reservation : NP6_StdModel.Reservation) {H : Type}
  | (apply NKK_Clauses.filled)
  | (apply NKK_Clauses.headerAny)
  | (apply NKK_Clauses.digest)
- | (apply NKK_LogClauses.pure)
- | (apply NKK_LogClauses.lift)
- | (apply NKK_LogClauses.liftM)
  | (apply NKK_LogClauses.bind)
  | (apply NKK_LogClauses.branch)
  | (apply NKK_LogClauses.flow)
