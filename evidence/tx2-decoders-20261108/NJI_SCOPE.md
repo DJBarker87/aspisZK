@@ -2,7 +2,7 @@
 
 All eight baseline rows OPEN. Exact original obligations retained in NJI_BASELINE_ROWS.json.xz, derived from authoritative NIU_LEDGER.json.xz.
 
-Cohort boundary: coherent AdapterRw installed account/registry functions under the replayed RPx_Deployed closure; exact op/owner inventory follows compiler inspection. No stale lean024 slot inferred.
+Cohort boundary: canonical AdapterRwModel from NER headline closure; policy validator op15, registry V1 decoder op31, entry V1 decoder op32, master/checkpoint op48/op49. V1 internal validators use full record/error carriers. op43/op44 are digest/error. NBN_U04 higher interpretations stay OPEN until these source associations are installed.
 
 ## TX2:150 decode_verifier_policy_v1
 
@@ -99,3 +99,11 @@ Analogue method: TX2:209 NHY_NCXValidators.registry_source: actual native/refere
 Domain: 384-byte master,192-byte Pool checkpoint,128/256-byte registries and192/320-byte entries; both version/flag alternatives; canonical digests, immutable/unpaused policy and active-at-slot checks. This is the Pool checkpoint, not the1768-byte verifier checkpoint.
 
 Caller clauses: complete same-input/carrier/Result/state/effects and exact Std constructors, windows, unwrap safety. No acceptance-only claim. Root hypotheses restricted by (aq)(2).
+
+## Current callee resolution
+
+TX2:146 digest decode CLOSED;151 policy validator CLOSED;192 status CLOSED;193/195 retirement CLOSED;197/199 immutable CLOSED;205 zero-binding CLOSED. TX2:149 identity decoder OPEN and outside this job: TX2:153 cannot close without that slice-boundary packet. Internal150/157/206/208 depend on this job.
+
+## Extraction finding NJI-F1
+
+Single Charon run produced all eight LLBC roots. Aeneas0 omitted decoder152/153/201/203 after the missing Iterator.any warning. No emitted-body closure for those rows; no hidden replacement. Master157 emitted but capacity parameter propagation and library IterMut ABI prevent aggregate compilation. Core split retains policy150 and validators206/208 without altered bodies. Raw artifacts and L003 failure retained.

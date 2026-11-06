@@ -1,0 +1,229 @@
+--- failed/Funs.lean
++++ isolated/Core.lean
+@@ -55,18 +55,6 @@
+     (core.result.Result Unit aspis_statement.pool_v1.format.PoolV1FormatError))
+ 
+ variable (NJI_call_8 : Result Std.U64)
+-
+-/-- Trait implementation: [core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut T> for core::slice::iter::IterMut<'a, T>}]
+-    Source: '/rustc/library/core/src/slice/iter/macros.rs', lines 153:8-153:45
+-    Name pattern: [core::iter::traits::iterator::Iterator<core::slice::iter::IterMut<'a, @T>, &'a mut @T>] -/
+-@[reducible, rust_trait_impl
+-  "core::iter::traits::iterator::Iterator<core::slice::iter::IterMut<'a, @T>, &'a mut @T>"]
+-impl_def core.slice.iter.IterMut.Insts.CoreIterTraitsIteratorIteratorMutAT (T :
+-  Type) : core.iter.traits.iterator.Iterator (core.slice.iter.IterMut T) T := {
+-  next := core.slice.iter.IteratorIterMut.next
+-  enumerate := core.iter.traits.iterator.Iterator.enumerate.trait_default
+-    (core.slice.iter.IterMut.Insts.CoreIterTraitsIteratorIteratorMutAT T)
+-}
+ 
+ /-- [aspis_statement::pool_v1::format::POOL_V1_DIGEST_ENCODING_VERSION]
+     Source: 'crates/aspis-statement/src/pool_v1/format.rs', lines 27:0-27:45
+@@ -434,194 +422,6 @@
+   : Std.Usize :=
+   112#usize
+ 
+-/-- [aspis_statement::pool_v1::pair_forest_accounts::validate_master::{impl core::ops::function::FnMut<(&'_ u64,), bool> for aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1}::call_mut]:
+-    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs', lines 219:13-219:23
+-    Name pattern: [aspis_statement::pool_v1::pair_forest_accounts::validate_master::{core::ops::function::FnMut<aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1, (&'_ u64), bool>}::call_mut] -/
+-@[rust_fun
+-  "aspis_statement::pool_v1::pair_forest_accounts::validate_master::{core::ops::function::FnMut<aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1, (&'_ u64), bool>}::call_mut"]
+-def
+-  aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1.Insts.CoreOpsFunctionFnMutTupleSharedU64Bool.call_mut
+-  (c : aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1)
+-  (tupled_args : Std.U64) :
+-  Result (Bool ×
+-    aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1)
+-  := do
+-  let i ← NJI_call_8
+-  ok (tupled_args > i, c)
+-
+-/-- [aspis_statement::pool_v1::pair_forest_accounts::validate_master::{impl core::ops::function::FnOnce<(&'_ u64,), bool> for aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1}::call_once]:
+-    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs', lines 219:13-219:23
+-    Name pattern: [aspis_statement::pool_v1::pair_forest_accounts::validate_master::{core::ops::function::FnOnce<aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1, (&'_ u64), bool>}::call_once] -/
+-@[rust_fun
+-  "aspis_statement::pool_v1::pair_forest_accounts::validate_master::{core::ops::function::FnOnce<aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1, (&'_ u64), bool>}::call_once"]
+-def
+-  aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1.Insts.CoreOpsFunctionFnOnceTupleSharedU64Bool.call_once
+-  (c : aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1)
+-  (i : Std.U64) :
+-  Result Bool
+-  := do
+-  let (b, _) ←
+-    aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1.Insts.CoreOpsFunctionFnMutTupleSharedU64Bool.call_mut
+-      c i
+-  ok b
+-
+-/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_accounts::validate_master::{impl core::ops::function::FnOnce<(&'_ u64,), bool> for aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1}]
+-    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs', lines 219:13-219:23
+-    Name pattern: [core::ops::function::FnOnce<aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1, (&'_ u64), bool>] -/
+-@[reducible, rust_trait_impl
+-  "core::ops::function::FnOnce<aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1, (&'_ u64), bool>"]
+-def
+-  aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1.Insts.CoreOpsFunctionFnOnceTupleSharedU64Bool
+-  : core.ops.function.FnOnce
+-  aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1
+-  Std.U64 Bool := {
+-  call_once :=
+-    aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1.Insts.CoreOpsFunctionFnOnceTupleSharedU64Bool.call_once
+-}
+-
+-/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_accounts::validate_master::{impl core::ops::function::FnMut<(&'_ u64,), bool> for aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1}]
+-    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs', lines 219:13-219:23
+-    Name pattern: [core::ops::function::FnMut<aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1, (&'_ u64), bool>] -/
+-@[reducible, rust_trait_impl
+-  "core::ops::function::FnMut<aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1, (&'_ u64), bool>"]
+-def
+-  aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1.Insts.CoreOpsFunctionFnMutTupleSharedU64Bool
+-  : core.ops.function.FnMut
+-  aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1
+-  Std.U64 Bool := {
+-  FnOnceInst :=
+-    aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1.Insts.CoreOpsFunctionFnOnceTupleSharedU64Bool
+-  call_mut :=
+-    aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1.Insts.CoreOpsFunctionFnMutTupleSharedU64Bool.call_mut
+-}
+-
+-/-- [aspis_statement::pool_v1::pair_forest_accounts::validate_master::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::format::PoolV1FormatError,), aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1> for aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure}::call_once]:
+-    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs', lines 215:17-215:20
+-    Name pattern: [aspis_statement::pool_v1::pair_forest_accounts::validate_master::{core::ops::function::FnOnce<aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure, (aspis_statement::pool_v1::format::PoolV1FormatError), aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1>}::call_once] -/
+-@[rust_fun
+-  "aspis_statement::pool_v1::pair_forest_accounts::validate_master::{core::ops::function::FnOnce<aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure, (aspis_statement::pool_v1::format::PoolV1FormatError), aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1>}::call_once"]
+-def
+-  aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1FormatErrorPoolV1PairForestAccountErrorV1.call_once
+-  (c : aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure)
+-  (tupled_args : aspis_statement.pool_v1.format.PoolV1FormatError) :
+-  Result
+-    aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+-  := do
+-  ok
+-    aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.Policy
+-
+-/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_accounts::validate_master::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::format::PoolV1FormatError,), aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1> for aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure}]
+-    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs', lines 215:17-215:20
+-    Name pattern: [core::ops::function::FnOnce<aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure, (aspis_statement::pool_v1::format::PoolV1FormatError), aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1>] -/
+-@[reducible, rust_trait_impl
+-  "core::ops::function::FnOnce<aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure, (aspis_statement::pool_v1::format::PoolV1FormatError), aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1>"]
+-def
+-  aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1FormatErrorPoolV1PairForestAccountErrorV1
+-  : core.ops.function.FnOnce
+-  aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure
+-  aspis_statement.pool_v1.format.PoolV1FormatError
+-  aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+-  := {
+-  call_once :=
+-    aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1FormatErrorPoolV1PairForestAccountErrorV1.call_once
+-}
+-
+-/-- [aspis_statement::pool_v1::pair_forest_accounts::validate_master]:
+-    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs', lines 204:0-206:47
+-    Name pattern: [aspis_statement::pool_v1::pair_forest_accounts::validate_master] -/
+-@[rust_fun "aspis_statement::pool_v1::pair_forest_accounts::validate_master"]
+-def aspis_statement.pool_v1.pair_forest_accounts.validate_master
+-  (master :
+-  aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1) :
+-  Result (core.result.Result Unit
+-    aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+-  := do
+-  let a := Array.repeat 32#usize 0#u8
+-  let b ←
+-    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+-      master.identity.pool a
+-  if b
+-  then
+-    ok (core.result.Result.Err
+-      aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)
+-  else
+-    let a1 := Array.repeat 32#usize 0#u8
+-    let b1 ←
+-      core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+-        master.identity.asset_mint a1
+-    if b1
+-    then
+-      ok (core.result.Result.Err
+-        aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)
+-    else
+-      let a2 := Array.repeat 32#usize 0#u8
+-      let b2 ←
+-        core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+-          master.identity.token_program a2
+-      if b2
+-      then
+-        ok (core.result.Result.Err
+-          aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)
+-      else
+-        let a3 := Array.repeat 32#usize 0#u8
+-        let b3 ←
+-          core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+-            master.identity.deployment_domain a3
+-        if b3
+-        then
+-          ok (core.result.Result.Err
+-            aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)
+-        else
+-          let r ←
+-            NJI_call_7
+-              master.verifier_policy
+-          let r1 ←
+-            NJI_call_2
+-              aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1FormatErrorPoolV1PairForestAccountErrorV1
+-              r ()
+-          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+-          match cf with
+-          | core.ops.control_flow.ControlFlow.Continue _ =>
+-            let s ←
+-              lift (Array.to_slice master.last_checkpoint_lane_sequences)
+-            let i ← core.slice.Slice.iter s
+-            let (b4, _) ←
+-              NJI_call_4
+-                aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1.Insts.CoreOpsFunctionFnMutTupleSharedU64Bool
+-                i ()
+-            if b4
+-            then
+-              ok (core.result.Result.Err
+-                aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidMasterState)
+-            else
+-              if master.has_checkpoint
+-              then
+-                if master.next_checkpoint_sequence = 0#u64
+-                then
+-                  ok (core.result.Result.Err
+-                    aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidMasterState)
+-                else ok (core.result.Result.Ok ())
+-              else
+-                if master.next_checkpoint_sequence != 0#u64
+-                then
+-                  ok (core.result.Result.Err
+-                    aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidMasterState)
+-                else
+-                  let a4 := Array.repeat 8#usize 0#u64
+-                  let b5 ←
+-                    core.array.equality.PartialEqArray.ne core.cmp.PartialEqU64
+-                      master.last_checkpoint_lane_sequences a4
+-                  if b5
+-                  then
+-                    ok (core.result.Result.Err
+-                      aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidMasterState)
+-                  else ok (core.result.Result.Ok ())
+-          | core.ops.control_flow.ControlFlow.Break residual =>
+-            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+-              Unit (core.convert.FromSame
+-              aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+-              residual
+-
+ /-- [aspis_statement::pool_v1::pair_forest_accounts::decode_pool_v1_pair_forest_master_v1::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::format::PoolV1FormatError,), aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1> for aspis_statement::pool_v1::pair_forest_accounts::decode_pool_v1_pair_forest_master_v1::closure#2}::call_once]:
+     Source: 'crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs', lines 293:17-293:20
+     Name pattern: [aspis_statement::pool_v1::pair_forest_accounts::decode_pool_v1_pair_forest_master_v1::{core::ops::function::FnOnce<aspis_statement::pool_v1::pair_forest_accounts::decode_pool_v1_pair_forest_master_v1::closure#2, (aspis_statement::pool_v1::format::PoolV1FormatError), aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1>}::call_once] -/
+@@ -1143,11 +943,7 @@
+ 
+ end NJI_Extracted
+ 
++
+ #print axioms NJI_Extracted.aspis_statement.pool_v1.format.decode_verifier_policy_v1
+-#print axioms NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.decode_pool_v1_pair_forest_checkpoint_v1
+-#print axioms NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.decode_pool_v1_pair_forest_master_v1
+-#print axioms NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.validate_master
+-#print axioms NJI_Extracted.aspis_statement.pool_v1.verifier_registry.decode_verifier_registry_entry_v1
+-#print axioms NJI_Extracted.aspis_statement.pool_v1.verifier_registry.decode_verifier_registry_v1
+ #print axioms NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_entry_v1
+ #print axioms NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_v1

@@ -7,3 +7,9 @@ Work only in NJI-prefixed modules and this evidence directory. No shipped source
 Budget60 Kani/70 Lean/1 extraction. At most one admitted scope at a time initially;6G/8G/swap0/tasks64, Lean-M7000, optimized Rust, exact deployed features and frozen offline lock/graph. No unchanged failed-shape reruns. All top theorems require printed standard axioms. Admission exit0 AND allowed:true. Own host workspace codex-cx-tx2-decoders-20261107; own CARGO_TARGET_DIR inside it. Host observed99% disk/25G available; keep source/cache small. Predecessor extraction was blocked by cold compiler caches; inspect before launching.
 
 Next: seed retained NIU/NIS/NHY objects with hashes, inspect the actual cohort owner, run NHR preflight, then bottom-up native cuts/emitted-body model laws. Every full Result and rejected abort prefix must be retained. No endpoint/success premise may supply a child.
+
+## Extraction stage
+
+Seed12,798,640 bytes copied from retained NIU first, then NIS and NHY exports, each object checked; NJI_SEED.json pins files. Own cache retained. P001/P002/P003 strict frozen source/graph/lock preflights pass. L001 optimized private statement warm-up exit0/92.144s/567984KiB/swap0. One Charon + one Aeneas invocation total, with two collector-only failures retained; SAME LLBC resumed, never recompiled. Aeneas omits four decoder bodies under missing Iterator.any warning (NJI-F1). No native/composed row closes.
+
+L002 generated Types passes. L003 aggregate Funs fails (no credit). L004 isolated Core passes, containing unchanged policy150 and validator206/208 bodies, printed standard axioms. Exact target/command/source revision/hash/selected Aeneas objects/resources are per-attempt. Master157 remains separately uncompiled; omitted152/153/201/203 cannot claim extraction. Identity149 is OPEN outside the slice and independently blocks153. No cap or timeout increase, no timeout/memory kill.

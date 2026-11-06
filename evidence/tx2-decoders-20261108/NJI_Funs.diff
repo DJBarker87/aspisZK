@@ -1,0 +1,126 @@
+--- raw/Funs.lean
++++ compile/Funs.lean
+@@ -2,7 +2,6 @@
+ -- [aspis_r1_cost_probe]: function definitions
+ import Aeneas
+ import NJI_Extracted.Types
+-import NJI_Extracted.FunsExternal
+ open Aeneas Aeneas.Std Result ControlFlow Error
+ set_option linter.dupNamespace false
+ set_option linter.hashCommand false
+@@ -18,6 +17,44 @@
+ noncomputable section
+ 
+ namespace NJI_Extracted
++
++-- Opaque callees are explicit parameters, never axioms.
++variable (NJI_call_0 : ∀ {T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq
++  T U),
++(Slice T) → (Array U N) → Result Bool)
++
++variable (NJI_call_1 : ∀ {Self : Type} {F : Type} {Clause0_Item : Type} (IteratorInst :
++  core.iter.traits.iterator.Iterator Self Clause0_Item)
++  (opsfunctionFnMutFTupleClause0_ItemBoolInst : core.ops.function.FnMut F
++  Clause0_Item Bool),
++Self → F → Result (Bool × Self))
++
++variable (NJI_call_2 : ∀ {T : Type} {E : Type} {F : Type} {O : Type} (opsfunctionFnOnceOTupleEFInst :
++  core.ops.function.FnOnce O E F),
++(core.result.Result T E) → O → Result (core.result.Result T F))
++
++variable (NJI_call_3 : ∀ {T : Type} {F : Type} (opsfunctionFnMutFTupleMutATBoolInst :
++  core.ops.function.FnMut F T Bool),
++(core.slice.iter.IterMut T) → F → Result (Bool ×
++    (core.slice.iter.IterMut T) × (core.slice.iter.IterMut T →
++    core.slice.iter.IterMut T)))
++
++variable (NJI_call_4 : ∀ {T : Type} {F : Type} (opsfunctionFnMutFTupleSharedATBoolInst :
++  core.ops.function.FnMut F T Bool),
++(core.slice.iter.Iter T) → F → Result (Bool × (core.slice.iter.Iter T)))
++
++variable (NJI_call_5 : (Array Std.U8 32#usize) → Result (core.result.Result (Array
++    aspis_core.field.M31 8#usize)
++    aspis_statement.atomic_statement.AtomicStatementError))
++
++variable (NJI_call_6 : (Slice Std.U8) → Result (core.result.Result
++    aspis_statement.pool_v1.format.PoolIdentityV1
++    aspis_statement.pool_v1.format.PoolV1FormatError))
++
++variable (NJI_call_7 : aspis_statement.pool_v1.format.VerifierPolicyV1 → Result
++    (core.result.Result Unit aspis_statement.pool_v1.format.PoolV1FormatError))
++
++variable (NJI_call_8 : Result Std.U64)
+ 
+ /-- Trait implementation: [core::slice::iter::{impl core::iter::traits::iterator::Iterator<&'a mut T> for core::slice::iter::IterMut<'a, T>}]
+     Source: '/rustc/library/core/src/slice/iter/macros.rs', lines 153:8-153:45
+@@ -106,7 +143,7 @@
+         (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8) bytes
+         { «end» := 4#usize }
+     let b ←
+-      Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 s
++      NJI_call_0 core.cmp.PartialEqU8 s
+         aspis_statement.pool_v1.format.POOL_V1_VERIFIER_POLICY_MAGIC
+     if b
+     then
+@@ -125,7 +162,7 @@
+             { start := 6#usize, «end» := 8#usize }
+         let a := Array.repeat 2#usize 0#u8
+         let b1 ←
+-          Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 s1 a
++          NJI_call_0 core.cmp.PartialEqU8 s1 a
+         if b1
+         then
+           ok (core.result.Result.Err
+@@ -160,7 +197,7 @@
+           let a3 ←
+             core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+           let r3 ←
+-            aspis_statement.pool_v1.format.validate_verifier_policy_v1
++            NJI_call_7
+               {
+                 flags := i2,
+                 registry_program := a1,
+@@ -409,7 +446,7 @@
+   Result (Bool ×
+     aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1)
+   := do
+-  let i ← aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY
++  let i ← NJI_call_8
+   ok (tupled_args > i, c)
+ 
+ /-- [aspis_statement::pool_v1::pair_forest_accounts::validate_master::{impl core::ops::function::FnOnce<(&'_ u64,), bool> for aspis_statement::pool_v1::pair_forest_accounts::validate_master::closure#1}::call_once]:
+@@ -536,10 +573,10 @@
+             aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)
+         else
+           let r ←
+-            aspis_statement.pool_v1.format.validate_verifier_policy_v1
++            NJI_call_7
+               master.verifier_policy
+           let r1 ←
+-            core.result.Result.map_err
++            NJI_call_2
+               aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1FormatErrorPoolV1PairForestAccountErrorV1
+               r ()
+           let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+@@ -549,7 +586,7 @@
+               lift (Array.to_slice master.last_checkpoint_lane_sequences)
+             let i ← core.slice.Slice.iter s
+             let (b4, _) ←
+-              core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
++              NJI_call_4
+                 aspis_statement.pool_v1.pair_forest_accounts.validate_master.closure_1.Insts.CoreOpsFunctionFnMutTupleSharedU64Bool
+                 i ()
+             if b4
+@@ -1105,3 +1142,12 @@
+                 else ok (core.result.Result.Ok ())
+ 
+ end NJI_Extracted
++
++#print axioms NJI_Extracted.aspis_statement.pool_v1.format.decode_verifier_policy_v1
++#print axioms NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.decode_pool_v1_pair_forest_checkpoint_v1
++#print axioms NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.decode_pool_v1_pair_forest_master_v1
++#print axioms NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.validate_master
++#print axioms NJI_Extracted.aspis_statement.pool_v1.verifier_registry.decode_verifier_registry_entry_v1
++#print axioms NJI_Extracted.aspis_statement.pool_v1.verifier_registry.decode_verifier_registry_v1
++#print axioms NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_entry_v1
++#print axioms NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_v1
