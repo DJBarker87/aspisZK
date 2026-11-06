@@ -1,0 +1,49 @@
+{"attempt": "NKL_L034", "exit_status": 1, "wall_seconds": 10.103035846026614, "peak_rss_kib": "5987232", "swaps": "0", "print_axioms": ["'NKL_WordCanonical.one' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_WordCanonical.scalar_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_WordCanonical.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_WordCanonical.limb_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_WordCanonical.k_word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKL_WordCanonical.k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKL_WordCanonical.lean:41:43: warning: This simp argument is unused:
+  Fin.val_mk
+
+Hint: Omit it from the simp argument list.
+  simp only [List.getElem_ofFn, ̲bytesOf, ̲List.getElem_map, ̲List.getElem_take, ̲List.getElem_drop,
+       qm31LimbBytes, ̲fixed, ̲limbByteIndex_val,F̵i̵n̵.̵v̵a̵l̵_̵m̵k̵,̵ ̲Array.to_slice]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKL_WordCanonical.lean:49:1: error: Tactic `rfl` failed: The left-hand side
+  little (bytesOf (List.take 4 (List.drop (4 * ↑j) ↑b)))
+is not definitionally equal to the right-hand side
+  little (slice (bytesOf ↑b) (4 * ↑j) 4)
+
+b : Std.Array U8 16#usize
+j : Fin 4
+⊢ little (bytesOf (List.take 4 (List.drop
+...
+NKL_WordCanonical.lean:41:43: warning: This simp argument is unused:
+  Fin.val_mk
+
+Hint: Omit it from the simp argument list.
+  simp only [List.getElem_ofFn, ̲bytesOf, ̲List.getElem_map, ̲List.getElem_take, ̲List.getElem_drop,
+       qm31LimbBytes, ̲fixed, ̲limbByteIndex_val,F̵i̵n̵.̵v̵a̵l̵_̵m̵k̵,̵ ̲Array.to_slice]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKL_WordCanonical.lean:49:1: error: Tactic `rfl` failed: The left-hand side
+  little (bytesOf (List.take 4 (List.drop (4 * ↑j) ↑b)))
+is not definitionally equal to the right-hand side
+  little (slice (bytesOf ↑b) (4 * ↑j) 4)
+
+b : Std.Array U8 16#usize
+j : Fin 4
+⊢ little (bytesOf (List.take 4 (List.drop (4 * ↑j) ↑b))) = little (slice (bytesOf ↑b) (4 * ↑j) 4)
+NKL_WordCanonical.lean:59:2: error: 'change' tactic failed, pattern
+  (0 = 0 ∧ ∀ n ∈ List.range 4, little (slice (bytesOf ↑b) (4 * n) 4) < 2147483647) ↔ ?m.62
+is not definitionally equal to target
+  (True ∧
+      ∀ j ∈ List.range (16 / 4),
+        little (slice (List.map AspisV8R19.SqueezeOracleBridge.decodeByte ↑b) (4 * j) 4) < 2147483647) ↔
+    ∀ (j : Fin 4), ↑(word b.to_slice ⋯ j) < 2147483647
+'NKL_WordCanonical.one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_WordCanonical.scalar_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_WordCanonical.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_WordCanonical.limb_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_WordCanonical.k_word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKL_WordCanonical.k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rad637ffc5c664cf5bb5b2bd8850bd514.scope; invocation ID: cb5a3272fce04aeb842448950db03a0d

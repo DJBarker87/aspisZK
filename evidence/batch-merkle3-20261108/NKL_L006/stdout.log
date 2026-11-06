@@ -1,0 +1,926 @@
+NKL_StepErasure.lean:51:1: error: Tactic `rfl` failed: The left-hand side
+  if pos < n then do
+    let x ← ops.op9 keys pos
+    let x_1 ← lift (pos.wrapping_add 1#usize)
+    let x_2 ← lift (x.wrapping_shr 8#u32)
+    let x_3 ← lift (UScalar.cast UScalarTy.U32 x_2)
+    let x ← lift (x &&& 255#u64)
+    let x ← lift (UScalar.cast UScalarTy.Usize x)
+    let x ← lift (lo.wrapping_add x)
+    let x ← ops.op2 proof x
+    let x ← ops.op6 D hash tree x
+    if d > 0#usize then do
+        let x_4 ← lift (d.wrapping_sub 1#usize)
+        let x_5 ← ops.op8 idx x_4 x_3
+        if x_5 = true then do
+            let x_6 ← lift (d.wrapping_sub 1#usize)
+            let x ← ops.op7 val x_6 x
+            if x = true then mapResult erase (ok (cont (idx, val, d, x_1)))
+              else mapResult erase (ok (done (idx, val, core.result.Result.Err verifier.Error.Merkle, false)))
+          else do
+            let x_6 ← Array.update idx d x_3
+            let x ← Array.update val d x
+            let x_7 ← lift (d.wrapping_add 1#usize)
+            mapResult erase (ok (cont (x_6, x, x_7, x_1)))
+      else do
+        let x_4 ← Array.update idx d x_3
+        let x ← Array.update val d x
+        let x_5 ← lift (d.wrapping_add 1#usize)
+        mapResult erase (ok (cont (x_4, x, x_5, x_1)))
+  else do
+    let x ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+          { «end» := d }
+    let x ← ops.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two x
+    let x ← ops.op1 x verifier.Error.Merkle
+    let x ← core.result.Result.Insts.CoreOpsTry.branch x
+    mapResult erase
+        (match x with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let nodes ← ops.op3 proof s
+          let a ← ops.op12
+          let i ← a.index_usize s
+          if val1 > i then ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+            else do
+              let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes { start := i1 }
+              let ce ← core.slice.Slice.chunks_exact s2 8#usize
+              let (b, _) ←
+                ops.op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                      ops D)
+                    ce ()
+              if b = true then ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+                else do
+                  let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes { «end» := i2 }
+                  let (b1, idx1, val2) ←
+                    ops.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                  if b1 = true then ok (done (idx1, val2, core.result.Result.Ok (), false))
+                    else ok (done (idx1, val2, core.result.Result.Err verifier.Error.Merkle, true))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let returned ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+          ok (done (idx, val, returned, true)))
+is not definitionally equal to the right-hand side
+  if pos < n then do
+    let key ← ops.op9 keys pos
+    let key_position1 ← lift (pos.wrapping_add 1#usize)
+    let i ← lift (key.wrapping_shr 8#u32)
+    let index ← lift (UScalar.cast UScalarTy.U32 i)
+    let i1 ← lift (key &&& 255#u64)
+    let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+    let i3 ← lift (lo.wrapping_add i2)
+    let q ← ops.op2 proof i3
+    let leaf ← ops.op6 D hash tree q
+    if d > 0#usize then do
+        let i4 ← lift (d.wrapping_sub 1#usize)
+        let b ← ops.op8 idx i4 index
+        if b = true then do
+            let i5 ← lift (d.wrapping_sub 1#usize)
+            let b1 ← ops.op7 val i5 leaf
+            if b1 = true then ok (cont (idx, val, d, key_position1))
+              else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+          else do
+            let idx1 ← Array.update idx d index
+            let val1 ← Array.update val d leaf
+            let d1 ← lift (d.wrapping_add 1#usize)
+            ok (cont (idx1, val1, d1, key_position1))
+      else do
+        let idx1 ← Array.update idx d index
+        let val1 ← Array.update val d leaf
+        let d1 ← lift (d.wrapping_add 1#usize)
+        ok (cont (idx1, val1, d1, key_position1))
+  else do
+    let s1 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+          { «end» := d }
+    let o ← ops.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two s1
+    let r ← ops.op1 o verifier.Error.Merkle
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val1 => do
+        let nodes ← ops.op3 proof s
+        let a ← ops.op12
+        let i ← a.index_usize s
+        if val1 > i then ok (done (idx, val, none))
+          else do
+            let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+            let s2 ←
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes { start := i1 }
+            let ce ← core.slice.Slice.chunks_exact s2 8#usize
+            let (b, _) ←
+              ops.op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                  (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                    ops D)
+                  ce ()
+            if b = true then ok (done (idx, val, none))
+              else do
+                let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                let s3 ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes { «end» := i2 }
+                let (b1, idx1, val2) ←
+                  ops.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                  else ok (done (idx1, val2, none))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let _ ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual
+        ok (done (idx, val, none))
+
+ops : AspisR1.Port3_NativeBatchBody.Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+proof : Slice U8
+root : Std.Array U8 32#usize
+tree : Usize
+hash : H
+lo n s : Usize
+keys : Std.Array U64 16#usize
+idx : Indices
+val : Values
+d pos : Usize
+⊢ (if pos < n then do
+      let x ← ops.op9 keys pos
+      let x_1 ← lift (pos.wrapping_add 1#usize)
+      let x_2 ← lift (x.wrapping_shr 8#u32)
+      let x_3 ← lift (UScalar.cast UScalarTy.U32 x_2)
+      let x ← lift (x &&& 255#u64)
+      let x ← lift (UScalar.cast UScalarTy.Usize x)
+      let x ← lift (lo.wrapping_add x)
+      let x ← ops.op2 proof x
+      let x ← ops.op6 D hash tree x
+      if d > 0#usize then do
+          let x_4 ← lift (d.wrapping_sub 1#usize)
+          let x_5 ← ops.op8 idx x_4 x_3
+          if x_5 = true then do
+              let x_6 ← lift (d.wrapping_sub 1#usize)
+              let x ← ops.op7 val x_6 x
+              if x = true then mapResult erase (ok (cont (idx, val, d, x_1)))
+                else mapResult erase (ok (done (idx, val, core.result.Result.Err verifier.Error.Merkle, false)))
+            else do
+              let x_6 ← Array.update idx d x_3
+              let x ← Array.update val d x
+              let x_7 ← lift (d.wrapping_add 1#usize)
+              mapResult erase (ok (cont (x_6, x, x_7, x_1)))
+        else do
+          let x_4 ← Array.update idx d x_3
+          let x ← Array.update val d x
+          let x_5 ← lift (d.wrapping_add 1#usize)
+          mapResult erase (ok (cont (x_4, x, x_5, x_1)))
+    else do
+      let x ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+            { «end» := d }
+      let x ← ops.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two x
+      let x ← ops.op1 x verifier.Error.Merkle
+      let x ← core.result.Result.Insts.CoreOpsTry.branch x
+      mapResult erase
+          (match x with
+          | core.ops.control_flow.ControlFlow.Continue val1 => do
+            let nodes ← ops.op3 proof s
+            let a ← ops.op12
+            let i ← a.index_usize s
+            if val1 > i then ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+              else do
+                let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                let s2 ←
+                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes { start := i1 }
+                let ce ← core.slice.Slice.chunks_exact s2 8#usize
+                let (b, _) ←
+                  ops.op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                      (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                        ops D)
+                      ce ()
+                if b = true then ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+                  else do
+                    let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                    let s3 ←
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+                          { «end» := i2 }
+                    let (b1, idx1, val2) ←
+                      ops.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                    if b1 = true then ok (done (idx1, val2, core.result.Result.Ok (), false))
+                      else ok (done (idx1, val2, core.result.Result.Err verifier.Error.Merkle, true))
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let returned ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame verifier.Error) residual
+            ok (done (idx, val, returned, true)))) =
+    if pos < n then do
+      let key ← ops.op9 keys pos
+      let key_position1 ← lift (pos.wrapping_add 1#usize)
+      let i ← lift (key.wrapping_shr 8#u32)
+      let index ← lift (UScalar.cast UScalarTy.U32 i)
+      let i1 ← lift (key &&& 255#u64)
+      let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+      let i3 ← lift (lo.wrapping_add i2)
+      let q ← ops.op2 proof i3
+      let leaf ← ops.op6 D hash tree q
+      if d > 0#usize then do
+          let i4 ← lift (d.wrapping_sub 1#usize)
+          let b ← ops.op8 idx i4 index
+          if b = true then do
+              let i5 ← lift (d.wrapping_sub 1#usize)
+              let b1 ← ops.op7 val i5 leaf
+              if b1 = true then ok (cont (idx, val, d, key_position1))
+                else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+            else do
+              let idx1 ← Array.update idx d index
+              let val1 ← Array.update val d leaf
+              let d1 ← lift (d.wrapping_add 1#usize)
+              ok (cont (idx1, val1, d1, key_position1))
+        else do
+          let idx1 ← Array.update idx d index
+          let val1 ← Array.update val d leaf
+          let d1 ← lift (d.wrapping_add 1#usize)
+          ok (cont (idx1, val1, d1, key_position1))
+    else do
+      let s1 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+            { «end» := d }
+      let o ← ops.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two s1
+      let r ← ops.op1 o verifier.Error.Merkle
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let nodes ← ops.op3 proof s
+          let a ← ops.op12
+          let i ← a.index_usize s
+          if val1 > i then ok (done (idx, val, none))
+            else do
+              let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+              let s2 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes { start := i1 }
+              let ce ← core.slice.Slice.chunks_exact s2 8#usize
+              let (b, _) ←
+                ops.op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                      ops D)
+                    ce ()
+              if b = true then ok (done (idx, val, none))
+                else do
+                  let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                  let s3 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes { «end» := i2 }
+                  let (b1, idx1, val2) ←
+                    ops.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                  if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                    else ok (done (idx1, val2, none))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let _ ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+          ok (done (idx, val, none))
+NKL_StepErasure.lean:50:29: warning: This simp argument is unused:
+  map_pair
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵_̵b̵i̵n̵d̵,̵m̵a̵p̵_̵i̵t̵e̵,̵m̵a̵p̵_̵p̵a̵i̵r̵,̵m̵a̵p̵_̵c̵f̵]̵[̲m̲a̲p̲_̲b̲i̲n̲d̲,̲ ̲m̲a̲p̲_̲i̲t̲e̲,̲ ̲m̲a̲p̲_̲c̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKL_StepErasure.lean:50:38: warning: This simp argument is unused:
+  map_cf
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵_̵b̵i̵n̵d̵,̵m̵a̵p̵_̵i̵t̵e̵,̵m̵a̵p̵_̵p̵a̵i̵r̵,̵m̵a̵p̵_̵c̵f̵]̵[̲m̲a̲p̲_̲b̲i̲n̲d̲,̲ ̲m̲a̲p̲_̲i̲t̲e̲,̲ ̲m̲a̲p̲_̲p̲a̲i̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKL_StepErasure.source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n s : Usize) (keys : Std.Array U64 16#usize) (idx : Indices) (val : Values) (d pos : Usize),
+  mapResult erase
+      (NKL_ExplicitBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n s keys idx val d pos) =
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n s keys idx val
+      d pos :=
+fun ops {H} D proof root tree hash lo n s keys idx val d pos =>
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (map_ite erase (pos < n)
+                  (do
+                    let key ← ops.op9 keys pos
+                    let key_position1 ← lift (pos.wrapping_add 1#usize)
+                    let i ← lift (key.wrapping_shr 8#u32)
+                    let index ← lift (UScalar.cast UScalarTy.U32 i)
+                    let i1 ← lift (key &&& 255#u64)
+                    let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+                    let i3 ← lift (lo.wrapping_add i2)
+                    let q ← ops.op2 proof i3
+                    let leaf ← ops.op6 D hash tree q
+                    if d > 0#usize then do
+                        let i4 ← lift (d.wrapping_sub 1#usize)
+                        let b ← ops.op8 idx i4 index
+                        if b = true then do
+                            let i5 ← lift (d.wrapping_sub 1#usize)
+                            let b1 ← ops.op7 val i5 leaf
+                            if b1 = true then ok (cont (idx, val, d, key_position1))
+                              else ok (done (idx, val, core.result.Result.Err verifier.Error.Merkle, false))
+                          else do
+                            let idx1 ← Array.update idx d index
+                            let val1 ← Array.update val d leaf
+                            let d1 ← lift (d.wrapping_add 1#usize)
+                            ok (cont (idx1, val1, d1, key_position1))
+                      else do
+                        let idx1 ← Array.update idx d index
+                        let val1 ← Array.update val d leaf
+                        let d1 ← lift (d.wrapping_add 1#usize)
+                        ok (cont (idx1, val1, d1, key_position1)))
+                  do
+                  let s1 ←
+                    core.array.Array.index
+                        (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+                        { «end» := d }
+                  let o ← ops.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two s1
+                  let r ← ops.op1 o verifier.Error.Merkle
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val1 => do
+                      let nodes ← ops.op3 proof s
+                      let a ← ops.op12
+                      let i ← a.index_usize s
+                      if val1 > i then ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+                        else do
+                          let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                          let s2 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+                                { start := i1 }
+                          let ce ← core.slice.Slice.chunks_exact s2 8#usize
+                          let (b, _) ←
+                            ops.op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                                (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                                  ops D)
+                                ce ()
+                          if b = true then ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+                            else do
+                              let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                              let s3 ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+                                    { «end» := i2 }
+                              let (b1, idx1, val2) ←
+                                ops.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                              if b1 = true then ok (done (idx1, val2, core.result.Result.Ok (), false))
+                                else ok (done (idx1, val2, core.result.Result.Err verifier.Error.Merkle, true))
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let returned ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                      ok (done (idx, val, returned, true)))
+                (ite_congr (Eq.refl (pos < n))
+                  (fun a =>
+                    Eq.trans
+                      (map_bind erase (ops.op9 keys pos) fun key => do
+                        let key_position1 ← lift (pos.wrapping_add 1#usize)
+                        let i ← lift (key.wrapping_shr 8#u32)
+                        let index ← lift (UScalar.cast UScalarTy.U32 i)
+                        let i1 ← lift (key &&& 255#u64)
+                        let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+                        let i3 ← lift (lo.wrapping_add i2)
+                        let q ← ops.op2 proof i3
+                        let leaf ← ops.op6 D hash tree q
+                        if d > 0#usize then do
+                            let i4 ← lift (d.wrapping_sub 1#usize)
+                            let b ← ops.op8 idx i4 index
+                            if b = true then do
+                                let i5 ← lift (d.wrapping_sub 1#usize)
+                                let b1 ← ops.op7 val i5 leaf
+                                if b1 = true then ok (cont (idx, val, d, key_position1))
+                                  else ok (done (idx, val, core.result.Result.Err verifier.Error.Merkle, false))
+                              else do
+                                let idx1 ← Array.update idx d index
+                                let val1 ← Array.update val d leaf
+                                let d1 ← lift (d.wrapping_add 1#usize)
+                                ok (cont (idx1, val1, d1, key_position1))
+                          else do
+                            let idx1 ← Array.update idx d index
+                            let val1 ← Array.update val d leaf
+                            let d1 ← lift (d.wrapping_add 1#usize)
+                            ok (cont (idx1, val1, d1, key_position1)))
+                      (congrArg (Bind.bind (ops.op9 keys pos))
+                        (funext fun x =>
+                          Eq.trans
+                            (map_bind erase (lift (pos.wrapping_add 1#usize)) fun key_position1 => do
+                              let i ← lift (x.wrapping_shr 8#u32)
+                              let index ← lift (UScalar.cast UScalarTy.U32 i)
+                              let i1 ← lift (x &&& 255#u64)
+                              let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+                              let i3 ← lift (lo.wrapping_add i2)
+                              let q ← ops.op2 proof i3
+                              let leaf ← ops.op6 D hash tree q
+                              if d > 0#usize then do
+                                  let i4 ← lift (d.wrapping_sub 1#usize)
+                                  let b ← ops.op8 idx i4 index
+                                  if b = true then do
+                                      let i5 ← lift (d.wrapping_sub 1#usize)
+                                      let b1 ← ops.op7 val i5 leaf
+                                      if b1 = true then ok (cont (idx, val, d, key_position1))
+                                        else ok (done (idx, val, core.result.Result.Err verifier.Error.Merkle, false))
+                                    else do
+                                      let idx1 ← Array.update idx d index
+                                      let val1 ← Array.update val d leaf
+                                      let d1 ← lift (d.wrapping_add 1#usize)
+                                      ok (cont (idx1, val1, d1, key_position1))
+                                else do
+                                  let idx1 ← Array.update idx d index
+                                  let val1 ← Array.update val d leaf
+                                  let d1 ← lift (d.wrapping_add 1#usize)
+                                  ok (cont (idx1, val1, d1, key_position1)))
+                            (congrArg (Bind.bind (lift (pos.wrapping_add 1#usize)))
+                              (funext fun x_1 =>
+                                Eq.trans
+                                  (map_bind erase (lift (x.wrapping_shr 8#u32)) fun i => do
+                                    let index ← lift (UScalar.cast UScalarTy.U32 i)
+                                    let i1 ← lift (x &&& 255#u64)
+                                    let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+                                    let i3 ← lift (lo.wrapping_add i2)
+                                    let q ← ops.op2 proof i3
+                                    let leaf ← ops.op6 D hash tree q
+                                    if d > 0#usize then do
+                                        let i4 ← lift (d.wrapping_sub 1#usize)
+                                        let b ← ops.op8 idx i4 index
+                                        if b = true then do
+                                            let i5 ← lift (d.wrapping_sub 1#usize)
+                                            let b1 ← ops.op7 val i5 leaf
+                                            if b1 = true then ok (cont (idx, val, d, x_1))
+                                              else
+                                                ok
+                                                  (done (idx, val, core.result.Result.Err verifier.Error.Merkle, false))
+                                          else do
+                                            let idx1 ← Array.update idx d index
+                                            let val1 ← Array.update val d leaf
+                                            let d1 ← lift (d.wrapping_add 1#usize)
+                                            ok (cont (idx1, val1, d1, x_1))
+                                      else do
+                                        let idx1 ← Array.update idx d index
+                                        let val1 ← Array.update val d leaf
+                                        let d1 ← lift (d.wrapping_add 1#usize)
+                                        ok (cont (idx1, val1, d1, x_1)))
+                                  (congrArg (Bind.bind (lift (x.wrapping_shr 8#u32)))
+                                    (funext fun x_2 =>
+                                      Eq.trans
+                                        (map_bind erase (lift (UScalar.cast UScalarTy.U32 x_2)) fun index => do
+                                          let i1 ← lift (x &&& 255#u64)
+                                          let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+                                          let i3 ← lift (lo.wrapping_add i2)
+                                          let q ← ops.op2 proof i3
+                                          let leaf ← ops.op6 D hash tree q
+                                          if d > 0#usize then do
+                                              let i4 ← lift (d.wrapping_sub 1#usize)
+                                              let b ← ops.op8 idx i4 index
+                                              if b = true then do
+                                                  let i5 ← lift (d.wrapping_sub 1#usize)
+                                                  let b1 ← ops.op7 val i5 leaf
+                                                  if b1 = true then ok (cont (idx, val, d, x_1))
+                                                    else
+                                                      ok
+                                                        (done
+                                                          (idx, val, core.result.Result.Err verifier.Error.Merkle,
+                                                            false))
+                                                else do
+                                                  let idx1 ← Array.update idx d index
+                                                  let val1 ← Array.update val d leaf
+                                                  let d1 ← lift (d.wrapping_add 1#usize)
+                                                  ok (cont (idx1, val1, d1, x_1))
+                                            else do
+                                              let idx1 ← Array.update idx d index
+                                              let val1 ← Array.update val d leaf
+                                              let d1 ← lift (d.wrapping_add 1#usize)
+                                              ok (cont (idx1, val1, d1, x_1)))
+                                        (congrArg (Bind.bind (lift (UScalar.cast UScalarTy.U32 x_2)))
+                                          (funext fun x_3 =>
+                                            Eq.trans
+                                              (map_bind erase (lift (x &&& 255#u64)) fun i1 => do
+                                                let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+                                                let i3 ← lift (lo.wrapping_add i2)
+                                                let q ← ops.op2 proof i3
+                                                let leaf ← ops.op6 D hash tree q
+                                                if d > 0#usize then do
+                                                    let i4 ← lift (d.wrapping_sub 1#usize)
+                                                    let b ← ops.op8 idx i4 x_3
+                                                    if b = true then do
+                                                        let i5 ← lift (d.wrapping_sub 1#usize)
+                                                        let b1 ← ops.op7 val i5 leaf
+                                                        if b1 = true then ok (cont (idx, val, d, x_1))
+                                                          else
+                                                            ok
+                                                              (done
+                                                                (idx, val, core.result.Result.Err verifier.Error.Merkle,
+                                                                  false))
+                                                      else do
+                                                        let idx1 ← Array.update idx d x_3
+                                                        let val1 ← Array.update val d leaf
+                                                        let d1 ← lift (d.wrapping_add 1#usize)
+                                                        ok (cont (idx1, val1, d1, x_1))
+                                                  else do
+                                                    let idx1 ← Array.update idx d x_3
+                                                    let val1 ← Array.update val d leaf
+                                                    let d1 ← lift (d.wrapping_add 1#usize)
+                                                    ok (cont (idx1, val1, d1, x_1)))
+                                              (congrArg (Bind.bind (lift (x &&& 255#u64)))
+                                                (funext fun x =>
+                                                  Eq.trans
+                                                    (map_bind erase (lift (UScalar.cast UScalarTy.Usize x)) fun i2 => do
+                                                      let i3 ← lift (lo.wrapping_add i2)
+                                                      let q ← ops.op2 proof i3
+                                                      let leaf ← ops.op6 D hash tree q
+                                                      if d > 0#usize then do
+                                                          let i4 ← lift (d.wrapping_sub 1#usize)
+                                                          let b ← ops.op8 idx i4 x_3
+                                                          if b = true then do
+                                                              let i5 ← lift (d.wrapping_sub 1#usize)
+                                                              let b1 ← ops.op7 val i5 leaf
+                                                              if b1 = true then ok (cont (idx, val, d, x_1))
+                                                                else
+                                                                  ok
+                                                                    (done
+                                                                      (idx, val,
+                                                                        core.result.Result.Err verifier.Error.Merkle,
+                                                                        false))
+                                                            else do
+                                                              let idx1 ← Array.update idx d x_3
+                                                              let val1 ← Array.update val d leaf
+                                                              let d1 ← lift (d.wrapping_add 1#usize)
+                                                              ok (cont (idx1, val1, d1, x_1))
+                                                        else do
+                                                          let idx1 ← Array.update idx d x_3
+                                                          let val1 ← Array.update val d leaf
+                                                          let d1 ← lift (d.wrapping_add 1#usize)
+                                                          ok (cont (idx1, val1, d1, x_1)))
+                                                    (congrArg (Bind.bind (lift (UScalar.cast UScalarTy.Usize x)))
+                                                      (funext fun x =>
+                                                        Eq.trans
+                                                          (map_bind erase (lift (lo.wrapping_add x)) fun i3 => do
+                                                            let q ← ops.op2 proof i3
+                                                            let leaf ← ops.op6 D hash tree q
+                                                            if d > 0#usize then do
+                                                                let i4 ← lift (d.wrapping_sub 1#usize)
+                                                                let b ← ops.op8 idx i4 x_3
+                                                                if b = true then do
+                                                                    let i5 ← lift (d.wrapping_sub 1#usize)
+                                                                    let b1 ← ops.op7 val i5 leaf
+                                                                    if b1 = true then ok (cont (idx, val, d, x_1))
+                                                                      else
+                                                                        ok
+                                                                          (done
+                                                                            (idx, val,
+                                                                              core.result.Result.Err
+                                                                                verifier.Error.Merkle,
+                                                                              false))
+                                                                  else do
+                                                                    let idx1 ← Array.update idx d x_3
+                                                                    let val1 ← Array.update val d leaf
+                                                                    let d1 ← lift (d.wrapping_add 1#usize)
+                                                                    ok (cont (idx1, val1, d1, x_1))
+                                                              else do
+                                                                let idx1 ← Array.update idx d x_3
+                                                                let val1 ← Array.update val d leaf
+                                                                let d1 ← lift (d.wrapping_add 1#usize)
+                                                                ok (cont (idx1, val1, d1, x_1)))
+                                                          (congrArg (Bind.bind (lift (lo.wrapping_add x)))
+                                                            (funext fun x =>
+                                                              Eq.trans
+                                                                (map_bind erase (ops.op2 proof x) fun q => do
+                                                                  let leaf ← ops.op6 D hash tree q
+                                                                  if d > 0#usize then do
+                                                                      let i4 ← lift (d.wrapping_sub 1#usize)
+                                                                      let b ← ops.op8 idx i4 x_3
+                                                                      if b = true then do
+                                                                          let i5 ← lift (d.wrapping_sub 1#usize)
+                                                                          let b1 ← ops.op7 val i5 leaf
+                                                                          if b1 = true then ok (cont (idx, val, d, x_1))
+                                                                            else
+                                                                              ok
+                                                                                (done
+                                                                                  (idx, val,
+                                                                                    core.result.Result.Err
+                                                                                      verifier.Error.Merkle,
+                                                                                    false))
+                                                                        else do
+                                                                          let idx1 ← Array.update idx d x_3
+                                                                          let val1 ← Array.update val d leaf
+                                                                          let d1 ← lift (d.wrapping_add 1#usize)
+                                                                          ok (cont (idx1, val1, d1, x_1))
+                                                                    else do
+                                                                      let idx1 ← Array.update idx d x_3
+                                                                      let val1 ← Array.update val d leaf
+                                                                      let d1 ← lift (d.wrapping_add 1#usize)
+                                                                      ok (cont (idx1, val1, d1, x_1)))
+                                                                (congrArg (Bind.bind (ops.op2 proof x))
+                                                                  (funext fun x =>
+                                                                    Eq.trans
+                                                                      (map_bind erase (ops.op6 D hash tree x)
+                                                                        fun leaf =>
+                                                                        if d > 0#usize then do
+                                                                          let i4 ← lift (d.wrapping_sub 1#usize)
+                                                                          let b ← ops.op8 idx i4 x_3
+                                                                          if b = true then do
+                                                                              let i5 ← lift (d.wrapping_sub 1#usize)
+                                                                              let b1 ← ops.op7 val i5 leaf
+                                                                              if b1 = true then ok ⋯ else ok ⋯
+                                                                            else do
+                                                                              let idx1 ← Array.update idx d x_3
+                                                                              let val1 ← Array.update val d leaf
+                                                                              let d1 ← lift (d.wrapping_add 1#usize)
+                                                                              ok (cont ⋯)
+                                                                        else do
+                                                                          let idx1 ← Array.update idx d x_3
+                                                                          let val1 ← Array.update val d leaf
+                                                                          let d1 ← lift (d.wrapping_add 1#usize)
+                                                                          ok (cont (idx1, val1, d1, x_1)))
+                                                                      (congrArg (Bind.bind (ops.op6 D hash tree x))
+                                                                        (funext fun x =>
+                                                                          Eq.trans
+                                                                            (map_ite erase (d > 0#usize)
+                                                                              (do
+                                                                                let i4 ← lift (d.wrapping_sub 1#usize)
+                                                                                let b ← ops.op8 idx i4 x_3
+                                                                                if b = true then do
+                                                                                    let i5 ←
+                                                                                      lift (d.wrapping_sub 1#usize)
+                                                                                    let b1 ← ops.op7 val i5 x
+                                                                                    ⋯
+                                                                                  else do
+                                                                                    let idx1 ← Array.update idx d x_3
+                                                                                    let val1 ← Array.update val d x
+                                                                                    let d1 ←
+                                                                                      lift (d.wrapping_add 1#usize)
+                                                                                    ⋯)
+                                                                              do
+                                                                              let idx1 ← Array.update idx d x_3
+                                                                              let val1 ← Array.update val d x
+                                                                              let d1 ← lift (d.wrapping_add 1#usize)
+                                                                              ok (cont ⋯))
+                                                                            (ite_congr (Eq.refl (d > 0#usize))
+                                                                              (fun a =>
+                                                                                Eq.trans
+                                                                                  (map_bind erase
+                                                                                    (lift (d.wrapping_sub 1#usize)) ⋯)
+                                                                                  (congrArg
+                                                                                    (Bind.bind
+                                                                                      (lift (d.wrapping_sub 1#usize)))
+                                                                                    ⋯))
+                                                                              fun a =>
+                                                                              Eq.trans
+                                                                                (map_bind erase (Array.update idx d x_3)
+                                                                                  ⋯)
+                                                                                (congrArg
+                                                                                  (Bind.bind (Array.update idx d x_3))
+                                                                                  ⋯)))))))))))))))))))))
+                  fun a =>
+                  Eq.trans
+                    (map_bind erase
+                      (core.array.Array.index
+                        (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+                        { «end» := d })
+                      fun s1 => do
+                      let o ← ops.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two s1
+                      let r ← ops.op1 o verifier.Error.Merkle
+                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue val1 => do
+                          let nodes ← ops.op3 proof s
+                          let a ← ops.op12
+                          let i ← a.index_usize s
+                          if val1 > i then ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+                            else do
+                              let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                              let s2 ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+                                    { start := i1 }
+                              let ce ← core.slice.Slice.chunks_exact s2 8#usize
+                              let (b, _) ←
+                                ops.op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                                    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                                      ops D)
+                                    ce ()
+                              if b = true then ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+                                else do
+                                  let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                                  let s3 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+                                        { «end» := i2 }
+                                  let (b1, idx1, val2) ←
+                                    ops.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                                  if b1 = true then ok (done (idx1, val2, core.result.Result.Ok (), false))
+                                    else ok (done (idx1, val2, core.result.Result.Err verifier.Error.Merkle, true))
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let returned ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame verifier.Error) residual
+                          ok (done (idx, val, returned, true)))
+                    (congrArg
+                      (Bind.bind
+                        (core.array.Array.index
+                          (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+                          { «end» := d }))
+                      (funext fun x =>
+                        Eq.trans
+                          (map_bind erase (ops.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two x) fun o => do
+                            let r ← ops.op1 o verifier.Error.Merkle
+                            let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                            match cf with
+                              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                let nodes ← ops.op3 proof s
+                                let a ← ops.op12
+                                let i ← a.index_usize s
+                                if val1 > i then ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+                                  else do
+                                    let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                                    let s2 ←
+                                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                          nodes { start := i1 }
+                                    let ce ← core.slice.Slice.chunks_exact s2 8#usize
+                                    let (b, _) ←
+                                      ops.op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                                          (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                                            ops D)
+                                          ce ()
+                                    if b = true then
+                                        ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+                                      else do
+                                        let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                                        let s3 ←
+                                          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                              nodes { «end» := i2 }
+                                        let (b1, idx1, val2) ←
+                                          ops.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx
+                                              val d s3
+                                        if b1 = true then ok (done (idx1, val2, core.result.Result.Ok (), false))
+                                          else
+                                            ok (done (idx1, val2, core.result.Result.Err verifier.Error.Merkle, true))
+                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                let returned ←
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (core.convert.FromSame verifier.Error) residual
+                                ok (done (idx, val, returned, true)))
+                          (congrArg (Bind.bind (ops.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two x))
+                            (funext fun x =>
+                              Eq.trans
+                                (map_bind erase (ops.op1 x verifier.Error.Merkle) fun r => do
+                                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                  match cf with
+                                    | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                      let nodes ← ops.op3 proof s
+                                      let a ← ops.op12
+                                      let i ← a.index_usize s
+                                      if val1 > i then
+                                          ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+                                        else do
+                                          let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                                          let s2 ←
+                                            core.slice.index.Slice.index
+                                                (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+                                                { start := i1 }
+                                          let ce ← core.slice.Slice.chunks_exact s2 8#usize
+                                          let (b, _) ←
+                                            ops.op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                                                (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                                                  ops D)
+                                                ce ()
+                                          if b = true then
+                                              ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+                                            else do
+                                              let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                                              let s3 ←
+                                                core.slice.index.Slice.index
+                                                    (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+                                                    { «end» := i2 }
+                                              let (b1, idx1, val2) ←
+                                                ops.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root
+                                                    idx val d s3
+                                              if b1 = true then ok (done (idx1, val2, core.result.Result.Ok (), false))
+                                                else
+                                                  ok
+                                                    (done
+                                                      (idx1, val2, core.result.Result.Err verifier.Error.Merkle, true))
+                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                      let returned ←
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (core.convert.FromSame verifier.Error) residual
+                                      ok (done (idx, val, returned, true)))
+                                (congrArg (Bind.bind (ops.op1 x verifier.Error.Merkle))
+                                  (funext fun x =>
+                                    map_bind erase (core.result.Result.Insts.CoreOpsTry.branch x) fun cf =>
+                                      match cf with
+                                      | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                        let nodes ← ops.op3 proof s
+                                        let a ← ops.op12
+                                        let i ← a.index_usize s
+                                        if val1 > i then
+                                            ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+                                          else do
+                                            let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                                            let s2 ←
+                                              core.slice.index.Slice.index
+                                                  (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+                                                  { start := i1 }
+                                            let ce ← core.slice.Slice.chunks_exact s2 8#usize
+                                            let (b, _) ←
+                                              ops.op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                                                  (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                                                    ops D)
+                                                  ce ()
+                                            if b = true then
+                                                ok (done (idx, val, core.result.Result.Err verifier.Error.Parse, true))
+                                              else do
+                                                let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                                                let s3 ←
+                                                  core.slice.index.Slice.index
+                                                      (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+                                                      { «end» := i2 }
+                                                let (b1, idx1, val2) ←
+                                                  ops.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two
+                                                      root idx val d s3
+                                                if b1 = true then
+                                                    ok (done (idx1, val2, core.result.Result.Ok (), false))
+                                                  else
+                                                    ok
+                                                      (done
+                                                        (idx1, val2, core.result.Result.Err verifier.Error.Merkle,
+                                                          true))
+                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                        let returned ←
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (core.convert.FromSame verifier.Error) residual
+                                        ok (done (idx, val, returned, true)))))))))))
+            (if pos < n then do
+              let key ← ops.op9 keys pos
+              let key_position1 ← lift (pos.wrapping_add 1#usize)
+              let i ← lift (key.wrapping_shr 8#u32)
+              let index ← lift (UScalar.cast UScalarTy.U32 i)
+              let i1 ← lift (key &&& 255#u64)
+              let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+              let i3 ← lift (lo.wrapping_add i2)
+              let q ← ops.op2 proof i3
+              let leaf ← ops.op6 D hash tree q
+              if d > 0#usize then do
+                  let i4 ← lift (d.wrapping_sub 1#usize)
+                  let b ← ops.op8 idx i4 index
+                  if b = true then do
+                      let i5 ← lift (d.wrapping_sub 1#usize)
+                      let b1 ← ops.op7 val i5 leaf
+                      if b1 = true then ok (cont (idx, val, d, key_position1))
+                        else ok (done (idx, val, some (core.result.Result.Err verifier.Error.Merkle)))
+                    else do
+                      let idx1 ← Array.update idx d index
+                      let val1 ← Array.update val d leaf
+                      let d1 ← lift (d.wrapping_add 1#usize)
+                      ok (cont (idx1, val1, d1, key_position1))
+                else do
+                  let idx1 ← Array.update idx d index
+                  let val1 ← Array.update val d leaf
+                  let d1 ← lift (d.wrapping_add 1#usize)
+                  ok (cont (idx1, val1, d1, key_position1))
+            else do
+              let s1 ←
+                core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                    idx { «end» := d }
+              let o ← ops.op11 AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two s1
+              let r ← ops.op1 o verifier.Error.Merkle
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let nodes ← ops.op3 proof s
+                  let a ← ops.op12
+                  let i ← a.index_usize s
+                  if val1 > i then ok (done (idx, val, none))
+                    else do
+                      let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                      let s2 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+                            { start := i1 }
+                      let ce ← core.slice.Slice.chunks_exact s2 8#usize
+                      let (b, _) ←
+                        ops.op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                            (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                              ops D)
+                            ce ()
+                      if b = true then ok (done (idx, val, none))
+                        else do
+                          let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                          let s3 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+                                { «end» := i2 }
+                          let (b1, idx1, val2) ←
+                            ops.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                          if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                            else ok (done (idx1, val2, none))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let _ ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (done (idx, val, none)))))
+        sorry))
+'NKL_StepErasure.map_bind' does not depend on any axioms
+'NKL_StepErasure.map_ite' does not depend on any axioms
+'NKL_StepErasure.map_pair' does not depend on any axioms
+'NKL_StepErasure.map_cf' does not depend on any axioms
+'NKL_StepErasure.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

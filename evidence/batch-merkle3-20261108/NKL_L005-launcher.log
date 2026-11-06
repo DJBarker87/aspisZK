@@ -1,0 +1,40 @@
+{"attempt": "NKL_L005", "exit_status": 0, "wall_seconds": 11.927111044991761, "peak_rss_kib": "6026276", "swaps": "0", "print_axioms": ["'NKL_CanonicalChildren.compact_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_CanonicalChildren.echeck_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_CanonicalChildren.compact_call' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_CanonicalChildren.echeck_call' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKL_CanonicalChildren.compact_call : ∀ (bytes : Slice U8),
+  (do
+      let r ← NFU_Retarget.compact.check_values bytes
+      ok (convert r)) =
+    ok (NKB_CanonicalOpening.reply (compactGood bytes)) :=
+⋯
+theorem NKL_CanonicalChildren.echeck_call : ∀ (bytes : Slice U8),
+  (do
+      let r ← NFU_Retarget.verifier.echeck bytes false
+      ok
+          (match r with
+          | core.result.Result.Ok u => core.result.Result.Ok u
+          | core.result.Result.Err a => core.result.Result.Err NJS_Extract.verifier.Error.Parse)) =
+    ok (NKB_CanonicalOpening.reply (echeckGood bytes)) :=
+⋯
+'NKL_CanonicalChildren.compact_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_Ca
+...
+theorem NKL_CanonicalChildren.compact_call : ∀ (bytes : Slice U8),
+  (do
+      let r ← NFU_Retarget.compact.check_values bytes
+      ok (convert r)) =
+    ok (NKB_CanonicalOpening.reply (compactGood bytes)) :=
+⋯
+theorem NKL_CanonicalChildren.echeck_call : ∀ (bytes : Slice U8),
+  (do
+      let r ← NFU_Retarget.verifier.echeck bytes false
+      ok
+          (match r with
+          | core.result.Result.Ok u => core.result.Result.Ok u
+          | core.result.Result.Err a => core.result.Result.Err NJS_Extract.verifier.Error.Parse)) =
+    ok (NKB_CanonicalOpening.reply (echeckGood bytes)) :=
+⋯
+'NKL_CanonicalChildren.compact_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_CanonicalChildren.echeck_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_CanonicalChildren.compact_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_CanonicalChildren.echeck_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb29e314ba5bf4293a90bd71cdc6c0c3f.scope; invocation ID: 5a4e3c4d1861452584eaf8ac05dd5af4

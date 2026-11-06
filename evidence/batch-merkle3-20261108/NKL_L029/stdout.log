@@ -1,0 +1,86 @@
+NKL_ChunkCanonical.lean:17:31: error: unexpected token 'at'; expected '_' or identifier
+NKL_ChunkCanonical.lean:35:5: error(lean.unknownIdentifier): Unknown identifier `window`
+NKL_ChunkCanonical.lean:28:73: error: unsolved goals
+bs : List U8
+width i j : ℕ
+inside : j < width
+⊢ LPl_Kit_Bytes.le32 (List.take 4 (List.drop (4 * j) (List.take (4 * width) (List.drop (4 * width * i) bs)))) <
+      2147483647 ↔
+    little (slice (bytesOf bs) (4 * (width * i + j)) 4) < 2147483647
+NKL_ChunkCanonical.lean:57:70: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  g - h ≥ 0
+  f ≥ 0
+  f - g ≥ 1
+  e ≥ 1
+where
+ e := ↑width
+ f := ↑bs.length / 4
+ g := ↑k
+ h := ↑count * ↑width
+NKL_ChunkCanonical.lean:60:50: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  n ≥ 0
+  0 ≤ m ≤ 2147483646
+  l ≥ 0
+  i - j ≥ 1
+  g ≥ 0
+  g - l - n ≥ 1
+  f ≥ 0
+  f - g ≥ 1
+  e ≥ 1
+  e - l ≥ 1
+where
+ e := ↑width
+ f := ↑bs.length / 4
+ g := ↑k
+ i := ↑bs.length / ↑(4 * width)
+ j := ↑k / ↑width
+ l := ↑k % ↑width
+ m := ↑(little
+    (slice (List.map AspisV8R19.SqueezeOracleBridge.decodeByte bs) (4 * (width * (k / width) + k % width)) 4))
+ n := ↑width * ↑(k / width)
+NKL_ChunkCanonical.lean:56:1: error: unsolved goals
+case mp
+bs : List U8
+width : ℕ
+positive : 0 < width
+aligned : bs.length % (4 * width) = 0
+count : ℕ := bs.length / (4 * width)
+length : bs.length = 4 * (width * count)
+words : bs.length / 4 = width * count
+mod4 : bs.length % 4 = 0
+native :
+  ∀ x < bs.length / (4 * width),
+    ∀ j < width,
+      little (slice (List.map AspisV8R19.SqueezeOracleBridge.decodeByte bs) (4 * (width * x + j)) 4) < 2147483647
+k : ℕ
+bound : k < width * count
+outer : k / width < count
+inner : k % width < width
+h :
+  little (slice (List.map AspisV8R19.SqueezeOracleBridge.decodeByte bs) (4 * (width * (k / width) + k % width)) 4) <
+    2147483647
+address : width * (k / width) + k % width = k
+⊢ little (slice (List.map AspisV8R19.SqueezeOracleBridge.decodeByte bs) (4 * k) 4) < 2147483647
+NKL_ChunkCanonical.lean:43:85: error: unsolved goals
+case mpr
+bs : List U8
+width : ℕ
+positive : 0 < width
+aligned : bs.length % (4 * width) = 0
+count : ℕ := ⋯
+length : bs.length = 4 * (width * count)
+words : bs.length / 4 = width * count
+mod4 : bs.length % 4 = 0
+⊢ (∀ j < width * count, little (slice (List.map AspisV8R19.SqueezeOracleBridge.decodeByte bs) (4 * j) 4) < 2147483647) →
+    ∀ x < bs.length / (4 * width),
+      ∀ j < width,
+        little (slice (List.map AspisV8R19.SqueezeOracleBridge.decodeByte bs) (4 * (width * x + j)) 4) < 2147483647
+NKL_ChunkCanonical.lean:60:56: error: unexpected token '['; expected command
+'NKL_ChunkCanonical.le32' depends on axioms: [propext]
+NKL_ChunkCanonical.lean:70:14: error(lean.unknownIdentifier): Unknown constant `window`
+'NKL_ChunkCanonical.chunk' depends on axioms: [propext, sorryAx, Quot.sound]
+'NKL_ChunkCanonical.blocks' depends on axioms: [propext, sorryAx, Quot.sound]

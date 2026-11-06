@@ -1,0 +1,12 @@
+theorem NKL_CanonicalK.source : ∀ (b : Std.Array U8 16#usize),
+  (do
+      let parsed ← OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice
+      ok
+          (if parsed.isSome = true then core.result.Result.Ok ()
+          else core.result.Result.Err NJS_Extract.verifier.Error.Parse)) =
+    ok (NKB_CanonicalOpening.reply (guard b)) :=
+⋯
+'NKL_CanonicalK.good_eq_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_CanonicalK.word_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_CanonicalK.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_CanonicalK.native_result' depends on axioms: [propext, Classical.choice, Quot.sound]

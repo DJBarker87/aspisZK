@@ -1,0 +1,76 @@
+NKL_CanonicalK.lean:17:61: error(lean.unknownIdentifier): Unknown identifier `decide_and`
+NKL_CanonicalK.lean:16:87: error: unsolved goals
+b : Std.Array U8 16#usize
+⊢ decide
+      (↑(word b.to_slice ⋯ 0) < 2147483647 ∧
+        ↑(word b.to_slice ⋯ 1) < 2147483647 ∧
+          ↑(word b.to_slice ⋯ 2) < 2147483647 ∧ ↑(word b.to_slice ⋯ 3) < 2147483647) =
+    (decide (↑(word b.to_slice ⋯ 0) < 2147483647) &&
+      (decide (↑(word b.to_slice ⋯ 1) < 2147483647) &&
+        (decide (↑(word b.to_slice ⋯ 2) < 2147483647) && decide (↑(word b.to_slice ⋯ 3) < 2147483647))))
+NKL_CanonicalK.lean:25:27: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.val`
+NKL_CanonicalK.lean:25:37: error(lean.unknownIdentifier): Unknown constant `List.getElem!_eq_getElem`
+NKL_CanonicalK.lean:26:48: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 3
+  e ≥ 0
+  e - 4*f ≤ 0
+where
+ e := ↑↑16#usize
+ f := ↑↑j
+NKL_CanonicalK.lean:27:50: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 3
+  e ≥ 0
+  e - 4*f ≤ 1
+where
+ e := ↑↑16#usize
+ f := ↑↑j
+NKL_CanonicalK.lean:28:50: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 3
+  e ≥ 0
+  e - 4*f ≤ 2
+where
+ e := ↑↑16#usize
+ f := ↑↑j
+NKL_CanonicalK.lean:29:50: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ f ≤ 3
+  e ≥ 0
+  e - 4*f ≤ 3
+where
+ e := ↑↑16#usize
+ f := ↑↑j
+NKL_CanonicalK.lean:30:1: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  m ≥ 0
+  l ≥ 0
+  k ≥ 0
+  i ≥ 0
+  h ≥ 0
+  g ≥ 0
+  f ≥ 0
+  e ≥ 0
+  e + 256*f + 65536*g + 16777216*h - i - 256*k - 65536*l - 16777216*m ≥ 1
+where
+ e := ↑↑(↑b)[4 * ↑j]!
+ f := ↑↑(↑b)[4 * ↑j + 1]!
+ g := ↑↑(↑b)[4 * ↑j + 2]!
+ h := ↑↑(↑b)[4 * ↑j + 3]!
+ i := ↑↑(↑b)[4 * ↑j]
+ k := ↑↑(↑b)[4 * ↑j + 1]
+ l := ↑↑(↑b)[4 * ↑j + 2]
+ m := ↑↑(↑b)[4 * ↑j + 3]
+theorem NKL_CanonicalK.source : ∀ (b : Std.Array U8 16#usize),
+  (do
+      let parsed ← OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice
+      ok
+          (if parsed.isSome = true then core.result.Result.Ok ()
+          else core.result.Result.Err NJS_Extract.verifier.Error.Parse)) =
+    ok (NKB_CanonicalOpening.reply (guard b)) :=
+⋯
+'NKL_CanonicalK.good_eq_guard' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKL_CanonicalK.word_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKL_CanonicalK.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKL_CanonicalK.native_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

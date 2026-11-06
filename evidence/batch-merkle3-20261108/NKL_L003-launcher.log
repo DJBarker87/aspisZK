@@ -1,0 +1,44 @@
+{"attempt": "NKL_L003", "exit_status": 1, "wall_seconds": 11.74078131094575, "peak_rss_kib": "5987756", "swaps": "0", "print_axioms": ["'NKL_CanonicalChildren.compact_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_CanonicalChildren.echeck_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_CanonicalChildren.compact_call' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKL_CanonicalChildren.echeck_call' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NKL_CanonicalChildren.lean:35:41: error(lean.unknownIdentifier): Unknown identifier `NFU_Retarget.compact.CodecError`
+NKL_CanonicalChildren.lean:39:8: warning: declaration uses `sorry`
+NKL_CanonicalChildren.lean:43:31: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+theorem NKL_CanonicalChildren.compact_call.{u_1} : ∀ (bytes : Slice U8),
+  (do
+      let _ ← NFU_Retarget.compact.check_values bytes
+      ok (convert sorry)) =
+    ok (NKB_CanonicalOpening.reply (compactGood bytes)) :=
+⋯
+theorem NKL_CanonicalChildren.echeck_call : ∀ (bytes : Slice U8),
+  (do
+      let r ← NFU_Retarget.verifier.echeck bytes false
+      ok
+         
+...
+NKL_CanonicalChildren.lean:35:41: error(lean.unknownIdentifier): Unknown identifier `NFU_Retarget.compact.CodecError`
+NKL_CanonicalChildren.lean:39:8: warning: declaration uses `sorry`
+NKL_CanonicalChildren.lean:43:31: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+theorem NKL_CanonicalChildren.compact_call.{u_1} : ∀ (bytes : Slice U8),
+  (do
+      let _ ← NFU_Retarget.compact.check_values bytes
+      ok (convert sorry)) =
+    ok (NKB_CanonicalOpening.reply (compactGood bytes)) :=
+⋯
+theorem NKL_CanonicalChildren.echeck_call : ∀ (bytes : Slice U8),
+  (do
+      let r ← NFU_Retarget.verifier.echeck bytes false
+      ok
+          (match r with
+          | core.result.Result.Ok u => core.result.Result.Ok u
+          | core.result.Result.Err a => core.result.Result.Err NJS_Extract.verifier.Error.Parse)) =
+    ok (NKB_CanonicalOpening.reply (echeckGood bytes)) :=
+⋯
+'NKL_CanonicalChildren.compact_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_CanonicalChildren.echeck_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_CanonicalChildren.compact_call' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKL_CanonicalChildren.echeck_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9a30198ebe3e4936abc1ea59f1b8f695.scope; invocation ID: cdb415afdedc4ecab818f8616ca8d962
