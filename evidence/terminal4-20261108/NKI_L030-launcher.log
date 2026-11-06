@@ -1,0 +1,45 @@
+{"attempt": "NKI_L030", "exit_status": 0, "wall_seconds": 11.33710654801689, "peak_rss_kib": "6186200", "swaps": "0", "print_axioms": ["'AspisR1.NKI_InitialAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NKI_InitialAssociation.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  canonical o.z →
+    canonical s.high →
+      canonical s.low →
+        ∃ t absorption,
+          NKI_InitialPrefix.run p o s = ok t ∧
+            NKI_InitialTotal.Canonical t ∧
+              NJB_Absorption.reference t.low t.fixed t.two t.eight t.nodes o.z = ok absorption ∧
+                pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal t.low t.fixed t.two t.eight t.nodes o.z =
+                    ok absorption ∧
+                  canonical absorption ∧
+                    reference p o s = ok (t.initial, absorption) ∧
+                      pool_v1.pair_forest_semantic_terminal.sema
+...
+d.bind ca) fun absorption => ok (t.initial, absorption))
+                              (bind_tc_ok absorption fun y => ok (t.initial, y)))))
+                        (ok (t.initial, absorption)))
+                      (eq_self (ok (t.initial, absorption)))),
+                  Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = ok (t.initial, absorption)) (Eq.symm (NKI_InitialFactor.source p o s))))
+                    (of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun' (congrArg Bind.bind ct) fun t => do
+                                  let absorption ←
+                                    pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal t.low t.fixed t.two
+                                        t.eight t.nodes o.z
+                                  ok (t.initial, absorption))
+                                (bind_tc_ok t fun y => do
+                                  let absorption ←
+                                    pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal y.low y.fixed y.two
+                                        y.eight y.nodes o.z
+                                  ok (y.initial, absorption)))
+                              (Eq.trans (congrFun' (congrArg Bind.bind co) fun absorption => ok (t.initial, absorption))
+                                (bind_tc_ok absorption fun y => ok (t.initial, y)))))
+                          (ok (t.initial, absorption)))
+                        (eq_self (ok (t.initial, absorption)))))⟩⟩⟩⟩⟩⟩)
+'AspisR1.NKI_InitialAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0184a5c348a74e86b4742493e236c5ac.scope; invocation ID: 71b967acf2554d1ba1d4dc31cf3a8fcc

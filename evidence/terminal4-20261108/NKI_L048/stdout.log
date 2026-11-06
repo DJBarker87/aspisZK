@@ -1,0 +1,47 @@
+NKI_InitialLaneResults.lean:35:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIv_NativeArray.value o.z ↑i
+in the target expression
+  decode (scalar rate full i) * decode (NJB_ArrayCarrier.cell o.z i) =
+    (fun i => (if ↑i < 8 then decode rate else decode full) * FIv_NativeArray.value o.z ↑i) i
+
+rate full : NQ
+pr pf : NP
+o : state_only_poseidon.StateOnlyPoseidonOpenings
+out : Std.Array NQ 16#usize
+hr : Canon rate
+hf : Canon full
+dr : NJB_PreparedLaws.Domain pr rate
+df : NJB_PreparedLaws.Domain pf full
+ho : FIw_ArrayValue.canonical o.z
+run :
+  array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+      pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO (pr, o, pf) =
+    ok out
+value :
+  (∀ x ∈ ↑out, Canon x) ∧
+    List.map decode ↑out =
+      List.ofFn fun i => (if ↑i < 8 then decode rate else decode full) * FIv_NativeArray.value o.z ↑i
+decoded :
+  FIw_ArrayValue.decoded out = fun i => (if ↑i < 8 then decode rate else decode full) * FIv_NativeArray.value o.z ↑i
+i : Fin 16
+hs : Canon (scalar rate full i)
+hd : NJB_PreparedLaws.Domain (cache pr pf i) (scalar rate full i)
+q : field.QM31
+cq : field.PreparedQm31Multiplier.mul (cache pr pf i) (NJB_ArrayCarrier.cell o.z i) = ok q
+hq : Canon q
+vq : decode q = decode (scalar rate full i) * decode (NJB_ArrayCarrier.cell o.z i)
+⊢ decode (scalar rate full i) * decode (NJB_ArrayCarrier.cell o.z i) =
+    (fun i => (if ↑i < 8 then decode rate else decode full) * FIv_NativeArray.value o.z ↑i) i
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NKI_InitialLaneResults.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

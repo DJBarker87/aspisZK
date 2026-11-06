@@ -1,0 +1,27 @@
+--- a/crates/aspis-statement/src/pool_v1/NKI_append_native.rs
++++ b/crates/aspis-statement/src/pool_v1/NKI_append_native.rs
+@@ -118,3 +118,24 @@
+  let nodes=NKI_sum(&s,&[4..25,33..57],&mut l);
+  assert_eq!(l.calls,1);let r:usize=kani::any();kani::assume(r<4);assert_eq!(l.ranges[r],[4,25,33,57][r]);assert_eq!(l.high[limb],hw[limb]);assert_eq!(l.low[limb],lw[limb]);assert_eq!(NKI_words(nodes)[limb],NKI_words(reply)[limb]^if cfg!(NKI_invert){1}else{0});
+ }
++struct NKI_LowLog {seek:usize,calls:usize,kind:u8,left:QM31,right:QM31,cache:[[u32;3];3],new_reply:PreparedQm31Multiplier,reply:[QM31;5]}
++fn NKI_low_enter(k:u8,a:QM31,b:QM31,l:&mut NKI_LowLog)->QM31{let i=l.calls;if i==l.seek{l.kind=k;l.left=a;l.right=b;}l.calls+=1;l.reply[i]}
++fn NKI_low_new(a:QM31,l:&mut NKI_LowLog)->PreparedQm31Multiplier{NKI_low_enter(3,a,QM31::ZERO,l);l.new_reply}
++fn NKI_low_mul(p:PreparedQm31Multiplier,a:QM31,l:&mut NKI_LowLog)->QM31{if l.calls==l.seek{l.cache=NKI_cache(p);}NKI_low_enter(4,QM31::ZERO,a,l)}
++fn NKI_low_add(a:QM31,b:QM31,l:&mut NKI_LowLog)->QM31{NKI_low_enter(1,a,b,l)}
++fn NKI_low_mix(mut output:[QM31;2],low:QM31,local:[QM31;2],l:&mut NKI_LowLog)->[QM31;2]{
++ let prepared=NKI_low_new(low,l);
++ output[0]=NKI_low_add(output[0],NKI_low_mul(prepared,local[0],l),l);
++ output[1]=NKI_low_add(output[1],NKI_low_mul(prepared,local[1],l),l);
++ output
++}
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKI_low_mix_cut(){
++ let before:[QM31;2]=unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())};let local:[QM31;2]=unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())};let low=NKI_q(kani::any());let reply:[QM31;5]=unsafe{core::mem::transmute::<[[u32;4];5],[QM31;5]>(kani::any())};let cache:[[u32;3];3]=kani::any();let p=unsafe{core::mem::transmute::<[[u32;3];3],PreparedQm31Multiplier>(cache)};let seek:usize=kani::any();let limb:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();let g:usize=kani::any();kani::assume(seek<5&&limb<4&&row<3&&col<3&&g<2);
++ let mut l=NKI_LowLog{seek,calls:0,kind:255,left:QM31::ZERO,right:QM31::ZERO,cache:[[0;3];3],new_reply:p,reply};let out=NKI_low_mix(before,low,local,&mut l);assert_eq!(l.calls,5);
++ if seek==0{assert_eq!(l.kind,3);assert_eq!(NKI_words(l.left)[limb],NKI_words(low)[limb]);}
++ else if seek%2==1{assert_eq!(l.kind,4);assert_eq!(l.cache[row][col],cache[row][col]);assert_eq!(NKI_words(l.right)[limb],NKI_words(local[(seek-1)/2])[limb]);}
++ else{assert_eq!(l.kind,1);assert_eq!(NKI_words(l.left)[limb],NKI_words(before[(seek-2)/2])[limb]);assert_eq!(NKI_words(l.right)[limb],NKI_words(reply[seek-1])[limb]);}
++ assert_eq!(NKI_words(out[g])[limb],NKI_words(reply[2+2*g])[limb]^if cfg!(NKI_invert){1}else{0});
++}

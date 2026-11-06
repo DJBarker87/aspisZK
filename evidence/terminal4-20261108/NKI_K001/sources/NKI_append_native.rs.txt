@@ -1,0 +1,76 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn NKI_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+fn NKI_q(w:[u32;4])->QM31{QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn NKI_cache(p:PreparedQm31Multiplier)->[[u32;3];3]{unsafe{core::mem::transmute(p)}}
+struct NKI_Log {seek:usize,calls:usize,kind:u8,left:[u32;4],right:[u32;4],pack:[[u32;4];4],cache:[[u32;3];3],new_reply:PreparedQm31Multiplier,reply:[QM31;23],empty:[M31;8],level:usize}
+impl NKI_Log {fn enter(&mut self,kind:u8,a:QM31,b:QM31)->QM31{let k=self.calls;if k==self.seek{self.kind=kind;self.left=NKI_words(a);self.right=NKI_words(b);}self.calls+=1;self.reply[k]}}
+fn NKI_new(h:QM31,l:&mut NKI_Log)->PreparedQm31Multiplier{l.enter(3,h,QM31::ZERO);l.new_reply}
+fn NKI_empty(level:usize,l:&mut NKI_Log)->Digest{l.level=level;l.enter(7,QM31::ZERO,QM31::ZERO);l.empty}
+fn NKI_tweak(a:M31,b:M31,l:&mut NKI_Log)->M31{let r=l.enter(8,NKI_q([a.0,0,0,0]),NKI_q([b.0,0,0,0]));M31(r.c0.a.0)}
+fn NKI_lift(a:M31,l:&mut NKI_Log)->QM31{l.enter(5,NKI_q([a.0,0,0,0]),QM31::ZERO)}
+fn NKI_sub(a:QM31,b:QM31,l:&mut NKI_Log)->QM31{l.enter(2,a,b)}
+fn NKI_pack(a:&[QM31;4],l:&mut NKI_Log)->QM31{if l.calls==l.seek{l.pack=a.map(NKI_words);}l.enter(6,QM31::ZERO,QM31::ZERO)}
+fn NKI_mul(p:PreparedQm31Multiplier,a:QM31,l:&mut NKI_Log)->QM31{if l.calls==l.seek{l.cache=NKI_cache(p);}l.enter(4,QM31::ZERO,a)}
+fn NKI_append(next_pair_index:u64,level:usize,frontier:Digest,opened:[QM31;16],high:QM31,l:&mut NKI_Log)->([QM31;2],[QM31;2]){
+    let prepared_high = NKI_new(high,l);
+    if ((next_pair_index >> level) & 1) == 0 {
+        let expected = NKI_empty(level,l);
+        let residual0 = [
+            NKI_sub(opened[RATE],NKI_lift(expected[0],l),l),
+            NKI_sub(opened[RATE + 1],NKI_lift(expected[1],l),l),
+            NKI_sub(opened[RATE + 2],NKI_lift(expected[2],l),l),
+            NKI_sub(opened[RATE + 3],NKI_lift(expected[3],l),l),
+        ];
+        let residual1 = [
+            NKI_sub(opened[RATE + 4],NKI_lift(expected[4],l),l),
+            NKI_sub(opened[RATE + 5],NKI_lift(expected[5],l),l),
+            NKI_sub(opened[RATE + 6],NKI_lift(expected[6],l),l),
+            NKI_sub(opened[RATE + 7],NKI_lift(NKI_tweak(expected[7],MERKLE_NODE_COMPRESSION_V3_TWEAK,l),l),l),
+        ];
+        (
+            [
+                NKI_mul(prepared_high,NKI_pack(&residual0,l),l),
+                NKI_mul(prepared_high,NKI_pack(&residual1,l),l),
+            ],
+            [QM31::ZERO; DIGEST_ELEMS / 4],
+        )
+    } else {
+        let residual0 = [
+            NKI_sub(opened[0],NKI_lift(frontier[0],l),l),
+            NKI_sub(opened[1],NKI_lift(frontier[1],l),l),
+            NKI_sub(opened[2],NKI_lift(frontier[2],l),l),
+            NKI_sub(opened[3],NKI_lift(frontier[3],l),l),
+        ];
+        let residual1 = [
+            NKI_sub(opened[4],NKI_lift(frontier[4],l),l),
+            NKI_sub(opened[5],NKI_lift(frontier[5],l),l),
+            NKI_sub(opened[6],NKI_lift(frontier[6],l),l),
+            NKI_sub(opened[7],NKI_lift(frontier[7],l),l),
+        ];
+        (
+            [QM31::ZERO; DIGEST_ELEMS / 4],
+            [
+                NKI_mul(prepared_high,NKI_pack(&residual0,l),l),
+                NKI_mul(prepared_high,NKI_pack(&residual1,l),l),
+            ],
+        )
+    }
+}
+#[kani::proof] #[kani::unwind(26)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKI_append_global_cut(){
+ let index:u64=kani::any();let level:usize=kani::any();kani::assume(level<20);
+ let high=NKI_q(kani::any());let opened:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let frontier:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};let empty:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};let reply:[QM31;23]=unsafe{core::mem::transmute::<[[u32;4];23],[QM31;23]>(kani::any())};let cache:[[u32;3];3]=kani::any();let new_reply=unsafe{core::mem::transmute::<[[u32;3];3],PreparedQm31Multiplier>(cache)};
+ let seek:usize=kani::any();let limb:usize=kani::any();let j:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();let g:usize=kani::any();kani::assume(seek<23&&limb<4&&j<4&&row<3&&col<3&&g<2);
+ let mut l=NKI_Log{seek,calls:0,kind:255,left:[0;4],right:[0;4],pack:[[0;4];4],cache:[[0;3];3],new_reply,reply,empty,level:999};
+ let (a,b)=NKI_append(index,level,frontier,opened,high,&mut l);let right=((index>>level)&1)==0;let count=if right{23}else{21};
+ assert_eq!(l.calls,count);assert_eq!(NKI_words(a[g])[limb],(if right{NKI_words(reply[20+2*g])[limb]}else{0})^if cfg!(NKI_invert){1}else{0});assert_eq!(NKI_words(b[g])[limb],if right{0}else{NKI_words(reply[18+2*g])[limb]});
+ if seek<count {
+  if seek==0{assert_eq!(l.kind,3);assert_eq!(l.left[limb],NKI_words(high)[limb]);}
+  else if right&&seek==1{assert_eq!(l.kind,7);assert_eq!(l.level,level);}
+  else if right&&seek==16{assert_eq!(l.kind,8);assert_eq!(l.left[0],empty[7].0);assert_eq!(l.right[0],MERKLE_NODE_COMPRESSION_V3_TWEAK.0);}
+  else if seek<if right{19}else{17}{let k=if right{if seek<16{(seek-2)/2}else{7}}else{(seek-1)/2};let is_lift=if right{if seek<16{seek%2==0}else{seek==17}}else{seek%2==1};if is_lift{assert_eq!(l.kind,5);assert_eq!(l.left[limb],if limb!=0{0}else if right&&k==7{NKI_words(reply[16])[0]}else if right{empty[k].0}else{frontier[k].0});}else{assert_eq!(l.kind,2);assert_eq!(l.left[limb],NKI_words(opened[if right{8+k}else{k}])[limb]);assert_eq!(l.right[limb],NKI_words(reply[seek-1])[limb]);}}
+  else {let base=if right{19}else{17};if (seek-base)%2==0{let group=(seek-base)/2;assert_eq!(l.kind,6);let k=4*group+j;let sub=if right{if k<7{3+2*k}else{18}}else{2+2*k};assert_eq!(l.pack[j][limb],NKI_words(reply[sub])[limb]);}else{assert_eq!(l.kind,4);assert_eq!(l.cache[row][col],cache[row][col]);assert_eq!(l.right[limb],NKI_words(reply[seek-1])[limb]);}}
+ }
+}

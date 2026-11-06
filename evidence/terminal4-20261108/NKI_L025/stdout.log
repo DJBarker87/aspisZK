@@ -1,0 +1,35 @@
+theorem AspisR1.NKI_LevelsRoot.source : ∀ (index : U64) (f : Frontier) (o : O) (s : High),
+  (∀ d ∈ ↑f, dc d) →
+    FIw_ArrayValue.canonical o →
+      FIw_ArrayValue.canonical s →
+        ∃ packets out,
+          (∀ (i : Fin 20),
+              NKI_LevelsFrame.call index f o s i = ok (NKI_AppendPacket.output (packets i)) ∧
+                (∀ (j : Fin 4), Canon (NKI_AppendPacket.output (packets i) j)) ∧
+                  NKI_AppendCertificate.Native (packets i)) ∧
+            NKI_LevelsFrame.run index f o s (List.finRange 20) zero = ok out ∧
+              NKI_LevelsNative.Trace index f o s (fun i => NKI_AppendPacket.output (packets i)) (List.finRange 20) zero
+                  out ∧
+                (∀ (j : Fin 4), Canon (out j)) ∧
+                  ∀ (j : Fin 4),
+                    decode (out j) =
+                      (List.map (fun i => decode (NKI_AppendPacket.output (packets i) j)) (List.finRange 20)).sum :=
+fun index f o s hf ho hs =>
+  let ⟨packets, children⟩ := NKI_LevelsChildren.source index f o s hf ho hs
+  let child := fun i => NKI_AppendPacket.output (packets i);
+  have calls := fun i => (children i).left;
+  have hc := fun i => (children i).right.left;
+  let ⟨out, h✝⟩ := NJX_AppendFold.zero_source child hc
+  let ⟨co, right✝⟩ := h✝
+  let ⟨tr, right✝¹⟩ := right✝
+  let ⟨ho, vo⟩ := right✝¹
+  Exists.intro packets
+    (Exists.intro out
+      ⟨children,
+        ⟨Eq.mpr
+            (id
+              (congrArg (fun _a => _a = ok out)
+                (NKI_LevelsFrame.association index f o s child calls (List.finRange 20) zero)))
+            co,
+          ⟨NKI_LevelsNative.source index f o s child calls tr, ⟨ho, vo⟩⟩⟩⟩)
+'AspisR1.NKI_LevelsRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

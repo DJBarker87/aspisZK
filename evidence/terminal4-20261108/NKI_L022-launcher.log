@@ -1,0 +1,30 @@
+{"attempt": "NKI_L022", "exit_status": 0, "wall_seconds": 10.017216328997165, "peak_rss_kib": "6173336", "swaps": "0", "print_axioms": ["'AspisR1.NKI_AppendCertificate.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.NKI_AppendCertificate.Native : {index : U64} →
+  {level : Usize} →
+    {frontier : D} → {o : O} → {high : NQ} → NKI_AppendPacket.Packet index level frontier o high → Prop :=
+fun {index} {level} {frontier} {o} {high} p =>
+  NKI_AppendCut.Cut (NKI_AppendPacket.emptySide index level) level high
+      (NKI_DigestView.opened o (NKI_AppendPacket.start (NKI_AppendPacket.emptySide index level)) ⋯)
+      (NJX_DigestCohort.dcells p.expected) p.targets.last p.arithmetic.prepared p.arithmetic.residual
+      p.arithmetic.packed p.arithmetic.out (NKI_AppendPacket.output p)
+      (NKI_AppendCut.observations level high
+        (NKI_DigestView.opened o (NKI_AppendPacket.start (NKI_AppendPacket.em
+...
+def AspisR1.NKI_AppendCertificate.Native : {index : U64} →
+  {level : Usize} →
+    {frontier : D} → {o : O} → {high : NQ} → NKI_AppendPacket.Packet index level frontier o high → Prop :=
+fun {index} {level} {frontier} {o} {high} p =>
+  NKI_AppendCut.Cut (NKI_AppendPacket.emptySide index level) level high
+      (NKI_DigestView.opened o (NKI_AppendPacket.start (NKI_AppendPacket.emptySide index level)) ⋯)
+      (NJX_DigestCohort.dcells p.expected) p.targets.last p.arithmetic.prepared p.arithmetic.residual
+      p.arithmetic.packed p.arithmetic.out (NKI_AppendPacket.output p)
+      (NKI_AppendCut.observations level high
+        (NKI_DigestView.opened o (NKI_AppendPacket.start (NKI_AppendPacket.emptySide index level)) ⋯)
+        (NJX_DigestCohort.dcells p.expected) p.targets.last (NKI_AppendPacket.emptySide index level)
+        p.arithmetic.prepared p.arithmetic.residual p.arithmetic.packed)
+      (if NKI_AppendPacket.emptySide index level = true then 23 else 21) ∧
+    NKI_DigestTargets.cells p.targets =
+      NKI_AppendCut.targets (NKI_AppendPacket.emptySide index level) (NJX_DigestCohort.dcells p.expected) p.targets.last
+'AspisR1.NKI_AppendCertificate.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7af5c8c808444b6b936034916fdb2382.scope; invocation ID: 74a036e8d8f7409bb1bf1d7fdcb5a71f

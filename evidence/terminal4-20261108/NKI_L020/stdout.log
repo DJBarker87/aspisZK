@@ -1,0 +1,32 @@
+theorem AspisR1.NKI_AppendRoot.source : ∀ (index : U64) (level : Usize) (frontier : D) (o : O) (high : NQ),
+  ↑level < 20 →
+    dc frontier →
+      FIw_ArrayValue.canonical o →
+        Canon high →
+          ∃ p,
+            NKI_AppendPacket.cohort index level frontier o high = ok (NKI_AppendPacket.output p) ∧
+              (∀ (j : Fin 4), Canon (NKI_AppendPacket.output p j)) ∧
+                NKI_AppendCut.Cut (NKI_AppendPacket.emptySide index level) level high
+                    (NKI_DigestView.opened o (NKI_AppendPacket.start (NKI_AppendPacket.emptySide index level)) ⋯)
+                    (NJX_DigestCohort.dcells p.expected) p.targets.last p.arithmetic.prepared p.arithmetic.residual
+                    p.arithmetic.packed p.arithmetic.out (NKI_AppendPacket.output p)
+                    (NKI_AppendCut.observations level high
+                      (NKI_DigestView.opened o (NKI_AppendPacket.start (NKI_AppendPacket.emptySide index level)) ⋯)
+                      (NJX_DigestCohort.dcells p.expected) p.targets.last (NKI_AppendPacket.emptySide index level)
+                      p.arithmetic.prepared p.arithmetic.residual p.arithmetic.packed)
+                    (if NKI_AppendPacket.emptySide index level = true then 23 else 21) ∧
+                  NKI_DigestTargets.cells p.targets =
+                    NKI_AppendCut.targets (NKI_AppendPacket.emptySide index level) (NJX_DigestCohort.dcells p.expected)
+                      p.targets.last :=
+fun index level frontier o high hl hf ho hh =>
+  let ⟨p, cp⟩ := NKI_AppendPacket.source index level frontier o high hl hf ho hh
+  Exists.intro p
+    ⟨cp,
+      ⟨NKI_AppendPacket.canonical p,
+        ⟨NKI_AppendCut.source (NKI_AppendPacket.emptySide index level) level high
+            (NKI_DigestView.opened o (NKI_AppendPacket.start (NKI_AppendPacket.emptySide index level))
+              (NKI_AppendPacket.start_bound (NKI_AppendPacket.emptySide index level)))
+            (NJX_DigestCohort.dcells p.expected) p.targets.last p.arithmetic.prepared p.arithmetic.residual
+            p.arithmetic.packed p.arithmetic.out,
+          NKI_TargetAssociation.source p.targets⟩⟩⟩
+'AspisR1.NKI_AppendRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

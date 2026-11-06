@@ -1,0 +1,20 @@
+theorem AspisR1.NKI_LevelsChildren.source : ∀ (index : U64) (f : Frontier) (o : O) (s : High),
+  (∀ d ∈ ↑f, dc d) →
+    FIw_ArrayValue.canonical o →
+      FIw_ArrayValue.canonical s →
+        ∃ packets,
+          ∀ (i : Fin 20),
+            NKI_LevelsFrame.call index f o s i = ok (NKI_AppendPacket.output (packets i)) ∧
+              (∀ (j : Fin 4), Canon (NKI_AppendPacket.output (packets i) j)) ∧
+                NKI_AppendCertificate.Native (packets i) :=
+fun index f o s hf ho hs =>
+  have children := fun i =>
+    have domains := NJX_AppendDomains.source f s hs hf i;
+    NKI_AppendCertificate.source index (NJX_AppendDomains.level i) (NJX_AppendDomains.frontier f i) o
+      (NJX_AppendDomains.high s i) domains.right.left domains.right.right.left ho domains.left;
+  (fun packets x =>
+      Exists.intro packets fun i =>
+        ⟨(fun i => (x i).left) i,
+          ⟨(fun i => ((fun i => (x i).right) i).left) i, (fun i => ((fun i => (x i).right) i).right) i⟩⟩)
+    (fun i => Classical.choose (children i)) fun i => Classical.choose_spec (children i)
+'AspisR1.NKI_LevelsChildren.source' depends on axioms: [propext, Classical.choice, Quot.sound]

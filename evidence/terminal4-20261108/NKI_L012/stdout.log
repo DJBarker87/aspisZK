@@ -1,0 +1,20 @@
+theorem AspisR1.NKI_BindingPacket.source : ∀ (high : NQ) (o : O) (d : D) (start : Usize) (right : Bool)
+  (hb : ↑start + 8 ≤ 16),
+  Canon high →
+    FIw_ArrayValue.canonical o →
+      dc d →
+        ∃ t p,
+          NJX_DigestPacket.reference high (NKI_DigestView.opened o start hb) (NKI_DigestTargets.cells t) = ok p.out ∧
+            NKI_DigestPacked.cohort high o d start right = ok p.out :=
+fun high o d start right hb hh ho hd =>
+  have target :=
+    Bool.casesOn (motive := fun t => right = t → ∃ t, True) right
+      (fun h => Eq.symm h ▸ NKI_TargetConstructors.left d hd) (fun h => Eq.symm h ▸ NKI_RightTarget.source d hd)
+      (Eq.refl right);
+  let ⟨t, h✝⟩ := target
+  let ⟨p, h✝¹⟩ :=
+    NKI_DigestPacked.source high o d start right hb hh ho hd (NKI_DigestTargets.cells t)
+      (NKI_DigestTargets.canonical t hd) (NKI_DigestTargets.values t)
+  let ⟨cp, co⟩ := h✝¹
+  Exists.intro t (Exists.intro p ⟨cp, co⟩)
+'AspisR1.NKI_BindingPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]

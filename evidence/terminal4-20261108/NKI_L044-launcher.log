@@ -1,0 +1,40 @@
+{"attempt": "NKI_L044", "exit_status": 0, "wall_seconds": 11.793005728861317, "peak_rss_kib": "6176332", "swaps": "0", "print_axioms": ["'AspisR1.NKI_LevelsComplete.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NKI_LevelsComplete.source : ∀ (index : U64) (f : Frontier) (o : O) (s : High),
+  (∀ d ∈ ↑f, dc d) →
+    FIw_ArrayValue.canonical o →
+      FIw_ArrayValue.canonical s →
+        ∃ packets out,
+          (∀ (i : Fin 20),
+              NKI_LevelsFrame.call index f o s i = ok (NKI_AppendPacket.output (packets i)) ∧
+                (∀ (j : Fin 4), Canon (NKI_AppendPacket.output (packets i) j)) ∧
+                  NKI_AppendCertificate.Native (packets i)) ∧
+            NKI_LevelsFrame.run index f o s (List.finRange 20) NKI_LevelsRoot.zero = ok out ∧
+              NKI_LevelsNative.Trace index f o s (fun i => NKI_AppendPacket.output (packets i)) (List.finRange 20)
+                  NK
+...
+theorem AspisR1.NKI_LevelsComplete.source : ∀ (index : U64) (f : Frontier) (o : O) (s : High),
+  (∀ d ∈ ↑f, dc d) →
+    FIw_ArrayValue.canonical o →
+      FIw_ArrayValue.canonical s →
+        ∃ packets out,
+          (∀ (i : Fin 20),
+              NKI_LevelsFrame.call index f o s i = ok (NKI_AppendPacket.output (packets i)) ∧
+                (∀ (j : Fin 4), Canon (NKI_AppendPacket.output (packets i) j)) ∧
+                  NKI_AppendCertificate.Native (packets i)) ∧
+            NKI_LevelsFrame.run index f o s (List.finRange 20) NKI_LevelsRoot.zero = ok out ∧
+              NKI_LevelsNative.Trace index f o s (fun i => NKI_AppendPacket.output (packets i)) (List.finRange 20)
+                  NKI_LevelsRoot.zero out ∧
+                (∀ (j : Fin 4), Canon (out j)) ∧
+                  ∀ (j : Fin 4), decode (out j) = NKI_LevelsCohort.model index f o s packets j :=
+fun index f o s hf ho hs =>
+  let ⟨packets, h✝⟩ := NKI_LevelsRoot.source index f o s hf ho hs
+  let ⟨out, h✝¹⟩ := h✝
+  let ⟨children, right✝⟩ := h✝¹
+  let ⟨run, right✝¹⟩ := right✝
+  let ⟨tr, right✝²⟩ := right✝¹
+  let ⟨ho, values⟩ := right✝²
+  Exists.intro packets
+    (Exists.intro out ⟨children, ⟨run, ⟨tr, ⟨ho, NKI_LevelsCohort.association index f o s packets out values⟩⟩⟩⟩)
+'AspisR1.NKI_LevelsComplete.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re28eca9c6ac9455d9d44ae1ed2d98e66.scope; invocation ID: 822a371315f84ed3bdcacb459570474a

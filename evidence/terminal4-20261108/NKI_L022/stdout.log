@@ -1,0 +1,16 @@
+def AspisR1.NKI_AppendCertificate.Native : {index : U64} →
+  {level : Usize} →
+    {frontier : D} → {o : O} → {high : NQ} → NKI_AppendPacket.Packet index level frontier o high → Prop :=
+fun {index} {level} {frontier} {o} {high} p =>
+  NKI_AppendCut.Cut (NKI_AppendPacket.emptySide index level) level high
+      (NKI_DigestView.opened o (NKI_AppendPacket.start (NKI_AppendPacket.emptySide index level)) ⋯)
+      (NJX_DigestCohort.dcells p.expected) p.targets.last p.arithmetic.prepared p.arithmetic.residual
+      p.arithmetic.packed p.arithmetic.out (NKI_AppendPacket.output p)
+      (NKI_AppendCut.observations level high
+        (NKI_DigestView.opened o (NKI_AppendPacket.start (NKI_AppendPacket.emptySide index level)) ⋯)
+        (NJX_DigestCohort.dcells p.expected) p.targets.last (NKI_AppendPacket.emptySide index level)
+        p.arithmetic.prepared p.arithmetic.residual p.arithmetic.packed)
+      (if NKI_AppendPacket.emptySide index level = true then 23 else 21) ∧
+    NKI_DigestTargets.cells p.targets =
+      NKI_AppendCut.targets (NKI_AppendPacket.emptySide index level) (NJX_DigestCohort.dcells p.expected) p.targets.last
+'AspisR1.NKI_AppendCertificate.source' depends on axioms: [propext, Classical.choice, Quot.sound]

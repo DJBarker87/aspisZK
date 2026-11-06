@@ -1,0 +1,98 @@
+theorem AspisR1.NKI_InitialRoot.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  canonical o.z →
+    canonical s.high →
+      canonical s.low →
+        ∃ l absorption,
+          NKI_InitialInvocation.Clauses p o s l ∧
+            NKI_InitialTrace.Canonical l ∧
+              NKI_InitialReads.Reads s l ∧
+                NJB_PreparedLaws.Domain l.full l.full_initial_selector ∧
+                  NJB_PreparedLaws.Domain l.full_or_rate l.q12 ∧
+                    (∀ (i : Fin 16),
+                        field.PreparedQm31Multiplier.mul (NKI_InitialLaneResults.cache l.full_or_rate l.full i)
+                            (NJB_ArrayCarrier.cell o.z i) =
+                          ok (NJB_ArrayCarrier.cell l.initial i)) ∧
+                      NKI_InitialCuts.Cut p o s l absorption (NKI_InitialCuts.observations p o s l absorption)
+                          ![12, 2, 12, 9, 16, 4, 1] ∧
+                        NJB_Absorption.reference l.q38 l.fixed l.chunk_two1 l.chunk_eight1 l.nodes o.z = ok absorption ∧
+                          NKI_InitialAssociation.reference p o s = ok (l.initial2, absorption) ∧
+                            pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s =
+                                ok (l.initial2, absorption) ∧
+                              canonical l.initial2 ∧ canonical absorption :=
+fun p o s hz hh hl =>
+  let ⟨l, h✝⟩ := spec_imp_exists (NKI_InitialTrace.source p o s hz hh hl)
+  let ⟨cl, hc⟩ := h✝
+  have calls := NKI_InitialTraceFactor.clauses p o s l cl;
+  have domains := NKI_InitialDomains.source p o s l calls hc;
+  have prefixCall :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = ok (NKI_InitialInvocation.output l)) (Eq.symm (NKI_InitialTraceFactor.source p o s))))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let l ← _a
+                  ok (NKI_InitialInvocation.output l)) =
+                ok (NKI_InitialInvocation.output l))
+            cl))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = ok (NKI_InitialInvocation.output l))
+              (bind_tc_ok l fun l => ok (NKI_InitialInvocation.output l))))
+          (Eq.refl (ok (NKI_InitialInvocation.output l)))));
+  let ⟨t, h✝¹⟩ := NKI_InitialAssociation.source p o s hz hh hl
+  let ⟨absorption, h✝²⟩ := h✝¹
+  let ⟨ct, right✝⟩ := h✝²
+  let ⟨ht, right✝¹⟩ := right✝
+  let ⟨ca, right✝²⟩ := right✝¹
+  let ⟨co, right✝³⟩ := right✝²
+  let ⟨ha, right✝⁴⟩ := right✝³
+  let ⟨cr, cs⟩ := right✝⁴
+  have same := ok.inj (Eq.trans (Eq.symm ct) prefixCall);
+  Eq.ndrec (motive := fun t =>
+    NKI_InitialPrefix.run p o s = ok t →
+      NKI_InitialTotal.Canonical t →
+        NJB_Absorption.reference t.low t.fixed t.two t.eight t.nodes o.z = ok absorption →
+          pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal t.low t.fixed t.two t.eight t.nodes o.z =
+              ok absorption →
+            NKI_InitialAssociation.reference p o s = ok (t.initial, absorption) →
+              pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s = ok (t.initial, absorption) →
+                ∃ l absorption,
+                  NKI_InitialInvocation.Clauses p o s l ∧
+                    NKI_InitialTrace.Canonical l ∧
+                      NKI_InitialReads.Reads s l ∧
+                        NJB_PreparedLaws.Domain l.full l.full_initial_selector ∧
+                          NJB_PreparedLaws.Domain l.full_or_rate l.q12 ∧
+                            (∀ (i : Fin 16),
+                                field.PreparedQm31Multiplier.mul (NKI_InitialLaneResults.cache l.full_or_rate l.full i)
+                                    (NJB_ArrayCarrier.cell o.z i) =
+                                  ok (NJB_ArrayCarrier.cell l.initial i)) ∧
+                              NKI_InitialCuts.Cut p o s l absorption (NKI_InitialCuts.observations p o s l absorption)
+                                  ![12, 2, 12, 9, 16, 4, 1] ∧
+                                NJB_Absorption.reference l.q38 l.fixed l.chunk_two1 l.chunk_eight1 l.nodes o.z =
+                                    ok absorption ∧
+                                  NKI_InitialAssociation.reference p o s = ok (l.initial2, absorption) ∧
+                                    pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s =
+                                        ok (l.initial2, absorption) ∧
+                                      canonical l.initial2 ∧ canonical absorption)
+    (fun ct ht ca co cr cs =>
+      have rateCanonical :=
+        hc.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.left;
+      have fullCanonical :=
+        hc.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.left;
+      have initialCall :=
+        calls.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.left;
+      Exists.intro l
+        (Exists.intro absorption
+          ⟨calls,
+            ⟨hc,
+              ⟨NKI_InitialReads.source p o s l calls,
+                ⟨domains.left,
+                  ⟨domains.right,
+                    ⟨NKI_InitialLaneResults.source l.q12 l.full_initial_selector l.full_or_rate l.full o l.initial
+                        rateCanonical fullCanonical domains.right domains.left hz initialCall,
+                      ⟨NKI_InitialCuts.source p o s l absorption calls, ⟨ca, ⟨cr, ⟨cs, ⟨ht.left, ha⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩))
+    (Eq.symm same) ct ht ca co cr cs
+'AspisR1.NKI_InitialRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

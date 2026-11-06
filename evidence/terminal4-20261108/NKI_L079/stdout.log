@@ -1,0 +1,119 @@
+theorem AspisR1.NKI_ValueRoot.source : ∀ (packed : Std.Array NQ 24#usize) (o : Openings) (s : Selectors),
+  canonical packed →
+    canonical o.z →
+      canonical o.succ_z →
+        canonical o.xor12_z →
+          canonical s.high →
+            canonical s.low →
+              ∃ l c a b r3 middle out,
+                NKI_ValueTrace.Clauses o s l ∧
+                  NKI_ValueTrace.Canonical o l ∧
+                    NKI_ValueFields.Reads o l ∧
+                      (∀ (g : Fin 3),
+                          pool_v1.pair_forest_copy_terminal.Selectors.row s (NKI_ValueFields.row g) =
+                            ok (NJB_ArrayCarrier.cell l.value_selectors g)) ∧
+                        NJX_RangeFold.Trace 0 (NJX_RangeInvocation.xs o 0) (List.finRange 10) NJX_RangeInvocation.zero
+                            a ∧
+                          NJX_RangeFold.Trace 1 (NJX_RangeInvocation.xs o 1) (List.finRange 10) a b ∧
+                            NJX_RangeFold.Trace 2 (NJX_RangeInvocation.xs o 2) (List.finRange 10) b r3 ∧
+                              l.range3 = NJB_ArrayCarrier.array r3 ∧
+                                l.i = 1024#u32 ∧
+                                  l.i1 = 1048576#u32 ∧
+                                    NKI_ValueCuts.Cut packed o s l c middle out
+                                        (NKI_ValueCuts.observations packed o s l c middle out) ![3, 3, 8, 1, 5, 1] ∧
+                                      NJL_SharedRoot.reference packed l.range6 l.range_selector = ok middle ∧
+                                        NKI_ConservationInvocation.Clauses middle o s out c ∧
+                                          NKI_ValueAssociation.reference packed o s = ok out ∧
+                                            pool_v1.pair_forest_semantic_terminal.add_value_lanes packed o s = ok out ∧
+                                              canonical middle ∧ canonical out :=
+fun packed o s hp hz hs hx hh hl =>
+  let ⟨l, h✝⟩ := spec_imp_exists (NKI_ValueTrace.source o s hz hs hx hh hl)
+  let ⟨trace, hc⟩ := h✝
+  have calls := NKI_ValueTraceFactor.clauses o s l trace;
+  have prefixCall :=
+    Eq.mpr (id (congrArg (fun _a => _a = ok (NKI_ValueTrace.output l)) (Eq.symm (NKI_ValueTraceFactor.source o s))))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let l ← _a
+                  ok (NKI_ValueTrace.output l)) =
+                ok (NKI_ValueTrace.output l))
+            trace))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = ok (NKI_ValueTrace.output l))
+              (bind_tc_ok l fun l => ok (NKI_ValueTrace.output l))))
+          (Eq.refl (ok (NKI_ValueTrace.output l)))));
+  let ⟨t, h✝¹⟩ := NKI_ValueAssociation.source packed o s hp hz hs hx hh hl
+  let ⟨middle, h✝²⟩ := h✝¹
+  let ⟨out, h✝³⟩ := h✝²
+  let ⟨ct, right✝⟩ := h✝³
+  let ⟨ot, right✝¹⟩ := right✝
+  let ⟨ht, right✝²⟩ := right✝¹
+  let ⟨cm, right✝³⟩ := right✝²
+  let ⟨co, right✝⁴⟩ := right✝³
+  let ⟨hm, right✝⁵⟩ := right✝⁴
+  let ⟨ho, right✝⁶⟩ := right✝⁵
+  let ⟨cr, cs⟩ := right✝⁶
+  have same := ok.inj (Eq.trans (Eq.symm ct) prefixCall);
+  Eq.ndrec (motive := fun t =>
+    NKI_ValuePrefix.run o s = ok t →
+      t.openings = o →
+        NKI_ValueTotal.Canonical t →
+          NJL_SharedRoot.reference packed t.range t.selector = ok middle →
+            ∃ l c a b r3 middle out,
+              NKI_ValueTrace.Clauses o s l ∧
+                NKI_ValueTrace.Canonical o l ∧
+                  NKI_ValueFields.Reads o l ∧
+                    (∀ (g : Fin 3),
+                        pool_v1.pair_forest_copy_terminal.Selectors.row s (NKI_ValueFields.row g) =
+                          ok (NJB_ArrayCarrier.cell l.value_selectors g)) ∧
+                      NJX_RangeFold.Trace 0 (NJX_RangeInvocation.xs o 0) (List.finRange 10) NJX_RangeInvocation.zero a ∧
+                        NJX_RangeFold.Trace 1 (NJX_RangeInvocation.xs o 1) (List.finRange 10) a b ∧
+                          NJX_RangeFold.Trace 2 (NJX_RangeInvocation.xs o 2) (List.finRange 10) b r3 ∧
+                            l.range3 = NJB_ArrayCarrier.array r3 ∧
+                              l.i = 1024#u32 ∧
+                                l.i1 = 1048576#u32 ∧
+                                  NKI_ValueCuts.Cut packed o s l c middle out
+                                      (NKI_ValueCuts.observations packed o s l c middle out) ![3, 3, 8, 1, 5, 1] ∧
+                                    NJL_SharedRoot.reference packed l.range6 l.range_selector = ok middle ∧
+                                      NKI_ConservationInvocation.Clauses middle o s out c ∧
+                                        NKI_ValueAssociation.reference packed o s = ok out ∧
+                                          pool_v1.pair_forest_semantic_terminal.add_value_lanes packed o s = ok out ∧
+                                            canonical middle ∧ canonical out)
+    (fun ct ot ht cm =>
+      let ⟨c, cc⟩ := NKI_ConservationInvocation.source middle o s out co
+      let ⟨a, h✝⁴⟩ := NKI_RangeAssociation.source o hz hs hx
+      let ⟨b, h✝⁵⟩ := h✝⁴
+      let ⟨r3, h✝⁶⟩ := h✝⁵
+      let ⟨ca, right✝⁷⟩ := h✝⁶
+      let ⟨ta, right✝⁸⟩ := right✝⁷
+      let ⟨cb, right✝⁹⟩ := right✝⁸
+      let ⟨tb, right✝¹⁰⟩ := right✝⁹
+      let ⟨cc3, right✝¹¹⟩ := right✝¹⁰
+      let ⟨tc, right✝¹²⟩ := right✝¹¹
+      let ⟨h3, loops⟩ := right✝¹²
+      have sameRange := congrArg Prod.snd (ok.inj (Eq.trans (Eq.symm (NKI_ValueFields.loops o s l calls hc)) loops));
+      have tail := NKI_ValueFrames.source o s l calls;
+      Exists.intro l
+        (Exists.intro c
+          (Exists.intro a
+            (Exists.intro b
+              (Exists.intro r3
+                (Exists.intro middle
+                  (Exists.intro out
+                    ⟨calls,
+                      ⟨hc,
+                        ⟨NKI_ValueFields.reads o s l calls hc,
+                          ⟨NKI_ValueFields.rows o s l calls hh hl,
+                            ⟨ta,
+                              ⟨tb,
+                                ⟨tc,
+                                  ⟨sameRange,
+                                    ⟨tail.left,
+                                      ⟨tail.right.left,
+                                        ⟨NKI_ValueCuts.source packed o s l c middle out calls, ⟨cm, ⋯⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩)))))))
+    (Eq.symm same) ct ot ht cm
+'AspisR1.NKI_ValueRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

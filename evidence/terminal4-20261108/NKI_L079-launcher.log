@@ -1,0 +1,56 @@
+{"attempt": "NKI_L079", "exit_status": 0, "wall_seconds": 11.742523885099217, "peak_rss_kib": "6187320", "swaps": "0", "print_axioms": ["'AspisR1.NKI_ValueRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NKI_ValueRoot.source : ∀ (packed : Std.Array NQ 24#usize) (o : Openings) (s : Selectors),
+  canonical packed →
+    canonical o.z →
+      canonical o.succ_z →
+        canonical o.xor12_z →
+          canonical s.high →
+            canonical s.low →
+              ∃ l c a b r3 middle out,
+                NKI_ValueTrace.Clauses o s l ∧
+                  NKI_ValueTrace.Canonical o l ∧
+                    NKI_ValueFields.Reads o l ∧
+                      (∀ (g : Fin 3),
+                          pool_v1.pair_forest_copy_terminal.Selectors.row s (NKI_ValueFields.row g) =
+                            ok (NJB_ArrayCarrier.cell l.value_selectors g)) ∧
+                        NJX_RangeFol
+...
+                                    NKI_ValueAssociation.reference packed o s = ok out ∧
+                                          pool_v1.pair_forest_semantic_terminal.add_value_lanes packed o s = ok out ∧
+                                            canonical middle ∧ canonical out)
+    (fun ct ot ht cm =>
+      let ⟨c, cc⟩ := NKI_ConservationInvocation.source middle o s out co
+      let ⟨a, h✝⁴⟩ := NKI_RangeAssociation.source o hz hs hx
+      let ⟨b, h✝⁵⟩ := h✝⁴
+      let ⟨r3, h✝⁶⟩ := h✝⁵
+      let ⟨ca, right✝⁷⟩ := h✝⁶
+      let ⟨ta, right✝⁸⟩ := right✝⁷
+      let ⟨cb, right✝⁹⟩ := right✝⁸
+      let ⟨tb, right✝¹⁰⟩ := right✝⁹
+      let ⟨cc3, right✝¹¹⟩ := right✝¹⁰
+      let ⟨tc, right✝¹²⟩ := right✝¹¹
+      let ⟨h3, loops⟩ := right✝¹²
+      have sameRange := congrArg Prod.snd (ok.inj (Eq.trans (Eq.symm (NKI_ValueFields.loops o s l calls hc)) loops));
+      have tail := NKI_ValueFrames.source o s l calls;
+      Exists.intro l
+        (Exists.intro c
+          (Exists.intro a
+            (Exists.intro b
+              (Exists.intro r3
+                (Exists.intro middle
+                  (Exists.intro out
+                    ⟨calls,
+                      ⟨hc,
+                        ⟨NKI_ValueFields.reads o s l calls hc,
+                          ⟨NKI_ValueFields.rows o s l calls hh hl,
+                            ⟨ta,
+                              ⟨tb,
+                                ⟨tc,
+                                  ⟨sameRange,
+                                    ⟨tail.left,
+                                      ⟨tail.right.left,
+                                        ⟨NKI_ValueCuts.source packed o s l c middle out calls, ⟨cm, ⋯⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩)))))))
+    (Eq.symm same) ct ot ht cm
+'AspisR1.NKI_ValueRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-raa6ba1455dfe4ff9a6c901fba81fde00.scope; invocation ID: 08f39c0d7f9e4a33bf99d92948bb457f

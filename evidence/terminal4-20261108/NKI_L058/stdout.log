@@ -1,0 +1,136 @@
+NKI_ScheduleSource.lean:27:1: error: unsolved goals
+case refine_1
+packed : Std.Array NQ 24#usize
+p : Public
+o : Openings
+s : Selectors
+hp : canonical packed
+hz : canonical o.z
+hh : canonical s.high
+hl : canonical s.low
+l : NKI_InitialInvocation.Locals
+absorption : Std.Array NQ 16#usize
+calls : NKI_InitialInvocation.Clauses p o s l
+hc : NKI_InitialTrace.Canonical l
+reads : NKI_InitialReads.Reads s l
+wreads : NKI_InitialWriteReads.Reads l
+df : NJB_PreparedLaws.Domain l.full l.full_initial_selector
+dr : NJB_PreparedLaws.Domain l.full_or_rate l.q12
+lanes :
+  ∀ (i : Fin 16),
+    field.PreparedQm31Multiplier.mul (NKI_InitialLaneResults.cache l.full_or_rate l.full i)
+        (NJB_ArrayCarrier.cell o.z i) =
+      ok (NJB_ArrayCarrier.cell l.initial i)
+cut : NKI_InitialCuts.Cut p o s l absorption (NKI_InitialCuts.observations p o s l absorption) ![12, 2, 12, 9, 16, 4, 1]
+ca : NJB_Absorption.reference l.q38 l.fixed l.chunk_two1 l.chunk_eight1 l.nodes o.z = ok absorption
+cr : NKI_InitialAssociation.reference p o s = ok (l.initial2, absorption)
+cs : pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s = ok (l.initial2, absorption)
+hi : canonical l.initial2
+ha : canonical absorption
+middle : Std.Array field.QM31 24#usize
+cm : pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize l.initial2 = ok middle
+hm : canonical middle
+vm :
+  ∀ (j : Fin ↑24#usize),
+    decoded middle j = decoded packed j + FIx_SelectedMeaning.contribution (decoded l.initial2) ↑0#usize ↑j
+out : Std.Array field.QM31 24#usize
+co : pool_v1.pair_forest_semantic_terminal.add_preweighted middle 16#usize absorption = ok out
+ho : canonical out
+vo :
+  ∀ (j : Fin ↑24#usize),
+    decoded out j = decoded middle j + FIx_SelectedMeaning.contribution (decoded absorption) ↑16#usize ↑j
+⊢ (let (initial, absorption) := (l.initial2, absorption)
+    do
+    let packed1 ← pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize initial
+    pool_v1.pair_forest_semantic_terminal.add_preweighted packed1 16#usize absorption) =
+    ok out
+NKI_ScheduleSource.lean:27:74: warning: This simp argument is unused:
+  cm
+
+Hint: Omit it from the simp argument list.
+  simp only [pool_v1.pair_forest_semantic_terminal.add_schedule_lanes, ̲cs, ̲cm̵,̵c̵o, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKI_ScheduleSource.lean:27:77: warning: This simp argument is unused:
+  co
+
+Hint: Omit it from the simp argument list.
+  simp only [pool_v1.pair_forest_semantic_terminal.add_schedule_lanes, ̲cs, ̲cm,c̵o̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NKI_ScheduleSource.source : ∀ (packed : Std.Array NQ 24#usize) (p : Public) (o : Openings)
+  (s : Selectors),
+  canonical packed →
+    canonical o.z →
+      canonical s.high →
+        canonical s.low →
+          ∃ l absorption middle out,
+            NKI_InitialInvocation.Clauses p o s l ∧
+              NKI_InitialCuts.Cut p o s l absorption (NKI_InitialCuts.observations p o s l absorption)
+                  ![12, 2, 12, 9, 16, 4, 1] ∧
+                pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s =
+                    ok (l.initial2, absorption) ∧
+                  pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize l.initial2 = ok middle ∧
+                    pool_v1.pair_forest_semantic_terminal.add_preweighted middle 16#usize absorption = ok out ∧
+                      pool_v1.pair_forest_semantic_terminal.add_schedule_lanes packed p o s = ok out ∧
+                        canonical out ∧
+                          ∀ (j : Fin ↑24#usize),
+                            decoded out j =
+                              decoded packed j + FIx_SelectedMeaning.contribution (decoded l.initial2) 0 ↑j +
+                                FIx_SelectedMeaning.contribution (decoded absorption) 16 ↑j :=
+fun packed p o s hp hz hh hl =>
+  let ⟨l, h✝⟩ := NKI_InitialRoot.source p o s hz hh hl
+  let ⟨absorption, h✝¹⟩ := h✝
+  let ⟨calls, right✝⟩ := h✝¹
+  let ⟨hc, right✝¹⟩ := right✝
+  let ⟨reads, right✝²⟩ := right✝¹
+  let ⟨wreads, right✝³⟩ := right✝²
+  let ⟨df, right✝⁴⟩ := right✝³
+  let ⟨dr, right✝⁵⟩ := right✝⁴
+  let ⟨lanes, right✝⁶⟩ := right✝⁵
+  let ⟨cut, right✝⁷⟩ := right✝⁶
+  let ⟨ca, right✝⁸⟩ := right✝⁷
+  let ⟨cr, right✝⁹⟩ := right✝⁸
+  let ⟨cs, right✝¹⁰⟩ := right✝⁹
+  let ⟨hi, ha⟩ := right✝¹⁰
+  let ⟨middle, h✝²⟩ :=
+    NHU_Preweighted.result packed 0#usize l.initial2 (of_decide_eq_true (id (Eq.refl true)))
+      (of_decide_eq_true (id (Eq.refl true))) hp hi
+  let ⟨cm, right✝¹¹⟩ := h✝²
+  let ⟨hm, vm⟩ := right✝¹¹
+  let ⟨out, h✝³⟩ :=
+    NHU_Preweighted.result middle 16#usize absorption (of_decide_eq_true (id (Eq.refl true)))
+      (of_decide_eq_true (id (Eq.refl true))) hm ha
+  let ⟨co, right✝¹²⟩ := h✝³
+  let ⟨ho, vo⟩ := right✝¹²
+  Exists.intro l
+    (Exists.intro absorption
+      (Exists.intro middle
+        (Exists.intro out
+          ⟨calls,
+            ⟨cut,
+              ⟨cs,
+                ⟨cm,
+                  ⟨co,
+                    ⟨sorry,
+                      ⟨ho, fun j =>
+                        Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                _a =
+                                  decoded packed j + FIx_SelectedMeaning.contribution (decoded l.initial2) 0 ↑j +
+                                    FIx_SelectedMeaning.contribution (decoded absorption) 16 ↑j)
+                              (vo j)))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  _a + FIx_SelectedMeaning.contribution (decoded absorption) ↑16#usize ↑j =
+                                    decoded packed j + FIx_SelectedMeaning.contribution (decoded l.initial2) 0 ↑j +
+                                      FIx_SelectedMeaning.contribution (decoded absorption) 16 ↑j)
+                                (vm j)))
+                            (Eq.refl
+                              (decoded packed j + FIx_SelectedMeaning.contribution (decoded l.initial2) ↑0#usize ↑j +
+                                FIx_SelectedMeaning.contribution (decoded absorption) ↑16#usize ↑j)))⟩⟩⟩⟩⟩⟩⟩)))
+'AspisR1.NKI_ScheduleSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
