@@ -199,6 +199,9 @@ fn NJE_binary_row_cut(){
  kani::assume(n<=16&&i<=n&&w<=i&&at<=96&&len<=96&&k<16&&h<32);
  let oldi=i;let oldw=w;let oldat=at;let beforeidx=idx[k];let beforeval=val[k][h];let parent=if i<n{idx[i]>>1}else{0};
  let left=if i<n{idx[i]&1==0}else{false};let paired=i<n&&i+1<n&&idx[i+1]==idx[i]^1;let available=at+32<=len;
+ if cfg!(NJE_missing_class){kani::assume(i<n&&!paired&&!available);}
+ if cfg!(NJE_exit_class){kani::assume(i==n);}
+
  let reply:[u8;32]=kani::any();let expectedreply=reply[h];let base=nodes.as_ptr();let valuebase=val.as_ptr() as *const u8;
  let mut log=NJE_RowLog{reply,calls:0,kind:0,left:false,i:0,len:0,ptr:core::ptr::null(),coordinate:k,byte:h,observed:beforeval};
  let succeeded=NJE_binary_row(&mut log,&mut idx,&mut val,n,&nodes[..len],&mut i,&mut w,&mut at);
@@ -273,9 +276,22 @@ fn NJE_enumerate_active(){
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::unwind(140)]
 fn NJE_enumerate_exit(){
- let mut state:[M31;16]=core::array::from_fn(|_|M31(kani::any()));let counter:usize=kani::any();kani::assume(counter<=16);
+ let mut state:[M31;16]=core::array::from_fn(|_|M31(kani::any()));let counter:usize=kani::any();let k:usize=kani::any();let h:usize=kani::any();kani::assume(counter<=16&&k<16&&h<2);let before=state[k];
  let pair:(core::slice::IterMut<'_,M31>,usize)=unsafe{core::mem::transmute(state[16..].iter_mut().enumerate())};assert_eq!(pair.1,0);
  let mut iter:core::iter::Enumerate<core::slice::IterMut<'_,M31>>=unsafe{core::mem::transmute((pair.0,counter))};let reply=iter.next();
- let (_,count):(core::slice::IterMut<'_,M31>,usize)=unsafe{core::mem::transmute(iter)};assert_eq!(count,counter);
+ let (tail,count):(core::slice::IterMut<'_,M31>,usize)=unsafe{core::mem::transmute(iter)};assert_eq!(count,counter);let header:[usize;2]=unsafe{core::mem::transmute(tail)};let expected:[usize;2]=unsafe{core::mem::transmute(state[16..].iter_mut())};assert_eq!(header[h],expected[h]);assert_eq!(state[k],before);
  if cfg!(NJE_bad_argument){assert!(reply.is_some())}else{assert!(reply.is_none())}
+}
+
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::unwind(140)]
+fn NJE_sibling_window_payload(){
+ let nodes:[u8;96]=kani::any();let at:usize=kani::any();let len:usize=kani::any();let j:usize=kani::any();kani::assume(at<=96&&len<=96&&j<32);
+ let window=nodes[..len].get(at..at+32);
+ match window {
+ Some(sibling)=>{assert!(at+32<=len);assert_eq!(sibling.len(),32);assert_eq!(sibling.as_ptr(),unsafe{nodes.as_ptr().add(at)});
+ if cfg!(NJE_bad_argument){assert_eq!(sibling[j],nodes[at+j]^1)}else{assert_eq!(sibling[j],nodes[at+j])}},
+ None=>{if cfg!(NJE_bad_argument){assert!(at+32<=len)}else{assert!(at+32>len)}}
+ }
 }

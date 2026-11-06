@@ -1,0 +1,81 @@
+theorem NJE_InternalRound.nonlinear_value : ∀ (input : State) (constant : U32),
+  (∀ (i : Fin 16), ↑(input i) < 2147483647) →
+    ↑constant < 2147483647 →
+      (∀ (i : Fin 16), ↑(nonlinear input constant i) < 2147483647) ∧
+        (fun i => ↑↑(nonlinear input constant i)) = fun i =>
+          if i = 0 then R0P.poseidonPow5 (↑↑(input 0) + ↑↑constant) else ↑↑(input i) :=
+fun input constant canonical hc =>
+  have value := NJE_RoundComposition.cell_law (input 0) constant (canonical 0) hc;
+  ⟨fun i =>
+    if zero : i = 0 then
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg LT.lt
+              (congrArg UScalar.val
+                (ite_cond_eq_true (NJE_RoundComposition.cell (input 0) constant) (input i)
+                  (Eq.trans (congrFun' (congrArg Eq zero) 0) (eq_self 0)))))
+            2147483647))
+        value.right.left
+    else
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg LT.lt
+              (congrArg UScalar.val
+                (ite_cond_eq_false (NJE_RoundComposition.cell (input 0) constant) (input i) (eq_false zero))))
+            2147483647))
+        (canonical i),
+    funext fun i =>
+      if zero : i = 0 then
+        Eq.mpr
+          (id
+            (congr
+              (congrArg Eq
+                (congrArg Nat.cast
+                  (congrArg UScalar.val
+                    (ite_cond_eq_true (NJE_RoundComposition.cell (input 0) constant) (input i)
+                      (Eq.trans (congrFun' (congrArg Eq zero) 0) (eq_self 0))))))
+              (ite_cond_eq_true (R0P.poseidonPow5 (↑↑(input 0) + ↑↑constant)) (↑↑(input i))
+                (Eq.trans (congrFun' (congrArg Eq zero) 0) (eq_self 0)))))
+          value.right.right
+      else
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (congrArg Nat.cast
+                  (congrArg UScalar.val
+                    (ite_cond_eq_false (NJE_RoundComposition.cell (input 0) constant) (input i) (eq_false zero)))))
+              (ite_cond_eq_false (R0P.poseidonPow5 (↑↑(input 0) + ↑↑constant)) (↑↑(input i)) (eq_false zero)))
+            (eq_self ↑↑(input i)))⟩
+'NJE_InternalRound.nonlinear_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_InternalRound.result : ∀ (input : State) (constant : U32) (sums : ℕ → ℕ) (full : ℕ) (args : Fin 16 → ℕ)
+  (post : ℕ → State),
+  (∀ (i : Fin 16), ↑(input i) < 2147483647) →
+    ↑constant < 2147483647 →
+      NJE_SumStage.Cut (nonlinear input constant) sums →
+        NJE_InternalCut.Cut (nonlinear input constant) (sums 15) full args post →
+          ∀ (i : Fin 16),
+            ↑(post 16 i) < 2147483647 ∧
+              ↑↑(post 16 i) = R0P.poseidonInternalRound (fun j => ↑↑(input j)) (↑↑constant) i :=
+fun input constant sums full args post canonical hc sum_cut linear_cut =>
+  have nonlinear_law := nonlinear_value input constant canonical hc;
+  have layer :=
+    NJE_InternalPacket.result (nonlinear input constant) sums full args post nonlinear_law.left sum_cut linear_cut;
+  fun i =>
+  ⟨(layer.right i).left,
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = R0P.poseidonInternalRound (fun j => ↑↑(input j)) (↑↑constant) i)
+          (layer.right i).right))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              R0P.poseidonInternalLinear _a i = R0P.poseidonInternalRound (fun j => ↑↑(input j)) (↑↑constant) i)
+            nonlinear_law.right))
+        (Eq.refl
+          (R0P.poseidonInternalLinear
+            (fun i => if i = 0 then R0P.poseidonPow5 (↑↑(input 0) + ↑↑constant) else ↑↑(input i)) i)))⟩
+'NJE_InternalRound.result' depends on axioms: [propext, Classical.choice, Quot.sound]

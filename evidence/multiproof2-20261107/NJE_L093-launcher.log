@@ -1,0 +1,47 @@
+{"attempt": "NJE_L093", "exit_status": 1, "wall_seconds": 2.6836542601231486, "peak_rss_kib": "3803936", "swaps": "0", "print_axioms": ["'NJE_CompressSeed.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_CompressSeed.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_CompressSeed.lean:32:7: error: Type mismatch: After simplification, term
+  tweak.right.right
+ has type
+  @Eq NJE_AddValue.K (↑↑(NJE_AddValue.add (right 7) 1095962629#u32)) (↑↑(right 7) + ↑↑1095962629#u32)
+but is expected to have type
+  @Eq NJE_RoundTrace.K (↑↑(NJE_AddValue.add (right 7) 1095962629#u32)) (↑↑(right 7) + 1095962629)
+theorem NJE_CompressSeed.value : ∀ (left right : Fin 8 → U32),
+  (∀ (i : Fin 8), ↑(left i) < 2147483647) →
+    (∀ (i : Fin 8), ↑(right i) < 2147483647) →
+      NJE_RoundTrace.Canonical (seed left right) ∧
+        NJE_RoundTrace.cast (seed left right) = NJA_Compress.seed (fun i => ↑↑(left i)) fun i => ↑↑(right i) :=
+fun left right hl hr =>
+  have tweak :
+...
+w)⟩)))⟩
+'NJE_CompressSeed.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CompressSeed.result : ∀ (left right : Fin 8 → U32),
+  (∀ (i : Fin 8), ↑(left i) < 2147483647) →
+    (∀ (i : Fin 8), ↑(right i) < 2147483647) →
+      ∀ (states : Fin 23 → State) (bs : ℕ → State) (sums : Fin 4 → ℕ → ℕ) (args : Fin 16 → ℕ) (leading : ℕ → State),
+        states 0 = leading 16 →
+          NJE_ExternalStages.Cut (seed left right) bs sums args leading →
+            (∀ (r : Fin 22), NJE_RoundTrace.Witness (states r.castSucc) (states r.succ) r) →
+              ∀ (i : Fin 8),
+                ↑↑(states (Fin.last 22) ⟨↑i, ⋯⟩) = R0P.nodeCompress (fun j => ↑↑(left j)) (fun j => ↑↑(right j)) i :=
+fun left right hl hr states bs sums args leading start initial_cut rounds =>
+  have joined := NJE_RoundTrace.composition (seed left right) states bs sums args leading start initial_cut rounds;
+  have seed_value := (value left right hl hr).right;
+  fun i =>
+  have selected := congrFun joined.right ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩;
+  Eq.mp
+    (congrArg
+      (fun _a =>
+        NJE_RoundTrace.cast (states (Fin.last 22)) ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩ =
+          R0P.poseidonPermutation _a ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩)
+      (NJA_Compress.seed_model (fun i => ↑↑(left i)) fun i => ↑↑(right i)))
+    (Eq.mp
+      (congrArg
+        (fun _a =>
+          NJE_RoundTrace.cast (states (Fin.last 22)) ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩ =
+            R0P.poseidonPermutation _a ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩)
+        seed_value)
+      selected)
+'NJE_CompressSeed.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r88c5ae5333fa47c080f25adac5aa1cae.scope; invocation ID: 741565f5782c4f03a9ce7260c2f4aa00

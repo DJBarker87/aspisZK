@@ -1,0 +1,142 @@
+NJE_lean/NJE_CompressSeed.lean:32:7: error: Type mismatch: After simplification, term
+  tweak.right.right
+ has type
+  @Eq NJE_AddValue.K (↑↑(NJE_AddValue.add (right 7) 1095962629#u32)) (↑↑(right 7) + ↑↑1095962629#u32)
+but is expected to have type
+  @Eq NJE_RoundTrace.K (↑↑(NJE_AddValue.add (right 7) 1095962629#u32)) (↑↑(right 7) + 1095962629)
+theorem NJE_CompressSeed.value : ∀ (left right : Fin 8 → U32),
+  (∀ (i : Fin 8), ↑(left i) < 2147483647) →
+    (∀ (i : Fin 8), ↑(right i) < 2147483647) →
+      NJE_RoundTrace.Canonical (seed left right) ∧
+        NJE_RoundTrace.cast (seed left right) = NJA_Compress.seed (fun i => ↑↑(left i)) fun i => ↑↑(right i) :=
+fun left right hl hr =>
+  have tweak := NJE_AddValue.law (right 7) 1095962629#u32 (hr 7) (of_decide_eq_true (id (Eq.refl true)));
+  ⟨fun i =>
+    if low : ↑i < 8 then
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg LT.lt
+              (congrArg UScalar.val
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos low) x_0 x_1 x_2 x_3) ((↑i).decLt 8) U32
+                  (fun h => left ⟨↑i, h⟩) fun h =>
+                  if ↑i = 15 then NJE_AddValue.add (right 7) 1095962629#u32 else right ⟨↑i - 8, seed._proof_4 i h⟩)))
+            2147483647))
+        (hl ⟨↑i, low⟩)
+    else
+      if last : ↑i = 15 then
+        Eq.mpr
+          (id
+            (congrFun'
+              (congrArg LT.lt
+                (congrArg UScalar.val
+                  (Eq.trans
+                    (dite_congr (Eq.refl (↑i < 8)) (fun h => Eq.refl (left ⟨↑i, Eq.mpr_prop (Eq.refl (↑i < 8)) h⟩))
+                      fun h =>
+                      (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos last) x_0 x_1 x_2 x_3)
+                        (instDecidableEqNat (↑i) 15) U32 (NJE_AddValue.add (right 7) 1095962629#u32)
+                        (right ⟨↑i - 8, seed._proof_4 i (Eq.mpr_not (Eq.refl (↑i < 8)) h)⟩))
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg low) x_0 x_1 x_2 x_3) ((↑i).decLt 8) U32
+                      (fun h => left ⟨↑i, Eq.mpr_prop (Eq.refl (↑i < 8)) h⟩) fun h =>
+                      NJE_AddValue.add (right 7) 1095962629#u32))))
+              2147483647))
+          tweak.right.left
+      else
+        Eq.mpr
+          (id
+            (congrFun'
+              (congrArg LT.lt
+                (congrArg UScalar.val
+                  (Eq.trans
+                    (dite_congr (Eq.refl (↑i < 8)) (fun h => Eq.refl (left ⟨↑i, Eq.mpr_prop (Eq.refl (↑i < 8)) h⟩))
+                      fun h =>
+                      (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg last) x_0 x_1 x_2 x_3)
+                        (instDecidableEqNat (↑i) 15) U32 (NJE_AddValue.add (right 7) 1095962629#u32)
+                        (right ⟨↑i - 8, seed._proof_4 i (Eq.mpr_not (Eq.refl (↑i < 8)) h)⟩))
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg low) x_0 x_1 x_2 x_3) ((↑i).decLt 8) U32
+                      (fun h => left ⟨↑i, Eq.mpr_prop (Eq.refl (↑i < 8)) h⟩) fun h =>
+                      right ⟨↑i - 8, seed._proof_4 i (Eq.mpr_not (Eq.refl (↑i < 8)) h)⟩))))
+              2147483647))
+          (hr ⟨↑i - 8, Decidable.byContradiction fun a => value._proof_2 right i low a⟩),
+    funext fun i =>
+      if low : ↑i < 8 then
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (congrArg Nat.cast
+                  (congrArg UScalar.val
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos low) x_0 x_1 x_2 x_3) ((↑i).decLt 8) U32
+                      (fun h => left ⟨↑i, h⟩) fun h =>
+                      if ↑i = 15 then NJE_AddValue.add (right 7) 1095962629#u32
+                      else right ⟨↑i - 8, seed._proof_4 i h⟩))))
+              (Eq.trans
+                (dite_congr (Eq.refl (↑i < 8)) (fun h => Eq.refl ↑↑(left ⟨↑i, Eq.mpr_prop (Eq.refl (↑i < 8)) h⟩))
+                  fun h =>
+                  ite_congr (Eq.refl (↑i = 15)) (fun a => Eq.refl (↑↑(right 7) + 1095962629)) fun a =>
+                    Eq.refl ↑↑(right ⟨↑i - 8, NJA_Compress.seed._proof_4 i (Eq.mpr_not (Eq.refl (↑i < 8)) h)⟩))
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos low) x_0 x_1 x_2 x_3) ((↑i).decLt 8)
+                  NJA_Compress.K (fun h => ↑↑(left ⟨↑i, Eq.mpr_prop (Eq.refl (↑i < 8)) h⟩)) fun h =>
+                  if ↑i = 15 then ↑↑(right 7) + 1095962629
+                  else ↑↑(right ⟨↑i - 8, NJA_Compress.seed._proof_4 i (Eq.mpr_not (Eq.refl (↑i < 8)) h)⟩))))
+            (eq_self ↑↑(left ⟨↑i, low⟩)))
+      else
+        if last : ↑i = 15 then sorry
+        else
+          of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg Eq
+                  (congrArg Nat.cast
+                    (congrArg UScalar.val
+                      (Eq.trans
+                        (dite_congr (Eq.refl (↑i < 8)) (fun h => Eq.refl (left ⟨↑i, Eq.mpr_prop (Eq.refl (↑i < 8)) h⟩))
+                          fun h =>
+                          (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg last) x_0 x_1 x_2 x_3)
+                            (instDecidableEqNat (↑i) 15) U32 (NJE_AddValue.add (right 7) 1095962629#u32)
+                            (right ⟨↑i - 8, seed._proof_4 i (Eq.mpr_not (Eq.refl (↑i < 8)) h)⟩))
+                        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg low) x_0 x_1 x_2 x_3) ((↑i).decLt 8)
+                          U32 (fun h => left ⟨↑i, Eq.mpr_prop (Eq.refl (↑i < 8)) h⟩) fun h =>
+                          right ⟨↑i - 8, seed._proof_4 i (Eq.mpr_not (Eq.refl (↑i < 8)) h)⟩)))))
+                (Eq.trans
+                  (dite_congr (Eq.refl (↑i < 8)) (fun h => Eq.refl ↑↑(left ⟨↑i, Eq.mpr_prop (Eq.refl (↑i < 8)) h⟩))
+                    fun h =>
+                    Eq.trans
+                      (ite_congr (Eq.refl (↑i = 15)) (fun a => Eq.refl (↑↑(right 7) + 1095962629)) fun a =>
+                        Eq.refl ↑↑(right ⟨↑i - 8, NJA_Compress.seed._proof_4 i (Eq.mpr_not (Eq.refl (↑i < 8)) h)⟩))
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg last) x_0 x_1 x_2 x_3)
+                        (instDecidableEqNat (↑i) 15) NJA_Compress.K (↑↑(right 7) + 1095962629)
+                        ↑↑(right ⟨↑i - 8, NJA_Compress.seed._proof_4 i (Eq.mpr_not (Eq.refl (↑i < 8)) h)⟩)))
+                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg low) x_0 x_1 x_2 x_3) ((↑i).decLt 8)
+                    NJA_Compress.K (fun h => ↑↑(left ⟨↑i, Eq.mpr_prop (Eq.refl (↑i < 8)) h⟩)) fun h =>
+                    ↑↑(right ⟨↑i - 8, NJA_Compress.seed._proof_4 i (Eq.mpr_not (Eq.refl (↑i < 8)) h)⟩))))
+              (eq_self ↑↑(right ⟨↑i - 8, seed._proof_4 i (Eq.mpr_not (Eq.refl (↑i < 8)) low)⟩)))⟩
+'NJE_CompressSeed.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CompressSeed.result : ∀ (left right : Fin 8 → U32),
+  (∀ (i : Fin 8), ↑(left i) < 2147483647) →
+    (∀ (i : Fin 8), ↑(right i) < 2147483647) →
+      ∀ (states : Fin 23 → State) (bs : ℕ → State) (sums : Fin 4 → ℕ → ℕ) (args : Fin 16 → ℕ) (leading : ℕ → State),
+        states 0 = leading 16 →
+          NJE_ExternalStages.Cut (seed left right) bs sums args leading →
+            (∀ (r : Fin 22), NJE_RoundTrace.Witness (states r.castSucc) (states r.succ) r) →
+              ∀ (i : Fin 8),
+                ↑↑(states (Fin.last 22) ⟨↑i, ⋯⟩) = R0P.nodeCompress (fun j => ↑↑(left j)) (fun j => ↑↑(right j)) i :=
+fun left right hl hr states bs sums args leading start initial_cut rounds =>
+  have joined := NJE_RoundTrace.composition (seed left right) states bs sums args leading start initial_cut rounds;
+  have seed_value := (value left right hl hr).right;
+  fun i =>
+  have selected := congrFun joined.right ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩;
+  Eq.mp
+    (congrArg
+      (fun _a =>
+        NJE_RoundTrace.cast (states (Fin.last 22)) ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩ =
+          R0P.poseidonPermutation _a ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩)
+      (NJA_Compress.seed_model (fun i => ↑↑(left i)) fun i => ↑↑(right i)))
+    (Eq.mp
+      (congrArg
+        (fun _a =>
+          NJE_RoundTrace.cast (states (Fin.last 22)) ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩ =
+            R0P.poseidonPermutation _a ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩)
+        seed_value)
+      selected)
+'NJE_CompressSeed.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

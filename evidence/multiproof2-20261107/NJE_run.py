@@ -89,6 +89,16 @@ rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items()
 entry['full_receipt']=a+'/receipt.json'
 with (E/'NJE_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));
+if cfg['kind']=='kani':
+ log_path=E/a/'stdout.log'
+ if log_path.exists(): semantic_log=log_path.read_text()
+ else:
+  import lzma
+  semantic_log=lzma.open(str(log_path)+'.xz').read().decode()
+ if any(term in semantic_log.lower() for term in ['cbmc timed out','timed out','time limit exceeded']):
+  print('NJE review: TIMEOUT gives no positive or control credit '+a);sys.exit(2)
+ if rc['exit_status']==1 and 'VERIFICATION:- FAILED' not in semantic_log and 'VERIFICATION FAILED' not in semantic_log:
+  print('NJE review: no semantic failing-control verdict '+a);sys.exit(2)
 if cfg['kind']=='kani' and rc['exit_status'] in (0,1):
  expected_fail=cfg.get('expected_failure', 'NJE_bad_argument' in cfg.get('env',{}).get('RUSTFLAGS',''))
  if (rc['exit_status']==1)!=expected_fail: print('NJE review: unexpected semantic verdict '+a);sys.exit(2)

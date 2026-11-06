@@ -1,71 +1,520 @@
 {
-  "NJE_COMBINED_IMPORT": {
-    "module": "NJE_COMBINED_IMPORT",
-    "imports": [
-      "Init",
-      "NGK_COMBINED_IMPORT",
-      "NIU_COMBINED_IMPORT",
-      "NJA_COMBINED_IMPORT",
-      "NJE_ArityPackets",
-      "NJE_ReadPackets",
-      "NJE_RootPackets",
-      "NJE_Pow5Packet",
-      "NJE_Mat4Packet",
-      "NJE_ExternalBlocks"
-    ]
+  "roots": [
+    "NJE_ArityPackets",
+    "NJE_ReadPackets",
+    "NJE_RootPackets",
+    "NJE_Pow5Packet",
+    "NJE_Mat4Packet",
+    "NJE_ExternalBlocks",
+    "NJE_ParentPackets",
+    "NJE_WellFrozen",
+    "NJE_LinearPackets",
+    "NJE_CountPacket",
+    "NJE_ConstantShifts",
+    "NJE_ConstantsInitial",
+    "NJE_ConstantsInternal",
+    "NJE_ConstantsFinal",
+    "NJE_PermutationFold",
+    "NJE_RoundComposition",
+    "NJE_InternalRound",
+    "NJE_RoundTrace",
+    "NJE_CompressSeed"
+  ],
+  "dependency_closure": {
+    "NJE_ArityPackets": {
+      "source": "NJE_lean/NJE_ArityPackets.lean",
+      "sha256": "be275012a1b739838686746242576782c9c4b6bc621af0a1882778e56e38fc8f",
+      "focused": "NJE_L001",
+      "imports": [
+        "NJA_CohortArity",
+        "NJA_Context"
+      ]
+    },
+    "NJE_ReadPackets": {
+      "source": "NJE_lean/NJE_ReadPackets.lean",
+      "sha256": "e428085a7a0a9c1b0bee6c0531e9af7a9d0a68489de28f44a64e0591ec2b2386",
+      "focused": "NJE_L002",
+      "imports": [
+        "NJA_CohortArity",
+        "NJA_Context"
+      ]
+    },
+    "NJE_RootPackets": {
+      "source": "NJE_lean/NJE_RootPackets.lean",
+      "sha256": "e7ce31a77174854ca7bcb6b2098824e4dd096d4dee5d88881e3265385627b4d3",
+      "focused": "NJE_L003",
+      "imports": [
+        "NJA_Context"
+      ]
+    },
+    "NJE_Pow5Packet": {
+      "source": "NJE_lean/NJE_Pow5Packet.lean",
+      "sha256": "365635a20c1d58be0db2a80e4e318ee2d4f56900461c66ee392e86bf3f40c35f",
+      "focused": "NJE_L005",
+      "imports": [
+        "NJE_Residue",
+        "NJA_Pow5Cut"
+      ]
+    },
+    "NJE_Residue": {
+      "source": "NJE_lean/NJE_Residue.lean",
+      "sha256": "6b663b37d086b25e2b82de18631c82e23e8b3509efdf230d64567d787cd2a0b2",
+      "focused": "NJE_L004",
+      "imports": [
+        "NJA_FieldLaws"
+      ]
+    },
+    "NJE_Mat4Packet": {
+      "source": "NJE_lean/NJE_Mat4Packet.lean",
+      "sha256": "48e50cb80586cb53b65353a1f890512d8ea6a11ac9b798fd3e15a144c2e6e470",
+      "focused": "NJE_L006",
+      "imports": [
+        "NJE_Residue",
+        "NJA_Mat4Cut"
+      ]
+    },
+    "NJE_ExternalBlocks": {
+      "source": "NJE_lean/NJE_ExternalBlocks.lean",
+      "sha256": "a0df4487f797e99a5ad22a2ec9d080381f7c04cbb844c65aecf74c10fb938cd1",
+      "focused": "NJE_L008",
+      "imports": [
+        "NJE_Mat4Packet",
+        "NJA_ChunkFrame"
+      ]
+    },
+    "NJE_ParentPackets": {
+      "source": "NJE_lean/NJE_ParentPackets.lean",
+      "sha256": "cec18139a383edc253cccb83a11919507ab69aab551569d48c470df2d12163a8",
+      "focused": "NJE_L021",
+      "imports": [
+        "NJA_ParentCut",
+        "NGC_DigestBridge"
+      ]
+    },
+    "NJE_WellFrozen": {
+      "source": "NJE_lean/NJE_WellFrozen.lean",
+      "sha256": "4982f746509a6edbe36ff2223fe7cef7c588f084777b9604f4e31f8f70328265",
+      "focused": "NJE_L069",
+      "imports": [
+        "NJE_AllCalls",
+        "NJE_WellPacket"
+      ]
+    },
+    "NJE_AllCalls": {
+      "source": "NJE_lean/NJE_AllCalls.lean",
+      "sha256": "92a15edc3d072766f8fdb3e61238f88b2e0f95050f758902c495145b1d7e99f3",
+      "focused": "NJE_L067",
+      "imports": [
+        "NJE_AllAdapter"
+      ]
+    },
+    "NJE_AllAdapter": {
+      "source": "NJE_lean/NJE_AllAdapter.lean",
+      "sha256": "20e7b67f41654908d37ce2891d2ac60a484309324eb051cdb0ddae8a4176cbb6",
+      "focused": "NJE_L026",
+      "imports": [
+        "NFU_LPl_Kit_FunsExternal",
+        "NJA_WellIteration"
+      ]
+    },
+    "NJE_WellPacket": {
+      "source": "NJE_lean/NJE_WellPacket.lean",
+      "sha256": "0fe47033f268a9d8265878dec4234a24763bb6612110d2dbeb74474fc8113d70",
+      "focused": "NJE_L041",
+      "imports": [
+        "NJE_WellSource"
+      ]
+    },
+    "NJE_WellSource": {
+      "source": "NJE_lean/NJE_WellSource.lean",
+      "sha256": "00b71456a501609a71dda91138d0aac94940bf9fe431fc122c40540214a9efc6",
+      "focused": "NJE_L031",
+      "imports": [
+        "NJE_AllAdapter"
+      ]
+    },
+    "NJE_LinearPackets": {
+      "source": "NJE_lean/NJE_LinearPackets.lean",
+      "sha256": "cf7d24350f8f3110391fa0795dff46492df67e9bdb694a9451972d16bc489f63",
+      "focused": "NJE_L083",
+      "imports": [
+        "NJE_ExternalTotal",
+        "NJE_InternalPacket"
+      ]
+    },
+    "NJE_ExternalTotal": {
+      "source": "NJE_lean/NJE_ExternalTotal.lean",
+      "sha256": "e785bbee474efe6428992bec24056a90bf29c919a37f6405b8a156d0b4384a16",
+      "focused": "NJE_L034",
+      "imports": [
+        "NJE_ExternalStages"
+      ]
+    },
+    "NJE_ExternalStages": {
+      "source": "NJE_lean/NJE_ExternalStages.lean",
+      "sha256": "081eb94e408518eff55ddbac3a7a5ddce7cc0b29bafe0cae6b884c7f63661c27",
+      "focused": "NJE_L035",
+      "imports": [
+        "NJE_ExternalPacket",
+        "NJE_SumStage"
+      ]
+    },
+    "NJE_ExternalPacket": {
+      "source": "NJE_lean/NJE_ExternalPacket.lean",
+      "sha256": "60c8a5371256c5bef93a1be8047d0c19513eb1e862334bafb3f6a3228fa6e15f",
+      "focused": "NJE_L019",
+      "imports": [
+        "NJE_ExternalBlocks",
+        "NJA_ExternalCut",
+        "NJA_Sums"
+      ]
+    },
+    "NJE_SumStage": {
+      "source": "NJE_lean/NJE_SumStage.lean",
+      "sha256": "b2d5dc99122779b0ffa74cc6ce6aae0945c8ee2b545fd3d8e77fa3804ad3a19f",
+      "focused": "NJE_L025",
+      "imports": [
+        "NJA_InternalReduce"
+      ]
+    },
+    "NJE_InternalPacket": {
+      "source": "NJE_lean/NJE_InternalPacket.lean",
+      "sha256": "3c6e4609ce7c6c27b41b3aa8163e5d447820b02a441b2e18b312c9a86e76eb97",
+      "focused": "NJE_L024",
+      "imports": [
+        "NJE_InternalCut",
+        "NJE_SumStage",
+        "NJA_Mat4Cut"
+      ]
+    },
+    "NJE_InternalCut": {
+      "source": "NJE_lean/NJE_InternalCut.lean",
+      "sha256": "7ca281ab3857d21eccd38f029da25e955f3712a6355e43d32cf4ad7c86ca1080",
+      "focused": "NJE_L020",
+      "imports": [
+        "NJE_Residue",
+        "NJA_InternalReduce",
+        "NJA_PointStaging"
+      ]
+    },
+    "NJE_CountPacket": {
+      "source": "NJE_lean/NJE_CountPacket.lean",
+      "sha256": "8c00391eaa2a82a69c92cdb2f930340b9c5a5fa5c2d60ea914ea5ed090d580d5",
+      "focused": "NJE_L090",
+      "imports": [
+        "NJE_CountLevels",
+        "NJE_CountInit",
+        "NJE_WellFrozen"
+      ]
+    },
+    "NJE_CountLevels": {
+      "source": "NJE_lean/NJE_CountLevels.lean",
+      "sha256": "caf7b4cbee01561324781440c3a5b414a87af525c360c49712781ed2d8401025",
+      "focused": "NJE_L078",
+      "imports": [
+        "NJE_CountRange"
+      ]
+    },
+    "NJE_CountRange": {
+      "source": "NJE_lean/NJE_CountRange.lean",
+      "sha256": "04257d7a2b3fc6e7117e81f80f83926d34bbe6461f68ef1d34e20982f1891d5a",
+      "focused": "NJE_L074",
+      "imports": [
+        "NJE_CountRows"
+      ]
+    },
+    "NJE_CountRows": {
+      "source": "NJE_lean/NJE_CountRows.lean",
+      "sha256": "e7446e8d42aad6a26ab7b194b3e4864631d84706ff14c5bf8a26f7c8d5095124",
+      "focused": "NJE_L065",
+      "imports": [
+        "NJE_CountRow",
+        "NJE_CountKeyFrame",
+        "NJE_CountRowBounds",
+        "MultiproofConeCountPhysicalLevels"
+      ]
+    },
+    "NJE_CountRow": {
+      "source": "NJE_lean/NJE_CountRow.lean",
+      "sha256": "4072d6c4ab37a96259b5db2d90d4de28e94d7602cb2a28c178439af6852a07aa",
+      "focused": "NJE_L043",
+      "imports": [
+        "NJE_CountGroup",
+        "NJE_CountArithmetic"
+      ]
+    },
+    "NJE_CountGroup": {
+      "source": "NJE_lean/NJE_CountGroup.lean",
+      "sha256": "2d822497e84871bfabfb556d6aa23a576399537cc4151e3638cea178d8d76d15",
+      "focused": "NJE_L050",
+      "imports": [
+        "NJA_CountSorted"
+      ]
+    },
+    "NJE_CountArithmetic": {
+      "source": "NJE_lean/NJE_CountArithmetic.lean",
+      "sha256": "2a4bf07d8db56fbfe9f3fa0646b35b3129d3ebad2dcfdb1521840ff8a962f875",
+      "focused": "NJE_L038",
+      "imports": [
+        "NJA_CountStep"
+      ]
+    },
+    "NJE_CountKeyFrame": {
+      "source": "NJE_lean/NJE_CountKeyFrame.lean",
+      "sha256": "979b7040469aecb8e9a52dfd290ee49a7296e6ecd4ed188a9075501c036c32db",
+      "focused": "NJE_L059",
+      "imports": [
+        "NJE_CountArrayFrame"
+      ]
+    },
+    "NJE_CountArrayFrame": {
+      "source": "NJE_lean/NJE_CountArrayFrame.lean",
+      "sha256": "31c9fc631450ec4d8b43e9bb6d04df2db5576c67067a1f81c31a5d8de780b249",
+      "focused": "NJE_L053",
+      "imports": [
+        "NJE_CountArithmetic",
+        "NJA_CountDrop",
+        "MultiproofConeLiveOrder"
+      ]
+    },
+    "NJE_CountRowBounds": {
+      "source": "NJE_lean/NJE_CountRowBounds.lean",
+      "sha256": "9713ca94a279feb10009c82420ad1a30c1499a6230ab958b39c4d68489da5ced",
+      "focused": "NJE_L055",
+      "imports": [
+        "NJE_CountArithmetic",
+        "MultiproofConeCountPhysical"
+      ]
+    },
+    "NJE_CountInit": {
+      "source": "NJE_lean/NJE_CountInit.lean",
+      "sha256": "363a06f29b3ba0b37226f258c5f5216ea5fb71812143d4b8a753aabacc444cef",
+      "focused": "NJE_L066",
+      "imports": [
+        "NJA_CountBody"
+      ]
+    },
+    "NJE_ConstantShifts": {
+      "source": "NJE_lean/NJE_ConstantShifts.lean",
+      "sha256": "00c0f15ebedb20e8c863137b2cb7a29711193cdc1218396ce736ff3cbf9b7c5c",
+      "focused": "NJE_L040",
+      "imports": [
+        "NJA_Internal"
+      ]
+    },
+    "NJE_ConstantsInitial": {
+      "source": "NJE_lean/NJE_ConstantsInitial.lean",
+      "sha256": "f53365c6eae1fd0d88c5fef72543b39f454c4772b19f2c3e40801f76cd715b85",
+      "focused": "NJE_L047",
+      "imports": [
+        "NJA_Matrix"
+      ]
+    },
+    "NJE_ConstantsInternal": {
+      "source": "NJE_lean/NJE_ConstantsInternal.lean",
+      "sha256": "331ef131e937bfc80fb71dcc3d68624a6474e9cbce6c87266c781e4110c015ef",
+      "focused": "NJE_L046",
+      "imports": [
+        "NJA_Matrix"
+      ]
+    },
+    "NJE_ConstantsFinal": {
+      "source": "NJE_lean/NJE_ConstantsFinal.lean",
+      "sha256": "630052828c0912bd0019b760e389a2859a89fbefd7160033cdddc5f8069cbec4",
+      "focused": "NJE_L048",
+      "imports": [
+        "NJA_Matrix"
+      ]
+    },
+    "NJE_PermutationFold": {
+      "source": "NJE_lean/NJE_PermutationFold.lean",
+      "sha256": "78a757a417bf1d8737c054c2b9971a19303ea93c441f8de2b3e911a596f558d8",
+      "focused": "NJE_L064",
+      "imports": [
+        "R0P.Poseidon",
+        "Lean"
+      ]
+    },
+    "NJE_RoundComposition": {
+      "source": "NJE_lean/NJE_RoundComposition.lean",
+      "sha256": "b7e6b8566d8739d0c49a4e8b34b960a146f2958d5151e28cdce2b7ac40809d89",
+      "focused": "NJE_L086",
+      "imports": [
+        "NJE_AddValue",
+        "NJE_Pow5Realization",
+        "NJE_ExternalTotal",
+        "NJE_InternalPacket",
+        "NJA_PointStaging",
+        "NJA_RoundCell"
+      ]
+    },
+    "NJE_AddValue": {
+      "source": "NJE_lean/NJE_AddValue.lean",
+      "sha256": "afa621ca7d0c1917a46879f7ec4b9d49b12f88ca2680daf96d0b1dbeaae1001b",
+      "focused": "NJE_L056",
+      "imports": [
+        "NJA_Compress"
+      ]
+    },
+    "NJE_Pow5Realization": {
+      "source": "NJE_lean/NJE_Pow5Realization.lean",
+      "sha256": "532b9fd0ba27129b302749cf83384915a4a85f9a8b0ddd1b88d8c7aa0adf3d31",
+      "focused": "NJE_L057",
+      "imports": [
+        "NJE_Pow5Packet"
+      ]
+    },
+    "NJE_InternalRound": {
+      "source": "NJE_lean/NJE_InternalRound.lean",
+      "sha256": "ab2db6ed4ed4604509fe2769fdce4280999908c5e84a18d38222bc35f7d3b4fd",
+      "focused": "NJE_L091",
+      "imports": [
+        "NJE_RoundComposition"
+      ]
+    },
+    "NJE_RoundTrace": {
+      "source": "NJE_lean/NJE_RoundTrace.lean",
+      "sha256": "53bbfd4d58af9e17744192eca57016d1330b321104a4518c51e7596ff8cd0125",
+      "focused": "NJE_L095",
+      "imports": [
+        "NJE_InternalRound",
+        "NJE_ConstantsInitial",
+        "NJE_ConstantsInternal",
+        "NJE_ConstantsFinal",
+        "NJE_PermutationFold",
+        "NJA_TraceModel"
+      ]
+    },
+    "NJE_CompressSeed": {
+      "source": "NJE_lean/NJE_CompressSeed.lean",
+      "sha256": "a7ee225d3fdf08804a37efcb6c8382f16fd372acc9dc9b813034ede6e558ab28",
+      "focused": "NJE_L096",
+      "imports": [
+        "NJE_RoundTrace",
+        "NJA_Compress",
+        "NJE_CountPacket"
+      ]
+    }
   },
-  "NJE_ArityPackets": {
-    "module": "NJE_ArityPackets",
-    "imports": [
-      "Init",
-      "NJA_CohortArity",
-      "NJA_Context"
-    ]
-  },
-  "NJE_ReadPackets": {
-    "module": "NJE_ReadPackets",
-    "imports": [
-      "Init",
-      "NJA_CohortArity",
-      "NJA_Context"
-    ]
-  },
-  "NJE_RootPackets": {
-    "module": "NJE_RootPackets",
-    "imports": [
-      "Init",
-      "NJA_Context"
-    ]
-  },
-  "NJE_Pow5Packet": {
-    "module": "NJE_Pow5Packet",
-    "imports": [
-      "Init",
-      "NJE_Residue",
-      "NJA_Pow5Cut"
-    ]
-  },
-  "NJE_Residue": {
-    "module": "NJE_Residue",
-    "imports": [
-      "Init",
-      "NJA_FieldLaws"
-    ]
-  },
-  "NJE_Mat4Packet": {
-    "module": "NJE_Mat4Packet",
-    "imports": [
-      "Init",
-      "NJE_Residue",
-      "NJA_Mat4Cut"
-    ]
-  },
-  "NJE_ExternalBlocks": {
-    "module": "NJE_ExternalBlocks",
-    "imports": [
-      "Init",
-      "NJE_Mat4Packet",
-      "NJA_ChunkFrame"
-    ]
-  }
+  "axiom_roots": [
+    "AspisR1.RPx_Deployed.deployed",
+    "NJE_CountPacket.assoc",
+    "NJE_ArityPackets.TX1_118",
+    "NJE_ArityPackets.TX2_084",
+    "NJE_ArityPackets.TX1_119",
+    "NJE_ArityPackets.TX2_085",
+    "NJE_ArityPackets.TX1_120",
+    "NJE_ArityPackets.TX2_086",
+    "NJE_ReadPackets.TX1_121",
+    "NJE_ReadPackets.TX2_087",
+    "NJE_ReadPackets.TX1_126",
+    "NJE_ReadPackets.TX2_092",
+    "NJE_RootPackets.TX1_124",
+    "NJE_RootPackets.TX2_090",
+    "NJE_Pow5Packet.laws",
+    "NJE_Pow5Packet.native_domains",
+    "NJE_Pow5Packet.TX1_307",
+    "NJE_Residue.value",
+    "NJE_Residue.canonical",
+    "NJE_Residue.multiply",
+    "NJE_Mat4Packet.laws",
+    "NJE_Mat4Packet.domains",
+    "NJE_Mat4Packet.TX1_302",
+    "NJE_ExternalBlocks.matrix_value",
+    "NJE_ExternalBlocks.block_value",
+    "NJE_ExternalBlocks.canonical",
+    "NJE_ExternalBlocks.chronology",
+    "NJE_ParentPackets.TX1_123",
+    "NJE_ParentPackets.TX2_089",
+    "NJE_ParentPackets.TX1_125",
+    "NJE_ParentPackets.TX2_091",
+    "NJE_WellFrozen.window_pair",
+    "NJE_WellFrozen.order_all",
+    "NJE_WellFrozen.domain_all",
+    "NJE_WellFrozen.association",
+    "NJE_WellFrozen.TX1_128",
+    "NJE_WellFrozen.TX2_094",
+    "NJE_AllCalls.loop_total",
+    "NJE_AllCalls.default_all",
+    "NJE_AllAdapter.loop_total",
+    "NJE_AllAdapter.default_all",
+    "NJE_WellPacket.emitted_value",
+    "NJE_WellPacket.TX1_128",
+    "NJE_WellPacket.TX2_094",
+    "NJE_WellSource.all_result",
+    "NJE_WellSource.order_pair",
+    "NJE_WellSource.order_all",
+    "NJE_WellSource.domain_all",
+    "NJE_WellSource.source",
+    "NJE_LinearPackets.TX1_303",
+    "NJE_LinearPackets.TX1_304",
+    "NJE_ExternalTotal.unread",
+    "NJE_ExternalTotal.argument",
+    "NJE_ExternalTotal.result",
+    "NJE_ExternalStages.block_next",
+    "NJE_ExternalStages.blocks_result",
+    "NJE_ExternalStages.sum_result",
+    "NJE_ExternalPacket.laws",
+    "NJE_ExternalPacket.domains",
+    "NJE_ExternalPacket.result",
+    "NJE_SumStage.prefix_fold",
+    "NJE_SumStage.complete",
+    "NJE_SumStage.native_domains",
+    "NJE_InternalPacket.result",
+    "NJE_InternalCut.unread",
+    "NJE_InternalCut.args_source",
+    "NJE_InternalCut.frame_result",
+    "NJE_CountPacket.continuation",
+    "NJE_CountPacket.initial_view",
+    "NJE_CountPacket.result",
+    "NJE_CountPacket.TX1_122",
+    "NJE_CountPacket.TX2_088",
+    "NJE_CountLevels.total",
+    "NJE_CountRange.value",
+    "NJE_CountRange.active",
+    "NJE_CountRange.exit",
+    "NJE_CountRows.total",
+    "NJE_CountRow.step",
+    "NJE_CountRow.exit",
+    "NJE_CountGroup.total",
+    "NJE_CountArithmetic.sub_value",
+    "NJE_CountArithmetic.add_value",
+    "NJE_CountArithmetic.deficit",
+    "NJE_CountArithmetic.count_value",
+    "NJE_CountArithmetic.update_result",
+    "NJE_CountKeyFrame.outside",
+    "NJE_CountKeyFrame.whole",
+    "NJE_CountArrayFrame.get_set",
+    "NJE_CountArrayFrame.keys_write",
+    "NJE_CountRowBounds.deficit",
+    "NJE_CountRowBounds.cost_bound",
+    "NJE_CountRowBounds.progress",
+    "NJE_CountRowBounds.count_value",
+    "NJE_CountInit.result",
+    "NJE_ConstantShifts.model",
+    "NJE_ConstantShifts.bound",
+    "NJE_ConstantsInitial.canonical",
+    "NJE_ConstantsInitial.model",
+    "NJE_ConstantsInternal.canonical",
+    "NJE_ConstantsInternal.model",
+    "NJE_ConstantsFinal.canonical",
+    "NJE_ConstantsFinal.model",
+    "NJE_PermutationFold.folded",
+    "NJE_PermutationFold.compose",
+    "NJE_RoundComposition.cell_law",
+    "NJE_RoundComposition.full_cells",
+    "NJE_RoundComposition.full_round",
+    "NJE_AddValue.law",
+    "NJE_Pow5Realization.cut",
+    "NJE_Pow5Realization.law",
+    "NJE_InternalRound.nonlinear_value",
+    "NJE_InternalRound.result",
+    "NJE_RoundTrace.facts",
+    "NJE_RoundTrace.trace_values",
+    "NJE_RoundTrace.one",
+    "NJE_RoundTrace.composition",
+    "NJE_CompressSeed.value",
+    "NJE_CompressSeed.result"
+  ],
+  "combined_audit": 2
 }
