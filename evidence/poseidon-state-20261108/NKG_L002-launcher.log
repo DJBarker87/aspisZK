@@ -1,0 +1,45 @@
+{"attempt": "NKG_L002", "exit_status": 0, "wall_seconds": 8.986320192925632, "peak_rss_kib": "5988624", "swaps": "0", "print_axioms": ["'AspisR1.NKG_ColumnTotal.step_total' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_ColumnTotal.step_total : ∀ (w : Weights) (c0 c1 c2 : Constants) (s : State) (i : Usize),
+  ↑i < ↑16#usize → canonical w → Bounded c0 → Bounded c1 → Bounded c2 → ∃ out, step w c0 c1 c2 s i = ok out :=
+fun w c0 c1 c2 s i hi hw h0 h1 h2 =>
+  let w0 := FJb_TailCell.cell w ⟨0, of_decide_eq_true (id (Eq.refl true))⟩;
+  let w1 := FJb_TailCell.cell w ⟨1, of_decide_eq_true (id (Eq.refl true))⟩;
+  let w2 := FJb_TailCell.cell w ⟨2, of_decide_eq_true (id (Eq.refl true))⟩;
+  let k0 := FJb_TailCell.cell c0 ⟨↑i, hi⟩;
+  let k1 := FJb_TailCell.cell c1 ⟨↑i, hi⟩;
+  let k2 := FJb_TailCell.cell c2 ⟨↑i, hi⟩;
+  
+...
+ =>
+                                            Eq.trans
+                                              (congrFun' (congrArg Bind.bind rc2) fun k2 => do
+                                                let q ← FJe_ThreeCell.source w0 w1 w2 k0 k1 k2
+                                                Array.update s i q)
+                                              (bind_tc_ok k2 fun y => do
+                                                let q ← FJe_ThreeCell.source w0 w1 w2 k0 k1 y
+                                                Array.update s i q)))
+                                        (bind_tc_ok k1 fun y => do
+                                          let q ← FJe_ThreeCell.source w0 w1 w2 k0 y k2
+                                          Array.update s i q)))
+                                  (bind_tc_ok k0 fun y => do
+                                    let q ← FJe_ThreeCell.source w0 w1 w2 y k1 k2
+                                    Array.update s i q)))
+                            (bind_tc_ok w2 fun y => do
+                              let q ← FJe_ThreeCell.source w0 w1 y k0 k1 k2
+                              Array.update s i q)))
+                      (bind_tc_ok w1 fun y => do
+                        let q ← FJe_ThreeCell.source w0 y w2 k0 k1 k2
+                        Array.update s i q)))
+                (bind_tc_ok w0 fun y => do
+                  let q ← FJe_ThreeCell.source y w1 w2 k0 k1 k2
+                  Array.update s i q))
+              (Eq.trans
+                (Eq.trans (congrFun' (congrArg Bind.bind rq) fun q => Array.update s i q)
+                  (bind_tc_ok q (Array.update s i)))
+                ru)))
+          (ok out))
+        (eq_self (ok out))))
+'AspisR1.NKG_ColumnTotal.step_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4223795e33be4c26877c1a373d1082e5.scope; invocation ID: 0bb8ec6951b549459acf7b3fe7e15e3d
