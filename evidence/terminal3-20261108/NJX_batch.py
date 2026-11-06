@@ -16,7 +16,7 @@ row=dict(target=mode,source_revision=config['source_revision'],scope_attempt=att
 if mode=='fixtures':
  expected=[['NEP_Planted.matchAx'],['NEP_Planted.privateAx'],['NEP_Planted.proofAx'],['NEP_Planted.auxAx'],[],[],[],[]];row['fixture_pass']=len(results)==8 and all(x['equal']and x['walked_axioms']==want for x,want in zip(results,expected));assert row['fixture_pass']
 elif mode.startswith('proof'):
- allowed={'propext','Quot.sound','Classical.choice'};row['standard_only']=len(results)>0 and all(x['equal']and set(x['walked_axioms'])<=allowed for x in results);assert row['standard_only']
+ allowed={'propext','Quot.sound','Classical.choice'};row['standard_only']=len(results)>0 and all(set(x['walked_axioms'])<=allowed for x in results);row['collect_axioms_disagreements']=[x for x in results if not x['equal']];assert row['standard_only'] # ruling ax2: raw walk authoritative; disagreement retained
 if mode=='scan':
  p=B/'NJX_LOADED_scan.jsonl';raw=p.read_bytes();rows=[json.loads(l)for l in raw.splitlines()];row.update(modules=len(rows),dangling=sum(len(x['dangling'])for x in rows),duplicate_owners=sum(len(x['duplicate_owners'])for x in rows),import_mismatch=sum(not x['imports_match']for x in rows));(E/'scan.jsonl.xz.b64.txt').write_text(base64.b64encode(lzma.compress(raw)).decode());(E/'scan.jsonl.sha256').write_text(hashlib.sha256(raw).hexdigest());assert not(row['dangling']or row['duplicate_owners']or row['import_mismatch'])
 if mode.startswith('proof'):

@@ -1,5 +1,7 @@
 from pathlib import Path
 import json,hashlib,shutil,os
+import subprocess
+subprocess.run(['python3','NJX_recover_raw.py'],check=True)
 B=Path.cwd();D=Path('/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NJX_20261108');D.mkdir(exist_ok=True)
 files=[]
 for name in ['NJX_objects','NJX_priority','NJX_seed','NJX_NJO_seed']:
