@@ -34,6 +34,7 @@ for name in ['ProofDriver','Driver']:
 raw=(P/'NKN_CLOSURE_PINS.json.xz').read_bytes();(E/'NKQ_PREDECESSOR_PINS.json.xz').write_bytes(raw)
 old=(P/'NKN_pin.py').read_text();new=old.replace('NKN_','NKQ_').replace("json.loads((B/'NKQ_PREDECESSOR_PINS.json').read_text())","json.loads(lzma.decompress((B/'NKQ_PREDECESSOR_PINS.json.xz').read_bytes()))")
 new=new.replace("/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NKQ_20261108/NKQ_exports_20261108","/home/dombarker/project-offloads/codex-cx-tx1-driver-20261108/NKQ_exports_20261108")
+new=new.replace(",B/'S2W_lean_host.py'",'')
 (E/'NKQ_pin.py').write_text(new)
 (E/'NKQ_pin_ADAPTATION.diff').write_text(''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='NKN_pin.py',tofile='NKQ_pin.py')))
 print(json.dumps(dict(modules=len(mods),own_roots=len(roots),all_roots=len(a['roots']),groups=len(a['groups']))))

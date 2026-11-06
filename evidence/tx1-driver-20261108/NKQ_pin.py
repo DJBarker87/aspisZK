@@ -3,7 +3,7 @@ from pathlib import Path
 import os,json,lzma,hashlib,shutil
 B=Path.cwd();H=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 toolroot=Path(os.environ['LEAN_SYSROOT']);toolpins=[]
-for p in [toolroot/'bin/lean',toolroot/'bin/lake',toolroot/'bin/leanc',B/'lean-toolchain',B/'S2W_run_host.py',B/'S2W_lean_host.py']:
+for p in [toolroot/'bin/lean',toolroot/'bin/lake',toolroot/'bin/leanc',B/'lean-toolchain',B/'S2W_run_host.py']:
  toolpins.append(dict(path=str(p),sha256=H(p),bytes=p.stat().st_size))
 (B/'NKQ_TOOL_PINS.json').write_text(json.dumps(toolpins,indent=1)+'\n')
 paths=os.environ['LEAN_PATH'].split(':');loaded=[json.loads(l)for l in(B/'NKQ_LOADED_scan.jsonl').read_text().splitlines()];pins=[]

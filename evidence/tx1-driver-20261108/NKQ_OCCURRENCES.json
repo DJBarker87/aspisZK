@@ -1,443 +1,668 @@
 [
-  {
-    "parent": "TX1:136",
-    "line": 234,
-    "text": "let (running, alpha, mut transcript) = semantic_rounds(&prefix, transcript)?;",
-    "coverage": "TX1:134 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 236,
-    "text": "let (running, alpha, mut transcript, round_checks) = semantic_rounds(&prefix, transcript)?;",
-    "coverage": "cfg(prover), excluded by deployed feature parity",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 237,
-    "text": "mark(obs, 2);",
-    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 238,
-    "text": "let claims = claims(&prefix)?;",
-    "coverage": "TX1:129 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 248,
-    "text": ".terminal_qm31(&claims, &alpha, &original_challenges)",
-    "coverage": "TX1:256 OPEN",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 249,
-    "text": ".map_err(|_| Error::Public)?;",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 250,
-    "text": "mark(obs, 3);",
-    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 251,
-    "text": "let mask = aspis_core::state_only_hiding::state_only_selected_mask_value(",
-    "coverage": "TX1:076 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 252,
-    "text": "&core::array::from_fn(|i| claims[0][i]),",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 253,
-    "text": "&core::array::from_fn(|i| claims[0][16 + i]),",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 257,
-    "text": "let extra = prefix.validated_record(25)?.decode_k::<29>(87)?;",
-    "coverage": "TX1:141 CLOSED, TX1:147 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 258,
-    "text": "let masked_terminal = mask.add(challenges.eta.mul(terminal)).add(extra[28]);",
-    "coverage": "TX1:001 CLOSED, TX1:007 CLOSED, TX1:013 CLOSED, TX1:017 CLOSED, TX1:024 CLOSED, TX1:029 CLOSED, TX1:047 CLOSED, TX1:051 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 260,
-    "text": "return Err(Error::Terminal);",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 262,
-    "text": "mark(obs, 4);",
-    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 263,
-    "text": "let state_before_z0 = transcript.state();",
-    "coverage": "TX1:146 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 264,
-    "text": "let z0 = transcript.circle_validated(prefix.validated_record(25)?)?;",
-    "coverage": "TX1:141 CLOSED, TX1:142 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 265,
-    "text": "let before_z1 = prefix.validated_record(26)?.decode_k::<29>(0)?;",
-    "coverage": "TX1:141 CLOSED, TX1:147 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 266,
-    "text": "let z1 = transcript.circle_validated(prefix.validated_record(26)?)?;",
-    "coverage": "TX1:141 CLOSED, TX1:142 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 267,
-    "text": "mark(obs, 5);",
-    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 270,
-    "text": "for (i, x) in [z0.x, z0.y, z1.x, z1.y].into_iter().enumerate() {",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 271,
-    "text": "crate::trace::value(3, i, aspis_core::field::WideExact::from_qm31(x));",
-    "coverage": "cfg(prover), excluded by deployed feature parity",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 273,
-    "text": "for (i, x) in challenges.with_alphas(&alpha).into_iter().enumerate() {",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 274,
-    "text": "crate::trace::value(0, i, x);",
-    "coverage": "cfg(prover), excluded by deployed feature parity",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 276,
-    "text": "for (i, row) in round_checks.iter().enumerate() {",
-    "coverage": "cfg(prover), excluded by deployed feature parity",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 277,
-    "text": "for (j, x) in row.iter().enumerate() {",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 278,
-    "text": "crate::trace::value(1, 3 * i + j, aspis_core::field::WideExact::from_qm31(*x));",
-    "coverage": "cfg(prover), excluded by deployed feature parity",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 281,
-    "text": "crate::trace::value(2, 0, aspis_core::field::WideExact::from_qm31(terminal));",
-    "coverage": "cfg(prover), excluded by deployed feature parity",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 282,
-    "text": "crate::trace::value(",
-    "coverage": "cfg(prover), excluded by deployed feature parity",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 285,
-    "text": "aspis_core::field::WideExact::from_qm31(masked_terminal),",
-    "coverage": "TX1:050 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 289,
-    "text": "return Err(Error::EqualCirclePoints);",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 291,
-    "text": "Ok(Verified {",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:136",
-    "line": 292,
-    "text": "roots: [*prefix.c1_root, prefix.payload(2)?.try_into().unwrap()],",
-    "coverage": "TX1:139 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:137",
-    "line": 312,
-    "text": "let prefix = Prefix::parse(bytes)?;",
-    "coverage": "TX1:138 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:137",
-    "line": 313,
-    "text": "mark(obs, 0);",
-    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:137",
-    "line": 314,
-    "text": "let mut transcript = public_transcript(public, hash, prefix.c1_root)?;",
-    "coverage": "TX1:131 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:137",
-    "line": 315,
-    "text": "let challenges = wire::begin(&prefix, &mut transcript)?;",
-    "coverage": "TX1:150 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:137",
-    "line": 316,
-    "text": "mark(obs, 1);",
-    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:137",
-    "line": 317,
-    "text": "verify_finish(public, prefix, transcript, challenges, obs)",
-    "coverage": "TX1:136 OPEN",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:087",
-    "line": 256,
-    "text": "let mut logical = aspis_core::r0::heap::filled(compact::LOGICAL_SEMANTIC + compact::LOGICAL_Y1, 0u8).map_err(|_| Error::Allocation)?;",
-    "coverage": "TX1:064 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:087",
-    "line": 257,
-    "text": "let (semantic, y1) = logical.split_at_mut(compact::LOGICAL_SEMANTIC);",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:087",
-    "line": 258,
-    "text": "compact::expand_semantic(&proof[compact::OFF_SEMANTIC..compact::OFF_Y1], semantic)?;",
-    "coverage": "TX1:098 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:087",
-    "line": 259,
-    "text": "compact::expand_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE], y1)?;",
-    "coverage": "TX1:099 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:087",
-    "line": 260,
-    "text": "let v = wide_view(proof, &logical[..compact::LOGICAL_SEMANTIC], &logical[compact::LOGICAL_SEMANTIC..])?;",
-    "coverage": "TX1:095 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:087",
-    "line": 261,
-    "text": "let sem = crate::r1_semantic::verify_observed(public, v.semantic, hash, obs).map_err(|_| Error::Semantic)?;",
-    "coverage": "TX1:137 OPEN",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:087",
-    "line": 262,
-    "text": "mark(obs, Phase::Semantic);",
-    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:087",
-    "line": 263,
-    "text": "Prepared::new(&sem, &v, hash, g)",
-    "coverage": "TX1:010 CLOSED, TX1:023 CLOSED, TX1:055 CLOSED, TX1:063 CLOSED, TX1:107 CLOSED, TX1:110 CLOSED, TX1:143 CLOSED, TX1:167 CLOSED, TX1:174 CLOSED, TX1:176 CLOSED, TX1:179 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 272,
-    "text": "return Err(Error::Parse);",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 274,
-    "text": "parse_shape(proof)?;",
-    "coverage": "TX1:086 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 275,
-    "text": "canonical_scan(proof)?;",
-    "coverage": "TX1:084 OPEN",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 276,
-    "text": "mark(obs, Phase::Parsed);",
-    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 278,
-    "text": "let p = prepare(public, proof, hash, obs, &mut g)?;",
-    "coverage": "TX1:087 OPEN",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 279,
-    "text": "let a = Accumulator::new(Variant::S2)?;",
-    "coverage": "TX1:010 CLOSED, TX1:023 CLOSED, TX1:055 CLOSED, TX1:063 CLOSED, TX1:107 CLOSED, TX1:110 CLOSED, TX1:143 CLOSED, TX1:167 CLOSED, TX1:174 CLOSED, TX1:176 CLOSED, TX1:179 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 280,
-    "text": "mark(obs, Phase::Prepare);",
-    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 281,
-    "text": "let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 282,
-    "text": "batch_merkle(proof, &p, &folded_root, 0, hash)?;",
-    "coverage": "TX1:081 OPEN",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 283,
-    "text": "mark(obs, Phase::Merkle(0));",
-    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 284,
-    "text": "let geometry = QueryGeometry::for_range(&p.queries, 0, k)?;",
-    "coverage": "TX1:181 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 285,
-    "text": "let pending = BatchedWeights::new(&a.weights)?;",
-    "coverage": "TX1:010 CLOSED, TX1:023 CLOSED, TX1:055 CLOSED, TX1:063 CLOSED, TX1:107 CLOSED, TX1:110 CLOSED, TX1:143 CLOSED, TX1:167 CLOSED, TX1:174 CLOSED, TX1:176 CLOSED, TX1:179 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 286,
-    "text": "let (mut a, pending) = query_loop(proof, &p, a, &g, obs, &geometry, pending, k)?;",
-    "coverage": "TX1:088 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 287,
-    "text": "pending.finish(&mut a.weights);",
-    "coverage": "TX1:066 CLOSED, TX1:106 CLOSED, TX1:109 CLOSED, TX1:175 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 288,
-    "text": "let bytes = checkpoint(&p, &a, proof, public_bytes, hash);",
-    "coverage": "TX1:186 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 289,
-    "text": "mark(obs, Phase::CheckpointWrite);",
-    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  },
-  {
-    "parent": "TX1:094",
-    "line": 290,
-    "text": "Ok(bytes)",
-    "coverage": "parent std/control/cfg; cut required",
-    "status": "NOT_YET_COVERED_BY_NKQ"
-  }
+ {
+  "parent": "TX1:136",
+  "line": 234,
+  "call": "semantic_rounds(&prefix, transcript)?",
+  "callee": "134 CLOSED",
+  "support": "K039/040 reject,041/042 stability; AlphaDomain.source; full native success carry OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 237,
+  "call": "mark(obs,2)",
+  "callee": "130 CLOSED",
+  "support": "Observed/Finish source support; actual mark log frame OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 238,
+  "call": "claims(&prefix)?",
+  "callee": "129 CLOSED",
+  "support": "ClaimsDomain.source; SAME parser/reservation; full native call carry OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 239,
+  "call": "original Challenges {lambda,chi,theta,zc,mu,eta}",
+  "callee": "parent record constructor",
+  "support": "K010/011 field-copy window; full parent carry OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 248,
+  "call": "public.terminal_qm31(&claims,&alpha,&original_challenges)",
+  "callee": "256 OPEN",
+  "support": "No sibling result consumed; full native terminal slot OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 249,
+  "call": "terminal.map_err(|_|Error::Public)?",
+  "callee": "parent Result mapping",
+  "support": "FinishStages.afterTerminal source support; actual mapping/log OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 250,
+  "call": "mark(obs,3)",
+  "callee": "130 CLOSED",
+  "support": "Native occurrence/frame OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 251,
+  "call": "state_only_selected_mask_value(low,high,blind,&alpha)",
+  "callee": "076 CLOSED",
+  "support": "Arguments evaluated before call; MaskCuts.arguments/FinishMaskDomain.source; actual076 full value installation OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 252,
+  "call": "core::array::from_fn(|i|claims[0][i])",
+  "callee": "parent fixed-array construction",
+  "support": "MaskLowStep/FromFnIndices/MaskArrays.low_source; K043/044; whole native constructor transport OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 252,
+  "call": "claims[0][i] for arbitrary i<16",
+  "callee": "parent bounded indexing",
+  "support": "MaskLowStep.step; K043/044 observation, K028/029 frame",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 253,
+  "call": "core::array::from_fn(|i|claims[0][16+i])",
+  "callee": "parent fixed-array construction",
+  "support": "MaskHighStep/FromFnIndices/MaskArrays.high_source; K045/046",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 253,
+  "call": "16+i and claims[0][16+i] for i<10",
+  "callee": "parent bounded indexing/add",
+  "support": "MaskHighStep.step includes exact usize bound; K045/046 window",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 254,
+  "call": "claims[0][27]",
+  "callee": "parent indexing",
+  "support": "K047/048; MaskCanonical.domain",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 255,
+  "call": "&alpha",
+  "callee": "parent argument carry",
+  "support": "K049/050; AlphaDomain.source",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 257,
+  "call": "prefix.validated_record(25)? [first occurrence]",
+  "callee": "141 CLOSED",
+  "support": "FinishSlots.source; getter frame/value generated from SAME parsed prefix",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 257,
+  "call": "record25.decode_k::<29>(87)?",
+  "callee": "147 CLOSED",
+  "support": "FinishSlots.source full successful decoder/canonicality; native parent installation OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 258,
+  "call": "challenges.eta.mul(terminal)",
+  "callee": "029 CLOSED",
+  "support": "No Kani multiplication. Future emitted Lean law/domain transport OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 258,
+  "call": "mask.add(eta*terminal)",
+  "callee": "024 CLOSED",
+  "support": "Full native call/domain/frame transport OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 258,
+  "call": "extra[28]",
+  "callee": "parent indexing",
+  "support": "K024/025 source window; canonical extra via FinishSlots.source",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 258,
+  "call": "previous.add(extra[28])",
+  "callee": "024 CLOSED",
+  "support": "Full native call/domain/frame transport OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 259,
+  "call": "running != masked_terminal / return Terminal",
+  "callee": "parent comparison/Result",
+  "support": "K020/021 source helper guard only",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 262,
+  "call": "mark(obs,4)",
+  "callee": "130 CLOSED",
+  "support": "Native occurrence/frame OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 263,
+  "call": "transcript.state()",
+  "callee": "146 CLOSED",
+  "support": "State carry before first circle OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 264,
+  "call": "prefix.validated_record(25)? [second occurrence]",
+  "callee": "141 CLOSED",
+  "support": "CircleDomains.source; GetterRepeat.source models repeat; native occurrence still distinct",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 264,
+  "call": "transcript.circle_validated(record25)?",
+  "callee": "142 CLOSED",
+  "support": "CircleDomains.source at arbitrary actual transcript; native mutation/log carry OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 265,
+  "call": "prefix.validated_record(26)? [first occurrence]",
+  "callee": "141 CLOSED",
+  "support": "FinishSlots.source",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 265,
+  "call": "record26.decode_k::<29>(0)?",
+  "callee": "147 CLOSED",
+  "support": "FinishSlots.source; exact full decoder/canonicality",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 266,
+  "call": "prefix.validated_record(26)? [second occurrence]",
+  "callee": "141 CLOSED",
+  "support": "CircleDomains.source; distinct native occurrence/frame OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 266,
+  "call": "transcript.circle_validated(record26)?",
+  "callee": "142 CLOSED",
+  "support": "CircleDomains.source; second native transcript/log carry OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 267,
+  "call": "mark(obs,5)",
+  "callee": "130 CLOSED",
+  "support": "Native occurrence/frame OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 288,
+  "call": "z0 == z1 / return EqualCirclePoints",
+  "callee": "parent comparison/Result",
+  "support": "K022/023 source guard only",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 291,
+  "call": "Verified {all returned fields}",
+  "callee": "parent constructor/moves",
+  "support": "Full roots/challenges/alpha/claims/extra/before_z1/state/z/transcript/result/log native assembly OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 292,
+  "call": "prefix.payload(2)?",
+  "callee": "139 CLOSED",
+  "support": "Actual payload/root length/domain and Err/abort transport OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 292,
+  "call": "payload2.try_into()",
+  "callee": "parent slice-array conversion",
+  "support": "K026/027 root32 cell copy window; full native parent context OPEN",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:136",
+  "line": 292,
+  "call": "converted_root.unwrap()",
+  "callee": "parent unwrap/abort",
+  "support": "Payload32 safety in actual parent still to install",
+  "required_frame": "prefix/root/claims/challenges/alpha immutable; transcript/hash consumption and ordered log preserved; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:137",
+  "line": 312,
+  "call": "Prefix::parse(bytes)?",
+  "callee": "138 CLOSED",
+  "support": "K006/007 reject and008/009 stability; ObservedStages.parsed_error, ObservedTrace.parser_rejection",
+  "required_frame": "public/bytes/root immutable; owned prefix, hash and mutable transcript/challenges carried at SAME arguments; all Err/abort prefix events retained",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:137",
+  "line": 313,
+  "call": "mark(obs,0)",
+  "callee": "130 CLOSED",
+  "support": "Full native mark occurrence/log frame OPEN",
+  "required_frame": "public/bytes/root immutable; owned prefix, hash and mutable transcript/challenges carried at SAME arguments; all Err/abort prefix events retained",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:137",
+  "line": 314,
+  "call": "public_transcript(public,hash,prefix.c1_root)?",
+  "callee": "131 CLOSED",
+  "support": "ObservedContinuations.afterPublic source factor; complete native success/error carry OPEN",
+  "required_frame": "public/bytes/root immutable; owned prefix, hash and mutable transcript/challenges carried at SAME arguments; all Err/abort prefix events retained",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:137",
+  "line": 315,
+  "call": "wire::begin(&prefix,&mut transcript)?",
+  "callee": "150 CLOSED",
+  "support": "ObservedContinuations.afterBegin source factor; complete native mutation/query carry OPEN",
+  "required_frame": "public/bytes/root immutable; owned prefix, hash and mutable transcript/challenges carried at SAME arguments; all Err/abort prefix events retained",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:137",
+  "line": 316,
+  "call": "mark(obs,1)",
+  "callee": "130 CLOSED",
+  "support": "Full native mark occurrence/log frame OPEN",
+  "required_frame": "public/bytes/root immutable; owned prefix, hash and mutable transcript/challenges carried at SAME arguments; all Err/abort prefix events retained",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:137",
+  "line": 317,
+  "call": "verify_finish(public,prefix,transcript,challenges,obs)",
+  "callee": "136 OPEN",
+  "support": "SAME arguments source factor only; no child result assumed",
+  "required_frame": "public/bytes/root immutable; owned prefix, hash and mutable transcript/challenges carried at SAME arguments; all Err/abort prefix events retained",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 256,
+  "call": "heap::filled(LOGICAL_SEMANTIC+LOGICAL_Y1,0)",
+  "callee": "064 CLOSED",
+  "support": "Full native allocation success/frame OPEN",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 256,
+  "call": "filled.map_err(|_|Error::Allocation)?",
+  "callee": "parent Result mapping",
+  "support": "Source buffer factor only; native exact allocation failure/abort OPEN",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 257,
+  "call": "logical.split_at_mut(LOGICAL_SEMANTIC)",
+  "callee": "parent disjoint mutable split",
+  "support": "K051/052 semantic and K053/054 values ENTRY_ONLY; disjoint post ownership/lifetime OPEN",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 258,
+  "call": "proof[OFF_SEMANTIC..OFF_Y1]",
+  "callee": "parent slice bounds",
+  "support": "K051/052 ENTRY_ONLY actual sizes/pointers",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 258,
+  "call": "expand_semantic(proof_semantic,semantic)?",
+  "callee": "098 CLOSED",
+  "support": "Full native child args/Result/owned frame OPEN",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 259,
+  "call": "proof[OFF_Y1..OFF_INACTIVE]",
+  "callee": "parent slice bounds",
+  "support": "K053/054 ENTRY_ONLY actual sizes/pointers",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 259,
+  "call": "expand_values(proof_values,y1)?",
+  "callee": "099 CLOSED",
+  "support": "Full native child args/Result/owned frame OPEN",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 260,
+  "call": "logical[..LOGICAL_SEMANTIC],logical[LOGICAL_SEMANTIC..]",
+  "callee": "parent views",
+  "support": "K055/056 semantic ENTRY_ONLY; second view/frame still OPEN",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 260,
+  "call": "wide_view(proof,semantic_logical,y1_logical)?",
+  "callee": "095 CLOSED",
+  "support": "Source factor only; complete native view/alias/lifetime/frame OPEN",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 261,
+  "call": "verify_observed(public,v.semantic,hash,obs)",
+  "callee": "137 OPEN",
+  "support": "K055/056 view ENTRY_ONLY; PrepareStages/PrepareBuffer source op9",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 261,
+  "call": "verify_observed(...).map_err(|_|Error::Semantic)?",
+  "callee": "parent Result mapping",
+  "support": "PrepareStages semantic_error/scratch source frame only",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 262,
+  "call": "mark(obs,Phase::Semantic)",
+  "callee": "191 CLOSED",
+  "support": "Actual native mark frame OPEN",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:087",
+  "line": 263,
+  "call": "Prepared::new(&sem,&v,hash,g)",
+  "callee": "179 CLOSED",
+  "support": "Use actual179, not alternative new methods; full native constructor args/domain and g frame OPEN",
+  "required_frame": "proof/public/hash immutable; allocation/logical buffer split and nonmodified partition; borrowed views live through constructor; scratch29 and observer/log full frame; first Err/abort stops suffix",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 271,
+  "call": "k != SPLIT / return Parse",
+  "callee": "parent guard/Result",
+  "support": "K031/032 and037/038 actual rejection/stability",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 274,
+  "call": "parse_shape(proof)?",
+  "callee": "086 CLOSED",
+  "support": "K033/034 actual Err prefix; full interpretation pending",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 275,
+  "call": "canonical_scan(proof)?",
+  "callee": "084 OPEN baseline; merged NKL gated candidate",
+  "support": "K035/036 error prefix; merged NKL_ScanRoot available, not yet installed at SAME proof",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 276,
+  "call": "mark(obs,Phase::Parsed)",
+  "callee": "191 CLOSED",
+  "support": "Full native mark/log frame OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 277,
+  "call": "[E::ZERO;29]",
+  "callee": "parent fixed-array construction",
+  "support": "K057/058 ENTRY_ONLY",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 278,
+  "call": "prepare(public,proof,hash,obs,&mut g)?",
+  "callee": "087 OPEN",
+  "support": "Full native call/post/Err/abort/log remains OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 279,
+  "call": "Accumulator::new(Variant::S2)?",
+  "callee": "174 CLOSED",
+  "support": "Exact174, not Prepared179; native state/Err carry OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 280,
+  "call": "mark(obs,Phase::Prepare)",
+  "callee": "191 CLOSED",
+  "support": "Full native mark/log frame OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 281,
+  "call": "proof[OFF_FOLDED_ROOT..OFF_ROUND1]",
+  "callee": "parent slice bounds",
+  "support": "K059/060 value and061/062 proof-cell ENTRY_ONLY",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 281,
+  "call": "folded_slice.try_into()",
+  "callee": "parent32 copy",
+  "support": "K059/060 arbitrary byte plus exact KMX configuration; parent association OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 281,
+  "call": "converted_folded.unwrap()",
+  "callee": "parent unwrap/abort",
+  "support": "Actual length/copy/abort native assembly OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 282,
+  "call": "batch_merkle(proof,&p,&folded_root,0,hash)?",
+  "callee": "081 OPEN",
+  "support": "K063/064 SAME arguments ENTRY_ONLY; no free result",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 283,
+  "call": "mark(obs,Phase::Merkle(0))",
+  "callee": "191 CLOSED",
+  "support": "Full native mark/log frame OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 284,
+  "call": "QueryGeometry::for_range(&p.queries,0,k)?",
+  "callee": "181 CLOSED",
+  "support": "K065/066 arguments ENTRY_ONLY; complete domain/Result/frame OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 285,
+  "call": "BatchedWeights::new(&a.weights)?",
+  "callee": "176 CLOSED",
+  "support": "K067/068 weights64 ENTRY_ONLY; complete result/domain OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 286,
+  "call": "query_loop(proof,&p,a,&g,obs,&geometry,pending,k)?",
+  "callee": "088 CLOSED",
+  "support": "Tx1Stages source factor; native owned state/arguments/Result/log carry OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 287,
+  "call": "pending.finish(&mut a.weights)",
+  "callee": "175 CLOSED",
+  "support": "Full native exactly-weights mutation and rest-of-a frame OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 288,
+  "call": "checkpoint(&p,&a,proof,public_bytes,hash)",
+  "callee": "186 CLOSED",
+  "support": "K069/070 arguments ENTRY_ONLY; complete bytes/hash/log/frames OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 289,
+  "call": "mark(obs,Phase::CheckpointWrite)",
+  "callee": "191 CLOSED",
+  "support": "Full native mark/log frame OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ },
+ {
+  "parent": "TX1:094",
+  "line": 290,
+  "call": "Ok(bytes)",
+  "callee": "parent final Result",
+  "support": "Full native bytes/owned frame/log assembly OPEN",
+  "required_frame": "proof/public/hash and prepared immutable; g scratch, accumulator(weights/rhs/power/next), geometry and pending owned carries; every exact Err/abort/log prefix and checkpoint bytes preserved",
+  "native_parent_installation": "OPEN"
+ }
 ]

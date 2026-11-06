@@ -1,0 +1,439 @@
+{
+ "full_print": "NKQ_STATEMENTS.txt",
+ "headline": "AspisR1.RPx_Deployed.deployed",
+ "rows_with_complete_root": [],
+ "items": [
+  {
+   "theorem": "AspisR1.NKQ_AlphaDomain.full",
+   "module": "NKQ_AlphaDomain",
+   "source_statement": "theorem full (a : NKQ_MaskCuts.Alpha) (h : NJG_CanonicalPrefix.CanonicalBefore a 10) :\n NKQ_MaskCuts.CanonAlpha a",
+   "review": "Retains certified134 observations/Cut and token/frame. full requires CanonicalBefore; source derives the domain from actual parsed-prefix/returned rounds branch. Not a native136 root.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_AlphaDomain.source",
+   "module": "NKQ_AlphaDomain",
+   "source_statement": "theorem source {H : Type} (native : NJM_RoundsCut.Observations) (cut : NJM_RoundsCut.Cut native)\n (token frame : Nat) (D : aspis_core.Digest32 H) (bytes : Slice U8) (t : r1_wire.SemanticTranscript H) :\n match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with\n | .ok (.Ok pre) =>\n   match returned : (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 with\n   | .ok (.Ok after) => NKQ_MaskCuts.CanonAlpha after.2.1\n   | _ => True\n | _ => True",
+   "review": "Retains certified134 observations/Cut and token/frame. full requires CanonicalBefore; source derives the domain from actual parsed-prefix/returned rounds branch. Not a native136 root.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ArrayWindows.extensional",
+   "module": "NKQ_ArrayWindows",
+   "source_statement": "theorem extensional {\u03b1 : Type} {n : Usize} (a b : Array \u03b1 n)\n (point : \u2200 i (h : i<n.val),cell a i h=cell b i h) : a=b",
+   "review": "Generic list/subtype bounds, extensional equality and closure invariant only. Fixed-array source mathematics, no native parent association.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ArrayWindows.fromFnLoop_bounded",
+   "module": "NKQ_ArrayWindows",
+   "source_statement": "theorem fromFnLoop_bounded {T C : Type} (f : core.ops.function.FnMut C Usize T)\n (g : Usize \u2192 T) (c : C) (is : List Usize)\n (step : \u2200 i\u2208is,f.call_mut c i=ok (g i,c)) :\n OraclePortStdBuilder.fromFnLoop f is c=ok (is.map g,c)",
+   "review": "Generic list/subtype bounds, extensional equality and closure invariant only. Fixed-array source mathematics, no native parent association.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ArrayWindows.read",
+   "module": "NKQ_ArrayWindows",
+   "source_statement": "theorem read {\u03b1 : Type} {n : Usize} (a : Array \u03b1 n) (i : Usize) (h : i.val<n.val) :\n Array.index_usize a i=ok (cell a i.val h)",
+   "review": "Generic list/subtype bounds, extensional equality and closure invariant only. Fixed-array source mathematics, no native parent association.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_CanonicalBridge.canonical",
+   "module": "NKQ_CanonicalBridge",
+   "source_statement": "theorem canonical (q : aspis_core.field.QM31) :\n JFv_RoundArithmetic.Canonical q \u2194 NKQ_MaskCuts.Canon q",
+   "review": "Definition-level canonical equivalence between flat4-limb and coherent probe-model predicates; no cryptographic assumption.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_CircleDomains.source",
+   "module": "NKQ_CircleDomains",
+   "source_statement": "theorem source {Pointer H : Type} (D : aspis_core.Digest32 H)\n (template : NIX_DispatchCut.Pre Pointer) (bytes : Slice U8)\n (beforeFirst beforeSecond : r1_wire.SemanticTranscript H) :\n match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with\n | .ok (.Ok pre) =>\n   \u2203 first second,\n    r1_wire.Prefix.validated_record (PrefixAdapter.fromOld pre) 25#u8=ok (.Ok first) \u2227\n    r1_wire.Prefix.validated_record (PrefixAdapter.fromOld pre) 26#u8=ok (.Ok second) \u2227\n    first.row=25#u8 \u2227 second.row=26#u8 \u2227\n    NJM_InvocationRoots.Circle D template beforeFirst first \u2227\n    NJM_InvocationRoots.Circle D template beforeSecond second\n | _ => True",
+   "review": "Retains digest interpretation and template; source derives both getters and CLOSED142 circle laws for actual parsed records at arbitrary carries. Does not identify a full136 native log.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ClaimsDomain.convert",
+   "module": "NKQ_ClaimsDomain",
+   "source_statement": "theorem convert (value : AspisR1ClaimsUnrolledParent.Claims)\n (canonical : NKQ_ClaimsMatrix.ParentCanon value) :\n NKQ_MaskCuts.CanonClaims (NKA_ClaimsEffects.main value)",
+   "review": "Quantified Reservation is model allocation behavior. convert needs ParentCanon (derived by ClaimsMatrix); source obtains SAME actual claims for parsed prefix. No chosen child result is a root premise.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ClaimsDomain.source",
+   "module": "NKQ_ClaimsDomain",
+   "source_statement": "theorem source (reservation : NP6_StdModel.Reservation) (bytes : Slice U8) :\n match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with\n | .ok (.Ok pre) => Outcome (claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre))\n | _ => True",
+   "review": "Quantified Reservation is model allocation behavior. convert needs ParentCanon (derived by ClaimsMatrix); source obtains SAME actual claims for parsed prefix. No chosen child result is a root premise.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ClaimsMatrix.canonical",
+   "module": "NKQ_ClaimsMatrix",
+   "source_statement": "theorem canonical (record : Record) (out : Claims)\n (call : decodeRows NJT_ClaimsRef_Value.external record=ok (.Ok out)) : ParentCanon out",
+   "review": "Decoder-success hypotheses are local source-helper inputs; reference uses the fixed claims reference and computes all three SAME decodes. These success equations are forbidden as external root inputs.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ClaimsMatrix.reference",
+   "module": "NKQ_ClaimsMatrix",
+   "source_statement": "theorem reference (pre : r1_wire.Prefix) (out : Claims)\n (call : NJT_ClaimsRef_Value.unbox (NJT_ClaimsRef.r1_semantic.NJT_claims_ref pre)=ok (.Ok out)) : ParentCanon out",
+   "review": "Decoder-success hypotheses are local source-helper inputs; reference uses the fixed claims reference and computes all three SAME decodes. These success equations are forbidden as external root inputs.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ClaimsMatrix.rows",
+   "module": "NKQ_ClaimsMatrix",
+   "source_statement": "theorem rows (record : Record) (out : Claims)\n (call : decodeRows NJT_ClaimsRef_Value.external record=ok (.Ok out)) :\n \u2203 a b c,sourceDecode 29#usize record 0#usize=ok (.Ok a) \u2227\n sourceDecode 29#usize record 29#usize=ok (.Ok b) \u2227\n sourceDecode 29#usize record 58#usize=ok (.Ok c) \u2227 out=\u27e8[a,b,c],by simp\u27e9",
+   "review": "Decoder-success hypotheses are local source-helper inputs; reference uses the fixed claims reference and computes all three SAME decodes. These success equations are forbidden as external root inputs.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_DecodeCanonical.main",
+   "module": "NKQ_DecodeCanonical",
+   "source_statement": "theorem main {n : Usize} (record : r1_wire.ValidatedRecord) (off : Usize)\n (out : Array MainQM n)\n (call : AspisS1ExtractedRoundChildren.decodeMain n record off=ok (.Ok out)) : MainRowCanon out",
+   "review": "Successful full decoder premise derives canonicality; callers StrictDecode/FinishSlots supply actual values. Not a substitute for native parent installation.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_DecodeCanonical.parent",
+   "module": "NKQ_DecodeCanonical",
+   "source_statement": "theorem parent (record : AspisR1ClaimsUnrolledParent.Record) (off : Usize)\n (out : AspisR1ClaimsUnrolledParent.Row)\n (call : sourceDecode 29#usize record off=ok (.Ok out)) : ParentRowCanon out",
+   "review": "Successful full decoder premise derives canonicality; callers StrictDecode/FinishSlots supply actual values. Not a substitute for native parent installation.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_FinishMaskDomain.source",
+   "module": "NKQ_FinishMaskDomain",
+   "source_statement": "theorem source {H : Type} (native : NJM_RoundsCut.Observations) (cut : NJM_RoundsCut.Cut native)\n (token frame : Nat) (reservation : NP6_StdModel.Reservation)\n (D : aspis_core.Digest32 H) (bytes : Slice U8) (t : r1_wire.SemanticTranscript H) :\n match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with\n | .ok (.Ok pre) =>\n   match rounds : (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) t)).2 with\n   | .ok (.Ok after) =>\n     match claimed : ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre) with\n     | .ok (.Ok c) =>\n       \u2203 (low : Std.Array aspis_core.field.QM31 16#usize) (high : Std.Array aspis_core.field.QM31 10#usize),\n        (IDa_Deployed.boundaries reservation).fromFn 16#usize (FinishModel.closureFn9 D) c=ok low \u2227\n        (IDa_Deployed.boundaries reservation).fromFn 10#usize (FinishModel.closureFn5 D) c=ok high \u2227\n        (\u2200 q\u2208low.val,NKQ_MaskCuts.Canon q) \u2227 (\u2200 q\u2208high.val,NKQ_MaskCuts.Canon q) \u2227\n        NKQ_MaskCuts.Canon (NKQ_MaskCuts.blind c) \u2227 NKQ_MaskCuts.CanonAlpha after.2.1\n     | _ => True\n   | _ => True\n | _ => True",
+   "review": "Retains certified134 Cut; parser/rounds/claims match binders are actual producer branches, not selected successful inputs. Mask arrays and domains derived. Mask reply canonicality/value and complete native136 fold still open.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_FinishSlots.source",
+   "module": "NKQ_FinishSlots",
+   "source_statement": "theorem source (bytes : Slice U8) :\n match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with\n | .ok (.Ok pre) =>\n   \u2203 record25 record26 extra beforeZ1,\n    r1_wire.Prefix.validated_record (PrefixAdapter.fromOld pre) 25#u8=ok (.Ok record25) \u2227\n    r1_wire.Prefix.validated_record (PrefixAdapter.fromOld pre) 26#u8=ok (.Ok record26) \u2227\n    record25.row=25#u8 \u2227 record26.row=26#u8 \u2227\n    decodeMain 29#usize record25 87#usize=ok (.Ok extra) \u2227 NKQ_DecodeCanonical.MainRowCanon extra \u2227\n    decodeMain 29#usize record26 0#usize=ok (.Ok beforeZ1) \u2227 NKQ_DecodeCanonical.MainRowCanon beforeZ1\n | _ => True",
+   "review": "Only original byte slice is input; success branch derives actual25/87 and26/0 records, full decoder values and canonicality. No successful endpoint premise.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_FinishStages.claims_error",
+   "module": "NKQ_FinishStages",
+   "source_statement": "theorem claims_error (reservation : NP6_StdModel.Reservation) {H : Type}\n (aspis_coreDigest32Inst : aspis_core.Digest32 H)\n (public1 : pool_v1.pair_forest_semantic_terminal.r0.Public)\n (prefix1 : r1_wire.Prefix) (challenges : r1_wire.Challenges)\n (running : Q) (alpha : Alpha) (transcript1 : r1_wire.SemanticTranscript H)\n (e : r1_wire.Error) :\n afterClaims reservation aspis_coreDigest32Inst public1 prefix1 challenges running alpha transcript1 (.Err e) = ok (.Err e)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_FinishStages.factor",
+   "module": "NKQ_FinishStages",
+   "source_statement": "theorem factor (reservation : NP6_StdModel.Reservation) {H : Type}\n (D : aspis_core.Digest32 H)\n (pub : pool_v1.pair_forest_semantic_terminal.r0.Public)\n (pre : r1_wire.Prefix) (challenges : r1_wire.Challenges)\n (r : NKA_FinishStages.RoundOut H) :\n NKA_FinishStages.afterRounds reservation D pub pre challenges r = afterRounds reservation D pub pre challenges r",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_FinishStages.terminal_error",
+   "module": "NKQ_FinishStages",
+   "source_statement": "theorem terminal_error (reservation : NP6_StdModel.Reservation) {H : Type}\n (aspis_coreDigest32Inst : aspis_core.Digest32 H)\n (public1 : pool_v1.pair_forest_semantic_terminal.r0.Public)\n (prefix1 : r1_wire.Prefix) (challenges : r1_wire.Challenges)\n (running : Q) (alpha : Alpha) (transcript1 : r1_wire.SemanticTranscript H)\n (val1 : Claims) (e : r1_wire.Error) :\n afterTerminal reservation aspis_coreDigest32Inst public1 prefix1 challenges running alpha transcript1 val1 (.Err e) = ok (.Err e)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_FromFnIndices.bound",
+   "module": "NKQ_FromFnIndices",
+   "source_statement": "theorem bound (n i : Usize) (member : i\u2208OraclePortStdBuilder.indices n) : i.val<n.val",
+   "review": "Bounded total closure premise with state frame drives structural index-list induction. Actual closures discharge it in MaskArrays. No whole-buffer Kani induction.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_FromFnIndices.length",
+   "module": "NKQ_FromFnIndices",
+   "source_statement": "theorem length (n : Usize) : (OraclePortStdBuilder.indices n).length=n.val",
+   "review": "Bounded total closure premise with state frame drives structural index-list induction. Actual closures discharge it in MaskArrays. No whole-buffer Kani induction.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_FromFnIndices.total",
+   "module": "NKQ_FromFnIndices",
+   "source_statement": "theorem total {T C : Type} (n : Usize) (f : core.ops.function.FnMut C Usize T)\n (g : Usize \u2192 T) (c : C)\n (step : \u2200 i,i.val<n.val \u2192 f.call_mut c i=ok (g i,c)) :\n OraclePortStdBuilder.fromFn n f c=\n ok (\u27e8(OraclePortStdBuilder.indices n).map g,by simp [length]\u27e9 : Array T n)",
+   "review": "Bounded total closure premise with state frame drives structural index-list induction. Actual closures discharge it in MaskArrays. No whole-buffer Kani induction.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_GetterRepeat.duplicate",
+   "module": "NKQ_GetterRepeat",
+   "source_statement": "theorem duplicate {A B : Type} (getter : Result A) (next : A \u2192 A \u2192 Result B) :\n (do let first \u2190 getter;let second \u2190 getter;next first second)=\n (do let first \u2190 getter;next first first)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_GetterRepeat.source",
+   "module": "NKQ_GetterRepeat",
+   "source_statement": "theorem source {A : Type} (pre : r1_wire.Prefix) (row : U8)\n (next : core.result.Result r1_wire.ValidatedRecord r1_wire.Error \u2192\n  core.result.Result r1_wire.ValidatedRecord r1_wire.Error \u2192 Result A) :\n (do let first \u2190 r1_wire.Prefix.validated_record pre row\n     let second \u2190 r1_wire.Prefix.validated_record pre row\n     next first second)=\n (do let first \u2190 r1_wire.Prefix.validated_record pre row\n     next first first)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_MaskArrays.high_source",
+   "module": "NKQ_MaskArrays",
+   "source_statement": "theorem high_source (reservation : NP6_StdModel.Reservation) {H : Type}\n (D : aspis_core.Digest32 H) (c : Claims) :\n (IDa_Deployed.boundaries reservation).fromFn 10#usize (FinishModel.closureFn5 D) c=ok (highArray c)",
+   "review": "Digest, reservation and original claims are arbitrary source inputs. Exact fixed16/10 constructor result, no external success premise.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_MaskArrays.low_source",
+   "module": "NKQ_MaskArrays",
+   "source_statement": "theorem low_source (reservation : NP6_StdModel.Reservation) {H : Type}\n (D : aspis_core.Digest32 H) (c : Claims) :\n (IDa_Deployed.boundaries reservation).fromFn 16#usize (FinishModel.closureFn9 D) c=ok (lowArray c)",
+   "review": "Digest, reservation and original claims are arbitrary source inputs. Exact fixed16/10 constructor result, no external success premise.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_MaskCanonical.claim_cell",
+   "module": "NKQ_MaskCanonical",
+   "source_statement": "theorem claim_cell (c : Claims) (canonical : CanonClaims c)\n (row col : Nat) (hr : row<3) (hc : col<29) :\n Canon (cell (cell c row hr) col hc)",
+   "review": "Canonical claims/alpha premises are model domains, discharged at source callers by ClaimsDomain/AlphaDomain/FinishMaskDomain. Does not certify terminal256 or arithmetic native transport.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_MaskCanonical.domain",
+   "module": "NKQ_MaskCanonical",
+   "source_statement": "theorem domain (c : Claims) (a : Alpha) (cc : CanonClaims c) (ca : CanonAlpha a) :\n (\u2200 q\u2208(NKQ_MaskArrays.lowArray c).val,Canon q) \u2227\n (\u2200 q\u2208(NKQ_MaskArrays.highArray c).val,Canon q) \u2227 Canon (blind c) \u2227 CanonAlpha a",
+   "review": "Canonical claims/alpha premises are model domains, discharged at source callers by ClaimsDomain/AlphaDomain/FinishMaskDomain. Does not certify terminal256 or arithmetic native transport.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_MaskCanonical.high",
+   "module": "NKQ_MaskCanonical",
+   "source_statement": "theorem high (c : Claims) (canonical : CanonClaims c) :\n \u2200 q\u2208(NKQ_MaskArrays.highArray c).val,Canon q",
+   "review": "Canonical claims/alpha premises are model domains, discharged at source callers by ClaimsDomain/AlphaDomain/FinishMaskDomain. Does not certify terminal256 or arithmetic native transport.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_MaskCanonical.low",
+   "module": "NKQ_MaskCanonical",
+   "source_statement": "theorem low (c : Claims) (canonical : CanonClaims c) :\n \u2200 q\u2208(NKQ_MaskArrays.lowArray c).val,Canon q",
+   "review": "Canonical claims/alpha premises are model domains, discharged at source callers by ClaimsDomain/AlphaDomain/FinishMaskDomain. Does not certify terminal256 or arithmetic native transport.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_MaskCuts.arguments",
+   "module": "NKQ_MaskCuts",
+   "source_statement": "theorem arguments (native : Native) (lo : LowCut native) (hi : HighCut native)\n (bl : BlindCut native) (al : AlphaCut native) (fr : FrameCut native)\n (c : Claims) (a : Alpha) (i : Nat) (reply : Q)\n (cc : CanonClaims c) (ca : CanonAlpha a) (cr : Canon reply) (inside : i<16) :\n let p:=native c a i reply\n p.calls=1 \u2227 p.result=reply \u2227 p.low=low c i inside \u2227 p.high=high c i \u2227\n p.blind=blind c \u2227 p.alpha=alpha a i \u2227 p.claimsAfter=c \u2227 p.alphaAfter=a",
+   "review": "Five external native-cut hypotheses transcribe K028/029 and K043..050 only. SAME c,a,i,reply with canonical inputs/bounds; full arrays framed by extensionality. Reply canonicality must come from CLOSED076 before future use. Generic component composition, not concrete native root.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_MaskHighStep.step",
+   "module": "NKQ_MaskHighStep",
+   "source_statement": "theorem step {H : Type} (D : aspis_core.Digest32 H) (c : Claims)\n (i : Usize) (inside : i.val<10) :\n (FinishModel.closureFn5 D).call_mut c i=ok (highAt c i inside,c)",
+   "review": "Original claims, digest, bounded usize index; proves16+index fit/read with same state. No arbitrary callee operation dictionary.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_MaskLowStep.frame",
+   "module": "NKQ_MaskLowStep",
+   "source_statement": "theorem frame {H : Type} (D : aspis_core.Digest32 H) (c : Claims)\n (i : Usize) (inside : i.val<16) :\n \u2203 value,(FinishModel.closureFn9 D).call_mut c i=ok (value,c)",
+   "review": "Original claims, digest, bounded usize index. One emitted low closure iteration and exact state frame, no native free result.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_MaskLowStep.step",
+   "module": "NKQ_MaskLowStep",
+   "source_statement": "theorem step {H : Type} (D : aspis_core.Digest32 H) (c : Claims)\n (i : Usize) (inside : i.val<16) :\n (FinishModel.closureFn9 D).call_mut c i=ok (lowAt c i inside,c)",
+   "review": "Original claims, digest, bounded usize index. One emitted low closure iteration and exact state frame, no native free result.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ObservedContinuations.begin_error",
+   "module": "NKQ_ObservedContinuations",
+   "source_statement": "theorem begin_error (F : VerifyPrefix.Finish) {H : Type} (D : aspis_core.Digest32 H)\n (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (p : r1_wire.Prefix)\n (after : r1_wire.SemanticTranscript H) (e : r1_wire.Error) :\n afterBegin F D pub p after (.Err e) = ok (.Err e)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ObservedContinuations.finish_same_call",
+   "module": "NKQ_ObservedContinuations",
+   "source_statement": "theorem finish_same_call (F : VerifyPrefix.Finish) {H : Type} (D : aspis_core.Digest32 H)\n (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (p : r1_wire.Prefix)\n (after : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges) :\n afterBegin F D pub p after (.Ok challenges) = F D pub p after challenges none",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ObservedContinuations.parsed_success",
+   "module": "NKQ_ObservedContinuations",
+   "source_statement": "theorem parsed_success (F : VerifyPrefix.Finish) {H : Type} (D : aspis_core.Digest32 H)\n (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (hash : H) (p : r1_wire.Prefix) :\n NKQ_ObservedStages.afterParsed F D pub hash (.Ok p) =\n (do let r \u2190 r1_semantic.public_transcript D pub hash p.c1_root; afterPublic F D pub p r)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ObservedContinuations.public_error",
+   "module": "NKQ_ObservedContinuations",
+   "source_statement": "theorem public_error (F : VerifyPrefix.Finish) {H : Type} (D : aspis_core.Digest32 H)\n (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (p : r1_wire.Prefix) (e : r1_wire.Error) :\n afterPublic F D pub p (.Err e) = ok (.Err e)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ObservedStages.factor",
+   "module": "NKQ_ObservedStages",
+   "source_statement": "theorem factor (F : VerifyPrefix.Finish) {H : Type} (D : aspis_core.Digest32 H)\n (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H) :\n VerifyPrefix.verify F D pub bytes hash none =\n (do let r \u2190 PrefixAdapter.parseAccepted bytes; afterParsed F D pub hash r)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ObservedStages.parsed_div",
+   "module": "NKQ_ObservedStages",
+   "source_statement": "theorem parsed_div (F : VerifyPrefix.Finish) {H : Type} (D : aspis_core.Digest32 H)\n (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (hash : H) :\n (do let r \u2190 (Result.div : Result (core.result.Result r1_wire.Prefix r1_wire.Error))\n     afterParsed F D pub hash r) = (.div : Result (Out H))",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ObservedStages.parsed_error",
+   "module": "NKQ_ObservedStages",
+   "source_statement": "theorem parsed_error (F : VerifyPrefix.Finish) {H : Type} (D : aspis_core.Digest32 H)\n (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (hash : H) (e : r1_wire.Error) :\n afterParsed F D pub hash (.Err e) = ok (.Err e)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ObservedStages.parsed_fail",
+   "module": "NKQ_ObservedStages",
+   "source_statement": "theorem parsed_fail (F : VerifyPrefix.Finish) {H : Type} (D : aspis_core.Digest32 H)\n (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (hash : H) (e : Error) :\n (do let r \u2190 (Result.fail e : Result (core.result.Result r1_wire.Prefix r1_wire.Error))\n     afterParsed F D pub hash r) = (.fail e : Result (Out H))",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ObservedTrace.factor",
+   "module": "NKQ_ObservedTrace",
+   "source_statement": "theorem factor (F : S1SemanticCode.Finish) {H : Type} (D : aspis_core.Digest32 H)\n (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H) :\n S1SemanticCode.verify F D pub bytes hash none =\n (do let r \u2190 liftM (PrefixAdapter.parseAccepted bytes);afterParsed F D pub hash r)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ObservedTrace.parser_rejection",
+   "module": "NKQ_ObservedTrace",
+   "source_statement": "theorem parser_rejection (F : S1SemanticCode.Finish) {H : Type} (D : aspis_core.Digest32 H)\n (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (hash : H) (e : r1_wire.Error) :\n run (afterParsed F D pub hash (.Err e))=([],ok (.Err e))",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_PrepareBuffer.buffer_error",
+   "module": "NKQ_PrepareBuffer",
+   "source_statement": "theorem buffer_error (ops : Ops) {H : Type} (D : aspis_core.digest.Digest32 H)\n (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)\n (hash : H) (g : Scratch) (e : verifier.Error) :\n afterBuffer ops D pub hash g (.Err e)=ok (.Err e,g)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_PrepareBuffer.factor",
+   "module": "NKQ_PrepareBuffer",
+   "source_statement": "theorem factor (ops : Ops) {H : Type} (D : aspis_core.digest.Digest32 H)\n (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)\n (proof : Slice U8) (hash : H) (g : Scratch) :\n NHL_PrepareStages.run ops D pub proof hash none g =\n (do let r \u2190 NHL_PrepareStages.buffers ops D proof; afterBuffer ops D pub hash g r)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_PrepareStages.factor",
+   "module": "NKQ_PrepareStages",
+   "source_statement": "theorem factor (ops : Ops) {H : Type} (D : aspis_core.digest.Digest32 H)\n (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)\n (hash : H) (g : Scratch) (v : verifier.View) :\n NHL_PrepareStages.semanticCut ops D pub hash none g v =\n (do let r \u2190 ops.op9 D pub v.semantic hash none; afterSemantic ops D hash g v r)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_PrepareStages.semantic_error",
+   "module": "NKQ_PrepareStages",
+   "source_statement": "theorem semantic_error (ops : Ops) {H : Type} (D : aspis_core.digest.Digest32 H)\n (hash : H) (g : Scratch) (v : verifier.View) (e : r1_wire.Error) :\n afterSemantic ops D hash g v (.Err e)=ok (.Err verifier.Error.Semantic,g)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_ReadTwo.readTwo",
+   "module": "NKQ_ReadTwo",
+   "source_statement": "theorem readTwo {\u03b1 : Type} {n m : Usize} (a : Array (Array \u03b1 m) n)\n (row col : Usize) (hr : row.val<n.val) (hc : col.val<m.val) :\n (do let inner \u2190 Array.index_usize a row\n     let value \u2190 Array.index_usize inner col\n     ok (value,a)) = ok (cell (cell a row.val hr) col.val hc,a)",
+   "review": "Array index/domain premises and exact unchanged state of the two emitted reads; local source helper.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_RecordDomains.entered",
+   "module": "NKQ_RecordDomains",
+   "source_statement": "theorem entered (bytes : Slice U8) (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix)\n (parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes=ok (.Ok pre))\n (row : U8) (N off : Usize) (live : row.val<27) (fields : 14\u2264row.val)\n (call : NGO_CallerDomains.Call row.val N.val off.val) :\n \u2203 record,r1_wire.Prefix.validated_record (PrefixAdapter.fromOld pre) row=ok (.Ok record) \u2227\n record.row=row \u2227 Ready record N off",
+   "review": "Parsed-success premise, live/fields bounds and exact NGO Call are local caller domains. FinishSlots supplies actual parsed branch/constants. Full bytes/record value used, not pointer identity.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_StrictDecode.total",
+   "module": "NKQ_StrictDecode",
+   "source_statement": "theorem total (N off : Usize) (record : MainRecord)\n (call : NGO_CallerDomains.Call record.row.val N.val off.val)\n (geometry : record.framed.val.length=5+NFU_PacketDomains.payloadSize record.row.val)\n (strict : \u2200 chunk\u2208(List.toChunksExact 32 (by decide) (record.framed.val.drop 5)).1,StrictLowChunk chunk) :\n \u2203 out,decodeMain N record off=ok (.Ok out) \u2227 NKQ_DecodeCanonical.MainRowCanon out",
+   "review": "Call/length/strict chunk premises require record producer. RecordDomains derives these from actual parser branch; never adopted as unproved root preconditions.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_Tx1Stages.factor",
+   "module": "NKQ_Tx1Stages",
+   "source_statement": "theorem factor (ops : Ops) {H : Type} (D : aspis_core.digest.Digest32 H)\n (public_bytes proof : Slice U8) (k : Usize) (hash : H) (c : NHL_Tx1Stages.Context) :\n NHL_Tx1Stages.queryCut ops D public_bytes proof k hash none c =\n (do let r \u2190 ops.op7 proof c.prepared c.accumulator c.scratch none c.geometry c.pending k\n     afterQuery ops D public_bytes proof hash c.prepared r)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_Tx1Stages.query_error",
+   "module": "NKQ_Tx1Stages",
+   "source_statement": "theorem query_error (ops : Ops) {H : Type} (D : aspis_core.digest.Digest32 H)\n (public_bytes proof : Slice U8) (hash : H) (p : verifier.Prepared) (e : verifier.Error) :\n afterQuery ops D public_bytes proof hash p (.Err e)=ok (.Err e)",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  },
+  {
+   "theorem": "AspisR1.NKQ_Tx1Stages.writer_frame",
+   "module": "NKQ_Tx1Stages",
+   "source_statement": "theorem writer_frame (a : verifier.Accumulator) (weights : alloc.vec.Vec aspis_core.field.QM31) :\n ({a with weights:=weights} : verifier.Accumulator).rhs=a.rhs \u2227\n ({a with weights:=weights} : verifier.Accumulator).power=a.power \u2227\n ({a with weights:=weights} : verifier.Accumulator).next=a.next",
+   "review": "SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded.",
+   "aq2_status": "NOT_A_ROW_ROOT; source/domain/component only",
+   "concrete_root_hypotheses_checked": false
+  }
+ ]
+}

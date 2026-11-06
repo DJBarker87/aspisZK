@@ -1,0 +1,23 @@
+"""Sequential audit-tool build, calibration, full scan and one root audit."""
+from pathlib import Path
+import subprocess,json,sys
+E=Path(__file__).resolve().parent
+T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
+def run(a):
+ r=subprocess.run([sys.executable,str(E/'NKQ_run.py'),a]);assert (E/a/'receipt.json').exists(), 'Recover submitted work, never resubmit'
+ return r.returncode
+for n,mod in [(72,'NKQ_Driver'),(73,'NKQ_ProofDriver')]:
+ a=f'NKQ_L{n:03d}';subprocess.run([sys.executable,str(E/'NKQ_config.py'),a,mod],check=True)
+ p=E/(a+'.json');x=json.loads(p.read_text());x['command']+=['-c','NKQ_native/'+mod+'.c'];x['collect']=['NKQ_native/'+mod+'.c'];p.write_text(json.dumps(x));assert run(a)==0
+for n,mod in [(74,'NKQ_Driver'),(75,'NKQ_ProofDriver')]:
+ a=f'NKQ_L{n:03d}';x=json.loads((E/'NKQ_L072.json').read_text());x.update(attempt=a,kind='link',module=mod,sources=['NKQ_native/'+mod+'.c','NKQ_native/NFA_WALKER.c','NKQ_native/NFA_MemoryLimit.c'],command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NKQ_native/'+mod,'NKQ_native/'+mod+'.c','NKQ_native/NFA_WALKER.c','NKQ_native/NFA_MemoryLimit.c'],collect=[],expected_time='Optimized C compilation/link of audit runtime and unchanged walker');x.pop('deps_fingerprint',None);(E/(a+'.json')).write_text(json.dumps(x));assert run(a)==0
+for n,mode in [(76,'fixtures'),(77,'scan')]+[(78+i,'proof'+str(i))for i in range(31)]+[(109,'close')]:
+ a=f'NKQ_L{n:03d}';subprocess.run([sys.executable,str(E/'NKQ_audit_config.py'),a,mode],check=True)
+ rc=run(a)
+ if rc:
+  # Retain actual nonzero raw-ax2 status; allow only the inherited exact standard mismatch.
+  if mode!='proof23':raise SystemExit('STOP unexpected audit verdict '+mode)
+  r=json.loads((E/'NKQ_audit'/mode/(mode+'.json')).read_text());bad=[v for v in r['results']if not v.get('equal',True)]
+  assert len(bad)==1 and bad[0]['root']=='NHC_DecodeModel.decoder_error',bad
+  assert set(bad[0]['walked_axioms'])<=set(['propext','Classical.choice','Quot.sound']),bad
+print('NKQ one full combined audit completed; inherited raw mismatch retained',flush=True)
