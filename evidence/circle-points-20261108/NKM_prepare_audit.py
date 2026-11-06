@@ -10,7 +10,7 @@ for p in sorted(E.glob('NKM_*.lean'))+list((E/'NKM_generated/NKM_circle').glob('
   full=r if r.startswith(ns+'.') else ns+'.'+r
   if full not in roots:roots.append(full)
 headline='AspisR1.RPx_Deployed.deployed'
-combined='import NKH_COMBINED_IMPORT\nimport NKM_Adopted\nimport NKM_SpecLaws\nimport NKM_NaturalLaws\nimport NKM_FallbackTrace\n#print axioms '+headline+'\n'
+combined='import NKH_COMBINED_IMPORT\nimport NKM_Adopted\nimport NKM_SpecLaws\nimport NKM_NaturalLaws\nimport NKM_SpecMatching\nimport NKM_EmittedMul\nimport NKM_FallbackTrace\n#print axioms '+headline+'\n'
 (E/'NKM_COMBINED_IMPORT.lean').write_text(combined);(E/'NKM_generated/NKM_COMBINED_IMPORT.lean').write_text(combined)
 (E/'NKM_AUDIT_ROOTS.json').write_text(json.dumps(dict(roots=roots+[headline],groups=[roots,[headline]]),indent=2)+'\n')
 (E/'NKM_AUDIT_MODULES.json').write_text(json.dumps([['NKM_COMBINED_IMPORT'],['NKM_COMBINED_IMPORT']]))
@@ -30,6 +30,7 @@ for p in(E/'NKM_generated').rglob('*.lean'):
  expected[m]=list(dict.fromkeys(['Init']+re.findall(r'^import ([\w.]+)',p.read_text(),re.M)))
 (E/'NKM_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(dict(module=m,imports=xs))+'\n'for m,xs in sorted(expected.items())))
 base=json.loads((E/'NKM_L018.json').read_text());base.pop('deps_fingerprint',None)
+base['env']['LEAN_PATH']=base['env']['LEAN_PATH'].replace('/NKM_seed/NKH:', '/NKM_seed/NKH_seed:')
 def lean(i,m,source,codegen=False):
  x=json.loads(json.dumps(base));x.update(attempt=f'NKM_L{i:03}',module=m,sources=[source],expected_time='One focused Lean module; audit source unchanged except roots and paths')
  x['command']=[x['env']['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R',str(Path(source).parent),source]

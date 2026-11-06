@@ -1,0 +1,13 @@
+import NKM_COMBINED_IMPORT
+#check NKM_Roots.circle
+#print NKM_Roots.circle
+#check NKM_Roots.ood
+#print NKM_Roots.ood
+#check NKM_Roots.fallback
+#print NKM_Roots.fallback
+#check NKM_CircleModel.circle_source
+#print NKM_CircleModel.circle_source
+#check NKM_Adopted.ood
+#print NKM_Adopted.ood
+#check NKM_Adopted.fallback
+#print NKM_Adopted.fallback

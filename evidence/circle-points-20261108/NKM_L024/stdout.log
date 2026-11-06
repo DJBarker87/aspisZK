@@ -1,0 +1,552 @@
+NKM_Roots.circle (t : AspisV8R15.ExactTowerBase.QM31Exact) :
+  Aeneas.Std.Result.ok (NKM_Roots.circleInvocation t) =
+    NKM_circle.circle.secure_circle_point_from_parameter (NKM_FieldLaws.encode t)
+theorem NKM_Roots.circle : ∀ (t : AspisV8R15.ExactTowerBase.QM31Exact),
+  Aeneas.Std.Result.ok (NKM_Roots.circleInvocation t) =
+    NKM_circle.circle.secure_circle_point_from_parameter (NKM_FieldLaws.encode t) :=
+fun t =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => Aeneas.Std.Result.ok (NKM_Roots.circleInvocation t) = _a) (NKM_CircleModel.circle_total t)))
+    (if hd : 1 + t * t = 0 then
+      of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg Aeneas.Std.Result.ok
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | none => Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter
+                    | some val =>
+                      Aeneas.Std.core.result.Result.Ok
+                        { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                          y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) })
+                  (Eq.trans
+                    (ite_congr (Eq.trans (congrFun' (congrArg Eq hd) 0) (eq_self 0)) (fun a => Eq.refl none) fun a =>
+                      congrArg some (congrArg NKM_FieldLaws.encode (congrArg Inv.inv hd)))
+                    (if_true none (some (NKM_FieldLaws.encode 0⁻¹)))))))
+            (congrArg Aeneas.Std.Result.ok
+              (Eq.trans
+                (ite_congr (Eq.trans (congrFun' (congrArg Eq hd) 0) (eq_self 0))
+                  (fun a =>
+                    Eq.refl (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter))
+                  fun a =>
+                  congrArg Aeneas.Std.core.result.Result.Ok
+                    (congr
+                      (congrArg NKM_circle.circle.SecureCirclePoint.mk
+                        (congrArg NKM_FieldLaws.encode (congrArg (HMul.hMul (1 - t * t)) (congrArg Inv.inv hd))))
+                      (congrArg NKM_FieldLaws.encode (congrArg (HMul.hMul (t + t)) (congrArg Inv.inv hd)))))
+                (if_true (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter)
+                  (Aeneas.Std.core.result.Result.Ok
+                    { x := NKM_FieldLaws.encode ((1 - t * t) * 0⁻¹), y := NKM_FieldLaws.encode ((t + t) * 0⁻¹) })))))
+          (eq_self
+            (Aeneas.Std.Result.ok
+              (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter))))
+    else
+      of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg Aeneas.Std.Result.ok
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | none => Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter
+                    | some val =>
+                      Aeneas.Std.core.result.Result.Ok
+                        { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                          y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) })
+                  (Eq.trans
+                    (ite_congr (eq_false hd) (fun a => Eq.refl none) fun a =>
+                      Eq.refl (some (NKM_FieldLaws.encode (1 + t * t)⁻¹)))
+                    (if_false none (some (NKM_FieldLaws.encode (1 + t * t)⁻¹)))))))
+            (congrArg Aeneas.Std.Result.ok
+              (Eq.trans
+                (ite_congr (eq_false hd)
+                  (fun a =>
+                    Eq.refl (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter))
+                  fun a =>
+                  Eq.refl
+                    (Aeneas.Std.core.result.Result.Ok
+                      { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                        y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) }))
+                (if_false (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter)
+                  (Aeneas.Std.core.result.Result.Ok
+                    { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                      y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) })))))
+          (eq_self
+            (Aeneas.Std.Result.ok
+              (Aeneas.Std.core.result.Result.Ok
+                { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                  y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) })))))
+NKM_Roots.ood (t : AspisV8R15.ExactTowerBase.QM31Exact) :
+  Aeneas.Std.Result.ok (NKM_Roots.oodInvocation t) =
+    NKM_circle.circle.secure_ood_circle_point_from_parameter (NKM_FieldLaws.encode t)
+theorem NKM_Roots.ood : ∀ (t : AspisV8R15.ExactTowerBase.QM31Exact),
+  Aeneas.Std.Result.ok (NKM_Roots.oodInvocation t) =
+    NKM_circle.circle.secure_ood_circle_point_from_parameter (NKM_FieldLaws.encode t) :=
+fun t =>
+  Eq.mpr (id (congrArg (fun _a => Aeneas.Std.Result.ok (NKM_Roots.oodInvocation t) = _a) (NKM_CircleModel.ood_total t)))
+    (if hd : 1 + t * t = 0 then
+      of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg Aeneas.Std.Result.ok
+                (congrArg
+                  (fun x =>
+                    match
+                      match x with
+                      | none => Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter
+                      | some val =>
+                        Aeneas.Std.core.result.Result.Ok
+                          { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                            y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) } with
+                    | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.core.result.Result.Err e
+                    | Aeneas.Std.core.result.Result.Ok p =>
+                      if decide (t.im = 0) = true then
+                        Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.ParameterInCm31Subfield
+                      else Aeneas.Std.core.result.Result.Ok p)
+                  (Eq.trans
+                    (ite_congr (Eq.trans (congrFun' (congrArg Eq hd) 0) (eq_self 0)) (fun a => Eq.refl none) fun a =>
+                      congrArg some (congrArg NKM_FieldLaws.encode (congrArg Inv.inv hd)))
+                    (if_true none (some (NKM_FieldLaws.encode 0⁻¹)))))))
+            (congrArg Aeneas.Std.Result.ok
+              (Eq.trans
+                (ite_congr (Eq.trans (congrFun' (congrArg Eq hd) 0) (eq_self 0))
+                  (fun a =>
+                    Eq.refl (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter))
+                  fun a =>
+                  Eq.refl
+                    (if t.im = 0 then
+                      Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.ParameterInCm31Subfield
+                    else Aeneas.Std.core.result.Result.Ok (NKM_CircleModel.point t)))
+                (if_true (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter)
+                  (if t.im = 0 then
+                    Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.ParameterInCm31Subfield
+                  else Aeneas.Std.core.result.Result.Ok (NKM_CircleModel.point t))))))
+          (eq_self
+            (Aeneas.Std.Result.ok
+              (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter))))
+    else
+      if ht : t.im = 0 then
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (congrArg Aeneas.Std.Result.ok
+                  (Eq.trans
+                    (congrArg
+                      (fun x =>
+                        match
+                          match x with
+                          | none =>
+                            Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter
+                          | some val =>
+                            Aeneas.Std.core.result.Result.Ok
+                              { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                                y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) } with
+                        | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.core.result.Result.Err e
+                        | Aeneas.Std.core.result.Result.Ok p =>
+                          if decide (t.im = 0) = true then
+                            Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.ParameterInCm31Subfield
+                          else Aeneas.Std.core.result.Result.Ok p)
+                      (Eq.trans
+                        (ite_congr (eq_false hd) (fun a => Eq.refl none) fun a =>
+                          Eq.refl (some (NKM_FieldLaws.encode (1 + t * t)⁻¹)))
+                        (if_false none (some (NKM_FieldLaws.encode (1 + t * t)⁻¹)))))
+                    (Eq.trans
+                      (ite_congr
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans
+                                (Decidable.decide.congr_simp (t.im = 0) True
+                                  (Eq.trans (congrFun' (congrArg Eq ht) 0) (eq_self 0)))
+                                (decide_true instDecidableTrue)))
+                            true)
+                          (eq_self true))
+                        (fun a =>
+                          Eq.refl
+                            (Aeneas.Std.core.result.Result.Err
+                              NKM_circle.circle.CirclePointError.ParameterInCm31Subfield))
+                        fun a =>
+                        Eq.refl
+                          (Aeneas.Std.core.result.Result.Ok
+                            { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                              y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) }))
+                      (if_true
+                        (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.ParameterInCm31Subfield)
+                        (Aeneas.Std.core.result.Result.Ok
+                          { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                            y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) }))))))
+              (congrArg Aeneas.Std.Result.ok
+                (Eq.trans
+                  (ite_congr (eq_false hd)
+                    (fun a =>
+                      Eq.refl (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter))
+                    fun a =>
+                    Eq.trans
+                      (ite_congr (Eq.trans (congrFun' (congrArg Eq ht) 0) (eq_self 0))
+                        (fun a =>
+                          Eq.refl
+                            (Aeneas.Std.core.result.Result.Err
+                              NKM_circle.circle.CirclePointError.ParameterInCm31Subfield))
+                        fun a =>
+                        Eq.refl
+                          (Aeneas.Std.core.result.Result.Ok
+                            { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                              y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) }))
+                      (if_true
+                        (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.ParameterInCm31Subfield)
+                        (Aeneas.Std.core.result.Result.Ok
+                          { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                            y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) })))
+                  (if_false (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter)
+                    (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.ParameterInCm31Subfield)))))
+            (eq_self
+              (Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.ParameterInCm31Subfield))))
+      else
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (congrArg Aeneas.Std.Result.ok
+                  (Eq.trans
+                    (congrArg
+                      (fun x =>
+                        match
+                          match x with
+                          | none =>
+                            Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter
+                          | some val =>
+                            Aeneas.Std.core.result.Result.Ok
+                              { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                                y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) } with
+                        | Aeneas.Std.core.result.Result.Err e => Aeneas.Std.core.result.Result.Err e
+                        | Aeneas.Std.core.result.Result.Ok p =>
+                          if decide (t.im = 0) = true then
+                            Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.ParameterInCm31Subfield
+                          else Aeneas.Std.core.result.Result.Ok p)
+                      (Eq.trans
+                        (ite_congr (eq_false hd) (fun a => Eq.refl none) fun a =>
+                          Eq.refl (some (NKM_FieldLaws.encode (1 + t * t)⁻¹)))
+                        (if_false none (some (NKM_FieldLaws.encode (1 + t * t)⁻¹)))))
+                    (Eq.trans
+                      (ite_congr
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans (Decidable.decide.congr_simp (t.im = 0) False (eq_false ht))
+                                (decide_false instDecidableFalse)))
+                            true)
+                          Bool.false_eq_true)
+                        (fun a =>
+                          Eq.refl
+                            (Aeneas.Std.core.result.Result.Err
+                              NKM_circle.circle.CirclePointError.ParameterInCm31Subfield))
+                        fun a =>
+                        Eq.refl
+                          (Aeneas.Std.core.result.Result.Ok
+                            { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                              y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) }))
+                      (if_false
+                        (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.ParameterInCm31Subfield)
+                        (Aeneas.Std.core.result.Result.Ok
+                          { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                            y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) }))))))
+              (congrArg Aeneas.Std.Result.ok
+                (Eq.trans
+                  (ite_congr (eq_false hd)
+                    (fun a =>
+                      Eq.refl (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter))
+                    fun a =>
+                    Eq.trans
+                      (ite_congr (eq_false ht)
+                        (fun a =>
+                          Eq.refl
+                            (Aeneas.Std.core.result.Result.Err
+                              NKM_circle.circle.CirclePointError.ParameterInCm31Subfield))
+                        fun a =>
+                        Eq.refl
+                          (Aeneas.Std.core.result.Result.Ok
+                            { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                              y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) }))
+                      (if_false
+                        (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.ParameterInCm31Subfield)
+                        (Aeneas.Std.core.result.Result.Ok
+                          { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                            y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) })))
+                  (if_false (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter)
+                    (Aeneas.Std.core.result.Result.Ok
+                      { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                        y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) })))))
+            (eq_self
+              (Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Ok
+                  { x := NKM_FieldLaws.encode ((1 - t * t) * (1 + t * t)⁻¹),
+                    y := NKM_FieldLaws.encode ((t + t) * (1 + t * t)⁻¹) })))))
+NKM_Roots.fallback (row : AspisR1CircleSampleWrapper.r0_transcript.CircleRow) :
+  Aeneas.Std.Result.ok
+      (NKM_Roots.fallbackG
+        (NKM_Roots.oodInvocation
+          (match row with
+          | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.First => R0P.SemSource.circleFallbackParameter0
+          | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.Second => R0P.SemSource.circleFallbackParameter1))) =
+    NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+theorem NKM_Roots.fallback : ∀ (row : AspisR1CircleSampleWrapper.r0_transcript.CircleRow),
+  Aeneas.Std.Result.ok
+      (NKM_Roots.fallbackG
+        (NKM_Roots.oodInvocation
+          (match row with
+          | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.First => R0P.SemSource.circleFallbackParameter0
+          | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.Second => R0P.SemSource.circleFallbackParameter1))) =
+    NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row) :=
+fun row =>
+  AspisR1CircleSampleWrapper.r0_transcript.CircleRow.casesOn (motive := fun t =>
+    row = t →
+      Aeneas.Std.Result.ok
+          (NKM_Roots.fallbackG
+            (NKM_Roots.oodInvocation
+              (match row with
+              | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.First => R0P.SemSource.circleFallbackParameter0
+              | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.Second => R0P.SemSource.circleFallbackParameter1))) =
+        NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row))
+    row (fun h => Eq.symm h ▸ NKM_Roots.fallback0) (fun h => Eq.symm h ▸ NKM_Roots.fallback1) (Eq.refl row)
+NKM_CircleModel.circle_source (t : AspisV8R15.ExactTowerBase.QM31Exact) :
+  NKM_circle.circle.secure_circle_point_from_parameter (NKM_FieldLaws.encode t) = do
+    let r ←
+      AspisR72Sampler.circle.secure_circle_point_from_parameter (AspisV8R19.SamplerClosureProductExecution.encode t)
+    Aeneas.Std.Result.ok (NKM_CircleModel.fromResult r)
+theorem NKM_CircleModel.circle_source : ∀ (t : AspisV8R15.ExactTowerBase.QM31Exact),
+  NKM_circle.circle.secure_circle_point_from_parameter (NKM_FieldLaws.encode t) = do
+    let r ←
+      AspisR72Sampler.circle.secure_circle_point_from_parameter (AspisV8R19.SamplerClosureProductExecution.encode t)
+    Aeneas.Std.Result.ok (NKM_CircleModel.fromResult r) :=
+fun t =>
+  if hd : 1 + t * t = 0 then
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a = do
+              let r ←
+                AspisR72Sampler.circle.secure_circle_point_from_parameter
+                    (AspisV8R19.SamplerClosureProductExecution.encode t)
+              Aeneas.Std.Result.ok (NKM_CircleModel.fromResult r))
+          (NKM_CircleModel.singular t hd)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter) =
+                do
+                let r ← _a
+                Aeneas.Std.Result.ok (NKM_CircleModel.fromResult r))
+            (AspisV8R19.SamplerClosureCircleSourceExecution.circle_singular t hd)))
+        (Eq.refl
+          (Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err NKM_circle.circle.CirclePointError.SingularParameter))))
+  else
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a = do
+              let r ←
+                AspisR72Sampler.circle.secure_circle_point_from_parameter
+                    (AspisV8R19.SamplerClosureProductExecution.encode t)
+              Aeneas.Std.Result.ok (NKM_CircleModel.fromResult r))
+          (NKM_CircleModel.regular t hd)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (NKM_CircleModel.point t)) = do
+                let r ← _a
+                Aeneas.Std.Result.ok (NKM_CircleModel.fromResult r))
+            (AspisV8R19.SamplerClosureCircleSourceExecution.circle_regular t hd)))
+        (of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (congrArg Aeneas.Std.Result.ok
+                  (congrArg Aeneas.Std.core.result.Result.Ok (NKM_CircleModel.point_cohort t))))
+              (Aeneas.Std.bind_tc_ok
+                (Aeneas.Std.core.result.Result.Ok
+                  (AspisV8R19.SamplerClosureCircleSourceExecution.encodePoint (AspisV8R19.SamplerCirclePolicy.point t)))
+                fun y =>
+                Aeneas.Std.Result.ok
+                  (match y with
+                  | Aeneas.Std.core.result.Result.Ok p => Aeneas.Std.core.result.Result.Ok (NKM_CircleModel.fromPoint p)
+                  | Aeneas.Std.core.result.Result.Err e =>
+                    Aeneas.Std.core.result.Result.Err (NKM_CircleModel.fromError e))))
+            (eq_self
+              (Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Ok
+                  (NKM_CircleModel.fromPoint
+                    (AspisV8R19.SamplerClosureCircleSourceExecution.encodePoint
+                      (AspisV8R19.SamplerCirclePolicy.point t)))))))))
+NKM_Adopted.ood (t : AspisV8R15.ExactTowerBase.QM31Exact) :
+  (do
+      let r ← NKM_circle.circle.secure_ood_circle_point_from_parameter (NKM_FieldLaws.encode t)
+      Aeneas.Std.Result.ok (NKM_Adopted.wrapperResult r)) =
+    circle.secure_ood_circle_point_from_parameter (NKM_Adopted.toWrapper (NKM_FieldLaws.encode t))
+theorem NKM_Adopted.ood : ∀ (t : AspisV8R15.ExactTowerBase.QM31Exact),
+  (do
+      let r ← NKM_circle.circle.secure_ood_circle_point_from_parameter (NKM_FieldLaws.encode t)
+      Aeneas.Std.Result.ok (NKM_Adopted.wrapperResult r)) =
+    circle.secure_ood_circle_point_from_parameter (NKM_Adopted.toWrapper (NKM_FieldLaws.encode t)) :=
+fun t =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          (do
+              let r ← _a
+              Aeneas.Std.Result.ok (NKM_Adopted.wrapperResult r)) =
+            circle.secure_ood_circle_point_from_parameter (NKM_Adopted.toWrapper (NKM_FieldLaws.encode t)))
+        (NKM_CircleModel.ood_source t)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let r ←
+                  do
+                    let r ←
+                      AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+                          (AspisV8R19.SamplerClosureProductExecution.encode t)
+                    Aeneas.Std.Result.ok (NKM_CircleModel.fromResult r)
+                Aeneas.Std.Result.ok (NKM_Adopted.wrapperResult r)) =
+              _a)
+          (AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.secure_circle_eq_r72
+            (NKM_Adopted.toWrapper (NKM_FieldLaws.encode t)))))
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Aeneas.Std.bind_assoc_eq
+                  (AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+                    (AspisV8R19.SamplerClosureProductExecution.encode t))
+                  (fun r => Aeneas.Std.Result.ok (NKM_CircleModel.fromResult r)) fun r =>
+                  Aeneas.Std.Result.ok (NKM_Adopted.wrapperResult r))
+                (congrArg
+                  (bind
+                    (AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+                      (AspisV8R19.SamplerClosureProductExecution.encode t)))
+                  (funext fun x =>
+                    Aeneas.Std.bind_tc_ok (NKM_CircleModel.fromResult x) fun y =>
+                      Aeneas.Std.Result.ok (NKM_Adopted.wrapperResult y)))))
+            do
+            let r ←
+              AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+                  (toR72QM (NKM_Adopted.toWrapper (NKM_FieldLaws.encode t)))
+            match r with
+              | Aeneas.Std.core.result.Result.Ok p =>
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (fromR72Point p))
+              | Aeneas.Std.core.result.Result.Err e =>
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (fromR72Error e))))
+        (have h := id (NKM_circle.to_from (AspisV8R19.SamplerClosureProductExecution.encode t));
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let x ←
+                      AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+                          (AspisV8R19.SamplerClosureProductExecution.encode t)
+                    Aeneas.Std.Result.ok (NKM_Adopted.wrapperResult (NKM_CircleModel.fromResult x))) =
+                  do
+                  let r ← AspisR72Sampler.circle.secure_ood_circle_point_from_parameter _a
+                  match r with
+                    | Aeneas.Std.core.result.Result.Ok p =>
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (fromR72Point p))
+                    | Aeneas.Std.core.result.Result.Err e =>
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (fromR72Error e)))
+              h))
+          ((fun {m} [Bind m] {α β} a a_1 e_a =>
+              Eq.rec (motive := fun a_2 e_a => ∀ (a_3 a_4 : α → m β), a_3 = a_4 → a >>= a_3 = a_2 >>= a_4)
+                (fun a_2 a_3 e_a => e_a ▸ Eq.refl (a >>= a_2)) e_a)
+            (AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+              (AspisV8R19.SamplerClosureProductExecution.encode t))
+            (AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+              (AspisV8R19.SamplerClosureProductExecution.encode t))
+            (Eq.refl
+              (AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+                (AspisV8R19.SamplerClosureProductExecution.encode t)))
+            (fun x => Aeneas.Std.Result.ok (NKM_Adopted.wrapperResult (NKM_CircleModel.fromResult x)))
+            (fun r =>
+              match r with
+              | Aeneas.Std.core.result.Result.Ok p =>
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (fromR72Point p))
+              | Aeneas.Std.core.result.Result.Err e =>
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (fromR72Error e)))
+            (funext fun r =>
+              Aeneas.Std.core.result.Result.casesOn (motive := fun t =>
+                r = t →
+                  Aeneas.Std.Result.ok (NKM_Adopted.wrapperResult (NKM_CircleModel.fromResult r)) =
+                    match r with
+                    | Aeneas.Std.core.result.Result.Ok p =>
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (fromR72Point p))
+                    | Aeneas.Std.core.result.Result.Err e =>
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (fromR72Error e)))
+                r
+                (fun p h =>
+                  Eq.symm h ▸
+                    Eq.refl
+                      (Aeneas.Std.Result.ok
+                        (NKM_Adopted.wrapperResult (NKM_CircleModel.fromResult (Aeneas.Std.core.result.Result.Ok p)))))
+                (fun e h =>
+                  Eq.symm h ▸
+                    AspisR72Sampler.circle.CirclePointError.casesOn (motive := fun t =>
+                      e = t →
+                        Aeneas.Std.Result.ok
+                            (NKM_Adopted.wrapperResult
+                              (NKM_CircleModel.fromResult (Aeneas.Std.core.result.Result.Err e))) =
+                          match Aeneas.Std.core.result.Result.Err e with
+                          | Aeneas.Std.core.result.Result.Ok p =>
+                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (fromR72Point p))
+                          | Aeneas.Std.core.result.Result.Err e =>
+                            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (fromR72Error e)))
+                      e
+                      (fun h =>
+                        Eq.symm h ▸
+                          Eq.refl
+                            (Aeneas.Std.Result.ok
+                              (NKM_Adopted.wrapperResult
+                                (NKM_CircleModel.fromResult
+                                  (Aeneas.Std.core.result.Result.Err
+                                    AspisR72Sampler.circle.CirclePointError.SingularParameter)))))
+                      (fun h =>
+                        Eq.symm h ▸
+                          Eq.refl
+                            (Aeneas.Std.Result.ok
+                              (NKM_Adopted.wrapperResult
+                                (NKM_CircleModel.fromResult
+                                  (Aeneas.Std.core.result.Result.Err
+                                    AspisR72Sampler.circle.CirclePointError.ParameterInCm31Subfield)))))
+                      (Eq.refl e))
+                (Eq.refl r))))))
+NKM_Adopted.fallback (row : AspisR1CircleSampleWrapper.r0_transcript.CircleRow) :
+  (do
+      let p ← NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+      Aeneas.Std.Result.ok (NKM_Adopted.fallbackPoint p)) =
+    AspisR1CircleFallback.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+theorem NKM_Adopted.fallback : ∀ (row : AspisR1CircleSampleWrapper.r0_transcript.CircleRow),
+  (do
+      let p ← NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+      Aeneas.Std.Result.ok (NKM_Adopted.fallbackPoint p)) =
+    AspisR1CircleFallback.transcript.circle_fallback_point (NKM_FallbackModel.index row) :=
+fun row =>
+  AspisR1CircleSampleWrapper.r0_transcript.CircleRow.casesOn (motive := fun t =>
+    row = t →
+      (do
+          let p ← NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+          Aeneas.Std.Result.ok (NKM_Adopted.fallbackPoint p)) =
+        AspisR1CircleFallback.transcript.circle_fallback_point (NKM_FallbackModel.index row))
+    row (fun h => Eq.symm h ▸ NKM_Adopted.fallback0) (fun h => Eq.symm h ▸ NKM_Adopted.fallback1) (Eq.refl row)

@@ -84,7 +84,7 @@ for n in names:
  if n.endswith('_REACHABLE.txt'):
   raw=p.read_bytes();compressed=lzma.compress(raw,preset=6)
   out[n+'.xz']={{'base64':base64.b64encode(compressed).decode()}}
-  out[n+'.sha256']=hashlib.sha256(raw).hexdigest()+'\n'
+  out[n+'.sha256']=hashlib.sha256(raw).hexdigest()+chr(10)
  else:out[n]={{'base64':base64.b64encode(p.read_bytes()).decode()}} if n.endswith('.xz') else p.read_text()
 print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
