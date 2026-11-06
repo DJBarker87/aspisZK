@@ -1,0 +1,15 @@
+theorem run {E : Type} (C : Carrier OWNER Data) (b : Bool) (K : Control)
+    (P : Data → Option PV_STX2_SliceSyntax.Program)
+    (H : PV_STX2_Native.Request Data → OWNER → Reply OWNER E Data)
+    (s : Store Data) (a dest : Nat) (parent : Frame) (parents : List Frame)
+    (wait : PV_STX2_Native.Waiting Data) (ptr allocator : Data)
+    (w : OWNER) (es : List E) (stack : List Config)
+    (ptrCell : s.cells ⟨a,1,[]⟩ = some ptr)
+    (allocatorCell : s.cells ⟨a,2,[]⟩ = some allocator)
+    (saved : parent.waiting = some wait) (action : wait.action = .child a (.local dest)) :
+    let B := PV_THR2_OwnInitExactReturnedCases.carrier C b
+    PV_THR2_IntrinsicState.advance B K P H 15
+      ⟨⟨.running ⟨{activation := a,remaining := PV_THR2_F315.live.body},parent :: parents,s⟩,w,es⟩,stack⟩ =
+      ⟨PV_THR2_ChildBoundary.delivered B
+        ⟨parent,parents,store13 s a ptr allocator⟩ wait
+        ⟨.returned (.ok (value ptr allocator)),w,es⟩,stack⟩ 

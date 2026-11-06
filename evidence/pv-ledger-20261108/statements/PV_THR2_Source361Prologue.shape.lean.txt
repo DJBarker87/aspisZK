@@ -1,0 +1,25 @@
+theorem shape : PV_THR2_IntrinsicFrameChain.nodes chain ++ PV_THR2_F361.live.body.drop 22 = PV_THR2_F361.live.body := rfl
+/-- Conditional on owner acceptance of amended translator. Hypotheses: none.
+Count stops at the first failed binding; source stores remain symbolic. -/
+def cost {W : Type} (base : Carrier W Data) (c : Config) (w : W) :=
+  PV_THR2_IntrinsicFrameChain.steps base c.frame.activation w chain c.store
+/-- Conditional on owner acceptance of amended translator. Hypotheses: none.
+Retain source parents and loops up to the actual12026 aggregate. -/
+def finish {W E : Type} (base : Carrier W Data) (c : Config) (w : W) (es : List E) (stack : List Config) : PV_THR2_IntrinsicState.State W E :=
+  ⟨⟨PV_THR2_IntrinsicFrameChain.result base c.frame.activation c.callers c.frame.loops
+    (PV_THR2_F361.live.body.drop 22) w chain c.store,w,es⟩,stack⟩
+/-- Conditional on owner acceptance of amended translator. Hypotheses: none.
+Only the actual361 entry receives prologue fuel. -/
+noncomputable def steps {W E : Type} (base : Carrier W Data) (q : PV_THR2_IntrinsicState.State W E) :=
+  PV_THR2_IntrinsicAtContinuation.steps PV_THR2_F361.live.body (cost base) q
+/-- Conditional on owner acceptance of amended translator. Hypotheses: none.
+Every unrelated failed/pending branch stays unchanged. -/
+noncomputable def after {W E : Type} (base : Carrier W Data) (q : PV_THR2_IntrinsicState.State W E) :=
+  PV_THR2_IntrinsicAtContinuation.after PV_THR2_F361.live.body (finish base) q
+/-- Conditional on owner acceptance of amended translator. Hypotheses: none.
+Execute361's actual22-node source prefix by the existing finite-chain theorem. -/
+theorem run {W E : Type} (base : Carrier W Data) (ctl : Control)
+    (programs : Data → Option PV_STX2_SliceSyntax.Program)
+    (handler : PV_STX2_Native.Request Data → W → Reply W E Data)
+    (q : PV_THR2_IntrinsicState.State W E) :
+    PV_THR2_IntrinsicState.advance base ctl programs handler (steps base q) q = after base q 

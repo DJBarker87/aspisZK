@@ -1,0 +1,27 @@
+theorem run {E : Type} (C : Carrier OWNER Data) (b : Bool) (K : Control)
+    (P : Data → Option PV_STX2_SliceSyntax.Program)
+    (H : PV_STX2_Native.Request Data → OWNER → Reply OWNER E Data)
+    (s : Store Data) (a dest ar lr : Nat) (parent : Frame) (parents : List Frame)
+    (outerWait : PV_STX2_Native.Waiting Data) (p : Address)
+    (arcKind nonNullKind phantom allocator : Data)
+    (w : OWNER) (es : List E) (stack : List Config)
+    (cell : s.cells ⟨a,1,[]⟩ = some (PV_STX2_TypedReferences.reference ⟨ar,lr,[]⟩ .null))
+    (root : s.cells ⟨ar,lr,[]⟩ = some (PV_THR2_KeyValues.pack arcKind
+      [PV_THR2_KeyValues.pack nonNullKind [PV_STX2_TypedReferences.reference p .null],phantom,allocator]))
+    (outer : ar ≠ a) (inner : ar ≠ s.nextActivation)
+    (body222 : P PV_THR2_PacketDataTable.fn222 = some PV_THR2_F222.live)
+    (child320 : P PV_THR2_PacketInner320.fn = none)
+    (saved : parent.waiting = some outerWait)
+    (action : outerWait.action = .child a (.local dest)) :
+    let B := PV_THR2_OwnInitExactReturnedCases.carrier C b
+    let t := finalStore s a ⟨ar,lr,[]⟩
+    let H' := PV_THR2_IntrinsicSemantics_NonNullAsRef.handler B t H
+    let receiver := PV_STX2_TypedReferences.reference ⟨ar,lr,[0]⟩ .null
+    let returnedStore := write (write (PV_THR2_Packet222SemanticReturn.finalStore t s.nextActivation receiver p)
+      ⟨s.nextActivation,0,[]⟩ (some (PV_STX2_TypedReferences.reference p .null)))
+      ⟨a,3,[]⟩ (some (PV_STX2_TypedReferences.reference p .null))
+    ∃ n, PV_THR2_IntrinsicState.advance B K P H' n
+      ⟨⟨.running ⟨{activation := a,remaining := PV_THR2_F126.live.body},parent :: parents,s⟩,w,es⟩,stack⟩ =
+      ⟨PV_THR2_ChildBoundary.delivered B
+        ⟨parent,parents,PV_THR2_Packet126Memory6To12.prepared returnedStore a p⟩ outerWait
+        ⟨.returned (.ok (PV_STX2_TypedReferences.reference {p with fields := p.fields ++ [2]} .null)),w,es⟩,stack⟩ 
