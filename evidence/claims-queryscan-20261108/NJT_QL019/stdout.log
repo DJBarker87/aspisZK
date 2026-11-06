@@ -1,0 +1,11 @@
+'AspisR1.NJT_QReached.carry_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QReached.scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+scan : ∀ (native : NJT_QScan.Native),
+  NJT_QScan.Cut native →
+    ∀ (priorBlocks : List Bytes) (block : Bytes),
+      have before := carry native priorBlocks NGQ_SamplerPacket.initial;
+      Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords before block =
+          ok
+            (optionStop (NJT_QScan.run native (↑(words block)) before).2,
+              (NJT_QScan.run native (↑(words block)) before).1) ∧
+        NJT_QDomains.Domain before ∧ NJT_QDomains.Domain (NJT_QScan.run native (↑(words block)) before).1

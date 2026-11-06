@@ -1,0 +1,7 @@
+#[cfg(kani)]
+fn NJT_Q_rank_ref(block: &[u8; 32]) -> Rank {
+    core::array::from_fn(|i| {
+        let j = 4 * i;
+        u32::from_le_bytes([block[j], block[j + 1], block[j + 2], block[j + 3]])
+    })
+}

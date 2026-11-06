@@ -1,0 +1,513 @@
+theorem AspisR1QueryScanUnrolled.r0_transcript.block_rank_success_words_in_order : ∀
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (out : Aeneas.Std.Array Aeneas.Std.U32 8#usize),
+  AspisR1QueryScanUnrolled.r0_transcript.block_rank block = Aeneas.Std.Result.ok out →
+    ↑out = List.map (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block) (List.range 8) :=
+fun block out hrank =>
+  let callback := AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32;
+  have h8 := AspisR1QueryScanUnrolled.r0_transcript.block_rank_success_words_in_order._proof_1;
+  have h0 := AspisR1QueryScanUnrolled.r0_transcript.block_rank_success_words_in_order._proof_2;
+  have hstable := fun j hj =>
+    have hj8 := Eq.mp (congrArg (LT.lt ↑j) h8) hj;
+    have h := AspisR1QueryScanUnrolled.r0_transcript.block_rank_callback_call_mut_success block j hj8;
+    Eq.mpr
+      (id
+        (congrArg
+          (Eq
+            (AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32.call_mut
+              block j))
+          (congrArg Aeneas.Std.Result.ok (congrFun' (congrArg Prod.mk (dite_cond_eq_true (eq_true hj8))) block))))
+      h;
+  AspisR1SelectedMaskProbe.core.array.from_fn.match_1.splitter✝
+    (fun x =>
+      AspisR1SelectedMaskProbe.arrayFromFnLoop 8#usize
+            AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+            (↑8#usize + 1) 0#usize block [] =
+          x →
+        (match h :
+              AspisR1SelectedMaskProbe.arrayFromFnLoop 8#usize
+                AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+                (↑8#usize + 1) 0#usize block [] with
+            | Aeneas.Std.Result.ok (values, snd) =>
+              Aeneas.Std.Result.ok
+                ⟨values,
+                  AspisR1SelectedMaskProbe.core.array.from_fn._proof_3 8#usize
+                    AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+                    block values snd
+                    (Eq.trans
+                      (Eq.refl
+                        (AspisR1SelectedMaskProbe.arrayFromFnLoop 8#usize
+                          AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+                          (↑8#usize + 1) 0#usize block []))
+                      h)⟩
+            | Aeneas.Std.Result.fail error => Aeneas.Std.Result.fail error
+            | Aeneas.Std.Result.div => Aeneas.Std.Result.div) =
+            Aeneas.Std.Result.ok out →
+          ↑out = List.map (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block) (List.range 8))
+    (AspisR1SelectedMaskProbe.arrayFromFnLoop 8#usize
+      AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 (↑8#usize + 1)
+      0#usize block [])
+    (fun values snd h h_1 =>
+      Eq.ndrec (motive := fun x =>
+        ∀
+          (heq :
+            AspisR1SelectedMaskProbe.arrayFromFnLoop 8#usize
+                AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+                (↑8#usize + 1) 0#usize block [] =
+              x),
+          (match h : x with
+              | Aeneas.Std.Result.ok (values, snd) =>
+                Aeneas.Std.Result.ok
+                  ⟨values,
+                    AspisR1SelectedMaskProbe.core.array.from_fn._proof_3 8#usize
+                      AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+                      block values snd (Eq.trans heq h)⟩
+              | Aeneas.Std.Result.fail error => Aeneas.Std.Result.fail error
+              | Aeneas.Std.Result.div => Aeneas.Std.Result.div) =
+              Aeneas.Std.Result.ok out →
+            ↑out = List.map (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block) (List.range 8))
+        (fun heq =>
+          id fun hrank =>
+            have hout := Aeneas.Std.Result.ok.inj hrank;
+            have hvalues :=
+              AspisR1SelectedMaskProbe.arrayFromFnLoop_values_of_stable callback
+                (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block) (↑8#usize + 1) 0#usize block [] values snd
+                (Eq.mpr (id (congrArg (fun _a => _a ≤ ↑8#usize) h0))
+                  (Eq.mpr (id (congrArg (fun _a => 0 ≤ _a) h8))
+                    (Decidable.byContradiction fun a =>
+                      AspisR1QueryScanUnrolled.r0_transcript.block_rank_success_words_in_order._proof_7 a)))
+                (Eq.mpr (id (congrArg (fun _a => ↑8#usize - _a ≤ ↑8#usize + 1) h0))
+                  (Eq.mpr (id (congrArg (fun _a => _a - 0 ≤ _a + 1) h8))
+                    (Decidable.byContradiction fun a =>
+                      AspisR1QueryScanUnrolled.r0_transcript.block_rank_success_words_in_order._proof_8 a)))
+                (of_eq_true
+                  (Eq.trans
+                    (congrArg (Eq [])
+                      (congrArg (List.map (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block))
+                        (congrArg List.range h0)))
+                    (eq_self [])))
+                hstable heq;
+            have hv :=
+              Eq.mp
+                (congrArg (Eq values)
+                  (congrArg (List.map (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block))
+                    (congrArg List.range h8)))
+                hvalues.left;
+            Eq.trans (Eq.symm (congrArg (fun a => ↑a) hout)) hv)
+        (Eq.symm h_1)
+        (Eq.refl
+          (AspisR1SelectedMaskProbe.arrayFromFnLoop 8#usize
+            AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+            (↑8#usize + 1) 0#usize block [])))
+    (fun error h h_1 =>
+      Eq.ndrec (motive := fun x =>
+        ∀
+          (heq :
+            AspisR1SelectedMaskProbe.arrayFromFnLoop 8#usize
+                AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+                (↑8#usize + 1) 0#usize block [] =
+              x),
+          (match h : x with
+              | Aeneas.Std.Result.ok (values, snd) =>
+                Aeneas.Std.Result.ok
+                  ⟨values,
+                    AspisR1SelectedMaskProbe.core.array.from_fn._proof_3 8#usize
+                      AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+                      block values snd (Eq.trans heq h)⟩
+              | Aeneas.Std.Result.fail error => Aeneas.Std.Result.fail error
+              | Aeneas.Std.Result.div => Aeneas.Std.Result.div) =
+              Aeneas.Std.Result.ok out →
+            ↑out = List.map (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block) (List.range 8))
+        (fun heq =>
+          id fun hrank =>
+            False.elim (Eq.mp (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)) hrank))
+        (Eq.symm h_1)
+        (Eq.refl
+          (AspisR1SelectedMaskProbe.arrayFromFnLoop 8#usize
+            AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+            (↑8#usize + 1) 0#usize block [])))
+    (fun h h_1 =>
+      Eq.ndrec (motive := fun x =>
+        ∀
+          (heq :
+            AspisR1SelectedMaskProbe.arrayFromFnLoop 8#usize
+                AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+                (↑8#usize + 1) 0#usize block [] =
+              x),
+          (match h : x with
+              | Aeneas.Std.Result.ok (values, snd) =>
+                Aeneas.Std.Result.ok
+                  ⟨values,
+                    AspisR1SelectedMaskProbe.core.array.from_fn._proof_3 8#usize
+                      AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+                      block values snd (Eq.trans heq h)⟩
+              | Aeneas.Std.Result.fail error => Aeneas.Std.Result.fail error
+              | Aeneas.Std.Result.div => Aeneas.Std.Result.div) =
+              Aeneas.Std.Result.ok out →
+            ↑out = List.map (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block) (List.range 8))
+        (fun heq =>
+          id fun hrank =>
+            have hdiv := rfl;
+            False.elim (Eq.mp Bool.false_eq_true (Eq.mp (congrArg (fun _a => Aeneas.Std.div? _a = true) hrank) hdiv)))
+        (Eq.symm h_1)
+        (Eq.refl
+          (AspisR1SelectedMaskProbe.arrayFromFnLoop 8#usize
+            AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32
+            (↑8#usize + 1) 0#usize block [])))
+    (Eq.refl
+      (AspisR1SelectedMaskProbe.arrayFromFnLoop 8#usize
+        AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32 (↑8#usize + 1)
+        0#usize block []))
+    hrank
+theorem AspisR1QueryScanUnrolled.r0_transcript.query_words_success_byte_mask : ∀
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (words : Aeneas.Std.Array Aeneas.Std.U32 8#usize),
+  AspisR1QueryScanUnrolled.r0_transcript.query_words block = Aeneas.Std.Result.ok words →
+    ↑words =
+      List.map
+        (fun j =>
+          AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+            (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block j))
+        (List.range 8) :=
+fun block words hqw =>
+  Aeneas.Std.Result.casesOn (motive := fun t =>
+    AspisR1QueryScanUnrolled.r0_transcript.block_rank block = t →
+      ↑words =
+        List.map
+          (fun j =>
+            AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+              (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block j))
+          (List.range 8))
+    (AspisR1QueryScanUnrolled.r0_transcript.block_rank block)
+    (fun ranks h =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1QueryScanUnrolled.r0_transcript.block_rank block = x →
+          ↑words =
+            List.map
+              (fun j =>
+                AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+                  (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block j))
+              (List.range 8))
+        (fun hrank =>
+          Aeneas.Std.Result.casesOn (motive := fun t =>
+            AspisR1QueryScanUnrolled.core.array.Array.map
+                  AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32 ranks
+                  () =
+                t →
+              ↑words =
+                List.map
+                  (fun j =>
+                    AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+                      (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block j))
+                  (List.range 8))
+            (AspisR1QueryScanUnrolled.core.array.Array.map
+              AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32 ranks ())
+            (fun out h =>
+              Eq.ndrec (motive := fun x =>
+                AspisR1QueryScanUnrolled.core.array.Array.map
+                      AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                      ranks () =
+                    x →
+                  ↑words =
+                    List.map
+                      (fun j =>
+                        AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+                          (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block j))
+                      (List.range 8))
+                (fun hmap =>
+                  have hout :=
+                    Eq.mp
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun' (congrArg bind hrank) fun ranks =>
+                                  AspisR1QueryScanUnrolled.core.array.Array.map
+                                    AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                                    ranks ())
+                                (Aeneas.Std.bind_tc_ok ranks fun y =>
+                                  AspisR1QueryScanUnrolled.core.array.Array.map
+                                    AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                                    y ()))
+                              hmap))
+                          (Aeneas.Std.Result.ok words))
+                        (Aeneas.Std.Result.ok.injEq out words))
+                      hqw;
+                  have horder :=
+                    AspisR1QueryScanUnrolled.r0_transcript.block_rank_success_words_in_order block ranks hrank;
+                  let callback :=
+                    AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32;
+                  have hstable := fun x a => AspisR1QueryScanUnrolled.r0_transcript.query_mask_call_mut_exact () x;
+                  have hstate :=
+                    AspisR1QueryScanUnrolled.r0_transcript.mapState_stable✝ callback.call_mut ()
+                      AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord (↑ranks) hstable;
+                  let masked :=
+                    ⟨List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord ↑ranks,
+                      of_eq_true
+                        (Eq.trans
+                          (congr
+                            (congrArg Eq
+                              (Eq.trans (List.length_map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord)
+                                (Eq.trans (List.Vector.length_val ranks)
+                                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 8
+                                      (of_decide_eq_true (id (Eq.refl true))))))))
+                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                              (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 8
+                                (of_decide_eq_true (id (Eq.refl true))))))
+                          (eq_self 8))⟩;
+                  have hmodel :=
+                    id
+                      (have h :=
+                        Aeneas.Std.core.array.Array.map_success callback ranks ()
+                          (List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord ↑ranks) () hstate;
+                      id h);
+                  have hvals :=
+                    have heq := Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm hmap) hmodel);
+                    congrArg (fun a => ↑a) heq;
+                  Eq.ndrec (motive := fun words =>
+                    (do
+                          let ranks ← AspisR1QueryScanUnrolled.r0_transcript.block_rank block
+                          AspisR1QueryScanUnrolled.core.array.Array.map
+                              AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                              ranks ()) =
+                        Aeneas.Std.Result.ok words →
+                      ↑words =
+                        List.map
+                          (fun j =>
+                            AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+                              (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block j))
+                          (List.range 8))
+                    (fun hqw =>
+                      Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              _a =
+                                List.map
+                                  (fun j =>
+                                    AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+                                      (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block j))
+                                  (List.range 8))
+                            hvals))
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord _a =
+                                  List.map
+                                    (fun j =>
+                                      AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+                                        (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block j))
+                                    (List.range 8))
+                              horder))
+                          (Eq.refl
+                            (List.map AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+                              (List.map (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block) (List.range 8))))))
+                    hout hqw)
+                (Eq.symm h)
+                (Eq.refl
+                  (AspisR1QueryScanUnrolled.core.array.Array.map
+                    AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                    ranks ())))
+            (fun e h =>
+              Eq.ndrec (motive := fun x =>
+                AspisR1QueryScanUnrolled.core.array.Array.map
+                      AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                      ranks () =
+                    x →
+                  ↑words =
+                    List.map
+                      (fun j =>
+                        AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+                          (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block j))
+                      (List.range 8))
+                (fun hmap =>
+                  False.elim
+                    (Eq.mp
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun' (congrArg bind hrank) fun ranks =>
+                                  AspisR1QueryScanUnrolled.core.array.Array.map
+                                    AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                                    ranks ())
+                                (Aeneas.Std.bind_tc_ok ranks fun y =>
+                                  AspisR1QueryScanUnrolled.core.array.Array.map
+                                    AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                                    y ()))
+                              hmap))
+                          (Aeneas.Std.Result.ok words))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                      hqw))
+                (Eq.symm h)
+                (Eq.refl
+                  (AspisR1QueryScanUnrolled.core.array.Array.map
+                    AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                    ranks ())))
+            (fun h =>
+              Eq.ndrec (motive := fun x =>
+                AspisR1QueryScanUnrolled.core.array.Array.map
+                      AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                      ranks () =
+                    x →
+                  ↑words =
+                    List.map
+                      (fun j =>
+                        AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+                          (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block j))
+                      (List.range 8))
+                (fun hmap =>
+                  False.elim
+                    (Eq.mp
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun' (congrArg bind hrank) fun ranks =>
+                                  AspisR1QueryScanUnrolled.core.array.Array.map
+                                    AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                                    ranks ())
+                                (Aeneas.Std.bind_tc_ok ranks fun y =>
+                                  AspisR1QueryScanUnrolled.core.array.Array.map
+                                    AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                                    y ()))
+                              hmap))
+                          (Aeneas.Std.Result.ok words))
+                        (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                      hqw))
+                (Eq.symm h)
+                (Eq.refl
+                  (AspisR1QueryScanUnrolled.core.array.Array.map
+                    AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                    ranks ())))
+            (Eq.refl
+              (AspisR1QueryScanUnrolled.core.array.Array.map
+                AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32 ranks
+                ())))
+        (Eq.symm h) (Eq.refl (AspisR1QueryScanUnrolled.r0_transcript.block_rank block)))
+    (fun e h =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1QueryScanUnrolled.r0_transcript.block_rank block = x →
+          ↑words =
+            List.map
+              (fun j =>
+                AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+                  (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block j))
+              (List.range 8))
+        (fun hrank =>
+          False.elim
+            (Eq.mp
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrFun' (congrArg bind hrank) fun ranks =>
+                        AspisR1QueryScanUnrolled.core.array.Array.map
+                          AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                          ranks ())
+                      (Aeneas.Std.bind_tc_fail e fun y =>
+                        AspisR1QueryScanUnrolled.core.array.Array.map
+                          AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                          y ())))
+                  (Aeneas.Std.Result.ok words))
+                (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+              hqw))
+        (Eq.symm h) (Eq.refl (AspisR1QueryScanUnrolled.r0_transcript.block_rank block)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1QueryScanUnrolled.r0_transcript.block_rank block = x →
+          ↑words =
+            List.map
+              (fun j =>
+                AspisR1QueryScanUnrolled.r0_transcript.queryMaskWord
+                  (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block j))
+              (List.range 8))
+        (fun hrank =>
+          False.elim
+            (Eq.mp
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrFun' (congrArg bind hrank) fun ranks =>
+                        AspisR1QueryScanUnrolled.core.array.Array.map
+                          AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                          ranks ())
+                      (Aeneas.Std.bind_tc_div fun y =>
+                        AspisR1QueryScanUnrolled.core.array.Array.map
+                          AspisR1QueryScanUnrolled.r0_transcript.query_words.closure.Insts.CoreOpsFunctionFnMutTupleU32U32
+                          y ())))
+                  (Aeneas.Std.Result.ok words))
+                (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+              hqw))
+        (Eq.symm h) (Eq.refl (AspisR1QueryScanUnrolled.r0_transcript.block_rank block)))
+    (Eq.refl (AspisR1QueryScanUnrolled.r0_transcript.block_rank block))
+def AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan.finish : AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+      AspisR1Query31Transcript.aspis_core.transcript.QuerySampleError) :=
+fun self =>
+  if self.accepted_len = AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_COUNT then
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok self.accepted)
+  else
+    Aeneas.Std.Result.ok
+      (Aeneas.Std.core.result.Result.Err
+        (AspisR1Query31Transcript.aspis_core.transcript.QuerySampleError.DrawLimitExhausted self.accepted_len
+          AspisR1Query31Transcript.aspis_core.r0_transcript.QUERY_MAX_DRAWS))
+def Query31ModelScanCall.modelScanFn : (Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+    Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U32 8#usize)) →
+  Query31ModelScanCall.QueryScan →
+    Aeneas.Std.Array Aeneas.Std.U8 32#usize → Aeneas.Std.Result (Bool × Query31ModelScanCall.QueryScan) :=
+fun decodeBlock s block => do
+  let words ← decodeBlock block
+  let __x ← Query31ExplicitListLoop.scanListLoop (↑words) s
+  match __x with
+    | (sf, pending) => Aeneas.Std.Result.ok (Query31ExplicitListLoop.optionStop pending, sf)
+def Query31ExplicitListLoop.scanListLoop : List Aeneas.Std.U32 →
+  Query31ExplicitListLoop.CurrentScan → Aeneas.Std.Result (Query31ExplicitListLoop.CurrentScan × Option Bool) :=
+fun xs s => Aeneas.Std.loop Query31ExplicitListLoop.step (xs, s)
+theorem AspisR1.NHK_NativeWords.association : ∀ {cursor last : ℕ} {xs : List Aeneas.Std.U32}
+  {s final : AspisR1.NHK_NativeWords.State} {pending : Option Bool},
+  AspisR1.NHK_NativeWords.Cuts cursor xs s final last pending →
+    AspisR1.NHB_WordTrace.Trace cursor xs s final last pending :=
+fun {cursor last} {xs} {s final} {pending} cuts =>
+  AspisR1.NHK_NativeWords.Cuts.rec (fun cursor s => AspisR1.NHB_WordTrace.Trace.exhausted cursor s)
+    (fun cursor last x xs s after reply full windows =>
+      let ⟨left✝, right✝⟩ := AspisR1.NHK_WordAssociation.stopped_post s after x cursor last true reply full windows
+      let ⟨hc, ha⟩ := right✝
+      Eq.ndrec (motive := fun after =>
+        (∀ (j : Fin 22),
+            AspisR1.NHB_Observation.observe after x last true j = AspisR1.NHK_WordAssociation.G s x cursor reply j) →
+          AspisR1.NHB_WordTrace.Trace cursor (x :: xs) s after last none)
+        (fun windows =>
+          Eq.ndrec (motive := fun last =>
+            (∀ (j : Fin 22),
+                AspisR1.NHB_Observation.observe s x last true j = AspisR1.NHK_WordAssociation.G s x cursor reply j) →
+              AspisR1.NHB_WordTrace.Trace cursor (x :: xs) s s last none)
+            (fun windows =>
+              have hfull :=
+                Or.casesOn full (fun hn => Or.inl (Aeneas.Std.UScalar.eq_of_val_eq hn)) fun hd =>
+                  Or.inr (Aeneas.Std.UScalar.eq_of_val_eq hd);
+              AspisR1.NHB_WordTrace.Trace.stopped cursor x xs s hfull)
+            (Eq.symm hc) windows)
+        (Eq.symm ha) windows)
+    (fun cursor nextCursor last x xs s after final pending reply hlen hdraw value windows tail ih =>
+      have observed := fun j => Eq.trans (windows j) (AspisR1.NHK_WordAssociation.substitute s x cursor reply value j);
+      let ⟨left✝¹, right✝¹⟩ :=
+        AspisR1.NHB_Observation.continuing_frame s after x cursor nextCursor false hlen hdraw observed
+      let ⟨hc, frame⟩ := right✝¹
+      Eq.ndrec (motive := fun nextCursor =>
+        (∀ (j : Fin 22),
+            AspisR1.NHB_Observation.observe after x nextCursor false j =
+              AspisR1.NHK_WordAssociation.G s x cursor reply j) →
+          AspisR1.NHK_NativeWords.Cuts nextCursor xs after final last pending →
+            AspisR1.NHB_WordTrace.Trace nextCursor xs after final last pending →
+              AspisR1.NHB_Observation.Relation s after x cursor nextCursor false →
+                AspisR1.NHB_WordTrace.Trace cursor (x :: xs) s final last pending)
+        (fun windows tail ih observed =>
+          AspisR1.NHB_WordTrace.Trace.continuing cursor x xs s after final last pending hlen hdraw frame ih)
+        (Eq.symm hc) windows tail ih observed)
+    cuts

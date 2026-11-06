@@ -1,0 +1,20 @@
+#[cfg(kani)] pub mod NJT_resize_window {
+ use super::*;
+ use alloc::vec::Vec;
+ use aspis_core::field::{CM31,M31};
+ type Claims=[[QM31;29];3];
+ fn q()->QM31{QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}}
+ fn native(out:&mut Vec<Claims>,value:Claims){out.resize(1,value);}
+ pub fn check(negative:bool){
+  let value:Claims=core::array::from_fn(|_|core::array::from_fn(|_|q()));
+  let offset:usize=kani::any();kani::assume(offset<348);
+  let expected=unsafe{value.as_ptr().cast::<u32>().add(offset).read()};
+  let mut out:Vec<Claims>=Vec::new();out.try_reserve_exact(1).unwrap();
+  // Data cut starts here: reserve finished, len0 and cap>=1. Exactly ONE
+  // native resize/push iteration. Allocation identity is a separate cut.
+  native(&mut out,value);
+  assert_eq!(out.len(),1);
+  let got=unsafe{out[0].as_ptr().cast::<u32>().add(offset).read()};
+  if negative{assert_eq!(got,expected^1);}else{assert_eq!(got,expected);}
+ }
+}

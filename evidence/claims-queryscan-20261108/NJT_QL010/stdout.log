@@ -1,0 +1,80 @@
+NJT_Q_generated/NJT_QScan.lean:41:23: error: unsolved goals
+case stopped
+native : Native
+cut : Cut native
+xs✝ : List U32
+s✝ final : State
+stop : Option Bool
+x : U32
+xs : List U32
+s : NGQ_SamplerTrace.State
+full : s.accepted_len = 22#usize ∨ s.draws = 64#usize
+valid : validState s
+hf : ↑s.accepted_len = 22 ∨ ↑s.draws = 64
+reply : Bool := NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted)
+h : (native s x reply).stop = true ∧ 1 = 0 + 1 ∧ (native s x reply).state = s
+⊢ (if (native s x (NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted))).stop = true then
+      ((native s x (NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted))).state, none)
+    else run native xs (native s x (NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted))).state) =
+    (s, none)
+NJT_Q_generated/NJT_QScan.lean:59:2: error: Type mismatch
+  ih vn
+has type
+  run native xs next = (final, stop)
+but is expected to have type
+  (if (native s x (NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted))).stop = true then
+      ((native s x (NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted))).state, none)
+    else run native xs (native s x (NHB_Membership.reference x (List.take ↑s.accepted_len ↑s.accepted))).state) =
+    (final, stop)
+NJT_Q_generated/NJT_QScan.lean:49:17: warning: This simp argument is unused:
+  h.1
+
+Hint: Omit it from the simp argument list.
+  simp only [run,h̵.̵1̵,̵ ̲if_true, ̲h.2.2]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJT_Q_generated/NJT_QScan.lean:49:21: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵h̵.̵1̵,̵i̵f̵_̵t̵r̵u̵e̵,̵h̵.̵2̵.̵2̵]̵[̲r̲u̲n̲,̲ ̲h̲.̲1̲,̲ ̲h̲.̲2̲.̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJT_Q_generated/NJT_QScan.lean:49:29: warning: This simp argument is unused:
+  h.2.2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵h̵.̵1̵,̵i̵f̵_̵t̵r̵u̵e̵,̵h̵.̵2̵.̵2̵]̵[̲r̲u̲n̲,̲ ̲h̲.̲1̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJT_Q_generated/NJT_QScan.lean:58:17: warning: This simp argument is unused:
+  h.1
+
+Hint: Omit it from the simp argument list.
+  simp only [run,h̵.̵1̵,̵ ̲if_false, ̲h.2.2]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJT_Q_generated/NJT_QScan.lean:58:21: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵h̵.̵1̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵h̵.̵2̵.̵2̵]̵[̲r̲u̲n̲,̲ ̲h̲.̲1̲,̲ ̲h̲.̲2̲.̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJT_Q_generated/NJT_QScan.lean:58:30: warning: This simp argument is unused:
+  h.2.2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵h̵.̵1̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵h̵.̵2̵.̵2̵]̵[̲r̲u̲n̲,̲ ̲h̲.̲1̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NJT_QScan.trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJT_QScan.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJT_QScan.scan' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+scan : ∀ (native : Native),
+  Cut native →
+    ∀ (s : State),
+      validState s →
+        ∀ (b : Bytes),
+          Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords s b =
+            ok (optionStop (run native (↑(words b)) s).2, (run native (↑(words b)) s).1)

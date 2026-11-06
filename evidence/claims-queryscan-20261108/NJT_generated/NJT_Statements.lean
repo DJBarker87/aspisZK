@@ -1,0 +1,17 @@
+import NJT_COMBINED_IMPORT
+#print AspisR1.NJT_ClaimsRoot.Packet
+#print AspisR1.NJT_ClaimsRoot.claims
+#print AspisR1.NJT_ClaimsRef_Value.std
+#print AspisR1.NJT_AllocationLift.named_allocator
+#print AspisR1.NJT_QLeaves.RankCut
+#print AspisR1.NJT_QLeaves.WordsCut
+#print AspisR1.NJT_QLeaves.FinishCut
+#print AspisR1.NJT_QLeaves.block_rank
+#print AspisR1.NJT_QLeaves.query_words
+#print AspisR1.NJT_QLeaves.finish
+#print AspisR1.NJT_QScan.Native
+#print AspisR1.NJT_QScan.Cut
+#print AspisR1.NJT_QDomains.Domain
+#print AspisR1.NJT_QReached.scan
+#print AspisR1.NJT_QPairs.reference
+#print AspisR1.NJT_QClaimsCanonical.claims

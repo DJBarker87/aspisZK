@@ -1,0 +1,28 @@
+#[cfg(kani)] pub mod NJT_allocation_cut {
+ use super::*;
+ use core::mem::MaybeUninit;
+ type Claims=[[QM31;29];3];
+ type Storage=Box<MaybeUninit<Claims>>;
+ // Frozen claims allocation-continuation prefix, with the allocator's full
+ // returning Result explicit. No initialized payload is read at this cut.
+ fn native(reply:Result<Storage,aspis_core::r0::Error>)->Result<Storage,Error>{
+  let out=reply.map_err(|_|Error::Allocation)?;
+  Ok(out)
+ }
+ pub fn check(negative:bool){
+  assert_eq!(core::mem::size_of::<Claims>(),1392);
+  assert_eq!(core::mem::size_of::<MaybeUninit<Claims>>(),1392);
+  assert_eq!(core::mem::align_of::<Claims>(),4);
+  assert_eq!(core::mem::align_of::<MaybeUninit<Claims>>(),4);
+  assert!(!core::mem::needs_drop::<Claims>());
+  let returning:bool=kani::any();
+  let source=aspis_core::r0::heap::uninit::<Claims>().unwrap();
+  let pointer=source.as_ptr();
+  let reply=if returning{Ok(source)}else{drop(source);Err(aspis_core::r0::Error::Allocation)};
+  let result=native(reply);
+  match result{
+   Ok(out)=>{assert!(returning);assert_eq!(out.as_ptr(),pointer);},
+   Err(e)=>{assert!(!returning);assert!(matches!(e,Error::Allocation));if negative{assert!(returning);}}
+  }
+ }
+}

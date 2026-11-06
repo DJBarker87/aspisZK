@@ -1,0 +1,41 @@
+NJT_Q_generated/NJT_QPairs.lean:27:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case cons
+native : NJT_QScan.Native
+cut : NJT_QScan.Cut native
+advances : Blocks
+fallback : Usize
+head : Bytes32 × Usize
+tail : List (Bytes32 × Usize)
+ih :
+  ∀ (s : State),
+    NJT_QDomains.Domain s →
+      NGQ_SamplerDriver.walk NGQ_SamplerPacket.Scan advances fallback tail s =
+        NGQ_SamplerDriver.walk (nativeScan native) advances fallback tail s
+s : State
+domain : NJT_QDomains.Domain s
+call :
+  Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords s head.1 =
+    ok (optionStop (NJT_QScan.run native (↑(words head.1)) s).2, (NJT_QScan.run native (↑(words head.1)) s).1)
+⊢ (let (stop, next) :=
+      (optionStop (NJT_QScan.run native (↑(words head.1)) s).2, (NJT_QScan.run native (↑(words head.1)) s).1)
+    if stop = true then AspisR1Query31Transcript.finishAdvance advances head.2 next
+    else
+      NGQ_SamplerDriver.walk (Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords)
+        advances fallback tail next) =
+    let (stop, next) :=
+      (optionStop (NJT_QScan.run native (↑(words head.1)) s).2, (NJT_QScan.run native (↑(words head.1)) s).1)
+    if stop = true then AspisR1Query31Transcript.finishAdvance advances head.2 next
+    else NGQ_SamplerDriver.walk (nativeScan native) advances fallback tail next
+'AspisR1.NJT_QPairs.walk_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJT_QPairs.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+reference : ∀ (native : NJT_QScan.Native),
+  NJT_QScan.Cut native →
+    ∀ (blocks advances : Blocks),
+      AspisR1Query31Transcript.queries_from_pairs_with_scan NGQ_SamplerPacket.Scan NGQ_SamplerPacket.initial blocks
+          advances =
+        NGQ_SamplerDriver.walk (nativeScan native) advances 7#usize
+          ((↑blocks).zip [0#usize, 1#usize, 2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize])
+          NGQ_SamplerPacket.initial

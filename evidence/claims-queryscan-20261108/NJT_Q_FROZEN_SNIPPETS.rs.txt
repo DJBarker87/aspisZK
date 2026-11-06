@@ -1,0 +1,58 @@
+// TX1:066 crates/aspis-core/src/r0_transcript.rs::QueryScan::finish
+{
+        if self.accepted_len == QUERY_COUNT {
+            Ok(self.accepted)
+        } else {
+            Err(QuerySampleError::DrawLimitExhausted {
+                accepted: self.accepted_len,
+                max_draws: QUERY_MAX_DRAWS,
+            })
+        }
+    }
+
+// TX1:067 crates/aspis-core/src/r0_transcript.rs::QueryScan::scan
+{
+        for candidate in query_words(block) {
+            if self.accepted_len == QUERY_COUNT || self.draws == QUERY_MAX_DRAWS {
+                return true;
+            }
+            self.draws += 1;
+            if !self.accepted[..self.accepted_len].contains(&candidate) {
+                self.accepted[self.accepted_len] = candidate;
+                self.accepted_len += 1;
+            }
+        }
+        false
+    }
+
+// TX1:068 crates/aspis-core/src/r0_transcript.rs::block_rank
+{
+    core::array::from_fn(|i| {
+        let j = 4 * i;
+        u32::from_le_bytes([block[j], block[j + 1], block[j + 2], block[j + 3]])
+    })
+}
+
+// TX1:069 crates/aspis-core/src/r0_transcript.rs::queries_from_pairs
+{
+    let mut scan = QueryScan::default();
+    let mut state = advances[7];
+    for k in 0..8 {
+        if scan.scan(&blocks[k]) {
+            state = advances[k];
+            break;
+        }
+    }
+    Ok((scan.finish()?, state))
+}
+
+// TX1:070 crates/aspis-core/src/r0_transcript.rs::query_words
+{
+    block_rank(block).map(|word| word & (QUERY_BOUND - 1))
+}
+
+// TX1:202 crates/aspis-statement/src/pool_v1/incremental_merkle.rs::IncrementalMerkleTreeV1::default
+{
+        Self::empty()
+    }
+

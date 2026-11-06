@@ -1,0 +1,24 @@
+{"attempt": "NJT_QL029", "exit_status": 0, "wall_seconds": 7.851797017036006, "peak_rss_kib": "6054064", "swaps": "0", "print_axioms": ["'AspisR1.NJT_QClaimsCanonical.strict_frame' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJT_QClaimsCanonical.decode' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJT_QClaimsCanonical.claims' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NJT_QClaimsCanonical.strict_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QClaimsCanonical.decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QClaimsCanonical.claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+claims : ∀ (bytes : Slice U8) (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix),
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre) →
+    ∃ record,
+      (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok record) ∧
+        record.row = 25#u8 ∧
+          ∀ (p off : Usize),
+            ↑p < 3 → ↑off = ↑p * 29 → ∃ out, decodeMain 29#u
+...
+'AspisR1.NJT_QClaimsCanonical.strict_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QClaimsCanonical.decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QClaimsCanonical.claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+claims : ∀ (bytes : Slice U8) (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix),
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre) →
+    ∃ record,
+      (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok record) ∧
+        record.row = 25#u8 ∧
+          ∀ (p off : Usize),
+            ↑p < 3 → ↑off = ↑p * 29 → ∃ out, decodeMain 29#usize record off = ok (core.result.Result.Ok out)
+
+Running as unit: run-rc34522738a0f414c8b57c13a6cac0a15.scope; invocation ID: b13c77aaaf76429aa1d5c09741ff9040
