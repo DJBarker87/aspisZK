@@ -1,0 +1,13 @@
+# NLE remaining work
+
+Target not yet established. None of the five rows is proposed CLOSED.
+
+- **064:** the checked source kernel and exact parser installation are available; native independent-oracle Result/descriptor and split byte-frame diagnostics remain narrower than a complete physical invocation packet. Need its reviewed ghost-record/heap association, all original-input frame clauses, full source/native event interpretation, and the exact OPEN065 row-packet signature. Result-only CommonResultPacket cannot replace that signature.
+- **241:** source G has one chronological State and all typed occurrences, including error conversion. It still takes intermediate Ops. Need complete native parent stage cuts and source-typed installation of CLOSED data/encoder/error/emit packets, all nominal carrier ports and every caller domain, with OPEN242/233 as exact complete packet parameters. Existing NLA leaf/ABI gaps remain visible; no successful child/allocation may be added.
+- **240:** local seven-snapshot/Clock/clear source fold is checked. Need actual SDK wrapper native cuts at original AccountInfo/guard/owned carriers, SAME-call SDK/runtime realization (only within accepted trust scopes), seven CLOSED snapshot packet instances, Clock/status/frame and cleanup association, and the complete241 packet. NJN partial projections are not a complete substitute for those carriers. A new standalone SDK law is outside these five owned rows; record/reuse an admitted law, not a new trust item.
+- **221:** unrestricted emission/Result fold and ASQ8 route/state/effects specialization are checked. Need native complete descriptor/frame association and the full240 packet. Lifecycle/stage1 alternatives cannot be pruned without their actual route context; no stronger root ASQ8 premise is introduced.
+- **213:** deployed entry emission and rejection-before-dispatch are checked. Need the complete221 packet and exact native admission/continuation frame chain. RuntimeEntrypointAdmission's seven fields do not alone supply SDK implementation/caller carrier laws.
+
+## Budget and early-stop discipline
+
+The allowance remains30 Kani /130 Lean /0 extraction. This document is incremental: final exact use is NLE_AUDIT.json. No claim is made that unused allowance itself justifies stopping, or that every conceivable independent source lemma is impossible. Independent source, per-call domain, split native-frame and combined-import audits continue while the exact OPEN-child statement clarification is pending. Dependent (bd)(3) folds cannot be certified by the currently available Result-only callbacks. Do not report this packet as a complete fold deliverable or promote any row.

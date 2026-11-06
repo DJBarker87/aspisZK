@@ -1,0 +1,46 @@
+{"attempt": "NLE_L057", "exit_status": 0, "wall_seconds": 11.712396444985643, "peak_rss_kib": "6022632", "swaps": "0", "print_axioms": ["'NLE_AuthLiteral.installed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLE_generated/NLE_AuthLiteral.lean:18:21: warning: This simp argument is unused:
+  parsed
+
+Hint: Omit it from the simp argument list.
+  simp [p̵a̵r̵s̵e̵d̵,̵Bind.bind, ̲Pure.pure, ̲NJU_Log.bind, ̲NJU_Log.record, ̲tryR]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLE_generated/NLE_AuthLiteral.lean:18:38: warning: This simp argument is unused:
+  Pure.pure
+
+Hint: Omit it from the simp argument list.
+  simp [̵p̵a̵r̵s̵e̵d̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵t̵r̵y̵R̵]̵[̲p̲a̲r̲s̲e̲d̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲t̲r̲y̲R̲]̲
+
+Note: This linter can b
+...
+roof = x →
+                      (do
+                          let reply ←
+                            do
+                              let reply ← NJU_Log.record (Event.parse s.frame.proof) x
+                              tryR reply fun variant =>
+                                  pure
+                                    (core.result.Result.Ok
+                                      { frame := s.frame, parsed := some variant, history := s.history })
+                          tryR reply fun post => do
+                              let next ←
+                                do
+                                  NJU_Log.record (Event.mark post.frame.observer)
+                                      (NHV_ReleaseOps.mark post.frame.observer
+                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                  pure post
+                              NJU_Log.record (Event.common next.frame) (child next.frame)) =
+                        do
+                        let parsed ← NJU_Log.record (Event.parse s.frame.proof) x
+                        tryR parsed fun x => do
+                            NJU_Log.record (Event.mark s.frame.observer)
+                                (NHV_ReleaseOps.mark s.frame.observer
+                                  AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                            NJU_Log.record (Event.common s.frame) (child s.frame))
+                    (fun parsed => of_eq_true (eq_self { result := div, events := [Event.parse s.frame.proof div] }))
+                    (Eq.symm h) (Eq.refl (NLE_ParseInstall.parse s.frame.proof)))
+                (Eq.refl (NLE_ParseInstall.parse s.frame.proof))))))))
+'NLE_AuthLiteral.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4c21b865078441a5842d19b754565896.scope; invocation ID: 104dbf0023f646f5a5247eaf54195910

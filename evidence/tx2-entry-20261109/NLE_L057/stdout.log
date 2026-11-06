@@ -1,0 +1,1906 @@
+NLE_generated/NLE_AuthLiteral.lean:18:21: warning: This simp argument is unused:
+  parsed
+
+Hint: Omit it from the simp argument list.
+  simp [p̵a̵r̵s̵e̵d̵,̵Bind.bind, ̲Pure.pure, ̲NJU_Log.bind, ̲NJU_Log.record, ̲tryR]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLE_generated/NLE_AuthLiteral.lean:18:38: warning: This simp argument is unused:
+  Pure.pure
+
+Hint: Omit it from the simp argument list.
+  simp [̵p̵a̵r̵s̵e̵d̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵t̵r̵y̵R̵]̵[̲p̲a̲r̲s̲e̲d̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲t̲r̲y̲R̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLE_generated/NLE_AuthLiteral.lean:18:76: warning: This simp argument is unused:
+  tryR
+
+Hint: Omit it from the simp argument list.
+  simp [parsed, ̲Bind.bind, ̲Pure.pure, ̲NJU_Log.bind, ̲NJU_Log.record,̵t̵r̵y̵R̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLE_generated/NLE_AuthLiteral.lean:19:16: warning: This simp argument is unused:
+  parsed
+
+Hint: Omit it from the simp argument list.
+  simp [p̵a̵r̵s̵e̵d̵,̵Bind.bind, ̲Pure.pure, ̲NJU_Log.bind, ̲NJU_Log.record, ̲tryR]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLE_generated/NLE_AuthLiteral.lean:19:33: warning: This simp argument is unused:
+  Pure.pure
+
+Hint: Omit it from the simp argument list.
+  simp [̵p̵a̵r̵s̵e̵d̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵t̵r̵y̵R̵]̵[̲p̲a̲r̲s̲e̲d̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲t̲r̲y̲R̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLE_generated/NLE_AuthLiteral.lean:19:71: warning: This simp argument is unused:
+  tryR
+
+Hint: Omit it from the simp argument list.
+  simp [parsed, ̲Bind.bind, ̲Pure.pure, ̲NJU_Log.bind, ̲NJU_Log.record,̵t̵r̵y̵R̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLE_generated/NLE_AuthLiteral.lean:22:21: warning: This simp argument is unused:
+  parsed
+
+Hint: Omit it from the simp argument list.
+  simp [p̵a̵r̵s̵e̵d̵,̵Bind.bind, ̲Pure.pure, ̲NJU_Log.bind, ̲NJU_Log.record, ̲tryR]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLE_generated/NLE_AuthLiteral.lean:25:10: warning: This simp argument is unused:
+  parsed
+
+Hint: Omit it from the simp argument list.
+  simp [p̵a̵r̵s̵e̵d̵,̵marker, ̲Bind.bind, ̲Pure.pure, ̲NJU_Log.bind, ̲NJU_Log.record, ̲tryR]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+def NLE_AuthLiteral.G : {H : Type} → Common H → Frame H → Run H Reply :=
+fun {H} child frame => do
+  let parsed ← NJU_Log.record (Event.parse frame.proof) (NLE_ParseInstall.parse frame.proof)
+  tryR parsed fun x => do
+      NJU_Log.record (Event.mark frame.observer)
+          (NHV_ReleaseOps.mark frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+      NJU_Log.record (Event.common frame) (child frame)
+theorem NLE_AuthLiteral.installed : ∀ {H : Type} (ops : Ops) (child : Common H) (s : State H),
+  NLE_Auth.G (NLE_AuthScope.install ops) child s = G child s.frame :=
+fun {H} ops child s =>
+  id
+    (id
+      (id
+        (id
+          (id
+            (id
+              (casesOn (motive := fun t =>
+                NLE_ParseInstall.parse s.frame.proof = t →
+                  (do
+                      let reply ←
+                        do
+                          let reply ← NJU_Log.record (Event.parse s.frame.proof) (NLE_ParseInstall.parse s.frame.proof)
+                          tryR reply fun variant =>
+                              pure
+                                (core.result.Result.Ok
+                                  { frame := s.frame, parsed := some variant, history := s.history })
+                      tryR reply fun post => do
+                          let next ←
+                            do
+                              NJU_Log.record (Event.mark post.frame.observer)
+                                  (NHV_ReleaseOps.mark post.frame.observer
+                                    AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                              pure post
+                          NJU_Log.record (Event.common next.frame) (child next.frame)) =
+                    do
+                    let parsed ← NJU_Log.record (Event.parse s.frame.proof) (NLE_ParseInstall.parse s.frame.proof)
+                    tryR parsed fun x => do
+                        NJU_Log.record (Event.mark s.frame.observer)
+                            (NHV_ReleaseOps.mark s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                        NJU_Log.record (Event.common s.frame) (child s.frame))
+                (NLE_ParseInstall.parse s.frame.proof)
+                (fun result h =>
+                  Eq.ndrec (motive := fun x =>
+                    NLE_ParseInstall.parse s.frame.proof = x →
+                      (do
+                          let reply ←
+                            do
+                              let reply ← NJU_Log.record (Event.parse s.frame.proof) x
+                              tryR reply fun variant =>
+                                  pure
+                                    (core.result.Result.Ok
+                                      { frame := s.frame, parsed := some variant, history := s.history })
+                          tryR reply fun post => do
+                              let next ←
+                                do
+                                  NJU_Log.record (Event.mark post.frame.observer)
+                                      (NHV_ReleaseOps.mark post.frame.observer
+                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                  pure post
+                              NJU_Log.record (Event.common next.frame) (child next.frame)) =
+                        do
+                        let parsed ← NJU_Log.record (Event.parse s.frame.proof) x
+                        tryR parsed fun x => do
+                            NJU_Log.record (Event.mark s.frame.observer)
+                                (NHV_ReleaseOps.mark s.frame.observer
+                                  AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                            NJU_Log.record (Event.common s.frame) (child s.frame))
+                    (fun parsed =>
+                      core.result.Result.casesOn (motive := fun t =>
+                        result = t →
+                          (do
+                              let reply ←
+                                do
+                                  let reply ← NJU_Log.record (Event.parse s.frame.proof) (ok result)
+                                  tryR reply fun variant =>
+                                      pure
+                                        (core.result.Result.Ok
+                                          { frame := s.frame, parsed := some variant, history := s.history })
+                              tryR reply fun post => do
+                                  let next ←
+                                    do
+                                      NJU_Log.record (Event.mark post.frame.observer)
+                                          (NHV_ReleaseOps.mark post.frame.observer
+                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                      pure post
+                                  NJU_Log.record (Event.common next.frame) (child next.frame)) =
+                            do
+                            let parsed ← NJU_Log.record (Event.parse s.frame.proof) (ok result)
+                            tryR parsed fun x => do
+                                NJU_Log.record (Event.mark s.frame.observer)
+                                    (NHV_ReleaseOps.mark s.frame.observer
+                                      AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                NJU_Log.record (Event.common s.frame) (child s.frame))
+                        result
+                        (fun value h =>
+                          Eq.ndrec (motive := fun result =>
+                            NLE_ParseInstall.parse s.frame.proof = ok result →
+                              (do
+                                  let reply ←
+                                    do
+                                      let reply ← NJU_Log.record (Event.parse s.frame.proof) (ok result)
+                                      tryR reply fun variant =>
+                                          pure
+                                            (core.result.Result.Ok
+                                              { frame := s.frame, parsed := some variant, history := s.history })
+                                  tryR reply fun post => do
+                                      let next ←
+                                        do
+                                          NJU_Log.record (Event.mark post.frame.observer)
+                                              (NHV_ReleaseOps.mark post.frame.observer
+                                                AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                          pure post
+                                      NJU_Log.record (Event.common next.frame) (child next.frame)) =
+                                do
+                                let parsed ← NJU_Log.record (Event.parse s.frame.proof) (ok result)
+                                tryR parsed fun x => do
+                                    NJU_Log.record (Event.mark s.frame.observer)
+                                        (NHV_ReleaseOps.mark s.frame.observer
+                                          AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                    NJU_Log.record (Event.common s.frame) (child s.frame))
+                            (fun parsed =>
+                              casesOn (motive := fun t =>
+                                NHV_ReleaseOps.mark s.frame.observer
+                                      AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed =
+                                    t →
+                                  (do
+                                      let reply ←
+                                        do
+                                          let reply ←
+                                            NJU_Log.record (Event.parse s.frame.proof)
+                                                (ok (core.result.Result.Ok value))
+                                          tryR reply fun variant =>
+                                              pure
+                                                (core.result.Result.Ok
+                                                  { frame := s.frame, parsed := some variant, history := s.history })
+                                      tryR reply fun post => do
+                                          let next ←
+                                            do
+                                              NJU_Log.record (Event.mark post.frame.observer)
+                                                  (NHV_ReleaseOps.mark post.frame.observer
+                                                    AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                              pure post
+                                          NJU_Log.record (Event.common next.frame) (child next.frame)) =
+                                    do
+                                    let parsed ←
+                                      NJU_Log.record (Event.parse s.frame.proof) (ok (core.result.Result.Ok value))
+                                    tryR parsed fun x => do
+                                        NJU_Log.record (Event.mark s.frame.observer)
+                                            (NHV_ReleaseOps.mark s.frame.observer
+                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                        NJU_Log.record (Event.common s.frame) (child s.frame))
+                                (NHV_ReleaseOps.mark s.frame.observer
+                                  AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                (fun v h =>
+                                  Eq.ndrec (motive := fun x =>
+                                    NHV_ReleaseOps.mark s.frame.observer
+                                          AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed =
+                                        x →
+                                      (do
+                                          let reply ←
+                                            do
+                                              let reply ←
+                                                NJU_Log.record (Event.parse s.frame.proof)
+                                                    (ok (core.result.Result.Ok value))
+                                              tryR reply fun variant =>
+                                                  pure
+                                                    (core.result.Result.Ok
+                                                      { frame := s.frame, parsed := some variant,
+                                                        history := s.history })
+                                          tryR reply fun post => do
+                                              let next ←
+                                                do
+                                                  NJU_Log.record (Event.mark post.frame.observer)
+                                                      (NHV_ReleaseOps.mark post.frame.observer
+                                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                  pure post
+                                              NJU_Log.record (Event.common next.frame) (child next.frame)) =
+                                        do
+                                        let parsed ←
+                                          NJU_Log.record (Event.parse s.frame.proof) (ok (core.result.Result.Ok value))
+                                        tryR parsed fun x_1 => do
+                                            NJU_Log.record (Event.mark s.frame.observer) x
+                                            NJU_Log.record (Event.common s.frame) (child s.frame))
+                                    (fun marker =>
+                                      of_eq_true
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg Eq
+                                              (Eq.trans
+                                                (congrArg
+                                                  (fun x =>
+                                                    match
+                                                      {
+                                                          result :=
+                                                            ok
+                                                              (core.result.Result.Ok
+                                                                { frame := s.frame, parsed := some value,
+                                                                  history := s.history }),
+                                                          events := x }.result with
+                                                    | fail err =>
+                                                      { result := fail err,
+                                                        events :=
+                                                          (do
+                                                              let reply ←
+                                                                NJU_Log.record (Event.parse s.frame.proof)
+                                                                    (ok (core.result.Result.Ok value))
+                                                              tryR reply fun variant =>
+                                                                  pure
+                                                                    (core.result.Result.Ok
+                                                                      { frame := s.frame, parsed := some variant,
+                                                                        history := s.history })).events }
+                                                    | div =>
+                                                      { result := div,
+                                                        events :=
+                                                          (do
+                                                              let reply ←
+                                                                NJU_Log.record (Event.parse s.frame.proof)
+                                                                    (ok (core.result.Result.Ok value))
+                                                              tryR reply fun variant =>
+                                                                  pure
+                                                                    (core.result.Result.Ok
+                                                                      { frame := s.frame, parsed := some variant,
+                                                                        history := s.history })).events }
+                                                    | ok a =>
+                                                      have next :=
+                                                        (fun reply =>
+                                                            tryR reply fun post => do
+                                                              let next ←
+                                                                do
+                                                                  NJU_Log.record (Event.mark post.frame.observer)
+                                                                      (NHV_ReleaseOps.mark post.frame.observer
+                                                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                  pure post
+                                                              NJU_Log.record (Event.common next.frame)
+                                                                  (child next.frame))
+                                                          a;
+                                                      { result := next.result,
+                                                        events :=
+                                                          (do
+                                                                let reply ←
+                                                                  NJU_Log.record (Event.parse s.frame.proof)
+                                                                      (ok (core.result.Result.Ok value))
+                                                                tryR reply fun variant =>
+                                                                    pure
+                                                                      (core.result.Result.Ok
+                                                                        { frame := s.frame, parsed := some variant,
+                                                                          history := s.history })).events ++
+                                                            next.events })
+                                                  (List.append_nil
+                                                    [Event.parse s.frame.proof (ok (core.result.Result.Ok value))]))
+                                                (congr
+                                                  (congrArg NJU_Log.Run.mk
+                                                    (congrArg NJU_Log.Run.result
+                                                      (Eq.trans
+                                                        (congrArg
+                                                          (fun x =>
+                                                            match x.result with
+                                                            | fail err =>
+                                                              { result := fail err,
+                                                                events :=
+                                                                  (do
+                                                                      NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                      pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history }).events }
+                                                            | div =>
+                                                              { result := div,
+                                                                events :=
+                                                                  (do
+                                                                      NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                      pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history }).events }
+                                                            | ok a =>
+                                                              have next :=
+                                                                (fun next =>
+                                                                    NJU_Log.record (Event.common next.frame)
+                                                                      (child next.frame))
+                                                                  a;
+                                                              { result := next.result,
+                                                                events :=
+                                                                  (do
+                                                                        NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                        pure
+                                                                            { frame := s.frame, parsed := some value,
+                                                                              history := s.history }).events ++
+                                                                    next.events })
+                                                          (Eq.trans
+                                                            (congrArg
+                                                              (fun x =>
+                                                                match x.result with
+                                                                | fail err =>
+                                                                  { result := fail err,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                | div =>
+                                                                  { result := div,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                | ok a =>
+                                                                  have next :=
+                                                                    (fun __x =>
+                                                                        pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history })
+                                                                      a;
+                                                                  { result := next.result,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events ++
+                                                                        next.events })
+                                                              (congr (congrArg NJU_Log.Run.mk marker)
+                                                                (congrFun'
+                                                                  (congrArg List.cons
+                                                                    (congrArg (Event.mark s.frame.observer) marker))
+                                                                  [])))
+                                                            (congrArg
+                                                              (NJU_Log.Run.mk
+                                                                (ok
+                                                                  { frame := s.frame, parsed := some value,
+                                                                    history := s.history }))
+                                                              (Eq.trans
+                                                                (congrFun'
+                                                                  (congrArg HAppend.hAppend
+                                                                    (congrArg NJU_Log.Run.events
+                                                                      (congr (congrArg NJU_Log.Run.mk marker)
+                                                                        (congrFun'
+                                                                          (congrArg List.cons
+                                                                            (congrArg (Event.mark s.frame.observer)
+                                                                              marker))
+                                                                          []))))
+                                                                  [])
+                                                                (List.append_nil
+                                                                  [Event.mark s.frame.observer (ok v)])))))
+                                                        (congrArg (NJU_Log.Run.mk (child s.frame))
+                                                          (congrFun'
+                                                            (congrArg HAppend.hAppend
+                                                              (congrArg NJU_Log.Run.events
+                                                                (Eq.trans
+                                                                  (congrArg
+                                                                    (fun x =>
+                                                                      match x.result with
+                                                                      | fail err =>
+                                                                        { result := fail err,
+                                                                          events :=
+                                                                            (NJU_Log.record
+                                                                                (Event.mark
+                                                                                  { frame := s.frame,
+                                                                                        parsed := some value,
+                                                                                        history :=
+                                                                                          s.history }.frame.observer)
+                                                                                (NHV_ReleaseOps.mark
+                                                                                  { frame := s.frame,
+                                                                                        parsed := some value,
+                                                                                        history :=
+                                                                                          s.history }.frame.observer
+                                                                                  AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                      | div =>
+                                                                        { result := div,
+                                                                          events :=
+                                                                            (NJU_Log.record
+                                                                                (Event.mark
+                                                                                  { frame := s.frame,
+                                                                                        parsed := some value,
+                                                                                        history :=
+                                                                                          s.history }.frame.observer)
+                                                                                (NHV_ReleaseOps.mark
+                                                                                  { frame := s.frame,
+                                                                                        parsed := some value,
+                                                                                        history :=
+                                                                                          s.history }.frame.observer
+                                                                                  AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                      | ok a =>
+                                                                        have next :=
+                                                                          (fun __x =>
+                                                                              pure
+                                                                                { frame := s.frame,
+                                                                                  parsed := some value,
+                                                                                  history := s.history })
+                                                                            a;
+                                                                        { result := next.result,
+                                                                          events :=
+                                                                            (NJU_Log.record
+                                                                                  (Event.mark
+                                                                                    { frame := s.frame,
+                                                                                          parsed := some value,
+                                                                                          history :=
+                                                                                            s.history }.frame.observer)
+                                                                                  (NHV_ReleaseOps.mark
+                                                                                    { frame := s.frame,
+                                                                                          parsed := some value,
+                                                                                          history :=
+                                                                                            s.history }.frame.observer
+                                                                                    AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events ++
+                                                                              next.events })
+                                                                    (congr (congrArg NJU_Log.Run.mk marker)
+                                                                      (congrFun'
+                                                                        (congrArg List.cons
+                                                                          (congrArg (Event.mark s.frame.observer)
+                                                                            marker))
+                                                                        [])))
+                                                                  (congrArg
+                                                                    (NJU_Log.Run.mk
+                                                                      (ok
+                                                                        { frame := s.frame, parsed := some value,
+                                                                          history := s.history }))
+                                                                    (Eq.trans
+                                                                      (congrFun'
+                                                                        (congrArg HAppend.hAppend
+                                                                          (congrArg NJU_Log.Run.events
+                                                                            (congr (congrArg NJU_Log.Run.mk marker)
+                                                                              (congrFun'
+                                                                                (congrArg List.cons
+                                                                                  (congrArg
+                                                                                    (Event.mark s.frame.observer)
+                                                                                    marker))
+                                                                                []))))
+                                                                        [])
+                                                                      (List.append_nil
+                                                                        [Event.mark s.frame.observer (ok v)]))))))
+                                                            [Event.common s.frame (child s.frame)])))))
+                                                  (congr
+                                                    (congrArg HAppend.hAppend
+                                                      (congrArg NJU_Log.Run.events
+                                                        (congrArg
+                                                          (NJU_Log.Run.mk
+                                                            (ok
+                                                              (core.result.Result.Ok
+                                                                { frame := s.frame, parsed := some value,
+                                                                  history := s.history })))
+                                                          (List.append_nil
+                                                            [Event.parse s.frame.proof
+                                                                (ok (core.result.Result.Ok value))]))))
+                                                    (congrArg NJU_Log.Run.events
+                                                      (Eq.trans
+                                                        (congrArg
+                                                          (fun x =>
+                                                            match x.result with
+                                                            | fail err =>
+                                                              { result := fail err,
+                                                                events :=
+                                                                  (do
+                                                                      NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                      pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history }).events }
+                                                            | div =>
+                                                              { result := div,
+                                                                events :=
+                                                                  (do
+                                                                      NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                      pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history }).events }
+                                                            | ok a =>
+                                                              have next :=
+                                                                (fun next =>
+                                                                    NJU_Log.record (Event.common next.frame)
+                                                                      (child next.frame))
+                                                                  a;
+                                                              { result := next.result,
+                                                                events :=
+                                                                  (do
+                                                                        NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                        pure
+                                                                            { frame := s.frame, parsed := some value,
+                                                                              history := s.history }).events ++
+                                                                    next.events })
+                                                          (Eq.trans
+                                                            (congrArg
+                                                              (fun x =>
+                                                                match x.result with
+                                                                | fail err =>
+                                                                  { result := fail err,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                | div =>
+                                                                  { result := div,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                | ok a =>
+                                                                  have next :=
+                                                                    (fun __x =>
+                                                                        pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history })
+                                                                      a;
+                                                                  { result := next.result,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events ++
+                                                                        next.events })
+                                                              (congr (congrArg NJU_Log.Run.mk marker)
+                                                                (congrFun'
+                                                                  (congrArg List.cons
+                                                                    (congrArg (Event.mark s.frame.observer) marker))
+                                                                  [])))
+                                                            (congrArg
+                                                              (NJU_Log.Run.mk
+                                                                (ok
+                                                                  { frame := s.frame, parsed := some value,
+                                                                    history := s.history }))
+                                                              (Eq.trans
+                                                                (congrFun'
+                                                                  (congrArg HAppend.hAppend
+                                                                    (congrArg NJU_Log.Run.events
+                                                                      (congr (congrArg NJU_Log.Run.mk marker)
+                                                                        (congrFun'
+                                                                          (congrArg List.cons
+                                                                            (congrArg (Event.mark s.frame.observer)
+                                                                              marker))
+                                                                          []))))
+                                                                  [])
+                                                                (List.append_nil
+                                                                  [Event.mark s.frame.observer (ok v)])))))
+                                                        (congrArg (NJU_Log.Run.mk (child s.frame))
+                                                          (congrFun'
+                                                            (congrArg HAppend.hAppend
+                                                              (congrArg NJU_Log.Run.events
+                                                                (Eq.trans
+                                                                  (congrArg
+                                                                    (fun x =>
+                                                                      match x.result with
+                                                                      | fail err =>
+                                                                        { result := fail err,
+                                                                          events :=
+                                                                            (NJU_Log.record
+                                                                                (Event.mark
+                                                                                  { frame := s.frame,
+                                                                                        parsed := some value,
+                                                                                        history :=
+                                                                                          s.history }.frame.observer)
+                                                                                (NHV_ReleaseOps.mark
+                                                                                  { frame := s.frame,
+                                                                                        parsed := some value,
+                                                                                        history :=
+                                                                                          s.history }.frame.observer
+                                                                                  AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                      | div =>
+                                                                        { result := div,
+                                                                          events :=
+                                                                            (NJU_Log.record
+                                                                                (Event.mark
+                                                                                  { frame := s.frame,
+                                                                                        parsed := some value,
+                                                                                        history :=
+                                                                                          s.history }.frame.observer)
+                                                                                (NHV_ReleaseOps.mark
+                                                                                  { frame := s.frame,
+                                                                                        parsed := some value,
+                                                                                        history :=
+                                                                                          s.history }.frame.observer
+                                                                                  AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                      | ok a =>
+                                                                        have next :=
+                                                                          (fun __x =>
+                                                                              pure
+                                                                                { frame := s.frame,
+                                                                                  parsed := some value,
+                                                                                  history := s.history })
+                                                                            a;
+                                                                        { result := next.result,
+                                                                          events :=
+                                                                            (NJU_Log.record
+                                                                                  (Event.mark
+                                                                                    { frame := s.frame,
+                                                                                          parsed := some value,
+                                                                                          history :=
+                                                                                            s.history }.frame.observer)
+                                                                                  (NHV_ReleaseOps.mark
+                                                                                    { frame := s.frame,
+                                                                                          parsed := some value,
+                                                                                          history :=
+                                                                                            s.history }.frame.observer
+                                                                                    AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events ++
+                                                                              next.events })
+                                                                    (congr (congrArg NJU_Log.Run.mk marker)
+                                                                      (congrFun'
+                                                                        (congrArg List.cons
+                                                                          (congrArg (Event.mark s.frame.observer)
+                                                                            marker))
+                                                                        [])))
+                                                                  (congrArg
+                                                                    (NJU_Log.Run.mk
+                                                                      (ok
+                                                                        { frame := s.frame, parsed := some value,
+                                                                          history := s.history }))
+                                                                    (Eq.trans
+                                                                      (congrFun'
+                                                                        (congrArg HAppend.hAppend
+                                                                          (congrArg NJU_Log.Run.events
+                                                                            (congr (congrArg NJU_Log.Run.mk marker)
+                                                                              (congrFun'
+                                                                                (congrArg List.cons
+                                                                                  (congrArg
+                                                                                    (Event.mark s.frame.observer)
+                                                                                    marker))
+                                                                                []))))
+                                                                        [])
+                                                                      (List.append_nil
+                                                                        [Event.mark s.frame.observer (ok v)]))))))
+                                                            [Event.common s.frame (child s.frame)]))))))))
+                                            { result := child s.frame,
+                                              events :=
+                                                [Event.parse s.frame.proof (ok (core.result.Result.Ok value)),
+                                                  Event.mark s.frame.observer (ok v),
+                                                  Event.common s.frame (child s.frame)] })
+                                          (eq_self
+                                            { result := child s.frame,
+                                              events :=
+                                                [Event.parse s.frame.proof (ok (core.result.Result.Ok value)),
+                                                  Event.mark s.frame.observer (ok v),
+                                                  Event.common s.frame (child s.frame)] })))
+                                    (Eq.symm h)
+                                    (Eq.refl
+                                      (NHV_ReleaseOps.mark s.frame.observer
+                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)))
+                                (fun e h =>
+                                  Eq.ndrec (motive := fun x =>
+                                    NHV_ReleaseOps.mark s.frame.observer
+                                          AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed =
+                                        x →
+                                      (do
+                                          let reply ←
+                                            do
+                                              let reply ←
+                                                NJU_Log.record (Event.parse s.frame.proof)
+                                                    (ok (core.result.Result.Ok value))
+                                              tryR reply fun variant =>
+                                                  pure
+                                                    (core.result.Result.Ok
+                                                      { frame := s.frame, parsed := some variant,
+                                                        history := s.history })
+                                          tryR reply fun post => do
+                                              let next ←
+                                                do
+                                                  NJU_Log.record (Event.mark post.frame.observer)
+                                                      (NHV_ReleaseOps.mark post.frame.observer
+                                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                  pure post
+                                              NJU_Log.record (Event.common next.frame) (child next.frame)) =
+                                        do
+                                        let parsed ←
+                                          NJU_Log.record (Event.parse s.frame.proof) (ok (core.result.Result.Ok value))
+                                        tryR parsed fun x_1 => do
+                                            NJU_Log.record (Event.mark s.frame.observer) x
+                                            NJU_Log.record (Event.common s.frame) (child s.frame))
+                                    (fun marker =>
+                                      of_eq_true
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg Eq
+                                              (Eq.trans
+                                                (congrArg
+                                                  (fun x =>
+                                                    match
+                                                      {
+                                                          result :=
+                                                            ok
+                                                              (core.result.Result.Ok
+                                                                { frame := s.frame, parsed := some value,
+                                                                  history := s.history }),
+                                                          events := x }.result with
+                                                    | fail err =>
+                                                      { result := fail err,
+                                                        events :=
+                                                          (do
+                                                              let reply ←
+                                                                NJU_Log.record (Event.parse s.frame.proof)
+                                                                    (ok (core.result.Result.Ok value))
+                                                              tryR reply fun variant =>
+                                                                  pure
+                                                                    (core.result.Result.Ok
+                                                                      { frame := s.frame, parsed := some variant,
+                                                                        history := s.history })).events }
+                                                    | div =>
+                                                      { result := div,
+                                                        events :=
+                                                          (do
+                                                              let reply ←
+                                                                NJU_Log.record (Event.parse s.frame.proof)
+                                                                    (ok (core.result.Result.Ok value))
+                                                              tryR reply fun variant =>
+                                                                  pure
+                                                                    (core.result.Result.Ok
+                                                                      { frame := s.frame, parsed := some variant,
+                                                                        history := s.history })).events }
+                                                    | ok a =>
+                                                      have next :=
+                                                        (fun reply =>
+                                                            tryR reply fun post => do
+                                                              let next ←
+                                                                do
+                                                                  NJU_Log.record (Event.mark post.frame.observer)
+                                                                      (NHV_ReleaseOps.mark post.frame.observer
+                                                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                  pure post
+                                                              NJU_Log.record (Event.common next.frame)
+                                                                  (child next.frame))
+                                                          a;
+                                                      { result := next.result,
+                                                        events :=
+                                                          (do
+                                                                let reply ←
+                                                                  NJU_Log.record (Event.parse s.frame.proof)
+                                                                      (ok (core.result.Result.Ok value))
+                                                                tryR reply fun variant =>
+                                                                    pure
+                                                                      (core.result.Result.Ok
+                                                                        { frame := s.frame, parsed := some variant,
+                                                                          history := s.history })).events ++
+                                                            next.events })
+                                                  (List.append_nil
+                                                    [Event.parse s.frame.proof (ok (core.result.Result.Ok value))]))
+                                                (congr
+                                                  (congrArg NJU_Log.Run.mk
+                                                    (congrArg NJU_Log.Run.result
+                                                      (Eq.trans
+                                                        (congrArg
+                                                          (fun x =>
+                                                            match x.result with
+                                                            | fail err =>
+                                                              { result := fail err,
+                                                                events :=
+                                                                  (do
+                                                                      NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                      pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history }).events }
+                                                            | div =>
+                                                              { result := div,
+                                                                events :=
+                                                                  (do
+                                                                      NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                      pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history }).events }
+                                                            | ok a =>
+                                                              have next :=
+                                                                (fun next =>
+                                                                    NJU_Log.record (Event.common next.frame)
+                                                                      (child next.frame))
+                                                                  a;
+                                                              { result := next.result,
+                                                                events :=
+                                                                  (do
+                                                                        NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                        pure
+                                                                            { frame := s.frame, parsed := some value,
+                                                                              history := s.history }).events ++
+                                                                    next.events })
+                                                          (Eq.trans
+                                                            (congrArg
+                                                              (fun x =>
+                                                                match x.result with
+                                                                | fail err =>
+                                                                  { result := fail err,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                | div =>
+                                                                  { result := div,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                | ok a =>
+                                                                  have next :=
+                                                                    (fun __x =>
+                                                                        pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history })
+                                                                      a;
+                                                                  { result := next.result,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events ++
+                                                                        next.events })
+                                                              (congr (congrArg NJU_Log.Run.mk marker)
+                                                                (congrFun'
+                                                                  (congrArg List.cons
+                                                                    (congrArg (Event.mark s.frame.observer) marker))
+                                                                  [])))
+                                                            (congrArg (NJU_Log.Run.mk (fail e))
+                                                              (congrArg NJU_Log.Run.events
+                                                                (congr (congrArg NJU_Log.Run.mk marker)
+                                                                  (congrFun'
+                                                                    (congrArg List.cons
+                                                                      (congrArg (Event.mark s.frame.observer) marker))
+                                                                    []))))))
+                                                        (congrArg (NJU_Log.Run.mk (fail e))
+                                                          (congrArg NJU_Log.Run.events
+                                                            (Eq.trans
+                                                              (congrArg
+                                                                (fun x =>
+                                                                  match x.result with
+                                                                  | fail err =>
+                                                                    { result := fail err,
+                                                                      events :=
+                                                                        (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                  | div =>
+                                                                    { result := div,
+                                                                      events :=
+                                                                        (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                  | ok a =>
+                                                                    have next :=
+                                                                      (fun __x =>
+                                                                          pure
+                                                                            { frame := s.frame, parsed := some value,
+                                                                              history := s.history })
+                                                                        a;
+                                                                    { result := next.result,
+                                                                      events :=
+                                                                        (NJU_Log.record
+                                                                              (Event.mark
+                                                                                { frame := s.frame,
+                                                                                      parsed := some value,
+                                                                                      history :=
+                                                                                        s.history }.frame.observer)
+                                                                              (NHV_ReleaseOps.mark
+                                                                                { frame := s.frame,
+                                                                                      parsed := some value,
+                                                                                      history :=
+                                                                                        s.history }.frame.observer
+                                                                                AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events ++
+                                                                          next.events })
+                                                                (congr (congrArg NJU_Log.Run.mk marker)
+                                                                  (congrFun'
+                                                                    (congrArg List.cons
+                                                                      (congrArg (Event.mark s.frame.observer) marker))
+                                                                    [])))
+                                                              (congrArg (NJU_Log.Run.mk (fail e))
+                                                                (congrArg NJU_Log.Run.events
+                                                                  (congr (congrArg NJU_Log.Run.mk marker)
+                                                                    (congrFun'
+                                                                      (congrArg List.cons
+                                                                        (congrArg (Event.mark s.frame.observer) marker))
+                                                                      []))))))))))
+                                                  (congr
+                                                    (congrArg HAppend.hAppend
+                                                      (congrArg NJU_Log.Run.events
+                                                        (congrArg
+                                                          (NJU_Log.Run.mk
+                                                            (ok
+                                                              (core.result.Result.Ok
+                                                                { frame := s.frame, parsed := some value,
+                                                                  history := s.history })))
+                                                          (List.append_nil
+                                                            [Event.parse s.frame.proof
+                                                                (ok (core.result.Result.Ok value))]))))
+                                                    (congrArg NJU_Log.Run.events
+                                                      (Eq.trans
+                                                        (congrArg
+                                                          (fun x =>
+                                                            match x.result with
+                                                            | fail err =>
+                                                              { result := fail err,
+                                                                events :=
+                                                                  (do
+                                                                      NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                      pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history }).events }
+                                                            | div =>
+                                                              { result := div,
+                                                                events :=
+                                                                  (do
+                                                                      NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                      pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history }).events }
+                                                            | ok a =>
+                                                              have next :=
+                                                                (fun next =>
+                                                                    NJU_Log.record (Event.common next.frame)
+                                                                      (child next.frame))
+                                                                  a;
+                                                              { result := next.result,
+                                                                events :=
+                                                                  (do
+                                                                        NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                        pure
+                                                                            { frame := s.frame, parsed := some value,
+                                                                              history := s.history }).events ++
+                                                                    next.events })
+                                                          (Eq.trans
+                                                            (congrArg
+                                                              (fun x =>
+                                                                match x.result with
+                                                                | fail err =>
+                                                                  { result := fail err,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                | div =>
+                                                                  { result := div,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                | ok a =>
+                                                                  have next :=
+                                                                    (fun __x =>
+                                                                        pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history })
+                                                                      a;
+                                                                  { result := next.result,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events ++
+                                                                        next.events })
+                                                              (congr (congrArg NJU_Log.Run.mk marker)
+                                                                (congrFun'
+                                                                  (congrArg List.cons
+                                                                    (congrArg (Event.mark s.frame.observer) marker))
+                                                                  [])))
+                                                            (congrArg (NJU_Log.Run.mk (fail e))
+                                                              (congrArg NJU_Log.Run.events
+                                                                (congr (congrArg NJU_Log.Run.mk marker)
+                                                                  (congrFun'
+                                                                    (congrArg List.cons
+                                                                      (congrArg (Event.mark s.frame.observer) marker))
+                                                                    []))))))
+                                                        (congrArg (NJU_Log.Run.mk (fail e))
+                                                          (congrArg NJU_Log.Run.events
+                                                            (Eq.trans
+                                                              (congrArg
+                                                                (fun x =>
+                                                                  match x.result with
+                                                                  | fail err =>
+                                                                    { result := fail err,
+                                                                      events :=
+                                                                        (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                  | div =>
+                                                                    { result := div,
+                                                                      events :=
+                                                                        (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                  | ok a =>
+                                                                    have next :=
+                                                                      (fun __x =>
+                                                                          pure
+                                                                            { frame := s.frame, parsed := some value,
+                                                                              history := s.history })
+                                                                        a;
+                                                                    { result := next.result,
+                                                                      events :=
+                                                                        (NJU_Log.record
+                                                                              (Event.mark
+                                                                                { frame := s.frame,
+                                                                                      parsed := some value,
+                                                                                      history :=
+                                                                                        s.history }.frame.observer)
+                                                                              (NHV_ReleaseOps.mark
+                                                                                { frame := s.frame,
+                                                                                      parsed := some value,
+                                                                                      history :=
+                                                                                        s.history }.frame.observer
+                                                                                AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events ++
+                                                                          next.events })
+                                                                (congr (congrArg NJU_Log.Run.mk marker)
+                                                                  (congrFun'
+                                                                    (congrArg List.cons
+                                                                      (congrArg (Event.mark s.frame.observer) marker))
+                                                                    [])))
+                                                              (congrArg (NJU_Log.Run.mk (fail e))
+                                                                (congrArg NJU_Log.Run.events
+                                                                  (congr (congrArg NJU_Log.Run.mk marker)
+                                                                    (congrFun'
+                                                                      (congrArg List.cons
+                                                                        (congrArg (Event.mark s.frame.observer) marker))
+                                                                      [])))))))))))))
+                                            { result := fail e,
+                                              events :=
+                                                [Event.parse s.frame.proof (ok (core.result.Result.Ok value)),
+                                                  Event.mark s.frame.observer (fail e)] })
+                                          (eq_self
+                                            { result := fail e,
+                                              events :=
+                                                [Event.parse s.frame.proof (ok (core.result.Result.Ok value)),
+                                                  Event.mark s.frame.observer (fail e)] })))
+                                    (Eq.symm h)
+                                    (Eq.refl
+                                      (NHV_ReleaseOps.mark s.frame.observer
+                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)))
+                                (fun h =>
+                                  Eq.ndrec (motive := fun x =>
+                                    NHV_ReleaseOps.mark s.frame.observer
+                                          AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed =
+                                        x →
+                                      (do
+                                          let reply ←
+                                            do
+                                              let reply ←
+                                                NJU_Log.record (Event.parse s.frame.proof)
+                                                    (ok (core.result.Result.Ok value))
+                                              tryR reply fun variant =>
+                                                  pure
+                                                    (core.result.Result.Ok
+                                                      { frame := s.frame, parsed := some variant,
+                                                        history := s.history })
+                                          tryR reply fun post => do
+                                              let next ←
+                                                do
+                                                  NJU_Log.record (Event.mark post.frame.observer)
+                                                      (NHV_ReleaseOps.mark post.frame.observer
+                                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                  pure post
+                                              NJU_Log.record (Event.common next.frame) (child next.frame)) =
+                                        do
+                                        let parsed ←
+                                          NJU_Log.record (Event.parse s.frame.proof) (ok (core.result.Result.Ok value))
+                                        tryR parsed fun x_1 => do
+                                            NJU_Log.record (Event.mark s.frame.observer) x
+                                            NJU_Log.record (Event.common s.frame) (child s.frame))
+                                    (fun marker =>
+                                      of_eq_true
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg Eq
+                                              (Eq.trans
+                                                (congrArg
+                                                  (fun x =>
+                                                    match
+                                                      {
+                                                          result :=
+                                                            ok
+                                                              (core.result.Result.Ok
+                                                                { frame := s.frame, parsed := some value,
+                                                                  history := s.history }),
+                                                          events := x }.result with
+                                                    | fail err =>
+                                                      { result := fail err,
+                                                        events :=
+                                                          (do
+                                                              let reply ←
+                                                                NJU_Log.record (Event.parse s.frame.proof)
+                                                                    (ok (core.result.Result.Ok value))
+                                                              tryR reply fun variant =>
+                                                                  pure
+                                                                    (core.result.Result.Ok
+                                                                      { frame := s.frame, parsed := some variant,
+                                                                        history := s.history })).events }
+                                                    | div =>
+                                                      { result := div,
+                                                        events :=
+                                                          (do
+                                                              let reply ←
+                                                                NJU_Log.record (Event.parse s.frame.proof)
+                                                                    (ok (core.result.Result.Ok value))
+                                                              tryR reply fun variant =>
+                                                                  pure
+                                                                    (core.result.Result.Ok
+                                                                      { frame := s.frame, parsed := some variant,
+                                                                        history := s.history })).events }
+                                                    | ok a =>
+                                                      have next :=
+                                                        (fun reply =>
+                                                            tryR reply fun post => do
+                                                              let next ←
+                                                                do
+                                                                  NJU_Log.record (Event.mark post.frame.observer)
+                                                                      (NHV_ReleaseOps.mark post.frame.observer
+                                                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                  pure post
+                                                              NJU_Log.record (Event.common next.frame)
+                                                                  (child next.frame))
+                                                          a;
+                                                      { result := next.result,
+                                                        events :=
+                                                          (do
+                                                                let reply ←
+                                                                  NJU_Log.record (Event.parse s.frame.proof)
+                                                                      (ok (core.result.Result.Ok value))
+                                                                tryR reply fun variant =>
+                                                                    pure
+                                                                      (core.result.Result.Ok
+                                                                        { frame := s.frame, parsed := some variant,
+                                                                          history := s.history })).events ++
+                                                            next.events })
+                                                  (List.append_nil
+                                                    [Event.parse s.frame.proof (ok (core.result.Result.Ok value))]))
+                                                (congr
+                                                  (congrArg NJU_Log.Run.mk
+                                                    (congrArg NJU_Log.Run.result
+                                                      (Eq.trans
+                                                        (congrArg
+                                                          (fun x =>
+                                                            match x.result with
+                                                            | fail err =>
+                                                              { result := fail err,
+                                                                events :=
+                                                                  (do
+                                                                      NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                      pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history }).events }
+                                                            | div =>
+                                                              { result := div,
+                                                                events :=
+                                                                  (do
+                                                                      NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                      pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history }).events }
+                                                            | ok a =>
+                                                              have next :=
+                                                                (fun next =>
+                                                                    NJU_Log.record (Event.common next.frame)
+                                                                      (child next.frame))
+                                                                  a;
+                                                              { result := next.result,
+                                                                events :=
+                                                                  (do
+                                                                        NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                        pure
+                                                                            { frame := s.frame, parsed := some value,
+                                                                              history := s.history }).events ++
+                                                                    next.events })
+                                                          (Eq.trans
+                                                            (congrArg
+                                                              (fun x =>
+                                                                match x.result with
+                                                                | fail err =>
+                                                                  { result := fail err,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                | div =>
+                                                                  { result := div,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                | ok a =>
+                                                                  have next :=
+                                                                    (fun __x =>
+                                                                        pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history })
+                                                                      a;
+                                                                  { result := next.result,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events ++
+                                                                        next.events })
+                                                              (congr (congrArg NJU_Log.Run.mk marker)
+                                                                (congrFun'
+                                                                  (congrArg List.cons
+                                                                    (congrArg (Event.mark s.frame.observer) marker))
+                                                                  [])))
+                                                            (congrArg (NJU_Log.Run.mk div)
+                                                              (congrArg NJU_Log.Run.events
+                                                                (congr (congrArg NJU_Log.Run.mk marker)
+                                                                  (congrFun'
+                                                                    (congrArg List.cons
+                                                                      (congrArg (Event.mark s.frame.observer) marker))
+                                                                    []))))))
+                                                        (congrArg (NJU_Log.Run.mk div)
+                                                          (congrArg NJU_Log.Run.events
+                                                            (Eq.trans
+                                                              (congrArg
+                                                                (fun x =>
+                                                                  match x.result with
+                                                                  | fail err =>
+                                                                    { result := fail err,
+                                                                      events :=
+                                                                        (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                  | div =>
+                                                                    { result := div,
+                                                                      events :=
+                                                                        (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                  | ok a =>
+                                                                    have next :=
+                                                                      (fun __x =>
+                                                                          pure
+                                                                            { frame := s.frame, parsed := some value,
+                                                                              history := s.history })
+                                                                        a;
+                                                                    { result := next.result,
+                                                                      events :=
+                                                                        (NJU_Log.record
+                                                                              (Event.mark
+                                                                                { frame := s.frame,
+                                                                                      parsed := some value,
+                                                                                      history :=
+                                                                                        s.history }.frame.observer)
+                                                                              (NHV_ReleaseOps.mark
+                                                                                { frame := s.frame,
+                                                                                      parsed := some value,
+                                                                                      history :=
+                                                                                        s.history }.frame.observer
+                                                                                AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events ++
+                                                                          next.events })
+                                                                (congr (congrArg NJU_Log.Run.mk marker)
+                                                                  (congrFun'
+                                                                    (congrArg List.cons
+                                                                      (congrArg (Event.mark s.frame.observer) marker))
+                                                                    [])))
+                                                              (congrArg (NJU_Log.Run.mk div)
+                                                                (congrArg NJU_Log.Run.events
+                                                                  (congr (congrArg NJU_Log.Run.mk marker)
+                                                                    (congrFun'
+                                                                      (congrArg List.cons
+                                                                        (congrArg (Event.mark s.frame.observer) marker))
+                                                                      []))))))))))
+                                                  (congr
+                                                    (congrArg HAppend.hAppend
+                                                      (congrArg NJU_Log.Run.events
+                                                        (congrArg
+                                                          (NJU_Log.Run.mk
+                                                            (ok
+                                                              (core.result.Result.Ok
+                                                                { frame := s.frame, parsed := some value,
+                                                                  history := s.history })))
+                                                          (List.append_nil
+                                                            [Event.parse s.frame.proof
+                                                                (ok (core.result.Result.Ok value))]))))
+                                                    (congrArg NJU_Log.Run.events
+                                                      (Eq.trans
+                                                        (congrArg
+                                                          (fun x =>
+                                                            match x.result with
+                                                            | fail err =>
+                                                              { result := fail err,
+                                                                events :=
+                                                                  (do
+                                                                      NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                      pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history }).events }
+                                                            | div =>
+                                                              { result := div,
+                                                                events :=
+                                                                  (do
+                                                                      NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                      pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history }).events }
+                                                            | ok a =>
+                                                              have next :=
+                                                                (fun next =>
+                                                                    NJU_Log.record (Event.common next.frame)
+                                                                      (child next.frame))
+                                                                  a;
+                                                              { result := next.result,
+                                                                events :=
+                                                                  (do
+                                                                        NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                                        pure
+                                                                            { frame := s.frame, parsed := some value,
+                                                                              history := s.history }).events ++
+                                                                    next.events })
+                                                          (Eq.trans
+                                                            (congrArg
+                                                              (fun x =>
+                                                                match x.result with
+                                                                | fail err =>
+                                                                  { result := fail err,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                | div =>
+                                                                  { result := div,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                          (Event.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer)
+                                                                          (NHV_ReleaseOps.mark
+                                                                            { frame := s.frame, parsed := some value,
+                                                                                  history := s.history }.frame.observer
+                                                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                | ok a =>
+                                                                  have next :=
+                                                                    (fun __x =>
+                                                                        pure
+                                                                          { frame := s.frame, parsed := some value,
+                                                                            history := s.history })
+                                                                      a;
+                                                                  { result := next.result,
+                                                                    events :=
+                                                                      (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events ++
+                                                                        next.events })
+                                                              (congr (congrArg NJU_Log.Run.mk marker)
+                                                                (congrFun'
+                                                                  (congrArg List.cons
+                                                                    (congrArg (Event.mark s.frame.observer) marker))
+                                                                  [])))
+                                                            (congrArg (NJU_Log.Run.mk div)
+                                                              (congrArg NJU_Log.Run.events
+                                                                (congr (congrArg NJU_Log.Run.mk marker)
+                                                                  (congrFun'
+                                                                    (congrArg List.cons
+                                                                      (congrArg (Event.mark s.frame.observer) marker))
+                                                                    []))))))
+                                                        (congrArg (NJU_Log.Run.mk div)
+                                                          (congrArg NJU_Log.Run.events
+                                                            (Eq.trans
+                                                              (congrArg
+                                                                (fun x =>
+                                                                  match x.result with
+                                                                  | fail err =>
+                                                                    { result := fail err,
+                                                                      events :=
+                                                                        (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                  | div =>
+                                                                    { result := div,
+                                                                      events :=
+                                                                        (NJU_Log.record
+                                                                            (Event.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer)
+                                                                            (NHV_ReleaseOps.mark
+                                                                              { frame := s.frame, parsed := some value,
+                                                                                    history :=
+                                                                                      s.history }.frame.observer
+                                                                              AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events }
+                                                                  | ok a =>
+                                                                    have next :=
+                                                                      (fun __x =>
+                                                                          pure
+                                                                            { frame := s.frame, parsed := some value,
+                                                                              history := s.history })
+                                                                        a;
+                                                                    { result := next.result,
+                                                                      events :=
+                                                                        (NJU_Log.record
+                                                                              (Event.mark
+                                                                                { frame := s.frame,
+                                                                                      parsed := some value,
+                                                                                      history :=
+                                                                                        s.history }.frame.observer)
+                                                                              (NHV_ReleaseOps.mark
+                                                                                { frame := s.frame,
+                                                                                      parsed := some value,
+                                                                                      history :=
+                                                                                        s.history }.frame.observer
+                                                                                AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).events ++
+                                                                          next.events })
+                                                                (congr (congrArg NJU_Log.Run.mk marker)
+                                                                  (congrFun'
+                                                                    (congrArg List.cons
+                                                                      (congrArg (Event.mark s.frame.observer) marker))
+                                                                    [])))
+                                                              (congrArg (NJU_Log.Run.mk div)
+                                                                (congrArg NJU_Log.Run.events
+                                                                  (congr (congrArg NJU_Log.Run.mk marker)
+                                                                    (congrFun'
+                                                                      (congrArg List.cons
+                                                                        (congrArg (Event.mark s.frame.observer) marker))
+                                                                      [])))))))))))))
+                                            { result := div,
+                                              events :=
+                                                [Event.parse s.frame.proof (ok (core.result.Result.Ok value)),
+                                                  Event.mark s.frame.observer div] })
+                                          (eq_self
+                                            { result := div,
+                                              events :=
+                                                [Event.parse s.frame.proof (ok (core.result.Result.Ok value)),
+                                                  Event.mark s.frame.observer div] })))
+                                    (Eq.symm h)
+                                    (Eq.refl
+                                      (NHV_ReleaseOps.mark s.frame.observer
+                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)))
+                                (Eq.refl
+                                  (NHV_ReleaseOps.mark s.frame.observer
+                                    AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)))
+                            (Eq.symm h) parsed)
+                        (fun err h =>
+                          Eq.ndrec (motive := fun result =>
+                            NLE_ParseInstall.parse s.frame.proof = ok result →
+                              (do
+                                  let reply ←
+                                    do
+                                      let reply ← NJU_Log.record (Event.parse s.frame.proof) (ok result)
+                                      tryR reply fun variant =>
+                                          pure
+                                            (core.result.Result.Ok
+                                              { frame := s.frame, parsed := some variant, history := s.history })
+                                  tryR reply fun post => do
+                                      let next ←
+                                        do
+                                          NJU_Log.record (Event.mark post.frame.observer)
+                                              (NHV_ReleaseOps.mark post.frame.observer
+                                                AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                          pure post
+                                      NJU_Log.record (Event.common next.frame) (child next.frame)) =
+                                do
+                                let parsed ← NJU_Log.record (Event.parse s.frame.proof) (ok result)
+                                tryR parsed fun x => do
+                                    NJU_Log.record (Event.mark s.frame.observer)
+                                        (NHV_ReleaseOps.mark s.frame.observer
+                                          AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                    NJU_Log.record (Event.common s.frame) (child s.frame))
+                            (fun parsed =>
+                              of_eq_true
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Eq
+                                      (Eq.trans
+                                        (congrArg
+                                          (fun x =>
+                                            match { result := ok (core.result.Result.Err err), events := x }.result with
+                                            | fail err_1 =>
+                                              { result := fail err_1,
+                                                events :=
+                                                  (do
+                                                      let reply ←
+                                                        NJU_Log.record (Event.parse s.frame.proof)
+                                                            (ok (core.result.Result.Err err))
+                                                      tryR reply fun variant =>
+                                                          pure
+                                                            (core.result.Result.Ok
+                                                              { frame := s.frame, parsed := some variant,
+                                                                history := s.history })).events }
+                                            | div =>
+                                              { result := div,
+                                                events :=
+                                                  (do
+                                                      let reply ←
+                                                        NJU_Log.record (Event.parse s.frame.proof)
+                                                            (ok (core.result.Result.Err err))
+                                                      tryR reply fun variant =>
+                                                          pure
+                                                            (core.result.Result.Ok
+                                                              { frame := s.frame, parsed := some variant,
+                                                                history := s.history })).events }
+                                            | ok a =>
+                                              have next :=
+                                                (fun reply =>
+                                                    tryR reply fun post => do
+                                                      let next ←
+                                                        do
+                                                          NJU_Log.record (Event.mark post.frame.observer)
+                                                              (NHV_ReleaseOps.mark post.frame.observer
+                                                                AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                          pure post
+                                                      NJU_Log.record (Event.common next.frame) (child next.frame))
+                                                  a;
+                                              { result := next.result,
+                                                events :=
+                                                  (do
+                                                        let reply ←
+                                                          NJU_Log.record (Event.parse s.frame.proof)
+                                                              (ok (core.result.Result.Err err))
+                                                        tryR reply fun variant =>
+                                                            pure
+                                                              (core.result.Result.Ok
+                                                                { frame := s.frame, parsed := some variant,
+                                                                  history := s.history })).events ++
+                                                    next.events })
+                                          (List.append_nil
+                                            [Event.parse s.frame.proof (ok (core.result.Result.Err err))]))
+                                        (congrArg (NJU_Log.Run.mk (ok (core.result.Result.Err err)))
+                                          (Eq.trans
+                                            (congrFun'
+                                              (congrArg HAppend.hAppend
+                                                (congrArg NJU_Log.Run.events
+                                                  (congrArg (NJU_Log.Run.mk (ok (core.result.Result.Err err)))
+                                                    (List.append_nil
+                                                      [Event.parse s.frame.proof (ok (core.result.Result.Err err))]))))
+                                              [])
+                                            (List.append_nil
+                                              [Event.parse s.frame.proof (ok (core.result.Result.Err err))])))))
+                                    (congrArg (NJU_Log.Run.mk (ok (core.result.Result.Err err)))
+                                      (List.append_nil [Event.parse s.frame.proof (ok (core.result.Result.Err err))])))
+                                  (eq_self
+                                    { result := ok (core.result.Result.Err err),
+                                      events := [Event.parse s.frame.proof (ok (core.result.Result.Err err))] })))
+                            (Eq.symm h) parsed)
+                        (Eq.refl result))
+                    (Eq.symm h) (Eq.refl (NLE_ParseInstall.parse s.frame.proof)))
+                (fun err h =>
+                  Eq.ndrec (motive := fun x =>
+                    NLE_ParseInstall.parse s.frame.proof = x →
+                      (do
+                          let reply ←
+                            do
+                              let reply ← NJU_Log.record (Event.parse s.frame.proof) x
+                              tryR reply fun variant =>
+                                  pure
+                                    (core.result.Result.Ok
+                                      { frame := s.frame, parsed := some variant, history := s.history })
+                          tryR reply fun post => do
+                              let next ←
+                                do
+                                  NJU_Log.record (Event.mark post.frame.observer)
+                                      (NHV_ReleaseOps.mark post.frame.observer
+                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                  pure post
+                              NJU_Log.record (Event.common next.frame) (child next.frame)) =
+                        do
+                        let parsed ← NJU_Log.record (Event.parse s.frame.proof) x
+                        tryR parsed fun x => do
+                            NJU_Log.record (Event.mark s.frame.observer)
+                                (NHV_ReleaseOps.mark s.frame.observer
+                                  AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                            NJU_Log.record (Event.common s.frame) (child s.frame))
+                    (fun parsed =>
+                      of_eq_true (eq_self { result := fail err, events := [Event.parse s.frame.proof (fail err)] }))
+                    (Eq.symm h) (Eq.refl (NLE_ParseInstall.parse s.frame.proof)))
+                (fun h =>
+                  Eq.ndrec (motive := fun x =>
+                    NLE_ParseInstall.parse s.frame.proof = x →
+                      (do
+                          let reply ←
+                            do
+                              let reply ← NJU_Log.record (Event.parse s.frame.proof) x
+                              tryR reply fun variant =>
+                                  pure
+                                    (core.result.Result.Ok
+                                      { frame := s.frame, parsed := some variant, history := s.history })
+                          tryR reply fun post => do
+                              let next ←
+                                do
+                                  NJU_Log.record (Event.mark post.frame.observer)
+                                      (NHV_ReleaseOps.mark post.frame.observer
+                                        AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                  pure post
+                              NJU_Log.record (Event.common next.frame) (child next.frame)) =
+                        do
+                        let parsed ← NJU_Log.record (Event.parse s.frame.proof) x
+                        tryR parsed fun x => do
+                            NJU_Log.record (Event.mark s.frame.observer)
+                                (NHV_ReleaseOps.mark s.frame.observer
+                                  AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                            NJU_Log.record (Event.common s.frame) (child s.frame))
+                    (fun parsed => of_eq_true (eq_self { result := div, events := [Event.parse s.frame.proof div] }))
+                    (Eq.symm h) (Eq.refl (NLE_ParseInstall.parse s.frame.proof)))
+                (Eq.refl (NLE_ParseInstall.parse s.frame.proof))))))))
+'NLE_AuthLiteral.installed' depends on axioms: [propext, Classical.choice, Quot.sound]

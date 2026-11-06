@@ -1,0 +1,138 @@
+NLE_generated/NLE_NativeTags.lean:37:15: error: Expected type must not contain free variables
+  commonTag (core.result.Result.Ok value) < 9
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+theorem NLE_NativeTags.parse_roundtrip : ∀ (reply : core.result.Result transport.Variant verifier.Error),
+  parse (parseTag reply) = reply :=
+fun reply =>
+  core.result.Result.casesOn (motive := fun t => reply = t → parse (parseTag reply) = reply) reply
+    (fun variant h =>
+      Eq.symm h ▸
+        AspisR1Stage2.transport.Variant.casesOn (motive := fun t =>
+          variant = t → parse (parseTag (core.result.Result.Ok variant)) = core.result.Result.Ok variant) variant
+          (fun h => Eq.symm h ▸ Eq.refl (parse (parseTag (core.result.Result.Ok AspisR1Stage2.transport.Variant.S1))))
+          (fun h => Eq.symm h ▸ Eq.refl (parse (parseTag (core.result.Result.Ok AspisR1Stage2.transport.Variant.S2))))
+          (fun h => Eq.symm h ▸ Eq.refl (parse (parseTag (core.result.Result.Ok AspisR1Stage2.transport.Variant.D))))
+          (Eq.refl variant))
+    (fun err h =>
+      Eq.symm h ▸
+        AdapterRw.aspis_r1_cost_probe.verifier.Error.casesOn (motive := fun t =>
+          err = t → parse (parseTag (core.result.Result.Err err)) = core.result.Result.Err err) err
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl (parse (parseTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl (parse (parseTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Semantic))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl
+                (parse (parseTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Transcript))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl (parse (parseTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Relation))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl (parse (parseTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Merkle))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl (parse (parseTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Query))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl
+                (parse (parseTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl
+                (parse (parseTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation))))
+          (Eq.refl err))
+    (Eq.refl reply)
+theorem NLE_NativeTags.common_roundtrip : ∀ (reply : core.result.Result Unit verifier.Error),
+  common (commonTag reply) = reply :=
+fun reply =>
+  core.result.Result.casesOn (motive := fun t => reply = t → common (commonTag reply) = reply) reply
+    (fun value h =>
+      Eq.symm h ▸
+        let ⟨h✝⟩ := value
+        Eq.symm h✝ ▸ Eq.refl (common (commonTag (core.result.Result.Ok PUnit.unit))))
+    (fun err h =>
+      Eq.symm h ▸
+        AdapterRw.aspis_r1_cost_probe.verifier.Error.casesOn (motive := fun t =>
+          err = t → common (commonTag (core.result.Result.Err err)) = core.result.Result.Err err) err
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl (common (commonTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl
+                (common (commonTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Semantic))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl
+                (common (commonTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Transcript))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl
+                (common (commonTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Relation))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl (common (commonTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Merkle))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl (common (commonTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Query))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl
+                (common (commonTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint))))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl
+                (common (commonTag (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation))))
+          (Eq.refl err))
+    (Eq.refl reply)
+theorem NLE_NativeTags.parse_domain : ∀ (reply : core.result.Result transport.Variant verifier.Error),
+  parseTag reply < 11 :=
+fun reply =>
+  core.result.Result.casesOn (motive := fun t => reply = t → parseTag reply < 11) reply
+    (fun variant h =>
+      Eq.symm h ▸
+        AspisR1Stage2.transport.Variant.casesOn (motive := fun t =>
+          variant = t → parseTag (core.result.Result.Ok variant) < 11) variant
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) (Eq.refl variant))
+    (fun err h =>
+      Eq.symm h ▸
+        AdapterRw.aspis_r1_cost_probe.verifier.Error.casesOn (motive := fun t =>
+          err = t → parseTag (core.result.Result.Err err) < 11) err
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) (Eq.refl err))
+    (Eq.refl reply)
+theorem NLE_NativeTags.common_domain : ∀ (reply : core.result.Result Unit verifier.Error), commonTag reply < 9 :=
+fun reply =>
+  core.result.Result.casesOn (motive := fun t => reply = t → commonTag reply < 9) reply
+    (fun value h => Eq.symm h ▸ sorry)
+    (fun err h =>
+      Eq.symm h ▸
+        AdapterRw.aspis_r1_cost_probe.verifier.Error.casesOn (motive := fun t =>
+          err = t → commonTag (core.result.Result.Err err) < 9) err
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) (Eq.refl err))
+    (Eq.refl reply)
+'NLE_NativeTags.error_roundtrip' does not depend on any axioms
+'NLE_NativeTags.parse_roundtrip' does not depend on any axioms
+'NLE_NativeTags.common_roundtrip' does not depend on any axioms
+'NLE_NativeTags.parse_domain' does not depend on any axioms
+'NLE_NativeTags.common_domain' depends on axioms: [sorryAx]

@@ -1,0 +1,45 @@
+{"attempt": "NLE_L061", "exit_status": 0, "wall_seconds": 16.11692201392725, "peak_rss_kib": "5997552", "swaps": "0", "print_axioms": ["'NLE_NativeTags.error_roundtrip' does not depend on any axioms", "'NLE_NativeTags.parse_roundtrip' does not depend on any axioms", "'NLE_NativeTags.common_roundtrip' does not depend on any axioms", "'NLE_NativeTags.parse_domain' does not depend on any axioms", "'NLE_NativeTags.common_domain' does not depend on any axioms"]}
+theorem NLE_NativeTags.parse_roundtrip : ∀ (reply : core.result.Result transport.Variant verifier.Error),
+  parse (parseTag reply) = reply :=
+fun reply =>
+  core.result.Result.casesOn (motive := fun t => reply = t → parse (parseTag reply) = reply) reply
+    (fun variant h =>
+      Eq.symm h ▸
+        AspisR1Stage2.transport.Variant.casesOn (motive := fun t =>
+          variant = t → parse (parseTag (core.result.Result.Ok variant)) = core.result.Result.Ok variant) variant
+          (fun h => Eq.symm h ▸ Eq.refl (parse (parseTag (core.result.Result.Ok AspisR1Stage2.transport.Variant.S1))))
+          (fun h => Eq.symm h ▸ Eq.refl (parse (parseTag (core.result.Result.Ok AspisR1Stage2.transport.V
+...
+h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) (Eq.refl err))
+    (Eq.refl reply)
+theorem NLE_NativeTags.common_domain : ∀ (reply : core.result.Result Unit verifier.Error), commonTag reply < 9 :=
+fun reply =>
+  core.result.Result.casesOn (motive := fun t => reply = t → commonTag reply < 9) reply
+    (fun value h =>
+      Eq.symm h ▸
+        let ⟨h✝⟩ := value
+        Eq.symm h✝ ▸ of_decide_eq_true (id (Eq.refl true)))
+    (fun err h =>
+      Eq.symm h ▸
+        AdapterRw.aspis_r1_cost_probe.verifier.Error.casesOn (motive := fun t =>
+          err = t → commonTag (core.result.Result.Err err) < 9) err
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true)))
+          (fun h => Eq.symm h ▸ of_decide_eq_true (id (Eq.refl true))) (Eq.refl err))
+    (Eq.refl reply)
+'NLE_NativeTags.error_roundtrip' does not depend on any axioms
+'NLE_NativeTags.parse_roundtrip' does not depend on any axioms
+'NLE_NativeTags.common_roundtrip' does not depend on any axioms
+'NLE_NativeTags.parse_domain' does not depend on any axioms
+'NLE_NativeTags.common_domain' does not depend on any axioms
+
+Running as unit: run-re5910700bb95409d841bc2444403812c.scope; invocation ID: 52bba8888aa14cd3b156ffa894621279

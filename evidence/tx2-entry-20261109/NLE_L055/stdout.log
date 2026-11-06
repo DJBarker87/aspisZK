@@ -1,0 +1,20 @@
+NLE_generated/NLE_AuthLiteral.lean:17:31: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.parse`
+  Result ?m.20 → ?m.19
+is not of the form `C ...` or `... → C ...` where C is a constant
+NLE_generated/NLE_AuthLiteral.lean:20:28: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.mark`
+  Result ?m.35 → ?m.36
+is not of the form `C ...` or `... → C ...` where C is a constant
+NLE_generated/NLE_AuthLiteral.lean:22:19: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.common`
+  Result (core.result.Result ?m.29 verifier.Error) → ?m.52
+is not of the form `C ...` or `... → C ...` where C is a constant
+def NLE_AuthLiteral.G : {H : Type} → Common H → Frame H → Run H Reply :=
+fun {H} child frame => do
+  let parsed ← NJU_Log.record (Event.parse frame.proof) (NLE_ParseInstall.parse frame.proof)
+  tryR parsed fun x => do
+      NJU_Log.record (Event.mark frame.observer)
+          (NHV_ReleaseOps.mark frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+      NJU_Log.record (Event.common frame) (child frame)
+theorem NLE_AuthLiteral.installed : ∀ {H : Type} (ops : Ops) (child : Common H) (s : State H),
+  NLE_Auth.G (NLE_AuthScope.install ops) child s = G child s.frame :=
+fun {H} ops child s => id (id (id (id (id sorry))))
+'NLE_AuthLiteral.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

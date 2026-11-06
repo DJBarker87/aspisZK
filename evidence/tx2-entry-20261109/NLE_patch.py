@@ -13,6 +13,6 @@ def save(module,text,label):
  name='crates/aspis-r1-cost-probe/src/'+module+'.rs'
  patch+='diff --git a/'+name+' b/'+name+'\nnew file mode 100644\n'+''.join(difflib.unified_diff([],text.splitlines(True),fromfile='/dev/null',tofile='b/'+name))
  (E/(label+'.patch')).write_text(patch)
-def load(label,module='NLE_auth_window'):
- patch=(E/(label+'.patch')).read_text();needle='diff --git a/crates/aspis-r1-cost-probe/src/'+module+'.rs '
+def load(label,module='NLE_auth_window',directory='crates/aspis-r1-cost-probe/src'):
+ patch=(E/(label+'.patch')).read_text();needle='diff --git a/'+directory+'/'+module+'.rs '
  part=patch[patch.index(needle):];return '\n'.join(l[1:] for l in part.splitlines() if l.startswith('+') and not l.startswith('+++'))+'\n'

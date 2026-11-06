@@ -27,6 +27,27 @@ inductive Event where
  | checkpoint (state : State) (account : Account) (reply : Result (core.result.Result (Slice U8) PE))
  | encode (state : State) (statement : Statement) (reply : Result (core.result.Result (Array U8 1880#usize) aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1))
  | tx2 (state : State) (publicBytes proof checkpoint : Slice U8) (reply : Result (core.result.Result Unit aspis_r1_cost_probe.verifier.Error))
+ | error (state : State) (error : aspis_r1_cost_probe.verifier.Error) (reply : Result PE)
  | emit (state : State) (statement : Statement) (reply : Result PR)
 abbrev Run (A : Type) := NJU_Log.Run Event A
+/-- Error conversion is itself an entered child with a retained abort prefix. -/
+def errorMap (ops : Ops) (state : State)
+ (reply : core.result.Result Unit aspis_r1_cost_probe.verifier.Error) : Run PR :=
+ match reply with
+ | .Ok unit => pure (.Ok unit)
+ | .Err err => do
+  let converted ← NJU_Log.record (.error state err) (ops.op44 err)
+  pure (.Err converted)
+theorem errorMap_result (ops : Ops) (state : State)
+ (reply : core.result.Result Unit aspis_r1_cost_probe.verifier.Error) :
+ (errorMap ops state reply).result = core.result.Result.map_err
+  (BuiltinFnOnce aspis_r1_cost_probe.verifier.Error PE) reply ops.op44 := by
+ cases reply with
+ | Ok unit => rfl
+ | Err err =>
+  unfold errorMap
+  rw [NJU_Log.erase_bind]
+  rfl
+#print errorMap_result
+#print axioms errorMap_result
 end NLE_Owned

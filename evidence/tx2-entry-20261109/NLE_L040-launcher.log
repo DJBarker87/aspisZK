@@ -1,0 +1,46 @@
+{"attempt": "NLE_L040", "exit_status": 0, "wall_seconds": 17.197368558961898, "peak_rss_kib": "6028084", "swaps": "0", "print_axioms": ["'NLE_Owned.errorMap_result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLE_generated/NLE_OwnedState.lean:37:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+NLE_generated/NLE_OwnedState.lean:46:6: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+theorem NLE_Owned.errorMap_result : ∀ (ops : Ops) (state : State)
+  (reply : core.result.Result Unit aspis_r1_cost_probe.verifier.Error),
+  (errorMap ops state reply)
+...
+e '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+NLE_generated/NLE_OwnedState.lean:46:6: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+theorem NLE_Owned.errorMap_result : ∀ (ops : Ops) (state : State)
+  (reply : core.result.Result Unit aspis_r1_cost_probe.verifier.Error),
+  (errorMap ops state reply).result =
+    core.result.Result.map_err (BuiltinFnOnce aspis_r1_cost_probe.verifier.Error PE) reply ops.op44 :=
+fun ops state reply =>
+  core.result.Result.casesOn (motive := fun t =>
+    reply = t →
+      (errorMap ops state reply).result =
+        core.result.Result.map_err (BuiltinFnOnce aspis_r1_cost_probe.verifier.Error PE) reply ops.op44)
+    reply (fun unit h => Eq.symm h ▸ Eq.refl (errorMap ops state (core.result.Result.Ok unit)).result)
+    (fun err h =>
+      Eq.symm h ▸
+        id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  _a =
+                    core.result.Result.map_err (BuiltinFnOnce aspis_r1_cost_probe.verifier.Error PE)
+                      (core.result.Result.Err err) ops.op44)
+                (NJU_Log.erase_bind (NJU_Log.record (Event.error state err) (ops.op44 err)) fun converted =>
+                  pure (core.result.Result.Err converted))))
+            (Eq.refl do
+              let a ← (NJU_Log.record (Event.error state err) (ops.op44 err)).result
+              (pure (core.result.Result.Err a)).result)))
+    (Eq.refl reply)
+'NLE_Owned.errorMap_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r231010b740cd43dfbbf39090af1712d1.scope; invocation ID: 35510a030ed740cd9a2de371e4c30dbe

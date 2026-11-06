@@ -1,0 +1,42 @@
+{"attempt": "NLE_L063", "exit_status": 0, "wall_seconds": 25.59587923414074, "peak_rss_kib": "5999492", "swaps": "0", "print_axioms": ["'NLE_CallerScope.checkpoint' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_CallerScope.scope' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLE_CallerScope.checkpoint : ∀ (entry : Entry) (bytes : Slice U8),
+  (entry.snapshot 6 1768 1768).bytes = core.result.Result.Ok bytes → (↑bytes).length = 1768 :=
+fun entry bytes read =>
+  Decidable.casesOn instDecidableOr
+    (fun h =>
+      let ⟨⟩ := core.result.Result.Ok bytes
+      Eq.mp (congrFun' (congrArg Eq (if_neg h)) (core.result.Result.Ok bytes)) read)
+    fun h =>
+    let ⟨⟩ := core.result.Result.Ok bytes
+    Eq.mp (congrFun' (congrArg Eq (if_pos h)) (core.result.Result.Ok bytes)) read
+theorem NLE_CallerScope.scope : ∀ (entry : Entry) (proofAccount proof checkpointBytes : Slice U8)
+  (publicBytes : Std.Array U8 1880#usize) (proofEnd : Usize) (publicAddress proofAddress che
+...
+theorem NLE_CallerScope.checkpoint : ∀ (entry : Entry) (bytes : Slice U8),
+  (entry.snapshot 6 1768 1768).bytes = core.result.Result.Ok bytes → (↑bytes).length = 1768 :=
+fun entry bytes read =>
+  Decidable.casesOn instDecidableOr
+    (fun h =>
+      let ⟨⟩ := core.result.Result.Ok bytes
+      Eq.mp (congrFun' (congrArg Eq (if_neg h)) (core.result.Result.Ok bytes)) read)
+    fun h =>
+    let ⟨⟩ := core.result.Result.Ok bytes
+    Eq.mp (congrFun' (congrArg Eq (if_pos h)) (core.result.Result.Ok bytes)) read
+theorem NLE_CallerScope.scope : ∀ (entry : Entry) (proofAccount proof checkpointBytes : Slice U8)
+  (publicBytes : Std.Array U8 1880#usize) (proofEnd : Usize) (publicAddress proofAddress checkpointAddress : ℕ),
+  (entry.snapshot 0 58295 58295).bytes = core.result.Result.Ok proofAccount →
+    (entry.snapshot 6 1768 1768).bytes = core.result.Result.Ok checkpointBytes →
+      (↑proofAccount).length = ↑proofEnd →
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proofAccount
+              { start := 688#usize, «end» := proofEnd } =
+            ok proof →
+          NLE_SafeCuts.Scope
+            (metadata publicAddress proofAddress checkpointAddress publicBytes.to_slice proof checkpointBytes) :=
+fun entry proofAccount proof checkpointBytes publicBytes proofEnd publicAddress proofAddress checkpointAddress proofRead
+    checkpointRead guard range =>
+  have exactProof := (NLE_RangeClause.caller_proof entry proofAccount proof proofEnd proofRead guard range).left;
+  ⟨NLE_Length.public_extent publicBytes, ⟨exactProof, checkpoint entry checkpointBytes checkpointRead⟩⟩
+'NLE_CallerScope.checkpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_CallerScope.scope' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r42ea2ab275444d7ab58ba970778f7679.scope; invocation ID: b7e5608721d1439ab5259d52ae6b685f

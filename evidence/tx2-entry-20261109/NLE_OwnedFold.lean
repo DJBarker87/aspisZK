@@ -100,9 +100,7 @@ def G (ops : Ops) (initial : State)
                       NJU_Log.record (.tx2 s5 s2 s3 val2)
                         (ops.op11 (SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) s2 s3 val2 () o2)
                     let r7 ←
-                      core.result.Result.map_err (BuiltinFnOnce
-                        aspis_r1_cost_probe.verifier.Error
-                        solana_program_error.ProgramError) r6 (ops.op44)
+                      errorMap ops s5 r6
                     let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r7
                     match cf5 with
                     | core.ops.control_flow.ControlFlow.Continue _ =>

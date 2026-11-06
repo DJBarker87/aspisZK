@@ -13,6 +13,8 @@ def baseline():
  for parent in ['programs/r1-cost-probe/src/lib.rs','crates/aspis-statement/src/lib.rs']:
   files['NLE_src/'+parent]='#![cfg_attr(kani,feature(allocator_api))]\n'+files['NLE_src/'+parent]
  files={k:v for k,v in files.items() if not k.startswith(('NIJ_src/','NLE_src/'))}
+ for clean in ['crates/aspis-r1-cost-probe/src/lib.rs','crates/aspis-r1-cost-probe/src/candidate.rs','programs/r1-cost-probe/src/lib.rs','programs/r1-cost-probe/src/r1_pool_adapter_owned.rs']:
+  files['NLE_src/'+clean]=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+clean],text=True)
  files['NLE_src/Cargo.lock']=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:Cargo.lock'],text=True)
  files['NIJ_SOURCE_PINS.json']=(E/'NLE_BASE_PINS.json').read_text()
  files['NGL_FROZEN_SOURCE_PINS.json']=(E/'NLE_BASE_PINS.json').read_text()
@@ -39,6 +41,8 @@ def submit(a,target,parent,module,text,mode='positive',edits=None,extra_sidecars
  files[key]=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+parent],text=True)
  if parent.startswith('crates/aspis-r1-cost-probe/'):
   files['NLE_src/crates/aspis-r1-cost-probe/src/lib.rs']='#![cfg_attr(kani,feature(allocator_api))]\n'+subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:crates/aspis-r1-cost-probe/src/lib.rs'],text=True)
+ if parent.startswith('programs/r1-cost-probe/'):
+  files['NLE_src/programs/r1-cost-probe/src/lib.rs']='#![cfg_attr(kani,feature(allocator_api))]\n'+files['NLE_src/programs/r1-cost-probe/src/lib.rs']
  files[key]+='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod '+module+';\n'
  files['NLE_src/'+str(Path(parent).parent/(module+'.rs'))]=text
  files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace("for module in [","for module in ['"+module+"',")

@@ -1,0 +1,35 @@
+theorem NLE_Wrapper.snapshot_result : ∀ {Account : Type} (ops : Ops Account) (state : State Account)
+  (index min max : Usize),
+  (snapshot ops state index min max).result = do
+    let account ← state.frame.accounts.index_usize index
+    let value ← ops.snapshot account min max
+    ok (value, { frame := state.frame, snapshots := state.snapshots ++ [value], slot := state.slot }) :=
+fun {Account} ops state index min max =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (NJU_Log.erase_bind (liftM (state.frame.accounts.index_usize index)) fun account => do
+              let value ← NJU_Log.record (Event.snapshot state index account min max) (ops.snapshot account min max)
+              pure (value, { frame := state.frame, snapshots := state.snapshots ++ [value], slot := state.slot }))
+            (congrArg (Bind.bind (state.frame.accounts.index_usize index))
+              (funext fun a =>
+                NJU_Log.erase_bind (NJU_Log.record (Event.snapshot state index a min max) (ops.snapshot a min max))
+                  fun value =>
+                  pure
+                    (value, { frame := state.frame, snapshots := state.snapshots ++ [value], slot := state.slot })))))
+        do
+        let a ← state.frame.accounts.index_usize index
+        let a ← ops.snapshot a min max
+        ok (a, { frame := state.frame, snapshots := state.snapshots ++ [a], slot := state.slot }))
+      (eq_self do
+        let a ← state.frame.accounts.index_usize index
+        let a ← ops.snapshot a min max
+        ok (a, { frame := state.frame, snapshots := state.snapshots ++ [a], slot := state.slot })))
+@[defeq] theorem NLE_Wrapper.clear_result : ∀ {Account : Type} (ops : Ops Account) (state : State Account),
+  (clear ops state).result = ops.clear ⟨[], ⋯⟩ :=
+fun {Account} ops state => rfl
+'NLE_Wrapper.snapshot_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Wrapper.snapshot_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Wrapper.clear_result' depends on axioms: [propext, Classical.choice, Quot.sound]

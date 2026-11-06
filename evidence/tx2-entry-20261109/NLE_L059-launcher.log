@@ -1,0 +1,61 @@
+{"attempt": "NLE_L059", "exit_status": 0, "wall_seconds": 12.340404645074159, "peak_rss_kib": "6018756", "swaps": "0", "print_axioms": ["'NLE_ErrorPrefix.abort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_ErrorPrefix.diverge' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_ErrorPrefix.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLE_ErrorPrefix.abort : ∀ (ops : Ops) (state : State) (err : aspis_r1_cost_probe.verifier.Error)
+  (failure : Error),
+  ops.op44 err = fail failure →
+    errorMap ops state (core.result.Result.Err err) =
+      { result := fail failure, events := [Event.error state err (fail failure)] } :=
+fun ops state err failure failed =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let converted ← NJU_Log.record (Event.error state err) _a
+                pure (core.result.Result.Err converted)) =
+              { result := fail failure, events := [Event.error state err (fail failure)] })
+          failed))
+      (Eq.refl do
+        let converted 
+...
+: ∀ (ops : Ops) (state : State) (err : aspis_r1_cost_probe.verifier.Error),
+  ops.op44 err = div →
+    errorMap ops state (core.result.Result.Err err) = { result := div, events := [Event.error state err div] } :=
+fun ops state err failed =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let converted ← NJU_Log.record (Event.error state err) _a
+                pure (core.result.Result.Err converted)) =
+              { result := div, events := [Event.error state err div] })
+          failed))
+      (Eq.refl do
+        let converted ← NJU_Log.record (Event.error state err) div
+        pure (core.result.Result.Err converted)))
+theorem NLE_ErrorPrefix.rejected : ∀ (ops : Ops) (state : State) (err : aspis_r1_cost_probe.verifier.Error)
+  (converted : PE),
+  ops.op44 err = ok converted →
+    errorMap ops state (core.result.Result.Err err) =
+      { result := ok (core.result.Result.Err converted), events := [Event.error state err (ok converted)] } :=
+fun ops state err converted returned =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let converted ← NJU_Log.record (Event.error state err) _a
+                pure (core.result.Result.Err converted)) =
+              { result := ok (core.result.Result.Err converted), events := [Event.error state err (ok converted)] })
+          returned))
+      (Eq.refl do
+        let converted ← NJU_Log.record (Event.error state err) (ok converted)
+        pure (core.result.Result.Err converted)))
+'NLE_ErrorPrefix.abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_ErrorPrefix.diverge' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_ErrorPrefix.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc6b4e0617aed461ca486464335af2e7b.scope; invocation ID: c927c881c20947e6943c08679ffe8122
