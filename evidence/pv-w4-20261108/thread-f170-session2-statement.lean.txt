@@ -1,0 +1,19 @@
+theorem throughBranch {W E : Type} (base : Carrier W Data) (ctl : Control)
+    (programs : Data → Option PV_STX2_SliceSyntax.Program)
+    (handler : PV_STX2_Native.Request Data → W → Reply W E Data)
+    (s : Store Data) (a ka kl : Nat) (callback : Data) (b : Bool)
+    (parents : List Frame) (w : W) (v mv ev : Data)
+    (pre : EntryPre s a ka kl callback b)
+    (key : (keyReply handler s a b w).answer = .returned (.ok v))
+    (mapped : (mapReply handler s a b v w).answer = .returned (.ok mv))
+    (error : (errorReply handler s a b parents v mv w).answer = .returned (.ok ev)) :
+    PV_THR2_Execution.advance (PV_THR2_EntryDynamic.carrier base b) ctl
+      (PV_THR2_RunEntryDynamic.table programs) handler ((24+3)+1)
+      ⟨.running ⟨{activation := a,remaining := PV_THR2_F170.live.body},parents,s⟩,w,[]⟩ =
+    let c := branchPending s a b parents v mv ev
+    let q := PV_THR2_ChildBoundary.delivered (PV_THR2_EntryDynamic.carrier base b) c
+      ⟨.child PV_THR2_RunTlsBranchRequest.callee (afterError s a b parents v mv ev).nextActivation [ev],
+       .child (afterError s a b parents v mv ev).nextActivation (.local 4),[]⟩
+      (branchReply handler s a b parents v mv ev w)
+    {q with events := (((keyReply handler s a b w).events ++ (mapReply handler s a b v w).events) ++
+      (errorReply handler s a b parents v mv w).events) ++ q.events}

@@ -1,0 +1,9 @@
+theorem toWith {W E : Type} (base : Carrier W Data) (ctl : Control)
+    (programs : Data → Option PV_STX2_SliceSyntax.Program)
+    (handler : PV_STX2_Native.Request Data → W → Reply W E Data)
+    (s : Store Data) (a : Nat) (b : Bool) (parents : List Frame) (w : W) :
+    PV_THR2_Execution.advance (PV_THR2_EntryDynamic.carrier base b) ctl
+      (PV_THR2_RunEntryDynamic.table programs) handler (5+2)
+      ⟨.running ⟨{activation := a,remaining := PV_THR2_F2.live.body},parents,s⟩,w,[]⟩ =
+    ⟨.running ⟨{activation := s.nextActivation,remaining := PV_THR2_F17.live.body},
+      parent s a :: parents,childStore s a b⟩,w,[]⟩

@@ -1,0 +1,14 @@
+theorem throughTls {W E : Type} (base : Carrier W Data) (ctl : Control)
+    (programs : Data → Option PV_STX2_SliceSyntax.Program)
+    (handler : PV_STX2_Native.Request Data → W → Reply W E Data)
+    (s : Store Data) (a ka kl : Nat) (fn : Data) (b : Bool)
+    (parents : List Frame) (w : W) (pre : Pre s a ka kl fn b) :
+    PV_THR2_Execution.advance (PV_THR2_EntryDynamic.carrier base b) ctl
+      (PV_THR2_RunEntryDynamic.table programs) handler ((6+2)+15)
+      ⟨.running ⟨{activation := a,remaining := PV_THR2_F17.live.body},parents,s⟩,w,[]⟩ =
+    let t := childStore s a ka kl fn
+    PV_THR2_OffPathReply.delivered (PV_THR2_EntryDynamic.carrier base b)
+      (PV_FN_THREAD_f170.beforeDynamic t s.nextActivation b) s.nextActivation
+      (parent s a ka kl fn :: parents) PV_FN_THREAD_f170.arg b
+      (handler (.child (PV_THR2_KeyValues.castToken b).2
+        (PV_FN_THREAD_f170.beforeDynamic t s.nextActivation b).nextActivation [PV_FN_THREAD_f170.arg]) w)

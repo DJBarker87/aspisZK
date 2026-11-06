@@ -1,0 +1,15 @@
+theorem throughIterator {W E : Type} (base : Carrier W Data) (ctl : Control)
+    (fallback : Data → Option PV_STX2_SliceSyntax.Program)
+    (handler : PV_STX2_Native.Request Data → W → Reply W E Data)
+    (s : Store Data) (a : Nat) (parents : List Frame) (p : Address)
+    (b : Bool) (w : W) (es : List E) (stack : List Config)
+    (pre : HandlesPre s a parents p) :
+    let t := source s a p
+    let r := PV_FN_THREAD_f164.reply handler (entry164 s a parents p).store w
+    PV_THR2_IntrinsicState.advance (PV_FN_THREAD_f164.carrier (PV_THR2_RangeLiterals.carrier base) b) ctl
+      (PV_THR2_Source208Table.table (PV_THR2_Source15Table.resolve (PV_THR2_OwnInitChildren.resolve fallback)))
+      handler (((6 + (4 + PV_THR2_Source164Continue268.steps r)) +
+        PV_THR2_Source15AfterHandles93.steps handler t a parents r) +
+        PV_THR2_Source15AfterHandlesMatch.steps handler t a parents w)
+      ⟨⟨.running ⟨{activation := a,remaining := PV_THR2_F15.live.body},parents,s⟩,w,es⟩,stack⟩ =
+    PV_THR2_Source15AfterHandlesMatch.after base ctl b handler t a parents w es stack
