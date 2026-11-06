@@ -1,0 +1,49 @@
+{"attempt": "NLF_L051", "exit_status": 1, "wall_seconds": 2.6659910790622234, "peak_rss_kib": "3406700", "swaps": "0", "print_axioms": ["'NLF_SnapshotOccurrence.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLF_generated/NLF_SnapshotOccurrence.lean:28:4: error: Type mismatch: After simplification, term
+  congrArg (fun n => n + 1) nt
+ has type
+  (run { state := NLF_Admission.initial h records (byteList h) money, next := 0, events := [] } prior).1.next + 1 =
+    prior.length + 1
+but is expected to have type
+  (run { state := NLF_Admission.initial h records (byteList h) money, next := 0, events := [] } prior).1.next =
+    prior.length
+NLF_generated/NLF_SnapshotOccurrence.lean:32:2: error: unsolved goals
+case refine_3
+F : Type
+h : S2Trust.Heap F
+records : ℕ → Account
+money : ℕ → ℕ
+prior : List ℕ
+a : ℕ
+frame : (run (install h records money) prior).1.state = (install h records money).state
+nt : (run 
+...
+(install h records money) prior).1.state.cells
+        ((run (install h records money) prior).1.state.accounts a).data).readers =
+    []
+e :
+  (NLF_SnapshotEvents.step (run (install h records money) prior).1 a).1.events =
+    (run (install h records money) prior).1.events ++
+      [Event.acquire a (run (install h records money) prior).1.next Kind.shared
+          (Except.ok
+            { cell := ((run (install h records money) prior).1.state.accounts a).data,
+              token := (run (install h records money) prior).1.next, kind := Kind.shared }),
+        Event.deref
+          { cell := ((run (install h records money) prior).1.state.accounts a).data,
+            token := (run (install h records money) prior).1.next, kind := Kind.shared }
+          (Except.ok
+            ((run (install h records money) prior).1.state.cells
+                ((run (install h records money) prior).1.state.accounts a).data).payload),
+        Event.release
+          { cell := ((run (install h records money) prior).1.state.accounts a).data,
+            token := (run (install h records money) prior).1.next, kind := Kind.shared }
+          (Except.ok ())]
+⊢ ((NLF_Admission.initial h records (byteList h) money).accounts a).data = (h.accounts a).1 ∧
+    (((NLF_Admission.initial h records (byteList h) money).accounts a).data = (h.accounts a).1 ∧
+        ((NLF_Admission.initial h records (byteList h) money).cells
+              ((NLF_Admission.initial h records (byteList h) money).accounts a).data).payload =
+          ((NLF_Admission.initial h records (byteList h) money).cells (h.accounts a).1).payload) ∧
+      ((NLF_Admission.initial h records (byteList h) money).accounts a).data = (h.accounts a).1
+'NLF_SnapshotOccurrence.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r98b4f88456cf430a8aafc6f1810413b0.scope; invocation ID: eb50be1361c44daf9b715aee6a748cb2
