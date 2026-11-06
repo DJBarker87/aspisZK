@@ -1,13 +1,13 @@
 # NKH physical association distances
 
-Target not yet established. Recomputed from599 retained function occurrences after refusing all ungated candidates. These are conditional native/source associations; entry/caller/runtime/source-to-ELF/headline obligations remain.
+Target not yet established. Recomputed from599 retained function occurrences after the full combined gate admitted28candidate occurrences. These are conditional native/source associations; entry/caller/runtime/source-to-ELF/headline obligations remain.
 
 | Part | Total | CLOSED | OPEN | QUALIFIED |
 |---|---:|---:|---:|---:|
 | (ao)(3)(b) | 53 | 38 | 15 | 0 |
-| (ao)(3)(c) | 546 | 476 | 70 | 0 |
+| (ao)(3)(c) | 546 | 504 | 42 | 0 |
 
-Entry(b)38/53 and native forest(c)476/546 unchanged;15entry and70forest occurrences remain OPEN,85total. The28candidate occurrences remain OPEN because this job did not complete its gate. No parent or production association is inferred from a helper closure.
+Entry(b)38/53 and native forest(c)504/546 CLOSED;15entry and42forest occurrences remain OPEN,57total. No parent or production association is inferred from a helper closure.
 
 ## Shortest OPEN spine paths
 
@@ -21,7 +21,7 @@ TX2: TX2:213 process_r1_cost_probe_instruction [OPEN] → TX2:221 process [OPEN]
 
 OPEN distance 6; 6 call edges.
 
-(aw) NJW-aw-TX2:115-off-domain remains OPEN: NJU_GeneralFinishRoot.finish/ported proposes a SAME-native-G arbitrary-current-word full Result/prefix law with final length2048 and no NoBad/history/persistence/success premise, but this job did not complete its all-root gate. It remains outside599. Original115 stays CLOSED as stated;065 remains OPEN.
+(aw) NJW-aw-TX2:115-off-domain CLOSED by the full combined gate: NJU_GeneralFinishRoot.finish/ported establishes a SAME-native-G arbitrary-current-word full Result/prefix law with final length2048 and no NoBad/history/persistence/success premise, and this job completed its all-root gate. It remains outside599. Original115 stays CLOSED as stated;065 remains OPEN.
 
 ## OPEN rows grouped by source and live owner
 
@@ -78,54 +78,11 @@ OPEN distance 6; 6 call edges.
 | TX1:136 | verify_finish | NKA_ claims2 |
 | TX1:137 | verify_observed | UNOWNED in current brief; S2 lead routing |
 
-### crates/aspis-r1-cost-probe/src/sampler.rs
-
-| Row | Function | Owning live job |
-|---|---|---|
-| TX1:155 | add_small_base_p | UNOWNED in current brief; S2 lead routing |
-| TX1:157 | decode8 | UNOWNED in current brief; S2 lead routing |
-| TX1:158 | gamma_sample | UNOWNED in current brief; S2 lead routing |
-| TX1:159 | low_base_p_digits | UNOWNED in current brief; S2 lead routing |
-| TX1:160 | ordinary_sample | UNOWNED in current brief; S2 lead routing |
-
-### crates/aspis-r1-cost-probe/src/transcript.rs
-
-| Row | Function | Owning live job |
-|---|---|---|
-| TX1:165 | Transcript<H>::absorb | UNOWNED in current brief; S2 lead routing |
-| TX1:166 | Transcript<H>::block | UNOWNED in current brief; S2 lead routing |
-| TX1:167 | Transcript<H>::new | UNOWNED in current brief; S2 lead routing |
-
 ### crates/aspis-r1-cost-probe/src/verifier.rs
 
 | Row | Function | Owning live job |
 |---|---|---|
-| TX1:176 | BatchedWeights::new | UNOWNED in current brief; S2 lead routing |
-| TX1:189 | echeck | UNOWNED in current brief; S2 lead routing |
-| TX2:099 | BatchedWeights::finish | UNOWNED in current brief; S2 lead routing |
-| TX2:100 | BatchedWeights::new | UNOWNED in current brief; S2 lead routing |
-| TX2:102 | BatchedWeights::value | UNOWNED in current brief; S2 lead routing |
-| TX2:105 | Reader<'a>::e | UNOWNED in current brief; S2 lead routing |
-| TX2:106 | Reader<'a>::k | UNOWNED in current brief; S2 lead routing |
-| TX2:107 | Reader<'a>::raw | UNOWNED in current brief; S2 lead routing |
-| TX2:121 | read_checkpoint_semantic_alpha | UNOWNED in current brief; S2 lead routing |
-| TX2:122 | read_checkpoint_weights | UNOWNED in current brief; S2 lead routing |
 | TX2:124 | resume | UNOWNED in current brief; S2 lead routing |
-| TX2:126 | validate_checkpoint_queries | UNOWNED in current brief; S2 lead routing |
-
-### crates/aspis-statement/src/pool_v1/format.rs
-
-| Row | Function | Owning live job |
-|---|---|---|
-| TX1:201 | pool_v1_tree_parent | UNOWNED in current brief; S2 lead routing |
-
-### crates/aspis-statement/src/pool_v1/incremental_merkle.rs
-
-| Row | Function | Owning live job |
-|---|---|---|
-| TX1:202 | IncrementalMerkleTreeV1::default | UNOWNED in current brief; S2 lead routing |
-| TX1:203 | IncrementalMerkleTreeV1::empty | UNOWNED in current brief; S2 lead routing |
-| TX1:204 | pool_v1_empty_roots | UNOWNED in current brief; S2 lead routing |
 
 ### crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
 
@@ -133,8 +90,6 @@ OPEN distance 6; 6 call edges.
 |---|---|---|
 | TX1:218 | evaluate_with_selectors | UNOWNED in current brief; S2 lead routing |
 | TX1:220 | finish_selector_tensor_basis | UNOWNED in current brief; S2 lead routing |
-| TX1:223 | pattern_values | UNOWNED in current brief; S2 lead routing |
-| TX1:224 | pattern_values_windowed | UNOWNED in current brief; S2 lead routing |
 | TX1:225 | qm31_sum_products_up_to4 | UNOWNED in current brief; S2 lead routing |
 
 ### crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
@@ -146,9 +101,6 @@ OPEN distance 6; 6 call edges.
 | TX1:234 | append_level_packed_selector_tensor | UNOWNED in current brief; S2 lead routing |
 | TX1:235 | append_levels_packed_selector_tensor | UNOWNED in current brief; S2 lead routing |
 | TX1:237 | composition_parts | UNOWNED in current brief; S2 lead routing |
-| TX1:242 | left_digest_packed_selector_tensor | UNOWNED in current brief; S2 lead routing |
-| TX1:245 | optional_carry_packed_selector_tensor | UNOWNED in current brief; S2 lead routing |
-| TX1:246 | optional_recipient_packed_selector_tensor | UNOWNED in current brief; S2 lead routing |
 | TX1:250 | public_digest_packed | UNOWNED in current brief; S2 lead routing |
 | TX1:251 | public_digest_packed_selector_tensor | UNOWNED in current brief; S2 lead routing |
 | TX1:256 | r0::Public<'a>::terminal_qm31 | UNOWNED in current brief; S2 lead routing |
@@ -197,7 +149,7 @@ OPEN distance 6; 6 call edges.
 
 ## Explicit unowned OPEN occurrences
 
-TX1:036, TX1:040, TX1:041, TX1:043, TX1:044, TX1:087, TX1:094, TX1:137, TX1:155, TX1:157, TX1:158, TX1:159, TX1:160, TX1:165, TX1:166, TX1:167, TX1:176, TX1:189, TX1:201, TX1:202, TX1:203, TX1:204, TX1:218, TX1:220, TX1:223, TX1:224, TX1:225, TX1:232, TX1:233, TX1:234, TX1:235, TX1:237, TX1:242, TX1:245, TX1:246, TX1:250, TX1:251, TX1:256, TX1:260, TX1:261, TX1:263, TX1:328, TX1:330, TX1:333, TX1:344, TX1:345, TX2:064, TX2:099, TX2:100, TX2:102, TX2:105, TX2:106, TX2:107, TX2:121, TX2:122, TX2:124, TX2:126, TX2:213, TX2:221, TX2:240, TX2:241, TX1:NGB002, TX1:NGB004, TX1:NGB006.
+TX1:036, TX1:040, TX1:041, TX1:043, TX1:044, TX1:087, TX1:094, TX1:137, TX1:218, TX1:220, TX1:225, TX1:232, TX1:233, TX1:234, TX1:235, TX1:237, TX1:250, TX1:251, TX1:256, TX1:260, TX1:261, TX1:263, TX1:328, TX1:330, TX1:333, TX1:344, TX1:345, TX2:064, TX2:124, TX2:213, TX2:221, TX2:240, TX2:241, TX1:NGB002, TX1:NGB004, TX1:NGB006.
 
 ## (ao)(3)(d): named Pool obligations
 
@@ -255,4 +207,4 @@ NIZ latest support: all four held CPI/callback units OPEN; 0/13 complete exclusi
 
 NJY-B1 retained: raw decoder rows149/152/153/201/203 do not close Box/ProgramError wrapper consumers48/49 or production Pool joins. No authoritative finite production inventory follows. K086 production reachability/exclusion UNPROVED; owner(aj)(a) PENDING.
 
-NKH makes no production Pool promotion or trust-row change. Pool obligations above remain unchanged; there were zero admissions. Digest/error are op43/op44 in the coherent SInt2 cohort. RuntimePersistence remains data-only; RuntimeCpiReadonlyEntry7 unused. K086 retained liveness/abort finding; production reachability/exclusion UNPROVED. Owner(aj)(a) PENDING.
+NKH makes no production Pool promotion or trust-row change. Pool obligations above remain unchanged; 28function occurrences and the off-domain115supplement were admitted. Digest/error are op43/op44 in the coherent SInt2 cohort. RuntimePersistence remains data-only; RuntimeCpiReadonlyEntry7 unused. K086 retained liveness/abort finding; production reachability/exclusion UNPROVED. Owner(aj)(a) PENDING.

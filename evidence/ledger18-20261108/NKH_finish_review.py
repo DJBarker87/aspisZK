@@ -14,11 +14,11 @@ assert extra['NJJ_Value.projection']['owner_module']=='NJJ_Value'
 assert extra['NJR_WeightFailure.weights']['owner_module']=='NJR_WeightFailure'
 assert matchers and len({x['root']for x in matchers})==len(matchers)
 assert {x['owner_module']for x in matchers}=={'JFw_Validator','JFw_Record'}
-axioms=rc['print_axioms'];assert len(axioms)>=50
+axioms=rc['print_axioms'];assert len(axioms)==sum(l.startswith('#print axioms')for l in(E/'NKH_HypothesisReview.lean').read_text().splitlines())==49
 assert not any('sorryAx'in l for l in axioms)
 for l in axioms:
  m=re.search(r'depends on axioms: \[(.*?)\]',l)
- if m:assert set(x.strip()for x in m[1].split(',')if x.strip())<={'propext','Classical.choice','Quot.sound'}
+ if m:assert set(re.sub(r'\.\{[^}]+\}', '', x.strip())for x in m[1].split(',')if x.strip())<={'propext','Classical.choice','Quot.sound'}
 (E/'NKH_EXTRA_STATEMENTS.json').write_text(json.dumps(extra,indent=1)+'\n')
 (E/'NKH_MATCHER_OWNERS.json').write_text(json.dumps(dict(status='PASS',unique_owners=True,roots=matchers,attempt='NKH_L040',replaced_failed_diagnostic='NKH_L039',print_axioms=axioms),indent=1)+'\n')
 print(json.dumps(dict(hypothesis_owner_review='PASS',extra_roots=len(extra),matchers=len(matchers),axiom_lines=len(axioms))))

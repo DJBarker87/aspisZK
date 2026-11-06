@@ -63,7 +63,7 @@ def main():
    need(p.exists()and H(raw(p))==h,'source snapshot '+str(p));sourcechecks+=1
   need(rc['exit_status']==0 or a['attempt']in A['retained_nonzero_audit_exits']+A['retained_nonzero_compile_exits'],'unexplained nonzero')
  results=[]
- for i in range(30):results+=J(E/f'NKH_audit/batch{i}/proof{i}.json')['results']
+ for i in range(30):results+=J(E/f'NKH_audit/{"batch28-29" if i>=28 else "batch"+str(i)}/proof{i}.json')['results']
  need(len(results)==len({r['root']for r in results})==A['required_roots'],'all-root coverage')
  need(all(set(r['walked_axioms'])<={'propext','Classical.choice','Quot.sound'}for r in results),'axioms')
  need([r['root']for r in results if not r['equal']]==['NHC_DecodeModel.decoder_error'],'retained finding')

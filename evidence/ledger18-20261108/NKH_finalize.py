@@ -10,7 +10,7 @@ def put(n,x):
  else:p.write_bytes(raw)
 required=J(E/'NKH_AUDIT_ROOTS.json')['roots'];results=[];disagreements=[];nonzero=[]
 for i in range(30):
- d=J(E/f'NKH_audit/batch{i}/proof{i}.json');results+=d['results']
+ d=J(E/f'NKH_audit/{"batch28-29" if i>=28 else "batch"+str(i)}/proof{i}.json');results+=d['results']
  if d['exit_status']:nonzero.append(f'NKH_L{min(i+9 if i<16 else i+10,38):03}')
  for r in d['results']:
   assert set(r['walked_axioms'])<={'propext','Classical.choice','Quot.sound'},r['root']

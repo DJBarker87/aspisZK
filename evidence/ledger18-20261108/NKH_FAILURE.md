@@ -1,3 +1,5 @@
+Historical failure record; host repair and one authorized resubmission are complete. NKH_HANDOFF.md and NKH_AUDIT.json now report the final passing composition gate; L025 metrics remain unavailable. L026 is recorded as resubmission after host repair.
+
 # Host-health stop
 
 L025 was submitted once after admission exit0 AND allowed:true, in an8GiB capped scope. The unchanged host launcher failed at S2W_run_host.py:24 while writing receipt.json:
