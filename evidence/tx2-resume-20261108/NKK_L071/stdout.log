@@ -1,0 +1,53 @@
+NKK_generated/NKK_Try.lean:11:22: error: Type mismatch
+  next value
+has type
+  NJU_Log.Run E (core.result.Result B verifier.Error)
+but is expected to have type
+  NJU_Log.Run E Unit
+NKK_generated/NKK_Try.lean:12:22: error: Type mismatch
+  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+has type
+  (T : Type) →
+    {E F : Type} →
+      core.convert.From F E → core.result.Result core.convert.Infallible E → Result (core.result.Result T F)
+of sort `Type 1` but is expected to have type
+  NJU_Log.Run E Unit
+of sort `Type`
+NKK_generated/NKK_Try.lean:13:4: error: Function expected at
+  B
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  (core.convert.FromSame verifier.Error)
+NKK_generated/NKK_Try.lean:19:17: error: Tactic `rfl` failed: The left-hand side
+  emitted (core.result.Result.Ok a✝) next
+is not definitionally equal to the right-hand side
+  match core.result.Result.Ok a✝ with
+  | core.result.Result.Ok value => next value
+  | core.result.Result.Err err => pure (core.result.Result.Err err)
+
+case Ok
+E A B : Type
+next : A → NJU_Log.Run E (core.result.Result B verifier.Error)
+a✝ : A
+⊢ emitted (core.result.Result.Ok a✝) next =
+    match core.result.Result.Ok a✝ with
+    | core.result.Result.Ok value => next value
+    | core.result.Result.Err err => pure (core.result.Result.Err err)
+NKK_generated/NKK_Try.lean:19:17: error: Tactic `rfl` failed: The left-hand side
+  emitted (core.result.Result.Err a✝) next
+is not definitionally equal to the right-hand side
+  match core.result.Result.Err a✝ with
+  | core.result.Result.Ok value => next value
+  | core.result.Result.Err err => pure (core.result.Result.Err err)
+
+case Err
+E A B : Type
+next : A → NJU_Log.Run E (core.result.Result B verifier.Error)
+a✝ : verifier.Error
+⊢ emitted (core.result.Result.Err a✝) next =
+    match core.result.Result.Err a✝ with
+    | core.result.Result.Ok value => next value
+    | core.result.Result.Err err => pure (core.result.Result.Err err)
+'NKK_Try.branch' depends on axioms: [sorryAx]

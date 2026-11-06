@@ -1,0 +1,16 @@
+NKK_generated/NKK_RawResult.lean:12:17: error: unsolved goals
+case succ
+n : Usize
+count : ℕ
+ih : ∀ (r : Reader), (NKK_RawPrefix.literal n count r).result = reads n count r
+r : Reader
+bytes : Std.Array U8 n
+next : NID_ResumeEmission.verifier.Reader
+⊢ (do
+      let a ← reads n count (bytes, next).2
+      ok ((bytes, next).1 :: a.1, a.2)) =
+    let (b, next) := (bytes, next)
+    do
+    let (bs, last) ← reads n count next
+    ok (b :: bs, last)
+'NKK_RawResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

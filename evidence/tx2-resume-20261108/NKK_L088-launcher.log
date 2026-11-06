@@ -1,0 +1,54 @@
+{"attempt": "NKK_L088", "exit_status": 1, "wall_seconds": 11.538972635986283, "peak_rss_kib": "5984724", "swaps": "0", "print_axioms": ["'NKK_DigestSource.source_eq_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKK_generated/NKK_DigestSource.lean:36:105: error: Tactic `rfl` failed: The left-hand side
+  if decide (↑reply ≠ ↑reply) = true then pure (core.result.Result.Err verifier.Error.Checkpoint) else next
+is not definitionally equal to the right-hand side
+  next
+
+case pos
+H T : Type
+d : AspisR1Stage2.aspis_core.digest.Digest32 H
+hash : H
+chunks : Slice (Slice U8)
+stored : Slice U8
+next : NJU_Log.Run Event (core.result.Result T verifier.Error)
+reply : Std.Array U8 32#usize
+same : ↑stored = ↑reply
+⊢ (if decide (↑reply ≠ ↑reply) = true then pure (core.result.Result.Err verifier.Error.Checkpoint) else next) = next
+NKK_generated/NKK_DigestSource.lean:36:105: error: Tactic `rfl` failed: The left-hand si
+...
+d.Array U8 32#usize
+same : ↑stored = ↑reply
+⊢ (if decide (↑reply ≠ ↑reply) = true then pure (core.result.Result.Err verifier.Error.Checkpoint) else next) = next
+NKK_generated/NKK_DigestSource.lean:36:105: error: Tactic `rfl` failed: The left-hand side
+  if decide (↑stored ≠ ↑reply) = true then pure (core.result.Result.Err verifier.Error.Checkpoint) else next
+is not definitionally equal to the right-hand side
+  pure (core.result.Result.Err verifier.Error.Checkpoint)
+
+case neg
+H T : Type
+d : AspisR1Stage2.aspis_core.digest.Digest32 H
+hash : H
+chunks : Slice (Slice U8)
+stored : Slice U8
+next : NJU_Log.Run Event (core.result.Result T verifier.Error)
+reply : Std.Array U8 32#usize
+same : ¬↑stored = ↑reply
+⊢ (if decide (↑stored ≠ ↑reply) = true then pure (core.result.Result.Err verifier.Error.Checkpoint) else next) =
+    pure (core.result.Result.Err verifier.Error.Checkpoint)
+NKK_generated/NKK_DigestSource.lean:36:58: warning: This simp argument is unused:
+  decide_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵a̵m̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲s̲a̲m̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKK_generated/NKK_DigestSource.lean:36:71: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵a̵m̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲s̲a̲m̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NKK_DigestSource.source_eq_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r37a163387e73445783e0021fdeeb9e60.scope; invocation ID: db46301d53a14dc0837cfd76a844cbc6

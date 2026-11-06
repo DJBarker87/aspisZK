@@ -1,0 +1,48 @@
+{"attempt": "NKK_K031", "exit_status": 1, "wall_seconds": 94.28695943998173, "peak_rss_kib": "3225532", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+e /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs line 51 column 21 function verifier::NKK_parent::digest_window::<57607> thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs line 51 column 21 function verifier::NKK_parent::digest_window::<57607> thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs line 51 column 21 function verifier::NKK_parent::digest_window::<57607> thread 0
+Runtime Symex: 0.17716s
+size of program expression: 7820 steps
+slicing removed 4694 assignments
+Generated 1002 VCC(s), 21 remaining after simplification
+Runtime Postprocess Equation: 0.00221236s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 4.16345s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 6.478e-06s
+Solving with CaDiCaL 2.0.0
+1801625 variables, 12996970 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.308316s
+Runtime decision procedure: 4.49917s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+1801626 variables, 12996971 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 2.88446s
+Runtime decision procedure: 2.89989s
+Running propositional reduction
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - verifier::NKK_parent::proof_digest_stage
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r6f8f28279dd84100b7a8c2add8afb5fe.scope; invocation ID: 1eabc6d4aab7417bb20659d677cbf3e6

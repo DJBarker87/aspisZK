@@ -1,0 +1,58 @@
+NKK_generated/NKK_RawChain.lean:12:17: error: unsolved goals
+case succ
+n : Usize
+count : ℕ
+ih :
+  ∀ (r : Reader),
+    ↑r.at + ↑n * count ≤ (↑r.bytes).length →
+      ∃ bs last, Chain n r bs last ∧ bs.length = count ∧ reads n count r = ok (bs, last)
+r : Reader
+bound : ↑r.at + ↑n * (count + 1) ≤ (↑r.bytes).length
+b : Std.Array U8 n
+next : Reader
+step : Step n r next b
+call : NJC_ConcreteUnwrap.raw n r = ok (b, next)
+nextBound : ↑next.at + ↑n * count ≤ (↑next.bytes).length
+bs : List (Std.Array U8 n)
+last : Reader
+chain : Chain n next bs last
+size : bs.length = count
+tail : reads n count next = ok (bs, last)
+⊢ (let (b, next) := (b, next)
+    do
+    let (bs, last) ← reads n count next
+    ok (b :: bs, last)) =
+    ok (b :: bs, last)
+NKK_generated/NKK_RawChain.lean:22:24: warning: This simp argument is unused:
+  tail
+
+Hint: Omit it from the simp argument list.
+  simp only [reads, ̲call,t̵a̵i̵l̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKK_generated/NKK_RawChain.lean:41:19: error(lean.unknownIdentifier): Unknown identifier `next.at.val`
+NKK_generated/NKK_RawChain.lean:41:47: error(lean.unknownIdentifier): Unknown identifier `next.bytes.val.length`
+NKK_generated/NKK_RawChain.lean:29:39: error: unsolved goals
+case cons
+n : Usize
+r✝ last✝ : Reader
+bs✝ : List (Std.Array U8 n)
+r last : Reader
+bs : List (Std.Array U8 n)
+firstBound : ↑r.at + ↑n ≤ (↑r.bytes).length
+actual : Std.Array U8 n
+out : Reader
+cut : Step n r out actual
+call : NJC_ConcreteUnwrap.raw n r = ok (actual, out)
+bound : ↑r.at + ↑n * (actual :: bs).length ≤ (↑r.bytes).length
+tail : Chain n out bs last
+ih : ↑out.at + ↑n * bs.length ≤ (↑out.bytes).length → reads n bs.length out = ok (bs, last)
+step : Step n r out actual
+nextBound : sorry + ↑n * bs.length ≤ sorry
+⊢ (let (b, next) := (actual, out)
+    do
+    let (bs, last) ← reads n bs.length next
+    ok (b :: bs, last)) =
+    ok (actual :: bs, last)
+'NKK_NativeRaw.read_chain' depends on axioms: [propext, sorryAx, Quot.sound]
+'NKK_NativeRaw.read_result' depends on axioms: [propext, sorryAx, Quot.sound]

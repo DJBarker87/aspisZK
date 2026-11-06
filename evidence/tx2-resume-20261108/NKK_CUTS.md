@@ -1,0 +1,15 @@
+# NKK native cut disposition
+
+TX2:124 OPEN; target not yet established. No composed-row credit is claimed. Native semantic transport uses the owner's option-A P6/D188 tool-trust reclassification.
+
+NKK_OCCURRENCES.md/JSON enumerates all45 maximal top-level events and74 nested reads at their actual source positions. Every primitive Reader window is N4/16/32 on the SAME1768 backing. Full Result/error/abort clauses are installed in NKK_ClauseRoot on the actual log and Reservation. This is source/callee installation, not a native parent.
+
+NKK_NATIVE_CERTIFICATES.json is authoritative for the12 native component candidates, their precise domains, positive and matched failing controls, source pins and graph/lock/resource receipts. These cover source state/roots, two eight-query windows, the final six-query window, gamma, z/claim, semantic cursor writeback, header prefix, three digest boundaries, owned tail and returned weights/scalars/owner. The proof-digest frame uses the calibrated borrowed-slice/Result contract with complete modifies protection, not a byte-selection assumption. No digest-value law or field multiplication is proved in Kani.
+
+Returning read replies/posts are unrestricted in the native segments; CLOSED child laws and the actual caller domains must instantiate them. NKK_RawFold/NKK_FieldFold and their associations carry exact fail/div and Rust Err prefixes; NKK_ReadFrames, DecoderDomain and FieldDomain supply the actual child/frame/domain laws. NKK_RawSlots and QueryDomain/QueryWindows establish all local query bounds,22 ordered words and cursor408. NKK_QueryBlockJoin/QueryMidJoin/QueryEndJoin connect8/8/6 windows to the actual source continuations and validator, including rejection.
+
+NKK_HeaderFactor, ResumeBodyFactor, FieldStages and ZStage factor named source phases. RawCps, FieldCps and DigestChain carry SAME continuations. AllocationStage/AllocationBind retain the SAME Reservation and stop before the owned continuation on rejection. SectionFrames gives the actual semantic/weights output cursors and width. None of these creates the complete native parent state.
+
+Required remaining step: instantiate every native component in one forward state fold over the actual source log, beginning at header-to-digest, carrying the full immutable frame, decoded Prepared fields, owned weights and cleanup/abort status. See NKK_FAILING_STEP.md and the member-by-member NKK_REMAINING.md. K045 protects full returned weights/rhs/power/next/owner but asserts Prepared.variant only; complete Prepared association still needs the retained constructor cut's SAME-argument std/frame chain. Std interpretation under (au)/(aa) is not reintroduced as producer rows.
+
+No arbitrary Ops, separate source/native stream, successful-child, endpoint, NoBad, accepted-parent or history premise is permitted. Source statements do not widen proof57607/public0..1880 native domains. No new trust row; pending RuntimeCpiReadonlyEntry7 is unused. No sibling or TX2:065 work was undertaken.

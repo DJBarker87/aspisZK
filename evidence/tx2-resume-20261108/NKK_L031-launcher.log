@@ -1,0 +1,44 @@
+{"attempt": "NKK_L031", "exit_status": 1, "wall_seconds": 12.174263454042375, "peak_rss_kib": "5981292", "swaps": "0", "print_axioms": ["'NKK_ResumeClauses.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKK_generated/NKK_ClausesRun.lean:15:5: error: unexpected token '⊢'; expected term
+NKK_generated/NKK_ClausesRun.lean:11:131: error: unsolved goals
+reservation : NP6_StdModel.Reservation
+H : Type
+d : AspisR1Stage2.aspis_core.digest.Digest32 H
+bytes proof public1 : Slice U8
+v : transport.Variant
+hash : H
+⊢ NKK_LogClauses.Holds (NKK_Clauses.Clause reservation d hash)
+    (have i := bytes.len;
+    do
+    let i1 ← liftM ((fun v => CheckpointBytes4Ops.checkpointSize (NIL_Carriers.variant v)) v)
+    if (i != i1) = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+      else do
+        let s ←
+          liftM
+              (core.slice.index.Slice.index (core.slice.index.SliceIn
+...
+                                      let s6 ←
+                                        liftM
+                                            (core.slice.index.Slice.index
+                                              (core.slice.index.SliceIndexRangeFromUsizeSlice U8) bytes
+                                              { start := end1 })
+                                      let s7 ←
+                                        liftM
+                                            (lift
+                                              (Array.make 22#usize
+                                                  [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8,
+                                                    49#u8, 58#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8,
+                                                    105#u8, 110#u8, 116#u8]
+                                                  run._proof_33).to_slice)
+                                      let s8 ←
+                                        liftM
+                                            (core.slice.index.Slice.index
+                                              (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes { «end» := end1 })
+                                      let s9 ← liftM (lift (Array.make 2#usize [s7, s8] ⋯).to_slice)
+                                      let a2 ← recordDigest d hash s9
+                                      let b4 ← liftM (CheckpointBytes4Ops.ne core.cmp.PartialEqU8 s6 a2)
+                                      if b4 = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                                        else resumeBodyG reservation d bytes v i4 end1)
+'NKK_ResumeClauses.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r756acc0e0dfa439e8a3809bd6bb55f3e.scope; invocation ID: a8368ba5b24c4ab39adf4c9e452824a6
