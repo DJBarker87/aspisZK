@@ -13,3 +13,9 @@ Next: seed retained NIU/NIS/NHY objects with hashes, inspect the actual cohort o
 Seed12,798,640 bytes copied from retained NIU first, then NIS and NHY exports, each object checked; NJI_SEED.json pins files. Own cache retained. P001/P002/P003 strict frozen source/graph/lock preflights pass. L001 optimized private statement warm-up exit0/92.144s/567984KiB/swap0. One Charon + one Aeneas invocation total, with two collector-only failures retained; SAME LLBC resumed, never recompiled. Aeneas omits four decoder bodies under missing Iterator.any warning (NJI-F1). No native/composed row closes.
 
 L002 generated Types passes. L003 aggregate Funs fails (no credit). L004 isolated Core passes, containing unchanged policy150 and validator206/208 bodies, printed standard axioms. Exact target/command/source revision/hash/selected Aeneas objects/resources are per-attempt. Master157 remains separately uncompiled; omitted152/153/201/203 cannot claim extraction. Identity149 is OPEN outside the slice and independently blocks153. No cap or timeout increase, no timeout/memory kill.
+
+## Validator/cut stage
+
+K003/004 registry and K005/006 entry give two native pass/intended-fail contract pairs on actual frozen functions with empty modifies. L005 total two-sided carriers, L009 complete emitted guard laws, L010 canonical record/Result joins all pass with standard axioms. Root statements take only the input record; CLOSED zero-binding law is applied internally. Candidates206/208 await the final combined/scan/raw audit; no ledger delta yet.
+
+Policy whole-return K008 timed out90s and is excluded. Its distinct source-cut/coordinate replacement K009 passed10.054s/608396KiB/swap0; K010 intended argument corruption fails. No timeout/cap increase. Policy full parser Lean proof continues. All own source-copy, compiler include, collector and proof-input repairs remain in NJI_FAILING_STEP and receipts. No shared infrastructure change.

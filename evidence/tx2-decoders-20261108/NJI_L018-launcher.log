@@ -1,0 +1,49 @@
+{"attempt": "NJI_L018", "exit_status": 1, "wall_seconds": 8.391474361997098, "peak_rss_kib": "5960096", "swaps": "0", "print_axioms": ["'NJI_PolicyParser.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJI_generated/NJI_PolicyParser.lean:85:7: error: unsolved goals
+case neg
+b : Slice U8
+count : NJI_Extracted.aspis_statement.pool_v1.format.POOL_V1_VERIFIER_POLICY_BYTES = 104#usize
+version : NJI_Extracted.aspis_statement.pool_v1.format.POOL_V1_VERIFIER_POLICY_VERSION = 1#u8
+len : (↑b).length = 104
+size : b.len = 104#usize
+pre :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) b { «end» := 4#usize } =
+    ok (NHY_SliceRead.segment b 0 ↑4#usize)
+byte4 : b.index_usize 4#usize = ok (NHY_ZeroStep.byte b ↑4#usize)
+byte5 : b.index_usize 5#usize = ok (NHY_ZeroStep.byte b ↑5#usize)
+reserve :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+...
+.fmt.DebugTryFromSliceError r1
+                            let r2 ←
+                              core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8
+                                  ⟨List.take (104 - 72) (List.drop 72 ↑b),
+                                    congr
+                                        (congrArg List.take
+                                          (congr
+                                            (congrArg HSub.hSub
+                                              (have this := rfl;
+                                              this))
+                                            (have this := rfl;
+                                            this)))
+                                        (congrFun'
+                                          (congrArg List.drop
+                                            (have this := rfl;
+                                            this))
+                                          ↑b) ▸
+                                      NHY_SliceRead.segment._proof_2 b (↑72#usize) (↑104#usize - ↑72#usize)⟩
+                            let a3 ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                            let r3 ←
+                              validator
+                                  { flags := NHY_ZeroStep.byte b 5, registry_program := a1, registry_authority := a2,
+                                    policy_binding := a3 }
+                            let cf ← core.result.Result.Insts.CoreOpsTry.branch r3
+                            match ⋯ with
+                              | ⋯ => ⋯
+                              | ⋯ => ⋯)
+                        ⋯))
+                    ⋯)
+                  ⋯)))))
+'NJI_PolicyParser.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf000134e0f0b4235ba49b5de59da33a7.scope; invocation ID: 66e9f882fb2a48fc9a43e4f75fc3ce09

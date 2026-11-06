@@ -1,0 +1,36 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+type F=PoolV1VerifierRegistryFormatError;
+fn status(n:u8)->Result<VerifierEntryStatusV1,F>{match n{0=>Ok(VerifierEntryStatusV1::Pending),1=>Ok(VerifierEntryStatusV1::Active),2=>Ok(VerifierEntryStatusV1::Paused),3=>Ok(VerifierEntryStatusV1::Retired),_=>Err(F::InvalidStatus)}}
+fn registry()->VerifierRegistryV1{VerifierRegistryV1{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any()}}
+fn entry()->VerifierRegistryEntryV1{let tag:u8=kani::any();kani::assume(tag<4);VerifierRegistryEntryV1{status:status(tag).unwrap(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
+fn registry_ref(r:&VerifierRegistryV1)->Result<(),F>{if r.flags & !3 !=0{Err(F::UnsupportedFlags)}else if r.pool==[0;32]||r.policy_binding==[0;32]{Err(F::ZeroRequiredBinding)}else if (r.flags & 2 !=0)!=(r.authority==[0;32]){Err(F::InvalidAuthorityMode)}else if r.minimum_activation_delay_slots==0{Err(F::InvalidActivationDelay)}else{Ok(())}}
+fn entry_ref(e:&VerifierRegistryEntryV1)->Result<(),F>{if e.statement_version==0{Err(F::InvalidStatementVersion)}else if e.pool==[0;32]||e.verifier_program==[0;32]||e.profile_binding==[0;32]||e.release_binding==[0;32]||e.policy_binding==[0;32]{Err(F::ZeroRequiredBinding)}else if e.retirement_slot!=u64::MAX&&e.retirement_slot<=e.activation_slot{Err(F::InvalidRetirementSlot)}else{Ok(())}}
+fn read32(b:&[u8],a:usize)->[u8;32]{[b[a+0],b[a+1],b[a+2],b[a+3],b[a+4],b[a+5],b[a+6],b[a+7],b[a+8],b[a+9],b[a+10],b[a+11],b[a+12],b[a+13],b[a+14],b[a+15],b[a+16],b[a+17],b[a+18],b[a+19],b[a+20],b[a+21],b[a+22],b[a+23],b[a+24],b[a+25],b[a+26],b[a+27],b[a+28],b[a+29],b[a+30],b[a+31]]}
+fn word(b:&[u8],a:usize)->u64{(b[a+0] as u64)<<0|(b[a+1] as u64)<<8|(b[a+2] as u64)<<16|(b[a+3] as u64)<<24|(b[a+4] as u64)<<32|(b[a+5] as u64)<<40|(b[a+6] as u64)<<48|(b[a+7] as u64)<<56}
+pub(super) fn decode_registry_ref(b:&[u8])->Result<VerifierRegistryV1,F>{
+ if b.len()!=128{return Err(F::WrongLength)}
+ if b[..4]!=POOL_V1_VERIFIER_REGISTRY_MAGIC{return Err(F::WrongMagic)}
+ if b[4]!=POOL_V1_VERIFIER_REGISTRY_VERSION{return Err(F::WrongVersion)}
+ if b[7]!=0||b[120..128]!=[0;8]{return Err(F::NonZeroReserved)}
+ let r=VerifierRegistryV1{flags:b[5],bump:b[6],pool:read32(b,8),authority:read32(b,40),policy_binding:read32(b,72),generation:word(b,104),minimum_activation_delay_slots:word(b,112)};
+ registry_ref(&r)?;Ok(r)
+}
+pub(super) fn decode_entry_ref(b:&[u8])->Result<VerifierRegistryEntryV1,F>{
+ if b.len()!=192{return Err(F::WrongLength)}
+ if b[..4]!=POOL_V1_VERIFIER_ENTRY_MAGIC{return Err(F::WrongMagic)}
+ if b[4]!=POOL_V1_VERIFIER_ENTRY_VERSION{return Err(F::WrongVersion)}
+ if b[184..192]!=[0;8]{return Err(F::NonZeroReserved)}
+ let e=VerifierRegistryEntryV1{status:status(b[5])?,statement_version:b[6],bump:b[7],pool:read32(b,8),verifier_program:read32(b,40),profile_binding:read32(b,72),release_binding:read32(b,104),activation_slot:word(b,136),retirement_slot:word(b,144),policy_binding:read32(b,152)};
+ entry_ref(&e)?;Ok(e)
+}
+
+#[kani::proof_for_contract(super::decode_verifier_registry_v1)]
+#[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn registry_contract(){let b:[u8;128]=kani::any();let _=super::decode_verifier_registry_v1(&b);}
+
+#[kani::proof_for_contract(super::decode_verifier_registry_entry_v1)]
+#[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry_contract(){let b:[u8;192]=kani::any();let _=super::decode_verifier_registry_entry_v1(&b);}

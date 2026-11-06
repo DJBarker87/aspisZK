@@ -1,0 +1,81 @@
+{"attempt": "NJI_L010", "exit_status": 0, "wall_seconds": 1.4588140579871833, "peak_rss_kib": "2636948", "swaps": "0", "print_axioms": ["'NJI_V1Join.registry_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJI_V1Join.entry_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJI_V1Join.registry_domain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJI_V1Join.entry_domain' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJI_V1Join.registry_source : ∀ (r : R),
+  (do
+      let reply ← NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_v1 r
+      ok (port reply)) =
+    registry (NJI_V1Carrier.registry r) :=
+fun r =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let reply ← NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_v1 r
+                ok (port reply)) =
+              do
+              let reply ← NJI_V1Models.registry _a
+              ok (port reply))
+          (registry_roundtrip r)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+         
+...
+))
+          (registry_roundtrip r)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let reply ← _a
+                  ok (port reply)) =
+                do
+                let reply ← NJI_V1Models.registry r
+                ok (port reply))
+            (NJI_V1Models.registry_source r)))
+        (Eq.refl do
+          let reply ← NJI_V1Models.registry r
+          ok (port reply))))
+theorem NJI_V1Join.entry_source : ∀ (r : E),
+  (do
+      let reply ← NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_entry_v1 r
+      ok (port reply)) =
+    entry (NJI_V1Carrier.entry r) :=
+fun r =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let reply ←
+                  NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_entry_v1 r
+                ok (port reply)) =
+              do
+              let reply ← NJI_V1Models.entry _a
+              ok (port reply))
+          (entry_roundtrip r)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let reply ← _a
+                  ok (port reply)) =
+                do
+                let reply ← NJI_V1Models.entry r
+                ok (port reply))
+            (NJI_V1Models.entry_source r)))
+        (Eq.refl do
+          let reply ← NJI_V1Models.entry r
+          ok (port reply))))
+'NJI_V1Join.registry_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_V1Join.entry_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_V1Join.registry_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_V1Join.entry_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r121fe58599ac49e6aea27878f1d147ac.scope; invocation ID: 99ba3928b7ec406ebd08ae40e49966ee

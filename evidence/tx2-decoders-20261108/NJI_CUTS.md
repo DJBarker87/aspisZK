@@ -1,0 +1,9 @@
+# NJI native cuts
+
+No writable static or Option<fn> observation. Every oracle/log/counter is local. Every native run has strict frozen graph/lock/source erasure, exact KMX stubs, deployed features and owned target. K003/005 use modifies() on the actual V1 validators. K004/006 fail the actual inverted ensures, not compiler diagnostics. No stub_verified interface used.
+
+Policy K009/K010: exact body copied from frozen format.rs::decode_verifier_policy_v1, with ONLY validate_verifier_policy_v1(&policy)? replaced by *log=Some(policy); reply?; reversal is checked by NJI_policy_cut_gen.py. Physical domain104 bytes, arbitrary byte i<32, arbitrary full Result<(),PoolV1FormatError>. Header rejects assert log None and exact first error. Live arm asserts log entered, flags, all three selected argument bytes; Err forwards the exact reply; Ok asserts returned flags and the same three arbitrary coordinates. Readonly input is borrowed; only local log modified. These assertions are the reviewed cut; output success is never an assumed premise. Full-array equality requires Lean extensionality over i, never a copy/equality inference.
+
+K008 timed-out whole-return shape is retired. K009 coordinate shape removes the expected full record and checks arbitrary coordinates, no timeout increase or unchanged replay. K011 source gate failed because a previous owned format sidecar persisted outside the historical incremental upload; the owned runner now restores every known omitted parent from frozen Git after checking the original expected hash. Validation is stricter, no historical pin weakened.
+
+Missing-body decoders201/203: stage cuts follow the same local-record pattern with arbitrary field and byte, every Result constructor and exact first error/status ordering. These are native support until a permitted complete source/model route is audited; a passing probe alone admits no row.

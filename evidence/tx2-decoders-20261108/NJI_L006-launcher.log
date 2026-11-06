@@ -1,0 +1,51 @@
+{"attempt": "NJI_L006", "exit_status": 1, "wall_seconds": 1.4913609770592302, "peak_rss_kib": "2629036", "swaps": "0", "print_axioms": ["'NJI_V1Models.zero_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJI_V1Models.registry_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJI_V1Models.entry_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJI_generated/NJI_V1Models.lean:36:105: error: unsolved goals
+r : R
+⊢ (do
+      let i ←
+        do
+          let i ← NJI_Extracted.aspis_statement.pool_v1.verifier_registry.POOL_V1_VERIFIER_REGISTRY_FLAG_PAUSED
+          let i1 ← 1#u8 <<< 1#i32
+          ok (i ||| i1)
+      if (r.flags &&& ~~~i != 0#u8) = true then
+          ok
+            (core.result.Result.Err
+              NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.UnsupportedFlags)
+        else
+          if Z r.pool = true then
+            ok
+              (core.result.Result.Err
+                NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.ZeroRe
+...
+ng = true then
+              ok
+                (core.result.Result.Err
+                  NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)
+            else
+              if Z r.policy_binding = true then
+                ok
+                  (core.result.Result.Err
+                    NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.ZeroRequiredBinding)
+              else
+                if r.retirement_slot = 18446744073709551615#u64 then ok (core.result.Result.Ok ())
+                else
+                  if r.retirement_slot ≤ r.activation_slot then
+                    ok
+                      (core.result.Result.Err
+                        NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.InvalidRetirementSlot)
+                  else ok (core.result.Result.Ok ())
+NJI_generated/NJI_V1Models.lean:49:2: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [NJI_Extracted.aspis_statement.pool_v1.verifier_registry.validate_verifier_registry_entry_v1,
+     ̲NJI_Extracted.aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV1.has_no_retirement_slot,
+     ̲NJI_Extracted.aspis_statement.pool_v1.verifier_registry.POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT,
+    l̵i̵f̵t̵,̵ ̲bind_tc_ok, ̲zero_source, ̲entry, ̲core.num.U64.MAX]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NJI_V1Models.zero_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_V1Models.registry_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJI_V1Models.entry_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r38fc7f26d8c34097b6ace98dd59a46ad.scope; invocation ID: 8d1b62d0315341c59fabb99bec336349

@@ -11,6 +11,15 @@ def historical(old):
         z=p/idx['objects'][h]['path'];raw=lzma.decompress(z.read_bytes());assert sha(raw)==h
         files[name]=raw.decode()
     for name,h in json.loads((p/old/'receipt.json').read_text())['source_hashes'].items():assert sha(files[name].encode())==h
+    # Always restore owned parents omitted by the historical incremental payload.
+    # Every added byte is checked against the original strict source pin.
+    pins=json.loads(files['NIJ_SOURCE_PINS.json'])
+    for parent in ['crates/aspis-statement/src/pool_v1/format.rs','crates/aspis-statement/src/pool_v1/verifier_registry.rs','crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs']:
+        key='NIJ_src/'+parent
+        if key not in files:
+            raw=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+parent])
+            assert sha(raw)==pins[parent]
+            files[key]=raw.decode()
     return x,cfg,files
 def run(a,old,prepared=None):
     assert a.startswith('NJI_K') and 1<=int(a[-3:])<=60
