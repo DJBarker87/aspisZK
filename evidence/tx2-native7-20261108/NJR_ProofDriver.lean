@@ -22,7 +22,9 @@ unsafe def main (args : List String) : IO UInt32 := do
     else if mode == "proof3" then
       (#[`NJR_COMBINED_IMPORT], #[`NJR_HistoryBinding.matches_without_binding, `NJR_ChecksumDomain.public_length, `NJR_ChecksumDomain.of_header, `NJR_ChecksumDomain.of_source_cuts, `NJR_ChecksumAtHeadline.accepted_pair, `NJR_SuccessReads.horner, `NJR_SuccessReads.polynomial, `NJR_SuccessReads.round, `NJR_SuccessReads.dot, `NJR_SourceFinishReads.rounds])
     else if mode == "proof4" then
-      (#[`NJR_COMBINED_IMPORT], #[`NJR_SourceFinishReads.source, `NJR_DecodedWords.decoded, `NJR_DecodedWords.window, `NJR_WindowsFromFinish.polynomial, `NJR_WindowsFromFinish.dot, `NJR_WindowsFromFinish.source, `NJR_AcceptedFinishDomain.lengths, `NJR_AcceptedFinishDomain.reached, `AspisR1.NJF_Root.finish, `AspisR1.RPx_Deployed.deployed])
+      (#[`NJR_COMBINED_IMPORT], #[`NJR_SourceFinishReads.source, `NJR_DecodedWords.decoded, `NJR_DecodedWords.window, `NJR_WindowsFromFinish.polynomial, `NJR_WindowsFromFinish.dot, `NJR_WindowsFromFinish.source, `NJR_AcceptedFinishDomain.lengths, `NJR_AcceptedFinishDomain.reached, `NJR_WeightFailure.loop, `NJR_WeightFailure.weights])
+    else if mode == "proof5" then
+      (#[`NJR_COMBINED_IMPORT], #[`AspisR1.NJF_Root.finish, `AspisR1.RPx_Deployed.deployed])
     else (#[], #[])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)

@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,re,difflib,hashlib
 E=Path(__file__).resolve().parent;P=E.parent/'tx2-native6-20261108'
-modules=['NJR_FinishWindows','NJR_Cuts','NJR_FinishPrepared','NJR_ReservationSites','NJR_ReaderCut','NJR_FlushComposition','NJR_FinishDomain','NJR_HistoryFromScan','NJR_ReservationRaw','NJR_FinishFromScan','NJR_FinishInstall','NJR_ViewFinish','NJR_FinishAtSourceView','NJR_PayloadExt','NJR_HistoryBinding','NJR_ChecksumDomain','NJR_ChecksumAtHeadline','NJR_SuccessReads','NJR_SourceFinishReads','NJR_DecodedWords','NJR_WindowsFromFinish','NJR_AcceptedFinishDomain','NJR_RootAudit']
+modules=['NJR_FinishWindows','NJR_Cuts','NJR_FinishPrepared','NJR_ReservationSites','NJR_ReaderCut','NJR_FlushComposition','NJR_FinishDomain','NJR_HistoryFromScan','NJR_ReservationRaw','NJR_FinishFromScan','NJR_FinishInstall','NJR_ViewFinish','NJR_FinishAtSourceView','NJR_PayloadExt','NJR_HistoryBinding','NJR_ChecksumDomain','NJR_ChecksumAtHeadline','NJR_SuccessReads','NJR_SourceFinishReads','NJR_DecodedWords','NJR_WindowsFromFinish','NJR_AcceptedFinishDomain','NJR_WeightFailure','NJR_RootAudit']
 roots=[]
 for m in modules:
  s=(E/(m+'.lean')).read_text();match=re.search(r'^namespace (\S+)',s,re.M)

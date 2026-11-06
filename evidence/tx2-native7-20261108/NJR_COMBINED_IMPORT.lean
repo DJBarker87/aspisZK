@@ -22,6 +22,7 @@ import NJR_SourceFinishReads
 import NJR_DecodedWords
 import NJR_WindowsFromFinish
 import NJR_AcceptedFinishDomain
+import NJR_WeightFailure
 import NJR_RootAudit
 #print axioms NJR_FinishWindows.word_window
 #print axioms NJR_FinishWindows.windows
@@ -71,5 +72,7 @@ import NJR_RootAudit
 #print axioms NJR_WindowsFromFinish.source
 #print axioms NJR_AcceptedFinishDomain.lengths
 #print axioms NJR_AcceptedFinishDomain.reached
+#print axioms NJR_WeightFailure.loop
+#print axioms NJR_WeightFailure.weights
 #print axioms AspisR1.NJF_Root.finish
 #print axioms AspisR1.RPx_Deployed.deployed
