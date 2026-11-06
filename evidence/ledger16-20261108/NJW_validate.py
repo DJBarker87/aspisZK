@@ -29,6 +29,7 @@ def verify(L,D,A,S,C):
    need(p['status']=='OPEN'and r['status']=='CLOSED','status/double count')
    need(o['basis_obligation']==po,'basis clauses')
    need(r['root_owners']==[dict(root=x['root'],owner_module=x['owner_module'],obligation_statement_sha256=H(x['obligation_statement'].encode()))for x in review[rid]['kernel_statements']],'canonical roots')
+   need(r['owner_module']==next(k['owner_module']for k in review[rid]['kernel_statements']if k['root']==review[rid]['primary_root']),'primary owner')
    need(not review[rid]['hypothesis_inventory'].get('extra_logical_hypotheses')and not review[rid]['hypothesis_inventory'].get('endpoint_or_success_premises'),'banned root premise')
   if rid in parentids:need(o['NJW_parent_basis_obligation']==po,'parent original')
   for k in['named_hypotheses','inventory_domain_obligations']:need(o[k]==po[k],'lost original '+rid)
@@ -44,6 +45,7 @@ def verify(L,D,A,S,C):
  return True
 
 def main():
+ need(H(lzma.decompress((P/'NJO_LEDGER.json.xz').read_bytes()))==(P/'NJO_LEDGER.json.sha256').read_text().split()[0],'basis uncompressed hash')
  L=J(E/'NJW_LEDGER.json.xz');D=J(E/'NJW_LEDGER_DELTA.json');A=J(E/'NJW_AUDIT.json');S=J(E/'NJW_SCAN.json');C=J(E/'NJW_CANDIDATE_REVIEW.json');verify(L,D,A,S,C)
  attempts=[json.loads(l)for l in(E/'NJW_ATTEMPTS.jsonl').read_text().splitlines()];need(len(attempts)==len({r['attempt']for r in attempts})==40,'budget');sourcechecks=0
  for a in attempts:

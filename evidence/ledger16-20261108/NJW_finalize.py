@@ -48,8 +48,9 @@ basis=J(P/'NJO_LEDGER.json.xz');ledger=copy.deepcopy(basis);oldby={r['row']:r fo
 for c in review['rows']:
  r=by[c['row']];assert r['status']=='OPEN'and r['obligation_statement_hash']==c['basis_obligation_statement_hash']
  o=copy.deepcopy(r['obligation']);o['basis_obligation']=copy.deepcopy(r['obligation']);o['certificate']=c['certificate'];o['kernel_roots']=c['kernel_statements'];o['NJW_complete_clause_review']=c['original_clauses'];o['NJW_hypothesis_inventory']=c['hypothesis_inventory'];o['NJW_root_domain']=c['root_domain'];o['NJW_semantic_review']=c['review']
- r.update(previous_status='OPEN',status='CLOSED',obligation=o,owner_module=c['kernel_statements'][-1]['owner_module'],owner_role='canonical checked row packet',root_owners=[dict(root=x['root'],owner_module=x['owner_module'],obligation_statement_sha256=H(x['obligation_statement'].encode()))for x in c['kernel_statements']],evidence_dir='evidence/ledger16-20261108')
- changes.append(dict(row=r['row'],provider=c['provider'],previous_status='OPEN',status='CLOSED',primary_root=r['root_owners'][-1]['root'],owner_module=r['owner_module'],basis_obligation_statement_hash=c['basis_obligation_statement_hash'],domain=c['root_domain'],roots=r['root_owners'],caller_clauses='All original clauses retained verbatim; NJW_PARENT_CLAUSES.json records the exact own-domain and unit-context requirements at every actual parent.'))
+ primary=next(k for k in c['kernel_statements']if k['root']==c['primary_root'])
+ r.update(previous_status='OPEN',status='CLOSED',obligation=o,owner_module=primary['owner_module'],owner_role='canonical checked row packet',root_owners=[dict(root=x['root'],owner_module=x['owner_module'],obligation_statement_sha256=H(x['obligation_statement'].encode()))for x in c['kernel_statements']],evidence_dir='evidence/ledger16-20261108')
+ changes.append(dict(row=r['row'],provider=c['provider'],previous_status='OPEN',status='CLOSED',primary_root=c['primary_root'],owner_module=r['owner_module'],basis_obligation_statement_hash=c['basis_obligation_statement_hash'],domain=c['root_domain'],roots=r['root_owners'],caller_clauses='All original clauses retained verbatim; NJW_PARENT_CLAUSES.json records the exact own-domain and unit-context requirements at every actual parent.'))
 parent=J(E/'NJW_PARENT_CLAUSES.json')
 for rid in parent['parents']:
  r=by[rid];o=r['obligation'];o['NJW_parent_basis_obligation']=copy.deepcopy(oldby[rid]['obligation']);o['NJW_explicit_child_domains']=[c for c in parent['clauses']if c['parent']==rid]
@@ -59,13 +60,16 @@ for c in changes:
 for rid in parent['parents']:
  r=by[rid];r['obligation_statement_hash']=H(json.dumps(r['obligation'],sort_keys=True,separators=(',',':')).encode())
 # New child supplement is not a 600th conservative function occurrence. Retain115 as stated.
-supplement=dict(id='NJW-aw-TX2:115-off-domain',row='TX2:115',status='OPEN',owner='NJU_ tx2-native8 / finish supplement owner',required='On SAME current finish arguments outside NIG_FinishInput.Domain raw-window clauses, native finish returns the SAME Err or abort with SAME ordered effects/prefix as emitted finish_relation; reviewed arbitrary-word native cut plus matched failing control and abort mapping, or generalize full115 law. No NoBad/history/current-proof persistence/accepted-finish premise.',parent='tx2_common',ruling='(aw)(3)',existing_row_status='CLOSED_CONDITIONALLY_AS_STATED',new_game_premise=False)
+supplement=dict(id='NJW-aw-TX2:115-off-domain',row='TX2:115',status='OPEN',owner='S2 lead / TX2:115 supplement owner; NJU_ live TX2-native8 overlaps, exact assignment unconfirmed',required='On SAME current finish arguments outside NIG_FinishInput.Domain raw-window clauses, native finish returns the SAME Err or abort with SAME ordered effects/prefix as emitted finish_relation; reviewed arbitrary-word native cut plus matched failing control and abort mapping, or generalize full115 law. No NoBad/history/current-proof persistence/accepted-finish premise.',parent='tx2_common',ruling='(aw)(3)',existing_row_status='CLOSED_CONDITIONALLY_AS_STATED',new_game_premise=False)
 ledger['supplemental_child_obligations']=[supplement]
 counts=dict(collections.Counter(r['status']for r in ledger['rows']));assert counts=={'CLOSED':484,'OPEN':115};assert ledger['trust_rows']==basis['trust_rows']
 ledger.update(basis='NJO ledger15 plus21 NJW-gated NJI/NJM/NJP/NJL occurrences; original and explicit own-domain/unit caller clauses retained',basis_delta='NJW_LEDGER_DELTA.json',counts=counts,gate='PASS',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),security_target_established=False)
 put('NJW_LEDGER.json',ledger)
 put('NJW_LEDGER_DELTA.json',dict(schema_version=1,basis='evidence/ledger15-20261108/NJO_LEDGER.json.xz',before=dict(CLOSED=463,QUALIFIED=0,OPEN=136),after=dict(CLOSED=484,QUALIFIED=0,OPEN=115),new_closed_rows=[c['row']for c in changes],new_count=21,rows=changes,no_double_count=True,no_other_status_change=True,gate=[r['attempt']for r in rs],explicit_parent_clause_updates=parent,new_child_obligations=[supplement],trust_rows_changed=False,security_target_established=False,supporting_imports_without_credit=['NJR','NJN','all other inherited supporting modules'],rejected_candidates=[]))
-review['status']='PASS_COMPLETE_STATEMENTS_EMISSION_OWNERS_AND_FULL_GATE';review['gate_pass']=True;put('NJW_CANDIDATE_REVIEW.json',review)
+review['status']='PASS_COMPLETE_STATEMENTS_EMISSION_OWNERS_AND_FULL_GATE';review['gate_pass']=True
+for c in review['rows']:
+ c.pop('admissible_pending_gate',None);c['gate_admitted']=True
+put('NJW_CANDIDATE_REVIEW.json',review)
 from NJW_report import report
 report(ledger,resources)
 print(json.dumps(dict(status='PASS',closed=484,open=115,qualified=0,roots=len(required),modules=len(scan),scopes=len(rs))))
