@@ -1,0 +1,192 @@
+NJT_generated/NJT_ClaimsCohort.lean:26:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  alloc.vec.Vec.resize (core.clone.CloneArray 29#usize cq) (alloc.vec.Vec.new Row) 3#usize value
+in the target expression
+  (do
+      let (r, out) ← ok (core.result.Result.Ok (), alloc.vec.Vec.new (Std.Array aspis_core.field.QM31 29#usize))
+      let r1 ←
+        match r with
+          | core.result.Result.Ok value => ok (core.result.Result.Ok value)
+          | core.result.Result.Err error => do
+            let mapped ←
+              aspis_core.r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once
+                  (Array.Insts.CoreMarkerCopy 29#usize aspis_core.field.QM31.Insts.CoreMarkerCopy) () error
+            ok (core.result.Result.Err mapped)
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let out1 ←
+            alloc.vec.Vec.resize (core.clone.CloneArray 29#usize aspis_core.field.QM31.Insts.CoreCloneClone) out 3#usize
+                value
+          ok (core.result.Result.Ok out1)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (alloc.vec.Vec (Std.Array aspis_core.field.QM31 29#usize)) (core.convert.FromSame aspis_core.r0.Error)
+            residual) =
+    ok (core.result.Result.Ok (triple value))
+
+value : Row
+cq : core.clone.Clone aspis_core.field.QM31 := aspis_core.field.QM31.Insts.CoreCloneClone
+hq : ∀ (q : aspis_core.field.QM31), cq.clone q = ok q
+row : (core.clone.CloneArray 29#usize cq).clone value = ok value
+out : alloc.vec.Vec (Std.Array aspis_core.field.QM31 29#usize)
+run : alloc.vec.Vec.resize (core.clone.CloneArray 29#usize cq) (alloc.vec.Vec.new Row) 3#usize value = ok out
+shape : ↑out = (↑(alloc.vec.Vec.new Row)).resize (↑3#usize) value
+same : out = triple value
+⊢ (do
+      let (r, out) ← ok (core.result.Result.Ok (), alloc.vec.Vec.new (Std.Array aspis_core.field.QM31 29#usize))
+      let r1 ←
+        match r with
+          | core.result.Result.Ok value => ok (core.result.Result.Ok value)
+          | core.result.Result.Err error => do
+            let mapped ←
+              aspis_core.r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once
+                  (Array.Insts.CoreMarkerCopy 29#usize aspis_core.field.QM31.Insts.CoreMarkerCopy) () error
+            ok (core.result.Result.Err mapped)
+      let cf ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let out1 ←
+            alloc.vec.Vec.resize (core.clone.CloneArray 29#usize aspis_core.field.QM31.Insts.CoreCloneClone) out 3#usize
+                value
+          ok (core.result.Result.Ok out1)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (alloc.vec.Vec (Std.Array aspis_core.field.QM31 29#usize)) (core.convert.FromSame aspis_core.r0.Error)
+            residual) =
+    ok (core.result.Result.Ok (triple value))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJT_generated/NJT_ClaimsCohort.lean:44:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  aspis_core.r0.heap.filled external (Array.Insts.CoreMarkerCopy 29#usize aspis_core.field.QM31.Insts.CoreMarkerCopy)
+    3#usize ?value
+in the target expression
+  (do
+      let r ← ok (core.result.Result.Ok record)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue vr => do
+          let q ← zero
+          let r1 ←
+            aspis_core.r0.heap.filled external
+                (Array.Insts.CoreMarkerCopy 29#usize aspis_core.field.QM31.Insts.CoreMarkerCopy) 3#usize
+                (Array.repeat 29#usize q)
+          let r2 ← mapError candidate_claims.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r1 ()
+          let cf1 ←
+            match r2 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← external.intoBox Global val
+              let r3 ← boxArray 3#usize s
+              let r4 ←
+                mapError candidate_claims.claims.closure_1.Insts.CoreOpsFunctionFnOnceTupleBoxSliceArrayQM3129Error r3
+                    ()
+              let cf2 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => decodeRows external vr
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize) (core.convert.FromSame r1_wire.Error)
+                    residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize) (core.convert.FromSame r1_wire.Error)
+                residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize) (core.convert.FromSame r1_wire.Error)
+            residual) =
+    do
+    let r ← ok (core.result.Result.Ok record)
+    match r with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok record => decodeRows external record
+
+case ok.Ok
+pre : r1_wire.Prefix
+record : r1_wire.ValidatedRecord
+h : ClaimsUnrolledFinish.sourceRecord pre 25#u8 = ok (core.result.Result.Ok record)
+⊢ (do
+      let r ← ok (core.result.Result.Ok record)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue vr => do
+          let q ← zero
+          let r1 ←
+            aspis_core.r0.heap.filled external
+                (Array.Insts.CoreMarkerCopy 29#usize aspis_core.field.QM31.Insts.CoreMarkerCopy) 3#usize
+                (Array.repeat 29#usize q)
+          let r2 ← mapError candidate_claims.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r1 ()
+          let cf1 ←
+            match r2 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s ← external.intoBox Global val
+              let r3 ← boxArray 3#usize s
+              let r4 ←
+                mapError candidate_claims.claims.closure_1.Insts.CoreOpsFunctionFnOnceTupleBoxSliceArrayQM3129Error r3
+                    ()
+              let cf2 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => decodeRows external vr
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize) (core.convert.FromSame r1_wire.Error)
+                    residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize) (core.convert.FromSame r1_wire.Error)
+                residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize) (core.convert.FromSame r1_wire.Error)
+            residual) =
+    do
+    let r ← ok (core.result.Result.Ok record)
+    match r with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok record => decodeRows external record
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NJT_ClaimsCohort.parent_filled' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJT_ClaimsCohort.parent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJT_ClaimsCohort.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,36 @@
+def Aeneas.Std.alloc.vec.Vec.resize : {T : Type} →
+  core.clone.Clone T → alloc.vec.Vec T → Usize → T → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst v new_len value =>
+  if ↑new_len < v.length then ok ⟨(↑v).resize (↑new_len) value, ⋯⟩
+  else do
+    let value ← cloneInst.clone value
+    ok ⟨(↑v).resize (↑new_len) value, ⋯⟩
+Aeneas.Std.alloc.vec.Vec.resize_spec {T : Type} (cloneInst : core.clone.Clone T) (v : alloc.vec.Vec T) (new_len : Usize)
+  (value : T) (hClone : cloneInst.clone value = ok value) :
+  alloc.vec.Vec.resize cloneInst v new_len value ⦃ nv => ↑nv = (↑v).resize (↑new_len) value ⦄
+NJT_generated/NJT_InspectStd.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Array.Insts.CoreCloneClone.clone`
+Aeneas.Std.Array.clone_spec.{u} {α : Type u} {n : Usize} {clone : α → Result α} {s : Std.Array α n}
+  (h : ∀ x ∈ ↑s, clone x = ok x) : Array.clone clone s ⦃ s' => s' = s ⦄
+NJT_generated/NJT_InspectStd.lean:7:7: error: overloaded, errors 
+  Unknown constant `Array.Insts.CoreCloneClone.clone_spec`
+  
+  Unknown constant `Aeneas.Std.Array.Insts.CoreCloneClone.clone_spec`
+structure Aeneas.Std.core.clone.Clone (Self : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.clone.Clone.clone : Self → Result Self
+  Aeneas.Std.core.clone.Clone.clone_from : Self → Self → Result Self :=
+    fun x => self.clone
+constructor:
+  Aeneas.Std.core.clone.Clone.mk {Self : Type} (clone : Self → Result Self) (clone_from : Self → Self → Result Self) :
+    core.clone.Clone Self
+def Aeneas.Std.Slice.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Usize.max }
+@[reducible] def Aeneas.Std.alloc.vec.Vec.new.{u} : (α : Type u) → alloc.vec.Vec α :=
+fun α => ⟨[], alloc.vec.Vec.new._proof_1⟩
+@[reducible] def Aeneas.Std.Array.Insts.CoreMarkerCopy : {T : Type} →
+  (N : Usize) → core.marker.Copy T → core.marker.Copy (Std.Array T N) :=
+fun {T} N markerCopyInst => { cloneInst := core.clone.CloneArray N markerCopyInst.cloneInst }
+def core.result.Result.map_err : {T E F O : Type} →
+  core.ops.function.FnOnce O E F → core.result.Result T E → O → Result (core.result.Result T F) :=
+fun {T E F O} f => AspisR1.Port4C_GeometryStd.mapError f

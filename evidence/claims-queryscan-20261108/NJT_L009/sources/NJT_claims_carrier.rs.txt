@@ -1,0 +1,20 @@
+#[cfg(kani)] pub mod NJT_claims_carrier {
+ use super::*;
+ use aspis_core::field::{CM31,M31};
+ type Claims=[[QM31;29];3];
+ fn q()->QM31{QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}}
+ // Safe reference's allocation and ownership phase, split from data windows.
+ // Payload is unrestricted. No content assertion or second native data write.
+ pub fn check(mode:u8){
+  let payload:Claims=core::array::from_fn(|_|core::array::from_fn(|_|q()));
+  let out=aspis_core::r0::heap::filled(1,payload).unwrap();
+  assert_eq!(out.len(),1);
+  let original=out.as_ptr();
+  let boxed=out.into_boxed_slice();
+  if mode==1{assert_eq!(boxed.len(),2);}else{assert_eq!(boxed.len(),1);}
+  if mode==2{
+   let other=aspis_core::r0::heap::filled(1,payload).unwrap().into_boxed_slice();
+   assert_eq!(other.as_ptr(),original);
+  }else{assert_eq!(boxed.as_ptr(),original);}
+ }
+}
