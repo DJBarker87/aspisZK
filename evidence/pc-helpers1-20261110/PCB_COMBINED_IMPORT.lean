@@ -6,6 +6,7 @@ import PCB_SmallStatementLaws
 import PCB_ErrorLaws
 import PCB_AppendFrame
 import PCB_VaultLaw
+import PCB_GetterLaws
 import NHC_ErrorConversion
 import NHP_ConstructorPackets
 #print axioms AspisR1.RPx_Deployed.deployed

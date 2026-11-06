@@ -1,0 +1,113 @@
+{
+ "rule": "y-prime source identity + extracted-body Lean identity + wrong-place caller control; no stub_verified borrowed return",
+ "rows": [
+  {
+   "id": "POOL:178",
+   "source": "crates/aspis-statement/src/pool_v1/incremental_merkle.rs",
+   "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+   "body": "{\n        &self.inner\n    }",
+   "body_sha256": "7012945a909489598af2f019d6b13d49ce71474d66865f28944d6616364c8f1e",
+   "borrowed_place": "receiver.inner",
+   "mutability": "shared",
+   "lifetime": "loan of actual receiver",
+   "modifies": [],
+   "own_argument_domain": "any valid live immutable Rust receiver; no additional semantic predicate",
+   "source_identity": true,
+   "mutations_rejected": 4,
+   "mutations": [
+    "{\n        &other.inner\n    }",
+    "{ panic!(\"wrong place\") }",
+    "{ &WRONG_PLACE }",
+    "{ log_effect(); \n        &self.inner\n     }"
+   ],
+   "dependency": null
+  },
+  {
+   "id": "POOL:176",
+   "source": "crates/aspis-statement/src/pool_v1/incremental_merkle.rs",
+   "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+   "body": "{\n        self.as_tree()\n    }",
+   "body_sha256": "fe68c93353ae2fe8506fc8870e534432c695913e479cc181cfbe3e030137c0e1",
+   "borrowed_place": "receiver.inner via CLOSED178",
+   "mutability": "shared",
+   "lifetime": "loan of actual receiver",
+   "modifies": [],
+   "own_argument_domain": "any valid live immutable Rust receiver; no additional semantic predicate",
+   "source_identity": true,
+   "mutations_rejected": 4,
+   "mutations": [
+    "{\n        other.as_tree()\n    }",
+    "{ panic!(\"wrong place\") }",
+    "{ &WRONG_PLACE }",
+    "{ log_effect(); \n        self.as_tree()\n     }"
+   ],
+   "dependency": "POOL:178 must be CLOSED before176 credit"
+  },
+  {
+   "id": "POOL:291",
+   "source": "programs/aspis-pool/src/nullifier.rs",
+   "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+   "body": "{\n        &self.seed\n    }",
+   "body_sha256": "b4a5b1d381348cdaa089591417ad447497b4b07fbe9b708a6b2684079bd268f6",
+   "borrowed_place": "receiver.seed",
+   "mutability": "shared",
+   "lifetime": "loan of actual receiver",
+   "modifies": [],
+   "own_argument_domain": "any valid live immutable Rust receiver; no additional semantic predicate",
+   "source_identity": true,
+   "mutations_rejected": 4,
+   "mutations": [
+    "{\n        &other.seed\n    }",
+    "{ panic!(\"wrong place\") }",
+    "{ &WRONG_PLACE }",
+    "{ log_effect(); \n        &self.seed\n     }"
+   ],
+   "dependency": null
+  },
+  {
+   "id": "POOL:343",
+   "source": "programs/aspis-pool/src/pair_forest_dispatch.rs",
+   "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+   "body": "{\n        &self.value\n    }",
+   "body_sha256": "a192a742cb1d79ce408b84fb04bba6907b3bdf275a764b7c53e56a5a45bb32d4",
+   "borrowed_place": "receiver.value.deref (std Box)",
+   "mutability": "shared",
+   "lifetime": "loan of actual receiver",
+   "modifies": [],
+   "own_argument_domain": "any valid live immutable Rust receiver; no additional semantic predicate",
+   "source_identity": true,
+   "mutations_rejected": 4,
+   "mutations": [
+    "{\n        &other.value\n    }",
+    "{ panic!(\"wrong place\") }",
+    "{ &WRONG_PLACE }",
+    "{ log_effect(); \n        &self.value\n     }"
+   ],
+   "dependency": null
+  },
+  {
+   "id": "POOL:355",
+   "source": "programs/aspis-pool/src/pair_state.rs",
+   "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+   "body": "{\n        &self.state\n    }",
+   "body_sha256": "47e2c5b666c5708ca9d6695694fb798018137e6928daba976dd72f5b2a794569",
+   "borrowed_place": "receiver.state.deref (std Box)",
+   "mutability": "shared",
+   "lifetime": "loan of actual receiver",
+   "modifies": [],
+   "own_argument_domain": "any valid live immutable Rust receiver; no additional semantic predicate",
+   "source_identity": true,
+   "mutations_rejected": 4,
+   "mutations": [
+    "{\n        &other.state\n    }",
+    "{ panic!(\"wrong place\") }",
+    "{ &WRONG_PLACE }",
+    "{ log_effect(); \n        &self.state\n     }"
+   ],
+   "dependency": null
+  }
+ ],
+ "shared_generic_reference": "PCB_getter_reference.rs",
+ "generic_parameter_scope": "unused preparation/program carriers and boxed pointee are polymorphic; no ABI/layout equality claimed",
+ "M31_model": "actual E003 extraction erases M31 newtype to Std.U32; no field arithmetic performed"
+}

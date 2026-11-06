@@ -1,0 +1,48 @@
+--- a/crates/aspis-statement/src/pool_v1/incremental_merkle.rs
++++ b/crates/aspis-statement/src/pool_v1/incremental_merkle.rs
+@@ -29,6 +29,7 @@
+     POOL_V1_TREE_STATE_HEADER_BYTES + 32 * POOL_V1_TREE_DEPTH;
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub enum PoolV1TreeError {
+     TreeFull,
+     InsufficientCapacity,
+@@ -764,3 +765,7 @@
+ #[cfg(any(kani, aeneas_ref))]
+ #[path = "../../../../tools/r1-builder-reference/tree.rs"]
+ pub mod tree_reference;
++
++#[cfg(kani)]
++#[path="PCB_178.rs"]
++mod PCB_178;
+--- a/programs/aspis-pool/src/nullifier.rs
++++ b/programs/aspis-pool/src/nullifier.rs
+@@ -807,3 +807,7 @@
+         assert_eq!(zeroed, before);
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCB_291.rs"]
++mod PCB_291;
+--- a/programs/aspis-pool/src/pair_forest_dispatch.rs
++++ b/programs/aspis-pool/src/pair_forest_dispatch.rs
+@@ -1180,3 +1180,7 @@
+ 
+     const _: () = assert!(POOL_V1_PAIR_TREE_DEPTH == 20);
+ }
++
++#[cfg(kani)]
++#[path="PCB_343.rs"]
++mod PCB_343;
+--- a/programs/aspis-pool/src/pair_state.rs
++++ b/programs/aspis-pool/src/pair_state.rs
+@@ -591,3 +591,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCB_355.rs"]
++mod PCB_355;

@@ -2,13 +2,17 @@
 from pathlib import Path
 import subprocess,json,time,sys
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-pc-helpers1-20261110';H='dombarker@100.108.41.90';a=sys.argv[1]
-assert a=='PCB_K040'
+assert a.startswith('PCB_')
+import re
+records=[json.loads(l) for l in (E/'PCB_TRANSPORT.jsonl').read_text().splitlines()]
+failed=next(r for r in reversed(records) if r['attempt']==a and r.get('submitted') and r['exit']==255)
+m=re.search(r'unit: ([-A-Za-z0-9_]+\.scope)',failed['stderr']);unit=m[1] if m else ''
 for retry in range(11):
  time.sleep(60)
  code=f'''from pathlib import Path
 import json,subprocess
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json',a+'-graph-check.json',a+'-lock-check.json',a+'-source-check.json',a+'-selected-features.txt',a+'-graph.stderr']
-status=subprocess.run(['systemctl','--user','show','run-re15e092771894b69bc1d334c6a1b7ff6.scope','-p','ActiveState','-p','SubState'],capture_output=True,text=True)
+status=subprocess.run(['systemctl','--user','show',{unit!r},'-p','ActiveState','-p','SubState'],capture_output=True,text=True)
 print(json.dumps(dict(files={{n:(b/n).read_text() for n in names if (b/n).is_file()}},scope_status=status.stdout,scope_stderr=status.stderr)))
 '''
  r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,'python3'],input=code,capture_output=True,text=True)

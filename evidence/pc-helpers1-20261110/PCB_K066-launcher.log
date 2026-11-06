@@ -1,0 +1,61 @@
+{"attempt": "PCB_K066", "exit_status": 1, "wall_seconds": 5.847886976087466, "peak_rss_kib": "433196", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`
+...
+sh(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: module `PCB_291` should have a snake case name
+   --> programs/aspis-pool/src/nullifier.rs:813:5
+    |
+813 | mod PCB_291;
+    |     ^^^^^^^ help: convert the identifier to snake case: `pcb_291`
+
+warning: module `PCB_300` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest.rs:5801:5
+     |
+5801 | mod PCB_300;
+     |     ^^^^^^^ help: convert the identifier to snake case: `pcb_300`
+
+warning: module `PCB_343` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest_dispatch.rs:1186:5
+     |
+1186 | mod PCB_343;
+     |     ^^^^^^^ help: convert the identifier to snake case: `pcb_343`
+
+warning: module `PCB_355` should have a snake case name
+   --> programs/aspis-pool/src/pair_state.rs:597:5
+    |
+597 | mod PCB_355;
+    |     ^^^^^^^ help: convert the identifier to snake case: `pcb_355`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 3.95s
+Checking harness pair_state::PCB_355::state_wrong...
+
+VERIFICATION RESULT:
+ ** 1 of 71 failed (2 unreachable)
+Failed Checks: assertion failed: core::ptr::eq(core::ops::Deref::deref(&x), &*x.state)
+ File: "programs/aspis-pool/src/PCB_355.rs", line 9, in pair_state::PCB_355::state_wrong
+
+VERIFICATION:- FAILED
+Verification Time: 0.36996287s
+
+Manual Harness Summary:
+Verification failed for - pair_state::PCB_355::state_wrong
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rca43ed2cf0b04d2abccd467a5a2a1cfe.scope; invocation ID: a0d04ddc0e3b46a29baf13f875b3b483
