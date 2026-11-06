@@ -34,3 +34,11 @@ Std/SDK operations (no Pool row under (au)/(be)): accounts.get (997/1000/1003/10
 Runtime boundaries: token CPI at 1170 through the deployed runtime and SDK down to sol_invoke_signed; system CPI occurrences inside create_or_allocate_pda at source call sites 1107/1145, including transfer/create/allocate/assign branches of its rent child. Their exact nested occurrence inventory remains to be completed; no CPI bridge is claimed. PDA op38 stays quantified, with exact seed/program/status/frame forwarding required. RuntimeCpiReadonlyEntry7 unused.
 
 PCB branch read-only inventory at Stage 1 contained only its handoff/ledger placeholders, no RowSpec/root module. These four first targets remain dependencies: POOL:165/246/279/280. Other class-A targets also belong to PCB, never duplicated here.
+
+## Inventory correction
+
+The deployed parent `runtime.invoke` at 1170 is **POOL:356, class B**, not the syscall boundary. There are **25 direct children: A4/B13/D8**. `SolanaPoolCpiRuntimeV1::invoke_signed` is **POOL:357, class D**, nested through POOL:358. Both stay OPEN and their full typed SDK-forwarding packets have not been authored. The actual boundary is sol_invoke_signed after the SDK checks. Earlier 24-child counts and the corresponding boundary classification are superseded. This correction earns no closure.
+
+The final PCB immutable-interface snapshot is in PCA_PCB_ALL_INTERFACES.json; representation/domain/frame transport remains unproved. No branch candidate is instantiated here.
+
+Status OPEN here means no PCA-instantiated certificate. It does not override a newer authoritative sibling/lead ledger. The exact read-only revisions and final ancestry check are retained in PCA_PEER_PIN.json.
