@@ -1,0 +1,34 @@
+from pathlib import Path
+import json,hashlib
+E=Path('evidence/entry-sdk-20261108');E.mkdir(exist_ok=True)
+P=Path('evidence/entry-leaves-20261107')
+for n in ['transport','formal','rerun','native','isolation','extract_host']:
+ s=(P/f'NJH_{n}.py').read_text().replace('NJH','NJN').replace('codex-cx-entry-leaves-20261107','codex-cx-entry-sdk-20261108')
+ if n in ['formal','rerun']:s=s.replace('<=60','<=70')
+ if n=='formal':
+  s=s.replace("E.parent/'slice-d-entry8-20261107/NJD_L033.json'","E.parent/'ledger14-20261108/NJK_L001.json'")
+ (E/f'NJN_{n}.py').write_text(s)
+(E/'NJN_INPUTS.json').write_text(json.dumps(dict(objects={},attempts={})))
+(E/'NJN_ATTEMPTS.jsonl').touch()
+(E/'NJN_HANDOFF.md').write_text('''# NJN entry SDK handoff — in progress
+
+Target not yet established. Branch codex/cx-entry-sdk-20261107; no push.
+Baseline NJK ledger14: 438 CLOSED / 0 QUALIFIED / 161 OPEN. No row promotion expected.
+Headline AspisR1.RPx_Deployed.deployed, frozen source 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387.
+
+Stage 0: read governing rules and NJH/NJD evidence. NJH's reduced counter/reply
+references do not certify typed guards, concrete conversions or SDK ABI.
+Plan: complete owned references before the single extraction; actual SDK/native
+contracts with controls; focused Lean laws; eligible cuts; combined import/raw ax2/scan.
+Budget 70 Kani, 70 Lean, one extraction. None submitted yet.
+
+Initial host disk inspection: 99% used, 22 GiB available. Keep seed and scratch small.
+Own workspace /home/dombarker/project-offloads/codex-cx-entry-sdk-20261108;
+CARGO_TARGET_DIR inside it at NJN_target. Seed predecessor retained export FIRST,
+then NIV retained export; immutable coherent objects reused, no shared writes.
+
+No assumptions discharged, retained trust unchanged, no new trust added. No shipped
+source changed, no ELF rebuild trigger. Full SDK laws and all native certificates
+remain pending. No release/security claim. Exact attempts and pins will be recorded
+incrementally. No keys created or removed. Only NJN_ files/evidence are writable.
+''')

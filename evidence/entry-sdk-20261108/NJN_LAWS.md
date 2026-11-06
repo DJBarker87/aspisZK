@@ -24,3 +24,12 @@ the final raw ax2 and NFX-method scan gate is recorded in NJN_AUDIT.json. A clea
 audit certifies these statements, not the absent native/reference associations.
 No assumption is discharged or added; P6/D188 option-A transport is retained
 reclassification. RuntimeCpiReadonlyEntry7 and a PDA value trust row are unused.
+
+Final scoped additions: K065/K066/K067 certify the actual 1768-byte exclusive
+copy window and its outside/metadata/drop frame against value/frame mutations.
+K068/K070 pass/fail on the actual Borsh conversion's arbitrary byte coordinate
+in a direct interface; K024's full contract is still open. K018/K069 pass/fail
+on actual Clock::default initialization, five zero fields, native40-byte zero
+region and alignment8. None supplies the missing Clock syscall association,
+full three/seven-account ABI or extracted reference equality. K016/K017's
+large-payload conflict interfaces timed out and are not candidate laws.

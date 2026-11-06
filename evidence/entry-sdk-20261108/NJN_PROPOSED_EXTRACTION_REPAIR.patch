@@ -1,0 +1,13 @@
+--- NJN_reference.rs
++++ NJN_reference.rs
+@@ -20,7 +20,9 @@
+ pub fn deref_mut_ref<'a>(heap:&'a mut Heap,guard:&Guard)->&'a mut [u8] { &mut heap.cells[guard.cell].data }
+ pub fn drop_ref(mut heap:Heap, guard:Guard)->Heap {
+     let cell=guard.cell;
+-    heap.cells[cell].counter=if guard.exclusive {heap.cells[cell].counter+1} else {heap.cells[cell].counter-1};
++    let before=heap.cells[cell].counter;
++    let after=if guard.exclusive {before+1} else {before-1};
++    heap.cells[cell].counter=after;
+     heap
+ }
+ pub fn copy_coordinate_ref(mut heap:Heap, guard:&Guard, index:usize, value:u8)->Heap {
