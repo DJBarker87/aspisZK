@@ -1,0 +1,320 @@
+# Removed legacy Pool surface
+
+Frozen revision: `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. Restore any frozen file with `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:<path>`.
+
+The dispatcher loses only ASIN/ASDI/ASPT/ASWD/ASPP/ASPF/ASPX arms. Rejection falls through to InvalidInstructionData. Shared encoding helpers remain because unchanged AS8D and ASJP/ASJW encoders call them; they do not add a dispatch path.
+
+## Deleted files
+
+- `programs/aspis-pool/src/anchor.rs:1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs:1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_instruction.rs:1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/settle_prepared_instruction.rs:1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/settle_prepared_instruction.rs`.
+- `programs/aspis-pool/src/transition.rs:1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/tests/payment_relation_abi.rs:1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/tests/payment_relation_abi.rs`.
+
+## Deleted functions and tests
+
+- `programs/aspis-pool/src/anchor.rs:58` `PrevalidatedHistoricalAnchorV1::authenticated`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:62` `PrevalidatedHistoricalAnchorV1::history_page`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:66` `PrevalidatedHistoricalAnchorV1::header`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:71` `load_canonical_pool_state`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:90` `bind_envelope_to_state_and_selection`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:114` `require_history_page_privileges`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:134` `authenticate_historical_anchor_against_state_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:192` `authenticate_historical_anchor_after_prevalidated_state_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:211` `authenticate_historical_anchor_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:245` `tests::digest`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:249` `tests::initialization`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:264` `tests::expected`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:272` `tests::account`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:303` `tests::fixture`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:334` `tests::envelope`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:347` `tests::authenticate`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:378` `tests::retained_sequence_one_authenticates_after_sequence_two_is_appended` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:394` `tests::exact_current_root_also_authenticates_without_mutation` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:405` `tests::prevalidated_state_adapter_is_exact_and_still_rejects_page_corruption` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:516` `tests::wrong_root_domain_selection_future_or_page_fails_closed` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:573` `tests::history_page_signer_is_rejected_without_writes` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/anchor.rs:588` `tests::older_page_writable_privilege_is_rejected` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/anchor.rs`.
+- `programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs:22` `CancelPreparedSettlementAccountShapeV1::account_count`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs:29` `CancelPreparedSettlementAccountShapeV1::has_rollover_shard`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs:44` `ProgramError::from`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs:54` `decode_cancel_prepared_settlement_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs:78` `encode_cancel_prepared_settlement_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs:93` `tests::cancel_prepared_wire_is_exact_shape_bound_and_canonical` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/cancel_prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/deposit.rs:49` `digest_is_canonical`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:53` `validate_request`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:68` `load_pool_state_for_deposit`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:87` `require_disjoint_account_groups`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:107` `prepare_deposit_after_state_validation_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:130` `finish_deposit_event_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:155` `apply_vault_backed_deposit_with_transfer_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:192` `apply_prevalidated_vault_backed_deposit_with_transfer_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:246` `apply_vault_backed_deposit_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:265` `apply_prevalidated_vault_backed_deposit_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:304` `tests::digest`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:308` `tests::policy`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:317` `tests::initialization`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:327` `tests::account`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:348` `tests::mint_data`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:355` `tests::token_data`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:369` `tests::backed_deposit_transfers_exact_u32_then_appends_one_note_and_root` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:567` `tests::prevalidated_deposit_is_byte_exact_to_standalone_kernel` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:821` `tests::failed_transfer_leaves_pool_and_history_byte_exact` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit.rs:965` `tests::invalid_amount_payload_and_token2022_shape_fail_before_transfer` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:77` `DepositEventReturnDataV1::as_bytes`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:132` `decode_deposit_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:203` `encode_deposit_event_return_data_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:217` `execute_and_emit_deposit_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:232` `process_vault_backed_deposit_instruction_with_runtime_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:255` `process_vault_backed_deposit_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:272` `process_prevalidated_vault_backed_deposit_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:300` `tests::digest`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:304` `tests::request`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:313` `tests::event`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:332` `tests::canonical_instruction_round_trip_rejects_wrong_version_reserved_and_trailing` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:363` `tests::successful_kernel_result_sets_exact_receipt_payload_once` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/deposit_transport.rs:383` `tests::failed_kernel_result_never_sets_return_data` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
+- `programs/aspis-pool/src/instruction.rs:272` `encode_initialize_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
+- `programs/aspis-pool/src/instruction.rs:295` `decode_initialize_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
+- `programs/aspis-pool/src/instruction.rs:414` `decode_private_transfer_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
+- `programs/aspis-pool/src/instruction.rs:541` `decode_withdrawal_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
+- `programs/aspis-pool/src/instruction.rs:608` `decode_deposit_top_level_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
+- `programs/aspis-pool/src/instruction.rs:614` `encode_initialization_receipt_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
+- `programs/aspis-pool/src/instruction.rs:684` `tests::digest`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
+- `programs/aspis-pool/src/instruction.rs:688` `tests::policy`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
+- `programs/aspis-pool/src/instruction.rs:697` `tests::envelope`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
+- `programs/aspis-pool/src/instruction.rs:711` `tests::initialization_is_exact_and_rejects_trailing_reserved_and_policy_confusion` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
+- `programs/aspis-pool/src/instruction.rs:746` `tests::private_transfer_round_trip_binds_both_outputs_and_all_common_fields` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
+- `programs/aspis-pool/src/instruction.rs:784` `tests::withdrawal_round_trip_rejects_zero_amount_wrong_kind_and_trailing_data` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:88` `AuthenticatedPreparedSettlementActionV1::transition_kind`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:92` `AuthenticatedPreparedSettlementActionV1::withdrawal_amount_and_destination`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:101` `AuthenticatedPreparedSettlementActionV1::ordered_commitments`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:107` `CanonicalSettlementStatementV1::transition_kind`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:114` `CanonicalSettlementStatementV1::pool`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:121` `CanonicalSettlementStatementV1::deployment_domain`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:128` `CanonicalSettlementStatementV1::anchor_sequence`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:135` `CanonicalSettlementStatementV1::anchor_root`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:142` `CanonicalSettlementStatementV1::nullifier`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:149` `CanonicalSettlementStatementV1::asset_id`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:156` `CanonicalSettlementStatementV1::ordered_commitments`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:228` `pool_v1_authorization_receipt_account_address`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:243` `decode_canonical_statement`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:262` `authenticate_statement_and_receipt_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:360` `verifier_selection_from_receipt`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:371` `authenticated_selection_matches_receipt`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:384` `authenticate_prepared_settlement_receipt_claim_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:416` `checked_history_distribution`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:450` `zeroed_page_box`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:456` `build_prepared_settlement_plan_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:651` `request_transition_kind`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:658` `request_commitments`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:665` `append_roots`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:673` `validate_receipt_progression`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:701` `source_state_and_result_image_match`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:758` `history_result_images_match`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:838` `nullifier_marker_matches`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:871` `apply_prepared_settlement_plan_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:996` `authorize_prepared_settlement_plan_close_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1095` `tests::sha256`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1103` `tests::refresh_asra_wrapper_digest`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1111` `tests::digest`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1115` `tests::initialization`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1136` `tests::NoPreparationCpi::invoke`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1140` `tests::NoPreparationCpi::invoke_signed`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1161` `tests::CancelSettlementRuntime::invoke`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1165` `tests::CancelSettlementRuntime::invoke_signed`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1174` `tests::CancelSettlementRuntime::close_program_account`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1196` `tests::FinalSettlementRuntime::invoke`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1200` `tests::FinalSettlementRuntime::invoke_signed`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1231` `tests::FinalSettlementRuntime::close_program_account`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1249` `tests::registry_selection`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1258` `tests::registry_images`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1305` `tests::account`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1325` `tests::legacy_mint_image`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1332` `tests::legacy_token_image`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1345` `tests::state_and_history_at`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1404` `tests::build_fixture`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1792` `tests::standard_fixture`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1802` `tests::prepare_instruction_for_fixture`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1861` `tests::fixture_request`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1876` `tests::rebuild_fixture_plan_with_registry`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:1985` `tests::apply_with`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:2015` `tests::apply_with_selection`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:2072` `tests::apply_fixture`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:2092` `tests::assert_parity`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:2122` `tests::public_preparation_processor_persists_exact_core_and_rejects_privilege_aliases` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:2297` `tests::public_preparation_processor_persists_exact_rollover_core_and_shard` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:2492` `tests::public_cancel_core_only_authenticates_layout_authority_and_digest_before_refund` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:2646` `tests::public_cancel_rollover_authenticates_shard_and_orders_late_failure_before_success` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:2841` `tests::public_final_private_transfer_copies_rollover_images_closes_plans_and_rejects_replay` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:3071` `tests::public_final_withdrawal_uses_authenticated_custody_delta_and_success_only_receipt` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:3277` `tests::withdrawal_and_private_transfer_are_byte_exact_with_the_direct_path` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:3283` `tests::rollover_encoder_owned_output_images_fit_default_solana_heap` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:3297` `tests::two_leaf_plan_preserves_both_chronological_roots_across_page_boundary` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:3306` `tests::every_plan_byte_is_authenticated` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:3349` `tests::rollover_shard_is_mutually_bound_and_semantically_checked` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:3439` `tests::stale_pool_pages_receipt_and_time_fail_closed` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:3539` `tests::asra_pending_wrapper_binding_pda_and_nested_receipt_fail_closed` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:3608` `tests::preparation_rejects_self_consistent_receipt_for_non_pool_historical_root` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:3752` `tests::registry_selection_is_active_exact_and_reauthenticated_at_settlement` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:3956` `tests::reauthenticated_root_receipt_and_output_order_substitutions_reject` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:4020` `tests::authority_sequence_parallel_plan_and_close_bindings_are_exact` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement.rs:4106` `tests::substituted_statement_and_nullifier_marker_reject` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:135` `ProgramError::from`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:223` `pool_v1_prepared_settlement_plan_address`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:243` `pool_v1_prepared_settlement_rollover_address`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:256` `exact_image_digest_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:260` `exact_array`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:266` `exact_ref`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:272` `zeroed_box`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:278` `transition_kind_from_byte`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:288` `receipt_is_exact`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:293` `encode_receipt`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:302` `decode_receipt`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:322` `digest32`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:327` `encode_rollover_shard_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:369` `encode_prepared_settlement_plan_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:519` `decode_rollover_shard_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:580` `decode_prepared_settlement_plan_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:749` `reauthenticate_prepared_settlement_plan_for_test`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:761` `reauthenticate_prepared_settlement_rollover_for_test`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_format.rs:773` `bind_prepared_settlement_rollover_for_test`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_format.rs`.
+- `programs/aspis-pool/src/prepared_settlement_instruction.rs:36` `ProgramError::from`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/prepared_settlement_instruction.rs:49` `exact_array`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/prepared_settlement_instruction.rs:57` `transition_kind`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/prepared_settlement_instruction.rs:67` `validate_nested_spend`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/prepared_settlement_instruction.rs:83` `decode_prepare_settlement_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/prepared_settlement_instruction.rs:121` `encode_prepare_settlement_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/prepared_settlement_instruction.rs:155` `tests::digest`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/prepared_settlement_instruction.rs:160` `tests::prepared_settlement_instruction_is_exact_and_nested_kind_bound` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/prepared_settlement_instruction.rs`.
+- `programs/aspis-pool/src/processor.rs:146` `PoolCpiRuntimeV1::close_program_account`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:236` `close_program_account_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:559` `load_canonical_pool_state`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:567` `create_program_pda_if_needed`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:591` `require_fresh_rent_exempt_program_pda`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:625` `process_initialize_with_runtime_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:728` `deposit_rolls_to_next_page`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:738` `process_deposit_with_runtime_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:853` `require_spend_capacity`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:867` `plan_spend_page_layout_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:947` `validate_spend_binding_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:979` `decode_prepare_settlement_request_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:1032` `plan_prepare_settlement_page_layout_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:1107` `create_prepare_rollover_page_if_needed`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:1167` `process_prepare_settlement_with_runtime_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:1365` `plan_settle_prepared_layout_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:1462` `require_prepared_plan_account_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:1484` `process_cancel_prepared_settlement_with_runtime_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:1580` `create_nullifier_marker_if_needed_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:1674` `process_settle_prepared_with_runtime_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:1912` `plan_marker_from_envelope_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:1924` `create_next_root_page_if_needed`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:1970` `state_accounts_for_append_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:1983` `create_and_write_marker_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2024` `process_private_transfer_with_runtime_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2189` `process_withdrawal_with_runtime_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2381` `dispatch_selected_verifier_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2646` `tests::NoCpi::invoke`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2650` `tests::NoCpi::invoke_signed`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2666` `tests::WithdrawalCpi::invoke`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2670` `tests::WithdrawalCpi::invoke_signed`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2706` `tests::digest`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2710` `tests::policy`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2719` `tests::initialization`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2729` `tests::account`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2750` `tests::mint_data`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2757` `tests::token_data`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2770` `tests::proof_data`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2811` `tests::precreated_initialization_reaches_dispatch_without_cpi_and_emits_only_after_success` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:2927` `tests::private_transfer_failure_alias_rejection_then_success_is_exactly_one_to_two` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/processor.rs:3338` `tests::accepted_withdrawal_updates_exact_balances_marker_tree_and_success_receipt` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/processor.rs`.
+- `programs/aspis-pool/src/settle_prepared_instruction.rs:34` `ProgramError::from`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/settle_prepared_instruction.rs`.
+- `programs/aspis-pool/src/settle_prepared_instruction.rs:45` `transition_kind`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/settle_prepared_instruction.rs`.
+- `programs/aspis-pool/src/settle_prepared_instruction.rs:55` `validate_statement`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/settle_prepared_instruction.rs`.
+- `programs/aspis-pool/src/settle_prepared_instruction.rs:71` `decode_settle_prepared_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/settle_prepared_instruction.rs`.
+- `programs/aspis-pool/src/settle_prepared_instruction.rs:98` `encode_settle_prepared_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/settle_prepared_instruction.rs`.
+- `programs/aspis-pool/src/settle_prepared_instruction.rs:122` `tests::digest`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/settle_prepared_instruction.rs`.
+- `programs/aspis-pool/src/settle_prepared_instruction.rs:127` `tests::settle_prepared_wire_is_exact_and_nested_kind_bound` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/settle_prepared_instruction.rs`.
+- `programs/aspis-pool/src/state.rs:42` `exact_state_array`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:49` `pool_v1_state_address`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:93` `CanonicalPoolStateV1::decode_account`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:125` `CanonicalPoolStateV1::decode_account_from_program_invariant`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:149` `CanonicalPoolStateV1::require_same_writable_account`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:168` `CanonicalPoolStateV1::as_state`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:172` `CanonicalPoolStateV1::reconstructed_tree`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:183` `CanonicalPoolStateV1::deref`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:189` `PoolStateV1::genesis`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:224` `PoolStateV1::current_root_sequence`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:230` `PoolStateV1::genesis_boxed`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:239` `PoolStateV1::decode_boxed`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:246` `PoolStateV1::decode_boxed_with_validated_tree`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:254` `PoolStateV1::decode_boxed_from_program_invariant`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:267` `PoolStateV1::validate_encoding`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:295` `PoolStateV1::write_encoding_prevalidated`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:340` `PoolStateV1::encode`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:347` `PoolStateV1::decode_with_validated_tree`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:403` `PoolStateV1::decode_from_program_invariant`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:487` `PoolStateV1::decode`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:496` `tests::digest`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:500` `tests::initialization`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:516` `tests::exact_state_image_roundtrips_and_rejects_type_reserved_cursor_and_pool_confusion` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:577` `tests::specialized_genesis_is_exactly_the_generic_checked_tree_and_fails_closed` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/state.rs:606` `tests::program_invariant_decoder_has_one_explicit_relation_boundary` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/state.rs`.
+- `programs/aspis-pool/src/transition.rs:45` `AuthorizedAppendV1::count`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:52` `AuthorizedAppendV1::validate_leaves`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:96` `PrevalidatedNewHistoryPageV1::require_matches`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:114` `prevalidate_new_history_page_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:130` `PrevalidatedCurrentHistoryV1::require_matches`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:190` `AuthorizedSourceStateV1<'a>::as_state`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:197` `AuthorizedSourceStateV1<'a>::prepare`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:220` `PreparedAuthorizedAppendV1::validate_inherited_state_and_cursor`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:258` `map_tree_error`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:269` `prepare_checked_append`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:310` `prepare_append_from_canonical_state`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:387` `append_one_from_program_invariant`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:440` `prepare_authorized_append_images_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:457` `validate_current_history`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:498` `validate_current_history_after_prevalidated_anchor_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:567` `initialize_pool_accounts_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:620` `apply_authorized_append_after_checked_state_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:758` `apply_authorized_append_after_prevalidated_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:791` `apply_authorized_append_after_prevalidated_history_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:822` `apply_authorized_append_after_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:859` `apply_authorized_append_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:878` `tests::digest`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:882` `tests::initialization`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:898` `tests::program_invariant_append_is_byte_exact_across_carry_boundaries` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:916` `tests::canonical_pool_key`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:921` `tests::account`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:941` `tests::initialize_fixture`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:956` `tests::genesis_accepts_canonical_pool_pda_without_signer` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:984` `tests::genesis_rejects_noncanonical_pool_address_without_writes` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:1017` `tests::genesis_rejects_wrong_page_address_and_nonzero_account_without_writes` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:1076` `tests::one_and_two_leaf_transitions_persist_matching_roots` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:1155` `tests::prevalidated_append_is_byte_exact_and_rejects_pool_substitution_before_callback` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:1347` `tests::state_and_history_at`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:1374` `tests::page_rollover_is_exact_and_failure_before_next_page_is_atomic` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:1457` `tests::two_leaf_append_splits_exactly_across_page_boundary` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:1516` `tests::one_slot_remaining_state`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:1535` `tests::terminal_current_page`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/transition.rs:1551` `tests::final_append_reaches_full_tree_and_future_append_fails_closed` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/transition.rs`.
+- `programs/aspis-pool/src/vault.rs:232` `plan_legacy_deposit_transfer_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/vault.rs`.
+- `programs/aspis-pool/src/vault.rs:391` `plan_legacy_withdrawal_transfer_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/vault.rs`.
+- `programs/aspis-pool/tests/payment_relation_abi.rs:21` `digest`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/tests/payment_relation_abi.rs`.
+- `programs/aspis-pool/tests/payment_relation_abi.rs:25` `envelope`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/tests/payment_relation_abi.rs`.
+- `programs/aspis-pool/tests/payment_relation_abi.rs:39` `private_transfer_relation_encoding_is_byte_exact_to_pool_payload` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/tests/payment_relation_abi.rs`.
+- `programs/aspis-pool/tests/payment_relation_abi.rs:83` `withdrawal_relation_encoding_is_byte_exact_to_pool_payload` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/tests/payment_relation_abi.rs`.
+
+## Retained dependencies
+
+All pair_forest*.rs, pair_processor.rs, pair_state.rs and pair_dispatch.rs files remain byte-identical. DepositRequestV1 and PoolInitializationV1 retain their full frozen declarations. Identity-based vault planners, SPL Token parsing, history/nullifier support and common instruction/receipt codecs remain. The word legacy in SPL Token helpers denotes the supported token program and is not a legacy Pool instruction.
+
+## Inventory disambiguation
+
+Six conservative target alternatives produce seven spurious closure rows. The full incoming-edge records and reasons are in NKX_BYTE_IDENTITY.json. The header callback overlay confused a local RootPageHeaderV1 record for a function. From alternatives target incompatible numeric/core/error receiver types; Deref alternatives target Vec/Box/CanonicalPairPoolStateV1, never CanonicalPoolStateV1. The latter false target also pulled in its as_state callee. No actual pair-forest body changed or was deleted; this is source/type disambiguation of an explicitly conservative inventory, not proof credit.
+
+NKX_edit.py records initial source surgery; subsequent import/whitespace/unused-symbol cleanup is captured by the final NKX_DIFF.patch. NKX_source.py independently checks the final tree.

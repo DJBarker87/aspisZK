@@ -18,7 +18,7 @@ use solana_sdk_ids::system_program;
 
 use aspis_statement::pool_v1::PoolIdentityV1;
 
-use crate::{error::PoolV1ProgramError, state::PoolStateV1};
+use crate::error::PoolV1ProgramError;
 
 pub const LEGACY_SPL_TOKEN_PROGRAM_ID: Pubkey =
     Pubkey::from_str_const("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
@@ -227,23 +227,7 @@ fn exact_five_accounts<'slice, 'info>(
     Ok(values)
 }
 
-/// Validate exactly `[mint, source, source_authority, vault, token_program]`
-/// and construct one direct-owner `TransferChecked` instruction.
-pub(crate) fn plan_legacy_deposit_transfer_v1(
-    program_id: &Pubkey,
-    pool: &Pubkey,
-    state: &PoolStateV1,
-    accounts: &[AccountInfo],
-    amount: u32,
-) -> Result<LegacyDepositTransferPlanV1, ProgramError> {
-    plan_legacy_deposit_transfer_from_identity_v1(
-        program_id,
-        pool,
-        &state.identity,
-        accounts,
-        amount,
-    )
-}
+
 
 /// Pair-forest and legacy-state deposits share the exact vault identity,
 /// token parsing and direct-owner `TransferChecked` semantics.
@@ -386,26 +370,7 @@ fn exact_five_withdrawal_accounts<'slice, 'info>(
     Ok(values)
 }
 
-/// Validate exactly `[mint, vault, destination, vault_authority,
-/// token_program]` and construct one PDA-authorized `TransferChecked`.
-pub(crate) fn plan_legacy_withdrawal_transfer_v1(
-    program_id: &Pubkey,
-    pool: &Pubkey,
-    state: &PoolStateV1,
-    accounts: &[AccountInfo],
-    destination: &Pubkey,
-    amount: u32,
-) -> Result<LegacyWithdrawalTransferPlanV1, ProgramError> {
-    plan_legacy_withdrawal_transfer_from_identity_v1(
-        program_id,
-        pool,
-        &state.identity,
-        accounts,
-        destination,
-        amount,
-        None,
-    )
-}
+
 
 /// Pool-only bump hints for the two constant-seed custody PDAs (pair-forest
 /// R1 withdrawal). They are carried in Pool instruction data only; the master
