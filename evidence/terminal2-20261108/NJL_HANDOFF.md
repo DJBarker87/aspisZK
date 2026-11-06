@@ -19,3 +19,7 @@ TX1:227 candidate added: L009 prologue/full cache domains, L010 ordered traversa
 ## Stage 3
 
 TX1:244 occupancy candidate added with a complete cut-consuming Packet and exact adopted cohort Result (L023/L024). All8 digest writes and the entire12cell frame are composed; no binary occupied premise. Existing four NJB nativepairs reused; missing fixed8 control K009PASS/K008FAIL added. Four candidate rows total (209,208,227,244), all awaiting combined/raw/scan and next ledger gate. Continue path247 (independent native windows already available), then actual callers. No target claim.
+
+## Stage 4
+
+TX1:247 candidate added (L030/L031), complete17cell native-cut invocation and exact adopted literal Result. Both caches and source-order16 writes are discharged internally; existing four NJB pairs reused, no native rerun. Five own candidates209/208/227/244/247 await all local gates and the next ledger. Endpoint214 missing writeframe is being isolated: K010 initializer unwind failure excluded; changed105bound K012 planned, same property/name, cap and90stimeout. No full103cell saved-prestate copy; this differs from NJB's timedoutshape. Continue work while budget remains.

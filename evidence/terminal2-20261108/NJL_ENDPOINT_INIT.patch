@@ -1,0 +1,11 @@
+--- a/crates/aspis-statement/src/pool_v1/NJL_control.rs
++++ b/crates/aspis-statement/src/pool_v1/NJL_control.rs
+@@ -73,7 +73,7 @@
+ fn NJL_endpoint_write(scratch:&mut[QM31],index:usize,rhs:QM31,log:&mut NJL_AddLog){
+  scratch[index]=NJL_add(scratch[index],rhs,log);
+ }
+-#[kani::proof] #[kani::unwind(4)]
++#[kani::proof] #[kani::unwind(105)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ fn NJL_endpoint_write_cut(){
+  let mut scratch:[QM31;103]=unsafe{core::mem::transmute::<[[u32;4];103],[QM31;103]>(kani::any())};
