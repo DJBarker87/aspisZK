@@ -1,3 +1,23 @@
+# NJB final handoff
+
+**Target not yet established.** Local gate PASS; only TX1:268 is proposed for the next authoritative ledger gate. No other row is submitted CLOSED. NIU remains the authoritative baseline432/0/167 of599; TX1:256 remains NIX-owned. All32 explicitly listed job occurrences are retained.
+
+Budget exhausted: **120/120 Kani,100/100 Lean-support scopes,1/1 extraction**. Native51 positive/matched-negative pairs are retained as observations; failed compiler/unwind/timeout and reduced-token stages are excluded. One extraction produced32 LLBC roots but Aeneas Not_found and no new Lean bodies. No cap or timeout was raised; all scopes were serial, admitted exit0+allowed:true,6G/8G/swap0/tasks64, Lean-M7000 and optimized/offline Rust. Peak RSS was7,299,032KiB; swaps0.
+
+Final combined import with NIU+NGK+AspisR1.RPx_Deployed.deployed passes. All8 hardened-walker fixtures pass;95 raw roots (including the headline) have only standard axioms. NFX-style metadata scan exits0 over15,124 modules: zero dangling references, duplicate owners and import mismatches. See NJB_AUDIT.json, NJB_LEDGER_DELTA.json and per-scope/nested receipts for exact targets, revisions, metrics and axioms.
+
+The sole candidate is NJB_SemanticPublic.result, unconditional for every typed statement. K005/K002 establish actual frozen native variant and SAME immutable borrowed field identity. Its root has no child/success/endpoint/Run hypothesis. All caller/ABI/compiler/source-to-ELF interpretation remains explicit P6/D188 reclassification; no new trust row and no headline premise removal.
+
+Forty modules (37 proof modules, combined import and2 missing unchanged math modules) are retained,6,871,848 bytes, at `/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NJB_20261107/NJB_exports_20261107`. NJB_EXPORT.json gives every hash and recommended LEAN_PATH. Seed NIU1,364,080 bytes first, plus6 provenance-pinned selected objects2,565,624 bytes; no shared cache was mutated. Never delete the retained cache.
+
+Next work: NJB_CERTIFICATES.md gives exact full-Result/domain statements; NJB_CUTS.md distinguishes typed cuts from model-only/native-only support. NJB_REMAINING.md lists every member's exact missing trace, frame, loop, domain or parent association. In particular do not use active/absorption model equality as a CLOSED native callee; finish their cut-consuming roots. The outside-slice OPEN field sum_products2/3/4 blocks225 and downstream finish. No sibling/session-A worktree was touched; import only committed artifacts read-only.
+
+Repository crates/programs match the frozen release trees exactly. The3 ELF hashes in NJB_SHIPPED_CHECK are inherited, not rebuilt. Harnesses are exclusively external scratch and committed as NJB_native.patch plus exact KMX patch, source/erasure inputs and receipts. No wallet/key operation, writable static, Option<fn>, Kani function contract or stub_verified is used. No whole manifest/package/unchanged regression was run. NOT-RUN configurations are explicitly listed in NJB_NOT_RUN.json.
+
+The historical stage notes follow; later corrections override earlier reduced-token or in-progress descriptions.
+
+---
+
 # NJB handoff — stage 0
 
 Target not yet established. Branch codex/cx-terminal-20261107. Prefix NJB_; evidence only in this directory. All 32 explicitly listed occurrences retained; no TX1:256 module will be authored. Initial scope and full obligations are pinned in NJB_SCOPE.md and NJB_OBLIGATIONS.json.xz.
@@ -45,3 +65,9 @@ No Option<fn>, function-pointer-dependent proof, writable static, function contr
 Native allowance is exhausted at120 attempts. Fifty-one positive/matched-negative pairs stand as observations; old reduced-token, compiler/unwinding failures and all seven timeouts are excluded. Windowed powers, actual-cache slot, arbitrary window step and all14 output coordinates pass/control. The Std array::map slot is a prototype only; no whole-map association is claimed. Path left and right k<7/k=7 partitions pass/control after K082/K134 timeouts; all four occupancy windows and the carry guard pass/control. Optional recipient and extra cache-inversion controls are not run.
 
 All37 final proof modules compile, with95 named roots including the deployed headline configured for the cumulative raw audit. Full model packets and field/cache domains are retained, but only the unconditional getter is proposed for a row. Final combined import, same-binary walker fixtures, two raw groups and zero-defect scan are still pending at this stage. No other root consumes every native cut; no model-only packet is called CLOSED.
+
+## Evidence retention and cleanup
+
+NJB_DEDUP.json records125 exact content-addressed aliases (264,692,464 duplicate bytes removed). Every alias's uncompressed bytes/sha256 is checked against the retained file. Sources/manifests/payloads remain committed; no required input is ignored. NJB_finalize.py resolves the aliases, and revalidation passes after deduplication. No file exceeds20MB; Python caches are removed.
+
+NJB_CLEANUP.json verifies all retained export hashes before removing only own build target/object/native/temp directories (5,655,425,291 bytes). The designated retained cache is untouched; no shared/sibling/key path is deleted. Library/object/source revision pins remain in the immutable receipts and export manifest. Regenerate build outputs from committed sources plus the retained export, not from deleted scratch.

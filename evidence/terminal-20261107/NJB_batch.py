@@ -8,7 +8,9 @@ s=(E/'stdout.log').read_text();t=(E/'time.log').read_text()
 def metric(k):
  m=re.search(re.escape(k)+r':\s*(.*)',t);return m[1]if m else None
 results=[json.loads(l[11:])for l in s.splitlines()if l.startswith('NEP_RESULT ')];axioms=[l for l in s.splitlines()if'depends on axioms'in l or'does not depend on any axioms'in l]
-row=dict(target=mode,command=command,exit_status=r.returncode,wall_seconds=time.monotonic()-start,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),results=results,print_axioms=axioms)
+attempt={'fixtures':'NJB_L091','proof0':'NJB_L092','proof1':'NJB_L093','scan':'NJB_L096'}[mode]
+config=json.loads((B/(attempt+'.json')).read_text())
+row=dict(target=mode,source_revision=config['source_revision'],scope_attempt=attempt,library_pins='see '+attempt+'/receipt.json deps_fingerprint',command=command,exit_status=r.returncode,wall_seconds=time.monotonic()-start,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),results=results,print_axioms=axioms)
 if mode=='fixtures':
  expected=[['NEP_Planted.matchAx'],['NEP_Planted.privateAx'],['NEP_Planted.proofAx'],['NEP_Planted.auxAx'],[],[],[],[]];row['fixture_pass']=len(results)==8 and all(x['equal']and x['walked_axioms']==want for x,want in zip(results,expected));assert row['fixture_pass']
 elif mode.startswith('proof'):

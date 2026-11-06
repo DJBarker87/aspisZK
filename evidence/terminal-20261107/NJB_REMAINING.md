@@ -167,3 +167,9 @@ Real in-job child occurrences: TX1:237.
 ## TX1:268 semantic_public
 
 Sole unconditional getter candidate: full typed variant/borrow identity and complete cohort Result, no hypotheses beyond typed input. Local combined/raw/scan gate and then next authoritative ledger gate determine admission; enclosing codec/native interpretation obligations remain.
+
+## Terminal resource disposition
+
+All authorized native and Lean-support scopes are spent (120/100), and the sole extraction is spent. No remaining member can be launched within this job's caps. The byte-identical compiled export and all source/receipt inputs are retained. This is not a Kani-only early stop: after native exhaustion the combined import, fixture, raw-axiom, scan and export scopes consumed the remaining Lean allowance.
+
+208/209/215/219/227/231 and the observed244/247 windows principally need Lean typed-cut, trace/finite-induction and cohort composition; never repeat their passed arithmetic windows merely because the parent is open. 214 still lacks the complete two-write103-cell invocation/frame;216 lacks native/model chunk/control composition;224 lacks complete Std map/body composition. 234 needs an actual append-level native bridge;242 needs the globally ordered parent/constructor/return-array binding;245 needs the arithmetic true-body composition and246 its actual Some/None/group bridge (recipient branch-only configs were not submitted). Parent rows218/220/223/228/229/232/233/235/237/250/251/260/261/263 require their actual caller cuts and CLOSED-child/domain discharges. 217 waits for216;225 has the explicit out-of-slice OPEN040/041/043 boundary. 268 alone is a locally validated candidate waiting for the next ledger gate.
