@@ -1,0 +1,926 @@
+theorem AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk
+                      (AspisR1.FIp_Install.configuration indexError
+                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisR1.ARW_Induced.issued native1 copy allocator
+                                                AspisR1.CPH_Program.verifier a H).length ≤
+                                            Q0 + Q1) →
+                                        have P :=
+                                          AspisR1.ARW_Induced.program native1 copy allocator
+                                            AspisR1.CPH_Program.verifier a;
+                                        have runtime :=
+                                          AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+                                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation)
+                                            indexError reservation native1 native2 hashv a;
+                                        have select := fun x =>
+                                          AspisR1.P2P_NativeSelection.pair
+                                            (AspisR1.DrvC_Installation.sdk
+                                              (AspisR1.FIp_Install.configuration indexError
+                                                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                  reservation)
+                                                reservation))
+                                            AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                        AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                            (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                            AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                            AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                          AspisR1.DrvC_Implementation.driver
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation) =
+                                              AspisR1.DrvC_SourceEntry.source
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation)
+                                                hashv ∧
+                                            AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                      reservation)
+                                                    reservation) =
+                                                AspisR1.SdkD_PairBatches.dictionary
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).boundaries
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).std ∧
+                                              AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.boundaries
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation).boundaries)
+                                                  reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1
+                                                  post2 H
+                                                  (AspisR1.DrvC_Implementation.driver
+                                                    (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation))
+                                                  prior (p.physicalEvents t) hashv
+                                                  (AspisR1.BinRawByteCollisionTargets.event
+                                                    AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.Hiq_RecordedJoint.program
+                                                        (AspisR1.F3X_Account.program
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P)
+                                                        AspisR1.F3X_Projection.project select))) ∧
+                                                (AspisR1.F3X_ModelClaims.Claims
+                                                      (AspisR1.FIp_Install.configuration indexError
+                                                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                          reservation)
+                                                        reservation)
+                                                      D P (Q0 + Q1) ∧
+                                                    AspisR1.F3Y_SourceClaims.Claims
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        D hashv P (Q0 + Q1) select ∧
+                                                      AspisR1.F3Y_AccountMass.Claims
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P (Q0 + Q1) select ∧
+                                                        ⋯) ∧
+                                                  (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                      (↑saved).length = 1768 ∧ ⋯) ∧
+                                                    AspisR1.Rc2_Events.Facts
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        hashv native1 native2 copy allocator
+                                                        AspisR1.CPH_Program.verifier H saved ∧
+                                                      AspisR1.CPH_Protection.Facts p t saved
+                                                          AspisR1.CPH_Program.verifier ∧
+                                                        ⋯ :=
+⋯
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalChildren.compact_result : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  NFU_Retarget.compact.check_values bytes =
+    Aeneas.Std.Result.ok
+      (if NKL_CanonicalChildren.compactGood bytes = true then Aeneas.Std.core.result.Result.Ok ()
+      else Aeneas.Std.core.result.Result.Err NFU_Retarget.LPl_Kit_Release.compact.CodecError.NonCanonical) :=
+⋯
+'NKL_CanonicalChildren.compact_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalChildren.echeck_result : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  NFU_Retarget.verifier.echeck bytes false =
+    Aeneas.Std.Result.ok
+      (if NKL_CanonicalChildren.echeckGood bytes = true then Aeneas.Std.core.result.Result.Ok ()
+      else Aeneas.Std.core.result.Result.Err NFU_Retarget.LPl_Kit_Release.verifier.Error.Parse) :=
+⋯
+'NKL_CanonicalChildren.echeck_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalChildren.compact_call : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (do
+      let r ← NFU_Retarget.compact.check_values bytes
+      Aeneas.Std.Result.ok (NKL_CanonicalChildren.convert r)) =
+    Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (NKL_CanonicalChildren.compactGood bytes)) :=
+⋯
+'NKL_CanonicalChildren.compact_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalChildren.echeck_call : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (do
+      let r ← NFU_Retarget.verifier.echeck bytes false
+      Aeneas.Std.Result.ok
+          (match r with
+          | Aeneas.Std.core.result.Result.Ok u => Aeneas.Std.core.result.Result.Ok u
+          | Aeneas.Std.core.result.Result.Err a =>
+            Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse)) =
+    Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (NKL_CanonicalChildren.echeckGood bytes)) :=
+⋯
+'NKL_CanonicalChildren.echeck_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalConcat.append : ∀ (left right : AspisV8R19.DuplexFrames.Bytes),
+  List.length left % 4 = 0 →
+    (AspisR1.OraclePortCompactDraft.canonical (left ++ right) ↔
+      AspisR1.OraclePortCompactDraft.canonical left ∧ AspisR1.OraclePortCompactDraft.canonical right) :=
+⋯
+'NKL_CanonicalConcat.append' depends on axioms: [propext, Quot.sound]
+theorem NKL_CanonicalConcat.partition : ∀ (bs : AspisV8R19.DuplexFrames.Bytes),
+  ∀ n ≤ List.length bs,
+    n % 4 = 0 →
+      (AspisR1.OraclePortCompactDraft.canonical bs ↔
+        AspisR1.OraclePortCompactDraft.canonical (List.take n bs) ∧
+          AspisR1.OraclePortCompactDraft.canonical (List.drop n bs)) :=
+⋯
+'NKL_CanonicalConcat.partition' depends on axioms: [propext, Quot.sound]
+theorem NKL_CanonicalInstallation.k_total : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  NKL_CanonicalInstallation.childK bytes = Aeneas.Std.Result.ok (NKL_CanonicalKCarrier.selected bytes) :=
+⋯
+'NKL_CanonicalInstallation.k_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalInstallation.e_total : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (flag : Bool),
+  NKL_CanonicalInstallation.childE bytes flag =
+    Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (NKL_CanonicalChildren.echeckGood bytes)) :=
+⋯
+'NKL_CanonicalInstallation.e_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalInstallation.cv_total : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  NKL_CanonicalInstallation.childCV bytes =
+    Aeneas.Std.Result.ok (NKB_CanonicalPrefix.codec (NKL_CanonicalChildren.compactGood bytes)) :=
+⋯
+'NKL_CanonicalInstallation.cv_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalInstallation.k_c1 : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (s : Aeneas.Std.Usize),
+      ↑s < 4 →
+        NKL_CanonicalInstallation.childK (NKB_CanonicalTail.window q s) =
+          NKL_CanonicalKCarrier.mapResult (Option.map NKL_CanonicalKCarrier.toCaller)
+            (OraclePortCkptAbi2Extracted.decode_k_spec (NKB_CanonicalTail.window q s)) :=
+⋯
+'NKL_CanonicalInstallation.k_c1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalInstallation.k_c2 : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (s l : Aeneas.Std.Usize),
+      ↑s < 4 →
+        ↑l < 2 →
+          NKL_CanonicalInstallation.childK (NKB_CanonicalRange.window q s l) =
+            NKL_CanonicalKCarrier.mapResult (Option.map NKL_CanonicalKCarrier.toCaller)
+              (OraclePortCkptAbi2Extracted.decode_k_spec (NKB_CanonicalRange.window q s l)) :=
+⋯
+'NKL_CanonicalInstallation.k_c2' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalInstallation.source : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    NJS_Extract.verifier.candidate.canonical_scan AspisR1M31Parser.field.M31.from_le_bytes
+        NKL_CanonicalInstallation.childK NKL_CanonicalInstallation.childE NKL_CanonicalInstallation.childCV proof =
+      Aeneas.Std.Result.ok
+        (NKB_CanonicalOpening.reply
+          (NKB_CanonicalPrefix.guard NKL_CanonicalChildren.compactGood NKL_CanonicalChildren.echeckGood proof &&
+            NKB_CanonicalPair.allFrom
+              (NKB_CanonicalRows.pass NKB_CanonicalScalarBridge.scalar NKL_CanonicalKCarrier.selected
+                NKL_CanonicalChildren.echeckGood proof)
+              0 22)) :=
+⋯
+'NKL_CanonicalInstallation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalK.good_eq_guard : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize),
+  NKB_CanonicalKBridge.good b = NKL_CanonicalK.guard b :=
+⋯
+'NKL_CanonicalK.good_eq_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalK.word_value : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize) (j : Fin 4),
+  ↑(AspisR1.CheckpointBytes3KDecode.word b.to_slice ⋯ j) =
+    ↑(↑b)[4 * ↑j]! + 256 * ↑(↑b)[4 * ↑j + 1]! + 65536 * ↑(↑b)[4 * ↑j + 2]! + 16777216 * ↑(↑b)[4 * ↑j + 3]! :=
+⋯
+'NKL_CanonicalK.word_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalK.source : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize),
+  (do
+      let parsed ← OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice
+      Aeneas.Std.Result.ok
+          (if parsed.isSome = true then Aeneas.Std.core.result.Result.Ok ()
+          else Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse)) =
+    Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (NKL_CanonicalK.guard b)) :=
+⋯
+'NKL_CanonicalK.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalK.native_result : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize)
+  (out : NKB_CanonicalRange.ScanResult),
+  NKB_CanonicalCuts.ReadCut (NKL_CanonicalK.guard b) out →
+    out = NKB_CanonicalOpening.reply (NKB_CanonicalKBridge.good b) :=
+⋯
+'NKL_CanonicalK.native_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalKCarrier.decoder : ∀ (b : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑b).length = 16 →
+    NKL_CanonicalKCarrier.mapResult (Option.map NKL_CanonicalKCarrier.toCaller)
+        (OraclePortCkptAbi2Extracted.decode_k_spec b) =
+      Aeneas.Std.Result.ok (NKL_CanonicalKCarrier.selected b) :=
+⋯
+'NKL_CanonicalKCarrier.decoder' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalKCarrier.selected_tag : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize),
+  (NKL_CanonicalKCarrier.selected b.to_slice).isSome = NKB_CanonicalKBridge.good b :=
+⋯
+'NKL_CanonicalKCarrier.selected_tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalWindows.nested : ∀ (bs : AspisV8R19.DuplexFrames.Bytes) (offset size start count : ℕ),
+  start + count ≤ size →
+    AspisR1.OraclePortCompactDraft.slice (AspisR1.OraclePortCompactDraft.slice bs offset size) start count =
+      AspisR1.OraclePortCompactDraft.slice bs (offset + start) count :=
+⋯
+'NKL_CanonicalWindows.nested' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalWindows.length : ∀ (bs : AspisV8R19.DuplexFrames.Bytes) (offset size : ℕ),
+  offset + size ≤ List.length bs → List.length (AspisR1.OraclePortCompactDraft.slice bs offset size) = size :=
+⋯
+'NKL_CanonicalWindows.length' depends on axioms: [propext, Quot.sound]
+theorem NKL_CanonicalWindows.canonical_window : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (start count : ℕ),
+      4 * start + 4 * count ≤ 832 →
+        (AspisR1.OraclePortCompactDraft.canonical
+            (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑q) (4 * start)
+              (4 * count)) ↔
+          ∀ j < count, NKL_CanonicalWindows.W q (start + j)) :=
+⋯
+'NKL_CanonicalWindows.canonical_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalWindows.index : ∀ n < 32, ↑(NKB_CanonicalScalarLoop.index n) = n :=
+⋯
+'NKL_CanonicalWindows.index' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_CanonicalWindows.allFrom : ∀ (pass : ℕ → Bool) (start fuel : ℕ),
+  NKB_CanonicalPair.allFrom pass start fuel = true ↔ ∀ (j : ℕ), start ≤ j → j < start + fuel → pass j = true :=
+⋯
+'NKL_CanonicalWindows.allFrom' depends on axioms: [propext, Quot.sound]
+theorem NKL_CanonicalWindows.selected : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑bytes).length = 16 →
+    ((NKL_CanonicalKCarrier.selected bytes).isSome = true ↔
+      AspisR1.OraclePortCompactDraft.canonical (AspisR1.MultiproofConeCanonical.bytesOf ↑bytes)) :=
+⋯
+'NKL_CanonicalWindows.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_Checks.slot_length : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8) (n : ℕ), (NKL_Checks.slot q n).length = 29 :=
+⋯
+'NKL_Checks.slot_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_Checks.opening_length : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8), (NKL_Checks.opening q).length = 117 :=
+⋯
+'NKL_Checks.opening_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_Checks.row_length : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (i : ℕ),
+  (NKL_Checks.row proof i).length ≤ 118 :=
+⋯
+'NKL_Checks.row_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_Checks.allFrom : ∀ (pass : ℕ → Bool) (fuel : ℕ),
+  NKB_CanonicalPair.allFrom pass 0 fuel = (List.range fuel).all pass :=
+⋯
+'NKL_Checks.allFrom' depends on axioms: [propext, Quot.sound]
+theorem NKL_Checks.slot_test : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8) (n : ℕ),
+  (NKL_Checks.slot q n).all NKL_Checks.test =
+    NKB_CanonicalOpening.slot NKB_CanonicalScalarBridge.scalar NKL_CanonicalKCarrier.selected q
+      (NKB_CanonicalScalarLoop.index n) :=
+⋯
+'NKL_Checks.slot_test' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_Checks.opening_test : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (NKL_Checks.opening q).all NKL_Checks.test =
+    (NKB_CanonicalPair.allFrom
+        (NKB_CanonicalSlotLoop.pass NKB_CanonicalScalarBridge.scalar NKL_CanonicalKCarrier.selected q) 0 4 &&
+      NKL_CanonicalChildren.echeckGood (NKB_CanonicalOpening.trailing q)) :=
+⋯
+'NKL_Checks.opening_test' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_Checks.row_test : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (i : ℕ),
+  (NKL_Checks.row proof i).all NKL_Checks.test =
+    NKB_CanonicalRows.pass NKB_CanonicalScalarBridge.scalar NKL_CanonicalKCarrier.selected
+      NKL_CanonicalChildren.echeckGood proof i :=
+⋯
+'NKL_Checks.row_test' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_Checks.prefix_test : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (NKL_Checks.header proof).all NKL_Checks.test =
+    NKB_CanonicalPrefix.guard NKL_CanonicalChildren.compactGood NKL_CanonicalChildren.echeckGood proof :=
+⋯
+'NKL_Checks.prefix_test' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_Checks.source : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (NKL_Checks.checks proof).all NKL_Checks.test =
+    (NKB_CanonicalPrefix.guard NKL_CanonicalChildren.compactGood NKL_CanonicalChildren.echeckGood proof &&
+      NKB_CanonicalPair.allFrom
+        (NKB_CanonicalRows.pass NKB_CanonicalScalarBridge.scalar NKL_CanonicalKCarrier.selected
+          NKL_CanonicalChildren.echeckGood proof)
+        0 22) :=
+⋯
+'NKL_Checks.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ChildCanonical.compact : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑bytes).length % 16 = 0 →
+    (NKL_CanonicalChildren.compactGood bytes = true ↔
+      AspisR1.OraclePortCompactDraft.canonical (AspisR1.MultiproofConeCanonical.bytesOf ↑bytes)) :=
+⋯
+'NKL_ChildCanonical.compact' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ChildCanonical.echeck : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑bytes).length % 32 = 0 →
+    (NKL_CanonicalChildren.echeckGood bytes = true ↔
+      AspisR1.OraclePortCompactDraft.canonical (AspisR1.MultiproofConeCanonical.bytesOf ↑bytes)) :=
+⋯
+'NKL_ChildCanonical.echeck' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ChildCanonical.compact_decide : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑bytes).length % 16 = 0 →
+    NKL_CanonicalChildren.compactGood bytes =
+      decide (AspisR1.OraclePortCompactDraft.canonical (AspisR1.MultiproofConeCanonical.bytesOf ↑bytes)) :=
+⋯
+'NKL_ChildCanonical.compact_decide' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ChildCanonical.echeck_decide : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑bytes).length % 32 = 0 →
+    NKL_CanonicalChildren.echeckGood bytes =
+      decide (AspisR1.OraclePortCompactDraft.canonical (AspisR1.MultiproofConeCanonical.bytesOf ↑bytes)) :=
+⋯
+'NKL_ChildCanonical.echeck_decide' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ChunkCanonical.le32 : ∀ (bs : List Aeneas.Std.U8),
+  NFU_Retarget.LPl_Kit_Bytes.le32 bs =
+    AspisR1.OraclePortCompactDraft.little (AspisR1.MultiproofConeCanonical.bytesOf (List.take 4 bs)) :=
+⋯
+'NKL_ChunkCanonical.le32' depends on axioms: [propext]
+theorem NKL_ChunkCanonical.window : ∀ (bs : List Aeneas.Std.U8) (offset width j : ℕ),
+  j < width →
+    List.take 4 (List.drop (4 * j) (List.take (4 * width) (List.drop offset bs))) =
+      List.take 4 (List.drop (offset + 4 * j) bs) :=
+⋯
+'NKL_ChunkCanonical.window' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ChunkCanonical.chunk : ∀ (bs : List Aeneas.Std.U8) (width i : ℕ),
+  NFU_Retarget.LPl_Kit_Bytes.validChunk width false (List.take (4 * width) (List.drop (4 * width * i) bs)) = true ↔
+    ∀ j < width,
+      AspisR1.OraclePortCompactDraft.little
+          (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf bs) (4 * (width * i + j)) 4) <
+        2147483647 :=
+⋯
+'NKL_ChunkCanonical.chunk' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ChunkCanonical.blocks : ∀ (bs : List Aeneas.Std.U8) (width : ℕ),
+  0 < width →
+    bs.length % (4 * width) = 0 →
+      (NFU_Retarget.LPl_Kit_Bytes.chunksValid (4 * width) width false bs = true ↔
+        AspisR1.OraclePortCompactDraft.canonical (AspisR1.MultiproofConeCanonical.bytesOf bs)) :=
+⋯
+'NKL_ChunkCanonical.blocks' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ClosedChildren.scalar : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  S8OwnedP6.aspis_core.field.M31.from_le_bytes b = Aeneas.Std.Result.ok (NKB_CanonicalScalarBridge.scalar b) :=
+⋯
+'NKL_ClosedChildren.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ClosedChildren.actualK : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize),
+  NKL_CanonicalKCarrier.mapResult (Option.map NKL_ClosedChildren.qToCaller)
+      (S8OwnedP6.aspis_core.field.QM31.from_le_bytes b.to_slice) =
+    Aeneas.Std.Result.ok (NKL_CanonicalKCarrier.selected b.to_slice) :=
+⋯
+'NKL_ClosedChildren.actualK' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ClosedChildren.quadratic : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑bytes).length = 16 →
+    NKL_CanonicalKCarrier.mapResult (Option.map NKL_ClosedChildren.qToCaller) (NET_ParserComposed.quadratic bytes) =
+      Aeneas.Std.Result.ok (NKL_CanonicalKCarrier.selected bytes) :=
+⋯
+'NKL_ClosedChildren.quadratic' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ClosedChildren.opening_reference : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize),
+  NEO_TailRef.opening proof i = NJS_Extract.verifier.candidate.opening proof i :=
+⋯
+'NKL_ClosedChildren.opening_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ClosedChildren.opening : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (i : Aeneas.Std.Usize),
+      ↑i < 22 →
+        ∃ q,
+          NJS_Extract.verifier.candidate.opening proof i = Aeneas.Std.Result.ok q ∧
+            (↑q).length = 832 ∧
+              AspisR1.MultiproofConeCanonical.bytesOf ↑q =
+                AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) (10055 + ↑i * 832)
+                  832 :=
+⋯
+'NKL_ClosedChildren.opening' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ExitTransport.parse_cut : ∀ (idx : NKL_ExitTransport.Indices) (val : NKL_ExitTransport.Values)
+  (out : NKL_ExitTransport.Reply) (afterIdx : NKL_ExitTransport.Indices) (afterVal : NKL_ExitTransport.Values),
+  NKB_ParseCut.Cut idx val out afterIdx afterVal →
+    NKL_ExitTransport.Cut NKL_ExitTransport.Exit.parse idx val out afterIdx afterVal :=
+⋯
+'NKL_ExitTransport.parse_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ExitTransport.result : ∀ (exit : NKL_ExitTransport.Exit) (idx : NKL_ExitTransport.Indices)
+  (val : NKL_ExitTransport.Values) (out : NKL_ExitTransport.Reply) (afterIdx : NKL_ExitTransport.Indices)
+  (afterVal : NKL_ExitTransport.Values),
+  NKL_ExitTransport.Cut exit idx val out afterIdx afterVal →
+    (out, afterIdx, afterVal) = (NKL_ExitTransport.reply exit, idx, val) :=
+⋯
+'NKL_ExitTransport.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ExitTransport.observed : ∀ (exit : NKL_ExitTransport.Exit) (idx : NKL_ExitTransport.Indices)
+  (val : NKL_ExitTransport.Values) (out : NKL_ExitTransport.Reply) (afterIdx : NKL_ExitTransport.Indices)
+  (afterVal : NKL_ExitTransport.Values) (cut : NKL_ExitTransport.Cut exit idx val out afterIdx afterVal),
+  NKL_ExitTransport.observe out afterIdx afterVal =
+    match exit, cut with
+    | NKL_ExitTransport.Exit.success, cut => Aeneas.Std.Result.ok ((), idx, val)
+    | x, cut => Aeneas.Std.Result.fail Aeneas.Std.Error.panic :=
+⋯
+'NKL_ExitTransport.observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ExitTransport.no_suffix : ∀ {Event : Type} (events : List Event) (exit : NKL_ExitTransport.Exit)
+  (idx : NKL_ExitTransport.Indices) (val : NKL_ExitTransport.Values) (out : NKL_ExitTransport.Reply)
+  (afterIdx : NKL_ExitTransport.Indices) (afterVal : NKL_ExitTransport.Values)
+  (cut : NKL_ExitTransport.Cut exit idx val out afterIdx afterVal),
+  NKL_ExitTransport.atExit events out afterIdx afterVal =
+    (events,
+      match exit, cut with
+      | NKL_ExitTransport.Exit.success, cut => Aeneas.Std.Result.ok ((), idx, val)
+      | x, cut => Aeneas.Std.Result.fail Aeneas.Std.Error.panic) :=
+⋯
+'NKL_ExitTransport.no_suffix' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_LeafTotal.total : ∀ (leaves : List AspisR1.MultiproofConeLiveFold.Leaf)
+  (s : MultiproofConeRef.reference.Scratch), ↑s.n + leaves.length ≤ 16 → ∃ out, NKB_LeafChain.Chain leaves s out :=
+⋯
+'NKL_LeafTotal.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_LeafTotal.source : ∀ (leaves : List AspisR1.MultiproofConeLiveFold.Leaf)
+  (s : MultiproofConeRef.reference.Scratch),
+  ↑s.n + leaves.length ≤ 16 →
+    ∃ out, NKB_LeafChain.Chain leaves s out ∧ AspisR1.MultiproofConeLiveFold.fold leaves s = Aeneas.Std.Result.ok out :=
+⋯
+'NKL_LeafTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_NativeGuard.k : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑bytes).length = 16 → NKL_NativeGuard.kGuard bytes = (NKL_CanonicalKCarrier.selected bytes).isSome :=
+⋯
+'NKL_NativeGuard.k' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_NativeGuard.source : ∀ (c : NKL_Checks.Check),
+  NKL_ScanDomains.Domain c → NKL_NativeGuard.nativeGuard c = NKL_Checks.test c :=
+⋯
+'NKL_NativeGuard.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_OpeningCanonical.source : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    (NKL_OpeningCanonical.native q = true ↔
+      AspisR1.OraclePortCompactDraft.openingCanonical (AspisR1.MultiproofConeCanonical.bytesOf ↑q)) :=
+⋯
+'NKL_OpeningCanonical.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_OpeningCanonical.value : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    NKL_OpeningCanonical.native q =
+      decide (AspisR1.OraclePortCompactDraft.openingCanonical (AspisR1.MultiproofConeCanonical.bytesOf ↑q)) :=
+⋯
+'NKL_OpeningCanonical.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_OpeningSlots.scalars : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (s : Aeneas.Std.Usize),
+      ↑s < 4 →
+        (NKB_CanonicalPair.allFrom (NKB_CanonicalScalarLoop.pass NKB_CanonicalScalarBridge.scalar q s) 0 26 = true ↔
+          ∀ l < 26, NKL_CanonicalWindows.W q (30 * ↑s + l)) :=
+⋯
+'NKL_OpeningSlots.scalars' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_OpeningSlots.slot : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (s : Aeneas.Std.Usize),
+      ↑s < 4 →
+        (NKB_CanonicalOpening.slot NKB_CanonicalScalarBridge.scalar NKL_CanonicalKCarrier.selected q s = true ↔
+          NKL_OpeningSlots.P q ↑s) :=
+⋯
+'NKL_OpeningSlots.slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_OpeningSlots.all_slots : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    (NKB_CanonicalPair.allFrom
+          (NKB_CanonicalSlotLoop.pass NKB_CanonicalScalarBridge.scalar NKL_CanonicalKCarrier.selected q) 0 4 =
+        true ↔
+      ∀ s < 4, NKL_OpeningSlots.P q s) :=
+⋯
+'NKL_OpeningSlots.all_slots' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_OpeningSlots.cover : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (∀ s < 4, NKL_OpeningSlots.P q s) ↔ ∀ j < 152, NKL_CanonicalWindows.W q j :=
+⋯
+'NKL_OpeningSlots.cover' depends on axioms: [propext, Quot.sound]
+theorem NKL_PrefixCanonical.slice_join : ∀ (bs : AspisV8R19.DuplexFrames.Bytes) (offset left right : ℕ),
+  AspisR1.OraclePortCompactDraft.slice bs offset (left + right) =
+    AspisR1.OraclePortCompactDraft.slice bs offset left ++
+      AspisR1.OraclePortCompactDraft.slice bs (offset + left) right :=
+⋯
+'NKL_PrefixCanonical.slice_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_PrefixCanonical.source : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    (NKB_CanonicalPrefix.guard NKL_CanonicalChildren.compactGood NKL_CanonicalChildren.echeckGood proof = true ↔
+      NKL_PrefixCanonical.model proof) :=
+⋯
+'NKL_PrefixCanonical.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ReadWindows.scalar_bytes : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8) (s l : Aeneas.Std.Usize),
+  ↑s < 4 →
+    ↑l < 26 →
+      AspisR1.MultiproofConeCanonical.bytesOf ↑(NKB_CanonicalScalar.window q s l) =
+        AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑q) (4 * (30 * ↑s + ↑l)) 4 :=
+⋯
+'NKL_ReadWindows.scalar_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ReadWindows.c1_bytes : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8) (s : Aeneas.Std.Usize),
+  ↑s < 4 →
+    AspisR1.MultiproofConeCanonical.bytesOf ↑(NKB_CanonicalTail.window q s) =
+      AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑q) (4 * (30 * ↑s + 26)) 16 :=
+⋯
+'NKL_ReadWindows.c1_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ReadWindows.c2_bytes : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8) (s l : Aeneas.Std.Usize),
+  ↑s < 4 →
+    ↑l < 2 →
+      AspisR1.MultiproofConeCanonical.bytesOf ↑(NKB_CanonicalRange.window q s l) =
+        AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑q) (4 * (120 + 8 * ↑s + 4 * ↑l))
+          16 :=
+⋯
+'NKL_ReadWindows.c2_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ReadWindows.scalar : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (s l : Aeneas.Std.Usize),
+      ↑s < 4 →
+        ↑l < 26 →
+          (NKB_CanonicalScalarLoop.pass NKB_CanonicalScalarBridge.scalar q s ↑l = true ↔
+            NKL_CanonicalWindows.W q (30 * ↑s + ↑l)) :=
+⋯
+'NKL_ReadWindows.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ReadWindows.c1 : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (s : Aeneas.Std.Usize),
+      ↑s < 4 →
+        ((NKL_CanonicalKCarrier.selected (NKB_CanonicalTail.window q s)).isSome = true ↔
+          ∀ j < 4, NKL_CanonicalWindows.W q (30 * ↑s + 26 + j)) :=
+⋯
+'NKL_ReadWindows.c1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ReadWindows.c2 : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (s l : Aeneas.Std.Usize),
+      ↑s < 4 →
+        ↑l < 2 →
+          ((NKL_CanonicalKCarrier.selected (NKB_CanonicalRange.window q s l)).isSome = true ↔
+            ∀ j < 4, NKL_CanonicalWindows.W q (120 + 8 * ↑s + 4 * ↑l + j)) :=
+⋯
+'NKL_ReadWindows.c2' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanAtoms.k : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑bytes).length = 16 →
+    NKL_ScanAtoms.kReply bytes =
+      Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (NKL_CanonicalKCarrier.selected bytes).isSome) :=
+⋯
+'NKL_ScanAtoms.k' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanAtoms.source : ∀ (c : NKL_Checks.Check),
+  NKL_ScanDomains.Domain c →
+    NKL_ScanAtoms.child c = Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (NKL_Checks.test c)) :=
+⋯
+'NKL_ScanAtoms.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanAtoms.accepted_test : ∀ (c : NKL_Checks.Check),
+  NKL_ScanDomains.Domain c → NKL_ScanAtoms.accepted c = NKL_Checks.test c :=
+⋯
+'NKL_ScanAtoms.accepted_test' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanDomains.slot : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 → ∀ s < 4, ∀ c ∈ NKL_Checks.slot q s, NKL_ScanDomains.Domain c :=
+⋯
+'NKL_ScanDomains.slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanDomains.opening : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 → ∀ c ∈ NKL_Checks.opening q, NKL_ScanDomains.Domain c :=
+⋯
+'NKL_ScanDomains.opening' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanDomains.row : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 → ∀ i < 22, ∀ c ∈ NKL_Checks.row proof i, NKL_ScanDomains.Domain c :=
+⋯
+'NKL_ScanDomains.row' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanDomains.header : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 → ∀ c ∈ NKL_Checks.header proof, NKL_ScanDomains.Domain c :=
+⋯
+'NKL_ScanDomains.header' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanDomains.source : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 → ∀ c ∈ NKL_Checks.checks proof, NKL_ScanDomains.Domain c :=
+⋯
+'NKL_ScanDomains.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanModel.predicate : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ((NKL_Checks.checks proof).all NKL_Checks.test = true ↔
+      AspisR1.OraclePortCompactDraft.scan (AspisR1.MultiproofConeCanonical.bytesOf ↑proof)) :=
+⋯
+'NKL_ScanModel.predicate' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanModel.value : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    (NKL_Checks.checks proof).all NKL_Checks.test =
+      decide (AspisR1.OraclePortCompactDraft.scan (AspisR1.MultiproofConeCanonical.bytesOf ↑proof)) :=
+⋯
+'NKL_ScanModel.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanModel.source : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    NJS_Extract.verifier.candidate.canonical_scan AspisR1M31Parser.field.M31.from_le_bytes
+        NKL_CanonicalInstallation.childK NKL_CanonicalInstallation.childE NKL_CanonicalInstallation.childCV proof =
+      Aeneas.Std.Result.ok
+        (NKB_CanonicalOpening.reply
+          (decide (AspisR1.OraclePortCompactDraft.scan (AspisR1.MultiproofConeCanonical.bytesOf ↑proof)))) :=
+⋯
+'NKL_ScanModel.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanModel.adopted : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    NJS_Extract.verifier.candidate.canonical_scan AspisR1M31Parser.field.M31.from_le_bytes
+        NKL_CanonicalInstallation.childK NKL_CanonicalInstallation.childE NKL_CanonicalInstallation.childCV proof =
+      do
+      let valid ← MultiproofParserRef.parser_reference.scan proof
+      Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply valid) :=
+⋯
+'NKL_ScanModel.adopted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanRoot.all_source : ∀ (xs : List NKL_Checks.Check),
+  (∀ c ∈ xs, NKL_ScanDomains.Domain c) → xs.all NKL_NativeGuard.nativeGuard = xs.all NKL_Checks.test :=
+⋯
+'NKL_ScanRoot.all_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanRoot.deployed : ∀ (proof : Aeneas.Std.Array Aeneas.Std.U8 57607#usize) (out : NKL_ScanAtoms.Reply)
+  (events : List NKL_Checks.Check) (after : NKL_ScanSequence.Bytes),
+  NKL_ScanSequence.Invoke (NKL_Checks.checks proof.to_slice) out events (↑proof) after →
+    Aeneas.Std.Result.ok out =
+        NJS_Extract.verifier.candidate.canonical_scan AspisR1M31Parser.field.M31.from_le_bytes
+          NKL_CanonicalInstallation.childK NKL_CanonicalInstallation.childE NKL_CanonicalInstallation.childCV
+          proof.to_slice ∧
+      after = ↑proof ∧ ∃ suffix, events ++ suffix = NKL_Checks.checks proof.to_slice :=
+⋯
+'NKL_ScanRoot.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanRoot.adopted : ∀ (proof : Aeneas.Std.Array Aeneas.Std.U8 57607#usize) (out : NKL_ScanAtoms.Reply)
+  (events : List NKL_Checks.Check) (after : NKL_ScanSequence.Bytes),
+  NKL_ScanSequence.Invoke (NKL_Checks.checks proof.to_slice) out events (↑proof) after →
+    Aeneas.Std.Result.ok out = do
+      let valid ← MultiproofParserRef.parser_reference.scan proof.to_slice
+      Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply valid) :=
+⋯
+'NKL_ScanRoot.adopted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanRoot.no_later_event : ∀ (proof : Aeneas.Std.Array Aeneas.Std.U8 57607#usize)
+  (events : List NKL_Checks.Check) (after : NKL_ScanSequence.Bytes),
+  NKL_ScanSequence.Invoke (NKL_Checks.checks proof.to_slice)
+      (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse) events (↑proof) after →
+    ∃ before bad suffix,
+      NKL_Checks.checks proof.to_slice = before ++ bad :: suffix ∧
+        events = before ++ [bad] ∧
+          before.all NKL_NativeGuard.nativeGuard = true ∧ NKL_NativeGuard.nativeGuard bad = false :=
+⋯
+'NKL_ScanRoot.no_later_event' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanRoot.success_events : ∀ (proof : Aeneas.Std.Array Aeneas.Std.U8 57607#usize)
+  (events : List NKL_Checks.Check) (after : NKL_ScanSequence.Bytes),
+  NKL_ScanSequence.Invoke (NKL_Checks.checks proof.to_slice) (Aeneas.Std.core.result.Result.Ok ()) events (↑proof)
+      after →
+    events = NKL_Checks.checks proof.to_slice :=
+⋯
+'NKL_ScanRoot.success_events' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanRows.one : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (i : Aeneas.Std.Usize),
+      ↑i < 22 →
+        (NKB_CanonicalRows.pass NKB_CanonicalScalarBridge.scalar NKL_CanonicalKCarrier.selected
+              NKL_CanonicalChildren.echeckGood proof ↑i =
+            true ↔
+          AspisR1.OraclePortCompactDraft.openingCanonical
+            (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) (10055 + ↑i * 832)
+              832)) :=
+⋯
+'NKL_ScanRows.one' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanRows.source : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    (NKB_CanonicalPair.allFrom
+          (NKB_CanonicalRows.pass NKB_CanonicalScalarBridge.scalar NKL_CanonicalKCarrier.selected
+            NKL_CanonicalChildren.echeckGood proof)
+          0 22 =
+        true ↔
+      ∀ j ∈ List.range 22,
+        AspisR1.OraclePortCompactDraft.openingCanonical
+          (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) (10055 + j * 832)
+            832)) :=
+⋯
+'NKL_ScanRows.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanSequence.exact : ∀ {xs : List NKL_Checks.Check} {out : NKL_ScanAtoms.Reply}
+  {events : List NKL_Checks.Check} {pre post : NKL_ScanSequence.Bytes},
+  NKL_ScanSequence.Invoke xs out events pre post →
+    out = (NKL_ScanSequence.run xs).1 ∧ events = (NKL_ScanSequence.run xs).2 ∧ post = pre :=
+⋯
+'NKL_ScanSequence.exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanSequence.result : ∀ (xs : List NKL_Checks.Check),
+  (NKL_ScanSequence.run xs).1 = NKB_CanonicalOpening.reply (xs.all NKL_NativeGuard.nativeGuard) :=
+⋯
+'NKL_ScanSequence.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanSequence.trace_prefix : ∀ (xs : List NKL_Checks.Check),
+  ∃ suffix, (NKL_ScanSequence.run xs).2 ++ suffix = xs :=
+⋯
+'NKL_ScanSequence.trace_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanSequence.success_trace : ∀ (xs : List NKL_Checks.Check),
+  (NKL_ScanSequence.run xs).1 = Aeneas.Std.core.result.Result.Ok () → (NKL_ScanSequence.run xs).2 = xs :=
+⋯
+'NKL_ScanSequence.success_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_ScanSequence.rejection_trace : ∀ (xs : List NKL_Checks.Check),
+  (NKL_ScanSequence.run xs).1 = Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse →
+    ∃ before bad suffix,
+      xs = before ++ bad :: suffix ∧
+        (NKL_ScanSequence.run xs).2 = before ++ [bad] ∧
+          before.all NKL_NativeGuard.nativeGuard = true ∧ NKL_NativeGuard.nativeGuard bad = false :=
+⋯
+'NKL_ScanSequence.rejection_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem NKL_StepErasure.map_ok : ∀ {A B : Type} (f : A → B) (x : A),
+  NKL_StepErasure.mapResult f (Aeneas.Std.Result.ok x) = Aeneas.Std.Result.ok (f x) :=
+⋯
+'NKL_StepErasure.map_ok' does not depend on any axioms
+theorem NKL_StepErasure.map_bind : ∀ {A B C : Type} (f : B → C) (m : Aeneas.Std.Result A) (k : A → Aeneas.Std.Result B),
+  NKL_StepErasure.mapResult f (m >>= k) = do
+    let x ← m
+    NKL_StepErasure.mapResult f (k x) :=
+⋯
+'NKL_StepErasure.map_bind' does not depend on any axioms
+theorem NKL_StepErasure.map_ite : ∀ {A B : Type} (f : A → B) (p : Prop) [inst : Decidable p]
+  (a b : Aeneas.Std.Result A),
+  NKL_StepErasure.mapResult f (if p then a else b) =
+    if p then NKL_StepErasure.mapResult f a else NKL_StepErasure.mapResult f b :=
+⋯
+'NKL_StepErasure.map_ite' does not depend on any axioms
+theorem NKL_StepErasure.map_pair : ∀ {A B C D : Type} (f : C → D) (p : A × B) (k : A → B → Aeneas.Std.Result C),
+  NKL_StepErasure.mapResult f
+      (match p with
+      | (a, b) => k a b) =
+    match p with
+    | (a, b) => NKL_StepErasure.mapResult f (k a b) :=
+⋯
+'NKL_StepErasure.map_pair' does not depend on any axioms
+theorem NKL_StepErasure.map_cf : ∀ {A B C D : Type} (f : C → D) (cf : Aeneas.Std.core.ops.control_flow.ControlFlow A B)
+  (cont : B → Aeneas.Std.Result C) (stop : A → Aeneas.Std.Result C),
+  NKL_StepErasure.mapResult f
+      (match cf with
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue b => cont b
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break a => stop a) =
+    match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue b => NKL_StepErasure.mapResult f (cont b)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break a => NKL_StepErasure.mapResult f (stop a) :=
+⋯
+'NKL_StepErasure.map_cf' does not depend on any axioms
+theorem NKL_StepErasure.source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree : Aeneas.Std.Usize) (hash : H) (lo n s : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : NKL_StepErasure.Indices) (val : NKL_StepErasure.Values)
+  (d pos : Aeneas.Std.Usize),
+  NKL_StepErasure.mapResult NKL_StepErasure.erase
+      (NKL_ExplicitBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n s keys idx val d pos) =
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n s keys idx val
+      d pos :=
+⋯
+'NKL_StepErasure.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_TailGeometry.cap_bound : ∀ s < 6, NKL_TailGeometry.capacity s ≤ 172 :=
+⋯
+'NKL_TailGeometry.cap_bound' depends on axioms: [propext]
+theorem NKL_TailGeometry.counted_prefix : ∀ (s count : ℕ),
+  s < 6 → count ≤ NKL_TailGeometry.capacity s → 32 * count ≤ 5504 ∧ 32 * count ≤ 9216 :=
+⋯
+'NKL_TailGeometry.counted_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_TailGeometry.suffix : ∀ (s count : ℕ),
+  s < 6 →
+    count ≤ NKL_TailGeometry.capacity s →
+      32 * count ≤ 32 * NKL_TailGeometry.capacity s ∧ (32 * NKL_TailGeometry.capacity s - 32 * count) % 8 = 0 :=
+⋯
+'NKL_TailGeometry.suffix' depends on axioms: [propext, Quot.sound]
+theorem NKL_TailGeometry.tx2_bytes : ∀ (leaves : List AspisR1.MultiproofConeLiveFold.Leaf)
+  (before after : MultiproofConeRef.reference.Scratch) (slot : Aeneas.Std.Slice Aeneas.Std.U8),
+  ↑before.n = 0 →
+    leaves ≠ [] →
+      leaves.length ≤ 12 →
+        List.Pairwise (fun x1 x2 => x1 ≤ x2) (List.map (fun x => ↑x.1) leaves) →
+          (∀ leaf ∈ leaves, ↑leaf.1 < 262144) →
+            NKB_LeafChain.Chain leaves before (some after) →
+              32 * AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after) ≤ (↑slot).length →
+                (↑(AspisR1.MultiproofConeSlotTail.prefixNodes slot
+                        (AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after)))).length ≤
+                  9216 :=
+⋯
+'NKL_TailGeometry.tx2_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_VerifyCut.result : ∀ (valid : Bool) (postIdx : NKL_ExitTransport.Indices)
+  (postVal : NKL_ExitTransport.Values) (out : NKL_ExitTransport.Reply) (afterIdx : NKL_ExitTransport.Indices)
+  (afterVal : NKL_ExitTransport.Values),
+  NKL_VerifyCut.Cut valid postIdx postVal out afterIdx afterVal →
+    out =
+      if valid = true then Aeneas.Std.core.result.Result.Ok ()
+      else Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Merkle :=
+⋯
+'NKL_VerifyCut.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_VerifyCut.indices : ∀ (valid : Bool) (postIdx : NKL_ExitTransport.Indices)
+  (postVal : NKL_ExitTransport.Values) (out : NKL_ExitTransport.Reply) (afterIdx : NKL_ExitTransport.Indices)
+  (afterVal : NKL_ExitTransport.Values),
+  NKL_VerifyCut.Cut valid postIdx postVal out afterIdx afterVal → afterIdx = postIdx :=
+⋯
+'NKL_VerifyCut.indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_VerifyCut.values : ∀ (valid : Bool) (postIdx : NKL_ExitTransport.Indices)
+  (postVal : NKL_ExitTransport.Values) (out : NKL_ExitTransport.Reply) (afterIdx : NKL_ExitTransport.Indices)
+  (afterVal : NKL_ExitTransport.Values),
+  NKL_VerifyCut.Cut valid postIdx postVal out afterIdx afterVal → afterVal = postVal :=
+⋯
+'NKL_VerifyCut.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_WordCanonical.one : ∀ (bs : AspisV8R19.DuplexFrames.Bytes),
+  List.length bs = 4 →
+    (AspisR1.OraclePortCompactDraft.canonical bs ↔ AspisR1.OraclePortCompactDraft.little bs < 2147483647) :=
+⋯
+'NKL_WordCanonical.one' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_WordCanonical.scalar_bytes : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  List.ofFn (AspisR1.M31ParserArray.arrayBytes b) = AspisR1.MultiproofConeCanonical.bytesOf ↑b :=
+⋯
+'NKL_WordCanonical.scalar_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_WordCanonical.scalar : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  NKB_CanonicalScalarBridge.good b = true ↔
+    AspisR1.OraclePortCompactDraft.canonical (AspisR1.MultiproofConeCanonical.bytesOf ↑b) :=
+⋯
+'NKL_WordCanonical.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_WordCanonical.limb_bytes : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize) (j : Fin 4),
+  List.ofFn (AspisR1.RetainedFieldByteCodec.qm31LimbBytes (AspisR1.CheckpointBytes3KDecode.fixed b.to_slice ⋯) j) =
+    AspisR1.MultiproofConeCanonical.bytesOf (List.take 4 (List.drop (4 * ↑j) ↑b)) :=
+⋯
+'NKL_WordCanonical.limb_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_WordCanonical.k_word : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize) (j : Fin 4),
+  ↑(AspisR1.CheckpointBytes3KDecode.word b.to_slice ⋯ j) =
+    AspisR1.OraclePortCompactDraft.little
+      (AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑b) (4 * ↑j) 4) :=
+⋯
+'NKL_WordCanonical.k_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKL_WordCanonical.k : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize),
+  NKB_CanonicalKBridge.good b = true ↔
+    AspisR1.OraclePortCompactDraft.canonical (AspisR1.MultiproofConeCanonical.bytesOf ↑b) :=
+⋯
+'NKL_WordCanonical.k' depends on axioms: [propext, Classical.choice, Quot.sound]
