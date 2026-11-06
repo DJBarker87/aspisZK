@@ -1,0 +1,36 @@
+{"attempt": "NJP_L036", "exit_status": 1, "wall_seconds": 14.628315322799608, "peak_rss_kib": "4363484", "swaps": "0", "print_axioms": []}
+@[irreducible] def Aeneas.Std.UScalar.size : Aeneas.Std.UScalarTy → ℕ :=
+Aeneas.Std.wrapped✝.1
+NJP_lean/NJP_ABIInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.numBits`
+def Aeneas.Std.UScalar.ofNatCore : {ty : Aeneas.Std.UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → Aeneas.Std.UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+theorem Aeneas.Std.UScalar.ofNatCore_val_eq : ∀ {x : ℕ} {ty : Aeneas.Std.UScalarTy} (h : x < 2 ^ ty.numBits),
+  ↑(Aeneas.Std.UScalar.ofNatCore x h) = x :=
+fun {x} {ty} h => of_eq_true (eq_self x)
+@[reducible] def Aeneas.Std.Usize : Type :=
+Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize
+NJP_ABI_FACT Aeneas.Std.alloc.vec.Vec.getEl
+...
+e_eq : ∀ {α : Type u} {β : α → Type v} {cmp : α → α → Ordering}
+  {t₁ t₂ : Std.DTreeMap.Raw α β cmp}, t₁.WF → t₂.WF → t₁.Equiv t₂ → t₁.size = t₂.size
+NJP_ABI_FACT Aeneas.Std.U16.size_eq : Aeneas.Std.U16.size = 65536
+NJP_ABI_FACT Aeneas.Std.U8.size_eq : Aeneas.Std.U8.size = 256
+NJP_ABI_FACT Std.PRange.UpwardEnumerable.Map.PreservesRxiSize.size_eq : ∀ {α : Type u_1} {β : Type u_2}
+  {inst : Std.PRange.UpwardEnumerable α} {inst_1 : Std.PRange.UpwardEnumerable β} {inst_2 : Std.Rxi.HasSize α}
+  {inst_3 : Std.Rxi.HasSize β} {f : Std.PRange.UpwardEnumerable.Map α β} [self : f.PreservesRxiSize] {b : α},
+  Std.Rxi.HasSize.size b = Std.Rxi.HasSize.size (f.toFun b)
+NJP_ABI_FACT Std.TreeMap.Equiv.size_eq : ∀ {α : Type u} {β : Type v} {cmp : α → α → Ordering}
+  {t₁ t₂ : Std.TreeMap α β cmp}, t₁.Equiv t₂ → t₁.size = t₂.size
+NJP_ABI_FACT Aeneas.Std.I64.size_eq : Aeneas.Std.I64.size = 18446744073709551616
+NJP_ABI_FACT Aeneas.Std.Array.getElem?_Usize_eq : ∀ {α : Type u} {n : Aeneas.Std.Usize} (v : Aeneas.Std.Array α n)
+  (i : Aeneas.Std.Usize), v[i]? = (↑v)[↑i]?
+NJP_ABI_FACT Aeneas.Std.I128.size_eq : Aeneas.Std.I128.size = 340282366920938463463374607431768211456
+NJP_ABI_FACT System.Platform.System.Platform.dvd_numBits._simp_1 : (32 ∣ System.Platform.numBits) = True
+NJP_ABI_FACT Std.Sat.AIG.Entrypoint.relabel_size_eq : ∀ {α : Type} [inst : Hashable α] [inst_1 : DecidableEq α]
+  {β : Type} [inst_2 : Hashable β] [inst_3 : DecidableEq β] {entry : Std.Sat.AIG.Entrypoint α} {r : α → β},
+  (Std.Sat.AIG.Entrypoint.relabel r entry).aig.decls.size = entry.aig.decls.size
+NJP_ABI_FACT Aeneas.Std.U64.val_mod_size_eq : ∀ (x : Aeneas.Std.U64), ↑x % Aeneas.Std.U64.size = ↑x
+NJP_ABI_FACT System.Platform.System.Platform.numBits_dvd : System.Platform.numBits ∣ 64
+NJP_ABI_FACT Aeneas.Std.Usize.numBits : ℕ
+
+Running as unit: run-rdc874da4ca2e4254bed1655be1670537.scope; invocation ID: 6a60dcecd9bc4c97aa8c86a46510ae4e

@@ -1,0 +1,56 @@
+{"attempt": "NJP_L050", "exit_status": 0, "wall_seconds": 3.3287117739673704, "peak_rss_kib": "4349032", "swaps": "0", "print_axioms": ["'NJP_CohortRead.index' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CohortRead.value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CohortRead.xor_one' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CohortRead.parity' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CohortRead.occupied_address' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJP_CohortRead.index : ∀ (s : reference.Scratch) (i : Usize),
+  ↑i < 16 → NJP_RowModel.index (raw s) ↑i = ↑(↑s.idx)[↑i]! :=
+fun s i bound =>
+  have size := s.idx.property;
+  of_eq_true
+    (Eq.trans
+      (congr
+        (congrArg Eq
+          (Eq.trans (dite_congr (Eq.refl (↑i < 16)) (fun h => Eq.refl ↑(↑s.idx)[↑i]) fun h => Eq.refl 0)
+            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos bound) x_0 x_1 x_2 x_3) ((↑i).decLt 16) ℕ
+              (fun h => ↑(↑s.idx)[↑i]) fun h => 0)))
+        (congrArg UScalar.val
+          (getElem!_pos (↑s.idx) (↑i) (Decidable.byContradiction fun a => index._proof_2 s i bound size a))))
+      (eq_self ↑(↑s.idx)[↑i]))
+'NJP_CohortRead.ind
+...
+bound next_bound step =>
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              AspisR1.MultiproofConePhysicalDigest.parts (encode (_a, NJP_RowModel.value (raw s) (↑i + 1)).1)
+                  (encode (_a, NJP_RowModel.value (raw s) (↑i + 1)).2) =
+                AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!)
+            (value s i bound)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                AspisR1.MultiproofConePhysicalDigest.parts
+                    (encode (decode (↑s.val)[↑i]!, NJP_RowModel.value (raw s) _a).1)
+                    (encode (decode (↑s.val)[↑i]!, NJP_RowModel.value (raw s) _a).2) =
+                  AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!)
+              (Eq.symm step)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  AspisR1.MultiproofConePhysicalDigest.parts (encode (decode (↑s.val)[↑i]!, _a).1)
+                      (encode (decode (↑s.val)[↑i]!, _a).2) =
+                    AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!)
+                (value s next next_bound)))
+            (of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congr (congrArg AspisR1.MultiproofConePhysicalDigest.parts (encode_decode (↑s.val)[↑i]!))
+                      (encode_decode (↑s.val)[↑next]!)))
+                  (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!))
+                (eq_self (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑next]!))))))))
+'NJP_CohortRead.occupied_address' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r851049baf4004f478a0982e4c806cc51.scope; invocation ID: 909d037ec35e4966930902af6fddd4b6

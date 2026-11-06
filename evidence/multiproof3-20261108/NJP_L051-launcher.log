@@ -1,0 +1,54 @@
+{"attempt": "NJP_L051", "exit_status": 1, "wall_seconds": 3.5895562949590385, "peak_rss_kib": "4337744", "swaps": "0", "print_axioms": ["'NJP_CohortOccupied.read' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CohortOccupied.occupied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJP_lean/NJP_CohortOccupied.lean:25:95: error: unsolved goals
+H : Slice (Slice U8) → RefDigest
+s : reference.Scratch
+physical : Slice U8
+i w : Usize
+active : ↑i < ↑s.n
+both : NJP_RowModel.paired (raw s) ↑i
+positive : 0 < ↑s.n
+size : ↑s.n ≤ 16
+readBound : ↑i ≤ ↑s.n
+writeBound : ↑w ≤ ↑i
+cursorBound : ↑s.at ≤ (↑physical).length
+ib : ↑i < 16
+wb : ↑w < 16
+next : UScalar UScalarTy.Usize
+addition : i + 1#usize = ok next
+next_value : ↑next = ↑i + 1
+nextNat : ↑i + 1 < ↑s.n
+nb : ↑next < 16
+next_active : next < s.n
+equality : (↑s.idx)[↑next]! = (↑s.idx)[↑i]! ^^^ 1#u32
+next2 : UScalar UScalarTy.Usize
+addition2 : i + 2#usize = ok next2
+next2_value : ↑next2 = ↑i + 2
+address :
+  NJP_RequestTransport.addres
+...
+                        (encode_decode
+                                                    (H
+                                                      (NJP_RequestTransport.address
+                                                        (NJP_RowModel.occupiedRequest
+                                                          { indices := decodeIndices s.idx,
+                                                            values := decodeValues s.val, n := ↑s.n, cursor := ↑s.at }
+                                                          ↑i))))))
+                                              []))
+                                          (ok
+                                            (NJP_RowModel.Row.next
+                                              (NJP_RowModel.write
+                                                { indices := decodeIndices s.idx, values := decodeValues s.val,
+                                                  n := ↑s.n, cursor := ↑s.at }
+                                                (↑i) (↑w) (↑s.at)
+                                                (decode
+                                                  (H
+                                                    (NJP_RequestTransport.address
+                                                      (NJP_RowModel.occupiedRequest
+                                                        { indices := decodeIndices s.idx, values := decodeValues s.val,
+                                                          n := ↑s.n, cursor := ↑s.at }
+                                                        ↑i)))))
+                                              (↑i + 2) (↑w + 1))))))
+                                    sorry))))))))))))))))
+'NJP_CohortOccupied.occupied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r554f562de769497493d2a47903ef31b7.scope; invocation ID: d448a618ef6d49ff90f4b62335da37f0

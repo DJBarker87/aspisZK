@@ -1,0 +1,561 @@
+NJP_BIT_OP Aeneas.Std.IScalar.xor_spec : ∀ {ty : Aeneas.Std.IScalarTy} (x y : Aeneas.Std.IScalar ty),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (x ^^^ y)) fun z =>
+    ↑z = ↑(x ^^^ y) ∧
+      z.bv =
+        x.bv ^^^
+          y.bv value=fun {ty} x y =>
+  Eq.mpr
+    (id
+      (Eq.trans (Aeneas.Std.WP.spec_ok._simp_1 (x ^^^ y))
+        (Eq.trans (congrFun' (congrArg And (eq_self ↑(x ^^^ y))) ((x ^^^ y).bv = x.bv ^^^ y.bv))
+          (true_and ((x ^^^ y).bv = x.bv ^^^ y.bv)))))
+    (Eq.refl (x ^^^ y).bv)
+NJP_BIT_OP Aeneas.Std.U32.and_zero : ∀ (x : Aeneas.Std.U32),
+  x &&& 0#u32 =
+    0#u32 value=fun x =>
+  Eq.mpr (id (congrArg (fun _a => _a) (propext (Aeneas.Std.UScalar.eq_equiv_bv_eq (x &&& 0#u32) 0#u32))))
+    BitVec.and_zero
+NJP_BIT_OP Aeneas.Std.U16.and_maxVal : ∀ (x : Aeneas.Std.U16),
+  x &&& 65535#u16 =
+    x value=fun x =>
+  Eq.mpr
+    (id
+      (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 (x &&& 65535#u16) x)
+        (congr
+          (congrArg Eq
+            (Eq.trans (Aeneas.Bvify.U16.UScalar_bv (x &&& 65535#u16))
+              (Eq.trans (Aeneas.Std.UScalar.bv_and x 65535#u16)
+                (congr (congrArg HAnd.hAnd (Aeneas.Bvify.U16.UScalar_bv x))
+                  (Eq.trans (Aeneas.Bvify.U16.UScalar_bv 65535#u16)
+                    (Aeneas.Std.U16.ofNat_bv 65535 (of_decide_eq_true (id (Eq.refl true)))))))))
+          (Aeneas.Bvify.U16.UScalar_bv x))))
+    ((fun _ =>
+        (fun _ =>
+            (fun _ =>
+                (fun _ =>
+                    Decidable.byContradiction fun a =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrArg Not
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun' (congrArg Eq (Std.Tactic.BVDecide.Normalize.BitVec.and_ones x.bv)) x.bv)
+                                  (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq x.bv x.bv))
+                                (Eq.trans
+                                  (congrFun' (congrArg Eq (Std.Tactic.BVDecide.Normalize.BitVec.beq_self_eq_true x.bv))
+                                    true)
+                                  (eq_self true))))
+                            not_true._simp_1)
+                          a))
+                  (Aeneas.Bvify.BitVec.iff_ofNat_eq' 16))
+              (Aeneas.Bvify.BitVec.lt_pow_n_iff_ofNat_le 16))
+          (Aeneas.Bvify.BitVec.lt_pow_lt_iff_ofNat_lt' 16))
+      (Aeneas.Bvify.BitVec.lt_pow_le_iff_ofNat_le' 16))
+NJP_BIT_OP Aeneas.Std.U8.and_zero : ∀ (x : Aeneas.Std.U8),
+  x &&& 0#u8 =
+    0#u8 value=fun x =>
+  Eq.mpr (id (congrArg (fun _a => _a) (propext (Aeneas.Std.UScalar.eq_equiv_bv_eq (x &&& 0#u8) 0#u8)))) BitVec.and_zero
+NJP_BIT_OP Aeneas.Std.U16.and_zero : ∀ (x : Aeneas.Std.U16),
+  x &&& 0#u16 =
+    0#u16 value=fun x =>
+  Eq.mpr (id (congrArg (fun _a => _a) (propext (Aeneas.Std.UScalar.eq_equiv_bv_eq (x &&& 0#u16) 0#u16))))
+    BitVec.and_zero
+NJP_BIT_OP Aeneas.Std.UScalar.and : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty value=fun {ty} x y => (x.bv &&& y.bv)#uscalar
+NJP_BIT_OP Aeneas.Std.U8.and_maxVal : ∀ (x : Aeneas.Std.U8),
+  x &&& 255#u8 =
+    x value=fun x =>
+  Eq.mpr
+    (id
+      (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 (x &&& 255#u8) x)
+        (congr
+          (congrArg Eq
+            (Eq.trans (Aeneas.Bvify.U8.UScalar_bv (x &&& 255#u8))
+              (Eq.trans (Aeneas.Std.UScalar.bv_and x 255#u8)
+                (congr (congrArg HAnd.hAnd (Aeneas.Bvify.U8.UScalar_bv x))
+                  (Eq.trans (Aeneas.Bvify.U8.UScalar_bv 255#u8)
+                    (Aeneas.Std.U8.ofNat_bv 255 (of_decide_eq_true (id (Eq.refl true)))))))))
+          (Aeneas.Bvify.U8.UScalar_bv x))))
+    ((fun _ =>
+        (fun _ =>
+            (fun _ =>
+                (fun _ =>
+                    Decidable.byContradiction fun a =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrArg Not
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun' (congrArg Eq (Std.Tactic.BVDecide.Normalize.BitVec.and_ones x.bv)) x.bv)
+                                  (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq x.bv x.bv))
+                                (Eq.trans
+                                  (congrFun' (congrArg Eq (Std.Tactic.BVDecide.Normalize.BitVec.beq_self_eq_true x.bv))
+                                    true)
+                                  (eq_self true))))
+                            not_true._simp_1)
+                          a))
+                  (Aeneas.Bvify.BitVec.iff_ofNat_eq' 8))
+              (Aeneas.Bvify.BitVec.lt_pow_n_iff_ofNat_le 8))
+          (Aeneas.Bvify.BitVec.lt_pow_lt_iff_ofNat_lt' 8))
+      (Aeneas.Bvify.BitVec.lt_pow_le_iff_ofNat_le' 8))
+NJP_BIT_OP Aeneas.Std.IScalar.and : {ty : Aeneas.Std.IScalarTy} →
+  Aeneas.Std.IScalar ty → Aeneas.Std.IScalar ty → Aeneas.Std.IScalar ty value=fun {ty} x y => (x.bv &&& y.bv)#iscalar
+NJP_BIT_OP Aeneas.Std.U8.xor_eq_zero_iff : ∀ (a b : Aeneas.Std.U8),
+  a ^^^ b = 0#u8 ↔
+    a =
+      b value=fun a b =>
+  Eq.mpr
+    (id
+      (congr
+        (congrArg Iff
+          (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 (a ^^^ b) 0#u8)
+            (congr
+              (congrArg Eq
+                (Eq.trans (Aeneas.Bvify.U8.UScalar_bv (a ^^^ b))
+                  (Eq.trans (Aeneas.Std.UScalar.bv_xor a b)
+                    (congr (congrArg HXor.hXor (Aeneas.Bvify.U8.UScalar_bv a)) (Aeneas.Bvify.U8.UScalar_bv b)))))
+              (Eq.trans (Aeneas.Bvify.U8.UScalar_bv 0#u8)
+                (Aeneas.Std.U8.ofNat_bv 0 (of_decide_eq_true (id (Eq.refl true))))))))
+        (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 a b)
+          (congr (congrArg Eq (Aeneas.Bvify.U8.UScalar_bv a)) (Aeneas.Bvify.U8.UScalar_bv b)))))
+    ((fun _ =>
+        (fun _ =>
+            (fun _ =>
+                (fun _ =>
+                    Decidable.byContradiction fun a_1 =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrArg Not
+                              (Eq.trans
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Iff
+                                      (Eq.trans (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq (a.bv ^^^ b.bv) 0#8)
+                                        (congrFun'
+                                          (congrArg Eq
+                                            (Std.Tactic.BVDecide.Frontend.Normalize.BitVec.xor_beq_zero_iff a.bv b.bv))
+                                          true)))
+                                    (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq a.bv b.bv))
+                                  (Std.Tactic.BVDecide.Normalize.Bool.iff_to_beq (a.bv == b.bv) (a.bv == b.bv)))
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq (Std.Tactic.BVDecide.Normalize.Bool.beq_self_eq_true (a.bv == b.bv)))
+                                    true)
+                                  (eq_self true))))
+                            not_true._simp_1)
+                          a_1))
+                  (Aeneas.Bvify.BitVec.iff_ofNat_eq' 8))
+              (Aeneas.Bvify.BitVec.lt_pow_n_iff_ofNat_le 8))
+          (Aeneas.Bvify.BitVec.lt_pow_lt_iff_ofNat_lt' 8))
+      (Aeneas.Bvify.BitVec.lt_pow_le_iff_ofNat_le' 8))
+NJP_BIT_OP Aeneas.Std.U128.xor_eq_zero_iff : ∀ (a b : Aeneas.Std.U128),
+  a ^^^ b = 0#u128 ↔
+    a =
+      b value=fun a b =>
+  Eq.mpr
+    (id
+      (congr
+        (congrArg Iff
+          (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 (a ^^^ b) 0#u128)
+            (congr
+              (congrArg Eq
+                (Eq.trans (Aeneas.Bvify.U128.UScalar_bv (a ^^^ b))
+                  (Eq.trans (Aeneas.Std.UScalar.bv_xor a b)
+                    (congr (congrArg HXor.hXor (Aeneas.Bvify.U128.UScalar_bv a)) (Aeneas.Bvify.U128.UScalar_bv b)))))
+              (Eq.trans (Aeneas.Bvify.U128.UScalar_bv 0#u128)
+                (Aeneas.Std.U128.ofNat_bv 0 (of_decide_eq_true (id (Eq.refl true))))))))
+        (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 a b)
+          (congr (congrArg Eq (Aeneas.Bvify.U128.UScalar_bv a)) (Aeneas.Bvify.U128.UScalar_bv b)))))
+    ((fun _ =>
+        (fun _ =>
+            (fun _ =>
+                (fun _ =>
+                    Decidable.byContradiction fun a_1 =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrArg Not
+                              (Eq.trans
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Iff
+                                      (Eq.trans (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq (a.bv ^^^ b.bv) 0#128)
+                                        (congrFun'
+                                          (congrArg Eq
+                                            (Std.Tactic.BVDecide.Frontend.Normalize.BitVec.xor_beq_zero_iff a.bv b.bv))
+                                          true)))
+                                    (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq a.bv b.bv))
+                                  (Std.Tactic.BVDecide.Normalize.Bool.iff_to_beq (a.bv == b.bv) (a.bv == b.bv)))
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq (Std.Tactic.BVDecide.Normalize.Bool.beq_self_eq_true (a.bv == b.bv)))
+                                    true)
+                                  (eq_self true))))
+                            not_true._simp_1)
+                          a_1))
+                  (Aeneas.Bvify.BitVec.iff_ofNat_eq' 128))
+              (Aeneas.Bvify.BitVec.lt_pow_n_iff_ofNat_le 128))
+          (Aeneas.Bvify.BitVec.lt_pow_lt_iff_ofNat_lt' 128))
+      (Aeneas.Bvify.BitVec.lt_pow_le_iff_ofNat_le' 128))
+NJP_BIT_OP Aeneas.Std.IScalar.and_spec.mvcgen_spec : ∀ {ty : Aeneas.Std.IScalarTy} (x y : Aeneas.Std.IScalar ty),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (x &&&
+        y) ⦃Std.Do.PostCond.noThrow fun r =>
+      ⌜↑r = ↑(x &&& y) ∧
+          r.bv = x.bv &&& y.bv⌝⦄ value=fun {ty} x y => Aeneas.Std.WP.spec_to_mvcgen (Aeneas.Std.IScalar.and_spec x y)
+NJP_BIT_OP Aeneas.Std.instHAndIScalar : {ty : Aeneas.Std.IScalarTy} →
+  HAnd (Aeneas.Std.IScalar ty) (Aeneas.Std.IScalar ty)
+    (Aeneas.Std.IScalar ty) value=fun {ty} => { hAnd := fun x y => x.and y }
+NJP_BIT_OP Aeneas.Std.U128.xor_eq_zero_iff._simp_1 : ∀ (a b : Aeneas.Std.U128),
+  (a ^^^ b = 0#u128) = (a = b) value=fun a b => propext (Aeneas.Std.U128.xor_eq_zero_iff a b)
+NJP_BIT_OP Aeneas.Std.UScalar.xor_spec : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (x ^^^ y)) fun z =>
+    ↑z = ↑(x ^^^ y) ∧
+      z.bv =
+        x.bv ^^^
+          y.bv value=fun {ty} x y =>
+  Eq.mpr
+    (id
+      (Eq.trans (Aeneas.Std.WP.spec_ok._simp_1 (x ^^^ y))
+        (Eq.trans (congrFun' (congrArg And (eq_self ↑(x ^^^ y))) ((x ^^^ y).bv = x.bv ^^^ y.bv))
+          (true_and ((x ^^^ y).bv = x.bv ^^^ y.bv)))))
+    (Eq.refl (x ^^^ y).bv)
+NJP_BIT_OP Aeneas.Std.instHAndUScalar : {ty : Aeneas.Std.UScalarTy} →
+  HAnd (Aeneas.Std.UScalar ty) (Aeneas.Std.UScalar ty)
+    (Aeneas.Std.UScalar ty) value=fun {ty} => { hAnd := fun x y => x.and y }
+NJP_BIT_OP Aeneas.Std.U64.and_maxVal : ∀ (x : Aeneas.Std.U64),
+  x &&& 18446744073709551615#u64 =
+    x value=fun x =>
+  Eq.mpr
+    (id
+      (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 (x &&& 18446744073709551615#u64) x)
+        (congr
+          (congrArg Eq
+            (Eq.trans (Aeneas.Bvify.U64.UScalar_bv (x &&& 18446744073709551615#u64))
+              (Eq.trans (Aeneas.Std.UScalar.bv_and x 18446744073709551615#u64)
+                (congr (congrArg HAnd.hAnd (Aeneas.Bvify.U64.UScalar_bv x))
+                  (Eq.trans (Aeneas.Bvify.U64.UScalar_bv 18446744073709551615#u64)
+                    (Aeneas.Std.U64.ofNat_bv 18446744073709551615 (of_decide_eq_true (id (Eq.refl true)))))))))
+          (Aeneas.Bvify.U64.UScalar_bv x))))
+    ((fun _ =>
+        (fun _ =>
+            (fun _ =>
+                (fun _ =>
+                    Decidable.byContradiction fun a =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrArg Not
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun' (congrArg Eq (Std.Tactic.BVDecide.Normalize.BitVec.and_ones x.bv)) x.bv)
+                                  (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq x.bv x.bv))
+                                (Eq.trans
+                                  (congrFun' (congrArg Eq (Std.Tactic.BVDecide.Normalize.BitVec.beq_self_eq_true x.bv))
+                                    true)
+                                  (eq_self true))))
+                            not_true._simp_1)
+                          a))
+                  (Aeneas.Bvify.BitVec.iff_ofNat_eq' 64))
+              (Aeneas.Bvify.BitVec.lt_pow_n_iff_ofNat_le 64))
+          (Aeneas.Bvify.BitVec.lt_pow_lt_iff_ofNat_lt' 64))
+      (Aeneas.Bvify.BitVec.lt_pow_le_iff_ofNat_le' 64))
+NJP_BIT_OP Aeneas.Std.U64.xor_eq_zero_iff._simp_1 : ∀ (a b : Aeneas.Std.U64),
+  (a ^^^ b = 0#u64) = (a = b) value=fun a b => propext (Aeneas.Std.U64.xor_eq_zero_iff a b)
+NJP_BIT_OP Aeneas.Std.U32.and_maxVal : ∀ (x : Aeneas.Std.U32),
+  x &&& 4294967295#u32 =
+    x value=fun x =>
+  Eq.mpr
+    (id
+      (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 (x &&& 4294967295#u32) x)
+        (congr
+          (congrArg Eq
+            (Eq.trans (Aeneas.Bvify.U32.UScalar_bv (x &&& 4294967295#u32))
+              (Eq.trans (Aeneas.Std.UScalar.bv_and x 4294967295#u32)
+                (congr (congrArg HAnd.hAnd (Aeneas.Bvify.U32.UScalar_bv x))
+                  (Eq.trans (Aeneas.Bvify.U32.UScalar_bv 4294967295#u32)
+                    (Aeneas.Std.U32.ofNat_bv 4294967295 (of_decide_eq_true (id (Eq.refl true)))))))))
+          (Aeneas.Bvify.U32.UScalar_bv x))))
+    ((fun _ =>
+        (fun _ =>
+            (fun _ =>
+                (fun _ =>
+                    Decidable.byContradiction fun a =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrArg Not
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun' (congrArg Eq (Std.Tactic.BVDecide.Normalize.BitVec.and_ones x.bv)) x.bv)
+                                  (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq x.bv x.bv))
+                                (Eq.trans
+                                  (congrFun' (congrArg Eq (Std.Tactic.BVDecide.Normalize.BitVec.beq_self_eq_true x.bv))
+                                    true)
+                                  (eq_self true))))
+                            not_true._simp_1)
+                          a))
+                  (Aeneas.Bvify.BitVec.iff_ofNat_eq' 32))
+              (Aeneas.Bvify.BitVec.lt_pow_n_iff_ofNat_le 32))
+          (Aeneas.Bvify.BitVec.lt_pow_lt_iff_ofNat_lt' 32))
+      (Aeneas.Bvify.BitVec.lt_pow_le_iff_ofNat_le' 32))
+NJP_BIT_OP Aeneas.Std.U128.and_maxVal : ∀ (x : Aeneas.Std.U128),
+  x &&& 340282366920938463463374607431768211455#u128 =
+    x value=fun x =>
+  Eq.mpr
+    (id
+      (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 (x &&& 340282366920938463463374607431768211455#u128) x)
+        (congr
+          (congrArg Eq
+            (Eq.trans (Aeneas.Bvify.U128.UScalar_bv (x &&& 340282366920938463463374607431768211455#u128))
+              (Eq.trans (Aeneas.Std.UScalar.bv_and x 340282366920938463463374607431768211455#u128)
+                (congr (congrArg HAnd.hAnd (Aeneas.Bvify.U128.UScalar_bv x))
+                  (Eq.trans (Aeneas.Bvify.U128.UScalar_bv 340282366920938463463374607431768211455#u128)
+                    (Aeneas.Std.U128.ofNat_bv 340282366920938463463374607431768211455
+                      (of_decide_eq_true (id (Eq.refl true)))))))))
+          (Aeneas.Bvify.U128.UScalar_bv x))))
+    ((fun _ =>
+        (fun _ =>
+            (fun _ =>
+                (fun _ =>
+                    Decidable.byContradiction fun a =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrArg Not
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun' (congrArg Eq (Std.Tactic.BVDecide.Normalize.BitVec.and_ones x.bv)) x.bv)
+                                  (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq x.bv x.bv))
+                                (Eq.trans
+                                  (congrFun' (congrArg Eq (Std.Tactic.BVDecide.Normalize.BitVec.beq_self_eq_true x.bv))
+                                    true)
+                                  (eq_self true))))
+                            not_true._simp_1)
+                          a))
+                  (Aeneas.Bvify.BitVec.iff_ofNat_eq' 128))
+              (Aeneas.Bvify.BitVec.lt_pow_n_iff_ofNat_le 128))
+          (Aeneas.Bvify.BitVec.lt_pow_lt_iff_ofNat_lt' 128))
+      (Aeneas.Bvify.BitVec.lt_pow_le_iff_ofNat_le' 128))
+NJP_BIT_OP Aeneas.Std.instHXorUScalar : {ty : Aeneas.Std.UScalarTy} →
+  HXor (Aeneas.Std.UScalar ty) (Aeneas.Std.UScalar ty)
+    (Aeneas.Std.UScalar ty) value=fun {ty} => { hXor := fun x y => x.xor y }
+NJP_BIT_OP Aeneas.Std.U16.xor_eq_zero_iff._simp_1 : ∀ (a b : Aeneas.Std.U16),
+  (a ^^^ b = 0#u16) = (a = b) value=fun a b => propext (Aeneas.Std.U16.xor_eq_zero_iff a b)
+NJP_BIT_OP Aeneas.Std.IScalar.xor_spec.mvcgen_spec : ∀ {ty : Aeneas.Std.IScalarTy} (x y : Aeneas.Std.IScalar ty),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (x ^^^
+        y) ⦃Std.Do.PostCond.noThrow fun r =>
+      ⌜↑r = ↑(x ^^^ y) ∧
+          r.bv = x.bv ^^^ y.bv⌝⦄ value=fun {ty} x y => Aeneas.Std.WP.spec_to_mvcgen (Aeneas.Std.IScalar.xor_spec x y)
+NJP_BIT_OP Aeneas.Std.U8.xor_eq_zero_iff._simp_1 : ∀ (a b : Aeneas.Std.U8),
+  (a ^^^ b = 0#u8) = (a = b) value=fun a b => propext (Aeneas.Std.U8.xor_eq_zero_iff a b)
+NJP_BIT_OP Aeneas.Std.UScalar.and_spec.mvcgen_spec : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (x &&&
+        y) ⦃Std.Do.PostCond.noThrow fun r =>
+      ⌜↑r = ↑(x &&& y) ∧
+          r.bv = x.bv &&& y.bv⌝⦄ value=fun {ty} x y => Aeneas.Std.WP.spec_to_mvcgen (Aeneas.Std.UScalar.and_spec x y)
+NJP_BIT_OP Aeneas.Std.U128.and_zero : ∀ (x : Aeneas.Std.U128),
+  x &&& 0#u128 =
+    0#u128 value=fun x =>
+  Eq.mpr (id (congrArg (fun _a => _a) (propext (Aeneas.Std.UScalar.eq_equiv_bv_eq (x &&& 0#u128) 0#u128))))
+    BitVec.and_zero
+NJP_BIT_OP Aeneas.Std.UScalar.xor : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty value=fun {ty} x y => (x.bv ^^^ y.bv)#uscalar
+NJP_BIT_OP Aeneas.Std.UScalar.and_spec : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (x &&& y)) fun z =>
+    ↑z = ↑(x &&& y) ∧
+      z.bv =
+        x.bv &&&
+          y.bv value=fun {ty} x y =>
+  Eq.mpr
+    (id
+      (Eq.trans (Aeneas.Std.WP.spec_ok._simp_1 (x &&& y))
+        (Eq.trans (congrFun' (congrArg And (eq_self ↑(x &&& y))) ((x &&& y).bv = x.bv &&& y.bv))
+          (true_and ((x &&& y).bv = x.bv &&& y.bv)))))
+    (Eq.refl (x &&& y).bv)
+NJP_BIT_OP Aeneas.Std.instHXorIScalar : {ty : Aeneas.Std.IScalarTy} →
+  HXor (Aeneas.Std.IScalar ty) (Aeneas.Std.IScalar ty)
+    (Aeneas.Std.IScalar ty) value=fun {ty} => { hXor := fun x y => x.xor y }
+NJP_BIT_OP Aeneas.Std.U64.xor_eq_zero_iff : ∀ (a b : Aeneas.Std.U64),
+  a ^^^ b = 0#u64 ↔
+    a =
+      b value=fun a b =>
+  Eq.mpr
+    (id
+      (congr
+        (congrArg Iff
+          (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 (a ^^^ b) 0#u64)
+            (congr
+              (congrArg Eq
+                (Eq.trans (Aeneas.Bvify.U64.UScalar_bv (a ^^^ b))
+                  (Eq.trans (Aeneas.Std.UScalar.bv_xor a b)
+                    (congr (congrArg HXor.hXor (Aeneas.Bvify.U64.UScalar_bv a)) (Aeneas.Bvify.U64.UScalar_bv b)))))
+              (Eq.trans (Aeneas.Bvify.U64.UScalar_bv 0#u64)
+                (Aeneas.Std.U64.ofNat_bv 0 (of_decide_eq_true (id (Eq.refl true))))))))
+        (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 a b)
+          (congr (congrArg Eq (Aeneas.Bvify.U64.UScalar_bv a)) (Aeneas.Bvify.U64.UScalar_bv b)))))
+    ((fun _ =>
+        (fun _ =>
+            (fun _ =>
+                (fun _ =>
+                    Decidable.byContradiction fun a_1 =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrArg Not
+                              (Eq.trans
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Iff
+                                      (Eq.trans (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq (a.bv ^^^ b.bv) 0#64)
+                                        (congrFun'
+                                          (congrArg Eq
+                                            (Std.Tactic.BVDecide.Frontend.Normalize.BitVec.xor_beq_zero_iff a.bv b.bv))
+                                          true)))
+                                    (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq a.bv b.bv))
+                                  (Std.Tactic.BVDecide.Normalize.Bool.iff_to_beq (a.bv == b.bv) (a.bv == b.bv)))
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq (Std.Tactic.BVDecide.Normalize.Bool.beq_self_eq_true (a.bv == b.bv)))
+                                    true)
+                                  (eq_self true))))
+                            not_true._simp_1)
+                          a_1))
+                  (Aeneas.Bvify.BitVec.iff_ofNat_eq' 64))
+              (Aeneas.Bvify.BitVec.lt_pow_n_iff_ofNat_le 64))
+          (Aeneas.Bvify.BitVec.lt_pow_lt_iff_ofNat_lt' 64))
+      (Aeneas.Bvify.BitVec.lt_pow_le_iff_ofNat_le' 64))
+NJP_BIT_OP Aeneas.Std.IScalar.and_spec : ∀ {ty : Aeneas.Std.IScalarTy} (x y : Aeneas.Std.IScalar ty),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (x &&& y)) fun z =>
+    ↑z = ↑(x &&& y) ∧
+      z.bv =
+        x.bv &&&
+          y.bv value=fun {ty} x y =>
+  Eq.mpr
+    (id
+      (Eq.trans (Aeneas.Std.WP.spec_ok._simp_1 (x &&& y))
+        (Eq.trans (congrFun' (congrArg And (eq_self ↑(x &&& y))) ((x &&& y).bv = x.bv &&& y.bv))
+          (true_and ((x &&& y).bv = x.bv &&& y.bv)))))
+    (Eq.refl (x &&& y).bv)
+NJP_BIT_OP Aeneas.Std.U16.xor_eq_zero_iff : ∀ (a b : Aeneas.Std.U16),
+  a ^^^ b = 0#u16 ↔
+    a =
+      b value=fun a b =>
+  Eq.mpr
+    (id
+      (congr
+        (congrArg Iff
+          (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 (a ^^^ b) 0#u16)
+            (congr
+              (congrArg Eq
+                (Eq.trans (Aeneas.Bvify.U16.UScalar_bv (a ^^^ b))
+                  (Eq.trans (Aeneas.Std.UScalar.bv_xor a b)
+                    (congr (congrArg HXor.hXor (Aeneas.Bvify.U16.UScalar_bv a)) (Aeneas.Bvify.U16.UScalar_bv b)))))
+              (Eq.trans (Aeneas.Bvify.U16.UScalar_bv 0#u16)
+                (Aeneas.Std.U16.ofNat_bv 0 (of_decide_eq_true (id (Eq.refl true))))))))
+        (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 a b)
+          (congr (congrArg Eq (Aeneas.Bvify.U16.UScalar_bv a)) (Aeneas.Bvify.U16.UScalar_bv b)))))
+    ((fun _ =>
+        (fun _ =>
+            (fun _ =>
+                (fun _ =>
+                    Decidable.byContradiction fun a_1 =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrArg Not
+                              (Eq.trans
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Iff
+                                      (Eq.trans (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq (a.bv ^^^ b.bv) 0#16)
+                                        (congrFun'
+                                          (congrArg Eq
+                                            (Std.Tactic.BVDecide.Frontend.Normalize.BitVec.xor_beq_zero_iff a.bv b.bv))
+                                          true)))
+                                    (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq a.bv b.bv))
+                                  (Std.Tactic.BVDecide.Normalize.Bool.iff_to_beq (a.bv == b.bv) (a.bv == b.bv)))
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq (Std.Tactic.BVDecide.Normalize.Bool.beq_self_eq_true (a.bv == b.bv)))
+                                    true)
+                                  (eq_self true))))
+                            not_true._simp_1)
+                          a_1))
+                  (Aeneas.Bvify.BitVec.iff_ofNat_eq' 16))
+              (Aeneas.Bvify.BitVec.lt_pow_n_iff_ofNat_le 16))
+          (Aeneas.Bvify.BitVec.lt_pow_lt_iff_ofNat_lt' 16))
+      (Aeneas.Bvify.BitVec.lt_pow_le_iff_ofNat_le' 16))
+NJP_BIT_OP Aeneas.Std.U32.xor_eq_zero_iff : ∀ (a b : Aeneas.Std.U32),
+  a ^^^ b = 0#u32 ↔
+    a =
+      b value=fun a b =>
+  Eq.mpr
+    (id
+      (congr
+        (congrArg Iff
+          (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 (a ^^^ b) 0#u32)
+            (congr
+              (congrArg Eq
+                (Eq.trans (Aeneas.Bvify.U32.UScalar_bv (a ^^^ b))
+                  (Eq.trans (Aeneas.Std.UScalar.bv_xor a b)
+                    (congr (congrArg HXor.hXor (Aeneas.Bvify.U32.UScalar_bv a)) (Aeneas.Bvify.U32.UScalar_bv b)))))
+              (Eq.trans (Aeneas.Bvify.U32.UScalar_bv 0#u32)
+                (Aeneas.Std.U32.ofNat_bv 0 (of_decide_eq_true (id (Eq.refl true))))))))
+        (Eq.trans (Aeneas.Std.UScalar.eq_equiv_bv_eq._simp_1 a b)
+          (congr (congrArg Eq (Aeneas.Bvify.U32.UScalar_bv a)) (Aeneas.Bvify.U32.UScalar_bv b)))))
+    ((fun _ =>
+        (fun _ =>
+            (fun _ =>
+                (fun _ =>
+                    Decidable.byContradiction fun a_1 =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrArg Not
+                              (Eq.trans
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Iff
+                                      (Eq.trans (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq (a.bv ^^^ b.bv) 0#32)
+                                        (congrFun'
+                                          (congrArg Eq
+                                            (Std.Tactic.BVDecide.Frontend.Normalize.BitVec.xor_beq_zero_iff a.bv b.bv))
+                                          true)))
+                                    (Std.Tactic.BVDecide.Normalize.BitVec.eq_to_beq a.bv b.bv))
+                                  (Std.Tactic.BVDecide.Normalize.Bool.iff_to_beq (a.bv == b.bv) (a.bv == b.bv)))
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq (Std.Tactic.BVDecide.Normalize.Bool.beq_self_eq_true (a.bv == b.bv)))
+                                    true)
+                                  (eq_self true))))
+                            not_true._simp_1)
+                          a_1))
+                  (Aeneas.Bvify.BitVec.iff_ofNat_eq' 32))
+              (Aeneas.Bvify.BitVec.lt_pow_n_iff_ofNat_le 32))
+          (Aeneas.Bvify.BitVec.lt_pow_lt_iff_ofNat_lt' 32))
+      (Aeneas.Bvify.BitVec.lt_pow_le_iff_ofNat_le' 32))
+NJP_BIT_OP Aeneas.Std.IScalar.xor : {ty : Aeneas.Std.IScalarTy} →
+  Aeneas.Std.IScalar ty → Aeneas.Std.IScalar ty → Aeneas.Std.IScalar ty value=fun {ty} x y => (x.bv ^^^ y.bv)#iscalar
+NJP_BIT_OP Aeneas.Std.U64.and_zero : ∀ (x : Aeneas.Std.U64),
+  x &&& 0#u64 =
+    0#u64 value=fun x =>
+  Eq.mpr (id (congrArg (fun _a => _a) (propext (Aeneas.Std.UScalar.eq_equiv_bv_eq (x &&& 0#u64) 0#u64))))
+    BitVec.and_zero
+NJP_BIT_OP Aeneas.Std.U32.xor_eq_zero_iff._simp_1 : ∀ (a b : Aeneas.Std.U32),
+  (a ^^^ b = 0#u32) = (a = b) value=fun a b => propext (Aeneas.Std.U32.xor_eq_zero_iff a b)
+NJP_BIT_OP Aeneas.Std.UScalar.xor_spec.mvcgen_spec : ∀ {ty : Aeneas.Std.UScalarTy} (x y : Aeneas.Std.UScalar ty),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (x ^^^
+        y) ⦃Std.Do.PostCond.noThrow fun r =>
+      ⌜↑r = ↑(x ^^^ y) ∧
+          r.bv = x.bv ^^^ y.bv⌝⦄ value=fun {ty} x y => Aeneas.Std.WP.spec_to_mvcgen (Aeneas.Std.UScalar.xor_spec x y)

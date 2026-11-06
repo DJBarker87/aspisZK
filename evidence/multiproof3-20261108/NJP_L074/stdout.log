@@ -1,0 +1,81 @@
+theorem NJP_CohortTotal.levels : ∀ (H : Slice (Slice U8) → RefDigest) (height : ℕ) (physical : Slice U8)
+  (s : reference.Scratch),
+  AspisR1.MultiproofConeLevelIteration.Domain physical s →
+    (↑physical).length ≤ 9216 →
+      ∃ out, (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 = ok out :=
+fun H height physical s domain bytes =>
+  have rawDomain := ⟨domain.left, ⟨domain.right.left, ⟨domain.right.right, bytes⟩⟩⟩;
+  let ⟨rawOut, h✝⟩ :=
+    NJP_LevelsTotal.levels_total (NJP_RequestTransport.hash H) (fun n => (↑physical)[n]!) (↑physical).length height
+      (raw s) rawDomain
+  let ⟨rawReturned, right✝⟩ := h✝
+  have observation := NJP_CohortHeightLoop.levels H height s physical domain;
+  have result :=
+    congrArg Prod.snd
+      (Eq.mp
+        (congrArg
+          (fun _a =>
+            have typed := eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical);
+            (typed.1, mapResult projectLevel typed.2) = _a)
+          (NJP_RequestTransport.observation H
+            (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length height (raw s))))
+        observation);
+  casesOn (motive := fun t =>
+    (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 = t →
+      ∃ out, (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 = ok out)
+    (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2
+    (fun out h =>
+      Eq.ndrec (motive := fun x =>
+        (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 = x → ∃ out, x = ok out)
+        (fun returned => Exists.intro out rfl) (Eq.symm h)
+        (Eq.refl (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2))
+    (fun e h =>
+      Eq.ndrec (motive := fun x =>
+        (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 = x → ∃ out, x = ok out)
+        (fun returned =>
+          let ⟨⟩ := ok rawOut
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | ok x => ok (projectLevel x)
+                    | fail e => fail e
+                    | div => div)
+                  returned))
+              (ok rawOut))
+            (Eq.mp
+              (congrArg
+                (fun _a =>
+                  mapResult projectLevel (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 =
+                    _a)
+                rawReturned)
+              result))
+        (Eq.symm h) (Eq.refl (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 = x → ∃ out, x = ok out)
+        (fun returned =>
+          let ⟨⟩ := ok rawOut
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | ok x => ok (projectLevel x)
+                    | fail e => fail e
+                    | div => div)
+                  returned))
+              (ok rawOut))
+            (Eq.mp
+              (congrArg
+                (fun _a =>
+                  mapResult projectLevel (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2 =
+                    _a)
+                rawReturned)
+              result))
+        (Eq.symm h) (Eq.refl (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2))
+    (Eq.refl (eval H (AspisR1.MultiproofConePhysicalLevels.levels height s physical)).2)
+'NJP_CohortTotal.levels' depends on axioms: [propext, Classical.choice, Quot.sound]

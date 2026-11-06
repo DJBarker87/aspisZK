@@ -1,0 +1,87 @@
+{
+  "attempt": "NJP_K071",
+  "kind": "kani",
+  "module": "NJP_pending_digest_frame",
+  "sources": [
+    "NJP_gate.py",
+    "NJP_multiproof.rs",
+    "NJP_poseidon.rs",
+    "NJP_CONTROLLER_SOURCE.json",
+    "NJP_frontier_cuts.rs"
+  ],
+  "upload": [
+    "NJP_gate.py",
+    "NJP_multiproof.rs",
+    "NJP_poseidon.rs",
+    "NJP_CONTROLLER_SOURCE.json",
+    "NJP_frontier_cuts.rs"
+  ],
+  "command": [
+    "python3",
+    "NJP_gate.py",
+    "NJP_K071.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "multiproof::NJP_native::NJP_pending_digest_frame",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 180,
+  "source_revision": "cc03bdd78a088d58da5c0250e7750fa4a36f68f2",
+  "expected_time": "Isolated NJP_pending_digest_frame; ONE step/prefix or fixed height controller; no SHA or field product",
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_target",
+    "CARGO_NET_OFFLINE": "true",
+    "RUSTFLAGS": "--cfg NJP_write_stage --cfg NJP_active_class --cfg NJP_bad_argument"
+  },
+  "collect": [
+    "NJP_K071_validation"
+  ],
+  "expected_failure": true,
+  "lane": "multiproof",
+  "configuration_source_revision": "",
+  "source_tree_dirty": true,
+  "exit_status": 1,
+  "wall_seconds": 33.70639116782695,
+  "peak_rss_kib": "2888848",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r91fa51b1f4564794919cd9c805ee1700.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "3217735680",
+  "source_hashes": {
+    "NJP_gate.py": "e2bdb7d803b5fea904e58350e08fc34bfe78b21c43f35c4dcfb259820437f1fb",
+    "NJP_multiproof.rs": "bf98425cd64ba4b1ae42ad2fadb443065339fbdfa1481265a0c9cbdfc0b593ed",
+    "NJP_poseidon.rs": "fb14067ae699d9698e181f08a4b1954822c96058cf5ba8b0b4a05af259d3314e",
+    "NJP_CONTROLLER_SOURCE.json": "62c8a53191f1686e629d556f44a2c0c1c988be626d0d89800372ef49f6e3484a",
+    "NJP_frontier_cuts.rs": "d7437c9e40b56e1886d4441396d5bcea65cd3d53ff53ec893f1da382b88dcd51"
+  },
+  "deps_fingerprint": "Std from pinned Lean sysroot only",
+  "print_axioms": "N/A: kani"
+}

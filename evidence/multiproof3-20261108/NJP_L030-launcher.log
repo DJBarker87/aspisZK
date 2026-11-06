@@ -1,0 +1,56 @@
+{"attempt": "NJP_L030", "exit_status": 0, "wall_seconds": 4.7049924589227885, "peak_rss_kib": "4343588", "swaps": "0", "print_axioms": ["'NJP_ScalarCarrier.word_value' depends on axioms: [propext]", "'NJP_ScalarCarrier.word_roundtrip' depends on axioms: [propext]", "'NJP_ScalarCarrier.size_value' depends on axioms: [propext]", "'NJP_ScalarCarrier.size_roundtrip' depends on axioms: [propext]", "'NJP_ScalarCarrier.half' depends on axioms: [propext]", "'NJP_ScalarCarrier.parity' depends on axioms: [propext, Quot.sound]", "'NJP_ScalarCarrier.sibling' depends on axioms: [propext, Quot.sound]"]}
+NJP_lean/NJP_ScalarCarrier.lean:31:29: warning: This simp argument is unused:
+  BitVec.toNat_ofNat
+
+Hint: Omit it from the simp argument list.
+  simp only [BitVec.toNat_and,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_ScalarCarrier.lean:35:29: warning: This simp argument is unused:
+  BitVec.toNat_ofNat
+
+Hint: Omit it from the simp argument list.
+  simp only [BitVec.toNat_xor,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJP_ScalarCarrier.word_value : ∀ n < 2 ^ 32, ↑(word n) = n :=
+fun n bound => id (Nat.mod_eq_of_lt bound)
+'
+...
+rier.lean:35:29: warning: This simp argument is unused:
+  BitVec.toNat_ofNat
+
+Hint: Omit it from the simp argument list.
+  simp only [BitVec.toNat_xor,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵N̵a̵t̵_̵o̵f̵N̵a̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJP_ScalarCarrier.word_value : ∀ n < 2 ^ 32, ↑(word n) = n :=
+fun n bound => id (Nat.mod_eq_of_lt bound)
+'NJP_ScalarCarrier.word_value' depends on axioms: [propext]
+theorem NJP_ScalarCarrier.word_roundtrip : ∀ (x : U32), word ↑x = x :=
+fun x => UScalar.eq_of_val_eq (word_value (↑x) (BitVec.isLt x.bv))
+'NJP_ScalarCarrier.word_roundtrip' depends on axioms: [propext]
+theorem NJP_ScalarCarrier.size_value : ∀ n < 2 ^ System.Platform.numBits, ↑(size n) = n :=
+fun n bound => id (Nat.mod_eq_of_lt bound)
+'NJP_ScalarCarrier.size_value' depends on axioms: [propext]
+theorem NJP_ScalarCarrier.size_roundtrip : ∀ (x : Usize), size ↑x = x :=
+fun x => UScalar.eq_of_val_eq (size_value (↑x) (BitVec.isLt x.bv))
+'NJP_ScalarCarrier.size_roundtrip' depends on axioms: [propext]
+theorem NJP_ScalarCarrier.half : ∀ (x : U32), (x.bv >>> 1).toNat = ↑x / 2 :=
+fun x =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans (Nat.shiftRight_eq_div_pow x.bv.toNat 1) (congrArg (HDiv.hDiv x.bv.toNat) (Nat.pow_one 2))))
+        (↑x / 2)))
+    (Eq.refl (x.bv.toNat / 2))
+'NJP_ScalarCarrier.half' depends on axioms: [propext]
+theorem NJP_ScalarCarrier.parity : ∀ (x : U32), (x.bv &&& 1).toNat = ↑x % 2 :=
+fun x => id (Nat.and_one_is_mod x.bv.toNat)
+'NJP_ScalarCarrier.parity' depends on axioms: [propext, Quot.sound]
+theorem NJP_ScalarCarrier.sibling : ∀ (x : U32), (x.bv ^^^ 1).toNat = (↑x).xor 1 :=
+fun x => id (Eq.refl (x.bv.toNat ^^^ BitVec.toNat 1))
+'NJP_ScalarCarrier.sibling' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-ra7db544b4173416882a50299d05818f9.scope; invocation ID: c1ea7b0b891d4fbbb8dce0bc355fbf75

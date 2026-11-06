@@ -1,0 +1,49 @@
+theorem NJP_CompressionPacket.TX1_305 : ∀ (left right : Digest),
+  (∀ (i : Fin 8), ↑(left i) < 2147483647) →
+    (∀ (i : Fin 8), ↑(right i) < 2147483647) →
+      ∀ (seeded : State) (out : Digest) (calls : ℕ),
+        CallerCut left right seeded (NJP_PermutationPacket.model seeded) out calls →
+          out = model left right ∧ calls = 1 ∧ ok out = ok (model left right) :=
+fun left right hl hr seeded out calls cut =>
+  have seed_value := (NJE_CompressSeed.value left right hl hr).right;
+  have same :=
+    funext fun i =>
+      Eq.mpr (id (congrArg (fun _a => _a = model left right i) (cut.output i)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                NJP_PermutationPacket.model _a ⟨↑i, Decidable.byContradiction fun a => CallerCut._proof_1 calls i a⟩ =
+                  model left right i)
+              cut.seed))
+          (have argument := Eq.trans seed_value (NJA_Compress.seed_model (fun i => ↑↑(left i)) fun i => ↑↑(right i));
+          have encoded :=
+            congrArg
+              (fun s =>
+                NJP_FieldEncoding.word
+                  (R0P.poseidonPermutation s ⟨↑i, Decidable.byContradiction fun a => TX1_305._proof_1 i a⟩))
+              argument;
+          Eq.mpr
+            (id
+              (congrArg
+                (Eq
+                  (NJP_FieldEncoding.word
+                    (R0P.poseidonPermutation (NJE_RoundTrace.cast (NJE_CompressSeed.seed left right))
+                      ⟨↑i, Decidable.byContradiction fun a => CallerCut._proof_1 calls i a⟩)))
+                (congrArg NJP_FieldEncoding.word
+                  (congrFun'
+                    (congrArg R0P.poseidonPermutation
+                      (funext fun l =>
+                        dite_congr (Eq.refl (↑l < 8)) (fun h => Eq.refl ↑↑(left ⟨↑l, Eq.mpr_prop (Eq.refl (↑l < 8)) h⟩))
+                          fun h =>
+                          ite_congr (Eq.refl (↑l = 15)) (fun a => Eq.refl (↑↑(right 7) - 1051521018)) fun a =>
+                            Eq.refl ↑↑(right ⟨↑l - 8, R0P.nodeCompress._proof_4 l (Eq.mpr_not (Eq.refl (↑l < 8)) h)⟩)))
+                    ⟨↑i, R0P.digestOf._proof_2 i⟩))))
+            encoded));
+  ⟨same, ⟨cut.call_count, congrArg (fun x => ok x) same⟩⟩
+'NJP_CompressionPacket.TX1_305' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CompressionPacket.child_domain : ∀ (left right : Digest),
+  (∀ (i : Fin 8), ↑(left i) < 2147483647) →
+    (∀ (i : Fin 8), ↑(right i) < 2147483647) → NJE_RoundTrace.Canonical (NJE_CompressSeed.seed left right) :=
+fun left right hl hr => (NJE_CompressSeed.value left right hl hr).left
+'NJP_CompressionPacket.child_domain' depends on axioms: [propext, Classical.choice, Quot.sound]

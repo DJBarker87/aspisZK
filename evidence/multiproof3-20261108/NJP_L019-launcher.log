@@ -1,0 +1,55 @@
+{"attempt": "NJP_L019", "exit_status": 0, "wall_seconds": 3.922711620805785, "peak_rss_kib": "4350368", "swaps": "0", "print_axioms": ["'NJP_DigestCarrier.coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_DigestCarrier.decode_encode' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_DigestCarrier.encode_decode' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_DigestCarrier.faithful' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_DigestCarrier.values_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_DigestCarrier.values_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJP_DigestCarrier.coordinate : ∀ (bytes : Digest) (j : Fin 32), decode (encode bytes) j = bytes j :=
+fun bytes j =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (List.getElem_ofFn (id (Eq.refl (List.ofFn bytes)) ▸ Eq.refl ↑j ▸ decode._proof_2 (encode bytes) j)))
+        (bytes j))
+      (eq_self
+        (bytes
+          ⟨↑j,
+            List.getElem_ofFn._proof_1
+              (id (Eq.refl (List.ofFn bytes)) ▸ Eq.refl ↑j ▸ decode._proof_2 (encode bytes) j)⟩)))
+'NJP_DigestCarrier.coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_DigestCarrier.decode_encode : ∀ (bytes : Digest), decode (encode bytes) = bytes :=
+fun bytes =>
+...
+alues values) i)⟩))))
+        (values i))
+      (eq_self
+        (values
+          ⟨↑i,
+            List.getElem_ofFn._proof_1
+              (id (Eq.refl (List.ofFn fun i => encode (values i))) ▸
+                Eq.refl ↑i ▸ decodeValues._proof_2 (encodeValues values) i)⟩)))
+'NJP_DigestCarrier.values_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_DigestCarrier.values_roundtrip : ∀ (values : Std.Array RefDigest 16#usize),
+  encodeValues (decodeValues values) = values :=
+fun values =>
+  AspisR1.MultiproofConeNodeAdoption.array_ext (encodeValues (decodeValues values)) values fun j left right =>
+    of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (GetElem.getElem.congr_simp (↑(encodeValues (decodeValues values))) (List.ofFn fun i => (↑values)[↑i])
+                (congrArg Subtype.val
+                  (Subtype.mk.congr_simp (List.ofFn fun i => encode (decodeValues values i))
+                    (List.ofFn fun i => (↑values)[↑i])
+                    (congrArg List.ofFn (funext fun i => encode_decode (↑values)[↑i]))
+                    (encodeValues._proof_2 (decodeValues values))))
+                j j (Eq.refl j) left)
+              (List.getElem_ofFn
+                (congrArg Subtype.val
+                    (Subtype.mk.congr_simp (List.ofFn fun i => encode (decodeValues values i))
+                      (List.ofFn fun i => (↑values)[↑i])
+                      (congrArg List.ofFn (funext fun i => encode_decode (↑values)[↑i]))
+                      (encodeValues._proof_2 (decodeValues values))) ▸
+                  Eq.refl j ▸ left))))
+          (↑values)[j])
+        (eq_self (↑values)[j]))
+'NJP_DigestCarrier.values_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r5601fc7b617842bfafb6be378d513e13.scope; invocation ID: 0e55bd51498f482b9fb6abecd9b58b5b

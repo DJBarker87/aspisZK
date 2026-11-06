@@ -1,0 +1,154 @@
+NJP_lean/NJP_CheckedWords.lean:12:13: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NJP_lean/NJP_CheckedWords.lean:12:13: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NJP_lean/NJP_CheckedWords.lean:18:13: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NJP_lean/NJP_CheckedWords.lean:18:13: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NJP_lean/NJP_CheckedWords.lean:24:13: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NJP_lean/NJP_CheckedWords.lean:24:13: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NJP_lean/NJP_CheckedWords.lean:30:13: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NJP_lean/NJP_CheckedWords.lean:30:13: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NJP_lean/NJP_CheckedWords.lean:36:13: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NJP_lean/NJP_CheckedWords.lean:36:13: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+theorem NJP_CheckedWords.add_one : ∀ (i : Usize), ↑i < 16 → ∃ next, i + 1#usize = ok next ∧ ↑next = ↑i + 1 :=
+fun i bound =>
+  have spec :=
+    WP.spec_mono'
+      (Usize.add_spec
+        (Eq.mpr
+          (id
+            (congrFun'
+              (congrArg LE.le
+                (congrArg (HAdd.hAdd ↑i)
+                  (UScalar.ofNatCore_val_eq
+                    (UScalar.bound_suffices UScalarTy.Usize 1 (of_decide_eq_true (id (Eq.refl true)))))))
+              Usize.max))
+          (add_one._proof_1 i bound)))
+      (Eq.mpr (id (add_one._simp_8 (fun z => ↑z = ↑i + ↑1#usize) fun next => ↑next = ↑i + 1))
+        (id fun _x =>
+          (fun _ next_post =>
+              add_one._proof_12 i _x
+                (Eq.mp
+                  (congrArg (Eq ↑_x)
+                    (congrArg (HAdd.hAdd ↑i)
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 1 (of_decide_eq_true (id (Eq.refl true)))))))
+                  next_post))
+            (Step.eq_imp_prettyMonadEq (i + 1#usize) _x)));
+  WP.spec_imp_exists spec
+'NJP_CheckedWords.add_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CheckedWords.add_two : ∀ (i : Usize), ↑i + 2 ≤ 16 → ∃ next, i + 2#usize = ok next ∧ ↑next = ↑i + 2 :=
+fun i bound =>
+  have spec :=
+    WP.spec_mono'
+      (Usize.add_spec
+        (Eq.mpr
+          (id
+            (congrFun'
+              (congrArg LE.le
+                (congrArg (HAdd.hAdd ↑i)
+                  (UScalar.ofNatCore_val_eq
+                    (UScalar.bound_suffices UScalarTy.Usize 2 (of_decide_eq_true (id (Eq.refl true)))))))
+              Usize.max))
+          (add_two._proof_1 i bound)))
+      (Eq.mpr (id (add_one._simp_8 (fun z => ↑z = ↑i + ↑2#usize) fun next => ↑next = ↑i + 2))
+        (id fun _x =>
+          (fun _ next_post =>
+              add_two._proof_2 i _x
+                (Eq.mp
+                  (congrArg (Eq ↑_x)
+                    (congrArg (HAdd.hAdd ↑i)
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 2 (of_decide_eq_true (id (Eq.refl true)))))))
+                  next_post))
+            (Step.eq_imp_prettyMonadEq (i + 2#usize) _x)));
+  WP.spec_imp_exists spec
+'NJP_CheckedWords.add_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CheckedWords.add_window : ∀ (at1 : Usize),
+  ↑at1 ≤ 9216 → ∃ next, at1 + 32#usize = ok next ∧ ↑next = ↑at1 + 32 :=
+fun at1 bound =>
+  have spec :=
+    WP.spec_mono'
+      (Usize.add_spec
+        (Eq.mpr
+          (id
+            (congrFun'
+              (congrArg LE.le
+                (congrArg (HAdd.hAdd ↑at1)
+                  (UScalar.ofNatCore_val_eq
+                    (UScalar.bound_suffices UScalarTy.Usize 32 (of_decide_eq_true (id (Eq.refl true)))))))
+              Usize.max))
+          (add_window._proof_1 at1 bound)))
+      (Eq.mpr (id (add_one._simp_8 (fun z => ↑z = ↑at1 + ↑32#usize) fun next => ↑next = ↑at1 + 32))
+        (id fun _x =>
+          (fun _ next_post =>
+              add_window._proof_2 at1 _x
+                (Eq.mp
+                  (congrArg (Eq ↑_x)
+                    (congrArg (HAdd.hAdd ↑at1)
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 32 (of_decide_eq_true (id (Eq.refl true)))))))
+                  next_post))
+            (Step.eq_imp_prettyMonadEq (at1 + 32#usize) _x)));
+  WP.spec_imp_exists spec
+'NJP_CheckedWords.add_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CheckedWords.subtract : ∀ (length at1 : Usize),
+  ↑at1 ≤ ↑length → ∃ remaining, length - at1 = ok remaining ∧ ↑remaining = ↑length - ↑at1 :=
+fun length at1 bound =>
+  have spec :=
+    WP.spec_mono' (Usize.sub_spec bound)
+      (Eq.mpr
+        (id
+          (Eq.trans
+            (add_one._simp_8 (fun z => ↑z = ↑length - ↑at1 ∧ ↑at1 ≤ ↑length) fun remaining =>
+              ↑remaining = ↑length - ↑at1)
+            (forall_congr fun x => add_one._simp_9 (↑x = ↑length - ↑at1) (↑at1 ≤ ↑length) (↑x = ↑length - ↑at1))))
+        (id fun _x =>
+          (fun _ remaining_post1 remaining_post2 => subtract._proof_1 length at1 _x remaining_post1)
+            (Step.eq_imp_prettyMonadEq (length - at1) _x)));
+  WP.spec_imp_exists spec
+'NJP_CheckedWords.subtract' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CheckedWords.half : ∀ (index : U32), ∃ parent, index / 2#u32 = ok parent ∧ ↑parent = ↑index / 2 :=
+fun index =>
+  have spec :=
+    WP.spec_mono'
+      (U32.div_spec index
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Ne
+                (UScalar.ofNatCore_val_eq
+                  (UScalar.bound_suffices UScalarTy.U32 2 (of_decide_eq_true (id (Eq.refl true))))))
+              0)
+            (Eq.trans (ScalarTac.Nat_neq_zero_iff._simp_1 2) (eq_true_of_decide (Eq.refl true))))))
+      (Eq.mpr (id (add_one._simp_8 (fun z => ↑z = ↑index / ↑2#u32) fun parent => ↑parent = ↑index / 2))
+        (id fun _x =>
+          (fun _ parent_post =>
+              half._proof_1 index _x
+                (Eq.mp
+                  (congrArg (Eq ↑_x)
+                    (congrArg (HDiv.hDiv ↑index)
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.U32 2 (of_decide_eq_true (id (Eq.refl true)))))))
+                  parent_post))
+            (Step.eq_imp_prettyMonadEq (index / 2#u32) _x)));
+  WP.spec_imp_exists spec
+'NJP_CheckedWords.half' depends on axioms: [propext, Classical.choice, Quot.sound]

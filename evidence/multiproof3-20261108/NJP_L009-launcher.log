@@ -1,0 +1,51 @@
+{"attempt": "NJP_L009", "exit_status": 0, "wall_seconds": 3.8449802938848734, "peak_rss_kib": "4359396", "swaps": "0", "print_axioms": ["'NJP_RowModel.active_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_RowModel.paired_bound' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_RowModel.write_frame' depends on axioms: [propext]", "'NJP_RowModel.write_selected' depends on axioms: [propext]", "'NJP_RowModel.occupied_observation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_RowModel.sibling_observation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_RowModel.missing_observation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_RowModel.exhausted_observation' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJP_RowModel.active_bounds : ∀ (length : ℕ) (s : Scratch) (i w : ℕ),
+  Domain length s i w → i < s.n → i < 16 ∧ w < 16 ∧ s.cursor + 32 < 2 ^ 64 :=
+fun length s i w domain active =>
+  let ⟨positive, right✝⟩ := domain
+  let ⟨size, right✝¹⟩ := right✝
+  let ⟨left✝, right✝²⟩ := right✝¹
+  let ⟨write, right✝³⟩ := right✝²
+  let ⟨cursorBound, bound⟩ := right✝³
+  Decidable.byContradiction fun a => active_bounds._proof_1 length s i w active positive size write cursorBound bound a
+'NJP_RowModel.active_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_RowModel.paired_bound : ∀ (s : Scratch) (i : ℕ), s.n ≤ 16 → paired s i → i + 1 < 16 ∧ i + 2 ≤ s.n :=
+fun s i size both
+...
+n x_0 x_1 x_2 x_3 => if_pos active) x_0 x_1 x_2 x_3) (i.decLt s.n) Run
+                  (Program.done (ok (Row.stop s))) (Program.done (ok (Row.next s i w))))))
+            (eval.eq_1 H (ok (Row.stop s)))))
+        ([], ok (Row.stop s)))
+      (eq_self ([], ok (Row.stop s))))
+'NJP_RowModel.missing_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_RowModel.exhausted_observation : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s : Scratch)
+  (i w : ℕ), s.n ≤ i → eval H (node nodes length s i w) = ([], ok (Row.next s i w)) :=
+fun H nodes length s i w ended =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (eval H)
+              ((fun x_0 x_1 x_2 x_3 =>
+                  (fun x_0 x_1 x_2 x_3 =>
+                      if_neg
+                        (have this := fun a => exhausted_observation._proof_1 s i ended a;
+                        this))
+                    x_0 x_1 x_2 x_3)
+                (i.decLt s.n) Run
+                (if paired s i then
+                  Program.ask (occupiedRequest s i) fun reply =>
+                    Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1)))
+                else
+                  if s.cursor + 32 ≤ length then
+                    Program.ask (siblingRequest s i nodes) fun reply =>
+                      Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1)))
+                  else Program.done (ok (Row.stop s)))
+                (Program.done (ok (Row.next s i w)))))
+            (eval.eq_1 H (ok (Row.next s i w)))))
+        ([], ok (Row.next s i w)))
+      (eq_self ([], ok (Row.next s i w))))
+'NJP_RowModel.exhausted_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rfc69e3a01479435a895d2cc0d23a904c.scope; invocation ID: 939fd3e69e994354a89044d667ca6c08

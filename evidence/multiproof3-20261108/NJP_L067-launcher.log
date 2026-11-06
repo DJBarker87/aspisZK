@@ -1,0 +1,54 @@
+{"attempt": "NJP_L067", "exit_status": 0, "wall_seconds": 3.3663118651602417, "peak_rss_kib": "4356968", "swaps": "0", "print_axioms": ["'NJP_AbortTransport.same' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_AbortTransport.abort_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJP_lean/NJP_AbortTransport.lean:15:3: warning: Variable name `n` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NJP_lean/NJP_AbortTransport.lean:38:72: warning: This simp argument is unused:
+  NJP_RequestTransport.hash
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵a̵p̵p̵l̵y̵,̵h̵i̵s̵t̵o̵r̵y̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵e̵n̵c̵o̵d̵e̵_̵d̵e̵c̵o̵d̵e̵,̵N̵J̵P̵_̵R̵e̵q̵u̵e̵s̵t̵T̵r̵a̵n̵s̵p̵o̵r̵t̵.̵h̵a̵s̵h̵]̵[̲F̲u̲n̲c̲t̲i̲o̲n̲.̲c̲o̲m̲p̲_̲a̲p̲p̲l̲y̲,̲ ̲h̲i̲s̲t̲o̲r̲y̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲e̲n̲c̲o̲d̲e̲_̲d̲e̲c̲o̲d̲e̲
+...
+vents, right✝⟩ := NJP_AbortPrefix.exact_prefix (NJP_RequestTransport.hash H) n p events last aborted
+    let ⟨length, right✝¹⟩ := right✝
+    Eq.mpr
+      (id
+        (congrArg (fun _a => history events = List.take n _a.1 ∧ events.length = n)
+          (NJP_RequestTransport.observation H p)))
+      (id
+        ⟨Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  _a =
+                    List.take n
+                      (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                        (eval (NJP_RequestTransport.hash H) p).1))
+                (history.eq_1 events)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) _a =
+                      List.take n
+                        (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                          (eval (NJP_RequestTransport.hash H) p).1))
+                  sameEvents))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      _a =
+                        List.take n
+                          (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                            (eval (NJP_RequestTransport.hash H) p).1))
+                    List.map_take))
+                (Eq.refl
+                  (List.take n
+                    (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                      (eval (NJP_RequestTransport.hash H) p).1))))),
+          length⟩)⟩
+'NJP_AbortTransport.abort_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7b08b17a48d24750afb81253e3701766.scope; invocation ID: dbe158201f354f5eb24068a7f14760cb

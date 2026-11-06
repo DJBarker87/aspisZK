@@ -1,0 +1,39 @@
+{"attempt": "NJP_L007", "exit_status": 0, "wall_seconds": 3.1624318349640816, "peak_rss_kib": "3850560", "swaps": "0", "print_axioms": ["'NJP_CopyFrame.window_ext' depends on axioms: [Quot.sound]", "'NJP_CopyFrame.digest_write_ext' depends on axioms: [Quot.sound]", "'NJP_CopyFrame.flat_window' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CopyFrame.outside' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_CopyFrame.different_row' depends on axioms: [propext, Quot.sound]", "'NJP_CopyFrame.caller_range' depends on axioms: [propext, Quot.sound]"]}
+theorem NJP_CopyFrame.window_ext : ∀ {α : Type} (source : ℕ → α) (window : Fin 32 → α) (offset : ℕ),
+  (∀ (j : Fin 32), window j = source (offset + ↑j)) → window = fun j => source (offset + ↑j) :=
+fun {α} source window offset selected => funext selected
+'NJP_CopyFrame.window_ext' depends on axioms: [Quot.sound]
+theorem NJP_CopyFrame.digest_write_ext : ∀ {α : Type} (before after : Fin 16 → Fin 32 → α) (w : Fin 16)
+  (reply : Fin 32 → α),
+  (∀ (k : Fin 16) (j : Fin 32), after k j = if k = w then reply j else before k j) →
+    after = fun k j => if k = w then reply j else before k j :=
+fun {α} before after w reply selected => funext fun k => funext fun j => selected k j
+'NJP_CopyFrame.digest_wr
+...
+w offset selected => funext selected
+'NJP_CopyFrame.window_ext' depends on axioms: [Quot.sound]
+theorem NJP_CopyFrame.digest_write_ext : ∀ {α : Type} (before after : Fin 16 → Fin 32 → α) (w : Fin 16)
+  (reply : Fin 32 → α),
+  (∀ (k : Fin 16) (j : Fin 32), after k j = if k = w then reply j else before k j) →
+    after = fun k j => if k = w then reply j else before k j :=
+fun {α} before after w reply selected => funext fun k => funext fun j => selected k j
+'NJP_CopyFrame.digest_write_ext' depends on axioms: [Quot.sound]
+theorem NJP_CopyFrame.flat_window : ∀ {α : Type} (src dst : ℕ → α) (offset k : ℕ),
+  KMX_CopyMeaning.loop src dst offset 32 k = if offset ≤ k ∧ k < offset + 32 then src k else dst k :=
+fun {α} src dst offset k => KMX_CopyMeaning.loop_spec src dst offset 32 k
+'NJP_CopyFrame.flat_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CopyFrame.outside : ∀ {α : Type} (src dst : ℕ → α) (offset k : ℕ),
+  k < offset ∨ offset + 32 ≤ k → KMX_CopyMeaning.loop src dst offset 32 k = dst k :=
+fun {α} src dst offset k disjoint => KMX_CopyMeaning.copy_frame src dst offset 32 k disjoint
+'NJP_CopyFrame.outside' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CopyFrame.different_row : ∀ (w k : Fin 16) (j : Fin 32),
+  k ≠ w → 32 * ↑k + ↑j < 32 * ↑w ∨ 32 * ↑w + 32 ≤ 32 * ↑k + ↑j :=
+fun w k j different =>
+  have neq := fun eq => different (Fin.ext eq);
+  Decidable.byContradiction fun a => different_row._proof_1 w k j neq a
+'NJP_CopyFrame.different_row' depends on axioms: [propext, Quot.sound]
+theorem NJP_CopyFrame.caller_range : ∀ count ≤ 16 * 18, 32 * count ≤ 9216 :=
+fun count bounded => Decidable.byContradiction fun a => caller_range._proof_1 count bounded a
+'NJP_CopyFrame.caller_range' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-r06d918fc480245e584e8bd356c304902.scope; invocation ID: 8429e57bf219410fb07fc7df901539b3

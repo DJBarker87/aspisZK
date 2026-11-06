@@ -1,0 +1,102 @@
+NJP_lean/NJP_AbortTransport.lean:15:3: warning: Variable name `n` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NJP_lean/NJP_AbortTransport.lean:32:16: error: unsolved goals
+case succ.ask.e_f
+α : Type
+H : NJP_RequestTransport.Address → RefDigest
+n : ℕ
+ih :
+  ∀ (p : Program Request Digest α),
+    physicalPending H n (NJP_RequestTransport.transport p) =
+      Option.map
+        (fun x =>
+          match x with
+          | (events, last) => (history events, NJP_RequestTransport.address last))
+        (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) n p)
+q : Request
+next : Digest → Program Request Digest α
+events : List (Request × Digest)
+last : Request
+⊢ ((fun x => ((NJP_RequestTransport.address q, H (NJP_RequestTransport.address q)) :: x.1, x.2)) ∘ fun x =>
+        (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) x.1,
+          NJP_RequestTransport.address x.2))
+      (events, last) =
+    ((fun x =>
+          (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) x.1,
+            NJP_RequestTransport.address x.2)) ∘
+        fun x => ((q, decode (H (NJP_RequestTransport.address q))) :: x.1, x.2))
+      (events, last)
+NJP_lean/NJP_AbortTransport.lean:38:24: warning: This simp argument is unused:
+  List.map_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵i̵s̵t̵o̵r̵y̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵e̵n̵c̵o̵d̵e̵_̵d̵e̵c̵o̵d̵e̵,̵N̵J̵P̵_̵R̵e̵q̵u̵e̵s̵t̵T̵r̵a̵n̵s̵p̵o̵r̵t̵.̵h̵a̵s̵h̵]̵[̲h̲i̲s̲t̲o̲r̲y̲,̲ ̲e̲n̲c̲o̲d̲e̲_̲d̲e̲c̲o̲d̲e̲,̲ ̲N̲J̲P̲_̲R̲e̲q̲u̲e̲s̲t̲T̲r̲a̲n̲s̲p̲o̲r̲t̲.̲h̲a̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_AbortTransport.lean:38:38: warning: This simp argument is unused:
+  encode_decode
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵i̵s̵t̵o̵r̵y̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵e̵n̵c̵o̵d̵e̵_̵d̵e̵c̵o̵d̵e̵,̵N̵J̵P̵_̵R̵e̵q̵u̵e̵s̵t̵T̵r̵a̵n̵s̵p̵o̵r̵t̵.̵h̵a̵s̵h̵]̵[̲h̲i̲s̲t̲o̲r̲y̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲N̲J̲P̲_̲R̲e̲q̲u̲e̲s̲t̲T̲r̲a̲n̲s̲p̲o̲r̲t̲.̲h̲a̲s̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_AbortTransport.lean:38:52: warning: This simp argument is unused:
+  NJP_RequestTransport.hash
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵i̵s̵t̵o̵r̵y̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵e̵n̵c̵o̵d̵e̵_̵d̵e̵c̵o̵d̵e̵,̵N̵J̵P̵_̵R̵e̵q̵u̵e̵s̵t̵T̵r̵a̵n̵s̵p̵o̵r̵t̵.̵h̵a̵s̵h̵]̵[̲h̲i̲s̲t̲o̲r̲y̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲e̲n̲c̲o̲d̲e̲_̲d̲e̲c̲o̲d̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_AbortTransport.lean:41:7: error: unexpected token 'prefix'; expected identifier
+theorem NJP_AbortTransport.same : ∀ {α : Type} (H : NJP_RequestTransport.Address → RefDigest) (n : ℕ)
+  (p : Program Request Digest α),
+  physicalPending H n (NJP_RequestTransport.transport p) =
+    Option.map
+      (fun x =>
+        match x with
+        | (events, last) => (history events, NJP_RequestTransport.address last))
+      (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) n p) :=
+fun {α} H n p =>
+  Nat.recAux (motive := fun n =>
+    ∀ (p : Program Request Digest α),
+      physicalPending H n (NJP_RequestTransport.transport p) =
+        Option.map
+          (fun x =>
+            match x with
+            | (events, last) => (history events, NJP_RequestTransport.address last))
+          (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) n p))
+    (fun p =>
+      Program.casesOn (motive := fun t =>
+        p = t →
+          physicalPending H 0 (NJP_RequestTransport.transport p) =
+            Option.map
+              (fun x =>
+                match x with
+                | (events, last) => (history events, NJP_RequestTransport.address last))
+              (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) 0 p))
+        p
+        (fun outcome h =>
+          Eq.symm h ▸ Eq.refl (physicalPending H 0 (NJP_RequestTransport.transport (Program.done outcome))))
+        (fun input next h =>
+          Eq.symm h ▸ Eq.refl (physicalPending H 0 (NJP_RequestTransport.transport (Program.ask input next))))
+        (Eq.refl p))
+    (fun n ih p =>
+      Program.casesOn (motive := fun t =>
+        p = t →
+          physicalPending H (n + 1) (NJP_RequestTransport.transport p) =
+            Option.map
+              (fun x =>
+                match x with
+                | (events, last) => (history events, NJP_RequestTransport.address last))
+              (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) (n + 1) p))
+        p (fun x h => Eq.symm h ▸ Eq.refl (physicalPending H (n + 1) (NJP_RequestTransport.transport (Program.done x))))
+        (fun q next h => Eq.symm h ▸ sorry) (Eq.refl p))
+    n p
+'NJP_AbortTransport.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NJP_lean/NJP_AbortTransport.lean:58:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+NJP_lean/NJP_AbortTransport.lean:58:13: error: unexpected token '#print'; expected ':'
+NJP_lean/NJP_AbortTransport.lean:59:7: error(lean.unknownIdentifier): Unknown constant `axioms`
+NJP_lean/NJP_AbortTransport.lean:59:20: error: unexpected token 'end'; expected ':'

@@ -1,0 +1,38 @@
+{"attempt": "NJP_L015", "exit_status": 1, "wall_seconds": 3.5664930660277605, "peak_rss_kib": "4335080", "swaps": "0", "print_axioms": ["'NJP_AbortPrefix.exact_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJP_AbortPrefix.occupied_pending' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_AbortPrefix.sibling_pending' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJP_lean/NJP_AbortPrefix.lean:15:3: warning: Variable name `n` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NJP_lean/NJP_AbortPrefix.lean:43:68: error(lean.unknownIdentifier): Unknown identifier `request`
+theorem NJP_AbortPrefix.exact_prefix : ∀ {α : Type} (H : Request → Digest) (n : ℕ) (p : Program Request Digest α)
+  (history : List (Request × Digest)) (last : Request),
+  pending H n p = some (history, last) →
+    history = List.take n (eval H p).1 ∧ history.length = n ∧ Option.map Prod.fst (eval H p).1[n]? = some last :=
+fun {α} H n p history last a
+...
+ext (write s i w s.cursor reply) (i + 2) (w + 1)))))
+                        fun a =>
+                        (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos available) x_0 x_1 x_2 x_3)
+                          ((s.cursor + 32).decLe length) Run
+                          (Program.ask (siblingRequest s i nodes) fun reply =>
+                            Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))
+                          (Program.done (ok (Row.stop s))))
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg single) x_0 x_1 x_2 x_3)
+                        (instDecidablePaired s i) Run
+                        (Program.ask (occupiedRequest s i) fun reply =>
+                          Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1))))
+                        (Program.ask (siblingRequest s i nodes) fun reply =>
+                          Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))))
+                  fun a => Eq.refl (Program.done (ok (Row.next s i w))))
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos active) x_0 x_1 x_2 x_3) (i.decLt s.n) Run
+                  (Program.ask (siblingRequest s i nodes) fun reply =>
+                    Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))
+                  (Program.done (ok (Row.next s i w))))))
+            (pending.eq_2 H (siblingRequest s i nodes) fun reply =>
+              Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))))
+        (some ([], siblingRequest s i nodes)))
+      (eq_self (some ([], siblingRequest s i nodes))))
+'NJP_AbortPrefix.sibling_pending' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2bf15359178849978ecf9ea923d0b421.scope; invocation ID: 710aabe3114e4ab8b23ec46318903967

@@ -1,0 +1,179 @@
+NJP_lean/NJP_AbortTransport.lean:15:3: warning: Variable name `n` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NJP_lean/NJP_AbortTransport.lean:38:72: warning: This simp argument is unused:
+  NJP_RequestTransport.hash
+
+Hint: Omit it from the simp argument list.
+  simp only [̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵a̵p̵p̵l̵y̵,̵h̵i̵s̵t̵o̵r̵y̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵e̵n̵c̵o̵d̵e̵_̵d̵e̵c̵o̵d̵e̵,̵N̵J̵P̵_̵R̵e̵q̵u̵e̵s̵t̵T̵r̵a̵n̵s̵p̵o̵r̵t̵.̵h̵a̵s̵h̵]̵[̲F̲u̲n̲c̲t̲i̲o̲n̲.̲c̲o̲m̲p̲_̲a̲p̲p̲l̲y̲,̲ ̲h̲i̲s̲t̲o̲r̲y̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲e̲n̲c̲o̲d̲e̲_̲d̲e̲c̲o̲d̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJP_AbortTransport.same : ∀ {α : Type} (H : NJP_RequestTransport.Address → RefDigest) (n : ℕ)
+  (p : Program Request Digest α),
+  physicalPending H n (NJP_RequestTransport.transport p) =
+    Option.map
+      (fun x =>
+        match x with
+        | (events, last) => (history events, NJP_RequestTransport.address last))
+      (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) n p) :=
+fun {α} H n p =>
+  Nat.recAux (motive := fun n =>
+    ∀ (p : Program Request Digest α),
+      physicalPending H n (NJP_RequestTransport.transport p) =
+        Option.map
+          (fun x =>
+            match x with
+            | (events, last) => (history events, NJP_RequestTransport.address last))
+          (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) n p))
+    (fun p =>
+      Program.casesOn (motive := fun t =>
+        p = t →
+          physicalPending H 0 (NJP_RequestTransport.transport p) =
+            Option.map
+              (fun x =>
+                match x with
+                | (events, last) => (history events, NJP_RequestTransport.address last))
+              (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) 0 p))
+        p
+        (fun outcome h =>
+          Eq.symm h ▸ Eq.refl (physicalPending H 0 (NJP_RequestTransport.transport (Program.done outcome))))
+        (fun input next h =>
+          Eq.symm h ▸ Eq.refl (physicalPending H 0 (NJP_RequestTransport.transport (Program.ask input next))))
+        (Eq.refl p))
+    (fun n ih p =>
+      Program.casesOn (motive := fun t =>
+        p = t →
+          physicalPending H (n + 1) (NJP_RequestTransport.transport p) =
+            Option.map
+              (fun x =>
+                match x with
+                | (events, last) => (history events, NJP_RequestTransport.address last))
+              (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) (n + 1) p))
+        p (fun x h => Eq.symm h ▸ Eq.refl (physicalPending H (n + 1) (NJP_RequestTransport.transport (Program.done x))))
+        (fun q next h =>
+          Eq.symm h ▸
+            Eq.mpr
+              (id
+                (congr
+                  (congrArg Eq
+                    (Eq.trans
+                      (physicalPending.eq_4 H n (NJP_RequestTransport.address q) fun answer =>
+                        NJP_RequestTransport.transport (next (decode answer)))
+                      (Eq.trans
+                        (congrArg
+                          (Option.map fun x =>
+                            ((NJP_RequestTransport.address q, H (NJP_RequestTransport.address q)) :: x.1, x.2))
+                          ((fun p => ih p) (next (decode (H (NJP_RequestTransport.address q))))))
+                        (Option.map_map
+                          (fun x => ((NJP_RequestTransport.address q, H (NJP_RequestTransport.address q)) :: x.1, x.2))
+                          (fun x => (history x.1, NJP_RequestTransport.address x.2))
+                          (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) n
+                            (next (decode (H (NJP_RequestTransport.address q)))))))))
+                  (Option.map_map (fun x => (history x.1, NJP_RequestTransport.address x.2))
+                    (fun x => ((q, decode (H (NJP_RequestTransport.address q))) :: x.1, x.2))
+                    (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) n
+                      (next (decode (H (NJP_RequestTransport.address q))))))))
+              ((fun {α β} f f_1 e_f =>
+                  Eq.rec (motive := fun f_2 e_f => ∀ (a a_1 : Option α), a = a_1 → Option.map f a = Option.map f_2 a_1)
+                    (fun a a_1 e_a => e_a ▸ Eq.refl (Option.map f a)) e_f)
+                ((fun x => ((NJP_RequestTransport.address q, H (NJP_RequestTransport.address q)) :: x.1, x.2)) ∘
+                  fun x => (history x.1, NJP_RequestTransport.address x.2))
+                ((fun x => (history x.1, NJP_RequestTransport.address x.2)) ∘ fun x =>
+                  ((q, decode (H (NJP_RequestTransport.address q))) :: x.1, x.2))
+                (funext fun pair =>
+                  let ⟨events, last⟩ := pair
+                  of_eq_true
+                    (Eq.trans
+                      (congrArg
+                        (Eq
+                          ((NJP_RequestTransport.address q, H (NJP_RequestTransport.address q)) ::
+                              List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) events,
+                            NJP_RequestTransport.address last))
+                        (congrFun'
+                          (congrArg Prod.mk
+                            (congrFun'
+                              (congrArg List.cons
+                                (congrArg (Prod.mk (NJP_RequestTransport.address q))
+                                  (encode_decode (H (NJP_RequestTransport.address q)))))
+                              (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) events)))
+                          (NJP_RequestTransport.address last)))
+                      (eq_self
+                        ((NJP_RequestTransport.address q, H (NJP_RequestTransport.address q)) ::
+                            List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) events,
+                          NJP_RequestTransport.address last))))
+                (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) n
+                  (next (decode (H (NJP_RequestTransport.address q)))))
+                (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) n
+                  (next (decode (H (NJP_RequestTransport.address q)))))
+                (Eq.refl
+                  (NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) n
+                    (next (decode (H (NJP_RequestTransport.address q))))))))
+        (Eq.refl p))
+    n p
+'NJP_AbortTransport.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_AbortTransport.abort_prefix : ∀ {α : Type} (H : NJP_RequestTransport.Address → RefDigest) (n : ℕ)
+  (p : Program Request Digest α) (events : List (Request × Digest)) (last : Request),
+  NJP_AbortPrefix.pending (NJP_RequestTransport.hash H) n p = some (events, last) →
+    physicalPending H n (NJP_RequestTransport.transport p) = some (history events, NJP_RequestTransport.address last) ∧
+      history events = List.take n (eval H (NJP_RequestTransport.transport p)).1 ∧ events.length = n :=
+fun {α} H n p events last aborted =>
+  ⟨Eq.mpr (id (congrArg (fun _a => _a = some (history events, NJP_RequestTransport.address last)) (same H n p)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              Option.map
+                  (fun x =>
+                    match x with
+                    | (events, last) => (history events, NJP_RequestTransport.address last))
+                  _a =
+                some (history events, NJP_RequestTransport.address last))
+            aborted))
+        (Eq.refl
+          (Option.map
+            (fun x =>
+              match x with
+              | (events, last) => (history events, NJP_RequestTransport.address last))
+            (some (events, last))))),
+    let ⟨sameEvents, right✝⟩ := NJP_AbortPrefix.exact_prefix (NJP_RequestTransport.hash H) n p events last aborted
+    let ⟨length, right✝¹⟩ := right✝
+    Eq.mpr
+      (id
+        (congrArg (fun _a => history events = List.take n _a.1 ∧ events.length = n)
+          (NJP_RequestTransport.observation H p)))
+      (id
+        ⟨Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  _a =
+                    List.take n
+                      (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                        (eval (NJP_RequestTransport.hash H) p).1))
+                (history.eq_1 events)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) _a =
+                      List.take n
+                        (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                          (eval (NJP_RequestTransport.hash H) p).1))
+                  sameEvents))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      _a =
+                        List.take n
+                          (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                            (eval (NJP_RequestTransport.hash H) p).1))
+                    List.map_take))
+                (Eq.refl
+                  (List.take n
+                    (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                      (eval (NJP_RequestTransport.hash H) p).1))))),
+          length⟩)⟩
+'NJP_AbortTransport.abort_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]

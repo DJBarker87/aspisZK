@@ -1,0 +1,80 @@
+NJP_lean/NJP_VerifierView.lean:11:5: error: unknown namespace `OraclePortFrozenOrder`
+NJP_lean/NJP_VerifierView.lean:19:13: error(lean.unknownIdentifier): Unknown identifier `wellFormed`
+
+Note: It is not possible to treat `wellFormed` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+NJP_lean/NJP_VerifierView.lean:22:84: error: unsolved goals
+H : Bytes → State
+root : RefDigest
+physical : Slice U8
+s : reference.Scratch
+zero : s.at = 0#usize
+domain : AspisR1.MultiproofConeLevelIteration.Domain physical s
+bytes : (↑physical).length ≤ 9216
+guard : sorry ∧ (↑physical).length % 32 = 0
+out : reference.Level
+returned : (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).2 = ok out
+initial : { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } = s
+⊢ eval H
+      (transport
+        (AspisR1.MultiproofConePhysicalLevels.bindRun (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)
+          fun out => Program.done (ok (NJP_CohortReturning.finish root physical out)))) =
+    ((eval H
+          (if
+              AspisR1.OraclePortFrozenOrder.wellFormed (List.map Prod.fst (live s 0 ↑s.n)) ∧
+                (↑physical).length % 32 = 0 then
+            AspisV8R19.OracleProgramOps.bind (transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+              fun result => Program.done (AspisR1.MultiproofConeVerifyState.finishState root physical s result)
+          else Program.done (false, s))).1,
+      ok
+        (eval H
+            (if
+                AspisR1.OraclePortFrozenOrder.wellFormed (List.map Prod.fst (live s 0 ↑s.n)) ∧
+                  (↑physical).length % 32 = 0 then
+              AspisV8R19.OracleProgramOps.bind (transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+                fun result => Program.done (AspisR1.MultiproofConeVerifyState.finishState root physical s result)
+            else Program.done (false, s))).2)
+theorem NJP_VerifierView.returning : ∀ (H : Bytes → State) (root : RefDigest) (physical : Slice U8)
+  (s : reference.Scratch),
+  s.at = 0#usize →
+    AspisR1.MultiproofConeLevelIteration.Domain physical s →
+      (↑physical).length ≤ 9216 →
+        sorry ∧ (↑physical).length % 32 = 0 →
+          eval H (transport (NJP_CohortReturning.run root physical s)) =
+            ((eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).1,
+              ok (eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).2) :=
+fun H root physical s zero domain bytes guard =>
+  let ⟨out, returned⟩ := NJP_CohortTotal.levels (rawOracle H) 18 physical s domain bytes
+  have initial :=
+    Eq.mpr (id (congrArg (fun _a => { idx := s.idx, val := s.val, n := s.n, «at» := _a } = s) (Eq.symm zero)))
+      (Eq.refl { idx := s.idx, val := s.val, n := s.n, «at» := s.at });
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              eval H
+                  (transport
+                    (AspisR1.MultiproofConePhysicalLevels.bindRun
+                      (AspisR1.MultiproofConePhysicalLevels.levels 18 _a physical) fun out =>
+                      Program.done (ok (NJP_CohortReturning.finish root physical out)))) =
+                ((eval H
+                      (if
+                          AspisR1.OraclePortFrozenOrder.wellFormed (List.map Prod.fst (live s 0 ↑s.n)) ∧
+                            (↑physical).length % 32 = 0 then
+                        AspisV8R19.OracleProgramOps.bind
+                          (transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)) fun result =>
+                          Program.done (AspisR1.MultiproofConeVerifyState.finishState root physical s result)
+                      else Program.done (false, s))).1,
+                  ok
+                    (eval H
+                        (if
+                            AspisR1.OraclePortFrozenOrder.wellFormed (List.map Prod.fst (live s 0 ↑s.n)) ∧
+                              (↑physical).length % 32 = 0 then
+                          AspisV8R19.OracleProgramOps.bind
+                            (transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)) fun result =>
+                            Program.done (AspisR1.MultiproofConeVerifyState.finishState root physical s result)
+                        else Program.done (false, s))).2))
+            initial))
+        sorry))
+'NJP_VerifierView.returning' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

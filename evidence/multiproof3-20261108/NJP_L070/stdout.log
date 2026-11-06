@@ -1,0 +1,561 @@
+NJP_lean/NJP_CohortReturning.lean:43:12: warning: This simp argument is unused:
+  Prod.fst
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵d̵.̵f̵s̵t̵,̵P̵r̵o̵d̵.̵s̵n̵d̵]̵[̲P̲r̲o̲d̲.̲s̲n̲d̲]̲ at logs returns
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_CohortReturning.lean:43:21: warning: This simp argument is unused:
+  Prod.snd
+
+Hint: Omit it from the simp argument list.
+  simp only [Prod.fst,̵P̵r̵o̵d̵.̵s̵n̵d̵] at logs returns
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJP_CohortReturning.finish_same : ∀ (root : RefDigest) (physical : Slice U8) (out : reference.Level),
+  answer (finish root physical out) = NJP_LoopModel.finish (decode root) (↑physical).length (projectLevel out) :=
+fun root physical out =>
+  reference.Level.casesOn (motive := fun t =>
+    out = t →
+      answer (finish root physical out) = NJP_LoopModel.finish (decode root) (↑physical).length (projectLevel out))
+    out (fun s h => Eq.symm h ▸ Eq.refl (answer (finish root physical (reference.Level.Stop s))))
+    (fun s h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congrArg (Eq (AspisR1.MultiproofConeRootGuard.sourceRoot root physical s, raw s))
+              (congrFun' (congrArg Prod.mk (NJP_CohortTerminal.same root physical s)) (raw s)))
+            (eq_self (AspisR1.MultiproofConeRootGuard.sourceRoot root physical s, raw s))))
+    (Eq.refl out)
+'NJP_CohortReturning.finish_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_CohortReturning.observation : ∀ (H : Slice (Slice U8) → RefDigest) (root : RefDigest) (physical : Slice U8)
+  (s : reference.Scratch),
+  0 < ↑s.n →
+    ↑s.n ≤ 16 →
+      have typed := eval H (run root physical s);
+      (typed.1, mapResult answer typed.2) =
+        eval H
+          (NJP_RequestTransport.transport
+            (NJP_LoopModel.run (decode root) (fun n => (↑physical)[n]!) (↑physical).length (raw s))) :=
+fun H root physical s positive size =>
+  have domain :=
+    ⟨positive,
+      ⟨size,
+        of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg LE.le
+                (UScalar.ofNatCore_val_eq
+                  (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+              (↑physical).length)
+            zero_le._simp_1)⟩⟩;
+  have levels :=
+    NJP_CohortHeightLoop.levels H 18 { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical domain;
+  have logs :=
+    congrArg Prod.fst
+      (Eq.mp
+        (congrArg
+          (fun _a =>
+            have typed :=
+              eval H
+                (AspisR1.MultiproofConePhysicalLevels.levels 18
+                  { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical);
+            (typed.1, mapResult projectLevel typed.2) = _a)
+          (NJP_RequestTransport.observation H
+            (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+              (raw { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize }))))
+        levels);
+  have returns :=
+    congrArg Prod.snd
+      (Eq.mp
+        (congrArg
+          (fun _a =>
+            have typed :=
+              eval H
+                (AspisR1.MultiproofConePhysicalLevels.levels 18
+                  { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical);
+            (typed.1, mapResult projectLevel typed.2) = _a)
+          (NJP_RequestTransport.observation H
+            (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+              (raw { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize }))))
+        levels);
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (congr
+                (congrArg Prod.mk
+                  (congrArg Prod.fst
+                    (eval_bind
+                      (AspisR1.MultiproofConePhysicalLevels.levels 18
+                        { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)
+                      (fun result =>
+                        AspisR1.MultiproofConePhysicalProgram.checked result fun out =>
+                          Program.done (ok (finish root physical out)))
+                      H)))
+                (congrArg (mapResult answer)
+                  (congrArg Prod.snd
+                    (eval_bind
+                      (AspisR1.MultiproofConePhysicalLevels.levels 18
+                        { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)
+                      (fun result =>
+                        AspisR1.MultiproofConePhysicalProgram.checked result fun out =>
+                          Program.done (ok (finish root physical out)))
+                      H)))))
+            (eval H
+              (NJP_RequestTransport.transport
+                (NJP_LoopModel.run (decode root) (fun n => (↑physical)[n]!) (↑physical).length (raw s))))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                ((eval H
+                          (AspisR1.MultiproofConePhysicalLevels.levels 18
+                            { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1 ++
+                      (eval H
+                          (AspisR1.MultiproofConePhysicalProgram.checked
+                            (eval H
+                                (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                  { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2
+                            fun out => Program.done (ok (finish root physical out)))).1,
+                    mapResult answer
+                      (eval H
+                          (AspisR1.MultiproofConePhysicalProgram.checked
+                            (eval H
+                                (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                  { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2
+                            fun out => Program.done (ok (finish root physical out)))).2) =
+                  _a)
+              (NJP_RequestTransport.observation H
+                (NJP_LoopModel.run (decode root) (fun n => (↑physical)[n]!) (↑physical).length (raw s)))))
+          (id
+            (Eq.mpr
+              (id
+                (congrArg
+                  (Eq
+                    ((eval H
+                            (AspisR1.MultiproofConePhysicalLevels.levels 18
+                              { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1 ++
+                        (eval H
+                            (AspisR1.MultiproofConePhysicalProgram.checked
+                              (eval H
+                                  (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                    { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2
+                              fun out => Program.done (ok (finish root physical out)))).1,
+                      mapResult answer
+                        (eval H
+                            (AspisR1.MultiproofConePhysicalProgram.checked
+                              (eval H
+                                  (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                    { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2
+                              fun out => Program.done (ok (finish root physical out)))).2))
+                  (congr
+                    (congrArg Prod.mk
+                      (congrArg (List.map fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                        (congrArg Prod.fst
+                          (eval_bind
+                            (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                              { indices := (raw s).indices, values := (raw s).values, n := (raw s).n, cursor := 0 })
+                            (fun r =>
+                              match r with
+                              | ok a => Program.done (ok (NJP_LoopModel.finish (decode root) (↑physical).length a))
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div)
+                            (NJP_RequestTransport.hash H)))))
+                    (congrArg Prod.snd
+                      (eval_bind
+                        (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                          { indices := (raw s).indices, values := (raw s).values, n := (raw s).n, cursor := 0 })
+                        (fun r =>
+                          match r with
+                          | ok a => Program.done (ok (NJP_LoopModel.finish (decode root) (↑physical).length a))
+                          | fail e => Program.done (fail e)
+                          | div => Program.done div)
+                        (NJP_RequestTransport.hash H))))))
+              (have initial := rfl;
+              Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      ((eval H
+                                (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                  { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1 ++
+                            (eval H
+                                (AspisR1.MultiproofConePhysicalProgram.checked
+                                  (eval H
+                                      (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                        { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2
+                                  fun out => Program.done (ok (finish root physical out)))).1,
+                          mapResult answer
+                            (eval H
+                                (AspisR1.MultiproofConePhysicalProgram.checked
+                                  (eval H
+                                      (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                        { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2
+                                  fun out => Program.done (ok (finish root physical out)))).2) =
+                        (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                            ((eval (NJP_RequestTransport.hash H)
+                                  (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                                    { indices := (raw s).indices, values := (raw s).values, n := (raw s).n,
+                                      cursor := 0 })).1 ++
+                              (eval (NJP_RequestTransport.hash H)
+                                  (match _a with
+                                  | ok a => Program.done (ok (NJP_LoopModel.finish (decode root) (↑physical).length a))
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div)).1),
+                          (eval (NJP_RequestTransport.hash H)
+                              (match _a with
+                              | ok a => Program.done (ok (NJP_LoopModel.finish (decode root) (↑physical).length a))
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div)).2))
+                    (Eq.symm
+                      (Eq.mp
+                        (congrArg
+                          (fun _a =>
+                            mapResult projectLevel
+                                (eval H
+                                    (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                      { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2 =
+                              (eval (NJP_RequestTransport.hash H)
+                                  (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18 _a)).2)
+                          initial)
+                        returns))))
+                (casesOn (motive := fun t =>
+                  (eval H
+                          (AspisR1.MultiproofConePhysicalLevels.levels 18
+                            { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2 =
+                      t →
+                    ((eval H
+                              (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1 ++
+                          (eval H
+                              (AspisR1.MultiproofConePhysicalProgram.checked
+                                (eval H
+                                    (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                      { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2
+                                fun out => Program.done (ok (finish root physical out)))).1,
+                        mapResult answer
+                          (eval H
+                              (AspisR1.MultiproofConePhysicalProgram.checked
+                                (eval H
+                                    (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                      { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2
+                                fun out => Program.done (ok (finish root physical out)))).2) =
+                      (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                          ((eval (NJP_RequestTransport.hash H)
+                                (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                                  { indices := (raw s).indices, values := (raw s).values, n := (raw s).n,
+                                    cursor := 0 })).1 ++
+                            (eval (NJP_RequestTransport.hash H)
+                                (match
+                                  mapResult projectLevel
+                                    (eval H
+                                        (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                          { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2 with
+                                | ok a => Program.done (ok (NJP_LoopModel.finish (decode root) (↑physical).length a))
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div)).1),
+                        (eval (NJP_RequestTransport.hash H)
+                            (match
+                              mapResult projectLevel
+                                (eval H
+                                    (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                      { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2 with
+                            | ok a => Program.done (ok (NJP_LoopModel.finish (decode root) (↑physical).length a))
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div)).2))
+                  (eval H
+                      (AspisR1.MultiproofConePhysicalLevels.levels 18
+                        { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2
+                  (fun out h =>
+                    Eq.ndrec (motive := fun x =>
+                      (eval H
+                              (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2 =
+                          x →
+                        ((eval H
+                                  (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                    { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1 ++
+                              (eval H
+                                  (AspisR1.MultiproofConePhysicalProgram.checked x fun out =>
+                                    Program.done (ok (finish root physical out)))).1,
+                            mapResult answer
+                              (eval H
+                                  (AspisR1.MultiproofConePhysicalProgram.checked x fun out =>
+                                    Program.done (ok (finish root physical out)))).2) =
+                          (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                              ((eval (NJP_RequestTransport.hash H)
+                                    (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                                      { indices := (raw s).indices, values := (raw s).values, n := (raw s).n,
+                                        cursor := 0 })).1 ++
+                                (eval (NJP_RequestTransport.hash H)
+                                    (match mapResult projectLevel x with
+                                    | ok a =>
+                                      Program.done (ok (NJP_LoopModel.finish (decode root) (↑physical).length a))
+                                    | fail e => Program.done (fail e)
+                                    | div => Program.done div)).1),
+                            (eval (NJP_RequestTransport.hash H)
+                                (match mapResult projectLevel x with
+                                | ok a => Program.done (ok (NJP_LoopModel.finish (decode root) (↑physical).length a))
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div)).2))
+                      (fun result =>
+                        Eq.mpr
+                          (id
+                            (congr
+                              (congrArg Eq
+                                (congr
+                                  (congrArg Prod.mk
+                                    (Eq.trans
+                                      (congrArg
+                                        (HAppend.hAppend
+                                          (eval H
+                                              (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                                { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1)
+                                        (congrArg Prod.fst (eval.eq_1 H (ok (finish root physical out)))))
+                                      (List.append_nil
+                                        (eval H
+                                            (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                              { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1)))
+                                  (congrArg
+                                    (fun x =>
+                                      match x.2 with
+                                      | ok x => ok (answer x)
+                                      | fail e => fail e
+                                      | div => div)
+                                    (eval.eq_1 H (ok (finish root physical out))))))
+                              (congr
+                                (congrArg Prod.mk
+                                  (congrArg
+                                    (List.map fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                    (Eq.trans
+                                      (congrArg
+                                        (HAppend.hAppend
+                                          (eval (NJP_RequestTransport.hash H)
+                                              (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                                                { indices := (raw s).indices, values := (raw s).values, n := (raw s).n,
+                                                  cursor := 0 })).1)
+                                        (congrArg Prod.fst
+                                          (eval.eq_1 (NJP_RequestTransport.hash H)
+                                            (ok
+                                              (NJP_LoopModel.finish (decode root) (↑physical).length
+                                                (projectLevel out))))))
+                                      (List.append_nil
+                                        (eval (NJP_RequestTransport.hash H)
+                                            (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                                              { indices := (raw s).indices, values := (raw s).values, n := (raw s).n,
+                                                cursor := 0 })).1))))
+                                (congrArg Prod.snd
+                                  (eval.eq_1 (NJP_RequestTransport.hash H)
+                                    (ok (NJP_LoopModel.finish (decode root) (↑physical).length (projectLevel out))))))))
+                          (Prod.ext
+                            (Eq.mp
+                              (congrArg
+                                (fun _a =>
+                                  (eval H
+                                        (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                          { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1 =
+                                    List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                      (eval (NJP_RequestTransport.hash H)
+                                          (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18 _a)).1)
+                                initial)
+                              logs)
+                            (congrArg ok (finish_same root physical out))))
+                      (Eq.symm h)
+                      (Eq.refl
+                        (eval H
+                            (AspisR1.MultiproofConePhysicalLevels.levels 18
+                              { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2))
+                  (fun e h =>
+                    Eq.ndrec (motive := fun x =>
+                      (eval H
+                              (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2 =
+                          x →
+                        ((eval H
+                                  (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                    { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1 ++
+                              (eval H
+                                  (AspisR1.MultiproofConePhysicalProgram.checked x fun out =>
+                                    Program.done (ok (finish root physical out)))).1,
+                            mapResult answer
+                              (eval H
+                                  (AspisR1.MultiproofConePhysicalProgram.checked x fun out =>
+                                    Program.done (ok (finish root physical out)))).2) =
+                          (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                              ((eval (NJP_RequestTransport.hash H)
+                                    (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                                      { indices := (raw s).indices, values := (raw s).values, n := (raw s).n,
+                                        cursor := 0 })).1 ++
+                                (eval (NJP_RequestTransport.hash H)
+                                    (match mapResult projectLevel x with
+                                    | ok a =>
+                                      Program.done (ok (NJP_LoopModel.finish (decode root) (↑physical).length a))
+                                    | fail e => Program.done (fail e)
+                                    | div => Program.done div)).1),
+                            (eval (NJP_RequestTransport.hash H)
+                                (match mapResult projectLevel x with
+                                | ok a => Program.done (ok (NJP_LoopModel.finish (decode root) (↑physical).length a))
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div)).2))
+                      (fun result =>
+                        Eq.mpr
+                          (id
+                            (congr
+                              (congrArg Eq
+                                (congr
+                                  (congrArg Prod.mk
+                                    (Eq.trans
+                                      (congrArg
+                                        (HAppend.hAppend
+                                          (eval H
+                                              (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                                { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1)
+                                        (congrArg Prod.fst (eval.eq_1 H (fail e))))
+                                      (List.append_nil
+                                        (eval H
+                                            (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                              { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1)))
+                                  (congrArg
+                                    (fun x =>
+                                      match x.2 with
+                                      | ok x => ok (answer x)
+                                      | fail e => fail e
+                                      | div => div)
+                                    (eval.eq_1 H (fail e)))))
+                              (congr
+                                (congrArg Prod.mk
+                                  (congrArg
+                                    (List.map fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                    (Eq.trans
+                                      (congrArg
+                                        (HAppend.hAppend
+                                          (eval (NJP_RequestTransport.hash H)
+                                              (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                                                { indices := (raw s).indices, values := (raw s).values, n := (raw s).n,
+                                                  cursor := 0 })).1)
+                                        (congrArg Prod.fst (eval.eq_1 (NJP_RequestTransport.hash H) (fail e))))
+                                      (List.append_nil
+                                        (eval (NJP_RequestTransport.hash H)
+                                            (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                                              { indices := (raw s).indices, values := (raw s).values, n := (raw s).n,
+                                                cursor := 0 })).1))))
+                                (congrArg Prod.snd (eval.eq_1 (NJP_RequestTransport.hash H) (fail e))))))
+                          (Prod.ext
+                            (Eq.mp
+                              (congrArg
+                                (fun _a =>
+                                  (eval H
+                                        (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                          { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1 =
+                                    List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                      (eval (NJP_RequestTransport.hash H)
+                                          (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18 _a)).1)
+                                initial)
+                              logs)
+                            rfl))
+                      (Eq.symm h)
+                      (Eq.refl
+                        (eval H
+                            (AspisR1.MultiproofConePhysicalLevels.levels 18
+                              { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2))
+                  (fun h =>
+                    Eq.ndrec (motive := fun x =>
+                      (eval H
+                              (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2 =
+                          x →
+                        ((eval H
+                                  (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                    { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1 ++
+                              (eval H
+                                  (AspisR1.MultiproofConePhysicalProgram.checked x fun out =>
+                                    Program.done (ok (finish root physical out)))).1,
+                            mapResult answer
+                              (eval H
+                                  (AspisR1.MultiproofConePhysicalProgram.checked x fun out =>
+                                    Program.done (ok (finish root physical out)))).2) =
+                          (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                              ((eval (NJP_RequestTransport.hash H)
+                                    (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                                      { indices := (raw s).indices, values := (raw s).values, n := (raw s).n,
+                                        cursor := 0 })).1 ++
+                                (eval (NJP_RequestTransport.hash H)
+                                    (match mapResult projectLevel x with
+                                    | ok a =>
+                                      Program.done (ok (NJP_LoopModel.finish (decode root) (↑physical).length a))
+                                    | fail e => Program.done (fail e)
+                                    | div => Program.done div)).1),
+                            (eval (NJP_RequestTransport.hash H)
+                                (match mapResult projectLevel x with
+                                | ok a => Program.done (ok (NJP_LoopModel.finish (decode root) (↑physical).length a))
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div)).2))
+                      (fun result =>
+                        Eq.mpr
+                          (id
+                            (congr
+                              (congrArg Eq
+                                (congr
+                                  (congrArg Prod.mk
+                                    (Eq.trans
+                                      (congrArg
+                                        (HAppend.hAppend
+                                          (eval H
+                                              (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                                { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1)
+                                        (congrArg Prod.fst (eval.eq_1 H div)))
+                                      (List.append_nil
+                                        (eval H
+                                            (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                              { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1)))
+                                  (congrArg
+                                    (fun x =>
+                                      match x.2 with
+                                      | ok x => ok (answer x)
+                                      | fail e => fail e
+                                      | div => div)
+                                    (eval.eq_1 H div))))
+                              (congr
+                                (congrArg Prod.mk
+                                  (congrArg
+                                    (List.map fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                    (Eq.trans
+                                      (congrArg
+                                        (HAppend.hAppend
+                                          (eval (NJP_RequestTransport.hash H)
+                                              (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                                                { indices := (raw s).indices, values := (raw s).values, n := (raw s).n,
+                                                  cursor := 0 })).1)
+                                        (congrArg Prod.fst (eval.eq_1 (NJP_RequestTransport.hash H) div)))
+                                      (List.append_nil
+                                        (eval (NJP_RequestTransport.hash H)
+                                            (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18
+                                              { indices := (raw s).indices, values := (raw s).values, n := (raw s).n,
+                                                cursor := 0 })).1))))
+                                (congrArg Prod.snd (eval.eq_1 (NJP_RequestTransport.hash H) div)))))
+                          (Prod.ext
+                            (Eq.mp
+                              (congrArg
+                                (fun _a =>
+                                  (eval H
+                                        (AspisR1.MultiproofConePhysicalLevels.levels 18
+                                          { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).1 =
+                                    List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                      (eval (NJP_RequestTransport.hash H)
+                                          (NJP_LoopModel.levels (fun n => (↑physical)[n]!) (↑physical).length 18 _a)).1)
+                                initial)
+                              logs)
+                            rfl))
+                      (Eq.symm h)
+                      (Eq.refl
+                        (eval H
+                            (AspisR1.MultiproofConePhysicalLevels.levels 18
+                              { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2))
+                  (Eq.refl
+                    (eval H
+                        (AspisR1.MultiproofConePhysicalLevels.levels 18
+                          { idx := s.idx, val := s.val, n := s.n, «at» := 0#usize } physical)).2))))))))
+'NJP_CohortReturning.observation' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,204 @@
+theorem NJP_NativeRowCut.arguments : ∀ (s : Scratch) (i w length : ℕ) (nodes : ℕ → U8) (reply : Digest)
+  (after : Scratch) (ni nw : ℕ) (returned : Bool) (log : Log),
+  Cut s i w length nodes reply after ni nw returned log →
+    writes s i length → request log = if paired s i then occupiedRequest s i else siblingRequest s i nodes :=
+fun s i w length nodes reply after ni nw returned log cut entered =>
+  have values := funext fun k => funext fun j => cut.inputValues entered k j;
+  have observed :=
+    funext fun j =>
+      of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (dite_congr (Eq.refl (j < 16)) (fun h => congrFun values ⟨j, Eq.mpr_prop (Eq.refl (j < 16)) h⟩) fun h =>
+                Eq.refl fun x => 0#u8))
+            (if h : j < 16 then s.values ⟨j, h⟩ else fun x => 0#u8))
+          (eq_self (if h : j < 16 then s.values ⟨j, Eq.mpr_prop (Eq.refl (j < 16)) h⟩ else fun x => 0#u8)));
+  if both : paired s i then
+    Eq.mpr
+      (id
+        (congr
+          (congrArg Eq
+            (ite_congr
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans (cut.kind entered)
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos both) x_0 x_1 x_2 x_3)
+                        (instDecidablePaired s i) ℕ 1 2)))
+                  1)
+                (eq_self 1))
+              (fun a =>
+                congr
+                  (congrArg Prod.mk
+                    (Eq.trans (congrArg (observedValue log) (cut.inputIndex entered)) (congrFun observed i)))
+                  (Eq.trans (congrArg (observedValue log) (congrFun' (congrArg HAdd.hAdd (cut.inputIndex entered)) 1))
+                    (congrFun observed (i + 1))))
+              fun a =>
+              ite_congr (Eq.refl (log.left = true))
+                (fun a =>
+                  congrFun'
+                    (congrArg Prod.mk
+                      (Eq.trans (congrArg (observedValue log) (cut.inputIndex entered)) (congrFun observed i)))
+                    log.sibling)
+                fun a =>
+                congrArg (Prod.mk log.sibling)
+                  (Eq.trans (congrArg (observedValue log) (cut.inputIndex entered)) (congrFun observed i))))
+          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos both) x_0 x_1 x_2 x_3) (instDecidablePaired s i)
+            Request (occupiedRequest s i) (siblingRequest s i nodes))))
+      (Eq.refl (value s i, value s (i + 1)))
+  else
+    have available := Or.resolve_left entered.right both;
+    have sibling := funext (cut.siblingValues entered.left both available);
+    Eq.mpr
+      (id
+        (congr
+          (congrArg Eq
+            (ite_congr
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans (cut.kind entered)
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg both) x_0 x_1 x_2 x_3)
+                        (instDecidablePaired s i) ℕ 1 2)))
+                  1)
+                (eq_false
+                  (have this := of_decide_eq_true (id (Eq.refl true));
+                  this)))
+              (fun a =>
+                congr
+                  (congrArg Prod.mk
+                    (Eq.trans (congrArg (observedValue log) (cut.inputIndex entered)) (congrFun observed i)))
+                  (Eq.trans (congrArg (observedValue log) (congrFun' (congrArg HAdd.hAdd (cut.inputIndex entered)) 1))
+                    (congrFun observed (i + 1))))
+              fun a =>
+              ite_congr (congrFun' (congrArg Eq (cut.orientation entered.left both available)) true)
+                (fun a =>
+                  congr
+                    (congrArg Prod.mk
+                      (Eq.trans (congrArg (observedValue log) (cut.inputIndex entered)) (congrFun observed i)))
+                    sibling)
+                fun a =>
+                congr (congrArg Prod.mk sibling)
+                  (Eq.trans (congrArg (observedValue log) (cut.inputIndex entered)) (congrFun observed i))))
+          (Eq.trans
+            (ite_congr (Eq.refl (paired s i)) (fun a => Eq.refl (occupiedRequest s i)) fun a =>
+              Eq.refl
+                (if index s i % 2 = 0 then (value s i, window nodes s.cursor) else (window nodes s.cursor, value s i)))
+            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg both) x_0 x_1 x_2 x_3) (instDecidablePaired s i)
+              Request (occupiedRequest s i)
+              (if index s i % 2 = 0 then (value s i, window nodes s.cursor) else (window nodes s.cursor, value s i))))))
+      (if even : index s i % 2 = 0 then
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (ite_congr
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (Eq.trans
+                          (Decidable.decide.congr_simp (index s i % 2 = 0) True
+                            (Eq.trans (congrFun' (congrArg Eq even) 0) (eq_self 0)))
+                          (decide_true instDecidableTrue)))
+                      true)
+                    (eq_self true))
+                  (fun a => Eq.refl (value s i, window nodes s.cursor)) fun a =>
+                  Eq.refl (window nodes s.cursor, value s i)))
+              (ite_congr (Eq.trans (congrFun' (congrArg Eq even) 0) (eq_self 0))
+                (fun a => Eq.refl (value s i, window nodes s.cursor)) fun a =>
+                Eq.refl (window nodes s.cursor, value s i)))
+            (eq_self (value s i, window nodes s.cursor)))
+      else
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (ite_congr
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (Eq.trans (Decidable.decide.congr_simp (index s i % 2 = 0) False (eq_false even))
+                          (decide_false instDecidableFalse)))
+                      true)
+                    Bool.false_eq_true)
+                  (fun a => Eq.refl (value s i, window nodes s.cursor)) fun a =>
+                  Eq.refl (window nodes s.cursor, value s i)))
+              (ite_congr (eq_false even) (fun a => Eq.refl (value s i, window nodes s.cursor)) fun a =>
+                Eq.refl (window nodes s.cursor, value s i)))
+            (eq_self (window nodes s.cursor, value s i))))
+'NJP_NativeRowCut.arguments' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_NativeRowCut.state : ∀ (s : Scratch) (i w length : ℕ) (nodes : ℕ → U8) (reply : Digest) (after : Scratch)
+  (ni nw : ℕ) (returned : Bool) (log : Log),
+  Cut s i w length nodes reply after ni nw returned log →
+    after = if writes s i length then write s i w (cursor s i length) reply else s :=
+fun s i w length nodes reply after ni nw returned log cut =>
+  if entered : writes s i length then
+    Eq.mpr (id (congrArg (fun _a => after = _a) (if_pos entered)))
+      (NJP_WriteCarrier.state_ext after (write s i w (cursor s i length) reply)
+        (funext fun k =>
+          id
+            (Eq.mp
+              (congrArg (Eq (after.indices k))
+                (ite_congr (Eq.trans (congrFun' (congrArg And (eq_true entered)) (↑k = w)) (true_and (↑k = w)))
+                  (fun a => Eq.refl (index s i / 2)) fun a => Eq.refl (s.indices k)))
+              (cut.indexValues k)))
+        (funext fun k =>
+          funext fun j =>
+            if same : ↑k = w then
+              Eq.mpr
+                (id
+                  (congrArg (Eq (after.values k j))
+                    (congrFun
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos same) x_0 x_1 x_2 x_3)
+                        (instDecidableEqNat (↑k) w) Digest reply (s.values k))
+                      j)))
+                (Eq.mp
+                  (congrArg (Eq (after.values k j))
+                    (Eq.trans
+                      (ite_congr (Eq.trans (congrFun' (congrArg And (eq_true entered)) (↑k = w)) (true_and (↑k = w)))
+                        (fun a => Eq.refl (reply j)) fun a => Eq.refl (s.values k j))
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos same) x_0 x_1 x_2 x_3)
+                        (instDecidableEqNat (↑k) w) U8 (reply j) (s.values k j))))
+                  (cut.digestValues k j))
+            else
+              Eq.mpr
+                (id
+                  (congrArg (Eq (after.values k j))
+                    (congrFun
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg same) x_0 x_1 x_2 x_3)
+                        (instDecidableEqNat (↑k) w) Digest reply (s.values k))
+                      j)))
+                (Eq.mp
+                  (congrArg (Eq (after.values k j))
+                    (Eq.trans
+                      (ite_congr (Eq.trans (congrFun' (congrArg And (eq_true entered)) (↑k = w)) (true_and (↑k = w)))
+                        (fun a => Eq.refl (reply j)) fun a => Eq.refl (s.values k j))
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg same) x_0 x_1 x_2 x_3)
+                        (instDecidableEqNat (↑k) w) U8 (reply j) (s.values k j))))
+                  (cut.digestValues k j)))
+        cut.countFrame cut.cursorValue)
+  else
+    Eq.mpr (id (congrArg (fun _a => after = _a) (if_neg entered)))
+      (NJP_WriteCarrier.state_ext after s
+        (funext fun k =>
+          Eq.mp
+            (congrArg (Eq (after.indices k))
+              (ite_congr (Eq.trans (congrFun' (congrArg And (eq_false entered)) (↑k = w)) (false_and (↑k = w)))
+                (fun a => Eq.refl (index s i / 2)) fun a => Eq.refl (s.indices k)))
+            (cut.indexValues k))
+        (funext fun k =>
+          funext fun j =>
+            Eq.mp
+              (congrArg (Eq (after.values k j))
+                (ite_congr (Eq.trans (congrFun' (congrArg And (eq_false entered)) (↑k = w)) (false_and (↑k = w)))
+                  (fun a => Eq.refl (reply j)) fun a => Eq.refl (s.values k j)))
+              (cut.digestValues k j))
+        cut.countFrame
+        (have no_sibling := fun h => entered ⟨h.left, Or.inr h.right.right⟩;
+        Eq.mp
+          (congrArg (Eq after.cursor)
+            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg no_sibling) x_0 x_1 x_2 x_3) instDecidableAnd ℕ
+              (s.cursor + 32) s.cursor))
+          cut.cursorValue))
+'NJP_NativeRowCut.state' depends on axioms: [propext, Quot.sound]

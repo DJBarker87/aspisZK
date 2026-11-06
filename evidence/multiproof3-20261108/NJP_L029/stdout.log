@@ -1,0 +1,45 @@
+NJP_lean/NJP_RequestTransport.lean:30:20: warning: Variable name `H` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+theorem NJP_RequestTransport.observation : ∀ {α : Type} (H : Address → RefDigest) (p : Program Request Digest α),
+  eval H (transport p) =
+    (List.map (fun event => (address event.1, encode event.2)) (eval (hash H) p).1, (eval (hash H) p).2) :=
+fun {α} H p =>
+  Program.rec (fun x => Eq.refl (eval H (transport (Program.done x))))
+    (fun request next ih =>
+      of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (Eq.trans (eval.eq_2 H (address request) fun answer => transport (next (decode answer)))
+                (congr
+                  (congrArg Prod.mk
+                    (congrArg (List.cons (address request, H (address request)))
+                      (congrArg Prod.fst ((fun a => ih a) (decode (H (address request)))))))
+                  (congrArg Prod.snd ((fun a => ih a) (decode (H (address request))))))))
+            (congrFun'
+              (congrArg Prod.mk
+                (congrFun'
+                  (congrArg List.cons (congrArg (Prod.mk (address request)) (encode_decode (H (address request)))))
+                  (List.map (fun event => (address event.1, encode event.2))
+                    (eval (hash H) (next (decode (H (address request))))).1)))
+              (eval (hash H) (next (decode (H (address request))))).2))
+          (eq_self
+            ((address request, H (address request)) ::
+                List.map (fun event => (address event.1, encode event.2))
+                  (eval (hash H) (next (decode (H (address request))))).1,
+              (eval (hash H) (next (decode (H (address request))))).2))))
+    p
+'NJP_RequestTransport.observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_RequestTransport.prefix_map : ∀ (H : Address → RefDigest) (history : List (Request × Digest)) (n : ℕ),
+  List.map (fun event => (address event.1, encode event.2)) (List.take n history) =
+    List.take n (List.map (fun event => (address event.1, encode event.2)) history) :=
+fun H history n =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = List.take n (List.map (fun event => (address event.1, encode event.2)) history))
+        List.map_take))
+    (Eq.refl (List.take n (List.map (fun event => (address event.1, encode event.2)) history)))
+'NJP_RequestTransport.prefix_map' depends on axioms: [propext, Classical.choice, Quot.sound]

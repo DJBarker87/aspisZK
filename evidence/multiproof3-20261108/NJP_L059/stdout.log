@@ -1,0 +1,939 @@
+NJP_lean/NJP_CohortRowLoop.lean:32:19: error: Application type mismatch: The argument
+  (raw s).n
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.36
+of sort `Type (?u.36 + 1)` in the application
+  @InitialSeg (raw s).n
+NJP_lean/NJP_CohortRowLoop.lean:32:30: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.35
+NJP_lean/NJP_CohortRowLoop.lean:32:3: error: unsolved goals
+case pos
+H : Slice (Slice U8) → RefDigest
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w
+halt : i ≥ s.n
+halted : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ ([],
+      ok
+        (NJP_LoopModel.Level.done
+          { indices := decodeIndices s.idx, values := decodeValues s.val, n := ↑w, cursor := ↑s.at })) =
+    ([],
+      if ↑s.n ≤ ↑i then
+        ok
+          (NJP_LoopModel.Level.done
+            { indices := decodeIndices s.idx, values := decodeValues s.val, n := ↑w, cursor := ↑s.at })
+      else div)
+NJP_lean/NJP_CohortRowLoop.lean:35:20: error: Application type mismatch: The argument
+  (raw s).n
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ¬(raw s).n
+NJP_lean/NJP_CohortRowLoop.lean:35:31: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.44
+NJP_lean/NJP_CohortRowLoop.lean:35:3: error: unsolved goals
+case neg
+H : Slice (Slice U8) → RefDigest
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w
+halt : ¬i ≥ s.n
+halted : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ ([], div) =
+    ([],
+      if (raw s).n ≤ ↑i then
+        ok
+          (NJP_LoopModel.Level.done
+            { indices := (raw s).indices, values := (raw s).values, n := ↑w, cursor := (raw s).cursor })
+      else div)
+NJP_lean/NJP_CohortRowLoop.lean:40:19: error: Application type mismatch: The argument
+  (raw s).n
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.58
+of sort `Type (?u.58 + 1)` in the application
+  @InitialSeg (raw s).n
+NJP_lean/NJP_CohortRowLoop.lean:40:30: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.57
+NJP_lean/NJP_CohortRowLoop.lean:40:3: error: unsolved goals
+case pos
+H : Slice (Slice U8) → RefDigest
+physical : Slice U8
+fuel : ℕ
+ih :
+  ∀ (s : reference.Scratch) (i w : Usize),
+    AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w →
+      let typed := eval H (AspisR1.MultiproofConePhysicalLevels.rows fuel s physical i w);
+      (typed.1, mapResult projectLevel typed.2) =
+        eval H
+          (NJP_RequestTransport.transport
+            (NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel (raw s) ↑i ↑w))
+s : reference.Scratch
+i w : Usize
+domain : AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w
+halt : i ≥ s.n
+halted : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ ([],
+      ok
+        (NJP_LoopModel.Level.done
+          { indices := decodeIndices s.idx, values := decodeValues s.val, n := ↑w, cursor := ↑s.at })) =
+    eval H
+      (NJP_RequestTransport.transport
+        (if ↑s.n ≤ ↑i then
+          Program.done
+            (ok
+              (NJP_LoopModel.Level.done
+                { indices := decodeIndices s.idx, values := decodeValues s.val, n := ↑w, cursor := ↑s.at }))
+        else
+          NJP_LoopModel.bindRun
+            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length
+              { indices := decodeIndices s.idx, values := decodeValues s.val, n := ↑s.n, cursor := ↑s.at } ↑i ↑w)
+            fun result =>
+            match result with
+            | NJP_RowModel.Row.stop stopped => Program.done (ok (NJP_LoopModel.Level.stop stopped))
+            | NJP_RowModel.Row.next after ni nw =>
+              NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel after ni nw))
+NJP_lean/NJP_CohortRowLoop.lean:43:47: error: Application type mismatch: The argument
+  ↑s.n
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ¬↑s.n
+NJP_lean/NJP_CohortRowLoop.lean:43:56: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.67
+NJP_lean/NJP_CohortRowLoop.lean:44:20: error: Application type mismatch: The argument
+  (raw s).n
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ¬(raw s).n
+NJP_lean/NJP_CohortRowLoop.lean:44:31: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.76
+NJP_lean/NJP_CohortRowLoop.lean:64:22: error: Application type mismatch: The argument
+  rawHistory
+has type
+  ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1,
+        mapResult projectRow (ok (reference.Row.Stop stopped))).1 =
+    (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+          (eval (NJP_RequestTransport.hash H)
+              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).1,
+        (eval (NJP_RequestTransport.hash H)
+            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2).1
+but is expected to have type
+  ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1,
+        ok (NJP_LoopModel.Level.stop (raw stopped))).1 =
+    (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+          (eval (NJP_RequestTransport.hash H)
+              (if (raw s).n ≤ ↑i then
+                Program.done
+                  (ok
+                    (NJP_LoopModel.Level.done
+                      { indices := (raw s).indices, values := (raw s).values, n := ↑w, cursor := (raw s).cursor }))
+              else
+                AspisV8R19.OracleProgramOps.bind
+                  (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w) fun r =>
+                  match r with
+                  | ok a =>
+                    match a with
+                    | NJP_RowModel.Row.stop stopped => Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                    | NJP_RowModel.Row.next after ni nw =>
+                      NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel after ni nw
+                  | fail e => Program.done (fail e)
+                  | div => Program.done div)).1,
+        (eval (NJP_RequestTransport.hash H)
+            (if (raw s).n ≤ ↑i then
+              Program.done
+                (ok
+                  (NJP_LoopModel.Level.done
+                    { indices := (raw s).indices, values := (raw s).values, n := ↑w, cursor := (raw s).cursor }))
+            else
+              AspisV8R19.OracleProgramOps.bind
+                (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w) fun r =>
+                match r with
+                | ok a =>
+                  match a with
+                  | NJP_RowModel.Row.stop stopped => Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                  | NJP_RowModel.Row.next after ni nw =>
+                    NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel after ni nw
+                | fail e => Program.done (fail e)
+                | div => Program.done div)).2).1
+in the application
+  Prod.ext rawHistory
+NJP_lean/NJP_CohortRowLoop.lean:70:11: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map ?m.274 (?m.275 ++ ?m.276)
+in the target expression
+  ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1 ++
+        (eval H (AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).1,
+      mapResult projectLevel (eval H (AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).2) =
+    (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+        (eval (NJP_RequestTransport.hash H)
+            (if (raw s).n ≤ ↑i then
+              Program.done
+                (ok
+                  (NJP_LoopModel.Level.done
+                    { indices := (raw s).indices, values := (raw s).values, n := ↑w, cursor := (raw s).cursor }))
+            else
+              AspisV8R19.OracleProgramOps.bind
+                (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w) fun r =>
+                match r with
+                | ok a =>
+                  match a with
+                  | NJP_RowModel.Row.stop stopped => Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                  | NJP_RowModel.Row.next after ni nw =>
+                    NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel after ni nw
+                | fail e => Program.done (fail e)
+                | div => Program.done div)).1,
+      (eval (NJP_RequestTransport.hash H)
+          (if (raw s).n ≤ ↑i then
+            Program.done
+              (ok
+                (NJP_LoopModel.Level.done
+                  { indices := (raw s).indices, values := (raw s).values, n := ↑w, cursor := (raw s).cursor }))
+          else
+            AspisV8R19.OracleProgramOps.bind
+              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w) fun r =>
+              match r with
+              | ok a =>
+                match a with
+                | NJP_RowModel.Row.stop stopped => Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                | NJP_RowModel.Row.next after ni nw =>
+                  NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel after ni nw
+              | fail e => Program.done (fail e)
+              | div => Program.done div)).2)
+
+case neg.Next
+H : Slice (Slice U8) → RefDigest
+physical : Slice U8
+fuel : ℕ
+ih :
+  ∀ (s : reference.Scratch) (i w : Usize),
+    AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w →
+      let typed := eval H (AspisR1.MultiproofConePhysicalLevels.rows fuel s physical i w);
+      (typed.1, mapResult projectLevel typed.2) =
+        eval H
+          (NJP_RequestTransport.transport
+            (NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel (raw s) ↑i ↑w))
+s : reference.Scratch
+i w : Usize
+domain : AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w
+halt : ¬i ≥ s.n
+active : ↑i < ↑s.n
+halted : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+after : reference.Scratch
+ni nw : Usize
+nodeObs :
+  ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1,
+      mapResult projectRow (ok (reference.Row.Next after ni nw))) =
+    (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+        (eval (NJP_RequestTransport.hash H)
+            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).1,
+      (eval (NJP_RequestTransport.hash H)
+          (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2)
+result : reference.binary_step (digest H) () s physical i w = ok (reference.Row.Next after ni nw)
+progress : AspisR1.MultiproofConeNodeDomain.Progress physical s i w (reference.Row.Next after ni nw)
+nodeResult :
+  (eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).2 = ok (reference.Row.Next after ni nw)
+rawResult :
+  ok (projectRow (reference.Row.Next after ni nw)) =
+    (eval (NJP_RequestTransport.hash H)
+        (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2
+rawHistory :
+  ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1,
+        mapResult projectRow (ok (reference.Row.Next after ni nw))).1 =
+    (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+          (eval (NJP_RequestTransport.hash H)
+              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).1,
+        (eval (NJP_RequestTransport.hash H)
+            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2).1
+recurse :
+  ((eval H (AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).1,
+      mapResult projectLevel (eval H (AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).2) =
+    (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+        (eval (NJP_RequestTransport.hash H)
+            (NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel (raw after) ↑ni ↑nw)).1,
+      (eval (NJP_RequestTransport.hash H)
+          (NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel (raw after) ↑ni ↑nw)).2)
+⊢ ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1 ++
+        (eval H (AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).1,
+      mapResult projectLevel (eval H (AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).2) =
+    (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+        (eval (NJP_RequestTransport.hash H)
+            (if (raw s).n ≤ ↑i then
+              Program.done
+                (ok
+                  (NJP_LoopModel.Level.done
+                    { indices := (raw s).indices, values := (raw s).values, n := ↑w, cursor := (raw s).cursor }))
+            else
+              AspisV8R19.OracleProgramOps.bind
+                (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w) fun r =>
+                match r with
+                | ok a =>
+                  match a with
+                  | NJP_RowModel.Row.stop stopped => Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                  | NJP_RowModel.Row.next after ni nw =>
+                    NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel after ni nw
+                | fail e => Program.done (fail e)
+                | div => Program.done div)).1,
+      (eval (NJP_RequestTransport.hash H)
+          (if (raw s).n ≤ ↑i then
+            Program.done
+              (ok
+                (NJP_LoopModel.Level.done
+                  { indices := (raw s).indices, values := (raw s).values, n := ↑w, cursor := (raw s).cursor }))
+          else
+            AspisV8R19.OracleProgramOps.bind
+              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w) fun r =>
+              match r with
+              | ok a =>
+                match a with
+                | NJP_RowModel.Row.stop stopped => Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                | NJP_RowModel.Row.next after ni nw =>
+                  NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel after ni nw
+              | fail e => Program.done (fail e)
+              | div => Program.done div)).2)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    physical
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑physical
+NJP_lean/NJP_CohortRowLoop.lean:42:21: warning: This simp argument is unused:
+  NJP_RequestTransport.transport
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵s̵p̵i̵s̵R̵1̵.̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵P̵h̵y̵s̵i̵c̵a̵l̵L̵e̵v̵e̵l̵s̵.̵r̵o̵w̵s̵,̵N̵J̵P̵_̵L̵o̵o̵p̵M̵o̵d̵e̵l̵.̵r̵o̵w̵s̵,̵i̵f̵_̵p̵o̵s̵[̲A̲s̲p̲i̲s̲R̲1̲.̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲P̲h̲y̲s̲i̲c̲a̲l̲L̲e̲v̲e̲l̲s̲.̲r̲o̲w̲s̲,̲ ̲N̲J̲P̲_̲L̲o̲o̲p̲M̲o̲d̲e̲l̲.̲r̲o̲w̲s̲,̲ ̲i̲f̲_̲p̲o̲s̲ halt,
+         if_pos h̵a̵l̵t̵e̵d̵,̵N̵J̵P̵_̵R̵e̵q̵u̵e̵s̵t̵T̵r̵a̵n̵s̵p̵o̵r̵t̵.̵t̵r̵a̵n̵s̵p̵o̵r̵t̵,̵e̵v̵a̵l̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵,̵p̵r̵o̵j̵e̵c̵t̵L̵e̵v̵e̵l̵,̵r̵a̵w̵]̵h̲a̲l̲t̲e̲d̲,̲ ̲e̲v̲a̲l̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲,̲ ̲p̲r̲o̲j̲e̲c̲t̲L̲e̲v̲e̲l̲,̲ ̲r̲a̲w̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_CohortRowLoop.lean:60:71: warning: This simp argument is unused:
+  eval_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵J̵P̵_̵L̵o̵o̵p̵M̵o̵d̵e̵l̵.̵r̵o̵w̵s̵,̵i̵f̵_̵n̵e̵g̵ ̵h̵a̵l̵t̵e̵d̵,̵N̵J̵P̵_̵L̵o̵o̵p̵M̵o̵d̵e̵l̵.̵b̵i̵n̵d̵R̵u̵n̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵←̵r̵a̵w̵R̵e̵s̵u̵l̵t̵]̵[̲N̲J̲P̲_̲L̲o̲o̲p̲M̲o̲d̲e̲l̲.̲r̲o̲w̲s̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲h̲a̲l̲t̲e̲d̲,̲ ̲N̲J̲P̲_̲L̲o̲o̲p̲M̲o̲d̲e̲l̲.̲b̲i̲n̲d̲R̲u̲n̲,̲ ̲←̲ ̲r̲a̲w̲R̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_CohortRowLoop.lean:60:81: warning: This simp argument is unused:
+  ← rawResult
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵J̵P̵_̵L̵o̵o̵p̵M̵o̵d̵e̵l̵.̵r̵o̵w̵s̵,̵i̵f̵_̵n̵e̵g̵ ̵h̵a̵l̵t̵e̵d̵,̵N̵J̵P̵_̵L̵o̵o̵p̵M̵o̵d̵e̵l̵.̵b̵i̵n̵d̵R̵u̵n̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵←̵r̵a̵w̵R̵e̵s̵u̵l̵t̵]̵[̲N̲J̲P̲_̲L̲o̲o̲p̲M̲o̲d̲e̲l̲.̲r̲o̲w̲s̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲h̲a̲l̲t̲e̲d̲,̲ ̲N̲J̲P̲_̲L̲o̲o̲p̲M̲o̲d̲e̲l̲.̲b̲i̲n̲d̲R̲u̲n̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲]̲
+
+Note: Simp arguments with `←` have the additional effect of removing the other direction from the simp set, even if the simp argument itself is unused. If the hint above does not work, try replacing `←` with `-` to only get that effect and silence this warning.
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_CohortRowLoop.lean:63:18: warning: This simp argument is unused:
+  projectRow
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵j̵e̵c̵t̵R̵o̵w̵,̵p̵r̵o̵j̵e̵c̵t̵L̵e̵v̵e̵l̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵]̵[̲p̲r̲o̲j̲e̲c̲t̲L̲e̲v̲e̲l̲,̲ ̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_CohortRowLoop.lean:66:18: warning: This simp argument is unused:
+  projectRow
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵p̵r̵o̵j̵e̵c̵t̵R̵o̵w̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJP_CohortRowLoop.rows : ∀ (H : Slice (Slice U8) → RefDigest) (fuel : ℕ) (s : reference.Scratch)
+  (physical : Slice U8) (i w : Usize),
+  AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w →
+    have typed := eval H (AspisR1.MultiproofConePhysicalLevels.rows fuel s physical i w);
+    (typed.1, mapResult projectLevel typed.2) =
+      eval H
+        (NJP_RequestTransport.transport
+          (NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel (raw s) ↑i ↑w)) :=
+fun H fuel s physical i w domain =>
+  Nat.recAux (motive := fun fuel =>
+    ∀ (s : reference.Scratch) (i w : Usize),
+      AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w →
+        let typed := eval H (AspisR1.MultiproofConePhysicalLevels.rows fuel s physical i w);
+        (typed.1, mapResult projectLevel typed.2) =
+          eval H
+            (NJP_RequestTransport.transport
+              (NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel (raw s) ↑i ↑w)))
+    (fun s i w domain => if halt : i ≥ s.n then sorry else sorry)
+    (fun fuel ih s i w domain =>
+      if halt : i ≥ s.n then sorry
+      else
+        have active := sorry;
+        have halted := sorry;
+        have nodeObs := NJP_CohortNode.observation H s physical i w domain active;
+        let ⟨out, h✝⟩ :=
+          AspisR1.MultiproofConeNodeDomain.binary_step_progress (digest H) () (fun q => Exists.intro (H q) rfl) physical
+            s i w domain active
+        let ⟨result, progress⟩ := h✝
+        have nodeResult :=
+          Eq.trans (AspisR1.MultiproofConePhysicalProgram.node_result (digest H) () H (fun x => rfl) s physical i w)
+            result;
+        have rawResult :=
+          congrArg Prod.snd
+            (Eq.mp
+              (congrArg
+                (fun _a =>
+                  ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1, mapResult projectRow _a) =
+                    (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                        (eval (NJP_RequestTransport.hash H)
+                            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).1,
+                      (eval (NJP_RequestTransport.hash H)
+                          (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2))
+                nodeResult)
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    have typed := eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w);
+                    (typed.1, mapResult projectRow typed.2) = _a)
+                  (NJP_RequestTransport.observation H
+                    (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+                nodeObs));
+        have rawHistory :=
+          congrArg Prod.fst
+            (Eq.mp
+              (congrArg
+                (fun _a =>
+                  ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1, mapResult projectRow _a) =
+                    (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                        (eval (NJP_RequestTransport.hash H)
+                            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).1,
+                      (eval (NJP_RequestTransport.hash H)
+                          (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2))
+                nodeResult)
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    have typed := eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w);
+                    (typed.1, mapResult projectRow typed.2) = _a)
+                  (NJP_RequestTransport.observation H
+                    (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+                nodeObs));
+        Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (congr
+                  (congrArg Prod.mk
+                    (congrArg Prod.fst
+                      (Eq.trans
+                        (Eq.trans
+                          (congrArg (eval H)
+                            (Eq.trans
+                              (ite_congr (Eq.refl (i ≥ s.n))
+                                (fun a =>
+                                  Eq.refl
+                                    (Program.done
+                                      (ok (reference.Level.Done { idx := s.idx, val := s.val, n := w, «at» := s.at }))))
+                                fun a =>
+                                Eq.refl
+                                  (AspisV8R19.OracleProgramOps.bind
+                                    (AspisR1.MultiproofConePhysicalProgram.node s physical i w) fun result =>
+                                    match result with
+                                    | ok x =>
+                                      match x with
+                                      | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                                      | reference.Row.Next after ni nw =>
+                                        AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw
+                                    | fail e => Program.done (fail e)
+                                    | div => Program.done div))
+                              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg halt) x_0 x_1 x_2 x_3)
+                                (UScalarDecidableLE UScalarTy.Usize s.n i)
+                                (AspisR1.MultiproofConePhysicalProgram.Run reference.Level)
+                                (Program.done
+                                  (ok (reference.Level.Done { idx := s.idx, val := s.val, n := w, «at» := s.at })))
+                                (AspisV8R19.OracleProgramOps.bind
+                                  (AspisR1.MultiproofConePhysicalProgram.node s physical i w) fun result =>
+                                  match result with
+                                  | ok x =>
+                                    match x with
+                                    | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                                    | reference.Row.Next after ni nw =>
+                                      AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div))))
+                          (eval_bind (AspisR1.MultiproofConePhysicalProgram.node s physical i w)
+                            (fun result =>
+                              match result with
+                              | ok x =>
+                                match x with
+                                | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                                | reference.Row.Next after ni nw =>
+                                  AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div)
+                            H))
+                        (congr
+                          (congrArg Prod.mk
+                            (congrArg
+                              (HAppend.hAppend (eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1)
+                              (congrArg Prod.fst
+                                (congrArg (eval H)
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | ok x =>
+                                        match x with
+                                        | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                                        | reference.Row.Next after ni nw =>
+                                          AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw
+                                      | fail e => Program.done (fail e)
+                                      | div => Program.done div)
+                                    nodeResult)))))
+                          (congrArg Prod.snd
+                            (congrArg (eval H)
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | ok x =>
+                                    match x with
+                                    | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                                    | reference.Row.Next after ni nw =>
+                                      AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div)
+                                nodeResult)))))))
+                  (congrArg (mapResult projectLevel)
+                    (congrArg Prod.snd
+                      (Eq.trans
+                        (Eq.trans
+                          (congrArg (eval H)
+                            (Eq.trans
+                              (ite_congr (Eq.refl (i ≥ s.n))
+                                (fun a =>
+                                  Eq.refl
+                                    (Program.done
+                                      (ok (reference.Level.Done { idx := s.idx, val := s.val, n := w, «at» := s.at }))))
+                                fun a =>
+                                Eq.refl
+                                  (AspisV8R19.OracleProgramOps.bind
+                                    (AspisR1.MultiproofConePhysicalProgram.node s physical i w) fun result =>
+                                    match result with
+                                    | ok x =>
+                                      match x with
+                                      | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                                      | reference.Row.Next after ni nw =>
+                                        AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw
+                                    | fail e => Program.done (fail e)
+                                    | div => Program.done div))
+                              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg halt) x_0 x_1 x_2 x_3)
+                                (UScalarDecidableLE UScalarTy.Usize s.n i)
+                                (AspisR1.MultiproofConePhysicalProgram.Run reference.Level)
+                                (Program.done
+                                  (ok (reference.Level.Done { idx := s.idx, val := s.val, n := w, «at» := s.at })))
+                                (AspisV8R19.OracleProgramOps.bind
+                                  (AspisR1.MultiproofConePhysicalProgram.node s physical i w) fun result =>
+                                  match result with
+                                  | ok x =>
+                                    match x with
+                                    | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                                    | reference.Row.Next after ni nw =>
+                                      AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div))))
+                          (eval_bind (AspisR1.MultiproofConePhysicalProgram.node s physical i w)
+                            (fun result =>
+                              match result with
+                              | ok x =>
+                                match x with
+                                | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                                | reference.Row.Next after ni nw =>
+                                  AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div)
+                            H))
+                        (congr
+                          (congrArg Prod.mk
+                            (congrArg
+                              (HAppend.hAppend (eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1)
+                              (congrArg Prod.fst
+                                (congrArg (eval H)
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | ok x =>
+                                        match x with
+                                        | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                                        | reference.Row.Next after ni nw =>
+                                          AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw
+                                      | fail e => Program.done (fail e)
+                                      | div => Program.done div)
+                                    nodeResult)))))
+                          (congrArg Prod.snd
+                            (congrArg (eval H)
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | ok x =>
+                                    match x with
+                                    | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                                    | reference.Row.Next after ni nw =>
+                                      AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div)
+                                nodeResult)))))))))
+              (eval H
+                (NJP_RequestTransport.transport
+                  (NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length (fuel + 1) (raw s) ↑i ↑w)))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1 ++
+                        (eval H
+                            (match out with
+                            | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                            | reference.Row.Next after ni nw =>
+                              AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).1,
+                      mapResult projectLevel
+                        (eval H
+                            (match out with
+                            | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                            | reference.Row.Next after ni nw =>
+                              AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).2) =
+                    _a)
+                (NJP_RequestTransport.observation H
+                  (NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length (fuel + 1) (raw s) ↑i ↑w))))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (Eq
+                    ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1 ++
+                        (eval H
+                            (match out with
+                            | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                            | reference.Row.Next after ni nw =>
+                              AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).1,
+                      mapResult projectLevel
+                        (eval H
+                            (match out with
+                            | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                            | reference.Row.Next after ni nw =>
+                              AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).2))
+                  (congr
+                    (congrArg Prod.mk
+                      (congrArg (List.map fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                        (congrArg Prod.fst
+                          (congrArg (eval (NJP_RequestTransport.hash H))
+                            (ite_congr (Eq.refl ((raw s).n ≤ ↑i))
+                              (fun a =>
+                                Eq.refl
+                                  (Program.done
+                                    (ok
+                                      (NJP_LoopModel.Level.done
+                                        { indices := (raw s).indices, values := (raw s).values, n := ↑w,
+                                          cursor := (raw s).cursor }))))
+                              fun a =>
+                              Eq.refl
+                                (AspisV8R19.OracleProgramOps.bind
+                                  (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)
+                                  fun r =>
+                                  match r with
+                                  | ok a =>
+                                    match a with
+                                    | NJP_RowModel.Row.stop stopped =>
+                                      Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                                    | NJP_RowModel.Row.next after ni nw =>
+                                      NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel after ni nw
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div))))))
+                    (congrArg Prod.snd
+                      (congrArg (eval (NJP_RequestTransport.hash H))
+                        (ite_congr (Eq.refl ((raw s).n ≤ ↑i))
+                          (fun a =>
+                            Eq.refl
+                              (Program.done
+                                (ok
+                                  (NJP_LoopModel.Level.done
+                                    { indices := (raw s).indices, values := (raw s).values, n := ↑w,
+                                      cursor := (raw s).cursor }))))
+                          fun a =>
+                          Eq.refl
+                            (AspisV8R19.OracleProgramOps.bind
+                              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w) fun r =>
+                              match r with
+                              | ok a =>
+                                match a with
+                                | NJP_RowModel.Row.stop stopped => Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                                | NJP_RowModel.Row.next after ni nw =>
+                                  NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel after ni nw
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div)))))))
+              (reference.Row.casesOn (motive := fun t =>
+                out = t →
+                  ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1 ++
+                        (eval H
+                            (match out with
+                            | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                            | reference.Row.Next after ni nw =>
+                              AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).1,
+                      mapResult projectLevel
+                        (eval H
+                            (match out with
+                            | reference.Row.Stop stopped => Program.done (ok (reference.Level.Stop stopped))
+                            | reference.Row.Next after ni nw =>
+                              AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).2) =
+                    (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                        (eval (NJP_RequestTransport.hash H)
+                            (if (raw s).n ≤ ↑i then
+                              Program.done
+                                (ok
+                                  (NJP_LoopModel.Level.done
+                                    { indices := (raw s).indices, values := (raw s).values, n := ↑w,
+                                      cursor := (raw s).cursor }))
+                            else
+                              AspisV8R19.OracleProgramOps.bind
+                                (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w) fun r =>
+                                match r with
+                                | ok a =>
+                                  match a with
+                                  | NJP_RowModel.Row.stop stopped =>
+                                    Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                                  | NJP_RowModel.Row.next after ni nw =>
+                                    NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel after ni nw
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div)).1,
+                      (eval (NJP_RequestTransport.hash H)
+                          (if (raw s).n ≤ ↑i then
+                            Program.done
+                              (ok
+                                (NJP_LoopModel.Level.done
+                                  { indices := (raw s).indices, values := (raw s).values, n := ↑w,
+                                    cursor := (raw s).cursor }))
+                          else
+                            AspisV8R19.OracleProgramOps.bind
+                              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w) fun r =>
+                              match r with
+                              | ok a =>
+                                match a with
+                                | NJP_RowModel.Row.stop stopped => Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                                | NJP_RowModel.Row.next after ni nw =>
+                                  NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel after ni nw
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div)).2))
+                out
+                (fun stopped h =>
+                  Eq.ndrec (motive := fun out =>
+                    ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1,
+                          mapResult projectRow (ok out)) =
+                        (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                            (eval (NJP_RequestTransport.hash H)
+                                (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).1,
+                          (eval (NJP_RequestTransport.hash H)
+                              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2) →
+                      reference.binary_step (digest H) () s physical i w = ok out →
+                        AspisR1.MultiproofConeNodeDomain.Progress physical s i w out →
+                          (eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).2 = ok out →
+                            ok (projectRow out) =
+                                (eval (NJP_RequestTransport.hash H)
+                                    (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2 →
+                              ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1,
+                                      mapResult projectRow (ok out)).1 =
+                                  (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                        (eval (NJP_RequestTransport.hash H)
+                                            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i
+                                              ↑w)).1,
+                                      (eval (NJP_RequestTransport.hash H)
+                                          (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i
+                                            ↑w)).2).1 →
+                                ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1 ++
+                                      (eval H
+                                          (match out with
+                                          | reference.Row.Stop stopped =>
+                                            Program.done (ok (reference.Level.Stop stopped))
+                                          | reference.Row.Next after ni nw =>
+                                            AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).1,
+                                    mapResult projectLevel
+                                      (eval H
+                                          (match out with
+                                          | reference.Row.Stop stopped =>
+                                            Program.done (ok (reference.Level.Stop stopped))
+                                          | reference.Row.Next after ni nw =>
+                                            AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).2) =
+                                  (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                      (eval (NJP_RequestTransport.hash H)
+                                          (if (raw s).n ≤ ↑i then
+                                            Program.done
+                                              (ok
+                                                (NJP_LoopModel.Level.done
+                                                  { indices := (raw s).indices, values := (raw s).values, n := ↑w,
+                                                    cursor := (raw s).cursor }))
+                                          else
+                                            AspisV8R19.OracleProgramOps.bind
+                                              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s)
+                                                ↑i ↑w)
+                                              fun r =>
+                                              match r with
+                                              | ok a =>
+                                                match a with
+                                                | NJP_RowModel.Row.stop stopped =>
+                                                  Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                                                | NJP_RowModel.Row.next after ni nw =>
+                                                  NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel
+                                                    after ni nw
+                                              | fail e => Program.done (fail e)
+                                              | div => Program.done div)).1,
+                                    (eval (NJP_RequestTransport.hash H)
+                                        (if (raw s).n ≤ ↑i then
+                                          Program.done
+                                            (ok
+                                              (NJP_LoopModel.Level.done
+                                                { indices := (raw s).indices, values := (raw s).values, n := ↑w,
+                                                  cursor := (raw s).cursor }))
+                                        else
+                                          AspisV8R19.OracleProgramOps.bind
+                                            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i
+                                              ↑w)
+                                            fun r =>
+                                            match r with
+                                            | ok a =>
+                                              match a with
+                                              | NJP_RowModel.Row.stop stopped =>
+                                                Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                                              | NJP_RowModel.Row.next after ni nw =>
+                                                NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel
+                                                  after ni nw
+                                            | fail e => Program.done (fail e)
+                                            | div => Program.done div)).2))
+                    (fun nodeObs result progress nodeResult rawResult rawHistory => sorry) (Eq.symm h)
+                    (Eq.mp
+                      (congrArg
+                        (fun _a =>
+                          ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1,
+                              mapResult projectRow _a) =
+                            (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                (eval (NJP_RequestTransport.hash H)
+                                    (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).1,
+                              (eval (NJP_RequestTransport.hash H)
+                                  (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2))
+                        nodeResult)
+                      (Eq.mp
+                        (congrArg
+                          (fun _a =>
+                            have typed := eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w);
+                            (typed.1, mapResult projectRow typed.2) = _a)
+                          (NJP_RequestTransport.observation H
+                            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+                        nodeObs))
+                    result progress nodeResult rawResult rawHistory)
+                (fun after ni nw h =>
+                  Eq.ndrec (motive := fun out =>
+                    ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1,
+                          mapResult projectRow (ok out)) =
+                        (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                            (eval (NJP_RequestTransport.hash H)
+                                (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).1,
+                          (eval (NJP_RequestTransport.hash H)
+                              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2) →
+                      reference.binary_step (digest H) () s physical i w = ok out →
+                        AspisR1.MultiproofConeNodeDomain.Progress physical s i w out →
+                          (eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).2 = ok out →
+                            ok (projectRow out) =
+                                (eval (NJP_RequestTransport.hash H)
+                                    (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2 →
+                              ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1,
+                                      mapResult projectRow (ok out)).1 =
+                                  (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                        (eval (NJP_RequestTransport.hash H)
+                                            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i
+                                              ↑w)).1,
+                                      (eval (NJP_RequestTransport.hash H)
+                                          (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i
+                                            ↑w)).2).1 →
+                                ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1 ++
+                                      (eval H
+                                          (match out with
+                                          | reference.Row.Stop stopped =>
+                                            Program.done (ok (reference.Level.Stop stopped))
+                                          | reference.Row.Next after ni nw =>
+                                            AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).1,
+                                    mapResult projectLevel
+                                      (eval H
+                                          (match out with
+                                          | reference.Row.Stop stopped =>
+                                            Program.done (ok (reference.Level.Stop stopped))
+                                          | reference.Row.Next after ni nw =>
+                                            AspisR1.MultiproofConePhysicalLevels.rows fuel after physical ni nw)).2) =
+                                  (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                      (eval (NJP_RequestTransport.hash H)
+                                          (if (raw s).n ≤ ↑i then
+                                            Program.done
+                                              (ok
+                                                (NJP_LoopModel.Level.done
+                                                  { indices := (raw s).indices, values := (raw s).values, n := ↑w,
+                                                    cursor := (raw s).cursor }))
+                                          else
+                                            AspisV8R19.OracleProgramOps.bind
+                                              (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s)
+                                                ↑i ↑w)
+                                              fun r =>
+                                              match r with
+                                              | ok a =>
+                                                match a with
+                                                | NJP_RowModel.Row.stop stopped =>
+                                                  Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                                                | NJP_RowModel.Row.next after ni nw =>
+                                                  NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel
+                                                    after ni nw
+                                              | fail e => Program.done (fail e)
+                                              | div => Program.done div)).1,
+                                    (eval (NJP_RequestTransport.hash H)
+                                        (if (raw s).n ≤ ↑i then
+                                          Program.done
+                                            (ok
+                                              (NJP_LoopModel.Level.done
+                                                { indices := (raw s).indices, values := (raw s).values, n := ↑w,
+                                                  cursor := (raw s).cursor }))
+                                        else
+                                          AspisV8R19.OracleProgramOps.bind
+                                            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i
+                                              ↑w)
+                                            fun r =>
+                                            match r with
+                                            | ok a =>
+                                              match a with
+                                              | NJP_RowModel.Row.stop stopped =>
+                                                Program.done (ok (NJP_LoopModel.Level.stop stopped))
+                                              | NJP_RowModel.Row.next after ni nw =>
+                                                NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel
+                                                  after ni nw
+                                            | fail e => Program.done (fail e)
+                                            | div => Program.done div)).2))
+                    (fun nodeObs result progress nodeResult rawResult rawHistory => sorry) (Eq.symm h)
+                    (Eq.mp
+                      (congrArg
+                        (fun _a =>
+                          ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1,
+                              mapResult projectRow _a) =
+                            (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                (eval (NJP_RequestTransport.hash H)
+                                    (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).1,
+                              (eval (NJP_RequestTransport.hash H)
+                                  (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2))
+                        nodeResult)
+                      (Eq.mp
+                        (congrArg
+                          (fun _a =>
+                            have typed := eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w);
+                            (typed.1, mapResult projectRow typed.2) = _a)
+                          (NJP_RequestTransport.observation H
+                            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+                        nodeObs))
+                    result progress nodeResult rawResult rawHistory)
+                (Eq.refl out)))))
+    fuel s i w domain
+'NJP_CohortRowLoop.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

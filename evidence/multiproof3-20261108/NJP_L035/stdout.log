@@ -1,0 +1,123 @@
+NJP_lean/NJP_WriteCarrier.lean:14:1: error: 'change' tactic failed, pattern
+  9217 < 2 ^ System.Platform.numBits
+is not definitionally equal to target
+  ↑9217#usize < UScalar.size UScalarTy.Usize
+NJP_lean/NJP_WriteCarrier.lean:18:5: warning: Variable name `bound` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NJP_lean/NJP_WriteCarrier.lean:41:7: error(lean.unknownIdentifier): Unknown constant `NJP_RowModel.Scratch.ext`
+NJP_lean/NJP_WriteCarrier.lean:42:1: error: No goals to be solved
+theorem NJP_WriteCarrier.small_size : ∀ n ≤ 9216, ↑(size n) = n :=
+fun n bound =>
+  size_value n
+    (have capacity := UScalar.hSize 9217#usize;
+    sorry capacity)
+'NJP_WriteCarrier.small_size' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJP_WriteCarrier.index_set : ∀ (a : Std.Array U32 16#usize) (w : Usize) (x : U32),
+  ↑w < 16 → ∀ (k : Fin 16), decodeIndices (a.set w x) k = if ↑k = ↑w then ↑x else decodeIndices a k :=
+fun a w x bound k =>
+  have len := a.property;
+  if same : ↑k = ↑w then
+    of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (congrArg UScalar.val
+              (Eq.trans
+                (GetElem.getElem.congr_simp (↑(a.set w x)) ((↑a).set (↑w) x) (Array.set_val_eq a w x) (↑k) (↑w) same
+                  (decodeIndices._proof_2 (a.set w x) k))
+                (List.getElem_set_self (Array.set_val_eq a w x ▸ same ▸ decodeIndices._proof_2 (a.set w x) k)))))
+          (ite_cond_eq_true (↑x) (decodeIndices a k) (Eq.trans (congrFun' (congrArg Eq same) ↑w) (eq_self ↑w))))
+        (eq_self ↑x))
+  else
+    of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (congrArg UScalar.val
+              (Eq.trans
+                (GetElem.getElem.congr_simp (↑(a.set w x)) ((↑a).set (↑w) x) (Array.set_val_eq a w x) (↑k) (↑k)
+                  (Eq.refl ↑k) (decodeIndices._proof_2 (a.set w x) k))
+                (List.set_getElem!_not_eq (↑a) (↑w) (↑k) x
+                  (of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (Eq.trans
+                            (congrArg (Or ¬↑w = ↑k)
+                              (Eq.trans
+                                (congr (congrArg Or (Eq.trans (congrArg Not (eq_false same)) not_false_eq_true))
+                                  lt_or_lt_iff_ne._simp_2)
+                                (true_or ¬↑w = ↑k)))
+                            (or_true ¬↑w = ↑k)))
+                        (Eq.trans
+                          (congrArg (LT.lt ↑k)
+                            (Eq.trans (List.Vector.length_val a)
+                              (UScalar.ofNatCore_val_eq
+                                (UScalar.bound_suffices UScalarTy.Usize 16 (of_decide_eq_true (id (Eq.refl true)))))))
+                          (Fin.is_lt._simp_1 k)))
+                      (and_self True)))))))
+          (ite_cond_eq_false (↑x) (decodeIndices a k) (eq_false same)))
+        (eq_self ↑(↑a)[↑k]))
+'NJP_WriteCarrier.index_set' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_WriteCarrier.value_set : ∀ (s : reference.Scratch) (w : Usize) (reply : RefDigest),
+  ↑w < 16 →
+    ∀ (k : Fin 16), decodeValues (s.val.set w reply) k = if ↑k = ↑w then decode reply else decodeValues s.val k :=
+fun s w reply bound k =>
+  have law := AspisR1.MultiproofConePhysicalDigest.set_digest s w reply bound (↑k) k.isLt;
+  have before := s.val.property;
+  have after := (s.val.set w reply).property;
+  id
+    (if same : ↑k = ↑w then
+      Eq.mpr
+        (id
+          (congrArg (Eq (decode (↑(s.val.set w reply))[↑k]))
+            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos same) x_0 x_1 x_2 x_3) (instDecidableEqNat ↑k ↑w)
+              (Fin 32 → U8) (decode reply) (decode (↑s.val)[↑k]))))
+        (Eq.mp
+          (congrArg (Eq (decode (↑(s.val.set w reply))[↑k]))
+            (congrArg decode
+              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos same) x_0 x_1 x_2 x_3) (instDecidableEqNat ↑k ↑w)
+                (Std.Array U8 32#usize) reply (↑s.val)[↑k])))
+          (congrArg decode
+            (Eq.mp
+              (congrArg (fun _a => (↑(s.val.set w reply))[↑k] = if ↑k = ↑w then reply else _a)
+                (getElem!_pos (↑s.val) (↑k)
+                  (Decidable.byContradiction fun a => value_set._proof_2 s w reply k before a)))
+              (Eq.mp
+                (congrArg (fun _a => _a = if ↑k = ↑w then reply else (↑s.val)[↑k]!)
+                  (getElem!_pos (↑(s.val.set w reply)) (↑k)
+                    (Decidable.byContradiction fun a => value_set._proof_1 s w reply k after a)))
+                law))))
+    else
+      Eq.mpr
+        (id
+          (congrArg (Eq (decode (↑(s.val.set w reply))[↑k]))
+            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg same) x_0 x_1 x_2 x_3) (instDecidableEqNat ↑k ↑w)
+              (Fin 32 → U8) (decode reply) (decode (↑s.val)[↑k]))))
+        (Eq.mp
+          (congrArg (Eq (decode (↑(s.val.set w reply))[↑k]))
+            (congrArg decode
+              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg same) x_0 x_1 x_2 x_3) (instDecidableEqNat ↑k ↑w)
+                (Std.Array U8 32#usize) reply (↑s.val)[↑k])))
+          (congrArg decode
+            (Eq.mp
+              (congrArg (fun _a => (↑(s.val.set w reply))[↑k] = if ↑k = ↑w then reply else _a)
+                (getElem!_pos (↑s.val) (↑k)
+                  (Decidable.byContradiction fun a => value_set._proof_2 s w reply k before a)))
+              (Eq.mp
+                (congrArg (fun _a => _a = if ↑k = ↑w then reply else (↑s.val)[↑k]!)
+                  (getElem!_pos (↑(s.val.set w reply)) (↑k)
+                    (Decidable.byContradiction fun a => value_set._proof_1 s w reply k after a)))
+                law)))))
+'NJP_WriteCarrier.value_set' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_WriteCarrier.complete_write : ∀ (s : reference.Scratch) (i w cursor : Usize) (parent : U32)
+  (reply : RefDigest),
+  ↑w < 16 →
+    ↑parent = index (raw s) ↑i / 2 →
+      raw { idx := s.idx.set w parent, val := s.val.set w reply, n := s.n, «at» := cursor } =
+        write (raw s) (↑i) (↑w) (↑cursor) (decode reply) :=
+fun s i w cursor parent reply bound parent_value => sorry
+'NJP_WriteCarrier.complete_write' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,40 @@
+{"attempt": "NJP_L003", "exit_status": 0, "wall_seconds": 2.568569855997339, "peak_rss_kib": "3848168", "swaps": "0", "print_axioms": ["'NJP_FieldEncoding.value' depends on axioms: [propext, Quot.sound]", "'NJP_FieldEncoding.canonical' depends on axioms: [propext, Quot.sound]", "'NJP_FieldEncoding.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_FieldEncoding.faithful' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_FieldEncoding.unique' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJP_FieldEncoding.value : ∀ (x : K), ↑(word x) = ZMod.val x :=
+fun x =>
+  Eq.mpr (id (congrArg (fun _a => ↑_a = ZMod.val x) (word.eq_1 x)))
+    (Eq.mpr (id (congrArg (fun _a => _a = ZMod.val x) (NJE_Residue.value (ZMod.val x))))
+      (Nat.mod_eq_of_lt (ZMod.val_lt x)))
+'NJP_FieldEncoding.value' depends on axioms: [propext, Quot.sound]
+theorem NJP_FieldEncoding.canonical : ∀ (x : K), ↑(word x) < 2147483647 :=
+fun x => NJE_Residue.canonical (ZMod.val x)
+'NJP_FieldEncoding.canonical' depends on axioms: [propext, Quot.sound]
+theorem NJP_FieldEncoding.decoded : ∀ (x : K), ↑↑(word x) = x :=
+fun x => Eq.mpr (id (congrArg (fun _a => ↑_a = x) (value x))) (ZMod.natCast_zmod_val x)
+'NJP_FieldE
+...
+theorem NJP_FieldEncoding.value : ∀ (x : K), ↑(word x) = ZMod.val x :=
+fun x =>
+  Eq.mpr (id (congrArg (fun _a => ↑_a = ZMod.val x) (word.eq_1 x)))
+    (Eq.mpr (id (congrArg (fun _a => _a = ZMod.val x) (NJE_Residue.value (ZMod.val x))))
+      (Nat.mod_eq_of_lt (ZMod.val_lt x)))
+'NJP_FieldEncoding.value' depends on axioms: [propext, Quot.sound]
+theorem NJP_FieldEncoding.canonical : ∀ (x : K), ↑(word x) < 2147483647 :=
+fun x => NJE_Residue.canonical (ZMod.val x)
+'NJP_FieldEncoding.canonical' depends on axioms: [propext, Quot.sound]
+theorem NJP_FieldEncoding.decoded : ∀ (x : K), ↑↑(word x) = x :=
+fun x => Eq.mpr (id (congrArg (fun _a => ↑_a = x) (value x))) (ZMod.natCast_zmod_val x)
+'NJP_FieldEncoding.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_FieldEncoding.faithful : ∀ (x y : U32), ↑x < 2147483647 → ↑y < 2147483647 → ↑↑x = ↑↑y → x = y :=
+fun x y hx hy same =>
+  have values := congrArg ZMod.val same;
+  UScalar.eq_of_val_eq
+    (Eq.mp
+      (congr (congrArg Eq (Eq.trans (ZMod.val_natCast AspisV8R15.ExactTowerBase.P ↑x) (Nat.mod_eq_of_lt hx)))
+        (Eq.trans (ZMod.val_natCast AspisV8R15.ExactTowerBase.P ↑y) (Nat.mod_eq_of_lt hy)))
+      values)
+'NJP_FieldEncoding.faithful' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_FieldEncoding.unique : ∀ (x : U32) (z : K), ↑x < 2147483647 → ↑↑x = z → x = word z :=
+fun x z hx same => faithful x (word z) hx (canonical z) (Eq.trans same (Eq.symm (decoded z)))
+'NJP_FieldEncoding.unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb6922ca40b4647c08332156323dbf846.scope; invocation ID: 02d8d901e61347658d0cebbd2d272aa6

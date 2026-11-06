@@ -1,0 +1,53 @@
+{"attempt": "NJP_L060", "exit_status": 1, "wall_seconds": 7.553751869825646, "peak_rss_kib": "5846800", "swaps": "0", "print_axioms": ["'NJP_CohortRowLoop.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJP_lean/NJP_CohortRowLoop.lean:32:3: error: unsolved goals
+case pos
+H : Slice (Slice U8) → RefDigest
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w
+halt : i ≥ s.n
+halted : (raw s).n ≤ ↑i
+⊢ ([],
+      ok
+        (NJP_LoopModel.Level.done
+          { indices := decodeIndices s.idx, values := decodeValues s.val, n := ↑w, cursor := ↑s.at })) =
+    ([],
+      if ↑s.n ≤ ↑i then
+        ok
+          (NJP_LoopModel.Level.done
+            { indices := decodeIndices s.idx, values := decodeValues s.val, n := ↑w, cursor := ↑s.at })
+      else div)
+NJP_lean/NJP_CohortRowLoop.lean:40:3: error: unsolved goals
+case pos
+H : Slice (Sli
+...
+         | NJP_RowModel.Row.next after ni nw =>
+                                          NJP_LoopModel.rows (fun n => (↑physical)[n]!) (↑physical).length fuel after ni
+                                            nw)).2))
+                    (fun nodeObs result progress nodeResult rawResult rawHistory => sorry) (Eq.symm h)
+                    (Eq.mp
+                      (congrArg
+                        (fun _a =>
+                          ((eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w)).1,
+                              mapResult projectRow _a) =
+                            (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                                (eval (NJP_RequestTransport.hash H)
+                                    (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).1,
+                              (eval (NJP_RequestTransport.hash H)
+                                  (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)).2))
+                        nodeResult)
+                      (Eq.mp
+                        (congrArg
+                          (fun _a =>
+                            have typed := eval H (AspisR1.MultiproofConePhysicalProgram.node s physical i w);
+                            (typed.1, mapResult projectRow typed.2) = _a)
+                          (NJP_RequestTransport.observation H
+                            (NJP_RowModel.node (fun n => (↑physical)[n]!) (↑physical).length (raw s) ↑i ↑w)))
+                        nodeObs))
+                    result progress nodeResult rawResult rawHistory)
+                (Eq.refl out)))))
+    fuel s i w domain
+'NJP_CohortRowLoop.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfc7aeda26c5c4787a4fc1f236f312205.scope; invocation ID: 82e1df8869bf45c5977d20c93e510966

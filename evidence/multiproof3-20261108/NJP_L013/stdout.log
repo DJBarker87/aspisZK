@@ -1,0 +1,85 @@
+theorem NJP_LoopBind.returned : ∀ {α β : Type} (H : Request → Digest) (p : Program Request Digest (Result α))
+  (f : α → Program Request Digest (Result β)) (history : List (Request × Digest)) (x : α),
+  eval H p = (history, ok x) → eval H (bindRun p f) = (history ++ (eval H (f x)).1, (eval H (f x)).2) :=
+fun {α β} H p f history x same =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (eval_bind p
+              (fun r =>
+                match r with
+                | ok a => f a
+                | fail e => Program.done (fail e)
+                | div => Program.done div)
+              H)
+            (congr
+              (congrArg Prod.mk
+                (congr (congrArg HAppend.hAppend (congrArg Prod.fst same))
+                  (congrArg Prod.fst
+                    (congrArg (eval H)
+                      (congrArg
+                        (fun x =>
+                          match x.2 with
+                          | ok a => f a
+                          | fail e => Program.done (fail e)
+                          | div => Program.done div)
+                        same)))))
+              (congrArg Prod.snd
+                (congrArg (eval H)
+                  (congrArg
+                    (fun x =>
+                      match x.2 with
+                      | ok a => f a
+                      | fail e => Program.done (fail e)
+                      | div => Program.done div)
+                    same))))))
+        (history ++ (eval H (f x)).1, (eval H (f x)).2))
+      (eq_self (history ++ (eval H (f x)).1, (eval H (f x)).2)))
+'NJP_LoopBind.returned' depends on axioms: [propext]
+theorem NJP_LoopBind.stopped_row : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length fuel : ℕ) (s stopped : Scratch)
+  (i w : ℕ),
+  ¬s.n ≤ i →
+    ∀ (history : List (Request × Digest)),
+      eval H (node nodes length s i w) = (history, ok (Row.stop stopped)) →
+        eval H (rows nodes length (fuel + 1) s i w) = (history, ok (Level.stop stopped)) :=
+fun H nodes length fuel s stopped i w active history stopped_at =>
+  Eq.mpr (id (congrArg (fun _a => eval H _a = (history, ok (Level.stop stopped))) (rows.eq_2 nodes length s i w fuel)))
+    (Eq.mpr (id (congrArg (fun _a => eval H _a = (history, ok (Level.stop stopped))) (if_neg active)))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = (history, ok (Level.stop stopped)))
+            (returned H (node nodes length s i w)
+              (fun result =>
+                match result with
+                | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                | Row.next after ni nw => rows nodes length fuel after ni nw)
+              history (Row.stop stopped) stopped_at)))
+        (of_eq_true
+          (Eq.trans
+            (congrFun' (congrArg Eq (congrFun' (congrArg Prod.mk (List.append_nil history)) (ok (Level.stop stopped))))
+              (history, ok (Level.stop stopped)))
+            (eq_self (history, ok (Level.stop stopped)))))))
+'NJP_LoopBind.stopped_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_LoopBind.stopped_level : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length height : ℕ) (s stopped : Scratch)
+  (history : List (Request × Digest)),
+  eval H (level nodes length s) = (history, ok (Level.stop stopped)) →
+    eval H (levels nodes length (height + 1) s) = (history, ok (Level.stop stopped)) :=
+fun H nodes length height s stopped history stopped_at =>
+  Eq.mpr (id (congrArg (fun _a => eval H _a = (history, ok (Level.stop stopped))) (levels.eq_2 nodes length s height)))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a = (history, ok (Level.stop stopped)))
+          (returned H (level nodes length s)
+            (fun result =>
+              match result with
+              | Level.stop stopped => Program.done (ok (Level.stop stopped))
+              | Level.done after => levels nodes length height after)
+            history (Level.stop stopped) stopped_at)))
+      (of_eq_true
+        (Eq.trans
+          (congrFun' (congrArg Eq (congrFun' (congrArg Prod.mk (List.append_nil history)) (ok (Level.stop stopped))))
+            (history, ok (Level.stop stopped)))
+          (eq_self (history, ok (Level.stop stopped))))))
+'NJP_LoopBind.stopped_level' depends on axioms: [propext, Classical.choice, Quot.sound]

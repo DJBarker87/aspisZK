@@ -1,0 +1,48 @@
+theorem NJP_WindowCarrier.length : ∀ (physical : Slice U8) (at1 : ℕ),
+  at1 + 32 ≤ (↑physical).length → (bytes physical at1).length = 32 :=
+fun physical at1 available =>
+  Eq.mpr (id (congrFun' (congrArg Eq (Eq.trans List.length_take (congrArg (min 32) List.length_drop))) 32))
+    (Decidable.byContradiction fun a => length._proof_2 physical at1 available a)
+'NJP_WindowCarrier.length' depends on axioms: [propext, Quot.sound]
+theorem NJP_WindowCarrier.contents : ∀ (physical : Slice U8) (at1 : ℕ),
+  at1 + 32 ≤ (↑physical).length → ↑(encode (window (fun n => (↑physical)[n]!) at1)) = bytes physical at1 :=
+fun physical at1 available =>
+  List.ext_getElem
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => (↑(encode (window (fun n => (↑physical)[n]!) at1))).length = _a)
+          (length physical at1 available)))
+      (of_eq_true (Eq.trans (congrFun' (congrArg Eq List.length_ofFn) 32) (eq_self 32))))
+    fun j left right =>
+    have byte_bound := Eq.mp (congrArg (LT.lt j) List.length_ofFn) left;
+    Eq.mpr
+      (id
+        (congr
+          (congrArg Eq
+            (List.getElem_ofFn (id (Eq.refl (List.ofFn (window (fun n => (↑physical)[n]!) at1))) ▸ Eq.refl j ▸ left)))
+          (Eq.trans List.getElem_take List.getElem_drop)))
+      (id
+        (getElem!_pos (↑physical) (at1 + j)
+          (Decidable.byContradiction fun a => contents._proof_1 physical at1 available j byte_bound a)))
+'NJP_WindowCarrier.contents' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_WindowCarrier.reader : ∀ (physical : Slice U8) (at1 : ℕ),
+  at1 + 32 ≤ (↑physical).length →
+    reference.read32 (view physical at1) = ok (encode (window (fun n => (↑physical)[n]!) at1)) :=
+fun physical at1 available =>
+  let ⟨out, h✝⟩ :=
+    AspisR1.MultiproofConeRead32.read32_total (view physical at1)
+      (id (Eq.mpr (id (congrArg (fun _a => 32 ≤ _a) (length physical at1 available))) (le_refl 32)))
+  let ⟨read, same⟩ := h✝
+  have out_contents :=
+    id
+      (Eq.mp
+        (congrArg (Eq ↑out)
+          (Eq.trans List.take_take (congrFun' (congrArg List.take (Nat.min_self 32)) (List.drop at1 ↑physical))))
+        same);
+  have out_eq := Subtype.ext (Eq.trans out_contents (Eq.symm (contents physical at1 available)));
+  Eq.mp (congrArg (Eq (reference.read32 (view physical at1))) (congrArg ok out_eq)) read
+'NJP_WindowCarrier.reader' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_WindowCarrier.missing_iff : ∀ (byteLength at1 : ℕ),
+  at1 ≤ byteLength → (byteLength - at1 < 32 ↔ byteLength < at1 + 32) :=
+fun byteLength at1 cursor => Decidable.byContradiction fun a => missing_iff._proof_1 byteLength at1 cursor a
+'NJP_WindowCarrier.missing_iff' depends on axioms: [propext, Classical.choice, Quot.sound]

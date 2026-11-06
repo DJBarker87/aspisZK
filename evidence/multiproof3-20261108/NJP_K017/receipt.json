@@ -1,0 +1,84 @@
+{
+  "attempt": "NJP_K017",
+  "kind": "kani",
+  "module": "NJP_binary_row_window",
+  "sources": [
+    "NJP_gate.py",
+    "NJP_multiproof.rs",
+    "NJP_poseidon.rs",
+    "NJP_CONTROLLER_SOURCE.json"
+  ],
+  "upload": [
+    "NJP_gate.py",
+    "NJP_multiproof.rs",
+    "NJP_poseidon.rs",
+    "NJP_CONTROLLER_SOURCE.json"
+  ],
+  "command": [
+    "python3",
+    "NJP_gate.py",
+    "NJP_K017.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "multiproof::NJP_native::NJP_binary_row_window",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 180,
+  "source_revision": "97e4b22d83d06cf4efddb7315f5088ab3c24d01b",
+  "expected_time": "ONE full-range arbitrary-prestate paired branch, assertion family 0; no whole-buffer loop",
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_target",
+    "CARGO_NET_OFFLINE": "true",
+    "RUSTFLAGS": "--cfg NJP_row_0 --cfg NJP_pair_class --cfg NJP_good_argument"
+  },
+  "collect": [
+    "NJP_K017_validation"
+  ],
+  "expected_failure": false,
+  "lane": "multiproof",
+  "configuration_source_revision": "",
+  "source_tree_dirty": true,
+  "exit_status": 0,
+  "wall_seconds": 70.9113884579856,
+  "peak_rss_kib": "4851696",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r0052686ef32d4859be4e5312c16d46e8.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "5440057344",
+  "source_hashes": {
+    "NJP_gate.py": "82ea65ad0ea8a2af023dbb80326971db495bd7be6ce54e5245c9fe6242a5832c",
+    "NJP_multiproof.rs": "40fef35d873d7d1d2264c63c20c899a870c2cb01c07985971a39c504b9935c08",
+    "NJP_poseidon.rs": "fe1441865c9c98f6accc4d78a6b6cbddc43caa84f96f1e4aa28d37f7f90902fd",
+    "NJP_CONTROLLER_SOURCE.json": "32548bcf2c62e7fb1c12e9e9fc8dfa4a476eddaa1de05fdde41925b240fe2ce1"
+  },
+  "deps_fingerprint": "Std from pinned Lean sysroot only",
+  "print_axioms": "N/A: kani"
+}

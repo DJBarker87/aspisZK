@@ -1,0 +1,53 @@
+{"attempt": "NJP_L033", "exit_status": 0, "wall_seconds": 3.3605179379228503, "peak_rss_kib": "4350204", "swaps": "0", "print_axioms": ["'NJP_ScratchCarrier.indices_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_ScratchCarrier.indices_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_ScratchCarrier.roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_ScratchCarrier.faithful' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJP_ScratchCarrier.index_bound' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJP_ScratchCarrier.indices_coordinate : ∀ (indices : Fin 16 → ℕ),
+  (∀ (i : Fin 16), indices i < 2 ^ 32) → ∀ (i : Fin 16), decodeIndices (encodeIndices indices) i = indices i :=
+fun indices bounded i =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congrArg UScalar.val
+            (List.getElem_ofFn
+              (id (Eq.refl (List.ofFn fun i => word (indices i))) ▸
+                Eq.refl ↑i ▸ decodeIndices._proof_2 (encodeIndices indices) i))))
+        (indices i)))
+    (word_value
+      (indices
+        ⟨↑i,
+          List.getElem_ofFn._proof_1
+            (id (Eq.refl (List.ofFn fun i => word (indices i))) ▸
+              Eq.refl ↑i ▸ decodeIndices._proof_2 (e
+...
+   (List.ofFn fun i => (↑indices)[↑i])
+                      (congrArg List.ofFn (funext fun i => word_roundtrip (↑indices)[↑i]))
+                      (encodeIndices._proof_2 (decodeIndices indices))) ▸
+                  Eq.refl j ▸ left))))
+          (↑indices)[j])
+        (eq_self (↑indices)[j]))
+'NJP_ScratchCarrier.indices_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_ScratchCarrier.roundtrip : ∀ (s : reference.Scratch), emitted (raw s) = s :=
+fun s =>
+  let ⟨idx✝, val✝, n✝, at✝, h✝⟩ := s
+  Eq.symm h✝ ▸
+    of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (congr
+              (congr (congr (congrArg reference.Scratch.mk (indices_roundtrip idx✝)) (values_roundtrip val✝))
+                (size_roundtrip n✝))
+              (size_roundtrip at✝)))
+          { idx := idx✝, val := val✝, n := n✝, «at» := at✝ })
+        (eq_self { idx := idx✝, val := val✝, n := n✝, «at» := at✝ }))
+'NJP_ScratchCarrier.roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_ScratchCarrier.faithful : ∀ (left right : reference.Scratch), raw left = raw right → left = right :=
+fun left right same =>
+  Eq.mpr (id (congrArg (fun _a => _a = right) (Eq.symm (roundtrip left))))
+    (Eq.mpr (id (congrArg (fun _a => emitted (raw left) = _a) (Eq.symm (roundtrip right))))
+      (Eq.mpr (id (congrArg (fun _a => emitted _a = emitted (raw right)) same)) (Eq.refl (emitted (raw right)))))
+'NJP_ScratchCarrier.faithful' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_ScratchCarrier.index_bound : ∀ (s : reference.Scratch) (i : Fin 16), (raw s).indices i < 2 ^ 32 :=
+fun s i => id (BitVec.isLt (↑s.idx)[↑i].bv)
+'NJP_ScratchCarrier.index_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r21a39e5973d4491a838e63b048bbb843.scope; invocation ID: 31c9ff758ed940e7906d5a99420c331e
