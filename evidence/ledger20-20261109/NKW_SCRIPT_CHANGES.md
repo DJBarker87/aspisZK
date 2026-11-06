@@ -1,0 +1,1 @@
+NKW scripts adapt NKN owned clients by prefix/path only. Predecessor closure now NKN. No launcher/shim/reservation infrastructure is changed. Exactly30 disjoint raw groups retain the hardened NEP walker and eight fixtures; no checks removed. NKW_L039 prints candidate endpoints/cut definitions; NKW_L040 pins the closure and exports own objects. No 16GiB scope needed to date.
