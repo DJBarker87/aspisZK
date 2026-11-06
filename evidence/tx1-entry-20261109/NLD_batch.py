@@ -5,6 +5,7 @@ B=Path.cwd();mode=sys.argv[1];E=B/'NLD_audit'/mode;E.mkdir(parents=True,exist_ok
 if mode=='close':
  exec(compile((B/'NLD_pin.py').read_text(),'NLD_pin.py','exec'));sys.exit(0)
 if mode=='review-close':jobs=[('review',[os.environ['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NLD_generated','-o','NLD_objects/NLD_HypothesisReview.olean','NLD_generated/NLD_HypothesisReview.lean'])]
+elif mode=='retention':jobs=[('retention',['python3','NLD_retention.py'])]
 elif mode.startswith('inventory-'):jobs=[(mode,['NLD_native/NLD_InventoryDriver',mode.split('-')[1]])]
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NLD_native/'+('NLD_PoolDriver' if mode=='poolscan' else 'NLD_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
 elif mode in ['fixtures','scan','scan2']:jobs=[('scan' if mode=='scan2' else mode,['NLD_native/'+('NLD_Driver' if mode.startswith('scan') else 'NLD_ProofDriver'),'scan' if mode=='scan2' else mode])]

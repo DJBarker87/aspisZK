@@ -49,12 +49,14 @@ elif kind=='link':
  sources=['NLD_native/'+target+'.c','NLD_native/NFA_WALKER.c','NLD_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NLD_native/'+target,*sources]
 elif kind=='audit':
+ if target=='retention':files['NLD_retention.py']=(E/'NLD_retention.py').read_text()
  if target in ['close','review-close']:
   files['NLD_pin.py']=(E/'NLD_pin.py').read_text();files['NLD_PREDECESSOR_PINS.json']=lzma.decompress((E.parent/'ledger19-20261108/NKN_CLOSURE_PINS.json.xz').read_bytes()).decode()
  if target=='review-close':files['NLD_generated/NLD_HypothesisReview.lean']=(E/'NLD_HypothesisReview.lean').read_text()
  sources=['NLD_generated/NLD_ProofDriver.lean','NLD_generated/NLD_Driver.lean','NLD_batch.py','NLD_AUDIT_ROOTS.json','NLD_AUDIT_MODULES.json','NLD_EXPECTED_IMPORTS.jsonl']+(['NLD_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NLD_pin.py','NLD_PREDECESSOR_PINS.json']if target in ['close','review-close']else[])+(['NLD_generated/NLD_HypothesisReview.lean']if target=='review-close'else[])
  for n in sources:
   if n not in files:files[n]=(E/Path(n).name).read_text()
+ if target=='retention':sources+=['NLD_retention.py']
  command=['python3','NLD_batch.py',target]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NLD_tmp',CARGO_TARGET_DIR=B+'/NLD_target',LEAN_PATH=':'.join([B+'/NLD_objects']+json.loads((E/'NLD_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
@@ -94,6 +96,7 @@ r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NLD_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NLD_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NLD_LOADED_scan.jsonl','NLD_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
+if {target!r}=='retention':names+=['NLD_EXPORT.json','NLD_TOOL_PINS.json']
 out={{n:(b/n).read_text() for n in names}}
 if {target!r} in ['close','review-close']:
  for n in ['NLD_PREDECESSOR_COMPARISON.json','NLD_EXPORT.json','NLD_TOOL_PINS.json','NLD_CLOSURE_PINS.json.sha256']:out[n]=(b/n).read_text()

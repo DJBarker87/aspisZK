@@ -1,0 +1,41 @@
+{"attempt": "NLD_L029", "exit_status": 0, "wall_seconds": 15.430591366952285, "peak_rss_kib": "6473200", "swaps": "0", "print_axioms": []}
+theorem AspisR1.NLD.chain : ∀ {A : Type} {p : AspisR1.NLD.Program A} {s t : AspisR1.NLD.ParentState}
+  {r : Aeneas.Std.Result A} {events : List AspisR1.NLD.Event},
+  AspisR1.NLD.Cuts p s r t events → AspisR1.NLD.Chain s t events :=
+fun {A} {p} {s t} {r} {events} cuts =>
+  AspisR1.NLD.Cuts.rec (fun a s => Eq.refl s)
+    (fun {B} site action k pre post final b result tail head rest ih => ⟨rfl, ih⟩)
+    (fun {B} site action k pre post e head => ⟨rfl, rfl⟩) (fun {B} site action k pre post head => ⟨rfl, rfl⟩) cuts
+theorem AspisR1.NLD.cuts_from_run : ∀ {A : Type} (p : AspisR1.NLD.Program A) (s : AspisR1.NLD.ParentState),
+  AspisR1.NLD.Cuts p s (AspisR1.NLD.run p s).1 (AspisR1.NLD.run p s).2.1 (Asp
+...
+all data1 data2 slot state1 state2 final1 final2 saved post1 post2
+    accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D a Q0 Q1 queries =>
+  let ⟨p6, right✝⟩ :=
+    AspisR1.FJv_Top.deployed L sdk copy std allocator e1 e2 w1 w2 admission1 admission2
+      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) indexError reservation native1 native2
+      hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2 saved post1 post2 accepted1
+      accepted2 root length prior words p t u actions game RuntimePersistence D a Q0 Q1 queries
+      (AspisR1.FJv_GlobalTerminal.owners missing indexError reservation
+        (AspisR1.Rc2_Install.configuration
+            (AspisR1.Rc5_Install.seed indexError
+              (AspisR1.FIp_Install.select reservation
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation)))
+            reservation).boundaries)
+  let ⟨driver, right✝¹⟩ := right✝
+  let ⟨sdkEq, right✝²⟩ := right✝¹
+  let ⟨oldNative, right✝³⟩ := right✝²
+  let ⟨security, right✝⁴⟩ := right✝³
+  let ⟨copyFacts, right✝⁵⟩ := right✝⁴
+  let ⟨events, right✝⁶⟩ := right✝⁵
+  let ⟨protection, right✝⁷⟩ := right✝⁶
+  let ⟨trace, right✝⁸⟩ := right✝⁷
+  let ⟨recorder, installation⟩ := right✝⁸
+  have native :=
+    AspisR1.FJv_DNativeAccepted.accepted L sdk copy std allocator e1 e2 w1 w2 admission1 admission2 missing indexError
+      reservation native1 native2 hashv extraction sha256 H p1 syscall data1 data2 slot state1 state2 final1 final2
+      saved post1 post2 accepted1 accepted2 root length prior words p t u actions game RuntimePersistence D a Q0 Q1
+      queries;
+  ⟨p6, ⟨driver, ⟨sdkEq, ⟨native, ⟨security, ⟨copyFacts, ⟨events, ⟨protection, ⟨trace, ⟨recorder, installation⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩
+
+Running as unit: run-r88f5d3034ef9464ea59d208589841c18.scope; invocation ID: a541a111bf824c20a2cdac91c5c56fe3
