@@ -1,0 +1,19 @@
+theorem NLQ_ClosedThreeSnapshots.fold : ∀ {W : Type} (e : Entry) (L : Library W (ℕ → Record)),
+  S2TrustedSdkBorrow L →
+    ∀ (before : W),
+      L.related before e.heap →
+        Valid e.heap →
+          ∃ first second third,
+            Step e L before first 0 58295#usize 58295#usize ∧
+              Step e L first second 1 1880#usize 1880#usize ∧
+                Step e L second third 2 1768#usize 1768#usize ∧ L.related third e.heap :=
+fun {W} e L sdk before related valid =>
+  let ⟨first, h1⟩ := at_site e L sdk before related valid 0 58295#usize 58295#usize
+  let ⟨second, h2⟩ :=
+    at_site e L sdk first (related_after e L before first 0 58295#usize 58295#usize h1) valid 1 1880#usize 1880#usize
+  let ⟨third, h3⟩ :=
+    at_site e L sdk second (related_after e L first second 1 1880#usize 1880#usize h2) valid 2 1768#usize 1768#usize
+  Exists.intro first
+    (Exists.intro second
+      (Exists.intro third ⟨h1, ⟨h2, ⟨h3, related_after e L second third 2 1768#usize 1768#usize h3⟩⟩⟩))
+'NLQ_ClosedThreeSnapshots.fold' depends on axioms: [propext, Classical.choice, Quot.sound]

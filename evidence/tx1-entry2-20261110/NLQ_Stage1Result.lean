@@ -28,19 +28,19 @@ theorem result (e : S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : Key) (d : Sl
  cases h : (NLD_Stage1Source.stage1Owned ops p e.first d).2 with
  | fail error =>
    rw [←source,h]
-   simp only [continuation,NLQ_Stage1Ready.initial,h,bind_tc_fail]
+   simp only [continuation,NLQ_Stage1Ready.initial,NLQ_SnapshotFold.final,NLM_Snapshot.ready,h,bind_tc_fail]
  | div =>
    rw [←source,h]
-   simp only [continuation,NLQ_Stage1Ready.initial,h,bind_tc_div]
+   simp only [continuation,NLQ_Stage1Ready.initial,NLQ_SnapshotFold.final,NLM_Snapshot.ready,h,bind_tc_div]
  | ok reply =>
    cases reply with
    | Err error =>
      rw [←source,h]
-     simp only [continuation,NLQ_Stage1Ready.initial,h,bind_tc_ok]
+     simp only [continuation,NLQ_Stage1Ready.initial,NLQ_SnapshotFold.final,NLM_Snapshot.ready,h,bind_tc_ok]
    | Ok saved =>
      have branch := source.symm.trans h
      rw [←source,h]
-     change (copyResult (NLQ_Stage1Ready.initial e) saved).result=_
+     simp only [continuation,NLQ_Stage1Ready.initial,NLQ_SnapshotFold.final,NLM_Snapshot.ready,h,bind_tc_ok]
      exact copied e ops p d saved branch
 #check @result
 #print axioms copied

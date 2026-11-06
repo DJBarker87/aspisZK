@@ -1,0 +1,5 @@
+returned : ∀ (e : Entry) (ops : AdapterRw.Ops) (a lo hi : ℕ) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot a lo hi) = ok (core.result.Result.Ok bytes) →
+    bytes = e.buffers (e.handles a).1 ∧
+      ((↑(e.buffers (e.handles a).1)).length = lo ∨ (↑(e.buffers (e.handles a).1)).length = hi)
+'NLQ_SnapshotData.returned' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,263 @@
+NLQ_generated/NLQ_WritebackFrame.lean:27:12: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.53 = ?m.53
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+NLQ_generated/NLQ_WritebackFrame.lean:27:16: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.57 = ?m.57
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+theorem NLQ_WritebackFrame.source : ∀ (e : S2W_D189Entry.Entry) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8)
+  (saved : Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p e.first d = ok (core.result.Result.Ok saved) →
+    have initial := NLQ_Stage1Ready.initial e;
+    have sdk := initial.snapshots.sdk;
+    have post :=
+      put sdk (sdk.accounts 2).data
+        (have __src := sdk.cells (sdk.accounts 2).data;
+        {
+          payload :=
+            have __src := (sdk.cells (sdk.accounts 2).data).payload;
+            { bytes := S2W_ReturnedCheckpoint.nativeBytes saved, money := __src.money },
+          readers := __src.readers, writer := __src.writer });
+    (copyResult initial saved).post.snapshots.sdk = post ∧
+      (copyResult initial saved).post.snapshots.owned = [] ∧
+        (copyResult initial saved).post.checkpoint = none ∧
+          (copyResult initial saved).result = ok (core.result.Result.Ok ()) :=
+fun e ops p d saved branch =>
+  id
+    (have h :=
+      NLQ_Stage1Copy.copy e (S2W_ReturnedCheckpoint.nativeBytes saved)
+        (NLQ_CheckpointDomain.same_length e ops p d saved branch);
+    id
+      (fun h =>
+        Eq.mpr
+          (id
+            (congr
+              (congrArg And
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg NLM_Snapshot.State.sdk
+                      (congrArg State.snapshots
+                        (congrArg Run.post
+                          (congrArg
+                            (fun x =>
+                              match x with
+                              | NLF_CopyStep.Outcome.returned sdk reply =>
+                                have before :=
+                                  {
+                                    snapshots :=
+                                      have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                                      { input := __src.input, sdk := sdk, next := __src.next, owned := __src.owned },
+                                    checkpoint := some saved };
+                                have after :=
+                                  {
+                                    snapshots :=
+                                      have __src := before.snapshots;
+                                      { input := __src.input, sdk := __src.sdk, next := __src.next } };
+                                have result :=
+                                  match reply with
+                                  | Except.ok a => core.result.Result.Ok ()
+                                  | Except.error a =>
+                                    core.result.Result.Err
+                                      AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed;
+                                { result := ok result, post := after,
+                                  events :=
+                                    List.map Event.copy
+                                        (NLQ_CopyTrace.G (NLQ_Stage1Ready.initial e).snapshots.sdk 2
+                                            (NLQ_Stage1Ready.initial e).snapshots.next
+                                            (S2W_ReturnedCheckpoint.nativeBytes saved)).events ++
+                                      [Event.cleanup before after] }
+                              | NLF_CopyStep.Outcome.abort sdk =>
+                                { result := fail Error.panic,
+                                  post :=
+                                    {
+                                      snapshots :=
+                                        have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                                        { input := __src.input, sdk := sdk, next := __src.next, owned := __src.owned },
+                                      checkpoint := some saved },
+                                  events :=
+                                    List.map Event.copy
+                                      (NLQ_CopyTrace.G (NLQ_Stage1Ready.initial e).snapshots.sdk 2
+                                          (NLQ_Stage1Ready.initial e).snapshots.next
+                                          (S2W_ReturnedCheckpoint.nativeBytes saved)).events })
+                            h)))))
+                  (put (NLQ_Stage1Ready.initial e).snapshots.sdk
+                    ((NLQ_Stage1Ready.initial e).snapshots.sdk.accounts 2).data
+                    {
+                      payload :=
+                        { bytes := S2W_ReturnedCheckpoint.nativeBytes saved,
+                          money :=
+                            ((NLQ_Stage1Ready.initial e).snapshots.sdk.cells
+                                  ((NLQ_Stage1Ready.initial e).snapshots.sdk.accounts 2).data).payload.money },
+                      readers :=
+                        ((NLQ_Stage1Ready.initial e).snapshots.sdk.cells
+                            ((NLQ_Stage1Ready.initial e).snapshots.sdk.accounts 2).data).readers,
+                      writer :=
+                        ((NLQ_Stage1Ready.initial e).snapshots.sdk.cells
+                            ((NLQ_Stage1Ready.initial e).snapshots.sdk.accounts 2).data).writer })))
+              (congr
+                (congrArg And
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg NLM_Snapshot.State.owned
+                          (congrArg State.snapshots
+                            (congrArg Run.post
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | NLF_CopyStep.Outcome.returned sdk reply =>
+                                    have before :=
+                                      {
+                                        snapshots :=
+                                          have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                                          { input := __src.input, sdk := sdk, next := __src.next,
+                                            owned := __src.owned },
+                                        checkpoint := some saved };
+                                    have after :=
+                                      {
+                                        snapshots :=
+                                          have __src := before.snapshots;
+                                          { input := __src.input, sdk := __src.sdk, next := __src.next } };
+                                    have result :=
+                                      match reply with
+                                      | Except.ok a => core.result.Result.Ok ()
+                                      | Except.error a =>
+                                        core.result.Result.Err
+                                          AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed;
+                                    { result := ok result, post := after,
+                                      events :=
+                                        List.map Event.copy
+                                            (NLQ_CopyTrace.G (NLQ_Stage1Ready.initial e).snapshots.sdk 2
+                                                (NLQ_Stage1Ready.initial e).snapshots.next
+                                                (S2W_ReturnedCheckpoint.nativeBytes saved)).events ++
+                                          [Event.cleanup before after] }
+                                  | NLF_CopyStep.Outcome.abort sdk =>
+                                    { result := fail Error.panic,
+                                      post :=
+                                        {
+                                          snapshots :=
+                                            have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                                            { input := __src.input, sdk := sdk, next := __src.next,
+                                              owned := __src.owned },
+                                          checkpoint := some saved },
+                                      events :=
+                                        List.map Event.copy
+                                          (NLQ_CopyTrace.G (NLQ_Stage1Ready.initial e).snapshots.sdk 2
+                                              (NLQ_Stage1Ready.initial e).snapshots.next
+                                              (S2W_ReturnedCheckpoint.nativeBytes saved)).events })
+                                h)))))
+                      [])
+                    (eq_self [])))
+                (congr
+                  (congrArg And
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (congrArg State.checkpoint
+                            (congrArg Run.post
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | NLF_CopyStep.Outcome.returned sdk reply =>
+                                    have before :=
+                                      {
+                                        snapshots :=
+                                          have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                                          { input := __src.input, sdk := sdk, next := __src.next,
+                                            owned := __src.owned },
+                                        checkpoint := some saved };
+                                    have after :=
+                                      {
+                                        snapshots :=
+                                          have __src := before.snapshots;
+                                          { input := __src.input, sdk := __src.sdk, next := __src.next } };
+                                    have result :=
+                                      match reply with
+                                      | Except.ok a => core.result.Result.Ok ()
+                                      | Except.error a =>
+                                        core.result.Result.Err
+                                          AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed;
+                                    { result := ok result, post := after,
+                                      events :=
+                                        List.map Event.copy
+                                            (NLQ_CopyTrace.G (NLQ_Stage1Ready.initial e).snapshots.sdk 2
+                                                (NLQ_Stage1Ready.initial e).snapshots.next
+                                                (S2W_ReturnedCheckpoint.nativeBytes saved)).events ++
+                                          [Event.cleanup before after] }
+                                  | NLF_CopyStep.Outcome.abort sdk =>
+                                    { result := fail Error.panic,
+                                      post :=
+                                        {
+                                          snapshots :=
+                                            have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                                            { input := __src.input, sdk := sdk, next := __src.next,
+                                              owned := __src.owned },
+                                          checkpoint := some saved },
+                                      events :=
+                                        List.map Event.copy
+                                          (NLQ_CopyTrace.G (NLQ_Stage1Ready.initial e).snapshots.sdk 2
+                                              (NLQ_Stage1Ready.initial e).snapshots.next
+                                              (S2W_ReturnedCheckpoint.nativeBytes saved)).events })
+                                h))))
+                        none)
+                      (eq_self none)))
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg Run.result
+                          (congrArg
+                            (fun x =>
+                              match x with
+                              | NLF_CopyStep.Outcome.returned sdk reply =>
+                                have before :=
+                                  {
+                                    snapshots :=
+                                      have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                                      { input := __src.input, sdk := sdk, next := __src.next, owned := __src.owned },
+                                    checkpoint := some saved };
+                                have after :=
+                                  {
+                                    snapshots :=
+                                      have __src := before.snapshots;
+                                      { input := __src.input, sdk := __src.sdk, next := __src.next } };
+                                have result :=
+                                  match reply with
+                                  | Except.ok a => core.result.Result.Ok ()
+                                  | Except.error a =>
+                                    core.result.Result.Err
+                                      AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed;
+                                { result := ok result, post := after,
+                                  events :=
+                                    List.map Event.copy
+                                        (NLQ_CopyTrace.G (NLQ_Stage1Ready.initial e).snapshots.sdk 2
+                                            (NLQ_Stage1Ready.initial e).snapshots.next
+                                            (S2W_ReturnedCheckpoint.nativeBytes saved)).events ++
+                                      [Event.cleanup before after] }
+                              | NLF_CopyStep.Outcome.abort sdk =>
+                                { result := fail Error.panic,
+                                  post :=
+                                    {
+                                      snapshots :=
+                                        have __src := (NLQ_Stage1Ready.initial e).snapshots;
+                                        { input := __src.input, sdk := sdk, next := __src.next, owned := __src.owned },
+                                      checkpoint := some saved },
+                                  events :=
+                                    List.map Event.copy
+                                      (NLQ_CopyTrace.G (NLQ_Stage1Ready.initial e).snapshots.sdk 2
+                                          (NLQ_Stage1Ready.initial e).snapshots.next
+                                          (S2W_ReturnedCheckpoint.nativeBytes saved)).events })
+                            h)))
+                      (ok (core.result.Result.Ok ())))
+                    (eq_self (ok (core.result.Result.Ok ()))))))))
+          ⟨rfl, ⟨sorry, ⟨sorry, sorry⟩⟩⟩)
+      h)
+'NLQ_WritebackFrame.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

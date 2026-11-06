@@ -1,0 +1,14 @@
+NLQ_generated/NLQ_ClosedSnapshotStep.lean:15:74: error: unexpected identifier; expected ')', ',' or ':'
+NLQ_generated/NLQ_ClosedSnapshotStep.lean:18:8: warning: declaration uses `sorry`
+NLQ_generated/NLQ_ClosedSnapshotStep.lean:25:8: warning: declaration uses `sorry`
+def NLQ_ClosedSnapshotStep.Step : {W : Type} → Entry → Library W (ℕ → Record) → W → W → ℕ → Usize → Usize → Prop :=
+fun {W} e L before after a l1 l2 =>
+  ∃ token owner w1 w2,
+    L.run before (Op.shared a token owner) = (w1, Reply.guard token) ∧
+      L.run w1 (Op.deref token) = (w2, Reply.payload (e.heap.payload (e.heap.accounts a).1)) ∧
+        L.run w2 (Op.drop token) = (after, Reply.unit) ∧
+          L.related after e.heap ∧
+            have old := (e.records (e.handles a).1).owned;
+            sorry
+'NLQ_ClosedSnapshotStep.at_site' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLQ_ClosedSnapshotStep.related_after' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

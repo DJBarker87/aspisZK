@@ -1,0 +1,48 @@
+{"attempt": "NLQ_L063", "exit_status": 1, "wall_seconds": 24.625683184945956, "peak_rss_kib": "5968248", "swaps": "0", "print_axioms": ["'NLQ_SnapshotSkip.skip' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLQ_generated/NLQ_SnapshotSkip.lean:15:26: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  try_borrow_data (ready ?e ?t ?owned).sdk ?a (ready ?e ?t ?owned).next
+in the target expression
+  (have acquisition := (acquired (ready e t owned) a, Except.ok (NLM_Snapshot.guard (ready e t owned) a));
+    do
+    let guardReply ←
+      NJU_Log.record (Event.acquire (ready e t owned) a (ready e t owned).next acquisition.1) (ok acquisition.2)
+    match guardReply with
+      | Except.error a_1 =>
+        have value :=
+          have __src := (ready e t owned).input.snapshot a lo hi;
+          { key := __src.key, owner := __src.owner, is_signer := __src.is_signer, is_writable :=
+...
+rRw.solana_program_error.ProgramError.AccountBorrowFailed,
+            bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed };
+        do
+        let _ ← NJU_Log.record (Event.returned (ready e t owned) a lo hi) (ok value)
+        pure
+            (value,
+              { input := (ready e t owned).input, sdk := (ready e t owned).sdk, next := (ready e t owned).next + 1,
+                owned := (ready e t owned).owned ++ [value] })
+      | Except.ok g =>
+        have live :=
+          { input := (ready e t owned).input, sdk := acquisition.1, next := (ready e t owned).next + 1,
+            owned := (ready e t owned).owned };
+        do
+        let payload ← NJU_Log.record (Event.deref live g) (ok (deref acquisition.1 g))
+        let allowed : Prop := payload.bytes.length = lo ∨ payload.bytes.length = hi
+        have __do_jp : Unit → Run (NLM_Snapshot.Owned × NLM_Snapshot.State) := fun __r => do
+          let dropped ← NJU_Log.record (Event.release live g) (ok (release acquisition.1 g))
+          match dropped with
+            | Except.error a => liftM (fail Error.panic)
+            | Except.ok restored =>
+              have value := (ready e t owned).input.snapshot a lo hi;
+              do
+              let _ ← NJU_Log.record (Event.returned live a lo hi) (ok value)
+              pure
+                  (value,
+                    { input := (ready e t owned).input, sdk := restored, next := (ready e t owned).next + 1,
+                      owned := (ready e t owned).owned ++ [value] })
+        if allowed then do
+            NJU_Log.record (Event.allocate live g payload.bytes.length) (ok ())
+            __do_jp ()
+          else __do_jp ()
+'NLQ_SnapshotSkip.skip' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8e9bd4791eaa4fbc8937a3fd64dfe548.scope; invocation ID: d6f2b289b8ec4df2a04f942ed144c30a
