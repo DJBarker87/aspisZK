@@ -1,0 +1,12 @@
+'AspisR1.NJT_QDomains.initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QDomains.preserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QDomains.scan_preserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QDomains.initial_scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QDomains.membership_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+initial_scan : ∀ (native : NJT_QScan.Native),
+  NJT_QScan.Cut native →
+    ∀ (b : Bytes),
+      Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords NGQ_SamplerPacket.initial b =
+        ok
+          (optionStop (NJT_QScan.run native (↑(words b)) NGQ_SamplerPacket.initial).2,
+            (NJT_QScan.run native (↑(words b)) NGQ_SamplerPacket.initial).1)

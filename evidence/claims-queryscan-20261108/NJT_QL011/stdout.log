@@ -1,0 +1,17 @@
+NJT_Q_generated/NJT_QScan.lean:60:21: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵h̵.̵1̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵h̵.̵2̵.̵2̵]̵[̲r̲u̲n̲,̲ ̲h̲.̲1̲,̲ ̲h̲.̲2̲.̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NJT_QScan.trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QScan.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJT_QScan.scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+scan : ∀ (native : Native),
+  Cut native →
+    ∀ (s : State),
+      validState s →
+        ∀ (b : Bytes),
+          Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords s b =
+            ok (optionStop (run native (↑(words b)) s).2, (run native (↑(words b)) s).1)

@@ -1,0 +1,42 @@
+{"attempt": "NJT_QL003", "exit_status": 0, "wall_seconds": 10.642323054140434, "peak_rss_kib": "6312884", "swaps": "0", "print_axioms": []}
+theorem AspisR1QueryScanUnrolled.r0_transcript.block_rank_success_words_in_order : ∀
+  (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (out : Aeneas.Std.Array Aeneas.Std.U32 8#usize),
+  AspisR1QueryScanUnrolled.r0_transcript.block_rank block = Aeneas.Std.Result.ok out →
+    ↑out = List.map (AspisR1QueryScanUnrolled.r0_transcript.blockRankWord block) (List.range 8) :=
+fun block out hrank =>
+  let callback := AspisR1QueryScanUnrolled.r0_transcript.block_rank.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU32;
+  have h8 := AspisR1QueryScanUnrolled.r0_transcript.block_rank_success_words_in_order._proof_1;
+  have h0 := AspisR1QueryScanUnrolled.r0_transcript.block_rank_success_words_in_order._proof
+...
+or (x :: xs) s after last none)
+        (fun windows =>
+          Eq.ndrec (motive := fun last =>
+            (∀ (j : Fin 22),
+                AspisR1.NHB_Observation.observe s x last true j = AspisR1.NHK_WordAssociation.G s x cursor reply j) →
+              AspisR1.NHB_WordTrace.Trace cursor (x :: xs) s s last none)
+            (fun windows =>
+              have hfull :=
+                Or.casesOn full (fun hn => Or.inl (Aeneas.Std.UScalar.eq_of_val_eq hn)) fun hd =>
+                  Or.inr (Aeneas.Std.UScalar.eq_of_val_eq hd);
+              AspisR1.NHB_WordTrace.Trace.stopped cursor x xs s hfull)
+            (Eq.symm hc) windows)
+        (Eq.symm ha) windows)
+    (fun cursor nextCursor last x xs s after final pending reply hlen hdraw value windows tail ih =>
+      have observed := fun j => Eq.trans (windows j) (AspisR1.NHK_WordAssociation.substitute s x cursor reply value j);
+      let ⟨left✝¹, right✝¹⟩ :=
+        AspisR1.NHB_Observation.continuing_frame s after x cursor nextCursor false hlen hdraw observed
+      let ⟨hc, frame⟩ := right✝¹
+      Eq.ndrec (motive := fun nextCursor =>
+        (∀ (j : Fin 22),
+            AspisR1.NHB_Observation.observe after x nextCursor false j =
+              AspisR1.NHK_WordAssociation.G s x cursor reply j) →
+          AspisR1.NHK_NativeWords.Cuts nextCursor xs after final last pending →
+            AspisR1.NHB_WordTrace.Trace nextCursor xs after final last pending →
+              AspisR1.NHB_Observation.Relation s after x cursor nextCursor false →
+                AspisR1.NHB_WordTrace.Trace cursor (x :: xs) s final last pending)
+        (fun windows tail ih observed =>
+          AspisR1.NHB_WordTrace.Trace.continuing cursor x xs s after final last pending hlen hdraw frame ih)
+        (Eq.symm hc) windows tail ih observed)
+    cuts
+
+Running as unit: run-r16696c7e98e4411dab96544030a88cd0.scope; invocation ID: c3841391f8614d53a4fea4d49f2d8adf

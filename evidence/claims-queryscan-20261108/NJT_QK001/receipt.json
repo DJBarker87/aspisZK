@@ -1,0 +1,85 @@
+{
+  "attempt": "NJT_QK001",
+  "kind": "kani",
+  "module": "r0_transcript::NJT_Q_rank::NJT_Q_block_rank",
+  "sources": [
+    "NJT_Q_gate.py",
+    "NJT_Q_SOURCE_PINS.json",
+    "NJT_Q_FROZEN_FILE_PINS.json"
+  ],
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-claims-queryscan-20261108-query/NJT_Q_tmp",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-claims-queryscan-20261108-query/NJT_Q_target",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1"
+  },
+  "command": [
+    "python3",
+    "NJT_Q_gate.py",
+    "NJT_QK001.json"
+  ],
+  "timeout": 180,
+  "expected_time": "optimized compile then arbitrary rank output window verification; no field arithmetic",
+  "root_package": "aspis-core",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-claims-queryscan-20261108-query/NJT_Q_src/crates/aspis-core/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-claims-queryscan-20261108-query/NJT_Q_target",
+    "--features",
+    "r0",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r0_transcript::NJT_Q_rank::NJT_Q_block_rank",
+    "--output-format",
+    "terse"
+  ],
+  "collect_globs": [
+    "NJT_QK001-graph-check.json",
+    "NJT_QK001-graph.stderr",
+    "NJT_QK001-source-check.json",
+    "NJT_QK001-lock-check.json"
+  ],
+  "source_revision": "46d4b70db8caa6ad8feab8cc3f006a3ebe1a8424",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "exit_status": 1,
+  "wall_seconds": 4.971041871001944,
+  "peak_rss_kib": "501980",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rebffc7e1956749ee990ab7eeda2d33e1.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "530337792",
+  "source_hashes": {
+    "NJT_Q_gate.py": "a89885266e4b923d22f412af8e12113ede92cd078b6a95d56a05d13c75a26422",
+    "NJT_Q_SOURCE_PINS.json": "3c9bfc0e7f055418d1500c64b0ba39ac731f57036d2d0050cf301b4d5bffb790",
+    "NJT_Q_FROZEN_FILE_PINS.json": "3bd0894f23afcc354b030cbfe8c90a33a22e8ccbf4312c129c276de14c9f4564"
+  },
+  "print_axioms": "N/A: kani"
+}

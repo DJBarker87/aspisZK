@@ -1,0 +1,10 @@
+import NHK_Invocation
+import NJO_COMBINED_IMPORT
+import NJM_COMBINED_IMPORT
+set_option autoImplicit false
+#print AspisR1QueryScanUnrolled.r0_transcript.block_rank_success_words_in_order
+#print AspisR1QueryScanUnrolled.r0_transcript.query_words_success_byte_mask
+#print AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan.finish
+#print Query31ModelScanCall.modelScanFn
+#print Query31ExplicitListLoop.scanListLoop
+#print AspisR1.NHK_NativeWords.association

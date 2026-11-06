@@ -1,0 +1,42 @@
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -11,6 +11,7 @@
+ //! fold consistency; the soundness delta to a stated proximity assumption is
+ //! Stage 1 work and no soundness figure may be quoted from this code alone.
+ 
++#![cfg_attr(kani, feature(allocator_api))]
+ #![no_std]
+ 
+ extern crate alloc;
+@@ -97,3 +98,7 @@
+ 
+ #[cfg(feature = "r0-op-count")]
+ pub mod r0_op_count;
++
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod KMX_stubs;
+--- a/crates/aspis-core/src/r0_transcript.rs
++++ b/crates/aspis-core/src/r0_transcript.rs
+@@ -319,3 +319,21 @@
+ 
+ #[cfg(test)]
+ mod tests;
++
++// Scratch-only native certificate for TX1:068; exact frozen body is executed.
++#[cfg(kani)]
++mod NJT_Q_rank {
++ use super::*;
++ #[kani::proof]
++ #[kani::unwind(34)]
++ #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++ fn NJT_Q_block_rank() {
++  let block: [u8;32] = kani::any();
++  let k: usize = kani::any(); kani::assume(k<8);
++  let out=block_rank(&block);
++  let j=4*k;
++  let expected=(block[j] as u32)|((block[j+1] as u32)<<8)|((block[j+2] as u32)<<16)|((block[j+3] as u32)<<24);
++  #[cfg(not(NJT_Q_invert))] assert!(out[k]==expected);
++  #[cfg(NJT_Q_invert)] assert!(out[k]==(expected^1));
++ }
++}
