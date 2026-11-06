@@ -7,6 +7,7 @@ import NJF_CutEvaluation
 import NJF_FinishInstantiation
 import NJF_FinishObserved
 import NJF_HypothesisAudit
+import NJF_LowSlots
 import NJF_PairInstantiation
 import NJF_RegularContinuation
 import NJF_RegularCut

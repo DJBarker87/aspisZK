@@ -55,7 +55,7 @@ if kind=='kani':
  env.update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1')
  import os
  if os.environ.get('NJF_INVERT'):
-  flag=os.environ.get('NJF_NATIVE_CFG','NJF_invert');assert flag in ['NJF_invert','NGM_invert','NJF_corrupt','NJF_mask_wrong'];env['RUSTFLAGS']+=' --cfg '+flag
+  flag=os.environ.get('NJF_NATIVE_CFG','NJF_invert');assert flag in ['NJF_invert','NGM_invert','NJF_corrupt','NJF_mask_wrong','NJF_copy_wrong'];env['RUSTFLAGS']+=' --cfg '+flag
 elif kind=='extract':
  files['NJF_extract.py']=(E/'NJF_extract.py').read_text()
  name={'NJF_WindowRef':'NJF_window_reference.rs.patch','NJF_ControlRef':'NJF_control_reference.rs.patch'}[target]
@@ -99,6 +99,9 @@ if kind=='kani' and os.environ.get('NJF_WINDOW'):
 if kind=='kani' and os.environ.get('NJF_SELECT'):
  assert os.environ['NJF_SELECT'] in ['slot_low','slot_high','power_low','power_high']
  env['RUSTFLAGS']+=' --cfg NJF_select_'+os.environ['NJF_SELECT']
+if kind=='kani' and os.environ.get('NJF_LITERAL'):
+ assert os.environ['NJF_LITERAL'] in ['0','1','2']
+ env['RUSTFLAGS']+=' --cfg NJF_literal_'+os.environ['NJF_LITERAL']
 if kind=='kani' and os.environ.get('NJF_OWNER_GROUP'):
  assert os.environ['NJF_OWNER_GROUP'] in ['factors','rest']
  env['RUSTFLAGS']+=' --cfg NJF_owner_'+os.environ['NJF_OWNER_GROUP']
