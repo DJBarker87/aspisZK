@@ -1,0 +1,24 @@
+theorem NLL_TerminalStep.value : ∀ (H : Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (root : Root) (batch : ℕ) (kind lo n slot : Usize),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                ∀ (keys : Keys) (s : reference.Scratch),
+                  ↑s.n ≤ 16 →
+                    ∀ (nodes : Slice U8),
+                      (NKV_ConcreteChildren.ops H).op3 proof slot = ok nodes →
+                        (↑(MultiproofConeSlotTail.prefixNodes nodes
+                                  (OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))).length ≤
+                            9216 →
+                          ∀ (events : List Event) (out : Answer),
+                            Terminal H root batch (↑kind) nodes s events out →
+                              NKV_FRef.verifier.candidate.batch_tree_loop (NKV_ConcreteChildren.ops H)
+                                    (NKV_ConcreteChildren.digest H) proof root kind s.idx s.val () lo n slot keys s.n
+                                    n >>=
+                                  NKV_ReturnBoundary.returned =
+                                ok out :=
+⋯
+'NLL_TerminalStep.value' depends on axioms: [propext, Classical.choice, Quot.sound]

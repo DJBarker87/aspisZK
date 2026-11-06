@@ -1,0 +1,30 @@
+{"attempt": "NLL_L047", "exit_status": 0, "wall_seconds": 15.880927461897954, "peak_rss_kib": "6034820", "swaps": "0", "print_axioms": ["'NLL_ValuesAbort.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLL_ValuesAbort.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (roots : Roots) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∀ (history : History) (pending : Pending),
+                AbortValues H proof raw roots batch history pending →
+                  NLL_Prefix.At (plan H proof p raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+                    (history ++ pending.answered) pending.parts :=
+⋯
+'NLL_ValuesAbort.source' depends on axi
+...
+theorem NLL_ValuesAbort.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (roots : Roots) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∀ (history : History) (pending : Pending),
+                AbortValues H proof raw roots batch history pending →
+                  NLL_Prefix.At (plan H proof p raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+                    (history ++ pending.answered) pending.parts :=
+⋯
+'NLL_ValuesAbort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r610b8dee1ed040f6817a44d8cbc3349b.scope; invocation ID: dfb64fa3595f4c3dbb878d02785bedeb

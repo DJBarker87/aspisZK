@@ -1,0 +1,32 @@
+{"attempt": "NLL_L049", "exit_status": 0, "wall_seconds": 22.46749767800793, "peak_rss_kib": "6034896", "swaps": "0", "print_axioms": ["'NLL_BatchAbort.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLL_BatchAbort.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (p : verifier.Prepared) (folded : Root) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑p.queries)[j]! < 262144) →
+              ∀ (history : History) (pending : Pending),
+                Invocation H proof p folded batch history pending →
+                  NLL_Prefix.At
+                    (plan H proof parsed p.queries batch (sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI
+                      NKV_ParentSource.zeroV)
+                    (h
+...
+theorem NLL_BatchAbort.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (p : verifier.Prepared) (folded : Root) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑p.queries)[j]! < 262144) →
+              ∀ (history : History) (pending : Pending),
+                Invocation H proof p folded batch history pending →
+                  NLL_Prefix.At
+                    (plan H proof parsed p.queries batch (sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI
+                      NKV_ParentSource.zeroV)
+                    (history ++ pending.answered) pending.parts :=
+⋯
+'NLL_BatchAbort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf3a75d9d9aff4a2a9794b619613a4ed1.scope; invocation ID: e1e3287d621e472498976dc0167c15a6

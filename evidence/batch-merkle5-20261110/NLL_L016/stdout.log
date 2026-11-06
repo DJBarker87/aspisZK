@@ -1,0 +1,21 @@
+theorem NLL_LoopHistory.source : ∀ (H : Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch : ℕ) (kind lo n slot : Usize) (root : Root),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                (↑lo = if batch = 0 then 0 else 10) →
+                  ↑n ≤ 16 →
+                    ∀ (positions : List ℕ) (f : Frame),
+                      (∀ selected ∈ positions, selected ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+                        ↑f.position + positions.length = ↑n →
+                          ↑f.scratch.n + positions.length ≤ 16 →
+                            Port4B_LeafLoop.KeyStream q batch (↑kind) f.keys f.position positions →
+                              ∀ (events : List Event) (out : Answer),
+                                Loop H proof root batch kind lo n slot f events out →
+                                  leafHistory kind events =
+                                    expected H p q batch kind (nodeView H proof slot) root positions f.scratch :=
+⋯
+'NLL_LoopHistory.source' depends on axioms: [propext, Classical.choice, Quot.sound]

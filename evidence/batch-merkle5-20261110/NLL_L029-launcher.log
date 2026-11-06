@@ -1,0 +1,60 @@
+{"attempt": "NLL_L029", "exit_status": 1, "wall_seconds": 12.864362976048142, "peak_rss_kib": "6019908", "swaps": "0", "print_axioms": ["'NLL_TreeAbort.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLL_TreeAbort.lean:39:47: error: unsolved goals
+H : Bytes → State
+proof : Slice U8
+len : (↑proof).length = 57607
+p : OraclePortCompactDraft.Parsed
+wire : p.wire = MultiproofConeCanonical.bytesOf ↑proof
+raw : Std.Array U32 22#usize
+root : Root
+batch kind : Usize
+hb : ↑batch < 2
+hk : ↑kind < 3
+canonical : ∀ j < 22, ↑(↑raw)[j]! < 262144
+idx : Indices
+val : Values
+pending : Pending
+length :
+  (OraclePortFrozenOrder.sortedPositions (Port4B_KeyInstall.queries raw) ↑batch ↑kind).length =
+    ↑(NKB_KeyStream.count ↑batch)
+stream :
+  Port4B_LeafLoop.KeyStream (Port4B_KeyInstall.queries raw) (↑batch) (↑kind) (entryKeys H raw (↑batch) kind) 0#usize
+    (OraclePortFrozenOrder.sortedPositions (Port4B_Key
+...
+dPositions (Port4B_KeyInstall.queries raw) ↑batch ↑kind)
+        (NJV_EntryABI.initial idx val 0#usize);
+    leaf.1 ++
+      match leaf.2 with
+      | ok (true, after) =>
+        NKV_QueryPlan.tail H (↑batch) (↑kind) (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind))
+          root after
+      | x => []) =
+    have leaf :=
+      NKV_LeafBuild.build H p (Port4B_KeyInstall.queries raw) (↑kind)
+        (OraclePortFrozenOrder.sortedPositions (Port4B_KeyInstall.queries raw) ↑batch ↑kind)
+        (NJV_EntryABI.initial idx val 0#usize);
+    leaf.1 ++
+      match leaf.2 with
+      | ok (true, t) =>
+        NKV_QueryPlan.tail H (↑batch) (↑kind) (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind))
+          root t
+      | x => []
+theorem NLL_TreeAbort.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Root) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : Indices) (val : Values) (events : List Event) (pending : Pending),
+                  AbortInvocation H proof raw root batch kind idx val events pending →
+                    NLL_Prefix.At
+                      (NKV_QueryPlan.plan H p (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+                        (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind)) root
+                        (NJV_EntryABI.initial idx val 0#usize))
+                      (leafHistory kind events ++ pending.answered) pending.parts :=
+⋯
+'NLL_TreeAbort.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4d8dc9c40a194b369114b15964e88277.scope; invocation ID: 90db71bad9bb4a88963ef610739fdc08

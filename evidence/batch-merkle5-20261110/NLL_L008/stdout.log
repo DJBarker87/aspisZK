@@ -1,0 +1,24 @@
+theorem NLL_LeafStep.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch selected : ℕ) (kind lo n slot : Usize) (root : Root) (f : Frame),
+          selected ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind →
+            (↑lo = if batch = 0 then 0 else 10) →
+              f.position < n →
+                ↑f.scratch.n < 16 →
+                  Array.index_usize f.keys f.position = ok (MultiproofConeSortOrder.packed q batch (↑kind) selected) →
+                    Port4B_NativeLeaf.decodedIndex (key f) = MultiproofConeLeafFold.key q (↑kind) selected ∧
+                      flatten (Port4B_LeafCode.input kind (view H proof lo (key f))) =
+                          OraclePortSelectedDraft.leaf p (↑kind) selected ∧
+                        digest H proof kind lo f = encodeState (H (OraclePortSelectedDraft.leaf p (↑kind) selected)) ∧
+                          NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+                              (NKV_ConcreteChildren.digest H) proof root kind () lo n slot f.keys f.scratch.idx
+                              f.scratch.val f.scratch.n f.position =
+                            do
+                            let out ←
+                              reference.leaf_step f.scratch (Port4B_NativeLeaf.decodedIndex (key f))
+                                  (digest H proof kind lo f)
+                            ok (NKV_LeafStep.project f.scratch (f.position.wrapping_add 1#usize) out) :=
+⋯
+'NLL_LeafStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]

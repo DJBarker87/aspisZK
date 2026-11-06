@@ -1,0 +1,43 @@
+{"attempt": "NLL_L012", "exit_status": 0, "wall_seconds": 14.110873277997598, "peak_rss_kib": "6054092", "swaps": "0", "print_axioms": ["'NLL_LoopValue.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLL_LoopValue.lean:52:16: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵b̵o̵d̵y̵,̵s̵t̵e̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵N̵K̵V̵_̵L̵e̵a̵f̵S̵t̵e̵p̵.̵p̵r̵o̵j̵e̵c̵t̵,̵N̵K̵V̵_̵R̵e̵t̵u̵r̵n̵B̵o̵u̵n̵d̵a̵r̵y̵.̵r̵e̵t̵u̵r̵n̵e̵d̵]̵[̲b̲o̲d̲y̲,̲ ̲s̲t̲e̲p̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲N̲K̲V̲_̲L̲e̲a̲f̲S̲t̲e̲p̲.̲p̲r̲o̲j̲e̲c̲t̲,̲ ̲N̲K̲V̲_̲R̲e̲t̲u̲r̲n̲B̲o̲u̲n̲d̲a̲r̲y̲.̲r̲e̲t̲u̲r̲n̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLL_LoopValue.lean:69:16: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵
+...
+d̵y̵,̵s̵t̵e̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵N̵K̵V̵_̵L̵e̵a̵f̵S̵t̵e̵p̵.̵p̵r̵o̵j̵e̵c̵t̵]̵[̲b̲o̲d̲y̲,̲ ̲s̲t̲e̲p̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲N̲K̲V̲_̲L̲e̲a̲f̲S̲t̲e̲p̲.̲p̲r̲o̲j̲e̲c̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLL_LoopValue.source : ∀ (H : Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch : ℕ) (kind lo n slot : Usize) (root : Root),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                (↑lo = if batch = 0 then 0 else 10) →
+                  ↑n ≤ 16 →
+                    ∀ (positions : List ℕ) (f : Frame),
+                      (∀ selected ∈ positions, selected ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+                        ↑f.position + positions.length = ↑n →
+                          ↑f.scratch.n + positions.length ≤ 16 →
+                            Port4B_LeafLoop.KeyStream q batch (↑kind) f.keys f.position positions →
+                              ∀ (events : List Event) (out : Answer),
+                                Loop H proof root batch kind lo n slot f events out →
+                                  NKV_FRef.verifier.candidate.batch_tree_loop (NKV_ConcreteChildren.ops H)
+                                        (NKV_ConcreteChildren.digest H) proof root kind f.scratch.idx f.scratch.val ()
+                                        lo n slot f.keys f.scratch.n f.position >>=
+                                      NKV_ReturnBoundary.returned =
+                                    ok out :=
+⋯
+'NLL_LoopValue.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r85abdd0bafd04fbe97bc8eb22b3fc07e.scope; invocation ID: 4a8ef5c339224b83a28a9c3c19f7c61f

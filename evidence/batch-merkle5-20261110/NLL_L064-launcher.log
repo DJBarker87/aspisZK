@@ -1,0 +1,63 @@
+{"attempt": "NLL_L064", "exit_status": 1, "wall_seconds": 15.686680816113949, "peak_rss_kib": "5947552", "swaps": "0", "print_axioms": ["'NLL_SamplerBound.finish' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLL_SamplerBound.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLL_SamplerBound.lean:26:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (qs, state).1
+in the target expression
+  Bounds (core.result.Result.Ok (qs, state))
+
+case pos
+advances : Blocks
+index : Usize
+s : State
+hi : ↑index < 8
+canonical : NHB_Canonical.State s
+qs : Std.Array U32 22#usize
+state : Bytes32
+full : s.accepted_len = 22#usize
+run : ok (core.result.Result.Ok (s.accepted, (↑advances)[↑index])) = ok (core.result.Result.Ok (qs, state))
+same : (s.accepted, (↑advances)[↑index]).1 = (qs, state).1
+⊢ Bounds (core.result.Result.Ok (qs, state))
+NLL_SamplerBound.lean:29:90: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp 
+...
+e.result.Result.Ok (s.accepted, (↑advances)[↑index])) = ok (core.result.Result.Ok (qs, state))
+same : (s.accepted, (↑advances)[↑index]).1 = (qs, state).1
+⊢ Bounds (core.result.Result.Ok (qs, state))
+NLL_SamplerBound.lean:29:90: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [aspis_core.r0_transcript.QUERY_COUNT, ̲full, ̲if_false, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+        ̵ ̵core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵] at run
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLL_SamplerBound.lean:41:48: error: unsolved goals
+advances : Blocks
+inputs : List (Bytes32 × Usize)
+s✝ : State
+out✝ : Out
+block : Bytes32
+index : Usize
+tail : List (Bytes32 × Usize)
+s next : State
+out : Out
+words : Std.Array U32 8#usize
+last : ℕ
+pending : Option Bool
+decode : Query31ConcreteWordsDriverChain.actualQueryWords block = ok words
+edges : NHK_NativeWords.Cuts 0 (↑words) s next last pending
+stop : Query31ExplicitListLoop.optionStop pending = true
+run : finishAdvance advances index next = ok out
+indices : ∀ input ∈ (block, index) :: tail, ↑input.2 < 8
+canonical : NHB_Canonical.State s
+good : NHB_Canonical.State next
+⊢ ?m.57 = (block, index) ∨ ?m.57 ∈ tail
+theorem NLL_SamplerBound.native : ∀ {advances : Blocks} {inputs : List (Bytes32 × Usize)} {s : State} {out : Out},
+  NHK_NativeBlocks.Cuts advances inputs s out → (∀ input ∈ inputs, ↑input.2 < 8) → NHB_Canonical.State s → Bounds out :=
+⋯
+'NLL_SamplerBound.finish' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLL_SamplerBound.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4f558cffd11340638c438e81a9d14dd0.scope; invocation ID: 2eb48a0f3a474f22910e8709ea07e2ab

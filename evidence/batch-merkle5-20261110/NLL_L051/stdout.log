@@ -1,0 +1,16 @@
+theorem NLL_ParentAdopted.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∀ (sites : List Call),
+                (∀ c ∈ sites, ↑c.2 < 3) →
+                  (∀ c ∈ sites, c.1 = encodeState (OraclePortBatchDraft.committedRoot p ↑c.2)) →
+                    ∀ (idx : Indices) (val : Values) (history : History) (out : Reply),
+                      Calls H proof raw batch sites idx val history out →
+                        NLL_ObservedCalls.calls H proof p raw batch sites idx val =
+                          (history, NKV_ParentSource.observe (ok out)) :=
+⋯
+'NLL_ParentAdopted.source' depends on axioms: [propext, Classical.choice, Quot.sound]

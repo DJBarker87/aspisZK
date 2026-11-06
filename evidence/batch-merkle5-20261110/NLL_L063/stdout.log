@@ -1,0 +1,11 @@
+theorem NLL_Tx2AtActual.source : ∀ (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish) {X : Type}
+  (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X) (enteredProof : Slice U8)
+  (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (reply : R Unit),
+  Event.merkle enteredProof p folded reply ∈ (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    enteredProof = proof ∧
+      ∃ a,
+        NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+            ok (core.result.Result.Ok (p, a)) ∧
+          ∀ j < 22, ↑(↑p.queries)[j]! < 262144 :=
+⋯
+'NLL_Tx2AtActual.source' depends on axioms: [propext, Classical.choice, Quot.sound]

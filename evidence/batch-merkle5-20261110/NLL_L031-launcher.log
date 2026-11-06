@@ -1,0 +1,32 @@
+{"attempt": "NLL_L031", "exit_status": 0, "wall_seconds": 20.392051968025044, "peak_rss_kib": "6037736", "swaps": "0", "print_axioms": ["'NLL_ParentReturning.calls' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLL_ParentReturning.calls : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∀ (sites : List Call),
+                (∀ c ∈ sites, ↑c.2 < 3) →
+                  ∀ (idx : Indices) (val : Values) (history : History) (out : Reply),
+                    Calls H proof raw batch sites idx val history out →
+                      model H proof raw batch sites idx val = ok out ∧
+                        plan H proof p raw batch sites idx 
+...
+theorem NLL_ParentReturning.calls : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∀ (sites : List Call),
+                (∀ c ∈ sites, ↑c.2 < 3) →
+                  ∀ (idx : Indices) (val : Values) (history : History) (out : Reply),
+                    Calls H proof raw batch sites idx val history out →
+                      model H proof raw batch sites idx val = ok out ∧
+                        plan H proof p raw batch sites idx val = history :=
+⋯
+'NLL_ParentReturning.calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r192a57bba8f847c4907e59c31f98cdc1.scope; invocation ID: 65a43e4629024cffb2c810628915d926

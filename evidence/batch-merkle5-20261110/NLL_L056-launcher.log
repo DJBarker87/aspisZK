@@ -1,0 +1,21 @@
+{"attempt": "NLL_L056", "exit_status": 0, "wall_seconds": 19.559420828009024, "peak_rss_kib": "6047424", "swaps": "0", "print_axioms": ["'NLL_ResumeQueries.bounds' depends on axioms: [propext, Quot.sound]", "'NLL_ResumeQueries.returned' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLL_ResumeQueries.returned : ∀ (reserved : Bool) {X : Type} (D : aspis_core.digest.Digest32 X)
+  (ck proof pub : Slice U8) (hash : X) (p : verifier.Prepared) (a : verifier.Accumulator),
+  verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) D ck proof pub transport.Variant.S2 hash =
+      ok (core.result.Result.Ok (p, a)) →
+    ∀ j < 22, ↑(↑p.queries)[j]! < 262144 :=
+⋯
+'NLL_ResumeQueries.bounds' depends on axioms: [propext, Quot.sound]
+'NLL_ResumeQueries.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+theorem NLL_ResumeQueries.returned : ∀ (reserved : Bool) {X : Type} (D : aspis_core.digest.Digest32 X)
+  (ck proof pub : Slice U8) (hash : X) (p : verifier.Prepared) (a : verifier.Accumulator),
+  verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) D ck proof pub transport.Variant.S2 hash =
+      ok (core.result.Result.Ok (p, a)) →
+    ∀ j < 22, ↑(↑p.queries)[j]! < 262144 :=
+⋯
+'NLL_ResumeQueries.bounds' depends on axioms: [propext, Quot.sound]
+'NLL_ResumeQueries.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1dca0f628a5d49b28e188f84a17d69c8.scope; invocation ID: 6ec4408d18904eb494479ef5cf600d4f

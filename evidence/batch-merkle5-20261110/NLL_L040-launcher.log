@@ -1,0 +1,33 @@
+{"attempt": "NLL_L040", "exit_status": 0, "wall_seconds": 16.690982179017738, "peak_rss_kib": "6037072", "swaps": "0", "print_axioms": ["'NLL_ValuesReturning.kinds' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLL_ValuesReturning.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLL_ValuesReturning.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (roots : Roots) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∀ (history : History) (out : Reply),
+                NLL_Parent.Invocation H proof raw roots batch history out →
+                  NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H)
+                        (NKV_ConcreteChildren.digest H) proof raw roots batch () =
+                      ok out ∧
+              
+...
+theorem NLL_ValuesReturning.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (roots : Roots) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∀ (history : History) (out : Reply),
+                NLL_Parent.Invocation H proof raw roots batch history out →
+                  NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H)
+                        (NKV_ConcreteChildren.digest H) proof raw roots batch () =
+                      ok out ∧
+                    plan H proof p raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV = history :=
+⋯
+'NLL_ValuesReturning.kinds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLL_ValuesReturning.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra36930ac1d084f7998bc4c9b9b9a470c.scope; invocation ID: 4de93e0e5c0c4af89bf7216fce86dbf9

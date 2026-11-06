@@ -1,0 +1,13 @@
+theorem NLL_LoopDomains.source : ∀ (H : Bytes → State) (proof : Slice U8) (root : Root) (batch : ℕ)
+  (kind lo n slot : Usize) (f : Frame) (events : List Event) (out : Answer),
+  Loop H proof root batch kind lo n slot f events out →
+    ↑n ≤ 16 →
+      ∀ limit ≤ 16,
+        ↑f.position ≤ ↑n →
+          ↑f.scratch.n + (↑n - ↑f.position) ≤ limit →
+            ∀ (nodes : Slice U8) (count : ℕ) (before : reference.Scratch)
+              (queries : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (answer : Bool × NJP_RowModel.Scratch),
+              Event.verify nodes count before queries answer ∈ events →
+                ↑before.n ≤ limit ∧ OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys before) :=
+⋯
+'NLL_LoopDomains.source' depends on axioms: [propext, Classical.choice, Quot.sound]

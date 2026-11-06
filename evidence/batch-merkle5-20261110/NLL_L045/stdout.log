@@ -1,0 +1,10 @@
+theorem NLL_TreeDomains.source : ∀ (H : Bytes → State) (proof : Slice U8) (raw : Std.Array U32 22#usize) (root : Root)
+  (batch kind : Usize) (idx : Indices) (val : Values) (events : List Event) (out : Answer),
+  Invocation H proof raw root batch kind idx val events out →
+    ∀ (nodes : Slice U8) (count : ℕ) (before : reference.Scratch)
+      (queries : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (answer : Bool × NJP_RowModel.Scratch),
+      Event.verify nodes count before queries answer ∈ events →
+        0 < ↑before.n ∧
+          (↑before.n ≤ if ↑batch = 0 then 10 else 12) ∧ OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys before) :=
+⋯
+'NLL_TreeDomains.source' depends on axioms: [propext, Classical.choice, Quot.sound]

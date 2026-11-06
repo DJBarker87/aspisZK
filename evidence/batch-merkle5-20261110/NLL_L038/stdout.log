@@ -1,0 +1,31 @@
+NLL_ValuesReturning.lean:12:25: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  c = (Port3_NativeBatchCalls.rootAt roots 2, 2#usize) ∨ c ∈ []
+
+case inr.inr
+roots : Roots
+c : Call
+h✝ : c = (Port3_NativeBatchCalls.rootAt roots 2, 2#usize) ∨ c ∈ []
+⊢ ↑c.2 < 3
+NLL_ValuesReturning.lean:11:32: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵i̵t̵e̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲s̲i̲t̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲]̲ at mem
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLL_ValuesReturning.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (roots : Roots) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∀ (history : History) (out : Reply),
+                NLL_Parent.Invocation H proof raw roots batch history out →
+                  NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H)
+                        (NKV_ConcreteChildren.digest H) proof raw roots batch () =
+                      ok out ∧
+                    plan H proof p raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV = history :=
+⋯
+'NLL_ValuesReturning.kinds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLL_ValuesReturning.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

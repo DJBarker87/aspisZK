@@ -1,0 +1,49 @@
+NLL_TreeDomains.lean:25:86: error: No goals to be solved
+NLL_TreeDomains.lean:25:15: error: unsolved goals
+H : Bytes → State
+proof : Slice U8
+raw : Std.Array U32 22#usize
+root : Root
+batch kind : Usize
+idx : Indices
+val : Values
+out : Answer
+nodes : Slice U8
+count : ℕ
+before : reference.Scratch
+queries : List (NJP_RowModel.Request × NJP_RowModel.Digest)
+answer : Bool × NJP_RowModel.Scratch
+rest : List Event
+loop :
+  Loop H proof root (↑batch) kind (NKB_KeyStream.lo ↑batch) (NKB_KeyStream.count ↑batch)
+    ((Usize.wrapping_mul 3#usize batch).wrapping_add kind)
+    { keys := entryKeys H raw (↑batch) kind, scratch := NJV_EntryABI.initial idx val 0#usize, position := 0#usize } rest
+    out
+entered :
+  Event.verify nodes count before queries answer ∈
+    Event.entry (NKB_KeyStream.lo ↑batch) (NKB_KeyStream.count ↑batch)
+        ((Usize.wrapping_mul 3#usize batch).wrapping_add kind) (entryKeys H raw (↑batch) kind) ::
+      rest
+member : Event.verify nodes count before queries answer ∈ rest
+sizes : 0 < ↑(NKB_KeyStream.count ↑batch) ∧ ↑(NKB_KeyStream.count ↑batch) ≤ 12
+zero : ↑0#usize = 0
+⊢ ↑0#usize ≤ ↑(NKB_KeyStream.count ↑batch)
+NLL_TreeDomains.lean:26:82: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  1 ≤ e ≤ 12
+  e - f ≤ -1
+  e - f ≤ -1
+where
+ e := ↑↑(NKB_KeyStream.count ↑batch)
+ f := ↑↑0#usize
+theorem NLL_TreeDomains.source : ∀ (H : Bytes → State) (proof : Slice U8) (raw : Std.Array U32 22#usize) (root : Root)
+  (batch kind : Usize) (idx : Indices) (val : Values) (events : List Event) (out : Answer),
+  Invocation H proof raw root batch kind idx val events out →
+    ∀ (nodes : Slice U8) (count : ℕ) (before : reference.Scratch)
+      (queries : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (answer : Bool × NJP_RowModel.Scratch),
+      Event.verify nodes count before queries answer ∈ events →
+        0 < ↑before.n ∧
+          (↑before.n ≤ if ↑batch = 0 then 10 else 12) ∧ OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys before) :=
+⋯
+'NLL_TreeDomains.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
