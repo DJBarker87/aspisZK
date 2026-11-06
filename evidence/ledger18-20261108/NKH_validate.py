@@ -40,6 +40,9 @@ assert not any(p.is_file()and(p.stat().st_size>20000000 or p.suffix in ['.olean'
 source_paths=['crates','programs','Cargo.lock','docs/research/100bit-spend-path-20261013/crates','docs/research/100bit-spend-path-20261013/programs','docs/research/100bit-spend-path-20261013/Cargo.lock']
 assert not subprocess.check_output(['git','diff','--name-only','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','HEAD','--',*source_paths],cwd=R).strip()
 assert not subprocess.check_output(['git','diff','--name-only','HEAD','--',*source_paths],cwd=R).strip()
+physical=J(E/'NKH_PHYSICAL.json');assert sum(len(v)for v in physical['open_by_source'].values())==85
+assert physical['entry_native_counts']=={'b':{'CLOSED':38,'OPEN':15},'c':{'CLOSED':476,'OPEN':70}}
+disposition=J(E/'NKH_SCOPE_DISPOSITION.json');assert len(disposition['unused'])==15 and len(disposition['candidates'])==29
 mutations=[]
 for label,part,change in [
  ('ledger promotion','ledger',lambda x:next(r for r in x['rows']if r['status']=='OPEN').update(status='CLOSED')),
