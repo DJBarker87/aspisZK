@@ -1,6 +1,6 @@
 # NJQ diagnosis of NJI-F1
 
-Inspection only; 0 extraction used. Retained LLBC SHA256 77a8e51bbf032f627484418378f221106d5dbf951a59b365f98da1c42a64f0bc, NJI_EMITTED. All eight roots have Structured bodies, Transparent opacity and is_local=false. All four omitted roots occur in ordered_decls. They are absent even from the per-function translation timing table, so no symbolic body translation was attempted for them.
+Diagnosis stage was inspection only, before any extraction. Final extraction use is E001,1/1. Retained LLBC SHA256 77a8e51bbf032f627484418378f221106d5dbf951a59b365f98da1c42a64f0bc, NJI_EMITTED. All eight roots have Structured bodies, Transparent opacity and is_local=false. All four omitted roots occur in ordered_decls. They are absent even from the per-function translation timing table, so no symbolic body translation was attempted for them.
 
 The pinned source PrePasses.ml::simplify_trait_calls (lines 3130–3217) computes used_funs from references inside Structured bodies and local definitions, then filters FunGroup declarations. Interp.ml::compute_contexts (115–159) translates only the surviving declaration IDs. The four roots are external statement-crate functions never called by any retained body. They are therefore removed before symbolic translation. Policy150 and validator157/206/208 survive because retained bodies call them. This is the exact omission mechanism, independent of body constructs.
 

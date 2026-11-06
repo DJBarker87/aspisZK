@@ -3,6 +3,7 @@ from pathlib import Path
 import subprocess,sys,json
 E=Path(__file__).resolve().parent
 queues={
+ 'identity_shape':[['NJQ_shape_run.py','NJQ_K047','inverse'],['NJQ_shape_run.py','NJQ_K056','unimplied'],['NJQ_shape_run.py','NJQ_K060','modifies']],
  'last_model_repairs':[['NJQ_formal.py','NJQ_L061','lean','NJQ_IdentityCut'],['NJQ_formal.py','NJQ_L062','lean','NJQ_Canonical'],['NJQ_formal.py','NJQ_L063','lean','NJQ_ResultCuts']],
  'last_native':[['NJQ_contract.py', 'NJQ_K052', 'registry', 'split_flags', 'invert', 'witness:NJQ_K040'], ['NJQ_contract.py', 'NJQ_K053', 'registry', 'split_zero', 'invert', 'witness:NJQ_K042'], ['NJQ_contract.py', 'NJQ_K054', 'registry', 'split_authority', 'invert', 'witness:NJQ_K044'], ['NJQ_contract.py', 'NJQ_K055', 'entry', 'plain'], ['NJQ_contract.py', 'NJQ_K056', 'entry', 'plain', 'invert'], ['NJQ_contract.py', 'NJQ_K057', 'registry', 'split_bump'], ['NJQ_contract.py', 'NJQ_K058', 'registry', 'split_bump', 'invert', 'witness:NJQ_K057'], ['NJQ_contract.py', 'NJQ_K059', 'entry', 'split_head'], ['NJQ_contract.py', 'NJQ_K060', 'entry', 'split_head', 'invert']],
  'total_carriers':[['NJQ_formal.py','NJQ_L055','lean','NJQ_MasterTotal'],['NJQ_formal.py','NJQ_L056','lean','NJQ_IdentityCut'],['NJQ_formal.py','NJQ_L057','lean','NJQ_Canonical']],

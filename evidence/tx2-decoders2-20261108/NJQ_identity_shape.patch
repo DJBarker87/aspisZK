@@ -1,0 +1,28 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJQ_identity_shape.rs
+@@ -0,0 +1,25 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++impl kani::Arbitrary for PoolIdentityV1 {
++ fn any()->Self {Self{pool:kani::any(),asset_mint:kani::any(),token_program:kani::any(),asset_id:M31(kani::any()),deployment_domain:kani::any()}}
++}
++impl kani::Arbitrary for PoolV1FormatError {
++ fn any()->Self {let x:u8=kani::any();kani::assume(x<8);match x {0=>Self::WrongLength,1=>Self::WrongMagic,2=>Self::WrongVersion,3=>Self::NonZeroReserved,4=>Self::NonCanonicalAssetId,5=>Self::UnsupportedFlags,6=>Self::ZeroRequiredBinding,_=>Self::InvalidAuthorityMode}}
++}
++#[kani::ensures(|r| (r.is_ok()==(seed&1==0))!=cfg!(NJQ_invert))]
++#[kani::modifies()]
++fn shape_probe(seed:u8,scratch:&mut u8)->Result<PoolIdentityV1,PoolV1FormatError>{
++ let control_writes=false;
++ if control_writes {*scratch=seed;}
++ if seed&1==0 {Ok(PoolIdentityV1{pool:[seed;32],asset_mint:[0;32],token_program:[0;32],asset_id:M31(0),deployment_domain:[0;32]})}else{Err(PoolV1FormatError::WrongMagic)}
++}
++fn native_assert(seed:u8,out:Result<PoolIdentityV1,PoolV1FormatError>){match out{Ok(p)=>assert_eq!(p.pool[0],seed),Err(e)=>assert_eq!(e,PoolV1FormatError::WrongMagic)}}
++#[kani::proof_for_contract(shape_probe)]
++#[kani::unwind(33)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn shape_contract(){let seed:u8=kani::any();let mut scratch:u8=kani::any();let out=shape_probe(seed,&mut scratch);native_assert(seed,out);}
++#[kani::proof]
++#[kani::stub_verified(shape_probe)]
++#[kani::unwind(33)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn shape_unimplied(){let seed:u8=kani::any();let mut scratch:u8=kani::any();let out=shape_probe(seed,&mut scratch);native_assert(seed,out);}
