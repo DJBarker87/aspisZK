@@ -1,0 +1,7 @@
+theorem NKV_ClassifiedBody.no_lost_ok : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n slot : Usize) (keys : Std.Array U64 16#usize) (i ai : Indices) (v av : Values) (d pos : Usize),
+  NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d pos ≠
+    ok (done (ai, av, core.result.Result.Ok (), true)) :=
+⋯
+'NKV_ClassifiedBody.no_lost_ok' depends on axioms: [propext, Classical.choice, Quot.sound]

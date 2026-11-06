@@ -1,0 +1,41 @@
+{"attempt": "NKV_L005", "exit_status": 0, "wall_seconds": 4.144083981169388, "peak_rss_kib": "4420284", "swaps": "0", "print_axioms": ["'NKV_LoopTransport.execute' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_LoopTransport.transport' does not depend on any axioms", "'NKV_LoopTransport.erase_flow' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_LoopTransport.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_LoopTransport.source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n slot : Usize) (keys : Std.Array U64 16#usize) (s : State) (out : Result Out),
+  Walk
+      (fun x =>
+        match x with
+        | (i, v, d, p) =>
+          NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d p)
+      s out →
+    loop
+        (fun x =>
+          match x with
+          | (i, v, d, p) =>
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot
+              keys i
+...
+theorem NKV_LoopTransport.source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n slot : Usize) (keys : Std.Array U64 16#usize) (s : State) (out : Result Out),
+  Walk
+      (fun x =>
+        match x with
+        | (i, v, d, p) =>
+          NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d p)
+      s out →
+    loop
+        (fun x =>
+          match x with
+          | (i, v, d, p) =>
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot
+              keys i v d p)
+        s =
+      mapResult eraseOut out :=
+⋯
+'NKV_LoopTransport.execute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_LoopTransport.transport' does not depend on any axioms
+'NKV_LoopTransport.erase_flow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_LoopTransport.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r632ba0f39e0142fba6f085740d031d1a.scope; invocation ID: 2b23737da7384b27a0f35e19e1c5386a

@@ -1,0 +1,58 @@
+{"attempt": "NKV_L010", "exit_status": 1, "wall_seconds": 5.499941092915833, "peak_rss_kib": "4408704", "swaps": "0", "print_axioms": ["'NKV_Progress.continues' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_Progress.done_classified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_Progress.lean:38:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (ai, av, r, true).2.2.1
+in the target expression
+  NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d pos =
+    ok (done (ai, av, r, true))
+
+case true
+ops : AspisR1.Port3_NativeBatchBody.Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+proof : Slice U8
+root : Std.Array U8 32#usize
+tree : Usize
+hash : H
+lo n slot : Usize
+keys : Std.Array U64 16#usize
+i : Indices
+v : Values
+d pos : Usize
+ai : Indices
+av : Values
+r : Reply
+step :
+  NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d pos =
+    ok (done (ai, av,
+...
+ av, r, true).2.2.2 = true
+success : (ai, av, r, true).2.2.1 = core.result.Result.Ok ()
+⊢ False
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+theorem NKV_Progress.continues : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n slot : Usize) (keys : Std.Array U64 16#usize) (i ai : Indices) (v av : Values) (d pos ad apos : Usize),
+  NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d pos =
+      ok (cont (ai, av, ad, apos)) →
+    apos = pos.wrapping_add 1#usize ∧ pos < n :=
+⋯
+theorem NKV_Progress.done_classified : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n slot : Usize) (keys : Std.Array U64 16#usize) (i : Indices) (v : Values) (d pos : Usize) (out : Out),
+  NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d pos = ok (done out) →
+    WellClassified out :=
+⋯
+'NKV_Progress.continues' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_Progress.done_classified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rdbfabe40fef74836a51e44bb433198f7.scope; invocation ID: d75cdc2838474aa1995931a3018aba23

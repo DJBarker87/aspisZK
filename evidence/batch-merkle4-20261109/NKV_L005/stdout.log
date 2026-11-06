@@ -1,0 +1,22 @@
+theorem NKV_LoopTransport.source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n slot : Usize) (keys : Std.Array U64 16#usize) (s : State) (out : Result Out),
+  Walk
+      (fun x =>
+        match x with
+        | (i, v, d, p) =>
+          NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d p)
+      s out →
+    loop
+        (fun x =>
+          match x with
+          | (i, v, d, p) =>
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot
+              keys i v d p)
+        s =
+      mapResult eraseOut out :=
+⋯
+'NKV_LoopTransport.execute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_LoopTransport.transport' does not depend on any axioms
+'NKV_LoopTransport.erase_flow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_LoopTransport.source' depends on axioms: [propext, Classical.choice, Quot.sound]

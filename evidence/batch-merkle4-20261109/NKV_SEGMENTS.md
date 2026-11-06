@@ -1,0 +1,13 @@
+# NKV source-ordered native segments
+
+Target not yet established; no composed Merkle row.
+
+Inherited unchanged: NKB K019/K020 entered Parse block; NKB K013/K014 immediate duplicate/write cuts; NKL K001/K002 Merkle return, K003/K004 Ok return, K005/K006 verify-final full child footprint; NKL K009/K010 count-input, K025/K026 capacity guard. Prior retired timeouts are not rerun. These entered blocks do not alone establish branch entry.
+
+NKV values_calls (ACTUAL frozen batch_merkle_values via kani::stub(batch_tree,logged_tree)): K005 PASS (0/633 failed), K006 inverse Result FAIL, K007 inverse copied-root argument FAIL. Both controls are semantic failures in the same deployed-feature/KMX configuration. No field arithmetic, function-pointer assertions, writable static or stub_verified. Full child footprint: both complete scratch arrays become kani::any at each entered tree. A local digest carrier holds the error codes and arbitrary j<16,k<32; typed cell sampling checks zero initialization and exact preceding child poststate at every next call. Roots, queries, batch, tree and proof pointer/width are checked at SAME call arguments. Explicit constructor replies cover Ok, Err(Parse), Err(Merkle). Exact first-error determines no later call and final Result.
+
+Native input envelope at K005-K007 is proof width1; parent passes it without reading bytes. This is SUPPORT ONLY until the actual57607-byte caller envelope is certified. No width1 pass is substituted for caller coverage. Ordered oracle logs of each actual tree are not instantiated yet. Logging-only header requests carry coordinates; they are harness ghosts, not claimed runtime digest queries.
+
+K001/K003/K004 raw nested-value byte logging failed; K005 uses typed arbitrary-coordinate logging instead, same names and semantic property. The failure is retained as an instrumentation finding, not a Rust defect. Exact KMX patch SHA256 bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67. Before every Kani run: frozen resolved graph equality, deployed feature metadata, offline command; after every run: lock unchanged. Exact receipts/patches are the corresponding K*_validation directories.
+
+K008 strengthens the SAME values_calls cut to the actual57607-byte proof carrier, arbitrary bytes. PASS,0/633 failures,52.73069967213087s,peak2225436KiB,swap0. The parent never reads or loops over the proof buffer; the frozen body passes its exact pointer/width through each child. This is not a whole-buffer arithmetic/iterator run. Full-envelope matched controls K009/K010 pending (these names are NKV parent attempts, not retired NKL count/padding shapes).

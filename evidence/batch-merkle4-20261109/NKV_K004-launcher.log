@@ -1,0 +1,40 @@
+{"attempt": "NKV_K004", "exit_status": 1, "wall_seconds": 43.18212689389475, "peak_rss_kib": "1701660", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+SizeIterator>::len
+
+Check 608: <core::slice::IterMut<'_, ()> as core::iter::ExactSizeIterator>::len.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <core::slice::IterMut<'_, ()> as core::iter::ExactSizeIterator>::len
+
+Check 609: <core::slice::IterMut<'_, ()> as core::iter::ExactSizeIterator>::len.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <core::slice::IterMut<'_, ()> as core::iter::ExactSizeIterator>::len
+
+
+SUMMARY:
+ ** 2 of 609 failed (7 unreachable)
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109/NKV_workspace/crates/aspis-r1-cost-probe/../../NKV_harness.rs", line 29, in <verifier::candidate::NKV_native::ParentOracle<'_> as aspis_core::Digest32>::digest
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109/NKV_workspace/crates/aspis-r1-cost-probe/../../NKV_harness.rs", line 29, in <verifier::candidate::NKV_native::ParentOracle<'_> as aspis_core::Digest32>::digest
+
+VERIFICATION:- FAILED
+Verification Time: 40.64282s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKV_native::values_calls
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rd0eb384ae25e4b73b2c941e1ecf1f1af.scope; invocation ID: 8bc1952058bb452ba472fe663087d5e3

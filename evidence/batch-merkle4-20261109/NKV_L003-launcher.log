@@ -1,0 +1,59 @@
+{"attempt": "NKV_L003", "exit_status": 1, "wall_seconds": 4.287992510944605, "peak_rss_kib": "4385592", "swaps": "0", "print_axioms": []}
+@[irreducible] def Aeneas.Std.loop.{u, v} : {α : Type u} →
+  {β : Type v} → (α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) → α → Aeneas.Std.Result β :=
+fun {α} {β} body =>
+  Lean.Order.fix
+    (fun f x =>
+      match body x with
+      | Aeneas.Std.Result.ok r =>
+        match r with
+        | Aeneas.Std.ControlFlow.cont x => f x
+        | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+      | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+    ⋯
+theorem Aeneas.Std.loop.eq_def.{u, v} : ∀ {α : Type u} {β : Type v}
+  (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  Aeneas.Std.loop body x =
+    matc
+...
+nt x => f x
+        | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+      | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+    ⋯
+theorem Aeneas.Std.loop.eq_def.{u, v} : ∀ {α : Type u} {β : Type v}
+  (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  Aeneas.Std.loop body x =
+    match body x with
+    | Aeneas.Std.Result.ok r =>
+      match r with
+      | Aeneas.Std.ControlFlow.cont x => Aeneas.Std.loop body x
+      | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div :=
+fun {α} {β} body x =>
+  id
+    (Eq.trans (congrFun (Lean.Order.fix_eq (Aeneas.Std.loop._proof_1 body)) x)
+      (Eq.refl
+        (match body x with
+        | Aeneas.Std.Result.ok r =>
+          match r with
+          | Aeneas.Std.ControlFlow.cont x =>
+            Lean.Order.fix
+              (fun f x =>
+                match body x with
+                | Aeneas.Std.Result.ok r =>
+                  match r with
+                  | Aeneas.Std.ControlFlow.cont x => f x
+                  | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+                | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+              (Aeneas.Std.loop._proof_1 body) x
+          | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+        | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+        | Aeneas.Std.Result.div => Aeneas.Std.Result.div)))
+NKV_Inspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.loop.induct`
+NKV_Inspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.loop.raw_induct`
+
+Running as unit: run-r2550a8f6ef4b42b0a39ee924ff1dc8a8.scope; invocation ID: 071bfc91f2d442358acb1c3c8d7f7372

@@ -1,0 +1,9 @@
+# NKV transport status
+
+The direct reference retains the exact returned Rust Err(Parse)/Err(Merkle) and all Ok scratch values. The unchanged emitted cohort preserves the duplicate Err arm as ok(Err Merkle,...), while the three post-loop exits become fail panic. NKV_ReturnBoundary.duplicate_preserved proves that distinction. A literal all-errors iff Aeneas Result.fail claim is false at this immediate boundary; rejection after observing Rust Result identifies both correctly. Clarification requested asynchronously while independent work continues.
+
+Checked support: NKV_StepErasure.source equates one reference step after ghost erasure to the original cohort step. NKV_LoopTransport.source lifts it along a source-ordered finite Walk including child fail/div. NKV_ReturnBoundary.observed/prefix_transport preserve full Ok value and any identical event prefix under WellClassified. NKV_ClassifiedBody.no_lost_ok discharges the key local classification property from the actual explicit-body syntax. All compiled passing top theorems print only standard axioms; failed attempts are excluded.
+
+Not yet proved: actual CLOSED-child dictionary installation and its domains for every SAME argument; concrete ordered child-effect/oracle-query trace; full native tree cut/frame chain; the adopted abstract cohort rejection observation; parent/root closure under aq(2). Generic Ops/Walk or WellClassified premises are support-only and will not be positive root hypotheses.
+
+L011 Progress.continues/done_classified and L012 BoundedLoop.finite/classified/source PASS with standard axioms. BoundedLoop derives finite termination of the outer control traversal for n<=12 even when a child aborts/diverges; it does not assume a finite-Walk or child success. It proves full f_ref-loop/cohort-loop classification and value-erasure on arbitrary initial scratch and child Results. Dictionary instantiation and actual query traces remain separate.
