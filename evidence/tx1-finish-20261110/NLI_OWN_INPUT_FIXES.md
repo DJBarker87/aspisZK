@@ -9,3 +9,11 @@ L012 initially refused by the local serial client guard while L011 was still col
 L033 terminalGuard reached the same concrete-normalization memory pattern (exit1,23.409498s,7168732KiB,swap0). Replaced it with abstract-fuel NLI_Window.terminalGuard_head L034 and a chain-only theorem L035, both PASS around6.35GB. Remaining uncompiled nontrivial heads split proactively. No unchanged failed shape rerun. L052 was a local name-shadowing error: parameter alpha shadowed theorem alpha; fully-qualified the theorem in uncompiled sources.
 
 L070 source comparison's unconstrained bind-congruence application opened the circle child's internals and introduced a digest-array value instead of the whole circle reply. L071 pins congruence explicitly to the complete circleValidated call at the SAME arguments; source comparison passes. No child arithmetic is unfolded. L072 proves the explicit NLC goal and initialized adopted fold.
+
+Before native proof, L074 widened the untested wire geometry to use one backing allocation for c1_root and all27 independent record slices. K001 codegen failed on the exact KMX include's alloc paths in the program crate; no semantic proof ran. L075 moves the UNCHANGED KMX include to the library's existing cfg-only KMX setup and imports its exact function in the program harness. No KMX body, production function or infrastructure changed. Graph matched frozen and post-lock hash stayed frozen.
+
+K020 first client invocation was rejected by the local serial guard while K019 was active; no host admission or launch occurred. K020 was submitted only after K019 completed. No budgeted shape was repeated.
+
+L090 failed to decide a locally defined zero counter containing the free reply variable. L091 explicitly changes that projected scalar goal to0<255 before decide; no source recurrence is unfolded. Failed sorryAx output is retained only as a failed receipt and never accepted or imported.
+
+L092 small symbolic initialization invariant failed on local identifier/spacing and reflexive-if simplification; L093 uses explicit hj:j<i and a small write-only simplification. L096 resource proposal failed on unavailable Result.map and reserved identifier prefix; L097 uses explicit Result bind and enteredLog. Validation is unchanged/stricter; no timeout or memory cap changed.

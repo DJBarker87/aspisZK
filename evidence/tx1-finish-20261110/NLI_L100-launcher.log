@@ -1,0 +1,42 @@
+{"attempt": "NLI_L100", "exit_status": 0, "wall_seconds": 22.279843828175217, "peak_rss_kib": "6353348", "swaps": "0", "print_axioms": ["'AspisR1.NLI_TerminalStep.reply_exact' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLI_TerminalStep.to_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLI_TerminalStep.reply_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLI_TerminalStep.to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLI_TerminalStep.to_source : ∀ {A H : Type} (native : Native),
+  RowSpec_256 native →
+    ∀ (heap : A) (s : State H), s.next = Event.terminal → run (nativeStep native heap s) = run (step s) :=
+fun {A H} native packet heap s atSite =>
+  Eq.mpr (id (congrArg (fun _a => run (nativeStep native heap s) = run _a) (step_terminal s atSite)))
+    (id
+      (id
+        (id
+          (Eq.mpr
+            (id
+              (congrFun'
+                (congrArg Eq
+                  (congrArg run
+    
+...
+= s.locals.high, blind := s.locals.blind, mask := s.locals.mask,
+                            extra := s.locals.extra, product := s.locals.product, partialValue := s.locals.partialValue,
+                            masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                            beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                            record26 := s.locals.record26, payload := s.locals.payload, extraCell := s.locals.extraCell,
+                            root := s.locals.root })))))
+            (Eq.refl
+              (run do
+                let c ← liftM (NLC_Finish.read s.locals.claims)
+                let a ← liftM (NLC_Finish.read s.locals.alpha)
+                let r ← liftM (FIq_Terminal.terminal s.input.publicValue c a s.input.challenges)
+                pure
+                    (Sum.inr
+                      (put s Event.mapPublic
+                        { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                          claims := s.locals.claims, terminalReply := some r, terminal := s.locals.terminal,
+                          low := s.locals.low, high := s.locals.high, blind := s.locals.blind, mask := s.locals.mask,
+                          extra := s.locals.extra, product := s.locals.product, partialValue := s.locals.partialValue,
+                          masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                          beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                          record26 := s.locals.record26, payload := s.locals.payload, extraCell := s.locals.extraCell,
+                          root := s.locals.root }))))))))
+
+Running as unit: run-r851fc025f8d543d0a0c16a0079f9f5bb.scope; invocation ID: bc016371f76941f2a9c243a6a3802fb7

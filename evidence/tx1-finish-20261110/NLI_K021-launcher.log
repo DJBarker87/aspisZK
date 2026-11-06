@@ -1,0 +1,67 @@
+{"attempt": "NLI_K021", "exit_status": 0, "wall_seconds": 18.997275860980153, "peak_rss_kib": "875860", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+AccountInfo<'_>; N]) -> ProgramResult {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `authenticate_invariant_release_registry` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:523:4
+    |
+523 | fn authenticate_invariant_release_registry(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `authenticate_asq8_accounts` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:672:4
+    |
+672 | fn authenticate_asq8_accounts(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `validate_asq8` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:886:4
+    |
+886 | fn validate_asq8(
+    |    ^^^^^^^^^^^^^
+
+warning: function `check_claims` is never used
+  --> programs/r1-cost-probe/src/NLI_program.rs:68:4
+   |
+68 | fn check_claims(mode:u8,bad:bool){
+   |    ^^^^^^^^^^^^
+
+warning: module `NLI_program` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:174:9
+    |
+174 | pub mod NLI_program;
+    |         ^^^^^^^^^^^ help: convert the identifier to snake case: `nli_program`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.91s
+Checking harness NLI_program::construct_transcript_cut...
+
+VERIFICATION RESULT:
+ ** 0 of 278 failed (13 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 16.052345s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r6d68760485d04e7a99b22b313c629820.scope; invocation ID: 238ca0730bbd416398a277330acf1b12

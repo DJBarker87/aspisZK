@@ -1,0 +1,51 @@
+//! Reviewed leading verify_finish segment with a LOCAL oracle log.
+//! No native credit until paired Kani receipts and Lean installation exist.
+use super::*;
+use aspis_core::field::QM31;
+use crate::r1_wire::NLI_factory;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+pub type RoundOut<H> = Result<(QM31,[QM31;10],SemanticTranscript<H>),Error>;
+pub struct RoundLog<H:Digest32> {
+ pub reply:Option<RoundOut<H>>,pub calls:usize,pub row:usize,pub cell:usize,
+ pub root_ptr:usize,pub root_byte:u8,pub record_ptr:usize,pub record_len:usize,pub record_byte:Option<u8>,
+ pub input_state:[u8;32],pub input_next:u8,
+}
+impl<H:Digest32+Copy> RoundLog<H> {
+ fn rounds(&mut self,prefix:&Prefix<'_>,transcript:SemanticTranscript<H>)->RoundOut<H>{
+  self.calls+=1;
+  self.root_ptr=prefix.c1_root.as_ptr() as usize;self.root_byte=prefix.c1_root[self.cell%32];
+  let record=NLI_factory::record(prefix,self.row);
+  self.record_ptr=record.as_ptr() as usize;self.record_len=record.len();
+  let (state,_,next)=NLI_factory::snapshot(&transcript);self.input_state=state;self.input_next=next;
+  self.reply.take().expect("one entered call consumes one local oracle reply")
+ }
+}
+/// Exactly the non-prover leading destructure and deployed phase tick.
+/// The only call substitution is semantic_rounds -> the local logging oracle.
+pub fn source_rounds<H:Digest32+Copy>(prefix:Prefix<'_>,transcript:SemanticTranscript<H>,log:&mut RoundLog<H>)->RoundOut<H>{
+    let (running, alpha, mut transcript) = log.rounds(&prefix, transcript)?;
+    mark(None, 2);
+    Ok((running,alpha,transcript))
+}
+
+pub type ClaimOut=Result<Box<[[QM31;29];3]>,Error>;
+pub struct ClaimLog {
+ pub reply:Option<ClaimOut>,pub calls:usize,pub row:usize,pub cell:usize,
+ pub root_ptr:usize,pub root_byte:u8,pub record_ptr:usize,pub record_len:usize,
+}
+impl ClaimLog {
+ fn claims(&mut self,prefix:&Prefix<'_>)->ClaimOut{
+  self.calls+=1;self.root_ptr=prefix.c1_root.as_ptr() as usize;self.root_byte=prefix.c1_root[self.cell%32];
+  let record=NLI_factory::record(prefix,self.row);self.record_ptr=record.as_ptr() as usize;self.record_len=record.len();
+  self.reply.take().expect("one claims call consumes one owned reply")
+ }
+}
+pub fn source_claims(prefix:&Prefix<'_>,log:&mut ClaimLog)->ClaimOut{
+    let claims = log.claims(&prefix)?;
+    Ok(claims)
+}
+/// The literal deployed constructor, now instantiated by the program's
+/// actual SolanaDigest carrier rather than the old Hash(u64) helper.
+pub fn source_construct<H:Digest32>(c1_root:&[u8;32],root:[u8;32],challenges:Challenges,alpha:[QM31;10],claims:Box<[[QM31;29];3]>,extra:[QM31;29],before_z1:[QM31;29],state_before_z0:[u8;32],z0:SecureCirclePoint,z1:SecureCirclePoint,transcript:SemanticTranscript<H>)->Verified<H>{
+    Verified { roots:[*c1_root,root],challenges,alpha,claims,extra,before_z1,state_before_z0,z:[z0,z1],transcript }
+}

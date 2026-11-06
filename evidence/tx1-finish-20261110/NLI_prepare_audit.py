@@ -14,9 +14,14 @@ assert 'NLI_SourceEquality' in mods, 'Exact FinishSourceEquality must compile be
 text='import NLG_COMBINED_IMPORT\nimport NLC_COMBINED_IMPORT\n'+''.join('import '+m+'\n' for m in mods)+'\n-- No row credit before next ledger gate; exact submitted scope in handoff.\n'
 for n in [headline]+roots:text+='#print axioms '+n+'\n#check @'+n+'\n'
 (E/'NLI_generated/NLI_COMBINED_IMPORT.lean').write_text(text);(E/'NLI_COMBINED_IMPORT.lean').write_text(text)
-(E/'NLI_MODULES.json').write_text(json.dumps(dict(modules=mods,roots=roots,unproved_goal='AspisR1.NLI_Goals.FinishSourceEquality',row_roots=[]),indent=2))
+(E/'NLI_MODULES.json').write_text(json.dumps(dict(modules=mods,roots=roots,proved_source_goal='AspisR1.NLI_Source.finishSourceEquality',unproved_goal='TX1:136 full native parent realization',row_roots=[]),indent=2))
 a=json.loads((W/'NLG_AUDIT_ROOTS.json').read_text());all_old=set(a['roots'])
-extra=[x for x in json.loads((P/'NLC_AUDIT_ROOTS.json').read_text())['roots']+roots if x not in all_old];extra=sorted(set(extra));a['groups'].append(extra);a['roots']=a['roots']+extra
+extra=[x for x in json.loads((P/'NLC_AUDIT_ROOTS.json').read_text())['roots']+roots if x not in all_old];extra=sorted(set(extra));a['roots']=a['roots']+extra
+# Smaller independently scoped groups than predecessor; unchanged complete root set.
+last=max(int(p.parent.name[5:8]) for p in E.glob('NLI_L[0-9][0-9][0-9]/receipt.json'))
+groupcount=150-last-8
+assert groupcount>=34, 'Reserve all combined/driver/fixture/scan/close scopes'
+a['groups']=[a['roots'][i::groupcount] for i in range(groupcount)]
 (E/'NLI_AUDIT_ROOTS.json').write_text(json.dumps(a));(E/'NLI_AUDIT_MODULES.json').write_text(json.dumps([['NLI_COMBINED_IMPORT'] for _ in a['groups']]))
 expected={};conflicts=[]
 for path in [W/'NLG_EXPECTED_IMPORTS.jsonl',P/'NLC_EXPECTED_IMPORTS.jsonl']:
@@ -34,6 +39,7 @@ for name in ['Driver','ProofDriver']:
  (E/'NLI_generated'/('NLI_'+name+'.lean')).write_text(s)
 for name in ['audit_batch.py','audit_config.py','pin.py']:
  s=(P/('NLC_'+name)).read_text().replace('NLC','NLI').replace('codex-cx-tx1-driver2-20261109','codex-cx-tx1-finish-20261110')
+ s=s.replace('NLI_exports_20261109','NLI_exports_20261110')
  (E/('NLI_'+name)).write_text(s)
 # Unchanged C inputs for existing walker and memory limit, copied once with hashes.
 (E/'NLI_native').mkdir(exist_ok=True)
@@ -42,3 +48,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
  shutil.copyfile(P/'NLC_native'/n,E/'NLI_native'/n);pins[n]=hashlib.sha256((E/'NLI_native'/n).read_bytes()).hexdigest()
 (E/'NLI_AUDIT_INPUT_PINS.json').write_text(json.dumps(pins,indent=2))
 print(json.dumps(dict(modules=len(mods),own_roots=len(roots),required_roots=len(a['roots']),groups=len(a['groups']),expected_import_conflicts=0)))
+
+(E/'NLI_PATHS.json').write_text(json.dumps(json.loads((E/'NLI_ENV.json').read_text())['LEAN_PATH'].split(':')))
+priors={tag:json.loads(lzma.decompress((base/(tag+'_CLOSURE_PINS.json.xz')).read_bytes())) for tag,base in [('NLG',W),('NLC',P)]}
+(E/'NLI_PREDECESSORS.json.xz').write_bytes(lzma.compress(json.dumps(priors).encode()))

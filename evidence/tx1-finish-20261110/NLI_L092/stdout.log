@@ -1,0 +1,41 @@
+NLI_generated/NLI_FromFnInduction.lean:17:19: error: unexpected token ':='; expected term
+NLI_generated/NLI_FromFnInduction.lean:16:1: error: unsolved goals
+case pos
+values : ℕ → Q
+i : ℕ
+memory : Memory
+before : Initialized values i memory
+inside : i < i + 1
+⊢ (if True then some (values i) else memory i) = some (values i)
+NLI_generated/NLI_FromFnInduction.lean:17:16: error: Application type mismatch: The argument
+  j
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.19
+of sort `Type (?u.19 + 1)` in the application
+  @PrincipalSeg j
+NLI_generated/NLI_FromFnInduction.lean:17:1: error: unsolved goals
+case earlier
+values : ℕ → Q
+i : ℕ
+memory : Memory
+before : Initialized values i memory
+j : ℕ
+inside : j < i + 1
+same : ¬j = i
+⊢ PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+
+case neg
+values : ℕ → Q
+i : ℕ
+memory : Memory
+before : Initialized values i memory
+j : ℕ
+inside : j < i + 1
+same : ¬j = i
+earlier : PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ write memory i (values i) j = some (values j)
+'AspisR1.NLI_FromFn.write_prefix' depends on axioms: [sorryAx]
+'AspisR1.NLI_FromFn.fill_prefix' depends on axioms: [sorryAx]
+'AspisR1.NLI_FromFn.byte_frame' depends on axioms: [propext, Classical.choice, Quot.sound]

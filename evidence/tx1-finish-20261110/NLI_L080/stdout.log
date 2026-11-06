@@ -1,0 +1,26 @@
+'AspisR1.NLI_RoundsCarry.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLI_RoundsCarry.from_child' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLI_RoundsCarry.from_child : ∀ {H : Type} (native : Native),
+  Cut native →
+    ∀ (childNative : NJM_RoundsCut.Observations),
+      NJM_RoundsCut.Cut childNative →
+        ∀ (token frame : ℕ) (D : aspis_core.Digest32 H) (bytes : Slice U8)
+          (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix),
+          AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre) →
+            ∀ (before : r1_wire.SemanticTranscript H),
+              ∃ running,
+                afterChild native before.hash
+                    (NJM_RoundsInduction.chain childNative token frame D (PrefixAdapter.fromOld pre) sites
+                      (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, before)) =
+                  run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before) :=
+fun {H} native cut childNative childCut token frame D bytes pre parsed before =>
+  let ⟨running, whole⟩ := NJM_RoundsInduction.rounds childNative childCut token frame D bytes pre parsed before
+  Exists.intro running
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            afterChild native before.hash _a =
+              run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before))
+          (Eq.symm whole)))
+      (source native cut D bytes pre parsed before))

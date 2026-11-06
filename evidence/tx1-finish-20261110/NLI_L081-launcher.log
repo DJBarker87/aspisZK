@@ -1,0 +1,43 @@
+{"attempt": "NLI_L081", "exit_status": 1, "wall_seconds": 16.235978392884135, "peak_rss_kib": "6322656", "swaps": "0", "print_axioms": ["'AspisR1.NLI_RoundsInstall.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLI_generated/NLI_RoundsInstall.lean:25:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    match parsed : _a with
+    | ok (core.result.Result.Ok pre) =>
+      (∃ running,
+          run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before) =
+            NJM_RoundsInduction.chain childNative token frame D (PrefixAdapter.fromOld pre) sites
+              (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, before)) ∧
+        ∀ (r : Usize) (member : r ∈ sites) (carry : Carry H),
+          NJM_RoundsClosed.Child D bytes pre parsed carry.2.2 carry.2.1 carry.1 r ⋯
+    | ok (core.result.Result.Err a) => True
+    | fail e => True
+    | div => 
+...
+dapter.fromOld pre) before)) ∧
+    (∀ (r : Usize) (member : r ∈ sites) (carry : Carry H),
+        NJM_RoundsClosed.Child D bytes pre parsed carry.2.2 carry.2.1 carry.1 r ⋯) ∧
+      NLI_RoundsHash.Outcome before.hash
+        (run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before)).2
+'AspisR1.NLI_RoundsInstall.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLI_RoundsInstall.source : ∀ {H : Type} (native : NLI_RoundsCarry.Native),
+  NLI_RoundsCarry.Cut native →
+    ∀ (childNative : NJM_RoundsCut.Observations),
+      NJM_RoundsCut.Cut childNative →
+        ∀ (token frame : ℕ) (D : aspis_core.Digest32 H) (bytes : Slice U8)
+          (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix)
+          (parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre))
+          (before : r1_wire.SemanticTranscript H),
+          (∃ running,
+              NLI_RoundsCarry.afterChild native before.hash
+                  (NJM_RoundsInduction.chain childNative token frame D (PrefixAdapter.fromOld pre) sites
+                    (running, Array.repeat 10#usize aspis_core.field.QM31.ZERO, before)) =
+                run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before)) ∧
+            (∀ (r : Usize) (member : r ∈ sites) (carry : Carry H),
+                NJM_RoundsClosed.Child D bytes pre parsed carry.2.2 carry.2.1 carry.1 r ⋯) ∧
+              NLI_RoundsHash.Outcome before.hash
+                (run (S1SemanticCode.rounds NJM_RoundJoin.R D (PrefixAdapter.fromOld pre) before)).2 :=
+fun {H} native cut childNative childCut token frame D bytes pre parsed before =>
+  have packet := NJM_InvocationRoots.rounds childNative childCut token frame D bytes before;
+  sorry packet
+
+Running as unit: run-rb0738893e0164240a90d94799e55b84f.scope; invocation ID: bcc59ff7d6f1444baeb862c74529acf0

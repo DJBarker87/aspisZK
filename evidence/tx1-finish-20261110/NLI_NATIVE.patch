@@ -1,0 +1,278 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -328,3 +328,7 @@
+ #[cfg(kani)]
+ #[path = "NLC_native.rs"]
+ pub(crate) mod NLC_native;
++
++#[cfg(kani)]
++#[path = "NLI_rounds.rs"]
++pub mod NLI_rounds;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NLI_rounds.rs
+@@ -0,0 +1,60 @@
++//! Reviewed leading verify_finish segment with a LOCAL oracle log.
++//! No native credit until paired Kani receipts and Lean installation exist.
++use super::*;
++use aspis_core::field::QM31;
++use crate::r1_wire::NLI_factory;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++pub type RoundOut<H> = Result<(QM31,[QM31;10],SemanticTranscript<H>),Error>;
++pub struct RoundLog<H:Digest32> {
++ pub reply:Option<RoundOut<H>>,pub calls:usize,pub row:usize,pub cell:usize,
++ pub root_ptr:usize,pub root_byte:u8,pub record_ptr:usize,pub record_len:usize,pub record_byte:Option<u8>,
++ pub input_state:[u8;32],pub input_next:u8,
++}
++impl<H:Digest32+Copy> RoundLog<H> {
++ fn rounds(&mut self,prefix:&Prefix<'_>,transcript:SemanticTranscript<H>)->RoundOut<H>{
++  self.calls+=1;
++  self.root_ptr=prefix.c1_root.as_ptr() as usize;self.root_byte=prefix.c1_root[self.cell%32];
++  let record=NLI_factory::record(prefix,self.row);
++  self.record_ptr=record.as_ptr() as usize;self.record_len=record.len();
++  let (state,_,next)=NLI_factory::snapshot(&transcript);self.input_state=state;self.input_next=next;
++  self.reply.take().expect("one entered call consumes one local oracle reply")
++ }
++}
++/// Exactly the non-prover leading destructure and deployed phase tick.
++/// The only call substitution is semantic_rounds -> the local logging oracle.
++pub fn source_rounds<H:Digest32+Copy>(prefix:Prefix<'_>,transcript:SemanticTranscript<H>,log:&mut RoundLog<H>)->RoundOut<H>{
++    let (running, alpha, mut transcript) = log.rounds(&prefix, transcript)?;
++    mark(None, 2);
++    Ok((running,alpha,transcript))
++}
++
++pub type ClaimOut=Result<Box<[[QM31;29];3]>,Error>;
++pub struct ClaimLog {
++ pub reply:Option<ClaimOut>,pub calls:usize,pub row:usize,pub cell:usize,
++ pub root_ptr:usize,pub root_byte:u8,pub record_ptr:usize,pub record_len:usize,
++}
++impl ClaimLog {
++ fn claims(&mut self,prefix:&Prefix<'_>)->ClaimOut{
++  self.calls+=1;self.root_ptr=prefix.c1_root.as_ptr() as usize;self.root_byte=prefix.c1_root[self.cell%32];
++  let record=NLI_factory::record(prefix,self.row);self.record_ptr=record.as_ptr() as usize;self.record_len=record.len();
++  self.reply.take().expect("one claims call consumes one owned reply")
++ }
++}
++pub fn source_claims(prefix:&Prefix<'_>,log:&mut ClaimLog)->ClaimOut{
++    let claims = log.claims(&prefix)?;
++    Ok(claims)
++}
++/// The literal deployed constructor, now instantiated by the program's
++/// actual SolanaDigest carrier rather than the old Hash(u64) helper.
++pub fn source_construct<H:Digest32>(c1_root:&[u8;32],root:[u8;32],challenges:Challenges,alpha:[QM31;10],claims:Box<[[QM31;29];3]>,extra:[QM31;29],before_z1:[QM31;29],state_before_z0:[u8;32],z0:SecureCirclePoint,z1:SecureCirclePoint,transcript:SemanticTranscript<H>)->Verified<H>{
++    Verified { roots:[*c1_root,root],challenges,alpha,claims,extra,before_z1,state_before_z0,z:[z0,z1],transcript }
++}
++/// Post-callee claims segment; no whole Prefix or wire buffer is involved.
++pub fn source_claims_carry(reply:ClaimOut)->ClaimOut{let claims=reply?;Ok(claims)}
++/// Stop at the child entry, including the nonreturning child case.
++pub fn source_claims_entry(prefix:&Prefix<'_>,log:&mut ClaimLog){
++ log.calls+=1;log.root_ptr=prefix.c1_root.as_ptr() as usize;log.root_byte=prefix.c1_root[log.cell%32];
++ let record=NLI_factory::record(prefix,log.row);log.record_ptr=record.as_ptr() as usize;log.record_len=record.len();
++}
++pub fn source_low_iteration(claims:&Box<[[QM31;29];3]>,i:usize,slot:&mut core::mem::MaybeUninit<QM31>){slot.write(claims[0][i]);}
++pub fn source_high_iteration(claims:&Box<[[QM31;29];3]>,i:usize,slot:&mut core::mem::MaybeUninit<QM31>){slot.write(claims[0][16+i]);}
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -855,3 +855,7 @@
+ #[cfg(kani)]
+ #[path = "NLC_factory.rs"]
+ pub(crate) mod NLC_factory;
++
++#[cfg(kani)]
++#[path = "NLI_factory.rs"]
++pub mod NLI_factory;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NLI_factory.rs
+@@ -0,0 +1,5 @@
++use super::*;
++pub fn make<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->SemanticTranscript<H>{SemanticTranscript{state,hash,next_row}}
++pub fn snapshot<H:Digest32+Copy>(t:&SemanticTranscript<H>)->([u8;32],H,u8){(t.state,t.hash,t.next_row)}
++pub fn prefix<'a>(c1_root:&'a[u8;32],records:[&'a[u8];27])->Prefix<'a>{Prefix{c1_root,records}}
++pub fn record<'a>(p:&Prefix<'a>,row:usize)->&'a[u8]{p.records[row]}
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -168,3 +168,7 @@
+ #[cfg(all(test, feature="pool-adapter"))]
+ #[path="r1_pool_adapter_original.rs"]
+ mod r1_pool_adapter_original;
++
++#[cfg(kani)]
++#[path = "NLI_program.rs"]
++pub mod NLI_program;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NLI_program.rs
+@@ -0,0 +1,174 @@
++//! The ACTUAL deployed SolanaDigest carrier; no digest is reached in this cut.
++use super::*;
++use aspis_core::field::{M31,CM31,QM31};
++use aspis_r1_cost_probe::r1_semantic::NLI_rounds::{source_rounds,RoundLog};
++use aspis_r1_cost_probe::r1_wire::{NLI_factory,Error};
++use aspis_r1_cost_probe::r1_semantic::NLI_rounds::KMX_copy_nonoverlapping;
++fn q()->QM31{let a:[u32;4]=kani::any();QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{a:M31(a[2]),b:M31(a[3])}}}
++fn error()->Error{let tag:u8=kani::any();let row:u8=kani::any();let actual:u8=kani::any();let value:usize=kani::any();match tag%11{0=>Error::Allocation,1=>Error::RowOrder{expected:row,actual},2=>Error::InvalidRow,3=>Error::Tag{row},4=>Error::Length{row},5=>Error::NonCanonical{row,value},6=>Error::Boundary{round:value},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}}
++fn check_rounds(mode:u8,bad:bool){
++ let data:[u8;13831]=kani::any();let root:&[u8;32]=data[..32].try_into().unwrap();let offsets:[usize;27]=kani::any();let lengths:[usize;27]=kani::any();
++ let records:[&[u8];27]=core::array::from_fn(|i|{kani::assume(offsets[i]<=13831&&lengths[i]<=13831-offsets[i]);&data[offsets[i]..offsets[i]+lengths[i]]});let prefix=NLI_factory::prefix(root,records);
++ let row:usize=kani::any();let cell:usize=kani::any();let alpha_cell:usize=kani::any();kani::assume(row<27&&cell<13831&&alpha_cell<10);
++ let input_state:[u8;32]=kani::any();let input_next:u8=kani::any();let transcript=NLI_factory::make(SolanaDigest,input_state,input_next);
++ let running=q();let alpha=core::array::from_fn(|_|q());let output_state:[u8;32]=kani::any();let output_next:u8=kani::any();let err=error();let success:bool=kani::any();
++ let expected_running=running;let expected_alpha=alpha[alpha_cell];let expected_byte=output_state[cell%32];
++ let reply=if success{Ok((running,alpha,NLI_factory::make(SolanaDigest,output_state,output_next)))}else{Err(err)};
++ let mut log=RoundLog{reply:Some(reply),calls:0,row,cell,root_ptr:0,root_byte:0,record_ptr:0,record_len:0,record_byte:None,input_state:[0;32],input_next:0};
++ let root_before=root[cell%32];let data_before=data[cell];
++ let out=source_rounds(prefix,transcript,&mut log);
++ let entered=log.calls==1&&log.reply.is_none()&&log.root_ptr==root.as_ptr() as usize&&log.record_ptr==data.as_ptr() as usize+offsets[row]&&log.record_len==lengths[row];
++ let values=log.root_byte==root_before&&log.input_state[cell%32]==input_state[cell%32]&&log.input_next==input_next;
++ let frame=root[cell%32]==root_before&&data[cell]==data_before;
++ let selected=match out{Err(e)=>!success&&e==err&&(mode!=0||(values&&frame)),Ok((r,a,t))=>{let (s,_,n)=NLI_factory::snapshot(&t);success&&match mode{0=>entered&&values&&frame,1=>r==expected_running,2=>a[alpha_cell]==expected_alpha,3=>s[cell%32]==expected_byte&&n==output_next,_=>false}}};
++ assert!(entered);assert!(frame);kani::cover!(success);kani::cover!(!success);
++ if bad{assert!(!selected)}else{assert!(selected)}
++}
++
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_input_cut(){check_rounds(0,false)}
++
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_input_control(){check_rounds(0,true)}
++
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_running_cut(){check_rounds(1,false)}
++
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_running_control(){check_rounds(1,true)}
++
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_alpha_cut(){check_rounds(2,false)}
++
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_alpha_control(){check_rounds(2,true)}
++
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_transcript_cut(){check_rounds(3,false)}
++
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_transcript_control(){check_rounds(3,true)}
++
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_input_stability_cut(){check_rounds(0,false)}
++
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_input_stability_control(){check_rounds(0,true)}
++use aspis_r1_cost_probe::r1_semantic::NLI_rounds::{ClaimLog,source_claims,source_construct};
++fn check_claims(mode:u8,bad:bool){
++ let data:[u8;13831]=kani::any();let root:&[u8;32]=data[..32].try_into().unwrap();let offsets:[usize;27]=kani::any();let lengths:[usize;27]=kani::any();
++ let records:[&[u8];27]=core::array::from_fn(|i|{kani::assume(offsets[i]<=13831&&lengths[i]<=13831-offsets[i]);&data[offsets[i]..offsets[i]+lengths[i]]});let prefix=NLI_factory::prefix(root,records);
++ let row:usize=kani::any();let cell:usize=kani::any();let p:usize=kani::any();let col:usize=kani::any();kani::assume(row<27&&cell<13831&&p<3&&col<29);
++ let claims=Box::new(core::array::from_fn(|_|core::array::from_fn(|_|q())));let owner=(&*claims as *const [[QM31;29];3]) as usize;let expected=claims[p][col];let err=error();let success:bool=kani::any();
++ let reply=if success{Ok(claims)}else{Err(err)};let mut log=ClaimLog{reply:Some(reply),calls:0,row,cell,root_ptr:0,root_byte:0,record_ptr:0,record_len:0};let before=data[cell];let root_before=root[cell%32];
++ let out=source_claims(&prefix,&mut log);
++ let entered=log.calls==1&&log.reply.is_none();let args=log.root_ptr==root.as_ptr() as usize&&log.root_byte==root_before&&log.record_ptr==data.as_ptr() as usize+offsets[row]&&log.record_len==lengths[row]&&data[cell]==before;
++ let selected=match out{Err(e)=>!success&&e==err&&(mode!=2||args),Ok(value)=>success&&match mode{0=>value[p][col]==expected,1=>(&*value as *const [[QM31;29];3]) as usize==owner&&core::mem::size_of_val(&*value)==1392,2=>args,_=>false}};
++ assert!(entered);kani::cover!(success);kani::cover!(!success);if bad{assert!(!selected)}else{assert!(selected)}
++}
++fn challenges()->aspis_r1_cost_probe::r1_wire::Challenges{aspis_r1_cost_probe::r1_wire::Challenges{lambda:q(),chi:q(),theta:q(),zc:core::array::from_fn(|_|q()),mu:q(),eta:q()}}
++fn check_construct(mode:u8,bad:bool){
++ let c1:[u8;32]=kani::any();let root:[u8;32]=kani::any();let ch=challenges();let alpha=core::array::from_fn(|_|q());let claims=Box::new(core::array::from_fn(|_|core::array::from_fn(|_|q())));let extra=core::array::from_fn(|_|q());let before=core::array::from_fn(|_|q());
++ let state:[u8;32]=kani::any();let z0=aspis_core::circle::SecureCirclePoint{x:q(),y:q()};let z1=aspis_core::circle::SecureCirclePoint{x:q(),y:q()};let tstate:[u8;32]=kani::any();let next:u8=kani::any();let transcript=NLI_factory::make(SolanaDigest,tstate,next);
++ let cell:usize=kani::any();let p:usize=kani::any();let col:usize=kani::any();kani::assume(cell<32&&p<3&&col<29);let owner=(&*claims as *const [[QM31;29];3]) as usize;let expected=claims[p][col];
++ let out=source_construct(&c1,root,ch,alpha,claims,extra,before,state,z0,z1,transcript);let (after,_,after_next)=NLI_factory::snapshot(&out.transcript);
++ let selected=match mode{0=>after[cell]==tstate[cell]&&after_next==next,1=>(&*out.claims as *const [[QM31;29];3]) as usize==owner&&out.claims[p][col]==expected,2=>out.roots[0][cell]==c1[cell]&&out.roots[1][cell]==root[cell],_=>false};
++ if bad{assert!(!selected)}else{assert!(selected)}
++}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn claims_payload_cut(){check_claims_carry(0,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn claims_payload_control(){check_claims_carry(0,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn claims_owner_cut(){check_claims_carry(1,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn claims_owner_control(){check_claims_carry(1,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn claims_entry_cut(){check_claims_entry(false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn claims_entry_control(){check_claims_entry(true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn construct_transcript_cut(){check_construct(0,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn construct_transcript_control(){check_construct(0,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn construct_claims_cut(){check_construct(1,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn construct_claims_control(){check_construct(1,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn construct_roots_cut(){check_construct(2,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn construct_roots_control(){check_construct(2,true)}
++use aspis_r1_cost_probe::r1_semantic::NLI_rounds::{source_claims_carry,source_claims_entry,source_low_iteration,source_high_iteration};
++fn check_claims_carry(mode:u8,bad:bool){
++ let claims=Box::new(core::array::from_fn(|_|core::array::from_fn(|_|q())));let p:usize=kani::any();let col:usize=kani::any();kani::assume(p<3&&col<29);
++ let owner=(&*claims as *const [[QM31;29];3]) as usize;let expected=claims[p][col];let success:bool=kani::any();let err=error();let reply=if success{Ok(claims)}else{Err(err)};
++ let out=source_claims_carry(reply);let selected=match out{Err(e)=>!success&&e==err,Ok(value)=>success&&if mode==0{value[p][col]==expected}else{(&*value as *const [[QM31;29];3]) as usize==owner&&core::mem::size_of_val(&*value)==1392}};
++ kani::cover!(success);kani::cover!(!success);if bad{assert!(!selected)}else{assert!(selected)}
++}
++fn check_claims_entry(bad:bool){
++ let data:[u8;13831]=kani::any();let root:&[u8;32]=data[..32].try_into().unwrap();let offsets:[usize;27]=kani::any();let lengths:[usize;27]=kani::any();
++ let records:[&[u8];27]=core::array::from_fn(|i|{kani::assume(offsets[i]<=13831&&lengths[i]<=13831-offsets[i]);&data[offsets[i]..offsets[i]+lengths[i]]});let prefix=NLI_factory::prefix(root,records);
++ let row:usize=kani::any();let cell:usize=kani::any();kani::assume(row<27&&cell<13831);let before=data[cell];let rb=root[cell%32];let mut log=ClaimLog{reply:None,calls:0,row,cell,root_ptr:0,root_byte:0,record_ptr:0,record_len:0};
++ source_claims_entry(&prefix,&mut log);
++ let selected=log.calls==1&&log.reply.is_none()&&log.root_ptr==root.as_ptr() as usize&&log.root_byte==rb&&log.record_ptr==data.as_ptr() as usize+offsets[row]&&log.record_len==lengths[row]&&data[cell]==before;
++ if bad{assert!(!selected)}else{assert!(selected)}
++}
++fn check_iteration(high:bool,bad:bool){
++ let claims=Box::new(core::array::from_fn(|_|core::array::from_fn(|_|q())));let i:usize=kani::any();kani::assume(i<if high{10}else{16});let expected=claims[0][if high{16+i}else{i}];let row:usize=kani::any();let col:usize=kani::any();kani::assume(row<3&&col<29);let source_before=claims[row][col];
++ // BOTH initialized and uninitialized cell prestates are admitted. The
++ // callback reads no destination tail; it writes exactly one MaybeUninit.
++ let initialized:bool=kani::any();let mut slot=core::mem::MaybeUninit::uninit();if initialized{slot.write(q());}
++ if high{source_high_iteration(&claims,i,&mut slot)}else{source_low_iteration(&claims,i,&mut slot)}
++ let actual=unsafe{slot.assume_init()};assert_eq!(claims[row][col],source_before);if bad{assert_ne!(actual,expected)}else{assert_eq!(actual,expected)}
++}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn low_iteration_cut(){check_iteration(false,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn low_iteration_control(){check_iteration(false,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn high_iteration_cut(){check_iteration(true,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn high_iteration_control(){check_iteration(true,true)}
