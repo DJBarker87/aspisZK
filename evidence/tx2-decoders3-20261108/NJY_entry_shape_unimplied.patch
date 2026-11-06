@@ -1,0 +1,23 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJY_entry_shape.rs
+@@ -0,0 +1,20 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++impl kani::Arbitrary for VerifierRegistryEntryV1 {fn any()->Self{Self{status:match kani::any::<u8>()%4 {0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired},statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}}
++impl kani::Arbitrary for PoolV1VerifierRegistryFormatError {fn any()->Self{let t:u8=kani::any();kani::assume(t<12);match t {0=>Self::WrongLength,1=>Self::WrongMagic,2=>Self::WrongVersion,3=>Self::NonZeroReserved,4=>Self::UnsupportedFlags,5=>Self::InvalidStatus,6=>Self::InvalidAuthorityMode,7=>Self::ZeroRequiredBinding,8=>Self::InvalidActivationDelay,9=>Self::InvalidStatementVersion,10=>Self::InvalidRetirementSlot,_=>Self::InvalidDeploymentMode}}}
++#[kani::ensures(|r| (r.is_ok()==(seed&1==0))!=cfg!(NJY_invert))]
++#[kani::modifies()]
++fn shape_probe(seed:u8,scratch:&mut u8)->Result<VerifierRegistryEntryV1,PoolV1VerifierRegistryFormatError>{
++ if false {*scratch=seed;}
++ if seed&1==0 {Ok(VerifierRegistryEntryV1{status:VerifierEntryStatusV1::Pending,statement_version:0,bump:seed,pool:[0;32],verifier_program:[0;32],profile_binding:[0;32],release_binding:[0;32],activation_slot:0,retirement_slot:0,policy_binding:[0;32]})}else{Err(PoolV1VerifierRegistryFormatError::WrongMagic)}
++}
++fn check(seed:u8,out:Result<VerifierRegistryEntryV1,PoolV1VerifierRegistryFormatError>){match out{Ok(p)=>assert_eq!(p.bump,seed),Err(e)=>assert_eq!(e,PoolV1VerifierRegistryFormatError::WrongMagic)}}
++#[kani::proof_for_contract(shape_probe)]
++#[kani::unwind(33)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn shape_contract(){let seed:u8=kani::any();let mut scratch:u8=kani::any();let out=shape_probe(seed,&mut scratch);check(seed,out);}
++#[kani::proof]
++#[kani::stub_verified(shape_probe)]
++#[kani::unwind(33)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn shape_unimplied(){let seed:u8=kani::any();let mut scratch:u8=kani::any();let out=shape_probe(seed,&mut scratch);check(seed,out);}

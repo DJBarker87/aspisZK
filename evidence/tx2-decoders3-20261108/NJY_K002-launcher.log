@@ -1,0 +1,46 @@
+{"attempt": "NJY_K002", "exit_status": 1, "wall_seconds": 5.820614848984405, "peak_rss_kib": "537520", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-tx2-decoders3-20261107/NIJ_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+ information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.55s
+Checking harness pool_v1::verifier_registry::NJY_entry_shape::shape_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 75 failed
+Failed Checks: |r| (r.is_ok()==(seed&1==0))!=cfg!(NJY_invert)
+ File: "crates/aspis-statement/src/pool_v1/NJY_entry_shape.rs", line 5, in pool_v1::verifier_registry::NJY_entry_shape::shape_probe::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 1.2546748s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::verifier_registry::NJY_entry_shape::shape_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r78e006a100b64f7da72a957aa9efc700.scope; invocation ID: 0a03ee212c2445909c5e13c3d12ed587
