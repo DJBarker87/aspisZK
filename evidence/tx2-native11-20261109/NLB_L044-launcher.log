@@ -1,0 +1,38 @@
+{"attempt": "NLB_L044", "exit_status": 0, "wall_seconds": 16.707023333990946, "peak_rss_kib": "6331424", "swaps": "0", "print_axioms": ["'NLB_Parent.transport_fold' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLB_ErrorTransport.entered_common_transport' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLB_Parent.transport_fold : ∀ (wr rr fr : AspisR1.NP6_StdModel.Reservation)
+  (loc : AspisR1.NIW_AlignFinishComposed.Locations) (nativeResume : NLB_ResumePacket.Native)
+  (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H),
+  NLB_ResumePacket.At nativeResume wr d ck proof pub hash →
+    (∀ (proofArg : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+        (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+        NLB_ErrorTransport.MerkleDomain wr d ck proof pub hash proofArg p →
+          NLB_ErrorTransport.ReplyRel (nativeMerkle d proofArg p 
+...
+k proof pub AspisR1Stage2.transport.Variant.S2 hash =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (p, a)) ∧
+        a.next = 10#usize ∧ NID_ResumeFields.Domain p a
+inductive NLB_ErrorTransport.ReplyRel : NLB_ErrorTransport.R Unit → NLB_ErrorTransport.R Unit → Prop
+number of parameters: 0
+constructors:
+NLB_ErrorTransport.ReplyRel.same : ∀ (reply : NLB_ErrorTransport.R Unit), NLB_ErrorTransport.ReplyRel reply reply
+NLB_ErrorTransport.ReplyRel.rejected : ∀ (error : VTop_Stages.verifier.Error),
+  NLB_ErrorTransport.ReplyRel (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error))
+    (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+theorem NLB_ErrorTransport.entered_common_transport : ∀ (wr rr : AspisR1.NP6_StdModel.Reservation)
+  (nativeMerkle modelMerkle : NJU_CommonObserved.Merkle) (finish : NJU_CommonObserved.Finish) {H : Type}
+  (d : VTop_Stages.aspis_core.digest.Digest32 H) (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H),
+  (∀ (proofArg : Aeneas.Std.Slice Aeneas.Std.U8) (p : VTop_Stages.verifier.Prepared)
+      (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+      NLB_ErrorTransport.MerkleDomain wr d ck proof pub hash proofArg p →
+        NLB_ErrorTransport.ReplyRel (nativeMerkle d proofArg p root 1#usize hash)
+          (modelMerkle d proofArg p root 1#usize hash)) →
+    NLB_ErrorTransport.observeCommon
+        (NJU_CommonObserved.run wr rr (fun {H} => nativeMerkle) finish d pub proof ck hash none) =
+      NLB_ErrorTransport.observeCommon
+        (NJU_CommonObserved.run wr rr (fun {H} => modelMerkle) finish d pub proof ck hash none) :=
+⋯
+'NLB_Parent.transport_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLB_ErrorTransport.entered_common_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9d398562c15044149e8557b299a62c25.scope; invocation ID: 11520336097f440483bc503c2b79e1b4

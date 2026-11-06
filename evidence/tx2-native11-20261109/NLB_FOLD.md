@@ -1,0 +1,15 @@
+# NLB fold result
+
+Target not yet established. TX2:065 remains OPEN; no composed native row certificate or candidate.
+
+NLB_State defines one full caller continuation/prefix state and reuses the nine-site NJU_CommonObserved.Event alphabet. G computes replies/logs forward; it does not consume an independently supplied log. Every window ignores its encoded source seed reply. Decode checks SAME arguments; the returned full reply selects the continuation. Primitive fail/div stops; Rust Err follows the actual caller Try residual. NLB_Transition proves a source-ordered transition Trace exists for arbitrary window replies.
+
+NHZ_DRIVER.events_from_cuts uses digest-specific Code/Cuts and cannot directly type these nine heterogeneous owned replies. NLB_Fold.events_from_cuts is the local algebra of the same shape, justified by this type mismatch: structural continuation induction, chronological append, entire caller frame carried, and no suffix after abort/divergence. It is conditional algebra, never native credit by itself.
+
+NLB_C01–C09 install the SAME-call step equations. NLB_QueryWindow/QueryStep additionally reconstruct C07's observed full native arguments using the retained KMX proof frame, Prepared/Accumulator/powers/geometry/raw/terms cuts and internally derived dimensions. NLB_NativeFlush.G runs all64 retained one-store transitions on the original arbitrary full weights buffer; NLB_NativeSteps installs that value rather than seeding flush from the model's endpoint. NKO's generalized(aw) finish G supplies the full C09 result without history/raw-canonicality/NoBad/success assumptions.
+
+C04 is relational: native Err(Parse/Merkle) is not equal to cohort fail. NLB_ErrorTransport.question_trace/projected_question/common_trace_transport/entered_common_transport preserve the rejection and ordered occurrence prefix, including duplicate Err exits the cohort already preserves. The final entered theorem needs the child only on the source-derived SAME proof/resumed Prepared/split domain. Other occurrences retain their full replies; projection changes only the named Merkle return boundary. Internal leaf/node digest histories remain a separate required child packet field.
+
+Final support theorem NLB_Parent.native_fold (L047; full statement L048) combines the native-window fold against NJJ_Common.run and the explicit caller transport. It takes C01's complete observed-run packet at the actual inputs; it still takes C04's Result-relation projection, not the missing complete native child packet. Therefore the exact requested (bd)(3) parameterized packet fold is NOT complete. NLB_FAILING_STEP.md and NLB_HYPOTHESES.md expose the remaining implementation/cut/allocator interpretations; no root with these auxiliary premises is promoted.
+
+Both required child rows remain OPEN at the final read-only research check. NLB_CLOSED.json and NLB_LEDGER_DELTA.json record zero credit. Combined import/raw ax2/NFX coherence pass (NLB_AUDIT.json); those checks do not discharge the missing packet. Native/ABI/capacity semantics stay in the inherited scoped P6/D188 item. No new runtime or cryptographic trust is added or removed.

@@ -1,0 +1,33 @@
+{
+  "excluded_attempt": "NLB_L055",
+  "reason": "Scanner driver had scan-only module/root list; fixtures mode selected zero roots. Exit0 is not fixture calibration.",
+  "queue_paused_before_scan": true,
+  "scan_attempt60_not_submitted": true,
+  "correction": "Add only explicit planted module/root lists to scanner driver, rebuild/relink, run scanfixtures2, then first combined scan. Hardened walker and scanner algorithms unchanged.",
+  "new_attempts": [
+    "NLB_L063",
+    "NLB_L064",
+    "NLB_L065"
+  ],
+  "proof_driver_fixture_attempt": "NLB_L054",
+  "proof_driver_fixture_roots": 8,
+  "validation_stricter": true,
+  "own_dispatch_correction": {
+    "attempt": "NLB_L065",
+    "error": "prepare_audit regenerated batch client without scanfixtures2 branch; ValueError before driver execution",
+    "fix": "Retain scanfixtures dispatch in generator and client; validation unchanged/stricter; fresh attempt L066",
+    "native_fixture_executed": false
+  },
+  "scan_input_correction": {
+    "attempt": "NLB_L060",
+    "module_count": 16515,
+    "dangling": 0,
+    "incompatible_owners": 0,
+    "import_mismatches": 76,
+    "reason": "Own source-derived baseline omitted compiler implicit Init in new NLB/NKO entries",
+    "fix": "Derive Init plus explicit imports from committed source (unless prelude); scanner unchanged, no observed imports copied into expected baseline",
+    "replacement_attempt": "NLB_L067",
+    "old_full_scan": "NLB_L060/NLB_LOADED_scan.jsonl.xz",
+    "full_combined_scan_limit": 2
+  }
+}

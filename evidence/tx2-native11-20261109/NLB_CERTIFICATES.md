@@ -1,0 +1,23 @@
+# NLB cut and packet disposition
+
+Target not yet established. No new native verdict, extraction or row credit.
+
+The retained source/harness identities and exact assertion transcriptions are NKO_CERTIFICATES.md, NKO_CUTS.md, NKO_NATIVE_PAIRS.json, NKO_CONTRACT_CONTROLS.json, NKO_STUBS.md and the NJJ_/NJR_/NKE_ definitions they cite. NLB_PREDECESSOR_PINS.json fixes all imported NKO/NKE source modules; NLB_SEED.json fixes the copied retained objects. Native ownership/address/capacity facts are retained P6/D188 native contract semantic transport (option A reclassification), never inferred from a value-level pointer equality.
+
+| Site | NLB typed step / G | Retained native support and limits |
+|---|---|---|
+| C01 resume | NLB_C01Domain.source; NLB_ResumePacket.At/projection | OPEN TX2:124. At is the complete observed-run equality shaped like committed NKU_FineRoot.source, not a native/gated instantiation. Child's native proof57607/public<=1880 domain and finalized packet are still required. |
+| C02 powers | NLB_C02_step | NKO_C02.at_actual derives canonical SAME gamma; retained powers/borrowed-prefix cuts. Every input is the current resumed Prepared, not another endpoint. |
+| C03 inactive | NLB_C03_step, NKO_C03.nativeStep/sourceStep | NKO K003/K004 payload/Option/Parse; K007/K006 abort; K016/K017 full immutable frame. Checked current proof[7495..7527]; no old-proof persistence. |
+| C04 Merkle | NLB_C04Domain.source; NLB_ErrorTransport.entered_common_transport | OPEN TX2:053. Native Err and cohort fail are RELATED, not equal. The exact internal leaf/node digest/error-prefix and scratch/frame packet is missing; ReplyRel is only its Result projection. |
+| C05 geometry | NLB_C05_step | NKO K026/K027 geometry12/12, complete pending Result/error cleanup, owned frames; NKO_C05 actual domain. |
+| C06 pending | NLB_C06_step, NKE_CommonNative.pendingG | NKO K008/K009 owned raw64/Result; NJJ/NJR start/end/row cuts and NKE_PendingAtSource.native_rows. Reservation remains universal, both arms; no success-only allocator seed. |
+| C07 query | NLB_QueryObservation/QueryCut/queryWindow/query_step | Exact NKO_FrameAtActual hypotheses: full input view + disjoint log/proof regions; PreparedCut; AccumulatorCut; all29 powers; geometry Cut; raw64/all cells/terms. NKO K010–K015, K052–K059 and retained NJJ/NJR frames/descriptors. NKO_QueryReturnG retains fail/div/Err/Ok and owned destructure. No independently seeded post-proof or child-success hypothesis. |
+| C08 flush | NLB_NativeFlush.G/at_actual, flushWindow | NKE_FlushNative.states runs all64 one-store iterations on the original full arbitrary weight buffer. NKO_C08.occurrence/row_at_actual and NJR_Cuts.flushStep preserve raw, terms and every untouched cell; output identified by induction, not seeded by source output. |
+| C09 finish | NLB_C09_step | NKO_C09.child_at_actual applies generalized (aw) G from current View/p/a, all Result/error/abort arms; K028/K029 full descriptors/frame/drop and K030/K031 short-slice abort/control. No NoBad/history/raw-canonicality premise. |
+
+NLB_State/G and NLB_Transition.Step/Trace carry one caller continuation and chronological prefix. Non-child std operations remain literal in the retained NKE_CommonProgram (au); they are neither new oracles nor new child rows. Every call response comes from its window, ignoring the encoded seed reply. Query uses the observed native argument record reconstructed by the accepted frame; flush uses the native 64-store state. Native close-to-source interpretation is scoped to the retained cuts above. A source interpreter and a raw axioms audit do not themselves establish frozen native correspondence.
+
+NHZ's digest-specific Code/Cuts cannot directly type the nine heterogeneous owned replies. NLB_Fold.events_from_cuts is the explicitly justified local chronological algebra: continuation induction, full frames, append in source order, no suffix after fail/div; Rust Err follows the caller's actual Try residual. NLB_QuestionTrace and NLB_ProjectedQuestion additionally preserve the Err/cohort-fail prefix boundary under (bb)/(bc).
+
+No missing native window has been identified among C02/C03/C05–C09: all required local shapes already have retained positive/control pairs and native-domain derivations. Therefore no new Kani run is justified. K036/K043 and all timed-out shapes remain retired; no K-2 or mutable-static K-3 credit is consumed. KMX source is the inherited exact KMX_copy_stubs.patch; its hash and matched controls remain in NKO_NATIVE_PAIRS, not newly measured here. No field multiplication Kani proof/stub, Option<fn> verdict, RuntimeCpiReadonlyEntry7, new trust row or XRn kit is used.

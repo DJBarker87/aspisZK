@@ -1,0 +1,83 @@
+theorem NLB_Parent.native_fold : ∀ (wr rr fr : NP6_StdModel.Reservation) (loc : NIW_AlignFinishComposed.Locations)
+  (nativeResume : NLB_ResumePacket.Native) (nativeMerkle modelMerkle : Merkle) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+  NLB_ResumePacket.At nativeResume wr d ck proof pub hash →
+    (∀ (proofArg : Slice U8) (p : verifier.Prepared) (root : Std.Array U8 32#usize),
+        NLB_ErrorTransport.MerkleDomain wr d ck proof pub hash proofArg p →
+          NLB_ErrorTransport.ReplyRel (nativeMerkle d proofArg p root 1#usize hash)
+            (modelMerkle d proofArg p root 1#usize hash)) →
+      (↑proof).length = 57607 →
+        ∀ (observe : NKE_QueryInput.Args → QueryObservation),
+          QueryCuts wr rr fr (fun {H} => nativeMerkle) d pub proof ck hash observe →
+            ∀ (before : List Event),
+              have w :=
+                flushWindow
+                  (queryWindow
+                    (window rr fr loc (fun {H} => NLB_ResumePacket.action nativeResume wr) (fun {H} => nativeMerkle) d
+                      hash)
+                    observe);
+              have p := NKE_CommonProgram.run wr rr (fun {H} => nativeMerkle) (finish fr) d pub proof ck hash none;
+              G w p before =
+                  State.done (NJJ_Common.run wr rr (fun {H} => nativeMerkle) (finish fr) d pub proof ck hash none)
+                    (before ++ (run wr rr (fun {H} => nativeMerkle) (finish fr) d pub proof ck hash none).events) ∧
+                NLB_ErrorTransport.observeCommon
+                    (run wr rr (fun {H} => nativeMerkle) (finish fr) d pub proof ck hash none) =
+                  NLB_ErrorTransport.observeCommon
+                    (run wr rr (fun {H} => modelMerkle) (finish fr) d pub proof ck hash none) :=
+fun wr rr fr loc nativeResume nativeMerkle modelMerkle {H} d pub proof ck hash resumePacket merkleReply headlineSize
+    observe cuts before =>
+  id
+    ⟨have localSteps :=
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                ∀ e ∈ _a.events,
+                  flushWindow
+                      (queryWindow
+                        (window rr fr loc (fun {H} => NLB_ResumePacket.action nativeResume wr) (fun {H} => nativeMerkle)
+                          d hash)
+                        observe)
+                      e =
+                    e)
+              (NKE_CommonEval.source wr rr nativeMerkle (finish fr) d pub proof ck hash)))
+          (native_steps wr rr fr loc (fun {H} => NLB_ResumePacket.action nativeResume wr) (fun {H} => nativeMerkle) d
+            pub proof ck hash (NLB_ResumePacket.projection nativeResume wr d ck proof pub hash resumePacket)
+            headlineSize observe cuts);
+      have folded :=
+        events_from_cuts
+          (flushWindow
+            (queryWindow
+              (window rr fr loc (fun {H} => NLB_ResumePacket.action nativeResume wr) (fun {H} => nativeMerkle) d hash)
+              observe))
+          (NKE_CommonProgram.run wr rr (fun {H} => nativeMerkle) (finish fr) d pub proof ck hash none) before
+          localSteps;
+      Eq.mp
+        (congrArg
+          (fun _a =>
+            G
+                (flushWindow
+                  (queryWindow
+                    (window rr fr loc (fun {H} => NLB_ResumePacket.action nativeResume wr) (fun {H} => nativeMerkle) d
+                      hash)
+                    observe))
+                (NKE_CommonProgram.run wr rr (fun {H} => nativeMerkle) (finish fr) d pub proof ck hash none) before =
+              State.done _a
+                (before ++ (run wr rr (fun {H} => nativeMerkle) (finish fr) d pub proof ck hash none).events))
+          (source wr rr nativeMerkle (finish fr) d pub proof ck hash))
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              G
+                  (flushWindow
+                    (queryWindow
+                      (window rr fr loc (fun {H} => NLB_ResumePacket.action nativeResume wr) (fun {H} => nativeMerkle) d
+                        hash)
+                      observe))
+                  (NKE_CommonProgram.run wr rr (fun {H} => nativeMerkle) (finish fr) d pub proof ck hash none) before =
+                State.done _a.result (before ++ _a.events))
+            (NKE_CommonEval.source wr rr nativeMerkle (finish fr) d pub proof ck hash))
+          folded),
+      NLB_ErrorTransport.entered_common_transport wr rr (fun {H} => nativeMerkle) (fun {H} => modelMerkle) (finish fr) d
+        pub proof ck hash merkleReply⟩
+'NLB_Parent.native_fold' depends on axioms: [propext, Classical.choice, Quot.sound]

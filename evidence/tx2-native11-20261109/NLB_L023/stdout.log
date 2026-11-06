@@ -1,0 +1,28 @@
+NLB_generated/NLB_QuestionTrace.lean:36:21: error: Tactic `rfl` failed: The left-hand side
+  observeRun (questionRun { result := ok (core.result.Result.Err error), events := nativeEvents } nativeTail)
+is not definitionally equal to the right-hand side
+  observeRun (questionRun { result := fail Error.panic, events := nativeEvents } sourceTail)
+
+case rejected
+E A : Type
+nativeTail sourceTail : Unit → NJU_Log.Run E (core.result.Result A verifier.Error)
+tail : ∀ (u : Unit), observeRun (nativeTail u) = observeRun (sourceTail u)
+nativeEvents : List E
+error : verifier.Error
+⊢ observeRun (questionRun { result := ok (core.result.Result.Err error), events := nativeEvents } nativeTail) =
+    observeRun (questionRun { result := fail Error.panic, events := nativeEvents } sourceTail)
+NLB_generated/NLB_QuestionTrace.lean:52:71: error: Type mismatch
+  rfl
+has type
+  ?m.17 = ?m.17
+but is expected to have type
+  questionRun { result := ok (core.result.Result.Err error), events := events } next =
+    { result := ok (core.result.Result.Err error), events := events }
+NLB_generated/NLB_QuestionTrace.lean:50:8: error: Not a definitional equality: the left-hand side
+  questionRun { result := ok (core.result.Result.Err error), events := events } next
+is not definitionally equal to the right-hand side
+  { result := ok (core.result.Result.Err error), events := events }
+'NLB_ErrorTransport.question_trace' depends on axioms: [sorryAx]
+'NLB_ErrorTransport.native_error_prefix' depends on axioms: [sorryAx]
+'NLB_ErrorTransport.source_abort_prefix' does not depend on any axioms
+'NLB_ErrorTransport.divergence_prefix' does not depend on any axioms

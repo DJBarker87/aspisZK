@@ -1,0 +1,1498 @@
+NLB_generated/NLB_CommonTransport.lean:21:46: warning: 'intro' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLB_generated/NLB_CommonTransport.lean:21:53: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLB_generated/NLB_CommonTransport.lean:25:3: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLB_generated/NLB_CommonTransport.lean:21:46: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLB_generated/NLB_CommonTransport.lean:21:53: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLB_generated/NLB_CommonTransport.lean:25:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+theorem NLB_ErrorTransport.common_transport : ∀ (wr rr : NP6_StdModel.Reservation) (nativeMerkle modelMerkle : Merkle)
+  (finish : Finish) {H : Type} (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+  (∀ (proofArg : Slice U8) (p : verifier.Prepared) (root : Std.Array U8 32#usize),
+      ReplyRel (nativeMerkle d proofArg p root 1#usize hash) (modelMerkle d proofArg p root 1#usize hash)) →
+    reject (NJJ_Common.run wr rr (fun {H} => nativeMerkle) finish d pub proof ck hash none) =
+      reject (NJJ_Common.run wr rr (fun {H} => modelMerkle) finish d pub proof ck hash none) :=
+fun wr rr nativeMerkle modelMerkle finish {H} d pub proof ck hash child =>
+  id
+    (bind_congr (NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash)
+      (fun r => do
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (p, a) := val
+            if (a.next != NHT_Constants.compact.SPLIT) = true then
+              ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+            else do
+              let g ← NHT_PacketOps.powers 29#usize p.gamma
+              NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+              let i ← NHT_Constants.compact.OFF_INACTIVE
+              let i1 ← NHT_Constants.compact.OFF_ROUND0
+              let s ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i, «end» := i1 }
+              let o ← NJC_ClosedCalls.inactive s
+              let r1 ← NHT_Constants.core.option.Option.ok_or o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                  let i3 ← NHT_Constants.compact.OFF_ROUND1
+                  let s1 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                        { start := i2, «end» := i3 }
+                  let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                  let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                  let r3 ← (fun {H} => nativeMerkle) d proof p folded_root 1#usize hash
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue a_1 => do
+                      NHV_ReleaseOps.mark none
+                          (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle NHT_Constants.compact.SPLIT)
+                      let r4 ← NJC_ClosedCalls.geometry p.queries a.next 22#usize
+                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 =>
+                          have s2 := a.weights.deref;
+                          do
+                          let r5 ← NJJ_Common.pending rr s2
+                          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                          match cf4 with
+                            | core.ops.control_flow.ControlFlow.Continue val3 => do
+                              let r6 ← NJJ_Common.query proof p a g none val2 val3 22#usize
+                              let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                              match cf5 with
+                                | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                  let (a1, pending) := val4
+                                  do
+                                  let (s3, deref_mut_back) ← lift a1.weights.deref_mut
+                                  let s4 ← Port3_FlushInstall.flush pending s3
+                                  have weights : alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 := deref_mut_back s4
+                                  let s5 ← lift (Std.Array.empty U8).to_slice
+                                  let s6 ← lift (Std.Array.empty U8).to_slice
+                                  let s7 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i1, «end» := i2 }
+                                  let i4 ← NHT_Constants.compact.OFF_FINAL
+                                  let s8 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i3, «end» := i4 }
+                                  let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                  let s9 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i4, «end» := i5 }
+                                  let s10 ← lift (Std.Array.empty U8).to_slice
+                                  finish
+                                      { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6,
+                                        inactive := val1, round0 := s7, folded_root := none, round1 := s8,
+                                        final_message := s9, query_bytes := s10 }
+                                      p { weights := weights, rhs := a1.rhs, power := a1.power, next := a1.next } none
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame verifier.Error) residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame verifier.Error) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual)
+      (fun r => do
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (p, a) := val
+            if (a.next != NHT_Constants.compact.SPLIT) = true then
+              ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+            else do
+              let g ← NHT_PacketOps.powers 29#usize p.gamma
+              NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+              let i ← NHT_Constants.compact.OFF_INACTIVE
+              let i1 ← NHT_Constants.compact.OFF_ROUND0
+              let s ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i, «end» := i1 }
+              let o ← NJC_ClosedCalls.inactive s
+              let r1 ← NHT_Constants.core.option.Option.ok_or o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                  let i3 ← NHT_Constants.compact.OFF_ROUND1
+                  let s1 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                        { start := i2, «end» := i3 }
+                  let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                  let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                  let r3 ← (fun {H} => modelMerkle) d proof p folded_root 1#usize hash
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue a_1 => do
+                      NHV_ReleaseOps.mark none
+                          (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle NHT_Constants.compact.SPLIT)
+                      let r4 ← NJC_ClosedCalls.geometry p.queries a.next 22#usize
+                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 =>
+                          have s2 := a.weights.deref;
+                          do
+                          let r5 ← NJJ_Common.pending rr s2
+                          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                          match cf4 with
+                            | core.ops.control_flow.ControlFlow.Continue val3 => do
+                              let r6 ← NJJ_Common.query proof p a g none val2 val3 22#usize
+                              let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                              match cf5 with
+                                | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                  let (a1, pending) := val4
+                                  do
+                                  let (s3, deref_mut_back) ← lift a1.weights.deref_mut
+                                  let s4 ← Port3_FlushInstall.flush pending s3
+                                  have weights : alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 := deref_mut_back s4
+                                  let s5 ← lift (Std.Array.empty U8).to_slice
+                                  let s6 ← lift (Std.Array.empty U8).to_slice
+                                  let s7 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i1, «end» := i2 }
+                                  let i4 ← NHT_Constants.compact.OFF_FINAL
+                                  let s8 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i3, «end» := i4 }
+                                  let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                  let s9 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i4, «end» := i5 }
+                                  let s10 ← lift (Std.Array.empty U8).to_slice
+                                  finish
+                                      { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6,
+                                        inactive := val1, round0 := s7, folded_root := none, round1 := s8,
+                                        final_message := s9, query_bytes := s10 }
+                                      p { weights := weights, rhs := a1.rhs, power := a1.power, next := a1.next } none
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame verifier.Error) residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame verifier.Error) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual)
+      fun a =>
+      bind_congr (core.result.Result.Insts.CoreOpsTry.branch a)
+        (fun cf =>
+          match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (p, a) := val
+            if (a.next != NHT_Constants.compact.SPLIT) = true then
+              ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+            else do
+              let g ← NHT_PacketOps.powers 29#usize p.gamma
+              NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+              let i ← NHT_Constants.compact.OFF_INACTIVE
+              let i1 ← NHT_Constants.compact.OFF_ROUND0
+              let s ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i, «end» := i1 }
+              let o ← NJC_ClosedCalls.inactive s
+              let r1 ← NHT_Constants.core.option.Option.ok_or o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                  let i3 ← NHT_Constants.compact.OFF_ROUND1
+                  let s1 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                        { start := i2, «end» := i3 }
+                  let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                  let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                  let r3 ← (fun {H} => nativeMerkle) d proof p folded_root 1#usize hash
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue a_1 => do
+                      NHV_ReleaseOps.mark none
+                          (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle NHT_Constants.compact.SPLIT)
+                      let r4 ← NJC_ClosedCalls.geometry p.queries a.next 22#usize
+                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 =>
+                          have s2 := a.weights.deref;
+                          do
+                          let r5 ← NJJ_Common.pending rr s2
+                          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                          match cf4 with
+                            | core.ops.control_flow.ControlFlow.Continue val3 => do
+                              let r6 ← NJJ_Common.query proof p a g none val2 val3 22#usize
+                              let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                              match cf5 with
+                                | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                  let (a1, pending) := val4
+                                  do
+                                  let (s3, deref_mut_back) ← lift a1.weights.deref_mut
+                                  let s4 ← Port3_FlushInstall.flush pending s3
+                                  have weights : alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 := deref_mut_back s4
+                                  let s5 ← lift (Std.Array.empty U8).to_slice
+                                  let s6 ← lift (Std.Array.empty U8).to_slice
+                                  let s7 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i1, «end» := i2 }
+                                  let i4 ← NHT_Constants.compact.OFF_FINAL
+                                  let s8 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i3, «end» := i4 }
+                                  let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                  let s9 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i4, «end» := i5 }
+                                  let s10 ← lift (Std.Array.empty U8).to_slice
+                                  finish
+                                      { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6,
+                                        inactive := val1, round0 := s7, folded_root := none, round1 := s8,
+                                        final_message := s9, query_bytes := s10 }
+                                      p { weights := weights, rhs := a1.rhs, power := a1.power, next := a1.next } none
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame verifier.Error) residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame verifier.Error) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual)
+        (fun cf =>
+          match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (p, a) := val
+            if (a.next != NHT_Constants.compact.SPLIT) = true then
+              ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+            else do
+              let g ← NHT_PacketOps.powers 29#usize p.gamma
+              NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+              let i ← NHT_Constants.compact.OFF_INACTIVE
+              let i1 ← NHT_Constants.compact.OFF_ROUND0
+              let s ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i, «end» := i1 }
+              let o ← NJC_ClosedCalls.inactive s
+              let r1 ← NHT_Constants.core.option.Option.ok_or o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                  let i3 ← NHT_Constants.compact.OFF_ROUND1
+                  let s1 ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                        { start := i2, «end» := i3 }
+                  let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                  let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                  let r3 ← (fun {H} => modelMerkle) d proof p folded_root 1#usize hash
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue a_1 => do
+                      NHV_ReleaseOps.mark none
+                          (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle NHT_Constants.compact.SPLIT)
+                      let r4 ← NJC_ClosedCalls.geometry p.queries a.next 22#usize
+                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 =>
+                          have s2 := a.weights.deref;
+                          do
+                          let r5 ← NJJ_Common.pending rr s2
+                          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                          match cf4 with
+                            | core.ops.control_flow.ControlFlow.Continue val3 => do
+                              let r6 ← NJJ_Common.query proof p a g none val2 val3 22#usize
+                              let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                              match cf5 with
+                                | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                  let (a1, pending) := val4
+                                  do
+                                  let (s3, deref_mut_back) ← lift a1.weights.deref_mut
+                                  let s4 ← Port3_FlushInstall.flush pending s3
+                                  have weights : alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 := deref_mut_back s4
+                                  let s5 ← lift (Std.Array.empty U8).to_slice
+                                  let s6 ← lift (Std.Array.empty U8).to_slice
+                                  let s7 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i1, «end» := i2 }
+                                  let i4 ← NHT_Constants.compact.OFF_FINAL
+                                  let s8 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i3, «end» := i4 }
+                                  let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                  let s9 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i4, «end» := i5 }
+                                  let s10 ← lift (Std.Array.empty U8).to_slice
+                                  finish
+                                      { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6,
+                                        inactive := val1, round0 := s7, folded_root := none, round1 := s8,
+                                        final_message := s9, query_bytes := s10 }
+                                      p { weights := weights, rhs := a1.rhs, power := a1.power, next := a1.next } none
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame verifier.Error) residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame verifier.Error) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual)
+        fun a =>
+        id
+          (NJJ_Common.run.match_1.splitter
+            (fun cf =>
+              a = cf →
+                reject
+                    (match a with
+                    | core.ops.control_flow.ControlFlow.Continue val =>
+                      if (val.2.next != NHT_Constants.compact.SPLIT) = true then
+                        ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+                      else do
+                        let g ← NHT_PacketOps.powers 29#usize val.1.gamma
+                        NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+                        let i ← NHT_Constants.compact.OFF_INACTIVE
+                        let i1 ← NHT_Constants.compact.OFF_ROUND0
+                        let s ←
+                          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                              { start := i, «end» := i1 }
+                        let o ← NJC_ClosedCalls.inactive s
+                        let r1 ←
+                          NHT_Constants.core.option.Option.ok_or o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                        match cf1 with
+                          | core.ops.control_flow.ControlFlow.Continue val1 => do
+                            let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                            let i3 ← NHT_Constants.compact.OFF_ROUND1
+                            let s1 ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                  { start := i2, «end» := i3 }
+                            let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                            let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                            let r3 ← nativeMerkle d proof val.1 folded_root 1#usize hash
+                            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                            match cf2 with
+                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                NHV_ReleaseOps.mark none
+                                    (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle NHT_Constants.compact.SPLIT)
+                                let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                match cf3 with
+                                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                    let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                    let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                    match cf4 with
+                                      | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                        let r6 ← NJJ_Common.query proof val.1 val.2 g none val2 val3 22#usize
+                                        let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                        match cf5 with
+                                          | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                            let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                            let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                            let s5 ← lift (Std.Array.empty U8).to_slice
+                                            let s6 ← lift (Std.Array.empty U8).to_slice
+                                            let s7 ←
+                                              core.slice.index.Slice.index
+                                                  (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                  { start := i1, «end» := i2 }
+                                            let i4 ← NHT_Constants.compact.OFF_FINAL
+                                            let s8 ←
+                                              core.slice.index.Slice.index
+                                                  (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                  { start := i3, «end» := i4 }
+                                            let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                            let s9 ←
+                                              core.slice.index.Slice.index
+                                                  (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                  { start := i4, «end» := i5 }
+                                            let s10 ← lift (Std.Array.empty U8).to_slice
+                                            finish
+                                                { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5,
+                                                  y1 := s6, inactive := val1, round0 := s7, folded_root := none,
+                                                  round1 := s8, final_message := s9, query_bytes := s10 }
+                                                val.1
+                                                { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                  power := val4.1.power, next := val4.1.next }
+                                                none
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (core.convert.FromSame verifier.Error) residual
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame verifier.Error) residual
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (core.convert.FromSame verifier.Error) residual
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame verifier.Error) residual
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual) =
+                  reject
+                    (match a with
+                    | core.ops.control_flow.ControlFlow.Continue val =>
+                      if (val.2.next != NHT_Constants.compact.SPLIT) = true then
+                        ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+                      else do
+                        let g ← NHT_PacketOps.powers 29#usize val.1.gamma
+                        NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+                        let i ← NHT_Constants.compact.OFF_INACTIVE
+                        let i1 ← NHT_Constants.compact.OFF_ROUND0
+                        let s ←
+                          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                              { start := i, «end» := i1 }
+                        let o ← NJC_ClosedCalls.inactive s
+                        let r1 ←
+                          NHT_Constants.core.option.Option.ok_or o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                        match cf1 with
+                          | core.ops.control_flow.ControlFlow.Continue val1 => do
+                            let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                            let i3 ← NHT_Constants.compact.OFF_ROUND1
+                            let s1 ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                  { start := i2, «end» := i3 }
+                            let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                            let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                            let r3 ← modelMerkle d proof val.1 folded_root 1#usize hash
+                            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                            match cf2 with
+                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                NHV_ReleaseOps.mark none
+                                    (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle NHT_Constants.compact.SPLIT)
+                                let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                match cf3 with
+                                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                    let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                    let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                    match cf4 with
+                                      | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                        let r6 ← NJJ_Common.query proof val.1 val.2 g none val2 val3 22#usize
+                                        let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                        match cf5 with
+                                          | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                            let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                            let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                            let s5 ← lift (Std.Array.empty U8).to_slice
+                                            let s6 ← lift (Std.Array.empty U8).to_slice
+                                            let s7 ←
+                                              core.slice.index.Slice.index
+                                                  (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                  { start := i1, «end» := i2 }
+                                            let i4 ← NHT_Constants.compact.OFF_FINAL
+                                            let s8 ←
+                                              core.slice.index.Slice.index
+                                                  (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                  { start := i3, «end» := i4 }
+                                            let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                            let s9 ←
+                                              core.slice.index.Slice.index
+                                                  (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                  { start := i4, «end» := i5 }
+                                            let s10 ← lift (Std.Array.empty U8).to_slice
+                                            finish
+                                                { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5,
+                                                  y1 := s6, inactive := val1, round0 := s7, folded_root := none,
+                                                  round1 := s8, final_message := s9, query_bytes := s10 }
+                                                val.1
+                                                { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                  power := val4.1.power, next := val4.1.next }
+                                                none
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (core.convert.FromSame verifier.Error) residual
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame verifier.Error) residual
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (core.convert.FromSame verifier.Error) residual
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame verifier.Error) residual
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual))
+            a
+            (fun val h =>
+              ⋯ ▸
+                id
+                  (Decidable.casesOn (instDecidableEqBool (val.2.next != NHT_Constants.compact.SPLIT) true)
+                    (fun h =>
+                      Eq.mpr (id (congr (congrArg Eq (congrArg reject (if_neg h))) (congrArg reject (if_neg h))))
+                        (bind_congr (NHT_PacketOps.powers 29#usize val.1.gamma)
+                          (fun g => do
+                            NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+                            let i ← NHT_Constants.compact.OFF_INACTIVE
+                            let i1 ← NHT_Constants.compact.OFF_ROUND0
+                            let s ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                  { start := i, «end» := i1 }
+                            let o ← NJC_ClosedCalls.inactive s
+                            let r1 ←
+                              NHT_Constants.core.option.Option.ok_or o
+                                  AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                            match cf1 with
+                              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                                let i3 ← NHT_Constants.compact.OFF_ROUND1
+                                let s1 ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                      { start := i2, «end» := i3 }
+                                let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                                let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                                let r3 ← nativeMerkle d proof val.1 folded_root 1#usize hash
+                                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                match cf2 with
+                                  | core.ops.control_flow.ControlFlow.Continue a => do
+                                    NHV_ReleaseOps.mark none
+                                        (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle
+                                          NHT_Constants.compact.SPLIT)
+                                    let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                    let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                    match cf3 with
+                                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                        let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                        let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                        match cf4 with
+                                          | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                            let r6 ← NJJ_Common.query proof val.1 val.2 g none val2 val3 22#usize
+                                            let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                            match cf5 with
+                                              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                                let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                                let s5 ← lift (Std.Array.empty U8).to_slice
+                                                let s6 ← lift (Std.Array.empty U8).to_slice
+                                                let s7 ←
+                                                  core.slice.index.Slice.index
+                                                      (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                      { start := i1, «end» := i2 }
+                                                let i4 ← NHT_Constants.compact.OFF_FINAL
+                                                let s8 ←
+                                                  core.slice.index.Slice.index
+                                                      (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                      { start := i3, «end» := i4 }
+                                                let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                                let s9 ←
+                                                  core.slice.index.Slice.index
+                                                      (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                      { start := i4, «end» := i5 }
+                                                let s10 ← lift (Std.Array.empty U8).to_slice
+                                                finish
+                                                    { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5,
+                                                      y1 := s6, inactive := val1, round0 := s7, folded_root := none,
+                                                      round1 := s8, final_message := s9, query_bytes := s10 }
+                                                    val.1
+                                                    { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                      power := val4.1.power, next := val4.1.next }
+                                                    none
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (core.convert.FromSame verifier.Error) residual
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (core.convert.FromSame verifier.Error) residual
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame verifier.Error) residual
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (core.convert.FromSame verifier.Error) residual
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame verifier.Error) residual)
+                          (fun g => do
+                            NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+                            let i ← NHT_Constants.compact.OFF_INACTIVE
+                            let i1 ← NHT_Constants.compact.OFF_ROUND0
+                            let s ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                  { start := i, «end» := i1 }
+                            let o ← NJC_ClosedCalls.inactive s
+                            let r1 ←
+                              NHT_Constants.core.option.Option.ok_or o
+                                  AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                            match cf1 with
+                              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                                let i3 ← NHT_Constants.compact.OFF_ROUND1
+                                let s1 ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                      { start := i2, «end» := i3 }
+                                let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                                let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                                let r3 ← modelMerkle d proof val.1 folded_root 1#usize hash
+                                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                match cf2 with
+                                  | core.ops.control_flow.ControlFlow.Continue a => do
+                                    NHV_ReleaseOps.mark none
+                                        (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle
+                                          NHT_Constants.compact.SPLIT)
+                                    let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                    let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                    match cf3 with
+                                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                        let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                        let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                        match cf4 with
+                                          | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                            let r6 ← NJJ_Common.query proof val.1 val.2 g none val2 val3 22#usize
+                                            let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                            match cf5 with
+                                              | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                                let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                                let s5 ← lift (Std.Array.empty U8).to_slice
+                                                let s6 ← lift (Std.Array.empty U8).to_slice
+                                                let s7 ←
+                                                  core.slice.index.Slice.index
+                                                      (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                      { start := i1, «end» := i2 }
+                                                let i4 ← NHT_Constants.compact.OFF_FINAL
+                                                let s8 ←
+                                                  core.slice.index.Slice.index
+                                                      (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                      { start := i3, «end» := i4 }
+                                                let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                                let s9 ←
+                                                  core.slice.index.Slice.index
+                                                      (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                      { start := i4, «end» := i5 }
+                                                let s10 ← lift (Std.Array.empty U8).to_slice
+                                                finish
+                                                    { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5,
+                                                      y1 := s6, inactive := val1, round0 := s7, folded_root := none,
+                                                      round1 := s8, final_message := s9, query_bytes := s10 }
+                                                    val.1
+                                                    { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                      power := val4.1.power, next := val4.1.next }
+                                                    none
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (core.convert.FromSame verifier.Error) residual
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (core.convert.FromSame verifier.Error) residual
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame verifier.Error) residual
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (core.convert.FromSame verifier.Error) residual
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame verifier.Error) residual)
+                          fun a =>
+                          bind_congr
+                            (NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead)
+                            (fun _ => do
+                              let i ← NHT_Constants.compact.OFF_INACTIVE
+                              let i1 ← NHT_Constants.compact.OFF_ROUND0
+                              let s ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                    { start := i, «end» := i1 }
+                              let o ← NJC_ClosedCalls.inactive s
+                              let r1 ←
+                                NHT_Constants.core.option.Option.ok_or o
+                                    AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                              match cf1 with
+                                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                  let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                                  let i3 ← NHT_Constants.compact.OFF_ROUND1
+                                  let s1 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i2, «end» := i3 }
+                                  let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                                  let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                                  let r3 ← nativeMerkle d proof val.1 folded_root 1#usize hash
+                                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                  match cf2 with
+                                    | core.ops.control_flow.ControlFlow.Continue a_1 => do
+                                      NHV_ReleaseOps.mark none
+                                          (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle
+                                            NHT_Constants.compact.SPLIT)
+                                      let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                      match cf3 with
+                                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                          let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                          match cf4 with
+                                            | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                              let r6 ← NJJ_Common.query proof val.1 val.2 a none val2 val3 22#usize
+                                              let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                              match cf5 with
+                                                | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                  let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                                  let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                                  let s5 ← lift (Std.Array.empty U8).to_slice
+                                                  let s6 ← lift (Std.Array.empty U8).to_slice
+                                                  let s7 ←
+                                                    core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                        { start := i1, «end» := i2 }
+                                                  let i4 ← NHT_Constants.compact.OFF_FINAL
+                                                  let s8 ←
+                                                    core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                        { start := i3, «end» := i4 }
+                                                  let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                                  let s9 ←
+                                                    core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                        { start := i4, «end» := i5 }
+                                                  let s10 ← lift (Std.Array.empty U8).to_slice
+                                                  finish
+                                                      { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5,
+                                                        y1 := s6, inactive := val1, round0 := s7, folded_root := none,
+                                                        round1 := s8, final_message := s9, query_bytes := s10 }
+                                                      val.1
+                                                      { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                        power := val4.1.power, next := val4.1.next }
+                                                      none
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    Unit (core.convert.FromSame verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (core.convert.FromSame verifier.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (core.convert.FromSame verifier.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (core.convert.FromSame verifier.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame verifier.Error) residual)
+                            (fun _ => do
+                              let i ← NHT_Constants.compact.OFF_INACTIVE
+                              let i1 ← NHT_Constants.compact.OFF_ROUND0
+                              let s ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                    { start := i, «end» := i1 }
+                              let o ← NJC_ClosedCalls.inactive s
+                              let r1 ←
+                                NHT_Constants.core.option.Option.ok_or o
+                                    AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                              match cf1 with
+                                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                  let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                                  let i3 ← NHT_Constants.compact.OFF_ROUND1
+                                  let s1 ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := i2, «end» := i3 }
+                                  let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                                  let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                                  let r3 ← modelMerkle d proof val.1 folded_root 1#usize hash
+                                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                  match cf2 with
+                                    | core.ops.control_flow.ControlFlow.Continue a_1 => do
+                                      NHV_ReleaseOps.mark none
+                                          (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle
+                                            NHT_Constants.compact.SPLIT)
+                                      let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                      let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                      match cf3 with
+                                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                          let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                          match cf4 with
+                                            | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                              let r6 ← NJJ_Common.query proof val.1 val.2 a none val2 val3 22#usize
+                                              let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                              match cf5 with
+                                                | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                  let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                                  let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                                  let s5 ← lift (Std.Array.empty U8).to_slice
+                                                  let s6 ← lift (Std.Array.empty U8).to_slice
+                                                  let s7 ←
+                                                    core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                        { start := i1, «end» := i2 }
+                                                  let i4 ← NHT_Constants.compact.OFF_FINAL
+                                                  let s8 ←
+                                                    core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                        { start := i3, «end» := i4 }
+                                                  let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                                  let s9 ←
+                                                    core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                        { start := i4, «end» := i5 }
+                                                  let s10 ← lift (Std.Array.empty U8).to_slice
+                                                  finish
+                                                      { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5,
+                                                        y1 := s6, inactive := val1, round0 := s7, folded_root := none,
+                                                        round1 := s8, final_message := s9, query_bytes := s10 }
+                                                      val.1
+                                                      { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                        power := val4.1.power, next := val4.1.next }
+                                                      none
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    Unit (core.convert.FromSame verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (core.convert.FromSame verifier.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (core.convert.FromSame verifier.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (core.convert.FromSame verifier.Error) residual
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame verifier.Error) residual)
+                            fun a_1 =>
+                            bind_congr NHT_Constants.compact.OFF_INACTIVE
+                              (fun i => do
+                                let i1 ← NHT_Constants.compact.OFF_ROUND0
+                                let s ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                      { start := i, «end» := i1 }
+                                let o ← NJC_ClosedCalls.inactive s
+                                let r1 ←
+                                  NHT_Constants.core.option.Option.ok_or o
+                                      AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                                match cf1 with
+                                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                    let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                                    let i3 ← NHT_Constants.compact.OFF_ROUND1
+                                    let s1 ←
+                                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                          { start := i2, «end» := i3 }
+                                    let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                                    let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                                    let r3 ← nativeMerkle d proof val.1 folded_root 1#usize hash
+                                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                    match cf2 with
+                                      | core.ops.control_flow.ControlFlow.Continue a_2 => do
+                                        NHV_ReleaseOps.mark none
+                                            (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle
+                                              NHT_Constants.compact.SPLIT)
+                                        let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                        let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                        match cf3 with
+                                          | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                            let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                            let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                            match cf4 with
+                                              | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                let r6 ← NJJ_Common.query proof val.1 val.2 a none val2 val3 22#usize
+                                                let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                match cf5 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                    let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                                    let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                                    let s5 ← lift (Std.Array.empty U8).to_slice
+                                                    let s6 ← lift (Std.Array.empty U8).to_slice
+                                                    let s7 ←
+                                                      core.slice.index.Slice.index
+                                                          (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                          { start := i1, «end» := i2 }
+                                                    let i4 ← NHT_Constants.compact.OFF_FINAL
+                                                    let s8 ←
+                                                      core.slice.index.Slice.index
+                                                          (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                          { start := i3, «end» := i4 }
+                                                    let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                                    let s9 ←
+                                                      core.slice.index.Slice.index
+                                                          (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                          { start := i4, «end» := i5 }
+                                                    let s10 ← lift (Std.Array.empty U8).to_slice
+                                                    finish
+                                                        { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5,
+                                                          y1 := s6, inactive := val1, round0 := s7, folded_root := none,
+                                                          round1 := s8, final_message := s9, query_bytes := s10 }
+                                                        val.1
+                                                        { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                          power := val4.1.power, next := val4.1.next }
+                                                        none
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      Unit (core.convert.FromSame verifier.Error) residual
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (core.convert.FromSame verifier.Error) residual
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (core.convert.FromSame verifier.Error) residual
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame verifier.Error) residual
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (core.convert.FromSame verifier.Error) residual)
+                              (fun i => do
+                                let i1 ← NHT_Constants.compact.OFF_ROUND0
+                                let s ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                      { start := i, «end» := i1 }
+                                let o ← NJC_ClosedCalls.inactive s
+                                let r1 ←
+                                  NHT_Constants.core.option.Option.ok_or o
+                                      AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                                match cf1 with
+                                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                    let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                                    let i3 ← NHT_Constants.compact.OFF_ROUND1
+                                    let s1 ←
+                                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                          { start := i2, «end» := i3 }
+                                    let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                                    let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                                    let r3 ← modelMerkle d proof val.1 folded_root 1#usize hash
+                                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                    match cf2 with
+                                      | core.ops.control_flow.ControlFlow.Continue a_2 => do
+                                        NHV_ReleaseOps.mark none
+                                            (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle
+                                              NHT_Constants.compact.SPLIT)
+                                        let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                        let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                        match cf3 with
+                                          | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                            let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                            let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                            match cf4 with
+                                              | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                let r6 ← NJJ_Common.query proof val.1 val.2 a none val2 val3 22#usize
+                                                let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                match cf5 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                    let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                                    let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                                    let s5 ← lift (Std.Array.empty U8).to_slice
+                                                    let s6 ← lift (Std.Array.empty U8).to_slice
+                                                    let s7 ←
+                                                      core.slice.index.Slice.index
+                                                          (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                          { start := i1, «end» := i2 }
+                                                    let i4 ← NHT_Constants.compact.OFF_FINAL
+                                                    let s8 ←
+                                                      core.slice.index.Slice.index
+                                                          (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                          { start := i3, «end» := i4 }
+                                                    let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                                    let s9 ←
+                                                      core.slice.index.Slice.index
+                                                          (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                          { start := i4, «end» := i5 }
+                                                    let s10 ← lift (Std.Array.empty U8).to_slice
+                                                    finish
+                                                        { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5,
+                                                          y1 := s6, inactive := val1, round0 := s7, folded_root := none,
+                                                          round1 := s8, final_message := s9, query_bytes := s10 }
+                                                        val.1
+                                                        { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                          power := val4.1.power, next := val4.1.next }
+                                                        none
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      Unit (core.convert.FromSame verifier.Error) residual
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (core.convert.FromSame verifier.Error) residual
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (core.convert.FromSame verifier.Error) residual
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame verifier.Error) residual
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (core.convert.FromSame verifier.Error) residual)
+                              fun a_2 =>
+                              bind_congr NHT_Constants.compact.OFF_ROUND0
+                                (fun i1 => do
+                                  let s ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := a_2, «end» := i1 }
+                                  let o ← NJC_ClosedCalls.inactive s
+                                  let r1 ←
+                                    NHT_Constants.core.option.Option.ok_or o
+                                        AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                                  match cf1 with
+                                    | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                      let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                                      let i3 ← NHT_Constants.compact.OFF_ROUND1
+                                      let s1 ←
+                                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                            proof { start := i2, «end» := i3 }
+                                      let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                                      let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                                      let r3 ← nativeMerkle d proof val.1 folded_root 1#usize hash
+                                      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                      match cf2 with
+                                        | core.ops.control_flow.ControlFlow.Continue a_3 => do
+                                          NHV_ReleaseOps.mark none
+                                              (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle
+                                                NHT_Constants.compact.SPLIT)
+                                          let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                          let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                          match cf3 with
+                                            | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                              let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                              let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                              match cf4 with
+                                                | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                  let r6 ← NJJ_Common.query proof val.1 val.2 a none val2 val3 22#usize
+                                                  let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                  match cf5 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                      let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                                      let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                                      let s5 ← lift (Std.Array.empty U8).to_slice
+                                                      let s6 ← lift (Std.Array.empty U8).to_slice
+                                                      let s7 ←
+                                                        core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                            { start := i1, «end» := i2 }
+                                                      let i4 ← NHT_Constants.compact.OFF_FINAL
+                                                      let s8 ←
+                                                        core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                            { start := i3, «end» := i4 }
+                                                      let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                                      let s9 ←
+                                                        core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                            { start := i4, «end» := i5 }
+                                                      let s10 ← lift (Std.Array.empty U8).to_slice
+                                                      finish
+                                                          { variant := AspisR1Stage2.transport.Variant.S2,
+                                                            semantic := s5, y1 := s6, inactive := val1, round0 := s7,
+                                                            folded_root := none, round1 := s8, final_message := s9,
+                                                            query_bytes := s10 }
+                                                          val.1
+                                                          { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                            power := val4.1.power, next := val4.1.next }
+                                                          none
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        Unit (core.convert.FromSame verifier.Error) residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    Unit (core.convert.FromSame verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (core.convert.FromSame verifier.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (core.convert.FromSame verifier.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (core.convert.FromSame verifier.Error) residual)
+                                (fun i1 => do
+                                  let s ←
+                                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                        { start := a_2, «end» := i1 }
+                                  let o ← NJC_ClosedCalls.inactive s
+                                  let r1 ←
+                                    NHT_Constants.core.option.Option.ok_or o
+                                        AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                                  let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                                  match cf1 with
+                                    | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                      let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                                      let i3 ← NHT_Constants.compact.OFF_ROUND1
+                                      let s1 ←
+                                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                            proof { start := i2, «end» := i3 }
+                                      let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                                      let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                                      let r3 ← modelMerkle d proof val.1 folded_root 1#usize hash
+                                      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                      match cf2 with
+                                        | core.ops.control_flow.ControlFlow.Continue a_3 => do
+                                          NHV_ReleaseOps.mark none
+                                              (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle
+                                                NHT_Constants.compact.SPLIT)
+                                          let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                          let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                          match cf3 with
+                                            | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                              let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                              let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                              match cf4 with
+                                                | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                  let r6 ← NJJ_Common.query proof val.1 val.2 a none val2 val3 22#usize
+                                                  let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                  match cf5 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                      let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                                      let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                                      let s5 ← lift (Std.Array.empty U8).to_slice
+                                                      let s6 ← lift (Std.Array.empty U8).to_slice
+                                                      let s7 ←
+                                                        core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                            { start := i1, «end» := i2 }
+                                                      let i4 ← NHT_Constants.compact.OFF_FINAL
+                                                      let s8 ←
+                                                        core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                            { start := i3, «end» := i4 }
+                                                      let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                                      let s9 ←
+                                                        core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                            { start := i4, «end» := i5 }
+                                                      let s10 ← lift (Std.Array.empty U8).to_slice
+                                                      finish
+                                                          { variant := AspisR1Stage2.transport.Variant.S2,
+                                                            semantic := s5, y1 := s6, inactive := val1, round0 := s7,
+                                                            folded_root := none, round1 := s8, final_message := s9,
+                                                            query_bytes := s10 }
+                                                          val.1
+                                                          { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                            power := val4.1.power, next := val4.1.next }
+                                                          none
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        Unit (core.convert.FromSame verifier.Error) residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    Unit (core.convert.FromSame verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (core.convert.FromSame verifier.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (core.convert.FromSame verifier.Error) residual
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (core.convert.FromSame verifier.Error) residual)
+                                fun a_3 =>
+                                bind_congr
+                                  (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                    { start := a_2, «end» := a_3 })
+                                  (fun s => do
+                                    let o ← NJC_ClosedCalls.inactive s
+                                    let r1 ←
+                                      NHT_Constants.core.option.Option.ok_or o
+                                          AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                                    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                                    match cf1 with
+                                      | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                        let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                                        let i3 ← NHT_Constants.compact.OFF_ROUND1
+                                        let s1 ←
+                                          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                              proof { start := i2, «end» := i3 }
+                                        let r2 ←
+                                          core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                                        let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                                        let r3 ← nativeMerkle d proof val.1 folded_root 1#usize hash
+                                        let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                        match cf2 with
+                                          | core.ops.control_flow.ControlFlow.Continue a_4 => do
+                                            NHV_ReleaseOps.mark none
+                                                (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle
+                                                  NHT_Constants.compact.SPLIT)
+                                            let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                            let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                            match cf3 with
+                                              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                                let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                                match cf4 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                    let r6 ←
+                                                      NJJ_Common.query proof val.1 val.2 a none val2 val3 22#usize
+                                                    let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                    match cf5 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                        let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                                        let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                                        let s5 ← lift (Std.Array.empty U8).to_slice
+                                                        let s6 ← lift (Std.Array.empty U8).to_slice
+                                                        let s7 ←
+                                                          core.slice.index.Slice.index
+                                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                              { start := a_3, «end» := i2 }
+                                                        let i4 ← NHT_Constants.compact.OFF_FINAL
+                                                        let s8 ←
+                                                          core.slice.index.Slice.index
+                                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                              { start := i3, «end» := i4 }
+                                                        let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                                        let s9 ←
+                                                          core.slice.index.Slice.index
+                                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                              { start := i4, «end» := i5 }
+                                                        let s10 ← lift (Std.Array.empty U8).to_slice
+                                                        finish
+                                                            { variant := AspisR1Stage2.transport.Variant.S2,
+                                                              semantic := s5, y1 := s6, inactive := val1, round0 := s7,
+                                                              folded_root := none, round1 := s8, final_message := s9,
+                                                              query_bytes := s10 }
+                                                            val.1
+                                                            { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                              power := val4.1.power, next := val4.1.next }
+                                                            none
+                                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          Unit (core.convert.FromSame verifier.Error) residual
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      Unit (core.convert.FromSame verifier.Error) residual
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (core.convert.FromSame verifier.Error) residual
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (core.convert.FromSame verifier.Error) residual
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame verifier.Error) residual)
+                                  (fun s => do
+                                    let o ← NJC_ClosedCalls.inactive s
+                                    let r1 ←
+                                      NHT_Constants.core.option.Option.ok_or o
+                                          AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                                    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                                    match cf1 with
+                                      | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                        let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                                        let i3 ← NHT_Constants.compact.OFF_ROUND1
+                                        let s1 ←
+                                          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                              proof { start := i2, «end» := i3 }
+                                        let r2 ←
+                                          core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                                        let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                                        let r3 ← modelMerkle d proof val.1 folded_root 1#usize hash
+                                        let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                        match cf2 with
+                                          | core.ops.control_flow.ControlFlow.Continue a_4 => do
+                                            NHV_ReleaseOps.mark none
+                                                (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle
+                                                  NHT_Constants.compact.SPLIT)
+                                            let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                            let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                            match cf3 with
+                                              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                                let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                                match cf4 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                    let r6 ←
+                                                      NJJ_Common.query proof val.1 val.2 a none val2 val3 22#usize
+                                                    let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                    match cf5 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                        let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                                        let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                                        let s5 ← lift (Std.Array.empty U8).to_slice
+                                                        let s6 ← lift (Std.Array.empty U8).to_slice
+                                                        let s7 ←
+                                                          core.slice.index.Slice.index
+                                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                              { start := a_3, «end» := i2 }
+                                                        let i4 ← NHT_Constants.compact.OFF_FINAL
+                                                        let s8 ←
+                                                          core.slice.index.Slice.index
+                                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                              { start := i3, «end» := i4 }
+                                                        let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                                        let s9 ←
+                                                          core.slice.index.Slice.index
+                                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                              { start := i4, «end» := i5 }
+                                                        let s10 ← lift (Std.Array.empty U8).to_slice
+                                                        finish
+                                                            { variant := AspisR1Stage2.transport.Variant.S2,
+                                                              semantic := s5, y1 := s6, inactive := val1, round0 := s7,
+                                                              folded_root := none, round1 := s8, final_message := s9,
+                                                              query_bytes := s10 }
+                                                            val.1
+                                                            { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                              power := val4.1.power, next := val4.1.next }
+                                                            none
+                                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          Unit (core.convert.FromSame verifier.Error) residual
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      Unit (core.convert.FromSame verifier.Error) residual
+                                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Unit (core.convert.FromSame verifier.Error) residual
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              Unit (core.convert.FromSame verifier.Error) residual
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame verifier.Error) residual)
+                                  fun a_4 =>
+                                  bind_congr (NJC_ClosedCalls.inactive a_4)
+                                    (fun o => do
+                                      let r1 ←
+                                        NHT_Constants.core.option.Option.ok_or o
+                                            AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                                      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                                      match cf1 with
+                                        | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                          let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                                          let i3 ← NHT_Constants.compact.OFF_ROUND1
+                                          let s1 ←
+                                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                proof { start := i2, «end» := i3 }
+                                          let r2 ←
+                                            core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                                          let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                                          let r3 ← nativeMerkle d proof val.1 folded_root 1#usize hash
+                                          let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                          match cf2 with
+                                            | core.ops.control_flow.ControlFlow.Continue a_5 => do
+                                              NHV_ReleaseOps.mark none
+                                                  (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle
+                                                    NHT_Constants.compact.SPLIT)
+                                              let r4 ← NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize
+                                              let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                                              match cf3 with
+                                                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                                  let r5 ← NJJ_Common.pending rr val.2.weights.deref
+                                                  let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                                  match cf4 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                                                      let r6 ←
+                                                        NJJ_Common.query proof val.1 val.2 a none val2 val3 22#usize
+                                                      let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                                                      match cf5 with
+                                                        | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                                          let (s3, deref_mut_back) ← lift val4.1.weights.deref_mut
+                                                          let s4 ← Port3_FlushInstall.flush val4.2 s3
+                                                          let s5 ← lift (Std.Array.empty U8).to_slice
+                                                          let s6 ← lift (Std.Array.empty U8).to_slice
+                                                          let s7 ←
+                                                            core.slice.index.Slice.index
+                                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                                { start := a_3, «end» := i2 }
+                                                          let i4 ← NHT_Constants.compact.OFF_FINAL
+                                                          let s8 ←
+                                                            core.slice.index.Slice.index
+                                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                                { start := i3, «end» := i4 }
+                                                          let i5 ← NHT_Constants.compact.OFF_OPENINGS
+                                                          let s9 ←
+                                                            core.slice.index.Slice.index
+                                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                                                { start := i4, «end» := i5 }
+                                                          let s10 ← lift (Std.Array.empty U8).to_slice
+                                                          finish
+                                                              { variant := AspisR1Stage2.transport.Variant.S2,
+                                                                semantic := s5, y1 := s6, inactive := val1,
+                                                                round0 := s7, folded_root := none, round1 := s8,
+                                                                final_message := s9, query_bytes := s10 }
+                                                              val.1
+                                                              { weights := deref_mut_back s4, rhs := val4.1.rhs,
+                                                                power := val4.1.power, next := val4.1.next }
+                                                              none
+                                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            Unit (core.convert.FromSame verifier.Error) residual
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        Unit (core.convert.FromSame verifier.Error) residual
+                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    Unit (core.convert.FromSame verifier.Error) residual
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                Unit (core.convert.FromSame verifier.Error) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            Unit (core.convert.FromSame verifier.Error) residual)
+                                    (fun o => do
+                                      let r1 ←
+                                        NHT_Constants.core.option.Option.ok_or o
+                                            AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+                                      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                                      match cf1 with
+                                        | ⋯ => do
+                                          let i2 ← NHT_Constants.compact.OFF_FOLDED_ROOT
+                                          let i3 ← NHT_Constants.compact.OFF_ROUND1
+                                          let s1 ←
+                                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                proof { start := i2, «end» := i3 }
+                                          let r2 ←
+                                            core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+                                          let folded_root ← core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2
+                                          let r3 ← modelMerkle d proof val.1 folded_root 1#usize hash
+                                          let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                                          match cf2 with
+                                            | ⋯ => do
+                                              NHV_ReleaseOps.mark ⋯ ⋯
+                                              let r4 ← ⋯
+                                              let cf3 ← ⋯
+                                              ⋯
+                                            | ⋯ => ⋯
+                                        | ⋯ => ⋯)
+                                    ⋯))
+                    ⋯))
+            ⋯ ⋯))
+'NLB_ErrorTransport.common_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
