@@ -1,0 +1,12 @@
+'AspisR1.NKA_FinishStages.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_FinishStages.rounds_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_FinishStages.rounds_fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_FinishStages.rounds_div' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKA_FinishStages.source : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
+  (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges),
+  FinishModel.finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation) D pub pre before challenges none = do
+    let result ← RoundModel.rounds NJM_RoundJoin.R D pre before
+    afterRounds reservation D pub pre challenges result :=
+fun reservation {H} D pub pre before challenges =>
+  Eq.refl (FinishModel.finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation) D pub pre before challenges none)

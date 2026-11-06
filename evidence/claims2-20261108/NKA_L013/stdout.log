@@ -1,0 +1,81 @@
+NKA_generated/NKA_OuterCut.lean:60:9: error: unsolved goals
+case cons.true
+word : NJT_QScan.Native
+wordCut : NJT_QScan.Cut word
+outer : Native
+outerCut : Cut outer
+advances : Blocks
+head : Bytes × Usize
+tail : List (Bytes × Usize)
+ih :
+  ∀ (carried : Bytes),
+    (∀ pair ∈ tail, ↑pair.2 < 8) →
+      ∀ (s : State),
+        NJT_QDomains.Domain s →
+          walk word outer advances carried tail s =
+            NHB_OuterState.walk (NJT_QPairs.nativeScan word) advances carried tail s
+carried : Bytes
+indices : ∀ pair ∈ head :: tail, ↑pair.2 < 8
+s : State
+domain : NJT_QDomains.Domain s
+bound : ↑head.2 < 8
+tailBound : ∀ pair ∈ tail, ↑pair.2 < 8
+read : Array.index_usize advances head.2 = ok (↑advances)[↑head.2]
+advance : NGQ_SamplerDriver.Bytes32 := (↑advances)[↑head.2]
+next : State × Option Bool := NJT_QScan.run word (↑(words head.1)) s
+state : (outer s head.1 advance carried (Query31ExplicitListLoop.optionStop next.2) next.1).state = next.1
+selected :
+  (outer s head.1 advance carried (Query31ExplicitListLoop.optionStop next.2) next.1).selected =
+    if Query31ExplicitListLoop.optionStop next.2 = true then advance else carried
+stop :
+  (outer s head.1 advance carried (Query31ExplicitListLoop.optionStop next.2) next.1).stop =
+    Query31ExplicitListLoop.optionStop next.2
+seenState : (outer s head.1 advance carried (Query31ExplicitListLoop.optionStop next.2) next.1).seenState = s
+seenBlock : (outer s head.1 advance carried (Query31ExplicitListLoop.optionStop next.2) next.1).seenBlock = head.1
+calls : (outer s head.1 advance carried (Query31ExplicitListLoop.optionStop next.2) next.1).calls = 1
+flag : Query31ExplicitListLoop.optionStop next.2 = true
+⊢ NHB_OuterState.finishCurrent advance next.1 =
+    NHB_OuterState.finishCurrent (↑advances)[↑head.2] (NJT_QScan.run word (↑(words head.1)) s).1
+NKA_generated/NKA_OuterCut.lean:60:23: warning: This simp argument is unused:
+  flag
+
+Hint: Omit it from the simp argument list.
+  simp only [f̵l̵a̵g̵,̵if_true, ̲read, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKA_generated/NKA_OuterCut.lean:60:36: warning: This simp argument is unused:
+  read
+
+Hint: Omit it from the simp argument list.
+  simp only [flag, ̲if_true,r̵e̵a̵d̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKA_generated/NKA_OuterCut.lean:60:41: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵l̵a̵g̵,̵i̵f̵_̵t̵r̵u̵e̵,̵r̵e̵a̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲f̲l̲a̲g̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲r̲e̲a̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKA_generated/NKA_OuterCut.lean:62:14: warning: This simp argument is unused:
+  flag
+
+Hint: Omit it from the simp argument list.
+  simp only [f̵l̵a̵g̵,̵Bool.false_eq_true, ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NKA_OuterCut.queries_from_pairs : ∀ (word : NJT_QScan.Native),
+  NJT_QScan.Cut word →
+    ∀ (outer : Native),
+      Cut outer →
+        ∀ (blocks advances : Blocks),
+          AspisR1Query31Transcript.queries_from_pairs_with_scan NGQ_SamplerPacket.Scan NGQ_SamplerPacket.initial blocks
+              advances =
+            walk word outer advances (↑advances)[7] (NKA_QueryPairs.inputs blocks) NGQ_SamplerPacket.initial :=
+fun word wordCut outer outerCut blocks advances =>
+  Eq.trans (NKA_QueryPairs.queries_from_pairs word wordCut blocks advances)
+    (Eq.symm
+      (association word wordCut outer outerCut advances (↑advances)[7] (NKA_QueryPairs.inputs blocks)
+        (NKA_QueryPairs.indices blocks) NGQ_SamplerPacket.initial NJT_QDomains.initial))
+'AspisR1.NKA_OuterCut.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKA_OuterCut.queries_from_pairs' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

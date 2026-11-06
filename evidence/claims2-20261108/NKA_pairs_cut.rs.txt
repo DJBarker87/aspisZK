@@ -1,0 +1,40 @@
+#[cfg(kani)] mod NKA_pairs_cut {
+ use super::*;
+ struct Log {before:QueryScan,block:[u8;32],after:QueryScan,stop:bool,count:usize}
+ fn arbitrary()->QueryScan {QueryScan{accepted:kani::any(),accepted_len:kani::any(),draws:kani::any()}}
+ fn oracle(log:&mut Log,scan:&mut QueryScan,block:&[u8;32])->bool {
+  log.before=QueryScan{accepted:scan.accepted,accepted_len:scan.accepted_len,draws:scan.draws};
+  log.block=*block;log.count+=1;
+  *scan=QueryScan{accepted:log.after.accepted,accepted_len:log.after.accepted_len,draws:log.after.draws};
+  log.stop
+ }
+ // Source ONE iteration, scan is a full-footprint child oracle. `true` is
+ // the source break; false continues with unchanged carried advance.
+ fn step(log:&mut Log,scan:&mut QueryScan,state:&mut [u8;32],blocks:&[[u8;32];8],advances:&[[u8;32];8],k:usize)->bool {
+  if oracle(log,scan,&blocks[k]) {*state=advances[k];return true;}
+  false
+ }
+ fn check(negative:bool){
+  let blocks:[[u8;32];8]=kani::any();let advances:[[u8;32];8]=kani::any();
+  let before=arbitrary();let mut scan=QueryScan{accepted:before.accepted,accepted_len:before.accepted_len,draws:before.draws};
+  let carried:[u8;32]=kani::any();let mut state=carried;
+  let mut log=Log{before:arbitrary(),block:kani::any(),after:arbitrary(),stop:kani::any(),count:0};
+  let k:usize=kani::any();kani::assume(k<8);let j:usize=kani::any();kani::assume(j<32);let q:usize=kani::any();kani::assume(q<22);
+  let stopped=step(&mut log,&mut scan,&mut state,&blocks,&advances,k);
+  assert_eq!(log.count,1);assert_eq!(stopped,log.stop);
+  assert_eq!(log.before.accepted[q],before.accepted[q]);
+  assert_eq!(log.before.accepted_len,before.accepted_len);assert_eq!(log.before.draws,before.draws);
+  assert_eq!(log.block[j],blocks[k][j]);
+  assert_eq!(scan.accepted[q],log.after.accepted[q]);assert_eq!(scan.accepted_len,log.after.accepted_len);assert_eq!(scan.draws,log.after.draws);
+  let expected=if log.stop{advances[k][j]}else{carried[j]};
+  if negative {assert_eq!(state[j],expected^1);}else{assert_eq!(state[j],expected);}
+ }
+ #[kani::proof] #[kani::unwind(33)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)]
+ fn outer_step(){check(false);}
+ #[kani::proof] #[kani::unwind(33)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)]
+ fn outer_step_control(){check(true);}
+ #[kani::proof] #[kani::unwind(23)]
+ fn default_state(){let s=QueryScan::default();let j:usize=kani::any();kani::assume(j<22);assert_eq!(s.accepted[j],0);assert_eq!(s.accepted_len,0);assert_eq!(s.draws,0);}
+ #[kani::proof] #[kani::unwind(23)]
+ fn default_state_control(){let s=QueryScan::default();let j:usize=kani::any();kani::assume(j<22);assert_eq!(s.accepted[j],1);}
+}

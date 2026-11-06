@@ -1,0 +1,29 @@
+ // Force BOTH standard TryReserveError constructors without changing the
+ // Global allocator or any shipped call. This is a valid local Allocator
+ // instance for the exact1392-byte/align4 request, not a std-operation stub.
+ struct NKA_FailAllocator;
+ unsafe impl alloc::alloc::Allocator for NKA_FailAllocator {
+  fn allocate(&self,layout:alloc::alloc::Layout)->Result<core::ptr::NonNull<[u8]>,alloc::alloc::AllocError>{
+   assert_eq!(layout.size(),1392);assert_eq!(layout.align(),4);Err(alloc::alloc::AllocError)
+  }
+  unsafe fn deallocate(&self,_:core::ptr::NonNull<u8>,_:alloc::alloc::Layout){assert!(false,"failed reserve owns no block");}
+ }
+ fn rejection_mapper_check(negative:bool){
+  let mut empty=Vec::<core::mem::MaybeUninit<Claims>,NKA_FailAllocator>::new_in(NKA_FailAllocator);
+  let before=empty.as_ptr();let allocation=empty.try_reserve_exact(1).unwrap_err();
+  assert_eq!(empty.len(),0);assert_eq!(empty.capacity(),0);assert_eq!(empty.as_ptr(),before);
+  let mut reference=Vec::<Claims,NKA_FailAllocator>::new_in(NKA_FailAllocator);
+  let reference_before=reference.as_ptr();let reference_error=reference.try_reserve_exact(1).unwrap_err();
+  assert_eq!(reference.len(),0);assert_eq!(reference.capacity(),0);assert_eq!(reference.as_ptr(),reference_before);
+  let reference_mapped:Result<(),Error>=Result::<(),alloc::collections::TryReserveError>::Err(reference_error).map_err(|_|Error::Allocation);
+  assert!(matches!(reference_mapped,Err(Error::Allocation)));
+  let overflow=Vec::<u8>::new().try_reserve_exact(usize::MAX).unwrap_err();
+  let kind:bool=kani::any();let success:bool=kani::any();let error=if kind{allocation}else{overflow};
+  let reply:Result<(),alloc::collections::TryReserveError>=if success{Ok(())}else{Err(error)};
+  // The exact source mapper; all raw error fields are discarded as shipped.
+  let mapped=reply.map_err(|_|Error::Allocation);
+  assert_eq!(mapped.is_ok(),success);
+  if let Err(error)=mapped {assert!(matches!(error,Error::Allocation));if negative{assert!(success);}}
+ }
+ #[kani::proof] #[kani::unwind(4)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)]
+ fn reservation_mapper(){rejection_mapper_check(false);}

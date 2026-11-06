@@ -1,0 +1,11 @@
+--- a/crates/aspis-core/src/r0/heap.rs
++++ b/crates/aspis-core/src/r0/heap.rs
+@@ -62,7 +62,7 @@
+   // ACTUAL frozen function including try_reserve_exact, set_len and cast.
+   // Allocation and data remain split: no payload is initialized or read.
+   match uninit::<Claims>() {
+-   Ok(out)=>{if mode==1 {core::mem::forget(out);}else{drop(out);}},
++   Ok(out)=>{let original=(&*out) as *const core::mem::MaybeUninit<Claims> as *mut core::mem::MaybeUninit<Claims>; drop(out); if mode==1 {drop(unsafe{Box::from_raw(original)});}},
+    Err(error)=>{assert!(matches!(error,Error::Allocation));if mode==2 {assert!(false,"returning allocation rejection is reached");}}
+   }
+  }

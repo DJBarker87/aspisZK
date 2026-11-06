@@ -1,0 +1,83 @@
+{
+  "attempt": "NKA_K027",
+  "kind": "kani",
+  "module": "r0::heap::NKA_reserve_continuation::complete_reservation",
+  "sources": [
+    "NKA_gate.py",
+    "NKA_SOURCE_PINS.json",
+    "NKA_FROZEN_FILE_PINS.json"
+  ],
+  "command": [
+    "python3",
+    "NKA_gate.py",
+    "NKA_K027.json"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_target",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_tmp"
+  },
+  "timeout": 180,
+  "expected_time": "explicit exact KMX annotation, original harness name; optimized focused verification, matched control",
+  "root_package": "aspis-core",
+  "metadata_features": "aspis-core/r0",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_src/crates/aspis-core/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_target",
+    "--features",
+    "r0",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r0::heap::NKA_reserve_continuation::complete_reservation",
+    "--output-format",
+    "terse"
+  ],
+  "collect": [
+    "NKA_K027-graph-check.json",
+    "NKA_K027-graph.stderr",
+    "NKA_K027-graph.json",
+    "NKA_K027-source-check.json",
+    "NKA_K027-lock-check.json"
+  ],
+  "source_revision": "e65f46f1a44e1b43cdb9182b5de6c108b3807f82",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "exit_status": 0,
+  "wall_seconds": 6.721201739041135,
+  "peak_rss_kib": "735424",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r292d2b73c064404f968d0bd4335a9a02.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "846774272",
+  "source_hashes": {
+    "NKA_gate.py": "0a6b1458430a080c5473fe828a828a2a07ea3d7b321c37ad2abca64e3fd1879d",
+    "NKA_SOURCE_PINS.json": "c203ca9cb44f20c0ea9a751fe78bf9584881867155bcce5b2000d81264371163",
+    "NKA_FROZEN_FILE_PINS.json": "6591096b9d0ed1a5df7f6c9773b949b34addf9367a69d412bc8ec192291cccaf"
+  },
+  "print_axioms": "N/A: kani"
+}

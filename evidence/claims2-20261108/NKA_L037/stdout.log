@@ -1,0 +1,192 @@
+NKA_generated/NKA_ClaimsRoot.lean:11:31: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NKA_generated/NKA_ClaimsRoot.lean:85:15: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NKA_generated/NKA_ClaimsRoot.lean:58:8: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NKA_generated/NKA_ClaimsRoot.lean:121:9: error(lean.unknownIdentifier): Unknown identifier `NKA_ClaimsRoot.parsed`
+'AspisR1.NKA_ClaimsRoot.outcome' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKA_generated/NKA_ClaimsRoot.lean:125:14: error(lean.unknownIdentifier): Unknown constant `parsed`
+'AspisR1.NKA_ClaimsRoot.claims' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKA_ClaimsRoot.claims : ∀ {A : Type} (allocator : S2W_D189Wrappers.Allocator A) (state : A)
+  (reservation : NP6_StdModel.Reservation) (rows : NKA_HeapCarrier.RowNative),
+  NKA_HeapCarrier.RowCut rows →
+    ∀ (box : NKA_HeapCarrier.BoxNative),
+      NKA_HeapCarrier.BoxCut box →
+        ∀ (owner : ℕ) (before : NKA_InitializedPrefix.Memory) (bytes : Slice U8),
+          match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+          | ok (core.result.Result.Ok pre) =>
+            ∃ value,
+              (match reservation, value with
+                | core.result.Result.Err a, value => True
+                | core.result.Result.Ok a, value =>
+                  have post :=
+                    box owner
+                      (NKA_InitializedPrefix.run (NKA_HeapCarrier.memoryNative rows) (NKA_HeapCarrier.rows (main value))
+                        before);
+                  post.owner = owner ∧ post.length = 1) ∧
+                native allocator state reservation rows box owner before value =
+                    cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                  native allocator state reservation rows box owner before value =
+                      reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                    toMainStatus
+                        (NJT_ClaimsRef_Value.unbox
+                          (NKA_ClaimsReference.run reservation (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                      ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)
+          | x => True :=
+fun {A} allocator state reservation rows rowCut box boxCut owner before bytes =>
+  claims.match_1.splitter
+    (fun x =>
+      AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+        match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+        | ok (core.result.Result.Ok pre) =>
+          ∃ value,
+            (match reservation, value with
+              | core.result.Result.Err a, value => True
+              | core.result.Result.Ok a, value =>
+                let post :=
+                  box owner
+                    (NKA_InitializedPrefix.run (NKA_HeapCarrier.memoryNative rows) (NKA_HeapCarrier.rows (main value))
+                      before);
+                post.owner = owner ∧ post.length = 1) ∧
+              native allocator state reservation rows box owner before value =
+                  cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                native allocator state reservation rows box owner before value =
+                    reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                  toMainStatus
+                      (NJT_ClaimsRef_Value.unbox
+                        (NKA_ClaimsReference.run reservation (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                    ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)
+        | x => True)
+    (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+    (fun pre parsed h =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+          match parsed : x with
+          | ok (core.result.Result.Ok pre) =>
+            ∃ value,
+              (match reservation, value with
+                | core.result.Result.Err a, value => True
+                | core.result.Result.Ok a, value =>
+                  let post :=
+                    box owner
+                      (NKA_InitializedPrefix.run (NKA_HeapCarrier.memoryNative rows) (NKA_HeapCarrier.rows (main value))
+                        before);
+                  post.owner = owner ∧ post.length = 1) ∧
+                native allocator state reservation rows box owner before value =
+                    cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                  native allocator state reservation rows box owner before value =
+                      reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                    toMainStatus
+                        (NJT_ClaimsRef_Value.unbox
+                          (NKA_ClaimsReference.run reservation (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                      ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)
+          | x_1 => True)
+        (fun heq => id sorry) (Eq.symm h) (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)))
+    (fun x x_1 parsed =>
+      Eq.ndrec (motive := fun x =>
+        (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+          AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+            match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+            | ok (core.result.Result.Ok pre) =>
+              ∃ value,
+                (match reservation, value with
+                  | core.result.Result.Err a, value => True
+                  | core.result.Result.Ok a, value =>
+                    let post :=
+                      box owner
+                        (NKA_InitializedPrefix.run (NKA_HeapCarrier.memoryNative rows)
+                          (NKA_HeapCarrier.rows (main value)) before);
+                    post.owner = owner ∧ post.length = 1) ∧
+                  native allocator state reservation rows box owner before value =
+                      cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                    native allocator state reservation rows box owner before value =
+                        reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                      toMainStatus
+                          (NJT_ClaimsRef_Value.unbox
+                            (NKA_ClaimsReference.run reservation (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                        ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)
+            | x => True)
+        (fun x h =>
+          Eq.ndrec (motive := fun x =>
+            (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+              match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+              | ok (core.result.Result.Ok pre) =>
+                ∃ value,
+                  (match reservation, value with
+                    | core.result.Result.Err a, value => True
+                    | core.result.Result.Ok a, value =>
+                      let post :=
+                        box owner
+                          (NKA_InitializedPrefix.run (NKA_HeapCarrier.memoryNative rows)
+                            (NKA_HeapCarrier.rows (main value)) before);
+                      post.owner = owner ∧ post.length = 1) ∧
+                    native allocator state reservation rows box owner before value =
+                        cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                      native allocator state reservation rows box owner before value =
+                          reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                        toMainStatus
+                            (NJT_ClaimsRef_Value.unbox
+                              (NKA_ClaimsReference.run reservation (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                          ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)
+              | x => True)
+            (fun x =>
+              Eq.ndrec (motive := fun x =>
+                (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+                  match parsed : x with
+                  | ok (core.result.Result.Ok pre) =>
+                    ∃ value,
+                      (match reservation, value with
+                        | core.result.Result.Err a, value => True
+                        | core.result.Result.Ok a, value =>
+                          let post :=
+                            box owner
+                              (NKA_InitializedPrefix.run (NKA_HeapCarrier.memoryNative rows)
+                                (NKA_HeapCarrier.rows (main value)) before);
+                          post.owner = owner ∧ post.length = 1) ∧
+                        native allocator state reservation rows box owner before value =
+                            cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                          native allocator state reservation rows box owner before value =
+                              reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                            toMainStatus
+                                (NJT_ClaimsRef_Value.unbox
+                                  (NKA_ClaimsReference.run reservation (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                              ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation) (PrefixAdapter.fromOld pre)
+                  | x_3 => True)
+                (fun x =>
+                  Eq.mpr
+                    (id
+                      (claims.match_1.eq_2 (fun x => Prop) (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+                        (fun pre parsed =>
+                          ∃ value,
+                            (match reservation, value with
+                              | core.result.Result.Err a, value => True
+                              | core.result.Result.Ok a, value =>
+                                let post :=
+                                  box owner
+                                    (NKA_InitializedPrefix.run (NKA_HeapCarrier.memoryNative rows)
+                                      (NKA_HeapCarrier.rows (main value)) before);
+                                post.owner = owner ∧ post.length = 1) ∧
+                              native allocator state reservation rows box owner before value =
+                                  cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                                native allocator state reservation rows box owner before value =
+                                    reference allocator state reservation (PrefixAdapter.fromOld pre) ∧
+                                  toMainStatus
+                                      (NJT_ClaimsRef_Value.unbox
+                                        (NKA_ClaimsReference.run reservation
+                                          (fromMainPrefix (PrefixAdapter.fromOld pre)))) =
+                                    ClaimsUnrolledFinish.claims (NP6_StdModel.calls reservation)
+                                      (PrefixAdapter.fromOld pre))
+                        (fun x parsed => True) x))
+                    True.intro)
+                (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)) x)
+            h x)
+        parsed x_1)
+    (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes))

@@ -1,0 +1,56 @@
+{"attempt": "NKA_L005", "exit_status": 1, "wall_seconds": 9.736251313937828, "peak_rss_kib": "6314304", "swaps": "0", "print_axioms": ["'AspisR1.NKA_ClaimsModel.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKA_ClaimsModel.parsed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKA_generated/NKA_ClaimsModel.lean:15:56: error: Ambiguous term
+  r1_wire.Prefix
+Possible interpretations:
+  AspisR1PublicPreparation.r1_wire.Prefix : Type
+  
+  AspisR1ClaimsUnrolledParent.r1_wire.Prefix : Type
+NKA_generated/NKA_ClaimsModel.lean:17:90: error: unsolved goals
+e : NP6_StdModel.ReserveError
+pre : sorry
+record : Record
+getter : sourceRecord sorry 25#u8 = ok (core.result.Result.Ok record)
+⊢ ∃ x,
+    (NKA_Reservation.external (core.result.Result.Err e)).validated (sorry ()) 25#u8 = ok x ∧
+      ∃ x_1,
+        (match x with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.Co
+...
+tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'AspisR1.NKA_ClaimsModel.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKA_ClaimsModel.parsed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKA_ClaimsModel.parsed : ∀ (r : NP6_StdModel.Reservation) (bytes : Slice U8)
+  (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix),
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre) →
+    ∃ value,
+      NJT_ClaimsRef_Value.unbox
+            (NJT_ClaimsRef.r1_semantic.NJT_claims_ref (fromMainPrefix (PrefixAdapter.fromOld pre))) =
+          ok (core.result.Result.Ok value) ∧
+        candidate_claims.claims (NKA_Reservation.external r) (fromMainPrefix (PrefixAdapter.fromOld pre)) =
+          reserveResult r value :=
+fun r bytes pre parser =>
+  let ⟨value, pure⟩ := NJT_AllocationLift.pure_success bytes pre parser
+  Exists.intro value
+    ⟨pure,
+      core.result.Result.casesOn (motive := fun t =>
+        r = t →
+          candidate_claims.claims (NKA_Reservation.external r) (fromMainPrefix (PrefixAdapter.fromOld pre)) =
+            reserveResult r value)
+        r
+        (fun unit h =>
+          Eq.symm h ▸
+            let ⟨h✝⟩ := unit
+            Eq.symm h✝ ▸
+              id
+                (Eq.mpr
+                  (id
+                    (congrArg (fun _a => _a = ok (core.result.Result.Ok value))
+                      (Eq.symm (NJT_ClaimsCohort.reference (fromMainPrefix (PrefixAdapter.fromOld pre))))))
+                  (Eq.mpr (id (congrArg (fun _a => _a = ok (core.result.Result.Ok value)) pure))
+                    (Eq.refl (ok (core.result.Result.Ok value))))))
+        (fun e h => Eq.symm h ▸ sorry) (Eq.refl r)⟩
+
+Running as unit: run-r562b39359f57413384aaf86b9255d5b1.scope; invocation ID: eb89e37353d9409f8856617957a37f0f

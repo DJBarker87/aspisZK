@@ -1,0 +1,31 @@
+{"attempt": "NKA_L010", "exit_status": 0, "wall_seconds": 7.576602185843512, "peak_rss_kib": "5980228", "swaps": "0", "print_axioms": ["'AspisR1.NKA_QueryPairs.indices' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKA_QueryPairs.queries_from_pairs' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKA_QueryPairs.reached' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NKA_QueryPairs.queries_from_pairs : ∀ (native : NJT_QScan.Native),
+  NJT_QScan.Cut native →
+    ∀ (blocks advances : Blocks),
+      AspisR1Query31Transcript.queries_from_pairs_with_scan NGQ_SamplerPacket.Scan NGQ_SamplerPacket.initial blocks
+          advances =
+        NHB_OuterState.walk (NJT_QPairs.nativeScan native) advances (↑advances)[7] (inputs blocks)
+          NGQ_SamplerPacket.initial :=
+fun native cut blocks advances =>
+  have association :=
+    NHB_OuterState.association (NJT_QPairs.nativeScan native) advances 7#usize (of_decide_eq_true (id (Eq.refl true)))
+      (inputs blocks) (indices blocks) NGQ_SamplerPacket.initial;
+  Eq.trans (NJT_QPairs.reference native cu
+...
+theorem AspisR1.NKA_QueryPairs.queries_from_pairs : ∀ (native : NJT_QScan.Native),
+  NJT_QScan.Cut native →
+    ∀ (blocks advances : Blocks),
+      AspisR1Query31Transcript.queries_from_pairs_with_scan NGQ_SamplerPacket.Scan NGQ_SamplerPacket.initial blocks
+          advances =
+        NHB_OuterState.walk (NJT_QPairs.nativeScan native) advances (↑advances)[7] (inputs blocks)
+          NGQ_SamplerPacket.initial :=
+fun native cut blocks advances =>
+  have association :=
+    NHB_OuterState.association (NJT_QPairs.nativeScan native) advances 7#usize (of_decide_eq_true (id (Eq.refl true)))
+      (inputs blocks) (indices blocks) NGQ_SamplerPacket.initial;
+  Eq.trans (NJT_QPairs.reference native cut blocks advances) (Eq.symm association)
+'AspisR1.NKA_QueryPairs.indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_QueryPairs.queries_from_pairs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_QueryPairs.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r15d59e681c0c4eac86e50e258ecd9d80.scope; invocation ID: b4d14695b2b247f99c07f926f180666e

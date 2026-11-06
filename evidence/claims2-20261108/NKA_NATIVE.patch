@@ -1,0 +1,248 @@
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! aspis-core: shared no_std verifier core for the Aspis native WHIR-style
+ //! M31 PCS substrate (Stage 0).
+ //!
+@@ -97,3 +98,5 @@
+ 
+ #[cfg(feature = "r0-op-count")]
+ pub mod r0_op_count;
++
++#[cfg(kani)] #[path="../../../KMX_stubs.rs"] mod NKA_kmx;
+--- a/crates/aspis-core/src/r0/heap.rs
++++ b/crates/aspis-core/src/r0/heap.rs
+@@ -19,3 +19,110 @@
+     // Exactly one element, with the same layout and allocation alignment.
+     Ok(unsafe { Box::from_raw(ptr) })
+ }
++
++#[cfg(kani)] mod NKA_heap_cut {
++ use super::*;
++ use core::mem::MaybeUninit;
++ type Claims=[[crate::field::QM31;29];3];
++ // Literal heap::uninit continuation after SAME try_reserve_exact(1).
++ // No data initialization/read is included in this allocation cut.
++ fn tail(mut out: Vec<MaybeUninit<Claims>>) -> Result<Box<MaybeUninit<Claims>>,Error> {
++  unsafe {out.set_len(1);}
++  let ptr=Box::into_raw(out.into_boxed_slice()) as *mut MaybeUninit<Claims>;
++  Ok(unsafe {Box::from_raw(ptr)})
++ }
++ fn check(mode:u8) {
++  let mut before=Vec::<MaybeUninit<Claims>>::new();
++  before.try_reserve_exact(1).unwrap();
++  assert_eq!(before.len(),0);
++  assert_eq!(before.capacity(),1);
++  assert_eq!(core::mem::size_of::<Claims>(),1392);
++  assert_eq!(core::mem::align_of::<Claims>(),4);
++  let address=before.as_ptr();
++  let out=tail(before).unwrap();
++  if mode==1 {assert_ne!(out.as_ptr(),address.cast::<Claims>());}
++  else if mode==2 {
++   let other=uninit::<Claims>().unwrap();
++   assert_eq!(out.as_ptr(),other.as_ptr());
++  } else {assert_eq!(out.as_ptr(),address.cast::<Claims>());}
++ }
++ #[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)] #[kani::unwind(4)]
++ fn allocation_tail(){check(0);}
++ #[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)] #[kani::unwind(4)]
++ fn allocation_tail_control(){check(1);}
++ #[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)] #[kani::unwind(4)]
++ fn allocation_other_control(){check(2);}
++}
++
++#[cfg(kani)] mod NKA_heap_effects {
++ use super::*;
++ type Claims=[[crate::field::QM31;29];3];
++ fn check(mode:u8){
++  assert_eq!(core::mem::size_of::<Claims>(),1392);assert_eq!(core::mem::align_of::<Claims>(),4);
++  // ACTUAL frozen function including try_reserve_exact, set_len and cast.
++  // Allocation and data remain split: no payload is initialized or read.
++  match uninit::<Claims>() {
++   Ok(out)=>{let original=(&*out) as *const core::mem::MaybeUninit<Claims> as *mut core::mem::MaybeUninit<Claims>; drop(out); if mode==1 {drop(unsafe{Box::from_raw(original)});}},
++   Err(error)=>{assert!(matches!(error,Error::Allocation));if mode==2 {assert!(false,"returning allocation rejection is reached");}}
++  }
++ }
++ #[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)] #[kani::unwind(4)] fn cleanup(){check(0);}
++ #[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)] #[kani::unwind(4)] fn cleanup_control(){check(1);}
++ #[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)] #[kani::unwind(4)] fn rejection_control(){rejection_mapper_check(true);}
++ // Force BOTH standard TryReserveError constructors without changing the
++ // Global allocator or any shipped call. This is a valid local Allocator
++ // instance for the exact1392-byte/align4 request, not a std-operation stub.
++ struct NKA_FailAllocator;
++ unsafe impl alloc::alloc::Allocator for NKA_FailAllocator {
++  fn allocate(&self,layout:alloc::alloc::Layout)->Result<core::ptr::NonNull<[u8]>,alloc::alloc::AllocError>{
++   assert_eq!(layout.size(),1392);assert_eq!(layout.align(),4);Err(alloc::alloc::AllocError)
++  }
++  unsafe fn deallocate(&self,_:core::ptr::NonNull<u8>,_:alloc::alloc::Layout){assert!(false,"failed reserve owns no block");}
++ }
++ fn rejection_mapper_check(negative:bool){
++  let mut empty=Vec::<core::mem::MaybeUninit<Claims>,NKA_FailAllocator>::new_in(NKA_FailAllocator);
++  let before=empty.as_ptr();let allocation=empty.try_reserve_exact(1).unwrap_err();
++  assert_eq!(empty.len(),0);assert_eq!(empty.capacity(),0);assert_eq!(empty.as_ptr(),before);
++  let mut reference=Vec::<Claims,NKA_FailAllocator>::new_in(NKA_FailAllocator);
++  let reference_before=reference.as_ptr();let reference_error=reference.try_reserve_exact(1).unwrap_err();
++  assert_eq!(reference.len(),0);assert_eq!(reference.capacity(),0);assert_eq!(reference.as_ptr(),reference_before);
++  let reference_mapped:Result<(),Error>=Result::<(),alloc::collections::TryReserveError>::Err(reference_error).map_err(|_|Error::Allocation);
++  assert!(matches!(reference_mapped,Err(Error::Allocation)));
++  let overflow=Vec::<u8>::new().try_reserve_exact(usize::MAX).unwrap_err();
++  let kind:bool=kani::any();let success:bool=kani::any();let error=if kind{allocation}else{overflow};
++  let reply:Result<(),alloc::collections::TryReserveError>=if success{Ok(())}else{Err(error)};
++  // The exact source mapper; all raw error fields are discarded as shipped.
++  let mapped=reply.map_err(|_|Error::Allocation);
++  assert_eq!(mapped.is_ok(),success);
++  if let Err(error)=mapped {assert!(matches!(error,Error::Allocation));if negative{assert!(success);}}
++ }
++ #[kani::proof] #[kani::unwind(4)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)]
++ fn reservation_mapper(){rejection_mapper_check(false);}
++}
++
++#[cfg(kani)] mod NKA_reserve_continuation {
++ use super::*;
++ use core::mem::MaybeUninit;
++ type Claims=[[crate::field::QM31;29];3];
++ // Actual heap::uninit continuation after the mapped reserve Result. The
++ // reserve site remains a standard allocator action, not a child oracle.
++ fn continuation(mut out:Vec<MaybeUninit<Claims>>,mapped:Result<(),Error>)->Result<Box<MaybeUninit<Claims>>,Error>{
++  mapped?;
++  unsafe{out.set_len(1);}
++  let ptr=Box::into_raw(out.into_boxed_slice()) as *mut MaybeUninit<Claims>;
++  Ok(unsafe{Box::from_raw(ptr)})
++ }
++ fn check(negative:bool){
++  let returning:bool=kani::any();let mut out=Vec::<MaybeUninit<Claims>>::new();
++  if returning {out.try_reserve_exact(1).unwrap();}
++  let pointer=out.as_ptr();
++  let mapped=if returning{Ok(())}else{Err(Error::Allocation)};
++  let result=continuation(out,mapped);
++  match result {
++   Ok(value)=>{assert!(returning);assert_eq!(value.as_ptr(),pointer.cast::<Claims>());},
++   Err(error)=>{assert!(!returning);assert!(matches!(error,Error::Allocation));if negative{assert!(returning);}}
++  }
++ }
++ #[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)] #[kani::unwind(4)] fn complete_reservation(){check(false);}
++ #[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)] #[kani::unwind(4)] fn complete_reservation_control(){check(true);}
++}
+--- a/crates/aspis-core/src/r0_transcript.rs
++++ b/crates/aspis-core/src/r0_transcript.rs
+@@ -319,3 +319,44 @@
+ 
+ #[cfg(test)]
+ mod tests;
++
++#[cfg(kani)] mod NKA_pairs_cut {
++ use super::*;
++ struct Log {before:QueryScan,block:[u8;32],after:QueryScan,stop:bool,count:usize}
++ fn arbitrary()->QueryScan {QueryScan{accepted:kani::any(),accepted_len:kani::any(),draws:kani::any()}}
++ fn oracle(log:&mut Log,scan:&mut QueryScan,block:&[u8;32])->bool {
++  log.before=QueryScan{accepted:scan.accepted,accepted_len:scan.accepted_len,draws:scan.draws};
++  log.block=*block;log.count+=1;
++  *scan=QueryScan{accepted:log.after.accepted,accepted_len:log.after.accepted_len,draws:log.after.draws};
++  log.stop
++ }
++ // Source ONE iteration, scan is a full-footprint child oracle. `true` is
++ // the source break; false continues with unchanged carried advance.
++ fn step(log:&mut Log,scan:&mut QueryScan,state:&mut [u8;32],blocks:&[[u8;32];8],advances:&[[u8;32];8],k:usize)->bool {
++  if oracle(log,scan,&blocks[k]) {*state=advances[k];return true;}
++  false
++ }
++ fn check(negative:bool){
++  let blocks:[[u8;32];8]=kani::any();let advances:[[u8;32];8]=kani::any();
++  let before=arbitrary();let mut scan=QueryScan{accepted:before.accepted,accepted_len:before.accepted_len,draws:before.draws};
++  let carried:[u8;32]=kani::any();let mut state=carried;
++  let mut log=Log{before:arbitrary(),block:kani::any(),after:arbitrary(),stop:kani::any(),count:0};
++  let k:usize=kani::any();kani::assume(k<8);let j:usize=kani::any();kani::assume(j<32);let q:usize=kani::any();kani::assume(q<22);
++  let stopped=step(&mut log,&mut scan,&mut state,&blocks,&advances,k);
++  assert_eq!(log.count,1);assert_eq!(stopped,log.stop);
++  assert_eq!(log.before.accepted[q],before.accepted[q]);
++  assert_eq!(log.before.accepted_len,before.accepted_len);assert_eq!(log.before.draws,before.draws);
++  assert_eq!(log.block[j],blocks[k][j]);
++  assert_eq!(scan.accepted[q],log.after.accepted[q]);assert_eq!(scan.accepted_len,log.after.accepted_len);assert_eq!(scan.draws,log.after.draws);
++  let expected=if log.stop{advances[k][j]}else{carried[j]};
++  if negative {assert_eq!(state[j],expected^1);}else{assert_eq!(state[j],expected);}
++ }
++ #[kani::proof] #[kani::unwind(33)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)]
++ fn outer_step(){check(false);}
++ #[kani::proof] #[kani::unwind(33)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)]
++ fn outer_step_control(){check(true);}
++ #[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)] #[kani::unwind(23)]
++ fn default_state(){let s=QueryScan::default();let j:usize=kani::any();kani::assume(j<22);assert_eq!(s.accepted[j],0);assert_eq!(s.accepted_len,0);assert_eq!(s.draws,0);}
++ #[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)] #[kani::unwind(23)]
++ fn default_state_control(){let s=QueryScan::default();let j:usize=kani::any();kani::assume(j<22);assert_eq!(s.accepted[j],1);}
++}
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+@@ -44,3 +45,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] #[path="../../../KMX_stubs.rs"] mod NKA_kmx;
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -316,3 +316,59 @@
+     mark(obs, 1);
+     verify_finish(public, prefix, transcript, challenges, obs)
+ }
++
++#[cfg(kani)] mod NKA_claims_cleanup {
++ use super::*;
++ use core::mem::MaybeUninit;
++ type Claims=[[QM31;29];3];
++ type Row=[QM31;29];
++ // Literal ONE original claims loop iteration, with the decode reply
++ // explicit. Its Err exits through ? and compiler-generated Box cleanup.
++ fn stage(mut out:Box<MaybeUninit<Claims>>,p:usize,reply:Result<Row,Error>)->Result<Box<MaybeUninit<Claims>>,Error>{
++  unsafe{out.as_mut_ptr().cast::<Row>().add(p).write(reply?);}
++  Ok(out)
++ }
++ fn check(negative:bool){
++  let p:usize=kani::any();kani::assume(p<3);let bad:usize=kani::any();kani::assume(bad<29);
++  let tag:bool=kani::any();let error=if tag{Error::Length{row:25}}else{Error::NonCanonical{row:25,value:p*29+bad}};
++  let out=aspis_core::r0::heap::uninit::<Claims>().unwrap();
++  let pointer=(&*out) as *const MaybeUninit<Claims> as *mut MaybeUninit<Claims>;
++  assert!(!core::mem::needs_drop::<Claims>());
++  let result=stage(out,p,Err(error));
++  match result {Err(got)=>{assert_eq!(got,error);},Ok(_)=>assert!(false,"rejection must be retained")}
++  // Original is dead on this SAME Err path. A deliberate second free must
++  // fail under the identical Kani/CBMC configuration.
++  if negative{drop(unsafe{Box::from_raw(pointer)});}
++ }
++ #[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)] #[kani::unwind(4)] fn error_cleanup(){check(false);}
++ #[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)] #[kani::unwind(4)] fn error_cleanup_control(){check(true);}
++}
++
++#[cfg(kani)] mod NKA_write_event {
++ use super::*;
++ use core::mem::MaybeUninit;
++ use aspis_core::field::{CM31,M31};
++ type Claims=[[QM31;29];3];
++ type Row=[QM31;29];
++ // Delete the ghost `written` assignment to recover the literal shipped
++ // ONE claims iteration. The log is fresh and LOCAL for this source site.
++ fn native(out:&mut MaybeUninit<Claims>,p:usize,reply:Result<Row,Error>,written:&mut bool)->Result<(),Error>{
++  unsafe{out.as_mut_ptr().cast::<Row>().add(p).write(reply?);}
++  *written=true;
++  Ok(())
++ }
++ fn check(negative:bool){
++  let p:usize=kani::any();kani::assume(p<3);
++  let row:Row=core::array::from_fn(|_|QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}});
++  let success:bool=kani::any();let tag:bool=kani::any();let bad:usize=kani::any();kani::assume(bad<29);
++  let reply=if success{Ok(row)}else{Err(if tag{Error::Length{row:25}}else{Error::NonCanonical{row:25,value:p*29+bad}})};
++  let mut out=MaybeUninit::<Claims>::uninit();let mut written=false;
++  let result=native(&mut out,p,reply,&mut written);
++  assert_eq!(result.is_ok(),success);
++  if negative{assert_eq!(written,!success);}else{assert_eq!(written,success);}
++ }
++ #[kani::proof] #[kani::unwind(117)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)]
++ fn typed_write_event(){check(false);}
++ #[kani::proof] #[kani::unwind(117)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)]
++ fn typed_write_event_control(){check(true);}
++}

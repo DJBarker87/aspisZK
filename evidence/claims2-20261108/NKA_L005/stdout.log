@@ -1,0 +1,91 @@
+NKA_generated/NKA_ClaimsModel.lean:15:56: error: Ambiguous term
+  r1_wire.Prefix
+Possible interpretations:
+  AspisR1PublicPreparation.r1_wire.Prefix : Type
+  
+  AspisR1ClaimsUnrolledParent.r1_wire.Prefix : Type
+NKA_generated/NKA_ClaimsModel.lean:17:90: error: unsolved goals
+e : NP6_StdModel.ReserveError
+pre : sorry
+record : Record
+getter : sourceRecord sorry 25#u8 = ok (core.result.Result.Ok record)
+⊢ ∃ x,
+    (NKA_Reservation.external (core.result.Result.Err e)).validated (sorry ()) 25#u8 = ok x ∧
+      ∃ x_1,
+        (match x with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+            ok x_1 ∧
+          (match x_1 with
+            | core.ops.control_flow.ControlFlow.Continue vr =>
+              ok (core.result.Result.Err AspisR1ClaimsUnrolledParent.r1_wire.Error.Allocation)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec
+                  (fun x =>
+                    Result
+                      (core.result.Result
+                        (Std.Array (Std.Array AspisR1ClaimsUnrolledParent.aspis_core.field.QM31 29#usize) 3#usize)
+                        AspisR1ClaimsUnrolledParent.r1_wire.Error))
+                  x
+              | core.result.Result.Err mapped => ok (core.result.Result.Err mapped)) =
+            ok (core.result.Result.Err AspisR1ClaimsUnrolledParent.r1_wire.Error.Allocation)
+NKA_generated/NKA_ClaimsModel.lean:24:2: warning: This simp argument is unused:
+  candidate_claims.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+
+Hint: Omit it from the simp argument list.
+  simp [mapError,
+     c̵a̵n̵d̵i̵d̵a̵t̵e̵_̵c̵l̵a̵i̵m̵s̵.̵c̵l̵a̵i̵m̵s̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵candidate_claims.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+     core.result.Result.Insts.CoreOpsTry.branch,
+     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKA_generated/NKA_ClaimsModel.lean:26:2: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp [mapError, candidate_claims.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError,
+     candidate_claims.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError.call_once,
+     c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKA_generated/NKA_ClaimsModel.lean:33:8: warning: declaration uses `sorry`
+NKA_generated/NKA_ClaimsModel.lean:44:6: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+NKA_generated/NKA_ClaimsModel.lean:54:2: warning: 'exact rejected e _ _ called' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'AspisR1.NKA_ClaimsModel.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKA_ClaimsModel.parsed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKA_ClaimsModel.parsed : ∀ (r : NP6_StdModel.Reservation) (bytes : Slice U8)
+  (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix),
+  AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre) →
+    ∃ value,
+      NJT_ClaimsRef_Value.unbox
+            (NJT_ClaimsRef.r1_semantic.NJT_claims_ref (fromMainPrefix (PrefixAdapter.fromOld pre))) =
+          ok (core.result.Result.Ok value) ∧
+        candidate_claims.claims (NKA_Reservation.external r) (fromMainPrefix (PrefixAdapter.fromOld pre)) =
+          reserveResult r value :=
+fun r bytes pre parser =>
+  let ⟨value, pure⟩ := NJT_AllocationLift.pure_success bytes pre parser
+  Exists.intro value
+    ⟨pure,
+      core.result.Result.casesOn (motive := fun t =>
+        r = t →
+          candidate_claims.claims (NKA_Reservation.external r) (fromMainPrefix (PrefixAdapter.fromOld pre)) =
+            reserveResult r value)
+        r
+        (fun unit h =>
+          Eq.symm h ▸
+            let ⟨h✝⟩ := unit
+            Eq.symm h✝ ▸
+              id
+                (Eq.mpr
+                  (id
+                    (congrArg (fun _a => _a = ok (core.result.Result.Ok value))
+                      (Eq.symm (NJT_ClaimsCohort.reference (fromMainPrefix (PrefixAdapter.fromOld pre))))))
+                  (Eq.mpr (id (congrArg (fun _a => _a = ok (core.result.Result.Ok value)) pure))
+                    (Eq.refl (ok (core.result.Result.Ok value))))))
+        (fun e h => Eq.symm h ▸ sorry) (Eq.refl r)⟩

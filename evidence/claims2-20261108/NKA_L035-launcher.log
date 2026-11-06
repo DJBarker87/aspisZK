@@ -1,0 +1,23 @@
+{"attempt": "NKA_L035", "exit_status": 0, "wall_seconds": 13.230218757875264, "peak_rss_kib": "6363968", "swaps": "0", "print_axioms": ["'AspisR1.NKA_FinishTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKA_FinishTrace.rounds_reject' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NKA_FinishTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_FinishTrace.rounds_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKA_FinishTrace.source : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
+  (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges),
+  finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation) D pub pre before challenges none = do
+    let result ← rounds NJM_RoundJoin.R D pre before
+    afterRounds reservation D pub pre challenges result :=
+fun reservation
+...
+'AspisR1.NKA_FinishTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_FinishTrace.rounds_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKA_FinishTrace.source : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
+  (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges),
+  finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation) D pub pre before challenges none = do
+    let result ← rounds NJM_RoundJoin.R D pre before
+    afterRounds reservation D pub pre challenges result :=
+fun reservation {H} D pub pre before challenges =>
+  Eq.refl (finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation) D pub pre before challenges none)
+
+Running as unit: run-reea24d6ba4a643cab2ad066e11a8ad66.scope; invocation ID: 1734cf69c8244da3ab3a92b030d0154d

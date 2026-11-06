@@ -1,0 +1,415 @@
+@AspisR1.NKA_ClaimsRoot.claims : ∀ {A : Type} (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (state : A)
+  (reservation : AspisR1.NP6_StdModel.Reservation) (rows : AspisR1.NKA_HeapCarrier.RowNative),
+  AspisR1.NKA_HeapCarrier.RowCut rows →
+    ∀ (box : AspisR1.NKA_HeapCarrier.BoxNative),
+      AspisR1.NKA_HeapCarrier.BoxCut box →
+        ∀ (owner : ℕ) (before : AspisR1.NKA_InitializedPrefix.Memory) (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+          match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+          | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) =>
+            ∃ value,
+              AspisR1.NKA_ClaimsOwnership.Bound reservation rows box owner before value ∧
+                AspisR1.NKA_ClaimsEffects.native allocator state reservation rows box owner before value =
+                    AspisR1.NKA_ClaimsEffects.cohort allocator state reservation
+                      (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) ∧
+                  AspisR1.NKA_ClaimsEffects.native allocator state reservation rows box owner before value =
+                      AspisR1.NKA_ClaimsEffects.reference allocator state reservation
+                        (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) ∧
+                    AspisR1.ClaimsUnrolledFinish.toMainStatus
+                        (AspisR1.NJT_ClaimsRef_Value.unbox
+                          (AspisR1.NKA_ClaimsReference.run reservation
+                            (AspisR1.ClaimsUnrolledFinish.fromMainPrefix
+                              (AspisR1PublicPreparation.PrefixAdapter.fromOld pre)))) =
+                      AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls reservation)
+                        (AspisR1PublicPreparation.PrefixAdapter.fromOld pre)
+          | x => True
+AspisR1.NKA_OuterCut.queries_from_pairs : ∀ (word : AspisR1.NJT_QScan.Native),
+  AspisR1.NJT_QScan.Cut word →
+    ∀ (outer : AspisR1.NKA_OuterCut.Native),
+      AspisR1.NKA_OuterCut.Cut outer →
+        ∀ (blocks advances : AspisR1.NKA_OuterCut.Blocks),
+          AspisR1Query31Transcript.queries_from_pairs_with_scan AspisR1.NGQ_SamplerPacket.Scan
+              AspisR1.NGQ_SamplerPacket.initial blocks advances =
+            AspisR1.NKA_OuterCut.walk word outer advances (↑advances)[7] (AspisR1.NKA_QueryPairs.inputs blocks)
+              AspisR1.NGQ_SamplerPacket.initial
+AspisR1.NKA_FinishStages.source : ∀ (reservation : AspisR1.NP6_StdModel.Reservation) {H : Type}
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pre : AspisR1PublicPreparation.r1_wire.Prefix) (before : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (challenges : AspisR1PublicPreparation.r1_wire.Challenges),
+  AspisR1PublicPreparation.FinishModel.finish AspisR1.NJM_RoundJoin.R (AspisR1.IDa_Deployed.boundaries reservation) D
+      pub pre before challenges none =
+    do
+    let result ← AspisR1PublicPreparation.RoundModel.rounds AspisR1.NJM_RoundJoin.R D pre before
+    AspisR1.NKA_FinishStages.afterRounds reservation D pub pre challenges result
+AspisR1.NKA_FinishTrace.source : ∀ (reservation : AspisR1.NP6_StdModel.Reservation) {H : Type}
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (pub : AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pre : AspisR1PublicPreparation.r1_wire.Prefix) (before : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+  (challenges : AspisR1PublicPreparation.r1_wire.Challenges),
+  AspisR1PublicPreparation.S1SemanticCode.finish AspisR1.NJM_RoundJoin.R (AspisR1.IDa_Deployed.boundaries reservation) D
+      pub pre before challenges none =
+    do
+    let result ← AspisR1PublicPreparation.S1SemanticCode.rounds AspisR1.NJM_RoundJoin.R D pre before
+    AspisR1.NKA_FinishTrace.afterRounds reservation D pub pre challenges result
+def AspisR1.NKA_HeapCarrier.RowCut : AspisR1.NKA_HeapCarrier.RowNative → Prop :=
+fun native =>
+  AspisR1.NKA_InitializedPrefix.Cut (AspisR1.NKA_HeapCarrier.memoryNative native) ∧
+    ∀ (p : Fin 3) (row : Fin 116 → Aeneas.Std.U32) (before : AspisR1.NKA_InitializedPrefix.Memory),
+      (native p row before).outcome = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())
+def AspisR1.NKA_InitializedPrefix.Cut : AspisR1.NKA_InitializedPrefix.Native → Prop :=
+fun native =>
+  ∀ (p : Fin 3) (row : Fin 116 → Aeneas.Std.U32) (before : AspisR1.NKA_InitializedPrefix.Memory),
+    (∀ (i : Fin 116), native p row before (116 * ↑p + ↑i) = row i) ∧
+      ∀ (q : Fin 3) (i : Fin 116), ↑q < ↑p → native p row before (116 * ↑q + ↑i) = before (116 * ↑q + ↑i)
+def AspisR1.NKA_InitializedPrefix.Prefix : AspisR1.NKA_InitializedPrefix.Rows →
+  ℕ → AspisR1.NKA_InitializedPrefix.Memory → Prop :=
+fun rows p memory => ∀ (q : Fin 3) (i : Fin 116), ↑q < p → memory (116 * ↑q + ↑i) = rows q i
+def AspisR1.NKA_HeapCarrier.BoxCut : AspisR1.NKA_HeapCarrier.BoxNative → Prop :=
+fun native =>
+  ∀ (owner : ℕ) (value : AspisR1.NKA_HeapCarrier.Claims) (memory : AspisR1.NKA_InitializedPrefix.Memory),
+    AspisR1.NKA_InitializedPrefix.Prefix (AspisR1.NKA_HeapCarrier.rows value) 3 memory →
+      (native owner memory).owner = owner ∧
+        (native owner memory).length = 1 ∧
+          ∀ (p : Fin 3) (k : Fin 29) (limb : Fin 4),
+            AspisR1.NJG_NativeCuts.word
+                (AspisR1.NIX_CertificateFrames.cell (AspisR1.NIX_CertificateFrames.cell (native owner memory).value p)
+                  k)
+                limb =
+              AspisR1.NJG_NativeCuts.word
+                (AspisR1.NIX_CertificateFrames.cell (AspisR1.NIX_CertificateFrames.cell value p) k) limb
+def AspisR1.NKA_ClaimsOwnership.Bound : AspisR1.NP6_StdModel.Reservation →
+  AspisR1.NKA_HeapCarrier.RowNative →
+    AspisR1.NKA_HeapCarrier.BoxNative →
+      ℕ → AspisR1.NKA_InitializedPrefix.Memory → AspisR1ClaimsUnrolledParent.Claims → Prop :=
+fun reservation rows box owner before value =>
+  match reservation with
+  | Aeneas.Std.core.result.Result.Err a => True
+  | Aeneas.Std.core.result.Result.Ok a =>
+    have post :=
+      box owner
+        (AspisR1.NKA_InitializedPrefix.run (AspisR1.NKA_HeapCarrier.memoryNative rows)
+          (AspisR1.NKA_HeapCarrier.rows (AspisR1.NKA_ClaimsEffects.main value)) before);
+    post.owner = owner ∧ post.length = 1
+def AspisR1.NKA_ClaimsEffects.allocate : {A : Type} → AspisR1.S2W_D189Wrappers.Allocator A → A → Aeneas.Std.Result A :=
+fun {A} allocator state => allocator.allocate state 1392
+def AspisR1.NKA_ClaimsEffects.native : {A : Type} →
+  AspisR1.S2W_D189Wrappers.Allocator A →
+    A →
+      AspisR1.NP6_StdModel.Reservation →
+        AspisR1.NKA_HeapCarrier.RowNative →
+          AspisR1.NKA_HeapCarrier.BoxNative →
+            ℕ →
+              AspisR1.NKA_InitializedPrefix.Memory →
+                AspisR1.NKA_ClaimsEffects.ParentClaims → Aeneas.Std.Result (AspisR1.NKA_ClaimsEffects.MainStatus × A) :=
+fun {A} allocator state reservation rows box owner before value => do
+  let post ← AspisR1.NKA_ClaimsEffects.allocate allocator state
+  let result ← AspisR1.NKA_HeapCarrier.result reservation rows box owner before (AspisR1.NKA_ClaimsEffects.main value)
+  Aeneas.Std.Result.ok (result, post)
+def AspisR1.NKA_ClaimsEffects.cohort : {A : Type} →
+  AspisR1.S2W_D189Wrappers.Allocator A →
+    A →
+      AspisR1.NP6_StdModel.Reservation →
+        AspisR1.ClaimsUnrolledFinish.MainPrefix → Aeneas.Std.Result (AspisR1.NKA_ClaimsEffects.MainStatus × A) :=
+fun {A} allocator state reservation pre => do
+  let post ← AspisR1.NKA_ClaimsEffects.allocate allocator state
+  let result ← AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls reservation) pre
+  Aeneas.Std.Result.ok (result, post)
+def AspisR1.NKA_ClaimsEffects.reference : {A : Type} →
+  AspisR1.S2W_D189Wrappers.Allocator A →
+    A →
+      AspisR1.NP6_StdModel.Reservation →
+        AspisR1.ClaimsUnrolledFinish.MainPrefix → Aeneas.Std.Result (AspisR1.NKA_ClaimsEffects.MainStatus × A) :=
+fun {A} allocator state reservation pre => do
+  let pure ←
+    AspisR1.NJT_ClaimsRef_Value.unbox
+        (NJT_ClaimsRef.r1_semantic.NJT_claims_ref (AspisR1.ClaimsUnrolledFinish.fromMainPrefix pre))
+  match pure with
+    | Aeneas.Std.core.result.Result.Err e =>
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err (AspisR1.ClaimsUnrolledFinish.toMainError e), state)
+    | Aeneas.Std.core.result.Result.Ok value => do
+      let post ← AspisR1.NKA_ClaimsEffects.allocate allocator state
+      let result ← AspisR1.ClaimsUnrolledFinish.toMainStatus (AspisR1.NKA_ClaimsModel.reserveResult reservation value)
+      Aeneas.Std.Result.ok (result, post)
+def AspisR1.NKA_ClaimsReference.reserveFilled : {T : Type} →
+  AspisR1.NP6_StdModel.Reservation →
+    Aeneas.Std.core.marker.Copy T →
+      Aeneas.Std.Usize →
+        T →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec T) NJT_ClaimsRef.aspis_core.r0.Error) :=
+fun {T} reservation copy n value =>
+  match reservation with
+  | Aeneas.Std.core.result.Result.Ok a => NJT_ClaimsRef.aspis_core.r0.heap.filled copy n value
+  | Aeneas.Std.core.result.Result.Err a =>
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1PublicPreparation.aspis_core.r0.Error.Allocation)
+@[reducible] def AspisR1.NP6_StdModel.Reservation : Type :=
+Aeneas.Std.core.result.Result Unit AspisR1.NP6_StdModel.ReserveError
+def AspisR1.NP6_StdModel.calls : AspisR1.NP6_StdModel.Reservation → AspisR1.ClaimsUnrolledFinish.StdCalls :=
+fun reservation =>
+  { reserve := fun {T} x before x_1 => Aeneas.Std.Result.ok (reservation, before),
+    intoBox := fun {T} x before => Aeneas.Std.Result.ok before.deref }
+structure AspisR1.S2W_D189Wrappers.Allocator (A : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1.S2W_D189Wrappers.Allocator.allocate : A → ℕ → Aeneas.Std.Result A
+  AspisR1.S2W_D189Wrappers.Allocator.cleanup : A → Aeneas.Std.Result A
+constructor:
+  AspisR1.S2W_D189Wrappers.Allocator.mk {A : Type} (allocate : A → ℕ → Aeneas.Std.Result A)
+    (cleanup : A → Aeneas.Std.Result A) : AspisR1.S2W_D189Wrappers.Allocator A
+def AspisR1.NKA_OuterCut.Cut : AspisR1.NKA_OuterCut.Native → Prop :=
+fun native =>
+  ∀ (before : AspisR1.NJT_QBase.State) (block advance carried : AspisR1.NJT_QBase.Bytes) (stop : Bool)
+    (after : AspisR1.NJT_QBase.State),
+    have post := native before block advance carried stop after;
+    post.state = after ∧
+      (post.selected = if stop = true then advance else carried) ∧
+        post.stop = stop ∧ post.seenState = before ∧ post.seenBlock = block ∧ post.calls = 1
+def AspisR1.NJT_QScan.Cut : AspisR1.NJT_QScan.Native → Prop :=
+fun native =>
+  ∀ (s : AspisR1.NJT_QBase.State) (x : Aeneas.Std.U32) (reply : Bool),
+    Query31ExplicitListLoop.validState s →
+      ∀ (j : Fin 22),
+        AspisR1.NHB_Observation.observe (native s x reply).state x 1 (native s x reply).stop j =
+          AspisR1.NHK_WordAssociation.G s x 0 reply j
+def AspisR1.NJT_QDomains.Domain : AspisR1.NJT_QBase.State → Prop :=
+fun s => Query31ExplicitListLoop.validState s ∧ AspisR1.NHB_Canonical.State s ∧ AspisR1.NHB_Inactive.State s
+def AspisR1.NKA_QueryPairs.inputs : AspisR1.NGQ_SamplerDriver.Blocks →
+  List (AspisR1.NGQ_SamplerDriver.Bytes32 × Aeneas.Std.Usize) :=
+fun blocks => (↑blocks).zip [0#usize, 1#usize, 2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize]
+def AspisR1.IDa_Deployed.boundaries : AspisR1.NP6_StdModel.Reservation →
+  AspisR1PublicPreparation.FinishModel.Boundaries :=
+fun reservation =>
+  { fromFn := fun {T F} => AspisR1.OraclePortStdBuilder.fromFn, mask := AspisR1.FIp_SemanticArithmetic.mask,
+    add := AspisR1.FIp_SemanticArithmetic.add, mul := AspisR1.FIp_SemanticArithmetic.mul,
+    terminal := AspisR1.FIq_Terminal.terminal, circle := AspisR1.F3M_CircleSource.source,
+    unwrapRoot := AspisR1PublicPreparation.S1SemanticRootCopy.unwrapRoot,
+    claims := AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls reservation) }
+def AspisR1.NKA_FinishTrace.afterRounds : AspisR1.NP6_StdModel.Reservation →
+  {H : Type} →
+    AspisR1PublicPreparation.aspis_core.Digest32 H →
+      AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        AspisR1PublicPreparation.r1_wire.Prefix →
+          AspisR1PublicPreparation.r1_wire.Challenges →
+            AspisR1.NKA_FinishStages.RoundOut H →
+              AspisR1PublicPreparation.PreparedHashCode.Code
+                (Aeneas.Std.core.result.Result (AspisR1PublicPreparation.r1_semantic.Verified H)
+                  AspisR1PublicPreparation.r1_wire.Error) :=
+fun reservation {H} aspis_coreDigest32Inst public1 prefix1 challenges r => do
+  let cf ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r)
+  match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val =>
+      match val with
+      | (running, alpha, transcript1) => do
+        liftM (AspisR1PublicPreparation.VerifyPrefix.mark none 2#u8)
+        let r1 ← liftM ((AspisR1.IDa_Deployed.boundaries reservation).claims prefix1)
+        let cf1 ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r1)
+        match cf1 with
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val1 => do
+            let r2 ← liftM ((AspisR1.IDa_Deployed.boundaries reservation).terminal public1 val1 alpha challenges)
+            let r3 ←
+              liftM
+                  (core.result.Result.map_err (AspisR1PublicPreparation.FinishModel.closureFn11 aspis_coreDigest32Inst)
+                    r2 ())
+            let cf2 ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r3)
+            match cf2 with
+              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val2 => do
+                liftM (AspisR1PublicPreparation.VerifyPrefix.mark none 3#u8)
+                let a ←
+                  liftM
+                      ((AspisR1.IDa_Deployed.boundaries reservation).fromFn 16#usize
+                        (AspisR1PublicPreparation.FinishModel.closureFn9 aspis_coreDigest32Inst) val1)
+                let a1 ←
+                  liftM
+                      ((AspisR1.IDa_Deployed.boundaries reservation).fromFn 10#usize
+                        (AspisR1PublicPreparation.FinishModel.closureFn5 aspis_coreDigest32Inst) val1)
+                let a2 ← liftM (val1.index_usize 0#usize)
+                let q ← liftM (a2.index_usize 27#usize)
+                let mask ← liftM ((AspisR1.IDa_Deployed.boundaries reservation).mask a a1 q alpha)
+                let r4 ← liftM (prefix1.validated_record 25#u8)
+                let cf3 ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4)
+                match cf3 with
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr => do
+                    let r5 ← liftM (AspisR1.NJM_RoundJoin.R.decode 29#usize vr 87#usize)
+                    let cf4 ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r5)
+                    match cf4 with
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val3 => do
+                        let q1 ← liftM ((AspisR1.IDa_Deployed.boundaries reservation).mul challenges.eta val2)
+                        let q2 ← liftM ((AspisR1.IDa_Deployed.boundaries reservation).add mask q1)
+                        let q3 ← liftM (val3.index_usize 28#usize)
+                        let masked_terminal ← liftM ((AspisR1.IDa_Deployed.boundaries reservation).add q2 q3)
+                        let b ←
+                          liftM
+                              (Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                                AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 running
+                                masked_terminal)
+                        if b = true then
+                            pure (Aeneas.Std.core.result.Result.Err AspisR1PublicPreparation.r1_wire.Error.Terminal)
+                          else do
+                            liftM (AspisR1PublicPreparation.VerifyPrefix.mark none 4#u8)
+                            let state_before_z0 ←
+                              liftM
+                                  (AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state aspis_coreDigest32Inst
+                                    transcript1)
+                            let cf5 ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r4)
+                            match cf5 with
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr1 => do
+                                let __x ←
+                                  AspisR1PublicPreparation.S1SemanticCode.circleValidated
+                                      (AspisR1.IDa_Deployed.boundaries reservation) aspis_coreDigest32Inst transcript1
+                                      vr1
+                                match __x with
+                                  | (r6, transcript2) => do
+                                    let cf6 ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r6)
+                                    match cf6 with
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val4 => do
+                                        let r7 ← liftM (prefix1.validated_record 26#u8)
+                                        let cf7 ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r7)
+                                        match cf7 with
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr2 => do
+                                            let r8 ← liftM (AspisR1.NJM_RoundJoin.R.decode 29#usize vr2 0#usize)
+                                            let cf8 ← liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r8)
+                                            match cf8 with
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val5 => do
+                                                let cf9 ←
+                                                  liftM (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r7)
+                                                match cf9 with
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue vr3 => do
+                                                    let __x ←
+                                                      AspisR1PublicPreparation.S1SemanticCode.circleValidated
+                                                          (AspisR1.IDa_Deployed.boundaries reservation)
+                                                          aspis_coreDigest32Inst transcript2 vr3
+                                                    match __x with
+                                                      | (r9, transcript3) => do
+                                                        let cf10 ←
+                                                          liftM
+                                                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r9)
+                                                        match cf10 with
+                                                          |
+                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Continue val6 =>
+                                                            do
+                                                            liftM (AspisR1PublicPreparation.VerifyPrefix.mark none 5#u8)
+                                                            let b1 ←
+                                                              liftM
+                                                                  (AspisR1PublicPreparation.FinishModel.pointEq val4
+                                                                    val6)
+                                                            if b1 = true then
+                                                                pure
+                                                                  (Aeneas.Std.core.result.Result.Err
+                                                                    AspisR1PublicPreparation.r1_wire.Error.EqualCirclePoints)
+                                                              else do
+                                                                let r10 ←
+                                                                  liftM
+                                                                      (AspisR1PublicPreparation.FinishModel.payload
+                                                                        prefix1 2#u8)
+                                                                let cf11 ←
+                                                                  liftM
+                                                                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch
+                                                                        r10)
+                                                                match cf11 with
+                                                                  |
+                                                                  Aeneas.Std.core.ops.control_flow.ControlFlow.Continue
+                                                                      val7 =>
+                                                                    do
+                                                                    let r11 ←
+                                                                      liftM
+                                                                          (Aeneas.Std.core.array.TryFromArrayCopySlice.try_from
+                                                                            32#usize Aeneas.Std.core.marker.CopyU8 val7)
+                                                                    let a3 ←
+                                                                      liftM
+                                                                          ((AspisR1.IDa_Deployed.boundaries
+                                                                                reservation).unwrapRoot
+                                                                            r11)
+                                                                    pure
+                                                                        (Aeneas.Std.core.result.Result.Ok
+                                                                          {
+                                                                            roots :=
+                                                                              Aeneas.Std.Array.make 2#usize
+                                                                                [prefix1.c1_root, a3] ⋯,
+                                                                            challenges := challenges, alpha := alpha,
+                                                                            claims := val1, extra := val3,
+                                                                            before_z1 := val5,
+                                                                            state_before_z0 := state_before_z0,
+                                                                            z :=
+                                                                              Aeneas.Std.Array.make 2#usize [val4, val6]
+                                                                                ⋯,
+                                                                            transcript := transcript3 })
+                                                                  |
+                                                                  Aeneas.Std.core.ops.control_flow.ControlFlow.Break
+                                                                      residual =>
+                                                                    liftM
+                                                                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        (AspisR1PublicPreparation.r1_semantic.Verified
+                                                                          H)
+                                                                        (Aeneas.Std.core.convert.FromSame
+                                                                          AspisR1PublicPreparation.r1_wire.Error)
+                                                                        residual)
+                                                          |
+                                                          Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                            liftM
+                                                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                                (Aeneas.Std.core.convert.FromSame
+                                                                  AspisR1PublicPreparation.r1_wire.Error)
+                                                                residual)
+                                                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                    liftM
+                                                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                        (Aeneas.Std.core.convert.FromSame
+                                                          AspisR1PublicPreparation.r1_wire.Error)
+                                                        residual)
+                                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                                liftM
+                                                  (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                    (Aeneas.Std.core.convert.FromSame
+                                                      AspisR1PublicPreparation.r1_wire.Error)
+                                                    residual)
+                                          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                            liftM
+                                              (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                                (Aeneas.Std.core.convert.FromSame
+                                                  AspisR1PublicPreparation.r1_wire.Error)
+                                                residual)
+                                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                        liftM
+                                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                            (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error)
+                                            residual)
+                              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (AspisR1PublicPreparation.r1_semantic.Verified H)
+                                    (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual)
+                      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (AspisR1PublicPreparation.r1_semantic.Verified H)
+                            (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual)
+                  | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (AspisR1PublicPreparation.r1_semantic.Verified H)
+                        (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual)
+              | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (AspisR1PublicPreparation.r1_semantic.Verified H)
+                    (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual)
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (AspisR1PublicPreparation.r1_semantic.Verified H)
+                (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+      liftM
+        (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (AspisR1PublicPreparation.r1_semantic.Verified H)
+          (Aeneas.Std.core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual)
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_ClaimsRoot.claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_OuterCut.queries_from_pairs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_FinishStages.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_FinishTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]

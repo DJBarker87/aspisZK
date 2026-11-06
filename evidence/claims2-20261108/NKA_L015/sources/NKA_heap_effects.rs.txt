@@ -1,0 +1,16 @@
+#[cfg(kani)] mod NKA_heap_effects {
+ use super::*;
+ type Claims=[[crate::field::QM31;29];3];
+ fn check(mode:u8){
+  assert_eq!(core::mem::size_of::<Claims>(),1392);assert_eq!(core::mem::align_of::<Claims>(),4);
+  // ACTUAL frozen function including try_reserve_exact, set_len and cast.
+  // Allocation and data remain split: no payload is initialized or read.
+  match uninit::<Claims>() {
+   Ok(out)=>{if mode==1 {core::mem::forget(out);}else{drop(out);}},
+   Err(error)=>{assert!(matches!(error,Error::Allocation));if mode==2 {assert!(false,"returning allocation rejection is reached");}}
+  }
+ }
+ #[kani::proof] #[kani::unwind(4)] fn cleanup(){check(0);}
+ #[kani::proof] #[kani::unwind(4)] fn cleanup_control(){check(1);}
+ #[kani::proof] #[kani::unwind(4)] fn rejection_control(){check(2);}
+}
