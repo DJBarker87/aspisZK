@@ -61,3 +61,11 @@ NJL_PathSelector.source L099 consumes actual CLOSED sum_high262, reads1/5/9/13, 
 ## Stage12 prefix-only224 and native remaining windows
 L105/106/108 powers recurrence and actual ordered new map; L117/L110 full arbitrary-prestate prepared-product/add window and finite8step induction; L111/L112 internally derive all cache/input domains and exact sum of lambda^(i+1)*opened[start+i]. L113/L114/L119 lift actual recurrence into all8mutable native frames and identify full final vector, including actual unused ninth power. No time/memory/heartbeat/recursion limit increased. The uncompiled same-packet join sketch is .lean.txt and excluded from combined imports and credit.14tail/cohort association remains Lean-only OPEN224.
 Native controls and additional independent group/loop windows are SUPPORT as itemized in CUTS/STUBS; every included pair is checked by NJL_pair_check.py against actual solver reach, frozen graph, unchanged lock, and same input hashes. K023 TIMEOUT excluded/replaced by small chunk proof and Lean induction; no unchanged timed-out shape rerun.
+
+## Final release evidence (target remains unestablished)
+- NJL_L200 target `NJL_COMBINED_IMPORT`; exit0; wall8.284759s; peakRSS6157028KiB; swap0; source `3e3276f7eb8594ab0283e8c6c17dc08c20caa2a0`; exact command/env/library pins in receipt.
+- NJL_L201 target `NJL_proof0`; exit0; wall22.783118s; peakRSS6370228KiB; swap0; source `3e3276f7eb8594ab0283e8c6c17dc08c20caa2a0`; exact command/env/library pins in receipt.
+- NJL_L202 target `NJL_proof1`; exit0; wall30.597889s; peakRSS6753164KiB; swap0; source `3e3276f7eb8594ab0283e8c6c17dc08c20caa2a0`; exact command/env/library pins in receipt.
+- NJL_L203 target `NJL_scan`; exit0; wall44.305058s; peakRSS7352396KiB; swap0; source `3e3276f7eb8594ab0283e8c6c17dc08c20caa2a0`; exact command/env/library pins in receipt.
+
+#print axioms/raw ax2: all164roots standard-only; headline `[Classical.choice, Quot.sound, propext]`; every raw/collector comparison equal. NFX15199modules, all3error counts0. Root statements/hypothesis inventory: NJL_ROOT_STATEMENTS.md. Exact native/source association register: NJL_NATIVE_TO_SOURCE.json. Credit awaits next authoritative ledger.

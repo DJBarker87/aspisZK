@@ -1,3 +1,23 @@
+# NJL handoff — final
+
+Target not established. Work is committed on `codex/cx-terminal2-20261107`; no push. Authoritative ledger unchanged; all credit waits for its next gate.
+
+New complete locally admitted candidate rows: TX1:208, TX1:209, TX1:214, TX1:216, TX1:217, TX1:219, TX1:227, TX1:228, TX1:229, TX1:231, TX1:244, TX1:247. Read-only existing candidates215(NIX) and268(NJB) are imported and audited;256 remains NJG-owned and untouched.
+
+Budget used exactly60Kani /120Lean-support /0extraction. Both permitted full combined audits used; no more launch/replay is authorized. All jobs used6Ghigh/8Gmax/zero swap/64tasks; no cap, timeout, recursion or heartbeat limit was raised. One scoped native TIMEOUT(K023) was excluded and replaced by one-chunk controls plus finite Lean induction.
+
+Final audit: NGK+NIU+NJB+NIX+NJL combined import with `AspisR1.RPx_Deployed.deployed` PASS;164raw roots agree with Lean's collector and contain only `propext`, `Classical.choice`, `Quot.sound`;15199modules scanned with0dangling declarations,0duplicate owners,0import mismatches. Same hardened binaries/eightfixtures from gate1 retained. Audited source revision `3e3276f7eb8594ab0283e8c6c17dc08c20caa2a0`. Exact command/exit/wall/RSS/swap/source/library/axiom records are in NJL_AUDIT.json and per-attempt receipts.
+
+Retained OWN export: `/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NJL_20261108/NJL_exports_20261108` (17840858bytes, plus16388064bytes of hashed NJB/NIX seeds). NJL_EXPORT.json lists every file hash and the exact next LEAN_PATH; Aeneas/AeneasMeta pins remain in final audit receipts. Own cargo target and solver scratch were removed after export; retained caches never deleted. No potential key material was found in those cleanup paths; no wallet/key action was performed.
+
+Remaining work is member-by-member in NJL_REMAINING.md.224 now has actual power8frames, std8map9word caches and complete8step windows; compile the uncompiled `.lean.txt` same-packet join sketch in a NEW job, then finish14tail/cohort.234/235/246 have stronger native group/iteration/Some-body SUPPORT but need arithmetic/domain/induction roots.242/245/260/233 and parent source/order/carrier work remain;040/041/043 and308 are explicit slice boundaries. Never substitute an opaque child reply or stronger caller precondition.
+
+Review NJL_ROOT_STATEMENTS.md against(aq)(2), NJL_NATIVE_TO_SOURCE.json against(aq)(5), NJL_STUBS.md for paired/full-Result domains and OPEN caller clauses. NJL_NATIVE_PAIRS.json checks22positive/failing-control pairs with identical inputs/frozen graph/unchanged lock/exact KMX; extraK063 is a failing u64-forwarding fidelity observation only. No new trust, pending RuntimeCpiReadonlyEntry7, XRn kit, contracts or Option<fn> were used. Native semantic transport is P6/D188 optionA RECLASSIFICATION;100-bit PER-ATTEMPT soundness, privacy and the two-transaction design are unchanged.
+
+Repository crates/programs remain byte-identical to frozen4bb3b3f5. Harnesses are scratch-only patches, so no ELF rebuild was triggered; default f8c0ec72…, devnet63ad3e9c…, Pool121f3e29… remain inherited pins, not a claimed new rebuild.
+
+Detailed staged notes follow.
+
 # NJL handoff — stage 0
 
 Target not yet established. Branch codex/cx-terminal2-20261107. Only NJL modules and this evidence directory are writable. Budget 60 Kani / 120 Lean / 0 extraction; no attempts yet. One admitted capped scope at a time (6G/8G/swap0/tasks64), Lean -M7000. No pushes or shipped-source changes. No ELF rebuild is required absent shipped changes.

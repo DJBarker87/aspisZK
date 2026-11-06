@@ -283,3 +283,7 @@ TX1:268, `PoolV1PairForestTerminalStatementV1::semantic_public`, frozen body `ce
 `NJB_StubLaws`, `NJB_PreparedLaws`, `NJB_Words`, `NJB_PreparedCarrier`, `NJB_ArrayCarrier`, `NJB_DecodeInjective`, `NJB_StateUpdates`, and the pack law are supporting domain/carrier/field packets. Their canonical/PreparedFor hypotheses are explicit local helper domains, not newly accepted headline hypotheses. Generic child-interface theorems are SUPPORT only. No output-success or endpoint premise is admitted as a row root.
 
 Native-only partials for214,224,242,244,245,246,247 are itemized in NJB_REMAINING/NJB_AUDIT when terminal. Every native pass requires its matched failing control and exact source/graph/lock/KMX receipt. No positive window, unsupported prototype or reduced token receives automatic row credit. TX1:256 remains NIX_'s; no module is authored for it.
+
+## Final dependency disposition
+
+Twelve complete locally audited packets: TX1:208, TX1:209, TX1:214, TX1:216, TX1:217, TX1:219, TX1:227, TX1:228, TX1:229, TX1:231, TX1:244, TX1:247.215/268 imported read-only. Native reuse/source interpretation for each is NJL_NATIVE_TO_SOURCE.json; exact remaining direct dependencies and obligations for all32members are NJL_REMAINING.md.232 depends on260 plus CLOSED230, not occupancy/path/value siblings.260 depends on227 plus its actual initial/prefix work, not228. No row is held behind an unrelated member. Budget60/120/0 is exhausted; both full audits used.

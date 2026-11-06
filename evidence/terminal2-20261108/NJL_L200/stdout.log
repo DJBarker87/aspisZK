@@ -1,0 +1,1112 @@
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_AbsorptionInvocation.lanes (scales : Fin 3 → AspisR1.NJB_AbsorptionScales.Scale)
+  (opened : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ)
+  (prepared :
+    ∀ (j : Fin 3),
+      AspisR1.FIv_NativeValue.Canon (scales j).value ∧
+        AspisR1.NJB_PreparedLaws.Domain (scales j).cache (scales j).value)
+  (canonical : ∀ (j : Fin 16), AspisR1.FIv_NativeValue.Canon (opened j)) :
+  ∃ ys,
+    AspisR1.NJB_Traverse.run (AspisR1.NJB_AbsorptionLane.reference scales opened)
+          AspisR1.NJL_AbsorptionInvocation.indices =
+        Aeneas.Std.Result.ok ys ∧
+      (∀ y ∈ ↑ys, AspisR1.FIv_NativeValue.Canon y) ∧
+        List.Forall₂ (AspisR1.NJL_AbsorptionInvocation.Lane scales opened) AspisR1.NJL_AbsorptionInvocation.indices ↑ys
+'AspisR1.NJL_AbsorptionInvocation.lanes' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_AbsorptionInvocation.source (low fixed two eight nodes : AspisR1.FIv_NativeArithmetic.NQ)
+  (opened : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize) (hl : AspisR1.FIv_NativeValue.Canon low)
+  (hf : AspisR1.FIv_NativeValue.Canon fixed) (ht : AspisR1.FIv_NativeValue.Canon two)
+  (he : AspisR1.FIv_NativeValue.Canon eight) (hn : AspisR1.FIv_NativeValue.Canon nodes)
+  (ho : AspisR1.FIw_ArrayValue.canonical opened) :
+  ∃ r p scales ys out,
+    AspisR1.NJL_AbsorptionPrologue.Cut ![low, fixed, two, eight, nodes] r p
+        (fun j =>
+          { operation := AspisR1.NJL_AbsorptionPrologue.kind j,
+            left := AspisR1.NJL_AbsorptionPrologue.left ![low, fixed, two, eight, nodes] r j,
+            right := AspisR1.NJL_AbsorptionPrologue.right ![low, fixed, two, eight, nodes] r j })
+        (fun j => r (AspisR1.NJL_AbsorptionPrologue.replyIndex j)) AspisR1.NJL_AbsorptionPrologue.positions p p 7 3 ∧
+      AspisR1.NJL_AbsorptionPrologue.Clauses ![low, fixed, two, eight, nodes] r p ∧
+        List.Forall₂ (AspisR1.NJL_AbsorptionInvocation.Lane scales (AspisR1.NJB_Absorption.cell opened))
+            AspisR1.NJL_AbsorptionInvocation.indices ↑ys ∧
+          ↑out = ↑ys ∧
+            AspisR1.FIw_ArrayValue.canonical out ∧
+              AspisR1.NJB_Absorption.reference low fixed two eight nodes opened = Aeneas.Std.Result.ok out ∧
+                FIq_Native.pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal low fixed two eight nodes
+                    opened =
+                  Aeneas.Std.Result.ok out
+'AspisR1.NJL_AbsorptionInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_AbsorptionPrologue.source (low fixed two eight nodes : AspisR1.FIv_NativeArithmetic.NQ)
+  (hl : AspisR1.FIv_NativeValue.Canon low) (hf : AspisR1.FIv_NativeValue.Canon fixed)
+  (ht : AspisR1.FIv_NativeValue.Canon two) (he : AspisR1.FIv_NativeValue.Canon eight)
+  (hn : AspisR1.FIv_NativeValue.Canon nodes) :
+  ∃ r p scales,
+    AspisR1.NJL_AbsorptionPrologue.Cut ![low, fixed, two, eight, nodes] r p
+        (fun j =>
+          { operation := AspisR1.NJL_AbsorptionPrologue.kind j,
+            left := AspisR1.NJL_AbsorptionPrologue.left ![low, fixed, two, eight, nodes] r j,
+            right := AspisR1.NJL_AbsorptionPrologue.right ![low, fixed, two, eight, nodes] r j })
+        (fun j => r (AspisR1.NJL_AbsorptionPrologue.replyIndex j)) AspisR1.NJL_AbsorptionPrologue.positions p p 7 3 ∧
+      AspisR1.NJL_AbsorptionPrologue.Clauses ![low, fixed, two, eight, nodes] r p ∧
+        AspisR1.NJB_AbsorptionScales.reference low fixed two eight nodes = Aeneas.Std.Result.ok scales ∧
+          ∀ (j : Fin 3),
+            (scales j).value = r (AspisR1.NJL_AbsorptionPrologue.replyIndex j) ∧
+              (scales j).cache = p j ∧
+                AspisR1.FIv_NativeValue.Canon (scales j).value ∧
+                  AspisR1.NJB_PreparedLaws.Domain (scales j).cache (scales j).value
+'AspisR1.NJL_AbsorptionPrologue.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_ActiveInvocation.high_run (source : Fin 64 → AspisR1.FIv_NativeArithmetic.NQ) (bs : List (Fin 64))
+  (before : Fin 7 → AspisR1.FIv_NativeArithmetic.NQ) (hh : ∀ (i : Fin 64), AspisR1.FIv_NativeValue.Canon (source i))
+  (hs : ∀ (i : Fin 7), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJL_ActiveInvocation.HighTrace source bs before after ∧
+      (∀ (i : Fin 7), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+        AspisR1.NJB_ActiveRawHigh.run source bs before = Aeneas.Std.Result.ok after
+'AspisR1.NJL_ActiveInvocation.high_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_ActiveInvocation.high_step (source : Fin 64 → AspisR1.FIv_NativeArithmetic.NQ)
+  (before : Fin 7 → AspisR1.FIv_NativeArithmetic.NQ) (b : Fin 64)
+  (hh : ∀ (i : Fin 64), AspisR1.FIv_NativeValue.Canon (source i))
+  (hs : ∀ (i : Fin 7), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJL_ActiveInvocation.HighStep source before after b ∧
+      (∀ (i : Fin 7), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+        AspisR1.NJB_ActiveRawHigh.step source before b = Aeneas.Std.Result.ok after
+'AspisR1.NJL_ActiveInvocation.high_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_ActiveInvocation.low_run (high : Fin 7 → AspisR1.FIv_NativeArithmetic.NQ)
+  (low : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (cs : List (Fin 7)) (before : AspisR1.FIv_NativeArithmetic.NQ)
+  (hh : ∀ (i : Fin 7), AspisR1.FIv_NativeValue.Canon (high i))
+  (hl : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (low i)) (hs : AspisR1.FIv_NativeValue.Canon before) :
+  ∃ after,
+    AspisR1.NJL_ActiveInvocation.LowTrace high low cs before after ∧
+      AspisR1.FIv_NativeValue.Canon after ∧ AspisR1.NJB_ActiveRawLow.run high low cs before = Aeneas.Std.Result.ok after
+'AspisR1.NJL_ActiveInvocation.low_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_ActiveInvocation.low_step (high : Fin 7 → AspisR1.FIv_NativeArithmetic.NQ)
+  (low : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (sum : AspisR1.FIv_NativeArithmetic.NQ) (c : Fin 7)
+  (hh : ∀ (i : Fin 7), AspisR1.FIv_NativeValue.Canon (high i))
+  (hl : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (low i)) (hs : AspisR1.FIv_NativeValue.Canon sum) :
+  ∃ after,
+    AspisR1.NJL_ActiveInvocation.LowStep high low sum after c ∧
+      AspisR1.FIv_NativeValue.Canon after ∧ AspisR1.NJB_ActiveRawLow.step high low sum c = Aeneas.Std.Result.ok after
+'AspisR1.NJL_ActiveInvocation.low_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_ActiveInvocation.source (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) (hl : AspisR1.FIw_ArrayValue.canonical s.low) :
+  ∃ grouped out,
+    AspisR1.NJL_ActiveInvocation.HighTrace (AspisR1.NJB_ActiveReference.high s) (List.ofFn fun b => b)
+        (fun x => FIq_Native.field.QM31.ZERO) grouped ∧
+      AspisR1.NJL_ActiveInvocation.LowTrace grouped (AspisR1.NJB_ActiveReference.low s) (List.ofFn fun c => c)
+          FIq_Native.field.QM31.ZERO out ∧
+        AspisR1.FIv_NativeValue.Canon out ∧
+          AspisR1.NJB_ActiveReference.reference s = Aeneas.Std.Result.ok out ∧ s.active = Aeneas.Std.Result.ok out
+'AspisR1.NJL_ActiveInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_ArrayCodec.ext {N : Aeneas.Std.Usize} (a b : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ N)
+  (ha : AspisR1.FIw_ArrayValue.canonical a) (hb : AspisR1.FIw_ArrayValue.canonical b)
+  (same : AspisR1.FIw_ArrayValue.decoded a = AspisR1.FIw_ArrayValue.decoded b) : a = b
+'AspisR1.NJL_ArrayCodec.ext' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_CacheReads.canonical {lambda : AspisR1.FIv_NativeArithmetic.NQ} (p : AspisR1.NJL_CachedPowers.Packet lambda)
+  (i : Fin 8) : AspisR1.FIv_NativeValue.Canon (AspisR1.NJL_CacheReads.power p i)
+'AspisR1.NJL_CacheReads.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_CacheReads.constructor {lambda : AspisR1.FIv_NativeArithmetic.NQ}
+  (p : AspisR1.NJL_CachedPowers.Packet lambda) (i : Fin 8) :
+  FIq_Native.field.PreparedQm31Multiplier.new (AspisR1.NJL_CacheReads.power p i) =
+      Aeneas.Std.Result.ok (AspisR1.NJL_CacheReads.cache p i) ∧
+    AspisR1.NJB_PreparedLaws.Domain (AspisR1.NJL_CacheReads.cache p i) (AspisR1.NJL_CacheReads.power p i)
+'AspisR1.NJL_CacheReads.constructor' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_CacheReads.paired {α β : Type} {R : α → β → Prop} {xs : List α} {ys : List β}
+  (relation : List.Forall₂ R xs ys) (i : ℕ) (hi : i < xs.length) (hj : i < ys.length) : R xs[i] ys[i]
+'AspisR1.NJL_CacheReads.paired' depends on axioms: [propext]
+AspisR1.NJL_CacheReads.value {lambda : AspisR1.FIv_NativeArithmetic.NQ} (p : AspisR1.NJL_CachedPowers.Packet lambda)
+  (i : Fin 8) :
+  AspisR1.FIv_NativeValue.decode (AspisR1.NJL_CacheReads.power p i) = AspisR1.FIv_NativeValue.decode lambda ^ (↑i + 1)
+'AspisR1.NJL_CacheReads.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_CachedPowers.source (lambda : AspisR1.FIv_NativeArithmetic.NQ) (hl : AspisR1.FIv_NativeValue.Canon lambda) :
+  Nonempty (AspisR1.NJL_CachedPowers.Packet lambda)
+'AspisR1.NJL_CachedPowers.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_CachedWindow.source (lambda : AspisR1.FIv_NativeArithmetic.NQ)
+  (o : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize) (hl : AspisR1.FIv_NativeValue.Canon lambda)
+  (ho : AspisR1.FIw_ArrayValue.canonical o) :
+  ∃ p,
+    ∀ (start : Fin 9),
+      ∃ after,
+        AspisR1.NJL_WindowFold.run (AspisR1.NJL_CacheReads.cache p) o start (List.finRange 8)
+              FIq_Native.field.QM31.ZERO =
+            Aeneas.Std.Result.ok after ∧
+          AspisR1.NJL_WindowFold.Trace (AspisR1.NJL_CacheReads.cache p) o start (List.finRange 8)
+              FIq_Native.field.QM31.ZERO after ∧
+            AspisR1.FIv_NativeValue.Canon after ∧
+              AspisR1.FIv_NativeValue.decode after =
+                (List.ofFn fun i =>
+                    AspisR1.FIv_NativeValue.decode lambda ^ (↑i + 1) *
+                      AspisR1.FIv_NativeValue.decode (AspisR1.NJL_WindowStep.opened o start i)).sum
+'AspisR1.NJL_CachedWindow.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointCell.source (before : AspisR1.NJL_EndpointCell.State) (index : Fin 103)
+  (rhs : AspisR1.FIv_NativeArithmetic.NQ) (hb : ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (before i))
+  (hr : AspisR1.FIv_NativeValue.Canon rhs) :
+  ∃ reply after,
+    FIq_Native.field.QM31.add (before index) rhs = Aeneas.Std.Result.ok reply ∧
+      AspisR1.FIv_NativeValue.Canon reply ∧
+        AspisR1.NJB_StateUpdates.add before index rhs = Aeneas.Std.Result.ok after ∧
+          (∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+            AspisR1.NJL_EndpointCell.Cut before after index rhs reply
+                { operation := 1, left := before index, right := rhs } 1 ∧
+              ∀ (i : Fin 103),
+                AspisR1.FIv_NativeValue.decode (after i) =
+                  if i = index then AspisR1.FIv_NativeValue.decode (before i) + AspisR1.FIv_NativeValue.decode rhs
+                  else AspisR1.FIv_NativeValue.decode (before i)
+'AspisR1.NJL_EndpointCell.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointIndices.disjoint (gc : Fin 30) (pc : Fin 43) :
+  AspisR1.NJL_EndpointIndices.weight gc ≠ AspisR1.NJL_EndpointIndices.pattern pc
+'AspisR1.NJL_EndpointIndices.disjoint' depends on axioms: [propext, Quot.sound]
+AspisR1.NJL_EndpointIndices.pattern_domain (pc : Fin 43) :
+  ↑(AspisR1.NJL_EndpointIndices.pattern pc) ≥ 60 ∧ ↑(AspisR1.NJL_EndpointIndices.pattern pc) < 103
+'AspisR1.NJL_EndpointIndices.pattern_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointIndices.weight_domain (gc : Fin 30) :
+  ↑(AspisR1.NJL_EndpointIndices.weight gc) ≥ 30 ∧ ↑(AspisR1.NJL_EndpointIndices.weight gc) < 60
+'AspisR1.NJL_EndpointIndices.weight_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointLookup.block_shift (index : Fin 136) (consumer : Bool) :
+  AspisR1.NJL_EndpointLookup.row index consumer >>> 4 = AspisR1.NJL_EndpointLookup.row index consumer / 16
+'AspisR1.NJL_EndpointLookup.block_shift' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointLookup.caller_weight (index : Fin 136) (append : Aeneas.Std.U64)
+  (variant : FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1) :
+  ∃ weight,
+    FIq_Native.pool_v1.pair_forest_copy_terminal.link_weight (AspisR1.NJL_EndpointLookup.link index) append variant =
+        Aeneas.Std.Result.ok weight ∧
+      ↑weight ≤ 1 ∧
+        ↑↑weight =
+          R0P.copyLinkWeight (AspisR1.FJk_CopyDescriptor.link (AspisR1.NJL_EndpointLookup.link index)) (↑append)
+            (AspisR1.FJk_CopyDescriptor.variant variant)
+'AspisR1.NJL_EndpointLookup.caller_weight' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointLookup.group_unique : AspisR1.NJL_EndpointLookup.groupKeys.Nodup
+'AspisR1.NJL_EndpointLookup.group_unique' does not depend on any axioms
+AspisR1.NJL_EndpointLookup.high_canonical (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (index : Fin 136)
+  (consumer : Bool) (cut : AspisR1.NJL_EndpointLookup.Cut index consumer)
+  (hs : AspisR1.FIw_ArrayValue.canonical s.high) :
+  AspisR1.FIv_NativeValue.Canon (AspisR1.NJL_EndpointLookup.high s index consumer cut)
+'AspisR1.NJL_EndpointLookup.high_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointLookup.member (index : Fin 136) :
+  AspisR1.NJL_EndpointLookup.link index ∈ ↑FIq_Native.pool_v1.pair_forest_copy_terminal.constants.COPY_LINKS
+'AspisR1.NJL_EndpointLookup.member' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointLookup.pattern_unique : AspisR1.NJL_EndpointLookup.patternKeys.Nodup
+'AspisR1.NJL_EndpointLookup.pattern_unique' does not depend on any axioms
+AspisR1.NJL_EndpointLookup.scan_step {α : Type} [DecidableEq α] (key x : α) (xs : List α) (start : ℕ) :
+  AspisR1.NJL_EndpointLookup.scanFrom key (x :: xs) start =
+    if key = x then start else AspisR1.NJL_EndpointLookup.scanFrom key xs (start + 1)
+'AspisR1.NJL_EndpointLookup.scan_step' does not depend on any axioms
+AspisR1.NJL_EndpointLookup.size136 : ↑136#usize = 136
+'AspisR1.NJL_EndpointLookup.size136' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointRoot.selected_value (high : AspisR1.FIv_NativeArithmetic.NQ) (weight : Aeneas.Std.U32)
+  (hh : AspisR1.FIv_NativeValue.Canon high) (bounded : ↑weight ≤ 1) :
+  AspisR1.FIv_NativeValue.decode (AspisR1.NJL_EndpointWrites.selected high weight) =
+    AspisR1.FIv_NativeValue.decode high * ↑↑weight
+'AspisR1.NJL_EndpointRoot.selected_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointRoot.source (before : AspisR1.NJL_EndpointCell.State)
+  (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (index : Fin 136) (consumer : Bool)
+  (tag weight : Aeneas.Std.U32) (lookup : AspisR1.NJL_EndpointLookup.Cut index consumer)
+  (hb : ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (before i)) (hs : AspisR1.FIw_ArrayValue.canonical s.high)
+  (bounded : ↑weight ≤ 1) :
+  have g := AspisR1.NJL_EndpointLookup.groupIndex index consumer lookup;
+  have p := AspisR1.NJL_EndpointLookup.patternIndex index consumer lookup;
+  have high := AspisR1.NJL_EndpointLookup.high s index consumer lookup;
+  ∃ first second middle after,
+    NDE_Reference12.selected_binary_ref AspisR1.NJL_EndpointRoot.copy high FIq_Native.field.QM31.ZERO weight =
+        Aeneas.Std.Result.ok (AspisR1.NJL_EndpointWrites.selected high weight) ∧
+      FIq_Native.field.QM31.add (before (AspisR1.NJL_EndpointIndices.weight g))
+            (AspisR1.NJL_EndpointWrites.selected high weight) =
+          Aeneas.Std.Result.ok first ∧
+        FIq_Native.field.QM31.add (before (AspisR1.NJL_EndpointIndices.pattern p)) high = Aeneas.Std.Result.ok second ∧
+          AspisR1.NJL_EndpointCell.Cut before middle (AspisR1.NJL_EndpointIndices.weight g)
+              (AspisR1.NJL_EndpointWrites.selected high weight) first
+              { operation := 1, left := before (AspisR1.NJL_EndpointIndices.weight g),
+                right := AspisR1.NJL_EndpointWrites.selected high weight }
+              1 ∧
+            AspisR1.NJL_EndpointCell.Cut middle after (AspisR1.NJL_EndpointIndices.pattern p) high second
+                { operation := 1, left := middle (AspisR1.NJL_EndpointIndices.pattern p), right := high } 1 ∧
+              AspisR1.NJL_EndpointRoot.reference before s index consumer lookup tag weight =
+                  Aeneas.Std.Result.ok after ∧
+                (∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+                  ∀ (i : Fin 103),
+                    AspisR1.FIv_NativeValue.decode (after i) =
+                      if i = AspisR1.NJL_EndpointIndices.weight g then
+                        AspisR1.FIv_NativeValue.decode (before i) + AspisR1.FIv_NativeValue.decode high * ↑↑weight
+                      else
+                        if i = AspisR1.NJL_EndpointIndices.pattern p then
+                          AspisR1.FIv_NativeValue.decode (before i) + AspisR1.FIv_NativeValue.decode high
+                        else AspisR1.FIv_NativeValue.decode (before i)
+'AspisR1.NJL_EndpointRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointWrites.selected_call (high : AspisR1.FIv_NativeArithmetic.NQ) (weight : Aeneas.Std.U32)
+  (copy : Aeneas.Std.core.marker.Copy AspisR1.FIv_NativeArithmetic.NQ) :
+  NDE_Reference12.selected_binary_ref copy high FIq_Native.field.QM31.ZERO weight =
+    Aeneas.Std.Result.ok (AspisR1.NJL_EndpointWrites.selected high weight)
+'AspisR1.NJL_EndpointWrites.selected_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointWrites.selected_canonical (high : AspisR1.FIv_NativeArithmetic.NQ) (weight : Aeneas.Std.U32)
+  (hh : AspisR1.FIv_NativeValue.Canon high) :
+  AspisR1.FIv_NativeValue.Canon (AspisR1.NJL_EndpointWrites.selected high weight)
+'AspisR1.NJL_EndpointWrites.selected_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_EndpointWrites.source (before : AspisR1.NJL_EndpointCell.State) (gc : Fin 30) (pc : Fin 43)
+  (high : AspisR1.FIv_NativeArithmetic.NQ) (weight : Aeneas.Std.U32)
+  (hb : ∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (before i)) (hh : AspisR1.FIv_NativeValue.Canon high) :
+  ∃ first second middle after,
+    (∀ (copy : Aeneas.Std.core.marker.Copy AspisR1.FIv_NativeArithmetic.NQ),
+        NDE_Reference12.selected_binary_ref copy high FIq_Native.field.QM31.ZERO weight =
+          Aeneas.Std.Result.ok (AspisR1.NJL_EndpointWrites.selected high weight)) ∧
+      FIq_Native.field.QM31.add (before (AspisR1.NJL_EndpointIndices.weight gc))
+            (AspisR1.NJL_EndpointWrites.selected high weight) =
+          Aeneas.Std.Result.ok first ∧
+        FIq_Native.field.QM31.add (before (AspisR1.NJL_EndpointIndices.pattern pc)) high = Aeneas.Std.Result.ok second ∧
+          AspisR1.NJL_EndpointCell.Cut before middle (AspisR1.NJL_EndpointIndices.weight gc)
+              (AspisR1.NJL_EndpointWrites.selected high weight) first
+              { operation := 1, left := before (AspisR1.NJL_EndpointIndices.weight gc),
+                right := AspisR1.NJL_EndpointWrites.selected high weight }
+              1 ∧
+            AspisR1.NJL_EndpointCell.Cut middle after (AspisR1.NJL_EndpointIndices.pattern pc) high second
+                { operation := 1, left := middle (AspisR1.NJL_EndpointIndices.pattern pc), right := high } 1 ∧
+              AspisR1.NJL_EndpointWrites.reference before gc pc high weight = Aeneas.Std.Result.ok after ∧
+                (∀ (i : Fin 103), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+                  ∀ (i : Fin 103),
+                    AspisR1.FIv_NativeValue.decode (after i) =
+                      if i = AspisR1.NJL_EndpointIndices.weight gc then
+                        AspisR1.FIv_NativeValue.decode (before i) +
+                          AspisR1.FIv_NativeValue.decode (AspisR1.NJL_EndpointWrites.selected high weight)
+                      else
+                        if i = AspisR1.NJL_EndpointIndices.pattern pc then
+                          AspisR1.FIv_NativeValue.decode (before i) + AspisR1.FIv_NativeValue.decode high
+                        else AspisR1.FIv_NativeValue.decode (before i)
+'AspisR1.NJL_EndpointWrites.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_LowDischarge.source (high : Fin 7 → AspisR1.FIv_NativeArithmetic.NQ)
+  (low : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (sum : AspisR1.FIv_NativeArithmetic.NQ) (c : Fin 7)
+  (hh : ∀ (i : Fin 7), AspisR1.FIv_NativeValue.Canon (high i))
+  (hl : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (low i)) (hs : AspisR1.FIv_NativeValue.Canon sum) :
+  ∃ r,
+    (∀ (j : Fin 17), AspisR1.FIv_NativeValue.Canon (r j)) ∧
+      AspisR1.NJL_LowDischarge.Clauses high low sum r c ∧
+        ∀ (events : Fin (AspisR1.NJB_Cuts.lowCount c + 1) → AspisR1.NJB_Cuts.Event) (calls next : ℕ)
+          (out : AspisR1.FIv_NativeArithmetic.NQ),
+          AspisR1.NJB_Cuts.low high low sum r c events calls next out →
+            AspisR1.NJB_ActiveRawLow.step high low sum c = Aeneas.Std.Result.ok out
+'AspisR1.NJL_LowDischarge.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyAssociation.cell_value (a : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize)
+  (i : Fin 16) :
+  AspisR1.FIv_NativeValue.decode (AspisR1.NJL_OccupancyPacket.cell a i) = AspisR1.FIv_NativeArray.value a ↑i
+'AspisR1.NJL_OccupancyAssociation.cell_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyAssociation.source (input output : AspisR1.FIv_NativeArithmetic.NQ) (expected : Aeneas.Std.U32)
+  (opened : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize) (hi : AspisR1.FIv_NativeValue.Canon input)
+  (ho : AspisR1.FIv_NativeValue.Canon output) (he : ↑expected < AspisR1.FIw_ScalarArithmetic.P)
+  (ha : AspisR1.FIw_ArrayValue.canonical opened) :
+  ∃ p,
+    AspisR1.NJL_OccupancyPacket.reference input output expected opened =
+        Aeneas.Std.Result.ok (AspisR1.NJL_OccupancyPacket.pack p.last) ∧
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_literal input output expected opened =
+          Aeneas.Std.Result.ok (AspisR1.NJL_OccupancyPacket.pack p.last) ∧
+        AspisR1.FIw_ArrayValue.canonical (AspisR1.NJL_OccupancyPacket.pack p.last)
+'AspisR1.NJL_OccupancyAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyAssociation.value (input output : AspisR1.FIv_NativeArithmetic.NQ) (expected : Aeneas.Std.U32)
+  (opened : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize)
+  (p : AspisR1.NJL_OccupancyPacket.Packet input output expected opened) :
+  AspisR1.FIw_ArrayValue.decoded (AspisR1.NJL_OccupancyPacket.pack p.last) =
+    AspisR1.FIy_OccupancyMeaning.model (AspisR1.FIv_NativeValue.decode input) (AspisR1.FIv_NativeValue.decode output)
+      (↑expected) (AspisR1.FIv_NativeArray.value opened)
+'AspisR1.NJL_OccupancyAssociation.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyContext.source (input output occupied : AspisR1.FIv_NativeArithmetic.NQ)
+  (hi : AspisR1.FIv_NativeValue.Canon input) (ho : AspisR1.FIv_NativeValue.Canon output)
+  (hc : AspisR1.FIv_NativeValue.Canon occupied) :
+  ∃ c,
+    AspisR1.NJL_OccupancyContext.reference input output occupied = Aeneas.Std.Result.ok c ∧
+      AspisR1.NJL_OccupancyContext.Domain c ∧
+        AspisR1.NJL_OccupancyContext.Clauses input output occupied c ∧
+          (∃ r events, AspisR1.NJL_OccupancyContext.Cut input output occupied r c.empty events 5 1 c) ∧
+            AspisR1.FIv_NativeValue.decode c.oneMinus = 1 - AspisR1.FIv_NativeValue.decode occupied ∧
+              AspisR1.FIv_NativeValue.decode c.both =
+                  AspisR1.FIv_NativeValue.decode input + AspisR1.FIv_NativeValue.decode output ∧
+                AspisR1.FIv_NativeValue.decode c.selected =
+                    (AspisR1.FIv_NativeValue.decode input + AspisR1.FIv_NativeValue.decode output) *
+                      AspisR1.FIv_NativeValue.decode occupied ∧
+                  AspisR1.FIv_NativeValue.decode c.emptyValue =
+                    (AspisR1.FIv_NativeValue.decode input + AspisR1.FIv_NativeValue.decode output) *
+                      (1 - AspisR1.FIv_NativeValue.decode occupied)
+'AspisR1.NJL_OccupancyContext.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyFrame.full_mem (i : Fin 12) :
+  i ∈ List.map AspisR1.NJL_OccupancyLanes.slot AspisR1.NJL_OccupancyFrame.indices ↔ 3 ≤ ↑i ∧ ↑i < 11
+'AspisR1.NJL_OccupancyFrame.full_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyFrame.input_same (lane : Fin 8) :
+  AspisR1.NJL_OccupancyFrame.sourceIndex (AspisR1.NJL_OccupancyLanes.slot lane) =
+    AspisR1.NJL_OccupancyLanes.inputSlot lane
+'AspisR1.NJL_OccupancyFrame.input_same' depends on axioms: [propext, Quot.sound]
+AspisR1.NJL_OccupancyFrame.model_run (c : AspisR1.NJL_OccupancyContext.Context)
+  (opened : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (xs : List (Fin 8))
+  (before : Fin 12 → AspisR1.FIv_NativeValue.K) :
+  List.foldl (fun s i => AspisR1.NJL_OccupancyLanes.modelStep c opened i s) before xs =
+    List.foldl (fun s i => AspisR1.NJL_WriteFrame.write s i (AspisR1.NJL_OccupancyFrame.value c opened i)) before
+      (List.map AspisR1.NJL_OccupancyLanes.slot xs)
+'AspisR1.NJL_OccupancyFrame.model_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyFrame.model_step (c : AspisR1.NJL_OccupancyContext.Context)
+  (opened : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (lane : Fin 8) (before : Fin 12 → AspisR1.FIv_NativeValue.K) :
+  AspisR1.NJL_OccupancyLanes.modelStep c opened lane before =
+    AspisR1.NJL_WriteFrame.write before (AspisR1.NJL_OccupancyLanes.slot lane)
+      (AspisR1.NJL_OccupancyFrame.value c opened (AspisR1.NJL_OccupancyLanes.slot lane))
+'AspisR1.NJL_OccupancyFrame.model_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyFrame.source (c : AspisR1.NJL_OccupancyContext.Context)
+  (opened : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (before : AspisR1.NJL_OccupancyHead.State)
+  (hc : AspisR1.NJL_OccupancyContext.Domain c) (ho : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (opened i))
+  (hb : ∀ (i : Fin 12), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJL_OccupancyLanes.run c opened AspisR1.NJL_OccupancyFrame.indices before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_OccupancyLanes.Trace c opened AspisR1.NJL_OccupancyFrame.indices before after ∧
+        (∀ (i : Fin 12), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+          ∀ (i : Fin 12),
+            AspisR1.FIv_NativeValue.decode (after i) =
+              if 3 ≤ ↑i ∧ ↑i < 11 then AspisR1.NJL_OccupancyFrame.value c opened i
+              else AspisR1.FIv_NativeValue.decode (before i)
+'AspisR1.NJL_OccupancyFrame.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyHead.source (c : AspisR1.NJL_OccupancyContext.Context)
+  (occupied inverse nine : AspisR1.FIv_NativeArithmetic.NQ) (hc : AspisR1.NJL_OccupancyContext.Domain c)
+  (ho : AspisR1.FIv_NativeValue.Canon occupied) (hi : AspisR1.FIv_NativeValue.Canon inverse)
+  (hn : AspisR1.FIv_NativeValue.Canon nine) :
+  ∃ r out events,
+    AspisR1.NJL_OccupancyHead.reference c occupied inverse nine = Aeneas.Std.Result.ok out ∧
+      AspisR1.NJL_OccupancyHead.Clauses c occupied inverse nine r ∧
+        AspisR1.NJL_OccupancyHead.Cut c occupied inverse nine r events c.empty 6 out ∧
+          (∀ (i : Fin 12), AspisR1.FIv_NativeValue.Canon (out i)) ∧
+            (fun i => AspisR1.FIv_NativeValue.decode (out i)) = AspisR1.NJL_OccupancyHead.model c occupied inverse nine
+'AspisR1.NJL_OccupancyHead.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyLanes.source (c : AspisR1.NJL_OccupancyContext.Context)
+  (opened : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (xs : List (Fin 8)) (before : AspisR1.NJL_OccupancyHead.State)
+  (hc : AspisR1.NJL_OccupancyContext.Domain c) (ho : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (opened i))
+  (hb : ∀ (i : Fin 12), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJL_OccupancyLanes.run c opened xs before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_OccupancyLanes.Trace c opened xs before after ∧
+        (∀ (i : Fin 12), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+          (fun i => AspisR1.FIv_NativeValue.decode (after i)) =
+            List.foldl (fun s i => AspisR1.NJL_OccupancyLanes.modelStep c opened i s)
+              (fun i => AspisR1.FIv_NativeValue.decode (before i)) xs
+'AspisR1.NJL_OccupancyLanes.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyLanes.step (c : AspisR1.NJL_OccupancyContext.Context)
+  (opened : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (before : AspisR1.NJL_OccupancyHead.State) (lane : Fin 8)
+  (hc : AspisR1.NJL_OccupancyContext.Domain c) (ho : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (opened i))
+  (hb : ∀ (i : Fin 12), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJL_OccupancyLanes.reference c opened before lane = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_OccupancyLanes.Step c opened before after lane ∧
+        (∀ (i : Fin 12), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+          (fun i => AspisR1.FIv_NativeValue.decode (after i)) =
+            AspisR1.NJL_OccupancyLanes.modelStep c opened lane fun i => AspisR1.FIv_NativeValue.decode (before i)
+'AspisR1.NJL_OccupancyLanes.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyPacket.pack_decode (s : AspisR1.NJL_OccupancyHead.State) (i : Fin ↑12#usize) :
+  AspisR1.FIw_ArrayValue.decoded (AspisR1.NJL_OccupancyPacket.pack s) i =
+    AspisR1.FIv_NativeValue.decode (s (Fin.cast AspisR1.NJL_OccupancyPacket.size12 i))
+'AspisR1.NJL_OccupancyPacket.pack_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyPacket.size12 : ↑12#usize = 12
+'AspisR1.NJL_OccupancyPacket.size12' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyPacket.source (input output : AspisR1.FIv_NativeArithmetic.NQ) (expected : Aeneas.Std.U32)
+  (opened : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize) (hi : AspisR1.FIv_NativeValue.Canon input)
+  (ho : AspisR1.FIv_NativeValue.Canon output) (he : ↑expected < AspisR1.FIw_ScalarArithmetic.P)
+  (ha : AspisR1.FIw_ArrayValue.canonical opened) :
+  ∃ p,
+    AspisR1.NJL_OccupancyPacket.reference input output expected opened =
+        Aeneas.Std.Result.ok (AspisR1.NJL_OccupancyPacket.pack p.last) ∧
+      AspisR1.FIw_ArrayValue.canonical (AspisR1.NJL_OccupancyPacket.pack p.last)
+'AspisR1.NJL_OccupancyPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyParent.source (packed : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 24#usize)
+  (pub : AspisR1.NJL_OccupancyParent.Public) (o : AspisR1.NJL_OccupancyParent.Openings)
+  (s : AspisR1.NJL_OccupancyParent.Selectors) (hp : AspisR1.FIw_ArrayValue.canonical packed)
+  (hh : AspisR1.FIw_ArrayValue.canonical s.high) (hl : AspisR1.FIw_ArrayValue.canonical s.low)
+  (hz : AspisR1.FIw_ArrayValue.canonical o.z) :
+  ∃ p,
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.add_occupancy_lanes packed pub o s = Aeneas.Std.Result.ok p.after ∧
+      AspisR1.NJL_OccupancyParent.Cut p.input p.output (NFQ_StatementLaws.expected pub.variant) o.z
+        (AspisR1.NJL_OccupancyPacket.pack p.lanes.last) (AspisR1.NJL_OccupancyPacket.pack p.lanes.last) p.after p.after
+        p.input p.output (NFQ_StatementLaws.expected pub.variant) o.z 4 1017 1018 0
+'AspisR1.NJL_OccupancyParent.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_OccupancyTail.source (before : AspisR1.NJL_OccupancyHead.State)
+  (input output occupied ten oneMinus : AspisR1.FIv_NativeArithmetic.NQ) (expected : Aeneas.Std.U32)
+  (hb : ∀ (i : Fin 12), AspisR1.FIv_NativeValue.Canon (before i)) (hi : AspisR1.FIv_NativeValue.Canon input)
+  (ho : AspisR1.FIv_NativeValue.Canon output) (hc : AspisR1.FIv_NativeValue.Canon occupied)
+  (ht : AspisR1.FIv_NativeValue.Canon ten) (hm : AspisR1.FIv_NativeValue.Canon oneMinus)
+  (he : ↑expected < AspisR1.FIw_ScalarArithmetic.P) :
+  ∃ r after events,
+    AspisR1.NJL_OccupancyTail.reference before input output occupied ten oneMinus expected =
+        Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_OccupancyTail.Clauses input output occupied ten oneMinus expected r ∧
+        AspisR1.NJL_OccupancyTail.Cut before after input output occupied ten oneMinus expected r events 5 ∧
+          (∀ (i : Fin 12), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+            ∀ (i : Fin 12),
+              AspisR1.FIv_NativeValue.decode (after i) =
+                if ↑i = 11 then
+                  AspisR1.FIv_NativeValue.decode input *
+                      (AspisR1.FIv_NativeValue.decode ten * AspisR1.FIv_NativeValue.decode oneMinus) +
+                    AspisR1.FIv_NativeValue.decode output * (AspisR1.FIv_NativeValue.decode occupied - ↑↑expected)
+                else AspisR1.FIv_NativeValue.decode (before i)
+'AspisR1.NJL_OccupancyTail.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathAssociation.source (selector : AspisR1.FIv_NativeArithmetic.NQ) (o : AspisR1.NJL_PathPacket.Openings)
+  (hs : AspisR1.FIv_NativeValue.Canon selector) (hz : AspisR1.FIw_ArrayValue.canonical o.z)
+  (hb : AspisR1.FIw_ArrayValue.canonical o.succ_z) :
+  ∃ p,
+    AspisR1.NJL_PathPacket.reference selector o = Aeneas.Std.Result.ok (AspisR1.NJL_PathPacket.pack p.after) ∧
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_literal selector o =
+          Aeneas.Std.Result.ok (AspisR1.NJL_PathPacket.pack p.after) ∧
+        AspisR1.FIw_ArrayValue.canonical (AspisR1.NJL_PathPacket.pack p.after)
+'AspisR1.NJL_PathAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathAssociation.value (selector : AspisR1.FIv_NativeArithmetic.NQ) (o : AspisR1.NJL_PathPacket.Openings)
+  (p : AspisR1.NJL_PathPacket.Packet selector o) :
+  AspisR1.FIw_ArrayValue.decoded (AspisR1.NJL_PathPacket.pack p.after) =
+    AspisR1.FIx_PathMeaning.coefficients (AspisR1.FIv_NativeValue.decode selector) (AspisR1.FIv_NativeArray.value o.z 0)
+      (AspisR1.FIv_NativeArray.value o.z) (AspisR1.FIv_NativeArray.value o.succ_z)
+'AspisR1.NJL_PathAssociation.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathContext.source (selector bit : AspisR1.FIv_NativeArithmetic.NQ)
+  (hs : AspisR1.FIv_NativeValue.Canon selector) (hb : AspisR1.FIv_NativeValue.Canon bit) :
+  ∃ c residual events,
+    AspisR1.NJL_PathContext.reference selector bit = Aeneas.Std.Result.ok c ∧
+      AspisR1.NJL_PathContext.Domain c ∧
+        AspisR1.NJL_PathContext.Clauses selector bit residual c ∧
+          AspisR1.NJL_PathContext.Cut selector bit residual c events c.left c.right (AspisR1.NJL_PathContext.initial c)
+              6 2 ∧
+            (∀ (i : Fin 17), AspisR1.FIv_NativeValue.Canon (AspisR1.NJL_PathContext.initial c i)) ∧
+              AspisR1.FIv_NativeValue.decode c.selected =
+                  AspisR1.FIv_NativeValue.decode selector * AspisR1.FIv_NativeValue.decode bit ∧
+                AspisR1.FIv_NativeValue.decode c.emptyValue =
+                    AspisR1.FIv_NativeValue.decode selector * (1 - AspisR1.FIv_NativeValue.decode bit) ∧
+                  AspisR1.FIv_NativeValue.decode c.head =
+                    AspisR1.FIv_NativeValue.decode selector *
+                      (AspisR1.FIv_NativeValue.decode bit * (AspisR1.FIv_NativeValue.decode bit - 1))
+'AspisR1.NJL_PathContext.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathFrame.full_mem (i : Fin 17) :
+  i ∈ List.map AspisR1.NJL_PathFrame.targetJob AspisR1.NJL_PathTrace.jobs ↔ ↑i ≠ 0
+'AspisR1.NJL_PathFrame.full_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathFrame.look_fin (a : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (i : Fin 16) :
+  AspisR1.NJL_PathFrame.look a ↑i = AspisR1.FIv_NativeValue.decode (a i)
+'AspisR1.NJL_PathFrame.look_fin' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathFrame.model_run (c : AspisR1.NJL_PathContext.Context)
+  (z succ : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (xs : List AspisR1.NJL_PathTrace.Job)
+  (before : Fin 17 → AspisR1.FIv_NativeValue.K) :
+  List.foldl (fun before job => AspisR1.NJL_PathStep.modelStep c z succ job.1 job.2 before) before xs =
+    List.foldl (fun before i => AspisR1.NJL_WriteFrame.write before i (AspisR1.NJL_PathFrame.value c z succ i)) before
+      (List.map AspisR1.NJL_PathFrame.targetJob xs)
+'AspisR1.NJL_PathFrame.model_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathFrame.source (c : AspisR1.NJL_PathContext.Context) (z succ : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ)
+  (before : AspisR1.NJL_PathContext.State) (hc : AspisR1.NJL_PathContext.Domain c)
+  (hz : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (z i))
+  (hs : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (succ i))
+  (hb : ∀ (i : Fin 17), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJL_PathTrace.run c z succ AspisR1.NJL_PathTrace.jobs before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_PathTrace.Trace c z succ AspisR1.NJL_PathTrace.jobs before after ∧
+        (∀ (i : Fin 17), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+          ∀ (i : Fin 17),
+            AspisR1.FIv_NativeValue.decode (after i) =
+              if ↑i ≠ 0 then AspisR1.NJL_PathFrame.value c z succ i else AspisR1.FIv_NativeValue.decode (before i)
+'AspisR1.NJL_PathFrame.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathFrame.target_value (c : AspisR1.NJL_PathContext.Context)
+  (z succ : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ) (right : Bool) (k : Fin 8) :
+  AspisR1.NJL_PathFrame.value c z succ (AspisR1.NJL_PathStep.target right k) =
+    AspisR1.FIv_NativeValue.decode (AspisR1.NJL_PathStep.weight c right) *
+      (AspisR1.FIv_NativeValue.decode (succ (AspisR1.NJL_PathStep.sourceIndex right k)) -
+        AspisR1.FIv_NativeValue.decode (z (AspisR1.NJL_PathStep.currentIndex k)))
+'AspisR1.NJL_PathFrame.target_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathPacket.pack_decode (s : AspisR1.NJL_PathContext.State) (i : Fin ↑17#usize) :
+  AspisR1.FIw_ArrayValue.decoded (AspisR1.NJL_PathPacket.pack s) i =
+    AspisR1.FIv_NativeValue.decode (s (Fin.cast AspisR1.NJL_PathPacket.size17 i))
+'AspisR1.NJL_PathPacket.pack_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathPacket.size17 : ↑17#usize = 17
+'AspisR1.NJL_PathPacket.size17' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathPacket.source (selector : AspisR1.FIv_NativeArithmetic.NQ) (o : AspisR1.NJL_PathPacket.Openings)
+  (hs : AspisR1.FIv_NativeValue.Canon selector) (hz : AspisR1.FIw_ArrayValue.canonical o.z)
+  (hb : AspisR1.FIw_ArrayValue.canonical o.succ_z) :
+  ∃ p,
+    AspisR1.NJL_PathPacket.reference selector o = Aeneas.Std.Result.ok (AspisR1.NJL_PathPacket.pack p.after) ∧
+      AspisR1.FIw_ArrayValue.canonical (AspisR1.NJL_PathPacket.pack p.after)
+'AspisR1.NJL_PathPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathParent.source (packed : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 24#usize)
+  (o : AspisR1.NJL_PathPacket.Openings) (s : AspisR1.NJL_PathSelector.Selectors)
+  (hp : AspisR1.FIw_ArrayValue.canonical packed) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) (hz : AspisR1.FIw_ArrayValue.canonical o.z)
+  (hb : AspisR1.FIw_ArrayValue.canonical o.succ_z) :
+  ∃ p,
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.add_path_lanes packed o s = Aeneas.Std.Result.ok p.after ∧
+      ∃ events,
+        AspisR1.NJL_PathParent.Cut s p.selector events o o (AspisR1.NJL_PathPacket.pack p.lanes.after)
+          (AspisR1.NJL_PathPacket.pack p.lanes.after) p.after p.after 3 4 32 57 63
+'AspisR1.NJL_PathParent.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathSelector.source (s : AspisR1.NJL_PathSelector.Selectors) (hh : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hl : AspisR1.FIw_ArrayValue.canonical s.low) :
+  ∃ p, AspisR1.NJL_PathSelector.reference s = Aeneas.Std.Result.ok p.selector
+'AspisR1.NJL_PathSelector.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathStep.domain (c : AspisR1.NJL_PathContext.Context) (right : Bool)
+  (hc : AspisR1.NJL_PathContext.Domain c) :
+  AspisR1.FIv_NativeValue.Canon (AspisR1.NJL_PathStep.weight c right) ∧
+    AspisR1.NJB_PreparedLaws.Domain (AspisR1.NJL_PathStep.cache c right) (AspisR1.NJL_PathStep.weight c right)
+'AspisR1.NJL_PathStep.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathStep.source (c : AspisR1.NJL_PathContext.Context) (z succ : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ)
+  (right : Bool) (k : Fin 8) (before : AspisR1.NJL_PathContext.State) (hc : AspisR1.NJL_PathContext.Domain c)
+  (hz : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (z i))
+  (hs : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (succ i))
+  (hb : ∀ (i : Fin 17), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJL_PathStep.reference c z succ right k before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_PathStep.Step c z succ right k before after ∧
+        (∀ (i : Fin 17), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+          (fun i => AspisR1.FIv_NativeValue.decode (after i)) =
+            AspisR1.NJL_PathStep.modelStep c z succ right k fun i => AspisR1.FIv_NativeValue.decode (before i)
+'AspisR1.NJL_PathStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PathTrace.source (c : AspisR1.NJL_PathContext.Context) (z succ : Fin 16 → AspisR1.FIv_NativeArithmetic.NQ)
+  (xs : List AspisR1.NJL_PathTrace.Job) (before : AspisR1.NJL_PathContext.State) (hc : AspisR1.NJL_PathContext.Domain c)
+  (hz : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (z i))
+  (hs : ∀ (i : Fin 16), AspisR1.FIv_NativeValue.Canon (succ i))
+  (hb : ∀ (i : Fin 17), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJL_PathTrace.run c z succ xs before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_PathTrace.Trace c z succ xs before after ∧
+        (∀ (i : Fin 17), AspisR1.FIv_NativeValue.Canon (after i)) ∧
+          (fun i => AspisR1.FIv_NativeValue.decode (after i)) =
+            List.foldl (fun before job => AspisR1.NJL_PathStep.modelStep c z succ job.1 job.2 before)
+              (fun i => AspisR1.FIv_NativeValue.decode (before i)) xs
+'AspisR1.NJL_PathTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PatternCuts.inner_source (terms : Fin 14 → AspisR1.FIv_NativeArithmetic.NQ)
+  (weights : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ) (before : AspisR1.NJB_PatternReference.State) (g : Fin 4)
+  (c : Fin 26)
+  (range : AspisR1.NJB_PatternReference.offset g.castSucc ≤ ↑c ∧ ↑c < AspisR1.NJB_PatternReference.offset g.succ)
+  (ht : ∀ (i : Fin 14), AspisR1.FIv_NativeValue.Canon (terms i))
+  (hw : ∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hb : ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJB_StateUpdates.mulAdd before g (terms (AspisR1.NJB_PatternReference.pattern c)) (weights c) =
+        Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_PatternCuts.InnerStep terms weights g c before after ∧
+        ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NJL_PatternCuts.inner_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PatternCuts.outer_source (terms : Fin 14 → AspisR1.FIv_NativeArithmetic.NQ)
+  (weights : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ) (before : AspisR1.NJB_PatternReference.State) (g : Fin 4)
+  (ht : ∀ (i : Fin 14), AspisR1.FIv_NativeValue.Canon (terms i))
+  (hw : ∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hb : ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ reply,
+    AspisR1.NJB_PatternReference.inner terms weights g before = Aeneas.Std.Result.ok reply ∧
+      (∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (reply i)) ∧
+        ∀ (after seenBefore : AspisR1.NJB_PatternReference.State)
+          (seenWeights : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ)
+          (seenTerms : Fin 14 → AspisR1.FIv_NativeArithmetic.NQ) (calls seenGroup start stop next : ℕ),
+          AspisR1.NJL_PatternCuts.outer terms weights before g reply after seenBefore seenWeights seenTerms calls
+              seenGroup start stop next →
+            AspisR1.NJB_PatternReference.inner terms weights g before = Aeneas.Std.Result.ok after
+'AspisR1.NJL_PatternCuts.outer_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PatternInner.run (terms : Fin 14 → AspisR1.FIv_NativeArithmetic.NQ)
+  (weights : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ) (g : Fin 4) (xs : List (Fin 26))
+  (before : AspisR1.NJB_PatternReference.State)
+  (range :
+    ∀ c ∈ xs, AspisR1.NJB_PatternReference.offset g.castSucc ≤ ↑c ∧ ↑c < AspisR1.NJB_PatternReference.offset g.succ)
+  (ht : ∀ (i : Fin 14), AspisR1.FIv_NativeValue.Canon (terms i))
+  (hw : ∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hb : ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJB_StateUpdates.run
+          (fun c state =>
+            AspisR1.NJB_StateUpdates.mulAdd state g (terms (AspisR1.NJB_PatternReference.pattern c)) (weights c))
+          xs before =
+        Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_PatternInner.Trace terms weights g xs before after ∧
+        ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NJL_PatternInner.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PatternInner.source (terms : Fin 14 → AspisR1.FIv_NativeArithmetic.NQ)
+  (weights : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ) (g : Fin 4) (before : AspisR1.NJB_PatternReference.State)
+  (ht : ∀ (i : Fin 14), AspisR1.FIv_NativeValue.Canon (terms i))
+  (hw : ∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hb : ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJB_PatternReference.inner terms weights g before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_PatternInner.Trace terms weights g (AspisR1.NJB_PatternReference.coordinates g) before after ∧
+        ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NJL_PatternInner.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PatternMeaning.fold_prefix (terms : Fin 14 → AspisR1.FIv_NativeValue.K)
+  (weights : Fin 26 → AspisR1.FIv_NativeValue.K) (gs : List (Fin 4)) (before : Fin 4 → AspisR1.FIv_NativeValue.K)
+  (j : Fin 4) :
+  List.foldl (fun s g => AspisR1.NJB_PatternReference.groupModel terms weights g s) before gs j =
+    before j + (List.map (fun g => if g = j then AspisR1.NJL_PatternMeaning.dot terms weights g else 0) gs).sum
+'AspisR1.NJL_PatternMeaning.fold_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PatternMeaning.value (terms : Fin 14 → AspisR1.FIv_NativeValue.K)
+  (weights : Fin 26 → AspisR1.FIv_NativeValue.K) (before : Fin 4 → AspisR1.FIv_NativeValue.K) (j : Fin 4) :
+  AspisR1.NJB_PatternReference.model terms weights before j = before j + AspisR1.NJL_PatternMeaning.dot terms weights j
+'AspisR1.NJL_PatternMeaning.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PatternOuter.group_source (terms : Fin 14 → AspisR1.FIv_NativeArithmetic.NQ)
+  (weights : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ) (g : Fin 4) (before : AspisR1.NJB_PatternReference.State)
+  (ht : ∀ (i : Fin 14), AspisR1.FIv_NativeValue.Canon (terms i))
+  (hw : ∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hb : ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJL_PatternOuter.Group terms weights g before after ∧ ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NJL_PatternOuter.group_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PatternOuter.run (terms : Fin 14 → AspisR1.FIv_NativeArithmetic.NQ)
+  (weights : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ) (gs : List (Fin 4)) (before : AspisR1.NJB_PatternReference.State)
+  (ht : ∀ (i : Fin 14), AspisR1.FIv_NativeValue.Canon (terms i))
+  (hw : ∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hb : ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJB_StateUpdates.run (fun g s => AspisR1.NJB_PatternReference.inner terms weights g s) gs before =
+        Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_PatternOuter.Trace terms weights gs before after ∧
+        ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NJL_PatternOuter.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PatternOuter.source (terms : Fin 14 → AspisR1.FIv_NativeArithmetic.NQ)
+  (weights : Fin 26 → AspisR1.FIv_NativeArithmetic.NQ) (before : AspisR1.NJB_PatternReference.State)
+  (ht : ∀ (i : Fin 14), AspisR1.FIv_NativeValue.Canon (terms i))
+  (hw : ∀ (i : Fin 26), AspisR1.FIv_NativeValue.Canon (weights i))
+  (hb : ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJB_PatternReference.reference terms weights before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_PatternOuter.Trace terms weights (List.ofFn fun g => g) before after ∧
+        ∀ (i : Fin 4), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NJL_PatternOuter.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_PatternRoot.source (values : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 4#usize)
+  (weights : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 26#usize)
+  (terms : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 14#usize) (hv : AspisR1.FIw_ArrayValue.canonical values)
+  (hw : AspisR1.FIw_ArrayValue.canonical weights) (ht : AspisR1.FIw_ArrayValue.canonical terms) :
+  ∃ after,
+    AspisR1.NJL_PatternOuter.Trace (AspisR1.NJB_PatternArray.patterns terms)
+        (AspisR1.NJB_PatternArray.selectors weights) (List.ofFn fun g => g) (AspisR1.NJB_PatternArray.state values)
+        after ∧
+      AspisR1.NJB_PatternArray.reference values weights terms =
+          Aeneas.Std.Result.ok (AspisR1.NJB_PatternArray.pack after) ∧
+        AspisR1.FIw_ArrayValue.canonical (AspisR1.NJB_PatternArray.pack after) ∧
+          ∀ (g : Fin 4),
+            AspisR1.FIv_NativeValue.decode (AspisR1.NJB_PatternArray.state (AspisR1.NJB_PatternArray.pack after) g) =
+              AspisR1.FIv_NativeValue.decode (AspisR1.NJB_PatternArray.state values g) +
+                AspisR1.NJL_PatternMeaning.dot
+                  (fun i => AspisR1.FIv_NativeValue.decode (AspisR1.NJB_PatternArray.patterns terms i))
+                  (fun i => AspisR1.FIv_NativeValue.decode (AspisR1.NJB_PatternArray.selectors weights i)) g
+'AspisR1.NJL_PatternRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_SharedCuts.source (values : Fin 33 → AspisR1.FIv_NativeArithmetic.NQ)
+  (selector : AspisR1.FIv_NativeArithmetic.NQ) (g : Fin 9) (before : AspisR1.NJL_SharedCuts.State)
+  (hv : ∀ (i : Fin 33), AspisR1.FIv_NativeValue.Canon (values i)) (hc : AspisR1.FIv_NativeValue.Canon selector)
+  (hb : ∀ (i : Fin 24), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJB_SharedReference.step values selector g before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_SharedCuts.Step values selector g before after ∧
+        ∀ (i : Fin 24), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NJL_SharedCuts.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_SharedMeaning.contribution (v : Fin 33 → AspisR1.FIv_NativeArithmetic.NQ)
+  (selector : AspisR1.FIv_NativeArithmetic.NQ) (g : Fin 9) :
+  AspisR1.NJL_SharedMeaning.increment v selector g =
+    AspisR1.FIx_SelectedMeaning.contribution
+      (fun i => AspisR1.FIv_NativeValue.decode selector * AspisR1.FIv_NativeValue.decode (v i)) 49
+      ↑(AspisR1.NJB_SharedReference.group g)
+'AspisR1.NJL_SharedMeaning.contribution' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_SharedMeaning.fold_prefix (v : Fin 33 → AspisR1.FIv_NativeArithmetic.NQ)
+  (selector : AspisR1.FIv_NativeArithmetic.NQ) (gs : List (Fin 9)) (before : Fin 24 → AspisR1.FIv_NativeValue.K)
+  (j : Fin 24) :
+  List.foldl (fun s g => AspisR1.NJB_SharedReference.stepModel v selector g s) before gs j =
+    before j +
+      (List.map
+          (fun g =>
+            if AspisR1.NJB_SharedReference.group g = j then AspisR1.NJL_SharedMeaning.increment v selector g else 0)
+          gs).sum
+'AspisR1.NJL_SharedMeaning.fold_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_SharedMeaning.group_injective : Function.Injective AspisR1.NJB_SharedReference.group
+'AspisR1.NJL_SharedMeaning.group_injective' depends on axioms: [propext, Quot.sound]
+AspisR1.NJL_SharedMeaning.lane (v : Fin 33 → AspisR1.FIv_NativeArithmetic.NQ)
+  (selector : AspisR1.FIv_NativeArithmetic.NQ) (g : Fin 9) (i : Fin 4) :
+  AspisR1.FIv_NativeValue.decode selector * AspisR1.FIv_NativeValue.decode (AspisR1.NJB_SharedReference.lanes v g i) =
+    AspisR1.FIx_SelectedMeaning.selected
+      (fun k => AspisR1.FIv_NativeValue.decode selector * AspisR1.FIv_NativeValue.decode (v k)) 49
+      ↑(AspisR1.NJB_SharedReference.group g) ↑i
+'AspisR1.NJL_SharedMeaning.lane' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_SharedMeaning.outside (v : Fin 33 → AspisR1.FIv_NativeArithmetic.NQ)
+  (selector : AspisR1.FIv_NativeArithmetic.NQ) (j : Fin 24) (out : ↑j < 12 ∨ 20 < ↑j) :
+  AspisR1.FIx_SelectedMeaning.contribution
+      (fun i => AspisR1.FIv_NativeValue.decode selector * AspisR1.FIv_NativeValue.decode (v i)) 49 ↑j =
+    0
+'AspisR1.NJL_SharedMeaning.outside' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_SharedMeaning.value (v : Fin 33 → AspisR1.FIv_NativeArithmetic.NQ)
+  (selector : AspisR1.FIv_NativeArithmetic.NQ) (before : Fin 24 → AspisR1.FIv_NativeValue.K) (j : Fin 24) :
+  List.foldl (fun s g => AspisR1.NJB_SharedReference.stepModel v selector g s) before (List.finRange 9) j =
+    before j +
+      AspisR1.FIx_SelectedMeaning.contribution
+        (fun i => AspisR1.FIv_NativeValue.decode selector * AspisR1.FIv_NativeValue.decode (v i)) 49 ↑j
+'AspisR1.NJL_SharedMeaning.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_SharedRoot.source (packed : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 24#usize)
+  (values : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 33#usize) (selector : AspisR1.FIv_NativeArithmetic.NQ)
+  (hp : AspisR1.FIw_ArrayValue.canonical packed) (hv : AspisR1.FIw_ArrayValue.canonical values)
+  (hc : AspisR1.FIv_NativeValue.Canon selector) :
+  ∃ weighted after,
+    (∀ (i : Fin ↑33#usize),
+        FIq_Native.field.QM31.mul selector (AspisR1.NJB_ArrayCarrier.cell values i) =
+          Aeneas.Std.Result.ok (AspisR1.NJB_ArrayCarrier.cell weighted i)) ∧
+      AspisR1.NJL_SharedRoot.reference packed values selector =
+          Aeneas.Std.Result.ok (AspisR1.NJB_ArrayCarrier.array after) ∧
+        AspisR1.NJL_SharedTrace.Trace (AspisR1.NJB_ArrayCarrier.cell values) selector (List.finRange 9)
+            (AspisR1.NJB_ArrayCarrier.cell packed) after ∧
+          FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted packed 49#usize weighted =
+              Aeneas.Std.Result.ok (AspisR1.NJB_ArrayCarrier.array after) ∧
+            AspisR1.FIw_ArrayValue.canonical (AspisR1.NJB_ArrayCarrier.array after) ∧
+              ∀ (j : Fin ↑24#usize),
+                AspisR1.FIw_ArrayValue.decoded (AspisR1.NJB_ArrayCarrier.array after) j =
+                  AspisR1.FIw_ArrayValue.decoded packed j +
+                    AspisR1.FIx_SelectedMeaning.contribution
+                      (fun i => AspisR1.FIv_NativeValue.decode selector * AspisR1.FIw_ArrayValue.decoded values i) 49 ↑j
+'AspisR1.NJL_SharedRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_SharedTrace.source (values : Fin 33 → AspisR1.FIv_NativeArithmetic.NQ)
+  (selector : AspisR1.FIv_NativeArithmetic.NQ) (groups : List (Fin 9)) (before : AspisR1.NJL_SharedCuts.State)
+  (hv : ∀ (i : Fin 33), AspisR1.FIv_NativeValue.Canon (values i)) (hc : AspisR1.FIv_NativeValue.Canon selector)
+  (hb : ∀ (i : Fin 24), AspisR1.FIv_NativeValue.Canon (before i)) :
+  ∃ after,
+    AspisR1.NJB_StateUpdates.run (AspisR1.NJB_SharedReference.step values selector) groups before =
+        Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_SharedTrace.Trace values selector groups before after ∧
+        ∀ (i : Fin 24), AspisR1.FIv_NativeValue.Canon (after i)
+'AspisR1.NJL_SharedTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk.source (s : AspisR1.NJL_TagRawTrace.Selectors) (terms : List (Fin 272))
+  (before : AspisR1.NJL_TagReduction.State) (small : terms.length ≤ 4) (hs : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hb : ∀ (i : Fin 4), ↑(before i) < AspisV8R17.RawReducer.P) :
+  ∃ after,
+    AspisR1.NJL_TagChunk.reference s terms before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_TagChunk.Invocation s terms before after ∧
+        (∀ (i : Fin 4), ↑(after i) < AspisV8R17.RawReducer.P) ∧
+          ∀ (i : Fin 4), ↑(after i) = (↑(before i) + AspisR1.NJL_TagRawTrace.dot s terms i) % AspisV8R17.RawReducer.P
+'AspisR1.NJL_TagChunk.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk00.block_all : (AspisR1.NJL_TagChunk00.blocks.all fun b => decide (b < 64)) = true
+'AspisR1.NJL_TagChunk00.block_all' does not depend on any axioms
+AspisR1.NJL_TagChunk00.block_length : AspisR1.NJL_TagChunk00.blocks.length = 34
+'AspisR1.NJL_TagChunk00.block_length' does not depend on any axioms
+AspisR1.NJL_TagChunk00.tag_all : (AspisR1.NJL_TagChunk00.tags.all fun t => decide (↑t < 2147483647)) = true
+'AspisR1.NJL_TagChunk00.tag_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk00.tag_length : AspisR1.NJL_TagChunk00.tags.length = 34
+'AspisR1.NJL_TagChunk00.tag_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk01.block_all : (AspisR1.NJL_TagChunk01.blocks.all fun b => decide (b < 64)) = true
+'AspisR1.NJL_TagChunk01.block_all' does not depend on any axioms
+AspisR1.NJL_TagChunk01.block_length : AspisR1.NJL_TagChunk01.blocks.length = 34
+'AspisR1.NJL_TagChunk01.block_length' does not depend on any axioms
+AspisR1.NJL_TagChunk01.tag_all : (AspisR1.NJL_TagChunk01.tags.all fun t => decide (↑t < 2147483647)) = true
+'AspisR1.NJL_TagChunk01.tag_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk01.tag_length : AspisR1.NJL_TagChunk01.tags.length = 34
+'AspisR1.NJL_TagChunk01.tag_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk02.block_all : (AspisR1.NJL_TagChunk02.blocks.all fun b => decide (b < 64)) = true
+'AspisR1.NJL_TagChunk02.block_all' does not depend on any axioms
+AspisR1.NJL_TagChunk02.block_length : AspisR1.NJL_TagChunk02.blocks.length = 34
+'AspisR1.NJL_TagChunk02.block_length' does not depend on any axioms
+AspisR1.NJL_TagChunk02.tag_all : (AspisR1.NJL_TagChunk02.tags.all fun t => decide (↑t < 2147483647)) = true
+'AspisR1.NJL_TagChunk02.tag_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk02.tag_length : AspisR1.NJL_TagChunk02.tags.length = 34
+'AspisR1.NJL_TagChunk02.tag_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk03.block_all : (AspisR1.NJL_TagChunk03.blocks.all fun b => decide (b < 64)) = true
+'AspisR1.NJL_TagChunk03.block_all' does not depend on any axioms
+AspisR1.NJL_TagChunk03.block_length : AspisR1.NJL_TagChunk03.blocks.length = 34
+'AspisR1.NJL_TagChunk03.block_length' does not depend on any axioms
+AspisR1.NJL_TagChunk03.tag_all : (AspisR1.NJL_TagChunk03.tags.all fun t => decide (↑t < 2147483647)) = true
+'AspisR1.NJL_TagChunk03.tag_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk03.tag_length : AspisR1.NJL_TagChunk03.tags.length = 34
+'AspisR1.NJL_TagChunk03.tag_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk04.block_all : (AspisR1.NJL_TagChunk04.blocks.all fun b => decide (b < 64)) = true
+'AspisR1.NJL_TagChunk04.block_all' does not depend on any axioms
+AspisR1.NJL_TagChunk04.block_length : AspisR1.NJL_TagChunk04.blocks.length = 34
+'AspisR1.NJL_TagChunk04.block_length' does not depend on any axioms
+AspisR1.NJL_TagChunk04.tag_all : (AspisR1.NJL_TagChunk04.tags.all fun t => decide (↑t < 2147483647)) = true
+'AspisR1.NJL_TagChunk04.tag_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk04.tag_length : AspisR1.NJL_TagChunk04.tags.length = 34
+'AspisR1.NJL_TagChunk04.tag_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk05.block_all : (AspisR1.NJL_TagChunk05.blocks.all fun b => decide (b < 64)) = true
+'AspisR1.NJL_TagChunk05.block_all' does not depend on any axioms
+AspisR1.NJL_TagChunk05.block_length : AspisR1.NJL_TagChunk05.blocks.length = 34
+'AspisR1.NJL_TagChunk05.block_length' does not depend on any axioms
+AspisR1.NJL_TagChunk05.tag_all : (AspisR1.NJL_TagChunk05.tags.all fun t => decide (↑t < 2147483647)) = true
+'AspisR1.NJL_TagChunk05.tag_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk05.tag_length : AspisR1.NJL_TagChunk05.tags.length = 34
+'AspisR1.NJL_TagChunk05.tag_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk06.block_all : (AspisR1.NJL_TagChunk06.blocks.all fun b => decide (b < 64)) = true
+'AspisR1.NJL_TagChunk06.block_all' does not depend on any axioms
+AspisR1.NJL_TagChunk06.block_length : AspisR1.NJL_TagChunk06.blocks.length = 34
+'AspisR1.NJL_TagChunk06.block_length' does not depend on any axioms
+AspisR1.NJL_TagChunk06.tag_all : (AspisR1.NJL_TagChunk06.tags.all fun t => decide (↑t < 2147483647)) = true
+'AspisR1.NJL_TagChunk06.tag_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk06.tag_length : AspisR1.NJL_TagChunk06.tags.length = 34
+'AspisR1.NJL_TagChunk06.tag_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk07.block_all : (AspisR1.NJL_TagChunk07.blocks.all fun b => decide (b < 64)) = true
+'AspisR1.NJL_TagChunk07.block_all' does not depend on any axioms
+AspisR1.NJL_TagChunk07.block_length : AspisR1.NJL_TagChunk07.blocks.length = 34
+'AspisR1.NJL_TagChunk07.block_length' does not depend on any axioms
+AspisR1.NJL_TagChunk07.tag_all : (AspisR1.NJL_TagChunk07.tags.all fun t => decide (↑t < 2147483647)) = true
+'AspisR1.NJL_TagChunk07.tag_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunk07.tag_length : AspisR1.NJL_TagChunk07.tags.length = 34
+'AspisR1.NJL_TagChunk07.tag_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunks.dot_append (s : AspisR1.NJL_TagRawTrace.Selectors) (xs ys : List (Fin 272)) (i : Fin 4) :
+  AspisR1.NJL_TagRawTrace.dot s (xs ++ ys) i = AspisR1.NJL_TagRawTrace.dot s xs i + AspisR1.NJL_TagRawTrace.dot s ys i
+'AspisR1.NJL_TagChunks.dot_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagChunks.source (s : AspisR1.NJL_TagRawTrace.Selectors) (chunks : List (List (Fin 272)))
+  (before : AspisR1.NJL_TagReduction.State) (small : ∀ terms ∈ chunks, terms.length ≤ 4)
+  (hs : AspisR1.FIw_ArrayValue.canonical s.high) (hb : ∀ (i : Fin 4), ↑(before i) < AspisV8R17.RawReducer.P) :
+  ∃ after,
+    AspisR1.NJL_TagChunks.run s chunks before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_TagChunks.Trace s chunks before after ∧
+        (∀ (i : Fin 4), ↑(after i) < AspisV8R17.RawReducer.P) ∧
+          ∀ (i : Fin 4),
+            ↑(after i) = (↑(before i) + AspisR1.NJL_TagRawTrace.dot s chunks.flatten i) % AspisV8R17.RawReducer.P
+'AspisR1.NJL_TagChunks.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagData.block_all : (AspisR1.NJL_TagData.blockList.all fun b => decide (b < 64)) = true
+'AspisR1.NJL_TagData.block_all' depends on axioms: [propext]
+AspisR1.NJL_TagData.block_length : AspisR1.NJL_TagData.blockList.length = 272
+'AspisR1.NJL_TagData.block_length' depends on axioms: [propext]
+AspisR1.NJL_TagData.interval (c : Fin 30) :
+  AspisR1.NJL_TagData.first c < AspisR1.NJL_TagData.last c ∧ AspisR1.NJL_TagData.last c ≤ 272
+'AspisR1.NJL_TagData.interval' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagData.range_values (c : Fin 30) :
+  List.map Fin.val (AspisR1.NJL_TagData.indices c) =
+    List.range' (AspisR1.NJL_TagData.first c) (AspisR1.NJL_TagData.last c - AspisR1.NJL_TagData.first c)
+'AspisR1.NJL_TagData.range_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagData.tag_all : (AspisR1.NJL_TagData.tagList.all fun t => decide (↑t < 2147483647)) = true
+'AspisR1.NJL_TagData.tag_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagData.tag_bound (i : Fin 272) : ↑(AspisR1.NJL_TagData.tag i) < 2147483647
+'AspisR1.NJL_TagData.tag_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagData.tag_length : AspisR1.NJL_TagData.tagList.length = 272
+'AspisR1.NJL_TagData.tag_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagForward.source (scratch : Aeneas.Std.Slice AspisR1.FIv_NativeArithmetic.NQ) (c : Fin 30)
+  (s : AspisR1.NJL_TagRawTrace.Selectors) (hs : AspisR1.FIw_ArrayValue.canonical s.high) :
+  ∃ after,
+    AspisR1.NJL_TagForward.reference scratch c s = Aeneas.Std.Result.ok (AspisR1.NJB_Words.value after) ∧
+      AspisR1.NJL_TagForward.Cut s s (↑c) (↑c) 1 (AspisR1.NJB_Words.value after) (AspisR1.NJB_Words.value after) ∧
+        AspisR1.NJL_TagChunks.Trace s (AspisR1.NJL_TagPartition.chunks 68 (AspisR1.NJL_TagData.indices c))
+            AspisR1.NJL_TagRoot.zero after ∧
+          AspisR1.FIv_NativeValue.Canon (AspisR1.NJB_Words.value after) ∧
+            AspisR1.FIv_NativeValue.decode (AspisR1.NJB_Words.value after) =
+              AspisR1.NJL_TagMeaning.model s (AspisR1.NJL_TagData.indices c)
+'AspisR1.NJL_TagForward.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagMeaning.encode_add (x y : Fin 4 → AspisR1.ExtractedMaskQM31Exact.M31Exact) :
+  (AspisR1.NJL_TagMeaning.encode fun i => x i + y i) = AspisR1.NJL_TagMeaning.encode x + AspisR1.NJL_TagMeaning.encode y
+'AspisR1.NJL_TagMeaning.encode_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagMeaning.encode_decode (q : AspisR1.FIv_NativeArithmetic.NQ) :
+  (AspisR1.NJL_TagMeaning.encode fun i => ↑↑(AspisR1.NJB_Words.word q i)) = AspisR1.FIv_NativeValue.decode q
+'AspisR1.NJL_TagMeaning.encode_decode' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagMeaning.encode_zero : (AspisR1.NJL_TagMeaning.encode fun x => 0) = 0
+'AspisR1.NJL_TagMeaning.encode_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagMeaning.residue (n : ℕ) : ↑(n % 2147483647) = ↑n
+'AspisR1.NJL_TagMeaning.residue' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagMeaning.scalar (q : AspisR1.FIv_NativeArithmetic.NQ) (n : ℕ) :
+  (AspisR1.NJL_TagMeaning.encode fun i => ↑(↑(AspisR1.NJB_Words.word q i) * n)) = AspisR1.FIv_NativeValue.decode q * ↑n
+'AspisR1.NJL_TagMeaning.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagMeaning.value (s : AspisR1.NJL_TagRawTrace.Selectors) (xs : List (Fin 272)) :
+  (AspisR1.NJL_TagMeaning.encode fun i => ↑(AspisR1.NJL_TagRawTrace.dot s xs i)) = AspisR1.NJL_TagMeaning.model s xs
+'AspisR1.NJL_TagMeaning.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagPartition.coordinate (c : Fin 30) :
+  (AspisR1.NJL_TagPartition.chunks 68 (AspisR1.NJL_TagData.indices c)).flatten = AspisR1.NJL_TagData.indices c ∧
+    ∀ ys ∈ AspisR1.NJL_TagPartition.chunks 68 (AspisR1.NJL_TagData.indices c), ys.length ≤ 4
+'AspisR1.NJL_TagPartition.coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagPartition.flatten {α : Type} [DecidableEq α] (n : ℕ) (xs : List α) (small : xs.length ≤ 4 * n) :
+  (AspisR1.NJL_TagPartition.chunks n xs).flatten = xs
+'AspisR1.NJL_TagPartition.flatten' depends on axioms: [propext, Quot.sound]
+AspisR1.NJL_TagPartition.small {α : Type} [DecidableEq α] (n : ℕ) (xs ys : List α) :
+  ys ∈ AspisR1.NJL_TagPartition.chunks n xs → ys.length ≤ 4
+'AspisR1.NJL_TagPartition.small' depends on axioms: [propext, Quot.sound]
+AspisR1.NJL_TagRawStep.add (raw product : Aeneas.Std.U64) (k : ℕ) (hk : k < 4) (hr : ↑raw ≤ k * AspisR1.NJB_TagRaw.B)
+  (hp : ↑product ≤ AspisR1.NJB_TagRaw.B) :
+  ∃ out,
+    Aeneas.Std.UScalar.add raw product = Aeneas.Std.Result.ok out ∧
+      ↑out = ↑raw + ↑product ∧ ↑out ≤ (k + 1) * AspisR1.NJB_TagRaw.B
+'AspisR1.NJL_TagRawStep.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagRawStep.source (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (term : Fin 272)
+  (before : AspisR1.NJL_TagRawStep.State) (k : ℕ) (hk : k < 4) (hs : AspisR1.FIw_ArrayValue.canonical s.high)
+  (hr : ∀ (i : Fin 4), ↑(before i) ≤ k * AspisR1.NJB_TagRaw.B) :
+  ∃ products after events,
+    AspisR1.NJL_TagRawStep.reference s term before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_TagRawStep.Cut s term before after products events 4 (↑term + 1) ∧
+        (∀ (i : Fin 4),
+            Aeneas.Std.UScalar.mul (AspisR1.NJL_TagWords.highWord s term i) (AspisR1.NJL_TagWords.tagWord term) =
+                Aeneas.Std.Result.ok (products i) ∧
+              ↑(products i) = ↑(AspisR1.NJL_TagWords.highWord s term i) * ↑(AspisR1.NJL_TagWords.tagWord term) ∧
+                ↑(products i) ≤ AspisR1.NJB_TagRaw.B) ∧
+          (∀ (i : Fin 4), Aeneas.Std.UScalar.add (before i) (products i) = Aeneas.Std.Result.ok (after i)) ∧
+            ∀ (i : Fin 4), ↑(after i) ≤ (k + 1) * AspisR1.NJB_TagRaw.B
+'AspisR1.NJL_TagRawStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagRawTrace.source (s : AspisR1.NJL_TagRawTrace.Selectors) (xs : List (Fin 272))
+  (before : AspisR1.NJL_TagRawStep.State) (k : ℕ) (small : k + xs.length ≤ 4)
+  (hs : AspisR1.FIw_ArrayValue.canonical s.high) (hb : ∀ (i : Fin 4), ↑(before i) ≤ k * AspisR1.NJB_TagRaw.B) :
+  ∃ after,
+    AspisR1.NJL_TagRawTrace.run s xs before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_TagRawTrace.Trace s xs k before after ∧
+        (∀ (i : Fin 4), ↑(after i) = ↑(before i) + AspisR1.NJL_TagRawTrace.dot s xs i) ∧
+          ∀ (i : Fin 4), ↑(after i) ≤ (k + xs.length) * AspisR1.NJB_TagRaw.B
+'AspisR1.NJL_TagRawTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagReduction.source (raw : AspisR1.NJL_TagRawStep.State) (before : AspisR1.NJL_TagReduction.State)
+  (hb : ∀ (i : Fin 4), ↑(before i) < AspisV8R17.RawReducer.P) :
+  ∃ after,
+    AspisR1.NJL_TagReduction.run raw [0, 1, 2, 3] before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_TagReduction.Trace raw [0, 1, 2, 3] before after ∧
+        (∀ (i : Fin 4), ↑(after i) < AspisV8R17.RawReducer.P) ∧
+          ∀ (i : Fin 4), ↑(after i) = (↑(before i) + ↑(raw i) % AspisV8R17.RawReducer.P) % AspisV8R17.RawReducer.P
+'AspisR1.NJL_TagReduction.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagReduction.step_source (raw : AspisR1.NJL_TagRawStep.State) (limb : Fin 4)
+  (before : AspisR1.NJL_TagReduction.State) (hb : ∀ (i : Fin 4), ↑(before i) < AspisV8R17.RawReducer.P) :
+  ∃ after,
+    AspisR1.NJL_TagReduction.step raw limb before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_TagReduction.Step raw limb before after ∧
+        (∀ (i : Fin 4), ↑(after i) < AspisV8R17.RawReducer.P) ∧
+          ∀ (i : Fin 4),
+            ↑(after i) =
+              if i = limb then (↑(before i) + ↑(raw i) % AspisV8R17.RawReducer.P) % AspisV8R17.RawReducer.P
+              else ↑(before i)
+'AspisR1.NJL_TagReduction.step_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagRoot.source (s : AspisR1.NJL_TagRawTrace.Selectors) (c : Fin 30)
+  (hs : AspisR1.FIw_ArrayValue.canonical s.high) :
+  ∃ after,
+    AspisR1.NJL_TagRoot.reference s c = Aeneas.Std.Result.ok (AspisR1.NJB_Words.value after) ∧
+      AspisR1.NJL_TagSchedule.Schedule (AspisR1.NJL_TagData.indices c)
+          (AspisR1.NJL_TagPartition.chunks 68 (AspisR1.NJL_TagData.indices c)) ∧
+        AspisR1.NJL_TagChunks.Trace s (AspisR1.NJL_TagPartition.chunks 68 (AspisR1.NJL_TagData.indices c))
+            AspisR1.NJL_TagRoot.zero after ∧
+          AspisR1.FIv_NativeValue.Canon (AspisR1.NJB_Words.value after) ∧
+            AspisR1.FIv_NativeValue.decode (AspisR1.NJB_Words.value after) =
+              AspisR1.NJL_TagMeaning.model s (AspisR1.NJL_TagData.indices c)
+'AspisR1.NJL_TagRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagSchedule.chunk (start stop : ℕ) (entered : start < stop) (bounded : stop ≤ 272) :
+  have next := min (start + 4) stop;
+  start < next ∧ next ≤ stop ∧ next ≤ 272 ∧ next - start ≤ 4 ∧ next = start + min 4 (stop - start)
+'AspisR1.NJL_TagSchedule.chunk' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagSchedule.coordinate (c : Fin 30) :
+  AspisR1.NJL_TagSchedule.Schedule (AspisR1.NJL_TagData.indices c)
+      (AspisR1.NJL_TagPartition.chunks 68 (AspisR1.NJL_TagData.indices c)) ∧
+    List.map Fin.val (AspisR1.NJL_TagData.indices c) =
+      List.range' (AspisR1.NJL_TagData.first c) (AspisR1.NJL_TagData.last c - AspisR1.NJL_TagData.first c)
+'AspisR1.NJL_TagSchedule.coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagSchedule.source {α : Type} [DecidableEq α] (n : ℕ) (xs : List α) (small : xs.length ≤ 4 * n) :
+  AspisR1.NJL_TagSchedule.Schedule xs (AspisR1.NJL_TagPartition.chunks n xs)
+'AspisR1.NJL_TagSchedule.source' depends on axioms: [propext, Quot.sound]
+AspisR1.NJL_TagWords.cast64 (x : Aeneas.Std.U32) : ↑(Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U64 x) = ↑x
+'AspisR1.NJL_TagWords.cast64' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagWords.domain (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (term : Fin 272) (limb : Fin 4)
+  (hs : AspisR1.FIw_ArrayValue.canonical s.high) :
+  ↑(AspisR1.NJL_TagWords.highWord s term limb) < 2147483647 ∧ ↑(AspisR1.NJL_TagWords.tagWord term) < 2147483647
+'AspisR1.NJL_TagWords.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagWords.product (s : FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors) (term : Fin 272)
+  (limb : Fin 4) (hs : AspisR1.FIw_ArrayValue.canonical s.high) :
+  ∃ out,
+    Aeneas.Std.UScalar.mul (AspisR1.NJL_TagWords.highWord s term limb) (AspisR1.NJL_TagWords.tagWord term) =
+        Aeneas.Std.Result.ok out ∧
+      ↑out = ↑(AspisR1.NJL_TagWords.highWord s term limb) * ↑(AspisR1.NJL_TagWords.tagWord term) ∧
+        ↑out ≤ AspisR1.NJB_TagRaw.B
+'AspisR1.NJL_TagWords.product' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_TagWords.word_bound (value : AspisR1.FIv_NativeArithmetic.NQ)
+  (canonical : AspisR1.FIv_NativeValue.Canon value) (limb : Fin 4) : ↑(AspisR1.NJB_Words.word value limb) < 2147483647
+'AspisR1.NJL_TagWords.word_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_Traverse.packet {α β : Type} (f : α → Aeneas.Std.Result β) (p : β → Prop) (R : α → β → Prop) (xs : List α)
+  (child : ∀ x ∈ xs, ∃ y, f x = Aeneas.Std.Result.ok y ∧ p y ∧ R x y) :
+  ∃ ys, AspisR1.NJB_Traverse.run f xs = Aeneas.Std.Result.ok ys ∧ (∀ y ∈ ↑ys, p y) ∧ List.Forall₂ R xs ↑ys
+'AspisR1.NJL_Traverse.packet' depends on axioms: [propext, Quot.sound]
+AspisR1.NJL_WindowCache.source (powers : List AspisR1.FIv_NativeArithmetic.NQ)
+  (canonical : ∀ x ∈ powers, AspisR1.FIv_NativeValue.Canon x) :
+  ∃ caches,
+    AspisR1.NJB_Traverse.run FIq_Native.field.PreparedQm31Multiplier.new powers = Aeneas.Std.Result.ok caches ∧
+      List.Forall₂
+        (fun power cache =>
+          FIq_Native.field.PreparedQm31Multiplier.new power = Aeneas.Std.Result.ok cache ∧
+            AspisR1.NJB_PreparedLaws.Domain cache power)
+        powers ↑caches
+'AspisR1.NJL_WindowCache.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_WindowFold.source (theta : Fin 8 → AspisR1.FIv_NativeArithmetic.NQ)
+  (cache : Fin 8 → AspisR1.FIv_PreparedNew.NP) (o : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize)
+  (start : Fin 9) (slots : List (Fin 8)) (before : AspisR1.FIv_NativeArithmetic.NQ)
+  (ht : ∀ (i : Fin 8), AspisR1.FIv_NativeValue.Canon (theta i)) (hb : AspisR1.FIv_NativeValue.Canon before)
+  (ho : AspisR1.FIw_ArrayValue.canonical o)
+  (domains : ∀ (i : Fin 8), AspisR1.NJB_PreparedLaws.Domain (cache i) (theta i)) :
+  ∃ after,
+    AspisR1.NJL_WindowFold.run cache o start slots before = Aeneas.Std.Result.ok after ∧
+      AspisR1.NJL_WindowFold.Trace cache o start slots before after ∧
+        AspisR1.FIv_NativeValue.Canon after ∧
+          AspisR1.FIv_NativeValue.decode after =
+            AspisR1.FIv_NativeValue.decode before +
+              (List.map
+                  (fun i =>
+                    AspisR1.FIv_NativeValue.decode (theta i) *
+                      AspisR1.FIv_NativeValue.decode (AspisR1.NJL_WindowStep.opened o start i))
+                  slots).sum
+'AspisR1.NJL_WindowFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_WindowPowerArray.source (lambda : AspisR1.FIv_NativeArithmetic.NQ)
+  (hl : AspisR1.FIv_NativeValue.Canon lambda) :
+  ∃ p,
+    AspisR1.NJL_WindowPowerFrame.run lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda =
+        Aeneas.Std.Result.ok (AspisR1.NJL_CacheReads.power p, p.next) ∧
+      AspisR1.NJL_WindowPowerFrame.Trace lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda
+        (AspisR1.NJL_CacheReads.power p) p.next
+'AspisR1.NJL_WindowPowerArray.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_WindowPowerFrame.lift (lambda : AspisR1.FIv_NativeArithmetic.NQ) {n : ℕ}
+  {power next : AspisR1.FIv_NativeArithmetic.NQ} {values : List AspisR1.FIv_NativeArithmetic.NQ}
+  (actual : AspisR1.NJL_WindowPowers.Trace lambda n power values next) (indices : List (Fin 8))
+  (length : indices.length = n) (before : AspisR1.NJL_WindowPowerFrame.State)
+  (hl : AspisR1.FIv_NativeValue.Canon lambda) (hp : AspisR1.FIv_NativeValue.Canon power) :
+  ∃ after,
+    AspisR1.NJL_WindowPowerFrame.run lambda indices before power = Aeneas.Std.Result.ok (after, next) ∧
+      AspisR1.NJL_WindowPowerFrame.Trace lambda indices before power after next ∧
+        after =
+          List.foldl (fun state entry => AspisR1.NJL_WindowPowerFrame.put state entry.1 entry.2) before
+            (indices.zip values)
+'AspisR1.NJL_WindowPowerFrame.lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_WindowPowerOverwrite.overwrite (before values : AspisR1.NJL_WindowPowerFrame.State) :
+  List.foldl (fun state entry => AspisR1.NJL_WindowPowerFrame.put state entry.1 entry.2) before
+      ((List.finRange 8).zip (List.ofFn values)) =
+    values
+'AspisR1.NJL_WindowPowerOverwrite.overwrite' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_WindowPowerOverwrite.power_list {lambda : AspisR1.FIv_NativeArithmetic.NQ}
+  (p : AspisR1.NJL_CachedPowers.Packet lambda) : List.ofFn (AspisR1.NJL_CacheReads.power p) = p.powers
+'AspisR1.NJL_WindowPowerOverwrite.power_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_WindowPowers.source (lambda power : AspisR1.FIv_NativeArithmetic.NQ) (n : ℕ)
+  (hl : AspisR1.FIv_NativeValue.Canon lambda) (hp : AspisR1.FIv_NativeValue.Canon power) :
+  ∃ values next,
+    AspisR1.NJL_WindowPowers.run lambda n power = Aeneas.Std.Result.ok (values, next) ∧
+      AspisR1.NJL_WindowPowers.Trace lambda n power values next ∧
+        values.length = n ∧
+          (∀ x ∈ values, AspisR1.FIv_NativeValue.Canon x) ∧
+            AspisR1.FIv_NativeValue.Canon next ∧
+              (∀ (i : ℕ) (hi : i < values.length),
+                  AspisR1.FIv_NativeValue.decode values[i] =
+                    AspisR1.FIv_NativeValue.decode power * AspisR1.FIv_NativeValue.decode lambda ^ i) ∧
+                AspisR1.FIv_NativeValue.decode next =
+                  AspisR1.FIv_NativeValue.decode power * AspisR1.FIv_NativeValue.decode lambda ^ n
+'AspisR1.NJL_WindowPowers.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_WindowStep.source (theta before : AspisR1.FIv_NativeArithmetic.NQ) (cache : AspisR1.FIv_PreparedNew.NP)
+  (o : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize) (start : Fin 9) (slot : Fin 8)
+  (ht : AspisR1.FIv_NativeValue.Canon theta) (hb : AspisR1.FIv_NativeValue.Canon before)
+  (ho : AspisR1.FIw_ArrayValue.canonical o) (domain : AspisR1.NJB_PreparedLaws.Domain cache theta) :
+  ∃ product reply,
+    FIq_Native.field.PreparedQm31Multiplier.mul cache (AspisR1.NJL_WindowStep.opened o start slot) =
+        Aeneas.Std.Result.ok product ∧
+      FIq_Native.field.QM31.add before product = Aeneas.Std.Result.ok reply ∧
+        AspisR1.NJL_WindowStep.reference cache o start slot before = Aeneas.Std.Result.ok reply ∧
+          AspisR1.NJL_WindowStep.Cut cache o start slot before product reply reply
+              (AspisR1.NJB_PreparedCarrier.words cache) (AspisR1.NJL_WindowStep.opened o start slot)
+              { operation := 1, left := before, right := product } 2 (↑slot + 1) ∧
+            AspisR1.FIv_NativeValue.Canon reply ∧
+              AspisR1.FIv_NativeValue.decode reply =
+                AspisR1.FIv_NativeValue.decode before +
+                  AspisR1.FIv_NativeValue.decode theta *
+                    AspisR1.FIv_NativeValue.decode (AspisR1.NJL_WindowStep.opened o start slot)
+'AspisR1.NJL_WindowStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJL_WriteFrame.fold {I V : Type} [DecidableEq I] (values : I → V) (xs : List I) (s : I → V) (j : I) :
+  List.foldl (fun before i => AspisR1.NJL_WriteFrame.write before i (values i)) s xs j =
+    if j ∈ xs then values j else s j
+'AspisR1.NJL_WriteFrame.fold' depends on axioms: [propext]
+AspisR1.NIX_ResidualCut.packet (row : FIq_Native.pool_v1.pair_forest_copy_terminal.CopyRowExtension)
+  (helper chi : AspisR1.NIX_ResidualLog.Q) (hpv : AspisR1.FIw_ArrayValue.canonical row.producer_values)
+  (hpw : AspisR1.FIw_ArrayValue.canonical row.producer_weights)
+  (hcv : AspisR1.FIw_ArrayValue.canonical row.consumer_values)
+  (hcw : AspisR1.FIw_ArrayValue.canonical row.consumer_weights) (hh : AspisR1.FIv_NativeValue.Canon helper)
+  (hc : AspisR1.FIv_NativeValue.Canon chi) :
+  ∃ v r,
+    AspisR1.NIX_ResidualLog.Reads row v ∧
+      AspisR1.NIX_ResidualLog.Law v helper chi r ∧
+        AspisR1.NIX_ResidualLog.Domain v helper chi r ∧
+          ∀ (count frame : ℕ) (p : AspisR1.NIX_ResidualCut.Post),
+            AspisR1.NIX_ResidualCut.cut v helper chi r count frame p →
+              FIq_Native.pool_v1.pair_forest_copy_terminal.copy_residual row helper chi =
+                  Aeneas.Std.Result.ok p.result ∧
+                AspisR1.FIv_NativeValue.Canon p.result ∧
+                  AspisR1.FIv_NativeValue.decode p.result =
+                    AspisR1.FIw_CopyMeaning.residual row (AspisR1.FIv_NativeValue.decode helper)
+                      (AspisR1.FIv_NativeValue.decode chi)
+'AspisR1.NIX_ResidualCut.packet' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NIX_ResidualLog.packet (row : FIq_Native.pool_v1.pair_forest_copy_terminal.CopyRowExtension)
+  (helper chi : AspisR1.NIX_ResidualLog.Q) (hpv : AspisR1.FIw_ArrayValue.canonical row.producer_values)
+  (hpw : AspisR1.FIw_ArrayValue.canonical row.producer_weights)
+  (hcv : AspisR1.FIw_ArrayValue.canonical row.consumer_values)
+  (hcw : AspisR1.FIw_ArrayValue.canonical row.consumer_weights) (hh : AspisR1.FIv_NativeValue.Canon helper)
+  (hc : AspisR1.FIv_NativeValue.Canon chi) :
+  ∃ v r,
+    AspisR1.NIX_ResidualLog.Reads row v ∧
+      AspisR1.NIX_ResidualLog.Law v helper chi r ∧
+        AspisR1.NIX_ResidualLog.Domain v helper chi r ∧
+          FIq_Native.pool_v1.pair_forest_copy_terminal.copy_residual row helper chi = Aeneas.Std.Result.ok r.q16
+'AspisR1.NIX_ResidualLog.packet' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NJB_SemanticPublic.result
+  (statement : AspisR1PublicPreparation.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1) :
+  statement.semantic_public = Aeneas.Std.Result.ok (AspisR1.NJB_SemanticPublic.value statement)
+'AspisR1.NJB_SemanticPublic.result' depends on axioms: [propext, Classical.choice, Quot.sound]
