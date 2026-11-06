@@ -34,7 +34,7 @@ for n,t in files.items():
   for line in t.splitlines():
    match=re.match(r'^(?:public )?import(?: all)? (.*)',line)
    if match:rels.update(d.replace('.','/')+'.olean' for d in match[1].split())
-if {kind!r} not in ['lean','cache']:rels.update(n+'.olean' for n in ['NKF_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations'])
+if {kind!r} not in ['lean','cache','extraction']:rels.update(n+'.olean' for n in ['NKF_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations'])
 for rel in sorted(rels):
  p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert p is not None,rel
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:

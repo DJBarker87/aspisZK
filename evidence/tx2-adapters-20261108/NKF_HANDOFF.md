@@ -11,3 +11,5 @@ Budget: 80 Kani, 90 Lean, 1 extraction. One scope at a time; admission exit 0 AN
 No shipped source, session A, sibling worktree, wallet or key changes authorized or made. New modules NKF_ only and evidence in this directory. Commits local only, no push. Frozen3, deployed headline, L154 parameter, narrowed D188, per-attempt 100-bit target, privacy and two transactions retained.
 
 Next: seed/pin host dependencies, inspect canonical installed wrapper/body definitions and plan exact cuts.
+
+Stage 1: copied NKC1365368bytes first, NJY269624bytes second; exact imported hashes NKF_SEED.json. Private corpus NKF_src, own CARGO_TARGET_DIR NKF_target. Five inherited seed instrumentation files restored from the frozen payload before extraction; full replacements recorded. One successful Charon invocation then Aeneas failure (L002); no Lean output, all six selected roots eligible under(ay)(2). L001 was only a failed source preflight. No source/ELF change or new closure claimed.
