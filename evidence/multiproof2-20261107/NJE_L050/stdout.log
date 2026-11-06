@@ -1,0 +1,189 @@
+theorem NJE_CountGroup.total : ∀ (a : Std.Array U32 16#usize) (n i : Usize) (hn : ↑n ≤ 16) (active : ↑i < ↑n),
+  List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) →
+    ∃ q,
+      multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n ((↑a)[↑i].wrapping_shr 1#u32) i = ok q ∧
+        ↑q = MultiproofConeLiveOrder.advance (NJA_CountDrop.keys a) ↑n ↑i ∧ ↑i + 1 ≤ ↑q ∧ ↑q ≤ ↑n ∧ ↑q ≤ ↑i + 2 :=
+fun a n i hn active sorted =>
+  have head := unread_cons (NJA_CountDrop.keys a) (↑n) (↑i) active;
+  have sorted' :=
+    id (fun sorted => Eq.mp (congrArg (fun _a => List.Pairwise (fun x1 x2 => x1 < x2) _a) head) sorted) sorted;
+  let ⟨q, h✝⟩ := NJA_CountSorted.group a n i hn active (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1)) head sorted'
+  let ⟨hq, right✝⟩ := h✝
+  let ⟨lower, right✝¹⟩ := right✝
+  let ⟨upper, tail⟩ := right✝¹
+  have rest_length :=
+    of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq (Eq.trans (List.length_map fun j => NJA_CountDrop.keys a (↑i + 1 + j)) List.length_range))
+          (↑n - (↑i + 1)))
+        (eq_self (↑n - (↑i + 1))));
+  have eq :=
+    List.casesOn (motive := fun t =>
+      unread (NJA_CountDrop.keys a) (↑n) (↑i + 1) = t →
+        ↑q = MultiproofConeLiveOrder.advance (NJA_CountDrop.keys a) ↑n ↑i)
+      (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1))
+      (fun h =>
+        Eq.ndrec (motive := fun x =>
+          unread (NJA_CountDrop.keys a) (↑n) (↑i + 1) = x →
+            ↑q = MultiproofConeLiveOrder.advance (NJA_CountDrop.keys a) ↑n ↑i)
+          (fun rest_eq =>
+            have lengths :=
+              congrArg List.length
+                (Eq.mp
+                  (congrArg (Eq (unread (NJA_CountDrop.keys a) ↑n ↑q))
+                    (Eq.trans
+                      (ite_cond_eq_false (List.drop 1 (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1)))
+                        (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1))
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | x :: tail => decide (paired (NJA_CountDrop.keys a ↑i) x)
+                                  | [] => false)
+                                rest_eq))
+                            true)
+                          Bool.false_eq_true))
+                      rest_eq))
+                  tail);
+            have noPair := fun h =>
+              have next := h.left;
+              total._proof_2 n i q upper
+                (Eq.mp (congrFun' (congrArg Eq (congrArg List.length rest_eq)) (↑n - (↑i + 1))) rest_length)
+                (Eq.mp
+                  (congrFun'
+                    (congrArg Eq (Eq.trans (List.length_map fun j => NJA_CountDrop.keys a (↑q + j)) List.length_range))
+                    0)
+                  lengths)
+                next;
+            Eq.mpr
+              (id
+                (congrArg (Eq ↑q)
+                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg noPair) x_0 x_1 x_2 x_3)
+                    (MultiproofConeLiveOrder.instDecidablePairAt (NJA_CountDrop.keys a) ↑n ↑i) ℕ (↑i + 2) (↑i + 1))))
+              (Decidable.byContradiction fun a_1 =>
+                total._proof_3 n i active q lower upper
+                  (Eq.mp (congrFun' (congrArg Eq (congrArg List.length rest_eq)) (↑n - (↑i + 1))) rest_length)
+                  (Eq.mp
+                    (congrFun'
+                      (congrArg Eq
+                        (Eq.trans (List.length_map fun j => NJA_CountDrop.keys a (↑q + j)) List.length_range))
+                      0)
+                    lengths)
+                  a_1))
+          (Eq.symm h) (Eq.refl (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1))))
+      (fun x xs h =>
+        Eq.ndrec (motive := fun x =>
+          unread (NJA_CountDrop.keys a) (↑n) (↑i + 1) = x →
+            ↑q = MultiproofConeLiveOrder.advance (NJA_CountDrop.keys a) ↑n ↑i)
+          (fun rest_eq =>
+            have next :=
+              Decidable.byContradiction fun a_1 =>
+                total._proof_4 n i active q xs
+                  (Eq.mp (congrFun' (congrArg Eq (congrArg List.length rest_eq)) (↑n - (↑i + 1))) rest_length) a_1;
+            have heads := unread_cons (NJA_CountDrop.keys a) (↑n) (↑i + 1) next;
+            have xeq := (List.cons.inj (Eq.trans (Eq.symm rest_eq) heads)).left;
+            if both : paired (NJA_CountDrop.keys a ↑i) x then
+              have lengths :=
+                congrArg List.length
+                  (Eq.mp
+                    (congrArg (Eq (unread (NJA_CountDrop.keys a) ↑n ↑q))
+                      (Eq.trans
+                        (ite_cond_eq_true (List.drop 1 (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1)))
+                          (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1))
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (Eq.trans
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | x :: tail => decide (paired (NJA_CountDrop.keys a ↑i) x)
+                                      | [] => false)
+                                    rest_eq)
+                                  (Eq.trans
+                                    (Decidable.decide.congr_simp (paired (NJA_CountDrop.keys a ↑i) x) True
+                                      (eq_true both))
+                                    (decide_true instDecidableTrue))))
+                              true)
+                            (eq_self true)))
+                        (congrArg (List.drop 1) rest_eq)))
+                    tail);
+              have hp := ⟨next, Eq.mp (congrArg (paired (NJA_CountDrop.keys a ↑i)) xeq) both⟩;
+              Eq.mpr
+                (id
+                  (congrArg (Eq ↑q)
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos hp) x_0 x_1 x_2 x_3)
+                      (MultiproofConeLiveOrder.instDecidablePairAt (NJA_CountDrop.keys a) ↑n ↑i) ℕ (↑i + 2) (↑i + 1))))
+                (Decidable.byContradiction fun a_1 =>
+                  total._proof_5 a n i q lower upper x xs
+                    (Eq.mp (congrFun' (congrArg Eq (congrArg List.length rest_eq)) (↑n - (↑i + 1))) rest_length) next
+                    (Eq.mp
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans (List.length_map fun j => NJA_CountDrop.keys a (↑q + j)) List.length_range))
+                        xs.length)
+                      lengths)
+                    a_1)
+            else
+              have lengths :=
+                congrArg List.length
+                  (Eq.mp
+                    (congrArg (Eq (unread (NJA_CountDrop.keys a) ↑n ↑q))
+                      (Eq.trans
+                        (ite_cond_eq_false (List.drop 1 (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1)))
+                          (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1))
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (Eq.trans
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | x :: tail => decide (paired (NJA_CountDrop.keys a ↑i) x)
+                                      | [] => false)
+                                    rest_eq)
+                                  (Eq.trans
+                                    (Decidable.decide.congr_simp (paired (NJA_CountDrop.keys a ↑i) x) False
+                                      (eq_false both))
+                                    (decide_false instDecidableFalse))))
+                              true)
+                            Bool.false_eq_true))
+                        rest_eq))
+                    tail);
+              have hp := fun hp => both (Eq.mpr (id (congrArg (paired (NJA_CountDrop.keys a ↑i)) xeq)) hp.right);
+              Eq.mpr
+                (id
+                  (congrArg (Eq ↑q)
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg hp) x_0 x_1 x_2 x_3)
+                      (MultiproofConeLiveOrder.instDecidablePairAt (NJA_CountDrop.keys a) ↑n ↑i) ℕ (↑i + 2) (↑i + 1))))
+                (Decidable.byContradiction fun a_1 =>
+                  total._proof_6 a n i q lower upper x xs
+                    (Eq.mp (congrFun' (congrArg Eq (congrArg List.length rest_eq)) (↑n - (↑i + 1))) rest_length) next
+                    (Eq.mp
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans (List.length_map fun j => NJA_CountDrop.keys a (↑q + j)) List.length_range))
+                        (xs.length + 1))
+                      lengths)
+                    a_1))
+          (Eq.symm h) (Eq.refl (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1))))
+      (Eq.refl (unread (NJA_CountDrop.keys a) (↑n) (↑i + 1)));
+  have adv := advance_bounds (NJA_CountDrop.keys a) (↑n) (↑i) active;
+  Exists.intro q
+    ⟨hq,
+      ⟨eq,
+        ⟨Decidable.byContradiction fun a_1 => total._proof_7 a n i q eq adv a_1,
+          ⟨upper,
+            Eq.mpr (id (congrArg (fun _a => _a ≤ ↑i + 2) eq))
+              (id
+                (Decidable.casesOn (MultiproofConeLiveOrder.instDecidablePairAt (NJA_CountDrop.keys a) ↑n ↑i)
+                  (fun h =>
+                    Eq.mpr (id (congrFun' (congrArg LE.le (if_neg h)) (↑i + 2)))
+                      (Decidable.byContradiction fun a_1 => total._proof_9 a n i q a_1))
+                  fun h =>
+                  Eq.mpr (id (congrFun' (congrArg LE.le (if_pos h)) (↑i + 2)))
+                    (Decidable.byContradiction fun a_1 => total._proof_8 a n i q a_1)))⟩⟩⟩⟩
+'NJE_CountGroup.total' depends on axioms: [propext, Classical.choice, Quot.sound]

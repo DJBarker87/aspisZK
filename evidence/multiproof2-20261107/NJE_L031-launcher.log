@@ -1,0 +1,51 @@
+{"attempt": "NJE_L031", "exit_status": 0, "wall_seconds": 3.767391785979271, "peak_rss_kib": "4324592", "swaps": "0", "print_axioms": ["'NJE_WellSource.all_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_WellSource.order_pair' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_WellSource.order_all' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_WellSource.domain_all' depends on axioms: [propext, Quot.sound]", "'NJE_WellSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_WellSource.lean:38:42: warning: This simp argument is unused:
+  List.all
+
+Hint: Omit it from the simp argument list.
+  simp [NJA_WellIteration.windows,L̵i̵s̵t̵.̵a̵l̵l̵,̵ ̲NJA_WellFormed.adjacent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJE_lean/NJE_WellSource.lean:41:44: warning: This simp argument is unused:
+  List.all
+
+Hint: Omit it from the simp argument list.
+  simp [NJA_WellIteration.windows,L̵i̵s̵t̵.̵a̵l̵l̵,̵ ̲NJA_WellFormed.adjacent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJE_WellSource.all_result : ∀ {α : Type} (p : α → Bool) (xs : List α), allValues p xs = ok (xs.all p) :=
+fun {α}
+...
+e (ok false)
+                            (if xs.length ≤ 16 then
+                              if decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) = true then
+                                allValues domain xs
+                              else ok false
+                            else ok false)
+                            (Eq.trans List.isEmpty_iff._simp_1 (eq_false e)))
+                          (ite_cond_eq_false
+                            (if decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) = true then
+                              allValues domain xs
+                            else ok false)
+                            (ok false) (eq_false small))))
+                      (congrArg ok
+                        (Eq.trans
+                          (ite_cond_eq_false false
+                            (if xs.length > 16 then false
+                            else
+                              if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                                decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                              else false)
+                            (eq_false e))
+                          (ite_cond_eq_true false
+                            (if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                              decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                            else false)
+                            (Eq.trans gt_iff_lt._simp_1
+                              (eq_true
+                                (have this := Decidable.byContradiction fun a => source._proof_2 xs small a;
+                                this)))))))
+                    (eq_self (ok false))))))))
+'NJE_WellSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf992a2f68f1a485697649572df95b229.scope; invocation ID: 0e28c4e8c0ea46e595b873a7acb86211

@@ -1,0 +1,56 @@
+theorem NJE_ExternalTotal.unread : ∀ (input : State U32) (bs : ℕ → State U32) (sums : Fin 4 → ℕ → ℕ) (args : Fin 16 → ℕ)
+  (steps : ℕ → State U32), NJE_ExternalStages.Cut input bs sums args steps → ∀ (i : Fin 16), steps (↑i) i = bs 4 i :=
+fun input bs sums args steps cut i =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a i = bs 4 i)
+        (NJA_PointStaging.replay (bs 4) (fun i x => NJE_Residue.word (args i)) steps cut.start cut.next (↑i)
+          (Nat.le_of_lt i.isLt))))
+    (NJA_PointFrame.frame (bs 4) (fun i x => NJE_Residue.word (args i)) (↑i) (Nat.le_of_lt i.isLt) i
+      (Decidable.byContradiction fun a => unread._proof_1 i a))
+'NJE_ExternalTotal.unread' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ExternalTotal.argument : ∀ (input : State U32) (bs : ℕ → State U32) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (steps : ℕ → State U32),
+  NJE_ExternalStages.Cut input bs sums args steps → ∀ (i : Fin 16), args i = NJA_External.arg (blocks input) i :=
+fun input bs sums args steps cut i =>
+  Eq.mpr (id (congrArg (fun _a => _a = NJA_External.arg (blocks input) i) (cut.arguments i)))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => ↑_a + sums (column i) 4 = NJA_External.arg (blocks input) i)
+          (unread input bs sums args steps cut i)))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => ↑(_a i) + sums (column i) 4 = NJA_External.arg (blocks input) i)
+            (NJE_ExternalStages.blocks_result input bs sums args steps cut)))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => ↑(blocks input i) + _a = NJA_External.arg (blocks input) i)
+              (NJE_ExternalStages.sum_result input bs sums args steps cut (column i))))
+          (Eq.refl (↑(blocks input i) + NJA_External.columnSum (blocks input) (column i))))))
+'NJE_ExternalTotal.argument' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ExternalTotal.result : ∀ (input : State U32) (bs : ℕ → State U32) (sums : Fin 4 → ℕ → ℕ) (args : Fin 16 → ℕ)
+  (steps : ℕ → State U32),
+  NJE_ExternalStages.Cut input bs sums args steps →
+    (∀ (i : Fin 16), args i < 2 ^ 62) ∧
+      ∀ (i : Fin 16),
+        ↑(steps 16 i) < 2147483647 ∧ ↑↑(steps 16 i) = R0P.poseidonExternalLinear (fun j => ↑↑(input j)) i :=
+fun input bs sums args steps cut =>
+  have args_eq := argument input bs sums args steps cut;
+  ⟨fun i => Eq.mpr (id (congrArg (fun _a => _a < 2 ^ 62) (args_eq i))) (NJA_External.arg_bound (blocks input) i),
+    have frame :=
+      { start := Eq.trans cut.start (NJE_ExternalStages.blocks_result input bs sums args steps cut),
+        args := fun i => ⟨rfl, ⟨rfl, rfl⟩⟩,
+        next := fun n h k =>
+          Eq.mpr
+            (id
+              (congrArg (Eq (steps (n + 1) k))
+                (ite_congr (Eq.refl (k = ⟨n, h⟩))
+                  (fun a => Eq.refl (NJE_Residue.word (NJA_External.arg (blocks input) ⟨n, h⟩))) fun a =>
+                  Eq.refl (steps n k))))
+            (Eq.mp
+              (congrArg (Eq (steps (n + 1) k))
+                (ite_congr (Eq.refl (k = ⟨n, h⟩)) (fun a => congrArg NJE_Residue.word ((fun i => args_eq i) ⟨n, h⟩))
+                  fun a => Eq.refl (steps n k)))
+              (cut.next n h k)) };
+    NJE_ExternalPacket.result input steps frame⟩
+'NJE_ExternalTotal.result' depends on axioms: [propext, Classical.choice, Quot.sound]

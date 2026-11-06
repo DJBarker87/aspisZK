@@ -1,0 +1,114 @@
+NJE_lean/NJE_ExternalStages.lean:24:50: error: Application type mismatch: The argument
+  args ⟨n, h⟩
+has type
+  args✝ ⟨n, h⟩ = ↑(steps ↑⟨n, h⟩ ⟨n, h⟩) + sums (column ⟨n, h⟩) 4
+of sort `Prop` but is expected to have type
+  ℕ
+of sort `Type` in the application
+  NJE_Residue.word ⋯
+NJE_lean/NJE_ExternalStages.lean:38:3: error: Type mismatch: After simplification, term
+  eq
+ has type
+  bs (↑(group k) + 1) k = matrix (block (bs ↑(group k)) (group k)) (column k)
+but is expected to have type
+  bs (↑g + 1) k = matrix (block (bs ↑g) g) (column k)
+theorem NJE_ExternalStages.block_next : ∀ (input : State U32) (bs : ℕ → State U32) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (steps : ℕ → State U32),
+  Cut input bs sums args steps → ∀ (g : Fin 4), bs (↑g + 1) = write (bs ↑g) g (matrix (block (bs ↑g) g)) :=
+fun input bs sums args steps cut g =>
+  have post := funext fun c => ((cut.block_cut g).right c).right.right;
+  funext fun k =>
+    if same : group k = g then sorry
+    else
+      Eq.mpr
+        (id
+          (congrArg (Eq (bs (↑g + 1) k))
+            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg same) x_0 x_1 x_2 x_3)
+              (instDecidableEqFin 4 (group k) g) U32 (matrix (block (bs ↑g) g) (column k)) (bs (↑g) k))))
+        (cut.block_frame g k same)
+'NJE_ExternalStages.block_next' depends on axioms: [propext, sorryAx, Quot.sound]
+theorem NJE_ExternalStages.blocks_result : ∀ (input : State U32) (bs : ℕ → State U32) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (steps : ℕ → State U32), Cut input bs sums args steps → bs 4 = blocks input :=
+fun input bs sums args steps cut =>
+  have all := fun n hn =>
+    Nat.recAux (motive := fun n => n ≤ 4 → bs n = run input matrix n) (fun hn => cut.block_start)
+      (fun n ih hn =>
+        have h := Decidable.byContradiction fun a => blocks_result._proof_1 n hn a;
+        Eq.mpr
+          (id (congrArg (fun _a => _a = run input matrix (n + 1)) (block_next input bs sums args steps cut ⟨n, h⟩)))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => write (bs ↑⟨n, h⟩) ⟨n, h⟩ (matrix (block (bs ↑⟨n, h⟩) ⟨n, h⟩)) = _a)
+                (run.eq_2 input matrix n)))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => write (bs ↑⟨n, h⟩) ⟨n, h⟩ (matrix (block (bs ↑⟨n, h⟩) ⟨n, h⟩)) = _a) (dif_pos h)))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      write _a ⟨n, h⟩ (matrix (block _a ⟨n, h⟩)) =
+                        write (run input matrix n) ⟨n, h⟩ (matrix (block (run input matrix n) ⟨n, h⟩)))
+                    (ih (Decidable.byContradiction fun a => blocks_result._proof_2 n hn a))))
+                (Eq.refl (write (run input matrix n) ⟨n, h⟩ (matrix (block (run input matrix n) ⟨n, h⟩))))))))
+      n hn;
+  Eq.mpr
+    (id (congrArg (fun _a => _a = blocks input) (all 4 (Decidable.byContradiction fun a => blocks_result._proof_3 a))))
+    (Eq.mpr (id (congrArg (fun _a => _a = blocks input) (chronology input))) (Eq.refl (blocks input)))
+'NJE_ExternalStages.blocks_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_ExternalStages.sum_result : ∀ (input : State U32) (bs : ℕ → State U32) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (steps : ℕ → State U32),
+  Cut input bs sums args steps → ∀ (c : Fin 4), sums c 4 = NJA_External.columnSum (blocks input) c :=
+fun input bs sums args steps cut c =>
+  have e3 := cut.sum_next c 3;
+  have e2 := cut.sum_next c 2;
+  have e1 := cut.sum_next c 1;
+  have e0 := cut.sum_next c 0;
+  id
+    (fun e3 =>
+      id
+        (fun e2 =>
+          id
+            (fun e1 =>
+              id
+                (fun e0 =>
+                  Eq.mpr (id (congrArg (fun _a => _a = NJA_External.columnSum (blocks input) c) e3))
+                    (Eq.mpr
+                      (id (congrArg (fun _a => _a + ↑(bs 4 (pack 3 c)) = NJA_External.columnSum (blocks input) c) e2))
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              _a + ↑(bs 4 (pack 2 c)) + ↑(bs 4 (pack 3 c)) = NJA_External.columnSum (blocks input) c)
+                            e1))
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                _a + ↑(bs 4 (pack 1 c)) + ↑(bs 4 (pack 2 c)) + ↑(bs 4 (pack 3 c)) =
+                                  NJA_External.columnSum (blocks input) c)
+                              e0))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  _a + ↑(bs 4 (pack 0 c)) + ↑(bs 4 (pack 1 c)) + ↑(bs 4 (pack 2 c)) +
+                                      ↑(bs 4 (pack 3 c)) =
+                                    NJA_External.columnSum (blocks input) c)
+                                (cut.sum_start c)))
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    0 + ↑(_a (pack 0 c)) + ↑(_a (pack 1 c)) + ↑(_a (pack 2 c)) + ↑(_a (pack 3 c)) =
+                                      NJA_External.columnSum (blocks input) c)
+                                  (blocks_result input bs sums args steps cut)))
+                              (Eq.refl
+                                (0 + ↑(blocks input (pack 0 c)) + ↑(blocks input (pack 1 c)) +
+                                    ↑(blocks input (pack 2 c)) +
+                                  ↑(blocks input (pack 3 c))))))))))
+                e0)
+            e1)
+        e2)
+    e3
+'NJE_ExternalStages.sum_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

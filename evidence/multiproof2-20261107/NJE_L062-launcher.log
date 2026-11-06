@@ -1,0 +1,45 @@
+{"attempt": "NJE_L062", "exit_status": 1, "wall_seconds": 2.462300870800391, "peak_rss_kib": "2633312", "swaps": "0", "print_axioms": ["'NJE_CountInit.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Slice T × (Slice T → Slice T)) :=
+fun {T} r s =>
+  if ↑r.end ≤ s.length then ok (⟨List.slice 0 ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! 0 ↑s', ⋯⟩) else fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T × (Slice T → Slice T)) :=
+fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+    ok (⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩)
+  else fail Error.panic
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n 
+...
+                        ⋯))
+                                                          ⋯))
+                                                      ⋯))
+                                                  ⋯)
+                                                ⋯)))
+                                          ⋯)))
+                                    ⋯ ▸
+                                  core.slice.index.SliceIndexRangeToUsizeSlice.index_mut._proof_1
+                                    ⟨[0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                        0#u32, 0#u32, 0#u32, 0#u32, 0#u32],
+                                      congrArg Subtype.val
+                                          (Subtype.mk.congr_simp (List.replicate (↑16#usize) 0#u32)
+                                            [0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32,
+                                              0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32]
+                                            (congrFun'
+                                              (congrArg List.replicate
+                                                (UScalar.ofNatCore_val_eq
+                                                  (UScalar.bound_suffices UScalarTy.Usize 16 source._proof_1)))
+                                              0#u32)
+                                            (Array.repeat._proof_1 16#usize 0#u32)) ▸
+                                        Array.to_slice._proof_1 (Array.repeat 16#usize 0#u32)⟩
+                                    s'⟩).2
+                          ⋯)
+                        ⋯⟩)
+                  ⋯))
+              ⋯))
+          ⋯)
+        ⋯))
+    ⋯
+'NJE_CountInit.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra0030b021aa94ff4b472ee6575248cc4.scope; invocation ID: a214ce58ffd24085aa82ece4522d673c

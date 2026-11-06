@@ -1,0 +1,477 @@
+NJE_lean/NJE_CountRows.lean:27:53: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n a c w i
+in the target expression
+  (match
+      match (a, c, w, i) with
+      | (level1, count1, w1, i1) =>
+        multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (level1, count1, w1, i1) =>
+              multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (a, c, w)
+
+case zero
+n : Usize
+hn : ↑n ≤ 16
+a : Std.Array U32 16#usize
+i w c : Usize
+safe : ↑w ≤ ↑i
+end_bound : ↑i ≤ ↑n
+sorted : List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i)
+range : ∀ x ∈ unread (NJA_CountDrop.keys a) ↑n ↑i, x < 262144
+budget : ↑c + (↑n - ↑i) ≤ 576
+enough : ↑n - ↑i ≤ 0
+inactive : ¬i < n
+⊢ (match
+      match (a, c, w, i) with
+      | (level1, count1, w1, i1) =>
+        multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (level1, count1, w1, i1) =>
+              multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (a, c, w)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJE_lean/NJE_CountRows.lean:51:69: error: Application type mismatch: The argument
+  paired
+has type
+  pairAt (NJA_CountDrop.keys a) ↑n ↑i
+but is expected to have type
+  ¬?m.539
+in the application
+  @if_neg ?m.539 ?m.540 paired
+NJE_lean/NJE_CountRows.lean:56:65: error: Application type mismatch: The argument
+  paired
+has type
+  pairAt (NJA_CountDrop.keys a) ↑n ↑i
+but is expected to have type
+  ¬?m.606
+in the application
+  @if_neg ?m.606 ?m.607 paired
+NJE_lean/NJE_CountRows.lean:71:57: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n a c w i
+in the target expression
+  (match
+      match (a, c, w, i) with
+      | (level1, count1, w1, i1) =>
+        multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (level1, count1, w1, i1) =>
+              multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (b, d, v)
+
+case pos.refine_1
+n : Usize
+hn : ↑n ≤ 16
+fuel : ℕ
+ih :
+  ∀ (a : Std.Array U32 16#usize) (i w c : Usize),
+    ↑w ≤ ↑i →
+      ↑i ≤ ↑n →
+        List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) →
+          (∀ x ∈ unread (NJA_CountDrop.keys a) ↑n ↑i, x < 262144) →
+            ↑c + (↑n - ↑i) ≤ 576 →
+              ↑n - ↑i ≤ fuel →
+                ∃ b d v,
+                  multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c w i = ok (b, d, v) ∧
+                    ↑v ≤ ↑n ∧
+                      ↑d ≤ ↑c + (↑n - ↑i) ∧
+                        cells (NJA_CountDrop.keys b) 0 ↑v = (rows fuel (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c).1 ∧
+                          ↑d = (rows fuel (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c).2
+a : Std.Array U32 16#usize
+i w c : Usize
+safe : ↑w ≤ ↑i
+end_bound : ↑i ≤ ↑n
+sorted : List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i)
+range : ∀ x ∈ unread (NJA_CountDrop.keys a) ↑n ↑i, x < 262144
+budget : ↑c + (↑n - ↑i) ≤ 576
+enough : ↑n - ↑i ≤ fuel + 1
+active : i < n
+nat_active : ↑i < ↑n
+ib : ↑i < 16
+wb : ↑w < 16
+q : Usize
+qvalue : ↑q = advance (NJA_CountDrop.keys a) ↑n ↑i
+lower : ↑i + 1 ≤ ↑q
+upper : ↑q ≤ ↑n
+delta : ↑q ≤ ↑i + 2
+body :
+  multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n a c w i =
+    ok
+      (cont
+        (a.set w ((↑a)[↑i].wrapping_shr 1#u32), c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i)),
+          w.wrapping_add 1#usize, q))
+p : U32 := (↑a)[↑i].wrapping_shr 1#u32
+a1 : Std.Array U32 16#usize := a.set w p
+c1 : Usize := c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i))
+w1 : Usize := w.wrapping_add 1#usize
+body' : multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n a c w i = ok (cont (a1, c1, w1, q))
+parent : p = (↑a)[↑i]!.wrapping_shr 1#u32
+keys : NJA_CountDrop.keys a1 = write (NJA_CountDrop.keys a) ↑i ↑w
+wvalue : ↑w1 = ↑w + 1
+cvalue : ↑c1 = ↑c + if pairAt (NJA_CountDrop.keys a) ↑n ↑i then 0 else 1
+progress : NJE_CountRowBounds.cost (NJA_CountDrop.keys a) ↑n ↑i ≤ ↑q - ↑i
+growth : ↑c1 + (↑n - ↑q) ≤ ↑c + (↑n - ↑i)
+domains :
+  List.Pairwise (fun x1 x2 => x1 < x2)
+      (unread (write (NJA_CountDrop.keys a) ↑i ↑w) (↑n) (advance (NJA_CountDrop.keys a) ↑n ↑i)) ∧
+    ∀ j ∈ unread (write (NJA_CountDrop.keys a) ↑i ↑w) (↑n) (advance (NJA_CountDrop.keys a) ↑n ↑i), j < 262144
+next_sorted : List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a1) ↑n ↑q)
+next_range : ∀ x ∈ unread (NJA_CountDrop.keys a1) ↑n ↑q, x < 262144
+b : Std.Array U32 16#usize
+d v : Usize
+exec : multiproof.node_count_loop0_loop0 multiproof.Arity.Two a1 n c1 w1 q = ok (b, d, v)
+vb : ↑v ≤ ↑n
+db : ↑d ≤ ↑c1 + (↑n - ↑q)
+prefix_eq : cells (NJA_CountDrop.keys b) 0 ↑v = (rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1).1
+count_eq : ↑d = (rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1).2
+model_step : rows (fuel + 1) (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c = rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1
+⊢ (match
+      match (a, c, w, i) with
+      | (level1, count1, w1, i1) =>
+        multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (level1, count1, w1, i1) =>
+              multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (b, d, v)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJE_lean/NJE_CountRows.lean:79:57: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n a c w i
+in the target expression
+  (match
+      match (a, c, w, i) with
+      | (level1, count1, w1, i1) =>
+        multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (level1, count1, w1, i1) =>
+              multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (a, c, w)
+
+case neg.refine_1
+n : Usize
+hn : ↑n ≤ 16
+fuel : ℕ
+ih :
+  ∀ (a : Std.Array U32 16#usize) (i w c : Usize),
+    ↑w ≤ ↑i →
+      ↑i ≤ ↑n →
+        List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) →
+          (∀ x ∈ unread (NJA_CountDrop.keys a) ↑n ↑i, x < 262144) →
+            ↑c + (↑n - ↑i) ≤ 576 →
+              ↑n - ↑i ≤ fuel →
+                ∃ b d v,
+                  multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c w i = ok (b, d, v) ∧
+                    ↑v ≤ ↑n ∧
+                      ↑d ≤ ↑c + (↑n - ↑i) ∧
+                        cells (NJA_CountDrop.keys b) 0 ↑v = (rows fuel (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c).1 ∧
+                          ↑d = (rows fuel (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c).2
+a : Std.Array U32 16#usize
+i w c : Usize
+safe : ↑w ≤ ↑i
+end_bound : ↑i ≤ ↑n
+sorted : List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i)
+range : ∀ x ∈ unread (NJA_CountDrop.keys a) ↑n ↑i, x < 262144
+budget : ↑c + (↑n - ↑i) ≤ 576
+enough : ↑n - ↑i ≤ fuel + 1
+active : ¬i < n
+nat_inactive : ¬↑i < ↑n
+⊢ (match
+      match (a, c, w, i) with
+      | (level1, count1, w1, i1) =>
+        multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (level1, count1, w1, i1) =>
+              multiproof.node_count_loop0_loop0.body multiproof.Arity.Two n level1 count1 w1 i1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (a, c, w)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+theorem NJE_CountRows.total : ∀ (fuel : ℕ) (a : Std.Array U32 16#usize) (n i w c : Usize),
+  ↑n ≤ 16 →
+    ↑w ≤ ↑i →
+      ↑i ≤ ↑n →
+        List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) →
+          (∀ x ∈ unread (NJA_CountDrop.keys a) ↑n ↑i, x < 262144) →
+            ↑c + (↑n - ↑i) ≤ 576 →
+              ↑n - ↑i ≤ fuel →
+                ∃ b d v,
+                  multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c w i = ok (b, d, v) ∧
+                    ↑v ≤ ↑n ∧
+                      ↑d ≤ ↑c + (↑n - ↑i) ∧
+                        cells (NJA_CountDrop.keys b) 0 ↑v = (rows fuel (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c).1 ∧
+                          ↑d = (rows fuel (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c).2 :=
+fun fuel a n i w c hn safe end_bound sorted range budget enough =>
+  Nat.recAux (motive := fun fuel =>
+    ∀ (a : Std.Array U32 16#usize) (i w c : Usize),
+      ↑w ≤ ↑i →
+        ↑i ≤ ↑n →
+          List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) →
+            (∀ x ∈ unread (NJA_CountDrop.keys a) ↑n ↑i, x < 262144) →
+              ↑c + (↑n - ↑i) ≤ 576 →
+                ↑n - ↑i ≤ fuel →
+                  ∃ b d v,
+                    multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c w i = ok (b, d, v) ∧
+                      ↑v ≤ ↑n ∧
+                        ↑d ≤ ↑c + (↑n - ↑i) ∧
+                          cells (NJA_CountDrop.keys b) 0 ↑v = (rows fuel (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c).1 ∧
+                            ↑d = (rows fuel (NJA_CountDrop.keys a) ↑n ↑i ↑w ↑c).2)
+    (fun a i w c safe end_bound sorted range budget enough => sorry)
+    (fun fuel ih a i w c safe end_bound sorted range budget enough =>
+      if active : i < n then
+        have nat_active := total._proof_4 n i w c active;
+        have ib := Decidable.byContradiction fun a => total._proof_5 n hn fuel i w c nat_active a;
+        have wb := Decidable.byContradiction fun a => total._proof_6 n fuel i w c safe ib a;
+        let ⟨q, h✝⟩ := NJE_CountRow.step a n i w c hn active safe sorted
+        let ⟨qvalue, right✝⟩ := h✝
+        let ⟨lower, right✝¹⟩ := right✝
+        let ⟨upper, right✝²⟩ := right✝¹
+        let ⟨delta, body⟩ := right✝²
+        let p := (↑a)[↑i].wrapping_shr 1#u32;
+        let a1 := a.set w p;
+        let c1 := c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i));
+        let w1 := w.wrapping_add 1#usize;
+        have body' := body;
+        have parent :=
+          Eq.mpr
+            (id
+              (congrArg (fun _a => p = _a.wrapping_shr 1#u32)
+                (getElem!_pos (↑a) (↑i)
+                  (have h := a.property;
+                  Decidable.byContradiction fun a_1 => total._proof_7 n fuel a i w c ib q h a_1))))
+            (Eq.refl p);
+        have keys :=
+          id
+            (Eq.mpr
+              (id (congrArg (fun _a => NJA_CountDrop.keys (a.set w _a) = write (NJA_CountDrop.keys a) ↑i ↑w) parent))
+              (NJE_CountKeyFrame.whole a i w ib wb));
+        have wvalue := NJA_CountStep.advance w wb;
+        have cvalue :=
+          have h :=
+            NJE_CountRowBounds.count_value (NJA_CountDrop.keys a) (↑n) c i q
+              (Decidable.byContradiction fun a_1 => total._proof_8 n fuel a i w c budget q a_1) qvalue;
+          if paired : pairAt (NJA_CountDrop.keys a) ↑n ↑i then
+            Eq.mpr
+              (id
+                (congrArg (Eq ↑(c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i))))
+                  (congrArg (HAdd.hAdd ↑c)
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos paired) x_0 x_1 x_2 x_3)
+                      (instDecidablePairAt (NJA_CountDrop.keys a) ↑n ↑i) ℕ 0 1))))
+              (Eq.mp
+                (congrArg (Eq ↑(c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i))))
+                  (congrArg (HAdd.hAdd ↑c)
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos paired) x_0 x_1 x_2 x_3)
+                      (instDecidablePairAt (NJA_CountDrop.keys a) ↑n ↑i) ℕ 0 1)))
+                h)
+          else
+            Eq.mpr
+              (id
+                (congrArg (Eq ↑(c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i))))
+                  (congrArg (HAdd.hAdd ↑c)
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg paired) x_0 x_1 x_2 x_3)
+                      (instDecidablePairAt (NJA_CountDrop.keys a) ↑n ↑i) ℕ 0 1))))
+              (Eq.mp
+                (congrArg (Eq ↑(c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i))))
+                  (congrArg (HAdd.hAdd ↑c)
+                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg paired) x_0 x_1 x_2 x_3)
+                      (instDecidablePairAt (NJA_CountDrop.keys a) ↑n ↑i) ℕ 0 1)))
+                h);
+        have progress := NJE_CountRowBounds.progress (NJA_CountDrop.keys a) ↑n ↑i;
+        have growth :=
+          if paired : pairAt (NJA_CountDrop.keys a) ↑n ↑i then
+            Decidable.byContradiction fun a_1 =>
+              total._proof_9 n hn fuel a i w c budget nat_active ib q qvalue lower upper delta
+                (Eq.mp
+                  (congrArg (Eq ↑c1)
+                    (congrArg (HAdd.hAdd ↑c)
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos paired) x_0 x_1 x_2 x_3)
+                        (instDecidablePairAt (NJA_CountDrop.keys a) ↑n ↑i) ℕ 0 1)))
+                  cvalue)
+                a_1
+          else
+            Decidable.byContradiction fun a_1 =>
+              total._proof_10 n hn fuel a i w c budget nat_active ib q qvalue lower upper delta
+                (Eq.mp
+                  (congrArg (Eq ↑c1)
+                    (congrArg (HAdd.hAdd ↑c)
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg paired) x_0 x_1 x_2 x_3)
+                        (instDecidablePairAt (NJA_CountDrop.keys a) ↑n ↑i) ℕ 0 1)))
+                  cvalue)
+                a_1;
+        have domains :=
+          MultiproofConeCountPhysicalLevels.unread_domain (NJA_CountDrop.keys a) (↑n) (↑i) (↑w) safe nat_active sorted
+            range;
+        have next_sorted :=
+          Eq.mpr (id (congrArg (fun _a => List.Pairwise (fun x1 x2 => x1 < x2) (unread _a ↑n ↑q)) keys))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a => List.Pairwise (fun x1 x2 => x1 < x2) (unread (write (NJA_CountDrop.keys a) ↑i ↑w) (↑n) _a))
+                  qvalue))
+              domains.left);
+        have next_range :=
+          Eq.mpr (id (congrArg (fun _a => ∀ x ∈ unread _a ↑n ↑q, x < 262144) keys))
+            (Eq.mpr
+              (id (congrArg (fun _a => ∀ x ∈ unread (write (NJA_CountDrop.keys a) ↑i ↑w) (↑n) _a, x < 262144) qvalue))
+              domains.right);
+        let ⟨b, h✝¹⟩ :=
+          ih a1 q w1 c1
+            (Decidable.byContradiction fun a_1 => total._proof_11 n fuel a i w c safe q qvalue lower delta wvalue a_1)
+            upper next_sorted next_range
+            (Decidable.byContradiction fun a_1 => total._proof_12 n fuel a i w c budget q cvalue growth a_1)
+            (Decidable.byContradiction fun a_1 =>
+              total._proof_13 n fuel a i w c enough nat_active q qvalue lower upper delta cvalue growth a_1)
+        let ⟨d, h✝²⟩ := h✝¹
+        let ⟨v, h✝³⟩ := h✝²
+        let ⟨exec, right✝³⟩ := h✝³
+        let ⟨vb, right✝⁴⟩ := right✝³
+        let ⟨db, right✝⁵⟩ := right✝⁴
+        let ⟨prefix_eq, count_eq⟩ := right✝⁵
+        have model_step :=
+          Eq.mpr
+            (id
+              (congrArg (fun _a => _a = rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1)
+                (rows.eq_2 (NJA_CountDrop.keys a) (↑n) (↑i) (↑w) (↑c) fuel)))
+            (Eq.mpr (id (congrArg (fun _a => _a = rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1) (if_pos nat_active)))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      rows fuel _a (↑n) (advance (NJA_CountDrop.keys a) ↑n ↑i) (↑w + 1)
+                          (↑c + if pairAt (NJA_CountDrop.keys a) ↑n ↑i then 0 else 1) =
+                        rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1)
+                    (Eq.symm keys)))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        rows fuel (NJA_CountDrop.keys a1) (↑n) _a (↑w + 1)
+                            (↑c + if pairAt (NJA_CountDrop.keys a) ↑n ↑i then 0 else 1) =
+                          rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1)
+                      (Eq.symm qvalue)))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          rows fuel (NJA_CountDrop.keys a1) (↑n) (↑q) _a
+                              (↑c + if pairAt (NJA_CountDrop.keys a) ↑n ↑i then 0 else 1) =
+                            rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1)
+                        (Eq.symm wvalue)))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            rows fuel (NJA_CountDrop.keys a1) (↑n) (↑q) (↑w1) _a =
+                              rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1)
+                          (Eq.symm cvalue)))
+                      (Eq.refl (rows fuel (NJA_CountDrop.keys a1) ↑n ↑q ↑w1 ↑c1)))))));
+        Exists.intro b
+          (Exists.intro d
+            (Exists.intro v
+              ⟨sorry,
+                ⟨vb,
+                  ⟨Decidable.byContradiction fun a_1 =>
+                      total._proof_14 n fuel a i w c ib q cvalue growth d v db count_eq a_1,
+                    ⟨Eq.mpr (id (congrArg (fun _a => cells (NJA_CountDrop.keys b) 0 ↑v = _a.1) model_step)) prefix_eq,
+                      Eq.mpr (id (congrArg (fun _a => ↑d = _a.2) model_step)) count_eq⟩⟩⟩⟩))
+      else
+        have nat_inactive := total._proof_15 n i w c active;
+        Exists.intro a
+          (Exists.intro c
+            (Exists.intro w
+              ⟨sorry,
+                ⟨Decidable.byContradiction fun a => total._proof_16 n fuel i w c safe end_bound nat_inactive a,
+                  ⟨Decidable.byContradiction fun a => total._proof_17 n fuel i w c a,
+                    ⟨Eq.mpr
+                        (id
+                          (congrArg (fun _a => cells (NJA_CountDrop.keys a) 0 ↑w = _a.1)
+                            (rows.eq_2 (NJA_CountDrop.keys a) (↑n) (↑i) (↑w) (↑c) fuel)))
+                        (Eq.mpr
+                          (id (congrArg (fun _a => cells (NJA_CountDrop.keys a) 0 ↑w = _a.1) (if_neg nat_inactive)))
+                          (Eq.refl (cells (NJA_CountDrop.keys a) 0 ↑w))),
+                      Eq.mpr
+                        (id
+                          (congrArg (fun _a => ↑c = _a.2) (rows.eq_2 (NJA_CountDrop.keys a) (↑n) (↑i) (↑w) (↑c) fuel)))
+                        (Eq.mpr (id (congrArg (fun _a => ↑c = _a.2) (if_neg nat_inactive))) (Eq.refl ↑c))⟩⟩⟩⟩)))
+    fuel a i w c safe end_bound sorted range budget enough
+'NJE_CountRows.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,41 @@
+{"attempt": "NJE_L036", "exit_status": 1, "wall_seconds": 3.9473847220651805, "peak_rss_kib": "4298064", "swaps": "0", "print_axioms": ["'NJE_WellPacket.emitted_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_WellPacket.TX1_128' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_WellPacket.TX2_094' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_WellPacket.lean:31:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) xs))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NJE_lean/NJE_WellPacket.lean:39:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) xs))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+theorem NJE_WellPacket.emitted_value : ∀ (xs : List U32),
+  
+...
+rArg and
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg and
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg and
+                                          (Eq.trans (congrArg not (Bool.of_not_eq_true empty)) Bool.not_false))
+                                        (Eq.trans (Decidable.decide.congr_simp (xs.length ≤ 16) False (eq_false small))
+                                          (decide_false instDecidableFalse)))
+                                      (Bool.and_false true)))
+                                  ((NJA_WellIteration.windows xs).all NJE_WellSource.order))
+                                (Bool.false_and ((NJA_WellIteration.windows xs).all NJE_WellSource.order))))
+                            (xs.all NJE_WellSource.domain))
+                          (Bool.false_and (xs.all NJE_WellSource.domain)))))
+                    (eq_self (ok false))))))))
+'NJE_WellPacket.emitted_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellPacket.TX1_128 : ∀ (xs : List U32) (out : Bool) (calls : ℕ),
+  Cut xs (ordered xs) (domain xs) out calls → NJE_WellSource.emitted xs = ok out ∧ out = sorry :=
+fun xs out calls cut =>
+  have source := NJE_WellSource.source xs;
+  sorry source
+'NJE_WellPacket.TX1_128' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_WellPacket.TX2_094 : ∀ (xs : List U32) (out : Bool) (calls : ℕ),
+  Cut xs (ordered xs) (domain xs) out calls → NJE_WellSource.emitted xs = ok out ∧ out = sorry :=
+fun xs out calls cut => TX1_128 xs out calls cut
+'NJE_WellPacket.TX2_094' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r752786bbff954719be4c980b95c0ea04.scope; invocation ID: 2220c2ed595e479aa9918604f758ffa1

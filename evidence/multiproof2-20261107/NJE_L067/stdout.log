@@ -1,0 +1,176 @@
+theorem NJE_AllCalls.loop_total : ∀ {α : Type} (f : core.ops.function.FnMut Unit α Bool) (p : α → Bool) (xs : List α),
+  (∀ x ∈ xs, f.call_mut () x = ok (p x, ())) → ∃ tail, loop (body f) (xs, ()) = ok (xs.all p, tail, ()) :=
+fun {α} f p xs =>
+  List.rec (motive := fun xs =>
+    (∀ x ∈ xs, f.call_mut () x = ok (p x, ())) → ∃ tail, loop (body f) (xs, ()) = ok (xs.all p, tail, ()))
+    (fun laws =>
+      Exists.intro []
+        (Eq.mpr (id (congrArg (fun _a => _a = ok ([].all p, [], ())) (loop.eq_def (body f) ([], ()))))
+          (of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (congrArg
+                    (fun x =>
+                      match x with
+                      | ok r =>
+                        match r with
+                        | cont x => loop (body f) x
+                        | done x => ok x
+                      | fail e => fail e
+                      | div => div)
+                    (Eq.trans
+                      (bind_tc_ok (none, [])
+                        (uncurry fun item tail =>
+                          match item with
+                          | none => ok (done (true, tail, ()))
+                          | some x => do
+                            let (b, u) ← f.call_mut () x
+                            if b = true then ok (cont (tail, u)) else ok (done (false, tail, u))))
+                      (uncurry_apply_pair
+                        (fun item tail =>
+                          match item with
+                          | none => ok (done (true, tail, ()))
+                          | some x => do
+                            let (b, u) ← f.call_mut () x
+                            if b = true then ok (cont (tail, u)) else ok (done (false, tail, u)))
+                        none []))))
+                (ok (true, [], ())))
+              (eq_self (ok (true, [], ())))))))
+    (fun x xs ih laws =>
+      have head :=
+        laws x
+          (of_eq_true
+            (Eq.trans List.mem_cons._simp_1
+              (Eq.trans (congrFun' (congrArg Or (eq_self x)) (x ∈ xs)) (true_or (x ∈ xs)))));
+      let ⟨tail, h⟩ := ih fun y hy => laws y (List.mem_cons_of_mem x hy)
+      if holds : p x = true then
+        Exists.intro tail
+          (Eq.mpr (id (congrArg (fun _a => _a = ok ((x :: xs).all p, tail, ())) (loop.eq_def (body f) (x :: xs, ()))))
+            (Eq.mpr
+              (id
+                (congr
+                  (congrArg Eq
+                    (congrArg
+                      (fun x =>
+                        match x with
+                        | ok r =>
+                          match r with
+                          | cont x => loop (body f) x
+                          | done x => ok x
+                        | fail e => fail e
+                        | div => div)
+                      (Eq.trans
+                        (bind_tc_ok (some x, xs)
+                          (uncurry fun item tail =>
+                            match item with
+                            | none => ok (done (true, tail, ()))
+                            | some x => do
+                              let (b, u) ← f.call_mut () x
+                              if b = true then ok (cont (tail, u)) else ok (done (false, tail, u))))
+                        (Eq.trans
+                          (uncurry_apply_pair
+                            (fun item tail =>
+                              match item with
+                              | none => ok (done (true, tail, ()))
+                              | some x => do
+                                let (b, u) ← f.call_mut () x
+                                if b = true then ok (cont (tail, u)) else ok (done (false, tail, u)))
+                            (some x) xs)
+                          (Eq.trans
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Bind.bind
+                                  (Eq.trans head (congrArg ok (congrFun' (congrArg Prod.mk holds) ()))))
+                                (uncurry fun b u => if b = true then ok (cont (xs, u)) else ok (done (false, xs, u))))
+                              (bind_tc_ok (true, ())
+                                (uncurry fun b u => if b = true then ok (cont (xs, u)) else ok (done (false, xs, u)))))
+                            (Eq.trans
+                              (uncurry_apply_pair
+                                (fun b u => if b = true then ok (cont (xs, u)) else ok (done (false, xs, u))) true ())
+                              (ite_cond_eq_true (ok (cont (xs, ()))) (ok (done (false, xs, ()))) (eq_self true))))))))
+                  (congrArg ok
+                    (congrFun'
+                      (congrArg Prod.mk
+                        (Eq.trans (congrFun' (congrArg and holds) (xs.all p)) (Bool.true_and (xs.all p))))
+                      (tail, ())))))
+              h))
+      else
+        Exists.intro xs
+          (Eq.mpr (id (congrArg (fun _a => _a = ok ((x :: xs).all p, xs, ())) (loop.eq_def (body f) (x :: xs, ()))))
+            (of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Eq
+                    (congrArg
+                      (fun x =>
+                        match x with
+                        | ok r =>
+                          match r with
+                          | cont x => loop (body f) x
+                          | done x => ok x
+                        | fail e => fail e
+                        | div => div)
+                      (Eq.trans
+                        (bind_tc_ok (some x, xs)
+                          (uncurry fun item tail =>
+                            match item with
+                            | none => ok (done (true, tail, ()))
+                            | some x => do
+                              let (b, u) ← f.call_mut () x
+                              if b = true then ok (cont (tail, u)) else ok (done (false, tail, u))))
+                        (Eq.trans
+                          (uncurry_apply_pair
+                            (fun item tail =>
+                              match item with
+                              | none => ok (done (true, tail, ()))
+                              | some x => do
+                                let (b, u) ← f.call_mut () x
+                                if b = true then ok (cont (tail, u)) else ok (done (false, tail, u)))
+                            (some x) xs)
+                          (Eq.trans
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Bind.bind
+                                  (Eq.trans head
+                                    (congrArg ok (congrFun' (congrArg Prod.mk (Bool.of_not_eq_true holds)) ()))))
+                                (uncurry fun b u => if b = true then ok (cont (xs, u)) else ok (done (false, xs, u))))
+                              (bind_tc_ok (false, ())
+                                (uncurry fun b u => if b = true then ok (cont (xs, u)) else ok (done (false, xs, u)))))
+                            (Eq.trans
+                              (uncurry_apply_pair
+                                (fun b u => if b = true then ok (cont (xs, u)) else ok (done (false, xs, u))) false ())
+                              (ite_cond_eq_false (ok (cont (xs, ()))) (ok (done (false, xs, ())))
+                                Bool.false_eq_true)))))))
+                  (congrArg ok
+                    (congrFun'
+                      (congrArg Prod.mk
+                        (Eq.trans (congrFun' (congrArg and (Bool.of_not_eq_true holds)) (xs.all p))
+                          (Bool.false_and (xs.all p))))
+                      (xs, ()))))
+                (eq_self (ok (false, xs, ())))))))
+    xs
+'NJE_AllCalls.loop_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_AllCalls.default_all : ∀ {α : Type} (f : core.ops.function.FnMut Unit α Bool) (p : α → Bool) (xs : List α),
+  (∀ x ∈ xs, f.call_mut () x = ok (p x, ())) →
+    ∃ tail,
+      NFU_Retarget.core.iter.traits.iterator.Iterator.all.default (NJE_AllAdapter.listInst α) f xs () =
+        ok (xs.all p, tail) :=
+fun {α} f p xs laws =>
+  let ⟨tail, h⟩ := loop_total f p xs laws
+  Exists.intro tail
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let outcome ← _a
+                    ok (outcome.1, outcome.2.1)) =
+                  ok (xs.all p, tail))
+              h))
+          (Eq.refl do
+            let outcome ← ok (xs.all p, tail, ())
+            ok (outcome.1, outcome.2.1)))))
+'NJE_AllCalls.default_all' depends on axioms: [propext, Classical.choice, Quot.sound]

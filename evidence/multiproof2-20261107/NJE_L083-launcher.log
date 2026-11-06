@@ -1,0 +1,34 @@
+{"attempt": "NJE_L083", "exit_status": 0, "wall_seconds": 2.567726748995483, "peak_rss_kib": "3833932", "swaps": "0", "print_axioms": ["'NJE_LinearPackets.TX1_303' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_LinearPackets.TX1_304' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_LinearPackets.TX1_303 : ∀ (input : State U32) (bs : ℕ → State U32) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (steps : ℕ → State U32),
+  NJE_ExternalStages.Cut input bs sums args steps →
+    (∀ (i : Fin 16), args i < 2 ^ 62) ∧
+      ∀ (i : Fin 16),
+        ↑(steps 16 i) < 2147483647 ∧ ↑↑(steps 16 i) = R0P.poseidonExternalLinear (fun j => ↑↑(input j)) i :=
+fun input bs sums args steps cut => NJE_ExternalTotal.result input bs sums args steps cut
+'NJE_LinearPackets.TX1_303' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_LinearPackets.TX1_304 : ∀ (input : NJA_Internal.State) (sums : ℕ → ℕ) (full : ℕ) (args : Fin 16 → ℕ)
+  (steps : ℕ → NJA_Internal.State),
+  
+...
+theorem NJE_LinearPackets.TX1_303 : ∀ (input : State U32) (bs : ℕ → State U32) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (steps : ℕ → State U32),
+  NJE_ExternalStages.Cut input bs sums args steps →
+    (∀ (i : Fin 16), args i < 2 ^ 62) ∧
+      ∀ (i : Fin 16),
+        ↑(steps 16 i) < 2147483647 ∧ ↑↑(steps 16 i) = R0P.poseidonExternalLinear (fun j => ↑↑(input j)) i :=
+fun input bs sums args steps cut => NJE_ExternalTotal.result input bs sums args steps cut
+'NJE_LinearPackets.TX1_303' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_LinearPackets.TX1_304 : ∀ (input : NJA_Internal.State) (sums : ℕ → ℕ) (full : ℕ) (args : Fin 16 → ℕ)
+  (steps : ℕ → NJA_Internal.State),
+  (∀ (i : Fin 16), ↑(input i) < 2147483647) →
+    NJE_SumStage.Cut input sums →
+      NJE_InternalCut.Cut input (sums 15) full args steps →
+        (∀ (i : Fin 16), args i < 2 ^ 62) ∧
+          ∀ (i : Fin 16),
+            ↑(steps 16 i) < 2147483647 ∧ ↑↑(steps 16 i) = R0P.poseidonInternalLinear (fun j => ↑↑(input j)) i :=
+fun input sums full args steps canonical sum_cut cut =>
+  NJE_InternalPacket.result input sums full args steps canonical sum_cut cut
+'NJE_LinearPackets.TX1_304' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r927388f1d8534f5ab329d4f21b0d0793.scope; invocation ID: 0378414ede0e43d7a3c371c41d1fbff9

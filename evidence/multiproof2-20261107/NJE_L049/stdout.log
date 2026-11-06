@@ -1,0 +1,34 @@
+def Aeneas.Std.core.array.Array.index_mut : {T I Output : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.ops.index.IndexMut (Aeneas.Std.Slice T) I Output →
+      Aeneas.Std.Array T N → I → Aeneas.Std.Result (Output × (Output → Aeneas.Std.Array T N)) :=
+fun {T I Output} {N} inst a i => do
+  let __x ← inst.index_mut a.to_slice i
+  match __x with
+    | (s, back) => Aeneas.Std.Result.ok (s, fun o => a.from_slice (back o))
+def Aeneas.Std.core.ops.index.IndexMutSlice : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.core.ops.index.IndexMut (Aeneas.Std.Slice T) I Output :=
+fun {T I Output} inst =>
+  { indexInst := Aeneas.Std.core.ops.index.IndexSlice inst,
+    index_mut := Aeneas.Std.core.slice.index.Slice.index_mut inst }
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice : (T : Type) →
+  Aeneas.Std.core.slice.index.SliceIndex (Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (Aeneas.Std.Slice T)
+    (Aeneas.Std.Slice T) :=
+fun T =>
+  { sealedInst := Aeneas.Std.core.slice.index.private_slice_index.SealedRangeToUsize,
+    get := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get,
+    get_mut := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_mut,
+    get_unchecked := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked,
+    get_unchecked_mut := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked_mut,
+    index := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index,
+    index_mut := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut }
+def Aeneas.Std.core.iter.range.UScalarStep : (ty : Aeneas.Std.UScalarTy) →
+  Aeneas.Std.core.clone.Clone (Aeneas.Std.UScalar ty) →
+    Aeneas.Std.core.cmp.PartialOrd (Aeneas.Std.UScalar ty) (Aeneas.Std.UScalar ty) →
+      Aeneas.Std.core.iter.range.Step (Aeneas.Std.UScalar ty) :=
+fun ty cloneInst partialOrdInst =>
+  { cloneInst := cloneInst, partialOrdInst := partialOrdInst,
+    steps_between := Aeneas.Std.core.iter.range.UScalarStep.steps_between,
+    forward_checked := Aeneas.Std.core.iter.range.UScalarStep.forward_checked,
+    backward_checked := Aeneas.Std.core.iter.range.UScalarStep.backward_checked }

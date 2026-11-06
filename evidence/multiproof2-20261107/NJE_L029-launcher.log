@@ -1,0 +1,47 @@
+{"attempt": "NJE_L029", "exit_status": 0, "wall_seconds": 1.8832695370074362, "peak_rss_kib": "2618340", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Array.update.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Result (Aeneas.Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some val => Aeneas.Std.Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+theorem Aeneas.Std.Usize.wrapping_sub_val_eq : ∀ (x y : Aeneas.Std.Usize),
+  ↑(x.wrapping_sub y) =
+    (↑x + (Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.Usize - ↑y)) %
+      Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.Usize :=
+fun x y => Aeneas.Std.UScalar.wrapping_sub_val_eq x y
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  Aeneas.Std.core.
+...
+ Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → α → Aeneas.Std.Result (Aeneas.Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some val => Aeneas.Std.Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+theorem Aeneas.Std.Usize.wrapping_sub_val_eq : ∀ (x y : Aeneas.Std.Usize),
+  ↑(x.wrapping_sub y) =
+    (↑x + (Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.Usize - ↑y)) %
+      Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.Usize :=
+fun x y => Aeneas.Std.UScalar.wrapping_sub_val_eq x y
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  Aeneas.Std.core.iter.range.Step A →
+    Aeneas.Std.core.ops.range.Range A → Aeneas.Std.Result (Option A × Aeneas.Std.core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+        | some n => Aeneas.Std.Result.ok (some range', { start := n, «end» := range.end })
+    else Aeneas.Std.Result.ok (none, range)
+@[reducible] def Aeneas.Std.core.iter.range.StepU32 : Aeneas.Std.core.iter.range.Step
+  (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U32) :=
+Aeneas.Std.core.iter.range.UScalarStep Aeneas.Std.UScalarTy.U32 Aeneas.Std.core.clone.CloneU32
+  Aeneas.Std.core.cmp.PartialOrdU32
+def Aeneas.Std.core.slice.Slice.copy_from_slice : {T : Type} →
+  Aeneas.Std.core.marker.Copy T → Aeneas.Std.Slice T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T) :=
+fun {T} x s src => if s.len = src.len then Aeneas.Std.Result.ok src else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+
+Running as unit: run-r8341f176355b4d2c8233adce74202c80.scope; invocation ID: cdc3f88142704b4887f7cdc6210bb366

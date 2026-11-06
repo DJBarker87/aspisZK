@@ -1,0 +1,13 @@
+theorem NJE_ExternalPacket.laws : ∀ (input : State U32), NJA_ExternalCut.CalleeLaws (events input) :=
+fun input i => NJE_Residue.value (NJA_External.arg (blocks input) i)
+'NJE_ExternalPacket.laws' depends on axioms: [propext, Quot.sound]
+theorem NJE_ExternalPacket.domains : ∀ (input : State U32) (i : Fin 16),
+  (events input i).a < 2 ^ 62 ∧ ↑(events input i).out < 2147483647 :=
+fun input i => ⟨NJA_External.arg_bound (blocks input) i, NJE_Residue.canonical (NJA_External.arg (blocks input) i)⟩
+'NJE_ExternalPacket.domains' depends on axioms: [propext, Quot.sound]
+theorem NJE_ExternalPacket.result : ∀ (input : State U32) (steps : ℕ → State U32),
+  NJA_ExternalCut.Cut (blocks input) (events input) steps →
+    ∀ (i : Fin 16), ↑(steps 16 i) < 2147483647 ∧ ↑↑(steps 16 i) = R0P.poseidonExternalLinear (fun j => ↑↑(input j)) i :=
+fun input steps cut =>
+  NJA_ExternalCut.result input (blocks input) (events input) steps cut (laws input) (block_value input)
+'NJE_ExternalPacket.result' depends on axioms: [propext, Classical.choice, Quot.sound]

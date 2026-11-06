@@ -1,0 +1,89 @@
+{"attempt": "NJE_L096", "exit_status": 0, "wall_seconds": 3.205861152848229, "peak_rss_kib": "4310072", "swaps": "0", "print_axioms": ["'NJE_CompressSeed.value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_CompressSeed.result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_CountPacket.assoc' does not depend on any axioms"]}
+theorem NJE_CompressSeed.value : ∀ (left right : Fin 8 → U32),
+  (∀ (i : Fin 8), ↑(left i) < 2147483647) →
+    (∀ (i : Fin 8), ↑(right i) < 2147483647) →
+      NJE_RoundTrace.Canonical (seed left right) ∧
+        NJE_RoundTrace.cast (seed left right) = NJA_Compress.seed (fun i => ↑↑(left i)) fun i => ↑↑(right i) :=
+fun left right hl hr =>
+  have tweak := NJE_AddValue.law (right 7) 1095962629#u32 (hr 7) (of_decide_eq_true (id (Eq.refl true)));
+  have tweak_value := tweak.right.right;
+  id
+    (fun tweak_value =>
+      ⟨fun i =>
+        if low : ↑i < 8 then
+          Eq.mpr
+            (id
+              (congrFun'
+                (congrArg LT.lt
+                  (congrArg UScalar.val
+        
+...
+oof_1 i a⟩;
+  Eq.mp
+    (congrArg
+      (fun _a =>
+        NJE_RoundTrace.cast (states (Fin.last 22)) ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩ =
+          R0P.poseidonPermutation _a ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩)
+      (NJA_Compress.seed_model (fun i => ↑↑(left i)) fun i => ↑↑(right i)))
+    (Eq.mp
+      (congrArg
+        (fun _a =>
+          NJE_RoundTrace.cast (states (Fin.last 22)) ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩ =
+            R0P.poseidonPermutation _a ⟨↑i, Decidable.byContradiction fun a => result._proof_1 i a⟩)
+        seed_value)
+      selected)
+'NJE_CompressSeed.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountPacket.assoc : ∀ {α β γ : Type} (r : Aeneas.Std.Result α) (f : α → Aeneas.Std.Result β)
+  (g : β → Aeneas.Std.Result γ),
+  (do
+      let b ←
+        do
+          let a ← r
+          f a
+      g b) =
+    do
+    let a ← r
+    let b ← f a
+    g b :=
+fun {α β γ} r f g =>
+  Aeneas.Std.Result.casesOn (motive := fun t =>
+    r = t →
+      (do
+          let b ←
+            do
+              let a ← r
+              f a
+          g b) =
+        do
+        let a ← r
+        let b ← f a
+        g b)
+    r
+    (fun v h =>
+      Eq.symm h ▸
+        Eq.refl do
+          let b ←
+            do
+              let a ← Aeneas.Std.Result.ok v
+              f a
+          g b)
+    (fun e h =>
+      Eq.symm h ▸
+        Eq.refl do
+          let b ←
+            do
+              let a ← Aeneas.Std.Result.fail e
+              f a
+          g b)
+    (fun h =>
+      Eq.symm h ▸
+        Eq.refl do
+          let b ←
+            do
+              let a ← Aeneas.Std.Result.div
+              f a
+          g b)
+    (Eq.refl r)
+'NJE_CountPacket.assoc' does not depend on any axioms
+
+Running as unit: run-r13ee3d1ffc7943a4b1375b929b387873.scope; invocation ID: 58a24d9162d24772a7c9f5cdd46a585c

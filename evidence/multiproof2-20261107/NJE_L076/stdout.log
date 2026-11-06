@@ -1,0 +1,174 @@
+NJE_lean/NJE_CountLevels.lean:29:29: error: Type mismatch: After simplification, term
+  sorted
+ has type
+  @List.Pairwise ℕ (fun x1 x2 => x1 < x2) (cells (NJA_CountDrop.keys a) 0 ↑n)
+but is expected to have type
+  @List.Pairwise ℕ (fun x1 x2 => x1 < x2) (MultiproofConeCountPhysical.unread (NJA_CountDrop.keys a) ↑n ↑0#usize)
+NJE_lean/NJE_CountLevels.lean:30:9: error: Type mismatch: After simplification, term
+  range
+ has type
+  ∀ x ∈ cells (NJA_CountDrop.keys a) 0 ↑n, @LT.lt ℕ instLTNat x 262144
+but is expected to have type
+  ∀ x ∈ MultiproofConeCountPhysical.unread (NJA_CountDrop.keys a) ↑n ↑0#usize, @LT.lt ℕ instLTNat x 262144
+NJE_lean/NJE_CountLevels.lean:35:87: error: Application type mismatch: The argument
+  sorted
+has type
+  List.Pairwise (fun x1 x2 => x1 < x2) (cells (NJA_CountDrop.keys a) 0 ↑n)
+but is expected to have type
+  0 ≤ 0
+in the application
+  rows_projection (↑n) (NJA_CountDrop.keys a) (↑n) 0 0 (↑c) sorted
+NJE_lean/NJE_CountLevels.lean:36:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  rows (↑n) (NJA_CountDrop.keys a) (↑n) 0 0 ↑c
+in the target expression
+  cells (NJA_CountDrop.keys b) 0 ↑v = (rows (↑n) (NJA_CountDrop.keys a) ↑n ↑0#usize ↑0#usize ↑c).1
+
+case succ
+height : ℕ
+ih :
+  ∀ (start : U32) (a : Std.Array U32 16#usize) (n c : Usize),
+    ↑start + height = 18 →
+      ↑n ≤ 16 →
+        List.Pairwise (fun x1 x2 => x1 < x2) (cells (NJA_CountDrop.keys a) 0 ↑n) →
+          (∀ x ∈ cells (NJA_CountDrop.keys a) 0 ↑n, x < 262144) →
+            ↑c + 16 * height ≤ 576 →
+              ∃ d,
+                multiproof.node_count_loop0 { start := start, «end» := 18#u32 } multiproof.Arity.Two a n c = ok d ∧
+                  ↑d = ↑c + nodeCount height (cells (NJA_CountDrop.keys a) 0 ↑n)
+start : U32
+a : Std.Array U32 16#usize
+n c : Usize
+clock : ↑start + (height + 1) = 18
+hn : ↑n ≤ 16
+sorted : List.Pairwise (fun x1 x2 => x1 < x2) (cells (NJA_CountDrop.keys a) 0 ↑n)
+range : ∀ x ∈ cells (NJA_CountDrop.keys a) 0 ↑n, x < 262144
+budget : ↑c + 16 * (height + 1) ≤ 576
+active : ↑start < 18
+unread : MultiproofConeCountPhysical.unread (NJA_CountDrop.keys a) (↑n) 0 = cells (NJA_CountDrop.keys a) 0 ↑n
+b : Std.Array U32 16#usize
+d v : Usize
+exec : multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c 0#usize 0#usize = ok (b, d, v)
+vb : ↑v ≤ ↑n
+db : ↑d ≤ ↑c + (↑n - ↑0#usize)
+viewEq : cells (NJA_CountDrop.keys b) 0 ↑v = (rows (↑n) (NJA_CountDrop.keys a) ↑n ↑0#usize ↑0#usize ↑c).1
+count : ↑d = (rows (↑n) (NJA_CountDrop.keys a) ↑n ↑0#usize ↑0#usize ↑c).2
+level : rows (↑n) (NJA_CountDrop.keys a) (↑n) 0 0 0 = countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)
+projection :
+  rows (↑n) (NJA_CountDrop.keys a) (↑n) 0 0 ↑c =
+    ((countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).1,
+      ↑c + (countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).2)
+⊢ ∃ d,
+    multiproof.node_count_loop0 { start := start, «end» := 18#u32 } multiproof.Arity.Two a n c = ok d ∧
+      ↑d = ↑c + nodeCount (height + 1) (cells (NJA_CountDrop.keys a) 0 ↑n)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+theorem NJE_CountLevels.total : ∀ (height : ℕ) (start : U32) (a : Std.Array U32 16#usize) (n c : Usize),
+  ↑start + height = 18 →
+    ↑n ≤ 16 →
+      List.Pairwise (fun x1 x2 => x1 < x2) (cells (NJA_CountDrop.keys a) 0 ↑n) →
+        (∀ x ∈ cells (NJA_CountDrop.keys a) 0 ↑n, x < 262144) →
+          ↑c + 16 * height ≤ 576 →
+            ∃ d,
+              multiproof.node_count_loop0 { start := start, «end» := 18#u32 } multiproof.Arity.Two a n c = ok d ∧
+                ↑d = ↑c + nodeCount height (cells (NJA_CountDrop.keys a) 0 ↑n) :=
+fun height start a n c clock hn sorted range budget =>
+  Nat.recAux (motive := fun height =>
+    ∀ (start : U32) (a : Std.Array U32 16#usize) (n c : Usize),
+      ↑start + height = 18 →
+        ↑n ≤ 16 →
+          List.Pairwise (fun x1 x2 => x1 < x2) (cells (NJA_CountDrop.keys a) 0 ↑n) →
+            (∀ x ∈ cells (NJA_CountDrop.keys a) 0 ↑n, x < 262144) →
+              ↑c + 16 * height ≤ 576 →
+                ∃ d,
+                  multiproof.node_count_loop0 { start := start, «end» := 18#u32 } multiproof.Arity.Two a n c = ok d ∧
+                    ↑d = ↑c + nodeCount height (cells (NJA_CountDrop.keys a) 0 ↑n))
+    (fun start a n c clock hn sorted range budget =>
+      have start_eq :=
+        UScalar.eq_of_val_eq
+          (Eq.mpr
+            (id
+              (congrArg (Eq ↑start)
+                (UScalar.ofNatCore_val_eq
+                  (UScalar.bound_suffices UScalarTy.U32 18 (of_decide_eq_true (id (Eq.refl true)))))))
+            (Eq.mp (congrFun' (congrArg Eq (add_zero ↑start)) 18) clock));
+      Eq.ndrec (motive := fun start =>
+        ↑start + 0 = 18 →
+          ∃ d,
+            multiproof.node_count_loop0 { start := start, «end» := 18#u32 } multiproof.Arity.Two a n c = ok d ∧
+              ↑d = ↑c + nodeCount 0 (cells (NJA_CountDrop.keys a) 0 ↑n))
+        (fun clock =>
+          Exists.intro c
+            ⟨Eq.mpr
+                (id
+                  (congrArg (fun _a => _a = ok c)
+                    (multiproof.node_count_loop0.eq_1 { start := 18#u32, «end» := 18#u32 } multiproof.Arity.Two a n c)))
+                (Eq.mpr
+                  (id
+                    (congrArg (fun _a => _a = ok c)
+                      (loop.eq_def
+                        (fun x =>
+                          match x with
+                          | (iter1, level1, n1, count1) =>
+                            multiproof.node_count_loop0.body multiproof.Arity.Two iter1 level1 n1 count1)
+                        ({ start := 18#u32, «end» := 18#u32 }, a, n, c))))
+                  (of_eq_true
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (congrArg
+                            (fun x =>
+                              match x with
+                              | ok r =>
+                                match r with
+                                | cont x =>
+                                  loop
+                                    (fun x =>
+                                      match x with
+                                      | (iter1, level1, n1, count1) =>
+                                        multiproof.node_count_loop0.body multiproof.Arity.Two iter1 level1 n1 count1)
+                                    x
+                                | done x => ok x
+                              | fail e => fail e
+                              | div => div)
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun' (congrArg Bind.bind NJE_CountRange.exit)
+                                  (uncurry fun o iter1 =>
+                                    match o with
+                                    | none => ok (done c)
+                                    | some val => do
+                                      let (level1, count1, w) ←
+                                        multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c 0#usize 0#usize
+                                      ok (cont (iter1, level1, w, count1))))
+                                (bind_tc_ok (none, { start := 18#u32, «end» := 18#u32 })
+                                  (uncurry fun o iter1 =>
+                                    match o with
+                                    | none => ok (done c)
+                                    | some val => do
+                                      let (level1, count1, w) ←
+                                        multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c 0#usize 0#usize
+                                      ok (cont (iter1, level1, w, count1)))))
+                              (uncurry_apply_pair
+                                (fun o iter1 =>
+                                  match o with
+                                  | none => ok (done c)
+                                  | some val => do
+                                    let (level1, count1, w) ←
+                                      multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c 0#usize 0#usize
+                                    ok (cont (iter1, level1, w, count1)))
+                                none { start := 18#u32, «end» := 18#u32 }))))
+                        (ok c))
+                      (eq_self (ok c))))),
+              of_eq_true (Eq.trans (congrArg (Eq ↑c) (add_zero ↑c)) (eq_self ↑c))⟩)
+        (Eq.symm start_eq) clock)
+    (fun height ih start a n c clock hn sorted range budget => sorry) height start a n c clock hn sorted range budget
+'NJE_CountLevels.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,49 @@
+{"attempt": "NJE_L063", "exit_status": 1, "wall_seconds": 3.805610307957977, "peak_rss_kib": "4314824", "swaps": "0", "print_axioms": ["'NJE_CountRows.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_CountRows.lean:30:3: error: No goals to be solved
+NJE_lean/NJE_CountRows.lean:86:7: error: No goals to be solved
+theorem NJE_CountRows.total : ∀ (fuel : ℕ) (a : Std.Array U32 16#usize) (n i w c : Usize),
+  ↑n ≤ 16 →
+    ↑w ≤ ↑i →
+      ↑i ≤ ↑n →
+        List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) →
+          (∀ x ∈ unread (NJA_CountDrop.keys a) ↑n ↑i, x < 262144) →
+            ↑c + (↑n - ↑i) ≤ 576 →
+              ↑n - ↑i ≤ fuel →
+                ∃ b d v,
+                  multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c w i = ok (b, d, v) ∧
+                    ↑v ≤ ↑n ∧
+                      ↑d ≤ ↑c + (↑n - ↑i) ∧
+                       
+...
+                | div => div) =
+                                ok (b, d, v))
+                            body'))
+                        (id exec)))),
+                ⟨vb,
+                  ⟨Decidable.byContradiction fun a_1 =>
+                      total._proof_14 n fuel a i w c ib q cvalue growth d v db count_eq a_1,
+                    ⟨Eq.mpr (id (congrArg (fun _a => cells (NJA_CountDrop.keys b) 0 ↑v = _a.1) model_step)) prefix_eq,
+                      Eq.mpr (id (congrArg (fun _a => ↑d = _a.2) model_step)) count_eq⟩⟩⟩⟩))
+      else
+        have nat_inactive := total._proof_15 n i w c active;
+        Exists.intro a
+          (Exists.intro c
+            (Exists.intro w
+              ⟨sorry,
+                ⟨Decidable.byContradiction fun a => total._proof_16 n fuel i w c safe end_bound nat_inactive a,
+                  ⟨Decidable.byContradiction fun a => total._proof_17 n fuel i w c a,
+                    ⟨Eq.mpr
+                        (id
+                          (congrArg (fun _a => cells (NJA_CountDrop.keys a) 0 ↑w = _a.1)
+                            (rows.eq_2 (NJA_CountDrop.keys a) (↑n) (↑i) (↑w) (↑c) fuel)))
+                        (Eq.mpr
+                          (id (congrArg (fun _a => cells (NJA_CountDrop.keys a) 0 ↑w = _a.1) (if_neg nat_inactive)))
+                          (Eq.refl (cells (NJA_CountDrop.keys a) 0 ↑w))),
+                      Eq.mpr
+                        (id
+                          (congrArg (fun _a => ↑c = _a.2) (rows.eq_2 (NJA_CountDrop.keys a) (↑n) (↑i) (↑w) (↑c) fuel)))
+                        (Eq.mpr (id (congrArg (fun _a => ↑c = _a.2) (if_neg nat_inactive))) (Eq.refl ↑c))⟩⟩⟩⟩)))
+    fuel a i w c safe end_bound sorted range budget enough
+'NJE_CountRows.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rccdc0c255d314aaf8bd927811a465009.scope; invocation ID: 7e1fb4671a9c4c9d95a20855a704d0c8

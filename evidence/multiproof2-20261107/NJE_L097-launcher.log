@@ -1,0 +1,75 @@
+{"attempt": "NJE_L097", "exit_status": 0, "wall_seconds": 7.98673244100064, "peak_rss_kib": "6148116", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_CountPacket.assoc' does not depend on any axioms"]}
+AspisR1.RPx_Deployed.deployed {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7)
+  (missing : AspisR1.IDa_Deployed.U
+...
+                 AspisR1.CPH_Recorder.Facts
+                        (AspisR1.FIp_Install.configuration indexError
+                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                        hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H p t u saved ∧
+                      AspisR1.S6N_Installation.Facts
+                        (AspisR1.DrvC_Installation.sdk
+                          (AspisR1.FIp_Install.configuration indexError
+                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountPacket.assoc : ∀ {α β γ : Type} (r : Aeneas.Std.Result α) (f : α → Aeneas.Std.Result β)
+  (g : β → Aeneas.Std.Result γ),
+  (do
+      let b ←
+        do
+          let a ← r
+          f a
+      g b) =
+    do
+    let a ← r
+    let b ← f a
+    g b :=
+fun {α β γ} r f g =>
+  Aeneas.Std.Result.casesOn (motive := fun t =>
+    r = t →
+      (do
+          let b ←
+            do
+              let a ← r
+              f a
+          g b) =
+        do
+        let a ← r
+        let b ← f a
+        g b)
+    r
+    (fun v h =>
+      Eq.symm h ▸
+        Eq.refl do
+          let b ←
+            do
+              let a ← Aeneas.Std.Result.ok v
+              f a
+          g b)
+    (fun e h =>
+      Eq.symm h ▸
+        Eq.refl do
+          let b ←
+            do
+              let a ← Aeneas.Std.Result.fail e
+              f a
+          g b)
+    (fun h =>
+      Eq.symm h ▸
+        Eq.refl do
+          let b ←
+            do
+              let a ← Aeneas.Std.Result.div
+              f a
+          g b)
+    (Eq.refl r)
+'NJE_CountPacket.assoc' does not depend on any axioms
+
+Running as unit: run-ra3720ee99c824b7892a5893c8c2fb110.scope; invocation ID: 7ff305b5e0324a5192225c32cd710069

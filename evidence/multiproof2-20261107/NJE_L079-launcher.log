@@ -1,0 +1,64 @@
+{"attempt": "NJE_L079", "exit_status": 1, "wall_seconds": 18.726149261929095, "peak_rss_kib": "4291036", "swaps": "0", "print_axioms": ["'NJE_CountPacket.initial_view' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_CountPacket.TX1_122' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_CountPacket.TX2_088' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_CountPacket.lean:22:33: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ d ≤ 16
+  c ≥ 0
+  b ≥ 0
+  b - c ≤ -1
+  b ≥ 16
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑(cells (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) 0 (↑indices).length).length
+ b := ↑j
+ c := ↑(List.map (fun x => ↑x) ↑indices).length
+ d := ↑(16 - (↑indices).length)
+NJE_lean/NJE_CountPacket.lean:23:3: error: No goals to be solved
+NJE_lean/NJE_CountPacket.lean:46:5: error: 'change' tactic failed, pattern
+  (do
+      let a0 ← NJE_CountInit.source indices
+      let levels ← multiproof.Arity.Two.levels
+      let count ←
+        multiproof.node_count_loop0 { start := 0#u
+...
+value indices bound)) 0 (↑indices).length =
+    List.map (fun x => ↑x) ↑indices :=
+fun indices bound =>
+  List.ext_getElem
+    (of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (congrArg List.length
+                  (congrFun'
+                    (congrArg List.map
+                      (funext fun j => congrArg (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) (zero_add j)))
+                    (List.range (↑indices).length)))
+                (List.length_map fun j => NJA_CountDrop.keys (NJE_CountInit.value indices bound) j))
+              List.length_range))
+          (List.length_map fun x => ↑x))
+        (eq_self (↑indices).length)))
+    sorry
+'NJE_CountPacket.initial_view' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NJE_lean/NJE_CountPacket.lean:72:7: error(lean.unknownIdentifier): Unknown constant `result`
+NJE_lean/NJE_CountPacket.lean:73:14: error(lean.unknownIdentifier): Unknown constant `result`
+theorem NJE_CountPacket.TX1_122 : ∀ (indices : Slice U32),
+  ∃ out,
+    source indices = ok out ∧
+      Option.map (fun x => ↑x) out =
+        if wellFormed (List.map (fun x => ↑x) ↑indices) then some (nodeCount 18 (List.map (fun x => ↑x) ↑indices))
+        else none :=
+fun indices => sorry
+'NJE_CountPacket.TX1_122' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CountPacket.TX2_088 : ∀ (indices : Slice U32),
+  ∃ out,
+    source indices = ok out ∧
+      Option.map (fun x => ↑x) out =
+        if wellFormed (List.map (fun x => ↑x) ↑indices) then some (nodeCount 18 (List.map (fun x => ↑x) ↑indices))
+        else none :=
+fun indices => sorry
+'NJE_CountPacket.TX2_088' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2c5c7e380c214bac8e4d209ba02adb48.scope; invocation ID: 54f7849450804f62941b3c21f4d0c06b

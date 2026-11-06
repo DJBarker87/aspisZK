@@ -1,0 +1,43 @@
+{"attempt": "NJE_L004", "exit_status": 0, "wall_seconds": 3.715379409957677, "peak_rss_kib": "3833100", "swaps": "0", "print_axioms": ["'NJE_Residue.value' depends on axioms: [propext, Quot.sound]", "'NJE_Residue.canonical' depends on axioms: [propext, Quot.sound]", "'NJE_Residue.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_Residue.value : ∀ (n : ℕ), ↑(word n) = n % 2147483647 :=
+fun n =>
+  id
+    (Nat.mod_eq_of_lt
+      (have this :=
+        Nat.mod_lt n
+          (have this := of_decide_eq_true (id (Eq.refl true));
+          this);
+      Decidable.byContradiction fun a => value._proof_1 n this a))
+'NJE_Residue.value' depends on axioms: [propext, Quot.sound]
+theorem NJE_Residue.canonical : ∀ (n : ℕ), ↑(word n) < 2147483647 :=
+fun n =>
+  Eq.mpr (id (congrArg (fun _a => _a < 2147483647) (value n))) (Nat.mod_lt n (of_decide_eq_true (id (Eq.refl true))))
+'NJE_Residue.canonical' depends on axioms: [propext, Quot.sound]
+theorem NJE_Residue.multiply : ∀ (x y : U32),
+  AspisR1SemanticCallExtraction.aspis_c
+...
+theorem NJE_Residue.value : ∀ (n : ℕ), ↑(word n) = n % 2147483647 :=
+fun n =>
+  id
+    (Nat.mod_eq_of_lt
+      (have this :=
+        Nat.mod_lt n
+          (have this := of_decide_eq_true (id (Eq.refl true));
+          this);
+      Decidable.byContradiction fun a => value._proof_1 n this a))
+'NJE_Residue.value' depends on axioms: [propext, Quot.sound]
+theorem NJE_Residue.canonical : ∀ (n : ℕ), ↑(word n) < 2147483647 :=
+fun n =>
+  Eq.mpr (id (congrArg (fun _a => _a < 2147483647) (value n))) (Nat.mod_lt n (of_decide_eq_true (id (Eq.refl true))))
+'NJE_Residue.canonical' depends on axioms: [propext, Quot.sound]
+theorem NJE_Residue.multiply : ∀ (x y : U32),
+  AspisR1SemanticCallExtraction.aspis_core.field.M31.mul x y = ok (word (↑x * ↑y)) :=
+fun x y =>
+  let ⟨z, h✝⟩ := NJA_FieldLaws.generated_mul x y
+  let ⟨hz, right✝⟩ := h✝
+  let ⟨vz, cz⟩ := right✝
+  have eq := UScalar.eq_of_val_eq (Eq.trans vz (Eq.symm (value (↑x * ↑y))));
+  Eq.mp (congrArg (Eq (AspisR1SemanticCallExtraction.aspis_core.field.M31.mul x y)) (congrArg ok eq)) hz
+'NJE_Residue.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r756681a163d54340993d890e83fa1916.scope; invocation ID: 0dd6368564fe404c9bf6c58a8efc32f7

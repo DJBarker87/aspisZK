@@ -1,0 +1,46 @@
+{"attempt": "NJE_L046", "exit_status": 0, "wall_seconds": 3.5623369270469993, "peak_rss_kib": "3854812", "swaps": "0", "print_axioms": ["'NJE_ConstantsInternal.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_ConstantsInternal.model' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_ConstantsInternal.canonical : ∀ (r : Fin 14), ↑(source r) < 2147483647 :=
+fun r =>
+  List.Mem.casesOn (motive := fun a x => List.finRange 14 = a → Fintype.complete r ≍ x → ↑(source r) < 2147483647)
+    (Fintype.complete r)
+    (fun «as» h =>
+      List.cons.noConfusion h fun head_eq =>
+        Eq.ndrec (motive := fun r =>
+          ∀ (this : r ∈ Fintype.elems),
+            (fun x1 x2 => (fun i => i) x1 :: x2)
+                  ⟨1,
+                    Nat.le_of_lt
+                      (Nat.le_of_lt
+                        (Nat.le_of_lt
+                          (Nat.le_of_lt
+                            (Nat.le_of_lt
+                              (Nat.le_of_lt
+                    
+...
+                                                 Nat.le_of_lt
+                                                                                (Nat.le_of_lt
+                                                                                  (Nat.le_of_lt (Nat.le_refl 14)))⟩
+                                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                              ⟨11,
+                                                                                Nat.le_of_lt
+                                                                                  (Nat.le_of_lt (Nat.le_refl 14))⟩
+                                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                                ⟨12, Nat.le_of_lt (Nat.le_refl 14)⟩
+                                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                                  ⟨13, Nat.le_refl 14⟩ [])))))))))))
+                                                            (HEq.refl a_4))
+                                                        (eq_of_heq tail_eq) a_3)
+                                                    (eq_of_heq head_eq))
+                                              (Eq.refl ((fun x1 x2 => [⋯ ⋯, ⋯]) ⋯ ⋯)) ⋯)
+                                          ⋯ ⋯)
+                                      ⋯)
+                                ⋯ ⋯)
+                            ⋯ ⋯)
+                        ⋯)
+                  ⋯ ⋯)
+              ⋯ ⋯)
+          ⋯)
+    ⋯ ⋯
+'NJE_ConstantsInternal.model' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb3e47cf62fb94746b77d91f79de2d9a3.scope; invocation ID: f67c5de12dc04ef9a73391b8f2e89ffd

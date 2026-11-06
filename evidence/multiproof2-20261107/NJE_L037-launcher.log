@@ -1,0 +1,62 @@
+{"attempt": "NJE_L037", "exit_status": 1, "wall_seconds": 3.2511173288803548, "peak_rss_kib": "4283740", "swaps": "0", "print_axioms": ["'NJE_CountGroup.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_CountGroup.lean:28:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  match unread k (↑n) (↑i + 1) with
+  | j :: tail => decide (paired (k ↑i) j)
+  | [] => false
+in the target expression
+  unread k ↑n ↑q =
+    if
+        (match unread k (↑n) (↑i + 1) with
+          | x :: tail => decide (paired (k ↑i) x)
+          | [] => false) =
+          true then
+      List.drop 1 (unread k (↑n) (↑i + 1))
+    else unread k (↑n) (↑i + 1)
+
+a : Std.Array U32 16#usize
+n i : Usize
+hn : ↑n ≤ 16
+active : ↑i < ↑n
+sorted : List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i)
+k : ℕ → ℕ := NJA_CountDrop.keys a
+head : unread k ↑n ↑i = k ↑i :: unread k (↑
+...
+2) (unread (NJA_CountDrop.keys a) ↑n ↑i)
+k : ℕ → ℕ := NJA_CountDrop.keys a
+head : unread k ↑n ↑i = k ↑i :: unread k (↑n) (↑i + 1)
+sorted' : List.Pairwise (fun x1 x2 => x1 < x2) (k ↑i :: unread k (↑n) (↑i + 1))
+q : Usize
+hq : multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n ((↑a)[↑i].wrapping_shr 1#u32) i = ok q
+lower : ↑i ≤ ↑q
+upper : ↑q ≤ ↑n
+group :
+  (match unread k (↑n) (↑i + 1) with
+      | j :: tail => decide (paired (k ↑i) j)
+      | [] => false) =
+      decide (MultiproofConeLiveOrder.pairAt k ↑n ↑i) ∧
+    (if decide (MultiproofConeLiveOrder.pairAt k ↑n ↑i) = true then List.drop 1 (unread k (↑n) (↑i + 1))
+      else unread k (↑n) (↑i + 1)) =
+      unread k (↑n) (MultiproofConeLiveOrder.advance k ↑n ↑i)
+tail :
+  unread k ↑n ↑q =
+    if
+        (match unread k (↑n) (↑i + 1) with
+          | x :: tail => decide (paired (k ↑i) x)
+          | [] => false) =
+          true then
+      List.drop 1 (unread k (↑n) (↑i + 1))
+    else unread k (↑n) (↑i + 1)
+⊢ ∃ q,
+    multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n ((↑a)[↑i].wrapping_shr 1#u32) i = ok q ∧
+      ↑q = MultiproofConeLiveOrder.advance (NJA_CountDrop.keys a) ↑n ↑i ∧ ↑i + 1 ≤ ↑q ∧ ↑q ≤ ↑n ∧ ↑q ≤ ↑i + 2
+theorem NJE_CountGroup.total : ∀ (a : Std.Array U32 16#usize) (n i : Usize) (hn : ↑n ≤ 16) (active : ↑i < ↑n),
+  List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) →
+    ∃ q,
+      multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n ((↑a)[↑i].wrapping_shr 1#u32) i = ok q ∧
+        ↑q = MultiproofConeLiveOrder.advance (NJA_CountDrop.keys a) ↑n ↑i ∧ ↑i + 1 ≤ ↑q ∧ ↑q ≤ ↑n ∧ ↑q ≤ ↑i + 2 :=
+fun a n i hn active sorted =>
+  let k := NJA_CountDrop.keys a;
+  sorry k
+'NJE_CountGroup.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5eff2f07ffeb4a40a878213f66fa6301.scope; invocation ID: b96ddb25bdaa4f558b879afcf13d2693

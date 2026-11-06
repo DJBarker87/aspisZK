@@ -1,0 +1,51 @@
+{"attempt": "NJE_L030", "exit_status": 1, "wall_seconds": 2.93068108195439, "peak_rss_kib": "3818448", "swaps": "0", "print_axioms": ["'NJE_ExternalStages.block_next' depends on axioms: [propext, sorryAx, Quot.sound]", "'NJE_ExternalStages.blocks_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_ExternalStages.sum_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_ExternalStages.lean:38:3: error: Type mismatch: After simplification, term
+  eq
+ has type
+  @Eq U32 (bs (↑g + 1) k) (matrix (block (bs ↑g) g) (column k))
+but is expected to have type
+  @Eq U32 (bs (↑g + 1) k) (if True then matrix (block (bs ↑g) g) (column k) else bs (↑g) k)
+theorem NJE_ExternalStages.block_next : ∀ (input : State U32) (bs : ℕ → State U32) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (steps : ℕ → State U32),
+  Cut input bs sums args steps → ∀ (g : Fin 4), bs (↑g + 1) = write (bs ↑g) g (matrix (block (bs ↑g) g)) :=
+fun input bs sums args steps cut g =>
+  have post := funext fun c => ((cut.block_cut g).right c).right.right;
+  funext fun k =>
+    if same : group k =
+...
+=>
+                              _a + ↑(bs 4 (pack 2 c)) + ↑(bs 4 (pack 3 c)) = NJA_External.columnSum (blocks input) c)
+                            e1))
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                _a + ↑(bs 4 (pack 1 c)) + ↑(bs 4 (pack 2 c)) + ↑(bs 4 (pack 3 c)) =
+                                  NJA_External.columnSum (blocks input) c)
+                              e0))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  _a + ↑(bs 4 (pack 0 c)) + ↑(bs 4 (pack 1 c)) + ↑(bs 4 (pack 2 c)) +
+                                      ↑(bs 4 (pack 3 c)) =
+                                    NJA_External.columnSum (blocks input) c)
+                                (cut.sum_start c)))
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    0 + ↑(_a (pack 0 c)) + ↑(_a (pack 1 c)) + ↑(_a (pack 2 c)) + ↑(_a (pack 3 c)) =
+                                      NJA_External.columnSum (blocks input) c)
+                                  (blocks_result input bs sums args steps cut)))
+                              (Eq.refl
+                                (0 + ↑(blocks input (pack 0 c)) + ↑(blocks input (pack 1 c)) +
+                                    ↑(blocks input (pack 2 c)) +
+                                  ↑(blocks input (pack 3 c))))))))))
+                e0)
+            e1)
+        e2)
+    e3
+'NJE_ExternalStages.sum_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r40c1666efaef40bcad37dea0ff05be9a.scope; invocation ID: 7d6938fac00f4e08af30f16531a612b8

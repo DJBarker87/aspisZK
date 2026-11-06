@@ -1,0 +1,424 @@
+theorem NJE_RoundTrace.facts : ∀ (input : State) (states : Fin 23 → State) (bs : ℕ → State) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (leading : ℕ → State),
+  states 0 = leading 16 →
+    NJE_ExternalStages.Cut input bs sums args leading →
+      (∀ (r : Fin 22), Witness (states r.castSucc) (states r.succ) r) →
+        (∀ (i : Fin 23), Canonical (states i)) ∧
+          (∀ (r : Fin 22), cast (states r.succ) = R0P.poseidonApplyRound r (cast (states r.castSucc))) ∧
+            cast (states 0) = R0P.poseidonExternalLinear (cast input) :=
+fun input states bs sums args leading start initial_cut rounds =>
+  have first := NJE_ExternalTotal.result input bs sums args leading initial_cut;
+  have initial := Eq.mpr (id (congrArg (fun _a => Canonical _a) start)) fun i => (first.right i).left;
+  have canonical := fun i =>
+    Fin.induction initial (fun i ih => (one (states i.castSucc) (states i.succ) i ih (rounds i)).left) i;
+  have steps := fun r => (one (states r.castSucc) (states r.succ) r (canonical r.castSucc) (rounds r)).right;
+  have initial_value :=
+    Eq.mpr (id (congrArg (fun _a => cast _a = R0P.poseidonExternalLinear (cast input)) start))
+      (funext fun i => (first.right i).right);
+  ⟨canonical, ⟨steps, initial_value⟩⟩
+'NJE_RoundTrace.facts' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_RoundTrace.trace_values : ∀ (input : State) (states : Fin 23 → State) (bs : ℕ → State)
+  (sums : Fin 4 → ℕ → ℕ) (args : Fin 16 → ℕ) (leading : ℕ → State),
+  states 0 = leading 16 →
+    NJE_ExternalStages.Cut input bs sums args leading →
+      (∀ (r : Fin 22), Witness (states r.castSucc) (states r.succ) r) →
+        (List.ofFn (observed input states)).length = 22 ∧
+          ∀ (r : Fin 22),
+            (observed input states r).round = ↑r ∧
+              R0P.poseidonRoundKind ↑r = some (NJA_TraceModel.kind (observed input states r).kind) ∧
+                (cast (observed input states r).input = if ↑r = 0 then cast input else cast (states r.castSucc)) ∧
+                  cast (observed input states r).output = R0P.poseidonApplyRound r (cast (states r.castSucc)) :=
+fun input states bs sums args leading start initial_cut rounds =>
+  let ⟨canonical, right✝⟩ := facts input states bs sums args leading start initial_cut rounds
+  let ⟨steps, initial_value⟩ := right✝
+  ⟨of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (congrArg List.length
+                (Eq.trans List.ofFn_succ
+                  (congrArg (List.cons (observed input states 0))
+                    (Eq.trans List.ofFn_succ
+                      (congrArg (List.cons (observed input states 1))
+                        (Eq.trans List.ofFn_succ
+                          (congrArg (List.cons (observed input states 2))
+                            (Eq.trans List.ofFn_succ
+                              (congrArg (List.cons (observed input states 3))
+                                (Eq.trans List.ofFn_succ
+                                  (congrArg (List.cons (observed input states 4))
+                                    (Eq.trans List.ofFn_succ
+                                      (congrArg (List.cons (observed input states 5))
+                                        (Eq.trans List.ofFn_succ
+                                          (congrArg (List.cons (observed input states 6))
+                                            (Eq.trans List.ofFn_succ
+                                              (congrArg (List.cons (observed input states 7))
+                                                (Eq.trans List.ofFn_succ
+                                                  (congrArg (List.cons (observed input states 8))
+                                                    (Eq.trans List.ofFn_succ
+                                                      (congrArg (List.cons (observed input states 9))
+                                                        (Eq.trans List.ofFn_succ
+                                                          (congrArg (List.cons (observed input states 10))
+                                                            (Eq.trans List.ofFn_succ
+                                                              (congrArg (List.cons (observed input states 11))
+                                                                (Eq.trans List.ofFn_succ
+                                                                  (congrArg (List.cons (observed input states 12))
+                                                                    (Eq.trans List.ofFn_succ
+                                                                      (congrArg (List.cons (observed input states 13))
+                                                                        (Eq.trans List.ofFn_succ
+                                                                          (congrArg
+                                                                            (List.cons (observed input states 14))
+                                                                            (Eq.trans List.ofFn_succ
+                                                                              (congrArg
+                                                                                (List.cons (observed input states 15))
+                                                                                (Eq.trans List.ofFn_succ
+                                                                                  (congrArg
+                                                                                    (List.cons
+                                                                                      (observed input states 16))
+                                                                                    (Eq.trans List.ofFn_succ
+                                                                                      (congrArg
+                                                                                        (List.cons
+                                                                                          (observed input states 17))
+                                                                                        (Eq.trans List.ofFn_succ
+                                                                                          (congrArg
+                                                                                            (List.cons
+                                                                                              (observed input states
+                                                                                                18))
+                                                                                            (Eq.trans List.ofFn_succ
+                                                                                              (congrArg
+                                                                                                (List.cons
+                                                                                                  (observed input states
+                                                                                                    19))
+                                                                                                (Eq.trans ⋯
+                                                                                                  ⋯))))))))))))))))))))))))))))))))))))))))))
+              (congrFun'
+                (congrArg HAdd.hAdd
+                  (congrFun'
+                    (congrArg HAdd.hAdd
+                      (congrFun'
+                        (congrArg HAdd.hAdd
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (congrFun'
+                                (congrArg HAdd.hAdd
+                                  (congrFun'
+                                    (congrArg HAdd.hAdd
+                                      (congrFun'
+                                        (congrArg HAdd.hAdd
+                                          (congrFun'
+                                            (congrArg HAdd.hAdd
+                                              (congrFun'
+                                                (congrArg HAdd.hAdd
+                                                  (congrFun'
+                                                    (congrArg HAdd.hAdd
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun'
+                                                                (congrArg HAdd.hAdd
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun'
+                                                                        (congrArg HAdd.hAdd
+                                                                          (congrFun'
+                                                                            (congrArg HAdd.hAdd
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd
+                                                                                  (congrFun'
+                                                                                    (congrArg HAdd.hAdd
+                                                                                      (congrFun'
+                                                                                        (congrArg HAdd.hAdd
+                                                                                          (congrFun'
+                                                                                            (congrArg HAdd.hAdd
+                                                                                              (congrFun'
+                                                                                                (congrArg HAdd.hAdd
+                                                                                                  (zero_add 1))
+                                                                                                1))
+                                                                                            1))
+                                                                                        1))
+                                                                                    1))
+                                                                                1))
+                                                                            1))
+                                                                        1))
+                                                                    1))
+                                                                1))
+                                                            1))
+                                                        1))
+                                                    1))
+                                                1))
+                                            1))
+                                        1))
+                                    1))
+                                1))
+                            1))
+                        1))
+                    1))
+                1)))
+          22)
+        (eq_self 22)),
+    fun r =>
+    ⟨rfl,
+      ⟨NJA_TraceModel.descriptor (↑r) r.isLt,
+        ⟨if first : ↑r = 0 then
+            of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Eq
+                    (congrArg cast
+                      (congrArg NJA_Trace.Event.input
+                        (congrFun'
+                          (congr (congr (congrArg NJA_Trace.Event.mk first) (congrArg NJA_Trace.kind first))
+                            (ite_cond_eq_true input (states r.castSucc)
+                              (Eq.trans (congrFun' (congrArg Eq first) 0) (eq_self 0))))
+                          (states r.succ)))))
+                  (ite_cond_eq_true (cast input) (cast (states r.castSucc))
+                    (Eq.trans (congrFun' (congrArg Eq first) 0) (eq_self 0))))
+                (eq_self (cast input)))
+          else
+            of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Eq
+                    (congrArg cast
+                      (congrArg NJA_Trace.Event.input
+                        (congrFun'
+                          (congrArg (NJA_Trace.Event.mk (↑r) (NJA_Trace.kind ↑r))
+                            (ite_cond_eq_false input (states r.castSucc) (eq_false first)))
+                          (states r.succ)))))
+                  (ite_cond_eq_false (cast input) (cast (states r.castSucc)) (eq_false first)))
+                (eq_self (cast (states r.castSucc)))),
+          steps r⟩⟩⟩⟩
+'NJE_RoundTrace.trace_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_RoundTrace.one : ∀ (pre post : State) (r : Fin 22),
+  Canonical pre → Witness pre post r → Canonical post ∧ cast post = R0P.poseidonApplyRound r (cast pre) :=
+fun pre post r canonical cut =>
+  if first : ↑r < 4 then
+    let ⟨states, h✝⟩ :=
+      Eq.mp
+        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos first) x_0 x_1 x_2 x_3) ((↑r).decLt 4) Prop
+          (fun h => Full pre (NJE_ConstantsInitial.source ⟨↑r, h⟩) post) fun h =>
+          if h' : ↑r < 4 + 14 then Internal pre (NJE_ConstantsInternal.source ⟨↑r - 4, Witness._proof_3 r h h'⟩) post
+          else Full pre (NJE_ConstantsFinal.source ⟨↑r - 4 - 14, Witness._proof_4 r h h'⟩) post)
+        cut
+    let ⟨bs, h✝¹⟩ := h✝
+    let ⟨sums, h✝²⟩ := h✝¹
+    let ⟨args, h✝³⟩ := h✝²
+    let ⟨steps, h✝⁴⟩ := h✝³
+    let ⟨cells, right✝⟩ := h✝⁴
+    let ⟨linear, right✝¹⟩ := right✝
+    Eq.symm right✝¹ ▸
+      have law :=
+        NJE_RoundComposition.full_round pre (NJE_ConstantsInitial.source ⟨↑r, first⟩) states bs sums args steps
+          canonical (NJE_ConstantsInitial.canonical ⟨↑r, first⟩) cells linear;
+      ⟨fun i => (law i).left,
+        funext fun i =>
+          Eq.mpr
+            (id
+              (congrArg (Eq (cast (steps 16) i))
+                (congrFun
+                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos first) x_0 x_1 x_2 x_3) ((↑r).decLt 4)
+                    (Fin 16 → K) (fun h => R0P.poseidonFullRound (cast pre) (R0P.poseidonExternalInitial ⟨↑r, h⟩))
+                    fun h =>
+                    if h' : ↑r < 4 + 14 then
+                      R0P.poseidonInternalRound (cast pre)
+                        (R0P.poseidonInternalConstants ⟨↑r - 4, R0P.poseidonApplyRound._proof_3 r h h'⟩)
+                    else
+                      R0P.poseidonFullRound (cast pre)
+                        (R0P.poseidonExternalFinal ⟨↑r - 4 - 14, R0P.poseidonApplyRound._proof_4 r h h'⟩))
+                  i)))
+            (have constants := funext (NJE_ConstantsInitial.model ⟨↑r, first⟩);
+            Eq.mpr
+              (id (congrArg (fun _a => cast (steps 16) i = R0P.poseidonFullRound (cast pre) _a i) (Eq.symm constants)))
+              (law i).right)⟩
+  else
+    if middle : ↑r < 4 + 14 then
+      let ⟨sums, h✝⁵⟩ :=
+        Eq.mp
+          (Eq.trans
+            (dite_congr (Eq.refl (↑r < 4))
+              (fun h => Eq.refl (Full pre (NJE_ConstantsInitial.source ⟨↑r, Eq.mpr_prop (Eq.refl (↑r < 4)) h⟩) post))
+              fun h =>
+              (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos middle) x_0 x_1 x_2 x_3) ((↑r).decLt (4 + 14))
+                Prop
+                (fun h' =>
+                  Internal pre
+                    (NJE_ConstantsInternal.source ⟨↑r - 4, Witness._proof_3 r (Eq.mpr_not (Eq.refl (↑r < 4)) h) h'⟩)
+                    post)
+                fun h' =>
+                Full pre
+                  (NJE_ConstantsFinal.source ⟨↑r - 4 - 14, Witness._proof_4 r (Eq.mpr_not (Eq.refl (↑r < 4)) h) h'⟩)
+                  post)
+            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg first) x_0 x_1 x_2 x_3) ((↑r).decLt 4) Prop
+              (fun h => Full pre (NJE_ConstantsInitial.source ⟨↑r, Eq.mpr_prop (Eq.refl (↑r < 4)) h⟩) post) fun h =>
+              Internal pre
+                (NJE_ConstantsInternal.source ⟨↑r - 4, Witness._proof_3 r (Eq.mpr_not (Eq.refl (↑r < 4)) h) middle⟩)
+                post))
+          cut
+      let ⟨full, h✝⁶⟩ := h✝⁵
+      let ⟨args, h✝⁷⟩ := h✝⁶
+      let ⟨steps, h✝⁸⟩ := h✝⁷
+      let ⟨sum_cut, right✝²⟩ := h✝⁸
+      let ⟨linear, right✝³⟩ := right✝²
+      Eq.symm right✝³ ▸
+        have law :=
+          NJE_InternalRound.result pre
+            (NJE_ConstantsInternal.source
+              ⟨↑r - 4, Decidable.byContradiction fun a => Witness._proof_1 r first middle a⟩)
+            sums full args steps canonical
+            (NJE_ConstantsInternal.canonical
+              ⟨↑r - 4, Decidable.byContradiction fun a => Witness._proof_1 r first middle a⟩)
+            sum_cut linear;
+        ⟨fun i => (law i).left,
+          funext fun i =>
+            Eq.mpr
+              (id
+                (congrArg (Eq (cast (steps 16) i))
+                  (Eq.trans
+                    (congrFun
+                      (dite_congr (Eq.refl (↑r < 4))
+                        (fun h =>
+                          Eq.refl
+                            (R0P.poseidonFullRound (cast pre)
+                              (R0P.poseidonExternalInitial ⟨↑r, Eq.mpr_prop (Eq.refl (↑r < 4)) h⟩)))
+                        fun h =>
+                        (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos middle) x_0 x_1 x_2 x_3)
+                          ((↑r).decLt (4 + 14)) (Fin 16 → K)
+                          (fun h' =>
+                            R0P.poseidonInternalRound (cast pre)
+                              (R0P.poseidonInternalConstants
+                                ⟨↑r - 4, R0P.poseidonApplyRound._proof_3 r (Eq.mpr_not (Eq.refl (↑r < 4)) h) h'⟩))
+                          fun h' =>
+                          R0P.poseidonFullRound (cast pre)
+                            (R0P.poseidonExternalFinal
+                              ⟨↑r - 4 - 14, R0P.poseidonApplyRound._proof_4 r (Eq.mpr_not (Eq.refl (↑r < 4)) h) h'⟩))
+                      i)
+                    (congrFun
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg first) x_0 x_1 x_2 x_3) ((↑r).decLt 4)
+                        (Fin 16 → K)
+                        (fun h =>
+                          R0P.poseidonFullRound (cast pre)
+                            (R0P.poseidonExternalInitial ⟨↑r, Eq.mpr_prop (Eq.refl (↑r < 4)) h⟩))
+                        fun h =>
+                        R0P.poseidonInternalRound (cast pre)
+                          (R0P.poseidonInternalConstants
+                            ⟨↑r - 4, R0P.poseidonApplyRound._proof_3 r (Eq.mpr_not (Eq.refl (↑r < 4)) h) middle⟩))
+                      i))))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => cast (steps 16) i = R0P.poseidonInternalRound (cast pre) _a i)
+                    (Eq.symm
+                      (NJE_ConstantsInternal.model
+                        ⟨↑r - 4, Decidable.byContradiction fun a => Witness._proof_1 r first middle a⟩))))
+                (law i).right)⟩
+    else
+      let ⟨states, h✝⁹⟩ :=
+        Eq.mp
+          (Eq.trans
+            (dite_congr (Eq.refl (↑r < 4))
+              (fun h => Eq.refl (Full pre (NJE_ConstantsInitial.source ⟨↑r, Eq.mpr_prop (Eq.refl (↑r < 4)) h⟩) post))
+              fun h =>
+              (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg middle) x_0 x_1 x_2 x_3) ((↑r).decLt (4 + 14))
+                Prop
+                (fun h' =>
+                  Internal pre
+                    (NJE_ConstantsInternal.source ⟨↑r - 4, Witness._proof_3 r (Eq.mpr_not (Eq.refl (↑r < 4)) h) h'⟩)
+                    post)
+                fun h' =>
+                Full pre
+                  (NJE_ConstantsFinal.source ⟨↑r - 4 - 14, Witness._proof_4 r (Eq.mpr_not (Eq.refl (↑r < 4)) h) h'⟩)
+                  post)
+            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg first) x_0 x_1 x_2 x_3) ((↑r).decLt 4) Prop
+              (fun h => Full pre (NJE_ConstantsInitial.source ⟨↑r, Eq.mpr_prop (Eq.refl (↑r < 4)) h⟩) post) fun h =>
+              Full pre
+                (NJE_ConstantsFinal.source ⟨↑r - 4 - 14, Witness._proof_4 r (Eq.mpr_not (Eq.refl (↑r < 4)) h) middle⟩)
+                post))
+          cut
+      let ⟨bs, h✝¹⁰⟩ := h✝⁹
+      let ⟨sums, h✝¹¹⟩ := h✝¹⁰
+      let ⟨args, h✝¹²⟩ := h✝¹¹
+      let ⟨steps, h✝¹³⟩ := h✝¹²
+      let ⟨cells, right✝⁴⟩ := h✝¹³
+      let ⟨linear, right✝⁵⟩ := right✝⁴
+      Eq.symm right✝⁵ ▸
+        have law :=
+          NJE_RoundComposition.full_round pre
+            (NJE_ConstantsFinal.source
+              ⟨↑r - 4 - 14, Decidable.byContradiction fun a => Witness._proof_2 r first middle a⟩)
+            states bs sums args steps canonical
+            (NJE_ConstantsFinal.canonical
+              ⟨↑r - 4 - 14, Decidable.byContradiction fun a => Witness._proof_2 r first middle a⟩)
+            cells linear;
+        ⟨fun i => (law i).left,
+          funext fun i =>
+            Eq.mpr
+              (id
+                (congrArg (Eq (cast (steps 16) i))
+                  (Eq.trans
+                    (congrFun
+                      (dite_congr (Eq.refl (↑r < 4))
+                        (fun h =>
+                          Eq.refl
+                            (R0P.poseidonFullRound (cast pre)
+                              (R0P.poseidonExternalInitial ⟨↑r, Eq.mpr_prop (Eq.refl (↑r < 4)) h⟩)))
+                        fun h =>
+                        (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg middle) x_0 x_1 x_2 x_3)
+                          ((↑r).decLt (4 + 14)) (Fin 16 → K)
+                          (fun h' =>
+                            R0P.poseidonInternalRound (cast pre)
+                              (R0P.poseidonInternalConstants
+                                ⟨↑r - 4, R0P.poseidonApplyRound._proof_3 r (Eq.mpr_not (Eq.refl (↑r < 4)) h) h'⟩))
+                          fun h' =>
+                          R0P.poseidonFullRound (cast pre)
+                            (R0P.poseidonExternalFinal
+                              ⟨↑r - 4 - 14, R0P.poseidonApplyRound._proof_4 r (Eq.mpr_not (Eq.refl (↑r < 4)) h) h'⟩))
+                      i)
+                    (congrFun
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg first) x_0 x_1 x_2 x_3) ((↑r).decLt 4)
+                        (Fin 16 → K)
+                        (fun h =>
+                          R0P.poseidonFullRound (cast pre)
+                            (R0P.poseidonExternalInitial ⟨↑r, Eq.mpr_prop (Eq.refl (↑r < 4)) h⟩))
+                        fun h =>
+                        R0P.poseidonFullRound (cast pre)
+                          (R0P.poseidonExternalFinal
+                            ⟨↑r - 4 - 14, R0P.poseidonApplyRound._proof_4 r (Eq.mpr_not (Eq.refl (↑r < 4)) h) middle⟩))
+                      i))))
+              (have constants :=
+                funext
+                  (NJE_ConstantsFinal.model
+                    ⟨↑r - 4 - 14, Decidable.byContradiction fun a => Witness._proof_2 r first middle a⟩);
+              Eq.mpr
+                (id
+                  (congrArg (fun _a => cast (steps 16) i = R0P.poseidonFullRound (cast pre) _a i) (Eq.symm constants)))
+                (law i).right)⟩
+'NJE_RoundTrace.one' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_RoundTrace.composition : ∀ (input : State) (states : Fin 23 → State) (bs : ℕ → State) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (leading : ℕ → State),
+  states 0 = leading 16 →
+    NJE_ExternalStages.Cut input bs sums args leading →
+      (∀ (r : Fin 22), Witness (states r.castSucc) (states r.succ) r) →
+        Canonical (states (Fin.last 22)) ∧ cast (states (Fin.last 22)) = R0P.poseidonPermutation (cast input) :=
+fun input states bs sums args leading start initial_cut rounds =>
+  let ⟨canonical, right✝⟩ := facts input states bs sums args leading start initial_cut rounds
+  let ⟨steps, initial_value⟩ := right✝
+  have joined := NJE_PermutationFold.compose (fun i => cast (states i)) (fun r => R0P.poseidonApplyRound r) steps;
+  have map :=
+    Eq.mpr (id (congrArg (fun _a => (List.ofFn fun r => R0P.poseidonApplyRound r) = _a) List.map_ofFn))
+      (Eq.refl (List.ofFn fun r => R0P.poseidonApplyRound r));
+  ⟨canonical (Fin.last 22),
+    Eq.trans
+      (Eq.symm
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              List.foldl (fun x y => R0P.poseidonApplyRound y x) _a (List.ofFn fun r => r) =
+                cast (states (Fin.last 22)))
+            initial_value)
+          (Eq.mp (congrArg (fun _a => _a = cast (states (Fin.last 22))) List.foldl_map)
+            (Eq.mp
+              (congrArg (fun _a => List.foldl (fun s step => step s) (cast (states 0)) _a = cast (states (Fin.last 22)))
+                map)
+              joined))))
+      (NJE_PermutationFold.folded (cast input))⟩
+'NJE_RoundTrace.composition' depends on axioms: [propext, Classical.choice, Quot.sound]

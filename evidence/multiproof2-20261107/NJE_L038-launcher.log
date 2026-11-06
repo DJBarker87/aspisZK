@@ -1,0 +1,56 @@
+{"attempt": "NJE_L038", "exit_status": 0, "wall_seconds": 2.341237269807607, "peak_rss_kib": "2642732", "swaps": "0", "print_axioms": ["'NJE_CountArithmetic.sub_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_CountArithmetic.add_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_CountArithmetic.deficit' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_CountArithmetic.count_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_CountArithmetic.update_result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_CountArithmetic.sub_value : ∀ (a b : Usize), ↑b ≤ ↑a → ↑(a.wrapping_sub b) = ↑a - ↑b :=
+fun a b order =>
+  Eq.mpr (id (congrArg (fun _a => _a = ↑a - ↑b) (Usize.wrapping_sub_val_eq a b)))
+    (have ha := UScalar.hSize a;
+    have hb := UScalar.hSize b;
+    have eq := Decidable.byContradiction fun a_1 => sub_value._proof_1 a b order hb a_1;
+    Eq.mpr (id (congrArg (fun _a => _a % UScalar.size UScalarTy.Usize = ↑a - ↑b) eq))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = ↑a - ↑b)
+            (Nat.add_mod (↑a - ↑b) (UScalar.size UScalarTy.Usize) (UScalar.size UScalarTy.Usize))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a => ((↑a - ↑b) % 
+...
+ical.choice, Quot.sound]
+theorem NJE_CountArithmetic.count_value : ∀ (c i q : Usize),
+  ↑c ≤ 576 →
+    ↑i ≤ ↑q → ↑q ≤ ↑i + 2 → ↑(c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i))) = ↑c + (2 - (↑q - ↑i)) :=
+fun c i q count_bound lower upper =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = ↑c + (2 - (↑q - ↑i)))
+        (add_value c (Usize.wrapping_sub 2#usize (q.wrapping_sub i))
+          (Eq.mpr (id (congrArg (fun _a => ↑c + _a < UScalar.size UScalarTy.Usize) (deficit i q lower upper)))
+            (have size := UScalar.hSize 1024#usize;
+            id (fun size => Decidable.byContradiction fun a => count_value._proof_1 c i q count_bound size a) size)))))
+    (Eq.mpr (id (congrArg (fun _a => ↑c + _a = ↑c + (2 - (↑q - ↑i))) (deficit i q lower upper)))
+      (Eq.refl (↑c + (2 - (↑q - ↑i)))))
+'NJE_CountArithmetic.count_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountArithmetic.update_result : ∀ {α : Type} (a : Std.Array α 16#usize) (w : Usize) (x : α),
+  ↑w < 16 → a.update w x = ok (a.set w x) :=
+fun {α} a w x bound =>
+  id
+    (have hw :=
+      have h := a.property;
+      Decidable.byContradiction fun a_1 => update_result._proof_1 a w bound h a_1;
+    id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (match _a with
+                | none => fail Error.arrayOutOfBounds
+                | some val => ok ⟨(↑a).set (↑w) x, Array.set._proof_1 a w x⟩) =
+                ok (a.set w x))
+            (List.getElem?_eq_getElem hw)))
+        (Eq.refl
+          (match some (↑a)[↑w] with
+          | none => fail Error.arrayOutOfBounds
+          | some val => ok ⟨(↑a).set (↑w) x, Array.set._proof_1 a w x⟩))))
+'NJE_CountArithmetic.update_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0a4014aa9c004016b847c17b50bc17fd.scope; invocation ID: b329f6e138364836b700f772dd5d8028

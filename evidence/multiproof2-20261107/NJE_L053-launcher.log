@@ -1,0 +1,58 @@
+{"attempt": "NJE_L053", "exit_status": 0, "wall_seconds": 3.269270309014246, "peak_rss_kib": "4305120", "swaps": "0", "print_axioms": ["'NJE_CountArrayFrame.get_set' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_CountArrayFrame.keys_write' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_CountArrayFrame.lean:21:5: warning: Variable name `ib` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+theorem NJE_CountArrayFrame.get_set : ∀ {α : Type} [inst : Inhabited α] (a : Std.Array α 16#usize) (w : Usize) (x : α),
+  ↑w < 16 → ∀ j < 16, (↑(a.set w x))[j]! = if j = ↑w then x else (↑a)[j]! :=
+fun {α} [Inhabited α] a w x bound j hj =>
+  have len := a.property;
+  if same : j = ↑w then
+    Eq.ndrec (motive := fun j => j < 16 → (↑(a.set w x))[j]! = if j = ↑w then x else (↑a)[j]!)
+      (fun hj =>
+        of_eq_true
+          (Eq.trans
+     
+...
+(eq_self x)))
+      (Eq.symm same) hj
+  else
+    of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans (congrFun' (congrArg getElem! (Array.set_val_eq a w x)) j) List.getElem!_eq_getElem?_getD)
+              (congrFun'
+                (congrArg Option.getD
+                  ((fun x_0 x_1 x_2 => (fun x_0 x_1 x_2 => List.getElem?_set_ne (Ne.symm same)) x_0 x_1 x_2) α (↑a) x))
+                default)))
+          (Eq.trans (ite_cond_eq_false x (↑a)[j]! (eq_false same)) List.getElem!_eq_getElem?_getD))
+        (eq_self ((↑a)[j]?.getD default)))
+'NJE_CountArrayFrame.get_set' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountArrayFrame.keys_write : ∀ (a : Std.Array U32 16#usize) (i w : Usize),
+  ↑i < 16 →
+    ↑w < 16 →
+      ∀ j < 16,
+        NJA_CountDrop.keys (a.set w ((↑a)[↑i]!.wrapping_shr 1#u32)) j =
+          AspisR1.MultiproofConeLiveOrder.write (NJA_CountDrop.keys a) (↑i) (↑w) j :=
+fun a i w ib wb j jb =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => ↑_a = AspisR1.MultiproofConeLiveOrder.write (fun i => ↑(↑a)[i]!) (↑i) (↑w) j)
+          (get_set a w ((↑a)[↑i]!.wrapping_shr 1#u32) wb j jb)))
+      (id
+        (Decidable.casesOn (instDecidableEqNat j ↑w)
+          (fun h =>
+            Eq.mpr (id (congr (congrArg Eq (congrArg UScalar.val (if_neg h))) (if_neg h)))
+              (of_eq_true (eq_self ↑(↑a)[j]!)))
+          fun h =>
+          Eq.mpr (id (congr (congrArg Eq (congrArg UScalar.val (if_pos h))) (if_pos h)))
+            (of_eq_true
+              (Eq.trans (congrFun' (congrArg Eq (NJA_CountStep.shift_one (↑a)[↑i]!)) (↑(↑a)[↑i]! / 2))
+                (eq_self (↑(↑a)[↑i]! / 2)))))))
+'NJE_CountArrayFrame.keys_write' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb3aad55072194ec880deb03e0a2bb663.scope; invocation ID: eacc262f587b4fd6977be057f7b57be8

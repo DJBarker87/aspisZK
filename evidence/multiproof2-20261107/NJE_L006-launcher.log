@@ -1,0 +1,26 @@
+{"attempt": "NJE_L006", "exit_status": 0, "wall_seconds": 2.4334760950878263, "peak_rss_kib": "3832116", "swaps": "0", "print_axioms": ["'NJE_Mat4Packet.laws' depends on axioms: [propext, Quot.sound]", "'NJE_Mat4Packet.domains' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_Mat4Packet.TX1_302' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_Mat4Packet.laws : ∀ (v : Fin 4 → U32), NJA_Mat4Cut.CalleeLaws (events v) :=
+fun v r => NJE_Residue.value (NJA_Matrix.rowArg v r)
+'NJE_Mat4Packet.laws' depends on axioms: [propext, Quot.sound]
+theorem NJE_Mat4Packet.domains : ∀ (v : Fin 4 → U32) (r : Fin 4),
+  (events v r).a < 2 ^ 62 ∧ ↑(events v r).out < 2147483647 :=
+fun v r => ⟨NJA_Matrix.argument_bound v r, NJE_Residue.canonical (NJA_Matrix.rowArg v r)⟩
+'NJE_Mat4Packet.domains' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_Mat4Packet.TX1_302 : ∀ (v : Fin 4 → U32) (len : ℕ) (post : Fin 4 → U32),
+  NJA_Mat4Cut.Cut v (events v) len post →
+    ∀ (r : Fin 4), ↑(post r) < 2147483647 ∧ ↑↑(post r) = R0P.poseid
+...
+theorem NJE_Mat4Packet.laws : ∀ (v : Fin 4 → U32), NJA_Mat4Cut.CalleeLaws (events v) :=
+fun v r => NJE_Residue.value (NJA_Matrix.rowArg v r)
+'NJE_Mat4Packet.laws' depends on axioms: [propext, Quot.sound]
+theorem NJE_Mat4Packet.domains : ∀ (v : Fin 4 → U32) (r : Fin 4),
+  (events v r).a < 2 ^ 62 ∧ ↑(events v r).out < 2147483647 :=
+fun v r => ⟨NJA_Matrix.argument_bound v r, NJE_Residue.canonical (NJA_Matrix.rowArg v r)⟩
+'NJE_Mat4Packet.domains' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_Mat4Packet.TX1_302 : ∀ (v : Fin 4 → U32) (len : ℕ) (post : Fin 4 → U32),
+  NJA_Mat4Cut.Cut v (events v) len post →
+    ∀ (r : Fin 4), ↑(post r) < 2147483647 ∧ ↑↑(post r) = R0P.poseidonMat4 (fun i => ↑↑(v i)) r :=
+fun v len post cut => NJA_Mat4Cut.compose v (events v) len post cut (laws v)
+'NJE_Mat4Packet.TX1_302' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf5538a3d2c5f49b9a3950316c1c39f87.scope; invocation ID: 1d8d24f4fe0d4d5faa720ab8a1e0342f

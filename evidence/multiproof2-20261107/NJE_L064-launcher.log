@@ -1,0 +1,29 @@
+{"attempt": "NJE_L064", "exit_status": 0, "wall_seconds": 2.4328402280807495, "peak_rss_kib": "3721200", "swaps": "0", "print_axioms": ["'NJE_PermutationFold.folded' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_PermutationFold.compose' depends on axioms: [propext, Quot.sound]"]}
+NJE_lean/NJE_PermutationFold.lean:14:1: warning: 'change
+  (List.ofFn (fun r : Fin 22 => r)).foldl (fun s r => R0P.poseidonApplyRound r s) (R0P.poseidonExternalLinear state) =
+    _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+theorem NJE_PermutationFold.folded : ∀ {K : Type} [inst : Field K] (state : Fin 16 → K),
+  List.foldl (fun s r => R0P.poseidonApplyRound r s) (R0P.poseidonExternalLinear state) (List.ofFn fun r => r) =
+    R0P.poseidonPermutation state :=
+fun {K} [Field K] state => id (R0P.poseidon_rounds_split✝ (R0P.poseidonExternalLinear state))
+'NJE_PermutationFold.folded' depends on axioms: [propext, Classical.choice, Quot.soun
+...
+NJE_lean/NJE_PermutationFold.lean:14:1: warning: 'change
+  (List.ofFn (fun r : Fin 22 => r)).foldl (fun s r => R0P.poseidonApplyRound r s) (R0P.poseidonExternalLinear state) =
+    _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+theorem NJE_PermutationFold.folded : ∀ {K : Type} [inst : Field K] (state : Fin 16 → K),
+  List.foldl (fun s r => R0P.poseidonApplyRound r s) (R0P.poseidonExternalLinear state) (List.ofFn fun r => r) =
+    R0P.poseidonPermutation state :=
+fun {K} [Field K] state => id (R0P.poseidon_rounds_split✝ (R0P.poseidonExternalLinear state))
+'NJE_PermutationFold.folded' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_PermutationFold.compose : ∀ {σ : Type} {n : ℕ} (states : Fin (n + 1) → σ) (steps : Fin n → σ → σ),
+  (∀ (i : Fin n), states i.succ = steps i (states i.castSucc)) →
+    List.foldl (fun s step => step s) (states 0) (List.ofFn steps) = states (Fin.last n) :=
+fun {σ} {n} states steps next => R0P.poseidon_compose_steps✝ states steps next
+'NJE_PermutationFold.compose' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-r2884f50a2ffe444f90e116fc1b7b7c4b.scope; invocation ID: 9669ec48e9f1439cb550034eb7b5478c

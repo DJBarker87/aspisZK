@@ -1,0 +1,50 @@
+{"attempt": "NJE_K037", "exit_status": 1, "wall_seconds": 85.07222812320106, "peak_rss_kib": "4855052", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-multiproof2-20261107/NJE_workspace/crates/aspis-core)
+   Compiling aspis-r0-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-multiproof2-20261107/NJE_workspace/docs/research/v8-r0-zk-20261009/refine/writers)
+   Compiling aspis-r0-block-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-multiproof2-20261107/NJE_workspace/docs/research/v8-r0-zk-20261009/refine/blockwriters)
+   Compiling aspis-r0-poseidon-copy v0.0.0 (/home/dombarker/project-offloads/codex-cx-multiproof2-20261107/NJE_workspace/docs/research/v8-r0-zk-20261009/refine/poseidon)
+warning: une
+...
+r x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-multiproof2-20261107/NJE_workspace/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.96s
+Checking harness multiproof::NJE_native::NJE_binary_row_cut...
+
+VERIFICATION RESULT:
+ ** 1 of 553 failed (19 unreachable)
+Failed Checks: assertion failed: if cfg!(NJE_bad_argument) {
+    i !=
+        if oldi < n && paired {
+            oldi + 2
+        } else if oldi < n && available { oldi + 1 } else { oldi }
+} else {
+    i ==
+        if oldi < n && paired {
+            oldi + 2
+        } else if oldi < n && available { oldi + 1 } else { oldi }
+}
+ File: "/home/dombarker/project-offloads/codex-cx-multiproof2-20261107/NJE_workspace/crates/aspis-r1-cost-probe/../../NJE_harness.rs", line 213, in multiproof::NJE_native::NJE_binary_row_cut
+
+VERIFICATION:- FAILED
+Verification Time: 79.35055s
+
+Manual Harness Summary:
+Verification failed for - multiproof::NJE_native::NJE_binary_row_cut
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rc3fad8c69aa74aa0894fba820d56df11.scope; invocation ID: 7e42ec84470947f892a99ce5c3dea457

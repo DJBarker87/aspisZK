@@ -1,0 +1,31 @@
+NJE_lean/NJE_ExternalBlocks.lean:25:42: warning: This simp argument is unused:
+  block
+
+Hint: Omit it from the simp argument list.
+  simp only [blocks, ̲group_pack, ̲column_pack,̵b̵l̵o̵c̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJE_ExternalBlocks.matrix_value : ∀ (v : Fin 4 → U32) (r : Fin 4),
+  ↑(matrix v r) < 2147483647 ∧ ↑↑(matrix v r) = R0P.poseidonMat4 (fun j => ↑↑(v j)) r :=
+fun v r =>
+  have cut := ⟨Eq.refl 4, fun i => ⟨rfl, ⟨rfl, rfl⟩⟩⟩;
+  NJE_Mat4Packet.TX1_302 v 4 (matrix v) cut r
+'NJE_ExternalBlocks.matrix_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ExternalBlocks.block_value : ∀ (v : State U32) (g c : Fin 4),
+  ↑↑(blocks v (pack g c)) = R0P.poseidonMat4 (fun j => ↑↑(v (pack g j))) c :=
+fun v g c =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congrArg Nat.cast
+            (congrArg UScalar.val (congr (congrArg matrix (congrArg (block v) (group_pack g c))) (column_pack g c)))))
+        (R0P.poseidonMat4 (fun j => ↑↑(v (pack g j))) c)))
+    (matrix_value (block v g) c).right
+'NJE_ExternalBlocks.block_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ExternalBlocks.canonical : ∀ (v : State U32) (i : Fin 16), ↑(blocks v i) < 2147483647 :=
+fun v i => (matrix_value (block v (group i)) (column i)).left
+'NJE_ExternalBlocks.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ExternalBlocks.chronology : ∀ (v : State U32), run v matrix 4 = blocks v :=
+fun v => complete v matrix
+'NJE_ExternalBlocks.chronology' depends on axioms: [propext, Classical.choice, Quot.sound]

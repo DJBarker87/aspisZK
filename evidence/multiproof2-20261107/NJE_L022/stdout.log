@@ -1,0 +1,59 @@
+NJE_lean/NJE_SumStage.lean:7:7: error: unexpected token 'prefix'; expected identifier
+NJE_lean/NJE_SumStage.lean:13:13: error: unsolved goals
+case succ
+xs : List ℕ
+states : ℕ → ℕ
+start : states 0 = 0
+next : ∀ (i : ℕ) (h : i < xs.length), states (i + 1) = states i + xs[i]
+n : ℕ
+ih : n ≤ xs.length → states n = List.foldl (fun x1 x2 => x1 + x2) 0 (List.take n xs)
+bound : n + 1 ≤ xs.length
+h : n < xs.length
+⊢ List.foldl (fun x1 x2 => x1 + x2) 0 (List.take n xs) + xs[n] =
+    List.foldl (fun x1 x2 => x1 + x2) 0 (List.take (n + 1) xs)
+NJE_lean/NJE_SumStage.lean:29:14: error: unexpected token 'prefix'; expected term
+NJE_lean/NJE_SumStage.lean:28:3: error: Type mismatch: After simplification, term
+  cut.right ⟨i, hi⟩
+ has type
+  states (i + 1) = states i + ↑(input ⟨i + 1, ⋯⟩)
+but is expected to have type
+  states (i + 1) =
+    states i +
+      [↑(input 1), ↑(input 2), ↑(input 3), ↑(input 4), ↑(input 5), ↑(input 6), ↑(input 7), ↑(input 8), ↑(input 9),
+          ↑(input 10), ↑(input 11), ↑(input 12), ↑(input 13), ↑(input 14), ↑(input 15)][i]
+NJE_lean/NJE_SumStage.lean:23:68: error: unsolved goals
+input : NJA_Internal.State
+states : ℕ → ℕ
+cut : Cut input states
+xs : List ℕ := List.ofFn fun i => ↑(input i.succ)
+next : ∀ (i : ℕ) (h : i < xs.length), states (i + 1) = states i + xs[i]
+⊢ states 15 = NJA_Internal.part input
+NJE_lean/NJE_SumStage.lean:29:21: error: unexpected identifier; expected ':'
+NJE_lean/NJE_SumStage.lean:45:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+NJE_lean/NJE_SumStage.lean:45:13: error: unexpected token '#print'; expected ':'
+NJE_lean/NJE_SumStage.lean:46:7: error(lean.unknownIdentifier): Unknown constant `axioms`
+NJE_lean/NJE_SumStage.lean:46:20: error: unexpected token '#print'; expected ':'
+theorem NJE_SumStage.complete : ∀ (input : NJA_Internal.State) (states : ℕ → ℕ),
+  Cut input states → states 15 = NJA_Internal.part input :=
+fun input states cut =>
+  let xs := List.ofFn fun i => ↑(input i.succ);
+  have next := sorry;
+  sorry
+'NJE_SumStage.complete' depends on axioms: [sorryAx]
+theorem NJE_SumStage.native_domains : ∀ (input : NJA_Internal.State) (states : ℕ → ℕ),
+  Cut input states → (∀ (i : Fin 16), ↑(input i) < 2147483647) → ∀ n ≤ 15, states n ≤ n * 2147483647 :=
+fun input states cut canonical n bound =>
+  Nat.recAux (motive := fun n => n ≤ 15 → states n ≤ n * 2147483647)
+    (fun bound => of_eq_true (Eq.trans (congr (congrArg LE.le cut.left) (zero_mul 2147483647)) (Std.le_refl._simp_1 0)))
+    (fun n ih bound =>
+      have hn := Decidable.byContradiction fun a => native_domains._proof_1 n bound a;
+      Eq.mpr (id (congrArg (fun _a => _a ≤ (n + 1) * 2147483647) (cut.right ⟨n, hn⟩)))
+        (have before := ih (Decidable.byContradiction fun a => native_domains._proof_2 n bound a);
+        have term := canonical ⟨n, hn⟩.succ;
+        Eq.mpr
+          (id
+            (congrArg (LE.le (states n + ↑(input ⟨n, hn⟩.succ)))
+              (Eq.trans (Nat.add_mul n 1 2147483647) (congrArg (HAdd.hAdd (n * 2147483647)) (Nat.one_mul 2147483647)))))
+          (Decidable.byContradiction fun a => native_domains._proof_3 input states n hn before term a)))
+    n bound
+'NJE_SumStage.native_domains' depends on axioms: [propext, Quot.sound]

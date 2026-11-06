@@ -1,0 +1,135 @@
+theorem NJE_AllAdapter.loop_total : ∀ {α : Type} (p : α → Bool) (xs : List α),
+  ∃ tail, loop (body p) (xs, ()) = ok (xs.all p, tail, ()) :=
+fun {α} p xs =>
+  List.rec
+    (Exists.intro []
+      (Eq.mpr (id (congrArg (fun _a => _a = ok ([].all p, [], ())) (loop.eq_def (body p) ([], ()))))
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | ok r =>
+                      match r with
+                      | cont x => loop (body p) x
+                      | done x => ok x
+                    | fail e => fail e
+                    | div => div)
+                  (Eq.trans
+                    (bind_tc_ok (none, [])
+                      (uncurry fun item tail =>
+                        match item with
+                        | none => ok (done (true, tail, ()))
+                        | some x => if p x = true then ok (cont (tail, ())) else ok (done (false, tail, ()))))
+                    (uncurry_apply_pair
+                      (fun item tail =>
+                        match item with
+                        | none => ok (done (true, tail, ()))
+                        | some x => if p x = true then ok (cont (tail, ())) else ok (done (false, tail, ())))
+                      none []))))
+              (ok (true, [], ())))
+            (eq_self (ok (true, [], ())))))))
+    (fun x xs ih =>
+      let ⟨tail, h⟩ := ih
+      if holds : p x = true then
+        Exists.intro tail
+          (Eq.mpr (id (congrArg (fun _a => _a = ok ((x :: xs).all p, tail, ())) (loop.eq_def (body p) (x :: xs, ()))))
+            (Eq.mpr
+              (id
+                (congr
+                  (congrArg Eq
+                    (congrArg
+                      (fun x =>
+                        match x with
+                        | ok r =>
+                          match r with
+                          | cont x => loop (body p) x
+                          | done x => ok x
+                        | fail e => fail e
+                        | div => div)
+                      (Eq.trans
+                        (bind_tc_ok (some x, xs)
+                          (uncurry fun item tail =>
+                            match item with
+                            | none => ok (done (true, tail, ()))
+                            | some x => if p x = true then ok (cont (tail, ())) else ok (done (false, tail, ()))))
+                        (Eq.trans
+                          (uncurry_apply_pair
+                            (fun item tail =>
+                              match item with
+                              | none => ok (done (true, tail, ()))
+                              | some x => if p x = true then ok (cont (tail, ())) else ok (done (false, tail, ())))
+                            (some x) xs)
+                          (ite_cond_eq_true (ok (cont (xs, ()))) (ok (done (false, xs, ())))
+                            (Eq.trans (congrFun' (congrArg Eq holds) true) (eq_self true)))))))
+                  (congrArg ok
+                    (congrFun'
+                      (congrArg Prod.mk
+                        (Eq.trans (congrFun' (congrArg and holds) (xs.all p)) (Bool.true_and (xs.all p))))
+                      (tail, ())))))
+              h))
+      else
+        Exists.intro xs
+          (Eq.mpr (id (congrArg (fun _a => _a = ok ((x :: xs).all p, xs, ())) (loop.eq_def (body p) (x :: xs, ()))))
+            (of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Eq
+                    (congrArg
+                      (fun x =>
+                        match x with
+                        | ok r =>
+                          match r with
+                          | cont x => loop (body p) x
+                          | done x => ok x
+                        | fail e => fail e
+                        | div => div)
+                      (Eq.trans
+                        (bind_tc_ok (some x, xs)
+                          (uncurry fun item tail =>
+                            match item with
+                            | none => ok (done (true, tail, ()))
+                            | some x => if p x = true then ok (cont (tail, ())) else ok (done (false, tail, ()))))
+                        (Eq.trans
+                          (uncurry_apply_pair
+                            (fun item tail =>
+                              match item with
+                              | none => ok (done (true, tail, ()))
+                              | some x => if p x = true then ok (cont (tail, ())) else ok (done (false, tail, ())))
+                            (some x) xs)
+                          (ite_cond_eq_false (ok (cont (xs, ()))) (ok (done (false, xs, ())))
+                            (Eq.trans (congrFun' (congrArg Eq (Bool.of_not_eq_true holds)) true)
+                              Bool.false_eq_true))))))
+                  (congrArg ok
+                    (congrFun'
+                      (congrArg Prod.mk
+                        (Eq.trans (congrFun' (congrArg and (Bool.of_not_eq_true holds)) (xs.all p))
+                          (Bool.false_and (xs.all p))))
+                      (xs, ()))))
+                (eq_self (ok (false, xs, ())))))))
+    xs
+'NJE_AllAdapter.loop_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_AllAdapter.default_all : ∀ {α : Type} (p : α → Bool) (xs : List α),
+  ∃ tail,
+    NFU_Retarget.core.iter.traits.iterator.Iterator.all.default (listInst α) (predicate p) xs () =
+      ok (xs.all p, tail) :=
+fun {α} p xs =>
+  let ⟨tail, h⟩ := loop_total p xs
+  Exists.intro tail
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let out ← _a
+                    ok (out.1, out.2.1)) =
+                  ok (xs.all p, tail))
+              h))
+          (Eq.refl do
+            let out ← ok (xs.all p, tail, ())
+            ok (out.1, out.2.1)))))
+'NJE_AllAdapter.default_all' depends on axioms: [propext, Classical.choice, Quot.sound]

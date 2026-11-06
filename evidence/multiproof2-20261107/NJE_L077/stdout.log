@@ -1,0 +1,383 @@
+NJE_lean/NJE_CountLevels.lean:41:21: error: Type mismatch
+  domains.left
+has type
+  List.Pairwise (fun x1 x2 => x1 < x2)
+    (countLevel (cells (NJA_CountDrop.keys a) 0 ↑n).length (cells (NJA_CountDrop.keys a) 0 ↑n)).1
+but is expected to have type
+  List.Pairwise (fun x1 x2 => x1 < x2)
+    ((countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).1,
+        ↑c + (countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).2).1
+NJE_lean/NJE_CountLevels.lean:41:54: error: Type mismatch
+  domains.right.right
+has type
+  ∀ j ∈ (countLevel (cells (NJA_CountDrop.keys a) 0 ↑n).length (cells (NJA_CountDrop.keys a) 0 ↑n)).1, j < 262144
+but is expected to have type
+  ∀
+    x ∈
+      ((countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).1,
+          ↑c + (countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).2).1,
+    x < 262144
+NJE_lean/NJE_CountLevels.lean:46:5: error: Type mismatch: After simplification, term
+  outcome
+ has type
+  @Eq (Result Usize)
+    (loop (fun x => multiproof.node_count_loop0.body multiproof.Arity.Two x.1 x.2.1 x.2.2.1 x.2.2.2)
+      ({ start := NJE_CountRange.successor start, «end» := 18#u32 }, b, v, d))
+    (ok out)
+but is expected to have type
+  @Eq (Result Usize)
+    (match
+      let (o, iter1) := (some start, { start := NJE_CountRange.successor start, «end» := 18#u32 })
+      match o with
+      | none => ok (done c)
+      | some val =>
+        let (level1, count1, w) := (b, d, v)
+        ok (cont (iter1, level1, w, count1)) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x => do
+            let (o, iter1) ← core.iter.range.IteratorRange.next core.iter.range.StepU32 x.1
+            match o with
+              | none => ok (done x.2.2.2)
+              | some val => do
+                let (level1, count1, w) ←
+                  multiproof.node_count_loop0_loop0 multiproof.Arity.Two x.2.1 x.2.2.1 x.2.2.2 0#usize 0#usize
+                ok (cont (iter1, level1, w, count1)))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div)
+    (ok out)
+NJE_lean/NJE_CountLevels.lean:50:5: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  m ≥ 0
+  l ≥ 0
+  l - m ≥ 1
+  0 ≤ k ≤ 16
+  j ≥ 0
+  i ≥ 0
+  i - j ≥ 0
+  0 ≤ h ≤ 16
+  g ≥ 0
+  g - i + j ≤ 0
+  g - k ≤ 0
+  f ≥ 0
+  f - k ≤ 0
+  0 ≤ e ≤ 17
+  16*e - g + i - j ≤ 560
+where
+ e := ↑height
+ f := ↑↑v
+ g := ↑(countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).2
+ h := ↑(countLevel (cells (NJA_CountDrop.keys a) 0 ↑n).length (cells (NJA_CountDrop.keys a) 0 ↑n)).1.length
+ i := ↑↑out
+ j := ↑(nodeCount height (cells (NJA_CountDrop.keys b) 0 ↑v))
+ k := ↑(cells (NJA_CountDrop.keys a) 0 ↑n).length
+ l := ↑(nodeCount height (countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).1)
+ m := ↑(nodeCount height
+    ((countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).1,
+        ↑c + (countLevel (↑n) (cells (NJA_CountDrop.keys a) 0 ↑n)).2).1)
+theorem NJE_CountLevels.total : ∀ (height : ℕ) (start : U32) (a : Std.Array U32 16#usize) (n c : Usize),
+  ↑start + height = 18 →
+    ↑n ≤ 16 →
+      List.Pairwise (fun x1 x2 => x1 < x2) (cells (NJA_CountDrop.keys a) 0 ↑n) →
+        (∀ x ∈ cells (NJA_CountDrop.keys a) 0 ↑n, x < 262144) →
+          ↑c + 16 * height ≤ 576 →
+            ∃ d,
+              multiproof.node_count_loop0 { start := start, «end» := 18#u32 } multiproof.Arity.Two a n c = ok d ∧
+                ↑d = ↑c + nodeCount height (cells (NJA_CountDrop.keys a) 0 ↑n) :=
+fun height start a n c clock hn sorted range budget =>
+  Nat.recAux (motive := fun height =>
+    ∀ (start : U32) (a : Std.Array U32 16#usize) (n c : Usize),
+      ↑start + height = 18 →
+        ↑n ≤ 16 →
+          List.Pairwise (fun x1 x2 => x1 < x2) (cells (NJA_CountDrop.keys a) 0 ↑n) →
+            (∀ x ∈ cells (NJA_CountDrop.keys a) 0 ↑n, x < 262144) →
+              ↑c + 16 * height ≤ 576 →
+                ∃ d,
+                  multiproof.node_count_loop0 { start := start, «end» := 18#u32 } multiproof.Arity.Two a n c = ok d ∧
+                    ↑d = ↑c + nodeCount height (cells (NJA_CountDrop.keys a) 0 ↑n))
+    (fun start a n c clock hn sorted range budget =>
+      have start_eq :=
+        UScalar.eq_of_val_eq
+          (Eq.mpr
+            (id
+              (congrArg (Eq ↑start)
+                (UScalar.ofNatCore_val_eq
+                  (UScalar.bound_suffices UScalarTy.U32 18 (of_decide_eq_true (id (Eq.refl true)))))))
+            (Eq.mp (congrFun' (congrArg Eq (add_zero ↑start)) 18) clock));
+      Eq.ndrec (motive := fun start =>
+        ↑start + 0 = 18 →
+          ∃ d,
+            multiproof.node_count_loop0 { start := start, «end» := 18#u32 } multiproof.Arity.Two a n c = ok d ∧
+              ↑d = ↑c + nodeCount 0 (cells (NJA_CountDrop.keys a) 0 ↑n))
+        (fun clock =>
+          Exists.intro c
+            ⟨Eq.mpr
+                (id
+                  (congrArg (fun _a => _a = ok c)
+                    (multiproof.node_count_loop0.eq_1 { start := 18#u32, «end» := 18#u32 } multiproof.Arity.Two a n c)))
+                (Eq.mpr
+                  (id
+                    (congrArg (fun _a => _a = ok c)
+                      (loop.eq_def
+                        (fun x =>
+                          match x with
+                          | (iter1, level1, n1, count1) =>
+                            multiproof.node_count_loop0.body multiproof.Arity.Two iter1 level1 n1 count1)
+                        ({ start := 18#u32, «end» := 18#u32 }, a, n, c))))
+                  (of_eq_true
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (congrArg
+                            (fun x =>
+                              match x with
+                              | ok r =>
+                                match r with
+                                | cont x =>
+                                  loop
+                                    (fun x =>
+                                      match x with
+                                      | (iter1, level1, n1, count1) =>
+                                        multiproof.node_count_loop0.body multiproof.Arity.Two iter1 level1 n1 count1)
+                                    x
+                                | done x => ok x
+                              | fail e => fail e
+                              | div => div)
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun' (congrArg Bind.bind NJE_CountRange.exit)
+                                  (uncurry fun o iter1 =>
+                                    match o with
+                                    | none => ok (done c)
+                                    | some val => do
+                                      let (level1, count1, w) ←
+                                        multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c 0#usize 0#usize
+                                      ok (cont (iter1, level1, w, count1))))
+                                (bind_tc_ok (none, { start := 18#u32, «end» := 18#u32 })
+                                  (uncurry fun o iter1 =>
+                                    match o with
+                                    | none => ok (done c)
+                                    | some val => do
+                                      let (level1, count1, w) ←
+                                        multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c 0#usize 0#usize
+                                      ok (cont (iter1, level1, w, count1)))))
+                              (uncurry_apply_pair
+                                (fun o iter1 =>
+                                  match o with
+                                  | none => ok (done c)
+                                  | some val => do
+                                    let (level1, count1, w) ←
+                                      multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c 0#usize 0#usize
+                                    ok (cont (iter1, level1, w, count1)))
+                                none { start := 18#u32, «end» := 18#u32 }))))
+                        (ok c))
+                      (eq_self (ok c))))),
+              of_eq_true (Eq.trans (congrArg (Eq ↑c) (add_zero ↑c)) (eq_self ↑c))⟩)
+        (Eq.symm start_eq) clock)
+    (fun height ih start a n c clock hn sorted range budget =>
+      have active := Decidable.byContradiction fun a => total._proof_2 height start n c clock a;
+      have unread :=
+        of_eq_true
+          (Eq.trans
+            (congrFun' (congrArg Eq (congrArg (cells (NJA_CountDrop.keys a) 0) (tsub_zero ↑n)))
+              (cells (NJA_CountDrop.keys a) 0 ↑n))
+            (eq_self (cells (NJA_CountDrop.keys a) 0 ↑n)));
+      let ⟨b, h✝⟩ :=
+        NJE_CountRows.total (↑n) a n 0#usize 0#usize c hn
+          (of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg LE.le
+                  (UScalar.ofNatCore_val_eq
+                    (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                (UScalar.ofNatCore_val_eq
+                  (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+              (Std.le_refl._simp_1 0)))
+          (of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg LE.le
+                  (UScalar.ofNatCore_val_eq
+                    (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                ↑n)
+              zero_le._simp_1))
+          (Eq.mpr
+            (id
+              (congrArg (List.Pairwise fun x1 x2 => x1 < x2)
+                (congr
+                  (congrArg (cells (NJA_CountDrop.keys a))
+                    (UScalar.ofNatCore_val_eq
+                      (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                  (Eq.trans
+                    (congrArg (HSub.hSub ↑n)
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                    (tsub_zero ↑n)))))
+            sorted)
+          (Eq.mpr
+            (id
+              (forall_congr fun x =>
+                implies_congr
+                  (congrFun'
+                    (congrArg Membership.mem
+                      (congr
+                        (congrArg (cells (NJA_CountDrop.keys a))
+                          (UScalar.ofNatCore_val_eq
+                            (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                        (Eq.trans
+                          (congrArg (HSub.hSub ↑n)
+                            (UScalar.ofNatCore_val_eq
+                              (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                          (tsub_zero ↑n))))
+                    x)
+                  (Eq.refl (x < 262144))))
+            range)
+          (Eq.mpr
+            (id
+              (congrFun'
+                (congrArg LE.le
+                  (congrArg (HAdd.hAdd ↑c)
+                    (Eq.trans
+                      (congrArg (HSub.hSub ↑n)
+                        (UScalar.ofNatCore_val_eq
+                          (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                      (tsub_zero ↑n))))
+                576))
+            (Decidable.byContradiction fun a => total._proof_3 height start n c clock hn budget a))
+          (of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg LE.le
+                  (Eq.trans
+                    (congrArg (HSub.hSub ↑n)
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                    (tsub_zero ↑n)))
+                ↑n)
+              (Std.le_refl._simp_1 ↑n)))
+      let ⟨d, h✝¹⟩ := h✝
+      let ⟨v, h✝²⟩ := h✝¹
+      let ⟨exec, right✝⟩ := h✝²
+      let ⟨vb, right✝¹⟩ := right✝
+      let ⟨db, right✝²⟩ := right✝¹
+      let ⟨viewEq, count⟩ := right✝²
+      have projection :=
+        Eq.mpr
+          (id
+            (congrArg (Eq (rows (↑n) (NJA_CountDrop.keys a) (↑n) 0 0 ↑c))
+              (congr
+                (congrArg Prod.mk
+                  (congrArg Prod.fst
+                    (congrArg (countLevel ↑n)
+                      (congrFun' (congrArg List.map (funext fun j => congrArg (NJA_CountDrop.keys a) (zero_add j)))
+                        (List.range ↑n)))))
+                (congrArg (HAdd.hAdd ↑c)
+                  (congrArg Prod.snd
+                    (congrArg (countLevel ↑n)
+                      (congrFun' (congrArg List.map (funext fun j => congrArg (NJA_CountDrop.keys a) (zero_add j)))
+                        (List.range ↑n))))))))
+          (Eq.mp
+            (congrArg (Eq (rows (↑n) (NJA_CountDrop.keys a) (↑n) 0 0 ↑c))
+              (congr
+                (congrArg Prod.mk
+                  (congr
+                    (congrArg HAppend.hAppend
+                      (congrFun' (congrArg List.map (funext fun j => congrArg (NJA_CountDrop.keys a) (zero_add j))) []))
+                    (congrArg Prod.fst
+                      (congrArg (countLevel ↑n)
+                        (congr (congrArg List.map (funext fun j => congrArg (NJA_CountDrop.keys a) (zero_add j)))
+                          (congrArg List.range (tsub_zero ↑n)))))))
+                (congrArg (HAdd.hAdd ↑c)
+                  (congrArg Prod.snd
+                    (congrArg (countLevel ↑n)
+                      (congr (congrArg List.map (funext fun j => congrArg (NJA_CountDrop.keys a) (zero_add j)))
+                        (congrArg List.range (tsub_zero ↑n))))))))
+            (rows_projection (↑n) (NJA_CountDrop.keys a) (↑n) 0 0 (↑c)
+              (Decidable.byContradiction fun a_1 => total._proof_4 height start a n c d v a_1)
+              (Decidable.byContradiction fun a_1 => total._proof_5 height start a n c hn d v a_1)));
+      have domains :=
+        MultiproofConeCountPhysicalLevels.next_domain (cells (NJA_CountDrop.keys a) 0 ↑n) sorted
+          (Eq.mpr
+            (id
+              (congrFun'
+                (congrArg LE.le
+                  (Eq.trans
+                    (Eq.trans
+                      (congrArg List.length
+                        (congrFun' (congrArg List.map (funext fun j => congrArg (NJA_CountDrop.keys a) (zero_add j)))
+                          (List.range ↑n)))
+                      (List.length_map fun j => NJA_CountDrop.keys a j))
+                    List.length_range))
+                16))
+            hn)
+          range;
+      let ⟨out, h✝³⟩ :=
+        ih (NJE_CountRange.successor start) b v d
+          (Eq.mpr (id (congrArg (fun _a => _a + height = 18) (NJE_CountRange.value start active)))
+            (Decidable.byContradiction fun a_1 => total._proof_6 height start a n c clock d v a_1))
+          (Decidable.byContradiction fun a_1 => total._proof_7 height start a n c hn d v vb a_1)
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => List.Pairwise (fun x1 x2 => x1 < x2) _a)
+                (Eq.mp (congrArg (fun _a => cells (NJA_CountDrop.keys b) 0 ↑v = _a.1) projection)
+                  (Eq.mp
+                    (congrArg (Eq (cells (NJA_CountDrop.keys b) 0 ↑v))
+                      (congrArg Prod.fst
+                        (congrFun'
+                          (congr
+                            (congrArg (rows (↑n) (NJA_CountDrop.keys a) ↑n)
+                              (UScalar.ofNatCore_val_eq
+                                (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                            (UScalar.ofNatCore_val_eq
+                              (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                          ↑c)))
+                    viewEq))))
+            sorry)
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => ∀ x ∈ _a, x < 262144)
+                (Eq.mp (congrArg (fun _a => cells (NJA_CountDrop.keys b) 0 ↑v = _a.1) projection)
+                  (Eq.mp
+                    (congrArg (Eq (cells (NJA_CountDrop.keys b) 0 ↑v))
+                      (congrArg Prod.fst
+                        (congrFun'
+                          (congr
+                            (congrArg (rows (↑n) (NJA_CountDrop.keys a) ↑n)
+                              (UScalar.ofNatCore_val_eq
+                                (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                            (UScalar.ofNatCore_val_eq
+                              (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                          ↑c)))
+                    viewEq))))
+            sorry)
+          (Decidable.byContradiction fun a_1 =>
+            total._proof_8 height start a n c hn budget d v
+              (Eq.mp
+                (congrArg (LE.le ↑d)
+                  (congrArg (HAdd.hAdd ↑c)
+                    (congrArg (HSub.hSub ↑n)
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))))
+                db)
+              (Eq.mp (congrArg (fun _a => ↑d = _a.2) projection)
+                (Eq.mp
+                  (congrArg (Eq ↑d)
+                    (congrArg Prod.snd
+                      (congrFun'
+                        (congr
+                          (congrArg (rows (↑n) (NJA_CountDrop.keys a) ↑n)
+                            (UScalar.ofNatCore_val_eq
+                              (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                          (UScalar.ofNatCore_val_eq
+                            (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                        ↑c)))
+                  count))
+              a_1)
+      let ⟨outcome, value⟩ := h✝³
+      Exists.intro out ⟨sorry, sorry⟩)
+    height start a n c clock hn sorted range budget
+'NJE_CountLevels.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

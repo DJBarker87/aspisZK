@@ -1,0 +1,60 @@
+{"attempt": "NJE_L071", "exit_status": 1, "wall_seconds": 3.752849546028301, "peak_rss_kib": "4291076", "swaps": "0", "print_axioms": ["'NJE_CountRange.value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_CountRange.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_CountRange.exit' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_CountRange.lean:17:13: error: Application type mismatch: The argument
+  successor s
+has type
+  U32
+but is expected to have type
+  Result (UScalar UScalarTy.U32)
+in the application
+  s + 1#u32 = successor s
+NJE_lean/NJE_CountRange.lean:22:1: error: Tactic `apply` failed: could not unify the conclusion of `@UScalar.eq_of_val_eq`
+  ?i = ?j
+with the goal
+  (if core.cmp.impls.PartialOrdU32.lt s 18#u32 = true then do
+      let n ← if h : ↑s < U32.max then ok (some (UScalar.ofNatCore (↑s + 1) ⋯)) else ok none
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some s, { start := n, «end» := 18#u32 })
+    else ok (none, { start := s, «end» := 18#u32 })) =
+    o
+...
+e : ∀ (s : U32),
+  ↑s < 18 →
+    core.iter.range.IteratorRange.next core.iter.range.StepU32 { start := s, «end» := 18#u32 } =
+      ok (some s, { start := successor s, «end» := 18#u32 }) :=
+fun s bound =>
+  have word := sorry;
+  sorry word
+'NJE_CountRange.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CountRange.exit : core.iter.range.IteratorRange.next core.iter.range.StepU32
+    { start := 18#u32, «end» := 18#u32 } =
+  ok (none, { start := 18#u32, «end» := 18#u32 }) :=
+Eq.mpr
+  (id
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (Bind.bind (ok (core.cmp.impls.PartialOrdU32.lt 18#u32 18#u32)))
+              (funext fun cmp =>
+                ite_congr (Eq.refl (cmp = true))
+                  (fun a =>
+                    bind_tc_ok 18#u32 fun y => do
+                      let n ← core.iter.range.UScalarStep.forward_checked y 1#usize
+                      match n with
+                        | none => fail Error.panic
+                        | some n => ok (some y, { start := n, «end» := 18#u32 }))
+                  fun a => Eq.refl (ok (none, { start := 18#u32, «end» := 18#u32 }))))
+            (bind_tc_ok (core.cmp.impls.PartialOrdU32.lt 18#u32 18#u32) fun y =>
+              if y = true then do
+                let n ← core.iter.range.UScalarStep.forward_checked 18#u32 1#usize
+                match n with
+                  | none => fail Error.panic
+                  | some n => ok (some 18#u32, { start := n, «end» := 18#u32 })
+              else ok (none, { start := 18#u32, «end» := 18#u32 }))))
+        (ok (none, { start := 18#u32, «end» := 18#u32 })))
+      ite_eq_right_iff._simp_1))
+  sorry
+'NJE_CountRange.exit' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4dc4b95f7e014e22aec6955e82029fe0.scope; invocation ID: 6f396aa84c55403dbeb525e919627bcb

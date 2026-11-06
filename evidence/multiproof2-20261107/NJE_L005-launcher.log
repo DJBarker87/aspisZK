@@ -1,0 +1,40 @@
+{"attempt": "NJE_L005", "exit_status": 0, "wall_seconds": 2.8867309959605336, "peak_rss_kib": "3843116", "swaps": "0", "print_axioms": ["'NJE_Pow5Packet.laws' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_Pow5Packet.native_domains' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_Pow5Packet.TX1_307' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_Pow5Packet.lean:27:37: warning: This simp argument is unused:
+  Fin.val_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵v̵e̵n̵t̵s̵,̵F̵i̵n̵.̵v̵a̵l̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵v̵a̵l̵_̵o̵n̵e̵,̵F̵i̵n̵.̵i̵s̵V̵a̵l̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵[̲e̲v̲e̲n̲t̲s̲,̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲o̲n̲e̲,̲ ̲F̲i̲n̲.̲i̲s̲V̲a̲l̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲
+       show ¬̵(̵2̵:̵N̵a̵t̵)̵=̵0̵¬̲(̲2̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ by d̵e̵c̵i̵d̵e̵,̵s̵h̵o̵w̵ ̵¬̵(̵2̵:̵N̵a̵t̵)̵=̵1̵ ̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵,̵s̵h̵o̵w̵ ̵¬̵(̵1̵:̵N̵a̵t̵)̵=̵0̵ ̵b̵y̵d̲e̲c̲i̲d̲e̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲2̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲1̲ ̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲,̲ ̲s̲h̲o̲w̲ ̲¬̲(̲1̲ ̲:̲ ̲N̲a̲t̲)̲ ̲=̲ ̲0̲ ̲b̲y̲ decide]
+
+Note: This linter
+...
+                                  (fun «as» h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+                                                (fun b {«as»} a_3 h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+                                                (Eq.refl []) (HEq.refl a))
+                                            (eq_of_heq tail_eq) a)
+                                        (eq_of_heq head_eq))
+                                  (Eq.refl ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl 3⟩ [])) (HEq.refl a_2))
+                              (eq_of_heq tail_eq) a_1)
+                          (eq_of_heq head_eq))
+                    (Eq.refl
+                      ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_refl 3)⟩
+                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl 3⟩ [])))
+                    (HEq.refl a))
+                (eq_of_heq tail_eq) a)
+            (eq_of_heq head_eq))
+      (Eq.refl (List.finRange 3)) (HEq.refl (Fintype.complete i))⟩
+'NJE_Pow5Packet.native_domains' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_Pow5Packet.TX1_307 : ∀ (x : U32) (len : ℕ) (out : U32),
+  Cut x (events x) len out → NJA_FieldLaws.pow5_ref x = ok out ∧ ↑out < 2147483647 ∧ ↑↑out = R0P.poseidonPow5 ↑↑x :=
+fun x len out cut =>
+  have h := compose x (events x) len out cut (laws x);
+  let ⟨z, h✝⟩ := NJA_Pow5Model.reference x
+  let ⟨hz, right✝⟩ := h✝
+  let ⟨cz, vz⟩ := right✝
+  have eq := ok.inj (Eq.trans (Eq.symm hz) h);
+  ⟨h,
+    ⟨Eq.mp (congrFun' (congrArg LT.lt (congrArg UScalar.val eq)) 2147483647) cz,
+      Eq.mp (congrFun' (congrArg Eq (congrArg Nat.cast (congrArg UScalar.val eq))) (R0P.poseidonPow5 ↑↑x)) vz⟩⟩
+'NJE_Pow5Packet.TX1_307' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra9e928a93e404d7d9f66d60d81fc5c35.scope; invocation ID: 7ce0599c74b944e0b4949105f0022114

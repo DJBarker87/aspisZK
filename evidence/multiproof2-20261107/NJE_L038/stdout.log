@@ -1,0 +1,74 @@
+theorem NJE_CountArithmetic.sub_value : ∀ (a b : Usize), ↑b ≤ ↑a → ↑(a.wrapping_sub b) = ↑a - ↑b :=
+fun a b order =>
+  Eq.mpr (id (congrArg (fun _a => _a = ↑a - ↑b) (Usize.wrapping_sub_val_eq a b)))
+    (have ha := UScalar.hSize a;
+    have hb := UScalar.hSize b;
+    have eq := Decidable.byContradiction fun a_1 => sub_value._proof_1 a b order hb a_1;
+    Eq.mpr (id (congrArg (fun _a => _a % UScalar.size UScalarTy.Usize = ↑a - ↑b) eq))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = ↑a - ↑b)
+            (Nat.add_mod (↑a - ↑b) (UScalar.size UScalarTy.Usize) (UScalar.size UScalarTy.Usize))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a => ((↑a - ↑b) % UScalar.size UScalarTy.Usize + _a) % UScalar.size UScalarTy.Usize = ↑a - ↑b)
+              (Nat.mod_self (UScalar.size UScalarTy.Usize))))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a % UScalar.size UScalarTy.Usize = ↑a - ↑b)
+                (Nat.add_zero ((↑a - ↑b) % UScalar.size UScalarTy.Usize))))
+            (Eq.mpr (id (congrArg (fun _a => _a = ↑a - ↑b) (Nat.mod_mod (↑a - ↑b) (UScalar.size UScalarTy.Usize))))
+              (Nat.mod_eq_of_lt (Decidable.byContradiction fun a_1 => sub_value._proof_2 a b order ha eq a_1)))))))
+'NJE_CountArithmetic.sub_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountArithmetic.add_value : ∀ (a b : Usize),
+  ↑a + ↑b < UScalar.size UScalarTy.Usize → ↑(a.wrapping_add b) = ↑a + ↑b :=
+fun a b small =>
+  Eq.mpr (id (congrArg (fun _a => _a = ↑a + ↑b) (Usize.wrapping_add_val_eq a b))) (Nat.mod_eq_of_lt small)
+'NJE_CountArithmetic.add_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountArithmetic.deficit : ∀ (i q : Usize),
+  ↑i ≤ ↑q → ↑q ≤ ↑i + 2 → ↑(Usize.wrapping_sub 2#usize (q.wrapping_sub i)) = 2 - (↑q - ↑i) :=
+fun i q lower upper =>
+  have difference := sub_value q i lower;
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = 2 - (↑q - ↑i))
+        (sub_value 2#usize (q.wrapping_sub i) (deficit._proof_1 i q lower upper difference))))
+    (Eq.mpr (id (congrArg (fun _a => ↑2#usize - _a = 2 - (↑q - ↑i)) difference)) (Eq.refl (↑2#usize - (↑q - ↑i))))
+'NJE_CountArithmetic.deficit' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountArithmetic.count_value : ∀ (c i q : Usize),
+  ↑c ≤ 576 →
+    ↑i ≤ ↑q → ↑q ≤ ↑i + 2 → ↑(c.wrapping_add (Usize.wrapping_sub 2#usize (q.wrapping_sub i))) = ↑c + (2 - (↑q - ↑i)) :=
+fun c i q count_bound lower upper =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = ↑c + (2 - (↑q - ↑i)))
+        (add_value c (Usize.wrapping_sub 2#usize (q.wrapping_sub i))
+          (Eq.mpr (id (congrArg (fun _a => ↑c + _a < UScalar.size UScalarTy.Usize) (deficit i q lower upper)))
+            (have size := UScalar.hSize 1024#usize;
+            id (fun size => Decidable.byContradiction fun a => count_value._proof_1 c i q count_bound size a) size)))))
+    (Eq.mpr (id (congrArg (fun _a => ↑c + _a = ↑c + (2 - (↑q - ↑i))) (deficit i q lower upper)))
+      (Eq.refl (↑c + (2 - (↑q - ↑i)))))
+'NJE_CountArithmetic.count_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountArithmetic.update_result : ∀ {α : Type} (a : Std.Array α 16#usize) (w : Usize) (x : α),
+  ↑w < 16 → a.update w x = ok (a.set w x) :=
+fun {α} a w x bound =>
+  id
+    (have hw :=
+      have h := a.property;
+      Decidable.byContradiction fun a_1 => update_result._proof_1 a w bound h a_1;
+    id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (match _a with
+                | none => fail Error.arrayOutOfBounds
+                | some val => ok ⟨(↑a).set (↑w) x, Array.set._proof_1 a w x⟩) =
+                ok (a.set w x))
+            (List.getElem?_eq_getElem hw)))
+        (Eq.refl
+          (match some (↑a)[↑w] with
+          | none => fail Error.arrayOutOfBounds
+          | some val => ok ⟨(↑a).set (↑w) x, Array.set._proof_1 a w x⟩))))
+'NJE_CountArithmetic.update_result' depends on axioms: [propext, Classical.choice, Quot.sound]

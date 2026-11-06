@@ -1,0 +1,83 @@
+{"attempt": "NJE_L001", "exit_status": 0, "wall_seconds": 5.807005526963621, "peak_rss_kib": "4311592", "swaps": "0", "print_axioms": ["'NJE_ArityPackets.TX1_118' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_ArityPackets.TX2_084' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_ArityPackets.TX1_119' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_ArityPackets.TX2_085' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_ArityPackets.TX1_120' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_ArityPackets.TX2_086' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: nhr: no previous manifest, creating one from scratch
+info: toolchain not updated; no toolchain information found
+theorem NJE_ArityPackets.TX1_118 : ∀ {α : Type} (a : multiproof.Arity) (k : U32 → Result α),
+  a.bits = (NJA_CohortArity.arity a).bits ∧
+    (do
+        let b ← a.bits
+        k b) =
+      k
+        (match a with
+        | multiproof.Arity.Two => 1#u32
+        | multiproof.Arity.Eight => 3#u32) :=
+fun {α} a k =>
+  ⟨NJA_CohortArity.bits a,
+    multiproof.Arity.casesOn (motive := fun t =>
+      a = t →
+        (do
+            let b ← a.bits
+            k b) =
+          k
+            (match a with
+            | multiproof.Arity.Two => 1#u32
+            | multiproof.Arity.Eight 
+...
+ty.casesOn (motive := fun t =>
+      a = t →
+        (do
+            let b ← a.width
+            k b) =
+          k
+            (match a with
+            | multiproof.Arity.Two => 2#usize
+            | multiproof.Arity.Eight => 8#usize))
+      a
+      (fun h =>
+        Eq.symm h ▸
+          Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (do
+                      let b ← _a
+                      k b) =
+                    k
+                      (match multiproof.Arity.Two with
+                      | multiproof.Arity.Two => 2#usize
+                      | multiproof.Arity.Eight => 8#usize))
+                NJA_Arity.two_width))
+            (Eq.refl do
+              let b ← ok 2#usize
+              k b))
+      (fun h =>
+        Eq.symm h ▸
+          Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (do
+                      let b ← _a
+                      k b) =
+                    k
+                      (match multiproof.Arity.Eight with
+                      | multiproof.Arity.Two => 2#usize
+                      | multiproof.Arity.Eight => 8#usize))
+                NJA_Arity.eight_width))
+            (Eq.refl do
+              let b ← ok 8#usize
+              k b))
+      (Eq.refl a)⟩
+'NJE_ArityPackets.TX1_120' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ArityPackets.TX2_086 : ∀ {α : Type} (a : multiproof.Arity) (k : Usize → Result α),
+  a.width = (NJA_CohortArity.arity a).width ∧
+    (do
+        let b ← a.width
+        k b) =
+      k
+        (match a with
+        | multiproof.Arity.Two => 2#usize
+        | multiproof.Arity.Eight => 8#usize) :=
+fun {α} a k => TX1_120 a k
+'NJE_ArityPackets.TX2_086' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb997145333794536b5ca52558e30b725.scope; invocation ID: 5d14ecabdcb64b7495e8c546d273ebcd

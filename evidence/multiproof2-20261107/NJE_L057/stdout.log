@@ -1,0 +1,129 @@
+theorem NJE_Pow5Realization.cut : ∀ (x : U32),
+  NJA_Pow5Cut.Cut x (NJE_Pow5Packet.events x) 3 (NJE_Pow5Packet.result x) :=
+fun x =>
+  ⟨rfl,
+    ⟨fun i =>
+      List.Mem.casesOn (motive := fun a x_1 =>
+        List.finRange 3 = a → Fintype.complete i ≍ x_1 → (NJE_Pow5Packet.events x i).kind = 0) (Fintype.complete i)
+        (fun «as» h =>
+          List.cons.noConfusion h fun head_eq =>
+            Eq.ndrec (motive := fun i =>
+              ∀ (this : i ∈ Fintype.elems),
+                (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_refl 3)⟩
+                      ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl 3⟩ []) ≍
+                    «as» →
+                  this ≍ List.Mem.head «as» → (NJE_Pow5Packet.events x i).kind = 0)
+              (fun this tail_eq =>
+                Eq.ndrec (motive := fun «as» =>
+                  this ≍ List.Mem.head «as» →
+                    (NJE_Pow5Packet.events x ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl 3))⟩)).kind = 0)
+                  (fun h =>
+                    Eq.refl
+                      (NJE_Pow5Packet.events x ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl 3))⟩)).kind)
+                  (eq_of_heq tail_eq))
+              (eq_of_heq head_eq) (Fintype.complete i))
+        (fun b {«as»} a h =>
+          List.cons.noConfusion h fun head_eq =>
+            Eq.ndrec (motive := fun b =>
+              (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_refl 3)⟩
+                    ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl 3⟩ []) ≍
+                  «as» →
+                Fintype.complete i ≍ List.Mem.tail b a → (NJE_Pow5Packet.events x i).kind = 0)
+              (fun tail_eq =>
+                Eq.ndrec (motive := fun {«as»} =>
+                  ∀ (a : List.Mem i «as»),
+                    Fintype.complete i ≍
+                        List.Mem.tail ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl 3))⟩) a →
+                      (NJE_Pow5Packet.events x i).kind = 0)
+                  (fun a h =>
+                    List.Mem.casesOn (motive := fun a_1 x_1 =>
+                      (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_refl 3)⟩
+                            ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl 3⟩ []) =
+                          a_1 →
+                        a ≍ x_1 → (NJE_Pow5Packet.events x i).kind = 0)
+                      a
+                      (fun «as» h =>
+                        List.cons.noConfusion h fun head_eq =>
+                          Eq.ndrec (motive := fun i =>
+                            ∀
+                              (a :
+                                List.Mem i
+                                  ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_refl 3)⟩
+                                    ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl 3⟩ []))),
+                              (fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl 3⟩ [] ≍ «as» →
+                                a ≍ List.Mem.head «as» → (NJE_Pow5Packet.events x i).kind = 0)
+                            (fun a tail_eq =>
+                              Eq.ndrec (motive := fun «as» =>
+                                a ≍ List.Mem.head «as» →
+                                  (NJE_Pow5Packet.events x ((fun i => i) ⟨1, Nat.le_of_lt (Nat.le_refl 3)⟩)).kind = 0)
+                                (fun h =>
+                                  Eq.refl
+                                    (NJE_Pow5Packet.events x ((fun i => i) ⟨1, Nat.le_of_lt (Nat.le_refl 3)⟩)).kind)
+                                (eq_of_heq tail_eq))
+                            (eq_of_heq head_eq) a)
+                      (fun b {«as»} a_1 h =>
+                        List.cons.noConfusion h fun head_eq =>
+                          Eq.ndrec (motive := fun b =>
+                            (fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl 3⟩ [] ≍ «as» →
+                              a ≍ List.Mem.tail b a_1 → (NJE_Pow5Packet.events x i).kind = 0)
+                            (fun tail_eq =>
+                              Eq.ndrec (motive := fun {«as»} =>
+                                ∀ (a_2 : List.Mem i «as»),
+                                  a ≍ List.Mem.tail ((fun i => i) ⟨1, Nat.le_of_lt (Nat.le_refl 3)⟩) a_2 →
+                                    (NJE_Pow5Packet.events x i).kind = 0)
+                                (fun a_2 h =>
+                                  List.Mem.casesOn (motive := fun a x_1 =>
+                                    (fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl 3⟩ [] = a →
+                                      a_2 ≍ x_1 → (NJE_Pow5Packet.events x i).kind = 0)
+                                    a_2
+                                    (fun «as» h =>
+                                      List.cons.noConfusion h fun head_eq =>
+                                        Eq.ndrec (motive := fun i =>
+                                          ∀
+                                            (a :
+                                              List.Mem i ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl 3⟩ [])),
+                                            [] ≍ «as» → a ≍ List.Mem.head «as» → (NJE_Pow5Packet.events x i).kind = 0)
+                                          (fun a tail_eq =>
+                                            Eq.ndrec (motive := fun «as» =>
+                                              a ≍ List.Mem.head «as» →
+                                                (NJE_Pow5Packet.events x ((fun i => i) ⟨2, Nat.le_refl 3⟩)).kind = 0)
+                                              (fun h =>
+                                                Eq.refl
+                                                  (NJE_Pow5Packet.events x ((fun i => i) ⟨2, Nat.le_refl 3⟩)).kind)
+                                              (eq_of_heq tail_eq))
+                                          (eq_of_heq head_eq) a_2)
+                                    (fun b {«as»} a h =>
+                                      List.cons.noConfusion h fun head_eq =>
+                                        Eq.ndrec (motive := fun b =>
+                                          [] ≍ «as» → a_2 ≍ List.Mem.tail b a → (NJE_Pow5Packet.events x i).kind = 0)
+                                          (fun tail_eq =>
+                                            Eq.ndrec (motive := fun {«as»} =>
+                                              ∀ (a : List.Mem i «as»),
+                                                a_2 ≍ List.Mem.tail ((fun i => i) ⟨2, Nat.le_refl 3⟩) a →
+                                                  (NJE_Pow5Packet.events x i).kind = 0)
+                                              (fun a h =>
+                                                List.Mem.casesOn (motive := fun a_3 x_1 =>
+                                                  [] = a_3 → a ≍ x_1 → (NJE_Pow5Packet.events x i).kind = 0) a
+                                                  (fun «as» h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+                                                  (fun b {«as»} a_3 h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+                                                  (Eq.refl []) (HEq.refl a))
+                                              (eq_of_heq tail_eq) a)
+                                          (eq_of_heq head_eq))
+                                    (Eq.refl ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl 3⟩ []))
+                                    (HEq.refl a_2))
+                                (eq_of_heq tail_eq) a_1)
+                            (eq_of_heq head_eq))
+                      (Eq.refl
+                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_refl 3)⟩
+                          ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl 3⟩ [])))
+                      (HEq.refl a))
+                  (eq_of_heq tail_eq) a)
+              (eq_of_heq head_eq))
+        (Eq.refl (List.finRange 3)) (HEq.refl (Fintype.complete i)),
+      ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩⟩⟩⟩
+'NJE_Pow5Realization.cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_Pow5Realization.law : ∀ (x : U32),
+  NJA_FieldLaws.pow5_ref x = ok (NJE_Pow5Packet.result x) ∧
+    ↑(NJE_Pow5Packet.result x) < 2147483647 ∧ ↑↑(NJE_Pow5Packet.result x) = R0P.poseidonPow5 ↑↑x :=
+fun x => NJE_Pow5Packet.TX1_307 x 3 (NJE_Pow5Packet.result x) (cut x)
+'NJE_Pow5Realization.law' depends on axioms: [propext, Classical.choice, Quot.sound]

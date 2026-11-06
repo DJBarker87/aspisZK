@@ -1,0 +1,27 @@
+{"attempt": "NJE_L044", "exit_status": 0, "wall_seconds": 3.3011382271070033, "peak_rss_kib": "3742932", "swaps": "0", "print_axioms": []}
+NJE_PRIVATE_REUSE _private.R0P.Poseidon.0.R0P.poseidon_compose_steps : ∀ {σ : Type} {n : ℕ} (states : Fin (n + 1) → σ)
+  (steps : Fin n → σ → σ),
+  (∀ (i : Fin n), states i.succ = steps i (states i.castSucc)) →
+    List.foldl (fun state step => step state) (states 0) (List.ofFn steps) = states (Fin.last n)
+NJE_PRIVATE_REUSE _private.R0P.Poseidon.0.R0P.poseidon_rounds_split : ∀ {K : Type} [inst : Field K]
+  (state : Fin 16 → K),
+  List.foldl (fun s r => R0P.poseidonApplyRound r s) state (List.ofFn fun r => r) =
+    List.foldl R0P.poseidonFullRound
+      (List.foldl R0P.poseidonInternalRound
+        (List.foldl R0P.poseidonFullRound state (List.ofFn fun r => R0P.poseidonExternalInitial r))
+   
+...
+NJE_PRIVATE_REUSE _private.R0P.Poseidon.0.R0P.poseidon_compose_steps : ∀ {σ : Type} {n : ℕ} (states : Fin (n + 1) → σ)
+  (steps : Fin n → σ → σ),
+  (∀ (i : Fin n), states i.succ = steps i (states i.castSucc)) →
+    List.foldl (fun state step => step state) (states 0) (List.ofFn steps) = states (Fin.last n)
+NJE_PRIVATE_REUSE _private.R0P.Poseidon.0.R0P.poseidon_rounds_split : ∀ {K : Type} [inst : Field K]
+  (state : Fin 16 → K),
+  List.foldl (fun s r => R0P.poseidonApplyRound r s) state (List.ofFn fun r => r) =
+    List.foldl R0P.poseidonFullRound
+      (List.foldl R0P.poseidonInternalRound
+        (List.foldl R0P.poseidonFullRound state (List.ofFn fun r => R0P.poseidonExternalInitial r))
+        (List.ofFn fun r => R0P.poseidonInternalConstants r))
+      (List.ofFn fun r => R0P.poseidonExternalFinal r)
+
+Running as unit: run-rd176cf61b1d042aeab226804ff144858.scope; invocation ID: c950e7c3a73b4de3bb54146035de7d08

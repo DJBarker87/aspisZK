@@ -1,0 +1,544 @@
+NJE_lean/NJE_CountPacket.lean:42:11: error: unsolved goals
+case ok
+α : Type
+indices : Slice U32
+g : Std.Array U32 16#usize → Result α
+part : Slice U32
+back : Slice U32 → Std.Array U32 16#usize
+h :
+  core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+      (Array.repeat 16#usize 0#u32) { «end» := indices.len } =
+    ok (part, back)
+⊢ (do
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+      g (back copied)) =
+    do
+    let a ←
+      let (part, back) := (part, back)
+        do
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+        ok (back copied)
+    g a
+NJE_lean/NJE_CountPacket.lean:45:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+    (Array.repeat 16#usize 0#u32) { «end» := indices.len }
+in the target expression
+  (do
+      let __x ← fail e
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 __x.1 indices
+      g (__x.2 copied)) =
+    do
+    let a ←
+      do
+        let (part, back) ← fail e
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+        ok (back copied)
+    g a
+
+case fail
+α : Type
+indices : Slice U32
+g : Std.Array U32 16#usize → Result α
+e : Error
+h :
+  core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+      (Array.repeat 16#usize 0#u32) { «end» := indices.len } =
+    fail e
+⊢ (do
+      let __x ← fail e
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 __x.1 indices
+      g (__x.2 copied)) =
+    do
+    let a ←
+      do
+        let (part, back) ← fail e
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+        ok (back copied)
+    g a
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJE_lean/NJE_CountPacket.lean:46:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+    (Array.repeat 16#usize 0#u32) { «end» := indices.len }
+in the target expression
+  (do
+      let __x ← div
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 __x.1 indices
+      g (__x.2 copied)) =
+    do
+    let a ←
+      do
+        let (part, back) ← div
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+        ok (back copied)
+    g a
+
+case div
+α : Type
+indices : Slice U32
+g : Std.Array U32 16#usize → Result α
+h :
+  core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+      (Array.repeat 16#usize 0#u32) { «end» := indices.len } =
+    div
+⊢ (do
+      let __x ← div
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 __x.1 indices
+      g (__x.2 copied)) =
+    do
+    let a ←
+      do
+        let (part, back) ← div
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+        ok (back copied)
+    g a
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJE_lean/NJE_CountPacket.lean:44:14: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok, ̲assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJE_lean/NJE_CountPacket.lean:44:27: warning: This simp argument is unused:
+  assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵a̵s̵s̵o̵c̵]̵[̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJE_lean/NJE_CountPacket.lean:70:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let __x ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+          (Array.repeat 16#usize 0#u32) { «end» := Slice.len ?indices }
+    match __x with
+      | (part, back) => do
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part ?indices
+        ?g (back copied)
+in the target expression
+  (do
+      let (s, index_mut_back) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+            (Array.repeat 16#usize 0#u32) { «end» := indices.len }
+      let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU32 s indices
+      let count ←
+        multiproof.node_count_loop0 { start := 0#u32, «end» := 18#u32 } multiproof.Arity.Two (index_mut_back s1)
+            indices.len 0#usize
+      ok (some count)) =
+    ok (some d)
+
+case pos.refine_1
+indices : Slice U32
+well : NJE_WellFrozen.emitted indices = ok (decide (wellFormed (List.map (fun x => ↑x) ↑indices)))
+valid : wellFormed (List.map (fun x => ↑x) ↑indices)
+bound : (↑indices).length ≤ 16
+a : Std.Array U32 16#usize := NJE_CountInit.value indices bound
+viewEq : cells (NJA_CountDrop.keys a) 0 ↑indices.len = List.map (fun x => ↑x) ↑indices
+d : Usize
+exec : multiproof.node_count_loop0 { start := 0#u32, «end» := 18#u32 } multiproof.Arity.Two a indices.len 0#usize = ok d
+value : ↑d = ↑0#usize + nodeCount 18 (cells (NJA_CountDrop.keys a) 0 ↑indices.len)
+⊢ (do
+      let (s, index_mut_back) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+            (Array.repeat 16#usize 0#u32) { «end» := indices.len }
+      let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU32 s indices
+      let count ←
+        multiproof.node_count_loop0 { start := 0#u32, «end» := 18#u32 } multiproof.Arity.Two (index_mut_back s1)
+            indices.len 0#usize
+      ok (some count)) =
+    ok (some d)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (18 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+theorem NJE_CountPacket.continuation : ∀ {α : Type} (indices : Slice U32) (g : Std.Array U32 16#usize → Result α),
+  (do
+      let __x ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+            (Array.repeat 16#usize 0#u32) { «end» := indices.len }
+      match __x with
+        | (part, back) => do
+          let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+          g (back copied)) =
+    do
+    let a ← NJE_CountInit.source indices
+    g a :=
+fun {α} indices g =>
+  id
+    (id
+      (casesOn (motive := fun t =>
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+              (Array.repeat 16#usize 0#u32) { «end» := indices.len } =
+            t →
+          (do
+              let __x ←
+                core.array.Array.index_mut
+                    (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                    (Array.repeat 16#usize 0#u32) { «end» := indices.len }
+              let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 __x.1 indices
+              g (__x.2 copied)) =
+            do
+            let a ←
+              do
+                let (part, back) ←
+                  core.array.Array.index_mut
+                      (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                      (Array.repeat 16#usize 0#u32) { «end» := indices.len }
+                let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+                ok (back copied)
+            g a)
+        (core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+          (Array.repeat 16#usize 0#u32) { «end» := indices.len })
+        (fun pair h =>
+          Eq.ndrec (motive := fun x =>
+            core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                  (Array.repeat 16#usize 0#u32) { «end» := indices.len } =
+                x →
+              (do
+                  let __x ← x
+                  let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 __x.1 indices
+                  g (__x.2 copied)) =
+                do
+                let a ←
+                  do
+                    let (part, back) ← x
+                    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+                    ok (back copied)
+                g a)
+            (fun h => sorry) (Eq.symm h)
+            (Eq.refl
+              (core.array.Array.index_mut
+                (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                (Array.repeat 16#usize 0#u32) { «end» := indices.len })))
+        (fun e h =>
+          Eq.ndrec (motive := fun x =>
+            core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                  (Array.repeat 16#usize 0#u32) { «end» := indices.len } =
+                x →
+              (do
+                  let __x ← x
+                  let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 __x.1 indices
+                  g (__x.2 copied)) =
+                do
+                let a ←
+                  do
+                    let (part, back) ← x
+                    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+                    ok (back copied)
+                g a)
+            (fun h => sorry) (Eq.symm h)
+            (Eq.refl
+              (core.array.Array.index_mut
+                (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                (Array.repeat 16#usize 0#u32) { «end» := indices.len })))
+        (fun h =>
+          Eq.ndrec (motive := fun x =>
+            core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                  (Array.repeat 16#usize 0#u32) { «end» := indices.len } =
+                x →
+              (do
+                  let __x ← x
+                  let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 __x.1 indices
+                  g (__x.2 copied)) =
+                do
+                let a ←
+                  do
+                    let (part, back) ← x
+                    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU32 part indices
+                    ok (back copied)
+                g a)
+            (fun h => sorry) (Eq.symm h)
+            (Eq.refl
+              (core.array.Array.index_mut
+                (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                (Array.repeat 16#usize 0#u32) { «end» := indices.len })))
+        (Eq.refl
+          (core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+            (Array.repeat 16#usize 0#u32) { «end» := indices.len }))))
+'NJE_CountPacket.continuation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CountPacket.initial_view : ∀ (indices : Slice U32) (bound : (↑indices).length ≤ 16),
+  cells (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) 0 (↑indices).length =
+    List.map (fun x => ↑x) ↑indices :=
+fun indices bound =>
+  List.ext_getElem
+    (of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (congrArg List.length
+                  (congrFun'
+                    (congrArg List.map
+                      (funext fun j => congrArg (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) (zero_add j)))
+                    (List.range (↑indices).length)))
+                (List.length_map fun j => NJA_CountDrop.keys (NJE_CountInit.value indices bound) j))
+              List.length_range))
+          (List.length_map fun x => ↑x))
+        (eq_self (↑indices).length)))
+    fun j hj hj' =>
+    have jb := Eq.mp (congrArg (LT.lt j) (List.length_map fun x => ↑x)) hj';
+    Eq.mpr
+      (id
+        (congr
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (GetElem.getElem.congr_simp
+                  (cells (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) 0 (↑indices).length)
+                  (List.map (fun j => NJA_CountDrop.keys (NJE_CountInit.value indices bound) j)
+                    (List.range (↑indices).length))
+                  (congrFun'
+                    (congrArg List.map
+                      (funext fun j =>
+                        congrArg (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) (Nat.zero_add j)))
+                    (List.range (↑indices).length))
+                  j j (Eq.refl j) hj)
+                (List.getElem_map fun j => NJA_CountDrop.keys (NJE_CountInit.value indices bound) j))
+              (congrArg (NJA_CountDrop.keys (NJE_CountInit.value indices bound))
+                (List.getElem_range
+                  ((List.length_map fun j => NJA_CountDrop.keys (NJE_CountInit.value indices bound) j) ▸
+                    congrFun'
+                        (congrArg List.map
+                          (funext fun j =>
+                            congrArg (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) (Nat.zero_add j)))
+                        (List.range (↑indices).length) ▸
+                      Eq.refl j ▸ hj)))))
+          (List.getElem_map fun x => ↑x)))
+      (id
+        (id
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => ↑_a = ↑(↑indices)[j])
+                (getElem!_pos
+                  (↑⟨↑indices ++ List.replicate (16 - (↑indices).length) 0#u32,
+                      NJE_CountInit.value._proof_2 indices bound⟩)
+                  j
+                  (Eq.mpr
+                    (id
+                      (congrArg (LT.lt j)
+                        (Eq.trans List.length_append (congrArg (HAdd.hAdd (↑indices).length) List.length_replicate))))
+                    (Decidable.byContradiction fun a => initial_view._proof_2 indices bound j jb a)))))
+            (Eq.mpr (id (congrArg (fun _a => ↑_a = ↑(↑indices)[j]) (List.getElem_append_left jb)))
+              (Eq.refl ↑(↑indices)[j])))))
+'NJE_CountPacket.initial_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_CountPacket.result : ∀ (indices : Slice U32),
+  ∃ out,
+    source indices = ok out ∧
+      Option.map (fun x => ↑x) out =
+        if wellFormed (List.map (fun x => ↑x) ↑indices) then some (nodeCount 18 (List.map (fun x => ↑x) ↑indices))
+        else none :=
+fun indices =>
+  have well :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = ok (decide (wellFormed (List.map (fun x => ↑x) ↑indices))))
+          (NJE_WellFrozen.association indices)))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = ok (decide (wellFormed (List.map (fun x => ↑x) ↑indices))))
+            (NJE_WellSource.source ↑indices)))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => ok _a = ok (decide (wellFormed (List.map (fun x => ↑x) ↑indices))))
+              (NJA_WellFormed.source_eq (List.map (fun x => ↑x) ↑indices))))
+          (Eq.refl (ok (decide (wellFormed (List.map (fun x => ↑x) ↑indices)))))));
+  if valid : wellFormed (List.map (fun x => ↑x) ↑indices) then
+    have bound := Eq.mp (congrFun' (congrArg LE.le (List.length_map fun x => ↑x)) 16) valid.right.left;
+    let a := NJE_CountInit.value indices bound;
+    have viewEq :=
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (congrArg (cells (NJA_CountDrop.keys (NJE_CountInit.value indices bound)) 0)
+                (Usize.ofNatCore_val_eq (Slice.len._proof_1 indices))))
+            (List.map (fun x => ↑x) ↑indices)))
+        (initial_view indices bound);
+    let ⟨d, h✝⟩ :=
+      NJE_CountLevels.total 18 0#u32 a indices.len 0#usize
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun'
+                    (congrArg HAdd.hAdd
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.U32 0 (of_decide_eq_true (id (Eq.refl true))))))
+                    18)
+                  (zero_add 18)))
+              18)
+            (eq_self 18)))
+        (Eq.mpr (id (congrFun' (congrArg LE.le (Usize.ofNatCore_val_eq (Slice.len._proof_1 indices))) 16)) bound)
+        (Eq.mpr (id (congrArg (fun _a => List.Pairwise (fun x1 x2 => x1 < x2) _a) viewEq)) valid.right.right.left)
+        (Eq.mpr (id (congrArg (fun _a => ∀ x ∈ _a, x < 262144) viewEq)) valid.right.right.right)
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg LE.le
+                (Eq.trans
+                  (congrFun'
+                    (congrArg HAdd.hAdd
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                    288)
+                  (zero_add 288)))
+              576)
+            (eq_true_of_decide (Eq.refl true))))
+    let ⟨exec, value⟩ := h✝
+    Exists.intro (some d)
+      ⟨sorry,
+        Eq.mpr
+          (id
+            (congrArg (Eq (some ↑d))
+              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos valid) x_0 x_1 x_2 x_3)
+                (Classical.propDecidable (wellFormed (List.map (fun x => ↑x) ↑indices))) (Option ℕ)
+                (some (nodeCount 18 (List.map (fun x => ↑x) ↑indices))) none)))
+          (congrArg some
+            (Eq.mp
+              (congrArg (Eq ↑d)
+                (Eq.trans
+                  (congrFun'
+                    (congrArg HAdd.hAdd
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                    (nodeCount 18 (List.map (fun x => ↑x) ↑indices)))
+                  (Nat.zero_add (nodeCount 18 (List.map (fun x => ↑x) ↑indices)))))
+              (Eq.mp (congrArg (fun _a => ↑d = ↑0#usize + nodeCount 18 _a) viewEq) value)))⟩
+  else
+    Exists.intro none
+      ⟨id
+          (id
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (do
+                        let b ← _a
+                        if b = true then
+                            have level := Array.repeat 16#usize 0#u32;
+                            have i := indices.len;
+                            do
+                            let (s, index_mut_back) ←
+                              core.array.Array.index_mut
+                                  (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                                  level { «end» := i }
+                            let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU32 s indices
+                            have level1 : Std.Array U32 16#usize := index_mut_back s1
+                            have n : Usize := indices.len
+                            let i1 ← multiproof.Arity.Two.levels
+                            let count ←
+                              multiproof.node_count_loop0 { start := 0#u32, «end» := i1 } multiproof.Arity.Two level1 n
+                                  0#usize
+                            ok (some count)
+                          else ok none) =
+                      ok none)
+                  well))
+              (of_eq_true
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans
+                        (Eq.trans
+                          (congr
+                            (congrArg Bind.bind
+                              (congrArg ok
+                                (Eq.trans
+                                  (Decidable.decide.congr_simp (wellFormed (List.map (fun x => ↑x) ↑indices)) False
+                                    (eq_false valid))
+                                  (decide_false instDecidableFalse))))
+                            (funext fun b =>
+                              ite_congr (Eq.refl (b = true))
+                                (fun a =>
+                                  Eq.refl do
+                                    let (s, index_mut_back) ←
+                                      core.array.Array.index_mut
+                                          (core.ops.index.IndexMutSlice
+                                            (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                                          (Array.repeat 16#usize 0#u32) { «end» := indices.len }
+                                    let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU32 s indices
+                                    let i1 ← multiproof.Arity.Two.levels
+                                    let count ←
+                                      multiproof.node_count_loop0 { start := 0#u32, «end» := i1 } multiproof.Arity.Two
+                                          (index_mut_back s1) indices.len 0#usize
+                                    ok (some count))
+                                fun a => Eq.refl (ok none)))
+                          (bind_tc_ok false fun y =>
+                            if y = true then do
+                              let (s, index_mut_back) ←
+                                core.array.Array.index_mut
+                                    (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                                    (Array.repeat 16#usize 0#u32) { «end» := indices.len }
+                              let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU32 s indices
+                              let i1 ← multiproof.Arity.Two.levels
+                              let count ←
+                                multiproof.node_count_loop0 { start := 0#u32, «end» := i1 } multiproof.Arity.Two
+                                    (index_mut_back s1) indices.len 0#usize
+                              ok (some count)
+                            else ok none))
+                        (ite_congr Bool.false_eq_true
+                          (fun a =>
+                            Eq.refl do
+                              let (s, index_mut_back) ←
+                                core.array.Array.index_mut
+                                    (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32))
+                                    (Array.repeat 16#usize 0#u32) { «end» := indices.len }
+                              let s1 ← core.slice.Slice.copy_from_slice core.marker.CopyU32 s indices
+                              let i1 ← multiproof.Arity.Two.levels
+                              let count ←
+                                multiproof.node_count_loop0 { start := 0#u32, «end» := i1 } multiproof.Arity.Two
+                                    (index_mut_back s1) indices.len 0#usize
+                              ok (some count))
+                          fun a => Eq.refl (ok none))))
+                    (ok none))
+                  (eq_self (ok none)))))),
+        of_eq_true
+          (Eq.trans
+            (congrArg (Eq none)
+              (ite_cond_eq_false (some (nodeCount 18 (List.map (fun x => ↑x) ↑indices))) none (eq_false valid)))
+            (eq_self none))⟩
+'NJE_CountPacket.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CountPacket.TX1_122 : ∀ (indices : Slice U32),
+  ∃ out,
+    source indices = ok out ∧
+      Option.map (fun x => ↑x) out =
+        if wellFormed (List.map (fun x => ↑x) ↑indices) then some (nodeCount 18 (List.map (fun x => ↑x) ↑indices))
+        else none :=
+fun indices => result indices
+'NJE_CountPacket.TX1_122' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CountPacket.TX2_088 : ∀ (indices : Slice U32),
+  ∃ out,
+    source indices = ok out ∧
+      Option.map (fun x => ↑x) out =
+        if wellFormed (List.map (fun x => ↑x) ↑indices) then some (nodeCount 18 (List.map (fun x => ↑x) ↑indices))
+        else none :=
+fun indices => result indices
+'NJE_CountPacket.TX2_088' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

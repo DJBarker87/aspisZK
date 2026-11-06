@@ -1,0 +1,43 @@
+{"attempt": "NJE_L076", "exit_status": 1, "wall_seconds": 3.247242403915152, "peak_rss_kib": "4293060", "swaps": "0", "print_axioms": ["'NJE_CountLevels.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_CountLevels.lean:29:29: error: Type mismatch: After simplification, term
+  sorted
+ has type
+  @List.Pairwise ℕ (fun x1 x2 => x1 < x2) (cells (NJA_CountDrop.keys a) 0 ↑n)
+but is expected to have type
+  @List.Pairwise ℕ (fun x1 x2 => x1 < x2) (MultiproofConeCountPhysical.unread (NJA_CountDrop.keys a) ↑n ↑0#usize)
+NJE_lean/NJE_CountLevels.lean:30:9: error: Type mismatch: After simplification, term
+  range
+ has type
+  ∀ x ∈ cells (NJA_CountDrop.keys a) 0 ↑n, @LT.lt ℕ instLTNat x 262144
+but is expected to have type
+  ∀ x ∈ MultiproofConeCountPhysical.unread (NJA_CountDrop.keys a) ↑n ↑0#usize, @LT.lt ℕ instLTNat x 262144
+NJE_lean/NJE_CountLevels.lean:35:87: error: Application type mis
+...
+                              let (level1, count1, w) ←
+                                        multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c 0#usize 0#usize
+                                      ok (cont (iter1, level1, w, count1))))
+                                (bind_tc_ok (none, { start := 18#u32, «end» := 18#u32 })
+                                  (uncurry fun o iter1 =>
+                                    match o with
+                                    | none => ok (done c)
+                                    | some val => do
+                                      let (level1, count1, w) ←
+                                        multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c 0#usize 0#usize
+                                      ok (cont (iter1, level1, w, count1)))))
+                              (uncurry_apply_pair
+                                (fun o iter1 =>
+                                  match o with
+                                  | none => ok (done c)
+                                  | some val => do
+                                    let (level1, count1, w) ←
+                                      multiproof.node_count_loop0_loop0 multiproof.Arity.Two a n c 0#usize 0#usize
+                                    ok (cont (iter1, level1, w, count1)))
+                                none { start := 18#u32, «end» := 18#u32 }))))
+                        (ok c))
+                      (eq_self (ok c))))),
+              of_eq_true (Eq.trans (congrArg (Eq ↑c) (add_zero ↑c)) (eq_self ↑c))⟩)
+        (Eq.symm start_eq) clock)
+    (fun height ih start a n c clock hn sorted range budget => sorry) height start a n c clock hn sorted range budget
+'NJE_CountLevels.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rffcca65df8c24950b27e7a46b8da22a9.scope; invocation ID: 39ab6f026ffd4fe085fa63d95d59f7c7

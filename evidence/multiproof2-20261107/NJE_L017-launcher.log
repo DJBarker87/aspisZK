@@ -1,0 +1,53 @@
+{"attempt": "NJE_L017", "exit_status": 1, "wall_seconds": 6.428395085036755, "peak_rss_kib": "5825908", "swaps": "0", "print_axioms": ["'NJE_ParentPackets.TX1_123' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_ParentPackets.TX2_089' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_ParentPackets.TX1_125' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_ParentPackets.TX2_091' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_ParentPackets.lean:22:72: error: unsolved goals
+hashv : Slice (Slice U8) → Digest
+values : Std.Array Digest 16#usize
+i : Usize
+bound : ↑i + 1 < 16
+⊢ parts (↑values)[↑i] (↑values)[↑i + 1] = parts (↑values)[↑i]! (↑values)[↑i + 1]!
+NJE_lean/NJE_ParentPackets.lean:25:29: warning: This simp argument is unused:
+  getElem!_pos
+
+Hint: Omit it from the simp argument list.
+  simp only [cell,̵g̵e̵t̵E̵l̵e̵m̵!̵_̵p̵o̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJE_lean/NJE_ParentPackets.lean:39:1: error: unsolved goals
+case false
+hashv : Slice (Slice U8) → Digest
+values : Std.Array Digest 16#usize
+i : Usize
+bound : ↑i < 16
+sibling : Digest
+⊢ ⟨[⟨[18#u8]
+...
+ → Digest) (values : Std.Array Digest 16#usize)
+  (i : Usize),
+  ↑i + 1 < 16 →
+    multiproof.occupied_binary_parent (backend hashv) () values i =
+      ok (hashv (parts (cell values ↑i) (cell values (↑i + 1)))) :=
+fun hashv values i bound => TX1_123 hashv values i bound
+'NJE_ParentPackets.TX2_089' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_ParentPackets.TX1_125 : ∀ (hashv : Slice (Slice U8) → Digest) (values : Std.Array Digest 16#usize)
+  (i : Usize),
+  ↑i < 16 →
+    ∀ (sibling : Digest) (left : Bool),
+      multiproof.sibling_binary_parent (backend hashv) () values i (Array.to_slice sibling) left =
+        ok (hashv (if left = true then parts (cell values ↑i) sibling else parts sibling (cell values ↑i))) :=
+fun hashv values i bound sibling left =>
+  Bool.casesOn (motive := fun t =>
+    left = t →
+      multiproof.sibling_binary_parent (backend hashv) () values i (Array.to_slice sibling) left =
+        ok (hashv (if left = true then parts (cell values ↑i) sibling else parts sibling (cell values ↑i))))
+    left (fun h => Eq.symm h ▸ sorry) (fun h => Eq.symm h ▸ sorry) (Eq.refl left)
+'NJE_ParentPackets.TX1_125' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_ParentPackets.TX2_091 : ∀ (hashv : Slice (Slice U8) → Digest) (values : Std.Array Digest 16#usize)
+  (i : Usize),
+  ↑i < 16 →
+    ∀ (sibling : Digest) (left : Bool),
+      multiproof.sibling_binary_parent (backend hashv) () values i (Array.to_slice sibling) left =
+        ok (hashv (if left = true then parts (cell values ↑i) sibling else parts sibling (cell values ↑i))) :=
+fun hashv values i bound sibling left => TX1_125 hashv values i bound sibling left
+'NJE_ParentPackets.TX2_091' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re0b5a67cc4274adba3c623a19e2e6a72.scope; invocation ID: 5a18b457a8db44cc8aeda377beb2d5e4

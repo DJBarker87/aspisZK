@@ -1,0 +1,48 @@
+{"attempt": "NJE_L069", "exit_status": 0, "wall_seconds": 3.97327917907387, "peak_rss_kib": "4327424", "swaps": "0", "print_axioms": ["'NJE_WellFrozen.window_pair' depends on axioms: [propext, Quot.sound]", "'NJE_WellFrozen.order_all' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_WellFrozen.domain_all' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_WellFrozen.association' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_WellFrozen.TX1_128' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_WellFrozen.TX2_094' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_WellFrozen.window_pair : ∀ (xs : List U32),
+  ∀ s ∈ NJA_WellIteration.windows xs, ∃ a b, s = NJA_WellPredicateLaws.pair a b :=
+fun xs =>
+  List.rec (motive := fun xs => ∀ s ∈ NJA_WellIteration.windows xs, ∃ a b, s = NJA_WellPredicateLaws.pair a b)
+    (of_eq_true
+      (Eq.trans
+        (forall_congr fun s =>
+          Eq.trans (implies_congr List.not_mem_nil._simp_1 (Eq.refl (∃ a b, s = NJA_WellPredicateLaws.pair a b)))
+            IsEmpty.forall_iff._simp_1)
+        (implies_true (Slice U32))))
+    (fun a xs ih =>
+      List.casesOn (motive := fun t =>
+        xs = t → ∀ s ∈ NJA_WellIteration.windows (a :: xs), ∃ a b, s = NJA_WellPredicateLaws.pair a b) xs
+        (fun h =>
+   
+...
+            if ordered = true then ok ((↑indices).all NJE_WellSource.domain) else ok false
+                    else ok false)
+                    (Eq.trans List.isEmpty_iff._simp_1 (eq_false empty)))
+                  (ite_cond_eq_false
+                    (do
+                      let ordered ← ok ((NJA_WellIteration.windows ↑indices).all NJE_WellSource.order)
+                      if ordered = true then ok ((↑indices).all NJE_WellSource.domain) else ok false)
+                    (ok false) (eq_false small))))
+              (eq_self (ok false)))))
+'NJE_WellFrozen.association' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellFrozen.TX1_128 : ∀ (indices : Slice U32) (out : Bool) (calls : ℕ),
+  NJE_WellPacket.Cut (↑indices) (NJE_WellPacket.ordered ↑indices) (NJE_WellPacket.domain ↑indices) out calls →
+    emitted indices = ok out ∧
+      out = decide (AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) ↑indices)) :=
+fun indices out calls cut =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a = ok out ∧ out = decide (AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) ↑indices)))
+        (association indices)))
+    (NJE_WellPacket.TX1_128 (↑indices) out calls cut)
+'NJE_WellFrozen.TX1_128' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellFrozen.TX2_094 : ∀ (indices : Slice U32) (out : Bool) (calls : ℕ),
+  NJE_WellPacket.Cut (↑indices) (NJE_WellPacket.ordered ↑indices) (NJE_WellPacket.domain ↑indices) out calls →
+    emitted indices = ok out ∧
+      out = decide (AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) ↑indices)) :=
+fun indices out calls cut => TX1_128 indices out calls cut
+'NJE_WellFrozen.TX2_094' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4435abc3babe4551bf87eecc13ecbc19.scope; invocation ID: a98cec51a4fa4726984e95eee1dfa139

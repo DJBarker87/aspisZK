@@ -1,0 +1,47 @@
+{"attempt": "NJE_L095", "exit_status": 0, "wall_seconds": 2.736324155004695, "peak_rss_kib": "3826404", "swaps": "0", "print_axioms": ["'NJE_RoundTrace.facts' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_RoundTrace.trace_values' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_RoundTrace.one' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_RoundTrace.composition' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_RoundTrace.facts : ∀ (input : State) (states : Fin 23 → State) (bs : ℕ → State) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (leading : ℕ → State),
+  states 0 = leading 16 →
+    NJE_ExternalStages.Cut input bs sums args leading →
+      (∀ (r : Fin 22), Witness (states r.castSucc) (states r.succ) r) →
+        (∀ (i : Fin 23), Canonical (states i)) ∧
+          (∀ (r : Fin 22), cast (states r.succ) = R0P.poseidonApplyRound r (cast (states r.castSucc))) ∧
+            cast (states 0) = R0P.poseidonExternalLinear (cast input) :=
+fun input states bs sums args leading start initial_cut rounds =>
+  have first := NJE_ExternalTotal.result input bs sums args leading initial_cut;
+  have initi
+...
+ 16) i = R0P.poseidonFullRound (cast pre) _a i) (Eq.symm constants)))
+                (law i).right)⟩
+'NJE_RoundTrace.one' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_RoundTrace.composition : ∀ (input : State) (states : Fin 23 → State) (bs : ℕ → State) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (leading : ℕ → State),
+  states 0 = leading 16 →
+    NJE_ExternalStages.Cut input bs sums args leading →
+      (∀ (r : Fin 22), Witness (states r.castSucc) (states r.succ) r) →
+        Canonical (states (Fin.last 22)) ∧ cast (states (Fin.last 22)) = R0P.poseidonPermutation (cast input) :=
+fun input states bs sums args leading start initial_cut rounds =>
+  let ⟨canonical, right✝⟩ := facts input states bs sums args leading start initial_cut rounds
+  let ⟨steps, initial_value⟩ := right✝
+  have joined := NJE_PermutationFold.compose (fun i => cast (states i)) (fun r => R0P.poseidonApplyRound r) steps;
+  have map :=
+    Eq.mpr (id (congrArg (fun _a => (List.ofFn fun r => R0P.poseidonApplyRound r) = _a) List.map_ofFn))
+      (Eq.refl (List.ofFn fun r => R0P.poseidonApplyRound r));
+  ⟨canonical (Fin.last 22),
+    Eq.trans
+      (Eq.symm
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              List.foldl (fun x y => R0P.poseidonApplyRound y x) _a (List.ofFn fun r => r) =
+                cast (states (Fin.last 22)))
+            initial_value)
+          (Eq.mp (congrArg (fun _a => _a = cast (states (Fin.last 22))) List.foldl_map)
+            (Eq.mp
+              (congrArg (fun _a => List.foldl (fun s step => step s) (cast (states 0)) _a = cast (states (Fin.last 22)))
+                map)
+              joined))))
+      (NJE_PermutationFold.folded (cast input))⟩
+'NJE_RoundTrace.composition' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1ba819fbb5f448388af65ff85459ecbc.scope; invocation ID: 688210d5f64e4e02b6e18549fa4f1379

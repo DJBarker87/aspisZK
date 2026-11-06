@@ -1,0 +1,48 @@
+{"attempt": "NJE_L020", "exit_status": 0, "wall_seconds": 2.4884952169377357, "peak_rss_kib": "3841224", "swaps": "0", "print_axioms": ["'NJE_InternalCut.unread' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_InternalCut.args_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_InternalCut.frame_result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_InternalCut.unread : ∀ (input : State) (part full : ℕ) (args : Fin 16 → ℕ) (steps : ℕ → State),
+  Cut input part full args steps → ∀ (i : Fin 16), steps (↑i) i = input i :=
+fun input part full args steps cut i =>
+  have h :=
+    NJA_PointStaging.replay input (fun j x => NJE_Residue.word (args j)) steps cut.start cut.next (↑i)
+      (Nat.le_of_lt i.isLt);
+  Eq.mpr (id (congrArg (fun _a => _a i = input i) h))
+    (NJA_PointFrame.frame input (fun j x => NJE_Residue.word (args j)) (↑i) (Nat.le_of_lt i.isLt) i
+      (Decidable.byContradiction fun a => unread._proof_1 i a))
+'NJE_InternalCut.unread' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_InternalCut.args_
+...
+  ⟨↑i - 1,
+                              Decidable.byContradiction fun a => Cut._proof_1 input _a (_a + ↑(input 0)) args i a⟩ =
+                    NJA_InternalReduce.argument input i)
+                part_source))
+            (of_eq_true
+              (Eq.trans
+                (Eq.trans
+                  (congrArg
+                    (Eq
+                      (NJA_Internal.part input + ↑(input 0) +
+                        ↑(input i) *
+                          2 ^
+                            R0P.poseidonInternalShifts
+                              ⟨↑i - 1,
+                                Decidable.byContradiction fun a =>
+                                  Cut._proof_1 input (NJA_Internal.part input) (NJA_Internal.part input + ↑(input 0))
+                                    args i a⟩))
+                    (dite_cond_eq_false (eq_false hi)))
+                  Nat.add_left_cancel_iff._simp_1)
+                (eq_self
+                  (↑(input i) *
+                    2 ^
+                      R0P.poseidonInternalShifts
+                        ⟨↑i - 1,
+                          Decidable.byContradiction fun a =>
+                            Cut._proof_1 input (NJA_Internal.part input) (NJA_Internal.part input + ↑(input 0)) args i
+                              a⟩)))))))
+'NJE_InternalCut.args_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_InternalCut.frame_result : ∀ (input : State) (part full : ℕ) (args : Fin 16 → ℕ) (steps : ℕ → State),
+  Cut input part full args steps → steps 16 = fun i => NJE_Residue.word (args i) :=
+fun input part full args steps cut =>
+  NJA_PointStaging.complete input (fun i x => NJE_Residue.word (args i)) steps cut.start cut.next
+'NJE_InternalCut.frame_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2f478461bf1247f49789ec3b1d98534d.scope; invocation ID: eec88aee9c624aa5ab83ace9fce6cae4

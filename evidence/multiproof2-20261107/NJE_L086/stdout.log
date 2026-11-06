@@ -1,0 +1,63 @@
+theorem NJE_RoundComposition.cell_law : ∀ (x c : U32),
+  ↑x < 2147483647 →
+    ↑c < 2147483647 →
+      NJA_RoundCell.reference x c = ok (cell x c) ∧
+        ↑(cell x c) < 2147483647 ∧ ↑↑(cell x c) = R0P.poseidonPow5 (↑↑x + ↑↑c) :=
+fun x c hx hc =>
+  have a := NJE_AddValue.law x c hx hc;
+  have p := NJE_Pow5Realization.law (NJE_AddValue.add x c);
+  ⟨of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans (congrFun' (congrArg Bind.bind a.left) fun input => NJA_FieldLaws.pow5_ref input)
+                (bind_tc_ok (NJE_AddValue.add x c) NJA_FieldLaws.pow5_ref))
+              p.left))
+          (ok (NJE_Pow5Packet.result (NJE_AddValue.add x c))))
+        (eq_self (ok (NJE_Pow5Packet.result (NJE_AddValue.add x c))))),
+    ⟨p.right.left, Eq.trans p.right.right (congrArg R0P.poseidonPow5 a.right.right)⟩⟩
+'NJE_RoundComposition.cell_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_RoundComposition.full_cells : ∀ (input constants : State) (states : ℕ → State),
+  FullCut input constants states →
+    (∀ (i : Fin 16), ↑(input i) < 2147483647) →
+      (∀ (i : Fin 16), ↑(constants i) < 2147483647) →
+        ∀ (i : Fin 16),
+          ↑(states 16 i) < 2147483647 ∧ ↑↑(states 16 i) = R0P.poseidonPow5 (↑↑(input i) + ↑↑(constants i)) :=
+fun input constants states cut canonical constants_domain =>
+  have complete := NJA_PointStaging.complete input (fun i x => cell x (constants i)) states cut.start cut.next;
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => ∀ (i : Fin 16), ↑(_a i) < 2147483647 ∧ ↑↑(_a i) = R0P.poseidonPow5 (↑↑(input i) + ↑↑(constants i)))
+        complete))
+    fun i => (cell_law (input i) (constants i) (canonical i) (constants_domain i)).right
+'NJE_RoundComposition.full_cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_RoundComposition.full_round : ∀ (input constants : State) (states bs : ℕ → State) (sums : Fin 4 → ℕ → ℕ)
+  (args : Fin 16 → ℕ) (post : ℕ → State),
+  (∀ (i : Fin 16), ↑(input i) < 2147483647) →
+    (∀ (i : Fin 16), ↑(constants i) < 2147483647) →
+      FullCut input constants states →
+        NJE_ExternalStages.Cut (states 16) bs sums args post →
+          ∀ (i : Fin 16),
+            ↑(post 16 i) < 2147483647 ∧
+              ↑↑(post 16 i) = R0P.poseidonFullRound (fun j => ↑↑(input j)) (fun j => ↑↑(constants j)) i :=
+fun input constants states bs sums args post canonical constants_domain cut linear =>
+  have cells := full_cells input constants states cut canonical constants_domain;
+  have layer := NJE_ExternalTotal.result (states 16) bs sums args post linear;
+  have converted := funext fun i => (cells i).right;
+  fun i =>
+  ⟨(layer.right i).left,
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = R0P.poseidonFullRound (fun j => ↑↑(input j)) (fun j => ↑↑(constants j)) i)
+          (layer.right i).right))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              R0P.poseidonExternalLinear _a i =
+                R0P.poseidonFullRound (fun j => ↑↑(input j)) (fun j => ↑↑(constants j)) i)
+            converted))
+        (Eq.refl (R0P.poseidonExternalLinear (fun i => R0P.poseidonPow5 (↑↑(input i) + ↑↑(constants i))) i)))⟩
+'NJE_RoundComposition.full_round' depends on axioms: [propext, Classical.choice, Quot.sound]
