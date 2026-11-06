@@ -1,0 +1,20 @@
+'NJS_Leaves.key' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJS_Leaves.index' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Aeneas.Std.core.array.equality.PartialEqArray.eq : {T U : Type} →
+  {N : Usize} → core.cmp.PartialEq T U → Std.Array T N → Std.Array U N → Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 =>
+  if a0.length = a1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          ok (decide ¬b = true))
+      ((↑a0).zip ↑a1)
+  else ok false
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+NJS_Leaves.lean:20:7: error(lean.unknownIdentifier): Unknown constant `UScalar.eq`

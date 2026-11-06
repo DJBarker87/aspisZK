@@ -1,72 +1,178 @@
-[
-  {
-    "generated_name": "Slice.Insts.CoreCmpPartialEqArray.ne",
-    "parameter": "NJS_call_0",
-    "signature": "{T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq\n  T U) :\n  (Slice T) \u2192 (Array U N) \u2192 Result Bool"
-  },
-  {
-    "generated_name": "Slice.Insts.CoreCmpPartialEqArray.eq",
-    "parameter": "NJS_call_1",
-    "signature": "{T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq\n  T U) :\n  (Slice T) \u2192 (Array U N) \u2192 Result Bool"
-  },
-  {
-    "generated_name": "core.iter.traits.iterator.Iterator.any.default",
-    "parameter": "NJS_call_2",
-    "signature": "{Self : Type} {F : Type} {Clause0_Item : Type} (IteratorInst :\n  core.iter.traits.iterator.Iterator Self Clause0_Item)\n  (opsfunctionFnMutFTupleClause0_ItemBoolInst : core.ops.function.FnMut F\n  Clause0_Item Bool) :\n  Self \u2192 F \u2192 Result (Bool \u00d7 Self)"
-  },
-  {
-    "generated_name": "core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any",
-    "parameter": "NJS_call_3",
-    "signature": "{T : Type} {F : Type} (opsfunctionFnMutFTupleSharedATBoolInst :\n  core.ops.function.FnMut F T Bool) :\n  (core.slice.iter.Iter T) \u2192 F \u2192 Result (Bool \u00d7 (core.slice.iter.Iter T))"
-  },
-  {
-    "generated_name": "aspis_core.field.M31.from_le_bytes",
-    "parameter": "NJS_call_4",
-    "signature": ": (Array Std.U8 4#usize) \u2192 Result (Option aspis_core.field.M31)"
-  },
-  {
-    "generated_name": "aspis_core.field.QM31.from_le_bytes",
-    "parameter": "NJS_call_5",
-    "signature": ": (Slice Std.U8) \u2192 Result (Option aspis_core.field.QM31)"
-  },
-  {
-    "generated_name": "aspis_core.r0.merkle.C1_TAG",
-    "parameter": "NJS_call_6",
-    "signature": ": Result Std.U8"
-  },
-  {
-    "generated_name": "aspis_core.r0.merkle.C2_TAG",
-    "parameter": "NJS_call_7",
-    "signature": ": Result Std.U8"
-  },
-  {
-    "generated_name": "aspis_core.state_only_private_merkle.private_leaf_hash_with_digest",
-    "parameter": "NJS_call_8",
-    "signature": "{H : Type} (digestDigest32Inst : aspis_core.digest.Digest32 H) :\n  H \u2192 Std.U8 \u2192 (Slice Std.U8) \u2192 (Array Std.U8 32#usize) \u2192 Result (Array\n    Std.U8 32#usize)"
-  },
-  {
-    "generated_name": "compact.slot_offset",
-    "parameter": "NJS_call_9",
-    "signature": ": Std.Usize \u2192 Result Std.Usize"
-  },
-  {
-    "generated_name": "verifier.echeck",
-    "parameter": "NJS_call_10",
-    "signature": ": (Slice Std.U8) \u2192 Bool \u2192 Result (core.result.Result Unit verifier.Error)"
-  },
-  {
-    "generated_name": "compact.check_values",
-    "parameter": "NJS_call_11",
-    "signature": ": (Slice Std.U8) \u2192 Result (core.result.Result Unit compact.CodecError)"
-  },
-  {
-    "generated_name": "multiproof.verify_in_place",
-    "parameter": "NJS_call_12",
-    "signature": "{H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H) :\n  H \u2192 multiproof.Arity \u2192 (Array Std.U8 32#usize) \u2192 (Array Std.U32\n    16#usize) \u2192 (Array (Array Std.U8 32#usize) 16#usize) \u2192 Std.Usize \u2192\n    (Slice Std.U8) \u2192 Result (Bool \u00d7 (Array Std.U32 16#usize) \u00d7 (Array\n    (Array Std.U8 32#usize) 16#usize))"
-  },
-  {
-    "generated_name": "multiproof.node_count",
-    "parameter": "NJS_call_13",
-    "signature": ": multiproof.Arity \u2192 (Slice Std.U32) \u2192 Result (Option Std.Usize)"
+{
+  "externals": [
+    {
+      "generated_name": "Slice.Insts.CoreCmpPartialEqArray.ne",
+      "parameter": "NJS_call_0",
+      "signature": "{T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq\n  T U) :\n  (Slice T) \u2192 (Array U N) \u2192 Result Bool"
+    },
+    {
+      "generated_name": "Slice.Insts.CoreCmpPartialEqArray.eq",
+      "parameter": "NJS_call_1",
+      "signature": "{T : Type} {U : Type} {N : Std.Usize} (cmpPartialEqInst : core.cmp.PartialEq\n  T U) :\n  (Slice T) \u2192 (Array U N) \u2192 Result Bool"
+    },
+    {
+      "generated_name": "core.iter.traits.iterator.Iterator.any.default",
+      "parameter": "NJS_call_2",
+      "signature": "{Self : Type} {F : Type} {Clause0_Item : Type} (IteratorInst :\n  core.iter.traits.iterator.Iterator Self Clause0_Item)\n  (opsfunctionFnMutFTupleClause0_ItemBoolInst : core.ops.function.FnMut F\n  Clause0_Item Bool) :\n  Self \u2192 F \u2192 Result (Bool \u00d7 Self)"
+    },
+    {
+      "generated_name": "core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any",
+      "parameter": "NJS_call_3",
+      "signature": "{T : Type} {F : Type} (opsfunctionFnMutFTupleSharedATBoolInst :\n  core.ops.function.FnMut F T Bool) :\n  (core.slice.iter.Iter T) \u2192 F \u2192 Result (Bool \u00d7 (core.slice.iter.Iter T))"
+    },
+    {
+      "generated_name": "aspis_core.field.M31.from_le_bytes",
+      "parameter": "NJS_call_4",
+      "signature": ": (Array Std.U8 4#usize) \u2192 Result (Option aspis_core.field.M31)"
+    },
+    {
+      "generated_name": "aspis_core.field.QM31.from_le_bytes",
+      "parameter": "NJS_call_5",
+      "signature": ": (Slice Std.U8) \u2192 Result (Option aspis_core.field.QM31)"
+    },
+    {
+      "generated_name": "aspis_core.r0.merkle.C1_TAG",
+      "parameter": "NJS_call_6",
+      "signature": ": Result Std.U8"
+    },
+    {
+      "generated_name": "aspis_core.r0.merkle.C2_TAG",
+      "parameter": "NJS_call_7",
+      "signature": ": Result Std.U8"
+    },
+    {
+      "generated_name": "aspis_core.state_only_private_merkle.private_leaf_hash_with_digest",
+      "parameter": "NJS_call_8",
+      "signature": "{H : Type} (digestDigest32Inst : aspis_core.digest.Digest32 H) :\n  H \u2192 Std.U8 \u2192 (Slice Std.U8) \u2192 (Array Std.U8 32#usize) \u2192 Result (Array\n    Std.U8 32#usize)"
+    },
+    {
+      "generated_name": "compact.slot_offset",
+      "parameter": "NJS_call_9",
+      "signature": ": Std.Usize \u2192 Result Std.Usize"
+    },
+    {
+      "generated_name": "verifier.echeck",
+      "parameter": "NJS_call_10",
+      "signature": ": (Slice Std.U8) \u2192 Bool \u2192 Result (core.result.Result Unit verifier.Error)"
+    },
+    {
+      "generated_name": "compact.check_values",
+      "parameter": "NJS_call_11",
+      "signature": ": (Slice Std.U8) \u2192 Result (core.result.Result Unit compact.CodecError)"
+    },
+    {
+      "generated_name": "multiproof.verify_in_place",
+      "parameter": "NJS_call_12",
+      "signature": "{H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H) :\n  H \u2192 multiproof.Arity \u2192 (Array Std.U8 32#usize) \u2192 (Array Std.U32\n    16#usize) \u2192 (Array (Array Std.U8 32#usize) 16#usize) \u2192 Std.Usize \u2192\n    (Slice Std.U8) \u2192 Result (Bool \u00d7 (Array Std.U32 16#usize) \u00d7 (Array\n    (Array Std.U8 32#usize) 16#usize))"
+    },
+    {
+      "generated_name": "multiproof.node_count",
+      "parameter": "NJS_call_13",
+      "signature": ": multiproof.Arity \u2192 (Slice Std.U32) \u2192 Result (Option Std.Usize)"
+    }
+  ],
+  "threading": {
+    "Slice.Insts.CoreCmpPartialEqArray": [
+      "NJS_call_0",
+      "NJS_call_1"
+    ],
+    "verifier.candidate.slot": [
+      "NJS_call_9"
+    ],
+    "verifier.candidate.parse_shape": [
+      "NJS_call_0",
+      "NJS_call_1",
+      "NJS_call_3"
+    ],
+    "verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0.body": [
+      "NJS_call_5"
+    ],
+    "verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0": [
+      "NJS_call_5"
+    ],
+    "verifier.candidate.canonical_scan_loop0_loop0_loop0.body": [
+      "NJS_call_4",
+      "NJS_call_5"
+    ],
+    "verifier.candidate.canonical_scan_loop0_loop0_loop0": [
+      "NJS_call_4",
+      "NJS_call_5"
+    ],
+    "verifier.candidate.canonical_scan_loop0_loop0.body": [
+      "NJS_call_10",
+      "NJS_call_4",
+      "NJS_call_5"
+    ],
+    "verifier.candidate.canonical_scan_loop0_loop0": [
+      "NJS_call_10",
+      "NJS_call_4",
+      "NJS_call_5"
+    ],
+    "verifier.candidate.canonical_scan_loop0.body": [
+      "NJS_call_10",
+      "NJS_call_4",
+      "NJS_call_5"
+    ],
+    "verifier.candidate.canonical_scan_loop0": [
+      "NJS_call_10",
+      "NJS_call_4",
+      "NJS_call_5"
+    ],
+    "verifier.candidate.canonical_scan": [
+      "NJS_call_10",
+      "NJS_call_11",
+      "NJS_call_4",
+      "NJS_call_5"
+    ],
+    "verifier.candidate.batch_leaf": [
+      "NJS_call_6",
+      "NJS_call_7",
+      "NJS_call_8"
+    ],
+    "verifier.candidate.batch_tree_loop.body": [
+      "NJS_call_12",
+      "NJS_call_13",
+      "NJS_call_2",
+      "NJS_call_6",
+      "NJS_call_7",
+      "NJS_call_8",
+      "NJS_call_9"
+    ],
+    "verifier.candidate.batch_tree_loop": [
+      "NJS_call_12",
+      "NJS_call_13",
+      "NJS_call_2",
+      "NJS_call_6",
+      "NJS_call_7",
+      "NJS_call_8",
+      "NJS_call_9"
+    ],
+    "verifier.candidate.batch_tree": [
+      "NJS_call_12",
+      "NJS_call_13",
+      "NJS_call_2",
+      "NJS_call_6",
+      "NJS_call_7",
+      "NJS_call_8",
+      "NJS_call_9"
+    ],
+    "verifier.candidate.batch_merkle_values": [
+      "NJS_call_12",
+      "NJS_call_13",
+      "NJS_call_2",
+      "NJS_call_6",
+      "NJS_call_7",
+      "NJS_call_8",
+      "NJS_call_9"
+    ],
+    "verifier.candidate.batch_merkle": [
+      "NJS_call_12",
+      "NJS_call_13",
+      "NJS_call_2",
+      "NJS_call_6",
+      "NJS_call_7",
+      "NJS_call_8",
+      "NJS_call_9"
+    ]
   }
-]
+}

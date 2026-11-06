@@ -28,3 +28,50 @@ fn same_leaf() {
  #[cfg(not(NJS_invert))] assert_eq!(actual,values[i]==leaf);
  #[cfg(NJS_invert)] assert_ne!(actual,values[i]==leaf);
 }
+#[derive(Clone,Copy)]
+struct LeafOracle<'a> { value: &'a [u8], salt: &'a [u8;32], tag:u8, byte:usize, reply:[u8;32], count:&'a core::cell::Cell<usize> }
+impl aspis_core::Digest32 for LeafOracle<'_> {
+ fn digest(&self,parts:&[&[u8]])->[u8;32] {
+  assert_eq!(self.count.get(),0);self.count.set(1);
+  assert_eq!(parts.len(),3);assert_eq!(parts[0].len(),2);assert_eq!(parts[0][0],0x10);assert_eq!(parts[0][1],self.tag);
+  assert_eq!(parts[1].len(),self.value.len());assert_eq!(parts[1].as_ptr(),self.value.as_ptr());
+  if !self.value.is_empty(){assert_eq!(parts[1][self.byte],self.value[self.byte]);}
+  assert_eq!(parts[2].len(),32);assert_eq!(parts[2].as_ptr(),self.salt.as_ptr());assert_eq!(parts[2][self.byte%32],self.salt[self.byte%32]);
+  self.reply
+ }
+}
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn private_leaf() {
+ let value:[u8;480]=kani::any();let salt:[u8;32]=kani::any();let reply:[u8;32]=kani::any();let tag:u8=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n<=480);kani::assume(k<core::cmp::max(n,1));
+ let calls=core::cell::Cell::new(0);let hash=LeafOracle{value:&value[..n],salt:&salt,tag,byte:k,reply,count:&calls};
+ let actual=aspis_core::state_only_private_merkle::private_leaf_hash_with_digest(hash,tag,&value[..n],&salt);
+ assert_eq!(calls.get(),1);
+ let out:usize=kani::any();kani::assume(out<32);
+ #[cfg(not(NJS_invert))] assert_eq!(actual[out],reply[out]);
+ #[cfg(NJS_invert)] assert_ne!(actual[out],reply[out]);
+}
+#[derive(Clone,Copy)]
+struct ParentOracle<'a> { children:&'a [[u8;32];8], child:usize, byte:usize, reply:[u8;32], count:&'a core::cell::Cell<usize> }
+impl aspis_core::Digest32 for ParentOracle<'_> {
+ fn digest(&self,parts:&[&[u8]])->[u8;32] {
+  assert_eq!(self.count.get(),0);self.count.set(1);
+  assert_eq!(parts.len(),9);assert_eq!(parts[0].len(),1);assert_eq!(parts[0][0],0x18);
+  assert_eq!(parts[self.child+1].len(),32);
+  assert_eq!(parts[self.child+1].as_ptr(),self.children[self.child].as_ptr());
+  assert_eq!(parts[self.child+1][self.byte],self.children[self.child][self.byte]);
+  self.reply
+ }
+}
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn parent() {
+ let children:[[u8;32];8]=kani::any();let reply:[u8;32]=kani::any();let child:usize=kani::any();let byte:usize=kani::any();kani::assume(child<8);kani::assume(byte<32);
+ let calls=core::cell::Cell::new(0);let hash=ParentOracle{children:&children,child,byte,reply,count:&calls};
+ let actual=aspis_core::r0::merkle::parent_with_digest(hash,&children);
+ assert_eq!(calls.get(),1);
+ #[cfg(not(NJS_invert))] assert_eq!(actual[byte],reply[byte]);
+ #[cfg(NJS_invert)] assert_ne!(actual[byte],reply[byte]);
+}

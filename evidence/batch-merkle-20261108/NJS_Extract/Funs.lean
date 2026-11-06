@@ -372,7 +372,7 @@ def verifier.candidate.parse_shape
         (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8) proof
         { «end» := 8#usize }
     let b ←
-      core.cmp.impls.PartialEqShared.ne (Slice.Insts.CoreCmpPartialEqArray
+      core.cmp.impls.PartialEqShared.ne ((Slice.Insts.CoreCmpPartialEqArray NJS_call_0 NJS_call_1)
         8#usize core.cmp.PartialEqU8) s compact.MAGIC
     if b
     then ok (core.result.Result.Err verifier.Error.Parse)
@@ -443,7 +443,7 @@ def verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0
   := do
   loop
     (fun iter1 =>
-      verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0.body q s
+      (verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0.body NJS_call_5) q s
       pending_return iter1)
     iter
 
@@ -474,7 +474,7 @@ def verifier.candidate.canonical_scan_loop0_loop0_loop0.body
     match cf with
     | core.ops.control_flow.ControlFlow.Continue _ =>
       let pending_return1 ←
-        verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0
+        (verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0 NJS_call_5)
           { start := 0#usize, «end» := 2#usize } q s pending_return
       match pending_return1 with
       | none => ok (done (none, 1#u32))
@@ -518,7 +518,7 @@ def verifier.candidate.canonical_scan_loop0_loop0_loop0
   Result ((Option (core.result.Result Unit verifier.Error)) × Std.U32)
   := do
   loop
-    (fun iter1 => verifier.candidate.canonical_scan_loop0_loop0_loop0.body q s
+    (fun iter1 => (verifier.candidate.canonical_scan_loop0_loop0_loop0.body NJS_call_4 NJS_call_5) q s
       pending_return iter1)
     iter
 
@@ -551,7 +551,7 @@ def verifier.candidate.canonical_scan_loop0_loop0.body
       ok (done (some r1, 0#u32))
   | some s =>
     let (pending_return1, i) ←
-      verifier.candidate.canonical_scan_loop0_loop0_loop0
+      (verifier.candidate.canonical_scan_loop0_loop0_loop0 NJS_call_4 NJS_call_5)
         { start := 0#usize, «end» := 26#usize } q s pending_return
     match i with
     | 1#uscalar => ok (cont (iter1, pending_return1))
@@ -570,7 +570,7 @@ def verifier.candidate.canonical_scan_loop0_loop0
   := do
   loop
     (fun (iter1, pending_return1) =>
-      verifier.candidate.canonical_scan_loop0_loop0.body q iter1
+      (verifier.candidate.canonical_scan_loop0_loop0.body NJS_call_4 NJS_call_5 NJS_call_10) q iter1
       pending_return1)
     (iter, pending_return)
 
@@ -591,7 +591,7 @@ def verifier.candidate.canonical_scan_loop0.body
   | some i =>
     let q ← verifier.candidate.opening proof i
     let (pending_return1, i1) ←
-      verifier.candidate.canonical_scan_loop0_loop0
+      (verifier.candidate.canonical_scan_loop0_loop0 NJS_call_4 NJS_call_5 NJS_call_10)
         { start := 0#usize, «end» := 4#usize } q pending_return
     match i1 with
     | 1#uscalar => ok (cont (iter1, pending_return1))
@@ -610,7 +610,7 @@ def verifier.candidate.canonical_scan_loop0
   := do
   loop
     (fun (iter1, pending_return1) =>
-      verifier.candidate.canonical_scan_loop0.body proof iter1 pending_return1)
+      (verifier.candidate.canonical_scan_loop0.body NJS_call_4 NJS_call_5 NJS_call_10) proof iter1 pending_return1)
     (iter, pending_return)
 
 /-- [aspis_r1_cost_probe::verifier::candidate::canonical_scan]:
@@ -657,7 +657,7 @@ def verifier.candidate.canonical_scan
         match cf3 with
         | core.ops.control_flow.ControlFlow.Continue _ =>
           let pending_return ←
-            verifier.candidate.canonical_scan_loop0
+            (verifier.candidate.canonical_scan_loop0 NJS_call_4 NJS_call_5 NJS_call_10)
               { start := 0#usize, «end» := 22#usize } proof none
           match pending_return with
           | none => fail panic
@@ -695,7 +695,7 @@ def verifier.candidate.batch_keys_loop.body
                   then u / 4#u32
                   else ok u
     let i1 ← lift (core.convert.num.FromU64U32.from index)
-    let i2 ← lift (Std.U64.wrapping_shl i1 8#i32)
+    let i2 ← lift (Std.U64.wrapping_shl i1 8#u32)
     let i3 ← lift (UScalar.cast .U64 j)
     let i4 ← lift (i2 ||| i3)
     let keys1 ← Array.update keys j i4
@@ -962,14 +962,14 @@ def verifier.candidate.batch_tree_loop.body
   then
     let key ← verifier.candidate.batch_key_at keys key_position
     let key_position1 ← lift (Std.Usize.wrapping_add key_position 1#usize)
-    let i ← lift (Std.U64.wrapping_shr key 8#i32)
+    let i ← lift (Std.U64.wrapping_shr key 8#u32)
     let index ← lift (UScalar.cast .U32 i)
     let i1 ← lift (key &&& 255#u64)
     let i2 ← lift (UScalar.cast .Usize i1)
     let i3 ← lift (Std.Usize.wrapping_add lo i2)
     let q ← verifier.candidate.opening proof i3
     let leaf ←
-      verifier.candidate.batch_leaf aspis_coredigestDigest32Inst hash tree q
+      (verifier.candidate.batch_leaf NJS_call_6 NJS_call_7 NJS_call_8) aspis_coredigestDigest32Inst hash tree q
     if d > 0#usize
     then
       let i4 ← lift (Std.Usize.wrapping_sub d 1#usize)
@@ -1003,7 +1003,7 @@ def verifier.candidate.batch_tree_loop.body
     let cf ← core.result.Result.Insts.CoreOpsTry.branch r
     match cf with
     | core.ops.control_flow.ControlFlow.Continue val1 =>
-      let nodes ← verifier.candidate.slot proof s
+      let nodes ← (verifier.candidate.slot NJS_call_9) proof s
       let i ← Array.index_usize compact.SLOT_NODES s
       if val1 > i
       then ok (done (idx, val, none))
@@ -1053,7 +1053,7 @@ def verifier.candidate.batch_tree_loop
   := do
   loop
     (fun (idx1, val1, d1, key_position1) =>
-      verifier.candidate.batch_tree_loop.body aspis_coredigestDigest32Inst
+      (verifier.candidate.batch_tree_loop.body NJS_call_2 NJS_call_6 NJS_call_7 NJS_call_8 NJS_call_9 NJS_call_12 NJS_call_13) aspis_coredigestDigest32Inst
       proof root tree hash lo n s keys idx1 val1 d1 key_position1)
     (idx, val, d, key_position)
 
@@ -1078,7 +1078,7 @@ def verifier.candidate.batch_tree
   let a ← verifier.candidate.batch_keys queries lo n tree
   let keys ← verifier.candidate.sort_batch_keys a n
   let (idx1, val1, pending_return) ←
-    verifier.candidate.batch_tree_loop aspis_coredigestDigest32Inst proof root
+    (verifier.candidate.batch_tree_loop NJS_call_2 NJS_call_6 NJS_call_7 NJS_call_8 NJS_call_9 NJS_call_12 NJS_call_13) aspis_coredigestDigest32Inst proof root
       tree idx val hash lo n s keys 0#usize 0#usize
   match pending_return with
   | none => fail panic
@@ -1100,19 +1100,19 @@ def verifier.candidate.batch_merkle_values
   let root1 ← Array.index_usize roots 1#usize
   let root2 ← Array.index_usize roots 2#usize
   let (r, idx1, val1) ←
-    verifier.candidate.batch_tree aspis_coredigestDigest32Inst proof queries
+    (verifier.candidate.batch_tree NJS_call_2 NJS_call_6 NJS_call_7 NJS_call_8 NJS_call_9 NJS_call_12 NJS_call_13) aspis_coredigestDigest32Inst proof queries
       root0 batch 0#usize idx val hash
   let cf ← core.result.Result.Insts.CoreOpsTry.branch r
   match cf with
   | core.ops.control_flow.ControlFlow.Continue _ =>
     let (r1, idx2, val2) ←
-      verifier.candidate.batch_tree aspis_coredigestDigest32Inst proof queries
+      (verifier.candidate.batch_tree NJS_call_2 NJS_call_6 NJS_call_7 NJS_call_8 NJS_call_9 NJS_call_12 NJS_call_13) aspis_coredigestDigest32Inst proof queries
         root1 batch 1#usize idx1 val1 hash
     let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue _ =>
       let (r2, _, _) ←
-        verifier.candidate.batch_tree aspis_coredigestDigest32Inst proof
+        (verifier.candidate.batch_tree NJS_call_2 NJS_call_6 NJS_call_7 NJS_call_8 NJS_call_9 NJS_call_12 NJS_call_13) aspis_coredigestDigest32Inst proof
           queries root2 batch 2#usize idx2 val2 hash
       let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
       match cf2 with
@@ -1138,7 +1138,7 @@ def verifier.candidate.batch_merkle
   := do
   let root0 ← Array.index_usize p.roots 0#usize
   let root1 ← Array.index_usize p.roots 1#usize
-  verifier.candidate.batch_merkle_values aspis_coredigestDigest32Inst proof
+  (verifier.candidate.batch_merkle_values NJS_call_2 NJS_call_6 NJS_call_7 NJS_call_8 NJS_call_9 NJS_call_12 NJS_call_13) aspis_coredigestDigest32Inst proof
     p.queries (Array.make 3#usize [ root0, root1, folded_root ]) batch hash
 
 end NJS_Extract
