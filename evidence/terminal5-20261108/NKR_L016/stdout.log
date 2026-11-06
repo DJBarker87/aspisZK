@@ -1,0 +1,53 @@
+theorem AspisR1.NKR_DigestChildren.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  Domain p → FIw_ArrayValue.canonical o.z → FIw_ArrayValue.canonical s.high → ∃ c, Clauses p o s c ∧ Canonical c :=
+fun p o s hp ho hs =>
+  have hh := fun i => NJB_ArrayCarrier.canonical_cell s.high hs ⟨↑i, high._proof_3 i⟩;
+  let ⟨a, h✝⟩ := NJX_LeftRoot.source (high s 56) o.z p.anchor (hh 56) ho hp.anchor
+  let ⟨ac, am⟩ := h✝
+  let ⟨n, h✝¹⟩ := NJX_LeftRoot.source (high s 26) o.z p.nullifier (hh 26) ho hp.nullifier
+  let ⟨nc, nm⟩ := h✝¹
+  let ⟨r, h✝²⟩ := NJX_RecipientRoot.source p.recipient o.z (high s 29) (hh 29) ho hp.recipient
+  let ⟨cache, h✝³⟩ := h✝²
+  let ⟨rc, right✝⟩ := h✝³
+  let ⟨rm, right✝¹⟩ := right✝
+  let ⟨hr, right✝²⟩ := right✝¹
+  let ⟨left✝, right✝³⟩ := right✝²
+  let ⟨d, h✝⁴⟩ := NJX_LeftRoot.source (high s 32) o.z p.change (hh 32) ho hp.change
+  let ⟨dc', dm⟩ := h✝⁴
+  let ⟨packets, h✝⁵⟩ :=
+    NKI_LevelsComplete.source p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z s.high
+      hp.frontier ho hs
+  let ⟨levels, h✝⁶⟩ := h✝⁵
+  let ⟨left✝¹, right✝⁴⟩ := h✝⁶
+  let ⟨lc, right✝⁵⟩ := right✝⁴
+  let ⟨left✝², right✝⁶⟩ := right✝⁵
+  let ⟨hl, right✝⁷⟩ := right✝⁶
+  let ⟨root, h✝⁷⟩ :=
+    NJX_LeftRoot.source (high s 53) o.z p.transition.candidate_afterstate.next_root (hh 53) ho hp.nextRoot
+  let ⟨rootc, rootm⟩ := h✝⁷
+  let ⟨carry, h✝⁸⟩ := NKR_DigestCarry.source p.transition.live_snapshot.next_pair_index
+  let ⟨cc, right✝⁸⟩ := h✝⁸
+  let ⟨cv, hc⟩ := right✝⁸
+  have ch :=
+    NJB_ArrayCarrier.canonical_cell s.high hs
+      ⟨33 + ↑(NKI_PublicDomains.carryLevel ↑carry), NKI_PublicDomains.high._proof_3 ↑carry⟩;
+  have cd :=
+    hp.nextFrontier
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier (NKI_PublicDomains.carryLevel ↑carry))
+      (List.getElem_mem
+        (NJB_ArrayCarrier.cell._proof_1 p.transition.candidate_afterstate.next_frontier
+          ⟨↑(NKI_PublicDomains.carryLevel ↑carry),
+            NJX_AppendDomains.frontier._proof_2 (NKI_PublicDomains.carryLevel ↑carry)⟩));
+  let ⟨carried, h✝⁹⟩ :=
+    NJX_CarryRoot.source (↑carry) (NKI_PublicDomains.high s ↑carry) o.z
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier (NKI_PublicDomains.carryLevel ↑carry))
+      ch ho cd
+  let ⟨cac, right✝⁹⟩ := h✝⁹
+  let ⟨cam, right✝¹⁰⟩ := right✝⁹
+  let ⟨hca, right✝¹¹⟩ := right✝¹⁰
+  Exists.intro
+    { anchor := a.out, nullifier := n.out, recipient := r, change := d.out, levels := levels, nextRoot := root.out,
+      carry := carry, carried := carried }
+    ⟨⟨ac, ⟨am, ⟨nc, ⟨nm, ⟨rc, ⟨rm, ⟨dc', ⟨dm, ⟨lc, ⟨rootc, ⟨rootm, ⟨cc, ⟨cv, ⟨hc, ⟨cac, cam⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩,
+      ⟨a.out_canonical, ⟨n.out_canonical, ⟨hr, ⟨d.out_canonical, ⟨hl, ⟨root.out_canonical, hca⟩⟩⟩⟩⟩⟩⟩
+'AspisR1.NKR_DigestChildren.source' depends on axioms: [propext, Classical.choice, Quot.sound]

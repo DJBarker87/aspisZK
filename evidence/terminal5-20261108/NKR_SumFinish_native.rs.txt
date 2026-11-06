@@ -1,0 +1,66 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn NKR_finish_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+struct NKR_FinishLog{seek:usize,limb:usize,tag_calls:usize,tag_at:usize,tag_scratch:usize,tag_selectors:usize,tag_replies:[QM31;4],calls:usize,kind:[u8;4],left:[QM31;4],right:[QM31;4],arity:[usize;4],op_replies:[QM31;4]}
+fn NKR_finish_tag(scratch:&[QM31],coordinate:usize,selectors:&Selectors,l:&mut NKR_FinishLog)->QM31{
+ let i=l.tag_calls;l.tag_calls+=1;if i==l.seek{l.tag_at=coordinate;l.tag_scratch=scratch.as_ptr()as usize;l.tag_selectors=selectors as*const Selectors as usize;}l.tag_replies[i]
+}
+fn NKR_finish_sum(left:[QM31;4],right:[QM31;4],count:usize,l:&mut NKR_FinishLog)->QM31{
+ let i=l.calls;l.calls+=1;l.kind[i]=0;l.left[i]=left[l.seek];l.right[i]=right[l.seek];l.arity[i]=count;l.op_replies[i]
+}
+fn NKR_finish_add(left:QM31,right:QM31,l:&mut NKR_FinishLog)->QM31{
+ let i=l.calls;l.calls+=1;l.kind[i]=1;l.left[i]=left;l.right[i]=right;l.op_replies[i]
+}
+fn NKR_finish_batch(scratch:&[QM31],selectors:&Selectors,mut values:[QM31;4],mut weights:[QM31;4],group:usize,mut coordinate:usize,l:&mut NKR_FinishLog)->([QM31;4],[QM31;4],usize){
+ let end=COPY_GROUP_LOCAL_GROUP_OFFSETS[group+1];
+ let count = core::cmp::min(4, end - coordinate);
+ let tag_values: [QM31; 4] = core::array::from_fn(|index| {
+     if index < count {
+         NKR_finish_tag(scratch, coordinate + index, selectors,l)
+     } else {
+         QM31::ZERO
+     }
+ });
+ let weight_values: [QM31; 4] = core::array::from_fn(|index| {
+     if index < count {
+         scratch[COPY_SELECTOR_TENSOR_WEIGHT_OFFSET + coordinate + index]
+     } else {
+         QM31::ZERO
+     }
+ });
+ let lows: [QM31; 4] = core::array::from_fn(|index| {
+     if index < count {
+         selectors.low
+             [usize::from(COPY_GROUP_LOCAL_COORDINATE_LOCALS[coordinate + index])]
+     } else {
+         QM31::ZERO
+     }
+ });
+ values[group] =
+     NKR_finish_add(values[group],NKR_finish_sum(tag_values, lows, count,l),l);
+ weights[group] =
+     NKR_finish_add(weights[group],NKR_finish_sum(weight_values, lows, count,l),l);
+ coordinate += count;
+ (values,weights,coordinate)
+}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_finish_batch_cut(){
+ let scratch:[QM31;103]=unsafe{core::mem::transmute::<[[u32;4];103],[QM31;103]>(kani::any())};
+ let selectors=Selectors{high:unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())}};
+ let values:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let weights:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};
+ let tags:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let replies:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};
+ let group:usize=kani::any();let coordinate:usize=kani::any();let seek:usize=kani::any();let limb:usize=kani::any();let observe:usize=kani::any();
+ kani::assume(group<4&&limb<4&&observe<4);let start=COPY_GROUP_LOCAL_GROUP_OFFSETS[group];let end=COPY_GROUP_LOCAL_GROUP_OFFSETS[group+1];kani::assume(coordinate>=start&&coordinate<end);
+ let count=core::cmp::min(4,end-coordinate);kani::assume(seek<4);
+ let mut l=NKR_FinishLog{seek,limb,tag_calls:0,tag_at:999,tag_scratch:0,tag_selectors:0,tag_replies:tags,calls:0,kind:[255;4],left:[QM31::ZERO;4],right:[QM31::ZERO;4],arity:[0;4],op_replies:replies};
+ let (v,w,next)=NKR_finish_batch(&scratch,&selectors,values,weights,group,coordinate,&mut l);
+ assert_eq!(l.tag_calls,count);if seek<count{assert_eq!(l.tag_at,coordinate+seek);assert_eq!(l.tag_scratch,scratch.as_ptr()as usize);assert_eq!(l.tag_selectors,&selectors as*const Selectors as usize);}assert_eq!(l.calls,4);
+ assert_eq!(l.kind,[0,1,0,1]);assert_eq!(l.arity[0],count);assert_eq!(l.arity[2],count);assert_eq!(next,coordinate+count);
+ assert_eq!(NKR_finish_words(l.left[0])[limb],NKR_finish_words(if seek<count{tags[seek]}else{QM31::ZERO})[limb]);assert_eq!(NKR_finish_words(l.right[0])[limb],NKR_finish_words(if seek<count{selectors.low[usize::from(COPY_GROUP_LOCAL_COORDINATE_LOCALS[coordinate+seek])]}else{QM31::ZERO})[limb]);
+ assert_eq!(NKR_finish_words(l.left[1])[limb],NKR_finish_words(values[group])[limb]);assert_eq!(NKR_finish_words(l.right[1])[limb],NKR_finish_words(replies[0])[limb]);
+ assert_eq!(NKR_finish_words(l.left[2])[limb],NKR_finish_words(if seek<count{scratch[COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+coordinate+seek]}else{QM31::ZERO})[limb]);assert_eq!(NKR_finish_words(l.right[2])[limb],NKR_finish_words(l.right[0])[limb]);
+ assert_eq!(NKR_finish_words(l.left[3])[limb],NKR_finish_words(weights[group])[limb]);assert_eq!(NKR_finish_words(l.right[3])[limb],NKR_finish_words(replies[2])[limb]);
+ assert_eq!(NKR_finish_words(v[observe])[limb],NKR_finish_words(if observe==group{replies[1]}else{values[observe]})[limb]^if cfg!(NKR_invert){1}else{0});
+ assert_eq!(NKR_finish_words(w[observe])[limb],NKR_finish_words(if observe==group{replies[3]}else{weights[observe]})[limb]);
+}

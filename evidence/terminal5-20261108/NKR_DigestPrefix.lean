@@ -52,6 +52,8 @@ theorem source (p : Public) (o : Openings) (s : Selectors)
  ∃ c sums,run p o s=ok (c,sums) ∧ Clauses p o s c ∧ Canonical c ∧
  (∀ g j,Canon (sums g j)) ∧ Frame c sums := by
  obtain ⟨c,hc,hcan⟩ := NKR_DigestChildren.source p o s hp ho hh
+ have clauses:=hc
+ have canonical:=hcan
  obtain ⟨ac,am,nc,nm,rc,rm,dc,dm,lc,rootc,rootm,cc,cv,hcarry,cac,cam⟩ := hc
  obtain ⟨ha,hn,hr,hd,hl,hroot,hca⟩ := hcan
  have hz : ∀ j,Canon (zero j) := fun _=>FIv_NativeValue.zero.1
@@ -65,8 +67,8 @@ theorem source (p : Public) (o : Openings) (s : Selectors)
  obtain ⟨v12,vc12,h12,val12⟩ := NKR_DigestAdd.source zero (last c.levels) hz ht
  obtain ⟨v5,vc5,h5,val5⟩ := NKR_DigestAdd.source v4 c.nextRoot h4 hroot
  obtain ⟨v6,vc6,h6,val6⟩ := NKR_DigestAdd.source v5 c.carried h5 hca
- refine ⟨c,![v0,v6,v12],?_,hc,hcan,?_,?_⟩
- · have rec : (Children.mk c.anchor c.nullifier c.recipient c.change c.levels c.nextRoot c.carry c.carried)=c := by cases c;rfl
+ refine ⟨c,![v0,v6,v12],?_,clauses,canonical,?_,?_⟩
+ · have rec : (Children.mk c.anchor c.nullifier c.recipient c.change c.levels c.nextRoot c.carry c.carried)=c := by rfl
    simp only [run,ac,nc,rc,dc,lc,rootc,cc,cac,vc1,vc2,vc3,vc4,vc0,vc12,vc5,vc6,bind_tc_ok,rec]
  · intro g j
    fin_cases g

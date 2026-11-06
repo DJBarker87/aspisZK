@@ -14,6 +14,7 @@ theorem singleton (x y : Q) (hx : Canon x) (hy : Canon y) :
   simp only [List.mem_singleton] at hp
   subst p
   exact ⟨hx,hy⟩)
+ change decode out'=NGA_SumAlgebra.sumProducts [(x,y)] at vo'
  have val : decode out=decode out' := by
   rw [vo,vo']
   simp only [NGA_SumAlgebra.sumProducts,List.map_cons,List.map_nil,List.sum_cons,List.sum_nil,add_zero]
@@ -28,10 +29,10 @@ theorem first_pairs (l r : A4) : (l.val.zip r.val).take 1=[(first l,first r)] :=
  rcases r with ⟨rs,hrs⟩
  cases ls with
  | nil => simp at hls
- | cons a as =>
+ | cons a tailL =>
   cases rs with
   | nil => simp at hrs
-  | cons b bs => rfl
+  | cons b tailR => rfl
 
 /-- Full adopted arithmetic on the exact first count input pairs. No count1
 restriction: the real field helpers are consumed for counts2,3,4. -/
@@ -63,7 +64,9 @@ theorem source (l r : A4) (count : Nat) (lower : 1≤count) (upper : count≤4)
    change native l r 4=_ at h
    rw [native_reference l r 4 hl hr] at h
    have len : (l.val.zip r.val).length=4 := by rw [d.1];rfl
-   rw [←len,List.take_length]
+   have take : (l.val.zip r.val).take 4=l.val.zip r.val := by
+    simpa only [len] using List.take_length (l.val.zip r.val)
+   rw [take]
    exact h
 
 /-- Complete parent result and canonicality, with every child-domain clause

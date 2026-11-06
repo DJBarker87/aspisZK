@@ -24,7 +24,18 @@ trans=re.sub(r'local_sums\[1\]\[([01])\] = local_sums\[1\]\[\1\]\.add\((\w+)\[\1
 trans+='    local_sums\n'
 compact=lambda s:re.sub(r'\s+','',s)
 assert compact(trans)==compact(body(code,'NKR_Digest_prefix')),'Frozen prefix translation mismatch'
-pins=dict(revision=rev,function='public_digest_packed_selector_tensor',source=source,source_sha256=hashlib.sha256(old.encode()).hexdigest(),full_body_sha256=hashlib.sha256(full.encode()).hexdigest(),prefix_sha256=hashlib.sha256(prefix.encode()).hexdigest(),harness_sha256=hashlib.sha256(code.encode()).hexdigest(),prefix=prefix,translated=trans,identity=True,scope='first four calls and eight additions only')
+middle=full[full.index('    let source = public.transition.live_snapshot;'):full.index('    let mut output = [QM31::ZERO; DIGEST_ELEMS / 4];')]
+mt=middle
+for orig,new in [('append_levels_packed_selector_tensor','NKR_Digest_append'),('left_digest_packed_selector_tensor','NKR_Digest_mleft'),('bounded_append_carry','NKR_Digest_carry'),('optional_carry_packed_selector_tensor','NKR_Digest_optional')]:
+ while orig+'(' in mt:
+  start=mt.index(orig+'(');p=start+len(orig);q=p+1;depth=1
+  while depth:depth+=(mt[q]=='(')-(mt[q]==')');q+=1
+  args=mt[p+1:q-1].rstrip().rstrip(',')
+  mt=mt[:start]+new+'('+args+',l)'+mt[q:]
+mt=re.sub(r'local_sums\[([012])\]\[([01])\] = local_sums\[\1\]\[\2\]\.add\((\w+)\[\2\]\);',r'local_sums[\1][\2] = NKR_Digest_madd(local_sums[\1][\2],\3[\2],l);',mt)
+mt+='    local_sums\n'
+assert compact(mt)==compact(body(code,'NKR_Digest_middle')),'Frozen middle translation mismatch'
+pins=dict(revision=rev,function='public_digest_packed_selector_tensor',source=source,source_sha256=hashlib.sha256(old.encode()).hexdigest(),full_body_sha256=hashlib.sha256(full.encode()).hexdigest(),prefix_sha256=hashlib.sha256(prefix.encode()).hexdigest(),harness_sha256=hashlib.sha256(code.encode()).hexdigest(),prefix=prefix,translated=trans,middle=middle,middle_translated=mt,identity=True,scope='first four calls/eight additions and middle append/root/carry/eight additions; low suffix retained NKI_K011/012')
 (E/'NKR_Digest_ERASURE.json').write_text(json.dumps(pins,indent=1))
 new=old+'\n#[cfg(kani)]\n#[path="NKR_Digest_native.rs"]\nmod NKR_Digest_native;\n'
 libnew='#![cfg_attr(kani,feature(allocator_api))]\n'+libold

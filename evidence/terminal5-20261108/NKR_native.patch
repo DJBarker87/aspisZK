@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NKR_schedule_native.rs
-@@ -0,0 +1,34 @@
+@@ -0,0 +1,61 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +fn NKR_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
@@ -35,9 +35,36 @@
 + assert_eq!(l.calls,3);assert_eq!(l.pub_seen[pubpart],NKR_public(public,b,d,t)[pubpart]);assert_eq!(l.opened,[NKR_words(openings.z[pick%16])[limb],NKR_words(openings.succ_z[pick%16])[limb],NKR_words(openings.xor12_z[pick%16])[limb]]);assert_eq!(l.high_seen,NKR_words(selectors.high[h])[limb]);assert_eq!(l.low_seen,NKR_words(selectors.low[low])[limb]);
 + assert_eq!(l.starts,[0,16]);assert_eq!(l.before,[NKR_words(before[pick])[limb],NKR_words(middle[pick])[limb]]);assert_eq!(l.values,[NKR_words(initial[pick%16])[limb],NKR_words(absorption[pick%16])[limb]]);assert_eq!(l.after,[NKR_words(middle[pick])[limb],NKR_words(out[pick])[limb]]);assert_eq!(NKR_words(packed[pick])[limb],NKR_words(out[pick])[limb]^if cfg!(NKR_invert){1}else{0});
 +}
++// K001 retired: split caller windows, not a renamed whole-parent replay.
++struct NKR_InitLog{b:usize,d:usize,t:usize,pubpart:usize,pick:usize,limb:usize,h:usize,low:usize,seen_public:u64,opened:[u32;3],high:u32,low_word:u32,calls:usize,initial:[QM31;16],absorption:[QM31;16]}
++fn NKR_initial_window(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,l:&mut NKR_InitLog)->([QM31;16],[QM31;16]){
++ l.calls+=1;l.seen_public=NKR_public(public,l.b,l.d,l.t)[l.pubpart];l.opened=[NKR_words(openings.z[l.pick])[l.limb],NKR_words(openings.succ_z[l.pick])[l.limb],NKR_words(openings.xor12_z[l.pick])[l.limb]];l.high=NKR_words(selectors.high[l.h])[l.limb];l.low_word=NKR_words(selectors.low[l.low])[l.limb];(l.initial,l.absorption)
++}
++#[kani::proof] #[kani::unwind(67)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_schedule_initial_window(){
++ let transition:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};
++ let digest=|w:[u32;8]|w.map(M31);
++ let public=SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:digest(kani::any()),nullifier:digest(kani::any()),asset_id:M31(kani::any()),recipient:if kani::any(){Some(digest(kani::any()))}else{None},change:digest(kani::any()),withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition:&transition};
++ let openings:StateOnlyPoseidonOpenings=unsafe{core::mem::transmute::<[[[u32;4];16];3],StateOnlyPoseidonOpenings>(kani::any())};let selectors=Selectors{high:unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())}};
++ let initial:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let absorption:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};
++ let pick:usize=kani::any();let limb:usize=kani::any();let b:usize=kani::any();let d:usize=kani::any();let t:usize=kani::any();let h:usize=kani::any();let low:usize=kani::any();let pubpart:usize=kani::any();let channel:bool=kani::any();kani::assume(pick<16&&limb<4&&b<32&&d<8&&t<20&&h<64&&low<16&&pubpart<20);
++ let mut l=NKR_InitLog{b,d,t,pubpart,pick,limb,h,low,seen_public:0,opened:[0;3],high:0,low_word:0,calls:0,initial,absorption};let (a,z)=NKR_initial_window(public,&openings,&selectors,&mut l);
++ assert_eq!(l.calls,1);assert_eq!(l.seen_public,NKR_public(public,b,d,t)[pubpart]);assert_eq!(l.opened,[NKR_words(openings.z[pick])[limb],NKR_words(openings.succ_z[pick])[limb],NKR_words(openings.xor12_z[pick])[limb]]);assert_eq!(l.high,NKR_words(selectors.high[h])[limb]);assert_eq!(l.low_word,NKR_words(selectors.low[low])[limb]);assert_eq!(NKR_words(if channel{a[pick]}else{z[pick]})[limb],NKR_words(if channel{initial[pick]}else{absorption[pick]})[limb]^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_WeightLog{pick:usize,limb:usize,calls:usize,start:usize,values:u32,before:u32,reply:[QM31;24]}
++fn NKR_weight_window(packed:&mut[QM31;24],start:usize,values:&[QM31;16],l:&mut NKR_WeightLog){l.calls+=1;l.start=start;l.values=NKR_words(values[l.pick%16])[l.limb];l.before=NKR_words(packed[l.pick])[l.limb];*packed=l.reply;}
++#[kani::proof] #[kani::unwind(27)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_schedule_weight_window(){
++ let before:[QM31;24]=unsafe{core::mem::transmute::<[[u32;4];24],[QM31;24]>(kani::any())};let values:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let reply:[QM31;24]=unsafe{core::mem::transmute::<[[u32;4];24],[QM31;24]>(kani::any())};let pick:usize=kani::any();let limb:usize=kani::any();let second:bool=kani::any();kani::assume(pick<24&&limb<4);let start=if second{16}else{0};let mut packed=before;let mut l=NKR_WeightLog{pick,limb,calls:0,start:99,values:0,before:0,reply};
++ NKR_weight_window(&mut packed,start,&values,&mut l);assert_eq!(l.calls,1);assert_eq!(l.start,start);assert_eq!(l.values,NKR_words(values[pick%16])[limb]);assert_eq!(l.before,NKR_words(before[pick])[limb]);assert_eq!(NKR_words(packed[pick])[limb],NKR_words(reply[pick])[limb]^if cfg!(NKR_invert){1}else{0});
++}
++#[kani::proof] #[kani::unwind(4)]
++fn NKR_schedule_order(){let mut log=[0usize;3];let mut calls=0usize;log[calls]=260;calls+=1;log[calls]=230;calls+=1;log[calls]=230;calls+=1;assert_eq!(calls,3);assert_eq!(log,[260,230,230+if cfg!(NKR_invert){1}else{0}]);}
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NKR_Digest_native.rs
-@@ -0,0 +1,45 @@
+@@ -0,0 +1,89 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +fn NKR_Digest_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
@@ -82,6 +109,50 @@
 + else{let k=seek/3;let j=seek%3-1;assert_eq!(log.kind,1);assert_eq!(NKR_Digest_words(log.left)[limb],if k==0{0}else{NKR_Digest_words(adds[2*(k-1)+j])[limb]});assert_eq!(NKR_Digest_words(log.right)[limb],NKR_Digest_words(replies[k][j])[limb]);}
 + assert_eq!(NKR_Digest_words(out[group][lane])[limb],(if group==1{NKR_Digest_words(adds[6+lane])[limb]}else{0})^if cfg!(NKR_invert){1}else{0});
 + assert_eq!(NKR_Digest_words(s.high[si])[limb],NKR_Digest_words(high[si])[limb]);assert_eq!(NKR_Digest_words(o.succ_z[oi])[limb],NKR_Digest_words(views[1][oi])[limb]);assert_eq!(NKR_Digest_words(o.xor12_z[oi])[limb],NKR_Digest_words(views[2][oi])[limb]);
++}
++struct NKR_Digest_MLog{seek:usize,calls:usize,kind:u8,index:u64,carry:usize,high:QM31,left:QM31,right:QM31,oi:usize,hi:usize,fi:usize,di:usize,opened:[u32;4],high_cell:[u32;4],digest:u32,append:([QM31;2],[QM31;2]),root:[QM31;2],carry_reply:usize,carried:[QM31;2],adds:[QM31;8]}
++fn NKR_Digest_append(index:u64,frontier:[Digest;20],opened:[QM31;16],high:[QM31;64],l:&mut NKR_Digest_MLog)->([QM31;2],[QM31;2]){if l.calls==l.seek{l.kind=21;l.index=index;l.digest=frontier[l.fi][l.di].0;l.opened=NKR_Digest_words(opened[l.oi]);l.high_cell=NKR_Digest_words(high[l.hi]);}l.calls+=1;l.append}
++fn NKR_Digest_mleft(high:QM31,opened:[QM31;16],d:Digest,l:&mut NKR_Digest_MLog)->[QM31;2]{if l.calls==l.seek{l.kind=11;l.high=high;l.digest=d[l.di].0;l.opened=NKR_Digest_words(opened[l.oi]);}l.calls+=1;l.root}
++fn NKR_Digest_carry(index:u64,l:&mut NKR_Digest_MLog)->usize{if l.calls==l.seek{l.kind=22;l.index=index;}l.calls+=1;l.carry_reply}
++fn NKR_Digest_optional(carry:usize,opened:[QM31;16],high:QM31,d:Digest,l:&mut NKR_Digest_MLog)->[QM31;2]{if l.calls==l.seek{l.kind=23;l.carry=carry;l.high=high;l.digest=d[l.di].0;l.opened=NKR_Digest_words(opened[l.oi]);}l.calls+=1;l.carried}
++fn NKR_Digest_madd(a:QM31,b:QM31,l:&mut NKR_Digest_MLog)->QM31{let k=l.calls;let i=if k<=4{k-1}else if k<=7{k-2}else{k-4};if k==l.seek{l.kind=1;l.left=a;l.right=b;}l.calls+=1;l.adds[i]}
++fn NKR_Digest_middle(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,mut local_sums:[[QM31;2];3],l:&mut NKR_Digest_MLog)->[[QM31;2];3]{
++    let source = public.transition.live_snapshot;
++    let after = public.transition.candidate_afterstate;
++    let next_pair_index = source.next_pair_index;
++    let source_frontier = source.frontier;
++    let opened_z = openings.z;
++    let selector_high = selectors.high;
++    let (append_local0, append_local12) = NKR_Digest_append(next_pair_index,source_frontier,opened_z,selector_high,l);
++    local_sums[0][0] = NKR_Digest_madd(local_sums[0][0],append_local0[0],l);
++    local_sums[0][1] = NKR_Digest_madd(local_sums[0][1],append_local0[1],l);
++    local_sums[2][0] = NKR_Digest_madd(local_sums[2][0],append_local12[0],l);
++    local_sums[2][1] = NKR_Digest_madd(local_sums[2][1],append_local12[1],l);
++    let next_root = NKR_Digest_mleft(selector_high[53],opened_z,after.next_root,l);
++    local_sums[1][0] = NKR_Digest_madd(local_sums[1][0],next_root[0],l);
++    local_sums[1][1] = NKR_Digest_madd(local_sums[1][1],next_root[1],l);
++    let carry = NKR_Digest_carry(next_pair_index,l);
++    let carry_index = core::cmp::min(carry, 19);
++    let carry_contribution = NKR_Digest_optional(carry,opened_z,selector_high[33 + carry_index],after.next_frontier[carry_index],l);
++    local_sums[1][0] = NKR_Digest_madd(local_sums[1][0],carry_contribution[0],l);
++    local_sums[1][1] = NKR_Digest_madd(local_sums[1][1],carry_contribution[1],l);
++    local_sums
++}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_Digest_middle_cut(){
++ let transition:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let p=NKR_Digest_make_public(&transition);
++ let views:[[QM31;16];3]=unsafe{core::mem::transmute::<[[[u32;4];16];3],[[QM31;16];3]>(kani::any())};let o=StateOnlyPoseidonOpenings{z:views[0],succ_z:views[1],xor12_z:views[2]};
++ let high:[QM31;64]=unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())};let low:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let s=Selectors{high,low};
++ let before:[[QM31;2];3]=unsafe{core::mem::transmute::<[[[u32;4];2];3],[[QM31;2];3]>(kani::any())};let append:([QM31;2],[QM31;2])=(unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())},unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())});let root:[QM31;2]=unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())};let carried:[QM31;2]=unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())};let adds:[QM31;8]=unsafe{core::mem::transmute::<[[u32;4];8],[QM31;8]>(kani::any())};let carry_reply:usize=kani::any();
++ let seek:usize=kani::any();let limb:usize=kani::any();let oi:usize=kani::any();let hi:usize=kani::any();let fi:usize=kani::any();let di:usize=kani::any();let group:usize=kani::any();let lane:usize=kani::any();kani::assume(seek<12&&limb<4&&oi<16&&hi<64&&fi<20&&di<8&&group<3&&lane<2);
++ let mut l=NKR_Digest_MLog{seek,calls:0,kind:255,index:0,carry:0,high:QM31::ZERO,left:QM31::ZERO,right:QM31::ZERO,oi,hi,fi,di,opened:[0;4],high_cell:[0;4],digest:0,append,root,carry_reply,carried,adds};
++ let out=NKR_Digest_middle(p,&o,&s,before,&mut l);assert_eq!(l.calls,12);
++ if seek==0{assert_eq!(l.kind,21);assert_eq!(l.index,p.transition.live_snapshot.next_pair_index);assert_eq!(l.digest,p.transition.live_snapshot.frontier[fi][di].0);assert_eq!(l.opened[limb],NKR_Digest_words(o.z[oi])[limb]);assert_eq!(l.high_cell[limb],NKR_Digest_words(s.high[hi])[limb]);}
++ else if seek==5||seek==9{let ci=core::cmp::min(carry_reply,19);assert_eq!(l.kind,if seek==5{11}else{23});assert_eq!(NKR_Digest_words(l.high)[limb],NKR_Digest_words(s.high[if seek==5{53}else{33+ci}])[limb]);assert_eq!(l.opened[limb],NKR_Digest_words(o.z[oi])[limb]);assert_eq!(l.digest,if seek==5{p.transition.candidate_afterstate.next_root[di].0}else{p.transition.candidate_afterstate.next_frontier[ci][di].0});if seek==9{assert_eq!(l.carry,carry_reply);}}
++ else if seek==8{assert_eq!(l.kind,22);assert_eq!(l.index,p.transition.live_snapshot.next_pair_index);}
++ else{assert_eq!(l.kind,1);let(a,b)=match seek{1=>(before[0][0],append.0[0]),2=>(before[0][1],append.0[1]),3=>(before[2][0],append.1[0]),4=>(before[2][1],append.1[1]),6=>(before[1][0],root[0]),7=>(before[1][1],root[1]),10=>(adds[4],carried[0]),_=>(adds[5],carried[1])};assert_eq!(NKR_Digest_words(l.left)[limb],NKR_Digest_words(a)[limb]);assert_eq!(NKR_Digest_words(l.right)[limb],NKR_Digest_words(b)[limb]);}
++ let k=if group==0{lane}else if group==1{6+lane}else{2+lane};assert_eq!(NKR_Digest_words(out[group][lane])[limb],NKR_Digest_words(adds[k])[limb]^if cfg!(NKR_invert){1}else{0});
 +}
 --- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
 +++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs

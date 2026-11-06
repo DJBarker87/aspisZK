@@ -11,3 +11,5 @@ Native/source cuts follow(ai)(5)/(aq)/(aq)(5)/(au). No endpoint/child-success/Ru
 Budget70 Kani/140 Lean/0 extraction. One capped scope at a time;admission exit0+allowed:true;40GB disk floor;own writes<30GB. Seed NKI_ first,NKN_ second. Receipts record exact targets,source/dependency/library pins,exit,wall,RSS,swap,axioms.
 
 Stage0 reading and seed preparation in progress.
+
+Stage1: NKR_ScheduleCut and NKR_ScheduleRoot focused PASS (L009/L010), candidate child260 conditional. Sum225 native windowK011PASS/K004matchedFAIL under KMX/frozen graph; source/cohort composition in progress. Whole scheduleK001timedout, retired and split;K003own source validation did not launch Kani. All failed receipts retained; no current row promotion.

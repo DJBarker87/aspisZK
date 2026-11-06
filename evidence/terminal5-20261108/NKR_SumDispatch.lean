@@ -21,7 +21,14 @@ theorem take_zip {A B : Type} (n : Nat) (xs : List A) (ys : List B) :
  induction n generalizing xs ys with
  | zero => simp
  | succ n ih =>
-  cases xs <;> cases ys <;> simp [List.take,List.zip,ih]
+  cases xs with
+  | nil => simp [List.zip]
+  | cons x xs =>
+   cases ys with
+   | nil => simp [List.zip]
+   | cons y ys =>
+    change (x,y)::((xs.take n).zip (ys.take n))=(x,y)::(xs.zip ys).take n
+    exact congrArg (List.cons (x,y)) (ih xs ys)
 
 theorem same_pairs (n : Usize) (h : n.val≤4) (l r : A4) :
  (selectedPrefix n h l).val.zip (selectedPrefix n h r).val=(l.val.zip r.val).take n.val := by
