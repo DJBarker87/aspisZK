@@ -1,0 +1,10 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "source": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+  "original": "\n    match count {\n        1 => left[0].mul(right[0]),\n        2 => qm31_sum_products2([left[0], left[1]], [right[0], right[1]]),\n        3 => qm31_sum_products3([left[0], left[1], left[2]], [right[0], right[1], right[2]]),\n        4 => qm31_sum_products4(left, right),\n        _ => unreachable!(\"Copy finish dot batch width\"),\n    }\n",
+  "translated": "\n    match count {\n        1 => NKR_sum_mul(left[0],right[0],l),\n        2 => NKR_sum_child([left[0], left[1]], [right[0], right[1]],l),\n        3 => NKR_sum_child([left[0], left[1], left[2]], [right[0], right[1], right[2]],l),\n        4 => NKR_sum_child(left,right,l),\n        _ => unreachable!(\"Copy finish dot batch width\"),\n    }\n",
+  "harness": "\n    match count {\n        1 => NKR_sum_mul(left[0],right[0],l),\n        2 => NKR_sum_child([left[0], left[1]], [right[0], right[1]],l),\n        3 => NKR_sum_child([left[0], left[1], left[2]], [right[0], right[1], right[2]],l),\n        4 => NKR_sum_child(left,right,l),\n        _ => unreachable!(\"Copy finish dot batch width\"),\n    }\n",
+  "identity": true,
+  "source_sha256": "f38ca2bd28554e8f67b75b7b035f02648ea0b5d82f78d2457e10188e6402a3f0",
+  "harness_sha256": "f646d519af970235af2494c44530e8d18ebb9ac4c77bc6d757e789377a0bbac8"
+}

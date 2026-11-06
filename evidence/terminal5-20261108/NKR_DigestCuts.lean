@@ -1,16 +1,21 @@
-import NKR_DigestWrapper
-/-! Reviewed(ai)(5) transcription of NKR_Digest_native.rs.txt SHA256
-42668f77057f6fc84b92b4dba60e78926219ad3085fc73376e2dd818a1666e11.
-Prefix assertions: `assert_eq!(log.calls,12)`; child kind/high/opened/some/digest;
-add left=previous add reply, right=child reply; `out[group][lane]` equals
-`adds[6+lane]` only for group1 and zero otherwise; high/succ/xor frames.
-Middle assertions: `assert_eq!(l.calls,12)`; exact append index/frontier/
-opened/highs; next-root high53/digest; carry index and carry reply; optional
-high33+min(carry,19)/next_frontier[min]; addition operands; return `adds[k]`.
-Wrapper assertions: `assert_eq!(l.calls,1)`; every Public scalar and arbitrary
-coordinate of public/transition/opening/selector arrays; `out=reply`.
-No arithmetic-value, success, endpoint or additional frame is asserted here.
-Association is P6/D188 option-A reclassification, never trust removal. -/
+import NKR_DigestPrefix
+/-! Native primitives below are ONLY the new split certificates. Old
+PrefixCut/MiddleCut definitions are retained historical DERIVED SUMMARY
+relations, never primitive native certificates: K020/K034 timed out and give
+NO credit. Their readonly high/succ/xor clauses describe source/P7 immutable
+borrow framing, not assertions from the new prefix step.
+
+Current primitive split source: NKR_Digest_split_native.rs.txt SHA256
+16ab42e2ed17b638c97ef5532aede22cc1684340a1518f6725a35dd29f0ba0d1.
+Append asserts1call, exact index/frontier/opened/highs and all4returned cells.
+Levels-add asserts4calls, four left/right pairs, updated0/2groups and framed1.
+Root asserts3calls, high53/opened/nextRoot, two operands and full3x2return.
+Carry asserts4calls, source index/carry/min arguments, two operands/full3x2.
+No event-kind clause is added where these split harnesses do not assert it.
+New prefix3event primitive/4block chain is NKR_DigestPrefixStep; projected
+wrapper primitive/fullcarrier extension is NKR_DigestWrapperView. Exact
+source-window checks and matched controls are required for every pair.
+Association remains P6/D188 option-A reclassification, never trust removal. -/
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NKR_DigestCuts
@@ -67,9 +72,9 @@ def prefixEvents (p : Public) (o : Openings) (s : Selectors) (c : Children) (v :
  childEvent p o s 2,addEvent p o s (v 1 0) (c.recipient 0),addEvent p o s (v 1 1) (c.recipient 1),
  childEvent p o s 3,addEvent p o s (v 2 0) (c.change 0),addEvent p o s (v 2 1) (c.change 1)]
 
-/-- Exact NKR_Digest_prefix_cut assertions:12calls, forwarded four full child
-arguments, eight ordered addition operands, full3x2return and asserted high/
-succ/xor frames. No successful output or arithmetic law is a cut clause. -/
+/-- HISTORICAL DERIVED SUMMARY only, not primitive native credit. The old
+12event harness timed out. Readonly input clauses are source/P7 borrow frames.
+The positive root instead exports the new four3event prefix step chain. -/
 def PrefixCut (p : Public) (o : Openings) (s : Selectors) (c : Children) (v : PrefixFrames)
  (out : Sums) (events : Fin 12 → Event) (calls : Nat) (afterHigh : High) (afterSucc afterXor : O) : Prop :=
  calls=12 ∧ afterHigh=s.high ∧ afterSucc=o.succ_z ∧ afterXor=o.xor12_z ∧
@@ -96,13 +101,12 @@ def middleEvents (p : Public) (o : Openings) (s : Selectors) (c : Children) (pre
  {baseEvent p o s 11 with high:=NKR_DigestChildren.high s 53,digest:=p.transition.candidate_afterstate.next_root},
  addEvent p o s (pre 1 0) (c.nextRoot 0),addEvent p o s (pre 1 1) (c.nextRoot 1),
  {baseEvent p o s 22 with index:=p.transition.live_snapshot.next_pair_index},
- {baseEvent p o s 23 with carry:=c.carry.val,high:=NKI_PublicDomains.high s c.carry.val,
-  digest:=NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier (NKI_PublicDomains.carryLevel c.carry.val)},
+ {baseEvent p o s 23 with carry:=c.carry.val,high:=NKI_PublicDomains.high s c.carry.val,digest:=NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier (NKI_PublicDomains.carryLevel c.carry.val)},
  addEvent p o s (m.nextRoot 0) (c.carried 0),addEvent p o s (m.nextRoot 1) (c.carried 1)]
 
-/-- Exact NKR_Digest_middle_cut assertions at arbitrary full3x2prestate:
-append arguments/full4reply channels, next-root and carry/min arguments,
-eight ordered additions and the complete returned3x2state. -/
+/-- HISTORICAL DERIVED SUMMARY only. The old whole-middle harness timed
+out. No root relies on it as a native certificate; the root exports the four
+new primitive cuts and their exact source-ordered frame composition. -/
 def MiddleCut (p : Public) (o : Openings) (s : Selectors) (c : Children) (pre : Sums) (m : MiddleFrames)
  (out : Sums) (events : Fin 12 → Event) (calls : Nat) : Prop :=
  calls=12 ∧
@@ -134,8 +138,72 @@ theorem middle_cut (p : Public) (o : Openings) (s : Selectors) (c : Children) (p
  refine ⟨rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,?_,rfl⟩
  intro j;fin_cases j <;> exact ⟨rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl⟩
 
-/-- NKR_Digest_wrapper_cut: universal-coordinate public/transition/opening/
-selector payload checks, one call, and both unchanged return cells. -/
+/-- New split append_window_cut, exactly1call and full4cell reply. Array
+identity is the universal-coordinate extension of the asserted raw words. -/
+def AppendCut (p : Public) (o : Openings) (s : Selectors)
+ (seenIndex : U64) (seenFrontier : Frontier) (seenOpened : O) (seenHighs : High)
+ (reply returned : Fin 4 → NQ) (calls : Nat) : Prop :=
+ calls=1 ∧ seenIndex=p.transition.live_snapshot.next_pair_index ∧
+ seenFrontier=p.transition.live_snapshot.frontier ∧ seenOpened=o.z ∧ seenHighs=s.high ∧ returned=reply
+
+def levelGroup (i : Fin 4) : Fin 3 := if i.val<2 then 0 else 2
+def levelLane (i : Fin 4) : Fin 2 := ⟨i.val%2,Nat.mod_lt _ (by decide)⟩
+def levelLeft (pre : Sums) (i : Fin 4) := pre (levelGroup i) (levelLane i)
+
+/-- New split levels_add_cut:4calls, exact four operand pairs and ALL3x2
+returned cells. No native event-kind, success or arithmetic-value clause. -/
+def LevelsAddCut (c : Children) (pre : Sums) (reply0 reply12 : Pair) (out : Sums)
+ (seenLeft seenRight : Fin 4 → NQ) (calls : Nat) : Prop :=
+ calls=4 ∧ (∀ i,seenLeft i=levelLeft pre i ∧ seenRight i=c.levels i) ∧
+ out=(![reply0,pre 1,reply12] : Sums)
+
+/-- New split root_window_cut:3calls, actual root argument window, both
+addition operands and the complete returned/frame3x2state. -/
+def RootCut (p : Public) (o : Openings) (s : Selectors) (c : Children) (pre : Sums)
+ (added : Pair) (out : Sums) (seenHigh : NQ) (seenOpened : O) (seenDigest : D)
+ (seenLeft seenRight : Pair) (calls : Nat) : Prop :=
+ calls=3 ∧ seenHigh=NKR_DigestChildren.high s 53 ∧ seenOpened=o.z ∧
+ seenDigest=p.transition.candidate_afterstate.next_root ∧
+ (∀ j,seenLeft j=pre 1 j ∧ seenRight j=c.nextRoot j) ∧ out=(![pre 0,added,pre 2] : Sums)
+
+/-- New split carry_window_cut:4calls, exact source index and opaque carry
+reply, SAME min-index arguments, two add operands and full3x2return/frame. -/
+def CarryCut (p : Public) (o : Openings) (s : Selectors) (c : Children) (pre : Sums)
+ (added : Pair) (out : Sums) (seenIndex : U64) (seenCarry : Nat) (seenHigh : NQ)
+ (seenOpened : O) (seenDigest : D) (seenLeft seenRight : Pair) (calls : Nat) : Prop :=
+ calls=4 ∧ seenIndex=p.transition.live_snapshot.next_pair_index ∧ seenCarry=c.carry.val ∧
+ seenHigh=NKI_PublicDomains.high s c.carry.val ∧ seenOpened=o.z ∧
+ seenDigest=NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier (NKI_PublicDomains.carryLevel c.carry.val) ∧
+ (∀ j,seenLeft j=pre 1 j ∧ seenRight j=c.carried j) ∧ out=(![pre 0,added,pre 2] : Sums)
+
+def afterLevels (pre : Sums) (m : MiddleFrames) : Sums := ![m.local0,pre 1,m.local12]
+def afterRoot (m : MiddleFrames) : Sums := ![m.local0,m.nextRoot,m.local12]
+def afterCarry (m : MiddleFrames) : Sums := ![m.local0,m.carried,m.local12]
+
+/-- Source-ordered composition of the FOUR new primitive cuts. The next
+cut consumes exactly the preceding complete post, including framed groups.
+This is a derived conjunction, not a whole-window native certificate. -/
+def MiddleNative (p : Public) (o : Openings) (s : Selectors) (c : Children) (pre : Sums) (m : MiddleFrames) : Prop :=
+ AppendCut p o s p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z s.high c.levels c.levels 1 ∧
+ LevelsAddCut c pre m.local0 m.local12 (afterLevels pre m) (levelLeft pre) c.levels 4 ∧
+ RootCut p o s c (afterLevels pre m) m.nextRoot (afterRoot m)
+  (NKR_DigestChildren.high s 53) o.z p.transition.candidate_afterstate.next_root ((afterLevels pre m) 1) c.nextRoot 3 ∧
+ CarryCut p o s c (afterRoot m) m.carried (afterCarry m) p.transition.live_snapshot.next_pair_index c.carry.val
+  (NKI_PublicDomains.high s c.carry.val) o.z
+  (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier (NKI_PublicDomains.carryLevel c.carry.val))
+  ((afterRoot m) 1) c.carried 4
+
+theorem middle_native (p : Public) (o : Openings) (s : Selectors) (c : Children) (pre : Sums) (m : MiddleFrames) :
+ MiddleNative p o s c pre m := by
+ refine ⟨⟨rfl,rfl,rfl,rfl,rfl,rfl⟩,⟨rfl,?_,rfl⟩,⟨rfl,rfl,rfl,rfl,?_,rfl⟩,⟨rfl,rfl,rfl,rfl,rfl,rfl,?_,rfl⟩⟩
+ · intro i;exact ⟨rfl,rfl⟩
+ · intro j;exact ⟨rfl,rfl⟩
+ · intro j;exact ⟨rfl,rfl⟩
+#print axioms middle_native
+
+/-- DERIVED strong wrapper SUMMARY. Its primitive is the new one-probe
+NativeCut in NKR_DigestWrapperView, extended to full carriers there. This is
+not a native assertion on an entire record and gives no K022 timeout credit. -/
 def WrapperCut (p : Public) (o : Openings) (s : Selectors) (seenP : Public) (seenO : Openings)
  (seenS : Selectors) (reply out : Pair) (calls : Nat) : Prop :=
  calls=1 ∧ seenP=p ∧ seenO=o ∧ seenS=s ∧ out=reply

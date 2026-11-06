@@ -1,0 +1,47 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn NKR_pattern_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+struct NKR_PatternLog{calls:usize,kind:[u8;2],left:[QM31;2],right:[QM31;2],reply:[QM31;2]}
+fn NKR_pattern_op(a:QM31,b:QM31,kind:u8,l:&mut NKR_PatternLog)->QM31{let i=l.calls;l.calls+=1;l.kind[i]=kind;l.left[i]=a;l.right[i]=b;l.reply[i]}
+fn NKR_pattern_step(scratch:&[QM31],selectors:&Selectors,pattern_selectors:&mut[QM31;26],mut coordinate:usize,l:&mut NKR_PatternLog)->usize{
+    let output = usize::from(COPY_PATTERN_LOCAL_OUTPUT_COORDINATES[coordinate]);
+    let low = selectors.low[usize::from(COPY_PATTERN_LOCAL_COORDINATE_LOCALS[coordinate])];
+    pattern_selectors[output] = NKR_pattern_op(pattern_selectors[output],NKR_pattern_op(scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET + coordinate],low,0,l),1,l);
+    coordinate += 1;
+    coordinate
+}
+#[kani::proof] #[kani::unwind(104)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_pattern_step_cut(){
+ let scratch:[QM31;103]=unsafe{core::mem::transmute::<[[u32;4];103],[QM31;103]>(kani::any())};
+ let selectors=Selectors{high:unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())}};
+ let mut pattern_selectors:[QM31;26]=unsafe{core::mem::transmute::<[[u32;4];26],[QM31;26]>(kani::any())};
+ let reply:[QM31;2]=unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())};
+ let coordinate:usize=kani::any();let observe:usize=kani::any();let limb:usize=kani::any();kani::assume(coordinate<43&&observe<26&&limb<4);
+ let output=usize::from(COPY_PATTERN_LOCAL_OUTPUT_COORDINATES[coordinate]);let low=usize::from(COPY_PATTERN_LOCAL_COORDINATE_LOCALS[coordinate]);let saved=pattern_selectors[observe];let old=pattern_selectors[output];
+ let mut l=NKR_PatternLog{calls:0,kind:[255;2],left:[QM31::ZERO;2],right:[QM31::ZERO;2],reply};
+ let next=NKR_pattern_step(&scratch,&selectors,&mut pattern_selectors,coordinate,&mut l);
+ assert_eq!(l.calls,2);assert_eq!(l.kind,[0,1]);assert_eq!(next,coordinate+1);
+ assert_eq!(NKR_pattern_words(l.left[0])[limb],NKR_pattern_words(scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET+coordinate])[limb]);assert_eq!(NKR_pattern_words(l.right[0])[limb],NKR_pattern_words(selectors.low[low])[limb]);
+ assert_eq!(NKR_pattern_words(l.left[1])[limb],NKR_pattern_words(old)[limb]);assert_eq!(NKR_pattern_words(l.right[1])[limb],NKR_pattern_words(reply[0])[limb]);
+ assert_eq!(NKR_pattern_words(pattern_selectors[observe])[limb],NKR_pattern_words(if observe==output{reply[1]}else{saved})[limb]^if cfg!(NKR_invert){1}else{0});
+}
+struct NKR_TailLog{calls:usize,pick:usize,coef:usize,term:usize,values:QM31,coefficients:QM31,pattern:QM31,reply:[QM31;4]}
+fn NKR_finish_tail_child(values:[QM31;4],coefficients:[QM31;26],patterns:&[QM31;14],l:&mut NKR_TailLog)->[QM31;4]{l.calls+=1;l.values=values[l.pick];l.coefficients=coefficients[l.coef];l.pattern=patterns[l.term];l.reply}
+fn NKR_finish_tail(values:[QM31;4],pattern_selectors:[QM31;26],patterns:&[QM31;14],weights:[QM31;4],l:&mut NKR_TailLog)->([QM31;4],[QM31;4]){
+    (
+        NKR_finish_tail_child(values, pattern_selectors, patterns,l),
+        weights,
+    )
+}
+#[kani::proof] #[kani::unwind(104)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_finish_tail_cut(){
+ let values:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let weights:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};
+ let coefficients:[QM31;26]=unsafe{core::mem::transmute::<[[u32;4];26],[QM31;26]>(kani::any())};let patterns:[QM31;14]=unsafe{core::mem::transmute::<[[u32;4];14],[QM31;14]>(kani::any())};let reply:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};
+ let pick:usize=kani::any();let coef:usize=kani::any();let term:usize=kani::any();let limb:usize=kani::any();kani::assume(pick<4&&coef<26&&term<14&&limb<4);
+ let mut l=NKR_TailLog{calls:0,pick,coef,term,values:QM31::ZERO,coefficients:QM31::ZERO,pattern:QM31::ZERO,reply};
+ let(v,w)=NKR_finish_tail(values,coefficients,&patterns,weights,&mut l);
+ assert_eq!(l.calls,1);assert_eq!(NKR_pattern_words(l.values)[limb],NKR_pattern_words(values[pick])[limb]);assert_eq!(NKR_pattern_words(l.coefficients)[limb],NKR_pattern_words(coefficients[coef])[limb]);assert_eq!(NKR_pattern_words(l.pattern)[limb],NKR_pattern_words(patterns[term])[limb]);
+ assert_eq!(NKR_pattern_words(v[pick])[limb],NKR_pattern_words(reply[pick])[limb]^if cfg!(NKR_invert){1}else{0});assert_eq!(NKR_pattern_words(w[pick])[limb],NKR_pattern_words(weights[pick])[limb]);
+}

@@ -1,0 +1,173 @@
+NKR_DigestWrapper.lean:36:45: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+theorem AspisR1.NKR_DigestWrapper.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain p →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical s.high →
+        FIw_ArrayValue.canonical s.low →
+          ∃ c sums out old,
+            NKR_DigestChildren.Clauses p o s c ∧
+              NKR_DigestChildren.Canonical c ∧
+                NKR_DigestPrefix.run p o s = ok (c, sums) ∧
+                  NKR_DigestPrefix.Frame c sums ∧
+                    NKR_DigestComplete.reference p o s = ok out ∧
+                      reference p o s = ok out ∧
+                        cohort p o s = ok out ∧
+                          (∀ (j : Fin 2), Canon (out j)) ∧
+                            FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes p o s = ok old ∧
+                              FIw_ArrayValue.canonical old :=
+fun p o s hp ho hh hl =>
+  let ⟨c, h✝⟩ := NKR_DigestRoot.source p o s hp ho hh hl
+  let ⟨sums, h✝¹⟩ := h✝
+  let ⟨out, h✝²⟩ := h✝¹
+  let ⟨old, h✝³⟩ := h✝²
+  let ⟨hc, right✝⟩ := h✝³
+  let ⟨hcan, right✝¹⟩ := right✝
+  let ⟨pc, right✝²⟩ := right✝¹
+  let ⟨frame, right✝³⟩ := right✝²
+  let ⟨oc, right✝⁴⟩ := right✝³
+  let ⟨hout, right✝⁵⟩ := right✝⁴
+  let ⟨oldc, right✝⁶⟩ := right✝⁵
+  let ⟨hold, values⟩ := right✝⁶
+  (fun packed x =>
+      have same :=
+        funext fun g =>
+          NJB_DecodeInjective.qm (packed g) (out g) ((fun g => ((fun g => (x g).right) g).left) g) (hout g)
+            (Eq.mpr (id (congrArg (fun _a => _a = decode (out g)) ((fun g => ((fun g => (x g).right) g).right) g)))
+              (Eq.mpr
+                (id (congrArg (fun _a => _a = decode (out g)) (NJB_PackLinearity.model (NJX_LeftRoot.lane old g))))
+                (Eq.mpr
+                  (id
+                    (congrArg (fun _a => (NJB_PackLinearity.pack fun i => decode (NJX_LeftRoot.lane old g i)) = _a)
+                      (values g)))
+                  (Eq.refl (NJB_PackLinearity.pack fun i => decode (NJX_LeftRoot.lane old g i))))));
+      have vector :=
+        Eq.mpr (id (congrArg (fun _a => ![_a 0, _a 1] = out) same))
+          (funext fun g =>
+            List.Mem.casesOn (motive := fun a x =>
+              List.finRange ({ len := 1 }.len + 1) = a → Fintype.complete g ≍ x → ![out 0, out 1] g = out g)
+              (Fintype.complete g)
+              (fun «as» h =>
+                List.cons.noConfusion h fun head_eq =>
+                  Eq.ndrec (motive := fun g =>
+                    ∀ (this : g ∈ Fintype.elems),
+                      (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ [] ≍ «as» →
+                        this ≍ List.Mem.head «as» → ![out 0, out 1] g = out g)
+                    (fun this tail_eq =>
+                      Eq.ndrec (motive := fun «as» =>
+                        this ≍ List.Mem.head «as» →
+                          ![out 0, out 1] ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_refl ({ len := 1 }.len + 1))⟩) =
+                            out ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_refl ({ len := 1 }.len + 1))⟩))
+                        (fun h =>
+                          Eq.refl
+                            (![out 0, out 1] ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_refl ({ len := 1 }.len + 1))⟩)))
+                        (eq_of_heq tail_eq))
+                    (eq_of_heq head_eq) (Fintype.complete g))
+              (fun b {«as»} a h =>
+                List.cons.noConfusion h fun head_eq =>
+                  Eq.ndrec (motive := fun b =>
+                    (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ [] ≍ «as» →
+                      Fintype.complete g ≍ List.Mem.tail b a → ![out 0, out 1] g = out g)
+                    (fun tail_eq =>
+                      Eq.ndrec (motive := fun {«as»} =>
+                        ∀ (a : List.Mem g «as»),
+                          Fintype.complete g ≍
+                              List.Mem.tail ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_refl ({ len := 1 }.len + 1))⟩) a →
+                            ![out 0, out 1] g = out g)
+                        (fun a h =>
+                          List.Mem.casesOn (motive := fun a_1 x =>
+                            (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ [] = a_1 →
+                              a ≍ x → ![out 0, out 1] g = out g)
+                            a
+                            (fun «as» h =>
+                              List.cons.noConfusion h fun head_eq =>
+                                Eq.ndrec (motive := fun g =>
+                                  ∀
+                                    (a :
+                                      List.Mem g
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩
+                                          [])),
+                                    [] ≍ «as» → a ≍ List.Mem.head «as» → ![out 0, out 1] g = out g)
+                                  (fun a tail_eq =>
+                                    Eq.ndrec (motive := fun «as» =>
+                                      a ≍ List.Mem.head «as» →
+                                        ![out 0, out 1] ((fun i => i) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩) =
+                                          out ((fun i => i) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩))
+                                      (fun h =>
+                                        Eq.refl
+                                          (![out 0, out 1] ((fun i => i) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩)))
+                                      (eq_of_heq tail_eq))
+                                  (eq_of_heq head_eq) a)
+                            (fun b {«as»} a_1 h =>
+                              List.cons.noConfusion h fun head_eq =>
+                                Eq.ndrec (motive := fun b =>
+                                  [] ≍ «as» → a ≍ List.Mem.tail b a_1 → ![out 0, out 1] g = out g)
+                                  (fun tail_eq =>
+                                    Eq.ndrec (motive := fun {«as»} =>
+                                      ∀ (a_2 : List.Mem g «as»),
+                                        a ≍ List.Mem.tail ((fun i => i) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩) a_2 →
+                                          ![out 0, out 1] g = out g)
+                                      (fun a_2 h =>
+                                        List.Mem.casesOn (motive := fun a x =>
+                                          [] = a → a_2 ≍ x → ![out 0, out 1] g = out g) a_2
+                                          (fun «as» h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+                                          (fun b {«as»} a h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+                                          (Eq.refl []) (HEq.refl a_2))
+                                      (eq_of_heq tail_eq) a_1)
+                                  (eq_of_heq head_eq))
+                            (Eq.refl ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ []))
+                            (HEq.refl a))
+                        (eq_of_heq tail_eq) a)
+                    (eq_of_heq head_eq))
+              (Eq.refl (List.finRange ({ len := 1 }.len + 1))) (HEq.refl (Fintype.complete g)));
+      Exists.intro c
+        (Exists.intro sums
+          (Exists.intro out
+            (Exists.intro old
+              ⟨hc,
+                ⟨hcan,
+                  ⟨pc,
+                    ⟨frame,
+                      ⟨oc,
+                        ⟨oc,
+                          ⟨of_eq_true
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg Eq
+                                    (Eq.trans
+                                      (Eq.trans
+                                        (congrFun' (congrArg Bind.bind oldc) fun old => do
+                                          let a ← NJB_PackLaw.reference (NJX_LeftRoot.lane old 0)
+                                          let b ← NJB_PackLaw.reference (NJX_LeftRoot.lane old 1)
+                                          ok ![a, b])
+                                        (bind_tc_ok old fun y => do
+                                          let a ← NJB_PackLaw.reference (NJX_LeftRoot.lane y 0)
+                                          let b ← NJB_PackLaw.reference (NJX_LeftRoot.lane y 1)
+                                          ok ![a, b]))
+                                      (Eq.trans
+                                        (Eq.trans
+                                          (congr (congrArg Bind.bind ((fun g => (fun g => (x g).left) g) 0))
+                                            (funext fun a =>
+                                              Eq.trans
+                                                (congrFun' (congrArg Bind.bind ((fun g => (fun g => (x g).left) g) 1))
+                                                  fun b => ok ![a, b])
+                                                (bind_tc_ok (packed 1) fun y => ok ![a, y])))
+                                          (bind_tc_ok (packed 0) fun y => ok ![y, packed 1]))
+                                        (congrArg ok vector))))
+                                  (ok out))
+                                (eq_self (ok out))),
+                            ⟨hout, ⟨oldc, hold⟩⟩⟩⟩⟩⟩⟩⟩⟩))))
+    (fun g =>
+      Classical.choose
+        ((fun g =>
+            NJB_PackLaw.result (NJX_LeftRoot.lane old g) fun j =>
+              NJB_ArrayCarrier.canonical_cell old hold ⟨↑(NJX_DigestGroups.index g j), NJX_LeftRoot.lane._proof_3 g j⟩)
+          g))
+    fun g =>
+    Classical.choose_spec
+      ((fun g =>
+          NJB_PackLaw.result (NJX_LeftRoot.lane old g) fun j =>
+            NJB_ArrayCarrier.canonical_cell old hold ⟨↑(NJX_DigestGroups.index g j), NJX_LeftRoot.lane._proof_3 g j⟩)
+        g)
+'AspisR1.NKR_DigestWrapper.source' depends on axioms: [propext, Classical.choice, Quot.sound]

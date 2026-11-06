@@ -55,7 +55,9 @@ theorem source (lookup : Lookups) (s : Selectors) (openings : Array NQ 16#usize)
    (NJB_ArrayCarrier.canonical_array _ cf) (NJB_ArrayCarrier.canonical_array _ cw) hhelper hchi
  refine ⟨patterns,scratch,values,weights,active,residual,scaled,patternCall,scratchCall,scratchTrace,
   finishCall,tailCall,?_,ca,cr,cm,rcall,vs⟩
- simp only [reference,patternCall,scratchCall,finishCall,tailCall,bind_tc_ok]
+ simp only [reference,patternCall,scratchCall,finishCall,bind_tc_ok]
+ change NKR_SumCopyTail.reference s values weights helper chi=ok {residual:=scaled,active:=active}
+ exact tailCall
 
 #print source
 #print axioms source

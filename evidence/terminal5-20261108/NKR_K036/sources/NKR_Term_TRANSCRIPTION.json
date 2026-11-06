@@ -1,0 +1,22 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "source": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+  "source_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+  "harness_sha256": "1287aaece60d2d3732692c55559a61ec6a6437529f87076ee4a405e84464c87b",
+  "frozen_suffix": "    let original = equality_value(zerocheck_point, point)\n        .mul(composition)\n        .add(mu.mul(h1_z))\n        .add(mu.mul(mu).mul(QM31::ONE.sub(copy_active).mul(h1_z)));\n    Ok((original, c1, mask_only, g))\n",
+  "translated": "let (composition, c1, mask_only, g, h1_z, copy_active) = child?;\nlet original = NKR_tadd(NKR_tadd(NKR_tmul(NKR_teq(zerocheck_point,point,l),composition,l),NKR_tmul(mu,h1_z,l),l),NKR_tmul(NKR_tmul(mu,mu,l),NKR_tmul(NKR_tsub(QM31::ONE,copy_active,l),h1_z,l),l),l);\nOk((original, c1, mask_only, g))",
+  "native": "\n    let (composition, c1, mask_only, g, h1_z, copy_active) = child?;\n    let original = NKR_tadd(\n      NKR_tadd(NKR_tmul(NKR_teq(zerocheck_point,point,l),composition,l),NKR_tmul(mu,h1_z,l),l),\n      NKR_tmul(NKR_tmul(mu,mu,l),NKR_tmul(NKR_tsub(QM31::ONE,copy_active,l),h1_z,l),l),l);\n    Ok((original, c1, mask_only, g))\n",
+  "identity": true,
+  "order": [
+    "equality",
+    "mul",
+    "mul",
+    "add",
+    "mul",
+    "sub",
+    "mul",
+    "mul",
+    "add"
+  ],
+  "coverage": "Complete SAME composition tuple/Err child; actual parent237 call arguments remain a separate caller prefix window"
+}

@@ -51,20 +51,14 @@ theorem source (pub : Public) (o : Openings) (s : Selectors) (before : Packed)
  obtain ⟨scalars,sc,cs⟩:=JFy_Scalars.source pub.variant (core.option.Option.is_some pub.withdrawal_amount) (products 0) (products 1) (products 2) (products 3) (productsCanonical 0) (productsCanonical 1) (productsCanonical 2) (productsCanonical 3)
  obtain ⟨out,pc,co,_⟩:=NHU_Preweighted.result before 92#usize scalars (by decide) (by decide) hb cs
  let p : Packet pub o s before:=⟨difference,selected,withdrawalDifference,products,scalars,out,dc,rowsCall,wc,productCall,sc,pc,cd,selectedCanonical,cw,productsCanonical,cs,co⟩
- have z1:=NJB_ArrayReads.read o.z 1#usize (by decide)
- have z10:=NJB_ArrayReads.read o.z 10#usize (by decide)
+ have z1 : Array.index_usize o.z 1#usize=ok (NJB_ArrayCarrier.cell o.z ⟨1,by decide⟩):=NJB_ArrayReads.read o.z 1#usize (by decide)
+ have z10 : Array.index_usize o.z 10#usize=ok (NJB_ArrayCarrier.cell o.z ⟨10,by decide⟩):=NJB_ArrayReads.read o.z 10#usize (by decide)
  refine ⟨p,?_⟩
  change FIw_ScalarSuffix.run pub o s before=ok out
  unfold FIw_ScalarSuffix.run VALUE_AUXILIARY_BLOCK
- rw [z1,bind_tc_ok,FIw_ScalarArithmetic.lift_run,bind_tc_ok,dc,bind_tc_ok]
- simp only [show (2#usize*16#usize : Result Usize)=ok 32#usize from rfl,
-  show (32#usize+12#usize : Result Usize)=ok 44#usize from rfl,
-  show (31#usize*16#usize : Result Usize)=ok 496#usize from rfl,
-  show (496#usize+12#usize : Result Usize)=ok 508#usize from rfl,
-  show (28#usize*16#usize : Result Usize)=ok 448#usize from rfl,
-  show (448#usize+12#usize : Result Usize)=ok 460#usize from rfl,
-  show (16#usize*63#usize : Result Usize)=ok 1008#usize from rfl,
-  show (1008#usize+2#usize : Result Usize)=ok 1010#usize from rfl,bind_tc_ok]
+ erw [z1,bind_tc_ok,FIw_ScalarArithmetic.lift_run,bind_tc_ok,dc,bind_tc_ok]
+ simp only [FIw_ScalarIndices.mul2,FIw_ScalarIndices.add44,FIw_ScalarIndices.mul31,FIw_ScalarIndices.add508,
+  FIw_ScalarIndices.mul28,FIw_ScalarIndices.add460,FIw_ScalarIndices.mul63,FIw_ScalarIndices.add1010,bind_tc_ok]
  have r0 : s.row 44#usize=ok (selected 0):=rowsCall 0
  have r1 : s.row 508#usize=ok (selected 1):=rowsCall 1
  have r2 : s.row 460#usize=ok (selected 2):=rowsCall 2
@@ -73,7 +67,7 @@ theorem source (pub : Public) (o : Openings) (s : Selectors) (before : Packed)
  have m1 : field.QM31.mul (selected 1) difference=ok (products 1):=productCall 1
  have m2 : field.QM31.mul (selected 2) difference=ok (products 2):=productCall 2
  have m3 : field.QM31.mul (selected 3) withdrawalDifference=ok (products 3):=productCall 3
- rw [r0,bind_tc_ok,m0,bind_tc_ok,r1,bind_tc_ok,m1,bind_tc_ok,r2,bind_tc_ok,m2,bind_tc_ok]
+ erw [r0,bind_tc_ok,m0,bind_tc_ok,r1,bind_tc_ok,m1,bind_tc_ok,r2,bind_tc_ok,m2,bind_tc_ok]
  change (do let q←s.row 1010#usize
             let z←Array.index_usize o.z 10#usize
             let target←lift_m31 (amount pub)
@@ -81,7 +75,7 @@ theorem source (pub : Public) (o : Openings) (s : Selectors) (before : Packed)
             let withdrawal←field.QM31.mul q difference
             let scalars←scalar_lanes pub.variant (core.option.Option.is_some pub.withdrawal_amount) (products 0) (products 1) (products 2) withdrawal
             add_preweighted before 92#usize scalars)=ok out
- rw [r3,bind_tc_ok,z10,bind_tc_ok,FIw_ScalarArithmetic.lift_run,bind_tc_ok,wc,bind_tc_ok,m3,bind_tc_ok,sc,bind_tc_ok,pc]
+ erw [r3,bind_tc_ok,z10,bind_tc_ok,FIw_ScalarArithmetic.lift_run,bind_tc_ok,wc,bind_tc_ok,m3,bind_tc_ok,sc,bind_tc_ok,pc]
 #print source
 #print axioms source
 end AspisR1.NKR_TermScalarInvocation

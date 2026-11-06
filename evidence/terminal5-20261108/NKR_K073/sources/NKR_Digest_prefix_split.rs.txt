@@ -1,0 +1,27 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn NKR_Digest_pstep_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+struct NKR_Digest_pstep_Log{calls:usize,di:usize,oi:usize,kind:u8,high:QM31,opened:[u32;4],present:bool,digest:u32,reply:[QM31;2],adds:[QM31;2],kinds:[u8;2],left:[QM31;2],right:[QM31;2]}
+fn NKR_Digest_pstep_left(high:QM31,o:[QM31;16],d:Digest,l:&mut NKR_Digest_pstep_Log)->[QM31;2]{l.calls+=1;l.kind=11;l.high=high;l.opened=NKR_Digest_pstep_words(o[l.oi]);l.present=true;l.digest=d[l.di].0;l.reply}
+fn NKR_Digest_pstep_recipient(d:Option<Digest>,o:[QM31;16],high:QM31,l:&mut NKR_Digest_pstep_Log)->[QM31;2]{l.calls+=1;l.kind=12;l.high=high;l.opened=NKR_Digest_pstep_words(o[l.oi]);l.present=d.is_some();l.digest=d.map_or(0,|x|x[l.di].0);l.reply}
+fn NKR_Digest_pstep_add(a:QM31,b:QM31,l:&mut NKR_Digest_pstep_Log)->QM31{let i=l.calls-1;l.kinds[i]=1;l.left[i]=a;l.right[i]=b;l.calls+=1;l.adds[i]}
+fn NKR_Digest_prefix_step(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,which:usize,mut local_sums:[[QM31;2];3],l:&mut NKR_Digest_pstep_Log)->[[QM31;2];3]{
+ let child=match which{
+ 0=>NKR_Digest_pstep_left(selectors.high[56],openings.z,public.anchor,l),
+ 1=>NKR_Digest_pstep_left(selectors.high[26],openings.z,public.nullifier,l),
+ 2=>NKR_Digest_pstep_recipient(public.recipient,openings.z,selectors.high[29],l),
+ _=>NKR_Digest_pstep_left(selectors.high[32],openings.z,public.change,l)
+ };
+ local_sums[1][0]=NKR_Digest_pstep_add(local_sums[1][0],child[0],l);
+ local_sums[1][1]=NKR_Digest_pstep_add(local_sums[1][1],child[1],l);
+ local_sums
+}
+#[kani::proof] #[kani::unwind(24)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_Digest_prefix_step_cut(){
+ let transition:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let recipient:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};let p=SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(recipient)}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition:&transition};
+ let o=StateOnlyPoseidonOpenings{z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())},succ_z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())},xor12_z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};let s=Selectors{high:unsafe{core::mem::transmute::<[u32;256],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};
+ let before:[[QM31;2];3]=unsafe{core::mem::transmute::<[u32;24],[[QM31;2];3]>(kani::any())};let reply:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let adds:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let which:usize=kani::any();let di:usize=kani::any();let oi:usize=kani::any();let group:usize=kani::any();let lane:usize=kani::any();let limb:usize=kani::any();kani::assume(which<4&&di<8&&oi<16&&group<3&&lane<2&&limb<4);
+ let mut l=NKR_Digest_pstep_Log{calls:0,di,oi,kind:255,high:QM31::ZERO,opened:[0;4],present:false,digest:0,reply,adds,kinds:[0;2],left:[QM31::ZERO;2],right:[QM31::ZERO;2]};let out=NKR_Digest_prefix_step(p,&o,&s,which,before,&mut l);let expected=match which{0=>Some(p.anchor),1=>Some(p.nullifier),2=>p.recipient,_=>Some(p.change)};
+ assert_eq!(l.calls,3);assert_eq!(l.kind,if which==2{12}else{11});assert_eq!(NKR_Digest_pstep_words(l.high)[limb],NKR_Digest_pstep_words(s.high[[56,26,29,32][which]])[limb]);assert_eq!(l.opened[limb],NKR_Digest_pstep_words(o.z[oi])[limb]);assert_eq!(l.present,expected.is_some());assert_eq!(l.digest,expected.map_or(0,|x|x[di].0));assert_eq!(l.kinds[lane],1);assert_eq!(NKR_Digest_pstep_words(l.left[lane])[limb],NKR_Digest_pstep_words(before[1][lane])[limb]);assert_eq!(NKR_Digest_pstep_words(l.right[lane])[limb],NKR_Digest_pstep_words(reply[lane])[limb]);assert_eq!(NKR_Digest_pstep_words(out[group][lane])[limb],NKR_Digest_pstep_words(if group==1{adds[lane]}else{before[group][lane]})[limb]^if cfg!(NKR_invert){1}else{0});
+}

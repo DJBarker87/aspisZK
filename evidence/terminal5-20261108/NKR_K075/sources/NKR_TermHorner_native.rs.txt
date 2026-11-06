@@ -1,0 +1,31 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn NKR_horner_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+fn NKR_horner_q(w:[u32;4])->QM31{unsafe{core::mem::transmute::<[u32;4],QM31>(w)}}
+fn NKR_horner_cache(p:PreparedQm31Multiplier)->[[u32;3];3]{unsafe{core::mem::transmute(p)}}
+struct NKR_HornerStepLog{calls:usize,cache:[[u32;3];3],input:QM31,left:QM31,right:QM31,product:QM31,reply:QM31}
+fn NKR_horner_mul(p:PreparedQm31Multiplier,x:QM31,l:&mut NKR_HornerStepLog)->QM31{assert_eq!(l.calls,0);l.calls+=1;l.cache=NKR_horner_cache(p);l.input=x;l.product}
+fn NKR_horner_add(a:QM31,b:QM31,l:&mut NKR_HornerStepLog)->QM31{assert_eq!(l.calls,1);l.calls+=1;l.left=a;l.right=b;l.reply}
+fn NKR_horner_step(prepared_theta:PreparedQm31Multiplier,composition:QM31,lane:QM31,l:&mut NKR_HornerStepLog)->QM31{NKR_horner_add(NKR_horner_mul(prepared_theta,composition,l),lane,l)}
+#[kani::proof] #[kani::unwind(5)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_horner_step_cut(){
+ let cache:[[u32;3];3]=kani::any();let prepared=unsafe{core::mem::transmute::<[[u32;3];3],PreparedQm31Multiplier>(cache)};let before=NKR_horner_q(kani::any());let lane=NKR_horner_q(kani::any());let product=NKR_horner_q(kani::any());let reply=NKR_horner_q(kani::any());let r:usize=kani::any();let c:usize=kani::any();let limb:usize=kani::any();kani::assume(r<3&&c<3&&limb<4);
+ let mut l=NKR_HornerStepLog{calls:0,cache:[[0;3];3],input:QM31::ZERO,left:QM31::ZERO,right:QM31::ZERO,product,reply};let out=NKR_horner_step(prepared,before,lane,&mut l);
+ assert_eq!(l.calls,2);assert_eq!(l.cache[r][c],cache[r][c]);assert_eq!(NKR_horner_words(l.input)[limb],NKR_horner_words(before)[limb]);assert_eq!(NKR_horner_words(l.left)[limb],NKR_horner_words(product)[limb]);assert_eq!(NKR_horner_words(l.right)[limb],NKR_horner_words(lane)[limb]);assert_eq!(NKR_horner_words(out)[limb],NKR_horner_words(reply)[limb]^if cfg!(NKR_invert){1}else{0});
+}
+struct NKR_HornerControl{preparations:usize,calls:usize,seek:usize,seen:usize,row:usize,col:usize,cache_seen:u32,theta:QM31,reply:PreparedQm31Multiplier}
+fn NKR_horner_new(theta:QM31,l:&mut NKR_HornerControl)->PreparedQm31Multiplier{l.preparations+=1;l.theta=theta;l.reply}
+fn NKR_horner_visit(p:PreparedQm31Multiplier,lane:QM31,l:&mut NKR_HornerControl){if l.calls==l.seek{l.seen=lane.c0.a.0 as usize;l.cache_seen=NKR_horner_cache(p)[l.row][l.col];}l.calls+=1;}
+fn NKR_horner_control(theta:QM31,semantic:[QM31;24],poseidon:[QM31;4],l:&mut NKR_HornerControl){
+ let prepared_theta=NKR_horner_new(theta,l);
+ for lane in semantic.into_iter().rev(){NKR_horner_visit(prepared_theta,lane,l);}
+ for lane in poseidon.into_iter().rev(){NKR_horner_visit(prepared_theta,lane,l);}
+}
+#[kani::proof] #[kani::unwind(30)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_horner_control_cut(){
+ let cache:[[u32;3];3]=kani::any();let reply=unsafe{core::mem::transmute::<[[u32;3];3],PreparedQm31Multiplier>(cache)};let theta=NKR_horner_q(kani::any());let row:usize=kani::any();let col:usize=kani::any();let seek:usize=kani::any();let limb:usize=kani::any();kani::assume(row<3&&col<3&&seek<28&&limb<4);
+ let semantic=core::array::from_fn(|i|NKR_horner_q([i as u32,0,0,0]));let poseidon=core::array::from_fn(|i|NKR_horner_q([24+i as u32,0,0,0]));let mut l=NKR_HornerControl{preparations:0,calls:0,seek,seen:999,row,col,cache_seen:0,theta:QM31::ZERO,reply};NKR_horner_control(theta,semantic,poseidon,&mut l);
+ assert_eq!(l.preparations,1);assert_eq!(l.calls,28);assert_eq!(NKR_horner_words(l.theta)[limb],NKR_horner_words(theta)[limb]);assert_eq!(l.cache_seen,cache[row][col]);assert_eq!(l.seen,if seek<24{23-seek}else{51-seek}+if cfg!(NKR_invert){1}else{0});
+}

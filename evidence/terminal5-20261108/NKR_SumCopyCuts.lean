@@ -36,9 +36,14 @@ def LinkCut (lookup : Lookups) (s : Selectors) (index : Fin 136) (append : U64)
  (w : U32) (pfirst psecond cfirst csecond : NQ)
  (passedLink : CompiledPoolV1PairForestLink) (passedAppend : U64)
  (passedVariant : PoolV1PairForestCompiledVariantV1) (passedSelectors : Selectors)
+ (passedProducer passedConsumer : CompiledPoolV1PairForestEndpoint)
+ (passedProducerTag passedConsumerTag passedProducerWeight passedConsumerWeight : U32)
  (passedProducerBefore passedConsumerBefore : State) (calls next : Nat) : Prop :=
  passedLink=NJL_EndpointLookup.link index ∧ passedAppend=append ∧ passedVariant=variant ∧
- passedSelectors=s ∧ passedProducerBefore=before ∧ passedConsumerBefore=middle ∧ calls=3 ∧ next=index.val+1 ∧
+ passedSelectors=s ∧ passedProducer=(NJL_EndpointLookup.link index).producer ∧
+ passedConsumer=(NJL_EndpointLookup.link index).consumer ∧
+ passedProducerTag=(NJL_EndpointLookup.link index).tag ∧ passedConsumerTag=(NJL_EndpointLookup.link index).tag ∧
+ passedProducerWeight=w ∧ passedConsumerWeight=w ∧ passedProducerBefore=before ∧ passedConsumerBefore=middle ∧ calls=3 ∧ next=index.val+1 ∧
  EndpointFrame before middle (NJL_EndpointLookup.groupIndex index false (lookup index false))
   (NJL_EndpointLookup.patternIndex index false (lookup index false)) pfirst psecond ∧
  EndpointFrame middle after (NJL_EndpointLookup.groupIndex index true (lookup index true))
@@ -51,7 +56,9 @@ theorem link (lookup : Lookups) (append : U64) (variant : PoolV1PairForestCompil
  NKR_SumCopyCollect.step lookup append variant s index before=ok after ∧
  link_weight (NJL_EndpointLookup.link index) append variant=ok w ∧
  LinkCut lookup s index append variant before middle after w pfirst psecond cfirst csecond
-  (NJL_EndpointLookup.link index) append variant s before middle 3 (index.val+1) ∧
+  (NJL_EndpointLookup.link index) append variant s
+  (NJL_EndpointLookup.link index).producer (NJL_EndpointLookup.link index).consumer
+  (NJL_EndpointLookup.link index).tag (NJL_EndpointLookup.link index).tag w w before middle 3 (index.val+1) ∧
  ∀ i,Canon (after i) := by
  obtain ⟨w,weightCall,binary,_⟩ := NJL_EndpointLookup.caller_weight index append variant
  obtain ⟨pf,ps,pm,middle,_,_,_,pmcut,pacut,middleCall,middleCanon,_⟩ :=
@@ -62,7 +69,7 @@ theorem link (lookup : Lookups) (append : U64) (variant : PoolV1PairForestCompil
    (lookup index true) middleCanon hs binary
  refine ⟨after,middle,w,pf,ps,cf,cs,?_,weightCall,?_,afterCanon⟩
  · simp only [NKR_SumCopyCollect.step,weightCall,middleCall,afterCall,bind_tc_ok]
- · exact ⟨rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,
+ · exact ⟨rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,
     endpoint_frame before pm middle _ _ _ _ pf ps pmcut pacut,
     endpoint_frame middle cm after _ _ _ _ cf cs cmcut cacut⟩
 

@@ -19,21 +19,21 @@ def Cut (index : Fin 136) (consumer : Bool) : Prop :=
 
 theorem scan_found {A : Type} [DecidableEq A] (key : A) (xs : List A) (start : Nat)
  (bounded : start+xs.length≤255) (found : NJL_EndpointLookup.scanFrom key xs start<255) :
- ∃ (i : Fin xs.length),NJL_EndpointLookup.scanFrom key xs start=start+i.val ∧ xs[i.val]=key := by
+ ∃ (i : Fin xs.length),NJL_EndpointLookup.scanFrom key xs start=start+i.val ∧ xs[i.val]?=some key := by
  induction xs generalizing start with
  | nil => simp only [NJL_EndpointLookup.scanFrom] at found;omega
  | cons x xs ih =>
   by_cases same : key=x
   · refine ⟨⟨0,by simp⟩,?_,?_⟩
     · simp only [NJL_EndpointLookup.scanFrom,if_pos same,Nat.add_zero]
-    · exact same.symm
+    · exact congrArg some same.symm
   · have tailFound : NJL_EndpointLookup.scanFrom key xs (start+1)<255 := by
      simpa only [NJL_EndpointLookup.scanFrom,if_neg same] using found
     obtain ⟨i,scan,read⟩ := ih (start+1) (by simp only [List.length_cons] at bounded;omega) tailFound
     refine ⟨⟨i.val+1,by have:=i.isLt;simp only [List.length_cons];omega⟩,?_,?_⟩
     · simp only [NJL_EndpointLookup.scanFrom,if_neg same,scan]
       omega
-    · simpa only [List.getElem_cons_succ] using read
+    · simpa only [List.getElem?_cons_succ] using read
 
 def patternGroup : Fin 43 → Fin 4 := ![0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3]
 
@@ -73,12 +73,12 @@ theorem keys (index : Fin 136) (consumer : Bool) (bounds : NJL_EndpointLookup.Cu
  constructor
  · have v := vg
    have eq : g.val=(NJL_EndpointLookup.groupIndex index consumer bounds).val := gi
-   rw [eq,group_key] at v
-   exact v
+   rw [eq] at v
+   simpa only [List.getElem?_eq_getElem (by rw [group_length];exact (NJL_EndpointLookup.groupIndex index consumer bounds).isLt),group_key,Option.some.injEq] using v
  · have v := vp
    have eq : p.val=(NJL_EndpointLookup.patternIndex index consumer bounds).val := pi
-   rw [eq,pattern_key] at v
-   exact v
+   rw [eq] at v
+   simpa only [List.getElem?_eq_getElem (by rw [pattern_length];exact (NJL_EndpointLookup.patternIndex index consumer bounds).isLt),pattern_key,Option.some.injEq] using v
 
 #print axioms scan_found
 #print axioms group_length

@@ -1,0 +1,214 @@
+theorem AspisR1.NKR_SumFinishCohort.source : ∀ (scratch : Scratch) (s : Selectors) (terms : Patterns),
+  FIw_ArrayValue.canonical scratch →
+    FIw_ArrayValue.canonical s.high →
+      FIw_ArrayValue.canonical s.low →
+        FIw_ArrayValue.canonical terms →
+          ∃ outValues outWeights,
+            NKR_SumFinishInvocation.reference scratch s terms = ok (outValues, outWeights) ∧
+              FIw_ArrayValue.canonical outValues ∧
+                FIw_ArrayValue.canonical outWeights ∧
+                  (∀ (g : Fin ↑4#usize), decode (NJB_ArrayCarrier.cell outValues g) = values scratch s terms g) ∧
+                    ∀ (g : Fin ↑4#usize), decode (NJB_ArrayCarrier.cell outWeights g) = baseWeights scratch s g :=
+fun scratch s terms hsc hh hl ht =>
+  let ⟨dot, h✝⟩ := NKR_SumFinishInvocation.source scratch s terms hsc hh hl ht
+  let ⟨coefficients, h✝¹⟩ := h✝
+  let ⟨finished, h✝²⟩ := h✝¹
+  let ⟨tc, right✝⟩ := h✝²
+  let ⟨left✝, right✝¹⟩ := right✝
+  let ⟨left✝¹, right✝²⟩ := right✝¹
+  let ⟨left✝², right✝³⟩ := right✝²
+  let ⟨left✝³, right✝⁴⟩ := right✝³
+  let ⟨left✝⁴, right✝⁵⟩ := right✝⁴
+  let ⟨left✝⁵, right✝⁶⟩ := right✝⁵
+  let ⟨call, right✝⁷⟩ := right✝⁶
+  let ⟨left✝⁶, right✝⁸⟩ := right✝⁷
+  let ⟨dotMeaning, right✝⁹⟩ := right✝⁸
+  let ⟨coeffMeaning, right✝¹⁰⟩ := right✝⁹
+  let ⟨cf, right✝¹¹⟩ := right✝¹⁰
+  let ⟨cw, finalValue⟩ := right✝¹¹
+  have tagValue := fun c => (tc c).right.right;
+  have dv := fun g =>
+    have v := congrArg (fun state => state.1 g) dotMeaning;
+    have v' :=
+      Eq.trans v
+        (NKR_SumFinishAlgebra.values (tagValues s) (weightValues scratch) (lowValues s) NKR_SumFinishFold.order
+          (NKR_SumFinishMeaning.decoded (zero4, zero4)) g);
+    id
+      (fun v' =>
+        Eq.mpr
+          (id
+            (congrArg (Eq (decode (dot.1 g)))
+              (congrArg List.sum
+                (congrFun'
+                  (congrArg List.map
+                    (funext fun c =>
+                      ite_congr (Eq.refl (group c = g))
+                        (fun a => Eq.refl (tag s c * decode (NJB_ArrayCarrier.cell s.low (NKR_SumFinishData.low c))))
+                        fun a => Eq.refl 0))
+                  (List.finRange 30)))))
+          (Eq.mp
+            (congrArg (Eq (decode (dot.1 g)))
+              (congrArg List.sum
+                (congrFun'
+                  (congrArg List.map
+                    (funext fun c =>
+                      ite_congr (Eq.refl (group c = g))
+                        (fun a =>
+                          congrFun' (congrArg HMul.hMul ((fun c => tagValue c) c))
+                            (decode (NJB_ArrayCarrier.cell s.low (NKR_SumFinishData.low c))))
+                        fun a => Eq.refl 0))
+                  (List.finRange 30))))
+            (Eq.mp
+              (congrArg (fun _a => decode (dot.1 g) = _a)
+                (NKR_SumFinishExpanded.group_value (tagValues s) (lowValues s) g))
+              (Eq.mp
+                (congrArg (fun _a => decode (dot.1 g) = _a)
+                  (zero_add
+                    (List.map
+                        (fun b =>
+                          if batchGroup b = g then NKR_SumFinishMeaning.delta (tagValues s) (lowValues s) b else 0)
+                        NKR_SumFinishFold.order).sum))
+                (Eq.mp
+                  (congrArg
+                    (fun _a =>
+                      decode (dot.1 g) =
+                        _a +
+                          (List.map
+                              (fun b =>
+                                if batchGroup b = g then NKR_SumFinishMeaning.delta (tagValues s) (lowValues s) b
+                                else 0)
+                              NKR_SumFinishFold.order).sum)
+                    FIv_NativeValue.zero.right)
+                  v')))))
+      v';
+  have dw := fun g =>
+    have v := congrArg (fun state => state.2 g) dotMeaning;
+    have v' :=
+      Eq.trans v
+        (NKR_SumFinishAlgebra.weights (tagValues s) (weightValues scratch) (lowValues s) NKR_SumFinishFold.order
+          (NKR_SumFinishMeaning.decoded (zero4, zero4)) g);
+    id
+      (fun v' =>
+        Eq.mpr
+          (id
+            (congrArg (Eq (decode (dot.2 g)))
+              (congrArg List.sum
+                (congrFun'
+                  (congrArg List.map
+                    (funext fun c =>
+                      ite_congr (Eq.refl (group c = g))
+                        (fun a =>
+                          Eq.refl
+                            (decode (weightValues scratch c) *
+                              decode (NJB_ArrayCarrier.cell s.low (NKR_SumFinishData.low c))))
+                        fun a => Eq.refl 0))
+                  (List.finRange 30)))))
+          (Eq.mp
+            (congrArg (Eq (decode (dot.2 g)))
+              (congrArg List.sum
+                (congrFun'
+                  (congrArg List.map
+                    (funext fun c =>
+                      ite_congr (Eq.refl (group c = g))
+                        (fun a =>
+                          Eq.refl
+                            (decode (weightValues scratch c) *
+                              decode (NJB_ArrayCarrier.cell s.low (NKR_SumFinishData.low c))))
+                        fun a => Eq.refl 0))
+                  (List.finRange 30))))
+            (Eq.mp
+              (congrArg (fun _a => decode (dot.2 g) = _a)
+                (NKR_SumFinishExpanded.group_value (weightValues scratch) (lowValues s) g))
+              (Eq.mp
+                (congrArg (fun _a => decode (dot.2 g) = _a)
+                  (zero_add
+                    (List.map
+                        (fun b =>
+                          if batchGroup b = g then NKR_SumFinishMeaning.delta (weightValues scratch) (lowValues s) b
+                          else 0)
+                        NKR_SumFinishFold.order).sum))
+                (Eq.mp
+                  (congrArg
+                    (fun _a =>
+                      decode (dot.2 g) =
+                        _a +
+                          (List.map
+                              (fun b =>
+                                if batchGroup b = g then
+                                  NKR_SumFinishMeaning.delta (weightValues scratch) (lowValues s) b
+                                else 0)
+                              NKR_SumFinishFold.order).sum)
+                    FIv_NativeValue.zero.right)
+                  v')))))
+      v';
+  have pc := fun j =>
+    have v := congrFun coeffMeaning j;
+    have v' :=
+      Eq.trans v
+        (NKR_SumPatternMeaning.source (fun i => decode (NJB_ArrayCarrier.cell scratch i))
+          (fun i => decode (NJB_ArrayCarrier.cell s.low i)) (List.finRange 43) (NJB_StateUpdates.decoded zero26) j);
+    id
+      (fun v' =>
+        Eq.mp
+          (congrArg (fun _a => decode (coefficients j) = _a)
+            (zero_add
+              (List.map
+                  (fun c =>
+                    if pOut c = j then
+                      decode (NJB_ArrayCarrier.cell scratch (NKR_SumFinishPattern.scratchIndex c)) *
+                        decode (NJB_ArrayCarrier.cell s.low (pLow c))
+                    else 0)
+                  (List.finRange 43)).sum))
+          (Eq.mp
+            (congrArg
+              (fun _a =>
+                decode (coefficients j) =
+                  _a +
+                    (List.map
+                        (fun c =>
+                          if pOut c = j then
+                            decode (NJB_ArrayCarrier.cell scratch (NKR_SumFinishPattern.scratchIndex c)) *
+                              decode (NJB_ArrayCarrier.cell s.low (pLow c))
+                          else 0)
+                        (List.finRange 43)).sum)
+              FIv_NativeValue.zero.right)
+            v'))
+      v';
+  Exists.intro (NJB_ArrayCarrier.array finished)
+    (Exists.intro (NJB_ArrayCarrier.array dot.2)
+      ⟨call,
+        ⟨NJB_ArrayCarrier.canonical_array finished cf,
+          ⟨NJB_ArrayCarrier.canonical_array dot.2 cw,
+            ⟨fun g =>
+              Eq.mpr
+                (id
+                  (congrArg (fun _a => decode (_a g) = values scratch s terms g)
+                    (NJB_ArrayCarrier.cell_array finished)))
+                (Eq.mpr (id (congrArg (fun _a => _a = values scratch s terms g) (finalValue g)))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          _a +
+                              NJL_PatternMeaning.dot (fun i => decode (NJB_ArrayCarrier.cell terms i))
+                                (fun i => decode (coefficients i)) g =
+                            values scratch s terms g)
+                        (dv g)))
+                    (have cp := funext pc;
+                    Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            baseValues s g +
+                                NJL_PatternMeaning.dot (fun i => decode (NJB_ArrayCarrier.cell terms i)) _a g =
+                              values scratch s terms g)
+                          cp))
+                      (Eq.refl
+                        (baseValues s g +
+                          NJL_PatternMeaning.dot (fun i => decode (NJB_ArrayCarrier.cell terms i))
+                            (coefficient scratch s) g))))),
+              fun g =>
+              Eq.mpr
+                (id (congrArg (fun _a => decode (_a g) = baseWeights scratch s g) (NJB_ArrayCarrier.cell_array dot.2)))
+                (dw g)⟩⟩⟩⟩)
+'AspisR1.NKR_SumFinishCohort.source' depends on axioms: [propext, Classical.choice, Quot.sound]

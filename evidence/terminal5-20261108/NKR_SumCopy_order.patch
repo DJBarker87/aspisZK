@@ -1,0 +1,15 @@
+--- a/NKR_SumCopy_native.rs.txt
++++ b/NKR_SumCopy_native.rs.txt
+@@ -40,9 +40,9 @@
+  assert_eq!(NKR_copy_words(scratch[observe])[limb],NKR_copy_words(after)[limb]^if cfg!(NKR_invert){1}else{0});
+ }
+ struct NKR_CopyTailLog{calls:usize,high_pick:usize,low_pick:usize,pick:usize,high:QM31,low:QM31,row:[QM31;8],helper:QM31,chi:QM31,left:QM31,right:QM31,reply:[QM31;3]}
+-fn NKR_copy_active(s:&Selectors,l:&mut NKR_CopyTailLog)->QM31{l.calls+=1;l.high=s.high[l.high_pick];l.low=s.low[l.low_pick];l.reply[0]}
+-fn NKR_copy_residual(row:CopyRowExtension,helper:QM31,chi:QM31,l:&mut NKR_CopyTailLog)->QM31{l.calls+=1;l.row=[row.producer_values[0],row.producer_values[1],row.producer_weights[0],row.producer_weights[1],row.consumer_values[0],row.consumer_values[1],row.consumer_weights[0],row.consumer_weights[1]];l.helper=helper;l.chi=chi;l.reply[1]}
+-fn NKR_copy_mul(left:QM31,right:QM31,l:&mut NKR_CopyTailLog)->QM31{l.calls+=1;l.left=left;l.right=right;l.reply[2]}
++fn NKR_copy_active(s:&Selectors,l:&mut NKR_CopyTailLog)->QM31{assert_eq!(l.calls,0);l.calls+=1;l.high=s.high[l.high_pick];l.low=s.low[l.low_pick];l.reply[0]}
++fn NKR_copy_residual(row:CopyRowExtension,helper:QM31,chi:QM31,l:&mut NKR_CopyTailLog)->QM31{assert_eq!(l.calls,1);l.calls+=1;l.row=[row.producer_values[0],row.producer_values[1],row.producer_weights[0],row.producer_weights[1],row.consumer_values[0],row.consumer_values[1],row.consumer_weights[0],row.consumer_weights[1]];l.helper=helper;l.chi=chi;l.reply[1]}
++fn NKR_copy_mul(left:QM31,right:QM31,l:&mut NKR_CopyTailLog)->QM31{assert_eq!(l.calls,2);l.calls+=1;l.left=left;l.right=right;l.reply[2]}
+ fn NKR_copy_tail(mut row:CopyRowExtension,values:[QM31;4],weights:[QM31;4],selectors:&Selectors,h1_z:QM31,chi:QM31,l:&mut NKR_CopyTailLog)->PoolV1PairForestCompiledCopyTerminalV1{
+  row.producer_values = [values[0], values[1]];
+  row.consumer_values = [values[2], values[3]];

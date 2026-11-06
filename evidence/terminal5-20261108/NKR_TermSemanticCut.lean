@@ -88,32 +88,8 @@ def DigestCut (pub : Public) (o : Openings) (s : Selectors) (before : Packed)
 def digestObservation (pub : Public) (o : Openings) (s : Selectors) (before after : Packed) (digests : Pair) : DigestObservation :=
  ⟨pub,o,s,![NJB_ArrayCarrier.cell before ⟨21,by decide⟩,NJB_ArrayCarrier.cell before ⟨22,by decide⟩],digests,after,3⟩
 
-theorem digest_source (pub : Public) (o : Openings) (s : Selectors) (before : Packed) (digests : Pair)
- (hb : canonical before) (hd : ∀ j,Canon (digests j)) :
- ∃ replies out,digest_reference before digests=ok out ∧ canonical out ∧
- (∀ g,field.QM31.add (NJB_ArrayCarrier.cell before (if g.val=0 then ⟨21,by decide⟩ else ⟨22,by decide⟩)) (digests g)=ok (replies g)) ∧
- DigestCut pub o s before digests replies (digestObservation pub o s before out digests) ∧
- ∀ g,decode (replies g)=decode (NJB_ArrayCarrier.cell before (if g.val=0 then ⟨21,by decide⟩ else ⟨22,by decide⟩))+decode (digests g) := by
- let slots : Fin 2 → Fin (24#usize).val := ![⟨21,by decide⟩,⟨22,by decide⟩]
- choose replies calls cr value using (fun g : Fin 2=>NJB_StubLaws.qm_add (NJB_ArrayCarrier.cell before (slots g)) (digests g) (NJB_ArrayCarrier.canonical_cell before hb _) (hd g))
- let out:=NJB_ArrayCarrier.array (digestFrame before replies)
- have vector : (![replies 0,replies 1] : Pair)=replies := by funext g;fin_cases g <;> rfl
- have co : canonical out := NJB_ArrayCarrier.canonical_array _ (fun j=>by
-  unfold digestFrame
-  split
-  · exact cr 0
-  · split
-    · exact cr 1
-    · exact NJB_ArrayCarrier.canonical_cell before hb j)
- refine ⟨replies,out,?_,co,?_,?_,?_⟩
- · simp only [digest_reference,calls,bind_tc_ok,vector]
-   rfl
- · intro g;fin_cases g <;> exact calls _
- · exact ⟨rfl,rfl,rfl,rfl,rfl,rfl,fun j=>congrFun (NJB_ArrayCarrier.cell_array (digestFrame before replies)) j⟩
- · intro g;fin_cases g <;> exact value _
 #print axioms cut_source
 #print axioms prefix_source
 #print axioms zero
-#print axioms digest_source
 end AspisR1.NKR_TermSemanticCut
 end

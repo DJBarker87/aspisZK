@@ -1,0 +1,54 @@
+{"attempt": "NKR_L113", "exit_status": 1, "wall_seconds": 10.124640542082489, "peak_rss_kib": "6152536", "swaps": "0", "print_axioms": ["'AspisR1.NKR_TermScalarInvocation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKR_TermScalarInvocation.lean:59:60: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  field.QM31.sub (NJB_ArrayCarrier.cell o.z ⟨1, ⋯⟩) (FIw_ScalarArithmetic.lifted pub.asset_id)
+in the target expression
+  (do
+      let asset_difference ← (↑o.z)[↑1#usize].sub (FIw_ScalarArithmetic.lifted pub.asset_id)
+      let i ← 2#usize * 16#usize
+      let i1 ← i + 12#usize
+      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+      let input_asset ← q2.mul asset_difference
+      let i2 ← 31#usize * 16#usize
+      let i3 ← i2 + 12#usize
+      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+      let output_scalar ← q3.mul asset_difference
+      let i
+...
+
+      let private_transfer_term ← q4.mul asset_difference
+      let withdrawal_amount_value ← lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+      let i6 ← 16#usize * 63#usize
+      let i7 ← i6 + 2#usize
+      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+      let q6 ← o.z.index_usize 10#usize
+      let q7 ← lift_m31 withdrawal_amount_value
+      let q8 ← q6.sub q7
+      let withdrawal_term ← q5.mul q8
+      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+      let scalars ← scalar_lanes pub.variant b input_asset output_scalar private_transfer_term withdrawal_term
+      add_preweighted before 92#usize scalars) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (24 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+theorem AspisR1.NKR_TermScalarInvocation.source : ∀ (pub : Public) (o : Openings) (s : Selectors) (before : Packed),
+  canonical o.z →
+    canonical s.high →
+      canonical s.low →
+        canonical before →
+          ↑pub.asset_id < 2147483647 →
+            ↑(amount pub) < 2147483647 → ∃ p, FIw_ScalarSuffix.run pub o s before = ok p.out :=
+fun pub o s before hz hh hl hb ha hm =>
+  have az := FIw_ScalarArithmetic.lift_value pub.asset_id ha;
+  sorry az
+'AspisR1.NKR_TermScalarInvocation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re3a6369669974f4b9220cc390d6864c6.scope; invocation ID: 955bdf86e2bf467eaf8dc3df5a1c4b03

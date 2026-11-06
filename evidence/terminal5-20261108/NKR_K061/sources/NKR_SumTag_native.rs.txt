@@ -1,0 +1,25 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+const NKR_TAG_BASE:u32=1_124_073_472;
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_tag_metadata_cut(){
+ let position:usize=kani::any();let coordinate:usize=kani::any();kani::assume(position<272&&coordinate<30);
+ let tag=COPY_TAG_TERMS.1[position];let block=usize::from(COPY_TAG_TERMS.0[position]);
+ assert!(tag>=NKR_TAG_BASE&&tag<NKR_TAG_BASE+136);
+ let index=(tag.wrapping_sub(NKR_TAG_BASE))as usize;let consumer=position>=136;
+ let link=constants::COPY_LINKS[index];let endpoint=if consumer{link.consumer}else{link.producer};
+ assert_eq!(tag,link.tag);assert_eq!(block,usize::from(endpoint.row)>>4);
+ let start=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate]);let end=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate+1]);
+ if start<=position&&position<end{
+  let group=(if consumer{2}else{0})+usize::from(endpoint.slot);let local=usize::from(endpoint.row)&15;
+  assert_eq!(usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local]),coordinate^if cfg!(NKR_invert){1}else{0});
+ }
+}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_tag_permutation_cut(){
+ let a:usize=kani::any();let b:usize=kani::any();kani::assume(a<272&&b<272);
+ let ta=COPY_TAG_TERMS.1[a];let tb=COPY_TAG_TERMS.1[b];let ca=a>=136;let cb=b>=136;
+ if ta==tb&&ca==cb{assert_eq!(a,b^if cfg!(NKR_invert){1}else{0});}
+}

@@ -1,0 +1,51 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -2328,3 +2328,7 @@
+         }
+     }
+ }
++
++#[cfg(kani)]
++#[path="NKR_Digest_wrapper_window.rs"]
++mod NKR_Digest_wrapper_window;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_Digest_wrapper_window.rs
+@@ -0,0 +1,38 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_Digest_warg_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++#[derive(Clone,Copy)]
++struct NKR_Digest_warg_Probe{kind:usize,a:usize,di:usize,fi:usize,oi:usize,hi:usize,lo:usize,limb:usize}
++fn NKR_Digest_warg_project(p:SemanticPublic<'_>,o:&StateOnlyPoseidonOpenings,s:&Selectors,q:NKR_Digest_warg_Probe)->u64{
++ match q.kind{
++ 0=>matches!(p.variant,CompiledVariant::PrivateTransfer) as u64,
++ 1=>p.pool[q.a] as u64,2=>p.deployment_domain[q.a] as u64,
++ 3=>p.anchor[q.di].0 as u64,4=>p.nullifier[q.di].0 as u64,5=>p.asset_id.0 as u64,
++ 6=>p.recipient.is_some() as u64,7=>p.recipient.map_or(0,|x|x[q.di].0 as u64),
++ 8=>p.change[q.di].0 as u64,9=>p.withdrawal_amount.is_some() as u64,10=>p.withdrawal_amount.unwrap_or(0) as u64,
++ 11=>p.transition.live_snapshot.pool[q.a] as u64,12=>p.transition.live_snapshot.deployment_domain[q.a] as u64,
++ 13=>p.transition.live_snapshot.sequence,14=>p.transition.live_snapshot.next_pair_index,
++ 15=>p.transition.live_snapshot.current_root[q.di].0 as u64,16=>p.transition.live_snapshot.frontier[q.fi][q.di].0 as u64,
++ 17=>p.transition.candidate_afterstate.next_pair_index,18=>p.transition.candidate_afterstate.next_root[q.di].0 as u64,
++ 19=>p.transition.candidate_afterstate.next_frontier[q.fi][q.di].0 as u64,
++ 20=>NKR_Digest_warg_words(o.z[q.oi])[q.limb] as u64,21=>NKR_Digest_warg_words(o.succ_z[q.oi])[q.limb] as u64,
++ 22=>NKR_Digest_warg_words(o.xor12_z[q.oi])[q.limb] as u64,
++ 23=>NKR_Digest_warg_words(s.high[q.hi])[q.limb] as u64,
++ _=>NKR_Digest_warg_words(s.low[q.lo])[q.limb] as u64
++ }
++}
++struct NKR_Digest_warg_Log{calls:usize,probe:NKR_Digest_warg_Probe,seen:u64,reply:[QM31;2]}
++fn NKR_Digest_warg_child(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,l:&mut NKR_Digest_warg_Log)->[QM31;2]{let seen=NKR_Digest_warg_project(public,openings,selectors,l.probe);l.calls+=1;l.seen=seen;l.reply}
++fn NKR_Digest_warg_wrapper(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,l:&mut NKR_Digest_warg_Log)->[QM31;2]{return NKR_Digest_warg_child(public,openings,selectors,l);}
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_Digest_wrapper_argument_window_cut(){
++ let transition:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};
++ let recipient:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};
++ let p=SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(recipient)}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition:&transition};
++ let o=StateOnlyPoseidonOpenings{z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())},succ_z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())},xor12_z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};
++ let s=Selectors{high:unsafe{core::mem::transmute::<[u32;256],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};
++ let q=NKR_Digest_warg_Probe{kind:kani::any(),a:kani::any(),di:kani::any(),fi:kani::any(),oi:kani::any(),hi:kani::any(),lo:kani::any(),limb:kani::any()};kani::assume(q.kind<25&&q.a<32&&q.di<8&&q.fi<20&&q.oi<16&&q.hi<64&&q.lo<16&&q.limb<4);
++ let reply:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let lane:usize=kani::any();let limb:usize=kani::any();kani::assume(lane<2&&limb<4);let expected=NKR_Digest_warg_project(p,&o,&s,q);let mut l=NKR_Digest_warg_Log{calls:0,probe:q,seen:0,reply};let out=NKR_Digest_warg_wrapper(p,&o,&s,&mut l);
++ assert_eq!(l.calls,1);assert_eq!(l.seen,expected^if cfg!(NKR_invert){1}else{0});assert_eq!(NKR_Digest_warg_words(out[lane])[limb],NKR_Digest_warg_words(reply[lane])[limb]);
++}

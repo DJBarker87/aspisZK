@@ -15,7 +15,7 @@ fn NKR_sem_path(packed:&mut[QM31;24],o:&StateOnlyPoseidonOpenings,s:&Selectors,l
 fn NKR_sem_value(packed:&mut[QM31;24],o:&StateOnlyPoseidonOpenings,s:&Selectors,l:&mut NKR_SemChildLog){NKR_sem_child(packed,None,o,s,233,l)}
 fn NKR_sem_occupancy(packed:&mut[QM31;24],public:SemanticPublic<'_>,o:&StateOnlyPoseidonOpenings,s:&Selectors,l:&mut NKR_SemChildLog){NKR_sem_child(packed,Some(public),o,s,228,l)}
 fn NKR_semantic_child_window(packed:&mut[QM31;24],public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,stage:usize,l:&mut NKR_SemChildLog){match stage{0=>NKR_sem_schedule(packed,public,openings,selectors,l),1=>NKR_sem_path(packed,openings,selectors,l),2=>NKR_sem_value(packed,openings,selectors,l),3=>NKR_sem_occupancy(packed,public,openings,selectors,l),_=>unreachable!()}}
-#[kani::proof] #[kani::unwind(27)]
+#[kani::proof] #[kani::unwind(68)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NKR_semantic_child_cut(){
  let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_sem_public(&t);let o=StateOnlyPoseidonOpenings{z:NKR_sem_array!(16),succ_z:NKR_sem_array!(16),xor12_z:NKR_sem_array!(16)};let s=Selectors{high:NKR_sem_array!(64),low:NKR_sem_array!(16)};let before=NKR_sem_array!(24);let reply=NKR_sem_array!(24);let pick:usize=kani::any();let stage:usize=kani::any();let probe=NKR_sem_probe();kani::assume(pick<24&&stage<4);kani::assume((stage==0||stage==3)||probe.arg!=0);let expected=NKR_sem_arg(if stage==0||stage==3{Some(public)}else{None},&o,&s,&probe);let limb=probe.limb;
@@ -29,7 +29,8 @@ struct NKR_SemOrder{calls:usize,seen:[usize;4]}
 fn NKR_sem_record(row:usize,l:&mut NKR_SemOrder){l.seen[l.calls]=row;l.calls+=1;}
 fn NKR_semantic_prefix_order(l:&mut NKR_SemOrder){NKR_sem_record(232,l);NKR_sem_record(229,l);NKR_sem_record(233,l);NKR_sem_record(228,l);}
 #[kani::proof] #[kani::unwind(5)]
-fn NKR_semantic_order_cut(){let mut l=NKR_SemOrder{calls:0,seen:[0;4]};NKR_semantic_prefix_order(&mut l);assert_eq!(l.calls,4);assert_eq!(l.seen,[232,229,233,228+if cfg!(NKR_invert){1}else{0}]);}
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_semantic_order_cut(){let mut l=NKR_SemOrder{calls:0,seen:[0;4]};NKR_semantic_prefix_order(&mut l);assert_eq!(l.calls,4);assert_eq!(l.seen[0],232);assert_eq!(l.seen[1],229);assert_eq!(l.seen[2],233);assert_eq!(l.seen[3],228+if cfg!(NKR_invert){1}else{0});}
 struct NKR_SemDigestLog{probe:NKR_SemProbe,seek:usize,calls:usize,arg:u64,left:QM31,right:QM31,digests:[QM31;2],adds:[QM31;2]}
 fn NKR_sem_digest(public:SemanticPublic<'_>,o:&StateOnlyPoseidonOpenings,s:&Selectors,l:&mut NKR_SemDigestLog)->[QM31;2]{assert_eq!(l.calls,0);l.calls+=1;l.arg=NKR_sem_arg(Some(public),o,s,&l.probe);l.digests}
 fn NKR_sem_add(a:QM31,b:QM31,l:&mut NKR_SemDigestLog)->QM31{let k=l.calls;assert!(k>=1&&k<=2);if k==l.seek{l.left=a;l.right=b;}l.calls+=1;l.adds[k-1]}
@@ -38,7 +39,7 @@ fn NKR_semantic_digest_window(packed:&mut[QM31;24],public:SemanticPublic<'_>,ope
  packed[84/4]=NKR_sem_add(packed[84/4],digests[0],l);
  packed[84/4+1]=NKR_sem_add(packed[84/4+1],digests[1],l);
 }
-#[kani::proof] #[kani::unwind(27)]
+#[kani::proof] #[kani::unwind(68)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NKR_semantic_digest_cut(){
  let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_sem_public(&t);let o=StateOnlyPoseidonOpenings{z:NKR_sem_array!(16),succ_z:NKR_sem_array!(16),xor12_z:NKR_sem_array!(16)};let s=Selectors{high:NKR_sem_array!(64),low:NKR_sem_array!(16)};let before=NKR_sem_array!(24);let digests=NKR_sem_array!(2);let adds=NKR_sem_array!(2);let probe=NKR_sem_probe();let limb=probe.limb;let pick:usize=kani::any();let seek:usize=kani::any();kani::assume(pick<24&&seek>=1&&seek<=2);let expected=NKR_sem_arg(Some(public),&o,&s,&probe);
@@ -63,7 +64,7 @@ fn NKR_semantic_scalar_window(packed:&mut[QM31;24],public:SemanticPublic<'_>,ope
  let scalars=NKR_sem_scalars(public.variant,public.withdrawal_amount.is_some(),input_asset,output_scalar,private_transfer_term,withdrawal_term,l);
  NKR_sem_scalar_pack(packed,92,&scalars,l);
 }
-#[kani::proof] #[kani::unwind(27)]
+#[kani::proof] #[kani::unwind(68)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NKR_semantic_scalar_cut(){
  let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_sem_public(&t);let o=StateOnlyPoseidonOpenings{z:NKR_sem_array!(16),succ_z:NKR_sem_array!(16),xor12_z:NKR_sem_array!(16)};let s=Selectors{high:NKR_sem_array!(64),low:NKR_sem_array!(16)};let before=NKR_sem_array!(24);let fields=NKR_sem_array!(12);let scalars=NKR_sem_array!(2);let reply=NKR_sem_array!(24);let seek:usize=kani::any();let limb:usize=kani::any();let high:usize=kani::any();let low:usize=kani::any();let pick:usize=kani::any();let scalar_pick:usize=kani::any();let value_pick:usize=kani::any();kani::assume(seek<12&&limb<4&&high<64&&low<16&&pick<24&&scalar_pick<4&&value_pick<2);
@@ -71,4 +72,37 @@ fn NKR_semantic_scalar_cut(){
  let kinds=[5u8,2,6,0,6,0,6,0,6,5,2,0];let left=[NKR_sem_q([public.asset_id.0,0,0,0]),o.z[1],QM31::ZERO,fields[2],QM31::ZERO,fields[4],QM31::ZERO,fields[6],QM31::ZERO,NKR_sem_q([public.withdrawal_amount.unwrap_or(0),0,0,0]),o.z[10],fields[8]];let right=[QM31::ZERO,fields[0],QM31::ZERO,fields[1],QM31::ZERO,fields[1],QM31::ZERO,fields[1],QM31::ZERO,QM31::ZERO,fields[9],fields[10]];
  assert_eq!(l.calls,14);assert_eq!(l.kind,kinds[seek]);assert_eq!(NKR_sem_words(l.left)[limb],NKR_sem_words(left[seek])[limb]);assert_eq!(NKR_sem_words(l.right)[limb],NKR_sem_words(right[seek])[limb]);if seek==2||seek==4||seek==6||seek==8{assert_eq!(l.row,[44,508,460,1010][(seek-2)/2]);assert_eq!(l.high_seen,NKR_sem_words(s.high[high])[limb]);assert_eq!(l.low_seen,NKR_sem_words(s.low[low])[limb]);}
  assert_eq!(l.variant,match public.variant{CompiledVariant::PrivateTransfer=>0,CompiledVariant::Withdrawal=>1});assert_eq!(l.present,public.withdrawal_amount.is_some());assert_eq!(NKR_sem_words(l.scalar_args[scalar_pick])[limb],NKR_sem_words([fields[3],fields[5],fields[7],fields[11]][scalar_pick])[limb]);assert_eq!(l.start,92);assert_eq!(NKR_sem_words(l.seen_values[value_pick])[limb],NKR_sem_words(scalars[value_pick])[limb]);assert_eq!(l.before,NKR_sem_words(before[pick])[limb]);assert_eq!(NKR_sem_words(packed[pick])[limb],NKR_sem_words(reply[pick])[limb]^if cfg!(NKR_invert){1}else{0});
+}
+// K048/K054 retired. Separate argument projections from native24cell frames.
+macro_rules! NKR_sem_flat_array{($n:expr)=>{unsafe{core::mem::transmute::<[u32;4*$n],[QM31;$n]>(kani::any())}}}
+struct NKR_SemArgLog{probe:NKR_SemProbe,calls:usize,kind:usize,seen:u64}
+fn NKR_sem_mark_arg(p:Option<SemanticPublic<'_>>,o:&StateOnlyPoseidonOpenings,s:&Selectors,kind:usize,l:&mut NKR_SemArgLog){l.calls+=1;l.kind=kind;l.seen=NKR_sem_arg(p,o,s,&l.probe);}
+fn NKR_semantic_child_args(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,stage:usize,l:&mut NKR_SemArgLog){match stage{0=>NKR_sem_mark_arg(Some(public),openings,selectors,232,l),1=>NKR_sem_mark_arg(None,openings,selectors,229,l),2=>NKR_sem_mark_arg(None,openings,selectors,233,l),3=>NKR_sem_mark_arg(Some(public),openings,selectors,228,l),_=>unreachable!()}}
+#[kani::proof] #[kani::unwind(68)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_semantic_child_args_cut(){
+ let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_sem_public(&t);let o=StateOnlyPoseidonOpenings{z:NKR_sem_flat_array!(16),succ_z:NKR_sem_flat_array!(16),xor12_z:NKR_sem_flat_array!(16)};let s=Selectors{high:NKR_sem_flat_array!(64),low:NKR_sem_flat_array!(16)};let stage:usize=kani::any();let probe=NKR_sem_probe();kani::assume(stage<4);kani::assume((stage==0||stage==3)||probe.arg!=0);let expected=NKR_sem_arg(if stage==0||stage==3{Some(public)}else{None},&o,&s,&probe);
+ let mut l=NKR_SemArgLog{probe,calls:0,kind:0,seen:0};NKR_semantic_child_args(public,&o,&s,stage,&mut l);assert_eq!(l.calls,1);assert_eq!(l.kind,[232,229,233,228][stage]);assert_eq!(l.seen,expected^if cfg!(NKR_invert){1}else{0});
+}
+struct NKR_SemStateLog{pick:usize,limb:usize,calls:usize,before:u32}
+fn NKR_semantic_child_state(packed:&mut[QM31;24],reply:&[QM31;24],l:&mut NKR_SemStateLog){l.calls+=1;l.before=NKR_sem_words(packed[l.pick])[l.limb];*packed=*reply;}
+#[kani::proof] #[kani::unwind(27)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_semantic_child_state_cut(){
+ let mut packed=NKR_sem_flat_array!(24);let reply=NKR_sem_flat_array!(24);let pick:usize=kani::any();let limb:usize=kani::any();kani::assume(pick<24&&limb<4);let before_word=NKR_sem_words(packed[pick])[limb];let reply_word=NKR_sem_words(reply[pick])[limb];let mut l=NKR_SemStateLog{pick,limb,calls:0,before:0};NKR_semantic_child_state(&mut packed,&reply,&mut l);assert_eq!(l.calls,1);assert_eq!(l.before,before_word);assert_eq!(NKR_sem_words(packed[pick])[limb],reply_word^if cfg!(NKR_invert){1}else{0});
+}
+struct NKR_SemDigestArg<'a>{probe:NKR_SemProbe,calls:usize,seen:u64,reply:&'a[QM31;2]}
+fn NKR_semantic_digest_args(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,l:&mut NKR_SemDigestArg<'_>)->[QM31;2]{l.calls+=1;l.seen=NKR_sem_arg(Some(public),openings,selectors,&l.probe);*l.reply}
+#[kani::proof] #[kani::unwind(68)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_semantic_digest_args_cut(){
+ let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_sem_public(&t);let o=StateOnlyPoseidonOpenings{z:NKR_sem_flat_array!(16),succ_z:NKR_sem_flat_array!(16),xor12_z:NKR_sem_flat_array!(16)};let s=Selectors{high:NKR_sem_flat_array!(64),low:NKR_sem_flat_array!(16)};let reply=NKR_sem_flat_array!(2);let g:usize=kani::any();kani::assume(g<2);let probe=NKR_sem_probe();let limb=probe.limb;let expected=NKR_sem_arg(Some(public),&o,&s,&probe);let reply_word=NKR_sem_words(reply[g])[limb];let mut l=NKR_SemDigestArg{probe,calls:0,seen:0,reply:&reply};let out=NKR_semantic_digest_args(public,&o,&s,&mut l);assert_eq!(l.calls,1);assert_eq!(l.seen,expected);assert_eq!(NKR_sem_words(out[g])[limb],reply_word^if cfg!(NKR_invert){1}else{0});
+}
+struct NKR_SemDigestState<'a>{calls:usize,seek:usize,left:QM31,right:QM31,reply:&'a[QM31;2]}
+fn NKR_sem_state_add(a:QM31,b:QM31,l:&mut NKR_SemDigestState<'_>)->QM31{let k=l.calls;assert!(k<2);if k==l.seek{l.left=a;l.right=b;}l.calls+=1;l.reply[k]}
+fn NKR_semantic_digest_state(packed:&mut[QM31;24],digests:&[QM31;2],l:&mut NKR_SemDigestState<'_>){packed[84/4]=NKR_sem_state_add(packed[84/4],digests[0],l);packed[84/4+1]=NKR_sem_state_add(packed[84/4+1],digests[1],l);}
+#[kani::proof] #[kani::unwind(27)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_semantic_digest_state_cut(){
+ let mut packed=NKR_sem_flat_array!(24);let digests=NKR_sem_flat_array!(2);let reply=NKR_sem_flat_array!(2);let pick:usize=kani::any();let limb:usize=kani::any();let seek:usize=kani::any();kani::assume(pick<24&&limb<4&&seek<2);let before_word=NKR_sem_words(packed[pick])[limb];let left_word=NKR_sem_words(packed[21+seek])[limb];let right_word=NKR_sem_words(digests[seek])[limb];let want=if pick==21{NKR_sem_words(reply[0])[limb]}else if pick==22{NKR_sem_words(reply[1])[limb]}else{before_word};let mut l=NKR_SemDigestState{calls:0,seek,left:QM31::ZERO,right:QM31::ZERO,reply:&reply};NKR_semantic_digest_state(&mut packed,&digests,&mut l);assert_eq!(l.calls,2);assert_eq!(NKR_sem_words(l.left)[limb],left_word);assert_eq!(NKR_sem_words(l.right)[limb],right_word);assert_eq!(NKR_sem_words(packed[pick])[limb],want^if cfg!(NKR_invert){1}else{0});
 }

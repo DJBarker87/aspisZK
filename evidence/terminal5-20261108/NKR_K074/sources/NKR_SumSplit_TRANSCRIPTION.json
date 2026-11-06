@@ -1,0 +1,29 @@
+{
+ "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "source": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+ "source_sha256": "f38ca2bd28554e8f67b75b7b035f02648ea0b5d82f78d2457e10188e6402a3f0",
+ "harness_sha256": "b83b2502d72faae773ffc236216bd6716564bcaf5093593d7291bc288832bd29",
+ "checks": {
+  "tag": true,
+  "weight": true,
+  "low": true,
+  "arithmetic": true,
+  "pattern_product": true
+ },
+ "original_batch": "\n                let count = core::cmp::min(4, end - coordinate);\n                let tag_values: [QM31; 4] = core::array::from_fn(|index| {\n                    if index < count {\n                        copy_tag_coordinate_value(scratch, coordinate + index, selectors)\n                    } else {\n                        QM31::ZERO\n                    }\n                });\n                let weight_values: [QM31; 4] = core::array::from_fn(|index| {\n                    if index < count {\n                        scratch[COPY_SELECTOR_TENSOR_WEIGHT_OFFSET + coordinate + index]\n                    } else {\n                        QM31::ZERO\n                    }\n                });\n                let lows: [QM31; 4] = core::array::from_fn(|index| {\n                    if index < count {\n                        selectors.low\n                            [usize::from(COPY_GROUP_LOCAL_COORDINATE_LOCALS[coordinate + index])]\n                    } else {\n                        QM31::ZERO\n                    }\n                });\n                values[group] =\n                    values[group].add(qm31_sum_products_up_to4(tag_values, lows, count));\n                weights[group] =\n                    weights[group].add(qm31_sum_products_up_to4(weight_values, lows, count));\n                coordinate += count;\n            ",
+ "original_pattern": "\n        let output = usize::from(COPY_PATTERN_LOCAL_OUTPUT_COORDINATES[coordinate]);\n        let low = selectors.low[usize::from(COPY_PATTERN_LOCAL_COORDINATE_LOCALS[coordinate])];\n        pattern_selectors[output] = pattern_selectors[output]\n            .add(scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET + coordinate].mul(low));\n        coordinate += 1;\n    ",
+ "segments": {
+  "NKR_ss_tag_cell": "if index<count{NKR_ss_tag(scratch,coordinate+index,selectors,l)}else{QM31::ZERO}",
+  "NKR_ss_weight_cell": "if index<count{scratch[COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+coordinate+index]}else{QM31::ZERO}",
+  "NKR_ss_low_cell": "if index<count{selectors.low[usize::from(COPY_GROUP_LOCAL_COORDINATE_LOCALS[coordinate+index])]}else{QM31::ZERO}",
+  "NKR_ss_arithmetic": "values[group]=NKR_ss_add(values[group],NKR_ss_sum(tag_values,lows,count,l),l);weights[group]=NKR_ss_add(weights[group],NKR_ss_sum(weight_values,lows,count,l),l);coordinate+=count;(values,weights,coordinate)",
+  "NKR_ss_product": "let output=usize::from(COPY_PATTERN_LOCAL_OUTPUT_COORDINATES[coordinate]);let low=selectors.low[usize::from(COPY_PATTERN_LOCAL_COORDINATE_LOCALS[coordinate])];(output,NKR_ss_mul(scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET+coordinate],low,l))",
+  "NKR_ss_write": "l.calls+=1;l.left=patterns[output];l.right=product;patterns[output]=l.reply;coordinate+1"
+ },
+ "pattern_write_association": "Scalar add logging/write window: actual output and product from preceding product segment; exact one-cell update, full arbitrary-coordinate frame, coordinate+1. Receiver may be read before/after pure field product because its CLOSED mutable footprint is empty.",
+ "retired": [
+  "NKR_K038",
+  "NKR_K040"
+ ],
+ "representative_restriction": false
+}

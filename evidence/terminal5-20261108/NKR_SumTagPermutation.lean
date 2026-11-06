@@ -1,4 +1,5 @@
 import NJL_TagData
+open scoped BigOperators
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NKR_SumTagPermutation
@@ -29,7 +30,7 @@ theorem injective (domain : Domain) (cut : Cut) : Function.Injective (encoded do
  have ht:=(index domain t).isLt
  have hu:=(index domain u).isLt
  have st : side t=side u := by
-  cases hst : side t <;> cases hsu : side u <;> simp only [hst,hsu,if_true,if_false,Bool.false_eq_true,Bool.true_eq_true] at val ⊢ <;> omega
+  cases hst : side t <;> cases hsu : side u <;> simp only [hst,hsu,if_true,if_false,Bool.false_eq_true] at val ⊢ <;> omega
  have vals : (index domain t).val=(index domain u).val := by rw [st] at val;omega
  have tags : tag t=tag u := by
   change tag t-base=tag u-base at vals
@@ -41,7 +42,7 @@ theorem injective (domain : Domain) (cut : Cut) : Function.Injective (encoded do
 /-- Finite self-map pigeonhole:272registry positions cover exactly the
 136producer plus136consumer source entries. No272-cell kernel replay. -/
 theorem surjective (domain : Domain) (cut : Cut) : Function.Surjective (encoded domain) :=
- Finite.surjective_of_injective (encoded domain) (injective domain cut)
+ Finite.surjective_of_injective (injective domain cut)
 
 theorem sum_transport (domain : Domain) (cut : Cut) (f : Fin 272 → K) :
  ((List.finRange 272).map (fun t=>f (encoded domain t))).sum=((List.finRange 272).map f).sum := by

@@ -1,0 +1,74 @@
+NKR_DigestRoot.lean:24:68: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+theorem AspisR1.NKR_DigestRoot.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain p →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical s.high →
+        FIw_ArrayValue.canonical s.low →
+          ∃ c sums out old,
+            NKR_DigestChildren.Clauses p o s c ∧
+              NKR_DigestChildren.Canonical c ∧
+                NKR_DigestPrefix.run p o s = ok (c, sums) ∧
+                  NKR_DigestPrefix.Frame c sums ∧
+                    NKR_DigestComplete.reference p o s = ok out ∧
+                      (∀ (j : Fin 2), Canon (out j)) ∧
+                        FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes p o s = ok old ∧
+                          FIw_ArrayValue.canonical old ∧
+                            ∀ (g : Fin 2),
+                              decode (out g) =
+                                NJB_PackLinearity.pack fun j =>
+                                  FIw_ArrayValue.decoded old (NJX_DigestGroups.index g j) :=
+fun p o s hp ho hh hl =>
+  let ⟨c, h✝⟩ := NKR_DigestComplete.source p o s hp ho hh hl
+  let ⟨sums, h✝¹⟩ := h✝
+  let ⟨out, h✝²⟩ := h✝¹
+  let ⟨hc, right✝⟩ := h✝²
+  let ⟨hcan, right✝¹⟩ := right✝
+  let ⟨pc, right✝²⟩ := right✝¹
+  let ⟨frame, right✝³⟩ := right✝²
+  let ⟨oc, right✝⁴⟩ := right✝³
+  let ⟨hout, values⟩ := right✝⁴
+  let ⟨old, h✝³⟩ := NKR_DigestOldPack.source p o s hp ho hh hl
+  let ⟨oldc, right✝⁵⟩ := h✝³
+  let ⟨hold, oldv⟩ := right✝⁵
+  Exists.intro c
+    (Exists.intro sums
+      (Exists.intro out
+        (Exists.intro old
+          ⟨hc,
+            ⟨hcan,
+              ⟨pc,
+                ⟨frame,
+                  ⟨oc,
+                    ⟨hout,
+                      ⟨oldc,
+                        ⟨hold, fun g =>
+                          Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  _a =
+                                    NJB_PackLinearity.pack fun j =>
+                                      FIw_ArrayValue.decoded old (NJX_DigestGroups.index g j))
+                                (values g)))
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    _a =
+                                      NJB_PackLinearity.pack fun j =>
+                                        FIw_ArrayValue.decoded old (NJX_DigestGroups.index g j))
+                                  (NKR_DigestAssociation.model p o s c hp ho hh hc g)))
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      (List.map (fun key => NKR_DigestKeyValues.term p o s key g)
+                                            (R0P.digestKeys (FIw_PublicModel.ofPublic p))).sum =
+                                        _a)
+                                    (oldv g)))
+                                (Eq.refl
+                                  (List.map (fun key => NKR_DigestKeyValues.term p o s key g)
+                                      (R0P.digestKeys (FIw_PublicModel.ofPublic p))).sum)))⟩⟩⟩⟩⟩⟩⟩⟩)))
+'AspisR1.NKR_DigestRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

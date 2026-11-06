@@ -22,9 +22,10 @@ def ssh(code,data=None,submitted=False):
   if retry<10:time.sleep(60)
  raise RuntimeError('Transport exhausted')
 for disk_retry in range(7):
- r=ssh("python3 -c 'import shutil,json;print(json.dumps(dict(free=shutil.disk_usage(\"/home/dombarker/project-offloads\").free)))'")
+ r=ssh("python3", "import shutil,json,subprocess,pathlib; p=pathlib.Path('/home/dombarker/project-offloads/codex-cx-terminal5-20261108'); print(json.dumps(dict(free=shutil.disk_usage(p.parent).free,workspace_bytes=int(subprocess.check_output(['du','-sb',str(p)]).split()[0]) if p.exists() else 0)))")
  assert r.returncode==0,r.stderr
  disk=json.loads(r.stdout);disk.update(attempt=a,retry=disk_retry,minimum=40_000_000_000)
+ assert disk['workspace_bytes']<30_000_000_000, 'STOP own workspace30GBcap'
  with (E/'NKR_DISK.jsonl').open('a') as f:f.write(json.dumps(disk)+'\n')
  if disk['free']>=40_000_000_000:break
  if disk_retry==6:raise RuntimeError('STOP disk floor after six10minute waits')
@@ -71,7 +72,7 @@ if x['kind'] in ['lean','audit']:
  if x['kind']=='lean':
   for n in re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):rels.add(n.replace('.','/')+'.olean')
  else:
-  modules=list(json.loads((b/'NKR_GATE_SOURCES.json').read_text())['passed'])+['NKR_COMBINED_IMPORT','NKC_COMBINED_IMPORT','NJX_COMBINED_IMPORT','NJO_COMBINED_IMPORT','NJL_COMBINED_IMPORT','NIU_COMBINED_IMPORT','NGK_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit']
+  modules=list(json.loads((b/'NKR_GATE_SOURCES.json').read_text())['passed'])+['NKR_COMBINED_IMPORT','NKN_COMBINED_IMPORT','NKI_COMBINED_IMPORT','NKC_COMBINED_IMPORT','NJX_COMBINED_IMPORT','NJO_COMBINED_IMPORT','NJL_COMBINED_IMPORT','NIU_COMBINED_IMPORT','NGK_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit']
   for n in modules:rels.add(n.replace('.','/')+'.olean')
  for rel in sorted(rels):
   q=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert q is not None,rel

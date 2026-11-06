@@ -1,0 +1,647 @@
+theorem AspisR1.NKR_TermScalarInvocation.source : ∀ (pub : Public) (o : Openings) (s : Selectors) (before : Packed),
+  canonical o.z →
+    canonical s.high →
+      canonical s.low →
+        canonical before →
+          ↑pub.asset_id < 2147483647 →
+            ↑(amount pub) < 2147483647 → ∃ p, FIw_ScalarSuffix.run pub o s before = ok p.out :=
+fun pub o s before hz hh hl hb ha hm =>
+  have az := FIw_ScalarArithmetic.lift_value pub.asset_id ha;
+  have mz := FIw_ScalarArithmetic.lift_value (amount pub) hm;
+  let ⟨difference, h✝⟩ :=
+    NJB_StubLaws.qm_sub (NJB_ArrayCarrier.cell o.z ⟨1, of_decide_eq_true (id (Eq.refl true))⟩)
+      (FIw_ScalarArithmetic.lifted pub.asset_id)
+      (NJB_ArrayCarrier.canonical_cell o.z hz ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) az.left
+  let ⟨dc, right✝⟩ := h✝
+  let ⟨cd, right✝¹⟩ := right✝
+  have rbound := fun g =>
+    List.Mem.casesOn (motive := fun a x =>
+      List.finRange ({ len := 3 }.len + 1) = a → Fintype.complete g ≍ x → ↑(rows g) < 1024) (Fintype.complete g)
+      (fun «as» h =>
+        List.cons.noConfusion h fun head_eq =>
+          Eq.ndrec (motive := fun g =>
+            ∀ (this : g ∈ Fintype.elems),
+              (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                    ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                      ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])) ≍
+                  «as» →
+                this ≍ List.Mem.head «as» → ↑(rows g) < 1024)
+            (fun this tail_eq =>
+              Eq.ndrec (motive := fun «as» =>
+                this ≍ List.Mem.head «as» →
+                  ↑(rows
+                        ((fun i => i)
+                          ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩)) <
+                    1024)
+                (fun h => of_decide_eq_true (id (Eq.refl true))) (eq_of_heq tail_eq))
+            (eq_of_heq head_eq) (Fintype.complete g))
+      (fun b {«as»} a h =>
+        List.cons.noConfusion h fun head_eq =>
+          Eq.ndrec (motive := fun b =>
+            (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                  ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                    ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])) ≍
+                «as» →
+              Fintype.complete g ≍ List.Mem.tail b a → ↑(rows g) < 1024)
+            (fun tail_eq =>
+              Eq.ndrec (motive := fun {«as»} =>
+                ∀ (a : List.Mem g «as»),
+                  Fintype.complete g ≍
+                      List.Mem.tail
+                        ((fun i => i)
+                          ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩)
+                        a →
+                    ↑(rows g) < 1024)
+                (fun a h =>
+                  List.Mem.casesOn (motive := fun a_1 x =>
+                    (fun x1 x2 => (fun i => i) x1 :: x2)
+                          ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                          ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                            ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])) =
+                        a_1 →
+                      a ≍ x → ↑(rows g) < 1024)
+                    a
+                    (fun «as» h =>
+                      List.cons.noConfusion h fun head_eq =>
+                        Eq.ndrec (motive := fun g =>
+                          ∀
+                            (a :
+                              List.Mem g
+                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                  ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                    ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                    ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                      [])))),
+                            (fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                  ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []) ≍
+                                «as» →
+                              a ≍ List.Mem.head «as» → ↑(rows g) < 1024)
+                          (fun a tail_eq =>
+                            Eq.ndrec (motive := fun «as» =>
+                              a ≍ List.Mem.head «as» →
+                                ↑(rows
+                                      ((fun i => i)
+                                        ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩)) <
+                                  1024)
+                              (fun h => of_decide_eq_true (id (Eq.refl true))) (eq_of_heq tail_eq))
+                          (eq_of_heq head_eq) a)
+                    (fun b {«as»} a_1 h =>
+                      List.cons.noConfusion h fun head_eq =>
+                        Eq.ndrec (motive := fun b =>
+                          (fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []) ≍
+                              «as» →
+                            a ≍ List.Mem.tail b a_1 → ↑(rows g) < 1024)
+                          (fun tail_eq =>
+                            Eq.ndrec (motive := fun {«as»} =>
+                              ∀ (a_2 : List.Mem g «as»),
+                                a ≍
+                                    List.Mem.tail
+                                      ((fun i => i)
+                                        ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩)
+                                      a_2 →
+                                  ↑(rows g) < 1024)
+                              (fun a_2 h =>
+                                List.Mem.casesOn (motive := fun a x =>
+                                  (fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                          []) =
+                                      a →
+                                    a_2 ≍ x → ↑(rows g) < 1024)
+                                  a_2
+                                  (fun «as» h =>
+                                    List.cons.noConfusion h fun head_eq =>
+                                      Eq.ndrec (motive := fun g =>
+                                        ∀
+                                          (a :
+                                            List.Mem g
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []))),
+                                          (fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                                [] ≍
+                                              «as» →
+                                            a ≍ List.Mem.head «as» → ↑(rows g) < 1024)
+                                        (fun a tail_eq =>
+                                          Eq.ndrec (motive := fun «as» =>
+                                            a ≍ List.Mem.head «as» →
+                                              ↑(rows
+                                                    ((fun i => i)
+                                                      ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩)) <
+                                                1024)
+                                            (fun h => of_decide_eq_true (id (Eq.refl true))) (eq_of_heq tail_eq))
+                                        (eq_of_heq head_eq) a_2)
+                                  (fun b {«as»} a h =>
+                                    List.cons.noConfusion h fun head_eq =>
+                                      Eq.ndrec (motive := fun b =>
+                                        (fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                              [] ≍
+                                            «as» →
+                                          a_2 ≍ List.Mem.tail b a → ↑(rows g) < 1024)
+                                        (fun tail_eq =>
+                                          Eq.ndrec (motive := fun {«as»} =>
+                                            ∀ (a : List.Mem g «as»),
+                                              a_2 ≍
+                                                  List.Mem.tail
+                                                    ((fun i => i)
+                                                      ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩)
+                                                    a →
+                                                ↑(rows g) < 1024)
+                                            (fun a h =>
+                                              List.Mem.casesOn (motive := fun a_3 x =>
+                                                (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [] =
+                                                    a_3 →
+                                                  a ≍ x → ↑(rows g) < 1024)
+                                                a
+                                                (fun «as» h =>
+                                                  List.cons.noConfusion h fun head_eq =>
+                                                    Eq.ndrec (motive := fun g =>
+                                                      ∀
+                                                        (a :
+                                                          List.Mem g
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])),
+                                                        [] ≍ «as» → a ≍ List.Mem.head «as» → ↑(rows g) < 1024)
+                                                      (fun a tail_eq =>
+                                                        Eq.ndrec (motive := fun «as» =>
+                                                          a ≍ List.Mem.head «as» →
+                                                            ↑(rows
+                                                                  ((fun i => i)
+                                                                    ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩)) <
+                                                              1024)
+                                                          (fun h => of_decide_eq_true (id (Eq.refl true)))
+                                                          (eq_of_heq tail_eq))
+                                                      (eq_of_heq head_eq) a)
+                                                (fun b {«as»} a_3 h =>
+                                                  List.cons.noConfusion h fun head_eq =>
+                                                    Eq.ndrec (motive := fun b =>
+                                                      [] ≍ «as» → a ≍ List.Mem.tail b a_3 → ↑(rows g) < 1024)
+                                                      (fun tail_eq =>
+                                                        Eq.ndrec (motive := fun {«as»} =>
+                                                          ∀ (a_4 : List.Mem g «as»),
+                                                            a ≍
+                                                                List.Mem.tail
+                                                                  ((fun i => i) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩)
+                                                                  a_4 →
+                                                              ↑(rows g) < 1024)
+                                                          (fun a_4 h =>
+                                                            List.Mem.casesOn (motive := fun a x =>
+                                                              [] = a → a_4 ≍ x → ↑(rows g) < 1024) a_4
+                                                              (fun «as» h =>
+                                                                False.elim (noConfusion_of_Nat List.ctorIdx h))
+                                                              (fun b {«as»} a h =>
+                                                                False.elim (noConfusion_of_Nat List.ctorIdx h))
+                                                              (Eq.refl []) (HEq.refl a_4))
+                                                          (eq_of_heq tail_eq) a_3)
+                                                      (eq_of_heq head_eq))
+                                                (Eq.refl
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []))
+                                                (HEq.refl a))
+                                            (eq_of_heq tail_eq) a)
+                                        (eq_of_heq head_eq))
+                                  (Eq.refl
+                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                        [])))
+                                  (HEq.refl a_2))
+                              (eq_of_heq tail_eq) a_1)
+                          (eq_of_heq head_eq))
+                    (Eq.refl
+                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                        ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                          ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []))))
+                    (HEq.refl a))
+                (eq_of_heq tail_eq) a)
+            (eq_of_heq head_eq))
+      (Eq.refl (List.finRange ({ len := 3 }.len + 1))) (HEq.refl (Fintype.complete g));
+  (fun selected x =>
+      let ⟨withdrawalDifference, h✝¹⟩ :=
+        NJB_StubLaws.qm_sub (NJB_ArrayCarrier.cell o.z ⟨10, of_decide_eq_true (id (Eq.refl true))⟩)
+          (FIw_ScalarArithmetic.lifted (amount pub))
+          (NJB_ArrayCarrier.canonical_cell o.z hz ⟨10, of_decide_eq_true (id (Eq.refl true))⟩) mz.left
+      let ⟨wc, right✝²⟩ := h✝¹
+      let ⟨cw, right✝³⟩ := right✝²
+      have differences := fun g =>
+        Decidable.casesOn (instDecidableEqNat (↑g) 3) (fun h => Eq.mpr (id (congrArg Canon (if_neg h))) cd) fun h =>
+          Eq.mpr (id (congrArg Canon (if_pos h))) cw;
+      (fun products x_1 =>
+          let ⟨scalars, h✝²⟩ :=
+            JFy_Scalars.source pub.variant (core.option.Option.is_some pub.withdrawal_amount) (products 0) (products 1)
+              (products 2) (products 3) ((fun g => ((fun g => (x_1 g).right) g).left) 0)
+              ((fun g => ((fun g => (x_1 g).right) g).left) 1) ((fun g => ((fun g => (x_1 g).right) g).left) 2)
+              ((fun g => ((fun g => (x_1 g).right) g).left) 3)
+          let ⟨sc, cs⟩ := h✝²
+          let ⟨out, h✝³⟩ :=
+            NHU_Preweighted.result before 92#usize scalars (of_decide_eq_true (id (Eq.refl true)))
+              (of_decide_eq_true (id (Eq.refl true))) hb cs
+          let ⟨pc, right✝⁴⟩ := h✝³
+          let ⟨co, right✝⁵⟩ := right✝⁴
+          let p :=
+            { difference := difference, selected := selected, withdrawalDifference := withdrawalDifference,
+              products := products, scalars := scalars, out := out, asset_sub := dc, row_calls := fun g => (x g).left,
+              amount_sub := wc, product_calls := fun g => (x_1 g).left, scalar_call := sc, packed_call := pc,
+              differenceCanonical := cd, selectedCanonical := fun g => ((fun g => (x g).right) g).left,
+              withdrawalCanonical := cw, productsCanonical := fun g => ((fun g => (x_1 g).right) g).left,
+              scalarsCanonical := cs, canonical := co };
+          have z1 := NJB_ArrayReads.read o.z 1#usize (of_decide_eq_true (id (Eq.refl true)));
+          have z10 := NJB_ArrayReads.read o.z 10#usize (of_decide_eq_true (id (Eq.refl true)));
+          Exists.intro p
+            (id
+              (id
+                (id
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          (do
+                              let q ← _a
+                              let q1 ← lift_m31 pub.asset_id
+                              let asset_difference ← q.sub q1
+                              let i ← 2#usize * 16#usize
+                              let i1 ← i + 12#usize
+                              let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+                              let input_asset ← q2.mul asset_difference
+                              let i2 ← 31#usize * 16#usize
+                              let i3 ← i2 + 12#usize
+                              let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+                              let output_scalar ← q3.mul asset_difference
+                              let i4 ← 28#usize * 16#usize
+                              let i5 ← i4 + 12#usize
+                              let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+                              let private_transfer_term ← q4.mul asset_difference
+                              let withdrawal_amount_value ←
+                                lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                              let i6 ← 16#usize * 63#usize
+                              let i7 ← i6 + 2#usize
+                              let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+                              let q6 ← o.z.index_usize 10#usize
+                              let q7 ← lift_m31 withdrawal_amount_value
+                              let q8 ← q6.sub q7
+                              let withdrawal_term ← q5.mul q8
+                              have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+                              let scalars ←
+                                scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+                                    withdrawal_term
+                              add_preweighted before 92#usize scalars) =
+                            ok out)
+                        z1))
+                    (Eq.mpr
+                      (id
+                        (congrArg (fun _a => _a = ok out)
+                          (bind_tc_ok (NJB_ArrayCarrier.cell o.z ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) fun q => do
+                            let q1 ← lift_m31 pub.asset_id
+                            let asset_difference ← q.sub q1
+                            let i ← 2#usize * 16#usize
+                            let i1 ← i + 12#usize
+                            let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+                            let input_asset ← q2.mul asset_difference
+                            let i2 ← 31#usize * 16#usize
+                            let i3 ← i2 + 12#usize
+                            let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+                            let output_scalar ← q3.mul asset_difference
+                            let i4 ← 28#usize * 16#usize
+                            let i5 ← i4 + 12#usize
+                            let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+                            let private_transfer_term ← q4.mul asset_difference
+                            let withdrawal_amount_value ←
+                              lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                            let i6 ← 16#usize * 63#usize
+                            let i7 ← i6 + 2#usize
+                            let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+                            let q6 ← o.z.index_usize 10#usize
+                            let q7 ← lift_m31 withdrawal_amount_value
+                            let q8 ← q6.sub q7
+                            let withdrawal_term ← q5.mul q8
+                            have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+                            let scalars ←
+                              scalar_lanes pub.variant b input_asset output_scalar private_transfer_term withdrawal_term
+                            add_preweighted before 92#usize scalars)))
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              (do
+                                  let q1 ← _a
+                                  let asset_difference ←
+                                    (NJB_ArrayCarrier.cell o.z ⟨1, of_decide_eq_true (id (Eq.refl true))⟩).sub q1
+                                  let i ← 2#usize * 16#usize
+                                  let i1 ← i + 12#usize
+                                  let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+                                  let input_asset ← q2.mul asset_difference
+                                  let i2 ← 31#usize * 16#usize
+                                  let i3 ← i2 + 12#usize
+                                  let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+                                  let output_scalar ← q3.mul asset_difference
+                                  let i4 ← 28#usize * 16#usize
+                                  let i5 ← i4 + 12#usize
+                                  let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+                                  let private_transfer_term ← q4.mul asset_difference
+                                  let withdrawal_amount_value ←
+                                    lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                                  let i6 ← 16#usize * 63#usize
+                                  let i7 ← i6 + 2#usize
+                                  let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+                                  let q6 ← o.z.index_usize 10#usize
+                                  let q7 ← lift_m31 withdrawal_amount_value
+                                  let q8 ← q6.sub q7
+                                  let withdrawal_term ← q5.mul q8
+                                  have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+                                  let scalars ←
+                                    scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+                                        withdrawal_term
+                                  add_preweighted before 92#usize scalars) =
+                                ok out)
+                            (FIw_ScalarArithmetic.lift_run pub.asset_id)))
+                        (Eq.mpr
+                          (id
+                            (congrArg (fun _a => _a = ok out)
+                              (bind_tc_ok (FIw_ScalarArithmetic.lifted pub.asset_id) fun q1 => do
+                                let asset_difference ←
+                                  (NJB_ArrayCarrier.cell o.z ⟨1, of_decide_eq_true (id (Eq.refl true))⟩).sub q1
+                                let i ← 2#usize * 16#usize
+                                let i1 ← i + 12#usize
+                                let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+                                let input_asset ← q2.mul asset_difference
+                                let i2 ← 31#usize * 16#usize
+                                let i3 ← i2 + 12#usize
+                                let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+                                let output_scalar ← q3.mul asset_difference
+                                let i4 ← 28#usize * 16#usize
+                                let i5 ← i4 + 12#usize
+                                let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+                                let private_transfer_term ← q4.mul asset_difference
+                                let withdrawal_amount_value ←
+                                  lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                                let i6 ← 16#usize * 63#usize
+                                let i7 ← i6 + 2#usize
+                                let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+                                let q6 ← o.z.index_usize 10#usize
+                                let q7 ← lift_m31 withdrawal_amount_value
+                                let q8 ← q6.sub q7
+                                let withdrawal_term ← q5.mul q8
+                                have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+                                let scalars ←
+                                  scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+                                      withdrawal_term
+                                add_preweighted before 92#usize scalars)))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  (do
+                                      let asset_difference ← _a
+                                      let i ← 2#usize * 16#usize
+                                      let i1 ← i + 12#usize
+                                      let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+                                      let input_asset ← q2.mul asset_difference
+                                      let i2 ← 31#usize * 16#usize
+                                      let i3 ← i2 + 12#usize
+                                      let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+                                      let output_scalar ← q3.mul asset_difference
+                                      let i4 ← 28#usize * 16#usize
+                                      let i5 ← i4 + 12#usize
+                                      let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+                                      let private_transfer_term ← q4.mul asset_difference
+                                      let withdrawal_amount_value ←
+                                        lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                                      let i6 ← 16#usize * 63#usize
+                                      let i7 ← i6 + 2#usize
+                                      let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+                                      let q6 ← o.z.index_usize 10#usize
+                                      let q7 ← lift_m31 withdrawal_amount_value
+                                      let q8 ← q6.sub q7
+                                      let withdrawal_term ← q5.mul q8
+                                      have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+                                      let scalars ←
+                                        scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+                                            withdrawal_term
+                                      add_preweighted before 92#usize scalars) =
+                                    ok out)
+                                dc))
+                            (Eq.mpr
+                              (id
+                                (congrArg (fun _a => _a = ok out)
+                                  (bind_tc_ok difference fun asset_difference => do
+                                    let i ← 2#usize * 16#usize
+                                    let i1 ← i + 12#usize
+                                    let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+                                    let input_asset ← q2.mul asset_difference
+                                    let i2 ← 31#usize * 16#usize
+                                    let i3 ← i2 + 12#usize
+                                    let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i3
+                                    let output_scalar ← q3.mul asset_difference
+                                    let i4 ← 28#usize * 16#usize
+                                    let i5 ← i4 + 12#usize
+                                    let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i5
+                                    let private_transfer_term ← q4.mul asset_difference
+                                    let withdrawal_amount_value ←
+                                      lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                                    let i6 ← 16#usize * 63#usize
+                                    let i7 ← i6 + 2#usize
+                                    let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i7
+                                    let q6 ← o.z.index_usize 10#usize
+                                    let q7 ← lift_m31 withdrawal_amount_value
+                                    let q8 ← q6.sub q7
+                                    let withdrawal_term ← q5.mul q8
+                                    have b : Bool := core.option.Option.is_some pub.withdrawal_amount
+                                    let scalars ←
+                                      scalar_lanes pub.variant b input_asset output_scalar private_transfer_term
+                                          withdrawal_term
+                                    add_preweighted before 92#usize scalars)))
+                              (Eq.mpr
+                                (id
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (Eq.trans
+                                        (Eq.trans
+                                          (congr (congrArg Bind.bind FIw_ScalarIndices.mul2)
+                                            (funext fun i =>
+                                              congrArg (Bind.bind (i + 12#usize))
+                                                (funext fun i1 =>
+                                                  congrArg
+                                                    (Bind.bind (pool_v1.pair_forest_copy_terminal.Selectors.row s i1))
+                                                    (funext fun q2 =>
+                                                      congrArg (Bind.bind (q2.mul difference))
+                                                        (funext fun input_asset => ⋯)))))
+                                          (bind_tc_ok 32#usize fun y => do
+                                            let i1 ← y + 12#usize
+                                            let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+                                            let input_asset ← q2.mul difference
+                                            let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 508#usize
+                                            let output_scalar ← q3.mul difference
+                                            let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 460#usize
+                                            let private_transfer_term ← q4.mul difference
+                                            let withdrawal_amount_value ←
+                                              lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                                            let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 1010#usize
+                                            let q6 ← o.z.index_usize 10#usize
+                                            let q7 ← lift_m31 withdrawal_amount_value
+                                            let q8 ← q6.sub q7
+                                            let withdrawal_term ← q5.mul q8
+                                            let scalars ←
+                                              scalar_lanes pub.variant
+                                                  (core.option.Option.is_some pub.withdrawal_amount) input_asset
+                                                  output_scalar private_transfer_term withdrawal_term
+                                            add_preweighted before 92#usize scalars))
+                                        (Eq.trans
+                                          (congrFun' (congrArg Bind.bind FIw_ScalarIndices.add44) fun i1 => do
+                                            let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s i1
+                                            let input_asset ← q2.mul difference
+                                            let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 508#usize
+                                            let output_scalar ← q3.mul difference
+                                            let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 460#usize
+                                            let private_transfer_term ← q4.mul difference
+                                            let withdrawal_amount_value ←
+                                              lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                                            let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 1010#usize
+                                            let q6 ← o.z.index_usize 10#usize
+                                            let q7 ← lift_m31 withdrawal_amount_value
+                                            let q8 ← q6.sub q7
+                                            let withdrawal_term ← q5.mul q8
+                                            let scalars ←
+                                              scalar_lanes pub.variant
+                                                  (core.option.Option.is_some pub.withdrawal_amount) input_asset
+                                                  output_scalar private_transfer_term withdrawal_term
+                                            add_preweighted before 92#usize scalars)
+                                          (bind_tc_ok 44#usize fun y => do
+                                            let q2 ← pool_v1.pair_forest_copy_terminal.Selectors.row s y
+                                            let input_asset ← q2.mul difference
+                                            let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 508#usize
+                                            let output_scalar ← q3.mul difference
+                                            let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 460#usize
+                                            let private_transfer_term ← q4.mul difference
+                                            let withdrawal_amount_value ←
+                                              lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                                            let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 1010#usize
+                                            let q6 ← o.z.index_usize 10#usize
+                                            let q7 ← lift_m31 withdrawal_amount_value
+                                            let q8 ← q6.sub q7
+                                            let withdrawal_term ← q5.mul q8
+                                            let scalars ←
+                                              scalar_lanes pub.variant
+                                                  (core.option.Option.is_some pub.withdrawal_amount) input_asset
+                                                  output_scalar private_transfer_term withdrawal_term
+                                            add_preweighted before 92#usize scalars))))
+                                    (ok out)))
+                                (have r0 := (fun g => (x g).left) 0;
+                                have r1 := (fun g => (x g).left) 1;
+                                have r2 := (fun g => (x g).left) 2;
+                                have r3 := (fun g => (x g).left) 3;
+                                have m0 := (fun g => (x_1 g).left) 0;
+                                have m1 := (fun g => (x_1 g).left) 1;
+                                have m2 := (fun g => (x_1 g).left) 2;
+                                have m3 := (fun g => (x_1 g).left) 3;
+                                Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        (do
+                                            let q2 ← _a
+                                            let input_asset ← q2.mul difference
+                                            let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 508#usize
+                                            let output_scalar ← q3.mul difference
+                                            let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 460#usize
+                                            let private_transfer_term ← q4.mul difference
+                                            let withdrawal_amount_value ←
+                                              lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                                            let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 1010#usize
+                                            let q6 ← o.z.index_usize 10#usize
+                                            let q7 ← lift_m31 withdrawal_amount_value
+                                            let q8 ← q6.sub q7
+                                            let withdrawal_term ← q5.mul q8
+                                            let scalars ←
+                                              scalar_lanes pub.variant
+                                                  (core.option.Option.is_some pub.withdrawal_amount) input_asset
+                                                  output_scalar private_transfer_term withdrawal_term
+                                            add_preweighted before 92#usize scalars) =
+                                          ok out)
+                                      r0))
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg (fun _a => _a = ok out)
+                                        (bind_tc_ok (selected 0) fun q2 => do
+                                          let input_asset ← q2.mul difference
+                                          let q3 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 508#usize
+                                          let output_scalar ← q3.mul difference
+                                          let q4 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 460#usize
+                                          let private_transfer_term ← q4.mul difference
+                                          let withdrawal_amount_value ←
+                                            lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                                          let q5 ← pool_v1.pair_forest_copy_terminal.Selectors.row s 1010#usize
+                                          let q6 ← o.z.index_usize 10#usize
+                                          let q7 ← lift_m31 withdrawal_amount_value
+                                          let q8 ← q6.sub q7
+                                          let withdrawal_term ← q5.mul q8
+                                          let scalars ←
+                                            scalar_lanes pub.variant (core.option.Option.is_some pub.withdrawal_amount)
+                                                input_asset output_scalar private_transfer_term withdrawal_term
+                                          add_preweighted before 92#usize scalars)))
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            (do
+                                                let input_asset ← _a
+                                                let q3 ← ⋯
+                                                let output_scalar ← q3.mul difference
+                                                let q4 ← ⋯
+                                                let private_transfer_term ← q4.mul difference
+                                                let withdrawal_amount_value ←
+                                                  lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                                                let q5 ← ⋯
+                                                let q6 ← o.z.index_usize 10#usize
+                                                let q7 ← lift_m31 withdrawal_amount_value
+                                                let q8 ← q6.sub q7
+                                                let withdrawal_term ← q5.mul q8
+                                                let scalars ←
+                                                  scalar_lanes pub.variant
+                                                      (core.option.Option.is_some pub.withdrawal_amount) input_asset
+                                                      output_scalar private_transfer_term withdrawal_term
+                                                add_preweighted before 92#usize scalars) =
+                                              ok out)
+                                          m0))
+                                      (Eq.mpr
+                                        (id
+                                          (congrArg (fun _a => _a = ⋯)
+                                            (bind_tc_ok (products 0) fun input_asset => do
+                                              let q3 ← ⋯
+                                              let output_scalar ← q3.mul difference
+                                              let q4 ← ⋯
+                                              let private_transfer_term ← q4.mul difference
+                                              let withdrawal_amount_value ←
+                                                lift (core.option.Option.unwrap_or pub.withdrawal_amount 0#u32)
+                                              let q5 ← ⋯
+                                              let q6 ← o.z.index_usize 10#usize
+                                              let q7 ← lift_m31 withdrawal_amount_value
+                                              let q8 ← q6.sub q7
+                                              let withdrawal_term ← q5.mul q8
+                                              let scalars ←
+                                                scalar_lanes pub.variant
+                                                    (core.option.Option.is_some pub.withdrawal_amount) input_asset
+                                                    output_scalar private_transfer_term withdrawal_term
+                                              add_preweighted before 92#usize scalars)))
+                                        (Eq.mpr (id (congrArg (fun _a => ⋯) r1))
+                                          (Eq.mpr (id (congrArg (fun _a => ⋯) (bind_tc_ok (selected 1) ⋯)))
+                                            (Eq.mpr (id (congrArg ⋯ m1)) (Eq.mpr (id ⋯) (Eq.mpr ⋯ ⋯))))))))))))))))))))
+        (fun g =>
+          Classical.choose
+            ((fun g =>
+                NJB_StubLaws.qm_mul (selected g) (if ↑g = 3 then withdrawalDifference else difference)
+                  ((fun g => ((fun g => (x g).right) g).left) g) (differences g))
+              g))
+        fun g =>
+        Classical.choose_spec
+          ((fun g =>
+              NJB_StubLaws.qm_mul (selected g) (if ↑g = 3 then withdrawalDifference else difference)
+                ((fun g => ((fun g => (x g).right) g).left) g) (differences g))
+            g))
+    (fun g => Classical.choose ((fun g => NIH_SelectorRow.result s (rows g) (rbound g) hh hl) g)) fun g =>
+    Classical.choose_spec ((fun g => NIH_SelectorRow.result s (rows g) (rbound g) hh hl) g)
+'AspisR1.NKR_TermScalarInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,6 +1,48 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -2328,3 +2328,39 @@
+         }
+     }
+ }
++
++#[cfg(kani)]
++#[path="NKR_schedule_native.rs"]
++mod NKR_native;
++
++#[cfg(kani)]
++#[path="NKR_Digest_native.rs"]
++mod NKR_digest_native;
++
++#[cfg(kani)]
++#[path="NKR_Term_native.rs"]
++mod NKR_term_native;
++
++#[cfg(kani)]
++#[path="NKR_Digest_split_native.rs"]
++mod NKR_digest_split_native;
++
++#[cfg(kani)]
++#[path="NKR_TermSemantic_native.rs"]
++mod NKR_term_semantic_native;
++
++#[cfg(kani)]
++#[path="NKR_TermPrefix_native.rs"]
++mod NKR_term_prefix_native;
++
++#[cfg(kani)]
++#[path="NKR_Digest_wrapper_window.rs"]
++mod NKR_digest_wrapper_window;
++
++#[cfg(kani)]
++#[path="NKR_TermHorner_native.rs"]
++mod NKR_term_horner_native;
++
++#[cfg(kani)]
++#[path="NKR_Digest_prefix_split.rs"]
++mod NKR_digest_prefix_split;
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NKR_schedule_native.rs
-@@ -0,0 +1,86 @@
+@@ -0,0 +1,93 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +fn NKR_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
@@ -60,8 +102,15 @@
 + let before:[QM31;24]=unsafe{core::mem::transmute::<[[u32;4];24],[QM31;24]>(kani::any())};let values:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let reply:[QM31;24]=unsafe{core::mem::transmute::<[[u32;4];24],[QM31;24]>(kani::any())};let pick:usize=kani::any();let limb:usize=kani::any();let second:bool=kani::any();kani::assume(pick<24&&limb<4);let start=if second{16}else{0};let mut packed=before;let mut l=NKR_WeightLog{pick,limb,calls:0,start:99,values:0,before:0,reply};
 + NKR_weight_window(&mut packed,start,&values,&mut l);assert_eq!(l.calls,1);assert_eq!(l.start,start);assert_eq!(l.values,NKR_words(values[pick%16])[limb]);assert_eq!(l.before,NKR_words(before[pick])[limb]);assert_eq!(NKR_words(packed[pick])[limb],NKR_words(reply[pick])[limb]^if cfg!(NKR_invert){1}else{0});
 +}
-+#[kani::proof] #[kani::unwind(4)]
-+fn NKR_schedule_order(){let mut log=[0usize;3];let mut calls=0usize;log[calls]=260;calls+=1;log[calls]=230;calls+=1;log[calls]=230;calls+=1;assert_eq!(calls,3);assert_eq!(log,[260,230,230+if cfg!(NKR_invert){1}else{0}]);}
++#[kani::proof] #[kani::unwind(67)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_schedule_order(){
++ let transition:PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};
++ let public=SemanticPublic{variant:CompiledVariant::PrivateTransfer,pool:[0;32],deployment_domain:[0;32],anchor:[M31(0);8],nullifier:[M31(0);8],asset_id:M31(0),recipient:None,change:[M31(0);8],withdrawal_amount:None,transition:&transition};
++ let openings=StateOnlyPoseidonOpenings{z:[QM31::ZERO;16],succ_z:[QM31::ZERO;16],xor12_z:[QM31::ZERO;16]};let selectors=Selectors{high:[QM31::ZERO;64],low:[QM31::ZERO;16]};
++ let mut packed=[QM31::ZERO;24];let mut l=NKR_ScheduleLog{calls:0,pick:0,limb:0,b:0,d:0,t:0,h:0,low:0,pub_seen:[0;20],opened:[0;3],high_seen:0,low_seen:0,starts:[99;2],before:[0;2],values:[0;2],after:[0;2],initial:[QM31::ZERO;16],absorption:[QM31::ZERO;16],middle:[QM31::ZERO;24],out:[QM31::ZERO;24]};
++ NKR_schedule(&mut packed,public,&openings,&selectors,&mut l);assert_eq!(l.calls,3);assert_eq!(l.starts,[0,16+if cfg!(NKR_invert){1}else{0}]);
++}
 +
 +// K005 retired: argument, borrowed payload and tuple channels separated.
 +fn NKR_public_window(public:SemanticPublic<'_>,b:usize,d:usize,t:usize,part:usize,seen:&mut u64){*seen=NKR_public(public,b,d,t)[part];}
@@ -119,7 +168,7 @@
 + let recipient:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};
 + SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(recipient)}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition}
 +}
-+#[kani::proof] #[kani::unwind(20)]
++#[kani::proof] #[kani::unwind(68)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn NKR_Digest_prefix_cut(){
 + let transition:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};
@@ -236,24 +285,372 @@
 + let out=NKR_term_suffix(Err(error),&[QM31::ZERO;10],&[QM31::ZERO;10],QM31::ZERO,&mut l);
 + assert_eq!(l.calls,0);match out{Err(actual)=>assert_eq!(actual,if cfg!(NKR_invert){if which{PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition}else{PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount}}else{error}),Ok(_)=>assert!(false)}
 +}
---- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
-+++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
-@@ -2328,3 +2328,15 @@
-         }
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_Digest_split_native.rs
+@@ -0,0 +1,86 @@
++use super::*;
++use crate::pool_v1::pair_tree_profile::PoolV1PairLiveSnapshotV1;
++use crate::pool_v1::pair_terminal::PoolV1PairVerifiedAfterstateV1;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_Digest_split_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++fn NKR_Digest_split_q(w:[u32;4])->QM31{unsafe{core::mem::transmute::<[u32;4],QM31>(w)}}
++fn NKR_Digest_split_transition(index:u64,frontier:[Digest;20],next_frontier:[Digest;20],next_root:Digest)->PoolV1PairLatePublicStatementV1{
++ let mut t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};
++ t.live_snapshot.next_pair_index=index;t.live_snapshot.frontier=frontier;t.candidate_afterstate.next_frontier=next_frontier;t.candidate_afterstate.next_root=next_root;t
++}
++fn NKR_Digest_split_public(t:&PoolV1PairLatePublicStatementV1)->SemanticPublic<'_>{let recipient:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(recipient)}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition:t}}
++struct NKR_Digest_split_ALog{calls:usize,fi:usize,di:usize,oi:usize,hi:usize,index:u64,digest:u32,opened:[u32;4],high:[u32;4],reply:([QM31;2],[QM31;2])}
++fn NKR_Digest_split_append(index:u64,f:[Digest;20],o:[QM31;16],h:[QM31;64],l:&mut NKR_Digest_split_ALog)->([QM31;2],[QM31;2]){l.calls+=1;l.index=index;l.digest=f[l.fi][l.di].0;l.opened=NKR_Digest_split_words(o[l.oi]);l.high=NKR_Digest_split_words(h[l.hi]);l.reply}
++fn NKR_Digest_split_append_segment(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,l:&mut NKR_Digest_split_ALog)->([QM31;2],[QM31;2]){
++ let source = public.transition.live_snapshot;
++ let after = public.transition.candidate_afterstate;
++ let next_pair_index = source.next_pair_index;
++ let source_frontier = source.frontier;
++ let opened_z = openings.z;
++ let selector_high = selectors.high;
++ let (append_local0, append_local12) = NKR_Digest_split_append(next_pair_index,source_frontier,opened_z,selector_high,l);
++ let _=after;
++ (append_local0,append_local12)
++}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_Digest_split_append_window_cut(){
++ let fi:usize=kani::any();let di:usize=kani::any();let oi:usize=kani::any();let hi:usize=kani::any();let lane:usize=kani::any();let limb:usize=kani::any();let group:usize=kani::any();kani::assume(fi<20&&di<8&&oi<16&&hi<64&&lane<2&&limb<4&&group<2);
++ let index:u64=kani::any();let frontier:[Digest;20]=unsafe{core::mem::transmute::<[u32;160],[Digest;20]>(kani::any())};let z:[QM31;16]=unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())};let high:[QM31;64]=unsafe{core::mem::transmute::<[u32;256],[QM31;64]>(kani::any())};let dw=frontier[fi][di].0;let ow=NKR_Digest_split_words(z[oi]);let hw=NKR_Digest_split_words(high[hi]);let next_frontier:[Digest;20]=unsafe{core::mem::transmute::<[u32;160],[Digest;20]>(kani::any())};let next_root:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};let t=NKR_Digest_split_transition(index,frontier,next_frontier,next_root);let p=NKR_Digest_split_public(&t);let o=StateOnlyPoseidonOpenings{z,succ_z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())},xor12_z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};let s=Selectors{high,low:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};let a:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let b:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};
++ let mut l=NKR_Digest_split_ALog{calls:0,fi,di,oi,hi,index:0,digest:0,opened:[0;4],high:[0;4],reply:(a,b)};let (x,y)=NKR_Digest_split_append_segment(p,&o,&s,&mut l);assert_eq!(l.calls,1);assert_eq!(l.index,index);assert_eq!(l.digest,dw);assert_eq!(l.opened[limb],ow[limb]);assert_eq!(l.high[limb],hw[limb]);let out=if group==0{x[lane]}else{y[lane]};let reply=if group==0{a[lane]}else{b[lane]};assert_eq!(NKR_Digest_split_words(out)[limb],NKR_Digest_split_words(reply)[limb]^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_Digest_split_AddLog{seek:usize,calls:usize,left:QM31,right:QM31,reply:[QM31;4]}
++fn NKR_Digest_split_add(a:QM31,b:QM31,l:&mut NKR_Digest_split_AddLog)->QM31{let i=l.calls;if i==l.seek{l.left=a;l.right=b;}l.calls+=1;l.reply[i]}
++fn NKR_Digest_split_levels_add_segment(mut local_sums:[[QM31;2];3],append_local0:[QM31;2],append_local12:[QM31;2],l:&mut NKR_Digest_split_AddLog)->[[QM31;2];3]{
++ local_sums[0][0] = NKR_Digest_split_add(local_sums[0][0],append_local0[0],l);
++ local_sums[0][1] = NKR_Digest_split_add(local_sums[0][1],append_local0[1],l);
++ local_sums[2][0] = NKR_Digest_split_add(local_sums[2][0],append_local12[0],l);
++ local_sums[2][1] = NKR_Digest_split_add(local_sums[2][1],append_local12[1],l);
++ local_sums
++}
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_Digest_split_levels_add_cut(){
++ let before:[[QM31;2];3]=unsafe{core::mem::transmute::<[u32;24],[[QM31;2];3]>(kani::any())};let a:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let b:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let reply:[QM31;4]=unsafe{core::mem::transmute::<[u32;16],[QM31;4]>(kani::any())};let seek:usize=kani::any();let group:usize=kani::any();let lane:usize=kani::any();let limb:usize=kani::any();kani::assume(seek<4&&group<3&&lane<2&&limb<4);let mut l=NKR_Digest_split_AddLog{seek,calls:0,left:QM31::ZERO,right:QM31::ZERO,reply};let out=NKR_Digest_split_levels_add_segment(before,a,b,&mut l);assert_eq!(l.calls,4);assert_eq!(NKR_Digest_split_words(l.left)[limb],NKR_Digest_split_words(before[if seek<2{0}else{2}][seek%2])[limb]);assert_eq!(NKR_Digest_split_words(l.right)[limb],NKR_Digest_split_words(if seek<2{a[seek]}else{b[seek-2]})[limb]);let expected=if group==0{reply[lane]}else if group==2{reply[2+lane]}else{before[1][lane]};assert_eq!(NKR_Digest_split_words(out[group][lane])[limb],NKR_Digest_split_words(expected)[limb]^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_Digest_split_RLog{calls:usize,di:usize,oi:usize,high:QM31,digest:u32,opened:[u32;4],reply:[QM31;2],adds:[QM31;2],left:[QM31;2],right:[QM31;2]}
++fn NKR_Digest_split_root(high:QM31,o:[QM31;16],d:Digest,l:&mut NKR_Digest_split_RLog)->[QM31;2]{l.calls+=1;l.high=high;l.opened=NKR_Digest_split_words(o[l.oi]);l.digest=d[l.di].0;l.reply}
++fn NKR_Digest_split_radd(a:QM31,b:QM31,l:&mut NKR_Digest_split_RLog)->QM31{let i=l.calls-1;l.left[i]=a;l.right[i]=b;l.calls+=1;l.adds[i]}
++fn NKR_Digest_split_root_segment(public:SemanticPublic<'_>,opened_z:[QM31;16],selector_high:[QM31;64],mut local_sums:[[QM31;2];3],l:&mut NKR_Digest_split_RLog)->[[QM31;2];3]{
++ let after=public.transition.candidate_afterstate;
++ let next_root = NKR_Digest_split_root(selector_high[53],opened_z,after.next_root,l);
++ local_sums[1][0] = NKR_Digest_split_radd(local_sums[1][0],next_root[0],l);
++ local_sums[1][1] = NKR_Digest_split_radd(local_sums[1][1],next_root[1],l);
++ local_sums
++}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_Digest_split_root_window_cut(){
++ let di:usize=kani::any();let oi:usize=kani::any();let group:usize=kani::any();let lane:usize=kani::any();let limb:usize=kani::any();kani::assume(di<8&&oi<16&&group<3&&lane<2&&limb<4);let d:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};let z:[QM31;16]=unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())};let high:[QM31;64]=unsafe{core::mem::transmute::<[u32;256],[QM31;64]>(kani::any())};let dw=d[di].0;let ow=NKR_Digest_split_words(z[oi]);let hw=NKR_Digest_split_words(high[53]);let frontier:[Digest;20]=unsafe{core::mem::transmute::<[u32;160],[Digest;20]>(kani::any())};let nf:[Digest;20]=unsafe{core::mem::transmute::<[u32;160],[Digest;20]>(kani::any())};let t=NKR_Digest_split_transition(kani::any(),frontier,nf,d);let p=NKR_Digest_split_public(&t);let before:[[QM31;2];3]=unsafe{core::mem::transmute::<[u32;24],[[QM31;2];3]>(kani::any())};let reply:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let adds:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let mut l=NKR_Digest_split_RLog{calls:0,di,oi,high:QM31::ZERO,digest:0,opened:[0;4],reply,adds,left:[QM31::ZERO;2],right:[QM31::ZERO;2]};let out=NKR_Digest_split_root_segment(p,z,high,before,&mut l);assert_eq!(l.calls,3);assert_eq!(NKR_Digest_split_words(l.high)[limb],hw[limb]);assert_eq!(l.opened[limb],ow[limb]);assert_eq!(l.digest,dw);assert_eq!(NKR_Digest_split_words(l.left[lane])[limb],NKR_Digest_split_words(before[1][lane])[limb]);assert_eq!(NKR_Digest_split_words(l.right[lane])[limb],NKR_Digest_split_words(reply[lane])[limb]);assert_eq!(NKR_Digest_split_words(out[group][lane])[limb],NKR_Digest_split_words(if group==1{adds[lane]}else{before[group][lane]})[limb]^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_Digest_split_CLog{calls:usize,index:u64,carry_reply:usize,di:usize,oi:usize,carry:usize,high:QM31,digest:u32,opened:[u32;4],reply:[QM31;2],adds:[QM31;2],left:[QM31;2],right:[QM31;2]}
++fn NKR_Digest_split_carry(index:u64,l:&mut NKR_Digest_split_CLog)->usize{l.calls+=1;l.index=index;l.carry_reply}
++fn NKR_Digest_split_optional(carry:usize,o:[QM31;16],high:QM31,d:Digest,l:&mut NKR_Digest_split_CLog)->[QM31;2]{l.calls+=1;l.carry=carry;l.high=high;l.opened=NKR_Digest_split_words(o[l.oi]);l.digest=d[l.di].0;l.reply}
++fn NKR_Digest_split_cadd(a:QM31,b:QM31,l:&mut NKR_Digest_split_CLog)->QM31{let i=l.calls-2;l.left[i]=a;l.right[i]=b;l.calls+=1;l.adds[i]}
++fn NKR_Digest_split_carry_segment(public:SemanticPublic<'_>,opened_z:[QM31;16],selector_high:[QM31;64],next_pair_index:u64,mut local_sums:[[QM31;2];3],l:&mut NKR_Digest_split_CLog)->[[QM31;2];3]{
++ let after=public.transition.candidate_afterstate;
++ let carry = NKR_Digest_split_carry(next_pair_index,l);
++ let carry_index = core::cmp::min(carry, 19);
++ let carry_contribution = NKR_Digest_split_optional(carry,opened_z,selector_high[33 + carry_index],after.next_frontier[carry_index],l);
++ local_sums[1][0] = NKR_Digest_split_cadd(local_sums[1][0],carry_contribution[0],l);
++ local_sums[1][1] = NKR_Digest_split_cadd(local_sums[1][1],carry_contribution[1],l);
++ local_sums
++}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_Digest_split_carry_window_cut(){
++ let di:usize=kani::any();let oi:usize=kani::any();let group:usize=kani::any();let lane:usize=kani::any();let limb:usize=kani::any();kani::assume(di<8&&oi<16&&group<3&&lane<2&&limb<4);let index:u64=kani::any();let carry_reply:usize=kani::any();let ci=core::cmp::min(carry_reply,19);let f:[Digest;20]=unsafe{core::mem::transmute::<[u32;160],[Digest;20]>(kani::any())};let z:[QM31;16]=unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())};let high:[QM31;64]=unsafe{core::mem::transmute::<[u32;256],[QM31;64]>(kani::any())};let dw=f[ci][di].0;let ow=NKR_Digest_split_words(z[oi]);let hw=NKR_Digest_split_words(high[33+ci]);let frontier:[Digest;20]=unsafe{core::mem::transmute::<[u32;160],[Digest;20]>(kani::any())};let root:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};let t=NKR_Digest_split_transition(index,frontier,f,root);let p=NKR_Digest_split_public(&t);let before:[[QM31;2];3]=unsafe{core::mem::transmute::<[u32;24],[[QM31;2];3]>(kani::any())};let reply:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let adds:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let mut l=NKR_Digest_split_CLog{calls:0,index:0,carry_reply,di,oi,carry:0,high:QM31::ZERO,digest:0,opened:[0;4],reply,adds,left:[QM31::ZERO;2],right:[QM31::ZERO;2]};let out=NKR_Digest_split_carry_segment(p,z,high,index,before,&mut l);assert_eq!(l.calls,4);assert_eq!(l.index,index);assert_eq!(l.carry,carry_reply);assert_eq!(NKR_Digest_split_words(l.high)[limb],hw[limb]);assert_eq!(l.opened[limb],ow[limb]);assert_eq!(l.digest,dw);assert_eq!(NKR_Digest_split_words(l.left[lane])[limb],NKR_Digest_split_words(before[1][lane])[limb]);assert_eq!(NKR_Digest_split_words(l.right[lane])[limb],NKR_Digest_split_words(reply[lane])[limb]);assert_eq!(NKR_Digest_split_words(out[group][lane])[limb],NKR_Digest_split_words(if group==1{adds[lane]}else{before[group][lane]})[limb]^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_Digest_split_WLog{calls:usize,reply:[QM31;2]}
++fn NKR_Digest_split_wrapper_child(_public:SemanticPublic<'_>,_openings:&StateOnlyPoseidonOpenings,_selectors:&Selectors,l:&mut NKR_Digest_split_WLog)->[QM31;2]{l.calls+=1;l.reply}
++fn NKR_Digest_split_wrapper(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,l:&mut NKR_Digest_split_WLog)->[QM31;2]{return NKR_Digest_split_wrapper_child(public,openings,selectors,l);}
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_Digest_split_wrapper_return_cut(){
++ let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let p=NKR_Digest_split_public(&t);let o=StateOnlyPoseidonOpenings{z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())},succ_z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())},xor12_z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};let s=Selectors{high:unsafe{core::mem::transmute::<[u32;256],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};let reply:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let lane:usize=kani::any();let limb:usize=kani::any();kani::assume(lane<2&&limb<4);let mut l=NKR_Digest_split_WLog{calls:0,reply};let out=NKR_Digest_split_wrapper(p,&o,&s,&mut l);assert_eq!(l.calls,1);assert_eq!(NKR_Digest_split_words(out[lane])[limb],NKR_Digest_split_words(reply[lane])[limb]^if cfg!(NKR_invert){1}else{0});
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_TermSemantic_native.rs
+@@ -0,0 +1,108 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_sem_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++fn NKR_sem_q(w:[u32;4])->QM31{unsafe{core::mem::transmute::<[u32;4],QM31>(w)}}
++macro_rules! NKR_sem_array{($n:expr)=>{unsafe{core::mem::transmute::<[[u32;4];$n],[QM31;$n]>(kani::any())}}}
++fn NKR_sem_public<'a>(t:&'a PoolV1PairLatePublicStatementV1)->SemanticPublic<'a>{SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())})}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition:t}}
++fn NKR_sem_pubword(p:SemanticPublic<'_>,k:usize,b:usize,d:usize,t:usize)->u64{let source=&p.transition.live_snapshot;let after=&p.transition.candidate_afterstate;match k{0=>match p.variant{CompiledVariant::PrivateTransfer=>0,CompiledVariant::Withdrawal=>1},1=>p.pool[b]as u64,2=>p.deployment_domain[b]as u64,3=>p.anchor[d].0 as u64,4=>p.nullifier[d].0 as u64,5=>p.asset_id.0 as u64,6=>p.recipient.is_some()as u64,7=>p.recipient.map_or(0,|x|x[d].0 as u64),8=>p.change[d].0 as u64,9=>p.withdrawal_amount.is_some()as u64,10=>p.withdrawal_amount.map_or(0,|x|x as u64),11=>source.pool[b]as u64,12=>source.deployment_domain[b]as u64,13=>source.sequence,14=>source.next_pair_index,15=>source.current_root[d].0 as u64,16=>source.frontier[t][d].0 as u64,17=>after.next_pair_index,18=>after.next_root[d].0 as u64,19=>after.next_frontier[t][d].0 as u64,_=>unreachable!()}}
++struct NKR_SemProbe{arg:usize,pubpart:usize,b:usize,d:usize,t:usize,view:usize,slot:usize,high:usize,low:usize,limb:usize}
++fn NKR_sem_arg(public:Option<SemanticPublic<'_>>,o:&StateOnlyPoseidonOpenings,s:&Selectors,p:&NKR_SemProbe)->u64{match p.arg{0=>NKR_sem_pubword(public.unwrap(),p.pubpart,p.b,p.d,p.t),1=>NKR_sem_words(match p.view{0=>o.z[p.slot],1=>o.succ_z[p.slot],2=>o.xor12_z[p.slot],_=>unreachable!()})[p.limb]as u64,2=>NKR_sem_words(s.high[p.high])[p.limb]as u64,3=>NKR_sem_words(s.low[p.low])[p.limb]as u64,_=>unreachable!()}}
++fn NKR_sem_probe()->NKR_SemProbe{let p=NKR_SemProbe{arg:kani::any(),pubpart:kani::any(),b:kani::any(),d:kani::any(),t:kani::any(),view:kani::any(),slot:kani::any(),high:kani::any(),low:kani::any(),limb:kani::any()};kani::assume(p.arg<4&&p.pubpart<20&&p.b<32&&p.d<8&&p.t<20&&p.view<3&&p.slot<16&&p.high<64&&p.low<16&&p.limb<4);p}
++struct NKR_SemChildLog{probe:NKR_SemProbe,pick:usize,calls:usize,kind:usize,arg:u64,before:u32,reply:[QM31;24]}
++fn NKR_sem_child(packed:&mut[QM31;24],public:Option<SemanticPublic<'_>>,o:&StateOnlyPoseidonOpenings,s:&Selectors,kind:usize,l:&mut NKR_SemChildLog){l.calls+=1;l.kind=kind;l.arg=NKR_sem_arg(public,o,s,&l.probe);l.before=NKR_sem_words(packed[l.pick])[l.probe.limb];*packed=l.reply;}
++fn NKR_sem_schedule(packed:&mut[QM31;24],public:SemanticPublic<'_>,o:&StateOnlyPoseidonOpenings,s:&Selectors,l:&mut NKR_SemChildLog){NKR_sem_child(packed,Some(public),o,s,232,l)}
++fn NKR_sem_path(packed:&mut[QM31;24],o:&StateOnlyPoseidonOpenings,s:&Selectors,l:&mut NKR_SemChildLog){NKR_sem_child(packed,None,o,s,229,l)}
++fn NKR_sem_value(packed:&mut[QM31;24],o:&StateOnlyPoseidonOpenings,s:&Selectors,l:&mut NKR_SemChildLog){NKR_sem_child(packed,None,o,s,233,l)}
++fn NKR_sem_occupancy(packed:&mut[QM31;24],public:SemanticPublic<'_>,o:&StateOnlyPoseidonOpenings,s:&Selectors,l:&mut NKR_SemChildLog){NKR_sem_child(packed,Some(public),o,s,228,l)}
++fn NKR_semantic_child_window(packed:&mut[QM31;24],public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,stage:usize,l:&mut NKR_SemChildLog){match stage{0=>NKR_sem_schedule(packed,public,openings,selectors,l),1=>NKR_sem_path(packed,openings,selectors,l),2=>NKR_sem_value(packed,openings,selectors,l),3=>NKR_sem_occupancy(packed,public,openings,selectors,l),_=>unreachable!()}}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_semantic_child_cut(){
++ let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_sem_public(&t);let o=StateOnlyPoseidonOpenings{z:NKR_sem_array!(16),succ_z:NKR_sem_array!(16),xor12_z:NKR_sem_array!(16)};let s=Selectors{high:NKR_sem_array!(64),low:NKR_sem_array!(16)};let before=NKR_sem_array!(24);let reply=NKR_sem_array!(24);let pick:usize=kani::any();let stage:usize=kani::any();let probe=NKR_sem_probe();kani::assume(pick<24&&stage<4);kani::assume((stage==0||stage==3)||probe.arg!=0);let expected=NKR_sem_arg(if stage==0||stage==3{Some(public)}else{None},&o,&s,&probe);let limb=probe.limb;
++ let mut l=NKR_SemChildLog{probe,pick,calls:0,kind:0,arg:0,before:0,reply};let mut packed=before;NKR_semantic_child_window(&mut packed,public,&o,&s,stage,&mut l);
++ assert_eq!(l.calls,1);assert_eq!(l.kind,[232,229,233,228][stage]);assert_eq!(l.arg,expected);assert_eq!(l.before,NKR_sem_words(before[pick])[limb]);assert_eq!(NKR_sem_words(packed[pick])[limb],NKR_sem_words(reply[pick])[limb]^if cfg!(NKR_invert){1}else{0});
++}
++#[kani::proof] #[kani::unwind(27)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_semantic_zero_cut(){let packed=[QM31::ZERO;24];let pick:usize=kani::any();let limb:usize=kani::any();kani::assume(pick<24&&limb<4);assert_eq!(NKR_sem_words(packed[pick])[limb],if cfg!(NKR_invert){1}else{0});}
++struct NKR_SemOrder{calls:usize,seen:[usize;4]}
++fn NKR_sem_record(row:usize,l:&mut NKR_SemOrder){l.seen[l.calls]=row;l.calls+=1;}
++fn NKR_semantic_prefix_order(l:&mut NKR_SemOrder){NKR_sem_record(232,l);NKR_sem_record(229,l);NKR_sem_record(233,l);NKR_sem_record(228,l);}
++#[kani::proof] #[kani::unwind(5)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_semantic_order_cut(){let mut l=NKR_SemOrder{calls:0,seen:[0;4]};NKR_semantic_prefix_order(&mut l);assert_eq!(l.calls,4);assert_eq!(l.seen[0],232);assert_eq!(l.seen[1],229);assert_eq!(l.seen[2],233);assert_eq!(l.seen[3],228+if cfg!(NKR_invert){1}else{0});}
++struct NKR_SemDigestLog{probe:NKR_SemProbe,seek:usize,calls:usize,arg:u64,left:QM31,right:QM31,digests:[QM31;2],adds:[QM31;2]}
++fn NKR_sem_digest(public:SemanticPublic<'_>,o:&StateOnlyPoseidonOpenings,s:&Selectors,l:&mut NKR_SemDigestLog)->[QM31;2]{assert_eq!(l.calls,0);l.calls+=1;l.arg=NKR_sem_arg(Some(public),o,s,&l.probe);l.digests}
++fn NKR_sem_add(a:QM31,b:QM31,l:&mut NKR_SemDigestLog)->QM31{let k=l.calls;assert!(k>=1&&k<=2);if k==l.seek{l.left=a;l.right=b;}l.calls+=1;l.adds[k-1]}
++fn NKR_semantic_digest_window(packed:&mut[QM31;24],public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,l:&mut NKR_SemDigestLog){
++ let digests=NKR_sem_digest(public,openings,selectors,l);
++ packed[84/4]=NKR_sem_add(packed[84/4],digests[0],l);
++ packed[84/4+1]=NKR_sem_add(packed[84/4+1],digests[1],l);
++}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_semantic_digest_cut(){
++ let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_sem_public(&t);let o=StateOnlyPoseidonOpenings{z:NKR_sem_array!(16),succ_z:NKR_sem_array!(16),xor12_z:NKR_sem_array!(16)};let s=Selectors{high:NKR_sem_array!(64),low:NKR_sem_array!(16)};let before=NKR_sem_array!(24);let digests=NKR_sem_array!(2);let adds=NKR_sem_array!(2);let probe=NKR_sem_probe();let limb=probe.limb;let pick:usize=kani::any();let seek:usize=kani::any();kani::assume(pick<24&&seek>=1&&seek<=2);let expected=NKR_sem_arg(Some(public),&o,&s,&probe);
++ let mut l=NKR_SemDigestLog{probe,seek,calls:0,arg:0,left:QM31::ZERO,right:QM31::ZERO,digests,adds};let mut packed=before;NKR_semantic_digest_window(&mut packed,public,&o,&s,&mut l);
++ assert_eq!(l.calls,3);assert_eq!(l.arg,expected);assert_eq!(NKR_sem_words(l.left)[limb],NKR_sem_words(before[20+seek])[limb]);assert_eq!(NKR_sem_words(l.right)[limb],NKR_sem_words(digests[seek-1])[limb]);let want=if pick==21{adds[0]}else if pick==22{adds[1]}else{before[pick]};assert_eq!(NKR_sem_words(packed[pick])[limb],NKR_sem_words(want)[limb]^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_SemScalarLog{calls:usize,seek:usize,limb:usize,high:usize,low:usize,pick:usize,scalar_pick:usize,kind:u8,left:QM31,right:QM31,row:usize,high_seen:u32,low_seen:u32,variant:u8,present:bool,scalar_args:[QM31;4],start:usize,seen_values:[QM31;2],before:u32,fields:[QM31;12],scalars:[QM31;2],reply:[QM31;24]}
++fn NKR_sem_scalar_enter(kind:u8,a:QM31,b:QM31,l:&mut NKR_SemScalarLog)->QM31{let k=l.calls;assert!(k<12);if k==l.seek{l.kind=kind;l.left=a;l.right=b;}l.calls+=1;l.fields[k]}
++fn NKR_sem_lift(a:M31,l:&mut NKR_SemScalarLog)->QM31{NKR_sem_scalar_enter(5,NKR_sem_q([a.0,0,0,0]),QM31::ZERO,l)}
++fn NKR_sem_sub(a:QM31,b:QM31,l:&mut NKR_SemScalarLog)->QM31{NKR_sem_scalar_enter(2,a,b,l)}
++fn NKR_sem_mul(a:QM31,b:QM31,l:&mut NKR_SemScalarLog)->QM31{NKR_sem_scalar_enter(0,a,b,l)}
++fn NKR_sem_row(s:&Selectors,row:usize,l:&mut NKR_SemScalarLog)->QM31{if l.calls==l.seek{l.row=row;l.high_seen=NKR_sem_words(s.high[l.high])[l.limb];l.low_seen=NKR_sem_words(s.low[l.low])[l.limb];}NKR_sem_scalar_enter(6,QM31::ZERO,QM31::ZERO,l)}
++fn NKR_sem_scalars(v:CompiledVariant,present:bool,a:QM31,b:QM31,c:QM31,d:QM31,l:&mut NKR_SemScalarLog)->[QM31;2]{assert_eq!(l.calls,12);l.calls+=1;l.variant=match v{CompiledVariant::PrivateTransfer=>0,CompiledVariant::Withdrawal=>1};l.present=present;l.scalar_args=[a,b,c,d];l.scalars}
++fn NKR_sem_scalar_pack(packed:&mut[QM31;24],start:usize,values:&[QM31;2],l:&mut NKR_SemScalarLog){assert_eq!(l.calls,13);l.calls+=1;l.start=start;l.seen_values=*values;l.before=NKR_sem_words(packed[l.pick])[l.limb];*packed=l.reply;}
++fn NKR_semantic_scalar_window(packed:&mut[QM31;24],public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,l:&mut NKR_SemScalarLog){
++ let asset_difference=NKR_sem_sub(openings.z[1],NKR_sem_lift(public.asset_id,l),l);
++ let input_asset=NKR_sem_mul(NKR_sem_row(selectors,2*16+12,l),asset_difference,l);
++ let output_scalar=NKR_sem_mul(NKR_sem_row(selectors,31*16+12,l),asset_difference,l);
++ let private_transfer_term=NKR_sem_mul(NKR_sem_row(selectors,28*16+12,l),asset_difference,l);
++ let withdrawal_amount_value=public.withdrawal_amount.unwrap_or(0);
++ let withdrawal_term=NKR_sem_mul(NKR_sem_row(selectors,16*VALUE_AUXILIARY_BLOCK+2,l),NKR_sem_sub(openings.z[10],NKR_sem_lift(M31(withdrawal_amount_value),l),l),l);
++ let scalars=NKR_sem_scalars(public.variant,public.withdrawal_amount.is_some(),input_asset,output_scalar,private_transfer_term,withdrawal_term,l);
++ NKR_sem_scalar_pack(packed,92,&scalars,l);
++}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_semantic_scalar_cut(){
++ let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_sem_public(&t);let o=StateOnlyPoseidonOpenings{z:NKR_sem_array!(16),succ_z:NKR_sem_array!(16),xor12_z:NKR_sem_array!(16)};let s=Selectors{high:NKR_sem_array!(64),low:NKR_sem_array!(16)};let before=NKR_sem_array!(24);let fields=NKR_sem_array!(12);let scalars=NKR_sem_array!(2);let reply=NKR_sem_array!(24);let seek:usize=kani::any();let limb:usize=kani::any();let high:usize=kani::any();let low:usize=kani::any();let pick:usize=kani::any();let scalar_pick:usize=kani::any();let value_pick:usize=kani::any();kani::assume(seek<12&&limb<4&&high<64&&low<16&&pick<24&&scalar_pick<4&&value_pick<2);
++ let mut l=NKR_SemScalarLog{calls:0,seek,limb,high,low,pick,scalar_pick,kind:255,left:QM31::ZERO,right:QM31::ZERO,row:9999,high_seen:0,low_seen:0,variant:255,present:false,scalar_args:[QM31::ZERO;4],start:999,seen_values:[QM31::ZERO;2],before:0,fields,scalars,reply};let mut packed=before;NKR_semantic_scalar_window(&mut packed,public,&o,&s,&mut l);
++ let kinds=[5u8,2,6,0,6,0,6,0,6,5,2,0];let left=[NKR_sem_q([public.asset_id.0,0,0,0]),o.z[1],QM31::ZERO,fields[2],QM31::ZERO,fields[4],QM31::ZERO,fields[6],QM31::ZERO,NKR_sem_q([public.withdrawal_amount.unwrap_or(0),0,0,0]),o.z[10],fields[8]];let right=[QM31::ZERO,fields[0],QM31::ZERO,fields[1],QM31::ZERO,fields[1],QM31::ZERO,fields[1],QM31::ZERO,QM31::ZERO,fields[9],fields[10]];
++ assert_eq!(l.calls,14);assert_eq!(l.kind,kinds[seek]);assert_eq!(NKR_sem_words(l.left)[limb],NKR_sem_words(left[seek])[limb]);assert_eq!(NKR_sem_words(l.right)[limb],NKR_sem_words(right[seek])[limb]);if seek==2||seek==4||seek==6||seek==8{assert_eq!(l.row,[44,508,460,1010][(seek-2)/2]);assert_eq!(l.high_seen,NKR_sem_words(s.high[high])[limb]);assert_eq!(l.low_seen,NKR_sem_words(s.low[low])[limb]);}
++ assert_eq!(l.variant,match public.variant{CompiledVariant::PrivateTransfer=>0,CompiledVariant::Withdrawal=>1});assert_eq!(l.present,public.withdrawal_amount.is_some());assert_eq!(NKR_sem_words(l.scalar_args[scalar_pick])[limb],NKR_sem_words([fields[3],fields[5],fields[7],fields[11]][scalar_pick])[limb]);assert_eq!(l.start,92);assert_eq!(NKR_sem_words(l.seen_values[value_pick])[limb],NKR_sem_words(scalars[value_pick])[limb]);assert_eq!(l.before,NKR_sem_words(before[pick])[limb]);assert_eq!(NKR_sem_words(packed[pick])[limb],NKR_sem_words(reply[pick])[limb]^if cfg!(NKR_invert){1}else{0});
++}
++// K048/K054 retired. Separate argument projections from native24cell frames.
++macro_rules! NKR_sem_flat_array{($n:expr)=>{unsafe{core::mem::transmute::<[u32;4*$n],[QM31;$n]>(kani::any())}}}
++struct NKR_SemArgLog{probe:NKR_SemProbe,calls:usize,kind:usize,seen:u64}
++fn NKR_sem_mark_arg(p:Option<SemanticPublic<'_>>,o:&StateOnlyPoseidonOpenings,s:&Selectors,kind:usize,l:&mut NKR_SemArgLog){l.calls+=1;l.kind=kind;l.seen=NKR_sem_arg(p,o,s,&l.probe);}
++fn NKR_semantic_child_args(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,stage:usize,l:&mut NKR_SemArgLog){match stage{0=>NKR_sem_mark_arg(Some(public),openings,selectors,232,l),1=>NKR_sem_mark_arg(None,openings,selectors,229,l),2=>NKR_sem_mark_arg(None,openings,selectors,233,l),3=>NKR_sem_mark_arg(Some(public),openings,selectors,228,l),_=>unreachable!()}}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_semantic_child_args_cut(){
++ let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_sem_public(&t);let o=StateOnlyPoseidonOpenings{z:NKR_sem_flat_array!(16),succ_z:NKR_sem_flat_array!(16),xor12_z:NKR_sem_flat_array!(16)};let s=Selectors{high:NKR_sem_flat_array!(64),low:NKR_sem_flat_array!(16)};let stage:usize=kani::any();let probe=NKR_sem_probe();kani::assume(stage<4);kani::assume((stage==0||stage==3)||probe.arg!=0);let expected=NKR_sem_arg(if stage==0||stage==3{Some(public)}else{None},&o,&s,&probe);
++ let mut l=NKR_SemArgLog{probe,calls:0,kind:0,seen:0};NKR_semantic_child_args(public,&o,&s,stage,&mut l);assert_eq!(l.calls,1);assert_eq!(l.kind,[232,229,233,228][stage]);assert_eq!(l.seen,expected^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_SemStateLog{pick:usize,limb:usize,calls:usize,before:u32}
++fn NKR_semantic_child_state(packed:&mut[QM31;24],reply:&[QM31;24],l:&mut NKR_SemStateLog){l.calls+=1;l.before=NKR_sem_words(packed[l.pick])[l.limb];*packed=*reply;}
++#[kani::proof] #[kani::unwind(27)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_semantic_child_state_cut(){
++ let mut packed=NKR_sem_flat_array!(24);let reply=NKR_sem_flat_array!(24);let pick:usize=kani::any();let limb:usize=kani::any();kani::assume(pick<24&&limb<4);let before_word=NKR_sem_words(packed[pick])[limb];let reply_word=NKR_sem_words(reply[pick])[limb];let mut l=NKR_SemStateLog{pick,limb,calls:0,before:0};NKR_semantic_child_state(&mut packed,&reply,&mut l);assert_eq!(l.calls,1);assert_eq!(l.before,before_word);assert_eq!(NKR_sem_words(packed[pick])[limb],reply_word^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_SemDigestArg<'a>{probe:NKR_SemProbe,calls:usize,seen:u64,reply:&'a[QM31;2]}
++fn NKR_semantic_digest_args(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,l:&mut NKR_SemDigestArg<'_>)->[QM31;2]{l.calls+=1;l.seen=NKR_sem_arg(Some(public),openings,selectors,&l.probe);*l.reply}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_semantic_digest_args_cut(){
++ let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_sem_public(&t);let o=StateOnlyPoseidonOpenings{z:NKR_sem_flat_array!(16),succ_z:NKR_sem_flat_array!(16),xor12_z:NKR_sem_flat_array!(16)};let s=Selectors{high:NKR_sem_flat_array!(64),low:NKR_sem_flat_array!(16)};let reply=NKR_sem_flat_array!(2);let g:usize=kani::any();kani::assume(g<2);let probe=NKR_sem_probe();let limb=probe.limb;let expected=NKR_sem_arg(Some(public),&o,&s,&probe);let reply_word=NKR_sem_words(reply[g])[limb];let mut l=NKR_SemDigestArg{probe,calls:0,seen:0,reply:&reply};let out=NKR_semantic_digest_args(public,&o,&s,&mut l);assert_eq!(l.calls,1);assert_eq!(l.seen,expected);assert_eq!(NKR_sem_words(out[g])[limb],reply_word^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_SemDigestState<'a>{calls:usize,seek:usize,left:QM31,right:QM31,reply:&'a[QM31;2]}
++fn NKR_sem_state_add(a:QM31,b:QM31,l:&mut NKR_SemDigestState<'_>)->QM31{let k=l.calls;assert!(k<2);if k==l.seek{l.left=a;l.right=b;}l.calls+=1;l.reply[k]}
++fn NKR_semantic_digest_state(packed:&mut[QM31;24],digests:&[QM31;2],l:&mut NKR_SemDigestState<'_>){packed[84/4]=NKR_sem_state_add(packed[84/4],digests[0],l);packed[84/4+1]=NKR_sem_state_add(packed[84/4+1],digests[1],l);}
++#[kani::proof] #[kani::unwind(27)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_semantic_digest_state_cut(){
++ let mut packed=NKR_sem_flat_array!(24);let digests=NKR_sem_flat_array!(2);let reply=NKR_sem_flat_array!(2);let pick:usize=kani::any();let limb:usize=kani::any();let seek:usize=kani::any();kani::assume(pick<24&&limb<4&&seek<2);let before_word=NKR_sem_words(packed[pick])[limb];let left_word=NKR_sem_words(packed[21+seek])[limb];let right_word=NKR_sem_words(digests[seek])[limb];let want=if pick==21{NKR_sem_words(reply[0])[limb]}else if pick==22{NKR_sem_words(reply[1])[limb]}else{before_word};let mut l=NKR_SemDigestState{calls:0,seek,left:QM31::ZERO,right:QM31::ZERO,reply:&reply};NKR_semantic_digest_state(&mut packed,&digests,&mut l);assert_eq!(l.calls,2);assert_eq!(NKR_sem_words(l.left)[limb],left_word);assert_eq!(NKR_sem_words(l.right)[limb],right_word);assert_eq!(NKR_sem_words(packed[pick])[limb],want^if cfg!(NKR_invert){1}else{0});
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_TermPrefix_native.rs
+@@ -0,0 +1,24 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_prefix_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++fn NKR_prefix_public<'a>(t:&'a PoolV1PairLatePublicStatementV1)->SemanticPublic<'a>{SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())})}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition:t}}
++fn NKR_prefix_pubword(p:SemanticPublic<'_>,k:usize,b:usize,d:usize,t:usize)->u64{let source=&p.transition.live_snapshot;let after=&p.transition.candidate_afterstate;match k{0=>match p.variant{CompiledVariant::PrivateTransfer=>0,CompiledVariant::Withdrawal=>1},1=>p.pool[b]as u64,2=>p.deployment_domain[b]as u64,3=>p.anchor[d].0 as u64,4=>p.nullifier[d].0 as u64,5=>p.asset_id.0 as u64,6=>p.recipient.is_some()as u64,7=>p.recipient.map_or(0,|x|x[d].0 as u64),8=>p.change[d].0 as u64,9=>p.withdrawal_amount.is_some()as u64,10=>p.withdrawal_amount.map_or(0,|x|x as u64),11=>source.pool[b]as u64,12=>source.deployment_domain[b]as u64,13=>source.sequence,14=>source.next_pair_index,15=>source.current_root[d].0 as u64,16=>source.frontier[t][d].0 as u64,17=>after.next_pair_index,18=>after.next_root[d].0 as u64,19=>after.next_frontier[t][d].0 as u64,_=>unreachable!()}}
++struct NKR_PrefixLog{calls:usize,k:usize,b:usize,d:usize,t:usize,seen:u64,reply:Result<(),PoolV1PairForestSemanticTerminalErrorV1>}
++fn NKR_prefix_validate(public:SemanticPublic<'_>,l:&mut NKR_PrefixLog)->Result<(),PoolV1PairForestSemanticTerminalErrorV1>{l.calls+=1;l.seen=NKR_prefix_pubword(public,l.k,l.b,l.d,l.t);l.reply}
++fn NKR_validation_prefix(public:SemanticPublic<'_>,l:&mut NKR_PrefixLog)->Result<bool,PoolV1PairForestSemanticTerminalErrorV1>{
++ let invalid_amount=match public.withdrawal_amount{None=>false,Some(amount)=>amount==0||amount>=(1<<30u32)};
++ if invalid_amount{return Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount);}
++ NKR_prefix_validate(public,l)?;
++ Ok(true)
++}
++#[kani::proof] #[kani::unwind(36)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_validation_prefix_cut(){
++ let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_prefix_public(&t);let k:usize=kani::any();let b:usize=kani::any();let d:usize=kani::any();let level:usize=kani::any();kani::assume(k<20&&b<32&&d<8&&level<20);let error=if kani::any(){PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount}else{PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition};let reply=if kani::any(){Ok(())}else{Err(error)};let invalid=public.withdrawal_amount.map_or(false,|amount|amount==0||amount>=(1<<30u32));
++ let mut l=NKR_PrefixLog{calls:0,k,b,d,t:level,seen:0,reply};let out=NKR_validation_prefix(public,&mut l);assert_eq!(l.calls,if invalid{0}else{1});if !invalid{assert_eq!(l.seen,NKR_prefix_pubword(public,k,b,d,level));}
++ let want=if invalid{Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount)}else{reply.map(|()|true)};match(out,want){(Ok(got),Ok(_))=>assert_eq!(got,!cfg!(NKR_invert)),(Err(got),Err(expected))=>assert_eq!(got,if cfg!(NKR_invert){if expected==PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount{PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition}else{PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount}}else{expected}),_=>assert!(false)}
++}
++fn NKR_terminal_gather_cell(claims:&[[QM31;29];3],i:usize)->QM31{claims[i/28][i%28]}
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_terminal_gather_cell_cut(){let words:[[[u32;4];29];3]=kani::any();let claims:[[QM31;29];3]=unsafe{core::mem::transmute(words)};let i:usize=kani::any();let limb:usize=kani::any();kani::assume(i<84&&limb<4);let out=NKR_terminal_gather_cell(&claims,i);assert_eq!(NKR_prefix_words(out)[limb],words[i/28][i%28][limb]^if cfg!(NKR_invert){1}else{0});}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_Digest_wrapper_window.rs
+@@ -0,0 +1,38 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_Digest_warg_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++#[derive(Clone,Copy)]
++struct NKR_Digest_warg_Probe{kind:usize,a:usize,di:usize,fi:usize,oi:usize,hi:usize,lo:usize,limb:usize}
++fn NKR_Digest_warg_project(p:SemanticPublic<'_>,o:&StateOnlyPoseidonOpenings,s:&Selectors,q:NKR_Digest_warg_Probe)->u64{
++ match q.kind{
++ 0=>matches!(p.variant,CompiledVariant::PrivateTransfer) as u64,
++ 1=>p.pool[q.a] as u64,2=>p.deployment_domain[q.a] as u64,
++ 3=>p.anchor[q.di].0 as u64,4=>p.nullifier[q.di].0 as u64,5=>p.asset_id.0 as u64,
++ 6=>p.recipient.is_some() as u64,7=>p.recipient.map_or(0,|x|x[q.di].0 as u64),
++ 8=>p.change[q.di].0 as u64,9=>p.withdrawal_amount.is_some() as u64,10=>p.withdrawal_amount.unwrap_or(0) as u64,
++ 11=>p.transition.live_snapshot.pool[q.a] as u64,12=>p.transition.live_snapshot.deployment_domain[q.a] as u64,
++ 13=>p.transition.live_snapshot.sequence,14=>p.transition.live_snapshot.next_pair_index,
++ 15=>p.transition.live_snapshot.current_root[q.di].0 as u64,16=>p.transition.live_snapshot.frontier[q.fi][q.di].0 as u64,
++ 17=>p.transition.candidate_afterstate.next_pair_index,18=>p.transition.candidate_afterstate.next_root[q.di].0 as u64,
++ 19=>p.transition.candidate_afterstate.next_frontier[q.fi][q.di].0 as u64,
++ 20=>NKR_Digest_warg_words(o.z[q.oi])[q.limb] as u64,21=>NKR_Digest_warg_words(o.succ_z[q.oi])[q.limb] as u64,
++ 22=>NKR_Digest_warg_words(o.xor12_z[q.oi])[q.limb] as u64,
++ 23=>NKR_Digest_warg_words(s.high[q.hi])[q.limb] as u64,
++ _=>NKR_Digest_warg_words(s.low[q.lo])[q.limb] as u64
++ }
++}
++struct NKR_Digest_warg_Log{calls:usize,probe:NKR_Digest_warg_Probe,seen:u64,reply:[QM31;2]}
++fn NKR_Digest_warg_child(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,l:&mut NKR_Digest_warg_Log)->[QM31;2]{let seen=NKR_Digest_warg_project(public,openings,selectors,l.probe);l.calls+=1;l.seen=seen;l.reply}
++fn NKR_Digest_warg_wrapper(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,l:&mut NKR_Digest_warg_Log)->[QM31;2]{return NKR_Digest_warg_child(public,openings,selectors,l);}
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_Digest_wrapper_argument_window_cut(){
++ let transition:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};
++ let recipient:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};
++ let p=SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(recipient)}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition:&transition};
++ let o=StateOnlyPoseidonOpenings{z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())},succ_z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())},xor12_z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};
++ let s=Selectors{high:unsafe{core::mem::transmute::<[u32;256],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};
++ let q=NKR_Digest_warg_Probe{kind:kani::any(),a:kani::any(),di:kani::any(),fi:kani::any(),oi:kani::any(),hi:kani::any(),lo:kani::any(),limb:kani::any()};kani::assume(q.kind<25&&q.a<32&&q.di<8&&q.fi<20&&q.oi<16&&q.hi<64&&q.lo<16&&q.limb<4);
++ let reply:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let lane:usize=kani::any();let limb:usize=kani::any();kani::assume(lane<2&&limb<4);let expected=NKR_Digest_warg_project(p,&o,&s,q);let mut l=NKR_Digest_warg_Log{calls:0,probe:q,seen:0,reply};let out=NKR_Digest_warg_wrapper(p,&o,&s,&mut l);
++ assert_eq!(l.calls,1);assert_eq!(l.seen,expected^if cfg!(NKR_invert){1}else{0});assert_eq!(NKR_Digest_warg_words(out[lane])[limb],NKR_Digest_warg_words(reply[lane])[limb]);
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_TermHorner_native.rs
+@@ -0,0 +1,31 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_horner_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++fn NKR_horner_q(w:[u32;4])->QM31{unsafe{core::mem::transmute::<[u32;4],QM31>(w)}}
++fn NKR_horner_cache(p:PreparedQm31Multiplier)->[[u32;3];3]{unsafe{core::mem::transmute(p)}}
++struct NKR_HornerStepLog{calls:usize,cache:[[u32;3];3],input:QM31,left:QM31,right:QM31,product:QM31,reply:QM31}
++fn NKR_horner_mul(p:PreparedQm31Multiplier,x:QM31,l:&mut NKR_HornerStepLog)->QM31{assert_eq!(l.calls,0);l.calls+=1;l.cache=NKR_horner_cache(p);l.input=x;l.product}
++fn NKR_horner_add(a:QM31,b:QM31,l:&mut NKR_HornerStepLog)->QM31{assert_eq!(l.calls,1);l.calls+=1;l.left=a;l.right=b;l.reply}
++fn NKR_horner_step(prepared_theta:PreparedQm31Multiplier,composition:QM31,lane:QM31,l:&mut NKR_HornerStepLog)->QM31{NKR_horner_add(NKR_horner_mul(prepared_theta,composition,l),lane,l)}
++#[kani::proof] #[kani::unwind(5)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_horner_step_cut(){
++ let cache:[[u32;3];3]=kani::any();let prepared=unsafe{core::mem::transmute::<[[u32;3];3],PreparedQm31Multiplier>(cache)};let before=NKR_horner_q(kani::any());let lane=NKR_horner_q(kani::any());let product=NKR_horner_q(kani::any());let reply=NKR_horner_q(kani::any());let r:usize=kani::any();let c:usize=kani::any();let limb:usize=kani::any();kani::assume(r<3&&c<3&&limb<4);
++ let mut l=NKR_HornerStepLog{calls:0,cache:[[0;3];3],input:QM31::ZERO,left:QM31::ZERO,right:QM31::ZERO,product,reply};let out=NKR_horner_step(prepared,before,lane,&mut l);
++ assert_eq!(l.calls,2);assert_eq!(l.cache[r][c],cache[r][c]);assert_eq!(NKR_horner_words(l.input)[limb],NKR_horner_words(before)[limb]);assert_eq!(NKR_horner_words(l.left)[limb],NKR_horner_words(product)[limb]);assert_eq!(NKR_horner_words(l.right)[limb],NKR_horner_words(lane)[limb]);assert_eq!(NKR_horner_words(out)[limb],NKR_horner_words(reply)[limb]^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_HornerControl{preparations:usize,calls:usize,seek:usize,seen:usize,row:usize,col:usize,cache_seen:u32,theta:QM31,reply:PreparedQm31Multiplier}
++fn NKR_horner_new(theta:QM31,l:&mut NKR_HornerControl)->PreparedQm31Multiplier{l.preparations+=1;l.theta=theta;l.reply}
++fn NKR_horner_visit(p:PreparedQm31Multiplier,lane:QM31,l:&mut NKR_HornerControl){if l.calls==l.seek{l.seen=lane.c0.a.0 as usize;l.cache_seen=NKR_horner_cache(p)[l.row][l.col];}l.calls+=1;}
++fn NKR_horner_control(theta:QM31,semantic:[QM31;24],poseidon:[QM31;4],l:&mut NKR_HornerControl){
++ let prepared_theta=NKR_horner_new(theta,l);
++ for lane in semantic.into_iter().rev(){NKR_horner_visit(prepared_theta,lane,l);}
++ for lane in poseidon.into_iter().rev(){NKR_horner_visit(prepared_theta,lane,l);}
++}
++#[kani::proof] #[kani::unwind(30)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_horner_control_cut(){
++ let cache:[[u32;3];3]=kani::any();let reply=unsafe{core::mem::transmute::<[[u32;3];3],PreparedQm31Multiplier>(cache)};let theta=NKR_horner_q(kani::any());let row:usize=kani::any();let col:usize=kani::any();let seek:usize=kani::any();let limb:usize=kani::any();kani::assume(row<3&&col<3&&seek<28&&limb<4);
++ let semantic=core::array::from_fn(|i|NKR_horner_q([i as u32,0,0,0]));let poseidon=core::array::from_fn(|i|NKR_horner_q([24+i as u32,0,0,0]));let mut l=NKR_HornerControl{preparations:0,calls:0,seek,seen:999,row,col,cache_seen:0,theta:QM31::ZERO,reply};NKR_horner_control(theta,semantic,poseidon,&mut l);
++ assert_eq!(l.preparations,1);assert_eq!(l.calls,28);assert_eq!(NKR_horner_words(l.theta)[limb],NKR_horner_words(theta)[limb]);assert_eq!(l.cache_seen,cache[row][col]);assert_eq!(l.seen,if seek<24{23-seek}else{51-seek}+if cfg!(NKR_invert){1}else{0});
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_Digest_prefix_split.rs
+@@ -0,0 +1,27 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_Digest_pstep_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++struct NKR_Digest_pstep_Log{calls:usize,di:usize,oi:usize,kind:u8,high:QM31,opened:[u32;4],present:bool,digest:u32,reply:[QM31;2],adds:[QM31;2],kinds:[u8;2],left:[QM31;2],right:[QM31;2]}
++fn NKR_Digest_pstep_left(high:QM31,o:[QM31;16],d:Digest,l:&mut NKR_Digest_pstep_Log)->[QM31;2]{l.calls+=1;l.kind=11;l.high=high;l.opened=NKR_Digest_pstep_words(o[l.oi]);l.present=true;l.digest=d[l.di].0;l.reply}
++fn NKR_Digest_pstep_recipient(d:Option<Digest>,o:[QM31;16],high:QM31,l:&mut NKR_Digest_pstep_Log)->[QM31;2]{l.calls+=1;l.kind=12;l.high=high;l.opened=NKR_Digest_pstep_words(o[l.oi]);l.present=d.is_some();l.digest=d.map_or(0,|x|x[l.di].0);l.reply}
++fn NKR_Digest_pstep_add(a:QM31,b:QM31,l:&mut NKR_Digest_pstep_Log)->QM31{let i=l.calls-1;l.kinds[i]=1;l.left[i]=a;l.right[i]=b;l.calls+=1;l.adds[i]}
++fn NKR_Digest_prefix_step(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,which:usize,mut local_sums:[[QM31;2];3],l:&mut NKR_Digest_pstep_Log)->[[QM31;2];3]{
++ let child=match which{
++ 0=>NKR_Digest_pstep_left(selectors.high[56],openings.z,public.anchor,l),
++ 1=>NKR_Digest_pstep_left(selectors.high[26],openings.z,public.nullifier,l),
++ 2=>NKR_Digest_pstep_recipient(public.recipient,openings.z,selectors.high[29],l),
++ _=>NKR_Digest_pstep_left(selectors.high[32],openings.z,public.change,l)
++ };
++ local_sums[1][0]=NKR_Digest_pstep_add(local_sums[1][0],child[0],l);
++ local_sums[1][1]=NKR_Digest_pstep_add(local_sums[1][1],child[1],l);
++ local_sums
++}
++#[kani::proof] #[kani::unwind(24)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_Digest_prefix_step_cut(){
++ let transition:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let recipient:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};let p=SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(recipient)}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition:&transition};
++ let o=StateOnlyPoseidonOpenings{z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())},succ_z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())},xor12_z:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};let s=Selectors{high:unsafe{core::mem::transmute::<[u32;256],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};
++ let before:[[QM31;2];3]=unsafe{core::mem::transmute::<[u32;24],[[QM31;2];3]>(kani::any())};let reply:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let adds:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};let which:usize=kani::any();let di:usize=kani::any();let oi:usize=kani::any();let group:usize=kani::any();let lane:usize=kani::any();let limb:usize=kani::any();kani::assume(which<4&&di<8&&oi<16&&group<3&&lane<2&&limb<4);
++ let mut l=NKR_Digest_pstep_Log{calls:0,di,oi,kind:255,high:QM31::ZERO,opened:[0;4],present:false,digest:0,reply,adds,kinds:[0;2],left:[QM31::ZERO;2],right:[QM31::ZERO;2]};let out=NKR_Digest_prefix_step(p,&o,&s,which,before,&mut l);let expected=match which{0=>Some(p.anchor),1=>Some(p.nullifier),2=>p.recipient,_=>Some(p.change)};
++ assert_eq!(l.calls,3);assert_eq!(l.kind,if which==2{12}else{11});assert_eq!(NKR_Digest_pstep_words(l.high)[limb],NKR_Digest_pstep_words(s.high[[56,26,29,32][which]])[limb]);assert_eq!(l.opened[limb],NKR_Digest_pstep_words(o.z[oi])[limb]);assert_eq!(l.present,expected.is_some());assert_eq!(l.digest,expected.map_or(0,|x|x[di].0));assert_eq!(l.kinds[lane],1);assert_eq!(NKR_Digest_pstep_words(l.left[lane])[limb],NKR_Digest_pstep_words(before[1][lane])[limb]);assert_eq!(NKR_Digest_pstep_words(l.right[lane])[limb],NKR_Digest_pstep_words(reply[lane])[limb]);assert_eq!(NKR_Digest_pstep_words(out[group][lane])[limb],NKR_Digest_pstep_words(if group==1{adds[lane]}else{before[group][lane]})[limb]^if cfg!(NKR_invert){1}else{0});
++}
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -1541,3 +1541,31 @@
+         );
      }
  }
 +
 +#[cfg(kani)]
-+#[path="NKR_schedule_native.rs"]
-+mod NKR_native;
++#[path="NKR_Sum_native.rs"]
++mod NKR_sum_native;
 +
 +#[cfg(kani)]
-+#[path="NKR_Digest_native.rs"]
-+mod NKR_digest_native;
++#[path="NKR_SumFinish_native.rs"]
++mod NKR_sum_finish_native;
 +
 +#[cfg(kani)]
-+#[path="NKR_Term_native.rs"]
-+mod NKR_term_native;
++#[path="NKR_SumPattern_native.rs"]
++mod NKR_sum_pattern_native;
++
++#[cfg(kani)]
++#[path="NKR_SumCopy_native.rs"]
++mod NKR_sum_copy_native;
++
++#[cfg(kani)]
++#[path="NKR_SumTag_native.rs"]
++mod NKR_sum_tag_native;
++
++#[cfg(kani)]
++#[path="NKR_SumSplit_native.rs"]
++mod NKR_sum_split_native;
++
++#[cfg(kani)]
++#[path="NKR_LinkSplit_native.rs"]
++mod NKR_link_split_native;
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NKR_Sum_native.rs
 @@ -0,0 +1,32 @@
@@ -337,7 +734,7 @@
 + coordinate += count;
 + (values,weights,coordinate)
 +}
-+#[kani::proof] #[kani::unwind(8)]
++#[kani::proof] #[kani::unwind(104)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn NKR_finish_batch_cut(){
 + let scratch:[QM31;103]=unsafe{core::mem::transmute::<[[u32;4];103],[QM31;103]>(kani::any())};
@@ -373,7 +770,7 @@
 +    coordinate += 1;
 +    coordinate
 +}
-+#[kani::proof] #[kani::unwind(8)]
++#[kani::proof] #[kani::unwind(104)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn NKR_pattern_step_cut(){
 + let scratch:[QM31;103]=unsafe{core::mem::transmute::<[[u32;4];103],[QM31;103]>(kani::any())};
@@ -397,7 +794,7 @@
 +        weights,
 +    )
 +}
-+#[kani::proof] #[kani::unwind(8)]
++#[kani::proof] #[kani::unwind(104)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn NKR_finish_tail_cut(){
 + let values:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let weights:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};
@@ -408,24 +805,233 @@
 + assert_eq!(l.calls,1);assert_eq!(NKR_pattern_words(l.values)[limb],NKR_pattern_words(values[pick])[limb]);assert_eq!(NKR_pattern_words(l.coefficients)[limb],NKR_pattern_words(coefficients[coef])[limb]);assert_eq!(NKR_pattern_words(l.pattern)[limb],NKR_pattern_words(patterns[term])[limb]);
 + assert_eq!(NKR_pattern_words(v[pick])[limb],NKR_pattern_words(reply[pick])[limb]^if cfg!(NKR_invert){1}else{0});assert_eq!(NKR_pattern_words(w[pick])[limb],NKR_pattern_words(weights[pick])[limb]);
 +}
---- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
-+++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
-@@ -1541,3 +1541,15 @@
-         );
-     }
- }
-+
-+#[cfg(kani)]
-+#[path="NKR_Sum_native.rs"]
-+mod NKR_sum_native;
-+
-+#[cfg(kani)]
-+#[path="NKR_SumFinish_native.rs"]
-+mod NKR_sum_finish_native;
-+
-+#[cfg(kani)]
-+#[path="NKR_SumPattern_native.rs"]
-+mod NKR_sum_pattern_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_SumCopy_native.rs
+@@ -0,0 +1,68 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_copy_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++struct NKR_CopyLog{observe:usize,high_pick:usize,low_pick:usize,calls:usize,kind:[u8;3],index:u64,variant:PoolV1PairForestCompiledVariantV1,tag:u32,weight_kind:u8,weight_level:u8,weight_prow:u16,weight_crow:u16,weight_pslot:u8,weight_cslot:u8,weight_ppattern:u8,weight_cpattern:u8,side:[usize;2],row:[u16;2],slot:[u8;2],pattern:[u8;2],passed_tag:[u32;2],passed_weight:[u32;2],passed_scratch:[QM31;2],high:[QM31;2],low:[QM31;2],weight_reply:M31,replies:[QM31;4]}
++fn NKR_copy_weight(link:CompiledPoolV1PairForestLink,append:u64,variant:PoolV1PairForestCompiledVariantV1,l:&mut NKR_CopyLog)->M31{
++ l.calls+=1;l.kind[0]=0;l.index=append;l.variant=variant;l.tag=link.tag;l.weight_kind=link.weight_kind;l.weight_level=link.weight_level;l.weight_prow=link.producer.row;l.weight_crow=link.consumer.row;l.weight_pslot=link.producer.slot;l.weight_cslot=link.consumer.slot;l.weight_ppattern=link.producer.pattern;l.weight_cpattern=link.consumer.pattern;l.weight_reply
++}
++fn NKR_copy_endpoint(scratch:&mut[QM31],side:usize,endpoint:CompiledPoolV1PairForestEndpoint,tag:u32,weight:M31,selectors:&Selectors,l:&mut NKR_CopyLog){
++ let i=l.calls-1;l.calls+=1;l.kind[i+1]=1;l.side[i]=side;l.row[i]=endpoint.row;l.slot[i]=endpoint.slot;l.pattern[i]=endpoint.pattern;l.passed_tag[i]=tag;l.passed_weight[i]=weight.0;l.passed_scratch[i]=scratch[l.observe];l.high[i]=selectors.high[l.high_pick];l.low[i]=selectors.low[l.low_pick];
++ let group=side+usize::from(endpoint.slot);let local=usize::from(endpoint.row)&15;
++ let gc=usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local]);let pc=usize::from(COPY_PATTERN_LOCAL_COORDINATES[group][usize::from(endpoint.pattern)][local]);
++ scratch[COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+gc]=l.replies[2*i];scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET+pc]=l.replies[2*i+1];
++}
++fn NKR_copy_link(scratch:&mut[QM31],selectors:&Selectors,append_index:u64,variant:PoolV1PairForestCompiledVariantV1,mut link_index:usize,l:&mut NKR_CopyLog)->usize{
++ let link = constants::COPY_LINKS[link_index];
++ let weight = NKR_copy_weight(link, append_index, variant,l);
++ NKR_copy_endpoint(scratch,0,link.producer,link.tag,weight,selectors,l);
++ NKR_copy_endpoint(scratch,2,link.consumer,link.tag,weight,selectors,l);
++ link_index += 1;
++ link_index
++}
++#[kani::proof] #[kani::unwind(104)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_copy_link_cut(){
++ let mut scratch:[QM31;103]=unsafe{core::mem::transmute::<[[u32;4];103],[QM31;103]>(kani::any())};
++ let selectors=Selectors{high:unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())}};
++ let replies:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let wr:u32=kani::any();let append:u64=kani::any();let private:bool=kani::any();let variant=if private{PoolV1PairForestCompiledVariantV1::PrivateTransfer}else{PoolV1PairForestCompiledVariantV1::Withdrawal};
++ let index:usize=kani::any();let observe:usize=kani::any();let high_pick:usize=kani::any();let low_pick:usize=kani::any();let limb:usize=kani::any();kani::assume(index<136&&observe<103&&high_pick<64&&low_pick<16&&limb<4);
++ let link=constants::COPY_LINKS[index];let p=link.producer;let c=link.consumer;
++ let pg=usize::from(p.slot);let cg=2+usize::from(c.slot);
++ let pw=COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+usize::from(COPY_GROUP_LOCAL_COORDINATES[pg][usize::from(p.row)&15]);let pp=COPY_SELECTOR_TENSOR_PATTERN_OFFSET+usize::from(COPY_PATTERN_LOCAL_COORDINATES[pg][usize::from(p.pattern)][usize::from(p.row)&15]);
++ let cw=COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+usize::from(COPY_GROUP_LOCAL_COORDINATES[cg][usize::from(c.row)&15]);let cp=COPY_SELECTOR_TENSOR_PATTERN_OFFSET+usize::from(COPY_PATTERN_LOCAL_COORDINATES[cg][usize::from(c.pattern)][usize::from(c.row)&15]);
++ let saved=scratch[observe];let middle=if observe==pp{replies[1]}else if observe==pw{replies[0]}else{saved};let after=if observe==cp{replies[3]}else if observe==cw{replies[2]}else{middle};
++ let mut l=NKR_CopyLog{observe,high_pick,low_pick,calls:0,kind:[255;3],index:0,variant,tag:0,weight_kind:0,weight_level:0,weight_prow:0,weight_crow:0,weight_pslot:0,weight_cslot:0,weight_ppattern:0,weight_cpattern:0,side:[999;2],row:[0;2],slot:[0;2],pattern:[0;2],passed_tag:[0;2],passed_weight:[0;2],passed_scratch:[QM31::ZERO;2],high:[QM31::ZERO;2],low:[QM31::ZERO;2],weight_reply:M31(wr),replies};
++ let next=NKR_copy_link(&mut scratch,&selectors,append,variant,index,&mut l);
++ assert_eq!(l.calls,3);assert_eq!(l.kind,[0,1,1]);assert_eq!(l.index,append);assert!(l.variant==variant);assert_eq!(l.tag,link.tag);assert_eq!(l.weight_kind,link.weight_kind);assert_eq!(l.weight_level,link.weight_level);assert_eq!(l.weight_prow,p.row);assert_eq!(l.weight_crow,c.row);assert_eq!(l.weight_pslot,p.slot);assert_eq!(l.weight_cslot,c.slot);assert_eq!(l.weight_ppattern,p.pattern);assert_eq!(l.weight_cpattern,c.pattern);assert_eq!(next,index+1);
++ assert_eq!(l.side,[0,2]);assert_eq!(l.row,[p.row,c.row]);assert_eq!(l.slot,[p.slot,c.slot]);assert_eq!(l.pattern,[p.pattern,c.pattern]);assert_eq!(l.passed_tag,[link.tag;2]);assert_eq!(l.passed_weight,[wr;2]);
++ assert_eq!(NKR_copy_words(l.passed_scratch[0])[limb],NKR_copy_words(saved)[limb]);assert_eq!(NKR_copy_words(l.passed_scratch[1])[limb],NKR_copy_words(middle)[limb]);
++ let call:usize=kani::any();kani::assume(call<2);assert_eq!(NKR_copy_words(l.high[call])[limb],NKR_copy_words(selectors.high[high_pick])[limb]);assert_eq!(NKR_copy_words(l.low[call])[limb],NKR_copy_words(selectors.low[low_pick])[limb]);
++ assert_eq!(NKR_copy_words(scratch[observe])[limb],NKR_copy_words(after)[limb]^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_CopyTailLog{calls:usize,high_pick:usize,low_pick:usize,pick:usize,high:QM31,low:QM31,row:[QM31;8],helper:QM31,chi:QM31,left:QM31,right:QM31,reply:[QM31;3]}
++fn NKR_copy_active(s:&Selectors,l:&mut NKR_CopyTailLog)->QM31{assert_eq!(l.calls,0);l.calls+=1;l.high=s.high[l.high_pick];l.low=s.low[l.low_pick];l.reply[0]}
++fn NKR_copy_residual(row:CopyRowExtension,helper:QM31,chi:QM31,l:&mut NKR_CopyTailLog)->QM31{assert_eq!(l.calls,1);l.calls+=1;l.row=[row.producer_values[0],row.producer_values[1],row.producer_weights[0],row.producer_weights[1],row.consumer_values[0],row.consumer_values[1],row.consumer_weights[0],row.consumer_weights[1]];l.helper=helper;l.chi=chi;l.reply[1]}
++fn NKR_copy_mul(left:QM31,right:QM31,l:&mut NKR_CopyTailLog)->QM31{assert_eq!(l.calls,2);l.calls+=1;l.left=left;l.right=right;l.reply[2]}
++fn NKR_copy_tail(mut row:CopyRowExtension,values:[QM31;4],weights:[QM31;4],selectors:&Selectors,h1_z:QM31,chi:QM31,l:&mut NKR_CopyTailLog)->PoolV1PairForestCompiledCopyTerminalV1{
++ row.producer_values = [values[0], values[1]];
++ row.consumer_values = [values[2], values[3]];
++ row.producer_weights = [weights[0], weights[1]];
++ row.consumer_weights = [weights[2], weights[3]];
++ let active = NKR_copy_active(selectors,l);
++ PoolV1PairForestCompiledCopyTerminalV1 {
++     residual: NKR_copy_mul(active,NKR_copy_residual(row, h1_z, chi,l),l),
++     active,
++ }
++}
++#[kani::proof] #[kani::unwind(104)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_copy_tail_cut(){
++ let selectors=Selectors{high:unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())}};
++ let v:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let w:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let reply:[QM31;3]=unsafe{core::mem::transmute::<[[u32;4];3],[QM31;3]>(kani::any())};let helper=unsafe{core::mem::transmute::<[u32;4],QM31>(kani::any())};let chi=unsafe{core::mem::transmute::<[u32;4],QM31>(kani::any())};
++ let old:[QM31;8]=unsafe{core::mem::transmute::<[[u32;4];8],[QM31;8]>(kani::any())};let row=CopyRowExtension{producer_values:[old[0],old[1]],producer_weights:[old[2],old[3]],consumer_values:[old[4],old[5]],consumer_weights:[old[6],old[7]]};
++ let pick:usize=kani::any();let high_pick:usize=kani::any();let low_pick:usize=kani::any();let limb:usize=kani::any();kani::assume(pick<8&&high_pick<64&&low_pick<16&&limb<4);
++ let mut l=NKR_CopyTailLog{calls:0,high_pick,low_pick,pick,high:QM31::ZERO,low:QM31::ZERO,row:[QM31::ZERO;8],helper:QM31::ZERO,chi:QM31::ZERO,left:QM31::ZERO,right:QM31::ZERO,reply};
++ let out=NKR_copy_tail(row,v,w,&selectors,helper,chi,&mut l);let expected=[v[0],v[1],w[0],w[1],v[2],v[3],w[2],w[3]];
++ assert_eq!(l.calls,3);assert_eq!(NKR_copy_words(l.high)[limb],NKR_copy_words(selectors.high[high_pick])[limb]);assert_eq!(NKR_copy_words(l.low)[limb],NKR_copy_words(selectors.low[low_pick])[limb]);assert_eq!(NKR_copy_words(l.row[pick])[limb],NKR_copy_words(expected[pick])[limb]);assert_eq!(NKR_copy_words(l.helper)[limb],NKR_copy_words(helper)[limb]);assert_eq!(NKR_copy_words(l.chi)[limb],NKR_copy_words(chi)[limb]);assert_eq!(NKR_copy_words(l.left)[limb],NKR_copy_words(reply[0])[limb]);assert_eq!(NKR_copy_words(l.right)[limb],NKR_copy_words(reply[1])[limb]);
++ assert_eq!(NKR_copy_words(out.active)[limb],NKR_copy_words(reply[0])[limb]);assert_eq!(NKR_copy_words(out.residual)[limb],NKR_copy_words(reply[2])[limb]^if cfg!(NKR_invert){1}else{0});
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_SumTag_native.rs
+@@ -0,0 +1,25 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++const NKR_TAG_BASE:u32=1_124_073_472;
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_tag_metadata_cut(){
++ let position:usize=kani::any();let coordinate:usize=kani::any();kani::assume(position<272&&coordinate<30);
++ let tag=COPY_TAG_TERMS.1[position];let block=usize::from(COPY_TAG_TERMS.0[position]);
++ assert!(tag>=NKR_TAG_BASE&&tag<NKR_TAG_BASE+136);
++ let index=(tag.wrapping_sub(NKR_TAG_BASE))as usize;let consumer=position>=136;
++ let link=constants::COPY_LINKS[index];let endpoint=if consumer{link.consumer}else{link.producer};
++ assert_eq!(tag,link.tag);assert_eq!(block,usize::from(endpoint.row)>>4);
++ let start=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate]);let end=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate+1]);
++ if start<=position&&position<end{
++  let group=(if consumer{2}else{0})+usize::from(endpoint.slot);let local=usize::from(endpoint.row)&15;
++  assert_eq!(usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local]),coordinate^if cfg!(NKR_invert){1}else{0});
++ }
++}
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_tag_permutation_cut(){
++ let a:usize=kani::any();let b:usize=kani::any();kani::assume(a<272&&b<272);
++ let ta=COPY_TAG_TERMS.1[a];let tb=COPY_TAG_TERMS.1[b];let ca=a>=136;let cb=b>=136;
++ if ta==tb&&ca==cb{assert_eq!(a,b^if cfg!(NKR_invert){1}else{0});}
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_SumSplit_native.rs
+@@ -0,0 +1,36 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_ss_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++macro_rules! NKR_ss_array{($n:expr)=>{unsafe{core::mem::transmute::<[u32;4*$n],[QM31;$n]>(kani::any())}}}
++struct NKR_SSArg{calls:usize,coordinate:usize,h:usize,l:usize,k:usize,limb:usize,high:u32,low:u32,scratch:u32,reply:QM31}
++fn NKR_ss_tag(scratch:&[QM31],coordinate:usize,selectors:&Selectors,l:&mut NKR_SSArg)->QM31{l.calls+=1;l.coordinate=coordinate;l.high=NKR_ss_words(selectors.high[l.h])[l.limb];l.low=NKR_ss_words(selectors.low[l.l])[l.limb];l.scratch=NKR_ss_words(scratch[l.k])[l.limb];l.reply}
++fn NKR_ss_tag_cell(scratch:&[QM31],selectors:&Selectors,coordinate:usize,count:usize,index:usize,l:&mut NKR_SSArg)->QM31{if index<count{NKR_ss_tag(scratch,coordinate+index,selectors,l)}else{QM31::ZERO}}
++#[kani::proof] #[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_sum_tag_cell_cut(){
++ let scratch=NKR_ss_array!(103);let selectors=Selectors{high:NKR_ss_array!(64),low:NKR_ss_array!(16)};let reply:QM31=unsafe{core::mem::transmute::<[u32;4],QM31>(kani::any())};
++ let coordinate:usize=kani::any();let count:usize=kani::any();let index:usize=kani::any();let h:usize=kani::any();let low:usize=kani::any();let k:usize=kani::any();let limb:usize=kani::any();kani::assume(coordinate<30&&count>=1&&count<=4&&coordinate+count<=30&&index<4&&h<64&&low<16&&k<103&&limb<4);
++ let mut l=NKR_SSArg{calls:0,coordinate:999,h,l:low,k,limb,high:0,low:0,scratch:0,reply};let out=NKR_ss_tag_cell(&scratch,&selectors,coordinate,count,index,&mut l);assert_eq!(l.calls,if index<count{1}else{0});if index<count{assert_eq!(l.coordinate,coordinate+index);assert_eq!(l.high,NKR_ss_words(selectors.high[h])[limb]);assert_eq!(l.low,NKR_ss_words(selectors.low[low])[limb]);assert_eq!(l.scratch,NKR_ss_words(scratch[k])[limb]);}assert_eq!(NKR_ss_words(out)[limb],NKR_ss_words(if index<count{reply}else{QM31::ZERO})[limb]^if cfg!(NKR_invert){1}else{0});
++}
++fn NKR_ss_weight_cell(scratch:&[QM31],coordinate:usize,count:usize,index:usize)->QM31{if index<count{scratch[COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+coordinate+index]}else{QM31::ZERO}}
++fn NKR_ss_low_cell(selectors:&Selectors,coordinate:usize,count:usize,index:usize)->QM31{if index<count{selectors.low[usize::from(COPY_GROUP_LOCAL_COORDINATE_LOCALS[coordinate+index])]}else{QM31::ZERO}}
++#[kani::proof] #[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_sum_data_cell_cut(){let scratch=NKR_ss_array!(103);let selectors=Selectors{high:NKR_ss_array!(64),low:NKR_ss_array!(16)};let coordinate:usize=kani::any();let count:usize=kani::any();let index:usize=kani::any();let limb:usize=kani::any();kani::assume(coordinate<30&&count>=1&&count<=4&&coordinate+count<=30&&index<4&&limb<4);let w=NKR_ss_weight_cell(&scratch,coordinate,count,index);let low=NKR_ss_low_cell(&selectors,coordinate,count,index);let ew=if index<count{scratch[COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+coordinate+index]}else{QM31::ZERO};let el=if index<count{selectors.low[usize::from(COPY_GROUP_LOCAL_COORDINATE_LOCALS[coordinate+index])]}else{QM31::ZERO};assert_eq!(NKR_ss_words(w)[limb],NKR_ss_words(ew)[limb]^if cfg!(NKR_invert){1}else{0});assert_eq!(NKR_ss_words(low)[limb],NKR_ss_words(el)[limb]);}
++struct NKR_SSArithmetic{seek:usize,calls:usize,kind:[u8;4],left:[QM31;4],right:[QM31;4],count:[usize;4],reply:[QM31;4]}
++fn NKR_ss_sum(a:[QM31;4],b:[QM31;4],n:usize,l:&mut NKR_SSArithmetic)->QM31{let i=l.calls;l.calls+=1;l.kind[i]=0;l.left[i]=a[l.seek];l.right[i]=b[l.seek];l.count[i]=n;l.reply[i]}
++fn NKR_ss_add(a:QM31,b:QM31,l:&mut NKR_SSArithmetic)->QM31{let i=l.calls;l.calls+=1;l.kind[i]=1;l.left[i]=a;l.right[i]=b;l.reply[i]}
++fn NKR_ss_arithmetic(mut values:[QM31;4],mut weights:[QM31;4],group:usize,mut coordinate:usize,count:usize,tag_values:[QM31;4],weight_values:[QM31;4],lows:[QM31;4],l:&mut NKR_SSArithmetic)->([QM31;4],[QM31;4],usize){values[group]=NKR_ss_add(values[group],NKR_ss_sum(tag_values,lows,count,l),l);weights[group]=NKR_ss_add(weights[group],NKR_ss_sum(weight_values,lows,count,l),l);coordinate+=count;(values,weights,coordinate)}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_sum_arithmetic_cut(){let values=NKR_ss_array!(4);let weights=NKR_ss_array!(4);let tags=NKR_ss_array!(4);let w=NKR_ss_array!(4);let low=NKR_ss_array!(4);let replies=NKR_ss_array!(4);let group:usize=kani::any();let coordinate:usize=kani::any();let count:usize=kani::any();let seek:usize=kani::any();let observe:usize=kani::any();let limb:usize=kani::any();kani::assume(group<4&&coordinate<30&&count>=1&&count<=4&&coordinate+count<=30&&seek<4&&observe<4&&limb<4);let mut l=NKR_SSArithmetic{seek,calls:0,kind:[255;4],left:[QM31::ZERO;4],right:[QM31::ZERO;4],count:[0;4],reply:replies};let(v,ws,next)=NKR_ss_arithmetic(values,weights,group,coordinate,count,tags,w,low,&mut l);assert_eq!(l.calls,4);assert_eq!(l.kind[0],0);assert_eq!(l.kind[1],1);assert_eq!(l.kind[2],0);assert_eq!(l.kind[3],1);assert_eq!(l.count[0],count);assert_eq!(l.count[2],count);assert_eq!(next,coordinate+count);assert_eq!(NKR_ss_words(l.left[0])[limb],NKR_ss_words(tags[seek])[limb]);assert_eq!(NKR_ss_words(l.right[0])[limb],NKR_ss_words(low[seek])[limb]);assert_eq!(NKR_ss_words(l.left[1])[limb],NKR_ss_words(values[group])[limb]);assert_eq!(NKR_ss_words(l.right[1])[limb],NKR_ss_words(replies[0])[limb]);assert_eq!(NKR_ss_words(l.left[2])[limb],NKR_ss_words(w[seek])[limb]);assert_eq!(NKR_ss_words(l.right[2])[limb],NKR_ss_words(low[seek])[limb]);assert_eq!(NKR_ss_words(l.left[3])[limb],NKR_ss_words(weights[group])[limb]);assert_eq!(NKR_ss_words(l.right[3])[limb],NKR_ss_words(replies[2])[limb]);assert_eq!(NKR_ss_words(v[observe])[limb],NKR_ss_words(if observe==group{replies[1]}else{values[observe]})[limb]^if cfg!(NKR_invert){1}else{0});assert_eq!(NKR_ss_words(ws[observe])[limb],NKR_ss_words(if observe==group{replies[3]}else{weights[observe]})[limb]);}
++struct NKR_SSProduct{calls:usize,left:QM31,right:QM31,reply:QM31}
++fn NKR_ss_mul(a:QM31,b:QM31,l:&mut NKR_SSProduct)->QM31{l.calls+=1;l.left=a;l.right=b;l.reply}
++fn NKR_ss_product(scratch:&[QM31],selectors:&Selectors,coordinate:usize,l:&mut NKR_SSProduct)->(usize,QM31){let output=usize::from(COPY_PATTERN_LOCAL_OUTPUT_COORDINATES[coordinate]);let low=selectors.low[usize::from(COPY_PATTERN_LOCAL_COORDINATE_LOCALS[coordinate])];(output,NKR_ss_mul(scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET+coordinate],low,l))}
++#[kani::proof] #[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_sum_pattern_product_cut(){let scratch=NKR_ss_array!(103);let selectors=Selectors{high:NKR_ss_array!(64),low:NKR_ss_array!(16)};let coordinate:usize=kani::any();let limb:usize=kani::any();let reply:QM31=unsafe{core::mem::transmute::<[u32;4],QM31>(kani::any())};kani::assume(coordinate<43&&limb<4);let mut l=NKR_SSProduct{calls:0,left:QM31::ZERO,right:QM31::ZERO,reply};let(output,out)=NKR_ss_product(&scratch,&selectors,coordinate,&mut l);assert_eq!(l.calls,1);assert_eq!(output,usize::from(COPY_PATTERN_LOCAL_OUTPUT_COORDINATES[coordinate]));assert_eq!(NKR_ss_words(l.left)[limb],NKR_ss_words(scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET+coordinate])[limb]);assert_eq!(NKR_ss_words(l.right)[limb],NKR_ss_words(selectors.low[usize::from(COPY_PATTERN_LOCAL_COORDINATE_LOCALS[coordinate])])[limb]);assert_eq!(NKR_ss_words(out)[limb],NKR_ss_words(reply)[limb]^if cfg!(NKR_invert){1}else{0});}
++fn NKR_ss_write(patterns:&mut[QM31;26],output:usize,product:QM31,coordinate:usize,l:&mut NKR_SSProduct)->usize{l.calls+=1;l.left=patterns[output];l.right=product;patterns[output]=l.reply;coordinate+1}
++#[kani::proof] #[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_sum_pattern_write_cut(){let mut patterns=NKR_ss_array!(26);let coordinate:usize=kani::any();let output:usize=kani::any();let observe:usize=kani::any();let limb:usize=kani::any();let product:QM31=unsafe{core::mem::transmute::<[u32;4],QM31>(kani::any())};let reply:QM31=unsafe{core::mem::transmute::<[u32;4],QM31>(kani::any())};kani::assume(coordinate<43&&output<26&&observe<26&&limb<4);let saved=NKR_ss_words(patterns[observe])[limb];let old=NKR_ss_words(patterns[output])[limb];let mut l=NKR_SSProduct{calls:0,left:QM31::ZERO,right:QM31::ZERO,reply};let next=NKR_ss_write(&mut patterns,output,product,coordinate,&mut l);assert_eq!(l.calls,1);assert_eq!(next,coordinate+1);assert_eq!(NKR_ss_words(l.left)[limb],old);assert_eq!(NKR_ss_words(l.right)[limb],NKR_ss_words(product)[limb]);assert_eq!(NKR_ss_words(patterns[observe])[limb],(if observe==output{NKR_ss_words(reply)[limb]}else{saved})^if cfg!(NKR_invert){1}else{0});}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_LinkSplit_native.rs
+@@ -0,0 +1,86 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_link_word(q:QM31,k:usize)->u32{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0][k]}
++struct NKR_LinkArgs{
++ hp:usize,lp:usize,calls:usize,index:u64,variant:PoolV1PairForestCompiledVariantV1,
++ tag:u32,kind:u8,level:u8,pr:u16,cr:u16,ps:u8,cs:u8,pp:u8,cp:u8,
++ side:[usize;2],row:[u16;2],slot:[u8;2],pattern:[u8;2],tags:[u32;2],weights:[u32;2],
++ high:[QM31;2],low:[QM31;2],reply:M31
++}
++fn NKR_link_weight(link:CompiledPoolV1PairForestLink,append:u64,variant:PoolV1PairForestCompiledVariantV1,l:&mut NKR_LinkArgs)->M31{
++ assert_eq!(l.calls,0);l.calls=1;l.index=append;l.variant=variant;l.tag=link.tag;l.kind=link.weight_kind;l.level=link.weight_level;
++ l.pr=link.producer.row;l.cr=link.consumer.row;l.ps=link.producer.slot;l.cs=link.consumer.slot;l.pp=link.producer.pattern;l.cp=link.consumer.pattern;l.reply
++}
++fn NKR_link_endpoint_args(side:usize,e:CompiledPoolV1PairForestEndpoint,tag:u32,weight:M31,selectors:&Selectors,l:&mut NKR_LinkArgs){
++ let n=l.calls-1;l.calls+=1;l.side[n]=side;l.row[n]=e.row;l.slot[n]=e.slot;l.pattern[n]=e.pattern;l.tags[n]=tag;l.weights[n]=weight.0;
++ l.high[n]=selectors.high[l.hp];l.low[n]=selectors.low[l.lp];
++}
++fn NKR_link_args(selectors:&Selectors,append_index:u64,variant:PoolV1PairForestCompiledVariantV1,mut link_index:usize,l:&mut NKR_LinkArgs)->usize{
++ let link=constants::COPY_LINKS[link_index];
++ let weight=NKR_link_weight(link,append_index,variant,l);
++ NKR_link_endpoint_args(0,link.producer,link.tag,weight,selectors,l);
++ NKR_link_endpoint_args(2,link.consumer,link.tag,weight,selectors,l);
++ link_index+=1;
++ link_index
++}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_link_arguments_cut(){
++ let selectors=Selectors{high:unsafe{core::mem::transmute::<[u32;256],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[u32;64],[QM31;16]>(kani::any())}};
++ let index:usize=kani::any();let hp:usize=kani::any();let lp:usize=kani::any();let call:usize=kani::any();let limb:usize=kani::any();
++ kani::assume(index<136&&hp<64&&lp<16&&call<2&&limb<4);
++ let append:u64=kani::any();let wr:u32=kani::any();let private:bool=kani::any();let variant=if private{PoolV1PairForestCompiledVariantV1::PrivateTransfer}else{PoolV1PairForestCompiledVariantV1::Withdrawal};
++ let mut l=NKR_LinkArgs{hp,lp,calls:0,index:0,variant,tag:0,kind:0,level:0,pr:0,cr:0,ps:0,cs:0,pp:0,cp:0,side:[999;2],row:[0;2],slot:[0;2],pattern:[0;2],tags:[0;2],weights:[0;2],high:[QM31::ZERO;2],low:[QM31::ZERO;2],reply:M31(wr)};
++ let link=constants::COPY_LINKS[index];let pg=usize::from(link.producer.slot);let cg=2+usize::from(link.consumer.slot);let pl=usize::from(link.producer.row)&15;let cl=usize::from(link.consumer.row)&15;assert!(usize::from(COPY_GROUP_LOCAL_COORDINATES[pg][pl])<30);assert!(usize::from(COPY_GROUP_LOCAL_COORDINATES[cg][cl])<30);assert!(usize::from(COPY_PATTERN_LOCAL_COORDINATES[pg][usize::from(link.producer.pattern)][pl])<43);assert!(usize::from(COPY_PATTERN_LOCAL_COORDINATES[cg][usize::from(link.consumer.pattern)][cl])<43);let e=if call==0{link.producer}else{link.consumer};
++ let next=NKR_link_args(&selectors,append,variant,index,&mut l);
++ assert_eq!(l.calls,3);assert_eq!(next,index+1);assert_eq!(l.index,append);assert!(l.variant==variant);
++ assert_eq!(l.tag,link.tag);assert_eq!(l.kind,link.weight_kind);assert_eq!(l.level,link.weight_level);
++ assert_eq!(l.pr,link.producer.row);assert_eq!(l.cr,link.consumer.row);assert_eq!(l.ps,link.producer.slot);assert_eq!(l.cs,link.consumer.slot);assert_eq!(l.pp,link.producer.pattern);assert_eq!(l.cp,link.consumer.pattern);
++ assert_eq!(l.side[call],2*call);assert_eq!(l.row[call],e.row);assert_eq!(l.slot[call],e.slot);assert_eq!(l.pattern[call],e.pattern);assert_eq!(l.tags[call],link.tag);assert_eq!(l.weights[call],wr);
++ assert_eq!(NKR_link_word(l.high[call],limb),NKR_link_word(selectors.high[hp],limb));
++ assert_eq!(NKR_link_word(l.low[call],limb),NKR_link_word(selectors.low[lp],limb)^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_LinkState{observe:usize,calls:usize,seen:[QM31;2],weight_before:[QM31;2],pattern_before:[QM31;2]}
++fn NKR_link_endpoint_state(scratch:&mut[QM31],side:usize,endpoint:CompiledPoolV1PairForestEndpoint,replies:&[QM31;2],l:&mut NKR_LinkState){
++ let n=l.calls;l.calls+=1;
++ let group=side+usize::from(endpoint.slot);
++ let local=usize::from(endpoint.row)&15;
++ let weight_index=COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local]);
++ let pattern_index=COPY_SELECTOR_TENSOR_PATTERN_OFFSET+usize::from(COPY_PATTERN_LOCAL_COORDINATES[group][usize::from(endpoint.pattern)][local]);
++ l.seen[n]=scratch[l.observe];l.weight_before[n]=scratch[weight_index];l.pattern_before[n]=scratch[pattern_index];
++ scratch[weight_index]=replies[0];
++ scratch[pattern_index]=replies[1];
++}
++fn NKR_link_states(scratch:&mut[QM31],producer:CompiledPoolV1PairForestEndpoint,consumer:CompiledPoolV1PairForestEndpoint,producer_reply:&[QM31;2],consumer_reply:&[QM31;2],l:&mut NKR_LinkState){
++ NKR_link_endpoint_state(scratch,0,producer,producer_reply,l);
++ NKR_link_endpoint_state(scratch,2,consumer,consumer_reply,l);
++}
++#[kani::proof] #[kani::unwind(104)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_link_state_cut(){
++ let mut scratch:[QM31;103]=unsafe{core::mem::transmute::<[u32;412],[QM31;103]>(kani::any())};
++ let producer_reply:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};
++ let consumer_reply:[QM31;2]=unsafe{core::mem::transmute::<[u32;8],[QM31;2]>(kani::any())};
++ let producer=CompiledPoolV1PairForestEndpoint{row:kani::any(),slot:kani::any(),pattern:kani::any()};
++ let consumer=CompiledPoolV1PairForestEndpoint{row:kani::any(),slot:kani::any(),pattern:kani::any()};
++ let observe:usize=kani::any();let limb:usize=kani::any();
++ kani::assume(producer.slot<2&&consumer.slot<2&&producer.pattern<14&&consumer.pattern<14&&observe<103&&limb<4);
++ let pg=usize::from(producer.slot);let cg=2+usize::from(consumer.slot);let pl=usize::from(producer.row)&15;let cl=usize::from(consumer.row)&15;
++ let pw=COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+usize::from(COPY_GROUP_LOCAL_COORDINATES[pg][pl]);
++ let pp=COPY_SELECTOR_TENSOR_PATTERN_OFFSET+usize::from(COPY_PATTERN_LOCAL_COORDINATES[pg][usize::from(producer.pattern)][pl]);
++ let cw=COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+usize::from(COPY_GROUP_LOCAL_COORDINATES[cg][cl]);
++ let cp=COPY_SELECTOR_TENSOR_PATTERN_OFFSET+usize::from(COPY_PATTERN_LOCAL_COORDINATES[cg][usize::from(consumer.pattern)][cl]);
++ kani::assume(pw<COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+30&&cw<COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+30&&pp<COPY_SELECTOR_TENSOR_PATTERN_OFFSET+43&&cp<COPY_SELECTOR_TENSOR_PATTERN_OFFSET+43);
++ let saved=scratch[observe];let saved_pw=scratch[pw];let saved_pp=scratch[pp];let saved_cw=scratch[cw];let saved_cp=scratch[cp];
++ let middle=if observe==pp{producer_reply[1]}else if observe==pw{producer_reply[0]}else{saved};
++ let cw_middle=if cw==pp{producer_reply[1]}else if cw==pw{producer_reply[0]}else{saved_cw};
++ let cp_middle=if cp==pp{producer_reply[1]}else if cp==pw{producer_reply[0]}else{saved_cp};
++ let after=if observe==cp{consumer_reply[1]}else if observe==cw{consumer_reply[0]}else{middle};
++ let mut l=NKR_LinkState{observe,calls:0,seen:[QM31::ZERO;2],weight_before:[QM31::ZERO;2],pattern_before:[QM31::ZERO;2]};
++ NKR_link_states(&mut scratch,producer,consumer,&producer_reply,&consumer_reply,&mut l);
++ assert_eq!(l.calls,2);
++ assert_eq!(NKR_link_word(l.seen[0],limb),NKR_link_word(saved,limb));assert_eq!(NKR_link_word(l.seen[1],limb),NKR_link_word(middle,limb));
++ assert_eq!(NKR_link_word(l.weight_before[0],limb),NKR_link_word(saved_pw,limb));assert_eq!(NKR_link_word(l.pattern_before[0],limb),NKR_link_word(saved_pp,limb));
++ assert_eq!(NKR_link_word(l.weight_before[1],limb),NKR_link_word(cw_middle,limb));assert_eq!(NKR_link_word(l.pattern_before[1],limb),NKR_link_word(cp_middle,limb));
++ assert_eq!(NKR_link_word(scratch[observe],limb),NKR_link_word(after,limb)^if cfg!(NKR_invert){1}else{0});
++}
 --- a/crates/aspis-statement/src/lib.rs
 +++ b/crates/aspis-statement/src/lib.rs
 @@ -1,3 +1,4 @@

@@ -24,7 +24,7 @@
 + NKR_prefix_validate(public,l)?;
 + Ok(true)
 +}
-+#[kani::proof] #[kani::unwind(4)]
++#[kani::proof] #[kani::unwind(36)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn NKR_validation_prefix_cut(){
 + let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_prefix_public(&t);let k:usize=kani::any();let b:usize=kani::any();let d:usize=kani::any();let level:usize=kani::any();kani::assume(k<20&&b<32&&d<8&&level<20);let error=if kani::any(){PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount}else{PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition};let reply=if kani::any(){Ok(())}else{Err(error)};let invalid=public.withdrawal_amount.map_or(false,|amount|amount==0||amount>=(1<<30u32));
@@ -32,6 +32,6 @@
 + let want=if invalid{Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount)}else{reply.map(|()|true)};match(out,want){(Ok(got),Ok(_))=>assert_eq!(got,!cfg!(NKR_invert)),(Err(got),Err(expected))=>assert_eq!(got,if cfg!(NKR_invert){if expected==PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount{PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition}else{PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount}}else{expected}),_=>assert!(false)}
 +}
 +fn NKR_terminal_gather_cell(claims:&[[QM31;29];3],i:usize)->QM31{claims[i/28][i%28]}
-+#[kani::proof] #[kani::unwind(4)]
++#[kani::proof] #[kani::unwind(32)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn NKR_terminal_gather_cell_cut(){let words:[[[u32;4];29];3]=kani::any();let claims:[[QM31;29];3]=unsafe{core::mem::transmute(words)};let i:usize=kani::any();let limb:usize=kani::any();kani::assume(i<84&&limb<4);let out=NKR_terminal_gather_cell(&claims,i);assert_eq!(NKR_prefix_words(out)[limb],words[i/28][i%28][limb]^if cfg!(NKR_invert){1}else{0});}

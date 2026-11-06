@@ -1,0 +1,48 @@
+{"attempt": "NKR_L157", "exit_status": 1, "wall_seconds": 10.35857456899248, "peak_rss_kib": "6161988", "swaps": "0", "print_axioms": ["'AspisR1.NKR_TermDigestFrame.pack_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKR_TermDigestFrame.selected_at' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKR_TermDigestFrame.selected_outside' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKR_TermDigestFrame.increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKR_TermDigestSupport.lean:45:3: error: Type mismatch: After simplification, term
+  selected_at (decoded old) 0 lane
+ has type
+  @Eq K (FIx_SelectedMeaning.selected (decoded old) 84 21 ↑lane) (decoded old (NJX_DigestGroups.index 0 lane))
+but is expected to have type
+  @Eq K (FIx_SelectedMeaning.selected (decoded old) 84 21 ↑lane) (decoded old (NJX_DigestGroups.index 0 lane))
+NKR_TermDigestSupport.lean:54:5: error: Type mismatch: After simplification, term
+  selected_at (decoded old) 1 lane
+ has type
+  @Eq K (FIx_SelectedMeaning.selected (decoded old) 84 (21 + 1) ↑lane) (decoded old (NJX_DigestGroups.index 1 lane))
+but is expected to have type
+  @Eq K (FIx_SelectedMeaning.selected (decoded ol
+...
+ old) 1 lane
+ has type
+  @Eq K (FIx_SelectedMeaning.selected (decoded old) 84 (21 + 1) ↑lane) (decoded old (NJX_DigestGroups.index 1 lane))
+but is expected to have type
+  @Eq K (FIx_SelectedMeaning.selected (decoded old) 84 22 ↑lane) (decoded old (NJX_DigestGroups.index 1 lane))
+NKR_TermDigestSupport.lean:61:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun lane => FIx_SelectedMeaning.selected (decoded old) 84 ↑j ↑lane
+in the target expression
+  (NJB_PackLinearity.pack fun i => FIx_SelectedMeaning.selected (decoded old) 84 ↑j ↑i) = 0
+
+case neg
+old : Std.Array NQ 8#usize
+j : Fin ↑24#usize
+h21 : ¬↑j = 21
+h22 : ¬↑j = 22
+cells : (fun lane => FIx_SelectedMeaning.selected (decoded old) 84 ↑j ↑lane) = fun x => 0
+⊢ (NJB_PackLinearity.pack fun i => FIx_SelectedMeaning.selected (decoded old) 84 ↑j ↑i) = 0
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NKR_TermDigestFrame.pack_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_TermDigestFrame.selected_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_TermDigestFrame.selected_outside' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_TermDigestFrame.increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf579f3f15d3b4d5bb160f7d5cf7847ce.scope; invocation ID: 1819d2aadec64642984e1bd2d2f4e44b

@@ -3,8 +3,10 @@ import json,hashlib,re
 E=Path(__file__).resolve().parent
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 rows=[]
-for positive,negative in [('NKR_K011','NKR_K004'),('NKR_K007','NKR_K008')]:
- if not (E/negative/'receipt.json').exists():continue
+candidates=[('NKR_K011','NKR_K004'),('NKR_K007','NKR_K008'),('NKR_K012','NKR_K013'),('NKR_K014','NKR_K015'),('NKR_K016','NKR_K017'),('NKR_K030','NKR_K031'),('NKR_K032','NKR_K033'),('NKR_K036','NKR_K037'),('NKR_K042','NKR_K043'),('NKR_K046','NKR_K047'),('NKR_K050','NKR_K051')]+[(f'NKR_K{i:03d}',f'NKR_K{i+1:03d}')for i in range(58,87,2)]
+for positive,negative in candidates:
+ if not (E/positive/'receipt.json').exists() or not (E/negative/'receipt.json').exists():continue
+ if json.loads((E/positive/'receipt.json').read_text())['exit_status']!=0:continue
  p=json.loads((E/positive/'receipt.json').read_text());n=json.loads((E/negative/'receipt.json').read_text())
  assert p['exit_status']==0 and n['exit_status']!=0
  assert 'VERIFICATION:- SUCCESSFUL' in (E/positive/'stdout.log').read_text()

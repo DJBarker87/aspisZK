@@ -15,3 +15,17 @@ No field multiplication is evaluated in Kani. Each local-record native window is
 NKR_finish_tag is CLOSED216 caller transport,not a new value oracle:the actual selector high64,low16 and scratch103 argument payloads are recorded at arbitrary coordinate/word in NKR_SumFinish_native.rs.txt;NKR_SumFinishInvocation.tag_calls instantiates every actual coordinate with NJL_TagRoot.source. No pointer/address equality is used alone as payload evidence.
 
 All native logs/counters/replies are local records passed by mutable reference. No writable statics,Option<fn>-dependent assertions or function contracts occur in these modules.
+
+Replacement split primitive names retain exactly these laws:
+
+|New opaque local-record call|Paired Lean full-Result law|Actual caller domain|
+|---|---|---|
+|NKR_ss_tag|NJL_TagRoot.source;NKR_SumFinishComposed.tag_source|Actual source batchCoordinate;high64 canonical from220root,allreadonly argument payload observations universal|
+|NKR_ss_sum|NKR_SumCarrier.source|Actual padded4arrays canonical and batchCount in1..4,proved by unchanged FinishBatch.canonical_arguments/Data.batch_domain|
+|NKR_ss_add|NJB_StubLaws.qm_add|Actual canonical prestate receiver and previous SAME-array225reply;unchanged FinishTrace.batch derives both Results|
+|NKR_ss_mul|NJB_StubLaws.qm_mul|Actual scratch60+c and low[pLow c] canonical;unchanged PatternTrace.step derives exact full Result|
+|NKR_ss_write's logged add|NJB_StubLaws.qm_add|Actual coefficient receiver and SAME complete product reply canonical;PatternTrace.step derives full Result|
+|NKR_copy_weight in isolated args window|NJL_EndpointLookup.caller_weight (consumes CLOSED217)|Actual constant COPY_LINKS[index],append,variant;returns complete Result and binary canonical weight;no scratch/mutable footprint|
+|NKR_copy_endpoint producer/consumer in split endpoint window|NJL_EndpointRoot.source|Actual producer/consumer descriptors,side0/2,SAME returned217weight and tag;lookup bounds and prior full scratch canonicality;producer output establishes consumer prestate canonicality|
+
+Split native replacements are unvalidated until main's positive/negative receipts. Existing source-law proofs alone confer no native credit. CopySplit endpoint log begins1 and ends3 to preserve original0/1log indexing:it represents exactly TWO214calls after the independently bridged pure217call. No extra217event or unobserved frame is attributed to that primitive.

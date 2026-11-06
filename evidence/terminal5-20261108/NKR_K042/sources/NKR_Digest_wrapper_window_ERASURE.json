@@ -1,0 +1,12 @@
+{
+ "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "source": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+ "body": "fn public_digest_packed(\n    public: SemanticPublic<'_>,\n    openings: &StateOnlyPoseidonOpenings,\n    selectors: &Selectors,\n) -> [QM31; DIGEST_ELEMS / 4] {\n    #[cfg(not(feature = \"pool-v1-pair-forest-packed-digest-selector-tensor-audit\"))]\n    return public_digest_packed_row_major(public, openings, selectors);\n    #[cfg(feature = \"pool-v1-pair-forest-packed-digest-selector-tensor-audit\")]\n    return public_digest_packed_selector_tensor(public, openings, selectors);\n}",
+ "source_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+ "harness_sha256": "47486a32df5925a4bdab1e817fb0230e135b578344b66903fa603e1605048a67",
+ "deployed_feature": "pool-v1-pair-forest-packed-digest-selector-tensor-audit",
+ "identity": true,
+ "scope": "actual literal wrapper, one universally selected projected payload component plus full2cell reply; all inputs arbitrary flat; no full-record log copy",
+ "retired": "K022 wholewrapper timeout",
+ "negative": "invert same selected component assertion"
+}

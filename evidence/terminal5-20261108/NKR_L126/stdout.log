@@ -1,0 +1,129 @@
+theorem AspisR1.NKR_SumFinishInvocation.source : ∀ (scratch : Scratch) (s : Selectors) (terms : Patterns),
+  FIw_ArrayValue.canonical scratch →
+    FIw_ArrayValue.canonical s.high →
+      FIw_ArrayValue.canonical s.low →
+        FIw_ArrayValue.canonical terms →
+          ∃ dot coefficients finished,
+            (∀ (c : Fin 30),
+                NJL_TagRoot.reference s c = ok (tags s c) ∧
+                  Canon (tags s c) ∧ decode (tags s c) = NJL_TagMeaning.model s (NJL_TagData.indices c)) ∧
+              NKR_SumFinishFold.run (tagValues s) (weightValues scratch) (lowValues s) NKR_SumFinishFold.order
+                    (zero4, zero4) =
+                  ok dot ∧
+                NKR_SumFinishTrace.Trace (tagValues s) (weightValues scratch) (lowValues s) NKR_SumFinishFold.order
+                    (zero4, zero4) dot ∧
+                  NJB_StateUpdates.run
+                        (NKR_SumFinishPattern.step (NJB_ArrayCarrier.cell scratch) (NJB_ArrayCarrier.cell s.low))
+                        (List.finRange 43) zero26 =
+                      ok coefficients ∧
+                    NKR_SumPatternTrace.Trace (NJB_ArrayCarrier.cell scratch) (NJB_ArrayCarrier.cell s.low)
+                        (List.finRange 43) zero26 coefficients ∧
+                      NJB_PatternReference.reference (NJB_ArrayCarrier.cell terms) coefficients dot.1 = ok finished ∧
+                        NJL_PatternOuter.Trace (NJB_ArrayCarrier.cell terms) coefficients (List.ofFn fun g => g) dot.1
+                            finished ∧
+                          reference scratch s terms =
+                              ok (NJB_ArrayCarrier.array finished, NJB_ArrayCarrier.array dot.2) ∧
+                            TailCut (NJB_ArrayCarrier.array dot.1) (NJB_ArrayCarrier.array coefficients) terms
+                                (NJB_ArrayCarrier.array dot.2) (NJB_ArrayCarrier.array finished)
+                                (NJB_ArrayCarrier.array dot.1) (NJB_ArrayCarrier.array coefficients) terms
+                                (NJB_ArrayCarrier.array finished, NJB_ArrayCarrier.array dot.2) 1 ∧
+                              NKR_SumFinishMeaning.decoded dot =
+                                  List.foldl
+                                    (fun state b =>
+                                      NKR_SumFinishMeaning.stepModel (tagValues s) (weightValues scratch) (lowValues s)
+                                        b state)
+                                    (NKR_SumFinishMeaning.decoded (zero4, zero4)) NKR_SumFinishFold.order ∧
+                                NJB_StateUpdates.decoded coefficients =
+                                    List.foldl
+                                      (fun state c =>
+                                        NKR_SumFinishPattern.modelStep
+                                          (fun i => decode (NJB_ArrayCarrier.cell scratch i))
+                                          (fun i => decode (NJB_ArrayCarrier.cell s.low i)) c state)
+                                      (NJB_StateUpdates.decoded zero26) (List.finRange 43) ∧
+                                  (∀ (i : Fin 4), Canon (finished i)) ∧
+                                    (∀ (i : Fin 4), Canon (dot.2 i)) ∧
+                                      ∀ (g : Fin 4),
+                                        decode (finished g) =
+                                          decode (dot.1 g) +
+                                            NJL_PatternMeaning.dot (fun i => decode (NJB_ArrayCarrier.cell terms i))
+                                              (fun i => decode (coefficients i)) g :=
+fun scratch s terms hsc hh hl ht =>
+  have tc := tag_calls s hh;
+  have tcanon := fun i => (tc i).right.left;
+  have wcanon := fun i => NJB_ArrayCarrier.canonical_cell scratch hsc (NJL_EndpointIndices.weight i);
+  have lcanon := fun i => NJB_ArrayCarrier.canonical_cell s.low hl (NKR_SumFinishData.low i);
+  have z4 := fun x => FIv_NativeValue.zero.left;
+  have z26 := fun x => FIv_NativeValue.zero.left;
+  let ⟨dot, h✝⟩ :=
+    NKR_SumFinishTrace.source (tagValues s) (weightValues scratch) (lowValues s) NKR_SumFinishFold.order (zero4, zero4)
+      tcanon wcanon lcanon ⟨z4, z4⟩
+  let ⟨dotCall, right✝⟩ := h✝
+  let ⟨dotTrace, right✝¹⟩ := right✝
+  let ⟨dcv, dcw⟩ := right✝¹
+  let ⟨dotOther, h✝¹⟩ :=
+    NKR_SumFinishMeaning.source (tagValues s) (weightValues scratch) (lowValues s) NKR_SumFinishFold.order
+      (zero4, zero4) tcanon wcanon lcanon ⟨z4, z4⟩
+  let ⟨dotOtherCall, right✝²⟩ := h✝¹
+  let ⟨left✝, right✝³⟩ := right✝²
+  let ⟨left✝¹, dotValue⟩ := right✝³
+  have dotSame := ok.inj (Eq.trans (Eq.symm dotCall) dotOtherCall);
+  have dotMeaning := Eq.trans (congrArg NKR_SumFinishMeaning.decoded dotSame) dotValue;
+  let ⟨coefficients, h✝²⟩ :=
+    NKR_SumFinishPattern.source (NJB_ArrayCarrier.cell scratch) (NJB_ArrayCarrier.cell s.low) (List.finRange 43) zero26
+      (NJB_ArrayCarrier.canonical_cell scratch hsc) (NJB_ArrayCarrier.canonical_cell s.low hl) z26
+  let ⟨coeffCall, right✝⁴⟩ := h✝²
+  let ⟨cc, coeffValue⟩ := right✝⁴
+  let ⟨coefOther, h✝³⟩ :=
+    NKR_SumPatternTrace.source (NJB_ArrayCarrier.cell scratch) (NJB_ArrayCarrier.cell s.low) (List.finRange 43) zero26
+      (NJB_ArrayCarrier.canonical_cell scratch hsc) (NJB_ArrayCarrier.canonical_cell s.low hl) z26
+  let ⟨coefOtherCall, right✝⁵⟩ := h✝³
+  let ⟨coefOtherTrace, right✝⁶⟩ := right✝⁵
+  have coefSame := ok.inj (Eq.trans (Eq.symm coeffCall) coefOtherCall);
+  have coefficientTrace :=
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            NKR_SumPatternTrace.Trace (NJB_ArrayCarrier.cell scratch) (NJB_ArrayCarrier.cell s.low) (List.finRange 43)
+              zero26 _a)
+          coefSame))
+      coefOtherTrace;
+  let ⟨finished, h✝⁴⟩ :=
+    NJL_PatternOuter.source (NJB_ArrayCarrier.cell terms) coefficients dot.1 (NJB_ArrayCarrier.canonical_cell terms ht)
+      cc dcv
+  let ⟨finishCall, right✝⁷⟩ := h✝⁴
+  let ⟨finishTrace, finishCanon⟩ := right✝⁷
+  let ⟨other, h✝⁵⟩ :=
+    NJB_PatternReference.result (NJB_ArrayCarrier.cell terms) coefficients dot.1
+      (NJB_ArrayCarrier.canonical_cell terms ht) cc dcv
+  let ⟨otherCall, right✝⁸⟩ := h✝⁵
+  let ⟨left✝², otherValue⟩ := right✝⁸
+  have same := ok.inj (Eq.trans (Eq.symm finishCall) otherCall);
+  Exists.intro dot
+    (Exists.intro coefficients
+      (Exists.intro finished
+        ⟨tc,
+          ⟨dotCall,
+            ⟨dotTrace,
+              ⟨coeffCall,
+                ⟨coefficientTrace,
+                  ⟨finishCall,
+                    ⟨finishTrace,
+                      ⟨of_eq_true
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (Eq.trans
+                                  (Eq.trans (congr (congrArg Bind.bind dotCall) (funext ⋯)) (bind_tc_ok dot fun y => ⋯))
+                                  (Eq.trans
+                                    (congrFun' (congrArg Bind.bind finishCall) fun finished =>
+                                      ok (NJB_ArrayCarrier.array finished, NJB_ArrayCarrier.array dot.2))
+                                    (bind_tc_ok finished fun y =>
+                                      ok (NJB_ArrayCarrier.array y, NJB_ArrayCarrier.array dot.2)))))
+                              (ok (NJB_ArrayCarrier.array finished, NJB_ArrayCarrier.array dot.2)))
+                            (eq_self (ok (NJB_ArrayCarrier.array finished, NJB_ArrayCarrier.array dot.2)))),
+                        ⟨⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩,
+                          ⟨dotMeaning,
+                            ⟨coeffValue, ⟨finishCanon, ⟨dcw, fun g => Eq.mpr (id ⋯) (Eq.trans ⋯ ⋯)⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩))
+'AspisR1.NKR_SumFinishInvocation.tag_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumFinishInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]

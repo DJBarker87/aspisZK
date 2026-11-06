@@ -10,10 +10,10 @@ open FIv_NativeValue (Canon decode)
 open FIq_Native.pool_v1.pair_forest_copy_terminal
 
 def row (values weights : Array NQ 4#usize) : CopyRowExtension :=
- {producer_values:=Array.make 2#usize [NJB_ArrayCarrier.cell values 0,NJB_ArrayCarrier.cell values 1],
-  consumer_values:=Array.make 2#usize [NJB_ArrayCarrier.cell values 2,NJB_ArrayCarrier.cell values 3],
-  producer_weights:=Array.make 2#usize [NJB_ArrayCarrier.cell weights 0,NJB_ArrayCarrier.cell weights 1],
-  consumer_weights:=Array.make 2#usize [NJB_ArrayCarrier.cell weights 2,NJB_ArrayCarrier.cell weights 3]}
+ {producer_values:=Array.make 2#usize [NJB_ArrayCarrier.cell values ⟨0,by decide⟩,NJB_ArrayCarrier.cell values ⟨1,by decide⟩],
+  consumer_values:=Array.make 2#usize [NJB_ArrayCarrier.cell values ⟨2,by decide⟩,NJB_ArrayCarrier.cell values ⟨3,by decide⟩],
+  producer_weights:=Array.make 2#usize [NJB_ArrayCarrier.cell weights ⟨0,by decide⟩,NJB_ArrayCarrier.cell weights ⟨1,by decide⟩],
+  consumer_weights:=Array.make 2#usize [NJB_ArrayCarrier.cell weights ⟨2,by decide⟩,NJB_ArrayCarrier.cell weights ⟨3,by decide⟩]}
 
 theorem row_canonical (values weights : Array NQ 4#usize)
  (hv : FIw_ArrayValue.canonical values) (hw : FIw_ArrayValue.canonical weights) :
@@ -25,18 +25,18 @@ theorem row_canonical (values weights : Array NQ 4#usize)
  have cw := NJB_ArrayCarrier.canonical_cell weights hw
  constructor
  · intro q hq
-   simp only [row,Array.make,List.mem_cons,List.mem_singleton] at hq
+   simp only [row,Array.make,List.mem_cons,List.not_mem_nil,or_false] at hq
    rcases hq with rfl|rfl <;> exact cv _
  constructor
  · intro q hq
-   simp only [row,Array.make,List.mem_cons,List.mem_singleton] at hq
+   simp only [row,Array.make,List.mem_cons,List.not_mem_nil,or_false] at hq
    rcases hq with rfl|rfl <;> exact cw _
  constructor
  · intro q hq
-   simp only [row,Array.make,List.mem_cons,List.mem_singleton] at hq
+   simp only [row,Array.make,List.mem_cons,List.not_mem_nil,or_false] at hq
    rcases hq with rfl|rfl <;> exact cv _
  · intro q hq
-   simp only [row,Array.make,List.mem_cons,List.mem_singleton] at hq
+   simp only [row,Array.make,List.mem_cons,List.not_mem_nil,or_false] at hq
    rcases hq with rfl|rfl <;> exact cw _
 
 def reference (s : Selectors) (values weights : Array NQ 4#usize) (helper chi : NQ) :

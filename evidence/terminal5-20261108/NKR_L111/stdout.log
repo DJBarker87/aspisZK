@@ -1,0 +1,102 @@
+theorem AspisR1.NKR_ScheduleAssociation.source : ∀ (packed : Std.Array NQ 24#usize) (p : Public) (o : Openings)
+  (s : Selectors),
+  FIw_ArrayValue.canonical packed →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical s.high →
+        FIw_ArrayValue.canonical s.low →
+          ∃ out,
+            reference packed p o s = ok out ∧
+              pool_v1.pair_forest_semantic_terminal.add_schedule_lanes packed p o s = ok out ∧
+                FIw_ArrayValue.canonical out :=
+fun packed p o s hp hz hh hl =>
+  let ⟨l, h✝⟩ := NKI_InitialRoot.source p o s hz hh hl
+  let ⟨absorption, h✝¹⟩ := h✝
+  let ⟨calls, right✝⟩ := h✝¹
+  let ⟨hc, right✝¹⟩ := right✝
+  let ⟨reads, right✝²⟩ := right✝¹
+  let ⟨wreads, right✝³⟩ := right✝²
+  let ⟨df, right✝⁴⟩ := right✝³
+  let ⟨dr, right✝⁵⟩ := right✝⁴
+  let ⟨lanes, right✝⁶⟩ := right✝⁵
+  let ⟨cut, right✝⁷⟩ := right✝⁶
+  let ⟨ca, right✝⁸⟩ := right✝⁷
+  let ⟨cr, right✝⁹⟩ := right✝⁸
+  let ⟨cs, right✝¹⁰⟩ := right✝⁹
+  let ⟨hi, ha⟩ := right✝¹⁰
+  let ⟨middle, h✝²⟩ :=
+    NHU_Preweighted.result packed 0#usize l.initial2 (of_decide_eq_true (id (Eq.refl true)))
+      (of_decide_eq_true (id (Eq.refl true))) hp hi
+  let ⟨cm, right✝¹¹⟩ := h✝²
+  let ⟨hm, vm⟩ := right✝¹¹
+  let ⟨out, h✝³⟩ :=
+    NHU_Preweighted.result middle 16#usize absorption (of_decide_eq_true (id (Eq.refl true)))
+      (of_decide_eq_true (id (Eq.refl true))) hm ha
+  let ⟨co, right✝¹²⟩ := h✝³
+  let ⟨ho, vo⟩ := right✝¹²
+  Exists.intro out
+    ⟨Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (congrFun' (congrArg Bind.bind cr)
+                  (uncurry fun initial absorption => do
+                    let middle ← pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize initial
+                    pool_v1.pair_forest_semantic_terminal.add_preweighted middle 16#usize absorption))
+                (bind_tc_ok (l.initial2, absorption)
+                  (uncurry fun initial absorption => do
+                    let middle ← pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize initial
+                    pool_v1.pair_forest_semantic_terminal.add_preweighted middle 16#usize absorption))))
+            (ok out)))
+        (id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (do
+                      let next ← _a
+                      pool_v1.pair_forest_semantic_terminal.add_preweighted next 16#usize absorption) =
+                    ok out)
+                cm))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => _a = ok out)
+                  (bind_tc_ok middle fun next =>
+                    pool_v1.pair_forest_semantic_terminal.add_preweighted next 16#usize absorption)))
+              (Eq.mpr (id (congrArg (fun _a => _a = ok out) co)) (Eq.refl (ok out)))))),
+      ⟨id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (do
+                      let (initial, absorption) ← _a
+                      let packed1 ← pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize initial
+                      pool_v1.pair_forest_semantic_terminal.add_preweighted packed1 16#usize absorption) =
+                    ok out)
+                cs))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => _a = ok out)
+                  (bind_tc_ok (l.initial2, absorption)
+                    (uncurry fun initial absorption => do
+                      let packed1 ← pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize initial
+                      pool_v1.pair_forest_semantic_terminal.add_preweighted packed1 16#usize absorption))))
+              (id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (do
+                            let next ← _a
+                            pool_v1.pair_forest_semantic_terminal.add_preweighted next 16#usize absorption) =
+                          ok out)
+                      cm))
+                  (Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = ok out)
+                        (bind_tc_ok middle fun next =>
+                          pool_v1.pair_forest_semantic_terminal.add_preweighted next 16#usize absorption)))
+                    (Eq.mpr (id (congrArg (fun _a => _a = ok out) co)) (Eq.refl (ok out)))))))),
+        ho⟩⟩
+'AspisR1.NKR_ScheduleAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]

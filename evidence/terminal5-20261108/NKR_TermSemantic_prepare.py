@@ -43,8 +43,15 @@ let withdrawal_term=NKR_sem_mul(NKR_sem_row(selectors,16*VALUE_AUXILIARY_BLOCK+2
 let scalars=NKR_sem_scalars(public.variant,public.withdrawal_amount.is_some(),input_asset,output_scalar,private_transfer_term,withdrawal_term,l);
 NKR_sem_scalar_pack(packed,92,&scalars,l);'''
 assert compact(body(code,'NKR_semantic_scalar_window'))==compact(translatedScalar)
+# Retired K048/K054 are split, never replayed unchanged.
+childArgs='match stage{0=>NKR_sem_mark_arg(Some(public),openings,selectors,232,l),1=>NKR_sem_mark_arg(None,openings,selectors,229,l),2=>NKR_sem_mark_arg(None,openings,selectors,233,l),3=>NKR_sem_mark_arg(Some(public),openings,selectors,228,l),_=>unreachable!()}'
+assert compact(body(code,'NKR_semantic_child_args'))==compact(childArgs)
+state='l.calls+=1;l.before=NKR_sem_words(packed[l.pick])[l.limb];*packed=*reply;'
+assert compact(body(code,'NKR_semantic_child_state'))==compact(state)
+digestState='packed[84/4]=NKR_sem_state_add(packed[84/4],digests[0],l);packed[84/4+1]=NKR_sem_state_add(packed[84/4+1],digests[1],l);'
+assert compact(body(code,'NKR_semantic_digest_state'))==compact(digestState)
 name='crates/aspis-statement/src/pool_v1/NKR_TermSemantic_native.rs';new=s+'\n#[cfg(kani)]\n#[path="NKR_TermSemantic_native.rs"]\nmod NKR_semantic_native;\n'
 patch=''.join(difflib.unified_diff(s.splitlines(True),new.splitlines(True),fromfile='a/'+source,tofile='b/'+source))
 patch+=''.join(difflib.unified_diff([],code.splitlines(True),fromfile='/dev/null',tofile='b/'+name));(E/'NKR_TermSemantic_native.patch').write_text(patch)
-(E/'NKR_TermSemantic_TRANSCRIPTION.json').write_text(json.dumps(dict(revision=rev,source=source,source_sha256=hashlib.sha256(s.encode()).hexdigest(),harness_sha256=hashlib.sha256(code.encode()).hexdigest(),prefix=prefix,order=[232,229,233,228],digest=digest,translated_digest=translated,scalar=scalar,translated_scalar=translatedScalar,identity=True,native_shapes=['NKR_semantic_child_cut','NKR_semantic_zero_cut','NKR_semantic_order_cut','NKR_semantic_digest_cut','NKR_semantic_scalar_cut'],scope='One actual full24child boundary at arbitraryprestate; literal4callcontrol; one2write digestwindow; final14call scalar/preweighted92window. No field multiplication evaluated.'),indent=2))
+(E/'NKR_TermSemantic_TRANSCRIPTION.json').write_text(json.dumps(dict(revision=rev,source=source,source_sha256=hashlib.sha256(s.encode()).hexdigest(),harness_sha256=hashlib.sha256(code.encode()).hexdigest(),prefix=prefix,order=[232,229,233,228],digest=digest,translated_digest=translated,scalar=scalar,translated_scalar=translatedScalar,identity=True,native_shapes=['NKR_semantic_child_cut(RETIRED_K048_TIMEOUT)','NKR_semantic_zero_cut','NKR_semantic_order_cut(REPAIRED_SCALAR_OBSERVER)','NKR_semantic_digest_cut(RETIRED_K054_TIMEOUT)','NKR_semantic_scalar_cut','NKR_semantic_child_args_cut','NKR_semantic_child_state_cut','NKR_semantic_digest_args_cut','NKR_semantic_digest_state_cut'],split_child_argument=childArgs,split_child_state=state,split_digest_state=digestState,scope='One actual full24child boundary at arbitraryprestate; literal4callcontrol; one2write digestwindow; final14call scalar/preweighted92window. No field multiplication evaluated.'),indent=2))
 print('Semantic261 frozen windows and operand expression trees PASS')
