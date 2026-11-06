@@ -8,4 +8,8 @@ K001/K002 stopped before verification on missing frozen cfg(kani) input and miss
 
 One attempted L020 submission was refused locally by the own active-client guard while K007 was running; no scope was launched. The eventual L020 compile ran only after K007 completed. No infrastructure bypass occurred.
 
-Remaining association under review: the reference builds rows before allocation, while frozen claims reserves before rows. Full private-caller closure requires proving that actual parsed row25 decoders cannot reject/abort before the allocation is moved, and transporting allocation/cleanup on the SAME numeric1392-byte request. No allocator-success or decoder-success premise is accepted at a positive root. No129 credit yet.
+Remaining129 association: canonicality and allocation-order transport are now proved, including NJT_AllocationLift.named_allocator's complete Result and returned allocator state. The full unsafe uninit/set_len/cast/assume_init P6 packet is still not installed into the cohort's StdCalls reserve/error/heap interpretation. The current std is a returning-success VALUE model. Native selected words, Result tags and address identity are not a proof of that whole interpretation.129 remains OPEN; safe std operations remain under ruling(au), not new child rows. See NJT_REMAINING.md/NJT-F1.
+
+L025–L028 are retained Cohort elaboration drafts; L029 passes the final source. L031 had a reserved-keyword name in allocation_transport; L033 passes. L040/L041 allocation-lift drafts exposed only elaboration/alias issues; L042 passes with standard axioms. No failed-draft sorryAx output enters the module manifest or raw audit.
+
+The final two combined imports (L036/L043), final NFX scan L044 and raw campaign L045/L046 pass. Strict(t) calibration QK006–QK011 produces all six expected verdicts; no new Lean object or third combined audit is introduced by that calibration. No timeout, memory kill, raised cap or renamed-verdict workaround occurred.

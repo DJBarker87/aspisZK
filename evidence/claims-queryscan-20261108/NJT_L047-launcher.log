@@ -1,0 +1,53 @@
+{"attempt": "NJT_L047", "exit_status": 0, "wall_seconds": 10.069244814105332, "peak_rss_kib": "6323136", "swaps": "0", "print_axioms": []}
+def AspisR1.NJT_ClaimsRoot.Packet : Aeneas.Std.Slice Aeneas.Std.U8 → Prop :=
+fun bytes =>
+  match AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+  | Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) =>
+    AspisR1.ClaimsUnrolledFinish.toMainStatus
+          (AspisR1.NJT_ClaimsRef_Value.unbox
+            (NJT_ClaimsRef.r1_semantic.NJT_claims_ref
+              (AspisR1.ClaimsUnrolledFinish.fromMainPrefix (AspisR1PublicPreparation.PrefixAdapter.fromOld pre)))) =
+        AspisR1.ClaimsUnrolledFinish.claims AspisR1.NJT_ClaimsRef_Value.std
+          (AspisR1PublicPreparation.PrefixAdapter.fromOld pre) ∧
+      ∃ record,
+        (AspisR1PublicPreparation.PrefixAdapter.fromOld
+...
+) (AspisR1.FJb_TailCell.cell.eq_1 pre.records idx))))
+      (Eq.mp
+        (congrArg (Membership.mem (AspisR1.ExtractedPrefixTrace.rowOrder.zip ↑pre.records))
+          (congrFun'
+            (congrArg Prod.mk
+              (have this := Eq.refl AspisR1.ExtractedPrefixTrace.rowOrder[25];
+              this))
+            (↑pre.records)[25]))
+        mem);
+  let ⟨payload, recordParsed⟩ :=
+    AspisR1.ExtractedPrefixParse.parse_record_of_success bytes pre parsed 25#u8 frame pairMember
+  have strict :=
+    AspisR1.NJT_QClaimsCanonical.strict_frame 25#u8 frame payload (of_decide_eq_true (id (Eq.refl true))) recordParsed;
+  let ⟨record, h✝⟩ := AspisR1.NIX_ProducerInstall.lookup pre 25#u8 (of_decide_eq_true (id (Eq.refl true)))
+  let ⟨getter, right✝⟩ := h✝
+  let ⟨tag, same⟩ := right✝
+  have equalFrame := same;
+  have framed :=
+    Eq.mpr (id (congrArg (fun _a => (↑_a).length = 3717) same))
+      (AspisR1.NIX_PredecessorFrames.aggregate bytes pre parsed idx);
+  Exists.intro record
+    ⟨getter,
+      ⟨tag, fun p off live offset =>
+        AspisR1.NJT_QClaimsCanonical.decode record p off (congrArg Aeneas.Std.UScalar.val tag) live offset framed
+          (Eq.mpr
+            (id
+              (forall_congr fun chunk =>
+                implies_congr
+                  (congrFun'
+                    (congrArg Membership.mem
+                      (congrArg Prod.fst
+                        (Aeneas.Std.List.toChunksExact.congr_simp 32 32 (Eq.refl 32)
+                          (of_decide_eq_true (id (Eq.refl true))) (List.drop 5 ↑record.framed) (List.drop 5 ↑frame)
+                          (congrArg (List.drop 5) (congrArg Subtype.val equalFrame)))))
+                    chunk)
+                  (Eq.refl (AspisR1.ExtractedPrefixStrictPayload.StrictLowChunk chunk))))
+            strict)⟩⟩
+
+Running as unit: run-r4f655c94f7c146acb9d0c1e2291fbd54.scope; invocation ID: 72d9fe0e80ae4402829f12622dc23e31

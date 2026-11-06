@@ -20,9 +20,11 @@ theorem parent_filled (value : Row) :
  have same : out = triple value := by
   apply Subtype.ext
   simpa [alloc.vec.Vec.new,triple,List.resize] using shape
- unfold aspis_core.r0.heap.filled
- simp only [external,ClaimsUnrolledFinish.external,std]
- simp only [mapError,core.result.Result.Insts.CoreOpsTry.branch]
+ change (do
+  let out ← alloc.vec.Vec.resize (core.clone.CloneArray 29#usize cq)
+    (alloc.vec.Vec.new Row) 3#usize value
+  ok (core.result.Result.Ok out : core.result.Result (alloc.vec.Vec Row) aspis_core.r0.Error)) =
+   ok (core.result.Result.Ok (triple value) : core.result.Result (alloc.vec.Vec Row) aspis_core.r0.Error)
  rw [run,same]
  rfl
 
@@ -40,7 +42,7 @@ theorem parent (pre : r1_wire.Prefix) :
       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
   | Ok record =>
     simp only [show external.validated pre 25#u8 = ok (.Ok record) from h]
-    simp only [core.result.Result.Insts.CoreOpsTry.branch]
+    simp only [core.result.Result.Insts.CoreOpsTry.branch,zero,bind_tc_ok]
     rw [parent_filled]
     simp [zero,mapError,external,ClaimsUnrolledFinish.external,std,boxArray,triple,
       core.result.Result.Insts.CoreOpsTry.branch]

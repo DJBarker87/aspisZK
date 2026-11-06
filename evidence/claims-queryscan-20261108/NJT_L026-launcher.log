@@ -1,0 +1,45 @@
+{"attempt": "NJT_L026", "exit_status": 1, "wall_seconds": 9.468439840944484, "peak_rss_kib": "6320940", "swaps": "0", "print_axioms": ["'AspisR1.NJT_ClaimsCohort.parent_filled' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJT_ClaimsCohort.parent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJT_ClaimsCohort.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJT_generated/NJT_ClaimsCohort.lean:26:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  alloc.vec.Vec.resize (core.clone.CloneArray 29#usize cq) (alloc.vec.Vec.new Row) 3#usize value
+in the target expression
+  (let (r, out) := (core.result.Result.Ok (), alloc.vec.Vec.new (Std.Array aspis_core.field.QM31 29#usize))
+    do
+    let r1 ←
+      match r with
+        | core.result.Result.Ok value => ok (core.result.Result.Ok value)
+        | core.result.Result.Err error => do
+          let mapped ←
+            aspis_core.r0.heap.filled.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError.call_once
+                (Array.Insts.CoreMarkerCopy 29#usize aspis_core.
+...
+     (Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize) (core.convert.FromSame r1_wire.Error)
+                    residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize) (core.convert.FromSame r1_wire.Error)
+                residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize) (core.convert.FromSame r1_wire.Error)
+            residual) =
+    do
+    let r ← ok (core.result.Result.Ok record)
+    match r with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok record => decodeRows external record
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NJT_ClaimsCohort.parent_filled' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJT_ClaimsCohort.parent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJT_ClaimsCohort.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r733d8a4255fe472ebefe74a5fd63c0e6.scope; invocation ID: 2ab569659ba349f4a514dcb5f3a4cade

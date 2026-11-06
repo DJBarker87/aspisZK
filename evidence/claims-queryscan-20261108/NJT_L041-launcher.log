@@ -1,0 +1,45 @@
+{"attempt": "NJT_L041", "exit_status": 1, "wall_seconds": 9.508554451866075, "peak_rss_kib": "6313912", "swaps": "0", "print_axioms": ["'AspisR1.NJT_AllocationLift.commute' does not depend on any axioms", "'AspisR1.NJT_AllocationLift.pure_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJT_AllocationLift.named_allocator' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJT_generated/NJT_AllocationLift.lean:39:45: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  RawActualDecodeKMainAdapter.decodeMain 29#usize record 0#usize
+in the target expression
+  (match AspisS1ExtractedRoundChildren.decodeMain 29#usize record 0#usize with
+    | ok (core.result.Result.Ok a) => ok (core.result.Result.Ok (fromMainArray a))
+    | ok (core.result.Result.Err e) => ok (core.result.Result.Err (fromMainError e))
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (fromMainArray a))
+
+bytes : Slice U8
+pre : AspisR1PrefixAggregateParser.r1_wire.Prefix
+parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.R
+...
+ldOwnerAdapter.MainQM 29#usize
+da : RawActualDecodeKMainAdapter.decodeMain 29#usize record 0#usize = ok (core.result.Result.Ok a)
+b : Std.Array RawSemanticFieldOwnerAdapter.MainQM 29#usize
+db : RawActualDecodeKMainAdapter.decodeMain 29#usize record 29#usize = ok (core.result.Result.Ok b)
+c : Std.Array RawSemanticFieldOwnerAdapter.MainQM 29#usize
+dc : RawActualDecodeKMainAdapter.decodeMain 29#usize record 58#usize = ok (core.result.Result.Ok c)
+la : sourceDecode 29#usize low 0#usize = ok (core.result.Result.Ok (fromMainArray a))
+lb : sourceDecode 29#usize low 29#usize = ok (core.result.Result.Ok (fromMainArray b))
+⊢ (match AspisS1ExtractedRoundChildren.decodeMain 29#usize record 58#usize with
+    | ok (core.result.Result.Ok a) => ok (core.result.Result.Ok (fromMainArray a))
+    | ok (core.result.Result.Err e) => ok (core.result.Result.Err (fromMainError e))
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok (fromMainArray c))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NJT_AllocationLift.commute' does not depend on any axioms
+'AspisR1.NJT_AllocationLift.pure_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJT_AllocationLift.named_allocator' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra58bd758cc4a4ce688b2901819f97372.scope; invocation ID: f142e1e6ddc64677aa68a924e829bf66
