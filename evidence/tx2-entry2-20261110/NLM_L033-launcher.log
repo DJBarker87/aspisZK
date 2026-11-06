@@ -1,0 +1,29 @@
+{"attempt": "NLM_L033", "exit_status": 0, "wall_seconds": 12.336567694088444, "peak_rss_kib": "6022040", "swaps": "0", "print_axioms": []}
+def NLM_RowSpec_065.RowSpec_065 : {Ambient : Type} →
+  Native Ambient → NP6_StdModel.Reservation → NP6_StdModel.Reservation → NJJ_Common.Merkle → NJJ_Common.Finish → Prop :=
+fun {Ambient} native wr rr merkle finish =>
+  ∀ {H : Type} (f : Frame H) (world : World Ambient),
+    Domain f →
+      native f world =
+          { post := world,
+            run :=
+              NJU_CommonObserved.run wr rr (fun {H} => merkle) finish f.digest f.publicBytes f.proof f.checkpoint f.hash
+                none } ∧
+        (native f world).run.result =
+          NJJ_Common.run wr rr (fun {H} => merkle) finish f.digest f.publicBytes f.proof f.checkpoint f.hash none
+
+...
+def NLM_RowSpec_065.RowSpec_065 : {Ambient : Type} →
+  Native Ambient → NP6_StdModel.Reservation → NP6_StdModel.Reservation → NJJ_Common.Merkle → NJJ_Common.Finish → Prop :=
+fun {Ambient} native wr rr merkle finish =>
+  ∀ {H : Type} (f : Frame H) (world : World Ambient),
+    Domain f →
+      native f world =
+          { post := world,
+            run :=
+              NJU_CommonObserved.run wr rr (fun {H} => merkle) finish f.digest f.publicBytes f.proof f.checkpoint f.hash
+                none } ∧
+        (native f world).run.result =
+          NJJ_Common.run wr rr (fun {H} => merkle) finish f.digest f.publicBytes f.proof f.checkpoint f.hash none
+
+Running as unit: run-r2b579c9978754840a3dcbe3b5c9f7363.scope; invocation ID: eba92decc54b407580664591a97be50f

@@ -1,0 +1,58 @@
+{"attempt": "NLM_L036", "exit_status": 1, "wall_seconds": 19.55126559501514, "peak_rss_kib": "5991956", "swaps": "0", "print_axioms": ["'NLM_SevenSnapshots.normal_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_SevenSnapshots.lean:20:52: error: Ambiguous term
+  Owned
+Possible interpretations:
+  NLM_Snapshot.Owned : Type
+  
+  S2W_D189Entry.Owned : Type
+NLM_generated/NLM_SevenSnapshots.lean:24:58: error: Ambiguous term
+  Owned
+Possible interpretations:
+  NLM_Snapshot.Owned : Type
+  
+  S2W_D189Entry.Owned : Type
+NLM_generated/NLM_SevenSnapshots.lean:28:18: warning: This simp argument is unused:
+  ownedValues
+
+Hint: Omit it from the simp argument list.
+  simp [̵G̵,̵o̵w̵n̵e̵d̵V̵a̵l̵u̵e̵s̵,̵r̵e̵a̵d̵y̵,̵N̵J̵U̵_̵L̵o̵g̵.̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵]̵[̲G̲,̲ ̲r̲e̲a̲d̲y̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLM_gen
+...
+NLM_Snapshot.Owned : Type
+  
+  S2W_D189Entry.Owned : Type
+NLM_generated/NLM_SevenSnapshots.lean:24:58: error: Ambiguous term
+  Owned
+Possible interpretations:
+  NLM_Snapshot.Owned : Type
+  
+  S2W_D189Entry.Owned : Type
+NLM_generated/NLM_SevenSnapshots.lean:28:18: warning: This simp argument is unused:
+  ownedValues
+
+Hint: Omit it from the simp argument list.
+  simp [̵G̵,̵o̵w̵n̵e̵d̵V̵a̵l̵u̵e̵s̵,̵r̵e̵a̵d̵y̵,̵N̵J̵U̵_̵L̵o̵g̵.̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵]̵[̲G̲,̲ ̲r̲e̲a̲d̲y̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLM_generated/NLM_SevenSnapshots.lean:28:18: warning: declaration uses `sorry`
+def NLM_SevenSnapshots.G : (Site → Result Unit) → List Site → State → Run State :=
+fun allocation x x_1 => List.brecOn (motive := fun x => State → Run State) x (G._f allocation) x_1
+theorem NLM_SevenSnapshots.normal_result : ∀ (e : Entry) (t : ℕ) (owned : List sorry) (cs : List Site),
+  (G (fun x => ok ()) cs (ready e t sorry)).result = ok (ready e (t + cs.length) sorry) :=
+fun e t owned cs =>
+  List.rec (motive := fun cs =>
+    ∀ (t : ℕ) (owned : List sorry),
+      (G (fun x => ok ()) cs (ready e t sorry)).result = ok (ready e (t + cs.length) sorry))
+    (fun t owned =>
+      of_eq_true
+        (Eq.trans
+          (congrArg (Eq (ok { input := e, sdk := (NLM_RuntimeInput.initial e).state, next := t, owned := sorry () }))
+            (congrArg ok
+              (congrFun' (congrArg (State.mk e (NLM_RuntimeInput.initial e).state) (add_zero t)) (sorry ()))))
+          (eq_self (ok { input := e, sdk := (NLM_RuntimeInput.initial e).state, next := t, owned := sorry () }))))
+    (fun c cs ih t owned => sorry) cs t owned
+'NLM_SevenSnapshots.normal_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re87f2e168486475ca494abf7219d5abb.scope; invocation ID: ae7af3bdf57c439a8c89c1b2bc36ad47

@@ -1,0 +1,43 @@
+{"attempt": "NLM_L038", "exit_status": 0, "wall_seconds": 17.231504264986143, "peak_rss_kib": "6023572", "swaps": "0", "print_axioms": ["'NLM_Auth064.parameterized_fold' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_Auth064.parameterized_fold : ∀ {Ambient H : Type} (common : NLM_RowSpec_065.Native Ambient)
+  (wr rr : NP6_StdModel.Reservation) (merkle : NJJ_Common.Merkle) (finish : NJJ_Common.Finish),
+  NLM_RowSpec_065.RowSpec_065 (fun {H} => common) wr rr (fun {H} => merkle) finish →
+    ∀ (s : State Ambient H), G (fun {H} => common) s = G (fun {H} => reference wr rr (fun {H} => merkle) finish) s :=
+fun {Ambient H} common wr rr merkle finish packet s =>
+  id
+    (casesOn (motive := fun t =>
+      NLE_ParseInstall.parse s.input.proof = t →
+        (have parsed := NLE_ParseInstall.parse s.input.proof;
+          have e := Event.parse s parsed;
+          match parsed with
+          | fail err =>
+...
+nts := [e] } }
+              | ok (core.result.Result.Ok variant) =>
+                have post := { input := s.input, world := s.world, parsed := some variant };
+                have marker := NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed;
+                have child := (fun {H} => reference wr rr (fun {H} => merkle) finish) (commonFrame post) post.world;
+                { post := child.post,
+                  run :=
+                    { result := child.run.result, events := [e, Event.mark post marker, Event.common post child] } })
+          (fun parsed =>
+            Eq.refl
+              (have parsed := div;
+              have e := Event.parse s parsed;
+              match parsed with
+              | fail err => { post := s.world, run := { result := fail err, events := [e] } }
+              | div => { post := s.world, run := { result := div, events := [e] } }
+              | ok (core.result.Result.Err err) =>
+                { post := s.world, run := { result := ok (core.result.Result.Err err), events := [e] } }
+              | ok (core.result.Result.Ok variant) =>
+                have post := { input := s.input, world := s.world, parsed := some variant };
+                have marker := NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed;
+                have child := (fun {H} => common) (commonFrame post) post.world;
+                { post := child.post,
+                  run :=
+                    { result := child.run.result, events := [e, Event.mark post marker, Event.common post child] } }))
+          (Eq.symm h) (Eq.refl (NLE_ParseInstall.parse s.input.proof)))
+      (Eq.refl (NLE_ParseInstall.parse s.input.proof)))
+'NLM_Auth064.parameterized_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra9b9740eea2c4e2c9397e49d2a40b16d.scope; invocation ID: 9d3be115b9384d7b82529697afb8ef98

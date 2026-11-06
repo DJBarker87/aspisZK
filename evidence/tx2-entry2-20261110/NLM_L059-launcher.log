@@ -1,0 +1,46 @@
+{"attempt": "NLM_L059", "exit_status": 0, "wall_seconds": 14.026441992027685, "peak_rss_kib": "5998400", "swaps": "0", "print_axioms": ["'NLM_Snapshot.returned_normal' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_Snapshot.returned_state' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_SnapshotReturned.lean:15:8: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+theorem NLM_Snapshot.returned_normal : ∀ (e : Entry) (t a lo hi : ℕ) (owned : List Owned) (allocation : Result Unit)
+  (value : Owned) (post : State),
+  (G (ready e t owned) a lo hi allocation).result = ok (value, post) →
+    G (ready e t owned) a lo hi allocation = G (ready e t owned) a lo hi (ok ()) :=
+fun e t a lo hi owned allocation value post entered =>
+  if copy :
+      (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (
+...
+   Eq.ndrec (motive := fun allocation =>
+          (G (ready e t owned) a lo hi allocation).result = ok (value, post) →
+            G (ready e t owned) a lo hi allocation = G (ready e t owned) a lo hi (ok ()))
+          (fun entered =>
+            let ⟨⟩ := ok (value, post)
+            Eq.mp (congrArg (fun _a => _a.result = ok (value, post)) (allocation_abort e t a lo hi owned err copy))
+              entered)
+          (Eq.symm h) entered)
+      (fun h =>
+        Eq.ndrec (motive := fun allocation =>
+          (G (ready e t owned) a lo hi allocation).result = ok (value, post) →
+            G (ready e t owned) a lo hi allocation = G (ready e t owned) a lo hi (ok ()))
+          (fun entered =>
+            let ⟨⟩ := ok (value, post)
+            Eq.mp (congrArg (fun _a => _a.result = ok (value, post)) (allocation_diverge e t a lo hi owned copy))
+              entered)
+          (Eq.symm h) entered)
+      (Eq.refl allocation)
+  else skip_allocation e t a lo hi owned allocation copy
+theorem NLM_Snapshot.returned_state : ∀ (e : Entry) (t a lo hi : ℕ) (owned : List Owned) (allocation : Result Unit)
+  (value : Owned) (post : State),
+  (G (ready e t owned) a lo hi allocation).result = ok (value, post) →
+    value = e.snapshot a lo hi ∧ post = returned (ready e t owned) a lo hi :=
+fun e t a lo hi owned allocation value post entered =>
+  let ⟨⟩ := ok (value, post)
+  Eq.mp (congrArg (fun _a => _a = ok (value, post)) (normal_result e t a lo hi owned))
+    (Eq.mp
+      (congrArg (fun _a => _a.result = ok (value, post))
+        (returned_normal e t a lo hi owned allocation value post entered))
+      entered)
+'NLM_Snapshot.returned_normal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_Snapshot.returned_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf4de656ad5274d07b872ae1b06e24d9e.scope; invocation ID: ae25436bde794f04a24c5f6b5c51477b

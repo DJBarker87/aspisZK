@@ -1,0 +1,54 @@
+{"attempt": "NLM_L074", "exit_status": 0, "wall_seconds": 13.444369999924675, "peak_rss_kib": "6021824", "swaps": "0", "print_axioms": ["'NLM_SevenReturned.entered' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_SevenReturned.entered : ∀ (e : Entry) (t : ℕ) (owned : List NLM_Snapshot.Owned) (cs : List Site)
+  (allocation : Site → Result Unit) (post : State),
+  (NLM_SevenSnapshots.G allocation cs (ready e t owned)).result = ok post →
+    post = ready e (t + cs.length) (owned ++ ownedValues e cs) :=
+fun e t owned cs allocation post success =>
+  List.rec (motive := fun cs =>
+    ∀ (t : ℕ) (owned : List NLM_Snapshot.Owned) (post : State),
+      (NLM_SevenSnapshots.G allocation cs (ready e t owned)).result = ok post →
+        post = ready e (t + cs.length) (owned ++ ownedValues e cs))
+    (fun t owned post success =>
+      let ⟨⟩ := ok post
+      success)
+    (fun c cs ih t owned post success
+...
+ ← _a
+                        (NLM_SevenSnapshots.G allocation cs a.2).result) =
+                      ok post)
+                  head)
+                (Eq.mp
+                  (congrFun'
+                    (congrArg Eq
+                      (NJU_Log.erase_bind (NLM_Snapshot.G (ready e t owned) c.account c.lo c.hi (allocation c))
+                        fun __x => NLM_SevenSnapshots.G allocation cs __x.2))
+                    (ok post))
+                  success))
+            (Eq.symm h) (Eq.refl (NLM_Snapshot.G (ready e t owned) c.account c.lo c.hi (allocation c)).result))
+        (fun h =>
+          Eq.ndrec (motive := fun x =>
+            (NLM_Snapshot.G (ready e t owned) c.account c.lo c.hi (allocation c)).result = x →
+              post = ready e (t + (c :: cs).length) (owned ++ ownedValues e (c :: cs)))
+            (fun head =>
+              let ⟨⟩ := ok post
+              Eq.mp
+                (congrArg
+                  (fun _a =>
+                    (do
+                        let a ← _a
+                        (NLM_SevenSnapshots.G allocation cs a.2).result) =
+                      ok post)
+                  head)
+                (Eq.mp
+                  (congrFun'
+                    (congrArg Eq
+                      (NJU_Log.erase_bind (NLM_Snapshot.G (ready e t owned) c.account c.lo c.hi (allocation c))
+                        fun __x => NLM_SevenSnapshots.G allocation cs __x.2))
+                    (ok post))
+                  success))
+            (Eq.symm h) (Eq.refl (NLM_Snapshot.G (ready e t owned) c.account c.lo c.hi (allocation c)).result))
+        (Eq.refl (NLM_Snapshot.G (ready e t owned) c.account c.lo c.hi (allocation c)).result))
+    cs t owned post success
+'NLM_SevenReturned.entered' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r07828eb0cff144d9a5948822fe54ced9.scope; invocation ID: 0296757f80074583923bdb214a7bf8d0

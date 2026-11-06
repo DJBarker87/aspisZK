@@ -1,0 +1,50 @@
+{"attempt": "NLM_L071", "exit_status": 1, "wall_seconds": 11.75376933789812, "peak_rss_kib": "5934964", "swaps": "0", "print_axioms": ["'NLM_ActualRead.snapshot_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_ActualRead.lean:12:41: error: unsolved goals
+case h_1
+ops : AdapterRw.Ops
+e : Entry
+a lo hi : ℕ
+bytes : Slice U8
+x✝ : core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError
+v✝ : alloc.vec.Vec U8
+heq✝ :
+  (if (↑(e.buffers (e.handles a).1)).length = lo ∨ (↑(e.buffers (e.handles a).1)).length = hi then
+      core.result.Result.Ok (e.buffers (e.handles a).1)
+    else core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData) =
+    core.result.Result.Ok v✝
+read : v✝.deref = bytes
+⊢ v✝ = bytes
+theorem NLM_ActualRead.snapshot_bytes : ∀ (ops : AdapterRw.Ops) (e : Entry) (a lo hi : ℕ) (bytes : Slice U8),
+  AdapterRw.r1_pool_adap
+...
+       (match x with
+                    | core.result.Result.Ok v => core.result.Result.Ok v.deref
+                    | core.result.Result.Err e => core.result.Result.Err e) =
+                  ok (core.result.Result.Ok bytes) →
+                (if (↑(e.buffers (e.handles a).1)).length = lo ∨ (↑(e.buffers (e.handles a).1)).length = hi then
+                    core.result.Result.Ok (e.buffers (e.handles a).1)
+                  else core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData) =
+                  core.result.Result.Ok bytes)
+            (fun heq =>
+              id fun read =>
+                False.elim
+                  (Eq.mp
+                    (Eq.trans (ok.injEq (core.result.Result.Err e_1) (core.result.Result.Ok bytes))
+                      (eq_false' fun h => False.elim (noConfusion_of_Nat core.result.Result.ctorIdx h)))
+                    read))
+            (Eq.symm h)
+            (Eq.refl
+              (if (↑(e.buffers (e.handles a).1)).length = lo ∨ (↑(e.buffers (e.handles a).1)).length = hi then
+                core.result.Result.Ok (e.buffers (e.handles a).1)
+              else core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)))
+        (Eq.refl
+          (if (↑(e.buffers (e.handles a).1)).length = lo ∨ (↑(e.buffers (e.handles a).1)).length = hi then
+            core.result.Result.Ok (e.buffers (e.handles a).1)
+          else core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+        (Eq.mp
+          (congrArg (fun _a => _a = ok (core.result.Result.Ok bytes))
+            (NGL_CloneDomain.data_result ops (e.snapshot a lo hi)))
+          read)))
+'NLM_ActualRead.snapshot_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd0562e98a6e04b1e9fcc78908aee329e.scope; invocation ID: f121b567beda4116bc500821326995c7

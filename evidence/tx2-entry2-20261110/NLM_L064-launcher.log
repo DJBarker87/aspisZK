@@ -1,0 +1,39 @@
+{"attempt": "NLM_L064", "exit_status": 0, "wall_seconds": 11.865757060004398, "peak_rss_kib": "5969460", "swaps": "0", "print_axioms": ["'NLM_ScalarLaws.scalar_eq' does not depend on any axioms", "'NLM_ScalarLaws.length_eq' depends on axioms: [propext, Quot.sound]"]}
+theorem NLM_ScalarLaws.scalar_eq : ∀ {ty : UScalarTy} (a b : UScalar ty), ↑a = ↑b → a = b :=
+fun {ty} a b same =>
+  let ⟨x, h✝⟩ := a
+  Eq.ndrec (motive := fun a => ↑a = ↑b → a = b)
+    (fun same =>
+      let ⟨y, h✝¹⟩ := b
+      Eq.ndrec (motive := fun b => ↑(x#uscalar) = ↑b → x#uscalar = b)
+        (fun same => (fun {ty} bv bv_1 e_bv => e_bv ▸ Eq.refl (bv#uscalar)) x y (BitVec.eq_of_toNat_eq same))
+        (Eq.symm h✝¹) same)
+    (Eq.symm h✝) same
+theorem NLM_ScalarLaws.length_eq : ∀ (bytes : Slice U8) (n : Usize), bytes.len = n ↔ (↑bytes).length = ↑n :=
+fun bytes n =>
+  {
+    mp := fun same =>
+      have h := congrArg (fun x => ↑x) same;
+      Eq.mp (congrFun' (congrArg Eq (Slice.len_val by
+...
+theorem NLM_ScalarLaws.scalar_eq : ∀ {ty : UScalarTy} (a b : UScalar ty), ↑a = ↑b → a = b :=
+fun {ty} a b same =>
+  let ⟨x, h✝⟩ := a
+  Eq.ndrec (motive := fun a => ↑a = ↑b → a = b)
+    (fun same =>
+      let ⟨y, h✝¹⟩ := b
+      Eq.ndrec (motive := fun b => ↑(x#uscalar) = ↑b → x#uscalar = b)
+        (fun same => (fun {ty} bv bv_1 e_bv => e_bv ▸ Eq.refl (bv#uscalar)) x y (BitVec.eq_of_toNat_eq same))
+        (Eq.symm h✝¹) same)
+    (Eq.symm h✝) same
+theorem NLM_ScalarLaws.length_eq : ∀ (bytes : Slice U8) (n : Usize), bytes.len = n ↔ (↑bytes).length = ↑n :=
+fun bytes n =>
+  {
+    mp := fun same =>
+      have h := congrArg (fun x => ↑x) same;
+      Eq.mp (congrFun' (congrArg Eq (Slice.len_val bytes)) ↑n) h,
+    mpr := fun same => scalar_eq bytes.len n (Eq.mpr (id (congrFun' (congrArg Eq (Slice.len_val bytes)) ↑n)) same) }
+'NLM_ScalarLaws.scalar_eq' does not depend on any axioms
+'NLM_ScalarLaws.length_eq' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-r95cdbaf7b4db4572a2c5329471c74f57.scope; invocation ID: 6c9b68975ce44753871606c0551aec87

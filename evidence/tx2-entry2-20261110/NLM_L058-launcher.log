@@ -1,0 +1,50 @@
+{"attempt": "NLM_L058", "exit_status": 0, "wall_seconds": 14.780220049899071, "peak_rss_kib": "6019908", "swaps": "0", "print_axioms": ["'NLM_Snapshot.skip_allocation' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_Snapshot.skip_allocation : ∀ (e : Entry) (t a lo hi : ℕ) (owned : List Owned) (allocation : Result Unit),
+  ¬((S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = lo ∨
+        (S2W_ReturnedCheckpoint.nativeBytes (e.buffers (e.handles a).1)).length = hi) →
+    G (ready e t owned) a lo hi allocation = G (ready e t owned) a lo hi (ok ()) :=
+fun e t a lo hi owned allocation skip =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (have acquisition := _a;
+              do
+              let guardReply ←
+                NJU_Log.record (Event.acquire (ready e t owned) a (ready e t owned).next acquisition.1)
+                    (ok acquisi
+...
+re
+                                            (value,
+                                              { input := (ready e t owned).input, sdk := restored,
+                                                next := (ready e t owned).next + 1,
+                                                owned := (ready e t owned).owned ++ [value] }))
+                                  ())
+                                (eq_false
+                                  (Eq.mp
+                                    (congrArg Not
+                                      (congr
+                                        (congrArg Or
+                                          (congrFun'
+                                            (congrArg Eq
+                                              (congrArg List.length
+                                                (congrArg Payload.bytes
+                                                  (shared_deref (ready e t owned).sdk
+                                                    ((ready e t owned).sdk.accounts a).data (ready e t owned).next))))
+                                            lo))
+                                        (congrFun'
+                                          (congrArg Eq
+                                            (congrArg List.length
+                                              (congrArg Payload.bytes
+                                                (shared_deref (ready e t owned).sdk ((ready ⋯ ⋯ ⋯).sdk.accounts ⋯).data
+                                                  ⋯))))
+                                          ⋯)))
+                                    ⋯)))
+                              ⋯)))
+                        ⋯))))))
+            ⋯)
+          ⋯)))
+'NLM_Snapshot.skip_allocation' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3f209873a5e642848fc26375f2c9d59b.scope; invocation ID: 31b60324bfbc413c8a40bf8919e0a8c9

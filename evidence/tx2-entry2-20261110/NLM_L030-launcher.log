@@ -1,0 +1,33 @@
+{"attempt": "NLM_L030", "exit_status": 0, "wall_seconds": 12.200361462077126, "peak_rss_kib": "6026504", "swaps": "0", "print_axioms": []}
+def NLM_Auth064.G : {Ambient H : Type} →
+  NLM_RowSpec_065.Native Ambient → State Ambient H → Observation Ambient (Event Ambient H) Reply :=
+fun {Ambient H} common s =>
+  have parsed := NLE_ParseInstall.parse s.input.proof;
+  have e := Event.parse s parsed;
+  match parsed with
+  | fail err => { post := s.world, run := { result := fail err, events := [e] } }
+  | div => { post := s.world, run := { result := div, events := [e] } }
+  | ok (core.result.Result.Err err) =>
+    { post := s.world, run := { result := ok (core.result.Result.Err err), events := [e] } }
+  | ok (core.result.Result.Ok variant) =>
+    have post := { input := s.input, world := s.world, parsed := some variant };
+    have mark
+...
+def NLM_Auth064.G : {Ambient H : Type} →
+  NLM_RowSpec_065.Native Ambient → State Ambient H → Observation Ambient (Event Ambient H) Reply :=
+fun {Ambient H} common s =>
+  have parsed := NLE_ParseInstall.parse s.input.proof;
+  have e := Event.parse s parsed;
+  match parsed with
+  | fail err => { post := s.world, run := { result := fail err, events := [e] } }
+  | div => { post := s.world, run := { result := div, events := [e] } }
+  | ok (core.result.Result.Err err) =>
+    { post := s.world, run := { result := ok (core.result.Result.Err err), events := [e] } }
+  | ok (core.result.Result.Ok variant) =>
+    have post := { input := s.input, world := s.world, parsed := some variant };
+    have marker := NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed;
+    have child := common (commonFrame post) post.world;
+    { post := child.post,
+      run := { result := child.run.result, events := [e, Event.mark post marker, Event.common post child] } }
+
+Running as unit: run-r36de8c6be82c42dd993e7d21b8a7c614.scope; invocation ID: 174fb5d3331240e88678118e7e2d157a

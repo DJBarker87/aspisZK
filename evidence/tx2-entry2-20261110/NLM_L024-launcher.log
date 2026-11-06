@@ -1,0 +1,17 @@
+{"attempt": "NLM_L024", "exit_status": 0, "wall_seconds": 11.249857719056308, "peak_rss_kib": "5989436", "swaps": "0", "print_axioms": []}
+def NLM_RowSpec_233.RowSpec_233 : {Ambient : Type} → Ops → Native Ambient → Prop :=
+fun {Ambient} ops native =>
+  ∀ (program : Key) (accounts : Slice Owned) (pool : Key) (lane : U8) (slot : U64) (world : World Ambient),
+    native program accounts pool lane slot world = { post := world, run := G ops program accounts pool lane slot } ∧
+      (native program accounts pool lane slot world).run.result =
+        r1_pool_adapter.owned.authenticate_asq8_accounts ops program accounts pool lane slot
+
+...
+def NLM_RowSpec_233.RowSpec_233 : {Ambient : Type} → Ops → Native Ambient → Prop :=
+fun {Ambient} ops native =>
+  ∀ (program : Key) (accounts : Slice Owned) (pool : Key) (lane : U8) (slot : U64) (world : World Ambient),
+    native program accounts pool lane slot world = { post := world, run := G ops program accounts pool lane slot } ∧
+      (native program accounts pool lane slot world).run.result =
+        r1_pool_adapter.owned.authenticate_asq8_accounts ops program accounts pool lane slot
+
+Running as unit: run-rac14656870b14add861512687ea9cdd2.scope; invocation ID: 1e1e060a5fff4ccbb94bf89ce0dd8b9a

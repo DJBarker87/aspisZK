@@ -1,0 +1,44 @@
+{"attempt": "NLM_L060", "exit_status": 0, "wall_seconds": 11.478986670961604, "peak_rss_kib": "5944204", "swaps": "0", "print_axioms": ["'NLM_ReadCalls.data_domain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_ReadCalls.data' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_ReadCalls.length' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_ReadCalls.data_domain : ∀ (e : Entry) (a lo hi : ℕ) (err : AdapterRw.solana_program_error.ProgramError),
+  (e.snapshot a lo hi).bytes = core.result.Result.Err err → NGL_CloneDomain.SnapshotError err :=
+fun e a lo hi err returned =>
+  Decidable.casesOn instDecidableOr
+    (fun h =>
+      let ⟨⟩ := core.result.Result.Err err
+      Eq.mp (congrFun' (congrArg Eq (if_neg h)) (core.result.Result.Err err)) returned)
+    fun h =>
+    let ⟨⟩ := core.result.Result.Err err
+    Eq.mp (congrFun' (congrArg Eq (if_pos h)) (core.result.Result.Err err)) returned
+theorem NLM_ReadCalls.data : ∀ (ops : AdapterRw.Ops) (e : Entry) (a lo hi : ℕ),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL
+...
+Entry) (a lo hi : ℕ) (err : AdapterRw.solana_program_error.ProgramError),
+  (e.snapshot a lo hi).bytes = core.result.Result.Err err → NGL_CloneDomain.SnapshotError err :=
+fun e a lo hi err returned =>
+  Decidable.casesOn instDecidableOr
+    (fun h =>
+      let ⟨⟩ := core.result.Result.Err err
+      Eq.mp (congrFun' (congrArg Eq (if_neg h)) (core.result.Result.Err err)) returned)
+    fun h =>
+    let ⟨⟩ := core.result.Result.Err err
+    Eq.mp (congrFun' (congrArg Eq (if_pos h)) (core.result.Result.Err err)) returned
+theorem NLM_ReadCalls.data : ∀ (ops : AdapterRw.Ops) (e : Entry) (a lo hi : ℕ),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot a lo hi) =
+    ok (NHJ_DataPacket.G (e.snapshot a lo hi) (NHJ_DataPacket.childReply (e.snapshot a lo hi))) :=
+fun ops e a lo hi => NHJ_DataPacket.substitute ops (e.snapshot a lo hi) (data_domain e a lo hi)
+theorem NLM_ReadCalls.length : ∀ (ops : AdapterRw.Ops) (e : Entry) (a lo hi : ℕ),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len (NGL_CloneDomain.install ops) (e.snapshot a lo hi) =
+    ok (core.result.Result.Ok (e.buffers (e.handles a).1).len) :=
+fun ops e a lo hi =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = ok (core.result.Result.Ok (e.buffers (e.handles a).1).len))
+        (NHJ_LengthPacket.substitute ops (e.snapshot a lo hi) fun err returned =>
+          let ⟨⟩ := core.result.Result.Err err
+          returned)))
+    (Eq.refl (ok (NHJ_LengthPacket.G (e.snapshot a lo hi) (NHJ_LengthPacket.childReply (e.snapshot a lo hi)))))
+'NLM_ReadCalls.data_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_ReadCalls.data' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_ReadCalls.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r38258b98d4ab4ca5952ee3ca8be00447.scope; invocation ID: 1931d80fa7a74d4486788221aa5f124c
