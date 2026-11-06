@@ -1,0 +1,53 @@
+{"attempt": "NKL_L058", "exit_status": 1, "wall_seconds": 12.038157243048772, "peak_rss_kib": "5995072", "swaps": "0", "print_axioms": ["'NKL_ScanAtoms.k' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_ScanAtoms.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKL_ScanAtoms.accepted_test' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKL_ScanAtoms.lean:54:11: error: Tactic `rfl` failed: The left-hand side
+  match Check.scalar q s l with
+  | Check.cv proof => do
+    let r ← NFU_Retarget.compact.check_values (NKB_CanonicalPrefix.values proof)
+    ok (NKL_CanonicalChildren.convert r)
+  | Check.ec site => do
+    let r ← NFU_Retarget.verifier.echeck site.bytes false
+    ok
+        (match r with
+        | core.result.Result.Ok u => core.result.Result.Ok u
+        | core.result.Result.Err a => core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+  | Check.view proof i => do
+    let _ ← NEO_TailRef.opening proof i
+    ok (core.result.Result.Ok ())
+  | Check.scalar q s l =>
+    match NKB_CanonicalScalarLoop.read q s l with
+  
+...
+   | core.result.Result.Err a => core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+    | Check.view proof i => do
+      let _ ← NEO_TailRef.opening proof i
+      ok (core.result.Result.Ok ())
+    | Check.scalar q s l =>
+      match NKB_CanonicalScalarLoop.read q s l with
+      | none => ok (core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+      | some b => do
+        let r ← S8OwnedP6.aspis_core.field.M31.from_le_bytes b
+        ok (NKB_CanonicalOpening.reply r.isSome)
+    | Check.c1 q s => kReply (NKB_CanonicalTail.window q s)
+    | Check.c2 q s l => kReply (NKB_CanonicalRange.window q s l)
+    | Check.invalid => fail Error.panic) =
+    ok
+      (NKB_CanonicalOpening.reply
+        (match Check.scalar q s l with
+        | Check.cv proof => NKL_CanonicalChildren.compactGood (NKB_CanonicalPrefix.values proof)
+        | Check.ec site => NKL_CanonicalChildren.echeckGood site.bytes
+        | Check.view proof i =>
+          match NJS_Extract.verifier.candidate.opening proof i with
+          | ok v => true
+          | x => false
+        | Check.scalar q s l => ((NKB_CanonicalScalarLoop.read q s l).bind NKB_CanonicalScalarBridge.scalar).isSome
+        | Check.c1 q s => (NKL_CanonicalKCarrier.selected (NKB_CanonicalTail.window q s)).isSome
+        | Check.c2 q s l => (NKL_CanonicalKCarrier.selected (NKB_CanonicalRange.window q s l)).isSome
+        | Check.invalid => false))
+theorem NKL_ScanAtoms.source : ∀ (c : Check),
+  NKL_ScanDomains.Domain c → child c = ok (NKB_CanonicalOpening.reply (test c)) :=
+⋯
+'NKL_ScanAtoms.k' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ScanAtoms.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKL_ScanAtoms.accepted_test' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfd820bd37afc40aba89ffe1b4bdb85be.scope; invocation ID: 464269de3ca64e1ebc762d7ed4f2a26f

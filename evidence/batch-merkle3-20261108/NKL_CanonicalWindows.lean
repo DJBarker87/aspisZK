@@ -31,7 +31,8 @@ theorem canonical_window (q : Slice U8) (width:q.val.length=832) (start count : 
   length _ _ _ (by simp only [bytesOf,List.length_map,width];exact inside)
  unfold canonical
  rw [size]
- simp only [Nat.mul_mod_right,Nat.mul_div_right,true_and,List.mem_range]
+ have div : 4*count/4=count := by omega
+ simp only [Nat.mul_mod_right,div,true_and,List.mem_range]
  apply forall_congr'
  intro j
  apply imp_congr_right
@@ -48,7 +49,10 @@ theorem index (n : Nat) (bound:n<32) : (NKB_CanonicalScalarLoop.index n).val=n :
 theorem allFrom (pass : Nat→Bool) (start fuel : Nat) :
  NKB_CanonicalPair.allFrom pass start fuel=true ↔ ∀ j,start≤j→j<start+fuel→pass j=true := by
  induction fuel generalizing start with
- | zero => simp [NKB_CanonicalPair.allFrom]
+ | zero =>
+   constructor
+   · intro _ j lo hi;omega
+   · intro _;rfl
  | succ fuel ih =>
    rw [NKB_CanonicalPair.allFrom,Bool.and_eq_true,ih]
    constructor

@@ -1,0 +1,42 @@
+{"attempt": "NKL_L062", "exit_status": 0, "wall_seconds": 15.627500779926777, "peak_rss_kib": "6017804", "swaps": "0", "print_axioms": ["'NKL_ScanRoot.all_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_ScanRoot.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_ScanRoot.adopted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_ScanRoot.no_later_event' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKL_ScanRoot.success_events' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKL_ScanRoot.deployed : ∀ (proof : Std.Array U8 57607#usize) (out : Reply) (events : List Check)
+  (after : Bytes),
+  Invoke (checks proof.to_slice) out events (↑proof) after →
+    ok out =
+        NJS_Extract.verifier.candidate.canonical_scan AspisR1M31Parser.field.M31.from_le_bytes
+          NKL_CanonicalInstallation.childK NKL_CanonicalInstallation.childE NKL_CanonicalInstallation.childCV
+          proof.to_slice ∧
+      after = ↑proof ∧ ∃ suffix, events ++ suffix = checks proof.to_slice :=
+⋯
+theorem NKL_ScanRoot.adopted : ∀ (proof : Std.Array U8 57607#usize) (out : Reply) (events : List Check) (after : Bytes),
+  Invoke (checks proof.to_slice) out events (↑proof) after →
+    ok ou
+...
+theorem NKL_ScanRoot.deployed : ∀ (proof : Std.Array U8 57607#usize) (out : Reply) (events : List Check)
+  (after : Bytes),
+  Invoke (checks proof.to_slice) out events (↑proof) after →
+    ok out =
+        NJS_Extract.verifier.candidate.canonical_scan AspisR1M31Parser.field.M31.from_le_bytes
+          NKL_CanonicalInstallation.childK NKL_CanonicalInstallation.childE NKL_CanonicalInstallation.childCV
+          proof.to_slice ∧
+      after = ↑proof ∧ ∃ suffix, events ++ suffix = checks proof.to_slice :=
+⋯
+theorem NKL_ScanRoot.adopted : ∀ (proof : Std.Array U8 57607#usize) (out : Reply) (events : List Check) (after : Bytes),
+  Invoke (checks proof.to_slice) out events (↑proof) after →
+    ok out = do
+      let valid ← MultiproofParserRef.parser_reference.scan proof.to_slice
+      ok (NKB_CanonicalOpening.reply valid) :=
+⋯
+theorem NKL_ScanRoot.no_later_event : ∀ (proof : Std.Array U8 57607#usize) (events : List Check) (after : Bytes),
+  Invoke (checks proof.to_slice) (core.result.Result.Err NJS_Extract.verifier.Error.Parse) events (↑proof) after →
+    ∃ before bad suffix,
+      checks proof.to_slice = before ++ bad :: suffix ∧
+        events = before ++ [bad] ∧ before.all nativeGuard = true ∧ nativeGuard bad = false :=
+⋯
+'NKL_ScanRoot.all_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ScanRoot.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ScanRoot.adopted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ScanRoot.no_later_event' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ScanRoot.success_events' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1a177c56f196424994006741851cfa46.scope; invocation ID: ab13489768714431a91e173dab03f564

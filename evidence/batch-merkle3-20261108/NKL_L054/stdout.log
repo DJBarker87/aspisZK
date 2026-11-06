@@ -1,0 +1,53 @@
+NKL_ClosedChildren.lean:42:1: error: Type mismatch: After simplification, term
+  selected
+ has type
+  @Eq (Result (Option NKB_CanonicalRange.K))
+    (ok
+      (Option.map
+        (fun x =>
+          {
+            c0 :=
+              {
+                a :=
+                  (CheckpointBytes3ScalarShape.kWords (M31ParserRefinement.valueToU32 (x 0))
+                        (M31ParserRefinement.valueToU32 (x 1)) (M31ParserRefinement.valueToU32 (x 2))
+                        (M31ParserRefinement.valueToU32 (x 3))).c0.a,
+                b :=
+                  (CheckpointBytes3ScalarShape.kWords (M31ParserRefinement.valueToU32 (x 0))
+                        (M31ParserRefinement.valueToU32 (x 1)) (M31ParserRefinement.valueToU32 (x 2))
+                        (M31ParserRefinement.valueToU32 (x 3))).c0.b },
+            c1 :=
+              {
+                a :=
+                  (CheckpointBytes3ScalarShape.kWords (M31ParserRefinement.valueToU32 (x 0))
+                        (M31ParserRefinement.valueToU32 (x 1)) (M31ParserRefinement.valueToU32 (x 2))
+                        (M31ParserRefinement.valueToU32 (x 3))).c1.a,
+                b :=
+                  (CheckpointBytes3ScalarShape.kWords (M31ParserRefinement.valueToU32 (x 0))
+                        (M31ParserRefinement.valueToU32 (x 1)) (M31ParserRefinement.valueToU32 (x 2))
+                        (M31ParserRefinement.valueToU32 (x 3))).c1.b } })
+        (decodeQM31LE (fixed b.to_slice ⋯))))
+    (ok (NKL_CanonicalKCarrier.selected b.to_slice))
+but is expected to have type
+  @Eq (Result (Option NKB_CanonicalRange.K))
+    (ok
+      (Option.map
+        (fun x =>
+          {
+            c0 :=
+              { a := (S8OwnedP6StrictParser.qFromCandidate (CandidateStrictQM31Parser.limbsToCandidate x)).c0.a,
+                b := (S8OwnedP6StrictParser.qFromCandidate (CandidateStrictQM31Parser.limbsToCandidate x)).c0.b },
+            c1 :=
+              { a := (S8OwnedP6StrictParser.qFromCandidate (CandidateStrictQM31Parser.limbsToCandidate x)).c1.a,
+                b := (S8OwnedP6StrictParser.qFromCandidate (CandidateStrictQM31Parser.limbsToCandidate x)).c1.b } })
+        (decodeQM31LE (fixed b.to_slice ⋯))))
+    (ok (NKL_CanonicalKCarrier.selected b.to_slice))
+theorem NKL_ClosedChildren.actualK : ∀ (b : Std.Array U8 16#usize),
+  NKL_CanonicalKCarrier.mapResult (Option.map qToCaller) (S8OwnedP6.aspis_core.field.QM31.from_le_bytes b.to_slice) =
+    ok (NKL_CanonicalKCarrier.selected b.to_slice) :=
+⋯
+'NKL_ClosedChildren.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ClosedChildren.actualK' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKL_ClosedChildren.quadratic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKL_ClosedChildren.opening_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ClosedChildren.opening' depends on axioms: [propext, Classical.choice, Quot.sound]

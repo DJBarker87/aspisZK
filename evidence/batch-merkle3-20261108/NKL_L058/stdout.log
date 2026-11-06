@@ -1,0 +1,164 @@
+NKL_ScanAtoms.lean:54:11: error: Tactic `rfl` failed: The left-hand side
+  match Check.scalar q s l with
+  | Check.cv proof => do
+    let r ← NFU_Retarget.compact.check_values (NKB_CanonicalPrefix.values proof)
+    ok (NKL_CanonicalChildren.convert r)
+  | Check.ec site => do
+    let r ← NFU_Retarget.verifier.echeck site.bytes false
+    ok
+        (match r with
+        | core.result.Result.Ok u => core.result.Result.Ok u
+        | core.result.Result.Err a => core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+  | Check.view proof i => do
+    let _ ← NEO_TailRef.opening proof i
+    ok (core.result.Result.Ok ())
+  | Check.scalar q s l =>
+    match NKB_CanonicalScalarLoop.read q s l with
+    | none => ok (core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+    | some b => do
+      let r ← S8OwnedP6.aspis_core.field.M31.from_le_bytes b
+      ok (NKB_CanonicalOpening.reply r.isSome)
+  | Check.c1 q s => kReply (NKB_CanonicalTail.window q s)
+  | Check.c2 q s l => kReply (NKB_CanonicalRange.window q s l)
+  | Check.invalid => fail Error.panic
+is not definitionally equal to the right-hand side
+  ok
+    (NKB_CanonicalOpening.reply
+      (match Check.scalar q s l with
+      | Check.cv proof => NKL_CanonicalChildren.compactGood (NKB_CanonicalPrefix.values proof)
+      | Check.ec site => NKL_CanonicalChildren.echeckGood site.bytes
+      | Check.view proof i =>
+        match NJS_Extract.verifier.candidate.opening proof i with
+        | ok v => true
+        | x => false
+      | Check.scalar q s l => ((NKB_CanonicalScalarLoop.read q s l).bind NKB_CanonicalScalarBridge.scalar).isSome
+      | Check.c1 q s => (NKL_CanonicalKCarrier.selected (NKB_CanonicalTail.window q s)).isSome
+      | Check.c2 q s l => (NKL_CanonicalKCarrier.selected (NKB_CanonicalRange.window q s l)).isSome
+      | Check.invalid => false))
+
+case scalar.none
+q : Slice U8
+s l : Usize
+domain : NKL_ScanDomains.Domain (Check.scalar q s l)
+read : NKB_CanonicalScalarLoop.read q s l = none
+⊢ (match Check.scalar q s l with
+    | Check.cv proof => do
+      let r ← NFU_Retarget.compact.check_values (NKB_CanonicalPrefix.values proof)
+      ok (NKL_CanonicalChildren.convert r)
+    | Check.ec site => do
+      let r ← NFU_Retarget.verifier.echeck site.bytes false
+      ok
+          (match r with
+          | core.result.Result.Ok u => core.result.Result.Ok u
+          | core.result.Result.Err a => core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+    | Check.view proof i => do
+      let _ ← NEO_TailRef.opening proof i
+      ok (core.result.Result.Ok ())
+    | Check.scalar q s l =>
+      match NKB_CanonicalScalarLoop.read q s l with
+      | none => ok (core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+      | some b => do
+        let r ← S8OwnedP6.aspis_core.field.M31.from_le_bytes b
+        ok (NKB_CanonicalOpening.reply r.isSome)
+    | Check.c1 q s => kReply (NKB_CanonicalTail.window q s)
+    | Check.c2 q s l => kReply (NKB_CanonicalRange.window q s l)
+    | Check.invalid => fail Error.panic) =
+    ok
+      (NKB_CanonicalOpening.reply
+        (match Check.scalar q s l with
+        | Check.cv proof => NKL_CanonicalChildren.compactGood (NKB_CanonicalPrefix.values proof)
+        | Check.ec site => NKL_CanonicalChildren.echeckGood site.bytes
+        | Check.view proof i =>
+          match NJS_Extract.verifier.candidate.opening proof i with
+          | ok v => true
+          | x => false
+        | Check.scalar q s l => ((NKB_CanonicalScalarLoop.read q s l).bind NKB_CanonicalScalarBridge.scalar).isSome
+        | Check.c1 q s => (NKL_CanonicalKCarrier.selected (NKB_CanonicalTail.window q s)).isSome
+        | Check.c2 q s l => (NKL_CanonicalKCarrier.selected (NKB_CanonicalRange.window q s l)).isSome
+        | Check.invalid => false))
+NKL_ScanAtoms.lean:55:17: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  S8OwnedP6.aspis_core.field.M31.from_le_bytes ?b
+in the target expression
+  (match Check.scalar q s l with
+    | Check.cv proof => do
+      let r ← NFU_Retarget.compact.check_values (NKB_CanonicalPrefix.values proof)
+      ok (NKL_CanonicalChildren.convert r)
+    | Check.ec site => do
+      let r ← NFU_Retarget.verifier.echeck site.bytes false
+      ok
+          (match r with
+          | core.result.Result.Ok u => core.result.Result.Ok u
+          | core.result.Result.Err a => core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+    | Check.view proof i => do
+      let _ ← NEO_TailRef.opening proof i
+      ok (core.result.Result.Ok ())
+    | Check.scalar q s l =>
+      match NKB_CanonicalScalarLoop.read q s l with
+      | none => ok (core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+      | some b => do
+        let r ← S8OwnedP6.aspis_core.field.M31.from_le_bytes b
+        ok (NKB_CanonicalOpening.reply r.isSome)
+    | Check.c1 q s => kReply (NKB_CanonicalTail.window q s)
+    | Check.c2 q s l => kReply (NKB_CanonicalRange.window q s l)
+    | Check.invalid => fail Error.panic) =
+    ok
+      (NKB_CanonicalOpening.reply
+        (match Check.scalar q s l with
+        | Check.cv proof => NKL_CanonicalChildren.compactGood (NKB_CanonicalPrefix.values proof)
+        | Check.ec site => NKL_CanonicalChildren.echeckGood site.bytes
+        | Check.view proof i =>
+          match NJS_Extract.verifier.candidate.opening proof i with
+          | ok v => true
+          | x => false
+        | Check.scalar q s l => ((NKB_CanonicalScalarLoop.read q s l).bind NKB_CanonicalScalarBridge.scalar).isSome
+        | Check.c1 q s => (NKL_CanonicalKCarrier.selected (NKB_CanonicalTail.window q s)).isSome
+        | Check.c2 q s l => (NKL_CanonicalKCarrier.selected (NKB_CanonicalRange.window q s l)).isSome
+        | Check.invalid => false))
+
+case scalar.some
+q : Slice U8
+s l : Usize
+domain : NKL_ScanDomains.Domain (Check.scalar q s l)
+b : Std.Array U8 4#usize
+read : NKB_CanonicalScalarLoop.read q s l = some b
+⊢ (match Check.scalar q s l with
+    | Check.cv proof => do
+      let r ← NFU_Retarget.compact.check_values (NKB_CanonicalPrefix.values proof)
+      ok (NKL_CanonicalChildren.convert r)
+    | Check.ec site => do
+      let r ← NFU_Retarget.verifier.echeck site.bytes false
+      ok
+          (match r with
+          | core.result.Result.Ok u => core.result.Result.Ok u
+          | core.result.Result.Err a => core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+    | Check.view proof i => do
+      let _ ← NEO_TailRef.opening proof i
+      ok (core.result.Result.Ok ())
+    | Check.scalar q s l =>
+      match NKB_CanonicalScalarLoop.read q s l with
+      | none => ok (core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+      | some b => do
+        let r ← S8OwnedP6.aspis_core.field.M31.from_le_bytes b
+        ok (NKB_CanonicalOpening.reply r.isSome)
+    | Check.c1 q s => kReply (NKB_CanonicalTail.window q s)
+    | Check.c2 q s l => kReply (NKB_CanonicalRange.window q s l)
+    | Check.invalid => fail Error.panic) =
+    ok
+      (NKB_CanonicalOpening.reply
+        (match Check.scalar q s l with
+        | Check.cv proof => NKL_CanonicalChildren.compactGood (NKB_CanonicalPrefix.values proof)
+        | Check.ec site => NKL_CanonicalChildren.echeckGood site.bytes
+        | Check.view proof i =>
+          match NJS_Extract.verifier.candidate.opening proof i with
+          | ok v => true
+          | x => false
+        | Check.scalar q s l => ((NKB_CanonicalScalarLoop.read q s l).bind NKB_CanonicalScalarBridge.scalar).isSome
+        | Check.c1 q s => (NKL_CanonicalKCarrier.selected (NKB_CanonicalTail.window q s)).isSome
+        | Check.c2 q s l => (NKL_CanonicalKCarrier.selected (NKB_CanonicalRange.window q s l)).isSome
+        | Check.invalid => false))
+theorem NKL_ScanAtoms.source : ∀ (c : Check),
+  NKL_ScanDomains.Domain c → child c = ok (NKB_CanonicalOpening.reply (test c)) :=
+⋯
+'NKL_ScanAtoms.k' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ScanAtoms.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKL_ScanAtoms.accepted_test' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

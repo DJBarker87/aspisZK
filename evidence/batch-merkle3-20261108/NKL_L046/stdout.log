@@ -1,0 +1,18 @@
+theorem NKL_ScanModel.source : ∀ (proof : Slice U8),
+  (↑proof).length = 57607 →
+    NJS_Extract.verifier.candidate.canonical_scan AspisR1M31Parser.field.M31.from_le_bytes
+        NKL_CanonicalInstallation.childK NKL_CanonicalInstallation.childE NKL_CanonicalInstallation.childCV proof =
+      ok (NKB_CanonicalOpening.reply (decide (scan (bytesOf ↑proof)))) :=
+⋯
+theorem NKL_ScanModel.adopted : ∀ (proof : Slice U8),
+  (↑proof).length = 57607 →
+    NJS_Extract.verifier.candidate.canonical_scan AspisR1M31Parser.field.M31.from_le_bytes
+        NKL_CanonicalInstallation.childK NKL_CanonicalInstallation.childE NKL_CanonicalInstallation.childCV proof =
+      do
+      let valid ← MultiproofParserRef.parser_reference.scan proof
+      ok (NKB_CanonicalOpening.reply valid) :=
+⋯
+'NKL_ScanModel.predicate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ScanModel.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ScanModel.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ScanModel.adopted' depends on axioms: [propext, Classical.choice, Quot.sound]

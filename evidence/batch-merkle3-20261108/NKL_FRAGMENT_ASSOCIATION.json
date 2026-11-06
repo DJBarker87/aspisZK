@@ -36,5 +36,35 @@
       "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
       "scope": "batch_tree"
     }
+  ],
+  "scan_spans": [
+    {
+      "body": "M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;",
+      "sha256": "52376733538e68a44877414cd1f93e118fcacce26cc68df969615ce151c6059d",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "scope": "canonical_scan"
+    },
+    {
+      "body": "K::from_le_bytes(&q[480 + s * 32 + l * 16..480 + s * 32 + l * 16 + 16]).ok_or(Error::Parse)?;",
+      "sha256": "98089433a70fa77facd2a625c79855bfc2f705df722f6c628fe7be61a792bf26",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "scope": "canonical_scan"
+    },
+    {
+      "body": "K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;",
+      "sha256": "1ee5f05398242ed6550441bdc6946ed62c0dc961b1dd04f1c33c6bc2024cbdd4",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "scope": "canonical_scan"
+    }
+  ],
+  "call_templates": [
+    {
+      "frozen": "echeck(&q[672..800], false)?;",
+      "schema": "bytes := SAME q[672..800]; evaluate child once, log arguments/reply, then reply?"
+    },
+    {
+      "frozen": "compact::check_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE])?;",
+      "schema": "bytes := SAME proof[OFF_Y1..OFF_INACTIVE]; evaluate child once, log arguments/reply, then reply?"
+    }
   ]
 }

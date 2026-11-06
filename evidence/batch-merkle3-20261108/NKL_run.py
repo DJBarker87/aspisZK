@@ -29,9 +29,15 @@ for disk_try in range(7):
  if shutil.disk_usage(b).free>=40000000000:break
  if disk_try==6:raise RuntimeError('STOP disk below40GB')
  time.sleep(600)
+own_bytes=int(subprocess.check_output(['du','-sb',str(b)],text=True).split()[0]);assert own_bytes<30000000000,'STOP own workspace30GB cap'
+resource=dict(free_bytes=shutil.disk_usage(b).free,own_workspace_bytes=own_bytes,cargo_target=str(b/'NKL_target'))
 p=b/{(a+'-reservation.json')!r}
 with (b/{(a+'-barrier-'+str(n)+'.log')!r}).open('w') as f:r=subprocess.run(['python3','/home/dombarker/project-offloads/codex-cx-s2h-20261023/S2H_reservation.py',str(p)],stdout=f,stderr=subprocess.STDOUT)
-print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
+if p.exists():
+ import json
+ ad=json.loads(p.read_text());ad['NKL_resource_preflight']=resource;print(json.dumps(ad))
+else:print('MISSING')
+sys.exit(r.returncode)
 ''')
  (E/(a+f'-barrier-{n}.log')).write_text(r.stdout+r.stderr)
  try:ad=json.loads(r.stdout)

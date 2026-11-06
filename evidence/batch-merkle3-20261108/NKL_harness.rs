@@ -92,3 +92,236 @@ fn count_input(){
  #[cfg(NKL_invert)] assert_ne!(front.len(),d);
  let j:usize=kani::any();kani::assume(j<d);assert_eq!(front[j],idx[j]);
 }
+
+#[derive(Default)]
+struct ScanLog{calls:usize,offset:usize,width:usize}
+fn scan_scalar_step(q:&[u8],s:usize,iter:&mut core::ops::Range<usize>,log:&mut ScanLog)->Result<(),Error>{
+ match iter.next(){
+  None=>Ok(()),
+  Some(l)=>{
+   log.calls+=1;log.offset=s*120+l*4;log.width=4;
+   M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;
+   Ok(())
+  }
+ }
+}
+fn scan_k_step(q:&[u8],s:usize,iter:&mut core::ops::Range<usize>,log:&mut ScanLog)->Result<(),Error>{
+ match iter.next(){
+  None=>Ok(()),
+  Some(l)=>{
+   log.calls+=1;log.offset=480+s*32+l*16;log.width=16;
+   K::from_le_bytes(&q[480 + s * 32 + l * 16..480 + s * 32 + l * 16 + 16]).ok_or(Error::Parse)?;
+   Ok(())
+  }
+ }
+}
+fn scan_c1_step(q:&[u8],s:usize,log:&mut ScanLog)->Result<(),Error>{
+ log.calls+=1;log.offset=s*120+104;log.width=16;
+ K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;
+ Ok(())
+}
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn scan_scalar_iteration(){
+ let q:[u8;832]=kani::any();let probe:usize=kani::any();kani::assume(probe<832);let before=q[probe];let s:usize=kani::any();let start:usize=kani::any();kani::assume(s<4&&start<=26); #[cfg(any(NKL_value_control,NKL_frame_control,NKL_argument_control))] kani::assume(start<26);
+ let mut iter=start..26;let mut log=ScanLog::default();let active=start<26;let offset=s*120+start*4;
+ let expected=if active{u32::from_le_bytes(q[offset..offset+4].try_into().unwrap())<2147483647}else{true};
+ let out=scan_scalar_step(&q,s,&mut iter,&mut log); #[cfg(not(NKL_frame_control))] assert_eq!(q[probe],before); #[cfg(NKL_frame_control)] assert_ne!(q[probe],before);
+ assert_eq!(iter.start,if active{start+1}else{start});assert_eq!(iter.end,26);#[cfg(not(NKL_value_control))] assert_eq!(out.is_ok(),expected); #[cfg(NKL_value_control)] assert_ne!(out.is_ok(),expected);if !expected{assert!(matches!(out,Err(Error::Parse)))}
+ #[cfg(not(NKL_invert))] assert_eq!(log.calls,active as usize);
+ #[cfg(NKL_invert)] assert_ne!(log.calls,active as usize);
+ if active{#[cfg(not(NKL_argument_control))] assert_eq!(log.offset,offset);#[cfg(NKL_argument_control)] assert_ne!(log.offset,offset);assert_eq!(log.width,4)}else{assert_eq!(log.offset,0);assert_eq!(log.width,0)}
+}
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn scan_k_iteration(){
+ let q:[u8;832]=kani::any();let probe:usize=kani::any();kani::assume(probe<832);let before=q[probe];let s:usize=kani::any();let start:usize=kani::any();kani::assume(s<4&&start<=2); #[cfg(any(NKL_value_control,NKL_frame_control,NKL_argument_control))] kani::assume(start<2);
+ let mut iter=start..2;let mut log=ScanLog::default();let active=start<2;let offset=480+s*32+start*16;
+ let w=|at:usize|u32::from_le_bytes(q[at..at+4].try_into().unwrap());let expected=if active{w(offset)<2147483647&&w(offset+4)<2147483647&&w(offset+8)<2147483647&&w(offset+12)<2147483647}else{true};
+ let out=scan_k_step(&q,s,&mut iter,&mut log); #[cfg(not(NKL_frame_control))] assert_eq!(q[probe],before); #[cfg(NKL_frame_control)] assert_ne!(q[probe],before);
+ assert_eq!(iter.start,if active{start+1}else{start});assert_eq!(iter.end,2);#[cfg(not(NKL_value_control))] assert_eq!(out.is_ok(),expected); #[cfg(NKL_value_control)] assert_ne!(out.is_ok(),expected);if !expected{assert!(matches!(out,Err(Error::Parse)))}
+ #[cfg(not(NKL_invert))] assert_eq!(log.calls,active as usize);
+ #[cfg(NKL_invert)] assert_ne!(log.calls,active as usize);
+ if active{#[cfg(not(NKL_argument_control))] assert_eq!(log.offset,offset);#[cfg(NKL_argument_control)] assert_ne!(log.offset,offset);assert_eq!(log.width,16)}else{assert_eq!(log.offset,0);assert_eq!(log.width,0)}
+}
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn scan_c1_iteration(){
+ let q:[u8;832]=kani::any();let probe:usize=kani::any();kani::assume(probe<832);let before=q[probe];let s:usize=kani::any();kani::assume(s<4);let mut log=ScanLog::default();let offset=s*120+104;
+ let w=|at:usize|u32::from_le_bytes(q[at..at+4].try_into().unwrap());let expected=w(offset)<2147483647&&w(offset+4)<2147483647&&w(offset+8)<2147483647&&w(offset+12)<2147483647;
+ let out=scan_c1_step(&q,s,&mut log); #[cfg(not(NKL_frame_control))] assert_eq!(q[probe],before); #[cfg(NKL_frame_control)] assert_ne!(q[probe],before);#[cfg(not(NKL_value_control))] assert_eq!(out.is_ok(),expected); #[cfg(NKL_value_control)] assert_ne!(out.is_ok(),expected);if !expected{assert!(matches!(out,Err(Error::Parse)))}
+ #[cfg(not(NKL_invert))] assert_eq!(log.calls,1);
+ #[cfg(NKL_invert)] assert_ne!(log.calls,1);
+ #[cfg(not(NKL_argument_control))] assert_eq!(log.offset,offset);#[cfg(NKL_argument_control)] assert_ne!(log.offset,offset);assert_eq!(log.width,16);
+}
+
+#[derive(Default)]
+struct ScanCallLog{calls:usize,ptr:usize,len:usize,flag:bool,reply_ok:bool}
+fn arbitrary_echeck(_: &[u8],_:bool)->Result<(),Error>{if kani::any(){Ok(())}else{Err(Error::Parse)}}
+fn arbitrary_compact(_: &[u8])->Result<(),CodecError>{if kani::any(){Ok(())}else{Err(CodecError::NonCanonical)}}
+// Source-ordered call-boundary template: materialize the child reply once,
+// log it, then execute the frozen question-mark propagation.
+fn scan_echeck_call(bytes:&[u8],log:&mut ScanCallLog)->Result<(),Error>{
+ log.calls+=1;log.ptr=bytes.as_ptr()as usize;log.len=bytes.len();log.flag=false;
+ let reply=echeck(bytes,false);log.reply_ok=reply.is_ok();reply?;Ok(())
+}
+fn scan_compact_call(bytes:&[u8],log:&mut ScanCallLog)->Result<(),Error>{
+ log.calls+=1;log.ptr=bytes.as_ptr()as usize;log.len=bytes.len();
+ let reply=compact::check_values(bytes);log.reply_ok=reply.is_ok();reply?;Ok(())
+}
+#[kani::proof]
+#[kani::unwind(2)]
+#[kani::stub(super::echeck,arbitrary_echeck)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn scan_echeck_call_cut(){
+ let bytes:[u8;2272]=kani::any();let len:usize=kani::any();kani::assume(len<=2272);let input=&bytes[..len];let mut log=ScanCallLog::default();
+ let probe:usize=kani::any();kani::assume(probe<2272);let before=bytes[probe];let out=scan_echeck_call(input,&mut log); #[cfg(not(NKL_frame_control))] assert_eq!(bytes[probe],before); #[cfg(NKL_frame_control)] assert_ne!(bytes[probe],before);#[cfg(not(NKL_value_control))] assert_eq!(out.is_ok(),log.reply_ok); #[cfg(NKL_value_control)] assert_ne!(out.is_ok(),log.reply_ok);if !log.reply_ok{assert!(matches!(out,Err(Error::Parse)))}
+ assert_eq!(log.ptr,input.as_ptr()as usize);assert_eq!(log.len,len);assert!(!log.flag);
+ #[cfg(not(NKL_invert))] assert_eq!(log.calls,1);
+ #[cfg(NKL_invert)] assert_ne!(log.calls,1);
+}
+#[kani::proof]
+#[kani::unwind(2)]
+#[kani::stub(compact::check_values,arbitrary_compact)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn scan_compact_call_cut(){
+ let bytes:[u8;464]=kani::any();let len:usize=kani::any();kani::assume(len<=464);let input=&bytes[..len];let mut log=ScanCallLog::default();
+ let probe:usize=kani::any();kani::assume(probe<464);let before=bytes[probe];let out=scan_compact_call(input,&mut log); #[cfg(not(NKL_frame_control))] assert_eq!(bytes[probe],before); #[cfg(NKL_frame_control)] assert_ne!(bytes[probe],before);#[cfg(not(NKL_value_control))] assert_eq!(out.is_ok(),log.reply_ok); #[cfg(NKL_value_control)] assert_ne!(out.is_ok(),log.reply_ok);if !log.reply_ok{assert!(matches!(out,Err(Error::Parse)))}
+ assert_eq!(log.ptr,input.as_ptr()as usize);assert_eq!(log.len,len);
+ #[cfg(not(NKL_invert))] assert_eq!(log.calls,1);
+ #[cfg(NKL_invert)] assert_ne!(log.calls,1);
+}
+
+fn scan_prefix_call(proof:&[u8],site:usize,log:&mut ScanCallLog)->Result<(),Error>{
+ match site{
+  0=>{
+   let bytes=&proof[compact::OFF_Y1..compact::OFF_INACTIVE];log.calls+=1;log.ptr=bytes.as_ptr()as usize;log.len=bytes.len();
+   let reply=compact::check_values(bytes);log.reply_ok=reply.is_ok();reply?;Ok(())
+  },
+  1=>{
+   let bytes=&proof[compact::OFF_INACTIVE..compact::OFF_INACTIVE+32];log.calls+=1;log.ptr=bytes.as_ptr()as usize;log.len=bytes.len();log.flag=false;
+   let reply=echeck(bytes,false);log.reply_ok=reply.is_ok();reply?;Ok(())
+  },
+  2=>{
+   let bytes=&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT];log.calls+=1;log.ptr=bytes.as_ptr()as usize;log.len=bytes.len();log.flag=false;
+   let reply=echeck(bytes,false);log.reply_ok=reply.is_ok();reply?;Ok(())
+  },
+  _=>{
+   let bytes=&proof[compact::OFF_ROUND1..compact::OFF_OPENINGS];log.calls+=1;log.ptr=bytes.as_ptr()as usize;log.len=bytes.len();log.flag=false;
+   let reply=echeck(bytes,false);log.reply_ok=reply.is_ok();reply?;Ok(())
+  }
+ }
+}
+#[kani::proof]
+#[kani::unwind(2)]
+#[kani::stub(super::echeck,arbitrary_echeck)]
+#[kani::stub(compact::check_values,arbitrary_compact)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn scan_prefix_call_cut(){
+ let proof:[u8;57607]=kani::any();let site:usize=kani::any();kani::assume(site<4);let mut log=ScanCallLog::default();
+ let probe:usize=kani::any();kani::assume(probe<57607);let before=proof[probe];
+ let out=scan_prefix_call(&proof,site,&mut log);
+ #[cfg(not(NKL_value_control))] assert_eq!(out.is_ok(),log.reply_ok);
+ #[cfg(NKL_value_control)] assert_ne!(out.is_ok(),log.reply_ok);
+ if !log.reply_ok{assert!(matches!(out,Err(Error::Parse)))}
+ let(start,len)=match site{0=>(7031,464),1=>(7495,32),2=>(7527,224),_=>(7783,2272)};
+ #[cfg(not(NKL_argument_control))] assert_eq!(log.ptr,proof.as_ptr().wrapping_add(start)as usize);
+ #[cfg(NKL_argument_control)] assert_ne!(log.ptr,proof.as_ptr().wrapping_add(start)as usize);
+ assert_eq!(log.len,len);assert!(!log.flag);
+ #[cfg(not(NKL_frame_control))] assert_eq!(proof[probe],before);
+ #[cfg(NKL_frame_control)] assert_ne!(proof[probe],before);
+ #[cfg(not(NKL_invert))] assert_eq!(log.calls,1);
+ #[cfg(NKL_invert)] assert_ne!(log.calls,1);
+}
+
+#[derive(Default)]
+struct OpenLog{calls:usize,proof_ptr:usize,proof_len:usize,ordinal:usize,ptr:usize,len:usize}
+fn scan_open_step<'a>(proof:&'a[u8],iter:&mut core::ops::Range<usize>,log:&mut OpenLog)->Option<&'a[u8]>{
+ match iter.next(){
+  None=>None,
+  Some(i)=>{
+   log.calls+=1;log.proof_ptr=proof.as_ptr()as usize;log.proof_len=proof.len();log.ordinal=i;
+   let q=opening(proof,i);log.ptr=q.as_ptr()as usize;log.len=q.len();Some(q)
+  }
+ }
+}
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn scan_open_iteration(){
+ let proof:[u8;57607]=kani::any();let start:usize=kani::any();kani::assume(start<=22);
+ #[cfg(NKL_argument_control)] kani::assume(start<22);
+ let active=start<22;let mut iter=start..22;let mut log=OpenLog::default();let probe:usize=kani::any();kani::assume(probe<57607);let before=proof[probe];
+ let out=scan_open_step(&proof,&mut iter,&mut log);
+ #[cfg(not(NKL_value_control))] assert_eq!(out.is_some(),active);
+ #[cfg(NKL_value_control)] assert_ne!(out.is_some(),active);
+ assert_eq!(iter.start,if active{start+1}else{start});assert_eq!(iter.end,22);
+ #[cfg(not(NKL_invert))] assert_eq!(log.calls,active as usize);
+ #[cfg(NKL_invert)] assert_ne!(log.calls,active as usize);
+ #[cfg(not(NKL_frame_control))] assert_eq!(proof[probe],before);
+ #[cfg(NKL_frame_control)] assert_ne!(proof[probe],before);
+ if let Some(q)=out{
+  assert_eq!(log.proof_ptr,proof.as_ptr()as usize);assert_eq!(log.proof_len,57607);assert_eq!(log.ordinal,start);assert_eq!(log.len,832);assert_eq!(q.len(),832);assert_eq!(log.ptr,q.as_ptr()as usize);
+  #[cfg(not(NKL_argument_control))] assert_eq!(q.as_ptr(),proof.as_ptr().wrapping_add(10055+start*832));
+  #[cfg(NKL_argument_control)] assert_ne!(q.as_ptr(),proof.as_ptr().wrapping_add(10055+start*832));
+ }else{assert_eq!(log.proof_ptr,0);assert_eq!(log.proof_len,0);assert_eq!(log.ptr,0);assert_eq!(log.len,0)}
+}
+fn scan_slot_boundary(q:&[u8],iter:&mut core::ops::Range<usize>,log:&mut ScanCallLog)->Result<Option<usize>,Error>{
+ match iter.next(){
+  Some(s)=>Ok(Some(s)),
+  None=>{
+   let bytes=&q[672..800];log.calls+=1;log.ptr=bytes.as_ptr()as usize;log.len=bytes.len();log.flag=false;
+   let reply=echeck(bytes,false);log.reply_ok=reply.is_ok();reply?;Ok(None)
+  }
+ }
+}
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(super::echeck,arbitrary_echeck)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn scan_slot_iteration(){
+ let q:[u8;832]=kani::any();let start:usize=kani::any();kani::assume(start<=4);
+ #[cfg(any(NKL_argument_control,NKL_value_control))] kani::assume(start==4);
+ let active=start<4;let mut iter=start..4;let mut log=ScanCallLog::default();let probe:usize=kani::any();kani::assume(probe<832);let before=q[probe];
+ let out=scan_slot_boundary(&q,&mut iter,&mut log);let expected=active||log.reply_ok;
+ #[cfg(not(NKL_value_control))] assert_eq!(out.is_ok(),expected);
+ #[cfg(NKL_value_control)] assert_ne!(out.is_ok(),expected);
+ assert_eq!(iter.start,if active{start+1}else{start});assert_eq!(iter.end,4);
+ #[cfg(not(NKL_invert))] assert_eq!(log.calls,(!active)as usize);
+ #[cfg(NKL_invert)] assert_ne!(log.calls,(!active)as usize);
+ #[cfg(not(NKL_frame_control))] assert_eq!(q[probe],before);
+ #[cfg(NKL_frame_control)] assert_ne!(q[probe],before);
+ if active{assert!(matches!(out,Ok(Some(s))if s==start));assert_eq!(log.ptr,0);assert_eq!(log.len,0)}
+ else{
+  if log.reply_ok{assert!(matches!(out,Ok(None)))}else{assert!(matches!(out,Err(Error::Parse)))}
+  #[cfg(not(NKL_argument_control))] assert_eq!(log.ptr,q.as_ptr().wrapping_add(672)as usize);
+  #[cfg(NKL_argument_control)] assert_ne!(log.ptr,q.as_ptr().wrapping_add(672)as usize);
+  assert_eq!(log.len,128);assert!(!log.flag)
+ }
+}
+
+fn scan_prefix_two(proof:&[u8],first:&mut ScanCallLog,second:&mut ScanCallLog)->Result<(),Error>{
+ scan_prefix_call(proof,0,first)?;
+ scan_prefix_call(proof,1,second)?;
+ Ok(())
+}
+#[kani::proof]
+#[kani::unwind(2)]
+#[kani::stub(super::echeck,arbitrary_echeck)]
+#[kani::stub(crate::compact::check_values,arbitrary_compact)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn scan_prefix_two_cut(){
+ let proof:[u8;57607]=kani::any();let probe:usize=kani::any();kani::assume(probe<57607);let before=proof[probe];
+ let mut first=ScanCallLog::default();let mut second=ScanCallLog::default();
+ let out=scan_prefix_two(&proof,&mut first,&mut second);
+ assert_eq!(first.calls,1);assert_eq!(first.ptr,proof.as_ptr().wrapping_add(compact::OFF_Y1)as usize);assert_eq!(first.len,464);
+ assert_eq!(out.is_ok(),first.reply_ok&&second.reply_ok);assert_eq!(proof[probe],before);
+ if out.is_err(){assert!(matches!(out,Err(Error::Parse)))}
+ #[cfg(not(NKL_invert))] assert_eq!(second.calls,first.reply_ok as usize);
+ #[cfg(NKL_invert)] assert_ne!(second.calls,first.reply_ok as usize);
+ if first.reply_ok{assert_eq!(second.ptr,proof.as_ptr().wrapping_add(compact::OFF_INACTIVE)as usize);assert_eq!(second.len,32);assert!(!second.flag)}
+ else{assert_eq!(second.ptr,0);assert_eq!(second.len,0);assert!(!second.reply_ok)}
+}

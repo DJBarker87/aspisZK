@@ -22,7 +22,14 @@ frag=(E/'NKL_fragments.rs').read_bytes(); assoc=json.loads((E/'NKL_FRAGMENT_ASSO
 for item in assoc['spans']:
  body=item['body'];assert stage.sha(body.encode())==item['sha256'];assert body in raw.decode() and body in frag.decode()
 (S/'NKL_fragments.rs').write_bytes(frag)
-h=(E/'NKL_harness.rs').read_bytes();assert not any(t in h.decode() for t in ['static mut','UnsafeCell','Atomic'])
+scan=(E/'NKL_scan_steps.rs').read_bytes()
+for item in assoc.get('scan_spans',[]):
+ assert stage.sha(item['body'].encode())==item['sha256'] and item['body'] in raw.decode() and item['body'] in scan.decode()
+for item in assoc.get('call_templates',[]):assert item['frozen'] in raw.decode()
+h=(E/'NKL_harness.rs').read_bytes()
+for name in ['NKL_scan_steps.rs','NKL_scan_calls.rs','NKL_prefix_cut.rs','NKL_scan_control.rs','NKL_prefix_pair.rs']:
+ assert (E/name).read_bytes() in h,'STOP unmaterialized segment '+name
+assert not any(t in h.decode() for t in ['static mut','UnsafeCell','Atomic'])
 (S/'NKL_harness.rs').write_bytes(h);p.write_bytes(raw+append);lib.write_bytes(lib_patched)
 diff=''.join(difflib.unified_diff(raw.decode().splitlines(True),(raw+append).decode().splitlines(True),fromfile='a/'+str(p.relative_to(S)),tofile='b/'+str(p.relative_to(S))))
 libdiff=''.join(difflib.unified_diff(lib_raw.decode().splitlines(True),lib_patched.decode().splitlines(True),fromfile='a/'+str(lib.relative_to(S)),tofile='b/'+str(lib.relative_to(S))))
