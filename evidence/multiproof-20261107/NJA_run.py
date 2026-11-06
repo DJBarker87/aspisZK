@@ -60,7 +60,7 @@ for root in roots:
   if Path(root,stem+'.olean').is_file():rels.add(stem+'.olean')
 for name in x['sources']:
  if name.endswith('.lean'):
-  rels.update(m.replace('.','/')+'.olean' for m in re.findall(r'^import ([A-Za-z0-9_.]+)',(b/name).read_text(),re.M))
+  rels.update(m.replace('.','/')+'.olean' for m in re.findall(r'^import (?:all )?([A-Za-z0-9_.]+)',(b/name).read_text(),re.M))
 for rel in sorted(rels):
  z=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert z is not None,rel
  for q in [z,Path(str(z)+'.private'),Path(str(z)+'.server'),z.with_suffix('.ir')]:

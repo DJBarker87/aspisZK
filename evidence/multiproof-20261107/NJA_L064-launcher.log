@@ -1,0 +1,52 @@
+{"attempt": "NJA_L064", "exit_status": 1, "wall_seconds": 3.651736533967778, "peak_rss_kib": "4270204", "swaps": "0", "print_axioms": ["'NJA_WellIteration.domain_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJA_WellIteration.order_pair' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJA_WellIteration.domain_all' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJA_WellIteration.order_all' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJA_WellIteration.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJA_lean/NJA_WellIteration.lean:24:76: error: unsolved goals
+x : U32
+⊢ (let (b, _) := (decide (↑x < 262144), ())
+    ok b) =
+    ok (decide (↑x < 262144))
+NJA_lean/NJA_WellIteration.lean:27:103: error: unsolved goals
+a b : U32
+⊢ (let (b, _) := (decide (↑a < ↑b), ())
+    ok b) =
+    ok (decide (↑a < ↑b))
+NJA_lean/NJA_WellIteration.lean:34:1: error: `simp` made no progress
+NJA_lean/NJA_WellIteration.lean:37:71: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.U32.val`
+NJA_lean/NJA_WellIteration.lean:43:15: error: unsolved goals
+case cons.cons.false
+x y : U32
+ys : List U32
+ih : List.allM order (windows (y :: ys)) = ok (decide (NJA_WellFormed.adjacent (sorry () y :: List.map (sorry ()
+...
+on.lean:37:71: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.U32.val`
+NJA_lean/NJA_WellIteration.lean:43:15: error: unsolved goals
+case cons.cons.false
+x y : U32
+ys : List U32
+ih : List.allM order (windows (y :: ys)) = ok (decide (NJA_WellFormed.adjacent (sorry () y :: List.map (sorry ()) ys)))
+h : ↑y ≤ ↑x
+⊢ pure false =
+    ok (decide (sorry () x < sorry () y) && decide (NJA_WellFormed.adjacent (sorry () y :: List.map (sorry ()) ys)))
+
+case cons.cons.true
+x y : U32
+ys : List U32
+ih : List.allM order (windows (y :: ys)) = ok (decide (NJA_WellFormed.adjacent (sorry () y :: List.map (sorry ()) ys)))
+h : ↑x < ↑y
+⊢ decide (NJA_WellFormed.adjacent (sorry () y :: List.map (sorry ()) ys)) =
+    (decide (sorry () x < sorry () y) && decide (NJA_WellFormed.adjacent (sorry () y :: List.map (sorry ()) ys)))
+NJA_lean/NJA_WellIteration.lean:55:48: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.U32.val`
+NJA_lean/NJA_WellIteration.lean:62:52: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.U32.val`
+NJA_lean/NJA_WellIteration.lean:63:5: error: unsolved goals
+case pos
+xs : List U32
+e : ¬xs = []
+large : xs.length ≤ 16
+a : NJA_WellFormed.adjacent (List.map sorry xs)
+⊢ decide (∀ x ∈ xs, ↑x < 262144) = (!decide (16 < xs.length) && decide (∀ a ∈ xs, sorry () a < 262144))
+'NJA_WellIteration.domain_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJA_WellIteration.order_pair' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJA_WellIteration.domain_all' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJA_WellIteration.order_all' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJA_WellIteration.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r15646c74dbe243fe83fb2ec7f6ea3dd4.scope; invocation ID: 3666ffd9ea30483da694e04b230feefe
