@@ -1,0 +1,136 @@
+def NLE_OwnedFine.G : Ops → State → Run (core.result.Result Unit solana_program_error.ProgramError) :=
+fun ops initial =>
+  have program_id := initial.frame.program;
+  have accounts := initial.frame.accounts;
+  have data := initial.frame.data;
+  have current_slot := initial.frame.slot;
+  have i := accounts.len;
+  if (i != 7#usize) = true then pure (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+  else do
+    let o ← liftM (core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize })
+    let s ←
+      liftM
+          (core.array.Array.index
+            (core.ops.index.IndexSlice (core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+            aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC ())
+    let b ←
+      liftM
+          (core.cmp.PartialEq.ne.trait_default
+            (core.option.Option.Insts.CoreCmpPartialEqOption ops
+              (core.cmp.PartialEqShared (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+            o (some s))
+    if b = true then pure (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+      else do
+        let r ← NLE_OwnedStep.validate ops initial
+        let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            have s1 :=
+              { frame := initial.frame, validated := some val, proofBytes := initial.proofBytes,
+                checkpoint := initial.checkpoint, proofEnd := initial.proofEnd, publicBytes := initial.publicBytes };
+            do
+            let oa ← liftM (accounts.index_usize 0#usize)
+            let r1 ← NLE_OwnedStep.proof ops s1 oa
+            let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 =>
+                have s2 :=
+                  { frame := s1.frame, validated := s1.validated, proofBytes := some val1, checkpoint := s1.checkpoint,
+                    proofEnd := s1.proofEnd, publicBytes := s1.publicBytes };
+                do
+                let oa1 ← liftM (accounts.index_usize 6#usize)
+                let r2 ← NLE_OwnedStep.checkpoint ops s2 oa1
+                let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 =>
+                    have s3 :=
+                      { frame := s2.frame, validated := s2.validated, proofBytes := s2.proofBytes,
+                        checkpoint := some val2, proofEnd := s2.proofEnd, publicBytes := s2.publicBytes };
+                    do
+                    let proof_start ←
+                      liftM (aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops)
+                    let o1 ← liftM (lift (proof_start.checked_add val.proof_length))
+                    let r3 ← liftM (core.option.Option.ok_or o1 solana_program_error.ProgramError.InvalidAccountData)
+                    let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue val3 =>
+                        have s4 :=
+                          { frame := s3.frame, validated := s3.validated, proofBytes := s3.proofBytes,
+                            checkpoint := s3.checkpoint, proofEnd := some val3, publicBytes := s3.publicBytes };
+                        have i1 := val1.len;
+                        if (i1 != val3) = true then
+                          pure (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+                        else do
+                          let r4 ← NLE_OwnedStep.encode ops s4 val.statement
+                          let r5 ←
+                            liftM
+                                (core.result.Result.map_err
+                                  r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+                                  r4 ())
+                          let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                          match cf4 with
+                            | core.ops.control_flow.ControlFlow.Continue val4 =>
+                              have s5 :=
+                                { frame := s4.frame, validated := s4.validated, proofBytes := s4.proofBytes,
+                                  checkpoint := s4.checkpoint, proofEnd := s4.proofEnd, publicBytes := some val4 };
+                              do
+                              let s1 ← liftM (lift val4.to_slice)
+                              have i2 : Usize := s1.len
+                              let i3 ←
+                                liftM
+                                    (aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES
+                                      ops)
+                              if (i2 != i3) = true then
+                                  pure (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+                                else do
+                                  let s2 ← liftM (lift val4.to_slice)
+                                  let s3 ←
+                                    liftM
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                          val1 { start := proof_start, «end» := val3 })
+                                  let o2 ← liftM (observer ops)
+                                  let r6 ← NLE_OwnedStep.tx2 ops s5 s2 s3 val2 o2
+                                  let r7 ← errorMap ops s5 r6
+                                  let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r7)
+                                  match cf5 with
+                                    | core.ops.control_flow.ControlFlow.Continue a =>
+                                      NLE_OwnedStep.emit ops s5 val.statement
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      liftM
+                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame solana_program_error.ProgramError) residual)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame solana_program_error.ProgramError) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame solana_program_error.ProgramError) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame solana_program_error.ProgramError) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame solana_program_error.ProgramError) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame solana_program_error.ProgramError) residual)
+theorem NLE_OwnedFine.source : ∀ (ops : Ops) (state : State),
+  (G ops state).result =
+    r1_pool_adapter.owned.stage2_owned ops state.frame.program state.frame.accounts state.frame.data state.frame.slot :=
+fun ops state =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a.result =
+            r1_pool_adapter.owned.stage2_owned ops state.frame.program state.frame.accounts state.frame.data
+              state.frame.slot)
+        (installed ops state)))
+    (NLE_Owned.source ops state)
+'NLE_OwnedFine.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_OwnedFine.source' depends on axioms: [propext, Classical.choice, Quot.sound]

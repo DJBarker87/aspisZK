@@ -1,0 +1,13 @@
+# NLE failing step
+
+**The requested five complete parameterized native folds are NOT established.**
+
+The checked theorems are source-level Result/Run equalities and local domain facts. Their callback/operation dictionaries have not been replaced by the complete native child packet statements and concrete CLOSED packet applications required by(bd)/(aq). They must not be passed to a ledger as row roots.
+
+1. NKW ledger20 OPEN065/233/242 have no typed kernel-root entries or owners in their metadata. NLE_CHILD_INTERFACE_FINDING.json records the exact obligations/hashes; a clarification request asks for the committed declarations of the future packet statements. An OPEN row need not have a proved theorem, but the exact typed statement still matters. The job has not resolved that interface by inventing it. In particular CommonResultPacket is only a Result equation and is not the requested065 packet.
+2. The native whole-parent diagnostics do not provide a P6 physical-carrier interpretation. K007/K009/K011's harness-owned record is recovered unsafely from the proof view by subtracting offset_of!(Input,proof). No typed provenance/borrow/heap-extension law justifies that recovery at a frozen caller; address equality is insufficient. The custom Hash record is also not the deployed zero-sized SolanaDigest, and no concrete-instantiation/body transport has been proved. Native passes therefore remain DIAGNOSTIC ONLY, even with failing controls, correct features and lock.
+3. The source C01 facts are now internally derived at every entered common event: same successful CLOSED parser yields57607 and actual encoded Array gives1880; observer=None is installed from the caller construction. The remaining step is the native SAME-input/read/snapshot/encoder association. Selecting a mathematically unrelated1880Array is not allowed.
+4. K006's three-coordinate frame and K013's isolated proof-coordinate frame timed out at the existing90s limit; neither is rerun unchanged. Public and checkpoint coordinate shapes have passing positives and intended failing controls. None repairs item2 or constitutes a whole native frame law.
+5. The initial owned Run's missing error-conversion event was found and repaired. The affected NLE dependency closure was rebuilt; old objects and failed/superseded source receipts are retained separately. Only final source selectors enter the combined audit.
+
+No timeout/cap increase, lowered target, new trust row, RuntimeCpiReadonlyEntry7, native field multiplication or extraction is used. Further parent contracts may not guess a child's full footprint or conceal it in an Ops/endpoint hypothesis. The remaining packet/native association is an open proof obligation, not a cryptographic assumption.

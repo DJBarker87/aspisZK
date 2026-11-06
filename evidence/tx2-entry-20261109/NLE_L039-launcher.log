@@ -1,0 +1,47 @@
+{"attempt": "NLE_L039", "exit_status": 0, "wall_seconds": 16.065382172819227, "peak_rss_kib": "5945524", "swaps": "0", "print_axioms": ["'NLE_RouteFold.asq8_route' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_RouteFold.entry' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_RouteFold.child_packet' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLE_RouteFold.asq8_route : ∀ (data : Slice U8),
+  Hiq_ReleaseRoute.asq8 data → Hiq_ReleaseRoute.route data = Hiq_ReleaseRoute.Route.second :=
+fun data header =>
+  (Hiq_ReleaseRoute.second_iff data).mpr
+    ⟨fun first =>
+      Or.casesOn first
+        (fun ten =>
+          False.elim
+            (Eq.mp
+              (Eq.trans
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans (congrArg (List.take 4) ten)
+                        (congrArg (List.cons 3#u8) (congrArg (List.cons 10#u8) List.take_nil))))
+                    [65#u8, 83#u8, 81#u8, 56#u8])
+                  (List.cons.injEq 3#u8 [10#u8] 65#u8 [83#u8, 81#u8, 
+...
+g
+            (fun _a =>
+              (match _a with
+                | Hiq_ReleaseRoute.Route.first => ops.first state.program state.accounts state.data
+                | Hiq_ReleaseRoute.Route.second => ops.second state.program state.accounts state.data
+                | Hiq_ReleaseRoute.Route.reject =>
+                  ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)) =
+                ops.second state.program state.accounts state.data)
+            (asq8_route state.data header)))
+        (Eq.refl
+          (match Hiq_ReleaseRoute.Route.second with
+          | Hiq_ReleaseRoute.Route.first => ops.first state.program state.accounts state.data
+          | Hiq_ReleaseRoute.Route.second => ops.second state.program state.accounts state.data
+          | Hiq_ReleaseRoute.Route.reject =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)))))
+theorem NLE_RouteFold.child_packet : ∀ {Account State Event : Type}
+  (children : NGL_EntryRouting.Children Account State Event) (state : State) (program : Hiq_DispatchSource.Key)
+  (accounts : Slice Account) (data : Slice U8),
+  Hiq_ReleaseRoute.asq8 data →
+    NGL_EntryRouting.run children program accounts data state =
+      (children.second program accounts data state, [NGL_EntryRouting.Call.second program accounts data]) :=
+fun {Account State Event} children state program accounts data header =>
+  NIV_ForwardPacket.second children state program accounts data (asq8_route data header)
+'NLE_RouteFold.asq8_route' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_RouteFold.entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_RouteFold.child_packet' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r61206011196549088e4c798d8ab01ec2.scope; invocation ID: a48a5431f7604b3b981db76f4c401826

@@ -1,0 +1,52 @@
+{"attempt": "NLE_L062", "exit_status": 0, "wall_seconds": 17.035148696042597, "peak_rss_kib": "5999164", "swaps": "0", "print_axioms": ["'NLE_SafeCuts.parse_continuation' does not depend on any axioms", "'NLE_SafeCuts.parse_error' does not depend on any axioms", "'NLE_SafeCuts.common_reply' does not depend on any axioms"]}
+def NLE_SafeCuts.ParseCut : State →
+  core.result.Result transport.Variant verifier.Error → core.result.Result State verifier.Error → Log → Prop :=
+fun before reply after log =>
+  (match reply with
+    | core.result.Result.Ok a => after = core.result.Result.Ok before
+    | core.result.Result.Err err => after = core.result.Result.Err err) ∧
+    log.calls = 1 ∧ log.proof = before.proof
+def NLE_SafeCuts.CommonCut : State →
+  core.result.Result Unit verifier.Error → core.result.Result Unit verifier.Error → Log → Prop :=
+fun before reply after log =>
+  after = reply ∧
+    log.calls = 1 ∧ log.publicBytes = before.publicBytes ∧ log.proof = before.proof ∧ log.checkpoint = before.checkpoint
+theorem N
+...
+Cut : State →
+  core.result.Result transport.Variant verifier.Error → core.result.Result State verifier.Error → Log → Prop :=
+fun before reply after log =>
+  (match reply with
+    | core.result.Result.Ok a => after = core.result.Result.Ok before
+    | core.result.Result.Err err => after = core.result.Result.Err err) ∧
+    log.calls = 1 ∧ log.proof = before.proof
+def NLE_SafeCuts.CommonCut : State →
+  core.result.Result Unit verifier.Error → core.result.Result Unit verifier.Error → Log → Prop :=
+fun before reply after log =>
+  after = reply ∧
+    log.calls = 1 ∧ log.publicBytes = before.publicBytes ∧ log.proof = before.proof ∧ log.checkpoint = before.checkpoint
+theorem NLE_SafeCuts.parse_continuation : ∀ (before post : State)
+  (reply : core.result.Result transport.Variant verifier.Error) (log : Log),
+  ParseCut before reply (core.result.Result.Ok post) log → Scope before → post = before ∧ Scope post :=
+fun before post reply log native scope =>
+  core.result.Result.casesOn (motive := fun t => reply = t → post = before ∧ Scope post) reply
+    (fun variant h =>
+      Eq.ndrec (motive := fun reply =>
+        ParseCut before reply (core.result.Result.Ok post) log → post = before ∧ Scope post)
+        (fun native =>
+          let ⟨⟩ := core.result.Result.Ok before
+          native.left)
+        (Eq.symm h) native)
+    (fun err h =>
+      Eq.ndrec (motive := fun reply =>
+        ParseCut before reply (core.result.Result.Ok post) log → post = before ∧ Scope post)
+        (fun native =>
+          let ⟨⟩ := core.result.Result.Err err
+          native.left)
+        (Eq.symm h) native)
+    (Eq.refl reply)
+'NLE_SafeCuts.parse_continuation' does not depend on any axioms
+'NLE_SafeCuts.parse_error' does not depend on any axioms
+'NLE_SafeCuts.common_reply' does not depend on any axioms
+
+Running as unit: run-r13785c515dae4db7a225317a6db2489a.scope; invocation ID: 0c20286114b44b4da82543843653c58d

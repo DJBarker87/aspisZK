@@ -1,0 +1,43 @@
+NLE_generated/NLE_AuthLiteral.lean:16:1: error: 'change' tactic failed, pattern
+  (do
+      let parsed ← NJU_Log.record (Event.parse s.frame.proof) (NLE_ParseInstall.parse s.frame.proof)
+      tryR parsed fun value => do
+          let next ←
+            do
+              NJU_Log.record (Event.mark s.frame.observer)
+                  (NHV_ReleaseOps.mark s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+              pure { frame := s.frame, parsed := some value, history := s.history }
+          NJU_Log.record (Event.common next.frame) (child next.frame)) =
+    ?m.58
+is not definitionally equal to target
+  (do
+      let reply ←
+        do
+          let reply ← NJU_Log.record (Event.parse s.frame.proof) ((NLE_AuthScope.install ops).op3 s.frame.proof)
+          tryR reply fun variant =>
+              pure (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.history })
+      tryR reply fun post => do
+          let next ←
+            do
+              NJU_Log.record (Event.mark post.frame.observer)
+                  ((NLE_AuthScope.install ops).op13 post.frame.observer
+                    AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+              pure post
+          NJU_Log.record (Event.common next.frame) (child next.frame)) =
+    do
+    let parsed ← NJU_Log.record (Event.parse s.frame.proof) (NLE_ParseInstall.parse s.frame.proof)
+    tryR parsed fun x => do
+        NJU_Log.record (Event.mark s.frame.observer)
+            (NHV_ReleaseOps.mark s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+        NJU_Log.record (Event.common s.frame) (child s.frame)
+def NLE_AuthLiteral.G : {H : Type} → Common H → Frame H → Run H Reply :=
+fun {H} child frame => do
+  let parsed ← NJU_Log.record (Event.parse frame.proof) (NLE_ParseInstall.parse frame.proof)
+  tryR parsed fun x => do
+      NJU_Log.record (Event.mark frame.observer)
+          (NHV_ReleaseOps.mark frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+      NJU_Log.record (Event.common frame) (child frame)
+theorem NLE_AuthLiteral.installed : ∀ {H : Type} (ops : Ops) (child : Common H) (s : State H),
+  NLE_Auth.G (NLE_AuthScope.install ops) child s = G child s.frame :=
+fun {H} ops child s => id (id (id (id (id sorry))))
+'NLE_AuthLiteral.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

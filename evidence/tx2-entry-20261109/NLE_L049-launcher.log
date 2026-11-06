@@ -1,0 +1,49 @@
+{"attempt": "NLE_L049", "exit_status": 0, "wall_seconds": 12.946183305932209, "peak_rss_kib": "6021200", "swaps": "0", "print_axioms": ["'NLE_OwnedFine.installed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_OwnedFine.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def NLE_OwnedFine.G : Ops → State → Run (core.result.Result Unit solana_program_error.ProgramError) :=
+fun ops initial =>
+  have program_id := initial.frame.program;
+  have accounts := initial.frame.accounts;
+  have data := initial.frame.data;
+  have current_slot := initial.frame.slot;
+  have i := accounts.len;
+  if (i != 7#usize) = true then pure (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+  else do
+    let o ← liftM (core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize })
+    let s ←
+      liftM
+          (core.array.Array.index
+            (core.ops.index.IndexSlice (core.ops.range.RangeFull.Insts.CoreSliceInd
+...
+w.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame solana_program_error.ProgramError) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame solana_program_error.ProgramError) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame solana_program_error.ProgramError) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame solana_program_error.ProgramError) residual)
+theorem NLE_OwnedFine.source : ∀ (ops : Ops) (state : State),
+  (G ops state).result =
+    r1_pool_adapter.owned.stage2_owned ops state.frame.program state.frame.accounts state.frame.data state.frame.slot :=
+fun ops state =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a.result =
+            r1_pool_adapter.owned.stage2_owned ops state.frame.program state.frame.accounts state.frame.data
+              state.frame.slot)
+        (installed ops state)))
+    (NLE_Owned.source ops state)
+'NLE_OwnedFine.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_OwnedFine.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r83ac9ea8f0e643368d05da5e226e7610.scope; invocation ID: a044171bc20544f18675f9939aa5ab95

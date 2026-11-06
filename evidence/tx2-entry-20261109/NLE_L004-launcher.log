@@ -1,0 +1,32 @@
+{"attempt": "NLE_L004", "exit_status": 0, "wall_seconds": 1.7999035539105535, "peak_rss_kib": "2634032", "swaps": "0", "print_axioms": ["'NLE_Length.proof_extent' depends on axioms: [propext, Quot.sound]", "'NLE_Length.validated_length' depends on axioms: [propext, Quot.sound]", "'NLE_Length.public_extent' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_Length.public_scope' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLE_Length.proof_extent : ∀ (proofAccountLength proofEnd : ℕ),
+  proofAccountLength = 58295 → proofAccountLength = proofEnd → proofEnd - 688 = 57607 :=
+fun proofAccountLength proofEnd snapshot guard =>
+  Decidable.byContradiction fun a => proof_extent._proof_1 proofAccountLength proofEnd snapshot guard a
+theorem NLE_Length.validated_length : ∀ (proofLength proofEnd : ℕ),
+  proofEnd = 688 + proofLength → proofEnd = 58295 → proofLength = 57607 :=
+fun proofLength proofEnd checked extent =>
+  Decidable.byContradiction fun a => validated_length._proof_1 proofLength proofEnd checked extent a
+theorem NLE_Length.public_extent : ∀ (bytes : Std.Array U8 1880#usize), (↑bytes.to_slice).length = 
+...
+theorem NLE_Length.proof_extent : ∀ (proofAccountLength proofEnd : ℕ),
+  proofAccountLength = 58295 → proofAccountLength = proofEnd → proofEnd - 688 = 57607 :=
+fun proofAccountLength proofEnd snapshot guard =>
+  Decidable.byContradiction fun a => proof_extent._proof_1 proofAccountLength proofEnd snapshot guard a
+theorem NLE_Length.validated_length : ∀ (proofLength proofEnd : ℕ),
+  proofEnd = 688 + proofLength → proofEnd = 58295 → proofLength = 57607 :=
+fun proofLength proofEnd checked extent =>
+  Decidable.byContradiction fun a => validated_length._proof_1 proofLength proofEnd checked extent a
+theorem NLE_Length.public_extent : ∀ (bytes : Std.Array U8 1880#usize), (↑bytes.to_slice).length = 1880 :=
+fun bytes => bytes.property
+theorem NLE_Length.public_scope : ∀ (bytes : Std.Array U8 1880#usize),
+  0 ≤ (↑bytes.to_slice).length ∧ (↑bytes.to_slice).length ≤ 1880 :=
+fun bytes =>
+  Eq.mpr (id (congrArg (fun _a => 0 ≤ _a ∧ _a ≤ 1880) (public_extent bytes)))
+    (Decidable.byContradiction fun a => public_scope._proof_1 a)
+'NLE_Length.proof_extent' depends on axioms: [propext, Quot.sound]
+'NLE_Length.validated_length' depends on axioms: [propext, Quot.sound]
+'NLE_Length.public_extent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Length.public_scope' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rab806d48c2694e91b56ceff73ec49cf1.scope; invocation ID: 3a4955fbead346b1b0bab452aad9481e

@@ -1,0 +1,34 @@
+{"attempt": "NLE_L017", "exit_status": 0, "wall_seconds": 4.786016348050907, "peak_rss_kib": "4391284", "swaps": "0", "print_axioms": ["'NLE_SnapshotClause.proof_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_SnapshotClause.proof_scope' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLE_SnapshotClause.proof_bytes : ∀ (entry : Entry) (bytes : Slice U8),
+  (entry.snapshot 0 58295 58295).bytes = core.result.Result.Ok bytes → (↑bytes).length = 58295 :=
+fun entry bytes read =>
+  Decidable.casesOn instDecidableOr
+    (fun h =>
+      let ⟨⟩ := core.result.Result.Ok bytes
+      Eq.mp (congrFun' (congrArg Eq (if_neg h)) (core.result.Result.Ok bytes)) read)
+    fun h =>
+    let ⟨⟩ := core.result.Result.Ok bytes
+    Eq.mp (congrFun' (congrArg Eq (if_pos h)) (core.result.Result.Ok bytes)) read
+theorem NLE_SnapshotClause.proof_scope : ∀ (entry : Entry) (bytes : Slice U8) (proofEnd : ℕ),
+  (entry.snapshot 0 58295 58295).bytes = core.result.Result.Ok bytes →
+    (↑bytes).lengt
+...
+theorem NLE_SnapshotClause.proof_bytes : ∀ (entry : Entry) (bytes : Slice U8),
+  (entry.snapshot 0 58295 58295).bytes = core.result.Result.Ok bytes → (↑bytes).length = 58295 :=
+fun entry bytes read =>
+  Decidable.casesOn instDecidableOr
+    (fun h =>
+      let ⟨⟩ := core.result.Result.Ok bytes
+      Eq.mp (congrFun' (congrArg Eq (if_neg h)) (core.result.Result.Ok bytes)) read)
+    fun h =>
+    let ⟨⟩ := core.result.Result.Ok bytes
+    Eq.mp (congrFun' (congrArg Eq (if_pos h)) (core.result.Result.Ok bytes)) read
+theorem NLE_SnapshotClause.proof_scope : ∀ (entry : Entry) (bytes : Slice U8) (proofEnd : ℕ),
+  (entry.snapshot 0 58295 58295).bytes = core.result.Result.Ok bytes →
+    (↑bytes).length = proofEnd → proofEnd - 688 = 57607 :=
+fun entry bytes proofEnd read guard =>
+  NLE_Length.proof_extent (↑bytes).length proofEnd (proof_bytes entry bytes read) guard
+'NLE_SnapshotClause.proof_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_SnapshotClause.proof_scope' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9597c2e190db4db3a75ab9f30d4b86f4.scope; invocation ID: 6bd43dd1c488407ab7d761b959b3a4ed

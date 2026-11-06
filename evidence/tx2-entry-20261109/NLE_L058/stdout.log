@@ -1,0 +1,81 @@
+NLE_generated/NLE_ErrorPrefix.lean:13:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ops.op44 err
+in the target expression
+  (match core.result.Result.Err err with
+    | core.result.Result.Ok unit => pure (core.result.Result.Ok unit)
+    | core.result.Result.Err err => do
+      let converted ← NJU_Log.record (Event.error state err) (ops.op44 err)
+      pure (core.result.Result.Err converted)) =
+    { result := fail failure, events := [Event.error state err (fail failure)] }
+
+ops : Ops
+state : State
+err : aspis_r1_cost_probe.verifier.Error
+failure : Error
+failed : ops.op44 err = fail failure
+⊢ (match core.result.Result.Err err with
+    | core.result.Result.Ok unit => pure (core.result.Result.Ok unit)
+    | core.result.Result.Err err => do
+      let converted ← NJU_Log.record (Event.error state err) (ops.op44 err)
+      pure (core.result.Result.Err converted)) =
+    { result := fail failure, events := [Event.error state err (fail failure)] }
+NLE_generated/NLE_ErrorPrefix.lean:19:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ops.op44 err
+in the target expression
+  (match core.result.Result.Err err with
+    | core.result.Result.Ok unit => pure (core.result.Result.Ok unit)
+    | core.result.Result.Err err => do
+      let converted ← NJU_Log.record (Event.error state err) (ops.op44 err)
+      pure (core.result.Result.Err converted)) =
+    { result := div, events := [Event.error state err div] }
+
+ops : Ops
+state : State
+err : aspis_r1_cost_probe.verifier.Error
+failed : ops.op44 err = div
+⊢ (match core.result.Result.Err err with
+    | core.result.Result.Ok unit => pure (core.result.Result.Ok unit)
+    | core.result.Result.Err err => do
+      let converted ← NJU_Log.record (Event.error state err) (ops.op44 err)
+      pure (core.result.Result.Err converted)) =
+    { result := div, events := [Event.error state err div] }
+NLE_generated/NLE_ErrorPrefix.lean:26:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ops.op44 err
+in the target expression
+  (match core.result.Result.Err err with
+    | core.result.Result.Ok unit => pure (core.result.Result.Ok unit)
+    | core.result.Result.Err err => do
+      let converted ← NJU_Log.record (Event.error state err) (ops.op44 err)
+      pure (core.result.Result.Err converted)) =
+    { result := ok (core.result.Result.Err converted), events := [Event.error state err (ok converted)] }
+
+ops : Ops
+state : State
+err : aspis_r1_cost_probe.verifier.Error
+converted : PE
+returned : ops.op44 err = ok converted
+⊢ (match core.result.Result.Err err with
+    | core.result.Result.Ok unit => pure (core.result.Result.Ok unit)
+    | core.result.Result.Err err => do
+      let converted ← NJU_Log.record (Event.error state err) (ops.op44 err)
+      pure (core.result.Result.Err converted)) =
+    { result := ok (core.result.Result.Err converted), events := [Event.error state err (ok converted)] }
+theorem NLE_ErrorPrefix.abort : ∀ (ops : Ops) (state : State) (err : aspis_r1_cost_probe.verifier.Error)
+  (failure : Error),
+  ops.op44 err = fail failure →
+    errorMap ops state (core.result.Result.Err err) =
+      { result := fail failure, events := [Event.error state err (fail failure)] } :=
+fun ops state err failure failed => id sorry
+theorem NLE_ErrorPrefix.diverge : ∀ (ops : Ops) (state : State) (err : aspis_r1_cost_probe.verifier.Error),
+  ops.op44 err = div →
+    errorMap ops state (core.result.Result.Err err) = { result := div, events := [Event.error state err div] } :=
+fun ops state err failed => id sorry
+theorem NLE_ErrorPrefix.rejected : ∀ (ops : Ops) (state : State) (err : aspis_r1_cost_probe.verifier.Error)
+  (converted : PE),
+  ops.op44 err = ok converted →
+    errorMap ops state (core.result.Result.Err err) =
+      { result := ok (core.result.Result.Err converted), events := [Event.error state err (ok converted)] } :=
+fun ops state err converted returned => id sorry
+'NLE_ErrorPrefix.abort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLE_ErrorPrefix.diverge' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLE_ErrorPrefix.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

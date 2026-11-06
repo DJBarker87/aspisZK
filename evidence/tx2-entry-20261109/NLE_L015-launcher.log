@@ -1,0 +1,48 @@
+{"attempt": "NLE_L015", "exit_status": 0, "wall_seconds": 11.306513553950936, "peak_rss_kib": "6017988", "swaps": "0", "print_axioms": ["'NLE_Auth.fold_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_Auth.parameterized_fold' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLE_Auth.fold_source : ∀ {H : Type} (ops : Ops) (child : Common H) (s : State H),
+  (G ops child s).result = source ops child s :=
+fun {H} ops child s =>
+  id
+    (id
+      (id
+        (id
+          (id
+            (casesOn (motive := fun t =>
+              ops.op3 s.frame.proof = t →
+                (do
+                      let reply ←
+                        do
+                          let reply ← NJU_Log.record (Event.parse s.frame.proof) (ops.op3 s.frame.proof)
+                          tryR reply fun variant =>
+                              pure
+                                (core.result.Result.Ok
+                                  { frame := s.frame, parsed := some variant, 
+...
+ly fun x => do
+                          ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                          verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                              s.frame.checkpoint s.frame.hash s.frame.observer) =
+                    do
+                    let r ← x
+                    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                    match cf with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                        verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                            s.frame.checkpoint s.frame.hash s.frame.observer
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame verifier.Error) residual)
+                (fun h =>
+                  Eq.refl do
+                    let reply ← div
+                    tryR reply fun x => do
+                        ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                        verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                            s.frame.checkpoint s.frame.hash s.frame.observer)
+                (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+            (Eq.refl (ops.op3 s.frame.proof))))))
+'NLE_Auth.fold_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Auth.parameterized_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4ba77030c9674052b2d660b0a88f4b8e.scope; invocation ID: f15f292efe6b4f0fbb3d7fcbaaf9643f

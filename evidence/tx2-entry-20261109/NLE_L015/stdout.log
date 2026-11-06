@@ -1,0 +1,591 @@
+theorem NLE_Auth.fold_source : ∀ {H : Type} (ops : Ops) (child : Common H) (s : State H),
+  (G ops child s).result = source ops child s :=
+fun {H} ops child s =>
+  id
+    (id
+      (id
+        (id
+          (id
+            (casesOn (motive := fun t =>
+              ops.op3 s.frame.proof = t →
+                (do
+                      let reply ←
+                        do
+                          let reply ← NJU_Log.record (Event.parse s.frame.proof) (ops.op3 s.frame.proof)
+                          tryR reply fun variant =>
+                              pure
+                                (core.result.Result.Ok
+                                  { frame := s.frame, parsed := some variant, history := s.history })
+                      tryR reply fun post => do
+                          let next ←
+                            do
+                              NJU_Log.record (Event.mark post.frame.observer)
+                                  (ops.op13 post.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                              pure post
+                          NJU_Log.record (Event.common next.frame) (child next.frame)).result =
+                  do
+                  let reply ← ops.op3 s.frame.proof
+                  tryR reply fun x => do
+                      ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                      child s.frame)
+              (ops.op3 s.frame.proof)
+              (fun reply h =>
+                Eq.ndrec (motive := fun x =>
+                  ops.op3 s.frame.proof = x →
+                    (do
+                          let reply ←
+                            do
+                              let reply ← NJU_Log.record (Event.parse s.frame.proof) x
+                              tryR reply fun variant =>
+                                  pure
+                                    (core.result.Result.Ok
+                                      { frame := s.frame, parsed := some variant, history := s.history })
+                          tryR reply fun post => do
+                              let next ←
+                                do
+                                  NJU_Log.record (Event.mark post.frame.observer)
+                                      (ops.op13 post.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                  pure post
+                              NJU_Log.record (Event.common next.frame) (child next.frame)).result =
+                      do
+                      let reply ← x
+                      tryR reply fun x => do
+                          ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                          child s.frame)
+                  (fun h =>
+                    core.result.Result.casesOn (motive := fun t =>
+                      reply = t →
+                        (do
+                              let reply ←
+                                do
+                                  let reply ← NJU_Log.record (Event.parse s.frame.proof) (ok reply)
+                                  tryR reply fun variant =>
+                                      pure
+                                        (core.result.Result.Ok
+                                          { frame := s.frame, parsed := some variant, history := s.history })
+                              tryR reply fun post => do
+                                  let next ←
+                                    do
+                                      NJU_Log.record (Event.mark post.frame.observer)
+                                          (ops.op13 post.frame.observer
+                                            AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                      pure post
+                                  NJU_Log.record (Event.common next.frame) (child next.frame)).result =
+                          do
+                          let reply ← ok reply
+                          tryR reply fun x => do
+                              ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                              child s.frame)
+                      reply
+                      (fun variant h_1 =>
+                        Eq.ndrec (motive := fun reply =>
+                          ops.op3 s.frame.proof = ok reply →
+                            (do
+                                  let reply ←
+                                    do
+                                      let reply ← NJU_Log.record (Event.parse s.frame.proof) (ok reply)
+                                      tryR reply fun variant =>
+                                          pure
+                                            (core.result.Result.Ok
+                                              { frame := s.frame, parsed := some variant, history := s.history })
+                                  tryR reply fun post => do
+                                      let next ←
+                                        do
+                                          NJU_Log.record (Event.mark post.frame.observer)
+                                              (ops.op13 post.frame.observer
+                                                AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                          pure post
+                                      NJU_Log.record (Event.common next.frame) (child next.frame)).result =
+                              do
+                              let reply ← ok reply
+                              tryR reply fun x => do
+                                  ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                                  child s.frame)
+                          (fun h =>
+                            Eq.mpr
+                              (id
+                                (congr
+                                  (congrArg Eq
+                                    (Eq.trans
+                                      (NJU_Log.erase_bind
+                                        (do
+                                          let reply ←
+                                            NJU_Log.record (Event.parse s.frame.proof)
+                                                (ok (core.result.Result.Ok variant))
+                                          match reply with
+                                            | core.result.Result.Ok a =>
+                                              pure
+                                                (core.result.Result.Ok
+                                                  { frame := s.frame, parsed := some a, history := s.history })
+                                            | core.result.Result.Err e => pure (core.result.Result.Err e))
+                                        fun reply =>
+                                        match reply with
+                                        | core.result.Result.Ok a => do
+                                          let next ←
+                                            do
+                                              NJU_Log.record (Event.mark a.frame.observer)
+                                                  (ops.op13 a.frame.observer
+                                                    AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                              pure a
+                                          NJU_Log.record (Event.common next.frame) (child next.frame)
+                                        | core.result.Result.Err e => pure (core.result.Result.Err e))
+                                      (Eq.trans
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg Bind.bind
+                                              (Eq.trans
+                                                (NJU_Log.erase_bind
+                                                  (NJU_Log.record (Event.parse s.frame.proof)
+                                                    (ok (core.result.Result.Ok variant)))
+                                                  fun reply =>
+                                                  match reply with
+                                                  | core.result.Result.Ok a =>
+                                                    pure
+                                                      (core.result.Result.Ok
+                                                        { frame := s.frame, parsed := some a, history := s.history })
+                                                  | core.result.Result.Err e => pure (core.result.Result.Err e))
+                                                (bind_tc_ok (core.result.Result.Ok variant) fun y =>
+                                                  (match y with
+                                                    | core.result.Result.Ok a =>
+                                                      pure
+                                                        (core.result.Result.Ok
+                                                          { frame := s.frame, parsed := some a, history := s.history })
+                                                    | core.result.Result.Err e =>
+                                                      pure (core.result.Result.Err e)).result)))
+                                            fun a =>
+                                            (match a with
+                                              | core.result.Result.Ok a => do
+                                                let next ←
+                                                  do
+                                                    NJU_Log.record (Event.mark a.frame.observer)
+                                                        (ops.op13 a.frame.observer
+                                                          AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                    pure a
+                                                NJU_Log.record (Event.common next.frame) (child next.frame)
+                                              | core.result.Result.Err e => pure (core.result.Result.Err e)).result)
+                                          (bind_tc_ok
+                                            (core.result.Result.Ok
+                                              { frame := s.frame, parsed := some variant, history := s.history })
+                                            fun y =>
+                                            (match y with
+                                              | core.result.Result.Ok a => do
+                                                let next ←
+                                                  do
+                                                    NJU_Log.record (Event.mark a.frame.observer)
+                                                        (ops.op13 a.frame.observer
+                                                          AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                                    pure a
+                                                NJU_Log.record (Event.common next.frame) (child next.frame)
+                                              | core.result.Result.Err e => pure (core.result.Result.Err e)).result))
+                                        (Eq.trans
+                                          (NJU_Log.erase_bind
+                                            (do
+                                              NJU_Log.record (Event.mark s.frame.observer)
+                                                  (ops.op13 s.frame.observer
+                                                    AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                              pure { frame := s.frame, parsed := some variant, history := s.history })
+                                            fun next => NJU_Log.record (Event.common next.frame) (child next.frame))
+                                          (congrFun'
+                                            (congrArg Bind.bind
+                                              (NJU_Log.erase_bind
+                                                (NJU_Log.record (Event.mark s.frame.observer)
+                                                  (ops.op13 s.frame.observer
+                                                    AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed))
+                                                fun __x =>
+                                                pure
+                                                  { frame := s.frame, parsed := some variant, history := s.history }))
+                                            fun a => child a.frame)))))
+                                  (bind_tc_ok (core.result.Result.Ok variant) fun y =>
+                                    match y with
+                                    | core.result.Result.Ok a => do
+                                      ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                                      child s.frame
+                                    | core.result.Result.Err e => pure (core.result.Result.Err e))))
+                              (casesOn (motive := fun t =>
+                                ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed = t →
+                                  (do
+                                      let a ←
+                                        do
+                                          ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                                          ok { frame := s.frame, parsed := some variant, history := s.history }
+                                      child a.frame) =
+                                    do
+                                    ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                                    child s.frame)
+                                (ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                (fun v h =>
+                                  Eq.symm h ▸
+                                    Eq.refl do
+                                      let a ←
+                                        do
+                                          ok v
+                                          ok { frame := s.frame, parsed := some variant, history := s.history }
+                                      child a.frame)
+                                (fun e h =>
+                                  Eq.symm h ▸
+                                    Eq.refl do
+                                      let a ←
+                                        do
+                                          fail e
+                                          ok { frame := s.frame, parsed := some variant, history := s.history }
+                                      child a.frame)
+                                (fun h =>
+                                  Eq.symm h ▸
+                                    Eq.refl do
+                                      let a ←
+                                        do
+                                          div
+                                          ok { frame := s.frame, parsed := some variant, history := s.history }
+                                      child a.frame)
+                                (Eq.refl
+                                  (ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed))))
+                          (Eq.symm h_1) h)
+                      (fun err h_1 =>
+                        Eq.ndrec (motive := fun reply =>
+                          ops.op3 s.frame.proof = ok reply →
+                            (do
+                                  let reply ←
+                                    do
+                                      let reply ← NJU_Log.record (Event.parse s.frame.proof) (ok reply)
+                                      tryR reply fun variant =>
+                                          pure
+                                            (core.result.Result.Ok
+                                              { frame := s.frame, parsed := some variant, history := s.history })
+                                  tryR reply fun post => do
+                                      let next ←
+                                        do
+                                          NJU_Log.record (Event.mark post.frame.observer)
+                                              (ops.op13 post.frame.observer
+                                                AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                          pure post
+                                      NJU_Log.record (Event.common next.frame) (child next.frame)).result =
+                              do
+                              let reply ← ok reply
+                              tryR reply fun x => do
+                                  ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                                  child s.frame)
+                          (fun h =>
+                            Eq.refl
+                              (do
+                                  let reply ←
+                                    do
+                                      let reply ←
+                                        NJU_Log.record (Event.parse s.frame.proof) (ok (core.result.Result.Err err))
+                                      tryR reply fun variant =>
+                                          pure
+                                            (core.result.Result.Ok
+                                              { frame := s.frame, parsed := some variant, history := s.history })
+                                  tryR reply fun post => do
+                                      let next ←
+                                        do
+                                          NJU_Log.record (Event.mark post.frame.observer)
+                                              (ops.op13 post.frame.observer
+                                                AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                          pure post
+                                      NJU_Log.record (Event.common next.frame) (child next.frame)).result)
+                          (Eq.symm h_1) h)
+                      (Eq.refl reply))
+                  (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+              (fun err h =>
+                Eq.ndrec (motive := fun x =>
+                  ops.op3 s.frame.proof = x →
+                    (do
+                          let reply ←
+                            do
+                              let reply ← NJU_Log.record (Event.parse s.frame.proof) x
+                              tryR reply fun variant =>
+                                  pure
+                                    (core.result.Result.Ok
+                                      { frame := s.frame, parsed := some variant, history := s.history })
+                          tryR reply fun post => do
+                              let next ←
+                                do
+                                  NJU_Log.record (Event.mark post.frame.observer)
+                                      (ops.op13 post.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                  pure post
+                              NJU_Log.record (Event.common next.frame) (child next.frame)).result =
+                      do
+                      let reply ← x
+                      tryR reply fun x => do
+                          ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                          child s.frame)
+                  (fun h =>
+                    Eq.refl
+                      (do
+                          let reply ←
+                            do
+                              let reply ← NJU_Log.record (Event.parse s.frame.proof) (fail err)
+                              tryR reply fun variant =>
+                                  pure
+                                    (core.result.Result.Ok
+                                      { frame := s.frame, parsed := some variant, history := s.history })
+                          tryR reply fun post => do
+                              let next ←
+                                do
+                                  NJU_Log.record (Event.mark post.frame.observer)
+                                      (ops.op13 post.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                  pure post
+                              NJU_Log.record (Event.common next.frame) (child next.frame)).result)
+                  (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+              (fun h =>
+                Eq.ndrec (motive := fun x =>
+                  ops.op3 s.frame.proof = x →
+                    (do
+                          let reply ←
+                            do
+                              let reply ← NJU_Log.record (Event.parse s.frame.proof) x
+                              tryR reply fun variant =>
+                                  pure
+                                    (core.result.Result.Ok
+                                      { frame := s.frame, parsed := some variant, history := s.history })
+                          tryR reply fun post => do
+                              let next ←
+                                do
+                                  NJU_Log.record (Event.mark post.frame.observer)
+                                      (ops.op13 post.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                  pure post
+                              NJU_Log.record (Event.common next.frame) (child next.frame)).result =
+                      do
+                      let reply ← x
+                      tryR reply fun x => do
+                          ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                          child s.frame)
+                  (fun h =>
+                    Eq.refl
+                      (do
+                          let reply ←
+                            do
+                              let reply ← NJU_Log.record (Event.parse s.frame.proof) div
+                              tryR reply fun variant =>
+                                  pure
+                                    (core.result.Result.Ok
+                                      { frame := s.frame, parsed := some variant, history := s.history })
+                          tryR reply fun post => do
+                              let next ←
+                                do
+                                  NJU_Log.record (Event.mark post.frame.observer)
+                                      (ops.op13 post.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)
+                                  pure post
+                              NJU_Log.record (Event.common next.frame) (child next.frame)).result)
+                  (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+              (Eq.refl (ops.op3 s.frame.proof)))))))
+def NLE_Auth.CommonResultPacket : {H : Type} → Ops → Common H → Prop :=
+fun {H} ops child =>
+  ∀ (f : Frame H),
+    child f = verifier.candidate.tx2_common ops f.digest f.publicBytes f.proof f.checkpoint f.hash f.observer
+theorem NLE_Auth.parameterized_fold : ∀ {H : Type} (ops : Ops) (child : Common H),
+  CommonResultPacket ops child →
+    ∀ (s : State H),
+      (G ops child s).result =
+        verifier.candidate.tx2_authenticated ops s.frame.digest s.frame.publicBytes s.frame.proof s.frame.checkpoint
+          s.frame.hash s.frame.observer :=
+fun {H} ops child packet s =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            verifier.candidate.tx2_authenticated ops s.frame.digest s.frame.publicBytes s.frame.proof s.frame.checkpoint
+              s.frame.hash s.frame.observer)
+        (fold_source ops child s)))
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let reply ← ops.op3 s.frame.proof
+                    tryR reply fun x => do
+                        ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                        _a) =
+                  do
+                  let r ← ops.op3 s.frame.proof
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue a => do
+                      ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                      verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                          s.frame.checkpoint s.frame.hash s.frame.observer
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual)
+              (packet s.frame)))
+          (casesOn (motive := fun t =>
+            ops.op3 s.frame.proof = t →
+              (do
+                  let reply ← ops.op3 s.frame.proof
+                  tryR reply fun x => do
+                      ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                      verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                          s.frame.checkpoint s.frame.hash s.frame.observer) =
+                do
+                let r ← ops.op3 s.frame.proof
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue a => do
+                    ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                    verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                        s.frame.checkpoint s.frame.hash s.frame.observer
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame verifier.Error) residual)
+            (ops.op3 s.frame.proof)
+            (fun reply h =>
+              Eq.ndrec (motive := fun x =>
+                ops.op3 s.frame.proof = x →
+                  (do
+                      let reply ← x
+                      tryR reply fun x => do
+                          ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                          verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                              s.frame.checkpoint s.frame.hash s.frame.observer) =
+                    do
+                    let r ← x
+                    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                    match cf with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                        verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                            s.frame.checkpoint s.frame.hash s.frame.observer
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame verifier.Error) residual)
+                (fun h =>
+                  core.result.Result.casesOn (motive := fun t =>
+                    reply = t →
+                      (do
+                          let reply ← ok reply
+                          tryR reply fun x => do
+                              ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                              verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                                  s.frame.checkpoint s.frame.hash s.frame.observer) =
+                        do
+                        let r ← ok reply
+                        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                        match cf with
+                          | core.ops.control_flow.ControlFlow.Continue a => do
+                            ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                            verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                                s.frame.checkpoint s.frame.hash s.frame.observer
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame verifier.Error) residual)
+                    reply
+                    (fun a h_1 =>
+                      Eq.ndrec (motive := fun reply =>
+                        ops.op3 s.frame.proof = ok reply →
+                          (do
+                              let reply ← ok reply
+                              tryR reply fun x => do
+                                  ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                                  verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                                      s.frame.checkpoint s.frame.hash s.frame.observer) =
+                            do
+                            let r ← ok reply
+                            let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                            match cf with
+                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                                verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                                    s.frame.checkpoint s.frame.hash s.frame.observer
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame verifier.Error) residual)
+                        (fun h =>
+                          Eq.refl do
+                            let reply ← ok (core.result.Result.Ok a)
+                            tryR reply fun x => do
+                                ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                                verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                                    s.frame.checkpoint s.frame.hash s.frame.observer)
+                        (Eq.symm h_1) h)
+                    (fun a h_1 =>
+                      Eq.ndrec (motive := fun reply =>
+                        ops.op3 s.frame.proof = ok reply →
+                          (do
+                              let reply ← ok reply
+                              tryR reply fun x => do
+                                  ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                                  verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                                      s.frame.checkpoint s.frame.hash s.frame.observer) =
+                            do
+                            let r ← ok reply
+                            let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                            match cf with
+                              | core.ops.control_flow.ControlFlow.Continue a => do
+                                ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                                verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                                    s.frame.checkpoint s.frame.hash s.frame.observer
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame verifier.Error) residual)
+                        (fun h =>
+                          Eq.refl do
+                            let reply ← ok (core.result.Result.Err a)
+                            tryR reply fun x => do
+                                ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                                verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                                    s.frame.checkpoint s.frame.hash s.frame.observer)
+                        (Eq.symm h_1) h)
+                    (Eq.refl reply))
+                (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+            (fun err h =>
+              Eq.ndrec (motive := fun x =>
+                ops.op3 s.frame.proof = x →
+                  (do
+                      let reply ← x
+                      tryR reply fun x => do
+                          ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                          verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                              s.frame.checkpoint s.frame.hash s.frame.observer) =
+                    do
+                    let r ← x
+                    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                    match cf with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                        verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                            s.frame.checkpoint s.frame.hash s.frame.observer
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame verifier.Error) residual)
+                (fun h =>
+                  Eq.refl do
+                    let reply ← fail err
+                    tryR reply fun x => do
+                        ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                        verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                            s.frame.checkpoint s.frame.hash s.frame.observer)
+                (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+            (fun h =>
+              Eq.ndrec (motive := fun x =>
+                ops.op3 s.frame.proof = x →
+                  (do
+                      let reply ← x
+                      tryR reply fun x => do
+                          ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                          verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                              s.frame.checkpoint s.frame.hash s.frame.observer) =
+                    do
+                    let r ← x
+                    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                    match cf with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                        verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                            s.frame.checkpoint s.frame.hash s.frame.observer
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame verifier.Error) residual)
+                (fun h =>
+                  Eq.refl do
+                    let reply ← div
+                    tryR reply fun x => do
+                        ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+                        verifier.candidate.tx2_common ops s.frame.digest s.frame.publicBytes s.frame.proof
+                            s.frame.checkpoint s.frame.hash s.frame.observer)
+                (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+            (Eq.refl (ops.op3 s.frame.proof))))))
+'NLE_Auth.fold_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Auth.parameterized_fold' depends on axioms: [propext, Classical.choice, Quot.sound]

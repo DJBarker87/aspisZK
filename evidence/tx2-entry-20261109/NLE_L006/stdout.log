@@ -1,0 +1,6 @@
+def NLE_Auth.G : {H : Type} → Ops → Common H → State H → Run H Reply :=
+fun {H} ops child s => do
+  let reply ← parse ops s
+  tryR reply fun post => do
+      let next ← mark ops post
+      common child next

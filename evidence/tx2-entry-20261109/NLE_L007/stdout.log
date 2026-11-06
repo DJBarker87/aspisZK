@@ -1,0 +1,219 @@
+NLE_generated/NLE_AuthParse.lean:26:41: warning: This simp argument is unused:
+  NJU_Log.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵G̵,̵p̵a̵r̵s̵e̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵r̵e̵p̵l̵y̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵t̵r̵y̵R̵]̵[̲G̲,̲ ̲p̲a̲r̲s̲e̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲t̲r̲y̲R̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLE_Auth.parse_result : ∀ {H : Type} (ops : Ops) (s : State H),
+  (parse ops s).result = do
+    let reply ← ops.op3 s.frame.proof
+    match reply with
+      | core.result.Result.Ok variant =>
+        ok (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.history })
+      | core.result.Result.Err err => ok (core.result.Result.Err err) :=
+fun {H} ops s =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a = do
+              let reply ← ops.op3 s.frame.proof
+              match reply with
+                | core.result.Result.Ok variant =>
+                  ok (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.history })
+                | core.result.Result.Err err => ok (core.result.Result.Err err))
+          (NJU_Log.erase_bind (NJU_Log.record (Event.parse s.frame.proof) (ops.op3 s.frame.proof)) fun reply =>
+            tryR reply fun variant =>
+              pure (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.history }))))
+      (casesOn (motive := fun t =>
+        ops.op3 s.frame.proof = t →
+          (do
+              let a ← (NJU_Log.record (Event.parse s.frame.proof) (ops.op3 s.frame.proof)).result
+              (tryR a fun variant =>
+                    pure
+                      (core.result.Result.Ok
+                        { frame := s.frame, parsed := some variant, history := s.history })).result) =
+            do
+            let reply ← ops.op3 s.frame.proof
+            match reply with
+              | core.result.Result.Ok variant =>
+                ok (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.history })
+              | core.result.Result.Err err => ok (core.result.Result.Err err))
+        (ops.op3 s.frame.proof)
+        (fun reply h =>
+          Eq.ndrec (motive := fun x =>
+            ops.op3 s.frame.proof = x →
+              (do
+                  let a ← (NJU_Log.record (Event.parse s.frame.proof) x).result
+                  (tryR a fun variant =>
+                        pure
+                          (core.result.Result.Ok
+                            { frame := s.frame, parsed := some variant, history := s.history })).result) =
+                do
+                let reply ← x
+                match reply with
+                  | core.result.Result.Ok variant =>
+                    ok (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.history })
+                  | core.result.Result.Err err => ok (core.result.Result.Err err))
+            (fun h =>
+              core.result.Result.casesOn (motive := fun t =>
+                reply = t →
+                  (do
+                      let a ← (NJU_Log.record (Event.parse s.frame.proof) (ok reply)).result
+                      (tryR a fun variant =>
+                            pure
+                              (core.result.Result.Ok
+                                { frame := s.frame, parsed := some variant, history := s.history })).result) =
+                    do
+                    let reply ← ok reply
+                    match reply with
+                      | core.result.Result.Ok variant =>
+                        ok (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.history })
+                      | core.result.Result.Err err => ok (core.result.Result.Err err))
+                reply
+                (fun a h_1 =>
+                  Eq.ndrec (motive := fun reply =>
+                    ops.op3 s.frame.proof = ok reply →
+                      (do
+                          let a ← (NJU_Log.record (Event.parse s.frame.proof) (ok reply)).result
+                          (tryR a fun variant =>
+                                pure
+                                  (core.result.Result.Ok
+                                    { frame := s.frame, parsed := some variant, history := s.history })).result) =
+                        do
+                        let reply ← ok reply
+                        match reply with
+                          | core.result.Result.Ok variant =>
+                            ok
+                              (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.history })
+                          | core.result.Result.Err err => ok (core.result.Result.Err err))
+                    (fun h =>
+                      Eq.refl do
+                        let a ← (NJU_Log.record (Event.parse s.frame.proof) (ok (core.result.Result.Ok a))).result
+                        (tryR a fun variant =>
+                              pure
+                                (core.result.Result.Ok
+                                  { frame := s.frame, parsed := some variant, history := s.history })).result)
+                    (Eq.symm h_1) h)
+                (fun a h_1 =>
+                  Eq.ndrec (motive := fun reply =>
+                    ops.op3 s.frame.proof = ok reply →
+                      (do
+                          let a ← (NJU_Log.record (Event.parse s.frame.proof) (ok reply)).result
+                          (tryR a fun variant =>
+                                pure
+                                  (core.result.Result.Ok
+                                    { frame := s.frame, parsed := some variant, history := s.history })).result) =
+                        do
+                        let reply ← ok reply
+                        match reply with
+                          | core.result.Result.Ok variant =>
+                            ok
+                              (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.history })
+                          | core.result.Result.Err err => ok (core.result.Result.Err err))
+                    (fun h =>
+                      Eq.refl do
+                        let a ← (NJU_Log.record (Event.parse s.frame.proof) (ok (core.result.Result.Err a))).result
+                        (tryR a fun variant =>
+                              pure
+                                (core.result.Result.Ok
+                                  { frame := s.frame, parsed := some variant, history := s.history })).result)
+                    (Eq.symm h_1) h)
+                (Eq.refl reply))
+            (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+        (fun err h =>
+          Eq.ndrec (motive := fun x =>
+            ops.op3 s.frame.proof = x →
+              (do
+                  let a ← (NJU_Log.record (Event.parse s.frame.proof) x).result
+                  (tryR a fun variant =>
+                        pure
+                          (core.result.Result.Ok
+                            { frame := s.frame, parsed := some variant, history := s.history })).result) =
+                do
+                let reply ← x
+                match reply with
+                  | core.result.Result.Ok variant =>
+                    ok (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.history })
+                  | core.result.Result.Err err => ok (core.result.Result.Err err))
+            (fun h =>
+              Eq.refl do
+                let a ← (NJU_Log.record (Event.parse s.frame.proof) (fail err)).result
+                (tryR a fun variant =>
+                      pure
+                        (core.result.Result.Ok
+                          { frame := s.frame, parsed := some variant, history := s.history })).result)
+            (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+        (fun h =>
+          Eq.ndrec (motive := fun x =>
+            ops.op3 s.frame.proof = x →
+              (do
+                  let a ← (NJU_Log.record (Event.parse s.frame.proof) x).result
+                  (tryR a fun variant =>
+                        pure
+                          (core.result.Result.Ok
+                            { frame := s.frame, parsed := some variant, history := s.history })).result) =
+                do
+                let reply ← x
+                match reply with
+                  | core.result.Result.Ok variant =>
+                    ok (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.history })
+                  | core.result.Result.Err err => ok (core.result.Result.Err err))
+            (fun h =>
+              Eq.refl do
+                let a ← (NJU_Log.record (Event.parse s.frame.proof) div).result
+                (tryR a fun variant =>
+                      pure
+                        (core.result.Result.Ok
+                          { frame := s.frame, parsed := some variant, history := s.history })).result)
+            (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+        (Eq.refl (ops.op3 s.frame.proof))))
+theorem NLE_Auth.parse_reject : ∀ {H : Type} (ops : Ops) (s : State H) (err : verifier.Error),
+  ops.op3 s.frame.proof = ok (core.result.Result.Err err) →
+    G ops (fun x => div) s =
+      { result := ok (core.result.Result.Err err),
+        events := [Event.parse s.frame.proof (ok (core.result.Result.Err err))] } :=
+fun {H} ops s err reply =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congrFun'
+            (congrArg Bind.bind
+              (congrFun'
+                (congrArg Bind.bind
+                  (congr (congrArg NJU_Log.Run.mk reply)
+                    (congrFun' (congrArg List.cons (congrArg (Event.parse s.frame.proof) reply)) [])))
+                fun reply =>
+                match reply with
+                | core.result.Result.Ok a =>
+                  pure (core.result.Result.Ok { frame := s.frame, parsed := some a, history := s.history })
+                | core.result.Result.Err e => pure (core.result.Result.Err e)))
+            fun reply =>
+            match reply with
+            | core.result.Result.Ok a => do
+              let next ← mark ops a
+              common (fun x => div) next
+            | core.result.Result.Err e => pure (core.result.Result.Err e)))
+        { result := ok (core.result.Result.Err err),
+          events := [Event.parse s.frame.proof (ok (core.result.Result.Err err))] }))
+    (Eq.refl do
+      let reply ←
+        do
+          let reply ←
+            { result := ok (core.result.Result.Err err),
+                events := [Event.parse s.frame.proof (ok (core.result.Result.Err err))] }
+          match reply with
+            | core.result.Result.Ok a =>
+              pure (core.result.Result.Ok { frame := s.frame, parsed := some a, history := s.history })
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+      match reply with
+        | core.result.Result.Ok a => do
+          let next ← mark ops a
+          common (fun x => div) next
+        | core.result.Result.Err e => pure (core.result.Result.Err e))
+'NLE_Auth.parse_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Auth.parse_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Auth.parse_reject' depends on axioms: [propext, Classical.choice, Quot.sound]

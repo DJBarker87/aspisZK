@@ -1,0 +1,114 @@
+theorem NLE_ParseInstall.success : ∀ (proof : Slice U8) (value : transport.Variant),
+  parse proof = ok (core.result.Result.Ok value) →
+    value = AspisR1Stage2.transport.Variant.S2 ∧ (↑proof).length = 57607 :=
+fun proof value returned =>
+  casesOn (motive := fun t =>
+    Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof = t →
+      value = AspisR1Stage2.transport.Variant.S2 ∧ (↑proof).length = 57607)
+    (Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof)
+    (fun result h =>
+      Eq.ndrec (motive := fun x =>
+        Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof = x →
+          value = AspisR1Stage2.transport.Variant.S2 ∧ (↑proof).length = 57607)
+        (fun h =>
+          core.result.Result.casesOn (motive := fun t =>
+            result = t → value = AspisR1Stage2.transport.Variant.S2 ∧ (↑proof).length = 57607) result
+            (fun raw h_1 =>
+              Eq.ndrec (motive := fun result =>
+                (do
+                      let result ← ok result
+                      ok (reply result)) =
+                    ok (core.result.Result.Ok value) →
+                  Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof = ok result →
+                    value = AspisR1Stage2.transport.Variant.S2 ∧ (↑proof).length = 57607)
+                (fun returned h =>
+                  have facts := Op3I_ParseLaws.source_success proof raw h;
+                  let ⟨⟩ := ok (core.result.Result.Ok value)
+                  Eq.mp
+                    (congrArg
+                      (fun _a =>
+                        (do
+                            let result ← ok (core.result.Result.Ok _a)
+                            ok (reply result)) =
+                          ok (core.result.Result.Ok value))
+                      facts.left)
+                    returned)
+                (Eq.symm h_1)
+                (Eq.mp
+                  (congrArg
+                    (fun _a =>
+                      (do
+                          let result ← _a
+                          ok (reply result)) =
+                        ok (core.result.Result.Ok value))
+                    h)
+                  returned)
+                h)
+            (fun err h_1 =>
+              Eq.ndrec (motive := fun result =>
+                (do
+                      let result ← ok result
+                      ok (reply result)) =
+                    ok (core.result.Result.Ok value) →
+                  Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof = ok result →
+                    value = AspisR1Stage2.transport.Variant.S2 ∧ (↑proof).length = 57607)
+                (fun returned h =>
+                  let ⟨⟩ := ok (core.result.Result.Ok value)
+                  returned)
+                (Eq.symm h_1)
+                (Eq.mp
+                  (congrArg
+                    (fun _a =>
+                      (do
+                          let result ← _a
+                          ok (reply result)) =
+                        ok (core.result.Result.Ok value))
+                    h)
+                  returned)
+                h)
+            (Eq.refl result))
+        (Eq.symm h) (Eq.refl (Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof)))
+    (fun err h =>
+      Eq.ndrec (motive := fun x =>
+        Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof = x →
+          value = AspisR1Stage2.transport.Variant.S2 ∧ (↑proof).length = 57607)
+        (fun h =>
+          let ⟨⟩ := ok (core.result.Result.Ok value)
+          Eq.mp
+            (congrArg
+              (fun _a =>
+                (do
+                    let result ← _a
+                    ok (reply result)) =
+                  ok (core.result.Result.Ok value))
+              h)
+            returned)
+        (Eq.symm h) (Eq.refl (Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof = x →
+          value = AspisR1Stage2.transport.Variant.S2 ∧ (↑proof).length = 57607)
+        (fun h =>
+          let ⟨⟩ := ok (core.result.Result.Ok value)
+          Eq.mp
+            (congrArg
+              (fun _a =>
+                (do
+                    let result ← _a
+                    ok (reply result)) =
+                  ok (core.result.Result.Ok value))
+              h)
+            returned)
+        (Eq.symm h) (Eq.refl (Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof)))
+    (Eq.refl (Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof))
+theorem NLE_ParseInstall.emitted : ∀ (proof : Slice U8),
+  parse proof =
+    NJS_Parse.map reply
+      (NJS_Parse.map NJS_Parse.reply
+        (NJS_Extract.verifier.candidate.parse_shape (fun {T U} {N} => Op3I_Std.ops.sliceNe)
+          (fun {T U} {N} => Op3I_Std.ops.sliceEq) (fun {T F} => Op3I_Std.ops.iterAny) proof)) :=
+fun proof =>
+  Eq.mpr (id (congrArg (fun _a => parse proof = NJS_Parse.map reply _a) (NJS_Parse.source proof)))
+    (Eq.refl (parse proof))
+'NLE_ParseInstall.success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_ParseInstall.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]
