@@ -1,0 +1,44 @@
+{"attempt": "NKV_L027", "exit_status": 1, "wall_seconds": 5.796725963009521, "peak_rss_kib": "4401392", "swaps": "0", "print_axioms": ["'NKV_ParentSource.next_observed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_ParentSource.next_congr' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_ParentSource.next_question' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_ParentSource.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_ParentSource.lean:71:1: error: 'change' tactic failed, pattern
+  observe
+      (next ?m.61 fun i v =>
+        next (?m.74 i v) fun i_1 v_1 => next (?m.75 i v i_1 v_1) fun x x_1 => ok (core.result.Result.Ok ())) =
+    observe
+      (next ?m.76 fun i v =>
+        next (?m.89 i v) fun i_1 v_1 => next (?m.90 i v i_1 v_1) fun x x_1 => ok (core.result.Result.Ok ()))
+is not definitionally equal to target
+  (observe do
+      let (r, idx1, val1) ←
+        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof
+            queries (AspisR1.Port3_NativeBatchCalls.rootAt roots 0) batch 0#usize (Array.repeat 16#usize 0#u32)
+            (Array.repeat 1
+...
+2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual
+theorem NKV_ParentSource.values : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (hash : H) (proof : Slice U8) (queries : Std.Array U32 22#usize)
+  (roots : Std.Array (Std.Array U8 32#usize) 3#usize) (batch : Usize),
+  ↑batch < 2 →
+    observe
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (AspisR1.Port3_BatchStd.install base) D
+          proof queries roots batch hash) =
+      observe
+        (NKV_FRef.verifier.candidate.batch_merkle_values (AspisR1.Port3_BatchStd.install base) D proof queries roots
+          batch hash) :=
+⋯
+'NKV_ParentSource.next_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentSource.next_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentSource.next_question' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentSource.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4453de5b50614096be732d2c8a6b1dd2.scope; invocation ID: 70e2fdbc2ac84ae29e9e87876d2f3a8b

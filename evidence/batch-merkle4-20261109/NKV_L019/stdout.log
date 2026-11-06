@@ -1,0 +1,12 @@
+theorem NKV_ExitTrace.transport : ∀ {S O P E : Type} (f : O → P) (body : S → List E × Result (ControlFlow S O))
+  (target : S → List E × Result (ControlFlow S P)),
+  (∀ (s : S), target s = ((body s).1, mapResult (mapFlow f) (body s).2)) →
+    ∀ (s : S) (events : List E) (out : Result O),
+      TraceWalk body s events out → TraceWalk target s events (mapResult f out) :=
+⋯
+theorem NKV_ExitTrace.terminal : ∀ {E : Type} (events : List E) (out : Out),
+  WellClassified out → observeTrace events (cohort out) = observeTrace events (returned out) :=
+⋯
+'NKV_ExitTrace.transport' does not depend on any axioms
+'NKV_ExitTrace.value' does not depend on any axioms
+'NKV_ExitTrace.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]

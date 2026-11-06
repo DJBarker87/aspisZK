@@ -1,0 +1,53 @@
+{"attempt": "NKV_L015", "exit_status": 1, "wall_seconds": 4.386928737163544, "peak_rss_kib": "4401172", "swaps": "0", "print_axioms": ["'NKV_TreeSource.boundary' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_TreeSource.bind_observed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_TreeSource.prefix_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_TreeSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_TreeSource.lean:12:4: warning: Variable name `i` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NKV_TreeSource.lean:12:6: warning: Variable name `v` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NKV_TreeSource.lean:85:3: error: `dsimp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfoldi
+...
+ent
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NKV_TreeSource.lean:85:3: error: `dsimp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+theorem NKV_TreeSource.source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (hash : H) (proof : Slice U8) (queries : Std.Array U32 22#usize)
+  (root : Std.Array U8 32#usize) (batch tree : Usize),
+  ↑batch < 2 →
+    ∀ (idx : Indices) (val : Values),
+      reject
+          (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof
+            queries root batch tree idx val hash) =
+        reject
+          (NKV_FRef.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof queries root batch tree
+            idx val hash) :=
+⋯
+'NKV_TreeSource.boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.bind_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.prefix_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9b3e6e16738845a3abd9739267de10f8.scope; invocation ID: 8830d816c3534ae7b895abc90948d0b1

@@ -4,6 +4,7 @@ import subprocess,json,sys,time,shlex,hashlib,lzma,base64
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109'
 a=sys.argv[1];cfg=json.loads((E/(a+'.json')).read_text());assert cfg['attempt']==a
 assert not cfg.get('cancelled'),cfg.get('cancelled')
+for name,wanted in cfg.get('inputs_expected',{}).items():assert hashlib.sha256((E/name).read_bytes()).hexdigest()==wanted,'STOP owned input drift '+name
 assert not (E/a).exists()
 history=[json.loads(line) for line in (E/'NKV_ATTEMPTS.jsonl').read_text().splitlines() if line.strip()]
 assert cfg['kind'] in ('lean','link','audit','kani','extract'), 'No extraction or unbudgeted proof kind admitted'
@@ -93,9 +94,13 @@ print(json.dumps({{str(p.relative_to(b)):base64.b64encode(p.read_bytes()).decode
 ''');assert r.returncode==0,r.stderr
 for n,t in json.loads(r.stdout).items():
  p=E/n;p.parent.mkdir(parents=True,exist_ok=True);raw=base64.b64decode(t)
- if len(raw)>1000000:
+ original=next((top for top in E.iterdir() if top.is_file() and top.name==p.name and top.stat().st_size==len(raw) and hashlib.sha256(top.read_bytes()).digest()==hashlib.sha256(raw).digest()),None)
+ if len(raw)>1000000 and original is not None:
+  p.with_name(p.name+'.ref.json').write_text(json.dumps(dict(owned_input=original.name,sha256=hashlib.sha256(raw).hexdigest(),bytes=len(raw)))+'\n')
+ elif len(raw)>1000000:
   p.with_name(p.name+'.xz').write_bytes(lzma.compress(raw,preset=6));p.with_name(p.name+'.sha256').write_text(hashlib.sha256(raw).hexdigest()+'\n')
  else:p.write_bytes(raw)
+
 rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items() if k not in ['deps_fingerprint','env']}
 entry['full_receipt']=a+'/receipt.json'
 with (E/'NKV_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')

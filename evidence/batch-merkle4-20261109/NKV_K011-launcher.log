@@ -1,0 +1,52 @@
+{"attempt": "NKV_K011", "exit_status": 0, "wall_seconds": 1.7972508519887924, "peak_rss_kib": "208128", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+2.1905e-05s
+Runtime decision procedure: 0.001299s
+
+RESULTS:
+Check 1: verifier::candidate::NKV_native::count_return.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: NKV_workspace/crates/aspis-r1-cost-probe/../../NKV_harness.rs:70:1 in function verifier::candidate::NKV_native::count_return
+
+Check 2: verifier::candidate::NKV_native::count_return.assertion.1
+	 - Status: SUCCESS
+	 - Description: "assertion failed: exact"
+	 - Location: NKV_workspace/crates/aspis-r1-cost-probe/../../NKV_harness.rs:75:26 in function verifier::candidate::NKV_native::count_return
+
+Check 3: verifier::candidate::NKV_native::count_return_fragment.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: NKV_workspace/crates/aspis-r1-cost-probe/../../NKV_fragments.rs:4:12 in function verifier::candidate::NKV_native::count_return_fragment
+
+Check 4: <core::result::Result<usize, verifier::Error> as core::ops::Try>::branch.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:2173:15 in function <core::result::Result<usize, verifier::Error> as core::ops::Try>::branch
+
+Check 5: core::option::Option::<usize>::ok_or::<verifier::Error>.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1338:15 in function core::option::Option::<usize>::ok_or::<verifier::Error>
+
+
+SUMMARY:
+ ** 0 of 5 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.037689216s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-ree2ae001cfca4f288e6186ee960e7c28.scope; invocation ID: f183e44b38ec4706adf48daf27874341

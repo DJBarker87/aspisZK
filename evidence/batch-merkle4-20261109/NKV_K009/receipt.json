@@ -1,0 +1,103 @@
+{
+  "attempt": "NKV_K009",
+  "kind": "kani",
+  "module": "values_calls",
+  "sources": [
+    "NKV_gate.py",
+    "NKV_harness.rs",
+    "NKV_KMX.patch",
+    "NKV_NHR_stage.py",
+    "NKV_SUPPLEMENT.json",
+    "NKV_FROZEN_PAYLOAD.json.xz",
+    "NKV_FROZEN_PAYLOAD.json.sha256",
+    "NKV_STAGING_MANIFEST.json",
+    "NKV_fragments.rs",
+    "NKV_FRAGMENT_ASSOCIATION.json"
+  ],
+  "upload": [
+    "NKV_gate.py",
+    "NKV_harness.rs",
+    "NKV_KMX.patch",
+    "NKV_NHR_stage.py",
+    "NKV_SUPPLEMENT.json",
+    "NKV_FROZEN_PAYLOAD.json.xz",
+    "NKV_FROZEN_PAYLOAD.json.sha256",
+    "NKV_STAGING_MANIFEST.json",
+    "NKV_fragments.rs",
+    "NKV_FRAGMENT_ASSOCIATION.json"
+  ],
+  "command": [
+    "python3",
+    "NKV_gate.py",
+    "NKV_K009.json"
+  ],
+  "collect": [
+    "NKV_K009_validation"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109/NKV_target",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1 --cfg NKV_invert"
+  },
+  "expected_failure": true,
+  "expected_time": "optimized compilation then actual post-verifier Result control; arbitrary full child footprint",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109/NKV_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109/NKV_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::candidate::NKV_native::values_calls",
+    "--output-format",
+    "regular"
+  ],
+  "configuration_source_revision": null,
+  "source_revision": "f0b9473ddfd208f55d32edd731b57318aae551f5",
+  "source_tree_dirty": true,
+  "exit_status": 1,
+  "wall_seconds": 58.94461269490421,
+  "peak_rss_kib": "2754492",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r57e4f0f0d9064c8bbc6f77e982327028.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "3136897024",
+  "source_hashes": {
+    "NKV_gate.py": "a9199d13785952992dff6ac6e33204af595fdf39ed57fbd24d4829dade23b39f",
+    "NKV_harness.rs": "29ba1e1314845839e6840f4ffee2a10a53fc5ea21a72c77b51bd0ef4f494b853",
+    "NKV_KMX.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NKV_NHR_stage.py": "7dac3a8803aa7f262818939a91b6986a180884c3edefa26e62a1c2746b474c19",
+    "NKV_SUPPLEMENT.json": "1d8b3b2bf561958174ce453f2706adeaae70885cbe73de33576b34683add84eb",
+    "NKV_FROZEN_PAYLOAD.json.xz": "58902e9cc80f328a57a4348d6470075505388ff034bcceb36a27d1f4c38118c8",
+    "NKV_FROZEN_PAYLOAD.json.sha256": "89f8cf69f243878ff24cd659dc6b0269c013ff855af2902578a5e3a76bf9cb39",
+    "NKV_STAGING_MANIFEST.json": "74a894c5ff7f4f3f3dda624b57891e6d7323fb2fa77c2b850d1c1ab4e3f18ad4",
+    "NKV_fragments.rs": "f3dc3c5ab2dddee46f7ea1e9fb6bbbc41993cf1b9a2b5d45843d2357a95ce2ff",
+    "NKV_FRAGMENT_ASSOCIATION.json": "4f253b77c095f6de9ead1b257dcca4598de8525a8f3770ba3d318fce32a90119"
+  },
+  "deps_fingerprint": "Std from pinned Lean sysroot only",
+  "print_axioms": "N/A: kani"
+}

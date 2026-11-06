@@ -1,0 +1,132 @@
+NKV_TreeSource.lean:12:4: warning: Variable name `i` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NKV_TreeSource.lean:12:6: warning: Variable name `v` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NKV_TreeSource.lean:100:3: error: Type mismatch
+  prefix_source (AspisR1.Port3_BatchStd.install base) D hash proof queries root tree 0#usize
+    (Usize.wrapping_sub 10#usize 0#usize) ((Usize.wrapping_mul 3#usize 0#usize).wrapping_add tree) span0 idx val
+has type
+  reject
+      (treeWith (AspisR1.Port3_BatchStd.install base) D hash proof queries root tree 0#usize
+        (Usize.wrapping_sub 10#usize 0#usize) ((Usize.wrapping_mul 3#usize 0#usize).wrapping_add tree) idx val) =
+    reject
+      (refWith (AspisR1.Port3_BatchStd.install base) D hash proof queries root tree 0#usize
+        (Usize.wrapping_sub 10#usize 0#usize) ((Usize.wrapping_mul 3#usize 0#usize).wrapping_add tree) idx val)
+but is expected to have type
+  reject
+      (let (lo, hi) := (0#usize, 10#usize)
+      do
+      let a ← base.op4 queries lo (Usize.wrapping_sub hi lo) tree
+      let keys ← base.op5 a (Usize.wrapping_sub hi lo)
+      let (idx1, val1, pending_return) ←
+        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+            { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+              op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr, op2 := base.op2, op3 := base.op3, op4 := base.op4,
+              op5 := base.op5, op6 := @AspisR1.Port3_NativeBatchBody.Ops.op6 base,
+              op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex, op9 := Array.index_usize,
+              op10 := @AspisR1.Port3_NativeBatchBody.Ops.op10 base, op11 := base.op11,
+              op12 :=
+                ok
+                  (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                    AspisR1.Port3_BatchStd.install._proof_6),
+              op13 := ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+            D proof root tree idx val hash lo (Usize.wrapping_sub hi lo)
+            ((Usize.wrapping_mul 3#usize 0#usize).wrapping_add tree) keys 0#usize 0#usize
+      match pending_return with
+        | none => fail Error.panic
+        | some r => ok (r, idx1, val1)) =
+    reject
+      (let (lo, hi) := (0#usize, 10#usize)
+      do
+      let a ← base.op4 queries lo (Usize.wrapping_sub hi lo) tree
+      let keys ← base.op5 a (Usize.wrapping_sub hi lo)
+      let (idx1, val1, returned, _) ←
+        NKV_FRef.verifier.candidate.batch_tree_loop
+            { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+              op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr, op2 := base.op2, op3 := base.op3, op4 := base.op4,
+              op5 := base.op5, op6 := @AspisR1.Port3_NativeBatchBody.Ops.op6 base,
+              op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex, op9 := Array.index_usize,
+              op10 := @AspisR1.Port3_NativeBatchBody.Ops.op10 base, op11 := base.op11,
+              op12 :=
+                ok
+                  (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                    AspisR1.Port3_BatchStd.install._proof_6),
+              op13 := ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+            D proof root tree idx val hash lo (Usize.wrapping_sub hi lo)
+            ((Usize.wrapping_mul 3#usize 0#usize).wrapping_add tree) keys 0#usize 0#usize
+      ok (returned, idx1, val1))
+NKV_TreeSource.lean:104:3: error: Type mismatch
+  prefix_source (AspisR1.Port3_BatchStd.install base) D hash proof queries root tree 10#usize
+    (Usize.wrapping_sub 22#usize 10#usize) ((Usize.wrapping_mul 3#usize 1#usize).wrapping_add tree) span1 idx val
+has type
+  reject
+      (treeWith (AspisR1.Port3_BatchStd.install base) D hash proof queries root tree 10#usize
+        (Usize.wrapping_sub 22#usize 10#usize) ((Usize.wrapping_mul 3#usize 1#usize).wrapping_add tree) idx val) =
+    reject
+      (refWith (AspisR1.Port3_BatchStd.install base) D hash proof queries root tree 10#usize
+        (Usize.wrapping_sub 22#usize 10#usize) ((Usize.wrapping_mul 3#usize 1#usize).wrapping_add tree) idx val)
+but is expected to have type
+  (reject do
+      let (lo, hi) ← if 1#usize = 0#usize then ok (0#usize, 10#usize) else ok (10#usize, 22#usize)
+      let a ← base.op4 queries lo (Usize.wrapping_sub hi lo) tree
+      let keys ← base.op5 a (Usize.wrapping_sub hi lo)
+      let (idx1, val1, pending_return) ←
+        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+            { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+              op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr, op2 := base.op2, op3 := base.op3, op4 := base.op4,
+              op5 := base.op5, op6 := @AspisR1.Port3_NativeBatchBody.Ops.op6 base,
+              op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex, op9 := Array.index_usize,
+              op10 := @AspisR1.Port3_NativeBatchBody.Ops.op10 base, op11 := base.op11,
+              op12 :=
+                ok
+                  (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                    AspisR1.Port3_BatchStd.install._proof_6),
+              op13 := ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+            D proof root tree idx val hash lo (Usize.wrapping_sub hi lo)
+            ((Usize.wrapping_mul 3#usize 1#usize).wrapping_add tree) keys 0#usize 0#usize
+      match pending_return with
+        | none => fail Error.panic
+        | some r => ok (r, idx1, val1)) =
+    reject do
+      let (lo, hi) ← if 1#usize = 0#usize then ok (0#usize, 10#usize) else ok (10#usize, 22#usize)
+      let a ← base.op4 queries lo (Usize.wrapping_sub hi lo) tree
+      let keys ← base.op5 a (Usize.wrapping_sub hi lo)
+      let (idx1, val1, returned, _) ←
+        NKV_FRef.verifier.candidate.batch_tree_loop
+            { op0 := fun {Self F Clause0_Item} => AspisR1.Port3_BatchStd.anyDefault,
+              op1 := fun {T E} => AspisR1.Port3_BatchStd.okOr, op2 := base.op2, op3 := base.op3, op4 := base.op4,
+              op5 := base.op5, op6 := @AspisR1.Port3_NativeBatchBody.Ops.op6 base,
+              op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex, op9 := Array.index_usize,
+              op10 := @AspisR1.Port3_NativeBatchBody.Ops.op10 base, op11 := base.op11,
+              op12 :=
+                ok
+                  (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                    AspisR1.Port3_BatchStd.install._proof_6),
+              op13 := ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+            D proof root tree idx val hash lo (Usize.wrapping_sub hi lo)
+            ((Usize.wrapping_mul 3#usize 1#usize).wrapping_add tree) keys 0#usize 0#usize
+      ok (returned, idx1, val1)
+theorem NKV_TreeSource.source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (hash : H) (proof : Slice U8) (queries : Std.Array U32 22#usize)
+  (root : Std.Array U8 32#usize) (batch tree : Usize),
+  ↑batch < 2 →
+    ∀ (idx : Indices) (val : Values),
+      reject
+          (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof
+            queries root batch tree idx val hash) =
+        reject
+          (NKV_FRef.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof queries root batch tree
+            idx val hash) :=
+⋯
+'NKV_TreeSource.boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.bind_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.prefix_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.span0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.span1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

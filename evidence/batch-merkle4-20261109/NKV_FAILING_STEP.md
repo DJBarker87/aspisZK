@@ -10,3 +10,5 @@ Target not yet established.
 K005 changed logging representation: sample the typed nested array directly at arbitrary j/k, retaining full-array child havoc, rather than raw-byte logging the nested value array. All earlier failures retained, same harness name, no cap/timeout increase. Outcome pending.
 
 L010 Progress.continues compiled but done_classified failed rewriting a tuple projection; L011 adds change r=.Ok() at success, PASS. K005 typed logging PASS; K006/K007 matched semantic and copied-root controls FAIL. No original source or KMX stub was changed to repair the raw logging issue. K008 actual57607 envelope PASS.
+
+Control review: initial copy-control configuration asserted the positive equality as well as its inverse, so its FAIL was weaker than a replacement-property control. No copy credit is retained from those controls. The owned harness now conditionally REPLACES the selected equality with its inverse. New same-source positive/semantic/copy-control triples K019-K021 (batch_calls), K022-K024 (values_calls) are planned. This strengthens validation and preserves original harness names, native bodies, domains and KMX patch.

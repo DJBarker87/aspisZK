@@ -63,6 +63,46 @@ theorem prefix_source (ops : AspisR1.Port3_NativeBatchBody.Ops)
  rw [native,ref]
  exact boundary out valid
 
+theorem span0 : (Usize.wrapping_sub 10#usize 0#usize).val≤12 := by
+ have x : (10#usize).val=10 := by scalar_tac
+ have y : (0#usize).val=0 := by scalar_tac
+ rw [Usize.wrapping_sub_val_eq,x,y,Nat.sub_zero,Nat.add_mod_right]
+ exact (Nat.mod_le _ _).trans (by decide)
+
+theorem span1 : (Usize.wrapping_sub 22#usize 10#usize).val≤12 := by
+ have x : (22#usize).val=22 := by scalar_tac
+ have y : (10#usize).val=10 := by scalar_tac
+ have cap : 4096<UScalar.size .Usize := by rw [UScalar.size_def];scalar_tac
+ rw [Usize.wrapping_sub_val_eq,x,y,
+   show 22+(UScalar.size .Usize-10)=12+UScalar.size .Usize by omega,Nat.add_mod_right]
+ exact Nat.mod_le _ _
+
+theorem loop_observed (ops : AspisR1.Port3_NativeBatchBody.Ops)
+ {H : Type} (D : aspis_core.digest.Digest32 H) (hash : H)
+ (proof : Slice U8) (root : Array U8 32#usize) (tree lo n slot : Usize)
+ (keys : Array U64 16#usize) (bound : n.val≤12) (idx : Indices) (val : Values) :
+ reject (do
+   let (i,v,pending) ← AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop
+     ops D proof root tree idx val hash lo n slot keys 0#usize 0#usize
+   match pending with | none => fail .panic | some r => ok (r,i,v)) =
+ reject (do
+   let (i,v,r,_) ← NKV_FRef.verifier.candidate.batch_tree_loop
+     ops D proof root tree idx val hash lo n slot keys 0#usize 0#usize
+   ok (r,i,v)) := by
+ obtain ⟨out,valid,direct,cohort⟩:=NKV_BoundedLoop.source ops D proof root tree hash lo n slot keys bound idx val 0#usize 0#usize
+ rw [direct,cohort]
+ cases out with
+ | fail e => rfl
+ | div => rfl
+ | ok out =>
+   rcases out with ⟨i,v,r,b⟩
+   cases b with
+   | false => cases r <;> rfl
+   | true =>
+     cases r with
+     | Err e => rfl
+     | Ok u => cases u;exact (valid rfl rfl).elim
+
 /-- Full source-level return observation, no accepted-run premise and no
 finite-Walk premise. Ops remains SUPPORT ONLY outside aq(2). -/
 theorem source (base : AspisR1.Port3_NativeBatchBody.Ops)
@@ -73,27 +113,35 @@ theorem source (base : AspisR1.Port3_NativeBatchBody.Ops)
    (AspisR1.Port3_BatchStd.install base) D proof queries root batch tree idx val hash)=
  reject (NKV_FRef.verifier.candidate.batch_tree
    (AspisR1.Port3_BatchStd.install base) D proof queries root batch tree idx val hash) := by
+ have notzero : ¬(1#usize=0#usize) := by scalar_tac
  have batches : batch=0#usize ∨ batch=1#usize := by
    by_cases zero : batch.val=0
    · exact Or.inl (UScalar.eq_of_val_eq zero)
    · exact Or.inr (UScalar.eq_of_val_eq (by change batch.val=1;omega))
  rcases batches with rfl|rfl
- · change reject (treeWith (AspisR1.Port3_BatchStd.install base) D hash proof queries root tree
-     0#usize 10#usize (Usize.wrapping_add (Usize.wrapping_mul 3#usize 0#usize) tree) idx val)=
-     reject (refWith (AspisR1.Port3_BatchStd.install base) D hash proof queries root tree
-     0#usize 10#usize (Usize.wrapping_add (Usize.wrapping_mul 3#usize 0#usize) tree) idx val)
-   exact prefix_source _ D hash proof queries root tree _ _ _ (by decide) idx val
- · change reject (treeWith (AspisR1.Port3_BatchStd.install base) D hash proof queries root tree
-     10#usize 12#usize (Usize.wrapping_add (Usize.wrapping_mul 3#usize 1#usize) tree) idx val)=
-     reject (refWith (AspisR1.Port3_BatchStd.install base) D hash proof queries root tree
-     10#usize 12#usize (Usize.wrapping_add (Usize.wrapping_mul 3#usize 1#usize) tree) idx val)
-   exact prefix_source _ D hash proof queries root tree _ _ _ (by decide) idx val
+ all_goals
+   unfold AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree
+     NKV_FRef.verifier.candidate.batch_tree
+   simp only [AspisR1.Port3_BatchStd.install,lift,bind_tc_ok,↓reduceIte,Aeneas.Std.uncurry,notzero,if_false]
+   apply bind_observed
+   intro raw
+   apply bind_observed
+   intro keys
+ · exact loop_observed (AspisR1.Port3_BatchStd.install base) D hash proof root tree
+       0#usize (Usize.wrapping_sub 10#usize 0#usize)
+       (Usize.wrapping_add (Usize.wrapping_mul 3#usize 0#usize) tree) keys span0 idx val
+ · exact loop_observed (AspisR1.Port3_BatchStd.install base) D hash proof root tree
+       10#usize (Usize.wrapping_sub 22#usize 10#usize)
+       (Usize.wrapping_add (Usize.wrapping_mul 3#usize 1#usize) tree) keys span1 idx val
 
 set_option pp.proofs false
 #print source
 #print axioms boundary
 #print axioms bind_observed
 #print axioms prefix_source
+#print axioms span0
+#print axioms span1
+#print axioms loop_observed
 #print axioms source
 end NKV_TreeSource
 end

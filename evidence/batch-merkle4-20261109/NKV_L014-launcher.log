@@ -1,0 +1,45 @@
+{"attempt": "NKV_L014", "exit_status": 1, "wall_seconds": 6.0612315139733255, "peak_rss_kib": "4400412", "swaps": "0", "print_axioms": ["'NKV_TreeSource.boundary' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_TreeSource.bind_observed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_TreeSource.prefix_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_TreeSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_TreeSource.lean:12:4: warning: Variable name `i` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NKV_TreeSource.lean:12:6: warning: Variable name `v` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NKV_TreeSource.lean:81:3: error: Type mismatch: After simplification, term
+  prefix_source (AspisR1.Port3_BatchStd.install base) D hash proof queries root tree 0#usize 10#usize
+    ((Usize.wrapping_mul 3#usize 0#usize).w
+...
+e.op3, op4 := base.op4,
+              op5 := base.op5, op6 := @AspisR1.Port3_NativeBatchBody.Ops.op6 base,
+              op7 := AspisR1.Port3_BatchStd.sameLeaf, op8 := AspisR1.Port3_BatchStd.sameIndex, op9 := Array.index_usize,
+              op10 := @AspisR1.Port3_NativeBatchBody.Ops.op10 base, op11 := base.op11,
+              op12 :=
+                ok
+                  (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize]
+                    AspisR1.Port3_BatchStd.install._proof_6),
+              op13 := ok 10#usize, unwrap8 := AspisR1.Port3_BatchStd.unwrap8 }
+            D proof root tree idx val hash lo (Usize.wrapping_sub hi lo)
+            ((Usize.wrapping_mul 3#usize 1#usize).wrapping_add tree) keys 0#usize 0#usize
+      ok (returned, idx1, val1)
+theorem NKV_TreeSource.source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (hash : H) (proof : Slice U8) (queries : Std.Array U32 22#usize)
+  (root : Std.Array U8 32#usize) (batch tree : Usize),
+  ↑batch < 2 →
+    ∀ (idx : Indices) (val : Values),
+      reject
+          (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof
+            queries root batch tree idx val hash) =
+        reject
+          (NKV_FRef.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof queries root batch tree
+            idx val hash) :=
+⋯
+'NKV_TreeSource.boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.bind_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.prefix_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r75d0399acf064fc79946182b3b41297d.scope; invocation ID: 9412ba6198cb484fbf96f08f30abfd82

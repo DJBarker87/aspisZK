@@ -20,7 +20,7 @@ impl Digest32 for ParentOracle<'_> {
   } else if phase%3==1 {
    assert!((parts.len())==(7),"NKV comparison source line 19");
    assert!((parts[0].as_ptr())==(self.proof),"NKV comparison source line 20");assert!((parts[0].len())==(self.width),"NKV comparison source line 20");
-   assert!((parts[1])==(&self.roots[tree]),"NKV comparison source line 21");
+   #[cfg(not(NKV_copy_control))] assert!((parts[1])==(&self.roots[tree]),"NKV comparison source line 21");
    #[cfg(NKV_copy_control)] assert!(parts[1]!=&self.roots[tree],"NKV copied root negative control");
    assert!((parts[2])==(&self.batch.to_le_bytes()),"NKV comparison source line 22");assert!((parts[3])==(&tree.to_le_bytes()),"NKV comparison source line 22");
    assert!((parts[4].len())==(88),"NKV comparison source line 23");
@@ -64,4 +64,56 @@ fn values_calls() {
  let exact=match code {0=>out.is_ok(),1=>matches!(out,Err(Error::Parse)),_=>matches!(out,Err(Error::Merkle))};
  #[cfg(not(NKV_invert))] assert!(exact);
  #[cfg(NKV_invert)] assert!(!exact);
+}
+
+#[kani::proof]
+fn count_return(){
+ let present:bool=kani::any();let value:usize=kani::any();
+ let counted=if present {Some(value)}else{None};
+ let out=count_return_fragment(counted);
+ let exact=if present {matches!(out,Ok(v) if v==value)}else{matches!(out,Err(Error::Merkle))};
+ #[cfg(not(NKV_invert))] assert!(exact);
+ #[cfg(NKV_invert)] assert!(!exact);
+}
+
+#[derive(Clone,Copy)]
+struct BatchOracle<'a>{calls:&'a core::cell::Cell<usize>,roots:[[u8;32];3],queries:[u32;22],batch:usize,proof:*const u8,width:usize,reply:u8}
+impl Digest32 for BatchOracle<'_>{fn digest(&self,parts:&[&[u8]])->[u8;32]{
+ assert!(self.calls.get()==0);self.calls.set(1);
+ assert!(parts.len()==6);assert!(parts[0].as_ptr()==self.proof&&parts[0].len()==self.width);
+ assert!(parts[1]==&self.roots[0]);assert!(parts[2]==&self.roots[1]);
+ #[cfg(not(NKV_copy_control))] assert!(parts[3]==&self.roots[2]);
+ #[cfg(NKV_copy_control)] assert!(parts[3]!=&self.roots[2]);
+ assert!(parts[4]==&self.batch.to_le_bytes());assert!(parts[5].len()==88);
+ for i in 0..22{assert!(&parts[5][4*i..4*i+4]==&self.queries[i].to_le_bytes());}
+ let mut out=[0;32];out[0]=self.reply;out
+}}
+fn logged_values<H:Digest32>(proof:&[u8],queries:[u32;22],roots:[[u8;32];3],batch:usize,hash:H)->Result<(),Error>{
+ let query_bytes=unsafe{core::slice::from_raw_parts(queries.as_ptr()as *const u8,88)};
+ let r=hash.digest(&[proof,&roots[0],&roots[1],&roots[2],&batch.to_le_bytes(),query_bytes]);
+ match r[0]{0=>Ok(()),1=>Err(Error::Parse),_=>Err(Error::Merkle)}
+}
+fn any_k()->K{
+ let words:[u32;4]=kani::any();
+ K{c0:aspis_core::field::CM31{a:M31(words[0]),b:M31(words[1])},c1:aspis_core::field::CM31{a:M31(words[2]),b:M31(words[3])}}
+}
+fn any_e()->E{
+ let words:[u32;8]=kani::any();for w in words{kani::assume(w<aspis_core::field::P)}
+ E::from_limbs(words).unwrap()
+}
+#[kani::proof]
+#[kani::unwind(600)]
+#[kani::stub(batch_merkle_values,logged_values)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn batch_calls(){
+ let proof:[u8;57607]=kani::any();let queries:[u32;22]=kani::any();let roots:[[u8;32];2]=kani::any();let folded:[u8;32]=kani::any();let state:[u8;32]=kani::any();
+ let variant:u8=kani::any();kani::assume(variant<3);let variant=match variant{0=>Variant::S1,1=>Variant::S2,_=>Variant::D};
+ let p=Prepared{variant,roots,gamma:any_e(),kappa:any_e(),alpha:[any_e(),any_e()],rho:any_k(),queries,semantic_alpha:core::array::from_fn(|_|any_k()),z:core::array::from_fn(|_|SecureCirclePoint{x:any_k(),y:any_k()}),claim:any_e(),state};
+ let batch:usize=kani::any();kani::assume(batch<2);let reply:u8=kani::any();kani::assume(reply<3);let calls=core::cell::Cell::new(0);
+ let oracle=BatchOracle{calls:&calls,roots:[roots[0],roots[1],folded],queries,batch,proof:proof.as_ptr(),width:proof.len(),reply};
+ let out=batch_merkle(&proof,&p,&folded,batch,oracle);assert!(calls.get()==1);
+ let exact=match reply{0=>out.is_ok(),1=>matches!(out,Err(Error::Parse)),_=>matches!(out,Err(Error::Merkle))};
+ #[cfg(not(NKV_invert))] assert!(exact);
+ #[cfg(NKV_invert)] assert!(!exact);
+ let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<2&&k<32);assert!(p.roots[j][k]==roots[j][k]);
 }
