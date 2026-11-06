@@ -1,0 +1,92 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+use aspis_core::field::{M31,CM31};
+fn k(x:[u32;4])->K{K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
+fn any_e()->E{let w:[u32;8]=kani::any();E::new(k([w[0],w[1],w[2],w[3]]),k([w[4],w[5],w[6],w[7]]))}
+fn error(n:u8)->Error{match n%8{0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
+fn prepared()->Prepared{Prepared{variant:Variant::S2,roots:kani::any(),gamma:any_e(),kappa:any_e(),alpha:[any_e(),any_e()],rho:k(kani::any()),queries:kani::any(),semantic_alpha:core::array::from_fn(|_|k(kani::any())),z:[SecureCirclePoint{x:k(kani::any()),y:k(kani::any())},SecureCirclePoint{x:k(kani::any()),y:k(kani::any())}],claim:any_e(),state:kani::any()}}
+struct FinishLog<'a>{proof:&'a[u8],prepared:&'a Prepared,rhs:E,power:K,next:usize,weights:*const K,cap:usize,len:usize,inactive:E,reply:Result<(),Error>,calls:usize}
+impl FinishLog<'_>{fn finish(&mut self,v:&View,p:&Prepared,a:&Accumulator)->Result<(),Error>{
+ self.calls+=1;
+ assert!(v.variant==Variant::S2);assert!(v.semantic.is_empty());assert!(v.y1.is_empty());assert!(v.query_bytes.is_empty());assert!(v.folded_root.is_none());assert_eq!(v.inactive,self.inactive);
+ assert_eq!(v.round0.as_ptr(),self.proof.as_ptr().wrapping_add(7527));assert_eq!(v.round0.len(),224);
+ assert_eq!(v.round1.as_ptr(),self.proof.as_ptr().wrapping_add(7783));assert_eq!(v.round1.len(),224);
+ assert_eq!(v.final_message.as_ptr(),self.proof.as_ptr().wrapping_add(8007));assert_eq!(v.final_message.len(),2048);
+ let i:usize=kani::any();kani::assume(i<224);let j:usize=kani::any();kani::assume(j<2048);
+ assert_eq!(v.round0[i],self.proof[7527+i]);assert_eq!(v.round1[i],self.proof[7783+i]);assert_eq!(v.final_message[j],self.proof[8007+j]);
+ assert_eq!(p as *const Prepared,self.prepared as *const Prepared);
+ assert_eq!(p.roots,self.prepared.roots);assert_eq!(p.gamma,self.prepared.gamma);assert_eq!(p.kappa,self.prepared.kappa);assert_eq!(p.alpha,self.prepared.alpha);assert_eq!(p.rho,self.prepared.rho);assert_eq!(p.queries,self.prepared.queries);assert_eq!(p.semantic_alpha,self.prepared.semantic_alpha);assert_eq!(p.claim,self.prepared.claim);assert_eq!(p.state,self.prepared.state);
+ assert_eq!(p.z[0].x,self.prepared.z[0].x);assert_eq!(p.z[0].y,self.prepared.z[0].y);assert_eq!(p.z[1].x,self.prepared.z[1].x);assert_eq!(p.z[1].y,self.prepared.z[1].y);
+ assert_eq!(a.weights.as_ptr(),self.weights);assert_eq!(a.weights.capacity(),self.cap);assert_eq!(a.weights.len(),self.len);assert_eq!(a.rhs,self.rhs);assert_eq!(a.power,self.power);assert_eq!(a.next,self.next);
+ self.reply
+}}
+// Exact tx2_common tail following the already certified flush, with only the
+// finish child changed to a full-Result local logging oracle. No observer value
+// is inspected; deployed None phase effects are erased on the Lean side.
+fn finish_tail(proof:&[u8],p:&Prepared,a:Accumulator,inactive:E,log:&mut FinishLog)->Result<(),Error>{
+ let v=View{variant:Variant::S2,semantic:&[],y1:&[],inactive,round0:&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],folded_root:None,round1:&proof[compact::OFF_ROUND1..compact::OFF_FINAL],final_message:&proof[compact::OFF_FINAL..compact::OFF_OPENINGS],query_bytes:&[]};
+ log.finish(&v,p,&a)
+}
+#[kani::proof]
+#[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn finish_call(){
+ let proof:[u8;57607]=kani::any();let len:usize=kani::any();kani::assume(len>=10055&&len<=57607);let proof=&proof[..len];
+ let p=prepared();let before:[[u32;4];64]=kani::any();let mut weights=alloc::vec::Vec::with_capacity(64);for w in before{weights.push(k(w));}
+ let rhs=any_e();let power=k(kani::any());let next:usize=kani::any();let inactive=any_e();let reply=if kani::any(){Ok(())}else{Err(error(kani::any()))};
+ let mut log=FinishLog{proof,prepared:&p,rhs,power,next,weights:weights.as_ptr(),cap:weights.capacity(),len:64,inactive,reply,calls:0};
+ let a=Accumulator{weights,rhs,power,next};let out=finish_tail(proof,&p,a,inactive,&mut log);
+ assert_eq!(log.calls,1);assert_eq!(out,if cfg!(NKE_invert){match reply{Ok(())=>Err(Error::Parse),Err(_)=>Ok(())}}else{reply});
+}
+// Replacement for the retired finish_call shape: only the current View
+// construction/call window. Prepared/owned Accumulator moves are separate cuts.
+struct ViewLog<'a>{proof:&'a[u8],inactive:E,reply:Result<(),Error>,calls:usize}
+impl ViewLog<'_>{fn finish(&mut self,v:&View)->Result<(),Error>{
+ self.calls+=1;assert!(v.variant==Variant::S2);assert!(v.semantic.is_empty());assert!(v.y1.is_empty());assert!(v.query_bytes.is_empty());assert!(v.folded_root.is_none());assert_eq!(v.inactive,self.inactive);
+ assert_eq!(v.round0.as_ptr(),self.proof.as_ptr().wrapping_add(7527));assert_eq!(v.round0.len(),224);assert_eq!(v.round1.as_ptr(),self.proof.as_ptr().wrapping_add(7783));assert_eq!(v.round1.len(),224);assert_eq!(v.final_message.as_ptr(),self.proof.as_ptr().wrapping_add(8007));assert_eq!(v.final_message.len(),2048);
+ let i=kani::any::<u8>() as usize;kani::assume(i<224);let j=(kani::any::<u16>() & 2047) as usize;assert_eq!(v.round0[i],self.proof[7527+i]);assert_eq!(v.round1[i],self.proof[7783+i]);assert_eq!(v.final_message[j],self.proof[8007+j]);self.reply
+}}
+fn view_tail(proof:&[u8],inactive:E,log:&mut ViewLog)->Result<(),Error>{
+ let v=View{variant:Variant::S2,semantic:&[],y1:&[],inactive,round0:&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],folded_root:None,round1:&proof[compact::OFF_ROUND1..compact::OFF_FINAL],final_message:&proof[compact::OFF_FINAL..compact::OFF_OPENINGS],query_bytes:&[]};
+ log.finish(&v)
+}
+#[kani::proof]
+#[kani::unwind(36)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn view_call(){
+ let proof:[u8;57607]=kani::any();let proof=&proof[..];let inactive=any_e();let reply=if kani::any(){Ok(())}else{Err(error(kani::any()))};
+ let mut log=ViewLog{proof,inactive,reply,calls:0};let out=view_tail(proof,inactive,&mut log);assert_eq!(log.calls,1);assert_eq!(out,if cfg!(NKE_invert){match reply{Ok(())=>Err(Error::Parse),Err(_)=>Ok(())}}else{reply});
+}
+struct GeometryLog{queries:[u32;22],start:usize,reply:Option<Result<QueryGeometry,Error>>,calls:usize}
+impl GeometryLog{fn for_range(&mut self,queries:&[u32;22],start:usize,end:usize)->Result<QueryGeometry,Error>{
+ self.calls+=1;assert_eq!(*queries,self.queries);assert_eq!(start,self.start);assert_eq!(end,22);self.reply.take().unwrap()
+}}
+fn geometry_stage(queries:&[u32;22],start:usize,log:&mut GeometryLog)->Result<QueryGeometry,Error>{
+ let geometry=log.for_range(queries,start,22)?;Ok(geometry)
+}
+#[kani::proof]
+#[kani::unwind(114)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn geometry_call(){
+ let queries:[u32;22]=kani::any();let start:usize=kani::any();let child_start:usize=kani::any();let n:usize=kani::any();kani::assume(n<=22);let cells:[[u32;5];22]=kani::any();let lines:[u32;22]=kani::any();
+ let mut inverses=alloc::vec::Vec::with_capacity(22);let mut line_z=alloc::vec::Vec::with_capacity(22);for i in 0..n{inverses.push(cells[i].map(M31));line_z.push(M31(lines[i]));}
+ let ip=inverses.as_ptr();let ic=inverses.capacity();let lp=line_z.as_ptr();let lc=line_z.capacity();let good:bool=kani::any();let e=error(kani::any());
+ let reply=if good{Ok(QueryGeometry{start:child_start,inverses,line_z})}else{Err(e)};let mut log=GeometryLog{queries,start,reply:Some(reply),calls:0};
+ let out=geometry_stage(&queries,start,&mut log);assert_eq!(log.calls,1);assert!(log.reply.is_none());match out{Err(err)=>{assert!(!good);assert_eq!(err,if cfg!(NKE_invert){if e==Error::Parse{Error::Query}else{Error::Parse}}else{e});},Ok(g)=>{assert!(good);assert_eq!(g.start,child_start^(if cfg!(NKE_invert){1}else{0}));assert_eq!(g.inverses.as_ptr(),ip);assert_eq!(g.inverses.capacity(),ic);assert_eq!(g.inverses.len(),n);assert_eq!(g.line_z.as_ptr(),lp);assert_eq!(g.line_z.capacity(),lc);assert_eq!(g.line_z.len(),n);let j:usize=kani::any();kani::assume(j<n);let k:usize=kani::any();kani::assume(k<5);assert_eq!(g.inverses[j][k].0,cells[j][k]);assert_eq!(g.line_z[j].0,lines[j]);}}
+}
+struct PendingLog{weights:*const K,len:usize,seen:Option<(*const K,usize)>,reply:Option<Result<BatchedWeights,Error>>,calls:usize}
+impl PendingLog{fn pending(&mut self,weights:&[K])->Result<BatchedWeights,Error>{self.calls+=1;self.seen=Some((weights.as_ptr(),weights.len()));assert_eq!(weights.as_ptr(),self.weights);assert_eq!(weights.len(),self.len);self.reply.take().unwrap()}}
+fn pending_stage(weights:&[K],log:&mut PendingLog)->Result<BatchedWeights,Error>{let pending=log.pending(weights)?;Ok(pending)}
+#[kani::proof]
+#[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn pending_call(){
+ let before:[[u32;4];64]=kani::any();let rows:[[u64;4];64]=kani::any();let mut weights=alloc::vec::Vec::with_capacity(64);let mut raw=alloc::vec::Vec::with_capacity(64);for w in before{weights.push(k(w));}for r in rows{raw.push(r);}
+ let wp=weights.as_ptr();let wc=weights.capacity();let rp=raw.as_ptr();let rc=raw.capacity();let terms:usize=kani::any();let good:bool=kani::any();let e=error(kani::any());let reply=if good{Ok(BatchedWeights{raw,terms})}else{Err(e)};
+ let mut log=PendingLog{weights:wp,len:64,seen:None,reply:Some(reply),calls:0};let out=pending_stage(&weights,&mut log);assert_eq!(log.calls,1);assert!(log.reply.is_none());assert_eq!(log.seen,Some((wp,64)));let i:usize=kani::any();kani::assume(i<64);assert_eq!(weights.as_ptr(),wp);assert_eq!(weights.capacity(),wc);assert_eq!(weights.len(),64);assert_eq!(weights[i].c0.a.0,before[i][0]);assert_eq!(weights[i].c0.b.0,before[i][1]);assert_eq!(weights[i].c1.a.0,before[i][2]);assert_eq!(weights[i].c1.b.0,before[i][3]);
+ match out{Err(err)=>{assert!(!good);assert_eq!(err,if cfg!(NKE_invert){if e==Error::Parse{Error::Query}else{Error::Parse}}else{e});},Ok(b)=>{assert!(good);assert_eq!(b.raw.as_ptr(),rp);assert_eq!(b.raw.capacity(),rc);assert_eq!(b.raw.len(),64);assert_eq!(b.terms,terms^(if cfg!(NKE_invert){1}else{0}));assert_eq!(b.raw[i],rows[i]);}}
+}

@@ -1,0 +1,43 @@
+{"attempt": "NKE_K005", "exit_status": 1, "wall_seconds": 94.64740396896377, "peak_rss_kib": "5955976", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rte
+...
+mn 0 function <core::result::Result<(), verifier::Error> as core::cmp::PartialEq>::eq thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs line 439 column 17 function core::panicking::assert_failed_inner thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs line 394 column 5 function core::panicking::assert_failed::<core::result::Result<(), verifier::Error>, core::result::Result<(), verifier::Error>> thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs line 51 column 21 function verifier::candidate::NKE_parent::view_call thread 0
+Runtime Symex: 0.332469s
+size of program expression: 12161 steps
+slicing removed 8351 assignments
+Generated 452 VCC(s), 43 remaining after simplification
+Runtime Postprocess Equation: 0.00462359s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 9.10708s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 8.12e-06s
+Solving with CaDiCaL 2.0.0
+4309393 variables, 38135863 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 1.44231s
+Runtime decision procedure: 10.62s
+Running propositional reduction
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKE_parent::view_call
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rf3d54f4ed3a4482aa3ca91140c3bb1f2.scope; invocation ID: 8b493be6a8154e54be3adb2a863789b7
