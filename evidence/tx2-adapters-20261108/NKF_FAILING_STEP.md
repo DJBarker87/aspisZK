@@ -1,25 +1,28 @@
-# NKF failing steps
+# Exact failing steps and replacements
 
-L001 pre-submission own-wrapper error: inherited formal runner attempted to pin NKF_COMBINED_IMPORT before any audit module existed for an extraction. No scope or extraction launched. Restricted audit-only dependency pins to audit kinds; extraction still pins all selected Aeneas objects and validates frozen source/dependency graph. No validation weakened.
+Target not yet established. Historical failures and sources remain retained.
 
-L001 launched only frozen-source preflight (0.303s, exit1, no Charon/Aeneas): seed NIV_src contained retained cfg(kani) instrumentation in statement lib.rs. Restore OWN scratch tree from pinned frozen payload and record every replaced hash before L002. The inherited receipt env still named NJY target/tmp; no Cargo process was reached, hence no sibling compilation/write occurred. NKF_ENV now pins own target/tmp, and the extractor overrides its target to NKF_target.
+* K081 was submitted ONCE after host repair: admission exit0/allowed:true,
+ 129497116672free bytes; source-erasure/offline-frozen-graph checks passed and
+ Cargo.lock unchanged. cargo-kani0.67.0 invoked rustc, which failed creating
+ NKF_tmp/rustcnaCM0r: No such file or directory. Prior owned end cleanup removed
+ NKF_tmp, and the resumed submission did not recreate it. No CBMC assertion ran.
+ Final native allowance consumed; no resubmission, no negative-control credit.
+* K064 iteration and K067 constructor inverse are retired TIMEOUTs. New Lean
+ factorizations L018/L022/L031 pass; exact future native windows/control plan
+ is NKF_SPLIT_PLAN.md. No timeout/cap increase or unchanged native retry.
+* L017/L019/L020/L021/L023/L030 are excluded failed drafts; error-recovery
+ sorryAx in failed outputs is not accepted. Fresh changed-source L018/L022/
+ L031 pass and raw ax2 sees standard axioms only.
+* Joint orchestration initially read a predecessor path omitted by sparse
+ checkout. Read exact committed blobs by git show with SHA validation; reused
+ L024/L025 without replay. No proof scope was lost to that local parser step.
+* L026 link failed because owned TMPDIR was absent. L033 adds retained
+ NKF_tmp/.keep and links successfully. This repair never reruns K081.
+* L032 pin script expected inherited lean-toolchain/S2W_lean_host inputs that
+ this workspace does not use. L035 pins actual LEAN_SYSROOT lean/lake/leanc,
+ lakefile.lean and the actual S2W_run_host launcher; comparison remains strict:
+ all32556predecessor files must match. Exit0, zero mismatches.
 
-L002: frozen-source/graph validation PASS; Charon exit0; Aeneas exit2, Not_found in InterpReduceCollapse.collapse_ctx_following_sequence, no emitted Lean output. Complete selection contains all six assigned roots (NKF_EMITTED/NHR_PINS.json and LLBC). (ay)(2) therefore permits (ah) references for all six; no retry of this shape. Extraction allowance 1/1 used. 124.372s, peak539480KiB, swaps0, caps6G/8G/swap0/tasks64. Native contracts/controls and Lean transcriptions remain to prove.
-
-K001 stopped in own source-pin preflight before Kani: stale inherited NJD_stages pin with no reached declaration or uploaded file. Removed that sole orphan entry; frozen-source erasure, all reached source pins and full frozen graph checks retained. K002 is the first attempted native wrapper proof.
-
-K002 compiled and verified the master wrapper tail but failed one builtin memcmp unwinding assertion (337 undetermined); NO pass. Replacement K003 splits the result relation into one scalar coordinate at arbitrary field/index, then Lean record/array extensionality. Same harness name retained; no timeout/cap/unwind increase.
-
-K003 arbitrary-field coordinate contract timed out at90s (scope92.658s, RSS3154120KiB, swaps0); no credit and no unchanged rerun. K004 fixes field0; later array fields retain one arbitrary byte/word offset. Full record is deferred to Lean extensional composition.
-
-L003 failed on an alias-qualified ProgramError constructor; corrected to the canonical constructor before passing L004. L008 ArrayFrame failed from an untyped getElem? index; annotated Nat in CellEq before fresh L009. Error-recovery sorryAx from failed attempts is excluded. No timeout, no cap increase.
-
-K046/K050: returned-Box stub_verified calibration fails to compile because Result<Box<master/checkpoint>,ProgramError> lacks kani::Arbitrary. This is the named(ak) non-Arbitrary interface obstruction, NOT a semantic FAIL and not a fidelity pass. K044/K048 real weak bodies PASS, K045/K049 inverted ensures FAIL, K047/K051 modifies violations detected. Apply(ak) explicit-constructor logging stubs; no production Box stub_verified use. K062 is a planned local queue review boundary (empty local output reservation), with no submission or cancelled scope.
-
-K062/K063 ordinary stubs still targeted contract-annotated shape_probe and Kani rejected the missing contract recursion closure before CBMC. Correct own calibration source by removing contract annotations from ordinary(ak) stub targets; retain the original selected master harness/module/function names and add both returned-Box cases there. K064 native lane iteration TIMEOUT; K065 is a changed canonical=false error-only control, semantic FAIL, not paired credit. K066 constructor PASS but K067 control TIMEOUT: NO native credit. K080 stale-capture control incorrectly changed log AFTER good was computed; its PASS is excluded. K081 corrects the mutation order and both typed(ak) cases in one harness. No timed-out shape is rerun. K001 source validation never invoked cargo-kani, so K081 is actual invocation80, not a budget increase; NKF_NATIVE_BUDGET records the count.
-
-Shared infrastructure STOP before K081: reservation attempts0/1 both returned SSH120 with blank stdout/stderr and blank receipt/log files; the allowed30-second missing-receipt retry was used. Read-only recovery confirmed the reservation JSON is zero bytes. It never had exit0 AND allowed:true, so NO upload or scope launch occurred. This is not exit255 transport contention and is not bypassed. local-lean rules5/7/9 require stop and lead repair. The read-only recovery saw1030356992free bytes; this is context, not a demonstrated root cause. End-of-job cleanup removed only1367947956bytes of owned Rust outputs/solver temporaries and retained every Lean object/source/receipt; no further proof launch followed.
-
-L001's inherited environment named predecessor target/tmp paths, but source validation failed before any Cargo/Lean tool launch or target access. L002 and all subsequent actual jobs used the owned target. L001/L002 expected_time was inherited audit wording; the actual L002 command/pins/stdout record optimized compilation121s, Charon success then Aeneas failure. The owned runner's future classification is repaired; original receipts remain unedited.
-
-K081 is a PREPARED repair, never a proof result. The final-control script's earlier local preparation syntax/import mistakes triggered only the duplicate-attempt guard before submission; no unchanged proof was rerun. No naming-based verdict repair or timed-out shape replay occurred.
+Historical K046/K050/K062/K063 compile failures, K065unpaired inverse,
+K066unpaired pass and K080control-order bug earn no native credit.

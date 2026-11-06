@@ -1,50 +1,85 @@
-# NKF TX2 adapter leaves handoff
+# NKF TX2 adapter leaves handoff after host repair
 
-**Target not yet established. Zero admitted rows.** Branch codex/cx-tx2-adapters-20261107; local stage commits, no push. Baseline authoritative NKC ledger17 remains514CLOSED /0QUALIFIED /85OPEN of599. NKF_CLOSED.json has no closed functions; NKF_LEDGER_DELTA.json is empty.
+**Target not yet established. Zero admitted rows.** Branch
+codex/cx-tx2-adapters-20261107; staged commits remain local, no push. Authoritative
+ledger17 stays514CLOSED /0QUALIFIED /85OPEN of599. NKF_CLOSED.json has no closed
+functions and NKF_LEDGER_DELTA.json has no changes. Every owned member216/217/
+218/233/234/242remains OPEN; exact native obligations and the reason for unused
+formal budget are in NKF_REMAINING.md.
 
-## Established focused support
+## Established support and joint gate
 
-TX2:216/218: exact account-format-error→ProgramError::InvalidAccountData maps, safe Box value carrier, SAME-argument CLOSED raw152/153 application and concrete slots48/49 (digest/error43/44 preserved) compile. Native14master/6checkpoint scalar/window pairs and corrupted-value controls pass/fail as intended. Allocation identity and distinct-live-allocation checks have matched different-allocation/uniqueness failures. Bounded/modulo windows reconstruct the entire records in Lean, with arbitrary Reservation and no allocator-success premise. These are conditional native/model support, NOT complete implementation rows: returned-Box calibration and the joint gate remain unvalidated.
+The exact master/checkpoint account-format-error→ProgramError::InvalidAccountData
+maps, Box value carrier, SAME-argument CLOSED raw152/153 application and concrete
+slots48/49compile. Native14master/6checkpoint field/window pairs and corrupted
+value controls pass/fail as intended. Allocation identity and distinct-live
+allocation checks have matched failures. Bounded/modulo observations reconstruct
+whole records in Lean with arbitrary Reservation and no success premise. These
+remain conditional support, because the returned-Box native control is absent.
 
-TX2:217: NKF_LaneTrace proves one-iteration frame, write-before-reject, finite-list frame induction and abort no-suffix. Actual iteration K064 times out; changed error-only inverse K065 is not a pair. Constructor K066 passes but K067 control times out; both shapes earn no native credit.
+After host repair, L016proves bounded seed/program windows assemble into the SAME
+op38 input; it adds no PDA value law. L018factors K064's lane iteration into
+guard/result, selected/untouched coordinate and symbolic window/disjointness
+lemmas. L022factors K067's constructor into scalar/header/root/frontier windows
+and reconstructs the complete canonical AdapterRw lane/tree record. L031proves
+chronological call-prefix, log bound and successful exhaustion, retaining earlier
+frame/induction/write-before-reject/no-suffix. These are model support, not
+native certificates. K064/K067were never rerun unchanged or credited.
 
-TX2:234: six versioned registry/entry/programdata API seed/program/reply cuts have matched semantic failures. The PDA VALUE is the quantified op38 reply, not a new runtime row or SHA/curve computation. This is no full SDK syscall ABI or parent metadata/authentication certificate. NKF_PdaModel has complete reply/error/fail/div relay laws. Final seed-window helper is preserved as NKF_SeedWindows.lean.wip, uncompiled.
+The ONE completed joint audit passes every member:
 
-TX2:233/242 remain OPEN behind their named children and missing complete source-ordered invocation cuts; no driver/entry-spine work was taken. NKF_REMAINING.md gives every member's precise next obligations and why no further native or Lean attempt may now run.
+| Member | Receipt | Result |
+|---|---|---|
+| Combined import with NKC and AspisR1.RPx_Deployed.deployed | NKF_L024 | exit0;14current modules,49NKF top theorems plus headline |
+| Same retained raw-ax2 binary eight fixtures/mutations | NKF_L027 | exit0;4planted axioms detected,4mutations clear, all equal collectAxioms |
+| Raw ax2 | NKF_L028 | exit0;50roots, only propext/Classical.choice/Quot.sound |
+| NFX module/owner/import scan | NKF_L034 | exit0;15978modules, zero dangling/conflicting-owner/import defects |
+| Selected coherent closure | NKF_L035 | exit0;32556predecessor files match, zero mismatches |
 
-## Native method failures and mandatory infrastructure stop
+NKF_AUDIT.json, NKF_HYPOTHESES.json and compressed full logs retain results and
+printed roots. NKF_CLOSURE_PINS.json.xz pins all selected objects/sidecars;
+Aeneas dependencies were pinned per attempt. NKF_WALKER_IDENTITY.json checks
+NFA_WALKER byte-identical to hardened NEP; retained proof binary SHA is
+82898d45b249439ff7c1c6ed03b4c5c49d72888643aadc82896987c668613c76.
+Own export NKF_exports_resume_20261108 is1305944bytes,15objects, retained in the
+workspace; NKF_EXPORT.json lists hashes. Audit success admits no incomplete
+native row and removes no headline hypothesis.
 
-K046/K050: actual Result<Box<record>,ProgramError> lacks Arbitrary for stub_verified. K062/K063: ordinary stubbing still targeted a contract-annotated function and failed for a missing contract recursion closure. No fidelity pass is inferred. K080's extra negative frame control incorrectly mutated the log after capturing `good`; its PASS is excluded. The PREPARED K081 retains the selected master harness name, removes contract annotations from ordinary(ak) targets, combines both returned-Box cases and fixes the seed-control mutation order. It has NOT been uploaded/submitted or verified.
+## K081 and resources
 
-Before K081, BOTH shared reservation steps returned SSH exit120, blank stdout/stderr and zero-byte JSON/logs, including the allowed30-second retry. Admission requires exit0 AND allowed:true. Read-only recovery confirmed no valid JSON. local-lean rules5/7/9 require stopping and lead infrastructure repair; no bypass or further proof launch occurred.1030356992free bytes was observed, but disk is not established as the cause. See NKF_INFRASTRUCTURE_STOP.json and recovery evidence.
+The lead lifted the historical shared admission stop after filesystem repair.
+K081's first submission had reservation exit0/allowed:true and129497116672free
+bytes. Frozen offline graph, deployed all-crate features, source erasure and
+unchanged lock checks passed. cargo-kani invoked rustc, then compilation failed:
+owned NKF_tmp was missing after prior cleanup. The resumed submission did not
+recreate it. No semantic property ran, so no failing-control credit follows.
+The final Kani invocation is consumed and was not resubmitted. This is an owned
+input failure, not another shared-infrastructure stop. Historical stop evidence
+is retained; NKF_RESUME.json supersedes the stop's applicability.
 
-No combined gate ran (0/2). NKF_COMBINED_IMPORT.lean is prepared for all ten compiled modules plus NKC and the deployed headline;35roots listed, NOT replayed. NFX, raw ax2, eight-fixture and complete selected-closure comparison are NOT run. Individual #print axioms for all34current new top theorems are standard-only; this is not a substitute for the gate. Failed L003/L008 drafts and unsupported/timed-out/unpaired/control-bug material are excluded.
+Resumed:1Kani invocation,19formal/support scopes,0extraction. Conservatively58
+of the77formal attempts remain;1of2combined allowances remains. The independent
+Lean work and joint audit were performed despite native exhaustion. Every
+unfinished row requires named native cuts/controls; adding model statements or
+endpoint assumptions does not supply them. No unchanged combined rerun occurred.
+Exact argv/target/exit/wall/peakRSS/swap/revision/source/dependency hashes and
+#print axioms are in NKF_ATTEMPTS.jsonl and per-scope receipts. Failed draft
+sorryAx is excluded; current49theorems are standard-only, including raw audit.
+All resumed scopes used6Ghigh/8Gmax/swap0/tasks64, Lean-M7000, optimized link/
+Rust, one scope at a time, admission exit0 AND allowed:true and ≥40GBdisk check.
+NKF_RESUME_RESOURCES.json records exact totals; peakRSS7608308KiB, swap0.
 
-## Resources, provenance and retention
+Final retained workspace534034775bytes, host free129371140096bytes. New retained
+writes and the small number of failed early tool steps stay below30GB; no heavy
+Rust solver run occurred after resume. All Lean caches/exports/sources retained;
+no shared cache deletion, key/wallet/fund action or sibling worktree access.
+Original seeds: NKC FIRST1365368bytes, NJY269624bytes; NKF_SEED.json records hashes.
 
-79/80actual cargo-kani invocations (80native scopes, K001 validation-only);13/90Lean attempts;1/1actual extraction plus L001 pre-extraction validation failure. K081 is the remaining authorized invocation, not a budget increase.95total scopes,2960.836s cumulative wall, peakRSS5993092KiB, swaps0. All launched admissions exit0 AND allowed:true,6Ghigh/8Gmax/swap0/tasks64; Lean-M7000; optimized Rust; one scope at a time. No cap/timeout increase or unchanged timed-out replay. Every target/argv/exit/wall/RSS/swap/source revision/hash/dependency/Aeneas pin and printed axioms is retained in NKF_ATTEMPTS.jsonl, per-attempt receipts and NKF_FOCUSED_FORMAL.json.
-
-Seeded NKC FIRST1365368bytes, then NJY269624bytes; all copied hashes NKF_SEED.json. Private workspace /home/dombarker/project-offloads/codex-cx-tx2-adapters-20261107; own CARGO_TARGET_DIR there/NKF_target. Normalized five inherited seed instrumentation files from the frozen payload before the actual extraction. Charon exit0; Aeneas Not_found in InterpReduceCollapse, exit2, no Lean output, all six selected roots eligible under(ay)(2); no retry. Literal body/source manifests and every validation input are committed once by hash, with authored Rust patches indexed by NKF_PATCH_INDEX.json.
-
-Retained ten own objects at the workspace/NKF_objects, hashes in NKF_HOST_END.json; use that path followed by NKF_ENV.json's pinned path selection. All sources, seeds and receipts retained. End cleanup removed1367947956bytes only from owned Rust target and solver-temp outputs; no Lean cache, shared path, key or wallet was deleted. Subsequent free bytes7065116672. No proof was resumed after cleanup.
-
-Frozen4bb3b3f51e16b4525f1d10336e2b0bcbbd775387 crates/programs/Cargo.lock unchanged; no ELF rebuild trigger. Inherited only, NOT rebuilt/reverified: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. No shipped/proved/sibling/session-A worktree changes or new trust rows. Frozen3/deployed headline/L154parameter/narrowedD188/100-bit PER-ATTEMPT/privacy/two transactions unchanged. No headline hypothesis discharged. Target not yet established.
-
-## Resume after host repair, 2026-11-08 (in progress)
-
-The lead lifted the historical admission stop. K081's first submission had valid
-exit0/allowed:true admission and129497116672free bytes. Its frozen offline graph,
-source erasure and unchanged lock checks passed; cargo-kani was invoked but rustc
-failed because owned NKF_tmp had been removed by prior end cleanup. No CBMC
-property ran and no semantic failing-control credit follows. Final authorized
-Kani invocation is consumed; no resubmission. This is an owned input failure,
-not a renewed shared-infrastructure stop. Historical stop receipts stay intact.
-
-L016 compiles NKF_SeedWindows. L018 compiles the factored K064 replacement model
-(NKF_LaneFactor): guard/result, arbitrary coordinate, finite node extensionality,
-window bounds and disjointness. L022 compiles the factored K067 replacement model
-(NKF_LaneConstructor): scalar fields and nested root/frontier windows imply the
-complete adopted lane record. These are Lean-only support; neither timed-out
-native shape was rerun or credited. Prefix/log composition and joint audit are
-in progress. No row is promoted. Every resumed scope checks ≥40GB free first;
-workspace size247310749bytes at the intermediate probe, below30GB of new writes.
+Frozen4bb3b3f51e16b4525f1d10336e2b0bcbbd775387crates/programs/Cargo.lock are
+unchanged, explicitly checked. No ELF rebuild trigger. Inherited only, not
+rebuilt/reverified: defaultf8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
+devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
+Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+No new trust row, shipped source, session-A/sibling candidate or security
+contract change. Frozen3/deployed headline, L154parameter, narrowedD188,
+100-bit PER-ATTEMPT, privacy and two-transaction design remain unchanged.

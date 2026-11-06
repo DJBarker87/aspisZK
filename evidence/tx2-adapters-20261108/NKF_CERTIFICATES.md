@@ -1,19 +1,43 @@
-# NKF certificates and exclusions
+# NKF certificates and exclusions after resumed audit
 
-Target not yet established. These are focused support facts, not ledger admissions.
+Target not yet established. Zero admitted implementation rows.
 
-Ten current modules,34explicit top theorems, compile with standard axioms only. NKF_FOCUSED_FORMAL.json identifies the exact source hashes, successful attempts, roots and complete #print axioms lines; receipts retain targets/argv/revision/dependencies/wall/RSS/swap. L003/L008 failed drafts' error-recovery sorryAx is excluded. NKF_COMBINED_IMPORT lists35roots including deployed, but is PREPARED ONLY. No combined compile, raw ax2, eight-fixture replay, NFX scan or current whole-closure comparison ran.
+Fourteen current modules contain49explicit top theorems. Their focused successful
+receipts and the joint raw-ax2 audit report only a subset of propext,
+Classical.choice, Quot.sound. NKF_FOCUSED_FORMAL.json records current source
+hashes/attempts/axioms. Failed drafts' error-recovery sorryAx is excluded.
 
-* Master fields: K004/K005 plus K006-K031,14positive/inverse pairs; NKF_MASTER_WINDOWS.json independently checks identical harness hashes and intended semantic failures.
-* Checkpoint fields: K032-K043,6positive/inverse pairs.
-* Allocation identity: K052/K053 and K056/K057. Both controls fail the actual output/logged-allocation identity postcondition.
-* Unique live allocation: K054/K055 and K058/K059, ordinary native bodies with an independently live sentinel; controls fail uniqueness assertions.
-* Corrupted boxed value: K060/K061 fail the respective field postcondition, in the same canonical KMX/deployed/offline configuration.
-* Returned-Box weak body: K044/K048 PASS; K045/K049 inverted ensures FAIL; K047/K051 detects illegal scratch writes. K046/K050 do NOT compile under stub_verified because the actual Box/ProgramError Results lack kani::Arbitrary. K062/K063 ordinary stubs still targeted contract-annotated functions and fail compilation for missing contract recursion closures. Neither attempt is an unimplied-control pass. Repaired ordinary-constructor K081 is NOT SUBMITTED.
-* Registry PDA calls: K068/K069,070/071,072/073,074/075,076/077,078/079, six complete per-call byte/reply cuts with semantic failures. This is no PDA VALUE law and no full parent/SDK ABI certificate.
+Joint gate: L024combined import with NKC and deployed headline PASS; L027same
+retained raw binary eight fixtures/mutations PASS; L028raw50roots PASS;
+L034NFX15978modules, zero defects; L035pins32556predecessor files, zero mismatches.
+One combined replay used, no unchanged rerun. These results certify coexistence
+and axiom discipline, not the missing native certificates.
 
-No credit: K001 prelaunch source-pin error; K002 builtin memcmp unwind failure; K003/K064/K067 TIMEOUT; K065 changed error-only inverse has no passing mate; K066's constructor pass lacks a failing matched control; K080 changes the log AFTER capturing `good`, so its unexpected PASS is a bug in our control, not a tool finding. K081 repairs that ordering and the two(ak) setups, but admission failed before upload/submission. Sources and failed receipts are retained, not renamed or relabelled.
+* Master: K004/K005 and K006-K031 give14positive/inverse field pairs.
+* Checkpoint: K032-K043 give6positive/inverse field pairs.
+* Allocation identity: K052/K053 and K056/K057; unique-live-allocation:
+  K054/K055 and K058/K059; corrupted value: K060/K061 intended failures.
+* Returned-Box weak-body/inverse/modifies controls exist, but the unimplied
+  constructor/logging control is still uncertified. K046/K050 lack Arbitrary;
+  K062/K063 fail the contract-recursion closure. K081 fails compilation on a
+  missing owned temporary directory, before any semantic property runs.
+* Registry: K068-K079 give six API seed/program/reply pairs, NOT full SDK ABI
+  or parent invocation. L016 assembles byte windows into SAME operation inputs;
+  op38 remains value-free. No PDA/SHA/curve value law is added.
+* Lane: K064/K067 TIMEOUT, K065unpaired inverse and K066unpaired pass excluded.
+  L018/L022/L031 establish factored model/constructor/chronological lemmas,
+  without restoring native credit. NKF_SPLIT_PLAN.md gives smaller native cuts.
+* K080 computes good before corrupting its log: erroneous control excluded.
+  K081 corrects the authored source but never reaches CBMC. No unchanged retry.
 
-All reached copy replacements are the exact KMX patch, hash in NKF_STUBS.md. Every launched native run validates the frozen graph offline before Kani and verifies Cargo.lock unchanged afterward; all-crate feature lists and source erasure checks are retained. There is no writable-static, function-pointer-dependent or multiplication-stub credit. Full source inputs are SHA-indexed once, authored harnesses have patches indexed by NKF_PATCH_INDEX.json.
+All actual invocations retain offline frozen graph checks, unchanged lock,
+all-crate deployed features, exact KMX patch, source erasure, argv, revision,
+hashes, wall/RSS/swap and admission receipts. No writable-static,
+function-pointer-dependent or multiplication-stub credit. Harness patches are
+NKF_PATCH_INDEX.json; full evidence inputs are SHA-indexed/compressed once.
 
-Resource totals:95scopes,80native validation/verification scopes containing79cargo-kani invocations;13Lean attempts;1actual extraction plus1pre-extraction source-validation failure. PeakRSS5993092KiB, swaps0; no cap/timeout increase. All launched scopes had reservation exit0 AND allowed:true,6Ghigh/8Gmax/swap0/tasks64; Lean-M7000, optimized Rust. Cumulative wall2960.836s. These are focused cached results, not a cold release replay.
+Resumed resources:20scopes,1Kani invocation,19formal/support scopes,
+210.63401494850405seconds total wall, peakRSS7608308KiB, swaps0. Every scope:
+6Ghigh/8Gmax/Swap0/Tasks64, Lean-M7000, one scope at a time, admission exit0 AND
+allowed:true, pre-scope free≥40GB. No cap/timeout increase. Frozen shipped files
+unchanged; ELF pins inherited, not rebuilt. No headline hypothesis discharged.
