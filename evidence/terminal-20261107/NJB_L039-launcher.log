@@ -1,0 +1,54 @@
+{"attempt": "NJB_L039", "exit_status": 1, "wall_seconds": 8.299078319920227, "peak_rss_kib": "6144824", "swaps": "0", "print_axioms": ["'AspisR1.NJB_Absorption.size' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJB_Absorption.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJB_Absorption.lean:42:3: error: Type mismatch: After simplification, term
+  vy
+ has type
+  @Eq (List K) (List.map decode ↑ys) (List.ofFn (value ∘ fun lane => lane))
+but is expected to have type
+  @Eq (List K) (List.map decode ↑ys) (List.ofFn value)
+theorem AspisR1.NJB_Absorption.result : ∀ (low fixed two eight nodes : NQ) (opened : Std.Array NQ 16#usize),
+  Canon low →
+    Canon fixed →
+      Canon two →
+        Canon eight →
+          Canon nodes →
+            FIw_ArrayValue.canonical opened →
+              ∃ out,
+                reference low fixed two eight nodes opened = ok out ∧
+                  FIw_ArrayValue.canonical out ∧
+                    List.map decode ↑out =
+                
+...
+verse.result (NJB_AbsorptionLane.reference scales (cell opened)) Canon decode value
+      (List.ofFn fun lane => lane) fun lane x => child lane
+  let ⟨cy, right✝¹⟩ := h✝²
+  let ⟨hy, vy⟩ := right✝¹
+  Exists.intro
+    (Array.make 16#usize (↑ys)
+      (Eq.mpr (id (congrArg (Eq (↑ys).length) size)) (Eq.mp (congrArg (Eq (↑ys).length) List.length_ofFn) ys.property)))
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congrFun' (congrArg Bind.bind call) fun scales => do
+                    let ys ←
+                      NJB_Traverse.run (NJB_AbsorptionLane.reference scales (cell opened)) (List.ofFn fun lane => lane)
+                    ok (Array.make 16#usize (↑ys) (reference._proof_1 ys)))
+                  (bind_tc_ok scales fun y => do
+                    let ys ←
+                      NJB_Traverse.run (NJB_AbsorptionLane.reference y (cell opened)) (List.ofFn fun lane => lane)
+                    ok (Array.make 16#usize (↑ys) (reference._proof_1 ys))))
+                (Eq.trans
+                  (congrFun' (congrArg Bind.bind cy) fun ys => ok (Array.make 16#usize (↑ys) (reference._proof_1 ys)))
+                  (bind_tc_ok ys fun y => ok (Array.make 16#usize (↑y) (reference._proof_1 y))))))
+            (ok
+              (Array.make 16#usize (↑ys)
+                (Eq.mpr (id (congrArg (Eq (↑ys).length) size))
+                  (Eq.mp (congrArg (Eq (↑ys).length) List.length_ofFn) ys.property)))))
+          (eq_self (ok (Array.make 16#usize (↑ys) (reference._proof_1 ys))))),
+      ⟨hy, sorry⟩⟩
+'AspisR1.NJB_Absorption.size' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_Absorption.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd1fa08ce2ea344df826c0c7e66f00275.scope; invocation ID: 8c1c438a1395430e9608db3beed58a84

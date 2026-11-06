@@ -1,0 +1,59 @@
+{"attempt": "NJB_L045", "exit_status": 0, "wall_seconds": 8.266046816948801, "peak_rss_kib": "6173400", "swaps": "0", "print_axioms": ["'AspisR1.NJB_ActiveReference.result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJB_ActiveReference.result : ∀ (s : Selectors),
+  FIw_ArrayValue.canonical s.high →
+    FIw_ArrayValue.canonical s.low →
+      ∃ out, reference s = ok out ∧ Canon out ∧ decode out = R0P.copyActiveLiteral (model s) :=
+fun s hh hl =>
+  have hhigh := fun b => hh (high s b) (List.getElem_mem (high._proof_3 s b));
+  have hlow := fun c => hl (low s c) (List.getElem_mem (low._proof_3 s c));
+  let ⟨grouped, h✝⟩ :=
+    NJB_ActiveRawHigh.run_result (high s) (List.ofFn fun b => b) (fun x => FIq_Native.field.QM31.ZERO) hhigh fun x =>
+      FIv_NativeValue.zero.left
+  let ⟨call, right✝⟩ := h✝
+  let ⟨hgrouped, vgrouped⟩ := right✝
+  let ⟨out, h✝¹⟩ :=
+    NJB_ActiveRawLow.run_result grouped 
+...
+un'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congrFun' (congrArg Bind.bind call) fun grouped =>
+                    NJB_ActiveRawLow.run grouped (low s) (List.ofFn fun c => c) FIq_Native.field.QM31.ZERO)
+                  (bind_tc_ok grouped fun y =>
+                    NJB_ActiveRawLow.run y (low s) (List.ofFn fun c => c) FIq_Native.field.QM31.ZERO))
+                cout))
+            (ok out))
+          (eq_self (ok out))),
+      ⟨hout,
+        have hz := funext fun x => FIv_NativeValue.zero.right;
+        id
+          (fun vout =>
+            Eq.trans
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    decode out =
+                      NJB_ActiveModel.lowRun
+                        (NJB_ActiveModel.highRun (fun i => decode (high s i)) (List.ofFn fun b => b) fun x => 0)
+                        (fun c => decode (low s c)) (List.ofFn fun c => c) _a)
+                  FIv_NativeValue.zero.right)
+                (Eq.mp
+                  (congrArg
+                    (fun _a =>
+                      decode out =
+                        NJB_ActiveModel.lowRun _a (fun c => decode (low s c)) (List.ofFn fun c => c)
+                          (decode FIq_Native.field.QM31.ZERO))
+                    (Eq.mp
+                      (congrArg
+                        (fun _a =>
+                          NJB_ActiveRawHigh.decoded grouped =
+                            NJB_ActiveModel.highRun (fun i => decode (high s i)) (List.ofFn fun b => b) _a)
+                        hz)
+                      vgrouped))
+                  vout))
+              (NJB_ActiveModel.result (model s)))
+          vout⟩⟩
+'AspisR1.NJB_ActiveReference.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8b57cf97d41e44bcaec092037722c274.scope; invocation ID: f2b1ffd6b602447e8fb24b6e9ede647a

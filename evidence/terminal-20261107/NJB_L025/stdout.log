@@ -1,0 +1,45 @@
+theorem AspisR1.NJB_PreparedLaws.new_result : ∀ (theta : NQ),
+  Canon theta → ∃ p, FIq_Native.field.PreparedQm31Multiplier.new theta = ok p ∧ Domain p theta :=
+fun theta canonical =>
+  let ⟨probe, h✝⟩ := NFQ_PreparedMultiplier.source (qm theta) canonical
+  let ⟨call, right✝⟩ := h✝
+  have mapped := FIv_PreparedNew.mapped theta;
+  casesOn (motive := fun t =>
+    FIq_Native.field.PreparedQm31Multiplier.new theta = t →
+      ∃ p, FIq_Native.field.PreparedQm31Multiplier.new theta = ok p ∧ Domain p theta)
+    (FIq_Native.field.PreparedQm31Multiplier.new theta)
+    (fun p h =>
+      Eq.ndrec (motive := fun x =>
+        FIq_Native.field.PreparedQm31Multiplier.new theta = x → ∃ p, x = ok p ∧ Domain p theta)
+        (fun run => Exists.intro p ⟨rfl, FIv_PreparedNew.valid theta p canonical run⟩) (Eq.symm h)
+        (Eq.refl (FIq_Native.field.PreparedQm31Multiplier.new theta)))
+    (fun e h =>
+      Eq.ndrec (motive := fun x =>
+        FIq_Native.field.PreparedQm31Multiplier.new theta = x → ∃ p, x = ok p ∧ Domain p theta)
+        (fun run =>
+          let ⟨⟩ := ok probe
+          Eq.mp (congrArg (fun _a => FIv_Map.map prepared _a = ok probe) run)
+            (Eq.mp
+              (congrArg (fun _a => FIv_Map.map prepared (FIq_Native.field.PreparedQm31Multiplier.new theta) = _a) call)
+              mapped))
+        (Eq.symm h) (Eq.refl (FIq_Native.field.PreparedQm31Multiplier.new theta)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        FIq_Native.field.PreparedQm31Multiplier.new theta = x → ∃ p, x = ok p ∧ Domain p theta)
+        (fun run =>
+          let ⟨⟩ := ok probe
+          Eq.mp (congrArg (fun _a => FIv_Map.map prepared _a = ok probe) run)
+            (Eq.mp
+              (congrArg (fun _a => FIv_Map.map prepared (FIq_Native.field.PreparedQm31Multiplier.new theta) = _a) call)
+              mapped))
+        (Eq.symm h) (Eq.refl (FIq_Native.field.PreparedQm31Multiplier.new theta)))
+    (Eq.refl (FIq_Native.field.PreparedQm31Multiplier.new theta))
+theorem AspisR1.NJB_PreparedLaws.mul_result : ∀ (p : NP) (theta x : NQ),
+  Canon theta →
+    Canon x →
+      Domain p theta →
+        ∃ out,
+          FIq_Native.field.PreparedQm31Multiplier.mul p x = ok out ∧ Canon out ∧ decode out = decode theta * decode x :=
+fun p theta x ht hx domain => FIv_PreparedTotal.mul p theta x ht hx domain
+'AspisR1.NJB_PreparedLaws.new_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_PreparedLaws.mul_result' depends on axioms: [propext, Classical.choice, Quot.sound]

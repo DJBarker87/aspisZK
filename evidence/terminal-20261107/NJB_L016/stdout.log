@@ -1,0 +1,38 @@
+NJB_ActiveRawHigh.lean:22:1: error: unsolved goals
+case refine_1
+high : Fin 64 → NQ
+s : State
+b : Fin 64
+hh : ∀ (i : Fin 64), Canon (high i)
+hs : canonical s
+out : FIq_Native.field.QM31
+call : FIq_Native.field.QM31.add (s (NJB_ActiveModel.key b)) (high b) = ok out
+hout : Canon out
+value : decode out = decode (s (NJB_ActiveModel.key b)) + decode (high b)
+⊢ (pure fun i => if NJB_ActiveModel.key b = i then out else s i) =
+    ok fun i => if NJB_ActiveModel.key b = i then out else s i
+NJB_ActiveRawHigh.lean:24:3: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case refine_2
+high : Fin 64 → NQ
+s : State
+b : Fin 64
+hh : ∀ (i : Fin 64), Canon (high i)
+hs : canonical s
+out : FIq_Native.field.QM31
+call : FIq_Native.field.QM31.add (s (NJB_ActiveModel.key b)) (high b) = ok out
+hout : Canon out
+value : decode out = decode (s (NJB_ActiveModel.key b)) + decode (high b)
+i : Fin 7
+⊢ Canon ((fun i => if NJB_ActiveModel.key b = i then out else s i) i)
+NJB_ActiveRawHigh.lean:27:44: warning: This simp argument is unused:
+  same
+
+Hint: Omit it from the simp argument list.
+  simp [decoded, ̲NJB_ActiveModel.highStep,s̵a̵m̵e̵,̵ ̲value, ̲same]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NJB_ActiveRawHigh.step_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJB_ActiveRawHigh.run_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
