@@ -1,0 +1,194 @@
+NJL_PathParent.lean:45:49: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.199 = ?m.199
+but is expected to have type
+  events 3 = { operation := 0, left := p.selector.high, right := p.selector.c }
+in the application
+  And.intro rfl
+structure AspisR1.NJL_PathParent.Packet (packed : Std.Array NQ 24#usize) (o : Openings) (s : Selectors) : Type
+number of parameters: 3
+fields:
+  AspisR1.NJL_PathParent.Packet.selector : NJL_PathSelector.Packet s
+  AspisR1.NJL_PathParent.Packet.lanes : NJL_PathPacket.Packet self.selector.selector o
+  AspisR1.NJL_PathParent.Packet.factored_call : NJL_PathPacket.reference self.selector.selector o =
+      ok (NJL_PathPacket.pack self.lanes.after)
+  AspisR1.NJL_PathParent.Packet.literal_call : pair_forest_semantic_terminal.path_lanes_literal self.selector.selector
+        o =
+      ok (NJL_PathPacket.pack self.lanes.after)
+  AspisR1.NJL_PathParent.Packet.after : Std.Array NQ 24#usize
+  AspisR1.NJL_PathParent.Packet.packed_call : pair_forest_semantic_terminal.add_preweighted packed 32#usize
+        (NJL_PathPacket.pack self.lanes.after) =
+      ok self.after
+  AspisR1.NJL_PathParent.Packet.canonical : FIw_ArrayValue.canonical self.after
+constructor:
+  AspisR1.NJL_PathParent.Packet.mk {packed : Std.Array NQ 24#usize} {o : Openings} {s : Selectors}
+    (selector : NJL_PathSelector.Packet s) (lanes : NJL_PathPacket.Packet selector.selector o)
+    (factored_call : NJL_PathPacket.reference selector.selector o = ok (NJL_PathPacket.pack lanes.after))
+    (literal_call :
+      pair_forest_semantic_terminal.path_lanes_literal selector.selector o = ok (NJL_PathPacket.pack lanes.after))
+    (after : Std.Array NQ 24#usize)
+    (packed_call :
+      pair_forest_semantic_terminal.add_preweighted packed 32#usize (NJL_PathPacket.pack lanes.after) = ok after)
+    (canonical : FIw_ArrayValue.canonical after) : Packet packed o s
+theorem AspisR1.NJL_PathParent.source : ∀ (packed : Std.Array NQ 24#usize) (o : Openings) (s : Selectors),
+  FIw_ArrayValue.canonical packed →
+    FIw_ArrayValue.canonical s.high →
+      FIw_ArrayValue.canonical s.low →
+        FIw_ArrayValue.canonical o.z →
+          FIw_ArrayValue.canonical o.succ_z →
+            ∃ p,
+              pair_forest_semantic_terminal.add_path_lanes packed o s = ok p.after ∧
+                ∃ events,
+                  Cut s p.selector events o o (NJL_PathPacket.pack p.lanes.after) (NJL_PathPacket.pack p.lanes.after)
+                    p.after p.after 3 4 32 57 63 :=
+fun packed o s hp hh hl hz hb =>
+  let ⟨selector, h✝⟩ := NJL_PathSelector.source s hh hl
+  let ⟨lanes, h✝¹⟩ := NJL_PathAssociation.source selector.selector o selector.canonical hz hb
+  let ⟨cf, right✝⟩ := h✝¹
+  let ⟨cl, hc⟩ := right✝
+  let ⟨after, h✝²⟩ :=
+    NHU_Preweighted.result packed 32#usize (NJL_PathPacket.pack lanes.after) (of_decide_eq_true (id (Eq.refl true)))
+      (of_decide_eq_true (id (Eq.refl true))) hp hc
+  let ⟨ca, right✝¹⟩ := h✝²
+  let ⟨ha, right✝²⟩ := right✝¹
+  let p :=
+    { selector := selector, lanes := lanes, factored_call := cf, literal_call := cl, after := after, packed_call := ca,
+      canonical := ha };
+  Exists.intro p
+    ⟨have r1 := NJB_ArrayReads.read s.low 1#usize (of_decide_eq_true (id (Eq.refl true)));
+      have r5 := NJB_ArrayReads.read s.low 5#usize (of_decide_eq_true (id (Eq.refl true)));
+      have r9 := NJB_ArrayReads.read s.low 9#usize (of_decide_eq_true (id (Eq.refl true)));
+      have r13 := NJB_ArrayReads.read s.low 13#usize (of_decide_eq_true (id (Eq.refl true)));
+      have rangeCall := rfl;
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congr (congrArg Bind.bind rangeCall)
+                    (funext fun s_1 =>
+                      congrArg (Bind.bind (pair_forest_semantic_terminal.sum_high s s_1))
+                        (funext fun q =>
+                          Eq.trans
+                            (Eq.trans
+                              (congr (congrArg Bind.bind r1)
+                                (funext fun q1 =>
+                                  Eq.trans
+                                    (congr (congrArg Bind.bind r5)
+                                      (funext fun q2 =>
+                                        congrArg (Bind.bind (q1.add q2))
+                                          (funext fun q3 =>
+                                            Eq.trans
+                                              (congr (congrArg Bind.bind r9)
+                                                (funext fun q4 =>
+                                                  congrArg (Bind.bind (q3.add q4))
+                                                    (funext fun q5 =>
+                                                      Eq.trans
+                                                        (congrFun' (congrArg Bind.bind r13) fun q6 => do
+                                                          let q7 ← q5.add q6
+                                                          let path_selector ← q.mul q7
+                                                          let path ←
+                                                            pair_forest_semantic_terminal.path_lanes_literal
+                                                                path_selector o
+                                                          pair_forest_semantic_terminal.add_preweighted packed 32#usize
+                                                              path)
+                                                        (bind_tc_ok (low s 13) fun y => do
+                                                          let q7 ← q5.add y
+                                                          let path_selector ← q.mul q7
+                                                          let path ←
+                                                            pair_forest_semantic_terminal.path_lanes_literal
+                                                                path_selector o
+                                                          pair_forest_semantic_terminal.add_preweighted packed 32#usize
+                                                              path))))
+                                              (bind_tc_ok (low s 9) fun y => do
+                                                let q5 ← q3.add y
+                                                let q7 ← q5.add (low s 13)
+                                                let path_selector ← q.mul q7
+                                                let path ←
+                                                  pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                                                pair_forest_semantic_terminal.add_preweighted packed 32#usize path))))
+                                    (bind_tc_ok (low s 5) fun y => do
+                                      let q3 ← q1.add y
+                                      let q5 ← q3.add (low s 9)
+                                      let q7 ← q5.add (low s 13)
+                                      let path_selector ← q.mul q7
+                                      let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                                      pair_forest_semantic_terminal.add_preweighted packed 32#usize path)))
+                              (bind_tc_ok (low s 1) fun y => do
+                                let q3 ← y.add (low s 5)
+                                let q5 ← q3.add (low s 9)
+                                let q7 ← q5.add (low s 13)
+                                let path_selector ← q.mul q7
+                                let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                                pair_forest_semantic_terminal.add_preweighted packed 32#usize path))
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun' (congrArg Bind.bind selector.a_call) fun q3 => do
+                                  let q5 ← q3.add (low s 9)
+                                  let q7 ← q5.add (low s 13)
+                                  let path_selector ← q.mul q7
+                                  let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                                  pair_forest_semantic_terminal.add_preweighted packed 32#usize path)
+                                (bind_tc_ok selector.a fun y => do
+                                  let q5 ← y.add (low s 9)
+                                  let q7 ← q5.add (low s 13)
+                                  let path_selector ← q.mul q7
+                                  let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                                  pair_forest_semantic_terminal.add_preweighted packed 32#usize path))
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun' (congrArg Bind.bind selector.b_call) fun q5 => do
+                                    let q7 ← q5.add (low s 13)
+                                    let path_selector ← q.mul q7
+                                    let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                                    pair_forest_semantic_terminal.add_preweighted packed 32#usize path)
+                                  (bind_tc_ok selector.b fun y => do
+                                    let q7 ← y.add (low s 13)
+                                    let path_selector ← q.mul q7
+                                    let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                                    pair_forest_semantic_terminal.add_preweighted packed 32#usize path))
+                                (Eq.trans
+                                  (congrFun' (congrArg Bind.bind selector.c_call) fun q7 => do
+                                    let path_selector ← q.mul q7
+                                    let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                                    pair_forest_semantic_terminal.add_preweighted packed 32#usize path)
+                                  (bind_tc_ok selector.c fun y => do
+                                    let path_selector ← q.mul y
+                                    let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                                    pair_forest_semantic_terminal.add_preweighted packed 32#usize path)))))))
+                  (bind_tc_ok NJL_PathSelector.ranges fun y => do
+                    let q ← pair_forest_semantic_terminal.sum_high s y
+                    let path_selector ← q.mul selector.c
+                    let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                    pair_forest_semantic_terminal.add_preweighted packed 32#usize path))
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind selector.high_call) fun q => do
+                      let path_selector ← q.mul selector.c
+                      let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                      pair_forest_semantic_terminal.add_preweighted packed 32#usize path)
+                    (bind_tc_ok selector.high fun y => do
+                      let path_selector ← y.mul selector.c
+                      let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                      pair_forest_semantic_terminal.add_preweighted packed 32#usize path))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind selector.product_call) fun path_selector => do
+                        let path ← pair_forest_semantic_terminal.path_lanes_literal path_selector o
+                        pair_forest_semantic_terminal.add_preweighted packed 32#usize path)
+                      (bind_tc_ok selector.selector fun y => do
+                        let path ← pair_forest_semantic_terminal.path_lanes_literal y o
+                        pair_forest_semantic_terminal.add_preweighted packed 32#usize path))
+                    (Eq.trans
+                      (Eq.trans
+                        (congrFun' (congrArg Bind.bind cl) fun path =>
+                          pair_forest_semantic_terminal.add_preweighted packed 32#usize path)
+                        (bind_tc_ok (NJL_PathPacket.pack lanes.after)
+                          (pair_forest_semantic_terminal.add_preweighted packed 32#usize)))
+                      ca)))))
+            (ok p.after)))
+        (Eq.refl (ok after)),
+      sorry⟩
+'AspisR1.NJL_PathParent.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

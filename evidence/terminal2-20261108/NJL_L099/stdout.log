@@ -1,0 +1,78 @@
+structure AspisR1.NJL_PathSelector.Packet (s : Selectors) : Type
+number of parameters: 1
+fields:
+  AspisR1.NJL_PathSelector.Packet.high : NQ
+  AspisR1.NJL_PathSelector.Packet.a : NQ
+  AspisR1.NJL_PathSelector.Packet.b : NQ
+  AspisR1.NJL_PathSelector.Packet.c : NQ
+  AspisR1.NJL_PathSelector.Packet.selector : NQ
+  AspisR1.NJL_PathSelector.Packet.high_call : FIq_Native.pool_v1.pair_forest_semantic_terminal.sum_high s ranges =
+      ok self.high
+  AspisR1.NJL_PathSelector.Packet.a_call : FIq_Native.field.QM31.add (low s 1) (low s 5) = ok self.a
+  AspisR1.NJL_PathSelector.Packet.b_call : FIq_Native.field.QM31.add self.a (low s 9) = ok self.b
+  AspisR1.NJL_PathSelector.Packet.c_call : FIq_Native.field.QM31.add self.b (low s 13) = ok self.c
+  AspisR1.NJL_PathSelector.Packet.product_call : FIq_Native.field.QM31.mul self.high self.c = ok self.selector
+  AspisR1.NJL_PathSelector.Packet.canonical : Canon self.selector
+constructor:
+  AspisR1.NJL_PathSelector.Packet.mk {s : Selectors} (high a b c selector : NQ)
+    (high_call : FIq_Native.pool_v1.pair_forest_semantic_terminal.sum_high s ranges = ok high)
+    (a_call : FIq_Native.field.QM31.add (low s 1) (low s 5) = ok a)
+    (b_call : FIq_Native.field.QM31.add a (low s 9) = ok b) (c_call : FIq_Native.field.QM31.add b (low s 13) = ok c)
+    (product_call : FIq_Native.field.QM31.mul high c = ok selector) (canonical : Canon selector) : Packet s
+theorem AspisR1.NJL_PathSelector.source : ∀ (s : Selectors),
+  FIw_ArrayValue.canonical s.high → FIw_ArrayValue.canonical s.low → ∃ p, reference s = ok p.selector :=
+fun s hh hl =>
+  have bounds := fun r h =>
+    have same := Eq.mp source._simp_2 h;
+    Eq.ndrec (motive := fun r => r ∈ ↑ranges → ↑r.start ≤ ↑r.end ∧ ↑r.end ≤ 64)
+      (fun h => of_decide_eq_true (id (Eq.refl true))) (Eq.symm same) h;
+  let ⟨high, h✝⟩ := NHG_ExtraLeaves.sum_result s ranges bounds hh
+  let ⟨ch, hhv⟩ := h✝
+  have lc := NJB_ArrayCarrier.canonical_cell s.low hl;
+  let ⟨a, h✝¹⟩ := NJB_StubLaws.qm_add (low s 1) (low s 5) (lc 1) (lc 5)
+  let ⟨ca, right✝⟩ := h✝¹
+  let ⟨ha, right✝¹⟩ := right✝
+  let ⟨b, h✝²⟩ := NJB_StubLaws.qm_add a (low s 9) ha (lc 9)
+  let ⟨cb, right✝²⟩ := h✝²
+  let ⟨hb, right✝³⟩ := right✝²
+  let ⟨c, h✝³⟩ := NJB_StubLaws.qm_add b (low s 13) hb (lc 13)
+  let ⟨cc, right✝⁴⟩ := h✝³
+  let ⟨hc, right✝⁵⟩ := right✝⁴
+  let ⟨selector, h✝⁴⟩ := NJB_StubLaws.qm_mul high c hhv hc
+  let ⟨cs, right✝⁶⟩ := h✝⁴
+  let ⟨hs, right✝⁷⟩ := right✝⁶
+  Exists.intro
+    { high := high, a := a, b := b, c := c, selector := selector, high_call := ch, a_call := ca, b_call := cb,
+      c_call := cc, product_call := cs, canonical := hs }
+    (of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (congr (congrArg Bind.bind ch)
+                  (funext fun high =>
+                    Eq.trans
+                      (Eq.trans
+                        (congrFun' (congrArg Bind.bind ca) fun a => do
+                          let b ← a.add (low s 9)
+                          let c ← b.add (low s 13)
+                          high.mul c)
+                        (bind_tc_ok a fun y => do
+                          let b ← y.add (low s 9)
+                          let c ← b.add (low s 13)
+                          high.mul c))
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun' (congrArg Bind.bind cb) fun b => do
+                            let c ← b.add (low s 13)
+                            high.mul c)
+                          (bind_tc_ok b fun y => do
+                            let c ← y.add (low s 13)
+                            high.mul c))
+                        (Eq.trans (congrFun' (congrArg Bind.bind cc) fun c => high.mul c) (bind_tc_ok c high.mul)))))
+                (bind_tc_ok high fun y => y.mul c))
+              cs))
+          (ok selector))
+        (eq_self (ok selector))))
+'AspisR1.NJL_PathSelector.source' depends on axioms: [propext, Classical.choice, Quot.sound]

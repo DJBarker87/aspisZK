@@ -1,0 +1,56 @@
+NJL_OccupancyParent.lean:52:78: error: Type mismatch
+  rfl
+has type
+  ?m.267 = ?m.267
+but is expected to have type
+  pair_forest_semantic_terminal.INPUT_OCCUPANCY_ROW = ok 1017#usize
+structure AspisR1.NJL_OccupancyParent.Packet (packed : Std.Array NQ 24#usize) (pub : Public) (o : Openings)
+  (s : Selectors) : Type
+number of parameters: 4
+fields:
+  AspisR1.NJL_OccupancyParent.Packet.input : NQ
+  AspisR1.NJL_OccupancyParent.Packet.output : NQ
+  AspisR1.NJL_OccupancyParent.Packet.input_call : pair_forest_copy_terminal.Selectors.row s 1017#usize = ok self.input
+  AspisR1.NJL_OccupancyParent.Packet.output_call : pair_forest_copy_terminal.Selectors.row s 1018#usize = ok self.output
+  AspisR1.NJL_OccupancyParent.Packet.lanes : NJL_OccupancyPacket.Packet self.input self.output
+      (NFQ_StatementLaws.expected pub.variant) o.z
+  AspisR1.NJL_OccupancyParent.Packet.factored_call : NJL_OccupancyPacket.reference self.input self.output
+        (NFQ_StatementLaws.expected pub.variant) o.z =
+      ok (NJL_OccupancyPacket.pack self.lanes.last)
+  AspisR1.NJL_OccupancyParent.Packet.literal_call : pair_forest_semantic_terminal.occupancy_lanes_literal self.input
+        self.output (NFQ_StatementLaws.expected pub.variant) o.z =
+      ok (NJL_OccupancyPacket.pack self.lanes.last)
+  AspisR1.NJL_OccupancyParent.Packet.after : Std.Array NQ 24#usize
+  AspisR1.NJL_OccupancyParent.Packet.packed_call : pair_forest_semantic_terminal.add_preweighted packed 0#usize
+        (NJL_OccupancyPacket.pack self.lanes.last) =
+      ok self.after
+  AspisR1.NJL_OccupancyParent.Packet.canonical : FIw_ArrayValue.canonical self.after
+constructor:
+  AspisR1.NJL_OccupancyParent.Packet.mk {packed : Std.Array NQ 24#usize} {pub : Public} {o : Openings} {s : Selectors}
+    (input output : NQ) (input_call : pair_forest_copy_terminal.Selectors.row s 1017#usize = ok input)
+    (output_call : pair_forest_copy_terminal.Selectors.row s 1018#usize = ok output)
+    (lanes : NJL_OccupancyPacket.Packet input output (NFQ_StatementLaws.expected pub.variant) o.z)
+    (factored_call :
+      NJL_OccupancyPacket.reference input output (NFQ_StatementLaws.expected pub.variant) o.z =
+        ok (NJL_OccupancyPacket.pack lanes.last))
+    (literal_call :
+      pair_forest_semantic_terminal.occupancy_lanes_literal input output (NFQ_StatementLaws.expected pub.variant) o.z =
+        ok (NJL_OccupancyPacket.pack lanes.last))
+    (after : Std.Array NQ 24#usize)
+    (packed_call :
+      pair_forest_semantic_terminal.add_preweighted packed 0#usize (NJL_OccupancyPacket.pack lanes.last) = ok after)
+    (canonical : FIw_ArrayValue.canonical after) : Packet packed pub o s
+theorem AspisR1.NJL_OccupancyParent.source : ∀ (packed : Std.Array NQ 24#usize) (pub : Public) (o : Openings)
+  (s : Selectors),
+  FIw_ArrayValue.canonical packed →
+    FIw_ArrayValue.canonical s.high →
+      FIw_ArrayValue.canonical s.low →
+        FIw_ArrayValue.canonical o.z →
+          ∃ p,
+            pair_forest_semantic_terminal.add_occupancy_lanes packed pub o s = ok p.after ∧
+              Cut p.input p.output (NFQ_StatementLaws.expected pub.variant) o.z (NJL_OccupancyPacket.pack p.lanes.last)
+                (NJL_OccupancyPacket.pack p.lanes.last) p.after p.after p.input p.output
+                (NFQ_StatementLaws.expected pub.variant) o.z 4 1017 1018 0 :=
+fun packed pub o s hp hh hl hz =>
+  sorry (NIH_SelectorRow.result s 1017#usize (of_decide_eq_true (id (Eq.refl true))) hh hl)
+'AspisR1.NJL_OccupancyParent.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

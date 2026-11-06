@@ -1,0 +1,42 @@
+{"attempt": "NJL_K041", "exit_status": 1, "wall_seconds": 1.1395542318932712, "peak_rss_kib": "229380", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+rs:329:15
+    |
+329 | pub(crate) fn verify_radix4_minimal_subtree_prevalidated_in_place(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: expected one of `!`, `(`, `.`, `::`, `;`, `<`, `?`, or `}`, found `usize`
+   --> crates/aspis-statement/src/pool_v1/NJL_control.rs:281:282
+    |
+281 | ..._only_poseidon::StateOnlyPoseidonOpeningsas usize;reply}
+    |                                                ^^^^^ expected one of 8 possible tokens
+    |
+help: you might have meant to write a field access
+    |
+281 | fn NJL_path_reply(selector:QM31,opened:&crate::state_only_poseidon::StateOnlyPoseidonOpenings,reply:[QM31;17],l:&mut NJL_PathParentLog)->[QM31;17]{assert_eq!(l.calls,1);l.calls+=1;l.selector=selector;l.opened=opened as*const crate::state_only_poseidon::StateOnlyPoseidonOpeningsas.usize;reply}
+    |                                                                                                                                                                                                                                                                                         +
+
+error: no rules expected `usize`
+   --> crates/aspis-statement/src/pool_v1/NJL_control.rs:302:159
+    |
+302 | ...y_poseidon::StateOnlyPoseidonOpeningsas usize);assert_eq!(l.packed,address);assert_eq!(l.start,32);assert_eq!(l.lane,NJL_words(l...
+    |                                           -^^^^^ no rules expected this token in macro call
+    |                                           |
+    |                                           help: missing comma here
+    |
+    = note: while trying to match sequence start
+
+error: could not compile `aspis-statement` (lib) due to 2 previous errors
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
+
+Running as unit: run-r374ce8e64df94c3b8e2f9287bba7aa25.scope; invocation ID: 0068dcb46ef244feb1fd057bd16f8d66

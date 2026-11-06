@@ -47,3 +47,6 @@ TX1:216 and217 now have complete locally compiled positive roots, exact natural-
 
 ## Stage9 shared selector231
 NJL_SharedRoot.source passes at L096: native std4callback, gather/group/control cuts, all9groups and all24cells, internally derived weighted33 and equality with the actual adopted add_preweighted Result at49. Closed NHU_Preweighted and NFT pack laws are consumed with same proven domains. NJB_DecodeInjective reused; no duplicate proof. Final gate2 pending; target not established.
+
+## Stage10 occupancy parent228
+L103 passes complete native/cohort parent root: same rows1017/1018, typed arbitrary variant, actual child244 full12array and CLOSED230 at0, all24final cells. K037/K038 fullparent pass/fail; no residual child-success hypothesis. Target not established; final gate2 and ledger pending.

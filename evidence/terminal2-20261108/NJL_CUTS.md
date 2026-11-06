@@ -58,3 +58,6 @@ K023 full-span control TIMEOUT is excluded and never rerun. Replacements K029/03
 
 ## Stage9 shared selector231
 NJB_K048/049 gather,050/051 group pack/mul/add/full24frame,052/053 exact9groups12..20 plus NJL_K033/034 actual std4callback/arbitrary slot output. NJL_SharedCuts.source derives every pack/product/add clause on same actual operands. NJL_SharedTrace.source finite induction supplies complete native invocation. No detached per-group reply array is assumed.
+
+## Stage10 occupancy parent228
+K037/K038 observe source-ordered selectors.row1017/1018, SAME immutable selector borrows, actual variant expected0/1, SAME openings.z16, full12child lanes into preweighted at0, and full24returned reply. NJL_OccupancyParent.Packet supplies all actual child Results; source invokes213/265/244/230 internally and proves each domain.

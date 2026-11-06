@@ -66,6 +66,32 @@ p=S/'crates/aspis-statement/src/pool_v1/NJL_control.rs'
 if 'fn NJL_shared_from_fn_cut' not in p.read_text():
  subprocess.run(['git','apply','--check',str(B/'NJL_SHARED_CONTROL.patch')],cwd=S,check=True)
  subprocess.run(['git','apply',str(B/'NJL_SHARED_CONTROL.patch')],cwd=S,check=True)
+p=S/'crates/aspis-statement/src/pool_v1/NJL_control.rs'
+if 'fn NJL_occupancy_parent_cut' not in p.read_text():
+ subprocess.run(['git','apply','--check',str(B/'NJL_OCC_PARENT.patch')],cwd=S,check=True)
+ subprocess.run(['git','apply',str(B/'NJL_OCC_PARENT.patch')],cwd=S,check=True)
+p=S/'crates/aspis-statement/src/pool_v1/NJL_control.rs'
+if 'fn NJL_path_parent_cut' not in p.read_text():
+ subprocess.run(['git','apply','--check',str(B/'NJL_PATH_PARENT.patch')],cwd=S,check=True)
+ subprocess.run(['git','apply',str(B/'NJL_PATH_PARENT.patch')],cwd=S,check=True)
+p=S/'crates/aspis-statement/src/pool_v1/NJL_control.rs'
+if 'opened:&crate::state_only_poseidon::StateOnlyPoseidonOpenings' not in p.read_text():
+ subprocess.run(['git','apply','--check',str(B/'NJL_PATH_BORROW.patch')],cwd=S,check=True)
+ subprocess.run(['git','apply',str(B/'NJL_PATH_BORROW.patch')],cwd=S,check=True)
+p=S/'crates/aspis-statement/src/pool_v1/NJL_control.rs'
+if 'StateOnlyPoseidonOpeningsas usize' in p.read_text():
+ subprocess.run(['git','apply','--check',str(B/'NJL_PATH_TYPE_FIX.patch')],cwd=S,check=True)
+ subprocess.run(['git','apply',str(B/'NJL_PATH_TYPE_FIX.patch')],cwd=S,check=True)
+p=S/'crates/aspis-statement/src/pool_v1/NJL_control.rs'
+if 'fn NJL_pattern_actual_map_cut' not in p.read_text():
+ subprocess.run(['git','apply','--check',str(B/'NJL_PATTERN_MAP.patch')],cwd=S,check=True)
+ subprocess.run(['git','apply',str(B/'NJL_PATTERN_MAP.patch')],cwd=S,check=True)
+p=S/'crates/aspis-core/src/field.rs'
+if 'pub mod NJL_observe' not in p.read_text():
+ subprocess.run(['git','apply','--check',str(B/'NJL_PATTERN_OBSERVER.patch')],cwd=S,check=True)
+ subprocess.run(['git','apply',str(B/'NJL_PATTERN_OBSERVER.patch')],cwd=S,check=True)
+suffix='\n#[cfg(kani)]\n#[path="NJL_observe.rs"]\npub mod NJL_observe;\n'.encode();field=p.read_bytes();assert field.endswith(suffix)
+assert hashlib.sha256(field[:-len(suffix)]).hexdigest()=='28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea','STOP non-harness field body changed'
 frozen='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
 assert sha(S/'Cargo.lock')==frozen,'STOP frozen lock mismatch before Kani'
 kmx={'KMX_stubs.rs': 'ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138', 'KMX_native.rs': 'cf719c47b5c8c91dcc369984c01bd0b8531b25210e344c9fd06db21b30171880', 'KMX_CopyMeaning.lean': '2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'}

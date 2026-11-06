@@ -11,3 +11,5 @@ The first gate checks the old scan-based cut as a tool/axiom/import snapshot, no
 L060 reached the default recursion depth while checking direct272-cell generated literal lengths/bounds and a concrete filtered interval. No cap/option increased, no memory kill and no pass claimed. Replaced data with8 independent34-cell chunks and named length/bound lemma applications; replaced concrete272-cell filter normalization with a generic List.ofFn contiguous-interval theorem. Generator --check passes. Compile chunks first, then data bridge; unchanged failed shape is not replayed.
 
 K023 full-span tag CONTROL timed out at unchanged90s (no credit). K024 not run. Replacement K029/K030 one arbitrary chunk≤4, K031/K032 init/exit; Lean chunk induction connects full intervals. Caps/timeouts unchanged.
+
+K039/K040 source shape passed but forwarded a16cell token to path helper. Excluded for229: actual caller forwards THREE-view StateOnlyPoseidonOpenings. K041/K042 retain harness name and assertions and strengthen the child borrow type to the actual struct (all three16-cell arrays); no assertion verdict is bypassed or renamed.

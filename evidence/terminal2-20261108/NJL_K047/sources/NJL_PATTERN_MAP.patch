@@ -1,0 +1,24 @@
+--- a/crates/aspis-statement/src/pool_v1/NJL_control.rs
++++ b/crates/aspis-statement/src/pool_v1/NJL_control.rs
+@@ -301,3 +301,21 @@
+  let left=[selectors.low[1],ops[0],ops[1],sum];let right=[selectors.low[5],selectors.low[9],selectors.low[13],ops[2]];assert_eq!(l.left[op][limb],NJL_words(left[op])[limb]);assert_eq!(l.right[op][limb],NJL_words(right[op])[limb]);assert_eq!(l.kind[op],if op<3{1}else{0});
+  assert_eq!(NJL_words(l.selector)[limb],NJL_words(ops[3])[limb]);assert_eq!(l.opened,&opened as*const crate::state_only_poseidon::StateOnlyPoseidonOpenings as usize);assert_eq!(l.packed,address);assert_eq!(l.start,32);assert_eq!(l.lane,NJL_words(lanes[pick])[limb]);assert_eq!(NJL_words(packed[k])[limb],NJL_words(reply[k])[limb]^if cfg!(NJL_invert){1}else{0});
+ }
++
++#[kani::proof] #[kani::unwind(75)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NJL_pattern_actual_map_cut(){
++ use aspis_core::field::NJB_observe::{prepared_words,prepared_from_words};
++ let powers:[QM31;8]=unsafe{core::mem::transmute::<[[u32;4];8],[QM31;8]>(kani::any())};let before=powers;
++ let caches:[[[[u32;3];3];8];1]=kani::any();let seek:usize=kani::any();let limb:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();kani::assume(seek<8&&limb<4&&row<3&&col<3);
++ let mut calls=0usize;let mut seen=QM31::ZERO;let mut index=999usize;
++ let prepared:[PreparedQm31Multiplier;8]=powers.map(|power|{let i=calls;if i==seek{seen=power;index=i;}calls+=1;prepared_from_words(caches[0][i])});
++ assert_eq!(calls,8);assert_eq!(index,seek);assert_eq!(NJL_words(seen)[limb],NJL_words(before[seek])[limb]);assert_eq!(prepared_words(prepared[seek])[row][col],caches[0][seek][row][col]^if cfg!(NJL_invert){1}else{0});
++}
++#[kani::proof] #[kani::unwind(10)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NJL_pattern_power_control_cut(){
++ let lambda=unsafe{core::mem::transmute::<[u32;4],QM31>(kani::any())};let mut powers=[QM31::ZERO;8];let mut power=lambda;let mut slot=0usize;let seek:usize=kani::any();kani::assume(seek<8);let mut seen=999;let mut calls=0;
++ while slot<powers.len(){powers[slot]=power;if slot==seek{seen=slot;}calls+=1;power=lambda;slot+=1;}
++ assert_eq!(slot,8);assert_eq!(calls,8);assert_eq!(seen,seek+if cfg!(NJL_invert){1}else{0});
++}
