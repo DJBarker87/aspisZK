@@ -1,0 +1,443 @@
+[
+  {
+    "parent": "TX1:136",
+    "line": 234,
+    "text": "let (running, alpha, mut transcript) = semantic_rounds(&prefix, transcript)?;",
+    "coverage": "TX1:134 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 236,
+    "text": "let (running, alpha, mut transcript, round_checks) = semantic_rounds(&prefix, transcript)?;",
+    "coverage": "cfg(prover), excluded by deployed feature parity",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 237,
+    "text": "mark(obs, 2);",
+    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 238,
+    "text": "let claims = claims(&prefix)?;",
+    "coverage": "TX1:129 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 248,
+    "text": ".terminal_qm31(&claims, &alpha, &original_challenges)",
+    "coverage": "TX1:256 OPEN",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 249,
+    "text": ".map_err(|_| Error::Public)?;",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 250,
+    "text": "mark(obs, 3);",
+    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 251,
+    "text": "let mask = aspis_core::state_only_hiding::state_only_selected_mask_value(",
+    "coverage": "TX1:076 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 252,
+    "text": "&core::array::from_fn(|i| claims[0][i]),",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 253,
+    "text": "&core::array::from_fn(|i| claims[0][16 + i]),",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 257,
+    "text": "let extra = prefix.validated_record(25)?.decode_k::<29>(87)?;",
+    "coverage": "TX1:141 CLOSED, TX1:147 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 258,
+    "text": "let masked_terminal = mask.add(challenges.eta.mul(terminal)).add(extra[28]);",
+    "coverage": "TX1:001 CLOSED, TX1:007 CLOSED, TX1:013 CLOSED, TX1:017 CLOSED, TX1:024 CLOSED, TX1:029 CLOSED, TX1:047 CLOSED, TX1:051 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 260,
+    "text": "return Err(Error::Terminal);",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 262,
+    "text": "mark(obs, 4);",
+    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 263,
+    "text": "let state_before_z0 = transcript.state();",
+    "coverage": "TX1:146 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 264,
+    "text": "let z0 = transcript.circle_validated(prefix.validated_record(25)?)?;",
+    "coverage": "TX1:141 CLOSED, TX1:142 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 265,
+    "text": "let before_z1 = prefix.validated_record(26)?.decode_k::<29>(0)?;",
+    "coverage": "TX1:141 CLOSED, TX1:147 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 266,
+    "text": "let z1 = transcript.circle_validated(prefix.validated_record(26)?)?;",
+    "coverage": "TX1:141 CLOSED, TX1:142 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 267,
+    "text": "mark(obs, 5);",
+    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 270,
+    "text": "for (i, x) in [z0.x, z0.y, z1.x, z1.y].into_iter().enumerate() {",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 271,
+    "text": "crate::trace::value(3, i, aspis_core::field::WideExact::from_qm31(x));",
+    "coverage": "cfg(prover), excluded by deployed feature parity",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 273,
+    "text": "for (i, x) in challenges.with_alphas(&alpha).into_iter().enumerate() {",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 274,
+    "text": "crate::trace::value(0, i, x);",
+    "coverage": "cfg(prover), excluded by deployed feature parity",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 276,
+    "text": "for (i, row) in round_checks.iter().enumerate() {",
+    "coverage": "cfg(prover), excluded by deployed feature parity",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 277,
+    "text": "for (j, x) in row.iter().enumerate() {",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 278,
+    "text": "crate::trace::value(1, 3 * i + j, aspis_core::field::WideExact::from_qm31(*x));",
+    "coverage": "cfg(prover), excluded by deployed feature parity",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 281,
+    "text": "crate::trace::value(2, 0, aspis_core::field::WideExact::from_qm31(terminal));",
+    "coverage": "cfg(prover), excluded by deployed feature parity",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 282,
+    "text": "crate::trace::value(",
+    "coverage": "cfg(prover), excluded by deployed feature parity",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 285,
+    "text": "aspis_core::field::WideExact::from_qm31(masked_terminal),",
+    "coverage": "TX1:050 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 289,
+    "text": "return Err(Error::EqualCirclePoints);",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 291,
+    "text": "Ok(Verified {",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:136",
+    "line": 292,
+    "text": "roots: [*prefix.c1_root, prefix.payload(2)?.try_into().unwrap()],",
+    "coverage": "TX1:139 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:137",
+    "line": 312,
+    "text": "let prefix = Prefix::parse(bytes)?;",
+    "coverage": "TX1:138 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:137",
+    "line": 313,
+    "text": "mark(obs, 0);",
+    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:137",
+    "line": 314,
+    "text": "let mut transcript = public_transcript(public, hash, prefix.c1_root)?;",
+    "coverage": "TX1:131 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:137",
+    "line": 315,
+    "text": "let challenges = wire::begin(&prefix, &mut transcript)?;",
+    "coverage": "TX1:150 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:137",
+    "line": 316,
+    "text": "mark(obs, 1);",
+    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:137",
+    "line": 317,
+    "text": "verify_finish(public, prefix, transcript, challenges, obs)",
+    "coverage": "TX1:136 OPEN",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:087",
+    "line": 256,
+    "text": "let mut logical = aspis_core::r0::heap::filled(compact::LOGICAL_SEMANTIC + compact::LOGICAL_Y1, 0u8).map_err(|_| Error::Allocation)?;",
+    "coverage": "TX1:064 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:087",
+    "line": 257,
+    "text": "let (semantic, y1) = logical.split_at_mut(compact::LOGICAL_SEMANTIC);",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:087",
+    "line": 258,
+    "text": "compact::expand_semantic(&proof[compact::OFF_SEMANTIC..compact::OFF_Y1], semantic)?;",
+    "coverage": "TX1:098 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:087",
+    "line": 259,
+    "text": "compact::expand_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE], y1)?;",
+    "coverage": "TX1:099 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:087",
+    "line": 260,
+    "text": "let v = wide_view(proof, &logical[..compact::LOGICAL_SEMANTIC], &logical[compact::LOGICAL_SEMANTIC..])?;",
+    "coverage": "TX1:095 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:087",
+    "line": 261,
+    "text": "let sem = crate::r1_semantic::verify_observed(public, v.semantic, hash, obs).map_err(|_| Error::Semantic)?;",
+    "coverage": "TX1:137 OPEN",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:087",
+    "line": 262,
+    "text": "mark(obs, Phase::Semantic);",
+    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:087",
+    "line": 263,
+    "text": "Prepared::new(&sem, &v, hash, g)",
+    "coverage": "TX1:010 CLOSED, TX1:023 CLOSED, TX1:055 CLOSED, TX1:063 CLOSED, TX1:107 CLOSED, TX1:110 CLOSED, TX1:143 CLOSED, TX1:167 CLOSED, TX1:174 CLOSED, TX1:176 CLOSED, TX1:179 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 272,
+    "text": "return Err(Error::Parse);",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 274,
+    "text": "parse_shape(proof)?;",
+    "coverage": "TX1:086 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 275,
+    "text": "canonical_scan(proof)?;",
+    "coverage": "TX1:084 OPEN",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 276,
+    "text": "mark(obs, Phase::Parsed);",
+    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 278,
+    "text": "let p = prepare(public, proof, hash, obs, &mut g)?;",
+    "coverage": "TX1:087 OPEN",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 279,
+    "text": "let a = Accumulator::new(Variant::S2)?;",
+    "coverage": "TX1:010 CLOSED, TX1:023 CLOSED, TX1:055 CLOSED, TX1:063 CLOSED, TX1:107 CLOSED, TX1:110 CLOSED, TX1:143 CLOSED, TX1:167 CLOSED, TX1:174 CLOSED, TX1:176 CLOSED, TX1:179 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 280,
+    "text": "mark(obs, Phase::Prepare);",
+    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 281,
+    "text": "let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 282,
+    "text": "batch_merkle(proof, &p, &folded_root, 0, hash)?;",
+    "coverage": "TX1:081 OPEN",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 283,
+    "text": "mark(obs, Phase::Merkle(0));",
+    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 284,
+    "text": "let geometry = QueryGeometry::for_range(&p.queries, 0, k)?;",
+    "coverage": "TX1:181 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 285,
+    "text": "let pending = BatchedWeights::new(&a.weights)?;",
+    "coverage": "TX1:010 CLOSED, TX1:023 CLOSED, TX1:055 CLOSED, TX1:063 CLOSED, TX1:107 CLOSED, TX1:110 CLOSED, TX1:143 CLOSED, TX1:167 CLOSED, TX1:174 CLOSED, TX1:176 CLOSED, TX1:179 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 286,
+    "text": "let (mut a, pending) = query_loop(proof, &p, a, &g, obs, &geometry, pending, k)?;",
+    "coverage": "TX1:088 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 287,
+    "text": "pending.finish(&mut a.weights);",
+    "coverage": "TX1:066 CLOSED, TX1:106 CLOSED, TX1:109 CLOSED, TX1:175 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 288,
+    "text": "let bytes = checkpoint(&p, &a, proof, public_bytes, hash);",
+    "coverage": "TX1:186 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 289,
+    "text": "mark(obs, Phase::CheckpointWrite);",
+    "coverage": "TX1:130 CLOSED, TX1:191 CLOSED",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  },
+  {
+    "parent": "TX1:094",
+    "line": 290,
+    "text": "Ok(bytes)",
+    "coverage": "parent std/control/cfg; cut required",
+    "status": "NOT_YET_COVERED_BY_NKQ"
+  }
+]
