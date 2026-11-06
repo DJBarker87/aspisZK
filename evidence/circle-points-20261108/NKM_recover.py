@@ -22,4 +22,4 @@ for n,t in json.loads(r.stdout).items():
 assert (E/a/'receipt.json').exists(),'Missing receipt; recover, never resubmit'
 rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items() if k!='deps_fingerprint'};entry['full_receipt']=a+'/receipt.json'
 with (E/'NKM_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
-print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));sys.exit(rc['exit_status'])
+print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));sys.exit(rc['exit_status'])

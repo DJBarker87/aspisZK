@@ -1,0 +1,50 @@
+{"attempt": "NKM_L018", "exit_status": 0, "wall_seconds": 6.1629905889276415, "peak_rss_kib": "5450860", "swaps": "0", "print_axioms": ["'NKM_Roots.circle' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKM_Roots.ood' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKM_Roots.fallback0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKM_Roots.fallback1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKM_Roots.circle_on_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKM_Roots.ood_on_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKM_Roots.singular_first' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKM_Roots.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKM_Roots.circle : ∀ (t : QM31Exact),
+  ok (circleInvocation t) = circle.secure_circle_point_from_parameter (encode t) :=
+fun t =>
+  Eq.mpr (id (congrArg (fun _a => ok (circleInvocation t) = _a) (circle_total t)))
+    (if hd : 1 + t * t = 0 then
+      of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg ok
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | none => core.result.Result.Err circle.CirclePointError.SingularParameter
+                    | some val =>
+                      core.result.Result.Ok
+                        { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode (
+...
+result.Result.Ok
+                  { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) })))))
+theorem NKM_Roots.fallback : ∀ (row : AspisR1CircleSampleWrapper.r0_transcript.CircleRow),
+  ok
+      (fallbackG
+        (oodInvocation
+          (match row with
+          | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.First => circleFallbackParameter0
+          | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.Second => circleFallbackParameter1))) =
+    NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row) :=
+fun row =>
+  AspisR1CircleSampleWrapper.r0_transcript.CircleRow.casesOn (motive := fun t =>
+    row = t →
+      ok
+          (fallbackG
+            (oodInvocation
+              (match row with
+              | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.First => circleFallbackParameter0
+              | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.Second => circleFallbackParameter1))) =
+        NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row))
+    row (fun h => Eq.symm h ▸ fallback0) (fun h => Eq.symm h ▸ fallback1) (Eq.refl row)
+'NKM_Roots.circle' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.ood' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.fallback0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.fallback1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.circle_on_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.ood_on_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.singular_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc46b531b0bd647819fe149d1401100a2.scope; invocation ID: 0d530a56f9cb4a4f83085453e9fe333d

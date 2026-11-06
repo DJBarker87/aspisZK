@@ -20,10 +20,12 @@ theorem canonical (t : QM31Exact) : Canon (encode t) := by
  exact SamplerClosureProductCorrectness.encode_canonical t
 
 theorem one : field.QM31.ONE = encode 1 := by
- unfold field.QM31.ONE encode fromQ fromCM
- exact congrArg fromQ SamplerClosureCircleFieldExecution.one
+ unfold encode
+ simpa only [field.QM31.ONE,AspisR72Sampler.field.QM31.ONE,fromQ,fromCM] using congrArg fromQ SamplerClosureCircleFieldExecution.one
 
-theorem zero : field.QM31.ZERO = encode 0 := by rfl
+theorem zero : field.QM31.ZERO = encode 0 := by
+ simp only [field.QM31.ZERO,encode,fromQ,fromCM,SamplerClosureProductExecution.encode,encodeCM]
+ rfl
 
 theorem square (t : QM31Exact) : field.QM31.square (encode t) = ok (encode (t*t)) := by
  simp only [field.QM31.square,encode,to_from,SamplerClosureCircleFieldExecution.square,bind_tc_ok]
@@ -50,8 +52,10 @@ theorem closed_inverse (x : NHH_QInverse.Q) :
  field.QM31.try_inv (fromQ (NHH_QInverse.toSampler x)) := by
  rw [field.QM31.try_inv,to_from,←NHH_QAll.try_association]
  simp only [bind_assoc_eq,bind_tc_ok]
- cases h : NFG_InverseRef.field.QM31.try_inv x <;> simp only [h,bind_tc_ok]
- case ok o => cases o <;> rfl
+ cases NFG_InverseRef.field.QM31.try_inv x with
+ | ok o => cases o <;> rfl
+ | fail e => rfl
+ | div => rfl
 
 #print axioms roundtrip
 #print axioms canonical

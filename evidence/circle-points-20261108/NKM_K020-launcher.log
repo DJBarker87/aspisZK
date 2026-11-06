@@ -1,0 +1,58 @@
+{"attempt": "NKM_K020", "exit_status": 1, "wall_seconds": 3.7377379841636866, "peak_rss_kib": "319712", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+be/src/NKM_native.rs:152:22
+    |
+152 | fn result_inverted(){inverted_reply(kani::any());}
+    |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+    |
+152 | fn result_inverted(){let _ = inverted_reply(kani::any());}
+    |                      +++++++
+
+warning: unused `core::result::Result` that must be used
+   --> crates/aspis-r1-cost-probe/src/NKM_native.rs:164:48
+    |
+164 | fn result_frame(){let mut x:[u8;2]=kani::any();wrong_frame(&mut x);}
+    |                                                ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+    |
+164 | fn result_frame(){let mut x:[u8;2]=kani::any();let _ = wrong_frame(&mut x);}
+    |                                                +++++++
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.89s
+Checking harness NKM_native::ood_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 200 failed
+Failed Checks: |r|(*r==ood_ref(parameter,l))!=cfg!(NKM_contract_invert)
+ File: "crates/aspis-r1-cost-probe/src/NKM_native.rs", line 43, in NKM_native::secure_ood_circle_point_from_parameter::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.38931563s
+
+Manual Harness Summary:
+Verification failed for - NKM_native::ood_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-re9db870ca08f4730b34aafe13ca0e7db.scope; invocation ID: 1cc2dbc94b4f485a8d733e33daf21584

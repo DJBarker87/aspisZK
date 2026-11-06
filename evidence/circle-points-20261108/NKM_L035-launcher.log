@@ -1,0 +1,61 @@
+{"attempt": "NKM_L035", "exit_status": 0, "wall_seconds": 7.0733776891138405, "peak_rss_kib": "5449564", "swaps": "0", "print_axioms": ["'NKM_Adopted.ood' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKM_Adopted.fallback0' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKM_Adopted.fallback1' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKM_Adopted.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKM_Adopted.ood : ∀ (t : QM31Exact),
+  (do
+      let r ← NKM_circle.circle.secure_ood_circle_point_from_parameter (encode t)
+      ok (wrapperResult r)) =
+    circle.secure_ood_circle_point_from_parameter (toWrapper (encode t)) :=
+fun t =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          (do
+              let r ← _a
+              ok (wrapperResult r)) =
+            circle.secure_ood_circle_point_from_parameter (toWrapper (encode t)))
+        (ood_source t)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let r ←
+                  do
+                    let r ←
+                      AspisR72Sampler.circle.secure_ood_circle_poi
+...
+Eq.symm h ▸
+                          Eq.refl
+                            (ok
+                              (wrapperResult
+                                (fromResult
+                                  (core.result.Result.Err AspisR72Sampler.circle.CirclePointError.SingularParameter)))))
+                      (fun h =>
+                        Eq.symm h ▸
+                          Eq.refl
+                            (ok
+                              (wrapperResult
+                                (fromResult
+                                  (core.result.Result.Err
+                                    AspisR72Sampler.circle.CirclePointError.ParameterInCm31Subfield)))))
+                      (Eq.refl e))
+                (Eq.refl r))))))
+theorem NKM_Adopted.fallback : ∀ (row : AspisR1CircleSampleWrapper.r0_transcript.CircleRow),
+  (do
+      let p ← NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+      ok (fallbackPoint p)) =
+    AspisR1CircleFallback.transcript.circle_fallback_point (NKM_FallbackModel.index row) :=
+fun row =>
+  AspisR1CircleSampleWrapper.r0_transcript.CircleRow.casesOn (motive := fun t =>
+    row = t →
+      (do
+          let p ← NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+          ok (fallbackPoint p)) =
+        AspisR1CircleFallback.transcript.circle_fallback_point (NKM_FallbackModel.index row))
+    row (fun h => Eq.symm h ▸ fallback0) (fun h => Eq.symm h ▸ fallback1) (Eq.refl row)
+'NKM_Adopted.ood' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Adopted.fallback0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Adopted.fallback1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Adopted.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0ac8628956444853aa562876f7dd813d.scope; invocation ID: edde6e2287ff4e7dadf68c3a22369c31

@@ -10,7 +10,7 @@ x.setdefault('env',{}).setdefault('CARGO_TARGET_DIR',B+'/NKM_target')
 assert 1<=int(a[-3:])<=({'L':50,'K':30,'E':2}[a[4]])
 if x['command'][:2]==['python3','NKM_gate.py']:assert x['command'][2]==a+'.json','Stale gate configuration'
 assert not (E/a/'receipt.json').exists(), 'Never resubmit'
-if x['kind']=='kani':assert x['sources']==['NKM_gate.py','NKM_SOURCE_PINS.json','NKM_FROZEN_FILE_PINS.json'] or (x['command'][:2]==['python3','NKM_gate_pair.py'] and x['sources']==['NKM_gate.py','NKM_gate_pair.py','NKM_SOURCE_PINS.json','NKM_FROZEN_FILE_PINS.json']),'Native inputs must be installed in a prior capped scope; never upload source snapshots'
+if x['kind']=='kani':assert x['sources']==['NKM_gate.py','NKM_SOURCE_PINS.json','NKM_FROZEN_FILE_PINS.json','NKM_EXTRA_INPUTS.json','NKM_CONTRACT_OVERLAY.json'] or (x['command'][:2]==['python3','NKM_gate_pair.py'] and x['sources']==['NKM_gate.py','NKM_gate_pair.py','NKM_SOURCE_PINS.json','NKM_FROZEN_FILE_PINS.json']),'Native inputs must be installed in a prior capped scope; never upload source snapshots'
 guard=E/'NKM_CLIENT_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
@@ -74,10 +74,19 @@ p.write_text(json.dumps(x))
 r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 r=ssh('python3',f'''from pathlib import Path
-import json,base64
+import json,base64,lzma,hashlib
 b=Path({B!r});names=[str(p.relative_to(b)) for p in (b/{a!r}).rglob('*') if p.is_file()]+[{(a+'.json')!r}]+{x.get('collect',[])!r}
 for pattern in {x.get('collect_globs',[])!r}:names += [str(p.relative_to(b)) for p in b.glob(pattern) if p.is_file()]
-print(json.dumps({{n:({{'base64':base64.b64encode((b/n).read_bytes()).decode()}} if n.endswith('.xz') else (b/n).read_text()) for n in names if (b/n).is_file()}}))
+out={{}}
+for n in names:
+ p=b/n
+ if not p.is_file():continue
+ if n.endswith('_REACHABLE.txt'):
+  raw=p.read_bytes();compressed=lzma.compress(raw,preset=6)
+  out[n+'.xz']={{'base64':base64.b64encode(compressed).decode()}}
+  out[n+'.sha256']=hashlib.sha256(raw).hexdigest()+'\n'
+ else:out[n]={{'base64':base64.b64encode(p.read_bytes()).decode()}} if n.endswith('.xz') else p.read_text()
+print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
 for n,t in json.loads(r.stdout).items():
  p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
@@ -86,4 +95,4 @@ for n,t in json.loads(r.stdout).items():
 assert (E/a/'receipt.json').exists(),'Missing receipt; recover, never resubmit'
 rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items() if k!='deps_fingerprint'};entry['full_receipt']=a+'/receipt.json'
 with (E/'NKM_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
-print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));sys.exit(rc['exit_status'])
+print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));sys.exit(rc['exit_status'])

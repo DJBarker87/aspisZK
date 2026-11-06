@@ -1,8 +1,18 @@
 """Own strict validation, executed inside the admitted capped scope before Kani."""
 from pathlib import Path
-import json,subprocess,sys,hashlib,tomllib,os
+import json,subprocess,sys,hashlib,tomllib,os,base64
 B=Path(__file__).resolve().parent;x=json.loads((B/sys.argv[1]).read_text());a=x['attempt'];S=B/'NKM_workspace'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+for n,encoded in json.loads((B/'NKM_EXTRA_INPUTS.json').read_text()).items():
+ raw=base64.b64decode(encoded);p=S/n;p.parent.mkdir(parents=True,exist_ok=True)
+ if p.exists():assert p.read_bytes()==raw
+ else:p.write_bytes(raw)
+
+for n,row in json.loads((B/'NKM_CONTRACT_OVERLAY.json').read_text()).items():
+ p=S/n;current=sha(p) if p.exists() else None
+ assert current in [row['before'],row['sha256']],('unexpected overlay input',n)
+ raw=base64.b64decode(row['data']);assert hashlib.sha256(raw).hexdigest()==row['sha256']
+ if current!=row['sha256']:p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw)
 frozen='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
 assert sha(S/'Cargo.lock')==frozen,'STOP frozen lock mismatch before Kani'
 kmx={'KMX_stubs.rs': 'ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138', 'KMX_native.rs': 'cf719c47b5c8c91dcc369984c01bd0b8531b25210e344c9fd06db21b30171880', 'KMX_CopyMeaning.lean': '2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'}

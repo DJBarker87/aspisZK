@@ -1,0 +1,44 @@
+fn canonical_replies(l:&Log)->bool{
+ canonical(l.replies[0])&&canonical(l.replies[1])&&canonical(l.replies[2])&&canonical(l.replies[3])&&canonical(l.replies[4])&&canonical(l.replies[5])&&canonical(l.replies[6])
+}
+fn circle_ref(l:&Log)->Result<SecureCirclePoint,CirclePointError>{
+ if l.inverse_some{Ok(SecureCirclePoint{x:l.replies[4],y:l.replies[6]})}else{Err(CirclePointError::SingularParameter)}
+}
+fn ood_ref(t:QM31,l:&Child)->Result<SecureCirclePoint,CirclePointError>{
+ match l.reply{Err(e)=>Err(e),Ok(p)=>if t.c1==CM31::ZERO{Err(CirclePointError::ParameterInCm31Subfield)}else{Ok(p)}}
+}
+fn fallback_ref(l:&Child)->SecureCirclePoint{
+ match l.reply{Ok(p)=>p,Err(_)=>SecureCirclePoint{x:QM31::ONE,y:QM31::ZERO}}
+}
+#[kani::proof_for_contract(secure_circle_point_from_parameter)] #[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn circle_contract(){let t=q(kani::any());let mut l=new_log(kani::any());secure_circle_point_from_parameter(t,&mut l);}
+#[kani::proof_for_contract(secure_ood_circle_point_from_parameter)] #[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn ood_contract(){let t=q(kani::any());let mut l=child_record();secure_ood_circle_point_from_parameter(t,&mut l);}
+#[kani::proof_for_contract(circle_fallback_point)] #[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn fallback_contract(){let sample:usize=kani::any();let mut l=child_record();circle_fallback_point(sample,&mut l);}
+// Exact Result<SecureCirclePoint,CirclePointError> contract calibration.
+#[kani::ensures(|_|true)]
+fn weak_reply(x:Result<SecureCirclePoint,CirclePointError>)->Result<SecureCirclePoint,CirclePointError>{x}
+#[kani::ensures(|r|*r!=x)]
+fn inverted_reply(x:Result<SecureCirclePoint,CirclePointError>)->Result<SecureCirclePoint,CirclePointError>{x}
+#[kani::proof_for_contract(weak_reply)] #[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn result_weak(){weak_reply(kani::any());}
+#[kani::proof_for_contract(inverted_reply)] #[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn result_inverted(){inverted_reply(kani::any());}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn result_real(){let x:Result<SecureCirclePoint,CirclePointError>=kani::any();assert_eq!(weak_reply(x),x);}
+#[kani::proof] #[kani::stub_verified(weak_reply)] #[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn result_unimplied(){let x:Result<SecureCirclePoint,CirclePointError>=kani::any();assert_eq!(weak_reply(x),x);}
+#[kani::modifies(&mut x[0])]
+#[kani::ensures(|_|true)]
+fn wrong_frame(x:&mut [u8;2])->Result<SecureCirclePoint,CirclePointError>{x[1]=x[1].wrapping_add(1);Err(CirclePointError::SingularParameter)}
+#[kani::proof_for_contract(wrong_frame)] #[kani::unwind(40)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn result_frame(){let mut x:[u8;2]=kani::any();wrong_frame(&mut x);}

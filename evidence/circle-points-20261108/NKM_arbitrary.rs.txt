@@ -1,0 +1,6 @@
+use crate::{field::{M31,CM31,QM31},circle::{SecureCirclePoint,CirclePointError}};
+impl kani::Arbitrary for M31 {fn any()->Self{Self(kani::any())}}
+impl kani::Arbitrary for CM31 {fn any()->Self{Self{a:kani::any(),b:kani::any()}}}
+impl kani::Arbitrary for QM31 {fn any()->Self{Self{c0:kani::any(),c1:kani::any()}}}
+impl kani::Arbitrary for SecureCirclePoint {fn any()->Self{Self{x:kani::any(),y:kani::any()}}}
+impl kani::Arbitrary for CirclePointError {fn any()->Self{if kani::any(){Self::SingularParameter}else{Self::ParameterInCm31Subfield}}}
