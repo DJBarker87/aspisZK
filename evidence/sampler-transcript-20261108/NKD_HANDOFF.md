@@ -1,0 +1,14 @@
+# NKD sampler/transcript handoff
+
+Stage 0. Target not yet established. Branch codex/cx-sampler-transcript-20261107.
+Assigned rows TX1:155/157/158/159/160/165/166/167 remain OPEN against NKC ledger17 (514 CLOSED, 85 OPEN, 599 total). No new row or proof credit.
+
+Budget 80 Kani / 90 Lean / 1 extraction; initially unused. Only NKD_ modules and this evidence directory may change. No push or shipped-file edits. Default/devnet/Pool ELF pins inherited, no rebuild claim. Frozen source 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; headline AspisR1.RPx_Deployed.deployed. No security, privacy, two-transaction or trust change.
+
+Plan: reuse and validate exact NGT/NIX native windows; decode8/low/add before ordinary/gamma; absorb before block (the actual frozen block calls absorb); new independently. Emitted body and typed native cut must be composed on SAME arguments, full Result/effects, caller-established domains, matched controls and standard axioms. No endpoint premise or free operation dictionary at root. Final credit requires NKC combined import, raw ax2, NFX exit0, then next ledger gate.
+
+Host own workspace /home/dombarker/project-offloads/codex-cx-sampler-transcript-20261108; own CARGO_TARGET_DIR is NKD_target within it. Own retained cache /home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKD_20261108. Seed NKC export FIRST, NIX export second, record sizes/hashes. One capped scope at a time (stricter than allowance), admission exit0 AND allowed:true, 6G/8G/swap0/tasks64, Lean -M7000. Initial host read-only disk observation: 7.4G free, 100% rounded utilization. No builds launched yet.
+
+Every attempt records exact target/argv, source revision/hash, selected dependency/Aeneas pins, exit, wall, RSS, swaps, full printed axioms. Runtime digest value remains existing trust; exact slices and unchanged reply require native evidence. Reused passing evidence is not replayed unchanged.
+
+Next deliverable: pinned seed and member-by-member native/source packet inventory. All eight member associations and release target remain open. No assumptions discharged, added or removed at stage0.
