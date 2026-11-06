@@ -22,8 +22,8 @@ theorem installed (n : Nat) (s : NKU.State) : run n s=source n s := by
  induction n generalizing s with
  | zero => simp only [run,source,NKK_RawPrefix.literal,NKK_LogReduce.pure_bind,post,List.map_nil,List.append_nil]
  | succ n ih =>
-  unfold run
-  rw [NKU_FineRead.raw_bind]
+  unfold run NKU_FineRead.raw
+  simp only [NKK_LogAlgebra.bind_assoc,NKK_LogReduce.pure_bind,NKK_Try.branch]
   simp_rw [ih]
   unfold source
   simp only [NKK_RawPrefix.literal,NKK_LogAlgebra.bind_assoc,NKK_LogReduce.pure_bind,NJU_Log.prod_cases]

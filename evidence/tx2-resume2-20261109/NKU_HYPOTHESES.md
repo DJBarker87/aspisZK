@@ -1,0 +1,9 @@
+# NKU root hypothesis inventory
+
+NKU_ResumeRoot.source, clauses and cohort (L100) quantify H, digest implementation d, SAME hash value, and one NKU.State. There are no Prop hypotheses, successful child replies, accepted-parent premise, NoBad premise, endpoint equality, independent logs, arbitrary Ops dictionary or invocation ID. All callee clauses are derived in clauses. Frame.reservation is the same actual Allocator item across every stage, covering allocation rejection; it is not a freely selected success flag at filled44.
+
+The native certificates have narrower domains than these source/model equations. NKK proof digest is57607 bytes, public digest <=1880, checkpoint1768 with actual end1736; all primitive reads use N4/16/32 on the SAME1768 backing. Proof/public sizes are entry-domain facts established by the actual parent caller; NKU does not infer them from source equality or silently widen native credit. Checkpoint length derives from the returned header (NKU_HeaderDomain.length). Reader cursor/frame domains follow NKK_RawSlots.roots, NKU_Offsets.gamma, NKK_QueryWindows.domain, NKU_Offsets.semantic/z/weights, and NKK_AllocationStage.width on SAME Reservation. These are local returning-branch implications used at their entered source sites, never successful-child hypotheses added to a positive root.
+
+No trust inventory change. Existing P6/D188 option-A reviewed native-cut semantic transport is reclassified, not removed. Runtime digest value, allocator, std/extraction models retain their stated scopes. RuntimeCpiReadonlyEntry7 is pending and unused. L154 remains a statement parameter; no100-bit conclusion follows from this row.
+
+OPEN until all native domains/frame/cut transcriptions are audited and combined/raw ax2/NFX checks pass. A compiled complete source G alone is not an unconditional native resume theorem on arbitrary proof/public lengths.

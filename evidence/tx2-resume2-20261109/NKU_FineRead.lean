@@ -42,9 +42,7 @@ theorem raw_bind {T : Type} (s : NKU.State) (n : Usize)
      next {s with reader := r,decoded := write value s.decoded}) := by
  unfold raw
  simp only [NKK_LogAlgebra.bind_assoc,NKK_Try.branch,NKK_LogReduce.pure_bind]
- apply NKK_LogAlgebra.bind_congr
- rintro ⟨value,r⟩
- rfl
+
 #print axioms e_bind
 #print axioms k_bind
 #print axioms raw_bind

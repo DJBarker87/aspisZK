@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,re,hashlib,difflib,shutil
 E=Path(__file__).resolve().parent;P=E.parent/'tx2-resume-20261108'
-excluded={'NKU_ProofDriver','NKU_Driver','NKU_COMBINED_IMPORT'}
+excluded={'NKU_EndProbe','NKU_ProofDriver','NKU_Driver','NKU_COMBINED_IMPORT'}
 receipts={}
 for p in E.glob('NKU_L*/receipt.json'):
  x=json.loads(p.read_text())

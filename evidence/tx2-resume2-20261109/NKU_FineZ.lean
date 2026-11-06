@@ -27,10 +27,11 @@ def run : Stage Unit := fun s=>do
  NKK_Try.emitted g fun (_,s7)=>pure (.Ok ((),{s7 with phase := .filled}))
 theorem installed (s : NKU.State) : run s=NKU_ZClaim.run s := by
  rw [←NKU_ZClaim.source_eq_run]
- unfold run NKU_ZClaim.source NKK_ZStage.source
- simp_rw [NKU_FineRead.e_bind,NKU_FineRead.k_bind]
- unfold NKK_FieldStages.withE NKK_FieldStages.withK
- simp only [first,more,claim,rhs,power,NKU_ZClaim.reply,NKU_ZClaim.post,List.cons_append,List.nil_append]
- rfl
+ unfold run NKU_ZClaim.source NKK_ZStage.source NKU_FineRead.e NKU_FineRead.k NKK_FieldStages.withE NKK_FieldStages.withK
+ repeat' first
+ | rfl
+ | (fail_if_no_progress simp only [NKK_LogAlgebra.bind_assoc,NKK_LogReduce.pure_bind,NKK_Try.branch,first,more,claim,rhs,power,NKU_ZClaim.reply,NKU_ZClaim.post,List.cons_append,List.nil_append])
+ | (apply NKK_LogAlgebra.bind_congr;rintro ⟨reply,r⟩;cases reply)
+
 #print axioms installed
 end NKU_FineZ

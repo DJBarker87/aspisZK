@@ -16,9 +16,7 @@ def run : Stage Unit := fun s=>do
  NKK_Try.emitted c fun (_,s3)=>pure (.Ok ((),{s3 with phase := .fields}))
 theorem installed (s : NKU.State) : run s=NKU_Roots.run s := by
  rw [←NKU_Roots.source_eq_run]
- unfold run NKU_Roots.source
- simp_rw [NKU_FineRead.raw_bind]
- simp only [NKK_RawPrefix.literal,NKK_LogAlgebra.bind_assoc,NKK_LogReduce.pure_bind,NJU_Log.prod_cases,first,more,NKU_Roots.post,List.cons_append,List.nil_append]
- rfl
+ unfold run NKU_Roots.source NKU_FineRead.raw
+ simp only [NKK_RawPrefix.literal,NKK_Try.branch,NKK_LogAlgebra.bind_assoc,NKK_LogReduce.pure_bind,NJU_Log.prod_cases,first,more,NKU_Roots.post,List.cons_append,List.nil_append]
 #print axioms installed
 end NKU_FineRoots
