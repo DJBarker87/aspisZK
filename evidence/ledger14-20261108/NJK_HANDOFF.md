@@ -16,7 +16,7 @@ NJH-F1 provenance PASS: canonical AdapterRwModel.observer is the actual Aeneas-e
 
 NJK_L001 imports NIU+NJF+NIX+NJH and NIW/NIY/NIZ/NIV/NJA/NJD/NJC support with AspisR1.RPx_Deployed.deployed. All8,904 root statements replay L002;837 inherited row-root owners/statements unchanged. NFX L008 exits0 on15,397 modules /717,409 declarations /25,500,967 references: zero dangling, incompatible canonical owners or import mismatches;1,843 compatible cache replicas disclosed. All31,675 predecessor selected files match, zero variants;315 added files.
 
-Raw ax2 audits every required root exactly once with only propext/Classical.choice/Quot.sound; same eight fixture results in the SAME optimized proof binary. NHC_DecodeModel.decoder_error raw-standard/empty-summary discrepancy and actual L033 exit1 retained under(ab')(3). No other nonzero formal result, timeout, memory kill, cap/timeout increase or unchanged failed-shape replay. Source validators replay read-only. Final packaging validation rejects12 mutations and checks211 source snapshots,8,916 compressed SHA pairs and109 input pins.
+Raw ax2 audits every required root exactly once with only propext/Classical.choice/Quot.sound; same eight fixture results in the SAME optimized proof binary. NHC_DecodeModel.decoder_error raw-standard/empty-summary discrepancy and actual L033 exit1 retained under(ab')(3). No other nonzero formal result, timeout, memory kill, cap/timeout increase or unchanged failed-shape replay. Source validators replay read-only. Final packaging validation rejects12 mutations and checks211 source snapshots,8,962 compressed SHA pairs and109 input pins.
 
 ## Physical and status
 
@@ -33,3 +33,5 @@ Seed224 objects/sidecars, 45359832 bytes copied/hash-checked with NIU export fir
 Frozen crates/programs/Cargo.lock unchanged in both historical-root and research scopes. No ELF rebuild trigger; inherited only: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4, devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299, Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. No file over20MB or binary/object/ELF committed.
 
 Frozen3, L154 parameter, narrowed D188,100-bit PER-ATTEMPT soundness/privacy/two transactions retained. Discharged headline hypotheses:none. Native entry/op9/TX2 common/production Pool association, owner(aj)(a),L187 cold release replay and L188 final artifact audit remain. **Target not yet established.**
+
+Final retention cleanup PASS: own exports rehashed before removing454,615,610 bytes of own rebuildable objects/native/tmp; cache, source snapshots and receipts retained. Exact raw log whitespace is preserved in46 compressed archives with uncompressed SHA256, rather than normalized. Post-packaging validation PASS; no prover or unchanged full regression rerun.
