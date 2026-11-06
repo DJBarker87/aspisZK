@@ -10,3 +10,10 @@ No new native stub or field product is introduced. Reused NGT logs are LOCAL rec
 | pack | NKD_Decode.root | canonicality from SAME low/add trace |
 
 No multiplication stub is needed. Digest value is approved runtime realization; exact descriptors and unchanged reply remain a distinct native obligation. No SDK callback or std operation is assigned an arbitrary root dictionary.
+
+| Additional reached boundary | Named discharge | Established domain |
+|---|---|---|
+| add_cut's second false carry | AspisR1.NGT_Reduction.second_carry / NGT_NBL_SamplerDebug.source | SAME LowTrace, quotient+1, first add with nonzero carry, second add of1; no false-carry endpoint premise |
+| observed_digest | AspisR1.NGC_DigestBridge.forwarding via NGT_BlockAssociation.runtime_forward; NKD_TranscriptPackets.new/absorb/block and NKD_Domains | ONLY deployed SolanaDigest; source-ordered descriptors3/4/2/2, each<=57607; arbitrary full runtime reply32, exact immutable borrow/frame; SHA=H existing runtime trust |
+
+Every new native positive/control uses the exact inherited KMX_stubs.rs and KMX_native.rs hashes checked by NKD_gate.py; no custom copy stub is authored. NKD_NATIVE_MATRIX.json pins the patch and code. No proof_for_contract or stub_verified use is introduced, so no new interface-shape contract fidelity calibration is claimed or required.

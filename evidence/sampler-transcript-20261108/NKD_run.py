@@ -1,6 +1,6 @@
 """NIH-owned input client; unchanged S2W launcher and admission infrastructure."""
 from pathlib import Path
-import json, subprocess, sys, time, hashlib, shlex, re, os, atexit
+import json, subprocess, sys, time, hashlib, shlex, re, os, atexit, base64
 E=Path(__file__).resolve().parent
 H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-sampler-transcript-20261108'
@@ -65,13 +65,15 @@ x['deps_fingerprint']={{'selected_objects':pins}};p.write_text(json.dumps(x))
 r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 r=ssh('python3',f'''from pathlib import Path
-import json
+import json,base64
 b=Path({B!r});names=[str(p.relative_to(b)) for p in (b/{a!r}).rglob('*') if p.is_file()]+[{(a+'.json')!r}]+{x.get('collect',[])!r}
 for pattern in {x.get('collect_globs',[])!r}:names += [str(p.relative_to(b)) for p in b.glob(pattern) if p.is_file()]
-print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).is_file()}}))
+print(json.dumps({{n:({{'base64':base64.b64encode((b/n).read_bytes()).decode()}} if n.endswith('.xz') else (b/n).read_text()) for n in names if (b/n).is_file()}}))
 ''');assert r.returncode==0,r.stderr
 for n,t in json.loads(r.stdout).items():
- p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+ p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
+ if isinstance(t,dict):p.write_bytes(base64.b64decode(t['base64']))
+ else:p.write_text(t)
 assert (E/a/'receipt.json').exists(),'Missing receipt; recover, never resubmit'
 rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items() if k!='deps_fingerprint'};entry['full_receipt']=a+'/receipt.json'
 with (E/'NKD_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
