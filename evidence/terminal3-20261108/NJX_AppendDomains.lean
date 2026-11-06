@@ -11,7 +11,7 @@ abbrev D := Array U32 8#usize
 abbrev Frontier := Array D 20#usize
 abbrev High := Array NQ 64#usize
 
-def level (i : Fin 20) : Usize := UScalar.ofNatCore .Usize i.val (by scalar_tac)
+def level (i : Fin 20) : Usize := UScalar.ofNatCore i.val (by scalar_tac)
 def frontier (f : Frontier) (i : Fin 20) : D := NJB_ArrayCarrier.cell f ⟨i.val,by have h:=i.isLt;scalar_tac⟩
 def high (s : High) (i : Fin 20) : NQ := NJB_ArrayCarrier.cell s ⟨34+i.val,by have h:=i.isLt;scalar_tac⟩
 

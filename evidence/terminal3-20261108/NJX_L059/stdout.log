@@ -1,0 +1,54 @@
+NJX_InitialPrologue.lean:48:3: warning: Variable name `p` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+theorem AspisR1.NJX_InitialPrologue.source : ∀ (s : Selectors) (v : Variant) (nodes : NQ),
+  FIw_ArrayValue.canonical s.high → FIw_ArrayValue.canonical s.low → Canon nodes → ∃ p, True :=
+fun s v nodes hs hl hn =>
+  have hh := fun i => NJB_ArrayCarrier.canonical_cell s.high hs ⟨↑i, high._proof_3 i⟩;
+  have hlow := NJB_ArrayCarrier.canonical_cell s.low hl ⟨0, low0._proof_1⟩;
+  let ⟨c1, h✝⟩ := NJB_StubLaws.qm_add (high s 0) (high s 1) (hh 0) (hh 1)
+  let ⟨cc1, right✝⟩ := h✝
+  let ⟨hc1, right✝¹⟩ := right✝
+  let ⟨c2, h✝¹⟩ := NJB_StubLaws.qm_add c1 (high s 25) hc1 (hh 25)
+  let ⟨cc2, right✝²⟩ := h✝¹
+  let ⟨hc2, right✝³⟩ := right✝²
+  let ⟨common, h✝²⟩ := NJB_StubLaws.qm_add c2 (high s 30) hc2 (hh 30)
+  let ⟨cc, right✝⁴⟩ := h✝²
+  let ⟨hc, right✝⁵⟩ := right✝⁴
+  let ⟨t, h✝³⟩ := NJX_InitialVariant.source v (high s 27) (high s 28) (high s 29) (hh 27) (hh 28) (hh 29)
+  let ⟨f, h✝⁴⟩ := h✝³
+  let ⟨eight, h✝⁵⟩ := h✝⁴
+  let ⟨two, h✝⁶⟩ := h✝⁵
+  let ⟨cv, right✝⁶⟩ := h✝⁶
+  let ⟨ht, right✝⁷⟩ := right✝⁶
+  let ⟨hf, right✝⁸⟩ := right✝⁷
+  let ⟨he, hw⟩ := right✝⁸
+  let ⟨f1, h✝⁷⟩ := NJB_StubLaws.qm_add common t hc ht
+  let ⟨cf1, right✝⁹⟩ := h✝⁷
+  let ⟨hf1, right✝¹⁰⟩ := right✝⁹
+  let ⟨f2, h✝⁸⟩ := NJB_StubLaws.qm_add f1 f hf1 hf
+  let ⟨cf2, right✝¹¹⟩ := h✝⁸
+  let ⟨hf2, right✝¹²⟩ := right✝¹¹
+  let ⟨fv, h✝⁹⟩ := NJB_StubLaws.qm_mul (low0 s) f2 hlow hf2
+  let ⟨cfv, right✝¹³⟩ := h✝⁹
+  let ⟨hfv, right✝¹⁴⟩ := right✝¹³
+  let ⟨rv, h✝¹⁰⟩ := NJB_StubLaws.qm_mul (low0 s) nodes hlow hn
+  let ⟨crv, right✝¹⁵⟩ := h✝¹⁰
+  let ⟨hrv, right✝¹⁶⟩ := right✝¹⁵
+  let ⟨full, h✝¹¹⟩ := NJB_PreparedLaws.new_result fv hfv
+  let ⟨cf, df⟩ := h✝¹¹
+  let ⟨bv, h✝¹²⟩ := NJB_StubLaws.qm_add fv rv hfv hrv
+  let ⟨cbv, right✝¹⁷⟩ := h✝¹²
+  let ⟨hbv, right✝¹⁸⟩ := right✝¹⁷
+  let ⟨both, h✝¹³⟩ := NJB_PreparedLaws.new_result bv hbv
+  let ⟨cb, db⟩ := h✝¹³
+  Exists.intro
+    { common := common, transfer := t, fixed := f, eight := eight, two := two, common1 := c1, common2 := c2,
+      full1 := f1, full2 := f2, fullValue := fv, rateValue := rv, bothValue := bv, full := full, both := both,
+      add1 := cc1, add2 := cc2, add3 := cc, variant_call := cv, add4 := cf1, add5 := cf2, mul1 := cfv, mul2 := crv,
+      new1 := cf, add6 := cbv, new2 := cb, domain1 := df, domain2 := db,
+      canonical := ⟨ht, ⟨hf, ⟨he, ⟨hw, ⟨hfv, hbv⟩⟩⟩⟩⟩ }
+    True.intro
+'AspisR1.NJX_InitialPrologue.source' depends on axioms: [propext, Classical.choice, Quot.sound]

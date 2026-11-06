@@ -1,0 +1,45 @@
+{"attempt": "NJX_L062", "exit_status": 0, "wall_seconds": 13.736639637034386, "peak_rss_kib": "6183168", "swaps": "0", "print_axioms": ["'AspisR1.NJX_RangeInvocation.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_RangeInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_RangeInvocation.source : ∀ (o : Openings),
+  FIw_ArrayValue.canonical o.z →
+    FIw_ArrayValue.canonical o.succ_z →
+      FIw_ArrayValue.canonical o.xor12_z →
+        ∃ a b c,
+          NJX_RangeFold.run 0 (xs o 0) (List.finRange 10) zero = ok a ∧
+            NJX_RangeFold.Trace 0 (xs o 0) (List.finRange 10) zero a ∧
+              NJX_RangeFold.run 1 (xs o 1) (List.finRange 10) a = ok b ∧
+                NJX_RangeFold.Trace 1 (xs o 1) (List.finRange 10) a b ∧
+                  NJX_RangeFold.run 2 (xs o 2) (List.finRange 10) b = ok c ∧
+                    NJX_RangeFold.Trace 2 (xs o 2) (List.finRange 10) b c ∧ ∀ (j : Fin 33), Canon (c j) :=
+fun o hz hs hx =>
+  have h := ca
+...
+theorem AspisR1.NJX_RangeInvocation.source : ∀ (o : Openings),
+  FIw_ArrayValue.canonical o.z →
+    FIw_ArrayValue.canonical o.succ_z →
+      FIw_ArrayValue.canonical o.xor12_z →
+        ∃ a b c,
+          NJX_RangeFold.run 0 (xs o 0) (List.finRange 10) zero = ok a ∧
+            NJX_RangeFold.Trace 0 (xs o 0) (List.finRange 10) zero a ∧
+              NJX_RangeFold.run 1 (xs o 1) (List.finRange 10) a = ok b ∧
+                NJX_RangeFold.Trace 1 (xs o 1) (List.finRange 10) a b ∧
+                  NJX_RangeFold.run 2 (xs o 2) (List.finRange 10) b = ok c ∧
+                    NJX_RangeFold.Trace 2 (xs o 2) (List.finRange 10) b c ∧ ∀ (j : Fin 33), Canon (c j) :=
+fun o hz hs hx =>
+  have h := canonical o hz hs hx;
+  let ⟨a, h✝⟩ := NJX_RangeFold.source 0 (xs o 0) (h 0) (List.finRange 10) zero fun x => FIv_NativeValue.zero.left
+  let ⟨ca, right✝⟩ := h✝
+  let ⟨ta, right✝¹⟩ := right✝
+  let ⟨ha, right✝²⟩ := right✝¹
+  let ⟨b, h✝¹⟩ := NJX_RangeFold.source 1 (xs o 1) (h 1) (List.finRange 10) a ha
+  let ⟨cb, right✝³⟩ := h✝¹
+  let ⟨tb, right✝⁴⟩ := right✝³
+  let ⟨hb, right✝⁵⟩ := right✝⁴
+  let ⟨c, h✝²⟩ := NJX_RangeFold.source 2 (xs o 2) (h 2) (List.finRange 10) b hb
+  let ⟨cc, right✝⁶⟩ := h✝²
+  let ⟨tc, right✝⁷⟩ := right✝⁶
+  let ⟨hc, right✝⁸⟩ := right✝⁷
+  Exists.intro a (Exists.intro b (Exists.intro c ⟨ca, ⟨ta, ⟨cb, ⟨tb, ⟨cc, ⟨tc, hc⟩⟩⟩⟩⟩⟩))
+'AspisR1.NJX_RangeInvocation.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_RangeInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4a3435d5411a43bd84fd229047f94c19.scope; invocation ID: dbc158e86a68480ab308ead12628bd21

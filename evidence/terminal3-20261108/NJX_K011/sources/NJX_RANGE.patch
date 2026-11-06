@@ -1,0 +1,21 @@
+--- a/crates/aspis-statement/src/pool_v1/NJX_digest_native.rs
++++ b/crates/aspis-statement/src/pool_v1/NJX_digest_native.rs
+@@ -68,3 +68,18 @@
+  let kinds=[7,1,1,1,8,1,1,0,0,3,1,3];let left=[QM31::ZERO,s.high[0],reply[1],reply[2],s.high[27],reply[3],reply[5],s.low[0],s.low[0],reply[7],reply[7],reply[10]];let right=[QM31::ZERO,s.high[1],s.high[25],s.high[30],s.high[28],variant_reply[0],variant_reply[1],reply[6],reply[0],QM31::ZERO,reply[8],QM31::ZERO];
+  assert_eq!(l.kind,kinds[seek]);assert_eq!(NJX_words(l.left)[limb],NJX_words(left[seek])[limb]);assert_eq!(NJX_words(l.right)[limb],NJX_words(right[seek])[limb]);assert_eq!(NJX_words(out.0)[limb],NJX_words(reply[0])[limb]);assert_eq!(NJX_words(out.1)[limb],NJX_words(variant_reply[0])[limb]);assert_eq!(NJX_words(out.2)[limb],NJX_words(variant_reply[1])[limb]);assert_eq!(NJX_words(out.3)[limb],NJX_words(variant_reply[2])[limb]);assert_eq!(NJX_words(out.4)[limb],NJX_words(variant_reply[3])[limb]);assert_eq!(NJX_words(out.5)[limb],NJX_words(reply[7])[limb]^if cfg!(NJX_invert){1}else{0});assert_eq!(NJX_cache(out.6)[row][col],cw[0][row][col]);assert_eq!(NJX_cache(out.7)[row][col],cw[1][row][col]);
+ }
++
++struct NJX_RLog{calls:usize,square:QM31,left:QM31,right:QM31,reply:[QM31;2]}
++fn NJX_r_square(x:QM31,l:&mut NJX_RLog)->QM31{assert_eq!(l.calls,0);l.calls+=1;l.square=x;l.reply[0]}
++fn NJX_r_sub(a:QM31,b:QM31,l:&mut NJX_RLog)->QM31{assert_eq!(l.calls,1);l.calls+=1;l.left=a;l.right=b;l.reply[1]}
++fn NJX_range_step(view:usize,mut index:usize,mut range:[QM31;33],o:&crate::state_only_poseidon::StateOnlyPoseidonOpenings,l:&mut NJX_RLog)->([QM31;33],usize){
++ match view{0=>{range[index]=NJX_r_sub(NJX_r_square(o.z[index],l),o.z[index],l);},1=>{range[10+index]=NJX_r_sub(NJX_r_square(o.succ_z[index],l),o.succ_z[index],l);},2=>{range[20+index]=NJX_r_sub(NJX_r_square(o.xor12_z[index],l),o.xor12_z[index],l);},_=>unreachable!()}
++ index+=1;(range,index)
++}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NJX_range_step_cut(){
++ let views:[[QM31;16];3]=unsafe{core::mem::transmute::<[[[u32;4];16];3],[[QM31;16];3]>(kani::any())};let o=crate::state_only_poseidon::StateOnlyPoseidonOpenings{z:views[0],succ_z:views[1],xor12_z:views[2]};let before:[QM31;33]=unsafe{core::mem::transmute::<[[u32;4];33],[QM31;33]>(kani::any())};let reply:[QM31;2]=unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())};let view:usize=kani::any();let index:usize=kani::any();let seek:usize=kani::any();let limb:usize=kani::any();kani::assume(view<3&&index<10&&seek<33&&limb<4);
++ let mut l=NJX_RLog{calls:0,square:QM31::ZERO,left:QM31::ZERO,right:QM31::ZERO,reply};let(after,next)=NJX_range_step(view,index,before,&o,&mut l);let x=views[view][index];
++ assert_eq!(l.calls,2);assert_eq!(NJX_words(l.square)[limb],NJX_words(x)[limb]);assert_eq!(NJX_words(l.left)[limb],NJX_words(reply[0])[limb]);assert_eq!(NJX_words(l.right)[limb],NJX_words(x)[limb]);assert_eq!(next,index+1);assert_eq!(NJX_words(after[seek])[limb],(if seek==10*view+index{NJX_words(reply[1])[limb]}else{NJX_words(before[seek])[limb]})^if cfg!(NJX_invert){1}else{0});
++}

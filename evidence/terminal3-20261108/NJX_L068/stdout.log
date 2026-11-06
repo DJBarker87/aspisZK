@@ -1,0 +1,236 @@
+structure AspisR1.NJL_CachedPowers.Packet (lambda : AspisR1.FIv_NativeArithmetic.NQ) : Type
+number of parameters: 1
+fields:
+  AspisR1.NJL_CachedPowers.Packet.powers : List AspisR1.FIv_NativeArithmetic.NQ
+  AspisR1.NJL_CachedPowers.Packet.next : AspisR1.FIv_NativeArithmetic.NQ
+  AspisR1.NJL_CachedPowers.Packet.eight : self.powers.length = 8
+  AspisR1.NJL_CachedPowers.Packet.power_call : AspisR1.NJL_WindowPowers.run lambda 8 lambda =
+      Aeneas.Std.Result.ok (self.powers, self.next)
+  AspisR1.NJL_CachedPowers.Packet.power_trace : AspisR1.NJL_WindowPowers.Trace lambda 8 lambda self.powers self.next
+  AspisR1.NJL_CachedPowers.Packet.canonical : ∀ x ∈ self.powers, AspisR1.FIv_NativeValue.Canon x
+  AspisR1.NJL_CachedPowers.Packet.values : ∀ (i : ℕ) (hi : i < self.powers.length),
+      AspisR1.FIv_NativeValue.decode self.powers[i] =
+        AspisR1.FIv_NativeValue.decode lambda * AspisR1.FIv_NativeValue.decode lambda ^ i
+  AspisR1.NJL_CachedPowers.Packet.caches : { xs // xs.length = self.powers.length }
+  AspisR1.NJL_CachedPowers.Packet.cache_call : AspisR1.NJB_Traverse.run FIq_Native.field.PreparedQm31Multiplier.new
+        self.powers =
+      Aeneas.Std.Result.ok self.caches
+  AspisR1.NJL_CachedPowers.Packet.domains : List.Forall₂
+      (fun power cache =>
+        FIq_Native.field.PreparedQm31Multiplier.new power = Aeneas.Std.Result.ok cache ∧
+          AspisR1.NJB_PreparedLaws.Domain cache power)
+      self.powers ↑self.caches
+constructor:
+  AspisR1.NJL_CachedPowers.Packet.mk {lambda : AspisR1.FIv_NativeArithmetic.NQ}
+    (powers : List AspisR1.FIv_NativeArithmetic.NQ) (next : AspisR1.FIv_NativeArithmetic.NQ) (eight : powers.length = 8)
+    (power_call : AspisR1.NJL_WindowPowers.run lambda 8 lambda = Aeneas.Std.Result.ok (powers, next))
+    (power_trace : AspisR1.NJL_WindowPowers.Trace lambda 8 lambda powers next)
+    (canonical : ∀ x ∈ powers, AspisR1.FIv_NativeValue.Canon x)
+    (values :
+      ∀ (i : ℕ) (hi : i < powers.length),
+        AspisR1.FIv_NativeValue.decode powers[i] =
+          AspisR1.FIv_NativeValue.decode lambda * AspisR1.FIv_NativeValue.decode lambda ^ i)
+    (caches : { xs // xs.length = powers.length })
+    (cache_call :
+      AspisR1.NJB_Traverse.run FIq_Native.field.PreparedQm31Multiplier.new powers = Aeneas.Std.Result.ok caches)
+    (domains :
+      List.Forall₂
+        (fun power cache =>
+          FIq_Native.field.PreparedQm31Multiplier.new power = Aeneas.Std.Result.ok cache ∧
+            AspisR1.NJB_PreparedLaws.Domain cache power)
+        powers ↑caches) :
+    AspisR1.NJL_CachedPowers.Packet lambda
+def AspisR1.NJX_PatternTail.Cut : AspisR1.NJX_PatternTail.State →
+  AspisR1.NJX_PatternTail.State → Fin 14 → AspisR1.FIv_NativeArithmetic.NQ → Prop :=
+fun s after j reply => ∀ (i : Fin 14), after i = if i = j then reply else s i
+structure AspisR1.NJX_DigestPacket.Packet (high : AspisR1.FIv_NativeArithmetic.NQ)
+  (o : AspisR1.NJX_DigestResiduals.Residuals) (d : AspisR1.NJX_DigestResiduals.Digest) : Type
+number of parameters: 3
+fields:
+  AspisR1.NJX_DigestPacket.Packet.prepared : AspisR1.FIv_PreparedNew.NP
+  AspisR1.NJX_DigestPacket.Packet.residual : AspisR1.NJX_DigestResiduals.Residuals
+  AspisR1.NJX_DigestPacket.Packet.packed : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ
+  AspisR1.NJX_DigestPacket.Packet.out : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ
+  AspisR1.NJX_DigestPacket.Packet.constructor : FIq_Native.field.PreparedQm31Multiplier.new high =
+      Aeneas.Std.Result.ok self.prepared
+  AspisR1.NJX_DigestPacket.Packet.domain : AspisR1.NJB_PreparedLaws.Domain self.prepared high
+  AspisR1.NJX_DigestPacket.Packet.cells : ∀ (i : Fin 8), AspisR1.NJX_DigestResiduals.Cell o d i (self.residual i)
+  AspisR1.NJX_DigestPacket.Packet.residual_canonical : ∀ (i : Fin 8), AspisR1.FIv_NativeValue.Canon (self.residual i)
+  AspisR1.NJX_DigestPacket.Packet.residual_value : ∀ (i : Fin 8),
+      AspisR1.FIv_NativeValue.decode (self.residual i) = AspisR1.FIv_NativeValue.decode (o i) - ↑↑(d i)
+  AspisR1.NJX_DigestPacket.Packet.prefix_call : AspisR1.NJB_Traverse.run (AspisR1.NJX_DigestResiduals.reference o d)
+        (List.finRange 8) =
+      Aeneas.Std.Result.ok ⟨List.ofFn self.residual, ⋯⟩
+  AspisR1.NJX_DigestPacket.Packet.packs : ∀ (g : Fin 2),
+      AspisR1.NJB_PackLaw.reference (AspisR1.NJX_DigestGroups.group self.residual g) =
+        Aeneas.Std.Result.ok (self.packed g)
+  AspisR1.NJX_DigestPacket.Packet.products : ∀ (g : Fin 2),
+      FIq_Native.field.PreparedQm31Multiplier.mul self.prepared (self.packed g) = Aeneas.Std.Result.ok (self.out g)
+  AspisR1.NJX_DigestPacket.Packet.out_canonical : ∀ (g : Fin 2), AspisR1.FIv_NativeValue.Canon (self.out g)
+  AspisR1.NJX_DigestPacket.Packet.out_value : ∀ (g : Fin 2),
+      AspisR1.FIv_NativeValue.decode (self.out g) =
+        AspisR1.FIv_NativeValue.decode high *
+          AspisR1.NJB_PackLinearity.pack fun j =>
+            AspisR1.FIv_NativeValue.decode (o (AspisR1.NJX_DigestGroups.index g j)) -
+              ↑↑(d (AspisR1.NJX_DigestGroups.index g j))
+constructor:
+  AspisR1.NJX_DigestPacket.Packet.mk {high : AspisR1.FIv_NativeArithmetic.NQ}
+    {o : AspisR1.NJX_DigestResiduals.Residuals} {d : AspisR1.NJX_DigestResiduals.Digest}
+    (prepared : AspisR1.FIv_PreparedNew.NP) (residual : AspisR1.NJX_DigestResiduals.Residuals)
+    (packed out : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ)
+    (constructor : FIq_Native.field.PreparedQm31Multiplier.new high = Aeneas.Std.Result.ok prepared)
+    (domain : AspisR1.NJB_PreparedLaws.Domain prepared high)
+    (cells : ∀ (i : Fin 8), AspisR1.NJX_DigestResiduals.Cell o d i (residual i))
+    (residual_canonical : ∀ (i : Fin 8), AspisR1.FIv_NativeValue.Canon (residual i))
+    (residual_value :
+      ∀ (i : Fin 8), AspisR1.FIv_NativeValue.decode (residual i) = AspisR1.FIv_NativeValue.decode (o i) - ↑↑(d i))
+    (prefix_call :
+      AspisR1.NJB_Traverse.run (AspisR1.NJX_DigestResiduals.reference o d) (List.finRange 8) =
+        Aeneas.Std.Result.ok ⟨List.ofFn residual, ⋯⟩)
+    (packs :
+      ∀ (g : Fin 2),
+        AspisR1.NJB_PackLaw.reference (AspisR1.NJX_DigestGroups.group residual g) = Aeneas.Std.Result.ok (packed g))
+    (products :
+      ∀ (g : Fin 2), FIq_Native.field.PreparedQm31Multiplier.mul prepared (packed g) = Aeneas.Std.Result.ok (out g))
+    (out_canonical : ∀ (g : Fin 2), AspisR1.FIv_NativeValue.Canon (out g))
+    (out_value :
+      ∀ (g : Fin 2),
+        AspisR1.FIv_NativeValue.decode (out g) =
+          AspisR1.FIv_NativeValue.decode high *
+            AspisR1.NJB_PackLinearity.pack fun j =>
+              AspisR1.FIv_NativeValue.decode (o (AspisR1.NJX_DigestGroups.index g j)) -
+                ↑↑(d (AspisR1.NJX_DigestGroups.index g j))) :
+    AspisR1.NJX_DigestPacket.Packet high o d
+def AspisR1.NJX_DigestCut.Cut : AspisR1.FIv_NativeArithmetic.NQ →
+  AspisR1.NJX_DigestResiduals.Residuals →
+    AspisR1.NJX_DigestResiduals.Digest →
+      AspisR1.FIv_PreparedNew.NP →
+        AspisR1.NJX_DigestResiduals.Residuals →
+          AspisR1.NJX_DigestResiduals.Residuals →
+            (Fin 2 → AspisR1.FIv_NativeArithmetic.NQ) →
+              (Fin 2 → AspisR1.FIv_NativeArithmetic.NQ) →
+                (Fin 2 → AspisR1.FIv_NativeArithmetic.NQ) → AspisR1.NJX_DigestCut.Log → ℕ → Prop :=
+fun high o d p lifted residual packed reply out l calls =>
+  calls = 21 ∧
+    l.kind 0 = 3 ∧
+      l.left 0 = high ∧
+        (∀ (i : Fin 8),
+            l.kind (1 + 2 * ↑i) = 5 ∧
+              l.left (1 + 2 * ↑i) = AspisR1.FIw_ScalarArithmetic.lifted (d i) ∧
+                l.kind (2 + 2 * ↑i) = 2 ∧ l.left (2 + 2 * ↑i) = o i ∧ l.right (2 + 2 * ↑i) = lifted i) ∧
+          ∀ (g : Fin 2),
+            l.kind (17 + 2 * ↑g) = 6 ∧
+              l.packs (17 + 2 * ↑g) = AspisR1.NJX_DigestGroups.group residual g ∧
+                l.kind (18 + 2 * ↑g) = 4 ∧
+                  l.caches (18 + 2 * ↑g) = AspisR1.NJB_PreparedCarrier.words p ∧
+                    l.right (18 + 2 * ↑g) = packed g ∧ out g = reply g
+def AspisR1.NJX_RecipientRoot.Cut : Option AspisR1.NJX_DigestCohort.D →
+  AspisR1.NJX_DigestCohort.O →
+    AspisR1.FIv_NativeArithmetic.NQ →
+      ℕ →
+        ℕ →
+          AspisR1.FIv_NativeArithmetic.NQ →
+            AspisR1.NJX_DigestCohort.O →
+              Option AspisR1.NJX_DigestCohort.D →
+                Option AspisR1.FIv_PreparedNew.NP →
+                  (Fin 2 → Option AspisR1.FIv_PreparedNew.NP) →
+                    (Fin 2 → AspisR1.FIv_NativeArithmetic.NQ) → (Fin 2 → AspisR1.FIv_NativeArithmetic.NQ) → Prop :=
+fun recipient o high news groups seenHigh seenO seenD cache seenCache child out =>
+  match recipient with
+  | none => news = 0 ∧ groups = 0 ∧ out = AspisR1.NJX_RecipientRoot.zero
+  | some d =>
+    news = 1 ∧
+      groups = 2 ∧
+        seenHigh = high ∧
+          seenO = o ∧ seenD = some d ∧ out = child ∧ ∃ p, cache = some p ∧ ∀ (g : Fin 2), seenCache g = some p
+AspisR1.NJX_PatternRoot.source (lambda : AspisR1.FIv_NativeArithmetic.NQ)
+  (o : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize) (hl : AspisR1.FIv_NativeValue.Canon lambda)
+  (ho : AspisR1.FIw_ArrayValue.canonical o) :
+  ∃ p w out,
+    AspisR1.NJL_WindowPowerFrame.run lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda =
+        Aeneas.Std.Result.ok (AspisR1.NJL_CacheReads.power p, p.next) ∧
+      AspisR1.NJL_WindowPowerFrame.Trace lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda
+          (AspisR1.NJL_CacheReads.power p) p.next ∧
+        (∀ (j : Fin 4),
+            AspisR1.NJL_WindowFold.run (AspisR1.NJL_CacheReads.cache p) o (AspisR1.NJX_PatternPacket.starts j)
+                  (List.finRange 8) FIq_Native.field.QM31.ZERO =
+                Aeneas.Std.Result.ok (w j) ∧
+              AspisR1.NJL_WindowFold.Trace (AspisR1.NJL_CacheReads.cache p) o (AspisR1.NJX_PatternPacket.starts j)
+                (List.finRange 8) FIq_Native.field.QM31.ZERO (w j)) ∧
+          (AspisR1.NJX_PatternTail.run p (AspisR1.NJX_PatternPacket.atoms o w) (List.finRange 14) fun x =>
+                FIq_Native.field.QM31.ZERO) =
+              Aeneas.Std.Result.ok (AspisR1.NJX_PatternRoot.cells out) ∧
+            AspisR1.NJX_PatternTail.Trace p (AspisR1.NJX_PatternPacket.atoms o w) (List.finRange 14)
+                (fun x => FIq_Native.field.QM31.ZERO) (AspisR1.NJX_PatternRoot.cells out) ∧
+              AspisR1.FIw_ArrayValue.canonical out ∧
+                FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = Aeneas.Std.Result.ok out
+AspisR1.NJX_PatternForward.source (lambda : AspisR1.FIv_NativeArithmetic.NQ)
+  (o : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 16#usize) (hl : AspisR1.FIv_NativeValue.Canon lambda)
+  (ho : AspisR1.FIw_ArrayValue.canonical o) :
+  ∃ p w out,
+    AspisR1.NJL_WindowPowerFrame.run lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda =
+        Aeneas.Std.Result.ok (AspisR1.NJL_CacheReads.power p, p.next) ∧
+      AspisR1.NJL_WindowPowerFrame.Trace lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda
+          (AspisR1.NJL_CacheReads.power p) p.next ∧
+        (∀ (j : Fin 4),
+            AspisR1.NJL_WindowFold.run (AspisR1.NJL_CacheReads.cache p) o (AspisR1.NJX_PatternPacket.starts j)
+                  (List.finRange 8) FIq_Native.field.QM31.ZERO =
+                Aeneas.Std.Result.ok (w j) ∧
+              AspisR1.NJL_WindowFold.Trace (AspisR1.NJL_CacheReads.cache p) o (AspisR1.NJX_PatternPacket.starts j)
+                (List.finRange 8) FIq_Native.field.QM31.ZERO (w j)) ∧
+          (AspisR1.NJX_PatternTail.run p (AspisR1.NJX_PatternPacket.atoms o w) (List.finRange 14) fun x =>
+                FIq_Native.field.QM31.ZERO) =
+              Aeneas.Std.Result.ok (AspisR1.NJX_PatternRoot.cells out) ∧
+            AspisR1.NJX_PatternTail.Trace p (AspisR1.NJX_PatternPacket.atoms o w) (List.finRange 14)
+                (fun x => FIq_Native.field.QM31.ZERO) (AspisR1.NJX_PatternRoot.cells out) ∧
+              AspisR1.FIw_ArrayValue.canonical out ∧
+                FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = Aeneas.Std.Result.ok out ∧
+                  AspisR1.NJX_PatternForward.Cut o o lambda lambda out out 1
+AspisR1.NJX_LeftCutRoot.source (high : AspisR1.FIv_NativeArithmetic.NQ) (o : AspisR1.NJX_DigestCohort.O)
+  (d : AspisR1.NJX_DigestCohort.D) (hh : AspisR1.FIv_NativeValue.Canon high) (ho : AspisR1.FIw_ArrayValue.canonical o)
+  (hd : AspisR1.NJX_DigestCohort.dc d) :
+  ∃ p,
+    AspisR1.NJX_DigestPacket.reference high (AspisR1.NJX_DigestCohort.ocells o) (AspisR1.NJX_DigestCohort.dcells d) =
+        Aeneas.Std.Result.ok p.out ∧
+      AspisR1.NJX_LeftRoot.cohort high o d = Aeneas.Std.Result.ok p.out ∧
+        AspisR1.NJX_DigestCut.Cut high (AspisR1.NJX_DigestCohort.ocells o) (AspisR1.NJX_DigestCohort.dcells d)
+          p.prepared (fun i => AspisR1.FIw_ScalarArithmetic.lifted (AspisR1.NJX_DigestCohort.dcells d i)) p.residual
+          p.packed p.out p.out (AspisR1.NJX_DigestCut.log p) 21
+AspisR1.NJX_CarryRoot.source (carry : ℕ) (high : AspisR1.FIv_NativeArithmetic.NQ) (o : AspisR1.NJX_DigestCohort.O)
+  (d : AspisR1.NJX_DigestCohort.D) (hh : AspisR1.FIv_NativeValue.Canon high) (ho : AspisR1.FIw_ArrayValue.canonical o)
+  (hd : AspisR1.NJX_DigestCohort.dc d) :
+  ∃ out,
+    AspisR1.NJX_CarryRoot.reference carry high o d = Aeneas.Std.Result.ok out ∧
+      AspisR1.NJX_CarryRoot.cohort carry high o d = Aeneas.Std.Result.ok out ∧
+        (∀ (g : Fin 2), AspisR1.FIv_NativeValue.Canon (out g)) ∧
+          if carry < 20 then
+            ∃ p,
+              out = p.out ∧
+                AspisR1.NJX_DigestCut.Cut high (AspisR1.NJX_DigestCohort.ocells o) (AspisR1.NJX_DigestCohort.dcells d)
+                  p.prepared (fun i => AspisR1.FIw_ScalarArithmetic.lifted (AspisR1.NJX_DigestCohort.dcells d i))
+                  p.residual p.packed p.out out (AspisR1.NJX_DigestCut.log p) 21
+          else out = AspisR1.NJX_CarryRoot.zero
+AspisR1.NJX_RecipientRoot.source (recipient : Option AspisR1.NJX_DigestCohort.D) (o : AspisR1.NJX_DigestCohort.O)
+  (high : AspisR1.FIv_NativeArithmetic.NQ) (hh : AspisR1.FIv_NativeValue.Canon high)
+  (ho : AspisR1.FIw_ArrayValue.canonical o)
+  (hd : ∀ (d : AspisR1.NJX_DigestCohort.D), recipient = some d → AspisR1.NJX_DigestCohort.dc d) :
+  ∃ out cache,
+    AspisR1.NJX_RecipientRoot.reference recipient o high = Aeneas.Std.Result.ok out ∧
+      AspisR1.NJX_RecipientRoot.cohort recipient o high = Aeneas.Std.Result.ok out ∧
+        (∀ (g : Fin 2), AspisR1.FIv_NativeValue.Canon (out g)) ∧
+          AspisR1.NJX_RecipientRoot.Cut recipient o high (if recipient.isSome = true then 1 else 0)
+              (if recipient.isSome = true then 2 else 0) high o recipient cache (fun x => cache) out out ∧
+            ∀ (d : AspisR1.NJX_DigestCohort.D),
+              recipient = some d →
+                ∃ p,
+                  out = p.out ∧
+                    FIq_Native.field.PreparedQm31Multiplier.new high = Aeneas.Std.Result.ok p.prepared ∧
+                      ∀ (g : Fin 2),
+                        AspisR1.NJX_RecipientBody.group p.prepared (AspisR1.NJX_DigestCohort.ocells o)
+                            (AspisR1.NJX_DigestCohort.dcells d) g =
+                          Aeneas.Std.Result.ok (out g)
+'AspisR1.NJX_PatternRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_PatternForward.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_LeftCutRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_CarryRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_RecipientRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

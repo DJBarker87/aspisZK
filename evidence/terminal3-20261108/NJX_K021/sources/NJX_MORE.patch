@@ -1,0 +1,33 @@
+--- a/crates/aspis-statement/src/pool_v1/NJX_digest_native.rs
++++ b/crates/aspis-statement/src/pool_v1/NJX_digest_native.rs
+@@ -41,3 +41,30 @@
+ #[kani::proof] #[kani::unwind(24)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ fn NJX_carry_global_cut(){NJX_check(Some(kani::any()))}
++
++struct NJX_PLog{seek:usize,calls:usize,kind:u8,left:QM31,right:QM31,reply:[QM31;12],variant_reply:[QM31;4],variant_seen:CompiledVariant,variant_args:[QM31;3],selector:usize,ranges:[usize;4],new_calls:usize,caches:[PreparedQm31Multiplier;2]}
++fn NJX_p_op(k:u8,a:QM31,b:QM31,l:&mut NJX_PLog)->QM31{let i=l.calls;if i==l.seek{l.kind=k;l.left=a;l.right=b;}l.calls+=1;l.reply[i]}
++fn NJX_p_sum(s:&Selectors,r:&[core::ops::Range<usize>],l:&mut NJX_PLog)->QM31{l.selector=s as*const Selectors as usize;l.ranges=[r[0].start,r[0].end,r[1].start,r[1].end];NJX_p_op(7,QM31::ZERO,QM31::ZERO,l)}
++fn NJX_p_variant(v:CompiledVariant,a:QM31,b:QM31,c:QM31,l:&mut NJX_PLog)->(QM31,QM31,QM31,QM31){l.variant_seen=v;l.variant_args=[a,b,c];NJX_p_op(8,a,b,l);let r=l.variant_reply;(r[0],r[1],r[2],r[3])}
++fn NJX_p_new(x:QM31,l:&mut NJX_PLog)->PreparedQm31Multiplier{NJX_p_op(3,x,QM31::ZERO,l);let i=l.new_calls;l.new_calls+=1;l.caches[i]}
++fn NJX_initial_prologue(v:CompiledVariant,s:&Selectors,l:&mut NJX_PLog)->(QM31,QM31,QM31,QM31,QM31,QM31,PreparedQm31Multiplier,PreparedQm31Multiplier){
++ let nodes=NJX_p_sum(s,&[4..25,33..57],l);
++ let first_common=NJX_p_op(1,NJX_p_op(1,NJX_p_op(1,s.high[0],s.high[1],l),s.high[25],l),s.high[30],l);
++ let(transfer_first,fixed,private_chunk_eight,private_chunk_two)=NJX_p_variant(v,s.high[27],s.high[28],s.high[29],l);
++ let full_initial_selector=NJX_p_op(0,s.low[0],NJX_p_op(1,NJX_p_op(1,first_common,transfer_first,l),fixed,l),l);
++ let rate_initial_selector=NJX_p_op(0,s.low[0],nodes,l);
++ let full=NJX_p_new(full_initial_selector,l);
++ let full_or_rate=NJX_p_new(NJX_p_op(1,full_initial_selector,rate_initial_selector,l),l);
++ (nodes,transfer_first,fixed,private_chunk_eight,private_chunk_two,full_initial_selector,full,full_or_rate)
++}
++#[kani::proof] #[kani::unwind(67)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NJX_initial_prologue_cut(){
++ let high:[QM31;64]=unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())};let low:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let s=Selectors{high,low};let v=if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal};let reply:[QM31;12]=unsafe{core::mem::transmute::<[[u32;4];12],[QM31;12]>(kani::any())};let variant_reply:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let cw:[[[u32;3];3];2]=kani::any();let caches=unsafe{core::mem::transmute::<[[[u32;3];3];2],[PreparedQm31Multiplier;2]>(cw)};
++ let seek:usize=kani::any();let limb:usize=kani::any();let i:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();kani::assume(seek<12&&limb<4&&i<3&&row<3&&col<3);
++ let mut l=NJX_PLog{seek,calls:0,kind:255,left:QM31::ZERO,right:QM31::ZERO,reply,variant_reply,variant_seen:CompiledVariant::Withdrawal,variant_args:[QM31::ZERO;3],selector:0,ranges:[0;4],new_calls:0,caches};
++ let out=NJX_initial_prologue(v,&s,&mut l);
++ assert_eq!(l.calls,12);assert_eq!(l.new_calls,2);assert_eq!(l.selector,&s as*const Selectors as usize);assert_eq!(l.ranges,[4,25,33,57]);assert!(matches!((l.variant_seen,v),(CompiledVariant::PrivateTransfer,CompiledVariant::PrivateTransfer)|(CompiledVariant::Withdrawal,CompiledVariant::Withdrawal)));assert_eq!(NJX_words(l.variant_args[i])[limb],NJX_words(s.high[27+i])[limb]);
++ let kinds=[7,1,1,1,8,1,1,0,0,3,1,3];let left=[QM31::ZERO,s.high[0],reply[1],reply[2],s.high[27],reply[3],reply[5],s.low[0],s.low[0],reply[7],reply[7],reply[10]];let right=[QM31::ZERO,s.high[1],s.high[25],s.high[30],s.high[28],variant_reply[0],variant_reply[1],reply[6],reply[0],QM31::ZERO,reply[8],QM31::ZERO];
++ assert_eq!(l.kind,kinds[seek]);assert_eq!(NJX_words(l.left)[limb],NJX_words(left[seek])[limb]);assert_eq!(NJX_words(l.right)[limb],NJX_words(right[seek])[limb]);assert_eq!(NJX_words(out.0)[limb],NJX_words(reply[0])[limb]);assert_eq!(NJX_words(out.1)[limb],NJX_words(variant_reply[0])[limb]);assert_eq!(NJX_words(out.2)[limb],NJX_words(variant_reply[1])[limb]);assert_eq!(NJX_words(out.3)[limb],NJX_words(variant_reply[2])[limb]);assert_eq!(NJX_words(out.4)[limb],NJX_words(variant_reply[3])[limb]);assert_eq!(NJX_words(out.5)[limb],NJX_words(reply[7])[limb]^if cfg!(NJX_invert){1}else{0});assert_eq!(NJX_cache(out.6)[row][col],cw[0][row][col]);assert_eq!(NJX_cache(out.7)[row][col],cw[1][row][col]);
++}

@@ -1,0 +1,17 @@
+NJX_InitialNodes.lean:20:17: warning: Variable name `p` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+theorem AspisR1.NJX_InitialNodes.source : ∀ (s : Selectors) (v : NJX_InitialVariant.Variant),
+  FIw_ArrayValue.canonical s.high →
+    FIw_ArrayValue.canonical s.low →
+      ∃ nodes,
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.sum_high s ranges = ok nodes ∧ Canon nodes ∧ ∃ p, True :=
+fun s v hs hl =>
+  let ⟨nodes, h✝⟩ := NHG_ExtraLeaves.sum_result s ranges bounds hs
+  let ⟨cn, hn⟩ := h✝
+  let ⟨p, hp⟩ := NJX_InitialPrologue.source s v nodes hs hl hn
+  Exists.intro nodes ⟨cn, ⟨hn, Exists.intro p hp⟩⟩
+'AspisR1.NJX_InitialNodes.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_InitialNodes.source' depends on axioms: [propext, Classical.choice, Quot.sound]

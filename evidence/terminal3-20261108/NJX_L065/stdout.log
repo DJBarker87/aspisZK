@@ -1,0 +1,22 @@
+NJX_AppendTargets.lean:26:5: warning: Variable name `i` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+theorem AspisR1.NJX_AppendTargets.source : ∀ (d : Digest),
+  (∀ (i : Fin 8), ↑(d i) < 2147483647) →
+    ∃ target,
+      FIq_Native.field.M31.add (d 7) tweak = ok target ∧
+        ↑target = (↑(d 7) + 1095962629) % 2147483647 ∧ ∀ (i : Fin 8), ↑(if i = 7 then target else d i) < 2147483647 :=
+fun d hd =>
+  let ⟨target, h✝⟩ := NJB_TagReduce.add (d 7) tweak (hd 7) (of_decide_eq_true (id (Eq.refl true)))
+  let ⟨ct, right✝⟩ := h✝
+  let ⟨vt, ht⟩ := right✝
+  Exists.intro target
+    ⟨ct,
+      ⟨vt, fun i =>
+        Decidable.casesOn (instDecidableEqFin 8 i 7)
+          (fun h => Eq.mpr (id (congrFun' (congrArg LT.lt (congrArg UScalar.val (if_neg h))) 2147483647)) (hd i))
+          fun h => Eq.mpr (id (congrFun' (congrArg LT.lt (congrArg UScalar.val (if_pos h))) 2147483647)) ht⟩⟩
+'AspisR1.NJX_AppendTargets.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_AppendTargets.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]

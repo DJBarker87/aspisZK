@@ -1,0 +1,32 @@
+theorem AspisR1.NJX_RangeFrame.source : ∀ (o : NJX_RangeInvocation.Openings),
+  FIw_ArrayValue.canonical o.z →
+    FIw_ArrayValue.canonical o.succ_z →
+      FIw_ArrayValue.canonical o.xor12_z →
+        ∃ a b c,
+          NJX_RangeFold.Trace 0 (NJX_RangeInvocation.xs o 0) (List.finRange 10) NJX_RangeInvocation.zero a ∧
+            NJX_RangeFold.Trace 1 (NJX_RangeInvocation.xs o 1) (List.finRange 10) a b ∧
+              NJX_RangeFold.Trace 2 (NJX_RangeInvocation.xs o 2) (List.finRange 10) b c ∧
+                (∀ (j : Fin 33), Canon (c j)) ∧ ∀ (j : Fin 33), 30 ≤ ↑j → c j = FIq_Native.field.QM31.ZERO :=
+fun o hz hs hx =>
+  let ⟨a, h✝⟩ := NJX_RangeInvocation.source o hz hs hx
+  let ⟨b, h✝¹⟩ := h✝
+  let ⟨c, h✝²⟩ := h✝¹
+  let ⟨left✝, right✝⟩ := h✝²
+  let ⟨ta, right✝¹⟩ := right✝
+  let ⟨left✝¹, right✝²⟩ := right✝¹
+  let ⟨tb, right✝³⟩ := right✝²
+  let ⟨left✝², right✝⁴⟩ := right✝³
+  let ⟨tc, hc⟩ := right✝⁴
+  Exists.intro a
+    (Exists.intro b
+      (Exists.intro c
+        ⟨ta,
+          ⟨tb,
+            ⟨tc,
+              ⟨hc, fun j hj =>
+                Eq.mpr (id (congrArg (fun _a => _a = FIq_Native.field.QM31.ZERO) (frame tc j hj)))
+                  (Eq.mpr (id (congrArg (fun _a => _a = FIq_Native.field.QM31.ZERO) (frame tb j hj)))
+                    (Eq.mpr (id (congrArg (fun _a => _a = FIq_Native.field.QM31.ZERO) (frame ta j hj)))
+                      (Eq.refl (NJX_RangeInvocation.zero j))))⟩⟩⟩⟩))
+'AspisR1.NJX_RangeFrame.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_RangeFrame.source' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,48 @@
+{"attempt": "NJX_L056", "exit_status": 0, "wall_seconds": 9.625524178845808, "peak_rss_kib": "6177052", "swaps": "0", "print_axioms": ["'AspisR1.NJX_InitialVariant.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_InitialVariant.source : ∀ (v : Variant) (a b c : NQ),
+  Canon a →
+    Canon b →
+      Canon c →
+        ∃ t f eight two,
+          FIq_Native.pool_v1.pair_forest_semantic_terminal.initial_variant_selectors v a b c = ok (t, f, eight, two) ∧
+            Canon t ∧ Canon f ∧ Canon eight ∧ Canon two :=
+fun v a b c ha hb hc =>
+  let ⟨ab, h✝⟩ := NJB_StubLaws.qm_add a b ha hb
+  let ⟨cab, right✝⟩ := h✝
+  let ⟨hab, right✝¹⟩ := right✝
+  Eq.mpr
+    (id
+      (congrArg (fun _a => ∃ t f eight two, _a = ok (t, f, eight, two) ∧ Canon t ∧ Canon f ∧ Canon eight ∧ Canon two)
+        (NHG_ExtraLeaves.initial_source v a b c)))
+    (FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVari
+...
+grFun' (congrArg Bind.bind cab) fun ab => do
+                                  let abc ← ab.add c
+                                  ok
+                                      (FIq_Native.field.QM31.ZERO, abc, FIq_Native.field.QM31.ZERO,
+                                        FIq_Native.field.QM31.ZERO))
+                                (bind_tc_ok ab fun y => do
+                                  let abc ← y.add c
+                                  ok
+                                      (FIq_Native.field.QM31.ZERO, abc, FIq_Native.field.QM31.ZERO,
+                                        FIq_Native.field.QM31.ZERO)))
+                              (Eq.trans
+                                (congrFun' (congrArg Bind.bind cabc) fun abc =>
+                                  ok
+                                    (FIq_Native.field.QM31.ZERO, abc, FIq_Native.field.QM31.ZERO,
+                                      FIq_Native.field.QM31.ZERO))
+                                (bind_tc_ok abc fun y =>
+                                  ok
+                                    (FIq_Native.field.QM31.ZERO, y, FIq_Native.field.QM31.ZERO,
+                                      FIq_Native.field.QM31.ZERO)))))
+                          (ok
+                            (FIq_Native.field.QM31.ZERO, abc, FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO)))
+                        (eq_self
+                          (ok
+                            (FIq_Native.field.QM31.ZERO, abc, FIq_Native.field.QM31.ZERO,
+                              FIq_Native.field.QM31.ZERO)))),
+                    ⟨FIv_NativeValue.zero.left, ⟨habc, ⟨FIv_NativeValue.zero.left, FIv_NativeValue.zero.left⟩⟩⟩⟩))))
+      (Eq.refl v))
+'AspisR1.NJX_InitialVariant.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6547538f2442487c9bf46aee0e1f2614.scope; invocation ID: 1759f22eb94f4148b5444a1062f86500

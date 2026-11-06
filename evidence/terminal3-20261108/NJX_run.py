@@ -69,6 +69,17 @@ for entry in manifest2['files']:
 (b/'NJX_NJO_SEED.json').write_text(json.dumps(dict(files=records2,total_bytes=sum(z['bytes'] for z in records2))))
 
 
+if (b/'NJX_COHORT_FIX.json').exists():
+ priority=b/'NJX_priority';priority.mkdir(exist_ok=True)
+ for entry in json.loads((b/'NJX_COHORT_FIX.json').read_text())['files']:
+  src=Path(entry['path']);assert hashlib.sha256(src.read_bytes()).hexdigest()==entry['sha256'],str(src)
+  for q in [src,Path(str(src)+'.private'),Path(str(src)+'.server'),src.with_suffix('.ir')]:
+   if q.is_file():
+    dst=priority/q.name
+    if not dst.exists():shutil.copyfile(q,dst)
+    assert hashlib.sha256(dst.read_bytes()).hexdigest()==hashlib.sha256(q.read_bytes()).hexdigest(),str(dst)
+
+
 
 p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x.get('env',{{}}).get('LEAN_PATH','').split(':');rels=set();pins={{}}
 if x['kind'] in ['lean','audit']:
@@ -80,12 +91,15 @@ if x['kind'] in ['lean','audit']:
  if x['kind']=='lean':
   for n in re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):rels.add(n.replace('.','/')+'.olean')
  else:
-  modules=list(json.loads((b/'NJX_GATE_SOURCES.json').read_text())['passed'])+['NJX_COMBINED_IMPORT','NIU_COMBINED_IMPORT','NGK_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit']
+  modules=list(json.loads((b/'NJX_GATE_SOURCES.json').read_text())['passed'])+['NJX_COMBINED_IMPORT','NJO_COMBINED_IMPORT','NJL_COMBINED_IMPORT','NIU_COMBINED_IMPORT','NGK_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit']
   for n in modules:rels.add(n.replace('.','/')+'.olean')
  for rel in sorted(rels):
   q=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert q is not None,rel
   for z in [q,Path(str(q)+'.private'),Path(str(q)+'.server'),q.with_suffix('.ir')]:
    if z.is_file():pins[str(z)]={{'path':str(z),'sha256':hashlib.sha256(z.read_bytes()).hexdigest()}}
+if (b/'NJX_priority').exists():
+ for q in (b/'NJX_priority').iterdir():
+  if q.is_file():pins[str(q)]={{'path':str(q),'sha256':hashlib.sha256(q.read_bytes()).hexdigest()}}
 x['deps_fingerprint']={{'selected_objects':pins}};p.write_text(json.dumps(x))
 ''');assert r.returncode==0,r.stderr
 r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)

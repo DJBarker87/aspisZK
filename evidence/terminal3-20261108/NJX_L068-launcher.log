@@ -1,0 +1,39 @@
+{"attempt": "NJX_L068", "exit_status": 0, "wall_seconds": 11.715296201175079, "peak_rss_kib": "6149136", "swaps": "0", "print_axioms": ["'AspisR1.NJX_PatternRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_PatternForward.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_LeftCutRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_CarryRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_RecipientRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+structure AspisR1.NJL_CachedPowers.Packet (lambda : AspisR1.FIv_NativeArithmetic.NQ) : Type
+number of parameters: 1
+fields:
+  AspisR1.NJL_CachedPowers.Packet.powers : List AspisR1.FIv_NativeArithmetic.NQ
+  AspisR1.NJL_CachedPowers.Packet.next : AspisR1.FIv_NativeArithmetic.NQ
+  AspisR1.NJL_CachedPowers.Packet.eight : self.powers.length = 8
+  AspisR1.NJL_CachedPowers.Packet.power_call : AspisR1.NJL_WindowPowers.run lambda 8 lambda =
+      Aeneas.Std.Result.ok (self.powers, self.next)
+  AspisR1.NJL_CachedPowers.Packet.power_trace : AspisR1.NJL_WindowPowers.Trace lambda 8 lambda self.powers self.next
+  AspisR1.NJL_CachedPowers.Packet.canonical : ∀ x ∈ self.powers, AspisR1.FIv_NativeValue.Canon 
+...
+ out = AspisR1.NJX_CarryRoot.zero
+AspisR1.NJX_RecipientRoot.source (recipient : Option AspisR1.NJX_DigestCohort.D) (o : AspisR1.NJX_DigestCohort.O)
+  (high : AspisR1.FIv_NativeArithmetic.NQ) (hh : AspisR1.FIv_NativeValue.Canon high)
+  (ho : AspisR1.FIw_ArrayValue.canonical o)
+  (hd : ∀ (d : AspisR1.NJX_DigestCohort.D), recipient = some d → AspisR1.NJX_DigestCohort.dc d) :
+  ∃ out cache,
+    AspisR1.NJX_RecipientRoot.reference recipient o high = Aeneas.Std.Result.ok out ∧
+      AspisR1.NJX_RecipientRoot.cohort recipient o high = Aeneas.Std.Result.ok out ∧
+        (∀ (g : Fin 2), AspisR1.FIv_NativeValue.Canon (out g)) ∧
+          AspisR1.NJX_RecipientRoot.Cut recipient o high (if recipient.isSome = true then 1 else 0)
+              (if recipient.isSome = true then 2 else 0) high o recipient cache (fun x => cache) out out ∧
+            ∀ (d : AspisR1.NJX_DigestCohort.D),
+              recipient = some d →
+                ∃ p,
+                  out = p.out ∧
+                    FIq_Native.field.PreparedQm31Multiplier.new high = Aeneas.Std.Result.ok p.prepared ∧
+                      ∀ (g : Fin 2),
+                        AspisR1.NJX_RecipientBody.group p.prepared (AspisR1.NJX_DigestCohort.ocells o)
+                            (AspisR1.NJX_DigestCohort.dcells d) g =
+                          Aeneas.Std.Result.ok (out g)
+'AspisR1.NJX_PatternRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_PatternForward.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_LeftCutRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_CarryRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_RecipientRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r818e0e354bf148fc9603e3f2e61919d7.scope; invocation ID: 96e0f82797c3472e8d1f3e1d2a5b6376

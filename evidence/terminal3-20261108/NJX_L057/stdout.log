@@ -1,0 +1,21 @@
+theorem AspisR1.NJX_AppendDomains.source : ∀ (f : Frontier) (s : High),
+  FIw_ArrayValue.canonical s →
+    (∀ d ∈ ↑f, ∀ x ∈ ↑d, ↑x < 2147483647) →
+      ∀ (i : Fin 20),
+        Canon (high s i) ∧
+          ↑(level i) < 20 ∧
+            (∀ x ∈ ↑(frontier f i), ↑x < 2147483647) ∧
+              ∃ empty,
+                FIq_Native.pool_v1.pair_forest_semantic_terminal.empty_root (level i) = ok empty ∧
+                  ∀ x ∈ ↑empty, ↑x < 2147483647 :=
+fun f s hs hf i =>
+  ⟨NJB_ArrayCarrier.canonical_cell s hs ⟨34 + ↑i, high._proof_2 i⟩,
+    ⟨Eq.mpr (id (congrArg (fun _a => _a < 20) (level_value i))) i.isLt,
+      ⟨hf (frontier f i) (List.getElem_mem (NJB_ArrayCarrier.cell._proof_1 f ⟨↑i, frontier._proof_2 i⟩)),
+        WP.spec_imp_exists
+          (JGa_EmptyRoot.source (level i)
+            (Eq.mpr (id (congrArg (fun _a => _a < 21) (level_value i)))
+              (have h := i.isLt;
+              Decidable.byContradiction fun a => source._proof_1 i h a)))⟩⟩⟩
+'AspisR1.NJX_AppendDomains.level_value' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJX_AppendDomains.source' depends on axioms: [propext, Classical.choice, Quot.sound]
