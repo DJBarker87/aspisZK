@@ -1,0 +1,28 @@
+{"attempt": "NLJ_L082", "exit_status": 0, "wall_seconds": 29.825264352140948, "peak_rss_kib": "6351784", "swaps": "0", "print_axioms": ["'AspisR1.NLJ_Control137.source_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLJ_Control137.observed_fold' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLJ_Control137.source_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLJ_Control137.observed_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_Control137.observed_fold : ∀ (native136 : NLC_Finish.Input Unit → NLI_Interface.Observation Unit),
+  NLI_Interface.RowSpec_136 native136 →
+    ∀ (i : Input Unit) (out : Result (Out Unit)) (log : Log) (events : List Event) (last : Input Unit),
+      Invocation native136 6 (initial i) out log events last →
+        PreparedHashCode.run
+              (S1SemanticCode.verify
+                (fun {H} => S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries i.reservation)) i.diges
+...
+'AspisR1.NLJ_Control137.source_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLJ_Control137.observed_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_Control137.observed_fold : ∀ (native136 : NLC_Finish.Input Unit → NLI_Interface.Observation Unit),
+  NLI_Interface.RowSpec_136 native136 →
+    ∀ (i : Input Unit) (out : Result (Out Unit)) (log : Log) (events : List Event) (last : Input Unit),
+      Invocation native136 6 (initial i) out log events last →
+        PreparedHashCode.run
+              (S1SemanticCode.verify
+                (fun {H} => S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries i.reservation)) i.digest
+                i.publicValue i.bytes i.hash none) =
+            (log, out) ∧
+          last = i :=
+fun native136 child136 i out log events last cuts =>
+  let ⟨source, frame⟩ := source_cuts native136 child136 cuts
+  ⟨events_from_cuts i out log events source, frame⟩
+
+Running as unit: run-rf9123cc4e6774ce6ae40789b944df8eb.scope; invocation ID: 66be791cbca342b783bc419cf11ec113

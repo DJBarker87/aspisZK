@@ -1,0 +1,117 @@
+NLJ_generated/NLJ_ControlStep.lean:22:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  parse ?bytes
+in the target expression
+  (have i_1 := { input := i, locals := NLJ_Observed.Local.parse }.input;
+    match { input := i, locals := NLJ_Observed.Local.parse }.locals with
+    | NLJ_Observed.Local.parse =>
+      run
+        (have this := do
+          let r ← liftM (parse i_1.bytes)
+          match r with
+            | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+            | core.result.Result.Ok p =>
+              pure
+                (Sum.inr
+                  (NLJ_Observed.advance { input := i, locals := NLJ_Observed.Local.parse }
+                    (NLJ_Observed.Local.mark0 p)));
+        this)
+    | NLJ_Observed.Local.publicTranscript p =>
+      run
+        (have this := do
+          let r ← NHG_PublicTranscript.packetCode i_1.digest i_1.publicValue i_1.hash p.c1_root
+          match r with
+            | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+            | core.result.Result.Ok t =>
+              pure
+                (Sum.inr
+                  (NLJ_Observed.advance { input := i, locals := NLJ_Observed.Local.parse }
+                    (NLJ_Observed.Local.begin p t)));
+        this)
+    | NLJ_Observed.Local.begin p t =>
+      run
+        (have this := do
+          let __x ← NHG_BeginPackets.begin S1SemanticCode.semanticValidated i_1.digest p t
+          match __x with
+            | (r, after) =>
+              match r with
+              | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+              | core.result.Result.Ok c =>
+                pure
+                  (Sum.inr
+                    (NLJ_Observed.advance { input := i, locals := NLJ_Observed.Local.parse }
+                      (NLJ_Observed.Local.mark1 p after c)));
+        this)
+    | NLJ_Observed.Local.finish p t c =>
+      have call := NLJ_Observed.finishInput i_1 p t c;
+      ((native136 call).log, NLJ_Observed.returnedReply (native136 call).reply)
+    | NLJ_Observed.Local.mark0 prefix1 => run (NLJ_Observed.step { input := i, locals := NLJ_Observed.Local.parse })
+    | NLJ_Observed.Local.mark1 prefix1 transcript challenges =>
+      run (NLJ_Observed.step { input := i, locals := NLJ_Observed.Local.parse })) =
+    run (NLJ_Observed.step { input := i, locals := NLJ_Observed.Local.parse })
+
+case mk.parse
+native136 : NLC_Finish.Input Unit → NLI_Interface.Observation Unit
+child136 : NLI_Interface.RowSpec_136 native136
+i : NLJ_Observed.Input Unit
+⊢ (have i_1 := { input := i, locals := NLJ_Observed.Local.parse }.input;
+    match { input := i, locals := NLJ_Observed.Local.parse }.locals with
+    | NLJ_Observed.Local.parse =>
+      run
+        (have this := do
+          let r ← liftM (parse i_1.bytes)
+          match r with
+            | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+            | core.result.Result.Ok p =>
+              pure
+                (Sum.inr
+                  (NLJ_Observed.advance { input := i, locals := NLJ_Observed.Local.parse }
+                    (NLJ_Observed.Local.mark0 p)));
+        this)
+    | NLJ_Observed.Local.publicTranscript p =>
+      run
+        (have this := do
+          let r ← NHG_PublicTranscript.packetCode i_1.digest i_1.publicValue i_1.hash p.c1_root
+          match r with
+            | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+            | core.result.Result.Ok t =>
+              pure
+                (Sum.inr
+                  (NLJ_Observed.advance { input := i, locals := NLJ_Observed.Local.parse }
+                    (NLJ_Observed.Local.begin p t)));
+        this)
+    | NLJ_Observed.Local.begin p t =>
+      run
+        (have this := do
+          let __x ← NHG_BeginPackets.begin S1SemanticCode.semanticValidated i_1.digest p t
+          match __x with
+            | (r, after) =>
+              match r with
+              | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+              | core.result.Result.Ok c =>
+                pure
+                  (Sum.inr
+                    (NLJ_Observed.advance { input := i, locals := NLJ_Observed.Local.parse }
+                      (NLJ_Observed.Local.mark1 p after c)));
+        this)
+    | NLJ_Observed.Local.finish p t c =>
+      have call := NLJ_Observed.finishInput i_1 p t c;
+      ((native136 call).log, NLJ_Observed.returnedReply (native136 call).reply)
+    | NLJ_Observed.Local.mark0 prefix1 => run (NLJ_Observed.step { input := i, locals := NLJ_Observed.Local.parse })
+    | NLJ_Observed.Local.mark1 prefix1 transcript challenges =>
+      run (NLJ_Observed.step { input := i, locals := NLJ_Observed.Local.parse })) =
+    run (NLJ_Observed.step { input := i, locals := NLJ_Observed.Local.parse })
+'AspisR1.NLJ_Control137.source_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_Control137.source_step : ∀ (native136 : NLC_Finish.Input Unit → NLI_Interface.Observation Unit),
+  NLI_Interface.RowSpec_136 native136 → ∀ (s : NLJ_Observed.State Unit), step native136 s = run (NLJ_Observed.step s) :=
+fun native136 child136 s =>
+  let ⟨i, locals, h✝⟩ := s
+  Eq.symm h✝ ▸
+    NLJ_Observed.Local.casesOn (motive := fun t =>
+      locals = t →
+        step native136 { input := i, locals := locals } = run (NLJ_Observed.step { input := i, locals := locals }))
+      locals (fun h => Eq.symm h ▸ sorry)
+      (fun p h => Eq.symm h ▸ Eq.refl (step native136 { input := i, locals := NLJ_Observed.Local.mark0 p }))
+      (fun p h => Eq.symm h ▸ public_step native136 i p) (fun p t h => Eq.symm h ▸ begin_step native136 i p t)
+      (fun p t c h => Eq.symm h ▸ Eq.refl (step native136 { input := i, locals := NLJ_Observed.Local.mark1 p t c }))
+      (fun p t c h => Eq.symm h ▸ Eq.symm (NLJ_Observed.finish_packet native136 child136 i p t c).right)
+      (Eq.refl locals)

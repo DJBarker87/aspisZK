@@ -1,0 +1,12 @@
+def AspisR1.NLJ_BatchInterface.RowSpec_081 : (Input → Observation) → Prop :=
+fun native =>
+  ∀ (i : Input),
+    (native i).afterInput = i ∧
+      (native i).enteredValues = true ∧
+        ∀ (before : SdkC_Source.Log),
+          SdkC_Source.run i.hashv
+              (SdkC_BatchSource.mapCode Op5T_Install.currentError
+                (SdkC_BatchSource.code (SdkC_Source.dictionary i.hashv) () i.proof i.prepared.queries i.prepared.roots
+                  i.folded i.which))
+              before =
+            ((native i).reply, before ++ (native i).log)

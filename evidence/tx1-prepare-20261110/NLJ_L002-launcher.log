@@ -1,0 +1,40 @@
+{"attempt": "NLJ_L002", "exit_status": 1, "wall_seconds": 14.088361748028547, "peak_rss_kib": "6319380", "swaps": "0", "print_axioms": []}
+def AspisR1PublicPreparation.S1SemanticCode.verify : AspisR1PublicPreparation.S1SemanticCode.Finish →
+  {H : Type} →
+    AspisR1PublicPreparation.aspis_core.Digest32 H →
+      AspisR1PublicPreparation.pool_v1.pair_forest_semantic_terminal.r0.Public →
+        Aeneas.Std.Slice Aeneas.Std.U8 →
+          H →
+            Option (RPz7_PhaseIso.Phase → Aeneas.Std.Result Unit) →
+              AspisR1PublicPreparation.PreparedHashCode.Code
+                (Aeneas.Std.core.result.Result (AspisR1PublicPreparation.r1_semantic.Verified H)
+                  AspisR1PublicPreparation.r1_wire.Error) :=
+fun F {H} aspis_coreDigest32Inst public1 bytes hash obs => do
+  let r ← liftM (AspisR1PublicPreparation.Pre
+...
+em v hash) (same_y1 : v.y1 = y1)
+  (inactive_canonical : AspisR1.NFN_LPi_FieldValues.canonE (AspisR1.NFW_SampledDomains.toNative v.inactive))
+  (qs : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (afterQueries : AspisR1PublicPreparation.transcript.Transcript Unit)
+  (observed : AspisR1.NGP_L181.Observation AspisR1.NGQ_Effects.Reply)
+  (cuts : AspisR1.NHK_Invocation.Cuts hashv packet.opening.transcript packet.opening.row v.final_message observed)
+  (returned : observed.result = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok qs, afterQueries))
+  (rhoBlock :
+    AspisR1.NGT_NBL_BlockTrace.Block (AspisR1.NGQ_Effects.dictionary hashv) afterQueries
+      (AspisR1.NHL_OpeningPacket.nextRow packet.opening)
+      AspisR1PublicPreparation.PreparedScratchReachability.emptyPayload)
+  (rho : AspisR1PublicPreparation.aspis_core.field.QM31) (rhoReduction : AspisR1.NGT_Reduction.K rhoBlock.value rho) :
+  ∃ g out,
+    FIo_Native.weights.powers 29#usize (AspisR1.NFW_SampledDomains.toNative packet.opening.gamma) =
+        Aeneas.Std.Result.ok g ∧
+      AspisR1.NFN_LPi_FieldValues.canonE out ∧
+        AspisR1.NGN_Emitted.prepared AspisR1.NHL_PreparedScalars.actual (AspisR1.NGQ_Effects.dictionary hashv) sem v
+            hash old =
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Ok
+                (AspisR1PublicPreparation.PreparedScratchReachability.output sem v packet.opening.gamma
+                  packet.opening.kappa packet.opening.alpha rho qs (AspisR1.NFW_PowersCohort.toPublic out)
+                  { state := rhoBlock.final, hash := afterQueries.hash }),
+              AspisR1.NFW_PowersCohort.mapArray AspisR1.NFW_PowersCohort.toPublic g)
+NLJ_generated/NLJ_Inspect.lean:15:7: error(lean.unknownIdentifier): Unknown identifier `AspisR1.NKL_ScanRoot.source`
+
+Running as unit: run-re83bed510bcf4070b7dd0c804f33212d.scope; invocation ID: 0905fa07b6e740eb8a7dacc218f5e8c1

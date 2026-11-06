@@ -1,0 +1,136 @@
+'AspisR1.NLJ_Observed.exact_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_Observed.exact_source : ∀ {H : Type} (n : ℕ) (s : State H),
+  rank s ≤ n → run (fold n s) = run (denote s) :=
+fun {H} n s enough =>
+  Nat.recAux (motive := fun n => ∀ (s : State H), rank s ≤ n → run (fold n s) = run (denote s))
+    (fun s enough =>
+      have positive := rank_positive s;
+      Classical.byContradiction fun a => exact_source._proof_1 s enough positive)
+    (fun n ih s enough =>
+      Eq.mpr (id (congrArg (fun _a => run (fold (n + 1) s) = _a) (Eq.symm (run_step s))))
+        (id
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = run (PreparedHashCode.bind (step s) continuation))
+                (AuS1_Trace.run_bind (step s) fun next =>
+                  match next with
+                  | Sum.inl out => pure out
+                  | Sum.inr after => fold n after)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (AuS1_Trace.continueRun (run (step s)).1 (run (step s)).2 fun next =>
+                        match next with
+                        | Sum.inl out => pure out
+                        | Sum.inr after => fold n after) =
+                      _a)
+                  (AuS1_Trace.run_bind (step s) continuation)))
+              (let ⟨log, reply, h✝⟩ := run (step s)
+              Eq.ndrec (motive := fun x =>
+                run (step s) = x →
+                  (AuS1_Trace.continueRun x.1 x.2 fun next =>
+                      match next with
+                      | Sum.inl out => pure out
+                      | Sum.inr after => fold n after) =
+                    AuS1_Trace.continueRun x.1 x.2 continuation)
+                (fun hs =>
+                  casesOn (motive := fun t =>
+                    reply = t →
+                      (AuS1_Trace.continueRun (log, reply).1 (log, reply).2 fun next =>
+                          match next with
+                          | Sum.inl out => pure out
+                          | Sum.inr after => fold n after) =
+                        AuS1_Trace.continueRun (log, reply).1 (log, reply).2 continuation)
+                    reply
+                    (fun post h =>
+                      Eq.ndrec (motive := fun reply =>
+                        run (step s) = (log, reply) →
+                          (AuS1_Trace.continueRun (log, reply).1 (log, reply).2 fun next =>
+                              match next with
+                              | Sum.inl out => pure out
+                              | Sum.inr after => fold n after) =
+                            AuS1_Trace.continueRun (log, reply).1 (log, reply).2 continuation)
+                        (fun hs =>
+                          Sum.casesOn (motive := fun t =>
+                            post = t →
+                              (AuS1_Trace.continueRun (log, ok post).1 (log, ok post).2 fun next =>
+                                  match next with
+                                  | Sum.inl out => pure out
+                                  | Sum.inr after => fold n after) =
+                                AuS1_Trace.continueRun (log, ok post).1 (log, ok post).2 continuation)
+                            post
+                            (fun out h =>
+                              Eq.ndrec (motive := fun post =>
+                                run (step s) = (log, ok post) →
+                                  (AuS1_Trace.continueRun (log, ok post).1 (log, ok post).2 fun next =>
+                                      match next with
+                                      | Sum.inl out => pure out
+                                      | Sum.inr after => fold n after) =
+                                    AuS1_Trace.continueRun (log, ok post).1 (log, ok post).2 continuation)
+                                (fun hs =>
+                                  Eq.refl
+                                    (AuS1_Trace.continueRun (log, ok (Sum.inl out)).1 (log, ok (Sum.inl out)).2
+                                      fun next =>
+                                      match next with
+                                      | Sum.inl out => pure out
+                                      | Sum.inr after => fold n after))
+                                (Eq.symm h) hs)
+                            (fun after h =>
+                              Eq.ndrec (motive := fun post =>
+                                run (step s) = (log, ok post) →
+                                  (AuS1_Trace.continueRun (log, ok post).1 (log, ok post).2 fun next =>
+                                      match next with
+                                      | Sum.inl out => pure out
+                                      | Sum.inr after => fold n after) =
+                                    AuS1_Trace.continueRun (log, ok post).1 (log, ok post).2 continuation)
+                                (fun hs =>
+                                  have smaller := decrease s after (congrArg Prod.snd hs);
+                                  have room :=
+                                    Decidable.byContradiction fun a => exact_source._proof_2 n s enough after smaller a;
+                                  have eq := ih after room;
+                                  of_eq_true
+                                    (Eq.trans
+                                      (congrFun'
+                                        (congrArg Eq
+                                          (congr
+                                            (congrArg Prod.mk (congrArg (HAppend.hAppend log) (congrArg Prod.fst eq)))
+                                            (congrArg Prod.snd eq)))
+                                        (log ++ (run (denote after)).1, (run (denote after)).2))
+                                      (eq_self (log ++ (run (denote after)).1, (run (denote after)).2))))
+                                (Eq.symm h) hs)
+                            (Eq.refl post))
+                        (Eq.symm h) hs)
+                    (fun e h =>
+                      Eq.ndrec (motive := fun reply =>
+                        run (step s) = (log, reply) →
+                          (AuS1_Trace.continueRun (log, reply).1 (log, reply).2 fun next =>
+                              match next with
+                              | Sum.inl out => pure out
+                              | Sum.inr after => fold n after) =
+                            AuS1_Trace.continueRun (log, reply).1 (log, reply).2 continuation)
+                        (fun hs =>
+                          Eq.refl
+                            (AuS1_Trace.continueRun (log, fail e).1 (log, fail e).2 fun next =>
+                              match next with
+                              | Sum.inl out => pure out
+                              | Sum.inr after => fold n after))
+                        (Eq.symm h) hs)
+                    (fun h =>
+                      Eq.ndrec (motive := fun reply =>
+                        run (step s) = (log, reply) →
+                          (AuS1_Trace.continueRun (log, reply).1 (log, reply).2 fun next =>
+                              match next with
+                              | Sum.inl out => pure out
+                              | Sum.inr after => fold n after) =
+                            AuS1_Trace.continueRun (log, reply).1 (log, reply).2 continuation)
+                        (fun hs =>
+                          Eq.refl
+                            (AuS1_Trace.continueRun (log, div).1 (log, div).2 fun next =>
+                              match next with
+                              | Sum.inl out => pure out
+                              | Sum.inr after => fold n after))
+                        (Eq.symm h) hs)
+                    (Eq.refl reply))
+                (Eq.symm h✝) (Eq.refl (run (step s))))))))
+    n s enough

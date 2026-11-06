@@ -1,0 +1,43 @@
+'AspisR1.NLJ_Control137.source_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_Control137.source_step : ∀ (native136 : NLC_Finish.Input Unit → NLI_Interface.Observation Unit),
+  NLI_Interface.RowSpec_136 native136 → ∀ (s : NLJ_Observed.State Unit), step native136 s = run (NLJ_Observed.step s) :=
+fun native136 child136 s =>
+  let ⟨i, locals, h✝⟩ := s
+  Eq.symm h✝ ▸
+    NLJ_Observed.Local.casesOn (motive := fun t =>
+      locals = t →
+        step native136 { input := i, locals := locals } = run (NLJ_Observed.step { input := i, locals := locals }))
+      locals
+      (fun h =>
+        Eq.symm h ▸
+          id
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (run do
+                        let r ← liftM _a
+                        match r with
+                          | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+                          | core.result.Result.Ok p =>
+                            pure
+                              (Sum.inr
+                                (NLJ_Observed.advance { input := i, locals := NLJ_Observed.Local.parse }
+                                  (NLJ_Observed.Local.mark0 p)))) =
+                      run (NLJ_Observed.step { input := i, locals := NLJ_Observed.Local.parse }))
+                  (parser i.bytes)))
+              (Eq.refl
+                (run do
+                  let r ← liftM (PrefixAdapter.parseAccepted i.bytes)
+                  match r with
+                    | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+                    | core.result.Result.Ok p =>
+                      pure
+                        (Sum.inr
+                          (NLJ_Observed.advance { input := i, locals := NLJ_Observed.Local.parse }
+                            (NLJ_Observed.Local.mark0 p)))))))
+      (fun p h => Eq.symm h ▸ Eq.refl (step native136 { input := i, locals := NLJ_Observed.Local.mark0 p }))
+      (fun p h => Eq.symm h ▸ public_step native136 i p) (fun p t h => Eq.symm h ▸ begin_step native136 i p t)
+      (fun p t c h => Eq.symm h ▸ Eq.refl (step native136 { input := i, locals := NLJ_Observed.Local.mark1 p t c }))
+      (fun p t c h => Eq.symm h ▸ Eq.symm (NLJ_Observed.finish_packet native136 child136 i p t c).right)
+      (Eq.refl locals)
