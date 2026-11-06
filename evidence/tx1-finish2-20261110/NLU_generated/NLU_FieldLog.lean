@@ -21,7 +21,11 @@ abbrev Native := Frame → Replies → Observation
 def arguments (f : Frame) (r : Replies) (i : Fin 3) : Q×Q :=
  if i.val=0 then (f.eta,f.terminal)
  else if i.val=1 then (f.mask,r.product) else (r.partialValue,f.extra)
-/-- Exact transcription of the planned local-record arithmetic_arguments
+/-- programs/r1-cost-probe/src/NLU_program.rs SHA256
+081a7249e92a16f46461172a7cb5f84a8c36a092e218408cb3dfd018226aea8c. Literal assertion:
+"log.calls==3 && word(actual,limb)==word(expected,limb) &&
+word(masked,limb)==word(replies[2],limb)" (K023/K024).
+Exact transcription of the planned local-record arithmetic_arguments
 native assertions: count3, arbitrary selected call/operand/word, and returned
 word. The three replies are independent. No multiplication specification or
 canonicality is silently added; those remain separate Lean obligations. -/

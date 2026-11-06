@@ -1,0 +1,50 @@
+{"attempt": "NLU_L061", "exit_status": 1, "wall_seconds": 33.77048229286447, "peak_rss_kib": "6539264", "swaps": "0", "print_axioms": ["'AspisR1.NLU_Terminal.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLU_generated/NLU_TerminalTransport.lean:19:79: error: unsolved goals
+pub : Public
+claims : NLC_Finish.Claims
+alpha : NLC_Finish.Alpha
+c : r1_wire.Challenges
+domain : InputDomain pub c
+hc : ∀ row ∈ ↑(mapArray (mapArray toQ) claims), FIw_ArrayValue.canonical row
+ha : FIw_ArrayValue.canonical (mapArray toQ alpha)
+result : Result (core.result.Result NLH_WrapperState.State NLH_WrapperState.Error)
+events : List NLH_WrapperState.Event
+cuts :
+  NLH_RustCuts.Cuts
+    (NLH_WrapperState.step (toPublic pub) (mapArray (mapArray toQ) claims) (mapArray toQ alpha) (toChallenges c))
+    NLH_WrapperState.order (NLH_WrapperRoot.initial (toPublic pub)) result events
+attemptedPrefix : events <+: NLH_WrapperStat
+...
+erRoot.Canonical result
+projected :
+  NLH_WrapperRoot.projected result =
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31 (toPublic pub)
+      (mapArray (mapArray toQ) claims) (mapArray toQ alpha) (toChallenges c)
+reference :
+  NLH_WrapperRoot.reference (toPublic pub) (mapArray (mapArray toQ) claims) (mapArray toQ alpha) (toChallenges c) =
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31 (toPublic pub)
+      (mapArray (mapArray toQ) claims) (mapArray toQ alpha) (toChallenges c)
+⊢ (do
+      let result ←
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31 (toPublic pub)
+            (mapArray (mapArray toQ) claims) (mapArray toQ alpha) (toChallenges c)
+      match result with
+        | core.result.Result.Ok q => ok (core.result.Result.Ok (fromQ q))
+        | core.result.Result.Err e => ok (core.result.Result.Err (FIq_Terminal.fromError e))) =
+    do
+    let r ←
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31 (toPublic pub)
+          (mapArray (mapArray toQ) claims) (mapArray toQ alpha) (toChallenges c)
+    match r with
+      | core.result.Result.Ok q => ok (core.result.Result.Ok (fromQ q))
+      | core.result.Result.Err e => ok (core.result.Result.Err (FIq_Terminal.fromError e))
+'AspisR1.NLU_Terminal.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLU_Terminal.installed : ∀ (pub : Public) (claims : NLC_Finish.Claims) (alpha : NLC_Finish.Alpha)
+  (c : r1_wire.Challenges),
+  InputDomain pub c →
+    (∀ row ∈ ↑(mapArray (mapArray toQ) claims), FIw_ArrayValue.canonical row) →
+      FIw_ArrayValue.canonical (mapArray toQ alpha) →
+        nativeTerminal pub claims alpha c = FIq_Terminal.terminal pub claims alpha c :=
+⋯
+
+Running as unit: run-r0ee4f5ba54e343c8a76b810fd3dfccaa.scope; invocation ID: 8616f18ed56f4d68bfea2b6be8329079

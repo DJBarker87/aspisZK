@@ -1,0 +1,32 @@
+NLU_generated/NLU_HighLoop.lean:23:12: error: unsolved goals
+case succ
+native : Native
+cut : Cut native
+n : ℕ
+ih :
+  ∀ (start : ℕ),
+    start + n ≤ 10 →
+      ∀ (claims : Claims) (memory : Memory),
+        loop native n start claims memory = (claims, NLI_FromFn.fill (values claims) n start memory)
+start : ℕ
+bound : start + (n + 1) ≤ 10
+claims : Claims
+memory : Memory
+inside : start < 10
+tail : start + 1 + n ≤ 10
+same : values claims start = high claims ⟨start, inside⟩
+⊢ (if h : start < 10 then
+      (claims,
+        NLI_FromFn.fill (values claims) n (start + 1) (NLI_FromFn.write memory start (high claims ⟨start, inside⟩)))
+    else (claims, memory)) =
+    (claims,
+      NLI_FromFn.fill (values claims) n (start + 1) (NLI_FromFn.write memory start (high claims ⟨start, inside⟩)))
+NLU_generated/NLU_HighLoop.lean:26:19: warning: This simp argument is unused:
+  if_pos inside
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵o̵p̵,̵i̵f̵_̵p̵o̵s̵ ̵i̵n̵s̵i̵d̵e̵,̵c̵o̵m̵p̵l̵e̵t̵e̵[̲l̲o̲o̲p̲,̲ ̲c̲o̲m̲p̲l̲e̲t̲e̲ native cut claims ⟨̵s̵t̵a̵r̵t̵,̵i̵n̵s̵i̵d̵e̵⟩̵]̵⟨̲s̲t̲a̲r̲t̲,̲ ̲i̲n̲s̲i̲d̲e̲⟩̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NLU_High.induction' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLU_High.initialized' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

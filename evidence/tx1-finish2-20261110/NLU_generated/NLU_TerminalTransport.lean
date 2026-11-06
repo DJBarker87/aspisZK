@@ -20,6 +20,7 @@ theorem installed (pub : Public) (claims : NLC_Finish.Claims) (alpha : NLC_Finis
  obtain ⟨result,events,cuts,attemptedPrefix,canonical,projected,reference⟩:=install pub claims alpha c domain hc ha
  unfold nativeTerminal FIq_Terminal.terminal
  rw [reference]
+ rfl
 #print axioms installed
 set_option pp.proofs false in #print installed
 end AspisR1.NLU_Terminal

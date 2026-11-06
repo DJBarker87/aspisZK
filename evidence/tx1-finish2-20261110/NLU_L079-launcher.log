@@ -1,0 +1,30 @@
+{"attempt": "NLU_L079", "exit_status": 0, "wall_seconds": 32.58465351909399, "peak_rss_kib": "6540936", "swaps": "0", "print_axioms": ["'AspisR1.NLU_Terminal.first_calls' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLU_Terminal.first_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLU_Terminal.first_calls : ∀ {H : Type} (native : NJM_RoundsCut.Observations),
+  NJM_RoundsCut.Cut native →
+    ∀ (token frame : ℕ) (i : NLU.Input H),
+      NLU.InputDomain i →
+        match (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R i.digest i.prefix1 i.transcript)).2 with
+        | ok (core.result.Result.Ok rounds) =>
+          match ClaimsUnrolledFinish.claims (NP6_StdModel.calls i.reservation) i.prefix1 with
+          | ok (core.result.Result.Ok claims) =>
+            Packet i.publicValue claims rounds.2.1 i.challenges ∧
+              nativeTerminal i.publicValu
+...
+'AspisR1.NLU_Terminal.first_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLU_Terminal.first_calls : ∀ {H : Type} (native : NJM_RoundsCut.Observations),
+  NJM_RoundsCut.Cut native →
+    ∀ (token frame : ℕ) (i : NLU.Input H),
+      NLU.InputDomain i →
+        match (PreparedHashCode.run (S1SemanticCode.rounds NJM_RoundJoin.R i.digest i.prefix1 i.transcript)).2 with
+        | ok (core.result.Result.Ok rounds) =>
+          match ClaimsUnrolledFinish.claims (NP6_StdModel.calls i.reservation) i.prefix1 with
+          | ok (core.result.Result.Ok claims) =>
+            Packet i.publicValue claims rounds.2.1 i.challenges ∧
+              nativeTerminal i.publicValue claims rounds.2.1 i.challenges =
+                (IDa_Deployed.boundaries i.reservation).terminal i.publicValue claims rounds.2.1 i.challenges
+          | x => True
+        | x => True :=
+⋯
+
+Running as unit: run-r172a98b6712c490aa39d78c08748e32e.scope; invocation ID: 82844aa6a9684f578457b337c5923754

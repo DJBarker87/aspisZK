@@ -19,7 +19,7 @@ theorem next_characterization {H : Type} (s after : NLU.State H)
    | ok post =>
      cases post with
      | inr machine =>
-       change ok (.inr (⟨machine,carryOwner s⟩ : NLU.State H))=ok (.inr after) at head
+       change (ok (Sum.inr (⟨machine,carryOwner s⟩ : NLU.State H) : Post H) : Result (Post H))=ok (Sum.inr after) at head
        have same:=Sum.inr.inj (Result.ok.inj head)
        cases same
        exact ⟨rfl,rfl⟩
@@ -39,7 +39,10 @@ theorem next_linear {H : Type} (s after : NLU.State H) (before : Linear s)
  have pair:=next_characterization s after head
  have invariant:=continuation_linear s after.machine before pair.1
  cases after with
- | mk machine owner => simpa only [pair.2] using invariant
+ | mk machine owner =>
+   have same : owner=carryOwner s := pair.2
+   rw [same]
+   exact invariant
 #print axioms next_characterization
 #print axioms next_input
 #print axioms next_linear

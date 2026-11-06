@@ -1,0 +1,28 @@
+theorem AspisR1.NJB_StubLaws.qm_mul : ∀ (x y : AspisR1.FIv_NativeArithmetic.NQ),
+  AspisR1.FIv_NativeValue.Canon x →
+    AspisR1.FIv_NativeValue.Canon y →
+      ∃ z,
+        FIq_Native.field.QM31.mul x y = Aeneas.Std.Result.ok z ∧
+          AspisR1.FIv_NativeValue.Canon z ∧
+            AspisR1.FIv_NativeValue.decode z = AspisR1.FIv_NativeValue.decode x * AspisR1.FIv_NativeValue.decode y :=
+⋯
+theorem AspisR1.NJB_StubLaws.qm_add : ∀ (x y : AspisR1.FIv_NativeArithmetic.NQ),
+  AspisR1.FIv_NativeValue.Canon x →
+    AspisR1.FIv_NativeValue.Canon y →
+      ∃ z,
+        FIq_Native.field.QM31.add x y = Aeneas.Std.Result.ok z ∧
+          AspisR1.FIv_NativeValue.Canon z ∧
+            AspisR1.FIv_NativeValue.decode z = AspisR1.FIv_NativeValue.decode x + AspisR1.FIv_NativeValue.decode y :=
+⋯
+def AspisR1.FIv_NativeArithmetic.qm : AspisR1.FIv_NativeArithmetic.NQ → AspisR1.FIv_NativeArithmetic.PQ :=
+fun x => { c0 := AspisR1.FIv_NativeArithmetic.cm x.c0, c1 := AspisR1.FIv_NativeArithmetic.cm x.c1 }
+theorem AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.generated_qm_mul_eq_probe : ∀
+  (x y : AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.GenQ),
+  AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.resultMap
+      AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.genQToProbe
+      (AspisR1SemanticCallExtraction.aspis_core.field.QM31.mul x y) =
+    AspisR1SelectedMaskProbe.field.QM31.mul (AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.genQToProbe x)
+      (AspisR1PublicPreparation.RawExtractedSemanticCallOpsV20.genQToProbe y) :=
+⋯
+'AspisR1.NJB_StubLaws.qm_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_StubLaws.qm_add' depends on axioms: [propext, Classical.choice, Quot.sound]

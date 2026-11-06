@@ -12,7 +12,13 @@ structure Observation where
  value : Q
  claims : Claims
 abbrev Native := Claims → Fin 10 → Observation
-/-- Reviewed transcription of NLU_K001/2 and NLU_K003/4, pending pair
+/-- Reviewed transcription of programs/r1-cost-probe/src/NLU_program.rs,
+SHA256 b4bfd86dfa299c552474319448c674742024ac9fb5b2a36df66f6081d11a9125,
+NLU_K001/2 and NLU_K003/4. Source helper NLI_rounds.rs is pinned in
+NLU_SOURCE_PINS.json. Literal selected assertion: "if frame {
+word(claims[row][col],j)==before } else { word(actual,j)==expected }".
+The pairs are native support; physical parent integration still needs review.
+Reviewed transcription of NLU_K001/2 and NLU_K003/4, pending pair
 validation and ledger review. Literal native assertions:
 value word(actual,j)==word(claims[0][16+i],j), or frame
 word(claims[row][col],j)==before, with i<10,j<4,row<3,col<29.

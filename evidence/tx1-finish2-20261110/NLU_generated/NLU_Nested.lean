@@ -1,3 +1,5 @@
+import NLC_ReadsReady
+import NLU_Execute
 import NLU_Invariant
 import NLC_Suboccurrences
 set_option autoImplicit false
@@ -22,9 +24,9 @@ theorem low_arguments {H : Type} (input : Input H) (s : NLU.State H)
  cases slot : s.machine.locals.claims with
  | none => rw [slot] at initialized;cases initialized
  | some claims =>
-   refine ⟨claims,slot,live,?_⟩
+   refine ⟨claims,rfl,live,?_⟩
    intro i hi
-   exact NLC_Finish.low_callback s.machine claims slot i hi
+   simpa only [slot] using NLC_Finish.low_callback s.machine claims slot i hi
 /-- High callback uses the same retained Claims owner and the actual16+i
 offset, without a completed destination array as a hypothesis. -/
 theorem high_arguments {H : Type} (input : Input H) (s : NLU.State H)
@@ -42,9 +44,9 @@ theorem high_arguments {H : Type} (input : Input H) (s : NLU.State H)
  cases slot : s.machine.locals.claims with
  | none => rw [slot] at initialized;cases initialized
  | some claims =>
-   refine ⟨claims,slot,live,?_⟩
+   refine ⟨claims,rfl,live,?_⟩
    intro i hi
-   exact NLC_Finish.high_callback s.machine claims slot i hi
+   simpa only [slot] using NLC_Finish.high_callback s.machine claims slot i hi
 /-- try_into precedes unwrap in the SAME rootCopy state; outer abort never
 runs a fabricated suffix. NLC's emitted-body split is reused verbatim. -/
 theorem root_occurrences {H : Type} (s : NLU.State H) (atSite : s.machine.next=.rootCopy) :

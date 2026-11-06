@@ -1,0 +1,56 @@
+{"attempt": "NLU_L076", "exit_status": 1, "wall_seconds": 19.41703347908333, "peak_rss_kib": "6539580", "swaps": "0", "print_axioms": ["'AspisR1.NLU_Terminal.canonical_from_native' does not depend on any axioms", "'AspisR1.NLU_Terminal.converted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLU_Terminal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLU_generated/NLU_TerminalCanonical.lean:36:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIq_Terminal.terminal pub claims alpha c
+in the target expression
+  Outcome ((IDa_Deployed.boundaries r).terminal pub claims alpha c)
+
+r : NP6_StdModel.Reservation
+pub : Public
+claims : NLC_Finish.Claims
+alpha : NLC_Finish.Alpha
+c : r1_wire.Challenges
+domain : InputDomain pub c
+hc : ∀ row ∈ ↑(mapArray (mapArray toQ) claims), FIw_ArrayValue.canonical row
+ha : FIw_ArrayValue.canonical (mapArray toQ alpha)
+result : Result (core.result.Result NLH_WrapperState.State NLH_WrapperState.Error)
+events : List NLH_WrapperState.Event
+cuts :
+  NLH_RustCuts.Cuts
+    (NLH_WrapperState.s
+...
+: Did not find an occurrence of the pattern
+  FIq_Terminal.terminal pub claims alpha c
+in the target expression
+  Outcome ((IDa_Deployed.boundaries r).terminal pub claims alpha c)
+
+r : NP6_StdModel.Reservation
+pub : Public
+claims : NLC_Finish.Claims
+alpha : NLC_Finish.Alpha
+c : r1_wire.Challenges
+domain : InputDomain pub c
+hc : ∀ row ∈ ↑(mapArray (mapArray toQ) claims), FIw_ArrayValue.canonical row
+ha : FIw_ArrayValue.canonical (mapArray toQ alpha)
+result : Result (core.result.Result NLH_WrapperState.State NLH_WrapperState.Error)
+events : List NLH_WrapperState.Event
+cuts :
+  NLH_RustCuts.Cuts
+    (NLH_WrapperState.step (toPublic pub) (mapArray (mapArray toQ) claims) (mapArray toQ alpha) (toChallenges c))
+    NLH_WrapperState.order (NLH_WrapperRoot.initial (toPublic pub)) result events
+attempted : events <+: NLH_WrapperState.order
+canonical : NLH_WrapperRoot.Canonical result
+projected :
+  NLH_WrapperRoot.projected result =
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31 (toPublic pub)
+      (mapArray (mapArray toQ) claims) (mapArray toQ alpha) (toChallenges c)
+reference :
+  NLH_WrapperRoot.reference (toPublic pub) (mapArray (mapArray toQ) claims) (mapArray toQ alpha) (toChallenges c) =
+    FIq_Native.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31 (toPublic pub)
+      (mapArray (mapArray toQ) claims) (mapArray toQ alpha) (toChallenges c)
+same : convert result = FIq_Terminal.terminal pub claims alpha c
+⊢ Outcome ((IDa_Deployed.boundaries r).terminal pub claims alpha c)
+'AspisR1.NLU_Terminal.canonical_from_native' does not depend on any axioms
+'AspisR1.NLU_Terminal.converted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLU_Terminal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5cc740c636514c6d82b3b4d2ec2a465b.scope; invocation ID: d94d3d8399044e0483e5a86c258bfaab

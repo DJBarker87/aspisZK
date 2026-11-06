@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,subprocess,sys
 E=Path(__file__).resolve().parent
-modules=['NLU_Words','NLU_Cell','NLU_HighCut','NLU_TerminalTransport','NLU_InputDomain','NLU_Next','NLU_Invariant','NLU_Nested','NLU_CanonicalTransport','NLU_ClaimsCanonical','NLU_SlotFrame']+['NLU_SlotFrame'+str(i) for i in range(5)]+['NLU_SlotFrames','NLU_Verified','NLU_FieldLog']
+modules=['NLU_InspectStubs','NLU_Words','NLU_Cell','NLU_HighCut','NLU_HighLoop','NLU_TerminalTransport','NLU_InputDomain','NLU_Next','NLU_Invariant','NLU_Nested','NLU_CanonicalTransport','NLU_TerminalCanonical','NLU_ClaimsCanonical','NLU_SameTerminal','NLU_SlotFrame']+['NLU_SlotFrame'+str(i) for i in range(5)]+['NLU_SlotFrames','NLU_Verified','NLU_FieldLog','NLU_GeneratedMul','NLU_FieldValues','NLU_Arithmetic','NLU_ConstructCut','NLU_ConstructArrays','NLU_ConstructMisc','NLU_ConstructChallenges','NLU_ConstructPoints','NLU_ConstructTranscript','NLU_ConstructComplete','NLU_Frontier','NLU_FrontierSource']
 for module in modules:
  source=E/'NLU_generated'/(module+'.lean');ok=False
  for p in E.glob('NLU_L*/receipt.json'):
