@@ -29,3 +29,22 @@ Seeded NKC FIRST1365368bytes, then NJY269624bytes; all copied hashes NKF_SEED.js
 Retained ten own objects at the workspace/NKF_objects, hashes in NKF_HOST_END.json; use that path followed by NKF_ENV.json's pinned path selection. All sources, seeds and receipts retained. End cleanup removed1367947956bytes only from owned Rust target and solver-temp outputs; no Lean cache, shared path, key or wallet was deleted. Subsequent free bytes7065116672. No proof was resumed after cleanup.
 
 Frozen4bb3b3f51e16b4525f1d10336e2b0bcbbd775387 crates/programs/Cargo.lock unchanged; no ELF rebuild trigger. Inherited only, NOT rebuilt/reverified: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. No shipped/proved/sibling/session-A worktree changes or new trust rows. Frozen3/deployed headline/L154parameter/narrowedD188/100-bit PER-ATTEMPT/privacy/two transactions unchanged. No headline hypothesis discharged. Target not yet established.
+
+## Resume after host repair, 2026-11-08 (in progress)
+
+The lead lifted the historical admission stop. K081's first submission had valid
+exit0/allowed:true admission and129497116672free bytes. Its frozen offline graph,
+source erasure and unchanged lock checks passed; cargo-kani was invoked but rustc
+failed because owned NKF_tmp had been removed by prior end cleanup. No CBMC
+property ran and no semantic failing-control credit follows. Final authorized
+Kani invocation is consumed; no resubmission. This is an owned input failure,
+not a renewed shared-infrastructure stop. Historical stop receipts stay intact.
+
+L016 compiles NKF_SeedWindows. L018 compiles the factored K064 replacement model
+(NKF_LaneFactor): guard/result, arbitrary coordinate, finite node extensionality,
+window bounds and disjointness. L022 compiles the factored K067 replacement model
+(NKF_LaneConstructor): scalar fields and nested root/frontier windows imply the
+complete adopted lane record. These are Lean-only support; neither timed-out
+native shape was rerun or credited. Prefix/log composition and joint audit are
+in progress. No row is promoted. Every resumed scope checks ≥40GB free first;
+workspace size247310749bytes at the intermediate probe, below30GB of new writes.

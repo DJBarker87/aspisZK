@@ -9,6 +9,10 @@ import NKF_Windows
 import NKF_Roots
 import NKF_LaneTrace
 import NKF_PdaModel
+import NKF_SeedWindows
+import NKF_LaneFactor
+import NKF_LaneConstructor
+import NKF_LanePrefix
 
 #check AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.RPx_Deployed.deployed
@@ -80,6 +84,36 @@ import NKF_PdaModel
 #print axioms NKF_PdaModel.divergence
 #check NKF_PdaModel.no_suffix
 #print axioms NKF_PdaModel.no_suffix
+#check NKF_SeedWindows.bytes
+#print axioms NKF_SeedWindows.bytes
+#check NKF_SeedWindows.seeds
+#print axioms NKF_SeedWindows.seeds
+#check NKF_SeedWindows.invocation
+#print axioms NKF_SeedWindows.invocation
+#check NKF_LaneFactor.success_step
+#print axioms NKF_LaneFactor.success_step
+#check NKF_LaneFactor.selected
+#print axioms NKF_LaneFactor.selected
+#check NKF_LaneFactor.coordinate
+#print axioms NKF_LaneFactor.coordinate
+#check NKF_LaneFactor.node_eq
+#print axioms NKF_LaneFactor.node_eq
+#check NKF_LaneFactor.accepted_guard
+#print axioms NKF_LaneFactor.accepted_guard
+#check NKF_LaneFactor.window_bounds
+#print axioms NKF_LaneFactor.window_bounds
+#check NKF_LaneFactor.distinct_windows
+#print axioms NKF_LaneFactor.distinct_windows
+#check NKF_LaneConstructor.tree
+#print axioms NKF_LaneConstructor.tree
+#check NKF_LaneConstructor.constructor
+#print axioms NKF_LaneConstructor.constructor
+#check NKF_LanePrefix.log_prefix
+#print axioms NKF_LanePrefix.log_prefix
+#check NKF_LanePrefix.log_bound
+#print axioms NKF_LanePrefix.log_bound
+#check NKF_LanePrefix.success_log
+#print axioms NKF_LanePrefix.success_log
 
 set_option pp.proofs false in
 #print NKF_Roots.MasterCut

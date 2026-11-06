@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,re,difflib
 E=Path(__file__).resolve().parent
-modules=['NKF_BoxModel','NKF_MasterBox','NKF_CheckpointBox','NKF_BoxInstall','NKF_ArrayFrame','NKF_BoxFields','NKF_Windows','NKF_Roots','NKF_LaneTrace','NKF_PdaModel']
+modules=['NKF_BoxModel','NKF_MasterBox','NKF_CheckpointBox','NKF_BoxInstall','NKF_ArrayFrame','NKF_BoxFields','NKF_Windows','NKF_Roots','NKF_LaneTrace','NKF_PdaModel','NKF_SeedWindows','NKF_LaneFactor','NKF_LaneConstructor','NKF_LanePrefix']
 roots=['AspisR1.RPx_Deployed.deployed']
 for m in modules:
  s=(E/(m+'.lean')).read_text();ns=re.search(r'^namespace (\w+)',s,re.M)[1]
