@@ -1,0 +1,3 @@
+from NLF_native import native
+names=['shared_conflict','shared_conflict_control','exclusive_shared_conflict','exclusive_shared_control','exclusive_exclusive_conflict','exclusive_exclusive_control','lamports_shared','lamports_shared_control','lamports_exclusive','lamports_exclusive_control','data_len_getters','data_len_control','metadata_getters','metadata_control','shared_map','shared_map_control','exclusive_map','exclusive_map_control','error_drop','error_drop_control','shared_seven','shared_seven_control','lamports_conflict','lamports_conflict_control','empty_getters','empty_control']
+for i,h in enumerate(names,7):native(f'NLF_K{i:03d}','NLF_sdk::'+h)
