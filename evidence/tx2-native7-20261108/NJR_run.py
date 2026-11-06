@@ -84,6 +84,10 @@ config['env']['LEAN_PATH']=':'.join(json.loads((E/'NJR_PATHS.json').read_text())
 if kind=='kani':
  config['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NJR_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NJR_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  config['env'].update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1'+(' --cfg NJR_invert' if os.environ.get('NJR_INVERT') else ''))
+ if os.environ.get('NJR_BAD_DESTINATION'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_destination'
+ if os.environ.get('NJR_BAD_RECEIVER'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_receiver'
+ if os.environ.get('NJR_BAD_BACKING'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_backing'
+ if os.environ.get('NJR_BAD_DROP'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_drop'
  if os.environ.get('NJR_BAD_DECODE_ARG'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_decode_arg'
  if os.environ.get('NJR_BAD_REPLY'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_reply'
  if os.environ.get('NJR_BAD_EXPAND'):config['env']['RUSTFLAGS']+=' --cfg NJR_bad_expand'
