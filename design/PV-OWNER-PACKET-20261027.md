@@ -322,7 +322,7 @@ The release checklist requires the shipped prover to match its proved source,
 E1/E2 and real RunJoin, the proof-account client route, L1/L2/L3 evidence, final
 adoption/timing gates, a coherent dependency-closure replay and accepted axioms,
 and **deployed verifier equals the pinned release ELF**. D416 records the
-immutable historical devnet verifier fb2fc048 and matching Pool121f3e29; the
+immutable historical devnet verifier fb2fc048 and matching Pool121f3e29 (historical, superseded 2026-11-09 by e0e49c34…, LOG D872); the
 release verifier pins are devnet63ad3e9c and defaultf8c0ec72. This is a deployment
 obligation and a pointer to Stream A's owner question, not a new privacy premise
 or a decision authorizing redeployment here. No credited privacy row was derived

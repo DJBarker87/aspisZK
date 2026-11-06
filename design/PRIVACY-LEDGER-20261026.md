@@ -405,7 +405,7 @@ The rows below include environment trust, concrete environment association, L1/L
 | V340 / `research rebase` | `docs/research/v8-r0-zk-20261009/LOG.md#D169/D191` | Rebase candidate onto research retaining adapter/H5 adoptions and rebind proofs | P | stream B | pv-rebase · assigned pv-rebase job (branch pin not supplied) | LOG-excerpts.md; rw-query.md; dict-design.md |
 | V341 / `default ELF identity` | `docs/research/v8-r0-zk-20261009/LOG.md#D169/D191` | Rebuild and compare default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4 | P | stream B | pv-rebase · assigned pv-rebase job (branch pin not supplied) | LOG-excerpts.md; rw-query.md; dict-design.md |
 | V342 / `devnet ELF identity` | `docs/research/v8-r0-zk-20261009/LOG.md#D169/D191` | Rebuild and compare devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299 | P | stream B | pv-rebase · assigned pv-rebase job (branch pin not supplied) | LOG-excerpts.md; rw-query.md; dict-design.md |
-| V343 / `Pool ELF identity` | `docs/research/v8-r0-zk-20261009/LOG.md#D169/D191` | Rebuild and compare Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548 | P | stream B | pv-rebase · assigned pv-rebase job (branch pin not supplied) | LOG-excerpts.md; rw-query.md; dict-design.md |
+| V343 / `Pool ELF identity` | `docs/research/v8-r0-zk-20261009/LOG.md#D169/D191` | Rebuild and compare Pool e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc (re-pinned 2026-11-09, LOG D872: legacy Pool instructions removed by owner decision; Pool frozen at research b936275465600469312d1f058cdc91ea2a11f3dc, source 7a6a39680fe, 345,648 bytes; the former pin 121f3e29… is historical) | P | stream B | pv-rebase · assigned pv-rebase job (branch pin not supplied) | LOG-excerpts.md; rw-query.md; dict-design.md |
 | V344 / `absolute timing` | `docs/research/v8-r0-zk-20261009/LOG.md#D169/D191` | Quiet-host, pinned candidate proof time median <15s; report samples/profile/CPU | P | stream B | pv-rebase · assigned pv-rebase job (branch pin not supplied) | LOG-excerpts.md; rw-query.md; dict-design.md |
 | V345 / `relative timing` | `docs/research/v8-r0-zk-20261009/LOG.md#D169/D191` | Median regression ≤10% against relevant pinned baseline; historical fixture ratios alone do not settle absolute gate | P | stream B | pv-rebase · assigned pv-rebase job (branch pin not supplied) | LOG-excerpts.md; rw-query.md; dict-design.md |
 | V346 / `proved=shipped manifest` | `docs/research/v8-r0-zk-20261009/LOG.md#D169/D191` | Pin same source/features/toolchain/wire/parameters/native prover binary and every proof/extraction/Kani association; no historical certificate migration by name | P | stream B | pv-rebase · assigned pv-rebase job (branch pin not supplied) | LOG-excerpts.md; rw-query.md; dict-design.md |
@@ -1841,7 +1841,7 @@ public-determinism recommendation without inventing an approval or trust field.
 
 The release checklist now explicitly requires **deployed verifier equals the
 pinned release ELF** (D416). Devnet's immutable verifier is historical fb2fc048,
-not devnet63ad3e9c/defaultf8c0ec72; Pool121f3e29 matches. No credited privacy row
+not devnet63ad3e9c/defaultf8c0ec72; Pool121f3e29 matches (historical Pool, superseded 2026-11-09 by e0e49c34…, LOG D872). No credited privacy row
 uses historical devnet transaction behavior. This is a deployment obligation,
 not a new counted privacy premise. Other release conditions remain shipped
 prover identity, E1/E2, real RunJoin, client proof-account route, L1/L2/L3,
