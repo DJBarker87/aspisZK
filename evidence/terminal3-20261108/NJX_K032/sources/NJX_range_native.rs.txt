@@ -1,0 +1,14 @@
+struct NJX_RLog{calls:usize,square:QM31,left:QM31,right:QM31,reply:[QM31;2]}
+fn NJX_r_square(x:QM31,l:&mut NJX_RLog)->QM31{assert_eq!(l.calls,0);l.calls+=1;l.square=x;l.reply[0]}
+fn NJX_r_sub(a:QM31,b:QM31,l:&mut NJX_RLog)->QM31{assert_eq!(l.calls,1);l.calls+=1;l.left=a;l.right=b;l.reply[1]}
+fn NJX_range_step(view:usize,mut index:usize,mut range:[QM31;33],o:&crate::state_only_poseidon::StateOnlyPoseidonOpenings,l:&mut NJX_RLog)->([QM31;33],usize){
+ match view{0=>{range[index]=NJX_r_sub(NJX_r_square(o.z[index],l),o.z[index],l);},1=>{range[10+index]=NJX_r_sub(NJX_r_square(o.succ_z[index],l),o.succ_z[index],l);},2=>{range[20+index]=NJX_r_sub(NJX_r_square(o.xor12_z[index],l),o.xor12_z[index],l);},_=>unreachable!()}
+ index+=1;(range,index)
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJX_range_step_cut(){
+ let views:[[QM31;16];3]=unsafe{core::mem::transmute::<[[[u32;4];16];3],[[QM31;16];3]>(kani::any())};let o=crate::state_only_poseidon::StateOnlyPoseidonOpenings{z:views[0],succ_z:views[1],xor12_z:views[2]};let before:[QM31;33]=unsafe{core::mem::transmute::<[[u32;4];33],[QM31;33]>(kani::any())};let reply:[QM31;2]=unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())};let view:usize=kani::any();let index:usize=kani::any();let seek:usize=kani::any();let limb:usize=kani::any();kani::assume(view<3&&index<10&&seek<33&&limb<4);
+ let mut l=NJX_RLog{calls:0,square:QM31::ZERO,left:QM31::ZERO,right:QM31::ZERO,reply};let(after,next)=NJX_range_step(view,index,before,&o,&mut l);let x=views[view][index];
+ assert_eq!(l.calls,2);assert_eq!(NJX_words(l.square)[limb],NJX_words(x)[limb]);assert_eq!(NJX_words(l.left)[limb],NJX_words(reply[0])[limb]);assert_eq!(NJX_words(l.right)[limb],NJX_words(x)[limb]);assert_eq!(next,index+1);assert_eq!(NJX_words(after[seek])[limb],(if seek==10*view+index{NJX_words(reply[1])[limb]}else{NJX_words(before[seek])[limb]})^if cfg!(NJX_invert){1}else{0});
+}

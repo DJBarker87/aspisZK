@@ -16,3 +16,6 @@ SUPPORT only: ZERO-initialized20level append fold/all4cells (L054), actual front
 
 ## Cohort audit correction
 First joint import L104 passed and8same-binary fixtures L105 passed. Scan L106 FAILED with12dangling references in2inherited parser proof objects. Failure and exact raw scan retained in NJX_GATE1.json/NJX_GATE1_SCAN; never relabelled. Canonical NJO versions of JFw_Validator and JFw_Record match unchanged parser objects; copied privately/hash-checked (NJX_COHORT_FIX.json). L150 second/final combined import passes; L151 NFX exits0 over15806modules with0dangling/duplicate-owner/import mismatches. Same hardened binaries/fixtures retained. Raw9435root closure audit follows; no third combined audit is allowed.
+
+## Final native support windows
+K005..K020 and K023..K032 provide13 additional passing positive/failing controls beyond the two own root cut pairs. K021/022 is rejected: positive64array generation fails unwind, not a pass. Frozen graph/offline/unchanged lock/KMX checks are mandatory per receipt. Total38 accepted native pairs includes inherited pairs. Initial constants/chunks/absorption arguments, range/conservation/preweighted calls and lane/from_fn windows remain SUPPORT; no extra ledger rows.

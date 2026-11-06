@@ -1,0 +1,43 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn NJX_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+fn NJX_q(w:[u32;4])->QM31{QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn NJX_cache(p:PreparedQm31Multiplier)->[[u32;3];3]{unsafe{core::mem::transmute(p)}}
+struct NJX_Log{seek:usize,calls:usize,kind:u8,left:[u32;4],right:[u32;4],pack:[[u32;4];4],cache:[[u32;3];3],new_reply:PreparedQm31Multiplier,reply:[QM31;21]}
+impl NJX_Log{
+ fn enter(&mut self,kind:u8,a:QM31,b:QM31)->QM31{let k=self.calls;if k==self.seek{self.kind=kind;self.left=NJX_words(a);self.right=NJX_words(b);}self.calls+=1;self.reply[k]}
+}
+fn NJX_new(high:QM31,l:&mut NJX_Log)->PreparedQm31Multiplier{l.enter(3,high,QM31::ZERO);l.new_reply}
+fn NJX_lift(a:M31,l:&mut NJX_Log)->QM31{l.enter(5,NJX_q([a.0,0,0,0]),QM31::ZERO)}
+fn NJX_sub(a:QM31,b:QM31,l:&mut NJX_Log)->QM31{l.enter(2,a,b)}
+fn NJX_pack(a:&[QM31;4],l:&mut NJX_Log)->QM31{if l.calls==l.seek{l.pack=a.map(NJX_words);}l.enter(6,QM31::ZERO,QM31::ZERO)}
+fn NJX_mul(p:PreparedQm31Multiplier,a:QM31,l:&mut NJX_Log)->QM31{if l.calls==l.seek{l.cache=NJX_cache(p);}l.enter(4,QM31::ZERO,a)}
+fn NJX_left(high:QM31,opened:[QM31;16],expected:[M31;8],l:&mut NJX_Log)->[QM31;2]{
+ let prepared_high=NJX_new(high,l);
+ let residual0=[NJX_sub(opened[0],NJX_lift(expected[0],l),l),NJX_sub(opened[1],NJX_lift(expected[1],l),l),NJX_sub(opened[2],NJX_lift(expected[2],l),l),NJX_sub(opened[3],NJX_lift(expected[3],l),l)];
+ let residual1=[NJX_sub(opened[4],NJX_lift(expected[4],l),l),NJX_sub(opened[5],NJX_lift(expected[5],l),l),NJX_sub(opened[6],NJX_lift(expected[6],l),l),NJX_sub(opened[7],NJX_lift(expected[7],l),l)];
+ [NJX_mul(prepared_high,NJX_pack(&residual0,l),l),NJX_mul(prepared_high,NJX_pack(&residual1,l),l)]
+}
+fn NJX_carry(carry:usize,opened:[QM31;16],high:QM31,frontier:[M31;8],l:&mut NJX_Log)->[QM31;2]{if carry<20{NJX_left(high,opened,frontier,l)}else{[QM31::ZERO;2]}}
+fn NJX_check(carry:Option<usize>){
+ let high=NJX_q(kani::any());let opened:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let expected:[M31;8]=unsafe{core::mem::transmute::<[u32;8],[M31;8]>(kani::any())};let reply:[QM31;21]=unsafe{core::mem::transmute::<[[u32;4];21],[QM31;21]>(kani::any())};let cache:[[u32;3];3]=kani::any();let new_reply=unsafe{core::mem::transmute::<[[u32;3];3],PreparedQm31Multiplier>(cache)};
+ let seek:usize=kani::any();let limb:usize=kani::any();let j:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();kani::assume(seek<21&&limb<4&&j<4&&row<3&&col<3);
+ let mut l=NJX_Log{seek,calls:0,kind:255,left:[0;4],right:[0;4],pack:[[0;4];4],cache:[[0;3];3],new_reply,reply};
+ let out=match carry{None=>NJX_left(high,opened,expected,&mut l),Some(c)=>NJX_carry(c,opened,high,expected,&mut l)};
+ let active=match carry{None=>true,Some(c)=>c<20};
+ assert_eq!(l.calls,if active{21}else{0});
+ let group:usize=kani::any();kani::assume(group<2);
+ assert_eq!(NJX_words(out[group])[limb],(if active{NJX_words(reply[18+2*group])[limb]}else{0})^if cfg!(NJX_invert){1}else{0});
+ if active{
+  if seek==0{assert_eq!(l.kind,3);assert_eq!(l.left[limb],NJX_words(high)[limb]);}
+  else if seek<17{let k=(seek-1)/2;if seek%2==1{assert_eq!(l.kind,5);assert_eq!(l.left[limb],if limb==0{expected[k].0}else{0});}else{assert_eq!(l.kind,2);assert_eq!(l.left[limb],NJX_words(opened[k])[limb]);assert_eq!(l.right[limb],NJX_words(reply[seek-1])[limb]);}}
+  else if seek==17||seek==19{assert_eq!(l.kind,6);let g=(seek-17)/2;assert_eq!(l.pack[j][limb],NJX_words(reply[2+8*g+2*j])[limb]);}
+  else{assert_eq!(l.kind,4);assert_eq!(l.cache[row][col],cache[row][col]);assert_eq!(l.right[limb],NJX_words(reply[seek-1])[limb]);}
+ }
+}
+#[kani::proof] #[kani::unwind(24)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJX_left_global_cut(){NJX_check(None)}
+#[kani::proof] #[kani::unwind(24)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJX_carry_global_cut(){NJX_check(Some(kani::any()))}

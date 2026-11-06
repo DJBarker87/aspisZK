@@ -4,6 +4,7 @@ E=Path(__file__).resolve().parent;P=E.parent/'terminal-20261107';L=E.parent/'ter
 pairs=[(P,f'NJB_K{k:03}',f'NJB_K{k+1:03}')for k in [98,102]+list(range(104,132,2))]+[(L,f'NJL_K{k:03}',f'NJL_K{k+1:03}')for k in [47,49,51,53,55,57,61]]
 pairs += [(E,'NJX_K001','NJX_K002')]
 if (E/'NJX_K004'/'receipt.json').exists():pairs += [(E,'NJX_K003','NJX_K004')]
+pairs += [(E,f'NJX_K{k:03}',f'NJX_K{k+1:03}') for k in range(5,33,2) if k!=21]
 rows=[]
 for d,a,b in pairs:
  r=[json.loads((d/x/'receipt.json').read_text())for x in [a,b]]
