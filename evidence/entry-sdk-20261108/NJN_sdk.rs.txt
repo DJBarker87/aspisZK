@@ -1,0 +1,60 @@
+use solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError};
+use core::cell::{Ref,RefMut};
+use std::rc::Rc;
+// Pinned native observation, NEVER used to create or havoc a typed guard.
+// The harness first checks this field against safely constructed live guards.
+fn counter(a:&AccountInfo)->isize {unsafe{*Rc::as_ptr(&a.data).cast::<isize>()}}
+fn shared_post(a:&AccountInfo,r:&Result<Ref<&mut[u8]>,ProgramError>,pre:isize,p:*const u8,n:usize)->bool {
+ if pre>=0 && pre<isize::MAX {counter(a)==pre+1 && matches!(r,Ok(g)if g.as_ptr()==p && g.len()==n)}
+ else {counter(a)==pre && matches!(r,Err(ProgramError::AccountBorrowFailed))}
+}
+#[kani::requires(counter(a)==pre)]
+#[kani::requires(unsafe{(&*a.data.as_ptr()).as_ptr()}==p)]
+#[kani::requires(unsafe{(&*a.data.as_ptr()).len()}==n)]
+#[kani::modifies(&*a.data)]
+#[kani::ensures(|r| shared_post(a,r,pre,p,n))]
+fn shared<'a,'b>(a:&'a AccountInfo<'b>,pre:isize,p:*const u8,n:usize)->Result<Ref<'a,&'a mut[u8]>,ProgramError>{a.try_borrow_data()}
+#[kani::requires(counter(a)==pre)]
+#[kani::modifies(&*a.data)]
+#[kani::ensures(|r| shared_post(a,r,pre,p,n))]
+fn shared_counter_bad<'a,'b>(a:&'a AccountInfo<'b>,pre:isize,p:*const u8,n:usize)->Result<Ref<'a,&'a mut[u8]>,ProgramError>{
+ let r=a.try_borrow_data();if r.is_ok(){core::mem::forget(a.try_borrow_data().unwrap());} r
+}
+#[kani::requires(counter(a)==pre)]
+#[kani::modifies(&*b.data)]
+#[kani::ensures(|r| shared_post(a,r,pre,p,n))]
+fn shared_cell_bad<'a,'b,'c>(a:&AccountInfo<'c>,b:&'a AccountInfo<'b>,pre:isize,p:*const u8,n:usize)->Result<Ref<'a,&'a mut[u8]>,ProgramError>{b.try_borrow_data()}
+fn exclusive_post(a:&AccountInfo,r:&Result<RefMut<&mut[u8]>,ProgramError>,pre:isize,p:*const u8,n:usize)->bool {
+ if pre==0 {counter(a)==-1 && matches!(r,Ok(g)if g.as_ptr()==p && g.len()==n)}
+ else {counter(a)==pre && matches!(r,Err(ProgramError::AccountBorrowFailed))}
+}
+#[kani::requires(counter(a)==pre)]
+#[kani::requires(unsafe{(&*a.data.as_ptr()).as_ptr()}==p)]
+#[kani::requires(unsafe{(&*a.data.as_ptr()).len()}==n)]
+#[kani::modifies(&*a.data)]
+#[kani::ensures(|r| exclusive_post(a,r,pre,p,n))]
+fn exclusive<'a,'b>(a:&'a AccountInfo<'b>,pre:isize,p:*const u8,n:usize)->Result<RefMut<'a,&'b mut[u8]>,ProgramError>{a.try_borrow_mut_data()}
+// Full typed native guard remains live across return/move/deref/drop.
+macro_rules! setup {($body:expr)=>{{
+ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
+ let mut lamports:u64=kani::any();let mut bytes=[kani::any::<u8>();2];let p=bytes.as_ptr();
+ let a=AccountInfo::new(&key,false,false,&mut lamports,&mut bytes,&owner,false,0);
+ let held:usize=kani::any();kani::assume(held<=7);
+ let mut guards:[Option<Ref<&mut[u8]>>;7]=core::array::from_fn(|_|None);
+ for i in 0..held {guards[i]=Some(a.try_borrow_data().unwrap());}
+ assert_eq!(counter(&a),held as isize);
+ ($body)(&a,held as isize,p);
+ for i in 0..held {drop(guards[i].take());}
+ assert_eq!(counter(&a),0);
+}}}
+#[kani::proof_for_contract(shared)] #[kani::unwind(9)]
+fn shared_contract(){setup!(|a:&AccountInfo,pre,p|{let r=shared(a,pre,p,2);drop(r);assert_eq!(counter(a),pre);});}
+#[kani::proof_for_contract(shared_counter_bad)] #[kani::unwind(9)]
+fn shared_counter_control(){setup!(|a:&AccountInfo,pre,p|{let r=shared_counter_bad(a,pre,p,2);drop(r);});}
+#[kani::proof_for_contract(shared_cell_bad)] #[kani::unwind(9)]
+fn shared_cell_control(){setup!(|a:&AccountInfo,pre,p|{
+ let k=Pubkey::default();let mut l=0;let mut d=[0u8;2];let b=AccountInfo::new(&k,false,false,&mut l,&mut d,&k,false,0);
+ let r=shared_cell_bad(a,&b,pre,p,2);drop(r);
+});}
+#[kani::proof_for_contract(exclusive)] #[kani::unwind(9)]
+fn exclusive_contract(){setup!(|a:&AccountInfo,pre,p|{let r=exclusive(a,pre,p,2);drop(r);assert_eq!(counter(a),pre);});}

@@ -7,7 +7,7 @@ charon=tools/'charon';aeneas=tools/'aeneas-b59d5188-extended'
 assert sha(charon)=='daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8'
 assert sha(aeneas)=='c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958'
 assert not (b/'NJN_EXTRACTION_LAUNCHED.json').exists()
-roots=['shared_ref','exclusive_ref','shared_drop_ref','exclusive_drop_ref','copy_window_ref','clock_ref','pda_reply_ref']
+roots=['borrow_ref','deref_ref','deref_mut_ref','drop_ref','copy_coordinate_ref','guard_move_ref','error_drop_ref','program_error_ref','clock_ref','pda_status_ref','seed_lengths_ref','pda_ref']
 cmd=[str(charon),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result']
 for root in roots:cmd+=['--start-from','crate::'+root]
 cmd+=['--dest-file',str(b/'NJN_reference.llbc'),'--','--manifest-path',str(b/'NJN_ref/Cargo.toml'),'--offline','--release','--lib','--jobs','1']
