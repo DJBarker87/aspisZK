@@ -31,7 +31,10 @@ def funcs(p,b):
    a=a.parent
   name=b[n.child_by_field_name('name').start_byte:n.child_by_field_name('name').end_byte].decode();key=str(p)+'::'+'::'.join(ancestors[::-1]+[name]);body=n.child_by_field_name('body')
   # Preserve distinct same-target conversion impls by frozen input type where needed.
-  if key in out:key+='@'+str(n.start_point.row+1)
+  if key in out:
+   prior=out[key];duplicate=1
+   while key+'@duplicate'+str(duplicate) in out:duplicate+=1
+   out[key+'@duplicate'+str(duplicate)]=prior
   attrs=[];prev=n.prev_named_sibling
   while prev and prev.type=='attribute_item':attrs.append(b[prev.start_byte:prev.end_byte].decode());prev=prev.prev_named_sibling
   out[key]=dict(name=name,line=n.start_point.row+1,end=n.end_point.row+1,full=sha(b[n.start_byte:n.end_byte]),body=sha(b[body.start_byte:body.end_byte]),text=b[n.start_byte:n.end_byte],test=any('#[test]' in a for a in attrs))
@@ -75,7 +78,11 @@ if __name__=='__main__':
    for target in edge['targets']:
     if target in exclusions:
      excluded.append(dict(caller=caller,target=target,reason=exclusions[target],edge=edge))
- todo=roots[:];seen=set()
+ # The conservative emitted inventory omitted cfg/off/inlined initialization
+ # codec nodes. Add source-established dependencies explicitly, plus common
+ # fixed-array codecs reached through unchanged pair encoders.
+ source_added=['programs/aspis-pool/src/instruction.rs::'+n for n in ['decode_initialize_instruction_v1','encode_initialize_instruction_v1','encode_private_transfer_instruction_v1','encode_withdrawal_instruction_v1']]+['programs/aspis-pool/src/deposit_transport.rs::encode_deposit_instruction_v1']
+ todo=roots[:]+source_added;seen=set()
  while todo:
   k=todo.pop()
   if k in seen:continue
@@ -86,9 +93,11 @@ if __name__=='__main__':
   if not old:continue
   new=current.get(k) if p.startswith('programs/aspis-pool/') else funcs(p,(R/p).read_bytes()).get(k)
   rec=dict(function=k,frozen_line=old['line'],direct_frozen_full_sha256=old['full'],direct_frozen_body_sha256=old['body'],inventory_full_sha256=rows.get(k,{}).get('full_function_sha256'),inventory_body_sha256=rows.get(k,{}).get('frozen_body_sha256'),current_full_sha256=new['full'] if new else None,identical=new is not None and new['text']==old['text'])
+  if rec['inventory_full_sha256'] is not None:assert rec['inventory_full_sha256']==old['full'],rec
+  if rec['inventory_body_sha256'] is not None:assert rec['inventory_body_sha256']==old['body'],rec
   checks.append(rec)
   if not rec['identical']:missing.append(rec)
- result=dict(frozen_revision=F,roots=roots,conservative_inventory_checks=checks,nonidentical=missing,conservative_edge_refinements=excluded,changed_functions=changed,deleted_files=files,removed_functions=removed,tests_before=tests_before,tests_after=tests_after)
+ result=dict(frozen_revision=F,roots=roots,source_added_dependencies=source_added,conservative_inventory_checks=checks,nonidentical=missing,conservative_edge_refinements=excluded,changed_functions=changed,deleted_files=files,removed_functions=removed,tests_before=tests_before,tests_after=tests_after)
  (E/'NKX_BYTE_IDENTITY.json').write_text(json.dumps(result,indent=1)+'\n')
  assert not missing,missing
  assert all(v['function']=='programs/aspis-pool/src/processor.rs::process_instruction' for v in changed),changed

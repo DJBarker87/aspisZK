@@ -2054,15 +2054,16 @@ index 912f6893f35..840e4108309 100644
 -    }
 -}
 diff --git a/programs/aspis-pool/src/instruction.rs b/programs/aspis-pool/src/instruction.rs
-index e7549dd1739..a551ccdba47 100644
+index e7549dd1739..2bc82ef384d 100644
 --- a/programs/aspis-pool/src/instruction.rs
 +++ b/programs/aspis-pool/src/instruction.rs
-@@ -10,31 +10,26 @@ use aspis_core::field::{M31, P};
+@@ -10,31 +10,28 @@ use aspis_core::field::{M31, P};
  use aspis_statement::{
      decode_digest_canonical, encode_digest_canonical,
      pool_v1::{
 -        decode_historical_anchor_envelope_v1, decode_verifier_policy_v1,
 -        encode_historical_anchor_envelope_v1, encode_verifier_policy_v1,
++        decode_verifier_policy_v1, encode_verifier_policy_v1,
 +        decode_historical_anchor_envelope_v1,
 +        encode_historical_anchor_envelope_v1,
          HistoricalAnchorEnvelopeV1, PoolV1TransitionKind, POOL_V1_DIGEST_ENCODING_VERSION,
@@ -2079,6 +2080,7 @@ index e7549dd1739..a551ccdba47 100644
 -    deposit_transport::{decode_deposit_instruction_v1, DepositInstructionFormatErrorV1},
 -    state::PoolInitializationV1,
 -    vault::LEGACY_SPL_TOKEN_PROGRAM_ID,
++    state::PoolInitializationV1, vault::LEGACY_SPL_TOKEN_PROGRAM_ID,
 +    deposit_transport::DepositInstructionFormatErrorV1,
  };
  
@@ -2093,7 +2095,7 @@ index e7549dd1739..a551ccdba47 100644
  pub const POOL_V1_TRANSITION_STATEMENT_BYTES: usize = 216;
  pub const POOL_V1_SPEND_INSTRUCTION_BYTES: usize =
      8 + POOL_V1_HISTORICAL_ANCHOR_ENVELOPE_BYTES + POOL_V1_TRANSITION_STATEMENT_BYTES;
-@@ -43,16 +38,9 @@ pub const POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC: [u8; 4] = *b"ASCP";
+@@ -43,16 +40,9 @@ pub const POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC: [u8; 4] = *b"ASCP";
  pub const POOL_V1_WITHDRAWAL_STATEMENT_MAGIC: [u8; 4] = *b"ASWP";
  pub const POOL_V1_TRANSITION_STATEMENT_VERSION: u8 = 1;
  
@@ -2110,7 +2112,7 @@ index e7549dd1739..a551ccdba47 100644
  const SPEND_ENVELOPE_OFFSET: usize = 8;
  const SPEND_STATEMENT_OFFSET: usize =
      SPEND_ENVELOPE_OFFSET + POOL_V1_HISTORICAL_ANCHOR_ENVELOPE_BYTES;
-@@ -269,59 +257,6 @@ fn require_envelope_statement_match(
+@@ -269,59 +259,6 @@ fn require_envelope_statement_match(
      Ok(())
  }
  
@@ -2170,7 +2172,7 @@ index e7549dd1739..a551ccdba47 100644
  fn encode_statement_common(
      bytes: &mut [u8; POOL_V1_TRANSITION_STATEMENT_BYTES],
      magic: &[u8; 4],
-@@ -411,12 +346,6 @@ pub fn encode_pair_private_transfer_instruction_v1(
+@@ -411,12 +348,6 @@ pub fn encode_pair_private_transfer_instruction_v1(
      Ok(bytes)
  }
  
@@ -2183,7 +2185,7 @@ index e7549dd1739..a551ccdba47 100644
  pub fn decode_pair_private_transfer_instruction_v1(
      bytes: &[u8],
  ) -> Result<PrivateTransferInstructionV1<'_>, PoolInstructionFormatErrorV1> {
-@@ -538,12 +467,6 @@ pub fn encode_pair_withdrawal_instruction_v1(
+@@ -538,12 +469,6 @@ pub fn encode_pair_withdrawal_instruction_v1(
      Ok(bytes)
  }
  
@@ -2196,7 +2198,7 @@ index e7549dd1739..a551ccdba47 100644
  pub fn decode_pair_withdrawal_instruction_v1(
      bytes: &[u8],
  ) -> Result<WithdrawalInstructionV1<'_>, PoolInstructionFormatErrorV1> {
-@@ -605,26 +528,6 @@ fn decode_withdrawal_with_magic_v1<'a>(
+@@ -605,26 +530,6 @@ fn decode_withdrawal_with_magic_v1<'a>(
      })
  }
  
@@ -2223,22 +2225,24 @@ index e7549dd1739..a551ccdba47 100644
  pub fn encode_transition_receipt_v1(
      receipt: &TransitionReceiptV1,
  ) -> Result<[u8; POOL_V1_TRANSITION_RECEIPT_BYTES], PoolInstructionFormatErrorV1> {
-@@ -673,152 +576,3 @@ pub fn encode_transition_receipt_v1(
-     bytes[168..200].copy_from_slice(&encode_digest_canonical(&receipt.root));
+@@ -674,151 +579,68 @@ pub fn encode_transition_receipt_v1(
      Ok(bytes)
  }
--
+ 
 -#[cfg(test)]
 -mod tests {
 -    use super::*;
 -    use aspis_statement::pool_v1::{
 -        VerifierPolicyV1, POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY,
 -    };
--
++// Shared AS8I codecs retain the frozen grammar and function text.
++pub const POOL_V1_INITIALIZE_INSTRUCTION_MAGIC: [u8; 4] = *b"ASIN";
+ 
 -    fn digest(seed: u32) -> Digest {
 -        core::array::from_fn(|index| M31(seed + 17 * index as u32))
 -    }
--
++pub const POOL_V1_INITIALIZE_INSTRUCTION_BYTES: usize = 184;
+ 
 -    fn policy() -> VerifierPolicyV1 {
 -        VerifierPolicyV1 {
 -            flags: POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY,
@@ -2247,7 +2251,8 @@ index e7549dd1739..a551ccdba47 100644
 -            policy_binding: [8u8; 32],
 -        }
 -    }
--
++const INITIALIZE_MINT_OFFSET: usize = 8;
+ 
 -    fn envelope(kind: PoolV1TransitionKind) -> HistoricalAnchorEnvelopeV1 {
 -        HistoricalAnchorEnvelopeV1 {
 -            transition_kind: kind,
@@ -2259,8 +2264,35 @@ index e7549dd1739..a551ccdba47 100644
 -            verifier_profile: [3u8; 32],
 -            verifier_release: [4u8; 32],
 -        }
--    }
--
++const INITIALIZE_ASSET_ID_OFFSET: usize = 40;
++
++const INITIALIZE_DOMAIN_OFFSET: usize = 48;
++
++const INITIALIZE_POLICY_OFFSET: usize = 80;
++
++pub fn encode_initialize_instruction_v1(
++    initialization: &PoolInitializationV1,
++) -> Result<[u8; POOL_V1_INITIALIZE_INSTRUCTION_BYTES], PoolInstructionFormatErrorV1> {
++    if initialization.token_program != LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes()
++        || initialization.asset_id.0 >= P
++    {
++        return Err(PoolInstructionFormatErrorV1::NonCanonicalField);
+     }
++    let policy = encode_verifier_policy_v1(&initialization.verifier_policy)
++        .map_err(|_| PoolInstructionFormatErrorV1::InvalidPolicy)?;
++    let mut bytes = [0u8; POOL_V1_INITIALIZE_INSTRUCTION_BYTES];
++    bytes[..4].copy_from_slice(&POOL_V1_INITIALIZE_INSTRUCTION_MAGIC);
++    bytes[4] = POOL_V1_INSTRUCTION_VERSION;
++    bytes[INITIALIZE_MINT_OFFSET..INITIALIZE_ASSET_ID_OFFSET]
++        .copy_from_slice(&initialization.asset_mint);
++    bytes[INITIALIZE_ASSET_ID_OFFSET..INITIALIZE_ASSET_ID_OFFSET + 4]
++        .copy_from_slice(&initialization.asset_id.to_le_bytes());
++    bytes[INITIALIZE_DOMAIN_OFFSET..INITIALIZE_POLICY_OFFSET]
++        .copy_from_slice(&initialization.deployment_domain);
++    bytes[INITIALIZE_POLICY_OFFSET..].copy_from_slice(&policy);
++    Ok(bytes)
++}
+ 
 -    #[test]
 -    fn initialization_is_exact_and_rejects_trailing_reserved_and_policy_confusion() {
 -        let initialization = PoolInitializationV1 {
@@ -2374,8 +2406,35 @@ index e7549dd1739..a551ccdba47 100644
 -            decode_withdrawal_instruction_v1(&trailing),
 -            Err(PoolInstructionFormatErrorV1::WrongLength)
 -        );
--    }
--}
++pub fn decode_initialize_instruction_v1(
++    bytes: &[u8],
++) -> Result<PoolInitializationV1, PoolInstructionFormatErrorV1> {
++    if bytes.len() != POOL_V1_INITIALIZE_INSTRUCTION_BYTES {
++        return Err(PoolInstructionFormatErrorV1::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_INITIALIZE_INSTRUCTION_MAGIC {
++        return Err(PoolInstructionFormatErrorV1::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_INSTRUCTION_VERSION {
++        return Err(PoolInstructionFormatErrorV1::WrongVersion);
+     }
++    if bytes[5..8] != [0u8; 3] || bytes[44..48] != [0u8; 4] {
++        return Err(PoolInstructionFormatErrorV1::NonZeroReserved);
++    }
++    let raw_asset_id = u32::from_le_bytes(exact_array(&bytes[40..44])?);
++    if raw_asset_id >= P {
++        return Err(PoolInstructionFormatErrorV1::NonCanonicalField);
++    }
++    let verifier_policy = decode_verifier_policy_v1(&bytes[INITIALIZE_POLICY_OFFSET..])
++        .map_err(|_| PoolInstructionFormatErrorV1::InvalidPolicy)?;
++    Ok(PoolInitializationV1 {
++        asset_mint: exact_array(&bytes[INITIALIZE_MINT_OFFSET..INITIALIZE_ASSET_ID_OFFSET])?,
++        token_program: LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes(),
++        asset_id: M31(raw_asset_id),
++        deployment_domain: exact_array(&bytes[INITIALIZE_DOMAIN_OFFSET..INITIALIZE_POLICY_OFFSET])?,
++        verifier_policy,
++    })
+ }
 diff --git a/programs/aspis-pool/src/lib.rs b/programs/aspis-pool/src/lib.rs
 index 2ef5916ec87..94e30db58d4 100644
 --- a/programs/aspis-pool/src/lib.rs
@@ -7664,7 +7723,7 @@ index fb0be4524e2..00000000000
 -    }
 -}
 diff --git a/programs/aspis-pool/src/processor.rs b/programs/aspis-pool/src/processor.rs
-index 1b2daae7808..9a124a22393 100644
+index 1b2daae7808..ec99724ba22 100644
 --- a/programs/aspis-pool/src/processor.rs
 +++ b/programs/aspis-pool/src/processor.rs
 @@ -9,16 +9,7 @@ extern crate alloc;
@@ -7685,7 +7744,7 @@ index 1b2daae7808..9a124a22393 100644
  #[cfg(target_os = "solana")]
  use solana_program::instruction::get_stack_height;
  #[cfg(any(target_os = "solana", test))]
-@@ -41,70 +32,12 @@ use solana_sdk_ids::{
+@@ -41,70 +32,11 @@ use solana_sdk_ids::{
  };
  
  use crate::{
@@ -7753,7 +7812,6 @@ index 1b2daae7808..9a124a22393 100644
 -        derive_verifier_dispatch_claim_v1, dispatch_authenticated_verifier_readonly_v1,
 -        VerifierDispatchClaimV1,
 -    },
-+    history::require_program_account,
 +    nullifier::NullifierMarkerPreparationV1,
 +    vault::{parse_legacy_token_account_v1, pool_v1_vault_authority_address,
 +        pool_v1_vault_token_account_address, LEGACY_SPL_TOKEN_ACCOUNT_BYTES,
@@ -7761,7 +7819,7 @@ index 1b2daae7808..9a124a22393 100644
  };
  
  #[cfg(feature = "pair-afterstate-evidence")]
-@@ -143,15 +76,6 @@ pub(crate) trait PoolCpiRuntimeV1 {
+@@ -143,15 +75,6 @@ pub(crate) trait PoolCpiRuntimeV1 {
          signer_seeds: &[&[&[u8]]],
      ) -> ProgramResult;
  
@@ -7777,7 +7835,7 @@ index 1b2daae7808..9a124a22393 100644
  }
  
  struct SolanaPoolCpiRuntimeV1;
-@@ -230,46 +154,6 @@ pub(crate) fn require_payer_and_system_program(
+@@ -230,46 +153,6 @@ pub(crate) fn require_payer_and_system_program(
      Ok(())
  }
  
@@ -7824,7 +7882,7 @@ index 1b2daae7808..9a124a22393 100644
  pub(crate) fn plan_fresh_program_pda(
      account: &AccountInfo<'_>,
      program_id: &Pubkey,
-@@ -556,2069 +440,197 @@ pub(crate) fn initialize_vault_account<'info, R: PoolCpiRuntimeV1>(
+@@ -556,2069 +439,197 @@ pub(crate) fn initialize_vault_account<'info, R: PoolCpiRuntimeV1>(
      require_initialized_empty_vault(program_id, pool, mint.key, vault)
  }
  
@@ -10064,7 +10122,7 @@ index 1b2daae7808..9a124a22393 100644
      }
      Ok(())
  }
-@@ -2626,157 +638,8 @@ fn require_transaction_level_invocation_v1(stack_height: usize) -> ProgramResult
+@@ -2626,157 +637,8 @@ fn require_transaction_level_invocation_v1(stack_height: usize) -> ProgramResult
  #[cfg(test)]
  mod tests {
      use super::*;
@@ -10223,7 +10281,7 @@ index 1b2daae7808..9a124a22393 100644
          let program_id = Pubkey::new_unique();
          assert_eq!(
              process_instruction(&program_id, &[], b"ASP"),
-@@ -2787,9 +650,8 @@ mod tests {
+@@ -2787,9 +649,8 @@ mod tests {
              Err(ProgramError::InvalidInstructionData)
          );
      }
@@ -10234,7 +10292,7 @@ index 1b2daae7808..9a124a22393 100644
          assert_eq!(
              require_transaction_level_invocation_v1(TRANSACTION_LEVEL_STACK_HEIGHT),
              Ok(())
-@@ -2806,949 +668,17 @@ mod tests {
+@@ -2806,949 +667,17 @@ mod tests {
              );
          }
      }

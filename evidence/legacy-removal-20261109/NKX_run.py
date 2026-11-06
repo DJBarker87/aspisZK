@@ -17,9 +17,19 @@ features='r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-sou
 if mode.startswith(('baseline','tests')):
  cmd=['cargo','test','--manifest-path',str(S/'programs/aspis-pool/Cargo.toml'),'--release','--locked','--offline','-j','4']
  if mode!='tests-default':cmd+=['--features',features]
- if mode=='tests-disabled':cmd[-1]+=',pair-afterstate-evidence,pair-forest-full-asf8-audit'
+ if mode in ['tests-disabled','tests-all']:cmd[-1]+=',pair-afterstate-evidence,pair-forest-full-asf8-audit'
+ if mode=='tests-all':cmd[-1]+=',pair-forest-history-page-invariant-audit,pair-forest-deposit-invariant-audit,pair-forest-direct-result-audit'
 else:
  program='aspis-pool' if mode.startswith('pool') else 'r1-cost-probe'
+ # build-sbf skips key generation when this output path exists. A directory
+ # is an explicit non-key placeholder: never create/read/use a wallet key.
+ artifact_dir=out/'artifacts';artifact_dir.mkdir()
+ (artifact_dir/('aspis_pool-keypair.json' if program=='aspis-pool' else 'aspis_r1_cost_probe_program-keypair.json')).mkdir()
+ pins={
+ '/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf':'46e50d5d1bcc70abfd74f0b6281071ef91576031330d1d892622e1ea59445d6c',
+ '/home/dombarker/.cache/solana/v1.52/platform-tools/rust/bin/rustc':'d95c95b68e321ad76634e1fd26b0a7c20ccdbae9ad9ca733f3ae2f2b4a0b6002',
+ '/home/dombarker/project-offloads/codex-cx-lowering2-20261026/rustc-diagnostics.py':'fa74d69e097b6eab43809943614133081abb6beb19406018961402b86494ff84'}
+ for p,h in pins.items():assert sha(pathlib.Path(p))==h,(p,'tool pin changed')
  cmd=['/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf','--manifest-path',str(S/'programs'/program/'Cargo.toml'),'--sbf-out-dir',str(out/'artifacts'),'--features',features if program=='aspis-pool' else 'pool-adapter,private-leaf-salts','--skip-tools-install','--offline','-j','4','--','--locked']
  env.update(CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS='-C link-arg=--threads=4',RUSTC_WRAPPER='/home/dombarker/project-offloads/codex-cx-lowering2-20261026/rustc-diagnostics.py',S10_DIAGNOSTICS=str(out/'diagnostics'))
  if mode=='devnet':env.update(ASPIS_R1_POOL_PROGRAM_ID='BmsNikL97uF7bb1hMnJxsas7a9LjjK8vvT5Q1b7W34Qs',ASPIS_R1_REGISTRY_PROGRAM_ID='9pWwAcBgwhnkA8JWSA6GvjpYqGzSibLF6GqGH8v6EC9Q')
@@ -29,12 +39,14 @@ else:
    __import__('shutil').rmtree(p)
   for p in (B/'target').glob('**/release/deps/*aspis_pool*'):
    if p.is_file():p.unlink()
-rec=dict(attempt=mode,target=cmd,source_revision=(B/'NKX_revision.txt').read_text().strip(),source_manifest={str(p.relative_to(S)):sha(p) for root in ['crates','programs'] for p in (S/root).rglob('*') if p.is_file()},limits=limits,cgroup=str(cg),lock_before=lock,environment={k:v for k,v in env.items() if k.startswith(('CARGO_','RUST','S10_','ASPIS_'))},print_axioms='N/A: engineering build/test',expected_work='optimized compilation and native tests' if mode.startswith(('baseline','tests')) else 'optimized SBF compilation/linking')
-meta=subprocess.run(['cargo','metadata','--manifest-path',str(S/'programs'/('aspis-pool' if mode.startswith(('baseline','tests','pool')) else 'r1-cost-probe')/'Cargo.toml'),'--features',features if mode.startswith(('baseline','tests','pool')) and mode!='tests-default' else ('pool-adapter,private-leaf-salts' if mode in ['default','devnet'] else ''),'--locked','--offline','--format-version','1'],cwd=S,env=env,capture_output=True,text=True)
+rec=dict(attempt=mode,target=cmd,source_revision=(B/'NKX_revision.txt').read_text().strip(),source_tree_dirty=mode.startswith('tests'),driver_sha256=sha(pathlib.Path(__file__)),source_manifest={str(p.relative_to(S)):sha(p) for root in ['crates','programs'] for p in (S/root).rglob('*') if p.is_file()},limits=limits,cgroup=str(cg),disk_free_before_bytes=__import__('shutil').disk_usage(B).free,own_disk_before_bytes=int(subprocess.check_output(['du','-sb',str(B)],text=True).split()[0]),lock_before=lock,environment={k:v for k,v in env.items() if k.startswith(('CARGO_','RUST','S10_','ASPIS_'))},print_axioms='N/A: engineering build/test',expected_work='optimized compilation and native tests' if mode.startswith(('baseline','tests')) else 'optimized SBF compilation/linking')
+meta=subprocess.run(['cargo','metadata','--manifest-path',str(S/'programs'/('aspis-pool' if mode.startswith(('baseline','tests','pool')) else 'r1-cost-probe')/'Cargo.toml'),'--features',cmd[cmd.index('--features')+1] if '--features' in cmd else '','--locked','--offline','--format-version','1'],cwd=S,env=env,capture_output=True,text=True)
 assert meta.returncode==0,meta.stderr
 metadata=json.loads(meta.stdout)
 rec['resolved_packages']=[dict(id=n['id'],features=n['features']) for n in metadata['resolve']['nodes']]
 assert sha(S/'Cargo.lock')==lock
+rec['tool_pins']=pins if not mode.startswith(('baseline','tests')) else {}
+rec['native_rustc_version']=subprocess.check_output(['rustc','--version'],cwd=S,env=env,text=True).strip()
 (out/'command.json').write_text(json.dumps(rec,indent=1)+'\n')
 t=time.monotonic()
 with (out/'stdout.log').open('w') as f:r=subprocess.run(['/usr/bin/time','-v','-o',str(out/'time.log'),'timeout','600','taskset','--cpu-list','0-3',*cmd],cwd=S,env=env,stdout=f,stderr=subprocess.STDOUT)

@@ -2,7 +2,7 @@
 
 Frozen revision: `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. Restore any frozen file with `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:<path>`.
 
-The dispatcher loses only ASIN/ASDI/ASPT/ASWD/ASPP/ASPF/ASPX arms. Rejection falls through to InvalidInstructionData. Shared encoding helpers remain because unchanged AS8D and ASJP/ASJW encoders call them; they do not add a dispatch path.
+The dispatcher loses only ASIN/ASDI/ASPT/ASWD/ASPP/ASPF/ASPX arms. Rejection falls through to InvalidInstructionData. Shared initialization/encoding helpers remain because unchanged AS8I/AS8D and ASJP/ASJW codecs call them; they do not add a dispatch path.
 
 ## Deleted files
 
@@ -78,8 +78,6 @@ The dispatcher loses only ASIN/ASDI/ASPT/ASWD/ASPP/ASPF/ASPX arms. Rejection fal
 - `programs/aspis-pool/src/deposit_transport.rs:332` `tests::canonical_instruction_round_trip_rejects_wrong_version_reserved_and_trailing` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
 - `programs/aspis-pool/src/deposit_transport.rs:363` `tests::successful_kernel_result_sets_exact_receipt_payload_once` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
 - `programs/aspis-pool/src/deposit_transport.rs:383` `tests::failed_kernel_result_never_sets_return_data` (test); restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/deposit_transport.rs`.
-- `programs/aspis-pool/src/instruction.rs:272` `encode_initialize_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
-- `programs/aspis-pool/src/instruction.rs:295` `decode_initialize_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
 - `programs/aspis-pool/src/instruction.rs:414` `decode_private_transfer_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
 - `programs/aspis-pool/src/instruction.rs:541` `decode_withdrawal_instruction_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
 - `programs/aspis-pool/src/instruction.rs:608` `decode_deposit_top_level_v1`; restore: `git show 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:programs/aspis-pool/src/instruction.rs`.
@@ -318,3 +316,5 @@ All pair_forest*.rs, pair_processor.rs, pair_state.rs and pair_dispatch.rs files
 Six conservative target alternatives produce seven spurious closure rows. The full incoming-edge records and reasons are in NKX_BYTE_IDENTITY.json. The header callback overlay confused a local RootPageHeaderV1 record for a function. From alternatives target incompatible numeric/core/error receiver types; Deref alternatives target Vec/Box/CanonicalPairPoolStateV1, never CanonicalPoolStateV1. The latter false target also pulled in its as_state callee. No actual pair-forest body changed or was deleted; this is source/type disambiguation of an explicitly conservative inventory, not proof credit.
 
 NKX_edit.py records initial source surgery; subsequent import/whitespace/unused-symbol cleanup is captured by the final NKX_DIFF.patch. NKX_source.py independently checks the final tree.
+
+The first post-removal compile identified omitted AS8I shared init codecs. Their exact frozen functions/constants were restored before any passing post-removal build; NKX_source.py now adds those source dependencies explicitly to its gate.

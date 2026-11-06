@@ -33,7 +33,6 @@ use solana_sdk_ids::{
 
 use crate::{
     error::PoolV1ProgramError,
-    history::require_program_account,
     nullifier::NullifierMarkerPreparationV1,
     vault::{parse_legacy_token_account_v1, pool_v1_vault_authority_address,
         pool_v1_vault_token_account_address, LEGACY_SPL_TOKEN_ACCOUNT_BYTES,

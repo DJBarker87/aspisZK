@@ -10,6 +10,7 @@ use aspis_core::field::{M31, P};
 use aspis_statement::{
     decode_digest_canonical, encode_digest_canonical,
     pool_v1::{
+        decode_verifier_policy_v1, encode_verifier_policy_v1,
         decode_historical_anchor_envelope_v1,
         encode_historical_anchor_envelope_v1,
         HistoricalAnchorEnvelopeV1, PoolV1TransitionKind, POOL_V1_DIGEST_ENCODING_VERSION,
@@ -21,6 +22,7 @@ use aspis_statement::{
 use solana_program::program_error::ProgramError;
 
 use crate::{
+    state::PoolInitializationV1, vault::LEGACY_SPL_TOKEN_PROGRAM_ID,
     deposit_transport::DepositInstructionFormatErrorV1,
 };
 
@@ -575,4 +577,70 @@ pub fn encode_transition_receipt_v1(
     bytes[160..168].copy_from_slice(&receipt.root_sequence.to_le_bytes());
     bytes[168..200].copy_from_slice(&encode_digest_canonical(&receipt.root));
     Ok(bytes)
+}
+
+// Shared AS8I codecs retain the frozen grammar and function text.
+pub const POOL_V1_INITIALIZE_INSTRUCTION_MAGIC: [u8; 4] = *b"ASIN";
+
+pub const POOL_V1_INITIALIZE_INSTRUCTION_BYTES: usize = 184;
+
+const INITIALIZE_MINT_OFFSET: usize = 8;
+
+const INITIALIZE_ASSET_ID_OFFSET: usize = 40;
+
+const INITIALIZE_DOMAIN_OFFSET: usize = 48;
+
+const INITIALIZE_POLICY_OFFSET: usize = 80;
+
+pub fn encode_initialize_instruction_v1(
+    initialization: &PoolInitializationV1,
+) -> Result<[u8; POOL_V1_INITIALIZE_INSTRUCTION_BYTES], PoolInstructionFormatErrorV1> {
+    if initialization.token_program != LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes()
+        || initialization.asset_id.0 >= P
+    {
+        return Err(PoolInstructionFormatErrorV1::NonCanonicalField);
+    }
+    let policy = encode_verifier_policy_v1(&initialization.verifier_policy)
+        .map_err(|_| PoolInstructionFormatErrorV1::InvalidPolicy)?;
+    let mut bytes = [0u8; POOL_V1_INITIALIZE_INSTRUCTION_BYTES];
+    bytes[..4].copy_from_slice(&POOL_V1_INITIALIZE_INSTRUCTION_MAGIC);
+    bytes[4] = POOL_V1_INSTRUCTION_VERSION;
+    bytes[INITIALIZE_MINT_OFFSET..INITIALIZE_ASSET_ID_OFFSET]
+        .copy_from_slice(&initialization.asset_mint);
+    bytes[INITIALIZE_ASSET_ID_OFFSET..INITIALIZE_ASSET_ID_OFFSET + 4]
+        .copy_from_slice(&initialization.asset_id.to_le_bytes());
+    bytes[INITIALIZE_DOMAIN_OFFSET..INITIALIZE_POLICY_OFFSET]
+        .copy_from_slice(&initialization.deployment_domain);
+    bytes[INITIALIZE_POLICY_OFFSET..].copy_from_slice(&policy);
+    Ok(bytes)
+}
+
+pub fn decode_initialize_instruction_v1(
+    bytes: &[u8],
+) -> Result<PoolInitializationV1, PoolInstructionFormatErrorV1> {
+    if bytes.len() != POOL_V1_INITIALIZE_INSTRUCTION_BYTES {
+        return Err(PoolInstructionFormatErrorV1::WrongLength);
+    }
+    if bytes[..4] != POOL_V1_INITIALIZE_INSTRUCTION_MAGIC {
+        return Err(PoolInstructionFormatErrorV1::WrongMagic);
+    }
+    if bytes[4] != POOL_V1_INSTRUCTION_VERSION {
+        return Err(PoolInstructionFormatErrorV1::WrongVersion);
+    }
+    if bytes[5..8] != [0u8; 3] || bytes[44..48] != [0u8; 4] {
+        return Err(PoolInstructionFormatErrorV1::NonZeroReserved);
+    }
+    let raw_asset_id = u32::from_le_bytes(exact_array(&bytes[40..44])?);
+    if raw_asset_id >= P {
+        return Err(PoolInstructionFormatErrorV1::NonCanonicalField);
+    }
+    let verifier_policy = decode_verifier_policy_v1(&bytes[INITIALIZE_POLICY_OFFSET..])
+        .map_err(|_| PoolInstructionFormatErrorV1::InvalidPolicy)?;
+    Ok(PoolInitializationV1 {
+        asset_mint: exact_array(&bytes[INITIALIZE_MINT_OFFSET..INITIALIZE_ASSET_ID_OFFSET])?,
+        token_program: LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes(),
+        asset_id: M31(raw_asset_id),
+        deployment_domain: exact_array(&bytes[INITIALIZE_DOMAIN_OFFSET..INITIALIZE_POLICY_OFFSET])?,
+        verifier_policy,
+    })
 }
