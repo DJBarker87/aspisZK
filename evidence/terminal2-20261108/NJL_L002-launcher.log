@@ -1,0 +1,48 @@
+{"attempt": "NJL_L002", "exit_status": 1, "wall_seconds": 37.078925298992544, "peak_rss_kib": "6164128", "swaps": "0", "print_axioms": ["'AspisR1.NJL_LowDischarge.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJL_LowDischarge.lean:40:16: error: Invalid projection: Projections cannot be used on functions, and
+  cut.right.right.right.right.right.right.right
+has function type
+  ∀ (j : Fin (NJB_Cuts.lowCount ((fun i => i) ⟨0, ⋯⟩) + 1)),
+    ((events j).operation = if ↑j = NJB_Cuts.lowCount ((fun i => i) ⟨0, ⋯⟩) - 1 then 0 else 1) ∧
+      (events j).left = NJB_Cuts.lowLeft high low sum r ((fun i => i) ⟨0, ⋯⟩) j ∧
+        (events j).right = NJB_Cuts.lowRight low r ((fun i => i) ⟨0, ⋯⟩) j
+NJL_LowDischarge.lean:58:16: error: Invalid projection: Projections cannot be used on functions, and
+  cut.right.right.right.right.right.right.right
+has function type
+  ∀ (j : Fin (NJB_Cuts.lowCount ((fun i => i) ⟨1, ⋯
+...
+ter can be disabled with `set_option linter.unusedSimpArgs false`
+NJL_LowDischarge.lean:120:64: warning: This simp argument is unused:
+  Matrix.cons_val_succ
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵,̵M̵a̵t̵r̵i̵x̵.̵c̵o̵n̵s̵_̵v̵a̵l̵_̵z̵e̵r̵o̵,̵M̵a̵t̵r̵i̵x̵.̵c̵o̵n̵s̵_̵v̵a̵l̵_̵s̵u̵c̵c̵]̵[̲r̲,̲ ̲M̲a̲t̲r̲i̲x̲.̲c̲o̲n̲s̲_̲v̲a̲l̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJL_LowDischarge.lean:147:43: warning: This simp argument is unused:
+  Matrix.cons_val_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵,̵M̵a̵t̵r̵i̵x̵.̵c̵o̵n̵s̵_̵v̵a̵l̵_̵z̵e̵r̵o̵,̵M̵a̵t̵r̵i̵x̵.̵c̵o̵n̵s̵_̵v̵a̵l̵_̵s̵u̵c̵c̵]̵[̲r̲,̲ ̲M̲a̲t̲r̲i̲x̲.̲c̲o̲n̲s̲_̲v̲a̲l̲_̲s̲u̲c̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJL_LowDischarge.lean:147:64: warning: This simp argument is unused:
+  Matrix.cons_val_succ
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵,̵M̵a̵t̵r̵i̵x̵.̵c̵o̵n̵s̵_̵v̵a̵l̵_̵z̵e̵r̵o̵,̵M̵a̵t̵r̵i̵x̵.̵c̵o̵n̵s̵_̵v̵a̵l̵_̵s̵u̵c̵c̵]̵[̲r̲,̲ ̲M̲a̲t̲r̲i̲x̲.̲c̲o̲n̲s̲_̲v̲a̲l̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NJL_LowDischarge.source : ∀ (high : Fin 7 → NQ) (low : Fin 16 → NQ) (sum : NQ) (c : Fin 7),
+  (∀ (i : Fin 7), Canon (high i)) →
+    (∀ (i : Fin 16), Canon (low i)) →
+      Canon sum →
+        ∃ r,
+          (∀ (j : Fin 17), Canon (r j)) ∧
+            Clauses high low sum r c ∧
+              ∀ (events : Fin (NJB_Cuts.lowCount c + 1) → NJB_Cuts.Event) (calls next : ℕ) (out : NQ),
+                NJB_Cuts.low high low sum r c events calls next out → NJB_ActiveRawLow.step high low sum c = ok out :=
+sorry
+'AspisR1.NJL_LowDischarge.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r14bc7b710fb94d3f86ad4153193afab0.scope; invocation ID: efa2f415e4904f28986b6b0db9b5b065

@@ -1,6 +1,6 @@
 """NIH-owned input client; unchanged S2W launcher and admission infrastructure."""
 from pathlib import Path
-import json, subprocess, sys, time, hashlib, shlex, re, os, atexit
+import base64, json, subprocess, sys, time, hashlib, shlex, re, os, atexit
 E=Path(__file__).resolve().parent
 H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-terminal2-20261108'
@@ -39,16 +39,25 @@ p=b/{(a+'-reservation.json')!r};print(p.read_text() if p.exists() else 'MISSING'
   print('reservation wait',flush=True);time.sleep(60);time.sleep(60);time.sleep(60);continue
  raise RuntimeError('STOP admission')
 x.update(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True)
-files={n:(E/n).read_text() for n in x['sources'] if (E/n).is_file()}
+files={n:(base64.b64encode((E/n).read_bytes()).decode() if n.endswith('.xz') else (E/n).read_text()) for n in x['sources'] if (E/n).is_file()}
 files[a+'.json']=json.dumps(x)
 r=ssh('python3',f'''from pathlib import Path
-import json,shutil,hashlib,re
+import base64,json,shutil,hashlib,re
 b=Path({B!r});w=Path('/home/dombarker/project-offloads/codex-cx-sound-int2-20261025')
 for n in ['S2W_run_host.py','lakefile.toml','lake-manifest.json','lean-toolchain']:
  if not (b/n).exists():shutil.copyfile(w/n,b/n)
 for n,t in json.loads({json.dumps(files)!r}).items():
- p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+ p=b/n;p.parent.mkdir(parents=True,exist_ok=True);(p.write_bytes(base64.b64decode(t)) if n.endswith('.xz') else p.write_text(t))
 for n in ['NJL_objects','NJL_generated','NJL_tmp','NJL_native']:(b/n).mkdir(exist_ok=True)
+manifest=json.loads((b/'NJL_PREDECESSOR_EXPORT.json').read_text());seed=b/'NJL_seed';seed.mkdir(exist_ok=True);records=[]
+for entry in manifest['files']:
+ src=Path(entry['path']);dst=seed/src.name
+ assert hashlib.sha256(src.read_bytes()).hexdigest()==entry['sha256'],str(src)
+ if not dst.exists():shutil.copyfile(src,dst)
+ assert hashlib.sha256(dst.read_bytes()).hexdigest()==entry['sha256'],str(dst)
+ records.append(dict(path=str(dst),sha256=entry['sha256'],bytes=dst.stat().st_size))
+(b/'NJL_SEED.json').write_text(json.dumps(dict(files=records,total_bytes=sum(z['bytes'] for z in records))))
+
 p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x.get('env',{{}}).get('LEAN_PATH','').split(':');rels=set();pins={{}}
 if x['kind'] in ['lean','audit']:
  for root in roots:
@@ -74,7 +83,7 @@ r=ssh('python3',f'''from pathlib import Path
 import json
 b=Path({B!r});names=[str(p.relative_to(b)) for p in (b/{a!r}).rglob('*') if p.is_file()]+[{(a+'.json')!r}]+{x.get('collect',[])!r}
 for pattern in {x.get('collect_globs',[])!r}:names += [str(p.relative_to(b)) for p in b.glob(pattern) if p.is_file()]
-print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).is_file()}}))
+print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).is_file() and not n.endswith('.xz')}}))
 ''');assert r.returncode==0,r.stderr
 for n,t in json.loads(r.stdout).items():
  p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)

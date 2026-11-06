@@ -1,0 +1,5 @@
+# Own-input repairs
+
+L001 had duplicated -o in argv copied by an off-by-one slice; Lean printed usage and exited1 before elaboration. L002 removes that extra argv element; validation unchanged.
+
+L006 completed exit0; client collection attempted UTF8 decode of its binary source snapshot. Recovered read-only; collection now aliases binary input to committed compressed payload. K001 compiler rejected a missing unchanged literal #[path] file (tools/r1-builder-reference/tree.rs). Added the complete predecessor literal-path closure after verifying each byte against frozen git, and strengthened every source check to pin it; K003 is the changed-input positive run, original harness name retained.

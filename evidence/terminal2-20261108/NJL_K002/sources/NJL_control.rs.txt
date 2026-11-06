@@ -1,0 +1,32 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+struct NJL_Control { seek:usize, seen:usize, calls:usize }
+impl NJL_Control { fn enter(&mut self,position:usize) { if self.calls==self.seek {self.seen=position;} self.calls+=1; } }
+fn NJL_active_control(log:&mut NJL_Control)->([QM31;7],QM31,usize,usize){
+ const MASKS:[u16;7]=[6144,6145,4097,2048,2049,26214,1749];
+ let high_sums=[QM31::ZERO;MASKS.len()];
+ let mut block=0usize;
+        while block < constants::ACTIVE_ROW_MASKS.len() {
+            log.enter(block);
+            block += 1;
+        }
+ let sum=QM31::ZERO;
+ let mut coordinate=0usize;
+        while coordinate < MASKS.len() {
+            log.enter(64+coordinate);
+            coordinate += 1;
+        }
+ (high_sums,sum,block,coordinate)
+}
+
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_active_control_cut(){
+ let seek:usize=kani::any();kani::assume(seek<71);
+ let mut log=NJL_Control{seek,seen:999,calls:0};
+ let (high,sum,block,coordinate)=NJL_active_control(&mut log);
+ assert_eq!(log.calls,71);assert_eq!(block,64);assert_eq!(coordinate,7);
+ assert_eq!(log.seen,seek ^ if cfg!(NJL_invert){1}else{0});
+ let cell:usize=kani::any();kani::assume(cell<7);
+ assert_eq!(high[cell],QM31::ZERO);assert_eq!(sum,QM31::ZERO);
+}

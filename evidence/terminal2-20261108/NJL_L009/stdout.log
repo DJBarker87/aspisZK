@@ -1,0 +1,288 @@
+NJL_AbsorptionPrologue.lean:75:60: warning: This simp argument is unused:
+  a2
+
+Hint: Omit it from the simp argument list.
+  simp only [NJB_AbsorptionScales.reference, ̲h0, ̲n0, ̲a1, ̲h1, ̲n1, ̲a2̵,̵a̵3', ̲a4, ̲h2, ̲n2, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NJL_AbsorptionPrologue.source : ∀ (low fixed two eight nodes : NQ),
+  Canon low →
+    Canon fixed →
+      Canon two →
+        Canon eight →
+          Canon nodes →
+            ∃ r p scales,
+              Cut ![low, fixed, two, eight, nodes] r p
+                  (fun j =>
+                    { operation := kind j, left := left ![low, fixed, two, eight, nodes] r j,
+                      right := right ![low, fixed, two, eight, nodes] r j })
+                  (fun j => r (replyIndex j)) positions p p 7 3 ∧
+                Clauses ![low, fixed, two, eight, nodes] r p ∧
+                  NJB_AbsorptionScales.reference low fixed two eight nodes = ok scales ∧
+                    ∀ (j : Fin 3),
+                      (scales j).value = r (replyIndex j) ∧
+                        (scales j).cache = p j ∧
+                          Canon (scales j).value ∧ NJB_PreparedLaws.Domain (scales j).cache (scales j).value :=
+fun low fixed two eight nodes hl hf ht he hn =>
+  let ⟨q0, h✝⟩ := NJB_StubLaws.qm_mul low fixed hl hf
+  let ⟨h0, right✝⟩ := h✝
+  let ⟨c0, right✝¹⟩ := right✝
+  let ⟨p0, h✝¹⟩ := NJB_PreparedLaws.new_result q0 c0
+  let ⟨n0, d0⟩ := h✝¹
+  let ⟨t1, h✝²⟩ := NJB_StubLaws.qm_add fixed two hf ht
+  let ⟨a1, right✝²⟩ := h✝²
+  let ⟨ct1, right✝³⟩ := right✝²
+  let ⟨q1, h✝³⟩ := NJB_StubLaws.qm_mul low t1 hl ct1
+  let ⟨h1, right✝⁴⟩ := h✝³
+  let ⟨c1, right✝⁵⟩ := right✝⁴
+  let ⟨p1, h✝⁴⟩ := NJB_PreparedLaws.new_result q1 c1
+  let ⟨n1, d1⟩ := h✝⁴
+  let ⟨t2, h✝⁵⟩ := NJB_StubLaws.qm_add fixed two hf ht
+  let ⟨a2, right✝⁶⟩ := h✝⁵
+  let ⟨ct2, right✝⁷⟩ := right✝⁶
+  let ⟨t3, h✝⁶⟩ := NJB_StubLaws.qm_add t2 eight ct2 he
+  let ⟨a3, right✝⁸⟩ := h✝⁶
+  let ⟨ct3, right✝⁹⟩ := right✝⁸
+  let ⟨t4, h✝⁷⟩ := NJB_StubLaws.qm_add t3 nodes ct3 hn
+  let ⟨a4, right✝¹⁰⟩ := h✝⁷
+  let ⟨ct4, right✝¹¹⟩ := right✝¹⁰
+  let ⟨q2, h✝⁸⟩ := NJB_StubLaws.qm_mul low t4 hl ct4
+  let ⟨h2, right✝¹²⟩ := h✝⁸
+  let ⟨c2, right✝¹³⟩ := right✝¹²
+  let ⟨p2, h✝⁹⟩ := NJB_PreparedLaws.new_result q2 c2
+  let ⟨n2, d2⟩ := h✝⁹
+  have repeated := ok.inj (Eq.trans (Eq.symm a2) a1);
+  have a3' := Eq.mpr (id (congrArg (fun _a => _a.add eight = ok t3) (Eq.symm repeated))) a3;
+  let r := ![q0, t1, q1, t2, t3, t4, q2];
+  let p := ![p0, p1, p2];
+  let scales := ![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }];
+  Exists.intro r
+    (Exists.intro p
+      (Exists.intro scales
+        ⟨⟨fun j =>
+            List.Mem.casesOn (motive := fun a x =>
+              List.finRange ({ len := 4 }.len + 1) = a →
+                Fintype.complete j ≍ x → Canon (![low, fixed, two, eight, nodes] j))
+              (Fintype.complete j)
+              (fun «as» h =>
+                List.cons.noConfusion h fun head_eq =>
+                  Eq.ndrec (motive := fun j =>
+                    ∀ (this : j ∈ Fintype.elems),
+                      (fun x1 x2 => (fun i => i) x1 :: x2)
+                            ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))))⟩
+                            ((fun x1 x2 => ⋯) ⟨2, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))⟩
+                              (⋯ ⟨3, Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))⟩ ⋯)) ≍
+                          «as» →
+                        this ≍ List.Mem.head «as» → Canon (![low, fixed, two, eight, nodes] j))
+                    (fun this tail_eq =>
+                      Eq.ndrec (motive := fun «as» =>
+                        this ≍ List.Mem.head «as» → Canon (![low, fixed, two, eight, nodes] ((fun i => i) ⋯)))
+                        (fun h => hl) (eq_of_heq tail_eq))
+                    (eq_of_heq head_eq) (Fintype.complete j))
+              (fun b {«as»} a h =>
+                List.cons.noConfusion h fun head_eq =>
+                  Eq.ndrec (motive := fun b =>
+                    (fun x1 x2 => (fun i => i) x1 :: x2)
+                          ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))))⟩
+                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                            ⟨2, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))⟩
+                            ((fun x1 x2 => ⋯) ⟨3, Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))⟩
+                              (⋯ ⟨4, Nat.le_refl ({ len := 4 }.len + 1)⟩ []))) ≍
+                        «as» →
+                      Fintype.complete j ≍ List.Mem.tail b a → Canon (![low, fixed, two, eight, nodes] j))
+                    (fun tail_eq =>
+                      Eq.ndrec (motive := fun {«as»} =>
+                        ∀ (a : List.Mem j «as»),
+                          Fintype.complete j ≍ List.Mem.tail ⋯ a → Canon (![low, fixed, two, eight, nodes] j))
+                        (fun a h =>
+                          List.Mem.casesOn (motive := fun a_1 x => ⋯ = a_1 → ⋯ → ⋯) a
+                            (fun «as» h => List.cons.noConfusion h fun head_eq => ⋯)
+                            (fun b {«as»} a_1 h => List.cons.noConfusion h fun head_eq => ⋯)
+                            (Eq.refl
+                              ((fun x1 x2 => ⋯)
+                                ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1))))⟩
+                                (⋯ ⟨2, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 4 }.len + 1)))⟩ ⋯)))
+                            (HEq.refl a))
+                        (eq_of_heq tail_eq) a)
+                    (eq_of_heq head_eq))
+              (Eq.refl (List.finRange ({ len := 4 }.len + 1))) (HEq.refl (Fintype.complete j)),
+            ⟨fun j =>
+              List.Mem.casesOn (motive := fun a x =>
+                List.finRange ({ len := 6 }.len + 1) = a → Fintype.complete j ≍ x → Canon (r j)) (Fintype.complete j)
+                (fun «as» h =>
+                  List.cons.noConfusion h fun head_eq =>
+                    Eq.ndrec (motive := fun j =>
+                      ∀ (this : j ∈ Fintype.elems),
+                        (fun x1 x2 => ⋯) ⟨1, ⋯⟩ (⋯ ⋯ ⋯) ≍ «as» → this ≍ List.Mem.head «as» → Canon (r j))
+                      (fun this tail_eq =>
+                        Eq.ndrec (motive := fun «as» => this ≍ List.Mem.head «as» → Canon (r ⋯)) (fun h => c0)
+                          (eq_of_heq tail_eq))
+                      (eq_of_heq head_eq) (Fintype.complete j))
+                (fun b {«as»} a h =>
+                  List.cons.noConfusion h fun head_eq =>
+                    Eq.ndrec (motive := fun b =>
+                      (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt ⋯⟩ ((fun x1 x2 => ⋯) ⟨2, ⋯⟩ (⋯ ⋯ ⋯)) ≍
+                          «as» →
+                        Fintype.complete j ≍ List.Mem.tail b a → Canon (r j))
+                      (fun tail_eq =>
+                        Eq.ndrec (motive := fun {«as»} => ∀ (a : List.Mem j «as»), Fintype.complete j ≍ ⋯ → Canon (r j))
+                          (fun a h =>
+                            List.Mem.casesOn (motive := fun a_1 x => ⋯ → ⋯) a (fun «as» h => List.cons.noConfusion h ⋯)
+                              (fun b {«as»} a_1 h => List.cons.noConfusion h ⋯) (Eq.refl (⋯ ⋯ ⋯)) (HEq.refl a))
+                          (eq_of_heq tail_eq) a)
+                      (eq_of_heq head_eq))
+                (Eq.refl (List.finRange ({ len := 6 }.len + 1))) (HEq.refl (Fintype.complete j)),
+              ⟨rfl, ⟨rfl, ⟨fun x => ⟨rfl, ⟨rfl, rfl⟩⟩, fun x => ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩⟩⟩⟩,
+          ⟨⟨fun j =>
+              List.Mem.casesOn (motive := fun a x =>
+                List.finRange ({ len := 6 }.len + 1) = a →
+                  Fintype.complete j ≍ x →
+                    (if kind j = 0 then
+                        FIq_Native.field.QM31.mul (left ![low, fixed, two, eight, nodes] r j)
+                          (right ![low, fixed, two, eight, nodes] r j)
+                      else
+                        FIq_Native.field.QM31.add (left ![low, fixed, two, eight, nodes] r j)
+                          (right ![low, fixed, two, eight, nodes] r j)) =
+                      ok (r j))
+                (Fintype.complete j)
+                (fun «as» h =>
+                  List.cons.noConfusion h fun head_eq =>
+                    Eq.ndrec (motive := fun j =>
+                      ∀ (this : j ∈ Fintype.elems),
+                        (fun x1 x2 => ⋯) ⟨1, ⋯⟩ (⋯ ⋯ ⋯) ≍ «as» →
+                          this ≍ List.Mem.head «as» → (if kind j = 0 then ⋯ else ⋯) = ok (r j))
+                      (fun this tail_eq =>
+                        Eq.ndrec (motive := fun «as» => this ≍ List.Mem.head «as» → (if ⋯ then ⋯ else ⋯) = ok ⋯)
+                          (fun h => h0) (eq_of_heq tail_eq))
+                      (eq_of_heq head_eq) (Fintype.complete j))
+                (fun b {«as»} a h =>
+                  List.cons.noConfusion h fun head_eq =>
+                    Eq.ndrec (motive := fun b =>
+                      (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt ⋯⟩ ((fun x1 x2 => ⋯) ⟨2, ⋯⟩ (⋯ ⋯ ⋯)) ≍
+                          «as» →
+                        Fintype.complete j ≍ List.Mem.tail b a →
+                          (if kind j = 0 then FIq_Native.field.QM31.mul ⋯ ⋯ else FIq_Native.field.QM31.add ⋯ ⋯) =
+                            ok (r j))
+                      (fun tail_eq =>
+                        Eq.ndrec (motive := fun {«as»} =>
+                          ∀ (a : List.Mem j «as»), Fintype.complete j ≍ ⋯ → ⋯ = ok (r j))
+                          (fun a h =>
+                            List.Mem.casesOn (motive := fun a_1 x => ⋯ → ⋯) a (fun «as» h => List.cons.noConfusion h ⋯)
+                              (fun b {«as»} a_1 h => List.cons.noConfusion h ⋯) (Eq.refl (⋯ ⋯ ⋯)) (HEq.refl a))
+                          (eq_of_heq tail_eq) a)
+                      (eq_of_heq head_eq))
+                (Eq.refl (List.finRange ({ len := 6 }.len + 1))) (HEq.refl (Fintype.complete j)),
+              fun j =>
+              List.Mem.casesOn (motive := fun a x =>
+                List.finRange ({ len := 2 }.len + 1) = a →
+                  Fintype.complete j ≍ x → FIq_Native.field.PreparedQm31Multiplier.new (r (replyIndex j)) = ok (p j))
+                (Fintype.complete j)
+                (fun «as» h =>
+                  List.cons.noConfusion h fun head_eq =>
+                    Eq.ndrec (motive := fun j =>
+                      ∀ (this : j ∈ Fintype.elems),
+                        (fun x1 x2 => ⋯) ⟨1, Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1))⟩
+                              (⋯ ⟨2, Nat.le_refl ({ len := 2 }.len + 1)⟩ []) ≍
+                            «as» →
+                          this ≍ List.Mem.head «as» →
+                            FIq_Native.field.PreparedQm31Multiplier.new (r (replyIndex j)) = ok (p j))
+                      (fun this tail_eq =>
+                        Eq.ndrec (motive := fun «as» =>
+                          this ≍ List.Mem.head «as» → FIq_Native.field.PreparedQm31Multiplier.new ⋯ = ok ⋯)
+                          (fun h => n0) (eq_of_heq tail_eq))
+                      (eq_of_heq head_eq) (Fintype.complete j))
+                (fun b {«as»} a h =>
+                  List.cons.noConfusion h fun head_eq =>
+                    Eq.ndrec (motive := fun b =>
+                      (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1))⟩
+                            ((fun x1 x2 => ⋯) ⟨2, Nat.le_refl ({ len := 2 }.len + 1)⟩ []) ≍
+                          «as» →
+                        Fintype.complete j ≍ List.Mem.tail b a →
+                          FIq_Native.field.PreparedQm31Multiplier.new (r (replyIndex j)) = ok (p j))
+                      (fun tail_eq =>
+                        Eq.ndrec (motive := fun {«as»} =>
+                          ∀ (a : List.Mem j «as»),
+                            Fintype.complete j ≍ ⋯ →
+                              FIq_Native.field.PreparedQm31Multiplier.new (r (replyIndex j)) = ok (p j))
+                          (fun a h =>
+                            List.Mem.casesOn (motive := fun a_1 x => ⋯ → ⋯) a (fun «as» h => List.cons.noConfusion h ⋯)
+                              (fun b {«as»} a_1 h => List.cons.noConfusion h ⋯)
+                              (Eq.refl (⋯ ⟨1, Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1))⟩ ⋯)) (HEq.refl a))
+                          (eq_of_heq tail_eq) a)
+                      (eq_of_heq head_eq))
+                (Eq.refl (List.finRange ({ len := 2 }.len + 1))) (HEq.refl (Fintype.complete j))⟩,
+            ⟨Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans
+                        (Eq.trans
+                          (congr (congrArg Bind.bind h0)
+                            (funext fun q0 =>
+                              congrArg (Bind.bind (FIq_Native.field.PreparedQm31Multiplier.new q0))
+                                (funext fun p0 => ⋯)))
+                          (bind_tc_ok q0 fun y => do
+                            let p0 ← FIq_Native.field.PreparedQm31Multiplier.new y
+                            ok
+                                ![{ value := y, cache := p0 }, { value := q1, cache := p1 },
+                                  { value := q2, cache := p2 }]))
+                        (Eq.trans
+                          (congrFun' (congrArg Bind.bind n0) fun p0 =>
+                            ok
+                              ![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                { value := q2, cache := p2 }])
+                          (bind_tc_ok p0 fun y =>
+                            ok
+                              ![{ value := q0, cache := y }, { value := q1, cache := p1 },
+                                { value := q2, cache := p2 }]))))
+                    (ok scales)))
+                (Eq.refl
+                  (ok ![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }])),
+              fun j =>
+              List.Mem.casesOn (motive := fun a x =>
+                List.finRange ({ len := 2 }.len + 1) = a →
+                  Fintype.complete j ≍ x →
+                    (scales j).value = r (replyIndex j) ∧
+                      (scales j).cache = p j ∧
+                        Canon (scales j).value ∧ NJB_PreparedLaws.Domain (scales j).cache (scales j).value)
+                (Fintype.complete j)
+                (fun «as» h =>
+                  List.cons.noConfusion h fun head_eq =>
+                    Eq.ndrec (motive := fun j =>
+                      ∀ (this : j ∈ Fintype.elems),
+                        (fun x1 x2 => ⋯) ⟨1, Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1))⟩
+                              (⋯ ⟨2, Nat.le_refl ({ len := 2 }.len + 1)⟩ []) ≍
+                            «as» →
+                          this ≍ List.Mem.head «as» →
+                            (scales j).value = r (replyIndex j) ∧
+                              (scales j).cache = p j ∧
+                                Canon (scales j).value ∧ NJB_PreparedLaws.Domain (scales j).cache (scales j).value)
+                      (fun this tail_eq =>
+                        Eq.ndrec (motive := fun «as» => this ≍ List.Mem.head «as» → ⋯ = ⋯ ∧ ⋯ ∧ ⋯)
+                          (fun h => ⟨rfl, ⟨rfl, ⟨c0, d0⟩⟩⟩) (eq_of_heq tail_eq))
+                      (eq_of_heq head_eq) (Fintype.complete j))
+                (fun b {«as»} a h =>
+                  List.cons.noConfusion h fun head_eq =>
+                    Eq.ndrec (motive := fun b =>
+                      (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1))⟩
+                            ((fun x1 x2 => ⋯) ⟨2, Nat.le_refl ({ len := 2 }.len + 1)⟩ []) ≍
+                          «as» →
+                        Fintype.complete j ≍ List.Mem.tail b a →
+                          (scales j).value = r (replyIndex j) ∧
+                            (scales j).cache = p j ∧
+                              Canon (scales j).value ∧ NJB_PreparedLaws.Domain (scales j).cache (scales j).value)
+                      (fun tail_eq =>
+                        Eq.ndrec (motive := fun {«as»} =>
+                          ∀ (a : List.Mem j «as»),
+                            Fintype.complete j ≍ ⋯ →
+                              (scales j).value = r (replyIndex j) ∧
+                                (scales j).cache = p j ∧
+                                  Canon (scales j).value ∧ NJB_PreparedLaws.Domain (scales j).cache (scales j).value)
+                          (fun a h =>
+                            List.Mem.casesOn (motive := fun a_1 x => ⋯ → ⋯) a (fun «as» h => List.cons.noConfusion h ⋯)
+                              (fun b {«as»} a_1 h => List.cons.noConfusion h ⋯)
+                              (Eq.refl (⋯ ⟨1, Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1))⟩ ⋯)) (HEq.refl a))
+                          (eq_of_heq tail_eq) a)
+                      (eq_of_heq head_eq))
+                (Eq.refl (List.finRange ({ len := 2 }.len + 1))) (HEq.refl (Fintype.complete j))⟩⟩⟩))
+'AspisR1.NJL_AbsorptionPrologue.source' depends on axioms: [propext, Classical.choice, Quot.sound]

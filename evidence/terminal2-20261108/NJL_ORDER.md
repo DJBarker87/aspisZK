@@ -1,200 +1,236 @@
-# NJL bottom-up composition order
+# NJL dependency order
 
-Target not yet established. Order follows the frozen call graph retained in NJB_OBLIGATIONS. Conservative field-method alternatives must be resolved against the body; they are not extra executable calls. Native observations and model Results below are SUPPORT until joined in a positive root. TX1:215 and268 are read-only predecessor candidates, not work to repeat. TX1:256 is excluded.
+Target not established. Canonical-call ordering is conservative; resolve deployed branches against the frozen source. For each member the predecessor register below names reusable windows, inductions and exact missing composition. All cited packets remain SUPPORT until a complete root and gates pass. TX1:215 consumes NIX;268 consumes NJB;256 belongs to NJG.
 
-## 1. TX1:TX1:209 active_mask_basis
+## 1. TX1:209 active_mask_basis
 
-Frozen body `06327928dccdc523e4969b244f5b8d6d6a45a68e25da195713c9c9391d1d8c63`. In-slice children: none.
+Children: none in job. Body SHA256 `06327928dccdc523e4969b244f5b8d6d6a45a68e25da195713c9c9391d1d8c63`.
 
-No predecessor packet.
+High64/low7 raw induction, exact masks, full reference/cohort Result and seven native partitions exist. Need native low trace/cut discharge and the complete source-ordered high+low invocation root, including initialization/counters/abort frames.
 
-## 2. TX1:TX1:214 accumulate_endpoint_selector_tensor_basis
+## 2. TX1:214 accumulate_endpoint_selector_tensor_basis
 
-Frozen body `2d9421c7d79f9d8d9a8f7b5a86f111360e3db287f95b24c4879a639fc8ada5fd`. In-slice children: none.
+Children: none in job. Body SHA256 `2d9421c7d79f9d8d9a8f7b5a86f111360e3db287f95b24c4879a639fc8ada5fd`.
 
-No predecessor packet.
+Full103-cell endpoint shape K072 timed out. Split genuine136-link lookup and one-cell add pass/control; need both source writes and binary-weight Result joined at the proved disjoint indices with full103-cell frame and caller binary-weight provenance.
 
-## 3. TX1:TX1:215 copy_residual
+## 3. TX1:215 copy_residual
 
-Frozen body `d337c04540afccc38db5d7078647f6d7dd334a3dec628a5eb0998f82cc7903bc`. In-slice children: none.
+Children: none in job. Body SHA256 `d337c04540afccc38db5d7078647f6d7dd334a3dec628a5eb0998f82cc7903bc`.
 
-No predecessor packet.
+Native17-operation record and full emitted value Result exist; instantiate every same-argument actual field Result through the typed residual cut in one root, rather than leave trace binding as prose.
 
-## 4. TX1:TX1:216 copy_tag_coordinate_dot
+## 4. TX1:216 copy_tag_coordinate_dot
 
-Frozen body `7fb036830e7ba6316136b8803d17227ea10345a0995a20ba58e7d3284c03bbd3`. In-slice children: none.
+Children: none in job. Body SHA256 `7fb036830e7ba6316136b8803d17227ea10345a0995a20ba58e7d3284c03bbd3`.
 
-No predecessor packet.
+Read/raw-add/reduce windows, exact U64 product law and symbolic at-most-four bound exist. Need frozen272-term/31-offset registry association and inner/chunk/limb/outer native-step induction to the cohort, including partial last chunks and final four-word constructor.
 
-## 5. TX1:TX1:219 finish_pattern_basis_values
+## 5. TX1:219 finish_pattern_basis_values
 
-Frozen body `13d49b06c2492291c427edf866f3385016bda99190116f78826d3340820d2ccb`. In-slice children: none.
+Children: none in job. Body SHA256 `13d49b06c2492291c427edf866f3385016bda99190116f78826d3340820d2ccb`.
 
-No predecessor packet.
+Inner and outer native windows and complete four-cell raw fold Result exist. Need full typed outer invocation cut, same-array state/frame composition, and association to the adopted pattern-basis meaning.
 
-## 6. TX1:TX1:224 pattern_values_windowed
+## 6. TX1:224 pattern_values_windowed
 
-Frozen body `e8b231003195740f4bf707f2d9bcfea889c1572c94350ab1f2219e88e1e82772`. In-slice children: none.
+Children: none in job. Body SHA256 `e8b231003195740f4bf707f2d9bcfea889c1572c94350ab1f2219e88e1e82772`.
 
-No predecessor packet.
+Native power/callback/window/tail observations are attempted separately. Need powers8 and actual prepared-array map association, four SAME windows, complete14-output composition and retained pattern-model equality. Callback-slot prototype alone does not establish Std array::map.
 
-## 7. TX1:TX1:225 qm31_sum_products_up_to4
+## 7. TX1:225 qm31_sum_products_up_to4
 
-Frozen body `c56b8bc9870aaa1d210da4f149eb6900e2aa4b4683feea5f35500657f076c883`. In-slice children: none.
+Children: none in job. Body SHA256 `c56b8bc9870aaa1d210da4f149eb6900e2aa4b4683feea5f35500657f076c883`.
 
-No predecessor packet.
+SLICE BOUNDARY: counts2/3/4 call field::qm31_sum_products2/3/4, baseline TX1:040/041/043 OPEN outside this job. Do not author their proofs or replace products with an unpaired oracle. Count1 uses the closed multiplication law; other arms prevent the whole dispatcher closing.
 
-## 8. TX1:TX1:227 absorption_lanes_factored
+Open slice boundaries: TX1:040 crates/aspis-core/src/field.rs::qm31_sum_products2; TX1:041 crates/aspis-core/src/field.rs::qm31_sum_products3; TX1:043 crates/aspis-core/src/field.rs::qm31_sum_products4.
 
-Frozen body `f8a4b6d3077b8e3557f7c1f6ad09096cadafd23f4f6b4c9222d7bacbd2a4a88d`. In-slice children: none.
+## 8. TX1:227 absorption_lanes_factored
 
-No predecessor packet.
+Children: none in job. Body SHA256 `f8a4b6d3077b8e3557f7c1f6ad09096cadafd23f4f6b4c9222d7bacbd2a4a88d`.
 
-## 9. TX1:TX1:231 add_preweighted_shared_selector
+Full16-array raw reference/cohort Result and actual9-word native prologue/lane records exist. Need the single positive root consuming all typed prologue/lane/array-construction cuts with complete frames. Reduced-token K016–019 is excluded.
 
-Frozen body `4f4229a3d79646f34efc41d984a0218414e3a93557767f00160309ea2de08625`. In-slice children: none.
+## 9. TX1:231 add_preweighted_shared_selector
 
-No predecessor packet.
+Children: none in job. Body SHA256 `4f4229a3d79646f34efc41d984a0218414e3a93557767f00160309ea2de08625`.
 
-## 10. TX1:TX1:234 append_level_packed_selector_tensor
+Deployed N33/start49 gather/group/control passes and full24-state reference exist; need complete typed cuts, same-array carrier, selector-pack distributivity instantiated against the adopted add_preweighted/selected contribution meaning.
 
-Frozen body `fa565e254864875310cfab90e74a8d5ca7f50c9a559078c0e35eba38f22d9d24`. In-slice children: none.
+## 10. TX1:234 append_level_packed_selector_tensor
 
-No predecessor packet.
+Children: none in job. Body SHA256 `fa565e254864875310cfab90e74a8d5ca7f50c9a559078c0e35eba38f22d9d24`.
 
-## 11. TX1:TX1:242 left_digest_packed_selector_tensor
+Independent leaf was extracted with the common batch but no new Lean body emitted. Still needs native append-level branch, empty_root239/lift243/pack039/prepared/m31-tweak clauses on their actual domains, two returned arrays and the level<20 caller fact. No external open callee is invented.
 
-Frozen body `0040d5ca2e9068254b4591e7378b86ac109324ec0b6fd01eac20413e7aa00ff0`. In-slice children: none.
+## 11. TX1:242 left_digest_packed_selector_tensor
 
-No predecessor packet.
+Children: none in job. Body SHA256 `0040d5ca2e9068254b4591e7378b86ac109324ec0b6fd01eac20413e7aa00ff0`.
 
-## 12. TX1:TX1:244 occupancy_lanes_factored
+K054 timed out; K060 timed out and also interleaved the global order. Both excluded. Atomic residual and pack/prepared windows pass/control; need all eight subtractions before both products, constructor/array-return cuts and exact full cohort Result.
 
-Frozen body `ed6aab03e13549b9db0a8bfddeda5b78fa83371f640988ef231f07137cb9f363`. In-slice children: none.
+## 12. TX1:244 occupancy_lanes_factored
 
-No predecessor packet.
+Children: none in job. Body SHA256 `ed6aab03e13549b9db0a8bfddeda5b78fa83371f640988ef231f07137cb9f363`.
 
-## 13. TX1:TX1:245 optional_carry_packed_selector_tensor
+Independent context/head/arbitrary-lane/tail native windows use the actual prepared type and no bit assumption. Need typed-cut composition, finite digest-lane induction and equality to the retained occupancy literal, including all12 outputs.
 
-Frozen body `f03d0e02cf983c980b2d8d19d420ed86afe44f973871eb596abfaae1b5478ab3`. In-slice children: none.
+## 13. TX1:245 optional_carry_packed_selector_tensor
 
-No predecessor packet.
+Children: none in job. Body SHA256 `f03d0e02cf983c980b2d8d19d420ed86afe44f973871eb596abfaae1b5478ab3`.
 
-## 14. TX1:TX1:246 optional_recipient_packed_selector_tensor
+Branch-only observation can establish carry<20 versus zero and exact callback payload/reply. True-body arithmetic/copy cuts must still compose all residuals/products and full2-array Result; do not treat the opaque body reply as a proved child.
 
-Frozen body `434787e888c9e5de13c6fa8db282243109d3b5f809ad5ca631ccf3204ce6b17a`. In-slice children: none.
+## 14. TX1:246 optional_recipient_packed_selector_tensor
 
-No predecessor packet.
+Children: none in job. Body SHA256 `434787e888c9e5de13c6fa8db282243109d3b5f809ad5ca631ccf3204ce6b17a`.
 
-## 15. TX1:TX1:247 path_lanes_factored
+Option<Digest> branch-only observation is not Option<fn> and uses no function contracts. Still need actual Some-body constructor/group loop induction, zero None branch and full two-array source/model Result.
 
-Frozen body `82be995dbb46c9ead080de3ab45a513377c316c6aec5d30f9f25dff80d79872b`. In-slice children: none.
+## 15. TX1:247 path_lanes_factored
 
-No predecessor packet.
+Children: none in job. Body SHA256 `82be995dbb46c9ead080de3ab45a513377c316c6aec5d30f9f25dff80d79872b`.
 
-## 16. TX1:TX1:268 semantic_public
+Prologue passes/control. Combined left/right K082 timed out; split one-side windows are attempted separately. Need all eight unrolled pair blocks composed with actual same caches, head bit residual, complete17-cell frame and retained path meaning; arbitrary canonical bit is allowed.
 
-Frozen body `cefd39cf61e4755559619d43ff4951205b5a61b1dd5870f0234838ad855fbbab`. In-slice children: none.
+## 16. TX1:268 semantic_public
 
-No predecessor packet.
+Children: none in job. Body SHA256 `cefd39cf61e4755559619d43ff4951205b5a61b1dd5870f0234838ad855fbbab`.
 
-## 17. TX1:TX1:208 active
+Sole unconditional getter candidate: full typed variant/borrow identity and complete cohort Result, no hypotheses beyond typed input. Local combined/raw/scan gate and then next authoritative ledger gate determine admission; enclosing codec/native interpretation obligations remain.
 
-Frozen body `2c5f9843f8a3de74cdff673abc924e331697f072d831d6f7e7be8a36572fbdb2`. In-slice children: TX1:TX1:209.
+## 17. TX1:208 active
 
-No predecessor packet.
+Children: TX1:209. Body SHA256 `2c5f9843f8a3de74cdff673abc924e331697f072d831d6f7e7be8a36572fbdb2`.
 
-## 18. TX1:TX1:217 copy_tag_coordinate_value
+K044/045 proves deployed forwarding identity, but209 still lacks the single positive native-cut composition root; cannot discharge the callee clause with model equality alone.
 
-Frozen body `26a0429e391dee8094a40b1aabd6c5d1e982012ade1f18926520444d500b428b`. In-slice children: TX1:TX1:216.
+Real in-job child occurrences: TX1:209.
 
-No predecessor packet.
+## 18. TX1:217 copy_tag_coordinate_value
 
-## 19. TX1:TX1:223 pattern_values
+Children: TX1:216. Body SHA256 `26a0429e391dee8094a40b1aabd6c5d1e982012ade1f18926520444d500b428b`.
 
-Frozen body `2638996d9eb8b1210efde6fa631b20f9a205e986c7c516d8dfed5086e49dab6f`. In-slice children: TX1:TX1:224.
+Deployed function forwards to216. Root cannot discharge its child until216 is CLOSED. Nondeployed scratch-index arm is not substituted for the deployed dot arm.
 
-No predecessor packet.
+Real in-job child occurrences: TX1:216.
 
-## 20. TX1:TX1:228 add_occupancy_lanes
+## 19. TX1:223 pattern_values
 
-Frozen body `d9500106e35c45325e9ee93fb7556861ed9726ba103945fd9849acb838835fb1`. In-slice children: TX1:TX1:244.
+Children: TX1:224. Body SHA256 `2638996d9eb8b1210efde6fa631b20f9a205e986c7c516d8dfed5086e49dab6f`.
 
-No predecessor packet.
+Deployed windowed child224 is unfinished; remaining literal/selector parent meaning must use the actual selected feature arm, not the old emitted helper name.
 
-## 21. TX1:TX1:229 add_path_lanes
+Real in-job child occurrences: TX1:224.
 
-Frozen body `2cb72727c5a5af29ad22f2bf3dbb2fbeca0766aa35a761cb835c5ce423f013c0`. In-slice children: TX1:TX1:247.
+## 20. TX1:228 add_occupancy_lanes
 
-No predecessor packet.
+Children: TX1:244. Body SHA256 `d9500106e35c45325e9ee93fb7556861ed9726ba103945fd9849acb838835fb1`.
 
-## 22. TX1:TX1:233 add_value_lanes
+Requires occupancy244 and full preweighted/shared231 call Results at their same actual arguments, plus source-ordered lane-adder cuts. The generic CLOSED add_preweighted230 alone does not supply the optimized factored caller.
 
-Frozen body `e01906f45024c2ec2eb3c3664b550a19a03327332774e5c06ab5310bcd742a85`. In-slice children: TX1:TX1:231.
+Real in-job child occurrences: TX1:244.
 
-No predecessor packet.
+## 21. TX1:229 add_path_lanes
 
-## 23. TX1:TX1:235 append_levels_packed_selector_tensor
+Children: TX1:247. Body SHA256 `2cb72727c5a5af29ad22f2bf3dbb2fbeca0766aa35a761cb835c5ce423f013c0`.
 
-Frozen body `f028d64de4bba7c77181271e7370653155cbe295661967587ae6d3c299df5f1d`. In-slice children: TX1:TX1:234.
+Requires path247 and the preweighted/shared caller-domain composition, with mutable packed-state and abort frames.
 
-No predecessor packet.
+Real in-job child occurrences: TX1:247.
 
-## 24. TX1:TX1:260 semantic_initial_and_absorption
+## 22. TX1:233 add_value_lanes
 
-Frozen body `2882d8e00e9546074b1effeb0210c77bdb0783bb623859d42a38986f60eb4d6d`. In-slice children: TX1:TX1:227.
+Children: TX1:231. Body SHA256 `e01906f45024c2ec2eb3c3664b550a19a03327332774e5c06ab5310bcd742a85`.
 
-No predecessor packet.
+Requires deployed shared-selector231 with N33/start49, same input packing/value lanes and complete packed-state frame. Reference-only231 is not a CLOSED callee.
 
-## 25. TX1:TX1:220 finish_selector_tensor_basis
+Real in-job child occurrences: TX1:231.
 
-Frozen body `504c25c7b38d3bd72d364eda75a74c2d9d5bccb70f04823ddc451fc922b8a3c3`. In-slice children: TX1:TX1:217, TX1:TX1:219, TX1:TX1:225.
+## 23. TX1:235 append_levels_packed_selector_tensor
 
-No predecessor packet.
+Children: TX1:234. Body SHA256 `f028d64de4bba7c77181271e7370653155cbe295661967587ae6d3c299df5f1d`.
 
-## 26. TX1:TX1:232 add_schedule_lanes
+Requires234, then one actual append-level iteration over the SAME frontier/opened/powers arrays and Lean finite level induction, full returned/mutable state and reject prefixes.
 
-Frozen body `9179b2d51ecca2cae6da861e781dba682bb1daa55608a8b16fec76d367923e7a`. In-slice children: TX1:TX1:260.
+Real in-job child occurrences: TX1:234.
 
-No predecessor packet.
+## 24. TX1:260 semantic_initial_and_absorption
 
-## 27. TX1:TX1:251 public_digest_packed_selector_tensor
+Children: TX1:227. Body SHA256 `2882d8e00e9546074b1effeb0210c77bdb0783bb623859d42a38986f60eb4d6d`.
 
-Frozen body `ef1afaa5cf67dbc47980119f3ff3b539d486059903b9fd7d24621a68d6191d17`. In-slice children: TX1:TX1:235, TX1:TX1:242, TX1:TX1:245, TX1:TX1:246.
+Requires initial/absorption child227/228 plus actual selected public/claim domains and source-order composition. Root abort prefixes and full returned packed array are unfinished.
 
-No predecessor packet.
+Real in-job child occurrences: TX1:227.
 
-## 28. TX1:TX1:218 evaluate_with_selectors
+## 25. TX1:220 finish_selector_tensor_basis
 
-Frozen body `943bbe1d2c45a64f1bd851059b01547776fa7b5ef051b34efc266fa8e844b624`. In-slice children: TX1:TX1:208, TX1:TX1:214, TX1:TX1:215, TX1:TX1:220, TX1:TX1:223.
+Children: TX1:217, TX1:219, TX1:225. Body SHA256 `504c25c7b38d3bd72d364eda75a74c2d9d5bccb70f04823ddc451fc922b8a3c3`.
 
-No predecessor packet.
+Finish tensor needs219, tag-coordinate217 and the dot dispatcher225. The latter reaches OPEN out-of-slice field helpers. Parent root and rejection/loop frames are unfinished.
 
-## 29. TX1:TX1:250 public_digest_packed
+Real in-job child occurrences: TX1:217, TX1:219, TX1:225.
 
-Frozen body `fc44daa9ba77a01784a47faf64017e7a61bd0043ede2e00149451cb05ce08e4c`. In-slice children: TX1:TX1:251.
+## 26. TX1:232 add_schedule_lanes
 
-No predecessor packet.
+Children: TX1:260. Body SHA256 `9179b2d51ecca2cae6da861e781dba682bb1daa55608a8b16fec76d367923e7a`.
 
-## 30. TX1:TX1:261 semantic_packed
+Requires add_occupancy228, add_path229 and add_value233 (and any actually selected parent branches). Native parent cuts and full Result/early-abort frames remain unfinished.
 
-Frozen body `59b34976f029d802a74e13a69a1f7a066cd8fc5da77753d0bfa093a5fb2dc635`. In-slice children: TX1:TX1:228, TX1:TX1:229, TX1:TX1:232, TX1:TX1:233, TX1:TX1:250.
+Real in-job child occurrences: TX1:260.
 
-No predecessor packet.
+## 27. TX1:251 public_digest_packed_selector_tensor
 
-## 31. TX1:TX1:237 composition_parts
+Children: TX1:235, TX1:242, TX1:245, TX1:246. Body SHA256 `ef1afaa5cf67dbc47980119f3ff3b539d486059903b9fd7d24621a68d6191d17`.
 
-Frozen body `499f65133b57e879a1f3ed024c17945fb0d975887ad8e131bc0ce054bfb27bc0`. In-slice children: TX1:TX1:218, TX1:TX1:261.
+Requires packed helper rows242/245/246 and their actual caller domains, plus all unchanged CLOSED semantic/append children. Complete branch/state cuts remain unfinished.
 
-No predecessor packet.
+Real in-job child occurrences: TX1:235, TX1:242, TX1:245, TX1:246.
 
-## 32. TX1:TX1:263 terminal_parts
+## 28. TX1:218 evaluate_with_selectors
 
-Frozen body `9ca63ef7b7895b4f276329eadef663600f700fa26656a68a809c6e1d04059304`. In-slice children: TX1:TX1:237.
+Children: TX1:208, TX1:214, TX1:215, TX1:220, TX1:223. Body SHA256 `943bbe1d2c45a64f1bd851059b01547776fa7b5ef051b34efc266fa8e844b624`.
 
-No predecessor packet.
+Requires composed endpoint/selector tensor finish220 and pattern223 packets (plus their caller domains); native source-order parent cuts and all early abort prefixes are unfinished.
 
-## Reuse map
+Real in-job child occurrences: TX1:208, TX1:214, TX1:215, TX1:220, TX1:223.
+
+## 29. TX1:250 public_digest_packed
+
+Children: TX1:251. Body SHA256 `fc44daa9ba77a01784a47faf64017e7a61bd0043ede2e00149451cb05ce08e4c`.
+
+Requires public_digest_packed_selector_tensor251 and digest helpers including242/245/246 at the SAME public values. No acceptance-only or guessed output premise is allowed.
+
+Real in-job child occurrences: TX1:251.
+
+## 30. TX1:261 semantic_packed
+
+Children: TX1:228, TX1:229, TX1:232, TX1:233, TX1:250. Body SHA256 `59b34976f029d802a74e13a69a1f7a066cd8fc5da77753d0bfa093a5fb2dc635`.
+
+Requires schedule232, values233, levels235, public digest250 and initial/absorption260 as selected by deployed features. Cannot replace those child Results with hypotheses.
+
+Real in-job child occurrences: TX1:228, TX1:229, TX1:232, TX1:233, TX1:250.
+
+## 31. TX1:237 composition_parts
+
+Children: TX1:218, TX1:261. Body SHA256 `499f65133b57e879a1f3ed024c17945fb0d975887ad8e131bc0ce054bfb27bc0`.
+
+Requires semantic_packed261 and terminal/base composition children; no root may assume those successful Results or an endpoint equality. Complete source-ordered cuts and return-state assembly are missing.
+
+Real in-job child occurrences: TX1:218, TX1:261.
+
+Open slice boundaries: TX1:308 crates/aspis-statement/src/state_only_poseidon.rs::evaluate_state_only_poseidon_oracle_projected.
+
+## 32. TX1:263 terminal_parts
+
+Children: TX1:237. Body SHA256 `9ca63ef7b7895b4f276329eadef663600f700fa26656a68a809c6e1d04059304`.
+
+Requires composition_parts237 and actual equality/terminal children. Parent native invocation and full Result/early-error frame remain OPEN.
+
+Real in-job child occurrences: TX1:237.
+
+## Exact predecessor cut and induction register
 
 # NJB typed cuts and composition status
 
