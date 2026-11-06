@@ -28,7 +28,7 @@
  fn block_rank(block: &[u8; 32]) -> Rank {
      core::array::from_fn(|i| {
          let j = 4 * i;
-@@ -319,3 +322,41 @@
+@@ -319,3 +322,79 @@
  
  #[cfg(test)]
  mod tests;
@@ -68,5 +68,43 @@
 + fn NJT_Q_block_rank_contract() {
 +  let block:[u8;32]=kani::any();
 +  let _=block_rank(&block);
++ }
++}
++
++#[cfg(kani)]
++mod NJT_Q_array8_calibration {
++ use super::*;
++ #[kani::modifies()]
++ #[cfg_attr(not(NJT_Q_shape_invert),kani::ensures(|out| out[0] == NJT_Q_rank_ref(block)[0]))]
++ #[cfg_attr(NJT_Q_shape_invert,kani::ensures(|out| out[0] != NJT_Q_rank_ref(block)[0]))]
++ fn NJT_Q_array8(block:&[u8;32])->[u32;8] {block_rank(block)}
++ #[kani::proof_for_contract(NJT_Q_array8)]
++ #[kani::unwind(34)]
++ #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++ fn NJT_Q_array8_contract() {let block:[u8;32]=kani::any();let _=NJT_Q_array8(&block);}
++ #[kani::proof]
++ #[kani::unwind(34)]
++ #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++ #[cfg_attr(NJT_Q_shape_stub,kani::stub_verified(NJT_Q_array8))]
++ fn NJT_Q_array8_caller() {
++  let block:[u8;32]=kani::any();let out=NJT_Q_array8(&block);
++  // This second-cell property follows from the real body, not the first-cell contract.
++  assert!(out[1]==NJT_Q_rank_ref(&block)[1]);
++ }
++ struct NJT_Q_Record {allowed:u32,frame:u32}
++ #[kani::modifies(&mut record.allowed)]
++ #[kani::ensures(|out| out[0] == NJT_Q_rank_ref(block)[0])]
++ fn NJT_Q_array8_modify(block:&[u8;32],record:&mut NJT_Q_Record)->[u32;8] {
++  record.allowed^=1;
++  #[cfg(NJT_Q_shape_bad_modifies)] {record.frame^=1;}
++  block_rank(block)
++ }
++ #[kani::proof_for_contract(NJT_Q_array8_modify)]
++ #[kani::unwind(34)]
++ #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++ fn NJT_Q_array8_modifies() {
++  let block:[u8;32]=kani::any();
++  let mut record=NJT_Q_Record{allowed:kani::any(),frame:kani::any()};
++  let _=NJT_Q_array8_modify(&block,&mut record);
 + }
 +}
