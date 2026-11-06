@@ -1,0 +1,34 @@
+{"attempt": "NKO_L050", "exit_status": 0, "wall_seconds": 11.84130576485768, "peak_rss_kib": "6021288", "swaps": "0", "print_axioms": ["'NKO_C02.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKO_C02.at_actual : ∀ (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H)
+  (gamma : aspis_core.field.wide_exact.WideExact)
+  (reply : Result (Std.Array aspis_core.field.wide_exact.WideExact 29#usize)),
+  Event.powers gamma reply ∈ (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    ∃ p a,
+      NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash = ok (core.result.Result.Ok (p, a)) ∧
+        gamma = p.gamma ∧ NID_ResumeFields.Domain p a ∧ NFN_LPi_FieldValues.canonE (FIo_Install.toE gamma) :=
+fun wr rr merkle finish {H} d pub proof ck
+...
+theorem NKO_C02.at_actual : ∀ (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H)
+  (gamma : aspis_core.field.wide_exact.WideExact)
+  (reply : Result (Std.Array aspis_core.field.wide_exact.WideExact 29#usize)),
+  Event.powers gamma reply ∈ (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    ∃ p a,
+      NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash = ok (core.result.Result.Ok (p, a)) ∧
+        gamma = p.gamma ∧ NID_ResumeFields.Domain p a ∧ NFN_LPi_FieldValues.canonE (FIo_Install.toE gamma) :=
+fun wr rr merkle finish {H} d pub proof ck hash gamma reply entered =>
+  let ⟨p, h✝⟩ := source wr rr (fun {H} => merkle) finish d pub proof ck hash (Event.powers gamma reply) entered
+  let ⟨a, h✝¹⟩ := h✝
+  let ⟨resume, right✝⟩ := h✝¹
+  let ⟨same, fields⟩ := right✝
+  Exists.intro p
+    (Exists.intro a
+      ⟨resume,
+        ⟨same,
+          ⟨fields,
+            Eq.mpr (id (congrArg (fun _a => NFN_LPi_FieldValues.canonE (FIo_Install.toE _a)) same))
+              (NID_ResumeCallerDomain.gamma p.gamma fields.gamma)⟩⟩⟩)
+'NKO_C02.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r475bf7b3c2bc484181a1a532ebf2bde3.scope; invocation ID: 1bb4e0d739634317ab3368da281fcaf7

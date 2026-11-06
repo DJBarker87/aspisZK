@@ -1,0 +1,44 @@
+{"attempt": "NKO_L027", "exit_status": 0, "wall_seconds": 10.739456914830953, "peak_rss_kib": "6056476", "swaps": "0", "print_axioms": ["'NKO_FrameAtActual.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKO_FrameAtActual.source : ∀ (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) (p : verifier.Prepared)
+  (a : verifier.Accumulator) (g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize)
+  (geometry : verifier.QueryGeometry) (pending : verifier.BatchedWeights)
+  (reply : R (verifier.Accumulator × verifier.BatchedWeights)),
+  Event.query proof p a g geometry pending reply ∈
+      (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    (↑proof).length = 57607 →
+      ∀ (written heap : ℕ → U8) (logBase logSize proofBase : ℕ),
+        ↑proof = NKO_Readonl
+...
+_QueryInput.child
+                                (NKO_FrameG.args written heap logBase logSize proofBase
+                                  { proof := proof, prepared := p, accumulator := a, powers := g, geometry := geometry,
+                                    pending := pending }
+                                  observed) =
+                              NJJ_Common.query proof p a g none geometry pending 22#usize :=
+fun wr rr merkle finish {H} d pub proof ck hash p a g geometry pending reply entered headlineSize written heap logBase
+    logSize proofBase inputView disjoint observed prepared accumulator powers geometryCut rawWidth rawCells terms =>
+  let ⟨left✝, right✝⟩ :=
+    NKO_C07.at_actual wr rr (fun {H} => merkle) finish d pub proof ck hash proof p a g geometry pending reply entered
+  let ⟨left✝¹, right✝¹⟩ := right✝
+  let ⟨left✝², right✝²⟩ := right✝¹
+  let ⟨left✝³, right✝³⟩ := right✝²
+  let ⟨left✝⁴, right✝⁴⟩ := right✝³
+  let ⟨weights, right✝⁵⟩ := right✝⁴
+  let ⟨raw, right✝⁶⟩ := right✝⁵
+  let ⟨inverses, right✝⁷⟩ := right✝⁶
+  let ⟨lines, right✝⁸⟩ := right✝⁷
+  have same :=
+    NKO_FrameG.args_source written heap logBase logSize proofBase
+      { proof := proof, prepared := p, accumulator := a, powers := g, geometry := geometry, pending := pending }
+      observed inputView disjoint headlineSize weights inverses lines raw prepared accumulator powers geometryCut
+      rawWidth rawCells terms;
+  Eq.mpr
+    (id
+      (congrArg (fun _a => NKE_QueryInput.child _a = NJJ_Common.query proof p a g none geometry pending 22#usize) same))
+    (Eq.refl
+      (NKE_QueryInput.child
+        { proof := proof, prepared := p, accumulator := a, powers := g, geometry := geometry, pending := pending }))
+'NKO_FrameAtActual.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r26cd7cf307514e708be1d5c839da1d47.scope; invocation ID: fa014373ad3746c286433af24bba0ff6

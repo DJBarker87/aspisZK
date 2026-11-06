@@ -1,0 +1,44 @@
+{"attempt": "NKO_K045", "exit_status": 1, "wall_seconds": 26.246224998962134, "peak_rss_kib": "5825720", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+lib/src/rust/library/alloc/src/raw_vec/mod.rs:504:9 in function alloc::raw_vec::RawVecInner::non_null::<[u64; 4]>
+
+Check 755: alloc::raw_vec::RawVecInner::non_null::<[u64; 4]>.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:504:9 in function alloc::raw_vec::RawVecInner::non_null::<[u64; 4]>
+
+Check 756: alloc::raw_vec::RawVecInner::non_null::<[u64; 4]>.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:504:9 in function alloc::raw_vec::RawVecInner::non_null::<[u64; 4]>
+
+Check 757: alloc::raw_vec::RawVecInner::non_null::<[u64; 4]>.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:504:9 in function alloc::raw_vec::RawVecInner::non_null::<[u64; 4]>
+
+
+SUMMARY:
+ ** 1 of 757 failed (9 unreachable)
+Failed Checks: |_| log.ptr==proof.as_ptr()as usize &&
+log.len==(proof.len()^(if cfg!(NKO_invert){1}else{0})) && log.calls==1
+ File: "crates/aspis-r1-cost-probe/src/NKO_QueryFrame.rs", line 13, in verifier::candidate::NKO_parent::NKO_QueryFrame::full::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 17.25037s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKO_parent::NKO_QueryFrame::full_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r49dabbe2a4fe429d8bfc03c3c4b16dfd.scope; invocation ID: d2fae8c983d0467290f84c7fe89e0b81

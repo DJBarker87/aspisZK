@@ -1,0 +1,18 @@
+theorem NKO_QueryReturnG.full_result : ∀ (reply : Reply), G reply = reply :=
+fun reply =>
+  casesOn (motive := fun t => reply = t → G reply = reply) reply
+    (fun r h =>
+      Eq.symm h ▸
+        core.result.Result.casesOn (motive := fun t => r = t → G (ok r) = ok r) r
+          (fun pair h =>
+            Eq.symm h ▸
+              let ⟨fst✝, snd✝, h✝⟩ := pair
+              Eq.symm h✝ ▸ Eq.refl (G (ok (core.result.Result.Ok (fst✝, snd✝)))))
+          (fun e h => Eq.symm h ▸ Eq.refl (G (ok (core.result.Result.Err e)))) (Eq.refl r))
+    (fun e h => Eq.symm h ▸ Eq.refl (G (fail e))) (fun h => Eq.symm h ▸ Eq.refl (G div)) (Eq.refl reply)
+'NKO_QueryReturnG.full_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKO_QueryReturnG.retained_return : ∀ (reply : Reply), G (NKE_QueryReturn.observed reply) = reply :=
+fun reply =>
+  Eq.mpr (id (congrArg (fun _a => G _a = reply) (NKE_QueryReturn.observed_exact reply)))
+    (Eq.mpr (id (congrArg (fun _a => _a = reply) (full_result reply))) (Eq.refl reply))
+'NKO_QueryReturnG.retained_return' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,41 @@
+{"attempt": "NKO_K030", "exit_status": 1, "wall_seconds": 13.799939838936552, "peak_rss_kib": "962156", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ address"
+	 - Location: crates/aspis-r1-cost-probe/src/NKO_parent.rs:155:2 in function verifier::candidate::NKO_parent::FinishFrame::<'_, 3>::finish
+
+Check 785: core::ub_checks::is_valid_allocation_size.division-by-zero.1
+	 - Status: SUCCESS
+	 - Description: "division by zero"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs:149:54 in function core::ub_checks::is_valid_allocation_size
+
+Check 786: core::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer.1
+	 - Status: SUCCESS
+	 - Description: "same object violation in this >= origin"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs:712:21 in function core::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime
+
+
+SUMMARY:
+ ** 2 of 786 failed (30 unreachable)
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs", line 49, in core::slice::index::slice_index_fail::do_panic::runtime
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs", line 40, in core::slice::index::slice_index_fail::do_panic::runtime
+
+VERIFICATION:- FAILED
+Verification Time: 9.19374s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKO_parent::finish_short_no_return
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rd23cc77ab7084b669cc566cffa4b5797.scope; invocation ID: 772b4c7f107144b8bd3059fe6980acc7

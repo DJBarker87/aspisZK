@@ -1,0 +1,41 @@
+{"attempt": "NKO_L031", "exit_status": 0, "wall_seconds": 19.570231625111774, "peak_rss_kib": "6331768", "swaps": "0", "print_axioms": ["'NKO_C02.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKO_C03.occurrence' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKO_C05.at_query' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKO_C07.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKO_C08.occurrence' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKO_C09.child_at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKO_FrameAtActual.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKO_QueryReturnG.retained_return' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKO_C02.at_actual : ∀ (wr rr : AspisR1.NP6_StdModel.Reservation) (merkle : NJU_CommonObserved.Merkle)
+  (finish : NJU_CommonObserved.Finish) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
+  (pub proof ck : Aeneas.Std.Slice Aeneas.Std.U8) (hash : H) (gamma : VTop_Stages.aspis_core.field.wide_exact.WideExact)
+  (reply : Aeneas.Std.Result (Aeneas.Std.Array VTop_Stages.aspis_core.field.wide_exact.WideExact 29#usize)),
+  NJU_CommonObserved.Event.powers gamma reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    ∃ p a,
+      NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash =
+          Aeneas.Std.R
+...
+et ⟨weights, right✝⁵⟩ := right✝⁴
+  let ⟨raw, right✝⁶⟩ := right✝⁵
+  let ⟨inverses, right✝⁷⟩ := right✝⁶
+  let ⟨lines, right✝⁸⟩ := right✝⁷
+  have same :=
+    NKO_FrameG.args_source written heap logBase logSize proofBase
+      { proof := proof, prepared := p, accumulator := a, powers := g, geometry := geometry, pending := pending }
+      observed inputView disjoint headlineSize weights inverses lines raw prepared accumulator powers geometryCut
+      rawWidth rawCells terms;
+  Eq.mpr
+    (id
+      (congrArg (fun _a => NKE_QueryInput.child _a = NJJ_Common.query proof p a g none geometry pending 22#usize) same))
+    (Eq.refl
+      (NKE_QueryInput.child
+        { proof := proof, prepared := p, accumulator := a, powers := g, geometry := geometry, pending := pending }))
+theorem NKO_QueryReturnG.retained_return : ∀ (reply : NKO_QueryReturnG.Reply),
+  NKO_QueryReturnG.G (NKE_QueryReturn.observed reply) = reply :=
+fun reply =>
+  Eq.mpr (id (congrArg (fun _a => NKO_QueryReturnG.G _a = reply) (NKE_QueryReturn.observed_exact reply)))
+    (Eq.mpr (id (congrArg (fun _a => _a = reply) (NKO_QueryReturnG.full_result reply))) (Eq.refl reply))
+'NKO_C02.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_C03.occurrence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_C05.at_query' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_C07.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_C08.occurrence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_C09.child_at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_FrameAtActual.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKO_QueryReturnG.retained_return' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re47a2c1741e7491f93d6a34a088aa1d6.scope; invocation ID: f2f006dd8f6e4cc7a16641c9164a0b5d

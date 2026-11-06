@@ -1,0 +1,43 @@
+{"attempt": "NKO_K028", "exit_status": 0, "wall_seconds": 94.29452385590412, "peak_rss_kib": "6042336", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+:field::QM31>::push_unchecked.pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs:939:13 in function core::array::Guard::<'_, aspis_core::field::QM31>::push_unchecked
+
+Check 888: core::array::Guard::<'_, aspis_core::field::QM31>::push_unchecked.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs:939:13 in function core::array::Guard::<'_, aspis_core::field::QM31>::push_unchecked
+
+Check 889: core::array::Guard::<'_, aspis_core::field::QM31>::push_unchecked.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs:939:13 in function core::array::Guard::<'_, aspis_core::field::QM31>::push_unchecked
+
+Check 890: core::array::Guard::<'_, aspis_core::field::QM31>::push_unchecked.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs:939:13 in function core::array::Guard::<'_, aspis_core::field::QM31>::push_unchecked
+
+
+SUMMARY:
+ ** 0 of 890 failed (9 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 89.64674s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rd836845e1db64f9db8f5d4105f4abe10.scope; invocation ID: 19d5fc9e99ac4af7aa731050e5023fc5
