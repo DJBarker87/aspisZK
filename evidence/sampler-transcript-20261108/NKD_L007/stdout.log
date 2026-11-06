@@ -1,0 +1,105 @@
+theorem AspisR1.NKD_Absorb.root : ∀ {H : Type} (D : aspis_core.Digest32 H) (before : transcript.Transcript H) (row : U8)
+  (payload : Slice U8), transcript.Transcript.absorb D before row payload = G D before row payload :=
+fun {H} D before row payload =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (Bind.bind (ok before.state.to_slice))
+              (funext fun s =>
+                congrArg (Bind.bind (160#u8 + row))
+                  (funext fun i =>
+                    Eq.trans
+                      (congrArg
+                        (Bind.bind
+                          (ok
+                            (Array.make 2#usize [0#u8, i]
+                                (r1_wire.SemanticTranscript.sample_block_validated._proof_2 i)).to_slice))
+                        (funext fun s1 =>
+                          Eq.trans
+                            (congrArg (Bind.bind (ok (UScalar.cast UScalarTy.U32 payload.len)))
+                              (funext fun i2 =>
+                                Eq.trans
+                                  (congrArg (Bind.bind (ok (core.num.U32.to_le_bytes i2)))
+                                    (funext fun a =>
+                                      Eq.trans
+                                        (congrArg (Bind.bind (ok a.to_slice))
+                                          (funext fun s2 =>
+                                            bind_tc_ok
+                                              (Array.make 4#usize [s, s1, s2, payload]
+                                                  (transcript.Transcript.absorb._proof_1 payload s s1 s2)).to_slice
+                                              fun y => do
+                                              let a1 ← D.digest before.hash y
+                                              ok { state := a1, hash := before.hash }))
+                                        (bind_tc_ok a.to_slice fun y => do
+                                          let a1 ←
+                                            D.digest before.hash
+                                                (Array.make 4#usize [s, s1, y, payload]
+                                                    (transcript.Transcript.absorb._proof_1 payload s s1 y)).to_slice
+                                          ok { state := a1, hash := before.hash })))
+                                  (bind_tc_ok (core.num.U32.to_le_bytes i2) fun y => do
+                                    let a1 ←
+                                      D.digest before.hash
+                                          (Array.make 4#usize [s, s1, y.to_slice, payload]
+                                              (transcript.Transcript.absorb._proof_1 payload s s1 y.to_slice)).to_slice
+                                    ok { state := a1, hash := before.hash })))
+                            (bind_tc_ok (UScalar.cast UScalarTy.U32 payload.len) fun y => do
+                              let a1 ←
+                                D.digest before.hash
+                                    (Array.make 4#usize [s, s1, (core.num.U32.to_le_bytes y).to_slice, payload]
+                                        (transcript.Transcript.absorb._proof_1 payload s s1
+                                          (core.num.U32.to_le_bytes y).to_slice)).to_slice
+                              ok { state := a1, hash := before.hash })))
+                      (bind_tc_ok
+                        (Array.make 2#usize [0#u8, i]
+                            (r1_wire.SemanticTranscript.sample_block_validated._proof_2 i)).to_slice
+                        fun y => do
+                        let a1 ←
+                          D.digest before.hash
+                              (Array.make 4#usize
+                                  [s, y, (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 payload.len)).to_slice,
+                                    payload]
+                                  (transcript.Transcript.absorb._proof_1 payload s y
+                                    (core.num.U32.to_le_bytes
+                                        (UScalar.cast UScalarTy.U32 payload.len)).to_slice)).to_slice
+                        ok { state := a1, hash := before.hash }))))
+            (bind_tc_ok before.state.to_slice fun y => do
+              let i ← 160#u8 + row
+              let a1 ←
+                D.digest before.hash
+                    (Array.make 4#usize
+                        [y,
+                          (Array.make 2#usize [0#u8, i]
+                              (r1_wire.SemanticTranscript.sample_block_validated._proof_2 i)).to_slice,
+                          (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 payload.len)).to_slice, payload]
+                        (transcript.Transcript.absorb._proof_1 payload y
+                          (Array.make 2#usize [0#u8, i]
+                              (r1_wire.SemanticTranscript.sample_block_validated._proof_2 i)).to_slice
+                          (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 payload.len)).to_slice)).to_slice
+              ok { state := a1, hash := before.hash })))
+        do
+        let tag ← 160#u8 + row
+        let reply ←
+          D.digest before.hash
+              (Array.make 4#usize
+                  [before.state.to_slice,
+                    (Array.make 2#usize [0#u8, tag] (NGT_NBA_Transcript.absorbParts._proof_4 tag)).to_slice,
+                    (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 payload.len)).to_slice, payload]
+                  (NGT_NBA_Transcript.absorbParts._proof_5 before.state tag payload)).to_slice
+        ok { state := reply, hash := before.hash })
+      (eq_self do
+        let i ← 160#u8 + row
+        let a1 ←
+          D.digest before.hash
+              (Array.make 4#usize
+                  [before.state.to_slice,
+                    (Array.make 2#usize [0#u8, i]
+                        (r1_wire.SemanticTranscript.sample_block_validated._proof_2 i)).to_slice,
+                    (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 payload.len)).to_slice, payload]
+                  (transcript.Transcript.absorb._proof_1 payload before.state.to_slice
+                    (Array.make 2#usize [0#u8, i]
+                        (r1_wire.SemanticTranscript.sample_block_validated._proof_2 i)).to_slice
+                    (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 payload.len)).to_slice)).to_slice
+        ok { state := a1, hash := before.hash }))
+'AspisR1.NKD_Absorb.root' depends on axioms: [propext, Classical.choice, Quot.sound]

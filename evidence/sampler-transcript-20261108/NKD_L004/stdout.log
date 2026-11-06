@@ -1,0 +1,12 @@
+theorem AspisR1.NKD_Add.root : ∀ (digits : Digits) (amount : U32),
+  Canonical digits →
+    ↑amount ≤ 257 →
+      ∀ (out : Digits) (carry : U32),
+        Cut digits amount out carry →
+          AspisR1Post25SamplerIndexedAddSmallCandidate.sampler.add_small_base_p digits amount =
+              ok (carry != 0#u32, out) ∧
+            Canonical out :=
+fun digits amount canonical small out carry cut =>
+  ⟨NBL_AddNative.source digits amount canonical small out carry cut,
+    NBL_AddNative.canonical digits amount out carry cut⟩
+'AspisR1.NKD_Add.root' depends on axioms: [propext, Classical.choice, Quot.sound]
