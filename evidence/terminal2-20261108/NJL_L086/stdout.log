@@ -1,0 +1,39 @@
+theorem AspisR1.NJL_SharedTrace.source : ∀ (values : Fin 33 → NQ) (selector : NQ) (groups : List (Fin 9))
+  (before : State),
+  (∀ (i : Fin 33), Canon (values i)) →
+    Canon selector →
+      (∀ (i : Fin 24), Canon (before i)) →
+        ∃ after,
+          NJB_StateUpdates.run (NJB_SharedReference.step values selector) groups before = ok after ∧
+            Trace values selector groups before after ∧ ∀ (i : Fin 24), Canon (after i) :=
+fun values selector groups before hv hc hb =>
+  List.rec (motive := fun groups =>
+    ∀ (before : State),
+      (∀ (i : Fin 24), Canon (before i)) →
+        ∃ after,
+          NJB_StateUpdates.run (NJB_SharedReference.step values selector) groups before = ok after ∧
+            Trace values selector groups before after ∧ ∀ (i : Fin 24), Canon (after i))
+    (fun before hb => Exists.intro before ⟨rfl, ⟨Trace.nil before, hb⟩⟩)
+    (fun g gs ih before hb =>
+      let ⟨middle, h✝⟩ := NJL_SharedCuts.source values selector g before hv hc hb
+      let ⟨cm, right✝⟩ := h✝
+      let ⟨tm, hm⟩ := right✝
+      let ⟨after, h✝¹⟩ := ih middle hm
+      let ⟨ca, right✝¹⟩ := h✝¹
+      let ⟨ta, ha⟩ := right✝¹
+      Exists.intro after
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind cm) fun next =>
+                        NJB_StateUpdates.run (NJB_SharedReference.step values selector) gs next)
+                      (bind_tc_ok middle (NJB_StateUpdates.run (NJB_SharedReference.step values selector) gs)))
+                    ca))
+                (ok after))
+              (eq_self (ok after))),
+          ⟨Trace.cons tm ta, ha⟩⟩)
+    groups before hb
+'AspisR1.NJL_SharedTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]

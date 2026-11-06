@@ -1,0 +1,52 @@
+{"attempt": "NJL_L076", "exit_status": 1, "wall_seconds": 8.17804448818788, "peak_rss_kib": "6144588", "swaps": "0", "print_axioms": ["'AspisR1.NJL_TagChunk.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJL_TagChunk.lean:21:92: error: Expected type must not contain free variables
+  ↑(zero i) ≤ 0 * NJB_TagRaw.B
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+NJL_TagChunk.lean:26:51: error: Type mismatch: After simplification, term
+  vr i
+ has type
+  (raw i).bv.toNat = 0#u64.bv.toNat + dot s terms i
+but is expected to have type
+  (raw i).bv.toNat = dot s terms i
+theorem AspisR1.NJL_TagChunk.source : ∀ (s : Selectors) (terms : List (Fin 272)) (before : State),
+  terms.length ≤ 4 →
+    FIw_ArrayValue.canonical s.high →
+      (∀ (i : Fin 4), ↑(before i) < P) →
+        ∃ after,
+          reference s terms before = ok after ∧
+            Invocation s terms befor
+...
+rArg (fun _a => (↑(before i) + _a % P) % P = (↑(before i) + dot s terms i) % P) rawValue))
+              (of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (Eq.trans (Nat.add_mod (↑(before i)) (dot s terms i % P) P)
+                        (Eq.trans
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg HMod.hMod
+                                (congrArg (HAdd.hAdd (↑(before i) % P)) (Nat.mod_mod (dot s terms i) P)))
+                              P)
+                            (Nat.add_mod (↑(before i) % P) (dot s terms i % P) P))
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg HMod.hMod
+                                (congr (congrArg HAdd.hAdd (Nat.mod_mod (↑(before i)) P))
+                                  (Nat.mod_mod (dot s terms i) P)))
+                              P)
+                            (Nat.add_mod (↑(before i) % P) (dot s terms i % P) P)))))
+                    (Eq.trans (Nat.add_mod (↑(before i)) (dot s terms i) P)
+                      (Eq.trans (Nat.add_mod (↑(before i) % P) (dot s terms i % P) P)
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg HMod.hMod
+                              (congr (congrArg HAdd.hAdd (Nat.mod_mod (↑(before i)) P))
+                                (Nat.mod_mod (dot s terms i) P)))
+                            P)
+                          (Nat.add_mod (↑(before i) % P) (dot s terms i % P) P)))))
+                  (eq_self ((↑(before i) % P % P + dot s terms i % P % P) % P)))))⟩⟩⟩
+'AspisR1.NJL_TagChunk.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rac8fb8e1cb1e4d03acb5085c10b3fd17.scope; invocation ID: adb9d48f520b4d1bbbb1708816347082

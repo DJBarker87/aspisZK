@@ -41,3 +41,6 @@ Further independent work: pattern219 source cuts/finite induction/sparse meaning
 ## Stage 7
 
 Static214 authority now K019PASS/K020FAIL with exact literal expected arrays, Lookup L052/Root L053 standard axioms. Pattern219 candidate added L058/L059: complete native-cut two-loop invocation plus sparse four-cell meaning. Seven own candidates; new source forest awaits the second/final audit and next ledger. Tag216 next: frozen spans1..54, all30 nonempty; 272-term/31-offset exact registry data pinned in NJL_TAG_DATA.json, no concrete recurrence normalization. Budget remains and work continues.
+
+## Stage8 tagged coordinate
+TX1:216 and217 now have complete locally compiled positive roots, exact natural-product clauses, actual4limb reductions, all chunk frames, registry/source control and final constructor. Native full-span control K023 timed out and is excluded; split K029/030 plus031/032 with Lean induction replaced it. K025/026 constructor and035/036 forwarding pass/fail. Finalcombined gate2 and next ledger still pending; target not established. Also prepared and passed std4callback K033/034 for independent231; its composed root is in progress.

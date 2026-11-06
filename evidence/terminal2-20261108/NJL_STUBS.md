@@ -22,3 +22,12 @@ Active pairing is explicit in NJL_LowDischarge.Clauses and NJL_ActiveInvocation.
 | native loop control recording bodies | No arithmetic value credit | Original body arithmetic erased only for control/count; separate arbitrary-prestate value windows and Lean induction supply all values |
 
 The obsolete scan-based lookup expected function receives no final row authority: K019/020 uses direct pinned literal expected arrays, represented with the same decimal payloads in Lean. No new Rust reference-loop interpretation or extraction is relied on.
+
+## Stage8 paired integer/reduction clauses
+|Native local operation|Full Lean Result/value/domain law|Caller proof|
+|---|---|---|
+|NJB_product (U64 multiply)|NJL_TagWords.product, NJB_TagRaw.product; operands<P, exact natural product≤B|NJL_TagWords.domain, exact same high-block/limb and registry tag|
+|raw checked add|NJL_TagRawStep.add; raw≤kB,k<4,product≤B; full Result and exact natural sum|NJL_TagRawTrace.source|
+|reduce_u64/add M31|NJB_TagReduce.reduce/add/result; every rawU64, old<P, residue<P|NJL_TagReduction.step_source/source and outer canonical invariant|
+|216 child in217|NJL_TagRoot.source, SAME high selectors canonical, coordinate<30|NJL_TagForward.source internally applies child|
+No field multiplication in Kani. Integer multiplies are opaque natural-value replies paired above; source integer overflow safety is proved symbolically. No contracts or function pointers.

@@ -1,0 +1,99 @@
+NJL_TagChunks.lean:36:2: error: unsolved goals
+case cons.refine_2
+s : Selectors
+hs : FIw_ArrayValue.canonical s.high
+chunk : List (Fin 272)
+rest : List (List (Fin 272))
+ih :
+  ∀ (before : State),
+    (∀ terms ∈ rest, terms.length ≤ 4) →
+      (∀ (i : Fin 4), ↑(before i) < P) →
+        ∃ after,
+          run s rest before = ok after ∧
+            Trace s rest before after ∧
+              (∀ (i : Fin 4), ↑(after i) < P) ∧ ∀ (i : Fin 4), ↑(after i) = (↑(before i) + dot s rest.flatten i) % P
+before : State
+small : ∀ terms ∈ chunk :: rest, terms.length ≤ 4
+hb : ∀ (i : Fin 4), ↑(before i) < P
+middle : State
+cc : NJL_TagChunk.reference s chunk before = ok middle
+tc : NJL_TagChunk.Invocation s chunk before middle
+hc : ∀ (i : Fin 4), ↑(middle i) < P
+vc : ∀ (i : Fin 4), ↑(middle i) = (↑(before i) + dot s chunk i) % P
+after : State
+ca : run s rest middle = ok after
+ta : Trace s rest middle after
+ha : ∀ (i : Fin 4), ↑(after i) < P
+va : ∀ (i : Fin 4), ↑(after i) = (↑(middle i) + dot s rest.flatten i) % P
+i : Fin 4
+⊢ ((↑(before i) % P % P + dot s chunk i % P % P) % P % P + dot s rest.flatten i % P % P) % P =
+    (↑(before i) % P % P + (dot s chunk i % P % P + dot s rest.flatten i % P % P) % P % P) % P
+NJL_TagChunks.lean:38:39: warning: This simp argument is unused:
+  Nat.add_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵a̵t̵.̵a̵d̵d̵_̵m̵o̵d̵,̵N̵a̵t̵.̵m̵o̵d̵_̵m̵o̵d̵,̵N̵a̵t̵.̵a̵d̵d̵_̵a̵s̵s̵o̵c̵]̵[̲N̲a̲t̲.̲a̲d̲d̲_̲m̲o̲d̲,̲ ̲N̲a̲t̲.̲m̲o̲d̲_̲m̲o̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NJL_TagChunks.dot_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NJL_TagChunks.source : ∀ (s : Selectors) (chunks : List (List (Fin 272))) (before : State),
+  (∀ terms ∈ chunks, terms.length ≤ 4) →
+    FIw_ArrayValue.canonical s.high →
+      (∀ (i : Fin 4), ↑(before i) < P) →
+        ∃ after,
+          run s chunks before = ok after ∧
+            Trace s chunks before after ∧
+              (∀ (i : Fin 4), ↑(after i) < P) ∧
+                ∀ (i : Fin 4), ↑(after i) = (↑(before i) + dot s chunks.flatten i) % P :=
+fun s chunks before small hs hb =>
+  List.rec (motive := fun chunks =>
+    ∀ (before : State),
+      (∀ terms ∈ chunks, terms.length ≤ 4) →
+        (∀ (i : Fin 4), ↑(before i) < P) →
+          ∃ after,
+            run s chunks before = ok after ∧
+              Trace s chunks before after ∧
+                (∀ (i : Fin 4), ↑(after i) < P) ∧
+                  ∀ (i : Fin 4), ↑(after i) = (↑(before i) + dot s chunks.flatten i) % P)
+    (fun before small hb =>
+      Exists.intro before
+        ⟨rfl,
+          ⟨Trace.nil before,
+            ⟨hb, fun i =>
+              of_eq_true (Eq.trans (congrArg (Eq ↑(before i)) (Nat.mod_eq_of_lt (hb i))) (eq_self ↑(before i)))⟩⟩⟩)
+    (fun chunk rest ih before small hb =>
+      let ⟨middle, h✝⟩ :=
+        NJL_TagChunk.source s chunk before
+          (small chunk
+            (of_eq_true
+              (Eq.trans List.mem_cons._simp_1
+                (Eq.trans (congrFun' (congrArg Or (eq_self chunk)) (chunk ∈ rest)) (true_or (chunk ∈ rest))))))
+          hs hb
+      let ⟨cc, right✝⟩ := h✝
+      let ⟨tc, right✝¹⟩ := right✝
+      let ⟨hc, vc⟩ := right✝¹
+      let ⟨after, h✝¹⟩ :=
+        ih middle
+          (fun xs hx =>
+            small xs
+              (of_eq_true
+                (Eq.trans List.mem_cons._simp_1
+                  (Eq.trans (congrArg (Or (xs = chunk)) (eq_true hx)) (or_true (xs = chunk))))))
+          hc
+      let ⟨ca, right✝²⟩ := h✝¹
+      let ⟨ta, right✝³⟩ := right✝²
+      let ⟨ha, va⟩ := right✝³
+      Exists.intro after
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans (congrFun' (congrArg Bind.bind cc) fun middle => run s rest middle)
+                      (bind_tc_ok middle (run s rest)))
+                    ca))
+                (ok after))
+              (eq_self (ok after))),
+          ⟨Trace.cons tc ta, ⟨ha, sorry⟩⟩⟩)
+    chunks before small hb
+'AspisR1.NJL_TagChunks.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

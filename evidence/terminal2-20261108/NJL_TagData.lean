@@ -1,4 +1,11 @@
-import NJB_TagRaw
+import NJL_TagChunk00
+import NJL_TagChunk01
+import NJL_TagChunk02
+import NJL_TagChunk03
+import NJL_TagChunk04
+import NJL_TagChunk05
+import NJL_TagChunk06
+import NJL_TagChunk07
 import NJB_Words
 set_option autoImplicit false
 noncomputable section
@@ -6,15 +13,19 @@ namespace AspisR1.NJL_TagData
 open Aeneas Aeneas.Std Result
 open FIv_NativeArithmetic (NQ)
 open FIv_NativeValue (Canon)
-/-- Exact immutable payload checked natively against all272 terms/31 offsets.
-There are no empty coordinates; spans1..54, at most4 products per chunk. -/
+/-- Exact272-term data split in34-cell chunks, each independently checked.
+Named length/bound lemmas avoid reducing a272-deep generated literal. -/
 def offsets : Fin 31 → Nat := ![0,2,3,10,11,18,25,79,84,90,96,102,108,129,130,136,189,195,196,197,203,204,205,212,213,261,267,268,269,270,272]
-def blockList : List Nat := [63,4,57,63,57,58,59,60,61,62,63,63,57,58,59,60,61,62,63,57,58,59,60,61,62,1,2,25,27,28,30,31,0,32,29,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,54,55,0,2,3,28,31,57,58,59,60,61,62,57,58,59,60,61,62,57,58,59,60,61,62,57,58,59,60,61,62,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,2,57,58,59,60,61,62,2,3,26,28,29,31,32,63,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,54,55,56,57,58,59,60,61,62,63,63,57,58,59,60,61,62,63,63,63,57,58,59,60,61,62,63,1,25,26,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,54,55,56,57,58,59,60,61,62,63,63,63,26,33]
-def tagList : List U32 := [1124073486#u32,1124073490#u32,1124073491#u32,1124073487#u32,1124073537#u32,1124073549#u32,1124073561#u32,1124073573#u32,1124073585#u32,1124073597#u32,1124073488#u32,1124073489#u32,1124073540#u32,1124073552#u32,1124073564#u32,1124073576#u32,1124073588#u32,1124073600#u32,1124073495#u32,1124073543#u32,1124073555#u32,1124073567#u32,1124073579#u32,1124073591#u32,1124073603#u32,1124073472#u32,1124073473#u32,1124073474#u32,1124073475#u32,1124073476#u32,1124073477#u32,1124073478#u32,1124073479#u32,1124073492#u32,1124073493#u32,1124073496#u32,1124073498#u32,1124073500#u32,1124073502#u32,1124073504#u32,1124073506#u32,1124073508#u32,1124073510#u32,1124073512#u32,1124073514#u32,1124073516#u32,1124073518#u32,1124073520#u32,1124073522#u32,1124073524#u32,1124073526#u32,1124073528#u32,1124073530#u32,1124073532#u32,1124073534#u32,1124073536#u32,1124073539#u32,1124073542#u32,1124073545#u32,1124073548#u32,1124073551#u32,1124073554#u32,1124073557#u32,1124073560#u32,1124073563#u32,1124073566#u32,1124073569#u32,1124073572#u32,1124073575#u32,1124073578#u32,1124073581#u32,1124073584#u32,1124073587#u32,1124073590#u32,1124073593#u32,1124073596#u32,1124073599#u32,1124073602#u32,1124073605#u32,1124073480#u32,1124073481#u32,1124073482#u32,1124073484#u32,1124073485#u32,1124073546#u32,1124073558#u32,1124073570#u32,1124073582#u32,1124073594#u32,1124073606#u32,1124073538#u32,1124073550#u32,1124073562#u32,1124073574#u32,1124073586#u32,1124073598#u32,1124073541#u32,1124073553#u32,1124073565#u32,1124073577#u32,1124073589#u32,1124073601#u32,1124073544#u32,1124073556#u32,1124073568#u32,1124073580#u32,1124073592#u32,1124073604#u32,1124073494#u32,1124073497#u32,1124073499#u32,1124073501#u32,1124073503#u32,1124073505#u32,1124073507#u32,1124073509#u32,1124073511#u32,1124073513#u32,1124073515#u32,1124073517#u32,1124073519#u32,1124073521#u32,1124073523#u32,1124073525#u32,1124073527#u32,1124073529#u32,1124073531#u32,1124073533#u32,1124073535#u32,1124073483#u32,1124073547#u32,1124073559#u32,1124073571#u32,1124073583#u32,1124073595#u32,1124073607#u32,1124073472#u32,1124073473#u32,1124073474#u32,1124073475#u32,1124073476#u32,1124073477#u32,1124073478#u32,1124073483#u32,1124073495#u32,1124073497#u32,1124073499#u32,1124073501#u32,1124073503#u32,1124073505#u32,1124073507#u32,1124073509#u32,1124073511#u32,1124073513#u32,1124073515#u32,1124073517#u32,1124073519#u32,1124073521#u32,1124073523#u32,1124073525#u32,1124073527#u32,1124073529#u32,1124073531#u32,1124073533#u32,1124073535#u32,1124073538#u32,1124073541#u32,1124073544#u32,1124073547#u32,1124073550#u32,1124073553#u32,1124073556#u32,1124073559#u32,1124073562#u32,1124073565#u32,1124073568#u32,1124073571#u32,1124073574#u32,1124073577#u32,1124073580#u32,1124073583#u32,1124073586#u32,1124073589#u32,1124073592#u32,1124073595#u32,1124073598#u32,1124073601#u32,1124073604#u32,1124073607#u32,1124073536#u32,1124073548#u32,1124073560#u32,1124073572#u32,1124073584#u32,1124073596#u32,1124073484#u32,1124073485#u32,1124073539#u32,1124073551#u32,1124073563#u32,1124073575#u32,1124073587#u32,1124073599#u32,1124073486#u32,1124073488#u32,1124073490#u32,1124073542#u32,1124073554#u32,1124073566#u32,1124073578#u32,1124073590#u32,1124073602#u32,1124073492#u32,1124073479#u32,1124073480#u32,1124073481#u32,1124073493#u32,1124073496#u32,1124073498#u32,1124073500#u32,1124073502#u32,1124073504#u32,1124073506#u32,1124073508#u32,1124073510#u32,1124073512#u32,1124073514#u32,1124073516#u32,1124073518#u32,1124073520#u32,1124073522#u32,1124073524#u32,1124073526#u32,1124073528#u32,1124073530#u32,1124073532#u32,1124073534#u32,1124073537#u32,1124073540#u32,1124073543#u32,1124073546#u32,1124073549#u32,1124073552#u32,1124073555#u32,1124073558#u32,1124073561#u32,1124073564#u32,1124073567#u32,1124073570#u32,1124073573#u32,1124073576#u32,1124073579#u32,1124073582#u32,1124073585#u32,1124073588#u32,1124073591#u32,1124073594#u32,1124073597#u32,1124073600#u32,1124073603#u32,1124073606#u32,1124073545#u32,1124073557#u32,1124073569#u32,1124073581#u32,1124073593#u32,1124073605#u32,1124073487#u32,1124073489#u32,1124073491#u32,1124073482#u32,1124073494#u32]
-theorem block_length : blockList.length=272 := rfl
-theorem tag_length : tagList.length=272 := rfl
-theorem block_all : blockList.all (fun b=>decide (b<64))=true := by decide
-theorem tag_all : tagList.all (fun t=>decide (t.val<2147483647))=true := by decide
+def blockList : List Nat := NJL_TagChunk00.blocks ++ NJL_TagChunk01.blocks ++ NJL_TagChunk02.blocks ++ NJL_TagChunk03.blocks ++ NJL_TagChunk04.blocks ++ NJL_TagChunk05.blocks ++ NJL_TagChunk06.blocks ++ NJL_TagChunk07.blocks
+def tagList : List U32 := NJL_TagChunk00.tags ++ NJL_TagChunk01.tags ++ NJL_TagChunk02.tags ++ NJL_TagChunk03.tags ++ NJL_TagChunk04.tags ++ NJL_TagChunk05.tags ++ NJL_TagChunk06.tags ++ NJL_TagChunk07.tags
+theorem block_length : blockList.length=272 := by
+ simp only [blockList,List.length_append,NJL_TagChunk00.block_length,NJL_TagChunk01.block_length,NJL_TagChunk02.block_length,NJL_TagChunk03.block_length,NJL_TagChunk04.block_length,NJL_TagChunk05.block_length,NJL_TagChunk06.block_length,NJL_TagChunk07.block_length]
+theorem tag_length : tagList.length=272 := by
+ simp only [tagList,List.length_append,NJL_TagChunk00.tag_length,NJL_TagChunk01.tag_length,NJL_TagChunk02.tag_length,NJL_TagChunk03.tag_length,NJL_TagChunk04.tag_length,NJL_TagChunk05.tag_length,NJL_TagChunk06.tag_length,NJL_TagChunk07.tag_length]
+theorem block_all : blockList.all (fun b=>decide (b<64))=true := by
+ simp only [blockList,List.all_append,NJL_TagChunk00.block_all,NJL_TagChunk01.block_all,NJL_TagChunk02.block_all,NJL_TagChunk03.block_all,NJL_TagChunk04.block_all,NJL_TagChunk05.block_all,NJL_TagChunk06.block_all,NJL_TagChunk07.block_all,Bool.and_self]
+theorem tag_all : tagList.all (fun t=>decide (t.val<2147483647))=true := by
+ simp only [tagList,List.all_append,NJL_TagChunk00.tag_all,NJL_TagChunk01.tag_all,NJL_TagChunk02.tag_all,NJL_TagChunk03.tag_all,NJL_TagChunk04.tag_all,NJL_TagChunk05.tag_all,NJL_TagChunk06.tag_all,NJL_TagChunk07.tag_all,Bool.and_self]
 def block (i : Fin 272) : Fin 64 :=
  let b := blockList[i.val]'(by rw [block_length];exact i.isLt)
  ⟨b,of_decide_eq_true ((List.all_eq_true.mp block_all) b (List.getElem_mem _))⟩
@@ -25,15 +36,19 @@ def first (c : Fin 30) : Nat := offsets c.castSucc
 def last (c : Fin 30) : Nat := offsets c.succ
 theorem interval (c : Fin 30) : first c<last c ∧ last c≤272 := by fin_cases c <;> decide
 def indices (c : Fin 30) : List (Fin 272) :=
- (List.ofFn (fun i : Fin 272=>i)).filter (fun i=>first c≤i.val ∧ i.val<last c)
-theorem range (c : Fin 30) : (indices c).map Fin.val=List.range' (first c) (last c-first c) := by
- fin_cases c <;> decide
+ List.ofFn (fun i : Fin (last c-first c)=>⟨first c+i.val,by have := (interval c).2;have := i.isLt;omega⟩)
+/-- Generic contiguous interval identity, not a concrete272-cell filter replay. -/
+theorem range_values (c : Fin 30) : (indices c).map Fin.val=List.range' (first c) (last c-first c) := by
+ apply List.ext_getElem
+ · simp only [indices,List.length_map,List.length_ofFn,List.length_range']
+ · intro i hi hj
+   simp only [indices,List.getElem_map,List.getElem_ofFn,List.getElem_range',Nat.one_mul]
 #print axioms block_length
 #print axioms tag_length
 #print axioms block_all
 #print axioms tag_all
 #print axioms tag_bound
 #print axioms interval
-#print axioms range
+#print axioms range_values
 end AspisR1.NJL_TagData
 end

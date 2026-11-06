@@ -1,0 +1,47 @@
+{"attempt": "NJL_L060", "exit_status": 1, "wall_seconds": 10.200673482147977, "peak_rss_kib": "6194912", "swaps": "0", "print_axioms": ["'AspisR1.NJL_TagData.block_all' depends on axioms: [sorryAx]", "'AspisR1.NJL_TagData.tag_all' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJL_TagData.tag_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJL_TagData.interval' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_TagData.range' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJL_TagData.lean:14:47: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+NJL_TagData.lean:15:43: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+NJL_TagData.lean:16:68: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+NJL_TagData.lean:17:76: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set
+...
+:30:17: error: Tactic `decide` failed for proposition
+  List.map Fin.val (indices ((fun i => i) ⟨29, ⋯⟩)) =
+    List.range' (first ((fun i => i) ⟨29, ⋯⟩)) (last ((fun i => i) ⟨29, ⋯⟩) - first ((fun i => i) ⟨29, ⋯⟩))
+because its `Decidable` instance
+  instDecidableEqList (List.map Fin.val (indices ((fun i => i) ⟨29, ⋯⟩)))
+    (List.range' (first ((fun i => i) ⟨29, ⋯⟩)) (last ((fun i => i) ⟨29, ⋯⟩) - first ((fun i => i) ⟨29, ⋯⟩)))
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instance `instDecidableEqList`, reduction got stuck at the `Decidable` instance
+  match List.map Fin.val (indices ((fun i => i) ⟨29, ⋯⟩)) with
+  | [] =>
+    match List.range' (first ((fun i => i) ⟨29, ⋯⟩)) (last ((fun i => i) ⟨29, ⋯⟩) - first ((fun i => i) ⟨29, ⋯⟩)) with
+    | [] => isTrue ⋯
+    | head :: tail => isFalse ⋯
+  | a :: «as» =>
+    match List.range' (first ((fun i => i) ⟨29, ⋯⟩)) (last ((fun i => i) ⟨29, ⋯⟩) - first ((fun i => i) ⟨29, ⋯⟩)) with
+    | [] => isFalse ⋯
+    | b :: bs =>
+      match decEq a b with
+      | isTrue hab =>
+        match «as».hasDecEq bs with
+        | isTrue habs => isTrue ⋯
+        | isFalse nabs => isFalse ⋯
+      | isFalse nab => isFalse ⋯
+NJL_TagData.lean:31:14: error(lean.unknownIdentifier): Unknown constant `block_length`
+NJL_TagData.lean:32:14: error(lean.unknownIdentifier): Unknown constant `tag_length`
+'AspisR1.NJL_TagData.block_all' depends on axioms: [sorryAx]
+'AspisR1.NJL_TagData.tag_all' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJL_TagData.tag_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJL_TagData.interval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_TagData.range' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra6870d2e466541f1bf2e03d7a8f47279.scope; invocation ID: 075388e5c3754c5cbe1a7a4a17d7c5b8

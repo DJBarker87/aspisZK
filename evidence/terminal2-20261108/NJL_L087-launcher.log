@@ -1,0 +1,50 @@
+{"attempt": "NJL_L087", "exit_status": 0, "wall_seconds": 8.434218334034085, "peak_rss_kib": "6187800", "swaps": "0", "print_axioms": ["'AspisR1.NJL_TagChunks.dot_append' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_TagChunks.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJL_TagChunks.lean:38:31: warning: This simp argument is unused:
+  Nat.add_mod_mod
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵a̵t̵.̵m̵o̵d̵_̵a̵d̵d̵_̵m̵o̵d̵,̵N̵a̵t̵.̵a̵d̵d̵_̵m̵o̵d̵_̵m̵o̵d̵,̵N̵a̵t̵.̵a̵d̵d̵_̵a̵s̵s̵o̵c̵]̵[̲N̲a̲t̲.̲m̲o̲d̲_̲a̲d̲d̲_̲m̲o̲d̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NJL_TagChunks.dot_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NJL_TagChunks.source : ∀ (s : Selectors) (chunks : List (List (Fin 272))) (before : State),
+  (∀ terms ∈ chunks, terms.length ≤ 4) →
+    FIw_ArrayValue.canonical s.high →
+      (∀ (i : Fin 4), ↑(before i) < P) →
+...
+,
+            ⟨ha, fun i =>
+              Eq.mpr (id (congrArg (fun _a => _a = (↑(before i) + dot s (chunk :: rest).flatten i) % P) (va i)))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a => (_a + dot s rest.flatten i) % P = (↑(before i) + dot s (chunk :: rest).flatten i) % P)
+                      (vc i)))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          ((↑(before i) + dot s chunk i) % P + dot s rest.flatten i) % P =
+                            (↑(before i) + dot s _a i) % P)
+                        List.flatten_cons))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            ((↑(before i) + dot s chunk i) % P + dot s rest.flatten i) % P = (↑(before i) + _a) % P)
+                          (dot_append s chunk rest.flatten i)))
+                      (of_eq_true
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans (Nat.mod_add_mod (↑(before i) + dot s chunk i) P (dot s rest.flatten i))
+                                (congrFun'
+                                  (congrArg HMod.hMod
+                                    (Nat.add_assoc (↑(before i)) (dot s chunk i) (dot s rest.flatten i)))
+                                  P)))
+                            ((↑(before i) + (dot s chunk i + dot s rest.flatten i)) % P))
+                          (eq_self ((↑(before i) + (dot s chunk i + dot s rest.flatten i)) % P)))))))⟩⟩⟩)
+    chunks before small hb
+'AspisR1.NJL_TagChunks.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc3aceee1830b4b84abba1d0dcb604ae4.scope; invocation ID: 96507bec04844a70b55006ec524f65f8

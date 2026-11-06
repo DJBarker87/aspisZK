@@ -1,0 +1,70 @@
+{"attempt": "NJL_L077", "exit_status": 1, "wall_seconds": 8.04036233597435, "peak_rss_kib": "6147748", "swaps": "0", "print_axioms": ["'AspisR1.NJL_TagChunks.dot_append' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_TagChunks.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJL_TagChunks.lean:36:2: error: unsolved goals
+case cons.refine_2
+s : Selectors
+hs : FIw_ArrayValue.canonical s.high
+chunk : List (Fin 272)
+rest : List (List (Fin 272))
+ih :
+  ∀ (before : State),
+    (∀ terms ∈ rest, terms.length ≤ 4) →
+      (∀ (i : Fin 4), ↑(before i) < P) →
+        ∃ after,
+          run s rest before = ok after ∧
+            Trace s rest before after ∧
+              (∀ (i : Fin 4), ↑(after i) < P) ∧ ∀ (i : Fin 4), ↑(after i) = (↑(before i) + dot s rest.flatten i) % P
+before : State
+small : ∀ terms ∈ chunk :: rest, terms.length ≤ 4
+hb : ∀ (i : Fin 4), ↑(before i) < P
+middle : State
+cc : NJL_TagChunk.reference s chunk before = ok middle
+tc : NJL_TagChunk.Invocation s chunk
+...
+before = ok after ∧
+              Trace s chunks before after ∧
+                (∀ (i : Fin 4), ↑(after i) < P) ∧
+                  ∀ (i : Fin 4), ↑(after i) = (↑(before i) + dot s chunks.flatten i) % P)
+    (fun before small hb =>
+      Exists.intro before
+        ⟨rfl,
+          ⟨Trace.nil before,
+            ⟨hb, fun i =>
+              of_eq_true (Eq.trans (congrArg (Eq ↑(before i)) (Nat.mod_eq_of_lt (hb i))) (eq_self ↑(before i)))⟩⟩⟩)
+    (fun chunk rest ih before small hb =>
+      let ⟨middle, h✝⟩ :=
+        NJL_TagChunk.source s chunk before
+          (small chunk
+            (of_eq_true
+              (Eq.trans List.mem_cons._simp_1
+                (Eq.trans (congrFun' (congrArg Or (eq_self chunk)) (chunk ∈ rest)) (true_or (chunk ∈ rest))))))
+          hs hb
+      let ⟨cc, right✝⟩ := h✝
+      let ⟨tc, right✝¹⟩ := right✝
+      let ⟨hc, vc⟩ := right✝¹
+      let ⟨after, h✝¹⟩ :=
+        ih middle
+          (fun xs hx =>
+            small xs
+              (of_eq_true
+                (Eq.trans List.mem_cons._simp_1
+                  (Eq.trans (congrArg (Or (xs = chunk)) (eq_true hx)) (or_true (xs = chunk))))))
+          hc
+      let ⟨ca, right✝²⟩ := h✝¹
+      let ⟨ta, right✝³⟩ := right✝²
+      let ⟨ha, va⟩ := right✝³
+      Exists.intro after
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans (congrFun' (congrArg Bind.bind cc) fun middle => run s rest middle)
+                      (bind_tc_ok middle (run s rest)))
+                    ca))
+                (ok after))
+              (eq_self (ok after))),
+          ⟨Trace.cons tc ta, ⟨ha, sorry⟩⟩⟩)
+    chunks before small hb
+'AspisR1.NJL_TagChunks.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r217a0f96a35b47afb409728b07c08145.scope; invocation ID: c83e89edb3954a8ab104b62f13223ea6

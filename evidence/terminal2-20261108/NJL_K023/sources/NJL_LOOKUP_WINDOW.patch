@@ -1,0 +1,31 @@
+--- a/crates/aspis-statement/src/pool_v1/NJL_control.rs
++++ b/crates/aspis-statement/src/pool_v1/NJL_control.rs
+@@ -86,3 +86,28 @@
+  assert_eq!(log.calls,1);assert_eq!(NJL_words(log.left)[limb],NJL_words(old)[limb]);assert_eq!(NJL_words(log.right)[limb],rhs[limb]);
+  assert_eq!(NJL_words(scratch[observe])[limb],(if observe==index{reply[limb]}else{before[limb]}) ^ if cfg!(NJL_invert){1}else{0});
+ }
++
++const NJL_GROUP_KEYS:[(usize,usize);30]=[(0,0),(0,1),(0,2),(0,4),(0,6),(0,10),(0,11),(0,12),(0,14),(1,2),(1,6),(1,10),(1,11),(1,12),(1,14),(2,0),(2,1),(2,2),(2,4),(2,5),(2,6),(2,7),(2,9),(2,10),(2,12),(2,13),(3,6),(3,7),(3,9),(3,12)];
++const NJL_PATTERN_KEYS:[(usize,usize,usize);43]=[(0,0,11),(0,1,2),(0,1,6),(0,1,10),(0,1,11),(0,1,12),(0,1,14),(0,2,12),(0,4,12),(0,6,1),(0,6,12),(0,7,0),(0,7,2),(0,7,4),(0,9,6),(0,10,0),(0,11,10),(1,1,11),(1,6,12),(1,13,2),(1,13,6),(1,13,10),(1,13,14),(2,0,0),(2,1,12),(2,3,12),(2,6,6),(2,7,0),(2,7,2),(2,7,4),(2,8,7),(2,10,0),(2,11,9),(2,11,10),(2,12,1),(2,12,5),(2,12,9),(2,12,13),(3,1,12),(3,5,12),(3,6,7),(3,7,9),(3,8,6)];
++fn NJL_group_model(g:usize,l:usize)->usize{let mut i=0;while i<30{if NJL_GROUP_KEYS[i]==(g,l){return i;}i+=1;}255}
++fn NJL_pattern_model(g:usize,p:usize,l:usize)->usize{let mut i=0;while i<43{if NJL_PATTERN_KEYS[i]==(g,p,l){return i;}i+=1;}255}
++fn NJL_endpoint_lookup(selectors:&Selectors,index:usize,consumer:bool)->(usize,usize,usize,QM31){
++ let link=constants::COPY_LINKS[index];let(side,endpoint)=if consumer{(2,link.consumer)}else{(0,link.producer)};
++ let group=side+usize::from(endpoint.slot);let row=usize::from(endpoint.row);let local=row&15;
++ let high=selectors.high[row>>4];let gc=usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local]);
++ let pc=usize::from(COPY_PATTERN_LOCAL_COORDINATES[group][usize::from(endpoint.pattern)][local]);
++ (row,gc,pc,high)
++}
++#[kani::proof] #[kani::unwind(145)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NJL_endpoint_lookup_cut(){
++ let selectors:Selectors=unsafe{core::mem::transmute::<[[u32;4];80],Selectors>(kani::any())};
++ let index:usize=kani::any();let consumer:bool=kani::any();let limb:usize=kani::any();kani::assume(index<136&&limb<4);
++ let(row,gc,pc,high)=NJL_endpoint_lookup(&selectors,index,consumer);
++ let link=constants::COPY_LINKS[index];let e=if consumer{link.consumer}else{link.producer};
++ let group=(if consumer{2}else{0})+usize::from(e.slot);let local=usize::from(e.row)&15;
++ assert!(row<1024&&gc<30&&pc<43);assert_eq!(row,usize::from(e.row));
++ assert_eq!(gc,NJL_group_model(group,local)+if cfg!(NJL_invert){1}else{0});
++ assert_eq!(pc,NJL_pattern_model(group,usize::from(e.pattern),local));
++ assert_eq!(NJL_words(high)[limb],NJL_words(selectors.high[row>>4])[limb]);
++}

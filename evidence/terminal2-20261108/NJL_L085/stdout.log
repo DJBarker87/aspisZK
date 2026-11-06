@@ -1,0 +1,81 @@
+theorem AspisR1.NJL_SharedCuts.source : ∀ (values : Fin 33 → NQ) (selector : NQ) (g : Fin 9) (before : State),
+  (∀ (i : Fin 33), Canon (values i)) →
+    Canon selector →
+      (∀ (i : Fin 24), Canon (before i)) →
+        ∃ after,
+          NJB_SharedReference.step values selector g before = ok after ∧
+            Step values selector g before after ∧ ∀ (i : Fin 24), Canon (after i) :=
+fun values selector g before hv hc hb =>
+  let ⟨packed, h✝⟩ := NJB_PackLaw.result (lanes values g) (NJB_SharedReference.lanes_canonical values hv g)
+  let ⟨cp, right✝⟩ := h✝
+  let ⟨hp, right✝¹⟩ := right✝
+  let ⟨product, h✝¹⟩ := NJB_StubLaws.qm_mul selector packed hc hp
+  let ⟨cm, right✝²⟩ := h✝¹
+  let ⟨hm, right✝³⟩ := right✝²
+  let ⟨reply, h✝²⟩ := NJB_StubLaws.qm_add (before (group g)) product (hb (group g)) hm
+  let ⟨ca, right✝⁴⟩ := h✝²
+  let ⟨ha, right✝⁵⟩ := right✝⁴
+  let after := NJB_StateUpdates.set before (group g) reply;
+  let events :=
+    ![{ operation := 0, left := selector, right := packed },
+      { operation := 1, left := before (group g), right := product }];
+  Exists.intro after
+    ⟨Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congrFun' (congrArg Bind.bind cp) fun packed => do
+                    let product ← FIq_Native.field.QM31.mul selector packed
+                    let out ← FIq_Native.field.QM31.add (before (group g)) product
+                    ok (NJB_StateUpdates.set before (group g) out))
+                  (bind_tc_ok packed fun y => do
+                    let product ← FIq_Native.field.QM31.mul selector y
+                    let out ← FIq_Native.field.QM31.add (before (group g)) product
+                    ok (NJB_StateUpdates.set before (group g) out)))
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind cm) fun product => do
+                      let out ← FIq_Native.field.QM31.add (before (group g)) product
+                      ok (NJB_StateUpdates.set before (group g) out))
+                    (bind_tc_ok product fun y => do
+                      let out ← FIq_Native.field.QM31.add (before (group g)) y
+                      ok (NJB_StateUpdates.set before (group g) out)))
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind ca) fun out => ok (NJB_StateUpdates.set before (group g) out))
+                    (bind_tc_ok reply fun y => ok (NJB_StateUpdates.set before (group g) y))))))
+            (ok after)))
+        (Eq.refl (ok (NJB_StateUpdates.set before (group g) reply))),
+      ⟨Exists.intro packed
+          (Exists.intro product
+            (Exists.intro reply
+              (Exists.intro (lanes values g)
+                (Exists.intro events
+                  ⟨cp,
+                    ⟨cm,
+                      ⟨ca,
+                        ⟨hp,
+                          ⟨hm,
+                            ⟨ha,
+                              ⟨rfl,
+                                ⟨rfl,
+                                  ⟨rfl,
+                                    ⟨rfl,
+                                      ⟨rfl,
+                                        ⟨rfl, fun j =>
+                                          of_eq_true
+                                            (Eq.trans
+                                              (congrFun'
+                                                (congrArg Eq
+                                                  (Eq.trans (NJB_StateUpdates.set.eq_1 before (group g) reply j)
+                                                    (ite_congr source._simp_1 (fun a => Eq.refl reply) fun a =>
+                                                      Eq.refl (before j))))
+                                                (if j = group g then reply else before j))
+                                              (eq_self (if j = group g then reply else before j)))⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩)))),
+        fun j =>
+        id
+          (Decidable.casesOn (instDecidableEqFin 24 (group g) j)
+            (fun h => Eq.mpr (id (congrArg Canon (if_neg h))) (hb j)) fun h =>
+            Eq.mpr (id (congrArg Canon (if_pos h))) ha)⟩⟩
+'AspisR1.NJL_SharedCuts.source' depends on axioms: [propext, Classical.choice, Quot.sound]
