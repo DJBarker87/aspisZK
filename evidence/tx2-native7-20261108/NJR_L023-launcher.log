@@ -1,0 +1,36 @@
+{"attempt": "NJR_L023", "exit_status": 0, "wall_seconds": 9.317089829128236, "peak_rss_kib": "6047060", "swaps": "0", "print_axioms": ["'NJR_FinishAtSourceView.at_source_view' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJR_FinishAtSourceView.at_source_view : ∀ (reserved : Bool) (r : NP6_StdModel.Reservation)
+  (loc : NIW_AlignFinishComposed.Locations) {H : Type} (d : aspis_core.digest.Digest32 H) (ck proof pub : Slice U8)
+  (hash : H) (p : verifier.Prepared) (a after : verifier.Accumulator)
+  (g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize) (geometry : verifier.QueryGeometry)
+  (pending : verifier.BatchedWeights) (inactive : aspis_core.field.wide_exact.WideExact),
+  (↑ck).length = 1768 →
+    verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) d ck proof pub transport.Variant.S2 hash =
+        ok (core.result.Result.Ok (p, a)) →
+      ↑a.next = 10 →
+        Port3_NativeQueryBody.
+...
+stall.flush pending after.weights.deref = ok out ∧
+                  have actual := { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next };
+                  ∀ (port : PairPort) (afterOwner : ℕ),
+                    NIW_AlignFinishPort.Cut p port afterOwner
+                        (NJF_FinishObserved.G r loc (NJR_ViewFinish.view proof inactive) p actual).2.2 →
+                      have execution := NJF_FinishObserved.G r loc (NJR_ViewFinish.view proof inactive) p actual;
+                      Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r)
+                            (NJR_ViewFinish.view proof inactive) p actual none =
+                          execution.1 ∧
+                        (∀ event ∈ execution.2.1, NIW_AlignFinishInvocation.Clause r event) ∧
+                          (∀ event ∈ execution.2.1,
+                              NIW_AlignFinishDomains.Inputs p (NJR_ViewFinish.view proof inactive) actual event) ∧
+                            NIW_AlignFinishPrefix.Prefix execution.2.1 ∧
+                              NIW_AlignFinishPairCertificate.Bound r execution.2.2 ∧
+                                NIW_AlignFinishInfoEvent.HasPair execution ∧
+                                  NIW_AlignFinishInfoNew.HasNew p execution ∧
+                                    NIW_AlignFinishPort.Bound r port execution.2.2 :=
+fun reserved r loc {H} d ck proof pub hash p a after g geometry pending inactive ckSize resume start query proofLength
+    scan =>
+  NJR_FinishInstall.at_call reserved r loc d ck proof pub hash p a after g geometry pending
+    (NJR_ViewFinish.view proof inactive) ckSize resume start query proofLength rfl rfl rfl scan
+'NJR_FinishAtSourceView.at_source_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb9c6b90cf90942bbba277cbca1ff1288.scope; invocation ID: 77c5209d7565410ea44169e365071c22

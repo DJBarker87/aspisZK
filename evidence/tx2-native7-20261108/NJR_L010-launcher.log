@@ -1,0 +1,43 @@
+{"attempt": "NJR_L010", "exit_status": 0, "wall_seconds": 12.197408757871017, "peak_rss_kib": "6017784", "swaps": "0", "print_axioms": ["'NJR_FinishDomain.reached' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJR_FinishDomain.reached : ∀ (reserved : Bool) {H : Type} (d : aspis_core.digest.Digest32 H)
+  (ck proof pub : Slice U8) (hash : H) (p : verifier.Prepared) (a after : verifier.Accumulator)
+  (g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize) (geometry : verifier.QueryGeometry)
+  (pending : verifier.BatchedWeights) (v : verifier.View),
+  (↑ck).length = 1768 →
+    verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) d ck proof pub transport.Variant.S2 hash =
+        ok (core.result.Result.Ok (p, a)) →
+      ↑a.next = 10 →
+        Port3_NativeQueryBody.verifier.candidate.query_loop (NFS_QueryOps.installed NJJ_QueryOps.concrete) proof p a g
+              none geometry (N
+...
+ts := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } :=
+fun reserved {H} d ck proof pub hash p a after g geometry pending v ckSize resume start query size round0 round1
+    finalView history =>
+  have dom := NID_ResumeFields.returned reserved d ck proof pub hash p a ckSize resume;
+  have qdom :=
+    NFW_QueryResume.domain p a dom.width (NID_ResumeQuery.weights a dom.weights)
+      (NID_ResumeCallerDomain.wide a.rhs dom.rhs) (NID_ResumeCallerDomain.power a.power dom.power)
+      (NID_ResumeCallerDomain.power p.rho dom.rho) start;
+  let ⟨out, h✝⟩ :=
+    NGM_FinishDomain.tx2_writeback NJJ_QueryOps.concrete proof p a after g geometry (NFW_QueryResume.pending a) pending
+      qdom start query
+  let ⟨flush, right✝⟩ := h✝
+  let ⟨acc, right✝¹⟩ := right✝
+  have words := NJR_FinishWindows.three proof v.round0 v.round1 v.final_message size round0 round1 finalView history;
+  Exists.intro out
+    ⟨flush,
+      { accumulator := acc, s2 := dom.variant, claim := NID_ResumeCallerDomain.wide p.claim dom.claim,
+        alpha := fun i a_1 x hx => NID_ResumeCallerDomain.wide x (dom.alpha x (List.mem_of_getElem? hx)),
+        kappa := NID_ResumeCallerDomain.wide p.kappa dom.kappa,
+        semantic := fun q hq =>
+          have h := dom.semantic q hq;
+          ⟨⟨h.left, h.right.left⟩, h.right.right⟩,
+        points := fun point hp =>
+          have h := dom.coordinates point hp;
+          ⟨⟨⟨h.left.left, h.left.right.left⟩, h.left.right.right⟩,
+            ⟨⟨h.right.left, h.right.right.left⟩, h.right.right.right⟩⟩,
+        round0 := round0, round1 := round1, final := finalView, round0_words := words.left,
+        round1_words := words.right.left, final_words := words.right.right }⟩
+'NJR_FinishDomain.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rcd8b2c58de5341c49219242258096122.scope; invocation ID: baaa26bcc93c4a44901417d86931fe4f

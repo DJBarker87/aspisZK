@@ -1,0 +1,43 @@
+{"attempt": "NJR_L045", "exit_status": 0, "wall_seconds": 11.867289745947346, "peak_rss_kib": "6353092", "swaps": "0", "print_axioms": ["'NJR_AcceptedFinishDomain.lengths' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJR_AcceptedFinishDomain.reached' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJR_AcceptedFinishDomain.reached : ∀ (reserved : Bool) (r : NP6_StdModel.Reservation) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (ck proof pub : Slice U8) (hash : H) (p : verifier.Prepared)
+  (a after : verifier.Accumulator) (g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize)
+  (geometry : verifier.QueryGeometry) (pending : verifier.BatchedWeights)
+  (inactive : aspis_core.field.wide_exact.WideExact) (out : Slice aspis_core.field.QM31),
+  (↑ck).length = 1768 →
+    verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) d ck proof pub transport.Variant.S2 hash =
+        ok (core.result.Result.Ok (p, a)) →
+      ↑a.next = 10 →
+        Port3_NativeQueryBody.verifier.ca
+...
+r =
+                after.power ∧
+              { weights := ⟨↑actual, actual.property⟩, rhs := after.rhs, power := after.power,
+                    next := after.next }.next =
+                after.next →
+          NIG_FinishInput.Domain proof (NJR_ViewFinish.view proof inactive) p
+            { weights := ⟨↑out, out.property⟩, rhs := after.rhs, power := after.power, next := after.next })
+    (fun actualFlush acc right =>
+      let ⟨r0size, right✝²⟩ := lengths proof inactive size
+      let ⟨r1size, finalSize⟩ := right✝²
+      have words :=
+        NJR_WindowsFromFinish.source r (NJR_ViewFinish.view proof inactive) p
+          { weights := ⟨↑out, out.property⟩, rhs := after.rhs, power := after.power, next := after.next } dom.variant
+          acc.width r0size r1size finalSize accepted;
+      { accumulator := acc, s2 := dom.variant, claim := NID_ResumeCallerDomain.wide p.claim dom.claim,
+        alpha := fun i a_1 x hx => NID_ResumeCallerDomain.wide x (dom.alpha x (List.mem_of_getElem? hx)),
+        kappa := NID_ResumeCallerDomain.wide p.kappa dom.kappa,
+        semantic := fun q hq =>
+          have h := dom.semantic q hq;
+          ⟨⟨h.left, h.right.left⟩, h.right.right⟩,
+        points := fun point hp =>
+          have h := dom.coordinates point hp;
+          ⟨⟨⟨h.left.left, h.left.right.left⟩, h.left.right.right⟩,
+            ⟨⟨h.right.left, h.right.right.left⟩, h.right.right.right⟩⟩,
+        round0 := rfl, round1 := rfl, final := rfl, round0_words := words.left, round1_words := words.right.left,
+        final_words := words.right.right })
+    (Eq.symm same) actualFlush acc right✝¹
+'NJR_AcceptedFinishDomain.lengths' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJR_AcceptedFinishDomain.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7340e0bde9e8427fbbe527e2f135fe7a.scope; invocation ID: 2b7094a6d53942a390ac00689f50585d

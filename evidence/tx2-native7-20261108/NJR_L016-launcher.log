@@ -1,0 +1,39 @@
+{"attempt": "NJR_L016", "exit_status": 0, "wall_seconds": 9.480756288161501, "peak_rss_kib": "6016176", "swaps": "0", "print_axioms": ["'NJR_FinishFromScan.reached' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJR_FinishFromScan.reached : ∀ (reserved : Bool) {H : Type} (d : aspis_core.digest.Digest32 H)
+  (ck proof pub : Slice U8) (hash : H) (p : verifier.Prepared) (a after : verifier.Accumulator)
+  (g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize) (geometry : verifier.QueryGeometry)
+  (pending : verifier.BatchedWeights) (v : verifier.View),
+  (↑ck).length = 1768 →
+    verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) d ck proof pub transport.Variant.S2 hash =
+        ok (core.result.Result.Ok (p, a)) →
+      ↑a.next = 10 →
+        Port3_NativeQueryBody.verifier.candidate.query_loop (NFS_QueryOps.installed NJJ_QueryOps.concrete) proof p a g
+              none geometry 
+...
+pub : Slice U8) (hash : H) (p : verifier.Prepared) (a after : verifier.Accumulator)
+  (g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize) (geometry : verifier.QueryGeometry)
+  (pending : verifier.BatchedWeights) (v : verifier.View),
+  (↑ck).length = 1768 →
+    verifier.resumeWithOps (CheckpointBytes4Ops.ops reserved) d ck proof pub transport.Variant.S2 hash =
+        ok (core.result.Result.Ok (p, a)) →
+      ↑a.next = 10 →
+        Port3_NativeQueryBody.verifier.candidate.query_loop (NFS_QueryOps.installed NJJ_QueryOps.concrete) proof p a g
+              none geometry (NFW_QueryResume.pending a) 22#usize =
+            ok (core.result.Result.Ok (after, pending)) →
+          (↑proof).length = 57607 →
+            ↑v.round0 = List.take 224 (List.drop 7527 ↑proof) →
+              ↑v.round1 = List.take 224 (List.drop 7783 ↑proof) →
+                ↑v.final_message = List.take 2048 (List.drop 8007 ↑proof) →
+                  Op4P_Install.sourceBody proof = ok (core.result.Result.Ok ()) →
+                    ∃ out,
+                      Port3_FlushInstall.flush pending after.weights.deref = ok out ∧
+                        NIG_FinishInput.Domain proof v p
+                          { weights := ⟨↑out, ⋯⟩, rhs := after.rhs, power := after.power, next := after.next } :=
+fun reserved {H} d ck proof pub hash p a after g geometry pending v ckSize resume start query proofLength round0 round1
+    finalView scan =>
+  NJR_FinishDomain.reached reserved d ck proof pub hash p a after g geometry pending v ckSize resume start query
+    (Decidable.byContradiction fun a_1 => reached._proof_1 ck proof a proofLength a_1) round0 round1 finalView
+    (NJR_HistoryFromScan.source proof proofLength scan)
+'NJR_FinishFromScan.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf7b8dae88d6a4ea98a3b3e8ba5530f42.scope; invocation ID: f064248fc7c9407ba0032bb330b5ad14
