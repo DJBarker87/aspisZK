@@ -1,0 +1,122 @@
+NLC_generated/NLC_Frame_mask.lean:16:4: warning: 'change ∀ _, _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_mask.lean:16:19: warning: 'intro' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_mask.lean:19:3: warning: 'exact frame_next s _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_mask.lean:20:3: warning: '(change True; trivial)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_mask.lean:21:3: warning: 'split' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_mask.lean:16:19: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_mask.lean:19:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_mask.lean:20:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_mask.lean:21:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.NLC_Finish.frame_mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.frame_mask : ∀ {H : Type} (s : State H),
+  s.next = Event.mask → AllLeaves (FramePost s) (step s) :=
+fun {H} s atSite =>
+  Eq.mpr (id (congrArg (fun _a => AllLeaves (FramePost s) _a) (step_mask s atSite)))
+    (id
+      (all_bind (liftM (read s.locals.low))
+        (fun low => do
+          let high ← liftM (read s.locals.high)
+          let blind ← liftM (read s.locals.blind)
+          let alpha ← liftM (read s.locals.alpha)
+          let mask ← liftM ((IDa_Deployed.boundaries s.input.reservation).mask low high blind alpha)
+          pure
+              (Sum.inr
+                (put s Event.record25a
+                  { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                    claims := s.locals.claims, terminalReply := s.locals.terminalReply, terminal := s.locals.terminal,
+                    low := s.locals.low, high := s.locals.high, blind := s.locals.blind, mask := some mask,
+                    extra := s.locals.extra, product := s.locals.product, partialValue := s.locals.partialValue,
+                    masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                    beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                    record26 := s.locals.record26, payload := s.locals.payload, extraCell := s.locals.extraCell,
+                    root := s.locals.root })))
+        (FramePost s) fun a =>
+        all_bind (liftM (read s.locals.high))
+          (fun high => do
+            let blind ← liftM (read s.locals.blind)
+            let alpha ← liftM (read s.locals.alpha)
+            let mask ← liftM ((IDa_Deployed.boundaries s.input.reservation).mask a high blind alpha)
+            pure
+                (Sum.inr
+                  (put s Event.record25a
+                    { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                      claims := s.locals.claims, terminalReply := s.locals.terminalReply, terminal := s.locals.terminal,
+                      low := s.locals.low, high := s.locals.high, blind := s.locals.blind, mask := some mask,
+                      extra := s.locals.extra, product := s.locals.product, partialValue := s.locals.partialValue,
+                      masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                      beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                      record26 := s.locals.record26, payload := s.locals.payload, extraCell := s.locals.extraCell,
+                      root := s.locals.root })))
+          (FramePost s) fun a_1 =>
+          all_bind (liftM (read s.locals.blind))
+            (fun blind => do
+              let alpha ← liftM (read s.locals.alpha)
+              let mask ← liftM ((IDa_Deployed.boundaries s.input.reservation).mask a a_1 blind alpha)
+              pure
+                  (Sum.inr
+                    (put s Event.record25a
+                      { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                        claims := s.locals.claims, terminalReply := s.locals.terminalReply,
+                        terminal := s.locals.terminal, low := s.locals.low, high := s.locals.high,
+                        blind := s.locals.blind, mask := some mask, extra := s.locals.extra,
+                        product := s.locals.product, partialValue := s.locals.partialValue, masked := s.locals.masked,
+                        stateBefore := s.locals.stateBefore, z0 := s.locals.z0, beforeZ1 := s.locals.beforeZ1,
+                        z1 := s.locals.z1, record25 := s.locals.record25, record26 := s.locals.record26,
+                        payload := s.locals.payload, extraCell := s.locals.extraCell, root := s.locals.root })))
+            (FramePost s) fun a_2 =>
+            all_bind (liftM (read s.locals.alpha))
+              (fun alpha => do
+                let mask ← liftM ((IDa_Deployed.boundaries s.input.reservation).mask a a_1 a_2 alpha)
+                pure
+                    (Sum.inr
+                      (put s Event.record25a
+                        { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                          claims := s.locals.claims, terminalReply := s.locals.terminalReply,
+                          terminal := s.locals.terminal, low := s.locals.low, high := s.locals.high,
+                          blind := s.locals.blind, mask := some mask, extra := s.locals.extra,
+                          product := s.locals.product, partialValue := s.locals.partialValue, masked := s.locals.masked,
+                          stateBefore := s.locals.stateBefore, z0 := s.locals.z0, beforeZ1 := s.locals.beforeZ1,
+                          z1 := s.locals.z1, record25 := s.locals.record25, record26 := s.locals.record26,
+                          payload := s.locals.payload, extraCell := s.locals.extraCell, root := s.locals.root })))
+              (FramePost s) fun a_3 =>
+              all_bind (liftM ((IDa_Deployed.boundaries s.input.reservation).mask a a_1 a_2 a_3))
+                (fun mask =>
+                  pure
+                    (Sum.inr
+                      (put s Event.record25a
+                        { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                          claims := s.locals.claims, terminalReply := s.locals.terminalReply,
+                          terminal := s.locals.terminal, low := s.locals.low, high := s.locals.high,
+                          blind := s.locals.blind, mask := some mask, extra := s.locals.extra,
+                          product := s.locals.product, partialValue := s.locals.partialValue, masked := s.locals.masked,
+                          stateBefore := s.locals.stateBefore, z0 := s.locals.z0, beforeZ1 := s.locals.beforeZ1,
+                          z1 := s.locals.z1, record25 := s.locals.record25, record26 := s.locals.record26,
+                          payload := s.locals.payload, extraCell := s.locals.extraCell, root := s.locals.root })))
+                (FramePost s) fun a =>
+                frame_put s Event.record25a
+                  { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                    claims := s.locals.claims, terminalReply := s.locals.terminalReply, terminal := s.locals.terminal,
+                    low := s.locals.low, high := s.locals.high, blind := s.locals.blind, mask := some a,
+                    extra := s.locals.extra, product := s.locals.product, partialValue := s.locals.partialValue,
+                    masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                    beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                    record26 := s.locals.record26, payload := s.locals.payload, extraCell := s.locals.extraCell,
+                    root := s.locals.root }))

@@ -1,0 +1,9 @@
+'AspisR1.NLC_Finish.source_invocation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLC_Finish.bounded_source_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.bounded_source_fold : ∀ {H : Type} (s : State H),
+  ∃ out log events, Invocation (fuel s) s out log events ∧ run (fold (fuel s) s) = (log, out) :=
+fun {H} s =>
+  let ⟨out, h✝⟩ := source_invocation (fuel s) s (Nat.le_refl (fuel s))
+  let ⟨log, h✝¹⟩ := h✝
+  let ⟨events, cuts⟩ := h✝¹
+  Exists.intro out (Exists.intro log (Exists.intro events ⟨cuts, fold_from_steps cuts⟩))

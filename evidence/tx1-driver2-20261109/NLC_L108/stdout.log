@@ -1,0 +1,7 @@
+AspisR1.NLC_Goals.FinishSourceEquality {H : Type} (input : Input H) : Prop
+def AspisR1.NLC_Goals.FinishSourceEquality : {H : Type} → Input H → Prop :=
+fun {H} input =>
+  PreparedHashCode.run (fold (fuel (initial input)) (initial input)) =
+    PreparedHashCode.run
+      (S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries input.reservation) input.digest input.publicValue
+        input.prefix1 input.transcript input.challenges none)

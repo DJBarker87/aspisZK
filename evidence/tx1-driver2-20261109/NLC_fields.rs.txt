@@ -1,0 +1,81 @@
+fn check_construct_window(mode:u8,bad:bool){
+ let c1:[u8;32]=kani::any();let root:[u8;32]=kani::any();let ch=challenges();let alpha=core::array::from_fn(|_|q());
+ let claims=Box::new(core::array::from_fn(|_|core::array::from_fn(|_|q())));let extra=core::array::from_fn(|_|q());let before=core::array::from_fn(|_|q());
+ let state:[u8;32]=kani::any();let z0=SecureCirclePoint{x:q(),y:q()};let z1=SecureCirclePoint{x:q(),y:q()};
+ let tstate:[u8;32]=kani::any();let hash=Hash(kani::any());let next:u8=kani::any();let transcript=crate::r1_wire::NLC_factory::make(hash,tstate,next);
+ let j:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();kani::assume(j<32&&row<3&&col<29);
+ let expected=match mode{0=>Some(byte(c1[j])),1=>Some(select_ch(&ch,j)),2=>Some(alpha[j%10]),3=>Some(claims[row][col]),4=>Some(extra[col]),5=>Some(before[col]),6=>Some(byte(state[j])),7=>Some(match j%4{0=>z0.x,1=>z0.y,2=>z1.x,_=>z1.y}),_=>None};
+ let address=(&*claims as *const [[QM31;29];3]) as usize;
+ let out=source_construct(&c1,root,ch,alpha,claims,extra,before,state,z0,z1,transcript);
+ let actual=match mode{0=>Some(byte(out.roots[0][j])),1=>Some(select_ch(&out.challenges,j)),2=>Some(out.alpha[j%10]),3=>Some(out.claims[row][col]),4=>Some(out.extra[col]),5=>Some(out.before_z1[col]),6=>Some(byte(out.state_before_z0[j])),7=>Some(match j%4{0=>out.z[0].x,1=>out.z[0].y,2=>out.z[1].x,_=>out.z[1].y}),_=>None};
+ let good=actual==expected && match mode {
+ 0=>out.roots[1][j]==root[j] && out.state_before_z0[j]==state[j],
+ 3=>(&*out.claims as *const [[QM31;29];3]) as usize==address,
+ 8=>crate::r1_wire::NLC_factory::snapshot(&out.transcript)==(tstate,hash,next),
+ _=>true,
+ };
+ if bad{assert!(!good)}else{assert!(good)}
+}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_bytes_cut(){check_construct_window(0,false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_bytes_control(){check_construct_window(0,true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_challenges_cut(){check_construct_window(1,false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_challenges_control(){check_construct_window(1,true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_alpha_cut(){check_construct_window(2,false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_alpha_control(){check_construct_window(2,true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_claims_cut(){check_construct_window(3,false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_claims_control(){check_construct_window(3,true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_extra_cut(){check_construct_window(4,false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_extra_control(){check_construct_window(4,true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_before_cut(){check_construct_window(5,false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_before_control(){check_construct_window(5,true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_points_cut(){check_construct_window(7,false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_points_control(){check_construct_window(7,true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_transcript_cut(){check_construct_window(8,false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_transcript_control(){check_construct_window(8,true)}

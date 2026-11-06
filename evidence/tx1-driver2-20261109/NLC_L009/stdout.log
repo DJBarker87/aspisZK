@@ -1,0 +1,112 @@
+NLC_generated/NLC_FinishFold.lean:37:17: error: unsolved goals
+case returned
+H : Type
+n : ℕ
+s : State H
+out : Result (Out H)
+log : Log
+events : List Event
+n✝ : ℕ
+s✝ : State H
+out✝ : Out H
+log✝ : Log
+head : run (step s✝) = (log✝, ok (Sum.inl out✝))
+⊢ (log✝ ++ (run (pure out✝)).1, (run (pure out✝)).2) = (log✝, ok out✝)
+NLC_generated/NLC_FinishFold.lean:41:37: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun,r̵u̵n̵,̵ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLC_generated/NLC_FinishFold.lean:41:41: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵u̵S̵1̵_̵T̵r̵a̵c̵e̵.̵c̵o̵n̵t̵i̵n̵u̵e̵R̵u̵n̵,̵r̵u̵n̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲A̲u̲S̲1̲_̲T̲r̲a̲c̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲,̲ ̲r̲u̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NLC_Finish.fold_from_steps' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.fold_from_steps : ∀ {H : Type} {n : ℕ} {s : State H} {out : Result (Out H)} {log : Log}
+  {events : List Event}, Invocation n s out log events → run (fold n s) = (log, out) :=
+fun {H} {n} {s} {out} {log} {events} cuts =>
+  Invocation.rec (fun {n} {s} {out} {log} head => sorry)
+    (fun {n} {s after} {out} {log suffix} {events} head tail ih =>
+      id
+        (id
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = (log ++ suffix, out))
+                (AuS1_Trace.run_bind (step s) fun next =>
+                  match next with
+                  | Sum.inl out => pure out
+                  | Sum.inr after => fold n after)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (AuS1_Trace.continueRun _a.1 _a.2 fun next =>
+                        match next with
+                        | Sum.inl out => pure out
+                        | Sum.inr after => fold n after) =
+                      (log ++ suffix, out))
+                  head))
+              (of_eq_true
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (congr (congrArg Prod.mk (congrArg (HAppend.hAppend log) (congrArg Prod.fst ih)))
+                        (congrArg Prod.snd ih)))
+                    (log ++ suffix, out))
+                  (eq_self (log ++ suffix, out))))))))
+    (fun {n} {s} {error} {log} head =>
+      id
+        (id
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = (log, fail error))
+                (AuS1_Trace.run_bind (step s) fun next =>
+                  match next with
+                  | Sum.inl out => pure out
+                  | Sum.inr after => fold n after)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (AuS1_Trace.continueRun _a.1 _a.2 fun next =>
+                        match next with
+                        | Sum.inl out => pure out
+                        | Sum.inr after => fold n after) =
+                      (log, fail error))
+                  head))
+              (Eq.refl
+                (AuS1_Trace.continueRun (log, fail error).1 (log, fail error).2 fun next =>
+                  match next with
+                  | Sum.inl out => pure out
+                  | Sum.inr after => fold n after))))))
+    (fun {n} {s} {log} head =>
+      id
+        (id
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = (log, div))
+                (AuS1_Trace.run_bind (step s) fun next =>
+                  match next with
+                  | Sum.inl out => pure out
+                  | Sum.inr after => fold n after)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (AuS1_Trace.continueRun _a.1 _a.2 fun next =>
+                        match next with
+                        | Sum.inl out => pure out
+                        | Sum.inr after => fold n after) =
+                      (log, div))
+                  head))
+              (Eq.refl
+                (AuS1_Trace.continueRun (log, div).1 (log, div).2 fun next =>
+                  match next with
+                  | Sum.inl out => pure out
+                  | Sum.inr after => fold n after))))))
+    cuts

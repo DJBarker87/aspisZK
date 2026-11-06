@@ -1,0 +1,56 @@
+//! Source-segment windows for verify_finish; no full-parent credit.
+use super::*;
+use aspis_core::field::{M31,CM31};
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[derive(Clone,Copy,PartialEq,Eq,Debug)]
+struct Hash(u64);
+impl Digest32 for Hash { fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("NLC constructor must not hash")} }
+fn q()->QM31 {let a:[u32;4]=kani::any();QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{a:M31(a[2]),b:M31(a[3])}}}
+fn byte(v:u8)->QM31{QM31{c0:CM31{a:M31(v as u32),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}}}
+fn select_ch(c:&Challenges,i:usize)->QM31{match i%15{0=>c.lambda,1=>c.chi,2=>c.theta,3..=12=>c.zc[i%15-3],13=>c.mu,_=>c.eta}}
+fn challenges()->Challenges { Challenges{lambda:q(),chi:q(),theta:q(),zc:core::array::from_fn(|_|q()),mu:q(),eta:q()} }
+fn source_construct<H:Digest32>(c1_root:&[u8;32],root:[u8;32],challenges:Challenges,alpha:[QM31;10],claims:Box<[[QM31;29];3]>,extra:[QM31;29],before_z1:[QM31;29],state_before_z0:[u8;32],z0:SecureCirclePoint,z1:SecureCirclePoint,transcript:SemanticTranscript<H>)->Verified<H>{
+    Verified {
+        roots: [*c1_root, root],
+        challenges,
+        alpha,
+        claims,
+        extra,
+        before_z1,
+        state_before_z0,
+        z: [z0, z1],
+        transcript,
+    }
+}
+fn check_construct(bad:bool){
+ let c1:[u8;32]=kani::any();let root:[u8;32]=kani::any();let ch=challenges();let alpha=core::array::from_fn(|_|q());
+ let claims=Box::new(core::array::from_fn(|_|core::array::from_fn(|_|q())));let extra=core::array::from_fn(|_|q());let before=core::array::from_fn(|_|q());
+ let state:[u8;32]=kani::any();let z0=SecureCirclePoint{x:q(),y:q()};let z1=SecureCirclePoint{x:q(),y:q()};
+ let tstate:[u8;32]=kani::any();let hash=Hash(kani::any());let next:u8=kani::any();let transcript=crate::r1_wire::NLC_factory::make(hash,tstate,next);
+ let mode:u8=kani::any();let j:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();kani::assume(mode<9&&j<32&&row<3&&col<29);
+ let expected=match mode{0=>Some(byte(c1[j])),1=>Some(select_ch(&ch,j)),2=>Some(alpha[j%10]),3=>Some(claims[row][col]),4=>Some(extra[col]),5=>Some(before[col]),6=>Some(byte(state[j])),7=>Some(match j%4{0=>z0.x,1=>z0.y,2=>z1.x,_=>z1.y}),_=>None};
+ let address=(&*claims as *const [[QM31;29];3]) as usize;
+ let out=source_construct(&c1,root,ch,alpha,claims,extra,before,state,z0,z1,transcript);
+ let actual=match mode{0=>Some(byte(out.roots[0][j])),1=>Some(select_ch(&out.challenges,j)),2=>Some(out.alpha[j%10]),3=>Some(out.claims[row][col]),4=>Some(out.extra[col]),5=>Some(out.before_z1[col]),6=>Some(byte(out.state_before_z0[j])),7=>Some(match j%4{0=>out.z[0].x,1=>out.z[0].y,2=>out.z[1].x,_=>out.z[1].y}),_=>None};
+ let good=actual==expected && out.roots[1][j]==root[j] && (&*out.claims as *const [[QM31;29];3]) as usize==address && crate::r1_wire::NLC_factory::snapshot(&out.transcript)==(tstate,hash,next);
+ if bad{assert!(!good)}else{assert!(good)}
+}
+fn core_error()->aspis_core::state_only_prefix::r0::Error{
+ use aspis_core::state_only_prefix::r0::Error as E;
+ let tag:u8=kani::any();let row:u8=kani::any();let actual:u8=kani::any();let value:usize=kani::any();
+ match tag%11{0=>E::Allocation,1=>E::RowOrder{expected:row,actual},2=>E::InvalidRow,3=>E::Tag{row},4=>E::Length{row},5=>E::NonCanonical{row,value},6=>E::Boundary{round:value},7=>E::Terminal,8=>E::EqualCirclePoints,9=>E::TrailingBytes,_=>E::Public}
+}
+fn source_map(terminal:Result<QM31,aspis_core::state_only_prefix::r0::Error>)->Result<QM31,Error>{terminal.map_err(|_| Error::Public)}
+fn check_map(bad:bool){let value=q();let good:bool=kani::any();let err=core_error();let input=if good{Ok(value)}else{Err(err)};let out=source_map(input);let expected=if good{Ok(value)}else{Err(Error::Public)};if bad{assert_ne!(out,expected)}else{assert_eq!(out,expected)}}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_cut(){check_construct(false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn construct_control(){check_construct(true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn map_cut(){check_map(false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn map_control(){check_map(true)}

@@ -1,0 +1,58 @@
+{"attempt": "NLC_L105", "exit_status": 1, "wall_seconds": 12.905995968030766, "peak_rss_kib": "6316668", "swaps": "0", "print_axioms": ["'AspisR1.NLC_Finish.initialized' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NLC_Finish.initial_fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLC_generated/NLC_InitializedInvocation.lean:12:1: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `AspisR1.NLC_Finish.Invocation.casesOn` can only eliminate into `Prop`
+
+H : Type
+x✝⁶ : ℕ
+x✝⁵ : State H
+x✝⁴ : Result (Out H)
+x✝³ : PreparedHashCode.Log
+x✝² : List Event
+x✝¹ : Invocation x✝⁶ x✝⁵ x✝⁴ x✝³ x✝²
+motive :
+  (x : ℕ) →
+    (x_1 : State H) →
+      (x_2 : Result (Out H)) →
+        (x_3 : PreparedHashCode.Log) → (x_4 : List Event) → Invocation x x_1 x_2 x_3 x_4 → Sort ?u.28
+h_1 :
+  (s : State H) →
+    (x : PreparedHashCode.Log) →
+      (n : ℕ) →
+        (out : Out H) →
+          (head : PreparedHashCode.run (step s) = (x, o
+...
+   (error : Error) →
+          (head : PreparedHashCode.run (step s) = (x, fail error)) → motive (n + 1) s (fail error) x [s.next] ⋯
+h_4 :
+  (s : State H) →
+    (x : PreparedHashCode.Log) →
+      (n : ℕ) → (head : PreparedHashCode.run (step s) = (x, div)) → motive (n + 1) s div x [s.next] ⋯
+a✝⁴ : ℕ
+a✝³ : State H
+a✝² : Result (Out H)
+a✝¹ : PreparedHashCode.Log
+a✝ : List Event
+x✝ : Invocation a✝⁴ a✝³ a✝² a✝¹ a✝
+⊢ x✝⁶ = a✝⁴ → x✝⁵ = a✝³ → x✝⁴ = a✝² → x✝³ = a✝¹ → x✝² = a✝ → x✝¹ ≍ x✝ → motive x✝⁶ x✝⁵ x✝⁴ x✝³ x✝² x✝¹ after processing
+  _, _, _, _, _, _
+the dependent pattern matcher can solve the following kinds of equations
+- <var> = <term> and <term> = <var>
+- <term> = <term> where the terms are definitionally equal
+- <constructor> = <constructor>, examples: List.cons x xs = List.cons y ys, and List.cons x xs = List.nil
+NLC_generated/NLC_InitializedInvocation.lean:17:8: warning: declaration uses `sorry`
+'AspisR1.NLC_Finish.initialized' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLC_Finish.initial_fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.initial_fold : ∀ {H : Type} (input : Input H),
+  ∃ out log events,
+    ∃ (cuts : Invocation (fuel (initial input)) (initial input) out log events),
+      AllInitialized cuts ∧ PreparedHashCode.run (fold (fuel (initial input)) (initial input)) = (log, out) :=
+fun {H} input =>
+  let ⟨out, h✝⟩ := source_invocation (fuel (initial input)) (initial input) (Nat.le_refl (fuel (initial input)))
+  let ⟨log, h✝¹⟩ := h✝
+  let ⟨events, cuts⟩ := h✝¹
+  have major := id (of_decide_eq_true (id (Eq.refl true)));
+  Exists.intro out
+    (Exists.intro log
+      (Exists.intro events (Exists.intro cuts ⟨initialized cuts (initial_ready input) major, fold_from_steps cuts⟩)))
+
+Running as unit: run-r6eb2ccdf6cbe4de39799e2bdff5ec853.scope; invocation ID: 4afc78ebd46041419bed69ec817c1c37

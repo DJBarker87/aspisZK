@@ -1,0 +1,157 @@
+NLC_generated/NLC_Frame_verified.lean:16:4: warning: 'change ∀ _, _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_verified.lean:16:19: warning: 'intro' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_verified.lean:21:3: warning: 'split' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_verified.lean:16:19: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_verified.lean:21:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.NLC_Finish.frame_verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.frame_verified : ∀ {H : Type} (s : State H),
+  s.next = Event.verified → AllLeaves (FramePost s) (step s) :=
+fun {H} s atSite =>
+  Eq.mpr (id (congrArg (fun _a => AllLeaves (FramePost s) _a) (step_verified s atSite)))
+    (id
+      (all_bind (liftM (read s.locals.root))
+        (fun root => do
+          let alpha ← liftM (read s.locals.alpha)
+          let claims ← liftM (read s.locals.claims)
+          let extra ← liftM (read s.locals.extra)
+          let beforeZ1 ← liftM (read s.locals.beforeZ1)
+          let stateBefore ← liftM (read s.locals.stateBefore)
+          let z0 ← liftM (read s.locals.z0)
+          let z1 ← liftM (read s.locals.z1)
+          let transcript ← liftM (read s.locals.transcript)
+          pure
+              (Sum.inl
+                (core.result.Result.Ok
+                  { roots := Array.make 2#usize [s.input.prefix1.c1_root, root] (window_verified._proof_3 s root),
+                    challenges := s.input.challenges, alpha := alpha, claims := claims, extra := extra,
+                    before_z1 := beforeZ1, state_before_z0 := stateBefore,
+                    z := Array.make 2#usize [z0, z1] (window_verified._proof_4 z0 z1), transcript := transcript })))
+        (FramePost s) fun a =>
+        all_bind (liftM (read s.locals.alpha))
+          (fun alpha => do
+            let claims ← liftM (read s.locals.claims)
+            let extra ← liftM (read s.locals.extra)
+            let beforeZ1 ← liftM (read s.locals.beforeZ1)
+            let stateBefore ← liftM (read s.locals.stateBefore)
+            let z0 ← liftM (read s.locals.z0)
+            let z1 ← liftM (read s.locals.z1)
+            let transcript ← liftM (read s.locals.transcript)
+            pure
+                (Sum.inl
+                  (core.result.Result.Ok
+                    { roots := Array.make 2#usize [s.input.prefix1.c1_root, a] (window_verified._proof_3 s a),
+                      challenges := s.input.challenges, alpha := alpha, claims := claims, extra := extra,
+                      before_z1 := beforeZ1, state_before_z0 := stateBefore,
+                      z := Array.make 2#usize [z0, z1] (window_verified._proof_4 z0 z1), transcript := transcript })))
+          (FramePost s) fun a_1 =>
+          all_bind (liftM (read s.locals.claims))
+            (fun claims => do
+              let extra ← liftM (read s.locals.extra)
+              let beforeZ1 ← liftM (read s.locals.beforeZ1)
+              let stateBefore ← liftM (read s.locals.stateBefore)
+              let z0 ← liftM (read s.locals.z0)
+              let z1 ← liftM (read s.locals.z1)
+              let transcript ← liftM (read s.locals.transcript)
+              pure
+                  (Sum.inl
+                    (core.result.Result.Ok
+                      { roots := Array.make 2#usize [s.input.prefix1.c1_root, a] (window_verified._proof_3 s a),
+                        challenges := s.input.challenges, alpha := a_1, claims := claims, extra := extra,
+                        before_z1 := beforeZ1, state_before_z0 := stateBefore,
+                        z := Array.make 2#usize [z0, z1] (window_verified._proof_4 z0 z1), transcript := transcript })))
+            (FramePost s) fun a_2 =>
+            all_bind (liftM (read s.locals.extra))
+              (fun extra => do
+                let beforeZ1 ← liftM (read s.locals.beforeZ1)
+                let stateBefore ← liftM (read s.locals.stateBefore)
+                let z0 ← liftM (read s.locals.z0)
+                let z1 ← liftM (read s.locals.z1)
+                let transcript ← liftM (read s.locals.transcript)
+                pure
+                    (Sum.inl
+                      (core.result.Result.Ok
+                        { roots := Array.make 2#usize [s.input.prefix1.c1_root, a] (window_verified._proof_3 s a),
+                          challenges := s.input.challenges, alpha := a_1, claims := a_2, extra := extra,
+                          before_z1 := beforeZ1, state_before_z0 := stateBefore,
+                          z := Array.make 2#usize [z0, z1] (window_verified._proof_4 z0 z1),
+                          transcript := transcript })))
+              (FramePost s) fun a_3 =>
+              all_bind (liftM (read s.locals.beforeZ1))
+                (fun beforeZ1 => do
+                  let stateBefore ← liftM (read s.locals.stateBefore)
+                  let z0 ← liftM (read s.locals.z0)
+                  let z1 ← liftM (read s.locals.z1)
+                  let transcript ← liftM (read s.locals.transcript)
+                  pure
+                      (Sum.inl
+                        (core.result.Result.Ok
+                          { roots := Array.make 2#usize [s.input.prefix1.c1_root, a] (window_verified._proof_3 s a),
+                            challenges := s.input.challenges, alpha := a_1, claims := a_2, extra := a_3,
+                            before_z1 := beforeZ1, state_before_z0 := stateBefore,
+                            z := Array.make 2#usize [z0, z1] (window_verified._proof_4 z0 z1),
+                            transcript := transcript })))
+                (FramePost s) fun a_4 =>
+                all_bind (liftM (read s.locals.stateBefore))
+                  (fun stateBefore => do
+                    let z0 ← liftM (read s.locals.z0)
+                    let z1 ← liftM (read s.locals.z1)
+                    let transcript ← liftM (read s.locals.transcript)
+                    pure
+                        (Sum.inl
+                          (core.result.Result.Ok
+                            { roots := Array.make 2#usize [s.input.prefix1.c1_root, a] (window_verified._proof_3 s a),
+                              challenges := s.input.challenges, alpha := a_1, claims := a_2, extra := a_3,
+                              before_z1 := a_4, state_before_z0 := stateBefore,
+                              z := Array.make 2#usize [z0, z1] (window_verified._proof_4 z0 z1),
+                              transcript := transcript })))
+                  (FramePost s) fun a_5 =>
+                  all_bind (liftM (read s.locals.z0))
+                    (fun z0 => do
+                      let z1 ← liftM (read s.locals.z1)
+                      let transcript ← liftM (read s.locals.transcript)
+                      pure
+                          (Sum.inl
+                            (core.result.Result.Ok
+                              { roots := Array.make 2#usize [s.input.prefix1.c1_root, a] (window_verified._proof_3 s a),
+                                challenges := s.input.challenges, alpha := a_1, claims := a_2, extra := a_3,
+                                before_z1 := a_4, state_before_z0 := a_5,
+                                z := Array.make 2#usize [z0, z1] (window_verified._proof_4 z0 z1),
+                                transcript := transcript })))
+                    (FramePost s) fun a_6 =>
+                    all_bind (liftM (read s.locals.z1))
+                      (fun z1 => do
+                        let transcript ← liftM (read s.locals.transcript)
+                        pure
+                            (Sum.inl
+                              (core.result.Result.Ok
+                                {
+                                  roots :=
+                                    Array.make 2#usize [s.input.prefix1.c1_root, a] (window_verified._proof_3 s a),
+                                  challenges := s.input.challenges, alpha := a_1, claims := a_2, extra := a_3,
+                                  before_z1 := a_4, state_before_z0 := a_5,
+                                  z := Array.make 2#usize [a_6, z1] (window_verified._proof_4 a_6 z1),
+                                  transcript := transcript })))
+                      (FramePost s) fun a_7 =>
+                      all_bind (liftM (read s.locals.transcript))
+                        (fun transcript =>
+                          pure
+                            (Sum.inl
+                              (core.result.Result.Ok
+                                {
+                                  roots :=
+                                    Array.make 2#usize [s.input.prefix1.c1_root, a] (window_verified._proof_3 s a),
+                                  challenges := s.input.challenges, alpha := a_1, claims := a_2, extra := a_3,
+                                  before_z1 := a_4, state_before_z0 := a_5,
+                                  z := Array.make 2#usize [a_6, a_7] (window_verified._proof_4 a_6 a_7),
+                                  transcript := transcript })))
+                        (FramePost s) fun a_8 => id True.intro))

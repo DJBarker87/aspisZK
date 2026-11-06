@@ -1,0 +1,87 @@
+NLC_generated/NLC_Frame_blind.lean:16:4: warning: 'change ∀ _, _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_blind.lean:16:19: warning: 'intro' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_blind.lean:19:3: warning: 'exact frame_next s _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_blind.lean:20:3: warning: '(change True; trivial)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_blind.lean:21:3: warning: 'split' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_blind.lean:16:19: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_blind.lean:19:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_blind.lean:20:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_blind.lean:21:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.NLC_Finish.frame_blind' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.frame_blind : ∀ {H : Type} (s : State H),
+  s.next = Event.blind → AllLeaves (FramePost s) (step s) :=
+fun {H} s atSite =>
+  Eq.mpr (id (congrArg (fun _a => AllLeaves (FramePost s) _a) (step_blind s atSite)))
+    (id
+      (all_bind (liftM (read s.locals.claims))
+        (fun c => do
+          let row ← liftM (Array.index_usize c 0#usize)
+          let blind ← liftM (row.index_usize 27#usize)
+          pure
+              (Sum.inr
+                (put s Event.alpha
+                  { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                    claims := s.locals.claims, terminalReply := s.locals.terminalReply, terminal := s.locals.terminal,
+                    low := s.locals.low, high := s.locals.high, blind := some blind, mask := s.locals.mask,
+                    extra := s.locals.extra, product := s.locals.product, partialValue := s.locals.partialValue,
+                    masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                    beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                    record26 := s.locals.record26, payload := s.locals.payload, extraCell := s.locals.extraCell,
+                    root := s.locals.root })))
+        (FramePost s) fun a =>
+        all_bind (liftM (Array.index_usize a 0#usize))
+          (fun row => do
+            let blind ← liftM (row.index_usize 27#usize)
+            pure
+                (Sum.inr
+                  (put s Event.alpha
+                    { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                      claims := s.locals.claims, terminalReply := s.locals.terminalReply, terminal := s.locals.terminal,
+                      low := s.locals.low, high := s.locals.high, blind := some blind, mask := s.locals.mask,
+                      extra := s.locals.extra, product := s.locals.product, partialValue := s.locals.partialValue,
+                      masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                      beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                      record26 := s.locals.record26, payload := s.locals.payload, extraCell := s.locals.extraCell,
+                      root := s.locals.root })))
+          (FramePost s) fun a =>
+          all_bind (liftM (a.index_usize 27#usize))
+            (fun blind =>
+              pure
+                (Sum.inr
+                  (put s Event.alpha
+                    { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                      claims := s.locals.claims, terminalReply := s.locals.terminalReply, terminal := s.locals.terminal,
+                      low := s.locals.low, high := s.locals.high, blind := some blind, mask := s.locals.mask,
+                      extra := s.locals.extra, product := s.locals.product, partialValue := s.locals.partialValue,
+                      masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                      beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                      record26 := s.locals.record26, payload := s.locals.payload, extraCell := s.locals.extraCell,
+                      root := s.locals.root })))
+            (FramePost s) fun a =>
+            frame_put s Event.alpha
+              { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                claims := s.locals.claims, terminalReply := s.locals.terminalReply, terminal := s.locals.terminal,
+                low := s.locals.low, high := s.locals.high, blind := some a, mask := s.locals.mask,
+                extra := s.locals.extra, product := s.locals.product, partialValue := s.locals.partialValue,
+                masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                record26 := s.locals.record26, payload := s.locals.payload, extraCell := s.locals.extraCell,
+                root := s.locals.root }))

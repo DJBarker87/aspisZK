@@ -1,0 +1,37 @@
+NLC_generated/NLC_Frame_circleGuard.lean:16:4: warning: 'change ∀ _, _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_circleGuard.lean:16:19: warning: 'intro' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_circleGuard.lean:16:19: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.NLC_Finish.frame_circleGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.frame_circleGuard : ∀ {H : Type} (s : State H),
+  s.next = Event.circleGuard → AllLeaves (FramePost s) (step s) :=
+fun {H} s atSite =>
+  Eq.mpr (id (congrArg (fun _a => AllLeaves (FramePost s) _a) (step_circleGuard s atSite)))
+    (id
+      (all_bind (liftM (read s.locals.z0))
+        (fun z0 => do
+          let z1 ← liftM (read s.locals.z1)
+          let reject ← liftM (FinishModel.pointEq z0 z1)
+          if reject = true then pure (Sum.inl (core.result.Result.Err r1_wire.Error.EqualCirclePoints))
+            else pure (Sum.inr (setNext s Event.payload2)))
+        (FramePost s) fun a =>
+        all_bind (liftM (read s.locals.z1))
+          (fun z1 => do
+            let reject ← liftM (FinishModel.pointEq a z1)
+            if reject = true then pure (Sum.inl (core.result.Result.Err r1_wire.Error.EqualCirclePoints))
+              else pure (Sum.inr (setNext s Event.payload2)))
+          (FramePost s) fun a_1 =>
+          all_bind (liftM (FinishModel.pointEq a a_1))
+            (fun reject =>
+              if reject = true then pure (Sum.inl (core.result.Result.Err r1_wire.Error.EqualCirclePoints))
+              else pure (Sum.inr (setNext s Event.payload2)))
+            (FramePost s) fun a =>
+            Decidable.casesOn (instDecidableEqBool a true)
+              (fun h =>
+                Eq.mpr (id (congrArg (AllLeaves (FramePost s)) (if_neg h))) (frame_put s Event.payload2 s.locals))
+              fun h => Eq.mpr (id (congrArg (AllLeaves (FramePost s)) (if_pos h))) (id True.intro)))

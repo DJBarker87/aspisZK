@@ -1,0 +1,926 @@
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk
+                      (AspisR1.FIp_Install.configuration indexError
+                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisR1.ARW_Induced.issued native1 copy allocator
+                                                AspisR1.CPH_Program.verifier a H).length ≤
+                                            Q0 + Q1) →
+                                        have P :=
+                                          AspisR1.ARW_Induced.program native1 copy allocator
+                                            AspisR1.CPH_Program.verifier a;
+                                        have runtime :=
+                                          AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+                                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation)
+                                            indexError reservation native1 native2 hashv a;
+                                        have select := fun x =>
+                                          AspisR1.P2P_NativeSelection.pair
+                                            (AspisR1.DrvC_Installation.sdk
+                                              (AspisR1.FIp_Install.configuration indexError
+                                                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                  reservation)
+                                                reservation))
+                                            AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                        AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                            (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                            AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                            AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                          AspisR1.DrvC_Implementation.driver
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation) =
+                                              AspisR1.DrvC_SourceEntry.source
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation)
+                                                hashv ∧
+                                            AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                      reservation)
+                                                    reservation) =
+                                                AspisR1.SdkD_PairBatches.dictionary
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).boundaries
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).std ∧
+                                              AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.boundaries
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation).boundaries)
+                                                  reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1
+                                                  post2 H
+                                                  (AspisR1.DrvC_Implementation.driver
+                                                    (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation))
+                                                  prior (p.physicalEvents t) hashv
+                                                  (AspisR1.BinRawByteCollisionTargets.event
+                                                    AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.Hiq_RecordedJoint.program
+                                                        (AspisR1.F3X_Account.program
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P)
+                                                        AspisR1.F3X_Projection.project select))) ∧
+                                                (AspisR1.F3X_ModelClaims.Claims
+                                                      (AspisR1.FIp_Install.configuration indexError
+                                                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                          reservation)
+                                                        reservation)
+                                                      D P (Q0 + Q1) ∧
+                                                    AspisR1.F3Y_SourceClaims.Claims
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        D hashv P (Q0 + Q1) select ∧
+                                                      AspisR1.F3Y_AccountMass.Claims
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P (Q0 + Q1) select ∧
+                                                        ⋯) ∧
+                                                  (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                      (↑saved).length = 1768 ∧ ⋯) ∧
+                                                    AspisR1.Rc2_Events.Facts
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        hashv native1 native2 copy allocator
+                                                        AspisR1.CPH_Program.verifier H saved ∧
+                                                      AspisR1.CPH_Protection.Facts p t saved
+                                                          AspisR1.CPH_Program.verifier ∧
+                                                        ⋯
+'AspisR1.NLC_ConstructExt.verified_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_ConstructExt.verified_fields : ∀ {H : Type}
+  (actual expected : AspisR1PublicPreparation.r1_semantic.Verified H),
+  actual.roots = expected.roots →
+    actual.challenges = expected.challenges →
+      actual.alpha = expected.alpha →
+        actual.claims = expected.claims →
+          actual.extra = expected.extra →
+            actual.before_z1 = expected.before_z1 →
+              actual.state_before_z0 = expected.state_before_z0 →
+                actual.z = expected.z → actual.transcript = expected.transcript → actual = expected
+'AspisR1.NLC_CopyFrames.array_windows' depends on axioms: [propext, Quot.sound]
+@AspisR1.NLC_CopyFrames.array_windows : ∀ {A : Type} {n : Aeneas.Std.Usize} (source actual : Aeneas.Std.Array A n),
+  (∀ (i : ℕ) (inside : i < ↑n),
+      AspisR1.NKQ_ArrayWindows.cell actual i inside = AspisR1.NKQ_ArrayWindows.cell source i inside) →
+    actual = source
+'AspisR1.NLC_CopyFrames.copied_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_CopyFrames.copied_window : ∀ {A : Type} (src dst : ℕ → A) (start count index : ℕ),
+  start ≤ index ∧ index < start + count → KMX_CopyMeaning.loop src dst start count index = src index
+'AspisR1.NLC_CopyFrames.disjoint_windows' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_CopyFrames.disjoint_windows : ∀ {A : Type} (first second original : ℕ → A) (a na b nb index : ℕ),
+  a ≤ index ∧ index < a + na →
+    a + na ≤ b ∨ b + nb ≤ a →
+      KMX_CopyMeaning.loop second (KMX_CopyMeaning.loop first original a na) b nb index = first index
+'AspisR1.NLC_CopyFrames.retained_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_CopyFrames.retained_window : ∀ {A : Type} (src dst : ℕ → A) (start count index : ℕ),
+  index < start ∨ start + count ≤ index → KMX_CopyMeaning.loop src dst start count index = dst index
+'AspisR1.NLC_Finish.all_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.all_bind : ∀ {A B : Type} (p : AspisR1PublicPreparation.PreparedHashCode.Code A)
+  (k : A → AspisR1PublicPreparation.PreparedHashCode.Code B) (P : B → Prop),
+  (∀ (a : A), AspisR1.NLC_Finish.AllLeaves P (k a)) →
+    AspisR1.NLC_Finish.AllLeaves P (AspisR1PublicPreparation.PreparedHashCode.bind p k)
+'AspisR1.NLC_Finish.all_erase' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.all_erase : ∀ {A : Type} (code : AspisR1PublicPreparation.PreparedHashCode.Code A) (P : A → Prop),
+  AspisR1.NLC_Finish.AllLeaves P code →
+    ∀ (a : A), AspisR1PublicPreparation.PreparedHashCode.erase code = Aeneas.Std.Result.ok a → P a
+'AspisR1.NLC_Finish.bounded_source_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.bounded_source_fold : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  ∃ out log events,
+    AspisR1.NLC_Finish.Invocation (AspisR1.NLC_Finish.fuel s) s out log events ∧
+      AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.fold (AspisR1.NLC_Finish.fuel s) s) = (log, out)
+'AspisR1.NLC_Finish.constructor' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.constructor : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (alpha : AspisR1.NLC_Finish.Alpha)
+  (claims : AspisR1.NLC_Finish.Claims) (extra before : AspisR1.NLC_Finish.Words)
+  (state root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (z0 z1 : AspisR1.NLC_Finish.Point)
+  (transcript : AspisR1PublicPreparation.r1_wire.SemanticTranscript H),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.step
+        { input := i,
+          locals := AspisR1.NLC_Finish.constructorLocals alpha claims extra before state root z0 z1 transcript,
+          next := AspisR1.NLC_Finish.Event.verified }) =
+    ([],
+      Aeneas.Std.Result.ok
+        (Sum.inl
+          (Aeneas.Std.core.result.Result.Ok
+            { roots := Aeneas.Std.Array.make 2#usize [i.prefix1.c1_root, root] ⋯, challenges := i.challenges,
+              alpha := alpha, claims := claims, extra := extra, before_z1 := before, state_before_z0 := state,
+              z := Aeneas.Std.Array.make 2#usize [z0, z1] ⋯, transcript := transcript })))
+'AspisR1.NLC_Finish.fold_from_steps' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.fold_from_steps : ∀ {H : Type} {n : ℕ} {s : AspisR1.NLC_Finish.State H}
+  {out : Aeneas.Std.Result (AspisR1.NLC_Finish.Out H)} {log : AspisR1PublicPreparation.PreparedHashCode.Log}
+  {events : List AspisR1.NLC_Finish.Event},
+  AspisR1.NLC_Finish.Invocation n s out log events →
+    AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.fold n s) = (log, out)
+'AspisR1.NLC_Finish.frame_addExtra' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_addExtra : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.addExtra →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_addMask' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_addMask : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.addMask →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_alpha' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_alpha : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.alpha →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_blind' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_blind : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.blind →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_circle0' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_circle0 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circle0 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_circle1' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_circle1 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circle1 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_circleGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_circleGuard : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circleGuard →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_claims : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.claims →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_decode25' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_decode25 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.decode25 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_decode26' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_decode26 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.decode26 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_extra28' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_extra28 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.extra28 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_highArray' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_highArray : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.highArray →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_lowArray' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_lowArray : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.lowArray →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_mapPublic' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_mapPublic : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mapPublic →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_mark2' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_mark2 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark2 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_mark3' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_mark3 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark3 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_mark4' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_mark4 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark4 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_mark5' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_mark5 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark5 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_mask : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mask →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_multiply : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.multiply →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_next : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H) (e : AspisR1.NLC_Finish.Event),
+  AspisR1.NLC_Finish.FramePost s (Sum.inr (AspisR1.NLC_Finish.setNext s e))
+'AspisR1.NLC_Finish.frame_original' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_original : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.original →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_payload2' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_payload2 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.payload2 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_put' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_put : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H) (e : AspisR1.NLC_Finish.Event)
+  (l : AspisR1.NLC_Finish.Locals H), AspisR1.NLC_Finish.FramePost s (Sum.inr (AspisR1.NLC_Finish.put s e l))
+'AspisR1.NLC_Finish.frame_record25a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_record25a : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record25a →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_record25b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_record25b : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record25b →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_record26a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_record26a : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record26a →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_record26b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_record26b : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record26b →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_rootCopy' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_rootCopy : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.rootCopy →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_rounds : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.rounds →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_stateBefore' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_stateBefore : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.stateBefore →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_terminal : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.terminal →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_terminalGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_terminalGuard : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.terminalGuard →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.frame_verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.frame_verified : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.verified →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.FramePost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.fuel_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.fuel_next : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 = Aeneas.Std.Result.ok (Sum.inr after) →
+    AspisR1.NLC_Finish.fuel s = AspisR1.NLC_Finish.fuel after + 1
+'AspisR1.NLC_Finish.fuel_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.fuel_positive : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H), 0 < AspisR1.NLC_Finish.fuel s
+'AspisR1.NLC_Finish.high_callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.high_callback : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H) (claims : AspisR1.NLC_Finish.Claims),
+  s.locals.claims = some claims →
+    ∀ (i : Aeneas.Std.Usize) (inside : ↑i < 10),
+      (do
+          let c ← AspisR1.NLC_Finish.read s.locals.claims
+          (AspisR1PublicPreparation.FinishModel.closureFn5 s.input.digest).call_mut c i) =
+        Aeneas.Std.Result.ok (AspisR1.NKQ_MaskHighStep.highAt claims i inside, claims)
+'AspisR1.NLC_Finish.initial_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.initial_fold : ∀ {H : Type} (input : AspisR1.NLC_Finish.Input H),
+  ∃ out log events,
+    AspisR1.NLC_Finish.InitializedInvocation (AspisR1.NLC_Finish.fuel (AspisR1.NLC_Finish.initial input))
+        (AspisR1.NLC_Finish.initial input) out log events ∧
+      AspisR1PublicPreparation.PreparedHashCode.run
+          (AspisR1.NLC_Finish.fold (AspisR1.NLC_Finish.fuel (AspisR1.NLC_Finish.initial input))
+            (AspisR1.NLC_Finish.initial input)) =
+        (log, out)
+'AspisR1.NLC_Finish.initial_ready' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.initial_ready : ∀ {H : Type} (input : AspisR1.NLC_Finish.Input H),
+  AspisR1.NLC_Finish.Ready (AspisR1.NLC_Finish.initial input)
+'AspisR1.NLC_Finish.initialized' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.initialized : ∀ {H : Type} {n : ℕ} {s : AspisR1.NLC_Finish.State H}
+  {out : Aeneas.Std.Result (AspisR1.NLC_Finish.Out H)} {log : AspisR1PublicPreparation.PreparedHashCode.Log}
+  {events : List AspisR1.NLC_Finish.Event},
+  AspisR1.NLC_Finish.Invocation n s out log events →
+    AspisR1.NLC_Finish.Ready s →
+      AspisR1.NLC_Finish.Major s → AspisR1.NLC_Finish.InitializedInvocation n s out log events
+'AspisR1.NLC_Finish.initialized_read' does not depend on any axioms
+@AspisR1.NLC_Finish.initialized_read : ∀ {A : Type} (slot : Option A),
+  slot.isSome = true → ∃ value, AspisR1.NLC_Finish.read slot = Aeneas.Std.Result.ok value
+'AspisR1.NLC_Finish.low_callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.low_callback : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H) (claims : AspisR1.NLC_Finish.Claims),
+  s.locals.claims = some claims →
+    ∀ (i : Aeneas.Std.Usize) (inside : ↑i < 16),
+      (do
+          let c ← AspisR1.NLC_Finish.read s.locals.claims
+          (AspisR1PublicPreparation.FinishModel.closureFn9 s.input.digest).call_mut c i) =
+        Aeneas.Std.Result.ok (AspisR1.NKQ_MaskLowStep.lowAt claims i inside, claims)
+'AspisR1.NLC_Finish.map_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.map_error : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (e : AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error),
+  AspisR1PublicPreparation.PreparedHashCode.run
+      (AspisR1.NLC_Finish.step
+        { input := i,
+          locals :=
+            { running := l.running, alpha := l.alpha, transcript := l.transcript, claims := l.claims,
+              terminalReply := some (Aeneas.Std.core.result.Result.Err e), terminal := l.terminal, low := l.low,
+              high := l.high, blind := l.blind, mask := l.mask, extra := l.extra, product := l.product,
+              partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0,
+              beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+              extraCell := l.extraCell, root := l.root },
+          next := AspisR1.NLC_Finish.Event.mapPublic }) =
+    ([],
+      Aeneas.Std.Result.ok (Sum.inl (Aeneas.Std.core.result.Result.Err AspisR1PublicPreparation.r1_wire.Error.Public)))
+'AspisR1.NLC_Finish.map_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.map_value : ∀ {H : Type} (i : AspisR1.NLC_Finish.Input H) (l : AspisR1.NLC_Finish.Locals H)
+  (q : AspisR1.NLC_Finish.Q),
+  have before :=
+    { input := i,
+      locals :=
+        { running := l.running, alpha := l.alpha, transcript := l.transcript, claims := l.claims,
+          terminalReply := some (Aeneas.Std.core.result.Result.Ok q), terminal := l.terminal, low := l.low,
+          high := l.high, blind := l.blind, mask := l.mask, extra := l.extra, product := l.product,
+          partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0,
+          beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25, record26 := l.record26, payload := l.payload,
+          extraCell := l.extraCell, root := l.root },
+      next := AspisR1.NLC_Finish.Event.mapPublic };
+  AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step before) =
+    ([],
+      Aeneas.Std.Result.ok
+        (Sum.inr
+          (AspisR1.NLC_Finish.put before AspisR1.NLC_Finish.Event.mark3
+            (have __src := before.locals;
+            { running := __src.running, alpha := __src.alpha, transcript := __src.transcript, claims := __src.claims,
+              terminalReply := __src.terminalReply, terminal := some q, low := __src.low, high := __src.high,
+              blind := __src.blind, mask := __src.mask, extra := __src.extra, product := __src.product,
+              partialValue := __src.partialValue, masked := __src.masked, stateBefore := __src.stateBefore,
+              z0 := __src.z0, beforeZ1 := __src.beforeZ1, z1 := __src.z1, record25 := __src.record25,
+              record26 := __src.record26, payload := __src.payload, extraCell := __src.extraCell,
+              root := __src.root }))))
+'AspisR1.NLC_Finish.put_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.put_frame : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H) (e : AspisR1.NLC_Finish.Event)
+  (l : AspisR1.NLC_Finish.Locals H), AspisR1.NLC_Finish.InputFrame s (AspisR1.NLC_Finish.put s e l)
+'AspisR1.NLC_Finish.rank_addExtra' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_addExtra : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.addExtra →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_addMask' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_addMask : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.addMask →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_alpha' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_alpha : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.alpha →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_blind' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_blind : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.blind →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_bound' does not depend on any axioms
+AspisR1.NLC_Finish.rank_bound : ∀ (e : AspisR1.NLC_Finish.Event), AspisR1.NLC_Finish.rank e < 34
+'AspisR1.NLC_Finish.rank_circle0' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_circle0 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circle0 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_circle1' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_circle1 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circle1 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_circleGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_circleGuard : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circleGuard →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_claims : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.claims →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_decode25' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_decode25 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.decode25 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_decode26' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_decode26 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.decode26 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_extra28' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_extra28 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.extra28 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_highArray' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_highArray : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.highArray →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_lowArray' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_lowArray : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.lowArray →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_mapPublic' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_mapPublic : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mapPublic →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_mark2' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_mark2 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark2 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_mark3' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_mark3 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark3 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_mark4' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_mark4 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark4 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_mark5' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_mark5 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark5 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_mask : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mask →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_multiply : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.multiply →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_next : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H) (e : AspisR1.NLC_Finish.Event),
+  AspisR1.NLC_Finish.rank e = AspisR1.NLC_Finish.rank s.next + 1 →
+    AspisR1.NLC_Finish.RankPost s (Sum.inr (AspisR1.NLC_Finish.setNext s e))
+'AspisR1.NLC_Finish.rank_original' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_original : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.original →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_payload2' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_payload2 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.payload2 →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_put' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_put : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H) (e : AspisR1.NLC_Finish.Event)
+  (l : AspisR1.NLC_Finish.Locals H),
+  AspisR1.NLC_Finish.rank e = AspisR1.NLC_Finish.rank s.next + 1 →
+    AspisR1.NLC_Finish.RankPost s (Sum.inr (AspisR1.NLC_Finish.put s e l))
+'AspisR1.NLC_Finish.rank_record25a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_record25a : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record25a →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_record25b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_record25b : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record25b →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_record26a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_record26a : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record26a →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_record26b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_record26b : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record26b →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_returned : ∀ {A H : Type} (s : AspisR1.NLC_Finish.State H) (e : AspisR1.NLC_Finish.Event)
+  (r : Aeneas.Std.core.result.Result A AspisR1PublicPreparation.r1_wire.Error)
+  (store : A → AspisR1.NLC_Finish.Locals H),
+  AspisR1.NLC_Finish.rank e = AspisR1.NLC_Finish.rank s.next + 1 →
+    AspisR1.NLC_Finish.RankPost s (AspisR1.NLC_Finish.returned s e r store)
+'AspisR1.NLC_Finish.rank_rootCopy' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_rootCopy : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.rootCopy →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_rounds : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.rounds →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_stateBefore' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_stateBefore : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.stateBefore →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_terminal : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.terminal →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_terminalGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_terminalGuard : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.terminalGuard →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.rank_verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.rank_verified : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.verified →
+    AspisR1.NLC_Finish.AllLeaves (AspisR1.NLC_Finish.RankPost s) (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_addExtra' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_addExtra : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.addExtra →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_addMask' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_addMask : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.addMask →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_alpha' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_alpha : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.alpha →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_blind' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_blind : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.blind →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_circle0' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_circle0 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circle0 →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_circle1' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_circle1 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circle1 →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_circleGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_circleGuard : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circleGuard →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_claims : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.claims →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_decode25' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_decode25 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.decode25 →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_decode26' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_decode26 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.decode26 →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_extra28' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_extra28 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.extra28 →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_highArray' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_highArray : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.highArray →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_lowArray' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_lowArray : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.lowArray →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_mapPublic' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_mapPublic : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mapPublic →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_mark2' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_mark2 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark2 →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_mark3' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_mark3 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark3 →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_mark4' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_mark4 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark4 →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_mark5' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_mark5 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark5 →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_mask : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mask →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_multiply : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.multiply →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_original' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_original : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.original →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_payload2' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_payload2 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.payload2 →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_reads' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_reads : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.ReadsReady s
+'AspisR1.NLC_Finish.ready_record25a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_record25a : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record25a →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_record25b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_record25b : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record25b →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_record26a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_record26a : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record26a →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_record26b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_record26b : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record26b →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_returned : ∀ {A H : Type} (s : AspisR1.NLC_Finish.State H) (e : AspisR1.NLC_Finish.Event)
+  (r : Aeneas.Std.core.result.Result A AspisR1PublicPreparation.r1_wire.Error)
+  (store : A → AspisR1.NLC_Finish.Locals H),
+  (∀ (a : A), AspisR1.NLC_Finish.Ready (AspisR1.NLC_Finish.put s e (store a))) →
+    AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.returned s e r store)
+'AspisR1.NLC_Finish.ready_rootCopy' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_rootCopy : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.rootCopy →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_rounds : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.rounds →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_stateBefore' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_stateBefore : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.stateBefore →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_terminal : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.terminal →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_terminalGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_terminalGuard : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.terminalGuard →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.ready_verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.ready_verified : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.verified →
+    AspisR1.NLC_Finish.Ready s → AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.ReadyPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_Finish.returned_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.returned_frame : ∀ {A H : Type} (s : AspisR1.NLC_Finish.State H) (e : AspisR1.NLC_Finish.Event)
+  (r : Aeneas.Std.core.result.Result A AspisR1PublicPreparation.r1_wire.Error)
+  (store : A → AspisR1.NLC_Finish.Locals H), AspisR1.NLC_Finish.FramePost s (AspisR1.NLC_Finish.returned s e r store)
+'AspisR1.NLC_Finish.root_occurrences' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.root_occurrences : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.rootCopy →
+    AspisR1.NLC_Finish.step s = do
+      let attempted ← AspisR1.NLC_Finish.rootTry s
+      AspisR1.NLC_Finish.rootUnwrap s attempted
+'AspisR1.NLC_Finish.setNext_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.setNext_frame : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H) (e : AspisR1.NLC_Finish.Event),
+  AspisR1.NLC_Finish.InputFrame s (AspisR1.NLC_Finish.setNext s e)
+'AspisR1.NLC_Finish.source_input_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.source_input_frame : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 = Aeneas.Std.Result.ok (Sum.inr after) →
+    AspisR1.NLC_Finish.InputFrame s after
+'AspisR1.NLC_Finish.source_invocation' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.source_invocation : ∀ {H : Type} (n : ℕ) (s : AspisR1.NLC_Finish.State H),
+  AspisR1.NLC_Finish.fuel s ≤ n → ∃ out log events, AspisR1.NLC_Finish.Invocation n s out log events
+'AspisR1.NLC_Finish.source_major_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.source_major_next : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  AspisR1.NLC_Finish.Major s →
+    (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+        Aeneas.Std.Result.ok (Sum.inr after) →
+      AspisR1.NLC_Finish.Major after
+'AspisR1.NLC_Finish.source_progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.source_progress : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 = Aeneas.Std.Result.ok (Sum.inr after) →
+    AspisR1.NLC_Finish.rank after.next = AspisR1.NLC_Finish.rank s.next + 1
+'AspisR1.NLC_Finish.source_ready_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.source_ready_next : ∀ {H : Type} (s after : AspisR1.NLC_Finish.State H),
+  AspisR1.NLC_Finish.Ready s →
+    (AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)).2 =
+        Aeneas.Std.Result.ok (Sum.inr after) →
+      AspisR1.NLC_Finish.Ready after
+'AspisR1.NLC_Finish.step_addExtra' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_addExtra : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.addExtra → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_addExtra s
+'AspisR1.NLC_Finish.step_addMask' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_addMask : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.addMask → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_addMask s
+'AspisR1.NLC_Finish.step_alpha' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_alpha : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.alpha → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_alpha s
+'AspisR1.NLC_Finish.step_blind' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_blind : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.blind → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_blind s
+'AspisR1.NLC_Finish.step_circle0' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_circle0 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circle0 → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_circle0 s
+'AspisR1.NLC_Finish.step_circle1' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_circle1 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circle1 → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_circle1 s
+'AspisR1.NLC_Finish.step_circleGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_circleGuard : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.circleGuard → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_circleGuard s
+'AspisR1.NLC_Finish.step_claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_claims : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.claims → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_claims s
+'AspisR1.NLC_Finish.step_decode25' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_decode25 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.decode25 → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_decode25 s
+'AspisR1.NLC_Finish.step_decode26' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_decode26 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.decode26 → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_decode26 s
+'AspisR1.NLC_Finish.step_extra28' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_extra28 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.extra28 → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_extra28 s
+'AspisR1.NLC_Finish.step_highArray' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_highArray : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.highArray → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_highArray s
+'AspisR1.NLC_Finish.step_lowArray' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_lowArray : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.lowArray → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_lowArray s
+'AspisR1.NLC_Finish.step_mapPublic' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_mapPublic : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mapPublic → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_mapPublic s
+'AspisR1.NLC_Finish.step_mark2' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_mark2 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark2 → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_mark2 s
+'AspisR1.NLC_Finish.step_mark3' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_mark3 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark3 → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_mark3 s
+'AspisR1.NLC_Finish.step_mark4' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_mark4 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark4 → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_mark4 s
+'AspisR1.NLC_Finish.step_mark5' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_mark5 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mark5 → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_mark5 s
+'AspisR1.NLC_Finish.step_mask' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_mask : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.mask → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_mask s
+'AspisR1.NLC_Finish.step_multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_multiply : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.multiply → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_multiply s
+'AspisR1.NLC_Finish.step_original' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_original : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.original → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_original s
+'AspisR1.NLC_Finish.step_payload2' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_payload2 : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.payload2 → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_payload2 s
+'AspisR1.NLC_Finish.step_record25a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_record25a : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record25a → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_record25a s
+'AspisR1.NLC_Finish.step_record25b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_record25b : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record25b → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_record25b s
+'AspisR1.NLC_Finish.step_record26a' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_record26a : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record26a → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_record26a s
+'AspisR1.NLC_Finish.step_record26b' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_record26b : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.record26b → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_record26b s
+'AspisR1.NLC_Finish.step_rootCopy' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_rootCopy : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.rootCopy → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_rootCopy s
+'AspisR1.NLC_Finish.step_rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_rounds : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.rounds → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_rounds s
+'AspisR1.NLC_Finish.step_stateBefore' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_stateBefore : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.stateBefore → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_stateBefore s
+'AspisR1.NLC_Finish.step_terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_terminal : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.terminal → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_terminal s
+'AspisR1.NLC_Finish.step_terminalGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_terminalGuard : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.terminalGuard →
+    AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_terminalGuard s
+'AspisR1.NLC_Finish.step_verified' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.step_verified : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.verified → AspisR1.NLC_Finish.step s = AspisR1.NLC_Finish.window_verified s
+'AspisR1.NLC_Finish.verified_final' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_Finish.verified_final : ∀ {H : Type} (s : AspisR1.NLC_Finish.State H),
+  s.next = AspisR1.NLC_Finish.Event.verified →
+    AspisR1.NLC_Finish.AllLeaves AspisR1.NLC_Finish.FinalPost (AspisR1.NLC_Finish.step s)
+'AspisR1.NLC_MapCut.model' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_MapCut.model : ∀ {H : Type} (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (r :
+    Aeneas.Std.core.result.Result AspisR1.NLC_Finish.Q AspisR1PublicPreparation.aspis_core.state_only_prefix.r0.Error),
+  core.result.Result.map_err (AspisR1PublicPreparation.FinishModel.closureFn11 D) r () =
+    Aeneas.Std.Result.ok (AspisR1.NLC_MapCut.reference r)
+'AspisR1.NLC_MapCut.to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLC_MapCut.to_source : ∀ {H : Type} (native : AspisR1.NLC_MapCut.Native),
+  AspisR1.NLC_MapCut.Cut native →
+    ∀ (s : AspisR1.NLC_Finish.State H),
+      s.next = AspisR1.NLC_Finish.Event.mapPublic →
+        AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_MapCut.nativeStep native s) =
+          AspisR1PublicPreparation.PreparedHashCode.run (AspisR1.NLC_Finish.step s)
