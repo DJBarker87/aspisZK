@@ -1,0 +1,36 @@
+{"attempt": "NKV_L061", "exit_status": 0, "wall_seconds": 16.623127061873674, "peak_rss_kib": "6042192", "swaps": "0", "print_axioms": ["'NKV_ProducerDomain.caller' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_ProducerDomain.tx2_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_ProducerDomain.tx1_count' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_ProducerDomain.caller : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (batch kind : ℕ) (before after : reference.Scratch),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (sortedPositions q batch kind) before).2 = ok (true, after) →
+      0 < ↑after.n ∧ ↑after.n ≤ 12 ∧ wellFormed (NJV_UnitDomain.keys after) :=
+⋯
+theorem NKV_ProducerDomain.tx2_bytes : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (batch kind : ℕ) (before after : reference.Scratch) (slot : Slice U8),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (sortedPositions q batch kind) before).2 = ok (true, after) →
+      32
+...
+theorem NKV_ProducerDomain.caller : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (batch kind : ℕ) (before after : reference.Scratch),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (sortedPositions q batch kind) before).2 = ok (true, after) →
+      0 < ↑after.n ∧ ↑after.n ≤ 12 ∧ wellFormed (NJV_UnitDomain.keys after) :=
+⋯
+theorem NKV_ProducerDomain.tx2_bytes : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (batch kind : ℕ) (before after : reference.Scratch) (slot : Slice U8),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (sortedPositions q batch kind) before).2 = ok (true, after) →
+      32 * nodeCount 18 (NJV_UnitDomain.keys after) ≤ (↑slot).length →
+        (↑(MultiproofConeSlotTail.prefixNodes slot (nodeCount 18 (NJV_UnitDomain.keys after)))).length ≤ 9216 :=
+⋯
+theorem NKV_ProducerDomain.tx1_count : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (kind : ℕ) (before after : reference.Scratch),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (sortedPositions q 0 kind) before).2 = ok (true, after) → ↑after.n ≤ 10 :=
+⋯
+'NKV_ProducerDomain.caller' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ProducerDomain.tx2_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ProducerDomain.tx1_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r35ca834933764eafbdf6f07bb1d5b0ab.scope; invocation ID: c6aed60b99074617af58c2b2d5f3ef5f

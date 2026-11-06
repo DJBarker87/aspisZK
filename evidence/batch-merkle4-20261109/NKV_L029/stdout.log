@@ -1,0 +1,11 @@
+theorem NKV_ConcreteChildren.source : ∀ (H : Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Slice U8)
+  (queries : Std.Array U32 22#usize) (root : Std.Array U8 32#usize) (batch tree : Usize),
+  ↑batch < 2 →
+    ∀ (idx : Indices) (val : Values),
+      reject
+          (Port3_NativeBatchBody.verifier.candidate.batch_tree (ops H) (digest H) proof queries root batch tree idx val
+            ()) =
+        reject (NKV_FRef.verifier.candidate.batch_tree (ops H) (digest H) proof queries root batch tree idx val ()) :=
+⋯
+'NKV_ConcreteChildren.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ConcreteChildren.source' depends on axioms: [propext, Classical.choice, Quot.sound]

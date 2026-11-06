@@ -1,0 +1,49 @@
+{"attempt": "NKV_L053", "exit_status": 1, "wall_seconds": 10.297997023910284, "peak_rss_kib": "5849904", "swaps": "0", "print_axioms": ["'NKV_PaddingInstall.any_congr' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_PaddingInstall.callback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKV_PaddingInstall.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_PaddingInstall.lean:28:1: error: Tactic `rfl` failed: The left-hand side
+  (predicate H).call_mut PUnit.unit chunk
+is not definitionally equal to the right-hand side
+  NKB_AnyModel.predicate.call_mut PUnit.unit chunk
+
+case unit
+H : Bytes → HashState
+chunk : Slice U8
+⊢ (predicate H).call_mut PUnit.unit chunk = NKB_AnyModel.predicate.call_mut PUnit.unit chunk
+theorem NKV_PaddingInstall.any_congr : ∀ {Self F Item : Type} (iter : core.iter.traits.iterator.Iterator Self Item)
+  (a b : core.ops.function.FnMut F Item Bool),
+  a.call_mut = b.call_mut →
+    ∀ (s : Self) (f : F), Port3_BatchStd.anyDefault iter a s f = Port3_BatchStd.anyDefault iter b s f :=
+fun {Self F Item} iter a b same s f =>
+ 
+...
+ s) ← iter.next state.1
+            match next with
+              | none => ok (ControlFlow.done (false, s))
+              | some value => do
+                let (stop, f) ← b.call_mut state.2 value
+                if stop = true then ok (ControlFlow.done (true, s)) else ok (ControlFlow.cont (s, f))));
+  id
+    (Eq.mpr (id (congrArg (fun _a => loop _a (s, f) = loop (Port3_BatchStd.anyBody iter b) (s, f)) body))
+      (Eq.refl (loop (Port3_BatchStd.anyBody iter b) (s, f))))
+theorem NKV_PaddingInstall.callback : ∀ (H : Bytes → HashState),
+  (predicate H).call_mut = NKB_AnyModel.predicate.call_mut :=
+fun H => funext fun state => sorry state
+theorem NKV_PaddingInstall.total : ∀ (H : Bytes → HashState) (chunks : List (Slice U8)) (remainder : Slice U8),
+  (∀ c ∈ chunks, (↑c).length = 8) →
+    (NKV_ConcreteChildren.ops H).op0 (core.iter.traits.iterator.IteratorChunksExact U8) (predicate H)
+        { chunks := chunks, remainder := remainder } () =
+      ok ((NKB_AnyModel.scan chunks).1, { chunks := (NKB_AnyModel.scan chunks).2, remainder := remainder }) :=
+fun H chunks remainder full =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a = ok ((NKB_AnyModel.scan chunks).1, { chunks := (NKB_AnyModel.scan chunks).2, remainder := remainder }))
+          (any_congr (core.iter.traits.iterator.IteratorChunksExact U8) (predicate H) NKB_AnyModel.predicate
+            (callback H) { chunks := chunks, remainder := remainder } ())))
+      (NKB_AnyModel.total chunks remainder full))
+'NKV_PaddingInstall.any_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_PaddingInstall.callback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKV_PaddingInstall.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc15137cbd5c148ee98a80d752a2304e3.scope; invocation ID: 2c85b2afb92240ba916e4d4f71905d5c

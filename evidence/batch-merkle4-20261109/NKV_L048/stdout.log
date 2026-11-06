@@ -1,0 +1,253 @@
+NKV_LeafHistory.lean:16:7: error: unexpected token 'prefix'; expected identifier
+NKV_LeafHistory.lean:32:23: error: unexpected token '('; expected '⟩'
+NKV_LeafHistory.lean:31:27: error: Type mismatch: After simplification, term
+  congrArg
+ has type
+  ∀ (f : ?m.143 → ?m.144), ?m.145 = ?m.146 → f ?m.145 = f ?m.146
+but is expected to have type
+  (OraclePortSelectedDraft.leaf p kind pos, H (OraclePortSelectedDraft.leaf p kind pos)) ::
+      ((NKV_LeafBuild.build H p q kind rest t).1 ++ remaining) =
+    (OraclePortSelectedDraft.leaf p kind pos, H (OraclePortSelectedDraft.leaf p kind pos)) ::
+      List.map (fun pos => (OraclePortSelectedDraft.leaf p kind pos, H (OraclePortSelectedDraft.leaf p kind pos))) rest
+NKV_LeafHistory.lean:56:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+NKV_LeafHistory.lean:56:13: error: unexpected token '#print'; expected ':'
+theorem NKV_LeafHistory.complete : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed)
+  (q : Fin 22 → Fin 262144) (kind : ℕ) (positions : List ℕ) (s after : reference.Scratch),
+  (NKV_LeafBuild.build H p q kind positions s).2 = ok (true, after) →
+    (NKV_LeafBuild.build H p q kind positions s).1 = requests H p kind positions :=
+fun H p q kind positions s after accepted =>
+  List.rec (motive := fun positions =>
+    ∀ (s : reference.Scratch),
+      (NKV_LeafBuild.build H p q kind positions s).2 = ok (true, after) →
+        (NKV_LeafBuild.build H p q kind positions s).1 = requests H p kind positions)
+    (fun s accepted => Eq.refl (NKV_LeafBuild.build H p q kind [] s).1)
+    (fun pos rest ih s accepted =>
+      casesOn (motive := fun t =>
+        reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+              (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))) =
+            t →
+          (NKV_LeafBuild.build H p q kind (pos :: rest) s).1 = requests H p kind (pos :: rest))
+        (reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+          (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))))
+        (fun out h =>
+          Eq.ndrec (motive := fun x =>
+            reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+                  (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))) =
+                x →
+              (NKV_LeafBuild.build H p q kind (pos :: rest) s).1 = requests H p kind (pos :: rest))
+            (fun step =>
+              Option.casesOn (motive := fun t =>
+                out = t → (NKV_LeafBuild.build H p q kind (pos :: rest) s).1 = requests H p kind (pos :: rest)) out
+                (fun h =>
+                  Eq.ndrec (motive := fun out =>
+                    reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+                          (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))) =
+                        ok out →
+                      (NKV_LeafBuild.build H p q kind (pos :: rest) s).1 = requests H p kind (pos :: rest))
+                    (fun step =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Eq
+                                  (congrArg Prod.snd
+                                    (congrArg
+                                      (fun x =>
+                                        match x with
+                                        | fail e =>
+                                          ([(OraclePortSelectedDraft.leaf p kind pos,
+                                                H (OraclePortSelectedDraft.leaf p kind pos))],
+                                            fail e)
+                                        | div =>
+                                          ([(OraclePortSelectedDraft.leaf p kind pos,
+                                                H (OraclePortSelectedDraft.leaf p kind pos))],
+                                            div)
+                                        | ok none =>
+                                          ([(OraclePortSelectedDraft.leaf p kind pos,
+                                                H (OraclePortSelectedDraft.leaf p kind pos))],
+                                            ok (false, s))
+                                        | ok (some t) =>
+                                          have tail := NKV_LeafBuild.build H p q kind rest t;
+                                          ((OraclePortSelectedDraft.leaf p kind pos,
+                                                H (OraclePortSelectedDraft.leaf p kind pos)) ::
+                                              tail.1,
+                                            tail.2))
+                                      step)))
+                                (ok (true, after)))
+                              (ok.injEq (false, s) (true, after)))
+                            (Eq.trans (Prod.mk.injEq false s true after)
+                              (Eq.trans (congrFun' (congrArg And Bool.false_eq_true) (s = after))
+                                (false_and (s = after)))))
+                          accepted))
+                    (Eq.symm h) step)
+                (fun t h =>
+                  Eq.ndrec (motive := fun out =>
+                    reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+                          (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))) =
+                        ok out →
+                      (NKV_LeafBuild.build H p q kind (pos :: rest) s).1 = requests H p kind (pos :: rest))
+                    (fun step =>
+                      have tail :=
+                        Eq.mp
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Prod.snd
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | fail e =>
+                                      ([(OraclePortSelectedDraft.leaf p kind pos,
+                                            H (OraclePortSelectedDraft.leaf p kind pos))],
+                                        fail e)
+                                    | div =>
+                                      ([(OraclePortSelectedDraft.leaf p kind pos,
+                                            H (OraclePortSelectedDraft.leaf p kind pos))],
+                                        div)
+                                    | ok none =>
+                                      ([(OraclePortSelectedDraft.leaf p kind pos,
+                                            H (OraclePortSelectedDraft.leaf p kind pos))],
+                                        ok (false, s))
+                                    | ok (some t) =>
+                                      have tail := NKV_LeafBuild.build H p q kind rest t;
+                                      ((OraclePortSelectedDraft.leaf p kind pos,
+                                            H (OraclePortSelectedDraft.leaf p kind pos)) ::
+                                          tail.1,
+                                        tail.2))
+                                  step)))
+                            (ok (true, after)))
+                          accepted;
+                      Eq.mpr
+                        (id
+                          (congrFun'
+                            (congrArg Eq
+                              (congrArg Prod.fst
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | fail e =>
+                                      ([(OraclePortSelectedDraft.leaf p kind pos,
+                                            H (OraclePortSelectedDraft.leaf p kind pos))],
+                                        fail e)
+                                    | div =>
+                                      ([(OraclePortSelectedDraft.leaf p kind pos,
+                                            H (OraclePortSelectedDraft.leaf p kind pos))],
+                                        div)
+                                    | ok none =>
+                                      ([(OraclePortSelectedDraft.leaf p kind pos,
+                                            H (OraclePortSelectedDraft.leaf p kind pos))],
+                                        ok (false, s))
+                                    | ok (some t) =>
+                                      have tail := NKV_LeafBuild.build H p q kind rest t;
+                                      ((OraclePortSelectedDraft.leaf p kind pos,
+                                            H (OraclePortSelectedDraft.leaf p kind pos)) ::
+                                          tail.1,
+                                        tail.2))
+                                  step)))
+                            ((OraclePortSelectedDraft.leaf p kind pos, H (OraclePortSelectedDraft.leaf p kind pos)) ::
+                              List.map
+                                (fun pos =>
+                                  (OraclePortSelectedDraft.leaf p kind pos,
+                                    H (OraclePortSelectedDraft.leaf p kind pos)))
+                                rest)))
+                        (congrArg
+                          (List.cons
+                            (OraclePortSelectedDraft.leaf p kind pos, H (OraclePortSelectedDraft.leaf p kind pos)))
+                          (ih t tail)))
+                    (Eq.symm h) step)
+                (Eq.refl out))
+            (Eq.symm h)
+            (Eq.refl
+              (reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+                (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))))))
+        (fun e h =>
+          Eq.ndrec (motive := fun x =>
+            reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+                  (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))) =
+                x →
+              (NKV_LeafBuild.build H p q kind (pos :: rest) s).1 = requests H p kind (pos :: rest))
+            (fun step =>
+              False.elim
+                (Eq.mp
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg Prod.snd
+                          (congrArg
+                            (fun x =>
+                              match x with
+                              | fail e =>
+                                ([(OraclePortSelectedDraft.leaf p kind pos,
+                                      H (OraclePortSelectedDraft.leaf p kind pos))],
+                                  fail e)
+                              | div =>
+                                ([(OraclePortSelectedDraft.leaf p kind pos,
+                                      H (OraclePortSelectedDraft.leaf p kind pos))],
+                                  div)
+                              | ok none =>
+                                ([(OraclePortSelectedDraft.leaf p kind pos,
+                                      H (OraclePortSelectedDraft.leaf p kind pos))],
+                                  ok (false, s))
+                              | ok (some t) =>
+                                have tail := NKV_LeafBuild.build H p q kind rest t;
+                                ((OraclePortSelectedDraft.leaf p kind pos,
+                                      H (OraclePortSelectedDraft.leaf p kind pos)) ::
+                                    tail.1,
+                                  tail.2))
+                            step)))
+                      (ok (true, after)))
+                    (eq_false' fun h => False.elim (noConfusion_of_Nat Result.ctorIdx h)))
+                  accepted))
+            (Eq.symm h)
+            (Eq.refl
+              (reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+                (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))))))
+        (fun h =>
+          Eq.ndrec (motive := fun x =>
+            reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+                  (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))) =
+                x →
+              (NKV_LeafBuild.build H p q kind (pos :: rest) s).1 = requests H p kind (pos :: rest))
+            (fun step =>
+              False.elim
+                (Eq.mp
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg Prod.snd
+                          (congrArg
+                            (fun x =>
+                              match x with
+                              | fail e =>
+                                ([(OraclePortSelectedDraft.leaf p kind pos,
+                                      H (OraclePortSelectedDraft.leaf p kind pos))],
+                                  fail e)
+                              | div =>
+                                ([(OraclePortSelectedDraft.leaf p kind pos,
+                                      H (OraclePortSelectedDraft.leaf p kind pos))],
+                                  div)
+                              | ok none =>
+                                ([(OraclePortSelectedDraft.leaf p kind pos,
+                                      H (OraclePortSelectedDraft.leaf p kind pos))],
+                                  ok (false, s))
+                              | ok (some t) =>
+                                have tail := NKV_LeafBuild.build H p q kind rest t;
+                                ((OraclePortSelectedDraft.leaf p kind pos,
+                                      H (OraclePortSelectedDraft.leaf p kind pos)) ::
+                                    tail.1,
+                                  tail.2))
+                            step)))
+                      (ok (true, after)))
+                    (eq_false' fun h => False.elim (noConfusion_of_Nat Result.ctorIdx h)))
+                  accepted))
+            (Eq.symm h)
+            (Eq.refl
+              (reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+                (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))))))
+        (Eq.refl
+          (reference.leaf_step s (MultiproofConeLeafFold.key q kind pos)
+            (encodeState (H (OraclePortSelectedDraft.leaf p kind pos))))))
+    positions s accepted
+NKV_LeafHistory.lean:58:7: error(lean.unknownIdentifier): Unknown constant `axioms`
+NKV_LeafHistory.lean:58:20: error: unexpected token '#print'; expected ':'
+'NKV_LeafHistory.complete' depends on axioms: [propext, Classical.choice, Quot.sound]

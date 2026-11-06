@@ -1,0 +1,13 @@
+theorem NKV_LeafTotal.source : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (kind : ℕ) (positions : List ℕ) (s : reference.Scratch),
+  ↑s.n + positions.length ≤ 16 → ∃ out, (NKV_LeafBuild.build H p q kind positions s).2 = ok out :=
+⋯
+theorem NKV_LeafTotal.reset : ∀ (H : Bytes → HashState) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (batch kind : ℕ) (s : reference.Scratch),
+  ∃ out,
+    (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset s)).2 =
+      ok out :=
+⋯
+'NKV_LeafTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_LeafTotal.reset' depends on axioms: [propext, Classical.choice, Quot.sound]

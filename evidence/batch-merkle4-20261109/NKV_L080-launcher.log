@@ -1,0 +1,53 @@
+{"attempt": "NKV_L080", "exit_status": 1, "wall_seconds": 10.64763896795921, "peak_rss_kib": "5842668", "swaps": "0", "print_axioms": ["'NKV_OkTransport.tree_observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKV_OkTransport.parent_observation' depends on axioms: [propext, sorryAx]", "'NKV_OkTransport.tree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKV_OkTransport.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKV_OkTransport.batch' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_OkTransport.lean:18:11: error: unsolved goals
+case ok.Err
+idx : Indices
+val : Values
+i : Indices
+v : Values
+e : verifier.Error
+⊢ False ↔ ok (core.result.Result.Err e, i, v) = ok (core.result.Result.Ok (), idx, val)
+NKV_OkTransport.lean:19:21: error: Tactic `rfl` failed: The left-hand side
+  NKV_ReturnBoundary.reject (ok (core.result.Result.Ok PUnit.unit, i, v)) = ok ((), idx, val)
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok PUnit.unit, i, v) = ok (core.result.Result.Ok (), idx, val)
+
+case ok.Ok.unit
+idx : Indices
+val : Values
+i : Indices
+v : Values
+⊢ NKV_ReturnBoundary.reject (ok (core.result.Result.Ok PUnit.unit, i, v)) = ok ((), idx, val) ↔
+    ok (co
+...
+atch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof raw
+            root batch kind idx val () =
+          ok (core.result.Result.Ok (), outIdx, outVal) :=
+⋯
+theorem NKV_OkTransport.values : ∀ (H : Bytes → HashState) (proof : Slice U8) (raw : Std.Array U32 22#usize)
+  (roots : Std.Array (Std.Array U8 32#usize) 3#usize) (batch : Usize),
+  ↑batch < 2 →
+    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H)
+          (NKV_ConcreteChildren.digest H) proof raw roots batch () =
+        ok (core.result.Result.Ok ()) ↔
+      NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+          raw roots batch () =
+        ok (core.result.Result.Ok ())) :=
+⋯
+theorem NKV_OkTransport.batch : ∀ (H : Bytes → HashState) (proof : Slice U8) (p : verifier.Prepared)
+  (folded : Std.Array U8 32#usize) (batch : Usize),
+  ↑batch < 2 →
+    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H)
+          (NKV_ConcreteChildren.digest H) proof p folded batch () =
+        ok (core.result.Result.Ok ()) ↔
+      NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof p
+          folded batch () =
+        ok (core.result.Result.Ok ())) :=
+⋯
+'NKV_OkTransport.tree_observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKV_OkTransport.parent_observation' depends on axioms: [propext, sorryAx]
+'NKV_OkTransport.tree' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKV_OkTransport.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKV_OkTransport.batch' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2ef9d55ea07c4f51b809a8d734f6beb5.scope; invocation ID: dacb1cf8a2c0452d9be3ac4300306714

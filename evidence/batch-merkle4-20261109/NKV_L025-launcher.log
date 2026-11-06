@@ -1,0 +1,56 @@
+{"attempt": "NKV_L025", "exit_status": 1, "wall_seconds": 6.8144210239406675, "peak_rss_kib": "4400640", "swaps": "0", "print_axioms": ["'NKV_ParentSource.next_observed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_ParentSource.next_congr' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_ParentSource.next_question' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_ParentSource.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_ParentSource.lean:68:1: error: 'change' tactic failed, pattern
+  observe
+      (next ?m.37 fun i v =>
+        next (?m.50 i v) fun i_1 v_1 => next (?m.51 i v i_1 v_1) fun x x_1 => ok (core.result.Result.Ok ())) =
+    observe
+      (next ?m.52 fun i v =>
+        next (?m.65 i v) fun i_1 v_1 => next (?m.66 i v i_1 v_1) fun x x_1 => ok (core.result.Result.Ok ()))
+is not definitionally equal to target
+  (observe do
+      let root0 ← roots.index_usize 0#usize
+      let root1 ← roots.index_usize 1#usize
+      let root2 ← roots.index_usize 2#usize
+      let (r, idx1, val1) ←
+        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof
+       
+...
+n be disabled with `set_option linter.unusedSimpArgs false`
+NKV_ParentSource.lean:66:15: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, ̲h1̵,̵h̵2, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_ParentSource.lean:66:18: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, ̲h1,h̵2̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_ParentSource.lean:66:21: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵1̵,̵h̵2̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKV_ParentSource.values : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (hash : H) (proof : Slice U8) (queries : Std.Array U32 22#usize)
+  (roots : Std.Array (Std.Array U8 32#usize) 3#usize) (batch : Usize),
+  ↑batch < 2 →
+    observe
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (AspisR1.Port3_BatchStd.install base) D
+          proof queries roots batch hash) =
+      observe
+        (NKV_FRef.verifier.candidate.batch_merkle_values (AspisR1.Port3_BatchStd.install base) D proof queries roots
+          batch hash) :=
+⋯
+'NKV_ParentSource.next_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentSource.next_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentSource.next_question' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentSource.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb6cebea5ad45496b8d4bc0b46b28382d.scope; invocation ID: 4895b85fe82a4c0cb69c7b0e3556d9be

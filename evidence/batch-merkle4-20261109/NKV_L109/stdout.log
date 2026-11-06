@@ -1,0 +1,1833 @@
+theorem AspisR1.NCE_PaddingCuts.first_stop : ∀ {Frame : Type}
+  (predicate : Aeneas.Std.core.ops.function.FnMut Unit (Aeneas.Std.Slice Aeneas.Std.U8) Bool)
+  (native : AspisR1.NCE_PaddingCuts.Body Frame),
+  AspisR1.NCE_PaddingCuts.NCE_Native_Padding predicate native →
+    ∀ (front suffix : List (Aeneas.Std.Slice Aeneas.Std.U8)) (chunk remainder : Aeneas.Std.Slice Aeneas.Std.U8)
+      (frame : Frame),
+      (∀ c ∈ front ++ chunk :: suffix, (↑c).length = 8) →
+        (∀ c ∈ front, predicate.call_mut () c = Aeneas.Std.Result.ok (false, ())) →
+          predicate.call_mut () chunk = Aeneas.Std.Result.ok (true, ()) →
+            AspisR1.NCE_PaddingCuts.run native ((front ++ chunk :: suffix).length + 1)
+                ({ chunks := front ++ chunk :: suffix, remainder := remainder }, frame) =
+              Aeneas.Std.Result.ok (true, { chunks := suffix, remainder := remainder }, frame) :=
+⋯
+'AspisR1.NCE_PaddingCuts.first_stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCE_PaddingCuts.run_eq : ∀ {Frame : Type}
+  (predicate : Aeneas.Std.core.ops.function.FnMut Unit (Aeneas.Std.Slice Aeneas.Std.U8) Bool)
+  (native : AspisR1.NCE_PaddingCuts.Body Frame),
+  AspisR1.NCE_PaddingCuts.NCE_Native_Padding predicate native →
+    ∀ (chunks : List (Aeneas.Std.Slice Aeneas.Std.U8)) (remainder : Aeneas.Std.Slice Aeneas.Std.U8) (frame : Frame),
+      (∀ c ∈ chunks, (↑c).length = 8) →
+        AspisR1.NCE_PaddingCuts.run native (chunks.length + 1) ({ chunks := chunks, remainder := remainder }, frame) =
+          do
+          let (stop, after) ← AspisR1.NBI_Padding.scan predicate remainder chunks
+          Aeneas.Std.Result.ok (stop, after, frame) :=
+⋯
+'AspisR1.NCE_PaddingCuts.run_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCE_PaddingPhysical.chunk_sizes : ∀ (padding : Aeneas.Std.Slice Aeneas.Std.U8)
+  (ce : AspisR1.NCE_PaddingCuts.Iter),
+  Aeneas.Std.core.slice.Slice.chunks_exact padding 8#usize = Aeneas.Std.Result.ok ce →
+    ∀ c ∈ ce.chunks, (↑c).length = 8 :=
+⋯
+'AspisR1.NCE_PaddingPhysical.chunk_sizes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCE_PaddingPhysical.counted_suffix : ∀ (nodes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (count : Aeneas.Std.Usize),
+  ∀ capacity ≤ 172,
+    ↑count ≤ capacity →
+      (↑nodes).length = 32 * capacity →
+        ∃ padding,
+          Aeneas.Std.core.slice.index.Slice.index
+                (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8) nodes
+                { start := Aeneas.Std.Usize.wrapping_mul 32#usize count } =
+              Aeneas.Std.Result.ok padding ∧
+            ↑padding = List.drop (32 * ↑count) ↑nodes ∧ (↑padding).length = 32 * (capacity - ↑count) :=
+⋯
+'AspisR1.NCE_PaddingPhysical.counted_suffix' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCE_PaddingPhysical.exact_chunk_lengths : ∀ (xs c : List Aeneas.Std.U8),
+  c ∈ (Aeneas.Std.List.toChunksExact 8 ⋯ xs).1 → c.length = 8 :=
+⋯
+'AspisR1.NCE_PaddingPhysical.exact_chunk_lengths' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCE_PaddingPhysical.physical_run : ∀ {Frame : Type}
+  (predicate : Aeneas.Std.core.ops.function.FnMut Unit (Aeneas.Std.Slice Aeneas.Std.U8) Bool)
+  (native : AspisR1.NCE_PaddingCuts.Body Frame),
+  AspisR1.NCE_PaddingCuts.NCE_Native_Padding predicate native →
+    ∀ (padding : Aeneas.Std.Slice Aeneas.Std.U8) (frame : Frame),
+      ∃ ce,
+        Aeneas.Std.core.slice.Slice.chunks_exact padding 8#usize = Aeneas.Std.Result.ok ce ∧
+          AspisR1.NCE_PaddingCuts.run native (ce.chunks.length + 1) (ce, frame) = do
+            let result ← AspisR1.NBI_Padding.scan predicate ce.remainder ce.chunks
+            Aeneas.Std.Result.ok (result.1, result.2, frame) :=
+⋯
+'AspisR1.NCE_PaddingPhysical.physical_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCM_PaddingBytes.all_zero : ∀ (xs : List Aeneas.Std.U8),
+  (List.all (AspisR1.MultiproofConeCanonical.bytesOf xs) fun b => b == 0) = xs.all fun b => b == 0#u8 :=
+⋯
+'AspisR1.NCM_PaddingBytes.all_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCM_PaddingBytes.scan : ∀ (padding : Aeneas.Std.Slice Aeneas.Std.U8) (words : ℕ),
+  (↑padding).length = 8 * words →
+    AspisR1.MultiproofConePadding.scan words (AspisR1.MultiproofConeCanonical.bytesOf ↑padding) =
+      (↑padding).all fun b => b == 0#u8 :=
+⋯
+'AspisR1.NCM_PaddingBytes.scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCM_PaddingCover.member : ∀ (xs chunk : List Aeneas.Std.U8),
+  chunk ∈ (Aeneas.Std.List.toChunksExact 8 ⋯ xs).1 → ∀ b ∈ chunk, b ∈ xs :=
+⋯
+'AspisR1.NCM_PaddingCover.member' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCM_PaddingCover.raw_zero : ∀ (xs : List Aeneas.Std.U8),
+  xs.length % 8 = 0 → ((∀ c ∈ (Aeneas.Std.List.toChunksExact 8 ⋯ xs).1, ∀ b ∈ c, b = 0#u8) ↔ ∀ b ∈ xs, b = 0#u8) :=
+⋯
+'AspisR1.NCM_PaddingCover.raw_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCM_PaddingCover.zero : ∀ (padding : Aeneas.Std.Slice Aeneas.Std.U8)
+  (ce : AspisR1.NCE_PaddingCuts.Iter),
+  Aeneas.Std.core.slice.Slice.chunks_exact padding 8#usize = Aeneas.Std.Result.ok ce →
+    (↑padding).length % 8 = 0 → ((∀ c ∈ ce.chunks, ∀ b ∈ ↑c, b = 0#u8) ↔ ∀ b ∈ ↑padding, b = 0#u8) :=
+⋯
+'AspisR1.NCM_PaddingCover.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCM_PaddingPredicate.observation : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (chunk : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑chunk).length = 8 →
+    (AspisR1.NCM_PaddingPredicate.predicate base D).call_mut () chunk =
+      Aeneas.Std.Result.ok (!(↑chunk).all fun b => b == 0#u8, ()) :=
+⋯
+'AspisR1.NCM_PaddingPredicate.observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCM_PaddingScan.native_value : ∀ {Frame : Type} (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (native : AspisR1.NCE_PaddingCuts.Body Frame),
+  AspisR1.NCE_PaddingCuts.NCE_Native_Padding (AspisR1.NCM_PaddingPredicate.predicate base D) native →
+    ∀ (chunks : List (Aeneas.Std.Slice Aeneas.Std.U8)) (remainder : Aeneas.Std.Slice Aeneas.Std.U8) (frame : Frame),
+      (∀ c ∈ chunks, (↑c).length = 8) →
+        ∃ after,
+          AspisR1.NCE_PaddingCuts.run native (chunks.length + 1) ({ chunks := chunks, remainder := remainder }, frame) =
+            Aeneas.Std.Result.ok (!AspisR1.NCM_PaddingScan.allZero chunks, after, frame) :=
+⋯
+'AspisR1.NCM_PaddingScan.native_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NCM_PaddingScan.value : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (chunks : List (Aeneas.Std.Slice Aeneas.Std.U8))
+  (remainder : Aeneas.Std.Slice Aeneas.Std.U8),
+  (∀ c ∈ chunks, (↑c).length = 8) →
+    ∃ after,
+      AspisR1.NBI_Padding.scan (AspisR1.NCM_PaddingPredicate.predicate base D) remainder chunks =
+        Aeneas.Std.Result.ok (!AspisR1.NCM_PaddingScan.allZero chunks, after) :=
+⋯
+'AspisR1.NCM_PaddingScan.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk
+                      (AspisR1.FIp_Install.configuration indexError
+                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisR1.ARW_Induced.issued native1 copy allocator
+                                                AspisR1.CPH_Program.verifier a H).length ≤
+                                            Q0 + Q1) →
+                                        have P :=
+                                          AspisR1.ARW_Induced.program native1 copy allocator
+                                            AspisR1.CPH_Program.verifier a;
+                                        have runtime :=
+                                          AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+                                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation)
+                                            indexError reservation native1 native2 hashv a;
+                                        have select := fun x =>
+                                          AspisR1.P2P_NativeSelection.pair
+                                            (AspisR1.DrvC_Installation.sdk
+                                              (AspisR1.FIp_Install.configuration indexError
+                                                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                  reservation)
+                                                reservation))
+                                            AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                        AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                            (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                            AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                            AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                          AspisR1.DrvC_Implementation.driver
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation) =
+                                              AspisR1.DrvC_SourceEntry.source
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation)
+                                                hashv ∧
+                                            AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                      reservation)
+                                                    reservation) =
+                                                AspisR1.SdkD_PairBatches.dictionary
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).boundaries
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).std ∧
+                                              AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.boundaries
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation).boundaries)
+                                                  reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1
+                                                  post2 H
+                                                  (AspisR1.DrvC_Implementation.driver
+                                                    (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation))
+                                                  prior (p.physicalEvents t) hashv
+                                                  (AspisR1.BinRawByteCollisionTargets.event
+                                                    AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.Hiq_RecordedJoint.program
+                                                        (AspisR1.F3X_Account.program
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P)
+                                                        AspisR1.F3X_Projection.project select))) ∧
+                                                (AspisR1.F3X_ModelClaims.Claims
+                                                      (AspisR1.FIp_Install.configuration indexError
+                                                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                          reservation)
+                                                        reservation)
+                                                      D P (Q0 + Q1) ∧
+                                                    AspisR1.F3Y_SourceClaims.Claims
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        D hashv P (Q0 + Q1) select ∧
+                                                      AspisR1.F3Y_AccountMass.Claims
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P (Q0 + Q1) select ∧
+                                                        ⋯) ∧
+                                                  (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                      (↑saved).length = 1768 ∧ ⋯) ∧
+                                                    AspisR1.Rc2_Events.Facts
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        hashv native1 native2 copy allocator
+                                                        AspisR1.CPH_Program.verifier H saved ∧
+                                                      AspisR1.CPH_Protection.Facts p t saved
+                                                          AspisR1.CPH_Program.verifier ∧
+                                                        ⋯ :=
+⋯
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_AbortPrefix.pending : ∀ {A : Type} (leaf tail : List A) (offset : ℕ),
+  (leaf ++ tail)[leaf.length + offset]? = tail[offset]? :=
+⋯
+'NKV_AbortPrefix.pending' depends on axioms: [propext]
+theorem NKV_AbortPrefix.take_prefix : ∀ {A : Type} (leaf prior tail : List A),
+  List.take prior.length tail = prior → List.take (leaf.length + prior.length) (leaf ++ tail) = leaf ++ prior :=
+⋯
+'NKV_AbortPrefix.take_prefix' does not depend on any axioms
+theorem NKV_AbortPrefix.tx2 : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ)
+  (before after : MultiproofConeRef.reference.Scratch) (slot : Aeneas.Std.Slice Aeneas.Std.U8),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind) before).2 =
+        Aeneas.Std.Result.ok (true, after) →
+      32 * AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after) ≤ (↑slot).length →
+        ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (events : List (NJP_RowModel.Request × NJP_RowModel.Digest))
+          (request : NJP_RowModel.Request) (state : NJP_RowModel.Scratch),
+          NJV_AbortEntry.Invocation (NJP_RequestTransport.hash (AspisR1.MultiproofConePhysicalTransport.rawOracle H))
+              root
+              (AspisR1.MultiproofConeSlotTail.prefixNodes slot
+                (AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after)))
+              (NJV_EntryABI.initial after.idx after.val after.n) events request state →
+            have leaf :=
+              (NKV_LeafBuild.build H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind) before).1;
+            have physical :=
+              AspisR1.MultiproofConeSlotTail.prefixNodes slot
+                (AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after));
+            have tail :=
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                  (NJV_TX2Returning.endpoint root physical after.idx after.val after.n)).1;
+            List.take (List.length leaf + events.length) (leaf ++ tail) =
+                leaf ++ NJV_AdoptedObservation.history events ∧
+              Option.map Prod.fst (leaf ++ tail)[List.length leaf + events.length]? =
+                some (AspisV8R19.SqueezeOracleBridge.flatten (NJP_RequestTransport.address request)) :=
+⋯
+'NKV_AbortPrefix.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ActiveStep.source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree : Aeneas.Std.Usize) (hash : H) (lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values)
+  (d pos : Aeneas.Std.Usize),
+  pos < n →
+    NKV_StepErasure.mapResult NKV_ActiveStep.restore
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys
+          idx val d pos) =
+      NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys idx val d pos :=
+⋯
+'NKV_ActiveStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_BatchGeometry.slot : ∀ (batch tree : Aeneas.Std.Usize),
+  ↑batch < 2 →
+    ↑tree < 3 →
+      ↑((Aeneas.Std.Usize.wrapping_mul 3#usize batch).wrapping_add tree) = 3 * ↑batch + ↑tree ∧
+        ↑((Aeneas.Std.Usize.wrapping_mul 3#usize batch).wrapping_add tree) < 6 :=
+⋯
+'NKV_BatchGeometry.slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_BatchGeometry.span0 : Aeneas.Std.Usize.wrapping_sub 10#usize 0#usize = 10#usize :=
+⋯
+'NKV_BatchGeometry.span0' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_BatchGeometry.span1 : Aeneas.Std.Usize.wrapping_sub 22#usize 10#usize = 12#usize :=
+⋯
+'NKV_BatchGeometry.span1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_BoundedLoop.classified : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree : Aeneas.Std.Usize) (hash : H) (lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : NKV_StepErasure.State)
+  (out : Aeneas.Std.Result NKV_LoopTransport.Out),
+  NKV_LoopTransport.Walk
+      (fun x =>
+        match x with
+        | (i, v, d, p) =>
+          NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d p)
+      s out →
+    NKV_BoundedLoop.Valid out :=
+⋯
+'NKV_BoundedLoop.classified' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_BoundedLoop.finite : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree : Aeneas.Std.Usize) (hash : H) (lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize),
+  ↑n ≤ 12 →
+    ∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values) (d pos : Aeneas.Std.Usize),
+      ∃ out,
+        NKV_LoopTransport.Walk
+          (fun x =>
+            match x with
+            | (i, v, d, p) =>
+              NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d p)
+          (i, v, d, pos) out :=
+⋯
+'NKV_BoundedLoop.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_BoundedLoop.source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree : Aeneas.Std.Usize) (hash : H) (lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize),
+  ↑n ≤ 12 →
+    ∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values) (d pos : Aeneas.Std.Usize),
+      ∃ out,
+        NKV_BoundedLoop.Valid out ∧
+          NKV_FRef.verifier.candidate.batch_tree_loop ops D proof root tree i v hash lo n slot keys d pos = out ∧
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop ops D proof root tree i v hash lo n slot
+                keys d pos =
+              NKV_StepErasure.mapResult NKV_LoopTransport.eraseOut out :=
+⋯
+'NKV_BoundedLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ClassifiedBody.no_lost_ok : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree : Aeneas.Std.Usize) (hash : H) (lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (i ai : NKV_StepErasure.Indices) (v av : NKV_StepErasure.Values)
+  (d pos : Aeneas.Std.Usize),
+  NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d pos ≠
+    Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (ai, av, Aeneas.Std.core.result.Result.Ok (), true)) :=
+⋯
+'NKV_ClassifiedBody.no_lost_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem NKV_ConcreteChildren.installed : ∀
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.Port3_BatchStd.install (NKV_ConcreteChildren.ops H) = NKV_ConcreteChildren.ops H :=
+⋯
+'NKV_ConcreteChildren.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ConcreteChildren.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch tree : Aeneas.Std.Usize),
+  ↑batch < 2 →
+    ∀ (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+      NKV_ReturnBoundary.reject
+          (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H)
+            (NKV_ConcreteChildren.digest H) proof queries root batch tree idx val ()) =
+        NKV_ReturnBoundary.reject
+          (NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+            queries root batch tree idx val ()) :=
+⋯
+'NKV_ConcreteChildren.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ConcreteDomains.count : ∀ (indices : Aeneas.Std.Slice Aeneas.Std.U32),
+  ∃ out,
+    NKV_ConcreteChildren.count AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two indices = Aeneas.Std.Result.ok out ∧
+      Option.map (fun x => ↑x) out =
+        if AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) ↑indices) then
+          some (AspisR1.OraclePortFrozenOrder.nodeCount 18 (List.map (fun x => ↑x) ↑indices))
+        else none :=
+⋯
+'NKV_ConcreteDomains.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ConcreteDomains.leaf : ∀ {X : Type} (H : AspisV8R19.DuplexFrames.Bytes → NKV_ConcreteDomains.HashState)
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (tree : Aeneas.Std.Usize)
+  (view : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑view).length = 832 →
+    (NKV_ConcreteChildren.ops H).op6 D hash tree view = AspisR1.Port4B_LeafCode.native D hash tree view :=
+⋯
+'NKV_ConcreteDomains.leaf' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ConcreteDomains.leaf_domains : ∀ (view : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑view).length = 832 →
+    (↑(AspisR1.MultiproofConeSlices.sub view 0#usize 480#usize)).length = 480 ∧
+      (↑(AspisR1.MultiproofConeSlices.sub view 480#usize 608#usize)).length = 128 ∧
+        (↑(AspisR1.MultiproofConeSlices.sub view 672#usize 800#usize)).length = 128 ∧
+          (↑(AspisR1.MultiproofConeSlices.sub view 608#usize 640#usize)).length = 32 ∧
+            (↑(AspisR1.MultiproofConeSlices.sub view 640#usize 672#usize)).length = 32 ∧
+              (↑(AspisR1.MultiproofConeSlices.sub view 800#usize 832#usize)).length = 32 :=
+⋯
+'NKV_ConcreteDomains.leaf_domains' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ConcreteDomains.opening : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_ConcreteDomains.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (i : Aeneas.Std.Usize),
+      ↑i < 22 →
+        ∃ view,
+          (NKV_ConcreteChildren.ops H).op2 proof i = Aeneas.Std.Result.ok view ∧
+            (↑view).length = 832 ∧
+              AspisR1.MultiproofConeCanonical.bytesOf ↑view =
+                AspisR1.OraclePortCompactDraft.slice (AspisR1.MultiproofConeCanonical.bytesOf ↑proof) (10055 + ↑i * 832)
+                  832 :=
+⋯
+'NKV_ConcreteDomains.opening' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ConcreteDomains.verifier_bytes : ∀ (leaves : List AspisR1.MultiproofConeLiveFold.Leaf)
+  (before after : MultiproofConeRef.reference.Scratch) (slot : Aeneas.Std.Slice Aeneas.Std.U8),
+  ↑before.n = 0 →
+    leaves ≠ [] →
+      leaves.length ≤ 12 →
+        List.Pairwise (fun x1 x2 => x1 ≤ x2) (List.map (fun x => ↑x.1) leaves) →
+          (∀ leaf ∈ leaves, ↑leaf.1 < 262144) →
+            NKB_LeafChain.Chain leaves before (some after) →
+              32 * AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after) ≤ (↑slot).length →
+                (↑(AspisR1.MultiproofConeSlotTail.prefixNodes slot
+                        (AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after)))).length ≤
+                  9216 :=
+⋯
+'NKV_ConcreteDomains.verifier_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_CountCut.missing : ∀ (out : Aeneas.Std.core.result.Result Aeneas.Std.Usize AspisR1Stage2.verifier.Error),
+  NKV_CountCut.Cut none out → out = Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle :=
+⋯
+'NKV_CountCut.missing' does not depend on any axioms
+theorem NKV_CountCut.present : ∀ (count : Aeneas.Std.Usize)
+  (out : Aeneas.Std.core.result.Result Aeneas.Std.Usize AspisR1Stage2.verifier.Error),
+  NKV_CountCut.Cut (some count) out → out = Aeneas.Std.core.result.Result.Ok count :=
+⋯
+'NKV_CountCut.present' does not depend on any axioms
+theorem NKV_CountCut.source : ∀ (counted : Option Aeneas.Std.Usize)
+  (out : Aeneas.Std.core.result.Result Aeneas.Std.Usize AspisR1Stage2.verifier.Error),
+  NKV_CountCut.Cut counted out →
+    AspisR1.Port3_BatchStd.okOr counted AspisR1Stage2.verifier.Error.Merkle = Aeneas.Std.Result.ok out :=
+⋯
+'NKV_CountCut.source' does not depend on any axioms
+theorem NKV_CountInvocation.keys : ∀ (s : MultiproofConeRef.reference.Scratch),
+  ↑s.n ≤ 16 → List.map (fun x => ↑x) ↑(NKV_CountInvocation.front s) = NJV_UnitDomain.keys s :=
+⋯
+'NKV_CountInvocation.keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_CountInvocation.missing : ∀ (s : MultiproofConeRef.reference.Scratch),
+  ↑s.n ≤ 16 →
+    ¬AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+      NKV_ConcreteChildren.count AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two (NKV_CountInvocation.front s) =
+        Aeneas.Std.Result.ok none :=
+⋯
+'NKV_CountInvocation.missing' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_CountInvocation.present : ∀ (s : MultiproofConeRef.reference.Scratch),
+  ↑s.n ≤ 16 →
+    AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+      ∃ count,
+        NKV_ConcreteChildren.count AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two (NKV_CountInvocation.front s) =
+            Aeneas.Std.Result.ok (some count) ∧
+          ↑count = AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s) :=
+⋯
+'NKV_CountInvocation.present' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_CountInvocation.read : ∀ (s : MultiproofConeRef.reference.Scratch),
+  ↑s.n ≤ 16 →
+    Aeneas.Std.core.array.Array.index
+        (Aeneas.Std.core.ops.index.IndexSlice (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U32))
+        s.idx { «end» := s.n } =
+      Aeneas.Std.Result.ok (NKV_CountInvocation.front s) :=
+⋯
+'NKV_CountInvocation.read' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_CountInvocation.source : ∀ (s : MultiproofConeRef.reference.Scratch),
+  ↑s.n ≤ 16 →
+    ∃ out,
+      NKV_ConcreteChildren.count AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two (NKV_CountInvocation.front s) =
+          Aeneas.Std.Result.ok out ∧
+        Option.map (fun x => ↑x) out =
+          if AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) then
+            some (AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s))
+          else none :=
+⋯
+'NKV_CountInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ErrorKinds.loop : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize),
+  ↑n ≤ 12 →
+    ∀ (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values) (d pos : Aeneas.Std.Usize),
+      NKV_ErrorKinds.LoopAllowed
+        (NKV_FRef.verifier.candidate.batch_tree_loop (AspisR1.Port3_BatchStd.install base) D proof root tree idx val
+          hash lo n slot keys d pos) :=
+⋯
+'NKV_ErrorKinds.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ErrorKinds.step_error : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx ai : NKV_StepErasure.Indices) (val av : NKV_StepErasure.Values)
+  (d pos : Aeneas.Std.Usize) (e : AspisR1Stage2.verifier.Error) (lost : Bool),
+  NKV_FRef.verifier.candidate.batch_tree_loop.body (AspisR1.Port3_BatchStd.install base) D proof root tree hash lo n
+        slot keys idx val d pos =
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (ai, av, Aeneas.Std.core.result.Result.Err e, lost)) →
+    e = AspisR1Stage2.verifier.Error.Parse ∨ e = AspisR1Stage2.verifier.Error.Merkle :=
+⋯
+'NKV_ErrorKinds.step_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ErrorKinds.walk : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : NKV_StepErasure.State)
+  (out : Aeneas.Std.Result NKV_LoopTransport.Out),
+  NKV_LoopTransport.Walk
+      (fun x =>
+        match x with
+        | (i, v, d, p) =>
+          NKV_FRef.verifier.candidate.batch_tree_loop.body (AspisR1.Port3_BatchStd.install base) D proof root tree hash
+            lo n slot keys i v d p)
+      s out →
+    NKV_ErrorKinds.LoopAllowed out :=
+⋯
+'NKV_ErrorKinds.walk' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ExitTrace.terminal : ∀ {E : Type} (events : List E) (out : NKV_LoopTransport.Out),
+  NKV_ReturnBoundary.WellClassified out →
+    NKV_ReturnBoundary.observeTrace events (NKV_ReturnBoundary.cohort out) =
+      NKV_ReturnBoundary.observeTrace events (NKV_ReturnBoundary.returned out) :=
+⋯
+'NKV_ExitTrace.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ExitTrace.transport : ∀ {S O P E : Type} (f : O → P)
+  (body : S → List E × Aeneas.Std.Result (Aeneas.Std.ControlFlow S O))
+  (target : S → List E × Aeneas.Std.Result (Aeneas.Std.ControlFlow S P)),
+  (∀ (s : S), target s = ((body s).1, NKV_StepErasure.mapResult (NKV_LoopTransport.mapFlow f) (body s).2)) →
+    ∀ (s : S) (events : List E) (out : Aeneas.Std.Result O),
+      NKV_ExitTrace.TraceWalk body s events out →
+        NKV_ExitTrace.TraceWalk target s events (NKV_StepErasure.mapResult f out) :=
+⋯
+'NKV_ExitTrace.transport' does not depend on any axioms
+theorem NKV_ExitTrace.value : ∀ {S O E : Type} (body : S → List E × Aeneas.Std.Result (Aeneas.Std.ControlFlow S O))
+  (s : S) (events : List E) (out : Aeneas.Std.Result O),
+  NKV_ExitTrace.TraceWalk body s events out → NKV_LoopTransport.Walk (fun s => (body s).2) s out :=
+⋯
+'NKV_ExitTrace.value' does not depend on any axioms
+theorem NKV_KeyInvocation.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_KeyInvocation.HashState)
+  (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (batch : ℕ) (kind : Aeneas.Std.Usize),
+  batch < 2 →
+    ↑kind < 3 →
+      (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+        ∃ sorted,
+          (do
+                let keys ←
+                  (NKV_ConcreteChildren.ops H).op4 raw (NKB_KeyStream.lo batch) (NKB_KeyStream.count batch) kind
+                (NKV_ConcreteChildren.ops H).op5 keys (NKB_KeyStream.count batch)) =
+              Aeneas.Std.Result.ok sorted ∧
+            (AspisR1.OraclePortFrozenOrder.sortedPositions (AspisR1.Port4B_KeyInstall.queries raw) batch ↑kind).length =
+                ↑(NKB_KeyStream.count batch) ∧
+              AspisR1.Port4B_LeafLoop.KeyStream (AspisR1.Port4B_KeyInstall.queries raw) batch (↑kind) sorted 0#usize
+                (AspisR1.OraclePortFrozenOrder.sortedPositions (AspisR1.Port4B_KeyInstall.queries raw) batch ↑kind) :=
+⋯
+'NKV_KeyInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafBuild.adopted : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_LeafBuild.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (kind : ℕ) (positions : List ℕ)
+  (s : MultiproofConeRef.reference.Scratch),
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeLeafFold.leaves p q kind positions s) =
+    ((NKV_LeafBuild.build H p q kind positions s).1,
+      NKV_StepErasure.mapResult NKV_LeafBuild.forget (NKV_LeafBuild.build H p q kind positions s).2) :=
+⋯
+'NKV_LeafBuild.adopted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafBuild.chain : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_LeafBuild.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (kind : ℕ) (positions : List ℕ)
+  (s after : MultiproofConeRef.reference.Scratch),
+  ↑s.n + positions.length ≤ 16 →
+    (NKV_LeafBuild.build H p q kind positions s).2 = Aeneas.Std.Result.ok (true, after) →
+      NKB_LeafChain.Chain (NKV_LeafBuild.leaves H p q kind positions) s (some after) :=
+⋯
+'NKV_LeafBuild.chain' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafBuild.fold : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_LeafBuild.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (kind : ℕ) (positions : List ℕ)
+  (s : MultiproofConeRef.reference.Scratch),
+  NKV_StepErasure.mapResult NKV_LeafBuild.forget (NKV_LeafBuild.build H p q kind positions s).2 =
+    AspisR1.MultiproofConeLiveFold.fold (NKV_LeafBuild.leaves H p q kind positions) s :=
+⋯
+'NKV_LeafBuild.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafHistory.complete : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_LeafHistory.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (kind : ℕ) (positions : List ℕ)
+  (s after : MultiproofConeRef.reference.Scratch),
+  (NKV_LeafBuild.build H p q kind positions s).2 = Aeneas.Std.Result.ok (true, after) →
+    (NKV_LeafBuild.build H p q kind positions s).1 = NKV_LeafHistory.requests H p kind positions :=
+⋯
+'NKV_LeafHistory.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafHistory.ordered_prefix : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_LeafHistory.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (kind : ℕ) (positions : List ℕ)
+  (s : MultiproofConeRef.reference.Scratch),
+  ∃ remaining,
+    (NKV_LeafBuild.build H p q kind positions s).1 ++ remaining = NKV_LeafHistory.requests H p kind positions :=
+⋯
+'NKV_LeafHistory.ordered_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafInvocation.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+      parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch selected : ℕ) (kind lo n slot pos : Aeneas.Std.Usize)
+          (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize)
+          (s : MultiproofConeRef.reference.Scratch),
+          selected ∈ AspisR1.OraclePortFrozenOrder.sortedPositions q batch ↑kind →
+            (↑lo = if batch = 0 then 0 else 10) →
+              pos < n →
+                ↑s.n < 16 →
+                  keys.index_usize pos =
+                      Aeneas.Std.Result.ok (AspisR1.MultiproofConeSortOrder.packed q batch (↑kind) selected) →
+                    ∀ (before : AspisR1.CheckpointBytes5Effect.Log),
+                      ∃ view,
+                        (NKV_ConcreteChildren.ops H).op2 proof
+                              (AspisR1.Port4B_NativeLeaf.openingIndex lo
+                                (AspisR1.MultiproofConeSortOrder.packed q batch (↑kind) selected)) =
+                            Aeneas.Std.Result.ok view ∧
+                          (↑view).length = 832 ∧
+                            AspisV8R19.SqueezeOracleBridge.flatten (AspisR1.Port4B_LeafCode.input kind view) =
+                                AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected ∧
+                              AspisR1.CheckpointBytes5Effect.run (NKV_ConcreteChildren.digest H) ()
+                                    (AspisR1.Port4B_LeafCode.code kind view) before =
+                                  Aeneas.Std.Result.ok
+                                    (AspisV8R19.SqueezeOracleBridge.encodeState
+                                        (H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected)),
+                                      before ++
+                                        [(AspisR1.Port4B_LeafCode.input kind view,
+                                            AspisV8R19.SqueezeOracleBridge.encodeState
+                                              (H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected)))]) ∧
+                                NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+                                    (NKV_ConcreteChildren.digest H) proof root kind () lo n slot keys s.idx s.val s.n
+                                    pos =
+                                  do
+                                  let out ←
+                                    MultiproofConeRef.reference.leaf_step s
+                                        (AspisR1.MultiproofConeLeafFold.key q (↑kind) selected)
+                                        (AspisV8R19.SqueezeOracleBridge.encodeState
+                                          (H (AspisR1.OraclePortSelectedDraft.leaf parsed (↑kind) selected)))
+                                  Aeneas.Std.Result.ok (NKV_LeafStep.project s (pos.wrapping_add 1#usize) out) :=
+⋯
+'NKV_LeafInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafOrder.canonical : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_LeafBuild.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (kind : ℕ) (positions : List ℕ),
+  ∀ leaf ∈ NKV_LeafBuild.leaves H p q kind positions, ↑leaf.1 < 262144 :=
+⋯
+'NKV_LeafOrder.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafOrder.key_bound : ∀ (q : Fin 22 → Fin 262144) (kind pos : ℕ),
+  ↑(AspisR1.MultiproofConeLeafFold.key q kind pos) < 262144 :=
+⋯
+'NKV_LeafOrder.key_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem NKV_LeafOrder.key_value : ∀ (q : Fin 22 → Fin 262144) (kind pos : ℕ),
+  ↑(AspisR1.MultiproofConeLeafFold.key q kind pos) = AspisR1.OraclePortSelectedDraft.index q kind pos :=
+⋯
+'NKV_LeafOrder.key_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafOrder.nonempty : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_LeafBuild.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ),
+  NKV_LeafBuild.leaves H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind) ≠ [] :=
+⋯
+'NKV_LeafOrder.nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafOrder.ordered : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_LeafBuild.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ),
+  List.Pairwise (fun x1 x2 => x1 ≤ x2)
+    (List.map (fun x => ↑x.1)
+      (NKV_LeafBuild.leaves H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind))) :=
+⋯
+'NKV_LeafOrder.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafOrder.positions_ordered : ∀ (q : Fin 22 → Fin 262144) (batch kind : ℕ),
+  List.Pairwise (fun x1 x2 => x1 ≤ x2)
+    (List.map (AspisR1.OraclePortSelectedDraft.index q kind)
+      (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind)) :=
+⋯
+'NKV_LeafOrder.positions_ordered' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafOrder.size : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_LeafBuild.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ),
+  (NKV_LeafBuild.leaves H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind)).length ≤ 12 :=
+⋯
+'NKV_LeafOrder.size' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafSlot.rejected : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8) (before bad : MultiproofConeRef.reference.Scratch),
+  (NKV_LeafBuild.build H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind)
+          (AspisR1.MultiproofConeSlotState.reset before)).2 =
+      Aeneas.Std.Result.ok (false, bad) →
+    AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeSlotState.slotState p q batch kind nodes before) =
+      ((NKV_LeafBuild.build H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind)
+            (AspisR1.MultiproofConeSlotState.reset before)).1,
+        false, before) :=
+⋯
+'NKV_LeafSlot.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafSlot.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8) (before : MultiproofConeRef.reference.Scratch),
+  AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeSlotState.slotState p q batch kind nodes before) =
+    have leaf :=
+      NKV_LeafBuild.build H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind)
+        (AspisR1.MultiproofConeSlotState.reset before);
+    have tail := NKV_LeafSlot.following H p batch kind nodes before leaf.2;
+    (leaf.1 ++ tail.1, tail.2) :=
+⋯
+'NKV_LeafSlot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafStep.project_source : ∀ (s : MultiproofConeRef.reference.Scratch) (pos : Aeneas.Std.Usize)
+  (out : Option MultiproofConeRef.reference.Scratch),
+  NKV_ActiveStep.restore (AspisR1.Port4B_LeafStep.project s pos out) = NKV_LeafStep.project s pos out :=
+⋯
+'NKV_LeafStep.project_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafStep.source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n slot pos : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : MultiproofConeRef.reference.Scratch) (key : Aeneas.Std.U64)
+  (view : Aeneas.Std.Slice Aeneas.Std.U8) (leaf : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  pos < n →
+    ↑s.n < 16 →
+      keys.index_usize pos = Aeneas.Std.Result.ok key →
+        base.op2 proof (AspisR1.Port4B_NativeLeaf.openingIndex lo key) = Aeneas.Std.Result.ok view →
+          base.op6 D hash tree view = Aeneas.Std.Result.ok leaf →
+            NKV_FRef.verifier.candidate.batch_tree_loop.body (AspisR1.Port3_BatchStd.install base) D proof root tree
+                hash lo n slot keys s.idx s.val s.n pos =
+              do
+              let out ← MultiproofConeRef.reference.leaf_step s (AspisR1.Port4B_NativeLeaf.decodedIndex key) leaf
+              Aeneas.Std.Result.ok (NKV_LeafStep.project s (pos.wrapping_add 1#usize) out) :=
+⋯
+'NKV_LeafStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafTotal.reset : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_LeafTotal.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ)
+  (s : MultiproofConeRef.reference.Scratch),
+  ∃ out,
+    (NKV_LeafBuild.build H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind)
+          (AspisR1.MultiproofConeSlotState.reset s)).2 =
+      Aeneas.Std.Result.ok out :=
+⋯
+'NKV_LeafTotal.reset' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafTotal.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_LeafTotal.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (kind : ℕ) (positions : List ℕ)
+  (s : MultiproofConeRef.reference.Scratch),
+  ↑s.n + positions.length ≤ 16 → ∃ out, (NKV_LeafBuild.build H p q kind positions s).2 = Aeneas.Std.Result.ok out :=
+⋯
+'NKV_LeafTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LeafTraversal.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_LeafTraversal.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+      parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch : ℕ) (kind lo n slot : Aeneas.Std.Usize)
+          (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize)
+          (positions : List ℕ) (s : MultiproofConeRef.reference.Scratch) (pos : Aeneas.Std.Usize),
+          (∀ selected ∈ positions, selected ∈ AspisR1.OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+            (↑lo = if batch = 0 then 0 else 10) →
+              ↑pos + positions.length = ↑n →
+                ↑n ≤ 16 →
+                  ↑s.n + positions.length ≤ 16 →
+                    AspisR1.Port4B_LeafLoop.KeyStream q batch (↑kind) keys pos positions →
+                      NKV_FRef.verifier.candidate.batch_tree_loop (NKV_ConcreteChildren.ops H)
+                          (NKV_ConcreteChildren.digest H) proof root kind s.idx s.val () lo n slot keys s.n pos =
+                        NKV_LeafTraversal.finish H proof root kind lo n slot keys
+                          (NKV_LeafBuild.build H parsed q (↑kind) positions s).2 :=
+⋯
+'NKV_LeafTraversal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LoopTransport.erase_flow : ∀ (x : Aeneas.Std.ControlFlow NKV_StepErasure.State NKV_LoopTransport.Out),
+  NKV_StepErasure.erase x = NKV_LoopTransport.mapFlow NKV_LoopTransport.eraseOut x :=
+⋯
+'NKV_LoopTransport.erase_flow' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LoopTransport.execute : ∀ {S O : Type} (body : S → Aeneas.Std.Result (Aeneas.Std.ControlFlow S O)) (s : S)
+  (out : Aeneas.Std.Result O), NKV_LoopTransport.Walk body s out → Aeneas.Std.loop body s = out :=
+⋯
+'NKV_LoopTransport.execute' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LoopTransport.source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree : Aeneas.Std.Usize) (hash : H) (lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : NKV_StepErasure.State)
+  (out : Aeneas.Std.Result NKV_LoopTransport.Out),
+  NKV_LoopTransport.Walk
+      (fun x =>
+        match x with
+        | (i, v, d, p) =>
+          NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d p)
+      s out →
+    Aeneas.Std.loop
+        (fun x =>
+          match x with
+          | (i, v, d, p) =>
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot
+              keys i v d p)
+        s =
+      NKV_StepErasure.mapResult NKV_LoopTransport.eraseOut out :=
+⋯
+'NKV_LoopTransport.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_LoopTransport.transport : ∀ {S O P : Type} (f : O → P)
+  (body : S → Aeneas.Std.Result (Aeneas.Std.ControlFlow S O))
+  (target : S → Aeneas.Std.Result (Aeneas.Std.ControlFlow S P)),
+  (∀ (s : S), NKV_StepErasure.mapResult (NKV_LoopTransport.mapFlow f) (body s) = target s) →
+    ∀ (s : S) (out : Aeneas.Std.Result O),
+      NKV_LoopTransport.Walk body s out → NKV_LoopTransport.Walk target s (NKV_StepErasure.mapResult f out) :=
+⋯
+'NKV_LoopTransport.transport' does not depend on any axioms
+theorem NKV_OkTransport.batch : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_OkTransport.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+  (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : Aeneas.Std.Usize),
+  ↑batch < 2 →
+    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H)
+          (NKV_ConcreteChildren.digest H) proof p folded batch () =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ↔
+      NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof p
+          folded batch () =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) :=
+⋯
+'NKV_OkTransport.batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_OkTransport.parent_observation : ∀ (m : Aeneas.Std.Result NKV_StepErasure.Reply),
+  NKV_ParentSource.observe m = Aeneas.Std.Result.ok () ↔
+    m = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) :=
+⋯
+'NKV_OkTransport.parent_observation' depends on axioms: [propext]
+theorem NKV_OkTransport.tree : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_OkTransport.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch kind : Aeneas.Std.Usize),
+  ↑batch < 2 →
+    ∀ (idx outIdx : NKV_StepErasure.Indices) (val outVal : NKV_StepErasure.Values),
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H)
+            (NKV_ConcreteChildren.digest H) proof raw root batch kind idx val () =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), outIdx, outVal) ↔
+        NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof raw
+            root batch kind idx val () =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), outIdx, outVal) :=
+⋯
+'NKV_OkTransport.tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_OkTransport.tree_observation : ∀
+  (m : Aeneas.Std.Result (NKV_StepErasure.Reply × NKV_StepErasure.Indices × NKV_StepErasure.Values))
+  (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+  NKV_ReturnBoundary.reject m = Aeneas.Std.Result.ok ((), idx, val) ↔
+    m = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), idx, val) :=
+⋯
+'NKV_OkTransport.tree_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_OkTransport.values : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_OkTransport.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (roots : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 3#usize) (batch : Aeneas.Std.Usize),
+  ↑batch < 2 →
+    (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H)
+          (NKV_ConcreteChildren.digest H) proof raw roots batch () =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ↔
+      NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+          raw roots batch () =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) :=
+⋯
+'NKV_OkTransport.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_OuterSource.bind_observed : ∀ {A : Type} (m : Aeneas.Std.Result A)
+  (f g : A → Aeneas.Std.Result NKV_StepErasure.Reply),
+  (∀ (x : A), NKV_ParentSource.observe (f x) = NKV_ParentSource.observe (g x)) →
+    NKV_ParentSource.observe (m >>= f) = NKV_ParentSource.observe (m >>= g) :=
+⋯
+'NKV_OuterSource.bind_observed' does not depend on any axioms
+theorem NKV_OuterSource.concrete : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (p : AspisR1Stage2.verifier.Prepared)
+  (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : Aeneas.Std.Usize),
+  ↑batch < 2 →
+    NKV_ParentSource.observe
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H)
+          (NKV_ConcreteChildren.digest H) proof p folded batch ()) =
+      NKV_ParentSource.observe
+        (NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof p
+          folded batch ()) :=
+⋯
+'NKV_OuterSource.concrete' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_OuterSource.source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : Aeneas.Std.Usize),
+  ↑batch < 2 →
+    NKV_ParentSource.observe
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle (AspisR1.Port3_BatchStd.install base) D proof p
+          folded batch hash) =
+      NKV_ParentSource.observe
+        (NKV_FRef.verifier.candidate.batch_merkle (AspisR1.Port3_BatchStd.install base) D proof p folded batch hash) :=
+⋯
+'NKV_OuterSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_OuterSource.values_concrete : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (roots : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 3#usize) (batch : Aeneas.Std.Usize),
+  ↑batch < 2 →
+    NKV_ParentSource.observe
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H)
+          (NKV_ConcreteChildren.digest H) proof queries roots batch ()) =
+      NKV_ParentSource.observe
+        (NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+          proof queries roots batch ()) :=
+⋯
+'NKV_OuterSource.values_concrete' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_OuterTotal.batch : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_OuterTotal.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+      parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (p : AspisR1Stage2.verifier.Prepared) (folded : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+          (batch : Aeneas.Std.Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑p.queries)[j]! < 262144) →
+              ∃ r,
+                NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                    proof p folded batch () =
+                  Aeneas.Std.Result.ok r :=
+⋯
+'NKV_OuterTotal.batch' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_OuterTotal.bind_roots : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {X : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : AspisR1Stage2.verifier.Prepared) (folded root0 root1 : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (batch : Aeneas.Std.Usize),
+  p.roots.index_usize 0#usize = Aeneas.Std.Result.ok root0 →
+    p.roots.index_usize 1#usize = Aeneas.Std.Result.ok root1 →
+      NKV_FRef.verifier.candidate.batch_merkle ops D proof p folded batch hash =
+        NKV_FRef.verifier.candidate.batch_merkle_values ops D proof p.queries
+          (Aeneas.Std.Array.make 3#usize [root0, root1, folded] ⋯) batch hash :=
+⋯
+'NKV_OuterTotal.bind_roots' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_PaddingChunks.scan : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_PaddingChunks.HashState)
+  (padding : Aeneas.Std.Slice Aeneas.Std.U8),
+  ∃ ce after verdict,
+    Aeneas.Std.core.slice.Slice.chunks_exact padding 8#usize = Aeneas.Std.Result.ok ce ∧
+      (NKV_ConcreteChildren.ops H).op0 (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8)
+            (NKV_PaddingInstall.predicate H) ce () =
+          Aeneas.Std.Result.ok (verdict, after) ∧
+        verdict = (NKB_AnyModel.scan ce.chunks).1 :=
+⋯
+'NKV_PaddingChunks.scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_PaddingChunks.total : ∀ (padding : Aeneas.Std.Slice Aeneas.Std.U8),
+  ∃ ce,
+    Aeneas.Std.core.slice.Slice.chunks_exact padding 8#usize = Aeneas.Std.Result.ok ce ∧
+      ∀ chunk ∈ ce.chunks, (↑chunk).length = 8 :=
+⋯
+'NKV_PaddingChunks.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_PaddingInstall.any_congr : ∀ {Self F Item : Type}
+  (iter : Aeneas.Std.core.iter.traits.iterator.Iterator Self Item)
+  (a b : Aeneas.Std.core.ops.function.FnMut F Item Bool),
+  a.call_mut = b.call_mut →
+    ∀ (s : Self) (f : F), AspisR1.Port3_BatchStd.anyDefault iter a s f = AspisR1.Port3_BatchStd.anyDefault iter b s f :=
+⋯
+'NKV_PaddingInstall.any_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_PaddingInstall.callback : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_PaddingInstall.HashState),
+  (NKV_PaddingInstall.predicate H).call_mut = NKB_AnyModel.predicate.call_mut :=
+⋯
+'NKV_PaddingInstall.callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_PaddingInstall.total : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_PaddingInstall.HashState)
+  (chunks : List (Aeneas.Std.Slice Aeneas.Std.U8)) (remainder : Aeneas.Std.Slice Aeneas.Std.U8),
+  (∀ c ∈ chunks, (↑c).length = 8) →
+    (NKV_ConcreteChildren.ops H).op0 (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8)
+        (NKV_PaddingInstall.predicate H) { chunks := chunks, remainder := remainder } () =
+      Aeneas.Std.Result.ok
+        ((NKB_AnyModel.scan chunks).1, { chunks := (NKB_AnyModel.scan chunks).2, remainder := remainder }) :=
+⋯
+'NKV_PaddingInstall.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_PaddingValue.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_PaddingValue.HashState)
+  (padding : Aeneas.Std.Slice Aeneas.Std.U8) (words : ℕ),
+  (↑padding).length = 8 * words →
+    ∃ ce after,
+      Aeneas.Std.core.slice.Slice.chunks_exact padding 8#usize = Aeneas.Std.Result.ok ce ∧
+        (NKV_ConcreteChildren.ops H).op0 (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8)
+            (NKV_PaddingInstall.predicate H) ce () =
+          Aeneas.Std.Result.ok
+            (!AspisR1.MultiproofConePadding.scan words (AspisR1.MultiproofConeCanonical.bytesOf ↑padding), after) :=
+⋯
+'NKV_PaddingValue.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentSource.next_congr : ∀ (m n : NKV_ParentSource.Step)
+  (f g : NKV_StepErasure.Indices → NKV_StepErasure.Values → Aeneas.Std.Result NKV_StepErasure.Reply),
+  NKV_ReturnBoundary.reject m = NKV_ReturnBoundary.reject n →
+    (∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values),
+        NKV_ParentSource.observe (f i v) = NKV_ParentSource.observe (g i v)) →
+      NKV_ParentSource.observe (NKV_ParentSource.next m f) = NKV_ParentSource.observe (NKV_ParentSource.next n g) :=
+⋯
+'NKV_ParentSource.next_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentSource.next_observed : ∀ (m : NKV_ParentSource.Step)
+  (k : NKV_StepErasure.Indices → NKV_StepErasure.Values → Aeneas.Std.Result NKV_StepErasure.Reply),
+  NKV_ParentSource.observe (NKV_ParentSource.next m k) = do
+    let (_, i, v) ← NKV_ReturnBoundary.reject m
+    NKV_ParentSource.observe (k i v) :=
+⋯
+'NKV_ParentSource.next_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentSource.next_question : ∀ (m : NKV_ParentSource.Step)
+  (k : NKV_StepErasure.Indices → NKV_StepErasure.Values → Aeneas.Std.Result NKV_StepErasure.Reply),
+  (do
+      let (r, i, v) ← m
+      let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a => k i v
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual =>
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (Aeneas.Std.core.convert.FromSame AspisR1Stage2.verifier.Error) residual) =
+    NKV_ParentSource.next m k :=
+⋯
+'NKV_ParentSource.next_question' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentSource.three_congr : ∀ (a0 a1 a2 b0 b1 b2 : NKV_ParentSource.Caller),
+  (∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values),
+      NKV_ReturnBoundary.reject (a0 i v) = NKV_ReturnBoundary.reject (b0 i v)) →
+    (∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values),
+        NKV_ReturnBoundary.reject (a1 i v) = NKV_ReturnBoundary.reject (b1 i v)) →
+      (∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values),
+          NKV_ReturnBoundary.reject (a2 i v) = NKV_ReturnBoundary.reject (b2 i v)) →
+        NKV_ParentSource.observe (NKV_ParentSource.three a0 a1 a2) =
+          NKV_ParentSource.observe (NKV_ParentSource.three b0 b1 b2) :=
+⋯
+'NKV_ParentSource.three_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentSource.three_next : ∀ (c0 c1 c2 : NKV_ParentSource.Caller),
+  NKV_ParentSource.three c0 c1 c2 =
+    NKV_ParentSource.next (c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV) fun i v =>
+      NKV_ParentSource.next (c1 i v) fun i v =>
+        NKV_ParentSource.next (c2 i v) fun x x_1 => Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) :=
+⋯
+'NKV_ParentSource.three_next' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentSource.values : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (roots : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 3#usize) (batch : Aeneas.Std.Usize),
+  ↑batch < 2 →
+    NKV_ParentSource.observe
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (AspisR1.Port3_BatchStd.install base) D
+          proof queries roots batch hash) =
+      NKV_ParentSource.observe
+        (NKV_FRef.verifier.candidate.batch_merkle_values (AspisR1.Port3_BatchStd.install base) D proof queries roots
+          batch hash) :=
+⋯
+'NKV_ParentSource.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentTotal.read : ∀ {A : Type} {size : Aeneas.Std.Usize} (array : Aeneas.Std.Array A size)
+  (pos : Aeneas.Std.Usize), ↑pos < ↑size → ∃ out, array.index_usize pos = Aeneas.Std.Result.ok out :=
+⋯
+'NKV_ParentTotal.read' depends on axioms: [propext]
+theorem NKV_ParentTotal.three : ∀ (c0 c1 c2 : NKV_ParentSource.Caller),
+  (∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values), ∃ r ai av, c0 i v = Aeneas.Std.Result.ok (r, ai, av)) →
+    (∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values),
+        ∃ r ai av, c1 i v = Aeneas.Std.Result.ok (r, ai, av)) →
+      (∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values),
+          ∃ r ai av, c2 i v = Aeneas.Std.Result.ok (r, ai, av)) →
+        ∃ r, NKV_ParentSource.three c0 c1 c2 = Aeneas.Std.Result.ok r :=
+⋯
+'NKV_ParentTotal.three' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentTotal.values : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_ParentTotal.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed),
+      p.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+          (roots : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 3#usize) (batch : Aeneas.Std.Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∃ r,
+                NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H)
+                    (NKV_ConcreteChildren.digest H) proof raw roots batch () =
+                  Aeneas.Std.Result.ok r :=
+⋯
+'NKV_ParentTotal.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentTrace.first_error : ∀ {E : Type}
+  (c0 c1 c2 : NKV_StepErasure.Indices → NKV_StepErasure.Values → NKV_ParentTrace.Tree E) (events : List E)
+  (error : AspisR1Stage2.verifier.Error) (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+  c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+      (events, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error, idx, val)) →
+    NKV_ParentTrace.three c0 c1 c2 = (events, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)) :=
+⋯
+'NKV_ParentTrace.first_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentTrace.next_congr : ∀ {E : Type} (m n : NKV_ParentTrace.Tree E)
+  (f g : NKV_StepErasure.Indices → NKV_StepErasure.Values → NKV_ParentTrace.Parent E),
+  NKV_ParentTrace.treeObserve m = NKV_ParentTrace.treeObserve n →
+    (∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values),
+        NKV_ParentTrace.observe (f i v) = NKV_ParentTrace.observe (g i v)) →
+      NKV_ParentTrace.observe (NKV_ParentTrace.next m f) = NKV_ParentTrace.observe (NKV_ParentTrace.next n g) :=
+⋯
+'NKV_ParentTrace.next_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentTrace.next_observed : ∀ {E : Type} (m : NKV_ParentTrace.Tree E)
+  (k : NKV_StepErasure.Indices → NKV_StepErasure.Values → NKV_ParentTrace.Parent E),
+  NKV_ParentTrace.observe (NKV_ParentTrace.next m k) =
+    NKV_ParentTrace.bindRejected (NKV_ParentTrace.treeObserve m) fun i v => NKV_ParentTrace.observe (k i v) :=
+⋯
+'NKV_ParentTrace.next_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentTrace.second_error : ∀ {E : Type}
+  (c0 c1 c2 : NKV_StepErasure.Indices → NKV_StepErasure.Values → NKV_ParentTrace.Tree E) (first second : List E)
+  (error : AspisR1Stage2.verifier.Error) (i0 i1 : NKV_StepErasure.Indices) (v0 v1 : NKV_StepErasure.Values),
+  c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+      (first, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), i0, v0)) →
+    c1 i0 v0 = (second, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error, i1, v1)) →
+      NKV_ParentTrace.three c0 c1 c2 =
+        (first ++ second, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)) :=
+⋯
+'NKV_ParentTrace.second_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ParentTrace.three_congr : ∀ {E : Type}
+  (a0 a1 a2 b0 b1 b2 : NKV_StepErasure.Indices → NKV_StepErasure.Values → NKV_ParentTrace.Tree E),
+  (∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values),
+      NKV_ParentTrace.treeObserve (a0 i v) = NKV_ParentTrace.treeObserve (b0 i v)) →
+    (∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values),
+        NKV_ParentTrace.treeObserve (a1 i v) = NKV_ParentTrace.treeObserve (b1 i v)) →
+      (∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values),
+          NKV_ParentTrace.treeObserve (a2 i v) = NKV_ParentTrace.treeObserve (b2 i v)) →
+        NKV_ParentTrace.observe (NKV_ParentTrace.three a0 a1 a2) =
+          NKV_ParentTrace.observe (NKV_ParentTrace.three b0 b1 b2) :=
+⋯
+'NKV_ParentTrace.three_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ProducerDomain.caller : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_ProducerDomain.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ)
+  (before after : MultiproofConeRef.reference.Scratch),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind) before).2 =
+        Aeneas.Std.Result.ok (true, after) →
+      0 < ↑after.n ∧ ↑after.n ≤ 12 ∧ AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys after) :=
+⋯
+'NKV_ProducerDomain.caller' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ProducerDomain.tx1_count : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_ProducerDomain.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (kind : ℕ)
+  (before after : MultiproofConeRef.reference.Scratch),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q 0 kind) before).2 =
+        Aeneas.Std.Result.ok (true, after) →
+      ↑after.n ≤ 10 :=
+⋯
+'NKV_ProducerDomain.tx1_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ProducerDomain.tx2_bytes : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_ProducerDomain.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ)
+  (before after : MultiproofConeRef.reference.Scratch) (slot : Aeneas.Std.Slice Aeneas.Std.U8),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind) before).2 =
+        Aeneas.Std.Result.ok (true, after) →
+      32 * AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after) ≤ (↑slot).length →
+        (↑(AspisR1.MultiproofConeSlotTail.prefixNodes slot
+                (AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after)))).length ≤
+          9216 :=
+⋯
+'NKV_ProducerDomain.tx2_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_Progress.continues : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree : Aeneas.Std.Usize) (hash : H) (lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (i ai : NKV_StepErasure.Indices) (v av : NKV_StepErasure.Values)
+  (d pos ad apos : Aeneas.Std.Usize),
+  NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d pos =
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (ai, av, ad, apos)) →
+    apos = pos.wrapping_add 1#usize ∧ pos < n :=
+⋯
+'NKV_Progress.continues' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_Progress.done_classified : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree : Aeneas.Std.Usize) (hash : H) (lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values)
+  (d pos : Aeneas.Std.Usize) (out : NKV_LoopTransport.Out),
+  NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d pos =
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out) →
+    NKV_ReturnBoundary.WellClassified out :=
+⋯
+'NKV_Progress.done_classified' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_QueryPlan.slot_history : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_QueryPlan.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑nodes).length = 32 * AspisR1.OraclePortSelectedDraft.capacity (3 * batch + kind) →
+    ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+      root = AspisV8R19.SqueezeOracleBridge.encodeState (AspisR1.OraclePortBatchDraft.committedRoot p kind) →
+        ∀ (before : MultiproofConeRef.reference.Scratch),
+          (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.MultiproofConeSlotState.slotState p q batch kind nodes before)).1 =
+            NKV_QueryPlan.plan H p q batch kind nodes root before :=
+⋯
+'NKV_QueryPlan.slot_history' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_QueryPlan.tail_history : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_QueryPlan.HashState)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (batch kind : ℕ) (nodes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : MultiproofConeRef.reference.Scratch),
+  (↑nodes).length = 32 * AspisR1.OraclePortSelectedDraft.capacity (3 * batch + kind) →
+    ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+      root = AspisV8R19.SqueezeOracleBridge.encodeState (AspisR1.OraclePortBatchDraft.committedRoot p kind) →
+        (AspisV8R19.MemoizedProgramLaw.eval H (AspisR1.MultiproofConeVerifyState.tailState p batch kind nodes s)).1 =
+          NKV_QueryPlan.tail H batch kind nodes root s :=
+⋯
+'NKV_QueryPlan.tail_history' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ReturnBoundary.duplicate_preserved : ∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values),
+  NKV_ReturnBoundary.cohort (i, v, Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle, false) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle, i, v) ∧
+    NKV_ReturnBoundary.cohort (i, v, Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle, false) ≠
+      Aeneas.Std.Result.fail Aeneas.Std.Error.panic :=
+⋯
+'NKV_ReturnBoundary.duplicate_preserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem NKV_ReturnBoundary.lost : ∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values)
+  (r : NKV_StepErasure.Reply),
+  NKV_ReturnBoundary.cohort (i, v, r, true) = Aeneas.Std.Result.fail Aeneas.Std.Error.panic :=
+⋯
+'NKV_ReturnBoundary.lost' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ReturnBoundary.observed : ∀ (x : NKV_LoopTransport.Out),
+  NKV_ReturnBoundary.WellClassified x →
+    NKV_ReturnBoundary.reject (NKV_ReturnBoundary.cohort x) =
+      NKV_ReturnBoundary.reject (NKV_ReturnBoundary.returned x) :=
+⋯
+'NKV_ReturnBoundary.observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_ReturnBoundary.prefix_transport : ∀ {Event : Type} (events : List Event) (x : NKV_LoopTransport.Out),
+  NKV_ReturnBoundary.WellClassified x →
+    NKV_ReturnBoundary.observeTrace events (NKV_ReturnBoundary.cohort x) =
+      NKV_ReturnBoundary.observeTrace events (NKV_ReturnBoundary.returned x) :=
+⋯
+'NKV_ReturnBoundary.prefix_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem NKV_ReturnBoundary.preserved : ∀ (i : NKV_StepErasure.Indices) (v : NKV_StepErasure.Values)
+  (r : NKV_StepErasure.Reply),
+  NKV_ReturnBoundary.cohort (i, v, r, false) = NKV_ReturnBoundary.returned (i, v, r, false) :=
+⋯
+'NKV_ReturnBoundary.preserved' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_SlotInvocation.capacity : ∀ (slot : Aeneas.Std.Usize),
+  ↑slot < 6 →
+    ∃ cap,
+      (Aeneas.Std.Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize] ⋯).index_usize
+            slot =
+          Aeneas.Std.Result.ok cap ∧
+        ↑cap = AspisR1.OraclePortSelectedDraft.capacity ↑slot ∧ ↑cap ≤ 172 :=
+⋯
+'NKV_SlotInvocation.capacity' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_SlotInvocation.physical : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_SlotInvocation.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed),
+      p.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (batch kind : ℕ),
+          batch < 2 →
+            kind < 3 →
+              ∀ (slot : Aeneas.Std.Usize),
+                ↑slot = 3 * batch + kind →
+                  ∃ view,
+                    (NKV_ConcreteChildren.ops H).op3 proof slot = Aeneas.Std.Result.ok view ∧
+                      (↑view).length = 32 * AspisR1.OraclePortSelectedDraft.capacity (3 * batch + kind) ∧
+                        AspisR1.MultiproofConeCanonical.bytesOf ↑view =
+                          AspisR1.OraclePortCompactDraft.slice p.wire
+                            (AspisR1.OraclePortSelectedDraft.slotStart (3 * batch + kind))
+                            (32 * AspisR1.OraclePortSelectedDraft.capacity (3 * batch + kind)) :=
+⋯
+'NKV_SlotInvocation.physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_StepErasure.map_bind : ∀ {A B C : Type} (f : B → C) (m : Aeneas.Std.Result A) (k : A → Aeneas.Std.Result B),
+  NKV_StepErasure.mapResult f (m >>= k) = do
+    let x ← m
+    NKV_StepErasure.mapResult f (k x) :=
+⋯
+'NKV_StepErasure.map_bind' does not depend on any axioms
+theorem NKV_StepErasure.map_cf : ∀ {A B C D : Type} (f : C → D) (cf : Aeneas.Std.core.ops.control_flow.ControlFlow A B)
+  (cont : B → Aeneas.Std.Result C) (stop : A → Aeneas.Std.Result C),
+  NKV_StepErasure.mapResult f
+      (match cf with
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue b => cont b
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break a => stop a) =
+    match cf with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue b => NKV_StepErasure.mapResult f (cont b)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break a => NKV_StepErasure.mapResult f (stop a) :=
+⋯
+'NKV_StepErasure.map_cf' does not depend on any axioms
+theorem NKV_StepErasure.map_ite : ∀ {A B : Type} (f : A → B) (p : Prop) [inst : Decidable p]
+  (a b : Aeneas.Std.Result A),
+  NKV_StepErasure.mapResult f (if p then a else b) =
+    if p then NKV_StepErasure.mapResult f a else NKV_StepErasure.mapResult f b :=
+⋯
+'NKV_StepErasure.map_ite' does not depend on any axioms
+@[defeq] theorem NKV_StepErasure.map_ok : ∀ {A B : Type} (f : A → B) (x : A),
+  NKV_StepErasure.mapResult f (Aeneas.Std.Result.ok x) = Aeneas.Std.Result.ok (f x) :=
+⋯
+'NKV_StepErasure.map_ok' does not depend on any axioms
+theorem NKV_StepErasure.map_pair : ∀ {A B C D : Type} (f : C → D) (p : A × B) (k : A → B → Aeneas.Std.Result C),
+  NKV_StepErasure.mapResult f
+      (match p with
+      | (a, b) => k a b) =
+    match p with
+    | (a, b) => NKV_StepErasure.mapResult f (k a b) :=
+⋯
+'NKV_StepErasure.map_pair' does not depend on any axioms
+theorem NKV_StepErasure.source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree : Aeneas.Std.Usize) (hash : H) (lo n s : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values)
+  (d pos : Aeneas.Std.Usize),
+  NKV_StepErasure.mapResult NKV_StepErasure.erase
+      (NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n s keys idx val d pos) =
+    AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n s keys idx val
+      d pos :=
+⋯
+'NKV_StepErasure.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TailArithmetic.checked_scale : ∀ (count : Aeneas.Std.Usize),
+  ↑count ≤ 172 → 32#usize * count = Aeneas.Std.Result.ok (Aeneas.Std.Usize.wrapping_mul 32#usize count) :=
+⋯
+'NKV_TailArithmetic.checked_scale' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TailArithmetic.fits : ∀ (slot count : ℕ),
+  slot < 6 →
+    count ≤ NKL_TailGeometry.capacity slot →
+      32 * count ≤ 5504 ∧
+        32 * count ≤ 9216 ∧
+          32 * count ≤ 32 * NKL_TailGeometry.capacity slot ∧
+            (32 * NKL_TailGeometry.capacity slot - 32 * count) % 8 = 0 :=
+⋯
+'NKV_TailArithmetic.fits' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TailArithmetic.scaled_value : ∀ (count : Aeneas.Std.Usize),
+  ↑count ≤ 172 → ↑(Aeneas.Std.Usize.wrapping_mul 32#usize count) = 32 * ↑count :=
+⋯
+'NKV_TailArithmetic.scaled_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TailContinue.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed),
+      p.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : ℕ) (kind lo n slot : Aeneas.Std.Usize),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                ∀ (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : MultiproofConeRef.reference.Scratch),
+                  ↑s.n ≤ 16 →
+                    AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+                      AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s) ≤
+                          AspisR1.OraclePortSelectedDraft.capacity (3 * batch + ↑kind) →
+                        ∃ nodes,
+                          (NKV_ConcreteChildren.ops H).op3 proof slot = Aeneas.Std.Result.ok nodes ∧
+                            (↑nodes).length = 32 * AspisR1.OraclePortSelectedDraft.capacity (3 * batch + ↑kind) ∧
+                              NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+                                  (NKV_ConcreteChildren.digest H) proof root kind () lo n slot keys s.idx s.val s.n n =
+                                if
+                                    AspisR1.MultiproofConePadding.scan
+                                        (4 *
+                                          (AspisR1.OraclePortSelectedDraft.capacity (3 * batch + ↑kind) -
+                                            AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))
+                                        (List.drop
+                                          (32 * AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s))
+                                          (AspisR1.MultiproofConeCanonical.bytesOf ↑nodes)) =
+                                      true then
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.ControlFlow.done
+                                      (NKV_TailContinue.returned
+                                        (AspisV8R19.MemoizedProgramLaw.eval H
+                                            (NJV_TX2Returning.endpoint root
+                                              (AspisR1.MultiproofConeSlotTail.prefixNodes nodes
+                                                (AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))
+                                              s.idx s.val s.n)).2))
+                                else
+                                  Aeneas.Std.Result.ok
+                                    (Aeneas.Std.ControlFlow.done
+                                      (s.idx, s.val,
+                                        Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Parse, true)) :=
+⋯
+'NKV_TailContinue.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TailLoop.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TailLoop.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed),
+      p.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : ℕ) (kind lo n slot : Aeneas.Std.Usize),
+          root = AspisV8R19.SqueezeOracleBridge.encodeState (AspisR1.OraclePortBatchDraft.committedRoot p ↑kind) →
+            batch < 2 →
+              ↑kind < 3 →
+                ↑slot = 3 * batch + ↑kind →
+                  ∀ (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : MultiproofConeRef.reference.Scratch),
+                    ↑s.n ≤ 16 →
+                      ∃ nodes,
+                        (NKV_ConcreteChildren.ops H).op3 proof slot = Aeneas.Std.Result.ok nodes ∧
+                          NKV_ReturnBoundary.reject
+                              (NKV_FRef.verifier.candidate.batch_tree_loop (NKV_ConcreteChildren.ops H)
+                                  (NKV_ConcreteChildren.digest H) proof root kind s.idx s.val () lo n slot keys s.n
+                                  n >>=
+                                NKV_ReturnBoundary.returned) =
+                            NKV_TailModel.model
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.MultiproofConeVerifyState.tailState p batch (↑kind) nodes s)).2 :=
+⋯
+'NKV_TailLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TailModel.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TailModel.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed),
+      p.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : ℕ) (kind lo n slot : Aeneas.Std.Usize),
+          root = AspisV8R19.SqueezeOracleBridge.encodeState (AspisR1.OraclePortBatchDraft.committedRoot p ↑kind) →
+            batch < 2 →
+              ↑kind < 3 →
+                ↑slot = 3 * batch + ↑kind →
+                  ∀ (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : MultiproofConeRef.reference.Scratch),
+                    ↑s.n ≤ 16 →
+                      ∃ nodes,
+                        (NKV_ConcreteChildren.ops H).op3 proof slot = Aeneas.Std.Result.ok nodes ∧
+                          NKV_TailModel.observe
+                              (NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+                                (NKV_ConcreteChildren.digest H) proof root kind () lo n slot keys s.idx s.val s.n n) =
+                            NKV_TailModel.model
+                              (AspisV8R19.MemoizedProgramLaw.eval H
+                                  (AspisR1.MultiproofConeVerifyState.tailState p batch (↑kind) nodes s)).2 :=
+⋯
+'NKV_TailModel.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TailModel.verify : ∀ (out : Bool × MultiproofConeRef.reference.Scratch),
+  NKV_TailModel.observe (Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (NKV_TailContinue.returned out))) =
+    NKV_TailModel.model out :=
+⋯
+'NKV_TailModel.verify' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TailProgram.source : ∀ (p : AspisR1.OraclePortCompactDraft.Parsed) (batch kind : ℕ)
+  (nodes : Aeneas.Std.Slice Aeneas.Std.U8) (s : MultiproofConeRef.reference.Scratch),
+  (↑nodes).length = 32 * AspisR1.OraclePortSelectedDraft.capacity (3 * batch + kind) →
+    ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+      root = AspisV8R19.SqueezeOracleBridge.encodeState (AspisR1.OraclePortBatchDraft.committedRoot p kind) →
+        AspisR1.MultiproofConeVerifyState.tailState p batch kind nodes s =
+          if AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) then
+            if
+                AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s) ≤
+                    AspisR1.OraclePortSelectedDraft.capacity (3 * batch + kind) ∧
+                  AspisR1.MultiproofConePadding.scan
+                      (4 *
+                        (AspisR1.OraclePortSelectedDraft.capacity (3 * batch + kind) -
+                          AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))
+                      (List.drop (32 * AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s))
+                        (AspisR1.MultiproofConeCanonical.bytesOf ↑nodes)) =
+                    true then
+              NJV_TX2Returning.endpoint root
+                (AspisR1.MultiproofConeSlotTail.prefixNodes nodes
+                  (AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))
+                s.idx s.val s.n
+            else AspisV8R19.MemoizedProgramLaw.Program.done (false, s)
+          else AspisV8R19.MemoizedProgramLaw.Program.done (false, s) :=
+⋯
+'NKV_TailProgram.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TailReject.capacity : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TailReject.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed),
+      p.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : ℕ) (kind lo n slot : Aeneas.Std.Usize),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                ∀ (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : MultiproofConeRef.reference.Scratch),
+                  ↑s.n ≤ 16 →
+                    AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+                      AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s) >
+                          AspisR1.OraclePortSelectedDraft.capacity (3 * batch + ↑kind) →
+                        NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+                            (NKV_ConcreteChildren.digest H) proof root kind () lo n slot keys s.idx s.val s.n n =
+                          Aeneas.Std.Result.ok
+                            (Aeneas.Std.ControlFlow.done
+                              (s.idx, s.val, Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Parse,
+                                true)) :=
+⋯
+'NKV_TailReject.capacity' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TailReject.missing : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TailReject.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (kind lo n slot : Aeneas.Std.Usize) (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize)
+  (s : MultiproofConeRef.reference.Scratch),
+  ↑s.n ≤ 16 →
+    ¬AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+      NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+          proof root kind () lo n slot keys s.idx s.val s.n n =
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.ControlFlow.done
+            (s.idx, s.val, Aeneas.Std.core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle, true)) :=
+⋯
+'NKV_TailReject.missing' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TailTotal.body : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TailTotal.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed),
+      p.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : ℕ) (kind lo n slot : Aeneas.Std.Usize),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                ∀ (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : MultiproofConeRef.reference.Scratch),
+                  ↑s.n ≤ 16 →
+                    ∃ out,
+                      NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+                          (NKV_ConcreteChildren.digest H) proof root kind () lo n slot keys s.idx s.val s.n n =
+                        Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out) :=
+⋯
+'NKV_TailTotal.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TailTotal.loop : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TailTotal.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed),
+      p.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch : ℕ) (kind lo n slot : Aeneas.Std.Usize),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                ∀ (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (s : MultiproofConeRef.reference.Scratch),
+                  ↑s.n ≤ 16 →
+                    ∃ out,
+                      NKV_FRef.verifier.candidate.batch_tree_loop (NKV_ConcreteChildren.ops H)
+                          (NKV_ConcreteChildren.digest H) proof root kind s.idx s.val () lo n slot keys s.n n =
+                        Aeneas.Std.Result.ok out :=
+⋯
+'NKV_TailTotal.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TraceCases.all_ok : ∀ {E : Type}
+  (c0 c1 c2 : NKV_StepErasure.Indices → NKV_StepErasure.Values → NKV_ParentTrace.Tree E) (first second third : List E)
+  (i0 i1 i2 : NKV_StepErasure.Indices) (v0 v1 v2 : NKV_StepErasure.Values),
+  c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+      (first, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), i0, v0)) →
+    c1 i0 v0 = (second, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), i1, v1)) →
+      c2 i1 v1 = (third, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), i2, v2)) →
+        NKV_ParentTrace.three c0 c1 c2 =
+          (first ++ (second ++ third), Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ())) :=
+⋯
+'NKV_TraceCases.all_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TraceCases.first_abort : ∀ {E : Type}
+  (c0 c1 c2 : NKV_StepErasure.Indices → NKV_StepErasure.Values → NKV_ParentTrace.Tree E) (events : List E)
+  (error : Aeneas.Std.Error),
+  c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV = (events, Aeneas.Std.Result.fail error) →
+    NKV_ParentTrace.three c0 c1 c2 = (events, Aeneas.Std.Result.fail error) :=
+⋯
+'NKV_TraceCases.first_abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TraceCases.second_abort : ∀ {E : Type}
+  (c0 c1 c2 : NKV_StepErasure.Indices → NKV_StepErasure.Values → NKV_ParentTrace.Tree E) (first second : List E)
+  (error : Aeneas.Std.Error) (i0 : NKV_StepErasure.Indices) (v0 : NKV_StepErasure.Values),
+  c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+      (first, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), i0, v0)) →
+    c1 i0 v0 = (second, Aeneas.Std.Result.fail error) →
+      NKV_ParentTrace.three c0 c1 c2 = (first ++ second, Aeneas.Std.Result.fail error) :=
+⋯
+'NKV_TraceCases.second_abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TraceCases.third_abort : ∀ {E : Type}
+  (c0 c1 c2 : NKV_StepErasure.Indices → NKV_StepErasure.Values → NKV_ParentTrace.Tree E) (first second third : List E)
+  (error : Aeneas.Std.Error) (i0 i1 : NKV_StepErasure.Indices) (v0 v1 : NKV_StepErasure.Values),
+  c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+      (first, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), i0, v0)) →
+    c1 i0 v0 = (second, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), i1, v1)) →
+      c2 i1 v1 = (third, Aeneas.Std.Result.fail error) →
+        NKV_ParentTrace.three c0 c1 c2 = (first ++ (second ++ third), Aeneas.Std.Result.fail error) :=
+⋯
+'NKV_TraceCases.third_abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TraceCases.third_error : ∀ {E : Type}
+  (c0 c1 c2 : NKV_StepErasure.Indices → NKV_StepErasure.Values → NKV_ParentTrace.Tree E) (first second third : List E)
+  (error : AspisR1Stage2.verifier.Error) (i0 i1 i2 : NKV_StepErasure.Indices) (v0 v1 v2 : NKV_StepErasure.Values),
+  c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+      (first, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), i0, v0)) →
+    c1 i0 v0 = (second, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), i1, v1)) →
+      c2 i1 v1 = (third, Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error, i2, v2)) →
+        NKV_ParentTrace.three c0 c1 c2 =
+          (first ++ (second ++ third), Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)) :=
+⋯
+'NKV_TraceCases.third_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeBuild.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TreeBuild.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : AspisR1.OraclePortCompactDraft.Parsed),
+      parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+          (batch kind : Aeneas.Std.Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+                  ∃ keys,
+                    NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                        proof raw root batch kind idx val () =
+                      NKV_LeafTraversal.finish H proof root kind (NKB_KeyStream.lo ↑batch) (NKB_KeyStream.count ↑batch)
+                          ((Aeneas.Std.Usize.wrapping_mul 3#usize batch).wrapping_add kind) keys
+                          (NKV_LeafBuild.build H parsed (AspisR1.Port4B_KeyInstall.queries raw) (↑kind)
+                              (AspisR1.OraclePortFrozenOrder.sortedPositions (AspisR1.Port4B_KeyInstall.queries raw)
+                                ↑batch ↑kind)
+                              (NJV_EntryABI.initial idx val 0#usize)).2 >>=
+                        NKV_ReturnBoundary.returned :=
+⋯
+'NKV_TreeBuild.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeEntry.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TreeEntry.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch kind : Aeneas.Std.Usize),
+  ↑batch < 2 →
+    ↑kind < 3 →
+      (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+        ∀ (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+          ∃ keys,
+            (AspisR1.OraclePortFrozenOrder.sortedPositions (AspisR1.Port4B_KeyInstall.queries raw) ↑batch
+                    ↑kind).length =
+                ↑(NKB_KeyStream.count ↑batch) ∧
+              AspisR1.Port4B_LeafLoop.KeyStream (AspisR1.Port4B_KeyInstall.queries raw) (↑batch) (↑kind) keys 0#usize
+                  (AspisR1.OraclePortFrozenOrder.sortedPositions (AspisR1.Port4B_KeyInstall.queries raw) ↑batch ↑kind) ∧
+                NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                    proof raw root batch kind idx val () =
+                  NKV_FRef.verifier.candidate.batch_tree_loop (NKV_ConcreteChildren.ops H)
+                      (NKV_ConcreteChildren.digest H) proof root kind idx val () (NKB_KeyStream.lo ↑batch)
+                      (NKB_KeyStream.count ↑batch) ((Aeneas.Std.Usize.wrapping_mul 3#usize batch).wrapping_add kind)
+                      keys 0#usize 0#usize >>=
+                    NKV_ReturnBoundary.returned :=
+⋯
+'NKV_TreeEntry.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeErrors.classified : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TreeErrors.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (batch kind : Aeneas.Std.Usize),
+  ↑batch < 2 →
+    ↑kind < 3 →
+      (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+        ∀ (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+          NKV_TreeErrors.Allowed
+            (NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+              raw root batch kind idx val ()) :=
+⋯
+'NKV_TreeErrors.classified' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeErrors.complete : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TreeErrors.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed),
+      p.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+          (batch kind : Aeneas.Std.Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+                  ∃ r i v,
+                    NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                          proof raw root batch kind idx val () =
+                        Aeneas.Std.Result.ok (r, i, v) ∧
+                      NKV_ErrorKinds.Allowed r :=
+⋯
+'NKV_TreeErrors.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeErrors.error_iff : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TreeErrors.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed),
+      p.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+          (batch kind : Aeneas.Std.Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+                  NKV_ReturnBoundary.reject
+                        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H)
+                          (NKV_ConcreteChildren.digest H) proof raw root batch kind idx val ()) =
+                      Aeneas.Std.Result.fail Aeneas.Std.Error.panic ↔
+                    ∃ e i v,
+                      (e = AspisR1Stage2.verifier.Error.Parse ∨ e = AspisR1Stage2.verifier.Error.Merkle) ∧
+                        NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H)
+                            (NKV_ConcreteChildren.digest H) proof raw root batch kind idx val () =
+                          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e, i, v) :=
+⋯
+'NKV_TreeErrors.error_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeErrors.returned_allowed : ∀ (out : Aeneas.Std.Result NKV_LoopTransport.Out),
+  NKV_ErrorKinds.LoopAllowed out → NKV_TreeErrors.Allowed (out >>= NKV_ReturnBoundary.returned) :=
+⋯
+'NKV_TreeErrors.returned_allowed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeModel.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TreeModel.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed),
+      p.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+          (batch kind : Aeneas.Std.Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                root = AspisV8R19.SqueezeOracleBridge.encodeState (AspisR1.OraclePortBatchDraft.committedRoot p ↑kind) →
+                  ∀ (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+                    ∃ nodes,
+                      (NKV_ConcreteChildren.ops H).op3 proof
+                            ((Aeneas.Std.Usize.wrapping_mul 3#usize batch).wrapping_add kind) =
+                          Aeneas.Std.Result.ok nodes ∧
+                        NKV_ReturnBoundary.reject
+                            (NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H)
+                              (NKV_ConcreteChildren.digest H) proof raw root batch kind idx val ()) =
+                          NKV_TailModel.model
+                            (AspisV8R19.MemoizedProgramLaw.eval H
+                                (AspisR1.MultiproofConeSlotState.slotState p (AspisR1.Port4B_KeyInstall.queries raw)
+                                  (↑batch) (↑kind) nodes (NJV_EntryABI.initial idx val 0#usize))).2 :=
+⋯
+'NKV_TreeModel.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeSource.bind_observed : ∀ {A : Type} (m : Aeneas.Std.Result A)
+  (f g : A → Aeneas.Std.Result NKV_TreeSource.Return),
+  (∀ (x : A), NKV_ReturnBoundary.reject (f x) = NKV_ReturnBoundary.reject (g x)) →
+    NKV_ReturnBoundary.reject (m >>= f) = NKV_ReturnBoundary.reject (m >>= g) :=
+⋯
+'NKV_TreeSource.bind_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeSource.boundary : ∀ (out : Aeneas.Std.Result NKV_LoopTransport.Out),
+  NKV_BoundedLoop.Valid out →
+    NKV_ReturnBoundary.reject (NKV_StepErasure.mapResult NKV_LoopTransport.eraseOut out >>= NKV_TreeSource.finish) =
+      NKV_ReturnBoundary.reject (out >>= NKV_ReturnBoundary.returned) :=
+⋯
+'NKV_TreeSource.boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeSource.loop_observed : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (tree lo n slot : Aeneas.Std.Usize)
+  (keys : Aeneas.Std.Array Aeneas.Std.U64 16#usize),
+  ↑n ≤ 12 →
+    ∀ (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+      (NKV_ReturnBoundary.reject do
+          let (i, v, pending) ←
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop ops D proof root tree idx val hash lo n
+                slot keys 0#usize 0#usize
+          match pending with
+            | none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+            | some r => Aeneas.Std.Result.ok (r, i, v)) =
+        NKV_ReturnBoundary.reject do
+          let (i, v, r, _) ←
+            NKV_FRef.verifier.candidate.batch_tree_loop ops D proof root tree idx val hash lo n slot keys 0#usize
+                0#usize
+          Aeneas.Std.Result.ok (r, i, v) :=
+⋯
+'NKV_TreeSource.loop_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeSource.prefix_source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (tree lo n slot : Aeneas.Std.Usize),
+  ↑n ≤ 12 →
+    ∀ (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+      NKV_ReturnBoundary.reject (NKV_TreeSource.treeWith ops D hash proof queries root tree lo n slot idx val) =
+        NKV_ReturnBoundary.reject (NKV_TreeSource.refWith ops D hash proof queries root tree lo n slot idx val) :=
+⋯
+'NKV_TreeSource.prefix_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeSource.source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (batch tree : Aeneas.Std.Usize),
+  ↑batch < 2 →
+    ∀ (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+      NKV_ReturnBoundary.reject
+          (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof
+            queries root batch tree idx val hash) =
+        NKV_ReturnBoundary.reject
+          (NKV_FRef.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof queries root batch tree
+            idx val hash) :=
+⋯
+'NKV_TreeSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeSource.span0 : ↑(Aeneas.Std.Usize.wrapping_sub 10#usize 0#usize) ≤ 12 :=
+⋯
+'NKV_TreeSource.span0' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeSource.span1 : ↑(Aeneas.Std.Usize.wrapping_sub 22#usize 10#usize) ≤ 12 :=
+⋯
+'NKV_TreeSource.span1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_TreeTotal.source : ∀ (H : AspisV8R19.DuplexFrames.Bytes → NKV_TreeTotal.HashState)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (p : AspisR1.OraclePortCompactDraft.Parsed),
+      p.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+          (batch kind : Aeneas.Std.Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values),
+                  ∃ r i v,
+                    NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                        proof raw root batch kind idx val () =
+                      Aeneas.Std.Result.ok (r, i, v) :=
+⋯
+'NKV_TreeTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_VerifyInvocation.returning : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (physical : Aeneas.Std.Slice Aeneas.Std.U8)
+  (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values) (n : Aeneas.Std.Usize),
+  (↑physical).length ≤ 9216 →
+    ∀ (events : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (out : Bool × NJP_RowModel.Scratch),
+      NJV_NativeEntry.Invocation (NJP_RequestTransport.hash (AspisR1.MultiproofConePhysicalTransport.rawOracle H)) root
+          physical (NJV_EntryABI.initial idx val n) events out →
+        ((AspisV8R19.MemoizedProgramLaw.eval H (NJV_TX2Returning.endpoint root physical idx val n)).1,
+            (NKV_ConcreteChildren.ops H).op10 (NKV_ConcreteChildren.digest H) ()
+              AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val n physical) =
+          (NJV_AdoptedObservation.history events,
+            Aeneas.Std.Result.ok
+              (out.1, (NJP_ScratchCarrier.emitted out.2).idx, (NJP_ScratchCarrier.emitted out.2).val)) :=
+⋯
+'NKV_VerifyInvocation.returning' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKV_VerifyInvocation.tx2 : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p : AspisR1.OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144) (batch kind : ℕ)
+  (before after : MultiproofConeRef.reference.Scratch) (slot : Aeneas.Std.Slice Aeneas.Std.U8),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (AspisR1.OraclePortFrozenOrder.sortedPositions q batch kind) before).2 =
+        Aeneas.Std.Result.ok (true, after) →
+      32 * AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after) ≤ (↑slot).length →
+        ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (events : List (NJP_RowModel.Request × NJP_RowModel.Digest))
+          (out : Bool × NJP_RowModel.Scratch),
+          NJV_NativeEntry.Invocation (NJP_RequestTransport.hash (AspisR1.MultiproofConePhysicalTransport.rawOracle H))
+              root
+              (AspisR1.MultiproofConeSlotTail.prefixNodes slot
+                (AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after)))
+              (NJV_EntryABI.initial after.idx after.val after.n) events out →
+            have physical :=
+              AspisR1.MultiproofConeSlotTail.prefixNodes slot
+                (AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after));
+            ((AspisV8R19.MemoizedProgramLaw.eval H
+                    (NJV_TX2Returning.endpoint root physical after.idx after.val after.n)).1,
+                (NKV_ConcreteChildren.ops H).op10 (NKV_ConcreteChildren.digest H) ()
+                  AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root after.idx after.val after.n physical) =
+              (NJV_AdoptedObservation.history events,
+                Aeneas.Std.Result.ok
+                  (out.1, (NJP_ScratchCarrier.emitted out.2).idx, (NJP_ScratchCarrier.emitted out.2).val)) :=
+⋯
+'NKV_VerifyInvocation.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]

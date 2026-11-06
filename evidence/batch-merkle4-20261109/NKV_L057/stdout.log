@@ -1,0 +1,430 @@
+NKV_TraceCases.lean:18:12: warning: This simp argument is unused:
+  next
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵n̵e̵x̵t̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_TraceCases.lean:30:12: warning: This simp argument is unused:
+  next
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵n̵e̵x̵t̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_TraceCases.lean:32:12: warning: This simp argument is unused:
+  next
+
+Hint: Omit it from the simp argument list.
+  simp only [n̵e̵x̵t̵,̵List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_TraceCases.lean:58:12: warning: This simp argument is unused:
+  next
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵n̵e̵x̵t̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKV_TraceCases.third_error : ∀ {E : Type} (c0 c1 c2 : Indices → Values → NKV_ParentTrace.Tree E)
+  (first second third : List E) (error : verifier.Error) (i0 i1 i2 : Indices) (v0 v1 v2 : Values),
+  c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV = (first, ok (core.result.Result.Ok (), i0, v0)) →
+    c1 i0 v0 = (second, ok (core.result.Result.Ok (), i1, v1)) →
+      c2 i1 v1 = (third, ok (core.result.Result.Err error, i2, v2)) →
+        three c0 c1 c2 = (first ++ (second ++ third), ok (core.result.Result.Err error)) :=
+fun {E} c0 c1 c2 first second third error i0 i1 i2 v0 v1 v2 reply0 reply1 reply2 =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = (first ++ (second ++ third), ok (core.result.Result.Err error))) (three.eq_1 c0 c1 c2)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (next _a fun i v =>
+                next (c1 i v) fun i v => next (c2 i v) fun x x_1 => ([], ok (core.result.Result.Ok ()))) =
+              (first ++ (second ++ third), ok (core.result.Result.Err error)))
+          reply0))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (first ++
+                      (match _a.2 with
+                        | fail e => (_a.1, fail e)
+                        | div => (_a.1, div)
+                        | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                        | ok (core.result.Result.Ok a, i, v) =>
+                          (_a.1 ++
+                              (match (c2 i v).2 with
+                                | fail e => ((c2 i v).1, fail e)
+                                | div => ((c2 i v).1, div)
+                                | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                                | ok (core.result.Result.Ok a, i_1, v_1) =>
+                                  ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).1,
+                            (match (c2 i v).2 with
+                              | fail e => ((c2 i v).1, fail e)
+                              | div => ((c2 i v).1, div)
+                              | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                              | ok (core.result.Result.Ok a, i_1, v_1) =>
+                                ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).2)).1,
+                    (match _a.2 with
+                      | fail e => (_a.1, fail e)
+                      | div => (_a.1, div)
+                      | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                      | ok (core.result.Result.Ok a, i, v) =>
+                        (_a.1 ++
+                            (match (c2 i v).2 with
+                              | fail e => ((c2 i v).1, fail e)
+                              | div => ((c2 i v).1, div)
+                              | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                              | ok (core.result.Result.Ok a, i_1, v_1) =>
+                                ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).1,
+                          (match (c2 i v).2 with
+                            | fail e => ((c2 i v).1, fail e)
+                            | div => ((c2 i v).1, div)
+                            | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                            | ok (core.result.Result.Ok a, i_1, v_1) =>
+                              ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).2)).2) =
+                  (first ++ (second ++ third), ok (core.result.Result.Err error)))
+              reply1))
+          (id
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (first ++
+                          (second ++
+                            (match _a.2 with
+                              | fail e => (_a.1, fail e)
+                              | div => (_a.1, div)
+                              | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                              | ok (core.result.Result.Ok a, i, v) => (_a.1 ++ [], ok (core.result.Result.Ok ()))).1),
+                        (match _a.2 with
+                          | fail e => (_a.1, fail e)
+                          | div => (_a.1, div)
+                          | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                          | ok (core.result.Result.Ok a, i, v) => (_a.1 ++ [], ok (core.result.Result.Ok ()))).2) =
+                      (first ++ (second ++ third), ok (core.result.Result.Err error)))
+                  reply2))
+              (Eq.refl
+                (first ++
+                    (second ++
+                      (match (third, ok (core.result.Result.Err error, i2, v2)).2 with
+                        | fail e => ((third, ok (core.result.Result.Err error, i2, v2)).1, fail e)
+                        | div => ((third, ok (core.result.Result.Err error, i2, v2)).1, div)
+                        | ok (core.result.Result.Err e, fst, snd) =>
+                          ((third, ok (core.result.Result.Err error, i2, v2)).1, ok (core.result.Result.Err e))
+                        | ok (core.result.Result.Ok a, i, v) =>
+                          ((third, ok (core.result.Result.Err error, i2, v2)).1 ++ [],
+                            ok (core.result.Result.Ok ()))).1),
+                  (match (third, ok (core.result.Result.Err error, i2, v2)).2 with
+                    | fail e => ((third, ok (core.result.Result.Err error, i2, v2)).1, fail e)
+                    | div => ((third, ok (core.result.Result.Err error, i2, v2)).1, div)
+                    | ok (core.result.Result.Err e, fst, snd) =>
+                      ((third, ok (core.result.Result.Err error, i2, v2)).1, ok (core.result.Result.Err e))
+                    | ok (core.result.Result.Ok a, i, v) =>
+                      ((third, ok (core.result.Result.Err error, i2, v2)).1 ++ [],
+                        ok (core.result.Result.Ok ()))).2)))))))
+theorem NKV_TraceCases.all_ok : ∀ {E : Type} (c0 c1 c2 : Indices → Values → NKV_ParentTrace.Tree E)
+  (first second third : List E) (i0 i1 i2 : Indices) (v0 v1 v2 : Values),
+  c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV = (first, ok (core.result.Result.Ok (), i0, v0)) →
+    c1 i0 v0 = (second, ok (core.result.Result.Ok (), i1, v1)) →
+      c2 i1 v1 = (third, ok (core.result.Result.Ok (), i2, v2)) →
+        three c0 c1 c2 = (first ++ (second ++ third), ok (core.result.Result.Ok ())) :=
+fun {E} c0 c1 c2 first second third i0 i1 i2 v0 v1 v2 reply0 reply1 reply2 =>
+  Eq.mpr
+    (id (congrArg (fun _a => _a = (first ++ (second ++ third), ok (core.result.Result.Ok ()))) (three.eq_1 c0 c1 c2)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (next _a fun i v =>
+                next (c1 i v) fun i v => next (c2 i v) fun x x_1 => ([], ok (core.result.Result.Ok ()))) =
+              (first ++ (second ++ third), ok (core.result.Result.Ok ())))
+          reply0))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (first ++
+                      (match _a.2 with
+                        | fail e => (_a.1, fail e)
+                        | div => (_a.1, div)
+                        | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                        | ok (core.result.Result.Ok a, i, v) =>
+                          (_a.1 ++
+                              (match (c2 i v).2 with
+                                | fail e => ((c2 i v).1, fail e)
+                                | div => ((c2 i v).1, div)
+                                | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                                | ok (core.result.Result.Ok a, i_1, v_1) =>
+                                  ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).1,
+                            (match (c2 i v).2 with
+                              | fail e => ((c2 i v).1, fail e)
+                              | div => ((c2 i v).1, div)
+                              | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                              | ok (core.result.Result.Ok a, i_1, v_1) =>
+                                ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).2)).1,
+                    (match _a.2 with
+                      | fail e => (_a.1, fail e)
+                      | div => (_a.1, div)
+                      | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                      | ok (core.result.Result.Ok a, i, v) =>
+                        (_a.1 ++
+                            (match (c2 i v).2 with
+                              | fail e => ((c2 i v).1, fail e)
+                              | div => ((c2 i v).1, div)
+                              | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                              | ok (core.result.Result.Ok a, i_1, v_1) =>
+                                ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).1,
+                          (match (c2 i v).2 with
+                            | fail e => ((c2 i v).1, fail e)
+                            | div => ((c2 i v).1, div)
+                            | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                            | ok (core.result.Result.Ok a, i_1, v_1) =>
+                              ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).2)).2) =
+                  (first ++ (second ++ third), ok (core.result.Result.Ok ())))
+              reply1))
+          (id
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (first ++
+                          (second ++
+                            (match _a.2 with
+                              | fail e => (_a.1, fail e)
+                              | div => (_a.1, div)
+                              | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                              | ok (core.result.Result.Ok a, i, v) => (_a.1 ++ [], ok (core.result.Result.Ok ()))).1),
+                        (match _a.2 with
+                          | fail e => (_a.1, fail e)
+                          | div => (_a.1, div)
+                          | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                          | ok (core.result.Result.Ok a, i, v) => (_a.1 ++ [], ok (core.result.Result.Ok ()))).2) =
+                      (first ++ (second ++ third), ok (core.result.Result.Ok ())))
+                  reply2))
+              (of_eq_true
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (congrFun'
+                        (congrArg Prod.mk
+                          (congrArg (HAppend.hAppend first)
+                            (congrArg (HAppend.hAppend second) (List.append_nil third))))
+                        (ok (core.result.Result.Ok ()))))
+                    (first ++ (second ++ third), ok (core.result.Result.Ok ())))
+                  (eq_self (first ++ (second ++ third), ok (core.result.Result.Ok ()))))))))))
+theorem NKV_TraceCases.first_abort : ∀ {E : Type} (c0 c1 c2 : Indices → Values → NKV_ParentTrace.Tree E)
+  (events : List E) (error : Error),
+  c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV = (events, fail error) → three c0 c1 c2 = (events, fail error) :=
+fun {E} c0 c1 c2 events error reply =>
+  Eq.mpr (id (congrArg (fun _a => _a = (events, fail error)) (three.eq_1 c0 c1 c2)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (next _a fun i v =>
+                next (c1 i v) fun i v => next (c2 i v) fun x x_1 => ([], ok (core.result.Result.Ok ()))) =
+              (events, fail error))
+          reply))
+      (Eq.refl
+        (next (events, fail error) fun i v =>
+          next (c1 i v) fun i v => next (c2 i v) fun x x_1 => ([], ok (core.result.Result.Ok ())))))
+theorem NKV_TraceCases.second_abort : ∀ {E : Type} (c0 c1 c2 : Indices → Values → NKV_ParentTrace.Tree E)
+  (first second : List E) (error : Error) (i0 : Indices) (v0 : Values),
+  c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV = (first, ok (core.result.Result.Ok (), i0, v0)) →
+    c1 i0 v0 = (second, fail error) → three c0 c1 c2 = (first ++ second, fail error) :=
+fun {E} c0 c1 c2 first second error i0 v0 reply0 reply1 =>
+  Eq.mpr (id (congrArg (fun _a => _a = (first ++ second, fail error)) (three.eq_1 c0 c1 c2)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (next _a fun i v =>
+                next (c1 i v) fun i v => next (c2 i v) fun x x_1 => ([], ok (core.result.Result.Ok ()))) =
+              (first ++ second, fail error))
+          reply0))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (first ++
+                      (match _a.2 with
+                        | fail e => (_a.1, fail e)
+                        | div => (_a.1, div)
+                        | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                        | ok (core.result.Result.Ok a, i, v) =>
+                          (_a.1 ++
+                              (match (c2 i v).2 with
+                                | fail e => ((c2 i v).1, fail e)
+                                | div => ((c2 i v).1, div)
+                                | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                                | ok (core.result.Result.Ok a, i_1, v_1) =>
+                                  ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).1,
+                            (match (c2 i v).2 with
+                              | fail e => ((c2 i v).1, fail e)
+                              | div => ((c2 i v).1, div)
+                              | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                              | ok (core.result.Result.Ok a, i_1, v_1) =>
+                                ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).2)).1,
+                    (match _a.2 with
+                      | fail e => (_a.1, fail e)
+                      | div => (_a.1, div)
+                      | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                      | ok (core.result.Result.Ok a, i, v) =>
+                        (_a.1 ++
+                            (match (c2 i v).2 with
+                              | fail e => ((c2 i v).1, fail e)
+                              | div => ((c2 i v).1, div)
+                              | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                              | ok (core.result.Result.Ok a, i_1, v_1) =>
+                                ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).1,
+                          (match (c2 i v).2 with
+                            | fail e => ((c2 i v).1, fail e)
+                            | div => ((c2 i v).1, div)
+                            | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                            | ok (core.result.Result.Ok a, i_1, v_1) =>
+                              ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).2)).2) =
+                  (first ++ second, fail error))
+              reply1))
+          (Eq.refl
+            (first ++
+                (match (second, fail error).2 with
+                  | fail e => ((second, fail error).1, fail e)
+                  | div => ((second, fail error).1, div)
+                  | ok (core.result.Result.Err e, fst, snd) => ((second, fail error).1, ok (core.result.Result.Err e))
+                  | ok (core.result.Result.Ok a, i, v) =>
+                    ((second, fail error).1 ++
+                        (match (c2 i v).2 with
+                          | fail e => ((c2 i v).1, fail e)
+                          | div => ((c2 i v).1, div)
+                          | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                          | ok (core.result.Result.Ok a, i_1, v_1) =>
+                            ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).1,
+                      (match (c2 i v).2 with
+                        | fail e => ((c2 i v).1, fail e)
+                        | div => ((c2 i v).1, div)
+                        | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                        | ok (core.result.Result.Ok a, i_1, v_1) =>
+                          ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).2)).1,
+              (match (second, fail error).2 with
+                | fail e => ((second, fail error).1, fail e)
+                | div => ((second, fail error).1, div)
+                | ok (core.result.Result.Err e, fst, snd) => ((second, fail error).1, ok (core.result.Result.Err e))
+                | ok (core.result.Result.Ok a, i, v) =>
+                  ((second, fail error).1 ++
+                      (match (c2 i v).2 with
+                        | fail e => ((c2 i v).1, fail e)
+                        | div => ((c2 i v).1, div)
+                        | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                        | ok (core.result.Result.Ok a, i_1, v_1) =>
+                          ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).1,
+                    (match (c2 i v).2 with
+                      | fail e => ((c2 i v).1, fail e)
+                      | div => ((c2 i v).1, div)
+                      | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                      | ok (core.result.Result.Ok a, i_1, v_1) =>
+                        ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).2)).2)))))
+theorem NKV_TraceCases.third_abort : ∀ {E : Type} (c0 c1 c2 : Indices → Values → NKV_ParentTrace.Tree E)
+  (first second third : List E) (error : Error) (i0 i1 : Indices) (v0 v1 : Values),
+  c0 NKV_ParentSource.zeroI NKV_ParentSource.zeroV = (first, ok (core.result.Result.Ok (), i0, v0)) →
+    c1 i0 v0 = (second, ok (core.result.Result.Ok (), i1, v1)) →
+      c2 i1 v1 = (third, fail error) → three c0 c1 c2 = (first ++ (second ++ third), fail error) :=
+fun {E} c0 c1 c2 first second third error i0 i1 v0 v1 reply0 reply1 reply2 =>
+  Eq.mpr (id (congrArg (fun _a => _a = (first ++ (second ++ third), fail error)) (three.eq_1 c0 c1 c2)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (next _a fun i v =>
+                next (c1 i v) fun i v => next (c2 i v) fun x x_1 => ([], ok (core.result.Result.Ok ()))) =
+              (first ++ (second ++ third), fail error))
+          reply0))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (first ++
+                      (match _a.2 with
+                        | fail e => (_a.1, fail e)
+                        | div => (_a.1, div)
+                        | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                        | ok (core.result.Result.Ok a, i, v) =>
+                          (_a.1 ++
+                              (match (c2 i v).2 with
+                                | fail e => ((c2 i v).1, fail e)
+                                | div => ((c2 i v).1, div)
+                                | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                                | ok (core.result.Result.Ok a, i_1, v_1) =>
+                                  ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).1,
+                            (match (c2 i v).2 with
+                              | fail e => ((c2 i v).1, fail e)
+                              | div => ((c2 i v).1, div)
+                              | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                              | ok (core.result.Result.Ok a, i_1, v_1) =>
+                                ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).2)).1,
+                    (match _a.2 with
+                      | fail e => (_a.1, fail e)
+                      | div => (_a.1, div)
+                      | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                      | ok (core.result.Result.Ok a, i, v) =>
+                        (_a.1 ++
+                            (match (c2 i v).2 with
+                              | fail e => ((c2 i v).1, fail e)
+                              | div => ((c2 i v).1, div)
+                              | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                              | ok (core.result.Result.Ok a, i_1, v_1) =>
+                                ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).1,
+                          (match (c2 i v).2 with
+                            | fail e => ((c2 i v).1, fail e)
+                            | div => ((c2 i v).1, div)
+                            | ok (core.result.Result.Err e, fst, snd) => ((c2 i v).1, ok (core.result.Result.Err e))
+                            | ok (core.result.Result.Ok a, i_1, v_1) =>
+                              ((c2 i v).1 ++ [], ok (core.result.Result.Ok ()))).2)).2) =
+                  (first ++ (second ++ third), fail error))
+              reply1))
+          (id
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (first ++
+                          (second ++
+                            (match _a.2 with
+                              | fail e => (_a.1, fail e)
+                              | div => (_a.1, div)
+                              | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                              | ok (core.result.Result.Ok a, i, v) => (_a.1 ++ [], ok (core.result.Result.Ok ()))).1),
+                        (match _a.2 with
+                          | fail e => (_a.1, fail e)
+                          | div => (_a.1, div)
+                          | ok (core.result.Result.Err e, fst, snd) => (_a.1, ok (core.result.Result.Err e))
+                          | ok (core.result.Result.Ok a, i, v) => (_a.1 ++ [], ok (core.result.Result.Ok ()))).2) =
+                      (first ++ (second ++ third), fail error))
+                  reply2))
+              (Eq.refl
+                (first ++
+                    (second ++
+                      (match (third, fail error).2 with
+                        | fail e => ((third, fail error).1, fail e)
+                        | div => ((third, fail error).1, div)
+                        | ok (core.result.Result.Err e, fst, snd) =>
+                          ((third, fail error).1, ok (core.result.Result.Err e))
+                        | ok (core.result.Result.Ok a, i, v) =>
+                          ((third, fail error).1 ++ [], ok (core.result.Result.Ok ()))).1),
+                  (match (third, fail error).2 with
+                    | fail e => ((third, fail error).1, fail e)
+                    | div => ((third, fail error).1, div)
+                    | ok (core.result.Result.Err e, fst, snd) => ((third, fail error).1, ok (core.result.Result.Err e))
+                    | ok (core.result.Result.Ok a, i, v) =>
+                      ((third, fail error).1 ++ [], ok (core.result.Result.Ok ()))).2)))))))
+'NKV_TraceCases.third_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TraceCases.all_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TraceCases.first_abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TraceCases.second_abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TraceCases.third_abort' depends on axioms: [propext, Classical.choice, Quot.sound]

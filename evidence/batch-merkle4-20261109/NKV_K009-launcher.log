@@ -1,0 +1,43 @@
+{"attempt": "NKV_K009", "exit_status": 1, "wall_seconds": 58.94461269490421, "peak_rss_kib": "2754492", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+rustlib/src/rust/library/core/src/result.rs:594:18 in function core::result::Result::<(), verifier::Error>::is_ok
+
+Check 631: core::result::Result::<(), verifier::Error>::is_ok.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:594:18 in function core::result::Result::<(), verifier::Error>::is_ok
+
+Check 632: core::result::Result::<(), verifier::Error>::is_ok.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:594:18 in function core::result::Result::<(), verifier::Error>::is_ok
+
+Check 633: core::array::equality::<impl core::cmp::PartialEq<[u8; 32]> for [u8]>::eq.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/equality.rs:49:15 in function core::array::equality::<impl core::cmp::PartialEq<[u8; 32]> for [u8]>::eq
+
+
+SUMMARY:
+ ** 1 of 633 failed (8 unreachable)
+Failed Checks: assertion failed: !exact
+ File: "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109/NKV_workspace/crates/aspis-r1-cost-probe/../../NKV_harness.rs", line 66, in verifier::candidate::NKV_native::values_calls
+
+VERIFICATION:- FAILED
+Verification Time: 56.104206s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKV_native::values_calls
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r57e4f0f0d9064c8bbc6f77e982327028.scope; invocation ID: 955834dd4a184889bfe952102771d023

@@ -1,0 +1,9 @@
+theorem NKV_PaddingValue.source : ∀ (H : Bytes → HashState) (padding : Slice U8) (words : ℕ),
+  (↑padding).length = 8 * words →
+    ∃ ce after,
+      core.slice.Slice.chunks_exact padding 8#usize = ok ce ∧
+        (NKV_ConcreteChildren.ops H).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+            (NKV_PaddingInstall.predicate H) ce () =
+          ok (!MultiproofConePadding.scan words (MultiproofConeCanonical.bytesOf ↑padding), after) :=
+⋯
+'NKV_PaddingValue.source' depends on axioms: [propext, Classical.choice, Quot.sound]

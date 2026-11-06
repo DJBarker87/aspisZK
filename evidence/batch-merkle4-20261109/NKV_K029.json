@@ -1,0 +1,79 @@
+{
+  "attempt": "NKV_K029",
+  "kind": "kani",
+  "module": "key_entry",
+  "sources": [
+    "NKV_gate.py",
+    "NKV_harness.rs",
+    "NKV_KMX.patch",
+    "NKV_NHR_stage.py",
+    "NKV_SUPPLEMENT.json",
+    "NKV_FROZEN_PAYLOAD.json.xz",
+    "NKV_FROZEN_PAYLOAD.json.sha256",
+    "NKV_STAGING_MANIFEST.json",
+    "NKV_fragments.rs",
+    "NKV_FRAGMENT_ASSOCIATION.json"
+  ],
+  "upload": [
+    "NKV_gate.py",
+    "NKV_harness.rs",
+    "NKV_KMX.patch",
+    "NKV_NHR_stage.py",
+    "NKV_SUPPLEMENT.json",
+    "NKV_FROZEN_PAYLOAD.json.xz",
+    "NKV_FROZEN_PAYLOAD.json.sha256",
+    "NKV_STAGING_MANIFEST.json",
+    "NKV_fragments.rs",
+    "NKV_FRAGMENT_ASSOCIATION.json"
+  ],
+  "command": [
+    "python3",
+    "NKV_gate.py",
+    "NKV_K029.json"
+  ],
+  "collect": [
+    "NKV_K029_validation"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109/NKV_target",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1 --cfg NKV_copy_control"
+  },
+  "expected_failure": true,
+  "expected_time": "optimized compilation then actual post-verifier Result control; arbitrary full child footprint",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109/NKV_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109/NKV_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::candidate::NKV_native::key_entry",
+    "--output-format",
+    "regular"
+  ],
+  "inputs_expected": {
+    "NKV_harness.rs": "11737755065cf0926032feae4ea80d3e11495b906fbe25bfd4d9655375130ec9",
+    "NKV_fragments.rs": "f7e24e70420a226dfbc8b5d278d19cd87c4c673489fb69111d248a6c8ef68d4c",
+    "NKV_FRAGMENT_ASSOCIATION.json": "9b7329d4ada8d1315aa07d0f5e44289446dcc7f8145718b102b837dc6d6ec737"
+  }
+}

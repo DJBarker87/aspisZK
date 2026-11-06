@@ -1,0 +1,44 @@
+NKV_ParentSource.lean:67:1: error: `simp` made no progress
+NKV_ParentSource.lean:66:12: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [h0̵,̵h̵1, ̲h2, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_ParentSource.lean:66:15: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, ̲h1̵,̵h̵2, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_ParentSource.lean:66:18: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, ̲h1,h̵2̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_ParentSource.lean:66:21: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵1̵,̵h̵2̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKV_ParentSource.values : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (hash : H) (proof : Slice U8) (queries : Std.Array U32 22#usize)
+  (roots : Std.Array (Std.Array U8 32#usize) 3#usize) (batch : Usize),
+  ↑batch < 2 →
+    observe
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (AspisR1.Port3_BatchStd.install base) D
+          proof queries roots batch hash) =
+      observe
+        (NKV_FRef.verifier.candidate.batch_merkle_values (AspisR1.Port3_BatchStd.install base) D proof queries roots
+          batch hash) :=
+⋯
+'NKV_ParentSource.next_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentSource.next_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentSource.next_question' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentSource.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

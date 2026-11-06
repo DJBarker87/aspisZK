@@ -1,0 +1,75 @@
+NKV_LoopTransport.lean:77:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d
+    p
+in the target expression
+  mapResult (mapFlow eraseOut)
+      (match (i, v, d, p) with
+      | (i, v, d, p) =>
+        NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d p) =
+    match (i, v, d, p) with
+    | (i, v, d, p) =>
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i
+        v d p
+
+ops : AspisR1.Port3_NativeBatchBody.Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+proof : Slice U8
+root : Std.Array U8 32#usize
+tree : Usize
+hash : H
+lo n slot : Usize
+keys : Std.Array U64 16#usize
+s : State
+out : Result Out
+walk :
+  Walk
+    (fun x =>
+      match x with
+      | (i, v, d, p) =>
+        NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d p)
+    s out
+i : Indices
+v : Values
+d p : Usize
+⊢ mapResult (mapFlow eraseOut)
+      (match (i, v, d, p) with
+      | (i, v, d, p) =>
+        NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d p) =
+    match (i, v, d, p) with
+    | (i, v, d, p) =>
+      AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i
+        v d p
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+theorem NKV_LoopTransport.source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n slot : Usize) (keys : Std.Array U64 16#usize) (s : State) (out : Result Out),
+  Walk
+      (fun x =>
+        match x with
+        | (i, v, d, p) =>
+          NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d p)
+      s out →
+    loop
+        (fun x =>
+          match x with
+          | (i, v, d, p) =>
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot
+              keys i v d p)
+        s =
+      mapResult eraseOut out :=
+⋯
+'NKV_LoopTransport.execute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_LoopTransport.transport' does not depend on any axioms
+'NKV_LoopTransport.erase_flow' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_LoopTransport.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

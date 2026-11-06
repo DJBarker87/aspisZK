@@ -1,0 +1,114 @@
+NKV_ParentSource.lean:68:1: error: 'change' tactic failed, pattern
+  observe
+      (next ?m.37 fun i v =>
+        next (?m.50 i v) fun i_1 v_1 => next (?m.51 i v i_1 v_1) fun x x_1 => ok (core.result.Result.Ok ())) =
+    observe
+      (next ?m.52 fun i v =>
+        next (?m.65 i v) fun i_1 v_1 => next (?m.66 i v i_1 v_1) fun x x_1 => ok (core.result.Result.Ok ()))
+is not definitionally equal to target
+  (observe do
+      let root0 ← roots.index_usize 0#usize
+      let root1 ← roots.index_usize 1#usize
+      let root2 ← roots.index_usize 2#usize
+      let (r, idx1, val1) ←
+        AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof
+            queries root0 batch 0#usize (Array.repeat 16#usize 0#u32)
+            (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) hash
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r1, idx2, val2) ←
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof
+                queries root1 batch 1#usize idx1 val1 hash
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let (r2, _, _) ←
+                AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D
+                    proof queries root2 batch 2#usize idx2 val2 hash
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    observe do
+      let root0 ← roots.index_usize 0#usize
+      let root1 ← roots.index_usize 1#usize
+      let root2 ← roots.index_usize 2#usize
+      let (r, idx1, val1) ←
+        NKV_FRef.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof queries root0 batch 0#usize
+            (Array.repeat 16#usize 0#u32) (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) hash
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r1, idx2, val2) ←
+            NKV_FRef.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof queries root1 batch
+                1#usize idx1 val1 hash
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let (r2, _, _) ←
+                NKV_FRef.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof queries root2 batch
+                    2#usize idx2 val2 hash
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual
+NKV_ParentSource.lean:66:12: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [h0̵,̵h̵1, ̲h2, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_ParentSource.lean:66:15: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, ̲h1̵,̵h̵2, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_ParentSource.lean:66:18: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, ̲h1,h̵2̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKV_ParentSource.lean:66:21: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵1̵,̵h̵2̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKV_ParentSource.values : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (hash : H) (proof : Slice U8) (queries : Std.Array U32 22#usize)
+  (roots : Std.Array (Std.Array U8 32#usize) 3#usize) (batch : Usize),
+  ↑batch < 2 →
+    observe
+        (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_merkle_values (AspisR1.Port3_BatchStd.install base) D
+          proof queries roots batch hash) =
+      observe
+        (NKV_FRef.verifier.candidate.batch_merkle_values (AspisR1.Port3_BatchStd.install base) D proof queries roots
+          batch hash) :=
+⋯
+'NKV_ParentSource.next_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentSource.next_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentSource.next_question' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentSource.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

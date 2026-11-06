@@ -1,0 +1,48 @@
+theorem NKV_TreeErrors.classified : ∀ (H : Bytes → HashState) (proof : Slice U8) (raw : Std.Array U32 22#usize)
+  (root : Std.Array U8 32#usize) (batch kind : Usize),
+  ↑batch < 2 →
+    ↑kind < 3 →
+      (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+        ∀ (idx : Indices) (val : Values),
+          Allowed
+            (NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+              raw root batch kind idx val ()) :=
+⋯
+theorem NKV_TreeErrors.complete : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Std.Array U8 32#usize) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : Indices) (val : Values),
+                  ∃ r i v,
+                    NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                          proof raw root batch kind idx val () =
+                        ok (r, i, v) ∧
+                      NKV_ErrorKinds.Allowed r :=
+⋯
+theorem NKV_TreeErrors.error_iff : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Std.Array U8 32#usize) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : Indices) (val : Values),
+                  reject
+                        (Port3_NativeBatchBody.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H)
+                          (NKV_ConcreteChildren.digest H) proof raw root batch kind idx val ()) =
+                      fail Error.panic ↔
+                    ∃ e i v,
+                      (e = verifier.Error.Parse ∨ e = verifier.Error.Merkle) ∧
+                        NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H)
+                            (NKV_ConcreteChildren.digest H) proof raw root batch kind idx val () =
+                          ok (core.result.Result.Err e, i, v) :=
+⋯
+'NKV_TreeErrors.returned_allowed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeErrors.classified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeErrors.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeErrors.error_iff' depends on axioms: [propext, Classical.choice, Quot.sound]

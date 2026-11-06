@@ -1,0 +1,63 @@
+{"attempt": "NKV_K025", "exit_status": 0, "wall_seconds": 1.796272445935756, "peak_rss_kib": "208132", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+efix_size thread 0
+Runtime Symex: 0.00421345s
+size of program expression: 254 steps
+slicing removed 116 assignments
+Generated 4 VCC(s), 4 remaining after simplification
+Runtime Postprocess Equation: 6.7449e-05s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.000618077s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 7.485e-06s
+Solving with CaDiCaL 2.0.0
+343 variables, 568 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 7.1657e-05s
+Runtime decision procedure: 0.000747186s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+344 variables, 569 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 4.6045e-05s
+Runtime decision procedure: 6.5687e-05s
+
+RESULTS:
+Check 1: verifier::candidate::NKV_native::prefix_size_fragment.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to multiply with overflow"
+	 - Location: NKV_workspace/crates/aspis-r1-cost-probe/../../NKV_fragments.rs:7:46 in function verifier::candidate::NKV_native::prefix_size_fragment
+
+Check 2: verifier::candidate::NKV_native::prefix_size.assertion.1
+	 - Status: SUCCESS
+	 - Description: "assertion failed: size == count << 5"
+	 - Location: NKV_workspace/crates/aspis-r1-cost-probe/../../NKV_harness.rs:125:26 in function verifier::candidate::NKV_native::prefix_size
+
+Check 3: verifier::candidate::NKV_native::prefix_size.assertion.2
+	 - Status: SUCCESS
+	 - Description: "assertion failed: size <= 5504 && size <= 9216"
+	 - Location: NKV_workspace/crates/aspis-r1-cost-probe/../../NKV_harness.rs:124:39 in function verifier::candidate::NKV_native::prefix_size
+
+
+SUMMARY:
+ ** 0 of 3 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.024766045s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r3e9eb583aea344f3abc6a48d67814840.scope; invocation ID: d5790f6dd1fe48a3965a10394cd2fae5

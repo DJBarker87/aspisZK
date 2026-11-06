@@ -1,0 +1,53 @@
+{"attempt": "NKV_L017", "exit_status": 1, "wall_seconds": 4.78245312999934, "peak_rss_kib": "4405048", "swaps": "0", "print_axioms": ["'NKV_TreeSource.boundary' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_TreeSource.bind_observed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_TreeSource.prefix_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_TreeSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_TreeSource.lean:12:4: warning: Variable name `i` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NKV_TreeSource.lean:12:6: warning: Variable name `v` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NKV_TreeSource.lean:89:11: error: Tactic `decide` failed for proposition
+  ↑(Usize.wrapping_sub 10#usize 0#usize) ≤ 12
+because its `Decidable` instance
+  (↑(Usize.wrapping_sub 10#usize 0#usize)).decLe 12
+did not reduce t
+...
+cLe`, reduction got stuck at the `Decidable` instance
+  match (↑(Usize.wrapping_sub 10#usize 0#usize)).ble 12, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+NKV_TreeSource.lean:93:11: error: Tactic `decide` failed for proposition
+  ↑(Usize.wrapping_sub 22#usize 10#usize) ≤ 12
+because its `Decidable` instance
+  (↑(Usize.wrapping_sub 22#usize 10#usize)).decLe 12
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match (↑(Usize.wrapping_sub 22#usize 10#usize)).ble 12, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+theorem NKV_TreeSource.source : ∀ (base : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (hash : H) (proof : Slice U8) (queries : Std.Array U32 22#usize)
+  (root : Std.Array U8 32#usize) (batch tree : Usize),
+  ↑batch < 2 →
+    ∀ (idx : Indices) (val : Values),
+      reject
+          (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof
+            queries root batch tree idx val hash) =
+        reject
+          (NKV_FRef.verifier.candidate.batch_tree (AspisR1.Port3_BatchStd.install base) D proof queries root batch tree
+            idx val hash) :=
+⋯
+'NKV_TreeSource.boundary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.bind_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.prefix_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_TreeSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4a397070f047445eafc2fda42e23f551.scope; invocation ID: 8ad89a407b3642f08182d2fe474ff164

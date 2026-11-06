@@ -1,0 +1,37 @@
+{"attempt": "NKV_L039", "exit_status": 1, "wall_seconds": 7.229210251010954, "peak_rss_kib": "4397572", "swaps": "0", "print_axioms": ["'NKV_ParentTrace.next_observed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_ParentTrace.next_congr' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_ParentTrace.three_congr' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_ParentTrace.first_error' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_ParentTrace.second_error' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NKV_ParentTrace.lean:78:1: error: No goals to be solved
+theorem NKV_ParentTrace.three_congr : ∀ {E : Type} (a0 a1 a2 b0 b1 b2 : Indices → Values → Tree E),
+  (∀ (i : Indices) (v : Values), treeObserve (a0 i v) = treeObserve (b0 i v)) →
+    (∀ (i : Indices) (v : Values), treeObserve (a1 i v) = treeObserve (b1 i v)) →
+      (∀ (i : Indices) (v : Values), treeObserve (a2 i v) = treeObserve (b2 i v)) →
+        observe (three a0 a1 a2) = observe (three b0 b1 b2) :=
+⋯
+theorem NKV_ParentTrace.first_error : ∀ {E : Type} (c0 c1 c2 : Indices → Values → Tree E) (events : List E)
+  (error : AspisR1Stage2.verifier.Error) (idx : Indices) (val : Values),
+  c0 zeroI zeroV = (events, ok (core.result.Result.E
+...
+NKV_ParentTrace.lean:78:1: error: No goals to be solved
+theorem NKV_ParentTrace.three_congr : ∀ {E : Type} (a0 a1 a2 b0 b1 b2 : Indices → Values → Tree E),
+  (∀ (i : Indices) (v : Values), treeObserve (a0 i v) = treeObserve (b0 i v)) →
+    (∀ (i : Indices) (v : Values), treeObserve (a1 i v) = treeObserve (b1 i v)) →
+      (∀ (i : Indices) (v : Values), treeObserve (a2 i v) = treeObserve (b2 i v)) →
+        observe (three a0 a1 a2) = observe (three b0 b1 b2) :=
+⋯
+theorem NKV_ParentTrace.first_error : ∀ {E : Type} (c0 c1 c2 : Indices → Values → Tree E) (events : List E)
+  (error : AspisR1Stage2.verifier.Error) (idx : Indices) (val : Values),
+  c0 zeroI zeroV = (events, ok (core.result.Result.Err error, idx, val)) →
+    three c0 c1 c2 = (events, ok (core.result.Result.Err error)) :=
+⋯
+theorem NKV_ParentTrace.second_error : ∀ {E : Type} (c0 c1 c2 : Indices → Values → Tree E) (first second : List E)
+  (error : AspisR1Stage2.verifier.Error) (i0 i1 : Indices) (v0 v1 : Values),
+  c0 zeroI zeroV = (first, ok (core.result.Result.Ok (), i0, v0)) →
+    c1 i0 v0 = (second, ok (core.result.Result.Err error, i1, v1)) →
+      three c0 c1 c2 = (first ++ second, ok (core.result.Result.Err error)) :=
+⋯
+'NKV_ParentTrace.next_observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentTrace.next_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentTrace.three_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentTrace.first_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_ParentTrace.second_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rbfa57c599d834ba5a99ea06d276d0e9a.scope; invocation ID: 636dc96bfa204047ab9e5606fb09f99c

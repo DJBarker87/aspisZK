@@ -1,0 +1,32 @@
+{"attempt": "NKV_L012", "exit_status": 0, "wall_seconds": 5.401655270019546, "peak_rss_kib": "4413536", "swaps": "0", "print_axioms": ["'NKV_BoundedLoop.finite' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_BoundedLoop.classified' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_BoundedLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_BoundedLoop.source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n slot : Usize) (keys : Std.Array U64 16#usize),
+  ↑n ≤ 12 →
+    ∀ (i : Indices) (v : Values) (d pos : Usize),
+      ∃ out,
+        Valid out ∧
+          NKV_FRef.verifier.candidate.batch_tree_loop ops D proof root tree i v hash lo n slot keys d pos = out ∧
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop ops D proof root tree i v hash lo n slot
+                keys d pos =
+              mapResult eraseOut out :=
+⋯
+'NKV_BoundedLoop.finite' depends on axioms: [p
+...
+theorem NKV_BoundedLoop.source : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n slot : Usize) (keys : Std.Array U64 16#usize),
+  ↑n ≤ 12 →
+    ∀ (i : Indices) (v : Values) (d pos : Usize),
+      ∃ out,
+        Valid out ∧
+          NKV_FRef.verifier.candidate.batch_tree_loop ops D proof root tree i v hash lo n slot keys d pos = out ∧
+            AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree_loop ops D proof root tree i v hash lo n slot
+                keys d pos =
+              mapResult eraseOut out :=
+⋯
+'NKV_BoundedLoop.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_BoundedLoop.classified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_BoundedLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc93cf034e410437287cc1d0eb499a35b.scope; invocation ID: 63a76b45b34b4550a0779eac97f03dbe

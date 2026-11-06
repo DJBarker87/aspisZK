@@ -1,0 +1,43 @@
+{"attempt": "NKV_K020", "exit_status": 1, "wall_seconds": 12.887671124190092, "peak_rss_kib": "611868", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+tion: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs:565:9 in function core::mem::MaybeUninit::<[u8; 32]>::write
+
+Check 607: core::mem::MaybeUninit::<[u8; 32]>::write.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs:565:9 in function core::mem::MaybeUninit::<[u8; 32]>::write
+
+Check 608: core::mem::MaybeUninit::<[u8; 32]>::write.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs:565:9 in function core::mem::MaybeUninit::<[u8; 32]>::write
+
+Check 609: core::slice::<impl [u8]>::as_array::<32>.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs:857:13 in function core::slice::<impl [u8]>::as_array::<32>
+
+
+SUMMARY:
+ ** 1 of 609 failed (12 unreachable)
+Failed Checks: assertion failed: !exact
+ File: "/home/dombarker/project-offloads/codex-cx-batch-merkle4-20261109/NKV_workspace/crates/aspis-r1-cost-probe/../../NKV_harness.rs", line 117, in verifier::candidate::NKV_native::batch_calls
+
+VERIFICATION:- FAILED
+Verification Time: 10.17242s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKV_native::batch_calls
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rdd05416bad224c10b1cfd6ad9ec5d18c.scope; invocation ID: ee4ce94a0afb45af8c473beba661fac1

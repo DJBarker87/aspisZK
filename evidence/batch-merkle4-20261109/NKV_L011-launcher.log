@@ -1,0 +1,28 @@
+{"attempt": "NKV_L011", "exit_status": 0, "wall_seconds": 5.232320373877883, "peak_rss_kib": "4434852", "swaps": "0", "print_axioms": ["'NKV_Progress.continues' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_Progress.done_classified' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_Progress.continues : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n slot : Usize) (keys : Std.Array U64 16#usize) (i ai : Indices) (v av : Values) (d pos ad apos : Usize),
+  NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d pos =
+      ok (cont (ai, av, ad, apos)) →
+    apos = pos.wrapping_add 1#usize ∧ pos < n :=
+⋯
+theorem NKV_Progress.done_classified : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize
+...
+theorem NKV_Progress.continues : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n slot : Usize) (keys : Std.Array U64 16#usize) (i ai : Indices) (v av : Values) (d pos ad apos : Usize),
+  NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d pos =
+      ok (cont (ai, av, ad, apos)) →
+    apos = pos.wrapping_add 1#usize ∧ pos < n :=
+⋯
+theorem NKV_Progress.done_classified : ∀ (ops : AspisR1.Port3_NativeBatchBody.Ops) {H : Type}
+  (D : aspis_core.digest.Digest32 H) (proof : Slice U8) (root : Std.Array U8 32#usize) (tree : Usize) (hash : H)
+  (lo n slot : Usize) (keys : Std.Array U64 16#usize) (i : Indices) (v : Values) (d pos : Usize) (out : Out),
+  NKV_FRef.verifier.candidate.batch_tree_loop.body ops D proof root tree hash lo n slot keys i v d pos = ok (done out) →
+    WellClassified out :=
+⋯
+'NKV_Progress.continues' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_Progress.done_classified' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf713ad7836174b2e96c0fd8de1aa9b03.scope; invocation ID: a11cd626672345c081dcfb7ab2f6a5ee

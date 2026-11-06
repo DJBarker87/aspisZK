@@ -1,0 +1,24 @@
+theorem NKV_CountInvocation.source : ∀ (s : reference.Scratch),
+  ↑s.n ≤ 16 →
+    ∃ out,
+      NKV_ConcreteChildren.count Port3_NativeBatchBody.multiproof.Arity.Two (front s) = ok out ∧
+        Option.map (fun x => ↑x) out =
+          if wellFormed (NJV_UnitDomain.keys s) then some (nodeCount 18 (NJV_UnitDomain.keys s)) else none :=
+⋯
+theorem NKV_CountInvocation.present : ∀ (s : reference.Scratch),
+  ↑s.n ≤ 16 →
+    wellFormed (NJV_UnitDomain.keys s) →
+      ∃ count,
+        NKV_ConcreteChildren.count Port3_NativeBatchBody.multiproof.Arity.Two (front s) = ok (some count) ∧
+          ↑count = nodeCount 18 (NJV_UnitDomain.keys s) :=
+⋯
+theorem NKV_CountInvocation.missing : ∀ (s : reference.Scratch),
+  ↑s.n ≤ 16 →
+    ¬wellFormed (NJV_UnitDomain.keys s) →
+      NKV_ConcreteChildren.count Port3_NativeBatchBody.multiproof.Arity.Two (front s) = ok none :=
+⋯
+'NKV_CountInvocation.read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_CountInvocation.keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_CountInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_CountInvocation.present' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_CountInvocation.missing' depends on axioms: [propext, Classical.choice, Quot.sound]

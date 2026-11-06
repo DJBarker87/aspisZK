@@ -1,0 +1,6 @@
+// Parent probes call the actual frozen functions directly.
+// Segment starts at the returned Option of the SAME node_count call.
+fn count_return_fragment(counted:Option<usize>)->Result<usize,Error>{
+ let count=counted.ok_or(Error::Merkle)?;
+ Ok(count)
+}

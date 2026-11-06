@@ -1,0 +1,37 @@
+{"attempt": "NKV_L076", "exit_status": 0, "wall_seconds": 13.002704517915845, "peak_rss_kib": "6045964", "swaps": "0", "print_axioms": ["'NKV_TreeBuild.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_TreeBuild.source : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Std.Array U8 32#usize) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : Indices) (val : Values),
+                  ∃ keys,
+                    NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                        proof raw root batch kind idx val () =
+                      NKV_LeafTravers
+...
+theorem NKV_TreeBuild.source : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Std.Array U8 32#usize) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : Indices) (val : Values),
+                  ∃ keys,
+                    NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                        proof raw root batch kind idx val () =
+                      NKV_LeafTraversal.finish H proof root kind (NKB_KeyStream.lo ↑batch) (NKB_KeyStream.count ↑batch)
+                          ((Usize.wrapping_mul 3#usize batch).wrapping_add kind) keys
+                          (NKV_LeafBuild.build H parsed (Port4B_KeyInstall.queries raw) (↑kind)
+                              (OraclePortFrozenOrder.sortedPositions (Port4B_KeyInstall.queries raw) ↑batch ↑kind)
+                              (NJV_EntryABI.initial idx val 0#usize)).2 >>=
+                        returned :=
+⋯
+'NKV_TreeBuild.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r65306322f20643a8873954fef6e1c6db.scope; invocation ID: d71cbc7daff348179ffac15d83d6f003

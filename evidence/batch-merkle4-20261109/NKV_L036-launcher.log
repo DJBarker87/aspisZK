@@ -1,0 +1,42 @@
+{"attempt": "NKV_L036", "exit_status": 0, "wall_seconds": 13.778053501155227, "peak_rss_kib": "6045720", "swaps": "0", "print_axioms": ["'NKV_LeafInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_LeafInvocation.source : ∀ (H : Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch selected : ℕ) (kind lo n slot pos : Usize) (root : Std.Array U8 32#usize)
+          (keys : Std.Array U64 16#usize) (s : reference.Scratch),
+          selected ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind →
+            (↑lo = if batch = 0 then 0 else 10) →
+              pos < n →
+                ↑s.n < 16 →
+                  keys.index_usize pos = ok (MultiproofConeSortOrder.packed q batch (↑kind) selected) →
+                
+...
+lected) →
+                    ∀ (before : Log),
+                      ∃ view,
+                        (NKV_ConcreteChildren.ops H).op2 proof
+                              (Port4B_NativeLeaf.openingIndex lo
+                                (MultiproofConeSortOrder.packed q batch (↑kind) selected)) =
+                            ok view ∧
+                          (↑view).length = 832 ∧
+                            flatten (Port4B_LeafCode.input kind view) =
+                                OraclePortSelectedDraft.leaf parsed (↑kind) selected ∧
+                              run (NKV_ConcreteChildren.digest H) () (Port4B_LeafCode.code kind view) before =
+                                  ok
+                                    (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)),
+                                      before ++
+                                        [(Port4B_LeafCode.input kind view,
+                                            encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)))]) ∧
+                                NKV_FRef.verifier.candidate.batch_tree_loop.body (NKV_ConcreteChildren.ops H)
+                                    (NKV_ConcreteChildren.digest H) proof root kind () lo n slot keys s.idx s.val s.n
+                                    pos =
+                                  do
+                                  let out ←
+                                    reference.leaf_step s (MultiproofConeLeafFold.key q (↑kind) selected)
+                                        (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)))
+                                  ok (NKV_LeafStep.project s (pos.wrapping_add 1#usize) out) :=
+⋯
+'NKV_LeafInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6d79dacee8a64f08b9f63af084e4e29b.scope; invocation ID: ffad22dd4ce447708815b2dc5bb39490

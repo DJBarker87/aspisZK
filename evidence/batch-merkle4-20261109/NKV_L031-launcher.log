@@ -1,0 +1,69 @@
+{"attempt": "NKV_L031", "exit_status": 1, "wall_seconds": 13.046981479972601, "peak_rss_kib": "5854312", "swaps": "0", "print_axioms": ["'NKV_LeafStep.project_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_LeafStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_LeafStep.lean:20:6: error: Ambiguous term
+  aspis_core.digest.Digest32
+Possible interpretations:
+  MultiproofConeRef.aspis_core.digest.Digest32 X : Type
+  
+  AspisR1Stage2.aspis_core.digest.Digest32 X : Type
+NKV_LeafStep.lean:31:61: error: unsolved goals
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : sorry
+hash : X
+proof : Slice U8
+root : Std.Array U8 32#usize
+tree lo n slot pos : Usize
+keys : Std.Array U64 16#usize
+s : reference.Scratch
+key : U64
+view : Slice U8
+leaf : Std.Array U8 32#usize
+more : pos < n
+room : ↑s.n < 16
+keyRead : keys.index_usize pos = ok key
+viewRead : base.op2 proof (Port4B_NativeLeaf.openingIndex lo key) = ok view
+leafRead : base.op6 sorry hash tree view = ok leaf
+⊢
+...
+32 X : Type
+NKV_LeafStep.lean:31:61: error: unsolved goals
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : sorry
+hash : X
+proof : Slice U8
+root : Std.Array U8 32#usize
+tree lo n slot pos : Usize
+keys : Std.Array U64 16#usize
+s : reference.Scratch
+key : U64
+view : Slice U8
+leaf : Std.Array U8 32#usize
+more : pos < n
+room : ↑s.n < 16
+keyRead : keys.index_usize pos = ok key
+viewRead : base.op2 proof (Port4B_NativeLeaf.openingIndex lo key) = ok view
+leafRead : base.op6 sorry hash tree view = ok leaf
+⊢ NKV_FRef.verifier.candidate.batch_tree_loop.body (Port3_BatchStd.install base) sorry proof root tree hash lo n slot
+      keys s.idx s.val s.n pos =
+    do
+    let out ← reference.leaf_step s (Port4B_NativeLeaf.decodedIndex key) leaf
+    ok (project s (pos.wrapping_add 1#usize) out)
+theorem NKV_LeafStep.source : ∀ (base : Port3_NativeBatchBody.Ops) {X : Type} (D : sorry) (hash : X) (proof : Slice U8)
+  (root : Std.Array U8 32#usize) (tree lo n slot pos : Usize) (keys : Std.Array U64 16#usize) (s : reference.Scratch)
+  (key : U64) (view : Slice U8) (leaf : Std.Array U8 32#usize),
+  pos < n →
+    ↑s.n < 16 →
+      keys.index_usize pos = ok key →
+        base.op2 proof (Port4B_NativeLeaf.openingIndex lo key) = ok view →
+          base.op6 sorry hash tree view = ok leaf →
+            NKV_FRef.verifier.candidate.batch_tree_loop.body (Port3_BatchStd.install base) sorry proof root tree hash lo
+                n slot keys s.idx s.val s.n pos =
+              do
+              let out ← reference.leaf_step s (Port4B_NativeLeaf.decodedIndex key) leaf
+              ok (project s (pos.wrapping_add 1#usize) out) :=
+⋯
+'NKV_LeafStep.project_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_LeafStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r56ff6f64c5ee44daa3fe60f092f03256.scope; invocation ID: e28bbfd9455f4abfb8e6ad243fc34c59

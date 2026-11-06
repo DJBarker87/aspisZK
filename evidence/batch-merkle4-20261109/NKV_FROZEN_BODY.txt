@@ -1,0 +1,51 @@
+156: fn batch_merkle<H: Digest32>(proof: &[u8], p: &Prepared, folded_root: &[u8; 32], batch: usize, hash: H) -> Result<(), Error> {
+157:     let [root0, root1] = p.roots;
+158:     batch_merkle_values(proof, p.queries, [root0, root1, *folded_root], batch, hash)
+159: }
+160: 
+161: #[inline(always)]
+162: fn batch_merkle_values<H: Digest32>(proof: &[u8], queries: [u32; 22], roots: [[u8; 32]; 3], batch: usize, hash: H) -> Result<(), Error> {
+163:     let mut idx = [0u32; multiproof::MAX_BATCH];
+164:     let mut val = [[0u8; 32]; multiproof::MAX_BATCH];
+165:     let [root0, root1, root2] = roots;
+166:     batch_tree(proof, queries, root0, batch, 0, &mut idx, &mut val, hash)?;
+167:     batch_tree(proof, queries, root1, batch, 1, &mut idx, &mut val, hash)?;
+168:     batch_tree(proof, queries, root2, batch, 2, &mut idx, &mut val, hash)?;
+169:     Ok(())
+170: }
+171: 
+172: #[inline(always)]
+173: fn batch_tree<H: Digest32>(proof: &[u8], queries: [u32; 22], root: [u8; 32], batch: usize, tree: usize, idx: &mut [u32; multiproof::MAX_BATCH], val: &mut [[u8; 32]; multiproof::MAX_BATCH], hash: H) -> Result<(), Error> {
+174:     let (lo, hi) = if batch == 0 { (0, SPLIT) } else { (SPLIT, 22) };
+175:     let n = hi - lo;
+176:     let s = 3 * batch + tree;
+177:     let keys = sort_batch_keys(batch_keys(&queries, lo, n, tree), n);
+178:     let mut d = 0;
+179:     let mut key_position = 0;
+180:     while key_position < n {
+181:         let key = batch_key_at(&keys, key_position);
+182:         key_position += 1;
+183:         let index = (key >> 8) as u32;
+184:         let q = opening(proof, lo + (key & 0xff) as usize);
+185:         let leaf = batch_leaf(hash, tree, q);
+186:         if d > 0 && same_batch_index(idx, d - 1, index) {
+187:             if !same_batch_leaf(val, d - 1, leaf) {
+188:                 return Err(Error::Merkle);
+189:             }
+190:             continue;
+191:         }
+192:         idx[d] = index;
+193:         val[d] = leaf;
+194:         d += 1;
+195:     }
+196:     let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;
+197:     let nodes = slot(proof, s);
+198:     // Padding is whole 32-byte words: scan it 8 bytes at a time.
+199:     if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {
+200:         return Err(Error::Parse);
+201:     }
+202:     if !multiproof::verify_in_place(hash, Arity::Two, &root, idx, val, d, &nodes[..32 * count]) {
+203:         return Err(Error::Merkle);
+204:     }
+205:     Ok(())
+206: }

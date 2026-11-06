@@ -1,0 +1,25 @@
+theorem NKV_SlotInvocation.capacity : ∀ (slot : Usize),
+  ↑slot < 6 →
+    ∃ cap,
+      (Array.make 6#usize [146#usize, 146#usize, 128#usize, 172#usize, 172#usize, 150#usize] ⋯).index_usize slot =
+          ok cap ∧
+        ↑cap = OraclePortSelectedDraft.capacity ↑slot ∧ ↑cap ≤ 172 :=
+⋯
+theorem NKV_SlotInvocation.physical : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (batch kind : ℕ),
+          batch < 2 →
+            kind < 3 →
+              ∀ (slot : Usize),
+                ↑slot = 3 * batch + kind →
+                  ∃ view,
+                    (NKV_ConcreteChildren.ops H).op3 proof slot = ok view ∧
+                      (↑view).length = 32 * OraclePortSelectedDraft.capacity (3 * batch + kind) ∧
+                        MultiproofConeCanonical.bytesOf ↑view =
+                          OraclePortCompactDraft.slice p.wire (OraclePortSelectedDraft.slotStart (3 * batch + kind))
+                            (32 * OraclePortSelectedDraft.capacity (3 * batch + kind)) :=
+⋯
+'NKV_SlotInvocation.capacity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_SlotInvocation.physical' depends on axioms: [propext, Classical.choice, Quot.sound]

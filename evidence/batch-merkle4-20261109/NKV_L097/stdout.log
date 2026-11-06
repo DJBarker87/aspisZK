@@ -1,0 +1,22 @@
+theorem NKV_AbortPrefix.tx2 : ∀ (H : Bytes → State) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (batch kind : ℕ) (before after : reference.Scratch) (slot : Slice U8),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind) before).2 = ok (true, after) →
+      32 * OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after) ≤ (↑slot).length →
+        ∀ (root : Std.Array U8 32#usize) (events : List (NJP_RowModel.Request × NJP_RowModel.Digest))
+          (request : NJP_RowModel.Request) (state : NJP_RowModel.Scratch),
+          NJV_AbortEntry.Invocation (NJP_RequestTransport.hash (rawOracle H)) root
+              (MultiproofConeSlotTail.prefixNodes slot (OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after)))
+              (NJV_EntryABI.initial after.idx after.val after.n) events request state →
+            have leaf := (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind) before).1;
+            have physical :=
+              MultiproofConeSlotTail.prefixNodes slot (OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after));
+            have tail := (eval H (NJV_TX2Returning.endpoint root physical after.idx after.val after.n)).1;
+            List.take (List.length leaf + events.length) (leaf ++ tail) =
+                leaf ++ NJV_AdoptedObservation.history events ∧
+              Option.map Prod.fst (leaf ++ tail)[List.length leaf + events.length]? =
+                some (flatten (NJP_RequestTransport.address request)) :=
+⋯
+'NKV_AbortPrefix.take_prefix' does not depend on any axioms
+'NKV_AbortPrefix.pending' depends on axioms: [propext]
+'NKV_AbortPrefix.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]

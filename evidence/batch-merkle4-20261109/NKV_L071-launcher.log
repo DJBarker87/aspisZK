@@ -1,0 +1,59 @@
+{"attempt": "NKV_L071", "exit_status": 1, "wall_seconds": 14.728537308052182, "peak_rss_kib": "6014404", "swaps": "0", "print_axioms": ["'NKV_TreeEntry.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKV_TreeEntry.lean:23:102: error: unsolved goals
+case inl
+H : Bytes → HashState
+proof : Slice U8
+raw : Std.Array U32 22#usize
+root : Std.Array U8 32#usize
+kind : Usize
+hk : ↑kind < 3
+canonical : ∀ j < 22, ↑(↑raw)[j]! < 262144
+idx : Indices
+val : Values
+keys : Std.Array U64 16#usize
+notzero : ¬1#usize = 0#usize
+natnz : ¬1 = 0
+zeroVal : ↑0#usize = 0
+oneVal : ↑1#usize = 1
+hb : ↑0#usize < 2
+run :
+  (do
+      let keys ← (NKV_ConcreteChildren.ops H).op4 raw (NKB_KeyStream.lo ↑0#usize) (NKB_KeyStream.count ↑0#usize) kind
+      (NKV_ConcreteChildren.ops H).op5 keys (NKB_KeyStream.count ↑0#usize)) =
+    ok keys
+length :
+  (OraclePortFrozenOrder.sortedPositions (Port4B_KeyInstall.queries raw) ↑0#usize
+...
+>=
+      returned
+NKV_TreeEntry.lean:42:93: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [NKV_ConcreteChildren.ops, ̲lift, ̲bind_tc_ok, ̲↓reduceIte, ̲Aeneas.Std.uncurry, ̲notzero,i̵f̵_̵f̵a̵l̵s̵e̵,̵
+       NKV_BatchGeometry.span0, ̲NKV_BatchGeometry.span1, ̲NKB_KeyStream.lo, ̲NKB_KeyStream.count,
+       zeroVal, ̲oneVal, ̲natnz] at keyRead sortRead ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKV_TreeEntry.source : ∀ (H : Bytes → HashState) (proof : Slice U8) (raw : Std.Array U32 22#usize)
+  (root : Std.Array U8 32#usize) (batch kind : Usize),
+  ↑batch < 2 →
+    ↑kind < 3 →
+      (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+        ∀ (idx : Indices) (val : Values),
+          ∃ keys,
+            (OraclePortFrozenOrder.sortedPositions (Port4B_KeyInstall.queries raw) ↑batch ↑kind).length =
+                ↑(NKB_KeyStream.count ↑batch) ∧
+              Port4B_LeafLoop.KeyStream (Port4B_KeyInstall.queries raw) (↑batch) (↑kind) keys 0#usize
+                  (OraclePortFrozenOrder.sortedPositions (Port4B_KeyInstall.queries raw) ↑batch ↑kind) ∧
+                NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                    proof raw root batch kind idx val () =
+                  NKV_FRef.verifier.candidate.batch_tree_loop (NKV_ConcreteChildren.ops H)
+                      (NKV_ConcreteChildren.digest H) proof root kind idx val () (NKB_KeyStream.lo ↑batch)
+                      (NKB_KeyStream.count ↑batch) ((Usize.wrapping_mul 3#usize batch).wrapping_add kind) keys 0#usize
+                      0#usize >>=
+                    returned :=
+⋯
+'NKV_TreeEntry.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r878276918be843a89635ab92b4ae084d.scope; invocation ID: 956c87bd30d0423399ad62c3d532a392

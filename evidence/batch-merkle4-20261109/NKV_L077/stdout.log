@@ -1,0 +1,32 @@
+NKV_LeafSlot.lean:9:3: error: unexpected token 'continue'; expected identifier
+NKV_LeafSlot.lean:22:12: error: unexpected token 'continue'; expected term
+NKV_LeafSlot.lean:42:12: error: unexpected token 'continue'; expected ']'
+NKV_LeafSlot.lean:41:5: error(lean.unknownIdentifier): Unknown identifier `source`
+NKV_LeafSlot.lean:40:64: error: unsolved goals
+H : Bytes → State
+p : OraclePortCompactDraft.Parsed
+q : Fin 22 → Fin 262144
+batch kind : ℕ
+nodes : Slice U8
+before bad : reference.Scratch
+reject :
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+        (MultiproofConeSlotState.reset before)).2 =
+    ok (false, bad)
+⊢ eval H (MultiproofConeSlotState.slotState p q batch kind nodes before) =
+    ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).1,
+      false, before)
+NKV_LeafSlot.lean:45:7: error(lean.unknownIdentifier): Unknown constant `source`
+theorem NKV_LeafSlot.rejected : ∀ (H : Bytes → State) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (batch kind : ℕ) (nodes : Slice U8) (before bad : reference.Scratch),
+  (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+          (MultiproofConeSlotState.reset before)).2 =
+      ok (false, bad) →
+    eval H (MultiproofConeSlotState.slotState p q batch kind nodes before) =
+      ((NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind)
+            (MultiproofConeSlotState.reset before)).1,
+        false, before) :=
+⋯
+NKV_LeafSlot.lean:47:14: error(lean.unknownIdentifier): Unknown constant `source`
+'NKV_LeafSlot.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

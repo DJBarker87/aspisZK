@@ -1,0 +1,39 @@
+NKV_OuterTotal.lean:15:59: error: unsolved goals
+ops : Port3_NativeBatchBody.Ops
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+proof : Slice U8
+p : verifier.Prepared
+folded root0 root1 : Std.Array U8 32#usize
+batch : Usize
+read0 : p.roots.index_usize 0#usize = ok root0
+read1 : p.roots.index_usize 1#usize = ok root1
+⊢ (do
+      let root1 ← ok root1
+      NKV_FRef.verifier.candidate.batch_merkle_values ops D proof p.queries
+          (Array.make 3#usize [root0, root1, folded] ⋯) batch hash) =
+    NKV_FRef.verifier.candidate.batch_merkle_values ops D proof p.queries (Array.make 3#usize [root0, root1, folded] ⋯)
+      batch hash
+theorem NKV_OuterTotal.bind_roots : ∀ (ops : Port3_NativeBatchBody.Ops) {X : Type} (D : aspis_core.digest.Digest32 X)
+  (hash : X) (proof : Slice U8) (p : verifier.Prepared) (folded root0 root1 : Std.Array U8 32#usize) (batch : Usize),
+  p.roots.index_usize 0#usize = ok root0 →
+    p.roots.index_usize 1#usize = ok root1 →
+      NKV_FRef.verifier.candidate.batch_merkle ops D proof p folded batch hash =
+        NKV_FRef.verifier.candidate.batch_merkle_values ops D proof p.queries
+          (Array.make 3#usize [root0, root1, folded] ⋯) batch hash :=
+⋯
+theorem NKV_OuterTotal.batch : ∀ (H : Bytes → HashState) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑p.queries)[j]! < 262144) →
+              ∃ r,
+                NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                    proof p folded batch () =
+                  ok r :=
+⋯
+'NKV_OuterTotal.bind_roots' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKV_OuterTotal.batch' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

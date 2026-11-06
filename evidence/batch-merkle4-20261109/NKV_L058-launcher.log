@@ -1,0 +1,33 @@
+{"attempt": "NKV_L058", "exit_status": 0, "wall_seconds": 16.39908576477319, "peak_rss_kib": "5885912", "swaps": "0", "print_axioms": ["'NKV_PaddingInstall.any_congr' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_PaddingInstall.callback' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_PaddingInstall.total' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_PaddingInstall.any_congr : ∀ {Self F Item : Type} (iter : core.iter.traits.iterator.Iterator Self Item)
+  (a b : core.ops.function.FnMut F Item Bool),
+  a.call_mut = b.call_mut →
+    ∀ (s : Self) (f : F), Port3_BatchStd.anyDefault iter a s f = Port3_BatchStd.anyDefault iter b s f :=
+⋯
+theorem NKV_PaddingInstall.callback : ∀ (H : Bytes → HashState),
+  (predicate H).call_mut = NKB_AnyModel.predicate.call_mut :=
+⋯
+theorem NKV_PaddingInstall.total : ∀ (H : Bytes → HashState) (chunks : List (Slice U8)) (remainder : Slice U8),
+  (∀ c ∈ chunks, (↑c).length = 8) →
+    (NKV_ConcreteChildren.ops H).op0 (core.iter.traits.iterator.IteratorChunksExact U8) (predicate H)
+        { chunks := chu
+...
+theorem NKV_PaddingInstall.any_congr : ∀ {Self F Item : Type} (iter : core.iter.traits.iterator.Iterator Self Item)
+  (a b : core.ops.function.FnMut F Item Bool),
+  a.call_mut = b.call_mut →
+    ∀ (s : Self) (f : F), Port3_BatchStd.anyDefault iter a s f = Port3_BatchStd.anyDefault iter b s f :=
+⋯
+theorem NKV_PaddingInstall.callback : ∀ (H : Bytes → HashState),
+  (predicate H).call_mut = NKB_AnyModel.predicate.call_mut :=
+⋯
+theorem NKV_PaddingInstall.total : ∀ (H : Bytes → HashState) (chunks : List (Slice U8)) (remainder : Slice U8),
+  (∀ c ∈ chunks, (↑c).length = 8) →
+    (NKV_ConcreteChildren.ops H).op0 (core.iter.traits.iterator.IteratorChunksExact U8) (predicate H)
+        { chunks := chunks, remainder := remainder } () =
+      ok ((NKB_AnyModel.scan chunks).1, { chunks := (NKB_AnyModel.scan chunks).2, remainder := remainder }) :=
+⋯
+'NKV_PaddingInstall.any_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_PaddingInstall.callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_PaddingInstall.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1119c62fb82b4b5abcf31dfcda9f8198.scope; invocation ID: 0cd630d20d2a49bf9303cfed7bfc5ff8

@@ -1,0 +1,37 @@
+{"attempt": "NKV_L073", "exit_status": 0, "wall_seconds": 11.979408288840204, "peak_rss_kib": "6041356", "swaps": "0", "print_axioms": ["'NKV_VerifyInvocation.returning' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKV_VerifyInvocation.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKV_VerifyInvocation.returning : ∀ (H : Bytes → State) (root : Std.Array U8 32#usize) (physical : Slice U8)
+  (idx : NKV_StepErasure.Indices) (val : NKV_StepErasure.Values) (n : Usize),
+  (↑physical).length ≤ 9216 →
+    ∀ (events : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (out : Bool × NJP_RowModel.Scratch),
+      NJV_NativeEntry.Invocation (NJP_RequestTransport.hash (rawOracle H)) root physical
+          (NJV_EntryABI.initial idx val n) events out →
+        ((eval H (NJV_TX2Returning.endpoint root physical idx val n)).1,
+            (NKV_ConcreteChildren.ops H).op10 (NKV_ConcreteChildren.digest H) ()
+              Port3_NativeBatchBody.multiproof.Arity.Two root idx val n p
+...
+al) =
+          (NJV_AdoptedObservation.history events,
+            ok (out.1, (NJP_ScratchCarrier.emitted out.2).idx, (NJP_ScratchCarrier.emitted out.2).val)) :=
+⋯
+theorem NKV_VerifyInvocation.tx2 : ∀ (H : Bytes → State) (p : OraclePortCompactDraft.Parsed) (q : Fin 22 → Fin 262144)
+  (batch kind : ℕ) (before after : reference.Scratch) (slot : Slice U8),
+  ↑before.n = 0 →
+    (NKV_LeafBuild.build H p q kind (OraclePortFrozenOrder.sortedPositions q batch kind) before).2 = ok (true, after) →
+      32 * OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after) ≤ (↑slot).length →
+        ∀ (root : Std.Array U8 32#usize) (events : List (NJP_RowModel.Request × NJP_RowModel.Digest))
+          (out : Bool × NJP_RowModel.Scratch),
+          NJV_NativeEntry.Invocation (NJP_RequestTransport.hash (rawOracle H)) root
+              (MultiproofConeSlotTail.prefixNodes slot (OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after)))
+              (NJV_EntryABI.initial after.idx after.val after.n) events out →
+            have physical :=
+              MultiproofConeSlotTail.prefixNodes slot (OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after));
+            ((eval H (NJV_TX2Returning.endpoint root physical after.idx after.val after.n)).1,
+                (NKV_ConcreteChildren.ops H).op10 (NKV_ConcreteChildren.digest H) ()
+                  Port3_NativeBatchBody.multiproof.Arity.Two root after.idx after.val after.n physical) =
+              (NJV_AdoptedObservation.history events,
+                ok (out.1, (NJP_ScratchCarrier.emitted out.2).idx, (NJP_ScratchCarrier.emitted out.2).val)) :=
+⋯
+'NKV_VerifyInvocation.returning' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKV_VerifyInvocation.tx2' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r657d017bdc09469ca4f7325d3411c8ef.scope; invocation ID: 7d3571e212744adcb9a0b208944523e6
