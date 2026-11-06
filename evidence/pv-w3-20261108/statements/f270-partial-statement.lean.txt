@@ -1,0 +1,13 @@
+theorem PV_FN_THREAD_FramedPrefixes.f270 : ∀ {E : Type}
+  (B : PV_STX2_Store.Carrier PV_EVHB_OwnerMachine.OWNER PV_STX2_Syntax.Data) (K : PV_STX2_SliceMachine.Control)
+  (fallback : PV_STX2_Syntax.Data → Option PV_STX2_SliceSyntax.Program)
+  (H :
+    PV_STX2_Native.Request PV_STX2_Syntax.Data →
+      PV_STX_World.World → PV_STX_Machine.Reply PV_STX_World.World E PV_STX2_Syntax.Data)
+  (s : PV_STX2_Store.Store PV_STX2_Syntax.Data) (a : ℕ) (parents : List PV_STX2_SliceMachine.Frame)
+  (w : PV_EVHB_OwnerMachine.OWNER) (es : List E) (stack : List PV_STX2_SliceMachine.Config),
+  have native := PV_FN_THREAD_NativeOwnerLift.handler H;
+  have q := PV_FN_THREAD_f270Prefix.entry s a parents w es stack;
+  PV_THR2_IntrinsicState.advance B K (PV_THR2_PacketJoinedTable.table fallback) native
+      (PV_FN_THREAD_f270Prefix.steps B K fallback native q) q =
+    PV_FN_THREAD_f270Prefix.after B K fallback native q :=
