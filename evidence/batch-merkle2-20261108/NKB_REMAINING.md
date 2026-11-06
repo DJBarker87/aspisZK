@@ -43,3 +43,7 @@ After the boundary/clause review: assemble the source-ordered parent cuts and co
 NJS/NJV candidate credit depends on ledger17. These support proofs and successful combined imports are not composed-row or security credit. RuntimeCpiReadonlyEntry7 remains unused. No wallet/key/account or shipped-file operation occurred.
 
 Research ref for echeck check: `11bb97b99eed5bb96360a15e512f41b00b9b9b6a`; NJZ merged paths: 0. Read-only Git objects only; no sibling worktree accessed.
+
+## Superseding development after the first full audit
+
+NJZ_ TX1:189 merged into research b23d74ad861d while the audit ran. The historical absent-child reason for TX1:084 is now cleared. Read-only NJZ inputs are pinned in NKB_NJZ_INPUTS.json. This member is being attempted; no final early stop is claimed at this stage. Merkle blockers are unchanged.
