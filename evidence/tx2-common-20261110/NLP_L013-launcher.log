@@ -1,0 +1,47 @@
+{"attempt": "NLP_L013", "exit_status": 0, "wall_seconds": 23.220598076935858, "peak_rss_kib": "6054288", "swaps": "0", "print_axioms": ["'NLP_RootCodec.decode_array' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLP_RootCodec.wire' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLP_RootCodec.kind1' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def NLP_RootCodec.parsed : Slice U8 → Std.Array U8 32#usize → OraclePortCompactDraft.Parsed :=
+fun proof root1 =>
+  { wire := MultiproofConeCanonical.bytesOf ↑proof,
+    semantic := [[], [], List.replicate 5 0 ++ MultiproofConeCanonical.bytesOf ↑root1] }
+theorem NLP_RootCodec.decode_array : ∀ (root : Std.Array U8 32#usize),
+  encodeState ((SemanticRecordCodec.decodeState (MultiproofConeCanonical.bytesOf ↑root)).getD fun x => 0) = root :=
+fun root =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => encodeState ((SemanticRecordCodec.decodeState _a).getD fun x => 0) = root)
+        (Eq.symm (MultiproofConePhysicalTransport.digest_bytes root))))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => enco
+...
+def NLP_RootCodec.parsed : Slice U8 → Std.Array U8 32#usize → OraclePortCompactDraft.Parsed :=
+fun proof root1 =>
+  { wire := MultiproofConeCanonical.bytesOf ↑proof,
+    semantic := [[], [], List.replicate 5 0 ++ MultiproofConeCanonical.bytesOf ↑root1] }
+theorem NLP_RootCodec.decode_array : ∀ (root : Std.Array U8 32#usize),
+  encodeState ((SemanticRecordCodec.decodeState (MultiproofConeCanonical.bytesOf ↑root)).getD fun x => 0) = root :=
+fun root =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => encodeState ((SemanticRecordCodec.decodeState _a).getD fun x => 0) = root)
+        (Eq.symm (MultiproofConePhysicalTransport.digest_bytes root))))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => encodeState (_a.getD fun x => 0) = root)
+          (SemanticRecordCodec.decodeState_bytes (decodeState root))))
+      (array_roundtrip root))
+@[defeq] theorem NLP_RootCodec.wire : ∀ (proof : Slice U8) (root1 : Std.Array U8 32#usize),
+  (parsed proof root1).wire = MultiproofConeCanonical.bytesOf ↑proof :=
+fun proof root1 => rfl
+theorem NLP_RootCodec.kind1 : ∀ (proof : Slice U8) (root1 : Std.Array U8 32#usize),
+  encodeState (OraclePortBatchDraft.committedRoot (parsed proof root1) 1) = root1 :=
+fun proof root1 =>
+  id
+    (have drop := of_eq_true (eq_self (MultiproofConeCanonical.bytesOf ↑root1));
+    Eq.mpr (id (congrArg (fun _a => encodeState ((SemanticRecordCodec.decodeState _a).getD fun x => 0) = root1) drop))
+      (decode_array root1))
+'NLP_RootCodec.decode_array' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_RootCodec.wire' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_RootCodec.kind1' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rdcb85b5886a8404e9a22ef56627609ef.scope; invocation ID: 55d10593137d450da7f876090167b9ce

@@ -12,7 +12,7 @@ theorem kind0_fixed (proof : Slice U8) (parsed : OraclePortCompactDraft.Parsed)
  OraclePortBatchDraft.committedRoot parsed 0=
  (SemanticRecordCodec.decodeState (OraclePortCompactDraft.slice
   (MultiproofConeCanonical.bytesOf proof.val) 16 32)).getD (fun _=>0) := by
- simp only [OraclePortBatchDraft.committedRoot,if_pos rfl,OraclePortCompactDraft.root0,wire]
+ simp only [OraclePortBatchDraft.committedRoot,ite_true,OraclePortCompactDraft.root0,wire]
 /-- Necessary own-argument clause at C04; selecting Parsed.semantic cannot
 repair a mismatch between the resumed checkpoint root and the proof root. -/
 theorem necessary (proof : Slice U8) (parsed : OraclePortCompactDraft.Parsed)

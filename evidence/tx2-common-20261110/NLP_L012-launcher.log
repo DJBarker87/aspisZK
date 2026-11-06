@@ -1,0 +1,31 @@
+{"attempt": "NLP_L012", "exit_status": 0, "wall_seconds": 20.25962359807454, "peak_rss_kib": "6362488", "swaps": "0", "print_axioms": ["'NLP_FoldedRange.diff' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLP_FoldedRange.start' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLP_FoldedRange.selected' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLP_FoldedRange.copied' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLP_FoldedRange.copied : ∀ (selected : Slice U8) (root : Std.Array U8 32#usize),
+  core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 selected = ok (core.result.Result.Ok root) →
+    ↑root = ↑selected :=
+fun selected root call =>
+  Decidable.casesOn (instDecidableEqNat selected.length ↑32#usize)
+    (fun h =>
+      let ⟨⟩ := ok (core.result.Result.Ok root)
+      Eq.mp (congrFun' (congrArg Eq (dif_neg h)) (ok (core.result.Result.Ok root))) call)
+    fun h =>
+    let ⟨⟩ := ok (core.result.Result.Ok root)
+    Eq.mp (congrFun' (congrArg Eq (dif_pos h)) (ok (core.result.Result.Ok root))) call
+'NLP_FoldedRange.diff' depends on axioms: [propext, Classical.choice, Quot.sou
+...
+theorem NLP_FoldedRange.copied : ∀ (selected : Slice U8) (root : Std.Array U8 32#usize),
+  core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 selected = ok (core.result.Result.Ok root) →
+    ↑root = ↑selected :=
+fun selected root call =>
+  Decidable.casesOn (instDecidableEqNat selected.length ↑32#usize)
+    (fun h =>
+      let ⟨⟩ := ok (core.result.Result.Ok root)
+      Eq.mp (congrFun' (congrArg Eq (dif_neg h)) (ok (core.result.Result.Ok root))) call)
+    fun h =>
+    let ⟨⟩ := ok (core.result.Result.Ok root)
+    Eq.mp (congrFun' (congrArg Eq (dif_pos h)) (ok (core.result.Result.Ok root))) call
+'NLP_FoldedRange.diff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_FoldedRange.start' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_FoldedRange.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_FoldedRange.copied' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r48c41985b6e34a07acbf5e5b5281ce48.scope; invocation ID: 2664145beffc412c8339b8e6da9d3a17

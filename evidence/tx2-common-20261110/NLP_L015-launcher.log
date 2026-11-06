@@ -1,0 +1,19 @@
+{"attempt": "NLP_L015", "exit_status": 0, "wall_seconds": 18.91377981682308, "peak_rss_kib": "6022312", "swaps": "0", "print_axioms": []}
+def NLP_InputDomain.Root0 : Slice U8 → Slice U8 → Prop :=
+fun ck proof =>
+  List.take 32 (List.drop 112 ↑ck) =
+    ↑(encodeState
+        ((SemanticRecordCodec.decodeState
+              (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+          fun x => 0))
+
+...
+def NLP_InputDomain.Root0 : Slice U8 → Slice U8 → Prop :=
+fun ck proof =>
+  List.take 32 (List.drop 112 ↑ck) =
+    ↑(encodeState
+        ((SemanticRecordCodec.decodeState
+              (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+          fun x => 0))
+
+Running as unit: run-rbd28a128eb594a10ad35e65fbdf67267.scope; invocation ID: 227973e9683f4ef7918fa1ee5833aa71

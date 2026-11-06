@@ -1,0 +1,46 @@
+{"attempt": "NLP_L024", "exit_status": 1, "wall_seconds": 36.538263214053586, "peak_rss_kib": "6335240", "swaps": "0", "print_axioms": ["'NLP_C04Folded.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLP_C04Folded.at_actual' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLP_generated/NLP_C04Folded.lean:44:11: error: don't know how to synthesize implicit argument `p`
+  @Exists.intro (core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError)
+    (fun r =>
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+            { start := 7751#usize, «end» := 7783#usize } =
+          ok ?m.795 ∧
+        core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 ?m.795 = ok r ∧
+          core.result.Result.unwrap core.fmt.DebugTryFromSliceError r = ok value✝¹²)
+    ?m.798 ⟨?m.801, ⟨?m.804, ?m.805⟩⟩
+context:
+wr rr : NP6_StdModel.Reservation
+merkle : Merkle
+finish : Finish
+H : Type
+d : aspis_core.digest.Digest
+...
+dexRangeUsizeSlice U8) proof
+      { start := value✝¹⁹, «end» := value✝¹⁸ } =
+    ok value✝¹⁷
+value✝⁵ : (NJU_Log.record (Event.inactive value✝¹⁷) (NJC_ClosedCalls.inactive value✝¹⁷)).result = ok value✝¹⁶
+value✝⁴ :
+  NHT_Constants.core.option.Option.ok_or value✝¹⁶ AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse = ok value✝¹⁵
+value✝³ : core.result.Result.Insts.CoreOpsTry.branch value✝¹⁵ = ok (core.ops.control_flow.ControlFlow.Continue val1✝)
+value✝² :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok value✝¹⁴
+value✝¹ : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 value✝¹⁴ = ok value✝¹³
+value✝ : core.result.Result.unwrap core.fmt.DebugTryFromSliceError value✝¹³ = ok value✝¹²
+⊢ Slice U8
+theorem NLP_C04Folded.source : ∀ (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H),
+  NKE_EventAll.Holds (Holds proof) (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none) :=
+⋯
+theorem NLP_C04Folded.at_actual : ∀ (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H) (pr : Slice U8) (p : verifier.Prepared)
+  (folded : Std.Array U8 32#usize) (reply : R Unit),
+  Event.merkle pr p folded reply ∈
+      (NJU_CommonObserved.run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    pr = proof ∧ ↑folded = List.take 32 (List.drop 7751 ↑proof) :=
+⋯
+'NLP_C04Folded.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLP_C04Folded.at_actual' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r05022f88e660466f9fbc61906ee1f401.scope; invocation ID: 54f763a05a3544e98b7099d7fc336f38

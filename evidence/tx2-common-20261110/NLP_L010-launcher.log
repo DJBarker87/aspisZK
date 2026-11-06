@@ -1,0 +1,40 @@
+{"attempt": "NLP_L010", "exit_status": 1, "wall_seconds": 24.71153688710183, "peak_rss_kib": "6323516", "swaps": "0", "print_axioms": ["'NLP_FoldedRange.diff' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLP_FoldedRange.start' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLP_FoldedRange.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLP_FoldedRange.copied' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLP_generated/NLP_FoldedRange.lean:13:13: error(lean.unknownIdentifier): Unknown identifier `PSem_Slices.range_bytes`
+NLP_generated/NLP_FoldedRange.lean:12:47: error: unsolved goals
+proof selected : Slice U8
+call :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok selected
+⊢ ↑selected = List.take 32 (List.drop 7751 ↑proof)
+theorem NLP_FoldedRange.copied : ∀ (selected : Slice U8) (root : Std.Array U8 32#usize),
+  core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 selected = ok (core.result.Result.Ok root) →
+    ↑root = ↑selected :=
+fun selected root call =>
+  Decidable.casesOn (in
+...
+NLP_generated/NLP_FoldedRange.lean:13:13: error(lean.unknownIdentifier): Unknown identifier `PSem_Slices.range_bytes`
+NLP_generated/NLP_FoldedRange.lean:12:47: error: unsolved goals
+proof selected : Slice U8
+call :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := 7751#usize, «end» := 7783#usize } =
+    ok selected
+⊢ ↑selected = List.take 32 (List.drop 7751 ↑proof)
+theorem NLP_FoldedRange.copied : ∀ (selected : Slice U8) (root : Std.Array U8 32#usize),
+  core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 selected = ok (core.result.Result.Ok root) →
+    ↑root = ↑selected :=
+fun selected root call =>
+  Decidable.casesOn (instDecidableEqNat selected.length ↑32#usize)
+    (fun h =>
+      let ⟨⟩ := ok (core.result.Result.Ok root)
+      Eq.mp (congrFun' (congrArg Eq (dif_neg h)) (ok (core.result.Result.Ok root))) call)
+    fun h =>
+    let ⟨⟩ := ok (core.result.Result.Ok root)
+    Eq.mp (congrFun' (congrArg Eq (dif_pos h)) (ok (core.result.Result.Ok root))) call
+'NLP_FoldedRange.diff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_FoldedRange.start' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_FoldedRange.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLP_FoldedRange.copied' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc15b66baed9d4214a31dd7604b873014.scope; invocation ID: a211f85520604f62b16d8a207edcec05
