@@ -1,0 +1,249 @@
+theorem NKM_Roots.circle : ∀ (t : QM31Exact),
+  ok (circleInvocation t) = circle.secure_circle_point_from_parameter (encode t) :=
+fun t =>
+  Eq.mpr (id (congrArg (fun _a => ok (circleInvocation t) = _a) (circle_total t)))
+    (if hd : 1 + t * t = 0 then
+      of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg ok
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | none => core.result.Result.Err circle.CirclePointError.SingularParameter
+                    | some val =>
+                      core.result.Result.Ok
+                        { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) })
+                  (Eq.trans
+                    (ite_congr (Eq.trans (congrFun' (congrArg Eq hd) 0) (eq_self 0)) (fun a => Eq.refl none) fun a =>
+                      congrArg some (congrArg encode (congrArg Inv.inv hd)))
+                    (if_true none (some (encode 0⁻¹)))))))
+            (congrArg ok
+              (Eq.trans
+                (ite_congr (Eq.trans (congrFun' (congrArg Eq hd) 0) (eq_self 0))
+                  (fun a => Eq.refl (core.result.Result.Err circle.CirclePointError.SingularParameter)) fun a =>
+                  congrArg core.result.Result.Ok
+                    (congr
+                      (congrArg circle.SecureCirclePoint.mk
+                        (congrArg encode (congrArg (HMul.hMul (1 - t * t)) (congrArg Inv.inv hd))))
+                      (congrArg encode (congrArg (HMul.hMul (t + t)) (congrArg Inv.inv hd)))))
+                (if_true (core.result.Result.Err circle.CirclePointError.SingularParameter)
+                  (core.result.Result.Ok { x := encode ((1 - t * t) * 0⁻¹), y := encode ((t + t) * 0⁻¹) })))))
+          (eq_self (ok (core.result.Result.Err circle.CirclePointError.SingularParameter))))
+    else
+      of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg ok
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | none => core.result.Result.Err circle.CirclePointError.SingularParameter
+                    | some val =>
+                      core.result.Result.Ok
+                        { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) })
+                  (Eq.trans
+                    (ite_congr (eq_false hd) (fun a => Eq.refl none) fun a => Eq.refl (some (encode (1 + t * t)⁻¹)))
+                    (if_false none (some (encode (1 + t * t)⁻¹)))))))
+            (congrArg ok
+              (Eq.trans
+                (ite_congr (eq_false hd)
+                  (fun a => Eq.refl (core.result.Result.Err circle.CirclePointError.SingularParameter)) fun a =>
+                  Eq.refl
+                    (core.result.Result.Ok
+                      { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) }))
+                (if_false (core.result.Result.Err circle.CirclePointError.SingularParameter)
+                  (core.result.Result.Ok
+                    { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) })))))
+          (eq_self
+            (ok
+              (core.result.Result.Ok
+                { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) })))))
+theorem NKM_Roots.ood : ∀ (t : QM31Exact),
+  ok (oodInvocation t) = NKM_circle.circle.secure_ood_circle_point_from_parameter (encode t) :=
+fun t =>
+  Eq.mpr (id (congrArg (fun _a => ok (oodInvocation t) = _a) (ood_total t)))
+    (if hd : 1 + t * t = 0 then
+      of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg ok
+                (congrArg
+                  (fun x =>
+                    match
+                      match x with
+                      | none => core.result.Result.Err circle.CirclePointError.SingularParameter
+                      | some val =>
+                        core.result.Result.Ok
+                          { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) } with
+                    | core.result.Result.Err e => core.result.Result.Err e
+                    | core.result.Result.Ok p =>
+                      if decide (t.im = 0) = true then
+                        core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield
+                      else core.result.Result.Ok p)
+                  (Eq.trans
+                    (ite_congr (Eq.trans (congrFun' (congrArg Eq hd) 0) (eq_self 0)) (fun a => Eq.refl none) fun a =>
+                      congrArg some (congrArg encode (congrArg Inv.inv hd)))
+                    (if_true none (some (encode 0⁻¹)))))))
+            (congrArg ok
+              (Eq.trans
+                (ite_congr (Eq.trans (congrFun' (congrArg Eq hd) 0) (eq_self 0))
+                  (fun a => Eq.refl (core.result.Result.Err circle.CirclePointError.SingularParameter)) fun a =>
+                  Eq.refl
+                    (if t.im = 0 then core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield
+                    else core.result.Result.Ok (point t)))
+                (if_true (core.result.Result.Err circle.CirclePointError.SingularParameter)
+                  (if t.im = 0 then core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield
+                  else core.result.Result.Ok (point t))))))
+          (eq_self (ok (core.result.Result.Err circle.CirclePointError.SingularParameter))))
+    else
+      if ht : t.im = 0 then
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (congrArg ok
+                  (Eq.trans
+                    (congrArg
+                      (fun x =>
+                        match
+                          match x with
+                          | none => core.result.Result.Err circle.CirclePointError.SingularParameter
+                          | some val =>
+                            core.result.Result.Ok
+                              { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) } with
+                        | core.result.Result.Err e => core.result.Result.Err e
+                        | core.result.Result.Ok p =>
+                          if decide (t.im = 0) = true then
+                            core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield
+                          else core.result.Result.Ok p)
+                      (Eq.trans
+                        (ite_congr (eq_false hd) (fun a => Eq.refl none) fun a => Eq.refl (some (encode (1 + t * t)⁻¹)))
+                        (if_false none (some (encode (1 + t * t)⁻¹)))))
+                    (Eq.trans
+                      (ite_congr
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans
+                                (Decidable.decide.congr_simp (t.im = 0) True
+                                  (Eq.trans (congrFun' (congrArg Eq ht) 0) (eq_self 0)))
+                                (decide_true instDecidableTrue)))
+                            true)
+                          (eq_self true))
+                        (fun a => Eq.refl (core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield))
+                        fun a =>
+                        Eq.refl
+                          (core.result.Result.Ok
+                            { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) }))
+                      (if_true (core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield)
+                        (core.result.Result.Ok
+                          { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) }))))))
+              (congrArg ok
+                (Eq.trans
+                  (ite_congr (eq_false hd)
+                    (fun a => Eq.refl (core.result.Result.Err circle.CirclePointError.SingularParameter)) fun a =>
+                    Eq.trans
+                      (ite_congr (Eq.trans (congrFun' (congrArg Eq ht) 0) (eq_self 0))
+                        (fun a => Eq.refl (core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield))
+                        fun a =>
+                        Eq.refl
+                          (core.result.Result.Ok
+                            { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) }))
+                      (if_true (core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield)
+                        (core.result.Result.Ok
+                          { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) })))
+                  (if_false (core.result.Result.Err circle.CirclePointError.SingularParameter)
+                    (core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield)))))
+            (eq_self (ok (core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield))))
+      else
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (congrArg ok
+                  (Eq.trans
+                    (congrArg
+                      (fun x =>
+                        match
+                          match x with
+                          | none => core.result.Result.Err circle.CirclePointError.SingularParameter
+                          | some val =>
+                            core.result.Result.Ok
+                              { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) } with
+                        | core.result.Result.Err e => core.result.Result.Err e
+                        | core.result.Result.Ok p =>
+                          if decide (t.im = 0) = true then
+                            core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield
+                          else core.result.Result.Ok p)
+                      (Eq.trans
+                        (ite_congr (eq_false hd) (fun a => Eq.refl none) fun a => Eq.refl (some (encode (1 + t * t)⁻¹)))
+                        (if_false none (some (encode (1 + t * t)⁻¹)))))
+                    (Eq.trans
+                      (ite_congr
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans (Decidable.decide.congr_simp (t.im = 0) False (eq_false ht))
+                                (decide_false instDecidableFalse)))
+                            true)
+                          Bool.false_eq_true)
+                        (fun a => Eq.refl (core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield))
+                        fun a =>
+                        Eq.refl
+                          (core.result.Result.Ok
+                            { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) }))
+                      (if_false (core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield)
+                        (core.result.Result.Ok
+                          { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) }))))))
+              (congrArg ok
+                (Eq.trans
+                  (ite_congr (eq_false hd)
+                    (fun a => Eq.refl (core.result.Result.Err circle.CirclePointError.SingularParameter)) fun a =>
+                    Eq.trans
+                      (ite_congr (eq_false ht)
+                        (fun a => Eq.refl (core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield))
+                        fun a =>
+                        Eq.refl
+                          (core.result.Result.Ok
+                            { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) }))
+                      (if_false (core.result.Result.Err circle.CirclePointError.ParameterInCm31Subfield)
+                        (core.result.Result.Ok
+                          { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) })))
+                  (if_false (core.result.Result.Err circle.CirclePointError.SingularParameter)
+                    (core.result.Result.Ok
+                      { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) })))))
+            (eq_self
+              (ok
+                (core.result.Result.Ok
+                  { x := encode ((1 - t * t) * (1 + t * t)⁻¹), y := encode ((t + t) * (1 + t * t)⁻¹) })))))
+theorem NKM_Roots.fallback : ∀ (row : AspisR1CircleSampleWrapper.r0_transcript.CircleRow),
+  ok
+      (fallbackG
+        (oodInvocation
+          (match row with
+          | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.First => circleFallbackParameter0
+          | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.Second => circleFallbackParameter1))) =
+    NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row) :=
+fun row =>
+  AspisR1CircleSampleWrapper.r0_transcript.CircleRow.casesOn (motive := fun t =>
+    row = t →
+      ok
+          (fallbackG
+            (oodInvocation
+              (match row with
+              | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.First => circleFallbackParameter0
+              | AspisR1CircleSampleWrapper.r0_transcript.CircleRow.Second => circleFallbackParameter1))) =
+        NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row))
+    row (fun h => Eq.symm h ▸ fallback0) (fun h => Eq.symm h ▸ fallback1) (Eq.refl row)
+'NKM_Roots.circle' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.ood' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.fallback0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.fallback1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.circle_on_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.ood_on_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.singular_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Roots.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]

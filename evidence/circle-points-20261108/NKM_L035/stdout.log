@@ -1,0 +1,127 @@
+theorem NKM_Adopted.ood : ∀ (t : QM31Exact),
+  (do
+      let r ← NKM_circle.circle.secure_ood_circle_point_from_parameter (encode t)
+      ok (wrapperResult r)) =
+    circle.secure_ood_circle_point_from_parameter (toWrapper (encode t)) :=
+fun t =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          (do
+              let r ← _a
+              ok (wrapperResult r)) =
+            circle.secure_ood_circle_point_from_parameter (toWrapper (encode t)))
+        (ood_source t)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let r ←
+                  do
+                    let r ←
+                      AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+                          (SamplerClosureProductExecution.encode t)
+                    ok (fromResult r)
+                ok (wrapperResult r)) =
+              _a)
+          (AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.secure_circle_eq_r72 (toWrapper (encode t)))))
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (bind_assoc_eq
+                  (AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+                    (SamplerClosureProductExecution.encode t))
+                  (fun r => ok (fromResult r)) fun r => ok (wrapperResult r))
+                (congrArg
+                  (Bind.bind
+                    (AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+                      (SamplerClosureProductExecution.encode t)))
+                  (funext fun x => bind_tc_ok (fromResult x) fun y => ok (wrapperResult y)))))
+            do
+            let r ← AspisR72Sampler.circle.secure_ood_circle_point_from_parameter (toR72QM (toWrapper (encode t)))
+            match r with
+              | core.result.Result.Ok p => ok (core.result.Result.Ok (fromR72Point p))
+              | core.result.Result.Err e => ok (core.result.Result.Err (fromR72Error e))))
+        (have h := id (NKM_circle.to_from (SamplerClosureProductExecution.encode t));
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let x ←
+                      AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+                          (SamplerClosureProductExecution.encode t)
+                    ok (wrapperResult (fromResult x))) =
+                  do
+                  let r ← AspisR72Sampler.circle.secure_ood_circle_point_from_parameter _a
+                  match r with
+                    | core.result.Result.Ok p => ok (core.result.Result.Ok (fromR72Point p))
+                    | core.result.Result.Err e => ok (core.result.Result.Err (fromR72Error e)))
+              h))
+          ((fun {m} [Bind m] {α β} a a_1 e_a =>
+              Eq.rec (motive := fun a_2 e_a => ∀ (a_3 a_4 : α → m β), a_3 = a_4 → a >>= a_3 = a_2 >>= a_4)
+                (fun a_2 a_3 e_a => e_a ▸ Eq.refl (a >>= a_2)) e_a)
+            (AspisR72Sampler.circle.secure_ood_circle_point_from_parameter (SamplerClosureProductExecution.encode t))
+            (AspisR72Sampler.circle.secure_ood_circle_point_from_parameter (SamplerClosureProductExecution.encode t))
+            (Eq.refl
+              (AspisR72Sampler.circle.secure_ood_circle_point_from_parameter (SamplerClosureProductExecution.encode t)))
+            (fun x => ok (wrapperResult (fromResult x)))
+            (fun r =>
+              match r with
+              | core.result.Result.Ok p => ok (core.result.Result.Ok (fromR72Point p))
+              | core.result.Result.Err e => ok (core.result.Result.Err (fromR72Error e)))
+            (funext fun r =>
+              core.result.Result.casesOn (motive := fun t =>
+                r = t →
+                  ok (wrapperResult (fromResult r)) =
+                    match r with
+                    | core.result.Result.Ok p => ok (core.result.Result.Ok (fromR72Point p))
+                    | core.result.Result.Err e => ok (core.result.Result.Err (fromR72Error e)))
+                r (fun p h => Eq.symm h ▸ Eq.refl (ok (wrapperResult (fromResult (core.result.Result.Ok p)))))
+                (fun e h =>
+                  Eq.symm h ▸
+                    AspisR72Sampler.circle.CirclePointError.casesOn (motive := fun t =>
+                      e = t →
+                        ok (wrapperResult (fromResult (core.result.Result.Err e))) =
+                          match core.result.Result.Err e with
+                          | core.result.Result.Ok p => ok (core.result.Result.Ok (fromR72Point p))
+                          | core.result.Result.Err e => ok (core.result.Result.Err (fromR72Error e)))
+                      e
+                      (fun h =>
+                        Eq.symm h ▸
+                          Eq.refl
+                            (ok
+                              (wrapperResult
+                                (fromResult
+                                  (core.result.Result.Err AspisR72Sampler.circle.CirclePointError.SingularParameter)))))
+                      (fun h =>
+                        Eq.symm h ▸
+                          Eq.refl
+                            (ok
+                              (wrapperResult
+                                (fromResult
+                                  (core.result.Result.Err
+                                    AspisR72Sampler.circle.CirclePointError.ParameterInCm31Subfield)))))
+                      (Eq.refl e))
+                (Eq.refl r))))))
+theorem NKM_Adopted.fallback : ∀ (row : AspisR1CircleSampleWrapper.r0_transcript.CircleRow),
+  (do
+      let p ← NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+      ok (fallbackPoint p)) =
+    AspisR1CircleFallback.transcript.circle_fallback_point (NKM_FallbackModel.index row) :=
+fun row =>
+  AspisR1CircleSampleWrapper.r0_transcript.CircleRow.casesOn (motive := fun t =>
+    row = t →
+      (do
+          let p ← NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+          ok (fallbackPoint p)) =
+        AspisR1CircleFallback.transcript.circle_fallback_point (NKM_FallbackModel.index row))
+    row (fun h => Eq.symm h ▸ fallback0) (fun h => Eq.symm h ▸ fallback1) (Eq.refl row)
+'NKM_Adopted.ood' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Adopted.fallback0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Adopted.fallback1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKM_Adopted.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]

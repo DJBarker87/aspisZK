@@ -1,0 +1,234 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NKM_native.rs
+@@ -0,0 +1,199 @@
++#![allow(non_snake_case)]
++extern crate alloc;
++use aspis_core::field::{M31,CM31,QM31,P};
++use aspis_core::circle::{SecureCirclePoint,CirclePointError};
++use aspis_core::transcript::CIRCLE_FALLBACK_PARAMETERS;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn q(a:[u32;4])->QM31{QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{a:M31(a[2]),b:M31(a[3])}}}
++fn words(x:QM31)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++fn canonical(x:QM31)->bool{x.c0.a.0<P&&x.c0.b.0<P&&x.c1.a.0<P&&x.c1.b.0<P}
++fn check(b:bool){assert!(b != cfg!(NKM_invert))}
++#[derive(Clone,Copy,Debug,PartialEq,Eq)]
++struct Event{kind:u8,a:QM31,b:QM31,out:QM31}
++struct Log{replies:[QM31;7],events:[Event;7],len:usize,inverse_some:bool}
++fn event(l:&mut Log,kind:u8,a:QM31,b:QM31)->QM31{
++ assert!(l.len<7);assert!(canonical(a)&&canonical(b));
++ let out=l.replies[l.len];kani::assume(canonical(out));
++ match kind {
++ 0|4=>kani::assume(out==ns_product(a,b)),
++ 1=>kani::assume(out==ns_plus(a,b)),
++ 2=>{if l.inverse_some{kani::assume(a!=QM31::ZERO);kani::assume(ns_product(a,out)==QM31::ONE)}else{kani::assume(a==QM31::ZERO)}},
++ 3=>kani::assume(out==ns_minus(a,b)),
++ _=>unreachable!()
++ }
++ l.events[l.len]=Event{kind,a,b,out};l.len+=1;out
++}
++fn square(l:&mut Log,a:QM31)->QM31{event(l,0,a,a)}
++fn add(l:&mut Log,a:QM31,b:QM31)->QM31{event(l,1,a,b)}
++fn inverse(l:&mut Log,a:QM31)->Option<QM31>{
++ let out=event(l,2,a,QM31::ZERO);if l.inverse_some{Some(out)}else{None}
++}
++fn sub(l:&mut Log,a:QM31,b:QM31)->QM31{event(l,3,a,b)}
++fn product(l:&mut Log,a:QM31,b:QM31)->QM31{event(l,4,a,b)}
++#[kani::requires(canonical(parameter)&&l.len==0&&canonical_replies(l))]
++#[kani::modifies(&mut l.events,&mut l.len)]
++#[kani::ensures(|r|(*r==circle_ref(l))!=cfg!(NKM_contract_invert))]
++pub fn secure_circle_point_from_parameter(
++    parameter: QM31, l: &mut Log,
++) -> Result<SecureCirclePoint, CirclePointError> {
++    let square = square(l,parameter);
++    let denominator = add(l,QM31::ONE,square);
++    let inverse_denominator = inverse(l,denominator)
++        .ok_or(CirclePointError::SingularParameter)?;
++    Ok(SecureCirclePoint {
++        x: { let n=sub(l,QM31::ONE,square); product(l,n,inverse_denominator) },
++        y: { let n=add(l,parameter,parameter); product(l,n,inverse_denominator) },
++    })
++}
++#[kani::requires(l.count==0)]
++#[kani::modifies(&mut l.parameter,&mut l.count)]
++#[kani::ensures(|r|(*r==ood_ref(parameter,l))!=cfg!(NKM_contract_invert))]
++pub fn secure_ood_circle_point_from_parameter(
++    parameter: QM31, l: &mut Child,
++) -> Result<SecureCirclePoint, CirclePointError> {
++    // Check the singularity first so `t = ±i` has the precise algebraic error
++    // even though those two roots also lie in CM31.
++    let point = child(parameter,l)?;
++    if parameter.c1 == CM31::ZERO {
++        return Err(CirclePointError::ParameterInCm31Subfield);
++    }
++    Ok(point)
++}
++#[kani::requires(l.count==0)]
++#[kani::modifies(&mut l.parameter,&mut l.count)]
++#[kani::ensures(|r|(*r==fallback_ref(l))!=cfg!(NKM_contract_invert))]
++pub fn circle_fallback_point(sample: usize,l: &mut Child) -> SecureCirclePoint {
++    let parameter = CIRCLE_FALLBACK_PARAMETERS[sample % 2];
++    match child(parameter,l) {
++        Ok(point) => point,
++        // Unreachable: `c1 = 1 ≠ 0` for both parameters.
++        Err(_) => SecureCirclePoint {
++            x: QM31::ONE,
++            y: QM31::ZERO,
++        },
++    }
++}
++fn new_log(inverse_some:bool)->Log{
++ let a:[[u32;4];7]=kani::any();
++ let replies=[q(a[0]),q(a[1]),q(a[2]),q(a[3]),q(a[4]),q(a[5]),q(a[6])];
++ let zero=Event{kind:0,a:QM31::ZERO,b:QM31::ZERO,out:QM31::ZERO};
++ Log{replies,events:[zero;7],len:0,inverse_some}
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn circle_full_cut(){
++ let t=q(kani::any());kani::assume(canonical(t));let some:bool=kani::any();let mut l=new_log(some);
++ let out=secure_circle_point_from_parameter(t,&mut l);
++ assert_eq!(l.events[0].a,t);assert_eq!(l.events[0].b,t);assert_eq!(l.events[0].kind,0);
++ assert_eq!(l.events[1].a,QM31::ONE);assert_eq!(l.events[1].b,l.replies[0]);assert_eq!(l.events[1].kind,1);
++ assert_eq!(l.events[2].a,l.replies[1]);assert_eq!(l.events[2].kind,2);
++ let expected=if some{
++  assert_eq!(l.len,7);
++  assert_eq!(l.events[3],Event{kind:3,a:QM31::ONE,b:l.replies[0],out:l.replies[3]});
++  assert_eq!(l.events[4],Event{kind:4,a:l.replies[3],b:l.replies[2],out:l.replies[4]});
++  assert_eq!(l.events[5],Event{kind:1,a:t,b:t,out:l.replies[5]});
++  assert_eq!(l.events[6],Event{kind:4,a:l.replies[5],b:l.replies[2],out:l.replies[6]});
++  Ok(SecureCirclePoint{x:l.replies[4],y:l.replies[6]})
++ }else{assert_eq!(l.len,3);Err(CirclePointError::SingularParameter)};
++ check(out==expected);
++}
++struct Child{parameter:QM31,reply:Result<SecureCirclePoint,CirclePointError>,count:usize}
++fn child(t:QM31,l:&mut Child)->Result<SecureCirclePoint,CirclePointError>{assert_eq!(l.count,0);l.parameter=t;l.count+=1;l.reply}
++fn child_record()->Child{
++ let x=q(kani::any());let y=q(kani::any());let tag:u8=kani::any();kani::assume(tag<3);
++ let reply=match tag{0=>Ok(SecureCirclePoint{x,y}),1=>Err(CirclePointError::SingularParameter),_=>Err(CirclePointError::ParameterInCm31Subfield)};
++ Child{parameter:QM31::ZERO,reply,count:0}
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn ood_full_cut(){
++ let t=q(kani::any());let mut l=child_record();
++ let out=secure_ood_circle_point_from_parameter(t,&mut l);
++ assert_eq!(l.count,1);assert_eq!(l.parameter,t);
++ let expected=match l.reply{Err(e)=>Err(e),Ok(p)=>if t.c1==CM31::ZERO{Err(CirclePointError::ParameterInCm31Subfield)}else{Ok(p)}};
++ check(out==expected)
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn fallback_full_cut(){
++ let sample:usize=kani::any();let mut l=child_record();let out=circle_fallback_point(sample,&mut l);
++ assert_eq!(l.count,1);assert_eq!(l.parameter,CIRCLE_FALLBACK_PARAMETERS[sample%2]);
++ let expected=match l.reply{Ok(p)=>p,Err(_)=>SecureCirclePoint{x:QM31::ONE,y:QM31::ZERO}};
++ check(out==expected)
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_control(){let a:[u8;32]=kani::any();let mut b=[0u8;32];unsafe{core::ptr::copy_nonoverlapping(a.as_ptr(),b.as_mut_ptr(),32)};check(a==b)}
++
++fn canonical_replies(l:&Log)->bool{
++ canonical(l.replies[0])&&canonical(l.replies[1])&&canonical(l.replies[2])&&canonical(l.replies[3])&&canonical(l.replies[4])&&canonical(l.replies[5])&&canonical(l.replies[6])
++}
++fn circle_ref(l:&Log)->Result<SecureCirclePoint,CirclePointError>{
++ if l.inverse_some{Ok(SecureCirclePoint{x:l.replies[4],y:l.replies[6]})}else{Err(CirclePointError::SingularParameter)}
++}
++fn ood_ref(t:QM31,l:&Child)->Result<SecureCirclePoint,CirclePointError>{
++ match l.reply{Err(e)=>Err(e),Ok(p)=>if t.c1==CM31::ZERO{Err(CirclePointError::ParameterInCm31Subfield)}else{Ok(p)}}
++}
++fn fallback_ref(l:&Child)->SecureCirclePoint{
++ match l.reply{Ok(p)=>p,Err(_)=>SecureCirclePoint{x:QM31::ONE,y:QM31::ZERO}}
++}
++#[kani::proof_for_contract(secure_circle_point_from_parameter)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn circle_contract(){let t=q(kani::any());let mut l=new_log(kani::any());secure_circle_point_from_parameter(t,&mut l);}
++#[kani::proof_for_contract(secure_ood_circle_point_from_parameter)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn ood_contract(){let t=q(kani::any());let mut l=child_record();secure_ood_circle_point_from_parameter(t,&mut l);}
++#[kani::proof_for_contract(circle_fallback_point)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn fallback_contract(){let sample:usize=kani::any();let mut l=child_record();circle_fallback_point(sample,&mut l);}
++// Exact Result<SecureCirclePoint,CirclePointError> contract calibration.
++#[kani::ensures(|_|true)]
++fn weak_reply(x:Result<SecureCirclePoint,CirclePointError>)->Result<SecureCirclePoint,CirclePointError>{x}
++#[kani::ensures(|r|*r!=x)]
++fn inverted_reply(x:Result<SecureCirclePoint,CirclePointError>)->Result<SecureCirclePoint,CirclePointError>{x}
++#[kani::proof_for_contract(weak_reply)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn result_weak(){weak_reply(kani::any());}
++#[kani::proof_for_contract(inverted_reply)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn result_inverted(){inverted_reply(kani::any());}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn result_real(){let x:Result<SecureCirclePoint,CirclePointError>=kani::any();assert_eq!(weak_reply(x),x);}
++#[kani::proof] #[kani::stub_verified(weak_reply)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn result_unimplied(){let x:Result<SecureCirclePoint,CirclePointError>=kani::any();assert_eq!(weak_reply(x),x);}
++#[kani::modifies(&mut x[0])]
++#[kani::ensures(|_|true)]
++fn wrong_frame(x:&mut [u8;2])->Result<SecureCirclePoint,CirclePointError>{x[1]=x[1].wrapping_add(1);Err(CirclePointError::SingularParameter)}
++#[kani::proof_for_contract(wrong_frame)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn result_frame(){let mut x:[u8;2]=kani::any();wrong_frame(&mut x);}
++
++// Natural-number tower specification; assumptions only, never a multiplication proof in Kani.
++fn ns_add(a:u32,b:u32)->u32{(((a as u64).wrapping_add(b as u64))%P as u64)as u32}
++fn ns_sub(a:u32,b:u32)->u32{(((a as u64).wrapping_add(P as u64).wrapping_sub(b as u64))%P as u64)as u32}
++fn ns_mul(a:u32,b:u32)->u32{(((a as u64).wrapping_mul(b as u64))%P as u64)as u32}
++fn ns_cm(a:CM31,b:CM31)->CM31{CM31{a:M31(ns_sub(ns_mul(a.a.0,b.a.0),ns_mul(a.b.0,b.b.0))),b:M31(ns_add(ns_mul(a.a.0,b.b.0),ns_mul(a.b.0,b.a.0)))}}
++fn ns_ca(a:CM31,b:CM31)->CM31{CM31{a:M31(ns_add(a.a.0,b.a.0)),b:M31(ns_add(a.b.0,b.b.0))}}
++fn ns_product(a:QM31,b:QM31)->QM31{
++ let ac=ns_cm(a.c0,b.c0);let bd=ns_cm(a.c1,b.c1);let ad=ns_cm(a.c0,b.c1);let bc=ns_cm(a.c1,b.c0);
++ let rbd=CM31{a:M31(ns_sub(ns_add(bd.a.0,bd.a.0),bd.b.0)),b:M31(ns_add(bd.a.0,ns_add(bd.b.0,bd.b.0)))};
++ QM31{c0:ns_ca(ac,rbd),c1:ns_ca(ad,bc)}
++}
++fn ns_plus(a:QM31,b:QM31)->QM31{QM31{c0:ns_ca(a.c0,b.c0),c1:ns_ca(a.c1,b.c1)}}
++fn ns_minus(a:QM31,b:QM31)->QM31{
++ let a=words(a);let b=words(b);q([ns_sub(a[0],b[0]),ns_sub(a[1],b[1]),ns_sub(a[2],b[2]),ns_sub(a[3],b[3])])
++}
++
++// One callee boundary on an arbitrary canonical pre-state; all five field kinds.
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn field_boundary(){
++ let a=q(kani::any());let b=q(kani::any());kani::assume(canonical(a)&&canonical(b));
++ let kind:u8=kani::any();kani::assume(kind<=4);
++ if cfg!(NKM_control_add){kani::assume(kind==1&&a==QM31::ZERO&&b==QM31::ZERO);}
++ let mut l=new_log(kani::any());let out=event(&mut l,kind,a,b);
++ assert_eq!(l.len,1);assert_eq!(l.events[0],Event{kind,a,b,out});
++ check(out==l.replies[0]);
++}
+--- /dev/null
++++ b/crates/aspis-core/src/NKM_arbitrary.rs
+@@ -0,0 +1,6 @@
++use crate::{field::{M31,CM31,QM31},circle::{SecureCirclePoint,CirclePointError}};
++impl kani::Arbitrary for M31 {fn any()->Self{Self(kani::any())}}
++impl kani::Arbitrary for CM31 {fn any()->Self{Self{a:kani::any(),b:kani::any()}}}
++impl kani::Arbitrary for QM31 {fn any()->Self{Self{c0:kani::any(),c1:kani::any()}}}
++impl kani::Arbitrary for SecureCirclePoint {fn any()->Self{Self{x:kani::any(),y:kani::any()}}}
++impl kani::Arbitrary for CirclePointError {fn any()->Self{if kani::any(){Self::SingularParameter}else{Self::ParameterInCm31Subfield}}}
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -97,3 +97,6 @@
+ 
+ #[cfg(feature = "r0-op-count")]
+ pub mod r0_op_count;
++
++#[cfg(kani)]
++mod NKM_arbitrary;
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+@@ -44,3 +45,6 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)]
++mod NKM_native;

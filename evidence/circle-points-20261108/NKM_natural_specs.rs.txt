@@ -1,0 +1,15 @@
+// Natural-number tower specification; assumptions only, never a multiplication proof in Kani.
+fn ns_add(a:u32,b:u32)->u32{((a as u64+b as u64)%P as u64)as u32}
+fn ns_sub(a:u32,b:u32)->u32{((a as u64+P as u64-b as u64)%P as u64)as u32}
+fn ns_mul(a:u32,b:u32)->u32{((a as u64*b as u64)%P as u64)as u32}
+fn ns_cm(a:CM31,b:CM31)->CM31{CM31{a:M31(ns_sub(ns_mul(a.a.0,b.a.0),ns_mul(a.b.0,b.b.0))),b:M31(ns_add(ns_mul(a.a.0,b.b.0),ns_mul(a.b.0,b.a.0)))}}
+fn ns_ca(a:CM31,b:CM31)->CM31{CM31{a:M31(ns_add(a.a.0,b.a.0)),b:M31(ns_add(a.b.0,b.b.0))}}
+fn ns_product(a:QM31,b:QM31)->QM31{
+ let ac=ns_cm(a.c0,b.c0);let bd=ns_cm(a.c1,b.c1);let ad=ns_cm(a.c0,b.c1);let bc=ns_cm(a.c1,b.c0);
+ let rbd=CM31{a:M31(ns_sub(ns_add(bd.a.0,bd.a.0),bd.b.0)),b:M31(ns_add(bd.a.0,ns_add(bd.b.0,bd.b.0)))};
+ QM31{c0:ns_ca(ac,rbd),c1:ns_ca(ad,bc)}
+}
+fn ns_plus(a:QM31,b:QM31)->QM31{QM31{c0:ns_ca(a.c0,b.c0),c1:ns_ca(a.c1,b.c1)}}
+fn ns_minus(a:QM31,b:QM31)->QM31{
+ let a=words(a);let b=words(b);q([ns_sub(a[0],b[0]),ns_sub(a[1],b[1]),ns_sub(a[2],b[2]),ns_sub(a[3],b[3])])
+}

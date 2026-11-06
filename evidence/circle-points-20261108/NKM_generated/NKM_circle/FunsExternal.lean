@@ -1,0 +1,33 @@
+import NKM_circle.Types
+import AspisV8R19.SamplerClosureCircleSourceExecution
+set_option autoImplicit false
+noncomputable section
+namespace NKM_circle
+open Aeneas Aeneas.Std Result
+
+def toCM (x : field.CM31) : AspisR72Sampler.field.CM31 := ⟨x.a,x.b⟩
+def fromCM (x : AspisR72Sampler.field.CM31) : field.CM31 := ⟨x.a,x.b⟩
+def toQ (x : field.QM31) : AspisR72Sampler.field.QM31 := ⟨toCM x.c0,toCM x.c1⟩
+def fromQ (x : AspisR72Sampler.field.QM31) : field.QM31 := ⟨fromCM x.c0,fromCM x.c1⟩
+
+def field.QM31.add (x y : field.QM31) : Result field.QM31 := do
+ let z ← AspisR72Sampler.field.QM31.add (toQ x) (toQ y)
+ ok (fromQ z)
+def field.QM31.sub (x y : field.QM31) : Result field.QM31 := do
+ let z ← AspisR72Sampler.field.QM31.sub (toQ x) (toQ y)
+ ok (fromQ z)
+def field.QM31.mul (x y : field.QM31) : Result field.QM31 := do
+ let z ← AspisR72Sampler.field.QM31.mul (toQ x) (toQ y)
+ ok (fromQ z)
+def field.QM31.square (x : field.QM31) : Result field.QM31 := do
+ let z ← AspisR72Sampler.field.QM31.square (toQ x)
+ ok (fromQ z)
+def field.QM31.try_inv (x : field.QM31) : Result (Option field.QM31) := do
+ let z ← AspisR72Sampler.field.QM31.try_inv (toQ x)
+ ok (z.map fromQ)
+theorem from_to (x : field.QM31) : fromQ (toQ x) = x := by cases x; rfl
+theorem to_from (x : AspisR72Sampler.field.QM31) : toQ (fromQ x) = x := by cases x; rfl
+#print axioms from_to
+#print axioms to_from
+end NKM_circle
+end

@@ -1,0 +1,50 @@
+{"attempt": "NKM_L024", "exit_status": 0, "wall_seconds": 16.09996745805256, "peak_rss_kib": "6379088", "swaps": "0", "print_axioms": []}
+NKM_Roots.circle (t : AspisV8R15.ExactTowerBase.QM31Exact) :
+  Aeneas.Std.Result.ok (NKM_Roots.circleInvocation t) =
+    NKM_circle.circle.secure_circle_point_from_parameter (NKM_FieldLaws.encode t)
+theorem NKM_Roots.circle : ∀ (t : AspisV8R15.ExactTowerBase.QM31Exact),
+  Aeneas.Std.Result.ok (NKM_Roots.circleInvocation t) =
+    NKM_circle.circle.secure_circle_point_from_parameter (NKM_FieldLaws.encode t) :=
+fun t =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => Aeneas.Std.Result.ok (NKM_Roots.circleInvocation t) = _a) (NKM_CircleModel.circle_total t)))
+    (if hd : 1 + t * t = 0 then
+      of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg Eq
+              (congrArg Aeneas.St
+...
+             (Aeneas.Std.core.result.Result.Err
+                                    AspisR72Sampler.circle.CirclePointError.SingularParameter)))))
+                      (fun h =>
+                        Eq.symm h ▸
+                          Eq.refl
+                            (Aeneas.Std.Result.ok
+                              (NKM_Adopted.wrapperResult
+                                (NKM_CircleModel.fromResult
+                                  (Aeneas.Std.core.result.Result.Err
+                                    AspisR72Sampler.circle.CirclePointError.ParameterInCm31Subfield)))))
+                      (Eq.refl e))
+                (Eq.refl r))))))
+NKM_Adopted.fallback (row : AspisR1CircleSampleWrapper.r0_transcript.CircleRow) :
+  (do
+      let p ← NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+      Aeneas.Std.Result.ok (NKM_Adopted.fallbackPoint p)) =
+    AspisR1CircleFallback.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+theorem NKM_Adopted.fallback : ∀ (row : AspisR1CircleSampleWrapper.r0_transcript.CircleRow),
+  (do
+      let p ← NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+      Aeneas.Std.Result.ok (NKM_Adopted.fallbackPoint p)) =
+    AspisR1CircleFallback.transcript.circle_fallback_point (NKM_FallbackModel.index row) :=
+fun row =>
+  AspisR1CircleSampleWrapper.r0_transcript.CircleRow.casesOn (motive := fun t =>
+    row = t →
+      (do
+          let p ← NKM_circle.transcript.circle_fallback_point (NKM_FallbackModel.index row)
+          Aeneas.Std.Result.ok (NKM_Adopted.fallbackPoint p)) =
+        AspisR1CircleFallback.transcript.circle_fallback_point (NKM_FallbackModel.index row))
+    row (fun h => Eq.symm h ▸ NKM_Adopted.fallback0) (fun h => Eq.symm h ▸ NKM_Adopted.fallback1) (Eq.refl row)
+
+Running as unit: run-r93a7903c209b47e0b06d2e47de8bb146.scope; invocation ID: 9973d422206d43e9b878a36f4f294c3e
