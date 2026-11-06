@@ -34,7 +34,8 @@ def run (native : Native) (rows : Rows) (before : Memory) : Memory :=
  native 2 (rows 2) (native 1 (rows 1) (native 0 (rows 0) before))
 
 /-- Three source writes, each ONE native iteration on arbitrary pre-state,
-compose to full initializedness before assume_init. No zero-initialized heap
+compose the complete DATA prefix. Typed-write readiness is proved separately
+in NKA_InitHistory and runRows_source. No zero-initialized heap
 or endpoint equation occurs in the hypotheses. -/
 theorem complete (native : Native) (cut : Cut native) (rows : Rows) (before : Memory) :
  Prefix rows 3 (run native rows before) := by

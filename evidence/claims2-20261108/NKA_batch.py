@@ -1,19 +1,21 @@
 """Each native child runs sequentially and has independent time/RSS/axiom receipt."""
 from pathlib import Path
 import subprocess,json,time,hashlib,re,sys,lzma
-B=Path.cwd();mode=sys.argv[1];E=B/'NKA_audit'/mode;E.mkdir(parents=True,exist_ok=True)
+B=Path.cwd();library=json.loads((B/'NKA_LIBRARY_PINS.json').read_text());assert all(Path(q).is_file() and hashlib.sha256(Path(q).read_bytes()).hexdigest()==v['sha256'] for q,v in library.items()),'library drift before audit';mode=sys.argv[1];E=B/'NKA_audit'/mode;E.mkdir(parents=True,exist_ok=True)
 if mode.startswith('inventory-'):jobs=[(mode,['NKA_native/NKA_InventoryDriver',mode.split('-')[1]])]
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NKA_native/'+('NKA_PoolDriver' if mode=='poolscan' else 'NKA_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
 elif mode in ['fixtures','scan']:jobs=[(mode,['NKA_native/'+('NKA_Driver' if mode=='scan' else 'NKA_ProofDriver'),mode])]
 else:
  batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NKA_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NKA_native/NKA_ProofDriver','proof'+str(i)]) for i in range(batch,min(batch+1,len(groups)))];assert jobs
 for name,command in jobs:
+ binary=B/command[0];binary_hash=hashlib.sha256(binary.read_bytes()).hexdigest()
+ links=json.loads((B/'NKA_LINK.json').read_text());assert any(z['target']==binary.name and z['binary_sha256']==binary_hash for z in links),'audit binary drift'
  start=time.monotonic()
  with (E/(name+'.log')).open('w') as out:r=subprocess.run(['/usr/bin/time','-v','-o',str(E/(name+'.time')),*command],stdout=out,stderr=subprocess.STDOUT)
- raw=(E/(name+'.log')).read_text();timing=(E/(name+'.time')).read_text()
+ assert hashlib.sha256(binary.read_bytes()).hexdigest()==binary_hash,'audit binary changed';raw=(E/(name+'.log')).read_text();timing=(E/(name+'.time')).read_text()
  def metric(k):
   m=re.search(re.escape(k)+r':\s*(.*)',timing);return m[1] if m else None
- receipt=dict(target=name,command=command,exit_status=r.returncode,wall_seconds=time.monotonic()-start,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),print_axioms=[l for l in raw.splitlines() if 'depends on axioms' in l or 'does not depend on any axioms' in l],results=[json.loads(l[11:]) for l in raw.splitlines() if l.startswith('NEP_RESULT ')])
+ receipt=dict(target=name,binary_sha256=binary_hash,command=command,exit_status=r.returncode,wall_seconds=time.monotonic()-start,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),print_axioms=[l for l in raw.splitlines() if 'depends on axioms' in l or 'does not depend on any axioms' in l],results=[json.loads(l[11:]) for l in raw.splitlines() if l.startswith('NEP_RESULT ')])
  archives=B/'NKA_archives';archives.mkdir(exist_ok=True)
  for source in sorted(B.glob('NEP_'+name+'_*')):
   if not source.is_file():continue
@@ -33,3 +35,5 @@ for name,command in jobs:
  (E/(name+'.json')).write_text(json.dumps(receipt,indent=1)+'\n');print(json.dumps(dict(target=name,exit_status=r.returncode,policy_pass=policy,roots=len(results))),flush=True)
  if not policy:sys.exit(1)
  if r.returncode:print(raw,flush=True);sys.exit(r.returncode)
+
+assert all(hashlib.sha256(Path(q).read_bytes()).hexdigest()==v['sha256'] for q,v in library.items()),'library drift after audit'

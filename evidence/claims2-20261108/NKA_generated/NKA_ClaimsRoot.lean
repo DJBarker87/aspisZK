@@ -17,7 +17,7 @@ theorem claims {A : Type} (allocator : S2W_D189Wrappers.Allocator A) (state : A)
  (before : NKA_InitializedPrefix.Memory) (bytes : Slice U8) :
  match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
  | .ok (.Ok pre) =>
-   ∃ value,NKA_ClaimsOwnership.Bound reservation rows box owner before value ∧
+   ∃ value,NKA_ClaimsOwnership.AtAllocation (allocate allocator state) reservation rows box owner before value ∧
    native allocator state reservation rows box owner before value=
     cohort allocator state reservation (PrefixAdapter.fromOld pre) ∧
    native allocator state reservation rows box owner before value=
@@ -30,7 +30,7 @@ theorem claims {A : Type} (allocator : S2W_D189Wrappers.Allocator A) (state : A)
  · rename_i pre parser
    obtain ⟨value,first,second,third⟩:=NKA_ClaimsEffects.parsed allocator state reservation
     rows rowCut box boxCut owner before bytes pre parser
-   exact ⟨value,NKA_ClaimsOwnership.bound reservation rows rowCut box boxCut owner before value,
+   exact ⟨value,NKA_ClaimsOwnership.at_allocation (allocate allocator state) reservation rows rowCut box boxCut owner before value,
     first,second,third⟩
  · trivial
 

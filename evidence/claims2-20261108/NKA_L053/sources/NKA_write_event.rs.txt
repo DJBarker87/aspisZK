@@ -1,0 +1,28 @@
+#[cfg(kani)] mod NKA_write_event {
+ use super::*;
+ use core::mem::MaybeUninit;
+ use aspis_core::field::{CM31,M31};
+ type Claims=[[QM31;29];3];
+ type Row=[QM31;29];
+ // Delete the ghost `written` assignment to recover the literal shipped
+ // ONE claims iteration. The log is fresh and LOCAL for this source site.
+ fn native(out:&mut MaybeUninit<Claims>,p:usize,reply:Result<Row,Error>,written:&mut bool)->Result<(),Error>{
+  unsafe{out.as_mut_ptr().cast::<Row>().add(p).write(reply?);}
+  *written=true;
+  Ok(())
+ }
+ fn check(negative:bool){
+  let p:usize=kani::any();kani::assume(p<3);
+  let row:Row=core::array::from_fn(|_|QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}});
+  let success:bool=kani::any();let tag:bool=kani::any();let bad:usize=kani::any();kani::assume(bad<29);
+  let reply=if success{Ok(row)}else{Err(if tag{Error::Length{row:25}}else{Error::NonCanonical{row:25,value:p*29+bad}})};
+  let mut out=MaybeUninit::<Claims>::uninit();let mut written=false;
+  let result=native(&mut out,p,reply,&mut written);
+  assert_eq!(result.is_ok(),success);
+  if negative{assert_eq!(written,!success);}else{assert_eq!(written,success);}
+ }
+ #[kani::proof] #[kani::unwind(117)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)]
+ fn typed_write_event(){check(false);}
+ #[kani::proof] #[kani::unwind(117)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NKA_kmx::KMX_copy_nonoverlapping)]
+ fn typed_write_event_control(){check(true);}
+}
