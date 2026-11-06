@@ -9,6 +9,16 @@ for n in ['NLJ_SOURCE_PINS.json','NLJ_FROZEN_FILE_PINS.json']:old.update(json.lo
 assert all(sha(P/'NLJ_src'/n)==h for n,h in old.items()),'Predecessor drift'
 shutil.copytree(P/'NLJ_src',S)
 assert all(sha(S/n)==h for n,h in old.items())
+# Apply the owner's amended frozen Pool source in this PRIVATE scratch only.
+# Remove only superseded Rust source files; no key/account data is touched.
+pool=json.loads((B/'NLV_POOL_FROZEN.json').read_text())
+for p in (S/'programs/aspis-pool').rglob('*.rs'):
+ n=str(p.relative_to(S))
+ if n not in pool['files']:p.unlink();old.pop(n,None)
+for n,t in pool['files'].items():
+ p=S/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+ assert sha(p)==pool['sha256'][n];old[n]=sha(p)
+(B/'NLV_POOL_SOURCE_CHECK.json').write_text(json.dumps(dict(revision=pool['revision'],files=pool['sha256'],scope='off-path frozen source only; no Pool bridge or ELF rebuild credit'),indent=2))
 expected={n:sha(S/n) for n in ['crates/aspis-r1-cost-probe/src/candidate.rs']}
 patch=''
 for parent,module,file in [('candidate.rs','NLV_native','NLV_native.rs.txt')]:

@@ -16,3 +16,22 @@ installation, native windows and combined audit are still being developed.
 
 The pending Rust file is unvalidated candidate input only. It does not count as
 a bridge or native result. No runtime or cryptographic trust item is added.
+
+Stage 2: NLV.source_cuts, external_frame_chain, input_frame_chain and effects
+pass at L067, using ONE NLV.State and ONE NLV.Event carrying its actual pre-state.
+Invocation threads the exact returned middle.core; fail/div are terminal.
+This remains parameterized by the proposed physical Cut producer, not a row root.
+
+NLV_EmissionSource.source passes at L072. It structurally identifies the exact
+adopted GExp body with the emitted suffix tree; NLV_EmitProof.eq_guard transports
+that tree to the linear denotation, with every Try/Err/fail/div and attempted log.
+The successful proof keeps installed child bodies locally opaque: broad whnf
+comparison had expanded their large reduction graphs. No theorem statement,
+heartbeat limit, memory cap or runtime trust item was weakened.
+
+K001 is compile-only (own ghost receiver/amount-width errors), excluded. K002
+TIMED OUT at90s after a full unused-fixture construction (97.092149744s scope,
+2521636KiB RSS, swap0), excluded. Its full-parent fixture shape is retired; no
+control or unchanged rerun is admitted. Split first-error windows are candidates
+only until their fresh native scopes and matched controls finish. Frozen graph,
+lock and deployed features validated for both; lock unchanged afterward.

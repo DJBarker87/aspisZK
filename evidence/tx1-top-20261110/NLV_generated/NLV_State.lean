@@ -29,21 +29,25 @@ structure State where
  external : NLJ_Packets.Frame094
  ownership : Ownership
  attempted : SdkC_Source.Log
-abbrev Event := NLJ_Tx1.Event
-def event (s : State) : Event := NLJ_Tx1.event s.core
+/-- One event type, recording the entire SAME pre-state as well as its source
+occurrence. Invocation constructs this from its own pre-state, never a free ID. -/
+structure Event where
+ pre : State
+ kind : NLJ_Tx1.Event
+def event (s : State) : Event := ⟨s,NLJ_Tx1.event s.core⟩
 /-- No late read of proof/public replaces the original snapshots. -/
 def InputAdmission (s : State) : Prop :=
  s.external.proof=s.core.input.proof ∧
  s.external.publicBytes=s.core.input.publicBytes
 /-- Source-only projection, not a claim that Rust preserves every field. -/
-def valueAdvance (s : State) (local : NLJ_Tx1.Local) : State :=
- {s with core:=NLJ_Tx1.advance s.core local}
-theorem input_frame (s : State) (local : NLJ_Tx1.Local) :
- (valueAdvance s local).core.input=s.core.input := rfl
-theorem external_frame (s : State) (local : NLJ_Tx1.Local) :
- (valueAdvance s local).external=s.external := rfl
-theorem admission (s : State) (local : NLJ_Tx1.Local) (h : InputAdmission s) :
- InputAdmission (valueAdvance s local) := h
+def valueAdvance (s : State) (nextLocal : NLJ_Tx1.Local) : State :=
+ {s with core:=NLJ_Tx1.advance s.core nextLocal}
+theorem input_frame (s : State) (nextLocal : NLJ_Tx1.Local) :
+ (valueAdvance s nextLocal).core.input=s.core.input := rfl
+theorem external_frame (s : State) (nextLocal : NLJ_Tx1.Local) :
+ (valueAdvance s nextLocal).external=s.external := rfl
+theorem admission (s : State) (nextLocal : NLJ_Tx1.Local) (h : InputAdmission s) :
+ InputAdmission (valueAdvance s nextLocal) := h
 #print axioms input_frame
 #print axioms external_frame
 #print axioms admission

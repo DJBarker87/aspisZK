@@ -15,3 +15,10 @@ Retained assumptions: approved runtime and P6/D188 trust inventory; no new trust
 Exact validation and remaining obligations will be updated after each stage. Next deliverable: reviewed RowSpec and parent fold, without treating a parameterized fold as row closure.
 
 Stage 1: all20 per-occurrence source continuation equations pass (L008-L028, excluding failed L022 replaced by L023). These are support only. Source/frame/native assembly and child domains remain OPEN; no row credit. Own prelaunch path correction L002 and client serialization refusal before L006 are retained. New native/reference/spec candidates are not yet validated.
+
+Stage 2: parent source cut fold L067 and exact GExp structural source identity
+L072 pass, standard axioms only. Physical Cut producer and child caller domains
+are NOT discharged. Native K001 compile-only and K002 timeout are excluded;
+K002 full-fixture shape is retired. Prefix splits are prepared, not yet validated.
+RowSpec correction draft explicitly retains raw Rust Result alongside its model
+rejection transport; see NLV_ROWSPEC_REVIEW.md (NLV-F1). No row root or credit.

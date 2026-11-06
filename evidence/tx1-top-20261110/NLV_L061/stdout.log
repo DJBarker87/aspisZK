@@ -1,0 +1,291 @@
+NLV_generated/NLV_EmissionSource.lean:10:61: error: unsolved goals
+cfg : Configuration
+i : Input
+⊢ (if (i.k != compact.SPLIT) = true then CheckpointBytes5Effect.Code.done (core.result.Result.Err verifier.Error.Parse)
+    else
+      CheckpointBytes5Effect.bind (liftM ((GExp_FirstCode.installed cfg.base cfg.boundaries cfg.std).op3 i.proof))
+        fun r =>
+        CheckpointBytes5Effect.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch r)) fun cf =>
+          match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            CheckpointBytes5Effect.bind (liftM ((GExp_FirstCode.installed cfg.base cfg.boundaries cfg.std).op4 i.proof))
+              fun r =>
+              CheckpointBytes5Effect.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch r)) fun cf =>
+                match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  CheckpointBytes5Effect.bind (liftM (verifier.mark none verifier.Phase.Parsed)) fun __r =>
+                    CheckpointBytes5Effect.bind
+                      (liftM
+                        (aspis_core.field.wide_exact.WideExact.ZERO
+                          (GExp_FirstCode.installed cfg.base cfg.boundaries cfg.std)))
+                      fun zero =>
+                      CheckpointBytes5Effect.bind
+                        (SdkD_PrepareLower.lower
+                          (SdkD_PrepareSource.code
+                            (Op5T_Concrete.current
+                              { op0 := cfg.base.op0, op1 := @Ops.op1 cfg.base, op2 := cfg.base.op2, op3 := cfg.base.op3,
+                                op4 := cfg.base.op4, op5 := cfg.base.op5, op6 := @Ops.op6 cfg.base, op7 := cfg.base.op7,
+                                op8 := @Ops.op8 cfg.base, op9 := @Ops.op9 cfg.base, op10 := cfg.base.op10,
+                                op11 := cfg.base.op11, op12 := cfg.base.op12, op13 := cfg.base.op13,
+                                op14 := cfg.base.op14, op15 := cfg.base.op15, op16 := fun {H} => Tx1Q_Install.writer,
+                                op17 := cfg.base.op17, op18 := cfg.base.op18, op19 := cfg.base.op19,
+                                op20 := cfg.base.op20, op21 := cfg.base.op21 })
+                            cfg.boundaries cfg.std i.digest i.publicValue i.proof () (Array.repeat 29#usize zero)))
+                        fun __x =>
+                        CheckpointBytes5Effect.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)) fun cf =>
+                          match cf with
+                          | core.ops.control_flow.ControlFlow.Continue val =>
+                            CheckpointBytes5Effect.bind
+                              (liftM
+                                ((GExp_FirstCode.installed cfg.base cfg.boundaries cfg.std).op20 transport.Variant.S2))
+                              fun r =>
+                              CheckpointBytes5Effect.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch r))
+                                fun cf =>
+                                match cf with
+                                | core.ops.control_flow.ControlFlow.Continue val_1 =>
+                                  CheckpointBytes5Effect.bind (liftM (verifier.mark none verifier.Phase.Prepare))
+                                    fun __r =>
+                                    CheckpointBytes5Effect.bind
+                                      (liftM
+                                        (compact.OFF_FOLDED_ROOT
+                                          (GExp_FirstCode.installed cfg.base cfg.boundaries cfg.std)))
+                                      fun lo =>
+                                      CheckpointBytes5Effect.bind
+                                        (liftM
+                                          (compact.OFF_ROUND1
+                                            (GExp_FirstCode.installed cfg.base cfg.boundaries cfg.std)))
+                                        fun hi =>
+                                        CheckpointBytes5Effect.bind
+                                          (liftM
+                                            (core.slice.index.Slice.index
+                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                              { start := lo, «end» := hi }))
+                                          fun slice =>
+                                          CheckpointBytes5Effect.bind
+                                            (liftM
+                                              (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8
+                                                slice))
+                                            fun r =>
+                                            CheckpointBytes5Effect.bind
+                                              (liftM (core.result.Result.unwrap core.fmt.DebugTryFromSliceError r))
+                                              fun root =>
+                                              CheckpointBytes5Effect.bind
+                                                (SdkC_BatchSource.currentCode i.hashv i.proof val root) fun r =>
+                                                CheckpointBytes5Effect.bind
+                                                  (liftM (core.result.Result.Insts.CoreOpsTry.branch r)) fun cf =>
+                                                  match cf with
+                                                  | core.ops.control_flow.ControlFlow.Continue val_2 =>
+                                                    CheckpointBytes5Effect.bind
+                                                      (liftM (verifier.mark none (verifier.Phase.Merkle 0#usize)))
+                                                      fun __r =>
+                                                      CheckpointBytes5Effect.bind
+                                                        (liftM
+                                                          ((GExp_FirstCode.installed cfg.base cfg.boundaries
+                                                                cfg.std).op19
+                                                            val.queries 0#usize i.k))
+                                                        fun r =>
+                                                        CheckpointBytes5Effect.bind
+                                                          (liftM (core.result.Result.Insts.CoreOpsTry.branch r))
+                                                          fun cf =>
+                                                          match cf with
+                                                          | core.ops.control_flow.ControlFlow.Continue val_3 =>
+                                                            CheckpointBytes5Effect.bind
+                                                              (liftM
+                                                                ((GExp_FirstCode.installed cfg.base cfg.boundaries
+                                                                      cfg.std).op18
+                                                                  val_1.weights.deref))
+                                                              ⋯
+                                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                                            liftM
+                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (alloc.vec.Vec U8)
+                                                                (core.convert.FromSame verifier.Error) residual)
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    liftM
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error)
+                                                        residual)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual)) =
+    if (i.k != compact.SPLIT) = true then CheckpointBytes5Effect.Code.done (core.result.Result.Err verifier.Error.Parse)
+    else
+      CheckpointBytes5Effect.bind (liftM ((GExp_FirstCode.installed cfg.base cfg.boundaries cfg.std).op3 i.proof))
+        fun r =>
+        CheckpointBytes5Effect.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch r)) fun cf =>
+          match cf with
+          | core.ops.control_flow.ControlFlow.Continue a =>
+            CheckpointBytes5Effect.bind (liftM ((GExp_FirstCode.installed cfg.base cfg.boundaries cfg.std).op4 i.proof))
+              fun r1 =>
+              CheckpointBytes5Effect.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch r1)) fun cf1 =>
+                match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  CheckpointBytes5Effect.bind (liftM (verifier.mark none verifier.Phase.Parsed)) fun __r =>
+                    CheckpointBytes5Effect.bind
+                      (liftM
+                        (aspis_core.field.wide_exact.WideExact.ZERO
+                          (GExp_FirstCode.installed cfg.base cfg.boundaries cfg.std)))
+                      fun we =>
+                      CheckpointBytes5Effect.bind
+                        (SdkD_PrepareLower.lower
+                          (SdkD_PrepareSource.code
+                            (Op5T_Concrete.current
+                              { op0 := cfg.base.op0, op1 := @Ops.op1 cfg.base, op2 := cfg.base.op2, op3 := cfg.base.op3,
+                                op4 := cfg.base.op4, op5 := cfg.base.op5, op6 := @Ops.op6 cfg.base, op7 := cfg.base.op7,
+                                op8 := @Ops.op8 cfg.base, op9 := @Ops.op9 cfg.base, op10 := cfg.base.op10,
+                                op11 := cfg.base.op11, op12 := cfg.base.op12, op13 := cfg.base.op13,
+                                op14 := cfg.base.op14, op15 := cfg.base.op15, op16 := fun {H} => Tx1Q_Install.writer,
+                                op17 := cfg.base.op17, op18 := cfg.base.op18, op19 := cfg.base.op19,
+                                op20 := cfg.base.op20, op21 := cfg.base.op21 })
+                            cfg.boundaries cfg.std i.digest i.publicValue i.proof () (Array.repeat 29#usize we)))
+                        fun __x =>
+                        CheckpointBytes5Effect.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1))
+                          fun cf2 =>
+                          match cf2 with
+                          | core.ops.control_flow.ControlFlow.Continue val =>
+                            CheckpointBytes5Effect.bind
+                              (liftM
+                                ((GExp_FirstCode.installed cfg.base cfg.boundaries cfg.std).op20 transport.Variant.S2))
+                              fun r3 =>
+                              CheckpointBytes5Effect.bind (liftM (core.result.Result.Insts.CoreOpsTry.branch r3))
+                                fun cf3 =>
+                                match cf3 with
+                                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                  CheckpointBytes5Effect.bind (liftM (verifier.mark none verifier.Phase.Prepare))
+                                    fun __r =>
+                                    CheckpointBytes5Effect.bind
+                                      (liftM
+                                        (compact.OFF_FOLDED_ROOT
+                                          (GExp_FirstCode.installed cfg.base cfg.boundaries cfg.std)))
+                                      fun i_1 =>
+                                      CheckpointBytes5Effect.bind
+                                        (liftM
+                                          (compact.OFF_ROUND1
+                                            (GExp_FirstCode.installed cfg.base cfg.boundaries cfg.std)))
+                                        fun i1 =>
+                                        CheckpointBytes5Effect.bind
+                                          (liftM
+                                            (core.slice.index.Slice.index
+                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                              { start := i_1, «end» := i1 }))
+                                          fun s =>
+                                          CheckpointBytes5Effect.bind
+                                            (liftM
+                                              (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s))
+                                            fun r4 =>
+                                            CheckpointBytes5Effect.bind
+                                              (liftM (core.result.Result.unwrap core.fmt.DebugTryFromSliceError r4))
+                                              fun folded_root =>
+                                              CheckpointBytes5Effect.bind
+                                                (SdkC_BatchSource.currentCode i.hashv i.proof val folded_root) fun r5 =>
+                                                CheckpointBytes5Effect.bind
+                                                  (liftM (core.result.Result.Insts.CoreOpsTry.branch r5)) fun cf4 =>
+                                                  match cf4 with
+                                                  | core.ops.control_flow.ControlFlow.Continue a =>
+                                                    CheckpointBytes5Effect.bind
+                                                      (liftM (verifier.mark none (verifier.Phase.Merkle 0#usize)))
+                                                      fun __r =>
+                                                      CheckpointBytes5Effect.bind
+                                                        (liftM
+                                                          ((GExp_FirstCode.installed cfg.base cfg.boundaries
+                                                                cfg.std).op19
+                                                            val.queries 0#usize i.k))
+                                                        fun r6 =>
+                                                        CheckpointBytes5Effect.bind
+                                                          (liftM (core.result.Result.Insts.CoreOpsTry.branch r6))
+                                                          fun cf5 =>
+                                                          match cf5 with
+                                                          | core.ops.control_flow.ControlFlow.Continue val2 =>
+                                                            CheckpointBytes5Effect.bind
+                                                              (liftM
+                                                                ((GExp_FirstCode.installed cfg.base cfg.boundaries
+                                                                      cfg.std).op18
+                                                                  val1.weights.deref))
+                                                              ⋯
+                                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                                            liftM
+                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (alloc.vec.Vec U8)
+                                                                (core.convert.FromSame verifier.Error) residual)
+                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                    liftM
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error)
+                                                        residual)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual)
+NLV_generated/NLV_EmissionSource.lean:12:57: warning: This simp argument is unused:
+  NLV_PairElim.elim
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵g̵u̵a̵r̵d̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵p̵a̵r̵s̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵s̵c̵a̵n̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵m̵a̵r̵k̵P̵a̵r̵s̵e̵d̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵z̵e̵r̵o̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵p̵r̵e̵p̵a̵r̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵a̵c̵c̵u̵m̵u̵l̵a̵t̵o̵r̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵m̵a̵r̵k̵P̵r̵e̵p̵a̵r̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵f̵o̵l̵d̵e̵d̵S̵l̵i̵c̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵f̵o̵l̵d̵e̵d̵C̵o̵p̵y̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵f̵o̵l̵d̵e̵d̵U̵n̵w̵r̵a̵p̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵b̵a̵t̵c̵h̵0̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵m̵a̵r̵k̵M̵e̵r̵k̵l̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵g̵e̵o̵m̵e̵t̵r̵y̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵p̵e̵n̵d̵i̵n̵g̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵q̵u̵e̵r̵y̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵f̵i̵n̵i̵s̵h̵P̵e̵n̵d̵i̵n̵g̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵c̵h̵e̵c̵k̵p̵o̵i̵n̵t̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵m̵a̵r̵k̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵r̵e̵t̵u̵r̵n̵e̵d̵,̵
+  ̵ ̵ ̵G̵E̵x̵p̵_̵F̵i̵r̵s̵t̵C̵o̵d̵e̵.̵c̵o̵d̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵e̵m̵i̵t̵t̵e̵d̵T̵r̵y̵,̵N̵L̵J̵_̵T̵x̵1̵.̵o̵p̵s̵,̵N̵L̵V̵_̵P̵a̵i̵r̵E̵l̵i̵m̵.̵e̵l̵i̵m̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵N̵L̵V̵_̵A̵l̵g̵e̵b̵r̵a̵.̵a̵s̵s̵o̵c̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵]̵[̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲g̲u̲a̲r̲d̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲p̲a̲r̲s̲e̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲s̲c̲a̲n̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲m̲a̲r̲k̲P̲a̲r̲s̲e̲d̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲z̲e̲r̲o̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲p̲r̲e̲p̲a̲r̲e̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲a̲c̲c̲u̲m̲u̲l̲a̲t̲o̲r̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲m̲a̲r̲k̲P̲r̲e̲p̲a̲r̲e̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲f̲o̲l̲d̲e̲d̲S̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲f̲o̲l̲d̲e̲d̲C̲o̲p̲y̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲f̲o̲l̲d̲e̲d̲U̲n̲w̲r̲a̲p̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲b̲a̲t̲c̲h̲0̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲m̲a̲r̲k̲M̲e̲r̲k̲l̲e̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲g̲e̲o̲m̲e̲t̲r̲y̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲p̲e̲n̲d̲i̲n̲g̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲q̲u̲e̲r̲y̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲f̲i̲n̲i̲s̲h̲P̲e̲n̲d̲i̲n̲g̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲c̲h̲e̲c̲k̲p̲o̲i̲n̲t̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲m̲a̲r̲k̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲r̲e̲t̲u̲r̲n̲e̲d̲,̲ ̲G̲E̲x̲p̲_̲F̲i̲r̲s̲t̲C̲o̲d̲e̲.̲c̲o̲d̲e̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲e̲m̲i̲t̲t̲e̲d̲T̲r̲y̲,̲ ̲N̲L̲J̲_̲T̲x̲1̲.̲o̲p̲s̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲N̲L̲V̲_̲A̲l̲g̲e̲b̲r̲a̲.̲a̲s̲s̲o̲c̲,̲
+  ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_EmissionSource.lean:12:95: warning: This simp argument is unused:
+  NLV_Algebra.assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵g̵u̵a̵r̵d̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵p̵a̵r̵s̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵s̵c̵a̵n̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵m̵a̵r̵k̵P̵a̵r̵s̵e̵d̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵z̵e̵r̵o̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵p̵r̵e̵p̵a̵r̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵a̵c̵c̵u̵m̵u̵l̵a̵t̵o̵r̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵m̵a̵r̵k̵P̵r̵e̵p̵a̵r̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵f̵o̵l̵d̵e̵d̵S̵l̵i̵c̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵f̵o̵l̵d̵e̵d̵C̵o̵p̵y̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵f̵o̵l̵d̵e̵d̵U̵n̵w̵r̵a̵p̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵b̵a̵t̵c̵h̵0̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵m̵a̵r̵k̵M̵e̵r̵k̵l̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵g̵e̵o̵m̵e̵t̵r̵y̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵p̵e̵n̵d̵i̵n̵g̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵q̵u̵e̵r̵y̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵f̵i̵n̵i̵s̵h̵P̵e̵n̵d̵i̵n̵g̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵c̵h̵e̵c̵k̵p̵o̵i̵n̵t̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵m̵a̵r̵k̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵r̵e̵t̵u̵r̵n̵e̵d̵,̵
+  ̵ ̵ ̵G̵E̵x̵p̵_̵F̵i̵r̵s̵t̵C̵o̵d̵e̵.̵c̵o̵d̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵e̵m̵i̵t̵t̵e̵d̵T̵r̵y̵,̵N̵L̵J̵_̵T̵x̵1̵.̵o̵p̵s̵,̵N̵L̵V̵_̵P̵a̵i̵r̵E̵l̵i̵m̵.̵e̵l̵i̵m̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵N̵L̵V̵_̵A̵l̵g̵e̵b̵r̵a̵.̵a̵s̵s̵o̵c̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵]̵[̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲g̲u̲a̲r̲d̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲p̲a̲r̲s̲e̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲s̲c̲a̲n̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲m̲a̲r̲k̲P̲a̲r̲s̲e̲d̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲z̲e̲r̲o̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲p̲r̲e̲p̲a̲r̲e̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲a̲c̲c̲u̲m̲u̲l̲a̲t̲o̲r̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲m̲a̲r̲k̲P̲r̲e̲p̲a̲r̲e̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲f̲o̲l̲d̲e̲d̲S̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲f̲o̲l̲d̲e̲d̲C̲o̲p̲y̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲f̲o̲l̲d̲e̲d̲U̲n̲w̲r̲a̲p̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲b̲a̲t̲c̲h̲0̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲m̲a̲r̲k̲M̲e̲r̲k̲l̲e̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲g̲e̲o̲m̲e̲t̲r̲y̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲p̲e̲n̲d̲i̲n̲g̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲q̲u̲e̲r̲y̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲f̲i̲n̲i̲s̲h̲P̲e̲n̲d̲i̲n̲g̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲c̲h̲e̲c̲k̲p̲o̲i̲n̲t̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲m̲a̲r̲k̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲r̲e̲t̲u̲r̲n̲e̲d̲,̲ ̲G̲E̲x̲p̲_̲F̲i̲r̲s̲t̲C̲o̲d̲e̲.̲c̲o̲d̲e̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲e̲m̲i̲t̲t̲e̲d̲T̲r̲y̲,̲ ̲N̲L̲J̲_̲T̲x̲1̲.̲o̲p̲s̲,̲ ̲N̲L̲V̲_̲P̲a̲i̲r̲E̲l̲i̲m̲.̲e̲l̲i̲m̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲
+  ̲ ̲ ̲ ̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲B̲y̲t̲e̲s̲5̲E̲f̲f̲e̲c̲t̲.̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_EmissionSource.lean:12:113: warning: This simp argument is unused:
+  CheckpointBytes5Effect.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵g̵u̵a̵r̵d̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵p̵a̵r̵s̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵s̵c̵a̵n̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵m̵a̵r̵k̵P̵a̵r̵s̵e̵d̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵z̵e̵r̵o̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵p̵r̵e̵p̵a̵r̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵a̵c̵c̵u̵m̵u̵l̵a̵t̵o̵r̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵m̵a̵r̵k̵P̵r̵e̵p̵a̵r̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵f̵o̵l̵d̵e̵d̵S̵l̵i̵c̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵f̵o̵l̵d̵e̵d̵C̵o̵p̵y̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵f̵o̵l̵d̵e̵d̵U̵n̵w̵r̵a̵p̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵b̵a̵t̵c̵h̵0̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵m̵a̵r̵k̵M̵e̵r̵k̵l̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵g̵e̵o̵m̵e̵t̵r̵y̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵p̵e̵n̵d̵i̵n̵g̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵q̵u̵e̵r̵y̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵f̵i̵n̵i̵s̵h̵P̵e̵n̵d̵i̵n̵g̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵c̵h̵e̵c̵k̵p̵o̵i̵n̵t̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵m̵a̵r̵k̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵s̵u̵f̵f̵i̵x̵_̵r̵e̵t̵u̵r̵n̵e̵d̵,̵
+  ̵ ̵ ̵G̵E̵x̵p̵_̵F̵i̵r̵s̵t̵C̵o̵d̵e̵.̵c̵o̵d̵e̵,̵N̵L̵V̵_̵E̵m̵i̵t̵t̵e̵d̵.̵e̵m̵i̵t̵t̵e̵d̵T̵r̵y̵,̵N̵L̵J̵_̵T̵x̵1̵.̵o̵p̵s̵,̵N̵L̵V̵_̵P̵a̵i̵r̵E̵l̵i̵m̵.̵e̵l̵i̵m̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵N̵L̵V̵_̵A̵l̵g̵e̵b̵r̵a̵.̵a̵s̵s̵o̵c̵,̵C̵h̵e̵c̵k̵p̵o̵i̵n̵t̵B̵y̵t̵e̵s̵5̵E̵f̵f̵e̵c̵t̵.̵b̵i̵n̵d̵]̵[̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲g̲u̲a̲r̲d̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲p̲a̲r̲s̲e̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲s̲c̲a̲n̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲m̲a̲r̲k̲P̲a̲r̲s̲e̲d̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲z̲e̲r̲o̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲p̲r̲e̲p̲a̲r̲e̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲a̲c̲c̲u̲m̲u̲l̲a̲t̲o̲r̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲m̲a̲r̲k̲P̲r̲e̲p̲a̲r̲e̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲f̲o̲l̲d̲e̲d̲S̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲f̲o̲l̲d̲e̲d̲C̲o̲p̲y̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲f̲o̲l̲d̲e̲d̲U̲n̲w̲r̲a̲p̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲b̲a̲t̲c̲h̲0̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲m̲a̲r̲k̲M̲e̲r̲k̲l̲e̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲g̲e̲o̲m̲e̲t̲r̲y̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲p̲e̲n̲d̲i̲n̲g̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲q̲u̲e̲r̲y̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲f̲i̲n̲i̲s̲h̲P̲e̲n̲d̲i̲n̲g̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲c̲h̲e̲c̲k̲p̲o̲i̲n̲t̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲m̲a̲r̲k̲C̲h̲e̲c̲k̲p̲o̲i̲n̲t̲,̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲s̲u̲f̲f̲i̲x̲_̲r̲e̲t̲u̲r̲n̲e̲d̲,̲ ̲G̲E̲x̲p̲_̲F̲i̲r̲s̲t̲C̲o̲d̲e̲.̲c̲o̲d̲e̲,̲
+  ̲ ̲ ̲ ̲N̲L̲V̲_̲E̲m̲i̲t̲t̲e̲d̲.̲e̲m̲i̲t̲t̲e̲d̲T̲r̲y̲,̲ ̲N̲L̲J̲_̲T̲x̲1̲.̲o̲p̲s̲,̲ ̲N̲L̲V̲_̲P̲a̲i̲r̲E̲l̲i̲m̲.̲e̲l̲i̲m̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲P̲u̲r̲e̲.̲p̲u̲r̲e̲,̲ ̲N̲L̲V̲_̲A̲l̲g̲e̲b̲r̲a̲.̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NLV_EmissionSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

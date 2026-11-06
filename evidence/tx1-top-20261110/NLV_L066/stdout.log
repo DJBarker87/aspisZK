@@ -1,0 +1,57 @@
+NLV_generated/NLV_CutFold.lean:46:36: error: unsolved goals
+case this
+cfg : NLJ_Tx1.Configuration
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+n✝ : ℕ
+s✝ last : State
+out✝ : Result NLJ_Tx1.Out
+log✝ : SdkC_Source.Log
+events : List Event
+n : ℕ
+s after : State
+out : NLJ_Tx1.Out
+log : SdkC_Source.Log
+head : Cut cfg hashv s after (ok (Sum.inl out)) log
+k : NLJ_Tx1.Post → Code NLJ_Tx1.Out :=
+  fun post =>
+    match post with
+    | Sum.inl value => pure value
+    | Sum.inr next => NLJ_Tx1.fold cfg n next
+tail : NHZ_DRIVER.Cuts hashv (k (Sum.inl out)) (ok out) []
+⊢ ?m.65
+
+case returned
+cfg : NLJ_Tx1.Configuration
+hashv : SdkC_Source.Parts → Result SdkC_Source.Digest
+n✝ : ℕ
+s✝ last : State
+out✝ : Result NLJ_Tx1.Out
+log✝ : SdkC_Source.Log
+events : List Event
+n : ℕ
+s after : State
+out : NLJ_Tx1.Out
+log : SdkC_Source.Log
+head : Cut cfg hashv s after (ok (Sum.inl out)) log
+k : NLJ_Tx1.Post → Code NLJ_Tx1.Out :=
+  fun post =>
+    match post with
+    | Sum.inl value => pure value
+    | Sum.inr next => NLJ_Tx1.fold cfg n next
+tail : NHZ_DRIVER.Cuts hashv (k (Sum.inl out)) (ok out) []
+this : ?m.65
+⊢ NHZ_DRIVER.Cuts hashv (NLJ_Tx1.fold cfg (n + 1) s.core) (ok out) log
+NLV_generated/NLV_CutFold.lean:45:1: error: Alternative `next` has not been provided
+NLV_generated/NLV_CutFold.lean:45:1: error: Alternative `fail` has not been provided
+NLV_generated/NLV_CutFold.lean:45:1: error: Alternative `div` has not been provided
+NLV_generated/NLV_CutFold.lean:51:14: error: unexpected token ':'; expected identifier or stx
+NLV_generated/NLV_CutFold.lean:57:13: error: unexpected token ']'; expected identifier or stx
+'AspisR1.NLV.source_cuts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLV.external_frame_chain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLV.input_frame_chain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLV.effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLV.source_cuts : ∀ {cfg : NLJ_Tx1.Configuration}
+  {hashv : SdkC_Source.Parts → Result SdkC_Source.Digest} {n : ℕ} {s last : State} {out : Result NLJ_Tx1.Out}
+  {log : SdkC_Source.Log} {events : List Event},
+  Invocation cfg hashv n s out log events last → NHZ_DRIVER.Cuts hashv (NLJ_Tx1.fold cfg n s.core) out log :=
+⋯

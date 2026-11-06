@@ -106,11 +106,5 @@ def suffix_guard (cfg : Configuration) (i : Input)  : Code Out := do
    if i.k != compact.SPLIT then pure (.Err verifier.Error.Parse)
    else suffix_parse cfg i
 
-/-- Structural identity with the adopted emitted body, including every Try
-residual and aborting pure step. No native cut is inferred. -/
-theorem initial_source (cfg : Configuration) (i : Input) :
- suffix_guard cfg i = GExp_FirstCode.code cfg.base cfg.boundaries cfg.std
- i.hashv i.digest i.publicValue i.publicBytes i.proof i.k := by rfl
-#print axioms initial_source
 end AspisR1.NLV_Emitted
 end

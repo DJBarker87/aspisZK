@@ -23,3 +23,6 @@ open CheckpointBytes5Effect (Code)
  | decide
 #print axioms '''+goal+'_'+name+'\n'
  s+='end AspisR1.NLV_Tree\nend\n';(G/('NLV_Frame_'+name+'.lean')).write_text(s)
+
+# Final authoritative frame bundle: NLV_generated/NLV_Frames.lean.
+# Historical separate-file templates were unvalidated and are not regenerated in the final gate.
