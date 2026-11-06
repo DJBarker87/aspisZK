@@ -1,3 +1,5 @@
 # NLN corrected attempt
 
 L008 failed at bindings' three tiny bound proofs: rootAt takes Fin 3, so implicit k<3 had inferred a Fin comparison and numeral3 wrapped to0. This was an owned statement error detected before any root used it. Replaced the clause by the explicit, nonvacuous `∀ k : Fin 3, rootAt roots k = encodeState (committedRoot p k.val)`, with no redundant comparison. The changed L009 tests this precise replacement. L008 source and diagnostic (including sorryAx printed by Lean for its uncompleted declaration) remain failed evidence; none is credited. No timeout/memory kill, cap/timeout increase or unchanged rerun.
+
+Owned validation also caught a documentation-copy omission of `.val` in the JSON rootValues clause; corrected JSON to match the already-passing Lean statement verbatim. This changed no proof or audit input. After audit, the owned reader was extended to resolve SHA-checked compressed input references, so the large immutable import manifest is stored only once. Validation remains the same or stricter.

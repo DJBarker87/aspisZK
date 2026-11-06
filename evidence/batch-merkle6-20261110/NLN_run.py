@@ -2,9 +2,16 @@
 from pathlib import Path
 import subprocess,json,sys,time,shlex,hashlib,lzma,base64
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-batch-merkle6-20261110'
+def input_bytes(name):
+ p=E/name
+ if p.is_file():return p.read_bytes()
+ ref=json.loads((E/(name+'.ref.json')).read_text());data=(E/ref['owned_input']).read_bytes()
+ if ref.get('compression')=='xz':data=lzma.decompress(data)
+ assert hashlib.sha256(data).hexdigest()==ref['sha256'],'STOP pinned input drift '+name
+ return data
 a=sys.argv[1];cfg=json.loads((E/(a+'.json')).read_text());assert cfg['attempt']==a
 assert not cfg.get('cancelled'),cfg.get('cancelled')
-for name,wanted in cfg.get('inputs_expected',{}).items():assert hashlib.sha256((E/name).read_bytes()).hexdigest()==wanted,'STOP owned input drift '+name
+for name,wanted in cfg.get('inputs_expected',{}).items():assert hashlib.sha256(input_bytes(name)).hexdigest()==wanted,'STOP owned input drift '+name
 assert not (E/a).exists()
 history=[json.loads(line) for line in (E/'NLN_ATTEMPTS.jsonl').read_text().splitlines() if line.strip()]
 assert cfg['kind'] in ('lean','link','audit','kani'), 'extraction forbidden'
@@ -52,7 +59,7 @@ sys.exit(r.returncode)
  raise RuntimeError('STOP admission')
 # Upload only owned configuration / source inputs, after admission.
 files={a+'.json':base64.b64encode(json.dumps(cfg).encode()).decode()}
-for name in cfg.pop('upload',[]):files[name]=base64.b64encode((E/name).read_bytes()).decode()
+for name in cfg.pop('upload',[]):files[name]=base64.b64encode(input_bytes(name)).decode()
 r=ssh('python3',f'''from pathlib import Path
 import json,shutil,base64
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
