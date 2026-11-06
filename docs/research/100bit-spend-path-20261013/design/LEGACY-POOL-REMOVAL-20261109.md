@@ -34,3 +34,7 @@ crates/ and programs/r1-cost-probe are unchanged, so every ledger row, native re
 ## If something breaks later
 
 Symptoms to watch: a client or test sending ASIN/ASDI/ASPT/ASWD/ASPP/ASPF/ASPX now gets an invalid-instruction error; any flow that relied on splitting settlement across transactions for compute. To restore, re-add the files/functions from 4bb3b3f; that re-expands the Pool proof scope by the rows listed in NKS_INVENTORY.json for those roots.
+
+## Result (2026-11-09)
+
+Done by NKX_ (evidence/legacy-removal-20261109; NKX_REMOVED.md lists every deleted file, function and test with its restore command). Merged into research at b936275465600469312d1f058cdc91ea2a11f3dc. 15 Pool files changed (13,336 lines deleted); deleted modules include anchor.rs, transition.rs and the prepared-settlement modules, all unreachable from pair-forest. 54 legacy-only tests removed, one rejection test added (each removed magic now returns the invalid-instruction error); all remaining tests pass. New Pool ELF e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc, 345,648 bytes (was 605,704). Nothing deployed.
