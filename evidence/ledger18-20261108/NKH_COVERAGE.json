@@ -1,0 +1,322 @@
+{
+ "status": "PASS_READ_ONLY_ALL_ARMS_AND_FULL_RETURN_REVIEW",
+ "rulings": [
+  "(ah)",
+  "(ay)(2)",
+  "(ay)(3)",
+  "(ay)(4)"
+ ],
+ "echeck": {
+  "row": "TX1:189",
+  "segments": [
+   {
+    "segment": "chunks_exact32",
+    "cases": [
+     "empty",
+     "complete windows",
+     "incomplete suffix ignored"
+    ],
+    "composition": "NJJ_Chunks plus LPl_Echeck first-error finite induction"
+   },
+   {
+    "segment": "E::from_le_bytes",
+    "cases": [
+     "None -> Err(Parse), no c1/suffix",
+     "Some exact8limbs; canonicality derived by NJZ_CodecSemantics.domain"
+    ],
+    "composition": "CLOSED decoder on SAME selected32bytes; source word32/canonical/highzero association"
+   },
+   {
+    "segment": "high check",
+    "cases": [
+     "k=false -> Ok",
+     "k=true,c1=ZERO -> Ok",
+     "k=true,c1!=ZERO -> Err(Parse)"
+    ],
+    "composition": "NJZ_Echeck.step_chunk and NJZ_CodecSemantics.source"
+   },
+   {
+    "segment": "iteration contract",
+    "cases": [
+     "every complete returned Result<(),Error> discriminant and exact Parse payload",
+     "calls exactly1; input32bytes and local reply readonly"
+    ],
+    "composition": "NJZ_K035/036 echeck_contract and K006/007 arbitrary-full-reply step; exact source fragment after parser-only substitution"
+   },
+   {
+    "segment": "whole function",
+    "cases": [
+     "first rejection; chronological prefix/no suffix",
+     "all successful windows -> Ok(())"
+    ],
+    "composition": "NJZ_CodecSemantics.root with concrete window cuts, NJZ_Echeck.root/result; no enclosing output/trace premise"
+   }
+  ],
+  "returned_record": "Unit Ok payload and exact Error::Parse Err payload; decoder Option<E> kept in immutable local log, exact8limb reply. No partial record projection used.",
+  "fidelity": {
+   "shape": "Result<(),Error> with ParseLog modifies frame",
+   "inverted_ensures": [
+    "NJZ_K051",
+    "NJZ_K052"
+   ],
+   "real_vs_unimplied": [
+    "NJZ_K053",
+    "NJZ_K054"
+   ],
+   "modifies": [
+    "NJZ_K055",
+    "NJZ_K056"
+   ],
+   "semantic_failures_verified": true
+  }
+ },
+ "reader": {
+  "status": "PASS_SLICE_SPECIALIZATION_ONLY",
+  "native_widths": [
+   4,
+   16,
+   32
+  ],
+  "native_backing": 1768,
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "call_sites": [
+   {
+    "line": 345,
+    "source": "fn e(&mut self)->Result<E,Error>{E::from_le_bytes(&self.raw::<32>()).ok_or(Error::Checkpoint)}"
+   },
+   {
+    "line": 347,
+    "source": "fn k(&mut self)->Result<K,Error>{K::from_le_bytes(&self.raw::<16>()).ok_or(Error::Checkpoint)}"
+   },
+   {
+    "line": 397,
+    "source": "let mut r=Reader{bytes,at:80};let state=r.raw();let roots=[r.raw(),r.raw()];"
+   },
+   {
+    "line": 400,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 401,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 402,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 403,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 404,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 405,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 406,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 407,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 408,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 409,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 410,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 411,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 412,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 413,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 414,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 415,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 416,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 417,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 418,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 419,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 420,
+    "source": "u32::from_le_bytes(r.raw()),"
+   },
+   {
+    "line": 421,
+    "source": "u32::from_le_bytes(r.raw()),"
+   }
+  ],
+  "bounds": [
+   {
+    "part": "state+roots",
+    "start": 80,
+    "width": 32,
+    "count": 3,
+    "end": 176
+   },
+   {
+    "part": "gamma/kappa/alpha",
+    "start": 176,
+    "width": 32,
+    "count": 4,
+    "end": 304
+   },
+   {
+    "part": "rho",
+    "start": 304,
+    "width": 16,
+    "count": 1,
+    "end": 320
+   },
+   {
+    "part": "queries",
+    "start": 320,
+    "width": 4,
+    "count": 22,
+    "end": 408
+   },
+   {
+    "part": "semantic_alpha",
+    "start": 408,
+    "width": 16,
+    "count": 10,
+    "end": 568
+   },
+   {
+    "part": "z",
+    "start": 568,
+    "width": 16,
+    "count": 4,
+    "end": 632
+   },
+   {
+    "part": "claim/rhs",
+    "start": 632,
+    "width": 32,
+    "count": 2,
+    "end": 696
+   },
+   {
+    "part": "power",
+    "start": 696,
+    "width": 16,
+    "count": 1,
+    "end": 712
+   },
+   {
+    "part": "weights",
+    "start": 712,
+    "width": 16,
+    "count": 64,
+    "end": 1736
+   }
+  ],
+  "same_backing": "Only3 Reader constructors: resume bytes/80, semantic_alpha bytes/current cursor, weights bytes/current cursor; helpers called only from resume. All retain SAME bytes. Candidate tx2_common fixes Variant::S2; size guard gives744+16*64=1768. All successful scalar prefixes stay <=1736, checksum begins1736. Early parse errors retain cursor/backing and no suffix.",
+  "generic_exclusion": "S1 generic resume can use4840 backing; that is outside the U11/S2 inventory and earns ZERO native credit. No generic N/backing Reader statement is promoted.",
+  "uncovered_slice_call_sites": []
+ },
+ "transcript": {
+  "native_instance": "SolanaDigest ONLY",
+  "sha_value": "existing runtime trust row; forwarding proves exact parts/reply unchanged",
+  "extra_generic_hasher_credit": false,
+  "caller_domains": "row<=95,payload<=8192 explicitly recorded at every parent; primitive inferred serializers retained conservative-by-name, not new field assumptions"
+ },
+ "trust_additions": [
+  {
+   "item": "NJZ-RT189",
+   "row": "TX1:189",
+   "classification": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION",
+   "reference": "NJZ_native.patch",
+   "root": "NJZ_CodecSemantics.root"
+  },
+  {
+   "item": "NJZ-RT201",
+   "row": "TX1:201",
+   "classification": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION",
+   "reference": "NJZ_native.patch",
+   "root": "NJZ_TreeParent.source"
+  },
+  {
+   "item": "NJZ-RT202",
+   "row": "TX1:202",
+   "classification": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION",
+   "reference": "NJZ_native.patch",
+   "root": "NJZ_PoolRoot.default"
+  },
+  {
+   "item": "NJZ-RT203",
+   "row": "TX1:203",
+   "classification": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION",
+   "reference": "NJZ_native.patch",
+   "root": "NJZ_PoolRoot.empty"
+  },
+  {
+   "item": "NJZ-RT204",
+   "row": "TX1:204",
+   "classification": "ReviewedTranscription; P6/D188 option-A RECLASSIFICATION",
+   "reference": "NJZ_native.patch",
+   "root": "NJZ_PoolRoot.roots"
+  }
+ ],
+ "source_pins": [
+  {
+   "path": "evidence/ledger18-20261108/NKH_frozen_verifier.rs.txt",
+   "sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756"
+  },
+  {
+   "path": "evidence/ledger18-20261108/NKH_frozen_candidate.rs.txt",
+   "sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794"
+  },
+  {
+   "path": "evidence/ledger18-20261108/NKH_frozen_transport.rs.txt",
+   "sha256": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7"
+  },
+  {
+   "path": "evidence/verifier-weights-20261108/NJZ_Echeck.lean",
+   "sha256": "49617ebd49a0988abf0f4077506e373e338f11f3034115f3c603eb5534c4ec5a"
+  },
+  {
+   "path": "evidence/verifier-weights-20261108/NJZ_CodecSemantics.lean",
+   "sha256": "42e26063711575472b571af6f7dc0955468d1f983689f0b89e87b271c4ced66c"
+  },
+  {
+   "path": "evidence/verifier-weights-20261108/NJZ_native.patch",
+   "sha256": "90e1e70c385edac82c483ef5470ebf8f67cb0d2d2e6fdab965d9c1af1a0517d6"
+  }
+ ]
+}
