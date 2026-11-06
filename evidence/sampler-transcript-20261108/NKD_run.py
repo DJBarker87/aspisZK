@@ -55,7 +55,7 @@ if x['kind']=='lean':
    q=Path(root)/stem
    if q.is_dir():rels.update(str(z.relative_to(root)) for z in q.rglob('*') if z.is_file() and any(str(z).endswith(s) for s in ['.olean','.olean.private','.olean.server','.ir']))
    if Path(root,stem+'.olean').is_file():rels.add(stem+'.olean')
- for n in re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):rels.add(n.replace('.','/')+'.olean')
+ for n in re.findall(r'^import (?:all )?([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):rels.add(n.replace('.','/')+'.olean')
  for rel in sorted(rels):
   q=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert q is not None,rel
   for z in [q,Path(str(q)+'.private'),Path(str(q)+'.server'),q.with_suffix('.ir')]:
@@ -75,4 +75,4 @@ for n,t in json.loads(r.stdout).items():
 assert (E/a/'receipt.json').exists(),'Missing receipt; recover, never resubmit'
 rc=json.loads((E/a/'receipt.json').read_text());entry={k:v for k,v in rc.items() if k!='deps_fingerprint'};entry['full_receipt']=a+'/receipt.json'
 with (E/'NKD_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
-print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print((E/a/'stdout.log').read_text()[-3500:]);sys.exit(rc['exit_status'])
+print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));sys.exit(rc['exit_status'])

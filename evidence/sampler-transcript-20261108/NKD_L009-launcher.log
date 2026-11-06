@@ -1,0 +1,47 @@
+{"attempt": "NKD_L009", "exit_status": 0, "wall_seconds": 3.4434798120055348, "peak_rss_kib": "4737092", "swaps": "0", "print_axioms": ["'AspisR1.NKD_New.root' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NKD_New.root : ∀ {H : Type} (D : aspis_core.Digest32 H) (hash : H) (semantic : Bytes32)
+  (variant : transport.Variant), transcript.Transcript.new D hash semantic variant = G D hash semantic variant :=
+fun {H} D hash semantic variant =>
+  transport.Variant.casesOn (motive := fun t =>
+    variant = t → transcript.Transcript.new D hash semantic variant = G D hash semantic variant) variant
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (congrArg
+                    (Bind.bind
+                      (ok
+                        (Array.make 29#usize
+                     
+...
+                        NGT_NBA_Transcript.domain._proof_19).to_slice,
+                                  (Array.make 1#usize [y] (parts._proof_4 y)).to_slice, Array.to_slice semantic]) ▸
+                            parts._proof_5 semantic y)).to_slice
+                ok { state := reply, hash := hash }))
+            (eq_self do
+              let a ←
+                D.digest hash
+                    (Array.make 3#usize
+                        [(Array.make 29#usize
+                              [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8,
+                                69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                              transcript.Transcript.new._proof_2).to_slice,
+                          (Array.make 1#usize [3#u8] (transcript.Transcript.new._proof_3 3#u8)).to_slice,
+                          Array.to_slice semantic]
+                        (transcript.Transcript.new._proof_4
+                          (Array.make 29#usize
+                              [85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8,
+                                80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8,
+                                69#u8, 68#u8, 58#u8, 80#u8, 51#u8]
+                              transcript.Transcript.new._proof_2).to_slice
+                          (Array.make 1#usize [3#u8] (transcript.Transcript.new._proof_3 3#u8)).to_slice
+                          (Array.to_slice semantic))).to_slice
+              ok { state := a, hash := hash })))
+    (Eq.refl variant)
+'AspisR1.NKD_New.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf75852f6fd7d423fa8686d409eac32f5.scope; invocation ID: e8b9f2e0e6374871b485cdaf1fe99e75

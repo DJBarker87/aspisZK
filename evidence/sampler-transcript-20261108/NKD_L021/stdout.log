@@ -1,0 +1,23 @@
+'AspisR1.NKD_TranscriptPackets.tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKD_TranscriptPackets.absorb' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKD_TranscriptPackets.block' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKD_TranscriptPackets.new' depends on axioms: [propext, Classical.choice, Quot.sound]
+absorb : ∀ (hashv : Slice (Slice U8) → Bytes32) (state : Bytes32) (row : U8) (payload : Slice U8),
+  ↑row ≤ 95 →
+    ∃ t,
+      ↑t = 160 + ↑row ∧
+        transcript.Transcript.absorb (NKD_Runtime.backend hashv) { state := state, hash := () } row payload =
+          ok { state := hashv (NGT_NBA_Transcript.absorbParts state t payload), hash := () }
+block : ∀ (hashv : Slice (Slice U8) → Bytes32) (state : Bytes32) (row : U8) (payload : Slice U8),
+  ↑row ≤ 95 →
+    ∃ t,
+      ↑t = 160 + ↑row ∧
+        have a := hashv (NGT_NBA_Transcript.absorbParts state t payload);
+        transcript.Transcript.block (NKD_Runtime.backend hashv) { state := state, hash := () } row payload =
+          ok
+            (hashv (NGT_NBA_Transcript.readParts a 1#u8),
+              { state := hashv (NGT_NBA_Transcript.readParts a 2#u8), hash := () })
+new : ∀ (hashv : Slice (Slice U8) → Bytes32) (semantic : Bytes32) (variant : transport.Variant),
+  transcript.Transcript.new (NKD_Runtime.backend hashv) () semantic variant = do
+    let t ← variant.tag
+    ok { state := hashv (NKD_New.parts semantic t), hash := () }

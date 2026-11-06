@@ -1,0 +1,62 @@
+{"attempt": "NKD_K002", "exit_status": 1, "wall_seconds": 28.57550680404529, "peak_rss_kib": "471640", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling cfg-if v1.0.4
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling serde_core v1.0.228
+   Compiling serde v1.0.228
+   Compiling zerocopy v0.8.52
+   Compiling libc v0.2.186
+   Compiling subtle v2.6.1
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling digest v0.10.7
+   Compiling borsh v1.5.7
+   Compiling cpufeatures v0.2.17
+   Compiling five8_core v0.1.2
+   Compiling num-traits v0.2.19
+   Compiling ahash v0.8.12
+   Compiling five8 v0.2.1
+   Compiling getrandom v0.2.17
+   Compiling once_cell v1.21.4
+   Compiling solana-atomic-u64 v2.2.1
+   Compiling solana-sanitize v2.2.1
+   Compiling byt
+...
+^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-sampler-transcript-20261108/NKD_src/programs/r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-sampler-transcript-20261108/NKD_src/programs/r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 24.33s
+Checking harness NKD_native::deployed_new_cut...
+
+VERIFICATION RESULT:
+ ** 1 of 563 failed (46 unreachable)
+Failed Checks: assertion failed: (out.state[l.k]==l.replies[0][l.k])!=cfg!(NKD_invert)
+ File: "programs/r1-cost-probe/src/NKD_native.rs", line 57, in NKD_native::deployed_new_cut
+
+VERIFICATION:- FAILED
+Verification Time: 3.1116629s
+
+Manual Harness Summary:
+Verification failed for - NKD_native::deployed_new_cut
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r14b3427c60a54f06a93cdcc92135ab27.scope; invocation ID: ad86c6601a694e229b03d9d114d404c2

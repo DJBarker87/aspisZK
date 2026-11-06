@@ -1,0 +1,20 @@
+{
+ "new": {
+  "frozen_body_sha256": "c2a6d1983ca895307f6e15c1687345c59456c0ae7ad4b6ab42443457e36a984f",
+  "reviewed_cut_sha256": "a04c3b931ceb9bac14975dfcefc28f8a22f49cb86f5b86b777ef4b23adfa96b1",
+  "frozen_body": "pub fn new(hash:H, semantic_state:[u8;32], variant:Variant) -> Self {\n        #[cfg(not(feature = \"private-leaf-salts\"))]\n        let domain: &[u8] = b\"UNPROVED:R1:COST-PROBE:P2\";\n        #[cfg(feature = \"private-leaf-salts\")]\n        let domain: &[u8] = b\"UNPROVED:R1:PRIVATE-SALTED:P3\";\n        Self { state:hash.digest(&[domain,&[variant.tag()],&semantic_state]), hash }\n    }",
+  "cut_body": "pub fn new(hash:SolanaDigest, semantic_state:[u8;32], variant:Variant, log:&mut Log) -> Self {\n        #[cfg(not(feature = \"private-leaf-salts\"))]\n        let domain: &[u8] = b\"UNPROVED:R1:COST-PROBE:P2\";\n        #[cfg(feature = \"private-leaf-salts\")]\n        let domain: &[u8] = b\"UNPROVED:R1:PRIVATE-SALTED:P3\";\n        Self { state:observed_digest(&hash,&[domain,&[variant.tag()],&semantic_state],log), hash }\n    }"
+ },
+ "absorb": {
+  "frozen_body_sha256": "9e983f12148cd10c947e2a5abfe5605ace391e38e05af56d2f65e735726412d5",
+  "reviewed_cut_sha256": "0fd9e69354a9958ef4a1c775fbd5ad49079006bbe9798ac2febb4d232ebaeffb",
+  "frozen_body": "pub fn absorb(&mut self, row:u8, payload:&[u8]) {\n        self.state=self.hash.digest(&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload]);\n    }",
+  "cut_body": "pub fn absorb(&mut self, row:u8, payload:&[u8], log:&mut Log) {\n        self.state=observed_digest(&self.hash,&[&self.state,&[0,0xa0+row],&(payload.len() as u32).to_le_bytes(),payload],log);\n    }"
+ },
+ "block": {
+  "frozen_body_sha256": "dec0a92d45f575a4c1c74343002d320f3660c20cd3d9038d56c930722931721f",
+  "reviewed_cut_sha256": "b6a46949c3594c43fb7d84d5b810bc66257568d67d4a31674dcf649b7fb12c56",
+  "frozen_body": "pub fn block(&mut self,row:u8,payload:&[u8])->[u8;32] {\n        self.absorb(row,payload);\n        let block=self.hash.digest(&[&self.state,&[1]]);\n        self.state=self.hash.digest(&[&self.state,&[2]]);\n        block\n    }",
+  "cut_body": "pub fn block(&mut self,row:u8,payload:&[u8], log:&mut Log)->[u8;32] {\n        self.absorb(row,payload,log);\n        let block=observed_digest(&self.hash,&[&self.state,&[1]],log);\n        self.state=observed_digest(&self.hash,&[&self.state,&[2]],log);\n        block\n    }"
+ }
+}

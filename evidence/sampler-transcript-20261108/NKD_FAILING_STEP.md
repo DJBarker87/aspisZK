@@ -1,0 +1,9 @@
+# NKD retained failures and replacements
+
+Target not yet established. No timeout, memory kill, cap increase or unchanged failed-shape replay.
+
+- NKD_K001: optimized native compilation rejects the own KMX include because alloc was not imported into the program harness module. No solver verdict, no native credit. Add extern crate alloc to that LOCAL module; KMX implementation and all assertions unchanged. L012 installs and pins the corrected source; K007 runs the SAME deployed_new_cut name and passes. K002 fails the intended inverted final-state assertion on the identical corrected source. Original patch is NKD_harness_v1.patch; the original generated source is in L010's source snapshot.
+- NKD_L016: stopped BEFORE submission by the own client's dependency parser: import all Lean was misread as all.olean. Extend the import parser to recognize the actual import-all keyword without dropping a dependency. No host launcher/shim/reservation change. L022 compiles the identical unchanged NFA_MemoryLimit source. The pre-submit event is retained in NKD_ATTEMPTS.jsonl; no Lean process was resubmitted.
+- Initial reuse validator required CARGO_TARGET_DIR in historical NGT environment receipts, where the exact path was already an explicit --target-dir argv. Validator now checks the recorded argv path plus the historical optimized/offline configuration. New NKD receipts always record own CARGO_TARGET_DIR. No graph/lock/source/copy/parity check was removed.
+
+All six matched transcript controls fail at the intended state assertion's inverted member (three controls, one per positive); they are semantic failure evidence, not failed proof attempts. Every inherited timeout/quarantine/static experiment stays excluded; LPk old traversal and NBL_K009 writable-static return are not reused. Only the replacement local-record NGT packets earn inherited native support.

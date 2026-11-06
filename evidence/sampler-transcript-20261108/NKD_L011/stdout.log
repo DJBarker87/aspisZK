@@ -1,0 +1,11 @@
+'AspisR1.NKD_Runtime.new_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKD_Runtime.absorb_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKD_Runtime.block_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+new_root : ∀ (hashv : Slice (Slice U8) → Bytes32) (semantic : Bytes32) (variant : transport.Variant),
+  transcript.Transcript.new (backend hashv) () semantic variant = NKD_New.G (backend hashv) () semantic variant
+absorb_root : ∀ (hashv : Slice (Slice U8) → Bytes32) (state : Bytes32) (row : U8) (payload : Slice U8),
+  transcript.Transcript.absorb (backend hashv) { state := state, hash := () } row payload =
+    NKD_Absorb.G (backend hashv) { state := state, hash := () } row payload
+block_root : ∀ (hashv : Slice (Slice U8) → Bytes32) (state : Bytes32) (row : U8) (payload : Slice U8),
+  transcript.Transcript.block (backend hashv) { state := state, hash := () } row payload =
+    NKD_Block.G (backend hashv) { state := state, hash := () } row payload

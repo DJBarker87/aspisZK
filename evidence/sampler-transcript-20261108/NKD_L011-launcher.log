@@ -1,0 +1,23 @@
+{"attempt": "NKD_L011", "exit_status": 0, "wall_seconds": 12.255595288937911, "peak_rss_kib": "5861404", "swaps": "0", "print_axioms": ["'AspisR1.NKD_Runtime.new_root' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKD_Runtime.absorb_root' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKD_Runtime.block_root' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NKD_Runtime.new_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKD_Runtime.absorb_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKD_Runtime.block_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+new_root : ∀ (hashv : Slice (Slice U8) → Bytes32) (semantic : Bytes32) (variant : transport.Variant),
+  transcript.Transcript.new (backend hashv) () semantic variant = NKD_New.G (backend hashv) () semantic variant
+absorb_root : ∀ (hashv : Slice (Slice U8) → Bytes32) (state : Bytes32) (row : U8) (payload : Slice U8),
+  transcript.Transcript.absorb (backend hashv) { state := state, hash := () } row payload =
+    NKD_Absorb.
+...
+'AspisR1.NKD_Runtime.new_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKD_Runtime.absorb_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKD_Runtime.block_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+new_root : ∀ (hashv : Slice (Slice U8) → Bytes32) (semantic : Bytes32) (variant : transport.Variant),
+  transcript.Transcript.new (backend hashv) () semantic variant = NKD_New.G (backend hashv) () semantic variant
+absorb_root : ∀ (hashv : Slice (Slice U8) → Bytes32) (state : Bytes32) (row : U8) (payload : Slice U8),
+  transcript.Transcript.absorb (backend hashv) { state := state, hash := () } row payload =
+    NKD_Absorb.G (backend hashv) { state := state, hash := () } row payload
+block_root : ∀ (hashv : Slice (Slice U8) → Bytes32) (state : Bytes32) (row : U8) (payload : Slice U8),
+  transcript.Transcript.block (backend hashv) { state := state, hash := () } row payload =
+    NKD_Block.G (backend hashv) { state := state, hash := () } row payload
+
+Running as unit: run-r765171f1cb2b4563b53d4400eef90e67.scope; invocation ID: 1ff43b7d4d054d70a6a2ddf3bb167ae2
