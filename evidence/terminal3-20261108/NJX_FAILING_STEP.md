@@ -1,0 +1,10 @@
+# Findings retained
+
+* L015 aggregate pattern algebra hit the heartbeat limit200000. Replaced by14 separate coordinate lemmas, then finite dispatch; no unchanged rerun.
+* L106 first combined scan failed with12dangling matcher references in JFw_Validator/JFw_Record. Original failure retained under NJX_GATE1 and NJX_GATE1_SCAN. Parser objects already matched NJO. Exact canonical NJO proof objects privately selected per NJX_COHORT_FIX; second/final combined L150 and NFX L151 pass. No third combined audit.
+* K021 positive selector-prologue harness fails an unwinding assertion in core::array::try_from_fn_erased while generating Arbitrary::any_array<64>, core/src/array/mod.rs:897. K022 also fails; this is NOT an accepted positive/negative pair. No credit, rename, bound increase or unchanged rerun. Future isolation must avoid whole-array construction, establish arbitrary-index frame/receiver binding and compose in Lean.
+* Failed local elaborations are preserved in attempts and were changed before retry; no failed scope is relabelled a pass. Support lemmas/windows do not close parents. See NJX_REMAINING.md for each missing root.
+
+L140 retains exit1: wrapper incorrectly required collectAxioms equality for inherited NHC_DecodeModel.decoder_error. Raw walk reports only standard axioms; exact known NJO discrepancy is admitted by ruling ax2 as a TOOLING finding. Own wrapper repaired to enforce raw-standard-only, preserving disagreements; same binary/fixtures unchanged. L149 recovers existing diagnostics read-only, no theorem rerun. Remaining groups continue once. See NJX_AX2_DISAGREEMENT.json.
+
+L149 export scope retains exit1: after successful raw33 read-only recovery and complete own copy, an incorrect AeneasMeta umbrella-object assertion failed. No formal budget remains and no scope is rerun. NJX_export_recover.py reads/hashes the existing retained32,127,793byte copy and ALL selected individual Aeneas/AeneasMeta objects from L148 receipt; NJX_EXPORT.json is a locally recorded read-only manifest. No cache/object/library file changed in recovery. Both export failure and transport receipt retained.

@@ -1,0 +1,52 @@
+theorem AspisR1.NJX_DigestGroups.source : ∀ (p : NP) (high : NQ) (r : Fin 8 → NQ) (g : Fin 2),
+  Canon high →
+    (∀ (i : Fin 8), Canon (r i)) →
+      NJB_PreparedLaws.Domain p high →
+        ∃ packed out,
+          NJB_PackLaw.reference (group r g) = ok packed ∧
+            Canon packed ∧
+              FIq_Native.field.PreparedQm31Multiplier.mul p packed = ok out ∧
+                reference p r g = ok out ∧
+                  Canon out ∧ decode out = decode high * NJB_PackLinearity.pack fun j => decode (r (index g j)) :=
+fun p high r g hh hr hp =>
+  let ⟨packed, h✝⟩ := NJB_PackLaw.result (group r g) fun j => hr (index g j)
+  let ⟨cp, right✝⟩ := h✝
+  let ⟨hp', vp⟩ := right✝
+  let ⟨out, h✝¹⟩ := NJB_PreparedLaws.mul_result p high packed hh hp' hp
+  let ⟨co, right✝¹⟩ := h✝¹
+  let ⟨ho, vo⟩ := right✝¹
+  Exists.intro packed
+    (Exists.intro out
+      ⟨cp,
+        ⟨hp',
+          ⟨co,
+            ⟨of_eq_true
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans
+                        (Eq.trans
+                          (congrFun' (congrArg Bind.bind cp) fun packed =>
+                            FIq_Native.field.PreparedQm31Multiplier.mul p packed)
+                          (bind_tc_ok packed (FIq_Native.field.PreparedQm31Multiplier.mul p)))
+                        co))
+                    (ok out))
+                  (eq_self (ok out))),
+              ⟨ho,
+                Eq.mpr
+                  (id
+                    (congrArg (fun _a => _a = decode high * NJB_PackLinearity.pack fun j => decode (r (index g j))) vo))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          decode high * _a = decode high * NJB_PackLinearity.pack fun j => decode (r (index g j)))
+                        vp))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            decode high * _a = decode high * NJB_PackLinearity.pack fun j => decode (r (index g j)))
+                          (NJB_PackLinearity.model (group r g))))
+                      (Eq.refl (decode high * NJB_PackLinearity.pack fun i => decode (group r g i)))))⟩⟩⟩⟩⟩)
+'AspisR1.NJX_DigestGroups.source' depends on axioms: [propext, Classical.choice, Quot.sound]

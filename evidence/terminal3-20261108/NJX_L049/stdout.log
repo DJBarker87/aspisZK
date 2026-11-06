@@ -1,0 +1,1234 @@
+theorem AspisR1.NJX_DigestCut.source : ∀ {high : NQ} {o : Residuals} {d : Digest}
+  (p : NJX_DigestPacket.Packet high o d),
+  Cut high o d p.prepared (fun i => FIw_ScalarArithmetic.lifted (d i)) p.residual p.packed p.out p.out (log p) 21 :=
+fun {high} {o} {d} p =>
+  ⟨rfl,
+    ⟨rfl,
+      ⟨rfl,
+        ⟨fun i =>
+          List.Mem.casesOn (motive := fun a x =>
+            List.finRange ({ len := 7 }.len + 1) = a →
+              Fintype.complete i ≍ x →
+                (log p).kind (1 + 2 * ↑i) = 5 ∧
+                  (log p).left (1 + 2 * ↑i) = FIw_ScalarArithmetic.lifted (d i) ∧
+                    (log p).kind (2 + 2 * ↑i) = 2 ∧
+                      (log p).left (2 + 2 * ↑i) = o i ∧
+                        (log p).right (2 + 2 * ↑i) = (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+            (Fintype.complete i)
+            (fun «as» h =>
+              List.cons.noConfusion h fun head_eq =>
+                Eq.ndrec (motive := fun i =>
+                  ∀ (this : i ∈ Fintype.elems),
+                    (fun x1 x2 => (fun i => i) x1 :: x2)
+                          ⟨1,
+                            Nat.le_of_lt
+                              (Nat.le_of_lt
+                                (Nat.le_of_lt
+                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩
+                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                            ⟨2,
+                              Nat.le_of_lt
+                                (Nat.le_of_lt
+                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))⟩
+                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                              ⟨3,
+                                Nat.le_of_lt
+                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                ⟨4, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                  ⟨5, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                    ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                    ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩
+                                      [])))))) ≍
+                        «as» →
+                      this ≍ List.Mem.head «as» →
+                        (log p).kind (1 + 2 * ↑i) = 5 ∧
+                          (log p).left (1 + 2 * ↑i) = FIw_ScalarArithmetic.lifted (d i) ∧
+                            (log p).kind (2 + 2 * ↑i) = 2 ∧
+                              (log p).left (2 + 2 * ↑i) = o i ∧
+                                (log p).right (2 + 2 * ↑i) = (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+                  (fun this tail_eq =>
+                    Eq.ndrec (motive := fun «as» =>
+                      this ≍ List.Mem.head «as» →
+                        (log p).kind
+                              (1 +
+                                2 *
+                                  ↑((fun i => i)
+                                      ⟨0,
+                                        Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))))⟩)) =
+                            5 ∧
+                          (log p).left
+                                (1 +
+                                  2 *
+                                    ↑((fun i => i)
+                                        ⟨0,
+                                          Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))))⟩)) =
+                              FIw_ScalarArithmetic.lifted
+                                (d
+                                  ((fun i => i)
+                                    ⟨0,
+                                      Nat.le_of_lt
+                                        (Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))))⟩)) ∧
+                            (log p).kind
+                                  (2 +
+                                    2 *
+                                      ↑((fun i => i)
+                                          ⟨0,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))))⟩)) =
+                                2 ∧
+                              (log p).left
+                                    (2 +
+                                      2 *
+                                        ↑((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))))⟩)) =
+                                  o
+                                    ((fun i => i)
+                                      ⟨0,
+                                        Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))))⟩) ∧
+                                (log p).right
+                                    (2 +
+                                      2 *
+                                        ↑((fun i => i)
+                                            ⟨0,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))))⟩)) =
+                                  (fun i => FIw_ScalarArithmetic.lifted (d i))
+                                    ((fun i => i)
+                                      ⟨0,
+                                        Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))))⟩))
+                      (fun h => ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩) (eq_of_heq tail_eq))
+                  (eq_of_heq head_eq) (Fintype.complete i))
+            (fun b {«as»} a h =>
+              List.cons.noConfusion h fun head_eq =>
+                Eq.ndrec (motive := fun b =>
+                  (fun x1 x2 => (fun i => i) x1 :: x2)
+                        ⟨1,
+                          Nat.le_of_lt
+                            (Nat.le_of_lt
+                              (Nat.le_of_lt
+                                (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩
+                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                          ⟨2,
+                            Nat.le_of_lt
+                              (Nat.le_of_lt
+                                (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))⟩
+                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                            ⟨3,
+                              Nat.le_of_lt
+                                (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                              ⟨4, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                ⟨5, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                  ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                  ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩
+                                    [])))))) ≍
+                      «as» →
+                    Fintype.complete i ≍ List.Mem.tail b a →
+                      (log p).kind (1 + 2 * ↑i) = 5 ∧
+                        (log p).left (1 + 2 * ↑i) = FIw_ScalarArithmetic.lifted (d i) ∧
+                          (log p).kind (2 + 2 * ↑i) = 2 ∧
+                            (log p).left (2 + 2 * ↑i) = o i ∧
+                              (log p).right (2 + 2 * ↑i) = (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+                  (fun tail_eq =>
+                    Eq.ndrec (motive := fun {«as»} =>
+                      ∀ (a : List.Mem i «as»),
+                        Fintype.complete i ≍
+                            List.Mem.tail
+                              ((fun i => i)
+                                ⟨0,
+                                  Nat.le_of_lt
+                                    (Nat.le_of_lt
+                                      (Nat.le_of_lt
+                                        (Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))))⟩)
+                              a →
+                          (log p).kind (1 + 2 * ↑i) = 5 ∧
+                            (log p).left (1 + 2 * ↑i) = FIw_ScalarArithmetic.lifted (d i) ∧
+                              (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                (log p).left (2 + 2 * ↑i) = o i ∧
+                                  (log p).right (2 + 2 * ↑i) = (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+                      (fun a h =>
+                        List.Mem.casesOn (motive := fun a_1 x =>
+                          (fun x1 x2 => (fun i => i) x1 :: x2)
+                                ⟨1,
+                                  Nat.le_of_lt
+                                    (Nat.le_of_lt
+                                      (Nat.le_of_lt
+                                        (Nat.le_of_lt
+                                          (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩
+                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                  ⟨2,
+                                    Nat.le_of_lt
+                                      (Nat.le_of_lt
+                                        (Nat.le_of_lt
+                                          (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))⟩
+                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                    ⟨3,
+                                      Nat.le_of_lt
+                                        (Nat.le_of_lt
+                                          (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨4,
+                                        Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨5, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩
+                                            [])))))) =
+                              a_1 →
+                            a ≍ x →
+                              (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                (log p).left (1 + 2 * ↑i) = FIw_ScalarArithmetic.lifted (d i) ∧
+                                  (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                    (log p).left (2 + 2 * ↑i) = o i ∧
+                                      (log p).right (2 + 2 * ↑i) = (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+                          a
+                          (fun «as» h =>
+                            List.cons.noConfusion h fun head_eq =>
+                              Eq.ndrec (motive := fun i =>
+                                ∀
+                                  (a :
+                                    List.Mem i
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨1,
+                                          Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨2,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨3,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨4,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨5, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩ [])))))))),
+                                  (fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨2,
+                                          Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨3,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt
+                                                (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨4,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨5, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩ []))))) ≍
+                                      «as» →
+                                    a ≍ List.Mem.head «as» →
+                                      (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                        (log p).left (1 + 2 * ↑i) = FIw_ScalarArithmetic.lifted (d i) ∧
+                                          (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                            (log p).left (2 + 2 * ↑i) = o i ∧
+                                              (log p).right (2 + 2 * ↑i) =
+                                                (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+                                (fun a tail_eq =>
+                                  Eq.ndrec (motive := fun «as» =>
+                                    a ≍ List.Mem.head «as» →
+                                      (log p).kind
+                                            (1 +
+                                              2 *
+                                                ↑((fun i => i)
+                                                    ⟨1,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩)) =
+                                          5 ∧
+                                        (log p).left
+                                              (1 +
+                                                2 *
+                                                  ↑((fun i => i)
+                                                      ⟨1,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩)) =
+                                            FIw_ScalarArithmetic.lifted
+                                              (d
+                                                ((fun i => i)
+                                                  ⟨1,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩)) ∧
+                                          (log p).kind
+                                                (2 +
+                                                  2 *
+                                                    ↑((fun i => i)
+                                                        ⟨1,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩)) =
+                                              2 ∧
+                                            (log p).left
+                                                  (2 +
+                                                    2 *
+                                                      ↑((fun i => i)
+                                                          ⟨1,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩)) =
+                                                o
+                                                  ((fun i => i)
+                                                    ⟨1,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩) ∧
+                                              (log p).right
+                                                  (2 +
+                                                    2 *
+                                                      ↑((fun i => i)
+                                                          ⟨1,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩)) =
+                                                (fun i => FIw_ScalarArithmetic.lifted (d i))
+                                                  ((fun i => i)
+                                                    ⟨1,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩))
+                                    (fun h => ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩) (eq_of_heq tail_eq))
+                                (eq_of_heq head_eq) a)
+                          (fun b {«as»} a_1 h =>
+                            List.cons.noConfusion h fun head_eq =>
+                              Eq.ndrec (motive := fun b =>
+                                (fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨2,
+                                        Nat.le_of_lt
+                                          (Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨3,
+                                          Nat.le_of_lt
+                                            (Nat.le_of_lt
+                                              (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨4,
+                                            Nat.le_of_lt
+                                              (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨5, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩ []))))) ≍
+                                    «as» →
+                                  a ≍ List.Mem.tail b a_1 →
+                                    (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                      (log p).left (1 + 2 * ↑i) = FIw_ScalarArithmetic.lifted (d i) ∧
+                                        (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                          (log p).left (2 + 2 * ↑i) = o i ∧
+                                            (log p).right (2 + 2 * ↑i) = (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+                                (fun tail_eq =>
+                                  Eq.ndrec (motive := fun {«as»} =>
+                                    ∀ (a_2 : List.Mem i «as»),
+                                      a ≍
+                                          List.Mem.tail
+                                            ((fun i => i)
+                                              ⟨1,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩)
+                                            a_2 →
+                                        (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                          (log p).left (1 + 2 * ↑i) = FIw_ScalarArithmetic.lifted (d i) ∧
+                                            (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                              (log p).left (2 + 2 * ↑i) = o i ∧
+                                                (log p).right (2 + 2 * ↑i) =
+                                                  (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+                                    (fun a_2 h =>
+                                      List.Mem.casesOn (motive := fun a x =>
+                                        (fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨2,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨3,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨4,
+                                                    Nat.le_of_lt
+                                                      (Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨5,
+                                                      Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩ []))))) =
+                                            a →
+                                          a_2 ≍ x →
+                                            (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                              (log p).left (1 + 2 * ↑i) = FIw_ScalarArithmetic.lifted (d i) ∧
+                                                (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                                  (log p).left (2 + 2 * ↑i) = o i ∧
+                                                    (log p).right (2 + 2 * ↑i) =
+                                                      (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+                                        a_2
+                                        (fun «as» h =>
+                                          List.cons.noConfusion h fun head_eq =>
+                                            Eq.ndrec (motive := fun i =>
+                                              ∀
+                                                (a :
+                                                  List.Mem i
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨2,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨3,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨4,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨5,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩ []))))))),
+                                                (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨3,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨4,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt
+                                                              (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨5,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩ [])))) ≍
+                                                    «as» →
+                                                  a ≍ List.Mem.head «as» →
+                                                    (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                                      (log p).left (1 + 2 * ↑i) = FIw_ScalarArithmetic.lifted (d i) ∧
+                                                        (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                                          (log p).left (2 + 2 * ↑i) = o i ∧
+                                                            (log p).right (2 + 2 * ↑i) =
+                                                              (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+                                              (fun a tail_eq =>
+                                                Eq.ndrec (motive := fun «as» =>
+                                                  a ≍ List.Mem.head «as» →
+                                                    (log p).kind
+                                                          (1 +
+                                                            2 *
+                                                              ↑((fun i => i)
+                                                                  ⟨2,
+                                                                    Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 7 }.len + 1))))))⟩)) =
+                                                        5 ∧
+                                                      (log p).left
+                                                            (1 +
+                                                              2 *
+                                                                ↑((fun i => i)
+                                                                    ⟨2,
+                                                                      Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_refl
+                                                                                  ({ len := 7 }.len + 1))))))⟩)) =
+                                                          FIw_ScalarArithmetic.lifted
+                                                            (d
+                                                              ((fun i => i)
+                                                                ⟨2,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_refl
+                                                                              ({ len := 7 }.len + 1))))))⟩)) ∧
+                                                        (log p).kind
+                                                              (2 +
+                                                                2 *
+                                                                  ↑((fun i => i)
+                                                                      ⟨2,
+                                                                        Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_of_lt
+                                                                                  (Nat.le_refl
+                                                                                    ({ len := 7 }.len + 1))))))⟩)) =
+                                                            2 ∧
+                                                          (log p).left
+                                                                (2 +
+                                                                  2 *
+                                                                    ↑((fun i => i)
+                                                                        ⟨2,
+                                                                          Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_of_lt
+                                                                                  (Nat.le_of_lt
+                                                                                    (Nat.le_refl
+                                                                                      ({ len := 7 }.len + 1))))))⟩)) =
+                                                              o
+                                                                ((fun i => i)
+                                                                  ⟨2,
+                                                                    Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 7 }.len + 1))))))⟩) ∧
+                                                            (log p).right
+                                                                (2 +
+                                                                  2 *
+                                                                    ↑((fun i => i)
+                                                                        ⟨2,
+                                                                          Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_of_lt
+                                                                                  (Nat.le_of_lt
+                                                                                    (Nat.le_refl
+                                                                                      ({ len := 7 }.len + 1))))))⟩)) =
+                                                              (fun i => FIw_ScalarArithmetic.lifted (d i))
+                                                                ((fun i => i)
+                                                                  ⟨2,
+                                                                    Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl
+                                                                                ({ len := 7 }.len + 1))))))⟩))
+                                                  (fun h => ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩) (eq_of_heq tail_eq))
+                                              (eq_of_heq head_eq) a_2)
+                                        (fun b {«as»} a h =>
+                                          List.cons.noConfusion h fun head_eq =>
+                                            Eq.ndrec (motive := fun b =>
+                                              (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨3,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨4,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt
+                                                            (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨5,
+                                                          Nat.le_of_lt
+                                                            (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩ [])))) ≍
+                                                  «as» →
+                                                a_2 ≍ List.Mem.tail b a →
+                                                  (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                                    (log p).left (1 + 2 * ↑i) = FIw_ScalarArithmetic.lifted (d i) ∧
+                                                      (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                                        (log p).left (2 + 2 * ↑i) = o i ∧
+                                                          (log p).right (2 + 2 * ↑i) =
+                                                            (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+                                              (fun tail_eq =>
+                                                Eq.ndrec (motive := fun {«as»} =>
+                                                  ∀ (a : List.Mem i «as»),
+                                                    a_2 ≍
+                                                        List.Mem.tail
+                                                          ((fun i => i)
+                                                            ⟨2,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 7 }.len + 1))))))⟩)
+                                                          a →
+                                                      (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                                        (log p).left (1 + 2 * ↑i) = FIw_ScalarArithmetic.lifted (d i) ∧
+                                                          (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                                            (log p).left (2 + 2 * ↑i) = o i ∧
+                                                              (log p).right (2 + 2 * ↑i) =
+                                                                (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+                                                  (fun a h =>
+                                                    List.Mem.casesOn (motive := fun a_3 x =>
+                                                      (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨3,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨4,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt
+                                                                    (Nat.le_of_lt
+                                                                      (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨5,
+                                                                  Nat.le_of_lt
+                                                                    (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩ [])))) =
+                                                          a_3 →
+                                                        a ≍ x →
+                                                          (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                                            (log p).left (1 + 2 * ↑i) =
+                                                                FIw_ScalarArithmetic.lifted (d i) ∧
+                                                              (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                                                (log p).left (2 + 2 * ↑i) = o i ∧
+                                                                  (log p).right (2 + 2 * ↑i) =
+                                                                    (fun i => FIw_ScalarArithmetic.lifted (d i)) i)
+                                                      a
+                                                      (fun «as» h =>
+                                                        List.cons.noConfusion h fun head_eq =>
+                                                          Eq.ndrec (motive := fun i =>
+                                                            ∀
+                                                              (a :
+                                                                List.Mem i
+                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨3,
+                                                                      Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                      ⟨4,
+                                                                        Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                        ⟨5,
+                                                                          Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                          ⟨6,
+                                                                            Nat.le_of_lt
+                                                                              (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                            ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩
+                                                                            [])))))),
+                                                              (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨4,
+                                                                      Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                      ⟨5,
+                                                                        Nat.le_of_lt
+                                                                          (Nat.le_of_lt
+                                                                            (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                        ⟨6,
+                                                                          Nat.le_of_lt
+                                                                            (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                          ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩
+                                                                          []))) ≍
+                                                                  «as» →
+                                                                a ≍ List.Mem.head «as» →
+                                                                  (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                                                    (log p).left (1 + 2 * ↑i) =
+                                                                        FIw_ScalarArithmetic.lifted (d i) ∧
+                                                                      (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                                                        (log p).left (2 + 2 * ↑i) = o i ∧
+                                                                          (log p).right (2 + 2 * ↑i) =
+                                                                            (fun i => FIw_ScalarArithmetic.lifted (d i))
+                                                                              i)
+                                                            (fun a tail_eq =>
+                                                              Eq.ndrec (motive := fun «as» =>
+                                                                a ≍ List.Mem.head «as» →
+                                                                  (log p).kind
+                                                                        (1 +
+                                                                          2 *
+                                                                            ↑((fun i => i)
+                                                                                ⟨3,
+                                                                                  Nat.le_of_lt
+                                                                                    (Nat.le_of_lt
+                                                                                      (Nat.le_of_lt
+                                                                                        (Nat.le_of_lt
+                                                                                          (Nat.le_refl
+                                                                                            ({ len := 7 }.len +
+                                                                                              1)))))⟩)) =
+                                                                      5 ∧
+                                                                    (log p).left
+                                                                          (1 +
+                                                                            2 *
+                                                                              ↑((fun i => i)
+                                                                                  ⟨3,
+                                                                                    Nat.le_of_lt
+                                                                                      (Nat.le_of_lt
+                                                                                        (Nat.le_of_lt
+                                                                                          (Nat.le_of_lt
+                                                                                            (Nat.le_refl
+                                                                                              ({ len := 7 }.len +
+                                                                                                1)))))⟩)) =
+                                                                        FIw_ScalarArithmetic.lifted
+                                                                          (d
+                                                                            ((fun i => i)
+                                                                              ⟨3,
+                                                                                Nat.le_of_lt
+                                                                                  (Nat.le_of_lt
+                                                                                    (Nat.le_of_lt
+                                                                                      (Nat.le_of_lt
+                                                                                        (Nat.le_refl
+                                                                                          ({ len := 7 }.len +
+                                                                                            1)))))⟩)) ∧
+                                                                      (log p).kind
+                                                                            (2 +
+                                                                              2 *
+                                                                                ↑((fun i => i)
+                                                                                    ⟨3,
+                                                                                      Nat.le_of_lt
+                                                                                        (Nat.le_of_lt
+                                                                                          (Nat.le_of_lt
+                                                                                            (Nat.le_of_lt
+                                                                                              (Nat.le_refl
+                                                                                                ({ len := 7 }.len +
+                                                                                                  1)))))⟩)) =
+                                                                          2 ∧
+                                                                        (log p).left
+                                                                              (2 +
+                                                                                2 *
+                                                                                  ↑((fun i => i)
+                                                                                      ⟨3,
+                                                                                        Nat.le_of_lt
+                                                                                          (Nat.le_of_lt
+                                                                                            (Nat.le_of_lt
+                                                                                              (Nat.le_of_lt
+                                                                                                (Nat.le_refl
+                                                                                                  ({ len := 7 }.len +
+                                                                                                    1)))))⟩)) =
+                                                                            o
+                                                                              ((fun i => i)
+                                                                                ⟨3,
+                                                                                  Nat.le_of_lt
+                                                                                    (Nat.le_of_lt
+                                                                                      (Nat.le_of_lt
+                                                                                        (Nat.le_of_lt
+                                                                                          (Nat.le_refl
+                                                                                            ({ len := 7 }.len +
+                                                                                              1)))))⟩) ∧
+                                                                          (log p).right
+                                                                              (2 +
+                                                                                2 *
+                                                                                  ↑((fun i => i)
+                                                                                      ⟨3,
+                                                                                        Nat.le_of_lt
+                                                                                          (Nat.le_of_lt
+                                                                                            (Nat.le_of_lt
+                                                                                              (Nat.le_of_lt
+                                                                                                (Nat.le_refl
+                                                                                                  ({ len := 7 }.len +
+                                                                                                    1)))))⟩)) =
+                                                                            (fun i => FIw_ScalarArithmetic.lifted (d i))
+                                                                              ((fun i => i)
+                                                                                ⟨3,
+                                                                                  Nat.le_of_lt
+                                                                                    (Nat.le_of_lt
+                                                                                      (Nat.le_of_lt
+                                                                                        (Nat.le_of_lt
+                                                                                          (Nat.le_refl
+                                                                                            ({ len := 7 }.len +
+                                                                                              1)))))⟩))
+                                                                (fun h => ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩)
+                                                                (eq_of_heq tail_eq))
+                                                            (eq_of_heq head_eq) a)
+                                                      (fun b {«as»} a_3 h =>
+                                                        List.cons.noConfusion h fun head_eq =>
+                                                          Eq.ndrec (motive := fun b =>
+                                                            (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨4,
+                                                                    Nat.le_of_lt
+                                                                      (Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨5,
+                                                                      Nat.le_of_lt
+                                                                        (Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                      ⟨6,
+                                                                        Nat.le_of_lt
+                                                                          (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                        ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩ []))) ≍
+                                                                «as» →
+                                                              a ≍ List.Mem.tail b a_3 →
+                                                                (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                                                  (log p).left (1 + 2 * ↑i) =
+                                                                      FIw_ScalarArithmetic.lifted (d i) ∧
+                                                                    (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                                                      (log p).left (2 + 2 * ↑i) = o i ∧
+                                                                        (log p).right (2 + 2 * ↑i) =
+                                                                          (fun i => FIw_ScalarArithmetic.lifted (d i))
+                                                                            i)
+                                                            (fun tail_eq =>
+                                                              Eq.ndrec (motive := fun {«as»} =>
+                                                                ∀ (a_4 : List.Mem i «as»),
+                                                                  a ≍
+                                                                      List.Mem.tail
+                                                                        ((fun i => i)
+                                                                          ⟨3,
+                                                                            Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_of_lt
+                                                                                  (Nat.le_of_lt
+                                                                                    (Nat.le_refl
+                                                                                      ({ len := 7 }.len + 1)))))⟩)
+                                                                        a_4 →
+                                                                    (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                                                      (log p).left (1 + 2 * ↑i) =
+                                                                          FIw_ScalarArithmetic.lifted (d i) ∧
+                                                                        (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                                                          (log p).left (2 + 2 * ↑i) = o i ∧
+                                                                            (log p).right (2 + 2 * ↑i) =
+                                                                              (fun i =>
+                                                                                  FIw_ScalarArithmetic.lifted (d i))
+                                                                                i)
+                                                                (fun a_4 h =>
+                                                                  List.Mem.casesOn (motive := fun a x =>
+                                                                    (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                          ⟨4,
+                                                                            Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_of_lt
+                                                                                  (Nat.le_refl
+                                                                                    ({ len := 7 }.len + 1))))⟩
+                                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                            ⟨5,
+                                                                              Nat.le_of_lt
+                                                                                (Nat.le_of_lt
+                                                                                  (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                              ⟨6,
+                                                                                Nat.le_of_lt
+                                                                                  (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                                ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩
+                                                                                []))) =
+                                                                        a →
+                                                                      a_4 ≍ x →
+                                                                        (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                                                          (log p).left (1 + 2 * ↑i) =
+                                                                              FIw_ScalarArithmetic.lifted (d i) ∧
+                                                                            (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                                                              (log p).left (2 + 2 * ↑i) = o i ∧
+                                                                                (log p).right (2 + 2 * ↑i) =
+                                                                                  (fun i =>
+                                                                                      FIw_ScalarArithmetic.lifted (d i))
+                                                                                    i)
+                                                                    a_4
+                                                                    (fun «as» h =>
+                                                                      List.cons.noConfusion h fun head_eq =>
+                                                                        Eq.ndrec (motive := fun i =>
+                                                                          ∀
+                                                                            (a :
+                                                                              List.Mem i
+                                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                                  ⟨4,
+                                                                                    Nat.le_of_lt
+                                                                                      (Nat.le_of_lt
+                                                                                        (Nat.le_of_lt
+                                                                                          (Nat.le_refl
+                                                                                            ({ len := 7 }.len + 1))))⟩
+                                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                                    ⟨5,
+                                                                                      Nat.le_of_lt
+                                                                                        (Nat.le_of_lt
+                                                                                          (Nat.le_refl
+                                                                                            ({ len := 7 }.len + 1)))⟩
+                                                                                    ((fun x1 x2 =>
+                                                                                        (fun i => i) x1 :: x2)
+                                                                                      ⟨6,
+                                                                                        Nat.le_of_lt
+                                                                                          (Nat.le_refl
+                                                                                            ({ len := 7 }.len + 1))⟩
+                                                                                      ((fun x1 x2 => ⋯)
+                                                                                        ⟨7,
+                                                                                          Nat.le_refl
+                                                                                            ({ len := 7 }.len + 1)⟩
+                                                                                        []))))),
+                                                                            (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                                  ⟨5,
+                                                                                    Nat.le_of_lt
+                                                                                      (Nat.le_of_lt
+                                                                                        (Nat.le_refl
+                                                                                          ({ len := 7 }.len + 1)))⟩
+                                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                                    ⟨6,
+                                                                                      Nat.le_of_lt
+                                                                                        (Nat.le_refl
+                                                                                          ({ len := 7 }.len + 1))⟩
+                                                                                    ((fun x1 x2 => ⋯)
+                                                                                      ⟨7,
+                                                                                        Nat.le_refl
+                                                                                          ({ len := 7 }.len + 1)⟩
+                                                                                      [])) ≍
+                                                                                «as» →
+                                                                              a ≍ List.Mem.head «as» →
+                                                                                (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                                                                  (log p).left (1 + 2 * ↑i) =
+                                                                                      FIw_ScalarArithmetic.lifted
+                                                                                        (d i) ∧
+                                                                                    (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                                                                      (log p).left (2 + 2 * ↑i) = o i ∧
+                                                                                        (log p).right (2 + 2 * ↑i) =
+                                                                                          (fun i =>
+                                                                                              FIw_ScalarArithmetic.lifted
+                                                                                                (d i))
+                                                                                            i)
+                                                                          (fun a tail_eq =>
+                                                                            Eq.ndrec (motive := fun «as» =>
+                                                                              a ≍ List.Mem.head «as» →
+                                                                                (log p).kind (1 + ⋯) = 5 ∧
+                                                                                  (log p).left ⋯ =
+                                                                                      FIw_ScalarArithmetic.lifted ⋯ ∧
+                                                                                    ⋯ = 2 ∧ ⋯ ∧ ⋯)
+                                                                              (fun h => ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩)
+                                                                              (eq_of_heq tail_eq))
+                                                                          (eq_of_heq head_eq) a_4)
+                                                                    (fun b {«as»} a h =>
+                                                                      List.cons.noConfusion h fun head_eq =>
+                                                                        Eq.ndrec (motive := fun b =>
+                                                                          (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                                ⟨5,
+                                                                                  Nat.le_of_lt
+                                                                                    (Nat.le_of_lt
+                                                                                      (Nat.le_refl
+                                                                                        ({ len := 7 }.len + 1)))⟩
+                                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                                  ⟨6,
+                                                                                    Nat.le_of_lt
+                                                                                      (Nat.le_refl
+                                                                                        ({ len := 7 }.len + 1))⟩
+                                                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                                    ⟨7,
+                                                                                      Nat.le_refl
+                                                                                        ({ len := 7 }.len + 1)⟩
+                                                                                    [])) ≍
+                                                                              «as» →
+                                                                            a_4 ≍ List.Mem.tail b a →
+                                                                              (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                                                                (log p).left (1 + 2 * ↑i) =
+                                                                                    FIw_ScalarArithmetic.lifted (d i) ∧
+                                                                                  (log p).kind (2 + 2 * ↑i) = 2 ∧
+                                                                                    (log p).left (2 + 2 * ↑i) = o i ∧
+                                                                                      (log p).right (2 + 2 * ↑i) =
+                                                                                        (fun i =>
+                                                                                            FIw_ScalarArithmetic.lifted
+                                                                                              (d i))
+                                                                                          i)
+                                                                          (fun tail_eq =>
+                                                                            Eq.ndrec (motive := fun {«as»} =>
+                                                                              ∀ (a : List.Mem i «as»),
+                                                                                a_4 ≍ List.Mem.tail ((fun i => i) ⋯) a →
+                                                                                  (log p).kind (1 + 2 * ↑i) = 5 ∧
+                                                                                    (log p).left (1 + 2 * ↑i) =
+                                                                                        FIw_ScalarArithmetic.lifted
+                                                                                          (d i) ∧
+                                                                                      (log p).kind (2 + 2 * ↑i) = 2 ∧ ⋯)
+                                                                              (fun a h =>
+                                                                                List.Mem.casesOn (motive := fun a_5 x =>
+                                                                                  ⋯
+                                                                                        ⟨5,
+                                                                                          Nat.le_of_lt
+                                                                                            (Nat.le_of_lt
+                                                                                              (Nat.le_refl
+                                                                                                ({ len := 7 }.len +
+                                                                                                  1)))⟩
+                                                                                        ⋯ =
+                                                                                      a_5 →
+                                                                                    a ≍ x →
+                                                                                      (log p).kind (1 + 2 * ↑i) = 5 ∧ ⋯)
+                                                                                  a
+                                                                                  (fun «as» h =>
+                                                                                    List.cons.noConfusion h
+                                                                                      fun head_eq =>
+                                                                                      Eq.ndrec (motive := ⋯) ⋯ ⋯ a)
+                                                                                  (fun b {«as»} a_5 h =>
+                                                                                    List.cons.noConfusion h
+                                                                                      fun head_eq =>
+                                                                                      Eq.ndrec (motive := ⋯) ⋯ ⋯)
+                                                                                  (Eq.refl
+                                                                                    ((fun x1 x2 =>
+                                                                                        (fun i => i) x1 :: x2)
+                                                                                      ⟨5,
+                                                                                        Nat.le_of_lt
+                                                                                          (Nat.le_of_lt
+                                                                                            (Nat.le_refl
+                                                                                              ({ len := 7 }.len + 1)))⟩
+                                                                                      ((fun x1 x2 => ⋯)
+                                                                                        ⟨6,
+                                                                                          Nat.le_of_lt
+                                                                                            (Nat.le_refl
+                                                                                              ({ len := 7 }.len + 1))⟩
+                                                                                        (⋯
+                                                                                          ⟨7,
+                                                                                            Nat.le_refl
+                                                                                              ({ len := 7 }.len + 1)⟩
+                                                                                          []))))
+                                                                                  (HEq.refl a))
+                                                                              (eq_of_heq tail_eq) a)
+                                                                          (eq_of_heq head_eq))
+                                                                    (Eq.refl
+                                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                        ⟨4,
+                                                                          Nat.le_of_lt
+                                                                            (Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                          ⟨5,
+                                                                            Nat.le_of_lt
+                                                                              (Nat.le_of_lt
+                                                                                (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                            ⟨6,
+                                                                              Nat.le_of_lt
+                                                                                (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                              ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩
+                                                                              [])))))
+                                                                    (HEq.refl a_4))
+                                                                (eq_of_heq tail_eq) a_3)
+                                                            (eq_of_heq head_eq))
+                                                      (Eq.refl
+                                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                          ⟨3,
+                                                            Nat.le_of_lt
+                                                              (Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨4,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨5,
+                                                                Nat.le_of_lt
+                                                                  (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩ []))))))
+                                                      (HEq.refl a))
+                                                  (eq_of_heq tail_eq) a)
+                                              (eq_of_heq head_eq))
+                                        (Eq.refl
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                            ⟨2,
+                                              Nat.le_of_lt
+                                                (Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt
+                                                      (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))⟩
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨3,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨4,
+                                                  Nat.le_of_lt
+                                                    (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨5, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩ [])))))))
+                                        (HEq.refl a_2))
+                                    (eq_of_heq tail_eq) a_1)
+                                (eq_of_heq head_eq))
+                          (Eq.refl
+                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                              ⟨1,
+                                Nat.le_of_lt
+                                  (Nat.le_of_lt
+                                    (Nat.le_of_lt
+                                      (Nat.le_of_lt
+                                        (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))))⟩
+                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                ⟨2,
+                                  Nat.le_of_lt
+                                    (Nat.le_of_lt
+                                      (Nat.le_of_lt
+                                        (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))))⟩
+                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                  ⟨3,
+                                    Nat.le_of_lt
+                                      (Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))))⟩
+                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                    ⟨4, Nat.le_of_lt (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))))⟩
+                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨5, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1)))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨6, Nat.le_of_lt (Nat.le_refl ({ len := 7 }.len + 1))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨7, Nat.le_refl ({ len := 7 }.len + 1)⟩
+                                          []))))))))
+                          (HEq.refl a))
+                      (eq_of_heq tail_eq) a)
+                  (eq_of_heq head_eq))
+            (Eq.refl (List.finRange ({ len := 7 }.len + 1))) (HEq.refl (Fintype.complete i)),
+          fun g =>
+          List.Mem.casesOn (motive := fun a x =>
+            ⋯ →
+              ⋯ →
+                (log p).kind (17 + 2 * ↑g) = 6 ∧
+                  (log p).packs (17 + 2 * ↑g) = NJX_DigestGroups.group p.residual g ∧
+                    (log p).kind (18 + 2 * ↑g) = 4 ∧
+                      (log p).caches (18 + 2 * ↑g) = NJB_PreparedCarrier.words p.prepared ∧
+                        (log p).right (18 + 2 * ↑g) = p.packed ⋯ ∧ ⋯)
+            ⋯ ⋯ ⋯ ⋯ ⋯⟩⟩⟩⟩
+'AspisR1.NJX_DigestCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]

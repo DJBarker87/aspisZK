@@ -1,0 +1,77 @@
+struct NJX_ELog{seek:usize,calls:usize,kind:u8,left:QM31,right:QM31,reply:[QM31;32]}
+fn NJX_e(k:u8,a:QM31,b:QM31,l:&mut NJX_ELog)->QM31{let i=l.calls;assert!(i<32);if i==l.seek{l.kind=k;l.left=a;l.right=b;}l.calls+=1;l.reply[i]}
+fn NJX_e_m31(a:QM31,b:M31,l:&mut NJX_ELog)->QM31{NJX_e(10,a,NJX_q([b.0,0,0,0]),l)}
+fn NJX_elog(seek:usize)->NJX_ELog{NJX_ELog{seek,calls:0,kind:255,left:QM31::ZERO,right:QM31::ZERO,reply:unsafe{core::mem::transmute::<[[u32;4];32],[QM31;32]>(kani::any())}}}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJX_initial_constants_cut(){
+ let h:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let transfer_first=NJX_q(kani::any());let seek:usize=kani::any();let limb:usize=kani::any();kani::assume(seek<12&&limb<4);let mut l=NJX_elog(seek);let r=l.reply;
+ let note_first=NJX_e(1,NJX_e(1,h[1],h[3],&mut l),transfer_first,&mut l);
+ let domain=NJX_e(1,NJX_e(1,NJX_e_m31(h[0],DOMAIN_OWNER_KEY,&mut l),NJX_e_m31(note_first,DOMAIN_NOTE,&mut l),&mut l),NJX_e_m31(h[2],DOMAIN_NULLIFIER,&mut l),&mut l);
+ let length=NJX_e(1,NJX_e(1,NJX_e_m31(h[0],M31(8),&mut l),NJX_e_m31(note_first,M31(18),&mut l),&mut l),NJX_e_m31(h[2],M31(16),&mut l),&mut l);
+ let kinds=[1,1,10,10,1,10,1,10,10,1,10,1];let left=[h[1],r[0],h[0],r[1],r[2],h[2],r[4],h[0],r[1],r[7],h[2],r[9]];let right=[h[3],transfer_first,NJX_q([DOMAIN_OWNER_KEY.0,0,0,0]),NJX_q([DOMAIN_NOTE.0,0,0,0]),r[3],NJX_q([DOMAIN_NULLIFIER.0,0,0,0]),r[5],NJX_q([8,0,0,0]),NJX_q([18,0,0,0]),r[8],NJX_q([16,0,0,0]),r[10]];
+ assert_eq!(l.calls,12);assert_eq!(l.kind,kinds[seek]);assert_eq!(NJX_words(l.left)[limb],NJX_words(left[seek])[limb]);assert_eq!(NJX_words(l.right)[limb],NJX_words(right[seek])[limb]);assert_eq!(NJX_words(domain)[limb],NJX_words(r[6])[limb]);assert_eq!(NJX_words(length)[limb],NJX_words(r[11])[limb]^if cfg!(NJX_invert){1}else{0});
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJX_initial_chunks_cut(){
+ let h:[QM31;9]=unsafe{core::mem::transmute::<[[u32;4];9],[QM31;9]>(kani::any())};let private_eight=NJX_q(kani::any());let private_two=NJX_q(kani::any());let seek:usize=kani::any();let limb:usize=kani::any();kani::assume(seek<9&&limb<4);let mut l=NJX_elog(seek);let r=l.reply;
+ let mut eight=NJX_e(1,NJX_e(1,NJX_e(1,NJX_e(1,NJX_e(1,NJX_e(1,h[0],h[1],&mut l),h[2],&mut l),h[3],&mut l),h[4],&mut l),h[5],&mut l),h[6],&mut l);
+ let mut two=NJX_e(1,h[7],h[8],&mut l);eight=NJX_e(1,eight,private_eight,&mut l);two=NJX_e(1,two,private_two,&mut l);
+ let left=[h[0],r[0],r[1],r[2],r[3],r[4],h[7],r[5],r[6]];let right=[h[1],h[2],h[3],h[4],h[5],h[6],h[8],private_eight,private_two];assert_eq!(l.calls,9);assert_eq!(l.kind,1);assert_eq!(NJX_words(l.left)[limb],NJX_words(left[seek])[limb]);assert_eq!(NJX_words(l.right)[limb],NJX_words(right[seek])[limb]);assert_eq!(NJX_words(eight)[limb],NJX_words(r[7])[limb]);assert_eq!(NJX_words(two)[limb],NJX_words(r[8])[limb]^if cfg!(NJX_invert){1}else{0});
+}
+struct NJX_ALog{calls:usize,seen:[QM31;5],opened:[QM31;16],reply:[QM31;16]}
+fn NJX_a_call(low:QM31,fixed:QM31,two:QM31,eight:QM31,nodes:QM31,o:&[QM31;16],l:&mut NJX_ALog)->[QM31;16]{l.calls+=1;l.seen=[low,fixed,two,eight,nodes];l.opened=*o;l.reply}
+#[kani::proof] #[kani::unwind(20)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJX_initial_absorption_call_cut(){
+ let initial:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let opened:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let args:[QM31;5]=unsafe{core::mem::transmute::<[[u32;4];5],[QM31;5]>(kani::any())};let reply:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let mut l=NJX_ALog{calls:0,seen:[QM31::ZERO;5],opened:[QM31::ZERO;16],reply};
+ let absorption=NJX_a_call(args[0],args[1],args[2],args[3],args[4],&opened,&mut l);let out=(initial,absorption);let seek:usize=kani::any();let limb:usize=kani::any();let arg:usize=kani::any();kani::assume(seek<16&&limb<4&&arg<5);assert_eq!(l.calls,1);assert_eq!(NJX_words(l.seen[arg])[limb],NJX_words(args[arg])[limb]);assert_eq!(NJX_words(l.opened[seek])[limb],NJX_words(opened[seek])[limb]);assert_eq!(NJX_words(out.0[seek])[limb],NJX_words(initial[seek])[limb]);assert_eq!(NJX_words(out.1[seek])[limb],NJX_words(reply[seek])[limb]^if cfg!(NJX_invert){1}else{0});
+}
+struct NJX_RowLog{receiver:usize,calls:usize,rows:[usize;3],reply:[QM31;3]}
+fn NJX_row(s:&Selectors,row:usize,l:&mut NJX_RowLog)->QM31{l.receiver=s as*const Selectors as usize;let i=l.calls;assert!(i<3);l.calls+=1;l.rows[i]=row;l.reply[i]}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJX_value_selectors_cut(){
+ let row_reply:[QM31;3]=unsafe{core::mem::transmute::<[[u32;4];3],[QM31;3]>(kani::any())};let selector_input=Selectors{high:unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())}};let mut row=NJX_RowLog{receiver:0,calls:0,rows:[999;3],reply:row_reply};let seek:usize=kani::any();let limb:usize=kani::any();let i:usize=kani::any();kani::assume(seek<3&&limb<4&&i<3);let mut l=NJX_elog(seek);let r=l.reply;
+ let values=[0usize,2,4].map(|local|NJX_row(&selector_input,16*VALUE_AUXILIARY_BLOCK+local,&mut row));let selector=NJX_e(1,NJX_e(1,NJX_e(1,QM31::ZERO,values[0],&mut l),values[1],&mut l),values[2],&mut l);
+ assert_eq!(row.calls,3);assert_eq!(row.receiver,&selector_input as*const Selectors as usize);assert_eq!(row.rows[i],[1008,1010,1012][i]);assert_eq!(NJX_words(values[i])[limb],NJX_words(row_reply[i])[limb]);assert_eq!(l.calls,3);assert_eq!(l.kind,1);assert_eq!(NJX_words(l.left)[limb],NJX_words([QM31::ZERO,r[0],r[1]][seek])[limb]);assert_eq!(NJX_words(l.right)[limb],NJX_words(row_reply[seek])[limb]);assert_eq!(NJX_words(selector)[limb],NJX_words(r[2])[limb]^if cfg!(NJX_invert){1}else{0});
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJX_value_reconstruct_cut(){
+ let views:[[QM31;16];3]=unsafe{core::mem::transmute::<[[[u32;4];16];3],[[QM31;16];3]>(kani::any())};let before:[QM31;33]=unsafe{core::mem::transmute::<[[u32;4];33],[QM31;33]>(kani::any())};let roots:[QM31;3]=unsafe{core::mem::transmute::<[[u32;4];3],[QM31;3]>(kani::any())};let seek:usize=kani::any();let limb:usize=kani::any();let cell:usize=kani::any();kani::assume(seek<5&&limb<4&&cell<33);let mut l=NJX_elog(seek);let r=l.reply;
+ let reconstructed=NJX_e(1,NJX_e(1,roots[0],NJX_e_m31(roots[1],M31(1<<10),&mut l),&mut l),NJX_e_m31(roots[2],M31(1<<20),&mut l),&mut l);
+ let mut range=before;range[30]=NJX_e(2,views[0][10],reconstructed,&mut l);range[31]=views[1][10];range[32]=views[2][10];
+ let kinds=[10,1,10,1,2];let left=[roots[1],roots[0],roots[2],r[1],views[0][10]];let right=[NJX_q([1024,0,0,0]),r[0],NJX_q([1048576,0,0,0]),r[2],r[3]];assert_eq!(l.calls,5);assert_eq!(l.kind,kinds[seek]);assert_eq!(NJX_words(l.left)[limb],NJX_words(left[seek])[limb]);assert_eq!(NJX_words(l.right)[limb],NJX_words(right[seek])[limb]);assert_eq!(NJX_words(range[cell])[limb],(if cell==30{NJX_words(r[4])[limb]}else if cell==31{NJX_words(views[1][10])[limb]}else if cell==32{NJX_words(views[2][10])[limb]}else{NJX_words(before[cell])[limb]})^if cfg!(NJX_invert){1}else{0});
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJX_value_conservation_cut(){
+ let input:[QM31;3]=unsafe{core::mem::transmute::<[[u32;4];3],[QM31;3]>(kani::any())};let output:[QM31;2]=unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())};let selector=NJX_q(kani::any());let seek:usize=kani::any();let limb:usize=kani::any();kani::assume(seek<5&&limb<4);let mut l=NJX_elog(seek);let r=l.reply;
+ let conservation=[NJX_e(0,selector,NJX_e(2,NJX_e(2,input[0],input[1],&mut l),input[2],&mut l),&mut l),NJX_e(0,selector,NJX_e(2,output[0],output[1],&mut l),&mut l)];
+ let kinds=[2,2,0,2,0];let left=[input[0],r[0],selector,output[0],selector];let right=[input[1],input[2],r[1],output[1],r[3]];assert_eq!(l.calls,5);assert_eq!(l.kind,kinds[seek]);assert_eq!(NJX_words(l.left)[limb],NJX_words(left[seek])[limb]);assert_eq!(NJX_words(l.right)[limb],NJX_words(right[seek])[limb]);assert_eq!(NJX_words(conservation[0])[limb],NJX_words(r[2])[limb]);assert_eq!(NJX_words(conservation[1])[limb],NJX_words(r[4])[limb]^if cfg!(NJX_invert){1}else{0});
+}
+struct NJX_PackedLog{calls:usize,start:usize,n:usize,selector:QM31,seen:QM31,before:QM31,seek:usize,reply:[QM31;24]}
+fn NJX_preweighted<const N:usize>(packed:&mut[QM31;24],start:usize,values:&[QM31;N],selector:QM31,l:&mut NJX_PackedLog){l.calls+=1;l.start=start;l.n=N;l.selector=selector;l.seen=values[l.seek%N];l.before=packed[l.seek%24];*packed=l.reply;}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJX_value_shared_call_cut(){
+ let before:[QM31;24]=unsafe{core::mem::transmute::<[[u32;4];24],[QM31;24]>(kani::any())};let range:[QM31;33]=unsafe{core::mem::transmute::<[[u32;4];33],[QM31;33]>(kani::any())};let reply:[QM31;24]=unsafe{core::mem::transmute::<[[u32;4];24],[QM31;24]>(kani::any())};let selector=NJX_q(kani::any());let seek:usize=kani::any();let limb:usize=kani::any();kani::assume(seek<792&&limb<4);let mut l=NJX_PackedLog{calls:0,start:0,n:0,selector:QM31::ZERO,seen:QM31::ZERO,before:QM31::ZERO,seek,reply};let mut packed=before;NJX_preweighted(&mut packed,49,&range,selector,&mut l);
+ assert_eq!(l.calls,1);assert_eq!(l.start,49);assert_eq!(l.n,33);assert_eq!(NJX_words(l.selector)[limb],NJX_words(selector)[limb]);assert_eq!(NJX_words(l.seen)[limb],NJX_words(range[seek%33])[limb]);assert_eq!(NJX_words(l.before)[limb],NJX_words(before[seek%24])[limb]);assert_eq!(NJX_words(packed[seek%24])[limb],NJX_words(reply[seek%24])[limb]^if cfg!(NJX_invert){1}else{0});
+}
+struct NJX_LaneLog{seek:usize,calls:usize,cache:[[u32;3];3],opened:QM31,reply:[QM31;16]}
+fn NJX_lane(p:PreparedQm31Multiplier,x:QM31,l:&mut NJX_LaneLog)->QM31{let i=l.calls;if i==l.seek{l.cache=NJX_cache(p);l.opened=x;}l.calls+=1;l.reply[i]}
+#[kani::proof] #[kani::unwind(19)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJX_initial_lane_array_cut(){
+ let cache:[[[u32;3];3];2]=kani::any();let p:[PreparedQm31Multiplier;2]=unsafe{core::mem::transmute::<[[[u32;3];3];2],[PreparedQm31Multiplier;2]>(cache)};let opened:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let reply:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let seek:usize=kani::any();let limb:usize=kani::any();let row:usize=kani::any();let col:usize=kani::any();kani::assume(seek<16&&limb<4&&row<3&&col<3);let mut l=NJX_LaneLog{seek,calls:0,cache:[[0;3];3],opened:QM31::ZERO,reply};
+ let initial:[QM31;16]=core::array::from_fn(|lane|if lane<RATE{NJX_lane(p[1],opened[lane],&mut l)}else{NJX_lane(p[0],opened[lane],&mut l)});
+ assert_eq!(l.calls,16);assert_eq!(l.cache[row][col],cache[if seek<8{1}else{0}][row][col]);assert_eq!(NJX_words(l.opened)[limb],NJX_words(opened[seek])[limb]);assert_eq!(NJX_words(initial[seek])[limb],NJX_words(reply[seek])[limb]^if cfg!(NJX_invert){1}else{0});
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJX_value_final_call_cut(){
+ let before:[QM31;24]=unsafe{core::mem::transmute::<[[u32;4];24],[QM31;24]>(kani::any())};let values:[QM31;2]=unsafe{core::mem::transmute::<[[u32;4];2],[QM31;2]>(kani::any())};let reply:[QM31;24]=unsafe{core::mem::transmute::<[[u32;4];24],[QM31;24]>(kani::any())};let seek:usize=kani::any();let limb:usize=kani::any();kani::assume(seek<24&&limb<4);let mut l=NJX_PackedLog{calls:0,start:0,n:0,selector:QM31::ZERO,seen:QM31::ZERO,before:QM31::ZERO,seek,reply};let mut packed=before;NJX_preweighted(&mut packed,82,&values,QM31::ONE,&mut l);
+ assert_eq!(l.calls,1);assert_eq!(l.start,82);assert_eq!(l.n,2);assert_eq!(NJX_words(l.seen)[limb],NJX_words(values[seek%2])[limb]);assert_eq!(NJX_words(l.before)[limb],NJX_words(before[seek])[limb]);assert_eq!(NJX_words(packed[seek])[limb],NJX_words(reply[seek])[limb]^if cfg!(NJX_invert){1}else{0});
+}

@@ -1,0 +1,141 @@
+NJX_PatternAssociation.lean:14:126: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  0 ≤ f ≤ 7
+  0 ≤ e ≤ 8
+  e + f - g ≥ 0
+where
+ e := ↑↑start
+ f := ↑↑slot
+ g := ↑↑16#usize
+NJX_PatternAssociation.lean:38:10: error: unsolved goals
+case fail
+lambda : NQ
+o : Std.Array NQ 16#usize
+hl : Canon lambda
+ho : FIw_ArrayValue.canonical o
+e : Error
+run : FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = fail e
+total : fail e ⦃ out => FIw_ArrayValue.canonical out ⦄
+⊢ ∃ out,
+    fail e = ok out ∧
+      FIw_ArrayValue.canonical out ∧
+        FIw_ArrayValue.decoded out = R0P.copyPatternValuesLiteral (FIw_ArrayValue.decoded o) (decode lambda)
+NJX_PatternAssociation.lean:39:7: error: unsolved goals
+case div
+lambda : NQ
+o : Std.Array NQ 16#usize
+hl : Canon lambda
+ho : FIw_ArrayValue.canonical o
+run : FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = div
+total : div ⦃ out => FIw_ArrayValue.canonical out ⦄
+⊢ ∃ out,
+    div = ok out ∧
+      FIw_ArrayValue.canonical out ∧
+        FIw_ArrayValue.decoded out = R0P.copyPatternValuesLiteral (FIw_ArrayValue.decoded o) (decode lambda)
+NJX_PatternAssociation.lean:40:24: error: Application type mismatch: The argument
+  run
+has type
+  FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = ok out
+but is expected to have type
+  ok out = ok out
+in the application
+  And.intro run
+theorem AspisR1.NJX_PatternAssociation.atoms_value : ∀ (lambda : NQ) (o : Std.Array NQ 16#usize) (w : Fin 4 → NQ),
+  (∀ (j : Fin 4),
+      decode (w j) =
+        (List.ofFn fun i => decode lambda ^ (↑i + 1) * decode (NJL_WindowStep.opened o (starts j) i)).sum) →
+    (fun k => decode (atoms o w k)) = NJX_PatternModel.atoms (FIw_ArrayValue.decoded o) (decode lambda) :=
+fun lambda o w hw =>
+  funext fun i =>
+    id
+      (id
+        (Decidable.casesOn ((↑i).decLt 16)
+          (fun h =>
+            Eq.mpr (id (congr (congrArg Eq (congrArg decode (dif_neg h))) (dif_neg h)))
+              (Decidable.casesOn ((↑i).decLt 20)
+                (fun h_1 =>
+                  Eq.mpr (id (congr (congrArg Eq (congrArg decode (dif_neg h_1))) (dif_neg h_1)))
+                    NJX_PatternPacket.constant_value)
+                fun h_1 =>
+                Eq.mpr (id (congr (congrArg Eq (congrArg decode (dif_pos h_1))) (dif_pos h_1)))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          _a =
+                            NJX_PatternModel.window (FIw_ArrayValue.decoded o) (decode lambda)
+                              (starts ⟨↑i - 16, NJX_PatternModel.atoms._proof_2 i h h_1⟩))
+                        (hw ⟨↑i - 16, atoms._proof_4 i h h_1⟩)))
+                    (id
+                      ((fun {α} [Add α] [Zero α] a a_1 e_a => e_a ▸ Eq.refl a.sum)
+                        (List.ofFn fun i_1 =>
+                          decode lambda ^ (↑i_1 + 1) *
+                            decode (NJL_WindowStep.opened o (starts ⟨↑i - 16, atoms._proof_4 i h h_1⟩) i_1))
+                        (List.ofFn fun i_1 =>
+                          decode lambda ^ (↑i_1 + 1) *
+                            FIw_ArrayValue.decoded o
+                              ⟨↑(starts ⟨↑i - 16, NJX_PatternModel.atoms._proof_2 i h h_1⟩) + ↑i_1,
+                                NJX_PatternModel.window._proof_2
+                                  (starts ⟨↑i - 16, NJX_PatternModel.atoms._proof_2 i h h_1⟩) i_1⟩)
+                        ((fun {α} {n} f f_1 e_f => e_f ▸ Eq.refl (List.ofFn f))
+                          (fun i_1 =>
+                            decode lambda ^ (↑i_1 + 1) *
+                              decode (NJL_WindowStep.opened o (starts ⟨↑i - 16, atoms._proof_4 i h h_1⟩) i_1))
+                          (fun i_1 =>
+                            decode lambda ^ (↑i_1 + 1) *
+                              FIw_ArrayValue.decoded o
+                                ⟨↑(starts ⟨↑i - 16, NJX_PatternModel.atoms._proof_2 i h h_1⟩) + ↑i_1,
+                                  NJX_PatternModel.window._proof_2
+                                    (starts ⟨↑i - 16, NJX_PatternModel.atoms._proof_2 i h h_1⟩) i_1⟩)
+                          (Eq.refl fun i_1 =>
+                            decode lambda ^ (↑i_1 + 1) *
+                              decode (NJL_WindowStep.opened o (starts ⟨↑i - 16, atoms._proof_4 i h h_1⟩) i_1))))))))
+          fun h =>
+          Eq.mpr (id (congr (congrArg Eq (congrArg decode (dif_pos h))) (dif_pos h)))
+            (Eq.refl (decode (NJB_ArrayCarrier.cell o ⟨↑i, atoms._proof_1 i h⟩)))))
+theorem AspisR1.NJX_PatternAssociation.cohort : ∀ (lambda : NQ) (o : Std.Array NQ 16#usize),
+  Canon lambda →
+    FIw_ArrayValue.canonical o →
+      ∃ out,
+        FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = ok out ∧
+          FIw_ArrayValue.canonical out ∧
+            FIw_ArrayValue.decoded out = R0P.copyPatternValuesLiteral (FIw_ArrayValue.decoded o) (decode lambda) :=
+fun lambda o hl ho =>
+  have total := JGa_CopyPatterns.source o lambda ho hl;
+  casesOn (motive := fun t =>
+    FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = t →
+      ∃ out,
+        FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = ok out ∧
+          FIw_ArrayValue.canonical out ∧
+            FIw_ArrayValue.decoded out = R0P.copyPatternValuesLiteral (FIw_ArrayValue.decoded o) (decode lambda))
+    (FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda)
+    (fun out h =>
+      Eq.ndrec (motive := fun x =>
+        FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = x →
+          ∃ out,
+            x = ok out ∧
+              FIw_ArrayValue.canonical out ∧
+                FIw_ArrayValue.decoded out = R0P.copyPatternValuesLiteral (FIw_ArrayValue.decoded o) (decode lambda))
+        (fun run => Exists.intro out ⟨sorry, FJk_PatternValues.value o lambda out ho hl run⟩) (Eq.symm h)
+        (Eq.refl (FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda)))
+    (fun e h =>
+      Eq.ndrec (motive := fun x =>
+        FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = x →
+          ∃ out,
+            x = ok out ∧
+              FIw_ArrayValue.canonical out ∧
+                FIw_ArrayValue.decoded out = R0P.copyPatternValuesLiteral (FIw_ArrayValue.decoded o) (decode lambda))
+        (fun run => sorry) (Eq.symm h) (Eq.refl (FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = x →
+          ∃ out,
+            x = ok out ∧
+              FIw_ArrayValue.canonical out ∧
+                FIw_ArrayValue.decoded out = R0P.copyPatternValuesLiteral (FIw_ArrayValue.decoded o) (decode lambda))
+        (fun run => sorry) (Eq.symm h) (Eq.refl (FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda)))
+    (Eq.refl (FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda))
+'AspisR1.NJX_PatternAssociation.opened' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJX_PatternAssociation.atoms_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_PatternAssociation.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

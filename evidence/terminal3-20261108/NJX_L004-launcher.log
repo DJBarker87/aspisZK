@@ -1,0 +1,61 @@
+{"attempt": "NJX_L004", "exit_status": 0, "wall_seconds": 11.50935667892918, "peak_rss_kib": "6188940", "swaps": "0", "print_axioms": ["'AspisR1.NJX_TailExpr.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_TailExpr.source : ∀ {lambda : NQ} (p : NJL_CachedPowers.Packet lambda) (a : Fin 21 → NQ),
+  (∀ (i : Fin 21), Canon (a i)) →
+    ∀ (e : Expr),
+      ∃ out, eval p a e = ok out ∧ Canon out ∧ decode out = value (decode lambda) (fun i => decode (a i)) e :=
+fun {lambda} p a ha e =>
+  Expr.rec (fun i => Exists.intro (a i) ⟨rfl, ⟨ha i, rfl⟩⟩)
+    (fun i e ih =>
+      let ⟨x, h✝⟩ := ih
+      let ⟨cx, right✝⟩ := h✝
+      let ⟨hx, vx⟩ := right✝
+      let ⟨out, h✝¹⟩ :=
+        NJB_PreparedLaws.mul_result (NJL_CacheReads.cache p i) (NJL_CacheReads.power p i) x
+          (NJL_CacheReads.canonical p i) hx (NJL_CacheReads.constructor p i).right
+      let ⟨co, right✝¹⟩ := h✝¹
+      let ⟨
+...
+ i => decode (a i)) f))))⟩⟩)
+    (fun e f ihe ihf =>
+      let ⟨x, h✝⁵⟩ := ihe
+      let ⟨cx, right✝⁵⟩ := h✝⁵
+      let ⟨hx, vx⟩ := right✝⁵
+      let ⟨y, h✝⁶⟩ := ihf
+      let ⟨cy, right✝⁶⟩ := h✝⁶
+      let ⟨hy, vy⟩ := right✝⁶
+      let ⟨out, h✝⁷⟩ := NJB_StubLaws.qm_sub x y hx hy
+      let ⟨co, right✝⁷⟩ := h✝⁷
+      let ⟨ho, vo⟩ := right✝⁷
+      Exists.intro out
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans
+                      (congr (congrArg Bind.bind cx)
+                        (funext fun x =>
+                          Eq.trans (congrFun' (congrArg Bind.bind cy) fun y => FIq_Native.field.QM31.sub x y)
+                            (bind_tc_ok y (FIq_Native.field.QM31.sub x))))
+                      (bind_tc_ok x fun y_1 => FIq_Native.field.QM31.sub y_1 y))
+                    co))
+                (ok out))
+              (eq_self (ok out))),
+          ⟨ho,
+            Eq.mpr (id (congrArg (fun _a => _a = value (decode lambda) (fun i => decode (a i)) (e.sub f)) vo))
+              (Eq.mpr
+                (id (congrArg (fun _a => _a - decode y = value (decode lambda) (fun i => decode (a i)) (e.sub f)) vx))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        value (decode lambda) (fun i => decode (a i)) e - _a =
+                          value (decode lambda) (fun i => decode (a i)) (e.sub f))
+                      vy))
+                  (Eq.refl
+                    (value (decode lambda) (fun i => decode (a i)) e -
+                      value (decode lambda) (fun i => decode (a i)) f))))⟩⟩)
+    e
+'AspisR1.NJX_TailExpr.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r342b4ca1f3e045dc9a96fc5f7f321bdc.scope; invocation ID: 7d3be8aefe264179b77f551e3801825c

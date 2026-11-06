@@ -1,0 +1,79 @@
+theorem AspisR1.NJX_InitialVariant.source : ∀ (v : Variant) (a b c : NQ),
+  Canon a →
+    Canon b →
+      Canon c →
+        ∃ t f eight two,
+          FIq_Native.pool_v1.pair_forest_semantic_terminal.initial_variant_selectors v a b c = ok (t, f, eight, two) ∧
+            Canon t ∧ Canon f ∧ Canon eight ∧ Canon two :=
+fun v a b c ha hb hc =>
+  let ⟨ab, h✝⟩ := NJB_StubLaws.qm_add a b ha hb
+  let ⟨cab, right✝⟩ := h✝
+  let ⟨hab, right✝¹⟩ := right✝
+  Eq.mpr
+    (id
+      (congrArg (fun _a => ∃ t f eight two, _a = ok (t, f, eight, two) ∧ Canon t ∧ Canon f ∧ Canon eight ∧ Canon two)
+        (NHG_ExtraLeaves.initial_source v a b c)))
+    (FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.casesOn (motive := fun t =>
+      v = t →
+        ∃ t f eight two,
+          NHG_ExtraLeaves.initialBody v a b c = ok (t, f, eight, two) ∧ Canon t ∧ Canon f ∧ Canon eight ∧ Canon two)
+      v
+      (fun h =>
+        Eq.symm h ▸
+          Exists.intro a
+            (Exists.intro FIq_Native.field.QM31.ZERO
+              (Exists.intro ab
+                (Exists.intro c
+                  ⟨of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind cab) fun ab => ok (a, FIq_Native.field.QM31.ZERO, ab, c))
+                              (bind_tc_ok ab fun y => ok (a, FIq_Native.field.QM31.ZERO, y, c))))
+                          (ok (a, FIq_Native.field.QM31.ZERO, ab, c)))
+                        (eq_self (ok (a, FIq_Native.field.QM31.ZERO, ab, c)))),
+                    ⟨ha, ⟨FIv_NativeValue.zero.left, ⟨hab, hc⟩⟩⟩⟩))))
+      (fun h =>
+        Eq.symm h ▸
+          let ⟨abc, h✝¹⟩ := NJB_StubLaws.qm_add ab c hab hc
+          let ⟨cabc, right✝²⟩ := h✝¹
+          let ⟨habc, right✝³⟩ := right✝²
+          Exists.intro FIq_Native.field.QM31.ZERO
+            (Exists.intro abc
+              (Exists.intro FIq_Native.field.QM31.ZERO
+                (Exists.intro FIq_Native.field.QM31.ZERO
+                  ⟨of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun' (congrArg Bind.bind cab) fun ab => do
+                                  let abc ← ab.add c
+                                  ok
+                                      (FIq_Native.field.QM31.ZERO, abc, FIq_Native.field.QM31.ZERO,
+                                        FIq_Native.field.QM31.ZERO))
+                                (bind_tc_ok ab fun y => do
+                                  let abc ← y.add c
+                                  ok
+                                      (FIq_Native.field.QM31.ZERO, abc, FIq_Native.field.QM31.ZERO,
+                                        FIq_Native.field.QM31.ZERO)))
+                              (Eq.trans
+                                (congrFun' (congrArg Bind.bind cabc) fun abc =>
+                                  ok
+                                    (FIq_Native.field.QM31.ZERO, abc, FIq_Native.field.QM31.ZERO,
+                                      FIq_Native.field.QM31.ZERO))
+                                (bind_tc_ok abc fun y =>
+                                  ok
+                                    (FIq_Native.field.QM31.ZERO, y, FIq_Native.field.QM31.ZERO,
+                                      FIq_Native.field.QM31.ZERO)))))
+                          (ok
+                            (FIq_Native.field.QM31.ZERO, abc, FIq_Native.field.QM31.ZERO, FIq_Native.field.QM31.ZERO)))
+                        (eq_self
+                          (ok
+                            (FIq_Native.field.QM31.ZERO, abc, FIq_Native.field.QM31.ZERO,
+                              FIq_Native.field.QM31.ZERO)))),
+                    ⟨FIv_NativeValue.zero.left, ⟨habc, ⟨FIv_NativeValue.zero.left, FIv_NativeValue.zero.left⟩⟩⟩⟩))))
+      (Eq.refl v))
+'AspisR1.NJX_InitialVariant.source' depends on axioms: [propext, Classical.choice, Quot.sound]

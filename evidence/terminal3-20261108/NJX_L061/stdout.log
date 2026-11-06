@@ -1,0 +1,122 @@
+theorem AspisR1.NJX_RangeFold.source : ∀ (view : Fin 3) (xs : Fin 10 → NQ),
+  (∀ (i : Fin 10), Canon (xs i)) →
+    ∀ (is : List (Fin 10)) (before : State),
+      (∀ (j : Fin 33), Canon (before j)) →
+        ∃ out,
+          run view xs is before = ok out ∧
+            Trace view xs is before out ∧
+              (∀ (j : Fin 33), Canon (out j)) ∧
+                (fun j => decode (out j)) =
+                  List.foldl (fun s i => modelStep view xs i s) (fun j => decode (before j)) is :=
+fun view xs hx is before hb =>
+  List.rec (motive := fun is =>
+    ∀ (before : State),
+      (∀ (j : Fin 33), Canon (before j)) →
+        ∃ out,
+          run view xs is before = ok out ∧
+            Trace view xs is before out ∧
+              (∀ (j : Fin 33), Canon (out j)) ∧
+                (fun j => decode (out j)) =
+                  List.foldl (fun s i => modelStep view xs i s) (fun j => decode (before j)) is)
+    (fun before hb => Exists.intro before ⟨rfl, ⟨Trace.nil before, ⟨hb, rfl⟩⟩⟩)
+    (fun i is ih before hb =>
+      let ⟨square, h✝⟩ := NJX_RangeStep.source (xs i) (hx i)
+      let ⟨r, h✝¹⟩ := h✝
+      let ⟨cs, right✝⟩ := h✝¹
+      let ⟨cr, right✝¹⟩ := right✝
+      let ⟨hr, vr⟩ := right✝¹
+      let middle := NJX_RangeStep.write before (index view i) r;
+      have cm :=
+        Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans (congrFun' (congrArg Bind.bind cr) fun r => ok (NJX_RangeStep.write before (index view i) r))
+                  (bind_tc_ok r fun y => ok (NJX_RangeStep.write before (index view i) y))))
+              (ok middle)))
+          (Eq.refl (ok (NJX_RangeStep.write before (index view i) r)));
+      have hm := fun j =>
+        id
+          (Decidable.casesOn (instDecidableEqFin 33 j (index view i))
+            (fun h => Eq.mpr (id (congrArg Canon (if_neg h))) (hb j)) fun h =>
+            Eq.mpr (id (congrArg Canon (if_pos h))) hr);
+      let ⟨out, h✝²⟩ := ih middle hm
+      let ⟨co, right✝²⟩ := h✝²
+      let ⟨tr, right✝³⟩ := right✝²
+      let ⟨ho, vo⟩ := right✝³
+      Exists.intro out
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans (congrFun' (congrArg Bind.bind cm) fun next => run view xs is next)
+                      (bind_tc_ok middle (run view xs is)))
+                    co))
+                (ok out))
+              (eq_self (ok out))),
+          ⟨Trace.cons cm
+              (fun j =>
+                id
+                  (if h : j = index view i then
+                    of_eq_true
+                      (Eq.trans
+                        (congr
+                          (congrArg Eq
+                            (ite_cond_eq_true r (before j)
+                              (Eq.trans (congrFun' (congrArg Eq h) (index view i)) (eq_self (index view i)))))
+                          (Eq.trans
+                            (ite_cond_eq_true (if index view i = index view i then r else before (index view i))
+                              (before j) (Eq.trans (congrFun' (congrArg Eq h) (index view i)) (eq_self (index view i))))
+                            (ite_cond_eq_true r (before (index view i)) (eq_self (index view i)))))
+                        (eq_self r))
+                  else
+                    of_eq_true
+                      (Eq.trans
+                        (congr (congrArg Eq (ite_cond_eq_false r (before j) (eq_false h)))
+                          (ite_cond_eq_false (if index view i = index view i then r else before (index view i))
+                            (before j) (eq_false h)))
+                        (eq_self (before j)))))
+              tr,
+            ⟨ho,
+              Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      _a = List.foldl (fun s i => modelStep view xs i s) (fun j => decode (before j)) (i :: is))
+                    vo))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a => List.foldl (fun s i => modelStep view xs i s) (fun j => decode (middle j)) is = _a)
+                      List.foldl_cons))
+                  ((fun {α β} f f_1 e_f =>
+                      Eq.rec (motive := fun f_2 e_f =>
+                        ∀ (init init_1 : α),
+                          init = init_1 → ∀ (a a_1 : List β), a = a_1 → List.foldl f init a = List.foldl f_2 init_1 a_1)
+                        (fun init init_1 e_init =>
+                          Eq.rec (motive := fun init_2 e_init =>
+                            ∀ (a a_1 : List β), a = a_1 → List.foldl f init a = List.foldl f init_2 a_1)
+                            (fun a a_1 e_a => e_a ▸ Eq.refl (List.foldl f init a)) e_init)
+                        e_f)
+                    (fun s i => modelStep view xs i s) (fun s i => modelStep view xs i s)
+                    (Eq.refl fun s i => modelStep view xs i s) (fun j => decode (middle j))
+                    (modelStep view xs i fun j => decode (before j))
+                    (funext fun j =>
+                      Eq.mpr
+                        (id
+                          (congr (congrArg Eq (congrArg decode (NJX_RangeStep.write.eq_1 before (index view i) r j)))
+                            (Function.update_apply (fun j => decode (before j)) (index view i)
+                              (decode (xs i) * decode (xs i) - decode (xs i)) j)))
+                        (Decidable.casesOn (instDecidableEqFin 33 j (index view i))
+                          (fun h =>
+                            Eq.mpr (id (congr (congrArg Eq (congrArg decode (if_neg h))) (if_neg h)))
+                              (of_eq_true (eq_self (decode (before j)))))
+                          fun h =>
+                          Eq.mpr (id (congr (congrArg Eq (congrArg decode (if_pos h))) (if_pos h)))
+                            (of_eq_true
+                              (Eq.trans (congrFun' (congrArg Eq vr) (decode (xs i) * decode (xs i) - decode (xs i)))
+                                (eq_self (decode (xs i) * decode (xs i) - decode (xs i)))))))
+                    is is (Eq.refl is)))⟩⟩⟩)
+    is before hb
+'AspisR1.NJX_RangeFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,41 @@
+theorem AspisR1.NJX_RangeStep.step_source : ∀ (view : Fin 3) (i : Fin 10) (x : NQ) (before : State),
+  Canon x →
+    (∀ (j : Fin 33), Canon (before j)) →
+      ∃ out,
+        step view i x before = ok out ∧
+          (∀ (j : Fin 33), Canon (out j)) ∧
+            ∀ (j : Fin 33),
+              decode (out j) = if j = index view i then decode x * decode x - decode x else decode (before j) :=
+fun view i x before hx hb =>
+  let ⟨square, h✝⟩ := source x hx
+  let ⟨r, h✝¹⟩ := h✝
+  let ⟨sq, right✝⟩ := h✝¹
+  let ⟨cr, right✝¹⟩ := right✝
+  let ⟨hr, vr⟩ := right✝¹
+  Exists.intro (write before (index view i) r)
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans (congrFun' (congrArg Bind.bind cr) fun r => ok (write before (index view i) r))
+                (bind_tc_ok r fun y => ok (write before (index view i) y))))
+            (ok (write before (index view i) r)))
+          (eq_self (ok (write before (index view i) r)))),
+      ⟨fun j =>
+        id
+          (Decidable.casesOn (instDecidableEqFin 33 j (index view i))
+            (fun h => Eq.mpr (id (congrArg Canon (if_neg h))) (hb j)) fun h =>
+            Eq.mpr (id (congrArg Canon (if_pos h))) hr),
+        fun j =>
+        id
+          (Decidable.casesOn (instDecidableEqFin 33 j (index view i))
+            (fun h =>
+              Eq.mpr (id (congr (congrArg Eq (congrArg decode (if_neg h))) (if_neg h)))
+                (of_eq_true (eq_self (decode (before j)))))
+            fun h =>
+            Eq.mpr (id (congr (congrArg Eq (congrArg decode (if_pos h))) (if_pos h)))
+              (of_eq_true
+                (Eq.trans (congrFun' (congrArg Eq vr) (decode x * decode x - decode x))
+                  (eq_self (decode x * decode x - decode x)))))⟩⟩
+'AspisR1.NJX_RangeStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_RangeStep.step_source' depends on axioms: [propext, Classical.choice, Quot.sound]

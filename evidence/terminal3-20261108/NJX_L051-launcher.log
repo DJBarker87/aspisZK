@@ -1,0 +1,57 @@
+{"attempt": "NJX_L051", "exit_status": 0, "wall_seconds": 8.43385501112789, "peak_rss_kib": "6195356", "swaps": "0", "print_axioms": ["'AspisR1.NJX_LeftRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_LeftRoot.source : ∀ (high : NQ) (o : O) (d : D),
+  Canon high →
+    FIw_ArrayValue.canonical o →
+      dc d → ∃ p, NJX_DigestPacket.reference high (ocells o) (dcells d) = ok p.out ∧ cohort high o d = ok p.out :=
+fun high o d hh ho hd =>
+  have hc := fun i => NJB_ArrayCarrier.canonical_cell o ho ⟨↑i, ocells._proof_2 i⟩;
+  have hdc := fun i => hd (dcells d i) (List.getElem_mem (NJB_ArrayCarrier.cell._proof_1 d ⟨↑i, dcells._proof_2 i⟩));
+  let ⟨p, pcall⟩ := NJX_DigestPacket.source high (ocells o) (dcells d) hh hc hdc
+  let ⟨old, h✝⟩ := NJX_DigestCohort.source high o d hh ho hd
+  let ⟨oldcall, right✝⟩ := h✝
+  let ⟨hold, vold⟩ := right✝
+  (fun packed x =>
+      have same :=
+  
+...
+f_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind oldcall) fun a => do
+                        let x ← NJB_PackLaw.reference (lane a 0)
+                        let y ← NJB_PackLaw.reference (lane a 1)
+                        ok ![x, y])
+                      (bind_tc_ok old fun y => do
+                        let x ← NJB_PackLaw.reference (lane y 0)
+                        let y ← NJB_PackLaw.reference (lane y 1)
+                        ok ![x, y]))
+                    (Eq.trans
+                      (Eq.trans
+                        (congr (congrArg Bind.bind ((fun g => (fun g => (x g).left) g) 0))
+                          (funext fun x_1 =>
+                            Eq.trans
+                              (congrFun' (congrArg Bind.bind ((fun g => (fun g => (x g).left) g) 1)) fun y =>
+                                ok ![x_1, y])
+                              (bind_tc_ok (packed 1) fun y => ok ![x_1, y])))
+                        (bind_tc_ok (packed 0) fun y => ok ![y, packed 1]))
+                      (congrArg ok vector))))
+                (ok p.out))
+              (eq_self (ok p.out)))⟩)
+    (fun g =>
+      Classical.choose
+        ((fun g =>
+            NJB_PackLaw.result (lane old g) fun j =>
+              NJB_ArrayCarrier.canonical_cell old hold ⟨↑(NJX_DigestGroups.index g j), lane._proof_3 g j⟩)
+          g))
+    fun g =>
+    Classical.choose_spec
+      ((fun g =>
+          NJB_PackLaw.result (lane old g) fun j =>
+            NJB_ArrayCarrier.canonical_cell old hold ⟨↑(NJX_DigestGroups.index g j), lane._proof_3 g j⟩)
+        g)
+'AspisR1.NJX_LeftRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r19af64ba7faa4470bed9b8061fdb74ac.scope; invocation ID: 6a11eefa49ce4efb893eaed6a356e8e7

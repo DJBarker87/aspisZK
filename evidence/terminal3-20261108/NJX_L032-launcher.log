@@ -1,0 +1,54 @@
+{"attempt": "NJX_L032", "exit_status": 1, "wall_seconds": 8.375092921080068, "peak_rss_kib": "6138884", "swaps": "0", "print_axioms": ["'AspisR1.NJX_PatternAssociation.opened' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJX_PatternAssociation.atoms_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_PatternAssociation.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJX_PatternAssociation.lean:14:126: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 0
+  0 ≤ f ≤ 7
+  0 ≤ e ≤ 8
+  e + f - g ≥ 0
+where
+ e := ↑↑start
+ f := ↑↑slot
+ g := ↑↑16#usize
+NJX_PatternAssociation.lean:38:10: error: unsolved goals
+case fail
+lambda : NQ
+o : Std.Array NQ 16#usize
+hl : Canon lambda
+ho : FIw_ArrayValue.canonical o
+e : Error
+run : FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = fail e
+total : fail e ⦃ out => FIw_ArrayValue.canonical out ⦄
+⊢ ∃ out,
+    fail e = ok out ∧
+      FIw_ArrayValue.canonical out ∧
+        FIw_ArrayValue.decoded out = R0P.copyPatternValuesLiteral (FIw_ArrayValue.decoded o) (decode 
+...
+ FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = x →
+          ∃ out,
+            x = ok out ∧
+              FIw_ArrayValue.canonical out ∧
+                FIw_ArrayValue.decoded out = R0P.copyPatternValuesLiteral (FIw_ArrayValue.decoded o) (decode lambda))
+        (fun run => Exists.intro out ⟨sorry, FJk_PatternValues.value o lambda out ho hl run⟩) (Eq.symm h)
+        (Eq.refl (FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda)))
+    (fun e h =>
+      Eq.ndrec (motive := fun x =>
+        FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = x →
+          ∃ out,
+            x = ok out ∧
+              FIw_ArrayValue.canonical out ∧
+                FIw_ArrayValue.decoded out = R0P.copyPatternValuesLiteral (FIw_ArrayValue.decoded o) (decode lambda))
+        (fun run => sorry) (Eq.symm h) (Eq.refl (FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = x →
+          ∃ out,
+            x = ok out ∧
+              FIw_ArrayValue.canonical out ∧
+                FIw_ArrayValue.decoded out = R0P.copyPatternValuesLiteral (FIw_ArrayValue.decoded o) (decode lambda))
+        (fun run => sorry) (Eq.symm h) (Eq.refl (FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda)))
+    (Eq.refl (FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda))
+'AspisR1.NJX_PatternAssociation.opened' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJX_PatternAssociation.atoms_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_PatternAssociation.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1b59b766f5624c21a1e4cad9bb7fabc6.scope; invocation ID: ca0db6d4c6214d718a954649fb7d3eb1

@@ -1,0 +1,48 @@
+{"attempt": "NJX_L042", "exit_status": 0, "wall_seconds": 9.232387266121805, "peak_rss_kib": "6180160", "swaps": "0", "print_axioms": ["'AspisR1.NJX_PatternForward.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_PatternForward.source : ∀ (lambda : NQ) (o : Std.Array NQ 16#usize),
+  Canon lambda →
+    FIw_ArrayValue.canonical o →
+      ∃ p w out,
+        NJL_WindowPowerFrame.run lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda =
+            ok (NJL_CacheReads.power p, p.next) ∧
+          NJL_WindowPowerFrame.Trace lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda
+              (NJL_CacheReads.power p) p.next ∧
+            (∀ (j : Fin 4),
+                NJL_WindowFold.run (NJL_CacheReads.cache p) o (NJX_PatternPacket.starts j) (List.finRange 8)
+                      FIq_Native.field.QM31.ZERO =
+                    ok (w j) ∧
+               
+...
+_WindowPowerFrame.run lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda =
+            ok (NJL_CacheReads.power p, p.next) ∧
+          NJL_WindowPowerFrame.Trace lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda
+              (NJL_CacheReads.power p) p.next ∧
+            (∀ (j : Fin 4),
+                NJL_WindowFold.run (NJL_CacheReads.cache p) o (NJX_PatternPacket.starts j) (List.finRange 8)
+                      FIq_Native.field.QM31.ZERO =
+                    ok (w j) ∧
+                  NJL_WindowFold.Trace (NJL_CacheReads.cache p) o (NJX_PatternPacket.starts j) (List.finRange 8)
+                    FIq_Native.field.QM31.ZERO (w j)) ∧
+              (NJX_PatternTail.run p (NJX_PatternPacket.atoms o w) (List.finRange 14) fun x =>
+                    FIq_Native.field.QM31.ZERO) =
+                  ok (NJX_PatternRoot.cells out) ∧
+                NJX_PatternTail.Trace p (NJX_PatternPacket.atoms o w) (List.finRange 14)
+                    (fun x => FIq_Native.field.QM31.ZERO) (NJX_PatternRoot.cells out) ∧
+                  FIw_ArrayValue.canonical out ∧
+                    FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = ok out ∧
+                      Cut o o lambda lambda out out 1 :=
+fun lambda o hl ho =>
+  let ⟨p, h✝⟩ := NJX_PatternRoot.source lambda o hl ho
+  let ⟨w, h✝¹⟩ := h✝
+  let ⟨out, h✝²⟩ := h✝¹
+  let ⟨hp, right✝⟩ := h✝²
+  let ⟨ht, right✝¹⟩ := right✝
+  let ⟨hw, right✝²⟩ := right✝¹
+  let ⟨tail, right✝³⟩ := right✝²
+  let ⟨trace, right✝⁴⟩ := right✝³
+  let ⟨hout, body⟩ := right✝⁴
+  Exists.intro p
+    (Exists.intro w (Exists.intro out ⟨hp, ⟨ht, ⟨hw, ⟨tail, ⟨trace, ⟨hout, ⟨body, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩))
+'AspisR1.NJX_PatternForward.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r33683911136c4bccb97ce9d6850f36c0.scope; invocation ID: 4428717081e44594a6977ddd396dfccd

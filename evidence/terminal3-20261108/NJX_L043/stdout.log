@@ -1,0 +1,406 @@
+theorem AspisR1.NJX_DigestPacket.source : ∀ (high : NQ) (o : Residuals) (d : Digest),
+  Canon high →
+    (∀ (i : Fin 8), Canon (o i)) → (∀ (i : Fin 8), ↑(d i) < 2147483647) → ∃ p, reference high o d = ok p.out :=
+fun high o d hh ho hd =>
+  let ⟨cache, h✝⟩ := NJB_PreparedLaws.new_result high hh
+  let ⟨cc, hcache⟩ := h✝
+  let ⟨r, h✝¹⟩ := NJX_DigestPrefix.source o d ho hd
+  let ⟨cr, right✝⟩ := h✝¹
+  let ⟨hr, right✝¹⟩ := right✝
+  let ⟨vr, pr⟩ := right✝¹
+  (fun packed x =>
+      (fun out x =>
+          have vals := fun g =>
+            Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    _a =
+                      decode high *
+                        NJB_PackLinearity.pack fun j =>
+                          decode (o (NJX_DigestGroups.index g j)) - ↑↑(d (NJX_DigestGroups.index g j)))
+                  ((fun g =>
+                      ((fun g => ((fun g => ((fun g => ((fun g => (x g).right) g).right) g).right) g).right) g).right)
+                    g)))
+              ((fun {α β γ} [HMul α β γ] a a_1 e_a =>
+                  Eq.rec (motive := fun a_2 e_a => ∀ (a_3 a_4 : β), a_3 = a_4 → a * a_3 = a_2 * a_4)
+                    (fun a_2 a_3 e_a => e_a ▸ Eq.refl (a * a_2)) e_a)
+                (decode high) (decode high) (Eq.refl (decode high))
+                (NJB_PackLinearity.pack fun j => decode (r (NJX_DigestGroups.index g j)))
+                (NJB_PackLinearity.pack fun j =>
+                  decode (o (NJX_DigestGroups.index g j)) - ↑↑(d (NJX_DigestGroups.index g j)))
+                ((fun v v_1 e_v => e_v ▸ Eq.refl (NJB_PackLinearity.pack v))
+                  (fun j => decode (r (NJX_DigestGroups.index g j)))
+                  (fun j => decode (o (NJX_DigestGroups.index g j)) - ↑↑(d (NJX_DigestGroups.index g j)))
+                  (funext fun j => vr (NJX_DigestGroups.index g j))));
+          let p :=
+            { prepared := cache, residual := r, packed := packed, out := out, constructor := cc, domain := hcache,
+              cells := cr, residual_canonical := hr, residual_value := vr, prefix_call := pr,
+              packs := fun g => (x g).left, products := fun g => ((fun g => ((fun g => (x g).right) g).right) g).left,
+              out_canonical := fun g =>
+                ((fun g => ((fun g => ((fun g => ((fun g => (x g).right) g).right) g).right) g).right) g).left,
+              out_value := vals };
+          Exists.intro p
+            (have a := (fun g => ((fun g => ((fun g => ((fun g => (x g).right) g).right) g).right) g).left) 0;
+            have b := (fun g => ((fun g => ((fun g => ((fun g => (x g).right) g).right) g).right) g).left) 1;
+            have same :=
+              funext fun i =>
+                List.Mem.casesOn (motive := fun a x =>
+                  List.finRange ({ len := 1 }.len + 1) = a → Fintype.complete i ≍ x → ![out 0, out 1] i = out i)
+                  (Fintype.complete i)
+                  (fun «as» h =>
+                    List.cons.noConfusion h fun head_eq =>
+                      Eq.ndrec (motive := fun i =>
+                        ∀ (this : i ∈ Fintype.elems),
+                          (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ [] ≍ «as» →
+                            this ≍ List.Mem.head «as» → ![out 0, out 1] i = out i)
+                        (fun this tail_eq =>
+                          Eq.ndrec (motive := fun «as» =>
+                            this ≍ List.Mem.head «as» →
+                              ![out 0, out 1] ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_refl ({ len := 1 }.len + 1))⟩) =
+                                out ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_refl ({ len := 1 }.len + 1))⟩))
+                            (fun h =>
+                              Eq.refl
+                                (![out 0, out 1] ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_refl ({ len := 1 }.len + 1))⟩)))
+                            (eq_of_heq tail_eq))
+                        (eq_of_heq head_eq) (Fintype.complete i))
+                  (fun b {«as»} a h =>
+                    List.cons.noConfusion h fun head_eq =>
+                      Eq.ndrec (motive := fun b =>
+                        (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ [] ≍ «as» →
+                          Fintype.complete i ≍ List.Mem.tail b a → ![out 0, out 1] i = out i)
+                        (fun tail_eq =>
+                          Eq.ndrec (motive := fun {«as»} =>
+                            ∀ (a : List.Mem i «as»),
+                              Fintype.complete i ≍
+                                  List.Mem.tail ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_refl ({ len := 1 }.len + 1))⟩)
+                                    a →
+                                ![out 0, out 1] i = out i)
+                            (fun a h =>
+                              List.Mem.casesOn (motive := fun a_1 x =>
+                                (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ [] = a_1 →
+                                  a ≍ x → ![out 0, out 1] i = out i)
+                                a
+                                (fun «as» h =>
+                                  List.cons.noConfusion h fun head_eq =>
+                                    Eq.ndrec (motive := fun i =>
+                                      ∀
+                                        (a :
+                                          List.Mem i
+                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ [])),
+                                        [] ≍ «as» → a ≍ List.Mem.head «as» → ![out 0, out 1] i = out i)
+                                      (fun a tail_eq =>
+                                        Eq.ndrec (motive := fun «as» =>
+                                          a ≍ List.Mem.head «as» →
+                                            ![out 0, out 1] ((fun i => i) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩) =
+                                              out ((fun i => i) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩))
+                                          (fun h =>
+                                            Eq.refl
+                                              (![out 0, out 1] ((fun i => i) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩)))
+                                          (eq_of_heq tail_eq))
+                                      (eq_of_heq head_eq) a)
+                                (fun b {«as»} a_1 h =>
+                                  List.cons.noConfusion h fun head_eq =>
+                                    Eq.ndrec (motive := fun b =>
+                                      [] ≍ «as» → a ≍ List.Mem.tail b a_1 → ![out 0, out 1] i = out i)
+                                      (fun tail_eq =>
+                                        Eq.ndrec (motive := fun {«as»} =>
+                                          ∀ (a_2 : List.Mem i «as»),
+                                            a ≍
+                                                List.Mem.tail ((fun i => i) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩)
+                                                  a_2 →
+                                              ![out 0, out 1] i = out i)
+                                          (fun a_2 h =>
+                                            List.Mem.casesOn (motive := fun a x =>
+                                              [] = a → a_2 ≍ x → ![out 0, out 1] i = out i) a_2
+                                              (fun «as» h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+                                              (fun b {«as»} a h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+                                              (Eq.refl []) (HEq.refl a_2))
+                                          (eq_of_heq tail_eq) a_1)
+                                      (eq_of_heq head_eq))
+                                (Eq.refl
+                                  ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ []))
+                                (HEq.refl a))
+                            (eq_of_heq tail_eq) a)
+                        (eq_of_heq head_eq))
+                  (Eq.refl (List.finRange ({ len := 1 }.len + 1))) (HEq.refl (Fintype.complete i));
+            Eq.mpr
+              (id
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congr (congrArg Bind.bind cc)
+                        (funext fun p =>
+                          Eq.trans
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind pr) fun rs => do
+                                let a ← NJX_DigestGroups.reference p (fun i => (↑rs)[↑i]) 0
+                                let b ← NJX_DigestGroups.reference p (fun i => (↑rs)[↑i]) 1
+                                ok ![a, b])
+                              (bind_tc_ok
+                                ⟨List.ofFn r,
+                                  of_eq_true
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg Eq
+                                          (Eq.trans
+                                            (congrArg List.length
+                                              (Eq.trans List.ofFn_succ
+                                                (congrArg (List.cons (r 0))
+                                                  (Eq.trans List.ofFn_succ
+                                                    (congrArg (List.cons (r 1))
+                                                      (Eq.trans List.ofFn_succ
+                                                        (congrArg (List.cons (r 2))
+                                                          (Eq.trans List.ofFn_succ
+                                                            (congrArg (List.cons (r 3))
+                                                              (Eq.trans List.ofFn_succ
+                                                                (congrArg (List.cons (r 4))
+                                                                  (Eq.trans List.ofFn_succ
+                                                                    (congrArg (List.cons (r 5))
+                                                                      (Eq.trans List.ofFn_succ
+                                                                        (congrArg (List.cons (r 6))
+                                                                          (Eq.trans List.ofFn_succ
+                                                                            (congrArg (List.cons (r 7))
+                                                                              ⋯)))))))))))))))))
+                                            (congrFun'
+                                              (congrArg HAdd.hAdd
+                                                (congrFun'
+                                                  (congrArg HAdd.hAdd
+                                                    (congrFun'
+                                                      (congrArg HAdd.hAdd
+                                                        (congrFun'
+                                                          (congrArg HAdd.hAdd
+                                                            (congrFun'
+                                                              (congrArg HAdd.hAdd
+                                                                (congrFun'
+                                                                  (congrArg HAdd.hAdd
+                                                                    (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                  1))
+                                                              1))
+                                                          1))
+                                                      1))
+                                                  1))
+                                              1)))
+                                        List.length_finRange)
+                                      (eq_self 8))⟩
+                                fun y => do
+                                let a ← NJX_DigestGroups.reference p (fun i => (↑y)[↑i]) 0
+                                let b ← NJX_DigestGroups.reference p (fun i => (↑y)[↑i]) 1
+                                ok ![a, b]))
+                            (congr
+                              (congrArg Bind.bind
+                                (congrFun'
+                                  (congrArg (NJX_DigestGroups.reference p)
+                                    (funext fun i =>
+                                      List.getElem_ofFn
+                                        (reference._proof_1
+                                          ⟨List.ofFn r,
+                                            of_eq_true
+                                              (Eq.trans
+                                                (congr
+                                                  (congrArg Eq
+                                                    (Eq.trans
+                                                      (congrArg List.length
+                                                        (Eq.trans List.ofFn_succ
+                                                          (congrArg (List.cons (r 0))
+                                                            (Eq.trans List.ofFn_succ
+                                                              (congrArg (List.cons (r 1))
+                                                                (Eq.trans List.ofFn_succ
+                                                                  (congrArg (List.cons (r 2))
+                                                                    (Eq.trans List.ofFn_succ
+                                                                      (congrArg (List.cons (r 3))
+                                                                        (Eq.trans List.ofFn_succ
+                                                                          (congrArg (List.cons (r 4)) ⋯)))))))))))
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun'
+                                                                (congrArg HAdd.hAdd
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun' (congrArg HAdd.hAdd (congrFun' ⋯ 1))
+                                                                        1))
+                                                                    1))
+                                                                1))
+                                                            1))
+                                                        1)))
+                                                  List.length_finRange)
+                                                (eq_self 8))⟩
+                                          i)))
+                                  0))
+                              (funext fun a =>
+                                congrFun'
+                                  (congrArg Bind.bind
+                                    (congrFun'
+                                      (congrArg (NJX_DigestGroups.reference p)
+                                        (funext fun i =>
+                                          List.getElem_ofFn
+                                            (reference._proof_1
+                                              ⟨List.ofFn r,
+                                                of_eq_true
+                                                  (Eq.trans
+                                                    (congr
+                                                      (congrArg Eq
+                                                        (Eq.trans
+                                                          (congrArg List.length
+                                                            (Eq.trans List.ofFn_succ
+                                                              (congrArg (List.cons (r 0))
+                                                                (Eq.trans List.ofFn_succ
+                                                                  (congrArg (List.cons (r 1))
+                                                                    (Eq.trans List.ofFn_succ
+                                                                      (congrArg (List.cons ⋯)
+                                                                        (Eq.trans List.ofFn_succ ⋯))))))))
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun'
+                                                                (congrArg HAdd.hAdd
+                                                                  (congrFun'
+                                                                    (congrArg HAdd.hAdd
+                                                                      (congrFun' (congrArg HAdd.hAdd ⋯) 1))
+                                                                    1))
+                                                                1))
+                                                            1)))
+                                                      List.length_finRange)
+                                                    (eq_self 8))⟩
+                                              i)))
+                                      1))
+                                  fun b => ok ![a, b]))))
+                      (bind_tc_ok cache fun y => do
+                        let a ←
+                          NJX_DigestGroups.reference y
+                              (fun i =>
+                                r
+                                  ⟨↑i,
+                                    List.getElem_ofFn._proof_1
+                                      (reference._proof_1
+                                        ⟨List.ofFn r,
+                                          of_eq_true
+                                            (Eq.trans
+                                              (congr
+                                                (congrArg Eq
+                                                  (Eq.trans
+                                                    (congrArg List.length
+                                                      (Eq.trans List.ofFn_succ
+                                                        (congrArg (List.cons (r 0))
+                                                          (Eq.trans List.ofFn_succ
+                                                            (congrArg (List.cons (r 1))
+                                                              (Eq.trans List.ofFn_succ
+                                                                (congrArg (List.cons (r 2))
+                                                                  (Eq.trans List.ofFn_succ
+                                                                    (congrArg (List.cons (r 3))
+                                                                      (Eq.trans List.ofFn_succ
+                                                                        (congrArg (List.cons (r 4))
+                                                                          (Eq.trans List.ofFn_succ
+                                                                            (congrArg (List.cons (r 5))
+                                                                              (Eq.trans ⋯ ⋯))))))))))))))
+                                                    (congrFun'
+                                                      (congrArg HAdd.hAdd
+                                                        (congrFun'
+                                                          (congrArg HAdd.hAdd
+                                                            (congrFun'
+                                                              (congrArg HAdd.hAdd
+                                                                (congrFun'
+                                                                  (congrArg HAdd.hAdd
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  1))
+                                                              1))
+                                                          1))
+                                                      1)))
+                                                List.length_finRange)
+                                              (eq_self 8))⟩
+                                        i)⟩)
+                              0
+                        let b ←
+                          NJX_DigestGroups.reference y
+                              (fun i =>
+                                r
+                                  ⟨↑i,
+                                    List.getElem_ofFn._proof_1
+                                      (reference._proof_1
+                                        ⟨List.ofFn r,
+                                          of_eq_true
+                                            (Eq.trans
+                                              (congr
+                                                (congrArg Eq
+                                                  (Eq.trans
+                                                    (congrArg List.length
+                                                      (Eq.trans List.ofFn_succ
+                                                        (congrArg (List.cons (r 0))
+                                                          (Eq.trans List.ofFn_succ
+                                                            (congrArg (List.cons (r 1))
+                                                              (Eq.trans List.ofFn_succ
+                                                                (congrArg (List.cons (r 2))
+                                                                  (Eq.trans List.ofFn_succ
+                                                                    (congrArg (List.cons (r 3))
+                                                                      (Eq.trans List.ofFn_succ
+                                                                        (congrArg (List.cons (r 4))
+                                                                          (Eq.trans List.ofFn_succ
+                                                                            (congrArg (List.cons (r 5))
+                                                                              (Eq.trans ⋯ ⋯))))))))))))))
+                                                    (congrFun'
+                                                      (congrArg HAdd.hAdd
+                                                        (congrFun'
+                                                          (congrArg HAdd.hAdd
+                                                            (congrFun'
+                                                              (congrArg HAdd.hAdd
+                                                                (congrFun'
+                                                                  (congrArg HAdd.hAdd
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun'
+                                                                          (congrArg HAdd.hAdd
+                                                                            (congrFun' (congrArg HAdd.hAdd (zero_add 1))
+                                                                              1))
+                                                                          1))
+                                                                      1))
+                                                                  1))
+                                                              1))
+                                                          1))
+                                                      1)))
+                                                List.length_finRange)
+                                              (eq_self 8))⟩
+                                        i)⟩)
+                              1
+                        ok ![a, b])))
+                  (ok p.out)))
+              (id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (do
+                            let a ← _a
+                            let b ← NJX_DigestGroups.reference cache r 1
+                            ok ![a, b]) =
+                          ok out)
+                      a))
+                  (Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = ok out)
+                        (bind_tc_ok (out 0) fun a => do
+                          let b ← NJX_DigestGroups.reference cache r 1
+                          ok ![a, b])))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            (do
+                                let b ← _a
+                                ok ![out 0, b]) =
+                              ok out)
+                          b))
+                      (Eq.mpr (id (congrArg (fun _a => _a = ok out) (bind_tc_ok (out 1) fun b => ok ![out 0, b])))
+                        (Eq.mpr (id (congrArg (fun _a => ok _a = ok out) same)) (Eq.refl (ok out))))))))))
+        (fun g => Classical.choose (x g)) fun g => Classical.choose_spec (x g))
+    (fun g => Classical.choose ((fun g => NJX_DigestGroups.source cache high r g hh hr hcache) g)) fun g =>
+    Classical.choose_spec ((fun g => NJX_DigestGroups.source cache high r g hh hr hcache) g)
+'AspisR1.NJX_DigestPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,44 @@
+{"attempt": "NJX_L054", "exit_status": 0, "wall_seconds": 8.688565068878233, "peak_rss_kib": "6189260", "swaps": "0", "print_axioms": ["'AspisR1.NJX_AppendFold.step_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_AppendFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_AppendFold.zero_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_AppendFold.zero_source : ∀ (child : Fin 20 → State),
+  (∀ (level : Fin 20) (j : Fin 4), Canon (child level j)) →
+    ∃ out,
+      (run child (List.finRange 20) fun x => FIq_Native.field.QM31.ZERO) = ok out ∧
+        Trace child (List.finRange 20) (fun x => FIq_Native.field.QM31.ZERO) out ∧
+          (∀ (j : Fin 4), Canon (out j)) ∧
+            ∀ (j : Fin 4), decode (out j) = (List.map (fun level => decode (child level j)) (List.finRange 20)).sum :=
+fun child hc =>
+  let ⟨out, h✝⟩ :=
+    source child hc (List.finRange 20) (fun x => FIq_Native.field.QM31.ZERO) fun x => FIv_NativeValue.zero.left
+  let ⟨co, right✝⟩ := h✝
+  let ⟨tr, right✝¹⟩ := right✝
+  let ⟨ho, vo⟩ := right✝¹
+...
+theorem AspisR1.NJX_AppendFold.zero_source : ∀ (child : Fin 20 → State),
+  (∀ (level : Fin 20) (j : Fin 4), Canon (child level j)) →
+    ∃ out,
+      (run child (List.finRange 20) fun x => FIq_Native.field.QM31.ZERO) = ok out ∧
+        Trace child (List.finRange 20) (fun x => FIq_Native.field.QM31.ZERO) out ∧
+          (∀ (j : Fin 4), Canon (out j)) ∧
+            ∀ (j : Fin 4), decode (out j) = (List.map (fun level => decode (child level j)) (List.finRange 20)).sum :=
+fun child hc =>
+  let ⟨out, h✝⟩ :=
+    source child hc (List.finRange 20) (fun x => FIq_Native.field.QM31.ZERO) fun x => FIv_NativeValue.zero.left
+  let ⟨co, right✝⟩ := h✝
+  let ⟨tr, right✝¹⟩ := right✝
+  let ⟨ho, vo⟩ := right✝¹
+  Exists.intro out
+    ⟨co,
+      ⟨tr,
+        ⟨ho, fun j =>
+          Eq.mp
+            (congrArg (Eq (decode (out j)))
+              (Eq.trans
+                (congrFun' (congrArg HAdd.hAdd FIv_NativeValue.zero.right)
+                  (List.map (fun level => decode (child level j)) (List.finRange 20)).sum)
+                (zero_add (List.map (fun level => decode (child level j)) (List.finRange 20)).sum)))
+            (vo j)⟩⟩⟩
+'AspisR1.NJX_AppendFold.step_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_AppendFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_AppendFold.zero_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9375a0d1e7e7453a9239f2d288ca9571.scope; invocation ID: 60765ceb7c2a4a1097853e7be5b64b8e

@@ -1,0 +1,59 @@
+{"attempt": "NJX_L035", "exit_status": 0, "wall_seconds": 8.541884111938998, "peak_rss_kib": "6188248", "swaps": "0", "print_axioms": ["'AspisR1.NJX_PatternRoot.size14' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_PatternRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_PatternRoot.source : ∀ (lambda : NQ) (o : Std.Array NQ 16#usize),
+  Canon lambda →
+    FIw_ArrayValue.canonical o →
+      ∃ p w out,
+        NJL_WindowPowerFrame.run lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda =
+            ok (NJL_CacheReads.power p, p.next) ∧
+          NJL_WindowPowerFrame.Trace lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda
+              (NJL_CacheReads.power p) p.next ∧
+            (∀ (j : Fin 4),
+                NJL_WindowFold.run (NJL_CacheReads.cache p) o (NJX_PatternPacket.starts j) (List.finRange 8)
+                      FIq_Native.field.QM31.ZERO =
+                    ok (w j) ∧
+                  
+...
+↑i, cells._proof_2 i⟩]
+          (List.getElem_mem (FIw_ArrayValue.cells._proof_1 out ⟨↑i, cells._proof_2 i⟩)))
+        (Eq.mpr (id (congrArg (fun _a => _a = decode (↑out)[↑⟨↑i, cells._proof_2 i⟩]) (va i)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  NJX_TailExpr.value (decode lambda) _a (NJX_PatternTail.expr i) =
+                    decode (↑out)[↑⟨↑i, cells._proof_2 i⟩])
+                av))
+            (id
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      NJX_PatternModel.model (FIw_ArrayValue.decoded o) (decode lambda) i = _a ⟨↑i, cells._proof_2 i⟩)
+                    vout))
+                (NJX_PatternMeaning.value (FIw_ArrayValue.decoded o) (decode lambda) i)))));
+  Exists.intro p
+    (Exists.intro w
+      (Exists.intro out
+        ⟨pc,
+          ⟨pt,
+            ⟨fun j => ⟨(hw j).left, (hw j).right.left⟩,
+              ⟨Eq.mp
+                  (congrArg
+                    (fun _a =>
+                      (NJX_PatternTail.run p (NJX_PatternPacket.atoms o w) (List.finRange 14) fun x =>
+                          FIq_Native.field.QM31.ZERO) =
+                        ok _a)
+                    same)
+                  tc,
+                ⟨Eq.mp
+                    (congrArg
+                      (fun _a =>
+                        NJX_PatternTail.Trace p (NJX_PatternPacket.atoms o w) (List.finRange 14)
+                          (fun x => FIq_Native.field.QM31.ZERO) _a)
+                      same)
+                    tt,
+                  ⟨hout, body⟩⟩⟩⟩⟩⟩))
+'AspisR1.NJX_PatternRoot.size14' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_PatternRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4b634f5a5a454c1cae26d77f5043d2d5.scope; invocation ID: 041d265c7c07463f8a5a8f52018e5820

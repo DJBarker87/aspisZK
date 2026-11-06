@@ -1,0 +1,31 @@
+{"attempt": "NJX_L064", "exit_status": 0, "wall_seconds": 8.762255550827831, "peak_rss_kib": "6181932", "swaps": "0", "print_axioms": ["'AspisR1.NJX_InitialLane.domain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJX_InitialLane.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_InitialLane.source : ∀ {s : Selectors} {v : NJX_InitialVariant.Variant} {nodes : NQ}
+  (p : NJX_InitialPrologue.Packet s v nodes) (o : Std.Array NQ 16#usize),
+  FIw_ArrayValue.canonical o →
+    ∃ ys,
+      NJB_Traverse.run (reference p o) (List.finRange 16) = ok ys ∧
+        (∀ y ∈ ↑ys, Canon y) ∧ List.Forall₂ (fun i y => reference p o i = ok y) (List.finRange 16) ↑ys :=
+fun {s} {v} {nodes} p o ho =>
+  NJL_Traverse.packet (reference p o) Canon (fun i y => reference p o i = ok y) (List.finRange 16) fun i a =>
+    let ⟨y, h✝⟩ :=
+      NJB_PreparedLaws.mul_result (cache p i) (scale p i) (NJB_ArrayCarrier.cell o ⟨↑i, reference._proof_3 i⟩)
+        (domain p i).left (NJB_Array
+...
+theorem AspisR1.NJX_InitialLane.source : ∀ {s : Selectors} {v : NJX_InitialVariant.Variant} {nodes : NQ}
+  (p : NJX_InitialPrologue.Packet s v nodes) (o : Std.Array NQ 16#usize),
+  FIw_ArrayValue.canonical o →
+    ∃ ys,
+      NJB_Traverse.run (reference p o) (List.finRange 16) = ok ys ∧
+        (∀ y ∈ ↑ys, Canon y) ∧ List.Forall₂ (fun i y => reference p o i = ok y) (List.finRange 16) ↑ys :=
+fun {s} {v} {nodes} p o ho =>
+  NJL_Traverse.packet (reference p o) Canon (fun i y => reference p o i = ok y) (List.finRange 16) fun i a =>
+    let ⟨y, h✝⟩ :=
+      NJB_PreparedLaws.mul_result (cache p i) (scale p i) (NJB_ArrayCarrier.cell o ⟨↑i, reference._proof_3 i⟩)
+        (domain p i).left (NJB_ArrayCarrier.canonical_cell o ho ⟨↑i, reference._proof_3 i⟩) (domain p i).right
+    let ⟨cy, right✝⟩ := h✝
+    let ⟨hy, right✝¹⟩ := right✝
+    Exists.intro y ⟨cy, ⟨hy, cy⟩⟩
+'AspisR1.NJX_InitialLane.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_InitialLane.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb8133904c29e46c493e2445cb37635b4.scope; invocation ID: 441a6351028e4143847a0707b78423c0

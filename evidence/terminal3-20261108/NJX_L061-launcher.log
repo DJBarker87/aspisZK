@@ -1,0 +1,47 @@
+{"attempt": "NJX_L061", "exit_status": 0, "wall_seconds": 9.092095501953736, "peak_rss_kib": "6189964", "swaps": "0", "print_axioms": ["'AspisR1.NJX_RangeFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_RangeFold.source : ∀ (view : Fin 3) (xs : Fin 10 → NQ),
+  (∀ (i : Fin 10), Canon (xs i)) →
+    ∀ (is : List (Fin 10)) (before : State),
+      (∀ (j : Fin 33), Canon (before j)) →
+        ∃ out,
+          run view xs is before = ok out ∧
+            Trace view xs is before out ∧
+              (∀ (j : Fin 33), Canon (out j)) ∧
+                (fun j => decode (out j)) =
+                  List.foldl (fun s i => modelStep view xs i s) (fun j => decode (before j)) is :=
+fun view xs hx is before hb =>
+  List.rec (motive := fun is =>
+    ∀ (before : State),
+      (∀ (j : Fin 33), Canon (before j)) →
+        ∃ out,
+          run view xs is before = ok out ∧
+            Trace view
+...
+        (fun init init_1 e_init =>
+                          Eq.rec (motive := fun init_2 e_init =>
+                            ∀ (a a_1 : List β), a = a_1 → List.foldl f init a = List.foldl f init_2 a_1)
+                            (fun a a_1 e_a => e_a ▸ Eq.refl (List.foldl f init a)) e_init)
+                        e_f)
+                    (fun s i => modelStep view xs i s) (fun s i => modelStep view xs i s)
+                    (Eq.refl fun s i => modelStep view xs i s) (fun j => decode (middle j))
+                    (modelStep view xs i fun j => decode (before j))
+                    (funext fun j =>
+                      Eq.mpr
+                        (id
+                          (congr (congrArg Eq (congrArg decode (NJX_RangeStep.write.eq_1 before (index view i) r j)))
+                            (Function.update_apply (fun j => decode (before j)) (index view i)
+                              (decode (xs i) * decode (xs i) - decode (xs i)) j)))
+                        (Decidable.casesOn (instDecidableEqFin 33 j (index view i))
+                          (fun h =>
+                            Eq.mpr (id (congr (congrArg Eq (congrArg decode (if_neg h))) (if_neg h)))
+                              (of_eq_true (eq_self (decode (before j)))))
+                          fun h =>
+                          Eq.mpr (id (congr (congrArg Eq (congrArg decode (if_pos h))) (if_pos h)))
+                            (of_eq_true
+                              (Eq.trans (congrFun' (congrArg Eq vr) (decode (xs i) * decode (xs i) - decode (xs i)))
+                                (eq_self (decode (xs i) * decode (xs i) - decode (xs i)))))))
+                    is is (Eq.refl is)))⟩⟩⟩)
+    is before hb
+'AspisR1.NJX_RangeFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r76016ff6dc6f41dc9edd8af4862a1079.scope; invocation ID: 5a0bbaffc01b4983ba57c6cf8bf26af3

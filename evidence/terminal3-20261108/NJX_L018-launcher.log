@@ -1,0 +1,49 @@
+{"attempt": "NJX_L018", "exit_status": 0, "wall_seconds": 12.096692752093077, "peak_rss_kib": "6198764", "swaps": "0", "print_axioms": ["'AspisR1.NJX_PatternMeaning01.value' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJX_PatternMeaning01.lean:11:39: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+theorem AspisR1.NJX_PatternMeaning01.value : ∀ (o : Fin 16 → K) (lambda : K),
+  model o lambda 1 = R0P.copyPatternValuesLiteral o lambda 1 :=
+fun o lambda =>
+  Eq.mpr
+    (id
+      (congr
+        (congrArg Eq
+          (Eq.trans (NJX_TailExpr.value.eq_1 lambda (atoms o lambda) 16)
+            (Eq.trans (dite_cond_eq_false (lt_self_iff_false._simp_1 16))
+              (Eq.trans (dite_cond_eq_true (eq_true_of_decide (Eq.refl true)))
+                (Eq.trans
+                  (congrArg List.sum
+                  
+...
+                                       if patternIndex = 7 then R0P.copyPattern7
+                                          else
+                                            if patternIndex = 8 then R0P.copyPattern8
+                                            else
+                                              if patternIndex = 9 then R0P.copyPattern9
+                                              else
+                                                match ↑patternIndex with
+                                                | ⋯ => R0P.copyPattern0
+                                                | ⋯ =>
+                                                  { kinds := ![1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                                                    columns := ![0, 1, 2, 3, 4, 5, 6, 7, 0, 0, 0, 0, 0, 0, 0, 0],
+                                                    offsets := ![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+                                                | ⋯ => R0P.copyPattern2
+                                                | ⋯ => R0P.copyPattern3
+                                                | ⋯ => R0P.copyPattern4
+                                                | ⋯ => R0P.copyPattern5
+                                                | ⋯ => R0P.copyPattern10
+                                                | ⋯ => R0P.copyPattern11
+                                                | ⋯ => ⋯
+                                                | ⋯ => ⋯).columns
+                                      ⋯) +
+                                  ⋯)
+                            else ⋯)))
+                      ⋯)
+                    ⋯)))
+            ⋯)
+          ⋯)))
+    ⋯
+'AspisR1.NJX_PatternMeaning01.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r24a83869dea4483db7f01d2e75062238.scope; invocation ID: 66bff3a641d842b5b8ad2020dece065a

@@ -1,0 +1,61 @@
+{"attempt": "NJX_L014", "exit_status": 0, "wall_seconds": 8.211021455004811, "peak_rss_kib": "6139396", "swaps": "0", "print_axioms": []}
+def R0P.copyPatterns : Fin 14 → R0P.CopyPattern :=
+fun i =>
+  if i = 6 then R0P.copyPattern6
+  else
+    if i = 7 then R0P.copyPattern7
+    else
+      if i = 8 then R0P.copyPattern8
+      else
+        if i = 9 then R0P.copyPattern9
+        else
+          match ↑i with
+          | 0 => R0P.copyPattern0
+          | 1 => R0P.copyPattern1
+          | 2 => R0P.copyPattern2
+          | 3 => R0P.copyPattern3
+          | 4 => R0P.copyPattern4
+          | 5 => R0P.copyPattern5
+          | 10 => R0P.copyPattern10
+          | 11 => R0P.copyPattern11
+          | 12 => R0P.copyPattern12
+          | x => R0P.copyPattern13
+def R0P.copyPatternValuesLiteral : {K : Type} → [Field K] → (Fin 16 → K) → K → Fin 14
+...
+yPattern0
+          | 1 => R0P.copyPattern1
+          | 2 => R0P.copyPattern2
+          | 3 => R0P.copyPattern3
+          | 4 => R0P.copyPattern4
+          | 5 => R0P.copyPattern5
+          | 10 => R0P.copyPattern10
+          | 11 => R0P.copyPattern11
+          | 12 => R0P.copyPattern12
+          | x => R0P.copyPattern13
+def R0P.copyPatternValuesLiteral : {K : Type} → [Field K] → (Fin 16 → K) → K → Fin 14 → K :=
+fun {K} [Field K] openings lambda =>
+  have powers := R0P.copyPowers lambda;
+  fun patternIndex =>
+  have pattern := R0P.copyPatterns patternIndex;
+  List.foldl
+    (fun value limb =>
+      if pattern.kinds limb = 1 then
+        have source := openings (pattern.columns limb) + ↑(pattern.offsets limb);
+        value + powers limb * source
+      else value)
+    0 (List.ofFn fun limb => limb)
+def R0P.copyPowers : {K : Type} → [Field K] → K → Fin 16 → K :=
+fun {K} [Field K] lambda i => List.foldl (fun power x => power * lambda) lambda (List.range ↑i)
+theorem R0P.copy_powers_eq : ∀ {K : Type} [inst : Field K] (lam : K) (i : Fin 16),
+  R0P.copyPowers lam i = lam ^ (↑i + 1) :=
+fun {K} [Field K] lam i =>
+  Eq.mpr (id (congrArg (fun _a => _a = lam ^ (↑i + 1)) (R0P.copyPowers.eq_1 lam i)))
+    (Eq.mpr (id (congrArg (fun _a => _a = lam ^ (↑i + 1)) (R0P.copy_power_fold✝ lam lam ↑i)))
+      (Eq.mpr (id (congrArg (fun _a => lam * lam ^ ↑i = _a) (pow_succ' lam ↑i))) (Eq.refl (lam * lam ^ ↑i))))
+def Aeneas.Std.WP.spec.{u_1} : {α : Type u_1} → Aeneas.Std.Result α → Aeneas.Std.WP.Post α → Aeneas.Std.WP.Pre :=
+fun {α} x p => Aeneas.Std.WP.theta x p
+def AspisR1.FIw_ArrayValue.decoded : {N : Aeneas.Std.Usize} →
+  Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ N → Fin ↑N → AspisR1.FIv_NativeValue.K :=
+fun {N} a i => AspisR1.FIv_NativeValue.decode (AspisR1.FIw_ArrayValue.cells a i)
+
+Running as unit: run-r40db4d9ea0a4435187c2faccac5f5202.scope; invocation ID: de7be337a7ca4aa7b2f0648c194e3310

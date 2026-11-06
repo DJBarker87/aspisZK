@@ -1,0 +1,15 @@
+theorem AspisR1.NJX_LeftCutRoot.source : ∀ (high : NQ) (o : O) (d : D),
+  Canon high →
+    FIw_ArrayValue.canonical o →
+      dc d →
+        ∃ p,
+          NJX_DigestPacket.reference high (ocells o) (dcells d) = ok p.out ∧
+            NJX_LeftRoot.cohort high o d = ok p.out ∧
+              NJX_DigestCut.Cut high (ocells o) (dcells d) p.prepared
+                (fun i => FIw_ScalarArithmetic.lifted (dcells d i)) p.residual p.packed p.out p.out
+                (NJX_DigestCut.log p) 21 :=
+fun high o d hh ho hd =>
+  let ⟨p, h✝⟩ := NJX_LeftRoot.source high o d hh ho hd
+  let ⟨call, cohort⟩ := h✝
+  Exists.intro p ⟨call, ⟨cohort, NJX_DigestCut.source p⟩⟩
+'AspisR1.NJX_LeftCutRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
