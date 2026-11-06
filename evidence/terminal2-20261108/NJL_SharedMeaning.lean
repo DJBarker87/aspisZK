@@ -14,27 +14,30 @@ theorem group_injective : Function.Injective group := by
  dsimp only [group] at v
  omega
 def increment (v : Fin 33 → NQ) (selector : NQ) (g : Fin 9) : K := decode selector*NJB_PackLaw.model (lanes v g)
-theorem contribution (v : Fin 33 → NQ) (selector : NQ) (g : Fin 9) :
- increment v selector g=FIx_SelectedMeaning.contribution (fun i=>decode selector*decode (v i)) 49 (group g).val := by
- rw [increment,NJB_PackLinearity.model,←NJB_PackLinearity.scale]
- change NJB_PackLinearity.pack _=NJB_PackLinearity.pack _
- congr 1
- funext i
+theorem lane (v : Fin 33 → NQ) (selector : NQ) (g : Fin 9) (i : Fin 4) :
+ decode selector*decode (lanes v g i)=FIx_SelectedMeaning.selected (fun k=>decode selector*decode (v k)) 49 (group g).val i.val := by
  dsimp only [lanes,FIx_SelectedMeaning.selected]
  split
  · rfl
  · rw [FIv_NativeValue.zero.2,mul_zero]
+theorem contribution (v : Fin 33 → NQ) (selector : NQ) (g : Fin 9) :
+ increment v selector g=FIx_SelectedMeaning.contribution (fun i=>decode selector*decode (v i)) 49 (group g).val := by
+ rw [increment,NJB_PackLinearity.model,←NJB_PackLinearity.scale]
+ unfold NJB_PackLinearity.pack FIx_SelectedMeaning.contribution FIx_PreweightedPack.pack
+ dsimp only []
+ rw [lane v selector g 0,lane v selector g 1,lane v selector g 2,lane v selector g 3]
+ rfl
 theorem outside (v : Fin 33 → NQ) (selector : NQ) (j : Fin 24) (out : j.val<12 ∨ 20<j.val) :
  FIx_SelectedMeaning.contribution (fun i=>decode selector*decode (v i)) 49 j.val=0 := by
- unfold FIx_SelectedMeaning.contribution
- have hzero : (fun i : Fin 4=>FIx_SelectedMeaning.selected (fun k=>decode selector*decode (v k)) 49 j.val i.val)=fun _=>0 := by
-  funext i
+ have hzero (i : Nat) (hi : i<4) : FIx_SelectedMeaning.selected (fun k=>decode selector*decode (v k)) 49 j.val i=0 := by
   dsimp only [FIx_SelectedMeaning.selected]
   split
-  · have := i.isLt;omega
+  · omega
   · rfl
- rw [hzero]
- simp [FIx_PreweightedPack.pack]
+ unfold FIx_SelectedMeaning.contribution FIx_PreweightedPack.pack
+ dsimp only []
+ rw [hzero 0 (by decide),hzero 1 (by decide),hzero 2 (by decide),hzero 3 (by decide)]
+ simp
 theorem fold_prefix (v : Fin 33 → NQ) (selector : NQ) (gs : List (Fin 9)) (before : Fin 24 → K) (j : Fin 24) :
  (gs.foldl (fun s g=>stepModel v selector g s) before) j=
  before j+(gs.map (fun g=>if group g=j then increment v selector g else 0)).sum := by
@@ -43,7 +46,7 @@ theorem fold_prefix (v : Fin 33 → NQ) (selector : NQ) (gs : List (Fin 9)) (bef
  | cons g gs ih =>
   rw [List.foldl_cons,ih]
   by_cases h:group g=j
-  · subst j;simp only [stepModel,NJB_StateUpdates.addModel,if_pos rfl,increment,List.map_cons,List.sum_cons];ring
+  · subst j;simp only [stepModel,NJB_StateUpdates.addModel,ite_true,increment,List.map_cons,List.sum_cons];ring
   · simp only [stepModel,NJB_StateUpdates.addModel,if_neg h,increment,List.map_cons,List.sum_cons,zero_add]
 theorem value (v : Fin 33 → NQ) (selector : NQ) (before : Fin 24 → K) (j : Fin 24) :
  ((List.finRange 9).foldl (fun s g=>stepModel v selector g s) before) j=

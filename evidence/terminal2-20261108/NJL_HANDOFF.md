@@ -44,3 +44,6 @@ Static214 authority now K019PASS/K020FAIL with exact literal expected arrays, Lo
 
 ## Stage8 tagged coordinate
 TX1:216 and217 now have complete locally compiled positive roots, exact natural-product clauses, actual4limb reductions, all chunk frames, registry/source control and final constructor. Native full-span control K023 timed out and is excluded; split K029/030 plus031/032 with Lean induction replaced it. K025/026 constructor and035/036 forwarding pass/fail. Finalcombined gate2 and next ledger still pending; target not established. Also prepared and passed std4callback K033/034 for independent231; its composed root is in progress.
+
+## Stage9 shared selector231
+NJL_SharedRoot.source passes at L096: native std4callback, gather/group/control cuts, all9groups and all24cells, internally derived weighted33 and equality with the actual adopted add_preweighted Result at49. Closed NHU_Preweighted and NFT pack laws are consumed with same proven domains. NJB_DecodeInjective reused; no duplicate proof. Final gate2 pending; target not established.

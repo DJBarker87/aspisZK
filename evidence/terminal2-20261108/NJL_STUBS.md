@@ -31,3 +31,6 @@ The obsolete scan-based lookup expected function receives no final row authority
 |reduce_u64/add M31|NJB_TagReduce.reduce/add/result; every rawU64, old<P, residue<P|NJL_TagReduction.step_source/source and outer canonical invariant|
 |216 child in217|NJL_TagRoot.source, SAME high selectors canonical, coordinate<30|NJL_TagForward.source internally applies child|
 No field multiplication in Kani. Integer multiplies are opaque natural-value replies paired above; source integer overflow safety is proved symbolically. No contracts or function pointers.
+
+## Stage9 shared selector
+Pack reply paired with NJB_PackLaw.result (CLOSED NFT_Pack.source), exact same gathered4cells canonical by lanes_canonical. Product/add reply paired NJB_StubLaws.qm_mul/qm_add; domains supplied from same input selector, pack Result, and evolving24state. NJL_SharedRoot.source constructs actual33selector products for adopted NHU_Preweighted.result; its positive/interval/canonical domains are discharged internally at N33/start49. Native pack is opaque, never field multiplication in Kani.

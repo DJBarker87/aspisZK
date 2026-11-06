@@ -1,0 +1,114 @@
+theorem AspisR1.NJL_SharedRoot.source : ∀ (packed : Std.Array NQ 24#usize) (values : Std.Array NQ 33#usize)
+  (selector : NQ),
+  FIw_ArrayValue.canonical packed →
+    FIw_ArrayValue.canonical values →
+      Canon selector →
+        ∃ weighted after,
+          (∀ (i : Fin ↑33#usize), FIq_Native.field.QM31.mul selector (cell values i) = ok (cell weighted i)) ∧
+            reference packed values selector = ok (array after) ∧
+              NJL_SharedTrace.Trace (cell values) selector (List.finRange 9) (cell packed) after ∧
+                FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted packed 49#usize weighted =
+                    ok (array after) ∧
+                  FIw_ArrayValue.canonical (array after) ∧
+                    ∀ (j : Fin ↑24#usize),
+                      FIw_ArrayValue.decoded (array after) j =
+                        FIw_ArrayValue.decoded packed j +
+                          FIx_SelectedMeaning.contribution (fun i => decode selector * FIw_ArrayValue.decoded values i)
+                            49 ↑j :=
+fun packed values selector hp hv hc =>
+  have cv := NJB_ArrayCarrier.canonical_cell values hv;
+  have cp := NJB_ArrayCarrier.canonical_cell packed hp;
+  let ⟨after, h✝⟩ := NJL_SharedTrace.source (cell values) selector (List.finRange 9) (cell packed) cv hc cp
+  let ⟨call, right✝⟩ := h✝
+  let ⟨trace, ha⟩ := right✝
+  let ⟨other, h✝¹⟩ := NJB_SharedReference.result (cell values) selector (cell packed) cv hc cp
+  let ⟨otherCall, right✝¹⟩ := h✝¹
+  let ⟨left✝, otherValue⟩ := right✝¹
+  have same := ok.inj (Eq.trans (Eq.symm call) otherCall);
+  have decoded := fun j =>
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            decode (_a j) =
+              decode (cell packed j) +
+                FIx_SelectedMeaning.contribution (fun i => decode selector * decode (cell values i)) 49 ↑j)
+          same))
+      (Eq.trans (congrFun otherValue j)
+        (NJL_SharedMeaning.value (cell values) selector (NJB_StateUpdates.decoded (cell packed)) j));
+  (fun weights laws =>
+      let weighted := array weights;
+      have cw := NJB_ArrayCarrier.canonical_array weights fun i => (laws i).right.left;
+      let ⟨adopted, h✝²⟩ :=
+        NHU_Preweighted.result packed 49#usize weighted (of_decide_eq_true (id (Eq.refl true)))
+          (of_decide_eq_true (id (Eq.refl true))) hp cw
+      let ⟨adoptedCall, right✝²⟩ := h✝²
+      let ⟨adoptedCanon, adoptedValue⟩ := right✝²
+      have exactCarrier :=
+        Subtype.ext
+          (List.ext_getElem
+            (of_eq_true (Eq.trans (congr (congrArg Eq adopted.property) List.length_ofFn) (eq_self ↑24#usize)))
+            fun i hi hj =>
+            let j := ⟨i, Eq.mp (congrArg (LT.lt i) adopted.property) hi⟩;
+            have eq :=
+              NJB_DecodeInjective.qm (cell adopted j) (after j) (NJB_ArrayCarrier.canonical_cell adopted adoptedCanon j)
+                (ha j)
+                (have value := adoptedValue j;
+                have weightedValue :=
+                  funext fun k =>
+                    id
+                      (Eq.mpr
+                        (id
+                          (congrArg (fun _a => decode (_a k) = decode selector * decode (cell values k))
+                            (NJB_ArrayCarrier.cell_array weights)))
+                        (laws k).right.right);
+                Eq.trans
+                  (Eq.mp
+                    (congrArg
+                      (fun _a =>
+                        FIw_ArrayValue.decoded adopted j =
+                          FIw_ArrayValue.decoded packed j + FIx_SelectedMeaning.contribution _a ↑49#usize ↑j)
+                      weightedValue)
+                    value)
+                  (Eq.symm (decoded j)));
+            Eq.mpr
+              (id (congrArg (Eq (↑adopted)[i]) (List.getElem_ofFn (id (Eq.refl (List.ofFn after)) ▸ Eq.refl i ▸ hj))))
+              eq);
+      Exists.intro weighted
+        (Exists.intro after
+          ⟨fun i =>
+            id
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => FIq_Native.field.QM31.mul selector (cell values i) = ok (_a i))
+                    (NJB_ArrayCarrier.cell_array weights)))
+                (laws i).left),
+            ⟨of_eq_true
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans (congrFun' (congrArg Bind.bind call) fun after => ok (array after))
+                        (bind_tc_ok after fun y => ok (array y))))
+                    (ok (array after)))
+                  (eq_self (ok (array after)))),
+              ⟨trace,
+                ⟨Eq.mp
+                    (congrArg
+                      (Eq (FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted packed 49#usize weighted))
+                      (congrArg ok exactCarrier))
+                    adoptedCall,
+                  ⟨NJB_ArrayCarrier.canonical_array after ha, fun j =>
+                    id
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              decode (_a j) =
+                                FIw_ArrayValue.decoded packed j +
+                                  FIx_SelectedMeaning.contribution
+                                    (fun i => decode selector * FIw_ArrayValue.decoded values i) 49 ↑j)
+                            (NJB_ArrayCarrier.cell_array after)))
+                        (decoded j))⟩⟩⟩⟩⟩))
+    (fun i => Classical.choose ((fun i => NJB_StubLaws.qm_mul selector (cell values i) hc (cv i)) i)) fun i =>
+    Classical.choose_spec ((fun i => NJB_StubLaws.qm_mul selector (cell values i) hc (cv i)) i)
+'AspisR1.NJL_SharedRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

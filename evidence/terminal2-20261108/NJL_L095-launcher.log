@@ -1,0 +1,47 @@
+{"attempt": "NJL_L095", "exit_status": 0, "wall_seconds": 9.011314420029521, "peak_rss_kib": "6186612", "swaps": "0", "print_axioms": ["'AspisR1.NJL_SharedMeaning.group_injective' depends on axioms: [propext, Quot.sound]", "'AspisR1.NJL_SharedMeaning.contribution' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_SharedMeaning.outside' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_SharedMeaning.fold_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_SharedMeaning.value' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NJL_SharedMeaning.group_injective' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJL_SharedMeaning.contribution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_SharedMeaning.outside' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_SharedMeaning.fold_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NJL_SharedMeaning.value : ∀ (v : Fin 33 → NQ) (selector : NQ) (before : Fin 24 → K) (j : Fin 24),
+  List.foldl (fun s g => stepModel v selector g s) before (List.finRange 9) j =
+    before j + FIx_SelectedMeaning.contribution (fun i => decode selector * decode (v i)) 49 ↑j :=
+fun v selector before j =>
+ 
+...
+m same)))
+              (Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (Finset.sum_congr (Eq.refl Finset.univ) fun x a =>
+                        ite_congr
+                          ((fun x_0 x_1 => propext ((fun x_0 x_1 => Function.Injective.eq_iff group_injective) x_0 x_1))
+                            x g)
+                          (fun a => Eq.refl (increment v selector x)) fun a => Eq.refl 0))
+                    (FIx_SelectedMeaning.contribution (fun i => decode selector * decode (v i)) 49 ↑(group g))))
+                (Eq.mpr
+                  (id
+                    (congrFun'
+                      (congrArg Eq
+                        (Eq.trans (Finset.sum_ite_eq' Finset.univ g (increment v selector))
+                          (Eq.trans
+                            (ite_congr (value._simp_2 g) (fun a => Eq.refl (increment v selector g)) fun a => Eq.refl 0)
+                            (if_pos (of_eq_true (Eq.refl True))))))
+                      (FIx_SelectedMeaning.contribution (fun i => decode selector * decode (v i)) 49 ↑(group g))))
+                  (contribution v selector g)))
+          else
+            have out := Decidable.byContradiction fun a => value._proof_3 j inside a;
+            Eq.mpr
+              (id
+                (congrArg (fun _a => (∑ i, if group i = j then increment v selector i else 0) = _a)
+                  (outside v selector j out)))
+              (Finset.sum_eq_zero fun g a =>
+                have h := fun e =>
+                  have this := congrArg Fin.val e;
+                  have this_1 := g.isLt;
+                  value._proof_4 j out g e this;
+                if_neg h)))))
+'AspisR1.NJL_SharedMeaning.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3d457b25cb5f4cb2ae4ecd22cdd230a7.scope; invocation ID: 85889c30a7c247899f434756ebbb9495
