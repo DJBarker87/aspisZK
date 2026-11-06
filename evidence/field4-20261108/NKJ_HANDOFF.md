@@ -10,3 +10,5 @@ Budget: 80 Kani,90 Lean,3 extraction. Current use 0/0/0. One admitted capped sco
 Model/frame support is inherited, not new native closure. Every top theorem needs printed axioms; final combined NKH+RPx gate, NFX scan and raw ax2 remain required. No additional trust row; any (ah) closure records ReviewedTranscription under option A. Frozen3/deployed headline, L154 parameter, narrowed D188,100-bit per-attempt target,privacy,two transactions unchanged. RuntimeCpiReadonlyEntry7 unused. No keys or account action. No shipped changes or ELF rebuild trigger.
 
 Next: borrow-minimal reference extraction, then raw-limb-product/source cuts and record fidelity controls.
+
+Stage2 native primitives: product K005/K006 (Kissat), addition K007/K008, exact cache prelude K009/K010 and arbitrary selected write K011/K012 have positive/negative pairs. KMX72-byte copy pairs K013..016; per-shape weak/inverse/real/unimplied/modifies controls K017..026. No row closure yet. L005 scalar/update and L008 row reference laws compile with standard axioms; L009 wrap32 and L010 cache association compile. Complete accumulation/outer-loop/root composition and final gate remain.

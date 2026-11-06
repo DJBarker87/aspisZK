@@ -12,11 +12,9 @@ for n,h in kmx.items():assert sha(S/n)==h,('KMX exact patch mismatch',n)
 frozen_pins=json.loads((B/'NKJ_FROZEN_PINS.json').read_text())
 raw_inputs=json.loads(__import__('lzma').decompress((B/'NKJ_FROZEN.json.xz').read_bytes()))
 lib='crates/aspis-core/src/lib.rs';libbase=__import__('base64').b64decode(raw_inputs[lib])
-(S/lib).write_bytes(b'#![cfg_attr(kani, feature(allocator_api))]
-'+libbase)
+(S/lib).write_bytes(b'#![cfg_attr(kani, feature(allocator_api))]'+bytes([10])+libbase)
 pins={n:h for n,h in frozen_pins.items() if n not in ['crates/aspis-core/src/field.rs',lib]}
-assert (S/lib).read_bytes()==b'#![cfg_attr(kani, feature(allocator_api))]
-'+libbase
+assert (S/lib).read_bytes()==b'#![cfg_attr(kani, feature(allocator_api))]'+bytes([10])+libbase
 
 base=__import__('base64').b64decode(json.loads(__import__('lzma').decompress((B/'NKJ_FROZEN.json.xz').read_bytes()))['crates/aspis-core/src/field.rs'])
 assert (S/'crates/aspis-core/src/field.rs').read_bytes()==base+b'\n#[cfg(kani)]\nmod NKJ_segments;\nmod NKJ_reference;\n'
