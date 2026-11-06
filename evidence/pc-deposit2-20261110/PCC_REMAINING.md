@@ -33,3 +33,5 @@ The binding E1-before-ANY-native and compiled-full-fold prerequisites remain unm
 Each B/D native child is blocked by the same mandatory E1/fold prerequisites; its additional missing packet/native facts are separately listed in PCC_CHILDREN.md. No independent native member is held behind an unrelated OPEN row. No remaining formal scope is spent on native setup, field multiplication, a retired shape or an unowned row.
 
 Stage3 was not entered. Extraction allowance is0 and no extraction was attempted. Remaining native allowance is not described as exhausted or mathematically unusable. This job supplies support only; another allowance can continue the named missing Lean packets/fold before native runs.
+
+Final stop accounting:70/70 formal scopes consumed;0/60 Kani and0/0 extraction. All remaining legal work before native is Lean work with no allowance left. Every remaining Kani member is listed above and in PCC_CHILDREN.md and requires the missing fixed E1/full fold first. The six final scopes audited the changed support closure and retained its evidence; they did not substitute for the missing owner proof. No claim that more budget cannot help.
