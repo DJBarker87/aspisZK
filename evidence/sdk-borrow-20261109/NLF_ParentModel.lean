@@ -27,6 +27,9 @@ def acquire (p : Parent) (a : Nat) (k : Kind) : Parent × Except ProgramError Gu
   let r := wrap p.state (p.state.accounts a).data p.next k
   (⟨r.1,p.next+1,p.events ++ [.acquire a p.next k r.2]⟩,r.2)
 
+instance liveDecidable {α : Type} (c : Cell α) (t : Nat) (k : Kind) : Decidable (live c t k) := by
+  cases k <;> dsimp [live] <;> infer_instance
+
 def deref (p : Parent) (g : Guard) : Parent × Except Error Payload :=
   let r := if live (p.state.cells g.cell) g.token g.kind then .ok (NLF_SdkModel.deref p.state g)
            else .error .invalidToken

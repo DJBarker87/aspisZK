@@ -1,0 +1,47 @@
+{"attempt": "NLF_K052", "exit_status": 1, "wall_seconds": 1.730036310153082, "peak_rss_kib": "234364", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+/dombarker/project-offloads/codex-cx-sdk-borrow-20261109/NLF_src/programs/r1-cost-probe/../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-sdk-borrow-20261109/NLF_src/programs/r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-sdk-borrow-20261109/NLF_src/programs/r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+    Finished `dev` profile [optimized] target(s) in 0.68s
+Checking harness NLF_sdk::shape_unimplied_control...
+
+VERIFICATION RESULT:
+ ** 2 of 36 failed
+Failed Checks: assertion failed: x == 1
+ File: "programs/r1-cost-probe/src/NLF_sdk.rs", line 156, in NLF_sdk::shape_unimplied_control
+Failed Checks: assertion failed: r.value == 1
+ File: "programs/r1-cost-probe/src/NLF_sdk.rs", line 156, in NLF_sdk::shape_unimplied_control
+
+VERIFICATION:- FAILED
+Verification Time: 0.034453873s
+
+Manual Harness Summary:
+Verification failed for - NLF_sdk::shape_unimplied_control
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rf5689eb968564ab68bfd8c1bd3d8d403.scope; invocation ID: 7bc2d4ba429745c9917c37d09e4f0bf2

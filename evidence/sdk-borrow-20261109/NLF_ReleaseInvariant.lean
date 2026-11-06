@@ -36,7 +36,7 @@ theorem release_preserves (p : Parent) (g : Guard) (h : Invariant p) :
       exact subset_invariant p.state _ p.next h (put_valid _ _ _ h.1 valid) (erased_subset _ _ _)
     · have eq : NLF_SdkModel.release p.state g = .error .invalidToken := by
         simp [NLF_SdkModel.release,hk,dropShared,ok]
-      simpa [release,eq] using h
+      simpa [Invariant,release,eq] using h
   | exclusive =>
     by_cases ok : (p.state.cells g.cell).writer = some g.token
     · have valid := (exclusive_drop_valid (p.state.cells g.cell) g.token (h.1 g.cell) ok).2
@@ -47,7 +47,7 @@ theorem release_preserves (p : Parent) (g : Guard) (h : Invariant p) :
       exact subset_invariant p.state _ p.next h (put_valid _ _ _ h.1 valid) (cleared_subset _ _)
     · have eq : NLF_SdkModel.release p.state g = .error .invalidToken := by
         simp [NLF_SdkModel.release,hk,dropExclusive,ok]
-      simpa [release,eq] using h
+      simpa [Invariant,release,eq] using h
 
 #print axioms erased_subset
 #print axioms cleared_subset

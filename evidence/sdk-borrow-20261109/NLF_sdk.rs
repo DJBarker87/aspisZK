@@ -84,3 +84,82 @@ fn group_scalars(){data_len_getters();metadata_getters();empty_getters();}
 #[kani::proof] #[kani::unwind(129)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn group_maps(){shared_map();exclusive_map();}
+#[kani::proof] #[kani::unwind(129)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn three_copy_window(){
+ let k0=Pubkey::new_from_array(kani::any());let k1=Pubkey::new_from_array(kani::any());let k2=Pubkey::new_from_array(kani::any());
+ kani::assume(k0!=k1 && k0!=k2 && k1!=k2);
+ let mut l0:u64=kani::any();let mut l1:u64=kani::any();let mut l2:u64=kani::any();
+ let mut d0:[u8;2]=kani::any();let mut d1:[u8;2]=kani::any();let mut d2:[u8;1768]=kani::any();
+ let offset:usize=kani::any();let j:usize=kani::any();kani::assume(offset<1768 && j<1768);
+ let old=d2[j];let p0=d0[0];let p1=d1[0];let input:u8=kani::any();
+ let a0=AccountInfo::new(&k0,false,false,&mut l0,&mut d0,&k2,false,0);
+ let a1=AccountInfo::new(&k1,false,false,&mut l1,&mut d1,&k2,false,0);
+ let a2=AccountInfo::new(&k2,false,true,&mut l2,&mut d2,&k2,false,0);
+ {let g=a0.try_borrow_data().unwrap();assert_eq!(g[0],p0);}
+ {let g=a1.try_borrow_data().unwrap();assert_eq!(g[0],p1);}
+ {let g=a2.try_borrow_data().unwrap();assert_eq!(g[j],old);}
+ {let mut g=a2.try_borrow_mut_data().unwrap();g[offset..offset+1].copy_from_slice(&[input]);assert_eq!(g[j],if j==offset{input}else{old});}
+ assert_eq!(data_counter(&a0),0);assert_eq!(data_counter(&a1),0);assert_eq!(data_counter(&a2),0);
+ assert_eq!(a0.try_borrow_data().unwrap()[0],p0);assert_eq!(a1.try_borrow_data().unwrap()[0],p1);
+}
+#[kani::proof] #[kani::unwind(129)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn three_copy_control(){setup!(|a:&AccountInfo,_,_,_|{let input:u8=kani::any();let mut g=a.try_borrow_mut_data().unwrap();g[0..1].copy_from_slice(&[input]);assert_ne!(g[0],input);drop(g);});}
+#[kani::proof] #[kani::unwind(129)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn seven_cleanup(){
+ let k=Pubkey::new_from_array(kani::any());
+ let mut l0=0;let mut l1=0;let mut l2=0;let mut l3=0;let mut l4=0;let mut l5=0;let mut l6=0;
+ let mut d0=[kani::any::<u8>();2];let mut d1=[kani::any::<u8>();2];let mut d2=[kani::any::<u8>();2];let mut d3=[kani::any::<u8>();2];let mut d4=[kani::any::<u8>();2];let mut d5=[kani::any::<u8>();2];let mut d6=[kani::any::<u8>();2];
+ let a0=AccountInfo::new(&k,false,false,&mut l0,&mut d0,&k,false,0);
+ let a1=AccountInfo::new(&k,false,false,&mut l1,&mut d1,&k,false,0);
+ let a2=AccountInfo::new(&k,false,false,&mut l2,&mut d2,&k,false,0);
+ let a3=AccountInfo::new(&k,false,false,&mut l3,&mut d3,&k,false,0);
+ let a4=AccountInfo::new(&k,false,false,&mut l4,&mut d4,&k,false,0);
+ let a5=AccountInfo::new(&k,false,false,&mut l5,&mut d5,&k,false,0);
+ let a6=AccountInfo::new(&k,false,false,&mut l6,&mut d6,&k,false,0);
+ let b1=if kani::any(){&a0}else{&a1};let b2=if kani::any(){&a0}else{&a2};let b3=if kani::any(){&a0}else{&a3};let b4=if kani::any(){&a0}else{&a4};let b5=if kani::any(){&a0}else{&a5};let b6=if kani::any(){&a0}else{&a6};
+ let stop:u8=kani::any();kani::assume(stop<=7);
+ let _:Result<(),ProgramError>=(||{
+  let g0=a0.try_borrow_data()?;if stop==0{return Err(ProgramError::InvalidArgument)}
+  let g1=b1.try_borrow_data()?;if stop==1{return Err(ProgramError::InvalidArgument)}
+  let g2=b2.try_borrow_data()?;if stop==2{return Err(ProgramError::InvalidArgument)}
+  let g3=b3.try_borrow_data()?;if stop==3{return Err(ProgramError::InvalidArgument)}
+  let g4=b4.try_borrow_data()?;if stop==4{return Err(ProgramError::InvalidArgument)}
+  let g5=b5.try_borrow_data()?;if stop==5{return Err(ProgramError::InvalidArgument)}
+  let g6=b6.try_borrow_data()?;if stop==6{return Err(ProgramError::InvalidArgument)}
+  assert_eq!(g0.len()+g1.len()+g2.len()+g3.len()+g4.len()+g5.len()+g6.len(),14);
+  Ok(())})();
+ assert_eq!(data_counter(&a0),0);assert_eq!(data_counter(&a1),0);assert_eq!(data_counter(&a2),0);assert_eq!(data_counter(&a3),0);assert_eq!(data_counter(&a4),0);assert_eq!(data_counter(&a5),0);assert_eq!(data_counter(&a6),0);
+}
+proof!(seven_cleanup_control,|a:&AccountInfo,_,_,_|{let g=a.try_borrow_data().unwrap();core::mem::forget(g);assert_eq!(data_counter(a),0);});
+#[derive(Clone,Copy,kani::Arbitrary)]
+struct ScalarReply{value:u64,tag:u8}
+#[kani::ensures(|r|r.tag==0)]
+fn shape_weak(x:u64)->ScalarReply{ScalarReply{value:x,tag:0}}
+#[kani::ensures(|r|r.tag==1)]
+fn shape_inverse(x:u64)->ScalarReply{ScalarReply{value:x,tag:0}}
+#[kani::requires(*x==0)]
+#[kani::modifies(x)]
+#[kani::ensures(|r|r.tag==0)]
+fn shape_effect(x:&mut u64)->ScalarReply{*x=1;ScalarReply{value:1,tag:0}}
+#[kani::requires(*x==0)]
+#[kani::modifies()]
+#[kani::ensures(|r|r.tag==0)]
+fn shape_modifies_bad(x:&mut u64)->ScalarReply{*x=1;ScalarReply{value:1,tag:0}}
+#[kani::proof_for_contract(shape_weak)]fn shape_weak_contract(){let _=shape_weak(kani::any());}
+#[kani::proof_for_contract(shape_inverse)]fn shape_inverse_control(){let _=shape_inverse(kani::any());}
+#[kani::proof]fn shape_real_body(){let mut x=0;let r=shape_effect(&mut x);assert_eq!(x,1);assert_eq!(r.value,1);}
+#[kani::proof]#[kani::stub_verified(shape_effect)]fn shape_unimplied_control(){let mut x=0;let r=shape_effect(&mut x);assert_eq!(x,1);assert_eq!(r.value,1);}
+#[kani::proof_for_contract(shape_modifies_bad)]fn shape_modifies_control(){let mut x=0;let _=shape_modifies_bad(&mut x);}
+#[kani::proof_for_contract(shape_effect)]fn shape_effect_contract(){let mut x=0;let _=shape_effect(&mut x);}
+proof!(drop_payload_frame,|a:&AccountInfo,_,v,m|{let g=a.try_borrow_data().unwrap();drop(g);assert_eq!(a.try_borrow_data().unwrap()[0],v);assert_eq!(a.lamports(),m);});
+proof!(drop_payload_control,|a:&AccountInfo,_,v:u8,_|{let g=a.try_borrow_data().unwrap();drop(g);assert_eq!(a.try_borrow_data().unwrap()[0],v.wrapping_add(1));});
+proof!(alias_guard,|a:&AccountInfo,p,_,_|{let mut alias=a.clone();let own=a.try_borrow_data().unwrap();let second=alias.try_borrow_data().unwrap();assert_eq!(second.as_ptr(),p);assert_eq!(data_counter(a),2);drop(second);drop(own);let g=alias.try_borrow_mut_data().unwrap();assert!(matches!(a.try_borrow_data(),Err(ProgramError::AccountBorrowFailed)));drop(g);alias.is_writable=false;assert!(a.is_writable);});
+proof!(alias_guard_control,|a:&AccountInfo,_,_,_|{let alias=a.clone();let g=alias.try_borrow_data().unwrap();assert_eq!(data_counter(a),0);drop(g);});
+proof!(exclusive_drop_frame,|a:&AccountInfo,_,v,m|{let g=a.try_borrow_mut_data().unwrap();drop(g);assert_eq!(a.try_borrow_data().unwrap()[0],v);assert_eq!(a.lamports(),m);});
+
+proof!(exclusive_drop_control,|a:&AccountInfo,_,v:u8,_|{let g=a.try_borrow_mut_data().unwrap();drop(g);assert_eq!(a.try_borrow_data().unwrap()[0],v.wrapping_add(1));});

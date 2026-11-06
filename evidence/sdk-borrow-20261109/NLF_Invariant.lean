@@ -20,15 +20,15 @@ theorem insert_invariant (s s' : State) (n cell : Nat)
     ValidState s' ∧ Below s' (n+1) ∧ Unique s' := by
   refine ⟨v, ?_, ?_⟩
   · intro i t ht
-    rcases sub i t ht with ⟨_,rfl⟩ | old
-    · exact Nat.lt_succ_self n
+    rcases sub i t ht with ⟨_,htn⟩ | old
+    · omega
     · exact Nat.lt_succ_of_lt (h.2.1 i t old)
   · intro i j t hi hj
     rcases sub i t hi with ⟨rfl,ht⟩ | oi <;>
       rcases sub j t hj with ⟨rfl,ht'⟩ | oj
     · rfl
-    · subst t; exact False.elim ((Nat.lt_irrefl n) (h.2.1 j n oj))
-    · subst t; exact False.elim ((Nat.lt_irrefl n) (h.2.1 i n oi))
+    · have q := h.2.1 j t oj; omega
+    · have q := h.2.1 i t oi; omega
     · exact h.2.2 i j t oi oj
 
 theorem shared_inserts (s : State) (i n j t : Nat)
