@@ -1,0 +1,121 @@
+//! Entry windows only: these stop before each child return. No completed parent cut.
+use super::*;
+use crate::r1_semantic::NKQ_windows::q;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn e()->E{E::new(q(),q())}
+fn point()->SecureCirclePoint{SecureCirclePoint{x:q(),y:q()}}
+fn prepared()->Box<Prepared>{Box::new(Prepared{variant:Variant::S2,roots:kani::any(),gamma:e(),kappa:e(),alpha:[e(),e()],rho:q(),queries:kani::any(),semantic_alpha:core::array::from_fn(|_|q()),z:[point(),point()],claim:e(),state:kani::any()})}
+fn check_shape(mode:u8,bad:bool){
+ let proof:[u8;57607]=kani::any();let mut logical:[u8;14759]=kani::any();let pbase=proof.as_ptr() as usize;let lbase=logical.as_ptr() as usize;
+ let (semantic,y1)=logical.split_at_mut(compact::LOGICAL_SEMANTIC);
+ let input=if mode==0{&proof[compact::OFF_SEMANTIC..compact::OFF_Y1]}else{&proof[compact::OFF_Y1..compact::OFF_INACTIVE]};
+ let output=if mode==0{semantic}else{y1};let good=if mode==0{input.as_ptr() as usize==pbase+16&&input.len()==7015&&output.as_ptr() as usize==lbase&&output.len()==13831}else{input.as_ptr() as usize==pbase+7031&&input.len()==464&&output.as_ptr() as usize==lbase+13831&&output.len()==928};if bad{assert!(!good)}else{assert!(good)}
+}
+fn check_semantic_view(bad:bool){let logical:[u8;14759]=kani::any();let semantic=&logical[..compact::LOGICAL_SEMANTIC];let good=semantic.as_ptr()==logical.as_ptr()&&semantic.len()==13831;if bad{assert!(!good)}else{assert!(good)}}
+fn check_zero(bad:bool){let g=[E::ZERO;29];let i:usize=kani::any();kani::assume(i<29);if bad{assert_ne!(g[i],E::ZERO)}else{assert_eq!(g[i],E::ZERO)}}
+fn folded(proof:&[u8])->[u8;32]{
+ let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();
+ folded_root
+}
+fn check_folded(frame:bool,bad:bool){let proof:[u8;57607]=kani::any();let i:usize=kani::any();kani::assume(i<32);let cell:usize=kani::any();kani::assume(cell<proof.len());let before=proof[cell];let out=folded(&proof);let good=if frame{proof[cell]==before}else{out[i]==proof[compact::OFF_FOLDED_ROOT+i]};if bad{assert!(!good)}else{assert!(good)}}
+struct Entry{proof:usize,proof_len:usize,prepared:usize,root:u8,batch:usize,queries:usize,query:u32,start:usize,end:usize,weights:usize,weight:K,weights_len:usize,accumulator:usize,public:usize,public_len:usize,calls:usize,cell:usize}
+impl Entry{
+ fn new(cell:usize)->Self{Self{proof:0,proof_len:0,prepared:0,root:0,batch:99,queries:0,query:0,start:99,end:99,weights:0,weight:K::ZERO,weights_len:0,accumulator:0,public:0,public_len:0,calls:0,cell}}
+ fn batch<H:Digest32>(&mut self,proof:&[u8],p:&Prepared,folded_root:&[u8;32],batch:usize,_:H){self.proof=proof.as_ptr() as usize;self.proof_len=proof.len();self.prepared=p as *const _ as usize;self.root=folded_root[self.cell%32];self.batch=batch;self.calls+=1}
+ fn geometry(&mut self,queries:&[u32;22],start:usize,end:usize){self.queries=queries.as_ptr() as usize;self.query=queries[self.cell%22];self.start=start;self.end=end;self.calls+=1}
+ fn pending(&mut self,weights:&[K]){self.weights=weights.as_ptr() as usize;self.weights_len=weights.len();self.weight=weights[self.cell%64];self.calls+=1}
+ fn checkpoint<H:Digest32>(&mut self,p:&Prepared,a:&Accumulator,proof:&[u8],public_bytes:&[u8],_:H){self.prepared=p as *const _ as usize;self.accumulator=a as *const _ as usize;self.proof=proof.as_ptr() as usize;self.proof_len=proof.len();self.public=public_bytes.as_ptr() as usize;self.public_len=public_bytes.len();self.weights=a.weights.as_ptr() as usize;self.weight=a.weights[self.cell%64];self.weights_len=a.weights.len();self.calls+=1}
+}
+fn check_batch(bad:bool){let proof:[u8;57607]=kani::any();let p=prepared();let folded_root:[u8;32]=kani::any();let cell:usize=kani::any();kani::assume(cell<32);let mut log=Entry::new(cell);
+ log.batch(&proof,&p,&folded_root,0,crate::r1_semantic::NKQ_rejections::Hash);
+ let good=log.calls==1&&log.proof==proof.as_ptr() as usize&&log.proof_len==57607&&log.prepared==&*p as *const _ as usize&&log.root==folded_root[cell]&&log.batch==0;if bad{assert!(!good)}else{assert!(good)}}
+fn check_geometry(bad:bool){let p=prepared();let cell:usize=kani::any();kani::assume(cell<22);let mut log=Entry::new(cell);let k=SPLIT;
+ log.geometry(&p.queries,0,k);
+ let good=log.calls==1&&log.queries==p.queries.as_ptr() as usize&&log.query==p.queries[cell]&&log.start==0&&log.end==10;if bad{assert!(!good)}else{assert!(good)}}
+fn accumulator()->Accumulator{Accumulator{weights:Vec::from(core::array::from_fn::<K,64,_>(|_|q())),rhs:e(),power:q(),next:kani::any()}}
+fn check_pending(bad:bool){let a=accumulator();let cell:usize=kani::any();kani::assume(cell<64);let mut log=Entry::new(cell);
+ log.pending(&a.weights);
+ let good=log.calls==1&&log.weights==a.weights.as_ptr() as usize&&log.weights_len==64&&log.weight==a.weights[cell];if bad{assert!(!good)}else{assert!(good)}}
+fn check_checkpoint(bad:bool){let p=prepared();let a=accumulator();let proof:[u8;57607]=kani::any();let public_bytes:[u8;1880]=kani::any();let cell:usize=kani::any();kani::assume(cell<64);let mut log=Entry::new(cell);
+ log.checkpoint(&p,&a,&proof,&public_bytes,crate::r1_semantic::NKQ_rejections::Hash);
+ let good=log.calls==1&&log.prepared==&*p as *const _ as usize&&log.accumulator==&a as *const _ as usize&&log.proof==proof.as_ptr() as usize&&log.proof_len==57607&&log.public==public_bytes.as_ptr() as usize&&log.public_len==1880&&log.weights==a.weights.as_ptr() as usize&&log.weight==a.weights[cell]&&log.weights_len==64;if bad{assert!(!good)}else{assert!(good)}}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn semantic_shape_cut(){check_shape(0,false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn semantic_shape_control(){check_shape(0,true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn values_shape_cut(){check_shape(1,false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn values_shape_control(){check_shape(1,true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn semantic_view_cut(){check_semantic_view(false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn semantic_view_control(){check_semantic_view(true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn scratch_zero_cut(){check_zero(false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn scratch_zero_control(){check_zero(true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn folded_value_cut(){check_folded(false,false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn folded_value_control(){check_folded(false,true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn folded_frame_cut(){check_folded(true,false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn folded_frame_control(){check_folded(true,true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn batch_entry_cut(){check_batch(false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn batch_entry_control(){check_batch(true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn geometry_entry_cut(){check_geometry(false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn geometry_entry_control(){check_geometry(true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pending_entry_cut(){check_pending(false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn pending_entry_control(){check_pending(true)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn checkpoint_entry_cut(){check_checkpoint(false)}
+
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn checkpoint_entry_control(){check_checkpoint(true)}

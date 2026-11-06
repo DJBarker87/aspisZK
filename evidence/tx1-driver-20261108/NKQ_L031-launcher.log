@@ -1,0 +1,21 @@
+{"attempt": "NKQ_L031", "exit_status": 0, "wall_seconds": 12.467532282928005, "peak_rss_kib": "6354152", "swaps": "0", "print_axioms": ["'AspisR1.NKQ_ObservedContinuations.parsed_success' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKQ_ObservedContinuations.public_error' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKQ_ObservedContinuations.begin_error' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKQ_ObservedContinuations.finish_same_call' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NKQ_ObservedContinuations.parsed_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedContinuations.public_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedContinuations.begin_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedContinuations.finish_same_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_ObservedContinuations.finish_same_call : ∀ (F : VerifyPrefix.Finish) {H : Type}
+  (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (p : r1_wire.Prefix)
+  (after : r1_wire.SemanticTranscript H) (challenges : r
+...
+'AspisR1.NKQ_ObservedContinuations.parsed_success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedContinuations.public_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedContinuations.begin_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedContinuations.finish_same_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_ObservedContinuations.finish_same_call : ∀ (F : VerifyPrefix.Finish) {H : Type}
+  (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (p : r1_wire.Prefix)
+  (after : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges),
+  afterBegin (fun {H} => F) D pub p after (core.result.Result.Ok challenges) = F D pub p after challenges none :=
+fun F {H} D pub p after challenges =>
+  Eq.refl (afterBegin (fun {H} => F) D pub p after (core.result.Result.Ok challenges))
+
+Running as unit: run-r2beb5f02f7a046c18fd001b367deba48.scope; invocation ID: 1b9d18fb94b9456a97f4541d10e8d2b2

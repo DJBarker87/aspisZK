@@ -1,0 +1,10 @@
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+def Aeneas.Std.UScalar.tryMk : (ty : UScalarTy) → ℕ → Result (UScalar ty) :=
+fun ty x => Result.ofOption (UScalar.tryMkOpt ty x) Error.integerOverflow
+def Aeneas.Std.UScalar.ofNatCore : {ty : UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+def Aeneas.Std.UScalar.val : {ty : UScalarTy} → UScalar ty → ℕ :=
+fun {ty} x => x.bv.toNat
+Aeneas.Std.UScalar.add_spec {ty : UScalarTy} {x y : UScalar ty} (hmax : ↑x + ↑y ≤ UScalar.max ty) :
+  x + y ⦃ z => ↑z = ↑x + ↑y ⦄

@@ -1,0 +1,82 @@
+use super::*;
+use aspis_core::field::{M31,CM31};
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[derive(Clone,Copy)] pub struct Hash;
+impl Digest32 for Hash { fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("NKQ no digest after rejection")} }
+fn digest()->[M31;8]{let r:[u32;8]=kani::any();[M31(r[0]),M31(r[1]),M31(r[2]),M31(r[3]),M31(r[4]),M31(r[5]),M31(r[6]),M31(r[7])]}
+pub(crate) fn transition()->aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1{
+ use aspis_statement::pool_v1::{pair_tree_profile::*,PoolV1PairVerifiedAfterstateV1};
+ PoolV1PairLatePublicStatementV1{live_snapshot:PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:digest(),frontier:core::array::from_fn(|_|digest())},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:digest(),next_frontier:core::array::from_fn(|_|digest())}}
+}
+pub(crate) fn transfer()->aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1{
+ aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()}
+}
+fn error(bytes:&[u8])->Error{
+ let k=bytes[0];let row=bytes[1];let actual=bytes[2];let n=usize::from_le_bytes([bytes[3],bytes[4],bytes[5],bytes[6],bytes[7],bytes[8],bytes[9],bytes[10]]);
+ match k%12{0=>Error::Allocation,1=>Error::RowOrder{expected:row,actual},2=>Error::InvalidRow,3=>Error::Tag{row},4=>Error::Length{row},5=>Error::NonCanonical{row,value:n},6=>Error::Boundary{round:n},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}
+}
+fn parse_error<'a:'a>(bytes:&'a[u8])->Result<Prefix<'a>,Error>{Err(error(bytes))}
+fn unreachable_public<H:Digest32>(_:Public<'_>,_:H,_:&[u8;32])->Result<SemanticTranscript<H>,Error>{panic!("NKQ suffix public")}
+fn unreachable_begin<H:Digest32>(_:&Prefix<'_>,_:&mut SemanticTranscript<H>)->Result<Challenges,Error>{panic!("NKQ suffix begin")}
+fn unreachable_finish<H:Digest32>(_:Public<'_>,_:Prefix<'_>,_:SemanticTranscript<H>,_:Challenges,_:crate::verifier::Observer)->Result<Verified<H>,Error>{panic!("NKQ suffix finish")}
+fn check_parse_rejection(bad:bool){
+ let bytes:[u8;13831]=kani::any();let t=transition();let p=transfer();let expected=error(&bytes);let index:usize=kani::any();kani::assume(index<bytes.len());let before=bytes[index];
+ let out=verify_observed(Public::Transfer(&p,&t),&bytes,Hash,None);
+ match out {Err(e)=>{if bad{assert_ne!(e,expected)}else{assert_eq!(e,expected)}},Ok(_)=>panic!("NKQ unexpected success")};assert_eq!(bytes[index],before);
+}
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
+#[kani::stub(public_transcript,unreachable_public)]
+#[kani::stub(crate::r1_wire::begin,unreachable_begin)]
+#[kani::stub(verify_finish,unreachable_finish)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn parse_rejection(){check_parse_rejection(false)}
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
+#[kani::stub(public_transcript,unreachable_public)]
+#[kani::stub(crate::r1_wire::begin,unreachable_begin)]
+#[kani::stub(verify_finish,unreachable_finish)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn parse_rejection_control(){check_parse_rejection(true)}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
+#[kani::stub(public_transcript,unreachable_public)]
+#[kani::stub(crate::r1_wire::begin,unreachable_begin)]
+#[kani::stub(verify_finish,unreachable_finish)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn parse_rejection_stability(){check_parse_rejection(false)}
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
+#[kani::stub(public_transcript,unreachable_public)]
+#[kani::stub(crate::r1_wire::begin,unreachable_begin)]
+#[kani::stub(verify_finish,unreachable_finish)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn parse_rejection_control_stability(){check_parse_rejection(true)}
+fn rounds_error<H:Digest32>(prefix:&Prefix<'_>,_:SemanticTranscript<H>)->Result<(QM31,[QM31;10],SemanticTranscript<H>),Error>{Err(error(prefix.c1_root))}
+fn claims_unreachable(_: &Prefix<'_>)->Result<Box<[[QM31;29];3]>,Error>{panic!("NKQ claims suffix")}
+fn check_rounds_rejection(bad:bool){let root:[u8;32]=kani::any();let t=transition();let p=transfer();let state:[u8;32]=kani::any();let row:u8=kani::any();let prefix=crate::r1_wire::NKQ_prefix(&root);let transcript=crate::r1_wire::NKQ_transcript(state,Hash,row);let challenges=super::NKQ_windows::challenges();let expected=error(&root);let i:usize=kani::any();kani::assume(i<32);let before=root[i];let out=verify_finish(Public::Transfer(&p,&t),prefix,transcript,challenges,None);match out{Err(e)=>{if bad{assert_ne!(e,expected)}else{assert_eq!(e,expected)}},Ok(_)=>panic!("NKQ unexpected finish success")};assert_eq!(root[i],before)}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(semantic_rounds,rounds_error)]
+#[kani::stub(claims,claims_unreachable)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_rejection(){check_rounds_rejection(false)}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(semantic_rounds,rounds_error)]
+#[kani::stub(claims,claims_unreachable)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_rejection_control(){check_rounds_rejection(true)}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(semantic_rounds,rounds_error)]
+#[kani::stub(claims,claims_unreachable)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_rejection_stability(){check_rounds_rejection(false)}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(semantic_rounds,rounds_error)]
+#[kani::stub(claims,claims_unreachable)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn rounds_rejection_control_stability(){check_rounds_rejection(true)}

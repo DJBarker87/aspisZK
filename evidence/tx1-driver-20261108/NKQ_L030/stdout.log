@@ -1,0 +1,59 @@
+NKQ_generated/NKQ_MaskHighStep.lean:9:44: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  0 ≤ e ≤ 9
+  e - f ≥ -16
+where
+ e := ↑↑i
+ f := ↑↑29#usize
+NKQ_generated/NKQ_MaskHighStep.lean:15:34: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+H : Type
+D : aspis_core.Digest32 H
+c : Claims
+i : Usize
+inside : ↑i < 10
+j : UScalar UScalarTy.Usize := Usize.ofNatCore (16 + ↑i) ⋯
+⊢ 16#usize + i = ok j
+NKQ_generated/NKQ_MaskHighStep.lean:18:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (cell c 0 ?m.87).index_usize j
+in the target expression
+  (do
+      let q ← (cell c ↑0#usize ⋯).index_usize j
+      ok (q, c)) =
+    ok (highAt c i inside, c)
+
+H : Type
+D : aspis_core.Digest32 H
+c : Claims
+i : Usize
+inside : ↑i < 10
+j : UScalar UScalarTy.Usize := Usize.ofNatCore (16 + ↑i) ⋯
+add : 16#usize + i = ok j
+⊢ (do
+      let q ← (cell c ↑0#usize ⋯).index_usize j
+      ok (q, c)) =
+    ok (highAt c i inside, c)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NKQ_generated/NKQ_MaskHighStep.lean:16:12: warning: This simp argument is unused:
+  FinishModel.closureFn5
+
+Hint: Omit it from the simp argument list.
+  simp only [FinishModel.closureFn5̵,̵F̵i̵n̵i̵s̵h̵M̵o̵d̵e̵l̵.̵c̵l̵o̵s̵u̵r̵e̵F̵n̵2]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NKQ_MaskHighStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

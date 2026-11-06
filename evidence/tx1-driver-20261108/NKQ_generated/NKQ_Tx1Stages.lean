@@ -28,7 +28,7 @@ theorem query_error (ops : Ops) {H : Type} (D : aspis_core.digest.Digest32 H)
 
 /-- The writer reconstruction preserves rhs, power and next by construction;
 this theorem does not assume pending.finish's mutable footprint. -/
-theorem writer_frame (a : verifier.Accumulator) (weights : alloc.vec.Vec aspis_core.field.wide_exact.WideExact) :
+theorem writer_frame (a : verifier.Accumulator) (weights : alloc.vec.Vec aspis_core.field.QM31) :
  ({a with weights:=weights} : verifier.Accumulator).rhs=a.rhs ∧
  ({a with weights:=weights} : verifier.Accumulator).power=a.power ∧
  ({a with weights:=weights} : verifier.Accumulator).next=a.next := by exact ⟨rfl,rfl,rfl⟩
