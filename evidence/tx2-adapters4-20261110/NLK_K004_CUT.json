@@ -1,0 +1,9 @@
+{
+ "part": "prefix",
+ "source": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+ "segment": "    let master: [u8; 32] = bytes[40..72]\n        .try_into()\n        .map_err(|_| ProgramError::InvalidAccountData)?;\n    if master == [0u8; 32] {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    let tree = &bytes[POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES..];\n    if tree[..4] != POOL_V1_TREE_STATE_MAGIC\n        || tree[4] != POOL_V1_TREE_STATE_VERSION\n        || tree[5] != POOL_V1_PAIR_TREE_DEPTH as u8\n        || tree[6] != POOL_V1_TREE_HASH_VERSION\n        || tree[7] != POOL_V1_DIGEST_ENCODING_VERSION\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    let next_leaf_index = u64::from_le_bytes(\n        tree[8..16]\n            .try_into()\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    );\n    if next_leaf_index > POOL_V1_PAIR_CAPACITY {\n        return Err(ProgramError::InvalidAccountData);\n    }\n",
+ "segment_sha256": "d96150ad31e58f58137d77857528e06a373b340a81cd73ff0dd14c92c7e28f19",
+ "mode": "inverse",
+ "modifies": "only local output/suffix; input unchanged",
+ "limits": "local named cut only; no complete row credit"
+}

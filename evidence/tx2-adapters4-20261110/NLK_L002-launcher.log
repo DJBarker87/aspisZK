@@ -1,0 +1,37 @@
+{"attempt": "NLK_L002", "exit_status": 0, "wall_seconds": 2.9735480637755245, "peak_rss_kib": "3430636", "swaps": "0", "print_axioms": ["'NLK_ParentFold.source_order' depends on axioms: [propext, Quot.sound]", "'NLK_ParentFold.step_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_ParentFold.admitted_fold' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLK_ParentFold.source_order : ∀ {Local : Type} (s : State Local) (xs ys : List NLF_ProgramFold.Command),
+  borrowFold s (xs ++ ys) = borrowFold (borrowFold s xs) ys :=
+fun {Local} s xs ys =>
+  of_eq_true
+    (Eq.trans
+      (congrFun' (congrArg Eq (congrFun' (congrArg State.mk (NLF_ProgramFold.source_order s.sdk xs ys)) s.caller))
+        { sdk := NLF_ProgramFold.run (NLF_ProgramFold.run s.sdk xs) ys, caller := s.caller })
+      (eq_self { sdk := NLF_ProgramFold.run (NLF_ProgramFold.run s.sdk xs) ys, caller := s.caller }))
+'NLK_ParentFold.source_order' depends on axioms: [propext, Quot.sound]
+theorem NLK_ParentFold.step_invariant : ∀ {Local : Type} (s : State Local) (c : NLF_ProgramF
+...
+theorem NLK_ParentFold.source_order : ∀ {Local : Type} (s : State Local) (xs ys : List NLF_ProgramFold.Command),
+  borrowFold s (xs ++ ys) = borrowFold (borrowFold s xs) ys :=
+fun {Local} s xs ys =>
+  of_eq_true
+    (Eq.trans
+      (congrFun' (congrArg Eq (congrFun' (congrArg State.mk (NLF_ProgramFold.source_order s.sdk xs ys)) s.caller))
+        { sdk := NLF_ProgramFold.run (NLF_ProgramFold.run s.sdk xs) ys, caller := s.caller })
+      (eq_self { sdk := NLF_ProgramFold.run (NLF_ProgramFold.run s.sdk xs) ys, caller := s.caller }))
+'NLK_ParentFold.source_order' depends on axioms: [propext, Quot.sound]
+theorem NLK_ParentFold.step_invariant : ∀ {Local : Type} (s : State Local) (c : NLF_ProgramFold.Command),
+  Invariant s.sdk → Invariant (borrowStep s c).sdk :=
+fun {Local} s c valid => NLF_ProgramFold.step_invariant s.sdk c valid
+'NLK_ParentFold.step_invariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_ParentFold.admitted_fold : ∀ {F Local : Type} (heap : AspisR1.S2Trust.Heap F)
+  (records : ℕ → NLF_SdkModel.Account) (money : ℕ → ℕ) (n : ℕ),
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission heap (fun a => (records a).key) n →
+    ∀ (caller : Local) (cs : List NLF_ProgramFold.Command),
+      Invariant (borrowFold { sdk := NLF_RuntimeInterpretation.install heap records money, caller := caller } cs).sdk ∧
+        (∀ (i : ℕ),
+            NLF_RefCell.flag ((NLF_RuntimeInterpretation.install heap records money).state.cells i) = heap.counter i) ∧
+          ∀ a < n, heap.ownerLive a = true :=
+fun {F Local} heap records money n runtime caller cs => NLF_SdkBorrowLaw.admitted_events heap records money n runtime cs
+'NLK_ParentFold.admitted_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6e0094e177fa4dbd910333208bd11a53.scope; invocation ID: 4ec4ff383a30427f8af4c434744706f4

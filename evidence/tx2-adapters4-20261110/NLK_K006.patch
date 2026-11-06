@@ -1,0 +1,44 @@
+--- /dev/null
++++ b/NLK_pda.rs
+@@ -0,0 +1,41 @@
++use super::*;
++use solana_program::pubkey::PubkeyError;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage(){
++ let seed0:[u8;32]=kani::any();let seed1:[u8;32]=kani::any();let seed2:[u8;32]=kani::any();let seed3:[u8;32]=kani::any();let seed4:[u8;32]=kani::any();
++ let raw_program:[u8;32]=kani::any();let program=Pubkey::new_from_array(raw_program);let program_id=&program;
++ let count:usize=kani::any();let selected:usize=kani::any();let coordinate:usize=kani::any();
++ kani::assume(count>=2&&count<=5&&selected<count&&coordinate<32);
++ let lengths:[usize;5]=kani::any();for j in 0..5 {kani::assume(lengths[j]<=32);}
++ kani::assume(coordinate<lengths[selected]);
++ let full:[&[u8];5]=[&seed0[..lengths[0]],&seed1[..lengths[1]],&seed2[..lengths[2]],&seed3[..lengths[3]],&seed4[..lengths[4]]];let seeds=&full[..count];
++ let reply:[u8;32]=kani::any();let status:u64=kani::any();kani::assume(status<=2);
++ let observer:usize=kani::any();kani::assume(observer<32);
++ let mut calls=0u8;let mut seed_byte=0u8;let mut program_byte=0u8;let mut seed_count=0u64;let mut seed_len=0usize;
++ let mut oracle=|seed_ptr:*const u8,n:u64,program_ptr:*const u8,out:*mut u8|->u64 {
++  calls+=1;seed_count=n;
++  unsafe {
++   let descriptors=core::slice::from_raw_parts(seed_ptr as *const &[u8],n as usize);
++   seed_len=descriptors[selected].len();seed_byte=descriptors[selected][coordinate];
++   program_byte=*program_ptr.add(observer);
++   for j in 0..32 {*out.add(j)=reply[j];}
++  } status
++ };
++ let mut out=(||->Result<Pubkey,PubkeyError>{             let mut bytes = [0; 32];
++            let result = unsafe {
++                oracle(
++                    seeds as *const _ as *const u8,
++                    seeds.len() as u64,
++                    program_id as *const _ as *const u8,
++                    &mut bytes as *mut _ as *mut u8,
++                )
++            };
++            match result {
++                0 => Ok(Pubkey::from(bytes)),
++                _ => Err(result.into()),
++            } })(); seed_byte^=1;
++ let value_ok=match out {Ok(key)=>status==0&&key.to_bytes()[observer]==reply[observer],Err(e)=>status!=0&&e==PubkeyError::from(status)};
++ assert!(calls==1&&seed_count==count as u64&&seed_len==lengths[selected]&&seed_byte==full[selected][coordinate],"deployed PDA syscall ordered descriptors program output status frame");
++}
