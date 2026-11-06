@@ -1,0 +1,41 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJY_master_constructor.rs
+@@ -0,0 +1,38 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++use crate::pool_v1::format::{PoolIdentityV1 as I,VerifierPolicyV1 as P,PoolV1FormatError as E};
++use crate::pool_v1::incremental_merkle::PoolV1TreeError as T;
++type F=PoolV1PairForestAccountErrorV1;
++fn identity()->I{I{pool:kani::any(),asset_mint:kani::any(),token_program:kani::any(),asset_id:aspis_core::field::M31(kani::any()),deployment_domain:kani::any()}}
++fn policy()->P{P{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()}}
++fn fmt_error()->E{let t:u8=kani::any();kani::assume(t<8);match t{0=>E::WrongLength,1=>E::WrongMagic,2=>E::WrongVersion,3=>E::NonZeroReserved,4=>E::NonCanonicalAssetId,5=>E::UnsupportedFlags,6=>E::ZeroRequiredBinding,_=>E::InvalidAuthorityMode}}
++fn id_reply()->Result<I,E>{if kani::any(){Ok(identity())}else{Err(fmt_error())}}
++fn policy_reply()->Result<P,E>{if kani::any(){Ok(policy())}else{Err(fmt_error())}}
++fn account_reply()->Result<(),F>{let t:u8=kani::any();kani::assume(t<34);match t{
++0=>Ok(()),1=>Err(F::WrongLength),2=>Err(F::WrongMagic),3=>Err(F::WrongVersion),4=>Err(F::WrongLaneCount),5=>Err(F::WrongDigestEncoding),6=>Err(F::WrongDepth),7=>Err(F::WrongFormatBinding),8=>Err(F::NonZeroReserved),9=>Err(F::ZeroRequiredBinding),10=>Err(F::InvalidBoolean),11=>Err(F::InvalidMasterState),12=>Err(F::InvalidLane),13=>Err(F::LaneMasterMismatch),14=>Err(F::LaneOrderMismatch),15=>Err(F::LaneSequenceDecreased),16=>Err(F::DuplicateCheckpoint),17=>Err(F::CheckpointSequenceOverflow),18=>Err(F::NonCanonicalDigest),19=>Err(F::Identity),20=>Err(F::Policy),21=>Err(F::Tree(T::TreeFull)),22=>Err(F::Tree(T::InsufficientCapacity)),23=>Err(F::Tree(T::IndexOutOfRange)),24=>Err(F::Tree(T::RootMismatch)),25=>Err(F::Tree(T::NonCanonicalFrontier)),26=>Err(F::Tree(T::WrongLength)),27=>Err(F::Tree(T::WrongMagic)),28=>Err(F::Tree(T::WrongVersion)),29=>Err(F::Tree(T::WrongDepth)),30=>Err(F::Tree(T::WrongTreeHash)),31=>Err(F::Tree(T::WrongDigestEncoding)),32=>Err(F::Tree(T::NonCanonicalDigest)),_=>Err(F::Tree(T::NonZeroReserved))}}
++fn digest()->[aspis_core::field::M31;8]{let r:[u32;8]=kani::any();[aspis_core::field::M31(r[0]),aspis_core::field::M31(r[1]),aspis_core::field::M31(r[2]),aspis_core::field::M31(r[3]),aspis_core::field::M31(r[4]),aspis_core::field::M31(r[5]),aspis_core::field::M31(r[6]),aspis_core::field::M31(r[7])]}
++fn digest_reply()->Result<[aspis_core::field::M31;8],crate::atomic_statement::AtomicStatementError>{use crate::atomic_statement::AtomicStatementError as A;let t:u8=kani::any();kani::assume(t<8);match t{0=>Err(A::NonCanonicalDigest),1=>Err(A::NonCanonicalAssetId),2=>Err(A::FeeOutOfRange),3=>Err(A::PathDepthMismatch),4=>Err(A::InsertionIndexOutOfRange),5=>Err(A::CurrentAnchorMismatch),6=>Err(A::OutputAnchorMismatch),_=>Ok(digest())}}
++fn reference(bytes:&[u8],identity:I,verifier_policy:P,has_checkpoint:bool,last_checkpoint_lane_sequences:[u64;8],reply:Result<(),F>)->Result<PoolV1PairForestMasterV1,F>{let master=PoolV1PairForestMasterV1{bump:bytes[7],identity,verifier_policy,initialized_lane_mask:bytes[48],has_checkpoint,next_checkpoint_sequence:u64::from_le_bytes([bytes[40],bytes[41],bytes[42],bytes[43],bytes[44],bytes[45],bytes[46],bytes[47]]),last_checkpoint_lane_sequences};match reply{Ok(())=>Ok(master),Err(e)=>Err(e)}}
++#[kani::requires(bytes.len()==384)]
++#[kani::ensures(|r| (*r==reference(bytes,identity,verifier_policy,has_checkpoint,last_checkpoint_lane_sequences,reply))!=cfg!(NJY_invert))]
++#[kani::modifies()]
++fn segment(bytes:&[u8],identity:I,verifier_policy:P,has_checkpoint:bool,last_checkpoint_lane_sequences:[u64;8],reply:Result<(),F>)->Result<PoolV1PairForestMasterV1,F>{    let master = PoolV1PairForestMasterV1 {
++        bump: bytes[7],
++        identity,
++        verifier_policy,
++        initialized_lane_mask: bytes[MASTER_INITIALIZED_MASK_OFFSET],
++        has_checkpoint,
++        next_checkpoint_sequence: u64::from_le_bytes(
++            bytes[MASTER_NEXT_CHECKPOINT_OFFSET..MASTER_INITIALIZED_MASK_OFFSET]
++                .try_into()
++                .unwrap(),
++        ),
++        last_checkpoint_lane_sequences,
++    };
++    reply?;
++    Ok(master)
++}
++#[kani::proof_for_contract(segment)]
++#[kani::unwind(193)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_contract(){let bytes:[u8;384]=kani::any();let identity=identity();let verifier_policy=policy();let has_checkpoint:bool=kani::any();let last_checkpoint_lane_sequences:[u64;8]=kani::any();let reply=account_reply();let _=segment(&bytes,identity,verifier_policy,has_checkpoint,last_checkpoint_lane_sequences,reply);}

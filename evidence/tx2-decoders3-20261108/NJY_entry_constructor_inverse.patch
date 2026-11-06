@@ -1,0 +1,29 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJY_entry_constructor.rs
+@@ -0,0 +1,26 @@
++use super::*;
++type F=PoolV1VerifierRegistryFormatError;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn reply(t:u8)->Result<(),F>{match t{0=>Err(F::WrongLength),1=>Err(F::WrongMagic),2=>Err(F::WrongVersion),3=>Err(F::NonZeroReserved),4=>Err(F::UnsupportedFlags),5=>Err(F::InvalidStatus),6=>Err(F::InvalidAuthorityMode),7=>Err(F::ZeroRequiredBinding),8=>Err(F::InvalidActivationDelay),9=>Err(F::InvalidStatementVersion),10=>Err(F::InvalidRetirementSlot),11=>Err(F::InvalidDeploymentMode),_=>Ok(())}}
++fn reference(bytes:&[u8])->Result<VerifierRegistryEntryV1,F>{let status=match bytes[5]{0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,3=>VerifierEntryStatusV1::Retired,_=>return Err(F::InvalidStatus)};Ok(VerifierRegistryEntryV1{status:status,statement_version:bytes[6],bump:bytes[7],pool:[bytes[8],bytes[9],bytes[10],bytes[11],bytes[12],bytes[13],bytes[14],bytes[15],bytes[16],bytes[17],bytes[18],bytes[19],bytes[20],bytes[21],bytes[22],bytes[23],bytes[24],bytes[25],bytes[26],bytes[27],bytes[28],bytes[29],bytes[30],bytes[31],bytes[32],bytes[33],bytes[34],bytes[35],bytes[36],bytes[37],bytes[38],bytes[39]],verifier_program:[bytes[40],bytes[41],bytes[42],bytes[43],bytes[44],bytes[45],bytes[46],bytes[47],bytes[48],bytes[49],bytes[50],bytes[51],bytes[52],bytes[53],bytes[54],bytes[55],bytes[56],bytes[57],bytes[58],bytes[59],bytes[60],bytes[61],bytes[62],bytes[63],bytes[64],bytes[65],bytes[66],bytes[67],bytes[68],bytes[69],bytes[70],bytes[71]],profile_binding:[bytes[72],bytes[73],bytes[74],bytes[75],bytes[76],bytes[77],bytes[78],bytes[79],bytes[80],bytes[81],bytes[82],bytes[83],bytes[84],bytes[85],bytes[86],bytes[87],bytes[88],bytes[89],bytes[90],bytes[91],bytes[92],bytes[93],bytes[94],bytes[95],bytes[96],bytes[97],bytes[98],bytes[99],bytes[100],bytes[101],bytes[102],bytes[103]],release_binding:[bytes[104],bytes[105],bytes[106],bytes[107],bytes[108],bytes[109],bytes[110],bytes[111],bytes[112],bytes[113],bytes[114],bytes[115],bytes[116],bytes[117],bytes[118],bytes[119],bytes[120],bytes[121],bytes[122],bytes[123],bytes[124],bytes[125],bytes[126],bytes[127],bytes[128],bytes[129],bytes[130],bytes[131],bytes[132],bytes[133],bytes[134],bytes[135]],activation_slot:u64::from_le_bytes([bytes[136],bytes[137],bytes[138],bytes[139],bytes[140],bytes[141],bytes[142],bytes[143]]),retirement_slot:u64::from_le_bytes([bytes[144],bytes[145],bytes[146],bytes[147],bytes[148],bytes[149],bytes[150],bytes[151]]),policy_binding:[bytes[152],bytes[153],bytes[154],bytes[155],bytes[156],bytes[157],bytes[158],bytes[159],bytes[160],bytes[161],bytes[162],bytes[163],bytes[164],bytes[165],bytes[166],bytes[167],bytes[168],bytes[169],bytes[170],bytes[171],bytes[172],bytes[173],bytes[174],bytes[175],bytes[176],bytes[177],bytes[178],bytes[179],bytes[180],bytes[181],bytes[182],bytes[183]]})}
++#[kani::requires(bytes.len()==192)]
++#[kani::ensures(|r| (*r==reference(bytes))!=cfg!(NJY_invert))]
++#[kani::modifies()]
++fn segment(bytes:&[u8])->Result<VerifierRegistryEntryV1,F>{    let entry = VerifierRegistryEntryV1 {
++        status: VerifierEntryStatusV1::try_from(bytes[5])?,
++        statement_version: bytes[6],
++        bump: bytes[7],
++        pool: bytes[8..40].try_into().unwrap(),
++        verifier_program: bytes[40..72].try_into().unwrap(),
++        profile_binding: bytes[72..104].try_into().unwrap(),
++        release_binding: bytes[104..136].try_into().unwrap(),
++        activation_slot: u64::from_le_bytes(bytes[136..144].try_into().unwrap()),
++        retirement_slot: u64::from_le_bytes(bytes[144..152].try_into().unwrap()),
++        policy_binding: bytes[152..184].try_into().unwrap(),
++    };
++    Ok(entry)
++}
++#[kani::proof_for_contract(segment)]
++#[kani::unwind(193)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_contract(){let bytes:[u8;192]=kani::any();let _=segment(&bytes);}

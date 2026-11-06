@@ -1,0 +1,23 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJY_registry_shape.rs
+@@ -0,0 +1,20 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++impl kani::Arbitrary for VerifierRegistryV1 {fn any()->Self{Self{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any()}}}
++impl kani::Arbitrary for PoolV1VerifierRegistryFormatError {fn any()->Self{let t:u8=kani::any();kani::assume(t<12);match t {0=>Self::WrongLength,1=>Self::WrongMagic,2=>Self::WrongVersion,3=>Self::NonZeroReserved,4=>Self::UnsupportedFlags,5=>Self::InvalidStatus,6=>Self::InvalidAuthorityMode,7=>Self::ZeroRequiredBinding,8=>Self::InvalidActivationDelay,9=>Self::InvalidStatementVersion,10=>Self::InvalidRetirementSlot,_=>Self::InvalidDeploymentMode}}}
++#[kani::ensures(|r| (r.is_ok()==(seed&1==0))!=cfg!(NJY_invert))]
++#[kani::modifies()]
++fn shape_probe(seed:u8,scratch:&mut u8)->Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>{
++ if true {*scratch=seed;}
++ if seed&1==0 {Ok(VerifierRegistryV1{flags:0,bump:seed,pool:[0;32],authority:[0;32],policy_binding:[0;32],generation:0,minimum_activation_delay_slots:0})}else{Err(PoolV1VerifierRegistryFormatError::WrongMagic)}
++}
++fn check(seed:u8,out:Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>){match out{Ok(p)=>assert!(p.bump==seed,"unimplied record bump"),Err(e)=>assert!(e==PoolV1VerifierRegistryFormatError::WrongMagic,"unimplied record error")}}
++#[kani::proof_for_contract(shape_probe)]
++#[kani::unwind(33)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn shape_contract(){let seed:u8=kani::any();let mut scratch:u8=kani::any();let out=shape_probe(seed,&mut scratch);check(seed,out);}
++#[kani::proof]
++#[kani::stub_verified(shape_probe)]
++#[kani::unwind(33)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn shape_unimplied(){let seed:u8=kani::any();let mut scratch:u8=kani::any();let out=shape_probe(seed,&mut scratch);check(seed,out);}

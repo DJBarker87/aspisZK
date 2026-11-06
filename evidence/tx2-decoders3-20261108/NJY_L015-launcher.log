@@ -1,0 +1,33 @@
+{"attempt": "NJY_L015", "exit_status": 0, "wall_seconds": 10.76748603512533, "peak_rss_kib": "5979160", "swaps": "0", "print_axioms": ["'NJY_WindowStep.coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJY_WindowStep.frame' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJY_WindowStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJY_WindowStep.coordinate : ∀ (before : Words) (k : ℕ) (value : U64),
+  ∀ j < 8, NHY_ArrayExt.coord (write before k value) j = if j = k then value else NHY_ArrayExt.coord before j :=
+⋯
+'NJY_WindowStep.coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJY_WindowStep.frame : ∀ (b : Slice U8) (start : ℕ) (fit : start + 64 ≤ (↑b).length) (k : ℕ) (bound : k < 8)
+  (before : Words),
+  Frame before (write before k (NJQ_Words.word b (start + 8 * k) ⋯)) (NJQ_Words.words b start fit) k :=
+⋯
+'NJY_WindowStep.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJY_WindowStep.source : ∀ (b : Slice U8) (start : ℕ) (fit : start + 64 ≤ (↑b).length) (
+...
+theorem NJY_WindowStep.coordinate : ∀ (before : Words) (k : ℕ) (value : U64),
+  ∀ j < 8, NHY_ArrayExt.coord (write before k value) j = if j = k then value else NHY_ArrayExt.coord before j :=
+⋯
+'NJY_WindowStep.coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJY_WindowStep.frame : ∀ (b : Slice U8) (start : ℕ) (fit : start + 64 ≤ (↑b).length) (k : ℕ) (bound : k < 8)
+  (before : Words),
+  Frame before (write before k (NJQ_Words.word b (start + 8 * k) ⋯)) (NJQ_Words.words b start fit) k :=
+⋯
+'NJY_WindowStep.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJY_WindowStep.source : ∀ (b : Slice U8) (start : ℕ) (fit : start + 64 ≤ (↑b).length) (k : ℕ) (bound : k < 8)
+  (before : Words),
+  step before k (NHY_NaturalReads.array b (start + 8 * k) 8#usize ⋯) =
+    (if NHY_ArrayExt.coord (NJQ_Words.words b start fit) k > capacity then
+        core.result.Result.Err
+          NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidMasterState
+      else core.result.Result.Ok (),
+      write before k (NHY_ArrayExt.coord (NJQ_Words.words b start fit) k)) :=
+⋯
+'NJY_WindowStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7d7364ed6348478db6540f60398efff0.scope; invocation ID: de4b469d133149319d9cb5feff505329

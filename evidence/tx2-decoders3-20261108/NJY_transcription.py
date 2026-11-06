@@ -1,0 +1,9 @@
+from pathlib import Path
+import json,hashlib
+E=Path(__file__).resolve().parent;Q=E.parent/'tx2-decoders2-20261108';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+rows=[]
+for row,name,child,slot in [('TX2:149','Identity',[],'internal helper of master48'),('TX2:152','Checkpoint',['TX2:146'],'raw helper consumed by boxed-wrapper op49; digest/error43/44'),('TX2:153','Master',['TX2:149','TX2:150','TX2:157'],'raw helper consumed by boxed-wrapper op48'),('TX2:201','Entry',['TX2:206'],'op32'),('TX2:203','Registry',['TX2:208'],'op31')]:
+ files=[Q/('NJQ_'+name+'.lean'),Q/('NJQ_'+name+'Cut.lean')] if name=='Identity' else [Q/('NJQ_'+name+'.lean'),Q/('NJQ_'+name+'Cut.lean'),Q/('NJQ_'+name+'Total.lean')]
+ rows.append(dict(item='NJY-RT'+row.split(':')[1],row=row,classification='ReviewedTranscription; P6/D188 option A RECLASSIFICATION',reference='NJQ_'+name+'.reference',reference_model_theorem='NJQ_'+name+'.source',canonical_result_transport='NJQ_Canonical.'+name.lower()+'_result',root='NJY_Roots.'+name.lower(),children=child,canonical_slot=slot,source_pins=[dict(path=str(p.relative_to(E.parent.parent)),sha256=sha(p)) for p in files],hand_rust_reference=dict(path=str((Q/'NJQ_reference.patch').relative_to(E.parent.parent)),sha256=sha(Q/'NJQ_reference.patch'))))
+(E/'NJY_REVIEWED_TRANSCRIPTIONS.json').write_text(json.dumps(dict(items=rows,segments=[dict(path=p.name,sha256=sha(p),**json.loads(p.read_text())) for p in sorted(E.glob('NJY_*_SOURCE.json'))],pin_policy='source segment manifests and content-addressed native inputs; failed K041 separately retained, never credited',library_semantics='NJQ_LIBMODELS.md; Q K010/011 any and K012/013 IterMut; finite pure byte predicate and exclusive iterator domain internally proved',trust_added=[],trust_removed=[]),indent=1)+'\n')
+print(json.dumps(dict(reference_items=len(rows),source_segment_manifests=len(list(E.glob('NJY_*_SOURCE.json'))))))

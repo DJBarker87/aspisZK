@@ -1,0 +1,18 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJY_entry_suffix.rs
+@@ -0,0 +1,15 @@
++use super::*;
++type F=PoolV1VerifierRegistryFormatError;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn reply(t:u8)->Result<(),F>{match t{0=>Err(F::WrongLength),1=>Err(F::WrongMagic),2=>Err(F::WrongVersion),3=>Err(F::NonZeroReserved),4=>Err(F::UnsupportedFlags),5=>Err(F::InvalidStatus),6=>Err(F::InvalidAuthorityMode),7=>Err(F::ZeroRequiredBinding),8=>Err(F::InvalidActivationDelay),9=>Err(F::InvalidStatementVersion),10=>Err(F::InvalidRetirementSlot),11=>Err(F::InvalidDeploymentMode),_=>Ok(())}}
++fn reference(entry:VerifierRegistryEntryV1,reply:Result<(),F>)->Result<VerifierRegistryEntryV1,F>{match reply{Ok(())=>Ok(entry),Err(e)=>Err(e)}}
++#[kani::requires(true)]
++#[kani::ensures(|r| (*r==reference(entry,reply))!=cfg!(NJY_invert))]
++#[kani::modifies()]
++fn segment(entry:VerifierRegistryEntryV1,reply:Result<(),F>)->Result<VerifierRegistryEntryV1,F>{    reply?;
++    Ok(entry)
++}
++#[kani::proof_for_contract(segment)]
++#[kani::unwind(193)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_contract(){let entry=VerifierRegistryEntryV1{status:match kani::any::<u8>()%4{0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired},statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()};let t:u8=kani::any();kani::assume(t<13);let reply=reply(t);let _=segment(entry,reply);}
