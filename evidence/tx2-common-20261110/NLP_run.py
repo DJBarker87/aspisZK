@@ -7,6 +7,9 @@ B='/home/dombarker/project-offloads/codex-cx-tx2-common-20261110';C='/home/domba
 if (E/'NLP_HOLD').exists():sys.exit(75)
 guard=E/'NLP_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 a,kind,target=sys.argv[1:];assert re.fullmatch('NLP_[LKE][0-9]{3}',a) and 1<=int(a[-3:])<=(10 if kind=='kani' else 0 if kind=='extract' else 90) and not (E/a).exists()
+if kind=='lean' and target=='NLP_COMBINED_IMPORT':
+ prior=[json.loads(l) for l in (E/'NLP_ATTEMPTS.jsonl').read_text().splitlines()]
+ assert sum(r.get('module')==target for r in prior)<2,'combined gate limit'
 if kind=='kani':
  completed=[json.loads(l) for l in (E/'NLP_ATTEMPTS.jsonl').read_text().splitlines()]
  assert sum(r['kind']=='kani' for r in completed)<10,'Kani process budget exhausted'
@@ -60,7 +63,9 @@ elif kind=='projection':
  for n in ['NLP_projection_check.py','NLP_TREE_CUT.json','NLP_PREFIX_NATIVE_CUT.json','NLP_CTOR_CUT.json']:files[n]=(E/n).read_text()
  sources=list(files);command=['python3','NLP_projection_check.py']
 elif kind=='retention':
- files['NLP_retention.py']=(E/'NLP_retention.py').read_text();sources=list(files);command=['python3','NLP_retention.py']
+ 
+ for n in ['NLP_retention.py','NLP_MODULES.json']:files[n]=(E/n).read_text()
+ sources=list(files);command=['python3','NLP_retention.py']
 elif kind=='sourcecheck':
  for n in ['NLP_verify_sources.py','NLP_MODULES.json','NLP_SOURCE_PINS.json']:files[n]=(E/n).read_text()
  sources=list(files);command=['python3','NLP_verify_sources.py']
@@ -129,6 +134,7 @@ if kind=='kani':
   z=os.environ['NLP_CORRUPT_ARGUMENT'];assert re.fullmatch('[0-9]',z);config['env']['RUSTFLAGS']+=' --cfg NLP_corrupt'+z
  config['expected_time']='optimized compilation then one native staged cut with local records; no field multiplication'
 config['env']['CARGO_TARGET_DIR']=B+'/NLP_target'
+config['client_script_sha256']=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
@@ -166,7 +172,7 @@ if {kind!r}=='cleanup': names += ['NLP_CLEANUP.json']
 if {kind!r}=='review': names += ['NLP_REVIEW_'+{target!r}+'.json']
 if {kind!r}=='verify': names += ['NLP_EXPORT_VERIFY.json']
 if {kind!r}=='projection': names += ['NLP_PROJECTION_CHECK.json']
-if {kind!r}=='retention': names += ['NLP_RETENTION.json','NLP_CLEANUP.json']
+if {kind!r}=='retention': names += ['NLP_RETENTION.json','NLP_CLEANUP.json','NLP_EXPORT.json','NLP_CLOSURE_PINS.json.xz','NLP_CLOSURE_PINS.json.sha256','NLP_PREDECESSOR_COMPARISON.json','NLP_TOOL_PINS.json']
 if {kind!r}=='sourcecheck': names += ['NLP_SOURCE_VERIFICATION.json']
 if {kind!r}=='tools': names += ['NLP_TOOL_PINS.json']
 if {kind!r}=='stage': names += ['NLP_STAGE.json','NLP_SOURCE_PINS.json']

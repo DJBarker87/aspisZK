@@ -38,7 +38,7 @@ theorem aborting (H : Bytes → State) (wr rr : NP6_StdModel.Reservation) (finis
  (len : proof.val.length=57607) (root0Input : NLP_InputDomain.Root0 ck proof)
  (pr : Slice U8) (p : verifier.Prepared) (folded : Array U8 32#usize) (reply : R Unit)
  (entered : Event.merkle pr p folded reply∈(run wr rr (NLP_NativeMerkle.action H) finish d pub proof ck hash none).events) :
- ∀ (history : NLL.History) (pending : NLL_Parent.Pending),
+ ∀ (history : NLL.History) (pending : NLL.Pending),
  NLL_BatchAbort.Invocation H pr p folded 1#usize history pending →
  NLL_Prefix.At
   (NLL_Parent.plan H pr (NLP_RootCodec.parsed pr (Port3_BatchStage.root1 p)) p.queries 1#usize

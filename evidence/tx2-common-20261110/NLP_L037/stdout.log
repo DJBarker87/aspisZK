@@ -1,0 +1,10 @@
+theorem NLP_FoldedValue.source : ∀ (proof selected : Slice U8)
+  (r : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError) (root : Std.Array U8 32#usize),
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+        { start := 7751#usize, «end» := 7783#usize } =
+      ok selected →
+    core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 selected = ok r →
+      core.result.Result.unwrap core.fmt.DebugTryFromSliceError r = ok root →
+        ↑root = List.take 32 (List.drop 7751 ↑proof) :=
+⋯
+'NLP_FoldedValue.source' depends on axioms: [propext, Classical.choice, Quot.sound]

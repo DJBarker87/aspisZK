@@ -1,0 +1,44 @@
+{"attempt": "NLP_L034", "exit_status": 0, "wall_seconds": 16.520071115810424, "peak_rss_kib": "6402616", "swaps": "0", "print_axioms": ["'NLP_C04Reply.relation' does not depend on any axioms", "'NLP_C04Reply.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def NLP_C04Reply.lift : Result Unit → R Unit :=
+fun x =>
+  match x with
+  | ok u => ok (core.result.Result.Ok u)
+  | fail error => fail error
+  | div => div
+theorem NLP_C04Reply.relation : ∀ (out : NLL.Reply),
+  NLB_ErrorTransport.ReplyRel (NHT_ResultPort.action (ok out)) (lift (NKV_ParentSource.observe (ok out))) :=
+⋯
+theorem NLP_C04Reply.at_actual : ∀ (H : Bytes → State) (wr rr : NP6_StdModel.Reservation) (finish : Finish) {X : Type}
+  (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (pr : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (reply : R Unit),
+        Event.merkle 
+...
+def NLP_C04Reply.lift : Result Unit → R Unit :=
+fun x =>
+  match x with
+  | ok u => ok (core.result.Result.Ok u)
+  | fail error => fail error
+  | div => div
+theorem NLP_C04Reply.relation : ∀ (out : NLL.Reply),
+  NLB_ErrorTransport.ReplyRel (NHT_ResultPort.action (ok out)) (lift (NKV_ParentSource.observe (ok out))) :=
+⋯
+theorem NLP_C04Reply.at_actual : ∀ (H : Bytes → State) (wr rr : NP6_StdModel.Reservation) (finish : Finish) {X : Type}
+  (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (pr : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (reply : R Unit),
+        Event.merkle pr p folded reply ∈
+            (run wr rr (fun {H_1} => NLP_NativeMerkle.action H) finish d pub proof ck hash none).events →
+          ∀ (history : NLL.History) (out : NLL.Reply),
+            NLL_BatchSource.Invocation H pr p folded 1#usize history out →
+              have observed :=
+                NLL_ObservedCalls.calls H pr (NLP_RootCodec.parsed pr (Port3_BatchStage.root1 p)) p.queries 1#usize
+                  (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV;
+              observed.1 = history ∧ NLB_ErrorTransport.ReplyRel reply (lift observed.2) :=
+⋯
+'NLP_C04Reply.relation' does not depend on any axioms
+'NLP_C04Reply.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r200c9a93d4e9421b9b768c53d3e0b556.scope; invocation ID: 98e4ffcd42244cfdb7908e1f07ad82b4

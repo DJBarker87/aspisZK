@@ -1,0 +1,14 @@
+theorem NLP_EffectOrder.append : ∀ {E F : Type} (part : E → List F) (before after : List E),
+  expand part (before ++ after) = expand part before ++ expand part after :=
+⋯
+theorem NLP_EffectOrder.prefix_frame : ∀ {E F : Type} (part : E → List F) (before : List E) (current : E)
+  (observed rest : List F),
+  part current = observed ++ rest →
+    ∃ suffix, expand part (before ++ [current]) = expand part before ++ observed ++ suffix :=
+⋯
+theorem NLP_EffectOrder.congr : ∀ {E F : Type} (native source : E → List F) (events : List E),
+  (∀ e ∈ events, native e = source e) → expand native events = expand source events :=
+⋯
+'NLP_EffectOrder.append' depends on axioms: [propext]
+'NLP_EffectOrder.prefix_frame' depends on axioms: [propext]
+'NLP_EffectOrder.congr' depends on axioms: [propext]

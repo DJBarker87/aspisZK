@@ -1,0 +1,29 @@
+inductive NLP_C04Chronology.Native : (Bytes → State) → List Event → NLL.History → Prop
+number of parameters: 1
+constructors:
+NLP_C04Chronology.Native.nil : ∀ {H : Bytes → State}, Native H [] []
+NLP_C04Chronology.Native.skip : ∀ {H : Bytes → State} (e : Event),
+  (∀ (pr : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (reply : R Unit),
+      e ≠ Event.merkle pr p folded reply) →
+    ∀ (rest : List Event) (history : NLL.History), Native H rest history → Native H (e :: rest) history
+NLP_C04Chronology.Native.merkle : ∀ {H : Bytes → State} (pr : Slice U8) (p : verifier.Prepared)
+  (folded : Std.Array U8 32#usize) (reply : R Unit) (inside : NLL.History) (out : NLL.Reply),
+  NLL_BatchSource.Invocation H pr p folded 1#usize inside out →
+    ∀ (rest : List Event) (history : NLL.History),
+      Native H rest history → Native H (Event.merkle pr p folded reply :: rest) (inside ++ history)
+theorem NLP_C04Chronology.fold : ∀ (H : Bytes → State) (events : List Event),
+  (∀ e ∈ events, NLP_C04All.Clause H e) →
+    ∀ (history : NLL.History), Native H events history → NLP_EffectOrder.expand (atEvent H) events = history :=
+⋯
+theorem NLP_C04Chronology.at_actual : ∀ (H : Bytes → State) (wr rr : NP6_StdModel.Reservation) (finish : Finish)
+  {X : Type} (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (history : NLL.History),
+        Native H (run wr rr (fun {H_1} => NLP_NativeMerkle.action H) finish d pub proof ck hash none).events history →
+          NLP_EffectOrder.expand (atEvent H)
+              (run wr rr (fun {H_1} => NLP_NativeMerkle.action H) finish d pub proof ck hash none).events =
+            history :=
+⋯
+'NLP_C04Chronology.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_C04Chronology.at_actual' depends on axioms: [propext, Classical.choice, Quot.sound]

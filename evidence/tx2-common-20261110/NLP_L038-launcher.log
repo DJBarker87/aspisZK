@@ -1,0 +1,36 @@
+{"attempt": "NLP_L038", "exit_status": 1, "wall_seconds": 32.820944603998214, "peak_rss_kib": "6598140", "swaps": "0", "print_axioms": ["'NLP_EnteredTransport.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLP_generated/NLP_EnteredTransport.lean:26:4: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+def NLP_EnteredTransport.Domain : NP6_StdModel.Reservation →
+  {X : Type} →
+    aspis_core.digest.Digest32 X →
+      Slice U8 → Slice U8 → Slice U8 → X → Slice U8 → verifier.Prepared → Std.Array U8 32#usize → Prop :=
+fun wr {X} d ck proof pub hash pr p root =>
+  MerkleDomain wr d ck proof pub hash pr p ∧ ↑root = List.take 32 (List.drop 7751 ↑pr)
+theorem NLP_EnteredTransport.source :
+...
+NLP_generated/NLP_EnteredTransport.lean:26:4: error: (deterministic) timeout at `isDefEq`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+def NLP_EnteredTransport.Domain : NP6_StdModel.Reservation →
+  {X : Type} →
+    aspis_core.digest.Digest32 X →
+      Slice U8 → Slice U8 → Slice U8 → X → Slice U8 → verifier.Prepared → Std.Array U8 32#usize → Prop :=
+fun wr {X} d ck proof pub hash pr p root =>
+  MerkleDomain wr d ck proof pub hash pr p ∧ ↑root = List.take 32 (List.drop 7751 ↑pr)
+theorem NLP_EnteredTransport.source : ∀ (wr rr : NP6_StdModel.Reservation) (nativeMerkle modelMerkle : Merkle)
+  (finish : Finish) {X : Type} (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (∀ (pr : Slice U8) (p : verifier.Prepared) (root : Std.Array U8 32#usize),
+      Domain wr d ck proof pub hash pr p root →
+        ReplyRel (nativeMerkle d pr p root 1#usize hash) (modelMerkle d pr p root 1#usize hash)) →
+    observeCommon (run wr rr (fun {H} => nativeMerkle) finish d pub proof ck hash none) =
+      observeCommon (run wr rr (fun {H} => modelMerkle) finish d pub proof ck hash none) :=
+⋯
+'NLP_EnteredTransport.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r57d33e80d3b24a0fb46a13eb1828139a.scope; invocation ID: a471b748507b425884d95841f5770818

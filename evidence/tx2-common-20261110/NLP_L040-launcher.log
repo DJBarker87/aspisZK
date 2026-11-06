@@ -1,0 +1,46 @@
+{"attempt": "NLP_L040", "exit_status": 0, "wall_seconds": 22.13512981799431, "peak_rss_kib": "6372552", "swaps": "0", "print_axioms": ["'NLP_EnteredTransport.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLP_generated/NLP_EnteredTransport.lean:24:4: warning: 'apply NKO_Branch.continued' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLP_generated/NLP_EnteredTransport.lean:24:35: warning: 'assumption' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLP_generated/NLP_EnteredTransport.lean:25:4: warning: 'apply split_start' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLP_generated/NLP_EnteredTransport.lean:25:23: warning: 'assumption' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLP_gen
+...
+rated/NLP_EnteredTransport.lean:30:3: warning: 'rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLP_generated/NLP_EnteredTransport.lean:24:35: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLP_generated/NLP_EnteredTransport.lean:25:23: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLP_generated/NLP_EnteredTransport.lean:26:36: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLP_generated/NLP_EnteredTransport.lean:30:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+@[reducible] def NLP_EnteredTransport.Domain : NP6_StdModel.Reservation →
+  {X : Type} →
+    aspis_core.digest.Digest32 X →
+      Slice U8 → Slice U8 → Slice U8 → X → Slice U8 → verifier.Prepared → Std.Array U8 32#usize → Prop :=
+NLP_TransportDomain.Domain
+theorem NLP_EnteredTransport.source : ∀ (wr rr : NP6_StdModel.Reservation) (nativeMerkle modelMerkle : Merkle)
+  (finish : Finish) {X : Type} (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (∀ (pr : Slice U8) (p : verifier.Prepared) (root : Std.Array U8 32#usize),
+      Domain wr d ck proof pub hash pr p root →
+        ReplyRel (nativeMerkle d pr p root 1#usize hash) (modelMerkle d pr p root 1#usize hash)) →
+    observeCommon (run wr rr (fun {H} => nativeMerkle) finish d pub proof ck hash none) =
+      observeCommon (run wr rr (fun {H} => modelMerkle) finish d pub proof ck hash none) :=
+⋯
+'NLP_EnteredTransport.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r820fd77c378f4e7eb7d24ef672420d6e.scope; invocation ID: acd410c35f4e4692b84eb5371eee9be0

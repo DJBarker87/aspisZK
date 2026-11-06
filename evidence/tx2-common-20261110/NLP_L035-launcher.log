@@ -1,0 +1,31 @@
+{"attempt": "NLP_L035", "exit_status": 0, "wall_seconds": 17.993093327851966, "peak_rss_kib": "6054020", "swaps": "0", "print_axioms": ["'NLP_EffectOrder.append' depends on axioms: [propext]", "'NLP_EffectOrder.prefix_frame' depends on axioms: [propext]", "'NLP_EffectOrder.congr' depends on axioms: [propext]"]}
+theorem NLP_EffectOrder.append : ∀ {E F : Type} (part : E → List F) (before after : List E),
+  expand part (before ++ after) = expand part before ++ expand part after :=
+⋯
+theorem NLP_EffectOrder.prefix_frame : ∀ {E F : Type} (part : E → List F) (before : List E) (current : E)
+  (observed rest : List F),
+  part current = observed ++ rest →
+    ∃ suffix, expand part (before ++ [current]) = expand part before ++ observed ++ suffix :=
+⋯
+theorem NLP_EffectOrder.congr : ∀ {E F : Type} (native source : E → List F) (events : List E),
+  (∀ e ∈ events, native e = source e) → expand native events = expand source events :=
+⋯
+'NLP_EffectOrder.append' depends on axioms: [propext]
+'NLP_EffectOrder.prefix_
+...
+theorem NLP_EffectOrder.append : ∀ {E F : Type} (part : E → List F) (before after : List E),
+  expand part (before ++ after) = expand part before ++ expand part after :=
+⋯
+theorem NLP_EffectOrder.prefix_frame : ∀ {E F : Type} (part : E → List F) (before : List E) (current : E)
+  (observed rest : List F),
+  part current = observed ++ rest →
+    ∃ suffix, expand part (before ++ [current]) = expand part before ++ observed ++ suffix :=
+⋯
+theorem NLP_EffectOrder.congr : ∀ {E F : Type} (native source : E → List F) (events : List E),
+  (∀ e ∈ events, native e = source e) → expand native events = expand source events :=
+⋯
+'NLP_EffectOrder.append' depends on axioms: [propext]
+'NLP_EffectOrder.prefix_frame' depends on axioms: [propext]
+'NLP_EffectOrder.congr' depends on axioms: [propext]
+
+Running as unit: run-rd5015712001e4d348e7a89d2fb5db492.scope; invocation ID: db0095ebf6f24a16908d13de464939eb

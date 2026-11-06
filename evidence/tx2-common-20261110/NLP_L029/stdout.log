@@ -1,0 +1,40 @@
+theorem NLP_C04Effects.returning : ∀ (H : Bytes → State) (wr rr : NP6_StdModel.Reservation) (finish : Finish) {X : Type}
+  (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (pr : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (reply : R Unit),
+        Event.merkle pr p folded reply ∈
+            (run wr rr (fun {H_1} => NLP_NativeMerkle.action H) finish d pub proof ck hash none).events →
+          ∀ (history : NLL.History) (out : NLL.Reply),
+            NLL_BatchSource.Invocation H pr p folded 1#usize history out →
+              reply = NHT_ResultPort.action (ok out) ∧
+                NLL_Parent.plan H pr (NLP_RootCodec.parsed pr (Port3_BatchStage.root1 p)) p.queries 1#usize
+                      (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI
+                      NKV_ParentSource.zeroV =
+                    history ∧
+                  NLL_ObservedCalls.calls H pr (NLP_RootCodec.parsed pr (Port3_BatchStage.root1 p)) p.queries 1#usize
+                      (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI
+                      NKV_ParentSource.zeroV =
+                    (history, NKV_ParentSource.observe (ok out)) :=
+⋯
+theorem NLP_C04Effects.aborting : ∀ (H : Bytes → State) (wr rr : NP6_StdModel.Reservation) (finish : Finish) {X : Type}
+  (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (pr : Slice U8) (p : verifier.Prepared) (folded : Std.Array U8 32#usize) (reply : R Unit),
+        Event.merkle pr p folded reply ∈
+            (run wr rr (fun {H_1} => NLP_NativeMerkle.action H) finish d pub proof ck hash none).events →
+          ∀ (history : NLL.History) (pending : NLL.Pending),
+            NLL_BatchAbort.Invocation H pr p folded 1#usize history pending →
+              NLL_Prefix.At
+                  (NLL_Parent.plan H pr (NLP_RootCodec.parsed pr (Port3_BatchStage.root1 p)) p.queries 1#usize
+                    (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+                  (history ++ pending.answered) pending.parts ∧
+                NLL_Prefix.At
+                  (NLL_ObservedCalls.calls H pr (NLP_RootCodec.parsed pr (Port3_BatchStage.root1 p)) p.queries 1#usize
+                      (NLL_Parent.sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI
+                      NKV_ParentSource.zeroV).1
+                  (history ++ pending.answered) pending.parts :=
+⋯
+'NLP_C04Effects.returning' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLP_C04Effects.aborting' depends on axioms: [propext, Classical.choice, Quot.sound]

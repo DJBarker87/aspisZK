@@ -11,3 +11,11 @@ The two expected input extents alone have not discharged this root binding. NLP_
 ## Elaboration diagnostics
 
 L001: implicit Type binder in the concrete polymorphic Native lambda was omitted; changed source passed L002. L005: ite simplification did not close the literal kind0 branch; changed source passed L007. L006: list-index reductions omitted; changed source passed L008. L009: rewrite required an explicit replicate-prefix length; under repair. Failed elaborations and any generated sorryAx diagnostics are retained and excluded from selected proof credit.
+
+## F2: C04 fold transport requested a stronger domain than its actual call
+
+NLB_Parent.native_fold's merkleReply quantifies over every root after MerkleDomain has fixed only proof/resumed Prepared/split. NLN requires that the third root is bound to the current proof. The old universal-root premise therefore cannot be instantiated verbatim from NLN. NLP_TransportDomain.at_branch (L039) and NLP_EnteredTransport.source (L040) retain the actual checked folded-root projection and prove the same rejection/ordered-occurrence transport on this narrower, caller-established domain. These are auxiliary transport lemmas, not a new row root.
+
+L038 hit the default200000-heartbeat limit at broad constructor search inside the nine-site body. That shape is retired. The replacement isolates the entire domain construction in L039 and the parent only applies it at the actual branch in L040. No heartbeat/cap/timeout increase or unchanged retry.
+
+Additional diagnostics retained/excluded: L010 missing namespace on a range lemma (L012 passes); L011 ambiguous Byte (L013 passes); L014 run-name ambiguity and L016/L018/L020/L022/L024 existential/tactic quotation/name diagnostics (the small SAME range/copy/unwrap proof passes L026); L021 Event-name ambiguity (L023 passes); L025 numerical-carrier simplification (L032 passes); L033 reserved parser tokens (L035 passes). All selected modules are pinned to passing source snapshots in NLP_MODULES.json.
