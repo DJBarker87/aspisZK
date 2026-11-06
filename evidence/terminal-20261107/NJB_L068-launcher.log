@@ -1,0 +1,60 @@
+{"attempt": "NJB_L068", "exit_status": 1, "wall_seconds": 12.298986959038302, "peak_rss_kib": "6147124", "swaps": "0", "print_axioms": ["'AspisR1.NJB_PackLaw.qm_raw' depends on axioms: [sorryAx]", "'AspisR1.NJB_PackLaw.length' depends on axioms: [propext, Quot.sound]", "'AspisR1.NJB_PackLaw.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJB_PackLaw.lean:11:35: error: unexpected token; expected '⟩'
+NJB_PackLaw.lean:12:86: error: Tactic `rfl` failed: The left-hand side
+  qm (raw { c0 := { a := a✝¹, b := b✝¹ }, c1 := { a := a✝, b := b✝ } })
+is not definitionally equal to the right-hand side
+  { c0 := { a := a✝¹, b := b✝¹ }, c1 := { a := a✝, b := b✝ } }
+
+case mk.mk.mk
+a✝¹ b✝¹ a✝ b✝ : AspisR1SelectedMaskProbe.field.M31
+⊢ qm (raw { c0 := { a := a✝¹, b := b✝¹ }, c1 := { a := a✝, b := b✝ } }) =
+    { c0 := { a := a✝¹, b := b✝¹ }, c1 := { a := a✝, b := b✝ } }
+NJB_PackLaw.lean:32:1: error: unsolved goals
+case refine_3
+v : Fin 4 → NQ
+hv : ∀ (i : Fin 4), Canon (v i)
+short : (slice v).length ≤ 4
+canonical : ∀ q ∈ ↑(slice v), ExtractedMa
+...
+ractedMaskQM31Exact.decode p =
+    ExtractedMaskQmPackBase4Arithmetic.mathematicalPack (NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short) ⋯)
+i : Fin 4
+⊢ (↑(Array.make 4#usize [qm (v 0), qm (v 1), qm (v 2), qm (v 3)] ⋯))[↑i] = qm (v i)
+NJB_PackLaw.lean:37:48: warning: This simp argument is unused:
+  length
+
+Hint: Omit it from the simp argument list.
+  simp [NFT_Pack.Whole, ̲NFT_Pack.paddedSlice, ̲NFT_Pack.padded,
+       ̲ExtractedMaskQmPackBase4Whole.inputAt, ̲slice,l̵e̵n̵g̵t̵h̵,̵ ̲Array.to_slice]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NJB_PackLaw.result : ∀ (v : Fin 4 → NQ),
+  (∀ (i : Fin 4), Canon (v i)) → ∃ out, reference v = ok out ∧ Canon out ∧ decode out = model v :=
+fun v hv =>
+  have short := Eq.mpr (id (congrArg (fun _a => _a ≤ 4) (length v))) (le_refl 4);
+  have canonical := fun q h =>
+    let ⟨i, hi⟩ := List.mem_ofFn.mp h
+    Eq.mpr (id (congrArg ExtractedMaskTowerAdd.CanonicalQM (Eq.symm hi))) (hv i);
+  let ⟨p, h✝⟩ := NFT_Pack.source (slice v) short canonical
+  let ⟨call, right✝⟩ := h✝
+  let ⟨hp, vp⟩ := right✝
+  Exists.intro (raw p)
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (congrArg
+                (fun x =>
+                  match x with
+                  | ok x => ok (raw x)
+                  | fail e => fail e
+                  | div => div)
+                call))
+            (ok (raw p)))
+          (eq_self (ok (raw p)))),
+      ⟨id (Eq.mpr (id (congrArg ExtractedMaskQM31Exact.CurrentCanonicalQM (qm_raw p))) hp), sorry⟩⟩
+'AspisR1.NJB_PackLaw.qm_raw' depends on axioms: [sorryAx]
+'AspisR1.NJB_PackLaw.length' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJB_PackLaw.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7fff78b3fe55488dab24db0b4cfbe556.scope; invocation ID: 6161a695dfca435d9f816b327243c773

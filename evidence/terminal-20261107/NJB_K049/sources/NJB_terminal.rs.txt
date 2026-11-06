@@ -1,0 +1,29 @@
+// Scratch-only, inside the frozen terminal module under cfg(kani).
+use super::*;
+use crate::pool_v1::pair_tree_profile::{PoolV1PairLatePublicStatementV1,PoolV1PairLiveSnapshotV1};
+use crate::pool_v1::pair_terminal::PoolV1PairVerifiedAfterstateV1;
+use aspis_core::field::M31;
+use crate::NJB_copy::KMX_copy_nonoverlapping;
+fn digest()->crate::poseidon2::Digest { let w:[u32;8]=kani::any();[M31(w[0]),M31(w[1]),M31(w[2]),M31(w[3]),M31(w[4]),M31(w[5]),M31(w[6]),M31(w[7])]}
+fn frontier()->[crate::poseidon2::Digest;20] {core::array::from_fn(|_|digest())}
+fn common()->PoolV1PairForestTerminalCommonV1 {
+ PoolV1PairForestTerminalCommonV1 {master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),checkpoint_sequence:kani::any(),historical_global_anchor:digest(),lane_transition:PoolV1PairLatePublicStatementV1{
+ live_snapshot:PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:digest(),frontier:frontier()},
+ candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:digest(),next_frontier:frontier()}}}
+}
+fn transfer()->PoolV1PrivateTransferPublicV1 {PoolV1PrivateTransferPublicV1 {pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()}}
+fn withdrawal()->PoolV1WithdrawalPublicV1 {PoolV1WithdrawalPublicV1 {pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:digest()}}
+#[kani::proof]
+#[kani::unwind(33)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJB_semantic_public() {
+ use crate::pool_v1::pair_forest_semantic_terminal::r0::Public;
+ let s=if kani::any(){PoolV1PairForestTerminalStatementV1::PrivateTransfer{common:common(),public:transfer()}}else{PoolV1PairForestTerminalStatementV1::Withdrawal{common:common(),public:withdrawal()}};
+ let reply=s.semantic_public();
+ let correct=match (&s,reply) {
+  (PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public},Public::Transfer(p,t))=>core::ptr::eq(p,public)&&core::ptr::eq(t,&common.lane_transition),
+  (PoolV1PairForestTerminalStatementV1::Withdrawal{common,public},Public::Withdrawal(p,t))=>core::ptr::eq(p,public)&&core::ptr::eq(t,&common.lane_transition),
+  _=>false
+ };
+ assert!(correct != cfg!(NJB_invert));
+}

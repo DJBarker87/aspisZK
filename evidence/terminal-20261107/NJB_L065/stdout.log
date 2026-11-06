@@ -1,0 +1,17 @@
+theorem AspisR1.NJB_PatternReference.result : ∀ (patterns : Fin 14 → NQ) (selectors : Fin 26 → NQ) (s : State),
+  (∀ (i : Fin 14), Canon (patterns i)) →
+    (∀ (i : Fin 26), Canon (selectors i)) →
+      canonical s →
+        ∃ out,
+          reference patterns selectors s = ok out ∧
+            canonical out ∧
+              decoded out = model (fun i => decode (patterns i)) (fun i => decode (selectors i)) (decoded s) :=
+fun patterns selectors s hp ht hs =>
+  NJB_StateUpdates.run_result (fun g state => inner patterns selectors g state)
+    (groupModel (fun i => decode (patterns i)) fun i => decode (selectors i)) (List.ofFn fun g => g) s hs
+    fun g x before hb => inner_result patterns selectors g before hp ht hb
+'AspisR1.NJB_PatternReference.coordinates_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_PatternReference.group_indices' does not depend on any axioms
+'AspisR1.NJB_PatternReference.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_PatternReference.inner_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_PatternReference.result' depends on axioms: [propext, Classical.choice, Quot.sound]

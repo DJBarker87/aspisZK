@@ -8,5 +8,5 @@ for arg in sys.argv[1:]:
  if r.returncode!=expected:sys.exit(r.returncode or 79)
  if expected:
   log=(E/a/'stdout.log').read_text()
-  if 'VERIFICATION:- FAILED'not in log or 'timed out'in log.lower() or 'error[E'in log:sys.exit(79)
+  if 'VERIFICATION:- FAILED'not in log or 'timed out'in log.lower() or 'error[E'in log or ('unwinding assertion' in log.lower() and 'FAILURE' in log):sys.exit(79)
 print('serial queue complete',flush=True)

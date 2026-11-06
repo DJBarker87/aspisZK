@@ -1,0 +1,22 @@
+theorem AspisR1.NJB_ActiveAssociation.result : ∀ (s : Selectors),
+  FIw_ArrayValue.canonical s.high → FIw_ArrayValue.canonical s.low → NJB_ActiveReference.reference s = s.active :=
+fun s hh hl =>
+  let ⟨a, h✝⟩ := NJB_ActiveReference.result s hh hl
+  let ⟨ra, right✝⟩ := h✝
+  let ⟨ca, va⟩ := right✝
+  let ⟨b, h✝¹⟩ := cohort s hh hl
+  let ⟨rb, right✝¹⟩ := h✝¹
+  let ⟨cb, vb⟩ := right✝¹
+  have sameValue :=
+    Eq.mpr (id (congrArg (fun _a => _a = decode b) va))
+      (Eq.mpr (id (congrArg (fun _a => R0P.copyActiveLiteral _a = decode b) (model_same s))) (Eq.symm vb));
+  have same := NJB_DecodeInjective.qm a b ca cb sameValue;
+  Eq.mpr (id (congrArg (fun _a => _a = s.active) ra))
+    (Eq.mpr (id (congrArg (fun _a => ok a = _a) rb))
+      (Eq.mpr (id (congrArg (fun _a => ok _a = ok b) same)) (Eq.refl (ok b))))
+'AspisR1.NJB_ActiveAssociation.index_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_ActiveAssociation.high_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_ActiveAssociation.low_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_ActiveAssociation.model_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_ActiveAssociation.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_ActiveAssociation.result' depends on axioms: [propext, Classical.choice, Quot.sound]

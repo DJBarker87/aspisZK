@@ -10,5 +10,5 @@ fn NJB_forward(selectors:&Selectors,log:&mut NJB_Call)->QM31{
         #[cfg(feature = "pool-v1-pair-forest-active-mask-basis-audit")]
         return NJB_child(selectors,log);
     }
-#[kani::proof]#[kani::unwind(3)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::proof]#[kani::unwind(82)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NJB_active_forward(){let s:Selectors=unsafe{core::mem::transmute::<[[u32;4];80],Selectors>(kani::any())};let reply=q(kani::any());let mut log=NJB_Call{seen:core::ptr::null(),calls:0,reply};let out=NJB_forward(&s,&mut log);let limb:usize=kani::any();kani::assume(limb<4);assert_eq!(log.calls,1);assert!(core::ptr::eq(log.seen,&s));assert_eq!(words(out)[limb],words(reply)[limb] ^ if cfg!(NJB_invert){1}else{0});}
