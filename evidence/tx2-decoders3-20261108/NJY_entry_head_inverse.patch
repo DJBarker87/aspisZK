@@ -1,0 +1,30 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJY_entry_head.rs
+@@ -0,0 +1,27 @@
++use super::*;
++type F=PoolV1VerifierRegistryFormatError;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn reply(t:u8)->Result<(),F>{match t{0=>Err(F::WrongLength),1=>Err(F::WrongMagic),2=>Err(F::WrongVersion),3=>Err(F::NonZeroReserved),4=>Err(F::UnsupportedFlags),5=>Err(F::InvalidStatus),6=>Err(F::InvalidAuthorityMode),7=>Err(F::ZeroRequiredBinding),8=>Err(F::InvalidActivationDelay),9=>Err(F::InvalidStatementVersion),10=>Err(F::InvalidRetirementSlot),11=>Err(F::InvalidDeploymentMode),_=>Ok(())}}
++fn reference(bytes:&[u8])->Result<(),F>{if bytes[..4]!=POOL_V1_VERIFIER_ENTRY_MAGIC{return Err(F::WrongMagic)}if bytes[4]!=2{return Err(F::WrongVersion)}if bytes[184..192]!=[0;8]{return Err(F::NonZeroReserved)}Ok(())}
++#[kani::requires(bytes.len()==192)]
++#[kani::ensures(|r| (*r==reference(bytes))!=cfg!(NJY_invert))]
++#[kani::modifies()]
++fn segment(bytes:&[u8])->Result<(),F>{
++    if bytes.len() != POOL_V1_VERIFIER_ENTRY_BYTES {
++        return Err(PoolV1VerifierRegistryFormatError::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_VERIFIER_ENTRY_MAGIC {
++        return Err(PoolV1VerifierRegistryFormatError::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_VERIFIER_ENTRY_VERSION {
++        return Err(PoolV1VerifierRegistryFormatError::WrongVersion);
++    }
++    if bytes[184..192] != [0u8; 8] {
++        return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);
++    }
++    Ok(())
++}
++#[kani::proof_for_contract(segment)]
++#[kani::unwind(193)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_contract(){let bytes:[u8;192]=kani::any();let _=segment(&bytes);}

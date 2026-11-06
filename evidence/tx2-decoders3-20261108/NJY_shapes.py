@@ -14,7 +14,7 @@ fn shape_probe(seed:u8,scratch:&mut u8)->Result<RECORD,PoolV1VerifierRegistryFor
  if CONTROL_WRITES {*scratch=seed;}
  if seed&1==0 {Ok(RECORD{CTOR})}else{Err(PoolV1VerifierRegistryFormatError::WrongMagic)}
 }
-fn check(seed:u8,out:Result<RECORD,PoolV1VerifierRegistryFormatError>){match out{Ok(p)=>assert_eq!(p.bump,seed),Err(e)=>assert_eq!(e,PoolV1VerifierRegistryFormatError::WrongMagic)}}
+fn check(seed:u8,out:Result<RECORD,PoolV1VerifierRegistryFormatError>){match out{Ok(p)=>assert!(p.bump==seed,"unimplied record bump"),Err(e)=>assert!(e==PoolV1VerifierRegistryFormatError::WrongMagic,"unimplied record error")}}
 #[kani::proof_for_contract(shape_probe)]
 #[kani::unwind(33)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]

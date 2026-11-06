@@ -1,0 +1,26 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJY_registry_constructor.rs
+@@ -0,0 +1,23 @@
++use super::*;
++type F=PoolV1VerifierRegistryFormatError;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn reply(t:u8)->Result<(),F>{match t{0=>Err(F::WrongLength),1=>Err(F::WrongMagic),2=>Err(F::WrongVersion),3=>Err(F::NonZeroReserved),4=>Err(F::UnsupportedFlags),5=>Err(F::InvalidStatus),6=>Err(F::InvalidAuthorityMode),7=>Err(F::ZeroRequiredBinding),8=>Err(F::InvalidActivationDelay),9=>Err(F::InvalidStatementVersion),10=>Err(F::InvalidRetirementSlot),11=>Err(F::InvalidDeploymentMode),_=>Ok(())}}
++fn reference(bytes:&[u8])->Result<VerifierRegistryV1,F>{Ok(VerifierRegistryV1{flags:bytes[5],bump:bytes[6],pool:[bytes[8],bytes[9],bytes[10],bytes[11],bytes[12],bytes[13],bytes[14],bytes[15],bytes[16],bytes[17],bytes[18],bytes[19],bytes[20],bytes[21],bytes[22],bytes[23],bytes[24],bytes[25],bytes[26],bytes[27],bytes[28],bytes[29],bytes[30],bytes[31],bytes[32],bytes[33],bytes[34],bytes[35],bytes[36],bytes[37],bytes[38],bytes[39]],authority:[bytes[40],bytes[41],bytes[42],bytes[43],bytes[44],bytes[45],bytes[46],bytes[47],bytes[48],bytes[49],bytes[50],bytes[51],bytes[52],bytes[53],bytes[54],bytes[55],bytes[56],bytes[57],bytes[58],bytes[59],bytes[60],bytes[61],bytes[62],bytes[63],bytes[64],bytes[65],bytes[66],bytes[67],bytes[68],bytes[69],bytes[70],bytes[71]],policy_binding:[bytes[72],bytes[73],bytes[74],bytes[75],bytes[76],bytes[77],bytes[78],bytes[79],bytes[80],bytes[81],bytes[82],bytes[83],bytes[84],bytes[85],bytes[86],bytes[87],bytes[88],bytes[89],bytes[90],bytes[91],bytes[92],bytes[93],bytes[94],bytes[95],bytes[96],bytes[97],bytes[98],bytes[99],bytes[100],bytes[101],bytes[102],bytes[103]],generation:u64::from_le_bytes([bytes[104],bytes[105],bytes[106],bytes[107],bytes[108],bytes[109],bytes[110],bytes[111]]),minimum_activation_delay_slots:u64::from_le_bytes([bytes[112],bytes[113],bytes[114],bytes[115],bytes[116],bytes[117],bytes[118],bytes[119]])})}
++#[kani::requires(bytes.len()==128)]
++#[kani::ensures(|r| (*r==reference(bytes))!=cfg!(NJY_invert))]
++#[kani::modifies()]
++fn segment(bytes:&[u8])->Result<VerifierRegistryV1,F>{    let registry = VerifierRegistryV1 {
++        flags: bytes[5],
++        bump: bytes[6],
++        pool: bytes[8..40].try_into().unwrap(),
++        authority: bytes[40..72].try_into().unwrap(),
++        policy_binding: bytes[72..104].try_into().unwrap(),
++        generation: u64::from_le_bytes(bytes[104..112].try_into().unwrap()),
++        minimum_activation_delay_slots: u64::from_le_bytes(bytes[112..120].try_into().unwrap()),
++    };
++    Ok(registry)
++}
++#[kani::proof_for_contract(segment)]
++#[kani::unwind(193)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_contract(){let bytes:[u8;128]=kani::any();let _=segment(&bytes);}

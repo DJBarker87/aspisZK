@@ -11,7 +11,7 @@
 + if false {*scratch=seed;}
 + if seed&1==0 {Ok(VerifierRegistryV1{flags:0,bump:seed,pool:[0;32],authority:[0;32],policy_binding:[0;32],generation:0,minimum_activation_delay_slots:0})}else{Err(PoolV1VerifierRegistryFormatError::WrongMagic)}
 +}
-+fn check(seed:u8,out:Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>){match out{Ok(p)=>assert_eq!(p.bump,seed),Err(e)=>assert_eq!(e,PoolV1VerifierRegistryFormatError::WrongMagic)}}
++fn check(seed:u8,out:Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>){match out{Ok(p)=>assert!(p.bump==seed,"unimplied record bump"),Err(e)=>assert!(e==PoolV1VerifierRegistryFormatError::WrongMagic,"unimplied record error")}}
 +#[kani::proof_for_contract(shape_probe)]
 +#[kani::unwind(33)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
