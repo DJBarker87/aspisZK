@@ -98,6 +98,7 @@ fn NJP_permutation(log:&mut NJP_PermutationLog,state:&mut[M31;16]) {
 }
 #[kani::proof]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[M31]>::copy_from_slice,KMX_copy_from_slice)]
 #[kani::unwind(40)]
 fn NJP_compression_caller() {
  let left:Digest=core::array::from_fn(|_|M31(kani::any()));let right:Digest=core::array::from_fn(|_|M31(kani::any()));

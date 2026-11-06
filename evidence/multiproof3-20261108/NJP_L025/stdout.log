@@ -1,0 +1,223 @@
+AspisR1.RPx_Deployed.deployed {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7)
+  (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+  (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk
+        (AspisR1.FIp_Install.configuration indexError
+          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+      native1 native2 hashv)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256) (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1 state1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)))
+  (accepted2 :
+    AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot state2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)))
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+  (prior : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit)
+  (words : AspisR1.CanonicalCutEnrichedTranscript.Words) (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+  (actions : List (AspisR1.CPP_BankState.Action A))
+  (game :
+    AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator
+      AspisR1.CPH_Program.verifier)
+  (RuntimePersistence :
+    AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8)) (AspisR1.CPG_Projection.before p)
+      (AspisR1.CPG_Projection.tentative p) (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p))
+  (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A) (Q0 Q1 : ℕ)
+  (queries :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisR1.ARW_Induced.issued native1 copy allocator AspisR1.CPH_Program.verifier a H).length ≤ Q0 + Q1) :
+  have P := AspisR1.ARW_Induced.program native1 copy allocator AspisR1.CPH_Program.verifier a;
+  have runtime :=
+    AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) indexError reservation native1 native2
+      hashv a;
+  have select := fun x =>
+    AspisR1.P2P_NativeSelection.pair
+      (AspisR1.DrvC_Installation.sdk
+        (AspisR1.FIp_Install.configuration indexError
+          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+      AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+      AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+    AspisR1.DrvC_Implementation.driver
+          (AspisR1.FIp_Install.configuration indexError
+            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation) =
+        AspisR1.DrvC_SourceEntry.source
+          (AspisR1.FIp_Install.configuration indexError
+            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+          hashv ∧
+      AspisR1.DrvC_Installation.sdk
+            (AspisR1.FIp_Install.configuration indexError
+              (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation) =
+          AspisR1.SdkD_PairBatches.dictionary
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).adapter
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).currentBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).stageBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).finish
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).reserved
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).query
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).geometry
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).boundaries
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).std ∧
+        AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).adapter
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).currentBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).reserved
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).query
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).geometry
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).stageBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).finish
+            (AspisR1.FIp_Install.boundaries
+              (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation).boundaries)
+            reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1 post2 H
+            (AspisR1.DrvC_Implementation.driver
+              (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+            prior (p.physicalEvents t) hashv
+            (AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Hiq_RecordedJoint.program
+                  (AspisR1.F3X_Account.program
+                    (AspisR1.FIp_Install.configuration indexError
+                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                    hashv P)
+                  AspisR1.F3X_Projection.project select))) ∧
+          (AspisR1.F3X_ModelClaims.Claims
+                (AspisR1.FIp_Install.configuration indexError
+                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                D P (Q0 + Q1) ∧
+              AspisR1.F3Y_SourceClaims.Claims
+                  (AspisR1.FIp_Install.configuration indexError
+                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                  D hashv P (Q0 + Q1) select ∧
+                AspisR1.F3Y_AccountMass.Claims
+                    (AspisR1.FIp_Install.configuration indexError
+                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                    hashv P (Q0 + Q1) select ∧
+                  AspisR1.F3T_RuntimeBound.failureModel runtime ≤ AspisR1.F3T_Numeric.total (Q0 + Q1) ∧
+                    (Q0 + Q1 ≤ AspisR1.F3U_RangeEdges.maxQueries →
+                        AspisR1.F3T_RuntimeBound.failureModel runtime ≤ (↑Q0 + ↑Q1 + 1) * (1 / 2 ^ 100)) ∧
+                      (Q0 + Q1 = 0 →
+                        AspisR1.F3U_Numeric.margin ≤ 1 / 2 ^ 100 - AspisR1.F3T_RuntimeBound.failureModel runtime ∧
+                          AspisR1.F3T_RuntimeBound.failureModel runtime < 1 / 2 ^ 100)) ∧
+            (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                (↑saved).length = 1768 ∧
+                  AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                        (post1.payload (e1.heap.accounts 2).1) 1768 =
+                      AspisR1.MultiproofConeCanonical.bytesOf ↑saved ∧
+                    post1.ambient = e1.heap.ambient ∧
+                      post1.accounts = e1.heap.accounts ∧
+                        post1.counter = e1.heap.counter ∧
+                          ∀ (cell : ℕ), cell ≠ (e1.heap.accounts 2).1 → post1.payload cell = e1.heap.payload cell) ∧
+              AspisR1.Rc2_Events.Facts
+                  (AspisR1.FIp_Install.configuration indexError
+                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                  hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H saved ∧
+                AspisR1.CPH_Protection.Facts p t saved AspisR1.CPH_Program.verifier ∧
+                  AspisR1.CPH_Trace.Facts p t u saved native1 native2 copy allocator AspisR1.CPH_Program.verifier ∧
+                    AspisR1.CPH_Recorder.Facts
+                        (AspisR1.FIp_Install.configuration indexError
+                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                        hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H p t u saved ∧
+                      AspisR1.S6N_Installation.Facts
+                        (AspisR1.DrvC_Installation.sdk
+                          (AspisR1.FIp_Install.configuration indexError
+                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_PermutationPacket.TX1_306 : ∀ (input : NJP_PermutationPacket.State)
+  (states : Fin 23 → NJP_PermutationPacket.State) (control : Fin 22 → ℕ × NJA_Trace.Kind),
+  NJP_ControllerTrace.Cut input states control →
+    states (Fin.last 22) = NJP_PermutationPacket.model input ∧
+      Aeneas.Std.Result.ok ((), states (Fin.last 22)) = Aeneas.Std.Result.ok ((), NJP_PermutationPacket.model input) ∧
+        ∀ (r : Fin 22),
+          ((NJE_RoundTrace.observed input states r).round, (NJE_RoundTrace.observed input states r).kind) = control r :=
+fun input states control cut =>
+  let ⟨canonical, right✝⟩ := NJP_ControllerTrace.result input states control cut
+  let ⟨value, right✝¹⟩ := right✝
+  let ⟨left✝, descriptors⟩ := right✝¹
+  have raw :=
+    funext fun i =>
+      NJP_FieldEncoding.unique (states (Fin.last 22) i) (R0P.poseidonPermutation (NJE_RoundTrace.cast input) i)
+        (canonical i) (congrFun value i);
+  ⟨raw, ⟨congrArg (fun s => Aeneas.Std.Result.ok ((), s)) raw, descriptors⟩⟩
+theorem NJP_CompressionPacket.TX1_305 : ∀ (left right : NJP_CompressionPacket.Digest),
+  (∀ (i : Fin 8), ↑(left i) < 2147483647) →
+    (∀ (i : Fin 8), ↑(right i) < 2147483647) →
+      ∀ (seeded : NJP_CompressionPacket.State) (out : NJP_CompressionPacket.Digest) (calls : ℕ),
+        NJP_CompressionPacket.CallerCut left right seeded (NJP_PermutationPacket.model seeded) out calls →
+          out = NJP_CompressionPacket.model left right ∧
+            calls = 1 ∧ Aeneas.Std.Result.ok out = Aeneas.Std.Result.ok (NJP_CompressionPacket.model left right) :=
+fun left right hl hr seeded out calls cut =>
+  have seed_value := (NJE_CompressSeed.value left right hl hr).right;
+  have same :=
+    funext fun i =>
+      Eq.mpr (id (congrArg (fun _a => _a = NJP_CompressionPacket.model left right i) (cut.output i)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                NJP_PermutationPacket.model _a
+                    ⟨↑i, Decidable.byContradiction fun a => NJP_CompressionPacket.CallerCut._proof_1 calls i a⟩ =
+                  NJP_CompressionPacket.model left right i)
+              cut.seed))
+          (have argument := Eq.trans seed_value (NJA_Compress.seed_model (fun i => ↑↑(left i)) fun i => ↑↑(right i));
+          have encoded :=
+            congrArg
+              (fun s =>
+                NJP_FieldEncoding.word
+                  (R0P.poseidonPermutation s
+                    ⟨↑i, Decidable.byContradiction fun a => NJP_CompressionPacket.TX1_305._proof_1 i a⟩))
+              argument;
+          Eq.mpr
+            (id
+              (congrArg
+                (Eq
+                  (NJP_FieldEncoding.word
+                    (R0P.poseidonPermutation (NJE_RoundTrace.cast (NJE_CompressSeed.seed left right))
+                      ⟨↑i, Decidable.byContradiction fun a => NJP_CompressionPacket.CallerCut._proof_1 calls i a⟩)))
+                (congrArg NJP_FieldEncoding.word
+                  (congrFun'
+                    (congrArg R0P.poseidonPermutation
+                      (funext fun l =>
+                        dite_congr (Eq.refl (↑l < 8)) (fun h => Eq.refl ↑↑(left ⟨↑l, Eq.mpr_prop (Eq.refl (↑l < 8)) h⟩))
+                          fun h =>
+                          ite_congr (Eq.refl (↑l = 15)) (fun a => Eq.refl (↑↑(right 7) - 1051521018)) fun a =>
+                            Eq.refl ↑↑(right ⟨↑l - 8, R0P.nodeCompress._proof_4 l (Eq.mpr_not (Eq.refl (↑l < 8)) h)⟩)))
+                    ⟨↑i, R0P.digestOf._proof_2 i⟩))))
+            encoded));
+  ⟨same, ⟨cut.call_count, congrArg (fun x => Aeneas.Std.Result.ok x) same⟩⟩

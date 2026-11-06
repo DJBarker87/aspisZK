@@ -1,0 +1,12 @@
+import NJK_COMBINED_IMPORT
+import NJE_COMBINED_IMPORT
+import NJP_ControllerTrace
+import NJP_FieldEncoding
+import NJP_PermutationPacket
+import NJP_CompressionPacket
+import NJP_CopyFrame
+
+#check AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.RPx_Deployed.deployed
+#print NJP_PermutationPacket.TX1_306
+#print NJP_CompressionPacket.TX1_305

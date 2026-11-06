@@ -11,3 +11,5 @@ L001 failed one Fin equality goal; not admitted and its diagnostic sorryAx is no
 Every reviewed cut association is P6/D188 native-contract semantic transport reclassification, never removal. No trust row added. No shipped source touched or ELF rebuild triggered.
 
 Compression native stage: K010 returning caller passes, K011 output perturbation and K012 seeded-state perturbation fail semantically; arbitrary full sixteen-limb reply, exact one permutation call, both input digests readonly. Exact actual-target features and frozen graph/unchanged lock recorded. L003 proves canonical word encoding and injectivity; L004 proves complete raw sixteen-limb output and Result unit/state for TX1:306, no external callee endpoint premise. Still pending combined gate.
+
+First combined audit L025/L026/L027: 15,446 modules, zero dangling/duplicate/import defects; 18 raw roots agree with collectAxioms and use only standard axioms. L024: eight fixtures/mutations match. Full-gate count 1/2. TX1:306 is a gated local candidate; TX1:305 held for stronger explicit slice-copy KMX coverage. NativeContract transport remains reclassification, no headline hypothesis removed.

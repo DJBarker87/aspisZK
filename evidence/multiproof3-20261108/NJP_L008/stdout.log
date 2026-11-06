@@ -1,0 +1,190 @@
+NJP_lean/NJP_RowModel.lean:30:72: error: unexpected identifier; expected '}'
+NJP_lean/NJP_RowModel.lean:54:29: error: unexpected token '∧'; expected term
+NJP_lean/NJP_RowModel.lean:58:31: error: unexpected token 'at'; expected rcasesPat
+NJP_lean/NJP_RowModel.lean:74:50: error: unsolved goals
+s : Scratch
+i : ℕ
+w : Fin 16
+cursor : ℕ
+reply : Digest
+⊢ True ∧ s.values w = reply
+NJP_lean/NJP_RowModel.lean:75:27: warning: This simp argument is unused:
+  and_self
+
+Hint: Omit it from the simp argument list.
+  simp only [̵w̵r̵i̵t̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵]̵[̲w̲r̲i̲t̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJP_lean/NJP_RowModel.lean:98:48: error: unexpected token ')'; expected term
+theorem NJP_RowModel.active_bounds : ∀ (length : ℕ) (s : Scratch) (i w : ℕ),
+  Domain length s i w → i < s.n → i < 16 ∧ w < 16 ∧ s.cursor + 32 < 2 ^ 64 :=
+fun length s i w domain active => sorry
+'NJP_RowModel.active_bounds' depends on axioms: [propext, sorryAx]
+theorem NJP_RowModel.paired_bound : ∀ (s : Scratch) (i : ℕ), s.n ≤ 16 → paired s i → i + 1 < 16 ∧ i + 2 ≤ s.n :=
+fun s i size both =>
+  let ⟨next, right✝⟩ := both
+  Decidable.byContradiction fun a => paired_bound._proof_1 s i size next a
+'NJP_RowModel.paired_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_RowModel.write_frame : ∀ (s : Scratch) (i w cursor : ℕ) (reply : Digest) (k : Fin 16),
+  ↑k ≠ w → (write s i w cursor reply).indices k = s.indices k ∧ (write s i w cursor reply).values k = s.values k :=
+fun s i w cursor reply k different =>
+  of_eq_true
+    (Eq.trans
+      (congr
+        (congrArg And
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg different) x_0 x_1 x_2 x_3)
+                  (instDecidableEqNat (↑k) w) ℕ (index s i / 2) (s.indices k)))
+              (s.indices k))
+            (eq_self (s.indices k))))
+        (eq_self (s.values k)))
+      (and_self True))
+'NJP_RowModel.write_frame' depends on axioms: [propext]
+theorem NJP_RowModel.write_selected : ∀ (s : Scratch) (i : ℕ) (w : Fin 16) (cursor : ℕ) (reply : Digest),
+  (write s i (↑w) cursor reply).indices w = index s i / 2 ∧ (write s i (↑w) cursor reply).values w = reply :=
+fun s i w cursor reply =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg And
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq (ite_congr (eq_self ↑w) (fun a => Eq.refl (index s i / 2)) fun a => Eq.refl (s.indices w)))
+              (index s i / 2))
+            (eq_self (index s i / 2))))
+        (s.values w = reply)))
+    sorry
+'NJP_RowModel.write_selected' depends on axioms: [propext, sorryAx]
+theorem NJP_RowModel.occupied_observation : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s : Scratch)
+  (i w : ℕ),
+  i < s.n →
+    paired s i →
+      eval H (node nodes length s i w) =
+        ([(occupiedRequest s i, H (occupiedRequest s i))],
+          ok (Row.next (write s i w s.cursor (H (occupiedRequest s i))) (i + 2) (w + 1))) :=
+fun H nodes length s i w active both =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (eval H)
+              (Eq.trans
+                (ite_congr (Eq.refl (i < s.n))
+                  (fun a =>
+                    (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos both) x_0 x_1 x_2 x_3)
+                      (instDecidablePaired s i) Run
+                      (Program.ask (occupiedRequest s i) fun reply =>
+                        Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1))))
+                      (if s.cursor + 32 ≤ length then
+                        Program.ask (siblingRequest s i nodes) fun reply =>
+                          Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1)))
+                      else Program.done (ok (Row.stop s))))
+                  fun a => Eq.refl (Program.done (ok (Row.next s i w))))
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos active) x_0 x_1 x_2 x_3) (i.decLt s.n) Run
+                  (Program.ask (occupiedRequest s i) fun reply =>
+                    Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1))))
+                  (Program.done (ok (Row.next s i w))))))
+            (eval.eq_2 H (occupiedRequest s i) fun reply =>
+              Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1))))))
+        ([(occupiedRequest s i, H (occupiedRequest s i))],
+          ok (Row.next (write s i w s.cursor (H (occupiedRequest s i))) (i + 2) (w + 1))))
+      (eq_self
+        ([(occupiedRequest s i, H (occupiedRequest s i))],
+          ok (Row.next (write s i w s.cursor (H (occupiedRequest s i))) (i + 2) (w + 1)))))
+'NJP_RowModel.occupied_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_RowModel.sibling_observation : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s : Scratch)
+  (i w : ℕ),
+  i < s.n →
+    ¬paired s i →
+      s.cursor + 32 ≤ length →
+        eval H (node nodes length s i w) =
+          ([(siblingRequest s i nodes, H (siblingRequest s i nodes))],
+            ok (Row.next (write s i w (s.cursor + 32) (H (siblingRequest s i nodes))) (i + 1) (w + 1))) :=
+fun H nodes length s i w active single available =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (eval H)
+              (Eq.trans
+                (ite_congr (Eq.refl (i < s.n))
+                  (fun a =>
+                    Eq.trans
+                      (ite_congr (Eq.refl (paired s i))
+                        (fun a =>
+                          Eq.refl
+                            (Program.ask (occupiedRequest s i) fun reply =>
+                              Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1)))))
+                        fun a =>
+                        (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos available) x_0 x_1 x_2 x_3)
+                          ((s.cursor + 32).decLe length) Run
+                          (Program.ask (siblingRequest s i nodes) fun reply =>
+                            Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))
+                          (Program.done (ok (Row.stop s))))
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg single) x_0 x_1 x_2 x_3)
+                        (instDecidablePaired s i) Run
+                        (Program.ask (occupiedRequest s i) fun reply =>
+                          Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1))))
+                        (Program.ask (siblingRequest s i nodes) fun reply =>
+                          Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))))
+                  fun a => Eq.refl (Program.done (ok (Row.next s i w))))
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos active) x_0 x_1 x_2 x_3) (i.decLt s.n) Run
+                  (Program.ask (siblingRequest s i nodes) fun reply =>
+                    Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))
+                  (Program.done (ok (Row.next s i w))))))
+            (eval.eq_2 H (siblingRequest s i nodes) fun reply =>
+              Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))))
+        ([(siblingRequest s i nodes, H (siblingRequest s i nodes))],
+          ok (Row.next (write s i w (s.cursor + 32) (H (siblingRequest s i nodes))) (i + 1) (w + 1))))
+      (eq_self
+        ([(siblingRequest s i nodes, H (siblingRequest s i nodes))],
+          ok (Row.next (write s i w (s.cursor + 32) (H (siblingRequest s i nodes))) (i + 1) (w + 1)))))
+'NJP_RowModel.sibling_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJP_RowModel.missing_observation : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s : Scratch)
+  (i w : ℕ),
+  i < s.n → ¬paired s i → length < s.cursor + 32 → eval H (node nodes length s i w) = ([], ok (Row.stop s)) :=
+fun H nodes length s i w active single missing =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (eval H)
+              (Eq.trans
+                (ite_congr (Eq.refl (i < s.n))
+                  (fun a =>
+                    Eq.trans
+                      (ite_congr (Eq.refl (paired s i))
+                        (fun a =>
+                          Eq.refl
+                            (Program.ask (occupiedRequest s i) fun reply =>
+                              Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1)))))
+                        fun a =>
+                        (fun x_0 x_1 x_2 x_3 =>
+                            (fun x_0 x_1 x_2 x_3 =>
+                                if_neg
+                                  (have this := fun a => missing_observation._proof_1 length s i missing a;
+                                  this))
+                              x_0 x_1 x_2 x_3)
+                          ((s.cursor + 32).decLe length) Run
+                          (Program.ask (siblingRequest s i nodes) fun reply =>
+                            Program.done (ok (Row.next (write s i w (s.cursor + 32) reply) (i + 1) (w + 1))))
+                          (Program.done (ok (Row.stop s))))
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg single) x_0 x_1 x_2 x_3)
+                        (instDecidablePaired s i) Run
+                        (Program.ask (occupiedRequest s i) fun reply =>
+                          Program.done (ok (Row.next (write s i w s.cursor reply) (i + 2) (w + 1))))
+                        (Program.done (ok (Row.stop s)))))
+                  fun a => Eq.refl (Program.done (ok (Row.next s i w))))
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos active) x_0 x_1 x_2 x_3) (i.decLt s.n) Run
+                  (Program.done (ok (Row.stop s))) (Program.done (ok (Row.next s i w))))))
+            (eval.eq_1 H (ok (Row.stop s)))))
+        ([], ok (Row.stop s)))
+      (eq_self ([], ok (Row.stop s))))
+'NJP_RowModel.missing_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJP_lean/NJP_RowModel.lean:116:7: error(lean.unknownIdentifier): Unknown constant `exhausted_observation`
+NJP_lean/NJP_RowModel.lean:117:14: error(lean.unknownIdentifier): Unknown constant `exhausted_observation`

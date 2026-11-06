@@ -1,0 +1,233 @@
+--- a/crates/aspis-statement/src/poseidon2.rs
++++ b/crates/aspis-statement/src/poseidon2.rs
+@@ -908,3 +908,5 @@
+ #[cfg(any(kani, aeneas_ref))]
+ #[path = "../../../tools/r1-builder-reference/poseidon.rs"]
+ mod builder_reference;
++
++#[cfg(kani)] mod NJP_native { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NJP_poseidon.rs")); }
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -5,6 +5,7 @@
+ //! constraint-composition kernel that Stage 2 must make correct before any
+ //! statement proof is wired into the PCS.
+ 
++#![cfg_attr(kani, feature(allocator_api))]
+ #![no_std]
+ 
+ extern crate alloc;
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,4 +1,5 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
++#![cfg_attr(kani, feature(allocator_api))]
+ #![no_std]
+ extern crate alloc;
+ pub mod sampler;
+--- a/crates/aspis-r1-cost-probe/src/multiproof.rs
++++ b/crates/aspis-r1-cost-probe/src/multiproof.rs
+@@ -354,3 +354,5 @@
+         assert_eq!(node_count(Arity::Eight, &spread(12, 16)), Some(346));
+     }
+ }
++
++#[cfg(kani)] mod NJP_native { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NJP_multiproof.rs")); }
+--- /dev/null
++++ b/NJP_poseidon.rs
+@@ -0,0 +1,115 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++// Ruling (ad) control only: every arithmetic body is a recording boundary.
++// No data-value credit follows from this controller certificate.
++struct NJP_Control { pairs:[(u8,u8);22], at:usize, cells:usize, external:usize, internal:usize }
++fn NJP_linear_control(log:&mut NJP_Control, kind:u8) {
++ if kind==0 {log.external+=1;} else {log.internal+=1;}
++}
++fn NJP_cell_control(log:&mut NJP_Control, _lane:usize, _constant:u32) { log.cells+=1; }
++fn NJP_callback<F:FnMut(Poseidon2RoundTransition)>(log:&mut NJP_Control, trace:&mut F, event:Poseidon2RoundTransition) {
++ let kind=match event.kind { Poseidon2RoundKind::ExternalInitial(i)=>i, Poseidon2RoundKind::Internal(i)=>32+i, Poseidon2RoundKind::ExternalFinal(i)=>64+i };
++ assert!(log.at<22);
++ log.pairs[log.at]=(event.round,kind);log.at+=1;trace(event);
++}
++fn NJP_controller<F>(state: &mut [M31; 16], mut trace: F, log: &mut NJP_Control)
++where
++    F: FnMut(Poseidon2RoundTransition),
++{
++    let mut round = 0u8;
++    let mut input = *state;
++    NJP_linear_control(log, 0);
++    for (index, constants) in EXTERNAL_INITIAL.iter().enumerate() {
++        for index in 0..16 {
++            NJP_cell_control(log, index, constants[index]);
++        }
++        NJP_linear_control(log, 0);
++        NJP_callback(log, &mut trace, Poseidon2RoundTransition {
++            round,
++            kind: Poseidon2RoundKind::ExternalInitial(index as u8),
++            input,
++            output: *state,
++        });
++        round += 1;
++        input = *state;
++    }
++    for (index, constant) in INTERNAL.into_iter().enumerate() {
++        NJP_cell_control(log, 0, constant);
++        NJP_linear_control(log, 1);
++        NJP_callback(log, &mut trace, Poseidon2RoundTransition {
++            round,
++            kind: Poseidon2RoundKind::Internal(index as u8),
++            input,
++            output: *state,
++        });
++        round += 1;
++        input = *state;
++    }
++    for (index, constants) in EXTERNAL_FINAL.iter().enumerate() {
++        for index in 0..16 {
++            NJP_cell_control(log, index, constants[index]);
++        }
++        NJP_linear_control(log, 0);
++        NJP_callback(log, &mut trace, Poseidon2RoundTransition {
++            round,
++            kind: Poseidon2RoundKind::ExternalFinal(index as u8),
++            input,
++            output: *state,
++        });
++        round += 1;
++        input = *state;
++    }
++    debug_assert_eq!(round as usize, POSEIDON2_ROUNDS);
++}
++
++fn NJP_controller_case() {
++ let mut state=[M31(0);16];
++ let mut log=NJP_Control{pairs:[(0,0);22],at:0,cells:0,external:0,internal:0};
++ NJP_controller(&mut state, |_| {}, &mut log);
++ if cfg!(NJP_bad_argument){log.pairs[9].1^=1;}
++ assert_eq!(log.at,22);assert_eq!(log.cells,142);assert_eq!(log.external,9);assert_eq!(log.internal,14);
++ let r:usize=kani::any();kani::assume(r<22);
++ assert_eq!(log.pairs[r],(r as u8,if r<4{r as u8}else if r<18{32+(r-4) as u8}else{64+(r-18) as u8}));
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::unwind(24)]
++fn NJP_permutation_controller(){NJP_controller_case();}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::unwind(24)]
++fn NJP_permutation_controller_stability(){NJP_controller_case();}
++fn NJP_compress(left: &Digest, right: &Digest, log: &mut NJP_PermutationLog) -> Digest {
++    let mut state = [M31::ZERO; POSEIDON2_WIDTH];
++    state[..DIGEST_ELEMS].copy_from_slice(left);
++    state[DIGEST_ELEMS..].copy_from_slice(right);
++    // Fixed node-domain tweak. This construction is never reused for leaves
++    // or variable-length inputs; the ordered 16-limb input is the full state.
++    state[POSEIDON2_WIDTH - 1] = state[POSEIDON2_WIDTH - 1].add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
++    NJP_permutation(log, &mut state);
++    core::array::from_fn(|index| state[index])
++}
++
++struct NJP_PermutationLog { calls:usize, seed:[M31;16], reply:[M31;16] }
++fn NJP_permutation(log:&mut NJP_PermutationLog,state:&mut[M31;16]) {
++ assert_eq!(log.calls,0);log.calls+=1;log.seed=*state;
++ for i in 0..16 { assert!(state[i].0<2147483647); }
++ *state=log.reply;
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::unwind(40)]
++fn NJP_compression_caller() {
++ let left:Digest=core::array::from_fn(|_|M31(kani::any()));let right:Digest=core::array::from_fn(|_|M31(kani::any()));
++ for i in 0..8 {kani::assume(left[i].0<2147483647&&right[i].0<2147483647);}
++ let reply:[M31;16]=core::array::from_fn(|_|M31(kani::any()));
++ let k:usize=kani::any();let j:usize=kani::any();kani::assume(k<16&&j<8);
++ let l=left[j];let r=right[j];
++ let mut log=NJP_PermutationLog{calls:0,seed:[M31(0);16],reply};
++ let mut out=NJP_compress(&left,&right,&mut log);
++ if cfg!(NJP_bad_argument){out[j].0^=1;}
++ if cfg!(NJP_bad_seed){log.seed[k].0^=1;}
++ assert_eq!(log.calls,1);
++ let expected=if k<8{left[k]}else if k==15{right[7].add(MERKLE_NODE_COMPRESSION_V3_TWEAK)}else{right[k-8]};
++ assert_eq!(log.seed[k],expected);assert_eq!(out[j],reply[j]);assert_eq!(left[j],l);assert_eq!(right[j],r);
++}
+--- /dev/null
++++ b/NJP_multiproof.rs
+@@ -0,0 +1,78 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++// Full caller bound: MAX_BATCH * LEAF_BITS * digest bytes = 9216.
++// Every byte is arbitrary, including all coordinates outside the selected view.
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::unwind(40)]
++fn NJP_sibling_window() {
++ let nodes:[u8;9216]=kani::any();let len:usize=kani::any();let at:usize=kani::any();let j:usize=kani::any();
++ kani::assume(len<=9216&&at<=9216&&j<32);
++ if cfg!(NJP_payload_only){kani::assume(at+32<=len);}
++ let part=nodes[..len].get(at..at+32);
++ match part {
++  Some(sibling)=>{
++   assert!(at+32<=len);assert_eq!(sibling.len(),32);assert_eq!(sibling.as_ptr(),unsafe{nodes.as_ptr().add(at)});
++   if cfg!(NJP_bad_argument){assert_eq!(sibling[j],nodes[at+j]^1)}else{assert_eq!(sibling[j],nodes[at+j])}
++  },
++  None=>{if cfg!(NJP_bad_argument){assert!(at+32<=len)}else{assert!(len<at+32)}}
++ }
++}
++
++// Full-range branch cuts imported from NJE, revalidated on full-range buffers.
++struct NJP_RowLog {reply:[u8;32],calls:usize,kind:usize,left:bool,i:usize,len:usize,ptr:*const u8,coordinate:usize,byte:usize,observed:u8,first:u8,second:u8}
++fn NJP_row_occupied(log:&mut NJP_RowLog,val:&[[u8;32];16],i:usize)->[u8;32]{
++ assert_eq!(val[log.coordinate][log.byte],log.observed);
++ log.first=val[i][log.byte];log.second=val[i+1][log.byte];log.calls+=1;log.kind=1;log.i=i;log.ptr=val.as_ptr() as *const u8;log.len=16;
++ log.reply
++}
++fn NJP_row_sibling(log:&mut NJP_RowLog,val:&[[u8;32];16],i:usize,sibling:&[u8],left:bool)->[u8;32]{
++ assert_eq!(val[log.coordinate][log.byte],log.observed);
++ log.first=val[i][log.byte];log.second=sibling[log.byte];log.calls+=1;log.kind=2;log.i=i;log.ptr=sibling.as_ptr();log.len=sibling.len();log.left=left;
++ log.reply
++}
++fn NJP_binary_row(log:&mut NJP_RowLog,idx:&mut[u32;16],val:&mut[[u8;32];16],n:usize,nodes:&[u8],i:&mut usize,w:&mut usize,at:&mut usize)->bool{
++ if *i<n {
++ let parent=super::index_at(idx,*i)>>super::Arity::Two.bits();
++ let digest=if *i+1<n&&super::index_at(idx,*i+1)==super::index_at(idx,*i)^1 {
++ let d=NJP_row_occupied(log,val,*i);*i+=2;d
++ }else{
++ let Some(sibling)=nodes.get(*at..*at+32)else{return false};
++ *at+=32;
++ let d=NJP_row_sibling(log,val,*i,sibling,super::index_at(idx,*i)&1==0);
++ *i+=1;d
++ };
++ idx[*w]=parent;val[*w]=digest;*w+=1;
++ }
++ true
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::unwind(40)]
++fn NJP_binary_row_window(){
++ let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let nodes:[u8;9216]=kani::any();
++ let n:usize=kani::any();let mut i:usize=kani::any();let mut w:usize=kani::any();let mut at:usize=kani::any();let len:usize=kani::any();let k:usize=kani::any();let h:usize=kani::any();
++ kani::assume(0<n&&n<=16&&i<n&&w<=i&&at<=9216&&len<=9216&&k<16&&h<32);
++ let paired=i+1<n&&idx[i+1]==idx[i]^1;
++ if cfg!(NJP_pair_class){kani::assume(paired);}else{kani::assume(!paired&&at+32<=len);}
++ let oldi=i;let oldw=w;let oldat=at;let beforeidx=idx[k];let beforeval=val[k][h];let parent=idx[i]>>1;let left=idx[i]&1==0;
++ let first=val[i][h];let second=if paired{val[i+1][h]}else{nodes[at+h]};
++ let reply:[u8;32]=kani::any();let expectedreply=reply[h];let base=nodes.as_ptr();let valuebase=val.as_ptr() as *const u8;
++ let mut log=NJP_RowLog{reply,calls:0,kind:0,left:false,i:0,len:0,ptr:core::ptr::null(),coordinate:k,byte:h,observed:beforeval,first:0,second:0};
++ let theorem:usize=if cfg!(NJP_row_0){0}else if cfg!(NJP_row_1){1}else if cfg!(NJP_row_2){2}else if cfg!(NJP_row_3){3}else if cfg!(NJP_row_4){4}else if cfg!(NJP_row_5){5}else if cfg!(NJP_row_6){6}else if cfg!(NJP_row_7){7}else if cfg!(NJP_row_8){8}else{9};
++ if theorem==8{kani::assume(k==oldw);}
++ if theorem==9{kani::assume(k!=oldw);}
++ let succeeded=NJP_binary_row(&mut log,&mut idx,&mut val,n,&nodes[..len],&mut i,&mut w,&mut at);
++ macro_rules! assert_eq {($a:expr,$b:expr)=>{assert!(if cfg!(NJP_bad_argument){$a!=$b}else{$a==$b})}}
++ if theorem==0{assert_eq!(succeeded,true);}
++ if theorem==1{assert_eq!(log.calls,1);}
++ if theorem==2{assert_eq!(log.kind,if paired{1}else{2});assert_eq!(log.i,oldi);assert_eq!(log.ptr,if paired{valuebase}else{unsafe{base.add(oldat)}});assert_eq!(log.len,if paired{16}else{32});}
++ if theorem==3{assert_eq!(log.first,first);assert_eq!(log.second,second);if !paired{assert_eq!(log.left,left);}}
++ if theorem==4{assert_eq!(i,oldi+if paired{2}else{1});}
++ if theorem==5{assert_eq!(w,oldw+1);}
++ if theorem==6{assert_eq!(at,oldat+if paired{0}else{32});}
++ if theorem==7{assert_eq!(idx[k],if k==oldw{parent}else{beforeidx});}
++ if theorem==8{assert_eq!(val[k][h],expectedreply);}
++ if theorem==9{assert_eq!(val[k][h],beforeval);}
++}

@@ -72,5 +72,6 @@ fn NJP_compression_caller() {
  assert_eq!(log.seed[k],expected);assert_eq!(out[j],reply[j]);assert_eq!(left[j],l);assert_eq!(right[j],r);
 }
 '''
+extra=extra.replace('#[kani::unwind(40)]\nfn NJP_compression_caller()', '#[kani::stub(<[M31]>::copy_from_slice,KMX_copy_from_slice)]\n#[kani::unwind(40)]\nfn NJP_compression_caller()')
 (E/'NJP_poseidon.rs').write_text(preamble+body+harness+compress+extra)
 (E/'NJP_CONTROLLER_SOURCE.json').write_text(json.dumps({'frozen_revision':rev,'frozen_file_sha256':hashlib.sha256(raw.encode()).hexdigest(),'function_sha256':hashlib.sha256(source.encode()).hexdigest(),'generated_sha256':hashlib.sha256((preamble+body+harness+compress+extra).encode()).hexdigest(),'replacements':{'scalar':'NJP_cell_control (control only)','linear':'NJP_linear_control (control only)','trace':'record actual event.round and enum variant/index before SAME trace; callback instantiated |_| {}'},'value_credit':False},indent=2)+'\n')

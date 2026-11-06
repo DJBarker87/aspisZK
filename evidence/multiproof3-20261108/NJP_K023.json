@@ -1,0 +1,62 @@
+{
+  "attempt": "NJP_K023",
+  "kind": "kani",
+  "module": "NJP_binary_row_window",
+  "sources": [
+    "NJP_gate.py",
+    "NJP_multiproof.rs",
+    "NJP_poseidon.rs",
+    "NJP_CONTROLLER_SOURCE.json"
+  ],
+  "upload": [
+    "NJP_gate.py",
+    "NJP_multiproof.rs",
+    "NJP_poseidon.rs",
+    "NJP_CONTROLLER_SOURCE.json"
+  ],
+  "command": [
+    "python3",
+    "NJP_gate.py",
+    "NJP_K023.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "multiproof::NJP_native::NJP_binary_row_window",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 180,
+  "source_revision": "",
+  "expected_time": "ONE full-range arbitrary-prestate paired branch, assertion family 3; no whole-buffer loop",
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-multiproof3-20261108/NJP_target",
+    "CARGO_NET_OFFLINE": "true",
+    "RUSTFLAGS": "--cfg NJP_write_stage --cfg NJP_row_3 --cfg NJP_pair_class --cfg NJP_good_argument"
+  },
+  "collect": [
+    "NJP_K023_validation"
+  ],
+  "expected_failure": false,
+  "lane": "multiproof"
+}

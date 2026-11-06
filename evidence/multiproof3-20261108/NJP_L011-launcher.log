@@ -1,0 +1,52 @@
+{"attempt": "NJP_L011", "exit_status": 0, "wall_seconds": 4.140798955922946, "peak_rss_kib": "4351212", "swaps": "0", "print_axioms": ["'NJP_RowInvariant.occupied_domain' depends on axioms: [propext, Quot.sound]", "'NJP_RowInvariant.sibling_domain' depends on axioms: [propext, Quot.sound]", "'NJP_RowInvariant.node_progress' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJP_RowInvariant.occupied_domain : ∀ (length : ℕ) (s : Scratch) (i w : ℕ) (reply : Digest),
+  Domain length s i w → paired s i → Domain length (write s i w s.cursor reply) (i + 2) (w + 1) :=
+fun length s i w reply domain both =>
+  let ⟨positive, right✝⟩ := domain
+  let ⟨size, right✝¹⟩ := right✝
+  let ⟨read, right✝²⟩ := right✝¹
+  let ⟨writeBound, right✝³⟩ := right✝²
+  let ⟨cursorBound, byteBound⟩ := right✝³
+  let ⟨readNext, right✝⁴⟩ := both
+  id
+    ⟨positive,
+      ⟨size,
+        ⟨Decidable.byContradiction fun a => occupied_domain._proof_2 length s i w readNext a,
+          ⟨Decidable.byContradiction fun a => occupied_domain._proof_3 length s i w writeBound a,
+            ⟨cursorBoun
+...
+oms: [propext, Quot.sound]
+theorem NJP_RowInvariant.node_progress : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s : Scratch) (i w : ℕ),
+  Domain length s i w → i < s.n → ∃ out, (eval H (node nodes length s i w)).2 = ok out ∧ Progress length s i w out :=
+fun H nodes length s i w domain active =>
+  if both : paired s i then
+    Eq.mpr
+      (id
+        (congrArg (fun _a => ∃ out, _a.2 = ok out ∧ Progress length s i w out)
+          (occupied_observation H nodes length s i w active both)))
+      (Exists.intro (Row.next (write s i w s.cursor (H (occupiedRequest s i))) (i + 2) (w + 1))
+        ⟨rfl,
+          ⟨rfl,
+            ⟨occupied_domain length s i w (H (occupiedRequest s i)) domain both,
+              ⟨Decidable.byContradiction fun a => node_progress._proof_1 s i a, rfl⟩⟩⟩⟩)
+  else
+    if available : s.cursor + 32 ≤ length then
+      Eq.mpr
+        (id
+          (congrArg (fun _a => ∃ out, _a.2 = ok out ∧ Progress length s i w out)
+            (sibling_observation H nodes length s i w active both available)))
+        (Exists.intro (Row.next (write s i w (s.cursor + 32) (H (siblingRequest s i nodes))) (i + 1) (w + 1))
+          ⟨rfl,
+            ⟨rfl,
+              ⟨sibling_domain length s i w (H (siblingRequest s i nodes)) domain active available,
+                ⟨Decidable.byContradiction fun a => node_progress._proof_2 length s i a, rfl⟩⟩⟩⟩)
+    else
+      Eq.mpr
+        (id
+          (congrArg (fun _a => ∃ out, _a.2 = ok out ∧ Progress length s i w out)
+            (missing_observation H nodes length s i w active both
+              (Decidable.byContradiction fun a => node_progress._proof_3 length s i available a))))
+        (Exists.intro (Row.stop s) ⟨rfl, rfl⟩)
+'NJP_RowInvariant.node_progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r034ecd6761414a7ba22769d4f4a38fa3.scope; invocation ID: ad666f2bcd854572ac351435f3537aa1

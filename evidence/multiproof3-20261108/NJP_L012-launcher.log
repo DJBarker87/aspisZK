@@ -1,0 +1,69 @@
+{"attempt": "NJP_L012", "exit_status": 0, "wall_seconds": 3.7096421029418707, "peak_rss_kib": "4355896", "swaps": "0", "print_axioms": ["'NJP_LoopModel.no_suffix_fail' depends on axioms: [propext]", "'NJP_LoopModel.no_suffix_div' depends on axioms: [propext]"]}
+theorem NJP_LoopModel.no_suffix_fail : ∀ {α β : Type} (H : Request → Digest) (p : Program Request Digest (Result α))
+  (f : α → Program Request Digest (Result β)) (history : List (Request × Digest)) (error : Error),
+  eval H p = (history, fail error) → eval H (bindRun p f) = (history, fail error) :=
+fun {α β} H p f history error failed =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (eval_bind p
+              (fun r =>
+                match r with
+                | ok a => f a
+                | fail e => Program.done (fail e)
+                | div => Program.done div)
+              H)
+            (congr
+              (congrArg Prod.mk
+     
+...
+fix_div : ∀ {α β : Type} (H : Request → Digest) (p : Program Request Digest (Result α))
+  (f : α → Program Request Digest (Result β)) (history : List (Request × Digest)),
+  eval H p = (history, div) → eval H (bindRun p f) = (history, div) :=
+fun {α β} H p f history diverged =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (eval_bind p
+              (fun r =>
+                match r with
+                | ok a => f a
+                | fail e => Program.done (fail e)
+                | div => Program.done div)
+              H)
+            (congr
+              (congrArg Prod.mk
+                (Eq.trans
+                  (congr (congrArg HAppend.hAppend (congrArg Prod.fst diverged))
+                    (congrArg Prod.fst
+                      (Eq.trans
+                        (congrArg (eval H)
+                          (congrArg
+                            (fun x =>
+                              match x.2 with
+                              | ok a => f a
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div)
+                            diverged))
+                        (eval.eq_1 H div))))
+                  (List.append_nil history)))
+              (congrArg Prod.snd
+                (Eq.trans
+                  (congrArg (eval H)
+                    (congrArg
+                      (fun x =>
+                        match x.2 with
+                        | ok a => f a
+                        | fail e => Program.done (fail e)
+                        | div => Program.done div)
+                      diverged))
+                  (eval.eq_1 H div))))))
+        (history, div))
+      (eq_self (history, div)))
+'NJP_LoopModel.no_suffix_div' depends on axioms: [propext]
+
+Running as unit: run-r1492e2d7365e4f47a9c73d22873f25cc.scope; invocation ID: 04ebabb4bcd940bbb6f488de88d12ed8
