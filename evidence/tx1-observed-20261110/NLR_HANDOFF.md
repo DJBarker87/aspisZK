@@ -7,3 +7,7 @@ Order: physical realization of the existing six-event137 source fold, then087 so
 Budget: 40 Kani,140 Lean/support,0 extraction. One freshly admitted scope at a time, exit0 AND allowed:true, disk>=40GB, MemoryHigh6G/MemoryMax8G/Swap0/Tasks64,Lean-M7000, optimized Rust. Own host workspace /home/dombarker/project-offloads/codex-cx-tx1-observed-20261110; target NLR_target and tmp NLR_tmp retained. Seed NLJ export FIRST, NLC SECOND, NLO THIRD; inherited closure paths read-only. Per-attempt hashes/dependencies/command/revision/status/wall/RSS/swap/axioms in NLR_ATTEMPTS.jsonl and receipts.
 
 Initial inspection: NLJ proves source137 but not physical Invocation. SourceEquality087 and full SAME-call179 domain remain Lean-only obligations. Native copy/frame, ownership, abort cuts remain. Current NLI RowSpec136 is only a packet, not a proved child root. No child assumed CLOSED without ledger/research check.
+
+## Fresh NLI correction
+
+Research now contains NLI_HANDOFF.md: source136 equality is proved, but the original value-level NLI_RowSpec136 is explicitly WEAKER than the ledger obligation and MUST NOT be used as a full child packet. Its hash remains92a4901a21af60031077d13d9509dfb497a457d9ad01f75a7117c273d70b1ff2. Resource136 is also ungated. Imported NLJ_Control137.observed_fold remains a conditional SOURCE/value theorem, not a full native137 fold. No full136 packet, native root or ledger promotion is installed. See NLR_CHILD_FINAL_RECHECK.json and retained git-object handoff; no sibling worktree was accessed.

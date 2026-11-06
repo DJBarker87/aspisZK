@@ -1,0 +1,9 @@
+'AspisR1.NLR_PrepareInitialized.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_PrepareInitialized.source : ∀ (cfg : NLJ_Prepare.Configuration) {H : Type}
+  (i : NLJ_Prepare.Input H),
+  ∃ events,
+    NLJ_Prepare.Invocation cfg 12 (NLJ_Prepare.initial i)
+      (run (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash i.scratch)).2
+      (run (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash i.scratch)).1
+      events :=
+⋯

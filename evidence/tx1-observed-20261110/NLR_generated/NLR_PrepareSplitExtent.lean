@@ -5,7 +5,7 @@ namespace AspisR1.NLR_PrepareSplitExtent
 open Aeneas Aeneas.Std Result AspisR1CurrentCaller
 /-- Library split law at the SAME owned Vec slice. The length guard is a
 pre-state fact, not inferred from successful semantic verification. -/
-theorem split (bytes : Slice U8) (cut : Usize) (bound : cut ≤ bytes.length)
+theorem split_lengths (bytes : Slice U8) (cut : Usize) (bound : cut ≤ bytes.length)
  (parts : (Slice U8 × Slice U8) × ((Slice U8 × Slice U8) → Slice U8))
  (call : core.slice.Slice.split_at_mut bytes cut = ok parts) :
  parts.1.1.length=cut.val ∧ parts.1.2.length=bytes.length-cut.val := by
@@ -21,9 +21,11 @@ theorem semantic (bytes : Slice U8) (size : bytes.length=14759)
  (parts : (Slice U8 × Slice U8) × ((Slice U8 × Slice U8) → Slice U8))
  (call : core.slice.Slice.split_at_mut bytes 13831#usize = ok parts) :
  parts.1.1.val.length=13831 ∧ parts.1.2.val.length=928 := by
- obtain ⟨first,second⟩ := split bytes 13831#usize (by change 13831≤bytes.length;omega) parts call
- exact ⟨first,by change parts.1.2.length=928;omega⟩
-#print axioms split
+ obtain ⟨first,second⟩ := split_lengths bytes 13831#usize (by change 13831≤bytes.length;omega) parts call
+ change parts.1.1.val.length=13831 at first
+ change parts.1.2.val.length=bytes.length-13831 at second
+ exact ⟨first,by omega⟩
+#print axioms split_lengths
 #print axioms semantic
 end AspisR1.NLR_PrepareSplitExtent
 end

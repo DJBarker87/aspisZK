@@ -1,0 +1,13 @@
+'AspisR1.NLR_PrepareArgumentDomains.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_PrepareArgumentDomains.source : ∀ (base : Ops) (reserved : Bool) (i : NLJ_Prepare.Input Unit)
+  (v : verifier.View),
+  (↑i.proof).length = 57607 →
+    NHL_PrepareModel.Reaches base reserved i.digest i.proof v →
+      have retained := InstalledPreparation.retainedView v;
+      retained.variant = AspisR1PublicPreparation.transport.Variant.S2 ∧
+        (↑retained.y1).length = 928 ∧
+          (↑retained.round0).length = 224 ∧
+            (↑retained.round1).length = 224 ∧
+              (↑retained.final_message).length = 2048 ∧
+                NFN_LPi_FieldValues.canonE (NFW_SampledDomains.toNative retained.inactive) :=
+⋯

@@ -15,7 +15,7 @@ theorem success (r : Result (NLJ_Observed.Out Unit)) (sem : r1_semantic.Verified
   cases r with
   | Err e => cases returned
   | Ok old =>
-   change ok (.Ok (S1SemanticCarrier.currentSem old))=ok (.Ok sem) at returned
+   dsimp only [NLR_PrepareSemantic137.reply,NLR_PrepareSemantic137.convert] at returned
    have converted := core.result.Result.Ok.inj (Result.ok.inj returned)
    have oldEq : old=(S1SemanticCarrier.semanticEquiv Unit).symm sem := by
     apply (S1SemanticCarrier.semanticEquiv Unit).injective

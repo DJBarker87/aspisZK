@@ -11,7 +11,7 @@ structure Observation087 where
  log : PreparedHashCode.Log
  events : List NLJ_Prepare.Event
 abbrev Native087 := NLJ_Prepare.Input Unit → ExternalFrame → Observation087
-/-- Draft full087 packet. cfg is a FIXED installation to be discharged before
+/-- Draft SOURCE/VALUE087 packet, with physical resources still absent. cfg is a FIXED installation to be discharged before
 any root; arbitrary Ops/std/boundaries are forbidden at an admitted root.
 This declaration proves nothing and supplies no physical producer. Scratch
 writeback is in the complete reply, external read-only state in afterFrame;

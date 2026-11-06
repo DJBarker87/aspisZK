@@ -9,3 +9,7 @@ RowSpec_087 is currently an unproved full-obligation schema with a configuration
 179 is CLOSED on its OWN domain, not unconditional success. At087 constructor occurrence: derive SAME semantic_finish at actual prefix/post-begin transcript/challenges, compact464 checked, initial value928/expanded y1, canonical inactive/kappa/gamma, opening and query/rho full packets, plus sampler/powers29/view widths. Source full137 Result permits branch inversion; no independent semantic or Prepared success may be supplied. Native constructor call must carry actual sem/view/hash/scratch and all Result/error/abort/owned cleanup. These obligations are OPEN until separately proved and installed.
 
 Headline/trust/cryptographic premises are unchanged. No RuntimeCpiReadonlyEntry7. Digest/error coherent slots remain43/44. No row root is emitted here; all new folds are mathematical/source intermediates until physical cuts and child roots are admitted.
+
+## Fresh NLI correction
+
+Research now contains NLI_HANDOFF.md: source136 equality is proved, but the original value-level NLI_RowSpec136 is explicitly WEAKER than the ledger obligation and MUST NOT be used as a full child packet. Its hash remains92a4901a21af60031077d13d9509dfb497a457d9ad01f75a7117c273d70b1ff2. Resource136 is also ungated. Imported NLJ_Control137.observed_fold remains a conditional SOURCE/value theorem, not a full native137 fold. No full136 packet, native root or ledger promotion is installed. See NLR_CHILD_FINAL_RECHECK.json and retained git-object handoff; no sibling worktree was accessed.

@@ -1,0 +1,85 @@
+NLR_generated/NLR_PrepareStep137.lean:35:11: error: Tactic `rfl` failed: The left-hand side
+  ((native (NLR_PrepareSemantic137.observedInput reservation i v) before).log ++
+      (run
+          (pure
+            (Sum.inr
+              (NLJ_Prepare.advance { input := i, locals := NLJ_Prepare.Local.semantic logical v }
+                (NLJ_Prepare.Local.mapSemantic logical v (NLR_PrepareSemantic137.convert v✝)))))).1,
+    (run
+        (pure
+          (Sum.inr
+            (NLJ_Prepare.advance { input := i, locals := NLJ_Prepare.Local.semantic logical v }
+              (NLJ_Prepare.Local.mapSemantic logical v (NLR_PrepareSemantic137.convert v✝)))))).2)
+is not definitionally equal to the right-hand side
+  ((native (NLR_PrepareSemantic137.observedInput reservation i v) before).log,
+    ok (Sum.inr { input := i, locals := NLJ_Prepare.Local.mapSemantic logical v (NLR_PrepareSemantic137.convert v✝) }))
+
+case ok
+native : NLR_Interface.Native137
+child137 : NLR_Interface.RowSpec_137 native
+base : Ops
+reservation : NP6_StdModel.Reservation
+i : NLJ_Prepare.Input Unit
+logical : alloc.vec.Vec U8
+v : verifier.View
+before : NLR_Interface.ExternalFrame
+domain : (↑v.semantic).length = 13831
+call : NLJ_Observed.Input Unit := NLR_PrepareSemantic137.observedInput reservation i v
+full :
+  (native call before).afterInput = call ∧
+    (native call before).afterFrame = before ∧
+      NLJ_Observed.Invocation 6 (NLJ_Observed.initial call) (native call before).reply (native call before).log
+          (native call before).events ∧
+        run
+            (AspisR1PublicPreparation.S1SemanticCode.verify
+              (fun {H} =>
+                AspisR1PublicPreparation.S1SemanticCode.finish NJM_RoundJoin.R
+                  (IDa_Deployed.boundaries call.reservation))
+              call.digest call.publicValue call.bytes call.hash none) =
+          ((native call before).log, (native call before).reply)
+v✝ : NLJ_Observed.Out Unit
+h : (native call before).reply = ok v✝
+⊢ ((native (NLR_PrepareSemantic137.observedInput reservation i v) before).log ++
+        (run
+            (pure
+              (Sum.inr
+                (NLJ_Prepare.advance { input := i, locals := NLJ_Prepare.Local.semantic logical v }
+                  (NLJ_Prepare.Local.mapSemantic logical v (NLR_PrepareSemantic137.convert v✝)))))).1,
+      (run
+          (pure
+            (Sum.inr
+              (NLJ_Prepare.advance { input := i, locals := NLJ_Prepare.Local.semantic logical v }
+                (NLJ_Prepare.Local.mapSemantic logical v (NLR_PrepareSemantic137.convert v✝)))))).2) =
+    ((native (NLR_PrepareSemantic137.observedInput reservation i v) before).log,
+      ok
+        (Sum.inr { input := i, locals := NLJ_Prepare.Local.mapSemantic logical v (NLR_PrepareSemantic137.convert v✝) }))
+NLR_generated/NLR_PrepareStep137.lean:34:3: warning: This simp argument is unused:
+  AspisR1PublicPreparation.PreparedHashCode.run
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵u̵S̵1̵_̵T̵r̵a̵c̵e̵.̵c̵o̵n̵t̵i̵n̵u̵e̵R̵u̵n̵,̵N̵L̵R̵_̵P̵r̵e̵p̵a̵r̵e̵S̵e̵m̵a̵n̵t̵i̵c̵1̵3̵7̵.̵r̵e̵p̵l̵y̵,̵p̵o̵s̵t̵,̵
+  ̵ ̵ ̵ ̵A̵s̵p̵i̵s̵R̵1̵P̵u̵b̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲A̲u̲S̲1̲_̲T̲r̲a̲c̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲,̲ ̲N̲L̲R̲_̲P̲r̲e̲p̲a̲r̲e̲S̲e̲m̲a̲n̲t̲i̲c̲1̲3̲7̲.̲r̲e̲p̲l̲y̲,̲ ̲p̲o̲s̲t̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLR_generated/NLR_PrepareStep137.lean:34:49: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [AuS1_Trace.continueRun, ̲NLR_PrepareSemantic137.reply, ̲post,
+      ̲AspisR1PublicPreparation.PreparedHashCode.run,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NLR_PrepareStep137.semantic_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_PrepareStep137.semantic_step : ∀ (native : NLR_Interface.Native137),
+  NLR_Interface.RowSpec_137 native →
+    ∀ (base : Ops) (reservation : NP6_StdModel.Reservation) (i : NLJ_Prepare.Input Unit) (logical : alloc.vec.Vec U8)
+      (v : verifier.View) (before : NLR_Interface.ExternalFrame),
+      (↑v.semantic).length = 13831 →
+        have call := NLR_PrepareSemantic137.observedInput reservation i v;
+        (native call before).afterInput = call ∧
+          (native call before).afterFrame = before ∧
+            run
+                (NLJ_Prepare.step (NLR_PrepareSemantic137.configuration base reservation)
+                  { input := i, locals := NLJ_Prepare.Local.semantic logical v }) =
+              ((native call before).log, post i logical v (native call before).reply) :=
+⋯

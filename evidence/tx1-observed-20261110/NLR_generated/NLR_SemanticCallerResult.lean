@@ -13,7 +13,7 @@ theorem source (native : NLR_Interface.Native137) (child137 : NLR_Interface.RowS
  (returned : NLR_PrepareSemantic137.reply
   (native (NLR_PrepareSemantic137.observedInput reservation i v) before).reply=ok (.Ok sem)) :
  let call := NLR_PrepareSemantic137.observedInput reservation i v
- (run (S1SemanticCode.verify (S1SemanticCode.finish NJM_RoundJoin.R
+ (run (AspisR1PublicPreparation.S1SemanticCode.verify (AspisR1PublicPreparation.S1SemanticCode.finish NJM_RoundJoin.R
   (IDa_Deployed.boundaries reservation)) call.digest call.publicValue call.bytes call.hash none)).2 =
  ok (.Ok ((S1SemanticCarrier.semanticEquiv Unit).symm sem)) := by
  have actual := congrArg Prod.snd

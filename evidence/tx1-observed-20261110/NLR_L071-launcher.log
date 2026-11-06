@@ -1,0 +1,33 @@
+{"attempt": "NLR_L071", "exit_status": 0, "wall_seconds": 24.855992591008544, "peak_rss_kib": "6354888", "swaps": "0", "print_axioms": ["'AspisR1.NLR_SemanticCallerResult.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLR_SemanticCallerResult.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_SemanticCallerResult.source : ∀ (native : NLR_Interface.Native137),
+  NLR_Interface.RowSpec_137 native →
+    ∀ (reservation : NP6_StdModel.Reservation) (i : NLJ_Prepare.Input Unit) (v : verifier.View)
+      (before : NLR_Interface.ExternalFrame),
+      (↑v.semantic).length = 13831 →
+        ∀ (sem : r1_semantic.Verified Unit),
+          NLR_PrepareSemantic137.reply (native (NLR_PrepareSemantic137.observedInput reservation i v) before).reply =
+              ok (core.result.Result.Ok sem) →
+            have call := NLR_PrepareSemantic137.observedInput reservation i v;
+      
+...
+'AspisR1.NLR_SemanticCallerResult.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_SemanticCallerResult.source : ∀ (native : NLR_Interface.Native137),
+  NLR_Interface.RowSpec_137 native →
+    ∀ (reservation : NP6_StdModel.Reservation) (i : NLJ_Prepare.Input Unit) (v : verifier.View)
+      (before : NLR_Interface.ExternalFrame),
+      (↑v.semantic).length = 13831 →
+        ∀ (sem : r1_semantic.Verified Unit),
+          NLR_PrepareSemantic137.reply (native (NLR_PrepareSemantic137.observedInput reservation i v) before).reply =
+              ok (core.result.Result.Ok sem) →
+            have call := NLR_PrepareSemantic137.observedInput reservation i v;
+            (run
+                  (AspisR1PublicPreparation.S1SemanticCode.verify
+                    (fun {H} =>
+                      AspisR1PublicPreparation.S1SemanticCode.finish NJM_RoundJoin.R
+                        (IDa_Deployed.boundaries reservation))
+                    call.digest call.publicValue call.bytes call.hash none)).2 =
+              ok (core.result.Result.Ok ((S1SemanticCarrier.semanticEquiv Unit).symm sem)) :=
+⋯
+
+Running as unit: run-ra69ba5d0eb9a40dc89c8adcdb6eb8d65.scope; invocation ID: 305d7cd54a69483394ebd6dd8d81ec70

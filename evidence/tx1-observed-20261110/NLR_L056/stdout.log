@@ -1,0 +1,8 @@
+'AspisR1.NLR_Prepare.source_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_Prepare.source_fold : ∀ (cfg : NLJ_Prepare.Configuration) {H : Type} (i : NLJ_Prepare.Input H)
+  (out : Result NLJ_Prepare.Out) (log : AspisR1PublicPreparation.PreparedHashCode.Log)
+  (events : List NLJ_Prepare.Event),
+  NLJ_Prepare.Invocation cfg 12 (NLJ_Prepare.initial i) out log events →
+    run (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash i.scratch) =
+      (log, out) :=
+⋯

@@ -1,0 +1,15 @@
+'AspisR1.NLR_FinishReservation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLR_FinishReservation.constructor_clause' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_FinishReservation.constructor_clause : ∀ (reservation : NP6_StdModel.Reservation) {H : Type}
+  (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
+  (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges) (sem : r1_semantic.Verified H),
+  FinishModel.finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation) D pub pre before challenges none =
+      ok (core.result.Result.Ok sem) →
+    FinishModel.finish NJM_RoundJoin.R
+        (have __src := IDa_Deployed.boundaries reservation;
+        { fromFn := @FinishModel.Boundaries.fromFn __src, mask := __src.mask, add := __src.add, mul := __src.mul,
+          terminal := __src.terminal, circle := __src.circle, unwrapRoot := __src.unwrapRoot,
+          claims := ClaimsUnrolledFinish.claims (NP6_StdModel.calls (core.result.Result.Ok ())) })
+        D pub pre before challenges none =
+      ok (core.result.Result.Ok sem) :=
+⋯

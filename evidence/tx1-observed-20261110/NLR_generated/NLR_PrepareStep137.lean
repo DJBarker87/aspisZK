@@ -30,7 +30,7 @@ theorem semantic_step (native : NLR_Interface.Native137)
    i.digest i.publicValue v.semantic i.hash) _) = _
  rw [AuS1_Trace.run_bind,NLR_PrepareSemantic137.packet native child137 reservation i v before domain]
  cases h : (native call before).reply <;>
-  simp only [AuS1_Trace.continueRun,NLR_PrepareSemantic137.reply,post,
+  simp only [AuS1_Trace.continueRun,NLR_PrepareSemantic137.reply,post,Pure.pure,NLJ_Prepare.advance,
    AspisR1PublicPreparation.PreparedHashCode.run,List.append_nil]
  all_goals rfl
 #print axioms semantic_step

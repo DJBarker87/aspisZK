@@ -1,6 +1,6 @@
 # NLR native cut certificates
 
-No admitted native parent or row root. These are local candidate cuts only. Native semantic transport remains option-A P6/D188 reclassification; nothing is removed or added to the trust inventory.
+No admitted native parent or row root. Begin success probes use zero Challenges; they prove only the shown Prefix projection, not an arbitrary-reply parent step. These are local candidate cuts only. Native semantic transport remains option-A P6/D188 reclassification; nothing is removed or added to the trust inventory.
 
 | Final positive/control | Source occurrence | Asserted scope | Remaining association |
 |---|---|---|---|

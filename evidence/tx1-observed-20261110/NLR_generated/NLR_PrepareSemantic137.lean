@@ -1,6 +1,7 @@
 import NLR_RowSpec137
 import NLJ_PrepareStep
 import NLJ_RoundPort
+import NLJ_CodeRight
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NLR_PrepareSemantic137
@@ -26,10 +27,21 @@ theorem installed (reservation : NP6_StdModel.Reservation) (i : NLJ_Prepare.Inpu
   (ClaimsUnrolledFinish.install (NP6_StdModel.calls reservation) (IDa_Deployed.boundaries reservation))
   i.digest i.publicValue v.semantic i.hash =
  AspisR1PublicPreparation.PreparedHashCode.bind
-  (S1SemanticCode.verify (S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation))
+  (AspisR1PublicPreparation.S1SemanticCode.verify
+   (AspisR1PublicPreparation.S1SemanticCode.finish NJM_RoundJoin.R
+    (IDa_Deployed.boundaries (observedInput reservation i v).reservation))
    (observedInput reservation i v).digest (observedInput reservation i v).publicValue
-   v.semantic i.hash none) (fun r => pure (convert r)) := by
- rfl
+   (observedInput reservation i v).bytes (observedInput reservation i v).hash none) (fun r => pure (convert r)) := by
+ unfold S1SemanticCodeInstallation.code
+ rw [NLJ_InstalledBoundaries.finish,NLJ_RoundPort.rounds]
+ simp only [Bind.bind,Pure.pure,observedInput,convert]
+ generalize hcall : AspisR1PublicPreparation.S1SemanticCode.verify
+  (AspisR1PublicPreparation.S1SemanticCode.finish AspisS1ExtractedRoundChildren.children
+   (IDa_Deployed.boundaries reservation)) (InstalledPreparation.retainedDigest i.digest)
+  (FirstComposition.toRetainedPublic i.publicValue) v.semantic i.hash none = call
+ apply NLJ_CodeRight.same call
+ intro result
+ cases result <;> rfl
 /-- Exact child packet at the produced view;13831 is a verbatim(bf) caller
 clause. It is not silently supplied, and no physical087 root is emitted. -/
 theorem packet (native : NLR_Interface.Native137) (child137 : NLR_Interface.RowSpec_137 native)
@@ -44,7 +56,7 @@ theorem packet (native : NLR_Interface.Native137) (child137 : NLR_Interface.RowS
  rw [installed,AuS1_Trace.run_bind]
  rw [(child137 (observedInput reservation i v) before domain).2.2.2]
  cases h : (native (observedInput reservation i v) before).reply <;>
-  simp only [AuS1_Trace.continueRun,reply,AspisR1PublicPreparation.PreparedHashCode.run,List.append_nil]
+  simp only [AuS1_Trace.continueRun,reply,Pure.pure,AspisR1PublicPreparation.PreparedHashCode.run,List.append_nil]
  all_goals rfl
 #print axioms installed
 #print axioms packet

@@ -1,0 +1,41 @@
+{"attempt": "NLR_L080", "exit_status": 1, "wall_seconds": 22.925051097059622, "peak_rss_kib": "6318368", "swaps": "0", "print_axioms": ["'AspisR1.NLR_PrepareSemantic137.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NLR_PrepareSemantic137.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLR_generated/NLR_PrepareSemantic137.lean:36:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let result ←
+      AspisR1PublicPreparation.S1SemanticCode.verify
+          (fun {H} =>
+            AspisR1PublicPreparation.S1SemanticCode.finish AspisS1ExtractedRoundChildren.children
+              (IDa_Deployed.boundaries reservation))
+          (InstalledPreparation.retainedDigest i.digest) (FirstComposition.toRetainedPublic i.publicValue) v.semantic
+          i.hash none
+    pure
+        (match result with
+        | core.result.Result.Ok sem => core.result.Result.Ok (S1SemanticCarrier.currentSem sem)
+        | core.result.Result.Err error => core.result.Result.Err (S1SemanticCarrier.c
+...
+̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲A̲u̲S̲1̲_̲T̲r̲a̲c̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLR_generated/NLR_PrepareSemantic137.lean:51:88: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵u̵S̵1̵_̵T̵r̵a̵c̵e̵.̵c̵o̵n̵t̵i̵n̵u̵e̵R̵u̵n̵,̵r̵e̵p̵l̵y̵,̵A̵s̵p̵i̵s̵R̵1̵P̵u̵b̵l̵i̵c̵P̵r̵e̵p̵a̵r̵a̵t̵i̵o̵n̵.̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲A̲u̲S̲1̲_̲T̲r̲a̲c̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲P̲u̲b̲l̲i̲c̲P̲r̲e̲p̲a̲r̲a̲t̲i̲o̲n̲.̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲r̲u̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NLR_PrepareSemantic137.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLR_PrepareSemantic137.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_PrepareSemantic137.packet : ∀ (native : NLR_Interface.Native137),
+  NLR_Interface.RowSpec_137 native →
+    ∀ (reservation : NP6_StdModel.Reservation) (i : NLJ_Prepare.Input Unit) (v : verifier.View)
+      (before : NLR_Interface.ExternalFrame),
+      (↑v.semantic).length = 13831 →
+        run
+            (S1SemanticCodeInstallation.code AspisS1ExtractedRoundChildren.children
+              (ClaimsUnrolledFinish.install (NP6_StdModel.calls reservation) (IDa_Deployed.boundaries reservation))
+              i.digest i.publicValue v.semantic i.hash) =
+          ((native (observedInput reservation i v) before).log,
+            reply (native (observedInput reservation i v) before).reply) :=
+⋯
+
+Running as unit: run-r72b5737efae64ea390a964b8caf902db.scope; invocation ID: 2230744a9d29436f9abb2f87503178f0

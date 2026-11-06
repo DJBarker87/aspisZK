@@ -44,5 +44,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
  shutil.copyfile(priors[1]/'NLJ_native'/n,E/'NLR_native'/n);pins[n]=hashlib.sha256((E/'NLR_native'/n).read_bytes()).hexdigest()
 (E/'NLR_AUDIT_INPUT_PINS.json').write_text(json.dumps(pins,indent=2))
 priorpins={tag:json.loads(lzma.decompress((path/(tag+'_CLOSURE_PINS.json.xz')).read_bytes()))for tag,path in zip(tags,priors)}
-(E/'NLR_PREDECESSORS.json.xz').write_bytes(lzma.compress(json.dumps(priorpins).encode()))
+priorraw=json.dumps(priorpins).encode()
+(E/'NLR_PREDECESSORS.json.xz').write_bytes(lzma.compress(priorraw))
+(E/'NLR_PREDECESSORS.json.sha256').write_text(hashlib.sha256(priorraw).hexdigest()+'\n')
 print(json.dumps(dict(modules=len(mods),own_roots=len(roots),required_roots=len(allroots),groups=len(groups),expected_import_conflicts=0)))

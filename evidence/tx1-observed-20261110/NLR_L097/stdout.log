@@ -1,0 +1,116 @@
+theorem AspisR1.NLJ_Control137.observed_fold : ∀
+  (native136 : AspisR1.NLC_Finish.Input Unit → AspisR1.NLI_Interface.Observation Unit),
+  AspisR1.NLI_Interface.RowSpec_136 native136 →
+    ∀ (i : AspisR1.NLJ_Observed.Input Unit) (out : Aeneas.Std.Result (AspisR1.NLJ_Observed.Out Unit))
+      (log : AspisR1PublicPreparation.PreparedHashCode.Log) (events : List AspisR1.NLJ_Observed.Event)
+      (last : AspisR1.NLJ_Observed.Input Unit),
+      AspisR1.NLJ_Control137.Invocation native136 6 (AspisR1.NLJ_Observed.initial i) out log events last →
+        AspisR1PublicPreparation.PreparedHashCode.run
+              (AspisR1PublicPreparation.S1SemanticCode.verify
+                (fun {H} =>
+                  AspisR1PublicPreparation.S1SemanticCode.finish AspisR1.NJM_RoundJoin.R
+                    (AspisR1.IDa_Deployed.boundaries i.reservation))
+                i.digest i.publicValue i.bytes i.hash none) =
+            (log, out) ∧
+          last = i :=
+⋯
+theorem AspisR1.NLR_Prepare.source : ∀ (cfg : AspisR1.NLJ_Prepare.Configuration) {H : Type}
+  (i : AspisR1.NLJ_Prepare.Input H), AspisR1.NLJ_Prepare.SourceEquality cfg i :=
+⋯
+theorem AspisR1.NLR_Prepare.source_fold : ∀ (cfg : AspisR1.NLJ_Prepare.Configuration) {H : Type}
+  (i : AspisR1.NLJ_Prepare.Input H) (out : Aeneas.Std.Result AspisR1.NLJ_Prepare.Out)
+  (log : AspisR1PublicPreparation.PreparedHashCode.Log) (events : List AspisR1.NLJ_Prepare.Event),
+  AspisR1.NLJ_Prepare.Invocation cfg 12 (AspisR1.NLJ_Prepare.initial i) out log events →
+    AspisR1PublicPreparation.PreparedHashCode.run
+        (AspisR1.SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash
+          i.scratch) =
+      (log, out) :=
+⋯
+theorem AspisR1.NLR_PrepareInitialized.source : ∀ (cfg : AspisR1.NLJ_Prepare.Configuration) {H : Type}
+  (i : AspisR1.NLJ_Prepare.Input H),
+  ∃ events,
+    AspisR1.NLJ_Prepare.Invocation cfg 12 (AspisR1.NLJ_Prepare.initial i)
+      (AspisR1PublicPreparation.PreparedHashCode.run
+          (AspisR1.SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash
+            i.scratch)).2
+      (AspisR1PublicPreparation.PreparedHashCode.run
+          (AspisR1.SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash
+            i.scratch)).1
+      events :=
+⋯
+theorem AspisR1.NLR_PrepareStep137.semantic_step : ∀ (native : AspisR1.NLR_Interface.Native137),
+  AspisR1.NLR_Interface.RowSpec_137 native →
+    ∀ (base : AspisR1CurrentCaller.Ops) (reservation : AspisR1.NP6_StdModel.Reservation)
+      (i : AspisR1.NLJ_Prepare.Input Unit) (logical : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+      (v : AspisR1CurrentCaller.verifier.View) (before : AspisR1.NLR_Interface.ExternalFrame),
+      (↑v.semantic).length = 13831 →
+        have call := AspisR1.NLR_PrepareSemantic137.observedInput reservation i v;
+        (native call before).afterInput = call ∧
+          (native call before).afterFrame = before ∧
+            AspisR1PublicPreparation.PreparedHashCode.run
+                (AspisR1.NLJ_Prepare.step (AspisR1.NLR_PrepareSemantic137.configuration base reservation)
+                  { input := i, locals := AspisR1.NLJ_Prepare.Local.semantic logical v }) =
+              ((native call before).log, AspisR1.NLR_PrepareStep137.post i logical v (native call before).reply) :=
+⋯
+theorem AspisR1.NLR_PreparedSemanticClause.source : ∀ (native : AspisR1.NLR_Interface.Native137),
+  AspisR1.NLR_Interface.RowSpec_137 native →
+    ∀ (reservation : AspisR1.NP6_StdModel.Reservation) (i : AspisR1.NLJ_Prepare.Input Unit)
+      (v : AspisR1CurrentCaller.verifier.View) (frame : AspisR1.NLR_Interface.ExternalFrame),
+      (↑v.semantic).length = 13831 →
+        ∀ (sem : AspisR1CurrentCaller.r1_semantic.Verified Unit),
+          AspisR1.NLR_PrepareSemantic137.reply
+                (native (AspisR1.NLR_PrepareSemantic137.observedInput reservation i v) frame).reply =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) →
+            have call := AspisR1.NLR_PrepareSemantic137.observedInput reservation i v;
+            ∃ p before c,
+              AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children
+                  (have __src := AspisR1.IDa_Deployed.boundaries reservation;
+                  { fromFn := @AspisR1PublicPreparation.FinishModel.Boundaries.fromFn __src, mask := __src.mask,
+                    add := __src.add, mul := __src.mul, terminal := __src.terminal, circle := __src.circle,
+                    unwrapRoot := __src.unwrapRoot,
+                    claims :=
+                      AspisR1.ClaimsUnrolledFinish.claims
+                        (AspisR1.NP6_StdModel.calls (Aeneas.Std.core.result.Result.Ok ())) })
+                  call.digest call.publicValue p before c none =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Ok
+                    ((AspisR1CurrentCaller.S1SemanticCarrier.semanticEquiv Unit).symm sem)) :=
+⋯
+theorem AspisR1.NLR_PrepareArgumentDomains.source : ∀ (base : AspisR1CurrentCaller.Ops) (reserved : Bool)
+  (i : AspisR1.NLJ_Prepare.Input Unit) (v : AspisR1CurrentCaller.verifier.View),
+  (↑i.proof).length = 57607 →
+    AspisR1.NHL_PrepareModel.Reaches base reserved i.digest i.proof v →
+      have retained := AspisR1CurrentCaller.InstalledPreparation.retainedView v;
+      retained.variant = AspisR1PublicPreparation.transport.Variant.S2 ∧
+        (↑retained.y1).length = 928 ∧
+          (↑retained.round0).length = 224 ∧
+            (↑retained.round1).length = 224 ∧
+              (↑retained.final_message).length = 2048 ∧
+                AspisR1.NFN_LPi_FieldValues.canonE (AspisR1.NFW_SampledDomains.toNative retained.inactive) :=
+⋯
+def AspisR1.NLR_Interface.RowSpec_137 : AspisR1.NLR_Interface.Native137 → Prop :=
+fun native =>
+  ∀ (i : AspisR1.NLJ_Observed.Input Unit) (before : AspisR1.NLR_Interface.ExternalFrame),
+    (↑i.bytes).length = 13831 →
+      (native i before).afterInput = i ∧
+        (native i before).afterFrame = before ∧
+          AspisR1.NLJ_Observed.Invocation 6 (AspisR1.NLJ_Observed.initial i) (native i before).reply
+              (native i before).log (native i before).events ∧
+            AspisR1PublicPreparation.PreparedHashCode.run
+                (AspisR1PublicPreparation.S1SemanticCode.verify
+                  (fun {H} =>
+                    AspisR1PublicPreparation.S1SemanticCode.finish AspisR1.NJM_RoundJoin.R
+                      (AspisR1.IDa_Deployed.boundaries i.reservation))
+                  i.digest i.publicValue i.bytes i.hash none) =
+              ((native i before).log, (native i before).reply)
+def AspisR1.NLR_Interface.RowSpec_087 : AspisR1.NLJ_Prepare.Configuration → AspisR1.NLR_Interface.Native087 → Prop :=
+fun cfg native =>
+  ∀ (i : AspisR1.NLJ_Prepare.Input Unit) (before : AspisR1.NLR_Interface.ExternalFrame),
+    (native i before).afterInput = i ∧
+      (native i before).afterFrame = before ∧
+        AspisR1.NLJ_Prepare.Invocation cfg 12 (AspisR1.NLJ_Prepare.initial i) (native i before).reply
+            (native i before).log (native i before).events ∧
+          AspisR1PublicPreparation.PreparedHashCode.run
+              (AspisR1.SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash
+                i.scratch) =
+            ((native i before).log, (native i before).reply)

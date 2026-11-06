@@ -1,0 +1,25 @@
+{"attempt": "NLR_L063", "exit_status": 0, "wall_seconds": 22.237920285202563, "peak_rss_kib": "6349516", "swaps": "0", "print_axioms": ["'AspisR1.NLR_FinishModelDomain.reached' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLR_FinishModelDomain.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_FinishModelDomain.reached : ∀ (R : RoundModel.Boundaries) (B : FinishModel.Boundaries) {H : Type}
+  (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H)
+  (sem : r1_semantic.Verified H),
+  (run (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes hash none)).2 =
+      ok (core.result.Result.Ok sem) →
+    ∃ p initial after c,
+      PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok p) ∧
+        (run (S1SemanticCode.publicTranscript D pub hash p.c1_root)).2 = ok (core.result.Result.Ok 
+...
+'AspisR1.NLR_FinishModelDomain.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_FinishModelDomain.reached : ∀ (R : RoundModel.Boundaries) (B : FinishModel.Boundaries) {H : Type}
+  (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H)
+  (sem : r1_semantic.Verified H),
+  (run (S1SemanticCode.verify (fun {H} => S1SemanticCode.finish R B) D pub bytes hash none)).2 =
+      ok (core.result.Result.Ok sem) →
+    ∃ p initial after c,
+      PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok p) ∧
+        (run (S1SemanticCode.publicTranscript D pub hash p.c1_root)).2 = ok (core.result.Result.Ok initial) ∧
+          (run (S1SemanticCode.begin D p initial)).2 = ok (core.result.Result.Ok c, after) ∧
+            FinishModel.finish R B D pub p after c none = ok (core.result.Result.Ok sem) :=
+⋯
+
+Running as unit: run-r4b31996ac4f94dccab8a34896b051271.scope; invocation ID: 096eb5cb7b854023aa711ea215b6ea5d
