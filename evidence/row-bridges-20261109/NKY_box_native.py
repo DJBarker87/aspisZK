@@ -11,6 +11,8 @@ def run(a,kind,mode):
  instrumented=f'''fn {name}(bytes: &[u8]) -> Result<Box<{typ}>, ProgramError> {{
     assert!(core::mem::size_of::<{typ}>()=={layout},"exact Box layout bytes");
     assert!(core::mem::align_of::<{typ}>()==8,"exact Box layout alignment");
+    assert!(!core::mem::needs_drop::<{typ}>(),"decoded record has no destructor");
+    assert!(!core::mem::needs_drop::<aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1>(),"raw decoder error has no destructor");
     let raw={child}(bytes);
     let mut allocated: *const {typ}=core::ptr::null();
     let mut out=(|| {{let b=Box::new(raw.map_err(|_| ProgramError::InvalidAccountData)?);allocated=&*b;Ok(b)}})();

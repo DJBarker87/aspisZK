@@ -13,7 +13,7 @@ The literal is a namespace/type port of retained emission, with explicit child
 slot. See NKY_LITERAL_CHECK.json; it is not an alias for a nonexistent FIq
 constant. Native transport uses existing (y)/(aq)(5), not a new trust row.
 
-TX2:216/218 (`NKY_BoxTotal.checkpoint/master`): allocator is the retained
+TX2:216/218 (`NKY_BoxSource.checkpoint/master` with `NKY_BoxTotal` outcome laws): allocator is the retained
 headline Allocator item at the actual Box::new source site; before is that
 invocation's pre-state. Reservation is universally quantified, consumed at
 that site; no success premise. Allocated is the native captured allocation
@@ -40,3 +40,18 @@ InvalidAccountData; allocator fail/div propagates with its allocation prefix;
 return retains the owner/payload/post and has no cleanup suffix. Payload
 identity is reconstructed from all fields independently of pointer identity.
 Existing Allocator/P6/D188 transport is retained/reclassified, not discharged.
+
+Final observed frame binding: `before` is the SAME caller-visible pre-heap,
+and `readsAfter : Nat → CC/CM` is captured post-state DATA, not an Ops dictionary
+or an independently executed callback. The `frame` hypothesis is exactly the
+own native selector/coordinate observation predicate, conditional only on
+which source arm is entered. `NKY_FrameObservation.checkpoint_windows` and
+`master_windows` reconstruct every field, including bool0/1and unsigned
+widening. `NKY_BoxPostWindows` lifts each live address. The ROOT derives the
+entire observed post-heap equality INSIDE the Result together with the actual
+Box and allocator post. No whole-heap or endpoint equality is assumed.
+Non-live cells are absent from the caller-visible projection; newly allocated
+payload comes from the actual typed Box observations, never from its address.
+On abort there is no returned post-state or post-read requirement. The old
+Total root is auxiliary outcome/event support; the final Source root is the
+actual Result/state/frame implication. Both use the identical arguments.

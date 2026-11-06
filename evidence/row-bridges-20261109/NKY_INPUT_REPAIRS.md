@@ -16,3 +16,11 @@ implicit Init. Final scan is on the changed final combined source, not an
 unchanged regression. NKY_K014 full-struct equality failed builtin memcmp
 unwinding at35; it was replaced by an arbitrary typed field/coordinate window
 under the SAME harness names, not rerun or given more unwind/time/memory.
+
+L073 rejected the reserved Lean identifier `at` in the new field-observer
+proof; it was corrected to `readImage` before changed L074. L079's strict
+export check refused to overwrite the first immutable export's old combined
+object after the additive post-heap extension. No old cache was overwritten
+or deleted. The OWN export destination was changed to NKY_exports_final_20261109;
+the same exact hash/provenance checks are retained, and L080 performs focused
+statement review plus that final pin/export. No cap, timeout or budget changed.
