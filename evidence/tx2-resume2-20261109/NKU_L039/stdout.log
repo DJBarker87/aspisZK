@@ -1,0 +1,551 @@
+NKU_generated/NKU_AfterZ.lean:41:55: error: Tactic `unfold` failed to unfold `NKU_Allocation.post` in
+  (match core.result.Result.Ok (weights, cursor) with
+    | core.result.Result.Ok x =>
+      if (x.2 != «end») = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+      else do
+        let n ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+        pure
+            (core.result.Result.Ok
+              ({ variant := transport.Variant.S2, roots := Array.make 2#usize [a3, a4] ⋯, gamma := g, kappa := k,
+                  alpha := Array.make 2#usize [a0, a1] ⋯, rho := rho, queries := queries, semantic_alpha := semantic,
+                  z := Array.make 2#usize [{ x := x0, y := y0 }, { x := x1, y := y1 }] ⋯, claim := claim,
+                  state := state },
+                { weights := x.1, rhs := rhs, power := power, next := n }))
+    | core.result.Result.Err err => pure (core.result.Result.Err err)) =
+    do
+    let weights ←
+      match core.result.Result.Ok (weights, cursor) with
+        | core.result.Result.Ok x =>
+          pure
+            (core.result.Result.Ok
+              ((),
+                {
+                  frame :=
+                    { frame := s.frame, phase := NKU.Phase.weights,
+                        decoded :=
+                          { next := some next, endAt := some «end», roots := [state, a3, a4],
+                            gammaAlpha := [g, k, a0, a1], rho := some rho, queries := ↑queries,
+                            semantic := some semantic, z := [x0, y0, x1, y1], claim := some claim, rhs := some rhs,
+                            power := some power },
+                        reader := r, iterator := s.iterator, owned := some owner, returned := s.returned,
+                        history := s.history }.frame,
+                  phase := NKU.Phase.tail,
+                  decoded :=
+                    { frame := s.frame, phase := NKU.Phase.weights,
+                        decoded :=
+                          { next := some next, endAt := some «end», roots := [state, a3, a4],
+                            gammaAlpha := [g, k, a0, a1], rho := some rho, queries := ↑queries,
+                            semantic := some semantic, z := [x0, y0, x1, y1], claim := some claim, rhs := some rhs,
+                            power := some power },
+                        reader := r, iterator := s.iterator, owned := some owner, returned := s.returned,
+                        history := s.history }.decoded,
+                  reader :=
+                    have __src :=
+                      { frame := s.frame, phase := NKU.Phase.weights,
+                          decoded :=
+                            { next := some next, endAt := some «end», roots := [state, a3, a4],
+                              gammaAlpha := [g, k, a0, a1], rho := some rho, queries := ↑queries,
+                              semantic := some semantic, z := [x0, y0, x1, y1], claim := some claim, rhs := some rhs,
+                              power := some power },
+                          reader := r, iterator := s.iterator, owned := some owner, returned := s.returned,
+                          history := s.history }.reader;
+                    { bytes := __src.bytes, «at» := x.2 },
+                  iterator :=
+                    { frame := s.frame, phase := NKU.Phase.weights,
+                        decoded :=
+                          { next := some next, endAt := some «end», roots := [state, a3, a4],
+                            gammaAlpha := [g, k, a0, a1], rho := some rho, queries := ↑queries,
+                            semantic := some semantic, z := [x0, y0, x1, y1], claim := some claim, rhs := some rhs,
+                            power := some power },
+                        reader := r, iterator := s.iterator, owned := some owner, returned := s.returned,
+                        history := s.history }.iterator,
+                  owned := some x.1,
+                  returned :=
+                    { frame := s.frame, phase := NKU.Phase.weights,
+                        decoded :=
+                          { next := some next, endAt := some «end», roots := [state, a3, a4],
+                            gammaAlpha := [g, k, a0, a1], rho := some rho, queries := ↑queries,
+                            semantic := some semantic, z := [x0, y0, x1, y1], claim := some claim, rhs := some rhs,
+                            power := some power },
+                        reader := r, iterator := s.iterator, owned := some owner, returned := s.returned,
+                        history := s.history }.returned,
+                  history :=
+                    { frame := s.frame, phase := NKU.Phase.weights,
+                        decoded :=
+                          { next := some next, endAt := some «end», roots := [state, a3, a4],
+                            gammaAlpha := [g, k, a0, a1], rho := some rho, queries := ↑queries,
+                            semantic := some semantic, z := [x0, y0, x1, y1], claim := some claim, rhs := some rhs,
+                            power := some power },
+                        reader := r, iterator := s.iterator, owned := some owner, returned := s.returned,
+                        history := s.history }.history }))
+        | core.result.Result.Err err => pure (core.result.Result.Err err)
+    match weights with
+      | core.result.Result.Ok x =>
+        liftM
+          (match x.2.decoded.next, x.2.decoded.endAt, x.2.decoded.roots, x.2.decoded.gammaAlpha, x.2.decoded.rho,
+            x.2.decoded.semantic, x.2.decoded.z, x.2.decoded.claim, x.2.decoded.rhs, x.2.decoded.power, x.2.owned with
+          | some next, some «end», [state, a3, a4], [g, k, a0, a1], some rho, some semantic, [x0, y0, x1, y1],
+            some claim, some rhs, some power, some weights =>
+            if (x.2.reader.at != «end») = true then ok (core.result.Result.Err verifier.Error.Checkpoint)
+            else do
+              let queries ← NKU_Validator.values x.2.decoded.queries
+              let n ← lift (UScalar.cast UScalarTy.Usize next)
+              ok
+                  (core.result.Result.Ok
+                    ({ variant := transport.Variant.S2, roots := Array.make 2#usize [a3, a4] ⋯, gamma := g, kappa := k,
+                        alpha := Array.make 2#usize [a0, a1] ⋯, rho := rho, queries := queries,
+                        semantic_alpha := semantic,
+                        z := Array.make 2#usize [{ x := x0, y := y0 }, { x := x1, y := y1 }] ⋯, claim := claim,
+                        state := state },
+                      { weights := weights, rhs := rhs, power := power, next := n }))
+          | x, x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_8, x_9, x_10 => fail Error.panic)
+      | core.result.Result.Err err => pure (core.result.Result.Err err)
+NKU_generated/NKU_AfterZ.lean:28:53: warning: This simp argument is unused:
+  NKK_LogReduce.pure_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵K̵K̵_̵L̵o̵g̵A̵l̵g̵e̵b̵r̵a̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵N̵K̵K̵_̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵N̵K̵K̵_̵L̵o̵g̵R̵e̵d̵u̵c̵e̵.̵p̵u̵r̵e̵_̵b̵i̵n̵d̵]̵[̲N̲K̲K̲_̲L̲o̲g̲A̲l̲g̲e̲b̲r̲a̲.̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲N̲K̲K̲_̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKU_AfterZ.source : ∀ {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (s : NKU.State) (next : U8)
+  («end» : Usize) (state a3 a4 : Std.Array U8 32#usize) (g k a0 a1 : NKU.E) (rho : NKU.K)
+  (queries : Std.Array U32 22#usize) (semantic : Std.Array NKU.K 10#usize) (x0 y0 x1 y1 : NKU.K) (claim rhs : NKU.E)
+  (power : NKU.K) (r : verifier.Reader),
+  NKU_AfterZSource.run d s next «end» state a3 a4 g k a0 a1 rho queries semantic x0 y0 x1 y1 claim rhs power r =
+    run d
+      (NKU_ZClaim.post
+        (NKU_Semantic.post (NKU_Pack.pack s next «end» state a3 a4 g k a0 a1 rho queries r) semantic r.at) x0 y0 x1 y1
+        claim rhs power r) :=
+fun {H} d s next «end» state a3 a4 g k a0 a1 rho queries semantic x0 y0 x1 y1 claim rhs power r =>
+  id
+    (id
+      (id
+        (id
+          (Eq.mpr
+            (id
+              (congr
+                (congrArg Eq
+                  (congrArg (Bind.bind (NKK_AllocationStage.source s.frame.reservation d))
+                    (funext fun allocated =>
+                      Eq.trans
+                        (congrArg (NKK_Try.emitted allocated)
+                          (funext fun owner =>
+                            congrArg (Bind.bind (NJU_ResumeObserved.recordWeights s.frame.checkpoint r.at owner))
+                              (funext fun reply =>
+                                NKK_Try.branch reply fun x =>
+                                  if (x.2 != «end») = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                  else do
+                                    let n ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+                                    pure
+                                        (core.result.Result.Ok
+                                          ({ variant := transport.Variant.S2,
+                                              roots :=
+                                                Array.make 2#usize [a3, a4] (NKU_AfterZSource.run._proof_5 a3 a4),
+                                              gamma := g, kappa := k,
+                                              alpha :=
+                                                Array.make 2#usize [a0, a1] (NKU_AfterZSource.run._proof_6 a0 a1),
+                                              rho := rho, queries := queries, semantic_alpha := semantic,
+                                              z :=
+                                                Array.make 2#usize [{ x := x0, y := y0 }, { x := x1, y := y1 }]
+                                                  (NKU_AfterZSource.run._proof_7 x0 y0 x1 y1),
+                                              claim := claim, state := state },
+                                            { weights := x.1, rhs := rhs, power := power, next := n })))))
+                        (NKK_Try.branch allocated fun owner => do
+                          let reply ← NJU_ResumeObserved.recordWeights s.frame.checkpoint r.at owner
+                          match reply with
+                            | core.result.Result.Ok x =>
+                              if (x.2 != «end») = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                              else do
+                                let n ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+                                pure
+                                    (core.result.Result.Ok
+                                      ({ variant := transport.Variant.S2,
+                                          roots := Array.make 2#usize [a3, a4] (NKU_AfterZSource.run._proof_5 a3 a4),
+                                          gamma := g, kappa := k,
+                                          alpha := Array.make 2#usize [a0, a1] (NKU_AfterZSource.run._proof_6 a0 a1),
+                                          rho := rho, queries := queries, semantic_alpha := semantic,
+                                          z :=
+                                            Array.make 2#usize [{ x := x0, y := y0 }, { x := x1, y := y1 }]
+                                              (NKU_AfterZSource.run._proof_7 x0 y0 x1 y1),
+                                          claim := claim, state := state },
+                                        { weights := x.1, rhs := rhs, power := power, next := n }))
+                            | core.result.Result.Err err => pure (core.result.Result.Err err)))))
+                (Eq.trans
+                  (congr
+                    (congrArg Bind.bind
+                      (congrArg
+                        (Bind.bind
+                          (NKK_AllocationStage.source
+                            (NKU_ZClaim.post
+                                  (NKU_Semantic.post (NKU_Pack.pack s next «end» state a3 a4 g k a0 a1 rho queries r)
+                                    semantic r.at)
+                                  x0 y0 x1 y1 claim rhs power r).frame.reservation
+                            d))
+                        (funext fun reply =>
+                          NKK_Try.branch reply fun owner =>
+                            pure
+                              (core.result.Result.Ok
+                                ((),
+                                  NKU_Allocation.post
+                                    (NKU_ZClaim.post
+                                      (NKU_Semantic.post
+                                        (NKU_Pack.pack s next «end» state a3 a4 g k a0 a1 rho queries r) semantic r.at)
+                                      x0 y0 x1 y1 claim rhs power r)
+                                    owner)))))
+                    (funext fun reply =>
+                      Eq.trans
+                        (congrArg (NKK_Try.emitted reply)
+                          (funext fun x =>
+                            congr
+                              (congrArg Bind.bind
+                                (congrArg
+                                  (NKU_Weights.run.match_2
+                                    (fun x => Run (core.result.Result (Unit × NKU.State) verifier.Error)) x.2.owned
+                                    fun _ => liftM (fail Error.panic))
+                                  (funext fun before =>
+                                    congrArg
+                                      (Bind.bind
+                                        (NJU_ResumeObserved.recordWeights x.2.frame.checkpoint x.2.reader.at before))
+                                      (funext fun reply =>
+                                        NKK_Try.branch reply fun x_1 =>
+                                          pure (core.result.Result.Ok ((), NKU_Weights.post x.2 x_1.1 x_1.2))))))
+                              (funext fun weights => NKK_Try.branch weights fun x => NKU_Tail.run x.2)))
+                        (NKK_Try.branch reply fun x => do
+                          let weights ←
+                            match x.2.owned with
+                              | none => liftM (fail Error.panic)
+                              | some before => do
+                                let reply ← NJU_ResumeObserved.recordWeights x.2.frame.checkpoint x.2.reader.at before
+                                match reply with
+                                  | core.result.Result.Ok x_1 =>
+                                    pure (core.result.Result.Ok ((), NKU_Weights.post x.2 x_1.1 x_1.2))
+                                  | core.result.Result.Err err => pure (core.result.Result.Err err)
+                          match weights with
+                            | core.result.Result.Ok x => NKU_Tail.run x.2
+                            | core.result.Result.Err err => pure (core.result.Result.Err err))))
+                  (NKK_LogAlgebra.bind_assoc
+                    (NKK_AllocationStage.source
+                      (NKU_ZClaim.post
+                            (NKU_Semantic.post (NKU_Pack.pack s next «end» state a3 a4 g k a0 a1 rho queries r) semantic
+                              r.at)
+                            x0 y0 x1 y1 claim rhs power r).frame.reservation
+                      d)
+                    (fun reply =>
+                      match reply with
+                      | core.result.Result.Ok owner =>
+                        pure
+                          (core.result.Result.Ok
+                            ((),
+                              NKU_Allocation.post
+                                (NKU_ZClaim.post
+                                  (NKU_Semantic.post (NKU_Pack.pack s next «end» state a3 a4 g k a0 a1 rho queries r)
+                                    semantic r.at)
+                                  x0 y0 x1 y1 claim rhs power r)
+                                owner))
+                      | core.result.Result.Err err => pure (core.result.Result.Err err))
+                    fun reply =>
+                    match reply with
+                    | core.result.Result.Ok x => do
+                      let weights ←
+                        match x.2.owned with
+                          | none => liftM (fail Error.panic)
+                          | some before => do
+                            let reply ← NJU_ResumeObserved.recordWeights x.2.frame.checkpoint x.2.reader.at before
+                            match reply with
+                              | core.result.Result.Ok x_1 =>
+                                pure (core.result.Result.Ok ((), NKU_Weights.post x.2 x_1.1 x_1.2))
+                              | core.result.Result.Err err => pure (core.result.Result.Err err)
+                      match weights with
+                        | core.result.Result.Ok x => NKU_Tail.run x.2
+                        | core.result.Result.Err err => pure (core.result.Result.Err err)
+                    | core.result.Result.Err err => pure (core.result.Result.Err err)))))
+            (NKK_LogAlgebra.bind_congr (NKK_AllocationStage.source s.frame.reservation d)
+              (fun allocated =>
+                match allocated with
+                | core.result.Result.Ok owner => do
+                  let reply ← NJU_ResumeObserved.recordWeights s.frame.checkpoint r.at owner
+                  match reply with
+                    | core.result.Result.Ok x =>
+                      if (x.2 != «end») = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                      else do
+                        let n ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+                        pure
+                            (core.result.Result.Ok
+                              ({ variant := transport.Variant.S2,
+                                  roots := Array.make 2#usize [a3, a4] (NKU_AfterZSource.run._proof_5 a3 a4),
+                                  gamma := g, kappa := k,
+                                  alpha := Array.make 2#usize [a0, a1] (NKU_AfterZSource.run._proof_6 a0 a1),
+                                  rho := rho, queries := queries, semantic_alpha := semantic,
+                                  z :=
+                                    Array.make 2#usize [{ x := x0, y := y0 }, { x := x1, y := y1 }]
+                                      (NKU_AfterZSource.run._proof_7 x0 y0 x1 y1),
+                                  claim := claim, state := state },
+                                { weights := x.1, rhs := rhs, power := power, next := n }))
+                    | core.result.Result.Err err => pure (core.result.Result.Err err)
+                | core.result.Result.Err err => pure (core.result.Result.Err err))
+              (fun a => do
+                let reply ←
+                  match a with
+                    | core.result.Result.Ok owner =>
+                      pure
+                        (core.result.Result.Ok
+                          ((),
+                            NKU_Allocation.post
+                              (NKU_ZClaim.post
+                                (NKU_Semantic.post (NKU_Pack.pack s next «end» state a3 a4 g k a0 a1 rho queries r)
+                                  semantic r.at)
+                                x0 y0 x1 y1 claim rhs power r)
+                              owner))
+                    | core.result.Result.Err err => pure (core.result.Result.Err err)
+                match reply with
+                  | core.result.Result.Ok x => do
+                    let weights ←
+                      match x.2.owned with
+                        | none => liftM (fail Error.panic)
+                        | some before => do
+                          let reply ← NJU_ResumeObserved.recordWeights x.2.frame.checkpoint x.2.reader.at before
+                          match reply with
+                            | core.result.Result.Ok x_1 =>
+                              pure (core.result.Result.Ok ((), NKU_Weights.post x.2 x_1.1 x_1.2))
+                            | core.result.Result.Err err => pure (core.result.Result.Err err)
+                    match weights with
+                      | core.result.Result.Ok x => NKU_Tail.run x.2
+                      | core.result.Result.Err err => pure (core.result.Result.Err err)
+                  | core.result.Result.Err err => pure (core.result.Result.Err err))
+              fun allocated =>
+              core.result.Result.casesOn (motive := fun t =>
+                allocated = t →
+                  (match allocated with
+                    | core.result.Result.Ok owner => do
+                      let reply ← NJU_ResumeObserved.recordWeights s.frame.checkpoint r.at owner
+                      match reply with
+                        | core.result.Result.Ok x =>
+                          if (x.2 != «end») = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                          else do
+                            let n ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+                            pure
+                                (core.result.Result.Ok
+                                  ({ variant := transport.Variant.S2,
+                                      roots := Array.make 2#usize [a3, a4] (NKU_AfterZSource.run._proof_5 a3 a4),
+                                      gamma := g, kappa := k,
+                                      alpha := Array.make 2#usize [a0, a1] (NKU_AfterZSource.run._proof_6 a0 a1),
+                                      rho := rho, queries := queries, semantic_alpha := semantic,
+                                      z :=
+                                        Array.make 2#usize [{ x := x0, y := y0 }, { x := x1, y := y1 }]
+                                          (NKU_AfterZSource.run._proof_7 x0 y0 x1 y1),
+                                      claim := claim, state := state },
+                                    { weights := x.1, rhs := rhs, power := power, next := n }))
+                        | core.result.Result.Err err => pure (core.result.Result.Err err)
+                    | core.result.Result.Err err => pure (core.result.Result.Err err)) =
+                    do
+                    let reply ←
+                      match allocated with
+                        | core.result.Result.Ok owner =>
+                          pure
+                            (core.result.Result.Ok
+                              ((),
+                                NKU_Allocation.post
+                                  (NKU_ZClaim.post
+                                    (NKU_Semantic.post (NKU_Pack.pack s next «end» state a3 a4 g k a0 a1 rho queries r)
+                                      semantic r.at)
+                                    x0 y0 x1 y1 claim rhs power r)
+                                  owner))
+                        | core.result.Result.Err err => pure (core.result.Result.Err err)
+                    match reply with
+                      | core.result.Result.Ok x => do
+                        let weights ←
+                          match x.2.owned with
+                            | none => liftM (fail Error.panic)
+                            | some before => do
+                              let reply ← NJU_ResumeObserved.recordWeights x.2.frame.checkpoint x.2.reader.at before
+                              match reply with
+                                | core.result.Result.Ok x_1 =>
+                                  pure (core.result.Result.Ok ((), NKU_Weights.post x.2 x_1.1 x_1.2))
+                                | core.result.Result.Err err => pure (core.result.Result.Err err)
+                        match weights with
+                          | core.result.Result.Ok x => NKU_Tail.run x.2
+                          | core.result.Result.Err err => pure (core.result.Result.Err err)
+                      | core.result.Result.Err err => pure (core.result.Result.Err err))
+                allocated
+                (fun owner h =>
+                  Eq.symm h ▸
+                    Eq.mpr
+                      (id
+                        (congrArg
+                          (Eq do
+                            let reply ← NJU_ResumeObserved.recordWeights s.frame.checkpoint r.at owner
+                            match reply with
+                              | core.result.Result.Ok x =>
+                                if (x.2 != «end») = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                else do
+                                  let n ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+                                  pure
+                                      (core.result.Result.Ok
+                                        ({ variant := transport.Variant.S2,
+                                            roots := Array.make 2#usize [a3, a4] (NKU_AfterZSource.run._proof_5 a3 a4),
+                                            gamma := g, kappa := k,
+                                            alpha := Array.make 2#usize [a0, a1] (NKU_AfterZSource.run._proof_6 a0 a1),
+                                            rho := rho, queries := queries, semantic_alpha := semantic,
+                                            z :=
+                                              Array.make 2#usize [{ x := x0, y := y0 }, { x := x1, y := y1 }]
+                                                (NKU_AfterZSource.run._proof_7 x0 y0 x1 y1),
+                                            claim := claim, state := state },
+                                          { weights := x.1, rhs := rhs, power := power, next := n }))
+                              | core.result.Result.Err err => pure (core.result.Result.Err err))
+                          (NKK_LogAlgebra.bind_assoc (NJU_ResumeObserved.recordWeights s.frame.checkpoint r.at owner)
+                            (fun reply =>
+                              match reply with
+                              | core.result.Result.Ok x =>
+                                pure
+                                  (core.result.Result.Ok
+                                    ((),
+                                      NKU_Weights.post
+                                        { frame := s.frame, phase := NKU.Phase.weights,
+                                          decoded :=
+                                            { next := some next, endAt := some «end», roots := [state, a3, a4],
+                                              gammaAlpha := [g, k, a0, a1], rho := some rho, queries := ↑queries,
+                                              semantic := some semantic, z := [x0, y0, x1, y1], claim := some claim,
+                                              rhs := some rhs, power := some power },
+                                          reader := r, iterator := s.iterator, owned := some owner,
+                                          returned := s.returned, history := s.history }
+                                        x.1 x.2))
+                              | core.result.Result.Err err => pure (core.result.Result.Err err))
+                            fun weights =>
+                            match weights with
+                            | core.result.Result.Ok x => NKU_Tail.run x.2
+                            | core.result.Result.Err err => pure (core.result.Result.Err err))))
+                      (NKK_LogAlgebra.bind_congr (NJU_ResumeObserved.recordWeights s.frame.checkpoint r.at owner)
+                        (fun reply =>
+                          match reply with
+                          | core.result.Result.Ok x =>
+                            if (x.2 != «end») = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                            else do
+                              let n ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+                              pure
+                                  (core.result.Result.Ok
+                                    ({ variant := transport.Variant.S2,
+                                        roots := Array.make 2#usize [a3, a4] (NKU_AfterZSource.run._proof_5 a3 a4),
+                                        gamma := g, kappa := k,
+                                        alpha := Array.make 2#usize [a0, a1] (NKU_AfterZSource.run._proof_6 a0 a1),
+                                        rho := rho, queries := queries, semantic_alpha := semantic,
+                                        z :=
+                                          Array.make 2#usize [{ x := x0, y := y0 }, { x := x1, y := y1 }]
+                                            (NKU_AfterZSource.run._proof_7 x0 y0 x1 y1),
+                                        claim := claim, state := state },
+                                      { weights := x.1, rhs := rhs, power := power, next := n }))
+                          | core.result.Result.Err err => pure (core.result.Result.Err err))
+                        (fun a => do
+                          let weights ←
+                            match a with
+                              | core.result.Result.Ok x =>
+                                pure
+                                  (core.result.Result.Ok
+                                    ((),
+                                      NKU_Weights.post
+                                        { frame := s.frame, phase := NKU.Phase.weights,
+                                          decoded :=
+                                            { next := some next, endAt := some «end», roots := [state, a3, a4],
+                                              gammaAlpha := [g, k, a0, a1], rho := some rho, queries := ↑queries,
+                                              semantic := some semantic, z := [x0, y0, x1, y1], claim := some claim,
+                                              rhs := some rhs, power := some power },
+                                          reader := r, iterator := s.iterator, owned := some owner,
+                                          returned := s.returned, history := s.history }
+                                        x.1 x.2))
+                              | core.result.Result.Err err => pure (core.result.Result.Err err)
+                          match weights with
+                            | core.result.Result.Ok x => NKU_Tail.run x.2
+                            | core.result.Result.Err err => pure (core.result.Result.Err err))
+                        fun reply =>
+                        core.result.Result.casesOn (motive := fun t =>
+                          reply = t →
+                            (match reply with
+                              | core.result.Result.Ok x =>
+                                if (x.2 != «end») = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                else do
+                                  let n ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+                                  pure
+                                      (core.result.Result.Ok
+                                        ({ variant := transport.Variant.S2,
+                                            roots := Array.make 2#usize [a3, a4] (NKU_AfterZSource.run._proof_5 a3 a4),
+                                            gamma := g, kappa := k,
+                                            alpha := Array.make 2#usize [a0, a1] (NKU_AfterZSource.run._proof_6 a0 a1),
+                                            rho := rho, queries := queries, semantic_alpha := semantic,
+                                            z :=
+                                              Array.make 2#usize [{ x := x0, y := y0 }, { x := x1, y := y1 }]
+                                                (NKU_AfterZSource.run._proof_7 x0 y0 x1 y1),
+                                            claim := claim, state := state },
+                                          { weights := x.1, rhs := rhs, power := power, next := n }))
+                              | core.result.Result.Err err => pure (core.result.Result.Err err)) =
+                              do
+                              let weights ←
+                                match reply with
+                                  | core.result.Result.Ok x =>
+                                    pure
+                                      (core.result.Result.Ok
+                                        ((),
+                                          NKU_Weights.post
+                                            { frame := s.frame, phase := NKU.Phase.weights,
+                                              decoded :=
+                                                { next := some next, endAt := some «end», roots := [state, a3, a4],
+                                                  gammaAlpha := [g, k, a0, a1], rho := some rho, queries := ↑queries,
+                                                  semantic := some semantic, z := [x0, y0, x1, y1], claim := some claim,
+                                                  rhs := some rhs, power := some power },
+                                              reader := r, iterator := s.iterator, owned := some owner,
+                                              returned := s.returned, history := s.history }
+                                            x.1 x.2))
+                                  | core.result.Result.Err err => pure (core.result.Result.Err err)
+                              match weights with
+                                | core.result.Result.Ok x => NKU_Tail.run x.2
+                                | core.result.Result.Err err => pure (core.result.Result.Err err))
+                          reply (fun pair h => Eq.symm h ▸ sorry)
+                          (fun err h =>
+                            Eq.symm h ▸
+                              Eq.refl
+                                (match core.result.Result.Err err with
+                                | core.result.Result.Ok x =>
+                                  if (x.2 != «end») = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                                  else do
+                                    let n ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+                                    pure
+                                        (core.result.Result.Ok
+                                          ({ variant := transport.Variant.S2,
+                                              roots :=
+                                                Array.make 2#usize [a3, a4] (NKU_AfterZSource.run._proof_5 a3 a4),
+                                              gamma := g, kappa := k,
+                                              alpha :=
+                                                Array.make 2#usize [a0, a1] (NKU_AfterZSource.run._proof_6 a0 a1),
+                                              rho := rho, queries := queries, semantic_alpha := semantic,
+                                              z :=
+                                                Array.make 2#usize [{ x := x0, y := y0 }, { x := x1, y := y1 }]
+                                                  (NKU_AfterZSource.run._proof_7 x0 y0 x1 y1),
+                                              claim := claim, state := state },
+                                            { weights := x.1, rhs := rhs, power := power, next := n }))
+                                | core.result.Result.Err err => pure (core.result.Result.Err err)))
+                          (Eq.refl reply)))
+                (fun err h =>
+                  Eq.symm h ▸
+                    Eq.refl
+                      (match core.result.Result.Err err with
+                      | core.result.Result.Ok owner => do
+                        let reply ← NJU_ResumeObserved.recordWeights s.frame.checkpoint r.at owner
+                        match reply with
+                          | core.result.Result.Ok x =>
+                            if (x.2 != «end») = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+                            else do
+                              let n ← liftM (lift (UScalar.cast UScalarTy.Usize next))
+                              pure
+                                  (core.result.Result.Ok
+                                    ({ variant := transport.Variant.S2,
+                                        roots := Array.make 2#usize [a3, a4] (NKU_AfterZSource.run._proof_5 a3 a4),
+                                        gamma := g, kappa := k,
+                                        alpha := Array.make 2#usize [a0, a1] (NKU_AfterZSource.run._proof_6 a0 a1),
+                                        rho := rho, queries := queries, semantic_alpha := semantic,
+                                        z :=
+                                          Array.make 2#usize [{ x := x0, y := y0 }, { x := x1, y := y1 }]
+                                            (NKU_AfterZSource.run._proof_7 x0 y0 x1 y1),
+                                        claim := claim, state := state },
+                                      { weights := x.1, rhs := rhs, power := power, next := n }))
+                          | core.result.Result.Err err => pure (core.result.Result.Err err)
+                      | core.result.Result.Err err => pure (core.result.Result.Err err)))
+                (Eq.refl allocated))))))
+'NKU_AfterZ.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

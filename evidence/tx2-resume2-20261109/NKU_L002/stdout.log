@@ -1,0 +1,196 @@
+NKU_generated/NKU_HeaderValue.lean:11:22: warning: Variable name `d` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+theorem NKU_HeaderValue.source : ∀ {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (bytes : Slice U8)
+  (v : transport.Variant), NKK_HeaderSource.header d bytes v = value d bytes v :=
+fun {H} d bytes v =>
+  id
+    (id
+      (id
+        (of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (congrArg (Bind.bind (liftM (CheckpointBytes4Ops.checkpointSize (NIL_Carriers.variant v))))
+                  (funext fun i1 =>
+                    ite_congr (Eq.refl ((bytes.len != i1) = true))
+                      (fun a => Eq.refl (liftM (ok (core.result.Result.Err verifier.Error.Checkpoint)))) fun a =>
+                      congrArg
+                        (Bind.bind
+                          (liftM
+                            (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                              { «end» := 8#usize })))
+                        (funext fun s =>
+                          congrArg
+                            (Bind.bind
+                              (liftM
+                                (core.cmp.impls.PartialEqShared.ne
+                                  (Slice.Insts.CoreCmpPartialEqArray (fun {T U} {N} => CheckpointBytes4Ops.ne)
+                                    (fun {T U} {N} => CheckpointBytes4Ops.eq) 8#usize core.cmp.PartialEqU8)
+                                  s
+                                  (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+                                    NKK_HeaderSource.header._proof_8))))
+                            (funext fun b =>
+                              ite_congr (Eq.refl (b = true))
+                                (fun a => Eq.refl (liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))))
+                                fun a =>
+                                congrArg (Bind.bind (liftM (bytes.index_usize 8#usize)))
+                                  (funext fun i2 =>
+                                    congrArg (Bind.bind (liftM (CheckpointBytes4Ops.tag (NIL_Carriers.variant v))))
+                                      (funext fun i3 =>
+                                        ite_congr (Eq.refl ((i2 != i3) = true))
+                                          (fun a =>
+                                            Eq.refl (liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))))
+                                          fun a =>
+                                          congrArg (Bind.bind (liftM (bytes.index_usize 9#usize)))
+                                            (funext fun i4 =>
+                                              ite_congr (Eq.refl (i4 > 22#u8))
+                                                (fun a =>
+                                                  Eq.refl
+                                                    (liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))))
+                                                fun a =>
+                                                congrArg (Bind.bind (liftM (bytes.index_usize 10#usize)))
+                                                  (funext fun i5 =>
+                                                    ite_congr (Eq.refl ((i5 != 1#u8) = true))
+                                                      (fun a =>
+                                                        Eq.refl
+                                                          (liftM
+                                                            (ok (core.result.Result.Err verifier.Error.Checkpoint))))
+                                                      fun a =>
+                                                      congrArg
+                                                        (Bind.bind
+                                                          (liftM
+                                                            (core.slice.index.Slice.index
+                                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                                              { start := 11#usize, «end» := 16#usize })))
+                                                        (funext fun s1 =>
+                                                          congrArg (Bind.bind (liftM (core.slice.Slice.iter s1)))
+                                                            (funext fun i6 =>
+                                                              congr
+                                                                (congrArg Bind.bind
+                                                                  (congrArg (NJU_Log.record (Event.headerAny i6))
+                                                                    (NJJ_Any.installed (NIL_FreshOps.digest d) i6)))
+                                                                (funext fun __x =>
+                                                                  ite_congr (Eq.refl (__x.1 = true))
+                                                                    (fun a =>
+                                                                      Eq.refl
+                                                                        (liftM
+                                                                          (ok
+                                                                            (core.result.Result.Err
+                                                                              verifier.Error.Checkpoint))))
+                                                                    fun a =>
+                                                                    Eq.refl do
+                                                                      let end1 ←
+                                                                        liftM (lift (bytes.len.wrapping_sub 32#usize))
+                                                                      pure
+                                                                          (core.result.Result.Ok (i4, end1))))))))))))))
+              (congrArg (Bind.bind (liftM (CheckpointBytes4Ops.checkpointSize (NIL_Carriers.variant v))))
+                (funext fun i1 =>
+                  ite_congr (Eq.refl ((bytes.len != i1) = true))
+                    (fun a => Eq.refl (liftM (ok (core.result.Result.Err verifier.Error.Checkpoint)))) fun a =>
+                    congrArg
+                      (Bind.bind
+                        (liftM
+                          (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                            { «end» := 8#usize })))
+                      (funext fun s =>
+                        congrArg
+                          (Bind.bind
+                            (liftM
+                              (core.cmp.impls.PartialEqShared.ne
+                                (Slice.Insts.CoreCmpPartialEqArray (fun {T U} {N} => CheckpointBytes4Ops.ne)
+                                  (fun {T U} {N} => CheckpointBytes4Ops.eq) 8#usize core.cmp.PartialEqU8)
+                                s
+                                (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+                                  value._proof_8))))
+                          (funext fun b =>
+                            ite_congr (Eq.refl (b = true))
+                              (fun a => Eq.refl (liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))))
+                              fun a =>
+                              congrArg (Bind.bind (liftM (bytes.index_usize 8#usize)))
+                                (funext fun i2 =>
+                                  congrArg (Bind.bind (liftM (CheckpointBytes4Ops.tag (NIL_Carriers.variant v))))
+                                    (funext fun i3 =>
+                                      ite_congr (Eq.refl ((i2 != i3) = true))
+                                        (fun a =>
+                                          Eq.refl (liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))))
+                                        fun a =>
+                                        congrArg (Bind.bind (liftM (bytes.index_usize 9#usize)))
+                                          (funext fun i4 =>
+                                            ite_congr (Eq.refl (i4 > 22#u8))
+                                              (fun a =>
+                                                Eq.refl (liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))))
+                                              fun a =>
+                                              congrArg (Bind.bind (liftM (bytes.index_usize 10#usize)))
+                                                (funext fun i5 =>
+                                                  ite_congr (Eq.refl ((i5 != 1#u8) = true))
+                                                    (fun a =>
+                                                      Eq.refl
+                                                        (liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))))
+                                                    fun a =>
+                                                    congrArg
+                                                      (Bind.bind
+                                                        (liftM
+                                                          (core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                                            { start := 11#usize, «end» := 16#usize })))
+                                                      (funext fun s1 =>
+                                                        congrArg (Bind.bind (liftM (core.slice.Slice.iter s1)))
+                                                          (funext fun i6 =>
+                                                            congrArg
+                                                              (Bind.bind
+                                                                (NJU_Log.record (Event.headerAny i6) (NJJ_Any.any i6)))
+                                                              (funext fun __x =>
+                                                                ite_congr (Eq.refl (__x.1 = true))
+                                                                  (fun a =>
+                                                                    Eq.refl
+                                                                      (liftM
+                                                                        (ok
+                                                                          (core.result.Result.Err
+                                                                            verifier.Error.Checkpoint))))
+                                                                  fun a =>
+                                                                  Eq.refl do
+                                                                    let end1 ←
+                                                                      liftM (lift (bytes.len.wrapping_sub 32#usize))
+                                                                    pure (core.result.Result.Ok (i4, end1))))))))))))))
+            (eq_self do
+              let i1 ← liftM (CheckpointBytes4Ops.checkpointSize (NIL_Carriers.variant v))
+              if (bytes.len != i1) = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                else do
+                  let s ←
+                    liftM
+                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                          { «end» := 8#usize })
+                  let b ←
+                    liftM
+                        (core.cmp.impls.PartialEqShared.ne
+                          (Slice.Insts.CoreCmpPartialEqArray (fun {T U} {N} => CheckpointBytes4Ops.ne)
+                            (fun {T U} {N} => CheckpointBytes4Ops.eq) 8#usize core.cmp.PartialEqU8)
+                          s
+                          (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+                            NKK_HeaderSource.header._proof_8))
+                  if b = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                    else do
+                      let i2 ← liftM (bytes.index_usize 8#usize)
+                      let i3 ← liftM (CheckpointBytes4Ops.tag (NIL_Carriers.variant v))
+                      if (i2 != i3) = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                        else do
+                          let i4 ← liftM (bytes.index_usize 9#usize)
+                          if i4 > 22#u8 then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                            else do
+                              let i5 ← liftM (bytes.index_usize 10#usize)
+                              if (i5 != 1#u8) = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                                else do
+                                  let s1 ←
+                                    liftM
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                          bytes { start := 11#usize, «end» := 16#usize })
+                                  let i6 ← liftM (core.slice.Slice.iter s1)
+                                  let __x ← NJU_Log.record (Event.headerAny i6) (NJJ_Any.any i6)
+                                  if __x.1 = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                                    else do
+                                      let end1 ← liftM (lift (bytes.len.wrapping_sub 32#usize))
+                                      pure (core.result.Result.Ok (i4, end1)))))))
+'NKU_HeaderValue.source' depends on axioms: [propext, Classical.choice, Quot.sound]

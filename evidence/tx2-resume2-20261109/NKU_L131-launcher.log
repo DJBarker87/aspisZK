@@ -1,0 +1,52 @@
+{"attempt": "NKU_L131", "exit_status": 1, "wall_seconds": 10.461567339021713, "peak_rss_kib": "5998056", "swaps": "0", "print_axioms": ["'NKU_FineRoot.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKU_FineRoot.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKU_FineRoot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKU_FineRoot.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKU_generated/NKU_FineRoot.lean:7:60: error: unsolved goals
+H : Type
+d : AspisR1Stage2.aspis_core.digest.Digest32 H
+hash : H
+s : NKU.State
+⊢ (match s.decoded.next, s.decoded.endAt with
+    | some next, some «end» => NKU_DigestBody.run d hash s next «end»
+    | x, x_1 => liftM (fail Error.panic)) =
+    match s.decoded.next, s.decoded.endAt with
+    | some next, some «end» => NKU_DigestBody.run d hash s next «end»
+    | x, x_1 => liftM (fail Error.panic)
+def NKU_Fold.G : {H : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 H →
+    H → NKU.State → NKU_Chronology.Run (core.result.Result NKU.Pair verifier.Error) :=
+fun {H} d hash s => do
+  let reply ← NKU_HeaderStep.run d s
+  NKK_Try.emitted r
+...
+→
+    H → NKU.State → NKU_Chronology.Run (core.result.Result NKU.Pair verifier.Error) :=
+fun {H} d hash s => do
+  let reply ← NKU_HeaderStep.run d s
+  NKK_Try.emitted reply fun x =>
+      match x with
+      | (fst, post) => NKU_Fold.suffix d hash post
+theorem NKU_FineRoot.source : ∀ {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (s : NKU.State),
+  NKU_Fold.G d hash s =
+    NJU_ResumeObserved.run s.frame.reservation d s.frame.checkpoint s.frame.proof s.frame.publicBytes
+      transport.Variant.S2 hash :=
+fun {H} d hash s => Eq.trans (installed d hash s) (NKU_ResumeRoot.source d hash s)
+theorem NKU_FineRoot.cohort : ∀ {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (s : NKU.State),
+  NIL_StatePort.reply (NKU_Fold.G d hash s).result =
+    AspisR1Stage2.verifier.resumeWithOps (CheckpointBytes4Ops.ops (NJC_FilledClause.reserved s.frame.reservation)) d
+      s.frame.checkpoint s.frame.proof s.frame.publicBytes AspisR1Stage2.transport.Variant.S2 hash :=
+fun {H} d hash s =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          NIL_StatePort.reply _a.result =
+            AspisR1Stage2.verifier.resumeWithOps
+              (CheckpointBytes4Ops.ops (NJC_FilledClause.reserved s.frame.reservation)) d s.frame.checkpoint
+              s.frame.proof s.frame.publicBytes AspisR1Stage2.transport.Variant.S2 hash)
+        (installed d hash s)))
+    (NKU_ResumeRoot.cohort d hash s)
+'NKU_FineRoot.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKU_FineRoot.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKU_FineRoot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKU_FineRoot.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd3e46151c4b744989cc74623d1e99b1c.scope; invocation ID: 239ef30992d64ed9887bc119e2c2e553

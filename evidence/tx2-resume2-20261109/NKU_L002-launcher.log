@@ -1,0 +1,45 @@
+{"attempt": "NKU_L002", "exit_status": 0, "wall_seconds": 10.15413364302367, "peak_rss_kib": "6027240", "swaps": "0", "print_axioms": ["'NKU_HeaderValue.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NKU_generated/NKU_HeaderValue.lean:11:22: warning: Variable name `d` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+theorem NKU_HeaderValue.source : ∀ {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (bytes : Slice U8)
+  (v : transport.Variant), NKK_HeaderSource.header d bytes v = value d bytes v :=
+fun {H} d bytes v =>
+  id
+    (id
+      (id
+        (of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (congrArg (Bind.bind (liftM (CheckpointBytes4Ops.checkpointSize (NIL_Carriers.variant v))))
+          
+...
+         NKK_HeaderSource.header._proof_8))
+                  if b = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                    else do
+                      let i2 ← liftM (bytes.index_usize 8#usize)
+                      let i3 ← liftM (CheckpointBytes4Ops.tag (NIL_Carriers.variant v))
+                      if (i2 != i3) = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                        else do
+                          let i4 ← liftM (bytes.index_usize 9#usize)
+                          if i4 > 22#u8 then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                            else do
+                              let i5 ← liftM (bytes.index_usize 10#usize)
+                              if (i5 != 1#u8) = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                                else do
+                                  let s1 ←
+                                    liftM
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                          bytes { start := 11#usize, «end» := 16#usize })
+                                  let i6 ← liftM (core.slice.Slice.iter s1)
+                                  let __x ← NJU_Log.record (Event.headerAny i6) (NJJ_Any.any i6)
+                                  if __x.1 = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                                    else do
+                                      let end1 ← liftM (lift (bytes.len.wrapping_sub 32#usize))
+                                      pure (core.result.Result.Ok (i4, end1)))))))
+'NKU_HeaderValue.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1106ed16db164d19b3622105ef5eedf5.scope; invocation ID: 038f7c428a504e9391f8c1c59b385381

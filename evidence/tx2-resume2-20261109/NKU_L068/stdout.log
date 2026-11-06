@@ -1,0 +1,49 @@
+NKU_generated/NKU_HeaderDomain.lean:11:1: error: 'change' tactic failed, pattern
+  (if (bytes.len != 1768#usize) = true then ?m.25 else ?m.26) = ?m.28
+is not definitionally equal to target
+  (have i := bytes.len;
+    do
+    let i1 ← liftM ((fun v => CheckpointBytes4Ops.checkpointSize (NIL_Carriers.variant v)) transport.Variant.S2)
+    if (i != i1) = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+      else do
+        let s ←
+          liftM
+              (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) bytes
+                { «end» := 8#usize })
+        let b ←
+          liftM
+              (core.cmp.impls.PartialEqShared.ne
+                (Slice.Insts.CoreCmpPartialEqArray (fun {T U} {N} => CheckpointBytes4Ops.ne)
+                  (fun {T U} {N} => CheckpointBytes4Ops.eq) 8#usize core.cmp.PartialEqU8)
+                s
+                (Array.make 8#usize [82#u8, 49#u8, 80#u8, 50#u8, 67#u8, 75#u8, 80#u8, 50#u8]
+                  NKU_HeaderValue.value._proof_8))
+        if b = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+          else do
+            let i2 ← liftM (bytes.index_usize 8#usize)
+            let i3 ← liftM ((fun v => CheckpointBytes4Ops.tag (NIL_Carriers.variant v)) transport.Variant.S2)
+            if (i2 != i3) = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+              else do
+                let i4 ← liftM (bytes.index_usize 9#usize)
+                if i4 > 22#u8 then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                  else do
+                    let i5 ← liftM (bytes.index_usize 10#usize)
+                    if (i5 != 1#u8) = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                      else do
+                        let s1 ←
+                          liftM
+                              (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                                { start := 11#usize, «end» := 16#usize })
+                        let i6 ← liftM (core.slice.Slice.iter s1)
+                        let __x ← NJU_Log.record (NJU_ResumeObserved.Event.headerAny i6) (NJJ_Any.any i6)
+                        match __x with
+                          | (b1, snd) =>
+                            if b1 = true then liftM (ok (core.result.Result.Err verifier.Error.Checkpoint))
+                            else
+                              have i7 := bytes.len;
+                              do
+                              let end1 ← liftM (lift (i7.wrapping_sub 32#usize))
+                              pure (core.result.Result.Ok (i4, end1))) =
+    pure (core.result.Result.Err verifier.Error.Checkpoint)
+'NKU_HeaderDomain.wrong_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKU_HeaderDomain.length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

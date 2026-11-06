@@ -1,0 +1,58 @@
+{"attempt": "NKU_L005", "exit_status": 0, "wall_seconds": 10.222039775922894, "peak_rss_kib": "6025384", "swaps": "0", "print_axioms": ["'NKU_HeaderStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKU_HeaderStep.source : ∀ {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H)
+  (s : NKU.State),
+  NJU_ResumeObserved.run s.frame.reservation d s.frame.checkpoint s.frame.proof s.frame.publicBytes transport.Variant.S2
+      hash =
+    do
+    let reply ← run d s
+    NKK_Try.emitted reply fun x =>
+        match x with
+        | (fst, post) => suffix d hash post :=
+fun {H} d hash s =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a = do
+            let reply ← run d s
+            NKK_Try.emitted reply fun x =>
+                match x with
+                | (fst, post) => suffix d hash post)
+        (NKK_HeaderFactor.source s.frame.reservation d s.fram
+...
+ ((), NKU.headerPost s next «end»))
+              NKK_Try.emitted reply fun x =>
+                  match x with
+                  | (fst, post) => suffix d hash post)
+            fun reply =>
+            core.result.Result.casesOn (motive := fun t =>
+              reply = t →
+                (NKK_Try.emitted reply fun pair =>
+                    NKK_HeaderSource.afterHeader s.frame.reservation d s.frame.checkpoint s.frame.proof
+                      s.frame.publicBytes transport.Variant.S2 hash pair.1 pair.2) =
+                  do
+                  let reply ←
+                    NKK_Try.emitted reply fun x =>
+                        match x with
+                        | (next, «end») => pure (core.result.Result.Ok ((), NKU.headerPost s next «end»))
+                  NKK_Try.emitted reply fun x =>
+                      match x with
+                      | (fst, post) => suffix d hash post)
+              reply
+              (fun pair h =>
+                Eq.symm h ▸
+                  let ⟨next, «end»⟩ := pair
+                  Eq.refl
+                    (NKK_Try.emitted (core.result.Result.Ok (next, «end»)) fun pair =>
+                      NKK_HeaderSource.afterHeader s.frame.reservation d s.frame.checkpoint s.frame.proof
+                        s.frame.publicBytes transport.Variant.S2 hash pair.1 pair.2))
+              (fun err h =>
+                Eq.symm h ▸
+                  Eq.refl
+                    (NKK_Try.emitted (core.result.Result.Err err) fun pair =>
+                      NKK_HeaderSource.afterHeader s.frame.reservation d s.frame.checkpoint s.frame.proof
+                        s.frame.publicBytes transport.Variant.S2 hash pair.1 pair.2))
+              (Eq.refl reply)))))
+'NKU_HeaderStep.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd287121f6c5c49a1b45931d50dbed12f.scope; invocation ID: 92b2b78428f04e1981ef1090b9926d41

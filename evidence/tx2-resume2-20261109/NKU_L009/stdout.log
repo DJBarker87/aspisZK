@@ -1,0 +1,22 @@
+NKU_generated/NKU_DigestCheckpoint.lean:35:1: error: Type mismatch
+  NKK_DigestSource.source_eq_model d hash ?m.54 ?m.55 ?m.56
+has type
+  NKK_DigestSource.source d hash ?m.54 ?m.55 ?m.56 = NKK_DigestSource.model d hash ?m.54 ?m.55 ?m.56
+but is expected to have type
+  (do
+      let different ← liftM (CheckpointBytes4Ops.ne core.cmp.PartialEqU8 value✝³ value)
+      if different = true then pure (core.result.Result.Err verifier.Error.Checkpoint)
+        else
+          pure
+            (core.result.Result.Ok
+              ((),
+                { frame := s.frame, phase := NKU.Phase.roots, decoded := s.decoded, reader := s.reader,
+                  iterator := s.iterator, owned := s.owned, returned := s.returned, history := s.history }))) =
+    if ↑value✝³ = ↑value then
+      pure
+        (core.result.Result.Ok
+          ((),
+            { frame := s.frame, phase := NKU.Phase.roots, decoded := s.decoded, reader := s.reader,
+              iterator := s.iterator, owned := s.owned, returned := s.returned, history := s.history }))
+    else pure (core.result.Result.Err verifier.Error.Checkpoint)
+'NKU_DigestCheckpoint.source_eq_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
