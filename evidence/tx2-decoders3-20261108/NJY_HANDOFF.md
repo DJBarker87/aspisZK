@@ -1,0 +1,9 @@
+# NJY handoff
+
+Target not yet established. Stage 0: read governing security/proof rules, NJQ diagnosis and support inventory, and ruling (ay). Assigned rows TX2:149/152/153/201/203 remain OPEN. Baseline NJW ledger16: 484 CLOSED / 0 QUALIFIED / 115 OPEN of 599. No native or Lean credit claimed.
+
+Branch codex/cx-tx2-decoders3-20261107; no push. Changes confined to NJY evidence/modules. Frozen source 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Headline AspisR1.RPx_Deployed.deployed. No shipped-source or key changes. Inherited ELF pins are not rebuilt evidence.
+
+Plan: seed NJQ export FIRST, NJW second; own workspace /home/dombarker/project-offloads/codex-cx-tx2-decoders3-20261107 and own NJY_target. One capped scope at a time conservatively; fresh admission allowed:true AND exit0. Budget 90 Kani / 90 Lean / 1 extraction. Every failure retained; no unchanged timed-out shape rerun. Identity precedes master; independent checkpoint/entry/registry work proceeds as dependencies permit. ReviewedTranscription is option-A reclassification, not trust removal.
+
+Host initial inspection: 11 GiB free, root rounds to 100%; keep seed small and record sizes before native compilation. No launch yet. Remaining native obligations: complete per-function contracts or source-ordered segment contracts, returned-record shape controls for entry/registry; Lean transcription/model transport, combined NJW+NJQ+headline import and NFX/raw-ax2 gates. Credit waits for lead ledger gate.
