@@ -1,0 +1,21 @@
+--- /dev/null
++++ b/NKP_lane.rs
+@@ -0,0 +1,18 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn digest()->[M31;8]{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn frontier()->[[M31;8];20]{let raw:[[u32;8];20]=kani::any();raw.map(|r|r.map(|x|M31(x)))}
++
++struct Log{count:u8,length:usize,input:u8}
++fn oracle(bytes:&[u8;32],canonical:bool,words:[M31;8],log:&mut Log,i:usize)->Result<[M31;8],aspis_statement::AtomicStatementError>{log.count+=1;log.length=bytes.len();log.input=bytes[i];if canonical{Ok(words)}else{Err(aspis_statement::AtomicStatementError::NonCanonicalDigest)}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn iteration(){
++ let tree:[u8;688]=kani::any();let level:usize=kani::any();let i:usize=kani::any();let word:usize=kani::any();kani::assume(level<20&&i<32&&word<8);
++ let words=digest();let canonical:bool=kani::any();let mut log=Log{count:0,length:0,input:0};
++ let start=48+32*level;
++ let result=(||->Result<[M31;8],ProgramError>{Ok(oracle(tree[start..start+32].try_into().map_err(|_|ProgramError::InvalidAccountData)?,canonical,words,&mut log,i).map_err(|_|ProgramError::InvalidAccountData)?)})();
++ 
++ let good=log.count==1&&log.length==32&&log.input==tree[48+32*level+i]&&match result{Ok(node)=>canonical&&node[word].0==words[word].0,Err(e)=>!canonical&&e==ProgramError::InvalidAccountData};
++ assert!(good,"lane iteration exact bytes and reply");
++}

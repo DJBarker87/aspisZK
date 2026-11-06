@@ -1,0 +1,16 @@
+--- /dev/null
++++ b/NKP_lane.rs
+@@ -0,0 +1,13 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn digest()->[M31;8]{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn frontier()->[[M31;8];20]{let raw:[[u32;8];20]=kani::any();raw.map(|r|r.map(|x|M31(x)))}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn iteration(){
++ let mut frontier=frontier();let level:usize=kani::any();let other:usize=kani::any();let word:usize=kani::any();kani::assume(level<20&&other<20&&other!=level&&word<8);
++ let before=frontier[other][word].0;let words=digest();let canonical:bool=kani::any();
++ let _result=(||->ProgramResult{let node=&mut frontier[level];*node=(if canonical{Ok(words)}else{Err(aspis_statement::AtomicStatementError::NonCanonicalDigest)}).map_err(|_|ProgramError::InvalidAccountData)?;Ok(())})();
++ frontier[other][word].0 ^= 1;
++ assert!(frontier[other][word].0==before,"lane iteration untouched coordinate");
++}

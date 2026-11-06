@@ -1,0 +1,17 @@
+{
+ "source": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+ "kind": "master",
+ "field": 7,
+ "mode": "inverse",
+ "oracle": "full arbitrary typed child Result at unchanged bytes",
+ "modifies": [],
+ "edits": [
+  [
+   "fn decode_master_box(bytes: &[u8]) -> Result<Box<PoolV1PairForestMasterV1>, ProgramError> {\n    Ok(Box::new(\n        decode_pool_v1_pair_forest_master_v1(bytes)\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    ))\n}",
+   "fn decode_master_box(bytes: &[u8]) -> Result<Box<PoolV1PairForestMasterV1>, ProgramError> {\n    let raw = decode_pool_v1_pair_forest_master_v1(bytes);\n    let mut out = (|| { Ok(Box::new(raw.map_err(|_| ProgramError::InvalidAccountData)?)) })();\n    #[cfg(kani)] {\n        let j:usize=kani::any();kani::assume(j<32);\n        kani::assume(raw.is_ok());if let Ok(ref mut b)=out{b.verifier_policy.registry_program[j] ^= 1;}\n        let good=match (&raw,&out) {(Ok(a),Ok(b))=>a.verifier_policy.registry_program[j]==b.verifier_policy.registry_program[j],(Err(_),Err(e))=>*e==ProgramError::InvalidAccountData,_=>false};\n        assert!(good, \"actual wrapper returned field/error at SAME raw decoder call\");\n    }\n    out\n}"
+  ]
+ ],
+ "instrumented_sha256": "83b4cc7c86b14303dbecec0eca30a07ee52c224af74e32360c03b8f09c2d94ee",
+ "reference": "raw = actual source child invocation at SAME immutable bytes",
+ "input_length": "0..33 representative; tail does not read bytes"
+}

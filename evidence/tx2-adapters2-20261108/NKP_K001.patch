@@ -1,0 +1,15 @@
+--- /dev/null
++++ b/NKP_checkpoint_box.rs
+@@ -0,0 +1,12 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::proof] #[kani::unwind(400)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn returned(){
++ let bytes:[u8;192]=kani::any();let length:usize=kani::any();kani::assume(length<=192);
++ let j:usize=kani::any();kani::assume(j<32);
++ let raw=decode_pool_v1_pair_forest_checkpoint_v1(&bytes[..length]);
++ let out=decode_checkpoint_box(&bytes[..length]);
++ let good=match (raw,out){(Ok(a),Ok(b))=>a.bump==b.bump,(Err(_),Err(e))=>e==ProgramError::InvalidAccountData,_=>false};
++ assert!(good,"SAME-byte returned Box field/error");
++}

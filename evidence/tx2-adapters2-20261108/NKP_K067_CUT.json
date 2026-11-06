@@ -1,0 +1,10 @@
+{
+ "part": "header",
+ "source": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+ "segment": "    if bytes.len() != POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES\n        || bytes[..4] != POOL_V1_PAIR_FOREST_LANE_MAGIC\n        || bytes[4] != POOL_V1_PAIR_FOREST_LANE_VERSION\n        || usize::from(bytes[5]) >= POOL_V1_PAIR_FOREST_LANE_COUNT\n        || bytes[6] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8\n        || bytes[7] != POOL_V1_PAIR_TREE_DEPTH as u8\n        || bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING\n        || bytes[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]\n            .iter()\n            .any(|byte| *byte != 0)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    let master: [u8; 32] = bytes[40..72]\n        .try_into()\n        .map_err(|_| ProgramError::InvalidAccountData)?;\n    if master == [0u8; 32] {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    let tree = &bytes[POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES..];\n    if tree[..4] != POOL_V1_TREE_STATE_MAGIC\n        || tree[4] != POOL_V1_TREE_STATE_VERSION\n        || tree[5] != POOL_V1_PAIR_TREE_DEPTH as u8\n        || tree[6] != POOL_V1_TREE_HASH_VERSION\n        || tree[7] != POOL_V1_DIGEST_ENCODING_VERSION\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    let next_leaf_index = u64::from_le_bytes(\n        tree[8..16]\n            .try_into()\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    );\n    if next_leaf_index > POOL_V1_PAIR_CAPACITY {\n        return Err(ProgramError::InvalidAccountData);\n    }\n",
+ "segment_sha256": "ef3de093607bf65c42e0fa7d6101724563f6d2207947d7436963b5d783748efc",
+ "exact_frozen_substring": true,
+ "mode": "inverse",
+ "domain": "arbitrary bounded native byte inputs0..769 for header, arbitrary next/root for terminal guard",
+ "modifies": []
+}
