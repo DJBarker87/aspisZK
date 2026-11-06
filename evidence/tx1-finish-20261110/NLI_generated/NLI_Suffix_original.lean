@@ -14,7 +14,7 @@ theorem original {H : Type} (i : Input H) (l : Locals H) (running : Q) (alpha : 
  run (fold 31 {input:=i,next:=.original,locals:={l with running:=some running, alpha:=some alpha, transcript:=some transcript, claims:=some claims}}) = run (suffix_original i (running) (alpha) (transcript) (claims)) := by
  rw [NLI_FoldTicks.original 30 _ rfl]
  change run (fold 30 {input:=i,next:=.terminal,locals:={l with running:=some running, alpha:=some alpha, transcript:=some transcript, claims:=some claims}}) = _
- exact terminal i l running alpha transcript claims
+ exact NLI_Source.terminal i l running alpha transcript claims
 #print axioms original
 end AspisR1.NLI_Source
 end

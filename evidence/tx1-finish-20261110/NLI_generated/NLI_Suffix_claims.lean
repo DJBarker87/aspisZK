@@ -21,7 +21,7 @@ theorem claims {H : Type} (i : Input H) (l : Locals H) (running : Q) (alpha : Al
  intro r
  try simp only [NLI_Notation.assoc,NLI_Notation.pure_left,NLI_Notation.lift_ok]
  cases r with
- | Ok v => exact original i (l) (running) (alpha) (transcript) (v)
+ | Ok v => exact NLI_Source.original i (l) (running) (alpha) (transcript) (v)
  | Err error => rfl
 #print axioms claims
 end AspisR1.NLI_Source

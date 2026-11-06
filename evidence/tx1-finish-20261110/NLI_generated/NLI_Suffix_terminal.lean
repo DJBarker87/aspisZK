@@ -18,7 +18,7 @@ theorem terminal {H : Type} (i : Input H) (l : Locals H) (running : Q) (alpha : 
  apply NLI_Notation.congr_bind
  intro r
  try simp only [NLI_Notation.assoc,NLI_Notation.pure_left,NLI_Notation.lift_ok]
- exact mapPublic i (l) (running) (alpha) (transcript) (claims) (r)
+ exact NLI_Source.mapPublic i (l) (running) (alpha) (transcript) (claims) (r)
 #print axioms terminal
 end AspisR1.NLI_Source
 end

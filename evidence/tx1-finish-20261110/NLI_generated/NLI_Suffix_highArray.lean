@@ -18,7 +18,7 @@ theorem highArray {H : Type} (i : Input H) (l : Locals H) (running : Q) (alpha :
  apply NLI_Notation.congr_bind
  intro high
  try simp only [NLI_Notation.assoc,NLI_Notation.pure_left,NLI_Notation.lift_ok]
- exact blind i (l) (running) (alpha) (transcript) (claims) (terminal) (low) (high)
+ exact NLI_Source.blind i (l) (running) (alpha) (transcript) (claims) (terminal) (low) (high)
 #print axioms highArray
 end AspisR1.NLI_Source
 end

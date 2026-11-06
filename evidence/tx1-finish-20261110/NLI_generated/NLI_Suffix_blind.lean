@@ -22,7 +22,7 @@ theorem blind {H : Type} (i : Input H) (l : Locals H) (running : Q) (alpha : Alp
  apply NLI_Notation.congr_bind
  intro blind
  try simp only [NLI_Notation.assoc,NLI_Notation.pure_left,NLI_Notation.lift_ok]
- exact alpha i (l) (running) (alpha) (transcript) (claims) (terminal) (low) (high) (blind)
+ exact NLI_Source.alpha i (l) (running) (alpha) (transcript) (claims) (terminal) (low) (high) (blind)
 #print axioms blind
 end AspisR1.NLI_Source
 end

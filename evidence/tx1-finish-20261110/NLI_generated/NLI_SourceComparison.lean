@@ -109,7 +109,7 @@ theorem suffix_eq_finish {H : Type} (i : Input H) :
        simp only [h25,NLI_Notation.assoc,NLI_Notation.pure_left,NLI_Notation.lift_ok]
        unfold suffix_circle0
        try simp only [NLI_Notation.assoc,NLI_Notation.pure_left,NLI_Notation.lift_ok,core.result.Result.Insts.CoreOpsTry.branch]
-       apply NLI_Notation.congr_bind
+       apply NLI_Notation.congr_bind (S1SemanticCode.circleValidated (IDa_Deployed.boundaries i.reservation) i.digest transcript record25)
        rintro ⟨r,transcript1⟩
        cases r with
        | Err error => rfl
@@ -132,7 +132,7 @@ theorem suffix_eq_finish {H : Type} (i : Input H) :
           simp only [h26,NLI_Notation.assoc,NLI_Notation.pure_left,NLI_Notation.lift_ok]
           unfold suffix_circle1
           try simp only [NLI_Notation.assoc,NLI_Notation.pure_left,NLI_Notation.lift_ok,core.result.Result.Insts.CoreOpsTry.branch]
-          apply NLI_Notation.congr_bind
+          apply NLI_Notation.congr_bind (S1SemanticCode.circleValidated (IDa_Deployed.boundaries i.reservation) i.digest transcript1 record26)
           rintro ⟨r,transcript2⟩
           cases r with
           | Err error => rfl

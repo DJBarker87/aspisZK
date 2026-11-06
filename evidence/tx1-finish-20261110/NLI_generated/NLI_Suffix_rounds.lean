@@ -21,7 +21,7 @@ theorem rounds {H : Type} (i : Input H) (l : Locals H)  :
  intro r
  try simp only [NLI_Notation.assoc,NLI_Notation.pure_left,NLI_Notation.lift_ok]
  cases r with
- | Ok v => exact mark2 i (l) (v.1) (v.2.1) (v.2.2)
+ | Ok v => exact NLI_Source.mark2 i (l) (v.1) (v.2.1) (v.2.2)
  | Err error => rfl
 #print axioms rounds
 end AspisR1.NLI_Source

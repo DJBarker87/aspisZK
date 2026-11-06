@@ -21,7 +21,7 @@ theorem mapPublic {H : Type} (i : Input H) (l : Locals H) (running : Q) (alpha :
  intro r
  try simp only [NLI_Notation.assoc,NLI_Notation.pure_left,NLI_Notation.lift_ok]
  cases r with
- | Ok v => exact mark3 i ({l with terminalReply:=some terminalReply}) (running) (alpha) (transcript) (claims) (v)
+ | Ok v => exact NLI_Source.mark3 i ({l with terminalReply:=some terminalReply}) (running) (alpha) (transcript) (claims) (v)
  | Err error => rfl
 #print axioms mapPublic
 end AspisR1.NLI_Source

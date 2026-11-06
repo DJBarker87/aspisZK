@@ -14,7 +14,7 @@ theorem mark3 {H : Type} (i : Input H) (l : Locals H) (running : Q) (alpha : Alp
  run (fold 28 {input:=i,next:=.mark3,locals:={l with running:=some running, alpha:=some alpha, transcript:=some transcript, claims:=some claims, terminal:=some terminal}}) = run (suffix_mark3 i (running) (alpha) (transcript) (claims) (terminal)) := by
  rw [NLI_FoldTicks.mark3 27 _ rfl]
  change run (fold 27 {input:=i,next:=.lowArray,locals:={l with running:=some running, alpha:=some alpha, transcript:=some transcript, claims:=some claims, terminal:=some terminal}}) = _
- exact lowArray i l running alpha transcript claims terminal
+ exact NLI_Source.lowArray i l running alpha transcript claims terminal
 #print axioms mark3
 end AspisR1.NLI_Source
 end
