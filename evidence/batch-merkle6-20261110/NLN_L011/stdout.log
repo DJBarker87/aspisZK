@@ -1,0 +1,11 @@
+theorem NLN_TX1_082.root : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (roots : Roots),
+          (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+            (∀ (k : Fin 3),
+                Port3_NativeBatchCalls.rootAt roots k = encodeState (OraclePortBatchDraft.committedRoot p ↑k)) →
+              NLN.ValuesPacket H proof p raw roots 0#usize :=
+⋯
+'NLN_TX1_082.root' depends on axioms: [propext, Classical.choice, Quot.sound]

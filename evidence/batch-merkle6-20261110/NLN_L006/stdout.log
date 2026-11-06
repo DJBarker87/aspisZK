@@ -1,0 +1,8 @@
+theorem NLN_AbortFold.calls : ∀ (H : Bytes → State) (proof : Slice U8) (p : OraclePortCompactDraft.Parsed)
+  (raw : Std.Array U32 22#usize) (batch : Usize) (sites : List Call),
+  (∀ c ∈ sites, NLN.TreePacket H proof p raw c.1 batch c.2) →
+    ∀ (idx : Indices) (val : Values) (history : History) (pending : Pending),
+      AbortCalls H proof raw batch sites idx val history pending →
+        NLL_Prefix.At (plan H proof p raw batch sites idx val) (history ++ pending.answered) pending.parts :=
+⋯
+'NLN_AbortFold.calls' depends on axioms: [propext, Classical.choice, Quot.sound]

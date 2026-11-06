@@ -1,0 +1,11 @@
+theorem NLN_TX2_055.root : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (commitment : Root) (kind : Usize),
+          ↑kind < 3 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              commitment = encodeState (OraclePortBatchDraft.committedRoot p ↑kind) →
+                NLN.TreePacket H proof p raw commitment 1#usize kind :=
+⋯
+'NLN_TX2_055.root' depends on axioms: [propext, Classical.choice, Quot.sound]

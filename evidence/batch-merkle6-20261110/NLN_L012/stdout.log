@@ -1,0 +1,58 @@
+structure NLN.BatchPacket (H : Bytes → State) (proof : Slice U8) (parsed : OraclePortCompactDraft.Parsed)
+  (p : verifier.Prepared) (folded : Root) (batch : Usize) : Prop
+number of parameters: 6
+fields:
+  NLN.BatchPacket.returning : ∀ (history : History) (out : Reply),
+      NLL_BatchSource.Invocation H proof p folded batch history out →
+        NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof p
+              folded batch () =
+            ok out ∧
+          plan H proof parsed p.queries batch (sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI
+                NKV_ParentSource.zeroV =
+              history ∧
+            NLL_ObservedCalls.calls H proof parsed p.queries batch (sites (NLL_BatchSource.roots p folded))
+                NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+              (history, NKV_ParentSource.observe (ok out))
+  NLN.BatchPacket.aborting : ∀ (history : History) (pending : Pending),
+      NLL_BatchAbort.Invocation H proof p folded batch history pending →
+        NLL_Prefix.At
+            (plan H proof parsed p.queries batch (sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI
+              NKV_ParentSource.zeroV)
+            (history ++ pending.answered) pending.parts ∧
+          NLL_Prefix.At
+            (NLL_ObservedCalls.calls H proof parsed p.queries batch (sites (NLL_BatchSource.roots p folded))
+                NKV_ParentSource.zeroI NKV_ParentSource.zeroV).1
+            (history ++ pending.answered) pending.parts
+constructor:
+  NLN.BatchPacket.mk {H : Bytes → State} {proof : Slice U8} {parsed : OraclePortCompactDraft.Parsed}
+    {p : verifier.Prepared} {folded : Root} {batch : Usize}
+    (returning :
+      ∀ (history : History) (out : Reply),
+        NLL_BatchSource.Invocation H proof p folded batch history out →
+          NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof p
+                folded batch () =
+              ok out ∧
+            plan H proof parsed p.queries batch (sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI
+                  NKV_ParentSource.zeroV =
+                history ∧
+              NLL_ObservedCalls.calls H proof parsed p.queries batch (sites (NLL_BatchSource.roots p folded))
+                  NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+                (history, NKV_ParentSource.observe (ok out)))
+    (aborting :
+      ∀ (history : History) (pending : Pending),
+        NLL_BatchAbort.Invocation H proof p folded batch history pending →
+          NLL_Prefix.At
+              (plan H proof parsed p.queries batch (sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI
+                NKV_ParentSource.zeroV)
+              (history ++ pending.answered) pending.parts ∧
+            NLL_Prefix.At
+              (NLL_ObservedCalls.calls H proof parsed p.queries batch (sites (NLL_BatchSource.roots p folded))
+                  NKV_ParentSource.zeroI NKV_ParentSource.zeroV).1
+              (history ++ pending.answered) pending.parts) :
+    BatchPacket H proof parsed p folded batch
+theorem NLN.batch : ∀ (H : Bytes → State) (proof : Slice U8) (parsed : OraclePortCompactDraft.Parsed)
+  (p : verifier.Prepared) (folded : Root) (batch : Usize),
+  ValuesPacket H proof parsed p.queries (NLL_BatchSource.roots p folded) batch →
+    BatchPacket H proof parsed p folded batch :=
+⋯
+'NLN.batch' depends on axioms: [propext, Classical.choice, Quot.sound]

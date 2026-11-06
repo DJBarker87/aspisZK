@@ -1,0 +1,12 @@
+theorem NLN_TX2_053.root : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (p : verifier.Prepared) (folded : Root),
+          (∀ j < 22, ↑(↑p.queries)[j]! < 262144) →
+            (∀ (k : Fin 3),
+                Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k =
+                  encodeState (OraclePortBatchDraft.committedRoot parsed ↑k)) →
+              NLN.BatchPacket H proof parsed p folded 1#usize :=
+⋯
+'NLN_TX2_053.root' depends on axioms: [propext, Classical.choice, Quot.sound]

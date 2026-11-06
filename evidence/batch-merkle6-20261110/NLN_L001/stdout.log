@@ -1,0 +1,97 @@
+info: nhr: no previous manifest, creating one from scratch
+info: toolchain not updated; no toolchain information found
+structure NLN.TreePacket (H : Bytes → State) (proof : Slice U8) (p : OraclePortCompactDraft.Parsed)
+  (raw : Std.Array U32 22#usize) (root : Root) (batch kind : Usize) : Prop
+number of parameters: 7
+fields:
+  NLN.TreePacket.returning : ∀ (idx : Indices) (val : Values) (events : List Event) (out : Answer),
+      Invocation H proof raw root batch kind idx val events out →
+        NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof raw
+              root batch kind idx val () =
+            ok out ∧
+          leafHistory kind events =
+              NKV_QueryPlan.plan H p (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+                (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind)) root
+                (NJV_EntryABI.initial idx val 0#usize) ∧
+            (leafHistory kind events, NKV_ReturnBoundary.reject (ok out)) =
+              NLL_ObservedCalls.tree H proof p raw batch kind idx val
+  NLN.TreePacket.aborting : ∀ (idx : Indices) (val : Values) (events : List Event) (pending : Pending),
+      AbortInvocation H proof raw root batch kind idx val events pending →
+        NLL_Prefix.At
+            (NKV_QueryPlan.plan H p (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+              (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind)) root
+              (NJV_EntryABI.initial idx val 0#usize))
+            (leafHistory kind events ++ pending.answered) pending.parts ∧
+          NLL_Prefix.At (NLL_ObservedCalls.tree H proof p raw batch kind idx val).1
+            (leafHistory kind events ++ pending.answered) pending.parts
+  NLN.TreePacket.counts : ∀ (idx : Indices) (val : Values) (events : List Event) (out : Answer),
+      Invocation H proof raw root batch kind idx val events out →
+        ∀ (nodes : Slice U8) (count : ℕ) (before : reference.Scratch)
+          (queries : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (answer : Bool × NJP_RowModel.Scratch),
+          Event.verify nodes count before queries answer ∈ events →
+            0 < ↑before.n ∧
+              (↑before.n ≤ if ↑batch = 0 then 10 else 12) ∧
+                OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys before)
+  NLN.TreePacket.abortCount : ∀ (idx : Indices) (val : Values) (events : List Event) (pending : Pending),
+      AbortInvocation H proof raw root batch kind idx val events pending →
+        ↑pending.parent.scratch.n ≤ if ↑batch = 0 then 10 else 12
+  NLN.TreePacket.bytes : ∀ (count : ℕ),
+      (↑(MultiproofConeSlotTail.prefixNodes (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind))
+              count)).length ≤
+        9216
+constructor:
+  NLN.TreePacket.mk {H : Bytes → State} {proof : Slice U8} {p : OraclePortCompactDraft.Parsed}
+    {raw : Std.Array U32 22#usize} {root : Root} {batch kind : Usize}
+    (returning :
+      ∀ (idx : Indices) (val : Values) (events : List Event) (out : Answer),
+        Invocation H proof raw root batch kind idx val events out →
+          NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof raw
+                root batch kind idx val () =
+              ok out ∧
+            leafHistory kind events =
+                NKV_QueryPlan.plan H p (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+                  (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind)) root
+                  (NJV_EntryABI.initial idx val 0#usize) ∧
+              (leafHistory kind events, NKV_ReturnBoundary.reject (ok out)) =
+                NLL_ObservedCalls.tree H proof p raw batch kind idx val)
+    (aborting :
+      ∀ (idx : Indices) (val : Values) (events : List Event) (pending : Pending),
+        AbortInvocation H proof raw root batch kind idx val events pending →
+          NLL_Prefix.At
+              (NKV_QueryPlan.plan H p (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+                (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind)) root
+                (NJV_EntryABI.initial idx val 0#usize))
+              (leafHistory kind events ++ pending.answered) pending.parts ∧
+            NLL_Prefix.At (NLL_ObservedCalls.tree H proof p raw batch kind idx val).1
+              (leafHistory kind events ++ pending.answered) pending.parts)
+    (counts :
+      ∀ (idx : Indices) (val : Values) (events : List Event) (out : Answer),
+        Invocation H proof raw root batch kind idx val events out →
+          ∀ (nodes : Slice U8) (count : ℕ) (before : reference.Scratch)
+            (queries : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (answer : Bool × NJP_RowModel.Scratch),
+            Event.verify nodes count before queries answer ∈ events →
+              0 < ↑before.n ∧
+                (↑before.n ≤ if ↑batch = 0 then 10 else 12) ∧
+                  OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys before))
+    (abortCount :
+      ∀ (idx : Indices) (val : Values) (events : List Event) (pending : Pending),
+        AbortInvocation H proof raw root batch kind idx val events pending →
+          ↑pending.parent.scratch.n ≤ if ↑batch = 0 then 10 else 12)
+    (bytes :
+      ∀ (count : ℕ),
+        (↑(MultiproofConeSlotTail.prefixNodes (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind))
+                count)).length ≤
+          9216) :
+    TreePacket H proof p raw root batch kind
+theorem NLN.tree : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Root) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                root = encodeState (OraclePortBatchDraft.committedRoot p ↑kind) →
+                  TreePacket H proof p raw root batch kind :=
+⋯
+'NLN.tree' depends on axioms: [propext, Classical.choice, Quot.sound]
