@@ -21,3 +21,5 @@ No new trust, Ops/root endpoint/success/history premise or security metric chang
 Next: pin seeds, inspect actual stage interfaces, then controlled native cuts and smallest Lean modules.
 
 Stage 2 seed copied NKP first (1,380,760 bytes), NKW second (1,365,368 bytes). NLA_SEED.json pins every imported file. Own orchestration repairs recorded in NLA_OWNED_REPAIRS.json; unchanged shared launcher retained. LEAN_PATH deduplicated preserving first owner order.
+
+Stage 3: K002..007 are three root PASS/intended-FAIL pairs; K008..027 are ten registry policy/address/data-decoder PASS/intended-FAIL pairs. K001 compilation error excluded. L002/L003 failed drafts excluded (sorryAx never accepted); corrected source is awaiting L004. These local cuts do not establish either owned row. All runs offline with graph/lock/features/source/KMX checks; exact receipts retained.

@@ -9,15 +9,20 @@ abbrev PE := NKF_BoxModel.PE
 runtime partiality; inner errors map exactly to InvalidAccountData. -/
 def enter {F A : Type} (reply : Result (core.result.Result Node F))
  (next : Node → Result A) : Result (core.result.Result A PE) := do
- match ← reply with
+ let raw ← reply
+ match raw with
  | .Err _ => ok (.Err .InvalidAccountData)
- | .Ok root => return .Ok (← next root)
+ | .Ok root => do
+   let value ← next root
+   ok (.Ok value)
 
 theorem rejected {F A : Type} (e : F) (next : Node → Result A) :
  enter (ok (.Err e)) next = ok (.Err .InvalidAccountData) := rfl
 
 theorem returned {F A : Type} (root : Node) (next : Node → Result A) :
- @enter F A (ok (.Ok root)) next = do return .Ok (← next root) := rfl
+ @enter F A (ok (.Ok root)) next = (do
+   let value ← next root
+   ok (.Ok value)) := rfl
 
 theorem abort {F A : Type} (e : Error) (next : Node → Result A) :
  @enter F A (.fail e) next = .fail e := rfl
