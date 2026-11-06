@@ -1,3 +1,13 @@
+--- a/programs/r1-cost-probe/src/r1_pool_adapter.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter.rs
+@@ -971,3 +971,7 @@
+ #[cfg(all(test, feature = "private-leaf-salts"))]
+ #[path = "adapter_rw_tests.rs"]
+ mod rw_tests;
++
++#[cfg(kani)]
++#[path="NJH_lane.rs"]
++mod NJH_lane;
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NJH_lane.rs
 @@ -0,0 +1,25 @@
