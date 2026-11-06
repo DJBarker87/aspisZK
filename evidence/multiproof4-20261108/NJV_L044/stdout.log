@@ -1,0 +1,99 @@
+NJV_lean/NJV_WellInput.lean:23:90: error: Application type mismatch: The argument
+  arr
+has type
+  j < (↑s.idx).length
+but is expected to have type
+  ?m.68 ?m.72 j
+in the application
+  getElem!_pos ?m.72 j arr
+NJV_lean/NJV_WellInput.lean:19:1: error: unsolved goals
+case h
+s : reference.Scratch
+bound : ↑s.n ≤ 16
+len : (↑s.idx).length = 16
+j : ℕ
+hj : j < (NJV_UnitDomain.keys s).length
+hj' : j < (List.map (fun x => ↑x) (List.take ↑s.n ↑s.idx)).length
+jb : j < ↑s.n
+arr : j < (↑s.idx).length
+⊢ ↑(↑s.idx)[j]! = ↑(↑s.idx)[j]
+theorem NJV_WellInput.keys : ∀ (s : reference.Scratch),
+  ↑s.n ≤ 16 → NJV_UnitDomain.keys s = List.map (fun x => ↑x) (List.take ↑s.n ↑s.idx) :=
+fun s bound =>
+  have len := s.idx.property;
+  List.ext_getElem
+    (of_eq_true
+      (Eq.trans
+        (congr (congrArg Eq (NJV_UnitDomain.key_length s))
+          (Eq.trans (List.length_map fun x => ↑x)
+            (Eq.trans List.length_take (Eq.trans (congrArg (min ↑s.n) len) (Nat.min_eq_left bound)))))
+        (eq_self ↑s.n)))
+    sorry
+'NJV_WellInput.keys' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJV_WellInput.reply : ∀ (s : reference.Scratch),
+  ↑s.n ≤ 16 → NJE_WellFrozen.emitted ⟨List.take ↑s.n ↑s.idx, ⋯⟩ = ok (decide (wellFormed (NJV_UnitDomain.keys s))) :=
+fun s bound =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = ok (decide (wellFormed (NJV_UnitDomain.keys s))))
+        (NJE_WellFrozen.association
+          ⟨List.take ↑s.n ↑s.idx,
+            have cap := s.idx.to_slice.property;
+            id
+              (fun cap =>
+                Eq.mpr (id (congrFun' (congrArg LE.le List.length_take) Usize.max))
+                  (Decidable.byContradiction fun a => reply._proof_1 s cap a))
+              cap⟩)))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a = ok (decide (wellFormed (NJV_UnitDomain.keys s))))
+          (NJE_WellSource.source
+            ↑⟨List.take ↑s.n ↑s.idx,
+                have cap := s.idx.to_slice.property;
+                id
+                  (fun cap =>
+                    Eq.mpr (id (congrFun' (congrArg LE.le List.length_take) Usize.max))
+                      (Decidable.byContradiction fun a => reply._proof_1 s cap a))
+                  cap⟩)))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => ok _a = ok (decide (wellFormed (NJV_UnitDomain.keys s))))
+            (NJA_WellFormed.source_eq
+              (List.map (fun x => ↑x)
+                ↑⟨List.take ↑s.n ↑s.idx,
+                    have cap := s.idx.to_slice.property;
+                    id
+                      (fun cap =>
+                        Eq.mpr (id (congrFun' (congrArg LE.le List.length_take) Usize.max))
+                          (Decidable.byContradiction fun a => reply._proof_1 s cap a))
+                      cap⟩))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                ok
+                    (decide
+                      (wellFormed
+                        (List.map (fun x => ↑x)
+                          ↑⟨List.take ↑s.n ↑s.idx,
+                              have cap := s.idx.to_slice.property;
+                              id
+                                (fun cap =>
+                                  Eq.mpr (id (congrFun' (congrArg LE.le List.length_take) Usize.max))
+                                    (Decidable.byContradiction fun a => reply._proof_1 s cap a))
+                                cap⟩))) =
+                  ok (decide (wellFormed _a)))
+              (keys s bound)))
+          (Eq.refl
+            (ok
+              (decide
+                (wellFormed
+                  (List.map (fun x => ↑x)
+                    ↑⟨List.take ↑s.n ↑s.idx,
+                        have cap := s.idx.to_slice.property;
+                        id
+                          (fun cap =>
+                            Eq.mpr (id (congrFun' (congrArg LE.le List.length_take) Usize.max))
+                              (Decidable.byContradiction fun a => reply._proof_1 s cap a))
+                          cap⟩))))))))
+'NJV_WellInput.reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

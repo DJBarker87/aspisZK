@@ -7,8 +7,8 @@ open Aeneas Aeneas.Std Result NJP_RowModel NJP_LoopModel
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 
 /-- The native 18-height controller consumes row loops in order, reinitializes
-(i,w) to (0,0), and installs their returned n. NJP_K064/065 (entry),
-K062/063 (row exit) and K066/067 (terminal) retain their own separate cuts;
+(i,w) to (0,0), and installs their returned n. NJP_K066/067 (entry),
+K062/063 (row exit) and K068/069 (terminal) retain their own separate cuts;
 NJP_K062 is not used for any data value. Exact receipt map is NJV_CUTS.md. -/
 inductive Invocation (H : Request → Digest) (nodes : Nat → U8) (length : Nat) :
     Nat → Scratch → List (Request × Digest) → Level → Prop where

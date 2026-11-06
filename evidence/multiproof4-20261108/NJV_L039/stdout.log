@@ -1,0 +1,23 @@
+theorem NJV_TX1Returning.returning : ∀ (H : Bytes → State) (root : RefDigest) (physical : Slice U8)
+  (idx : Std.Array U32 16#usize) (val : Std.Array RefDigest 16#usize) (n : Usize),
+  (↑physical).length ≤ 9216 →
+    ∀ (events : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (out : Bool × NJP_RowModel.Scratch),
+      NJV_NativeEntry.Invocation (NJP_RequestTransport.hash (rawOracle H)) root physical
+          (NJV_EntryABI.initial idx val n) events out →
+        have adopted := eval H (endpoint root physical idx val n);
+        (adopted.1, ok (NJP_CohortReturning.answer adopted.2)) = (NJV_AdoptedObservation.history events, ok out) :=
+fun H root physical idx val n bytes events out native =>
+  NJV_AdoptedObservation.returning H root physical (NJV_EntryABI.initial idx val n) rfl bytes events out native
+'NJV_TX1Returning.returning' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_TX1Returning.unit_returning : ∀ (H : Bytes → State) (root : RefDigest) (physical slot : Slice U8)
+  (idx : Std.Array U32 16#usize) (val : Std.Array RefDigest 16#usize) (n : Usize),
+  NJV_UnitDomain.Domain physical slot (NJV_EntryABI.initial idx val n) →
+    ∀ (events : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (out : Bool × NJP_RowModel.Scratch),
+      NJV_NativeEntry.Invocation (NJP_RequestTransport.hash (rawOracle H)) root physical
+          (NJV_EntryABI.initial idx val n) events out →
+        have adopted := eval H (endpoint root physical idx val n);
+        (adopted.1, ok (NJP_CohortReturning.answer adopted.2)) = (NJV_AdoptedObservation.history events, ok out) :=
+fun H root physical slot idx val n domain events out native =>
+  returning H root physical idx val n (NJV_UnitDomain.bytes physical slot (NJV_EntryABI.initial idx val n) domain)
+    events out native
+'NJV_TX1Returning.unit_returning' depends on axioms: [propext, Classical.choice, Quot.sound]

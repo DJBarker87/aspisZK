@@ -8,8 +8,8 @@ open Aeneas Aeneas.Std Result NJP_RowModel NJP_LoopModel
 open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 attribute [local instance] Classical.propDecidable
 
-/-- Pending native child frame, BEFORE any reply/write. Occupied: NJV_K001/002;
-sibling: NJP_K068/069 and K013..016 borrowed byte windows. The child's SAME
+/-- Pending native child frame, BEFORE any reply/write. Occupied: NJV_K002/003;
+sibling: NJP_K070/071 and K013..016 borrowed byte windows. The child's SAME
 slice arguments determine q; no reply or returned Result is included. -/
 structure Cut (s : Scratch) (i length : Nat) (nodes : Nat → U8)
     (pending : Scratch) (q : Request) : Prop where

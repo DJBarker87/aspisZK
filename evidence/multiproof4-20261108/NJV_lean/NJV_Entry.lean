@@ -13,7 +13,7 @@ open AspisR1.MultiproofConePhysicalTransport AspisR1.MultiproofConePhysicalViews
 open AspisR1.OraclePortFrozenOrder
 attribute [local instance] Classical.propDecidable
 
-/-- Actual binary entry guard, before the local cursor is reset. NJP_K064/065
+/-- Actual binary entry guard, before the local cursor is reset. NJP_K066/067
 certify the scalar short-circuit; NJE_WellPacket supplies the SAME slice reply. -/
 def Guard (physical : Slice U8) (s : reference.Scratch) : Prop :=
  wellFormed ((live s 0 s.n.val).map Prod.fst) ∧ physical.val.length%32=0
