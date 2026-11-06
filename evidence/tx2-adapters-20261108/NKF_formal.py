@@ -15,7 +15,7 @@ def run(a,kind,target,command=None,extra=None):
         command=[env['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NKF_generated','-o','NKF_objects/'+target.replace('.','/')+'.olean',src]
         if target in ['NKF_ProofDriver','NKF_ScanDriver']:command+=['-c','NKF_native/'+target+'.c']
     assert command
-    cfg=dict(attempt=a,kind=kind,module=target,command=command,env=env,sources=list(files),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='focused Lean elaboration' if kind=='lean' else 'optimized audit link or named raw axiom/module scan')
+    cfg=dict(attempt=a,kind=kind,module=target,command=command,env=env,sources=list(files),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='focused Lean elaboration' if kind=='lean' else 'optimized compilation, one Charon translation and one Aeneas emission' if kind=='extraction' else 'optimized audit link or named raw axiom/module scan')
     files[a+'.json']=json.dumps(cfg)
     admission(a)
     r=ssh('python3',f'''from pathlib import Path

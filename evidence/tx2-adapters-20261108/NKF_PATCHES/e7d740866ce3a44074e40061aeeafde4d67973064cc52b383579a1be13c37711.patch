@@ -1,0 +1,34 @@
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NKF_checkpoint_shape.rs
+@@ -0,0 +1,31 @@
++use super::*;
++use aspis_statement::pool_v1::{PoolV1PairForestAccountErrorV1 as F,PoolIdentityV1,VerifierPolicyV1};
++extern crate alloc;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_field()->M31{M31(kani::any())}
++fn any_digest()->[M31;8]{[any_field(),any_field(),any_field(),any_field(),any_field(),any_field(),any_field(),any_field()]}
++fn any_error()->F{
++ let i:u8=kani::any();kani::assume(i<=20);
++ match i{0=>F::WrongLength,1=>F::WrongMagic,2=>F::WrongVersion,3=>F::WrongLaneCount,4=>F::WrongDigestEncoding,5=>F::WrongDepth,6=>F::WrongFormatBinding,7=>F::NonZeroReserved,8=>F::ZeroRequiredBinding,9=>F::InvalidBoolean,10=>F::InvalidMasterState,11=>F::InvalidLane,12=>F::LaneMasterMismatch,13=>F::LaneOrderMismatch,14=>F::LaneSequenceDecreased,15=>F::DuplicateCheckpoint,16=>F::CheckpointSequenceOverflow,17=>F::NonCanonicalDigest,18=>F::Identity,19=>F::Policy,_=>{
++ use aspis_statement::pool_v1::PoolV1TreeError as T;let j:u8=kani::any();kani::assume(j<13);
++ F::Tree(match j{0=>T::TreeFull,1=>T::InsufficientCapacity,2=>T::IndexOutOfRange,3=>T::RootMismatch,4=>T::NonCanonicalFrontier,5=>T::WrongLength,6=>T::WrongMagic,7=>T::WrongVersion,8=>T::WrongDepth,9=>T::WrongTreeHash,10=>T::WrongDigestEncoding,11=>T::NonCanonicalDigest,_=>T::NonZeroReserved})}}
++}
++fn any_master()->PoolV1PairForestMasterV1{PoolV1PairForestMasterV1{
++ bump:kani::any(),identity:PoolIdentityV1{pool:kani::any(),asset_mint:kani::any(),token_program:kani::any(),asset_id:any_field(),deployment_domain:kani::any()},verifier_policy:VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()},initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()}}
++fn any_checkpoint()->PoolV1PairForestCheckpointV1{PoolV1PairForestCheckpointV1{bump:kani::any(),master:kani::any(),deployment_domain:kani::any(),checkpoint_sequence:kani::any(),global_root:any_digest(),lane_sequences:kani::any()}}
++
++#[kani::ensures(|out| true)]
++#[kani::modifies(scratch)]
++fn shape_probe(seed:u8,scratch:&mut u8)->Result<Box<PoolV1PairForestCheckpointV1>,ProgramError>{
++ *scratch=seed;
++ if seed&1==0{let mut value=any_checkpoint();value.bump=seed;Ok(Box::new(value))}else{Err(ProgramError::InvalidAccountData)}
++}
++fn check(seed:u8,out:Result<Box<PoolV1PairForestCheckpointV1>,ProgramError>){match out{Ok(p)=>assert!(p.bump==seed,"unimplied boxed bump"),Err(e)=>assert!(e==ProgramError::InvalidAccountData,"unimplied boxed error")}}
++#[kani::proof_for_contract(shape_probe)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn shape_contract(){let seed:u8=kani::any();let mut scratch:u8=kani::any();let out=shape_probe(seed,&mut scratch);check(seed,out);}
++#[kani::proof] #[kani::stub(shape_probe,shape_oracle)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn shape_unimplied(){let seed:u8=kani::any();let mut scratch:u8=kani::any();let out=shape_probe(seed,&mut scratch);check(seed,out);}
++
++fn shape_oracle(_seed:u8,scratch:&mut u8)->Result<Box<PoolV1PairForestCheckpointV1>,ProgramError>{*scratch=kani::any();if kani::any(){Ok(Box::new(any_checkpoint()))}else{Err(ProgramError::InvalidAccountData)}}

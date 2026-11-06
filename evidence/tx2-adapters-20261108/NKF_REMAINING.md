@@ -1,3 +1,18 @@
-# NKF_REMAINING
+# NKF remaining members and mandatory stop
 
-Pending; no credit claimed.
+**Target not yet established. Zero admitted rows; ledger17 remains514CLOSED /0QUALIFIED /85OPEN of599.**
+
+Host admission failed twice before K081: exit120, blank outputs, zero-byte JSON, including the permitted30-second retry. No allowed:true/exit0 receipt exists. local-lean rule5 says: “If the launcher or host misbehaves, stop and report the exact error ... the lead fixes infrastructure.” No further host proof/audit work is permitted. This applies equally to the remaining1/80Kani invocation and77/90Lean attempts. The extraction allowance1/1 was used. Budget is NOT exhausted.
+
+| Member | Exact blocker and why no remaining member can now be attempted |
+|---|---|
+| TX2:216 checkpoint Box | Six field pairs, error map, carrier/slot49 and allocation identity/uniqueness pass. Unimplied returned-Box control is not certified: verified havoc lacks Arbitrary and ordinary stubbing of a contract target fails. K081 removes those contract annotations under(ak); not submitted. Native/source packet review and combined/NFX/raw-ax2 remain. Shared admission prevents the repair and all formal gates. |
+| TX2:218 master Box | Same blocker after fourteen field pairs and slot48. Full conditional model root compiled, with no allocator-success premise; this does not discharge the unvalidated native cut. K081 and all gates blocked by the same shared failure. |
+| TX2:217 lane decoder | Actual iteration K064 TIMEOUT; changed canonical=false inverse K065 no positive mate. Constructor K066 PASS, K067 control TIMEOUT gives no credit. Need smaller one-window native iteration/control and constructor control, plus complete header/reserved/tree/sequence/digest/root/Box source coverage. Existing NKF_LaneTrace frame/induction/no-suffix is compiled; these are remaining NATIVE cuts, not hidden endpoint assumptions. Admission blocks fresh isolated shapes. |
+| TX2:234 registry authentication | Six actual call-site seed/program/reply pairs pass. Full ordered readonly/borrow/data/decoder/policy/active/PDA-comparison/return frame and SDK ABI/calldata associations are absent. Byte windows need final argument-image assembly: NKF_SeedWindows.lean.wip is written but uncompiled. Native gaps prevent a positive parent invocation cut; admission also prevents even this independent focused Lean compile. No new PDA value row may be assumed. |
+| TX2:233 account authentication | Depends on217/234 and ungated216/218. Under(as)/(aq), no composed row before these children. Own full7-account/error/distinct/three-PDA/snapshot/Box cuts and source/model join remain. No public entry, process, stage2 or tx2_authenticated candidate was taken. Admission blocks independent cuts as well. |
+| TX2:242 validate_asq8 | Depends on233. Need actual ordered request/profile/release/pool/lane/current-slot/error/authenticate/first/data/scan/reconstruct/constructor invocation. CLOSED request/scan/reconstruction still need SAME-call joins. No driver or new runtime trust premise is substituted; admission blocks next independent native/formal steps. |
+
+This is the member-by-member explanation for ending below80% of the Lean allowance. It is an incomplete return, not an assertion that the remaining work is impossible. Stop is the explicit infrastructure rule, not Kani exhaustion. No combined audit has run (0/2); no raw ax2 or NFX exit0 is claimed.
+
+Next lead deliverable: restore the reservation script's valid JSON and exit0/allowed:true, recover/review K081's prepared inputs, then use the final authorized Kani invocation. Compile the WIP seed-window helper and perform the one joint gate only when the wrapper cut packet is complete. Preserve all timed-out shapes and split them instead of retrying; other members need a fresh budget after the last invocation. Current retained coherent objects: own NKF_objects,10hashes in NKF_HOST_END.json; NKC/NJY seed and Aeneas pins retained. Rust target/temp outputs alone were cleaned.

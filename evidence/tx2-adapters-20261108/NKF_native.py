@@ -23,7 +23,9 @@ def baseline():
  return x,files
 
 def submit(a,target,parent,module,text,mode='positive',edits=None,extra_sidecars=None):
- assert a.startswith('NKF_K') and 1<=int(a[-3:])<=80 and not (E/a).exists()
+ assert a.startswith('NKF_K') and 1<=int(a[-3:]) and not (E/a).exists()
+ used=[json.loads(line) for line in (E/'NKF_ATTEMPTS.jsonl').read_text().splitlines() if json.loads(line).get('kind')=='kani' and json.loads(line).get('attempt')!='NKF_K001']
+ assert len(used)<80,'Kani invocation budget exhausted; all receipt-bearing attempts count except verified prelaunch K001'
  x,files=baseline();key='NKF_src/'+parent
  files[key]+='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod '+module+';\n'
  files['NKF_src/'+str(Path(parent).parent/(module+'.rs'))]=text
@@ -31,7 +33,10 @@ def submit(a,target,parent,module,text,mode='positive',edits=None,extra_sidecars
  for extra_parent,extra_module,extra_text in (extra_sidecars or []):
   extra_raw=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+extra_parent],text=True)
   frozen_pins=json.loads(files['NGL_FROZEN_SOURCE_PINS.json']);assert sha(extra_raw.encode())==frozen_pins[extra_parent]
-  files['NKF_src/'+extra_parent]=extra_raw+'\n#[cfg(kani)]\n#[path="'+extra_module+'.rs"]\nmod '+extra_module+';\n'
+  visibility='pub(crate) ' if a=='NKF_K081' and extra_module=='NKF_pda' else ''
+  files['NKF_src/'+extra_parent]=extra_raw+'\n#[cfg(kani)]\n#[path="'+extra_module+'.rs"]\n'+visibility+'mod '+extra_module+';\n'
+  if visibility:
+   files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace('if s.endswith(suffix):s=s[:-len(suffix)]',"public=suffix.replace('mod '+module,'pub(crate) mod '+module)\n  if s.endswith(public):s=s[:-len(public)]\n  if s.endswith(suffix):s=s[:-len(suffix)]")
   files['NKF_src/'+str(Path(extra_parent).parent/(extra_module+'.rs'))]=extra_text
   files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace("for module in [","for module in ['"+extra_module+"',")
  if edits:
@@ -39,7 +44,7 @@ def submit(a,target,parent,module,text,mode='positive',edits=None,extra_sidecars
    assert files[key].count(old)==1;files[key]=files[key].replace(old,new)
   # Exact source erasure of authored instrumentation, before inherited validation.
   files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace('def erase(n,s,zero):','def erase(n,s,zero):\n for old,new in '+repr(edits)+':\n  if new in s:s=s.replace(new,old,1)')
- pins=json.loads(files['NIJ_SOURCE_PINS.json'])
+ pins=json.loads(files['NIJ_SOURCE_PINS.json']);pins.update(json.loads(files['NGL_FROZEN_SOURCE_PINS.json']));pins.pop('programs/r1-cost-probe/src/NJD_stages.rs',None)
  for n,t in files.items():
   if n.startswith('NKF_src/') and not n.endswith('Cargo.lock'):pins[n[8:]]=sha(t.encode())
  files['NIJ_SOURCE_PINS.json']=json.dumps(pins)
@@ -61,7 +66,8 @@ def submit(a,target,parent,module,text,mode='positive',edits=None,extra_sidecars
 import json,lzma,base64
 b=Path({B!r});files=json.loads(lzma.decompress(base64.b64decode({payload!r})))
 for n,t in files.items():
- p=b/n;assert p.resolve().is_relative_to(b.resolve());p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+ p=b/n;assert p.resolve().is_relative_to(b.resolve());p.parent.mkdir(parents=True,exist_ok=True)
+ if not p.exists() or p.read_text()!=t:p.write_text(t)
 ''');assert r.returncode==0,r.stderr
  r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
  (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
