@@ -7,6 +7,7 @@ import NJY_Entry
 import NJY_Registry
 import NJY_WindowStep
 import NJY_Roots
+import NJY_Install
 
 #check NJQ_ArrayAll.coordinates
 #print axioms NJQ_ArrayAll.coordinates
@@ -214,6 +215,10 @@ import NJY_Roots
 #print axioms NJY_Roots.entry
 #check NJY_Roots.registry
 #print axioms NJY_Roots.registry
+#check NJY_Install.actual_slots
+#print axioms NJY_Install.actual_slots
+#check NJY_Install.digest_error_frame
+#print axioms NJY_Install.digest_error_frame
 
 set_option pp.proofs false in
 #print NJQ_MasterTotal.Cut

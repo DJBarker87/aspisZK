@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,re,hashlib,difflib
 E=Path(__file__).resolve().parent;Q=E.parent/'tx2-decoders2-20261108'
-modules=['NJY_Identity','NJY_Checkpoint','NJY_Master','NJY_Entry','NJY_Registry','NJY_WindowStep','NJY_Roots']
+modules=['NJY_Identity','NJY_Checkpoint','NJY_Master','NJY_Entry','NJY_Registry','NJY_WindowStep','NJY_Roots','NJY_Install']
 roots=json.loads((Q/'NJQ_AUDIT_ROOTS.json').read_text())['groups'][0]
 for m in modules:
  s=(E/(m+'.lean')).read_text();ns=re.search(r'^namespace (\w+)',s,re.M)[1]

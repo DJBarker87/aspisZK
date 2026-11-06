@@ -13,7 +13,7 @@ prior=json.loads(lzma.decompress(Path('/home/dombarker/project-offloads/codex-cx
 def key(x):return(x['module'],next(s for s in['.olean.private','.olean.server','.olean','.ir']if x['path'].endswith(s)))
 old={key(x):x for x in prior['selected_objects']};new={key(x):x for x in pins};wrong=[dict(module=k[0],suffix=k[1],old=x,new=new.get(k))for k,x in old.items()if k not in new or new[k]['sha256']!=x['sha256']]
 (B/'NJY_PREDECESSOR_COMPARISON.json').write_text(json.dumps(dict(previous_files=len(old),current_files=len(new),mismatches=wrong,status='PASS'if not wrong else'FINDING'),indent=1)+'\n');assert not wrong
-cache=B/'NJY_exports_20261108';cache.mkdir(exist_ok=True);exports=[]
+cache=B/'NJY_exports_final_20261108';cache.mkdir(exist_ok=True);exports=[]
 for p in sorted((B/'NJY_objects').rglob('*')):
  if not p.is_file()or p.name.startswith('NJY_ScanDriver.'):continue
  q=cache/p.relative_to(B/'NJY_objects');q.parent.mkdir(parents=True,exist_ok=True)

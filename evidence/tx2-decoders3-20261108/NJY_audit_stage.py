@@ -2,8 +2,8 @@
 from NJY_formal import *
 from NJY_inspect import inputs
 T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
-assert run('NJY_L015','lean','NJY_WindowStep')['exit_status']==0
-assert run('NJY_L007','lean','NJY_Roots')['exit_status']==0
+assert json.loads((E/'NJY_L015/receipt.json').read_text())['exit_status']==0
+assert run('NJY_L016','lean','NJY_Roots')['exit_status']==0
 assert run('NJY_L008','lean','NJY_COMBINED_IMPORT')['exit_status']==0
 assert run('NJY_L009','lean','NJY_ScanDriver',extra={'NJY_native/.keep':'owned optimized audit outputs\n'})['exit_status']==0
 r=ssh('cat '+B+'/NJY_native/NJY_ScanDriver.c');assert r.returncode==0
