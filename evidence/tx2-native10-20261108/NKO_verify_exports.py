@@ -22,6 +22,6 @@ for r in results:
 scan=json.loads((B/'NKO_audit/scan/scan.json').read_text());assert scan['exit_status']==0
 log=(B/'NKO_audit/scan/scan.log').read_text();assert 'NFN_SCAN_ZERO_DANGLING' in log
 cleanup=json.loads((B/'NKO_CLEANUP.json').read_text());assert cleanup['cache_deleted'] is False
-assert not (B/'NKO_target').exists()
+assert (B/'NKO_target').exists() and cleanup['retained_target'] is True
 report=dict(status='PASS',export_objects=len(export['files']),closure_objects=len(closure),raw_roots=len(results),scan_exit=0,cache_retained=True,keys_touched=False,full_manifest_replayed=False)
 (B/'NKO_EXPORT_VERIFY.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

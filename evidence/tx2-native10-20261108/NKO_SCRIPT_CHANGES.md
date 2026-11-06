@@ -8,3 +8,5 @@ Shared reservation, S2W launcher, shim, source workspaces, caches and walkers ar
 - Pair runner restores the retained positive's exact native sources for its control and then restores the current draft; source-hash equality is checked.
 - Audit selection follows actual chronological receipts, not numeric attempt IDs (unused IDs are reused after stopped plans). Latest focused source hashes must match; failed/obsolete snapshots earn no credit.
 - Audit-driver adaptation is names/paths/root groups only; NFA C walker and memory limiter are byte-identical to the retained NKE tools, with full fixtures/raw equality/loaded-scan required.
+
+Final pin/export and verify scripts are copied from NKE with own-prefix paths. Exports are redirected into the OWN workspace, never the read-only shared cache. Destructive target/TMPDIR cleanup is removed and both are retained; source/closure/export hash, ax2 and scan checks remain unchanged. Own allocated size must be below30GB. This retention check is stricter for artifact preservation; it is not a proof-validation relaxation.

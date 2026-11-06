@@ -1,0 +1,43 @@
+{"attempt": "NKO_K060", "exit_status": 1, "wall_seconds": 41.158202156890184, "peak_rss_kib": "5828540", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+c/array/mod.rs:951:48 in function <core::array::Guard<'_, [u8; 32]> as core::ops::Drop>::drop
+
+Check 780: <core::array::Guard<'_, [u8; 32]> as core::ops::Drop>::drop.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs:951:48 in function <core::array::Guard<'_, [u8; 32]> as core::ops::Drop>::drop
+
+Check 781: <core::array::Guard<'_, [u8; 32]> as core::ops::Drop>::drop.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs:951:48 in function <core::array::Guard<'_, [u8; 32]> as core::ops::Drop>::drop
+
+Check 782: <core::array::Guard<'_, [u8; 32]> as core::ops::Drop>::drop.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs:951:48 in function <core::array::Guard<'_, [u8; 32]> as core::ops::Drop>::drop
+
+
+SUMMARY:
+ ** 1 of 782 failed (9 unreachable)
+Failed Checks: Check that *dst is assignable
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs", line 1908, in core::ptr::write::<u8>
+
+VERIFICATION:- FAILED
+Verification Time: 30.17844s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKO_parent::NKO_QueryFrame::full_restore_violation
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r0e4a8963254c4311b2bb60c1e28bc62c.scope; invocation ID: b30b42e24f0e41dab3b3451b306019e3

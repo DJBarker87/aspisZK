@@ -1,6 +1,6 @@
 """Own pin/export validation. Does not modify shared sources or infrastructure."""
 from pathlib import Path
-import json,hashlib,shutil,lzma
+import json,hashlib,shutil,lzma,subprocess
 B=Path(__file__).resolve().parent;C=Path('/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104')
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 modules=json.loads((B/'NKO_MODULES.json').read_text())+['NKO_COMBINED_IMPORT'];pins=json.loads((B/'NKO_SOURCE_PINS.json').read_text())
@@ -38,7 +38,8 @@ W=Path('/home/dombarker/project-offloads/codex-cx-sound-int2-20261025')
 T=Path('/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0')
 tool_paths=[B/'S2W_run_host.py',B/'NKO_native/NFA_WALKER.c',B/'NKO_native/NFA_MemoryLimit.c']+[W/n for n in ['S2W_lean_host.py','lakefile.toml','lake-manifest.json','lean-toolchain']]+[T/'bin'/n for n in ['lean','lake','leanc']]
 (B/'NKO_TOOL_PINS.json').write_text(json.dumps({str(q):sha(q) for q in tool_paths},indent=2)+'\n')
-(B/'NKO_RETENTION.json').write_text(json.dumps(dict(workspace=str(B),cache=str(out),cargo_target=str(B/'NKO_target'),retained_objects=modules,cache_deleted=False,keys_touched=False),indent=2)+'\n')
+own_bytes=int(subprocess.check_output(['du','-sb',str(B)],text=True).split()[0]);assert own_bytes<30_000_000_000,own_bytes
+(B/'NKO_RETENTION.json').write_text(json.dumps(dict(workspace=str(B),own_workspace_bytes=own_bytes,free_bytes=shutil.disk_usage(B).free,cache=str(out),cargo_target=str(B/'NKO_target'),retained_objects=modules,cache_deleted=False,keys_touched=False),indent=2)+'\n')
 print(json.dumps(dict(source_files=len(pins),closure_modules=len(rows),export_bytes=sum(z['bytes'] for z in records),free_bytes=shutil.disk_usage(B).free)))
 
-(B/'NKO_CLEANUP.json').write_text(json.dumps(dict(deleted=[],keys_touched=False,retained_target=True,reason='Retain own workspace, cache, TMPDIR and target; no destructive cleanup.'))+'\n')
+(B/'NKO_CLEANUP.json').write_text(json.dumps(dict(deleted=[],cache_deleted=False,keys_touched=False,retained_target=True,reason='Retain own workspace, cache, TMPDIR and target; no destructive cleanup.'))+'\n')
