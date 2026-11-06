@@ -1,0 +1,65 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -2328,3 +2328,7 @@
+         }
+     }
+ }
++
++#[cfg(kani)]
++#[path="NKR_Digest_native.rs"]
++mod NKR_Digest_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_Digest_native.rs
+@@ -0,0 +1,45 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_Digest_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++fn NKR_Digest_q(w:[u32;4])->QM31{unsafe{core::mem::transmute::<[u32;4],QM31>(w)}}
++struct NKR_Digest_Log{seek:usize,calls:usize,kind:u8,high:QM31,left:QM31,right:QM31,oi:usize,si:usize,di:usize,opened:[u32;4],digest:u32,some:bool,reply:[[QM31;2];4],add_reply:[QM31;8]}
++fn NKR_Digest_enter(kind:u8,high:QM31,o:[QM31;16],d:Option<Digest>,l:&mut NKR_Digest_Log)->[QM31;2]{let i=l.calls/3;if l.calls==l.seek{l.kind=kind;l.high=high;l.opened=NKR_Digest_words(o[l.oi]);l.digest=d.map_or(0,|x|x[l.di].0);l.some=d.is_some();}l.calls+=1;l.reply[i]}
++fn NKR_Digest_left(high:QM31,o:[QM31;16],d:Digest,l:&mut NKR_Digest_Log)->[QM31;2]{NKR_Digest_enter(11,high,o,Some(d),l)}
++fn NKR_Digest_recipient(d:Option<Digest>,o:[QM31;16],high:QM31,l:&mut NKR_Digest_Log)->[QM31;2]{NKR_Digest_enter(12,high,o,d,l)}
++fn NKR_Digest_add(a:QM31,b:QM31,l:&mut NKR_Digest_Log)->QM31{let call=l.calls;let i=call-call/3-1;if call==l.seek{l.kind=1;l.left=a;l.right=b;}l.calls+=1;l.add_reply[i]}
++fn NKR_Digest_prefix(public:SemanticPublic<'_>,openings:&StateOnlyPoseidonOpenings,selectors:&Selectors,l:&mut NKR_Digest_Log)->[[QM31;2];3]{
++    let mut local_sums = [[QM31::ZERO; DIGEST_ELEMS / 4]; 3];
++    let anchor = NKR_Digest_left(selectors.high[56],openings.z,public.anchor,l);
++    local_sums[1][0] = NKR_Digest_add(local_sums[1][0],anchor[0],l);
++    local_sums[1][1] = NKR_Digest_add(local_sums[1][1],anchor[1],l);
++    let nullifier = NKR_Digest_left(selectors.high[26],openings.z,public.nullifier,l);
++    local_sums[1][0] = NKR_Digest_add(local_sums[1][0],nullifier[0],l);
++    local_sums[1][1] = NKR_Digest_add(local_sums[1][1],nullifier[1],l);
++    let recipient = NKR_Digest_recipient(public.recipient,openings.z,selectors.high[29],l);
++    local_sums[1][0] = NKR_Digest_add(local_sums[1][0],recipient[0],l);
++    local_sums[1][1] = NKR_Digest_add(local_sums[1][1],recipient[1],l);
++    let change = NKR_Digest_left(selectors.high[32],openings.z,public.change,l);
++    local_sums[1][0] = NKR_Digest_add(local_sums[1][0],change[0],l);
++    local_sums[1][1] = NKR_Digest_add(local_sums[1][1],change[1],l);
++    local_sums
++}
++fn NKR_Digest_make_public<'a>(transition:&'a PoolV1PairLatePublicStatementV1)->SemanticPublic<'a>{
++ let recipient:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};
++ SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(recipient)}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition}
++}
++#[kani::proof] #[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_Digest_prefix_cut(){
++ let transition:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};
++ let p=NKR_Digest_make_public(&transition);
++ let views:[[QM31;16];3]=unsafe{core::mem::transmute::<[[[u32;4];16];3],[[QM31;16];3]>(kani::any())};let o=StateOnlyPoseidonOpenings{z:views[0],succ_z:views[1],xor12_z:views[2]};
++ let high:[QM31;64]=unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())};let low:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let s=Selectors{high,low};
++ let replies:[[QM31;2];4]=unsafe{core::mem::transmute::<[[[u32;4];2];4],[[QM31;2];4]>(kani::any())};let adds:[QM31;8]=unsafe{core::mem::transmute::<[[u32;4];8],[QM31;8]>(kani::any())};
++ let seek:usize=kani::any();let limb:usize=kani::any();let oi:usize=kani::any();let si:usize=kani::any();let di:usize=kani::any();let group:usize=kani::any();let lane:usize=kani::any();kani::assume(seek<12&&limb<4&&oi<16&&si<64&&di<8&&group<3&&lane<2);
++ let mut log=NKR_Digest_Log{seek,calls:0,kind:255,high:QM31::ZERO,left:QM31::ZERO,right:QM31::ZERO,oi,si,di,opened:[0;4],digest:0,some:false,reply:replies,add_reply:adds};
++ let out=NKR_Digest_prefix(p,&o,&s,&mut log);assert_eq!(log.calls,12);
++ if seek%3==0{let k=seek/3;assert_eq!(log.kind,if k==2{12}else{11});assert_eq!(NKR_Digest_words(log.high)[limb],NKR_Digest_words(s.high[[56,26,29,32][k]])[limb]);assert_eq!(log.opened[limb],NKR_Digest_words(o.z[oi])[limb]);let d=match k{0=>Some(p.anchor),1=>Some(p.nullifier),2=>p.recipient,_=>Some(p.change)};assert_eq!(log.some,d.is_some());assert_eq!(log.digest,d.map_or(0,|x|x[di].0));}
++ else{let k=seek/3;let j=seek%3-1;assert_eq!(log.kind,1);assert_eq!(NKR_Digest_words(log.left)[limb],if k==0{0}else{NKR_Digest_words(adds[2*(k-1)+j])[limb]});assert_eq!(NKR_Digest_words(log.right)[limb],NKR_Digest_words(replies[k][j])[limb]);}
++ assert_eq!(NKR_Digest_words(out[group][lane])[limb],(if group==1{NKR_Digest_words(adds[6+lane])[limb]}else{0})^if cfg!(NKR_invert){1}else{0});
++ assert_eq!(NKR_Digest_words(s.high[si])[limb],NKR_Digest_words(high[si])[limb]);assert_eq!(NKR_Digest_words(o.succ_z[oi])[limb],NKR_Digest_words(views[1][oi])[limb]);assert_eq!(NKR_Digest_words(o.xor12_z[oi])[limb],NKR_Digest_words(views[2][oi])[limb]);
++}
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! Aspis SpendV0 statement layer, built evaluator-first.
+ //!
+ //! This crate deliberately contains no proof system. It defines the exact
