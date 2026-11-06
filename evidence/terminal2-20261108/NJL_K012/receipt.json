@@ -1,0 +1,113 @@
+{
+  "attempt": "NJL_K012",
+  "kind": "kani",
+  "module": "NJL_endpoint_write_cut",
+  "sources": [
+    "NJL_gate.py",
+    "NJL_SOURCE_PINS.json",
+    "NJL_FROZEN_FILE_PINS.json",
+    "NJL_control.rs.txt",
+    "NJL_CONTROL_ERASURE.json",
+    "NJL_native.patch",
+    "NJL_KMX.patch",
+    "NJL_EXTRA_INPUTS.json",
+    "NJL_COMPILER.patch",
+    "NJL_ARRAY_WINDOW.patch",
+    "NJL_OCC_CONTROL.patch",
+    "NJL_OCC_FIX.patch",
+    "NJL_ENDPOINT_WINDOW.patch",
+    "NJL_ENDPOINT_INIT.patch"
+  ],
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-terminal2-20261108/NJL_tmp",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-terminal2-20261108/NJL_target"
+  },
+  "timeout": 180,
+  "expected_time": "Optimized ONE scratch write at arbitrary offset and arbitrary observer, two scalar prestates only; NO full103-cell before copy. Missing K072 frame replacement, not same shape",
+  "root_package": "aspis-statement",
+  "metadata_features": "aspis-statement/pool-v1-kernel,aspis-statement/pool-v1-pair-forest-active-mask-basis-audit,aspis-statement/pool-v1-pair-forest-binary-copy-weights-audit,aspis-statement/pool-v1-pair-forest-copy-finish-dot-basis-audit,aspis-statement/pool-v1-pair-forest-copy-pattern-basis-audit,aspis-statement/pool-v1-pair-forest-copy-selector-tensor-basis-audit,aspis-statement/pool-v1-pair-forest-copy-tag-dot-basis-audit,aspis-statement/pool-v1-pair-forest-endpoint-selector-cache-audit,aspis-statement/pool-v1-pair-forest-packed-digest-audit,aspis-statement/pool-v1-pair-forest-packed-digest-selector-tensor-audit,aspis-statement/pool-v1-pair-forest-packed-range-audit,aspis-statement/pool-v1-pair-forest-pattern-window-audit,aspis-statement/pool-v1-pair-forest-semantic-factor-audit,aspis-statement/r0,aspis-statement/spend-dynamic-rate512",
+  "command": [
+    "python3",
+    "NJL_gate.py",
+    "NJL_K012.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-terminal2-20261108/NJL_src/crates/aspis-statement/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-terminal2-20261108/NJL_target",
+    "--features",
+    "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "pool_v1::pair_forest_copy_terminal::NJL_native::NJL_endpoint_write_cut",
+    "--output-format",
+    "terse"
+  ],
+  "collect": [
+    "NJL_K012-graph-check.json",
+    "NJL_K012-graph.stderr",
+    "NJL_K012-graph.json",
+    "NJL_K012-source-check.json",
+    "NJL_K012-lock-check.json"
+  ],
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "source_tree_dirty": true,
+  "source_revision": "8f0a0752314d27048b78d8051f2d28e4989f5d2f",
+  "partition": {
+    "coordinate": 0,
+    "covered_union": "all Fin 7"
+  },
+  "exit_status": 0,
+  "wall_seconds": 40.28112003696151,
+  "peak_rss_kib": "1469172",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r3994b0b656514df990bb4f70e41e4dee.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1632399360",
+  "source_hashes": {
+    "NJL_gate.py": "5a4945df937b53bd10f9021d19c5362db102b9c69c2dc0dbcfb724b524f44593",
+    "NJL_SOURCE_PINS.json": "580855bf7513b134219e8f638a17bc856e080d1eeaff82a431c8572a53a36aa1",
+    "NJL_FROZEN_FILE_PINS.json": "a0f6de8c2d9fbdb54693fba7adcc4748ca5f7723079e1699fa3cfbdb5faff2be",
+    "NJL_control.rs.txt": "d007d8a1457c8927cd01cea11ca1460d5773d5f9b6aecfdb37e7886256a1f18c",
+    "NJL_CONTROL_ERASURE.json": "194eb7fb04b16e0171b03b8f7e670873ad52a47c47d46b2427fb5fcef1fae0da",
+    "NJL_native.patch": "57820b12c39b15665077cae6a0de55a23efb00119efa02783dc01a42ecd0c57e",
+    "NJL_KMX.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NJL_EXTRA_INPUTS.json": "cd081a9c7fc57aea7dfe7c5051d529f734ce4dc67c1884831de3402bccb2b5c5",
+    "NJL_COMPILER.patch": "1eeafaff1c2144fc09e312c71fb2b872a4e204e6d655cbe22954b7a2f1ed0f6f",
+    "NJL_ARRAY_WINDOW.patch": "6a896b55ed39ca219e457cb738b1f91e1d015ac968123a22d060e3d116dc15b7",
+    "NJL_OCC_CONTROL.patch": "07f2c47326c91ad34474f9f9fc889f6a603fd25e617a4900705a2bd66510193f",
+    "NJL_OCC_FIX.patch": "55dcfa523c1e680a407e3507c1be7036ee6fc3adef8662fa237bd68b28969026",
+    "NJL_ENDPOINT_WINDOW.patch": "116c1eac35e8eae0d7f1002926da8079399827e42b60acf3852c83c4c7cb1076",
+    "NJL_ENDPOINT_INIT.patch": "eefac85ff73384ba901dcd0c5f3b5eaf17bb1e76b8484e7ae9aa0f6085ebaa32"
+  },
+  "print_axioms": "N/A: kani"
+}

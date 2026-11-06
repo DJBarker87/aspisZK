@@ -1,0 +1,56 @@
+{"attempt": "NJL_L041", "exit_status": 0, "wall_seconds": 11.58995954808779, "peak_rss_kib": "6176040", "swaps": "0", "print_axioms": ["'AspisR1.NJL_EndpointRoot.selected_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_EndpointRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.NJL_EndpointRoot.copy : core.marker.Copy NQ :=
+{ cloneInst := { clone := fun x => ok x } }
+def AspisR1.NJL_EndpointLookup.Cut : Fin 136 → Bool → Prop :=
+fun index consumer =>
+  NJL_EndpointLookup.row index consumer < 1024 ∧
+    NJL_EndpointLookup.gc index consumer < 30 ∧ NJL_EndpointLookup.pc index consumer < 43
+theorem AspisR1.NJL_EndpointRoot.source : ∀ (before : State) (s : Selectors) (index : Fin 136) (consumer : Bool)
+  (tag weight : U32) (lookup : NJL_EndpointLookup.Cut index consumer),
+  (∀ (i : Fin 103), Canon (before i)) →
+    FIw_ArrayValue.canonical s.high →
+      ↑weight ≤ 1 →
+        have g := NJL_EndpointLookup.groupIndex index consumer lookup;
+        have p := NJL
+...
+h✝²
+  let ⟨selected, right✝⟩ := h✝³
+  let ⟨fcall, right✝¹⟩ := right✝
+  let ⟨scall, right✝²⟩ := right✝¹
+  let ⟨mcut, right✝³⟩ := right✝²
+  let ⟨acut, right✝⁴⟩ := right✝³
+  let ⟨call, right✝⁵⟩ := right✝⁴
+  let ⟨ha, value⟩ := right✝⁵
+  Exists.intro first
+    (Exists.intro second
+      (Exists.intro middle
+        (Exists.intro after
+          ⟨selected copy,
+            ⟨fcall,
+              ⟨scall,
+                ⟨mcut,
+                  ⟨acut,
+                    ⟨call,
+                      ⟨ha, fun i =>
+                        Eq.mp
+                          (congrArg (Eq (decode (after i)))
+                            (ite_congr
+                              (Eq.refl
+                                (i = NJL_EndpointIndices.weight (NJL_EndpointLookup.groupIndex index consumer lookup)))
+                              (fun a =>
+                                congrArg (HAdd.hAdd (decode (before i)))
+                                  (selected_value (NJL_EndpointLookup.high s index consumer lookup) weight hhigh
+                                    bounded))
+                              fun a =>
+                              Eq.refl
+                                (if
+                                    i =
+                                      NJL_EndpointIndices.pattern
+                                        (NJL_EndpointLookup.patternIndex index consumer lookup) then
+                                  decode (before i) + decode (NJL_EndpointLookup.high s index consumer lookup)
+                                else decode (before i))))
+                          (value i)⟩⟩⟩⟩⟩⟩⟩)))
+'AspisR1.NJL_EndpointRoot.selected_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_EndpointRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r210d621d2e4a468690933ce3efd274d4.scope; invocation ID: 9f8ce3f1e204411e974caf4ef5bad5c2

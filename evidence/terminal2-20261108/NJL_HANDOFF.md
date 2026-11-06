@@ -23,3 +23,7 @@ TX1:244 occupancy candidate added with a complete cut-consuming Packet and exact
 ## Stage 4
 
 TX1:247 candidate added (L030/L031), complete17cell native-cut invocation and exact adopted literal Result. Both caches and source-order16 writes are discharged internally; existing four NJB pairs reused, no native rerun. Five own candidates209/208/227/244/247 await all local gates and the next ledger. Endpoint214 missing writeframe is being isolated: K010 initializer unwind failure excluded; changed105bound K012 planned, same property/name, cap and90stimeout. No full103cell saved-prestate copy; this differs from NJB's timedoutshape. Continue work while budget remains.
+
+## Stage 5
+
+TX1:214 candidate added: genuine lookup binding + two native one-write windows + disjoint full103cell frame and binary-weight caller provenance (L041). Missing windows K012PASS/K011FAIL andK013PASS/K014FAIL; predecessor K072 timeout never replayed. Six own candidates209/208/227/244/247/214 now await combined NGK+NIU+NJB+headline import, rawax2 and zero-defect scan; next ledger gate still controls credit. Root inventory accepts only typed same-call domain and reviewed lookup Cut; all child/results/frames are derived. NIX215 and NJB268 are consumed read-only, no duplicate proof. First cumulative gate is next; scope budget remains for further work afterward.

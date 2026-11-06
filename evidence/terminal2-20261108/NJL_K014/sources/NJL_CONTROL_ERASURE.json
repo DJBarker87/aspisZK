@@ -1,0 +1,11 @@
+{
+  "source": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "frozen_body_sha256": "5cd31359df72696ff4c245636c117a24656c4e261f70ddf05c5dac60dc9c9834",
+  "original_high_loop": "        while block < constants::ACTIVE_ROW_MASKS.len() {\n            let mask = constants::ACTIVE_ROW_MASKS[block];\n            let coordinate = match mask {\n                6144 => 0,\n                6145 => 1,\n                4097 => 2,\n                2048 => 3,\n                2049 => 4,\n                26214 => 5,\n                1749 => 6,\n                _ => unreachable!(\"generated Copy active mask outside frozen basis\"),\n            };\n            high_sums[coordinate] = high_sums[coordinate].add(self.high[block]);\n            block += 1;\n        }\n",
+  "original_low_loop": "        while coordinate < MASKS.len() {\n            let low_sum = match coordinate {\n                0 => self.low[11].add(self.low[12]),\n                1 => self.low[0].add(self.low[11]).add(self.low[12]),\n                2 => self.low[0].add(self.low[12]),\n                3 => self.low[11],\n                4 => self.low[0].add(self.low[11]),\n                5 => self.low[1].add(self.low[2]).add(self.low[5]).add(self.low[6])\n                    .add(self.low[9]).add(self.low[10]).add(self.low[13]).add(self.low[14]),\n                6 => self.low[0].add(self.low[2]).add(self.low[4]).add(self.low[6])\n                    .add(self.low[7]).add(self.low[9]).add(self.low[10]),\n                _ => unreachable!(\"coordinate outside frozen active-mask basis\"),\n            };\n            sum = sum.add(high_sums[coordinate].mul(low_sum));\n            coordinate += 1;\n        }\n",
+  "control_high_loop": "        while block < constants::ACTIVE_ROW_MASKS.len() {\n            log.enter(block);\n            block += 1;\n        }\n",
+  "control_low_loop": "        while coordinate < MASKS.len() {\n            log.enter(64+coordinate);\n            coordinate += 1;\n        }\n",
+  "removed_windows": "high read/match/add/store and low match/mul/add only; guards and increments verbatim",
+  "observed": "all71 source positions via arbitrary seek; zero initializers, exit counters"
+}
