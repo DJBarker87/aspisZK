@@ -1,0 +1,10 @@
+--- K026
++++ K028
+@@ -192,6 +192,7 @@
+ fn field_boundary(){
+  let a=q(kani::any());let b=q(kani::any());kani::assume(canonical(a)&&canonical(b));
+  let kind:u8=kani::any();kani::assume(kind<=4);
++ if cfg!(NKM_control_add){kani::assume(kind==1&&a==QM31::ZERO&&b==QM31::ZERO);}
+  let mut l=new_log(kani::any());let out=event(&mut l,kind,a,b);
+  assert_eq!(l.len,1);assert_eq!(l.events[0],Event{kind,a,b,out});
+  check(out==l.replies[0]);
