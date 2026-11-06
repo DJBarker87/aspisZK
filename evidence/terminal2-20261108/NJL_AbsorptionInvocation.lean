@@ -34,7 +34,7 @@ silently assert any missing observation. -/
 theorem source (low fixed two eight nodes : NQ) (opened : Array NQ 16#usize)
  (hl : Canon low) (hf : Canon fixed) (ht : Canon two) (he : Canon eight) (hn : Canon nodes)
  (ho : FIw_ArrayValue.canonical opened) :
- ∃ r p scales (ys : {ys : List NQ // ys.length=indices.length}) (out : Array NQ 16#usize),
+ ∃ (r : Fin 7 → NQ) (p : Fin 3 → FIv_PreparedNew.NP) (scales : Fin 3 → Scale) (ys : {ys : List NQ // ys.length=indices.length}) (out : Array NQ 16#usize),
  NJL_AbsorptionPrologue.Cut ![low,fixed,two,eight,nodes] r p
   (fun j=>⟨NJL_AbsorptionPrologue.kind j,
    NJL_AbsorptionPrologue.left ![low,fixed,two,eight,nodes] r j,

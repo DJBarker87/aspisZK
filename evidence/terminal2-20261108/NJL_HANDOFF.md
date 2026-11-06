@@ -11,3 +11,7 @@ Each attempt records command, target, source/dependency/library hashes, revision
 ## Stage 1
 
 TX1:209/208 candidates: L003 low discharge and L005 full active invocation compile with only standard axioms. Native control K004 PASS/K002 matched assertion FAIL; K001/K003 compiler-input failures are excluded (literal path closure and cfg(kani) allocator feature gate repaired, frozen bodies unchanged). All actual field clauses and frames are discharged, no root endpoint premise. Combined/scan/raw gate not yet run; no ledger credit claimed. Private seed 6,871,848 bytes, hashes recorded. Own native scratch and CARGO_TARGET_DIR are separate; no shared cache writes. Absorption and pattern continue independently.
+
+## Stage 2
+
+TX1:227 candidate added: L009 prologue/full cache domains, L010 ordered traversal packet, L012 full invocation with exact old cohort Result. Native std array window K005 PASS/K006 matched control FAIL on arbitrary output lane/limb, exact KMX. All16 child Results supplied internally; no new trust or output premise. Local gate still PENDING. No extraction, shipped edit or ELF rebuild. Continue independent terminal leaves bottom-up.

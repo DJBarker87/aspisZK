@@ -1,0 +1,61 @@
+{"attempt": "NJL_L012", "exit_status": 0, "wall_seconds": 11.969990361016244, "peak_rss_kib": "6154024", "swaps": "0", "print_axioms": ["'AspisR1.NJL_AbsorptionInvocation.lanes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJL_AbsorptionInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJL_AbsorptionInvocation.source : ∀ (low fixed two eight nodes : NQ) (opened : Std.Array NQ 16#usize),
+  Canon low →
+    Canon fixed →
+      Canon two →
+        Canon eight →
+          Canon nodes →
+            FIw_ArrayValue.canonical opened →
+              ∃ r p scales ys out,
+                NJL_AbsorptionPrologue.Cut ![low, fixed, two, eight, nodes] r p
+                    (fun j =>
+                      { operation := NJL_AbsorptionPrologue.kind j,
+                        left := NJL_AbsorptionPrologue.left ![low, fixed, two, eight, nodes] r j,
+                        right := NJL_AbsorptionPrologue.right ![low, fixed, two, eight, nodes] r j })
+                    (fun j
+...
+q
+            (Eq.trans
+              (congrFun' (congrArg Bind.bind scaleCall) fun scales => do
+                let ys ←
+                  NJB_Traverse.run (NJB_AbsorptionLane.reference scales (NJB_Absorption.cell opened))
+                      (List.ofFn fun lane => lane)
+                ok (Array.make 16#usize (↑ys) (NJB_Absorption.reference._proof_1 ys)))
+              (bind_tc_ok scales fun y => do
+                let ys ←
+                  NJB_Traverse.run (NJB_AbsorptionLane.reference y (NJB_Absorption.cell opened))
+                      (List.ofFn fun lane => lane)
+                ok (Array.make 16#usize (↑ys) (NJB_Absorption.reference._proof_1 ys)))))
+          (ok out)))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let ys ← _a
+                    ok (Array.make 16#usize (↑ys) (NJB_Absorption.reference._proof_1 ys))) =
+                  ok out)
+              run))
+          (Eq.refl do
+            let ys ← ok ys
+            ok (Array.make 16#usize (↑ys) (NJB_Absorption.reference._proof_1 ys)))));
+  Exists.intro r
+    (Exists.intro p
+      (Exists.intro scales
+        (Exists.intro ys
+          (Exists.intro out
+            ⟨cut,
+              ⟨clauses,
+                ⟨trace,
+                  ⟨rfl,
+                    ⟨hys,
+                      ⟨reference,
+                        Eq.trans
+                          (Eq.symm
+                            (NJB_AbsorptionAssociation.result low fixed two eight nodes opened hl hf ht he hn ho))
+                          reference⟩⟩⟩⟩⟩⟩))))
+'AspisR1.NJL_AbsorptionInvocation.lanes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_AbsorptionInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd2f8d9970a894cbca4aa2792c457e51c.scope; invocation ID: 26f7d106c66245c4a653371377663d1f

@@ -1,0 +1,85 @@
+theorem AspisR1.NJL_AbsorptionInvocation.source : ∀ (low fixed two eight nodes : NQ) (opened : Std.Array NQ 16#usize),
+  Canon low →
+    Canon fixed →
+      Canon two →
+        Canon eight →
+          Canon nodes →
+            FIw_ArrayValue.canonical opened →
+              ∃ r p scales ys out,
+                NJL_AbsorptionPrologue.Cut ![low, fixed, two, eight, nodes] r p
+                    (fun j =>
+                      { operation := NJL_AbsorptionPrologue.kind j,
+                        left := NJL_AbsorptionPrologue.left ![low, fixed, two, eight, nodes] r j,
+                        right := NJL_AbsorptionPrologue.right ![low, fixed, two, eight, nodes] r j })
+                    (fun j => r (NJL_AbsorptionPrologue.replyIndex j)) NJL_AbsorptionPrologue.positions p p 7 3 ∧
+                  NJL_AbsorptionPrologue.Clauses ![low, fixed, two, eight, nodes] r p ∧
+                    List.Forall₂ (Lane scales (NJB_Absorption.cell opened)) indices ↑ys ∧
+                      ↑out = ↑ys ∧
+                        FIw_ArrayValue.canonical out ∧
+                          NJB_Absorption.reference low fixed two eight nodes opened = ok out ∧
+                            FIq_Native.pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal low fixed two
+                                eight nodes opened =
+                              ok out :=
+fun low fixed two eight nodes opened hl hf ht he hn ho =>
+  let ⟨r, h✝⟩ := NJL_AbsorptionPrologue.source low fixed two eight nodes hl hf ht he hn
+  let ⟨p, h✝¹⟩ := h✝
+  let ⟨scales, h✝²⟩ := h✝¹
+  let ⟨cut, right✝⟩ := h✝²
+  let ⟨clauses, right✝¹⟩ := right✝
+  let ⟨scaleCall, domain⟩ := right✝¹
+  let ⟨ys, h✝³⟩ :=
+    lanes scales (NJB_Absorption.cell opened) (fun j => ⟨(domain j).right.right.left, (domain j).right.right.right⟩)
+      fun j => ho (NJB_Absorption.cell opened j) (List.getElem_mem (NJB_Absorption.cell._proof_2 opened j))
+  let ⟨run, right✝²⟩ := h✝³
+  let ⟨hys, trace⟩ := right✝²
+  let out :=
+    Array.make 16#usize (↑ys)
+      (Eq.mpr (id (congrArg (Eq (↑ys).length) NJB_Absorption.size))
+        (Eq.mp (congrArg (Eq (↑ys).length) List.length_ofFn) ys.property));
+  have reference :=
+    Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (congrFun' (congrArg Bind.bind scaleCall) fun scales => do
+                let ys ←
+                  NJB_Traverse.run (NJB_AbsorptionLane.reference scales (NJB_Absorption.cell opened))
+                      (List.ofFn fun lane => lane)
+                ok (Array.make 16#usize (↑ys) (NJB_Absorption.reference._proof_1 ys)))
+              (bind_tc_ok scales fun y => do
+                let ys ←
+                  NJB_Traverse.run (NJB_AbsorptionLane.reference y (NJB_Absorption.cell opened))
+                      (List.ofFn fun lane => lane)
+                ok (Array.make 16#usize (↑ys) (NJB_Absorption.reference._proof_1 ys)))))
+          (ok out)))
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let ys ← _a
+                    ok (Array.make 16#usize (↑ys) (NJB_Absorption.reference._proof_1 ys))) =
+                  ok out)
+              run))
+          (Eq.refl do
+            let ys ← ok ys
+            ok (Array.make 16#usize (↑ys) (NJB_Absorption.reference._proof_1 ys)))));
+  Exists.intro r
+    (Exists.intro p
+      (Exists.intro scales
+        (Exists.intro ys
+          (Exists.intro out
+            ⟨cut,
+              ⟨clauses,
+                ⟨trace,
+                  ⟨rfl,
+                    ⟨hys,
+                      ⟨reference,
+                        Eq.trans
+                          (Eq.symm
+                            (NJB_AbsorptionAssociation.result low fixed two eight nodes opened hl hf ht he hn ho))
+                          reference⟩⟩⟩⟩⟩⟩))))
+'AspisR1.NJL_AbsorptionInvocation.lanes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJL_AbsorptionInvocation.source' depends on axioms: [propext, Classical.choice, Quot.sound]

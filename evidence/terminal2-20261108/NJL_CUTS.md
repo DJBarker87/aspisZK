@@ -15,3 +15,9 @@ Hypothesis inventory: `s`, canonical s.high/s.low only; root contains no Ops dic
 ## Absorption prologue (SUPPORT pending complete root)
 
 `NJL_AbsorptionPrologue.Cut` transcribes NJB_K040/041 `NJB_absorption_scales`: calls7/news3; exact seven kind/left/right observations; cache construction positions1/3/7; new arguments reply0/2/6; all nine cache words seen/output equal the oracle replies. Source assertions are in predecessor NJB_absorption.rs.txt. No reduced cache token is reused. The new constructor law supplies the SAME prepared multiplier domain. Lane uses NJB_AbsorptionCuts.lane with NJB_K046/047. Full returning array/control composition remains to be checked.
+
+## Array constructor window and absorption root
+
+NJL_K005/K006 runs the actual `core::array::from_fn` constructor with exactly16 callbacks, each returning unconstrained complete QM31 words and logging the selected callback's reply in a LOCAL record. Its assertions are `calls=16`, `seen=seek` and arbitrary output[seek][limb]=logged_reply[limb], over seek<16 and limb<4. This is one arbitrary output window; every index is covered by universal quantification, no field multiplication executes. Exact KMX original copy patch used; positive SUCCESSFUL/control FAILED. No address-to-payload inference.
+
+`NJL_Traverse.packet` threads the ordered child relation over the existing NJB traversal. `NJL_AbsorptionInvocation.source` supplies the complete prologue clauses and all16 actual prepared multiplications internally, retains SAME cache/argument identities, constructs the entire returned array from the ordered replies, and uses NJB_AbsorptionAssociation.result to obtain the exact old cohort Result. No missing structural/native observation is inserted as a premise. Standard array construction follows (au)/(y) with the native window above; no extra std child row. Raw carrier correctness is inherited from NJB_PreparedCarrier and NJB_Words.
