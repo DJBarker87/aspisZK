@@ -16,8 +16,8 @@ fn begin_window<'a>(prefix:Prefix<'a>,transcript:&mut SemanticTranscript<Hash>,
  let challenges=reply?;super::mark(None,1);Ok((prefix,challenges))
 }
 fn finish_window<'a>(prefix:Prefix<'a>)->Prefix<'a>{prefix}
-fn check(mode:u8,bad:bool){
- let bytes:[u8;32]=kani::any();let root:[u8;32]=kani::any();
+fn check<const N:usize>(mode:u8,bad:bool){
+ let bytes:[u8;N]=kani::any();let root:[u8;32]=kani::any();
  let row:usize=kani::any();let index:usize=kani::any();kani::assume(row<27);
  let lo0:usize=kani::any();let hi0:usize=kani::any();kani::assume(lo0<=hi0&&hi0<=bytes.len());
  let lo1:usize=kani::any();let hi1:usize=kani::any();kani::assume(lo1<=hi1&&hi1<=bytes.len());
@@ -49,7 +49,7 @@ fn check(mode:u8,bad:bool){
  let records=[&bytes[lo0..hi0],&bytes[lo1..hi1],&bytes[lo2..hi2],&bytes[lo3..hi3],&bytes[lo4..hi4],&bytes[lo5..hi5],&bytes[lo6..hi6],&bytes[lo7..hi7],&bytes[lo8..hi8],&bytes[lo9..hi9],&bytes[lo10..hi10],&bytes[lo11..hi11],&bytes[lo12..hi12],&bytes[lo13..hi13],&bytes[lo14..hi14],&bytes[lo15..hi15],&bytes[lo16..hi16],&bytes[lo17..hi17],&bytes[lo18..hi18],&bytes[lo19..hi19],&bytes[lo20..hi20],&bytes[lo21..hi21],&bytes[lo22..hi22],&bytes[lo23..hi23],&bytes[lo24..hi24],&bytes[lo25..hi25],&bytes[lo26..hi26]];
  let prefix=crate::r1_wire::NLR_factory::prefix(&root,records);
  let expected=records[row];
- let nonempty=!expected.is_empty();kani::assume(!nonempty||index<expected.len());
+ let nonempty=!expected.is_empty();let old_byte=if nonempty&&mode%3==0 {kani::assume(index<expected.len());expected[index]}else{0};kani::assume(!nonempty||index<expected.len());
  let returned=match mode/3 {
   0=>parse_window(Ok(prefix)).unwrap(),
   1=>{
@@ -62,63 +62,75 @@ fn check(mode:u8,bad:bool){
  };
  let selected=crate::r1_wire::NLR_factory::record(&returned,row);
  let good=match mode%3 {
-  0=>selected.len()==expected.len()&&core::ptr::eq(selected.as_ptr(),expected.as_ptr())&&(!nonempty||selected[index]==expected[index]),
+  0=>selected.len()==expected.len()&&core::ptr::eq(selected.as_ptr(),expected.as_ptr())&&(!nonempty||selected[index]==old_byte),
   1=>core::ptr::eq(returned.c1_root,&root)&&returned.c1_root[0]==root[0],
-  _=>selected.is_empty()==expected.is_empty()
+  _=>selected.len()==expected.len()&&core::ptr::eq(selected.as_ptr(),expected.as_ptr())
  };
  if bad{assert!(!good)}else{assert!(good)}
 }
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_00_cut(){check(0,false)}
+fn window_00_cut(){check::<32>(0,false)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_00_control(){check(0,true)}
+fn window_00_control(){check::<32>(0,true)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_01_cut(){check(1,false)}
+fn window_01_cut(){check::<13831>(1,false)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_01_control(){check(1,true)}
+fn window_01_control(){check::<13831>(1,true)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_02_cut(){check(2,false)}
+fn window_02_cut(){check::<13831>(2,false)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_02_control(){check(2,true)}
+fn window_02_control(){check::<13831>(2,true)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_03_cut(){check(3,false)}
+fn window_03_cut(){check::<32>(3,false)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_03_control(){check(3,true)}
+fn window_03_control(){check::<32>(3,true)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_04_cut(){check(4,false)}
+fn window_04_cut(){check::<13831>(4,false)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_04_control(){check(4,true)}
+fn window_04_control(){check::<13831>(4,true)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_05_cut(){check(5,false)}
+fn window_05_cut(){check::<13831>(5,false)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_05_control(){check(5,true)}
+fn window_05_control(){check::<13831>(5,true)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_06_cut(){check(6,false)}
+fn window_06_cut(){check::<32>(6,false)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_06_control(){check(6,true)}
+fn window_06_control(){check::<32>(6,true)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_07_cut(){check(7,false)}
+fn window_07_cut(){check::<13831>(7,false)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_07_control(){check(7,true)}
+fn window_07_control(){check::<13831>(7,true)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_08_cut(){check(8,false)}
+fn window_08_cut(){check::<13831>(8,false)}
 #[kani::proof] #[kani::unwind(90)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn window_08_control(){check(8,true)}
+fn window_08_control(){check::<13831>(8,true)}
+
+fn error()->Error{let tag:u8=kani::any();let row:u8=kani::any();let actual:u8=kani::any();let n:usize=kani::any();match tag%11{0=>Error::Allocation,1=>Error::RowOrder{expected:row,actual},2=>Error::InvalidRow,3=>Error::Tag{row},4=>Error::Length{row},5=>Error::NonCanonical{row,value:n},6=>Error::Boundary{round:n},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}}
+fn parse_error(bad:bool){let e=error();let r=parse_window(Err::<Prefix<'static>,Error>(e));let good=matches!(r,Err(actual)if actual==e);if bad{assert!(!good)}else{assert!(good)}}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn parse_error_cut(){parse_error(false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn parse_error_control(){parse_error(true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn independent_error_control(){let expected=error();let input:u8=kani::any();let coupled=if input%2==0{Error::Terminal}else{Error::Public};assert_eq!(coupled,expected)}

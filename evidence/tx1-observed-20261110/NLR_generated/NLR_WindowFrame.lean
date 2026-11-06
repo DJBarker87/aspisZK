@@ -10,13 +10,13 @@ buffer projection of NLR's restricted native windows. -/
 theorem partition {A : Type} (source target : Nat → A) (start count i : Nat) :
  KMX_CopyMeaning.loop source target start count i =
  if start ≤ i ∧ i < start+count then source i else target i :=
- congrFun (KMX_CopyMeaning.loop_spec source target start count) i
+ KMX_CopyMeaning.loop_spec source target start count i
 /-- Scalar/record frame chain for three ORIGINAL source windows. -/
 theorem three_windows {A : Type} (p p0 p1 p2 : A)
  (first : p0=p) (second : p1=p0) (third : p2=p1) : p2=p :=
  third.trans (second.trans first)
 /-- Every byte and extent is required; addresses never imply payload. -/
-theorem prefix (source actual : r1_wire.Prefix)
+theorem prefix_fields (source actual : r1_wire.Prefix)
  (root : actual.c1_root = source.c1_root)
  (records : actual.records = source.records) : actual=source := by
  cases source
@@ -26,5 +26,5 @@ theorem prefix (source actual : r1_wire.Prefix)
  rfl
 #print axioms partition
 #print axioms three_windows
-#print axioms prefix
+#print axioms prefix_fields
 end AspisR1.NLR_WindowFrame
