@@ -1,0 +1,6 @@
+import NLC_FinishState
+#print AspisR1PublicPreparation.FinishModel.Boundaries
+#print AspisR1PublicPreparation.PreparedHashCode.Code
+#print AspisR1PublicPreparation.PreparedHashCode.bind
+#print AspisR1PublicPreparation.r1_semantic.Verified
+#check AspisR1PublicPreparation.r1_wire.SemanticTranscript.impl.state
