@@ -1,0 +1,5 @@
+# Own input repairs
+
+PCE_L002 failed because PCE_prepare.py selected only the consumer closure, omitting NFA_WALKER/NFA_MemoryLimit and the eight-fixture modules. PCE_L003 was launched before inspecting that failure and failed for the absent generated C file. No proof or link result is credited. The selector now includes the audit support closure. PCE_L004 uses the unchanged driver with the corrected, newly pinned dependency environment; PCE_L005 links only after L004 exits zero. Shared infrastructure is unchanged. Two failures consume budget; raw roots are split into thirteen groups of at most six, preserving all75 roots and the same validation. No timeout/memory kill occurred.
+
+PCE_L007 scan failed before importing the environment because the reused driver reads PCE_AUDIT_ROOTS.json even in scan mode. The owned wrapper now always materializes that input. PCE_L008 is the corrected-input scan; no scanner validation changed. To retain the original25-scope budget, statement inspection is a single elaboration-only PCE_Statements module instead of a runtime executable. No theorem is added.
