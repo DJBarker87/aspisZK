@@ -1,0 +1,86 @@
+theorem AspisR1.NJX_RecipientRoot.source : ∀ (recipient : Option D) (o : O) (high : NQ),
+  Canon high →
+    FIw_ArrayValue.canonical o →
+      (∀ (d : D), recipient = some d → dc d) →
+        ∃ out cache,
+          reference recipient o high = ok out ∧
+            cohort recipient o high = ok out ∧
+              (∀ (g : Fin 2), Canon (out g)) ∧
+                Cut recipient o high (if recipient.isSome = true then 1 else 0)
+                    (if recipient.isSome = true then 2 else 0) high o recipient cache (fun x => cache) out out ∧
+                  ∀ (d : D),
+                    recipient = some d →
+                      ∃ p,
+                        out = p.out ∧
+                          FIq_Native.field.PreparedQm31Multiplier.new high = ok p.prepared ∧
+                            ∀ (g : Fin 2), NJX_RecipientBody.group p.prepared (ocells o) (dcells d) g = ok (out g) :=
+fun recipient o high hh ho hd =>
+  Option.casesOn (motive := fun t =>
+    recipient = t →
+      ∃ out cache,
+        reference recipient o high = ok out ∧
+          cohort recipient o high = ok out ∧
+            (∀ (g : Fin 2), Canon (out g)) ∧
+              Cut recipient o high (if recipient.isSome = true then 1 else 0) (if recipient.isSome = true then 2 else 0)
+                  high o recipient cache (fun x => cache) out out ∧
+                ∀ (d : D),
+                  recipient = some d →
+                    ∃ p,
+                      out = p.out ∧
+                        FIq_Native.field.PreparedQm31Multiplier.new high = ok p.prepared ∧
+                          ∀ (g : Fin 2), NJX_RecipientBody.group p.prepared (ocells o) (dcells d) g = ok (out g))
+    recipient
+    (fun h =>
+      Eq.ndrec (motive := fun recipient =>
+        (∀ (d : D), recipient = some d → dc d) →
+          ∃ out cache,
+            reference recipient o high = ok out ∧
+              cohort recipient o high = ok out ∧
+                (∀ (g : Fin 2), Canon (out g)) ∧
+                  Cut recipient o high (if recipient.isSome = true then 1 else 0)
+                      (if recipient.isSome = true then 2 else 0) high o recipient cache (fun x => cache) out out ∧
+                    ∀ (d : D),
+                      recipient = some d →
+                        ∃ p,
+                          out = p.out ∧
+                            FIq_Native.field.PreparedQm31Multiplier.new high = ok p.prepared ∧
+                              ∀ (g : Fin 2), NJX_RecipientBody.group p.prepared (ocells o) (dcells d) g = ok (out g))
+        (fun hd =>
+          Exists.intro zero
+            (Exists.intro none
+              ⟨rfl,
+                ⟨rfl,
+                  ⟨fun x => FIv_NativeValue.zero.left,
+                    ⟨⟨rfl, ⟨rfl, rfl⟩⟩, fun d h =>
+                      let ⟨⟩ := some d
+                      h⟩⟩⟩⟩))
+        (Eq.symm h) hd)
+    (fun d h =>
+      Eq.ndrec (motive := fun recipient =>
+        (∀ (d : D), recipient = some d → dc d) →
+          ∃ out cache,
+            reference recipient o high = ok out ∧
+              cohort recipient o high = ok out ∧
+                (∀ (g : Fin 2), Canon (out g)) ∧
+                  Cut recipient o high (if recipient.isSome = true then 1 else 0)
+                      (if recipient.isSome = true then 2 else 0) high o recipient cache (fun x => cache) out out ∧
+                    ∀ (d : D),
+                      recipient = some d →
+                        ∃ p,
+                          out = p.out ∧
+                            FIq_Native.field.PreparedQm31Multiplier.new high = ok p.prepared ∧
+                              ∀ (g : Fin 2), NJX_RecipientBody.group p.prepared (ocells o) (dcells d) g = ok (out g))
+        (fun hd =>
+          let ⟨p, h✝⟩ := NJX_LeftRoot.source high o d hh ho (hd d rfl)
+          let ⟨left✝, mc⟩ := h✝
+          Exists.intro p.out
+            (Exists.intro (some p.prepared)
+              ⟨NJX_RecipientBody.source p,
+                ⟨mc,
+                  ⟨p.out_canonical,
+                    ⟨⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, Exists.intro p.prepared ⟨rfl, fun x => rfl⟩⟩⟩⟩⟩⟩⟩, fun d' h =>
+                      let ⟨⟩ := d'
+                      Option.some.inj h⟩⟩⟩⟩))
+        (Eq.symm h) hd)
+    (Eq.refl recipient)
+'AspisR1.NJX_RecipientRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,80 @@
+theorem AspisR1.NJX_PatternRoot.source : ∀ (lambda : NQ) (o : Std.Array NQ 16#usize),
+  Canon lambda →
+    FIw_ArrayValue.canonical o →
+      ∃ p w out,
+        NJL_WindowPowerFrame.run lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda =
+            ok (NJL_CacheReads.power p, p.next) ∧
+          NJL_WindowPowerFrame.Trace lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda
+              (NJL_CacheReads.power p) p.next ∧
+            (∀ (j : Fin 4),
+                NJL_WindowFold.run (NJL_CacheReads.cache p) o (NJX_PatternPacket.starts j) (List.finRange 8)
+                      FIq_Native.field.QM31.ZERO =
+                    ok (w j) ∧
+                  NJL_WindowFold.Trace (NJL_CacheReads.cache p) o (NJX_PatternPacket.starts j) (List.finRange 8)
+                    FIq_Native.field.QM31.ZERO (w j)) ∧
+              (NJX_PatternTail.run p (NJX_PatternPacket.atoms o w) (List.finRange 14) fun x =>
+                    FIq_Native.field.QM31.ZERO) =
+                  ok (cells out) ∧
+                NJX_PatternTail.Trace p (NJX_PatternPacket.atoms o w) (List.finRange 14)
+                    (fun x => FIq_Native.field.QM31.ZERO) (cells out) ∧
+                  FIw_ArrayValue.canonical out ∧
+                    FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values o lambda = ok out :=
+fun lambda o hl ho =>
+  let ⟨p, h✝⟩ := NJX_PatternPacket.source lambda o hl ho
+  let ⟨w, h✝¹⟩ := h✝
+  let ⟨after, h✝²⟩ := h✝¹
+  let ⟨pc, right✝⟩ := h✝²
+  let ⟨pt, right✝¹⟩ := right✝
+  let ⟨hw, right✝²⟩ := right✝¹
+  let ⟨tc, right✝³⟩ := right✝²
+  let ⟨tt, right✝⁴⟩ := right✝³
+  let ⟨ha, va⟩ := right✝⁴
+  let ⟨out, h✝³⟩ := NJX_PatternAssociation.cohort lambda o hl ho
+  let ⟨body, right✝⁵⟩ := h✝³
+  let ⟨hout, vout⟩ := right✝⁵
+  have av := NJX_PatternAssociation.atoms_value lambda o w fun j => (hw j).right.right.right;
+  have same :=
+    funext fun i =>
+      NJB_DecodeInjective.qm (after i) (↑out)[↑⟨↑i, cells._proof_2 i⟩] (ha i)
+        (hout (↑out)[↑⟨↑i, cells._proof_2 i⟩]
+          (List.getElem_mem (FIw_ArrayValue.cells._proof_1 out ⟨↑i, cells._proof_2 i⟩)))
+        (Eq.mpr (id (congrArg (fun _a => _a = decode (↑out)[↑⟨↑i, cells._proof_2 i⟩]) (va i)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  NJX_TailExpr.value (decode lambda) _a (NJX_PatternTail.expr i) =
+                    decode (↑out)[↑⟨↑i, cells._proof_2 i⟩])
+                av))
+            (id
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      NJX_PatternModel.model (FIw_ArrayValue.decoded o) (decode lambda) i = _a ⟨↑i, cells._proof_2 i⟩)
+                    vout))
+                (NJX_PatternMeaning.value (FIw_ArrayValue.decoded o) (decode lambda) i)))));
+  Exists.intro p
+    (Exists.intro w
+      (Exists.intro out
+        ⟨pc,
+          ⟨pt,
+            ⟨fun j => ⟨(hw j).left, (hw j).right.left⟩,
+              ⟨Eq.mp
+                  (congrArg
+                    (fun _a =>
+                      (NJX_PatternTail.run p (NJX_PatternPacket.atoms o w) (List.finRange 14) fun x =>
+                          FIq_Native.field.QM31.ZERO) =
+                        ok _a)
+                    same)
+                  tc,
+                ⟨Eq.mp
+                    (congrArg
+                      (fun _a =>
+                        NJX_PatternTail.Trace p (NJX_PatternPacket.atoms o w) (List.finRange 14)
+                          (fun x => FIq_Native.field.QM31.ZERO) _a)
+                      same)
+                    tt,
+                  ⟨hout, body⟩⟩⟩⟩⟩⟩))
+'AspisR1.NJX_PatternRoot.size14' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJX_PatternRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

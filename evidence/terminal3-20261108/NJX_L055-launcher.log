@@ -1,0 +1,60 @@
+{"attempt": "NJX_L055", "exit_status": 1, "wall_seconds": 8.647996864980087, "peak_rss_kib": "6145600", "swaps": "0", "print_axioms": ["'AspisR1.NJX_AppendDomains.level_value' depends on axioms: [sorryAx]", "'AspisR1.NJX_AppendDomains.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJX_AppendDomains.lean:14:52: error(lean.unknownIdentifier): Unknown constant `Nat.Usize`
+
+Note: Inferred this name from the expected resulting type of `.Usize`:
+  ℕ
+NJX_AppendDomains.lean:18:58: error: Type mismatch
+  rfl
+has type
+  ?m.7 = ?m.7
+but is expected to have type
+  ↑(level i) = ↑i
+NJX_AppendDomains.lean:18:8: error: Not a definitional equality: the left-hand side
+  ↑(level i)
+is not definitionally equal to the right-hand side
+  ↑i
+theorem AspisR1.NJX_AppendDomains.source : ∀ (f : Frontier) (s : High),
+  FIw_ArrayValue.canonical s →
+    (∀ d ∈ ↑f, ∀ x ∈ ↑d, ↑x < 2147483647) →
+      ∀ (i : Fin 20),
+        Canon (high s i) ∧
+          ↑(level i) < 20 ∧
+            (∀ x ∈ ↑(frontier 
+...
+NJX_AppendDomains.lean:14:52: error(lean.unknownIdentifier): Unknown constant `Nat.Usize`
+
+Note: Inferred this name from the expected resulting type of `.Usize`:
+  ℕ
+NJX_AppendDomains.lean:18:58: error: Type mismatch
+  rfl
+has type
+  ?m.7 = ?m.7
+but is expected to have type
+  ↑(level i) = ↑i
+NJX_AppendDomains.lean:18:8: error: Not a definitional equality: the left-hand side
+  ↑(level i)
+is not definitionally equal to the right-hand side
+  ↑i
+theorem AspisR1.NJX_AppendDomains.source : ∀ (f : Frontier) (s : High),
+  FIw_ArrayValue.canonical s →
+    (∀ d ∈ ↑f, ∀ x ∈ ↑d, ↑x < 2147483647) →
+      ∀ (i : Fin 20),
+        Canon (high s i) ∧
+          ↑(level i) < 20 ∧
+            (∀ x ∈ ↑(frontier f i), ↑x < 2147483647) ∧
+              ∃ empty,
+                FIq_Native.pool_v1.pair_forest_semantic_terminal.empty_root (level i) = ok empty ∧
+                  ∀ x ∈ ↑empty, ↑x < 2147483647 :=
+fun f s hs hf i =>
+  ⟨NJB_ArrayCarrier.canonical_cell s hs ⟨34 + ↑i, high._proof_2 i⟩,
+    ⟨Eq.mpr (id (congrArg (fun _a => _a < 20) (level_value i))) i.isLt,
+      ⟨hf (frontier f i) (List.getElem_mem (NJB_ArrayCarrier.cell._proof_1 f ⟨↑i, frontier._proof_2 i⟩)),
+        WP.spec_imp_exists
+          (JGa_EmptyRoot.source (level i)
+            (Eq.mpr (id (congrArg (fun _a => _a < 21) (level_value i)))
+              (have h := i.isLt;
+              Decidable.byContradiction fun a => source._proof_1 i h a)))⟩⟩⟩
+'AspisR1.NJX_AppendDomains.level_value' depends on axioms: [sorryAx]
+'AspisR1.NJX_AppendDomains.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r83184de1b9924410b3db0e87d0bb24ad.scope; invocation ID: 7f315d30cfa64abcb6ac2b4e8cdef254

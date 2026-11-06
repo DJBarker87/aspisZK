@@ -24,7 +24,8 @@ theorem source (o : Residuals) (d : Digest) (ho : ∀ i,Canon (o i)) (hd : ∀ i
  NJB_Traverse.run (reference o d) (List.finRange 8)=ok ⟨List.ofFn r,by simp⟩ := by
  choose r cr cl hr vr using NJX_DigestResiduals.cell o d ho hd
  refine ⟨r,cl,hr,vr,?_⟩
- simpa using sequence (reference o d) r cr (List.finRange 8)
+ rw [sequence (reference o d) r cr]
+ rfl
 #print source
 #print axioms sequence
 #print axioms source

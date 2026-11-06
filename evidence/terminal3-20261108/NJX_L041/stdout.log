@@ -1,0 +1,76 @@
+theorem AspisR1.NJX_DigestPrefix.source : ∀ (o : Residuals) (d : Digest),
+  (∀ (i : Fin 8), Canon (o i)) →
+    (∀ (i : Fin 8), ↑(d i) < 2147483647) →
+      ∃ r,
+        (∀ (i : Fin 8), Cell o d i (r i)) ∧
+          (∀ (i : Fin 8), Canon (r i)) ∧
+            (∀ (i : Fin 8), decode (r i) = decode (o i) - ↑↑(d i)) ∧
+              NJB_Traverse.run (reference o d) (List.finRange 8) = ok ⟨List.ofFn r, ⋯⟩ :=
+fun o d ho hd =>
+  (fun r x =>
+      Exists.intro r
+        ⟨fun i => ((fun i => (x i).right) i).left,
+          ⟨fun i => ((fun i => ((fun i => (x i).right) i).right) i).left,
+            ⟨fun i => ((fun i => ((fun i => (x i).right) i).right) i).right,
+              Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      _a =
+                        ok
+                          ⟨List.ofFn r,
+                            of_eq_true
+                              (Eq.trans
+                                (congr
+                                  (congrArg Eq
+                                    (Eq.trans
+                                      (congrArg List.length
+                                        (Eq.trans List.ofFn_succ
+                                          (congrArg (List.cons (r 0))
+                                            (Eq.trans List.ofFn_succ
+                                              (congrArg (List.cons (r 1))
+                                                (Eq.trans List.ofFn_succ
+                                                  (congrArg (List.cons (r 2))
+                                                    (Eq.trans List.ofFn_succ
+                                                      (congrArg (List.cons (r 3))
+                                                        (Eq.trans List.ofFn_succ
+                                                          (congrArg (List.cons (r 4))
+                                                            (Eq.trans List.ofFn_succ
+                                                              (congrArg (List.cons (r 5))
+                                                                (Eq.trans List.ofFn_succ
+                                                                  (congrArg (List.cons (r 6))
+                                                                    (Eq.trans List.ofFn_succ
+                                                                      (congrArg (List.cons (r 7))
+                                                                        List.ofFn_zero)))))))))))))))))
+                                      (congrFun'
+                                        (congrArg HAdd.hAdd
+                                          (congrFun'
+                                            (congrArg HAdd.hAdd
+                                              (congrFun'
+                                                (congrArg HAdd.hAdd
+                                                  (congrFun'
+                                                    (congrArg HAdd.hAdd
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                            1))
+                                                        1))
+                                                    1))
+                                                1))
+                                            1))
+                                        1)))
+                                  List.length_finRange)
+                                (eq_self 8))⟩)
+                    (sequence (reference o d) r (fun i => (x i).left) (List.finRange 8))))
+                (Eq.refl
+                  (ok
+                    ⟨List.map r (List.finRange 8),
+                      of_eq_true
+                        (Eq.trans (congrFun' (congrArg Eq (List.length_map r)) (List.finRange 8).length)
+                          (eq_self (List.finRange 8).length))⟩))⟩⟩⟩)
+    (fun i => Classical.choose (NJX_DigestResiduals.cell o d ho hd i)) fun i =>
+    Classical.choose_spec (NJX_DigestResiduals.cell o d ho hd i)
+'AspisR1.NJX_DigestPrefix.sequence' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJX_DigestPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]

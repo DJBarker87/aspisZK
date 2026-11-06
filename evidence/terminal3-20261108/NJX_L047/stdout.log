@@ -1,0 +1,58 @@
+theorem AspisR1.NJX_CarryRoot.source : ∀ (carry : ℕ) (high : NQ) (o : O) (d : D),
+  Canon high →
+    FIw_ArrayValue.canonical o →
+      dc d →
+        ∃ out,
+          reference carry high o d = ok out ∧
+            cohort carry high o d = ok out ∧
+              (∀ (g : Fin 2), Canon (out g)) ∧
+                if carry < 20 then
+                  ∃ p,
+                    out = p.out ∧
+                      NJX_DigestCut.Cut high (ocells o) (dcells d) p.prepared
+                        (fun i => FIw_ScalarArithmetic.lifted (dcells d i)) p.residual p.packed p.out out
+                        (NJX_DigestCut.log p) 21
+                else out = zero :=
+fun carry high o d hh ho hd =>
+  if active : carry < 20 then
+    let ⟨p, h✝⟩ := NJX_LeftRoot.source high o d hh ho hd
+    let ⟨pc, mc⟩ := h✝
+    Exists.intro p.out
+      ⟨Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos active) x_0 x_1 x_2 x_3) (carry.decLt 20)
+                  (Result (Fin 2 → NQ)) (NJX_DigestPacket.reference high (ocells o) (dcells d)) (ok zero)))
+              (ok p.out)))
+          pc,
+        ⟨Eq.mpr
+            (id
+              (congrFun'
+                (congrArg Eq
+                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos active) x_0 x_1 x_2 x_3) (carry.decLt 20)
+                    (Result (Fin 2 → NQ)) (NJX_LeftRoot.cohort high o d) (ok zero)))
+                (ok p.out)))
+            mc,
+          ⟨p.out_canonical,
+            Eq.mpr (id (congrArg (fun _a => _a) (if_pos active))) (Exists.intro p ⟨rfl, NJX_DigestCut.source p⟩)⟩⟩⟩
+  else
+    Exists.intro zero
+      ⟨of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg active) x_0 x_1 x_2 x_3) (carry.decLt 20)
+                  (Result (Fin 2 → NQ)) (NJX_DigestPacket.reference high (ocells o) (dcells d)) (ok zero)))
+              (ok zero))
+            (eq_self (ok zero))),
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg active) x_0 x_1 x_2 x_3) (carry.decLt 20)
+                    (Result (Fin 2 → NQ)) (NJX_LeftRoot.cohort high o d) (ok zero)))
+                (ok zero))
+              (eq_self (ok zero))),
+          ⟨fun x => FIv_NativeValue.zero.left, Eq.mpr (id (congrArg (fun _a => _a) (if_neg active))) (Eq.refl zero)⟩⟩⟩
+'AspisR1.NJX_CarryRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

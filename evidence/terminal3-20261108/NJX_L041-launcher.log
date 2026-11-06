@@ -1,0 +1,50 @@
+{"attempt": "NJX_L041", "exit_status": 0, "wall_seconds": 12.04821852920577, "peak_rss_kib": "6174236", "swaps": "0", "print_axioms": ["'AspisR1.NJX_DigestPrefix.sequence' depends on axioms: [propext, Quot.sound]", "'AspisR1.NJX_DigestPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_DigestPrefix.source : ∀ (o : Residuals) (d : Digest),
+  (∀ (i : Fin 8), Canon (o i)) →
+    (∀ (i : Fin 8), ↑(d i) < 2147483647) →
+      ∃ r,
+        (∀ (i : Fin 8), Cell o d i (r i)) ∧
+          (∀ (i : Fin 8), Canon (r i)) ∧
+            (∀ (i : Fin 8), decode (r i) = decode (o i) - ↑↑(d i)) ∧
+              NJB_Traverse.run (reference o d) (List.finRange 8) = ok ⟨List.ofFn r, ⋯⟩ :=
+fun o d ho hd =>
+  (fun r x =>
+      Exists.intro r
+        ⟨fun i => ((fun i => (x i).right) i).left,
+          ⟨fun i => ((fun i => ((fun i => (x i).right) i).right) i).left,
+            ⟨fun i => ((fun i => ((fun i => (x i).right) i).right) i).right,
+              Eq.mpr
+                (id
+
+...
+d
+                                              (congrFun'
+                                                (congrArg HAdd.hAdd
+                                                  (congrFun'
+                                                    (congrArg HAdd.hAdd
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                            1))
+                                                        1))
+                                                    1))
+                                                1))
+                                            1))
+                                        1)))
+                                  List.length_finRange)
+                                (eq_self 8))⟩)
+                    (sequence (reference o d) r (fun i => (x i).left) (List.finRange 8))))
+                (Eq.refl
+                  (ok
+                    ⟨List.map r (List.finRange 8),
+                      of_eq_true
+                        (Eq.trans (congrFun' (congrArg Eq (List.length_map r)) (List.finRange 8).length)
+                          (eq_self (List.finRange 8).length))⟩))⟩⟩⟩)
+    (fun i => Classical.choose (NJX_DigestResiduals.cell o d ho hd i)) fun i =>
+    Classical.choose_spec (NJX_DigestResiduals.cell o d ho hd i)
+'AspisR1.NJX_DigestPrefix.sequence' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJX_DigestPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re481f60db5954644871e925b3d0a4d00.scope; invocation ID: 6af69ecbfe604a3880fa0a0838496f8b

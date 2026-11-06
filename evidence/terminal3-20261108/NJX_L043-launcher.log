@@ -1,0 +1,62 @@
+{"attempt": "NJX_L043", "exit_status": 0, "wall_seconds": 20.509650112129748, "peak_rss_kib": "6176252", "swaps": "0", "print_axioms": ["'AspisR1.NJX_DigestPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJX_DigestPacket.source : ∀ (high : NQ) (o : Residuals) (d : Digest),
+  Canon high →
+    (∀ (i : Fin 8), Canon (o i)) → (∀ (i : Fin 8), ↑(d i) < 2147483647) → ∃ p, reference high o d = ok p.out :=
+fun high o d hh ho hd =>
+  let ⟨cache, h✝⟩ := NJB_PreparedLaws.new_result high hh
+  let ⟨cc, hcache⟩ := h✝
+  let ⟨r, h✝¹⟩ := NJX_DigestPrefix.source o d ho hd
+  let ⟨cr, right✝⟩ := h✝¹
+  let ⟨hr, right✝¹⟩ := right✝
+  let ⟨vr, pr⟩ := right✝¹
+  (fun packed x =>
+      (fun out x =>
+          have vals := fun g =>
+            Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    _a =
+                      decode high *
+                      
+...
+                List.length_finRange)
+                                              (eq_self 8))⟩
+                                        i)⟩)
+                              1
+                        ok ![a, b])))
+                  (ok p.out)))
+              (id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (do
+                            let a ← _a
+                            let b ← NJX_DigestGroups.reference cache r 1
+                            ok ![a, b]) =
+                          ok out)
+                      a))
+                  (Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = ok out)
+                        (bind_tc_ok (out 0) fun a => do
+                          let b ← NJX_DigestGroups.reference cache r 1
+                          ok ![a, b])))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            (do
+                                let b ← _a
+                                ok ![out 0, b]) =
+                              ok out)
+                          b))
+                      (Eq.mpr (id (congrArg (fun _a => _a = ok out) (bind_tc_ok (out 1) fun b => ok ![out 0, b])))
+                        (Eq.mpr (id (congrArg (fun _a => ok _a = ok out) same)) (Eq.refl (ok out))))))))))
+        (fun g => Classical.choose (x g)) fun g => Classical.choose_spec (x g))
+    (fun g => Classical.choose ((fun g => NJX_DigestGroups.source cache high r g hh hr hcache) g)) fun g =>
+    Classical.choose_spec ((fun g => NJX_DigestGroups.source cache high r g hh hr hcache) g)
+'AspisR1.NJX_DigestPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf82bd1087ac444ba9999e4dd9c63525a.scope; invocation ID: 4203dbc11bac4f7eb9d80f72d877cca4
