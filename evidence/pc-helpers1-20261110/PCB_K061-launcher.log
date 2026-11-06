@@ -1,0 +1,58 @@
+{"attempt": "PCB_K061", "exit_status": 0, "wall_seconds": 15.119516226928681, "peak_rss_kib": "484788", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`
+...
+  |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_src/programs/aspis-pool/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: module `PCB_291` should have a snake case name
+   --> programs/aspis-pool/src/nullifier.rs:813:5
+    |
+813 | mod PCB_291;
+    |     ^^^^^^^ help: convert the identifier to snake case: `pcb_291`
+
+warning: module `PCB_300` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest.rs:5801:5
+     |
+5801 | mod PCB_300;
+     |     ^^^^^^^ help: convert the identifier to snake case: `pcb_300`
+
+warning: module `PCB_343` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest_dispatch.rs:1186:5
+     |
+1186 | mod PCB_343;
+     |     ^^^^^^^ help: convert the identifier to snake case: `pcb_343`
+
+warning: module `PCB_355` should have a snake case name
+   --> programs/aspis-pool/src/pair_state.rs:597:5
+    |
+597 | mod PCB_355;
+    |     ^^^^^^^ help: convert the identifier to snake case: `pcb_355`
+
+    Finished `dev` profile [optimized] target(s) in 13.42s
+Checking harness nullifier::PCB_291::seed_correct...
+
+VERIFICATION RESULT:
+ ** 0 of 1 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.02898353s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-re34029afc9f4485286f1d7be377f1524.scope; invocation ID: 2d115b11ae2348668adea918822c3671

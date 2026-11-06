@@ -1,0 +1,10 @@
+--- a/crates/aspis-statement/src/pool_v1/format.rs
++++ b/crates/aspis-statement/src/pool_v1/format.rs
+@@ -120,6 +120,7 @@
+ /// verifier-result interface. Exact verifier/profile/release triples live in
+ /// canonical registry-entry accounts.
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct VerifierPolicyV1 {
+     pub flags: u8,
+     pub registry_program: [u8; 32],

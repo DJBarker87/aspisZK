@@ -1,0 +1,49 @@
+{
+ "rows": [
+  {
+   "id": "POOL:370",
+   "body_sha256": "4b36bba490cfbbc81c64891538aca0a65d9f9a5cc2f9fcac870b52ab5abfc0a2",
+   "body": "{\n        self.pool == pool\n            && self.verifier_program == verifier_program\n            && self.profile_binding == profile_binding\n            && self.release_binding == release_binding\n            && self.statement_version == statement_version\n    }",
+   "reference": "PCB_registry_reference.rs",
+   "reference_sha256": "fd63f88b52c3c45f20ddc125a197d70a8f70d0f93974be0be975230dac5ab866",
+   "line_correspondence": "self\u2192s; all five && terms in source order; 32-byte arrays remain arrays; U8 version unchanged",
+   "own_argument_domain": "all valid Rust arguments; no additional semantic predicate",
+   "post_loop_explicit_return_check": "No loop, no post-loop return/? ambiguity",
+   "trust": "P6/D188 option-A native semantic transport reclassification; compiler/ABI/source-to-ELF retained"
+  },
+  {
+   "id": "POOL:371",
+   "body_sha256": "a7f5567ee51f7e43b593a1ff36cbd288fea561fcedfa537d17098103dc0c8cb9",
+   "body": "{\n        self.expected_verifier_loader\n            .map(|expected| owner.to_bytes() == expected)\n            .unwrap_or(true)\n    }",
+   "reference": "PCB_registry_reference.rs",
+   "reference_sha256": "fd63f88b52c3c45f20ddc125a197d70a8f70d0f93974be0be975230dac5ab866",
+   "line_correspondence": "Option.map(Pubkey.to_bytes==expected).unwrap_or(true)\u2192None true / Some expected exact byte equality; transparent32-byte Pubkey carrier",
+   "own_argument_domain": "all valid Rust arguments; no additional semantic predicate",
+   "post_loop_explicit_return_check": "No loop, no post-loop return/? ambiguity",
+   "trust": "P6/D188 option-A native semantic transport reclassification; compiler/ABI/source-to-ELF retained"
+  },
+  {
+   "id": "POOL:290",
+   "body_sha256": "2ac21e9b6a91dfe2fbf25329e87f2d8e4f98126237b465111bd3c75ff237fb6c",
+   "body": "{\n        self.preparation\n    }",
+   "reference": "PCB_final_reference.rs",
+   "reference_sha256": "718fa54cba774c9cc2931b7a9a46ee1f9ad17bd54d905331884e55c9ebe46b1b",
+   "line_correspondence": "Plan<P> preparation P moves unchanged; actual P is the two-variant Copy enum; ignored seed[32]/marker[208] both fixed arrays with no Drop",
+   "own_argument_domain": "all valid Rust arguments; no additional semantic predicate",
+   "post_loop_explicit_return_check": "No loop, no post-loop return/? ambiguity",
+   "trust": "P6/D188 option-A native semantic transport reclassification; compiler/ABI/source-to-ELF retained"
+  },
+  {
+   "id": "POOL:344",
+   "body_sha256": "8632cfe8db857cbeb2f1217dd21eb2abf7bbd033770ac07d07410f5ae55f988d",
+   "body": "{\n        program::set_return_data(&[]);\n    }",
+   "reference": "PCB_final_reference.rs",
+   "reference_sha256": "718fa54cba774c9cc2931b7a9a46ee1f9ad17bd54d905331884e55c9ebe46b1b",
+   "line_correspondence": "SDK call set_return_data(&[]) is represented by clearStep; extraction covers unique unit return; native oracle validates exact empty slice and covers reached request; existing RuntimeReturnDataClear carries effect",
+   "own_argument_domain": "all valid Rust arguments; no additional semantic predicate",
+   "post_loop_explicit_return_check": "No loop, no post-loop return/? ambiguity",
+   "trust": "P6/D188 option-A native semantic transport reclassification; compiler/ABI/source-to-ELF retained"
+  }
+ ],
+ "reviewed_transcription_item": "PCB-RT-344-runtime-boundary; ruling ah/ay exact request transcription, native covered oracle, not new runtime trust"
+}

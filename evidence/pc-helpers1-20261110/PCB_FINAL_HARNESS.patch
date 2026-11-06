@@ -1,0 +1,806 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -20,6 +20,7 @@
+ 
+ /// M31 base field element, canonical representation in [0, P).
+ #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct M31(pub u32);
+ 
+ /// 1/2 in M31 (P is odd, so (P+1)/2 = 2^30).
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! Aspis SpendV0 statement layer, built evaluator-first.
+ //!
+ //! This crate deliberately contains no proof system. It defines the exact
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCB_159.rs
+@@ -0,0 +1,7 @@
++use super::*;
++pub(super) fn reference(error:PoolV1VerifierDispatchFormatError)->PoolV1AuthorizationReceiptError { PoolV1AuthorizationReceiptError::Dispatch(error) }
++#[cfg(kani)] #[kani::proof]
++fn error_contract() {let e:PoolV1VerifierDispatchFormatError=kani::any();let r=<PoolV1AuthorizationReceiptError as core::convert::From<PoolV1VerifierDispatchFormatError>>::from(e);
++ #[cfg(not(PCB_NEG_159))] assert_eq!(r,reference(e));
++ #[cfg(PCB_NEG_159)] assert_ne!(r,reference(e));
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCB_160.rs
+@@ -0,0 +1,7 @@
++use super::*;
++pub(super) fn reference(error:PoolV1AuthorizationReceiptError)->PoolV1AuthorizationReceiptAccountErrorV1 { PoolV1AuthorizationReceiptAccountErrorV1::Receipt(error) }
++#[cfg(kani)] #[kani::proof]
++fn error_contract() {let e:PoolV1AuthorizationReceiptError=kani::any();let r=<PoolV1AuthorizationReceiptAccountErrorV1 as core::convert::From<PoolV1AuthorizationReceiptError>>::from(e);
++ #[cfg(not(PCB_NEG_160))] assert_eq!(r,reference(e));
++ #[cfg(PCB_NEG_160)] assert_ne!(r,reference(e));
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCB_178.rs
+@@ -0,0 +1,12 @@
++use super::*;
++const WRONG_TREE:IncrementalMerkleTreeV1=IncrementalMerkleTreeV1 {next_leaf_index:0,root:[M31::ZERO;8],frontier:[[M31::ZERO;8];POOL_V1_TREE_DEPTH]};
++fn correct<'b:'b,'loan>(x:&'loan ValidatedIncrementalMerkleTreeV1<'b>)->&'loan IncrementalMerkleTreeV1 {&x.inner}
++fn wrong<'b:'b,'loan>(_:&'loan ValidatedIncrementalMerkleTreeV1<'b>)->&'loan IncrementalMerkleTreeV1 {&WRONG_TREE}
++#[kani::proof] #[kani::stub(ValidatedIncrementalMerkleTreeV1::as_tree,correct)]
++fn tree_correct(){let empty=[[M31::ZERO;8];POOL_V1_TREE_DEPTH+1];let mut inner=WRONG_TREE;inner.next_leaf_index=kani::any();let x=ValidatedIncrementalMerkleTreeV1 {inner,empty:&empty};assert!(core::ptr::eq(x.as_tree(),&x.inner));}
++#[kani::proof] #[kani::stub(ValidatedIncrementalMerkleTreeV1::as_tree,wrong)]
++fn tree_wrong(){let empty=[[M31::ZERO;8];POOL_V1_TREE_DEPTH+1];let mut inner=WRONG_TREE;inner.next_leaf_index=kani::any();let x=ValidatedIncrementalMerkleTreeV1 {inner,empty:&empty};assert!(core::ptr::eq(x.as_tree(),&x.inner));}
++#[kani::proof] #[kani::stub(ValidatedIncrementalMerkleTreeV1::as_tree,correct)]
++fn deref_correct(){let empty=[[M31::ZERO;8];POOL_V1_TREE_DEPTH+1];let mut inner=WRONG_TREE;inner.next_leaf_index=kani::any();let x=ValidatedIncrementalMerkleTreeV1 {inner,empty:&empty};assert!(core::ptr::eq(core::ops::Deref::deref(&x),&x.inner));}
++#[kani::proof] #[kani::stub(ValidatedIncrementalMerkleTreeV1::as_tree,wrong)]
++fn deref_wrong(){let empty=[[M31::ZERO;8];POOL_V1_TREE_DEPTH+1];let mut inner=WRONG_TREE;inner.next_leaf_index=kani::any();let x=ValidatedIncrementalMerkleTreeV1 {inner,empty:&empty};assert!(core::ptr::eq(core::ops::Deref::deref(&x),&x.inner));}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCB_181.rs
+@@ -0,0 +1,5 @@
++use super::*;
++#[kani::proof_for_contract(ValidatedIncrementalMerkleTreeV1::into_inner)]
++fn contract(){let inner:IncrementalMerkleTreeV1=kani::any();let empty:[Digest;POOL_V1_TREE_DEPTH+1]=kani::any();let x=ValidatedIncrementalMerkleTreeV1 {inner,empty:&empty};let _=x.into_inner();}
++#[kani::proof]fn arbitrary_place(){let inner:IncrementalMerkleTreeV1=kani::any();let empty:[Digest;POOL_V1_TREE_DEPTH+1]=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<8&&j<POOL_V1_TREE_DEPTH);let n=inner.next_leaf_index;let r=inner.root[i].0;let f=inner.frontier[j][i].0;let out=ValidatedIncrementalMerkleTreeV1 {inner,empty:&empty}.into_inner();assert_eq!(out.next_leaf_index,n);assert_eq!(out.root[i].0,r);assert_eq!(out.frontier[j][i].0,f);}
++#[kani::proof]fn wrong_place(){let inner:IncrementalMerkleTreeV1=kani::any();let empty:[Digest;POOL_V1_TREE_DEPTH+1]=kani::any();let i:usize=kani::any();kani::assume(i<8);let r=inner.root[i].0;let out=ValidatedIncrementalMerkleTreeV1 {inner,empty:&empty}.into_inner();assert_ne!(out.root[i].0,r);}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCB_184.rs
+@@ -0,0 +1,31 @@
++use super::*;
++extern crate alloc;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++pub(super) fn encode_spec(root:&Digest)->[u8;32] {
++    let w0=root[0].0.to_le_bytes();
++    let w1=root[1].0.to_le_bytes();
++    let w2=root[2].0.to_le_bytes();
++    let w3=root[3].0.to_le_bytes();
++    let w4=root[4].0.to_le_bytes();
++    let w5=root[5].0.to_le_bytes();
++    let w6=root[6].0.to_le_bytes();
++    let w7=root[7].0.to_le_bytes();
++    [w0[0], w0[1], w0[2], w0[3], w1[0], w1[1], w1[2], w1[3], w2[0], w2[1], w2[2], w2[3], w3[0], w3[1], w3[2], w3[3], w4[0], w4[1], w4[2], w4[3], w5[0], w5[1], w5[2], w5[3], w6[0], w6[1], w6[2], w6[3], w7[0], w7[1], w7[2], w7[3]]
++}
++
++pub(super) fn reference(x:PoolV1NullifierMarkerV1)->[u8;32] {encode_spec(&x.nullifier)}
++fn encoder_reply(d:&Digest)->[u8;32] {let out:[u8;32]=kani::any();kani::assume(out==encode_spec(d));out}
++fn marker()->PoolV1NullifierMarkerV1 {PoolV1NullifierMarkerV1 {transition_kind:if kani::any(){PoolV1TransitionKind::PrivateTransfer}else{PoolV1TransitionKind::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),nullifier:kani::any(),retained_anchor_sequence:kani::any(),retained_anchor_root:kani::any(),verifier_profile:kani::any(),verifier_release:kani::any()}}
++#[kani::proof_for_contract(PoolV1NullifierMarkerV1::canonical_nullifier_encoding)]
++#[kani::stub(crate::encode_digest_canonical,encoder_reply)]
++#[kani::unwind(34)] fn contract(){let x=marker();let _=x.canonical_nullifier_encoding();}
++#[kani::ensures(|r|r[0]==x[0])]fn weak(x:[u8;32])->[u8;32] {x}
++#[kani::proof_for_contract(weak)]#[kani::unwind(34)]fn weak_contract(){let _=weak(kani::any());}
++#[kani::proof]#[kani::unwind(34)]fn real(){let x:[u8;32]=kani::any();assert_eq!(weak(x)[1],x[1]);}
++#[kani::proof]#[kani::stub_verified(weak)]#[kani::unwind(34)]fn unimplied(){let x:[u8;32]=kani::any();assert_eq!(weak(x)[1],x[1]);}
++#[kani::modifies(&mut x[0])]#[kani::ensures(|_|true)]fn bad_frame(x:&mut [u8;2])->[u8;32] {x[1]=x[1].wrapping_add(1);[0;32]}
++#[kani::proof_for_contract(bad_frame)]#[kani::unwind(34)]fn frame(){let mut x:[u8;2]=kani::any();let _=bad_frame(&mut x);}
++#[kani::proof]#[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_negative(){let src:[u8;32]=kani::any();let mut dst:[u8;32]=kani::any();let i:usize=kani::any();kani::assume(i<32);dst.copy_from_slice(&src);assert_ne!(dst[i],src[i]);}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCB_186.rs
+@@ -0,0 +1,5 @@
++use super::*;
++#[cfg_attr(not(PCB_NEG_186),kani::ensures(|r| *r==(u64::from(word)<2147483647)))]
++#[cfg_attr(PCB_NEG_186,kani::ensures(|r| *r!=(u64::from(word)<2147483647)))]
++fn limb(word:u32)->bool {aspis_core::field::M31(word).0<P}
++#[kani::proof_for_contract(limb)]fn contract(){let _=limb(kani::any());}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCB_189.rs
+@@ -0,0 +1,7 @@
++use super::*;
++pub(super) fn reference(error:PoolV1TreeError)->PoolV1PairForestAccountErrorV1 { PoolV1PairForestAccountErrorV1::Tree(error) }
++#[cfg(kani)] #[kani::proof]
++fn error_contract() {let e:PoolV1TreeError=kani::any();let r=<PoolV1PairForestAccountErrorV1 as core::convert::From<PoolV1TreeError>>::from(e);
++ #[cfg(not(PCB_NEG_189))] assert_eq!(r,reference(e));
++ #[cfg(PCB_NEG_189)] assert_ne!(r,reference(e));
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCB_221.rs
+@@ -0,0 +1,18 @@
++use super::*;
++pub(super) fn reference(leaf:&PoolV1PairLeafWitnessV1)->M31 { leaf.second_commitment[7] }
++#[cfg(kani)]
++#[kani::proof_for_contract(PoolV1PairLeafWitnessV1::second_sentinel)]
++fn small_contract(){let p:PoolV1PairLeafWitnessV1=kani::any();let _=p.second_sentinel();}
++
++#[cfg(kani)] #[kani::ensures(|_| true)]
++fn record_weak(x:u32)->M31 {M31(x)}
++#[cfg(kani)] #[kani::proof_for_contract(record_weak)]
++fn record_weak_contract(){let _=record_weak(kani::any());}
++#[cfg(kani)] #[kani::proof]
++fn record_real(){let x:u32=kani::any();assert_eq!(record_weak(x).0,x);}
++#[cfg(kani)] #[kani::proof] #[kani::stub_verified(record_weak)]
++fn record_unimplied(){let x:u32=kani::any();assert_eq!(record_weak(x).0,x);}
++#[cfg(kani)] #[kani::modifies(&mut x[0])] #[kani::ensures(|_| true)]
++fn record_bad_frame(x:&mut [u32;2])->M31 {x[1]=x[1].wrapping_add(1);M31(0)}
++#[cfg(kani)] #[kani::proof_for_contract(record_bad_frame)]
++fn record_frame(){let mut x:[u32;2]=kani::any();let _=record_bad_frame(&mut x);}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCB_242.rs
+@@ -0,0 +1,5 @@
++use super::*;
++pub(super) fn reference(page:&RootHistoryPageV1)->bool { page.filled==256 }
++#[cfg(kani)]
++#[kani::proof_for_contract(RootHistoryPageV1::is_full)]
++fn small_contract(){let p:RootHistoryPageV1=kani::any();let _=p.is_full();}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCB_246.rs
+@@ -0,0 +1,22 @@
++use super::*;
++#[path="PCB_reference.rs"] pub(super) mod reference;
++#[kani::proof_for_contract(root_history_location)]
++fn location_contract(){let _=root_history_location(kani::any());}
++
++#[kani::ensures(|r| r.page_number == sequence/256)]
++fn record_weak(sequence:u64)->RootHistoryLocationV1 {
++ RootHistoryLocationV1 {page_number:sequence/256,slot:(sequence%256) as u16}
++}
++#[kani::proof_for_contract(record_weak)]
++fn record_weak_contract(){let _=record_weak(kani::any());}
++#[kani::proof]
++fn record_real(){let n:u64=kani::any();assert_eq!(record_weak(n).slot,(n%256) as u16);}
++#[kani::proof] #[kani::stub_verified(record_weak)]
++fn record_unimplied(){let n:u64=kani::any();assert_eq!(record_weak(n).slot,(n%256) as u16);}
++#[kani::modifies(&mut x[0])]
++#[kani::ensures(|r| r.page_number==0)]
++fn record_bad_frame(x:&mut [u16;2])->RootHistoryLocationV1 {
++ x[1]=x[1].wrapping_add(1);RootHistoryLocationV1 {page_number:0,slot:0}
++}
++#[kani::proof_for_contract(record_bad_frame)]
++fn record_frame(){let mut x:[u16;2]=kani::any();let _=record_bad_frame(&mut x);}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCB_reference.rs
+@@ -0,0 +1,5 @@
++#[derive(Clone, Copy, PartialEq, Eq, Debug)]
++pub struct Location {pub page_number:u64,pub slot:u16}
++pub fn location(sequence:u64)->Location {
++    Location {page_number:sequence/256, slot:(sequence%256) as u16}
++}
+--- a/crates/aspis-statement/src/pool_v1/authorization_receipt.rs
++++ b/crates/aspis-statement/src/pool_v1/authorization_receipt.rs
+@@ -43,6 +43,7 @@
+ }
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub enum PoolV1AuthorizationReceiptError {
+     WrongLength,
+     WrongMagic,
+@@ -56,6 +57,8 @@
+ }
+ 
+ impl From<PoolV1VerifierDispatchFormatError> for PoolV1AuthorizationReceiptError {
++    #[cfg_attr(all(kani,not(PCB_NEG_159)), kani::ensures(|r| *r == PCB_159::reference(error)))]
++    #[cfg_attr(all(kani,PCB_NEG_159), kani::ensures(|r| *r != PCB_159::reference(error)))]
+     fn from(error: PoolV1VerifierDispatchFormatError) -> Self {
+         Self::Dispatch(error)
+     }
+@@ -242,3 +245,7 @@
+         );
+     }
+ }
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_159.rs"]
++mod PCB_159;
+--- a/crates/aspis-statement/src/pool_v1/authorization_receipt_account.rs
++++ b/crates/aspis-statement/src/pool_v1/authorization_receipt_account.rs
+@@ -185,6 +185,8 @@
+ }
+ 
+ impl From<PoolV1AuthorizationReceiptError> for PoolV1AuthorizationReceiptAccountErrorV1 {
++    #[cfg_attr(all(kani,not(PCB_NEG_160)), kani::ensures(|r| *r == PCB_160::reference(error)))]
++    #[cfg_attr(all(kani,PCB_NEG_160), kani::ensures(|r| *r != PCB_160::reference(error)))]
+     fn from(error: PoolV1AuthorizationReceiptError) -> Self {
+         Self::Receipt(error)
+     }
+@@ -914,3 +916,7 @@
+         );
+     }
+ }
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_160.rs"]
++mod PCB_160;
+--- a/crates/aspis-statement/src/pool_v1/format.rs
++++ b/crates/aspis-statement/src/pool_v1/format.rs
+@@ -120,6 +120,7 @@
+ /// verifier-result interface. Exact verifier/profile/release triples live in
+ /// canonical registry-entry accounts.
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct VerifierPolicyV1 {
+     pub flags: u8,
+     pub registry_program: [u8; 32],
+--- a/crates/aspis-statement/src/pool_v1/incremental_merkle.rs
++++ b/crates/aspis-statement/src/pool_v1/incremental_merkle.rs
+@@ -29,6 +29,7 @@
+     POOL_V1_TREE_STATE_HEADER_BYTES + 32 * POOL_V1_TREE_DEPTH;
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub enum PoolV1TreeError {
+     TreeFull,
+     InsufficientCapacity,
+@@ -61,6 +62,7 @@
+ }
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct IncrementalMerkleTreeV1 {
+     pub next_leaf_index: u64,
+     pub root: Digest,
+@@ -167,6 +169,8 @@
+         &self.inner
+     }
+ 
++    #[cfg_attr(all(kani,not(PCB_NEG_181)),kani::ensures(|r| r.next_leaf_index==self.inner.next_leaf_index))]
++    #[cfg_attr(all(kani,PCB_NEG_181),kani::ensures(|r| r.next_leaf_index!=self.inner.next_leaf_index))]
+     pub fn into_inner(self) -> IncrementalMerkleTreeV1 {
+         self.inner
+     }
+@@ -764,3 +768,11 @@
+ #[cfg(any(kani, aeneas_ref))]
+ #[path = "../../../../tools/r1-builder-reference/tree.rs"]
+ pub mod tree_reference;
++
++#[cfg(kani)]
++#[path="PCB_178.rs"]
++mod PCB_178;
++
++#[cfg(kani)]
++#[path="PCB_181.rs"]
++mod PCB_181;
+--- a/crates/aspis-statement/src/pool_v1/nullifier_marker.rs
++++ b/crates/aspis-statement/src/pool_v1/nullifier_marker.rs
+@@ -71,6 +71,8 @@
+     }
+ 
+     /// The third PDA seed is exactly this canonical 32-byte encoding.
++    #[cfg_attr(all(kani,not(PCB_NEG_184)),kani::ensures(|r| *r==PCB_184::reference(self)))]
++    #[cfg_attr(all(kani,PCB_NEG_184),kani::ensures(|r| *r!=PCB_184::reference(self)))]
+     pub fn canonical_nullifier_encoding(self) -> [u8; 32] {
+         encode_digest_canonical(&self.nullifier)
+     }
+@@ -277,3 +279,11 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCB_184.rs"]
++mod PCB_184;
++
++#[cfg(kani)]
++#[path="PCB_186.rs"]
++mod PCB_186;
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+@@ -118,6 +118,8 @@
+ }
+ 
+ impl From<PoolV1TreeError> for PoolV1PairForestAccountErrorV1 {
++    #[cfg_attr(all(kani,not(PCB_NEG_189)), kani::ensures(|r| *r == PCB_189::reference(error)))]
++    #[cfg_attr(all(kani,PCB_NEG_189), kani::ensures(|r| *r != PCB_189::reference(error)))]
+     fn from(error: PoolV1TreeError) -> Self {
+         Self::Tree(error)
+     }
+@@ -819,3 +821,7 @@
+         );
+     }
+ }
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_189.rs"]
++mod PCB_189;
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -94,6 +94,7 @@
+ /// witnesses which prove whether that already-committed second digest is the
+ /// canonical empty digest.
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct PoolV1PairLeafWitnessV1 {
+     pub first_commitment: Digest,
+     pub second_occupied: M31,
+@@ -115,6 +116,8 @@
+ 
+ impl PoolV1PairLeafWitnessV1 {
+     #[inline]
++    #[cfg_attr(all(kani,not(PCB_NEG_221)),kani::ensures(|r| *r == PCB_221::reference(self)))]
++    #[cfg_attr(all(kani,PCB_NEG_221),kani::ensures(|r| *r != PCB_221::reference(self)))]
+     pub fn second_sentinel(&self) -> M31 {
+         self.second_commitment[POOL_V1_PAIR_SECOND_SENTINEL_LANE]
+     }
+@@ -982,3 +985,7 @@
+         ));
+     }
+ }
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_221.rs"]
++mod PCB_221;
+--- a/crates/aspis-statement/src/pool_v1/root_history.rs
++++ b/crates/aspis-statement/src/pool_v1/root_history.rs
+@@ -45,6 +45,7 @@
+ }
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct RootHistoryLocationV1 {
+     pub page_number: u64,
+     pub slot: u16,
+@@ -58,6 +59,8 @@
+     }
+ }
+ 
++#[cfg_attr(all(kani,not(PCB_NEG_246)), kani::ensures(|r| {let e=PCB_246::reference::location(sequence); r.page_number==e.page_number && r.slot==e.slot}))]
++#[cfg_attr(all(kani,PCB_NEG_246), kani::ensures(|r| {let e=PCB_246::reference::location(sequence); r.page_number!=e.page_number || r.slot!=e.slot}))]
+ pub fn root_history_location(sequence: u64) -> RootHistoryLocationV1 {
+     RootHistoryLocationV1 {
+         page_number: sequence / POOL_V1_ROOT_HISTORY_CAPACITY as u64,
+@@ -280,6 +283,7 @@
+ /// Unfilled slots are canonical zero digests.  This makes the on-chain image
+ /// unique and prevents stale bytes from being interpreted as retained roots.
+ #[derive(Clone, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct RootHistoryPageV1 {
+     pub pool: [u8; 32],
+     pub page_number: u64,
+@@ -317,6 +321,8 @@
+         page
+     }
+ 
++    #[cfg_attr(all(kani,not(PCB_NEG_242)),kani::ensures(|r| *r == PCB_242::reference(self)))]
++    #[cfg_attr(all(kani,PCB_NEG_242),kani::ensures(|r| *r != PCB_242::reference(self)))]
+     pub fn is_full(&self) -> bool {
+         usize::from(self.filled) == POOL_V1_ROOT_HISTORY_CAPACITY
+     }
+@@ -619,3 +625,11 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCB_246.rs"]
++mod PCB_246;
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_242.rs"]
++mod PCB_242;
+--- a/crates/aspis-statement/src/pool_v1/verifier_dispatch.rs
++++ b/crates/aspis-statement/src/pool_v1/verifier_dispatch.rs
+@@ -51,6 +51,7 @@
+ const STATEMENT_PAYLOAD_LENGTH_OFFSET: usize = 380;
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub enum PoolV1VerifierDispatchFormatError {
+     WrongLength,
+     WrongMagic,
+--- /dev/null
++++ b/programs/aspis-pool/src/PCB_279.rs
+@@ -0,0 +1,75 @@
++use super::*;
++extern crate alloc;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++pub(super) fn encode_spec(root:&Digest)->[u8;32] {
++    let w0=root[0].0.to_le_bytes();
++    let w1=root[1].0.to_le_bytes();
++    let w2=root[2].0.to_le_bytes();
++    let w3=root[3].0.to_le_bytes();
++    let w4=root[4].0.to_le_bytes();
++    let w5=root[5].0.to_le_bytes();
++    let w6=root[6].0.to_le_bytes();
++    let w7=root[7].0.to_le_bytes();
++    [w0[0], w0[1], w0[2], w0[3], w1[0], w1[1], w1[2], w1[3], w2[0], w2[1], w2[2], w2[3], w3[0], w3[1], w3[2], w3[3], w4[0], w4[1], w4[2], w4[3], w5[0], w5[1], w5[2], w5[3], w6[0], w6[1], w6[2], w6[3], w7[0], w7[1], w7[2], w7[3]]
++}
++// One exact source-ordered geometry step, history.rs:276-277.
++#[kani::requires(offset<256 && usize::from(filled)+offset<256)]
++#[cfg_attr(not(PCB_NEG_GEOM),kani::ensures(|r| *r==64+(usize::from(filled)+offset)*32))]
++#[cfg_attr(PCB_NEG_GEOM,kani::ensures(|r| *r!=64+(usize::from(filled)+offset)*32))]
++fn geometry(filled:u16,offset:usize)->usize {
++    let slot=usize::from(filled)+offset;
++    let start=PAGE_ROOTS_OFFSET+slot*32;
++    start
++}
++#[kani::proof_for_contract(geometry)]
++fn geometry_contract(){let filled:u16=kani::any();let offset:usize=kani::any();kani::assume(offset<256 && usize::from(filled)+offset<256);let _=geometry(filled,offset);}
++// Borrowed destination is precisely data[start..start+32], not a whole page.
++#[kani::modifies(window)]
++#[cfg_attr(not(PCB_NEG_WINDOW),kani::ensures(|_| *window==*encoded))]
++#[cfg_attr(PCB_NEG_WINDOW,kani::ensures(|_| window[0]!=encoded[0]))]
++fn write_window(window:&mut [u8;32],encoded:&[u8;32]) {
++    window.copy_from_slice(encoded);
++}
++#[kani::proof_for_contract(write_window)] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn window_contract(){let encoded:[u8;32]=kani::any();let mut window:[u8;32]=kani::any();write_window(&mut window,&encoded);}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_control(){let src:[u8;32]=kani::any();let mut dst:[u8;32]=kani::any();let j:usize=kani::any();kani::assume(j<32);dst.copy_from_slice(&src);
++ #[cfg(not(PCB_NEG_COPY))] assert_eq!(dst[j],src[j]);
++ #[cfg(PCB_NEG_COPY)] assert_ne!(dst[j],src[j]);
++}
++
++#[kani::modifies(window)]
++#[kani::ensures(|_| window[0]!=encoded[0])]
++fn inverse_window(window:&mut [u8;32],encoded:&[u8;32]) {write_window(window,encoded);}
++#[kani::proof_for_contract(inverse_window)] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn inverse_window_contract(){let encoded:[u8;32]=kani::any();let mut window:[u8;32]=kani::any();inverse_window(&mut window,&encoded);}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn copy_negative(){let src:[u8;32]=kani::any();let mut dst:[u8;32]=kani::any();let j:usize=kani::any();kani::assume(j<32);dst.copy_from_slice(&src);assert_ne!(dst[j],src[j]);}
++
++#[kani::requires(count<=256 && usize::from(filled)+count<=256)]
++#[kani::modifies(window)]
++#[kani::ensures(|_| *window==(filled+count as u16).to_le_bytes())]
++fn finish_window(window:&mut [u8;2],filled:u16,count:usize) {
++ let filled=filled+count as u16;
++ window.copy_from_slice(&filled.to_le_bytes());
++}
++#[kani::proof_for_contract(finish_window)] #[kani::unwind(4)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn finish_contract(){let filled:u16=kani::any();let count:usize=kani::any();kani::assume(count<=256 && usize::from(filled)+count<=256);let mut window:[u8;2]=kani::any();finish_window(&mut window,filled,count);}
++#[kani::requires(count<=256 && usize::from(filled)+count<=256)]
++#[kani::modifies(window)]
++#[kani::ensures(|_| window[0]!=(filled+count as u16).to_le_bytes()[0])]
++fn inverse_finish(window:&mut [u8;2],filled:u16,count:usize) {finish_window(window,filled,count);}
++#[kani::proof_for_contract(inverse_finish)] #[kani::unwind(4)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn inverse_finish_contract(){let filled:u16=kani::any();let count:usize=kani::any();kani::assume(count<=256 && usize::from(filled)+count<=256);let mut window:[u8;2]=kani::any();inverse_finish(&mut window,filled,count);}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCB_287.rs
+@@ -0,0 +1,5 @@
++use super::*;
++#[kani::proof] fn observe_287(){let tag:u8=kani::any();kani::assume(tag<7);let x=match tag{0=>DepositInstructionFormatErrorV1::WrongLength,1=>DepositInstructionFormatErrorV1::WrongMagic,2=>DepositInstructionFormatErrorV1::WrongVersion,3=>DepositInstructionFormatErrorV1::NonZeroReserved,4=>DepositInstructionFormatErrorV1::InvalidAmount,5=>DepositInstructionFormatErrorV1::InvalidPayloadLength,6=>DepositInstructionFormatErrorV1::NonCanonicalDigest,_=>unreachable!()};let actual:PoolInstructionFormatErrorV1=x.into();assert_eq!(actual,PoolInstructionFormatErrorV1::InvalidDeposit);}
++#[kani::proof] fn observe_287_wrong(){let tag:u8=kani::any();kani::assume(tag<7);let x=match tag{0=>DepositInstructionFormatErrorV1::WrongLength,1=>DepositInstructionFormatErrorV1::WrongMagic,2=>DepositInstructionFormatErrorV1::WrongVersion,3=>DepositInstructionFormatErrorV1::NonZeroReserved,4=>DepositInstructionFormatErrorV1::InvalidAmount,5=>DepositInstructionFormatErrorV1::InvalidPayloadLength,6=>DepositInstructionFormatErrorV1::NonCanonicalDigest,_=>unreachable!()};let actual:PoolInstructionFormatErrorV1=x.into();assert_ne!(actual,PoolInstructionFormatErrorV1::InvalidDeposit);}
++#[kani::proof] fn observe_288(){let tag:u8=kani::any();kani::assume(tag<13);let x=match tag{0=>PoolInstructionFormatErrorV1::WrongLength,1=>PoolInstructionFormatErrorV1::WrongMagic,2=>PoolInstructionFormatErrorV1::WrongVersion,3=>PoolInstructionFormatErrorV1::WrongTransitionKind,4=>PoolInstructionFormatErrorV1::WrongDigestEncoding,5=>PoolInstructionFormatErrorV1::NonZeroReserved,6=>PoolInstructionFormatErrorV1::InvalidEnvelope,7=>PoolInstructionFormatErrorV1::EnvelopeStatementMismatch,8=>PoolInstructionFormatErrorV1::InvalidPolicy,9=>PoolInstructionFormatErrorV1::NonCanonicalField,10=>PoolInstructionFormatErrorV1::InvalidWithdrawalAmount,11=>PoolInstructionFormatErrorV1::InvalidDestination,12=>PoolInstructionFormatErrorV1::InvalidDeposit,_=>unreachable!()};let actual:ProgramError=x.into();assert_eq!(actual,ProgramError::InvalidInstructionData);}
++#[kani::proof] fn observe_288_wrong(){let tag:u8=kani::any();kani::assume(tag<13);let x=match tag{0=>PoolInstructionFormatErrorV1::WrongLength,1=>PoolInstructionFormatErrorV1::WrongMagic,2=>PoolInstructionFormatErrorV1::WrongVersion,3=>PoolInstructionFormatErrorV1::WrongTransitionKind,4=>PoolInstructionFormatErrorV1::WrongDigestEncoding,5=>PoolInstructionFormatErrorV1::NonZeroReserved,6=>PoolInstructionFormatErrorV1::InvalidEnvelope,7=>PoolInstructionFormatErrorV1::EnvelopeStatementMismatch,8=>PoolInstructionFormatErrorV1::InvalidPolicy,9=>PoolInstructionFormatErrorV1::NonCanonicalField,10=>PoolInstructionFormatErrorV1::InvalidWithdrawalAmount,11=>PoolInstructionFormatErrorV1::InvalidDestination,12=>PoolInstructionFormatErrorV1::InvalidDeposit,_=>unreachable!()};let actual:ProgramError=x.into();assert_ne!(actual,ProgramError::InvalidInstructionData);}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCB_290.rs
+@@ -0,0 +1,12 @@
++use super::*;
++pub(super) fn reference(p:PlannedPairForestNullifierMarkerV1)->NullifierMarkerPreparationV1 {p.preparation}
++#[kani::proof_for_contract(PlannedPairForestNullifierMarkerV1::preparation)]
++fn contract(){let p:PlannedPairForestNullifierMarkerV1=kani::any();let _=p.preparation();}
++#[kani::ensures(|_|true)]
++fn weak(x:bool)->NullifierMarkerPreparationV1 {if x {NullifierMarkerPreparationV1::PopulateProgramOwnedZeroed}else{NullifierMarkerPreparationV1::CreateOrAllocateSystemOwned}}
++#[kani::proof_for_contract(weak)] fn weak_contract(){let _=weak(kani::any());}
++#[kani::proof] fn real(){let x:bool=kani::any();assert_eq!(weak(x),if x {NullifierMarkerPreparationV1::PopulateProgramOwnedZeroed}else{NullifierMarkerPreparationV1::CreateOrAllocateSystemOwned});}
++#[kani::proof] #[kani::stub_verified(weak)] fn unimplied(){let x:bool=kani::any();assert_eq!(weak(x),if x {NullifierMarkerPreparationV1::PopulateProgramOwnedZeroed}else{NullifierMarkerPreparationV1::CreateOrAllocateSystemOwned});}
++#[kani::modifies(&mut x[0])] #[kani::ensures(|_|true)]
++fn bad_frame(x:&mut [u8;2])->NullifierMarkerPreparationV1 {x[1]=x[1].wrapping_add(1);NullifierMarkerPreparationV1::PopulateProgramOwnedZeroed}
++#[kani::proof_for_contract(bad_frame)]fn frame(){let mut x:[u8;2]=kani::any();let _=bad_frame(&mut x);}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCB_291.rs
+@@ -0,0 +1,8 @@
++use super::*;
++const WRONG:[u8;32]=[0;32];
++fn correct(x:&PlannedPairForestNullifierMarkerV1)->&[u8;32] {&x.seed}
++fn wrong(_:&PlannedPairForestNullifierMarkerV1)->&[u8;32] {&WRONG}
++#[kani::proof] #[kani::stub(PlannedPairForestNullifierMarkerV1::seed,correct)]
++fn seed_correct(){let x=PlannedPairForestNullifierMarkerV1 {preparation:NullifierMarkerPreparationV1::PopulateProgramOwnedZeroed,seed:kani::any(),encoded_marker:[0;POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES]};assert!(core::ptr::eq(x.seed(),&x.seed));}
++#[kani::proof] #[kani::stub(PlannedPairForestNullifierMarkerV1::seed,wrong)]
++fn seed_wrong(){let x=PlannedPairForestNullifierMarkerV1 {preparation:NullifierMarkerPreparationV1::PopulateProgramOwnedZeroed,seed:kani::any(),encoded_marker:[0;POOL_V1_NULLIFIER_MARKER_ACCOUNT_BYTES]};assert!(core::ptr::eq(x.seed(),&x.seed));}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCB_293.rs
+@@ -0,0 +1,24 @@
++use super::*;
++// Exact one-iteration statements outlined from the frozen inner loops.
++#[kani::requires(chunk<4 && byte<7 && (word as u128)<(1u128<<(8*byte)))]
++#[cfg_attr(not(PCB_NEG_293_WORD),kani::ensures(|r| (r.0 as u128)==(word as u128)*256+(digest[7*chunk+byte] as u128) && r.1==byte+1))]
++#[cfg_attr(PCB_NEG_293_WORD,kani::ensures(|r| (r.0 as u128)!=(word as u128)*256+(digest[7*chunk+byte] as u128)))]
++fn read_step(digest:&[u8;32],chunk:usize,byte:usize,word:u64)->(u64,usize) {
++ let word=(word<<8)|u64::from(digest[7*chunk+byte]);
++ let byte=byte+1;
++ (word,byte)
++}
++#[kani::proof_for_contract(read_step)]fn read_contract(){let digest:[u8;32]=kani::any();let chunk:usize=kani::any();let byte:usize=kani::any();let word:u64=kani::any();kani::assume(chunk<4&&byte<7&&(word as u128)<(1u128<<(8*byte)));let _=read_step(&digest,chunk,byte,word);}
++#[kani::requires(group<8)]
++#[cfg_attr(not(PCB_NEG_293_GROUP),kani::ensures(|r| *r==((word>>(49-7*group))&127) as u8))]
++#[cfg_attr(PCB_NEG_293_GROUP,kani::ensures(|r| *r!=((word>>(49-7*group))&127) as u8))]
++fn group_value(word:u64,group:usize)->u8 {((word>>(7*(7-group)))&0x7f)as u8}
++#[kani::proof_for_contract(group_value)]fn group_contract(){let word:u64=kani::any();let group:usize=kani::any();kani::assume(group<8);let _=group_value(word,group);}
++#[kani::requires(chunk<4&&group<8)]
++#[cfg_attr(not(PCB_NEG_293_FRAME),kani::modifies(&mut seed[8*chunk+group]))]
++#[cfg_attr(PCB_NEG_293_FRAME,kani::modifies(&mut seed[(8*chunk+group+1)%32]))]
++#[kani::ensures(|_|seed[8*chunk+group]==((word>>(7*(7-group)))&0x7f)as u8)]
++fn write_step(seed:&mut [u8;32],chunk:usize,group:usize,word:u64) {
++ seed[8*chunk+group]=((word>>(7*(7-group)))&0x7f)as u8;
++}
++#[kani::proof_for_contract(write_step)]fn write_contract(){let mut seed:[u8;32]=kani::any();let chunk:usize=kani::any();let group:usize=kani::any();let word:u64=kani::any();kani::assume(chunk<4&&group<8);write_step(&mut seed,chunk,group,word);}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCB_300.rs
+@@ -0,0 +1,18 @@
++use super::*;
++pub(super) fn reference(h:PoolV1PairForestTerminalBumpHintsV1)->VaultBumpHintsV1 { VaultBumpHintsV1 {vault_authority:h.vault_authority,vault_token_account:h.vault_token_account} }
++#[cfg(kani)]
++#[kani::proof_for_contract(PoolV1PairForestTerminalBumpHintsV1::vault)]
++fn small_contract(){let p:PoolV1PairForestTerminalBumpHintsV1=kani::any();let _=p.vault();}
++
++#[cfg(kani)] #[kani::ensures(|r| r.vault_authority==x)]
++fn record_weak(x:u8,y:u8)->VaultBumpHintsV1 {VaultBumpHintsV1 {vault_authority:x,vault_token_account:y}}
++#[cfg(kani)] #[kani::proof_for_contract(record_weak)]
++fn record_weak_contract(){let _=record_weak(kani::any(),kani::any());}
++#[cfg(kani)] #[kani::proof]
++fn record_real(){let x:u8=kani::any();let y:u8=kani::any();assert_eq!(record_weak(x,y).vault_token_account,y);}
++#[cfg(kani)] #[kani::proof] #[kani::stub_verified(record_weak)]
++fn record_unimplied(){let x:u8=kani::any();let y:u8=kani::any();assert_eq!(record_weak(x,y).vault_token_account,y);}
++#[cfg(kani)] #[kani::modifies(&mut x[0])] #[kani::ensures(|_| true)]
++fn record_bad_frame(x:&mut [u8;2])->VaultBumpHintsV1 {x[1]=x[1].wrapping_add(1);VaultBumpHintsV1 {vault_authority:0,vault_token_account:0}}
++#[cfg(kani)] #[kani::proof_for_contract(record_bad_frame)]
++fn record_frame(){let mut x:[u8;2]=kani::any();let _=record_bad_frame(&mut x);}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCB_343.rs
+@@ -0,0 +1,9 @@
++use super::*;
++fn fixture()->PoolV1PairForestTerminalResultV1 {PoolV1PairForestTerminalResultV1 {
++ transition_kind:aspis_statement::pool_v1::PoolV1TransitionKind::PrivateTransfer,master_account:[0;32],selected_lane_account:[0;32],output_lane:0,nullifier:[aspis_core::field::M31::ZERO;8],verified_afterstate:aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1 {next_pair_index:kani::any(),next_root:[aspis_core::field::M31::ZERO;8],next_frontier:[[aspis_core::field::M31::ZERO;8];aspis_statement::pool_v1::POOL_V1_PAIR_TREE_DEPTH]}}}
++fn correct(x:&AuthenticatedPairForestResultV1)->&PoolV1PairForestTerminalResultV1 {&x.value}
++fn wrong(_:&AuthenticatedPairForestResultV1)->&PoolV1PairForestTerminalResultV1 {Box::leak(Box::new(fixture()))}
++#[kani::proof] #[kani::stub(AuthenticatedPairForestResultV1::value,correct)]
++fn value_correct(){let x=AuthenticatedPairForestResultV1 {value:Box::new(fixture()),exact_bytes:alloc::vec::Vec::<u8>::new().into_boxed_slice()};assert!(core::ptr::eq(x.value(),&*x.value));}
++#[kani::proof] #[kani::stub(AuthenticatedPairForestResultV1::value,wrong)]
++fn value_wrong(){let x=AuthenticatedPairForestResultV1 {value:Box::new(fixture()),exact_bytes:alloc::vec::Vec::<u8>::new().into_boxed_slice()};assert!(core::ptr::eq(x.value(),&*x.value));}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCB_344.rs
+@@ -0,0 +1,19 @@
++use super::*;
++pub(super) fn reference()->() {()}
++fn clear_empty(bytes:&[u8]) {assert!(bytes.is_empty());kani::cover!(bytes.is_empty(),"exact empty request reached");}
++fn clear_wrong(bytes:&[u8]) {assert!(!bytes.is_empty());}
++#[kani::proof_for_contract(<SolanaPairForestVerifierRuntimeV1 as PairForestVerifierRuntimeV1>::clear_return_data)]
++#[kani::stub(solana_program::program::set_return_data,clear_empty)]
++fn clear_contract(){let mut rt=SolanaPairForestVerifierRuntimeV1;rt.clear_return_data();}
++#[kani::proof_for_contract(<SolanaPairForestVerifierRuntimeV1 as PairForestVerifierRuntimeV1>::clear_return_data)]
++#[kani::stub(solana_program::program::set_return_data,clear_wrong)]
++fn clear_wrong_argument(){let mut rt=SolanaPairForestVerifierRuntimeV1;rt.clear_return_data();}
++#[kani::modifies(x)]
++#[cfg_attr(not(PCB_NEG_UNIT),kani::ensures(|_|x[0]==0))]
++#[cfg_attr(PCB_NEG_UNIT,kani::ensures(|_|x[0]!=0))]
++fn unit_weak(x:&mut [u8;2]) {x[0]=0;x[1]=0;}
++#[kani::proof_for_contract(unit_weak)]fn unit_contract(){let mut x:[u8;2]=kani::any();unit_weak(&mut x);}
++#[kani::proof]fn unit_real(){let mut x:[u8;2]=kani::any();unit_weak(&mut x);assert_eq!(x[1],0);}
++#[kani::proof]#[kani::stub_verified(unit_weak)]fn unit_unimplied(){let mut x:[u8;2]=kani::any();unit_weak(&mut x);assert_eq!(x[1],0);}
++#[kani::modifies(&mut x[0])]#[kani::ensures(|_|true)]fn unit_bad_frame(x:&mut [u8;2]) {x[1]=x[1].wrapping_add(1);}
++#[kani::proof_for_contract(unit_bad_frame)]fn unit_frame(){let mut x:[u8;2]=kani::any();unit_bad_frame(&mut x);}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCB_355.rs
+@@ -0,0 +1,9 @@
++use super::*;
++fn fixture()->PairPoolStateV1 {PairPoolStateV1 {
++ identity:aspis_statement::pool_v1::PoolIdentityV1 {pool:[0;32],asset_mint:[0;32],token_program:[0;32],asset_id:aspis_core::field::M31::ZERO,deployment_domain:[0;32]},verifier_policy:aspis_statement::pool_v1::VerifierPolicyV1 {flags:0,registry_program:[0;32],registry_authority:[0;32],policy_binding:[0;32]},tree:aspis_statement::pool_v1::IncrementalMerkleTreeV1 {next_leaf_index:kani::any(),root:[aspis_core::field::M31::ZERO;8],frontier:[[aspis_core::field::M31::ZERO;8];aspis_statement::pool_v1::POOL_V1_TREE_DEPTH]}}}
++fn correct(x:&CanonicalPairPoolStateV1)->&PairPoolStateV1 {&x.state}
++fn wrong(_:&CanonicalPairPoolStateV1)->&PairPoolStateV1 {Box::leak(Box::new(fixture()))}
++#[kani::proof] #[kani::stub(<CanonicalPairPoolStateV1 as core::ops::Deref>::deref,correct)]
++fn state_correct(){let x=CanonicalPairPoolStateV1 {program_id:Pubkey::new_from_array([0;32]),pool:Pubkey::new_from_array([0;32]),state:Box::new(fixture())};assert!(core::ptr::eq(core::ops::Deref::deref(&x),&*x.state));}
++#[kani::proof] #[kani::stub(<CanonicalPairPoolStateV1 as core::ops::Deref>::deref,wrong)]
++fn state_wrong(){let x=CanonicalPairPoolStateV1 {program_id:Pubkey::new_from_array([0;32]),pool:Pubkey::new_from_array([0;32]),state:Box::new(fixture())};assert!(core::ptr::eq(core::ops::Deref::deref(&x),&*x.state));}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCB_370.rs
+@@ -0,0 +1,6 @@
++use super::*;
++pub(super) fn reference(s:AuthenticatedVerifierSelectionV1,pool:[u8;32],verifier_program:[u8;32],profile_binding:[u8;32],release_binding:[u8;32],statement_version:u8)->bool {
++ s.pool==pool && s.verifier_program==verifier_program && s.profile_binding==profile_binding && s.release_binding==release_binding && s.statement_version==statement_version
++}
++#[cfg(kani)] #[kani::proof_for_contract(AuthenticatedVerifierSelectionV1::matches)]
++fn matches_contract(){let s:AuthenticatedVerifierSelectionV1=kani::any();let _=s.matches(kani::any(),kani::any(),kani::any(),kani::any(),kani::any());}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCB_371.rs
+@@ -0,0 +1,6 @@
++use super::*;
++pub(super) fn reference(s:AuthenticatedVerifierSelectionV1,owner:&Pubkey)->bool {
++ match s.expected_verifier_loader {None=>true,Some(expected)=>owner.to_bytes()==expected}
++}
++#[cfg(kani)] #[kani::proof_for_contract(AuthenticatedVerifierSelectionV1::matches_verifier_owner)]
++fn owner_contract(){let s:AuthenticatedVerifierSelectionV1=kani::any();let owner=Pubkey::new_from_array(kani::any());let _=s.matches_verifier_owner(&owner);}
+--- a/programs/aspis-pool/src/history.rs
++++ b/programs/aspis-pool/src/history.rs
+@@ -344,3 +344,7 @@
+         assert!(validate_root_page_bytes_from_program_invariant(&data, &pool, 0).is_err());
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCB_279.rs"]
++mod PCB_279;
+--- a/programs/aspis-pool/src/instruction.rs
++++ b/programs/aspis-pool/src/instruction.rs
+@@ -644,3 +644,7 @@
+         verifier_policy,
+     })
+ }
++
++#[cfg(kani)]
++#[path="PCB_287.rs"]
++mod PCB_287;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes the pair-forest initialization, checkpoint,
+@@ -105,3 +106,6 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
+--- a/programs/aspis-pool/src/nullifier.rs
++++ b/programs/aspis-pool/src/nullifier.rs
+@@ -119,6 +119,7 @@
+ }
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub enum NullifierMarkerPreparationV1 {
+     /// A data-empty System-owned PDA. Future composition must perform the
+     /// reviewed create/allocate/assign sequence with `invoke_signed`.
+@@ -214,6 +215,7 @@
+ 
+ /// Fully validated but unapplied pair-forest (B1) marker plan.
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct PlannedPairForestNullifierMarkerV1 {
+     preparation: NullifierMarkerPreparationV1,
+     seed: [u8; 32],
+@@ -221,6 +223,8 @@
+ }
+ 
+ impl PlannedPairForestNullifierMarkerV1 {
++    #[cfg_attr(all(kani,not(PCB_NEG_290)),kani::ensures(|r| *r==PCB_290::reference(self)))]
++    #[cfg_attr(all(kani,PCB_NEG_290),kani::ensures(|r| *r!=PCB_290::reference(self)))]
+     pub(crate) fn preparation(self) -> NullifierMarkerPreparationV1 {
+         self.preparation
+     }
+@@ -807,3 +811,15 @@
+         assert_eq!(zeroed, before);
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCB_291.rs"]
++mod PCB_291;
++
++#[cfg(kani)]
++#[path="PCB_290.rs"]
++mod PCB_290;
++
++#[cfg(kani)]
++#[path="PCB_293.rs"]
++mod PCB_293;
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -110,6 +110,7 @@
+ pub const POOL_V1_PAIR_FOREST_TERMINAL_BUMP_HINT_BYTES: usize = 4;
+ 
+ #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct PoolV1PairForestTerminalBumpHintsV1 {
+     pub current_page: u8,
+     pub next_page: u8,
+@@ -127,6 +128,8 @@
+         ]
+     }
+ 
++    #[cfg_attr(all(kani,not(PCB_NEG_300)),kani::ensures(|r| *r == PCB_300::reference(self)))]
++    #[cfg_attr(all(kani,PCB_NEG_300),kani::ensures(|r| *r != PCB_300::reference(self)))]
+     fn vault(self) -> VaultBumpHintsV1 {
+         VaultBumpHintsV1 {
+             vault_authority: self.vault_authority,
+@@ -5792,3 +5795,7 @@
+         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
+     }
+ }
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_300.rs"]
++mod PCB_300;
+--- a/programs/aspis-pool/src/pair_forest_dispatch.rs
++++ b/programs/aspis-pool/src/pair_forest_dispatch.rs
+@@ -261,6 +261,7 @@
+ struct SolanaPairForestVerifierRuntimeV1;
+ 
+ impl PairForestVerifierRuntimeV1 for SolanaPairForestVerifierRuntimeV1 {
++    #[cfg_attr(kani,kani::ensures(|r| *r==PCB_344::reference()))]
+     fn clear_return_data(&mut self) {
+         program::set_return_data(&[]);
+     }
+@@ -1180,3 +1181,11 @@
+ 
+     const _: () = assert!(POOL_V1_PAIR_TREE_DEPTH == 20);
+ }
++
++#[cfg(kani)]
++#[path="PCB_343.rs"]
++mod PCB_343;
++
++#[cfg(kani)]
++#[path="PCB_344.rs"]
++mod PCB_344;
+--- a/programs/aspis-pool/src/pair_state.rs
++++ b/programs/aspis-pool/src/pair_state.rs
+@@ -591,3 +591,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCB_355.rs"]
++mod PCB_355;
+--- a/programs/aspis-pool/src/registry.rs
++++ b/programs/aspis-pool/src/registry.rs
+@@ -85,6 +85,7 @@
+ /// Evidence returned only after the Pool policy, canonical registry and exact
+ /// active entry all agree at `current_slot`.
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub(crate) struct AuthenticatedVerifierSelectionV1 {
+     policy: VerifierPolicyV1,
+     pool: [u8; 32],
+@@ -107,6 +108,8 @@
+         self.policy == *policy
+     }
+ 
++    #[cfg_attr(all(kani,not(PCB_NEG_370)),kani::ensures(|r| *r == PCB_370::reference(self,pool,verifier_program,profile_binding,release_binding,statement_version)))]
++    #[cfg_attr(all(kani,PCB_NEG_370),kani::ensures(|r| *r != PCB_370::reference(self,pool,verifier_program,profile_binding,release_binding,statement_version)))]
+     pub(crate) fn matches(
+         self,
+         pool: [u8; 32],
+@@ -130,6 +133,8 @@
+         self.authenticated_at_slot
+     }
+ 
++    #[cfg_attr(all(kani,not(PCB_NEG_371)),kani::ensures(|r| *r == PCB_371::reference(self,owner)))]
++    #[cfg_attr(all(kani,PCB_NEG_371),kani::ensures(|r| *r != PCB_371::reference(self,owner)))]
+     pub(crate) fn matches_verifier_owner(self, owner: &Pubkey) -> bool {
+         self.expected_verifier_loader
+             .map(|expected| owner.to_bytes() == expected)
+@@ -1112,3 +1117,11 @@
+         .is_ok());
+     }
+ }
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_370.rs"]
++mod PCB_370;
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_371.rs"]
++mod PCB_371;
+--- a/programs/aspis-pool/src/vault.rs
++++ b/programs/aspis-pool/src/vault.rs
+@@ -376,6 +376,7 @@
+ /// R1 withdrawal). They are carried in Pool instruction data only; the master
+ /// format and the verifier are unchanged.
+ #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct VaultBumpHintsV1 {
+     pub vault_authority: u8,
+     pub vault_token_account: u8,

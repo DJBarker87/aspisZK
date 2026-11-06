@@ -1,0 +1,19 @@
+--- a/crates/aspis-statement/src/pool_v1/root_history.rs
++++ b/crates/aspis-statement/src/pool_v1/root_history.rs
+@@ -58,6 +58,8 @@
+     }
+ }
+ 
++#[cfg_attr(all(kani,not(PCB_NEG_246)), kani::ensures(|r| {let e=PCB_246::reference::location(sequence); r.page_number==e.page_number && r.slot==e.slot}))]
++#[cfg_attr(all(kani,PCB_NEG_246), kani::ensures(|r| {let e=PCB_246::reference::location(sequence); r.page_number!=e.page_number || r.slot!=e.slot}))]
+ pub fn root_history_location(sequence: u64) -> RootHistoryLocationV1 {
+     RootHistoryLocationV1 {
+         page_number: sequence / POOL_V1_ROOT_HISTORY_CAPACITY as u64,
+@@ -619,3 +621,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCB_246.rs"]
++mod PCB_246;

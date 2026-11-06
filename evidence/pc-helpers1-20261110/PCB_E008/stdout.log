@@ -1,0 +1,31 @@
+{"charon_sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8", "aeneas_sha256": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958", "rust_reference_sha256": "a14c86e65f8648ef1e96a81741edb8a96e6b2c95ad616dc2c255d5ddc3ff597b", "charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::tree_ref", "--start-from", "crate::deref_ref", "--start-from", "crate::seed_ref", "--start-from", "crate::value_ref", "--start-from", "crate::state_ref", "--dest-file", "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_reference.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_ref/Cargo.toml", "--offline", "--release", "--lib", "--jobs", "1"], "toolchain": "nightly-2026-09-17", "aeneas_origin": "b59d5188 extended binary; imported read-only, no tool patches by PCB"}
+   Compiling nco_reference v0.1.0 (/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_ref)
+error[E0106]: missing lifetime specifier
+ --> src/lib.rs:5:36
+  |
+5 | pub fn tree_ref(x:&Validated<'_>)->&Tree {x.as_tree()}
+  |                   --------------   ^ expected named lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value, but the signature does not say which one of `x`'s 2 lifetimes it is borrowed from
+help: consider introducing a named lifetime parameter
+  |
+5 - pub fn tree_ref(x:&Validated<'_>)->&Tree {x.as_tree()}
+5 + pub fn tree_ref<'a>(x:&'a Validated<'a>)->&'a Tree {x.as_tree()}
+  |
+
+error[E0106]: missing lifetime specifier
+ --> src/lib.rs:6:37
+  |
+6 | pub fn deref_ref(x:&Validated<'_>)->&Tree {x.as_tree()}
+  |                    --------------   ^ expected named lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value, but the signature does not say which one of `x`'s 2 lifetimes it is borrowed from
+help: consider introducing a named lifetime parameter
+  |
+6 - pub fn deref_ref(x:&Validated<'_>)->&Tree {x.as_tree()}
+6 + pub fn deref_ref<'a>(x:&'a Validated<'a>)->&'a Tree {x.as_tree()}
+  |
+
+For more information about this error, try `rustc --explain E0106`.
+ERROR Code failed to compile
+error: could not compile `nco_reference` (lib) due to 2 previous errors

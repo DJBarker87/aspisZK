@@ -1,0 +1,39 @@
+{"attempt": "PCB_K008", "exit_status": 1, "wall_seconds": 4.183804550906643, "peak_rss_kib": "394796", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+1
+  |
+4 | #[kani::proof_for_contract(<PoolV1AuthorizationReceiptError as From<PoolV1VerifierDispatchFormatError>>::from)]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the attribute macro `kani::proof_for_contract` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: failed to resolve `<PoolV1AuthorizationReceiptAccountErrorV1 as From < PoolV1AuthorizationReceiptError >>::from`: unable to find `From` inside module `pool_v1::authorization_receipt_account::PCB_160`
+ --> crates/aspis-statement/src/pool_v1/PCB_160.rs:4:1
+  |
+4 | #[kani::proof_for_contract(<PoolV1AuthorizationReceiptAccountErrorV1 as From<PoolV1AuthorizationReceiptError>>::from)]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the attribute macro `kani::proof_for_contract` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: failed to resolve `<PoolV1PairForestAccountErrorV1 as From < PoolV1TreeError >>::from`: unable to find `From` inside module `pool_v1::pair_forest_accounts::PCB_189`
+ --> crates/aspis-statement/src/pool_v1/PCB_189.rs:4:1
+  |
+4 | #[kani::proof_for_contract(<PoolV1PairForestAccountErrorV1 as From<PoolV1TreeError>>::from)]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: this error originates in the attribute macro `kani::proof_for_contract` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: could not compile `aspis-statement` (lib) due to 3 previous errors; 149 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 3 compilation errors.
+
+Running as unit: run-r697f2b5b825f4fd0a934c36694ffc2f8.scope; invocation ID: fdeb0c9f3070413db28f3fcb20eafd55

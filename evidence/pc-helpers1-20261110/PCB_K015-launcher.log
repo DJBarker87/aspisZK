@@ -1,0 +1,53 @@
+{"attempt": "PCB_K015", "exit_status": 0, "wall_seconds": 5.8607634759973735, "peak_rss_kib": "512592", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+    |
+827 | mod PCB_189;
+    |     ^^^^^^^ help: convert the identifier to snake case: `pcb_189`
+
+warning: module `PCB_246` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/root_history.rs:628:5
+    |
+628 | mod PCB_246;
+    |     ^^^^^^^ help: convert the identifier to snake case: `pcb_246`
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:131:20
+    |
+131 |         assert_eq!(ACTUAL_CALL, 4);
+    |                    ^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+    Finished `dev` profile [optimized] target(s) in 4.51s
+Checking harness pool_v1::root_history::PCB_246::record_weak_contract...
+
+VERIFICATION RESULT:
+ ** 0 of 54 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.06982017s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r10e2472e67374d87b337f1414e9c3e82.scope; invocation ID: d7bf7f8999ef4097b058c073d4a30fd5

@@ -1,0 +1,141 @@
+[
+ {
+  "id": "POOL:370",
+  "function": "programs/aspis-pool/src/registry.rs::AuthenticatedVerifierSelectionV1::matches",
+  "status": "OPEN_GATE_BLOCKED",
+  "root": "PCB_RegistryLaws.selection",
+  "statement": "\u2200 (s : PCB_RegistryRef.AuthenticatedVerifierSelectionV1) (p v q r : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (version : Aeneas.Std.U8), PCB_RegistryRef.matches_ref s p v q r version = Aeneas.Result.ok (decide (s.pool.val = p.val \u2227 s.verifier_program.val = v.val \u2227 s.profile_binding.val = q.val \u2227 s.release_binding.val = r.val \u2227 s.statement_version = version))",
+  "named_hypotheses": [],
+  "caller_clause": "all valid Rust arguments; no additional semantic predicate",
+  "modifies_native_memory": [],
+  "external_effects": [],
+  "individual_raw": {
+   "collect_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "edges_scanned": 29417,
+   "equal": true,
+   "reachable_constants": 2120,
+   "root": "PCB_RegistryLaws.selection",
+   "walked_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "body_hash": "4b36bba490cfbbc81c64891538aca0a65d9f9a5cc2f9fcac870b52ab5abfc0a2",
+  "native": [
+   "PCB_K111",
+   "PCB_K112"
+  ],
+  "gate": "PCB_AUDIT_LATEST.json",
+  "correspondence": "PCB_BOUNDARY_CORRESPONDENCE.json",
+  "trust": "P6/D188 option-A semantic-transport reclassification; no trust removal"
+ },
+ {
+  "id": "POOL:371",
+  "function": "programs/aspis-pool/src/registry.rs::AuthenticatedVerifierSelectionV1::matches_verifier_owner",
+  "status": "OPEN_GATE_BLOCKED",
+  "root": "PCB_RegistryLaws.owner",
+  "statement": "\u2200 (s : PCB_RegistryRef.AuthenticatedVerifierSelectionV1) (p : PCB_RegistryRef.Pubkey), PCB_RegistryRef.owner_ref s p = Aeneas.Result.ok (match s.expected_verifier_loader with | none => true | some expected => decide (p.val = expected.val))",
+  "named_hypotheses": [],
+  "caller_clause": "all valid Rust arguments; no additional semantic predicate",
+  "modifies_native_memory": [],
+  "external_effects": [],
+  "individual_raw": {
+   "collect_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ],
+   "edges_scanned": 29466,
+   "equal": true,
+   "reachable_constants": 2121,
+   "root": "PCB_RegistryLaws.owner",
+   "walked_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "body_hash": "a7f5567ee51f7e43b593a1ff36cbd288fea561fcedfa537d17098103dc0c8cb9",
+  "native": [
+   "PCB_K113",
+   "PCB_K114"
+  ],
+  "gate": "PCB_AUDIT_LATEST.json",
+  "correspondence": "PCB_BOUNDARY_CORRESPONDENCE.json",
+  "trust": "P6/D188 option-A semantic-transport reclassification; no trust removal"
+ },
+ {
+  "id": "POOL:344",
+  "function": "programs/aspis-pool/src/pair_forest_dispatch.rs::SolanaPairForestVerifierRuntimeV1::clear_return_data",
+  "status": "OPEN_GATE_BLOCKED",
+  "root": "PCB_FinalLaws.clear",
+  "statement": "\u2200 {S R : Type} (setReturnData : List Aeneas.Std.U8 \u2192 S \u2192 R) (state : S), PCB_FinalLaws.clearStep setReturnData state = setReturnData [] state \u2227 PCB_FinalRef.clear_ref = Aeneas.Result.ok ()",
+  "named_hypotheses": [],
+  "caller_clause": "all valid Rust arguments; no additional semantic predicate",
+  "modifies_native_memory": [],
+  "external_effects": [
+   "clear return-data slot via existing RuntimeReturnDataClear"
+  ],
+  "individual_raw": {
+   "collect_axioms": [],
+   "edges_scanned": 370,
+   "equal": true,
+   "reachable_constants": 98,
+   "root": "PCB_FinalLaws.clear",
+   "walked_axioms": []
+  },
+  "body_hash": "8632cfe8db857cbeb2f1217dd21eb2abf7bbd033770ac07d07410f5ae55f988d",
+  "native": [
+   "PCB_K070",
+   "PCB_K071",
+   "PCB_K115",
+   "PCB_K116",
+   "PCB_K117",
+   "PCB_K118",
+   "PCB_K119"
+  ],
+  "gate": "PCB_AUDIT_LATEST.json",
+  "correspondence": "PCB_BOUNDARY_CORRESPONDENCE.json",
+  "trust": "P6/D188 option-A semantic-transport reclassification; no trust removal"
+ },
+ {
+  "id": "POOL:290",
+  "function": "programs/aspis-pool/src/nullifier.rs::PlannedPairForestNullifierMarkerV1::preparation",
+  "status": "OPEN_GATE_BLOCKED",
+  "root": "PCB_FinalLaws.preparation",
+  "statement": "\u2200 {P : Type} (x : PCB_FinalRef.Plan P), PCB_FinalRef.preparation_ref x = Aeneas.Result.ok x.preparation",
+  "named_hypotheses": [],
+  "caller_clause": "all valid Rust arguments; no additional semantic predicate",
+  "modifies_native_memory": [],
+  "external_effects": [],
+  "individual_raw": {
+   "collect_axioms": [],
+   "edges_scanned": 27667,
+   "equal": false,
+   "reachable_constants": 2008,
+   "root": "PCB_FinalLaws.preparation",
+   "walked_axioms": [
+    "Classical.choice",
+    "Quot.sound",
+    "propext"
+   ]
+  },
+  "body_hash": "2ac21e9b6a91dfe2fbf25329e87f2d8e4f98126237b465111bd3c75ff237fb6c",
+  "native": [
+   "PCB_K072",
+   "PCB_K074",
+   "PCB_K075",
+   "PCB_K076",
+   "PCB_K077",
+   "PCB_K078"
+  ],
+  "gate": "PCB_AUDIT_LATEST.json",
+  "correspondence": "PCB_BOUNDARY_CORRESPONDENCE.json",
+  "trust": "P6/D188 option-A semantic-transport reclassification; no trust removal"
+ }
+]

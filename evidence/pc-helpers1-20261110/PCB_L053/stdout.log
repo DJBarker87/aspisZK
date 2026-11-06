@@ -1,0 +1,41 @@
+PCB_generated/PCB_AppendScalarLaws.lean:9:10: error: could not synthesize default value for parameter 'hInBounds' using tactics
+PCB_generated/PCB_AppendScalarLaws.lean:9:10: error: Expected type must not contain free variables
+  64 + 32 * (↑filled + ↑offset) ≤ UScalar.cMax UScalarTy.Usize
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+PCB_generated/PCB_AppendScalarLaws.lean:11:2: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+filled : U16
+offset : Usize
+cap : ↑filled + ↑offset < 256
+⊢ (do
+      let i ← lift (core.convert.num.FromUsizeU16.from filled)
+      let slot ← i + offset
+      let i1 ← slot * 32#usize
+      64#usize + i1) =
+    ok (64 + 32 * (↑filled + ↑offset))#usize
+PCB_generated/PCB_AppendScalarLaws.lean:16:36: error: could not synthesize default value for parameter 'hInBounds' using tactics
+PCB_generated/PCB_AppendScalarLaws.lean:16:36: error: Expected type must not contain free variables
+  ↑n + ↑count ≤ UScalar.cMax UScalarTy.U16
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+PCB_generated/PCB_AppendScalarLaws.lean:18:2: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+n : U16
+count : Usize
+cap : ↑n + ↑count ≤ 256
+⊢ (do
+      let i ← lift (UScalar.cast UScalarTy.U16 count)
+      let filled1 ← n + i
+      ok (core.num.U16.to_le_bytes filled1)) =
+    ok (core.num.U16.to_le_bytes (↑n + ↑count)#u16)
+'PCB_AppendScalarLaws.geometry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCB_AppendScalarLaws.filled' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,36 @@
+{"attempt": "PCB_K014", "exit_status": 1, "wall_seconds": 4.913609059061855, "peak_rss_kib": "400584", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ReceiptAccountErrorV1
+ --> crates/aspis-statement/src/pool_v1/PCB_160.rs:4:1
+  |
+4 | #[kani::proof_for_contract(<PoolV1AuthorizationReceiptAccountErrorV1 as core::convert::From<PoolV1AuthorizationReceiptError>>::from)]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: Kani does not currently support stubs or function contracts on generic functions in traits.
+           See https://github.com/model-checking/kani/issues/1997#issuecomment-3134614734 for more information.
+  = note: this error originates in the attribute macro `kani::proof_for_contract` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: failed to resolve `<PoolV1PairForestAccountErrorV1 as core::convert::From < PoolV1TreeError >>::from`: unable to find implementation of associated function `core::convert::From::from` for pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1
+ --> crates/aspis-statement/src/pool_v1/PCB_189.rs:4:1
+  |
+4 | #[kani::proof_for_contract(<PoolV1PairForestAccountErrorV1 as core::convert::From<PoolV1TreeError>>::from)]
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: Kani does not currently support stubs or function contracts on generic functions in traits.
+           See https://github.com/model-checking/kani/issues/1997#issuecomment-3134614734 for more information.
+  = note: this error originates in the attribute macro `kani::proof_for_contract` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: could not compile `aspis-statement` (lib) due to 3 previous errors; 149 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 3 compilation errors.
+
+Running as unit: run-ra3f1aee562cb417c83cb1118df2f9b88.scope; invocation ID: c99150d4593946dd85c13c6c6799ab27

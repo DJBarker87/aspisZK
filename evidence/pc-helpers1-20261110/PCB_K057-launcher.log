@@ -1,0 +1,40 @@
+{"attempt": "PCB_K057", "exit_status": 1, "wall_seconds": 14.837380965938792, "peak_rss_kib": "513324", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+    Blocking waiting for file lock on package cache
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-pc-helpers1-20261110/PCB_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `no
+...
+ creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:131:20
+    |
+131 |         assert_eq!(ACTUAL_CALL, 4);
+    |                    ^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+error: mismatch in the number of generic parameters: original function/method `pool_v1::incremental_merkle::ValidatedIncrementalMerkleTreeV1::<'a>::as_tree` takes 1 generic parameters(s), stub `pool_v1::incremental_merkle::PCB_178::correct` takes 0
+ --> crates/aspis-statement/src/pool_v1/PCB_178.rs:6:1
+  |
+6 | fn tree_correct(){let empty=[[M31::ZERO;8];POOL_V1_TREE_DEPTH+1];let mut inner=WRONG_TREE;inner.next_leaf_index=kani::any();let x=Val...
+  | ^^^^^^^^^^^^^^^^^
+
+error: could not compile `aspis-statement` (lib) due to 1 previous error; 166 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-r895cd4db8ab346f1bee0539e4198d04d.scope; invocation ID: 746b766d7b0444e0844dff357eba5dff

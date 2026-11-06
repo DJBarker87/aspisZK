@@ -1,0 +1,85 @@
+--- a/crates/aspis-statement/src/pool_v1/authorization_receipt.rs
++++ b/crates/aspis-statement/src/pool_v1/authorization_receipt.rs
+@@ -43,6 +43,7 @@
+ }
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub enum PoolV1AuthorizationReceiptError {
+     WrongLength,
+     WrongMagic,
+@@ -56,6 +57,8 @@
+ }
+ 
+ impl From<PoolV1VerifierDispatchFormatError> for PoolV1AuthorizationReceiptError {
++    #[cfg_attr(all(kani,not(PCB_NEG_159)), kani::ensures(|r| *r == PCB_159::reference(error)))]
++    #[cfg_attr(all(kani,PCB_NEG_159), kani::ensures(|r| *r != PCB_159::reference(error)))]
+     fn from(error: PoolV1VerifierDispatchFormatError) -> Self {
+         Self::Dispatch(error)
+     }
+@@ -242,3 +245,7 @@
+         );
+     }
+ }
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_159.rs"]
++mod PCB_159;
+--- a/crates/aspis-statement/src/pool_v1/authorization_receipt_account.rs
++++ b/crates/aspis-statement/src/pool_v1/authorization_receipt_account.rs
+@@ -185,6 +185,8 @@
+ }
+ 
+ impl From<PoolV1AuthorizationReceiptError> for PoolV1AuthorizationReceiptAccountErrorV1 {
++    #[cfg_attr(all(kani,not(PCB_NEG_160)), kani::ensures(|r| *r == PCB_160::reference(error)))]
++    #[cfg_attr(all(kani,PCB_NEG_160), kani::ensures(|r| *r != PCB_160::reference(error)))]
+     fn from(error: PoolV1AuthorizationReceiptError) -> Self {
+         Self::Receipt(error)
+     }
+@@ -914,3 +916,7 @@
+         );
+     }
+ }
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_160.rs"]
++mod PCB_160;
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+@@ -118,6 +118,8 @@
+ }
+ 
+ impl From<PoolV1TreeError> for PoolV1PairForestAccountErrorV1 {
++    #[cfg_attr(all(kani,not(PCB_NEG_189)), kani::ensures(|r| *r == PCB_189::reference(error)))]
++    #[cfg_attr(all(kani,PCB_NEG_189), kani::ensures(|r| *r != PCB_189::reference(error)))]
+     fn from(error: PoolV1TreeError) -> Self {
+         Self::Tree(error)
+     }
+@@ -819,3 +821,7 @@
+         );
+     }
+ }
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_189.rs"]
++mod PCB_189;
+--- a/crates/aspis-statement/src/pool_v1/verifier_dispatch.rs
++++ b/crates/aspis-statement/src/pool_v1/verifier_dispatch.rs
+@@ -51,6 +51,7 @@
+ const STATEMENT_PAYLOAD_LENGTH_OFFSET: usize = 380;
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub enum PoolV1VerifierDispatchFormatError {
+     WrongLength,
+     WrongMagic,
+--- a/crates/aspis-statement/src/pool_v1/incremental_merkle.rs
++++ b/crates/aspis-statement/src/pool_v1/incremental_merkle.rs
+@@ -29,6 +29,7 @@
+     POOL_V1_TREE_STATE_HEADER_BYTES + 32 * POOL_V1_TREE_DEPTH;
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub enum PoolV1TreeError {
+     TreeFull,
+     InsufficientCapacity,

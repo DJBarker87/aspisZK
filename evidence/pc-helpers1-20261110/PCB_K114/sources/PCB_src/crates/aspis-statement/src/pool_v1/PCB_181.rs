@@ -1,0 +1,5 @@
+use super::*;
+#[kani::proof_for_contract(ValidatedIncrementalMerkleTreeV1::into_inner)]
+fn contract(){let inner:IncrementalMerkleTreeV1=kani::any();let empty:[Digest;POOL_V1_TREE_DEPTH+1]=kani::any();let x=ValidatedIncrementalMerkleTreeV1 {inner,empty:&empty};let _=x.into_inner();}
+#[kani::proof]fn arbitrary_place(){let inner:IncrementalMerkleTreeV1=kani::any();let empty:[Digest;POOL_V1_TREE_DEPTH+1]=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<8&&j<POOL_V1_TREE_DEPTH);let n=inner.next_leaf_index;let r=inner.root[i].0;let f=inner.frontier[j][i].0;let out=ValidatedIncrementalMerkleTreeV1 {inner,empty:&empty}.into_inner();assert_eq!(out.next_leaf_index,n);assert_eq!(out.root[i].0,r);assert_eq!(out.frontier[j][i].0,f);}
+#[kani::proof]fn wrong_place(){let inner:IncrementalMerkleTreeV1=kani::any();let empty:[Digest;POOL_V1_TREE_DEPTH+1]=kani::any();let i:usize=kani::any();kani::assume(i<8);let r=inner.root[i].0;let out=ValidatedIncrementalMerkleTreeV1 {inner,empty:&empty}.into_inner();assert_ne!(out.root[i].0,r);}

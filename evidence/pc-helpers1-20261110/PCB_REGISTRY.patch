@@ -1,0 +1,40 @@
+--- a/programs/aspis-pool/src/registry.rs
++++ b/programs/aspis-pool/src/registry.rs
+@@ -85,6 +85,7 @@
+ /// Evidence returned only after the Pool policy, canonical registry and exact
+ /// active entry all agree at `current_slot`.
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub(crate) struct AuthenticatedVerifierSelectionV1 {
+     policy: VerifierPolicyV1,
+     pool: [u8; 32],
+@@ -107,6 +108,8 @@
+         self.policy == *policy
+     }
+ 
++    #[cfg_attr(all(kani,not(PCB_NEG_370)),kani::ensures(|r| *r == PCB_370::reference(self,pool,verifier_program,profile_binding,release_binding,statement_version)))]
++    #[cfg_attr(all(kani,PCB_NEG_370),kani::ensures(|r| *r != PCB_370::reference(self,pool,verifier_program,profile_binding,release_binding,statement_version)))]
+     pub(crate) fn matches(
+         self,
+         pool: [u8; 32],
+@@ -130,6 +133,8 @@
+         self.authenticated_at_slot
+     }
+ 
++    #[cfg_attr(all(kani,not(PCB_NEG_371)),kani::ensures(|r| *r == PCB_371::reference(self,owner)))]
++    #[cfg_attr(all(kani,PCB_NEG_371),kani::ensures(|r| *r != PCB_371::reference(self,owner)))]
+     pub(crate) fn matches_verifier_owner(self, owner: &Pubkey) -> bool {
+         self.expected_verifier_loader
+             .map(|expected| owner.to_bytes() == expected)
+@@ -1112,3 +1117,11 @@
+         .is_ok());
+     }
+ }
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_370.rs"]
++mod PCB_370;
++
++#[cfg(any(kani,PCB_EXTRACT))]
++#[path="PCB_371.rs"]
++mod PCB_371;
