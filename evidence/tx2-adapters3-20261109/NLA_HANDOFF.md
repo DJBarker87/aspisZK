@@ -6,7 +6,7 @@ Baseline: ledger20 NKW_LEDGER, 560 CLOSED / 0 QUALIFIED / 39 OPEN.
 
 Owned rows only: decode_lane_from_pool_release and authenticate_invariant_release_registry.
 First reuse NKP final export, then NKW export, privately; no shared cache writes.
-Native budget 70; formal/support budget 80; extraction budget 0; none consumed yet.
+Native budget 70; formal/support budget 80; extraction budget 0; K001 compile failure; L001 launcher rejected oversized own environment before compiler start.
 One scope at a time, 6G high / 8G max / swap 0 / 64 tasks, Lean -M7000.
 Admission requires exit 0 and allowed:true; pre-scope free disk >=40 GB; own writes <25 GB.
 
@@ -19,3 +19,5 @@ No shipped files changed; no rebuild trigger. No keys/wallets touched.
 234: missing ordered policy/readonly/data/decoder/PDA/address chains for both versions; PDA value remains quantified op38.
 No new trust, Ops/root endpoint/success/history premise or security metric change is authorized.
 Next: pin seeds, inspect actual stage interfaces, then controlled native cuts and smallest Lean modules.
+
+Stage 2 seed copied NKP first (1,380,760 bytes), NKW second (1,365,368 bytes). NLA_SEED.json pins every imported file. Own orchestration repairs recorded in NLA_OWNED_REPAIRS.json; unchanged shared launcher retained. LEAN_PATH deduplicated preserving first owner order.
