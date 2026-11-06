@@ -1,0 +1,73 @@
+'AspisR1.NLC_ConstructExt.verified_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_ConstructExt.verified_fields : ∀ {H : Type} (actual expected : r1_semantic.Verified H),
+  actual.roots = expected.roots →
+    actual.challenges = expected.challenges →
+      actual.alpha = expected.alpha →
+        actual.claims = expected.claims →
+          actual.extra = expected.extra →
+            actual.before_z1 = expected.before_z1 →
+              actual.state_before_z0 = expected.state_before_z0 →
+                actual.z = expected.z → actual.transcript = expected.transcript → actual = expected :=
+fun {H} actual expected roots challenges alpha claims extra before state points transcript =>
+  let ⟨roots✝, challenges✝, alpha✝, claims✝, extra✝, before_z1✝, state_before_z0✝, z✝, transcript✝, h✝⟩ := actual
+  Eq.ndrec (motive := fun actual =>
+    actual.roots = expected.roots →
+      actual.challenges = expected.challenges →
+        actual.alpha = expected.alpha →
+          actual.claims = expected.claims →
+            actual.extra = expected.extra →
+              actual.before_z1 = expected.before_z1 →
+                actual.state_before_z0 = expected.state_before_z0 →
+                  actual.z = expected.z → actual.transcript = expected.transcript → actual = expected)
+    (fun roots challenges alpha claims extra before state points transcript =>
+      let ⟨roots✝¹, challenges✝¹, alpha✝¹, claims✝¹, extra✝¹, before_z1✝¹, state_before_z0✝¹, z✝¹, transcript✝¹, h✝¹⟩ :=
+        expected
+      Eq.ndrec (motive := fun expected =>
+        { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝, extra := extra✝,
+                before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                transcript := transcript✝ }.roots =
+            expected.roots →
+          { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝, extra := extra✝,
+                  before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                  transcript := transcript✝ }.challenges =
+              expected.challenges →
+            { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝, extra := extra✝,
+                    before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                    transcript := transcript✝ }.alpha =
+                expected.alpha →
+              { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝, extra := extra✝,
+                      before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                      transcript := transcript✝ }.claims =
+                  expected.claims →
+                { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝, extra := extra✝,
+                        before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                        transcript := transcript✝ }.extra =
+                    expected.extra →
+                  { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝, extra := extra✝,
+                          before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                          transcript := transcript✝ }.before_z1 =
+                      expected.before_z1 →
+                    { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝, extra := extra✝,
+                            before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                            transcript := transcript✝ }.state_before_z0 =
+                        expected.state_before_z0 →
+                      { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝, extra := extra✝,
+                              before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                              transcript := transcript✝ }.z =
+                          expected.z →
+                        { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝,
+                                extra := extra✝, before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                                transcript := transcript✝ }.transcript =
+                            expected.transcript →
+                          { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝,
+                              extra := extra✝, before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                              transcript := transcript✝ } =
+                            expected)
+        (fun roots challenges alpha claims extra before state points transcript =>
+          let ⟨⟩ :=
+            { roots := roots✝¹, challenges := challenges✝¹, alpha := alpha✝¹, claims := claims✝¹, extra := extra✝¹,
+                before_z1 := before_z1✝¹, state_before_z0 := state_before_z0✝¹, z := z✝¹,
+                transcript := transcript✝¹ }.roots
+          roots)
+        (Eq.symm h✝¹) roots challenges alpha claims extra before state points transcript)
+    (Eq.symm h✝) roots challenges alpha claims extra before state points transcript

@@ -1,0 +1,648 @@
+'AspisR1.NLC_MapCut.model' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLC_MapCut.to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_MapCut.to_source : ∀ {H : Type} (native : Native),
+  Cut native → ∀ (s : State H), s.next = Event.mapPublic → run (nativeStep native s) = run (step s) :=
+fun {H} native cut s atSite =>
+  Eq.mpr (id (congrArg (fun _a => run (nativeStep native s) = run _a) (step_mapPublic s atSite)))
+    (id
+      (id
+        (Option.casesOn (motive := fun t =>
+          s.locals.terminalReply = t →
+            (run do
+                let r ← liftM (NLC_Finish.read s.locals.terminalReply)
+                pure
+                    (returned s Event.mark3 (native r) fun q =>
+                      have __src := s.locals;
+                      { running := __src.running, alpha := __src.alpha, transcript := __src.transcript,
+                        claims := __src.claims, terminalReply := __src.terminalReply, terminal := some q,
+                        low := __src.low, high := __src.high, blind := __src.blind, mask := __src.mask,
+                        extra := __src.extra, product := __src.product, partialValue := __src.partialValue,
+                        masked := __src.masked, stateBefore := __src.stateBefore, z0 := __src.z0,
+                        beforeZ1 := __src.beforeZ1, z1 := __src.z1, record25 := __src.record25,
+                        record26 := __src.record26, payload := __src.payload, extraCell := __src.extraCell,
+                        root := __src.root })) =
+              run
+                (have i := s.input;
+                have l := s.locals;
+                do
+                let r ← liftM (NLC_Finish.read l.terminalReply)
+                let r1 ← liftM (core.result.Result.map_err (FinishModel.closureFn11 i.digest) r ())
+                pure
+                    (returned s Event.mark3 r1 fun v =>
+                      { running := l.running, alpha := l.alpha, transcript := l.transcript, claims := l.claims,
+                        terminalReply := l.terminalReply, terminal := some v, low := l.low, high := l.high,
+                        blind := l.blind, mask := l.mask, extra := l.extra, product := l.product,
+                        partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0,
+                        beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25, record26 := l.record26,
+                        payload := l.payload, extraCell := l.extraCell, root := l.root })))
+          s.locals.terminalReply
+          (fun h =>
+            Eq.ndrec (motive := fun x =>
+              s.locals.terminalReply = x →
+                (run do
+                    let r ← liftM (NLC_Finish.read x)
+                    pure
+                        (returned s Event.mark3 (native r) fun q =>
+                          have __src := s.locals;
+                          { running := __src.running, alpha := __src.alpha, transcript := __src.transcript,
+                            claims := __src.claims, terminalReply := __src.terminalReply, terminal := some q,
+                            low := __src.low, high := __src.high, blind := __src.blind, mask := __src.mask,
+                            extra := __src.extra, product := __src.product, partialValue := __src.partialValue,
+                            masked := __src.masked, stateBefore := __src.stateBefore, z0 := __src.z0,
+                            beforeZ1 := __src.beforeZ1, z1 := __src.z1, record25 := __src.record25,
+                            record26 := __src.record26, payload := __src.payload, extraCell := __src.extraCell,
+                            root := __src.root })) =
+                  run
+                    (have i := s.input;
+                    have l := s.locals;
+                    do
+                    let r ← liftM (NLC_Finish.read l.terminalReply)
+                    let r1 ← liftM (core.result.Result.map_err (FinishModel.closureFn11 i.digest) r ())
+                    pure
+                        (returned s Event.mark3 r1 fun v =>
+                          { running := l.running, alpha := l.alpha, transcript := l.transcript, claims := l.claims,
+                            terminalReply := l.terminalReply, terminal := some v, low := l.low, high := l.high,
+                            blind := l.blind, mask := l.mask, extra := l.extra, product := l.product,
+                            partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore,
+                            z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25,
+                            record26 := l.record26, payload := l.payload, extraCell := l.extraCell, root := l.root })))
+              (fun reply =>
+                Eq.mpr
+                  (id
+                    (congr
+                      (congrArg Eq
+                        (congrArg run
+                          (congrArg (Bind.bind (liftM (fail Error.panic)))
+                            (funext fun r =>
+                              congrArg pure
+                                (congrArg (returned s Event.mark3 (native r))
+                                  (funext fun q =>
+                                    congrFun'
+                                      (congrFun'
+                                        (congrFun'
+                                          (congrFun'
+                                            (congrFun'
+                                              (congrFun'
+                                                (congrFun'
+                                                  (congrFun'
+                                                    (congrFun'
+                                                      (congrFun'
+                                                        (congrFun'
+                                                          (congrFun'
+                                                            (congrFun'
+                                                              (congrFun'
+                                                                (congrFun'
+                                                                  (congrFun'
+                                                                    (congrFun'
+                                                                      (congrFun'
+                                                                        (congrArg
+                                                                          (Locals.mk s.locals.running s.locals.alpha
+                                                                            s.locals.transcript s.locals.claims)
+                                                                          reply)
+                                                                        (some q))
+                                                                      s.locals.low)
+                                                                    s.locals.high)
+                                                                  s.locals.blind)
+                                                                s.locals.mask)
+                                                              s.locals.extra)
+                                                            s.locals.product)
+                                                          s.locals.partialValue)
+                                                        s.locals.masked)
+                                                      s.locals.stateBefore)
+                                                    s.locals.z0)
+                                                  s.locals.beforeZ1)
+                                                s.locals.z1)
+                                              s.locals.record25)
+                                            s.locals.record26)
+                                          s.locals.payload)
+                                        s.locals.extraCell)
+                                      s.locals.root))))))
+                      (congrArg run
+                        (congr
+                          (congrArg Bind.bind
+                            (congrArg liftM
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | some a => ok a
+                                  | none => fail Error.panic)
+                                reply)))
+                          (funext fun r =>
+                            congrArg
+                              (Bind.bind
+                                (liftM (core.result.Result.map_err (FinishModel.closureFn11 s.input.digest) r ())))
+                              (funext fun r1 =>
+                                congrArg pure
+                                  (congrArg (returned s Event.mark3 r1)
+                                    (funext fun v =>
+                                      congrFun'
+                                        (congrFun'
+                                          (congrFun'
+                                            (congrFun'
+                                              (congrFun'
+                                                (congrFun'
+                                                  (congrFun'
+                                                    (congrFun'
+                                                      (congrFun'
+                                                        (congrFun'
+                                                          (congrFun'
+                                                            (congrFun'
+                                                              (congrFun'
+                                                                (congrFun'
+                                                                  (congrFun'
+                                                                    (congrFun'
+                                                                      (congrFun'
+                                                                        (congrFun'
+                                                                          (congrArg
+                                                                            (Locals.mk s.locals.running s.locals.alpha
+                                                                              s.locals.transcript s.locals.claims)
+                                                                            reply)
+                                                                          (some v))
+                                                                        s.locals.low)
+                                                                      s.locals.high)
+                                                                    s.locals.blind)
+                                                                  s.locals.mask)
+                                                                s.locals.extra)
+                                                              s.locals.product)
+                                                            s.locals.partialValue)
+                                                          s.locals.masked)
+                                                        s.locals.stateBefore)
+                                                      s.locals.z0)
+                                                    s.locals.beforeZ1)
+                                                  s.locals.z1)
+                                                s.locals.record25)
+                                              s.locals.record26)
+                                            s.locals.payload)
+                                          s.locals.extraCell)
+                                        s.locals.root))))))))
+                  (Eq.refl
+                    (run do
+                      let r ← liftM (fail Error.panic)
+                      pure
+                          (returned s Event.mark3 (native r) fun q =>
+                            { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                              claims := s.locals.claims, terminal := some q, low := s.locals.low, high := s.locals.high,
+                              blind := s.locals.blind, mask := s.locals.mask, extra := s.locals.extra,
+                              product := s.locals.product, partialValue := s.locals.partialValue,
+                              masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                              beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                              record26 := s.locals.record26, payload := s.locals.payload,
+                              extraCell := s.locals.extraCell, root := s.locals.root }))))
+              (Eq.symm h) (Eq.refl s.locals.terminalReply))
+          (fun r h =>
+            Eq.ndrec (motive := fun x =>
+              s.locals.terminalReply = x →
+                (run do
+                    let r ← liftM (NLC_Finish.read x)
+                    pure
+                        (returned s Event.mark3 (native r) fun q =>
+                          have __src := s.locals;
+                          { running := __src.running, alpha := __src.alpha, transcript := __src.transcript,
+                            claims := __src.claims, terminalReply := __src.terminalReply, terminal := some q,
+                            low := __src.low, high := __src.high, blind := __src.blind, mask := __src.mask,
+                            extra := __src.extra, product := __src.product, partialValue := __src.partialValue,
+                            masked := __src.masked, stateBefore := __src.stateBefore, z0 := __src.z0,
+                            beforeZ1 := __src.beforeZ1, z1 := __src.z1, record25 := __src.record25,
+                            record26 := __src.record26, payload := __src.payload, extraCell := __src.extraCell,
+                            root := __src.root })) =
+                  run
+                    (have i := s.input;
+                    have l := s.locals;
+                    do
+                    let r ← liftM (NLC_Finish.read l.terminalReply)
+                    let r1 ← liftM (core.result.Result.map_err (FinishModel.closureFn11 i.digest) r ())
+                    pure
+                        (returned s Event.mark3 r1 fun v =>
+                          { running := l.running, alpha := l.alpha, transcript := l.transcript, claims := l.claims,
+                            terminalReply := l.terminalReply, terminal := some v, low := l.low, high := l.high,
+                            blind := l.blind, mask := l.mask, extra := l.extra, product := l.product,
+                            partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore,
+                            z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25,
+                            record26 := l.record26, payload := l.payload, extraCell := l.extraCell, root := l.root })))
+              (fun reply =>
+                core.result.Result.casesOn (motive := fun t =>
+                  r = t →
+                    (run do
+                        let r ← liftM (NLC_Finish.read (some r))
+                        pure
+                            (returned s Event.mark3 (native r) fun q =>
+                              have __src := s.locals;
+                              { running := __src.running, alpha := __src.alpha, transcript := __src.transcript,
+                                claims := __src.claims, terminalReply := __src.terminalReply, terminal := some q,
+                                low := __src.low, high := __src.high, blind := __src.blind, mask := __src.mask,
+                                extra := __src.extra, product := __src.product, partialValue := __src.partialValue,
+                                masked := __src.masked, stateBefore := __src.stateBefore, z0 := __src.z0,
+                                beforeZ1 := __src.beforeZ1, z1 := __src.z1, record25 := __src.record25,
+                                record26 := __src.record26, payload := __src.payload, extraCell := __src.extraCell,
+                                root := __src.root })) =
+                      run
+                        (have i := s.input;
+                        have l := s.locals;
+                        do
+                        let r ← liftM (NLC_Finish.read l.terminalReply)
+                        let r1 ← liftM (core.result.Result.map_err (FinishModel.closureFn11 i.digest) r ())
+                        pure
+                            (returned s Event.mark3 r1 fun v =>
+                              { running := l.running, alpha := l.alpha, transcript := l.transcript, claims := l.claims,
+                                terminalReply := l.terminalReply, terminal := some v, low := l.low, high := l.high,
+                                blind := l.blind, mask := l.mask, extra := l.extra, product := l.product,
+                                partialValue := l.partialValue, masked := l.masked, stateBefore := l.stateBefore,
+                                z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1, record25 := l.record25,
+                                record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+                                root := l.root })))
+                  r
+                  (fun q h =>
+                    Eq.ndrec (motive := fun r =>
+                      s.locals.terminalReply = some r →
+                        (run do
+                            let r ← liftM (NLC_Finish.read (some r))
+                            pure
+                                (returned s Event.mark3 (native r) fun q =>
+                                  have __src := s.locals;
+                                  { running := __src.running, alpha := __src.alpha, transcript := __src.transcript,
+                                    claims := __src.claims, terminalReply := __src.terminalReply, terminal := some q,
+                                    low := __src.low, high := __src.high, blind := __src.blind, mask := __src.mask,
+                                    extra := __src.extra, product := __src.product, partialValue := __src.partialValue,
+                                    masked := __src.masked, stateBefore := __src.stateBefore, z0 := __src.z0,
+                                    beforeZ1 := __src.beforeZ1, z1 := __src.z1, record25 := __src.record25,
+                                    record26 := __src.record26, payload := __src.payload, extraCell := __src.extraCell,
+                                    root := __src.root })) =
+                          run
+                            (have i := s.input;
+                            have l := s.locals;
+                            do
+                            let r ← liftM (NLC_Finish.read l.terminalReply)
+                            let r1 ← liftM (core.result.Result.map_err (FinishModel.closureFn11 i.digest) r ())
+                            pure
+                                (returned s Event.mark3 r1 fun v =>
+                                  { running := l.running, alpha := l.alpha, transcript := l.transcript,
+                                    claims := l.claims, terminalReply := l.terminalReply, terminal := some v,
+                                    low := l.low, high := l.high, blind := l.blind, mask := l.mask, extra := l.extra,
+                                    product := l.product, partialValue := l.partialValue, masked := l.masked,
+                                    stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+                                    record25 := l.record25, record26 := l.record26, payload := l.payload,
+                                    extraCell := l.extraCell, root := l.root })))
+                      (fun reply =>
+                        Eq.mpr
+                          (id
+                            (congr
+                              (congrArg Eq
+                                (congrArg run
+                                  (congrArg (Bind.bind (liftM (ok (core.result.Result.Ok q))))
+                                    (funext fun r =>
+                                      congrArg pure
+                                        (congrArg (returned s Event.mark3 (native r))
+                                          (funext fun q_1 =>
+                                            congrFun'
+                                              (congrFun'
+                                                (congrFun'
+                                                  (congrFun'
+                                                    (congrFun'
+                                                      (congrFun'
+                                                        (congrFun'
+                                                          (congrFun'
+                                                            (congrFun'
+                                                              (congrFun'
+                                                                (congrFun'
+                                                                  (congrFun'
+                                                                    (congrFun'
+                                                                      (congrFun'
+                                                                        (congrFun'
+                                                                          (congrFun'
+                                                                            (congrFun'
+                                                                              (congrFun'
+                                                                                (congrArg
+                                                                                  (Locals.mk s.locals.running
+                                                                                    s.locals.alpha s.locals.transcript
+                                                                                    s.locals.claims)
+                                                                                  reply)
+                                                                                (some q_1))
+                                                                              s.locals.low)
+                                                                            s.locals.high)
+                                                                          s.locals.blind)
+                                                                        s.locals.mask)
+                                                                      s.locals.extra)
+                                                                    s.locals.product)
+                                                                  s.locals.partialValue)
+                                                                s.locals.masked)
+                                                              s.locals.stateBefore)
+                                                            s.locals.z0)
+                                                          s.locals.beforeZ1)
+                                                        s.locals.z1)
+                                                      s.locals.record25)
+                                                    s.locals.record26)
+                                                  s.locals.payload)
+                                                s.locals.extraCell)
+                                              s.locals.root))))))
+                              (congrArg run
+                                (congr
+                                  (congrArg Bind.bind
+                                    (congrArg liftM
+                                      (congrArg
+                                        (fun x =>
+                                          match x with
+                                          | some a => ok a
+                                          | none => fail Error.panic)
+                                        reply)))
+                                  (funext fun r =>
+                                    congrArg
+                                      (Bind.bind
+                                        (liftM
+                                          (core.result.Result.map_err (FinishModel.closureFn11 s.input.digest) r ())))
+                                      (funext fun r1 =>
+                                        congrArg pure
+                                          (congrArg (returned s Event.mark3 r1)
+                                            (funext fun v =>
+                                              congrFun'
+                                                (congrFun'
+                                                  (congrFun'
+                                                    (congrFun'
+                                                      (congrFun'
+                                                        (congrFun'
+                                                          (congrFun'
+                                                            (congrFun'
+                                                              (congrFun'
+                                                                (congrFun'
+                                                                  (congrFun'
+                                                                    (congrFun'
+                                                                      (congrFun'
+                                                                        (congrFun'
+                                                                          (congrFun'
+                                                                            (congrFun'
+                                                                              (congrFun'
+                                                                                (congrFun'
+                                                                                  (congrArg
+                                                                                    (Locals.mk s.locals.running
+                                                                                      s.locals.alpha s.locals.transcript
+                                                                                      s.locals.claims)
+                                                                                    reply)
+                                                                                  (some v))
+                                                                                s.locals.low)
+                                                                              s.locals.high)
+                                                                            s.locals.blind)
+                                                                          s.locals.mask)
+                                                                        s.locals.extra)
+                                                                      s.locals.product)
+                                                                    s.locals.partialValue)
+                                                                  s.locals.masked)
+                                                                s.locals.stateBefore)
+                                                              s.locals.z0)
+                                                            s.locals.beforeZ1)
+                                                          s.locals.z1)
+                                                        s.locals.record25)
+                                                      s.locals.record26)
+                                                    s.locals.payload)
+                                                  s.locals.extraCell)
+                                                s.locals.root))))))))
+                          (id
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    ([],
+                                        ok
+                                          (returned s Event.mark3 _a fun v =>
+                                            let __src := s.locals;
+                                            { running := __src.running, alpha := __src.alpha,
+                                              transcript := __src.transcript, claims := __src.claims,
+                                              terminalReply := some (core.result.Result.Ok q), terminal := some v,
+                                              low := __src.low, high := __src.high, blind := __src.blind,
+                                              mask := __src.mask, extra := __src.extra, product := __src.product,
+                                              partialValue := __src.partialValue, masked := __src.masked,
+                                              stateBefore := __src.stateBefore, z0 := __src.z0,
+                                              beforeZ1 := __src.beforeZ1, z1 := __src.z1, record25 := __src.record25,
+                                              record26 := __src.record26, payload := __src.payload,
+                                              extraCell := __src.extraCell, root := __src.root })) =
+                                      run do
+                                        let r ← liftM (ok (core.result.Result.Ok q))
+                                        let r1 ←
+                                          liftM
+                                              (core.result.Result.map_err (FinishModel.closureFn11 s.input.digest) r ())
+                                        pure
+                                            (returned s Event.mark3 r1 fun q_1 =>
+                                              { running := s.locals.running, alpha := s.locals.alpha,
+                                                transcript := s.locals.transcript, claims := s.locals.claims,
+                                                terminalReply := some (core.result.Result.Ok q), terminal := some q_1,
+                                                low := s.locals.low, high := s.locals.high, blind := s.locals.blind,
+                                                mask := s.locals.mask, extra := s.locals.extra,
+                                                product := s.locals.product, partialValue := s.locals.partialValue,
+                                                masked := s.locals.masked, stateBefore := s.locals.stateBefore,
+                                                z0 := s.locals.z0, beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1,
+                                                record25 := s.locals.record25, record26 := s.locals.record26,
+                                                payload := s.locals.payload, extraCell := s.locals.extraCell,
+                                                root := s.locals.root }))
+                                  (cut (core.result.Result.Ok q))))
+                              (Eq.refl
+                                ([],
+                                  ok
+                                    (returned s Event.mark3 (reference (core.result.Result.Ok q)) fun v =>
+                                      let __src := s.locals;
+                                      { running := __src.running, alpha := __src.alpha, transcript := __src.transcript,
+                                        claims := __src.claims, terminalReply := some (core.result.Result.Ok q),
+                                        terminal := some v, low := __src.low, high := __src.high, blind := __src.blind,
+                                        mask := __src.mask, extra := __src.extra, product := __src.product,
+                                        partialValue := __src.partialValue, masked := __src.masked,
+                                        stateBefore := __src.stateBefore, z0 := __src.z0, beforeZ1 := __src.beforeZ1,
+                                        z1 := __src.z1, record25 := __src.record25, record26 := __src.record26,
+                                        payload := __src.payload, extraCell := __src.extraCell,
+                                        root := __src.root }))))))
+                      (Eq.symm h) reply)
+                  (fun error h =>
+                    Eq.ndrec (motive := fun r =>
+                      s.locals.terminalReply = some r →
+                        (run do
+                            let r ← liftM (NLC_Finish.read (some r))
+                            pure
+                                (returned s Event.mark3 (native r) fun q =>
+                                  have __src := s.locals;
+                                  { running := __src.running, alpha := __src.alpha, transcript := __src.transcript,
+                                    claims := __src.claims, terminalReply := __src.terminalReply, terminal := some q,
+                                    low := __src.low, high := __src.high, blind := __src.blind, mask := __src.mask,
+                                    extra := __src.extra, product := __src.product, partialValue := __src.partialValue,
+                                    masked := __src.masked, stateBefore := __src.stateBefore, z0 := __src.z0,
+                                    beforeZ1 := __src.beforeZ1, z1 := __src.z1, record25 := __src.record25,
+                                    record26 := __src.record26, payload := __src.payload, extraCell := __src.extraCell,
+                                    root := __src.root })) =
+                          run
+                            (have i := s.input;
+                            have l := s.locals;
+                            do
+                            let r ← liftM (NLC_Finish.read l.terminalReply)
+                            let r1 ← liftM (core.result.Result.map_err (FinishModel.closureFn11 i.digest) r ())
+                            pure
+                                (returned s Event.mark3 r1 fun v =>
+                                  { running := l.running, alpha := l.alpha, transcript := l.transcript,
+                                    claims := l.claims, terminalReply := l.terminalReply, terminal := some v,
+                                    low := l.low, high := l.high, blind := l.blind, mask := l.mask, extra := l.extra,
+                                    product := l.product, partialValue := l.partialValue, masked := l.masked,
+                                    stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+                                    record25 := l.record25, record26 := l.record26, payload := l.payload,
+                                    extraCell := l.extraCell, root := l.root })))
+                      (fun reply =>
+                        Eq.mpr
+                          (id
+                            (congr
+                              (congrArg Eq
+                                (congrArg run
+                                  (congrArg (Bind.bind (liftM (ok (core.result.Result.Err error))))
+                                    (funext fun r =>
+                                      congrArg pure
+                                        (congrArg (returned s Event.mark3 (native r))
+                                          (funext fun q =>
+                                            congrFun'
+                                              (congrFun'
+                                                (congrFun'
+                                                  (congrFun'
+                                                    (congrFun'
+                                                      (congrFun'
+                                                        (congrFun'
+                                                          (congrFun'
+                                                            (congrFun'
+                                                              (congrFun'
+                                                                (congrFun'
+                                                                  (congrFun'
+                                                                    (congrFun'
+                                                                      (congrFun'
+                                                                        (congrFun'
+                                                                          (congrFun'
+                                                                            (congrFun'
+                                                                              (congrFun'
+                                                                                (congrArg
+                                                                                  (Locals.mk s.locals.running
+                                                                                    s.locals.alpha s.locals.transcript
+                                                                                    s.locals.claims)
+                                                                                  reply)
+                                                                                (some q))
+                                                                              s.locals.low)
+                                                                            s.locals.high)
+                                                                          s.locals.blind)
+                                                                        s.locals.mask)
+                                                                      s.locals.extra)
+                                                                    s.locals.product)
+                                                                  s.locals.partialValue)
+                                                                s.locals.masked)
+                                                              s.locals.stateBefore)
+                                                            s.locals.z0)
+                                                          s.locals.beforeZ1)
+                                                        s.locals.z1)
+                                                      s.locals.record25)
+                                                    s.locals.record26)
+                                                  s.locals.payload)
+                                                s.locals.extraCell)
+                                              s.locals.root))))))
+                              (congrArg run
+                                (congr
+                                  (congrArg Bind.bind
+                                    (congrArg liftM
+                                      (congrArg
+                                        (fun x =>
+                                          match x with
+                                          | some a => ok a
+                                          | none => fail Error.panic)
+                                        reply)))
+                                  (funext fun r =>
+                                    congrArg
+                                      (Bind.bind
+                                        (liftM
+                                          (core.result.Result.map_err (FinishModel.closureFn11 s.input.digest) r ())))
+                                      (funext fun r1 =>
+                                        congrArg pure
+                                          (congrArg (returned s Event.mark3 r1)
+                                            (funext fun v =>
+                                              congrFun'
+                                                (congrFun'
+                                                  (congrFun'
+                                                    (congrFun'
+                                                      (congrFun'
+                                                        (congrFun'
+                                                          (congrFun'
+                                                            (congrFun'
+                                                              (congrFun'
+                                                                (congrFun'
+                                                                  (congrFun'
+                                                                    (congrFun'
+                                                                      (congrFun'
+                                                                        (congrFun'
+                                                                          (congrFun'
+                                                                            (congrFun'
+                                                                              (congrFun'
+                                                                                (congrFun'
+                                                                                  (congrArg
+                                                                                    (Locals.mk s.locals.running
+                                                                                      s.locals.alpha s.locals.transcript
+                                                                                      s.locals.claims)
+                                                                                    reply)
+                                                                                  (some v))
+                                                                                s.locals.low)
+                                                                              s.locals.high)
+                                                                            s.locals.blind)
+                                                                          s.locals.mask)
+                                                                        s.locals.extra)
+                                                                      s.locals.product)
+                                                                    s.locals.partialValue)
+                                                                  s.locals.masked)
+                                                                s.locals.stateBefore)
+                                                              s.locals.z0)
+                                                            s.locals.beforeZ1)
+                                                          s.locals.z1)
+                                                        s.locals.record25)
+                                                      s.locals.record26)
+                                                    s.locals.payload)
+                                                  s.locals.extraCell)
+                                                s.locals.root))))))))
+                          (id
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    ([],
+                                        ok
+                                          (returned s Event.mark3 _a fun v =>
+                                            let __src := s.locals;
+                                            { running := __src.running, alpha := __src.alpha,
+                                              transcript := __src.transcript, claims := __src.claims,
+                                              terminalReply := some (core.result.Result.Err error), terminal := some v,
+                                              low := __src.low, high := __src.high, blind := __src.blind,
+                                              mask := __src.mask, extra := __src.extra, product := __src.product,
+                                              partialValue := __src.partialValue, masked := __src.masked,
+                                              stateBefore := __src.stateBefore, z0 := __src.z0,
+                                              beforeZ1 := __src.beforeZ1, z1 := __src.z1, record25 := __src.record25,
+                                              record26 := __src.record26, payload := __src.payload,
+                                              extraCell := __src.extraCell, root := __src.root })) =
+                                      run do
+                                        let r ← liftM (ok (core.result.Result.Err error))
+                                        let r1 ←
+                                          liftM
+                                              (core.result.Result.map_err (FinishModel.closureFn11 s.input.digest) r ())
+                                        pure
+                                            (returned s Event.mark3 r1 fun q =>
+                                              { running := s.locals.running, alpha := s.locals.alpha,
+                                                transcript := s.locals.transcript, claims := s.locals.claims,
+                                                terminalReply := some (core.result.Result.Err error),
+                                                terminal := some q, low := s.locals.low, high := s.locals.high,
+                                                blind := s.locals.blind, mask := s.locals.mask, extra := s.locals.extra,
+                                                product := s.locals.product, partialValue := s.locals.partialValue,
+                                                masked := s.locals.masked, stateBefore := s.locals.stateBefore,
+                                                z0 := s.locals.z0, beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1,
+                                                record25 := s.locals.record25, record26 := s.locals.record26,
+                                                payload := s.locals.payload, extraCell := s.locals.extraCell,
+                                                root := s.locals.root }))
+                                  (cut (core.result.Result.Err error))))
+                              (Eq.refl
+                                ([],
+                                  ok
+                                    (returned s Event.mark3 (reference (core.result.Result.Err error)) fun v =>
+                                      let __src := s.locals;
+                                      { running := __src.running, alpha := __src.alpha, transcript := __src.transcript,
+                                        claims := __src.claims, terminalReply := some (core.result.Result.Err error),
+                                        terminal := some v, low := __src.low, high := __src.high, blind := __src.blind,
+                                        mask := __src.mask, extra := __src.extra, product := __src.product,
+                                        partialValue := __src.partialValue, masked := __src.masked,
+                                        stateBefore := __src.stateBefore, z0 := __src.z0, beforeZ1 := __src.beforeZ1,
+                                        z1 := __src.z1, record25 := __src.record25, record26 := __src.record26,
+                                        payload := __src.payload, extraCell := __src.extraCell,
+                                        root := __src.root }))))))
+                      (Eq.symm h) reply)
+                  (Eq.refl r))
+              (Eq.symm h) (Eq.refl s.locals.terminalReply))
+          (Eq.refl s.locals.terminalReply))))

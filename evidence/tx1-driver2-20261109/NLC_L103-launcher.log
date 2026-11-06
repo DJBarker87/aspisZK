@@ -1,0 +1,41 @@
+{"attempt": "NLC_L103", "exit_status": 0, "wall_seconds": 19.2031503431499, "peak_rss_kib": "6356620", "swaps": "0", "print_axioms": ["'AspisR1.NLC_MapCut.model' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLC_MapCut.to_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLC_MapCut.model' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLC_MapCut.to_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_MapCut.to_source : ∀ {H : Type} (native : Native),
+  Cut native → ∀ (s : State H), s.next = Event.mapPublic → run (nativeStep native s) = run (step s) :=
+fun {H} native cut s atSite =>
+  Eq.mpr (id (congrArg (fun _a => run (nativeStep native s) = run _a) (step_mapPublic s atSite)))
+    (id
+      (id
+        (Option.casesOn (motive := fun t =>
+          s.locals.terminalReply = t →
+            (run do
+                let r ← liftM (NLC_Finish.read s.locals.terminalReply)
+                pure
+        
+...
+ocals.z1,
+                                                record25 := s.locals.record25, record26 := s.locals.record26,
+                                                payload := s.locals.payload, extraCell := s.locals.extraCell,
+                                                root := s.locals.root }))
+                                  (cut (core.result.Result.Err error))))
+                              (Eq.refl
+                                ([],
+                                  ok
+                                    (returned s Event.mark3 (reference (core.result.Result.Err error)) fun v =>
+                                      let __src := s.locals;
+                                      { running := __src.running, alpha := __src.alpha, transcript := __src.transcript,
+                                        claims := __src.claims, terminalReply := some (core.result.Result.Err error),
+                                        terminal := some v, low := __src.low, high := __src.high, blind := __src.blind,
+                                        mask := __src.mask, extra := __src.extra, product := __src.product,
+                                        partialValue := __src.partialValue, masked := __src.masked,
+                                        stateBefore := __src.stateBefore, z0 := __src.z0, beforeZ1 := __src.beforeZ1,
+                                        z1 := __src.z1, record25 := __src.record25, record26 := __src.record26,
+                                        payload := __src.payload, extraCell := __src.extraCell,
+                                        root := __src.root }))))))
+                      (Eq.symm h) reply)
+                  (Eq.refl r))
+              (Eq.symm h) (Eq.refl s.locals.terminalReply))
+          (Eq.refl s.locals.terminalReply))))
+
+Running as unit: run-rb8a0670f210e43fb826d508733d4784b.scope; invocation ID: c688fc9be1624253a8b6691b59ab0c7f

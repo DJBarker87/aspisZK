@@ -1,0 +1,43 @@
+{"attempt": "NLC_L102", "exit_status": 1, "wall_seconds": 13.814883949933574, "peak_rss_kib": "6316656", "swaps": "0", "print_axioms": ["'AspisR1.NLC_MapCut.model' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLC_MapCut.to_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLC_generated/NLC_MapCut.lean:35:28: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 : Type) → Option x_0 → Result x_0
+NLC_generated/NLC_MapCut.lean:39:22: error: Ambiguous term
+  read
+Possible interpretations:
+  NLC_Finish.read : Option ?m.79 → Result ?m.79
+  
+  MonadReader.read : ?m.80 ?m.79
+NLC_generated/NLC_MapCut.lean:40:5: error: 'change' tactic failed, pattern
+  ([],
+      ok
+        (returned s Event.mark3 (native (core.result.Result.Ok q)) fun v =>
+          let __src := s.locals;
+          { running := __src.running, alpha := __src.alpha, transcript := __src.transcript, claims := __src.claims,
+            terminalReply := __src.terminalReply, terminal := some 
+...
+rtialValue,
+                                    masked := __src.masked, stateBefore := __src.stateBefore, z0 := __src.z0,
+                                    beforeZ1 := __src.beforeZ1, z1 := __src.z1, record25 := __src.record25,
+                                    record26 := __src.record26, payload := __src.payload, extraCell := __src.extraCell,
+                                    root := __src.root })) =
+                          run
+                            (have i := s.input;
+                            have l := s.locals;
+                            do
+                            let r ← liftM (NLC_Finish.read l.terminalReply)
+                            let r1 ← liftM (core.result.Result.map_err (FinishModel.closureFn11 i.digest) r ())
+                            pure
+                                (returned s Event.mark3 r1 fun v =>
+                                  { running := l.running, alpha := l.alpha, transcript := l.transcript,
+                                    claims := l.claims, terminalReply := l.terminalReply, terminal := some v,
+                                    low := l.low, high := l.high, blind := l.blind, mask := l.mask, extra := l.extra,
+                                    product := l.product, partialValue := l.partialValue, masked := l.masked,
+                                    stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+                                    record25 := l.record25, record26 := l.record26, payload := l.payload,
+                                    extraCell := l.extraCell, root := l.root })))
+                      (fun reply => sorry) (Eq.symm h) reply)
+                  (Eq.refl r))
+              (Eq.symm h) (Eq.refl s.locals.terminalReply))
+          (Eq.refl s.locals.terminalReply))))
+
+Running as unit: run-rf0272f3cf1234302b4a69c018248c622.scope; invocation ID: 404a79b213ab4f99b81286687ebe3449

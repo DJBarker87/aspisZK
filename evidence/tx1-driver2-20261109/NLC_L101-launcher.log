@@ -1,0 +1,39 @@
+{"attempt": "NLC_L101", "exit_status": 0, "wall_seconds": 18.388443070929497, "peak_rss_kib": "6350012", "swaps": "0", "print_axioms": ["'AspisR1.NLC_ConstructExt.verified_fields' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLC_ConstructExt.verified_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_ConstructExt.verified_fields : ∀ {H : Type} (actual expected : r1_semantic.Verified H),
+  actual.roots = expected.roots →
+    actual.challenges = expected.challenges →
+      actual.alpha = expected.alpha →
+        actual.claims = expected.claims →
+          actual.extra = expected.extra →
+            actual.before_z1 = expected.before_z1 →
+              actual.state_before_z0 = expected.state_before_z0 →
+                actual.z = expected.z → actual.transcript = expected.transcript → actual = expected :=
+fun {H} actual expected roots challenges alpha claims extra before 
+...
+:= claims✝, extra := extra✝,
+                            before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                            transcript := transcript✝ }.state_before_z0 =
+                        expected.state_before_z0 →
+                      { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝, extra := extra✝,
+                              before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                              transcript := transcript✝ }.z =
+                          expected.z →
+                        { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝,
+                                extra := extra✝, before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                                transcript := transcript✝ }.transcript =
+                            expected.transcript →
+                          { roots := roots✝, challenges := challenges✝, alpha := alpha✝, claims := claims✝,
+                              extra := extra✝, before_z1 := before_z1✝, state_before_z0 := state_before_z0✝, z := z✝,
+                              transcript := transcript✝ } =
+                            expected)
+        (fun roots challenges alpha claims extra before state points transcript =>
+          let ⟨⟩ :=
+            { roots := roots✝¹, challenges := challenges✝¹, alpha := alpha✝¹, claims := claims✝¹, extra := extra✝¹,
+                before_z1 := before_z1✝¹, state_before_z0 := state_before_z0✝¹, z := z✝¹,
+                transcript := transcript✝¹ }.roots
+          roots)
+        (Eq.symm h✝¹) roots challenges alpha claims extra before state points transcript)
+    (Eq.symm h✝) roots challenges alpha claims extra before state points transcript
+
+Running as unit: run-r3461999e45d74492b1c4c39e31c80ec4.scope; invocation ID: ff2981a2c3e8416994decba27b3a6237

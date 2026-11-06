@@ -32,17 +32,17 @@ theorem to_source {H : Type} (native : Native) (cut : Cut native)
  rw [step_mapPublic s atSite]
  unfold nativeStep window_mapPublic
  cases reply : s.locals.terminalReply with
- | none => simp only [reply,read];rfl
+ | none => simp only [reply,NLC_Finish.read];rfl
  | some r =>
    cases r with
    | Ok q =>
-     simp only [reply,read]
-     change ([],ok (returned s .mark3 (native (.Ok q)) (fun v => {s.locals with terminal:=some v}))) = _
+     simp only [reply,NLC_Finish.read]
+     change ([],ok (returned s .mark3 (native (.Ok q)) (fun v => {s.locals with terminalReply:=some (.Ok q), terminal:=some v}))) = _
      rw [cut (.Ok q)]
      rfl
    | Err error =>
-     simp only [reply,read]
-     change ([],ok (returned s .mark3 (native (.Err error)) (fun v => {s.locals with terminal:=some v}))) = _
+     simp only [reply,NLC_Finish.read]
+     change ([],ok (returned s .mark3 (native (.Err error)) (fun v => {s.locals with terminalReply:=some (.Err error), terminal:=some v}))) = _
      rw [cut (.Err error)]
      rfl
 #print axioms model

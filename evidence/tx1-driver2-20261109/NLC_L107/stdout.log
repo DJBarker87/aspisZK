@@ -1,0 +1,13 @@
+'AspisR1.NLC_Finish.initialized' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLC_Finish.initial_fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.initial_fold : ∀ {H : Type} (input : Input H),
+  ∃ out log events,
+    InitializedInvocation (fuel (initial input)) (initial input) out log events ∧
+      run (fold (fuel (initial input)) (initial input)) = (log, out) :=
+fun {H} input =>
+  let ⟨out, h✝⟩ := source_invocation (fuel (initial input)) (initial input) (Nat.le_refl (fuel (initial input)))
+  let ⟨log, h✝¹⟩ := h✝
+  let ⟨events, cuts⟩ := h✝¹
+  have major := id (of_decide_eq_true (id (Eq.refl true)));
+  Exists.intro out
+    (Exists.intro log (Exists.intro events ⟨initialized cuts (initial_ready input) major, fold_from_steps cuts⟩))
