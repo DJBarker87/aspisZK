@@ -1,0 +1,844 @@
+theorem AspisR1.NKR_DigestComplete.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain p →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical s.high →
+        FIw_ArrayValue.canonical s.low →
+          ∃ c sums out,
+            Clauses p o s c ∧
+              Canonical c ∧
+                NKR_DigestPrefix.run p o s = ok (c, sums) ∧
+                  NKR_DigestPrefix.Frame c sums ∧
+                    reference p o s = ok out ∧
+                      (∀ (j : Fin 2), Canon (out j)) ∧ ∀ (j : Fin 2), decode (out j) = model s c j :=
+fun p o s hp ho hh hl =>
+  let ⟨c, h✝⟩ := NKR_DigestPrefix.source p o s hp ho hh
+  let ⟨sums, h✝¹⟩ := h✝
+  let ⟨pc, right✝⟩ := h✝¹
+  let ⟨hc, right✝¹⟩ := right✝
+  let ⟨hcan, right✝²⟩ := right✝¹
+  let ⟨hs, frame⟩ := right✝²
+  let ⟨out, h✝²⟩ := NKI_LowMixCaller.source s sums hl hs
+  let ⟨lowc, right✝³⟩ := h✝²
+  let ⟨hout, vout⟩ := right✝³
+  Exists.intro c
+    (Exists.intro sums
+      (Exists.intro out
+        ⟨hc,
+          ⟨hcan,
+            ⟨pc,
+              ⟨frame,
+                ⟨Eq.mpr
+                    (id
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans
+                            (congrFun' (congrArg Bind.bind pc)
+                              (uncurry fun _ sums =>
+                                NKI_LowMixFold.run (NKI_LowMixCaller.low s) sums (List.finRange 3)
+                                  NKI_LowMixCaller.zero))
+                            (bind_tc_ok (c, sums)
+                              (uncurry fun _ sums =>
+                                NKI_LowMixFold.run (NKI_LowMixCaller.low s) sums (List.finRange 3)
+                                  NKI_LowMixCaller.zero))))
+                        (ok out)))
+                    lowc,
+                  ⟨hout, fun j =>
+                    have v := vout j;
+                    Eq.mpr
+                      (id
+                        (congrArg (fun _a => _a = model s c j)
+                          (Eq.mp
+                            (congrArg
+                              (fun _a =>
+                                decode (out j) =
+                                  decode (NKI_LowMixCaller.low s 0) * decode (NKR_DigestPrefix.first c.levels j) +
+                                    (decode (NKI_LowMixCaller.low s 1) *
+                                        (decode (c.anchor j) + decode (c.nullifier j) + decode (c.recipient j) +
+                                              decode (c.change j) +
+                                            decode (c.nextRoot j) +
+                                          decode (c.carried j)) +
+                                      (decode (NKI_LowMixCaller.low s 2) * _a + 0)))
+                              (frame.values12 j))
+                            (Eq.mp
+                              (congrArg
+                                (fun _a =>
+                                  decode (out j) =
+                                    decode (NKI_LowMixCaller.low s 0) * decode (NKR_DigestPrefix.first c.levels j) +
+                                      (decode (NKI_LowMixCaller.low s 1) * _a +
+                                        (decode (NKI_LowMixCaller.low s 2) * decode (sums 2 j) + 0)))
+                                (frame.values11 j))
+                              (Eq.mp
+                                (congrArg
+                                  (fun _a =>
+                                    decode (out j) =
+                                      decode (NKI_LowMixCaller.low s 0) * _a +
+                                        (decode (NKI_LowMixCaller.low s 1) * decode (sums 1 j) +
+                                          (decode (NKI_LowMixCaller.low s 2) * decode (sums 2 j) + 0)))
+                                  (frame.values0 j))
+                                (Eq.mp
+                                  (congrArg
+                                    (fun _a =>
+                                      decode (out j) =
+                                        (List.map (fun g => decode (NKI_LowMixCaller.low s g) * decode (sums g j))
+                                            _a).sum)
+                                    (have this := of_decide_eq_true (id (Eq.refl true));
+                                    this))
+                                  v))))))
+                      (id
+                        (Mathlib.Tactic.Ring.of_eq
+                          (Mathlib.Tactic.Ring.Common.add_congr
+                            (Mathlib.Tactic.Ring.Common.mul_congr
+                              (Mathlib.Tactic.Ring.Common.atom_pf (decode (NKI_LowMixCaller.low s 0)) rfl
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                          decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl (decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                              (Mathlib.Tactic.Ring.Common.atom_pf (decode (NKR_DigestPrefix.first c.levels j)) rfl
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                          decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl
+                                    (decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                              (Mathlib.Tactic.Ring.Common.add_mul
+                                (Mathlib.Tactic.Ring.Common.mul_add
+                                  (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 0))
+                                    (Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_right
+                                      (decode (NKR_DigestPrefix.first c.levels j)) (Nat.rawCast 1)
+                                      (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                        (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                  (Mathlib.Tactic.Ring.Common.mul_zero
+                                    (decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 *
+                                        (decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      0)))
+                                (Mathlib.Tactic.Ring.Common.zero_mul
+                                  (decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                  (decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 *
+                                      (decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                    0))))
+                            (Mathlib.Tactic.Ring.Common.add_congr
+                              (Mathlib.Tactic.Ring.Common.mul_congr
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode (NKI_LowMixCaller.low s 1)) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.add_congr
+                                  (Mathlib.Tactic.Ring.Common.add_congr
+                                    (Mathlib.Tactic.Ring.Common.add_congr
+                                      (Mathlib.Tactic.Ring.Common.add_congr
+                                        (Mathlib.Tactic.Ring.Common.add_congr
+                                          (Mathlib.Tactic.Ring.Common.atom_pf (decode (c.anchor j)) rfl
+                                            (Eq.mpr
+                                              (id
+                                                (congrArg
+                                                  (fun _a =>
+                                                    decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                      decode (c.anchor j) ^ Nat.rawCast 1 * _a)
+                                                  (Eq.symm rfl)))
+                                              (Eq.refl (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                          (Mathlib.Tactic.Ring.Common.atom_pf (decode (c.nullifier j)) rfl
+                                            (Eq.mpr
+                                              (id
+                                                (congrArg
+                                                  (fun _a =>
+                                                    decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                      decode (c.nullifier j) ^ Nat.rawCast 1 * _a)
+                                                  (Eq.symm rfl)))
+                                              (Eq.refl (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+                                        (Mathlib.Tactic.Ring.Common.atom_pf (decode (c.recipient j)) rfl
+                                          (Eq.mpr
+                                            (id
+                                              (congrArg
+                                                (fun _a =>
+                                                  decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                    decode (c.recipient j) ^ Nat.rawCast 1 * _a)
+                                                (Eq.symm rfl)))
+                                            (Eq.refl (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))))
+                                      (Mathlib.Tactic.Ring.Common.atom_pf (decode (c.change j)) rfl
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a =>
+                                                decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                  decode (c.change j) ^ Nat.rawCast 1 * _a)
+                                              (Eq.symm rfl)))
+                                          (Eq.refl (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                        (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))))
+                                    (Mathlib.Tactic.Ring.Common.atom_pf (decode (c.nextRoot j)) rfl
+                                      (Eq.mpr
+                                        (id
+                                          (congrArg
+                                            (fun _a =>
+                                              decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                decode (c.nextRoot j) ^ Nat.rawCast 1 * _a)
+                                            (Eq.symm rfl)))
+                                        (Eq.refl (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                        (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))))))
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode (c.carried j)) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode (c.carried j) ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                        (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))))))
+                                (Mathlib.Tactic.Ring.Common.add_mul
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 1))
+                                      (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (c.anchor j)) (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                          (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                    (Mathlib.Tactic.Ring.Common.mul_add
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 1))
+                                        (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (c.nullifier j))
+                                          (Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                      (Mathlib.Tactic.Ring.Common.mul_add
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 1))
+                                          (Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (c.recipient j))
+                                            (Nat.rawCast 1)
+                                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                              (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                        (Mathlib.Tactic.Ring.Common.mul_add
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 1))
+                                            (Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (c.change j))
+                                              (Nat.rawCast 1)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                          (Mathlib.Tactic.Ring.Common.mul_add
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 1))
+                                              (Nat.rawCast 1)
+                                              (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (c.nextRoot j))
+                                                (Nat.rawCast 1)
+                                                (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                  (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                    (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                                    (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                            (Mathlib.Tactic.Ring.Common.mul_add
+                                              (Mathlib.Tactic.Ring.Common.mul_pf_left
+                                                (decode (NKI_LowMixCaller.low s 1)) (Nat.rawCast 1)
+                                                (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (c.carried j))
+                                                  (Nat.rawCast 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                    (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                      (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                                      (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                              (Mathlib.Tactic.Ring.Common.mul_zero
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                              (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                    (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                  0)))
+                                            (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                              (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                              (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                    (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                  0))))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                              (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                  (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                    (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                  0)))))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                            (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                            (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                              (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                  (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                    (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                  0))))))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                        (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                          (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                              (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                              (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                  (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                    (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                  0)))))))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                        (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                        (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                            (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                              (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                              (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                  (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                    (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                  0))))))))
+                                  (Mathlib.Tactic.Ring.Common.zero_mul
+                                    (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                      (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                        (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                          (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                            (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                              (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))))))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                        (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                          (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                            (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                              (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                              (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                  (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                0)))))))))
+                              (Mathlib.Tactic.Ring.Common.add_congr
+                                (Mathlib.Tactic.Ring.Common.mul_congr
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode (NKI_LowMixCaller.low s 2)) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode (NKR_DigestPrefix.last c.levels j)) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl
+                                        (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.add_mul
+                                    (Mathlib.Tactic.Ring.Common.mul_add
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 2))
+                                        (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right
+                                          (decode (NKR_DigestPrefix.last c.levels j)) (Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                      (Mathlib.Tactic.Ring.Common.mul_zero
+                                        (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 *
+                                            (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 *
+                                              Nat.rawCast 1) +
+                                          0)))
+                                    (Mathlib.Tactic.Ring.Common.zero_mul
+                                      (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 *
+                                          (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        0))))
+                                (Mathlib.Tactic.Ring.cast_zero (Mathlib.Meta.NormNum.isNat_ofNat K Nat.cast_zero))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                  (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 *
+                                      (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                    0)))
+                              (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                  (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                  (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                    (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                      (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                        (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                        (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                          (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                            (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                            (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 *
+                                                (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 *
+                                                  Nat.rawCast 1) +
+                                              0)))))))))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                              (decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 *
+                                (decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                              (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                    (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                  (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                      (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                    (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                        (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                          (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                            (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                              (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 *
+                                                (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 *
+                                                  Nat.rawCast 1) +
+                                              0))))))))))
+                          (Mathlib.Tactic.Ring.Common.add_congr
+                            (Mathlib.Tactic.Ring.Common.add_congr
+                              (Mathlib.Tactic.Ring.Common.mul_congr
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode (NKI_LowMixCaller.low s 0)) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode (NKR_DigestPrefix.first c.levels j)) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl
+                                      (decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.add_mul
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 0))
+                                      (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_right
+                                        (decode (NKR_DigestPrefix.first c.levels j)) (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                          (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                    (Mathlib.Tactic.Ring.Common.mul_zero
+                                      (decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 *
+                                          (decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        0)))
+                                  (Mathlib.Tactic.Ring.Common.zero_mul
+                                    (decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 *
+                                        (decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      0))))
+                              (Mathlib.Tactic.Ring.Common.mul_congr
+                                (Mathlib.Tactic.Ring.Common.atom_pf (decode (NKI_LowMixCaller.low s 1)) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.add_congr
+                                  (Mathlib.Tactic.Ring.Common.add_congr
+                                    (Mathlib.Tactic.Ring.Common.add_congr
+                                      (Mathlib.Tactic.Ring.Common.add_congr
+                                        (Mathlib.Tactic.Ring.Common.add_congr
+                                          (Mathlib.Tactic.Ring.Common.atom_pf (decode (c.anchor j)) rfl
+                                            (Eq.mpr
+                                              (id
+                                                (congrArg
+                                                  (fun _a =>
+                                                    decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                      decode (c.anchor j) ^ Nat.rawCast 1 * _a)
+                                                  (Eq.symm rfl)))
+                                              (Eq.refl (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                          (Mathlib.Tactic.Ring.Common.atom_pf (decode (c.nullifier j)) rfl
+                                            (Eq.mpr
+                                              (id
+                                                (congrArg
+                                                  (fun _a =>
+                                                    decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                      decode (c.nullifier j) ^ Nat.rawCast 1 * _a)
+                                                  (Eq.symm rfl)))
+                                              (Eq.refl (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+                                        (Mathlib.Tactic.Ring.Common.atom_pf (decode (c.recipient j)) rfl
+                                          (Eq.mpr
+                                            (id
+                                              (congrArg
+                                                (fun _a =>
+                                                  decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                    decode (c.recipient j) ^ Nat.rawCast 1 * _a)
+                                                (Eq.symm rfl)))
+                                            (Eq.refl (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))))
+                                      (Mathlib.Tactic.Ring.Common.atom_pf (decode (c.change j)) rfl
+                                        (Eq.mpr
+                                          (id
+                                            (congrArg
+                                              (fun _a =>
+                                                decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                  decode (c.change j) ^ Nat.rawCast 1 * _a)
+                                              (Eq.symm rfl)))
+                                          (Eq.refl (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                        (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))))
+                                    (Mathlib.Tactic.Ring.Common.atom_pf (decode (c.nextRoot j)) rfl
+                                      (Eq.mpr
+                                        (id
+                                          (congrArg
+                                            (fun _a =>
+                                              decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                                decode (c.nextRoot j) ^ Nat.rawCast 1 * _a)
+                                            (Eq.symm rfl)))
+                                        (Eq.refl (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                        (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))))))
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (decode (c.carried j)) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              decode (c.carried j) ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                        (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))))))
+                                (Mathlib.Tactic.Ring.Common.add_mul
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 1))
+                                      (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (c.anchor j)) (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                          (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                    (Mathlib.Tactic.Ring.Common.mul_add
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 1))
+                                        (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (c.nullifier j))
+                                          (Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                      (Mathlib.Tactic.Ring.Common.mul_add
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 1))
+                                          (Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (c.recipient j))
+                                            (Nat.rawCast 1)
+                                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                              (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                        (Mathlib.Tactic.Ring.Common.mul_add
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 1))
+                                            (Nat.rawCast 1)
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (c.change j))
+                                              (Nat.rawCast 1)
+                                              (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                          (Mathlib.Tactic.Ring.Common.mul_add
+                                            (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 1))
+                                              (Nat.rawCast 1)
+                                              (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (c.nextRoot j))
+                                                (Nat.rawCast 1)
+                                                (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                  (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                    (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                                    (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                            (Mathlib.Tactic.Ring.Common.mul_add
+                                              (Mathlib.Tactic.Ring.Common.mul_pf_left
+                                                (decode (NKI_LowMixCaller.low s 1)) (Nat.rawCast 1)
+                                                (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (c.carried j))
+                                                  (Nat.rawCast 1)
+                                                  (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                                    (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                      (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                                      (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                              (Mathlib.Tactic.Ring.Common.mul_zero
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                              (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                    (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                  0)))
+                                            (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                              (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                              (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                    (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                  0))))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                            (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                              (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                            (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                              (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                  (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                    (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                  0)))))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                            (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                            (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                              (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                  (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                    (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                  0))))))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                        (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                          (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                              (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                              (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                  (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                    (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                  0)))))))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                        (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                        (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                            (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                              (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                              (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                  (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                    (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                  0))))))))
+                                  (Mathlib.Tactic.Ring.Common.zero_mul
+                                    (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                      (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                        (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                          (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                            (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                              (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))))))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                        (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                          (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                            (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                              (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                              (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                  (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                                0)))))))))
+                              (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                (decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 *
+                                  (decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                  (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                      (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                    (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                        (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                          (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                            (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                              (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                                (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                              0)))))))))
+                            (Mathlib.Tactic.Ring.Common.mul_congr
+                              (Mathlib.Tactic.Ring.Common.atom_pf (decode (NKI_LowMixCaller.low s 2)) rfl
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                          decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                              (Mathlib.Tactic.Ring.Common.atom_pf (decode (NKR_DigestPrefix.last c.levels j)) rfl
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                          decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl
+                                    (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                              (Mathlib.Tactic.Ring.Common.add_mul
+                                (Mathlib.Tactic.Ring.Common.mul_add
+                                  (Mathlib.Tactic.Ring.Common.mul_pf_left (decode (NKI_LowMixCaller.low s 2))
+                                    (Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_right (decode (NKR_DigestPrefix.last c.levels j))
+                                      (Nat.rawCast 1)
+                                      (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                        (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw K 1)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw K 1) (Eq.refl 1)))))
+                                  (Mathlib.Tactic.Ring.Common.mul_zero
+                                    (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 *
+                                        (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      0)))
+                                (Mathlib.Tactic.Ring.Common.zero_mul
+                                  (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                  (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 *
+                                      (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                    0))))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                              (decode (NKI_LowMixCaller.low s 0) ^ Nat.rawCast 1 *
+                                (decode (NKR_DigestPrefix.first c.levels j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                              (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                  (decode (c.anchor j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                  (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                    (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                      (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                        (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                        (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                          (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                            (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                            (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 *
+                                                (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 *
+                                                  Nat.rawCast 1) +
+                                              0))))))))))))⟩⟩⟩⟩⟩⟩))
+'AspisR1.NKR_DigestComplete.source' depends on axioms: [propext, Classical.choice, Quot.sound]

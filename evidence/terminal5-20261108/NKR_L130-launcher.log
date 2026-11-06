@@ -1,0 +1,52 @@
+{"attempt": "NKR_L130", "exit_status": 0, "wall_seconds": 17.29414416407235, "peak_rss_kib": "6193572", "swaps": "0", "print_axioms": ["'AspisR1.NKR_SumFinishCohort.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NKR_SumFinishCohort.source : ∀ (scratch : Scratch) (s : Selectors) (terms : Patterns),
+  FIw_ArrayValue.canonical scratch →
+    FIw_ArrayValue.canonical s.high →
+      FIw_ArrayValue.canonical s.low →
+        FIw_ArrayValue.canonical terms →
+          ∃ outValues outWeights,
+            NKR_SumFinishInvocation.reference scratch s terms = ok (outValues, outWeights) ∧
+              FIw_ArrayValue.canonical outValues ∧
+                FIw_ArrayValue.canonical outWeights ∧
+                  (∀ (g : Fin ↑4#usize), decode (NJB_ArrayCarrier.cell outValues g) = values scratch s terms g) ∧
+                    ∀ (g : Fin ↑4#usize), decode (NJB_ArrayCarrier.cell outWeights g) = baseWeig
+...
+ntro (NJB_ArrayCarrier.array dot.2)
+      ⟨call,
+        ⟨NJB_ArrayCarrier.canonical_array finished cf,
+          ⟨NJB_ArrayCarrier.canonical_array dot.2 cw,
+            ⟨fun g =>
+              Eq.mpr
+                (id
+                  (congrArg (fun _a => decode (_a g) = values scratch s terms g)
+                    (NJB_ArrayCarrier.cell_array finished)))
+                (Eq.mpr (id (congrArg (fun _a => _a = values scratch s terms g) (finalValue g)))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          _a +
+                              NJL_PatternMeaning.dot (fun i => decode (NJB_ArrayCarrier.cell terms i))
+                                (fun i => decode (coefficients i)) g =
+                            values scratch s terms g)
+                        (dv g)))
+                    (have cp := funext pc;
+                    Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            baseValues s g +
+                                NJL_PatternMeaning.dot (fun i => decode (NJB_ArrayCarrier.cell terms i)) _a g =
+                              values scratch s terms g)
+                          cp))
+                      (Eq.refl
+                        (baseValues s g +
+                          NJL_PatternMeaning.dot (fun i => decode (NJB_ArrayCarrier.cell terms i))
+                            (coefficient scratch s) g))))),
+              fun g =>
+              Eq.mpr
+                (id (congrArg (fun _a => decode (_a g) = baseWeights scratch s g) (NJB_ArrayCarrier.cell_array dot.2)))
+                (dw g)⟩⟩⟩⟩)
+'AspisR1.NKR_SumFinishCohort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r405d2c8e0d7044afa46ee0e6909724e5.scope; invocation ID: 2415dc6ebc764d2ab44b9a872ca9696b

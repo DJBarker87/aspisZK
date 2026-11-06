@@ -1,0 +1,52 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -2328,3 +2328,7 @@
+         }
+     }
+ }
++
++#[cfg(kani)]
++#[path="NKR_Term_native.rs"]
++mod NKR_term_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_Term_native.rs
+@@ -0,0 +1,39 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_term_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++fn NKR_term_q(w:[u32;4])->QM31{QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
++type NKR_TermCarrier=(QM31,[QM31;16],[QM31;10],QM31,QM31,QM31);
++type NKR_TermOutput=(QM31,[QM31;16],[QM31;10],QM31);
++struct NKR_TermLog{calls:usize,seek:usize,kind:u8,left:QM31,right:QM31,eq_pick:usize,eq_limb:usize,eq_left:u32,eq_right:u32,replies:[QM31;9]}
++fn NKR_term_enter(k:u8,a:QM31,b:QM31,l:&mut NKR_TermLog)->QM31{let i=l.calls;assert!(i<9);if i==l.seek{l.kind=k;l.left=a;l.right=b;}l.calls+=1;l.replies[i]}
++fn NKR_teq(a:&[QM31;10],b:&[QM31;10],l:&mut NKR_TermLog)->QM31{l.eq_left=NKR_term_words(a[l.eq_pick])[l.eq_limb];l.eq_right=NKR_term_words(b[l.eq_pick])[l.eq_limb];NKR_term_enter(0,QM31::ZERO,QM31::ZERO,l)}
++fn NKR_tmul(a:QM31,b:QM31,l:&mut NKR_TermLog)->QM31{NKR_term_enter(1,a,b,l)}
++fn NKR_tadd(a:QM31,b:QM31,l:&mut NKR_TermLog)->QM31{NKR_term_enter(2,a,b,l)}
++fn NKR_tsub(a:QM31,b:QM31,l:&mut NKR_TermLog)->QM31{NKR_term_enter(3,a,b,l)}
++fn NKR_term_suffix(child:Result<NKR_TermCarrier,PoolV1PairForestSemanticTerminalErrorV1>,zerocheck_point:&[QM31;10],point:&[QM31;10],mu:QM31,l:&mut NKR_TermLog)->Result<NKR_TermOutput,PoolV1PairForestSemanticTerminalErrorV1>{
++    let (composition, c1, mask_only, g, h1_z, copy_active) = child?;
++    let original = NKR_tadd(
++      NKR_tadd(NKR_tmul(NKR_teq(zerocheck_point,point,l),composition,l),NKR_tmul(mu,h1_z,l),l),
++      NKR_tmul(NKR_tmul(mu,mu,l),NKR_tmul(NKR_tsub(QM31::ONE,copy_active,l),h1_z,l),l),l);
++    Ok((original, c1, mask_only, g))
++}
++#[kani::proof] #[kani::unwind(20)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_terminal_suffix_cut(){
++ let zc:[QM31;10]=unsafe{core::mem::transmute::<[[u32;4];10],[QM31;10]>(kani::any())};let point:[QM31;10]=unsafe{core::mem::transmute::<[[u32;4];10],[QM31;10]>(kani::any())};
++ let c1:[QM31;16]=unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())};let mask:[QM31;10]=unsafe{core::mem::transmute::<[[u32;4];10],[QM31;10]>(kani::any())};let replies:[QM31;9]=unsafe{core::mem::transmute::<[[u32;4];9],[QM31;9]>(kani::any())};
++ let comp=NKR_term_q(kani::any());let g=NKR_term_q(kani::any());let h=NKR_term_q(kani::any());let active=NKR_term_q(kani::any());let mu=NKR_term_q(kani::any());let seek:usize=kani::any();let limb:usize=kani::any();let eq_pick:usize=kani::any();let c1_pick:usize=kani::any();let mask_pick:usize=kani::any();kani::assume(seek<9&&limb<4&&eq_pick<10&&c1_pick<16&&mask_pick<10);
++ let mut l=NKR_TermLog{calls:0,seek,kind:255,left:QM31::ZERO,right:QM31::ZERO,eq_pick,eq_limb:limb,eq_left:0,eq_right:0,replies};let out=NKR_term_suffix(Ok((comp,c1,mask,g,h,active)),&zc,&point,mu,&mut l).unwrap();
++ assert_eq!(l.calls,9);assert_eq!(l.eq_left,NKR_term_words(zc[eq_pick])[limb]);assert_eq!(l.eq_right,NKR_term_words(point[eq_pick])[limb]);
++ let kinds=[0u8,1,1,2,1,3,1,1,2];let left=[QM31::ZERO,replies[0],mu,replies[1],mu,QM31::ONE,replies[5],replies[4],replies[3]];let right=[QM31::ZERO,comp,h,replies[2],mu,active,h,replies[6],replies[7]];
++ assert_eq!(l.kind,kinds[seek]);assert_eq!(NKR_term_words(l.left)[limb],NKR_term_words(left[seek])[limb]);assert_eq!(NKR_term_words(l.right)[limb],NKR_term_words(right[seek])[limb]);
++ assert_eq!(NKR_term_words(out.0)[limb],NKR_term_words(replies[8])[limb]^if cfg!(NKR_invert){1}else{0});assert_eq!(NKR_term_words(out.1[c1_pick])[limb],NKR_term_words(c1[c1_pick])[limb]);assert_eq!(NKR_term_words(out.2[mask_pick])[limb],NKR_term_words(mask[mask_pick])[limb]);assert_eq!(NKR_term_words(out.3)[limb],NKR_term_words(g)[limb]);
++}
++#[kani::proof] #[kani::unwind(4)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_terminal_error_prefix_cut(){
++ let which:bool=kani::any();let error=if which{PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount}else{PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition};
++ let mut l=NKR_TermLog{calls:0,seek:0,kind:255,left:QM31::ZERO,right:QM31::ZERO,eq_pick:0,eq_limb:0,eq_left:0,eq_right:0,replies:[QM31::ZERO;9]};
++ let out=NKR_term_suffix(Err(error),&[QM31::ZERO;10],&[QM31::ZERO;10],QM31::ZERO,&mut l);
++ assert_eq!(l.calls,0);match out{Err(actual)=>assert_eq!(actual,if cfg!(NKR_invert){if which{PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition}else{PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount}}else{error}),Ok(_)=>assert!(false)}
++}

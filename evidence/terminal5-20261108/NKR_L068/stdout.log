@@ -1,0 +1,364 @@
+NKR_TermPartsFactor.lean:29:5: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← ok (core.result.Result.Ok (comp, c1, mask, g, h✝, active))
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        let (composition, c1, mask_only, g, h1_z, copy_active) := val
+        do
+        let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+        let q1 ← q.mul composition
+        let q2 ← field.QM31.mul mu h1_z
+        let q3 ← q1.add q2
+        let q4 ← field.QM31.mul mu mu
+        let q5 ← field.QM31.ONE.sub copy_active
+        let q6 ← q5.mul h1_z
+        let q7 ← q4.mul q6
+        let original ← q3.add q7
+        ok (core.result.Result.Ok (original, c1, mask_only, g))
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+          (core.convert.FromSame pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1) residual
+is not definitionally equal to the right-hand side
+  do
+    let child ← ok (core.result.Result.Ok (comp, c1, mask, g, h✝, active))
+    NKR_TermTail.after zc point mu child
+
+case ok.Ok
+pub : Public
+claims : Std.Array NQ 84#usize
+point : Std.Array NQ 10#usize
+lambda chi theta : NQ
+zc : Std.Array NQ 10#usize
+mu : NQ
+comp : field.QM31
+c1 : Std.Array field.QM31 16#usize
+mask : Std.Array field.QM31 10#usize
+g h✝ active : field.QM31
+h :
+  pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta =
+    ok (core.result.Result.Ok (comp, c1, mask, g, h✝, active))
+⊢ (do
+      let r ← ok (core.result.Result.Ok (comp, c1, mask, g, h✝, active))
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (composition, c1, mask_only, g, h1_z, copy_active) := val
+          do
+          let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+          let q1 ← q.mul composition
+          let q2 ← field.QM31.mul mu h1_z
+          let q3 ← q1.add q2
+          let q4 ← field.QM31.mul mu mu
+          let q5 ← field.QM31.ONE.sub copy_active
+          let q6 ← q5.mul h1_z
+          let q7 ← q4.mul q6
+          let original ← q3.add q7
+          ok (core.result.Result.Ok (original, c1, mask_only, g))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+            (core.convert.FromSame pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+            residual) =
+    do
+    let child ← ok (core.result.Result.Ok (comp, c1, mask, g, h✝, active))
+    NKR_TermTail.after zc point mu child
+theorem AspisR1.NKR_TermPartsFactor.source : ∀ (pub : Public) (claims : Std.Array NQ 84#usize)
+  (point : Std.Array NQ 10#usize) (lambda chi theta : NQ) (zc : Std.Array NQ 10#usize) (mu : NQ),
+  pool_v1.pair_forest_semantic_terminal.terminal_parts pub claims point lambda chi theta zc mu =
+    reference pub claims point lambda chi theta zc mu :=
+fun pub claims point lambda chi theta zc mu =>
+  id
+    (id
+      (casesOn (motive := fun t =>
+        pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta = t →
+          (do
+              let r ← pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                  do
+                  let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                  let q1 ← q.mul composition
+                  let q2 ← field.QM31.mul mu h1_z
+                  let q3 ← q1.add q2
+                  let q4 ← field.QM31.mul mu mu
+                  let q5 ← field.QM31.ONE.sub copy_active
+                  let q6 ← q5.mul h1_z
+                  let q7 ← q4.mul q6
+                  let original ← q3.add q7
+                  ok (core.result.Result.Ok (original, c1, mask_only, g))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                    (core.convert.FromSame
+                      pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                    residual) =
+            do
+            let child ← pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta
+            NKR_TermTail.after zc point mu child)
+        (pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta)
+        (fun child h =>
+          Eq.ndrec (motive := fun x =>
+            pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta = x →
+              (do
+                  let r ← x
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val =>
+                      let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                      do
+                      let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                      let q1 ← q.mul composition
+                      let q2 ← field.QM31.mul mu h1_z
+                      let q3 ← q1.add q2
+                      let q4 ← field.QM31.mul mu mu
+                      let q5 ← field.QM31.ONE.sub copy_active
+                      let q6 ← q5.mul h1_z
+                      let q7 ← q4.mul q6
+                      let original ← q3.add q7
+                      ok (core.result.Result.Ok (original, c1, mask_only, g))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                        (core.convert.FromSame
+                          pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                        residual) =
+                do
+                let child ← x
+                NKR_TermTail.after zc point mu child)
+            (fun h =>
+              core.result.Result.casesOn (motive := fun t =>
+                child = t →
+                  (do
+                      let r ← ok child
+                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue val =>
+                          let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                          do
+                          let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                          let q1 ← q.mul composition
+                          let q2 ← field.QM31.mul mu h1_z
+                          let q3 ← q1.add q2
+                          let q4 ← field.QM31.mul mu mu
+                          let q5 ← field.QM31.ONE.sub copy_active
+                          let q6 ← q5.mul h1_z
+                          let q7 ← q4.mul q6
+                          let original ← q3.add q7
+                          ok (core.result.Result.Ok (original, c1, mask_only, g))
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                            (core.convert.FromSame
+                              pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                            residual) =
+                    do
+                    let child ← ok child
+                    NKR_TermTail.after zc point mu child)
+                child
+                (fun child_1 h_1 =>
+                  Eq.ndrec (motive := fun child =>
+                    pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta =
+                        ok child →
+                      (do
+                          let r ← ok child
+                          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                          match cf with
+                            | core.ops.control_flow.ControlFlow.Continue val =>
+                              let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                              do
+                              let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                              let q1 ← q.mul composition
+                              let q2 ← field.QM31.mul mu h1_z
+                              let q3 ← q1.add q2
+                              let q4 ← field.QM31.mul mu mu
+                              let q5 ← field.QM31.ONE.sub copy_active
+                              let q6 ← q5.mul h1_z
+                              let q7 ← q4.mul q6
+                              let original ← q3.add q7
+                              ok (core.result.Result.Ok (original, c1, mask_only, g))
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (field.QM31 ×
+                                  Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                                (core.convert.FromSame
+                                  pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                                residual) =
+                        do
+                        let child ← ok child
+                        NKR_TermTail.after zc point mu child)
+                    (fun h => sorry) (Eq.symm h_1) h)
+                (fun e h_1 =>
+                  Eq.ndrec (motive := fun child =>
+                    pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta =
+                        ok child →
+                      (do
+                          let r ← ok child
+                          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                          match cf with
+                            | core.ops.control_flow.ControlFlow.Continue val =>
+                              let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                              do
+                              let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                              let q1 ← q.mul composition
+                              let q2 ← field.QM31.mul mu h1_z
+                              let q3 ← q1.add q2
+                              let q4 ← field.QM31.mul mu mu
+                              let q5 ← field.QM31.ONE.sub copy_active
+                              let q6 ← q5.mul h1_z
+                              let q7 ← q4.mul q6
+                              let original ← q3.add q7
+                              ok (core.result.Result.Ok (original, c1, mask_only, g))
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (field.QM31 ×
+                                  Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                                (core.convert.FromSame
+                                  pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                                residual) =
+                        do
+                        let child ← ok child
+                        NKR_TermTail.after zc point mu child)
+                    (fun h =>
+                      Eq.refl do
+                        let r ← ok (core.result.Result.Err e)
+                        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                        match cf with
+                          | core.ops.control_flow.ControlFlow.Continue val =>
+                            let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                            do
+                            let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                            let q1 ← q.mul composition
+                            let q2 ← field.QM31.mul mu h1_z
+                            let q3 ← q1.add q2
+                            let q4 ← field.QM31.mul mu mu
+                            let q5 ← field.QM31.ONE.sub copy_active
+                            let q6 ← q5.mul h1_z
+                            let q7 ← q4.mul q6
+                            let original ← q3.add q7
+                            ok (core.result.Result.Ok (original, c1, mask_only, g))
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                              (core.convert.FromSame
+                                pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                              residual)
+                    (Eq.symm h_1) h)
+                (Eq.refl child))
+            (Eq.symm h)
+            (Eq.refl (pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta)))
+        (fun e h =>
+          Eq.ndrec (motive := fun x =>
+            pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta = x →
+              (do
+                  let r ← x
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val =>
+                      let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                      do
+                      let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                      let q1 ← q.mul composition
+                      let q2 ← field.QM31.mul mu h1_z
+                      let q3 ← q1.add q2
+                      let q4 ← field.QM31.mul mu mu
+                      let q5 ← field.QM31.ONE.sub copy_active
+                      let q6 ← q5.mul h1_z
+                      let q7 ← q4.mul q6
+                      let original ← q3.add q7
+                      ok (core.result.Result.Ok (original, c1, mask_only, g))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                        (core.convert.FromSame
+                          pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                        residual) =
+                do
+                let child ← x
+                NKR_TermTail.after zc point mu child)
+            (fun h =>
+              Eq.refl do
+                let r ← fail e
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val =>
+                    let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                    do
+                    let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                    let q1 ← q.mul composition
+                    let q2 ← field.QM31.mul mu h1_z
+                    let q3 ← q1.add q2
+                    let q4 ← field.QM31.mul mu mu
+                    let q5 ← field.QM31.ONE.sub copy_active
+                    let q6 ← q5.mul h1_z
+                    let q7 ← q4.mul q6
+                    let original ← q3.add q7
+                    ok (core.result.Result.Ok (original, c1, mask_only, g))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                      (core.convert.FromSame
+                        pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                      residual)
+            (Eq.symm h)
+            (Eq.refl (pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta)))
+        (fun h =>
+          Eq.ndrec (motive := fun x =>
+            pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta = x →
+              (do
+                  let r ← x
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val =>
+                      let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                      do
+                      let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                      let q1 ← q.mul composition
+                      let q2 ← field.QM31.mul mu h1_z
+                      let q3 ← q1.add q2
+                      let q4 ← field.QM31.mul mu mu
+                      let q5 ← field.QM31.ONE.sub copy_active
+                      let q6 ← q5.mul h1_z
+                      let q7 ← q4.mul q6
+                      let original ← q3.add q7
+                      ok (core.result.Result.Ok (original, c1, mask_only, g))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                        (core.convert.FromSame
+                          pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                        residual) =
+                do
+                let child ← x
+                NKR_TermTail.after zc point mu child)
+            (fun h =>
+              Eq.refl do
+                let r ← div
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val =>
+                    let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                    do
+                    let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                    let q1 ← q.mul composition
+                    let q2 ← field.QM31.mul mu h1_z
+                    let q3 ← q1.add q2
+                    let q4 ← field.QM31.mul mu mu
+                    let q5 ← field.QM31.ONE.sub copy_active
+                    let q6 ← q5.mul h1_z
+                    let q7 ← q4.mul q6
+                    let original ← q3.add q7
+                    ok (core.result.Result.Ok (original, c1, mask_only, g))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                      (core.convert.FromSame
+                        pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                      residual)
+            (Eq.symm h)
+            (Eq.refl (pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta)))
+        (Eq.refl (pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta))))
+'AspisR1.NKR_TermPartsFactor.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

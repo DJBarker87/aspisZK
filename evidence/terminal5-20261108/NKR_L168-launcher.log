@@ -1,0 +1,59 @@
+{"attempt": "NKR_L168", "exit_status": 0, "wall_seconds": 15.181149791926146, "peak_rss_kib": "6190964", "swaps": "0", "print_axioms": ["'AspisR1.NKR_DigestComposed.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NKR_DigestComposed.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain p →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical s.high →
+        FIw_ArrayValue.canonical s.low →
+          ∃ c sums out old v m,
+            NKR_DigestChildren.Clauses p o s c ∧
+              NKR_DigestChildren.Canonical c ∧
+                NKR_DigestInvocation.PrefixArithmetic c v ∧
+                  NKR_DigestPrefixStep.Trace p o s c (List.finRange 4) ![zero, zero, zero] ![zero, v 3, zero] ∧
+                    NKR_DigestInvocation.MiddleArithmetic c ![zero, v 3, zero] m ∧
+                      NKR_DigestCuts.MiddleNative p o s c ![zero, v 3, zero] m
+...
+                (∀ (j : Fin 2), Canon (out j)) ∧
+                                          FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_lanes p o s =
+                                              ok old ∧
+                                            FIw_ArrayValue.canonical old :=
+fun p o s hp ho hh hl =>
+  let ⟨c, h✝⟩ := NKR_DigestWrapper.source p o s hp ho hh hl
+  let ⟨sums, h✝¹⟩ := h✝
+  let ⟨out, h✝²⟩ := h✝¹
+  let ⟨old, h✝³⟩ := h✝²
+  let ⟨hc, right✝⟩ := h✝³
+  let ⟨hcan, right✝¹⟩ := right✝
+  let ⟨pc, right✝²⟩ := right✝¹
+  let ⟨frame, right✝³⟩ := right✝²
+  let ⟨oc, right✝⁴⟩ := right✝³
+  let ⟨wc, right✝⁵⟩ := right✝⁴
+  let ⟨cc, right✝⁶⟩ := right✝⁵
+  let ⟨hout, right✝⁷⟩ := right✝⁶
+  let ⟨oldc, hold⟩ := right✝⁷
+  let ⟨v, h✝⁴⟩ := NKR_DigestInvocation.source p o s c hc hcan
+  let ⟨m, h✝⁵⟩ := h✝⁴
+  let ⟨vc, right✝⁸⟩ := h✝⁵
+  let ⟨mc, right✝⁹⟩ := right✝⁸
+  let ⟨native, right✝¹⁰⟩ := right✝⁹
+  let ⟨sc, right✝¹¹⟩ := right✝¹⁰
+  have same := congrArg Prod.snd (ok.inj (Eq.trans (Eq.symm sc) pc));
+  have wrapperNative := NKR_DigestWrapperView.native_cut p o s out;
+  have wrapperSummary := NKR_DigestWrapperView.native_summary p p o o s s out out 1 wrapperNative;
+  Exists.intro c
+    (Exists.intro sums
+      (Exists.intro out
+        (Exists.intro old
+          (Exists.intro v
+            (Exists.intro m
+              ⟨hc,
+                ⟨hcan,
+                  ⟨vc,
+                    ⟨NKR_DigestPrefixStep.four p o s c v vc,
+                      ⟨mc,
+                        ⟨native,
+                          ⟨same,
+                            ⟨wrapperNative,
+                              ⟨wrapperSummary, ⟨pc, ⟨frame, ⟨oc, ⟨wc, ⟨cc, ⟨hout, ⟨oldc, hold⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩)))))
+'AspisR1.NKR_DigestComposed.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r56ddb53951c247feadab60cdf5ba5569.scope; invocation ID: d7208583955a4417ab63f74b4b9b713d

@@ -1,0 +1,13 @@
+theorem AspisR1.NKR_TermScalarCut.source : ∀ (pub : Public) (o : Openings) (s : Selectors) (before : Packed),
+  FIw_ArrayValue.canonical o.z →
+    FIw_ArrayValue.canonical s.high →
+      FIw_ArrayValue.canonical s.low →
+        FIw_ArrayValue.canonical before →
+          ↑pub.asset_id < 2147483647 →
+            ↑(amount pub) < 2147483647 →
+              ∃ p, FIw_ScalarSuffix.run pub o s before = ok p.out ∧ Cut pub o s before p (observations p) :=
+fun pub o s before hz hh hl hb ha hm =>
+  let ⟨p, call⟩ := NKR_TermScalarInvocation.source pub o s before hz hh hl hb ha hm
+  Exists.intro p
+    ⟨call, ⟨fun x => ⟨rfl, ⟨rfl, rfl⟩⟩, ⟨fun x => ⟨rfl, rfl⟩, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩
+'AspisR1.NKR_TermScalarCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,66 @@
+--- evidence/terminal4-20261108/NKI_Driver.lean
++++ evidence/terminal5-20261108/NKR_Driver.lean
+@@ -96 +96 @@
+-  let (modules, roots) := if mode == "scan" then (#[`NKI_COMBINED_IMPORT], #[]) else (#[], #[])
++  let (modules, roots) := if mode == "scan" then (#[`NKR_COMBINED_IMPORT], #[]) else (#[], #[])
+@@ -101 +101 @@
+-    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NKI_EXPECTED_IMPORTS.jsonl") do
++    for line in ← IO.FS.lines (if mode == "queryscan" then "NFN_QUERY_EXPECTED_IMPORTS.jsonl" else "NKR_EXPECTED_IMPORTS.jsonl") do
+@@ -105 +105 @@
+-    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NKI_LOADED_scan.jsonl") expected
++    let failed ← NER.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NKR_LOADED_scan.jsonl") expected
+--- evidence/terminal4-20261108/NKI_batch.py
++++ evidence/terminal5-20261108/NKR_batch.py
+@@ -3,2 +3,5 @@
+-B=Path.cwd();mode=sys.argv[1];E=B/'NKI_audit'/mode;E.mkdir(parents=True,exist_ok=True)
+-command=['NKI_native/'+('NKI_Driver'if mode=='scan'else'NKI_ProofDriver'),mode]
++B=Path.cwd();mode=sys.argv[1];E=B/'NKR_audit'/mode;E.mkdir(parents=True,exist_ok=True)
++if mode!='scan':
++ for name in ['AUDIT_ROOTS.json','AUDIT_MODULES.json']:
++  assert (B/('NKR_'+name)).read_bytes()==(B/('NKI_'+name)).read_bytes(), 'Raw driver runtime alias changed'
++command=['NKR_native/'+('NKR_Driver'if mode=='scan'else'NKR_ProofDriver'),mode]
+@@ -12 +15 @@
+-assert re.fullmatch(r'NKI_L[0-9]{3}',attempt)
++assert re.fullmatch(r'NKR_L[0-9]{3}',attempt)
+@@ -14 +17 @@
+-assert config['attempt']==attempt and config['command']==['python3','NKI_batch.py',mode,attempt]
++assert config['attempt']==attempt and (config['command']==['python3','NKR_batch.py',mode,attempt] or (mode in ['fixtures','scan'] and config['command']==['python3','NKR_preflight.py',attempt]))
+@@ -21 +24 @@
+- p=B/'NKI_LOADED_scan.jsonl';raw=p.read_bytes();rows=[json.loads(l)for l in raw.splitlines()];row.update(modules=len(rows),dangling=sum(len(x['dangling'])for x in rows),duplicate_owners=sum(len(x['duplicate_owners'])for x in rows),import_mismatch=sum(not x['imports_match']for x in rows));(E/'scan.jsonl.xz.b64.txt').write_text(base64.b64encode(lzma.compress(raw)).decode());(E/'scan.jsonl.sha256').write_text(hashlib.sha256(raw).hexdigest());assert not(row['dangling']or row['duplicate_owners']or row['import_mismatch'])
++ p=B/'NKR_LOADED_scan.jsonl';raw=p.read_bytes();rows=[json.loads(l)for l in raw.splitlines()];row.update(modules=len(rows),dangling=sum(len(x['dangling'])for x in rows),duplicate_owners=sum(len(x['duplicate_owners'])for x in rows),import_mismatch=sum(not x['imports_match']for x in rows));(E/'scan.jsonl.xz.b64.txt').write_text(base64.b64encode(lzma.compress(raw)).decode());(E/'scan.jsonl.sha256').write_text(hashlib.sha256(raw).hexdigest());assert not(row['dangling']or row['duplicate_owners']or row['import_mismatch'])
+--- evidence/terminal4-20261108/NKI_link.py
++++ evidence/terminal5-20261108/NKR_link.py
+@@ -2,0 +3 @@
++exec((Path.cwd()/'NKR_gate_setup.py').read_text())
+@@ -4,3 +5,3 @@
+-for row in json.loads((b/'NKI_GATE_PINS.json').read_text()):assert hashlib.sha256(Path(row['target']).read_bytes()).hexdigest()==row['sha256']
+-for name in ['NKI_Driver','NKI_ProofDriver']:
+- cmd=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NKI_native/'+name,'NKI_native/'+name+'.c','NKI_native/NFA_WALKER.c','NKI_native/NFA_MemoryLimit.c'];start=time.monotonic();log=b/(name+'-link.log');timing=b/(name+'-link.time')
++for row in json.loads((b/'NKR_GATE_PINS.json').read_text()):assert hashlib.sha256(Path(row['target']).read_bytes()).hexdigest()==row['sha256']
++for name in ['NKR_Driver']:
++ cmd=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NKR_native/'+name,'NKR_native/'+name+'.c','NKR_native/NFA_WALKER.c','NKR_native/NFA_MemoryLimit.c'];start=time.monotonic();log=b/(name+'-link.log');timing=b/(name+'-link.time')
+@@ -8 +9 @@
+- t=timing.read_text();rows.append(dict(target=name,command=cmd,exit=r.returncode,wall=time.monotonic()-start,peak_rss_kib=re.search(r'Maximum resident set size \(kbytes\):\s*(\d+)',t)[1],swap=re.search(r'Swaps:\s*(\d+)',t)[1],sha256=hashlib.sha256((b/'NKI_native'/name).read_bytes()).hexdigest()if r.returncode==0 else None))
++ t=timing.read_text();rows.append(dict(target=name,command=cmd,exit=r.returncode,wall=time.monotonic()-start,peak_rss_kib=re.search(r'Maximum resident set size \(kbytes\):\s*(\d+)',t)[1],swap=re.search(r'Swaps:\s*(\d+)',t)[1],sha256=hashlib.sha256((b/'NKR_native'/name).read_bytes()).hexdigest()if r.returncode==0 else None))
+@@ -10 +11,13 @@
+-(b/'NKI_LINK.json').write_text(json.dumps(rows,indent=1));print(json.dumps(rows));sys.exit(r.returncode)
++(b/'NKR_LINK.json').write_text(json.dumps(rows,indent=1));print(json.dumps(rows))
++assert r.returncode==0
++
++# Reuse the byte-identical admitted raw driver; only runtime input/root lists change.
++import shutil
++origin=Path('/home/dombarker/project-offloads/codex-cx-terminal4-20261108')
++old=json.loads((origin/'NKI_LINK.json').read_text());pin=next(x for x in old if x['target']=='NKI_ProofDriver')
++exe=origin/'NKI_native/NKI_ProofDriver';assert hashlib.sha256(exe.read_bytes()).hexdigest()==pin['sha256']
++assert (b/'NKR_ProofDriver.lean').read_bytes()==(origin/'NKI_ProofDriver.lean').read_bytes()
++shutil.copyfile(exe,b/'NKR_native/NKR_ProofDriver');(b/'NKR_native/NKR_ProofDriver').chmod(0o755)
++for suffix in ['AUDIT_ROOTS.json','AUDIT_MODULES.json']:
++ shutil.copyfile(b/('NKR_'+suffix),b/('NKI_'+suffix))
++(b/'NKR_PROOF_DRIVER_REUSE.json').write_text(json.dumps(dict(source=str(origin/'NKI_ProofDriver.lean'),source_sha256=hashlib.sha256((b/'NKR_ProofDriver.lean').read_bytes()).hexdigest(),binary=str(exe),binary_sha256=pin['sha256'],unchanged=True,runtime_aliases=['NKI_AUDIT_ROOTS.json','NKI_AUDIT_MODULES.json'],reason='Exact unchanged driver/cache reuse under AGENTS resourcepolicy; new root/module lists only')));print('Pinned unchanged raw driver reused; no redundant compile/link')
+--- evidence/terminal4-20261108/NKI_gate_setup.py
++++ evidence/terminal5-20261108/NKR_gate_setup.py
+@@ -5,2 +5,2 @@
+- q=p/n;r=b/'NKI_native'/n;shutil.copyfile(q,r);rows.append(dict(source=str(q),target=str(r),sha256=hashlib.sha256(r.read_bytes()).hexdigest(),bytes=r.stat().st_size))
+-(b/'NKI_GATE_PINS.json').write_text(json.dumps(rows,indent=1));print('unchanged walker/memory C source copied and pinned')
++ q=p/n;r=b/'NKR_native'/n;shutil.copyfile(q,r);rows.append(dict(source=str(q),target=str(r),sha256=hashlib.sha256(r.read_bytes()).hexdigest(),bytes=r.stat().st_size))
++(b/'NKR_GATE_PINS.json').write_text(json.dumps(rows,indent=1));print('unchanged walker/memory C source copied and pinned')

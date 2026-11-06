@@ -1,0 +1,67 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -2328,3 +2328,7 @@
+         }
+     }
+ }
++
++#[cfg(kani)]
++#[path="NKR_TermScalarWindows_native.rs"]
++mod NKR_scalar_windows_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NKR_TermScalarWindows_native.rs
+@@ -0,0 +1,54 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NKR_swindow_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++fn NKR_swindow_q(w:[u32;4])->QM31{unsafe{core::mem::transmute::<[u32;4],QM31>(w)}}
++macro_rules! NKR_swindow_array{($n:expr)=>{unsafe{core::mem::transmute::<[u32;4*$n],[QM31;$n]>(kani::any())}}}
++struct NKR_ScalarFieldLog{calls:usize,kind:u8,left:QM31,right:QM31,row:usize,high:usize,low:usize,limb:usize,high_seen:u32,low_seen:u32,reply:QM31}
++fn NKR_swindow_enter(kind:u8,a:QM31,b:QM31,l:&mut NKR_ScalarFieldLog)->QM31{l.calls+=1;l.kind=kind;l.left=a;l.right=b;l.reply}
++fn NKR_swindow_lift(a:M31,l:&mut NKR_ScalarFieldLog)->QM31{NKR_swindow_enter(5,NKR_swindow_q([a.0,0,0,0]),QM31::ZERO,l)}
++fn NKR_swindow_sub(a:QM31,b:QM31,l:&mut NKR_ScalarFieldLog)->QM31{NKR_swindow_enter(2,a,b,l)}
++fn NKR_swindow_mul(a:QM31,b:QM31,l:&mut NKR_ScalarFieldLog)->QM31{NKR_swindow_enter(0,a,b,l)}
++fn NKR_swindow_row(s:&Selectors,row:usize,l:&mut NKR_ScalarFieldLog)->QM31{l.row=row;l.high_seen=NKR_swindow_words(s.high[l.high])[l.limb];l.low_seen=NKR_swindow_words(s.low[l.low])[l.limb];NKR_swindow_enter(6,QM31::ZERO,QM31::ZERO,l)}
++// logical locals[k] is the frozen scalar-prefix Result number k, in source order.
++fn NKR_scalar_field_window(asset:M31,withdrawal_amount:Option<u32>,opened:&[QM31;16],selectors:&Selectors,locals:&mut[QM31;12],stage:usize,l:&mut NKR_ScalarFieldLog){
++ let next=match stage{
++  0=>NKR_swindow_lift(asset,l),
++  1=>NKR_swindow_sub(opened[1],locals[0],l),
++  2=>NKR_swindow_row(selectors,2*16+12,l),
++  3=>NKR_swindow_mul(locals[2],locals[1],l),
++  4=>NKR_swindow_row(selectors,31*16+12,l),
++  5=>NKR_swindow_mul(locals[4],locals[1],l),
++  6=>NKR_swindow_row(selectors,28*16+12,l),
++  7=>NKR_swindow_mul(locals[6],locals[1],l),
++  8=>NKR_swindow_row(selectors,16*VALUE_AUXILIARY_BLOCK+2,l),
++  9=>NKR_swindow_lift(M31(withdrawal_amount.unwrap_or(0)),l),
++  10=>NKR_swindow_sub(opened[10],locals[9],l),
++  11=>NKR_swindow_mul(locals[8],locals[10],l),
++  _=>unreachable!()};
++ locals[stage]=next;
++}
++#[kani::proof] #[kani::unwind(68)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_scalar_field_window_cut(){
++ let asset=M31(kani::any());let withdrawal_amount=if kani::any(){Some(kani::any())}else{None};let opened=NKR_swindow_array!(16);let selectors=Selectors{high:NKR_swindow_array!(64),low:NKR_swindow_array!(16)};let mut locals=NKR_swindow_array!(12);let reply=NKR_swindow_q(kani::any());let stage:usize=kani::any();let pick:usize=kani::any();let limb:usize=kani::any();let high:usize=kani::any();let low:usize=kani::any();kani::assume(stage<12&&pick<12&&limb<4&&high<64&&low<16);
++ let before_word=NKR_swindow_words(locals[pick])[limb];let reply_word=NKR_swindow_words(reply)[limb];let left_word=NKR_swindow_words(match stage{0=>NKR_swindow_q([asset.0,0,0,0]),1=>opened[1],2|4|6|8=>QM31::ZERO,3=>locals[2],5=>locals[4],7=>locals[6],9=>NKR_swindow_q([withdrawal_amount.unwrap_or(0),0,0,0]),10=>opened[10],11=>locals[8],_=>unreachable!()})[limb];
++ let right_word=NKR_swindow_words(match stage{0|2|4|6|8|9=>QM31::ZERO,1=>locals[0],3|5|7=>locals[1],10=>locals[9],11=>locals[10],_=>unreachable!()})[limb];let kind=match stage{0|9=>5,1|10=>2,2|4|6|8=>6,3|5|7|11=>0,_=>unreachable!()};
++ let mut l=NKR_ScalarFieldLog{calls:0,kind:255,left:QM31::ZERO,right:QM31::ZERO,row:9999,high,low,limb,high_seen:0,low_seen:0,reply};NKR_scalar_field_window(asset,withdrawal_amount,&opened,&selectors,&mut locals,stage,&mut l);
++ assert_eq!(l.calls,1);assert_eq!(l.kind,kind);assert_eq!(NKR_swindow_words(l.left)[limb],left_word);assert_eq!(NKR_swindow_words(l.right)[limb],right_word);
++ if stage==2||stage==4||stage==6||stage==8{let row=match stage{2=>44,4=>508,6=>460,8=>1010,_=>unreachable!()};assert_eq!(l.row,row);assert_eq!(l.high_seen,NKR_swindow_words(selectors.high[high])[limb]);assert_eq!(l.low_seen,NKR_swindow_words(selectors.low[low])[limb]);}
++ assert_eq!(NKR_swindow_words(locals[pick])[limb],(if pick==stage{reply_word}else{before_word})^if cfg!(NKR_invert){1}else{0});
++}
++struct NKR_ScalarTailLog<'a>{calls:usize,variant:u8,present:bool,args:[QM31;4],start:usize,seen:u32,before:u32,pick:usize,limb:usize,values:&'a[QM31;2],after:&'a[QM31;24]}
++fn NKR_swindow_scalars(variant:CompiledVariant,present:bool,a:QM31,b:QM31,c:QM31,d:QM31,l:&mut NKR_ScalarTailLog<'_>)->[QM31;2]{assert_eq!(l.calls,0);l.calls+=1;l.variant=match variant{CompiledVariant::PrivateTransfer=>0,CompiledVariant::Withdrawal=>1};l.present=present;l.args=[a,b,c,d];*l.values}
++fn NKR_swindow_preweighted(packed:&mut[QM31;24],start:usize,values:&[QM31;2],l:&mut NKR_ScalarTailLog<'_>){assert_eq!(l.calls,1);l.calls+=1;l.start=start;l.seen=NKR_swindow_words(values[l.pick%2])[l.limb];l.before=NKR_swindow_words(packed[l.pick])[l.limb];*packed=*l.after;}
++fn NKR_scalar_tail_window(packed:&mut[QM31;24],variant:CompiledVariant,withdrawal_amount:Option<u32>,products:[QM31;4],l:&mut NKR_ScalarTailLog<'_>){
++ let scalars=NKR_swindow_scalars(variant,withdrawal_amount.is_some(),products[0],products[1],products[2],products[3],l);
++ NKR_swindow_preweighted(packed,92,&scalars,l);
++}
++#[kani::proof] #[kani::unwind(27)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NKR_scalar_tail_window_cut(){
++ let mut packed=NKR_swindow_array!(24);let products=NKR_swindow_array!(4);let values=NKR_swindow_array!(2);let after=NKR_swindow_array!(24);let variant=if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal};let withdrawal_amount=if kani::any(){Some(kani::any())}else{None};let pick:usize=kani::any();let limb:usize=kani::any();let arg:usize=kani::any();kani::assume(pick<24&&limb<4&&arg<4);let before_word=NKR_swindow_words(packed[pick])[limb];let expected=NKR_swindow_words(after[pick])[limb];let value_word=NKR_swindow_words(values[pick%2])[limb];let arg_word=NKR_swindow_words(products[arg])[limb];
++ let mut l=NKR_ScalarTailLog{calls:0,variant:255,present:false,args:[QM31::ZERO;4],start:999,seen:0,before:0,pick,limb,values:&values,after:&after};NKR_scalar_tail_window(&mut packed,variant,withdrawal_amount,products,&mut l);
++ assert_eq!(l.calls,2);assert_eq!(l.variant,match variant{CompiledVariant::PrivateTransfer=>0,CompiledVariant::Withdrawal=>1});assert_eq!(l.present,withdrawal_amount.is_some());assert_eq!(NKR_swindow_words(l.args[arg])[limb],arg_word);assert_eq!(l.start,92);assert_eq!(l.seen,value_word);assert_eq!(l.before,before_word);assert_eq!(NKR_swindow_words(packed[pick])[limb],expected^if cfg!(NKR_invert){1}else{0});
++}

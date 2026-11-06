@@ -1,0 +1,55 @@
+{"attempt": "NKR_L055", "exit_status": 0, "wall_seconds": 8.988387753954157, "peak_rss_kib": "6202936", "swaps": "0", "print_axioms": ["'AspisR1.NKR_DigestPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NKR_DigestPrefix.lean:71:3: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+theorem AspisR1.NKR_DigestPrefix.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain p →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical s.high →
+        ∃ c sums,
+          run p o s = ok (c, sums) ∧
+            Clauses p o s c ∧ Canonical c ∧ (∀ (g : Fin 3) (j : Fin 2), Canon (sums g j)) ∧ Frame c sums :=
+fun p o s hp ho hh =>
+  let ⟨c, h✝⟩ := NKR_DigestChildren.source p o s hp ho hh
+  let ⟨hc, hcan⟩ := h✝
+  have clauses := hc;
+  have canonical := hcan;
+  let ⟨ac, right✝⟩ := hc
+  let ⟨am, righ
+...
+ a))
+                (eq_of_heq tail_eq) a)
+            (eq_of_heq head_eq))
+      (Eq.refl (List.finRange ({ len := 1 }.len + 1))) (HEq.refl (Fintype.complete j));
+  have ht := fun j =>
+    List.Mem.casesOn (motive := fun a x =>
+      List.finRange ({ len := 1 }.len + 1) = a → Fintype.complete j ≍ x → Canon (last c.levels j)) (Fintype.complete j)
+      (fun «as» h =>
+        List.cons.noConfusion h fun head_eq =>
+          Eq.ndrec (motive := fun j => ∀ (this : j ∈ Fintype.elems), ⋯ ≍ «as» → ⋯ → Canon (last c.levels j))
+            (fun this tail_eq => Eq.ndrec (motive := fun «as» => ⋯ → ⋯) (fun h => hl 2) (eq_of_heq tail_eq))
+            (eq_of_heq head_eq) (Fintype.complete j))
+      (fun b {«as»} a h =>
+        List.cons.noConfusion h fun head_eq =>
+          Eq.ndrec (motive := fun b =>
+            ⋯ ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ [] ≍ «as» →
+              Fintype.complete j ≍ List.Mem.tail b a → Canon (last c.levels j))
+            (fun tail_eq =>
+              Eq.ndrec (motive := fun {«as»} => ∀ (a : List.Mem j «as»), ⋯)
+                (fun a h => List.Mem.casesOn (motive := ⋯) a ⋯ ⋯ ⋯ ⋯) (eq_of_heq tail_eq) a)
+            (eq_of_heq head_eq))
+      (Eq.refl (List.finRange ({ len := 1 }.len + 1))) (HEq.refl (Fintype.complete j));
+  let ⟨v0, h✝⁵⟩ := NKR_DigestAdd.source zero (first c.levels) hz hf
+  let ⟨vc0, right✝²³⟩ := h✝⁵
+  let ⟨h0, val0⟩ := right✝²³
+  let ⟨v12, h✝⁶⟩ := NKR_DigestAdd.source zero (last c.levels) hz ht
+  let ⟨vc12, right✝²⁴⟩ := h✝⁶
+  let ⟨h12, val12⟩ := right✝²⁴
+  let ⟨v5, h✝⁷⟩ := NKR_DigestAdd.source v4 c.nextRoot h4 hroot
+  let ⟨vc5, right✝²⁵⟩ := h✝⁷
+  let ⟨h5, val5⟩ := right✝²⁵
+  let ⟨v6, h✝⁸⟩ := NKR_DigestAdd.source v5 c.carried h5 hca
+  ⋯
+'AspisR1.NKR_DigestPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r42682004eb40459b985d8b4b1d09524d.scope; invocation ID: b9dc1473153d44c6b65fcc087dc18192

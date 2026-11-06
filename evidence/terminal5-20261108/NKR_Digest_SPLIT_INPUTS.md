@@ -1,0 +1,9 @@
+# Digest split input repair and footprint
+
+K020 whole-middle and K022 full-wrapper-log timed out, retained without credit. Their bodies/harnesses remain unchanged. New split windows are source-scope isolation, not a rename or an unchanged retry. Caps/timeouts unchanged.
+
+A one-hot representative proposal was authored but NEVER launched or credited. Before launch, the replacement was strengthened to FULL arbitrary native inputs under ruleD, at the lead's request. All frontier20x8/Openings16/high64/low16 and3x2prestate words are arbitrary raw32bit values; all Public scalar fields, Options, variant and transition fields are arbitrary valid values. Raw products use flat primitive `[u32;4*N]` inputs transmuted into QM31 arrays, avoiding the nested Arbitrary iterator loop that caused K018's input-unwind failure. This changes input generation only; checked frozen segment control/order is unchanged. No zero outside-window premise remains and no generalization from representative-only input is claimed.
+
+The four scopes are: append exact index/frontier[fi][di]/opened[oi]/high[hi] plus unchanged4reply channels; four append-channel additions on arbitrary3x2prestate; nextRoot call and2adds with full-array frame; carry/index/min(carry,19)/optional call and2adds with full-array frame. Each field observation ranges over arbitrary coordinate and raw limb. Source arguments/returns are matched by the exact source segments in NKR_Digest_SPLIT_ERASURE.json.
+
+The wrapper return window executes the exact cfg forwarding body with FULL arbitrary valid Public/Openings/Selectors and asserts one child call plus both returned cells. It does not assert argument payload equality; that part must use an accepted passed argument-window certificate and exact source-parametric forwarding association, or a separate direct argument-window proof. Never cite this return-only pair as proving the full WrapperCut on its own.

@@ -1,0 +1,41 @@
+theorem AspisR1.NKR_TermGatherPoseidon.source : ∀ (claims : Claims) (point : Point),
+  canonical claims →
+    canonical point →
+      ∃ p,
+        decoded p.poseidon = fun g =>
+          R0P.poseidonPackingFormula ExtractedMaskQmPackBase4Arithmetic.iBasis ExtractedMaskQmPackBase4Arithmetic.uBasis
+            fun j =>
+            R0P.poseidonScalarResidual
+              (FJh_Native07RawValue.openings { z := p.z, succ_z := p.succ, xor12_z := p.xor12 })
+              (decode p.poseidonSelectors.block) (decoded p.poseidonSelectors.local) (FJe_ExternalAdjoint.lane g j) :=
+fun claims point hc hp =>
+  let ⟨z, h✝⟩ := JFy_CompositionGathers.source claims hc
+  let ⟨succ, h✝¹⟩ := h✝
+  let ⟨xor12, h✝²⟩ := h✝¹
+  let ⟨mask, h✝³⟩ := h✝²
+  let ⟨left✝, right✝⟩ := h✝³
+  let ⟨g0, hz⟩ := left✝
+  let ⟨left✝¹, right✝¹⟩ := right✝
+  let ⟨g1, hs⟩ := left✝¹
+  let ⟨left✝², right✝²⟩ := right✝¹
+  let ⟨g2, hx⟩ := left✝²
+  let ⟨g3, hm⟩ := right✝²
+  let ⟨selectors, h✝⁴⟩ := NIH_AtPoint.boxed point hp
+  let ⟨sc, right✝³⟩ := h✝⁴
+  let ⟨ch, right✝⁴⟩ := right✝³
+  let ⟨cl, right✝⁵⟩ := right✝⁴
+  let ⟨ps, h✝⁵⟩ := NHU_PoseidonSelectors.result selectors ch
+  let ⟨psc, right✝⁶⟩ := h✝⁵
+  let ⟨ls, bc⟩ := right✝⁶
+  have lc := Eq.mpr (id (congrArg (fun _a => canonical _a) ls)) cl;
+  let ⟨poseidon, h✝⁶⟩ := NKG_OracleSource.result { z := z, succ_z := succ, xor12_z := xor12 } ps hz hs hx lc bc
+  let ⟨pc, right✝⁷⟩ := h✝⁶
+  let ⟨cp, value⟩ := right✝⁷
+  let p :=
+    { z := z, succ := succ, xor12 := xor12, mask := mask, selectors := selectors, poseidonSelectors := ps,
+      poseidon := poseidon, gather0 := g0, gather1 := g1, gather2 := g2, gather3 := g3, selectorCall := sc,
+      selectorHigh := ch, selectorLow := cl, poseidonSelectorCall := psc, localSame := ls, blockCanonical := bc,
+      poseidonCall := pc, zCanonical := hz, succCanonical := hs, xorCanonical := hx, maskCanonical := hm,
+      poseidonCanonical := cp };
+  Exists.intro p value
+'AspisR1.NKR_TermGatherPoseidon.source' depends on axioms: [propext, Classical.choice, Quot.sound]

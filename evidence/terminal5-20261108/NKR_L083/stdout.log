@@ -1,0 +1,111 @@
+NKR_SumCollectMeaning.lean:50:3: error: unsolved goals
+case pos
+lookup : Lookups
+append : U64
+variant : PoolV1PairForestCompiledVariantV1
+s : Selectors
+index : Fin 136
+before : State
+hs : FIw_ArrayValue.canonical s.high
+hb : ∀ (i : Fin 103), Canon (before i)
+w : FIq_Native.field.M31
+weightCall : link_weight (NJL_EndpointLookup.link index) append variant = ok w
+binary : ↑w ≤ 1
+weightValue :
+  ↑↑w =
+    R0P.copyLinkWeight (FJk_CopyDescriptor.link (NJL_EndpointLookup.link index)) (↑append)
+      (FJk_CopyDescriptor.variant variant)
+w✝⁵ w✝⁴ : FIq_Native.field.QM31
+w✝³ middle : NJL_EndpointCell.State
+left✝⁹ :
+  NDE_Reference12.selected_binary_ref NJL_EndpointRoot.copy (NJL_EndpointLookup.high s index false ⋯)
+      FIq_Native.field.QM31.ZERO w =
+    ok (NJL_EndpointWrites.selected (NJL_EndpointLookup.high s index false ⋯) w)
+left✝⁸ :
+  FIq_Native.field.QM31.add (before (NJL_EndpointIndices.weight (NJL_EndpointLookup.groupIndex index false ⋯)))
+      (NJL_EndpointWrites.selected (NJL_EndpointLookup.high s index false ⋯) w) =
+    ok w✝⁵
+left✝⁷ :
+  FIq_Native.field.QM31.add (before (NJL_EndpointIndices.pattern (NJL_EndpointLookup.patternIndex index false ⋯)))
+      (NJL_EndpointLookup.high s index false ⋯) =
+    ok w✝⁴
+left✝⁶ :
+  NJL_EndpointCell.Cut before w✝³ (NJL_EndpointIndices.weight (NJL_EndpointLookup.groupIndex index false ⋯))
+    (NJL_EndpointWrites.selected (NJL_EndpointLookup.high s index false ⋯) w) w✝⁵
+    { operation := 1, left := before (NJL_EndpointIndices.weight (NJL_EndpointLookup.groupIndex index false ⋯)),
+      right := NJL_EndpointWrites.selected (NJL_EndpointLookup.high s index false ⋯) w }
+    1
+left✝⁵ :
+  NJL_EndpointCell.Cut w✝³ middle (NJL_EndpointIndices.pattern (NJL_EndpointLookup.patternIndex index false ⋯))
+    (NJL_EndpointLookup.high s index false ⋯) w✝⁴
+    { operation := 1, left := w✝³ (NJL_EndpointIndices.pattern (NJL_EndpointLookup.patternIndex index false ⋯)),
+      right := NJL_EndpointLookup.high s index false ⋯ }
+    1
+middleCall : NJL_EndpointRoot.reference before s index false ⋯ (NJL_EndpointLookup.link index).tag w = ok middle
+middleCanon : ∀ (i : Fin 103), Canon (middle i)
+middleValue :
+  ∀ (i : Fin 103),
+    decode (middle i) =
+      if i = NJL_EndpointIndices.weight (NJL_EndpointLookup.groupIndex index false ⋯) then
+        decode (before i) + decode (NJL_EndpointLookup.high s index false ⋯) * ↑↑w
+      else
+        if i = NJL_EndpointIndices.pattern (NJL_EndpointLookup.patternIndex index false ⋯) then
+          decode (before i) + decode (NJL_EndpointLookup.high s index false ⋯)
+        else decode (before i)
+w✝² w✝¹ : FIq_Native.field.QM31
+w✝ after : NJL_EndpointCell.State
+left✝⁴ :
+  NDE_Reference12.selected_binary_ref NJL_EndpointRoot.copy (NJL_EndpointLookup.high s index true ⋯)
+      FIq_Native.field.QM31.ZERO w =
+    ok (NJL_EndpointWrites.selected (NJL_EndpointLookup.high s index true ⋯) w)
+left✝³ :
+  FIq_Native.field.QM31.add (middle (NJL_EndpointIndices.weight (NJL_EndpointLookup.groupIndex index true ⋯)))
+      (NJL_EndpointWrites.selected (NJL_EndpointLookup.high s index true ⋯) w) =
+    ok w✝²
+left✝² :
+  FIq_Native.field.QM31.add (middle (NJL_EndpointIndices.pattern (NJL_EndpointLookup.patternIndex index true ⋯)))
+      (NJL_EndpointLookup.high s index true ⋯) =
+    ok w✝¹
+left✝¹ :
+  NJL_EndpointCell.Cut middle w✝ (NJL_EndpointIndices.weight (NJL_EndpointLookup.groupIndex index true ⋯))
+    (NJL_EndpointWrites.selected (NJL_EndpointLookup.high s index true ⋯) w) w✝²
+    { operation := 1, left := middle (NJL_EndpointIndices.weight (NJL_EndpointLookup.groupIndex index true ⋯)),
+      right := NJL_EndpointWrites.selected (NJL_EndpointLookup.high s index true ⋯) w }
+    1
+left✝ :
+  NJL_EndpointCell.Cut w✝ after (NJL_EndpointIndices.pattern (NJL_EndpointLookup.patternIndex index true ⋯))
+    (NJL_EndpointLookup.high s index true ⋯) w✝¹
+    { operation := 1, left := w✝ (NJL_EndpointIndices.pattern (NJL_EndpointLookup.patternIndex index true ⋯)),
+      right := NJL_EndpointLookup.high s index true ⋯ }
+    1
+afterCall : NJL_EndpointRoot.reference middle s index true ⋯ (NJL_EndpointLookup.link index).tag w = ok after
+afterCanon : ∀ (i : Fin 103), Canon (after i)
+afterValue :
+  ∀ (i : Fin 103),
+    decode (after i) =
+      if i = NJL_EndpointIndices.weight (NJL_EndpointLookup.groupIndex index true ⋯) then
+        decode (middle i) + decode (NJL_EndpointLookup.high s index true ⋯) * ↑↑w
+      else
+        if i = NJL_EndpointIndices.pattern (NJL_EndpointLookup.patternIndex index true ⋯) then
+          decode (middle i) + decode (NJL_EndpointLookup.high s index true ⋯)
+        else decode (middle i)
+consumer : Bool
+old new : State
+value :
+  ∀ (j : Fin 103),
+    decode (new j) =
+      if j = NJL_EndpointIndices.weight (NJL_EndpointLookup.groupIndex index consumer ⋯) then
+        decode (old j) + decode (NJL_EndpointLookup.high s index consumer ⋯) * ↑↑w
+      else
+        if j = NJL_EndpointIndices.pattern (NJL_EndpointLookup.patternIndex index consumer ⋯) then
+          decode (old j) + decode (NJL_EndpointLookup.high s index consumer ⋯)
+        else decode (old j)
+j : Fin 103
+h1 : j = NJL_EndpointIndices.weight (NJL_EndpointLookup.groupIndex index consumer ⋯)
+⊢ decode (old j) +
+      decode (NJL_EndpointLookup.high s index consumer ⋯) *
+        R0P.copyLinkWeight (FJk_CopyDescriptor.link (NJL_EndpointLookup.link index)) (↑append)
+          (FJk_CopyDescriptor.variant variant) =
+    decode (old j) + decode (NJL_EndpointLookup.high s index consumer ⋯) * weight index append variant
+'AspisR1.NKR_SumCollectMeaning.step_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCollectMeaning.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

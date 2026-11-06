@@ -1,0 +1,14 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "source": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+  "source_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+  "harness_sha256": "c737a43402d470e82638cf1176f3b76f0e68557591e3b78f0c1615343d4d5b55",
+  "frozen": "    let prepared_theta = PreparedQm31Multiplier::new(theta);\n    let mut composition = copy.residual;\n    for lane in semantic.into_iter().rev() {\n        composition = prepared_theta.mul(composition).add(lane);\n    }\n    for lane in poseidon.into_iter().rev() {\n        composition = prepared_theta.mul(composition).add(lane);\n    }\n",
+  "translated_control": "let prepared_theta=NKR_horner_new(theta,l);\nfor lane in semantic.into_iter().rev(){NKR_horner_visit(prepared_theta,lane,l);}\nfor lane in poseidon.into_iter().rev(){NKR_horner_visit(prepared_theta,lane,l);}",
+  "identity": true,
+  "shape": [
+    "NKR_horner_step_cut",
+    "NKR_horner_control_cut"
+  ],
+  "scope": "One nativeiteration on arbitrarycache/state/lane/replies; dataindependent24+4reversecontrol+theta/cachesamecall (ad). Control IDlabels carry no fieldvaluecredit."
+}

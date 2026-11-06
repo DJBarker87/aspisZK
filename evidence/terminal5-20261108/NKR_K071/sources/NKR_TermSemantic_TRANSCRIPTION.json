@@ -1,0 +1,33 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "source": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+  "source_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+  "harness_sha256": "10d813d5512be4ba6b8642cbfa69c0d8715ce280226228ec3b1d9c2c2978d2e4",
+  "prefix": "let mut packed = [QM31::ZERO; POOL_V1_PAIR_FOREST_PACKED_SEMANTIC_LANES_V1];\n    add_schedule_lanes(&mut packed, public, openings, selectors);\n    add_path_lanes(&mut packed, openings, selectors);\n    add_value_lanes(&mut packed, openings, selectors);\n    add_occupancy_lanes(&mut packed, public, openings, selectors);\n    ",
+  "order": [
+    232,
+    229,
+    233,
+    228
+  ],
+  "digest": "let digests = public_digest_packed(public, openings, selectors);\npacked[84 / 4] = packed[84 / 4].add(digests[0]);\npacked[84 / 4 + 1] = packed[84 / 4 + 1].add(digests[1]);",
+  "translated_digest": "let digests=NKR_sem_digest(public,openings,selectors,l);\npacked[84/4]=NKR_sem_add(packed[84/4],digests[0],l);\npacked[84/4+1]=NKR_sem_add(packed[84/4+1],digests[1],l);",
+  "scalar": "let asset_difference = openings.z[1].sub(lift_m31(public.asset_id));\n    let input_asset = selectors.row(2 * 16 + 12).mul(asset_difference);\n    let output_scalar = selectors.row(31 * 16 + 12).mul(asset_difference);\n    let private_transfer_term = selectors.row(28 * 16 + 12).mul(asset_difference);\n    let withdrawal_amount_value = public.withdrawal_amount.unwrap_or(0);\n    let withdrawal_term = selectors\n        .row(16 * VALUE_AUXILIARY_BLOCK + 2)\n        .mul(openings.z[10].sub(lift_m31(M31(withdrawal_amount_value))));\n    let scalars = scalar_lanes(\n        public.variant,\n        public.withdrawal_amount.is_some(),\n        input_asset,\n        output_scalar,\n        private_transfer_term,\n        withdrawal_term,\n    );\n    add_preweighted(&mut packed, 92, &scalars);\n    packed\n",
+  "translated_scalar": "let asset_difference=NKR_sem_sub(openings.z[1],NKR_sem_lift(public.asset_id,l),l);\nlet input_asset=NKR_sem_mul(NKR_sem_row(selectors,2*16+12,l),asset_difference,l);\nlet output_scalar=NKR_sem_mul(NKR_sem_row(selectors,31*16+12,l),asset_difference,l);\nlet private_transfer_term=NKR_sem_mul(NKR_sem_row(selectors,28*16+12,l),asset_difference,l);\nlet withdrawal_amount_value=public.withdrawal_amount.unwrap_or(0);\nlet withdrawal_term=NKR_sem_mul(NKR_sem_row(selectors,16*VALUE_AUXILIARY_BLOCK+2,l),NKR_sem_sub(openings.z[10],NKR_sem_lift(M31(withdrawal_amount_value),l),l),l);\nlet scalars=NKR_sem_scalars(public.variant,public.withdrawal_amount.is_some(),input_asset,output_scalar,private_transfer_term,withdrawal_term,l);\nNKR_sem_scalar_pack(packed,92,&scalars,l);",
+  "identity": true,
+  "native_shapes": [
+    "NKR_semantic_child_cut(RETIRED_K048_TIMEOUT)",
+    "NKR_semantic_zero_cut",
+    "NKR_semantic_order_cut(REPAIRED_SCALAR_OBSERVER)",
+    "NKR_semantic_digest_cut(RETIRED_K054_TIMEOUT)",
+    "NKR_semantic_scalar_cut",
+    "NKR_semantic_child_args_cut",
+    "NKR_semantic_child_state_cut",
+    "NKR_semantic_digest_args_cut",
+    "NKR_semantic_digest_state_cut"
+  ],
+  "split_child_argument": "match stage{0=>NKR_sem_mark_arg(Some(public),openings,selectors,232,l),1=>NKR_sem_mark_arg(None,openings,selectors,229,l),2=>NKR_sem_mark_arg(None,openings,selectors,233,l),3=>NKR_sem_mark_arg(Some(public),openings,selectors,228,l),_=>unreachable!()}",
+  "split_child_state": "l.calls+=1;l.before=NKR_sem_words(packed[l.pick])[l.limb];*packed=*reply;",
+  "split_digest_state": "packed[84/4]=NKR_sem_state_add(packed[84/4],digests[0],l);packed[84/4+1]=NKR_sem_state_add(packed[84/4+1],digests[1],l);",
+  "scope": "One actual full24child boundary at arbitraryprestate; literal4callcontrol; one2write digestwindow; final14call scalar/preweighted92window. No field multiplication evaluated."
+}

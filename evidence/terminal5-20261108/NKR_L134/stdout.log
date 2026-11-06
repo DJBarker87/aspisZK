@@ -1,0 +1,77 @@
+NKR_DigestInvocation.lean:28:41: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NKR_DigestInvocation.lean:20:51: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NKR_DigestInvocation.lean:58:1: error: Tactic `assumption` failed
+
+p : Public
+o : Openings
+s : Selectors
+c : Children
+v : PrefixFrames
+m : MiddleFrames
+hv : PrefixArithmetic c v
+ac : NKR_DigestChildren.left s o 56 p.anchor = ok c.anchor
+left✝⁶ : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 56) o.z p.anchor = ok c.anchor
+nc : NKR_DigestChildren.left s o 26 p.nullifier = ok c.nullifier
+left✝⁵ : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 26) o.z p.nullifier = ok c.nullifier
+rc : NJX_RecipientRoot.reference p.recipient o.z (NKR_DigestChildren.high s 29) = ok c.recipient
+left✝⁴ : NJX_RecipientRoot.cohort p.recipient o.z (NKR_DigestChildren.high s 29) = ok c.recipient
+dc : NKR_DigestChildren.left s o 32 p.change = ok c.change
+left✝³ : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 32) o.z p.change = ok c.change
+lc :
+  NKI_LevelsFrame.run p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z s.high
+      (List.finRange 20) NKI_LevelsRoot.zero =
+    ok c.levels
+rootc : NKR_DigestChildren.left s o 53 p.transition.candidate_afterstate.next_root = ok c.nextRoot
+left✝² :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 53) o.z p.transition.candidate_afterstate.next_root = ok c.nextRoot
+cc :
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry p.transition.live_snapshot.next_pair_index =
+    ok c.carry
+left✝¹ : ↑c.carry = R0P.digestCarry ↑p.transition.live_snapshot.next_pair_index
+left✝ : ↑c.carry ≤ 20
+cac :
+  NJX_CarryRoot.reference (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+right✝ :
+  NJX_CarryRoot.cohort (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+vc0 : NKR_DigestAdd.add zero c.anchor = ok (v 0)
+vc1 : NKR_DigestAdd.add (v 0) c.nullifier = ok (v 1)
+vc2 : NKR_DigestAdd.add (v 1) c.recipient = ok (v 2)
+vc3 : NKR_DigestAdd.add (v 2) c.change = ok (v 3)
+mc0 : NKR_DigestAdd.add (![zero, v 3, zero] 0) (NKR_DigestPrefix.first c.levels) = ok m.local0
+mc12 : NKR_DigestAdd.add (![zero, v 3, zero] 2) (NKR_DigestPrefix.last c.levels) = ok m.local12
+mcr : NKR_DigestAdd.add (![zero, v 3, zero] 1) c.nextRoot = ok m.nextRoot
+mcc : NKR_DigestAdd.add m.nextRoot c.carried = ok m.carried
+⊢ (do
+      let v1 ← NKR_DigestAdd.add NKR_DigestPrefix.zero c.anchor
+      let v2 ← NKR_DigestAdd.add v1 c.nullifier
+      let v3 ← NKR_DigestAdd.add v2 c.recipient
+      let v4 ← NKR_DigestAdd.add v3 c.change
+      let v0 ← NKR_DigestAdd.add NKR_DigestPrefix.zero (NKR_DigestPrefix.first c.levels)
+      let v12 ← NKR_DigestAdd.add NKR_DigestPrefix.zero (NKR_DigestPrefix.last c.levels)
+      let v5 ← NKR_DigestAdd.add v4 c.nextRoot
+      let v6 ← NKR_DigestAdd.add v5 c.carried
+      ok
+          ({ anchor := c.anchor, nullifier := c.nullifier, recipient := c.recipient, change := c.change,
+              levels := c.levels, nextRoot := c.nextRoot, carry := c.carry, carried := c.carried },
+            ![v0, v6, v12])) =
+    ok (c, ![m.local0, m.carried, m.local12])
+NKR_DigestInvocation.lean:70:21: error(lean.unknownIdentifier): Unknown identifier `prefix_source`
+NKR_DigestInvocation.lean:70:8: error: Tactic `rcases` failed: `x✝ : ?m.30` is not an inductive datatype
+NKR_DigestInvocation.lean:76:14: error(lean.unknownIdentifier): Unknown constant `prefix_source`
+'AspisR1.NKR_DigestInvocation.middle_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_DigestInvocation.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_DigestInvocation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

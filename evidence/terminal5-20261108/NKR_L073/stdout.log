@@ -1,0 +1,127 @@
+theorem AspisR1.NKR_TermSemanticSource.source : ∀ (pub : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain pub →
+    canonical o.z →
+      canonical o.succ_z →
+        canonical o.xor12_z →
+          canonical s.high →
+            canonical s.low →
+              ↑pub.asset_id < 2147483647 →
+                ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647 →
+                  ∃ p, semantic_packed pub o s = ok p.out :=
+fun pub o s hd hz hs hx hh hl asset amount =>
+  have hzero := JFy_ZeroArrays.source 24#usize;
+  let ⟨l, h✝⟩ := NKR_ScheduleRoot.source zero pub o s hzero hz hh hl
+  let ⟨absorption, h✝¹⟩ := h✝
+  let ⟨middle, h✝²⟩ := h✝¹
+  let ⟨schedule, h✝³⟩ := h✝²
+  let ⟨left✝, right✝⟩ := h✝³
+  let ⟨left✝¹, right✝¹⟩ := right✝
+  let ⟨left✝², right✝²⟩ := right✝¹
+  let ⟨left✝³, right✝³⟩ := right✝²
+  let ⟨left✝⁴, right✝⁴⟩ := right✝³
+  let ⟨sc, right✝⁵⟩ := right✝⁴
+  let ⟨cs, right✝⁶⟩ := right✝⁵
+  let ⟨path, h✝⁴⟩ := NJL_PathParent.source schedule o s cs hh hl hz hs
+  let ⟨pc, right✝⁷⟩ := h✝⁴
+  let ⟨t, h✝⁵⟩ := NKI_ValueAssociation.source path.after o s path.canonical hz hs hx hh hl
+  let ⟨vmiddle, h✝⁶⟩ := h✝⁵
+  let ⟨value, h✝⁷⟩ := h✝⁶
+  let ⟨left✝⁵, right✝⁸⟩ := h✝⁷
+  let ⟨left✝⁶, right✝⁹⟩ := right✝⁸
+  let ⟨left✝⁷, right✝¹⁰⟩ := right✝⁹
+  let ⟨left✝⁸, right✝¹¹⟩ := right✝¹⁰
+  let ⟨left✝⁹, right✝¹²⟩ := right✝¹¹
+  let ⟨left✝¹⁰, right✝¹³⟩ := right✝¹²
+  let ⟨cv, right✝¹⁴⟩ := right✝¹³
+  let ⟨left✝¹¹, vc⟩ := right✝¹⁴
+  let ⟨occupancy, h✝⁸⟩ := NJL_OccupancyParent.source value pub o s cv hh hl hz
+  let ⟨oc, right✝¹⁵⟩ := h✝⁸
+  let ⟨digests, h✝⁹⟩ := NKR_DigestOldSource.source pub o s hd hz hh hl
+  let ⟨dc, right✝¹⁶⟩ := h✝⁹
+  let ⟨cd, right✝¹⁷⟩ := right✝¹⁶
+  let ⟨packedDigests, h✝¹⁰⟩ :=
+    NHU_Preweighted.result occupancy.after 84#usize digests (of_decide_eq_true (id (Eq.refl true)))
+      (of_decide_eq_true (id (Eq.refl true))) occupancy.canonical cd
+  let ⟨pdc, right✝¹⁸⟩ := h✝¹⁰
+  let ⟨cpd, right✝¹⁹⟩ := right✝¹⁸
+  let ⟨out, h✝¹¹⟩ := NKR_TermScalar.source pub o s packedDigests hz hh hl cpd asset amount
+  let ⟨call, co⟩ := h✝¹¹
+  let p :=
+    { schedule := schedule, path := path.after, value := value, occupancy := occupancy.after, digests := digests,
+      packedDigests := packedDigests, out := out, schedule_call := sc, path_call := pc, value_call := vc,
+      occupancy_call := oc, digest_call := dc, packed_digest_call := pdc, scalar_call := call, canonical_schedule := cs,
+      canonical_path := path.canonical, canonical_value := cv, canonical_occupancy := occupancy.canonical,
+      canonical_digests := cd, canonical_packedDigests := cpd, canonical_out := co };
+  Exists.intro p
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let a ← _a
+                    let b ← add_path_lanes a o s
+                    let c ← add_value_lanes b o s
+                    let d ← add_occupancy_lanes c pub o s
+                    let e ← public_digest_lanes pub o s
+                    let f ← add_preweighted d 84#usize e
+                    FIw_ScalarSuffix.run pub o s f) =
+                  ok out)
+              sc))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = ok out)
+                (bind_tc_ok schedule fun a => do
+                  let b ← add_path_lanes a o s
+                  let c ← add_value_lanes b o s
+                  let d ← add_occupancy_lanes c pub o s
+                  let e ← public_digest_lanes pub o s
+                  let f ← add_preweighted d 84#usize e
+                  FIw_ScalarSuffix.run pub o s f)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (do
+                        let b ← _a
+                        let c ← add_value_lanes b o s
+                        let d ← add_occupancy_lanes c pub o s
+                        let e ← public_digest_lanes pub o s
+                        let f ← add_preweighted d 84#usize e
+                        FIw_ScalarSuffix.run pub o s f) =
+                      ok out)
+                  pc))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => _a = ok out)
+                    (bind_tc_ok path.after fun b => do
+                      let c ← add_value_lanes b o s
+                      let d ← add_occupancy_lanes c pub o s
+                      let e ← public_digest_lanes pub o s
+                      let f ← add_preweighted d 84#usize e
+                      FIw_ScalarSuffix.run pub o s f)))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (do
+                            let c ← _a
+                            let d ← add_occupancy_lanes c pub o s
+                            let e ← public_digest_lanes pub o s
+                            let f ← add_preweighted d ⋯ e
+                            FIw_ScalarSuffix.run pub o s f) =
+                          ok out)
+                      vc))
+                  (Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = ok out)
+                        (bind_tc_ok value fun c => do
+                          let d ← add_occupancy_lanes c pub o s
+                          let e ← public_digest_lanes pub o s
+                          let f ← ⋯
+                          FIw_ScalarSuffix.run pub o s f)))
+                    (Eq.mpr (id (congrArg (fun _a => ⋯ = ⋯) oc))
+                      (Eq.mpr (id (congrArg (fun _a => ⋯) (bind_tc_ok occupancy.after ⋯)))
+                        (Eq.mpr (id (congrArg ⋯ dc)) (Eq.mpr (id ⋯) (Eq.mpr ⋯ ⋯)))))))))))))
+'AspisR1.NKR_TermSemanticSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]

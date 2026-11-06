@@ -1,0 +1,39 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "source": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+  "source_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+  "harness_sha256": "862da2c8de6edef06fd65cb2f98c0e41d65d7230194071c5083c802865830331",
+  "frozen": "let asset_difference = openings.z[1].sub(lift_m31(public.asset_id));\n    let input_asset = selectors.row(2 * 16 + 12).mul(asset_difference);\n    let output_scalar = selectors.row(31 * 16 + 12).mul(asset_difference);\n    let private_transfer_term = selectors.row(28 * 16 + 12).mul(asset_difference);\n    let withdrawal_amount_value = public.withdrawal_amount.unwrap_or(0);\n    let withdrawal_term = selectors\n        .row(16 * VALUE_AUXILIARY_BLOCK + 2)\n        .mul(openings.z[10].sub(lift_m31(M31(withdrawal_amount_value))));\n    let scalars = scalar_lanes(\n        public.variant,\n        public.withdrawal_amount.is_some(),\n        input_asset,\n        output_scalar,\n        private_transfer_term,\n        withdrawal_term,\n    );\n    add_preweighted(&mut packed, 92, &scalars);\n    packed\n",
+  "stages": [
+    "NKR_swindow_lift(asset,l)",
+    "NKR_swindow_sub(opened[1],locals[0],l)",
+    "NKR_swindow_row(selectors,2*16+12,l)",
+    "NKR_swindow_mul(locals[2],locals[1],l)",
+    "NKR_swindow_row(selectors,31*16+12,l)",
+    "NKR_swindow_mul(locals[4],locals[1],l)",
+    "NKR_swindow_row(selectors,28*16+12,l)",
+    "NKR_swindow_mul(locals[6],locals[1],l)",
+    "NKR_swindow_row(selectors,16*VALUE_AUXILIARY_BLOCK+2,l)",
+    "NKR_swindow_lift(M31(withdrawal_amount.unwrap_or(0)),l)",
+    "NKR_swindow_sub(opened[10],locals[9],l)",
+    "NKR_swindow_mul(locals[8],locals[10],l)"
+  ],
+  "locals_mapping": [
+    "liftAsset",
+    "difference",
+    "row44",
+    "inputAsset",
+    "row508",
+    "outputScalar",
+    "row460",
+    "privateTransfer",
+    "row1010",
+    "liftAmount",
+    "withdrawalDifference",
+    "withdrawalTerm"
+  ],
+  "tail": "let scalars=NKR_swindow_scalars(variant,withdrawal_amount.is_some(),products[0],products[1],products[2],products[3],l);NKR_swindow_preweighted(packed,92,&scalars,l);",
+  "identity": true,
+  "retired": "K05614callwindow TIMEOUT, never rerun",
+  "scope": "One arbitrary native field/row statement on12value prestate +pointwise fullframe; separate258/23092suffix with complete2/24replies. No field product evaluated."
+}

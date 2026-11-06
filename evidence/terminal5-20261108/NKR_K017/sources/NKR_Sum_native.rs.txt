@@ -1,0 +1,32 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn NKR_sum_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+fn NKR_sum_q(w:[u32;4])->QM31{QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+struct NKR_SumLog{seek:usize,calls:usize,arity:usize,left:QM31,right:QM31,reply:QM31}
+fn NKR_sum_child<const N:usize>(left:[QM31;N],right:[QM31;N],l:&mut NKR_SumLog)->QM31{
+ l.calls+=1;l.arity=N;l.left=left[l.seek];l.right=right[l.seek];l.reply
+}
+fn NKR_sum_mul(left:QM31,right:QM31,l:&mut NKR_SumLog)->QM31{NKR_sum_child([left],[right],l)}
+fn NKR_sum_dispatch(left:[QM31;4],right:[QM31;4],count:usize,l:&mut NKR_SumLog)->QM31{
+    match count {
+        1 => NKR_sum_mul(left[0],right[0],l),
+        2 => NKR_sum_child([left[0], left[1]], [right[0], right[1]],l),
+        3 => NKR_sum_child([left[0], left[1], left[2]], [right[0], right[1], right[2]],l),
+        4 => NKR_sum_child(left,right,l),
+        _ => unreachable!("Copy finish dot batch width"),
+    }
+}
+#[kani::proof] #[kani::unwind(8)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_sum_dispatch_cut(){
+ let left:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};
+ let right:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};
+ let reply=NKR_sum_q(kani::any());let count:usize=kani::any();let seek:usize=kani::any();let limb:usize=kani::any();
+ kani::assume(count>=1&&count<=4&&seek<count&&limb<4);
+ let mut l=NKR_SumLog{seek,calls:0,arity:0,left:QM31::ZERO,right:QM31::ZERO,reply};
+ let out=NKR_sum_dispatch(left,right,count,&mut l);
+ assert_eq!(l.calls,1);assert_eq!(l.arity,count);
+ assert_eq!(NKR_sum_words(l.left)[limb],NKR_sum_words(left[seek])[limb]);
+ assert_eq!(NKR_sum_words(l.right)[limb],NKR_sum_words(right[seek])[limb]);
+ assert_eq!(NKR_sum_words(out)[limb],NKR_sum_words(reply)[limb]^if cfg!(NKR_invert){1}else{0});
+}

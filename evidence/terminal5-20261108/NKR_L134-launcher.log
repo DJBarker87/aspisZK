@@ -1,0 +1,45 @@
+{"attempt": "NKR_L134", "exit_status": 1, "wall_seconds": 25.04959395597689, "peak_rss_kib": "6151324", "swaps": "0", "print_axioms": ["'AspisR1.NKR_DigestInvocation.middle_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKR_DigestInvocation.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKR_DigestInvocation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKR_DigestInvocation.lean:28:41: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NKR_DigestInvocation.lean:20:51: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NKR_DigestInvocation.lean:58:1: error: Tactic `assumption` failed
+
+p : Public
+o : Openings
+s : Selecto
+...
+ (v 1) c.recipient = ok (v 2)
+vc3 : NKR_DigestAdd.add (v 2) c.change = ok (v 3)
+mc0 : NKR_DigestAdd.add (![zero, v 3, zero] 0) (NKR_DigestPrefix.first c.levels) = ok m.local0
+mc12 : NKR_DigestAdd.add (![zero, v 3, zero] 2) (NKR_DigestPrefix.last c.levels) = ok m.local12
+mcr : NKR_DigestAdd.add (![zero, v 3, zero] 1) c.nextRoot = ok m.nextRoot
+mcc : NKR_DigestAdd.add m.nextRoot c.carried = ok m.carried
+⊢ (do
+      let v1 ← NKR_DigestAdd.add NKR_DigestPrefix.zero c.anchor
+      let v2 ← NKR_DigestAdd.add v1 c.nullifier
+      let v3 ← NKR_DigestAdd.add v2 c.recipient
+      let v4 ← NKR_DigestAdd.add v3 c.change
+      let v0 ← NKR_DigestAdd.add NKR_DigestPrefix.zero (NKR_DigestPrefix.first c.levels)
+      let v12 ← NKR_DigestAdd.add NKR_DigestPrefix.zero (NKR_DigestPrefix.last c.levels)
+      let v5 ← NKR_DigestAdd.add v4 c.nextRoot
+      let v6 ← NKR_DigestAdd.add v5 c.carried
+      ok
+          ({ anchor := c.anchor, nullifier := c.nullifier, recipient := c.recipient, change := c.change,
+              levels := c.levels, nextRoot := c.nextRoot, carry := c.carry, carried := c.carried },
+            ![v0, v6, v12])) =
+    ok (c, ![m.local0, m.carried, m.local12])
+NKR_DigestInvocation.lean:70:21: error(lean.unknownIdentifier): Unknown identifier `prefix_source`
+NKR_DigestInvocation.lean:70:8: error: Tactic `rcases` failed: `x✝ : ?m.30` is not an inductive datatype
+NKR_DigestInvocation.lean:76:14: error(lean.unknownIdentifier): Unknown constant `prefix_source`
+'AspisR1.NKR_DigestInvocation.middle_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_DigestInvocation.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_DigestInvocation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r226421fc45bb47888d9ea4fc908d2f93.scope; invocation ID: 085dbf2bf7714773893d0b2577e10363

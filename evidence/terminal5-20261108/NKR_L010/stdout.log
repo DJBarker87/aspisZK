@@ -1,0 +1,42 @@
+theorem AspisR1.NKR_ScheduleRoot.source : ∀ (packed : Std.Array NQ 24#usize) (p : Public) (o : Openings)
+  (s : Selectors),
+  canonical packed →
+    canonical o.z →
+      canonical s.high →
+        canonical s.low →
+          ∃ l absorption middle out,
+            NKI_InitialInvocation.Clauses p o s l ∧
+              pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s =
+                  ok (l.initial2, absorption) ∧
+                pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize l.initial2 = ok middle ∧
+                  pool_v1.pair_forest_semantic_terminal.add_preweighted middle 16#usize absorption = ok out ∧
+                    NKR_ScheduleCut.Cut packed p o s l.initial2 absorption middle out
+                        (NKR_ScheduleCut.observations packed p o s l.initial2 absorption middle out) ∧
+                      pool_v1.pair_forest_semantic_terminal.add_schedule_lanes packed p o s = ok out ∧
+                        canonical out ∧
+                          ∀ (j : Fin ↑24#usize),
+                            decoded out j =
+                              decoded packed j + FIx_SelectedMeaning.contribution (decoded l.initial2) 0 ↑j +
+                                FIx_SelectedMeaning.contribution (decoded absorption) 16 ↑j :=
+fun packed p o s hp hz hh hl =>
+  let ⟨l, h✝⟩ := NKI_ScheduleSource.source packed p o s hp hz hh hl
+  let ⟨absorption, h✝¹⟩ := h✝
+  let ⟨middle, h✝²⟩ := h✝¹
+  let ⟨out, h✝³⟩ := h✝²
+  let ⟨calls, right✝⟩ := h✝³
+  let ⟨left✝, right✝¹⟩ := right✝
+  let ⟨child, right✝²⟩ := right✝¹
+  let ⟨first, right✝³⟩ := right✝²
+  let ⟨second, right✝⁴⟩ := right✝³
+  let ⟨parent, right✝⁵⟩ := right✝⁴
+  let ⟨co, value⟩ := right✝⁵
+  Exists.intro l
+    (Exists.intro absorption
+      (Exists.intro middle
+        (Exists.intro out
+          ⟨calls,
+            ⟨child,
+              ⟨first,
+                ⟨second,
+                  ⟨NKR_ScheduleCut.source packed p o s l.initial2 absorption middle out, ⟨parent, ⟨co, value⟩⟩⟩⟩⟩⟩⟩)))
+'AspisR1.NKR_ScheduleRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]

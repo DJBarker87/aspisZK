@@ -1,0 +1,52 @@
+NKR_TermTail.lean:67:1: error: unsolved goals
+case refine_1
+zc point : Std.Array NQ 10#usize
+mu comp h active : NQ
+hz : canonical zc
+hp : canonical point
+hm : Canon mu
+hc : Canon comp
+hh : Canon h
+ha : Canon active
+eq : field.QM31
+ce : pool_v1.pair_forest_semantic_terminal.equality_value zc point = ok eq
+he : Canon eq
+ve : decode eq = FIv_EqualityValue.weight zc point
+weighted : field.QM31
+cw : eq.mul comp = ok weighted
+hw : Canon weighted
+vw : decode weighted = decode eq * decode comp
+muH : field.QM31
+cmh : field.QM31.mul mu h = ok muH
+hmh : Canon muH
+vmh : decode muH = decode mu * decode h
+sum : field.QM31
+cs : weighted.add muH = ok sum
+hs : Canon sum
+vs : decode sum = decode weighted + decode muH
+mu2 : field.QM31
+cm2 : field.QM31.mul mu mu = ok mu2
+hm2 : Canon mu2
+vm2 : decode mu2 = decode mu * decode mu
+inactive : field.QM31
+ci : field.QM31.ONE.sub active = ok inactive
+hi : Canon inactive
+vi : decode inactive = decode field.QM31.ONE - decode active
+inactiveH : field.QM31
+cih : inactive.mul h = ok inactiveH
+hih : Canon inactiveH
+vih : decode inactiveH = decode inactive * decode h
+extra : field.QM31
+cx : mu2.mul inactiveH = ok extra
+hx : Canon extra
+vx : decode extra = decode mu2 * decode inactiveH
+out : field.QM31
+co : sum.add extra = ok out
+ho : Canon out
+vo : decode out = decode sum + decode extra
+c : Calls zc point mu comp h active :=
+  { eq := eq, weighted := weighted, muH := muH, sum := sum, mu2 := mu2, inactive := inactive, inactiveH := inactiveH,
+    extra := extra, out := out, equality := ce, weight := cw, mu_h := cmh, sum_call := cs, mu_square := cm2,
+    inactive_call := ci, inactive_h := cih, extra_call := cx, returned := co }
+⊢ ok out = ok c.out
+'AspisR1.NKR_TermTail.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,469 @@
+NKR_SumCopyAssociation.lean:55:1: warning: 'change
+  (NKR_SumFinishData.group (gi lookup i consumer)).val =
+    (NJL_EndpointLookup.endpoint i consumer).slot.val + (if consumer then 2 else 0)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NKR_SumCopyAssociation.lean:68:25: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  k.1
+has type `ℕ` which is not a one-constructor inductive type.
+NKR_SumCopyAssociation.lean:68:45: error: Application type mismatch: The argument
+  Eq.symm (congrArg Prod.fst key.left)
+has type
+  (NJL_EndpointLookup.group i consumer, NJL_EndpointLookup.column i consumer).1 =
+    (↑(NKR_SumFinishData.group (NJL_EndpointLookup.groupIndex i consumer ⋯)),
+        ↑(NKR_SumFinishData.low (NJL_EndpointLookup.groupIndex i consumer ⋯))).1
+but is expected to have type
+  ?m.18
+      (NJL_EndpointLookup.group i consumer, ↑(NJL_EndpointLookup.endpoint i consumer).pattern,
+        NJL_EndpointLookup.column i consumer) =
+    ?m.24
+in the application
+  Eq.trans (congrArg (fun k => ?m.17) key.right) (Eq.symm (congrArg Prod.fst key.left))
+NKR_SumCopyAssociation.lean:74:25: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  k.1
+has type `ℕ` which is not a one-constructor inductive type.
+NKR_SumCopyAssociation.lean:74:43: error: Application type mismatch: The argument
+  Eq.symm (descriptor_pattern i consumer)
+has type
+  ↑(NJL_EndpointLookup.endpoint i consumer).pattern = ↑(endpoint i consumer).pattern
+but is expected to have type
+  ?m.20
+      (NJL_EndpointLookup.group i consumer, ↑(NJL_EndpointLookup.endpoint i consumer).pattern,
+        NJL_EndpointLookup.column i consumer) =
+    ?m.24
+in the application
+  Eq.trans (congrArg (fun k => ?m.19) key) (Eq.symm (descriptor_pattern i consumer))
+NKR_SumCopyAssociation.lean:80:43: error: Application type mismatch: The argument
+  Eq.symm (congrArg Prod.snd key.left)
+has type
+  (NJL_EndpointLookup.group i consumer, NJL_EndpointLookup.column i consumer).2 =
+    (↑(NKR_SumFinishData.group (NJL_EndpointLookup.groupIndex i consumer ⋯)),
+        ↑(NKR_SumFinishData.low (NJL_EndpointLookup.groupIndex i consumer ⋯))).2
+but is expected to have type
+  (NJL_EndpointLookup.group i consumer, ↑(NJL_EndpointLookup.endpoint i consumer).pattern,
+        NJL_EndpointLookup.column i consumer).2 =
+    ?m.23
+in the application
+  Eq.trans (congrArg Prod.snd key.right) (Eq.symm (congrArg Prod.snd key.left))
+NKR_SumCopyAssociation.lean:97:1: error: No goals to be solved
+NKR_SumCopyAssociation.lean:99:90: error: unsolved goals
+n : ℕ
+f : Fin n → K
+⊢ ∑ i, (f ∘ fun i => i) i = ∑ i, f i
+NKR_SumCopyAssociation.lean:161:11: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+NKR_SumCopyAssociation.lean:168:9: error: unsolved goals
+f : Fin 136 → Bool → K
+i : Fin 136
+hi : i ∈ Finset.univ
+⊢ f i true + f i false = f i false + f i true
+NKR_SumCopyAssociation.lean:155:0: error: linter Lean.Linter.constructorNameAsVariable failed: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+NKR_SumCopyAssociation.lean:274:93: error: unsolved goals
+terms : Fin 14 → K
+coefficients : Fin 26 → K
+g : Fin 4
+p : Fin 26
+hp : p ∈ Finset.univ
+⊢ NJB_PatternReference.offset g.castSucc ≤ ↑p →
+    ↑p < NJB_PatternReference.offset g.succ →
+      p = 0 ∨
+        p = 1 ∨
+          p = 2 ∨
+            p = 3 ∨
+              p = 4 ∨
+                p = 5 ∨
+                  p = 6 ∨
+                    p = 7 ∨
+                      p = 8 ∨
+                        p = 9 ∨
+                          p = 10 ∨
+                            p = 11 ∨
+                              p = 12 ∨
+                                p = 13 ∨
+                                  p = 14 ∨
+                                    p = 15 ∨
+                                      p = 16 ∨
+                                        p = 17 ∨ p = 18 ∨ p = 19 ∨ p = 20 ∨ p = 21 ∨ p = 22 ∨ p = 23 ∨ p = 24 ∨ p = 25
+NKR_SumCopyAssociation.lean:267:123: error: unsolved goals
+terms : Fin 14 → K
+coefficients : Fin 26 → K
+g : Fin 4
+p : Fin 26
+hp : p ∈ Finset.univ
+member :
+  p ∈ NJB_PatternReference.coordinates g ↔
+    NJB_PatternReference.offset g.castSucc ≤ ↑p ∧ ↑p < NJB_PatternReference.offset g.succ
+⊢ (if NJB_PatternReference.offset g.castSucc ≤ ↑p ∧ ↑p < NJB_PatternReference.offset g.succ then
+      terms (NJB_PatternReference.pattern p) * coefficients p
+    else 0) =
+    if
+        (p = 0 ∨
+            p = 1 ∨
+              p = 2 ∨
+                p = 3 ∨
+                  p = 4 ∨
+                    p = 5 ∨
+                      p = 6 ∨
+                        p = 7 ∨
+                          p = 8 ∨
+                            p = 9 ∨
+                              p = 10 ∨
+                                p = 11 ∨
+                                  p = 12 ∨
+                                    p = 13 ∨
+                                      p = 14 ∨
+                                        p = 15 ∨
+                                          p = 16 ∨
+                                            p = 17 ∨
+                                              p = 18 ∨ p = 19 ∨ p = 20 ∨ p = 21 ∨ p = 22 ∨ p = 23 ∨ p = 24 ∨ p = 25) ∧
+          NJB_PatternReference.offset g.castSucc ≤ ↑p ∧ ↑p < NJB_PatternReference.offset g.succ then
+      terms (NJB_PatternReference.pattern p) * coefficients p
+    else 0
+NKR_SumCopyAssociation.lean:276:7: warning: This simp argument is unused:
+  member
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵m̵e̵m̵b̵e̵r̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_SumCopyAssociation.lean:301:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (if _a then
+        decode (NJB_ArrayCarrier.cell terms (NJB_PatternReference.pattern (NKR_SumFinishData.pOut c))) *
+          (decode (scratch (NJL_EndpointIndices.pattern c)) * plow s c)
+      else 0) =
+      if NKR_SumLookupCertificate.patternGroup c = g then
+        patternTerm s terms c * decode (scratch (NJL_EndpointIndices.pattern c))
+      else 0
+Error: Application type mismatch: The argument
+  List.instDecidableMemOfLawfulBEq (NKR_SumFinishData.pOut c) (NJB_PatternReference.coordinates g)
+has type
+  Decidable (NKR_SumFinishData.pOut c ∈ NJB_PatternReference.coordinates g)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite K _a (List.instDecidableMemOfLawfulBEq (NKR_SumFinishData.pOut c) (NJB_PatternReference.coordinates g))
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+scratch : State
+s : Selectors
+terms : Std.Array NQ 14#usize
+g : Fin 4
+c : Fin 43
+hc : c ∈ Finset.univ
+⊢ (if NKR_SumFinishData.pOut c ∈ NJB_PatternReference.coordinates g then
+      decode (NJB_ArrayCarrier.cell terms (NJB_PatternReference.pattern (NKR_SumFinishData.pOut c))) *
+        (decode (scratch (NJL_EndpointIndices.pattern c)) * plow s c)
+    else 0) =
+    if NKR_SumLookupCertificate.patternGroup c = g then
+      patternTerm s terms c * decode (scratch (NJL_EndpointIndices.pattern c))
+    else 0
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (14 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NKR_SumCopyAssociation.lean:347:3: error: 'change' tactic failed, pattern
+  (if NKR_SumFinishData.group c = g then decode (scratch (NJL_EndpointIndices.weight c)) * low s c else 0) = ?m.217
+is not definitionally equal to target
+  (if NKR_SumFinishData.group c = g then
+      decode (NKR_SumFinishInvocation.weightValues (NJB_ArrayCarrier.array scratch) c) * NKR_SumFinishCohort.low s c
+    else 0) =
+    if NKR_SumFinishData.group c = g then low s c * weightSum lookup s append variant c else 0
+NKR_SumCopyAssociation.lean:420:1: error: Type mismatch: After simplification, term
+  v
+ has type
+  @Eq K
+    (NKR_SumLegacyRows.values
+      (List.foldl
+        (FJk_CopyStep.step (FIw_CopyEndpoint.modelSelectors s) (FIw_ArrayValue.decoded terms) (↑append)
+          (FJk_CopyDescriptor.variant variant))
+        FJk_CopyFullFold.initial R0P.copyLinks)
+      g)
+    (∑ x,
+      ((if g = NKR_SumLegacyRows.group false (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)).producer then
+          NKR_SumLegacyRows.valueTerm (FIw_CopyEndpoint.modelSelectors s) (FIw_ArrayValue.decoded terms)
+            (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)) false
+        else 0) +
+        if g = NKR_SumLegacyRows.group true (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)).consumer then
+          NKR_SumLegacyRows.valueTerm (FIw_CopyEndpoint.modelSelectors s) (FIw_ArrayValue.decoded terms)
+            (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)) true
+        else 0))
+but is expected to have type
+  @Eq K
+    (NKR_SumLegacyRows.values
+      (List.foldl
+        (FJk_CopyStep.step (FIw_CopyEndpoint.modelSelectors s) (FIw_ArrayValue.decoded terms) (↑append)
+          (FJk_CopyDescriptor.variant variant))
+        FJk_CopyFullFold.initial R0P.copyLinks)
+      g)
+    (∑ x,
+      ((if
+            g =
+              NKR_SumLegacyRows.group false
+                (if false = true then (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)).consumer
+                else (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)).producer) then
+          NKR_SumLegacyRows.valueTerm (FIw_CopyEndpoint.modelSelectors s) (FIw_ArrayValue.decoded terms)
+            (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)) false
+        else 0) +
+        if
+            g =
+              NKR_SumLegacyRows.group true
+                (if True then (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)).consumer
+                else (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)).producer) then
+          NKR_SumLegacyRows.valueTerm (FIw_CopyEndpoint.modelSelectors s) (FIw_ArrayValue.decoded terms)
+            (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)) true
+        else 0))
+NKR_SumCopyAssociation.lean:433:1: error: Type mismatch: After simplification, term
+  v
+ has type
+  @Eq K
+    (NKR_SumLegacyRows.weights
+      (List.foldl
+        (FJk_CopyStep.step (FIw_CopyEndpoint.modelSelectors s) (FIw_ArrayValue.decoded terms) (↑append)
+          (FJk_CopyDescriptor.variant variant))
+        FJk_CopyFullFold.initial R0P.copyLinks)
+      g)
+    (∑ x,
+      ((if g = NKR_SumLegacyRows.group false (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)).producer then
+          NKR_SumLegacyRows.weightTerm (FIw_CopyEndpoint.modelSelectors s) (↑append)
+            (FJk_CopyDescriptor.variant variant) (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)) false
+        else 0) +
+        if g = NKR_SumLegacyRows.group true (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)).consumer then
+          NKR_SumLegacyRows.weightTerm (FIw_CopyEndpoint.modelSelectors s) (↑append)
+            (FJk_CopyDescriptor.variant variant) (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)) true
+        else 0))
+but is expected to have type
+  @Eq K
+    (NKR_SumLegacyRows.weights
+      (List.foldl
+        (FJk_CopyStep.step (FIw_CopyEndpoint.modelSelectors s) (FIw_ArrayValue.decoded terms) (↑append)
+          (FJk_CopyDescriptor.variant variant))
+        FJk_CopyFullFold.initial R0P.copyLinks)
+      g)
+    (∑ x,
+      ((if
+            g =
+              NKR_SumLegacyRows.group false
+                (if false = true then (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)).consumer
+                else (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)).producer) then
+          NKR_SumLegacyRows.weightTerm (FIw_CopyEndpoint.modelSelectors s) (↑append)
+            (FJk_CopyDescriptor.variant variant) (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)) false
+        else 0) +
+        if
+            g =
+              NKR_SumLegacyRows.group true
+                (if True then (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)).consumer
+                else (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)).producer) then
+          NKR_SumLegacyRows.weightTerm (FIw_CopyEndpoint.modelSelectors s) (↑append)
+            (FJk_CopyDescriptor.variant variant) (FJk_CopyDescriptor.link (NJL_EndpointLookup.link x)) true
+        else 0))
+'AspisR1.NKR_SumCopyAssociation.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.descriptor_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.descriptor_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.descriptor_pattern' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.group_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.low_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pattern_group_key' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pattern_key' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pattern_low_key' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.selector' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.sum_finRange' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.sum_filter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.native_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.link_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pair_left' depends on axioms: [propext, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pair_right' depends on axioms: [propext, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.canonical_encoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.sum_pairs' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.tag_transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.list_sum_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.tag_bucket' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.tag_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.dot_finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.coefficient_finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pattern_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.weight_regroup' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pattern_regroup' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.tag_pattern' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.legacy_values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.legacy_weights' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKR_SumCopyAssociation.source : ∀ (lookup : Lookups),
+  Keys →
+    ∀ (domain : NKR_SumTagPermutation.Domain),
+      NKR_SumTagPermutation.Cut →
+        NKR_SumTagAssociation.Cut domain →
+          ∀ (s : Selectors) (terms : Std.Array NQ 14#usize) (append : U64)
+            (variant : PoolV1PairForestCompiledVariantV1),
+            FIw_ArrayValue.canonical s.high →
+              FIw_ArrayValue.canonical s.low →
+                FIw_ArrayValue.canonical terms →
+                  ∃ scratch outValues outWeights,
+                    NJB_StateUpdates.run (fun i state => NKR_SumCopyCollect.step lookup append variant s i state)
+                          (List.finRange 136) NKR_SumCopyInvocation.zero =
+                        ok scratch ∧
+                      NKR_SumFinishInvocation.reference (NJB_ArrayCarrier.array scratch) s terms =
+                          ok (outValues, outWeights) ∧
+                        FIw_ArrayValue.canonical outValues ∧
+                          FIw_ArrayValue.canonical outWeights ∧
+                            (∀ (g : Fin ↑4#usize),
+                                decode (NJB_ArrayCarrier.cell outValues g) =
+                                  NKR_SumLegacyRows.values (FJk_CopyFullFold.model s terms append variant) g) ∧
+                              ∀ (g : Fin ↑4#usize),
+                                decode (NJB_ArrayCarrier.cell outWeights g) =
+                                  NKR_SumLegacyRows.weights (FJk_CopyFullFold.model s terms append variant) g :=
+fun lookup keys domain permutation metadata s terms append variant hh hl ht =>
+  let ⟨scratch, h✝⟩ :=
+    NKR_SumScratchCoordinates.source lookup append variant s (List.finRange 136) NKR_SumCopyInvocation.zero hh fun x =>
+      FIv_NativeValue.zero.left
+  let ⟨call, right✝⟩ := h✝
+  let ⟨cs, right✝¹⟩ := right✝
+  let ⟨weightCoordinates, patternCoordinates⟩ := right✝¹
+  have hw := fun c =>
+    have h := weightCoordinates c;
+    id
+      (fun h =>
+        Eq.mpr
+          (id
+            (congrArg (Eq (decode (scratch (NJL_EndpointIndices.weight c))))
+              (Finset.sum_congr (Eq.refl Finset.univ) fun x a =>
+                congr
+                  (congrArg HAdd.hAdd
+                    (ite_congr legacy_values._simp_5
+                      (fun a =>
+                        Eq.refl
+                          (decode (NJL_EndpointLookup.high s x false (lookup x false)) *
+                            NKR_SumCollectMeaning.weight x append variant))
+                      fun a => Eq.refl 0))
+                  (ite_congr legacy_values._simp_5
+                    (fun a =>
+                      Eq.refl
+                        (decode (NJL_EndpointLookup.high s x true (lookup x true)) *
+                          NKR_SumCollectMeaning.weight x append variant))
+                    fun a => Eq.refl 0))))
+          (Eq.mp
+            (congrArg (fun _a => decode (scratch (NJL_EndpointIndices.weight c)) = _a)
+              (sum_finRange fun i =>
+                (if c = NJL_EndpointLookup.groupIndex i false (lookup i false) then
+                    decode (NJL_EndpointLookup.high s i false (lookup i false)) *
+                      NKR_SumCollectMeaning.weight i append variant
+                  else 0) +
+                  if c = NJL_EndpointLookup.groupIndex i true (lookup i true) then
+                    decode (NJL_EndpointLookup.high s i true (lookup i true)) *
+                      NKR_SumCollectMeaning.weight i append variant
+                  else 0))
+            (Eq.mp
+              (congrArg (fun _a => decode (scratch (NJL_EndpointIndices.weight c)) = _a)
+                (zero_add
+                  (List.map
+                      (fun i =>
+                        (if c = NJL_EndpointLookup.groupIndex i false (lookup i false) then
+                            decode (NJL_EndpointLookup.high s i false (lookup i false)) *
+                              NKR_SumCollectMeaning.weight i append variant
+                          else 0) +
+                          if c = NJL_EndpointLookup.groupIndex i true (lookup i true) then
+                            decode (NJL_EndpointLookup.high s i true (lookup i true)) *
+                              NKR_SumCollectMeaning.weight i append variant
+                          else 0)
+                      (List.finRange 136)).sum))
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    decode (scratch (NJL_EndpointIndices.weight c)) =
+                      _a +
+                        (List.map
+                            (fun i =>
+                              (if c = NJL_EndpointLookup.groupIndex i false (lookup i false) then
+                                  decode (NJL_EndpointLookup.high s i false (lookup i false)) *
+                                    NKR_SumCollectMeaning.weight i append variant
+                                else 0) +
+                                if c = NJL_EndpointLookup.groupIndex i true (lookup i true) then
+                                  decode (NJL_EndpointLookup.high s i true (lookup i true)) *
+                                    NKR_SumCollectMeaning.weight i append variant
+                                else 0)
+                            (List.finRange 136)).sum)
+                  FIv_NativeValue.zero.right)
+                h))))
+      h;
+  have hp := fun c =>
+    have h := patternCoordinates c;
+    id
+      (fun h =>
+        Eq.mpr
+          (id
+            (congrArg (Eq (decode (scratch (NJL_EndpointIndices.pattern c))))
+              (Finset.sum_congr (Eq.refl Finset.univ) fun x a =>
+                congr
+                  (congrArg HAdd.hAdd
+                    (ite_congr legacy_values._simp_5
+                      (fun a => Eq.refl (decode (NJL_EndpointLookup.high s x false (lookup x false)))) fun a =>
+                      Eq.refl 0))
+                  (ite_congr legacy_values._simp_5
+                    (fun a => Eq.refl (decode (NJL_EndpointLookup.high s x true (lookup x true)))) fun a =>
+                    Eq.refl 0))))
+          (Eq.mp
+            (congrArg (fun _a => decode (scratch (NJL_EndpointIndices.pattern c)) = _a)
+              (sum_finRange fun i =>
+                (if c = NJL_EndpointLookup.patternIndex i false (lookup i false) then
+                    decode (NJL_EndpointLookup.high s i false (lookup i false))
+                  else 0) +
+                  if c = NJL_EndpointLookup.patternIndex i true (lookup i true) then
+                    decode (NJL_EndpointLookup.high s i true (lookup i true))
+                  else 0))
+            (Eq.mp
+              (congrArg (fun _a => decode (scratch (NJL_EndpointIndices.pattern c)) = _a)
+                (zero_add
+                  (List.map
+                      (fun i =>
+                        (if c = NJL_EndpointLookup.patternIndex i false (lookup i false) then
+                            decode (NJL_EndpointLookup.high s i false (lookup i false))
+                          else 0) +
+                          if c = NJL_EndpointLookup.patternIndex i true (lookup i true) then
+                            decode (NJL_EndpointLookup.high s i true (lookup i true))
+                          else 0)
+                      (List.finRange 136)).sum))
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    decode (scratch (NJL_EndpointIndices.pattern c)) =
+                      _a +
+                        (List.map
+                            (fun i =>
+                              (if c = NJL_EndpointLookup.patternIndex i false (lookup i false) then
+                                  decode (NJL_EndpointLookup.high s i false (lookup i false))
+                                else 0) +
+                                if c = NJL_EndpointLookup.patternIndex i true (lookup i true) then
+                                  decode (NJL_EndpointLookup.high s i true (lookup i true))
+                                else 0)
+                            (List.finRange 136)).sum)
+                  FIv_NativeValue.zero.right)
+                h))))
+      h;
+  let ⟨values, h✝¹⟩ :=
+    NKR_SumFinishCohort.source (NJB_ArrayCarrier.array scratch) s terms (NJB_ArrayCarrier.canonical_array scratch cs) hh
+      hl ht
+  let ⟨weights, h✝²⟩ := h✝¹
+  let ⟨finishCall, right✝²⟩ := h✝²
+  let ⟨cv, right✝³⟩ := right✝²
+  let ⟨cw, right✝⁴⟩ := right✝³
+  let ⟨vv, vw⟩ := right✝⁴
+  have eq := rows lookup keys domain permutation metadata s scratch terms append variant hw hp;
+  Exists.intro scratch
+    (Exists.intro values
+      (Exists.intro weights
+        ⟨call,
+          ⟨finishCall, ⟨cv, ⟨cw, ⟨fun g => Eq.trans (vv g) (eq.left g), fun g => Eq.trans (vw g) (eq.right g)⟩⟩⟩⟩⟩))
+'AspisR1.NKR_SumCopyAssociation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

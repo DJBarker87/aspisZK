@@ -1,0 +1,724 @@
+'AspisR1.NKR_SumCollectMeaning.step_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCollectMeaning.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumCopyAlgebraCombined.lean:173:7: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    NJL_EndpointLookup.groupKeys[_a] =
+      (NJL_EndpointLookup.group index consumer, NJL_EndpointLookup.column index consumer)
+Error: Application type mismatch: The argument
+  a✝
+has type
+  ¬_a < NJL_EndpointLookup.groupKeys.length
+but is expected to have type
+  ¬↑g < NJL_EndpointLookup.groupKeys.length
+in the application
+  scan_found._proof_1 (NJL_EndpointLookup.group index consumer, NJL_EndpointLookup.column index consumer)
+    NJL_EndpointLookup.groupKeys 0 g a✝
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case left
+index : Fin 136
+consumer : Bool
+bounds : NJL_EndpointLookup.Cut index consumer
+cut : Cut index consumer
+g : Fin NJL_EndpointLookup.groupKeys.length
+hg :
+  NJL_EndpointLookup.scanFrom (NJL_EndpointLookup.group index consumer, NJL_EndpointLookup.column index consumer)
+      NJL_EndpointLookup.groupKeys 0 =
+    0 + ↑g
+vg :
+  NJL_EndpointLookup.groupKeys[↑g] = (NJL_EndpointLookup.group index consumer, NJL_EndpointLookup.column index consumer)
+p : Fin NJL_EndpointLookup.patternKeys.length
+hp :
+  NJL_EndpointLookup.scanFrom
+      (NJL_EndpointLookup.group index consumer, ↑(NJL_EndpointLookup.endpoint index consumer).pattern,
+        NJL_EndpointLookup.column index consumer)
+      NJL_EndpointLookup.patternKeys 0 =
+    0 + ↑p
+vp :
+  NJL_EndpointLookup.patternKeys[↑p] =
+    (NJL_EndpointLookup.group index consumer, ↑(NJL_EndpointLookup.endpoint index consumer).pattern,
+      NJL_EndpointLookup.column index consumer)
+gi : ↑g = NJL_EndpointLookup.gc index consumer
+pi : ↑p = NJL_EndpointLookup.pc index consumer
+v :
+  NJL_EndpointLookup.groupKeys[↑g] = (NJL_EndpointLookup.group index consumer, NJL_EndpointLookup.column index consumer)
+eq : ↑g = ↑(NJL_EndpointLookup.groupIndex index consumer bounds)
+⊢ (↑(group (NJL_EndpointLookup.groupIndex index consumer bounds)),
+      ↑(low (NJL_EndpointLookup.groupIndex index consumer bounds))) =
+    (NJL_EndpointLookup.group index consumer, NJL_EndpointLookup.column index consumer)
+NKR_SumCopyAlgebraCombined.lean:177:7: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    NJL_EndpointLookup.patternKeys[_a] =
+      (NJL_EndpointLookup.group index consumer, ↑(NJL_EndpointLookup.endpoint index consumer).pattern,
+        NJL_EndpointLookup.column index consumer)
+Error: Application type mismatch: The argument
+  a✝
+has type
+  ¬_a < NJL_EndpointLookup.patternKeys.length
+but is expected to have type
+  ¬↑p < NJL_EndpointLookup.patternKeys.length
+in the application
+  scan_found._proof_1
+    (NJL_EndpointLookup.group index consumer, ↑(NJL_EndpointLookup.endpoint index consumer).pattern,
+      NJL_EndpointLookup.column index consumer)
+    NJL_EndpointLookup.patternKeys 0 p a✝
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case right
+index : Fin 136
+consumer : Bool
+bounds : NJL_EndpointLookup.Cut index consumer
+cut : Cut index consumer
+g : Fin NJL_EndpointLookup.groupKeys.length
+hg :
+  NJL_EndpointLookup.scanFrom (NJL_EndpointLookup.group index consumer, NJL_EndpointLookup.column index consumer)
+      NJL_EndpointLookup.groupKeys 0 =
+    0 + ↑g
+vg :
+  NJL_EndpointLookup.groupKeys[↑g] = (NJL_EndpointLookup.group index consumer, NJL_EndpointLookup.column index consumer)
+p : Fin NJL_EndpointLookup.patternKeys.length
+hp :
+  NJL_EndpointLookup.scanFrom
+      (NJL_EndpointLookup.group index consumer, ↑(NJL_EndpointLookup.endpoint index consumer).pattern,
+        NJL_EndpointLookup.column index consumer)
+      NJL_EndpointLookup.patternKeys 0 =
+    0 + ↑p
+vp :
+  NJL_EndpointLookup.patternKeys[↑p] =
+    (NJL_EndpointLookup.group index consumer, ↑(NJL_EndpointLookup.endpoint index consumer).pattern,
+      NJL_EndpointLookup.column index consumer)
+gi : ↑g = NJL_EndpointLookup.gc index consumer
+pi : ↑p = NJL_EndpointLookup.pc index consumer
+v :
+  NJL_EndpointLookup.patternKeys[↑p] =
+    (NJL_EndpointLookup.group index consumer, ↑(NJL_EndpointLookup.endpoint index consumer).pattern,
+      NJL_EndpointLookup.column index consumer)
+eq : ↑p = ↑(NJL_EndpointLookup.patternIndex index consumer bounds)
+⊢ (↑(patternGroup (NJL_EndpointLookup.patternIndex index consumer bounds)),
+      ↑(NJB_PatternReference.pattern (pOut (NJL_EndpointLookup.patternIndex index consumer bounds))),
+      ↑(pLow (NJL_EndpointLookup.patternIndex index consumer bounds))) =
+    (NJL_EndpointLookup.group index consumer, ↑(NJL_EndpointLookup.endpoint index consumer).pattern,
+      NJL_EndpointLookup.column index consumer)
+'AspisR1.NKR_SumLookupCertificate.scan_found' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumLookupCertificate.group_length' does not depend on any axioms
+'AspisR1.NKR_SumLookupCertificate.pattern_length' does not depend on any axioms
+'AspisR1.NKR_SumLookupCertificate.group_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumLookupCertificate.pattern_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumLookupCertificate.column_mod' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumLookupCertificate.keys' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NKR_SumCopyAlgebraCombined.lean:243:87: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  12 ≤ e ≤ 20
+  e - f ≤ -1
+where
+ e := ↑↑p
+ f := ↑(![0, 9, 12, 21, 26] 2)
+NKR_SumCopyAlgebraCombined.lean:243:87: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  21 ≤ e ≤ 25
+  e - f ≤ -1
+where
+ e := ↑↑p
+ f := ↑(![0, 9, 12, 21, 26] 2)
+NKR_SumCopyAlgebraCombined.lean:243:87: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  12 ≤ e ≤ 20
+  e - f ≤ -1
+where
+ e := ↑↑p
+ f := ↑(![0, 9, 12, 21, 26] 2)
+NKR_SumCopyAlgebraCombined.lean:243:87: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  21 ≤ e ≤ 25
+  e - f ≤ -1
+where
+ e := ↑↑p
+ f := ↑(![0, 9, 12, 21, 26] 2)
+'AspisR1.NKR_SumRegroup.contraction' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumRegroup.endpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumRegroup.bucket' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumRegroup.bucket_unique' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumRegroup.bucket_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NKR_SumCopyAlgebraCombined.lean:276:46: error: Application type mismatch: The argument
+  c
+has type
+  ?m.25 → ?m.25 → ?m.25 → ?m.25 → ?m.25 → ?m.25 → ?m.25 → ?m.25
+but is expected to have type
+  C
+in the application
+  out1 c
+NKR_SumCopyAlgebraCombined.lean:276:62: error: Application type mismatch: The argument
+  c
+has type
+  ?m.31 → ?m.31 → ?m.31 → ?m.31 → ?m.31 → ?m.31 → ?m.31 → ?m.31
+but is expected to have type
+  C
+in the application
+  value1 c
+NKR_SumCopyAlgebraCombined.lean:278:19: error: Application type mismatch: The argument
+  c
+has type
+  ?m.61 → ?m.61 → ?m.61 → ?m.61 → ?m.61 → ?m.61 → ?m.61 → ?m.61
+but is expected to have type
+  C
+in the application
+  out1 c
+NKR_SumCopyAlgebraCombined.lean:278:38: error: Application type mismatch: The argument
+  c
+has type
+  ?m.66 → ?m.66 → ?m.66 → ?m.66 → ?m.66 → ?m.66 → ?m.66 → ?m.66
+but is expected to have type
+  C
+in the application
+  out1 c
+NKR_SumCopyAlgebraCombined.lean:278:48: error: Application type mismatch: The argument
+  c
+has type
+  ?m.68 → ?m.68 → ?m.68 → ?m.68 → ?m.68 → ?m.68 → ?m.68 → ?m.68
+but is expected to have type
+  C
+in the application
+  value1 c
+NKR_SumCopyAlgebraCombined.lean:281:91: error: unsolved goals
+case pos
+C P : Type
+inst✝³ : Fintype C
+inst✝² : Fintype P
+inst✝¹ : DecidableEq P
+out0 out1 : C → P
+inside : P → Prop
+inst✝ : DecidablePred inside
+term : P → K
+value0 value1 : C → K
+p : P
+hp : p ∈ Finset.univ
+h : inside p
+⊢ (if out1 (sorry ()) = p then term p * value1 (sorry ()) else 0) = term p * ∑ c, if out1 c = p then value1 c else 0
+NKR_SumCopyAlgebraCombined.lean:285:37: warning: This simp argument is unused:
+  Finset.sum_add_distrib
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵,̵F̵i̵n̵s̵e̵t̵.̵s̵u̵m̵_̵a̵d̵d̵_̵d̵i̵s̵t̵r̵i̵b̵,̵m̵u̵l̵_̵a̵d̵d̵]̵[̲h̲,̲ ̲m̲u̲l̲_̲a̲d̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NKR_SumTensorAlgebra.contraction_two' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NKR_SumCopyAlgebraCombined.lean:329:88: warning: This simp argument is unused:
+  Function.update_apply
+
+Hint: Omit it from the simp argument list.
+  simp [̵v̵a̵l̵u̵e̵s̵,̵F̵J̵k̵_̵C̵o̵p̵y̵S̵t̵e̵p̵.̵s̵t̵e̵p̵,̵R̵0̵P̵.̵c̵o̵p̵y̵A̵c̵c̵u̵m̵u̵l̵a̵t̵e̵E̵n̵d̵p̵o̵i̵n̵t̵,̵g̵r̵o̵u̵p̵,̵v̵a̵l̵u̵e̵T̵e̵r̵m̵,̵e̵n̵d̵p̵o̵i̵n̵t̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵a̵p̵p̵l̵y̵]̵[̲v̲a̲l̲u̲e̲s̲,̲ ̲F̲J̲k̲_̲C̲o̲p̲y̲S̲t̲e̲p̲.̲s̲t̲e̲p̲,̲ ̲R̲0̲P̲.̲c̲o̲p̲y̲A̲c̲c̲u̲m̲u̲l̲a̲t̲e̲E̲n̲d̲p̲o̲i̲n̲t̲,̲ ̲g̲r̲o̲u̲p̲,̲ ̲v̲a̲l̲u̲e̲T̲e̲r̲m̲,̲ ̲e̲n̲d̲p̲o̲i̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_SumCopyAlgebraCombined.lean:329:115: warning: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NKR_SumCopyAlgebraCombined.lean:329:115: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NKR_SumCopyAlgebraCombined.lean:343:90: warning: This simp argument is unused:
+  Function.update_apply
+
+Hint: Omit it from the simp argument list.
+  simp [̵w̵e̵i̵g̵h̵t̵s̵,̵F̵J̵k̵_̵C̵o̵p̵y̵S̵t̵e̵p̵.̵s̵t̵e̵p̵,̵R̵0̵P̵.̵c̵o̵p̵y̵A̵c̵c̵u̵m̵u̵l̵a̵t̵e̵E̵n̵d̵p̵o̵i̵n̵t̵,̵g̵r̵o̵u̵p̵,̵w̵e̵i̵g̵h̵t̵T̵e̵r̵m̵,̵e̵n̵d̵p̵o̵i̵n̵t̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵u̵p̵d̵a̵t̵e̵_̵a̵p̵p̵l̵y̵]̵[̲w̲e̲i̲g̲h̲t̲s̲,̲ ̲F̲J̲k̲_̲C̲o̲p̲y̲S̲t̲e̲p̲.̲s̲t̲e̲p̲,̲ ̲R̲0̲P̲.̲c̲o̲p̲y̲A̲c̲c̲u̲m̲u̲l̲a̲t̲e̲E̲n̲d̲p̲o̲i̲n̲t̲,̲ ̲g̲r̲o̲u̲p̲,̲ ̲w̲e̲i̲g̲h̲t̲T̲e̲r̲m̲,̲ ̲e̲n̲d̲p̲o̲i̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_SumCopyAlgebraCombined.lean:343:117: warning: 'ring' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NKR_SumCopyAlgebraCombined.lean:343:117: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.NKR_SumLegacyRows.one_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumLegacyRows.one_weight' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumLegacyRows.fold_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumLegacyRows.fold_weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumCopyAlgebraCombined.lean:403:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.range' ?m.166 ?m.167 ?m.169 ++ List.range' (?m.166 + ?m.169 * ?m.167) ?m.168 ?m.169
+in the target expression
+  List.range' (off 0) (off n - off 0) ++ List.range' (off 0 + (off n - off 0)) (off (n + 1) - off n) =
+    List.range' (off 0) (off (n + 1) - off 0)
+
+case succ
+off : ℕ → ℕ
+mono : Monotone off
+n : ℕ
+ih :
+  List.flatMap (fun c => List.range' (off c) (off (c + 1) - off c)) (List.range n) = List.range' (off 0) (off n - off 0)
+first : off 0 ≤ off n
+next : off n ≤ off (n + 1)
+start : off 0 + (off n - off 0) = off n
+length : off n - off 0 + (off (n + 1) - off n) = off (n + 1) - off 0
+second : List.range' (off n) (off (n + 1) - off n) = List.range' (off 0 + (off n - off 0)) (off (n + 1) - off n)
+⊢ List.range' (off 0) (off n - off 0) ++ List.range' (off 0 + (off n - off 0)) (off (n + 1) - off n) =
+    List.range' (off 0) (off (n + 1) - off 0)
+NKR_SumCopyAlgebraCombined.lean:410:3: error: Type mismatch: After simplification, term
+  h
+ has type
+  NJL_TagData.offsets ⟨n, small⟩.castSucc ≤ NJL_TagData.offsets ⟨n, small⟩.succ
+but is expected to have type
+  NJL_TagData.offsets ⟨n, ⋯⟩ ≤ NJL_TagData.offsets ⟨min (n + 1) 30, ⋯⟩
+NKR_SumCopyAlgebraCombined.lean:412:1: error: unsolved goals
+case neg
+n : ℕ
+small : ¬n < 30
+hn : 30 ≤ n
+hn' : 30 ≤ n + 1
+⊢ NJL_TagData.offsets ⟨30, ⋯⟩ ≤ NJL_TagData.offsets ⟨30, ⋯⟩
+NKR_SumCopyAlgebraCombined.lean:424:1: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'AspisR1.NKR_SumIntervals.partition' depends on axioms: [propext, sorryAx]
+'AspisR1.NKR_SumIntervals.step' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.NKR_SumIntervals.monotone' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.NKR_SumIntervals.thirty' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.NKR_SumIntervals.map_flatMap' depends on axioms: [propext]
+'AspisR1.NKR_SumIntervals.fin_values' depends on axioms: [propext, Quot.sound]
+'AspisR1.NKR_SumIntervals.lists_ext' depends on axioms: [propext]
+'AspisR1.NKR_SumTagPartition.first' depends on axioms: [propext, Quot.sound]
+'AspisR1.NKR_SumTagPartition.last' depends on axioms: [propext, Quot.sound]
+'AspisR1.NKR_SumTagPartition.flatMap_map' depends on axioms: [propext]
+'AspisR1.NKR_SumTagPartition.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NKR_SumCopyAlgebraCombined.lean:539:103: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+NKR_SumCopyAlgebraCombined.lean:539:103: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+NKR_SumCopyAlgebraCombined.lean:539:103: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+NKR_SumCopyAlgebraCombined.lean:539:103: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+NKR_SumCopyAlgebraCombined.lean:551:32: error: Application type mismatch: The argument
+  encoded domain
+has type
+  Fin 272 → Fin 272
+of sort `Type` but is expected to have type
+  Function.Injective ?m.5
+of sort `Prop` in the application
+  Finite.surjective_of_injective (encoded domain)
+'AspisR1.NKR_SumTagPermutation.injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumTagPermutation.surjective' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumTagPermutation.sum_transport' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumTagAssociation.high' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumTagAssociation.term' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumTagAssociation.coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumTagAssociation.low' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumScratchCoordinates.weight_injective' depends on axioms: [propext, Quot.sound]
+'AspisR1.NKR_SumScratchCoordinates.pattern_injective' depends on axioms: [propext, Quot.sound]
+'AspisR1.NKR_SumScratchCoordinates.weight_contribution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumScratchCoordinates.pattern_contribution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumScratchCoordinates.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumCopyAlgebraCombined.lean:737:68: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Fin ↑4#usize) 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  Fin ↑4#usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKR_SumCopyAlgebraCombined.lean:737:99: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Fin ↑4#usize) 1
+numerals are polymorphic in Lean, but the numeral `1` cannot be used in a context where the expected type is
+  Fin ↑4#usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKR_SumCopyAlgebraCombined.lean:739:70: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Fin ↑4#usize) 0
+numerals are polymorphic in Lean, but the numeral `0` cannot be used in a context where the expected type is
+  Fin ↑4#usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKR_SumCopyAlgebraCombined.lean:739:102: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Fin ↑4#usize) 1
+numerals are polymorphic in Lean, but the numeral `1` cannot be used in a context where the expected type is
+  Fin ↑4#usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKR_SumCopyAlgebraCombined.lean:738:68: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Fin ↑4#usize) 2
+numerals are polymorphic in Lean, but the numeral `2` cannot be used in a context where the expected type is
+  Fin ↑4#usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKR_SumCopyAlgebraCombined.lean:738:99: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Fin ↑4#usize) 3
+numerals are polymorphic in Lean, but the numeral `3` cannot be used in a context where the expected type is
+  Fin ↑4#usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKR_SumCopyAlgebraCombined.lean:740:70: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Fin ↑4#usize) 2
+numerals are polymorphic in Lean, but the numeral `2` cannot be used in a context where the expected type is
+  Fin ↑4#usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKR_SumCopyAlgebraCombined.lean:740:102: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Fin ↑4#usize) 3
+numerals are polymorphic in Lean, but the numeral `3` cannot be used in a context where the expected type is
+  Fin ↑4#usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKR_SumCopyAlgebraCombined.lean:742:8: warning: declaration uses `sorry`
+NKR_SumCopyAlgebraCombined.lean:752:43: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵o̵w̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲r̲o̲w̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲]̲ at hq
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_SumCopyAlgebraCombined.lean:756:43: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵o̵w̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲r̲o̲w̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲]̲ at hq
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_SumCopyAlgebraCombined.lean:760:43: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵o̵w̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲r̲o̲w̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲]̲ at hq
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_SumCopyAlgebraCombined.lean:763:43: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵o̵w̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵]̵[̲r̲o̲w̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲]̲ at hq
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_SumCopyAlgebraCombined.lean:753:30: warning: 'exact cv _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NKR_SumCopyAlgebraCombined.lean:757:30: warning: 'exact cw _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NKR_SumCopyAlgebraCombined.lean:761:30: warning: 'exact cv _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NKR_SumCopyAlgebraCombined.lean:764:30: warning: 'exact cw _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NKR_SumCopyAlgebraCombined.lean:753:30: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NKR_SumCopyAlgebraCombined.lean:757:30: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NKR_SumCopyAlgebraCombined.lean:761:30: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NKR_SumCopyAlgebraCombined.lean:764:30: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NKR_SumCopyAlgebraCombined.lean:752:14: warning: declaration uses `sorry`
+'AspisR1.NKR_SumCopyTail.row_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKR_SumCopyTail.source : ∀ (s : Selectors) (values weights : Std.Array NQ 4#usize) (helper chi : NQ),
+  FIw_ArrayValue.canonical s.high →
+    FIw_ArrayValue.canonical s.low →
+      FIw_ArrayValue.canonical values →
+        FIw_ArrayValue.canonical weights →
+          Canon helper →
+            Canon chi →
+              ∃ active residual scaled,
+                s.active = ok active ∧
+                  Canon active ∧
+                    copy_residual (row values weights) helper chi = ok residual ∧
+                      Canon residual ∧
+                        active.mul residual = ok scaled ∧
+                          Canon scaled ∧
+                            reference s values weights helper chi = ok { residual := scaled, active := active } ∧
+                              decode residual =
+                                  FIw_CopyMeaning.residual (row values weights) (decode helper) (decode chi) ∧
+                                decode scaled =
+                                  decode active *
+                                    FIw_CopyMeaning.residual (row values weights) (decode helper) (decode chi) :=
+fun s values weights helper chi hh hl hv hw hhelper hchi =>
+  let ⟨w✝, h✝⟩ := NJL_ActiveInvocation.source s hh hl
+  let ⟨active, h✝¹⟩ := h✝
+  let ⟨left✝, right✝⟩ := h✝¹
+  let ⟨left✝¹, right✝¹⟩ := right✝
+  let ⟨ca, right✝²⟩ := right✝¹
+  let ⟨left✝², acall⟩ := right✝²
+  let ⟨cpv, right✝³⟩ := row_canonical values weights hv hw
+  let ⟨cpw, right✝⁴⟩ := right✝³
+  let ⟨ccv, ccw⟩ := right✝⁴
+  let ⟨residual, h✝²⟩ := NJB_CopyResidual.result (row values weights) helper chi cpv ccv cpw ccw hhelper hchi
+  let ⟨rcall, right✝⁵⟩ := h✝²
+  let ⟨cr, vr⟩ := right✝⁵
+  let ⟨scaled, h✝³⟩ := NJB_StubLaws.qm_mul active residual ca cr
+  let ⟨mcall, right✝⁶⟩ := h✝³
+  let ⟨cs, vs⟩ := right✝⁶
+  Exists.intro active
+    (Exists.intro residual
+      (Exists.intro scaled
+        ⟨acall,
+          ⟨ca,
+            ⟨rcall,
+              ⟨cr,
+                ⟨mcall,
+                  ⟨cs,
+                    ⟨of_eq_true
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans
+                                (Eq.trans
+                                  (congr (congrArg Bind.bind acall)
+                                    (funext fun active =>
+                                      Eq.trans
+                                        (congrFun' (congrArg Bind.bind rcall) fun residual => do
+                                          let scaled ← active.mul residual
+                                          ok { residual := scaled, active := active })
+                                        (bind_tc_ok residual fun y => do
+                                          let scaled ← active.mul y
+                                          ok { residual := scaled, active := active })))
+                                  (bind_tc_ok active fun y => do
+                                    let scaled ← y.mul residual
+                                    ok { residual := scaled, active := y }))
+                                (Eq.trans
+                                  (congrFun' (congrArg Bind.bind mcall) fun scaled =>
+                                    ok { residual := scaled, active := active })
+                                  (bind_tc_ok scaled fun y => ok { residual := y, active := active }))))
+                            (ok { residual := scaled, active := active }))
+                          (eq_self (ok { residual := scaled, active := active }))),
+                      ⟨vr,
+                        Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                _a =
+                                  decode active *
+                                    FIw_CopyMeaning.residual (row values weights) (decode helper) (decode chi))
+                              vs))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  decode active * _a =
+                                    decode active *
+                                      FIw_CopyMeaning.residual (row values weights) (decode helper) (decode chi))
+                                vr))
+                            (Eq.refl
+                              (decode active *
+                                FIw_CopyMeaning.residual (row values weights) (decode helper) (decode chi))))⟩⟩⟩⟩⟩⟩⟩⟩))
+'AspisR1.NKR_SumCopyTail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyCuts.endpoint_frame' depends on axioms: [propext, Quot.sound]
+'AspisR1.NKR_SumCopyCuts.link' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumCopyAlgebraCombined.lean:929:123: error: unsolved goals
+lookup : Lookups
+s : Selectors
+openings : Std.Array NQ 16#usize
+helper lambda chi : NQ
+append : U64
+variant : PoolV1PairForestCompiledVariantV1
+hh : FIw_ArrayValue.canonical s.high
+hl : FIw_ArrayValue.canonical s.low
+ho : FIw_ArrayValue.canonical openings
+hhelper : Canon helper
+hlambda : Canon lambda
+hchi : Canon chi
+w✝¹ : NJL_CachedPowers.Packet lambda
+w✝ : Fin 4 → NQ
+patterns : Std.Array NQ 14#usize
+left✝¹⁴ :
+  NJL_WindowPowerFrame.run lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda =
+    ok (NJL_CacheReads.power w✝¹, w✝¹.next)
+left✝¹³ :
+  NJL_WindowPowerFrame.Trace lambda (List.finRange 8) (fun x => FIq_Native.field.QM31.ZERO) lambda
+    (NJL_CacheReads.power w✝¹) w✝¹.next
+left✝¹² :
+  ∀ (j : Fin 4),
+    NJL_WindowFold.run (NJL_CacheReads.cache w✝¹) openings (NJX_PatternPacket.starts j) (List.finRange 8)
+          FIq_Native.field.QM31.ZERO =
+        ok (w✝ j) ∧
+      NJL_WindowFold.Trace (NJL_CacheReads.cache w✝¹) openings (NJX_PatternPacket.starts j) (List.finRange 8)
+        FIq_Native.field.QM31.ZERO (w✝ j)
+left✝¹¹ :
+  (NJX_PatternTail.run w✝¹ (NJX_PatternPacket.atoms openings w✝) (List.finRange 14) fun x =>
+      FIq_Native.field.QM31.ZERO) =
+    ok (NJX_PatternRoot.cells patterns)
+left✝¹⁰ :
+  NJX_PatternTail.Trace w✝¹ (NJX_PatternPacket.atoms openings w✝) (List.finRange 14)
+    (fun x => FIq_Native.field.QM31.ZERO) (NJX_PatternRoot.cells patterns)
+cp : FIw_ArrayValue.canonical patterns
+patternCall : pattern_values openings lambda = ok patterns
+scratch : Fin 103 → NQ
+scratchCall :
+  NJB_StateUpdates.run (fun i state => NKR_SumCopyCollect.step lookup append variant s i state) (List.finRange 136)
+      zero =
+    ok scratch
+scratchTrace : NKR_SumCopyCollect.Trace lookup append variant s (List.finRange 136) zero scratch
+cs : ∀ (i : Fin 103), Canon (scratch i)
+dot : NKR_SumFinishBatch.State
+coefficients : Fin 26 → NQ
+finished : Fin 4 → NQ
+left✝⁹ :
+  ∀ (c : Fin 30),
+    NJL_TagRoot.reference s c = ok (NKR_SumFinishInvocation.tags s c) ∧
+      Canon (NKR_SumFinishInvocation.tags s c) ∧
+        decode (NKR_SumFinishInvocation.tags s c) = NJL_TagMeaning.model s (NJL_TagData.indices c)
+left✝⁸ :
+  NKR_SumFinishFold.run (NKR_SumFinishInvocation.tagValues s)
+      (NKR_SumFinishInvocation.weightValues (NJB_ArrayCarrier.array scratch)) (NKR_SumFinishInvocation.lowValues s)
+      NKR_SumFinishFold.order (NKR_SumFinishInvocation.zero4, NKR_SumFinishInvocation.zero4) =
+    ok dot
+left✝⁷ :
+  NKR_SumFinishTrace.Trace (NKR_SumFinishInvocation.tagValues s)
+    (NKR_SumFinishInvocation.weightValues (NJB_ArrayCarrier.array scratch)) (NKR_SumFinishInvocation.lowValues s)
+    NKR_SumFinishFold.order (NKR_SumFinishInvocation.zero4, NKR_SumFinishInvocation.zero4) dot
+left✝⁶ :
+  NJB_StateUpdates.run
+      (NKR_SumFinishPattern.step (NJB_ArrayCarrier.cell (NJB_ArrayCarrier.array scratch)) (NJB_ArrayCarrier.cell s.low))
+      (List.finRange 43) NKR_SumFinishInvocation.zero26 =
+    ok coefficients
+left✝⁵ :
+  NKR_SumPatternTrace.Trace (NJB_ArrayCarrier.cell (NJB_ArrayCarrier.array scratch)) (NJB_ArrayCarrier.cell s.low)
+    (List.finRange 43) NKR_SumFinishInvocation.zero26 coefficients
+left✝⁴ : NJB_PatternReference.reference (NJB_ArrayCarrier.cell patterns) coefficients dot.1 = ok finished
+left✝³ : NJL_PatternOuter.Trace (NJB_ArrayCarrier.cell patterns) coefficients (List.ofFn fun g => g) dot.1 finished
+finishCall :
+  NKR_SumFinishInvocation.reference (NJB_ArrayCarrier.array scratch) s patterns =
+    ok (NJB_ArrayCarrier.array finished, NJB_ArrayCarrier.array dot.2)
+left✝² :
+  NKR_SumFinishInvocation.TailCut (NJB_ArrayCarrier.array dot.1) (NJB_ArrayCarrier.array coefficients) patterns
+    (NJB_ArrayCarrier.array dot.2) (NJB_ArrayCarrier.array finished) (NJB_ArrayCarrier.array dot.1)
+    (NJB_ArrayCarrier.array coefficients) patterns (NJB_ArrayCarrier.array finished, NJB_ArrayCarrier.array dot.2) 1
+left✝¹ :
+  NKR_SumFinishMeaning.decoded dot =
+    List.foldl
+      (fun state b =>
+        NKR_SumFinishMeaning.stepModel (NKR_SumFinishInvocation.tagValues s)
+          (NKR_SumFinishInvocation.weightValues (NJB_ArrayCarrier.array scratch)) (NKR_SumFinishInvocation.lowValues s)
+          b state)
+      (NKR_SumFinishMeaning.decoded (NKR_SumFinishInvocation.zero4, NKR_SumFinishInvocation.zero4))
+      NKR_SumFinishFold.order
+left✝ :
+  NJB_StateUpdates.decoded coefficients =
+    List.foldl
+      (fun state c =>
+        NKR_SumFinishPattern.modelStep (fun i => decode (NJB_ArrayCarrier.cell (NJB_ArrayCarrier.array scratch) i))
+          (fun i => decode (NJB_ArrayCarrier.cell s.low i)) c state)
+      (NJB_StateUpdates.decoded NKR_SumFinishInvocation.zero26) (List.finRange 43)
+cf : ∀ (i : Fin 4), Canon (finished i)
+cw : ∀ (i : Fin 4), Canon (dot.2 i)
+right✝ :
+  ∀ (g : Fin 4),
+    decode (finished g) =
+      decode (dot.1 g) +
+        NJL_PatternMeaning.dot (fun i => decode (NJB_ArrayCarrier.cell patterns i)) (fun i => decode (coefficients i)) g
+values : Std.Array NQ 4#usize := NJB_ArrayCarrier.array finished
+weights : Std.Array NQ 4#usize := NJB_ArrayCarrier.array dot.2
+active residual scaled : FIq_Native.field.QM31
+acall : s.active = ok active
+ca : Canon active
+rcall : copy_residual (NKR_SumCopyTail.row values weights) helper chi = ok residual
+cr : Canon residual
+mcall : active.mul residual = ok scaled
+cm : Canon scaled
+tailCall : NKR_SumCopyTail.reference s values weights helper chi = ok { residual := scaled, active := active }
+vr : decode residual = FIw_CopyMeaning.residual (NKR_SumCopyTail.row values weights) (decode helper) (decode chi)
+vs :
+  decode scaled =
+    decode active * FIw_CopyMeaning.residual (NKR_SumCopyTail.row values weights) (decode helper) (decode chi)
+⊢ (let (values, weights) := (NJB_ArrayCarrier.array finished, NJB_ArrayCarrier.array dot.2)
+    NKR_SumCopyTail.reference s values weights helper chi) =
+    ok { residual := scaled, active := active }
+NKR_SumCopyAlgebraCombined.lean:943:57: warning: This simp argument is unused:
+  tailCall
+
+Hint: Omit it from the simp argument list.
+  simp only [reference, ̲patternCall, ̲scratchCall, ̲finishCall,t̵a̵i̵l̵C̵a̵l̵l̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NKR_SumCopyInvocation.source : ∀ (lookup : Lookups) (s : Selectors) (openings : Std.Array NQ 16#usize)
+  (helper lambda chi : NQ) (append : U64) (variant : PoolV1PairForestCompiledVariantV1),
+  FIw_ArrayValue.canonical s.high →
+    FIw_ArrayValue.canonical s.low →
+      FIw_ArrayValue.canonical openings →
+        Canon helper →
+          Canon lambda →
+            Canon chi →
+              ∃ patterns scratch values weights active residual scaled,
+                pattern_values openings lambda = ok patterns ∧
+                  NJB_StateUpdates.run (fun i state => NKR_SumCopyCollect.step lookup append variant s i state)
+                        (List.finRange 136) zero =
+                      ok scratch ∧
+                    NKR_SumCopyCollect.Trace lookup append variant s (List.finRange 136) zero scratch ∧
+                      NKR_SumFinishInvocation.reference (NJB_ArrayCarrier.array scratch) s patterns =
+                          ok (values, weights) ∧
+                        NKR_SumCopyTail.reference s values weights helper chi =
+                            ok { residual := scaled, active := active } ∧
+                          reference lookup s openings helper lambda chi append variant =
+                              ok { residual := scaled, active := active } ∧
+                            Canon active ∧
+                              Canon residual ∧
+                                Canon scaled ∧
+                                  copy_residual (NKR_SumCopyTail.row values weights) helper chi = ok residual ∧
+                                    decode scaled =
+                                      decode active *
+                                        FIw_CopyMeaning.residual (NKR_SumCopyTail.row values weights) (decode helper)
+                                          (decode chi) :=
+fun lookup s openings helper lambda chi append variant hh hl ho hhelper hlambda hchi =>
+  let ⟨w✝, h✝⟩ := NJX_PatternRoot.source lambda openings hlambda ho
+  let ⟨w✝¹, h✝¹⟩ := h✝
+  let ⟨patterns, h✝²⟩ := h✝¹
+  let ⟨left✝, right✝⟩ := h✝²
+  let ⟨left✝¹, right✝¹⟩ := right✝
+  let ⟨left✝², right✝²⟩ := right✝¹
+  let ⟨left✝³, right✝³⟩ := right✝²
+  let ⟨left✝⁴, right✝⁴⟩ := right✝³
+  let ⟨cp, patternCall⟩ := right✝⁴
+  let ⟨scratch, h✝³⟩ :=
+    NKR_SumCopyCollect.source lookup append variant s (List.finRange 136) zero hh fun x => FIv_NativeValue.zero.left
+  let ⟨scratchCall, right✝⁵⟩ := h✝³
+  let ⟨scratchTrace, cs⟩ := right✝⁵
+  let ⟨dot, h✝⁴⟩ :=
+    NKR_SumFinishInvocation.source (NJB_ArrayCarrier.array scratch) s patterns
+      (NJB_ArrayCarrier.canonical_array scratch cs) hh hl cp
+  let ⟨coefficients, h✝⁵⟩ := h✝⁴
+  let ⟨finished, h✝⁶⟩ := h✝⁵
+  let ⟨left✝⁵, right✝⁶⟩ := h✝⁶
+  let ⟨left✝⁶, right✝⁷⟩ := right✝⁶
+  let ⟨left✝⁷, right✝⁸⟩ := right✝⁷
+  let ⟨left✝⁸, right✝⁹⟩ := right✝⁸
+  let ⟨left✝⁹, right✝¹⁰⟩ := right✝⁹
+  let ⟨left✝¹⁰, right✝¹¹⟩ := right✝¹⁰
+  let ⟨left✝¹¹, right✝¹²⟩ := right✝¹¹
+  let ⟨finishCall, right✝¹³⟩ := right✝¹²
+  let ⟨left✝¹², right✝¹⁴⟩ := right✝¹³
+  let ⟨left✝¹³, right✝¹⁵⟩ := right✝¹⁴
+  let ⟨left✝¹⁴, right✝¹⁶⟩ := right✝¹⁵
+  let ⟨cf, right✝¹⁷⟩ := right✝¹⁶
+  let ⟨cw, right✝¹⁸⟩ := right✝¹⁷
+  let values := NJB_ArrayCarrier.array finished;
+  let weights := NJB_ArrayCarrier.array dot.2;
+  let ⟨active, h✝⁷⟩ :=
+    NKR_SumCopyTail.source s values weights helper chi hh hl (NJB_ArrayCarrier.canonical_array finished cf)
+      (NJB_ArrayCarrier.canonical_array dot.2 cw) hhelper hchi
+  let ⟨residual, h✝⁸⟩ := h✝⁷
+  let ⟨scaled, h✝⁹⟩ := h✝⁸
+  let ⟨acall, right✝¹⁹⟩ := h✝⁹
+  let ⟨ca, right✝²⁰⟩ := right✝¹⁹
+  let ⟨rcall, right✝²¹⟩ := right✝²⁰
+  let ⟨cr, right✝²²⟩ := right✝²¹
+  let ⟨mcall, right✝²³⟩ := right✝²²
+  let ⟨cm, right✝²⁴⟩ := right✝²³
+  let ⟨tailCall, right✝²⁵⟩ := right✝²⁴
+  let ⟨vr, vs⟩ := right✝²⁵
+  Exists.intro patterns
+    (Exists.intro scratch
+      (Exists.intro values
+        (Exists.intro weights
+          (Exists.intro active (Exists.intro residual (Exists.intro scaled ⟨patternCall, ⟨scratchCall, ⋯⟩⟩))))))
+'AspisR1.NKR_SumCopyInvocation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

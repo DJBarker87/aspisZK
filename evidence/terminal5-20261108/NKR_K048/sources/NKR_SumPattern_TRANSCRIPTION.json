@@ -1,0 +1,13 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "source": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+  "original_pattern": "\n        let output = usize::from(COPY_PATTERN_LOCAL_OUTPUT_COORDINATES[coordinate]);\n        let low = selectors.low[usize::from(COPY_PATTERN_LOCAL_COORDINATE_LOCALS[coordinate])];\n        pattern_selectors[output] = pattern_selectors[output]\n            .add(scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET + coordinate].mul(low));\n        coordinate += 1;\n    ",
+  "translated_pattern": "letoutput=usize::from(COPY_PATTERN_LOCAL_OUTPUT_COORDINATES[coordinate]);letlow=selectors.low[usize::from(COPY_PATTERN_LOCAL_COORDINATE_LOCALS[coordinate])];pattern_selectors[output]=NKR_pattern_op(pattern_selectors[output],NKR_pattern_op(scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET+coordinate],low,0,l),1,l);coordinate+=1;",
+  "harness_pattern": "\n    let output = usize::from(COPY_PATTERN_LOCAL_OUTPUT_COORDINATES[coordinate]);\n    let low = selectors.low[usize::from(COPY_PATTERN_LOCAL_COORDINATE_LOCALS[coordinate])];\n    pattern_selectors[output] = NKR_pattern_op(pattern_selectors[output],NKR_pattern_op(scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET + coordinate],low,0,l),1,l);\n    coordinate += 1;\n    ",
+  "original_tail": "    (\n        finish_pattern_basis_values(values, pattern_selectors, patterns),\n        weights,\n    )\n",
+  "translated_tail": "    (\n        NKR_finish_tail_child(values, pattern_selectors, patterns,l),\n        weights,\n    )\n",
+  "harness_tail": "\n    (\n        NKR_finish_tail_child(values, pattern_selectors, patterns,l),\n        weights,\n    )\n",
+  "identity": true,
+  "source_sha256": "f38ca2bd28554e8f67b75b7b035f02648ea0b5d82f78d2457e10188e6402a3f0",
+  "harness_sha256": "e54ca8bc24e35ac9c3da9ca4f4d71a35a01076bcae906ad1bda8937088e8c3bf"
+}

@@ -1,0 +1,330 @@
+NKR_SumCopyFull.lean:59:1: warning: 'change
+  (NKR_SumFinishData.group (gi lookup i consumer)).val =
+    (NJL_EndpointLookup.endpoint i consumer).slot.val + (if consumer then 2 else 0)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'AspisR1.NKR_SumCopyAssociation.sum_bijection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.descriptor_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.descriptor_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.descriptor_pattern' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.group_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.low_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pattern_group_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pattern_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pattern_low_key' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.selector' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.sum_finRange' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.sum_filter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.native_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.link_sum' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pair_left' depends on axioms: [propext, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pair_right' depends on axioms: [propext, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.canonical_encoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.sum_pairs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.tag_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.list_sum_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.tag_bucket' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.tag_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.dot_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.coefficient_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pattern_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.weight_regroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.pattern_regroup' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.tag_pattern' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.legacy_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.legacy_weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumCopyAssociation.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKR_SumCopyAssociation.source : ∀ (lookup : Lookups),
+  Keys →
+    ∀ (domain : NKR_SumTagPermutation.Domain),
+      NKR_SumTagPermutation.Cut →
+        NKR_SumTagAssociation.Cut domain →
+          ∀ (s : Selectors) (terms : Std.Array NQ 14#usize) (append : U64)
+            (variant : PoolV1PairForestCompiledVariantV1),
+            FIw_ArrayValue.canonical s.high →
+              FIw_ArrayValue.canonical s.low →
+                FIw_ArrayValue.canonical terms →
+                  ∃ scratch outValues outWeights,
+                    NJB_StateUpdates.run (fun i state => NKR_SumCopyCollect.step lookup append variant s i state)
+                          (List.finRange 136) NKR_SumCopyInvocation.zero =
+                        ok scratch ∧
+                      NKR_SumFinishInvocation.reference (NJB_ArrayCarrier.array scratch) s terms =
+                          ok (outValues, outWeights) ∧
+                        FIw_ArrayValue.canonical outValues ∧
+                          FIw_ArrayValue.canonical outWeights ∧
+                            (∀ (g : Fin ↑4#usize),
+                                decode (NJB_ArrayCarrier.cell outValues g) =
+                                  NKR_SumLegacyRows.values (FJk_CopyFullFold.model s terms append variant) g) ∧
+                              ∀ (g : Fin ↑4#usize),
+                                decode (NJB_ArrayCarrier.cell outWeights g) =
+                                  NKR_SumLegacyRows.weights (FJk_CopyFullFold.model s terms append variant) g :=
+fun lookup keys domain permutation metadata s terms append variant hh hl ht =>
+  let ⟨scratch, h✝⟩ :=
+    NKR_SumScratchCoordinates.source lookup append variant s (List.finRange 136) NKR_SumCopyInvocation.zero hh fun x =>
+      FIv_NativeValue.zero.left
+  let ⟨call, right✝⟩ := h✝
+  let ⟨cs, right✝¹⟩ := right✝
+  let ⟨weightCoordinates, patternCoordinates⟩ := right✝¹
+  have hw := fun c =>
+    have h := weightCoordinates c;
+    id
+      (fun h =>
+        Eq.mpr
+          (id
+            (congrArg (Eq (decode (scratch (NJL_EndpointIndices.weight c))))
+              (Finset.sum_congr (Eq.refl Finset.univ) fun x a =>
+                congr
+                  (congrArg HAdd.hAdd
+                    (ite_congr legacy_values._simp_5
+                      (fun a =>
+                        Eq.refl
+                          (decode (NJL_EndpointLookup.high s x false (lookup x false)) *
+                            NKR_SumCollectMeaning.weight x append variant))
+                      fun a => Eq.refl 0))
+                  (ite_congr legacy_values._simp_5
+                    (fun a =>
+                      Eq.refl
+                        (decode (NJL_EndpointLookup.high s x true (lookup x true)) *
+                          NKR_SumCollectMeaning.weight x append variant))
+                    fun a => Eq.refl 0))))
+          (Eq.mp
+            (congrArg (fun _a => decode (scratch (NJL_EndpointIndices.weight c)) = _a)
+              (sum_finRange fun i =>
+                (if c = NJL_EndpointLookup.groupIndex i false (lookup i false) then
+                    decode (NJL_EndpointLookup.high s i false (lookup i false)) *
+                      NKR_SumCollectMeaning.weight i append variant
+                  else 0) +
+                  if c = NJL_EndpointLookup.groupIndex i true (lookup i true) then
+                    decode (NJL_EndpointLookup.high s i true (lookup i true)) *
+                      NKR_SumCollectMeaning.weight i append variant
+                  else 0))
+            (Eq.mp
+              (congrArg (fun _a => decode (scratch (NJL_EndpointIndices.weight c)) = _a)
+                (zero_add
+                  (List.map
+                      (fun i =>
+                        (if c = NJL_EndpointLookup.groupIndex i false (lookup i false) then
+                            decode (NJL_EndpointLookup.high s i false (lookup i false)) *
+                              NKR_SumCollectMeaning.weight i append variant
+                          else 0) +
+                          if c = NJL_EndpointLookup.groupIndex i true (lookup i true) then
+                            decode (NJL_EndpointLookup.high s i true (lookup i true)) *
+                              NKR_SumCollectMeaning.weight i append variant
+                          else 0)
+                      (List.finRange 136)).sum))
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    decode (scratch (NJL_EndpointIndices.weight c)) =
+                      _a +
+                        (List.map
+                            (fun i =>
+                              (if c = NJL_EndpointLookup.groupIndex i false (lookup i false) then
+                                  decode (NJL_EndpointLookup.high s i false (lookup i false)) *
+                                    NKR_SumCollectMeaning.weight i append variant
+                                else 0) +
+                                if c = NJL_EndpointLookup.groupIndex i true (lookup i true) then
+                                  decode (NJL_EndpointLookup.high s i true (lookup i true)) *
+                                    NKR_SumCollectMeaning.weight i append variant
+                                else 0)
+                            (List.finRange 136)).sum)
+                  FIv_NativeValue.zero.right)
+                h))))
+      h;
+  have hp := fun c =>
+    have h := patternCoordinates c;
+    id
+      (fun h =>
+        Eq.mpr
+          (id
+            (congrArg (Eq (decode (scratch (NJL_EndpointIndices.pattern c))))
+              (Finset.sum_congr (Eq.refl Finset.univ) fun x a =>
+                congr
+                  (congrArg HAdd.hAdd
+                    (ite_congr legacy_values._simp_5
+                      (fun a => Eq.refl (decode (NJL_EndpointLookup.high s x false (lookup x false)))) fun a =>
+                      Eq.refl 0))
+                  (ite_congr legacy_values._simp_5
+                    (fun a => Eq.refl (decode (NJL_EndpointLookup.high s x true (lookup x true)))) fun a =>
+                    Eq.refl 0))))
+          (Eq.mp
+            (congrArg (fun _a => decode (scratch (NJL_EndpointIndices.pattern c)) = _a)
+              (sum_finRange fun i =>
+                (if c = NJL_EndpointLookup.patternIndex i false (lookup i false) then
+                    decode (NJL_EndpointLookup.high s i false (lookup i false))
+                  else 0) +
+                  if c = NJL_EndpointLookup.patternIndex i true (lookup i true) then
+                    decode (NJL_EndpointLookup.high s i true (lookup i true))
+                  else 0))
+            (Eq.mp
+              (congrArg (fun _a => decode (scratch (NJL_EndpointIndices.pattern c)) = _a)
+                (zero_add
+                  (List.map
+                      (fun i =>
+                        (if c = NJL_EndpointLookup.patternIndex i false (lookup i false) then
+                            decode (NJL_EndpointLookup.high s i false (lookup i false))
+                          else 0) +
+                          if c = NJL_EndpointLookup.patternIndex i true (lookup i true) then
+                            decode (NJL_EndpointLookup.high s i true (lookup i true))
+                          else 0)
+                      (List.finRange 136)).sum))
+              (Eq.mp
+                (congrArg
+                  (fun _a =>
+                    decode (scratch (NJL_EndpointIndices.pattern c)) =
+                      _a +
+                        (List.map
+                            (fun i =>
+                              (if c = NJL_EndpointLookup.patternIndex i false (lookup i false) then
+                                  decode (NJL_EndpointLookup.high s i false (lookup i false))
+                                else 0) +
+                                if c = NJL_EndpointLookup.patternIndex i true (lookup i true) then
+                                  decode (NJL_EndpointLookup.high s i true (lookup i true))
+                                else 0)
+                            (List.finRange 136)).sum)
+                  FIv_NativeValue.zero.right)
+                h))))
+      h;
+  let ⟨values, h✝¹⟩ :=
+    NKR_SumFinishCohort.source (NJB_ArrayCarrier.array scratch) s terms (NJB_ArrayCarrier.canonical_array scratch cs) hh
+      hl ht
+  let ⟨weights, h✝²⟩ := h✝¹
+  let ⟨finishCall, right✝²⟩ := h✝²
+  let ⟨cv, right✝³⟩ := right✝²
+  let ⟨cw, right✝⁴⟩ := right✝³
+  let ⟨vv, vw⟩ := right✝⁴
+  have eq := rows lookup keys domain permutation metadata s scratch terms append variant hw hp;
+  Exists.intro scratch
+    (Exists.intro values
+      (Exists.intro weights
+        ⟨call,
+          ⟨finishCall, ⟨cv, ⟨cw, ⟨fun g => Eq.trans (vv g) (eq.left g), fun g => Eq.trans (vw g) (eq.right g)⟩⟩⟩⟩⟩))
+'AspisR1.NKR_SumCopyAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+NKR_SumCopyFull.lean:561:7: error(lean.unknownIdentifier): Unknown constant `R0P.CopyRowExtension.ext`
+NKR_SumCopyFull.lean:562:1: error: No goals to be solved
+'AspisR1.NKR_SumCopyRoot.row' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKR_SumCopyRoot.source : ∀ (lookup : Lookups),
+  NKR_SumCopyAssociation.Keys →
+    ∀ (domain : NKR_SumTagPermutation.Domain),
+      NKR_SumTagPermutation.Cut →
+        NKR_SumTagAssociation.Cut domain →
+          ∀ (s : Selectors) (openings : Std.Array NQ 16#usize) (helper lambda chi : NQ) (append : U64)
+            (variant : PoolV1PairForestCompiledVariantV1),
+            FIw_ArrayValue.canonical openings →
+              Canon helper →
+                Canon lambda →
+                  Canon chi →
+                    FIw_ArrayValue.canonical s.high →
+                      FIw_ArrayValue.canonical s.low →
+                        NKR_SumCopyInvocation.reference lookup s openings helper lambda chi append variant =
+                          evaluate_with_selectors openings helper s lambda chi append variant :=
+fun lookup keys domain permutation metadata s openings helper lambda chi append variant ho hhelper hlambda hchi hh hl =>
+  let ⟨old, h✝⟩ := JGa_Copy.source openings helper s lambda chi append variant ho hhelper hh hl hlambda hchi
+  let ⟨oldCall, right✝⟩ := h✝
+  let ⟨oldResCanon, oldActiveCanon⟩ := right✝
+  let ⟨patterns, h✝¹⟩ :=
+    FJk_CopyRawValue.value openings helper s lambda chi append variant old ho hhelper hh hl hlambda hchi oldCall
+  let ⟨patternCall, right✝¹⟩ := h✝¹
+  let ⟨cp, right✝²⟩ := right✝¹
+  let ⟨oldActiveCall, right✝³⟩ := right✝²
+  let ⟨left✝, right✝⁴⟩ := right✝³
+  let ⟨left✝¹, oldValue⟩ := right✝⁴
+  let ⟨scratch, h✝²⟩ :=
+    NKR_SumCopyAssociation.source lookup keys domain permutation metadata s patterns append variant hh hl cp
+  let ⟨values, h✝³⟩ := h✝²
+  let ⟨weights, h✝⁴⟩ := h✝³
+  let ⟨collectCall, right✝⁵⟩ := h✝⁴
+  let ⟨finishCall, right✝⁶⟩ := right✝⁵
+  let ⟨cv, right✝⁷⟩ := right✝⁶
+  let ⟨cw, right✝⁸⟩ := right✝⁷
+  let ⟨veq, weq⟩ := right✝⁸
+  let ⟨active, h✝⁵⟩ := NKR_SumCopyTail.source s values weights helper chi hh hl cv cw hhelper hchi
+  let ⟨residual, h✝⁶⟩ := h✝⁵
+  let ⟨scaled, h✝⁷⟩ := h✝⁶
+  let ⟨activeCall, right✝⁹⟩ := h✝⁷
+  let ⟨ca, right✝¹⁰⟩ := right✝⁹
+  let ⟨residualCall, right✝¹¹⟩ := right✝¹⁰
+  let ⟨cr, right✝¹²⟩ := right✝¹¹
+  let ⟨mulCall, right✝¹³⟩ := right✝¹²
+  let ⟨cs, right✝¹⁴⟩ := right✝¹³
+  let ⟨tailCall, right✝¹⁵⟩ := right✝¹⁴
+  let ⟨residualValue, scaledValue⟩ := right✝¹⁵
+  have sameRow := row values weights (FJk_CopyFullFold.model s patterns append variant) veq weq;
+  have sameActive := ok.inj (Eq.trans (Eq.symm activeCall) oldActiveCall);
+  have sameResidualValue :=
+    Eq.mpr (id (congrArg (fun _a => _a = decode old.residual) scaledValue))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => decode active * _a = decode old.residual)
+            (FIw_CopyTransport.value_exact (NKR_SumCopyTail.row values weights) (decode helper) (decode chi))))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => decode active * R0P.copyResidual _a (decode helper) (decode chi) = decode old.residual)
+              sameRow))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  decode _a *
+                      R0P.copyResidual (FJk_CopyFullFold.model s patterns append variant) (decode helper) (decode chi) =
+                    decode old.residual)
+                sameActive))
+            (Eq.symm oldValue))));
+  have sameResidual := NJB_DecodeInjective.qm scaled old.residual cs oldResCanon sameResidualValue;
+  have sameOut :=
+    let ⟨residual✝, active✝, h✝⁸⟩ := old
+    Eq.ndrec (motive := fun old =>
+      evaluate_with_selectors openings helper s lambda chi append variant = ok old →
+        Canon old.residual →
+          Canon old.active →
+            s.active = ok old.active →
+              Canon old.active →
+                Canon old.residual →
+                  decode old.residual =
+                      decode old.active *
+                        R0P.copyResidual (FJk_CopyFullFold.model s patterns append variant) (decode helper)
+                          (decode chi) →
+                    active = old.active →
+                      decode scaled = decode old.residual →
+                        scaled = old.residual → { residual := scaled, active := active } = old)
+      (fun oldCall oldResCanon oldActiveCanon oldActiveCall left left_1 oldValue sameActive sameResidualValue
+          sameResidual =>
+        let ⟨⟩ := active✝
+        sameActive)
+      (Eq.symm h✝⁸) oldCall oldResCanon oldActiveCanon oldActiveCall left✝ left✝¹ oldValue sameActive sameResidualValue
+      sameResidual;
+  have refCall :=
+    Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (congr (congrArg Bind.bind patternCall)
+                  (funext fun patterns =>
+                    Eq.trans
+                      (congrFun' (congrArg Bind.bind collectCall) fun scratch => do
+                        let (values, weights) ←
+                          NKR_SumFinishInvocation.reference (NJB_ArrayCarrier.array scratch) s patterns
+                        NKR_SumCopyTail.reference s values weights helper chi)
+                      (bind_tc_ok scratch fun y => do
+                        let (values, weights) ← NKR_SumFinishInvocation.reference (NJB_ArrayCarrier.array y) s patterns
+                        NKR_SumCopyTail.reference s values weights helper chi)))
+                (bind_tc_ok patterns fun y => do
+                  let (values, weights) ← NKR_SumFinishInvocation.reference (NJB_ArrayCarrier.array scratch) s y
+                  NKR_SumCopyTail.reference s values weights helper chi))
+              (Eq.trans
+                (congrFun' (congrArg Bind.bind finishCall)
+                  (uncurry fun values weights => NKR_SumCopyTail.reference s values weights helper chi))
+                (bind_tc_ok (values, weights)
+                  (uncurry fun values weights => NKR_SumCopyTail.reference s values weights helper chi)))))
+          (ok { residual := scaled, active := active })))
+      (id tailCall);
+  Eq.trans
+    (Eq.mp
+      (congrArg (fun _a => NKR_SumCopyInvocation.reference lookup s openings helper lambda chi append variant = ok _a)
+        sameOut)
+      refCall)
+    (Eq.symm oldCall)
+'AspisR1.NKR_SumCopyRoot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

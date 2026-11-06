@@ -1,0 +1,13 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "source": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+  "original": "\n        let link = constants::COPY_LINKS[link_index];\n        let weight = link_weight(link, append_index, variant);\n        \n            accumulate_endpoint_selector_tensor_basis(\n                &mut selector_tensor_scratch,\n                0,\n                link.producer,\n                link.tag,\n                weight,\n                selectors,\n            );\n            accumulate_endpoint_selector_tensor_basis(\n                &mut selector_tensor_scratch,\n                2,\n                link.consumer,\n                link.tag,\n                weight,\n                selectors,\n            );\n        link_index += 1;",
+  "translated_endpoints": "letlink=constants::COPY_LINKS[link_index];NKR_copy_endpoint(scratch,0,link.producer,link.tag,weight,selectors,l);NKR_copy_endpoint(scratch,2,link.consumer,link.tag,weight,selectors,l);link_index+=1;",
+  "harness_endpoints": "\n let link=constants::COPY_LINKS[link_index];\n NKR_copy_endpoint(scratch,0,link.producer,link.tag,weight,selectors,l);\n NKR_copy_endpoint(scratch,2,link.consumer,link.tag,weight,selectors,l);\n link_index+=1;\n ",
+  "removed_closed_scalar_call": "letweight=link_weight(link,append_index,variant);",
+  "identity": true,
+  "retired": "K044 whole217+214sequence nested primitive array generation",
+  "replacement": "separate217 scalar descriptor args;214sequence flat primitive inputs,saved arbitrary coordinate only",
+  "source_sha256": "f38ca2bd28554e8f67b75b7b035f02648ea0b5d82f78d2457e10188e6402a3f0",
+  "harness_sha256": "1057d3f1aefc4ea1d62252ba41b1254a075e46abe9d5a8e94bb607fe4aaea8e2"
+}

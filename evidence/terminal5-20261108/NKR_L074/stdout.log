@@ -1,0 +1,52 @@
+NKR_TermHorner.lean:23:12: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NKR_TermHorner.lean:23:12: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.NKR_TermHorner.column' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKR_TermHorner.source : ∀ (claims : Std.Array NQ 84#usize) (z : Std.Array NQ 16#usize)
+  (mask : Std.Array NQ 10#usize) (semantic : Std.Array NQ 24#usize) (poseidon : Std.Array NQ 4#usize) (theta h1 : NQ)
+  (copy : Copy),
+  canonical claims →
+    canonical semantic →
+      canonical poseidon →
+        Canon theta →
+          Canon copy.residual →
+            ∃ comp g,
+              run claims z mask semantic poseidon theta h1 copy = ok (comp, z, mask, g, h1, copy.active) ∧
+                Canon comp ∧
+                  Canon g ∧
+                    decode comp = FIv_CompositionValue.polynomial (decode theta) semantic poseidon copy.residual :=
+fun claims z mask semantic poseidon theta h1 copy hc hs hp ht hr =>
+  let ⟨comp, h✝⟩ := FIv_FoldsTotal.value semantic poseidon theta copy.residual ht hr hs hp
+  let ⟨call, right✝⟩ := h✝
+  let ⟨cc, value⟩ := right✝
+  let ⟨g, h✝¹⟩ :=
+    JFy_SelectedRead.source claims hc 0#usize 27#usize (of_decide_eq_true (id (Eq.refl true)))
+      (of_decide_eq_true (id (Eq.refl true)))
+  let ⟨gcall, cg⟩ := h✝¹
+  Exists.intro comp
+    (Exists.intro g
+      ⟨of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congr (congrArg Bind.bind call)
+                    (funext fun comp =>
+                      Eq.trans
+                        (Eq.trans
+                          (congrFun' (congrArg Bind.bind column) fun col => do
+                            let g ← selected_claim claims 0#usize col
+                            ok (comp, z, mask, g, h1, copy.active))
+                          (bind_tc_ok 27#usize fun y => do
+                            let g ← selected_claim claims 0#usize y
+                            ok (comp, z, mask, g, h1, copy.active)))
+                        (Eq.trans (congrFun' (congrArg Bind.bind gcall) fun g => ok (comp, z, mask, g, h1, copy.active))
+                          (bind_tc_ok g fun y => ok (comp, z, mask, y, h1, copy.active)))))
+                  (bind_tc_ok comp fun y => ok (y, z, mask, g, h1, copy.active))))
+              (ok (comp, z, mask, g, h1, copy.active)))
+            (eq_self (ok (comp, z, mask, g, h1, copy.active)))),
+        ⟨cc, ⟨cg, value⟩⟩⟩)
+'AspisR1.NKR_TermHorner.source' depends on axioms: [propext, Classical.choice, Quot.sound]
