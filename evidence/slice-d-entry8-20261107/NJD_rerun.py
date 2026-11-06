@@ -1,16 +1,20 @@
 """Exact historical native inputs; only owned path relocation and isolation added."""
 from NJD_transport import *
 import hashlib,lzma,base64,shlex,sys
+def read(p):
+    if p.exists():return p.read_bytes()
+    rel=p.resolve().relative_to(E.parent.parent)
+    return subprocess.check_output(['git','show','HEAD:'+str(rel)])
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def historical(old):
     p=E.parent/('slice-d-entry5-20261107' if old.startswith('NIJ_') else 'slice-d-entry4-20261106')
-    cfg=(p/(old+'.json')).read_bytes();x=json.loads(cfg)
-    idx=json.loads((p/(old[:3]+'_INPUTS.json')).read_text())
+    cfg=read(p/(old+'.json'));x=json.loads(cfg)
+    idx=json.loads(read(p/(old[:3]+'_INPUTS.json')))
     files={}
     for name,h in idx['attempts'][old].items():
-        z=p/idx['objects'][h]['path'];raw=lzma.decompress(z.read_bytes());assert sha(raw)==h
+        z=p/idx['objects'][h]['path'];raw=lzma.decompress(read(z));assert sha(raw)==h
         files[name]=raw.decode()
-    for name,h in json.loads((p/old/'receipt.json').read_text())['source_hashes'].items():assert sha(files[name].encode())==h
+    for name,h in json.loads(read(p/old/'receipt.json'))['source_hashes'].items():assert sha(files[name].encode())==h
     return x,cfg,files
 def run(a,old,prepared=None):
     assert a.startswith('NJD_K') and 1<=int(a[-3:])<=100

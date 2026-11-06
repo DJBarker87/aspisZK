@@ -6,6 +6,7 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
     assert a.startswith('NJD_L') and 1<=int(a[-3:])<=90 and not (E/a).exists()
     env=json.loads((E.parent/'slice-d-entry7-20261107/NIV_L027.json').read_text())['env']
     env['LEAN_PATH']=B+'/NJD_seed:'+B+'/NJD_objects:/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NJD_seed_20261107:'+':'.join(p for p in env['LEAN_PATH'].split(':') if not p.endswith('/NIV_objects'))
+    env['LEAN_PATH']=':'.join(dict.fromkeys([B+'/NJD_objects',B+'/NJD_seed','/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NIU_20261107/NIU_exports_20261107']+json.loads((E.parent/'ledger13-20261107/NIU_PATHS.json').read_text())+env['LEAN_PATH'].split(':')))
     env['TMPDIR']=B+'/NJD_tmp'
     env['CARGO_TARGET_DIR']=B+'/NJD_target'
     env['CARGO_NET_OFFLINE']='true'
@@ -66,6 +67,7 @@ print(json.dumps({{str(p.relative_to(b)):p.read_text() for p in names}}))
     for n,t in files.items():
         if n==a+'.json':continue
         raw=t.encode();h=sha(raw);p=E/'NJD_INPUTS'/(h+'.xz')
+        p.parent.mkdir(exist_ok=True)
         if not p.exists():p.write_bytes(lzma.compress(raw))
         idx['objects'][h]=dict(path=str(p.relative_to(E)),bytes=len(raw),archive_sha256=sha(p.read_bytes()));idx['attempts'].setdefault(a,{})[n]=h
     (E/'NJD_INPUTS.json').write_text(json.dumps(idx,indent=1)+'\n')

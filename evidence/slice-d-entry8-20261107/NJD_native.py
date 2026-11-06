@@ -2,7 +2,7 @@
 from NJD_rerun import *
 def fresh(a,target,sidecars):
     x,original,files=historical('NIJ_K120')
-    files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace("['NIJ_entry'","['NJD_accounts','NJD_sdk','NJD_prefix','NJD_v1','NJD_active','NJD_forward','NJD_auth','NJD_owned','NIJ_entry'")
+    files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace("['NIJ_entry'","['NJD_stages','NJD_accounts','NJD_sdk','NJD_prefix','NJD_v1','NJD_active','NJD_forward','NJD_auth','NJD_owned','NIJ_entry'")
     for parent,module,text in sidecars:
         suffix='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod '+module+';\n'
         key='NIJ_src/'+parent
