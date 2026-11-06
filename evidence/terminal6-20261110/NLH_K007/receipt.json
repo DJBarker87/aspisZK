@@ -1,0 +1,101 @@
+{
+  "attempt": "NLH_K007",
+  "kind": "kani",
+  "module": "NKR_semantic_digest_args_cut",
+  "sources": [
+    "NLH_seed.py",
+    "NLH_SEED_INPUTS.json",
+    "NLH_stage_native.py",
+    "NLH_FROZEN_INPUTS.json.sha256",
+    "NLH_EXTRA_INPUTS.json",
+    "NLH_KMX.patch",
+    "NLH_native.patch",
+    "NLH_SOURCE_PINS.json",
+    "NLH_gate.py",
+    "NLH_allocator.patch"
+  ],
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-terminal6-20261110/NLH_tmp",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1 --cfg NKR_invert",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-terminal6-20261110/NLH_target"
+  },
+  "timeout": 180,
+  "expected_time": "Optimized compile then matched corrupt-argument/reply control (expected failure): NKR_semantic_digest_args_cut",
+  "root_package": "aspis-statement",
+  "metadata_features": "aspis-statement/pool-v1-kernel,aspis-statement/pool-v1-pair-forest-active-mask-basis-audit,aspis-statement/pool-v1-pair-forest-binary-copy-weights-audit,aspis-statement/pool-v1-pair-forest-copy-finish-dot-basis-audit,aspis-statement/pool-v1-pair-forest-copy-pattern-basis-audit,aspis-statement/pool-v1-pair-forest-copy-selector-tensor-basis-audit,aspis-statement/pool-v1-pair-forest-copy-tag-dot-basis-audit,aspis-statement/pool-v1-pair-forest-endpoint-selector-cache-audit,aspis-statement/pool-v1-pair-forest-packed-digest-audit,aspis-statement/pool-v1-pair-forest-packed-digest-selector-tensor-audit,aspis-statement/pool-v1-pair-forest-packed-range-audit,aspis-statement/pool-v1-pair-forest-pattern-window-audit,aspis-statement/pool-v1-pair-forest-semantic-factor-audit,aspis-statement/r0,aspis-statement/spend-dynamic-rate512",
+  "command": [
+    "python3",
+    "NLH_gate.py",
+    "NLH_K007.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-terminal6-20261110/NLH_src/crates/aspis-statement/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-terminal6-20261110/NLH_target",
+    "--features",
+    "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "pool_v1::pair_forest_semantic_terminal::NKR_term_semantic_native::NKR_semantic_digest_args_cut",
+    "--output-format",
+    "terse"
+  ],
+  "collect": [
+    "NLH_K007-graph-check.json",
+    "NLH_K007-graph.stderr",
+    "NLH_K007-graph.json",
+    "NLH_K007-source-check.json",
+    "NLH_K007-lock-check.json"
+  ],
+  "source_revision": "c358a31fd01f0c2117a594c669be859ae83999b1",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "exit_status": 1,
+  "wall_seconds": 15.881627888884395,
+  "peak_rss_kib": "1204804",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r99eb7e7592d643a9aeaa5b5f57dd7761.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1435652096",
+  "source_hashes": {
+    "NLH_seed.py": "b34f72d40c5b759d352aff7e28341ac6acf033b7d1cb7b36aedba6fea56a93d9",
+    "NLH_SEED_INPUTS.json": "aa35067a1d864988f9856d79ed8adba15cc785a36d6b771c497df512843c9b83",
+    "NLH_stage_native.py": "1b541d0635d905a4a44fe9c0d6a232a92195a927f9a4279019e405239a5eda0f",
+    "NLH_FROZEN_INPUTS.json.sha256": "89f8cf69f243878ff24cd659dc6b0269c013ff855af2902578a5e3a76bf9cb39",
+    "NLH_EXTRA_INPUTS.json": "cd081a9c7fc57aea7dfe7c5051d529f734ce4dc67c1884831de3402bccb2b5c5",
+    "NLH_KMX.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NLH_native.patch": "d081f44997c5809c5667e00eb391b7b7e9a28673345eabc70defac92baceef7c",
+    "NLH_SOURCE_PINS.json": "3f8fe4c59460841cfa14742374d22c3e29797d431c4edbe646461a1147e14b3a",
+    "NLH_gate.py": "9d4aa706bf7342c0961c0ba18772464d38ed43b329f3c26bbb449e85bf9f1cbf",
+    "NLH_allocator.patch": "1eeafaff1c2144fc09e312c71fb2b872a4e204e6d655cbe22954b7a2f1ed0f6f"
+  },
+  "print_axioms": "N/A: kani"
+}

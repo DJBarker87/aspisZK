@@ -10,6 +10,8 @@ open FIw_ArrayValue (canonical decoded)
 open NKI_InitialPrefix (Public Openings Selectors)
 open NKR_TermSemanticSource (Packed)
 open NKR_TermSemanticCut (Pair)
+open NKR_TermDigestFrame (increment)
+abbrev packed := NKR_TermDigestFrame.packed
 
 /-- Generic native-to-source261 digest window association. The packing
 clause is SUPPORT input: the261 ROOT must discharge it from SAME250/251
@@ -34,12 +36,15 @@ theorem source (pub : Public) (o : Openings) (s : Selectors) (before : Packed)
     subst j
     simp only [NKR_TermSemanticCut.digestFrame,ite_true]
     erw [value 0,pairing 0]
+    rfl
   · by_cases h22 : j.val=22
     · have same : j=⟨22,by decide⟩:=Fin.ext h22
       subst j
       simp only [NKR_TermSemanticCut.digestFrame,show ¬(22:Nat)=21 from by decide,ite_false,ite_true]
       erw [value 1,pairing 1]
+      rfl
     · simp only [NKR_TermSemanticCut.digestFrame,if_neg h21,if_neg h22,add_zero]
+      rfl
  have same : out=oldOut := NKI_ArrayCanonicalEq.source out oldOut co cold (by
   funext j
   erw [directValue j,oldValue j,increment old j])

@@ -14,7 +14,7 @@ abbrev Challenges := state_only_prefix.r0.Challenges
 abbrev Error := state_only_prefix.r0.Error
 structure State where
  selected : Array NQ 84#usize
- public : SemanticPublic
+ semanticPublic : SemanticPublic
  parts : NKR_TermTail.Output
 inductive Event where
  | gather (i : Fin 84)
@@ -28,20 +28,20 @@ def step (pub : r0.Public) (claims : Claims) (point : Array NQ 10#usize)
  | .gather i, st => ok (.Ok {st with selected := (NJB_ArrayCarrier.array
      (fun j => if j=i then selectedCell claims i else NJB_ArrayCarrier.cell st.selected j))})
  | .semantic, st => do
-   let public ← pub.semantic
-   ok (.Ok {st with public := public})
+   let semanticPublic ← pub.semantic
+   ok (.Ok {st with semanticPublic := semanticPublic})
  | .parts, st => do
-   let r ← terminal_parts st.public st.selected point c.lambda c.chi c.theta c.zc c.mu
+   let r ← terminal_parts st.semanticPublic st.selected point c.lambda c.chi c.theta c.zc c.mu
    match r with
    | .Err _ => ok (.Err .Public)
    | .Ok parts => ok (.Ok {st with parts := parts})
 def order : List Event := (List.finRange 84).map Event.gather ++ [.semantic,.parts]
 def returned (st : State) : NQ := st.parts.1
 /-- Model-side instantiation of the already CLOSED semantic255 projection at
-this public input; the arbitrary initial public field cannot replace it. -/
+this semanticPublic input; the arbitrary initial semanticPublic field cannot replace it. -/
 theorem semantic_step (pub : r0.Public) (claims : Claims) (point : Array NQ 10#usize)
  (c : Challenges) (st : State) :
- step pub claims point c .semantic st=ok (.Ok {st with public := NKR_TermPublic.value pub}) := by
+ step pub claims point c .semantic st=ok (.Ok {st with semanticPublic := NKR_TermPublic.value pub}) := by
  simp only [step,NKR_TermPublic.source,bind_tc_ok]
 #print axioms semantic_step
 end AspisR1.NLH_WrapperState

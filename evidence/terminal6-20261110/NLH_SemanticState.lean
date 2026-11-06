@@ -25,11 +25,17 @@ inductive Event where
  | field (i : Fin 12)
  | scalars
  | preweighted
+def childCall (pub : Public) (o : Openings) (s : Selectors) (i : Fin 4) (before : Packed) : Result Packed :=
+ match i.val with
+ | 0 => add_schedule_lanes before pub o s
+ | 1 => add_path_lanes before o s
+ | 2 => add_value_lanes before o s
+ | _ => add_occupancy_lanes before pub o s
 /-- Actual child calls at their source arguments. No independently selected
 child state or operation dictionary occurs in the parent interpreter. -/
 def step (pub : Public) (o : Openings) (s : Selectors) : Event → State → Result State
  | .child i, st => do
-   let packed ← NKR_TermSemanticCut.call pub o s i st.packed
+   let packed ← childCall pub o s i st.packed
    ok {st with packed := packed}
  | .digest, st => do
    let digests ← NKR_DigestWrapper.reference pub o s
