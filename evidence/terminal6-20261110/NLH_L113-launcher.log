@@ -1,0 +1,55 @@
+{"attempt": "NLH_L113", "exit_status": 1, "wall_seconds": 16.752676557051018, "peak_rss_kib": "6146648", "swaps": "0", "print_axioms": ["'AspisR1.NLH_WrapperGathers.step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLH_WrapperGathers.sequential' depends on axioms: [propext, Quot.sound]", "'AspisR1.NLH_WrapperGathers.fold' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLH_WrapperGathers.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLH_WrapperGathers.lean:71:37: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑j < ↑84#usize then ?m.140 else ?m.141
+in the target expression
+  (if ↑j < 84 then selectedCell claims j else NJB_ArrayCarrier.cell base.selected j) = NJB_ArrayCarrier.cell selected j
+
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+claims : Claims
+point : Std.Array NQ 10#usize
+c : Challenges
+base : State
+hc : ∀ row ∈ ↑claims, FIw_ArrayValue.canonical row
+selected : NLH_TermSelected.Selected
+call :
+  array_from_fn_copy 84#usize field.QM31.Insts.CoreMarkerCopy NLH_TermSelected.builder field.QM31.ZERO claims =
+    ok selected
+canon : FIw_ArrayValue.canonical selected
+values : ∀ (
+...
+ims : Claims
+point : Std.Array NQ 10#usize
+c : Challenges
+base : State
+hc : ∀ row ∈ ↑claims, FIw_ArrayValue.canonical row
+selected : NLH_TermSelected.Selected
+call :
+  array_from_fn_copy 84#usize field.QM31.Insts.CoreMarkerCopy NLH_TermSelected.builder field.QM31.ZERO claims =
+    ok selected
+canon : FIw_ArrayValue.canonical selected
+values : ∀ (i : Fin ↑84#usize), NJB_ArrayCarrier.cell selected i = NLH_TermSelected.expected claims i
+cuts :
+  NLH_RustCuts.Cuts (NLH_WrapperState.step pub claims point c) (List.map Event.gather (List.finRange 84))
+    (stage claims base 0) (ok (core.result.Result.Ok (stage claims base (0 + (List.finRange 84).length))))
+    (List.map Event.gather (List.finRange 84))
+j : Fin ↑84#usize
+⊢ (if ↑j < 84 then selectedCell claims j else NJB_ArrayCarrier.cell base.selected j) = NJB_ArrayCarrier.cell selected j
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    j
+  has type
+    Fin ↑84#usize
+  but is expected to have type
+    Fin 84
+  in the application
+    ↑j
+NLH_WrapperGathers.lean:74:66: error: No goals to be solved
+NLH_WrapperGathers.lean:75:36: error: No goals to be solved
+'AspisR1.NLH_WrapperGathers.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLH_WrapperGathers.sequential' depends on axioms: [propext, Quot.sound]
+'AspisR1.NLH_WrapperGathers.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLH_WrapperGathers.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r258a416339dc452a90bba2e835959f0b.scope; invocation ID: 6380d5ecdc40411bbb98196ee27f79fe

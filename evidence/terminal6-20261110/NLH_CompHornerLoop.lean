@@ -20,7 +20,7 @@ theorem source (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#
  Canon out ∧ NLH_TermHornerCut.Trace st.prepared st.remaining st.composition out := by
  induction events generalizing st with
  | nil =>
-   have empty : st.remaining=[] := List.length_eq_zero.mp (by omega)
+   have empty : st.remaining=[] := List.length_eq_zero_iff.mp (by simpa only [List.length_nil] using length.symm)
    have same : {st with composition := st.composition,remaining := []}=st := by rw [←empty]
    refine ⟨st.composition,?_,hc,?_⟩
    · rw [same];exact .nil st
@@ -42,7 +42,6 @@ theorem source (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#
        omega
      obtain ⟨out,tail,co,trace⟩ := ih next (fun e he => shape e (by simp only [List.mem_cons];exact Or.inr he)) tailLength cm restCanonical hp
      refine ⟨out,.next window tail,co,?_⟩
-     rw [remaining]
      exact .cons pm ma cut trace
 #print axioms source
 end AspisR1.NLH_CompHornerLoop

@@ -39,6 +39,7 @@ theorem factor_good (pub : Public) (claims : Array NQ 84#usize) (point : Array N
  unfold NLH_TermCompositionFactor.reference
  rw [NLH_TermAmount.source,bind_tc_ok]
  simp only [Aeneas.Std.uncurry,good,Bool.false_eq_true,ite_false]
+ rfl
 /-- Packaging only; not a row root and no native-cut producer. -/
 theorem package (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#usize)
  (lambda chi theta : NQ) (out : Outcome) (log : List Event)

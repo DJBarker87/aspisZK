@@ -21,3 +21,7 @@ Stage 3: NLH_SemanticFold.source L049 exit0, 14.6468s, 6,208,100 KiB, swap0, sta
 ## Native-window and parent-step stage
 
 K002..K047 deliver23 matched pairs; K001 remains a code-generation failure with no credit. Semantic261 complete21-event fold passes (L049), and263 arithmetic suffix9-step fold passes (L074). Composition237 primitive steps through prepared construction pass; upper237/263/256 folds are authored and being checked, not candidate roots yet. NLH_STAGE_NATIVE.md maps all pairs. Gate scripts are prepared but unrun. All four authoritative rows remain OPEN pending completed roots and ledger gate.
+
+## Complete parent source stage
+
+All four exact-source roots pass:261 L049,237 L107,263 L109,256 L117; only propext/Classical.choice/Quot.sound. The full84 gather frame is L114; native23 pairs are complete. Gate manifest selects78 current-source modules,128 new audited theorem roots and10,962 total roots including private raw inventory. One combined gate is planned (118..138),16 initial raw partitions balanced by predecessor edge counts. Candidate source interfaces are recorded in NLH_ROOT_STATEMENTS.md. No authoritative credit before the next ledger gate.

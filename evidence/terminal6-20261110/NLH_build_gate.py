@@ -32,7 +32,17 @@ for m in passed|{'NLH_COMBINED_IMPORT':{}}:
  q=p/(m+'.lean');expected[m]=list(dict.fromkeys(['Init']+re.findall(r'^import ([\w.]+)',q.read_text(),re.M)))
 allroots=sorted(set(allroots+roots+['AspisR1.RPx_Deployed.deployed']));private='_private.NKR_SumCopyFull.0.AspisR1.NKR_SumCopyRoot.rows_ext';assert private in allroots
 count=int(__import__('sys').argv[1])if len(__import__('sys').argv)>1 else 26
-groups=[allroots[i*len(allroots)//count:(i+1)*len(allroots)//count]for i in range(count)]
+# Cost-balanced initial partition, using retained predecessor raw edge counts.
+# This is a new audit partition, never a rerun of a timed-out shape.
+cost={};cost_pins=[]
+for q in sorted((p.parent/'terminal5-20261108/NKR_audit').glob('proof*/receipt.json')):
+ d=json.loads(q.read_text());cost_pins.append(dict(path=str(q),sha256=sha(q)))
+ for row in d.get('results',[]):cost[row['root']]=row['edges_scanned']
+unknown=100000;groups=[[]for _ in range(count)];loads=[0]*count
+for root in sorted(allroots,key=lambda r:(-cost.get(r,unknown),r)):
+ i=min(range(count),key=lambda j:(loads[j],j));groups[i].append(root);loads[i]+=cost.get(root,unknown)
+for g in groups:g.sort()
+(p/'NLH_AUDIT_PARTITION.json').write_text(json.dumps(dict(method='largest-first edge-count balancing from predecessor raw receipts',predecessor_receipts=cost_pins,groups=count,estimated_edges=loads,unknown_root_edges=unknown,known_costs=len(cost)),indent=1)+'\n')
 assert len(set(sum(groups,[])))==sum(map(len,groups))==len(allroots)
 (p/'NLH_AUDIT_ROOTS.json').write_text(json.dumps(dict(roots=allroots,groups=groups,new_roots=sorted(set(roots)),baseline_pins=baseline,private_inventory_retained=True),indent=1)+'\n');(p/'NLH_AUDIT_MODULES.json').write_text(json.dumps([['NLH_COMBINED_IMPORT']]*count)+'\n');(p/'NLH_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(dict(module=m,imports=im))+'\n'for m,im in sorted(expected.items())))
 (p/'NLH_GATE_SOURCES.json').write_text(json.dumps(dict(passed={m:r['attempt']for m,r in passed.items()},sources=pins,baselines=baseline,nkr_modules=list(nkr),combined_sha256=sha(p/'NLH_COMBINED_IMPORT.lean'),gate_generator_private_source_checks=False,raw_private_inventory_complete=True),indent=1)+'\n')

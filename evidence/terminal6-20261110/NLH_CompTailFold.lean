@@ -102,17 +102,21 @@ theorem source (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#
  have horner : NKR_TermHorner.run claims p.z p.mask semantic p.poseidon theta h copy=
      ok (composition,p.z,p.mask,gv,h,copy.active) := by
    simp only [NKR_TermHorner.run,body,NKR_TermHorner.column,gCall,bind_tc_ok]
+ change semantic_packed pub ⟨p.z,p.succ,p.xor12⟩ p.selectors=ok semantic at semanticCall
+ change pool_v1.pair_forest_copy_terminal.evaluate_with_selectors p.z h p.selectors lambda chi
+   pub.transition.live_snapshot.next_pair_index (NLH_TermComposeTail.variant pub.variant)=ok copy at copyCall
  have sourceCall : NLH_TermComposeTail.run pub claims point lambda chi theta=ok (.Ok (returned final)) := by
    unfold NLH_TermComposeTail.run
    rw [p.gather0,bind_tc_ok,p.gather1,bind_tc_ok,p.gather2,bind_tc_ok,p.gather3,bind_tc_ok,
      p.selectorCall,bind_tc_ok,p.poseidonSelectorCall,bind_tc_ok,p.poseidonCall,bind_tc_ok,
      semanticCall,bind_tc_ok,NLH_TermComposeTail.hcolumn,bind_tc_ok,hCall,bind_tc_ok,
      NLH_TermComposeTail.variant_source,bind_tc_ok,copyCall,bind_tc_ok]
-   have mapped : (do let out ← NKR_TermHorner.run claims p.z p.mask semantic p.poseidon theta h copy
-                    ok (core.result.Result.Ok out : core.result.Result NKR_TermTail.Carrier NKR_TermTail.Error))=
+   have mapped : (do let out ← NKR_TermHorner.run claims p.z p.mask semantic p.poseidon theta h copy; ok (core.result.Result.Ok out : core.result.Result NKR_TermTail.Carrier NKR_TermTail.Error))=
       ok (.Ok (composition,p.z,p.mask,gv,h,copy.active)) := by rw [horner,bind_tc_ok]
    simp only [NKR_TermHorner.run,FIv_FoldsTotal.body,bind_assoc_eq,bind_tc_ok] at mapped
-   simpa only [returned,FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter,
+   simpa only [returned,final,beforeG,preparedState,hstate,g,f,e,d,c,b,a,NLH_CompGathers.stage,
+     show (1:Nat) ≤ 4 by decide,show (2:Nat) ≤ 4 by decide,show (3:Nat) ≤ 4 by decide,
+     show (4:Nat) ≤ 4 by decide,ite_true,FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter,
      core.iter.traits.iterator.Iterator.rev.trait_default,core.iter.traits.iterator.Iterator.rev.default,bind_tc_ok] using mapped
  exact ⟨final,complete,sourceCall,cc,p.zCanonical,p.maskCanonical,cg,ch,ca⟩
 #print source

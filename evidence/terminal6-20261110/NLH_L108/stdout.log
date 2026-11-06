@@ -1,0 +1,354 @@
+NLH_PartsRoot.lean:78:87: error: unsolved goals
+pub : Public
+claims : Std.Array NQ 84#usize
+point zc : Std.Array NQ 10#usize
+lambda chi theta mu : NQ
+hd : NKR_DigestChildren.Domain pub
+hc : canonical claims
+hp : canonical point
+hz : canonical zc
+hl : Canon lambda
+hchi : Canon chi
+ht : Canon theta
+hm : Canon mu
+asset : ↑pub.asset_id < 2147483647
+childResult : Result (core.result.Result NLH_CompositionState.State NLH_CompositionState.Error)
+w✝ : List NLH_CompositionState.Event
+left✝¹ :
+  NLH_RustCuts.Cuts (NLH_CompositionState.step pub claims point lambda chi theta) NLH_CompositionState.order
+    NLH_CompRun.initial childResult w✝
+left✝ : w✝ <+: NLH_CompositionState.order
+childCanonical : NLH_CompRoot.Canonical childResult
+childEq : NLH_CompRoot.projected childResult = composition_parts pub claims point lambda chi theta
+right✝¹ : NLH_CompRun.reference pub claims point lambda chi theta = composition_parts pub claims point lambda chi theta
+childState : NLH_CompositionState.State
+resultEq : childResult = ok (core.result.Result.Ok childState)
+child : NKR_TermTail.Carrier := NLH_CompositionState.returned childState
+called : composition_parts pub claims point lambda chi theta = ok (core.result.Result.Ok child)
+cc : Canon childState.composition
+cz : canonical childState.openings.z
+cm : canonical childState.mask
+cg : Canon childState.g
+ch : Canon childState.h
+ca : Canon childState.copy.active
+calls : NKR_TermTail.Calls zc point mu child.1 child.2.2.2.2.1 child.2.2.2.2.2
+arithmetic : NKR_TermTail.arithmetic zc point mu child.1 child.2.2.2.2.1 child.2.2.2.2.2 = ok calls.out
+co : Canon calls.out
+right✝ :
+  FIv_NativeValue.decode calls.out =
+    FIv_EqualityValue.weight zc point * FIv_NativeValue.decode child.1 +
+        FIv_NativeValue.decode mu * FIv_NativeValue.decode child.2.2.2.2.1 +
+      FIv_NativeValue.decode mu ^ 2 *
+        ((1 - FIv_NativeValue.decode child.2.2.2.2.2) * FIv_NativeValue.decode child.2.2.2.2.1)
+zero : NLH_PartsValues.snapshot calls 0 = fun x => field.QM31.ZERO
+⊢ { child := child, locals := fun x => field.QM31.ZERO } =
+    let __src := initial;
+    { child := child, locals := __src.locals }
+'AspisR1.NLH_PartsRoot.package' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLH_PartsRoot.source : ∀ (pub : Public) (claims : Std.Array NQ 84#usize)
+  (point zc : Std.Array NQ 10#usize) (lambda chi theta mu : NQ),
+  NKR_DigestChildren.Domain pub →
+    canonical claims →
+      canonical point →
+        canonical zc →
+          Canon lambda →
+            Canon chi →
+              Canon theta →
+                Canon mu →
+                  ↑pub.asset_id < 2147483647 →
+                    ∃ result events,
+                      NLH_RustCuts.Cuts (step pub claims point zc lambda chi theta mu) order initial result events ∧
+                        events <+: order ∧
+                          Canonical result ∧
+                            projected result = terminal_parts pub claims point lambda chi theta zc mu ∧
+                              reference pub claims point zc lambda chi theta mu =
+                                terminal_parts pub claims point lambda chi theta zc mu :=
+fun pub claims point zc lambda chi theta mu hd hc hp hz hl hchi ht hm asset =>
+  let ⟨childResult, h✝⟩ := NLH_CompRoot.source pub claims point lambda chi theta hd hc hp hl hchi ht asset
+  let ⟨w✝, h✝¹⟩ := h✝
+  let ⟨left✝, right✝⟩ := h✝¹
+  let ⟨left✝¹, right✝¹⟩ := right✝
+  let ⟨childCanonical, right✝²⟩ := right✝¹
+  let ⟨childEq, right✝³⟩ := right✝²
+  casesOn (motive := fun t =>
+    childResult = t →
+      ∃ result events,
+        NLH_RustCuts.Cuts (step pub claims point zc lambda chi theta mu) order initial result events ∧
+          events <+: order ∧
+            Canonical result ∧
+              projected result = terminal_parts pub claims point lambda chi theta zc mu ∧
+                reference pub claims point zc lambda chi theta mu =
+                  terminal_parts pub claims point lambda chi theta zc mu)
+    childResult
+    (fun r h =>
+      Eq.ndrec (motive := fun x =>
+        childResult = x →
+          ∃ result events,
+            NLH_RustCuts.Cuts (step pub claims point zc lambda chi theta mu) order initial result events ∧
+              events <+: order ∧
+                Canonical result ∧
+                  projected result = terminal_parts pub claims point lambda chi theta zc mu ∧
+                    reference pub claims point zc lambda chi theta mu =
+                      terminal_parts pub claims point lambda chi theta zc mu)
+        (fun resultEq =>
+          core.result.Result.casesOn (motive := fun t =>
+            r = t →
+              ∃ result events,
+                NLH_RustCuts.Cuts (step pub claims point zc lambda chi theta mu) order initial result events ∧
+                  events <+: order ∧
+                    Canonical result ∧
+                      projected result = terminal_parts pub claims point lambda chi theta zc mu ∧
+                        reference pub claims point zc lambda chi theta mu =
+                          terminal_parts pub claims point lambda chi theta zc mu)
+            r
+            (fun childState h =>
+              Eq.ndrec (motive := fun r =>
+                childResult = ok r →
+                  ∃ result events,
+                    NLH_RustCuts.Cuts (step pub claims point zc lambda chi theta mu) order initial result events ∧
+                      events <+: order ∧
+                        Canonical result ∧
+                          projected result = terminal_parts pub claims point lambda chi theta zc mu ∧
+                            reference pub claims point zc lambda chi theta mu =
+                              terminal_parts pub claims point lambda chi theta zc mu)
+                (fun resultEq =>
+                  let child := NLH_CompositionState.returned childState;
+                  have called :=
+                    Eq.mpr (id (congrArg (fun _a => _a = ok (core.result.Result.Ok child)) (Eq.symm childEq)))
+                      (Eq.mpr
+                        (id
+                          (congrArg (fun _a => NLH_CompRoot.projected _a = ok (core.result.Result.Ok child)) resultEq))
+                        (Eq.refl (NLH_CompRoot.projected (ok (core.result.Result.Ok childState)))));
+                  have canonicalChild :=
+                    Eq.mpr (id (congrArg (fun _a => NLH_CompRoot.Canonical _a) (Eq.symm resultEq))) childCanonical;
+                  let ⟨cc, right✝⁴⟩ := canonicalChild
+                  let ⟨cz, right✝⁵⟩ := right✝⁴
+                  let ⟨cm, right✝⁶⟩ := right✝⁵
+                  let ⟨cg, right✝⁷⟩ := right✝⁶
+                  let ⟨ch, ca⟩ := right✝⁷
+                  let ⟨calls, h✝²⟩ :=
+                    NKR_TermTail.result zc point mu child.1 child.2.2.2.2.1 child.2.2.2.2.2 hz hp hm cc ch ca
+                  let ⟨arithmetic, right✝⁸⟩ := h✝²
+                  let ⟨co, right✝⁹⟩ := right✝⁸
+                  have start := sorry;
+                  have call :=
+                    Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            step pub claims point zc lambda chi theta mu Event.composition initial =
+                              ok (core.result.Result.Ok _a))
+                          start))
+                      (of_eq_true
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans
+                                (congrFun' (congrArg Bind.bind called) fun result =>
+                                  match result with
+                                  | core.result.Result.Err err => ok (core.result.Result.Err err)
+                                  | core.result.Result.Ok child =>
+                                    ok (core.result.Result.Ok { child := child, locals := initial.locals }))
+                                (bind_tc_ok (core.result.Result.Ok child) fun y =>
+                                  match y with
+                                  | core.result.Result.Err err => ok (core.result.Result.Err err)
+                                  | core.result.Result.Ok child =>
+                                    ok (core.result.Result.Ok { child := child, locals := initial.locals }))))
+                            (ok (core.result.Result.Ok { child := child, locals := initial.locals })))
+                          (eq_self (ok (core.result.Result.Ok { child := child, locals := initial.locals })))));
+                  have tail := NLH_PartsFold.arithmetic pub claims point zc lambda chi theta mu child calls;
+                  let final := NLH_PartsValues.stage child calls 9;
+                  have cuts := NLH_RustCuts.Cuts.next call tail;
+                  package pub claims point zc lambda chi theta mu (ok (core.result.Result.Ok final)) order cuts
+                    (Eq.mpr
+                      (id
+                        (congrArg (fun _a => projected (ok (core.result.Result.Ok final)) = _a)
+                          (NLH_TermPartsFactor.source pub claims point lambda chi theta zc mu)))
+                      (id
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                projected (ok (core.result.Result.Ok final)) = do
+                                  let child ← _a
+                                  NKR_TermTail.after zc point mu child)
+                              called))
+                          (Eq.mpr
+                            (id
+                              (congrArg (fun _a => projected (ok (core.result.Result.Ok final)) = _a)
+                                (bind_tc_ok (core.result.Result.Ok child) (NKR_TermTail.after zc point mu))))
+                            (Eq.mpr
+                              (id
+                                (congrArg (Eq (projected (ok (core.result.Result.Ok final))))
+                                  (Eq.trans
+                                    (congrFun'
+                                      (congrArg Bind.bind
+                                        (Eq.trans
+                                          (congrFun' (congrArg Bind.bind arithmetic) fun original =>
+                                            ok (original, child.2.1, child.2.2.1, ⋯.2.1))
+                                          (bind_tc_ok calls.out fun y => ok (y, child.2.1, child.2.2.1, ⋯.2.1))))
+                                      fun output => ok (core.result.Result.Ok output))
+                                    (bind_tc_ok (calls.out, child.2.1, child.2.2.1, child.2.2.2.1) fun y =>
+                                      ok (core.result.Result.Ok y)))))
+                              (Eq.refl (projected (ok (core.result.Result.Ok final)))))))))
+                    ⟨co, ⟨cz, ⟨cm, cg⟩⟩⟩)
+                (Eq.symm h) resultEq)
+            (fun err h =>
+              Eq.ndrec (motive := fun r =>
+                childResult = ok r →
+                  ∃ result events,
+                    NLH_RustCuts.Cuts (step pub claims point zc lambda chi theta mu) order initial result events ∧
+                      events <+: order ∧
+                        Canonical result ∧
+                          projected result = terminal_parts pub claims point lambda chi theta zc mu ∧
+                            reference pub claims point zc lambda chi theta mu =
+                              terminal_parts pub claims point lambda chi theta zc mu)
+                (fun resultEq =>
+                  have child :=
+                    Eq.mpr (id (congrArg (fun _a => _a = ok (core.result.Result.Err err)) (Eq.symm childEq)))
+                      (Eq.mpr
+                        (id (congrArg (fun _a => NLH_CompRoot.projected _a = ok (core.result.Result.Err err)) resultEq))
+                        (Eq.refl (NLH_CompRoot.projected (ok (core.result.Result.Err err)))));
+                  have call :=
+                    of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind child) fun result =>
+                                match result with
+                                | core.result.Result.Err err => ok (core.result.Result.Err err)
+                                | core.result.Result.Ok child =>
+                                  ok (core.result.Result.Ok { child := child, locals := initial.locals }))
+                              (bind_tc_ok (core.result.Result.Err err) fun y =>
+                                match y with
+                                | core.result.Result.Err err => ok (core.result.Result.Err err)
+                                | core.result.Result.Ok child =>
+                                  ok (core.result.Result.Ok { child := child, locals := initial.locals }))))
+                          (ok (core.result.Result.Err err)))
+                        (eq_self (ok (core.result.Result.Err err))));
+                  have cuts := NLH_RustCuts.Cuts.returned call;
+                  package pub claims point zc lambda chi theta mu (ok (core.result.Result.Err err)) [Event.composition]
+                    cuts
+                    (Eq.mpr
+                      (id
+                        (congrArg (fun _a => projected (ok (core.result.Result.Err err)) = _a)
+                          (NLH_TermPartsFactor.source pub claims point lambda chi theta zc mu)))
+                      (id
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                projected (ok (core.result.Result.Err err)) = do
+                                  let child ← _a
+                                  NKR_TermTail.after zc point mu child)
+                              child))
+                          (Eq.refl (projected (ok (core.result.Result.Err err)))))))
+                    True.intro)
+                (Eq.symm h) resultEq)
+            (Eq.refl r))
+        (Eq.symm h) (Eq.refl childResult))
+    (fun err h =>
+      Eq.ndrec (motive := fun x =>
+        childResult = x →
+          ∃ result events,
+            NLH_RustCuts.Cuts (step pub claims point zc lambda chi theta mu) order initial result events ∧
+              events <+: order ∧
+                Canonical result ∧
+                  projected result = terminal_parts pub claims point lambda chi theta zc mu ∧
+                    reference pub claims point zc lambda chi theta mu =
+                      terminal_parts pub claims point lambda chi theta zc mu)
+        (fun resultEq =>
+          have child :=
+            Eq.mpr (id (congrArg (fun _a => _a = fail err) (Eq.symm childEq)))
+              (Eq.mpr (id (congrArg (fun _a => NLH_CompRoot.projected _a = fail err) resultEq))
+                (Eq.refl (NLH_CompRoot.projected (fail err))));
+          have call :=
+            of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind child) fun result =>
+                        match result with
+                        | core.result.Result.Err err => ok (core.result.Result.Err err)
+                        | core.result.Result.Ok child =>
+                          ok (core.result.Result.Ok { child := child, locals := initial.locals }))
+                      (bind_tc_fail err fun y =>
+                        match y with
+                        | core.result.Result.Err err => ok (core.result.Result.Err err)
+                        | core.result.Result.Ok child =>
+                          ok (core.result.Result.Ok { child := child, locals := initial.locals }))))
+                  (fail err))
+                (eq_self (fail err)));
+          have cuts := NLH_RustCuts.Cuts.failed call;
+          package pub claims point zc lambda chi theta mu (fail err) [Event.composition] cuts
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => projected (fail err) = _a)
+                  (NLH_TermPartsFactor.source pub claims point lambda chi theta zc mu)))
+              (id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        projected (fail err) = do
+                          let child ← _a
+                          NKR_TermTail.after zc point mu child)
+                      child))
+                  (Eq.refl (projected (fail err))))))
+            True.intro)
+        (Eq.symm h) (Eq.refl childResult))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        childResult = x →
+          ∃ result events,
+            NLH_RustCuts.Cuts (step pub claims point zc lambda chi theta mu) order initial result events ∧
+              events <+: order ∧
+                Canonical result ∧
+                  projected result = terminal_parts pub claims point lambda chi theta zc mu ∧
+                    reference pub claims point zc lambda chi theta mu =
+                      terminal_parts pub claims point lambda chi theta zc mu)
+        (fun resultEq =>
+          have child :=
+            Eq.mpr (id (congrArg (fun _a => _a = div) (Eq.symm childEq)))
+              (Eq.mpr (id (congrArg (fun _a => NLH_CompRoot.projected _a = div) resultEq))
+                (Eq.refl (NLH_CompRoot.projected div)));
+          have call :=
+            of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind child) fun result =>
+                        match result with
+                        | core.result.Result.Err err => ok (core.result.Result.Err err)
+                        | core.result.Result.Ok child =>
+                          ok (core.result.Result.Ok { child := child, locals := initial.locals }))
+                      (bind_tc_div fun y =>
+                        match y with
+                        | core.result.Result.Err err => ok (core.result.Result.Err err)
+                        | core.result.Result.Ok child =>
+                          ok (core.result.Result.Ok { child := child, locals := initial.locals }))))
+                  div)
+                (eq_self div));
+          have cuts := NLH_RustCuts.Cuts.diverged call;
+          package pub claims point zc lambda chi theta mu div [Event.composition] cuts
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => projected div = _a)
+                  (NLH_TermPartsFactor.source pub claims point lambda chi theta zc mu)))
+              (id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        projected div = do
+                          let child ← _a
+                          NKR_TermTail.after zc point mu child)
+                      child))
+                  (Eq.refl (projected div)))))
+            True.intro)
+        (Eq.symm h) (Eq.refl childResult))
+    (Eq.refl childResult)
+'AspisR1.NLH_PartsRoot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

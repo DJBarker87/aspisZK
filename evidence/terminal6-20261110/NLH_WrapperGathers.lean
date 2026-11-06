@@ -8,19 +8,19 @@ open Aeneas Aeneas.Std Result FIq_Native NLH_WrapperState
 open FIv_NativeArithmetic (NQ)
 def stage (claims : Claims) (base : State) (n : Nat) : State :=
  {base with selected := (NJB_ArrayCarrier.array
-   (fun j => if j.val < n then selectedCell claims j else NJB_ArrayCarrier.cell base.selected j))}
+   (fun (j : Fin 84) => if j.val < n then selectedCell claims j else NJB_ArrayCarrier.cell base.selected j))}
 /-- ONE arbitrary native window, including the complete logical array frame.
 K046/K047 exercises std::array::from_fn at one window and its actual store. -/
 theorem step (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (claims : Claims)
  (point : Array NQ 10#usize) (c : Challenges) (base : State) (i : Fin 84) :
  NLH_WrapperState.step pub claims point c (.gather i) (stage claims base i.val)=
  ok (.Ok (stage claims base (i.val+1))) := by
- have image : (fun j => if j=i then selectedCell claims i else
+ have image : (fun (j : Fin 84) => if j=i then selectedCell claims i else
      NJB_ArrayCarrier.cell (stage claims base i.val).selected j)=
-   (fun j => if j.val < i.val+1 then selectedCell claims j else NJB_ArrayCarrier.cell base.selected j) := by
+   (fun (j : Fin 84) => if j.val < i.val+1 then selectedCell claims j else NJB_ArrayCarrier.cell base.selected j) := by
    funext j
    change (if j=i then selectedCell claims i else
-     NJB_ArrayCarrier.cell (NJB_ArrayCarrier.array (fun j => if j.val < i.val then selectedCell claims j else NJB_ArrayCarrier.cell base.selected j)) j)=_
+     NJB_ArrayCarrier.cell (NJB_ArrayCarrier.array (N := 84#usize) (fun (j : Fin 84) => if j.val < i.val then selectedCell claims j else NJB_ArrayCarrier.cell base.selected j)) j)=_
    rw [NJB_ArrayCarrier.cell_array]
    by_cases same : j=i
    · subst j;simp only [if_pos (Nat.lt_succ_self i.val),ite_true]
@@ -28,8 +28,7 @@ theorem step (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (claims : C
      by_cases earlier : j.val < i.val
      · simp only [if_neg same,if_pos earlier,if_pos (show j.val < i.val+1 by omega)]
      · simp only [if_neg same,if_neg earlier,if_neg (show ¬j.val < i.val+1 by omega)]
- change ok (core.result.Result.Ok {stage claims base i.val with selected := NJB_ArrayCarrier.array
-   (fun j => if j=i then selectedCell claims i else NJB_ArrayCarrier.cell (stage claims base i.val).selected j)} : core.result.Result State Error)=_
+ change ok (core.result.Result.Ok {stage claims base i.val with selected := NJB_ArrayCarrier.array (N := 84#usize) (fun (j : Fin 84) => if j=i then selectedCell claims i else NJB_ArrayCarrier.cell (stage claims base i.val).selected j)} : core.result.Result State NLH_WrapperState.Error)=_
  rw [image]
  rfl
 /-- Pure ordinal shape, independent of field values and buffer contents. -/
@@ -68,13 +67,12 @@ theorem source (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (claims :
  have same : (stage claims base 84).selected=selected := by
    have cells : NJB_ArrayCarrier.cell (stage claims base 84).selected=NJB_ArrayCarrier.cell selected := by
      funext j
-     change NJB_ArrayCarrier.cell (NJB_ArrayCarrier.array (fun j => if j.val < 84 then selectedCell claims j else NJB_ArrayCarrier.cell base.selected j)) j=_
-     rw [NJB_ArrayCarrier.cell_array,if_pos j.isLt]
+     change NJB_ArrayCarrier.cell (NJB_ArrayCarrier.array (N := 84#usize) (fun (j : Fin 84) => if j.val < 84 then selectedCell claims j else NJB_ArrayCarrier.cell base.selected j)) j=_
+     have bound : j.val < (84:Nat) := j.isLt
+     rw [NJB_ArrayCarrier.cell_array,if_pos bound]
      exact (values j).symm
-   calc
-     (stage claims base 84).selected=NJB_ArrayCarrier.array (NJB_ArrayCarrier.cell (stage claims base 84).selected) := (NJB_ArrayCarrier.array_cell _).symm
-     _=NJB_ArrayCarrier.array (NJB_ArrayCarrier.cell selected) := congrArg NJB_ArrayCarrier.array cells
-     _=selected := NJB_ArrayCarrier.array_cell _
+   have equal := congrArg (fun f : Fin (84#usize).val → NQ => NJB_ArrayCarrier.array (N := 84#usize) f) cells
+   simpa only [NJB_ArrayCarrier.array_cell] using equal
  exact ⟨selected,by simpa only [List.length_finRange,Nat.zero_add] using cuts,canon,same,call⟩
 #print axioms step
 #print axioms sequential

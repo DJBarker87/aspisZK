@@ -80,6 +80,7 @@ theorem source (pub : Public) (claims : Array NQ 84#usize) (point zc : Array NQ 
          funext j;simp only [NLH_PartsValues.snapshot,Nat.not_lt_zero,ite_false]
        unfold NLH_PartsValues.stage
        rw [zero]
+       rfl
      have call : step pub claims point zc lambda chi theta mu .composition initial=ok (.Ok (NLH_PartsValues.stage child calls 0)) := by
        rw [start];simp only [step,called,bind_tc_ok]
      have tail := NLH_PartsFold.arithmetic pub claims point zc lambda chi theta mu child calls

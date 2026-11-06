@@ -1,0 +1,417 @@
+NLH_CompRoot.lean:29:46: warning: This simp argument is unused:
+  if_pos bad
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵h̵,̵N̵L̵H̵_̵T̵e̵r̵m̵A̵m̵o̵u̵n̵t̵.̵i̵n̵v̵a̵l̵i̵d̵,̵i̵f̵_̵p̵o̵s̵ ̵b̵a̵d̵,̵b̵a̵d̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵]̵[̲s̲t̲e̲p̲,̲ ̲h̲,̲ ̲N̲L̲H̲_̲T̲e̲r̲m̲A̲m̲o̲u̲n̲t̲.̲i̲n̲v̲a̲l̲i̲d̲,̲ ̲b̲a̲d̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLH_CompRoot.lean:30:46: warning: This simp argument is unused:
+  if_neg bad
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵h̵,̵N̵L̵H̵_̵T̵e̵r̵m̵A̵m̵o̵u̵n̵t̵.̵i̵n̵v̵a̵l̵i̵d̵,̵i̵f̵_̵n̵e̵g̵ ̵b̵a̵d̵,̵b̵a̵d̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵]̵[̲s̲t̲e̲p̲,̲ ̲h̲,̲ ̲N̲L̲H̲_̲T̲e̲r̲m̲A̲m̲o̲u̲n̲t̲.̲i̲n̲v̲a̲l̲i̲d̲,̲ ̲b̲a̲d̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLH_CompRoot.lean:37:78: error: unsolved goals
+pub : Public
+claims : Std.Array NQ 84#usize
+point : Std.Array NQ 10#usize
+lambda chi theta : NQ
+good : NLH_TermAmount.invalid pub.withdrawal_amount = false
+⊢ (do
+      let validation ← validate_transition pub
+      match validation with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta) =
+    do
+    let r ← validate_transition pub
+    match r with
+      | core.result.Result.Err err => ok (core.result.Result.Err err)
+      | core.result.Result.Ok a => NLH_TermComposeTail.run pub claims point lambda chi theta
+NLH_CompRoot.lean:106:10: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'AspisR1.NLH_CompRoot.order_eq' depends on axioms: [propext]
+'AspisR1.NLH_CompRoot.amount_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLH_CompRoot.factor_good' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLH_CompRoot.package' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLH_CompRoot.source : ∀ (pub : Public) (claims : Std.Array NQ 84#usize) (point : Std.Array NQ 10#usize)
+  (lambda chi theta : NQ),
+  NKR_DigestChildren.Domain pub →
+    canonical claims →
+      canonical point →
+        Canon lambda →
+          Canon chi →
+            Canon theta →
+              ↑pub.asset_id < 2147483647 →
+                ∃ result events,
+                  NLH_RustCuts.Cuts (step pub claims point lambda chi theta) order NLH_CompRun.initial result events ∧
+                    events <+: order ∧
+                      Canonical result ∧
+                        projected result = composition_parts pub claims point lambda chi theta ∧
+                          NLH_CompRun.reference pub claims point lambda chi theta =
+                            composition_parts pub claims point lambda chi theta :=
+fun pub claims point lambda chi theta hd hc hp hl hchi ht asset =>
+  Bool.casesOn (motive := fun t =>
+    NLH_TermAmount.invalid pub.withdrawal_amount = t →
+      ∃ result events,
+        NLH_RustCuts.Cuts (step pub claims point lambda chi theta) order NLH_CompRun.initial result events ∧
+          events <+: order ∧
+            Canonical result ∧
+              projected result = composition_parts pub claims point lambda chi theta ∧
+                NLH_CompRun.reference pub claims point lambda chi theta =
+                  composition_parts pub claims point lambda chi theta)
+    (NLH_TermAmount.invalid pub.withdrawal_amount)
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        NLH_TermAmount.invalid pub.withdrawal_amount = x →
+          ∃ result events,
+            NLH_RustCuts.Cuts (step pub claims point lambda chi theta) order NLH_CompRun.initial result events ∧
+              events <+: order ∧
+                Canonical result ∧
+                  projected result = composition_parts pub claims point lambda chi theta ∧
+                    NLH_CompRun.reference pub claims point lambda chi theta =
+                      composition_parts pub claims point lambda chi theta)
+        (fun bad =>
+          have amount :=
+            Eq.mpr
+              (id
+                (congrArg (fun _a => _a = ok (core.result.Result.Ok NLH_CompRun.initial))
+                  (amount_step pub claims point lambda chi theta NLH_CompRun.initial)))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      (if _a = true then
+                          ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                        else ok (core.result.Result.Ok NLH_CompRun.initial)) =
+                        ok (core.result.Result.Ok NLH_CompRun.initial))
+                    bad))
+                (Eq.refl
+                  (if false = true then
+                    ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                  else ok (core.result.Result.Ok NLH_CompRun.initial))));
+          have factor := factor_good pub claims point lambda chi theta bad;
+          casesOn (motive := fun t =>
+            validate_transition pub = t →
+              ∃ result events,
+                NLH_RustCuts.Cuts (step pub claims point lambda chi theta) order NLH_CompRun.initial result events ∧
+                  events <+: order ∧
+                    Canonical result ∧
+                      projected result = composition_parts pub claims point lambda chi theta ∧
+                        NLH_CompRun.reference pub claims point lambda chi theta =
+                          composition_parts pub claims point lambda chi theta)
+            (validate_transition pub)
+            (fun r h =>
+              Eq.ndrec (motive := fun x =>
+                validate_transition pub = x →
+                  ∃ result events,
+                    NLH_RustCuts.Cuts (step pub claims point lambda chi theta) order NLH_CompRun.initial result events ∧
+                      events <+: order ∧
+                        Canonical result ∧
+                          projected result = composition_parts pub claims point lambda chi theta ∧
+                            NLH_CompRun.reference pub claims point lambda chi theta =
+                              composition_parts pub claims point lambda chi theta)
+                (fun validation =>
+                  core.result.Result.casesOn (motive := fun t =>
+                    r = t →
+                      ∃ result events,
+                        NLH_RustCuts.Cuts (step pub claims point lambda chi theta) order NLH_CompRun.initial result
+                            events ∧
+                          events <+: order ∧
+                            Canonical result ∧
+                              projected result = composition_parts pub claims point lambda chi theta ∧
+                                NLH_CompRun.reference pub claims point lambda chi theta =
+                                  composition_parts pub claims point lambda chi theta)
+                    r
+                    (fun unit h =>
+                      Eq.ndrec (motive := fun r =>
+                        validate_transition pub = ok r →
+                          ∃ result events,
+                            NLH_RustCuts.Cuts (step pub claims point lambda chi theta) order NLH_CompRun.initial result
+                                events ∧
+                              events <+: order ∧
+                                Canonical result ∧
+                                  projected result = composition_parts pub claims point lambda chi theta ∧
+                                    NLH_CompRun.reference pub claims point lambda chi theta =
+                                      composition_parts pub claims point lambda chi theta)
+                        (fun validation =>
+                          have cut :=
+                            of_eq_true
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg Eq
+                                    (Eq.trans
+                                      (congrFun' (congrArg Bind.bind validation) fun r =>
+                                        match r with
+                                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                        | core.result.Result.Ok a => ok (core.result.Result.Ok NLH_CompRun.initial))
+                                      (bind_tc_ok (core.result.Result.Ok unit) fun y =>
+                                        match y with
+                                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                        | core.result.Result.Ok a => ok (core.result.Result.Ok NLH_CompRun.initial))))
+                                  (ok (core.result.Result.Ok NLH_CompRun.initial)))
+                                (eq_self (ok (core.result.Result.Ok NLH_CompRun.initial))));
+                          let ⟨final, h✝⟩ :=
+                            NLH_CompTailFold.source pub claims point lambda chi theta NLH_CompRun.initial hd hc hp hl
+                              hchi ht asset (NLH_TermAmount.canonical pub bad)
+                          let ⟨tail, right✝⟩ := h✝
+                          let ⟨tailCall, right✝¹⟩ := right✝
+                          let ⟨cc, right✝²⟩ := right✝¹
+                          let ⟨cz, right✝³⟩ := right✝²
+                          let ⟨cm, right✝⁴⟩ := right✝³
+                          let ⟨cg, right✝⁵⟩ := right✝⁴
+                          let ⟨ch, ca⟩ := right✝⁵
+                          have cuts :=
+                            Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    NLH_RustCuts.Cuts (step pub claims point lambda chi theta) _a NLH_CompRun.initial
+                                      (ok (core.result.Result.Ok final))
+                                      (Event.amount :: Event.validate :: NLH_CompTailFold.order))
+                                  order_eq))
+                              (NLH_RustCuts.Cuts.next amount (NLH_RustCuts.Cuts.next cut tail));
+                          package pub claims point lambda chi theta (ok (core.result.Result.Ok final))
+                            (Event.amount :: Event.validate :: NLH_CompTailFold.order) cuts
+                            (Eq.mpr (id (congrArg (fun _a => projected (ok (core.result.Result.Ok final)) = _a) factor))
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      projected (ok (core.result.Result.Ok final)) = do
+                                        let r ← _a
+                                        match r with
+                                          | core.result.Result.Err err => ok (core.result.Result.Err err)
+                                          | core.result.Result.Ok a =>
+                                            NLH_TermComposeTail.run pub claims point lambda chi theta)
+                                    validation))
+                                (Eq.mpr
+                                  (id
+                                    (congrArg (fun _a => projected (ok (core.result.Result.Ok final)) = _a)
+                                      (bind_tc_ok (core.result.Result.Ok unit) fun r =>
+                                        match r with
+                                        | core.result.Result.Err err => ok (core.result.Result.Err err)
+                                        | core.result.Result.Ok a =>
+                                          NLH_TermComposeTail.run pub claims point lambda chi theta)))
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          projected (ok (core.result.Result.Ok final)) =
+                                            match core.result.Result.Ok unit with
+                                            | core.result.Result.Err err => ok (core.result.Result.Err err)
+                                            | core.result.Result.Ok a => _a)
+                                        tailCall))
+                                    (Eq.refl (projected (ok (core.result.Result.Ok final))))))))
+                            ⟨cc, ⟨cz, ⟨cm, ⟨cg, ⟨ch, ca⟩⟩⟩⟩⟩)
+                        (Eq.symm h) validation)
+                    (fun err h =>
+                      Eq.ndrec (motive := fun r =>
+                        validate_transition pub = ok r →
+                          ∃ result events,
+                            NLH_RustCuts.Cuts (step pub claims point lambda chi theta) order NLH_CompRun.initial result
+                                events ∧
+                              events <+: order ∧
+                                Canonical result ∧
+                                  projected result = composition_parts pub claims point lambda chi theta ∧
+                                    NLH_CompRun.reference pub claims point lambda chi theta =
+                                      composition_parts pub claims point lambda chi theta)
+                        (fun validation =>
+                          have cut :=
+                            of_eq_true
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg Eq
+                                    (Eq.trans
+                                      (congrFun' (congrArg Bind.bind validation) fun r =>
+                                        match r with
+                                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                        | core.result.Result.Ok a => ok (core.result.Result.Ok NLH_CompRun.initial))
+                                      (bind_tc_ok (core.result.Result.Err err) fun y =>
+                                        match y with
+                                        | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                        | core.result.Result.Ok a => ok (core.result.Result.Ok NLH_CompRun.initial))))
+                                  (ok (core.result.Result.Err err)))
+                                (eq_self (ok (core.result.Result.Err err))));
+                          have cuts :=
+                            Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    NLH_RustCuts.Cuts (step pub claims point lambda chi theta) _a NLH_CompRun.initial
+                                      (ok (core.result.Result.Err err)) [Event.amount, Event.validate])
+                                  order_eq))
+                              (NLH_RustCuts.Cuts.next amount (NLH_RustCuts.Cuts.returned cut));
+                          package pub claims point lambda chi theta (ok (core.result.Result.Err err))
+                            [Event.amount, Event.validate] cuts
+                            (Eq.mpr (id (congrArg (fun _a => projected (ok (core.result.Result.Err err)) = _a) factor))
+                              (Eq.mpr
+                                (id
+                                  (congrArg
+                                    (fun _a =>
+                                      projected (ok (core.result.Result.Err err)) = do
+                                        let r ← _a
+                                        match r with
+                                          | core.result.Result.Err err => ok (core.result.Result.Err err)
+                                          | core.result.Result.Ok a =>
+                                            NLH_TermComposeTail.run pub claims point lambda chi theta)
+                                    validation))
+                                (Eq.refl (projected (ok (core.result.Result.Err err))))))
+                            True.intro)
+                        (Eq.symm h) validation)
+                    (Eq.refl r))
+                (Eq.symm h) (Eq.refl (validate_transition pub)))
+            (fun err h =>
+              Eq.ndrec (motive := fun x =>
+                validate_transition pub = x →
+                  ∃ result events,
+                    NLH_RustCuts.Cuts (step pub claims point lambda chi theta) order NLH_CompRun.initial result events ∧
+                      events <+: order ∧
+                        Canonical result ∧
+                          projected result = composition_parts pub claims point lambda chi theta ∧
+                            NLH_CompRun.reference pub claims point lambda chi theta =
+                              composition_parts pub claims point lambda chi theta)
+                (fun validation =>
+                  have cut :=
+                    of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind validation) fun r =>
+                                match r with
+                                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                | core.result.Result.Ok a => ok (core.result.Result.Ok NLH_CompRun.initial))
+                              (bind_tc_fail err fun y =>
+                                match y with
+                                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                | core.result.Result.Ok a => ok (core.result.Result.Ok NLH_CompRun.initial))))
+                          (fail err))
+                        (eq_self (fail err)));
+                  have cuts :=
+                    Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            NLH_RustCuts.Cuts (step pub claims point lambda chi theta) _a NLH_CompRun.initial (fail err)
+                              [Event.amount, Event.validate])
+                          order_eq))
+                      (NLH_RustCuts.Cuts.next amount (NLH_RustCuts.Cuts.failed cut));
+                  package pub claims point lambda chi theta (fail err) [Event.amount, Event.validate] cuts
+                    (Eq.mpr (id (congrArg (fun _a => projected (fail err) = _a) factor))
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              projected (fail err) = do
+                                let r ← _a
+                                match r with
+                                  | core.result.Result.Err err => ok (core.result.Result.Err err)
+                                  | core.result.Result.Ok a =>
+                                    NLH_TermComposeTail.run pub claims point lambda chi theta)
+                            validation))
+                        (Eq.refl (projected (fail err)))))
+                    True.intro)
+                (Eq.symm h) (Eq.refl (validate_transition pub)))
+            (fun h =>
+              Eq.ndrec (motive := fun x =>
+                validate_transition pub = x →
+                  ∃ result events,
+                    NLH_RustCuts.Cuts (step pub claims point lambda chi theta) order NLH_CompRun.initial result events ∧
+                      events <+: order ∧
+                        Canonical result ∧
+                          projected result = composition_parts pub claims point lambda chi theta ∧
+                            NLH_CompRun.reference pub claims point lambda chi theta =
+                              composition_parts pub claims point lambda chi theta)
+                (fun validation =>
+                  have cut :=
+                    of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind validation) fun r =>
+                                match r with
+                                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                | core.result.Result.Ok a => ok (core.result.Result.Ok NLH_CompRun.initial))
+                              (bind_tc_div fun y =>
+                                match y with
+                                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                | core.result.Result.Ok a => ok (core.result.Result.Ok NLH_CompRun.initial))))
+                          div)
+                        (eq_self div));
+                  have cuts :=
+                    Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            NLH_RustCuts.Cuts (step pub claims point lambda chi theta) _a NLH_CompRun.initial div
+                              [Event.amount, Event.validate])
+                          order_eq))
+                      (NLH_RustCuts.Cuts.next amount (NLH_RustCuts.Cuts.diverged cut));
+                  package pub claims point lambda chi theta div [Event.amount, Event.validate] cuts
+                    (Eq.mpr (id (congrArg (fun _a => projected div = _a) factor))
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              projected div = do
+                                let r ← _a
+                                match r with
+                                  | core.result.Result.Err err => ok (core.result.Result.Err err)
+                                  | core.result.Result.Ok a =>
+                                    NLH_TermComposeTail.run pub claims point lambda chi theta)
+                            validation))
+                        (Eq.refl (projected div))))
+                    True.intro)
+                (Eq.symm h) (Eq.refl (validate_transition pub)))
+            (Eq.refl (validate_transition pub)))
+        (Eq.symm h) (Eq.refl (NLH_TermAmount.invalid pub.withdrawal_amount)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        NLH_TermAmount.invalid pub.withdrawal_amount = x →
+          ∃ result events,
+            NLH_RustCuts.Cuts (step pub claims point lambda chi theta) order NLH_CompRun.initial result events ∧
+              events <+: order ∧
+                Canonical result ∧
+                  projected result = composition_parts pub claims point lambda chi theta ∧
+                    NLH_CompRun.reference pub claims point lambda chi theta =
+                      composition_parts pub claims point lambda chi theta)
+        (fun bad =>
+          have amount :=
+            Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    _a = ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount))
+                  (amount_step pub claims point lambda chi theta NLH_CompRun.initial)))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      (if _a = true then
+                          ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                        else ok (core.result.Result.Ok NLH_CompRun.initial)) =
+                        ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount))
+                    bad))
+                (Eq.refl
+                  (if true = true then
+                    ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                  else ok (core.result.Result.Ok NLH_CompRun.initial))));
+          have cuts :=
+            Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    NLH_RustCuts.Cuts (step pub claims point lambda chi theta) _a NLH_CompRun.initial
+                      (ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount))
+                      [Event.amount])
+                  order_eq))
+              (NLH_RustCuts.Cuts.returned amount);
+          package pub claims point lambda chi theta
+            (ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)) [Event.amount]
+            cuts (Eq.symm (NLH_TermAmount.rejected pub claims point lambda chi theta bad)) True.intro)
+        (Eq.symm h) (Eq.refl (NLH_TermAmount.invalid pub.withdrawal_amount)))
+    (Eq.refl (NLH_TermAmount.invalid pub.withdrawal_amount))
+'AspisR1.NLH_CompRoot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

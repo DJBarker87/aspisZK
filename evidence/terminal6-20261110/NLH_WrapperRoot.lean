@@ -61,22 +61,22 @@ theorem source (pub : r0.Public) (claims : Claims) (point : Array NQ 10#usize) (
  cases resultEq : partsResult with
  | fail err =>
    have child : terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu=fail err := by rw [←partsEq,resultEq];rfl
-   have called : terminal_parts afterPublic.semanticPublic afterPublic.selected point c.lambda c.chi c.theta c.zc c.mu=fail err := by
+   have called : terminal_parts (NKR_TermPublic.value pub) beforePublic.selected point c.lambda c.chi c.theta c.zc c.mu=fail err := by
      change terminal_parts (NKR_TermPublic.value pub) beforePublic.selected point c.lambda c.chi c.theta c.zc c.mu=_
      rw [sameSelected];exact child
    have suffix : NLH_RustCuts.Cuts (step pub claims point c) [.semantic,.parts] beforePublic (fail err) [.semantic,.parts] :=
-     .next publicCall (.failed (by simp only [step,called,bind_tc_fail]))
+     .next publicCall (.failed (by simp only [step,afterPublic,called,bind_tc_fail]))
    have cuts : NLH_RustCuts.Cuts (step pub claims point c) order (initial pub) (fail err) ((List.finRange 84).map Event.gather ++ [.semantic,.parts]) := NLH_FoldAppend.rust gathers suffix
    apply package pub claims point c _ _ cuts
    · rw [wrapper];unfold NLH_TermWrapperFactor.reference;rw [child];rfl
    · trivial
  | div =>
    have child : terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu=div := by rw [←partsEq,resultEq];rfl
-   have called : terminal_parts afterPublic.semanticPublic afterPublic.selected point c.lambda c.chi c.theta c.zc c.mu=div := by
+   have called : terminal_parts (NKR_TermPublic.value pub) beforePublic.selected point c.lambda c.chi c.theta c.zc c.mu=div := by
      change terminal_parts (NKR_TermPublic.value pub) beforePublic.selected point c.lambda c.chi c.theta c.zc c.mu=_
      rw [sameSelected];exact child
    have suffix : NLH_RustCuts.Cuts (step pub claims point c) [.semantic,.parts] beforePublic div [.semantic,.parts] :=
-     .next publicCall (.diverged (by simp only [step,called,bind_tc_div]))
+     .next publicCall (.diverged (by simp only [step,afterPublic,called,bind_tc_div]))
    have cuts : NLH_RustCuts.Cuts (step pub claims point c) order (initial pub) div ((List.finRange 84).map Event.gather ++ [.semantic,.parts]) := NLH_FoldAppend.rust gathers suffix
    apply package pub claims point c _ _ cuts
    · rw [wrapper];unfold NLH_TermWrapperFactor.reference;rw [child];rfl
@@ -85,11 +85,11 @@ theorem source (pub : r0.Public) (claims : Claims) (point : Array NQ 10#usize) (
    cases r with
    | Err err =>
      have child : terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu=ok (.Err err) := by rw [←partsEq,resultEq];rfl
-     have called : terminal_parts afterPublic.semanticPublic afterPublic.selected point c.lambda c.chi c.theta c.zc c.mu=ok (.Err err) := by
+     have called : terminal_parts (NKR_TermPublic.value pub) beforePublic.selected point c.lambda c.chi c.theta c.zc c.mu=ok (.Err err) := by
        change terminal_parts (NKR_TermPublic.value pub) beforePublic.selected point c.lambda c.chi c.theta c.zc c.mu=_
        rw [sameSelected];exact child
      have suffix : NLH_RustCuts.Cuts (step pub claims point c) [.semantic,.parts] beforePublic (ok (.Err .Public)) [.semantic,.parts] :=
-       .next publicCall (.returned (by simp only [step,called,bind_tc_ok]))
+       .next publicCall (.returned (by simp only [step,afterPublic,called,bind_tc_ok]))
      have cuts : NLH_RustCuts.Cuts (step pub claims point c) order (initial pub) (ok (.Err .Public)) ((List.finRange 84).map Event.gather ++ [.semantic,.parts]) := NLH_FoldAppend.rust gathers suffix
      apply package pub claims point c _ _ cuts
      · rw [wrapper];unfold NLH_TermWrapperFactor.reference;rw [child];rfl
@@ -97,12 +97,12 @@ theorem source (pub : r0.Public) (claims : Claims) (point : Array NQ 10#usize) (
    | Ok partsState =>
      let parts := NLH_PartsState.returned partsState
      have child : terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu=ok (.Ok parts) := by rw [←partsEq,resultEq];rfl
-     have called : terminal_parts afterPublic.semanticPublic afterPublic.selected point c.lambda c.chi c.theta c.zc c.mu=ok (.Ok parts) := by
+     have called : terminal_parts (NKR_TermPublic.value pub) beforePublic.selected point c.lambda c.chi c.theta c.zc c.mu=ok (.Ok parts) := by
        change terminal_parts (NKR_TermPublic.value pub) beforePublic.selected point c.lambda c.chi c.theta c.zc c.mu=_
        rw [sameSelected];exact child
      let final : State := {afterPublic with parts := parts}
      have suffix : NLH_RustCuts.Cuts (step pub claims point c) [.semantic,.parts] beforePublic (ok (.Ok final)) [.semantic,.parts] :=
-       .next publicCall (.next (by simp only [step,called,bind_tc_ok]) (.nil final))
+       .next publicCall (.next (by simp only [step,afterPublic,called,bind_tc_ok,final]) (.nil final))
      have cuts : NLH_RustCuts.Cuts (step pub claims point c) order (initial pub) (ok (.Ok final)) ((List.finRange 84).map Event.gather ++ [.semantic,.parts]) := NLH_FoldAppend.rust gathers suffix
      apply package pub claims point c _ _ cuts
      · rw [wrapper];unfold NLH_TermWrapperFactor.reference;rw [child];rfl

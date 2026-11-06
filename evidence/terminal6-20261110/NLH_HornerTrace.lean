@@ -9,7 +9,7 @@ theorem append {p xs ys before middle out} (left : Trace p xs before middle) (ri
  Trace p (xs++ys) before out := by
  induction left with
  | nil => exact right
- | cons pm ma cut _ ih => exact .cons pm ma cut ih
+ | cons pm ma cut _ ih => exact .cons pm ma cut (ih right)
 theorem unique {p xs before out out'} (first : Trace p xs before out) (second : Trace p xs before out') : out=out' := by
  induction first generalizing out' with
  | nil => cases second;rfl
