@@ -1,6 +1,6 @@
 from pathlib import Path
 import json,time,subprocess,re,sys,lzma,hashlib,base64
-B=Path.cwd();mode=sys.argv[1];E=B/'NKI_audit_gate2'/mode;E.mkdir(parents=True,exist_ok=True)
+B=Path.cwd();mode=sys.argv[1];E=B/'NKI_audit'/mode;E.mkdir(parents=True,exist_ok=True)
 command=['NKI_native/'+('NKI_Driver'if mode=='scan'else'NKI_ProofDriver'),mode]
 start=time.monotonic()
 with (E/'stdout.log').open('w')as f:r=subprocess.run(['/usr/bin/time','-v','-o',str(E/'time.log'),*command],stdout=f,stderr=subprocess.STDOUT)

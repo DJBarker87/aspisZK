@@ -21,6 +21,15 @@ def ssh(code,data=None,submitted=False):
   if submitted:raise RuntimeError('Recover read-only; never resubmit')
   if retry<10:time.sleep(60)
  raise RuntimeError('Transport exhausted')
+for disk_retry in range(7):
+ r=ssh("python3 -c 'import shutil,json;print(json.dumps(dict(free=shutil.disk_usage(\"/home/dombarker/project-offloads\").free)))'")
+ assert r.returncode==0,r.stderr
+ disk=json.loads(r.stdout);disk.update(attempt=a,retry=disk_retry,minimum=40_000_000_000)
+ with (E/'NKI_DISK.jsonl').open('a') as f:f.write(json.dumps(disk)+'\n')
+ if disk['free']>=40_000_000_000:break
+ if disk_retry==6:raise RuntimeError('STOP disk floor after six10minute waits')
+ print('disk floor wait10minutes',flush=True)
+ for _ in range(10):time.sleep(60)
 for retry in range(11):
  r=ssh('python3',f'''from pathlib import Path
 import subprocess,sys
@@ -61,7 +70,7 @@ if x['kind'] in ['lean','audit']:
  if x['kind']=='lean':
   for n in re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):rels.add(n.replace('.','/')+'.olean')
  else:
-  modules=list(json.loads((b/'NKI_GATE_SOURCES.json').read_text())['passed'])+['NKI_COMBINED_IMPORT','NJO_COMBINED_IMPORT','NJL_COMBINED_IMPORT','NIU_COMBINED_IMPORT','NGK_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit']
+  modules=list(json.loads((b/'NKI_GATE_SOURCES.json').read_text())['passed'])+['NKI_COMBINED_IMPORT','NKC_COMBINED_IMPORT','NJX_COMBINED_IMPORT','NJO_COMBINED_IMPORT','NJL_COMBINED_IMPORT','NIU_COMBINED_IMPORT','NGK_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit']
   for n in modules:rels.add(n.replace('.','/')+'.olean')
  for rel in sorted(rels):
   q=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert q is not None,rel

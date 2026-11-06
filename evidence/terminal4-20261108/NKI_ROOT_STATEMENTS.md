@@ -1,0 +1,626 @@
+# NKI root statements
+
+Complete Lean output from L083; expanded domain structures follow. Candidate roots only; no execution/callee-success/returned-output/cohort-equality premise is retained. Child227/230 are CLOSED in baseline17; future251child242/245/246 remains conditional onledger18.
+
+```text
+theorem AspisR1.NKI_ValueRoot.source : ∀ (packed : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 24#usize)
+  (o : AspisR1.NKI_ValuePrefix.Openings) (s : AspisR1.NKI_ValuePrefix.Selectors),
+  AspisR1.FIw_ArrayValue.canonical packed →
+    AspisR1.FIw_ArrayValue.canonical o.z →
+      AspisR1.FIw_ArrayValue.canonical o.succ_z →
+        AspisR1.FIw_ArrayValue.canonical o.xor12_z →
+          AspisR1.FIw_ArrayValue.canonical s.high →
+            AspisR1.FIw_ArrayValue.canonical s.low →
+              ∃ l c a b r3 middle out,
+                AspisR1.NKI_ValueTrace.Clauses o s l ∧
+                  AspisR1.NKI_ValueTrace.Canonical o l ∧
+                    AspisR1.NKI_ValueFields.Reads o l ∧
+                      (∀ (g : Fin 3),
+                          FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.row s (AspisR1.NKI_ValueFields.row g) =
+                            Aeneas.Std.Result.ok (AspisR1.NJB_ArrayCarrier.cell l.value_selectors g)) ∧
+                        AspisR1.NJX_RangeFold.Trace 0 (AspisR1.NJX_RangeInvocation.xs o 0) (List.finRange 10)
+                            AspisR1.NJX_RangeInvocation.zero a ∧
+                          AspisR1.NJX_RangeFold.Trace 1 (AspisR1.NJX_RangeInvocation.xs o 1) (List.finRange 10) a b ∧
+                            AspisR1.NJX_RangeFold.Trace 2 (AspisR1.NJX_RangeInvocation.xs o 2) (List.finRange 10) b r3 ∧
+                              l.range3 = AspisR1.NJB_ArrayCarrier.array r3 ∧
+                                l.i = 1024#u32 ∧
+                                  l.i1 = 1048576#u32 ∧
+                                    AspisR1.NKI_ValueCuts.Cut packed o s l c middle out
+                                        (AspisR1.NKI_ValueCuts.observations packed o s l c middle out)
+                                        ![3, 3, 8, 1, 5, 1] ∧
+                                      AspisR1.NJL_SharedRoot.reference packed l.range6 l.range_selector =
+                                          Aeneas.Std.Result.ok middle ∧
+                                        AspisR1.NKI_ConservationInvocation.Clauses middle o s out c ∧
+                                          AspisR1.NKI_ValueAssociation.reference packed o s = Aeneas.Std.Result.ok out ∧
+                                            FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes packed o
+                                                  s =
+                                                Aeneas.Std.Result.ok out ∧
+                                              AspisR1.FIw_ArrayValue.canonical middle ∧
+                                                AspisR1.FIw_ArrayValue.canonical out :=
+fun packed o s hp hz hs hx hh hl =>
+  let ⟨l, h✝⟩ := Aeneas.Std.WP.spec_imp_exists (AspisR1.NKI_ValueTrace.source o s hz hs hx hh hl)
+  let ⟨trace, hc⟩ := h✝
+  have calls := AspisR1.NKI_ValueTraceFactor.clauses o s l trace;
+  have prefixCall :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = Aeneas.Std.Result.ok (AspisR1.NKI_ValueTrace.output l))
+          (Eq.symm (AspisR1.NKI_ValueTraceFactor.source o s))))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let l ← _a
+                  Aeneas.Std.Result.ok (AspisR1.NKI_ValueTrace.output l)) =
+                Aeneas.Std.Result.ok (AspisR1.NKI_ValueTrace.output l))
+            trace))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = Aeneas.Std.Result.ok (AspisR1.NKI_ValueTrace.output l))
+              (Aeneas.Std.bind_tc_ok l fun l => Aeneas.Std.Result.ok (AspisR1.NKI_ValueTrace.output l))))
+          (Eq.refl (Aeneas.Std.Result.ok (AspisR1.NKI_ValueTrace.output l)))));
+  let ⟨t, h✝¹⟩ := AspisR1.NKI_ValueAssociation.source packed o s hp hz hs hx hh hl
+  let ⟨middle, h✝²⟩ := h✝¹
+  let ⟨out, h✝³⟩ := h✝²
+  let ⟨ct, right✝⟩ := h✝³
+  let ⟨ot, right✝¹⟩ := right✝
+  let ⟨ht, right✝²⟩ := right✝¹
+  let ⟨cm, right✝³⟩ := right✝²
+  let ⟨co, right✝⁴⟩ := right✝³
+  let ⟨hm, right✝⁵⟩ := right✝⁴
+  let ⟨ho, right✝⁶⟩ := right✝⁵
+  let ⟨cr, cs⟩ := right✝⁶
+  have same := Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm ct) prefixCall);
+  Eq.ndrec (motive := fun t =>
+    AspisR1.NKI_ValuePrefix.run o s = Aeneas.Std.Result.ok t →
+      t.openings = o →
+        AspisR1.NKI_ValueTotal.Canonical t →
+          AspisR1.NJL_SharedRoot.reference packed t.range t.selector = Aeneas.Std.Result.ok middle →
+            ∃ l c a b r3 middle out,
+              AspisR1.NKI_ValueTrace.Clauses o s l ∧
+                AspisR1.NKI_ValueTrace.Canonical o l ∧
+                  AspisR1.NKI_ValueFields.Reads o l ∧
+                    (∀ (g : Fin 3),
+                        FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.row s (AspisR1.NKI_ValueFields.row g) =
+                          Aeneas.Std.Result.ok (AspisR1.NJB_ArrayCarrier.cell l.value_selectors g)) ∧
+                      AspisR1.NJX_RangeFold.Trace 0 (AspisR1.NJX_RangeInvocation.xs o 0) (List.finRange 10)
+                          AspisR1.NJX_RangeInvocation.zero a ∧
+                        AspisR1.NJX_RangeFold.Trace 1 (AspisR1.NJX_RangeInvocation.xs o 1) (List.finRange 10) a b ∧
+                          AspisR1.NJX_RangeFold.Trace 2 (AspisR1.NJX_RangeInvocation.xs o 2) (List.finRange 10) b r3 ∧
+                            l.range3 = AspisR1.NJB_ArrayCarrier.array r3 ∧
+                              l.i = 1024#u32 ∧
+                                l.i1 = 1048576#u32 ∧
+                                  AspisR1.NKI_ValueCuts.Cut packed o s l c middle out
+                                      (AspisR1.NKI_ValueCuts.observations packed o s l c middle out)
+                                      ![3, 3, 8, 1, 5, 1] ∧
+                                    AspisR1.NJL_SharedRoot.reference packed l.range6 l.range_selector =
+                                        Aeneas.Std.Result.ok middle ∧
+                                      AspisR1.NKI_ConservationInvocation.Clauses middle o s out c ∧
+                                        AspisR1.NKI_ValueAssociation.reference packed o s = Aeneas.Std.Result.ok out ∧
+                                          FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes packed o s =
+                                              Aeneas.Std.Result.ok out ∧
+                                            AspisR1.FIw_ArrayValue.canonical middle ∧
+                                              AspisR1.FIw_ArrayValue.canonical out)
+    (fun ct ot ht cm =>
+      let ⟨c, cc⟩ := AspisR1.NKI_ConservationInvocation.source middle o s out co
+      let ⟨a, h✝⁴⟩ := AspisR1.NKI_RangeAssociation.source o hz hs hx
+      let ⟨b, h✝⁵⟩ := h✝⁴
+      let ⟨r3, h✝⁶⟩ := h✝⁵
+      let ⟨ca, right✝⁷⟩ := h✝⁶
+      let ⟨ta, right✝⁸⟩ := right✝⁷
+      let ⟨cb, right✝⁹⟩ := right✝⁸
+      let ⟨tb, right✝¹⁰⟩ := right✝⁹
+      let ⟨cc3, right✝¹¹⟩ := right✝¹⁰
+      let ⟨tc, right✝¹²⟩ := right✝¹¹
+      let ⟨h3, loops⟩ := right✝¹²
+      have sameRange :=
+        congrArg Prod.snd
+          (Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm (AspisR1.NKI_ValueFields.loops o s l calls hc)) loops));
+      have tail := AspisR1.NKI_ValueFrames.source o s l calls;
+      Exists.intro l
+        (Exists.intro c
+          (Exists.intro a
+            (Exists.intro b
+              (Exists.intro r3
+                (Exists.intro middle
+                  (Exists.intro out
+                    ⟨calls,
+                      ⟨hc,
+                        ⟨AspisR1.NKI_ValueFields.reads o s l calls hc,
+                          ⟨AspisR1.NKI_ValueFields.rows o s l calls hh hl,
+                            ⟨ta,
+                              ⟨tb,
+                                ⟨tc,
+                                  ⟨sameRange,
+                                    ⟨tail.left,
+                                      ⟨tail.right.left,
+                                        ⟨AspisR1.NKI_ValueCuts.source packed o s l c middle out calls,
+                                          ⟨cm, ⋯⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩)))))))
+    (Eq.symm same) ct ot ht cm
+theorem AspisR1.NKI_InitialRoot.source : ∀ (p : AspisR1.NKI_InitialPrefix.Public)
+  (o : AspisR1.NKI_InitialPrefix.Openings) (s : AspisR1.NKI_InitialPrefix.Selectors),
+  AspisR1.FIw_ArrayValue.canonical o.z →
+    AspisR1.FIw_ArrayValue.canonical s.high →
+      AspisR1.FIw_ArrayValue.canonical s.low →
+        ∃ l absorption,
+          AspisR1.NKI_InitialInvocation.Clauses p o s l ∧
+            AspisR1.NKI_InitialTrace.Canonical l ∧
+              AspisR1.NKI_InitialReads.Reads s l ∧
+                AspisR1.NKI_InitialWriteReads.Reads l ∧
+                  AspisR1.NJB_PreparedLaws.Domain l.full l.full_initial_selector ∧
+                    AspisR1.NJB_PreparedLaws.Domain l.full_or_rate l.q12 ∧
+                      (∀ (i : Fin 16),
+                          FIq_Native.field.PreparedQm31Multiplier.mul
+                              (AspisR1.NKI_InitialLaneResults.cache l.full_or_rate l.full i)
+                              (AspisR1.NJB_ArrayCarrier.cell o.z i) =
+                            Aeneas.Std.Result.ok (AspisR1.NJB_ArrayCarrier.cell l.initial i)) ∧
+                        AspisR1.NKI_InitialCuts.Cut p o s l absorption
+                            (AspisR1.NKI_InitialCuts.observations p o s l absorption) ![12, 2, 12, 9, 16, 4, 1] ∧
+                          AspisR1.NJB_Absorption.reference l.q38 l.fixed l.chunk_two1 l.chunk_eight1 l.nodes o.z =
+                              Aeneas.Std.Result.ok absorption ∧
+                            AspisR1.NKI_InitialAssociation.reference p o s =
+                                Aeneas.Std.Result.ok (l.initial2, absorption) ∧
+                              FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s =
+                                  Aeneas.Std.Result.ok (l.initial2, absorption) ∧
+                                AspisR1.FIw_ArrayValue.canonical l.initial2 ∧
+                                  AspisR1.FIw_ArrayValue.canonical absorption :=
+fun p o s hz hh hl =>
+  let ⟨l, h✝⟩ := Aeneas.Std.WP.spec_imp_exists (AspisR1.NKI_InitialTrace.source p o s hz hh hl)
+  let ⟨cl, hc⟩ := h✝
+  have calls := AspisR1.NKI_InitialTraceFactor.clauses p o s l cl;
+  have domains := AspisR1.NKI_InitialDomains.source p o s l calls hc;
+  have prefixCall :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = Aeneas.Std.Result.ok (AspisR1.NKI_InitialInvocation.output l))
+          (Eq.symm (AspisR1.NKI_InitialTraceFactor.source p o s))))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let l ← _a
+                  Aeneas.Std.Result.ok (AspisR1.NKI_InitialInvocation.output l)) =
+                Aeneas.Std.Result.ok (AspisR1.NKI_InitialInvocation.output l))
+            cl))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = Aeneas.Std.Result.ok (AspisR1.NKI_InitialInvocation.output l))
+              (Aeneas.Std.bind_tc_ok l fun l => Aeneas.Std.Result.ok (AspisR1.NKI_InitialInvocation.output l))))
+          (Eq.refl (Aeneas.Std.Result.ok (AspisR1.NKI_InitialInvocation.output l)))));
+  let ⟨t, h✝¹⟩ := AspisR1.NKI_InitialAssociation.source p o s hz hh hl
+  let ⟨absorption, h✝²⟩ := h✝¹
+  let ⟨ct, right✝⟩ := h✝²
+  let ⟨ht, right✝¹⟩ := right✝
+  let ⟨ca, right✝²⟩ := right✝¹
+  let ⟨co, right✝³⟩ := right✝²
+  let ⟨ha, right✝⁴⟩ := right✝³
+  let ⟨cr, cs⟩ := right✝⁴
+  have same := Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm ct) prefixCall);
+  Eq.ndrec (motive := fun t =>
+    AspisR1.NKI_InitialPrefix.run p o s = Aeneas.Std.Result.ok t →
+      AspisR1.NKI_InitialTotal.Canonical t →
+        AspisR1.NJB_Absorption.reference t.low t.fixed t.two t.eight t.nodes o.z = Aeneas.Std.Result.ok absorption →
+          FIq_Native.pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal t.low t.fixed t.two t.eight t.nodes
+                o.z =
+              Aeneas.Std.Result.ok absorption →
+            AspisR1.NKI_InitialAssociation.reference p o s = Aeneas.Std.Result.ok (t.initial, absorption) →
+              FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s =
+                  Aeneas.Std.Result.ok (t.initial, absorption) →
+                ∃ l absorption,
+                  AspisR1.NKI_InitialInvocation.Clauses p o s l ∧
+                    AspisR1.NKI_InitialTrace.Canonical l ∧
+                      AspisR1.NKI_InitialReads.Reads s l ∧
+                        AspisR1.NKI_InitialWriteReads.Reads l ∧
+                          AspisR1.NJB_PreparedLaws.Domain l.full l.full_initial_selector ∧
+                            AspisR1.NJB_PreparedLaws.Domain l.full_or_rate l.q12 ∧
+                              (∀ (i : Fin 16),
+                                  FIq_Native.field.PreparedQm31Multiplier.mul
+                                      (AspisR1.NKI_InitialLaneResults.cache l.full_or_rate l.full i)
+                                      (AspisR1.NJB_ArrayCarrier.cell o.z i) =
+                                    Aeneas.Std.Result.ok (AspisR1.NJB_ArrayCarrier.cell l.initial i)) ∧
+                                AspisR1.NKI_InitialCuts.Cut p o s l absorption
+                                    (AspisR1.NKI_InitialCuts.observations p o s l absorption)
+                                    ![12, 2, 12, 9, 16, 4, 1] ∧
+                                  AspisR1.NJB_Absorption.reference l.q38 l.fixed l.chunk_two1 l.chunk_eight1 l.nodes
+                                        o.z =
+                                      Aeneas.Std.Result.ok absorption ∧
+                                    AspisR1.NKI_InitialAssociation.reference p o s =
+                                        Aeneas.Std.Result.ok (l.initial2, absorption) ∧
+                                      FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p
+                                            o s =
+                                          Aeneas.Std.Result.ok (l.initial2, absorption) ∧
+                                        AspisR1.FIw_ArrayValue.canonical l.initial2 ∧
+                                          AspisR1.FIw_ArrayValue.canonical absorption)
+    (fun ct ht ca co cr cs =>
+      have rateCanonical :=
+        hc.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.left;
+      have fullCanonical :=
+        hc.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.left;
+      have initialCall :=
+        calls.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right.left;
+      Exists.intro l
+        (Exists.intro absorption
+          ⟨calls,
+            ⟨hc,
+              ⟨AspisR1.NKI_InitialReads.source p o s l calls,
+                ⟨AspisR1.NKI_InitialWriteReads.source p o s l calls,
+                  ⟨domains.left,
+                    ⟨domains.right,
+                      ⟨AspisR1.NKI_InitialLaneResults.source l.q12 l.full_initial_selector l.full_or_rate l.full o
+                          l.initial rateCanonical fullCanonical domains.right domains.left hz initialCall,
+                        ⟨AspisR1.NKI_InitialCuts.source p o s l absorption calls,
+                          ⟨ca, ⟨cr, ⟨cs, ⟨ht.left, ha⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩))
+    (Eq.symm same) ct ht ca co cr cs
+theorem AspisR1.NKI_LevelsComplete.source : ∀ (index : Aeneas.Std.U64) (f : AspisR1.NJX_AppendDomains.Frontier)
+  (o : AspisR1.NJX_DigestCohort.O) (s : AspisR1.NJX_AppendDomains.High),
+  (∀ d ∈ ↑f, AspisR1.NJX_DigestCohort.dc d) →
+    AspisR1.FIw_ArrayValue.canonical o →
+      AspisR1.FIw_ArrayValue.canonical s →
+        ∃ packets out,
+          (∀ (i : Fin 20),
+              AspisR1.NKI_LevelsFrame.call index f o s i =
+                  Aeneas.Std.Result.ok (AspisR1.NKI_AppendPacket.output (packets i)) ∧
+                (∀ (j : Fin 4), AspisR1.FIv_NativeValue.Canon (AspisR1.NKI_AppendPacket.output (packets i) j)) ∧
+                  AspisR1.NKI_AppendCertificate.Native (packets i)) ∧
+            AspisR1.NKI_LevelsFrame.run index f o s (List.finRange 20) AspisR1.NKI_LevelsRoot.zero =
+                Aeneas.Std.Result.ok out ∧
+              AspisR1.NKI_LevelsNative.Trace index f o s (fun i => AspisR1.NKI_AppendPacket.output (packets i))
+                  (List.finRange 20) AspisR1.NKI_LevelsRoot.zero out ∧
+                (∀ (j : Fin 4), AspisR1.FIv_NativeValue.Canon (out j)) ∧
+                  ∀ (j : Fin 4),
+                    AspisR1.FIv_NativeValue.decode (out j) = AspisR1.NKI_LevelsCohort.model index f o s packets j :=
+fun index f o s hf ho hs =>
+  let ⟨packets, h✝⟩ := AspisR1.NKI_LevelsRoot.source index f o s hf ho hs
+  let ⟨out, h✝¹⟩ := h✝
+  let ⟨children, right✝⟩ := h✝¹
+  let ⟨run, right✝¹⟩ := right✝
+  let ⟨tr, right✝²⟩ := right✝¹
+  let ⟨ho, values⟩ := right✝²
+  Exists.intro packets
+    (Exists.intro out
+      ⟨children, ⟨run, ⟨tr, ⟨ho, AspisR1.NKI_LevelsCohort.association index f o s packets out values⟩⟩⟩⟩)
+theorem AspisR1.NKI_AppendRoot.source : ∀ (index : Aeneas.Std.U64) (level : Aeneas.Std.Usize)
+  (frontier : AspisR1.NJX_DigestCohort.D) (o : AspisR1.NJX_DigestCohort.O) (high : AspisR1.FIv_NativeArithmetic.NQ),
+  ↑level < 20 →
+    AspisR1.NJX_DigestCohort.dc frontier →
+      AspisR1.FIw_ArrayValue.canonical o →
+        AspisR1.FIv_NativeValue.Canon high →
+          ∃ p,
+            AspisR1.NKI_AppendPacket.cohort index level frontier o high =
+                Aeneas.Std.Result.ok (AspisR1.NKI_AppendPacket.output p) ∧
+              (∀ (j : Fin 4), AspisR1.FIv_NativeValue.Canon (AspisR1.NKI_AppendPacket.output p j)) ∧
+                AspisR1.NKI_AppendCut.Cut (AspisR1.NKI_AppendPacket.emptySide index level) level high
+                    (AspisR1.NKI_DigestView.opened o
+                      (AspisR1.NKI_AppendPacket.start (AspisR1.NKI_AppendPacket.emptySide index level)) ⋯)
+                    (AspisR1.NJX_DigestCohort.dcells p.expected) p.targets.last p.arithmetic.prepared
+                    p.arithmetic.residual p.arithmetic.packed p.arithmetic.out (AspisR1.NKI_AppendPacket.output p)
+                    (AspisR1.NKI_AppendCut.observations level high
+                      (AspisR1.NKI_DigestView.opened o
+                        (AspisR1.NKI_AppendPacket.start (AspisR1.NKI_AppendPacket.emptySide index level)) ⋯)
+                      (AspisR1.NJX_DigestCohort.dcells p.expected) p.targets.last
+                      (AspisR1.NKI_AppendPacket.emptySide index level) p.arithmetic.prepared p.arithmetic.residual
+                      p.arithmetic.packed)
+                    (if AspisR1.NKI_AppendPacket.emptySide index level = true then 23 else 21) ∧
+                  AspisR1.NKI_DigestTargets.cells p.targets =
+                    AspisR1.NKI_AppendCut.targets (AspisR1.NKI_AppendPacket.emptySide index level)
+                      (AspisR1.NJX_DigestCohort.dcells p.expected) p.targets.last :=
+fun index level frontier o high hl hf ho hh =>
+  let ⟨p, cp⟩ := AspisR1.NKI_AppendPacket.source index level frontier o high hl hf ho hh
+  Exists.intro p
+    ⟨cp,
+      ⟨AspisR1.NKI_AppendPacket.canonical p,
+        ⟨AspisR1.NKI_AppendCut.source (AspisR1.NKI_AppendPacket.emptySide index level) level high
+            (AspisR1.NKI_DigestView.opened o
+              (AspisR1.NKI_AppendPacket.start (AspisR1.NKI_AppendPacket.emptySide index level))
+              (AspisR1.NKI_AppendPacket.start_bound (AspisR1.NKI_AppendPacket.emptySide index level)))
+            (AspisR1.NJX_DigestCohort.dcells p.expected) p.targets.last p.arithmetic.prepared p.arithmetic.residual
+            p.arithmetic.packed p.arithmetic.out,
+          AspisR1.NKI_TargetAssociation.source p.targets⟩⟩⟩
+def AspisR1.NKI_AppendCertificate.Native : {index : Aeneas.Std.U64} →
+  {level : Aeneas.Std.Usize} →
+    {frontier : AspisR1.NJX_DigestCohort.D} →
+      {o : AspisR1.NJX_DigestCohort.O} →
+        {high : AspisR1.FIv_NativeArithmetic.NQ} → AspisR1.NKI_AppendPacket.Packet index level frontier o high → Prop :=
+fun {index} {level} {frontier} {o} {high} p =>
+  AspisR1.NKI_AppendCut.Cut (AspisR1.NKI_AppendPacket.emptySide index level) level high
+      (AspisR1.NKI_DigestView.opened o (AspisR1.NKI_AppendPacket.start (AspisR1.NKI_AppendPacket.emptySide index level))
+        ⋯)
+      (AspisR1.NJX_DigestCohort.dcells p.expected) p.targets.last p.arithmetic.prepared p.arithmetic.residual
+      p.arithmetic.packed p.arithmetic.out (AspisR1.NKI_AppendPacket.output p)
+      (AspisR1.NKI_AppendCut.observations level high
+        (AspisR1.NKI_DigestView.opened o
+          (AspisR1.NKI_AppendPacket.start (AspisR1.NKI_AppendPacket.emptySide index level)) ⋯)
+        (AspisR1.NJX_DigestCohort.dcells p.expected) p.targets.last (AspisR1.NKI_AppendPacket.emptySide index level)
+        p.arithmetic.prepared p.arithmetic.residual p.arithmetic.packed)
+      (if AspisR1.NKI_AppendPacket.emptySide index level = true then 23 else 21) ∧
+    AspisR1.NKI_DigestTargets.cells p.targets =
+      AspisR1.NKI_AppendCut.targets (AspisR1.NKI_AppendPacket.emptySide index level)
+        (AspisR1.NJX_DigestCohort.dcells p.expected) p.targets.last
+structure AspisR1.NKI_AppendPacket.Packet (index : Aeneas.Std.U64) (level : Aeneas.Std.Usize)
+  (frontier : AspisR1.NJX_DigestCohort.D) (o : AspisR1.NJX_DigestCohort.O) (high : AspisR1.FIv_NativeArithmetic.NQ) :
+  Type
+number of parameters: 5
+fields:
+  AspisR1.NKI_AppendPacket.Packet.expected : AspisR1.NJX_DigestCohort.D
+  AspisR1.NKI_AppendPacket.Packet.expected_call : (if AspisR1.NKI_AppendPacket.emptySide index level = true then
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.empty_root level
+      else Aeneas.Std.Result.ok frontier) =
+      Aeneas.Std.Result.ok self.expected
+  AspisR1.NKI_AppendPacket.Packet.expected_canonical : AspisR1.NJX_DigestCohort.dc self.expected
+  AspisR1.NKI_AppendPacket.Packet.targets : AspisR1.NKI_DigestTargets.Packet self.expected
+      (AspisR1.NKI_AppendPacket.emptySide index level)
+  AspisR1.NKI_AppendPacket.Packet.arithmetic : AspisR1.NJX_DigestPacket.Packet high
+      (AspisR1.NKI_DigestView.opened o (AspisR1.NKI_AppendPacket.start (AspisR1.NKI_AppendPacket.emptySide index level))
+        ⋯)
+      (AspisR1.NKI_DigestTargets.cells self.targets)
+  AspisR1.NKI_AppendPacket.Packet.call : AspisR1.NJX_DigestPacket.reference high
+        (AspisR1.NKI_DigestView.opened o
+          (AspisR1.NKI_AppendPacket.start (AspisR1.NKI_AppendPacket.emptySide index level)) ⋯)
+        (AspisR1.NKI_DigestTargets.cells self.targets) =
+      Aeneas.Std.Result.ok self.arithmetic.out
+  AspisR1.NKI_AppendPacket.Packet.association : AspisR1.NKI_DigestPacked.cohort high o self.expected
+        (AspisR1.NKI_AppendPacket.start (AspisR1.NKI_AppendPacket.emptySide index level))
+        (AspisR1.NKI_AppendPacket.emptySide index level) =
+      Aeneas.Std.Result.ok self.arithmetic.out
+constructor:
+  AspisR1.NKI_AppendPacket.Packet.mk {index : Aeneas.Std.U64} {level : Aeneas.Std.Usize}
+    {frontier : AspisR1.NJX_DigestCohort.D} {o : AspisR1.NJX_DigestCohort.O} {high : AspisR1.FIv_NativeArithmetic.NQ}
+    (expected : AspisR1.NJX_DigestCohort.D)
+    (expected_call :
+      (if AspisR1.NKI_AppendPacket.emptySide index level = true then
+          FIq_Native.pool_v1.pair_forest_semantic_terminal.empty_root level
+        else Aeneas.Std.Result.ok frontier) =
+        Aeneas.Std.Result.ok expected)
+    (expected_canonical : AspisR1.NJX_DigestCohort.dc expected)
+    (targets : AspisR1.NKI_DigestTargets.Packet expected (AspisR1.NKI_AppendPacket.emptySide index level))
+    (arithmetic :
+      AspisR1.NJX_DigestPacket.Packet high
+        (AspisR1.NKI_DigestView.opened o
+          (AspisR1.NKI_AppendPacket.start (AspisR1.NKI_AppendPacket.emptySide index level)) ⋯)
+        (AspisR1.NKI_DigestTargets.cells targets))
+    (call :
+      AspisR1.NJX_DigestPacket.reference high
+          (AspisR1.NKI_DigestView.opened o
+            (AspisR1.NKI_AppendPacket.start (AspisR1.NKI_AppendPacket.emptySide index level)) ⋯)
+          (AspisR1.NKI_DigestTargets.cells targets) =
+        Aeneas.Std.Result.ok arithmetic.out)
+    (association :
+      AspisR1.NKI_DigestPacked.cohort high o expected
+          (AspisR1.NKI_AppendPacket.start (AspisR1.NKI_AppendPacket.emptySide index level))
+          (AspisR1.NKI_AppendPacket.emptySide index level) =
+        Aeneas.Std.Result.ok arithmetic.out) :
+    AspisR1.NKI_AppendPacket.Packet index level frontier o high
+def AspisR1.NKI_InitialInvocation.Clauses : AspisR1.NKI_InitialPrefix.Public →
+  AspisR1.NKI_InitialPrefix.Openings →
+    AspisR1.NKI_InitialPrefix.Selectors → AspisR1.NKI_InitialInvocation.Locals → Prop :=
+fun public1 openings selectors l =>
+  have s := l.s;
+  have nodes := l.nodes;
+  have q := l.q;
+  have q1 := l.q1;
+  have q2 := l.q2;
+  have q3 := l.q3;
+  have q4 := l.q4;
+  have q5 := l.q5;
+  have first_common := l.first_common;
+  have q6 := l.q6;
+  have q7 := l.q7;
+  have q8 := l.q8;
+  have transfer_first := l.transfer_first;
+  have fixed := l.fixed;
+  have private_chunk_eight := l.private_chunk_eight;
+  have private_chunk_two := l.private_chunk_two;
+  have q9 := l.q9;
+  have q10 := l.q10;
+  have q11 := l.q11;
+  have full_initial_selector := l.full_initial_selector;
+  have rate_initial_selector := l.rate_initial_selector;
+  have full := l.full;
+  have q12 := l.q12;
+  have full_or_rate := l.full_or_rate;
+  have initial := l.initial;
+  have q13 := l.q13;
+  have note_first := l.note_first;
+  have q14 := l.q14;
+  have q15 := l.q15;
+  have q16 := l.q16;
+  have q17 := l.q17;
+  have domain := l.domain;
+  have q18 := l.q18;
+  have q19 := l.q19;
+  have q20 := l.q20;
+  have q21 := l.q21;
+  have length := l.length;
+  have q22 := l.q22;
+  have q23 := l.q23;
+  have q24 := l.q24;
+  have initial1 := l.initial1;
+  have i := l.i;
+  have q25 := l.q25;
+  have q26 := l.q26;
+  have q27 := l.q27;
+  have initial2 := l.initial2;
+  have q28 := l.q28;
+  have q29 := l.q29;
+  have q30 := l.q30;
+  have q31 := l.q31;
+  ⋯
+def AspisR1.NKI_InitialTrace.Canonical : AspisR1.NKI_InitialInvocation.Locals → Prop :=
+fun l =>
+  AspisR1.FIv_NativeValue.Canon l.nodes ∧
+    AspisR1.FIv_NativeValue.Canon l.q ∧
+      AspisR1.FIv_NativeValue.Canon l.q1 ∧
+        AspisR1.FIv_NativeValue.Canon l.q2 ∧
+          AspisR1.FIv_NativeValue.Canon l.q3 ∧
+            AspisR1.FIv_NativeValue.Canon l.q4 ∧
+              AspisR1.FIv_NativeValue.Canon l.q5 ∧
+                AspisR1.FIv_NativeValue.Canon l.first_common ∧
+                  AspisR1.FIv_NativeValue.Canon l.q6 ∧
+                    AspisR1.FIv_NativeValue.Canon l.q7 ∧
+                      AspisR1.FIv_NativeValue.Canon l.q8 ∧
+                        AspisR1.FIv_NativeValue.Canon l.transfer_first ∧
+                          AspisR1.FIv_NativeValue.Canon l.fixed ∧
+                            AspisR1.FIv_NativeValue.Canon l.private_chunk_eight ∧
+                              AspisR1.FIv_NativeValue.Canon l.private_chunk_two ∧
+                                AspisR1.FIv_NativeValue.Canon l.q9 ∧
+                                  AspisR1.FIv_NativeValue.Canon l.q10 ∧
+                                    AspisR1.FIv_NativeValue.Canon l.q11 ∧
+                                      AspisR1.FIv_NativeValue.Canon l.full_initial_selector ∧
+                                        AspisR1.FIv_NativeValue.Canon l.rate_initial_selector ∧
+                                          AspisR1.JFy_PreparedSteps.Valid l.full ∧
+                                            AspisR1.FIv_NativeValue.Canon l.q12 ∧
+                                              AspisR1.JFy_PreparedSteps.Valid l.full_or_rate ∧
+                                                AspisR1.FIw_ArrayValue.canonical l.initial ∧
+                                                  AspisR1.FIv_NativeValue.Canon l.q13 ∧
+                                                    AspisR1.FIv_NativeValue.Canon l.note_first ∧
+                                                      AspisR1.FIv_NativeValue.Canon l.q14 ∧
+                                                        AspisR1.FIv_NativeValue.Canon l.q15 ∧
+                                                          AspisR1.FIv_NativeValue.Canon l.q16 ∧
+                                                            AspisR1.FIv_NativeValue.Canon l.q17 ∧
+                                                              AspisR1.FIv_NativeValue.Canon l.domain ∧
+                                                                AspisR1.FIv_NativeValue.Canon l.q18 ∧
+                                                                  AspisR1.FIv_NativeValue.Canon l.q19 ∧
+                                                                    AspisR1.FIv_NativeValue.Canon l.q20 ∧
+                                                                      AspisR1.FIv_NativeValue.Canon l.q21 ∧
+                                                                        AspisR1.FIv_NativeValue.Canon l.length ∧
+                                                                          AspisR1.FIv_NativeValue.Canon l.q22 ∧
+                                                                            AspisR1.FIv_NativeValue.Canon l.q23 ∧
+                                                                              AspisR1.FIv_NativeValue.Canon l.q24 ∧
+                                                                                AspisR1.FIw_ArrayValue.canonical
+                                                                                    l.initial1 ∧
+                                                                                  AspisR1.FIv_NativeValue.Canon l.q25 ∧
+                                                                                    AspisR1.FIv_NativeValue.Canon
+                                                                                        l.q26 ∧
+                                                                                      AspisR1.FIv_NativeValue.Canon
+                                                                                          l.q27 ∧
+                                                                                        AspisR1.FIw_ArrayValue.canonical
+                                                                                            l.initial2 ∧
+                                                                                          AspisR1.FIv_NativeValue.Canon
+                                                                                              l.q28 ∧
+                                                                                            AspisR1.FIv_NativeValue.Canon
+                                                                                                l.q29 ∧
+                                                                                              AspisR1.FIv_NativeValue.Canon
+                                                                                                  l.q30 ∧
+                                                                                                AspisR1.FIv_NativeValue.Canon
+                                                                                                    l.q31 ∧
+                                                                                                  AspisR1.FIv_NativeValue.Canon
+                                                                                                      l.q32 ∧
+                                                                                                    AspisR1.FIv_NativeValue.Canon
+                                                                                                        l.q33 ∧
+                                                                                                      AspisR1.FIv_NativeValue.Canon
+                                                                                                          l.q34 ∧
+                                                                                                        AspisR1.FIv_NativeValue.Canon
+                                                                                                            l.q35 ∧
+                                                                                                          AspisR1.FIv_NativeValue.Canon
+                                                                                                              l.chunk_eight ∧
+                                                                                                            AspisR1.FIv_NativeValue.Canon
+                                                                                                                l.q36 ∧
+                                                                                                              AspisR1.FIv_NativeValue.Canon
+                                                                                                                  l.q37 ∧
+                                                                                                                AspisR1.FIv_NativeValue.Canon
+                                                                                                                    l.chunk_two ∧
+                                                                                                                  AspisR1.FIv_NativeValue.Canon
+                                                                                                                      l.chunk_eight1 ∧
+                                                                                                                    AspisR1.FIv_NativeValue.Canon
+                                                                                                                        l.chunk_two1 ∧
+                                                                                                                      AspisR1.FIv_NativeValue.Canon
+                                                                                                                        l.q38
+def AspisR1.NKI_ValueTrace.Clauses : AspisR1.NKI_ValuePrefix.Openings →
+  AspisR1.NKI_ValuePrefix.Selectors → AspisR1.NKI_ValueTrace.Locals → Prop :=
+fun openings selectors l =>
+  have value_selectors := l.value_selectors;
+  have q := l.q;
+  have q1 := l.q1;
+  have q2 := l.q2;
+  have q3 := l.q3;
+  have q4 := l.q4;
+  have range_selector := l.range_selector;
+  have openings1 := l.openings1;
+  have range1 := l.range1;
+  have openings2 := l.openings2;
+  have range2 := l.range2;
+  have openings3 := l.openings3;
+  have range3 := l.range3;
+  have q5 := l.q5;
+  have q6 := l.q6;
+  have i := l.i;
+  have q7 := l.q7;
+  have q8 := l.q8;
+  have q9 := l.q9;
+  have i1 := l.i1;
+  have q10 := l.q10;
+  have reconstructed := l.reconstructed;
+  have q11 := l.q11;
+  have q12 := l.q12;
+  have range4 := l.range4;
+  have q13 := l.q13;
+  have range5 := l.range5;
+  have q14 := l.q14;
+  have range6 := l.range6;
+  have range := Aeneas.Std.Array.repeat 33#usize FIq_Native.field.QM31.ZERO;
+  FIq_Native.core.array.Array.map
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+        (Aeneas.Std.Array.make 3#usize [0#usize, 2#usize, 4#usize] AspisR1.NKI_ValueTrace.run._proof_5) selectors =
+      Aeneas.Std.Result.ok value_selectors ∧
+    value_selectors.index_usize 0#usize = Aeneas.Std.Result.ok q ∧
+      FIq_Native.field.QM31.ZERO.add q = Aeneas.Std.Result.ok q1 ∧
+        value_selectors.index_usize 1#usize = Aeneas.Std.Result.ok q2 ∧
+          FIq_Native.field.QM31.add q1 q2 = Aeneas.Std.Result.ok q3 ∧
+            value_selectors.index_usize 2#usize = Aeneas.Std.Result.ok q4 ∧
+              FIq_Native.field.QM31.add q3 q4 = Aeneas.Std.Result.ok range_selector ∧
+                FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop0 openings range 0#usize =
+                    Aeneas.Std.Result.ok (openings1, range1) ∧
+                  FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop1 openings1 range1 0#usize =
+                      Aeneas.Std.Result.ok (openings2, range2) ∧
+                    FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes_loop2 openings2 range2 0#usize =
+                        Aeneas.Std.Result.ok (openings3, range3) ∧
+                      FIq_Native.pool_v1.pair_forest_semantic_terminal.reconstruct_10 openings3.z =
+                          Aeneas.Std.Result.ok q5 ∧
+                        FIq_Native.pool_v1.pair_forest_semantic_terminal.reconstruct_10 openings3.succ_z =
+                            Aeneas.Std.Result.ok q6 ∧
+                          1#u32 <<< 10#i32 = Aeneas.Std.Result.ok i ∧
+                            FIq_Native.field.QM31.mul_m31 q6 i = Aeneas.Std.Result.ok q7 ∧
+                              FIq_Native.field.QM31.add q5 q7 = Aeneas.Std.Result.ok q8 ∧
+                                FIq_Native.pool_v1.pair_forest_semantic_terminal.reconstruct_10 openings3.xor12_z =
+                                    Aeneas.Std.Result.ok q9 ∧
+                                  1#u32 <<< 20#i32 = Aeneas.Std.Result.ok i1 ∧
+                                    FIq_Native.field.QM31.mul_m31 q9 i1 = Aeneas.Std.Result.ok q10 ∧
+                                      FIq_Native.field.QM31.add q8 q10 = Aeneas.Std.Result.ok reconstructed ∧
+                                        openings3.z.index_usize 10#usize = Aeneas.Std.Result.ok q11 ∧ ⋯
+def AspisR1.NKI_ValueTrace.Canonical : AspisR1.NKI_ValuePrefix.Openings → AspisR1.NKI_ValueTrace.Locals → Prop :=
+fun o l =>
+  AspisR1.FIw_ArrayValue.canonical l.value_selectors ∧
+    AspisR1.FIv_NativeValue.Canon l.q ∧
+      AspisR1.FIv_NativeValue.Canon l.q1 ∧
+        AspisR1.FIv_NativeValue.Canon l.q2 ∧
+          AspisR1.FIv_NativeValue.Canon l.q3 ∧
+            AspisR1.FIv_NativeValue.Canon l.q4 ∧
+              AspisR1.FIv_NativeValue.Canon l.range_selector ∧
+                l.openings1 = o ∧
+                  AspisR1.FIw_ArrayValue.canonical l.range1 ∧
+                    l.openings2 = o ∧
+                      AspisR1.FIw_ArrayValue.canonical l.range2 ∧
+                        l.openings3 = o ∧
+                          AspisR1.FIw_ArrayValue.canonical l.range3 ∧
+                            AspisR1.FIv_NativeValue.Canon l.q5 ∧
+                              AspisR1.FIv_NativeValue.Canon l.q6 ∧
+                                AspisR1.FIv_NativeValue.Canon l.q7 ∧
+                                  AspisR1.FIv_NativeValue.Canon l.q8 ∧
+                                    AspisR1.FIv_NativeValue.Canon l.q9 ∧
+                                      AspisR1.FIv_NativeValue.Canon l.q10 ∧
+                                        AspisR1.FIv_NativeValue.Canon l.reconstructed ∧
+                                          AspisR1.FIv_NativeValue.Canon l.q11 ∧
+                                            AspisR1.FIv_NativeValue.Canon l.q12 ∧
+                                              AspisR1.FIw_ArrayValue.canonical l.range4 ∧
+                                                AspisR1.FIv_NativeValue.Canon l.q13 ∧
+                                                  AspisR1.FIw_ArrayValue.canonical l.range5 ∧
+                                                    AspisR1.FIv_NativeValue.Canon l.q14 ∧
+                                                      AspisR1.FIw_ArrayValue.canonical l.range6
+'AspisR1.NKI_ValueRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKI_InitialRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKI_LevelsComplete.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKI_AppendRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+```

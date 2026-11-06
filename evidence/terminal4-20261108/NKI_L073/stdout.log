@@ -1,0 +1,123 @@
+theorem AspisR1.NKI_RangeAssociation.source : ∀ (o : Openings),
+  FIw_ArrayValue.canonical o.z →
+    FIw_ArrayValue.canonical o.succ_z →
+      FIw_ArrayValue.canonical o.xor12_z →
+        ∃ a b c,
+          NJX_RangeFold.run 0 (xs o 0) (List.finRange 10) zero = ok a ∧
+            NJX_RangeFold.Trace 0 (xs o 0) (List.finRange 10) zero a ∧
+              NJX_RangeFold.run 1 (xs o 1) (List.finRange 10) a = ok b ∧
+                NJX_RangeFold.Trace 1 (xs o 1) (List.finRange 10) a b ∧
+                  NJX_RangeFold.run 2 (xs o 2) (List.finRange 10) b = ok c ∧
+                    NJX_RangeFold.Trace 2 (xs o 2) (List.finRange 10) b c ∧
+                      (∀ (j : Fin 33), Canon (c j)) ∧
+                        FIx_ValueBitPrefix.calls o (Array.repeat 33#usize field.QM31.ZERO) =
+                          ok (o, NJB_ArrayCarrier.array c) :=
+fun o hz hs hx =>
+  have hc := NJX_RangeInvocation.canonical o hz hs hx;
+  let ⟨a, h✝⟩ := NJX_RangeFold.source 0 (xs o 0) (hc 0) (List.finRange 10) zero fun x => FIv_NativeValue.zero.left
+  let ⟨ca, right✝⟩ := h✝
+  let ⟨ta, right✝¹⟩ := right✝
+  let ⟨ha, va⟩ := right✝¹
+  let ⟨b, h✝¹⟩ := NJX_RangeFold.source 1 (xs o 1) (hc 1) (List.finRange 10) a ha
+  let ⟨cb, right✝²⟩ := h✝¹
+  let ⟨tb, right✝³⟩ := right✝²
+  let ⟨hb, vb⟩ := right✝³
+  let ⟨c, h✝²⟩ := NJX_RangeFold.source 2 (xs o 2) (hc 2) (List.finRange 10) b hb
+  let ⟨cc, right✝⁴⟩ := h✝²
+  let ⟨tc, right✝⁵⟩ := right✝⁴
+  let ⟨hcc, vc⟩ := right✝⁵
+  have values :=
+    Eq.mpr (id (congrArg (fun _a => _a = FIx_ValueBitPrefix.model o fun x => 0) vc))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              List.foldl (fun s i => NJX_RangeFold.modelStep 2 (xs o 2) i s) _a (List.finRange 10) =
+                FIx_ValueBitPrefix.model o fun x => 0)
+            vb))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                List.foldl (fun s i => NJX_RangeFold.modelStep 2 (xs o 2) i s)
+                    (List.foldl (fun s i => NJX_RangeFold.modelStep 1 (xs o 1) i s) _a (List.finRange 10))
+                    (List.finRange 10) =
+                  FIx_ValueBitPrefix.model o fun x => 0)
+              va))
+          (id
+            (Eq.mpr
+              (id
+                (congrFun'
+                  (congrArg Eq
+                    (congrFun'
+                      (congrArg (List.foldl fun s i => NJX_RangeFold.modelStep 2 (xs o 2) i s)
+                        (congrFun'
+                          (congrArg (List.foldl fun s i => NJX_RangeFold.modelStep 1 (xs o 1) i s)
+                            (congrFun'
+                              (congrArg (List.foldl fun s i => NJX_RangeFold.modelStep 0 (xs o 0) i s)
+                                (funext fun x => FIv_NativeValue.zero.right))
+                              (List.finRange 10)))
+                          (List.finRange 10)))
+                      (List.finRange 10)))
+                  (FIx_ValueBitPrefix.model o fun x => 0)))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => _a = FIx_ValueBitPrefix.model o fun x => 0)
+                    (NKI_RangeModel.source 2 (xs o 2)
+                      (List.foldl (fun s i => NJX_RangeFold.modelStep 1 (xs o 1) i s)
+                        (List.foldl (fun s i => NJX_RangeFold.modelStep 0 (xs o 0) i s) (fun x => 0) (List.finRange 10))
+                        (List.finRange 10)))))
+                (Eq.mpr
+                  (id
+                    (congrArg (fun _a => NKI_RangeModel.closed 2 (xs o 2) _a = FIx_ValueBitPrefix.model o fun x => 0)
+                      (NKI_RangeModel.source 1 (xs o 1)
+                        (List.foldl (fun s i => NJX_RangeFold.modelStep 0 (xs o 0) i s) (fun x => 0)
+                          (List.finRange 10)))))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          NKI_RangeModel.closed 2 (xs o 2) (NKI_RangeModel.closed 1 (xs o 1) _a) =
+                            FIx_ValueBitPrefix.model o fun x => 0)
+                        (NKI_RangeModel.source 0 (xs o 0) fun x => 0)))
+                    (NKI_RangeCohort.source o))))))));
+  let ⟨r, h✝³⟩ :=
+    JFy_ValueBits.source o (Array.repeat 33#usize field.QM31.ZERO) hz hs hx (JFy_ZeroArrays.source 33#usize)
+  let ⟨cr, right✝⁶⟩ := h✝³
+  let ⟨hr, vr⟩ := right✝⁶
+  have canon := NJB_ArrayCarrier.canonical_array c hcc;
+  have arrValues :=
+    funext fun j =>
+      id
+        (Eq.mpr (id (congrArg (fun _a => decode (_a j) = decode (c j)) (NJB_ArrayCarrier.cell_array c)))
+          (Eq.refl (decode (c j))));
+  have same :=
+    NKI_ArrayCanonicalEq.source r (NJB_ArrayCarrier.array c) hr canon
+      (Eq.mpr (id (congrArg (fun _a => _a = FIw_ArrayValue.decoded (NJB_ArrayCarrier.array c)) vr))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => FIx_ValueBitPrefix.model o _a = FIw_ArrayValue.decoded (NJB_ArrayCarrier.array c))
+              (FIx_ArrayMeaning.decoded_repeat 33#usize field.QM31.ZERO)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a => (FIx_ValueBitPrefix.model o fun x => _a) = FIw_ArrayValue.decoded (NJB_ArrayCarrier.array c))
+                FIv_NativeValue.zero.right))
+            (Eq.mpr (id (congrArg (fun _a => (FIx_ValueBitPrefix.model o fun x => 0) = _a) arrValues))
+              (Eq.mpr (id (congrArg (fun _a => (FIx_ValueBitPrefix.model o fun x => 0) = _a) values))
+                (Eq.refl (FIx_ValueBitPrefix.model o fun x => 0)))))));
+  Exists.intro a
+    (Exists.intro b
+      (Exists.intro c
+        ⟨ca,
+          ⟨ta,
+            ⟨cb,
+              ⟨tb,
+                ⟨cc,
+                  ⟨tc,
+                    ⟨hcc,
+                      Eq.mp
+                        (congrArg (Eq (FIx_ValueBitPrefix.calls o (Array.repeat 33#usize field.QM31.ZERO)))
+                          (congrArg ok (congrArg (Prod.mk o) same)))
+                        cr⟩⟩⟩⟩⟩⟩⟩))
+'AspisR1.NKI_RangeAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]

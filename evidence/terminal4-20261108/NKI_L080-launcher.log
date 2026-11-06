@@ -1,0 +1,48 @@
+{"attempt": "NKI_L080", "exit_status": 1, "wall_seconds": 8.820051237940788, "peak_rss_kib": "6158440", "swaps": "0", "print_axioms": ["'AspisR1.NKI_LowMix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKI_LowMix.lean:52:1: error: unsolved goals
+case refine_1
+before : State
+low : NQ
+sums : State
+hb : ∀ (g : Fin 2), Canon (before g)
+hl : Canon low
+hs : ∀ (g : Fin 2), Canon (sums g)
+cache : FIq_Native.field.PreparedQm31Multiplier
+cc : FIq_Native.field.PreparedQm31Multiplier.new low = ok cache
+dc : NJB_PreparedLaws.Domain cache low
+product : Fin 2 → FIq_Native.field.QM31
+cp : ∀ (g : Fin 2), cache.mul (sums g) = ok (product g)
+hp : ∀ (g : Fin 2), Canon (product g)
+vp : ∀ (g : Fin 2), decode (product g) = decode low * decode (sums g)
+out : Fin 2 → FIq_Native.field.QM31
+co : ∀ (g : Fin 2), FIq_Native.field.QM31.add (before g) (product g) = ok (out g)
+ho : ∀ (g : Fin 2), Canon (out g)
+vo : ∀ (g :
+...
+                                       ⟨2 + 2 * ↑g, Cut._proof_4 g⟩).right =
+                                                                    p.product g ∧
+                                                                  p.out g = p.out g)
+                                                  a_2 (fun «as» h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+                                                  (fun b {«as»} a h => False.elim (noConfusion_of_Nat List.ctorIdx h))
+                                                  (Eq.refl []) (HEq.refl a_2))
+                                              (eq_of_heq tail_eq) a_1)
+                                          (eq_of_heq head_eq))
+                                    (Eq.refl
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ []))
+                                    (HEq.refl a))
+                                (eq_of_heq tail_eq) a)
+                            (eq_of_heq head_eq))
+                      (Eq.refl (List.finRange ({ len := 1 }.len + 1))) (HEq.refl (Fintype.complete g))⟩⟩⟩⟩)
+        (fun g =>
+          Classical.choose
+            ((fun g => NJB_StubLaws.qm_add (before g) (product g) (hb g) ((fun g => ((fun g => (x g).right) g).left) g))
+              g))
+        fun g =>
+        Classical.choose_spec
+          ((fun g => NJB_StubLaws.qm_add (before g) (product g) (hb g) ((fun g => ((fun g => (x g).right) g).left) g))
+            g))
+    (fun g => Classical.choose ((fun g => NJB_PreparedLaws.mul_result cache low (sums g) hl (hs g) dc) g)) fun g =>
+    Classical.choose_spec ((fun g => NJB_PreparedLaws.mul_result cache low (sums g) hl (hs g) dc) g)
+'AspisR1.NKI_LowMix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r453ba96fdd354f9b95c9062a3fca5ef1.scope; invocation ID: 4d2307c79c194a76bef3e10daf20226e

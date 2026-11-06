@@ -1,0 +1,47 @@
+{"attempt": "NKI_L077", "exit_status": 0, "wall_seconds": 8.993543789954856, "peak_rss_kib": "6193316", "swaps": "0", "print_axioms": ["'AspisR1.NKI_ValueCuts.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.NKI_ValueCuts.Cut : Std.Array NQ 24#usize →
+  Openings →
+    Selectors →
+      Locals →
+        NKI_ConservationInvocation.Locals →
+          Std.Array NQ 24#usize → Std.Array NQ 24#usize → Observations → (Fin 6 → ℕ) → Prop :=
+fun packed o s l c middle out ob counts =>
+  counts = ![3, 3, 8, 1, 5, 1] ∧
+    ob.rows = NKI_ValueFields.row ∧
+      (∀ (g : Fin 3) (i : Fin 64), ob.high g i = NJB_ArrayCarrier.cell s.high i) ∧
+        (∀ (g : Fin 3) (i : Fin 16), ob.low g i = NJB_ArrayCarrier.cell s.low i) ∧
+          (∀ (g : Fin 3), (ob.sums g).kind = 1 ∧ (ob.sums g).left = sumLeft l g ∧ (ob.sums g).right = sumRight l g) ∧
+            ob.sumOut = l.range_selector ∧
+              ob.views
+...
+ :=
+fun packed o s l c middle out ob counts =>
+  counts = ![3, 3, 8, 1, 5, 1] ∧
+    ob.rows = NKI_ValueFields.row ∧
+      (∀ (g : Fin 3) (i : Fin 64), ob.high g i = NJB_ArrayCarrier.cell s.high i) ∧
+        (∀ (g : Fin 3) (i : Fin 16), ob.low g i = NJB_ArrayCarrier.cell s.low i) ∧
+          (∀ (g : Fin 3), (ob.sums g).kind = 1 ∧ (ob.sums g).left = sumLeft l g ∧ (ob.sums g).right = sumRight l g) ∧
+            ob.sumOut = l.range_selector ∧
+              ob.views = ![o.z, o.succ_z, o.xor12_z] ∧
+                (∀ (i : Fin 8),
+                    (ob.tail i).kind = tailKind i ∧
+                      (ob.tail i).left = tailLeft l i ∧ (ob.tail i).right = tailRight l i) ∧
+                  (∀ (j : Fin ↑33#usize),
+                      NJB_ArrayCarrier.cell ob.rangeOut j =
+                        if ↑j = 30 then l.q12
+                        else if ↑j = 31 then l.q13 else if ↑j = 32 then l.q14 else NJB_ArrayCarrier.cell l.range3 j) ∧
+                    ob.sharedStart = 49 ∧
+                      ob.sharedSelector = l.range_selector ∧
+                        ob.sharedBefore = packed ∧
+                          ob.sharedValues = l.range6 ∧
+                            ob.sharedAfter = middle ∧
+                              (∀ (i : Fin 5),
+                                  (ob.conservation i).kind = consKind i ∧
+                                    (ob.conservation i).left = consLeft c i ∧
+                                      (ob.conservation i).right = consRight c i) ∧
+                                ob.finalStart = 82 ∧
+                                  ob.finalBefore = middle ∧
+                                    ob.finalValues = Array.make 2#usize [c.q20, c.q24] ⋯ ∧ ob.finalAfter = out
+'AspisR1.NKI_ValueCuts.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2186b9e7651040ecb8032148a5f5a370.scope; invocation ID: bb760695dec0497daa0751f6183992e9
