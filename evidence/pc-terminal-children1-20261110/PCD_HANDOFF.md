@@ -18,3 +18,9 @@ RuntimeCpiAccountView, RuntimeReturnData and RuntimeReturnDataClear remain expli
 RuntimeCpiReadonlyEntry7 is pending/unused. No conclusion about CPI-passed cell contents is assumed.
 
 Validation and exact receipts will be appended as work proceeds. No shipped source or key changed.
+
+Stage 1: complete ProgramError carrier draft, pinned segmented lane reference extraction E001/E002,
+compiled emitted Types/Funs, exact emitted record/frame lemmas and symbolic first-error loop induction.
+E001 emitted an opaque external equality and is excluded; E002 explicit matching has no external template.
+L004/L006 owned proof errors retained/excluded; corrected L005/L007 pass, standard printed axioms.
+No row promotion. Native rejection-segment setup is in progress; all whole-row native associations remain open.

@@ -3,7 +3,7 @@ from PCD_transport import *
 import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def run(a,kind,target,command=None,extra=None,env_extra=None):
-    assert ((a.startswith('PCD_L') and 1<=int(a[-3:])<=60) or (a.startswith('PCD_K') and 1<=int(a[-3:])<=80)) and not (E/a).exists()
+    assert ((a.startswith('PCD_L') and 1<=int(a[-3:])<=60) or (a.startswith('PCD_K') and 1<=int(a[-3:])<=80) or (a.startswith('PCD_E') and 1<=int(a[-3:])<=12)) and not (E/a).exists()
     env=json.loads((E/'PCD_ENV_BASE.json').read_text())['env']
     env['LEAN_PATH']=':'.join([B+'/PCD_objects', B+'/NLF_seed', B+'/NIZ_seed', B+'/NIO_seed', B+'/NLG_seed']+env['LEAN_PATH'].split(':'))
     env['TMPDIR']=B+'/PCD_tmp'
