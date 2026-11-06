@@ -11,3 +11,22 @@ Status: state defined (pending compile); header first; digests 2–4, roots 5–
 Passing installation: NKU_HeaderStep.source and NKU_Front.source (header1 plus digest2–4, with source suffix explicit). The digest join is NKU_DigestJoin.source. Passing local state steps: NKU_Roots, NKU_Gamma, NKU_QueryFirst/Mid/End, NKU_Validator, NKU_Semantic, NKU_ZClaim, NKU_Allocation, NKU_Weights. Passing terminal helpers: NKU_Array22.source, NKU_Tail.guard_reject. Source-to-state suffix assembly is active; local steps alone do not count as TX2:124 closure.
 
 The complete G is NKU_ResumeRoot.G, with passing source/clauses/cohort equations (L100). Its stage list is header, proof/public/checkpoint digests, roots, gamma, query8/8/6, validator, semantic, z/claim/rhs/power, SAME reservation allocation, weights, terminal guard and construction. Remaining review: replace grouped read carriers by single-occurrence parent-state steps, derive every native window domain from the actual chain, and run combined/raw/scan gates. No row promotion yet.
+
+
+Final parent: NKU_ParentFold.G (source/cohort/clauses). NKU_FineHeader stores the actual next byte and live bytes[11..16] iterator in the parent record at event1, then ends that iterator's scope before hashes. All raw/E/K calls update that SAME record individually. NKU_CallerScope.header_to_roots proves the earliest full-frame interface; NKU_DigestState proves the full live core survives all three hashes. NKU_SourceConstructors handles the emitted terminal carrier explicitly.
+
+| Occurrences | Final status / association |
+|---|---|
+| header1, all earlier guards | installed, NKU_FineHeader/NKU_HeaderState/HeaderEnd |
+| digest2–4 | installed, DigestJoin/DigestState and SAME immutable Frame |
+| roots5–7 | installed, FineRoots/RawAt; Reader80→176 |
+| fields8–12 | installed, FineGamma/EAt/KAt; Reader176→320 |
+| queries13–34 | installed, FineWords + First/Middle/Last joins; Reader320→408 |
+| validator35 | CLOSED child at SAME22 words, QueryLastJoin |
+| semantic36 | CLOSED child + full writeback; SemanticJoin;408→568 |
+| z/claim/rhs/power37–43 | installed, FineZ/EAt/KAt;568→712 |
+| filled44 | SAME Reservation; Allocation/AllocationWidth; no success premise |
+| weights45,64 nested reads | CLOSED child on SAME owned Vec64; AfterZ/Offsets;712→1736 |
+| guard/Box/pair/cleanup | TailSource/SourceConstructors + retained native value/owner/drop cuts; (aa)/(an)/(au) scope |
+
+Native proof/public scope and incoming C01 clause are explicit in NKU_NATIVE_INPUTS.md. The broader source theorem is not an unbounded native packet. Combined gate1 passed; final gate2 adds the caller-frame and live-iterator statements while retaining exact unchanged-root audits.

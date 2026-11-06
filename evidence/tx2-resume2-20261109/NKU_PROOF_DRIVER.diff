@@ -1,6 +1,6 @@
 --- NKK_ProofDriver.lean
 +++ NKU_ProofDriver.lean
-@@ -14,27 +14,31 @@
+@@ -14,27 +14,39 @@
         `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
         `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
      else if mode == "proof0" then
@@ -40,6 +40,14 @@
 +      (#[`NKU_COMBINED_IMPORT], #[`NKU_Success.pure, `NKU_Success.reject, `NKU_Tail.guard_reject, `NKU_TailSource.source, `NKU_TerminalCut.pair, `NKU_Validator.frame, `NKU_Weights.frame, `NKU_ZClaim.source_eq_run])
 +    else if mode == "proof12" then
 +      (#[`NKU_COMBINED_IMPORT], #[`NKU_ZClaim.frame, `NKU_ZJoin.source, `AspisR1.RPx_Deployed.deployed])
++    else if mode == "proof13" then
++      (#[`NKU_COMBINED_IMPORT], #[`NKU_CallerScope.header_to_roots, `NKU_CallerScope.first_queries, `NKU_CallerScope.middle_queries, `NKU_CallerScope.last_queries, `NKU_Core.bind, `NKU_DigestCheckpointFrame.preserved, `NKU_DigestProofFrame.preserved, `NKU_DigestPublicFrame.preserved])
++    else if mode == "proof14" then
++      (#[`NKU_COMBINED_IMPORT], #[`NKU_DigestState.preserved, `NKU_EAt.returned, `NKU_EAt.domain, `NKU_FineHeader.installed, `NKU_HeaderState.returned, `NKU_HeaderState.root_entry, `NKU_InputAt.bound, `NKU_InputAt.initial])
++    else if mode == "proof15" then
++      (#[`NKU_COMBINED_IMPORT], #[`NKU_KAt.returned, `NKU_KAt.domain, `NKU_ParentFold.installed, `NKU_ParentFold.source, `NKU_ParentFold.cohort, `NKU_ParentFold.clauses, `NKU_RawAt.total, `NKU_RawAt.domain])
++    else if mode == "proof16" then
++      (#[`NKU_COMBINED_IMPORT], #[`NKU_WordsAt.total])
      else (#[], #[])
    let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
      {} (loadExts := true) (level := .private)

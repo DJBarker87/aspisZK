@@ -5,17 +5,25 @@ import NKU_AfterZSource
 import NKU_Allocation
 import NKU_Array22
 import NKU_BodyJoin
+import NKU_CallerScope
 import NKU_Chronology
+import NKU_Core
 import NKU_DigestBody
 import NKU_DigestCheckpoint
+import NKU_DigestCheckpointFrame
 import NKU_DigestJoin
 import NKU_DigestProof
+import NKU_DigestProofFrame
 import NKU_DigestPublic
+import NKU_DigestPublicFrame
+import NKU_DigestState
+import NKU_EAt
 import NKU_EndArithmetic
 import NKU_FineDigestJoin
 import NKU_FineFirstJoin
 import NKU_FineGamma
 import NKU_FineGammaJoin
+import NKU_FineHeader
 import NKU_FineLastJoin
 import NKU_FineMiddleJoin
 import NKU_FineQueryEnd
@@ -41,12 +49,16 @@ import NKU_HeaderEnd
 import NKU_HeaderPrefix
 import NKU_HeaderSize
 import NKU_HeaderSlots
+import NKU_HeaderState
 import NKU_HeaderStep
 import NKU_HeaderTailEnd
 import NKU_HeaderValue
+import NKU_InputAt
+import NKU_KAt
 import NKU_MixedFrame
 import NKU_Offsets
 import NKU_Pack
+import NKU_ParentFold
 import NKU_QueryEnd
 import NKU_QueryFirst
 import NKU_QueryFirstJoin
@@ -55,6 +67,7 @@ import NKU_QueryLastJoin
 import NKU_QueryMid
 import NKU_QueryMiddleJoin
 import NKU_QueryPack
+import NKU_RawAt
 import NKU_ResumeRoot
 import NKU_RootPack
 import NKU_Roots
@@ -69,6 +82,7 @@ import NKU_TailSource
 import NKU_TerminalCut
 import NKU_Validator
 import NKU_Weights
+import NKU_WordsAt
 import NKU_ZClaim
 import NKU_ZJoin
 import NKU_ZSource
@@ -171,3 +185,28 @@ import NKU_ZSource
 #print axioms NKU_ZClaim.frame
 #print axioms NKU_ZJoin.source
 #print axioms AspisR1.RPx_Deployed.deployed
+#print axioms NKU_CallerScope.header_to_roots
+#print axioms NKU_CallerScope.first_queries
+#print axioms NKU_CallerScope.middle_queries
+#print axioms NKU_CallerScope.last_queries
+#print axioms NKU_Core.bind
+#print axioms NKU_DigestCheckpointFrame.preserved
+#print axioms NKU_DigestProofFrame.preserved
+#print axioms NKU_DigestPublicFrame.preserved
+#print axioms NKU_DigestState.preserved
+#print axioms NKU_EAt.returned
+#print axioms NKU_EAt.domain
+#print axioms NKU_FineHeader.installed
+#print axioms NKU_HeaderState.returned
+#print axioms NKU_HeaderState.root_entry
+#print axioms NKU_InputAt.bound
+#print axioms NKU_InputAt.initial
+#print axioms NKU_KAt.returned
+#print axioms NKU_KAt.domain
+#print axioms NKU_ParentFold.installed
+#print axioms NKU_ParentFold.source
+#print axioms NKU_ParentFold.cohort
+#print axioms NKU_ParentFold.clauses
+#print axioms NKU_RawAt.total
+#print axioms NKU_RawAt.domain
+#print axioms NKU_WordsAt.total

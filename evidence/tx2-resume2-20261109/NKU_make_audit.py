@@ -18,7 +18,12 @@ for p in sorted(E.glob('NKU_*.lean')):
  if m:roots.extend(m[1]+'.'+n for n in re.findall(r'^theorem (\w+)',s,re.M))
 roots+=['AspisR1.RPx_Deployed.deployed']
 assert len(roots)==len(set(roots))
-groups=[roots[i:i+8] for i in range(0,len(roots),8)]
+prior_path=E/'NKU_first_audit/NKU_AUDIT_ROOTS.json'
+if prior_path.exists():
+ prior=json.loads(prior_path.read_text());new=[r for r in roots if r not in prior['roots']]
+ assert set(prior['roots']).issubset(roots)
+ roots=prior['roots']+new;groups=prior['groups']+[new[i:i+8] for i in range(0,len(new),8)]
+else:groups=[roots[i:i+8] for i in range(0,len(roots),8)]
 for name,obj in [('NKU_MODULES.json',modules),('NKU_SELECTED_SOURCES.json',selected),('NKU_AUDIT_ROOTS.json',dict(roots=roots,groups=groups))]:(E/name).write_text(json.dumps(obj,indent=2)+'\n')
 (E/'NKU_COMBINED_IMPORT.lean').write_text('import NKN_COMBINED_IMPORT\nimport NKK_COMBINED_IMPORT\n'+''.join('import '+m+'\n' for m in modules)+''.join('#print axioms '+r+'\n' for r in roots))
 s=(P/'NKK_ProofDriver.lean').read_text();a=s.index('    else if mode == "proof0"');b=s.index('    else (#[], #[])',a)
