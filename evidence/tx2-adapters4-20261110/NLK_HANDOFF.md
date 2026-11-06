@@ -12,9 +12,13 @@ have no credit. Strict validation is in NLK_NATIVE_VERDICTS and NLK_NATIVE_PAIRS
 No retired timeout shape is rerun unchanged; no cap, timeout or unwind increased.
 25 current semantic modules contain95 new theorem roots. Their focused current
 sources compile; NLK_COMBINED_IMPORT prints every root/type/axioms and the
-AspisR1.RPx_Deployed.deployed headline with NLG+NLA+NLF imports. The combined
-import and eight fixture controls passed. The single full raw extended audit
-of11035 roots is in progress; final verdict is NLK_AUDIT.json when present.
+AspisR1.RPx_Deployed.deployed headline with NLG+NLA+NLF imports. The corrected combined import and eight fixture controls pass. The full
+raw audit plus import-repair delta check cover11035 distinct roots; all95 new
+roots print standard axioms. NFX scans16629 modules with exit0;33222 selected
+object/sidecar pins match, with zero inherited mismatches. The known
+NHC_DecodeModel.decoder_error collector disagreement and both exit1s are
+retained, as is L086's own missing-import failure without partial credit.
+Final verdict: NLK_AUDIT.json; no security target or row closure is asserted.
 
 NLK_FOLD describes the proved support. NLK_HYPOTHESES inventories conditional
 premises. NLK_REMAINING gives each row's exact native blockage. Conditional
@@ -52,7 +56,8 @@ f1818cfa64e: private seeds and controlled lane/PDA cuts.
 0d40e9e3f6f: registry stages, borrow and allocation folds.
 c0bd4affab9: complete conditional lane schema and owned cuts.
 256baac6480: total returned-borrow law, fixed-byte domains, concrete prefixes.
-No push. Later receipt/document commits appear in git log.
+c3ae2a4823e: combined audit, strict missing-import repair and retained finding.
+No push. Final receipt/document commit appears in git log.
 
 Next native allowance: isolate217's actual allocator-action/error/frame seam;
 prove234's status>2 abort and assemble both source chains with SAME byte/key
@@ -60,3 +65,21 @@ producer domains and NLF-admitted snapshot ownership.233 still needs the
 native distinct-account/successor stages and217/234 closures;242 needs its
 request-success/Clock/auth/proof scan/reconstruction chain. Do not substitute
 an arbitrary callback/Ops, successful child/allocation or whole-output equality.
+
+## Final retention and usage
+
+60/60 native;94/110 formal scopes;0/0 extraction. No remaining independent
+Lean-only obligation can close a member: each missing item is a concrete
+native invocation/frame association or an absent success-path native cut;
+see NLK_REMAINING. All final audit/retention scopes exit0 except the explicitly
+retained collector findings; no timeout/OOM/cap increase in Lean. Peak across
+all scopes7740184KiB,swap0. Native failures/timeouts retain no credit.
+
+Retained export: /home/dombarker/project-offloads/codex-cx-tx2-adapters4-20261110/NLK_exports_20261110_256baac6480
+Export size: 4338935 bytes. Own workspace: 2196013744 bytes,
+below30GB; host free at export: 71820660736 bytes. Own cache,
+TMPDIR and CARGO_TARGET_DIR remain retained. NLK_EXPORT pins every exported
+source/object/sidecar. NLK_RAW_REFERENCES pins11045 raw dumps:10918 reuse
+matching inherited artifacts by hash;127 new compressed archives are retained.
+NLK_TARGET and per-attempt receipts pin source/features/formats/toolchains,
+commands, revision/hashes, exact targets, exits, wall/RSS/swap and axioms.

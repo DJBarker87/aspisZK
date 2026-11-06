@@ -60,3 +60,11 @@ NFX scan L091 exits0 (51.39s,7740184KiB,swap0); closure pins L092 exit0
 raw traversal, two combined imports and one import-repair delta recheck; no
 second unchanged full manifest replay. L085's allowed:false admission was
 waited out and allowed:true/exit0 obtained before launch. No row promotion.
+
+Stage6: L093 retains11045 raw reachability outputs by content hash:10918
+inherited artifacts reused and127 new xz archives. L094 exports current
+semantic sources/objects/sidecars and verifies own workspace under30GB;
+private cache/TMPDIR/target retained. Final report validation:11035 distinct
+raw roots,95 new theorem roots,16629 scanned modules,33222 selected pins,
+zero mismatches, one known collector disagreement.60 native/94 formal scopes.
+No row promotion; all four members' remaining native associations explicit.

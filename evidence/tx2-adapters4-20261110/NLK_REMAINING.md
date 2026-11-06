@@ -5,8 +5,10 @@ Native allowance60/60 is exhausted. Formal work continued after native exhaustio
 complete original-byte lane reference/loop/invocation schema, arbitrary consumed
 Reservation and allocation interpretation, concrete registry installation,
 SDK total-return scope with derived Drop, byte representation bounds, and
-emitted233/242 independent rejection prefixes. One full extended combined gate
-is being recorded; final audit status is in NLK_AUDIT.json.
+emitted233/242 independent rejection prefixes. Final usage is94/110 formal scopes and0 extraction. One full inherited
+raw traversal plus the import-repair delta gate covers11035 roots; NFX exits0
+and all selected pins match. The only collector disagreement is retained in
+NLK_AUDIT.json. This mathematical packet earns zero native row credit.
 
 | Member | Completed local support | Exact remaining obligation requiring native evidence |
 |---|---|---|
