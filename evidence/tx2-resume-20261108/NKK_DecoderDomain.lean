@@ -12,6 +12,7 @@ theorem e (b : Array U8 32#usize)
  (returned : NJC_EReaderResults.naturalE b=.Ok value) :
  CanonicalWide (CheckpointBytes3Namespaces.toE value) := by
  unfold NJC_EReaderResults.naturalE at returned
+ dsimp only at returned
  split at returned
  · rename_i canonical
    cases returned
@@ -24,6 +25,7 @@ theorem k (b : Array U8 16#usize)
  (returned : NJC_ReaderResults.naturalK b=.Ok value) :
  Canonical (CheckpointBytes3Namespaces.toK value) := by
  unfold NJC_ReaderResults.naturalK at returned
+ dsimp only at returned
  split at returned
  · rename_i canonical
    cases returned

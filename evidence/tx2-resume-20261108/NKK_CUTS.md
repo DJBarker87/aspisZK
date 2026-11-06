@@ -13,3 +13,11 @@ New segment candidates NKK_parent.rs:
 These are (y)/(ay)(3) segment candidates, not whole resume certificates. They leave actual raw child Results to the CLOSED Reader law, and caller proof must derive the bounded read domain at every event. Returning raw replies are unrestricted; abort prefixes must be supplied under (an). Positive and argument/reply controls will be attached before any credit. No whole-buffer loop, field multiplication or writable static is used.
 
 Owned tail and actual Box/Vec cleanup association remain explicit obligations. The event inventory does not promote pointer identity into payload equality, nor add an independent endpoint equality.
+
+## Final native components and source joins
+
+NKK_NATIVE_CERTIFICATES.json supersedes the initial candidate status above: 12 positive components with matched failing controls cover query8/query6, state/roots, gamma, z/claim, semantic writeback, owned tail, header, proof/public/checkpoint digest boundaries and returned weights/scalars/owner. It does not certify the whole resume row. Exact domains and source hashes are per component, not widened by general source lemmas. K045 asserts Prepared.variant only; existing constructor/frame cuts must supply any wider Prepared association.
+
+NKK_ClauseRoot installs all nine full child-result clauses at the SAME actual log arguments and Reservation and retains NJU source erasure/cohort transport. Raw/field folds prove prefix induction including fail/div and Rust errors. RawCps, DigestChain and AllocationBind add continuation/rejection composition. HeaderFactor, ResumeBodyFactor, FieldStages and ZStage join named source phases. These are component/source joins, not the complete native parent G required by (aq)(5).
+
+The exact unfinished join is NKK_FAILING_STEP.md. No new trust item, arbitrary Ops, child-success, endpoint, NoBad or history root premise was added. TX2:124 remains OPEN.

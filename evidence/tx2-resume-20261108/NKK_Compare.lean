@@ -16,7 +16,8 @@ theorem list_result (xs ys : List U8) :
    · subst y
      simpa only [List.cons.injEq,true_and,decide_true,if_true] using ih ys
    · have different : x::xs≠y::ys := fun same=>h (List.cons.inj same).1
-     simp only [h,different,decide_false,if_false]
+     simp only [h,different,decide_false]
+     rfl
 
 theorem eq_result {n : Usize} (s : Slice U8) (a : Array U8 n) :
  CheckpointBytes4Ops.eq core.cmp.PartialEqU8 s a=ok (decide (s.val=a.val)) := by

@@ -30,7 +30,6 @@ theorem source (n : Usize) (count : Nat) (r : Reader) : run n count r=literal n 
   rw [NKK_EmbedRaw.bind]
   change ((run n count next) >>= fun pair=>pure (b::pair.1,pair.2))=_
   rw [ih]
-  rfl
 
 /-- Native fold induction and the literal source use this one computed log. -/
 theorem associated (n : Usize) (count : Nat) (r : Reader)
