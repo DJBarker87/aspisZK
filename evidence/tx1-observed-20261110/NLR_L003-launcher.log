@@ -1,0 +1,27 @@
+{"attempt": "NLR_L003", "exit_status": 0, "wall_seconds": 21.301573044853285, "peak_rss_kib": "6357608", "swaps": "0", "print_axioms": []}
+def AspisR1.NLR_Interface.RowSpec_087 : NLJ_Prepare.Configuration → Native087 → Prop :=
+fun cfg native =>
+  ∀ (i : NLJ_Prepare.Input Unit) (before : ExternalFrame),
+    (native i before).afterInput = i ∧
+      (native i before).afterFrame = before ∧
+        NLJ_Prepare.Invocation cfg 12 (NLJ_Prepare.initial i) (native i before).reply (native i before).log
+            (native i before).events ∧
+          PreparedHashCode.run
+              (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash
+                i.scratch) =
+            ((native i before).log, (native i before).reply)
+
+...
+def AspisR1.NLR_Interface.RowSpec_087 : NLJ_Prepare.Configuration → Native087 → Prop :=
+fun cfg native =>
+  ∀ (i : NLJ_Prepare.Input Unit) (before : ExternalFrame),
+    (native i before).afterInput = i ∧
+      (native i before).afterFrame = before ∧
+        NLJ_Prepare.Invocation cfg 12 (NLJ_Prepare.initial i) (native i before).reply (native i before).log
+            (native i before).events ∧
+          PreparedHashCode.run
+              (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash
+                i.scratch) =
+            ((native i before).log, (native i before).reply)
+
+Running as unit: run-red197bb636d64056a6ab10f6145fbcf1.scope; invocation ID: 65fe59c34c574d76b30b8936574e1263
