@@ -1,0 +1,28 @@
+{"attempt": "NLE_L023", "exit_status": 0, "wall_seconds": 4.306100436951965, "peak_rss_kib": "4401328", "swaps": "0", "print_axioms": ["'NLE_Dispatch.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_Dispatch.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLE_Dispatch.source : ∀ {Account : Type} (ops : NIV_RawBoundary.Boundaries Account) (state : State Account),
+  (G ops state).2 = NIV_RawBoundary.process ops state.program state.accounts state.data :=
+fun {Account} ops state => id (NJD_EntrySpine.process_erasure ops state.program state.accounts state.data)
+theorem NLE_Dispatch.emitted : ∀ {Account : Type} (ops : Hiq_DispatchSource.Ops Account) (state : State Account),
+  (G (NIV_RawBoundary.profile ops) state).2 =
+    NIV_ExtractedForward.process ops state.program state.accounts state.data :=
+fun {Account} ops state =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = NIV_ExtractedForward.process ops state.program state.accounts state.d
+...
+theorem NLE_Dispatch.source : ∀ {Account : Type} (ops : NIV_RawBoundary.Boundaries Account) (state : State Account),
+  (G ops state).2 = NIV_RawBoundary.process ops state.program state.accounts state.data :=
+fun {Account} ops state => id (NJD_EntrySpine.process_erasure ops state.program state.accounts state.data)
+theorem NLE_Dispatch.emitted : ∀ {Account : Type} (ops : Hiq_DispatchSource.Ops Account) (state : State Account),
+  (G (NIV_RawBoundary.profile ops) state).2 =
+    NIV_ExtractedForward.process ops state.program state.accounts state.data :=
+fun {Account} ops state =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = NIV_ExtractedForward.process ops state.program state.accounts state.data)
+        (source (NIV_RawBoundary.profile ops) state)))
+    (NIV_RawBoundary.process_profile ops state.program state.accounts state.data)
+'NLE_Dispatch.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Dispatch.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r291286e763874dbd8f9c65cc34ba806a.scope; invocation ID: 0a1d004f23064bc48f4cc29fd6df00d6

@@ -1,0 +1,53 @@
+{"attempt": "NLE_L036", "exit_status": 0, "wall_seconds": 12.331932575907558, "peak_rss_kib": "6018124", "swaps": "0", "print_axioms": ["'NLE_AuthScope.mark_stub_domain' does not depend on any axioms", "'NLE_AuthScope.entered' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_AuthScope.common_domain' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLE_generated/NLE_AuthScope.lean:28:8: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+NLE_generated/NLE_AuthScope.lean:19:33: warning: This simp argument is unused:
+  Pure.pure
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵P̵u̵r̵e̵.̵p̵u̵r̵e̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵t̵r̵y̵R̵]̵[̲h̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲b̲i̲n̲d̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲t̲r̲y̲R̲]̲ at event
+
+Note: This linter can be disabled with `set_option linter.unusedSimpA
+...
+m
+            (Eq.mp
+              (Eq.trans
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Membership.mem
+                      (congrArg NJU_Log.Run.events
+                        (Eq.trans
+                          (congrArg
+                            (fun x =>
+                              match ⋯ with
+                              | ⋯ => ⋯
+                              | ⋯ => ⋯
+                              | ⋯ => ⋯)
+                            ⋯)
+                          ⋯)))
+                    ⋯)
+                  ⋯)
+                ⋯)
+              ⋯))
+        ⋯ ⋯)
+    ⋯ ⋯
+theorem NLE_AuthScope.common_domain : ∀ {H : Type} (ops : Ops) (child : Common H) (s : State H)
+  (bytes : Std.Array U8 1880#usize) (frame : Frame H) (reply : Result Reply),
+  Event.common frame reply ∈ (G (install ops) child (withPublic s bytes)).events →
+    (↑frame.proof).length = 57607 ∧ (↑frame.publicBytes).length ≤ 1880 ∧ frame.observer = none :=
+fun {H} ops child s bytes frame reply event =>
+  let ⟨same, right✝⟩ := entered (install ops) child (withPublic s bytes) frame reply event
+  let ⟨value, parsed⟩ := right✝
+  Eq.ndrec (motive := fun frame =>
+    Event.common frame reply ∈ (G (install ops) child (withPublic s bytes)).events →
+      (↑frame.proof).length = 57607 ∧ (↑frame.publicBytes).length ≤ 1880 ∧ frame.observer = none)
+    (fun event =>
+      have exactProof := NLE_ParseInstall.success s.frame.proof value parsed;
+      ⟨exactProof.right, ⟨(NLE_Length.public_scope bytes).right, rfl⟩⟩)
+    (Eq.symm same) event
+'NLE_AuthScope.mark_stub_domain' does not depend on any axioms
+'NLE_AuthScope.entered' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_AuthScope.common_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3e97364bc64941a59810b216039c3f23.scope; invocation ID: 55dcfa36bbfa437284956c16d61844c9

@@ -1,0 +1,41 @@
+@[defeq] theorem NLE_MapError.rejection : ∀ (ops : Ops) (err : VE),
+  run ops (core.result.Result.Err err) = do
+    let converted ← ops.op44 err
+    ok (core.result.Result.Err converted) :=
+fun ops err => rfl
+theorem NLE_MapError.abort : ∀ (ops : Ops) (err : VE) (failure : Error),
+  ops.op44 err = fail failure → run ops (core.result.Result.Err err) = fail failure :=
+fun ops err failure failed =>
+  Eq.mpr (id (congrArg (fun _a => _a = fail failure) (rejection ops err)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let converted ← _a
+                ok (core.result.Result.Err converted)) =
+              fail failure)
+          failed))
+      (Eq.refl do
+        let converted ← fail failure
+        ok (core.result.Result.Err converted)))
+theorem NLE_MapError.diverge : ∀ (ops : Ops) (err : VE),
+  ops.op44 err = div → run ops (core.result.Result.Err err) = div :=
+fun ops err failed =>
+  Eq.mpr (id (congrArg (fun _a => _a = div) (rejection ops err)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let converted ← _a
+                ok (core.result.Result.Err converted)) =
+              div)
+          failed))
+      (Eq.refl do
+        let converted ← div
+        ok (core.result.Result.Err converted)))
+'NLE_MapError.success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_MapError.rejection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_MapError.abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_MapError.diverge' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,15 @@
+theorem NLE_RangeClause.caller_proof : ∀ (entry : Entry) (bytes selected : Slice U8) (proofEnd : Usize),
+  (entry.snapshot 0 58295 58295).bytes = core.result.Result.Ok bytes →
+    (↑bytes).length = ↑proofEnd →
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := 688#usize, «end» := proofEnd } =
+          ok selected →
+        (↑selected).length = 57607 ∧ ↑bytes = List.take 688 ↑bytes ++ ↑selected :=
+fun entry bytes selected proofEnd read guard range =>
+  have size := NLE_SnapshotClause.proof_bytes entry bytes read;
+  have ordered := id (Decidable.byContradiction fun a => caller_proof._proof_1 bytes proofEnd guard size a);
+  have facts := AspisR1.AdapterRw.Ranges.suffix_exact bytes selected 688#usize proofEnd ordered guard range;
+  ⟨Eq.mpr (id (congrArg (fun _a => _a = 57607) facts.left))
+      (id (Decidable.byContradiction fun a => caller_proof._proof_2 bytes selected proofEnd guard size a)),
+    facts.right⟩
+'NLE_RangeClause.caller_proof' depends on axioms: [propext, Classical.choice, Quot.sound]

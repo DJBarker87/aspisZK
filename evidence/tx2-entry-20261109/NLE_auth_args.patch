@@ -1,0 +1,77 @@
+diff --git a/crates/aspis-r1-cost-probe/src/candidate.rs b/crates/aspis-r1-cost-probe/src/candidate.rs
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,7 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path="NLE_auth_window.rs"]
++mod NLE_auth_window;
+diff --git a/crates/aspis-r1-cost-probe/src/lib.rs b/crates/aspis-r1-cost-probe/src/lib.rs
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+diff --git a/crates/aspis-r1-cost-probe/src/NLE_auth_window.rs b/crates/aspis-r1-cost-probe/src/NLE_auth_window.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NLE_auth_window.rs
+@@ -0,0 +1,53 @@
++use super::*;
++use core::cell::Cell;
++use alloc::alloc::{alloc_zeroed,dealloc,Layout};
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[derive(Clone,Copy)] struct Log { calls:u8, public:*const u8, proof:*const u8, checkpoint:*const u8, public_len:usize,proof_len:usize,checkpoint_len:usize }
++#[repr(C)] struct Input { parse_tag:u8,reply_tag:u8,parse_calls:Cell<u8>,parse_seen:Cell<u8>,log:Cell<Log>,public:[u8;1880],proof:[u8;57607],checkpoint:[u8;1768] }
++#[derive(Clone,Copy)] struct Hash<'a>(&'a Input);
++impl Digest32 for Hash<'_> { fn digest(&self,parts:&[&[u8]])->[u8;32]{
++ assert!(parts.len()==3,"NLE common exact three slices");
++ self.0.log.set(Log{calls:self.0.log.get().calls+1,public:parts[0].as_ptr(),proof:parts[1].as_ptr(),checkpoint:parts[2].as_ptr(),public_len:parts[0].len(),proof_len:parts[1].len(),checkpoint_len:parts[2].len()});
++ [self.0.reply_tag;32]
++}}
++fn error(tag:u8)->Error {match tag {0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
++fn parse_reply(tag:u8)->Result<Variant,Error>{match tag {0=>Ok(Variant::S1),1=>Ok(Variant::S2),2=>Ok(Variant::D),x=>Err(error(x-3))}}
++fn parse_stub(proof:&[u8])->Result<Variant,Error>{
++ assert!(proof.len()==57607,"NLE parse SAME proof extent");
++ // Ghost record owned by this harness; its Cell fields are disjoint from
++ // all three immutable byte fields. No static state or function pointer log.
++ let input=unsafe{&*proof.as_ptr().sub(core::mem::offset_of!(Input,proof)).cast::<Input>()};
++ assert!(proof.as_ptr()==input.proof.as_ptr(),"NLE parse exact proof descriptor");
++ input.parse_calls.set(input.parse_calls.get()+1);input.parse_seen.set(input.parse_tag);
++ parse_reply(input.parse_tag)
++}
++fn mark_stub(_observer:Observer,phase:Phase){assert!(matches!(phase,Phase::Parsed),"NLE marker exact phase");}
++fn common_stub<H:Digest32>(public:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,_obs:Observer)->Result<(),Error>{
++ let reply=hash.digest(&[public,proof,checkpoint]);
++ if reply[0]==8 {Ok(())}else{Err(error(reply[0]))}
++}
++fn run<const WRONG:bool>(){
++ let ptag:u8=kani::any();kani::assume(ptag<11);
++ let rtag:u8=kani::any();kani::assume(rtag<=8);
++ let layout=Layout::new::<Input>();let raw=unsafe{alloc_zeroed(layout)};assert!(!raw.is_null());let ptr=raw.cast::<Input>();
++ unsafe{core::ptr::addr_of_mut!((*ptr).parse_tag).write(ptag);core::ptr::addr_of_mut!((*ptr).reply_tag).write(rtag);
++}
++
++ // Every field of Input has a valid zero representation before the above
++ // scalar writes; no reference to uninitialized storage is constructed.
++ let input=unsafe{&*ptr};let actual=tx2_authenticated(&input.public,&input.proof,&input.checkpoint,Hash(input),None);
++ let expected=match parse_reply(ptag){Err(e)=>Err(e),Ok(_)=>if rtag==8{Ok(())}else{Err(error(rtag))}};
++ let log=input.log.get();let entered=ptag<3;
++ let good=actual==expected&&input.parse_calls.get()==1&&input.parse_seen.get()==ptag&&log.calls==(if entered{1}else{0})&&
++ (!entered||(log.public==input.public.as_ptr()&&log.proof==input.proof.as_ptr()&&log.checkpoint==input.checkpoint.as_ptr()&&log.public_len==1880&&log.proof_len==57607&&log.checkpoint_len==1768))&&input.parse_tag==ptag&&input.reply_tag==rtag;
++ assert!(good!=WRONG,"NLE full Result independent oracle replies SAME descriptors oracle-state frame only");
++ unsafe{dealloc(raw,layout)};
++}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(parse_shape,parse_stub)] #[kani::stub(tx2_common,common_stub)] #[kani::stub(mark,mark_stub)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn authenticated_window(){run::<false>()}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(parse_shape,parse_stub)] #[kani::stub(tx2_common,common_stub)] #[kani::stub(mark,mark_stub)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn authenticated_window_wrong(){run::<true>()}

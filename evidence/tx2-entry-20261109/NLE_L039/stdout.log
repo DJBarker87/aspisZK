@@ -1,0 +1,293 @@
+theorem NLE_RouteFold.asq8_route : ∀ (data : Slice U8),
+  Hiq_ReleaseRoute.asq8 data → Hiq_ReleaseRoute.route data = Hiq_ReleaseRoute.Route.second :=
+fun data header =>
+  (Hiq_ReleaseRoute.second_iff data).mpr
+    ⟨fun first =>
+      Or.casesOn first
+        (fun ten =>
+          False.elim
+            (Eq.mp
+              (Eq.trans
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans (congrArg (List.take 4) ten)
+                        (congrArg (List.cons 3#u8) (congrArg (List.cons 10#u8) List.take_nil))))
+                    [65#u8, 83#u8, 81#u8, 56#u8])
+                  (List.cons.injEq 3#u8 [10#u8] 65#u8 [83#u8, 81#u8, 56#u8]))
+                (Eq.trans
+                  (congr
+                    (congrArg And
+                      (UScalar.val_not_eq_imp_not_eq._simp_1 3#u8 65#u8
+                        (of_eq_true
+                          (Eq.trans
+                            (congr
+                              (congrArg Or
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Ne
+                                      (UScalar.ofNatCore_val_eq
+                                        (UScalar.bound_suffices UScalarTy.U8 3 Hiq_ReleaseRoute.stage1._proof_1)))
+                                    (UScalar.ofNatCore_val_eq
+                                      (UScalar.bound_suffices UScalarTy.U8 65 Hiq_ReleaseRoute.asq8._proof_1)))
+                                  (Eq.trans (congrArg Not (eq_false_of_decide (Eq.refl false))) not_false_eq_true)))
+                              (Eq.trans
+                                (congr
+                                  (congrArg Or
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg Ne
+                                          (UScalar.ofNatCore_val_eq
+                                            (UScalar.bound_suffices UScalarTy.U8 65 Hiq_ReleaseRoute.asq8._proof_1)))
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.U8 3 Hiq_ReleaseRoute.stage1._proof_1)))
+                                      (Eq.trans (congrArg Not (eq_false_of_decide (Eq.refl false))) not_false_eq_true)))
+                                  (Eq.trans
+                                    (congr
+                                      (congrArg Or
+                                        (Eq.trans
+                                          (congr
+                                            (congrArg LT.lt
+                                              (UScalar.ofNatCore_val_eq
+                                                (UScalar.bound_suffices UScalarTy.U8 3
+                                                  Hiq_ReleaseRoute.stage1._proof_1)))
+                                            (UScalar.ofNatCore_val_eq
+                                              (UScalar.bound_suffices UScalarTy.U8 65 Hiq_ReleaseRoute.asq8._proof_1)))
+                                          (eq_true_of_decide (Eq.refl true))))
+                                      (Eq.trans
+                                        (congr
+                                          (congrArg LT.lt
+                                            (UScalar.ofNatCore_val_eq
+                                              (UScalar.bound_suffices UScalarTy.U8 65 Hiq_ReleaseRoute.asq8._proof_1)))
+                                          (UScalar.ofNatCore_val_eq
+                                            (UScalar.bound_suffices UScalarTy.U8 3 Hiq_ReleaseRoute.stage1._proof_1)))
+                                        (eq_false_of_decide (Eq.refl false))))
+                                    (or_false True)))
+                                (or_self True)))
+                            (or_self True)))))
+                    (Eq.trans (List.cons.injEq 10#u8 [] 83#u8 [81#u8, 56#u8])
+                      (Eq.trans
+                        (congr
+                          (congrArg And
+                            (UScalar.val_not_eq_imp_not_eq._simp_1 10#u8 83#u8
+                              (of_eq_true
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Or
+                                      (Eq.trans
+                                        (congr
+                                          (congrArg Ne
+                                            (UScalar.ofNatCore_val_eq
+                                              (UScalar.bound_suffices UScalarTy.U8 10
+                                                Hiq_ReleaseRoute.stage1._proof_2)))
+                                          (UScalar.ofNatCore_val_eq
+                                            (UScalar.bound_suffices UScalarTy.U8 83 Hiq_ReleaseRoute.asq8._proof_2)))
+                                        (Eq.trans (congrArg Not (eq_false_of_decide (Eq.refl false)))
+                                          not_false_eq_true)))
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg Or
+                                          (Eq.trans
+                                            (congr
+                                              (congrArg Ne
+                                                (UScalar.ofNatCore_val_eq
+                                                  (UScalar.bound_suffices UScalarTy.U8 83
+                                                    Hiq_ReleaseRoute.asq8._proof_2)))
+                                              (UScalar.ofNatCore_val_eq
+                                                (UScalar.bound_suffices UScalarTy.U8 10
+                                                  Hiq_ReleaseRoute.stage1._proof_2)))
+                                            (Eq.trans (congrArg Not (eq_false_of_decide (Eq.refl false)))
+                                              not_false_eq_true)))
+                                        (Eq.trans
+                                          (congr
+                                            (congrArg Or
+                                              (Eq.trans
+                                                (congr
+                                                  (congrArg LT.lt
+                                                    (UScalar.ofNatCore_val_eq
+                                                      (UScalar.bound_suffices UScalarTy.U8 10
+                                                        Hiq_ReleaseRoute.stage1._proof_2)))
+                                                  (UScalar.ofNatCore_val_eq
+                                                    (UScalar.bound_suffices UScalarTy.U8 83
+                                                      Hiq_ReleaseRoute.asq8._proof_2)))
+                                                (eq_true_of_decide (Eq.refl true))))
+                                            (Eq.trans
+                                              (congr
+                                                (congrArg LT.lt
+                                                  (UScalar.ofNatCore_val_eq
+                                                    (UScalar.bound_suffices UScalarTy.U8 83
+                                                      Hiq_ReleaseRoute.asq8._proof_2)))
+                                                (UScalar.ofNatCore_val_eq
+                                                  (UScalar.bound_suffices UScalarTy.U8 10
+                                                    Hiq_ReleaseRoute.stage1._proof_2)))
+                                              (eq_false_of_decide (Eq.refl false))))
+                                          (or_false True)))
+                                      (or_self True)))
+                                  (or_self True)))))
+                          (Eq.trans List.nil_eq._simp_1
+                            (eq_false' fun h => False.elim (noConfusion_of_Nat List.ctorIdx h))))
+                        (and_self False))))
+                  (and_self False)))
+              header))
+        fun eleven =>
+        False.elim
+          (Eq.mp
+            (Eq.trans
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans (congrArg (List.take 4) eleven)
+                      (congrArg (List.cons 3#u8) (congrArg (List.cons 11#u8) List.take_nil))))
+                  [65#u8, 83#u8, 81#u8, 56#u8])
+                (List.cons.injEq 3#u8 [11#u8] 65#u8 [83#u8, 81#u8, 56#u8]))
+              (Eq.trans
+                (congr
+                  (congrArg And
+                    (UScalar.val_not_eq_imp_not_eq._simp_1 3#u8 65#u8
+                      (of_eq_true
+                        (Eq.trans
+                          (congr
+                            (congrArg Or
+                              (Eq.trans
+                                (congr
+                                  (congrArg Ne
+                                    (UScalar.ofNatCore_val_eq
+                                      (UScalar.bound_suffices UScalarTy.U8 3 Hiq_ReleaseRoute.stage1._proof_1)))
+                                  (UScalar.ofNatCore_val_eq
+                                    (UScalar.bound_suffices UScalarTy.U8 65 Hiq_ReleaseRoute.asq8._proof_1)))
+                                (Eq.trans (congrArg Not (eq_false_of_decide (Eq.refl false))) not_false_eq_true)))
+                            (Eq.trans
+                              (congr
+                                (congrArg Or
+                                  (Eq.trans
+                                    (congr
+                                      (congrArg Ne
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.U8 65 Hiq_ReleaseRoute.asq8._proof_1)))
+                                      (UScalar.ofNatCore_val_eq
+                                        (UScalar.bound_suffices UScalarTy.U8 3 Hiq_ReleaseRoute.stage1._proof_1)))
+                                    (Eq.trans (congrArg Not (eq_false_of_decide (Eq.refl false))) not_false_eq_true)))
+                                (Eq.trans
+                                  (congr
+                                    (congrArg Or
+                                      (Eq.trans
+                                        (congr
+                                          (congrArg LT.lt
+                                            (UScalar.ofNatCore_val_eq
+                                              (UScalar.bound_suffices UScalarTy.U8 3 Hiq_ReleaseRoute.stage1._proof_1)))
+                                          (UScalar.ofNatCore_val_eq
+                                            (UScalar.bound_suffices UScalarTy.U8 65 Hiq_ReleaseRoute.asq8._proof_1)))
+                                        (eq_true_of_decide (Eq.refl true))))
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg LT.lt
+                                          (UScalar.ofNatCore_val_eq
+                                            (UScalar.bound_suffices UScalarTy.U8 65 Hiq_ReleaseRoute.asq8._proof_1)))
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.U8 3 Hiq_ReleaseRoute.stage1._proof_1)))
+                                      (eq_false_of_decide (Eq.refl false))))
+                                  (or_false True)))
+                              (or_self True)))
+                          (or_self True)))))
+                  (Eq.trans (List.cons.injEq 11#u8 [] 83#u8 [81#u8, 56#u8])
+                    (Eq.trans
+                      (congr
+                        (congrArg And
+                          (UScalar.val_not_eq_imp_not_eq._simp_1 11#u8 83#u8
+                            (of_eq_true
+                              (Eq.trans
+                                (congr
+                                  (congrArg Or
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg Ne
+                                          (UScalar.ofNatCore_val_eq
+                                            (UScalar.bound_suffices UScalarTy.U8 11 Hiq_ReleaseRoute.stage1._proof_3)))
+                                        (UScalar.ofNatCore_val_eq
+                                          (UScalar.bound_suffices UScalarTy.U8 83 Hiq_ReleaseRoute.asq8._proof_2)))
+                                      (Eq.trans (congrArg Not (eq_false_of_decide (Eq.refl false))) not_false_eq_true)))
+                                  (Eq.trans
+                                    (congr
+                                      (congrArg Or
+                                        (Eq.trans
+                                          (congr
+                                            (congrArg Ne
+                                              (UScalar.ofNatCore_val_eq
+                                                (UScalar.bound_suffices UScalarTy.U8 83
+                                                  Hiq_ReleaseRoute.asq8._proof_2)))
+                                            (UScalar.ofNatCore_val_eq
+                                              (UScalar.bound_suffices UScalarTy.U8 11
+                                                Hiq_ReleaseRoute.stage1._proof_3)))
+                                          (Eq.trans (congrArg Not (eq_false_of_decide (Eq.refl false)))
+                                            not_false_eq_true)))
+                                      (Eq.trans
+                                        (congr
+                                          (congrArg Or
+                                            (Eq.trans
+                                              (congr
+                                                (congrArg LT.lt
+                                                  (UScalar.ofNatCore_val_eq
+                                                    (UScalar.bound_suffices UScalarTy.U8 11
+                                                      Hiq_ReleaseRoute.stage1._proof_3)))
+                                                (UScalar.ofNatCore_val_eq
+                                                  (UScalar.bound_suffices UScalarTy.U8 83
+                                                    Hiq_ReleaseRoute.asq8._proof_2)))
+                                              (eq_true_of_decide (Eq.refl true))))
+                                          (Eq.trans
+                                            (congr
+                                              (congrArg LT.lt
+                                                (UScalar.ofNatCore_val_eq
+                                                  (UScalar.bound_suffices UScalarTy.U8 83
+                                                    Hiq_ReleaseRoute.asq8._proof_2)))
+                                              (UScalar.ofNatCore_val_eq
+                                                (UScalar.bound_suffices UScalarTy.U8 11
+                                                  Hiq_ReleaseRoute.stage1._proof_3)))
+                                            (eq_false_of_decide (Eq.refl false))))
+                                        (or_false True)))
+                                    (or_self True)))
+                                (or_self True)))))
+                        (Eq.trans List.nil_eq._simp_1
+                          (eq_false' fun h => False.elim (noConfusion_of_Nat List.ctorIdx h))))
+                      (and_self False))))
+                (and_self False)))
+            header),
+      header⟩
+theorem NLE_RouteFold.entry : ∀ {Account : Type} (ops : Hiq_DispatchSource.Ops Account)
+  (state : NLE_Dispatch.State Account),
+  Hiq_ReleaseRoute.asq8 state.data →
+    (NLE_Entry.G (NIV_RawBoundary.profile ops) state).2 = ops.second state.program state.accounts state.data :=
+fun {Account} ops state header =>
+  Eq.mpr
+    (id (congrArg (fun _a => _a = ops.second state.program state.accounts state.data) (NLE_Entry.emitted ops state)))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a = ops.second state.program state.accounts state.data)
+          (NIV_ExtractedForward.forwarding ops state.program state.accounts state.data)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (match _a with
+                | Hiq_ReleaseRoute.Route.first => ops.first state.program state.accounts state.data
+                | Hiq_ReleaseRoute.Route.second => ops.second state.program state.accounts state.data
+                | Hiq_ReleaseRoute.Route.reject =>
+                  ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)) =
+                ops.second state.program state.accounts state.data)
+            (asq8_route state.data header)))
+        (Eq.refl
+          (match Hiq_ReleaseRoute.Route.second with
+          | Hiq_ReleaseRoute.Route.first => ops.first state.program state.accounts state.data
+          | Hiq_ReleaseRoute.Route.second => ops.second state.program state.accounts state.data
+          | Hiq_ReleaseRoute.Route.reject =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)))))
+theorem NLE_RouteFold.child_packet : ∀ {Account State Event : Type}
+  (children : NGL_EntryRouting.Children Account State Event) (state : State) (program : Hiq_DispatchSource.Key)
+  (accounts : Slice Account) (data : Slice U8),
+  Hiq_ReleaseRoute.asq8 data →
+    NGL_EntryRouting.run children program accounts data state =
+      (children.second program accounts data state, [NGL_EntryRouting.Call.second program accounts data]) :=
+fun {Account State Event} children state program accounts data header =>
+  NIV_ForwardPacket.second children state program accounts data (asq8_route data header)
+'NLE_RouteFold.asq8_route' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_RouteFold.entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_RouteFold.child_packet' depends on axioms: [propext, Classical.choice, Quot.sound]

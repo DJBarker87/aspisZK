@@ -1,0 +1,39 @@
+def NLE_Entry.G : {Account : Type} → NIV_RawBoundary.Boundaries Account → State Account → Run Account PR :=
+fun {Account} ops state =>
+  NJD_Trace.bind (NJD_Trace.call (NJD_EntrySpine.Event.admission state.data) (ops.admitted state.data)) fun allowed =>
+    if allowed = true then NLE_Dispatch.G ops state
+    else NJD_Trace.pure (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+theorem NLE_Entry.source : ∀ {Account : Type} (ops : NIV_RawBoundary.Boundaries Account) (state : State Account),
+  (G ops state).2 = NIV_RawBoundary.entry ops state.program state.accounts state.data :=
+fun {Account} ops state => id (NJD_EntrySpine.entry_erasure ops state.program state.accounts state.data)
+theorem NLE_Entry.emitted : ∀ {Account : Type} (ops : Hiq_DispatchSource.Ops Account) (state : State Account),
+  (G (NIV_RawBoundary.profile ops) state).2 = NIV_ExtractedForward.entry ops state.program state.accounts state.data :=
+fun {Account} ops state => id (NJD_EntrySpine.emitted ops state.program state.accounts state.data)
+theorem NLE_Entry.rejected : ∀ {Account : Type} (ops : NIV_RawBoundary.Boundaries Account) (state : State Account),
+  ops.admitted state.data = ok false →
+    G ops state =
+      ([NJD_EntrySpine.Event.admission state.data],
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)) :=
+fun {Account} ops state rejected =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (NJD_Trace.bind (NJD_Trace.call (NJD_EntrySpine.Event.admission state.data) _a) fun allowed =>
+                if allowed = true then NLE_Dispatch.G ops state
+                else
+                  NJD_Trace.pure
+                    (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)) =
+              ([NJD_EntrySpine.Event.admission state.data],
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)))
+          rejected))
+      (Eq.refl
+        (NJD_Trace.bind (NJD_Trace.call (NJD_EntrySpine.Event.admission state.data) (ok false)) fun allowed =>
+          if allowed = true then NLE_Dispatch.G ops state
+          else
+            NJD_Trace.pure
+              (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData))))
+'NLE_Entry.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Entry.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Entry.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]

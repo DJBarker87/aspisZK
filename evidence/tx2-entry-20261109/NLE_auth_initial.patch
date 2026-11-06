@@ -1,0 +1,80 @@
+diff --git a/crates/aspis-r1-cost-probe/src/candidate.rs b/crates/aspis-r1-cost-probe/src/candidate.rs
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,7 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path="NLE_auth.rs"]
++mod NLE_auth;
+diff --git a/crates/aspis-r1-cost-probe/src/lib.rs b/crates/aspis-r1-cost-probe/src/lib.rs
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+diff --git a/crates/aspis-r1-cost-probe/src/NLE_auth.rs b/crates/aspis-r1-cost-probe/src/NLE_auth.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NLE_auth.rs
+@@ -0,0 +1,56 @@
++use super::*;
++use core::cell::Cell;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[derive(Clone,Copy)] struct Log { calls:u8, public:*const u8, proof:*const u8, checkpoint:*const u8, public_len:usize,proof_len:usize,checkpoint_len:usize }
++#[derive(Clone,Copy)] struct Hash<'a> { log:&'a Cell<Log>, tag:u8 }
++impl Digest32 for Hash<'_> { fn digest(&self,parts:&[&[u8]])->[u8;32]{
++ assert!(parts.len()==3,"NLE common oracle has exact three caller slices");
++ self.log.set(Log{calls:self.log.get().calls+1,public:parts[0].as_ptr(),proof:parts[1].as_ptr(),checkpoint:parts[2].as_ptr(),public_len:parts[0].len(),proof_len:parts[1].len(),checkpoint_len:parts[2].len()});
++ [self.tag;32]
++}}
++fn error(tag:u8)->Error {match tag {0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
++fn parse_stub(proof:&[u8])->Result<Variant,Error>{
++ assert!(proof.len()==57607,"NLE parse exact caller proof length");
++ match proof[0] {0=>Ok(Variant::S1),1=>Ok(Variant::S2),2=>Ok(Variant::D),tag=>Err(error(tag-3))}
++}
++fn common_stub<H:Digest32>(public:&[u8],proof:&[u8],checkpoint:&[u8],hash:H,_obs:Observer)->Result<(),Error>{
++ let reply=hash.digest(&[public,proof,checkpoint]);
++ if reply[0]==8 {Ok(())}else{Err(error(reply[0]))}
++}
++static P0:[u8;57607]=[0;57607];
++static P1:[u8;57607]=[1;57607];
++static P2:[u8;57607]=[2;57607];
++static P3:[u8;57607]=[3;57607];
++static P4:[u8;57607]=[4;57607];
++static P5:[u8;57607]=[5;57607];
++static P6:[u8;57607]=[6;57607];
++static P7:[u8;57607]=[7;57607];
++static P8:[u8;57607]=[8;57607];
++static P9:[u8;57607]=[9;57607];
++static P10:[u8;57607]=[10;57607];
++static PUBLIC:[u8;1880]=[0;1880];
++static CHECKPOINT:[u8;1768]=[0;1768];
++fn run<const WRONG:bool>(){
++ let tag:u8=kani::any();kani::assume(tag<11);
++ let reply_tag:u8=kani::any();kani::assume(reply_tag<=8);
++ let proof:&[u8]=match tag {0=>&P0,1=>&P1,2=>&P2,3=>&P3,4=>&P4,5=>&P5,6=>&P6,7=>&P7,8=>&P8,9=>&P9,_=>&P10};
++ let log=Cell::new(Log{calls:0,public:core::ptr::null(),proof:core::ptr::null(),checkpoint:core::ptr::null(),public_len:0,proof_len:0,checkpoint_len:0});
++ let hash=Hash{log:&log,tag:reply_tag};
++ let actual=tx2_authenticated(&PUBLIC,proof,&CHECKPOINT,hash,None);
++ let expected=if tag>=3 {Err(error(tag-3))}else if reply_tag==8{Ok(())}else{Err(error(reply_tag))};
++ let l=log.get();let good=actual==expected&&l.calls==(if tag>=3{0}else{1})&&
++ (tag>=3||(l.public==PUBLIC.as_ptr()&&l.proof==proof.as_ptr()&&l.checkpoint==CHECKPOINT.as_ptr()&&l.public_len==1880&&l.proof_len==57607&&l.checkpoint_len==1768));
++ assert!(good!=WRONG,"NLE actual authenticated full Result common call and same caller slices");
++}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(parse_shape,parse_stub)]
++#[kani::stub(tx2_common,common_stub)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn authenticated_parent(){run::<false>()}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(parse_shape,parse_stub)]
++#[kani::stub(tx2_common,common_stub)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn authenticated_parent_wrong(){run::<true>()}

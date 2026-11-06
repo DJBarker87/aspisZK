@@ -1,0 +1,58 @@
+{"attempt": "NLE_L033", "exit_status": 0, "wall_seconds": 16.060349219013005, "peak_rss_kib": "6020736", "swaps": "0", "print_axioms": ["'NLE_ParseInstall.success' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_ParseInstall.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLE_ParseInstall.success : ∀ (proof : Slice U8) (value : transport.Variant),
+  parse proof = ok (core.result.Result.Ok value) →
+    value = AspisR1Stage2.transport.Variant.S2 ∧ (↑proof).length = 57607 :=
+fun proof value returned =>
+  casesOn (motive := fun t =>
+    Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof = t →
+      value = AspisR1Stage2.transport.Variant.S2 ∧ (↑proof).length = 57607)
+    (Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof)
+    (fun result h =>
+      Eq.ndrec (motive := fun x =>
+        Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof = x →
+          value = AspisR1Stage2.transport.Variant.S2 ∧ (↑proof).length = 57607)
+  
+...
+transport.Variant.S2 ∧ (↑proof).length = 57607)
+        (fun h =>
+          let ⟨⟩ := ok (core.result.Result.Ok value)
+          Eq.mp
+            (congrArg
+              (fun _a =>
+                (do
+                    let result ← _a
+                    ok (reply result)) =
+                  ok (core.result.Result.Ok value))
+              h)
+            returned)
+        (Eq.symm h) (Eq.refl (Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof = x →
+          value = AspisR1Stage2.transport.Variant.S2 ∧ (↑proof).length = 57607)
+        (fun h =>
+          let ⟨⟩ := ok (core.result.Result.Ok value)
+          Eq.mp
+            (congrArg
+              (fun _a =>
+                (do
+                    let result ← _a
+                    ok (reply result)) =
+                  ok (core.result.Result.Ok value))
+              h)
+            returned)
+        (Eq.symm h) (Eq.refl (Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof)))
+    (Eq.refl (Op3I_Source.verifier.candidate.parse_shape Op3I_Std.ops proof))
+theorem NLE_ParseInstall.emitted : ∀ (proof : Slice U8),
+  parse proof =
+    NJS_Parse.map reply
+      (NJS_Parse.map NJS_Parse.reply
+        (NJS_Extract.verifier.candidate.parse_shape (fun {T U} {N} => Op3I_Std.ops.sliceNe)
+          (fun {T U} {N} => Op3I_Std.ops.sliceEq) (fun {T F} => Op3I_Std.ops.iterAny) proof)) :=
+fun proof =>
+  Eq.mpr (id (congrArg (fun _a => parse proof = NJS_Parse.map reply _a) (NJS_Parse.source proof)))
+    (Eq.refl (parse proof))
+'NLE_ParseInstall.success' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_ParseInstall.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r011e410140504d858ceaf9e3b0f35145.scope; invocation ID: 3997639f588d4ef796a75bc032dbab6c

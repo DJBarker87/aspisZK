@@ -1,0 +1,55 @@
+{"attempt": "NLE_L034", "exit_status": 1, "wall_seconds": 13.119606186170131, "peak_rss_kib": "5986884", "swaps": "0", "print_axioms": ["'NLE_AuthScope.mark_stub_domain' does not depend on any axioms", "'NLE_AuthScope.entered' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLE_AuthScope.common_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLE_generated/NLE_AuthScope.lean:19:12: error: unsolved goals
+case fail
+H : Type
+ops : Ops
+child : Common H
+s : State H
+frame : Frame H
+reply : Result Reply
+err : Error
+h : ops.op3 s.frame.proof = fail err
+event :
+  Event.common frame reply ∈
+    (do
+        let reply ←
+          do
+            let reply ← { result := fail err, events := [Event.parse s.frame.proof (fail err)] }
+            match reply with
+              | core.result.Result.Ok a =>
+                pure (core.result.Result.Ok { frame := s.frame, parsed := some a, history := s.history })
+              | core.result.Result.Err e => pure (core.result.Result.Err e)
+        match reply with
+          | core.result.Result.Ok a => d
+...
+      (fun h => sorry) (Eq.symm h_1) h)
+            (Eq.refl result))
+        (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+    (fun err h =>
+      Eq.ndrec (motive := fun x =>
+        ops.op3 s.frame.proof = x → frame = s.frame ∧ ∃ value, x = ok (core.result.Result.Ok value)) (fun h => sorry)
+        (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        ops.op3 s.frame.proof = x → frame = s.frame ∧ ∃ value, x = ok (core.result.Result.Ok value)) (fun h => sorry)
+        (Eq.symm h) (Eq.refl (ops.op3 s.frame.proof)))
+    (Eq.refl (ops.op3 s.frame.proof))
+theorem NLE_AuthScope.common_domain : ∀ {H : Type} (ops : Ops) (child : Common H) (s : State H)
+  (bytes : Std.Array U8 1880#usize) (frame : Frame H) (reply : Result Reply),
+  Event.common frame reply ∈ (G (install ops) child (withPublic s bytes)).events →
+    (↑frame.proof).length = 57607 ∧ (↑frame.publicBytes).length ≤ 1880 ∧ frame.observer = none :=
+fun {H} ops child s bytes frame reply event =>
+  let ⟨same, right✝⟩ := entered (install ops) child (withPublic s bytes) frame reply event
+  let ⟨value, parsed⟩ := right✝
+  Eq.ndrec (motive := fun frame =>
+    Event.common frame reply ∈ (G (install ops) child (withPublic s bytes)).events →
+      (↑frame.proof).length = 57607 ∧ (↑frame.publicBytes).length ≤ 1880 ∧ frame.observer = none)
+    (fun event =>
+      have exactProof := NLE_ParseInstall.success s.frame.proof value parsed;
+      ⟨exactProof.right, ⟨(NLE_Length.public_scope bytes).right, rfl⟩⟩)
+    (Eq.symm same) event
+'NLE_AuthScope.mark_stub_domain' does not depend on any axioms
+'NLE_AuthScope.entered' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLE_AuthScope.common_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r39e3f894666c459f8e496203aa2a64cf.scope; invocation ID: 0c10acaa8ea44532baaaac966e76356d
