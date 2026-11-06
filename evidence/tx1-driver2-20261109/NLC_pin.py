@@ -14,15 +14,20 @@ for row in loaded:
   if q.is_file():pins.append(dict(module=row['module'],path=str(q),sha256=H(q),bytes=q.stat().st_size))
 raw=(json.dumps(dict(LEAN_PATH=paths,selected_objects=pins,modules=len(loaded),scan_pass=True),indent=1)+'\n').encode()
 (B/'NLC_CLOSURE_PINS.json.xz').write_bytes(lzma.compress(raw));(B/'NLC_CLOSURE_PINS.json.sha256').write_text(hashlib.sha256(raw).hexdigest()+'\n')
-prior=json.loads(lzma.decompress((B/'NLC_PREDECESSOR_PINS.json.xz').read_bytes()))
+priors=json.loads(lzma.decompress((B/'NLC_PREDECESSORS.json.xz').read_bytes()))
 def key(x):return(x['module'],next(s for s in['.olean.private','.olean.server','.olean','.ir']if x['path'].endswith(s)))
-old={key(x):x for x in prior['selected_objects']};new={key(x):x for x in pins}
-wrong=[dict(module=k[0],suffix=k[1],old=x,new=new.get(k))for k,x in old.items()if k not in new or new[k]['sha256']!=x['sha256']]
-comparison=dict(previous_files=len(old),current_files=len(new),same_predecessor_files=len(old)-len(wrong),mismatches=wrong,added_files=len(set(new)-set(old)),status='PASS'if not wrong else'FINDING')
-(B/'NLC_PREDECESSOR_COMPARISON.json').write_text(json.dumps(comparison,indent=1)+'\n');assert not wrong
-cache=Path('/home/dombarker/project-offloads/codex-cx-tx1-driver2-20261109/NLC_exports_20261108');cache.mkdir(exist_ok=True);exports=[]
+new={key(x):x for x in pins};comparisons={}
+for tag,prior in priors.items():
+ old={key(x):x for x in prior['selected_objects']}
+ wrong=[dict(module=k[0],suffix=k[1],old=x,new=new.get(k))for k,x in old.items()if k not in new or new[k]['sha256']!=x['sha256']]
+ comparisons[tag]=dict(previous_files=len(old),same_predecessor_files=len(old)-len(wrong),mismatches=wrong,status='PASS'if not wrong else'FINDING')
+(B/'NLC_PREDECESSOR_COMPARISON.json').write_text(json.dumps(comparisons,indent=1)+'\n');assert all(not x['mismatches']for x in comparisons.values())
+old={key(x):x for prior in priors.values()for x in prior['selected_objects']}
+cache=Path('/home/dombarker/project-offloads/codex-cx-tx1-driver2-20261109/NLC_exports_20261109');cache.mkdir(exist_ok=True);exports=[]
+selected_modules={r['module']for r in loaded}
 for p in(B/'NLC_objects').rglob('*'):
  if not p.is_file():continue
+ if p.name.split('.')[0] not in selected_modules:continue
  q=cache/p.relative_to(B/'NLC_objects');q.parent.mkdir(parents=True,exist_ok=True)
  if q.exists():assert H(q)==H(p)
  else:shutil.copy2(p,q)
