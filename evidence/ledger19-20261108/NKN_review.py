@@ -32,7 +32,7 @@ for folder,pre in [('claims2','NKA'),('poseidon-state','NKG'),('field4','NKJ')]:
      extras=r['obligation']['NKC_explicit_child_domains'];assert len(extras)==4
      for c in extras:
       own=c['kind']=='own'
-      additions.append(dict(original=c,resolution='DISCHARGED_SAME_ARGUMENTS'if own else'CALLER_CONTEXT_RETAINED',roots=['AspisR1.NKA_QueryPairs.reached','AspisR1.NJT_QDomains.initial','AspisR1.NJT_QDomains.scan_preserved','AspisR1.NKA_OuterCut.association'],parent_provenance='Opening-transcript unit remains incoming at TX1:070; no successful semantic finish presumed.'))
+      additions.append(dict(original=c,resolution='DISCHARGED_SAME_ARGUMENTS'if own else'CALLER_CONTEXT_RETAINED',roots=['AspisR1.NKA_QueryPairs.reached','AspisR1.NJT_QDomains.initial','AspisR1.NJT_QDomains.scan_preserved','AspisR1.NKA_OuterCut.association'],parent_provenance='Opening-transcript unit remains incoming at TX1:168; no successful semantic finish presumed.'))
     else:assert orig['obligation']==r['obligation']
     assert packet['inventory_domain_obligations']==r['obligation']['inventory_domain_obligations']and packet['named_hypotheses']==r['obligation']['named_hypotheses']
    elif pre=='NKG':
@@ -65,7 +65,7 @@ for rid in ['TX1:066','TX1:067']:
  r=by[rid];assert r['status']=='CLOSED'
  for ro in r['root_owners']:assert statements[ro['root']]==old[ro['root']]
  children.append(dict(row=rid,status='CLOSED_IN_NKH',roots=r['root_owners'],same_arguments='NKA_OuterCut.association / QueryPairs.reached derive default and every SAME-block carry; NJT_QDomains.scan_preserved; finishCurrent receives SAME state/selected advance.'))
-put('NKN_CHILD_REVIEW.json',dict(status='PASS',children=children,baseline16_status_not_reused=True,hash_difference069='NKH retained four explicit NKC child-own/unit clauses. Own clauses discharged; opening-transcript context remains incoming at070. All original clauses retained.',NJV_TX2_093=dict(status='CLOSED_UNCHANGED',roots=by['TX2:093']['root_owners'],domain='Binary entry SAME12 canonical distinct indices, <=9216 bytes; not the superseded literal10 unit.',evidence='NJV_TX2.TX2_093 via NJV_EntryCall.bridge / NJV_Constructors.entry; full error arm and abort; NKN_L039 prints exact definitions.')))
+put('NKN_CHILD_REVIEW.json',dict(status='PASS',children=children,baseline16_status_not_reused=True,hash_difference069='NKH retained four explicit NKC child-own/unit clauses. Own clauses discharged; opening-transcript context remains incoming at168. All original clauses retained.',NJV_TX2_093=dict(status='CLOSED_UNCHANGED',roots=by['TX2:093']['root_owners'],domain='Binary entry SAME12 canonical distinct indices, <=9216 bytes; not the superseded literal10 unit.',evidence='NJV_TX2.TX2_093 via NJV_EntryCall.bridge / NJV_Constructors.entry; full error arm and abort; NKN_L039 prints exact definitions.')))
 put('NKN_CANDIDATE_REVIEW.json',dict(status='REVIEW_PASS_GATE_PENDING',rows=rows,no_double_count=True,comparison_basis='NKH complete obligations, including added069 clauses; no ledger16/17 delta reused'))
 put('NKN_PARENT_CLAUSES.json',dict(clauses=parents,parents=sorted({c['parent']for c in parents}),no_unsubmitted_parent_promotion=True))
 # Additional helper/cut definitions are printed for review in one focused module.
