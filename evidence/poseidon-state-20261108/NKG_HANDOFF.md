@@ -9,3 +9,7 @@ Budget: 80 Kani, 90 Lean/link/audit, 1 extraction. No scope launched at initial 
 Host workspace planned: /home/dombarker/project-offloads/codex-cx-poseidon-state-20261108. Seed NKC export first, NJP export second into own retained cache, hash every copied file. Host preflight found 6,909,067,264 bytes free; keep cache small.
 
 NDN interpolation arithmetic/native partial cuts are candidates only, explicitly not complete bridges. NJP permutation/compression and admitted field packets are read-only predecessors.
+
+Stage 2 update: K001–009 establish column iteration/argument/frame, KMX calibration, exit and ZERO initialization with matched failures. ColumnTotal/ColumnLoop/ColumnReply/ColumnCuts/ColumnsPacket compile; source returns the SAME finite native trace's final state with adopted value. K013 and K011/K012 establish full internal-pair argument/result forwarding; InternalMaps/InternalSource compile and discharge all dot/round domains. K014/K015/K016 establish full-pair native forwarding; FullSource compiles and supplies complete Result/adopted packed value. All remain candidate components pending typed packet review and combined gate.
+
+K010 compiler failure repaired with a source-ordered temporary. K020 unexpected structured-equality failure remains excluded; K032 isolates raw cache-word forwarding with SAME harness name, under investigation. No timeouts, memory kills, cap increases or unapproved trust rows. Exact attempt budget is NKG_ATTEMPTS.jsonl; no full combined audit yet.

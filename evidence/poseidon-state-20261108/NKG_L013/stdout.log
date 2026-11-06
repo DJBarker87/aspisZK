@@ -1,0 +1,152 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+NKG_lean/NKG_FullSource.lean:34:76: error: unsolved goals
+s l : State
+hs : canonical s
+hl : canonical l
+q0 : NQ := cell l ⟨1, ⋯⟩
+q1 : NQ := cell l ⟨9, ⋯⟩
+q2 : NQ := cell l ⟨10, ⋯⟩
+r0 : Array.index_usize l 1#usize = ok q0
+r1 : Array.index_usize l 9#usize = ok q1
+r2 : Array.index_usize l 10#usize = ok q2
+hw : canonical (FJe_FullWeights.weights q0 q1 q2)
+even : Std.Array field.QM31 16#usize
+re :
+  state_only_poseidon.interpolate_three_constant_columns (Array.make 3#usize [q0, q1, q2] ⋯)
+      (FJb_InitialConstants.row 2) (FJe_FinalConstants.row 0) (FJe_FinalConstants.row 2) =
+    ok even
+ce : canonical even
+right✝³ :
+  decoded even =
+    FJe_ThreeColumnStep.model (Array.make 3#usize [q0, q1, q2] ⋯) (FJb_InitialConstants.row 2)
+      (FJe_FinalConstants.row 0) (FJe_FinalConstants.row 2)
+odd : Std.Array field.QM31 16#usize
+ro :
+  state_only_poseidon.interpolate_three_constant_columns (Array.make 3#usize [q0, q1, q2] ⋯)
+      (FJb_InitialConstants.row 3) (FJe_FinalConstants.row 1) (FJe_FinalConstants.row 3) =
+    ok odd
+co : canonical odd
+right✝² :
+  decoded odd =
+    FJe_ThreeColumnStep.model (Array.make 3#usize [q0, q1, q2] ⋯) (FJb_InitialConstants.row 3)
+      (FJe_FinalConstants.row 1) (FJe_FinalConstants.row 3)
+middle : Std.Array field.QM31 16#usize
+rm : state_only_poseidon.full_round s even = ok middle
+cm : canonical middle
+right✝¹ : decoded middle = R0P.poseidonFullRound (decoded s) (decoded even)
+out : Std.Array field.QM31 4#usize
+rf : state_only_poseidon.full_round_packed middle odd = ok out
+cf : canonical out
+right✝ :
+  decoded out = fun g =>
+    R0P.poseidonPackingFormula ExtractedMaskQmPackBase4Arithmetic.iBasis ExtractedMaskQmPackBase4Arithmetic.uBasis
+      fun j => R0P.poseidonFullRound (decoded middle) (decoded odd) (FJe_ExternalAdjoint.lane g j)
+⊢ (do
+      let even ←
+        state_only_poseidon.interpolate_three_constant_columns (Array.make 3#usize [q0, q1, q2] ⋯)
+            (FJb_InitialConstants.row ⟨↑2#usize, ⋯⟩) (FJe_FinalConstants.row ⟨↑0#usize, ⋯⟩)
+            (FJe_FinalConstants.row ⟨↑2#usize, ⋯⟩)
+      let odd ←
+        state_only_poseidon.interpolate_three_constant_columns (Array.make 3#usize [q0, q1, q2] ⋯)
+            (FJb_InitialConstants.row ⟨↑3#usize, ⋯⟩) (FJe_FinalConstants.row ⟨↑1#usize, ⋯⟩)
+            (FJe_FinalConstants.row ⟨↑3#usize, ⋯⟩)
+      let a6 ← state_only_poseidon.full_round s even
+      state_only_poseidon.full_round_packed a6 odd) =
+    ok out
+NKG_lean/NKG_FullSource.lean:38:93: warning: This simp argument is unused:
+  re
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵a̵t̵e̵_̵o̵n̵l̵y̵_̵p̵o̵s̵e̵i̵d̵o̵n̵.̵i̵n̵t̵e̵r̵p̵o̵l̵a̵t̵e̵d̵_̵f̵u̵l̵l̵_̵p̵a̵i̵r̵_̵p̵a̵c̵k̵e̵d̵,̵r̵0̵,̵r̵1̵,̵r̵2̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲s̲t̲a̲t̲e̲_̲o̲n̲l̲y̲_̲p̲o̲s̲e̲i̲d̲o̲n̲.̲i̲n̲t̲e̲r̲p̲o̲l̲a̲t̲e̲d̲_̲f̲u̲l̲l̲_̲p̲a̲i̲r̲_̲p̲a̲c̲k̲e̲d̲,̲ ̲r̲0̲,̲ ̲r̲1̲,̲ ̲r̲2̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+       FJb_InitialConstants.read 2#usize (by d̵e̵c̵i̵d̵e̵)̵,̵F̵J̵b̵_̵I̵n̵i̵t̵i̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵d̲e̲c̲i̲d̲e̲)̲,̲ ̲F̲J̲b̲_̲I̲n̲i̲t̲i̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ 3#usize (by decide),
+       FJe_FinalConstants.read 0#usize (by d̵e̵c̵i̵d̵e̵)̵,̵F̵J̵e̵_̵F̵i̵n̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵d̲e̲c̲i̲d̲e̲)̲,̲ ̲F̲J̲e̲_̲F̲i̲n̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ 1#usize (by decide),
+       F̵J̵e̵_̵F̵i̵n̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵ ̵2̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵F̵J̵e̵_̵F̵i̵n̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵ ̵3̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵r̵e̵,̵r̵o̵,̵r̵m̵,̵r̵f̵]̵F̲J̲e̲_̲F̲i̲n̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ ̲2̲#̲u̲s̲i̲z̲e̲ ̲(̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲)̲,̲ ̲F̲J̲e̲_̲F̲i̲n̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ ̲3̲#̲u̲s̲i̲z̲e̲ ̲(̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲)̲,̲ ̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲r̲m̲,̲ ̲r̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKG_lean/NKG_FullSource.lean:38:96: warning: This simp argument is unused:
+  ro
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵a̵t̵e̵_̵o̵n̵l̵y̵_̵p̵o̵s̵e̵i̵d̵o̵n̵.̵i̵n̵t̵e̵r̵p̵o̵l̵a̵t̵e̵d̵_̵f̵u̵l̵l̵_̵p̵a̵i̵r̵_̵p̵a̵c̵k̵e̵d̵,̵r̵0̵,̵r̵1̵,̵r̵2̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲s̲t̲a̲t̲e̲_̲o̲n̲l̲y̲_̲p̲o̲s̲e̲i̲d̲o̲n̲.̲i̲n̲t̲e̲r̲p̲o̲l̲a̲t̲e̲d̲_̲f̲u̲l̲l̲_̲p̲a̲i̲r̲_̲p̲a̲c̲k̲e̲d̲,̲ ̲r̲0̲,̲ ̲r̲1̲,̲ ̲r̲2̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+       FJb_InitialConstants.read 2#usize (by d̵e̵c̵i̵d̵e̵)̵,̵F̵J̵b̵_̵I̵n̵i̵t̵i̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵d̲e̲c̲i̲d̲e̲)̲,̲ ̲F̲J̲b̲_̲I̲n̲i̲t̲i̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ 3#usize (by decide),
+       FJe_FinalConstants.read 0#usize (by d̵e̵c̵i̵d̵e̵)̵,̵F̵J̵e̵_̵F̵i̵n̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵d̲e̲c̲i̲d̲e̲)̲,̲ ̲F̲J̲e̲_̲F̲i̲n̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ 1#usize (by decide),
+       F̵J̵e̵_̵F̵i̵n̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵ ̵2̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵F̵J̵e̵_̵F̵i̵n̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵ ̵3̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵r̵e̵,̵r̵o̵,̵r̵m̵,̵r̵f̵]̵F̲J̲e̲_̲F̲i̲n̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ ̲2̲#̲u̲s̲i̲z̲e̲ ̲(̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲)̲,̲ ̲F̲J̲e̲_̲F̲i̲n̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ ̲3̲#̲u̲s̲i̲z̲e̲ ̲(̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲)̲,̲ ̲r̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲r̲m̲,̲ ̲r̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKG_lean/NKG_FullSource.lean:38:99: warning: This simp argument is unused:
+  rm
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵a̵t̵e̵_̵o̵n̵l̵y̵_̵p̵o̵s̵e̵i̵d̵o̵n̵.̵i̵n̵t̵e̵r̵p̵o̵l̵a̵t̵e̵d̵_̵f̵u̵l̵l̵_̵p̵a̵i̵r̵_̵p̵a̵c̵k̵e̵d̵,̵r̵0̵,̵r̵1̵,̵r̵2̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲s̲t̲a̲t̲e̲_̲o̲n̲l̲y̲_̲p̲o̲s̲e̲i̲d̲o̲n̲.̲i̲n̲t̲e̲r̲p̲o̲l̲a̲t̲e̲d̲_̲f̲u̲l̲l̲_̲p̲a̲i̲r̲_̲p̲a̲c̲k̲e̲d̲,̲ ̲r̲0̲,̲ ̲r̲1̲,̲ ̲r̲2̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+       FJb_InitialConstants.read 2#usize (by d̵e̵c̵i̵d̵e̵)̵,̵F̵J̵b̵_̵I̵n̵i̵t̵i̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵d̲e̲c̲i̲d̲e̲)̲,̲ ̲F̲J̲b̲_̲I̲n̲i̲t̲i̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ 3#usize (by decide),
+       FJe_FinalConstants.read 0#usize (by d̵e̵c̵i̵d̵e̵)̵,̵F̵J̵e̵_̵F̵i̵n̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵d̲e̲c̲i̲d̲e̲)̲,̲ ̲F̲J̲e̲_̲F̲i̲n̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ 1#usize (by decide),
+       F̵J̵e̵_̵F̵i̵n̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵ ̵2̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵F̵J̵e̵_̵F̵i̵n̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵ ̵3̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵r̵e̵,̵r̵o̵,̵r̵m̵,̵r̵f̵]̵F̲J̲e̲_̲F̲i̲n̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ ̲2̲#̲u̲s̲i̲z̲e̲ ̲(̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲)̲,̲ ̲F̲J̲e̲_̲F̲i̲n̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ ̲3̲#̲u̲s̲i̲z̲e̲ ̲(̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲)̲,̲ ̲r̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲r̲o̲,̲ ̲r̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKG_lean/NKG_FullSource.lean:38:102: warning: This simp argument is unused:
+  rf
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵a̵t̵e̵_̵o̵n̵l̵y̵_̵p̵o̵s̵e̵i̵d̵o̵n̵.̵i̵n̵t̵e̵r̵p̵o̵l̵a̵t̵e̵d̵_̵f̵u̵l̵l̵_̵p̵a̵i̵r̵_̵p̵a̵c̵k̵e̵d̵,̵r̵0̵,̵r̵1̵,̵r̵2̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲s̲t̲a̲t̲e̲_̲o̲n̲l̲y̲_̲p̲o̲s̲e̲i̲d̲o̲n̲.̲i̲n̲t̲e̲r̲p̲o̲l̲a̲t̲e̲d̲_̲f̲u̲l̲l̲_̲p̲a̲i̲r̲_̲p̲a̲c̲k̲e̲d̲,̲ ̲r̲0̲,̲ ̲r̲1̲,̲ ̲r̲2̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+       FJb_InitialConstants.read 2#usize (by d̵e̵c̵i̵d̵e̵)̵,̵F̵J̵b̵_̵I̵n̵i̵t̵i̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵d̲e̲c̲i̲d̲e̲)̲,̲ ̲F̲J̲b̲_̲I̲n̲i̲t̲i̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ 3#usize (by decide),
+       FJe_FinalConstants.read 0#usize (by d̵e̵c̵i̵d̵e̵)̵,̵F̵J̵e̵_̵F̵i̵n̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵d̲e̲c̲i̲d̲e̲)̲,̲ ̲F̲J̲e̲_̲F̲i̲n̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ 1#usize (by decide),
+       F̵J̵e̵_̵F̵i̵n̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵ ̵2̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵F̵J̵e̵_̵F̵i̵n̵a̵l̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵r̵e̵a̵d̵ ̵3̵#̵u̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵d̵e̵c̵i̵d̵e̵)̵,̵r̵e̵,̵r̵o̵,̵r̵m̵,̵r̵f̵]̵F̲J̲e̲_̲F̲i̲n̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ ̲2̲#̲u̲s̲i̲z̲e̲ ̲(̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲)̲,̲ ̲F̲J̲e̲_̲F̲i̲n̲a̲l̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲r̲e̲a̲d̲ ̲3̲#̲u̲s̲i̲z̲e̲ ̲(̲b̲y̲ ̲d̲e̲c̲i̲d̲e̲)̲,̲ ̲r̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲r̲o̲,̲ ̲r̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NKG_FullSource.result : ∀ (s l : State),
+  canonical s →
+    canonical l →
+      ∃ out,
+        state_only_poseidon.interpolated_full_pair_packed s l = ok out ∧
+          canonical out ∧
+            decoded out = fun g =>
+              R0P.poseidonPackingFormula ExtractedMaskQmPackBase4Arithmetic.iBasis
+                ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+                R0P.poseidonInterpolatedFullPair (decoded s) (decoded l) (FJe_ExternalAdjoint.lane g j) :=
+fun s l hs hl =>
+  let q0 := cell l ⟨1, of_decide_eq_true (id (Eq.refl true))⟩;
+  let q1 := cell l ⟨9, of_decide_eq_true (id (Eq.refl true))⟩;
+  let q2 := cell l ⟨10, of_decide_eq_true (id (Eq.refl true))⟩;
+  have r0 := RawPoseidonExternalRowReads.array_index_usize_ok l 1#usize (of_decide_eq_true (id (Eq.refl true)));
+  have r1 := RawPoseidonExternalRowReads.array_index_usize_ok l 9#usize (of_decide_eq_true (id (Eq.refl true)));
+  have r2 := RawPoseidonExternalRowReads.array_index_usize_ok l 10#usize (of_decide_eq_true (id (Eq.refl true)));
+  have hw := (FJe_FullWeights.value l q0 q1 q2 hl r0 r1 r2).left;
+  let ⟨even, h✝⟩ :=
+    NKG_ColumnLoop.source
+      (Array.make 3#usize [q0, q1, q2]
+        (of_eq_true
+          (Eq.trans
+            (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+              (UScalar.ofNatCore_val_eq
+                (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+            (eq_self 3))))
+      (FJb_InitialConstants.row 2) (FJe_FinalConstants.row 0) (FJe_FinalConstants.row 2) hw
+      (FJb_InitialConstants.bounded 2) (FJe_FinalConstants.bounded 0) (FJe_FinalConstants.bounded 2)
+  let ⟨re, right✝⟩ := h✝
+  let ⟨ce, right✝¹⟩ := right✝
+  let ⟨odd, h✝¹⟩ :=
+    NKG_ColumnLoop.source
+      (Array.make 3#usize [q0, q1, q2]
+        (of_eq_true
+          (Eq.trans
+            (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+              (UScalar.ofNatCore_val_eq
+                (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+            (eq_self 3))))
+      (FJb_InitialConstants.row 3) (FJe_FinalConstants.row 1) (FJe_FinalConstants.row 3) hw
+      (FJb_InitialConstants.bounded 3) (FJe_FinalConstants.bounded 1) (FJe_FinalConstants.bounded 3)
+  let ⟨ro, right✝²⟩ := h✝¹
+  let ⟨co, right✝³⟩ := right✝²
+  let ⟨middle, h✝²⟩ := NIH_FullRounds.qm s even hs ce
+  let ⟨rm, right✝⁴⟩ := h✝²
+  let ⟨cm, right✝⁵⟩ := right✝⁴
+  let ⟨out, h✝³⟩ := NIH_FullRounds.packed_qm middle odd cm co
+  let ⟨rf, right✝⁶⟩ := h✝³
+  let ⟨cf, right✝⁷⟩ := right✝⁶
+  have run := sorry;
+  Exists.intro out ⟨run, FJe_FullPackedValue.value s l out hs hl run⟩
+'AspisR1.NKG_FullSource.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

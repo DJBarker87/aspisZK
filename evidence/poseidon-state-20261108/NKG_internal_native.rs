@@ -17,7 +17,8 @@ fn NKG_internal_pair(
     let odd_constants = ROWS.map(|row| M31(INTERNAL[2 * (row - 2) + 1]));
     let even = NKG_dot(log,&weights, &even_constants);
     let odd = NKG_dot(log,&weights, &odd_constants);
-    NKG_round(log,NKG_round(log,state, even), odd)
+    let middle = NKG_round(log,state, even);
+    NKG_round(log,middle, odd)
 }
 
 #[kani::proof]

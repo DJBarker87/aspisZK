@@ -1,0 +1,59 @@
+{"attempt": "NKG_L013", "exit_status": 1, "wall_seconds": 12.81968645285815, "peak_rss_kib": "5995820", "swaps": "0", "print_axioms": ["'AspisR1.NKG_FullSource.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+NKG_lean/NKG_FullSource.lean:34:76: error: unsolved goals
+s l : State
+hs : canonical s
+hl : canonical l
+q0 : NQ := cell l ⟨1, ⋯⟩
+q1 : NQ := cell l ⟨9, ⋯⟩
+q2 : NQ := cell l ⟨10, ⋯⟩
+r0 : Array.index_usize l 1#usize = ok q0
+r1 : Array.index_usize l 9#usize = ok q1
+r2 : Array.index_usize l 10#usize = ok q2
+hw : canonical (FJe_FullWeights.weights q0 q1 q2)
+even : Std.Array field.QM31 16#usize
+re :
+  state_only_poseidon.interpolate_three_constant_columns (Array.make 3#usize [q0, q1, q2] ⋯)
+      (FJb_InitialConstants.row 2) (FJe_FinalConstants.row 0) (FJe_FinalConstants.row 2) =
+    ok even
+ce : canonical even
+righ
+...
+ hw := (FJe_FullWeights.value l q0 q1 q2 hl r0 r1 r2).left;
+  let ⟨even, h✝⟩ :=
+    NKG_ColumnLoop.source
+      (Array.make 3#usize [q0, q1, q2]
+        (of_eq_true
+          (Eq.trans
+            (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+              (UScalar.ofNatCore_val_eq
+                (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+            (eq_self 3))))
+      (FJb_InitialConstants.row 2) (FJe_FinalConstants.row 0) (FJe_FinalConstants.row 2) hw
+      (FJb_InitialConstants.bounded 2) (FJe_FinalConstants.bounded 0) (FJe_FinalConstants.bounded 2)
+  let ⟨re, right✝⟩ := h✝
+  let ⟨ce, right✝¹⟩ := right✝
+  let ⟨odd, h✝¹⟩ :=
+    NKG_ColumnLoop.source
+      (Array.make 3#usize [q0, q1, q2]
+        (of_eq_true
+          (Eq.trans
+            (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+              (UScalar.ofNatCore_val_eq
+                (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+            (eq_self 3))))
+      (FJb_InitialConstants.row 3) (FJe_FinalConstants.row 1) (FJe_FinalConstants.row 3) hw
+      (FJb_InitialConstants.bounded 3) (FJe_FinalConstants.bounded 1) (FJe_FinalConstants.bounded 3)
+  let ⟨ro, right✝²⟩ := h✝¹
+  let ⟨co, right✝³⟩ := right✝²
+  let ⟨middle, h✝²⟩ := NIH_FullRounds.qm s even hs ce
+  let ⟨rm, right✝⁴⟩ := h✝²
+  let ⟨cm, right✝⁵⟩ := right✝⁴
+  let ⟨out, h✝³⟩ := NIH_FullRounds.packed_qm middle odd cm co
+  let ⟨rf, right✝⁶⟩ := h✝³
+  let ⟨cf, right✝⁷⟩ := right✝⁶
+  have run := sorry;
+  Exists.intro out ⟨run, FJe_FullPackedValue.value s l out hs hl run⟩
+'AspisR1.NKG_FullSource.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6acc220d688245e888438fbecd20b3c4.scope; invocation ID: db96918e14b5484fa12bb64ce5763880

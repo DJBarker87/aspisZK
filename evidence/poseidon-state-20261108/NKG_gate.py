@@ -11,10 +11,11 @@ spec=importlib.util.spec_from_file_location('NKG_frozen_stage',P/'NJE_stage.py')
 x=json.loads((E/sys.argv[1]).read_text());a=x['attempt'];S=E/'NKG_workspace';out=E/(a+'_validation');out.mkdir(exist_ok=False)
 payload=json.loads(lzma.decompress((P/'NJE_FROZEN_PAYLOAD.json.xz').read_bytes()))
 mods={}
-for rel in ['crates/aspis-statement/src/state_only_poseidon.rs','crates/aspis-statement/src/lib.rs','crates/aspis-r1-cost-probe/src/lib.rs']:
+for rel in ['crates/aspis-statement/src/state_only_poseidon.rs','crates/aspis-statement/src/lib.rs','crates/aspis-r1-cost-probe/src/lib.rs','crates/aspis-core/src/field.rs']:
  raw=base64.b64decode(payload[rel]);q=S/rel
  if rel.endswith('state_only_poseidon.rs'):patched=raw+b'\n#[cfg(kani)] mod NKG_native { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NKG_state_native.rs")); }\n'
 
+ elif rel.endswith('/field.rs'):patched=raw+b'\n'+(E/'NKG_core_helpers.rs').read_bytes()
  else:patched=raw.replace(b'#![no_std]',b'#![cfg_attr(kani, feature(allocator_api))]\n#![no_std]',1)
  if q.exists():assert q.read_bytes() in (raw,patched),'STOP unknown scratch drift'
  q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(raw);mods[rel]=(raw,patched)

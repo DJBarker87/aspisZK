@@ -1,0 +1,118 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_ColumnReply.result : ∀ (w : Weights) (c0 c1 c2 : Constants) (i : Fin 16),
+  canonical w →
+    Bounded c0 →
+      Bounded c1 →
+        Bounded c2 → scalarCell w c0 c1 c2 i = ok (reply w c0 c1 c2 i) ∧ FIv_NativeValue.Canon (reply w c0 c1 c2 i) :=
+fun w c0 c1 c2 i hw h0 h1 h2 =>
+  have cw := fun j => hw (cell w j) (List.getElem_mem (cell._proof_1 w j));
+  let ⟨q, h✝⟩ :=
+    FJe_ThreeCell.source_success (cell w ⟨0, of_decide_eq_true (id (Eq.refl true))⟩)
+      (cell w ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) (cell w ⟨2, of_decide_eq_true (id (Eq.refl true))⟩)
+      (cell c0 i) (cell c1 i) (cell c2 i) (cw ⟨0, of_decide_eq_true (id (Eq.refl true))⟩)
+      (cw ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) (cw ⟨2, of_decide_eq_true (id (Eq.refl true))⟩) (h0 i) (h1 i)
+      (h2 i)
+  let ⟨rq, right✝⟩ := h✝
+  let ⟨cq, right✝¹⟩ := right✝
+  id
+    (fun rq =>
+      have eq :=
+        of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | ok q => q
+                    | x => field.QM31.ZERO)
+                  rq))
+              q)
+            (eq_self q));
+      Eq.mpr (id (congrArg (fun _a => scalarCell w c0 c1 c2 i = ok _a ∧ FIv_NativeValue.Canon _a) eq)) ⟨rq, cq⟩)
+    rq
+'AspisR1.NKG_ColumnReply.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_ColumnReply.step_reply : ∀ (w : Weights) (c0 c1 c2 : Constants) (s : State) (i : Usize)
+  (hi : ↑i < 16),
+  canonical w →
+    Bounded c0 → Bounded c1 → Bounded c2 → step w c0 c1 c2 s i = ok (Std.Array.set s i (reply w c0 c1 c2 ⟨↑i, hi⟩)) :=
+fun w c0 c1 c2 s i hi hw h0 h1 h2 =>
+  have reads := fun {A} {n} a j hj => RawPoseidonExternalRowReads.array_index_usize_ok a j hj;
+  have rv := (result w c0 c1 c2 ⟨↑i, hi⟩ hw h0 h1 h2).left;
+  let ⟨out, h✝⟩ :=
+    WP.spec_imp_exists
+      (Array.update_spec s i (reply w c0 c1 c2 ⟨↑i, hi⟩)
+        (Eq.mpr
+          (id
+            (congrArg (LT.lt ↑i)
+              (Eq.trans s.property
+                (UScalar.ofNatCore_val_eq (UScalar.bound_suffices UScalarTy.Usize 16 State._proof_1)))))
+          hi))
+  let ⟨ru, vu⟩ := h✝
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congr (congrArg Bind.bind (reads w 0#usize (of_decide_eq_true (id (Eq.refl true)))))
+              (funext fun w0 =>
+                Eq.trans
+                  (congr (congrArg Bind.bind (reads w 1#usize (of_decide_eq_true (id (Eq.refl true)))))
+                    (funext fun w1 =>
+                      Eq.trans
+                        (congr (congrArg Bind.bind (reads w 2#usize (of_decide_eq_true (id (Eq.refl true)))))
+                          (funext fun w2 =>
+                            Eq.trans
+                              (congr (congrArg Bind.bind (reads c0 i hi))
+                                (funext fun k0 =>
+                                  Eq.trans
+                                    (congr (congrArg Bind.bind (reads c1 i hi))
+                                      (funext fun k1 =>
+                                        Eq.trans
+                                          (congrFun' (congrArg Bind.bind (reads c2 i hi)) fun k2 => do
+                                            let q ← FJe_ThreeCell.source w0 w1 w2 k0 k1 k2
+                                            Array.update s i q)
+                                          (bind_tc_ok (cell c2 ⟨↑i, hi⟩) fun y => do
+                                            let q ← FJe_ThreeCell.source w0 w1 w2 k0 k1 y
+                                            Array.update s i q)))
+                                    (bind_tc_ok (cell c1 ⟨↑i, hi⟩) fun y => do
+                                      let q ← FJe_ThreeCell.source w0 w1 w2 k0 y (cell c2 ⟨↑i, hi⟩)
+                                      Array.update s i q)))
+                              (bind_tc_ok (cell c0 ⟨↑i, hi⟩) fun y => do
+                                let q ← FJe_ThreeCell.source w0 w1 w2 y (cell c1 ⟨↑i, hi⟩) (cell c2 ⟨↑i, hi⟩)
+                                Array.update s i q)))
+                        (bind_tc_ok (cell w ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩) fun y => do
+                          let q ← FJe_ThreeCell.source w0 w1 y (cell c0 ⟨↑i, hi⟩) (cell c1 ⟨↑i, hi⟩) (cell c2 ⟨↑i, hi⟩)
+                          Array.update s i q)))
+                  (bind_tc_ok (cell w ⟨↑1#usize, of_decide_eq_true (id (Eq.refl true))⟩) fun y => do
+                    let q ←
+                      FJe_ThreeCell.source w0 y (cell w ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                          (cell c0 ⟨↑i, hi⟩) (cell c1 ⟨↑i, hi⟩) (cell c2 ⟨↑i, hi⟩)
+                    Array.update s i q)))
+            (bind_tc_ok (cell w ⟨↑0#usize, of_decide_eq_true (id (Eq.refl true))⟩) fun y => do
+              let q ←
+                FJe_ThreeCell.source y (cell w ⟨↑1#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                    (cell w ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩) (cell c0 ⟨↑i, hi⟩) (cell c1 ⟨↑i, hi⟩)
+                    (cell c2 ⟨↑i, hi⟩)
+              Array.update s i q)))
+        (ok (Std.Array.set s i (reply w c0 c1 c2 ⟨↑i, hi⟩)))))
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let q ← _a
+                  Array.update s i q) =
+                ok (Std.Array.set s i (reply w c0 c1 c2 ⟨↑i, hi⟩)))
+            rv))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = ok (Std.Array.set s i (reply w c0 c1 c2 ⟨↑i, hi⟩)))
+              (bind_tc_ok (reply w c0 c1 c2 ⟨↑i, hi⟩) (Array.update s i))))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = ok (Std.Array.set s i (reply w c0 c1 c2 ⟨↑i, hi⟩)))
+                (Eq.mp (congrArg (fun _a => Array.update s i (reply w c0 c1 c2 ⟨↑i, hi⟩) = ok _a) vu) ru)))
+            (Eq.refl (ok (Std.Array.set s i (reply w c0 c1 c2 ⟨↑i, hi⟩))))))))
+'AspisR1.NKG_ColumnReply.step_reply' depends on axioms: [propext, Classical.choice, Quot.sound]

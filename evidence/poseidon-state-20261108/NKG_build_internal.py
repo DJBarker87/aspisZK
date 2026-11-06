@@ -5,6 +5,7 @@ s=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd77538
 at=s.index('fn interpolated_internal_pair(');end=s.index('\n/// Evaluate the four',at)
 b=s[at:end].replace('fn interpolated_internal_pair(', 'fn NKG_internal_pair(').replace('    local: &[QM31; 16],','    local: &[QM31; 16], log: &mut NKG_InternalLog,')
 b=b.replace('qm31_m31_dot(', 'NKG_dot(log,').replace('internal_round(', 'NKG_round(log,')
+b=b.replace('NKG_round(log,NKG_round(log,state, even), odd)', 'let middle = NKG_round(log,state, even);\n    NKG_round(log,middle, odd)')
 p='''
 struct NKG_InternalLog { weights:[[QM31;7];2], constants:[[M31;7];2], dots:[QM31;2], dot_calls:usize,states:[[QM31;16];2],round_constants:[QM31;2],round_replies:[[QM31;16];2],round_calls:usize }
 fn NKG_dot(log:&mut NKG_InternalLog,w:&[QM31],c:&[M31])->QM31 {

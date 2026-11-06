@@ -7,3 +7,7 @@ TX1:321: NKG_columns_iteration outlines exactly ONE frozen loop body on arbitrar
 The source-erasure checker rejects a changed constant-column argument. Hashes and complete scratch patches are retained per attempt; source/harness association is P6/D188 option-A reviewed transcription, reclassification, not removal. These native cuts alone do not establish the row.
 
 TX1:324: NKG_internal_calls is prepared, not yet verified. It outlines the frozen full body with local-record logging oracles for both dot calls and both internal rounds; complete argument and return arrays, SAME selector/constants and source ordering are asserted. No arithmetic value is claimed from unconstrained replies.
+
+Update: internal K013 PASS, K011 output and K012 argument FAIL after source-ordered mutable-log borrow repair (historical K010 compiler error excluded). Full pair K014 PASS, K015 output and K016 argument FAIL; all selected weights, six table rows, even/odd round operands and full packed result are covered. NKG_sourcecheck.py verifies both complete frozen-body token erasures and rejects changed internal/external constants.
+
+K017 low-fold arbitrary iteration PASS; K018/K019 reply/argument controls FAIL. K020 prepared-stage positive FAILED and earns no credit. See NKG_FAILING_STEP.md for the raw-word isolation and unchanged harness name. Group/constructor/child-prefix gates are independent and pending.

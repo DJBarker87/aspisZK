@@ -1,0 +1,60 @@
+{"attempt": "NKG_L008", "exit_status": 0, "wall_seconds": 9.976899961940944, "peak_rss_kib": "6002428", "swaps": "0", "print_axioms": ["'AspisR1.NKG_ColumnsPacket.loop' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKG_ColumnsPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_ColumnsPacket.loop : ∀ (w : Weights) (c0 c1 c2 : Constants) (states : ℕ → State),
+  NKG_ColumnCuts.Trace w c0 c1 c2 states →
+    canonical w →
+      Bounded c0 →
+        Bounded c1 →
+          Bounded c2 →
+            ∀ (n : ℕ) (i : Usize),
+              ↑i + n = 16 →
+                state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 (states ↑i) i = ok (states 16) :=
+fun w c0 c1 c2 states cut hw h0 h1 h2 n i span =>
+  Nat.recAux (motive := fun n =>
+    ∀ (i : Usize),
+      ↑i + n = 16 →
+        state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 (stat
+...
+late_three_constant_columns_loop w c0 c1 c2
+                                (states (↑i + 1))))))
+                        (Eq.mp
+                          (congrFun'
+                            (congrArg Eq
+                              (congrFun'
+                                (congrArg (state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2)
+                                  (congrArg states vi1))
+                                i1))
+                            (ok (states 16)))
+                          rest))))))))
+        vi1)
+    n i span
+'AspisR1.NKG_ColumnsPacket.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_ColumnsPacket.source : ∀ (w : Weights) (c0 c1 c2 : Constants) (states : ℕ → State),
+  canonical w →
+    Bounded c0 →
+      Bounded c1 →
+        Bounded c2 →
+          NKG_ColumnCuts.Trace w c0 c1 c2 states →
+            state_only_poseidon.interpolate_three_constant_columns w c0 c1 c2 = ok (states 16) ∧
+              canonical (states 16) ∧ decoded (states 16) = model w c0 c1 c2 :=
+fun w c0 c1 c2 states hw h0 h1 h2 cut =>
+  have run := loop w c0 c1 c2 states cut hw h0 h1 h2 16 0#usize rfl;
+  id
+    (fun run =>
+      ⟨Eq.mp
+          (congrArg
+            (fun _a =>
+              state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 _a 0#usize = ok (states 16))
+            cut.initial)
+          run,
+        FJe_ThreeColumns.value w c0 c1 c2 (states 16) hw h0 h1 h2
+          (Eq.mp
+            (congrArg
+              (fun _a =>
+                state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 _a 0#usize = ok (states 16))
+              cut.initial)
+            run)⟩)
+    run
+'AspisR1.NKG_ColumnsPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rbc4b0f2a9c864575ab511fcadf779bf5.scope; invocation ID: 434638e854b141669448fdaab43317cc

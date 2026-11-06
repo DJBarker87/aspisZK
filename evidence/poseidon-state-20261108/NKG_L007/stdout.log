@@ -1,0 +1,36 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+structure AspisR1.NKG_ColumnCuts.Step (w : Weights) (c0 c1 c2 : Constants) (s : State) (i : Fin 16) (reply : NQ)
+  (out : State) (next calls : ℕ) (args : Fin 4 → Fin 6 → U32) : Prop
+number of parameters: 11
+fields:
+  AspisR1.NKG_ColumnCuts.Step.increment : next = ↑i + 1
+  AspisR1.NKG_ColumnCuts.Step.callCount : calls = 4
+  AspisR1.NKG_ColumnCuts.Step.arguments : ∀ (j : Fin 4) (k : Fin 6),
+      args j k =
+        if h : ↑k < 3 then word (cell w ⟨↑k, h⟩) j
+        else if ↑k = 3 then cell c0 i else if ↑k = 4 then cell c1 i else cell c2 i
+  AspisR1.NKG_ColumnCuts.Step.frame : out = Std.Array.set s (↑i)#usize reply
+constructor:
+  AspisR1.NKG_ColumnCuts.Step.mk {w : Weights} {c0 c1 c2 : Constants} {s : State} {i : Fin 16} {reply : NQ}
+    {out : State} {next calls : ℕ} {args : Fin 4 → Fin 6 → U32} (increment : next = ↑i + 1) (callCount : calls = 4)
+    (arguments :
+      ∀ (j : Fin 4) (k : Fin 6),
+        args j k =
+          if h : ↑k < 3 then word (cell w ⟨↑k, h⟩) j
+          else if ↑k = 3 then cell c0 i else if ↑k = 4 then cell c1 i else cell c2 i)
+    (frame : out = Std.Array.set s (↑i)#usize reply) : Step w c0 c1 c2 s i reply out next calls args
+structure AspisR1.NKG_ColumnCuts.Trace (w : Weights) (c0 c1 c2 : Constants) (states : ℕ → State) : Prop
+number of parameters: 5
+fields:
+  AspisR1.NKG_ColumnCuts.Trace.initial : states 0 = Array.repeat 16#usize field.QM31.ZERO
+  AspisR1.NKG_ColumnCuts.Trace.steps : ∀ (i : Fin 16),
+      ∃ next calls args,
+        Step w c0 c1 c2 (states ↑i) i (NKG_ColumnReply.reply w c0 c1 c2 i) (states (↑i + 1)) next calls args
+constructor:
+  AspisR1.NKG_ColumnCuts.Trace.mk {w : Weights} {c0 c1 c2 : Constants} {states : ℕ → State}
+    (initial : states 0 = Array.repeat 16#usize field.QM31.ZERO)
+    (steps :
+      ∀ (i : Fin 16),
+        ∃ next calls args,
+          Step w c0 c1 c2 (states ↑i) i (NKG_ColumnReply.reply w c0 c1 c2 i) (states (↑i + 1)) next calls args) :
+    Trace w c0 c1 c2 states

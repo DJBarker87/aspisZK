@@ -1,0 +1,98 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_InternalSource.result : ∀ (s l : State),
+  canonical s →
+    canonical l →
+      ∃ out,
+        state_only_poseidon.interpolated_internal_pair s l = ok out ∧
+          canonical out ∧ decoded out = R0P.poseidonInterpolatedInternalPair (decoded s) (decoded l) :=
+fun s l hs hl =>
+  let ⟨w, h✝⟩ := NKG_InternalMaps.weights l hl
+  let ⟨rw, cw⟩ := h✝
+  let ⟨e, h✝¹⟩ := NKG_InternalMaps.constants_even
+  let ⟨re, ce⟩ := h✝¹
+  let ⟨o, h✝²⟩ := NKG_InternalMaps.constants_odd
+  let ⟨ro, co⟩ := h✝²
+  have wd := fun i hi => cw (FJh_M31DotReads.sliceCell w.to_slice i hi) (List.getElem_mem hi);
+  have ed := fun i hi => ce (FJh_M31DotReads.sliceCell e.to_slice i hi) (List.getElem_mem hi);
+  have od := fun i hi => co (FJh_M31DotReads.sliceCell o.to_slice i hi) (List.getElem_mem hi);
+  have wl := w.property;
+  have el := e.property;
+  have ol := o.property;
+  let ⟨even, h✝³⟩ := NFT_DotSource.source w.to_slice e.to_slice wl el wd ed
+  let ⟨reven, right✝⟩ := h✝³
+  let ⟨canonEven, right✝¹⟩ := right✝
+  let ⟨odd, h✝⁴⟩ := NFT_DotSource.source w.to_slice o.to_slice wl ol wd od
+  let ⟨rodd, right✝²⟩ := h✝⁴
+  let ⟨canonOdd, right✝³⟩ := right✝²
+  let ⟨middle, h✝⁵⟩ := NIH_InternalRound.result s even hs canonEven
+  let ⟨rm, right✝⁴⟩ := h✝⁵
+  let ⟨cm, right✝⁵⟩ := right✝⁴
+  let ⟨out, h✝⁶⟩ := NIH_InternalRound.result middle odd cm canonOdd
+  let ⟨rf, right✝⁶⟩ := h✝⁶
+  let ⟨cf, right✝⁷⟩ := right✝⁶
+  have run :=
+    of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (congr (congrArg Bind.bind rw)
+                  (funext fun weights =>
+                    Eq.trans
+                      (congr (congrArg Bind.bind re)
+                        (funext fun even_constants =>
+                          Eq.trans
+                            (congr (congrArg Bind.bind ro)
+                              (funext fun odd_constants =>
+                                Eq.trans
+                                  (congrArg (Bind.bind (ok weights.to_slice))
+                                    (funext fun s_1 =>
+                                      Eq.trans (congrArg (Bind.bind (ok even_constants.to_slice)) (funext fun s1 => ⋯))
+                                        (bind_tc_ok even_constants.to_slice fun y => do
+                                          let even ← field.qm31_m31_dot s_1 y
+                                          let odd ← field.qm31_m31_dot weights.to_slice odd_constants.to_slice
+                                          let a ← state_only_poseidon.internal_round s even
+                                          state_only_poseidon.internal_round a odd)))
+                                  (bind_tc_ok weights.to_slice fun y => do
+                                    let even ← field.qm31_m31_dot y even_constants.to_slice
+                                    let odd ← field.qm31_m31_dot weights.to_slice odd_constants.to_slice
+                                    let a ← state_only_poseidon.internal_round s even
+                                    state_only_poseidon.internal_round a odd)))
+                            (bind_tc_ok o fun y => do
+                              let even ← field.qm31_m31_dot weights.to_slice even_constants.to_slice
+                              let odd ← field.qm31_m31_dot weights.to_slice y.to_slice
+                              let a ← state_only_poseidon.internal_round s even
+                              state_only_poseidon.internal_round a odd)))
+                      (bind_tc_ok e fun y => do
+                        let even ← field.qm31_m31_dot weights.to_slice y.to_slice
+                        let odd ← field.qm31_m31_dot weights.to_slice o.to_slice
+                        let a ← state_only_poseidon.internal_round s even
+                        state_only_poseidon.internal_round a odd)))
+                (bind_tc_ok w fun y => do
+                  let even ← field.qm31_m31_dot y.to_slice e.to_slice
+                  let odd ← field.qm31_m31_dot y.to_slice o.to_slice
+                  let a ← state_only_poseidon.internal_round s even
+                  state_only_poseidon.internal_round a odd))
+              (Eq.trans
+                (Eq.trans
+                  (congr (congrArg Bind.bind reven)
+                    (funext fun even =>
+                      Eq.trans
+                        (congrFun' (congrArg Bind.bind rodd) fun odd => do
+                          let a ← state_only_poseidon.internal_round s even
+                          state_only_poseidon.internal_round a odd)
+                        (bind_tc_ok odd fun y => do
+                          let a ← state_only_poseidon.internal_round s even
+                          state_only_poseidon.internal_round a y)))
+                  (bind_tc_ok even fun y => do
+                    let a ← state_only_poseidon.internal_round s y
+                    state_only_poseidon.internal_round a odd))
+                (Eq.trans
+                  (Eq.trans (congrFun' (congrArg Bind.bind rm) fun a => state_only_poseidon.internal_round a odd)
+                    (bind_tc_ok middle fun y => state_only_poseidon.internal_round y odd))
+                  rf))))
+          (ok out))
+        (eq_self (ok out)));
+  Exists.intro out ⟨run, FJh_InternalPairValue.value s l out hs hl run⟩
+'AspisR1.NKG_InternalSource.result' depends on axioms: [propext, Classical.choice, Quot.sound]

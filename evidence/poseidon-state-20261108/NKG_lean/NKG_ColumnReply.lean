@@ -28,7 +28,8 @@ theorem result (w : Weights) (c0 c1 c2 : Constants) (i : Fin 16)
    (cell w ⟨0,by decide⟩) (cell w ⟨1,by decide⟩) (cell w ⟨2,by decide⟩)
    (cell c0 i) (cell c1 i) (cell c2 i) (cw _) (cw _) (cw _) (h0 _) (h1 _) (h2 _)
  change scalarCell w c0 c1 c2 i=ok q at rq
- simp only [reply,rq]
+ have eq : reply w c0 c1 c2 i=q := by simp only [reply,rq]
+ rw [eq]
  exact ⟨rq,cq⟩
 /-- SAME returned raw reply is installed at exactly the source lane. -/
 theorem step_reply (w : Weights) (c0 c1 c2 : Constants) (s : State) (i : Usize)
@@ -38,7 +39,7 @@ theorem step_reply (w : Weights) (c0 c1 c2 : Constants) (s : State) (i : Usize)
    Array.index_usize a j=ok (cell a ⟨j.val,hj⟩) := RawPoseidonExternalRowReads.array_index_usize_ok a j hj
  have rv := (result w c0 c1 c2 ⟨i.val,hi⟩ hw h0 h1 h2).1
  obtain ⟨out,ru,vu⟩ := WP.spec_imp_exists
-   (Array.update_spec s i (reply w c0 c1 c2 ⟨i.val,hi⟩) (by simpa only [s.property] using hi))
+   (Array.update_spec s i (reply w c0 c1 c2 ⟨i.val,hi⟩) (by simpa [s.property] using hi))
  rw [vu] at ru
  simp only [step,reads w 0#usize (by decide),reads w 1#usize (by decide),reads w 2#usize (by decide),
    reads c0 i hi,reads c1 i hi,reads c2 i hi,bind_tc_ok]
