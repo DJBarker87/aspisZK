@@ -95,6 +95,8 @@ def get(rev,path):
 
 def main():
     ledger = json.loads((EVID/'enumeration.json').read_text())
+    ledger['enumeration_artifact'] = 'evidence/pv-ledger-20261108/enumeration.json'
+    ledger['enumeration_sha256'] = hashlib.sha256((EVID/'enumeration.json').read_bytes()).hexdigest()
     ledger['contract_convention'] = {
       'state': 'Draft mathematical interfaces, not Lean declarations and not proofs. C = (Pre, Post); all row-specific clauses below are conjuncts of the common call-entry/return convention.',
       'parameters': ['actual arguments args', 'arbitrary lower caller stack kappa', 'entry store sigma', 'entry OWNER state s', 'entry world w', 'argument-reachable caller cells R(args,sigma,s)', 'prior event prefix'],
