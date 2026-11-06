@@ -11,3 +11,7 @@ NJU_ResumeRoot.source is source erasure only. Need native SAME-argument occurren
 No shipped file, wallet, key, ELF or sibling worktree touched. No push. Inherited ELF hashes, not remeasured: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
 
 Next deliverable: NKK_OCCURRENCES.md and exact cut coverage before native-parent assembly. Validation and section6 fields will be attached per attempt. Retained assumptions and all unclosed obligations will remain explicit.
+
+## Stage 1 inventory checkpoint
+
+NKK_OCCURRENCES lists45 top-level and74 nested reads. Seed49 files /8,432,064 bytes pinned in NKK_SEED.json. L002 focused imports pass; L004 log-clause composition and L005 complete event clause definitions pass with standard axioms. L001 had one bad namespace #print (corrected in L002); L003 used nonexistent List.Forall constructor names (corrected in L004). No limits raised. Native segment candidates are being checked; no new row closure or combined audit yet.

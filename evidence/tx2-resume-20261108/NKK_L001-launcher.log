@@ -1,0 +1,42 @@
+{"attempt": "NKK_L001", "exit_status": 1, "wall_seconds": 28.898608542978764, "peak_rss_kib": "5976696", "swaps": "0", "print_axioms": ["'NJU_ResumeRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJU_ResumeRoot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJU_ResumeRoot.source : ∀ (reservation : AspisR1.NP6_StdModel.Reservation) {H : Type}
+  (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : NID_ResumeEmission.transport.Variant) (hash : H),
+  (NJU_ResumeObserved.run reservation d ck proof pub v hash).result =
+    NJC_RawCalls.resume (NJC_FilledClause.reserved reservation) d ck proof pub v hash :=
+fun reservation {H} d ck proof pub v hash =>
+  Eq.trans (NJU_ResumeErase.header reservation d ck proof pub v hash)
+    (NJU_ResumeReference.source reservation d ck proof pub v hash)
+theorem NJU_ResumeRoot.cohort : ∀ (reservation : AspisR1.NP6_StdModel.Reservation) {H : Type}
+  (d : AspisR1S
+...
+zation AspisR1.CheckpointBytes3Reader.readK bytes cursor)))
+      (Eq.refl (AspisR1.CheckpointBytes4Ops.semanticUsing AspisR1.CheckpointBytes3Reader.readK bytes cursor)))
+theorem NJZ_CheckpointReaders.weights : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (cursor : Aeneas.Std.Usize)
+  (before : Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31),
+  AspisR1.Port5Q2_ReaderWeights.weights NJZ_CheckpointReaders.readK bytes cursor before =
+    AspisR1.CheckpointBytes4Ops.readWeights bytes cursor before :=
+fun bytes cursor before =>
+  have same := funext NJZ_CheckpointReaders.scalar;
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          AspisR1.Port5Q2_ReaderWeights.weights _a bytes cursor before =
+            AspisR1.CheckpointBytes4Ops.readWeights bytes cursor before)
+        same))
+    (AspisR1.T2Nat_WeightSequence.weights bytes cursor before)
+theorem NJZ_Validator.source : ∀ (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize),
+  NJC_ValidateEmission.verifier.validate_checkpoint_queries queries =
+      Aeneas.Std.Result.ok
+        (if NJC_ValidateResult.ValidFrom [] ↑queries then Aeneas.Std.core.result.Result.Ok ()
+        else Aeneas.Std.core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint) ∧
+    (NJC_ValidateResult.ValidFrom [] ↑queries → (∀ x ∈ ↑queries, ↑x < 262144) ∧ (↑queries).Nodup) :=
+fun queries =>
+  ⟨NJC_ValidateResult.source queries, fun valid =>
+    ⟨fun x hx => (NJZ_Validator.members [] (↑queries) valid x hx).left, NJZ_Validator.unique [] (↑queries) valid⟩⟩
+NKK_generated/NKK_Inventory.lean:12:7: error(lean.unknownIdentifier): Unknown constant `NJR_ReservationSites`
+'NJU_ResumeRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJU_ResumeRoot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r84a0f7aba57f4aa8b8631b77c980cf38.scope; invocation ID: c64c962b83cb49d99c58982d984a77f9

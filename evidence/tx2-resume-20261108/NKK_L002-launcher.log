@@ -1,0 +1,44 @@
+{"attempt": "NKK_L002", "exit_status": 0, "wall_seconds": 9.898852514103055, "peak_rss_kib": "5985244", "swaps": "0", "print_axioms": ["'NJU_ResumeRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJU_ResumeRoot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJU_ResumeRoot.source : ∀ (reservation : AspisR1.NP6_StdModel.Reservation) {H : Type}
+  (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (ck proof pub : Aeneas.Std.Slice Aeneas.Std.U8)
+  (v : NID_ResumeEmission.transport.Variant) (hash : H),
+  (NJU_ResumeObserved.run reservation d ck proof pub v hash).result =
+    NJC_RawCalls.resume (NJC_FilledClause.reserved reservation) d ck proof pub v hash :=
+fun reservation {H} d ck proof pub v hash =>
+  Eq.trans (NJU_ResumeErase.header reservation d ck proof pub v hash)
+    (NJU_ResumeReference.source reservation d ck proof pub v hash)
+theorem NJU_ResumeRoot.cohort : ∀ (reservation : AspisR1.NP6_StdModel.Reservation) {H : Type}
+  (d : AspisR1S
+...
+s : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (cursor : Aeneas.Std.Usize)
+  (before : Aeneas.Std.alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31),
+  AspisR1.Port5Q2_ReaderWeights.weights NJZ_CheckpointReaders.readK bytes cursor before =
+    AspisR1.CheckpointBytes4Ops.readWeights bytes cursor before :=
+fun bytes cursor before =>
+  have same := funext NJZ_CheckpointReaders.scalar;
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          AspisR1.Port5Q2_ReaderWeights.weights _a bytes cursor before =
+            AspisR1.CheckpointBytes4Ops.readWeights bytes cursor before)
+        same))
+    (AspisR1.T2Nat_WeightSequence.weights bytes cursor before)
+theorem NJZ_Validator.source : ∀ (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize),
+  NJC_ValidateEmission.verifier.validate_checkpoint_queries queries =
+      Aeneas.Std.Result.ok
+        (if NJC_ValidateResult.ValidFrom [] ↑queries then Aeneas.Std.core.result.Result.Ok ()
+        else Aeneas.Std.core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint) ∧
+    (NJC_ValidateResult.ValidFrom [] ↑queries → (∀ x ∈ ↑queries, ↑x < 262144) ∧ (↑queries).Nodup) :=
+fun queries =>
+  ⟨NJC_ValidateResult.source queries, fun valid =>
+    ⟨fun x hx => (NJZ_Validator.members [] (↑queries) valid x hx).left, NJZ_Validator.unique [] (↑queries) valid⟩⟩
+theorem NJR_ReservationSites.resume_filled : ∀ (r : AspisR1.NP6_StdModel.Reservation),
+  NJC_FilledClause.native r =
+    AspisR1.CheckpointBytes3Allocation.filled (NJC_FilledClause.reserved r) 64#usize
+      { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } } :=
+fun r => NJC_FilledClause.source r
+'NJU_ResumeRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJU_ResumeRoot.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0f2e000d3b664d44b1a25a4b53ffb9a8.scope; invocation ID: 4346a979ecd941f99bb70caf8813eeec
