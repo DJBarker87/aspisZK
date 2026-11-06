@@ -1,0 +1,61 @@
+{"attempt": "NJD_L007", "exit_status": 1, "wall_seconds": 3.386868152068928, "peak_rss_kib": "4397584", "swaps": "0", "print_axioms": ["'AspisR1.NJD_EntrySpine.fallback_erasure' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJD_EntrySpine.dispatch_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJD_EntrySpine.process_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJD_EntrySpine.entry_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJD_EntrySpine.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJD_generated/NJD_EntrySpine.lean:74:11: error: unsolved goals
+case h_2
+Account : Type
+ops : Boundaries Account
+p : Key
+a : Slice Account
+d : Slice U8
+i : U8
+value✝ : Option U8
+i✝ : U8
+heq✝ : some i = some i✝
+⊢ (match i✝ with
+      | 4#8#uscalar => ([Event.child 4 p a d], ops.init p a d)
+      | 5#8#uscalar => ([Event.child 5 p a d], ops.write p a d)
+      | 6#8#uscalar => ([Event.child 6 p a d], ops.finalize p a d)
+      | x => fallback ops p a d).2 =
+    match i✝ with
+    | 4#8#uscalar => ops.init p a d
+    | 5#8#uscalar => ops.write p a d
+    | 6#8#uscalar => ops.finalize p a d
+    | x => (fallback ops p a d).2
+NJD_generated/NJD_EntrySpine.lean:81:65: error: unsolved goals
+Account : Type
+
+...
+      | 6#8#uscalar => ops.finalize p a d
+          | x => do
+            let ten ← ops.eq d (Array.make 2#usize [3#u8, 10#u8] ⋯)
+            if ten = true then ops.first p a d
+              else do
+                let eleven ← ops.eq d (Array.make 2#usize [3#u8, 11#u8] ⋯)
+                if eleven = true then ops.first p a d else ops.second p a d) =
+    do
+    let o ← ops.head d
+    let o1 ← ops.copy o
+    match o1 with
+      | none => do
+        let b ← ops.eq d (Array.make 2#usize [3#u8, 10#u8] NIV_RawBoundary.process._proof_4)
+        if b = true then ops.first p a d
+          else do
+            let b1 ← ops.eq d (Array.make 2#usize [3#u8, 11#u8] NIV_RawBoundary.process._proof_6)
+            if b1 = true then ops.first p a d else ops.second p a d
+      | some i =>
+        match i with
+        | 4#8#uscalar => ops.init p a d
+        | 5#8#uscalar => ops.write p a d
+        | 6#8#uscalar => ops.finalize p a d
+        | x => do
+          let b ← ops.eq d (Array.make 2#usize [3#u8, 10#u8] NIV_RawBoundary.process._proof_4)
+          if b = true then ops.first p a d
+            else do
+              let b1 ← ops.eq d (Array.make 2#usize [3#u8, 11#u8] NIV_RawBoundary.process._proof_6)
+              if b1 = true then ops.first p a d else ops.second p a d
+'AspisR1.NJD_EntrySpine.fallback_erasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJD_EntrySpine.dispatch_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJD_EntrySpine.process_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJD_EntrySpine.entry_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJD_EntrySpine.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc0ce7b44b356480f819f01a5e682e986.scope; invocation ID: 43e51411a99d469bb2089c8933ead636

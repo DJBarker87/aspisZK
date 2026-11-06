@@ -1,0 +1,53 @@
+{"attempt": "NJD_L004", "exit_status": 1, "wall_seconds": 1.593431378947571, "peak_rss_kib": "2631068", "swaps": "0", "print_axioms": ["'NJD_GuardCuts.step_result' does not depend on any axioms", "'NJD_GuardCuts.readonly_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJD_GuardCuts.readonly_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJD_GuardCuts.chain_error' does not depend on any axioms", "'NJD_GuardCuts.chain_continue' does not depend on any axioms", "'NJD_GuardCuts.readonly_bytes_irrelevant' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJD_generated/NJD_GuardCuts.lean:52:12: error: Tactic `rfl` failed: The left-hand side
+  ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+is not definitionally equal to the right-hand side
+  ok
+    (if (a.is_signer || a.is_writable || a.executable) = true then
+      core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+    else core.result.Result.Ok ())
+
+case isTrue
+a : Account
+h✝ : a.is_signer = true
+⊢ ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData) =
+    ok
+      (if (a.is_signer || a.is_writable || a.executable) = true then
+        core.result.Result.Err AdapterRw.solana_pr
+...
+t.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+      else core.result.Result.Ok ())
+NJD_generated/NJD_GuardCuts.lean:52:12: error: Tactic `rfl` failed: The left-hand side
+  if a.is_writable = true then
+    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+  else
+    if a.executable = true then
+      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+    else ok (core.result.Result.Ok ())
+is not definitionally equal to the right-hand side
+  ok
+    (if (a.is_signer || a.is_writable || a.executable) = true then
+      core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+    else core.result.Result.Ok ())
+
+case isFalse
+a : Account
+h✝ : ¬a.is_signer = true
+⊢ (if a.is_writable = true then
+      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+    else
+      if a.executable = true then
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      else ok (core.result.Result.Ok ())) =
+    ok
+      (if (a.is_signer || a.is_writable || a.executable) = true then
+        core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+      else core.result.Result.Ok ())
+'NJD_GuardCuts.step_result' does not depend on any axioms
+'NJD_GuardCuts.readonly_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJD_GuardCuts.readonly_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJD_GuardCuts.chain_error' does not depend on any axioms
+'NJD_GuardCuts.chain_continue' does not depend on any axioms
+'NJD_GuardCuts.readonly_bytes_irrelevant' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re80c99041b39410fb8865482bf4038f4.scope; invocation ID: 68c5c75184e1427c99406db0f9ed4028

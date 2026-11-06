@@ -1,0 +1,4361 @@
+{
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "baseline": "NIU_LEDGER",
+ "baseline_sha256": "550975c8078b430beb7e053cef4fa81ce524670bb34392114e691cbd556f6bda",
+ "source_pins": {
+  "programs/r1-cost-probe/src/lib.rs": {
+   "sha256": "e56fd18185d72d5b925da56fdd168a05c9bfea2da1c2d17058d097f74c66d4d8",
+   "bytes": 7551,
+   "archive": "NJD_FROZEN_lib.rs.xz"
+  },
+  "programs/r1-cost-probe/src/r1_pool_adapter.rs": {
+   "sha256": "09ce3b480cf772c843315b9bcdabd9bf266f4065e5a524ae2a4d5560ea4feaf3",
+   "bytes": 37612,
+   "archive": "NJD_FROZEN_r1_pool_adapter.rs.xz"
+  },
+  "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs": {
+   "sha256": "246d96b479ef552b485a51a2a3d4c4dbe1ff4ef9c0527b6f9a872f296b60576b",
+   "bytes": 20485,
+   "archive": "NJD_FROZEN_r1_pool_adapter_owned.rs.xz"
+  }
+ },
+ "rows": [
+  {
+   "row": "TX1:330",
+   "function": "programs/r1-cost-probe/src/lib.rs::process_r1_cost_probe_instruction",
+   "frozen_function_sha256": "813e89e4a2c65e10831513f64c8c33acb7a2532c005f6a477e2d147f6d49a9bb",
+   "start_line": 56,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "cfg",
+     "arguments": "feature=\"pool-adapter\"",
+     "line": 57,
+     "end_offset": 34,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 2,
+     "callee": "pool_route::admitted",
+     "arguments": "data",
+     "line": 61,
+     "end_offset": 220,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:331",
+      "TX2:214"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "28f35192940cc1ded6769e4f375740fab107d2756ccbeba011381ff4e27ad256",
+       "owner_module": "NHJ_RoutePacket",
+       "root": "NHJ_RoutePacket.associate"
+      },
+      {
+       "obligation_statement_sha256": "28f35192940cc1ded6769e4f375740fab107d2756ccbeba011381ff4e27ad256",
+       "owner_module": "NHJ_RoutePacket",
+       "root": "NHJ_RoutePacket.associate"
+      }
+     ]
+    },
+    {
+     "order": 3,
+     "callee": "r1_pool_adapter::process",
+     "arguments": "program_id,accounts,data",
+     "line": 64,
+     "end_offset": 360,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX1:333",
+      "TX2:221"
+     ]
+    }
+   ],
+   "canonical_callees": [
+    "programs/r1-cost-probe/src/pool_route.rs::admitted",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::process"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX1:333",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::process",
+   "frozen_function_sha256": "d4d72223a78edcd0faea8856ded24316b2c19967745d0298428d6ea2f372c7c3",
+   "start_line": 950,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "first",
+     "arguments": "",
+     "line": 955,
+     "end_offset": 23,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 2,
+     "callee": "copied",
+     "arguments": "",
+     "line": 955,
+     "end_offset": 32,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 3,
+     "callee": "lifecycle_init",
+     "arguments": "program_id, accounts, data",
+     "line": 956,
+     "end_offset": 96,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 4,
+     "callee": "lifecycle_write",
+     "arguments": "program_id, accounts, data",
+     "line": 957,
+     "end_offset": 160,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 5,
+     "callee": "lifecycle_finalize",
+     "arguments": "program_id, accounts, data",
+     "line": 958,
+     "end_offset": 227,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 6,
+     "callee": "stage1",
+     "arguments": "program_id, accounts, data",
+     "line": 959,
+     "end_offset": 316,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX1:344"
+     ]
+    },
+    {
+     "order": 7,
+     "callee": "stage2",
+     "arguments": "program_id, accounts, data",
+     "line": 960,
+     "end_offset": 365,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:240"
+     ]
+    }
+   ],
+   "canonical_callees": [
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX1:344",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1",
+   "frozen_function_sha256": "a63f8aae4b9a7db7d513937ce8ccdf5b5d345e8bc2f3e486b2c9334cc35577e9",
+   "start_line": 447,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "len",
+     "arguments": "",
+     "line": 448,
+     "end_offset": 65,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 2,
+     "callee": "snapshot",
+     "arguments": "&accounts[0], POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES, POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES",
+     "line": 452,
+     "end_offset": 313,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:343",
+      "TX2:239"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      },
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      }
+     ]
+    },
+    {
+     "order": 3,
+     "callee": "snapshot",
+     "arguments": "&accounts[1], POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES, POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES",
+     "line": 453,
+     "end_offset": 437,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:343",
+      "TX2:239"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      },
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      }
+     ]
+    },
+    {
+     "order": 4,
+     "callee": "snapshot",
+     "arguments": "&accounts[2], CHECKPOINT_TAIL_BYTES, CHECKPOINT_TAIL_BYTES",
+     "line": 454,
+     "end_offset": 515,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:343",
+      "TX2:239"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      },
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      }
+     ]
+    },
+    {
+     "order": 5,
+     "callee": "stage1_owned",
+     "arguments": "program_id, &owned, data",
+     "line": 456,
+     "end_offset": 583,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX1:345"
+     ]
+    },
+    {
+     "order": 6,
+     "callee": "try_borrow_mut_data",
+     "arguments": "",
+     "line": 457,
+     "end_offset": 623,
+     "law_class": "SDK borrow law requires pinned P7/retained S2TrustedSdkBorrow matching; RuntimeEntrypointAdmission alone insufficient"
+    },
+    {
+     "order": 7,
+     "callee": "copy_from_slice",
+     "arguments": "&checkpoint",
+     "line": 457,
+     "end_offset": 653,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 8,
+     "callee": "cfg",
+     "arguments": "feature=\"cu-profiling\"",
+     "line": 458,
+     "end_offset": 688,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 9,
+     "callee": "solana_program::log::sol_log_compute_units",
+     "arguments": "",
+     "line": 459,
+     "end_offset": 791,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    }
+   ],
+   "canonical_callees": [
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1_owned"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX1:345",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1_owned",
+   "frozen_function_sha256": "2de1a75ed86e5bdf1055c79221c9a29b32f0aa0a50be43e3a10c71cffc78693c",
+   "start_line": 376,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "len",
+     "arguments": "",
+     "line": 377,
+     "end_offset": 65,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 2,
+     "callee": "require_distinct_accounts",
+     "arguments": "&[proof_account, public_account, checkpoint_account]",
+     "line": 383,
+     "end_offset": 340,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:339",
+      "TX2:235"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "2d9a70d5760b2e7b99f7a4506e220589eb7261aaf388e49049d70c378c84adca",
+       "owner_module": "NHJ_DistinctPacket",
+       "root": "NHJ_DistinctPacket.three"
+      },
+      {
+       "obligation_statement_sha256": "8eda6c93c82f2bec2bad0e73caf6f827a6ff9846c70eb1a190de267563307724",
+       "owner_module": "NHJ_DistinctPacket",
+       "root": "NHJ_DistinctPacket.seven"
+      }
+     ]
+    },
+    {
+     "order": 3,
+     "callee": "require_readonly_buffer",
+     "arguments": "proof_account",
+     "line": 384,
+     "end_offset": 385,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:340",
+      "TX2:237"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "8e09b52e7edabd2808da20036a98f53545abeae133674faef914e1c5458c79ab",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.readonly"
+      },
+      {
+       "obligation_statement_sha256": "8e09b52e7edabd2808da20036a98f53545abeae133674faef914e1c5458c79ab",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.readonly"
+      }
+     ]
+    },
+    {
+     "order": 4,
+     "callee": "require_readonly_buffer",
+     "arguments": "public_account",
+     "line": 385,
+     "end_offset": 431,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:340",
+      "TX2:237"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "8e09b52e7edabd2808da20036a98f53545abeae133674faef914e1c5458c79ab",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.readonly"
+      },
+      {
+       "obligation_statement_sha256": "8e09b52e7edabd2808da20036a98f53545abeae133674faef914e1c5458c79ab",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.readonly"
+      }
+     ]
+    },
+    {
+     "order": 5,
+     "callee": "require_verifier_checkpoint",
+     "arguments": "checkpoint_account, program_id, true",
+     "line": 386,
+     "end_offset": 503,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:341",
+      "TX2:238"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "d8397c85aabf3e880bce24a65b19d188b1dfad210f60681ca3d5d4472b3841f7",
+       "owner_module": "NHJ_CheckpointPacket",
+       "root": "NHJ_CheckpointPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "d8397c85aabf3e880bce24a65b19d188b1dfad210f60681ca3d5d4472b3841f7",
+       "owner_module": "NHJ_CheckpointPacket",
+       "root": "NHJ_CheckpointPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 6,
+     "callee": "data",
+     "arguments": "",
+     "line": 387,
+     "end_offset": 557,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 7,
+     "callee": "require_zero",
+     "arguments": "checkpoint_data",
+     "line": 388,
+     "end_offset": 593,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:342"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "2684c1838c3c2840bbf923119d7e3bd1d43503236b5bfd871c8eefa6300d8c5f",
+       "owner_module": "NFU_ZeroPort",
+       "root": "NFU_ZeroPort.head"
+      },
+      {
+       "obligation_statement_sha256": "ad746973f69390a30b0aa03697a8bb81803d8293eb54c3d33e8ea885a0c25e02",
+       "owner_module": "NFU_ZeroPort",
+       "root": "NFU_ZeroPort.source"
+      }
+     ]
+    },
+    {
+     "order": 8,
+     "callee": "data",
+     "arguments": "",
+     "line": 389,
+     "end_offset": 639,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 9,
+     "callee": "decode_public_statement_box",
+     "arguments": "&public_data",
+     "line": 390,
+     "end_offset": 703,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:332"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "7a1b20c48559a5a9703dcab7e03cbe2648c368a8c05d13a24524506b2de13f0f",
+       "owner_module": "NFY_Part058",
+       "root": "NFY_NEX_PublicModel.result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "e3e3309f50a68abcae35412466914674ec55fbbe522ed781a71262fb66bad9d9",
+       "owner_module": "NGF_NEX_StatementExt",
+       "root": "NGF_NEX_StatementExt.complete"
+      },
+      {
+       "obligation_statement_sha256": "ee622edb721ad0c0ef07d71569092a4994184e8945e6576df5e42f93adae3c57",
+       "owner_module": "NGF_NEY_Field00",
+       "root": "NGF_NEY_Field00.alignment"
+      },
+      {
+       "obligation_statement_sha256": "95ca37c107f50a3c811ccdf87f0fd0bfd0e91a8ec21b3f3a70283ad5fce2ee8d",
+       "owner_module": "NGF_NEY_Field01",
+       "root": "NGF_NEY_Field01.alignment"
+      },
+      {
+       "obligation_statement_sha256": "866e7926d1f48c37f3a329fce10e7437e536582cac780757d880694d35d2dd5c",
+       "owner_module": "NGF_NEY_Field02",
+       "root": "NGF_NEY_Field02.alignment"
+      },
+      {
+       "obligation_statement_sha256": "7a4fdb6131c2ffc76d90c180f37cbe805ab8988d6fb73e899933ea725e0ed1eb",
+       "owner_module": "NGF_NEY_Field03",
+       "root": "NGF_NEY_Field03.alignment"
+      },
+      {
+       "obligation_statement_sha256": "a75de8c239ba1ced3c7a7de817b9afafb8489cf0f5cb38f6d71732add1b2b2c0",
+       "owner_module": "NGF_NEY_Field04",
+       "root": "NGF_NEY_Field04.alignment"
+      },
+      {
+       "obligation_statement_sha256": "24b93fb45605c874bd26f5b991c0b0273e1b3f83793885a025d8d7efe8c3e192",
+       "owner_module": "NGF_NEY_Field05",
+       "root": "NGF_NEY_Field05.alignment"
+      },
+      {
+       "obligation_statement_sha256": "4568a426f5d991c892bb1e810aa4dec8fe5643424d6ee35d3c12b7b04f2ebcb4",
+       "owner_module": "NGF_NEY_Field06",
+       "root": "NGF_NEY_Field06.alignment"
+      },
+      {
+       "obligation_statement_sha256": "2dd4a76ab7e0a6c5b39ea8f123a069ce35e1202ab83d8b86517470999b54a25a",
+       "owner_module": "NGF_NEY_Field07",
+       "root": "NGF_NEY_Field07.alignment"
+      },
+      {
+       "obligation_statement_sha256": "ff8f90b058383a19afb68f7483f5722fd16af467748a7188eedcd2126cce4611",
+       "owner_module": "NGF_NEY_Field08",
+       "root": "NGF_NEY_Field08.alignment"
+      },
+      {
+       "obligation_statement_sha256": "c66ca1e12acd85f8dbc76f5c3e312948a77c09b7907f1a1b289a35b74ea19464",
+       "owner_module": "NGF_NEY_Field09",
+       "root": "NGF_NEY_Field09.alignment"
+      },
+      {
+       "obligation_statement_sha256": "f12ca5f31b32c3805d9fd1a50aa5c9f1fa53266df74d863e2f915cc0ac7bd388",
+       "owner_module": "NGF_NEY_Field10",
+       "root": "NGF_NEY_Field10.alignment"
+      },
+      {
+       "obligation_statement_sha256": "c59d12dbf49c2c6d682fd9fdb900de9dca2c0b93cadcffe8fa761da3b25eb078",
+       "owner_module": "NGF_NEY_Field11",
+       "root": "NGF_NEY_Field11.alignment"
+      },
+      {
+       "obligation_statement_sha256": "6899dbcc5f8feb3a42c9026065422c3fa36a194accadbc5f869cfff61c93141e",
+       "owner_module": "NGF_NEY_Field12",
+       "root": "NGF_NEY_Field12.alignment"
+      },
+      {
+       "obligation_statement_sha256": "4aa1a8d6c7696aa37c153466ef37f46978033d5e86223b8c5753215cb8af649d",
+       "owner_module": "NGF_NEY_Field13",
+       "root": "NGF_NEY_Field13.alignment"
+      },
+      {
+       "obligation_statement_sha256": "c01abbe759e39b3dfcfa82283073617bd4693d09aa78b36d050bc42ef6954996",
+       "owner_module": "NGF_NEY_Field14",
+       "root": "NGF_NEY_Field14.alignment"
+      },
+      {
+       "obligation_statement_sha256": "76f017b6daa8e3fc56bf550e5a77b4de27c4db6bdd22db66958aade8eef6f01d",
+       "owner_module": "NGF_NEY_Field15",
+       "root": "NGF_NEY_Field15.alignment"
+      },
+      {
+       "obligation_statement_sha256": "52d2972120aac60d007eb7ed88e43a8538907150e03ca4ee8cf58d1adfe73be3",
+       "owner_module": "NGF_NEY_Field16",
+       "root": "NGF_NEY_Field16.alignment"
+      },
+      {
+       "obligation_statement_sha256": "3f5a666d6b917d9b288f4aad95862d54d023e1c706f8a1ee127436420193f5be",
+       "owner_module": "NGF_NEY_Field17",
+       "root": "NGF_NEY_Field17.alignment"
+      },
+      {
+       "obligation_statement_sha256": "36d58a25bc1c620b6f054586006b06e54d5b45eb6313a7d27f84ee939d61b688",
+       "owner_module": "NGF_NEY_Field18",
+       "root": "NGF_NEY_Field18.alignment"
+      },
+      {
+       "obligation_statement_sha256": "95327e36c7505fa8633e3cd93bf469521d9a941c7e860032dad6d68a09286fbb",
+       "owner_module": "NGF_NEY_Field19",
+       "root": "NGF_NEY_Field19.alignment"
+      },
+      {
+       "obligation_statement_sha256": "fa82d47b385d1721bd0e3303584183bbb390e0fe92ca15250ada1e34f4f70154",
+       "owner_module": "NGF_NEY_Field20",
+       "root": "NGF_NEY_Field20.alignment"
+      },
+      {
+       "obligation_statement_sha256": "9b7262a57cf5ea25d0ac2cd8027747e3a8176b21bc6aaca39e5348cd31440853",
+       "owner_module": "NGF_NEY_Field21",
+       "root": "NGF_NEY_Field21.alignment"
+      },
+      {
+       "obligation_statement_sha256": "d21001c30146c92930cd6768c10534945f4c922f4bc25c91eef6051d83339a8d",
+       "owner_module": "NGF_NEY_Field22",
+       "root": "NGF_NEY_Field22.alignment"
+      },
+      {
+       "obligation_statement_sha256": "6d43ef64420c79a1ee419ba4bdd53e05e5b3e6e915e9c382a02f810b6d90b802",
+       "owner_module": "NGF_NEY_Field23",
+       "root": "NGF_NEY_Field23.alignment"
+      },
+      {
+       "obligation_statement_sha256": "2d3d5d6fbbc393025d3dac77b40d6278dd7afe2023100efeefde90a1c789192a",
+       "owner_module": "NGF_NEY_Field24",
+       "root": "NGF_NEY_Field24.alignment"
+      },
+      {
+       "obligation_statement_sha256": "442a22c82360bb0365a1bfa74141ce0b6a2233c1d9b81bca101d37b079376665",
+       "owner_module": "NGF_NEY_Field25",
+       "root": "NGF_NEY_Field25.alignment"
+      }
+     ]
+    },
+    {
+     "order": 10,
+     "callee": "validate_pool_v1_pair_forest_terminal_statement_v1",
+     "arguments": "&statement",
+     "line": 391,
+     "end_offset": 772,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:276",
+      "TX2:169"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "4723d023345873be802d186cb6217c25407158fcdefed6fcb489e757fa1fb508",
+       "owner_module": "NFY_Part031",
+       "root": "NFY_NEM_LaneReached.lane_reached"
+      },
+      {
+       "obligation_statement_sha256": "af2025eddf0b18150e52a243e74064f9b31772ed4368a9ef445765c6365e4288",
+       "owner_module": "NFY_Part032",
+       "root": "NFY_NEM_LateOracle.late_reached"
+      },
+      {
+       "obligation_statement_sha256": "b359148fd9edcf5eac9a9aca2911dcf83075666a3e5f3dd211aaae098b5fbb92",
+       "owner_module": "NFY_Part031",
+       "root": "NFY_NEM_PaymentReached.payment_reached"
+      },
+      {
+       "obligation_statement_sha256": "e2f342e6b3ae24dc61d849be720216255c04c1adcc4aae1bcdacaf3e69c67ecd",
+       "owner_module": "NFY_Part032",
+       "root": "NFY_NEM_ValidatorComposed.result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "4723d023345873be802d186cb6217c25407158fcdefed6fcb489e757fa1fb508",
+       "owner_module": "NFY_Part031",
+       "root": "NFY_NEM_LaneReached.lane_reached"
+      },
+      {
+       "obligation_statement_sha256": "af2025eddf0b18150e52a243e74064f9b31772ed4368a9ef445765c6365e4288",
+       "owner_module": "NFY_Part032",
+       "root": "NFY_NEM_LateOracle.late_reached"
+      },
+      {
+       "obligation_statement_sha256": "b359148fd9edcf5eac9a9aca2911dcf83075666a3e5f3dd211aaae098b5fbb92",
+       "owner_module": "NFY_Part031",
+       "root": "NFY_NEM_PaymentReached.payment_reached"
+      },
+      {
+       "obligation_statement_sha256": "e2f342e6b3ae24dc61d849be720216255c04c1adcc4aae1bcdacaf3e69c67ecd",
+       "owner_module": "NFY_Part032",
+       "root": "NFY_NEM_ValidatorComposed.result_state_effects"
+      }
+     ]
+    },
+    {
+     "order": 11,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 392,
+     "end_offset": 827,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 12,
+     "callee": "common",
+     "arguments": "",
+     "line": 394,
+     "end_offset": 921,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:267",
+      "TX2:160"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "3a5037f03adc9388f26c510be4c3a188c688babcd8008b39e2117263d7de4396",
+       "owner_module": "NFY_Part053",
+       "root": "NFY_NED_ReconstructCarriers.common_argument"
+      },
+      {
+       "obligation_statement_sha256": "3a5037f03adc9388f26c510be4c3a188c688babcd8008b39e2117263d7de4396",
+       "owner_module": "NFY_Part053",
+       "root": "NFY_NED_ReconstructCarriers.common_argument"
+      }
+     ]
+    },
+    {
+     "order": 13,
+     "callee": "encode_pool_v1_pair_verified_afterstate_v1",
+     "arguments": "\n        &statement.common().lane_transition.candidate_afterstate,\n    ",
+     "line": 393,
+     "end_offset": 965,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:278",
+      "TX2:172"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "f72c4d8125ba1def4b3562088412ca25ae7c742b04bde2ce4506d35524f4281c",
+       "owner_module": "NGE_NEM_EncoderFrame",
+       "root": "NGE_NEM_EncoderFrame.after_step_and_bytes"
+      },
+      {
+       "obligation_statement_sha256": "c6857aa3d3674758a42542f7269fce68654fd1ac0169167033719411a6abf95e",
+       "owner_module": "NGE_NEM_EncoderFrame",
+       "root": "NGE_NEM_EncoderFrame.after_value_and_frame"
+      },
+      {
+       "obligation_statement_sha256": "2e43b6453d65cd43c87f17f24d962355cfd9b14d9d5885c5c8d3ed417cacbf6a",
+       "owner_module": "NGE_NEM_EncoderFrame",
+       "root": "NGE_NEM_EncoderFrame.frontier_next"
+      },
+      {
+       "obligation_statement_sha256": "f72c4d8125ba1def4b3562088412ca25ae7c742b04bde2ce4506d35524f4281c",
+       "owner_module": "NGE_NEM_EncoderFrame",
+       "root": "NGE_NEM_EncoderFrame.after_step_and_bytes"
+      },
+      {
+       "obligation_statement_sha256": "c6857aa3d3674758a42542f7269fce68654fd1ac0169167033719411a6abf95e",
+       "owner_module": "NGE_NEM_EncoderFrame",
+       "root": "NGE_NEM_EncoderFrame.after_value_and_frame"
+      },
+      {
+       "obligation_statement_sha256": "2e43b6453d65cd43c87f17f24d962355cfd9b14d9d5885c5c8d3ed417cacbf6a",
+       "owner_module": "NGE_NEM_EncoderFrame",
+       "root": "NGE_NEM_EncoderFrame.frontier_next"
+      }
+     ]
+    },
+    {
+     "order": 14,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 396,
+     "end_offset": 1016,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 15,
+     "callee": "data",
+     "arguments": "",
+     "line": 398,
+     "end_offset": 1061,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 16,
+     "callee": "checked_add",
+     "arguments": "proof_length",
+     "line": 401,
+     "end_offset": 1229,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 17,
+     "callee": "ok_or",
+     "arguments": "ProgramError::InvalidAccountData",
+     "line": 402,
+     "end_offset": 1278,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 18,
+     "callee": "len",
+     "arguments": "",
+     "line": 403,
+     "end_offset": 1304,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 19,
+     "callee": "tag",
+     "arguments": "",
+     "line": 405,
+     "end_offset": 1427,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:173",
+      "TX2:098"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "81d00274088e6d521c3ed66be388c65dab6646231e2b1bd756f1f2d795508070",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RawCarriers.tag_result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "395c72932d55341b3f7509e637a513b5f9c7aa0d13807387b9aebb7b719b4d86",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RawCarriers.tag_roundtrip"
+      },
+      {
+       "obligation_statement_sha256": "81d00274088e6d521c3ed66be388c65dab6646231e2b1bd756f1f2d795508070",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RawCarriers.tag_result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "395c72932d55341b3f7509e637a513b5f9c7aa0d13807387b9aebb7b719b4d86",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RawCarriers.tag_roundtrip"
+      }
+     ]
+    },
+    {
+     "order": 20,
+     "callee": "semantic_public",
+     "arguments": "",
+     "line": 409,
+     "end_offset": 1570,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX1:268"
+     ]
+    },
+    {
+     "order": 21,
+     "callee": "super::super::first_decoded",
+     "arguments": "statement.semantic_public(), &public_data, &proof_data[proof_start..proof_end], data[1] as usize",
+     "line": 409,
+     "end_offset": 1640,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX1:328"
+     ]
+    },
+    {
+     "order": 22,
+     "callee": "len",
+     "arguments": "",
+     "line": 410,
+     "end_offset": 1666,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 23,
+     "callee": "len",
+     "arguments": "",
+     "line": 410,
+     "end_offset": 1691,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-r1-cost-probe/src/transport.rs::Variant::tag",
+    "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common",
+    "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::semantic_public",
+    "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::validate_pool_v1_pair_forest_terminal_statement_v1",
+    "crates/aspis-statement/src/pool_v1/pair_terminal.rs::encode_pool_v1_pair_verified_afterstate_v1",
+    "programs/r1-cost-probe/src/lib.rs::first_decoded",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_public_statement_box",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_buffer",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_zero"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX1:328",
+   "function": "programs/r1-cost-probe/src/lib.rs::first_decoded",
+   "frozen_function_sha256": "a104f64dc73be780d2eed4092cbd10eeebd24bab3f2efb6ad3bab3bf02440ece",
+   "start_line": 49,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "observer",
+     "arguments": "",
+     "line": 50,
+     "end_offset": 70,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX1:329",
+      "TX2:212"
+     ]
+    },
+    {
+     "order": 2,
+     "callee": "verifier::tx1",
+     "arguments": "public,public_bytes,proof,k,SolanaDigest,observer()",
+     "line": 50,
+     "end_offset": 71,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX1:094"
+     ]
+    },
+    {
+     "order": 3,
+     "callee": "map_err",
+     "arguments": "error",
+     "line": 50,
+     "end_offset": 86,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-r1-cost-probe/src/candidate.rs::tx1",
+    "programs/r1-cost-probe/src/lib.rs::error",
+    "programs/r1-cost-probe/src/lib.rs::observer"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX2:213",
+   "function": "programs/r1-cost-probe/src/lib.rs::process_r1_cost_probe_instruction",
+   "frozen_function_sha256": "813e89e4a2c65e10831513f64c8c33acb7a2532c005f6a477e2d147f6d49a9bb",
+   "start_line": 56,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "cfg",
+     "arguments": "feature=\"pool-adapter\"",
+     "line": 57,
+     "end_offset": 34,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 2,
+     "callee": "pool_route::admitted",
+     "arguments": "data",
+     "line": 61,
+     "end_offset": 220,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:331",
+      "TX2:214"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "28f35192940cc1ded6769e4f375740fab107d2756ccbeba011381ff4e27ad256",
+       "owner_module": "NHJ_RoutePacket",
+       "root": "NHJ_RoutePacket.associate"
+      },
+      {
+       "obligation_statement_sha256": "28f35192940cc1ded6769e4f375740fab107d2756ccbeba011381ff4e27ad256",
+       "owner_module": "NHJ_RoutePacket",
+       "root": "NHJ_RoutePacket.associate"
+      }
+     ]
+    },
+    {
+     "order": 3,
+     "callee": "r1_pool_adapter::process",
+     "arguments": "program_id,accounts,data",
+     "line": 64,
+     "end_offset": 360,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX1:333",
+      "TX2:221"
+     ]
+    }
+   ],
+   "canonical_callees": [
+    "programs/r1-cost-probe/src/pool_route.rs::admitted",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::process"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX2:221",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::process",
+   "frozen_function_sha256": "d4d72223a78edcd0faea8856ded24316b2c19967745d0298428d6ea2f372c7c3",
+   "start_line": 950,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "first",
+     "arguments": "",
+     "line": 955,
+     "end_offset": 23,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 2,
+     "callee": "copied",
+     "arguments": "",
+     "line": 955,
+     "end_offset": 32,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 3,
+     "callee": "lifecycle_init",
+     "arguments": "program_id, accounts, data",
+     "line": 956,
+     "end_offset": 96,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 4,
+     "callee": "lifecycle_write",
+     "arguments": "program_id, accounts, data",
+     "line": 957,
+     "end_offset": 160,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 5,
+     "callee": "lifecycle_finalize",
+     "arguments": "program_id, accounts, data",
+     "line": 958,
+     "end_offset": 227,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 6,
+     "callee": "stage1",
+     "arguments": "program_id, accounts, data",
+     "line": 959,
+     "end_offset": 316,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX1:344"
+     ]
+    },
+    {
+     "order": 7,
+     "callee": "stage2",
+     "arguments": "program_id, accounts, data",
+     "line": 960,
+     "end_offset": 365,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:240"
+     ]
+    }
+   ],
+   "canonical_callees": [
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage1",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX2:240",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2",
+   "frozen_function_sha256": "be246c28d75415fe6364c527cc7fda4966490ac5a2cc347934e6b77fc0cddcfa",
+   "start_line": 463,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "len",
+     "arguments": "",
+     "line": 464,
+     "end_offset": 22,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 2,
+     "callee": "get",
+     "arguments": "..4",
+     "line": 464,
+     "end_offset": 44,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:062",
+      "TX2:043"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "fed8a48a8d7fcf80f9a543ea1316052908f7de84e4f3f1944aeda8688a7300f2",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.constructor"
+      },
+      {
+       "obligation_statement_sha256": "f1ab0e843c294a30c353083aa0d09c4a2477deee522d2bb6ebba157efef61510",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.constructor_frame"
+      },
+      {
+       "obligation_statement_sha256": "dc1ace9abbdac70fb4aad30e74ba574ccda863b7d9df8d08d76a151fcacbd236",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.getter_frame"
+      },
+      {
+       "obligation_statement_sha256": "c14a725851a777a32c9676372ad9ad4266ddabbc63b9005923b620bc523bf1a5",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.selected_table"
+      },
+      {
+       "obligation_statement_sha256": "0c56d0568cca7e2085aeb4eb7eaa53ce7988143337a18bfc533ae832a7cd1d1f",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.table_body"
+      },
+      {
+       "obligation_statement_sha256": "bc0e68d91510bd7be9c8179e4d1ed3a54b55d4e47dcf0ee2aa2ae156f9fac390",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.table_frame"
+      },
+      {
+       "obligation_statement_sha256": "fed8a48a8d7fcf80f9a543ea1316052908f7de84e4f3f1944aeda8688a7300f2",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.constructor"
+      },
+      {
+       "obligation_statement_sha256": "f1ab0e843c294a30c353083aa0d09c4a2477deee522d2bb6ebba157efef61510",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.constructor_frame"
+      },
+      {
+       "obligation_statement_sha256": "dc1ace9abbdac70fb4aad30e74ba574ccda863b7d9df8d08d76a151fcacbd236",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.getter_frame"
+      },
+      {
+       "obligation_statement_sha256": "c14a725851a777a32c9676372ad9ad4266ddabbc63b9005923b620bc523bf1a5",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.selected_table"
+      },
+      {
+       "obligation_statement_sha256": "0c56d0568cca7e2085aeb4eb7eaa53ce7988143337a18bfc533ae832a7cd1d1f",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.table_body"
+      },
+      {
+       "obligation_statement_sha256": "bc0e68d91510bd7be9c8179e4d1ed3a54b55d4e47dcf0ee2aa2ae156f9fac390",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.table_frame"
+      }
+     ]
+    },
+    {
+     "order": 3,
+     "callee": "program::set_return_data",
+     "arguments": "&[]",
+     "line": 467,
+     "end_offset": 201,
+     "law_class": "RuntimeReturnDataClear for empty argument; native exact slice/effects cut remains OPEN"
+    },
+    {
+     "order": 4,
+     "callee": "cfg",
+     "arguments": "feature=\"cu-profiling\"",
+     "line": 468,
+     "end_offset": 236,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 5,
+     "callee": "solana_program::log::sol_log_compute_units",
+     "arguments": "",
+     "line": 469,
+     "end_offset": 326,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 6,
+     "callee": "snapshot",
+     "arguments": "&accounts[0], POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES, POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES",
+     "line": 471,
+     "end_offset": 506,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:343",
+      "TX2:239"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      },
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      }
+     ]
+    },
+    {
+     "order": 7,
+     "callee": "snapshot",
+     "arguments": "&accounts[1], POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES",
+     "line": 472,
+     "end_offset": 622,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:343",
+      "TX2:239"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      },
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      }
+     ]
+    },
+    {
+     "order": 8,
+     "callee": "snapshot",
+     "arguments": "&accounts[2], POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES",
+     "line": 473,
+     "end_offset": 746,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:343",
+      "TX2:239"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      },
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      }
+     ]
+    },
+    {
+     "order": 9,
+     "callee": "snapshot",
+     "arguments": "&accounts[3], POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES",
+     "line": 474,
+     "end_offset": 858,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:343",
+      "TX2:239"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      },
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      }
+     ]
+    },
+    {
+     "order": 10,
+     "callee": "snapshot",
+     "arguments": "&accounts[4], POOL_V1_VERIFIER_REGISTRY_BYTES, POOL_V1_VERIFIER_REGISTRY_V2_BYTES",
+     "line": 475,
+     "end_offset": 959,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:343",
+      "TX2:239"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      },
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      }
+     ]
+    },
+    {
+     "order": 11,
+     "callee": "snapshot",
+     "arguments": "&accounts[5], POOL_V1_VERIFIER_ENTRY_BYTES, POOL_V1_VERIFIER_ENTRY_V2_BYTES",
+     "line": 476,
+     "end_offset": 1054,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:343",
+      "TX2:239"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      },
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      }
+     ]
+    },
+    {
+     "order": 12,
+     "callee": "snapshot",
+     "arguments": "&accounts[6], CHECKPOINT_TAIL_BYTES, CHECKPOINT_TAIL_BYTES",
+     "line": 477,
+     "end_offset": 1132,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:343",
+      "TX2:239"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      },
+      {
+       "obligation_statement_sha256": "5f92e3bdf0e5d598160988d5a43bd001c481413648742f25eff852ea04fa2592",
+       "owner_module": "NIM_NHY_SnapshotJoin",
+       "root": "NHY_SnapshotJoin.source"
+      }
+     ]
+    },
+    {
+     "order": 13,
+     "callee": "Clock::get",
+     "arguments": "",
+     "line": 479,
+     "end_offset": 1182,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:062",
+      "TX2:043"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "fed8a48a8d7fcf80f9a543ea1316052908f7de84e4f3f1944aeda8688a7300f2",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.constructor"
+      },
+      {
+       "obligation_statement_sha256": "f1ab0e843c294a30c353083aa0d09c4a2477deee522d2bb6ebba157efef61510",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.constructor_frame"
+      },
+      {
+       "obligation_statement_sha256": "dc1ace9abbdac70fb4aad30e74ba574ccda863b7d9df8d08d76a151fcacbd236",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.getter_frame"
+      },
+      {
+       "obligation_statement_sha256": "c14a725851a777a32c9676372ad9ad4266ddabbc63b9005923b620bc523bf1a5",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.selected_table"
+      },
+      {
+       "obligation_statement_sha256": "0c56d0568cca7e2085aeb4eb7eaa53ce7988143337a18bfc533ae832a7cd1d1f",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.table_body"
+      },
+      {
+       "obligation_statement_sha256": "bc0e68d91510bd7be9c8179e4d1ed3a54b55d4e47dcf0ee2aa2ae156f9fac390",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.table_frame"
+      },
+      {
+       "obligation_statement_sha256": "fed8a48a8d7fcf80f9a543ea1316052908f7de84e4f3f1944aeda8688a7300f2",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.constructor"
+      },
+      {
+       "obligation_statement_sha256": "f1ab0e843c294a30c353083aa0d09c4a2477deee522d2bb6ebba157efef61510",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.constructor_frame"
+      },
+      {
+       "obligation_statement_sha256": "dc1ace9abbdac70fb4aad30e74ba574ccda863b7d9df8d08d76a151fcacbd236",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.getter_frame"
+      },
+      {
+       "obligation_statement_sha256": "c14a725851a777a32c9676372ad9ad4266ddabbc63b9005923b620bc523bf1a5",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.selected_table"
+      },
+      {
+       "obligation_statement_sha256": "0c56d0568cca7e2085aeb4eb7eaa53ce7988143337a18bfc533ae832a7cd1d1f",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.table_body"
+      },
+      {
+       "obligation_statement_sha256": "bc0e68d91510bd7be9c8179e4d1ed3a54b55d4e47dcf0ee2aa2ae156f9fac390",
+       "owner_module": "NFN_GeometryPart03",
+       "root": "NFN_NEB_TableCalls.table_frame"
+      }
+     ]
+    },
+    {
+     "order": 14,
+     "callee": "stage2_owned",
+     "arguments": "program_id, &owned, data, current_slot",
+     "line": 480,
+     "end_offset": 1298,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:241"
+     ]
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-core/src/r0/domain.rs::FibreIndex::get",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2_owned"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX2:241",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::stage2_owned",
+   "frozen_function_sha256": "7cbf4a3e0546acda426bf96671c2ad94fa0cd18caab557225b6a8fb42a70d4f5",
+   "start_line": 417,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "len",
+     "arguments": "",
+     "line": 418,
+     "end_offset": 22,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 2,
+     "callee": "get",
+     "arguments": "..4",
+     "line": 418,
+     "end_offset": 44,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 3,
+     "callee": "validate_asq8",
+     "arguments": "program_id, accounts, data, current_slot",
+     "line": 422,
+     "end_offset": 247,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:242"
+     ]
+    },
+    {
+     "order": 4,
+     "callee": "data",
+     "arguments": "",
+     "line": 423,
+     "end_offset": 289,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 5,
+     "callee": "data",
+     "arguments": "",
+     "line": 424,
+     "end_offset": 336,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 6,
+     "callee": "checked_add",
+     "arguments": "validated.proof_length",
+     "line": 426,
+     "end_offset": 468,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 7,
+     "callee": "ok_or",
+     "arguments": "ProgramError::InvalidAccountData",
+     "line": 427,
+     "end_offset": 517,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 8,
+     "callee": "len",
+     "arguments": "",
+     "line": 428,
+     "end_offset": 543,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 9,
+     "callee": "encode_pool_v1_pair_forest_terminal_statement_v1",
+     "arguments": "&validated.statement",
+     "line": 431,
+     "end_offset": 712,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:165"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "bb4fef546051cd374b5c900ee840b8764a2337a3999386fa2f88f13c8091312f",
+       "owner_module": "NFY_Part053",
+       "root": "NFY_NEQ_EncoderOracle.result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "d71fa2dda5ac47c9f13d60a087f26febb13f414270dc4053d2100a9b91ebc3a3",
+       "owner_module": "NFY_Part053",
+       "root": "NFY_NEQ_EncoderOracle.substitution"
+      },
+      {
+       "obligation_statement_sha256": "7ea6c7c8e01a8c84473a9b5bbc6cefc58facfa74a8b3001be33149ae9c63b6c1",
+       "owner_module": "NGE_NEM_EncoderReceiver",
+       "root": "NGE_NEM_EncoderReceiver.sequence_width"
+      },
+      {
+       "obligation_statement_sha256": "ff66fc6ea52069a1aca1af864b8eb7d03b9ab8d531c634867fc2a7a958c5432a",
+       "owner_module": "NGE_NEM_KindInstance",
+       "root": "NGE_NEM_KindInstance.statement_window"
+      },
+      {
+       "obligation_statement_sha256": "7aafdd60a94880faab6c2a948b15ae6dae780f7503d1de3da9826e9e3876ae98",
+       "owner_module": "NGE_NEQ_EncoderDomains",
+       "root": "NGE_NEQ_EncoderDomains.header_length"
+      },
+      {
+       "obligation_statement_sha256": "b0bfe9a7b349e52cce577eceef8b6bc2f0a60fc00e74138232ee3c267ed2a7a8",
+       "owner_module": "NGE_NEQ_EncoderDomains",
+       "root": "NGE_NEQ_EncoderDomains.reached_domains"
+      },
+      {
+       "obligation_statement_sha256": "c633190dbca36efba7c6c38cc2a0650af6178609984b746e3b395e5bb583be46",
+       "owner_module": "NGE_NEQ_LateBorrow",
+       "root": "NGE_NEQ_LateBorrow.after_preserves_child"
+      },
+      {
+       "obligation_statement_sha256": "80ad95d515b624f149cda5b72a06ab07f60040d3f15d96b4df4e03a310dbb33a",
+       "owner_module": "NGE_NEQ_LateBorrow",
+       "root": "NGE_NEQ_LateBorrow.poststate"
+      },
+      {
+       "obligation_statement_sha256": "14618a7f326bea34ee8092e3272ec7c917ff70824035cb62fe39598619e4bdb9",
+       "owner_module": "NGE_NEQ_LateBorrow",
+       "root": "NGE_NEQ_LateBorrow.rejoin"
+      },
+      {
+       "obligation_statement_sha256": "9ce41899c18dd690a0d581ebe43fe5ce94dfb99581510985e95feb06eb8355b5",
+       "owner_module": "NGE_NEQ_RootFrame",
+       "root": "NGE_NEQ_RootFrame.array_ext"
+      },
+      {
+       "obligation_statement_sha256": "fd487567c17f83835969fe0d013ec4fdb2ed92df7643fb20135ffcdadd73a5c8",
+       "owner_module": "NGE_NEQ_RootFrame",
+       "root": "NGE_NEQ_RootFrame.assembled"
+      },
+      {
+       "obligation_statement_sha256": "f04297a21aee6e148ed27d1377b532b54bb9c095bbc626f33c275a2079c0cf69",
+       "owner_module": "NGE_NEQ_RootFrame",
+       "root": "NGE_NEQ_RootFrame.cover"
+      },
+      {
+       "obligation_statement_sha256": "5397060d651c1ffbf64ac99e1ef2e9e23bf68c98b79bf037a63e23c3054d6520",
+       "owner_module": "NGE_NEQ_RootFrame",
+       "root": "NGE_NEQ_RootFrame.finish"
+      },
+      {
+       "obligation_statement_sha256": "08403fb50fe009ec7ad01a51cc28ccad367ad66cd2d62c1b3ada05c1db115676",
+       "owner_module": "NGE_NEQ_RootFrame",
+       "root": "NGE_NEQ_RootFrame.header_frame"
+      },
+      {
+       "obligation_statement_sha256": "00a217c7bddd2cf1ecb2d9ce11f33de4672b552dcbcb1ac61631487dccc2650e",
+       "owner_module": "NGE_NEQ_RootFrame",
+       "root": "NGE_NEQ_RootFrame.scalar_frame"
+      }
+     ]
+    },
+    {
+     "order": 10,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidInstructionData",
+     "line": 432,
+     "end_offset": 771,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 11,
+     "callee": "len",
+     "arguments": "",
+     "line": 433,
+     "end_offset": 799,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 12,
+     "callee": "super::super::observer",
+     "arguments": "",
+     "line": 441,
+     "end_offset": 1109,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX1:329",
+      "TX2:212"
+     ]
+    },
+    {
+     "order": 13,
+     "callee": "verifier::tx2_authenticated",
+     "arguments": "\n        &public_bytes,\n        &proof_data[proof_start..proof_end],\n        &checkpoint_data,\n        super::super::SolanaDigest,\n        super::super::observer(),\n    ",
+     "line": 436,
+     "end_offset": 1116,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:064"
+     ]
+    },
+    {
+     "order": 14,
+     "callee": "map_err",
+     "arguments": "super::super::error",
+     "line": 443,
+     "end_offset": 1150,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 15,
+     "callee": "emit_result",
+     "arguments": "&validated.statement",
+     "line": 444,
+     "end_offset": 1190,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:219"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "37b9ad45886504c531145019a4750d934862a1f25608db789cafc6734a10cdc7",
+       "owner_module": "NFY_Part058",
+       "root": "NFY_NEY_EmitComposed.encoder_bridge"
+      },
+      {
+       "obligation_statement_sha256": "5666bcee53e029bfb77f4027c57ab6db7edf007dfe036b01fbf053c31637c32f",
+       "owner_module": "NFY_Part058",
+       "root": "NFY_NEY_EmitComposed.reached_encoder"
+      },
+      {
+       "obligation_statement_sha256": "62b568f8a211dcf86450251a47cf236610643493ba727adc1dc91fe598205d49",
+       "owner_module": "NFY_Part058",
+       "root": "NFY_NEY_EmitComposed.result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "5d16bd9f312e6124c4d689ecbcad1216d9681d9975eef0d2558b933f77fcbd0e",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_EmitProjection.alignment0"
+      },
+      {
+       "obligation_statement_sha256": "bd4b9896bb73c81c3944e281f6f564488032377b11490b53266ba33bb9cec0d0",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_EmitProjection.alignment1"
+      },
+      {
+       "obligation_statement_sha256": "425464573e9d8904bf12e398ac435135c981301255302fb50c647c458eada8f0",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_EmitProjection.alignment2"
+      },
+      {
+       "obligation_statement_sha256": "93ff6930f943b8bf3e9123984b73c114261804d670f059e43ff3f3bc7f0b0bb9",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_EmitProjection.alignment3"
+      },
+      {
+       "obligation_statement_sha256": "ccfad95aec4d66602cd3f0005e1a6014d72aebf16a5f979af0841e05b0a0dfaa",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_EmitProjection.alignment4"
+      },
+      {
+       "obligation_statement_sha256": "eb9c50d20cf64dbea32225d668b445c8afa5fd400bdd31db701460794d7cfa57",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_EmitProjection.alignment5"
+      },
+      {
+       "obligation_statement_sha256": "90febac62176108fdf7d585f85d7a11a30abb7624a73285550b907dd4189c250",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_EmitProjection.alignment6"
+      },
+      {
+       "obligation_statement_sha256": "b584c2b58cabc5420bced63464cd3133942e9752f4b661d08108128607691a16",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_EmitProjection.alignment7"
+      },
+      {
+       "obligation_statement_sha256": "66531060d4b78f20de6825f8326458ba0e06018ed57faa872af525159e492430",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_EmitProjection.complete"
+      }
+     ]
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-r1-cost-probe/src/candidate.rs::tx2_authenticated",
+    "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::encode_pool_v1_pair_forest_terminal_statement_v1",
+    "programs/r1-cost-probe/src/lib.rs::error",
+    "programs/r1-cost-probe/src/lib.rs::observer",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::emit_result",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::validate_asq8"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX2:216",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_checkpoint_box",
+   "frozen_function_sha256": "a9736dc02b3469f748c6065239170ba6e534485ea7c2bdd9321d57c67b832548",
+   "start_line": 437,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "decode_pool_v1_pair_forest_checkpoint_v1",
+     "arguments": "bytes",
+     "line": 439,
+     "end_offset": 73,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:152"
+     ]
+    },
+    {
+     "order": 2,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 440,
+     "end_offset": 132,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 3,
+     "callee": "Box::new",
+     "arguments": "\n        decode_pool_v1_pair_forest_checkpoint_v1(bytes)\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    ",
+     "line": 438,
+     "end_offset": 140,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::decode_pool_v1_pair_forest_checkpoint_v1"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX2:217",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_lane_from_pool_release",
+   "frozen_function_sha256": "eb68cdaea742fb4de4b304745b866766edd510a0e8cfc1e18d7c43af3bf319e0",
+   "start_line": 448,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "len",
+     "arguments": "",
+     "line": 452,
+     "end_offset": 69,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 2,
+     "callee": "usize::from",
+     "arguments": "bytes[5]",
+     "line": 455,
+     "end_offset": 256,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 3,
+     "callee": "iter",
+     "arguments": "",
+     "line": 460,
+     "end_offset": 553,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 4,
+     "callee": "any",
+     "arguments": "|byte| *byte != 0",
+     "line": 461,
+     "end_offset": 589,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 5,
+     "callee": "try_into",
+     "arguments": "",
+     "line": 466,
+     "end_offset": 716,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 6,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 467,
+     "end_offset": 771,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 7,
+     "callee": "try_into",
+     "arguments": "",
+     "line": 482,
+     "end_offset": 1330,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 8,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 483,
+     "end_offset": 1389,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 9,
+     "callee": "u64::from_le_bytes",
+     "arguments": "\n        tree[8..16]\n            .try_into()\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    ",
+     "line": 480,
+     "end_offset": 1397,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 10,
+     "callee": "try_into",
+     "arguments": "",
+     "line": 490,
+     "end_offset": 1592,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 11,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 491,
+     "end_offset": 1651,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 12,
+     "callee": "decode_digest_canonical",
+     "arguments": "\n        tree[16..48]\n            .try_into()\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    ",
+     "line": 488,
+     "end_offset": 1659,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:198",
+      "TX2:146"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "087b318513f2cd0ace21e6a286fa3354dda0794ef6849cca40dae2d275671c8c",
+       "owner_module": "NFY_Part005",
+       "root": "NFY_NEQ_DecodeScalar.digest_result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "d361a1f471b5e13fc949faba5fdbcfb344dc5b960ba9bea9807861179d31dcb1",
+       "owner_module": "NFY_Part005",
+       "root": "NFY_NEQ_DecodeScalar.digest_word_domain"
+      },
+      {
+       "obligation_statement_sha256": "bbb535445242e13e5636543a7ed5e15afae5c28aa8943803aa5ab69b4c52fddf",
+       "owner_module": "NGE_NEQ_ParserCanonical",
+       "root": "NGE_NEQ_ParserCanonical.some_canonical"
+      },
+      {
+       "obligation_statement_sha256": "087b318513f2cd0ace21e6a286fa3354dda0794ef6849cca40dae2d275671c8c",
+       "owner_module": "NFY_Part005",
+       "root": "NFY_NEQ_DecodeScalar.digest_result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "d361a1f471b5e13fc949faba5fdbcfb344dc5b960ba9bea9807861179d31dcb1",
+       "owner_module": "NFY_Part005",
+       "root": "NFY_NEQ_DecodeScalar.digest_word_domain"
+      },
+      {
+       "obligation_statement_sha256": "bbb535445242e13e5636543a7ed5e15afae5c28aa8943803aa5ab69b4c52fddf",
+       "owner_module": "NGE_NEQ_ParserCanonical",
+       "root": "NGE_NEQ_ParserCanonical.some_canonical"
+      }
+     ]
+    },
+    {
+     "order": 13,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 493,
+     "end_offset": 1710,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 14,
+     "callee": "iter_mut",
+     "arguments": "",
+     "line": 495,
+     "end_offset": 1823,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 15,
+     "callee": "enumerate",
+     "arguments": "",
+     "line": 495,
+     "end_offset": 1835,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 16,
+     "callee": "try_into",
+     "arguments": "",
+     "line": 499,
+     "end_offset": 1979,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 17,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 500,
+     "end_offset": 2042,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 18,
+     "callee": "decode_digest_canonical",
+     "arguments": "\n            tree[start..start + 32]\n                .try_into()\n                .map_err(|_| ProgramError::InvalidAccountData)?,\n        ",
+     "line": 497,
+     "end_offset": 2054,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:198",
+      "TX2:146"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "087b318513f2cd0ace21e6a286fa3354dda0794ef6849cca40dae2d275671c8c",
+       "owner_module": "NFY_Part005",
+       "root": "NFY_NEQ_DecodeScalar.digest_result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "d361a1f471b5e13fc949faba5fdbcfb344dc5b960ba9bea9807861179d31dcb1",
+       "owner_module": "NFY_Part005",
+       "root": "NFY_NEQ_DecodeScalar.digest_word_domain"
+      },
+      {
+       "obligation_statement_sha256": "bbb535445242e13e5636543a7ed5e15afae5c28aa8943803aa5ab69b4c52fddf",
+       "owner_module": "NGE_NEQ_ParserCanonical",
+       "root": "NGE_NEQ_ParserCanonical.some_canonical"
+      },
+      {
+       "obligation_statement_sha256": "087b318513f2cd0ace21e6a286fa3354dda0794ef6849cca40dae2d275671c8c",
+       "owner_module": "NFY_Part005",
+       "root": "NFY_NEQ_DecodeScalar.digest_result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "d361a1f471b5e13fc949faba5fdbcfb344dc5b960ba9bea9807861179d31dcb1",
+       "owner_module": "NFY_Part005",
+       "root": "NFY_NEQ_DecodeScalar.digest_word_domain"
+      },
+      {
+       "obligation_statement_sha256": "bbb535445242e13e5636543a7ed5e15afae5c28aa8943803aa5ab69b4c52fddf",
+       "owner_module": "NGE_NEQ_ParserCanonical",
+       "root": "NGE_NEQ_ParserCanonical.some_canonical"
+      }
+     ]
+    },
+    {
+     "order": 19,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 502,
+     "end_offset": 2109,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 20,
+     "callee": "Box::new",
+     "arguments": "PoolV1PairForestLaneStateV1 {\n        bump: bytes[72],\n        master,\n        lane_id: bytes[5],\n        tree: IncrementalMerkleTreeV1 {\n            next_leaf_index,\n            root,\n            frontier,\n        },\n    }",
+     "line": 510,
+     "end_offset": 2660,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-statement/src/atomic_statement.rs::decode_digest_canonical"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX2:218",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_master_box",
+   "frozen_function_sha256": "33f6750412a25de0d7a891306d716f3293540c144569adc655c11716db29a4f1",
+   "start_line": 429,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "decode_pool_v1_pair_forest_master_v1",
+     "arguments": "bytes",
+     "line": 431,
+     "end_offset": 69,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:153"
+     ]
+    },
+    {
+     "order": 2,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 432,
+     "end_offset": 128,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 3,
+     "callee": "Box::new",
+     "arguments": "\n        decode_pool_v1_pair_forest_master_v1(bytes)\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    ",
+     "line": 430,
+     "end_offset": 136,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::decode_pool_v1_pair_forest_master_v1"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX2:233",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::authenticate_asq8_accounts",
+   "frozen_function_sha256": "96e1346285e94f17668b799cbeff2570e1c80e46492e812f28c04a09f499ae6d",
+   "start_line": 230,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "len",
+     "arguments": "",
+     "line": 240,
+     "end_offset": 195,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 2,
+     "callee": "require_readonly_buffer",
+     "arguments": "proof_account",
+     "line": 246,
+     "end_offset": 369,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:340",
+      "TX2:237"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "8e09b52e7edabd2808da20036a98f53545abeae133674faef914e1c5458c79ab",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.readonly"
+      },
+      {
+       "obligation_statement_sha256": "8e09b52e7edabd2808da20036a98f53545abeae133674faef914e1c5458c79ab",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.readonly"
+      }
+     ]
+    },
+    {
+     "order": 3,
+     "callee": "require_verifier_checkpoint",
+     "arguments": "verifier_checkpoint, verifier_program, false",
+     "line": 247,
+     "end_offset": 449,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:341",
+      "TX2:238"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "d8397c85aabf3e880bce24a65b19d188b1dfad210f60681ca3d5d4472b3841f7",
+       "owner_module": "NHJ_CheckpointPacket",
+       "root": "NHJ_CheckpointPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "d8397c85aabf3e880bce24a65b19d188b1dfad210f60681ca3d5d4472b3841f7",
+       "owner_module": "NHJ_CheckpointPacket",
+       "root": "NHJ_CheckpointPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 4,
+     "callee": "require_readonly_account",
+     "arguments": "master_account, pool_program",
+     "line": 248,
+     "end_offset": 510,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:236"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5731548329fe4218e18e4984059b3fe695e42e9f9805f631d37942d6e462b2ce",
+       "owner_module": "NIM_NHJ_ReadonlyPacket",
+       "root": "NHJ_ReadonlyPacket.readonly"
+      }
+     ]
+    },
+    {
+     "order": 5,
+     "callee": "require_readonly_account",
+     "arguments": "checkpoint_account, pool_program",
+     "line": 249,
+     "end_offset": 575,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:236"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5731548329fe4218e18e4984059b3fe695e42e9f9805f631d37942d6e462b2ce",
+       "owner_module": "NIM_NHJ_ReadonlyPacket",
+       "root": "NHJ_ReadonlyPacket.readonly"
+      }
+     ]
+    },
+    {
+     "order": 6,
+     "callee": "require_readonly_account",
+     "arguments": "lane_account, pool_program",
+     "line": 250,
+     "end_offset": 634,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:236"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5731548329fe4218e18e4984059b3fe695e42e9f9805f631d37942d6e462b2ce",
+       "owner_module": "NIM_NHJ_ReadonlyPacket",
+       "root": "NHJ_ReadonlyPacket.readonly"
+      }
+     ]
+    },
+    {
+     "order": 7,
+     "callee": "require_distinct_accounts",
+     "arguments": "&[\n        proof_account,\n        master_account,\n        checkpoint_account,\n        lane_account,\n        registry_account,\n        entry_account,\n        verifier_checkpoint,\n    ]",
+     "line": 251,
+     "end_offset": 851,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:339",
+      "TX2:235"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "2d9a70d5760b2e7b99f7a4506e220589eb7261aaf388e49049d70c378c84adca",
+       "owner_module": "NHJ_DistinctPacket",
+       "root": "NHJ_DistinctPacket.three"
+      },
+      {
+       "obligation_statement_sha256": "8eda6c93c82f2bec2bad0e73caf6f827a6ff9846c70eb1a190de267563307724",
+       "owner_module": "NHJ_DistinctPacket",
+       "root": "NHJ_DistinctPacket.seven"
+      }
+     ]
+    },
+    {
+     "order": 8,
+     "callee": "data",
+     "arguments": "",
+     "line": 261,
+     "end_offset": 911,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 9,
+     "callee": "decode_master_box",
+     "arguments": "master_account.data()?",
+     "line": 261,
+     "end_offset": 913,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:218"
+     ]
+    },
+    {
+     "order": 10,
+     "callee": "key",
+     "arguments": "",
+     "line": 262,
+     "end_offset": 967,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 11,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 262,
+     "end_offset": 978,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 12,
+     "callee": "Pubkey::new_from_array",
+     "arguments": "master.identity.asset_mint",
+     "line": 267,
+     "end_offset": 1222,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 13,
+     "callee": "as_ref",
+     "arguments": "",
+     "line": 267,
+     "end_offset": 1231,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 14,
+     "callee": "Pubkey::create_program_address",
+     "arguments": "\n            &[\n                PAIR_FOREST_MASTER_SEED,\n                Pubkey::new_from_array(master.identity.asset_mint).as_ref(),\n                &[master.bump],\n            ],\n            pool_program,\n        ",
+     "line": 264,
+     "end_offset": 1315,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 15,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 272,
+     "end_offset": 1370,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 16,
+     "callee": "key",
+     "arguments": "",
+     "line": 272,
+     "end_offset": 1396,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 17,
+     "callee": "authenticate_invariant_release_registry",
+     "arguments": "\n        verifier_program,\n        pool_program,\n        master_account,\n        &master,\n        registry_account,\n        entry_account,\n        current_slot,\n    ",
+     "line": 276,
+     "end_offset": 1673,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:234"
+     ]
+    },
+    {
+     "order": 18,
+     "callee": "data",
+     "arguments": "",
+     "line": 286,
+     "end_offset": 1745,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 19,
+     "callee": "decode_checkpoint_box",
+     "arguments": "checkpoint_account.data()?",
+     "line": 286,
+     "end_offset": 1747,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:216"
+     ]
+    },
+    {
+     "order": 20,
+     "callee": "key",
+     "arguments": "",
+     "line": 287,
+     "end_offset": 1798,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 21,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 287,
+     "end_offset": 1809,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 22,
+     "callee": "key",
+     "arguments": "",
+     "line": 292,
+     "end_offset": 2026,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 23,
+     "callee": "as_ref",
+     "arguments": "",
+     "line": 292,
+     "end_offset": 2035,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 24,
+     "callee": "to_le_bytes",
+     "arguments": "",
+     "line": 293,
+     "end_offset": 2098,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:022",
+      "TX1:058",
+      "TX2:016",
+      "TX2:039"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "c0a0d4da7aed53490d7d5250c4338dbf79a8d5044d3bb8a5ab4d0d8a7189fd66",
+       "owner_module": "NFY_Part000",
+       "root": "NFY_NEE_M31SerializerDomain.primitive"
+      },
+      {
+       "obligation_statement_sha256": "20b0d311986769e0b50e7550b645312bab9a9f51e172bfbefcadcce791133a6c",
+       "owner_module": "NFY_Part000",
+       "root": "NFY_NEE_M31SerializerDomain.width"
+      },
+      {
+       "obligation_statement_sha256": "ba654ffa71526d2cdd776189e2bf77634dfa0c42350f6b7bb957d55904afc24f",
+       "owner_module": "NFY_Part000",
+       "root": "NFY_NEE_M31SerializerDomain.widths_distinct"
+      },
+      {
+       "obligation_statement_sha256": "73438be8cc73fb5d2ad72ee86928fee9dff7052d13b7696f9afb2daebb96ba14",
+       "owner_module": "NFY_Part004",
+       "root": "NFY_NFD_WideSerialization.carrier_roundtrip"
+      },
+      {
+       "obligation_statement_sha256": "c10e3ed4cbbc231c6081b1a3e610ea9cbcffa40e90cd425b0f0fae0ed8ee4b79",
+       "owner_module": "NFY_Part004",
+       "root": "NFY_NFD_WideSerialization.result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "c0a0d4da7aed53490d7d5250c4338dbf79a8d5044d3bb8a5ab4d0d8a7189fd66",
+       "owner_module": "NFY_Part000",
+       "root": "NFY_NEE_M31SerializerDomain.primitive"
+      },
+      {
+       "obligation_statement_sha256": "20b0d311986769e0b50e7550b645312bab9a9f51e172bfbefcadcce791133a6c",
+       "owner_module": "NFY_Part000",
+       "root": "NFY_NEE_M31SerializerDomain.width"
+      },
+      {
+       "obligation_statement_sha256": "ba654ffa71526d2cdd776189e2bf77634dfa0c42350f6b7bb957d55904afc24f",
+       "owner_module": "NFY_Part000",
+       "root": "NFY_NEE_M31SerializerDomain.widths_distinct"
+      },
+      {
+       "obligation_statement_sha256": "73438be8cc73fb5d2ad72ee86928fee9dff7052d13b7696f9afb2daebb96ba14",
+       "owner_module": "NFY_Part004",
+       "root": "NFY_NFD_WideSerialization.carrier_roundtrip"
+      },
+      {
+       "obligation_statement_sha256": "c10e3ed4cbbc231c6081b1a3e610ea9cbcffa40e90cd425b0f0fae0ed8ee4b79",
+       "owner_module": "NFY_Part004",
+       "root": "NFY_NFD_WideSerialization.result_state_effects"
+      }
+     ]
+    },
+    {
+     "order": 25,
+     "callee": "Pubkey::create_program_address",
+     "arguments": "\n            &[\n                PAIR_FOREST_CHECKPOINT_SEED,\n                master_account.key().as_ref(),\n                &checkpoint.checkpoint_sequence.to_le_bytes(),\n                &[checkpoint.bump],\n            ],\n            pool_program,\n        ",
+     "line": 289,
+     "end_offset": 2186,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 26,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 298,
+     "end_offset": 2241,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 27,
+     "callee": "key",
+     "arguments": "",
+     "line": 298,
+     "end_offset": 2271,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 28,
+     "callee": "data",
+     "arguments": "",
+     "line": 302,
+     "end_offset": 2411,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 29,
+     "callee": "decode_lane_from_pool_release",
+     "arguments": "lane_account.data()?",
+     "line": 302,
+     "end_offset": 2413,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:217"
+     ]
+    },
+    {
+     "order": 30,
+     "callee": "key",
+     "arguments": "",
+     "line": 303,
+     "end_offset": 2467,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 31,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 303,
+     "end_offset": 2478,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 32,
+     "callee": "key",
+     "arguments": "",
+     "line": 308,
+     "end_offset": 2660,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 33,
+     "callee": "as_ref",
+     "arguments": "",
+     "line": 308,
+     "end_offset": 2669,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 34,
+     "callee": "Pubkey::create_program_address",
+     "arguments": "\n            &[\n                PAIR_FOREST_LANE_SEED,\n                master_account.key().as_ref(),\n                &[output_lane],\n                &[selected_lane.bump],\n            ],\n            pool_program,\n        ",
+     "line": 305,
+     "end_offset": 2792,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 35,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 314,
+     "end_offset": 2847,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 36,
+     "callee": "key",
+     "arguments": "",
+     "line": 314,
+     "end_offset": 2871,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 37,
+     "callee": "key",
+     "arguments": "",
+     "line": 319,
+     "end_offset": 3032,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 38,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 319,
+     "end_offset": 3043,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 39,
+     "callee": "Box::new",
+     "arguments": "PoolV1PairLiveSnapshotV1 {\n        pool: master_account.key().to_bytes(),\n        deployment_domain: master.identity.deployment_domain,\n        sequence: selected_lane.tree.next_leaf_index,\n        next_pair_index: selected_lane.tree.next_leaf_index,\n        current_root: selected_lane.tree.root,\n        frontier: selected_lane.tree.frontier,\n    }",
+     "line": 318,
+     "end_offset": 3322,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 40,
+     "callee": "key",
+     "arguments": "",
+     "line": 327,
+     "end_offset": 3403,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 41,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 327,
+     "end_offset": 3414,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 42,
+     "callee": "key",
+     "arguments": "",
+     "line": 328,
+     "end_offset": 3468,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 43,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 328,
+     "end_offset": 3479,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 44,
+     "callee": "key",
+     "arguments": "",
+     "line": 329,
+     "end_offset": 3530,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 45,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 329,
+     "end_offset": 3541,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-core/src/field.rs::M31::to_le_bytes",
+    "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_checkpoint_box",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_lane_from_pool_release",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_master_box",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::authenticate_invariant_release_registry",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_account",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_buffer",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX2:234",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::authenticate_invariant_release_registry",
+   "frozen_function_sha256": "7f8bb66f920853152d7d18011906af845dad2d4faaae21c64bd2258c69c955c2",
+   "start_line": 81,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 93,
+     "end_offset": 272,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 2,
+     "callee": "pool_program_id",
+     "arguments": "",
+     "line": 93,
+     "end_offset": 293,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:220"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "ebedd0031990b8a804c9f961a34fc0bc317878a6f53308aa501dc634e315ad18",
+       "owner_module": "NHJ_DeployedIds",
+       "root": "NHJ_DeployedIds.pool_actual"
+      }
+     ]
+    },
+    {
+     "order": 3,
+     "callee": "registry_program_id",
+     "arguments": "",
+     "line": 95,
+     "end_offset": 464,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:225"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "75f5fc5d453d551919ddc102e145cb849575f51425ea63487f18376c13984215",
+       "owner_module": "NHJ_DeployedIds",
+       "root": "NHJ_DeployedIds.registry_actual"
+      }
+     ]
+    },
+    {
+     "order": 4,
+     "callee": "validate_verifier_policy_v1",
+     "arguments": "&master.verifier_policy",
+     "line": 101,
+     "end_offset": 726,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:151"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a690c0ad0b7c55ea5d2906406d807946ce3b75e82c70d2a5d51a230db8c43775",
+       "owner_module": "NHY_PolicyModel",
+       "root": "NHY_PolicyModel.actual_slot"
+      }
+     ]
+    },
+    {
+     "order": 5,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 102,
+     "end_offset": 781,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 6,
+     "callee": "registry_program_id",
+     "arguments": "",
+     "line": 103,
+     "end_offset": 855,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:225"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "75f5fc5d453d551919ddc102e145cb849575f51425ea63487f18376c13984215",
+       "owner_module": "NHJ_DeployedIds",
+       "root": "NHJ_DeployedIds.registry_actual"
+      }
+     ]
+    },
+    {
+     "order": 7,
+     "callee": "Pubkey::new_from_array",
+     "arguments": "registry_program_id()",
+     "line": 103,
+     "end_offset": 856,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 8,
+     "callee": "require_readonly_account",
+     "arguments": "registry_account, &registry_program",
+     "line": 104,
+     "end_offset": 923,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:236"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5731548329fe4218e18e4984059b3fe695e42e9f9805f631d37942d6e462b2ce",
+       "owner_module": "NIM_NHJ_ReadonlyPacket",
+       "root": "NHJ_ReadonlyPacket.readonly"
+      }
+     ]
+    },
+    {
+     "order": 9,
+     "callee": "bpf_loader_upgradeable::id",
+     "arguments": "",
+     "line": 108,
+     "end_offset": 1131,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 10,
+     "callee": "data",
+     "arguments": "",
+     "line": 109,
+     "end_offset": 1207,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 11,
+     "callee": "decode_verifier_registry_v2",
+     "arguments": "registry_account.data()?",
+     "line": 109,
+     "end_offset": 1209,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:204"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "c41a6877efeea4432fc06c0dc5f52e13778447110af485b958180631de3e47b9",
+       "owner_module": "NHY_RegistryJoin",
+       "root": "NHY_RegistryJoin.cohort"
+      }
+     ]
+    },
+    {
+     "order": 12,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 110,
+     "end_offset": 1268,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 13,
+     "callee": "key",
+     "arguments": "",
+     "line": 114,
+     "end_offset": 1429,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 14,
+     "callee": "as_ref",
+     "arguments": "",
+     "line": 114,
+     "end_offset": 1438,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 15,
+     "callee": "Pubkey::create_program_address",
+     "arguments": "\n            &[\n                VERIFIER_REGISTRY_V2_SEED,\n                master_account.key().as_ref(),\n                &[registry.bump],\n            ],\n            &registry_program,\n        ",
+     "line": 111,
+     "end_offset": 1529,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 16,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 119,
+     "end_offset": 1584,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 17,
+     "callee": "key",
+     "arguments": "",
+     "line": 120,
+     "end_offset": 1620,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 18,
+     "callee": "as_ref",
+     "arguments": "",
+     "line": 124,
+     "end_offset": 1819,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 19,
+     "callee": "Pubkey::create_program_address",
+     "arguments": "\n            &[registry_program.as_ref(), &[registry.programdata_bump]],\n            &loader,\n        ",
+     "line": 123,
+     "end_offset": 1882,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 20,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 127,
+     "end_offset": 1937,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 21,
+     "callee": "key",
+     "arguments": "",
+     "line": 128,
+     "end_offset": 1988,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 22,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 128,
+     "end_offset": 1999,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 23,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 131,
+     "end_offset": 2230,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 24,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 132,
+     "end_offset": 2290,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 25,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 133,
+     "end_offset": 2369,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 26,
+     "callee": "is_immutable",
+     "arguments": "",
+     "line": 134,
+     "end_offset": 2409,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:197",
+      "TX2:199"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "c6cc3ee978980ca5eed9276a30091898b4446dfb52bc02f2873e5ec67f30d356",
+       "owner_module": "NHY_RegistryPipeline",
+       "root": "NHY_RegistryPipeline.immutable_v1"
+      },
+      {
+       "obligation_statement_sha256": "4db7c8cb6d26e98102e026d3a066570ae25a75529517ea32f771cf5de784fa99",
+       "owner_module": "NHY_RegistryPipeline",
+       "root": "NHY_RegistryPipeline.immutable_v2"
+      }
+     ]
+    },
+    {
+     "order": 27,
+     "callee": "is_paused",
+     "arguments": "",
+     "line": 135,
+     "end_offset": 2445,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:198",
+      "TX2:200"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "7a2350d918e4bed42fed67587a5fd3926cb432744b065572be9aee4835092ddc",
+       "owner_module": "NHY_RegistryPipeline",
+       "root": "NHY_RegistryPipeline.paused_v1"
+      },
+      {
+       "obligation_statement_sha256": "0b8e4acea76e2e322eb6242bc253fc72a857a6e77a66f024af41eb17719c7e4b",
+       "owner_module": "NHY_RegistryPipeline",
+       "root": "NHY_RegistryPipeline.paused_v2"
+      }
+     ]
+    },
+    {
+     "order": 28,
+     "callee": "require_readonly_account",
+     "arguments": "entry_account, &registry_program",
+     "line": 139,
+     "end_offset": 2590,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:236"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5731548329fe4218e18e4984059b3fe695e42e9f9805f631d37942d6e462b2ce",
+       "owner_module": "NIM_NHJ_ReadonlyPacket",
+       "root": "NHJ_ReadonlyPacket.readonly"
+      }
+     ]
+    },
+    {
+     "order": 29,
+     "callee": "data",
+     "arguments": "",
+     "line": 140,
+     "end_offset": 2667,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 30,
+     "callee": "decode_verifier_registry_entry_v2",
+     "arguments": "entry_account.data()?",
+     "line": 140,
+     "end_offset": 2669,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:202"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "9e8c02b5c479c1e5853aab53dfb3cb1fbc6f29731eea090b4bdced635e1171ef",
+       "owner_module": "NIS_EntryJoin",
+       "root": "NIJ_EntryJoin.cohort"
+      }
+     ]
+    },
+    {
+     "order": 31,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 141,
+     "end_offset": 2728,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 32,
+     "callee": "key",
+     "arguments": "",
+     "line": 145,
+     "end_offset": 2883,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 33,
+     "callee": "as_ref",
+     "arguments": "",
+     "line": 145,
+     "end_offset": 2892,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 34,
+     "callee": "Pubkey::create_program_address",
+     "arguments": "\n            &[\n                VERIFIER_ENTRY_V2_SEED,\n                master_account.key().as_ref(),\n                &PROFILE_BINDING,\n                &RELEASE_BINDING,\n                &[entry.bump],\n            ],\n            &registry_program,\n        ",
+     "line": 142,
+     "end_offset": 3048,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 35,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 152,
+     "end_offset": 3103,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 36,
+     "callee": "key",
+     "arguments": "",
+     "line": 153,
+     "end_offset": 3136,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 37,
+     "callee": "as_ref",
+     "arguments": "",
+     "line": 157,
+     "end_offset": 3332,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 38,
+     "callee": "Pubkey::create_program_address",
+     "arguments": "\n            &[verifier_program.as_ref(), &[entry.programdata_bump]],\n            &loader,\n        ",
+     "line": 156,
+     "end_offset": 3392,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 39,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 160,
+     "end_offset": 3447,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 40,
+     "callee": "key",
+     "arguments": "",
+     "line": 161,
+     "end_offset": 3495,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 41,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 161,
+     "end_offset": 3506,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 42,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 163,
+     "end_offset": 3635,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 43,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 167,
+     "end_offset": 3883,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 44,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 168,
+     "end_offset": 3959,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 45,
+     "callee": "is_active_at",
+     "arguments": "current_slot",
+     "line": 170,
+     "end_offset": 4069,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:194",
+      "TX2:196"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a898271c1e07ac4600fba020938315220883b8a7a26d3eed24c76e0547758b7a",
+       "owner_module": "NIS_ActiveSlots",
+       "root": "NIJ_ActiveSlots.op30_exact"
+      },
+      {
+       "obligation_statement_sha256": "c47db5552579ae567c1d80ed8869b5b210caf8de7272f8e7e420127a88d7dcd0",
+       "owner_module": "NIS_ActiveSlots",
+       "root": "NIJ_ActiveSlots.op29_exact"
+      }
+     ]
+    },
+    {
+     "order": 46,
+     "callee": "data",
+     "arguments": "",
+     "line": 177,
+     "end_offset": 4248,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 47,
+     "callee": "decode_verifier_registry_v1",
+     "arguments": "registry_account.data()?",
+     "line": 177,
+     "end_offset": 4250,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:203"
+     ]
+    },
+    {
+     "order": 48,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 178,
+     "end_offset": 4305,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 49,
+     "callee": "key",
+     "arguments": "",
+     "line": 182,
+     "end_offset": 4447,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 50,
+     "callee": "as_ref",
+     "arguments": "",
+     "line": 182,
+     "end_offset": 4456,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 51,
+     "callee": "Pubkey::create_program_address",
+     "arguments": "\n        &[\n            VERIFIER_REGISTRY_SEED,\n            master_account.key().as_ref(),\n            &[registry.bump],\n        ],\n        &registry_program,\n    ",
+     "line": 179,
+     "end_offset": 4531,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 52,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 187,
+     "end_offset": 4582,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 53,
+     "callee": "key",
+     "arguments": "",
+     "line": 188,
+     "end_offset": 4614,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 54,
+     "callee": "key",
+     "arguments": "",
+     "line": 191,
+     "end_offset": 4743,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 55,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 191,
+     "end_offset": 4754,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 56,
+     "callee": "is_immutable",
+     "arguments": "",
+     "line": 194,
+     "end_offset": 4941,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:197",
+      "TX2:199"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "c6cc3ee978980ca5eed9276a30091898b4446dfb52bc02f2873e5ec67f30d356",
+       "owner_module": "NHY_RegistryPipeline",
+       "root": "NHY_RegistryPipeline.immutable_v1"
+      },
+      {
+       "obligation_statement_sha256": "4db7c8cb6d26e98102e026d3a066570ae25a75529517ea32f771cf5de784fa99",
+       "owner_module": "NHY_RegistryPipeline",
+       "root": "NHY_RegistryPipeline.immutable_v2"
+      }
+     ]
+    },
+    {
+     "order": 57,
+     "callee": "is_paused",
+     "arguments": "",
+     "line": 195,
+     "end_offset": 4973,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:198",
+      "TX2:200"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "7a2350d918e4bed42fed67587a5fd3926cb432744b065572be9aee4835092ddc",
+       "owner_module": "NHY_RegistryPipeline",
+       "root": "NHY_RegistryPipeline.paused_v1"
+      },
+      {
+       "obligation_statement_sha256": "0b8e4acea76e2e322eb6242bc253fc72a857a6e77a66f024af41eb17719c7e4b",
+       "owner_module": "NHY_RegistryPipeline",
+       "root": "NHY_RegistryPipeline.paused_v2"
+      }
+     ]
+    },
+    {
+     "order": 58,
+     "callee": "require_readonly_account",
+     "arguments": "entry_account, &registry_program",
+     "line": 199,
+     "end_offset": 5102,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:236"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "5731548329fe4218e18e4984059b3fe695e42e9f9805f631d37942d6e462b2ce",
+       "owner_module": "NIM_NHJ_ReadonlyPacket",
+       "root": "NHJ_ReadonlyPacket.readonly"
+      }
+     ]
+    },
+    {
+     "order": 59,
+     "callee": "data",
+     "arguments": "",
+     "line": 200,
+     "end_offset": 5175,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 60,
+     "callee": "decode_verifier_registry_entry_v1",
+     "arguments": "entry_account.data()?",
+     "line": 200,
+     "end_offset": 5177,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:201"
+     ]
+    },
+    {
+     "order": 61,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 201,
+     "end_offset": 5232,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 62,
+     "callee": "key",
+     "arguments": "",
+     "line": 205,
+     "end_offset": 5368,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 63,
+     "callee": "as_ref",
+     "arguments": "",
+     "line": 205,
+     "end_offset": 5377,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 64,
+     "callee": "Pubkey::create_program_address",
+     "arguments": "\n        &[\n            VERIFIER_ENTRY_SEED,\n            master_account.key().as_ref(),\n            &PROFILE_BINDING,\n            &RELEASE_BINDING,\n            &[entry.bump],\n        ],\n        &registry_program,\n    ",
+     "line": 202,
+     "end_offset": 5509,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 65,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidAccountData",
+     "line": 212,
+     "end_offset": 5560,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 66,
+     "callee": "key",
+     "arguments": "",
+     "line": 213,
+     "end_offset": 5589,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 67,
+     "callee": "key",
+     "arguments": "",
+     "line": 216,
+     "end_offset": 5712,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:337",
+      "TX2:231"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      },
+      {
+       "obligation_statement_sha256": "a5148483e3b4e77a628da0f2c37b9a9ae83dc0f19684daeeaf2c8f9bd37d46ca",
+       "owner_module": "NFU_AdapterGetters",
+       "root": "NFU_AdapterGetters.key"
+      }
+     ]
+    },
+    {
+     "order": 68,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 216,
+     "end_offset": 5723,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 69,
+     "callee": "to_bytes",
+     "arguments": "",
+     "line": 218,
+     "end_offset": 5844,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 70,
+     "callee": "is_active_at",
+     "arguments": "current_slot",
+     "line": 222,
+     "end_offset": 6068,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:194",
+      "TX2:196"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "a898271c1e07ac4600fba020938315220883b8a7a26d3eed24c76e0547758b7a",
+       "owner_module": "NIS_ActiveSlots",
+       "root": "NIJ_ActiveSlots.op30_exact"
+      },
+      {
+       "obligation_statement_sha256": "c47db5552579ae567c1d80ed8869b5b210caf8de7272f8e7e420127a88d7dcd0",
+       "owner_module": "NIS_ActiveSlots",
+       "root": "NIJ_ActiveSlots.op29_exact"
+      }
+     ]
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-statement/src/pool_v1/format.rs::validate_verifier_policy_v1",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::is_active_at",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::is_active_at",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_immutable",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_paused",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_immutable",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_paused",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_entry_v1",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_entry_v2",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_v1",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_v2",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::pool_program_id",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::registry_program_id",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_account"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX2:242",
+   "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::validate_asq8",
+   "frozen_function_sha256": "be78896a83d0f50d461c9f9fa2d545ba639f700c4d91c814f83ed98105114dde",
+   "start_line": 338,
+   "calls": [
+    {
+     "order": 1,
+     "callee": "len",
+     "arguments": "",
+     "line": 344,
+     "end_offset": 30,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 2,
+     "callee": "decode_pool_v1_pair_forest_terminal_request_v1",
+     "arguments": "instruction_data",
+     "line": 347,
+     "end_offset": 225,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:163"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "b8fddf2b1608d61f4171b91a4d0f7a65f5bcba56974fdc0ec0309740fe969e2f",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RequestDomains.binding_fields"
+      },
+      {
+       "obligation_statement_sha256": "57b9a6cbcd24c21a918511a48cc1daeeff9cbac36965026867492262b72721d8",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RequestDomains.payment_length"
+      },
+      {
+       "obligation_statement_sha256": "d76c1ce1a6e12261008e2112e8aa274b006bf35bc3ae36f304ec3bbf392cfb1d",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RequestDomains.payment_window"
+      },
+      {
+       "obligation_statement_sha256": "76f08a95c787ce6b726af03a55b7185c02c7c0a00da05f50e6fa834562b29303",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RequestDomains.wrong_length"
+      },
+      {
+       "obligation_statement_sha256": "1a136309567011da64d933913b0e79ac72870604dd78ca4125173bd452389c23",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RequestField00.alignment"
+      },
+      {
+       "obligation_statement_sha256": "7c95ae9a0c12bbc7969a337d8a3e8135b6bc02a6722dbbf86e8d884785eac4ac",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RequestField01.alignment"
+      },
+      {
+       "obligation_statement_sha256": "41a1880ccb2d23c1f9aa930118f72f1f95aa4d6e68f5a2c5d31b16c7e921159e",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RequestField02.alignment"
+      },
+      {
+       "obligation_statement_sha256": "24d6aa0959ac52372cde3b2aa1e35556f2dc66e518ba740a5c7ab9167fb4a0aa",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFD_RequestField03.alignment"
+      },
+      {
+       "obligation_statement_sha256": "eefa49d1ad2ca53068e2f05a8d45054d7cdb22e2559189c6cf47112f7a1e1bcd",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFD_RequestField04.alignment"
+      },
+      {
+       "obligation_statement_sha256": "41af0150358218c348ecab5afdc6b5144451a688c5b4499b69a3b2a67a00e34e",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFD_RequestField05.alignment"
+      },
+      {
+       "obligation_statement_sha256": "a4872b3a04333ddd4c0783b8de383dd1d7e05b6c8fb9895c14268df3e5f8e9e3",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFD_RequestField06.alignment"
+      },
+      {
+       "obligation_statement_sha256": "c86b9f753d18145c8858fe6c7a292fc39dd86dcf1ec4f6372efb08ee3741f68f",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFD_RequestField07.alignment"
+      },
+      {
+       "obligation_statement_sha256": "4df3433909d9df3962592e9ec389d39bd146d7e4950ba08c3464eceeb5c3b4aa",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFD_RequestField08.alignment"
+      },
+      {
+       "obligation_statement_sha256": "daca7a4e1c22d659accd76bc6c9e46b5a54e8a077d1fbfacaac12c81b3922c6a",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFD_RequestField09.alignment"
+      },
+      {
+       "obligation_statement_sha256": "0df64acd6eb157867f364d1a063c6d5f6da2a7944c1725ec9bf728b968f389c0",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFD_RequestField10.alignment"
+      },
+      {
+       "obligation_statement_sha256": "9647505134814d3b61daa9671d22efe78ed27b10ba571f9a14065ddd0a496fd4",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFD_RequestField11.alignment"
+      },
+      {
+       "obligation_statement_sha256": "d22b7558125257f89bb07af879c0dc018362558f26251422dea091a62fe0927a",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFD_RequestField12.alignment"
+      },
+      {
+       "obligation_statement_sha256": "128723661d591eccc75fae6fe09a957d9a399f72b3683d7c4ebdff8b6558bf97",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFD_RequestField13.alignment"
+      },
+      {
+       "obligation_statement_sha256": "296e66861115e351fa8750d486e5a7c3761549c3f6347ce198100dbe05e5bf76",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RequestOracle.array_result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "db40b43104a296f91ad06a772fca69e90c7f7644f20d5184520e888e324c6c13",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RequestOracle.result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "f99820e3add845dcf59d860278a81323009b9fa047d31f7fc8660a3f264cd305",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RequestProjection.complete"
+      },
+      {
+       "obligation_statement_sha256": "1f685f1195ebe5a31796f50f14366e87b7e7b515e0f31af8ee6fb6d1b489564e",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RequestProjection.transfer_roundtrip"
+      },
+      {
+       "obligation_statement_sha256": "08d3106b08ecf6b2b8f3246fe15ae59d87d46a7963f770d8c1cacf2f246d4680",
+       "owner_module": "NFY_Part059",
+       "root": "NFY_NFD_RequestProjection.withdrawal_roundtrip"
+      }
+     ]
+    },
+    {
+     "order": 3,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidInstructionData",
+     "line": 348,
+     "end_offset": 284,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 4,
+     "callee": "pool_program_id",
+     "arguments": "",
+     "line": 351,
+     "end_offset": 445,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:220"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "ebedd0031990b8a804c9f961a34fc0bc317878a6f53308aa501dc634e315ad18",
+       "owner_module": "NHJ_DeployedIds",
+       "root": "NHJ_DeployedIds.pool_actual"
+      }
+     ]
+    },
+    {
+     "order": 5,
+     "callee": "Pubkey::new_from_array",
+     "arguments": "request.pool_program",
+     "line": 355,
+     "end_offset": 583,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 6,
+     "callee": "nullifier",
+     "arguments": "",
+     "line": 356,
+     "end_offset": 668,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:158",
+      "TX2:161"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "549932a6381ed7ccc5d1f3aacec11dddb85b9679385ac2a481e7d2a308e0c6e2",
+       "owner_module": "NGE_NEQ_NullifierDomains",
+       "root": "NGE_NEQ_NullifierDomains.common_independent"
+      },
+      {
+       "obligation_statement_sha256": "17d6c8241bbfbebd3fc669a43166c1f877ae7f398d8f83f0cc59b6933e72843f",
+       "owner_module": "NGE_NEQ_NullifierDomains",
+       "root": "NGE_NEQ_NullifierDomains.payment_result_frame"
+      },
+      {
+       "obligation_statement_sha256": "02f7a841f7cdab68256fff8f8668e95583123e6e0ca3b9db6bc70c53ad19940d",
+       "owner_module": "NGE_NEQ_NullifierDomains",
+       "root": "NGE_NEQ_NullifierDomains.statement_result_frame"
+      },
+      {
+       "obligation_statement_sha256": "549932a6381ed7ccc5d1f3aacec11dddb85b9679385ac2a481e7d2a308e0c6e2",
+       "owner_module": "NGE_NEQ_NullifierDomains",
+       "root": "NGE_NEQ_NullifierDomains.common_independent"
+      },
+      {
+       "obligation_statement_sha256": "17d6c8241bbfbebd3fc669a43166c1f877ae7f398d8f83f0cc59b6933e72843f",
+       "owner_module": "NGE_NEQ_NullifierDomains",
+       "root": "NGE_NEQ_NullifierDomains.payment_result_frame"
+      },
+      {
+       "obligation_statement_sha256": "02f7a841f7cdab68256fff8f8668e95583123e6e0ca3b9db6bc70c53ad19940d",
+       "owner_module": "NGE_NEQ_NullifierDomains",
+       "root": "NGE_NEQ_NullifierDomains.statement_result_frame"
+      }
+     ]
+    },
+    {
+     "order": 7,
+     "callee": "pool_v1_pair_forest_output_lane_v1",
+     "arguments": "request.public.nullifier()",
+     "line": 356,
+     "end_offset": 669,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:207",
+      "TX2:156"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "9ab4f529cbf68cb3c80deaa386771747726c0f8cc2e4f8f46dc3babdbc0c3062",
+       "owner_module": "NFY_Part031",
+       "root": "NFY_NEM_LaneReached.lane_instance"
+      },
+      {
+       "obligation_statement_sha256": "4723d023345873be802d186cb6217c25407158fcdefed6fcb489e757fa1fb508",
+       "owner_module": "NFY_Part031",
+       "root": "NFY_NEM_LaneReached.lane_reached"
+      },
+      {
+       "obligation_statement_sha256": "9ab4f529cbf68cb3c80deaa386771747726c0f8cc2e4f8f46dc3babdbc0c3062",
+       "owner_module": "NFY_Part031",
+       "root": "NFY_NEM_LaneReached.lane_instance"
+      },
+      {
+       "obligation_statement_sha256": "4723d023345873be802d186cb6217c25407158fcdefed6fcb489e757fa1fb508",
+       "owner_module": "NFY_Part031",
+       "root": "NFY_NEM_LaneReached.lane_reached"
+      }
+     ]
+    },
+    {
+     "order": 8,
+     "callee": "map_err",
+     "arguments": "|_| ProgramError::InvalidInstructionData",
+     "line": 357,
+     "end_offset": 728,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 9,
+     "callee": "authenticate_asq8_accounts",
+     "arguments": "\n        verifier_program,\n        accounts,\n        &pool_program,\n        output_lane,\n        current_slot?,\n    ",
+     "line": 358,
+     "end_offset": 899,
+     "law_class": "MISSING CLOSED callee packet",
+     "law_rows": [
+      "TX2:233"
+     ]
+    },
+    {
+     "order": 10,
+     "callee": "first",
+     "arguments": "",
+     "line": 365,
+     "end_offset": 942,
+     "law_class": "P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name"
+    },
+    {
+     "order": 11,
+     "callee": "ok_or",
+     "arguments": "ProgramError::NotEnoughAccountKeys",
+     "line": 365,
+     "end_offset": 984,
+     "law_class": "MISSING exact specialization/packet/frame lemma; cannot assume"
+    },
+    {
+     "order": 12,
+     "callee": "data",
+     "arguments": "",
+     "line": 366,
+     "end_offset": 1043,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX1:335",
+      "TX2:229"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      },
+      {
+       "obligation_statement_sha256": "e31989fb35801e8bbbcbc90cec0f02b8efb51e4dbe9f9ebc3ac5479a63933bf8",
+       "owner_module": "NHJ_DataPacket",
+       "root": "NHJ_DataPacket.substitute"
+      }
+     ]
+    },
+    {
+     "order": 13,
+     "callee": "scan_proof_buffer",
+     "arguments": "proof_account.data()?",
+     "line": 366,
+     "end_offset": 1045,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:226"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "af3f299b667ab920a4eb5361be8cbc6a33742783bf52a9d4fc487da54ca1a708",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFJ_Comparison.completion"
+      },
+      {
+       "obligation_statement_sha256": "c40df6bc5c02fcfe35254e4eb0fab15e0d67bbcd510a387f632a4da20eaca7df",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFJ_Comparison.header_length"
+      },
+      {
+       "obligation_statement_sha256": "e1ace077f9a11da45f60c2ee04111dc2f0106be9b9b1d108245696a533f6aabf",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFJ_Comparison.nativeEqualityBridge"
+      },
+      {
+       "obligation_statement_sha256": "cda7342ae451f32206126f71f4a1d029c197a47200dd426c58111a2a42a2e246",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFJ_Comparison.same_buffer_lengths"
+      },
+      {
+       "obligation_statement_sha256": "c7f85656cf4693fdb998ba1699730fe6bb3e386e21cba0d7121cf81045c8f523",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFJ_Comparison.slot_zero_iff"
+      },
+      {
+       "obligation_statement_sha256": "d0c882c13e3999944ababbcefb56c745ac66ba8871e1d496eac0edcc2ee99156",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFJ_Scanner.decode_domain"
+      },
+      {
+       "obligation_statement_sha256": "b2eb02646358d4cf6d628dd086cd969ae4f0b503d9ebcb95acea058b9fb3eb4c",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFJ_Scanner.encode_domain"
+      },
+      {
+       "obligation_statement_sha256": "57bdccf501814d7d2eeeee7c08902c10972defce3bfb206b439a1e92b4c96ba4",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFJ_Scanner.result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "43190285ac298b656caf678143f8afc71eb94c5ac3f14888927a6e95299d8e49",
+       "owner_module": "NFY_Part060",
+       "root": "NFY_NFJ_Scanner.tag_domain"
+      }
+     ]
+    },
+    {
+     "order": 14,
+     "callee": "reconstruct_asq8_statement",
+     "arguments": "&request, &authenticated, &scanned.candidate_afterstate",
+     "line": 368,
+     "end_offset": 1159,
+     "law_class": "CLOSED row (domain and full packet still to instantiate)",
+     "law_rows": [
+      "TX2:224"
+     ],
+     "roots": [
+      {
+       "obligation_statement_sha256": "2a59186c2f3978c27cc8ed35625439f28728448ef20d8882f399b57857c4e752",
+       "owner_module": "NFY_Part057",
+       "root": "NFY_NEU_CallDomains.common_packet"
+      },
+      {
+       "obligation_statement_sha256": "91820abb9e90a440ed0ba9bc2790d6e9aa5d12e9d20a2648f5026369ce57f39e",
+       "owner_module": "NFY_Part057",
+       "root": "NFY_NEU_CallDomains.reached_domains"
+      },
+      {
+       "obligation_statement_sha256": "19176d69ae55b58f7f733336e4b572531703e9da52af9824828b194b3a4d7433",
+       "owner_module": "NFY_Part057",
+       "root": "NFY_NEU_CallDomains.transfer_packet"
+      },
+      {
+       "obligation_statement_sha256": "4b9a639a4a95127efc599627c32af6d0474b4be0a92ffb24c2a3e05f8c74fce0",
+       "owner_module": "NFY_Part057",
+       "root": "NFY_NEU_CallDomains.transfer_reply_range"
+      },
+      {
+       "obligation_statement_sha256": "190623721e83a7d87eeeb45d3ea1b1d4f3058d65289e591a08f75f2b1a873d6d",
+       "owner_module": "NFY_Part057",
+       "root": "NFY_NEU_CallDomains.withdrawal_packet"
+      },
+      {
+       "obligation_statement_sha256": "98f7b7243ef7dfaff97c0b2ba80addf1bf5744232b576474de94aea9e45eaf04",
+       "owner_module": "NFY_Part057",
+       "root": "NFY_NEU_CallDomains.withdrawal_reply_range"
+      },
+      {
+       "obligation_statement_sha256": "af1e137647baee1014918510c429b55ac8757f52eacf7ec36882a361e407e835",
+       "owner_module": "NFY_Part057",
+       "root": "NFY_NEU_ReconstructAdopted.result_state_effects"
+      },
+      {
+       "obligation_statement_sha256": "531a1055b554a342904af1a2b05946342d12ec5ad15c6e4cdce689a67eceecde",
+       "owner_module": "NFY_Part057",
+       "root": "NFY_NEU_ReconstructCore.result_state_effects"
+      }
+     ]
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::pool_v1_pair_forest_output_lane_v1",
+    "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalPaymentV1::nullifier",
+    "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::nullifier",
+    "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::decode_pool_v1_pair_forest_terminal_request_v1",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::pool_program_id",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement",
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs::scan_proof_buffer",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::authenticate_asq8_accounts"
+   ],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX1:329",
+   "function": "programs/r1-cost-probe/src/lib.rs::observer",
+   "frozen_function_sha256": "40e3ceae0418aae92321c19651f8a3ff3660e31468f6197f82186a3b01f9d50c",
+   "start_line": 36,
+   "calls": [],
+   "canonical_callees": [],
+   "status": "OPEN"
+  },
+  {
+   "row": "TX2:212",
+   "function": "programs/r1-cost-probe/src/lib.rs::observer",
+   "frozen_function_sha256": "40e3ceae0418aae92321c19651f8a3ff3660e31468f6197f82186a3b01f9d50c",
+   "start_line": 36,
+   "calls": [],
+   "canonical_callees": [],
+   "status": "OPEN"
+  }
+ ],
+ "method": "Source-ordered call inventory cross-checked against canonical emitted slots; library candidates are NOT credited laws"
+}

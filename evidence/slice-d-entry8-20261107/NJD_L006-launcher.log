@@ -1,0 +1,59 @@
+{"attempt": "NJD_L006", "exit_status": 1, "wall_seconds": 3.459355097031221, "peak_rss_kib": "4396384", "swaps": "0", "print_axioms": ["'AspisR1.NJD_EntrySpine.process_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJD_EntrySpine.entry_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJD_EntrySpine.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJD_generated/NJD_EntrySpine.lean:64:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let a_1 ← ops.eq d (Array.make 2#usize [3#u8, 10#u8] fallback._proof_4)
+    (if a_1 = true then ([Event.child 1 p a d], ops.first p a d)
+        else
+          NJD_Trace.bind
+            ([Event.equal d (Array.make 2#usize [3#u8, 11#u8] fallback._proof_6)],
+              ops.eq d (Array.make 2#usize [3#u8, 11#u8] fallback._proof_6))
+            fun eleven =>
+            if eleven = true then ([Event.child 1 p a d], ops.first p a d)
+            else ([Event.child 2 p a d], ops.second p a d)).2
+is not definitionally equal to the right-hand side
+  do
+    let b ← ops.eq d (Array.make 2#usize [3#u8, 10
+...
+case h_2
+Account : Type
+ops : Boundaries Account
+p : Key
+a : Slice Account
+d : Slice U8
+h : Option U8
+i : U8
+value✝ : Option U8
+i✝ : U8
+heq✝ : some i = some i✝
+⊢ (match i✝ with
+      | 4#8#uscalar => ([Event.child 4 p a d], ops.init p a d)
+      | 5#8#uscalar => ([Event.child 5 p a d], ops.write p a d)
+      | 6#8#uscalar => ([Event.child 6 p a d], ops.finalize p a d)
+      | x =>
+        NJD_Trace.bind
+          ([Event.equal d (Array.make 2#usize [3#u8, 10#u8] fallback._proof_4)],
+            ops.eq d (Array.make 2#usize [3#u8, 10#u8] fallback._proof_4))
+          fun ten =>
+          if ten = true then ([Event.child 1 p a d], ops.first p a d)
+          else
+            NJD_Trace.bind
+              ([Event.equal d (Array.make 2#usize [3#u8, 11#u8] fallback._proof_6)],
+                ops.eq d (Array.make 2#usize [3#u8, 11#u8] fallback._proof_6))
+              fun eleven =>
+              if eleven = true then ([Event.child 1 p a d], ops.first p a d)
+              else ([Event.child 2 p a d], ops.second p a d)).2 =
+    match i with
+    | 4#8#uscalar => ops.init p a d
+    | 5#8#uscalar => ops.write p a d
+    | 6#8#uscalar => ops.finalize p a d
+    | x => do
+      let b ← ops.eq d (Array.make 2#usize [3#u8, 10#u8] NIV_RawBoundary.process._proof_4)
+      if b = true then ops.first p a d
+        else do
+          let b1 ← ops.eq d (Array.make 2#usize [3#u8, 11#u8] NIV_RawBoundary.process._proof_6)
+          if b1 = true then ops.first p a d else ops.second p a d
+'AspisR1.NJD_EntrySpine.process_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJD_EntrySpine.entry_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJD_EntrySpine.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf0e1c7db81ad4e42b8f3196ba51d0548.scope; invocation ID: 74fb4a38f5b14a18824bd73f243c5161
