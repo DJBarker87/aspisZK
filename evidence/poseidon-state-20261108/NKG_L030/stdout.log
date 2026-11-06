@@ -1,0 +1,157 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_FullChoices.value : ∀ (s l : State) (out : Std.Array field.QM31 4#usize),
+  state_only_poseidon.interpolated_full_pair_packed s l = ok out → last s l = out :=
+fun s l out run =>
+  let ⟨q0, h✝⟩ := FJe_FullCalls.value s l out run
+  let ⟨q1, h✝¹⟩ := h✝
+  let ⟨q2, h✝²⟩ := h✝¹
+  let ⟨e, h✝³⟩ := h✝²
+  let ⟨o, h✝⁴⟩ := h✝³
+  let ⟨mid, h✝⁵⟩ := h✝⁴
+  let ⟨r0, right✝⟩ := h✝⁵
+  let ⟨r1, right✝¹⟩ := right✝
+  let ⟨r2, right✝²⟩ := right✝¹
+  let ⟨re, right✝³⟩ := right✝²
+  let ⟨ro, right✝⁴⟩ := right✝³
+  let ⟨rm, rf⟩ := right✝⁴
+  have e0 :=
+    ok.inj
+      (Eq.trans (Eq.symm r0)
+        (RawPoseidonExternalRowReads.array_index_usize_ok l 1#usize (of_decide_eq_true (id (Eq.refl true)))));
+  have e1 :=
+    ok.inj
+      (Eq.trans (Eq.symm r1)
+        (RawPoseidonExternalRowReads.array_index_usize_ok l 9#usize (of_decide_eq_true (id (Eq.refl true)))));
+  have e2 :=
+    ok.inj
+      (Eq.trans (Eq.symm r2)
+        (RawPoseidonExternalRowReads.array_index_usize_ok l 10#usize (of_decide_eq_true (id (Eq.refl true)))));
+  Eq.ndrec (motive := fun q0 =>
+    Array.index_usize l 1#usize = ok q0 →
+      state_only_poseidon.interpolate_three_constant_columns
+            (Array.make 3#usize [q0, q1, q2]
+              (of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                    (UScalar.ofNatCore_val_eq
+                      (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                  (eq_self 3))))
+            (FJb_InitialConstants.row 2) (FJe_FinalConstants.row 0) (FJe_FinalConstants.row 2) =
+          ok e →
+        state_only_poseidon.interpolate_three_constant_columns
+              (Array.make 3#usize [q0, q1, q2]
+                (of_eq_true
+                  (Eq.trans
+                    (congr
+                      (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                      (UScalar.ofNatCore_val_eq
+                        (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                    (eq_self 3))))
+              (FJb_InitialConstants.row 3) (FJe_FinalConstants.row 1) (FJe_FinalConstants.row 3) =
+            ok o →
+          last s l = out)
+    (fun r0 re ro =>
+      Eq.ndrec (motive := fun q1 =>
+        Array.index_usize l 9#usize = ok q1 →
+          state_only_poseidon.interpolate_three_constant_columns
+                (Array.make 3#usize [cell l ⟨1, of_decide_eq_true (id (Eq.refl true))⟩, q1, q2]
+                  (of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                        (UScalar.ofNatCore_val_eq
+                          (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                      (eq_self 3))))
+                (FJb_InitialConstants.row 2) (FJe_FinalConstants.row 0) (FJe_FinalConstants.row 2) =
+              ok e →
+            state_only_poseidon.interpolate_three_constant_columns
+                  (Array.make 3#usize [cell l ⟨1, of_decide_eq_true (id (Eq.refl true))⟩, q1, q2]
+                    (of_eq_true
+                      (Eq.trans
+                        (congr
+                          (congrArg Eq
+                            (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                          (UScalar.ofNatCore_val_eq
+                            (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                        (eq_self 3))))
+                  (FJb_InitialConstants.row 3) (FJe_FinalConstants.row 1) (FJe_FinalConstants.row 3) =
+                ok o →
+              last s l = out)
+        (fun r1 re ro =>
+          Eq.ndrec (motive := fun q2 =>
+            Array.index_usize l 10#usize = ok q2 →
+              state_only_poseidon.interpolate_three_constant_columns
+                    (Array.make 3#usize
+                      [cell l ⟨1, of_decide_eq_true (id (Eq.refl true))⟩,
+                        cell l ⟨9, of_decide_eq_true (id (Eq.refl true))⟩, q2]
+                      (of_eq_true
+                        (Eq.trans
+                          (congr
+                            (congrArg Eq
+                              (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                            (UScalar.ofNatCore_val_eq
+                              (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                          (eq_self 3))))
+                    (FJb_InitialConstants.row 2) (FJe_FinalConstants.row 0) (FJe_FinalConstants.row 2) =
+                  ok e →
+                state_only_poseidon.interpolate_three_constant_columns
+                      (Array.make 3#usize
+                        [cell l ⟨1, of_decide_eq_true (id (Eq.refl true))⟩,
+                          cell l ⟨9, of_decide_eq_true (id (Eq.refl true))⟩, q2]
+                        (of_eq_true
+                          (Eq.trans
+                            (congr
+                              (congrArg Eq
+                                (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                              (UScalar.ofNatCore_val_eq
+                                (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+                            (eq_self 3))))
+                      (FJb_InitialConstants.row 3) (FJe_FinalConstants.row 1) (FJe_FinalConstants.row 3) =
+                    ok o →
+                  last s l = out)
+            (fun r2 re ro =>
+              have ve :=
+                get_ok
+                  (state_only_poseidon.interpolate_three_constant_columns (weights l) (FJb_InitialConstants.row 2)
+                    (FJe_FinalConstants.row 0) (FJe_FinalConstants.row 2))
+                  (Array.repeat 16#usize field.QM31.ZERO) e re;
+              have vo :=
+                get_ok
+                  (state_only_poseidon.interpolate_three_constant_columns (weights l) (FJb_InitialConstants.row 3)
+                    (FJe_FinalConstants.row 1) (FJe_FinalConstants.row 3))
+                  (Array.repeat 16#usize field.QM31.ZERO) o ro;
+              have vm :=
+                id
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          NKG_InternalChoices.get (state_only_poseidon.full_round s _a)
+                              (Array.repeat 16#usize field.QM31.ZERO) =
+                            mid)
+                        ve))
+                    (get_ok (state_only_poseidon.full_round s e) (Array.repeat 16#usize field.QM31.ZERO) mid rm));
+              id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        NKG_InternalChoices.get (state_only_poseidon.full_round_packed _a (odd l))
+                            (Array.repeat 4#usize field.QM31.ZERO) =
+                          out)
+                      vm))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          NKG_InternalChoices.get (state_only_poseidon.full_round_packed mid _a)
+                              (Array.repeat 4#usize field.QM31.ZERO) =
+                            out)
+                        vo))
+                    (get_ok (state_only_poseidon.full_round_packed mid o) (Array.repeat 4#usize field.QM31.ZERO) out
+                      rf))))
+            (Eq.symm e2) r2 re ro)
+        (Eq.symm e1) r1 re ro)
+    (Eq.symm e0) r0 re ro
+'AspisR1.NKG_FullChoices.value' depends on axioms: [propext, Classical.choice, Quot.sound]

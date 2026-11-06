@@ -1,0 +1,51 @@
+{"attempt": "NKG_L011", "exit_status": 0, "wall_seconds": 10.558565376093611, "peak_rss_kib": "6032076", "swaps": "0", "print_axioms": ["'AspisR1.NKG_InternalSource.result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_InternalSource.result : ∀ (s l : State),
+  canonical s →
+    canonical l →
+      ∃ out,
+        state_only_poseidon.interpolated_internal_pair s l = ok out ∧
+          canonical out ∧ decoded out = R0P.poseidonInterpolatedInternalPair (decoded s) (decoded l) :=
+fun s l hs hl =>
+  let ⟨w, h✝⟩ := NKG_InternalMaps.weights l hl
+  let ⟨rw, cw⟩ := h✝
+  let ⟨e, h✝¹⟩ := NKG_InternalMaps.constants_even
+  let ⟨re, ce⟩ := h✝¹
+  let ⟨o, h✝²⟩ := NKG_InternalMaps.constants_odd
+  let ⟨ro, co⟩ := h✝²
+  have wd := fun i hi => cw (FJh_M31DotReads.sliceCell w.to_slice i hi) (List.getElem_mem hi);
+  have ed :
+...
+t weights.to_slice y.to_slice
+                        let odd ← field.qm31_m31_dot weights.to_slice o.to_slice
+                        let a ← state_only_poseidon.internal_round s even
+                        state_only_poseidon.internal_round a odd)))
+                (bind_tc_ok w fun y => do
+                  let even ← field.qm31_m31_dot y.to_slice e.to_slice
+                  let odd ← field.qm31_m31_dot y.to_slice o.to_slice
+                  let a ← state_only_poseidon.internal_round s even
+                  state_only_poseidon.internal_round a odd))
+              (Eq.trans
+                (Eq.trans
+                  (congr (congrArg Bind.bind reven)
+                    (funext fun even =>
+                      Eq.trans
+                        (congrFun' (congrArg Bind.bind rodd) fun odd => do
+                          let a ← state_only_poseidon.internal_round s even
+                          state_only_poseidon.internal_round a odd)
+                        (bind_tc_ok odd fun y => do
+                          let a ← state_only_poseidon.internal_round s even
+                          state_only_poseidon.internal_round a y)))
+                  (bind_tc_ok even fun y => do
+                    let a ← state_only_poseidon.internal_round s y
+                    state_only_poseidon.internal_round a odd))
+                (Eq.trans
+                  (Eq.trans (congrFun' (congrArg Bind.bind rm) fun a => state_only_poseidon.internal_round a odd)
+                    (bind_tc_ok middle fun y => state_only_poseidon.internal_round y odd))
+                  rf))))
+          (ok out))
+        (eq_self (ok out)));
+  Exists.intro out ⟨run, FJh_InternalPairValue.value s l out hs hl run⟩
+'AspisR1.NKG_InternalSource.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb1321ec02b354f688e9f1b9d1d0a4578.scope; invocation ID: be35962dd3ce471fa5608069171013bc

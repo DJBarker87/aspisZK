@@ -1,0 +1,205 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_PreparedRaw.source : ∀ (w : Three) (p : Prepared),
+  FIq_Native.core.array.Array.map (BuiltinFnMut NQ NP) w field.PreparedQm31Multiplier.new = ok p → p = model w :=
+fun w p run =>
+  have rel :=
+    FJa_MapRelation.value (BuiltinFnMut NQ NP) (fun x y => field.PreparedQm31Multiplier.new x = ok y) w
+      field.PreparedQm31Multiplier.new p
+      (fun x hx y last called =>
+        id
+          (fun called =>
+            let ⟨z, h✝⟩ :=
+              FIv_Map.bind_success (field.PreparedQm31Multiplier.new x)
+                (fun z => ok (z, field.PreparedQm31Multiplier.new)) (y, last) called
+            let ⟨rz, called⟩ := h✝
+            let ⟨left✝, right✝⟩ := Prod.mk.inj (ok.inj called)
+            Eq.ndrec (motive := fun y =>
+              (do
+                    let z ← field.PreparedQm31Multiplier.new x
+                    ok (z, field.PreparedQm31Multiplier.new)) =
+                  ok (y, last) →
+                ok (z, field.PreparedQm31Multiplier.new) = ok (y, last) →
+                  field.PreparedQm31Multiplier.new x = ok y ∧ last = field.PreparedQm31Multiplier.new)
+              (fun called called_1 =>
+                Eq.ndrec (motive := fun last =>
+                  (do
+                        let z ← field.PreparedQm31Multiplier.new x
+                        ok (z, field.PreparedQm31Multiplier.new)) =
+                      ok (z, last) →
+                    ok (z, field.PreparedQm31Multiplier.new) = ok (z, last) →
+                      field.PreparedQm31Multiplier.new x = ok z ∧ last = field.PreparedQm31Multiplier.new)
+                  (fun called called_2 => ⟨rz, rfl⟩) right✝ called called_1)
+              left✝ called called)
+          called)
+      run;
+  Subtype.ext
+    (List.ext_getElem
+      (Eq.mpr (id (congrArg (fun _a => _a = (↑(model w)).length) p.property))
+        (Eq.mpr (id (congrArg (fun _a => ↑3#usize = _a) (model w).property)) (Eq.refl ↑3#usize)))
+      fun j hj hk =>
+      have h3 := Eq.mp (congrArg (LT.lt j) p.property) hj;
+      let i := ⟨j, h3⟩;
+      have called := FJh_MapCells.get rel j (Eq.mpr (id (congrArg (LT.lt j) w.property)) h3) hj;
+      Eq.mpr
+        (id
+          (congrArg (Eq (↑p)[j])
+            (List.getElem_ofFn
+              (id
+                  (Eq.refl
+                    (List.ofFn fun i =>
+                      NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[↑i]) zeroPrepared)) ▸
+                Eq.refl j ▸ hk))))
+        (Eq.symm (get_ok (field.PreparedQm31Multiplier.new (cell w i)) zeroPrepared (cell p i) called)))
+'AspisR1.NKG_PreparedRaw.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_PreparedRaw.native : ∀ (w : Three) (theta : NQ) (args : Std.Array NQ 4#usize) (p : Prepared)
+  (block : NP) (calls : ℕ),
+  NKG_OracleCuts.Prepare w theta args (replies w theta) p block calls →
+    p = model w ∧ block = NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared :=
+fun w theta args p block calls cut =>
+  ⟨Subtype.ext
+      (List.ext_getElem
+        (Eq.mpr (id (congrArg (fun _a => _a = (↑(model w)).length) p.property))
+          (Eq.mpr (id (congrArg (fun _a => ↑3#usize = _a) (model w).property)) (Eq.refl ↑3#usize)))
+        fun j hj hk =>
+        have h3 :=
+          Eq.mp
+            (congrArg (LT.lt j)
+              (Eq.trans p.property
+                (UScalar.ofNatCore_val_eq (UScalar.bound_suffices UScalarTy.Usize 3 Three._proof_1))))
+            hj;
+        have value := cut.weightsReply ⟨j, h3⟩;
+        Eq.mpr
+          (id
+            (congrArg (Eq (↑p)[j])
+              (List.getElem_ofFn
+                (id
+                    (Eq.refl
+                      (List.ofFn fun i =>
+                        NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[↑i]) zeroPrepared)) ▸
+                  Eq.refl j ▸ hk))))
+          (Eq.mp
+            (congrArg (Eq (↑p)[j])
+              (Eq.trans
+                (Eq.trans
+                  (GetElem.getElem.congr_simp (↑(replies w theta))
+                    (List.ofFn fun j =>
+                      if h : ↑j < 3 then
+                        NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[↑j]) zeroPrepared
+                      else NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)
+                    (congrArg Subtype.val
+                      (Subtype.mk.congr_simp
+                        (List.ofFn fun j =>
+                          if h : ↑j < 3 then
+                            NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (cell w ⟨↑j, h⟩)) zeroPrepared
+                          else NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)
+                        (List.ofFn fun j =>
+                          if h : ↑j < 3 then
+                            NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[↑j]) zeroPrepared
+                          else NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)
+                        (congrArg List.ofFn
+                          (funext fun j =>
+                            dite_congr (Eq.refl (↑j < 3))
+                              (fun h =>
+                                Eq.refl
+                                  (NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[↑j]) zeroPrepared))
+                              fun h =>
+                              Eq.refl (NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)))
+                        (replies._proof_2 w theta)))
+                    (↑⟨↑⟨j, h3⟩,
+                        have this := ⟨j, h3⟩.isLt;
+                        id (Decidable.byContradiction fun a => NKG_OracleCuts.Prepare._proof_1 calls ⟨j, h3⟩ this a)⟩)
+                    j (Eq.refl j)
+                    (cell._proof_1 (replies w theta)
+                      ⟨↑⟨j, h3⟩,
+                        have this := ⟨j, h3⟩.isLt;
+                        id (Decidable.byContradiction fun a => NKG_OracleCuts.Prepare._proof_1 calls ⟨j, h3⟩ this a)⟩))
+                  (List.getElem_ofFn
+                    (congrArg Subtype.val
+                        (Subtype.mk.congr_simp
+                          (List.ofFn fun j =>
+                            if h : ↑j < 3 then
+                              NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (cell w ⟨↑j, h⟩)) zeroPrepared
+                            else NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)
+                          (List.ofFn fun j =>
+                            if h : ↑j < 3 then
+                              NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[↑j]) zeroPrepared
+                            else NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)
+                          (congrArg List.ofFn
+                            (funext fun j =>
+                              dite_congr (Eq.refl (↑j < 3))
+                                (fun h =>
+                                  Eq.refl
+                                    (NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[↑j]) zeroPrepared))
+                                fun h =>
+                                Eq.refl
+                                  (NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)))
+                          (replies._proof_2 w theta)) ▸
+                      Eq.refl j ▸
+                        cell._proof_1 (replies w theta)
+                          ⟨↑⟨j, h3⟩,
+                            have this := ⟨j, h3⟩.isLt;
+                            id
+                              (Decidable.byContradiction fun a =>
+                                NKG_OracleCuts.Prepare._proof_1 calls ⟨j, h3⟩ this a)⟩)))
+                (Eq.trans
+                  (dite_congr (Eq.refl (j < 3))
+                    (fun h => Eq.refl (NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[j]) zeroPrepared))
+                    fun h => Eq.refl (NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared))
+                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos h3) x_0 x_1 x_2 x_3) (j.decLt 3) NP
+                    (fun h => NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[j]) zeroPrepared) fun h =>
+                    NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared))))
+            value)),
+    have value := cut.blockReply;
+    Eq.mp
+      (congrArg (Eq block)
+        (Eq.trans
+          (Eq.trans
+            (GetElem.getElem.congr_simp (↑(replies w theta))
+              (List.ofFn fun j =>
+                if h : ↑j < 3 then NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[↑j]) zeroPrepared
+                else NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)
+              (congrArg Subtype.val
+                (Subtype.mk.congr_simp
+                  (List.ofFn fun j =>
+                    if h : ↑j < 3 then
+                      NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (cell w ⟨↑j, h⟩)) zeroPrepared
+                    else NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)
+                  (List.ofFn fun j =>
+                    if h : ↑j < 3 then NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[↑j]) zeroPrepared
+                    else NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)
+                  (congrArg List.ofFn
+                    (funext fun j =>
+                      dite_congr (Eq.refl (↑j < 3))
+                        (fun h =>
+                          Eq.refl (NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[↑j]) zeroPrepared))
+                        fun h =>
+                        Eq.refl (NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)))
+                  (replies._proof_2 w theta)))
+              (↑⟨3, of_decide_eq_true (id (Eq.refl true))⟩) 3 (Eq.refl 3)
+              (cell._proof_1 (replies w theta) ⟨3, of_decide_eq_true (id (Eq.refl true))⟩))
+            (List.getElem_ofFn
+              (congrArg Subtype.val
+                  (Subtype.mk.congr_simp
+                    (List.ofFn fun j =>
+                      if h : ↑j < 3 then
+                        NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (cell w ⟨↑j, h⟩)) zeroPrepared
+                      else NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)
+                    (List.ofFn fun j =>
+                      if h : ↑j < 3 then
+                        NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[↑j]) zeroPrepared
+                      else NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)
+                    (congrArg List.ofFn
+                      (funext fun j =>
+                        dite_congr (Eq.refl (↑j < 3))
+                          (fun h =>
+                            Eq.refl (NKG_InternalChoices.get (field.PreparedQm31Multiplier.new (↑w)[↑j]) zeroPrepared))
+                          fun h =>
+                          Eq.refl (NKG_InternalChoices.get (field.PreparedQm31Multiplier.new theta) zeroPrepared)))
+                    (replies._proof_2 w theta)) ▸
+                Eq.refl 3 ▸ cell._proof_1 (replies w theta) ⟨3, of_decide_eq_true (id (Eq.refl true))⟩)))
+          (dite_cond_eq_false
+            (eq_false
+              (have this := Nat.lt_irrefl 3;
+              this)))))
+      value⟩
+'AspisR1.NKG_PreparedRaw.native' depends on axioms: [propext, Classical.choice, Quot.sound]

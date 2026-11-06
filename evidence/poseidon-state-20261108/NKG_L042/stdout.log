@@ -1,0 +1,21 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+NKG_lean/NKG_BuilderRaw.lean:37:1: error: Type mismatch: After simplification, term
+  built.right
+ has type
+  @Eq (List field.QM31) (↑out)
+    (List.ofFn fun i => if h : ↑i < 4 then reply c (NKG_GroupFrame.index ⟨↑i, h⟩) else field.QM31.ZERO)
+but is expected to have type
+  @Eq (List NQ) (↑out) (List.ofFn fun i => reply (o, internal, block, p, lead, full) (NKG_GroupFrame.index ⟨↑i, ⋯⟩))
+theorem AspisR1.NKG_BuilderRaw.reply_ok : ∀ (c : Capture) (g : Usize) (x : NQ) (last : Capture),
+  call c g = ok (x, last) → reply c g = x :=
+fun c g x last run =>
+  id
+    (Eq.mpr (id (congrArg (fun _a => (NKG_InternalChoices.get _a (field.QM31.ZERO, c)).1 = x) run))
+      (Eq.refl (NKG_InternalChoices.get (ok (x, last)) (field.QM31.ZERO, c)).1))
+'AspisR1.NKG_BuilderRaw.reply_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_BuilderRaw.source : ∀ (c : Capture) (out : Packed),
+  array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy FJh_ProjectedArrayValue.callback field.QM31.ZERO c =
+      ok out →
+    out = values c :=
+fun c out run => sorry c run
+'AspisR1.NKG_BuilderRaw.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

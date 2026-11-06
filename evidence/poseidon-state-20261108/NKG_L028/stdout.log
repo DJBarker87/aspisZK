@@ -1,0 +1,30 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_InternalPacket.source : ∀ (s l nativeOut : State) (weights : Fin 2 → NKG_HelperCuts.Seven)
+  (constants : Fin 2 → NKG_HelperCuts.Constants7) (states : Fin 2 → State) (roundConstants : Fin 2 → NQ)
+  (dotCalls roundCalls : ℕ),
+  canonical s →
+    canonical l →
+      NKG_HelperCuts.Internal s l weights constants
+          (fun c => if ↑c = 0 then NKG_InternalChoices.even l else NKG_InternalChoices.odd l) states
+          (fun c => if ↑c = 0 then NKG_InternalChoices.middle s l else NKG_InternalChoices.last s l) roundConstants
+          nativeOut dotCalls roundCalls →
+        state_only_poseidon.interpolated_internal_pair s l = ok nativeOut ∧
+          canonical nativeOut ∧ decoded nativeOut = R0P.poseidonInterpolatedInternalPair (decoded s) (decoded l) :=
+fun s l nativeOut weights constants states roundConstants dotCalls roundCalls hs hl cut =>
+  let ⟨out, h✝⟩ := NKG_InternalSource.result s l hs hl
+  let ⟨run, right✝⟩ := h✝
+  let ⟨co, value⟩ := right✝
+  have returned := cut.returned;
+  id
+    (fun returned =>
+      have same := Eq.trans returned (NKG_InternalChoices.value s l out run);
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              state_only_poseidon.interpolated_internal_pair s l = ok _a ∧
+                canonical _a ∧ decoded _a = R0P.poseidonInterpolatedInternalPair (decoded s) (decoded l))
+            same))
+        ⟨run, ⟨co, value⟩⟩)
+    returned
+'AspisR1.NKG_InternalPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,61 @@
+{"attempt": "NKG_L019", "exit_status": 1, "wall_seconds": 6.4692583351861686, "peak_rss_kib": "5448056", "swaps": "0", "print_axioms": ["'AspisR1.NKG_CellTotal.cell' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKG_CellTotal.array' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+NKG_lean/NKG_CellTotal.lean:24:104: error: unsolved goals
+o : Openings
+internal : State
+theta : QM
+block : NP
+p : Std.Array NP 3#usize
+lead full : Packed
+w : Std.Array QM 3#usize
+g : Usize
+hg : ↑g < 4
+ct : canonical o.succ_z
+ci : canonical internal
+cb : Canonical theta
+cl : canonical lead
+cf : canonical full
+cw : canonical w
+rp : FIq_Native.core.array.Array.map (BuiltinFnMut QM NP) w field.PreparedQm31Multiplier.new = ok p
+rb : field.PreparedQm31Multiplier.new theta = ok block
+start : UScalar UScalarTy.Usize
+rs : 4#usize * g = ok start
+vs : ↑start = 4 * ↑g
+finish : UScalar UScalarTy.Usize
+re : start + 4#usize
+...
+ p, lead, full)))
+                                (Eq.trans
+                                  (congrFun' (congrArg Bind.bind ra) fun out =>
+                                    ok (out, o, internal, block, p, lead, full))
+                                  (bind_tc_ok out fun y => ok (y, o, internal, block, p, lead, full))))))))
+                      (ok (out, o, internal, block, p, lead, full))))
+                  sorry),
+              ca⟩)
+        ve)
+    vs
+'AspisR1.NKG_CellTotal.cell' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_CellTotal.array : ∀ (o : Openings) (internal : State) (theta : QM) (block : NP)
+  (p : Std.Array NP 3#usize) (lead full : Packed) (w : Std.Array QM 3#usize),
+  canonical o.succ_z →
+    canonical internal →
+      Canonical theta →
+        canonical lead →
+          canonical full →
+            canonical w →
+              FIq_Native.core.array.Array.map (BuiltinFnMut QM NP) w field.PreparedQm31Multiplier.new = ok p →
+                field.PreparedQm31Multiplier.new theta = ok block →
+                  ∃ out,
+                    array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy FJh_ProjectedArrayValue.callback
+                          field.QM31.ZERO (o, internal, block, p, lead, full) =
+                        ok out ∧
+                      canonical out :=
+fun o internal theta block p lead full w ct ci cb cl cf cw rp rb =>
+  let ⟨out, h✝⟩ :=
+    JFy_BoundedCanonical.source Canonical 4#usize FJh_ProjectedArrayValue.callback (o, internal, block, p, lead, full)
+      fun g hg => cell o internal theta block p lead full w g hg ct ci cb cl cf cw rp rb
+  let ⟨run, co⟩ := h✝
+  Exists.intro out ⟨run, co⟩
+'AspisR1.NKG_CellTotal.array' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb1b4434f4a7041a787db639886cfc4b8.scope; invocation ID: 04743162a8624a4ba932367307cfd5e5

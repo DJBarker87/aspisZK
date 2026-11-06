@@ -1,0 +1,52 @@
+{"attempt": "NKG_L027", "exit_status": 0, "wall_seconds": 9.594643385149539, "peak_rss_kib": "6030896", "swaps": "0", "print_axioms": ["'AspisR1.NKG_InternalChoices.get_ok' depends on axioms: [propext]", "'AspisR1.NKG_InternalChoices.value' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_InternalChoices.get_ok : ∀ {A : Type} (r : Result A) (fallback x : A),
+  r = ok x → get r fallback = x :=
+fun {A} r fallback x run => Eq.mpr (id (congrArg (fun _a => get _a fallback = x) run)) (Eq.refl (get (ok x) fallback))
+'AspisR1.NKG_InternalChoices.get_ok' depends on axioms: [propext]
+theorem AspisR1.NKG_InternalChoices.value : ∀ (s l out : State),
+  state_only_poseidon.interpolated_internal_pair s l = ok out → last s l = out :=
+fun s l out run =>
+  let ⟨w, h✝⟩ := FJh_InternalPairOrigins.reached s l out run
+  let ⟨e, h✝¹⟩ := h✝
+  let ⟨o, h✝²⟩ := h✝¹
+  let ⟨ev, h✝³⟩ := h✝²
+  let ⟨od, h
+...
+h_InternalConstantCalls.even FJh_InternalWeights.rows ())
+      (Array.repeat 7#usize 0#u32) e re;
+  have oo :=
+    get_ok (FIq_Native.core.array.Array.map FJh_InternalConstantCalls.odd FJh_InternalWeights.rows ())
+      (Array.repeat 7#usize 0#u32) o ro;
+  have ve :=
+    id
+      (Eq.mpr (id (congrArg (fun _a => get (field.qm31_m31_dot _a.to_slice evens.to_slice) field.QM31.ZERO = ev) ww))
+        (Eq.mpr (id (congrArg (fun _a => get (field.qm31_m31_dot w.to_slice _a.to_slice) field.QM31.ZERO = ev) ee))
+          (get_ok (field.qm31_m31_dot w.to_slice e.to_slice) field.QM31.ZERO ev rev)));
+  have vo :=
+    id
+      (Eq.mpr (id (congrArg (fun _a => get (field.qm31_m31_dot _a.to_slice odds.to_slice) field.QM31.ZERO = od) ww))
+        (Eq.mpr (id (congrArg (fun _a => get (field.qm31_m31_dot w.to_slice _a.to_slice) field.QM31.ZERO = od) oo))
+          (get_ok (field.qm31_m31_dot w.to_slice o.to_slice) field.QM31.ZERO od rod)));
+  have vm :=
+    id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a => get (state_only_poseidon.internal_round s _a) (Array.repeat 16#usize field.QM31.ZERO) = mid) ve))
+        (get_ok (state_only_poseidon.internal_round s ev) (Array.repeat 16#usize field.QM31.ZERO) mid rm));
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a => get (state_only_poseidon.internal_round _a (odd l)) (Array.repeat 16#usize field.QM31.ZERO) = out)
+          vm))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a => get (state_only_poseidon.internal_round mid _a) (Array.repeat 16#usize field.QM31.ZERO) = out)
+            vo))
+        (get_ok (state_only_poseidon.internal_round mid od) (Array.repeat 16#usize field.QM31.ZERO) out rf)))
+'AspisR1.NKG_InternalChoices.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3c2b2e82c8114649b4a4ee2bb7aca074.scope; invocation ID: 12b3578b980f4d8099965125f28d4b32

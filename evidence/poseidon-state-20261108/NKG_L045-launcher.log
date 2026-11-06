@@ -1,0 +1,61 @@
+{"attempt": "NKG_L045", "exit_status": 0, "wall_seconds": 10.313328492920846, "peak_rss_kib": "6015472", "swaps": "0", "print_axioms": ["'AspisR1.NKG_BuilderRaw.reply_ok' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKG_BuilderRaw.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_BuilderRaw.reply_ok : ∀ (c : Capture) (g : Usize) (x : NQ) (last : Capture),
+  call c g = ok (x, last) → reply c g = x :=
+fun c g x last run =>
+  id
+    (Eq.mpr (id (congrArg (fun _a => (NKG_InternalChoices.get _a (field.QM31.ZERO, c)).1 = x) run))
+      (Eq.refl (NKG_InternalChoices.get (ok (x, last)) (field.QM31.ZERO, c)).1))
+'AspisR1.NKG_BuilderRaw.reply_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_BuilderRaw.source : ∀ (c : Capture) (out : Packed),
+  array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy FJh_ProjectedArrayValue.callback field.Q
+...
+True) id model c out
+      (fun i hi x last called =>
+        id
+          (fun called =>
+            have h4 := hi;
+            have eq := UScalar.eq_of_val_eq rfl;
+            let ⟨start, h✝⟩ := FJh_ProjectedCall.reached o internal block p lead full i x last called
+            let ⟨stop, h✝¹⟩ := h✝
+            let ⟨ts, h✝²⟩ := h✝¹
+            let ⟨ins, h✝³⟩ := h✝²
+            let ⟨target, h✝⁴⟩ := h✝³
+            let ⟨ip, h✝⁵⟩ := h✝⁴
+            let ⟨rs, right✝⟩ := h✝⁵
+            let ⟨re, right✝¹⟩ := right✝
+            let ⟨rts, right✝²⟩ := right✝¹
+            let ⟨rt, right✝³⟩ := right✝²
+            let ⟨rins, right✝⁴⟩ := right✝³
+            let ⟨ri, right✝⁵⟩ := right✝⁴
+            let ⟨ra, hlast⟩ := right✝⁵
+            ⟨True.intro,
+              ⟨id
+                  (id
+                    (Eq.mpr (id (congrArg (fun _a => x = _a) (dif_pos h4)))
+                      (Eq.mpr (id (congrArg (fun _a => x = reply c _a) eq)) (Eq.symm (reply_ok c i x last called))))),
+                hlast⟩⟩)
+          called)
+      run;
+  Subtype.ext
+    (id
+      (have e := built.right;
+      Eq.trans (Eq.mp (congrFun' (congrArg Eq (List.map_id ↑out)) (List.ofFn fun i => model ↑i)) e)
+        (congrArg (fun f => List.ofFn f)
+          (funext fun i =>
+            id
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => _a = reply c (NKG_GroupFrame.index ⟨↑i, i.isLt⟩))
+                    (dif_pos
+                      (have this := i.isLt;
+                      this))))
+                (Eq.refl
+                  (reply c
+                    (NKG_GroupFrame.index
+                      ⟨↑i,
+                        have this := i.isLt;
+                        this⟩))))))))
+'AspisR1.NKG_BuilderRaw.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r5b90dd544bf04823b1f7dd6815c9ab4d.scope; invocation ID: d9598991600f403da35743189bc8644c

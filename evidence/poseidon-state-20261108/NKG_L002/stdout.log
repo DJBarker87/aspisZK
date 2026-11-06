@@ -1,0 +1,74 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_ColumnTotal.step_total : ∀ (w : Weights) (c0 c1 c2 : Constants) (s : State) (i : Usize),
+  ↑i < ↑16#usize → canonical w → Bounded c0 → Bounded c1 → Bounded c2 → ∃ out, step w c0 c1 c2 s i = ok out :=
+fun w c0 c1 c2 s i hi hw h0 h1 h2 =>
+  let w0 := FJb_TailCell.cell w ⟨0, of_decide_eq_true (id (Eq.refl true))⟩;
+  let w1 := FJb_TailCell.cell w ⟨1, of_decide_eq_true (id (Eq.refl true))⟩;
+  let w2 := FJb_TailCell.cell w ⟨2, of_decide_eq_true (id (Eq.refl true))⟩;
+  let k0 := FJb_TailCell.cell c0 ⟨↑i, hi⟩;
+  let k1 := FJb_TailCell.cell c1 ⟨↑i, hi⟩;
+  let k2 := FJb_TailCell.cell c2 ⟨↑i, hi⟩;
+  have r0 := RawPoseidonExternalRowReads.array_index_usize_ok w 0#usize (of_decide_eq_true (id (Eq.refl true)));
+  have r1 := RawPoseidonExternalRowReads.array_index_usize_ok w 1#usize (of_decide_eq_true (id (Eq.refl true)));
+  have r2 := RawPoseidonExternalRowReads.array_index_usize_ok w 2#usize (of_decide_eq_true (id (Eq.refl true)));
+  have rc0 := RawPoseidonExternalRowReads.array_index_usize_ok c0 i hi;
+  have rc1 := RawPoseidonExternalRowReads.array_index_usize_ok c1 i hi;
+  have rc2 := RawPoseidonExternalRowReads.array_index_usize_ok c2 i hi;
+  let ⟨q, h✝⟩ :=
+    FJe_ThreeCell.source_success w0 w1 w2 k0 k1 k2 (FIv_NativeArray.canonical w 0#usize w0 hw r0)
+      (FIv_NativeArray.canonical w 1#usize w1 hw r1) (FIv_NativeArray.canonical w 2#usize w2 hw r2) (h0 ⟨↑i, hi⟩)
+      (h1 ⟨↑i, hi⟩) (h2 ⟨↑i, hi⟩)
+  let ⟨rq, right✝⟩ := h✝
+  let ⟨left✝, right✝¹⟩ := right✝
+  let ⟨out, h✝¹⟩ := WP.spec_imp_exists (Array.update_spec s i q (Eq.mpr (id (congrArg (LT.lt ↑i) s.property)) hi))
+  let ⟨ru, right✝²⟩ := h✝¹
+  Exists.intro out
+    (of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (congr (congrArg Bind.bind r0)
+                  (funext fun w0 =>
+                    Eq.trans
+                      (congr (congrArg Bind.bind r1)
+                        (funext fun w1 =>
+                          Eq.trans
+                            (congr (congrArg Bind.bind r2)
+                              (funext fun w2 =>
+                                Eq.trans
+                                  (congr (congrArg Bind.bind rc0)
+                                    (funext fun k0 =>
+                                      Eq.trans
+                                        (congr (congrArg Bind.bind rc1)
+                                          (funext fun k1 =>
+                                            Eq.trans
+                                              (congrFun' (congrArg Bind.bind rc2) fun k2 => do
+                                                let q ← FJe_ThreeCell.source w0 w1 w2 k0 k1 k2
+                                                Array.update s i q)
+                                              (bind_tc_ok k2 fun y => do
+                                                let q ← FJe_ThreeCell.source w0 w1 w2 k0 k1 y
+                                                Array.update s i q)))
+                                        (bind_tc_ok k1 fun y => do
+                                          let q ← FJe_ThreeCell.source w0 w1 w2 k0 y k2
+                                          Array.update s i q)))
+                                  (bind_tc_ok k0 fun y => do
+                                    let q ← FJe_ThreeCell.source w0 w1 w2 y k1 k2
+                                    Array.update s i q)))
+                            (bind_tc_ok w2 fun y => do
+                              let q ← FJe_ThreeCell.source w0 w1 y k0 k1 k2
+                              Array.update s i q)))
+                      (bind_tc_ok w1 fun y => do
+                        let q ← FJe_ThreeCell.source w0 y w2 k0 k1 k2
+                        Array.update s i q)))
+                (bind_tc_ok w0 fun y => do
+                  let q ← FJe_ThreeCell.source y w1 w2 k0 k1 k2
+                  Array.update s i q))
+              (Eq.trans
+                (Eq.trans (congrFun' (congrArg Bind.bind rq) fun q => Array.update s i q)
+                  (bind_tc_ok q (Array.update s i)))
+                ru)))
+          (ok out))
+        (eq_self (ok out))))
+'AspisR1.NKG_ColumnTotal.step_total' depends on axioms: [propext, Classical.choice, Quot.sound]

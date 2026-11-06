@@ -1,0 +1,9 @@
+# NKG dependency order and oracle classification
+
+TX1:308 is an ordinary deterministic function of its two immutable inputs. The frozen body in state_only_poseidon.rs:585-624 computes selector sums, invokes leading_pair_packed, interpolated_full_pair_packed and interpolated_internal_pair, builds prepared multipliers, and returns four residuals. It makes no syscall, samples nothing and accepts no oracle callback. The word oracle names the constraint polynomial evaluation, not a permission to replace implementation behaviour with an arbitrary reply.
+
+The security interface's hash oracle enters separately: S2LeadInterface.lean S2CallerFacts.oracle requires the installed Digest32.digest to equal MultiproofConePhysicalTransport.rawOracle H; checkpoint_oracle transports that digest interpretation. That runtime/hash row is not used as the value of this evaluator. TX1:308 still needs SAME openings/selectors, all child call domains, all four complete output values, frame and source order, bound to the adopted cohort evaluator.
+
+Bottom-up: TX1:321 (three columns) and TX1:324 (internal pair) are independent; TX1:323 consumes 321; TX1:308 consumes 323/324 and CLOSED leading/field children. No sibling terminal root is required. Frozen bodies and baseline obligations are pinned in NKG_BASELINE_ROWS.json and NKG_SOURCE_PINS.json. Existing PoseidonThreeConstantColumnsModel proves a source loop value theorem; it alone supplies no native credit. NDN scalar cuts are likewise partial.
+
+Route: emitted bodies under (y), typed native cuts under (ai)(5), SAME-reply substitution under (aq)(5), loop frame/induction, CLOSED child domains, std under (au), paired Lean field-product laws. No arbitrary dictionary or successful-child premise at a root. Every row remains OPEN until combined NKC/headline import, NFX scan and raw ax2 pass, then ledger admission.

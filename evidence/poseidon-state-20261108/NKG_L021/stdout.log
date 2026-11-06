@@ -1,0 +1,148 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_CellTotal.cell : ∀ (o : Openings) (internal : State) (theta : QM) (block : NP)
+  (p : Std.Array NP 3#usize) (lead full : Packed) (w : Std.Array QM 3#usize) (g : Usize),
+  ↑g < 4 →
+    canonical o.succ_z →
+      canonical internal →
+        Canonical theta →
+          canonical lead →
+            canonical full →
+              canonical w →
+                FIq_Native.core.array.Array.map (BuiltinFnMut QM NP) w field.PreparedQm31Multiplier.new = ok p →
+                  field.PreparedQm31Multiplier.new theta = ok block →
+                    ∃ out,
+                      call (o, internal, block, p, lead, full) g = ok (out, o, internal, block, p, lead, full) ∧
+                        Canonical out :=
+fun o internal theta block p lead full w g hg ct ci cb cl cf cw rp rb =>
+  let ⟨start, h✝⟩ := WP.spec_imp_exists (UScalar.mul_spec (cell._proof_1 g hg))
+  let ⟨rs, vs⟩ := h✝
+  id
+    (fun vs =>
+      let ⟨finish, h✝¹⟩ := WP.spec_imp_exists (UScalar.add_spec (cell._proof_2 g hg start vs))
+      let ⟨re, ve⟩ := h✝¹
+      id
+        (fun ve =>
+          have hb := Decidable.byContradiction fun a => cell._proof_3 g hg start vs finish ve a;
+          have hle := Decidable.byContradiction fun a => cell._proof_4 g start vs finish ve a;
+          let ⟨rts, right✝⟩ := NKG_SliceTotal.slice o.succ_z start finish hle hb ve ct
+          let ⟨lts, cts⟩ := right✝
+          let ⟨target, h✝²⟩ := FIw_PackTotal.source (FJh_GroupSlices.sliceAt o.succ_z start finish) lts cts
+          let ⟨rt, ctarget⟩ := h✝²
+          let ⟨ris, right✝¹⟩ := NKG_SliceTotal.slice internal start finish hle hb ve ci
+          let ⟨lis, cis⟩ := right✝¹
+          let ⟨ip, h✝³⟩ := FIw_PackTotal.source (FJh_GroupSlices.sliceAt internal start finish) lis cis
+          let ⟨ri, cip⟩ := h✝³
+          let ⟨out, h✝⁴⟩ :=
+            NKG_AfterTotal.result target ip theta lead full w p block g hg ctarget cip cb cl cf cw
+              (FJh_PreparedCells.value w p cw rp) (FIv_PreparedNew.valid theta block cb rb)
+          let ⟨ra, ca⟩ := h✝⁴
+          Exists.intro out
+            ⟨Eq.mpr
+                (id
+                  (congrArg (fun _a => _a = ok (out, o, internal, block, p, lead, full))
+                    (FJh_ProjectedCall.factor o internal block p lead full g)))
+                (Eq.mpr
+                  (id
+                    (congrFun'
+                      (congrArg Eq
+                        (Eq.trans
+                          (Eq.trans
+                            (congrFun' (congrArg Bind.bind rs) fun start => do
+                              let stop ← start + 4#usize
+                              let ts ← FJh_ProjectedCall.slice o.succ_z start stop
+                              let target ← field.qm31_pack_base4 ts
+                              let ins ← FJh_ProjectedCall.slice internal start stop
+                              let ip ← field.qm31_pack_base4 ins
+                              let out ← FJh_ProjectedAfter.source target ip lead full p block g
+                              ok (out, o, internal, block, p, lead, full))
+                            (bind_tc_ok start fun y => do
+                              let stop ← y + 4#usize
+                              let ts ← FJh_ProjectedCall.slice o.succ_z y stop
+                              let target ← field.qm31_pack_base4 ts
+                              let ins ← FJh_ProjectedCall.slice internal y stop
+                              let ip ← field.qm31_pack_base4 ins
+                              let out ← FJh_ProjectedAfter.source target ip lead full p block g
+                              ok (out, o, internal, block, p, lead, full)))
+                          (Eq.trans
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind re) fun stop => do
+                                let ts ← FJh_ProjectedCall.slice o.succ_z start stop
+                                let target ← field.qm31_pack_base4 ts
+                                let ins ← FJh_ProjectedCall.slice internal start stop
+                                let ip ← field.qm31_pack_base4 ins
+                                let out ← FJh_ProjectedAfter.source target ip lead full p block g
+                                ok (out, o, internal, block, p, lead, full))
+                              (bind_tc_ok finish fun y => do
+                                let ts ← FJh_ProjectedCall.slice o.succ_z start y
+                                let target ← field.qm31_pack_base4 ts
+                                let ins ← FJh_ProjectedCall.slice internal start y
+                                let ip ← field.qm31_pack_base4 ins
+                                let out ← FJh_ProjectedAfter.source target ip lead full p block g
+                                ok (out, o, internal, block, p, lead, full)))
+                            (Eq.trans
+                              (Eq.trans
+                                (congr (congrArg Bind.bind rts)
+                                  (funext fun ts =>
+                                    congrArg (Bind.bind (field.qm31_pack_base4 ts))
+                                      (funext fun target =>
+                                        Eq.trans
+                                          (Eq.trans
+                                            (congrFun' (congrArg Bind.bind ris) fun ins => do
+                                              let ip ← field.qm31_pack_base4 ins
+                                              let out ← FJh_ProjectedAfter.source target ip lead full p block g
+                                              ok (out, o, internal, block, p, lead, full))
+                                            (bind_tc_ok (FJh_GroupSlices.sliceAt internal start finish) fun y => do
+                                              let ip ← field.qm31_pack_base4 y
+                                              let out ← FJh_ProjectedAfter.source target ip lead full p block g
+                                              ok (out, o, internal, block, p, lead, full)))
+                                          (Eq.trans
+                                            (congrFun' (congrArg Bind.bind ri) fun ip => do
+                                              let out ← FJh_ProjectedAfter.source target ip lead full p block g
+                                              ok (out, o, internal, block, p, lead, full))
+                                            (bind_tc_ok ip fun y => do
+                                              let out ← FJh_ProjectedAfter.source target y lead full p block g
+                                              ok (out, o, internal, block, p, lead, full))))))
+                                (bind_tc_ok (FJh_GroupSlices.sliceAt o.succ_z start finish) fun y => do
+                                  let target ← field.qm31_pack_base4 y
+                                  let out ← FJh_ProjectedAfter.source target ip lead full p block g
+                                  ok (out, o, internal, block, p, lead, full)))
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun' (congrArg Bind.bind rt) fun target => do
+                                    let out ← FJh_ProjectedAfter.source target ip lead full p block g
+                                    ok (out, o, internal, block, p, lead, full))
+                                  (bind_tc_ok target fun y => do
+                                    let out ← FJh_ProjectedAfter.source y ip lead full p block g
+                                    ok (out, o, internal, block, p, lead, full)))
+                                (Eq.trans
+                                  (congrFun' (congrArg Bind.bind ra) fun out =>
+                                    ok (out, o, internal, block, p, lead, full))
+                                  (bind_tc_ok out fun y => ok (y, o, internal, block, p, lead, full))))))))
+                      (ok (out, o, internal, block, p, lead, full))))
+                  (Eq.refl (ok (out, o, internal, block, p, lead, full)))),
+              ca⟩)
+        ve)
+    vs
+'AspisR1.NKG_CellTotal.cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_CellTotal.array : ∀ (o : Openings) (internal : State) (theta : QM) (block : NP)
+  (p : Std.Array NP 3#usize) (lead full : Packed) (w : Std.Array QM 3#usize),
+  canonical o.succ_z →
+    canonical internal →
+      Canonical theta →
+        canonical lead →
+          canonical full →
+            canonical w →
+              FIq_Native.core.array.Array.map (BuiltinFnMut QM NP) w field.PreparedQm31Multiplier.new = ok p →
+                field.PreparedQm31Multiplier.new theta = ok block →
+                  ∃ out,
+                    array_from_fn_copy 4#usize field.QM31.Insts.CoreMarkerCopy FJh_ProjectedArrayValue.callback
+                          field.QM31.ZERO (o, internal, block, p, lead, full) =
+                        ok out ∧
+                      canonical out :=
+fun o internal theta block p lead full w ct ci cb cl cf cw rp rb =>
+  let ⟨out, h✝⟩ :=
+    JFy_BoundedCanonical.source Canonical 4#usize FJh_ProjectedArrayValue.callback (o, internal, block, p, lead, full)
+      fun g hg => cell o internal theta block p lead full w g hg ct ci cb cl cf cw rp rb
+  let ⟨run, co⟩ := h✝
+  Exists.intro out ⟨run, co⟩
+'AspisR1.NKG_CellTotal.array' depends on axioms: [propext, Classical.choice, Quot.sound]

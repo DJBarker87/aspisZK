@@ -1,0 +1,50 @@
+{"attempt": "NKG_L010", "exit_status": 0, "wall_seconds": 10.588282944867387, "peak_rss_kib": "5996892", "swaps": "0", "print_axioms": ["'AspisR1.NKG_ColumnReply.result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKG_ColumnReply.step_reply' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_ColumnReply.result : ∀ (w : Weights) (c0 c1 c2 : Constants) (i : Fin 16),
+  canonical w →
+    Bounded c0 →
+      Bounded c1 →
+        Bounded c2 → scalarCell w c0 c1 c2 i = ok (reply w c0 c1 c2 i) ∧ FIv_NativeValue.Canon (reply w c0 c1 c2 i) :=
+fun w c0 c1 c2 i hw h0 h1 h2 =>
+  have cw := fun j => hw (cell w j) (List.getElem_mem (cell._proof_1 w j));
+  let ⟨q, h✝⟩ :=
+    FJe_ThreeCell.source_success (cell w ⟨0, of_decide_eq_true (id (Eq.refl true))⟩)
+      (cell w ⟨1, of_decide_eq_true (id (Eq.refl true))⟩) (cell w ⟨2, of_decide_eq_true (id (Eq.refl true))⟩)
+      (cell c0 i) (cell c1 i) (
+...
+e w0 w1 y (cell c0 ⟨↑i, hi⟩) (cell c1 ⟨↑i, hi⟩) (cell c2 ⟨↑i, hi⟩)
+                          Array.update s i q)))
+                  (bind_tc_ok (cell w ⟨↑1#usize, of_decide_eq_true (id (Eq.refl true))⟩) fun y => do
+                    let q ←
+                      FJe_ThreeCell.source w0 y (cell w ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                          (cell c0 ⟨↑i, hi⟩) (cell c1 ⟨↑i, hi⟩) (cell c2 ⟨↑i, hi⟩)
+                    Array.update s i q)))
+            (bind_tc_ok (cell w ⟨↑0#usize, of_decide_eq_true (id (Eq.refl true))⟩) fun y => do
+              let q ←
+                FJe_ThreeCell.source y (cell w ⟨↑1#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                    (cell w ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩) (cell c0 ⟨↑i, hi⟩) (cell c1 ⟨↑i, hi⟩)
+                    (cell c2 ⟨↑i, hi⟩)
+              Array.update s i q)))
+        (ok (Std.Array.set s i (reply w c0 c1 c2 ⟨↑i, hi⟩)))))
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let q ← _a
+                  Array.update s i q) =
+                ok (Std.Array.set s i (reply w c0 c1 c2 ⟨↑i, hi⟩)))
+            rv))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = ok (Std.Array.set s i (reply w c0 c1 c2 ⟨↑i, hi⟩)))
+              (bind_tc_ok (reply w c0 c1 c2 ⟨↑i, hi⟩) (Array.update s i))))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = ok (Std.Array.set s i (reply w c0 c1 c2 ⟨↑i, hi⟩)))
+                (Eq.mp (congrArg (fun _a => Array.update s i (reply w c0 c1 c2 ⟨↑i, hi⟩) = ok _a) vu) ru)))
+            (Eq.refl (ok (Std.Array.set s i (reply w c0 c1 c2 ⟨↑i, hi⟩))))))))
+'AspisR1.NKG_ColumnReply.step_reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r59e11fa752db47379f6c7c92171abd88.scope; invocation ID: 6a9c992239fe4c398fe58d7f89577ff0

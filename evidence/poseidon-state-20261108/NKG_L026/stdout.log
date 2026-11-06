@@ -1,0 +1,57 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+structure AspisR1.NKG_HelperCuts.Internal (s l : State) (weights : Fin 2 → Seven) (constants : Fin 2 → Constants7)
+  (dots : Fin 2 → NQ) (states replies : Fin 2 → State) (roundConstants : Fin 2 → NQ) (out : State)
+  (dotCalls roundCalls : ℕ) : Prop
+number of parameters: 11
+fields:
+  AspisR1.NKG_HelperCuts.Internal.dotCount : dotCalls = 2
+  AspisR1.NKG_HelperCuts.Internal.roundCount : roundCalls = 2
+  AspisR1.NKG_HelperCuts.Internal.weightArgs : ∀ (c : Fin 2) (i : Fin ↑7#usize), cell (weights c) i = cell l ⟨↑i + 2, ⋯⟩
+  AspisR1.NKG_HelperCuts.Internal.constantArgs : ∀ (c : Fin 2) (i : Fin ↑7#usize),
+      cell (constants c) i = FJh_InternalConstants.value ⟨2 * ↑i + ↑c, ⋯⟩
+  AspisR1.NKG_HelperCuts.Internal.firstState : states 0 = s
+  AspisR1.NKG_HelperCuts.Internal.secondState : states 1 = replies 0
+  AspisR1.NKG_HelperCuts.Internal.scalarArgs : ∀ (c : Fin 2), roundConstants c = dots c
+  AspisR1.NKG_HelperCuts.Internal.returned : out = replies 1
+constructor:
+  AspisR1.NKG_HelperCuts.Internal.mk {s l : State} {weights : Fin 2 → Seven} {constants : Fin 2 → Constants7}
+    {dots : Fin 2 → NQ} {states replies : Fin 2 → State} {roundConstants : Fin 2 → NQ} {out : State}
+    {dotCalls roundCalls : ℕ} (dotCount : dotCalls = 2) (roundCount : roundCalls = 2)
+    (weightArgs : ∀ (c : Fin 2) (i : Fin ↑7#usize), cell (weights c) i = cell l ⟨↑i + 2, ⋯⟩)
+    (constantArgs :
+      ∀ (c : Fin 2) (i : Fin ↑7#usize), cell (constants c) i = FJh_InternalConstants.value ⟨2 * ↑i + ↑c, ⋯⟩)
+    (firstState : states 0 = s) (secondState : states 1 = replies 0)
+    (scalarArgs : ∀ (c : Fin 2), roundConstants c = dots c) (returned : out = replies 1) :
+    Internal s l weights constants dots states replies roundConstants out dotCalls roundCalls
+structure AspisR1.NKG_HelperCuts.Full (s l : State) (weights : Fin 2 → Std.Array NQ 3#usize)
+  (columns : Fin 2 → Fin 3 → Std.Array U32 16#usize) (replies states constants : Fin 2 → State) (middle : State)
+  (packed out : Packed) (columnCalls roundCalls : ℕ) : Prop
+number of parameters: 12
+fields:
+  AspisR1.NKG_HelperCuts.Full.columnCount : columnCalls = 2
+  AspisR1.NKG_HelperCuts.Full.roundCount : roundCalls = 2
+  AspisR1.NKG_HelperCuts.Full.weightArgs : ∀ (c : Fin 2) (i : Fin ↑3#usize),
+      cell (weights c) i = cell l (if ↑i = 0 then ⟨1, ⋯⟩ else if ↑i = 1 then ⟨9, ⋯⟩ else ⟨10, ⋯⟩)
+  AspisR1.NKG_HelperCuts.Full.constantArgs : ∀ (c : Fin 2) (i : Fin 3) (k : Fin ↑16#usize),
+      cell (columns c i) k =
+        if ↑i = 0 then cell (FJb_InitialConstants.row ⟨2 + ↑c, ⋯⟩) k
+        else cell (FJe_FinalConstants.row ⟨2 * (↑i - 1) + ↑c, ⋯⟩) k
+  AspisR1.NKG_HelperCuts.Full.firstState : states 0 = s
+  AspisR1.NKG_HelperCuts.Full.secondState : states 1 = middle
+  AspisR1.NKG_HelperCuts.Full.constantReplies : ∀ (c : Fin 2), constants c = replies c
+  AspisR1.NKG_HelperCuts.Full.returned : out = packed
+constructor:
+  AspisR1.NKG_HelperCuts.Full.mk {s l : State} {weights : Fin 2 → Std.Array NQ 3#usize}
+    {columns : Fin 2 → Fin 3 → Std.Array U32 16#usize} {replies states constants : Fin 2 → State} {middle : State}
+    {packed out : Packed} {columnCalls roundCalls : ℕ} (columnCount : columnCalls = 2) (roundCount : roundCalls = 2)
+    (weightArgs :
+      ∀ (c : Fin 2) (i : Fin ↑3#usize),
+        cell (weights c) i = cell l (if ↑i = 0 then ⟨1, ⋯⟩ else if ↑i = 1 then ⟨9, ⋯⟩ else ⟨10, ⋯⟩))
+    (constantArgs :
+      ∀ (c : Fin 2) (i : Fin 3) (k : Fin ↑16#usize),
+        cell (columns c i) k =
+          if ↑i = 0 then cell (FJb_InitialConstants.row ⟨2 + ↑c, ⋯⟩) k
+          else cell (FJe_FinalConstants.row ⟨2 * (↑i - 1) + ↑c, ⋯⟩) k)
+    (firstState : states 0 = s) (secondState : states 1 = middle)
+    (constantReplies : ∀ (c : Fin 2), constants c = replies c) (returned : out = packed) :
+    Full s l weights columns replies states constants middle packed out columnCalls roundCalls

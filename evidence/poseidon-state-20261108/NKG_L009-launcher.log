@@ -1,0 +1,52 @@
+{"attempt": "NKG_L009", "exit_status": 1, "wall_seconds": 9.40817484096624, "peak_rss_kib": "5993280", "swaps": "0", "print_axioms": ["'AspisR1.NKG_InternalMaps.row_member' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKG_InternalMaps.weights' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKG_InternalMaps.constants_even' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKG_InternalMaps.constants_odd' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+NKG_lean/NKG_InternalMaps.lean:15:15: error: Type mismatch: After simplification, term
+  hj
+ has type
+  @LT.lt ℕ instLTNat j ↑7#usize
+but is expected to have type
+  @LT.lt ℕ instLTNat j 7
+theorem AspisR1.NKG_InternalMaps.row_member : ∀ x ∈ ↑rows, ∃ i, index i = x :=
+fun x hx =>
+  let ⟨j, h✝⟩ := List.getElem_of_mem hx
+  let ⟨hj, eq⟩ := h✝
+  Exists.intro ⟨j, sorry⟩ eq
+'AspisR1.NKG_InternalMaps.row_member' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_InternalMaps.weights : ∀ (l : State),
+  canonical l → ∃ w, FIq_Native.core.array.Array.map callback rows l = ok w ∧ canon
+...
+ ∀ x ∈ ↑e, ↑x < P :=
+let ⟨e, h✝⟩ :=
+  JGa_Map.source FJh_InternalConstantCalls.even (fun x => ↑x < P) rows () fun x hx =>
+    let ⟨i, h✝¹⟩ := row_member x hx
+    Eq.ndrec (motive := fun x => x ∈ ↑rows → ∃ y, FJh_InternalConstantCalls.even.call_mut () x = ok (y, ()) ∧ ↑y < P)
+      (fun hx =>
+        Exists.intro
+          (FJh_InternalConstants.value
+            ⟨2 * ↑i, Decidable.byContradiction fun a => FJh_InternalConstantCalls.even_call._proof_1 i a⟩)
+          ⟨FJh_InternalConstantCalls.even_call i,
+            FJh_InternalConstants.canonical
+              ⟨2 * ↑i, Decidable.byContradiction fun a => FJh_InternalConstantCalls.even_call._proof_1 i a⟩⟩)
+      h✝¹ hx
+let ⟨run, ce⟩ := h✝
+Exists.intro e ⟨run, ce⟩
+'AspisR1.NKG_InternalMaps.constants_even' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_InternalMaps.constants_odd : ∃ o,
+  FIq_Native.core.array.Array.map FJh_InternalConstantCalls.odd rows () = ok o ∧ ∀ x ∈ ↑o, ↑x < P :=
+let ⟨o, h✝⟩ :=
+  JGa_Map.source FJh_InternalConstantCalls.odd (fun x => ↑x < P) rows () fun x hx =>
+    let ⟨i, h✝¹⟩ := row_member x hx
+    Eq.ndrec (motive := fun x => x ∈ ↑rows → ∃ y, FJh_InternalConstantCalls.odd.call_mut () x = ok (y, ()) ∧ ↑y < P)
+      (fun hx =>
+        Exists.intro
+          (FJh_InternalConstants.value
+            ⟨2 * ↑i + 1, Decidable.byContradiction fun a => FJh_InternalConstantCalls.odd_call._proof_1 i a⟩)
+          ⟨FJh_InternalConstantCalls.odd_call i,
+            FJh_InternalConstants.canonical
+              ⟨2 * ↑i + 1, Decidable.byContradiction fun a => FJh_InternalConstantCalls.odd_call._proof_1 i a⟩⟩)
+      h✝¹ hx
+let ⟨run, co⟩ := h✝
+Exists.intro o ⟨run, co⟩
+'AspisR1.NKG_InternalMaps.constants_odd' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6c3ef5b2ea9c4644a980905e443305d4.scope; invocation ID: 90d5a8aa809a4f8b99fc990e9e5ed12a

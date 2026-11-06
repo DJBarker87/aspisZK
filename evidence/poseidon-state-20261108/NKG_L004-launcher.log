@@ -1,0 +1,55 @@
+{"attempt": "NKG_L004", "exit_status": 0, "wall_seconds": 8.978842447977513, "peak_rss_kib": "6002776", "swaps": "0", "print_axioms": ["'AspisR1.NKG_ColumnLoop.total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKG_ColumnLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_ColumnLoop.total : ∀ (n : ℕ) (i : Usize) (s : State) (w : Weights) (c0 c1 c2 : Constants),
+  ↑i + n = 16 →
+    canonical w →
+      Bounded c0 →
+        Bounded c1 →
+          Bounded c2 → ∃ out, state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 s i = ok out :=
+fun n i s w c0 c1 c2 span hw h0 h1 h2 =>
+  Nat.recAux (motive := fun n =>
+    ∀ (i : Usize) (s : State),
+      ↑i + n = 16 → ∃ out, state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 s i = ok out)
+    (fun i s span =>
+      have stop := Eq.mpr (id (congrArg (fun _a => ¬i < _a) poseidon2.POSEID
+...
+      ok out)
+                      rnext))
+                  (Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = ok out)
+                        (bind_tc_ok next fun next => do
+                          let i1 ← i + 1#usize
+                          state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 next i1)))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            (do
+                                let i1 ← _a
+                                state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 next i1) =
+                              ok out)
+                          ri1))
+                      (Eq.mpr
+                        (id
+                          (congrArg (fun _a => _a = ok out)
+                            (bind_tc_ok i1
+                              (state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 next))))
+                        rout)))))))
+        vi1)
+    n i s span
+'AspisR1.NKG_ColumnLoop.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_ColumnLoop.source : ∀ (w : Weights) (c0 c1 c2 : Constants),
+  canonical w →
+    Bounded c0 →
+      Bounded c1 →
+        Bounded c2 →
+          ∃ out,
+            state_only_poseidon.interpolate_three_constant_columns w c0 c1 c2 = ok out ∧
+              canonical out ∧ decoded out = model w c0 c1 c2 :=
+fun w c0 c1 c2 hw h0 h1 h2 =>
+  let ⟨out, run⟩ := total 16 0#usize (Array.repeat 16#usize field.QM31.ZERO) w c0 c1 c2 rfl hw h0 h1 h2
+  Exists.intro out ⟨run, FJe_ThreeColumns.value w c0 c1 c2 out hw h0 h1 h2 run⟩
+'AspisR1.NKG_ColumnLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r32166edb8d024b3588a94b27fd2468af.scope; invocation ID: 06a8242b3cf249ad8b5e905cae4f238e

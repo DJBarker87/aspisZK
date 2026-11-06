@@ -1,0 +1,38 @@
+{"attempt": "NKG_L001", "exit_status": 0, "wall_seconds": 1.8088664489332587, "peak_rss_kib": "2628332", "swaps": "0", "print_axioms": []}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+def FIq_Native.state_only_poseidon.interpolate_three_constant_limb : Aeneas.Std.U32 →
+  Aeneas.Std.U32 →
+    Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.Result FIq_Native.field.M31 :=
+fun weight0 weight1 weight2 constant0 constant1 constant2 => do
+  let i ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from weight0)
+  let i1 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from constant0)
+  let i2 ← i * i1
+  let i3 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from weight1)
+  let i4 ← Aeneas.Std.lift (Aeneas.Std.core.convert.num.FromU64U32.from
+...
+#usize [1#usize, 9#usize, 10#usize]
+          FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected._proof_1)
+  let full_low ←
+    FIq_Native.core.array.iter.IntoIter.Insts.CoreIterTraitsIteratorIterator.fold
+        FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31
+        ii FIq_Native.field.QM31.ZERO selectors
+  let ri ← Aeneas.Std.core.ops.range.RangeInclusive.new 2#usize 8#usize
+  let internal_low ←
+    FIq_Native.core.ops.range.RangeInclusive.Insts.CoreIterTraitsIteratorIterator.fold
+        Aeneas.Std.core.iter.range.StepUsize
+        FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure_1.Insts.CoreOpsFunctionFnMutPairQM31UsizeQM31
+        ri FIq_Native.field.QM31.ZERO selectors
+  let leading ← FIq_Native.state_only_poseidon.leading_pair_packed openings
+  let full ← FIq_Native.state_only_poseidon.interpolated_full_pair_packed openings.z selectors.local
+  let internal ← FIq_Native.state_only_poseidon.interpolated_internal_pair openings.z selectors.local
+  let prepared_weights ←
+    FIq_Native.core.array.Array.map
+        (Aeneas.Std.BuiltinFnMut FIq_Native.field.QM31 FIq_Native.field.PreparedQm31Multiplier)
+        (Aeneas.Std.Array.make 3#usize [leading_low, full_low, internal_low] ⋯)
+        FIq_Native.field.PreparedQm31Multiplier.new
+  let prepared_block ← FIq_Native.field.PreparedQm31Multiplier.new selectors.block
+  FIq_Native.array_from_fn_copy 4#usize FIq_Native.field.QM31.Insts.CoreMarkerCopy
+      FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      FIq_Native.field.QM31.ZERO (openings, internal, prepared_block, prepared_weights, leading, full)
+
+Running as unit: run-rdddbe617715b45d1b15fdc84036a8cf6.scope; invocation ID: 79b052d8c4c44b5fbf63ab2c5b09a76d

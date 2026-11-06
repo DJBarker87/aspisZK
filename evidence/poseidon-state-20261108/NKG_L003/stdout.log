@@ -1,0 +1,79 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+NKG_lean/NKG_ColumnLoop.lean:25:40: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  0 ≤ f ≤ 15
+  e ≥ 0
+  e - f ≥ 1
+where
+ e := ↑↑16#usize
+ f := ↑↑i1
+theorem AspisR1.NKG_ColumnLoop.total : ∀ (n : ℕ) (i : Usize) (s : State) (w : Weights) (c0 c1 c2 : Constants),
+  ↑i + n = 16 →
+    canonical w →
+      Bounded c0 →
+        Bounded c1 →
+          Bounded c2 → ∃ out, state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 s i = ok out :=
+fun n i s w c0 c1 c2 span hw h0 h1 h2 =>
+  Nat.recAux (motive := fun n =>
+    ∀ (i : Usize) (s : State),
+      ↑i + n = 16 → ∃ out, state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 s i = ok out)
+    (fun i s span =>
+      have stop := Eq.mpr (id (congrArg (fun _a => ¬i < _a) poseidon2.POSEIDON2_WIDTH.eq_1)) (total._proof_1 i span);
+      Exists.intro s
+        (Eq.mpr (id (congrArg (fun _a => _a = ok s) (FJe_ThreeColumnStep.unfold_loop w c0 c1 c2 s i)))
+          (Eq.mpr (id (congrArg (fun _a => _a = ok s) (if_neg stop))) (Eq.refl (ok s)))))
+    (fun n ih i s span =>
+      have hi := id (Decidable.byContradiction fun a => total._proof_2 n i span a);
+      have guard := Eq.mpr (id (congrArg (fun _a => i < _a) poseidon2.POSEIDON2_WIDTH.eq_1)) (total._proof_3 i hi);
+      let ⟨next, rnext⟩ := NKG_ColumnTotal.step_total w c0 c1 c2 s i hi hw h0 h1 h2
+      let ⟨i1, h✝⟩ := WP.spec_imp_exists (UScalar.add_spec (total._proof_4 n i span guard))
+      let ⟨ri1, vi1⟩ := h✝
+      let ⟨out, rout⟩ := ih i1 next (Decidable.byContradiction fun a => sorry a)
+      Exists.intro out
+        (Eq.mpr (id (congrArg (fun _a => _a = ok out) (FJe_ThreeColumnStep.unfold_loop w c0 c1 c2 s i)))
+          (Eq.mpr (id (congrArg (fun _a => _a = ok out) (if_pos guard)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (do
+                        let next ← _a
+                        let i1 ← i + 1#usize
+                        state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 next i1) =
+                      ok out)
+                  rnext))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => _a = ok out)
+                    (bind_tc_ok next fun next => do
+                      let i1 ← i + 1#usize
+                      state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 next i1)))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (do
+                            let i1 ← _a
+                            state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 next i1) =
+                          ok out)
+                      ri1))
+                  (Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = ok out)
+                        (bind_tc_ok i1 (state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 next))))
+                    rout)))))))
+    n i s span
+'AspisR1.NKG_ColumnLoop.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_ColumnLoop.source : ∀ (w : Weights) (c0 c1 c2 : Constants),
+  canonical w →
+    Bounded c0 →
+      Bounded c1 →
+        Bounded c2 →
+          ∃ out,
+            state_only_poseidon.interpolate_three_constant_columns w c0 c1 c2 = ok out ∧
+              canonical out ∧ decoded out = model w c0 c1 c2 :=
+fun w c0 c1 c2 hw h0 h1 h2 =>
+  let ⟨out, run⟩ := total 16 0#usize (Array.repeat 16#usize field.QM31.ZERO) w c0 c1 c2 rfl hw h0 h1 h2
+  Exists.intro out ⟨run, FJe_ThreeColumns.value w c0 c1 c2 out hw h0 h1 h2 run⟩
+'AspisR1.NKG_ColumnLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

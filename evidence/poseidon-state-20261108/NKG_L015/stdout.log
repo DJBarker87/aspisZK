@@ -1,0 +1,50 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_Sum3Total.result : ∀ (a : Left) (b w : Right),
+  FIw_ArrayValue.canonical w →
+    FIw_ArrayValue.canonical b →
+      (∀ (i : Fin 3), PreparedFor (prepared (cell a i)) (qm (cell w i))) →
+        ∃ out, FIq_Native.field.qm31_sum_products3_prepared a b = ok out ∧ Canon out :=
+fun a b w cw cb hp =>
+  have cmem := fun i => cw (cell w i) (List.getElem_mem (cell._proof_2 w i));
+  have bmem := fun i => cb (cell b i) (List.getElem_mem (cell._proof_2 b i));
+  let ⟨v, h✝⟩ :=
+    PoseidonPreparedSum3ActualValue.actual_sum3_value (left a) (right b)
+      (fun i =>
+        Exists.intro (qm (cell w i))
+          ⟨cmem i, id (Eq.mpr (congrArg (fun p => PreparedFor p (qm (cell w i))) (mappedCell prepared a i)) (hp i))⟩)
+      fun i => id (Eq.mpr (congrArg ExtractedMaskQM31Exact.CurrentCanonicalQM (mappedCell qm b i)) (bmem i))
+  let ⟨x0, h✝¹⟩ := h✝
+  let ⟨x1, h✝²⟩ := h✝¹
+  let ⟨x2, h✝³⟩ := h✝²
+  let ⟨rv, right✝⟩ := h✝³
+  let ⟨cv, right✝¹⟩ := right✝
+  let ⟨p0, right✝²⟩ := right✝¹
+  let ⟨p1, right✝³⟩ := right✝²
+  let ⟨p2, vv⟩ := right✝³
+  have same := FJe_Sum3WrapperBridge.same a b;
+  casesOn (motive := fun t =>
+    FIq_Native.field.qm31_sum_products3_prepared a b = t →
+      ∃ out, FIq_Native.field.qm31_sum_products3_prepared a b = ok out ∧ Canon out)
+    (FIq_Native.field.qm31_sum_products3_prepared a b)
+    (fun out h =>
+      Eq.ndrec (motive := fun x => FIq_Native.field.qm31_sum_products3_prepared a b = x → ∃ out, x = ok out ∧ Canon out)
+        (fun run => Exists.intro out ⟨rfl, (FJe_Sum3Value.value a b w out cw cb hp run).left⟩) (Eq.symm h)
+        (Eq.refl (FIq_Native.field.qm31_sum_products3_prepared a b)))
+    (fun e h =>
+      Eq.ndrec (motive := fun x => FIq_Native.field.qm31_sum_products3_prepared a b = x → ∃ out, x = ok out ∧ Canon out)
+        (fun run =>
+          let ⟨⟩ := ok v
+          Eq.mp (congrArg (fun _a => FIv_Map.map qm _a = ok v) run)
+            (Eq.mp (congrArg (fun _a => FIv_Map.map qm (FIq_Native.field.qm31_sum_products3_prepared a b) = _a) rv)
+              same))
+        (Eq.symm h) (Eq.refl (FIq_Native.field.qm31_sum_products3_prepared a b)))
+    (fun h =>
+      Eq.ndrec (motive := fun x => FIq_Native.field.qm31_sum_products3_prepared a b = x → ∃ out, x = ok out ∧ Canon out)
+        (fun run =>
+          let ⟨⟩ := ok v
+          Eq.mp (congrArg (fun _a => FIv_Map.map qm _a = ok v) run)
+            (Eq.mp (congrArg (fun _a => FIv_Map.map qm (FIq_Native.field.qm31_sum_products3_prepared a b) = _a) rv)
+              same))
+        (Eq.symm h) (Eq.refl (FIq_Native.field.qm31_sum_products3_prepared a b)))
+    (Eq.refl (FIq_Native.field.qm31_sum_products3_prepared a b))
+'AspisR1.NKG_Sum3Total.result' depends on axioms: [propext, Classical.choice, Quot.sound]

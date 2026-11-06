@@ -1,0 +1,126 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+NKG_lean/NKG_OracleCuts.lean:24:22: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Fin ↑4#usize) 3
+numerals are polymorphic in Lean, but the numeral `3` cannot be used in a context where the expected type is
+  Fin ↑4#usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKG_lean/NKG_OracleCuts.lean:26:33: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Fin ↑4#usize) 3
+numerals are polymorphic in Lean, but the numeral `3` cannot be used in a context where the expected type is
+  Fin ↑4#usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+structure AspisR1.NKG_OracleCuts.Low (l : State) (acc : NQ) (i : Fin 16) (reply out : NQ) (args : Fin 2 → NQ)
+  (calls : ℕ) : Prop
+number of parameters: 7
+fields:
+  AspisR1.NKG_OracleCuts.Low.count : calls = 1
+  AspisR1.NKG_OracleCuts.Low.left : args 0 = acc
+  AspisR1.NKG_OracleCuts.Low.right : args 1 = cell l i
+  AspisR1.NKG_OracleCuts.Low.returned : out = reply
+constructor:
+  AspisR1.NKG_OracleCuts.Low.mk {l : State} {acc : NQ} {i : Fin 16} {reply out : NQ} {args : Fin 2 → NQ} {calls : ℕ}
+    (count : calls = 1) (left : args 0 = acc) (right : args 1 = cell l i) (returned : out = reply) :
+    Low l acc i reply out args calls
+structure AspisR1.NKG_OracleCuts.Prepare (w : Three) (theta : NQ) (args : Std.Array NQ 4#usize)
+  (replies : Std.Array NP 4#usize) (weights : Prepared) (block : NP) (calls : ℕ) : Prop
+number of parameters: 7
+fields:
+  AspisR1.NKG_OracleCuts.Prepare.count : calls = 4
+  AspisR1.NKG_OracleCuts.Prepare.inputArgs : ∀ (i : Fin 3), cell args ⟨↑i, ⋯⟩ = cell w i
+  AspisR1.NKG_OracleCuts.Prepare.blockArg : cell args sorry = theta
+  AspisR1.NKG_OracleCuts.Prepare.weightsReply : ∀ (i : Fin 3), cell weights i = cell replies ⟨↑i, ⋯⟩
+  AspisR1.NKG_OracleCuts.Prepare.blockReply : block = cell replies sorry
+constructor:
+  AspisR1.NKG_OracleCuts.Prepare.mk {w : Three} {theta : NQ} {args : Std.Array NQ 4#usize}
+    {replies : Std.Array NP 4#usize} {weights : Prepared} {block : NP} {calls : ℕ} (count : calls = 4)
+    (inputArgs : ∀ (i : Fin 3), cell args ⟨↑i, ⋯⟩ = cell w i) (blockArg : cell args sorry = theta)
+    (weightsReply : ∀ (i : Fin 3), cell weights i = cell replies ⟨↑i, ⋯⟩) (blockReply : block = cell replies sorry) :
+    Prepare w theta args replies weights block calls
+structure AspisR1.NKG_OracleCuts.Pack (succ internal : State) (g : Fin 4) (inputs : Fin 2 → Packed)
+  (replies : Fin 2 → NQ) (target ip : NQ) (calls : ℕ) : Prop
+number of parameters: 8
+fields:
+  AspisR1.NKG_OracleCuts.Pack.count : calls = 2
+  AspisR1.NKG_OracleCuts.Pack.window : ∀ (c : Fin 2) (i : Fin ↑4#usize),
+      cell (inputs c) i = cell (if ↑c = 0 then succ else internal) ⟨4 * ↑g + ↑i, ⋯⟩
+  AspisR1.NKG_OracleCuts.Pack.targetReply : target = replies 0
+  AspisR1.NKG_OracleCuts.Pack.internalReply : ip = replies 1
+constructor:
+  AspisR1.NKG_OracleCuts.Pack.mk {succ internal : State} {g : Fin 4} {inputs : Fin 2 → Packed} {replies : Fin 2 → NQ}
+    {target ip : NQ} {calls : ℕ} (count : calls = 2)
+    (window :
+      ∀ (c : Fin 2) (i : Fin ↑4#usize), cell (inputs c) i = cell (if ↑c = 0 then succ else internal) ⟨4 * ↑g + ↑i, ⋯⟩)
+    (targetReply : target = replies 0) (internalReply : ip = replies 1) :
+    Pack succ internal g inputs replies target ip calls
+structure AspisR1.NKG_OracleCuts.Sub (target ip : NQ) (lead full : Packed) (g : Fin 4) (args : Fin 3 → Fin 2 → NQ)
+  (replies differences : Three) (calls : ℕ) : Prop
+number of parameters: 9
+fields:
+  AspisR1.NKG_OracleCuts.Sub.count : calls = 3
+  AspisR1.NKG_OracleCuts.Sub.leftArgs : ∀ (j : Fin 3), args j 0 = target
+  AspisR1.NKG_OracleCuts.Sub.rightArgs : ∀ (j : Fin 3),
+      args j 1 = if ↑j = 0 then cell lead g else if ↑j = 1 then cell full g else ip
+  AspisR1.NKG_OracleCuts.Sub.returned : differences = replies
+constructor:
+  AspisR1.NKG_OracleCuts.Sub.mk {target ip : NQ} {lead full : Packed} {g : Fin 4} {args : Fin 3 → Fin 2 → NQ}
+    {replies differences : Three} {calls : ℕ} (count : calls = 3) (leftArgs : ∀ (j : Fin 3), args j 0 = target)
+    (rightArgs : ∀ (j : Fin 3), args j 1 = if ↑j = 0 then cell lead g else if ↑j = 1 then cell full g else ip)
+    (returned : differences = replies) : Sub target ip lead full g args replies differences calls
+structure AspisR1.NKG_OracleCuts.Sum (p logged : Prepared) (differences rhs : Three) (reply out : NQ) (calls : ℕ) : Prop
+number of parameters: 7
+fields:
+  AspisR1.NKG_OracleCuts.Sum.count : calls = 1
+  AspisR1.NKG_OracleCuts.Sum.caches : logged = p
+  AspisR1.NKG_OracleCuts.Sum.rightArgs : rhs = differences
+  AspisR1.NKG_OracleCuts.Sum.returned : out = reply
+constructor:
+  AspisR1.NKG_OracleCuts.Sum.mk {p logged : Prepared} {differences rhs : Three} {reply out : NQ} {calls : ℕ}
+    (count : calls = 1) (caches : logged = p) (rightArgs : rhs = differences) (returned : out = reply) :
+    Sum p logged differences rhs reply out calls
+structure AspisR1.NKG_OracleCuts.Mul (block logged : NP) (sum arg reply out : NQ) (calls : ℕ) : Prop
+number of parameters: 7
+fields:
+  AspisR1.NKG_OracleCuts.Mul.count : calls = 1
+  AspisR1.NKG_OracleCuts.Mul.cache : logged = block
+  AspisR1.NKG_OracleCuts.Mul.rightArg : arg = sum
+  AspisR1.NKG_OracleCuts.Mul.returned : out = reply
+constructor:
+  AspisR1.NKG_OracleCuts.Mul.mk {block logged : NP} {sum arg reply out : NQ} {calls : ℕ} (count : calls = 1)
+    (cache : logged = block) (rightArg : arg = sum) (returned : out = reply) : Mul block logged sum arg reply out calls
+structure AspisR1.NKG_OracleCuts.Output (replies out : Packed) (indices : Fin 4 → ℕ) (calls : ℕ) : Prop
+number of parameters: 4
+fields:
+  AspisR1.NKG_OracleCuts.Output.count : calls = 4
+  AspisR1.NKG_OracleCuts.Output.order : ∀ (i : Fin 4), indices i = ↑i
+  AspisR1.NKG_OracleCuts.Output.returned : out = replies
+constructor:
+  AspisR1.NKG_OracleCuts.Output.mk {replies out : Packed} {indices : Fin 4 → ℕ} {calls : ℕ} (count : calls = 4)
+    (order : ∀ (i : Fin 4), indices i = ↑i) (returned : out = replies) : Output replies out indices calls
+structure AspisR1.NKG_OracleCuts.Prefix (o : FJa_PoseidonOrigins.Openings) (s : FJa_PoseidonOrigins.Selectors)
+  (opening : FJa_PoseidonOrigins.Openings) (fullState fullLocal internalState internalLocal : State)
+  (leadReply fullReply leadOut fullOut : Packed) (internalReply internalOut : State) (calls : ℕ) : Prop
+number of parameters: 14
+fields:
+  AspisR1.NKG_OracleCuts.Prefix.count : calls = 3
+  AspisR1.NKG_OracleCuts.Prefix.leadingArgs : opening = o
+  AspisR1.NKG_OracleCuts.Prefix.fullStateArg : fullState = o.z
+  AspisR1.NKG_OracleCuts.Prefix.fullLocalArg : fullLocal = s.local
+  AspisR1.NKG_OracleCuts.Prefix.internalStateArg : internalState = o.z
+  AspisR1.NKG_OracleCuts.Prefix.internalLocalArg : internalLocal = s.local
+  AspisR1.NKG_OracleCuts.Prefix.leadingReturn : leadOut = leadReply
+  AspisR1.NKG_OracleCuts.Prefix.fullReturn : fullOut = fullReply
+  AspisR1.NKG_OracleCuts.Prefix.internalReturn : internalOut = internalReply
+constructor:
+  AspisR1.NKG_OracleCuts.Prefix.mk {o : FJa_PoseidonOrigins.Openings} {s : FJa_PoseidonOrigins.Selectors}
+    {opening : FJa_PoseidonOrigins.Openings} {fullState fullLocal internalState internalLocal : State}
+    {leadReply fullReply leadOut fullOut : Packed} {internalReply internalOut : State} {calls : ℕ} (count : calls = 3)
+    (leadingArgs : opening = o) (fullStateArg : fullState = o.z) (fullLocalArg : fullLocal = s.local)
+    (internalStateArg : internalState = o.z) (internalLocalArg : internalLocal = s.local)
+    (leadingReturn : leadOut = leadReply) (fullReturn : fullOut = fullReply)
+    (internalReturn : internalOut = internalReply) :
+    Prefix o s opening fullState fullLocal internalState internalLocal leadReply fullReply leadOut fullOut internalReply
+      internalOut calls

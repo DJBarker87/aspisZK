@@ -1,0 +1,215 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_FullSource.result : ∀ (s l : State),
+  canonical s →
+    canonical l →
+      ∃ out,
+        state_only_poseidon.interpolated_full_pair_packed s l = ok out ∧
+          canonical out ∧
+            decoded out = fun g =>
+              R0P.poseidonPackingFormula ExtractedMaskQmPackBase4Arithmetic.iBasis
+                ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+                R0P.poseidonInterpolatedFullPair (decoded s) (decoded l) (FJe_ExternalAdjoint.lane g j) :=
+fun s l hs hl =>
+  let q0 := cell l ⟨1, of_decide_eq_true (id (Eq.refl true))⟩;
+  let q1 := cell l ⟨9, of_decide_eq_true (id (Eq.refl true))⟩;
+  let q2 := cell l ⟨10, of_decide_eq_true (id (Eq.refl true))⟩;
+  have r0 := RawPoseidonExternalRowReads.array_index_usize_ok l 1#usize (of_decide_eq_true (id (Eq.refl true)));
+  have r1 := RawPoseidonExternalRowReads.array_index_usize_ok l 9#usize (of_decide_eq_true (id (Eq.refl true)));
+  have r2 := RawPoseidonExternalRowReads.array_index_usize_ok l 10#usize (of_decide_eq_true (id (Eq.refl true)));
+  have hw := (FJe_FullWeights.value l q0 q1 q2 hl r0 r1 r2).left;
+  let ⟨even, h✝⟩ :=
+    NKG_ColumnLoop.source
+      (Array.make 3#usize [q0, q1, q2]
+        (of_eq_true
+          (Eq.trans
+            (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+              (UScalar.ofNatCore_val_eq
+                (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+            (eq_self 3))))
+      (FJb_InitialConstants.row 2) (FJe_FinalConstants.row 0) (FJe_FinalConstants.row 2) hw
+      (FJb_InitialConstants.bounded 2) (FJe_FinalConstants.bounded 0) (FJe_FinalConstants.bounded 2)
+  let ⟨re, right✝⟩ := h✝
+  let ⟨ce, right✝¹⟩ := right✝
+  let ⟨odd, h✝¹⟩ :=
+    NKG_ColumnLoop.source
+      (Array.make 3#usize [q0, q1, q2]
+        (of_eq_true
+          (Eq.trans
+            (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+              (UScalar.ofNatCore_val_eq
+                (UScalar.bound_suffices UScalarTy.Usize 3 (of_decide_eq_true (id (Eq.refl true))))))
+            (eq_self 3))))
+      (FJb_InitialConstants.row 3) (FJe_FinalConstants.row 1) (FJe_FinalConstants.row 3) hw
+      (FJb_InitialConstants.bounded 3) (FJe_FinalConstants.bounded 1) (FJe_FinalConstants.bounded 3)
+  let ⟨ro, right✝²⟩ := h✝¹
+  let ⟨co, right✝³⟩ := right✝²
+  let ⟨middle, h✝²⟩ := NIH_FullRounds.qm s even hs ce
+  let ⟨rm, right✝⁴⟩ := h✝²
+  let ⟨cm, right✝⁵⟩ := right✝⁴
+  let ⟨out, h✝³⟩ := NIH_FullRounds.packed_qm middle odd cm co
+  let ⟨rf, right✝⁶⟩ := h✝³
+  let ⟨cf, right✝⁷⟩ := right✝⁶
+  have run :=
+    Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (congr (congrArg Bind.bind r0)
+                (funext fun q =>
+                  Eq.trans
+                    (congr (congrArg Bind.bind r1)
+                      (funext fun q1 =>
+                        Eq.trans
+                          (congr (congrArg Bind.bind r2)
+                            (funext fun q2 =>
+                              Eq.trans
+                                (congr
+                                  (congrArg Bind.bind
+                                    (FJb_InitialConstants.read 2#usize (of_decide_eq_true (id (Eq.refl true)))))
+                                  (funext fun a =>
+                                    Eq.trans
+                                      (congr
+                                        (congrArg Bind.bind
+                                          (FJe_FinalConstants.read 0#usize (of_decide_eq_true (id (Eq.refl true)))))
+                                        (funext fun a1 =>
+                                          Eq.trans
+                                            (congr
+                                              (congrArg Bind.bind
+                                                (FJe_FinalConstants.read 2#usize
+                                                  (of_decide_eq_true (id (Eq.refl true)))))
+                                              (funext fun a2 => congrArg (Bind.bind ⋯) (funext ⋯)))
+                                            (bind_tc_ok
+                                              (FJe_FinalConstants.row ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                              fun y => do
+                                              let even ←
+                                                state_only_poseidon.interpolate_three_constant_columns
+                                                    (Array.make 3#usize [q, q1, q2]
+                                                      (state_only_poseidon.interpolated_full_pair_packed._proof_9 q q1
+                                                        q2))
+                                                    a a1 y
+                                              let odd ←
+                                                state_only_poseidon.interpolate_three_constant_columns
+                                                    (Array.make 3#usize [q, q1, q2]
+                                                      (state_only_poseidon.interpolated_full_pair_packed._proof_9 q q1
+                                                        q2))
+                                                    (FJb_InitialConstants.row ⋯) (FJe_FinalConstants.row ⋯)
+                                                    (FJe_FinalConstants.row ⋯)
+                                              let a6 ← state_only_poseidon.full_round s even
+                                              state_only_poseidon.full_round_packed a6 odd)))
+                                      (bind_tc_ok
+                                        (FJe_FinalConstants.row ⟨↑0#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                        fun y => do
+                                        let even ←
+                                          state_only_poseidon.interpolate_three_constant_columns
+                                              (Array.make 3#usize [q, q1, q2]
+                                                (state_only_poseidon.interpolated_full_pair_packed._proof_9 q q1 q2))
+                                              a y
+                                              (FJe_FinalConstants.row ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                        let odd ←
+                                          state_only_poseidon.interpolate_three_constant_columns
+                                              (Array.make 3#usize [q, q1, q2]
+                                                (state_only_poseidon.interpolated_full_pair_packed._proof_9 q q1 q2))
+                                              (FJb_InitialConstants.row
+                                                ⟨↑3#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                              (FJe_FinalConstants.row ⟨↑1#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                              (FJe_FinalConstants.row ⟨↑3#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                        let a6 ← state_only_poseidon.full_round s even
+                                        state_only_poseidon.full_round_packed a6 odd)))
+                                (bind_tc_ok (FJb_InitialConstants.row ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                  fun y => do
+                                  let even ←
+                                    state_only_poseidon.interpolate_three_constant_columns
+                                        (Array.make 3#usize [q, q1, q2]
+                                          (state_only_poseidon.interpolated_full_pair_packed._proof_9 q q1 q2))
+                                        y (FJe_FinalConstants.row ⟨↑0#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                        (FJe_FinalConstants.row ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                  let odd ←
+                                    state_only_poseidon.interpolate_three_constant_columns
+                                        (Array.make 3#usize [q, q1, q2]
+                                          (state_only_poseidon.interpolated_full_pair_packed._proof_9 q q1 q2))
+                                        (FJb_InitialConstants.row ⟨↑3#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                        (FJe_FinalConstants.row ⟨↑1#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                        (FJe_FinalConstants.row ⟨↑3#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                  let a6 ← state_only_poseidon.full_round s even
+                                  state_only_poseidon.full_round_packed a6 odd)))
+                          (bind_tc_ok q2 fun y => do
+                            let even ←
+                              state_only_poseidon.interpolate_three_constant_columns
+                                  (Array.make 3#usize [q, q1, y]
+                                    (state_only_poseidon.interpolated_full_pair_packed._proof_9 q q1 y))
+                                  (FJb_InitialConstants.row ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                  (FJe_FinalConstants.row ⟨↑0#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                  (FJe_FinalConstants.row ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                            let odd ←
+                              state_only_poseidon.interpolate_three_constant_columns
+                                  (Array.make 3#usize [q, q1, y]
+                                    (state_only_poseidon.interpolated_full_pair_packed._proof_9 q q1 y))
+                                  (FJb_InitialConstants.row ⟨↑3#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                  (FJe_FinalConstants.row ⟨↑1#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                                  (FJe_FinalConstants.row ⟨↑3#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                            let a6 ← state_only_poseidon.full_round s even
+                            state_only_poseidon.full_round_packed a6 odd)))
+                    (bind_tc_ok q1 fun y => do
+                      let even ←
+                        state_only_poseidon.interpolate_three_constant_columns
+                            (Array.make 3#usize [q, y, q2]
+                              (state_only_poseidon.interpolated_full_pair_packed._proof_9 q y q2))
+                            (FJb_InitialConstants.row ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                            (FJe_FinalConstants.row ⟨↑0#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                            (FJe_FinalConstants.row ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                      let odd ←
+                        state_only_poseidon.interpolate_three_constant_columns
+                            (Array.make 3#usize [q, y, q2]
+                              (state_only_poseidon.interpolated_full_pair_packed._proof_9 q y q2))
+                            (FJb_InitialConstants.row ⟨↑3#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                            (FJe_FinalConstants.row ⟨↑1#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                            (FJe_FinalConstants.row ⟨↑3#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                      let a6 ← state_only_poseidon.full_round s even
+                      state_only_poseidon.full_round_packed a6 odd)))
+              (bind_tc_ok q0 fun y => do
+                let even ←
+                  state_only_poseidon.interpolate_three_constant_columns
+                      (Array.make 3#usize [y, q1, q2]
+                        (state_only_poseidon.interpolated_full_pair_packed._proof_9 y q1 q2))
+                      (FJb_InitialConstants.row ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                      (FJe_FinalConstants.row ⟨↑0#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                      (FJe_FinalConstants.row ⟨↑2#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                let odd ←
+                  state_only_poseidon.interpolate_three_constant_columns
+                      (Array.make 3#usize [y, q1, q2]
+                        (state_only_poseidon.interpolated_full_pair_packed._proof_9 y q1 q2))
+                      (FJb_InitialConstants.row ⟨↑3#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                      (FJe_FinalConstants.row ⟨↑1#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                      (FJe_FinalConstants.row ⟨↑3#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                let a6 ← state_only_poseidon.full_round s even
+                state_only_poseidon.full_round_packed a6 odd)))
+          (ok out)))
+      (id
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (Eq.trans
+                    (congr (congrArg Bind.bind re)
+                      (funext fun ev =>
+                        Eq.trans
+                          (congrFun' (congrArg Bind.bind ro) fun od => do
+                            let mid ← state_only_poseidon.full_round s ev
+                            state_only_poseidon.full_round_packed mid od)
+                          (bind_tc_ok odd fun y => do
+                            let mid ← state_only_poseidon.full_round s ev
+                            state_only_poseidon.full_round_packed mid y)))
+                    (bind_tc_ok even fun y => do
+                      let mid ← state_only_poseidon.full_round s y
+                      state_only_poseidon.full_round_packed mid odd))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind rm) fun mid => state_only_poseidon.full_round_packed mid odd)
+                      (bind_tc_ok middle fun y => state_only_poseidon.full_round_packed y odd))
+                    rf)))
+              (ok out))
+            (eq_self (ok out)))));
+  Exists.intro out ⟨run, FJe_FullPackedValue.value s l out hs hl run⟩
+'AspisR1.NKG_FullSource.result' depends on axioms: [propext, Classical.choice, Quot.sound]

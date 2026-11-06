@@ -1,0 +1,64 @@
+{"attempt": "NKG_L017", "exit_status": 0, "wall_seconds": 3.4677485120482743, "peak_rss_kib": "3866488", "swaps": "0", "print_axioms": ["'AspisR1.NKG_SliceTotal.slice' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKG_SliceTotal.pack' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+NKG_lean/NKG_SliceTotal.lean:24:36: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NKG_lean/NKG_SliceTotal.lean:26:41: warning: This simp argument is unused:
+  hlen
+
+Hint: Omit it from the simp argument list.
+  simp [Array.to_slice, ̲Slice.length, ̲hle,h̵l̵e̵n̵,̵ ̲sliceAt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NKG_SliceTotal.slice : ∀ (a : State) (start finish : Usize),
+  ↑start ≤ ↑finish →
+    ↑finish ≤ 16 →
+      ↑finish = ↑start + 4 →
+        canonical a →
+          FJh_Proj
+...
+
+    ⟨len, fun x hx =>
+      let ⟨j, h✝⟩ := List.getElem_of_mem hx
+      let ⟨hj, h✝¹⟩ := h✝
+      Eq.ndrec (motive := fun x => x ∈ ↑(sliceAt a start finish) → Canonical x)
+        (fun hx =>
+          have h4 := Eq.mpr (id (congrArg (LT.lt j) (Eq.symm len))) hj;
+          Eq.mpr
+            (id (congrArg (fun _a => Canonical _a) (FJh_GroupSlices.slice_input_eq a start finish hle hb span ⟨j, h4⟩)))
+            (ca (FJh_GroupSlices.inputAt a start finish span hb ⟨j, h4⟩)
+              (List.getElem_mem (FJh_GroupSlices.inputAt._proof_2 a start finish span hb ⟨j, h4⟩))))
+        h✝¹ hx⟩⟩
+'AspisR1.NKG_SliceTotal.slice' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_SliceTotal.pack : ∀ (a : State) (start finish : Usize),
+  ↑start ≤ ↑finish →
+    ↑finish ≤ 16 →
+      ↑finish = ↑start + 4 →
+        canonical a →
+          ∃ out,
+            (do
+                  let values ← FJh_ProjectedCall.slice a start finish
+                  field.qm31_pack_base4 values) =
+                ok out ∧
+              Canonical out :=
+fun a start finish hle hb span ca =>
+  let ⟨rs, right✝⟩ := slice a start finish hle hb span ca
+  let ⟨len, cs⟩ := right✝
+  let ⟨out, h✝⟩ := FIw_PackTotal.source (sliceAt a start finish) len cs
+  let ⟨rp, cp⟩ := h✝
+  Exists.intro out
+    ⟨Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let values ← _a
+                  field.qm31_pack_base4 values) =
+                ok out)
+            rs))
+        (Eq.mpr (id (congrArg (fun _a => _a = ok out) (bind_tc_ok (sliceAt a start finish) field.qm31_pack_base4)))
+          (Eq.mpr (id (congrArg (fun _a => _a = ok out) rp)) (Eq.refl (ok out)))),
+      cp⟩
+'AspisR1.NKG_SliceTotal.pack' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r297b8dbe14b34c6db12c32a6bc923f79.scope; invocation ID: daf8e3e5f73446e983ac0ea98b64fa08

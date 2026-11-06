@@ -1,0 +1,164 @@
+--- a/crates/aspis-statement/src/state_only_poseidon.rs
++++ b/crates/aspis-statement/src/state_only_poseidon.rs
+@@ -1239,3 +1239,5 @@
+         );
+     }
+ }
++
++#[cfg(kani)] mod NKG_native { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NKG_state_native.rs")); }
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -5,6 +5,7 @@
+ //! constraint-composition kernel that Stage 2 must make correct before any
+ //! statement proof is wired into the PCS.
+ 
++#![cfg_attr(kani, feature(allocator_api))]
+ #![no_std]
+ 
+ extern crate alloc;
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,4 +1,5 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
++#![cfg_attr(kani, feature(allocator_api))]
+ #![no_std]
+ extern crate alloc;
+ pub mod sampler;
+--- /dev/null
++++ b/NKG_state_native.rs
+@@ -0,0 +1,135 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++struct NKG_ColumnLog { args:[[u32;6];4], replies:[u32;4], calls:usize }
++fn NKG_limb(log:&mut NKG_ColumnLog,a:u32,b:u32,c:u32,d:u32,e:u32,f:u32)->M31 {
++ let k=log.calls;assert!(k<4);log.args[k]=[a,b,c,d,e,f];log.calls+=1;M31(log.replies[k])
++}
++fn NKG_column_step(weights:[QM31;3],column0:[u32;16],column1:[u32;16],column2:[u32;16],output:&mut[QM31;16],lane:&mut usize,log:&mut NKG_ColumnLog){
++ if *lane<POSEIDON2_WIDTH {
++        output[*lane] = QM31 {
++            c0: CM31::new(
++                NKG_limb(log,
++                    weights[0].c0.a.0,
++                    weights[1].c0.a.0,
++                    weights[2].c0.a.0,
++                    column0[*lane],
++                    column1[*lane],
++                    column2[*lane],
++                ),
++                NKG_limb(log,
++                    weights[0].c0.b.0,
++                    weights[1].c0.b.0,
++                    weights[2].c0.b.0,
++                    column0[*lane],
++                    column1[*lane],
++                    column2[*lane],
++                ),
++            ),
++            c1: CM31::new(
++                NKG_limb(log,
++                    weights[0].c1.a.0,
++                    weights[1].c1.a.0,
++                    weights[2].c1.a.0,
++                    column0[*lane],
++                    column1[*lane],
++                    column2[*lane],
++                ),
++                NKG_limb(log,
++                    weights[0].c1.b.0,
++                    weights[1].c1.b.0,
++                    weights[2].c1.b.0,
++                    column0[*lane],
++                    column1[*lane],
++                    column2[*lane],
++                ),
++            ),
++        };
++        *lane += 1;
++    }
++}
++fn NKG_q()->QM31 {QM31{c0:CM31::new(M31(kani::any()),M31(kani::any())),c1:CM31::new(M31(kani::any()),M31(kani::any()))}}
++fn NKG_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::unwind(80)]
++fn NKG_columns_iteration(){
++ let weights=core::array::from_fn(|_|NKG_q());
++ let c0:[u32;16]=kani::any();let c1:[u32;16]=kani::any();let c2:[u32;16]=kani::any();
++ let mut out:[QM31;16]=core::array::from_fn(|_|NKG_q());
++ let mut lane:usize=kani::any();kani::assume(lane<16);let initial=lane;
++ let k:usize=kani::any();let j:usize=kani::any();kani::assume(k<16&&j<4);
++ let old=NKG_words(out[k]);let replies:[u32;4]=kani::any();
++ let mut log=NKG_ColumnLog{args:[[0;6];4],replies,calls:0};
++ NKG_column_step(weights,c0,c1,c2,&mut out,&mut lane,&mut log);
++ if cfg!(NKG_bad_output){out[k].c0.a.0^=1;}
++ if cfg!(NKG_bad_argument){log.args[j][3]^=1;}
++ assert_eq!(lane,initial+1);assert_eq!(log.calls,4);
++ assert_eq!(log.args[j],[NKG_words(weights[0])[j],NKG_words(weights[1])[j],NKG_words(weights[2])[j],c0[initial],c1[initial],c2[initial]]);
++ assert_eq!(NKG_words(out[k]),if k==initial{replies}else{old});
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::unwind(80)]
++fn NKG_columns_stop(){
++ let weights=core::array::from_fn(|_|NKG_q());
++ let c0:[u32;16]=kani::any();let c1:[u32;16]=kani::any();let c2:[u32;16]=kani::any();
++ let mut out:[QM31;16]=core::array::from_fn(|_|NKG_q());
++ let mut lane:usize=kani::any();kani::assume(lane>=16);let initial=lane;
++ let k:usize=kani::any();kani::assume(k<16);let before=NKG_words(out[k]);
++ let mut log=NKG_ColumnLog{args:[[0;6];4],replies:kani::any(),calls:0};
++ NKG_column_step(weights,c0,c1,c2,&mut out,&mut lane,&mut log);
++ if cfg!(NKG_bad_output){out[k].c0.a.0^=1;}
++ assert_eq!(lane,initial);assert_eq!(log.calls,0);assert_eq!(NKG_words(out[k]),before);
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::unwind(80)]
++fn NKG_columns_initial(){
++ let mut output = [QM31::ZERO; POSEIDON2_WIDTH];
++ let lane = 0usize;
++ let k:usize=kani::any();kani::assume(k<16);
++ if cfg!(NKG_bad_output){output[k].c0.a.0^=1;}
++ assert_eq!(lane,0);assert_eq!(NKG_words(output[k]),[0;4]);
++}
++
++struct NKG_InternalLog { weights:[[QM31;7];2], constants:[[M31;7];2], dots:[QM31;2], dot_calls:usize,states:[[QM31;16];2],round_constants:[QM31;2],round_replies:[[QM31;16];2],round_calls:usize }
++fn NKG_dot(log:&mut NKG_InternalLog,w:&[QM31],c:&[M31])->QM31 {
++ let k=log.dot_calls;assert!(k<2);assert_eq!(w.len(),7);assert_eq!(c.len(),7);
++ log.weights[k]=core::array::from_fn(|i|w[i]);log.constants[k]=core::array::from_fn(|i|c[i]);log.dot_calls+=1;log.dots[k]
++}
++fn NKG_round(log:&mut NKG_InternalLog,s:[QM31;16],c:QM31)->[QM31;16] {
++ let k=log.round_calls;assert!(k<2);log.states[k]=s;log.round_constants[k]=c;log.round_calls+=1;log.round_replies[k]
++}
++fn NKG_internal_pair(
++    state: [QM31; POSEIDON2_WIDTH],
++    local: &[QM31; 16], log: &mut NKG_InternalLog,
++) -> [QM31; POSEIDON2_WIDTH] {
++    const ROWS: [usize; 7] = [2, 3, 4, 5, 6, 7, 8];
++    let weights = ROWS.map(|row| local[row]);
++    let even_constants = ROWS.map(|row| M31(INTERNAL[2 * (row - 2)]));
++    let odd_constants = ROWS.map(|row| M31(INTERNAL[2 * (row - 2) + 1]));
++    let even = NKG_dot(log,&weights, &even_constants);
++    let odd = NKG_dot(log,&weights, &odd_constants);
++    let middle = NKG_round(log,state, even);
++    NKG_round(log,middle, odd)
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::unwind(80)]
++fn NKG_internal_calls(){
++ let state:[QM31;16]=core::array::from_fn(|_|NKG_q());let local:[QM31;16]=core::array::from_fn(|_|NKG_q());
++ let dots:[QM31;2]=core::array::from_fn(|_|NKG_q());let round_replies:[[QM31;16];2]=core::array::from_fn(|_|core::array::from_fn(|_|NKG_q()));
++ let mut log=NKG_InternalLog{weights:[[QM31::ZERO;7];2],constants:[[M31::ZERO;7];2],dots,dot_calls:0,states:[[QM31::ZERO;16];2],round_constants:[QM31::ZERO;2],round_replies,round_calls:0};
++ let k:usize=kani::any();let j:usize=kani::any();let call:usize=kani::any();kani::assume(k<16&&j<7&&call<2);
++ let before=NKG_words(local[k]);let mut out=NKG_internal_pair(state,&local,&mut log);
++ if cfg!(NKG_bad_output){out[k].c0.a.0^=1;}
++ if cfg!(NKG_bad_argument){log.weights[call][j].c0.a.0^=1;}
++ assert_eq!(log.dot_calls,2);assert_eq!(log.round_calls,2);
++ assert_eq!(NKG_words(log.weights[call][j]),NKG_words(local[j+2]));
++ assert_eq!(log.constants[call][j].0,INTERNAL[2*j+call]);
++ assert_eq!(NKG_words(log.states[0][k]),NKG_words(state[k]));
++ assert_eq!(NKG_words(log.states[1][k]),NKG_words(round_replies[0][k]));
++ assert_eq!(NKG_words(log.round_constants[call]),NKG_words(dots[call]));
++ assert_eq!(NKG_words(out[k]),NKG_words(round_replies[1][k]));assert_eq!(NKG_words(local[k]),before);
++}

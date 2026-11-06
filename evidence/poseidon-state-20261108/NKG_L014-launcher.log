@@ -1,0 +1,52 @@
+{"attempt": "NKG_L014", "exit_status": 0, "wall_seconds": 11.135043800109997, "peak_rss_kib": "6037696", "swaps": "0", "print_axioms": ["'AspisR1.NKG_FullSource.result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_FullSource.result : ∀ (s l : State),
+  canonical s →
+    canonical l →
+      ∃ out,
+        state_only_poseidon.interpolated_full_pair_packed s l = ok out ∧
+          canonical out ∧
+            decoded out = fun g =>
+              R0P.poseidonPackingFormula ExtractedMaskQmPackBase4Arithmetic.iBasis
+                ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+                R0P.poseidonInterpolatedFullPair (decoded s) (decoded l) (FJe_ExternalAdjoint.lane g j) :=
+fun s l hs hl =>
+  let q0 := cell l ⟨1, of_decide_eq_true (id (Eq.refl true))⟩;
+  let q1 := cell l ⟨9, of_decide_eq_true 
+...
+ow ⟨↑3#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                      (FJe_FinalConstants.row ⟨↑1#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                      (FJe_FinalConstants.row ⟨↑3#usize, of_decide_eq_true (id (Eq.refl true))⟩)
+                let a6 ← state_only_poseidon.full_round s even
+                state_only_poseidon.full_round_packed a6 odd)))
+          (ok out)))
+      (id
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (Eq.trans
+                    (congr (congrArg Bind.bind re)
+                      (funext fun ev =>
+                        Eq.trans
+                          (congrFun' (congrArg Bind.bind ro) fun od => do
+                            let mid ← state_only_poseidon.full_round s ev
+                            state_only_poseidon.full_round_packed mid od)
+                          (bind_tc_ok odd fun y => do
+                            let mid ← state_only_poseidon.full_round s ev
+                            state_only_poseidon.full_round_packed mid y)))
+                    (bind_tc_ok even fun y => do
+                      let mid ← state_only_poseidon.full_round s y
+                      state_only_poseidon.full_round_packed mid odd))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind rm) fun mid => state_only_poseidon.full_round_packed mid odd)
+                      (bind_tc_ok middle fun y => state_only_poseidon.full_round_packed y odd))
+                    rf)))
+              (ok out))
+            (eq_self (ok out)))));
+  Exists.intro out ⟨run, FJe_FullPackedValue.value s l out hs hl run⟩
+'AspisR1.NKG_FullSource.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra639895bd9554a4bbe32870d79e3b3f9.scope; invocation ID: 45f2968550bb499494fa24a467c25336

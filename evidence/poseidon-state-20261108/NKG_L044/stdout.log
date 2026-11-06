@@ -1,0 +1,102 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+theorem AspisR1.NKG_OraclePacket.source : ∀ (o : Openings) (s : Selectors) (nativeOut : Packed)
+  (pre : NKG_PreludeFrame.Observation) (groups : Fin 4 → NKG_GroupFrame.Observation) (indices : Fin 4 → ℕ)
+  (outputCalls : ℕ),
+  canonical o.z →
+    canonical o.succ_z →
+      canonical o.xor12_z →
+        canonical s.local →
+          Canon s.block →
+            NKG_PreludeFrame.Cut o s pre →
+              (∀ (g : Fin 4),
+                  NKG_GroupFrame.Frame o.succ_z pre.internal pre.leading pre.full pre.prepared pre.block g (groups g)) →
+                NKG_OracleCuts.Output (outputs groups) nativeOut indices outputCalls →
+                  state_only_poseidon.evaluate_state_only_poseidon_oracle_projected o s = ok nativeOut ∧
+                    canonical nativeOut ∧
+                      decoded nativeOut = fun g =>
+                        R0P.poseidonPackingFormula ExtractedMaskQmPackBase4Arithmetic.iBasis
+                          ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+                          R0P.poseidonScalarResidual (FJh_Native07RawValue.openings o) (decode s.block)
+                            (decoded s.local) (FJe_ExternalAdjoint.lane g j) :=
+fun o s nativeOut pre groups indices outputCalls hz ht hx hs hb precut groupcuts outputcut =>
+  let ⟨pp, right✝⟩ := NKG_PreludeFrame.result o s pre hz hx hs hb precut
+  let ⟨pb, right✝¹⟩ := right✝
+  let ⟨pl, right✝²⟩ := right✝¹
+  let ⟨pf, pi⟩ := right✝²
+  have ready := NKG_OracleChoices.ready o s hz hx hs hb;
+  have groupRaw := fun g =>
+    have cut :=
+      Eq.mp
+        (congrFun'
+          (congrFun' (congr (congr (congr (congr (congrArg (NKG_GroupFrame.Frame o.succ_z) pi) pl) pf) pp) pb) g)
+          (groups g))
+        (groupcuts g);
+    let ⟨out, h✝⟩ :=
+      NKG_CellTotal.cell o (NKG_OracleChoices.internal o s) s.block (NKG_OracleChoices.block s)
+        (NKG_OracleChoices.prepared s) (NKG_OracleChoices.leading o) (NKG_OracleChoices.full o s)
+        (NKG_OracleChoices.weights s) (NKG_GroupFrame.index g) g.isLt ht ready.internalCanonical hb
+        ready.leadingCanonical ready.fullCanonical ready.weightsCanonical ready.preparedCall ready.blockCall
+    let ⟨called, right✝³⟩ := h✝
+    have frame :=
+      NKG_GroupFrame.result o.succ_z (NKG_OracleChoices.internal o s) (NKG_OracleChoices.leading o)
+        (NKG_OracleChoices.full o s) (NKG_OracleChoices.prepared s) (NKG_OracleChoices.block s) g (groups g) cut;
+    have raw :=
+      NKG_GroupRaw.value o (NKG_OracleChoices.internal o s) (NKG_OracleChoices.block s) (NKG_OracleChoices.prepared s)
+        (NKG_OracleChoices.leading o) (NKG_OracleChoices.full o s) g out (NKG_OracleChoices.capture o s) ht
+        ready.internalCanonical called;
+    Eq.trans frame
+      (Eq.trans raw
+        (Eq.symm
+          (NKG_BuilderRaw.reply_ok (NKG_OracleChoices.capture o s) (NKG_GroupFrame.index g) out
+            (NKG_OracleChoices.capture o s) called)));
+  have values :=
+    Subtype.ext
+      (List.ext_getElem
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = (↑(NKG_BuilderRaw.values (NKG_OracleChoices.capture o s))).length)
+              (outputs groups).property))
+          (Eq.mpr
+            (id (congrArg (fun _a => ↑4#usize = _a) (NKG_BuilderRaw.values (NKG_OracleChoices.capture o s)).property))
+            (Eq.refl ↑4#usize)))
+        fun j hj hk =>
+        have h4 :=
+          Eq.mp
+            (congrArg (LT.lt j)
+              (Eq.trans (outputs groups).property
+                (UScalar.ofNatCore_val_eq (UScalar.bound_suffices UScalarTy.Usize 4 Packed._proof_1))))
+            hj;
+        Eq.mpr
+          (id
+            (congr
+              (congrArg Eq
+                (List.getElem_ofFn
+                  (id (Eq.refl (List.ofFn fun i => (groups ⟨↑i, outputs._proof_2 i⟩).out)) ▸ Eq.refl j ▸ hj)))
+              (List.getElem_ofFn
+                (id
+                    (Eq.refl
+                      (List.ofFn fun i =>
+                        NKG_BuilderRaw.reply (NKG_OracleChoices.capture o s)
+                          (NKG_GroupFrame.index ⟨↑i, NKG_BuilderRaw.values._proof_2 i⟩))) ▸
+                  Eq.refl j ▸ hk))))
+          (groupRaw ⟨j, h4⟩));
+  let ⟨out, h✝¹⟩ := NKG_OracleSource.result o s hz ht hx hs hb
+  let ⟨run, right✝⁴⟩ := h✝¹
+  let ⟨co, value⟩ := right✝⁴
+  have builder := NKG_OracleChoices.builder o s out run;
+  have sourceValues := NKG_BuilderRaw.source (NKG_OracleChoices.capture o s) out builder;
+  have same := Eq.trans outputcut.returned (Eq.trans values (Eq.symm sourceValues));
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          state_only_poseidon.evaluate_state_only_poseidon_oracle_projected o s = ok _a ∧
+            canonical _a ∧
+              decoded _a = fun g =>
+                R0P.poseidonPackingFormula ExtractedMaskQmPackBase4Arithmetic.iBasis
+                  ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+                  R0P.poseidonScalarResidual (FJh_Native07RawValue.openings o) (decode s.block) (decoded s.local)
+                    (FJe_ExternalAdjoint.lane g j))
+        same))
+    ⟨run, ⟨co, value⟩⟩
+'AspisR1.NKG_OraclePacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]

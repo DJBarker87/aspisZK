@@ -1,0 +1,671 @@
+info: [root]: lakefile.lean and lakefile.toml are both present; using lakefile.lean
+AspisR1.RPx_Deployed.deployed {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)) (sdk : AspisR1.S2Trust.S2TrustedSdkBorrow L)
+  (copy :
+    AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+      ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record))
+  (std : AspisR1.S2W_TrustedStd.TrustedStd copy) (allocator : AspisR1.S2W_D189Wrappers.Allocator A)
+  (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W)
+  (admission1 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3)
+  (admission2 : AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7)
+  (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+  (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+  (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+  (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest)
+  (extraction :
+    AspisR1.S2W_DigestExtraction.AeneasExtraction
+      (AspisR1.DrvC_Installation.sdk
+        (AspisR1.FIp_Install.configuration indexError
+          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+      native1 native2 hashv)
+  (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (p1 : AspisR1.S2W_ExtractionBoundary.P1 sha256 H)
+  (syscall : AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256) (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8)
+  (slot : AspisR1.S2W_ExtractionBoundary.Slot) (state1 state2 final1 final2 : A)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record))
+  (accepted1 :
+    AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1 state1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)))
+  (accepted2 :
+    AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot state2 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)))
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+  (prior : AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes AspisV8R19.SourceDuplexStep.State Unit)
+  (words : AspisR1.CanonicalCutEnrichedTranscript.Words) (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+  (actions : List (AspisR1.CPP_BankState.Action A))
+  (game :
+    AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy allocator
+      AspisR1.CPH_Program.verifier)
+  (RuntimePersistence :
+    AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8)) (AspisR1.CPG_Projection.before p)
+      (AspisR1.CPG_Projection.tentative p) (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p))
+  (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A) (Q0 Q1 : ℕ)
+  (queries :
+    ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+      (AspisR1.ARW_Induced.issued native1 copy allocator AspisR1.CPH_Program.verifier a H).length ≤ Q0 + Q1) :
+  have P := AspisR1.ARW_Induced.program native1 copy allocator AspisR1.CPH_Program.verifier a;
+  have runtime :=
+    AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) indexError reservation native1 native2
+      hashv a;
+  have select := fun x =>
+    AspisR1.P2P_NativeSelection.pair
+      (AspisR1.DrvC_Installation.sdk
+        (AspisR1.FIp_Install.configuration indexError
+          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+      AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+  AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+      AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+    AspisR1.DrvC_Implementation.driver
+          (AspisR1.FIp_Install.configuration indexError
+            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation) =
+        AspisR1.DrvC_SourceEntry.source
+          (AspisR1.FIp_Install.configuration indexError
+            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+          hashv ∧
+      AspisR1.DrvC_Installation.sdk
+            (AspisR1.FIp_Install.configuration indexError
+              (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation) =
+          AspisR1.SdkD_PairBatches.dictionary
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).adapter
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).currentBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).stageBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).finish
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).reserved
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).query
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).geometry
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).boundaries
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).std ∧
+        AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).adapter
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).currentBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).reserved
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).query
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).geometry
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).stageBase
+            (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation).finish
+            (AspisR1.FIp_Install.boundaries
+              (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation).boundaries)
+            reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1 post2 H
+            (AspisR1.DrvC_Implementation.driver
+              (AspisR1.FIp_Install.configuration indexError
+                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+            prior (p.physicalEvents t) hashv
+            (AspisR1.BinRawByteCollisionTargets.event AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+              (AspisV8R19.MemoizedProgramLaw.eval H
+                (AspisR1.Hiq_RecordedJoint.program
+                  (AspisR1.F3X_Account.program
+                    (AspisR1.FIp_Install.configuration indexError
+                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                    hashv P)
+                  AspisR1.F3X_Projection.project select))) ∧
+          (AspisR1.F3X_ModelClaims.Claims
+                (AspisR1.FIp_Install.configuration indexError
+                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                D P (Q0 + Q1) ∧
+              AspisR1.F3Y_SourceClaims.Claims
+                  (AspisR1.FIp_Install.configuration indexError
+                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                  D hashv P (Q0 + Q1) select ∧
+                AspisR1.F3Y_AccountMass.Claims
+                    (AspisR1.FIp_Install.configuration indexError
+                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                    hashv P (Q0 + Q1) select ∧
+                  AspisR1.F3T_RuntimeBound.failureModel runtime ≤ AspisR1.F3T_Numeric.total (Q0 + Q1) ∧
+                    (Q0 + Q1 ≤ AspisR1.F3U_RangeEdges.maxQueries →
+                        AspisR1.F3T_RuntimeBound.failureModel runtime ≤ (↑Q0 + ↑Q1 + 1) * (1 / 2 ^ 100)) ∧
+                      (Q0 + Q1 = 0 →
+                        AspisR1.F3U_Numeric.margin ≤ 1 / 2 ^ 100 - AspisR1.F3T_RuntimeBound.failureModel runtime ∧
+                          AspisR1.F3T_RuntimeBound.failureModel runtime < 1 / 2 ^ 100)) ∧
+            (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                (↑saved).length = 1768 ∧
+                  AspisR1.S2W_EntryWriteHistory.payloadBytes AspisR1.S2W_ReturnedCheckpoint.encode
+                        (post1.payload (e1.heap.accounts 2).1) 1768 =
+                      AspisR1.MultiproofConeCanonical.bytesOf ↑saved ∧
+                    post1.ambient = e1.heap.ambient ∧
+                      post1.accounts = e1.heap.accounts ∧
+                        post1.counter = e1.heap.counter ∧
+                          ∀ (cell : ℕ), cell ≠ (e1.heap.accounts 2).1 → post1.payload cell = e1.heap.payload cell) ∧
+              AspisR1.Rc2_Events.Facts
+                  (AspisR1.FIp_Install.configuration indexError
+                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                  hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H saved ∧
+                AspisR1.CPH_Protection.Facts p t saved AspisR1.CPH_Program.verifier ∧
+                  AspisR1.CPH_Trace.Facts p t u saved native1 native2 copy allocator AspisR1.CPH_Program.verifier ∧
+                    AspisR1.CPH_Recorder.Facts
+                        (AspisR1.FIp_Install.configuration indexError
+                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation)
+                        hashv native1 native2 copy allocator AspisR1.CPH_Program.verifier H p t u saved ∧
+                      AspisR1.S6N_Installation.Facts
+                        (AspisR1.DrvC_Installation.sdk
+                          (AspisR1.FIp_Install.configuration indexError
+                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_ColumnsPacket.source : ∀ (w : AspisR1.FJe_ThreeColumnStep.Weights)
+  (c0 c1 c2 : AspisR1.FJb_M31Step.Constants) (states : ℕ → AspisR1.FJb_MatrixGroupStep.State),
+  AspisR1.FIw_ArrayValue.canonical w →
+    AspisR1.FJb_M31Step.Bounded c0 →
+      AspisR1.FJb_M31Step.Bounded c1 →
+        AspisR1.FJb_M31Step.Bounded c2 →
+          AspisR1.NKG_ColumnCuts.Trace w c0 c1 c2 states →
+            FIq_Native.state_only_poseidon.interpolate_three_constant_columns w c0 c1 c2 =
+                Aeneas.Std.Result.ok (states 16) ∧
+              AspisR1.FIw_ArrayValue.canonical (states 16) ∧
+                AspisR1.FIw_ArrayValue.decoded (states 16) = AspisR1.FJe_ThreeColumnStep.model w c0 c1 c2 :=
+fun w c0 c1 c2 states hw h0 h1 h2 cut =>
+  have run := AspisR1.NKG_ColumnsPacket.loop w c0 c1 c2 states cut hw h0 h1 h2 16 0#usize rfl;
+  id
+    (fun run =>
+      ⟨Eq.mp
+          (congrArg
+            (fun _a =>
+              FIq_Native.state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 _a 0#usize =
+                Aeneas.Std.Result.ok (states 16))
+            cut.initial)
+          run,
+        AspisR1.FJe_ThreeColumns.value w c0 c1 c2 (states 16) hw h0 h1 h2
+          (Eq.mp
+            (congrArg
+              (fun _a =>
+                FIq_Native.state_only_poseidon.interpolate_three_constant_columns_loop w c0 c1 c2 _a 0#usize =
+                  Aeneas.Std.Result.ok (states 16))
+              cut.initial)
+            run)⟩)
+    run
+'AspisR1.NKG_ColumnsPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_InternalPacket.source : ∀ (s l nativeOut : AspisR1.FJh_Base.State)
+  (weights : Fin 2 → AspisR1.NKG_HelperCuts.Seven) (constants : Fin 2 → AspisR1.NKG_HelperCuts.Constants7)
+  (states : Fin 2 → AspisR1.FJh_Base.State) (roundConstants : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ)
+  (dotCalls roundCalls : ℕ),
+  AspisR1.FIw_ArrayValue.canonical s →
+    AspisR1.FIw_ArrayValue.canonical l →
+      AspisR1.NKG_HelperCuts.Internal s l weights constants
+          (fun c => if ↑c = 0 then AspisR1.NKG_InternalChoices.even l else AspisR1.NKG_InternalChoices.odd l) states
+          (fun c => if ↑c = 0 then AspisR1.NKG_InternalChoices.middle s l else AspisR1.NKG_InternalChoices.last s l)
+          roundConstants nativeOut dotCalls roundCalls →
+        FIq_Native.state_only_poseidon.interpolated_internal_pair s l = Aeneas.Std.Result.ok nativeOut ∧
+          AspisR1.FIw_ArrayValue.canonical nativeOut ∧
+            AspisR1.FIw_ArrayValue.decoded nativeOut =
+              R0P.poseidonInterpolatedInternalPair (AspisR1.FIw_ArrayValue.decoded s)
+                (AspisR1.FIw_ArrayValue.decoded l) :=
+fun s l nativeOut weights constants states roundConstants dotCalls roundCalls hs hl cut =>
+  let ⟨out, h✝⟩ := AspisR1.NKG_InternalSource.result s l hs hl
+  let ⟨run, right✝⟩ := h✝
+  let ⟨co, value⟩ := right✝
+  have returned := cut.returned;
+  id
+    (fun returned =>
+      have same := Eq.trans returned (AspisR1.NKG_InternalChoices.value s l out run);
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              FIq_Native.state_only_poseidon.interpolated_internal_pair s l = Aeneas.Std.Result.ok _a ∧
+                AspisR1.FIw_ArrayValue.canonical _a ∧
+                  AspisR1.FIw_ArrayValue.decoded _a =
+                    R0P.poseidonInterpolatedInternalPair (AspisR1.FIw_ArrayValue.decoded s)
+                      (AspisR1.FIw_ArrayValue.decoded l))
+            same))
+        ⟨run, ⟨co, value⟩⟩)
+    returned
+'AspisR1.NKG_InternalPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_FullPacket.source : ∀ (s l : AspisR1.FJh_Base.State) (nativeOut : AspisR1.NKG_HelperCuts.Packed)
+  (weights : Fin 2 → Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 3#usize)
+  (columns : Fin 2 → Fin 3 → Aeneas.Std.Array Aeneas.Std.U32 16#usize)
+  (states constants : Fin 2 → AspisR1.FJh_Base.State) (columnCalls roundCalls : ℕ),
+  AspisR1.FIw_ArrayValue.canonical s →
+    AspisR1.FIw_ArrayValue.canonical l →
+      AspisR1.NKG_HelperCuts.Full s l weights columns
+          (fun c => if ↑c = 0 then AspisR1.NKG_FullChoices.even l else AspisR1.NKG_FullChoices.odd l) states constants
+          (AspisR1.NKG_FullChoices.middle s l) (AspisR1.NKG_FullChoices.last s l) nativeOut columnCalls roundCalls →
+        FIq_Native.state_only_poseidon.interpolated_full_pair_packed s l = Aeneas.Std.Result.ok nativeOut ∧
+          AspisR1.FIw_ArrayValue.canonical nativeOut ∧
+            AspisR1.FIw_ArrayValue.decoded nativeOut = fun g =>
+              R0P.poseidonPackingFormula AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
+                AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+                R0P.poseidonInterpolatedFullPair (AspisR1.FIw_ArrayValue.decoded s) (AspisR1.FIw_ArrayValue.decoded l)
+                  (AspisR1.FJe_ExternalAdjoint.lane g j) :=
+fun s l nativeOut weights columns states constants columnCalls roundCalls hs hl cut =>
+  let ⟨out, h✝⟩ := AspisR1.NKG_FullSource.result s l hs hl
+  let ⟨run, right✝⟩ := h✝
+  let ⟨co, value⟩ := right✝
+  have same := Eq.trans cut.returned (AspisR1.NKG_FullChoices.value s l out run);
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          FIq_Native.state_only_poseidon.interpolated_full_pair_packed s l = Aeneas.Std.Result.ok _a ∧
+            AspisR1.FIw_ArrayValue.canonical _a ∧
+              AspisR1.FIw_ArrayValue.decoded _a = fun g =>
+                R0P.poseidonPackingFormula AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
+                  AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+                  R0P.poseidonInterpolatedFullPair (AspisR1.FIw_ArrayValue.decoded s) (AspisR1.FIw_ArrayValue.decoded l)
+                    (AspisR1.FJe_ExternalAdjoint.lane g j))
+        same))
+    ⟨run, ⟨co, value⟩⟩
+'AspisR1.NKG_FullPacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKG_OraclePacket.source : ∀ (o : AspisR1.FJa_PoseidonOrigins.Openings)
+  (s : AspisR1.FJa_PoseidonOrigins.Selectors) (nativeOut : AspisR1.NKG_OracleCuts.Packed)
+  (pre : AspisR1.NKG_PreludeFrame.Observation) (groups : Fin 4 → AspisR1.NKG_GroupFrame.Observation)
+  (indices : Fin 4 → ℕ) (outputCalls : ℕ),
+  AspisR1.FIw_ArrayValue.canonical o.z →
+    AspisR1.FIw_ArrayValue.canonical o.succ_z →
+      AspisR1.FIw_ArrayValue.canonical o.xor12_z →
+        AspisR1.FIw_ArrayValue.canonical s.local →
+          AspisR1.FIv_NativeValue.Canon s.block →
+            AspisR1.NKG_PreludeFrame.Cut o s pre →
+              (∀ (g : Fin 4),
+                  AspisR1.NKG_GroupFrame.Frame o.succ_z pre.internal pre.leading pre.full pre.prepared pre.block g
+                    (groups g)) →
+                AspisR1.NKG_OracleCuts.Output (AspisR1.NKG_OraclePacket.outputs groups) nativeOut indices outputCalls →
+                  FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected o s =
+                      Aeneas.Std.Result.ok nativeOut ∧
+                    AspisR1.FIw_ArrayValue.canonical nativeOut ∧
+                      AspisR1.FIw_ArrayValue.decoded nativeOut = fun g =>
+                        R0P.poseidonPackingFormula AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
+                          AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+                          R0P.poseidonScalarResidual (AspisR1.FJh_Native07RawValue.openings o)
+                            (AspisR1.FIv_NativeValue.decode s.block) (AspisR1.FIw_ArrayValue.decoded s.local)
+                            (AspisR1.FJe_ExternalAdjoint.lane g j) :=
+fun o s nativeOut pre groups indices outputCalls hz ht hx hs hb precut groupcuts outputcut =>
+  let ⟨pp, right✝⟩ := AspisR1.NKG_PreludeFrame.result o s pre hz hx hs hb precut
+  let ⟨pb, right✝¹⟩ := right✝
+  let ⟨pl, right✝²⟩ := right✝¹
+  let ⟨pf, pi⟩ := right✝²
+  have ready := AspisR1.NKG_OracleChoices.ready o s hz hx hs hb;
+  have groupRaw := fun g =>
+    have cut :=
+      Eq.mp
+        (congrFun'
+          (congrFun' (congr (congr (congr (congr (congrArg (AspisR1.NKG_GroupFrame.Frame o.succ_z) pi) pl) pf) pp) pb)
+            g)
+          (groups g))
+        (groupcuts g);
+    let ⟨out, h✝⟩ :=
+      AspisR1.NKG_CellTotal.cell o (AspisR1.NKG_OracleChoices.internal o s) s.block (AspisR1.NKG_OracleChoices.block s)
+        (AspisR1.NKG_OracleChoices.prepared s) (AspisR1.NKG_OracleChoices.leading o)
+        (AspisR1.NKG_OracleChoices.full o s) (AspisR1.NKG_OracleChoices.weights s) (AspisR1.NKG_GroupFrame.index g)
+        g.isLt ht ready.internalCanonical hb ready.leadingCanonical ready.fullCanonical ready.weightsCanonical
+        ready.preparedCall ready.blockCall
+    let ⟨called, right✝³⟩ := h✝
+    have frame :=
+      AspisR1.NKG_GroupFrame.result o.succ_z (AspisR1.NKG_OracleChoices.internal o s)
+        (AspisR1.NKG_OracleChoices.leading o) (AspisR1.NKG_OracleChoices.full o s)
+        (AspisR1.NKG_OracleChoices.prepared s) (AspisR1.NKG_OracleChoices.block s) g (groups g) cut;
+    have raw :=
+      AspisR1.NKG_GroupRaw.value o (AspisR1.NKG_OracleChoices.internal o s) (AspisR1.NKG_OracleChoices.block s)
+        (AspisR1.NKG_OracleChoices.prepared s) (AspisR1.NKG_OracleChoices.leading o)
+        (AspisR1.NKG_OracleChoices.full o s) g out (AspisR1.NKG_OracleChoices.capture o s) ht ready.internalCanonical
+        called;
+    Eq.trans frame
+      (Eq.trans raw
+        (Eq.symm
+          (AspisR1.NKG_BuilderRaw.reply_ok (AspisR1.NKG_OracleChoices.capture o s) (AspisR1.NKG_GroupFrame.index g) out
+            (AspisR1.NKG_OracleChoices.capture o s) called)));
+  have values :=
+    Subtype.ext
+      (List.ext_getElem
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = (↑(AspisR1.NKG_BuilderRaw.values (AspisR1.NKG_OracleChoices.capture o s))).length)
+              (AspisR1.NKG_OraclePacket.outputs groups).property))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => ↑4#usize = _a)
+                (AspisR1.NKG_BuilderRaw.values (AspisR1.NKG_OracleChoices.capture o s)).property))
+            (Eq.refl ↑4#usize)))
+        fun j hj hk =>
+        have h4 :=
+          Eq.mp
+            (congrArg (LT.lt j)
+              (Eq.trans (AspisR1.NKG_OraclePacket.outputs groups).property
+                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                    AspisR1.NKG_OracleCuts.Packed._proof_1))))
+            hj;
+        Eq.mpr
+          (id
+            (congr
+              (congrArg Eq
+                (List.getElem_ofFn
+                  (id (Eq.refl (List.ofFn fun i => (groups ⟨↑i, AspisR1.NKG_OraclePacket.outputs._proof_2 i⟩).out)) ▸
+                    Eq.refl j ▸ hj)))
+              (List.getElem_ofFn
+                (id
+                    (Eq.refl
+                      (List.ofFn fun i =>
+                        AspisR1.NKG_BuilderRaw.reply (AspisR1.NKG_OracleChoices.capture o s)
+                          (AspisR1.NKG_GroupFrame.index ⟨↑i, AspisR1.NKG_BuilderRaw.values._proof_2 i⟩))) ▸
+                  Eq.refl j ▸ hk))))
+          (groupRaw ⟨j, h4⟩));
+  let ⟨out, h✝¹⟩ := AspisR1.NKG_OracleSource.result o s hz ht hx hs hb
+  let ⟨run, right✝⁴⟩ := h✝¹
+  let ⟨co, value⟩ := right✝⁴
+  have builder := AspisR1.NKG_OracleChoices.builder o s out run;
+  have sourceValues := AspisR1.NKG_BuilderRaw.source (AspisR1.NKG_OracleChoices.capture o s) out builder;
+  have same := Eq.trans outputcut.returned (Eq.trans values (Eq.symm sourceValues));
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected o s = Aeneas.Std.Result.ok _a ∧
+            AspisR1.FIw_ArrayValue.canonical _a ∧
+              AspisR1.FIw_ArrayValue.decoded _a = fun g =>
+                R0P.poseidonPackingFormula AspisR1.ExtractedMaskQmPackBase4Arithmetic.iBasis
+                  AspisR1.ExtractedMaskQmPackBase4Arithmetic.uBasis fun j =>
+                  R0P.poseidonScalarResidual (AspisR1.FJh_Native07RawValue.openings o)
+                    (AspisR1.FIv_NativeValue.decode s.block) (AspisR1.FIw_ArrayValue.decoded s.local)
+                    (AspisR1.FJe_ExternalAdjoint.lane g j))
+        same))
+    ⟨run, ⟨co, value⟩⟩
+'AspisR1.NKG_OraclePacket.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.NKG_ColumnCuts.Step (w : AspisR1.FJe_ThreeColumnStep.Weights)
+  (c0 c1 c2 : AspisR1.FJb_M31Step.Constants) (s : AspisR1.FJb_MatrixGroupStep.State) (i : Fin 16)
+  (reply : AspisR1.FIv_NativeArithmetic.NQ) (out : AspisR1.FJb_MatrixGroupStep.State) (next calls : ℕ)
+  (args : Fin 4 → Fin 6 → Aeneas.Std.U32) : Prop
+number of parameters: 11
+fields:
+  AspisR1.NKG_ColumnCuts.Step.increment : next = ↑i + 1
+  AspisR1.NKG_ColumnCuts.Step.callCount : calls = 4
+  AspisR1.NKG_ColumnCuts.Step.arguments : ∀ (j : Fin 4) (k : Fin 6),
+      args j k =
+        if h : ↑k < 3 then AspisR1.NKG_ColumnCuts.word (AspisR1.FJb_TailCell.cell w ⟨↑k, h⟩) j
+        else
+          if ↑k = 3 then AspisR1.FJb_TailCell.cell c0 i
+          else if ↑k = 4 then AspisR1.FJb_TailCell.cell c1 i else AspisR1.FJb_TailCell.cell c2 i
+  AspisR1.NKG_ColumnCuts.Step.frame : out = Aeneas.Std.Array.set s (↑i)#usize reply
+constructor:
+  AspisR1.NKG_ColumnCuts.Step.mk {w : AspisR1.FJe_ThreeColumnStep.Weights} {c0 c1 c2 : AspisR1.FJb_M31Step.Constants}
+    {s : AspisR1.FJb_MatrixGroupStep.State} {i : Fin 16} {reply : AspisR1.FIv_NativeArithmetic.NQ}
+    {out : AspisR1.FJb_MatrixGroupStep.State} {next calls : ℕ} {args : Fin 4 → Fin 6 → Aeneas.Std.U32}
+    (increment : next = ↑i + 1) (callCount : calls = 4)
+    (arguments :
+      ∀ (j : Fin 4) (k : Fin 6),
+        args j k =
+          if h : ↑k < 3 then AspisR1.NKG_ColumnCuts.word (AspisR1.FJb_TailCell.cell w ⟨↑k, h⟩) j
+          else
+            if ↑k = 3 then AspisR1.FJb_TailCell.cell c0 i
+            else if ↑k = 4 then AspisR1.FJb_TailCell.cell c1 i else AspisR1.FJb_TailCell.cell c2 i)
+    (frame : out = Aeneas.Std.Array.set s (↑i)#usize reply) :
+    AspisR1.NKG_ColumnCuts.Step w c0 c1 c2 s i reply out next calls args
+structure AspisR1.NKG_ColumnCuts.Trace (w : AspisR1.FJe_ThreeColumnStep.Weights)
+  (c0 c1 c2 : AspisR1.FJb_M31Step.Constants) (states : ℕ → AspisR1.FJb_MatrixGroupStep.State) : Prop
+number of parameters: 5
+fields:
+  AspisR1.NKG_ColumnCuts.Trace.initial : states 0 = Aeneas.Std.Array.repeat 16#usize FIq_Native.field.QM31.ZERO
+  AspisR1.NKG_ColumnCuts.Trace.steps : ∀ (i : Fin 16),
+      ∃ next calls args,
+        AspisR1.NKG_ColumnCuts.Step w c0 c1 c2 (states ↑i) i (AspisR1.NKG_ColumnReply.reply w c0 c1 c2 i)
+          (states (↑i + 1)) next calls args
+constructor:
+  AspisR1.NKG_ColumnCuts.Trace.mk {w : AspisR1.FJe_ThreeColumnStep.Weights} {c0 c1 c2 : AspisR1.FJb_M31Step.Constants}
+    {states : ℕ → AspisR1.FJb_MatrixGroupStep.State}
+    (initial : states 0 = Aeneas.Std.Array.repeat 16#usize FIq_Native.field.QM31.ZERO)
+    (steps :
+      ∀ (i : Fin 16),
+        ∃ next calls args,
+          AspisR1.NKG_ColumnCuts.Step w c0 c1 c2 (states ↑i) i (AspisR1.NKG_ColumnReply.reply w c0 c1 c2 i)
+            (states (↑i + 1)) next calls args) :
+    AspisR1.NKG_ColumnCuts.Trace w c0 c1 c2 states
+structure AspisR1.NKG_HelperCuts.Internal (s l : AspisR1.FJh_Base.State)
+  (weights : Fin 2 → AspisR1.NKG_HelperCuts.Seven) (constants : Fin 2 → AspisR1.NKG_HelperCuts.Constants7)
+  (dots : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ) (states replies : Fin 2 → AspisR1.FJh_Base.State)
+  (roundConstants : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ) (out : AspisR1.FJh_Base.State) (dotCalls roundCalls : ℕ) :
+  Prop
+number of parameters: 11
+fields:
+  AspisR1.NKG_HelperCuts.Internal.dotCount : dotCalls = 2
+  AspisR1.NKG_HelperCuts.Internal.roundCount : roundCalls = 2
+  AspisR1.NKG_HelperCuts.Internal.weightArgs : ∀ (c : Fin 2) (i : Fin ↑7#usize),
+      AspisR1.FJh_Base.cell (weights c) i = AspisR1.FJh_Base.cell l ⟨↑i + 2, ⋯⟩
+  AspisR1.NKG_HelperCuts.Internal.constantArgs : ∀ (c : Fin 2) (i : Fin ↑7#usize),
+      AspisR1.FJh_Base.cell (constants c) i = AspisR1.FJh_InternalConstants.value ⟨2 * ↑i + ↑c, ⋯⟩
+  AspisR1.NKG_HelperCuts.Internal.firstState : states 0 = s
+  AspisR1.NKG_HelperCuts.Internal.secondState : states 1 = replies 0
+  AspisR1.NKG_HelperCuts.Internal.scalarArgs : ∀ (c : Fin 2), roundConstants c = dots c
+  AspisR1.NKG_HelperCuts.Internal.returned : out = replies 1
+constructor:
+  AspisR1.NKG_HelperCuts.Internal.mk {s l : AspisR1.FJh_Base.State} {weights : Fin 2 → AspisR1.NKG_HelperCuts.Seven}
+    {constants : Fin 2 → AspisR1.NKG_HelperCuts.Constants7} {dots : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ}
+    {states replies : Fin 2 → AspisR1.FJh_Base.State} {roundConstants : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ}
+    {out : AspisR1.FJh_Base.State} {dotCalls roundCalls : ℕ} (dotCount : dotCalls = 2) (roundCount : roundCalls = 2)
+    (weightArgs :
+      ∀ (c : Fin 2) (i : Fin ↑7#usize), AspisR1.FJh_Base.cell (weights c) i = AspisR1.FJh_Base.cell l ⟨↑i + 2, ⋯⟩)
+    (constantArgs :
+      ∀ (c : Fin 2) (i : Fin ↑7#usize),
+        AspisR1.FJh_Base.cell (constants c) i = AspisR1.FJh_InternalConstants.value ⟨2 * ↑i + ↑c, ⋯⟩)
+    (firstState : states 0 = s) (secondState : states 1 = replies 0)
+    (scalarArgs : ∀ (c : Fin 2), roundConstants c = dots c) (returned : out = replies 1) :
+    AspisR1.NKG_HelperCuts.Internal s l weights constants dots states replies roundConstants out dotCalls roundCalls
+structure AspisR1.NKG_HelperCuts.Full (s l : AspisR1.FJh_Base.State)
+  (weights : Fin 2 → Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 3#usize)
+  (columns : Fin 2 → Fin 3 → Aeneas.Std.Array Aeneas.Std.U32 16#usize)
+  (replies states constants : Fin 2 → AspisR1.FJh_Base.State) (middle : AspisR1.FJh_Base.State)
+  (packed out : AspisR1.NKG_HelperCuts.Packed) (columnCalls roundCalls : ℕ) : Prop
+number of parameters: 12
+fields:
+  AspisR1.NKG_HelperCuts.Full.columnCount : columnCalls = 2
+  AspisR1.NKG_HelperCuts.Full.roundCount : roundCalls = 2
+  AspisR1.NKG_HelperCuts.Full.weightArgs : ∀ (c : Fin 2) (i : Fin ↑3#usize),
+      AspisR1.FJh_Base.cell (weights c) i =
+        AspisR1.FJh_Base.cell l (if ↑i = 0 then ⟨1, ⋯⟩ else if ↑i = 1 then ⟨9, ⋯⟩ else ⟨10, ⋯⟩)
+  AspisR1.NKG_HelperCuts.Full.constantArgs : ∀ (c : Fin 2) (i : Fin 3) (k : Fin ↑16#usize),
+      AspisR1.FJh_Base.cell (columns c i) k =
+        if ↑i = 0 then AspisR1.FJh_Base.cell (AspisR1.FJb_InitialConstants.row ⟨2 + ↑c, ⋯⟩) k
+        else AspisR1.FJh_Base.cell (AspisR1.FJe_FinalConstants.row ⟨2 * (↑i - 1) + ↑c, ⋯⟩) k
+  AspisR1.NKG_HelperCuts.Full.firstState : states 0 = s
+  AspisR1.NKG_HelperCuts.Full.secondState : states 1 = middle
+  AspisR1.NKG_HelperCuts.Full.constantReplies : ∀ (c : Fin 2), constants c = replies c
+  AspisR1.NKG_HelperCuts.Full.returned : out = packed
+constructor:
+  AspisR1.NKG_HelperCuts.Full.mk {s l : AspisR1.FJh_Base.State}
+    {weights : Fin 2 → Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 3#usize}
+    {columns : Fin 2 → Fin 3 → Aeneas.Std.Array Aeneas.Std.U32 16#usize}
+    {replies states constants : Fin 2 → AspisR1.FJh_Base.State} {middle : AspisR1.FJh_Base.State}
+    {packed out : AspisR1.NKG_HelperCuts.Packed} {columnCalls roundCalls : ℕ} (columnCount : columnCalls = 2)
+    (roundCount : roundCalls = 2)
+    (weightArgs :
+      ∀ (c : Fin 2) (i : Fin ↑3#usize),
+        AspisR1.FJh_Base.cell (weights c) i =
+          AspisR1.FJh_Base.cell l (if ↑i = 0 then ⟨1, ⋯⟩ else if ↑i = 1 then ⟨9, ⋯⟩ else ⟨10, ⋯⟩))
+    (constantArgs :
+      ∀ (c : Fin 2) (i : Fin 3) (k : Fin ↑16#usize),
+        AspisR1.FJh_Base.cell (columns c i) k =
+          if ↑i = 0 then AspisR1.FJh_Base.cell (AspisR1.FJb_InitialConstants.row ⟨2 + ↑c, ⋯⟩) k
+          else AspisR1.FJh_Base.cell (AspisR1.FJe_FinalConstants.row ⟨2 * (↑i - 1) + ↑c, ⋯⟩) k)
+    (firstState : states 0 = s) (secondState : states 1 = middle)
+    (constantReplies : ∀ (c : Fin 2), constants c = replies c) (returned : out = packed) :
+    AspisR1.NKG_HelperCuts.Full s l weights columns replies states constants middle packed out columnCalls roundCalls
+structure AspisR1.NKG_PreludeFrame.Cut (o : AspisR1.FJa_PoseidonOrigins.Openings)
+  (s : AspisR1.FJa_PoseidonOrigins.Selectors) (n : AspisR1.NKG_PreludeFrame.Observation) : Prop
+number of parameters: 3
+fields:
+  AspisR1.NKG_PreludeFrame.Cut.leadingRead : n.leadingLow = AspisR1.FJh_Base.cell s.local ⟨0, ⋯⟩
+  AspisR1.NKG_PreludeFrame.Cut.fullTrace : AspisR1.NKG_LowFrame.Trace s AspisR1.NKG_LowFrame.fullRows n.fullStates
+  AspisR1.NKG_PreludeFrame.Cut.internalTrace : AspisR1.NKG_LowFrame.Trace s AspisR1.NKG_LowFrame.internalRows
+      n.internalStates
+  AspisR1.NKG_PreludeFrame.Cut.branches : AspisR1.NKG_OracleCuts.Prefix o s n.openingArg n.fullStateArg n.fullLocalArg
+      n.internalStateArg n.internalLocalArg (AspisR1.NKG_OracleChoices.leading o) (AspisR1.NKG_OracleChoices.full o s)
+      n.leading n.full (AspisR1.NKG_OracleChoices.internal o s) n.internal n.prefixCalls
+  AspisR1.NKG_PreludeFrame.Cut.prepares : AspisR1.NKG_OracleCuts.Prepare (AspisR1.NKG_PreludeFrame.weights n) s.block
+      n.prepareArgs (AspisR1.NKG_PreparedRaw.replies (AspisR1.NKG_PreludeFrame.weights n) s.block) n.prepared n.block
+      n.prepareCalls
+constructor:
+  AspisR1.NKG_PreludeFrame.Cut.mk {o : AspisR1.FJa_PoseidonOrigins.Openings} {s : AspisR1.FJa_PoseidonOrigins.Selectors}
+    {n : AspisR1.NKG_PreludeFrame.Observation} (leadingRead : n.leadingLow = AspisR1.FJh_Base.cell s.local ⟨0, ⋯⟩)
+    (fullTrace : AspisR1.NKG_LowFrame.Trace s AspisR1.NKG_LowFrame.fullRows n.fullStates)
+    (internalTrace : AspisR1.NKG_LowFrame.Trace s AspisR1.NKG_LowFrame.internalRows n.internalStates)
+    (branches :
+      AspisR1.NKG_OracleCuts.Prefix o s n.openingArg n.fullStateArg n.fullLocalArg n.internalStateArg n.internalLocalArg
+        (AspisR1.NKG_OracleChoices.leading o) (AspisR1.NKG_OracleChoices.full o s) n.leading n.full
+        (AspisR1.NKG_OracleChoices.internal o s) n.internal n.prefixCalls)
+    (prepares :
+      AspisR1.NKG_OracleCuts.Prepare (AspisR1.NKG_PreludeFrame.weights n) s.block n.prepareArgs
+        (AspisR1.NKG_PreparedRaw.replies (AspisR1.NKG_PreludeFrame.weights n) s.block) n.prepared n.block
+        n.prepareCalls) :
+    AspisR1.NKG_PreludeFrame.Cut o s n
+structure AspisR1.NKG_LowFrame.Trace (s : AspisR1.FJa_PoseidonOrigins.Selectors) (rows : List (Fin 16))
+  (states : ℕ → AspisR1.FIv_NativeArithmetic.NQ) : Prop
+number of parameters: 3
+fields:
+  AspisR1.NKG_LowFrame.Trace.initial : states 0 = FIq_Native.field.QM31.ZERO
+  AspisR1.NKG_LowFrame.Trace.steps : AspisR1.NKG_LowFrame.Steps s rows states
+constructor:
+  AspisR1.NKG_LowFrame.Trace.mk {s : AspisR1.FJa_PoseidonOrigins.Selectors} {rows : List (Fin 16)}
+    {states : ℕ → AspisR1.FIv_NativeArithmetic.NQ} (initial : states 0 = FIq_Native.field.QM31.ZERO)
+    (steps : AspisR1.NKG_LowFrame.Steps s rows states) : AspisR1.NKG_LowFrame.Trace s rows states
+def AspisR1.NKG_LowFrame.Steps : AspisR1.FJa_PoseidonOrigins.Selectors →
+  List (Fin 16) → (ℕ → AspisR1.FIv_NativeArithmetic.NQ) → Prop :=
+fun s rows states =>
+  ∀ (n : ℕ) (hn : n < rows.length),
+    ∃ args calls,
+      AspisR1.NKG_OracleCuts.Low s.local (states n) rows[n] (AspisR1.NKG_LowFrame.step s (states n) rows[n])
+        (states (n + 1)) args calls
+structure AspisR1.NKG_GroupFrame.Frame (succ internal : AspisR1.FJh_Base.State)
+  (lead full : AspisR1.NKG_OracleCuts.Packed) (p : AspisR1.NKG_OracleCuts.Prepared) (block : AspisR1.FIv_PreparedNew.NP)
+  (g : Fin 4) (o : AspisR1.NKG_GroupFrame.Observation) : Prop
+number of parameters: 8
+fields:
+  AspisR1.NKG_GroupFrame.Frame.packs : AspisR1.NKG_OracleCuts.Pack succ internal g o.packInputs
+      (fun c => if ↑c = 0 then AspisR1.NKG_GroupFrame.pack succ g else AspisR1.NKG_GroupFrame.pack internal g) o.target
+      o.ip o.packCalls
+  AspisR1.NKG_GroupFrame.Frame.subs : AspisR1.NKG_OracleCuts.Sub o.target o.ip lead full g o.subArgs
+      (AspisR1.NKG_GroupFrame.differences o.target o.ip lead full g) o.differences o.subCalls
+  AspisR1.NKG_GroupFrame.Frame.sums : AspisR1.NKG_OracleCuts.Sum p o.sumCaches o.differences o.sumRight
+      (AspisR1.NKG_GroupFrame.sum p o.differences) o.sum o.sumCalls
+  AspisR1.NKG_GroupFrame.Frame.multiply : AspisR1.NKG_OracleCuts.Mul block o.mulCache o.sum o.mulRight
+      (AspisR1.NKG_GroupFrame.mul block o.sum) o.out o.mulCalls
+constructor:
+  AspisR1.NKG_GroupFrame.Frame.mk {succ internal : AspisR1.FJh_Base.State} {lead full : AspisR1.NKG_OracleCuts.Packed}
+    {p : AspisR1.NKG_OracleCuts.Prepared} {block : AspisR1.FIv_PreparedNew.NP} {g : Fin 4}
+    {o : AspisR1.NKG_GroupFrame.Observation}
+    (packs :
+      AspisR1.NKG_OracleCuts.Pack succ internal g o.packInputs
+        (fun c => if ↑c = 0 then AspisR1.NKG_GroupFrame.pack succ g else AspisR1.NKG_GroupFrame.pack internal g)
+        o.target o.ip o.packCalls)
+    (subs :
+      AspisR1.NKG_OracleCuts.Sub o.target o.ip lead full g o.subArgs
+        (AspisR1.NKG_GroupFrame.differences o.target o.ip lead full g) o.differences o.subCalls)
+    (sums :
+      AspisR1.NKG_OracleCuts.Sum p o.sumCaches o.differences o.sumRight (AspisR1.NKG_GroupFrame.sum p o.differences)
+        o.sum o.sumCalls)
+    (multiply :
+      AspisR1.NKG_OracleCuts.Mul block o.mulCache o.sum o.mulRight (AspisR1.NKG_GroupFrame.mul block o.sum) o.out
+        o.mulCalls) :
+    AspisR1.NKG_GroupFrame.Frame succ internal lead full p block g o
+structure AspisR1.NKG_OracleCuts.Prepare (w : AspisR1.NKG_OracleCuts.Three) (theta : AspisR1.FIv_NativeArithmetic.NQ)
+  (args : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 4#usize)
+  (replies : Aeneas.Std.Array AspisR1.FIv_PreparedNew.NP 4#usize) (weights : AspisR1.NKG_OracleCuts.Prepared)
+  (block : AspisR1.FIv_PreparedNew.NP) (calls : ℕ) : Prop
+number of parameters: 7
+fields:
+  AspisR1.NKG_OracleCuts.Prepare.count : calls = 4
+  AspisR1.NKG_OracleCuts.Prepare.inputArgs : ∀ (i : Fin 3),
+      AspisR1.FJh_Base.cell args ⟨↑i, ⋯⟩ = AspisR1.FJh_Base.cell w i
+  AspisR1.NKG_OracleCuts.Prepare.blockArg : AspisR1.FJh_Base.cell args ⟨3, ⋯⟩ = theta
+  AspisR1.NKG_OracleCuts.Prepare.weightsReply : ∀ (i : Fin 3),
+      AspisR1.FJh_Base.cell weights i = AspisR1.FJh_Base.cell replies ⟨↑i, ⋯⟩
+  AspisR1.NKG_OracleCuts.Prepare.blockReply : block = AspisR1.FJh_Base.cell replies ⟨3, ⋯⟩
+constructor:
+  AspisR1.NKG_OracleCuts.Prepare.mk {w : AspisR1.NKG_OracleCuts.Three} {theta : AspisR1.FIv_NativeArithmetic.NQ}
+    {args : Aeneas.Std.Array AspisR1.FIv_NativeArithmetic.NQ 4#usize}
+    {replies : Aeneas.Std.Array AspisR1.FIv_PreparedNew.NP 4#usize} {weights : AspisR1.NKG_OracleCuts.Prepared}
+    {block : AspisR1.FIv_PreparedNew.NP} {calls : ℕ} (count : calls = 4)
+    (inputArgs : ∀ (i : Fin 3), AspisR1.FJh_Base.cell args ⟨↑i, ⋯⟩ = AspisR1.FJh_Base.cell w i)
+    (blockArg : AspisR1.FJh_Base.cell args ⟨3, ⋯⟩ = theta)
+    (weightsReply : ∀ (i : Fin 3), AspisR1.FJh_Base.cell weights i = AspisR1.FJh_Base.cell replies ⟨↑i, ⋯⟩)
+    (blockReply : block = AspisR1.FJh_Base.cell replies ⟨3, ⋯⟩) :
+    AspisR1.NKG_OracleCuts.Prepare w theta args replies weights block calls
+structure AspisR1.NKG_OracleCuts.Pack (succ internal : AspisR1.FJh_Base.State) (g : Fin 4)
+  (inputs : Fin 2 → AspisR1.NKG_OracleCuts.Packed) (replies : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ)
+  (target ip : AspisR1.FIv_NativeArithmetic.NQ) (calls : ℕ) : Prop
+number of parameters: 8
+fields:
+  AspisR1.NKG_OracleCuts.Pack.count : calls = 2
+  AspisR1.NKG_OracleCuts.Pack.window : ∀ (c : Fin 2) (i : Fin ↑4#usize),
+      AspisR1.FJh_Base.cell (inputs c) i = AspisR1.FJh_Base.cell (if ↑c = 0 then succ else internal) ⟨4 * ↑g + ↑i, ⋯⟩
+  AspisR1.NKG_OracleCuts.Pack.targetReply : target = replies 0
+  AspisR1.NKG_OracleCuts.Pack.internalReply : ip = replies 1
+constructor:
+  AspisR1.NKG_OracleCuts.Pack.mk {succ internal : AspisR1.FJh_Base.State} {g : Fin 4}
+    {inputs : Fin 2 → AspisR1.NKG_OracleCuts.Packed} {replies : Fin 2 → AspisR1.FIv_NativeArithmetic.NQ}
+    {target ip : AspisR1.FIv_NativeArithmetic.NQ} {calls : ℕ} (count : calls = 2)
+    (window :
+      ∀ (c : Fin 2) (i : Fin ↑4#usize),
+        AspisR1.FJh_Base.cell (inputs c) i = AspisR1.FJh_Base.cell (if ↑c = 0 then succ else internal) ⟨4 * ↑g + ↑i, ⋯⟩)
+    (targetReply : target = replies 0) (internalReply : ip = replies 1) :
+    AspisR1.NKG_OracleCuts.Pack succ internal g inputs replies target ip calls
+structure AspisR1.NKG_OracleCuts.Sub (target ip : AspisR1.FIv_NativeArithmetic.NQ)
+  (lead full : AspisR1.NKG_OracleCuts.Packed) (g : Fin 4) (args : Fin 3 → Fin 2 → AspisR1.FIv_NativeArithmetic.NQ)
+  (replies differences : AspisR1.NKG_OracleCuts.Three) (calls : ℕ) : Prop
+number of parameters: 9
+fields:
+  AspisR1.NKG_OracleCuts.Sub.count : calls = 3
+  AspisR1.NKG_OracleCuts.Sub.leftArgs : ∀ (j : Fin 3), args j 0 = target
+  AspisR1.NKG_OracleCuts.Sub.rightArgs : ∀ (j : Fin 3),
+      args j 1 = if ↑j = 0 then AspisR1.FJh_Base.cell lead g else if ↑j = 1 then AspisR1.FJh_Base.cell full g else ip
+  AspisR1.NKG_OracleCuts.Sub.returned : differences = replies
+constructor:
+  AspisR1.NKG_OracleCuts.Sub.mk {target ip : AspisR1.FIv_NativeArithmetic.NQ}
+    {lead full : AspisR1.NKG_OracleCuts.Packed} {g : Fin 4} {args : Fin 3 → Fin 2 → AspisR1.FIv_NativeArithmetic.NQ}
+    {replies differences : AspisR1.NKG_OracleCuts.Three} {calls : ℕ} (count : calls = 3)
+    (leftArgs : ∀ (j : Fin 3), args j 0 = target)
+    (rightArgs :
+      ∀ (j : Fin 3),
+        args j 1 = if ↑j = 0 then AspisR1.FJh_Base.cell lead g else if ↑j = 1 then AspisR1.FJh_Base.cell full g else ip)
+    (returned : differences = replies) : AspisR1.NKG_OracleCuts.Sub target ip lead full g args replies differences calls
+structure AspisR1.NKG_OracleCuts.Sum (p logged : AspisR1.NKG_OracleCuts.Prepared)
+  (differences rhs : AspisR1.NKG_OracleCuts.Three) (reply out : AspisR1.FIv_NativeArithmetic.NQ) (calls : ℕ) : Prop
+number of parameters: 7
+fields:
+  AspisR1.NKG_OracleCuts.Sum.count : calls = 1
+  AspisR1.NKG_OracleCuts.Sum.caches : logged = p
+  AspisR1.NKG_OracleCuts.Sum.rightArgs : rhs = differences
+  AspisR1.NKG_OracleCuts.Sum.returned : out = reply
+constructor:
+  AspisR1.NKG_OracleCuts.Sum.mk {p logged : AspisR1.NKG_OracleCuts.Prepared}
+    {differences rhs : AspisR1.NKG_OracleCuts.Three} {reply out : AspisR1.FIv_NativeArithmetic.NQ} {calls : ℕ}
+    (count : calls = 1) (caches : logged = p) (rightArgs : rhs = differences) (returned : out = reply) :
+    AspisR1.NKG_OracleCuts.Sum p logged differences rhs reply out calls
+structure AspisR1.NKG_OracleCuts.Mul (block logged : AspisR1.FIv_PreparedNew.NP)
+  (sum arg reply out : AspisR1.FIv_NativeArithmetic.NQ) (calls : ℕ) : Prop
+number of parameters: 7
+fields:
+  AspisR1.NKG_OracleCuts.Mul.count : calls = 1
+  AspisR1.NKG_OracleCuts.Mul.cache : logged = block
+  AspisR1.NKG_OracleCuts.Mul.rightArg : arg = sum
+  AspisR1.NKG_OracleCuts.Mul.returned : out = reply
+constructor:
+  AspisR1.NKG_OracleCuts.Mul.mk {block logged : AspisR1.FIv_PreparedNew.NP}
+    {sum arg reply out : AspisR1.FIv_NativeArithmetic.NQ} {calls : ℕ} (count : calls = 1) (cache : logged = block)
+    (rightArg : arg = sum) (returned : out = reply) : AspisR1.NKG_OracleCuts.Mul block logged sum arg reply out calls
+structure AspisR1.NKG_OracleCuts.Output (replies out : AspisR1.NKG_OracleCuts.Packed) (indices : Fin 4 → ℕ)
+  (calls : ℕ) : Prop
+number of parameters: 4
+fields:
+  AspisR1.NKG_OracleCuts.Output.count : calls = 4
+  AspisR1.NKG_OracleCuts.Output.order : ∀ (i : Fin 4), indices i = ↑i
+  AspisR1.NKG_OracleCuts.Output.returned : out = replies
+constructor:
+  AspisR1.NKG_OracleCuts.Output.mk {replies out : AspisR1.NKG_OracleCuts.Packed} {indices : Fin 4 → ℕ} {calls : ℕ}
+    (count : calls = 4) (order : ∀ (i : Fin 4), indices i = ↑i) (returned : out = replies) :
+    AspisR1.NKG_OracleCuts.Output replies out indices calls

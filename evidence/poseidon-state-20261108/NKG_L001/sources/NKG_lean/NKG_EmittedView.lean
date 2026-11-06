@@ -1,0 +1,8 @@
+import RPu_FIq_Native07
+
+#print FIq_Native.state_only_poseidon.interpolate_three_constant_limb
+#print FIq_Native.state_only_poseidon.interpolate_three_constant_columns_loop
+#print FIq_Native.state_only_poseidon.interpolate_three_constant_columns
+#print FIq_Native.state_only_poseidon.interpolated_internal_pair
+#print FIq_Native.state_only_poseidon.interpolated_full_pair_packed
+#print FIq_Native.state_only_poseidon.evaluate_state_only_poseidon_oracle_projected
