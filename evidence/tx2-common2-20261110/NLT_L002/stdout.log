@@ -1,0 +1,99 @@
+NLT_generated/NLT_Continuation.lean:48:20: error: Type mismatch: After simplification, term
+  rest.right
+ has type
+  events = (eval (next value)).events
+but is expected to have type
+  True ∧ events = (eval (next value)).events
+theorem NLT_Continuation.source : ∀ {E A : Type} (Local : E → E → Prop) (p : Program E A),
+  (∀ e ∈ (eval p).events, ∀ (actual : E), Local e actual → actual = e) →
+    ∀ (result : Result A) (events : List E),
+      Invocation Local p result events → result = (eval p).result ∧ events = (eval p).events :=
+fun {E A} Local p cuts result events native =>
+  Invocation.rec (motive := fun p result events native =>
+    (∀ e ∈ (eval p).events, ∀ (actual : E), Local e actual → actual = e) →
+      result = (eval p).result ∧ events = (eval p).events)
+    (fun value cuts => ⟨rfl, rfl⟩) (fun {B} value next result events tail ih cuts => ih cuts)
+    (fun {B} error next cuts => ⟨rfl, rfl⟩) (fun {B} next cuts => ⟨rfl, rfl⟩)
+    (fun {B} codec seed next actual cut value decoded result events tail ih cuts =>
+      have same :=
+        cuts (codec.encode seed)
+          (casesOn (motive := fun t => seed = t → codec.encode seed ∈ (eval (Program.call codec seed next)).events) seed
+            (fun v h =>
+              Eq.ndrec (motive := fun seed =>
+                Local (codec.encode seed) actual →
+                  (∀ e ∈ (eval (Program.call codec seed next)).events, ∀ (actual : E), Local e actual → actual = e) →
+                    codec.encode seed ∈ (eval (Program.call codec seed next)).events)
+                (fun cut cuts => List.mem_cons_self) (Eq.symm h) cut cuts)
+            (fun e h =>
+              Eq.ndrec (motive := fun seed =>
+                Local (codec.encode seed) actual →
+                  (∀ e ∈ (eval (Program.call codec seed next)).events, ∀ (actual : E), Local e actual → actual = e) →
+                    codec.encode seed ∈ (eval (Program.call codec seed next)).events)
+                (fun cut cuts => List.mem_cons_self) (Eq.symm h) cut cuts)
+            (fun h =>
+              Eq.ndrec (motive := fun seed =>
+                Local (codec.encode seed) actual →
+                  (∀ e ∈ (eval (Program.call codec seed next)).events, ∀ (actual : E), Local e actual → actual = e) →
+                    codec.encode seed ∈ (eval (Program.call codec seed next)).events)
+                (fun cut cuts => List.mem_cons_self) (Eq.symm h) cut cuts)
+            (Eq.refl seed))
+          actual cut;
+      let ⟨⟩ := some (ok value)
+      Eq.mp (congrArg (fun _a => _a = some (ok value)) (codec.roundtrip seed))
+        (Eq.mp (congrArg (fun _a => codec.decode _a = some (ok value)) same) decoded))
+    (fun {B} codec seed next actual cut error decoded cuts =>
+      have same :=
+        cuts (codec.encode seed)
+          (casesOn (motive := fun t => seed = t → codec.encode seed ∈ (eval (Program.call codec seed next)).events) seed
+            (fun v h =>
+              Eq.ndrec (motive := fun seed =>
+                Local (codec.encode seed) actual →
+                  (∀ e ∈ (eval (Program.call codec seed next)).events, ∀ (actual : E), Local e actual → actual = e) →
+                    codec.encode seed ∈ (eval (Program.call codec seed next)).events)
+                (fun cut cuts => List.mem_cons_self) (Eq.symm h) cut cuts)
+            (fun e h =>
+              Eq.ndrec (motive := fun seed =>
+                Local (codec.encode seed) actual →
+                  (∀ e ∈ (eval (Program.call codec seed next)).events, ∀ (actual : E), Local e actual → actual = e) →
+                    codec.encode seed ∈ (eval (Program.call codec seed next)).events)
+                (fun cut cuts => List.mem_cons_self) (Eq.symm h) cut cuts)
+            (fun h =>
+              Eq.ndrec (motive := fun seed =>
+                Local (codec.encode seed) actual →
+                  (∀ e ∈ (eval (Program.call codec seed next)).events, ∀ (actual : E), Local e actual → actual = e) →
+                    codec.encode seed ∈ (eval (Program.call codec seed next)).events)
+                (fun cut cuts => List.mem_cons_self) (Eq.symm h) cut cuts)
+            (Eq.refl seed))
+          actual cut;
+      let ⟨⟩ := some (fail error)
+      Eq.mp (congrArg (fun _a => _a = some (fail error)) (codec.roundtrip seed))
+        (Eq.mp (congrArg (fun _a => codec.decode _a = some (fail error)) same) decoded))
+    (fun {B} codec seed next actual cut decoded cuts =>
+      have same :=
+        cuts (codec.encode seed)
+          (casesOn (motive := fun t => seed = t → codec.encode seed ∈ (eval (Program.call codec seed next)).events) seed
+            (fun v h =>
+              Eq.ndrec (motive := fun seed =>
+                Local (codec.encode seed) actual →
+                  (∀ e ∈ (eval (Program.call codec seed next)).events, ∀ (actual : E), Local e actual → actual = e) →
+                    codec.encode seed ∈ (eval (Program.call codec seed next)).events)
+                (fun cut cuts => List.mem_cons_self) (Eq.symm h) cut cuts)
+            (fun e h =>
+              Eq.ndrec (motive := fun seed =>
+                Local (codec.encode seed) actual →
+                  (∀ e ∈ (eval (Program.call codec seed next)).events, ∀ (actual : E), Local e actual → actual = e) →
+                    codec.encode seed ∈ (eval (Program.call codec seed next)).events)
+                (fun cut cuts => List.mem_cons_self) (Eq.symm h) cut cuts)
+            (fun h =>
+              Eq.ndrec (motive := fun seed =>
+                Local (codec.encode seed) actual →
+                  (∀ e ∈ (eval (Program.call codec seed next)).events, ∀ (actual : E), Local e actual → actual = e) →
+                    codec.encode seed ∈ (eval (Program.call codec seed next)).events)
+                (fun cut cuts => List.mem_cons_self) (Eq.symm h) cut cuts)
+            (Eq.refl seed))
+          actual cut;
+      let ⟨⟩ := some div
+      Eq.mp (congrArg (fun _a => _a = some div) (codec.roundtrip seed))
+        (Eq.mp (congrArg (fun _a => codec.decode _a = some div) same) decoded))
+    native cuts
+'NLT_Continuation.source' depends on axioms: [propext, sorryAx]

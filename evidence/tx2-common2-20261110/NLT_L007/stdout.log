@@ -1,0 +1,7 @@
+theorem NLT_Subcuts.erase : ∀ {f : NLT_Interpreted.Uninstalled} {H : Bytes → State} {X : Type}
+  {d : aspis_core.digest.Digest32 X} {hash : X} {A : Type} (p : Program Event A) (result : Result A)
+  (records : List (Occurrence f H d hash)),
+  Invocation f H d hash p result records →
+    NLT_Continuation.Invocation (NLT_Interpreted.Local f H d hash) p result (List.map actual records) :=
+⋯
+'NLT_Subcuts.erase' depends on axioms: [propext, Classical.choice, Quot.sound]

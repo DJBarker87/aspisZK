@@ -1,0 +1,6 @@
+theorem NLT_Continuation.source : ∀ {E A : Type} (Local : E → E → Prop) (p : Program E A),
+  (∀ e ∈ (eval p).events, ∀ (actual : E), Local e actual → actual = e) →
+    ∀ (result : Result A) (events : List E),
+      Invocation Local p result events → result = (eval p).result ∧ events = (eval p).events :=
+⋯
+'NLT_Continuation.source' depends on axioms: [propext]
