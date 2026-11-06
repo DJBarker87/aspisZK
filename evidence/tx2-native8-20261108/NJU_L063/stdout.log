@@ -1,0 +1,42 @@
+NJU_generated/NJU_GeneralFinishRoot.lean:20:47: error: unsolved goals
+case this
+r : NP6_StdModel.Reservation
+loc : Locations
+proof : Slice U8
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+facts : NJU_FinishInput.Holds proof v p a
+same : NIW_AlignFinishComposedLog.forget (NJF_FinishObserved.G r loc v p a) = NIW_AlignFinishExecution.run r v p a
+first : (NJF_FinishObserved.G r loc v p a).1 = (NIW_AlignFinishExecution.run r v p a).1
+⊢ ?m.47
+
+r : NP6_StdModel.Reservation
+loc : Locations
+proof : Slice U8
+v : verifier.View
+p : verifier.Prepared
+a : verifier.Accumulator
+facts : NJU_FinishInput.Holds proof v p a
+same : NIW_AlignFinishComposedLog.forget (NJF_FinishObserved.G r loc v p a) = NIW_AlignFinishExecution.run r v p a
+first : (NJF_FinishObserved.G r loc v p a).1 = (NIW_AlignFinishExecution.run r v p a).1
+this : ?m.47
+⊢ NIW_AlignFinishPrefix.Prefix (NJF_FinishObserved.G r loc v p a).2.1
+NJU_generated/NJU_GeneralFinishRoot.lean:25:12: error: unexpected token ':='; expected ':'
+NJU_generated/NJU_GeneralFinishRoot.lean:29:13: error: unexpected token '#print'; expected ':'
+theorem AspisR1.NJU_GeneralFinishRoot.finish : ∀ (r : NP6_StdModel.Reservation) (loc : Locations) (proof : Slice U8)
+  (v : verifier.View) (p : verifier.Prepared) (a : verifier.Accumulator),
+  NJU_FinishInput.Holds proof v p a →
+    have execution := NJF_FinishObserved.G r loc v p a;
+    Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none = execution.1 ∧
+      NIW_AlignFinishComposedLog.forget execution = NIW_AlignFinishExecution.run r v p a ∧
+        NIW_AlignFinishPrefix.Prefix execution.2.1 :=
+fun r loc proof v p a facts =>
+  have same := NJU_WeakFinishObserved.source_log r loc proof v p a facts;
+  have first := congrArg Prod.fst same;
+  id
+    (fun first =>
+      ⟨Eq.trans (NJU_FinishObserved.source r v p a (NJU_FinishInput.intrinsic proof v p a facts)) (Eq.symm first),
+        ⟨same, sorry⟩⟩)
+    first
+'AspisR1.NJU_GeneralFinishRoot.finish' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

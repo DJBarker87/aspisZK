@@ -15,3 +15,9 @@ Retained assumptions: approved headline/runtime trust and option-A P6/D188 nativ
 ## Stage 2 checkpoint
 
 Five native decoder/window pairs and five raw no-return/control pairs are retained in NJU_NATIVE_CERTIFICATES.json. should_panic alone earns no universal credit. Current-window caller case split and no-window-premise source finish Result/observation erasure compile. Exact primitive short/None abort and all checked offsets compile. These do not yet close TX2:115 supplement or TX2:065. Generalization of the pair chain to arbitrary2048-byte messages is in progress; the existing composition appears to use canonical-window data only for its length. No promotion or new trust item.
+
+## Stage 3 checkpoint
+
+The pair/finish word-bound restriction has been generalized away. NJU_WeakPairInstantiation.root and NJU_GeneralFinishRoot.finish/ported compile on arbitrary current raw words; they reuse the SAME native G and source/trace carriers. NJU_FinishAtCurrent.source_view installs the generalized bridge from SAME resume/query/flush with only the actual slice bound. Full Result, ordered effects, abort prefix and reviewed PairPort cut are retained. Final-message length2048 remains, derived from the entered View construction. No history/NoBad/current-proof persistence or finish-success premise. Formal credit is pending the combined/raw/scan gate and next ledger.
+
+NJU_CommonObserved.source compiles for the complete common invocation, including the finish event. NJU_ResumeObserved definitions compile after 8/8/6 query-read outlining under unchanged limits. Its log-erasure and emitted-reference proofs are still being worked on; no M01 native-parent closure is claimed. M02 remains an unconsumed external dependency.
