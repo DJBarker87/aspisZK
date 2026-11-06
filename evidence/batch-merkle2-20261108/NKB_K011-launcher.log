@@ -1,0 +1,53 @@
+{"attempt": "NKB_K011", "exit_status": 1, "wall_seconds": 93.21475582499988, "peak_rss_kib": "2204700", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `KMX_to_vec` is never used
+  --> /home/dombarker/project-offloads/codex-cx-batch-merkle2-20261108/NKB_workspace/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:18:8
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^
+
+warning: function `KMX_realloc` is never used
+  --> /home/dombarker/project-offloads/codex-cx-batch-merkle2-20261108/NKB_workspace/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^
+
+warning: module `NKB_native` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/candidate.rs:342:18
+    |
+342 | #[cfg(kani)] mod NKB_native { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NKB_harness.rs")); }
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nkb_native`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.04s
+Checking harness verifier::candidate::NKB_native::prefix_step...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKB_native::prefix_step
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r3c8c4d8db7d64038b1f8060f64b4b327.scope; invocation ID: 4e272636aaf34d30a9efa49a8757c84a

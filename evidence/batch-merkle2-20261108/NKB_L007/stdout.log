@@ -1,0 +1,463 @@
+NKB_lean/NKB_Rejection.lean:30:61: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [core.slice.index.Slice.index, ̲core.slice.index.SliceIndexRangeToUsizeSlice.index,
+     show (0#usize).val ̲≤i ̲dx.to_slice.length from Nat.zero_le _,i̵f̵_̵t̵r̵u̵e̵,̵ ̲bind_tc_ok,
+     NJS_Extract.core.option.Option.ok_or, ̲core.result.Result.Insts.CoreOpsTry.branch,
+     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+     core.convert.FromSame, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKB_lean/NKB_Rejection.lean:33:3: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [core.slice.index.Slice.index, ̲core.slice.index.SliceIndexRangeToUsizeSlice.index,
+     show (0#usize).val ̲≤i ̲dx.to_slice.length from Nat.zero_le _, ̲if_true, ̲bind_tc_ok,
+     NJS_Extract.core.option.Option.ok_or, ̲core.result.Result.Insts.CoreOpsTry.branch,
+     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̵  ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NKB_Rejection.count_none : ∀ (proof : Slice U8) (root : Std.Array U8 32#usize) (idx : Std.Array U32 16#usize)
+  (val : Std.Array (Std.Array U8 32#usize) 16#usize), terminal proof root idx val = ok (done (idx, val, none)) :=
+fun proof root idx val =>
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (ite_congr (count_none._simp_1 0#usize)
+                  (fun a =>
+                    congrArg
+                      (Bind.bind (NJS_Extract.verifier.candidate.batch_key_at (Array.repeat 16#usize 0#u64) 0#usize))
+                      (funext fun key =>
+                        congrArg (Bind.bind (lift (Usize.wrapping_add 0#usize 1#usize)))
+                          (funext fun key_position1 =>
+                            congrArg (Bind.bind (lift (key.wrapping_shr 8#u32)))
+                              (funext fun i =>
+                                congrArg (Bind.bind (lift (UScalar.cast UScalarTy.U32 i)))
+                                  (funext fun index =>
+                                    congrArg (Bind.bind (lift (key &&& 255#u64)))
+                                      (funext fun i1 =>
+                                        congrArg (Bind.bind (lift (UScalar.cast UScalarTy.Usize i1)))
+                                          (funext fun i2 =>
+                                            congrArg (Bind.bind (lift (Usize.wrapping_add 0#usize i2)))
+                                              (funext fun i3 =>
+                                                congrArg (Bind.bind (NJS_Extract.verifier.candidate.opening proof i3))
+                                                  (funext fun q =>
+                                                    congrArg
+                                                      (Bind.bind
+                                                        (NJS_Extract.verifier.candidate.batch_leaf (ok 113#u8)
+                                                          (ok 241#u8) (fun {H} => NJS_BatchLeaf.privateLeaf)
+                                                          (NJS_RuntimeDigest.backend fun x => default) () 0#usize q))
+                                                      (funext fun leaf =>
+                                                        Eq.trans
+                                                          (ite_congr (count_none._simp_1 0#usize)
+                                                            (fun a =>
+                                                              Eq.refl do
+                                                                let i4 ← lift (Usize.wrapping_sub 0#usize 1#usize)
+                                                                let b ←
+                                                                  NJS_Extract.verifier.candidate.same_batch_index idx i4
+                                                                      index
+                                                                if b = true then do
+                                                                    let i5 ← lift (Usize.wrapping_sub 0#usize 1#usize)
+                                                                    let b1 ←
+                                                                      NJS_Extract.verifier.candidate.same_batch_leaf val
+                                                                          i5 leaf
+                                                                    if b1 = true then
+                                                                        ok (cont (idx, val, 0#usize, key_position1))
+                                                                      else
+                                                                        ok
+                                                                          (done
+                                                                            (idx, val,
+                                                                              some
+                                                                                (core.result.Result.Err
+                                                                                  NJS_Extract.verifier.Error.Merkle)))
+                                                                  else do
+                                                                    let idx1 ← idx.update 0#usize index
+                                                                    let val1 ← val.update 0#usize leaf
+                                                                    let d1 ← lift (Usize.wrapping_add 0#usize 1#usize)
+                                                                    ok (cont (idx1, val1, d1, key_position1)))
+                                                            fun a =>
+                                                            Eq.refl do
+                                                              let idx1 ← idx.update 0#usize index
+                                                              let val1 ← val.update 0#usize leaf
+                                                              let d1 ← lift (Usize.wrapping_add 0#usize 1#usize)
+                                                              ok (cont (idx1, val1, d1, key_position1)))
+                                                          (if_false
+                                                            (do
+                                                              let i4 ← lift (Usize.wrapping_sub 0#usize 1#usize)
+                                                              let b ←
+                                                                NJS_Extract.verifier.candidate.same_batch_index idx i4
+                                                                    index
+                                                              if b = true then do
+                                                                  let i5 ← lift (Usize.wrapping_sub 0#usize 1#usize)
+                                                                  let b1 ←
+                                                                    NJS_Extract.verifier.candidate.same_batch_leaf val
+                                                                        i5 leaf
+                                                                  if b1 = true then
+                                                                      ok (cont (idx, val, 0#usize, key_position1))
+                                                                    else
+                                                                      ok
+                                                                        (done
+                                                                          (idx, val,
+                                                                            some
+                                                                              (core.result.Result.Err
+                                                                                NJS_Extract.verifier.Error.Merkle)))
+                                                                else do
+                                                                  let idx1 ← idx.update 0#usize index
+                                                                  let val1 ← val.update 0#usize leaf
+                                                                  let d1 ← lift (Usize.wrapping_add 0#usize 1#usize)
+                                                                  ok (cont (idx1, val1, d1, key_position1)))
+                                                            do
+                                                            let idx1 ← idx.update 0#usize index
+                                                            let val1 ← val.update 0#usize leaf
+                                                            let d1 ← lift (Usize.wrapping_add 0#usize 1#usize)
+                                                            ok (cont (idx1, val1, d1, key_position1)))))))))))))
+                  fun a =>
+                  congrArg
+                    (Bind.bind
+                      (core.array.Array.index
+                        (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+                        { «end» := 0#usize }))
+                    (funext fun s1 =>
+                      congrArg (Bind.bind (ok none))
+                        (funext fun o =>
+                          congrArg
+                            (Bind.bind (NJS_Extract.core.option.Option.ok_or o NJS_Extract.verifier.Error.Merkle))
+                            (funext fun r =>
+                              congrArg (Bind.bind (core.result.Result.Insts.CoreOpsTry.branch r))
+                                (funext fun cf =>
+                                  congrFun'
+                                    (congrArg
+                                      (NJS_Extract.verifier.candidate.batch_tree_loop.body.match_1
+                                        (fun cf =>
+                                          Result
+                                            (ControlFlow
+                                              (Std.Array U32 16#usize ×
+                                                Std.Array (Std.Array U8 32#usize) 16#usize × Usize × Usize)
+                                              (Std.Array U32 16#usize ×
+                                                Std.Array (Std.Array U8 32#usize) 16#usize ×
+                                                  Option (core.result.Result Unit NJS_Extract.verifier.Error))))
+                                        cf)
+                                      (funext fun val1 =>
+                                        congrArg
+                                          (Bind.bind
+                                            (NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof
+                                              0#usize))
+                                          (funext fun nodes =>
+                                            congrArg (Bind.bind (NJS_Extract.compact.SLOT_NODES.index_usize 0#usize))
+                                              (funext fun i =>
+                                                ite_congr (Eq.refl (val1 > i))
+                                                  (fun a => Eq.refl (ok (done (idx, val, none)))) fun a =>
+                                                  congrArg (Bind.bind (lift (Usize.wrapping_mul 32#usize val1)))
+                                                    (funext fun i1 =>
+                                                      congrArg
+                                                        (Bind.bind
+                                                          (core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+                                                            { start := i1 }))
+                                                        (funext fun s2 =>
+                                                          congrArg
+                                                            (Bind.bind (core.slice.Slice.chunks_exact s2 8#usize))
+                                                            (funext fun ce =>
+                                                              congrArg (Bind.bind (fail Error.panic))
+                                                                (congrArg uncurry
+                                                                  (funext fun b =>
+                                                                    funext fun _ =>
+                                                                      ite_congr (Eq.refl (b = true)) (fun a => ⋯)
+                                                                        fun a => ⋯)))))))))
+                                    fun residual => do
+                                    let _ ←
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame NJS_Extract.verifier.Error) residual
+                                    ok (done (idx, val, none)))))))
+                (if_false
+                  (do
+                    let key ← NJS_Extract.verifier.candidate.batch_key_at (Array.repeat 16#usize 0#u64) 0#usize
+                    let key_position1 ← lift (Usize.wrapping_add 0#usize 1#usize)
+                    let i ← lift (key.wrapping_shr 8#u32)
+                    let index ← lift (UScalar.cast UScalarTy.U32 i)
+                    let i1 ← lift (key &&& 255#u64)
+                    let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+                    let i3 ← lift (Usize.wrapping_add 0#usize i2)
+                    let q ← NJS_Extract.verifier.candidate.opening proof i3
+                    let leaf ←
+                      NJS_Extract.verifier.candidate.batch_leaf (ok 113#u8) (ok 241#u8)
+                          (fun {H} => NJS_BatchLeaf.privateLeaf) (NJS_RuntimeDigest.backend fun x => default) () 0#usize
+                          q
+                    let idx1 ← idx.update 0#usize index
+                    let val1 ← val.update 0#usize leaf
+                    let d1 ← lift (Usize.wrapping_add 0#usize 1#usize)
+                    ok (cont (idx1, val1, d1, key_position1)))
+                  do
+                  let _ ←
+                    core.array.Array.index
+                        (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+                        { «end» := 0#usize }
+                  let o ← ok none
+                  let r ← NJS_Extract.core.option.Option.ok_or o NJS_Extract.verifier.Error.Merkle
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val1 => do
+                      let nodes ← NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof 0#usize
+                      let i ← NJS_Extract.compact.SLOT_NODES.index_usize 0#usize
+                      if val1 > i then ok (done (idx, val, none))
+                        else do
+                          let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                          let s2 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+                                { start := i1 }
+                          let _ ← core.slice.Slice.chunks_exact s2 8#usize
+                          let (b, _) ← fail Error.panic
+                          if b = true then ok (done (idx, val, none))
+                            else do
+                              let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                              let _ ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+                                    { «end» := i2 }
+                              let (b1, idx1, val2) ← fail Error.panic
+                              if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                                else ok (done (idx1, val2, none))
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let _ ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame NJS_Extract.verifier.Error) residual
+                      ok (done (idx, val, none)))))
+            (ok (done (idx, val, none)))))
+        (id
+          (Eq.mpr
+            (id
+              (congrFun'
+                (congrArg Eq
+                  (congr
+                    (congrArg Bind.bind
+                      (ite_congr (Eq.refl (↑0#usize ≤ idx.to_slice.length))
+                        (fun a =>
+                          Eq.refl
+                            (ok
+                              ⟨List.slice 0 ↑0#usize ↑idx.to_slice,
+                                core.slice.index.SliceIndexRangeToUsizeSlice.get._proof_1 { «end» := 0#usize }
+                                  idx.to_slice⟩))
+                        fun a => Eq.refl (fail Error.panic)))
+                    (funext fun s1 =>
+                      Eq.trans
+                        (Eq.trans
+                          (congrArg (Bind.bind (ok none))
+                            (funext fun o =>
+                              congrArg
+                                (Bind.bind
+                                  (match o with
+                                  | none => ok (core.result.Result.Err NJS_Extract.verifier.Error.Merkle)
+                                  | some v => ok (core.result.Result.Ok v)))
+                                (funext fun r =>
+                                  congrArg
+                                    (Bind.bind
+                                      (match r with
+                                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                      | core.result.Result.Err e =>
+                                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))))
+                                    (funext fun cf =>
+                                      congr
+                                        (congrArg
+                                          (NJS_Extract.verifier.candidate.batch_tree_loop.body.match_1
+                                            (fun cf =>
+                                              Result
+                                                (ControlFlow
+                                                  (Std.Array U32 16#usize ×
+                                                    Std.Array (Std.Array U8 32#usize) 16#usize × Usize × Usize)
+                                                  (Std.Array U32 16#usize ×
+                                                    Std.Array (Std.Array U8 32#usize) 16#usize ×
+                                                      Option (core.result.Result Unit NJS_Extract.verifier.Error))))
+                                            cf)
+                                          (funext fun val1 =>
+                                            congrArg
+                                              (Bind.bind
+                                                (NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof
+                                                  0#usize))
+                                              (funext fun nodes =>
+                                                congrArg
+                                                  (Bind.bind (NJS_Extract.compact.SLOT_NODES.index_usize 0#usize))
+                                                  (funext fun i =>
+                                                    ite_congr (Eq.refl (val1 > i))
+                                                      (fun a => Eq.refl (ok (done (idx, val, none)))) fun a =>
+                                                      congrArg (Bind.bind (lift (Usize.wrapping_mul 32#usize val1)))
+                                                        (funext fun i1 =>
+                                                          congrArg
+                                                            (Bind.bind
+                                                              (core.slice.index.SliceIndexRangeFromUsizeSlice.index
+                                                                { start := i1 } nodes))
+                                                            (funext fun s2 =>
+                                                              congrArg
+                                                                (Bind.bind (core.slice.Slice.chunks_exact s2 8#usize))
+                                                                (funext fun ce =>
+                                                                  congrArg (Bind.bind (fail Error.panic))
+                                                                    (congrArg uncurry
+                                                                      (funext fun b =>
+                                                                        funext fun _ =>
+                                                                          ite_congr (Eq.refl (b = true)) ⋯ ⋯)))))))))
+                                        (funext fun residual =>
+                                          congrFun'
+                                            (congrArg Bind.bind
+                                              (congrArg
+                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual.match_1
+                                                  (fun r => Result (core.result.Result Unit NJS_Extract.verifier.Error))
+                                                  residual fun x =>
+                                                  core.convert.Infallible.rec
+                                                    (fun x =>
+                                                      Result (core.result.Result Unit NJS_Extract.verifier.Error))
+                                                    x)
+                                                (funext fun e =>
+                                                  bind_tc_ok (core.convert.FromSame.from e) fun y =>
+                                                    ok (core.result.Result.Err y))))
+                                            fun _ => ok (done (idx, val, none)))))))
+                          (bind_tc_ok none fun y => do
+                            let r ←
+                              match y with
+                                | none => ok (core.result.Result.Err NJS_Extract.verifier.Error.Merkle)
+                                | some v => ok (core.result.Result.Ok v)
+                            let cf ←
+                              match r with
+                                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                | core.result.Result.Err e =>
+                                  ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                            match cf with
+                              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                let nodes ←
+                                  NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof 0#usize
+                                let i ← NJS_Extract.compact.SLOT_NODES.index_usize 0#usize
+                                if val1 > i then ok (done (idx, val, none))
+                                  else do
+                                    let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                                    let s2 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i1 } nodes
+                                    let _ ← core.slice.Slice.chunks_exact s2 8#usize
+                                    let (b, _) ← fail Error.panic
+                                    if b = true then ok (done (idx, val, none))
+                                      else do
+                                        let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                                        let _ ←
+                                          if ↑i2 ≤ nodes.length then
+                                              ok
+                                                ⟨List.slice 0 ↑i2 ↑nodes,
+                                                  core.slice.index.SliceIndexRangeToUsizeSlice.get._proof_1
+                                                    { «end» := i2 } nodes⟩
+                                            else fail Error.panic
+                                        let (b1, idx1, val2) ← fail Error.panic
+                                        if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                                          else ok (done (idx1, val2, none))
+                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                let _ ←
+                                  match residual with
+                                    | core.result.Result.Ok x =>
+                                      core.convert.Infallible.rec
+                                        (fun x => Result (core.result.Result Unit NJS_Extract.verifier.Error)) x
+                                    | core.result.Result.Err e =>
+                                      ok (core.result.Result.Err (core.convert.FromSame.from e))
+                                ok (done (idx, val, none))))
+                        (Eq.trans
+                          (bind_tc_ok (core.result.Result.Err NJS_Extract.verifier.Error.Merkle) fun y => do
+                            let cf ←
+                              match y with
+                                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                | core.result.Result.Err e =>
+                                  ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                            match cf with
+                              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                let nodes ←
+                                  NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof 0#usize
+                                let i ← NJS_Extract.compact.SLOT_NODES.index_usize 0#usize
+                                if val1 > i then ok (done (idx, val, none))
+                                  else do
+                                    let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                                    let s2 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i1 } nodes
+                                    let _ ← core.slice.Slice.chunks_exact s2 8#usize
+                                    let (b, _) ← fail Error.panic
+                                    if b = true then ok (done (idx, val, none))
+                                      else do
+                                        let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                                        let _ ←
+                                          if ↑i2 ≤ nodes.length then
+                                              ok
+                                                ⟨List.slice 0 ↑i2 ↑nodes,
+                                                  core.slice.index.SliceIndexRangeToUsizeSlice.get._proof_1
+                                                    { «end» := i2 } nodes⟩
+                                            else fail Error.panic
+                                        let (b1, idx1, val2) ← fail Error.panic
+                                        if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                                          else ok (done (idx1, val2, none))
+                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                let _ ←
+                                  match residual with
+                                    | core.result.Result.Ok x =>
+                                      core.convert.Infallible.rec
+                                        (fun x => Result (core.result.Result Unit NJS_Extract.verifier.Error)) x
+                                    | core.result.Result.Err e =>
+                                      ok (core.result.Result.Err (core.convert.FromSame.from e))
+                                ok (done (idx, val, none)))
+                          (Eq.trans
+                            (bind_tc_ok
+                              (core.ops.control_flow.ControlFlow.Break
+                                (core.result.Result.Err NJS_Extract.verifier.Error.Merkle))
+                              fun y =>
+                              match y with
+                              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                let nodes ←
+                                  NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof 0#usize
+                                let i ← NJS_Extract.compact.SLOT_NODES.index_usize 0#usize
+                                if val1 > i then ok (done (idx, val, none))
+                                  else do
+                                    let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                                    let s2 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i1 } nodes
+                                    let _ ← core.slice.Slice.chunks_exact s2 8#usize
+                                    let (b, _) ← fail Error.panic
+                                    if b = true then ok (done (idx, val, none))
+                                      else do
+                                        let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                                        let _ ←
+                                          if ↑i2 ≤ nodes.length then
+                                              ok
+                                                ⟨List.slice 0 ↑i2 ↑nodes,
+                                                  core.slice.index.SliceIndexRangeToUsizeSlice.get._proof_1
+                                                    { «end» := i2 } nodes⟩
+                                            else fail Error.panic
+                                        let (b1, idx1, val2) ← fail Error.panic
+                                        if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                                          else ok (done (idx1, val2, none))
+                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                let _ ←
+                                  match residual with
+                                    | core.result.Result.Ok x =>
+                                      core.convert.Infallible.rec
+                                        (fun x => Result (core.result.Result Unit NJS_Extract.verifier.Error)) x
+                                    | core.result.Result.Err e =>
+                                      ok (core.result.Result.Err (core.convert.FromSame.from e))
+                                ok (done (idx, val, none)))
+                            (bind_tc_ok
+                              (core.result.Result.Err (core.convert.FromSame.from NJS_Extract.verifier.Error.Merkle))
+                              fun y => ok (done (idx, val, none))))))))
+                (ok (done (idx, val, none)))))
+            (Decidable.casesOn ((↑0#usize).decLe idx.to_slice.length)
+              (fun h =>
+                Eq.mpr
+                  (id
+                    (congrFun'
+                      (congrArg Eq (congrFun' (congrArg Bind.bind (if_neg h)) fun s1 => ok (done (idx, val, none))))
+                      (ok (done (idx, val, none)))))
+                  (False.elim (h (count_none._proof_7 idx h))))
+              fun h =>
+              Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq (congrFun' (congrArg Bind.bind (if_pos h)) fun s1 => ok (done (idx, val, none))))
+                    (ok (done (idx, val, none)))))
+                (Eq.refl do
+                  let _ ←
+                    ok
+                        ⟨List.slice 0 ↑0#usize ↑idx.to_slice,
+                          core.slice.index.SliceIndexRangeToUsizeSlice.get._proof_1 { «end» := 0#usize } idx.to_slice⟩
+                  ok (done (idx, val, none))))))))
+'NKB_Rejection.count_none' depends on axioms: [propext, Classical.choice, Quot.sound]

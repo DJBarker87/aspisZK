@@ -1,0 +1,267 @@
+NKB_lean/NKB_Rejection.lean:25:59: error: unsolved goals
+proof : Slice U8
+root : Std.Array U8 32#usize
+idx : Std.Array U32 16#usize
+val : Std.Array (Std.Array U8 32#usize) 16#usize
+⊢ (∃ x, core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 0#usize } idx.to_slice = ok x) ∧
+    ∃ x,
+      NJS_Extract.core.option.Option.ok_or none NJS_Extract.verifier.Error.Merkle = ok x ∧
+        ∃ x_1,
+          core.result.Result.Insts.CoreOpsTry.branch x = ok x_1 ∧
+            (match x_1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let nodes ← NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof 0#usize
+                let i ← NJS_Extract.compact.SLOT_NODES.index_usize 0#usize
+                if ↑i < ↑val1 then ok (done (idx, val, none))
+                  else do
+                    let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                    let s2 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i1 } nodes
+                    let _ ← core.slice.Slice.chunks_exact s2 8#usize
+                    fail Error.panic
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let _ ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame NJS_Extract.verifier.Error) residual
+                ok (done (idx, val, none))) =
+              ok (done (idx, val, none))
+theorem NKB_Rejection.count_none : ∀ (proof : Slice U8) (root : Std.Array U8 32#usize) (idx : Std.Array U32 16#usize)
+  (val : Std.Array (Std.Array U8 32#usize) 16#usize), terminal proof root idx val = ok (done (idx, val, none)) :=
+fun proof root idx val =>
+  Eq.mpr
+    (id
+      (Eq.trans
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (ite_cond_eq_false
+                  (do
+                    let key ← NJS_Extract.verifier.candidate.batch_key_at (Array.repeat 16#usize 0#u64) 0#usize
+                    let key_position1 ← lift (Usize.wrapping_add 0#usize 1#usize)
+                    let i ← lift (key.wrapping_shr 8#u32)
+                    let index ← lift (UScalar.cast UScalarTy.U32 i)
+                    let i1 ← lift (key &&& 255#u64)
+                    let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+                    let i3 ← lift (Usize.wrapping_add 0#usize i2)
+                    let q ← NJS_Extract.verifier.candidate.opening proof i3
+                    let leaf ←
+                      NJS_Extract.verifier.candidate.batch_leaf (ok 113#u8) (ok 241#u8)
+                          (fun {H} {H} => NJS_BatchLeaf.privateLeaf) (NJS_RuntimeDigest.backend fun x => default) ()
+                          0#usize q
+                    if 0#usize > 0#usize then do
+                        let i4 ← lift (Usize.wrapping_sub 0#usize 1#usize)
+                        let b ← NJS_Extract.verifier.candidate.same_batch_index idx i4 index
+                        if b = true then do
+                            let i5 ← lift (Usize.wrapping_sub 0#usize 1#usize)
+                            let b1 ← NJS_Extract.verifier.candidate.same_batch_leaf val i5 leaf
+                            if b1 = true then ok (cont (idx, val, 0#usize, key_position1))
+                              else ok (done (idx, val, some (core.result.Result.Err NJS_Extract.verifier.Error.Merkle)))
+                          else do
+                            let idx1 ← idx.update 0#usize index
+                            let val1 ← val.update 0#usize leaf
+                            let d1 ← lift (Usize.wrapping_add 0#usize 1#usize)
+                            ok (cont (idx1, val1, d1, key_position1))
+                      else do
+                        let idx1 ← idx.update 0#usize index
+                        let val1 ← val.update 0#usize leaf
+                        let d1 ← lift (Usize.wrapping_add 0#usize 1#usize)
+                        ok (cont (idx1, val1, d1, key_position1)))
+                  (do
+                    let s1 ←
+                      core.array.Array.index
+                          (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U32)) idx
+                          { «end» := 0#usize }
+                    let o ← (fun x x_1 => ok none) NJS_Extract.multiproof.Arity.Two s1
+                    let r ← NJS_Extract.core.option.Option.ok_or o NJS_Extract.verifier.Error.Merkle
+                    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                    match cf with
+                      | core.ops.control_flow.ControlFlow.Continue val1 => do
+                        let nodes ← NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof 0#usize
+                        let i ← NJS_Extract.compact.SLOT_NODES.index_usize 0#usize
+                        if val1 > i then ok (done (idx, val, none))
+                          else do
+                            let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                            let s2 ←
+                              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+                                  { start := i1 }
+                            let ce ← core.slice.Slice.chunks_exact s2 8#usize
+                            let (b, _) ←
+                              (fun {Self F Clause0_Item} x x_1 x_2 x_3 => fail Error.panic)
+                                  (core.iter.traits.iterator.IteratorChunksExact U8)
+                                  (NJS_Extract.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                                    (NJS_RuntimeDigest.backend fun x => default))
+                                  ce ()
+                            if b = true then ok (done (idx, val, none))
+                              else do
+                                let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                                let s3 ←
+                                  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+                                      { «end» := i2 }
+                                let (b1, idx1, val2) ←
+                                  (fun {H} x x_1 x_2 x_3 x_4 x_5 x_6 x_7 => fail Error.panic)
+                                      (NJS_RuntimeDigest.backend fun x => default) () NJS_Extract.multiproof.Arity.Two
+                                      root idx val 0#usize s3
+                                if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                                  else ok (done (idx1, val2, none))
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let _ ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame NJS_Extract.verifier.Error) residual
+                        ok (done (idx, val, none)))
+                  (lt_self_iff_false._simp_1 0#usize))
+                (congr
+                  (congrArg Bind.bind (Slice.index_SliceIndexRangeToUsizeSliceInst idx.to_slice { «end» := 0#usize }))
+                  (funext fun s1 =>
+                    Eq.trans
+                      (congrArg (Bind.bind (ok none))
+                        (funext fun o =>
+                          congrArg
+                            (Bind.bind (NJS_Extract.core.option.Option.ok_or o NJS_Extract.verifier.Error.Merkle))
+                            (funext fun r =>
+                              congrArg (Bind.bind (core.result.Result.Insts.CoreOpsTry.branch r))
+                                (funext fun cf =>
+                                  congrFun'
+                                    (congrArg
+                                      (NJS_Extract.verifier.candidate.batch_tree_loop.body.match_1
+                                        (fun cf =>
+                                          Result
+                                            (ControlFlow
+                                              (Std.Array U32 16#usize ×
+                                                Std.Array (Std.Array U8 32#usize) 16#usize × Usize × Usize)
+                                              (Std.Array U32 16#usize ×
+                                                Std.Array (Std.Array U8 32#usize) 16#usize ×
+                                                  Option (core.result.Result Unit NJS_Extract.verifier.Error))))
+                                        cf)
+                                      (funext fun val1 =>
+                                        congrArg
+                                          (Bind.bind
+                                            (NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof
+                                              0#usize))
+                                          (funext fun nodes =>
+                                            congrArg (Bind.bind (NJS_Extract.compact.SLOT_NODES.index_usize 0#usize))
+                                              (funext fun i =>
+                                                ite_congr (Eq.trans gt_iff_lt._simp_1 (UScalar.lt_equiv._simp_1 i val1))
+                                                  (fun a => Eq.refl (ok (done (idx, val, none)))) fun a =>
+                                                  congrArg (Bind.bind (lift (Usize.wrapping_mul 32#usize val1)))
+                                                    (funext fun i1 =>
+                                                      congr
+                                                        (congrArg Bind.bind
+                                                          (Slice.index_SliceIndexRangeFromUsizeSliceInst nodes
+                                                            { start := i1 }))
+                                                        (funext fun s2 =>
+                                                          congrArg
+                                                            (Bind.bind (core.slice.Slice.chunks_exact s2 8#usize))
+                                                            (funext fun ce =>
+                                                              Eq.trans
+                                                                (congrArg (Bind.bind (fail Error.panic))
+                                                                  (congrArg uncurry
+                                                                    (funext fun b =>
+                                                                      funext fun _ =>
+                                                                        ite_congr (Eq.refl (b = true)) (fun a => ⋯)
+                                                                          fun a => ⋯)))
+                                                                (bind_tc_fail Error.panic
+                                                                  (uncurry fun b _ =>
+                                                                    if b = true then ok (done (idx, val, none))
+                                                                    else do
+                                                                      let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                                                                      let _ ←
+                                                                        core.slice.index.SliceIndexRangeToUsizeSlice.index
+                                                                            { «end» := i2 } nodes
+                                                                      fail Error.panic)))))))))
+                                    fun residual => do
+                                    let _ ←
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Unit (core.convert.FromSame NJS_Extract.verifier.Error) residual
+                                    ok (done (idx, val, none))))))
+                      (bind_tc_ok none fun y => do
+                        let r ← NJS_Extract.core.option.Option.ok_or y NJS_Extract.verifier.Error.Merkle
+                        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                        match cf with
+                          | core.ops.control_flow.ControlFlow.Continue val1 => do
+                            let nodes ← NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof 0#usize
+                            let i ← NJS_Extract.compact.SLOT_NODES.index_usize 0#usize
+                            if ↑i < ↑val1 then ok (done (idx, val, none))
+                              else do
+                                let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                                let s2 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i1 } nodes
+                                let _ ← core.slice.Slice.chunks_exact s2 8#usize
+                                fail Error.panic
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let _ ←
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame NJS_Extract.verifier.Error) residual
+                            ok (done (idx, val, none)))))))
+            (ok (done (idx, val, none))))
+          (AspisR1EbyKPushExplicitOpsV1.result_bind_eq_ok_iff._simp_1
+            (core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 0#usize } idx.to_slice)
+            (fun s1 => do
+              let r ← NJS_Extract.core.option.Option.ok_or none NJS_Extract.verifier.Error.Merkle
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let nodes ← NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof 0#usize
+                  let i ← NJS_Extract.compact.SLOT_NODES.index_usize 0#usize
+                  if ↑i < ↑val1 then ok (done (idx, val, none))
+                    else do
+                      let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                      let s2 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i1 } nodes
+                      let _ ← core.slice.Slice.chunks_exact s2 8#usize
+                      fail Error.panic
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let _ ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame NJS_Extract.verifier.Error) residual
+                  ok (done (idx, val, none)))
+            (done (idx, val, none))))
+        (Eq.trans
+          (congrArg Exists
+            (funext fun x =>
+              congrArg
+                (And (core.slice.index.SliceIndexRangeToUsizeSlice.index { «end» := 0#usize } idx.to_slice = ok x))
+                (Eq.trans
+                  (AspisR1EbyKPushExplicitOpsV1.result_bind_eq_ok_iff._simp_1
+                    (NJS_Extract.core.option.Option.ok_or none NJS_Extract.verifier.Error.Merkle)
+                    (fun r => do
+                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue val1 => do
+                          let nodes ← NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof 0#usize
+                          let i ← NJS_Extract.compact.SLOT_NODES.index_usize 0#usize
+                          if ↑i < ↑val1 then ok (done (idx, val, none))
+                            else do
+                              let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                              let s2 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i1 } nodes
+                              let _ ← core.slice.Slice.chunks_exact s2 8#usize
+                              fail Error.panic
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let _ ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame NJS_Extract.verifier.Error) residual
+                          ok (done (idx, val, none)))
+                    (done (idx, val, none)))
+                  (congrArg Exists
+                    (funext fun x =>
+                      congrArg
+                        (And (NJS_Extract.core.option.Option.ok_or none NJS_Extract.verifier.Error.Merkle = ok x))
+                        (AspisR1EbyKPushExplicitOpsV1.result_bind_eq_ok_iff._simp_1
+                          (core.result.Result.Insts.CoreOpsTry.branch x)
+                          (fun cf =>
+                            match cf with
+                            | core.ops.control_flow.ControlFlow.Continue val1 => do
+                              let nodes ← NJS_Extract.verifier.candidate.slot (fun x => fail Error.panic) proof 0#usize
+                              let i ← NJS_Extract.compact.SLOT_NODES.index_usize 0#usize
+                              if ↑i < ↑val1 then ok (done (idx, val, none))
+                                else do
+                                  let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                                  let s2 ← core.slice.index.SliceIndexRangeFromUsizeSlice.index { start := i1 } nodes
+                                  let _ ← core.slice.Slice.chunks_exact s2 8#usize
+                                  fail Error.panic
+                            | core.ops.control_flow.ControlFlow.Break residual => do
+                              let _ ←
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                    (core.convert.FromSame NJS_Extract.verifier.Error) residual
+                              ok (done (idx, val, none)))
+                          (done (idx, val, none))))))))
+          exists_and_right._simp_1)))
+    sorry
+'NKB_Rejection.count_none' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

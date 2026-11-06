@@ -1,0 +1,48 @@
+{"attempt": "NKB_L003", "exit_status": 1, "wall_seconds": 8.162348696961999, "peak_rss_kib": "5849980", "swaps": "0", "print_axioms": ["'NKB_Rejection.count_none' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKB_lean/NKB_Rejection.lean:30:15: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_spec`
+NKB_lean/NKB_Rejection.lean:25:59: error: unsolved goals
+proof : Slice U8
+root : Std.Array U8 32#usize
+idx : Std.Array U32 16#usize
+val : Std.Array (Std.Array U8 32#usize) 16#usize
+size : (↑idx.to_slice).length = 16
+⊢ (do
+      let _ ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U32) idx.to_slice
+            { «end» := 0#usize }
+      let o ← ok none
+      let r ← NJS_Extract.core.option.Option.ok_or o NJS_Extract.verifier.Error.Merkle
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      mat
+...
+ic) proof 0#usize
+                      let i ← NJS_Extract.compact.SLOT_NODES.index_usize 0#usize
+                      if val1 > i then ok (done (idx, val, none))
+                        else do
+                          let i1 ← lift (Usize.wrapping_mul 32#usize val1)
+                          let s2 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) nodes
+                                { start := i1 }
+                          let _ ← core.slice.Slice.chunks_exact s2 8#usize
+                          let (b, _) ← fail Error.panic
+                          if b = true then ok (done (idx, val, none))
+                            else do
+                              let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                              let _ ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+                                    { «end» := i2 }
+                              let (b1, idx1, val2) ← fail Error.panic
+                              if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                                else ok (done (idx1, val2, none))
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let _ ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame NJS_Extract.verifier.Error) residual
+                      ok (done (idx, val, none)))))
+            (ok (done (idx, val, none)))))
+        (id
+          (have size := idx.property;
+          sorry))))
+'NKB_Rejection.count_none' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re699e85f6a164c509506ce999b6c9f3c.scope; invocation ID: e694109748054114805e38b8dc11ed52

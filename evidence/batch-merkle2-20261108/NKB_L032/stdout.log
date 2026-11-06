@@ -1,0 +1,24 @@
+NKB_lean/NKB_AnyModel.lean:54:5: error: Type mismatch: After simplification, term
+  tail
+ has type
+  @Eq (Result (Bool × core.slice.iter.ChunksExact U8))
+    (Port3_BatchStd.anyDefault (core.iter.traits.iterator.IteratorChunksExact U8) predicate
+      { chunks := rest, remainder := remainder } ())
+    (ok ((scan rest).1, { chunks := (scan rest).2, remainder := remainder }))
+but is expected to have type
+  @Eq (Result (Bool × core.slice.iter.ChunksExact U8))
+    (match
+      let (stop, state) := (false, ())
+      if stop = true then ok (done (true, { chunks := rest, remainder := remainder }))
+      else ok (cont ({ chunks := rest, remainder := remainder }, state)) with
+    | ok r =>
+      match r with
+      | cont x => loop (Port3_BatchStd.anyBody (core.iter.traits.iterator.IteratorChunksExact U8) predicate) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div)
+    (ok ((scan rest).1, { chunks := (scan rest).2, remainder := remainder }))
+'NKB_AnyModel.callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_AnyModel.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKB_AnyModel.predicate_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_AnyModel.false_iff' depends on axioms: [propext, Classical.choice, Quot.sound]

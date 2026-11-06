@@ -1,0 +1,40 @@
+{
+  "spans": [
+    {
+      "body": "    let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;\n    let nodes = slot(proof, s);\n    // Padding is whole 32-byte words: scan it 8 bytes at a time.\n    if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {\n        return Err(Error::Parse);\n    }\n    if !multiproof::verify_in_place(hash, Arity::Two, &root, idx, val, d, &nodes[..32 * count]) {\n        return Err(Error::Merkle);\n    }\n    Ok(())",
+      "sha256": "f0480cb98aefb8ff56b4d9828909929275674e1d156cbb61a18f7363adcad454",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "        let key = batch_key_at(&keys, key_position);\n        key_position += 1;\n        let index = (key >> 8) as u32;\n        let q = opening(proof, lo + (key & 0xff) as usize);\n        let leaf = batch_leaf(hash, tree, q);\n        if d > 0 && same_batch_index(idx, d - 1, index) {\n            if !same_batch_leaf(val, d - 1, leaf) {\n                return Err(Error::Merkle);\n            }\n            continue;\n        }\n        idx[d] = index;\n        val[d] = leaf;\n        d += 1;",
+      "sha256": "6370a6686ab057a5b100d64170d0685507f8d0d0cc49f7e1ab2c669a1195bd0e",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "        let key = batch_key_at(&keys, key_position);\n        key_position += 1;\n        let index = (key >> 8) as u32;\n        let q = opening(proof, lo + (key & 0xff) as usize);\n        let leaf = batch_leaf(hash, tree, q);\n",
+      "sha256": "c94e26ffa278b6790a7de31bd35df0aa5a08bcaabdd9dd4a2f7f983d49a01cda",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "        if d > 0 && same_batch_index(idx, d - 1, index) {\n            if !same_batch_leaf(val, d - 1, leaf) {\n                return Err(Error::Merkle);\n            }\n            continue;\n        }\n        idx[d] = index;\n        val[d] = leaf;\n        d += 1;",
+      "sha256": "f13a62768080063e2a530dc3bb1ed6dc843be598e7426f3764719c3bdfdded92",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "    let nodes = slot(proof, s);\n    // Padding is whole 32-byte words: scan it 8 bytes at a time.\n    if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {\n        return Err(Error::Parse);\n    }\n    if !multiproof::verify_in_place(hash, Arity::Two, &root, idx, val, d, &nodes[..32 * count]) {\n        return Err(Error::Merkle);\n    }\n    Ok(())",
+      "sha256": "f6f81097c0c98aef3b1e8263b1b2adfb6b483af98f1d14537b6d5624b4a5491e",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "u64::from_le_bytes(w.try_into().unwrap()) != 0",
+      "sha256": "ac3fca5c82c01e8d38260564e62d196e911d49861735975fb0917451cfd12f37",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "        return Err(Error::Parse);",
+      "sha256": "68ffd462d7875658c89246704af4d1b1f70e5920cb5e7a316233d6e0b719742c",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "context": "batch_tree Parse branch after the count/padding guard"
+    }
+  ]
+}

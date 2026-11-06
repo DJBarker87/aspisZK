@@ -1,0 +1,56 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,5 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)] mod NKB_native { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NKB_harness.rs")); }
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,4 +1,5 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
++#![cfg_attr(kani, feature(allocator_api))]
+ #![no_std]
+ extern crate alloc;
+ pub mod sampler;
+--- /dev/null
++++ b/NKB_fragments.rs
+@@ -0,0 +1,13 @@
++// Exact frozen batch_tree terminal, exposed on arbitrary loop post-state.
++fn terminal_fragment<H:Digest32>(proof:&[u8],root:[u8;32],s:usize,idx:&mut[u32;16],val:&mut[[u8;32];16],d:usize,hash:H)->Result<(),Error>{
++    let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;
++    let nodes = slot(proof, s);
++    // Padding is whole 32-byte words: scan it 8 bytes at a time.
++    if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {
++        return Err(Error::Parse);
++    }
++    if !multiproof::verify_in_place(hash, Arity::Two, &root, idx, val, d, &nodes[..32 * count]) {
++        return Err(Error::Merkle);
++    }
++    Ok(())
++}
+
+--- /dev/null
++++ b/NKB_harness.rs
+@@ -0,0 +1,20 @@
++use super::*;
++#[allow(non_snake_case)]
++mod kmx { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NKB_fragments.rs"));
++#[derive(Clone,Copy)]
++struct NoDigest;
++impl Digest32 for NoDigest { fn digest(&self,_:&[&[u8]])->[u8;32]{assert!(false,"no digest after rejected count");[0;32]} }
++fn rejected_count(arity:Arity,indices:&[u32])->Option<usize>{assert!(matches!(arity,Arity::Two));assert!(indices.len()<=16);None}
++#[kani::proof]
++#[kani::unwind(34)]
++#[kani::stub(multiproof::node_count,rejected_count)]
++#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
++fn count_reject(){
++ let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let before_i=idx;let before_v=val;let d:usize=kani::any();kani::assume(d<=16);let root:[u8;32]=kani::any();
++ let result=terminal_fragment(&[],root,0,&mut idx,&mut val,d,NoDigest);
++ assert!(matches!(result,Err(Error::Merkle)));
++ let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16&&k<32);assert_eq!(idx[j],before_i[j]);
++ #[cfg(not(NKB_invert))] assert_eq!(val[j][k],before_v[j][k]);
++ #[cfg(NKB_invert)] assert_ne!(val[j][k],before_v[j][k]);
++}
