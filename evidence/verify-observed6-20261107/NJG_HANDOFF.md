@@ -1,0 +1,9 @@
+# NJG stage 0 handoff
+
+Target not yet established. Branch codex/cx-verify-observed6-20261107. Scope in order: claims129 F2 arbitrary allocator/one-row-window/abort prefix; semantic_round133 and rounds134 native/model canonical carry; finish136 with caller-installed142/147/256; root137 complete SAME-value RustResult (Verified H) WireError op9; NHW/NHL installation.
+
+Budget 100 Kani, 100 Lean, 1 extraction; no attempts yet. At most one scope at a time (stricter than job allowance); admission requires exit0 AND allowed:true. Caps6G/8G/swap0/64; Lean-M7000. Never rerun timed-out shapes or raise limits. Seed first from NIX retained export and record hashes/size. Own host workspace /home/dombarker/project-offloads/codex-cx-verify-observed6-20261107; own CARGO_TARGET_DIR NJG_target within it. NIX workspace and all sibling inputs read-only.
+
+NIX candidates142/156/215 await ledger gate; no automatic parent closure. Baseline ledger13 NIU_LEDGER. Every new row requires NGK+NIU+NIX+RPx combined import, raw ax2 standard axioms, NFX scan exit0; at most two full combined audits. TX1:036/040/041/043/044 remain TOOL-BOUNDARY and their dependencies are disclosed, never bridged. Terminal256 consumed only after sibling merge, otherwise exact child-clause conditional composition explicitly remains a dependency.
+
+No shipped source changes, new runtime trust, key operations, shared infrastructure changes, sibling worktree changes or push authorized. Only NJG modules and this evidence directory are modified. Source revision, features/artifacts and existing runtime hypotheses remain fixed; source inspection is not proof credit. Each attempt records exact target/command/source/dependency pins/exit/wall/RSS/swap/axioms. No new security claim;100-bit per-attempt target, privacy and two-transaction design unchanged.
