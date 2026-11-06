@@ -5,6 +5,7 @@ B=Path.cwd();mode=sys.argv[1];E=B/'NLB_audit'/mode;E.mkdir(parents=True,exist_ok
 if mode=='all':jobs=[('proof'+str(i),['NLB_native/NLB_ProofDriver','proof'+str(i)]) for i in range(len(json.loads((B/'NLB_AUDIT_ROOTS.json').read_text())['groups']))]
 elif mode.startswith('inventory-'):jobs=[(mode,['NLB_native/NLB_InventoryDriver',mode.split('-')[1]])]
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NLB_native/'+('NLB_PoolDriver' if mode=='poolscan' else 'NLB_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
+elif mode in ['scanfixtures','scanfixtures2']:jobs=[('fixtures',['NLB_native/NLB_Driver','fixtures'])]
 elif mode in ['fixtures','scan']:jobs=[(mode,['NLB_native/'+('NLB_Driver' if mode=='scan' else 'NLB_ProofDriver'),mode])]
 else:
  batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NLB_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NLB_native/NLB_ProofDriver','proof'+str(i)]) for i in range(batch,min(batch+1,len(groups)))];assert jobs

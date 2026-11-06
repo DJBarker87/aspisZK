@@ -14,9 +14,13 @@ unsafe def main (args : List String) : IO UInt32 := do
        `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
        `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
     else if mode == "proof0" then
-      (#[`NLB_COMBINED_IMPORT], #[`NLB_Parent.C01_step, `NLB_Parent.C02_step, `NLB_Parent.C03_step, `NLB_Parent.C04_step, `NLB_Parent.C05_step, `NLB_Parent.C06_step, `NLB_Parent.C07_step, `NLB_Parent.C08_step, `NLB_Parent.C09_step, `NLB_ErrorTransport.common_transport, `NLB_ErrorTransport.bind_congr, `NLB_ErrorTransport.question_rel])
+      (#[`NLB_COMBINED_IMPORT], #[`NLB_Parent.C01_step, `NLB_C01Domain.source, `NLB_Parent.C02_step, `NLB_Parent.C03_step, `NLB_Parent.C04_step, `NLB_C04Domain.source, `NLB_Parent.C05_step, `NLB_Parent.C06_step, `NLB_Parent.C07_step, `NLB_Parent.C08_step, `NLB_Parent.C09_step, `NLB_ErrorTransport.common_trace_transport])
     else if mode == "proof1" then
-      (#[`NLB_COMBINED_IMPORT], #[`NLB_ErrorTransport.error_not_equal, `NLB_Parent.events_from_cuts, `NLB_Parent.observed_steps, `NLB_Parent.semantic_fold, `NLB_Parent.query_step, `NLB_ErrorTransport.question_trace, `NLB_ErrorTransport.native_error_prefix, `NLB_ErrorTransport.source_abort_prefix, `NLB_ErrorTransport.divergence_prefix, `NLB_Parent.steps, `NLB_Parent.execution, `AspisR1.RPx_Deployed.deployed])
+      (#[`NLB_COMBINED_IMPORT], #[`NLB_ErrorTransport.common_transport, `NLB_ErrorTransport.entered_common_transport, `NLB_ErrorTransport.observe_bind_entered, `NLB_ErrorTransport.split_start, `NLB_ErrorTransport.bind_congr, `NLB_ErrorTransport.question_rel, `NLB_ErrorTransport.error_not_equal, `NLB_ErrorTransport.merkle_event, `NLB_ErrorTransport.observe_bind_congr, `NLB_Parent.events_from_cuts, `NLB_ErrorTransport.at_branch, `NLB_NativeFlush.at_actual])
+    else if mode == "proof2" then
+      (#[`NLB_COMBINED_IMPORT], #[`NLB_Parent.native_fold, `NLB_Parent.native_steps, `NLB_Parent.observed_steps, `NLB_Parent.semantic_fold, `NLB_ErrorTransport.projected_question, `NLB_ErrorTransport.merkle_question, `NLB_Parent.query_step, `NLB_ErrorTransport.question_trace, `NLB_ErrorTransport.native_error_prefix, `NLB_ErrorTransport.source_abort_prefix, `NLB_ErrorTransport.divergence_prefix, `NLB_ResumePacket.projection])
+    else if mode == "proof3" then
+      (#[`NLB_COMBINED_IMPORT], #[`NLB_Parent.steps, `NLB_Parent.target_steps, `NLB_Parent.execution, `NLB_Parent.transport_fold, `AspisR1.RPx_Deployed.deployed])
     else (#[], #[])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)

@@ -93,7 +93,7 @@ unsafe def main (args : List String) : IO UInt32 := do
   initSearchPath (← findSysroot)
   enableInitializersExecution
   let mode := args.headD "small"
-  let (modules, roots) := if mode == "scan" then (#[`NLB_COMBINED_IMPORT], #[]) else (#[], #[])
+  let (modules, roots) := if mode == "scan" then (#[`NLB_COMBINED_IMPORT], #[]) else if mode == "fixtures" then (#[`NEP_Planted, `NEP_Mutations], #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof, `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate, `NEP_MutateProof.proof, `NEP_MutateAux.viaAux]) else (#[], #[])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)
   if mode == "scan" || mode == "queryscan" then
