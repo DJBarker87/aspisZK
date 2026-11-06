@@ -1,0 +1,49 @@
+{"attempt": "NKA_L009", "exit_status": 1, "wall_seconds": 7.3407021490857005, "peak_rss_kib": "5944204", "swaps": "0", "print_axioms": ["'AspisR1.NKA_QueryPairs.indices' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKA_QueryPairs.queries_from_pairs' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKA_QueryPairs.reached' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NKA_generated/NKA_QueryPairs.lean:30:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NHB_OuterState.walk ?m.36 advances (↑advances)[↑7#usize] (inputs blocks) ?s
+in the target expression
+  AspisR1Query31Transcript.queries_from_pairs_with_scan NGQ_SamplerPacket.Scan NGQ_SamplerPacket.initial blocks
+      advances =
+    NHB_OuterState.walk (NJT_QPairs.nativeScan native) advances (↑advances)[7] (inputs blocks) NGQ_SamplerPacket.initial
+
+native : NJT_QScan.Native
+cut : NJT_QScan.Cut native
+blocks advances : Blocks
+⊢ AspisR1Query31Transcript.queries_from_pairs_with_scan NGQ_SamplerPacket.Scan NGQ_SamplerPacket.initial blocks
+      advances =
+    NHB_OuterState.walk (
+...
+Q_SamplerPacket.initial blocks
+      advances =
+    NHB_OuterState.walk (NJT_QPairs.nativeScan native) advances (↑advances)[7] (inputs blocks) NGQ_SamplerPacket.initial
+
+native : NJT_QScan.Native
+cut : NJT_QScan.Cut native
+blocks advances : Blocks
+⊢ AspisR1Query31Transcript.queries_from_pairs_with_scan NGQ_SamplerPacket.Scan NGQ_SamplerPacket.initial blocks
+      advances =
+    NHB_OuterState.walk (NJT_QPairs.nativeScan native) advances (↑advances)[7] (inputs blocks) NGQ_SamplerPacket.initial
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (22 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+theorem AspisR1.NKA_QueryPairs.queries_from_pairs : ∀ (native : NJT_QScan.Native),
+  NJT_QScan.Cut native →
+    ∀ (blocks advances : Blocks),
+      AspisR1Query31Transcript.queries_from_pairs_with_scan NGQ_SamplerPacket.Scan NGQ_SamplerPacket.initial blocks
+          advances =
+        NHB_OuterState.walk (NJT_QPairs.nativeScan native) advances (↑advances)[7] (inputs blocks)
+          NGQ_SamplerPacket.initial :=
+fun native cut blocks advances => sorry
+'AspisR1.NKA_QueryPairs.indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKA_QueryPairs.queries_from_pairs' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKA_QueryPairs.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf9341c60dc0141feaee04fcef672c899.scope; invocation ID: 6780d8bf87264d9a8473f15dd9a4e89b

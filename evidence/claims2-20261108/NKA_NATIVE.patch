@@ -1,0 +1,40 @@
+--- a/crates/aspis-core/src/r0/heap.rs
++++ b/crates/aspis-core/src/r0/heap.rs
+@@ -19,3 +19,37 @@
+     // Exactly one element, with the same layout and allocation alignment.
+     Ok(unsafe { Box::from_raw(ptr) })
+ }
++
++#[cfg(kani)] mod NKA_heap_cut {
++ use super::*;
++ use core::mem::MaybeUninit;
++ type Claims=[[crate::field::QM31;29];3];
++ // Literal heap::uninit continuation after SAME try_reserve_exact(1).
++ // No data initialization/read is included in this allocation cut.
++ fn tail(mut out: Vec<MaybeUninit<Claims>>) -> Result<Box<MaybeUninit<Claims>>,Error> {
++  unsafe {out.set_len(1);}
++  let ptr=Box::into_raw(out.into_boxed_slice()) as *mut MaybeUninit<Claims>;
++  Ok(unsafe {Box::from_raw(ptr)})
++ }
++ fn check(mode:u8) {
++  let mut before=Vec::<MaybeUninit<Claims>>::new();
++  before.try_reserve_exact(1).unwrap();
++  assert_eq!(before.len(),0);
++  assert_eq!(before.capacity(),1);
++  assert_eq!(core::mem::size_of::<Claims>(),1392);
++  assert_eq!(core::mem::align_of::<Claims>(),4);
++  let address=before.as_ptr();
++  let out=tail(before).unwrap();
++  if mode==1 {assert_ne!(out.as_ptr(),address.cast::<Claims>());}
++  else if mode==2 {
++   let other=uninit::<Claims>().unwrap();
++   assert_eq!(out.as_ptr(),other.as_ptr());
++  } else {assert_eq!(out.as_ptr(),address.cast::<Claims>());}
++ }
++ #[kani::proof] #[kani::unwind(4)]
++ fn allocation_tail(){check(0);}
++ #[kani::proof] #[kani::unwind(4)]
++ fn allocation_tail_control(){check(1);}
++ #[kani::proof] #[kani::unwind(4)]
++ fn allocation_other_control(){check(2);}
++}
