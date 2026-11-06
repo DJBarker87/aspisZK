@@ -1,0 +1,45 @@
+{"attempt": "NJJ_L002", "exit_status": 0, "wall_seconds": 7.661313333082944, "peak_rss_kib": "5966200", "swaps": "0", "print_axioms": []}
+structure Aeneas.Std.core.slice.iter.Iter (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.Iter.slice : Aeneas.Std.Slice T
+  Aeneas.Std.core.slice.iter.Iter.i : ℕ
+constructor:
+  Aeneas.Std.core.slice.iter.Iter.mk {T : Type} (slice : Aeneas.Std.Slice T) (i : ℕ) : Aeneas.Std.core.slice.iter.Iter T
+def Aeneas.Std.core.slice.iter.IteratorSliceIter.next : {T : Type} →
+  Aeneas.Std.core.slice.iter.Iter T → Aeneas.Std.Result (Option T × Aeneas.Std.core.slice.iter.Iter T) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have it := { slice := it.slice, i := it.i + 1 };
+    Aeneas.Std.Result.ok (some x, it)
+  else Aeneas.Std.Result.ok 
+...
+.Usize → Aeneas.Std.Result AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+    (widePartialEq :
+      Aeneas.Std.core.cmp.PartialEq AspisR1Stage2.aspis_core.field.wide_exact.WideExact
+        AspisR1Stage2.aspis_core.field.wide_exact.WideExact) :
+    AspisR1.Port3_NativeQueryBody.Ops
+@[reducible] def AspisR1.NP6_StdModel.Reservation : Type :=
+Aeneas.Std.core.result.Result Unit AspisR1.NP6_StdModel.ReserveError
+structure AspisR1.DrvC_Installation.Configuration (F CoreError : Type) : Type 1
+number of parameters: 2
+fields:
+  AspisR1.DrvC_Installation.Configuration.adapter : AdapterRw.Ops
+  AspisR1.DrvC_Installation.Configuration.currentBase : AspisR1CurrentCaller.Ops
+  AspisR1.DrvC_Installation.Configuration.stageBase : VTop_Stages.Ops
+  AspisR1.DrvC_Installation.Configuration.finish : AspisR1Stage2.Stage2Finish.FinishOps F
+  AspisR1.DrvC_Installation.Configuration.reserved : Bool
+  AspisR1.DrvC_Installation.Configuration.query : AspisR1.Port3_NativeQueryBody.Ops
+  AspisR1.DrvC_Installation.Configuration.geometry : AspisR1.Port3_NativeGeometryBody.Ops CoreError
+  AspisR1.DrvC_Installation.Configuration.boundaries : AspisR1PublicPreparation.FinishModel.Boundaries
+  AspisR1.DrvC_Installation.Configuration.std : AspisR1.ClaimsUnrolledFinish.StdCalls
+constructor:
+  AspisR1.DrvC_Installation.Configuration.mk {F CoreError : Type} (adapter : AdapterRw.Ops)
+    (currentBase : AspisR1CurrentCaller.Ops) (stageBase : VTop_Stages.Ops)
+    (finish : AspisR1Stage2.Stage2Finish.FinishOps F) (reserved : Bool) (query : AspisR1.Port3_NativeQueryBody.Ops)
+    (geometry : AspisR1.Port3_NativeGeometryBody.Ops CoreError)
+    (boundaries : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls) :
+    AspisR1.DrvC_Installation.Configuration F CoreError
+
+Running as unit: run-r31eb7329da0b454391e127726cd79547.scope; invocation ID: d89d6814c83f4ba28b2cc35dc5819285
