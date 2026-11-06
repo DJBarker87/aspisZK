@@ -1,0 +1,83 @@
+NLI_generated/NLI_TailRoot.lean:22:1: error: Tactic `apply` failed: could not unify the conclusion of `@NLI_RunLaws.bind_congr`
+  run (PreparedHashCode.bind ?p ?k) = run (PreparedHashCode.bind ?p ?l)
+with the goal
+  (run do
+      let next ←
+        do
+          let payload_1 ← liftM (ok payload)
+          let r ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 payload_1)
+          let root ← liftM ((IDa_Deployed.boundaries i.reservation).unwrapRoot r)
+          pure
+              (Sum.inr
+                (put
+                  { input := i,
+                    locals :=
+                      { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+                        terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high,
+                        blind := l.blind, mask := l.mask, extra := some extra, product := l.product,
+                        partialValue := l.partialValue, masked := l.masked, stateBefore := some stateBefore,
+                        z0 := some z0, beforeZ1 := some beforeZ1, z1 := some z1, record25 := l.record25,
+                        record26 := l.record26, payload := some payload, extraCell := l.extraCell, root := l.root },
+                    next := Event.rootCopy }
+                  Event.verified
+                  { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+                    terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high,
+                    blind := l.blind, mask := l.mask, extra := some extra, product := l.product,
+                    partialValue := l.partialValue, masked := l.masked, stateBefore := some stateBefore, z0 := some z0,
+                    beforeZ1 := some beforeZ1, z1 := some z1, record25 := l.record25, record26 := l.record26,
+                    payload := some payload, extraCell := l.extraCell, root := some root }))
+      match next with
+        | Sum.inl out => pure out
+        | Sum.inr after => fold 3 after) =
+    run do
+      let r ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 payload)
+      let root ← liftM ((IDa_Deployed.boundaries i.reservation).unwrapRoot r)
+      tailVerified i root alpha claims extra beforeZ1 stateBefore z0 z1 transcript
+
+Note: The full type of `@NLI_RunLaws.bind_congr` is
+  ∀ {A B : Type} (p : Code A) (k l : A → Code B),
+    (∀ (a : A), run (k a) = run (l a)) → run (PreparedHashCode.bind p k) = run (PreparedHashCode.bind p l)
+
+H : Type
+i : Input H
+l : Locals H
+payload : Slice U8
+alpha : Alpha
+claims : Claims
+extra beforeZ1 : Words
+stateBefore : Std.Array U8 32#usize
+z0 z1 : Point
+transcript : r1_wire.SemanticTranscript H
+⊢ (run do
+      let next ←
+        do
+          let payload_1 ← liftM (ok payload)
+          let r ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 payload_1)
+          let root ← liftM ((IDa_Deployed.boundaries i.reservation).unwrapRoot r)
+          pure
+              (Sum.inr
+                (put
+                  { input := i,
+                    locals :=
+                      { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+                        terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high,
+                        blind := l.blind, mask := l.mask, extra := some extra, product := l.product,
+                        partialValue := l.partialValue, masked := l.masked, stateBefore := some stateBefore,
+                        z0 := some z0, beforeZ1 := some beforeZ1, z1 := some z1, record25 := l.record25,
+                        record26 := l.record26, payload := some payload, extraCell := l.extraCell, root := l.root },
+                    next := Event.rootCopy }
+                  Event.verified
+                  { running := l.running, alpha := some alpha, transcript := some transcript, claims := some claims,
+                    terminalReply := l.terminalReply, terminal := l.terminal, low := l.low, high := l.high,
+                    blind := l.blind, mask := l.mask, extra := some extra, product := l.product,
+                    partialValue := l.partialValue, masked := l.masked, stateBefore := some stateBefore, z0 := some z0,
+                    beforeZ1 := some beforeZ1, z1 := some z1, record25 := l.record25, record26 := l.record26,
+                    payload := some payload, extraCell := l.extraCell, root := some root }))
+      match next with
+        | Sum.inl out => pure out
+        | Sum.inr after => fold 3 after) =
+    run do
+      let r ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 payload)
+      let root ← liftM ((IDa_Deployed.boundaries i.reservation).unwrapRoot r)
+      tailVerified i root alpha claims extra beforeZ1 stateBefore z0 z1 transcript
+'AspisR1.NLI_Source.rootCopy' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
