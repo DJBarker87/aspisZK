@@ -1,0 +1,50 @@
+{"attempt": "NJV_L004", "exit_status": 0, "wall_seconds": 8.461900291964412, "peak_rss_kib": "5868448", "swaps": "0", "print_axioms": ["'NJV_Entry.guard_domain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_Entry.observation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_Entry.adopted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJV_Entry.guard_domain : ∀ (physical : Slice U8) (s : reference.Scratch),
+  Guard physical s → 0 < ↑s.n ∧ ↑s.n ≤ 16 :=
+fun physical s guard =>
+  have len :=
+    of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq (Eq.trans (List.length_map Prod.fst) (AspisR1.MultiproofConeRootGuard.live_length s 0 ↑s.n)))
+          ↑s.n)
+        (eq_self ↑s.n));
+  ⟨Decidable.byContradiction fun bad =>
+      have empty := List.length_eq_zero_iff.mp (Decidable.byContradiction fun a => guard_domain._proof_1 s len bad a);
+      guard.left.left empty,
+    have small := guard.left.right.left;
+    Decidable.byContradiction fun a => guard_domain._proof_2 s len small a⟩
+'NJV_Entry.guard_domai
+...
+MultiproofConeVerifyState.verifyState root physical s)).1,
+            ok (eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).2)))
+      (of_eq_true
+        (Eq.trans
+          (congr (congrArg Eq (eval.eq_1 H (ok (false, s))))
+            (congr
+              (congrArg Prod.mk
+                (congrArg Prod.fst
+                  (Eq.trans
+                    (congrArg (eval H)
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg guard) x_0 x_1 x_2 x_3) instDecidableAnd
+                        (Program Bytes State (Bool × reference.Scratch))
+                        (AspisV8R19.OracleProgramOps.bind
+                          (transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)) fun result =>
+                          Program.done (AspisR1.MultiproofConeVerifyState.finishState root physical s result))
+                        (Program.done (false, s))))
+                    (eval.eq_1 H (false, s)))))
+              (congrArg ok
+                (congrArg Prod.snd
+                  (Eq.trans
+                    (congrArg (eval H)
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg guard) x_0 x_1 x_2 x_3) instDecidableAnd
+                        (Program Bytes State (Bool × reference.Scratch))
+                        (AspisV8R19.OracleProgramOps.bind
+                          (transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)) fun result =>
+                          Program.done (AspisR1.MultiproofConeVerifyState.finishState root physical s result))
+                        (Program.done (false, s))))
+                    (eval.eq_1 H (false, s)))))))
+          (eq_self ([], ok (false, s)))))
+'NJV_Entry.adopted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rdfb6b6fbd8ac4ee4bfe52758fa9d4914.scope; invocation ID: c6c2fac1a28746fb9009111f794ee46e

@@ -1,0 +1,289 @@
+theorem NJV_NativeRows.observation : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length fuel : ℕ) (s : Scratch) (i w : ℕ)
+  (history : List (Request × Digest)) (out : Level),
+  Invocation H nodes length fuel s i w history out → eval H (rows nodes length fuel s i w) = (history, ok out) :=
+fun H nodes length fuel s i w history out native =>
+  Invocation.rec
+    (fun fuel s i w halted =>
+      Nat.casesAuxOn (motive := fun a =>
+        fuel = a →
+          eval H (rows nodes length fuel s i w) =
+            ([], ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))
+        fuel
+        (fun h =>
+          Eq.symm h ▸
+            of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrArg (eval H)
+                        (congrArg Program.done
+                          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos halted) x_0 x_1 x_2 x_3) (s.n.decLe i)
+                            (Result Level)
+                            (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor }))
+                            div)))
+                      (eval.eq_1 H
+                        (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))))
+                  ([], ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))
+                (eq_self
+                  ([], ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))))
+        (fun n h =>
+          Eq.symm h ▸
+            of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrArg (eval H)
+                        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos halted) x_0 x_1 x_2 x_3) (s.n.decLe i)
+                          (Program Request Digest (Result Level))
+                          (Program.done
+                            (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))
+                          (bindRun (node nodes length s i w) fun result =>
+                            match result with
+                            | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                            | Row.next after ni nw => rows nodes length n after ni nw)))
+                      (eval.eq_1 H
+                        (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))))
+                  ([], ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))
+                (eq_self
+                  ([], ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))))
+        (Eq.refl fuel))
+    (fun fuel s after i w ni nw log active cut =>
+      have step := NJP_NativeStep.one H nodes length s i w after ni nw false log cut;
+      have notDone := fun a => observation._proof_2 s i active a;
+      of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congrArg (eval H)
+                    (Eq.trans
+                      (ite_congr (Eq.refl (s.n ≤ i))
+                        (fun a =>
+                          Eq.refl
+                            (Program.done
+                              (ok
+                                (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor }))))
+                        fun a =>
+                        Eq.refl
+                          (AspisV8R19.OracleProgramOps.bind (node nodes length s i w) fun r =>
+                            match r with
+                            | ok a =>
+                              match a with
+                              | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                              | Row.next after ni nw => rows nodes length fuel after ni nw
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div))
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg notDone) x_0 x_1 x_2 x_3) (s.n.decLe i)
+                        (Program Request Digest (Result Level))
+                        (Program.done
+                          (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))
+                        (AspisV8R19.OracleProgramOps.bind (node nodes length s i w) fun r =>
+                          match r with
+                          | ok a =>
+                            match a with
+                            | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                            | Row.next after ni nw => rows nodes length fuel after ni nw
+                          | fail e => Program.done (fail e)
+                          | div => Program.done div))))
+                  (eval_bind (node nodes length s i w)
+                    (fun r =>
+                      match r with
+                      | ok a =>
+                        match a with
+                        | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                        | Row.next after ni nw => rows nodes length fuel after ni nw
+                      | fail e => Program.done (fail e)
+                      | div => Program.done div)
+                    H))
+                (congr
+                  (congrArg Prod.mk
+                    (Eq.trans
+                      (congr
+                        (congrArg HAppend.hAppend
+                          (congrArg Prod.fst
+                            (Eq.mp
+                              (congrArg (Eq (eval H (node nodes length s i w)))
+                                (congrArg
+                                  (Prod.mk
+                                    (if log.calls = 0 then []
+                                    else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))]))
+                                  (congrArg ok
+                                    (ite_congr Bool.false_eq_true (fun a => Eq.refl (Row.next after ni nw)) fun a =>
+                                      Eq.refl (Row.stop after)))))
+                              step)))
+                        (congrArg Prod.fst
+                          (Eq.trans
+                            (congrArg (eval H)
+                              (congrArg
+                                (fun x =>
+                                  match x.2 with
+                                  | ok a =>
+                                    match a with
+                                    | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                                    | Row.next after ni nw => rows nodes length fuel after ni nw
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div)
+                                (Eq.mp
+                                  (congrArg (Eq (eval H (node nodes length s i w)))
+                                    (congrArg
+                                      (Prod.mk
+                                        (if log.calls = 0 then []
+                                        else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))]))
+                                      (congrArg ok
+                                        (ite_congr Bool.false_eq_true (fun a => Eq.refl (Row.next after ni nw)) fun a =>
+                                          Eq.refl (Row.stop after)))))
+                                  step)))
+                            (eval.eq_1 H (ok (Level.stop after))))))
+                      (List.append_nil
+                        (if log.calls = 0 then []
+                        else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))]))))
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (congrArg (eval H)
+                        (congrArg
+                          (fun x =>
+                            match x.2 with
+                            | ok a =>
+                              match a with
+                              | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                              | Row.next after ni nw => rows nodes length fuel after ni nw
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div)
+                          (Eq.mp
+                            (congrArg (Eq (eval H (node nodes length s i w)))
+                              (congrArg
+                                (Prod.mk
+                                  (if log.calls = 0 then []
+                                  else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))]))
+                                (congrArg ok
+                                  (ite_congr Bool.false_eq_true (fun a => Eq.refl (Row.next after ni nw)) fun a =>
+                                    Eq.refl (Row.stop after)))))
+                            step)))
+                      (eval.eq_1 H (ok (Level.stop after))))))))
+            (if log.calls = 0 then [] else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))],
+              ok (Level.stop after)))
+          (eq_self
+            (if log.calls = 0 then [] else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))],
+              ok (Level.stop after)))))
+    (fun fuel s after i w ni nw log history out active cut tail ih =>
+      have step := NJP_NativeStep.one H nodes length s i w after ni nw true log cut;
+      have notDone := fun a => observation._proof_2 s i active a;
+      of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (congrArg (eval H)
+                    (Eq.trans
+                      (ite_congr (Eq.refl (s.n ≤ i))
+                        (fun a =>
+                          Eq.refl
+                            (Program.done
+                              (ok
+                                (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor }))))
+                        fun a =>
+                        Eq.refl
+                          (AspisV8R19.OracleProgramOps.bind (node nodes length s i w) fun r =>
+                            match r with
+                            | ok a =>
+                              match a with
+                              | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                              | Row.next after ni nw => rows nodes length fuel after ni nw
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div))
+                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg notDone) x_0 x_1 x_2 x_3) (s.n.decLe i)
+                        (Program Request Digest (Result Level))
+                        (Program.done
+                          (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))
+                        (AspisV8R19.OracleProgramOps.bind (node nodes length s i w) fun r =>
+                          match r with
+                          | ok a =>
+                            match a with
+                            | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                            | Row.next after ni nw => rows nodes length fuel after ni nw
+                          | fail e => Program.done (fail e)
+                          | div => Program.done div))))
+                  (eval_bind (node nodes length s i w)
+                    (fun r =>
+                      match r with
+                      | ok a =>
+                        match a with
+                        | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                        | Row.next after ni nw => rows nodes length fuel after ni nw
+                      | fail e => Program.done (fail e)
+                      | div => Program.done div)
+                    H))
+                (congr
+                  (congrArg Prod.mk
+                    (congr
+                      (congrArg HAppend.hAppend
+                        (congrArg Prod.fst
+                          (Eq.mp
+                            (congrArg (Eq (eval H (node nodes length s i w)))
+                              (congrArg
+                                (Prod.mk
+                                  (if log.calls = 0 then []
+                                  else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))]))
+                                (congrArg ok
+                                  (ite_congr (eq_self true) (fun a => Eq.refl (Row.next after ni nw)) fun a =>
+                                    Eq.refl (Row.stop after)))))
+                            step)))
+                      (congrArg Prod.fst
+                        (Eq.trans
+                          (congrArg (eval H)
+                            (congrArg
+                              (fun x =>
+                                match x.2 with
+                                | ok a =>
+                                  match a with
+                                  | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                                  | Row.next after ni nw => rows nodes length fuel after ni nw
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div)
+                              (Eq.mp
+                                (congrArg (Eq (eval H (node nodes length s i w)))
+                                  (congrArg
+                                    (Prod.mk
+                                      (if log.calls = 0 then []
+                                      else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))]))
+                                    (congrArg ok
+                                      (ite_congr (eq_self true) (fun a => Eq.refl (Row.next after ni nw)) fun a =>
+                                        Eq.refl (Row.stop after)))))
+                                step)))
+                          ih))))
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (congrArg (eval H)
+                        (congrArg
+                          (fun x =>
+                            match x.2 with
+                            | ok a =>
+                              match a with
+                              | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                              | Row.next after ni nw => rows nodes length fuel after ni nw
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div)
+                          (Eq.mp
+                            (congrArg (Eq (eval H (node nodes length s i w)))
+                              (congrArg
+                                (Prod.mk
+                                  (if log.calls = 0 then []
+                                  else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))]))
+                                (congrArg ok
+                                  (ite_congr (eq_self true) (fun a => Eq.refl (Row.next after ni nw)) fun a =>
+                                    Eq.refl (Row.stop after)))))
+                            step)))
+                      ih)))))
+            ((if log.calls = 0 then [] else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))]) ++
+                history,
+              ok out))
+          (eq_self
+            ((if log.calls = 0 then [] else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))]) ++
+                history,
+              ok out))))
+    native
+'NJV_NativeRows.observation' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,159 @@
+theorem NJV_NativeLevels.observation : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length height : ℕ) (s : Scratch)
+  (history : List (Request × Digest)) (out : Level),
+  Invocation H nodes length height s history out → eval H (levels nodes length height s) = (history, ok out) :=
+fun H nodes length height s history out native =>
+  Invocation.rec (fun s => Eq.refl (eval H (levels nodes length 0 s)))
+    (fun height s after history row =>
+      have observed := NJV_NativeRows.observation H nodes length s.n s 0 0 history (Level.stop after) row;
+      of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (eval_bind (rows nodes length s.n s 0 0)
+                  (fun r =>
+                    match r with
+                    | ok a =>
+                      match a with
+                      | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                      | Level.done after => levels nodes length height after
+                    | fail e => Program.done (fail e)
+                    | div => Program.done div)
+                  H)
+                (congr
+                  (congrArg Prod.mk
+                    (Eq.trans
+                      (congr (congrArg HAppend.hAppend (congrArg Prod.fst observed))
+                        (congrArg Prod.fst
+                          (Eq.trans
+                            (congrArg (eval H)
+                              (congrArg
+                                (fun x =>
+                                  match x.2 with
+                                  | ok a =>
+                                    match a with
+                                    | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                                    | Level.done after => levels nodes length height after
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div)
+                                observed))
+                            (eval.eq_1 H (ok (Level.stop after))))))
+                      (List.append_nil history)))
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (congrArg (eval H)
+                        (congrArg
+                          (fun x =>
+                            match x.2 with
+                            | ok a =>
+                              match a with
+                              | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                              | Level.done after => levels nodes length height after
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div)
+                          observed))
+                      (eval.eq_1 H (ok (Level.stop after))))))))
+            (history, ok (Level.stop after)))
+          (eq_self (history, ok (Level.stop after)))))
+    (fun height s after first rest out row tail ih =>
+      have observed := NJV_NativeRows.observation H nodes length s.n s 0 0 first (Level.done after) row;
+      of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (eval_bind (rows nodes length s.n s 0 0)
+                  (fun r =>
+                    match r with
+                    | ok a =>
+                      match a with
+                      | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                      | Level.done after => levels nodes length height after
+                    | fail e => Program.done (fail e)
+                    | div => Program.done div)
+                  H)
+                (congr
+                  (congrArg Prod.mk
+                    (congr (congrArg HAppend.hAppend (congrArg Prod.fst observed))
+                      (congrArg Prod.fst
+                        (Eq.trans
+                          (congrArg (eval H)
+                            (congrArg
+                              (fun x =>
+                                match x.2 with
+                                | ok a =>
+                                  match a with
+                                  | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                                  | Level.done after => levels nodes length height after
+                                | fail e => Program.done (fail e)
+                                | div => Program.done div)
+                              observed))
+                          ih))))
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (congrArg (eval H)
+                        (congrArg
+                          (fun x =>
+                            match x.2 with
+                            | ok a =>
+                              match a with
+                              | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                              | Level.done after => levels nodes length height after
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div)
+                          observed))
+                      ih)))))
+            (first ++ rest, ok out))
+          (eq_self (first ++ rest, ok out))))
+    native
+'NJV_NativeLevels.observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_NativeLevels.returning : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (root : Digest)
+  (s : Scratch) (history : List (Request × Digest)) (out : Level),
+  Invocation H nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 } history out →
+    eval H (run root nodes length s) = (history, ok (finish root length out)) :=
+fun H nodes length root s history out native =>
+  have observed :=
+    observation H nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 } history out
+      native;
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (eval_bind (levels nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 })
+              (fun r =>
+                match r with
+                | ok a => Program.done (ok (finish root length a))
+                | fail e => Program.done (fail e)
+                | div => Program.done div)
+              H)
+            (congr
+              (congrArg Prod.mk
+                (Eq.trans
+                  (congr (congrArg HAppend.hAppend (congrArg Prod.fst observed))
+                    (congrArg Prod.fst
+                      (Eq.trans
+                        (congrArg (eval H)
+                          (congrArg
+                            (fun x =>
+                              match x.2 with
+                              | ok a => Program.done (ok (finish root length a))
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div)
+                            observed))
+                        (eval.eq_1 H (ok (finish root length out))))))
+                  (List.append_nil history)))
+              (congrArg Prod.snd
+                (Eq.trans
+                  (congrArg (eval H)
+                    (congrArg
+                      (fun x =>
+                        match x.2 with
+                        | ok a => Program.done (ok (finish root length a))
+                        | fail e => Program.done (fail e)
+                        | div => Program.done div)
+                      observed))
+                  (eval.eq_1 H (ok (finish root length out))))))))
+        (history, ok (finish root length out)))
+      (eq_self (history, ok (finish root length out))))
+'NJV_NativeLevels.returning' depends on axioms: [propext, Classical.choice, Quot.sound]

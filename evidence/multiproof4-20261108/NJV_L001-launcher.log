@@ -1,0 +1,43 @@
+{"attempt": "NJV_L001", "exit_status": 0, "wall_seconds": 11.644375741947442, "peak_rss_kib": "5872892", "swaps": "0", "print_axioms": ["'NJV_VerifierView.returning' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: nhr: no previous manifest, creating one from scratch
+info: toolchain not updated; no toolchain information found
+theorem NJV_VerifierView.returning : ∀ (H : Bytes → State) (root : RefDigest) (physical : Slice U8)
+  (s : reference.Scratch),
+  s.at = 0#usize →
+    AspisR1.MultiproofConeLevelIteration.Domain physical s →
+      (↑physical).length ≤ 9216 →
+        wellFormed (List.map Prod.fst (live s 0 ↑s.n)) ∧ (↑physical).length % 32 = 0 →
+          eval H (transport (NJP_CohortReturning.run root physical s)) =
+            ((eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).1,
+              ok (eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).2
+...
+              ok (NJP_CohortReturning.finish root physical (reference.Level.Stop a))))
+                  (Eq.symm h) returned)
+              (fun a h =>
+                Eq.ndrec (motive := fun out =>
+                  (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).2 = ok out →
+                    (List.map
+                          (fun e =>
+                            (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                              AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                          (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1,
+                        ok (NJP_CohortReturning.finish root physical out)) =
+                      (List.map
+                          (fun e =>
+                            (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                              AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                          (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1,
+                        ok (AspisR1.MultiproofConeVerifyState.finishState root physical s (ok out))))
+                  (fun returned =>
+                    Eq.refl
+                      (List.map
+                          (fun e =>
+                            (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                              AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                          (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1,
+                        ok (NJP_CohortReturning.finish root physical (reference.Level.Done a))))
+                  (Eq.symm h) returned)
+              (Eq.refl out))))))
+'NJV_VerifierView.returning' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r298aba2756144b0e8dc15b94b7524ede.scope; invocation ID: 8318145de3c14604a97f56edbbf402eb
