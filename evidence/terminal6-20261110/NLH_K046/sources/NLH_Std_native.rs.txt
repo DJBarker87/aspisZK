@@ -1,0 +1,12 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn NLH_std_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+fn NLH_std_window(dst:&mut[QM31;84],slot:usize,value:QM31,calls:&mut usize){
+ let one:[QM31;1]=core::array::from_fn(|_|{*calls+=1;value});
+ dst[slot]=one[0];
+}
+#[kani::proof] #[kani::unwind(5)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NLH_std_window_cut(){
+ let mut dst:[QM31;84]=unsafe{core::mem::transmute::<[u32;336],[QM31;84]>(kani::any())};let value:QM31=unsafe{core::mem::transmute::<[u32;4],QM31>(kani::any())};let slot:usize=kani::any();let pick:usize=kani::any();let limb:usize=kani::any();kani::assume(slot<84&&pick<84&&limb<4);let before=NLH_std_words(dst[pick])[limb];let expected=if pick==slot{NLH_std_words(value)[limb]}else{before};let mut calls=0;NLH_std_window(&mut dst,slot,value,&mut calls);assert_eq!(calls,1);assert_eq!(NLH_std_words(dst[pick])[limb],expected^if cfg!(NKR_invert){1}else{0});
+}

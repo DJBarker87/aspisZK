@@ -1,0 +1,47 @@
+{"attempt": "NLH_L057", "exit_status": 0, "wall_seconds": 23.145340031944215, "peak_rss_kib": "6173280", "swaps": "0", "print_axioms": ["'AspisR1.NLH_TermPartsFactor.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NLH_TermPartsFactor.source : ∀ (pub : Public) (claims : Std.Array NQ 84#usize)
+  (point : Std.Array NQ 10#usize) (lambda chi theta : NQ) (zc : Std.Array NQ 10#usize) (mu : NQ),
+  pool_v1.pair_forest_semantic_terminal.terminal_parts pub claims point lambda chi theta zc mu =
+    reference pub claims point lambda chi theta zc mu :=
+fun pub claims point lambda chi theta zc mu =>
+  id
+    (id
+      (casesOn (motive := fun t =>
+        pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta = t →
+          (do
+              let r ← pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta
+              let cf ← core.
+...
+          do
+                let child ← x
+                NKR_TermTail.after zc point mu child)
+            (fun h =>
+              Eq.refl do
+                let r ← div
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val =>
+                    let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                    do
+                    let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                    let q1 ← q.mul composition
+                    let q2 ← field.QM31.mul mu h1_z
+                    let q3 ← q1.add q2
+                    let q4 ← field.QM31.mul mu mu
+                    let q5 ← field.QM31.ONE.sub copy_active
+                    let q6 ← q5.mul h1_z
+                    let q7 ← q4.mul q6
+                    let original ← q3.add q7
+                    ok (core.result.Result.Ok (original, c1, mask_only, g))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                      (core.convert.FromSame
+                        pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                      residual)
+            (Eq.symm h)
+            (Eq.refl (pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta)))
+        (Eq.refl (pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta))))
+'AspisR1.NLH_TermPartsFactor.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4669d3f52f354b41ad06cd570a76672a.scope; invocation ID: fa6c75df7462446e835ca9c37a0a781b

@@ -1,0 +1,46 @@
+{"attempt": "NLH_L058", "exit_status": 1, "wall_seconds": 21.0274704429321, "peak_rss_kib": "6456128", "swaps": "0", "print_axioms": ["'AspisR1.NLH_TermPartsSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLH_TermPartsSource.lean:55:7: error: Type mismatch: After simplification, term
+  tail
+ has type
+  @Eq (Result (core.result.Result NKR_TermTail.Output NKR_TermTail.Error))
+    (NKR_TermTail.after zc point mu (core.result.Result.Ok child))
+    (ok (core.result.Result.Ok (NKR_TermCut.observations zc point mu child c).result))
+but is expected to have type
+  @Eq
+    (Result
+      (core.result.Result (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+        PoolV1PairForestSemanticTerminalErrorV1))
+    (NKR_TermTail.after zc point mu (core.result.Result.Ok child)) (ok (core.result.Result.Ok out))
+NLH_TermPartsSource.lean:54:10: warning: Local variable 'unit
+...
+    (fun h =>
+                          Eq.ndrec (motive := fun x =>
+                            validate_transition pub = x →
+                              (do
+                                  let child ←
+                                    do
+                                      let result ← x
+                                      match result with
+                                        | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                        | core.result.Result.Ok a => ok (core.result.Result.Ok child)
+                                  NKR_TermTail.after zc point mu child) =
+                                do
+                                let result ← x
+                                match result with
+                                  | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                  | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                            (fun result =>
+                              Eq.refl do
+                                let child ←
+                                  do
+                                    let result ← div
+                                    match result with
+                                      | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                      | core.result.Result.Ok a => ok (core.result.Result.Ok child)
+                                NKR_TermTail.after zc point mu child)
+                            (Eq.symm h) (Eq.refl (validate_transition pub)))
+                        (Eq.refl (validate_transition pub))))))),
+            ⟨co, ⟨cz, ⟨cm, cg⟩⟩⟩⟩⟩)
+'AspisR1.NLH_TermPartsSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb75584863526469fb285698d43c972c6.scope; invocation ID: fad669f7b3884e0b8f3d90ef0c770e85

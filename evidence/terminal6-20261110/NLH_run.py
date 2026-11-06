@@ -54,7 +54,7 @@ assert all((E/n).is_file() for n in x['sources']), 'Missing required validation 
 files={n:(base64.b64encode((E/n).read_bytes()).decode() if n.endswith('.xz') else (E/n).read_text()) for n in x['sources'] if (E/n).is_file()}
 files[a+'.json']=json.dumps(x)
 r=ssh('python3',f'''from pathlib import Path
-import base64,json,shutil,hashlib,re
+import base64,json,shutil,hashlib,re,os,subprocess
 b=Path({B!r});w=Path('/home/dombarker/project-offloads/codex-cx-sound-int2-20261025')
 for n in ['S2W_run_host.py','lakefile.toml','lake-manifest.json','lean-toolchain']:
  if not (b/n).exists():shutil.copyfile(w/n,b/n)
@@ -65,6 +65,14 @@ exec((b/'NLH_seed.py').read_text())
 for suffix in []:
  if (b/('NLH_'+suffix)).is_file():(b/('NKI_'+suffix)).write_bytes((b/('NLH_'+suffix)).read_bytes())
 p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x.get('env',{{}}).get('LEAN_PATH','').split(':');rels=set();pins={{}}
+if x['kind']=='lean':
+ probe=subprocess.run(['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','printenv','LEAN_PATH'],cwd=b,env=dict(os.environ,**x.get('env',{{}})),capture_output=True,text=True)
+ assert probe.returncode==0,probe.stderr
+ roots=probe.stdout.strip().split(':');x['effective_lean_path']=roots
+else:x['effective_lean_path']=roots
+roots=[str((b/root).resolve()) if not Path(root).is_absolute() else root for root in roots]
+x['library_pin_selection']='actual lake env LEAN_PATH for compiler; direct env for native auditor'
+
 if x['kind'] in ['lean','audit']:
  for root in roots:
   for stem in ['Aeneas','AeneasMeta']:

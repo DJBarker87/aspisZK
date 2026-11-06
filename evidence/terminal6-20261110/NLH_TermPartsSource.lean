@@ -11,7 +11,7 @@ open FIw_ArrayValue (canonical)
 open NKI_InitialPrefix (Public)
 open pool_v1.pair_forest_semantic_terminal
 
-def validated (pub : Public) (out : NKR_TermTail.Output) := do
+def validated (pub : Public) (out : NKR_TermTail.Output) : Result (core.result.Result NKR_TermTail.Output NKR_TermTail.Error) := do
  let result←validate_transition pub
  match result with
  | .Err error=>ok (.Err error)
@@ -52,7 +52,7 @@ theorem source (pub : Public) (claims : Array NQ 84#usize) (point zc : Array NQ 
      cases value with
      | Err error=>rfl
      | Ok unit=>
-       simpa only [bind_tc_ok] using tail
+       simpa only [bind_tc_ok,NKR_TermCut.observations,out] using tail
 #print source
 #print axioms source
 end AspisR1.NLH_TermPartsSource

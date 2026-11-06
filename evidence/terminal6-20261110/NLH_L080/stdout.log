@@ -1,0 +1,342 @@
+NLH_CompGather0.lean:14:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+  (match Event.gather 0, stage p base 0 with
+    | Event.amount, st =>
+      match pub.withdrawal_amount with
+      | none => ok (core.result.Result.Ok st)
+      | some a =>
+        if a = 0#u32 ∨ 1073741824 ≤ ↑a then
+          ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+        else ok (core.result.Result.Ok st)
+    | Event.validate, st => do
+      let r ← pool_v1.pair_forest_semantic_terminal.validate_transition pub
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a => ok (core.result.Result.Ok st)
+    | Event.gather i, st =>
+      match ↑i with
+      | 0 => do
+        let a ← ok p.z
+        ok
+            (core.result.Result.Ok
+              {
+                openings :=
+                  have __src := st.openings;
+                  { z := a, succ_z := __src.succ_z, xor12_z := __src.xor12_z },
+                mask := st.mask, selectors := st.selectors, poseidonSelectors := st.poseidonSelectors,
+                poseidon := st.poseidon, semantic := st.semantic, h := st.h, copyVariant := st.copyVariant,
+                copy := st.copy, prepared := st.prepared, composition := st.composition, remaining := st.remaining,
+                g := st.g })
+      | 1 => do
+        let a ←
+          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+              pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+              field.QM31.ZERO claims
+        ok
+            (core.result.Result.Ok
+              {
+                openings :=
+                  have __src := st.openings;
+                  { z := __src.z, succ_z := a, xor12_z := __src.xor12_z },
+                mask := st.mask, selectors := st.selectors, poseidonSelectors := st.poseidonSelectors,
+                poseidon := st.poseidon, semantic := st.semantic, h := st.h, copyVariant := st.copyVariant,
+                copy := st.copy, prepared := st.prepared, composition := st.composition, remaining := st.remaining,
+                g := st.g })
+      | 2 => do
+        let a ←
+          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+              pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+              field.QM31.ZERO claims
+        ok
+            (core.result.Result.Ok
+              {
+                openings :=
+                  have __src := st.openings;
+                  { z := __src.z, succ_z := __src.succ_z, xor12_z := a },
+                mask := st.mask, selectors := st.selectors, poseidonSelectors := st.poseidonSelectors,
+                poseidon := st.poseidon, semantic := st.semantic, h := st.h, copyVariant := st.copyVariant,
+                copy := st.copy, prepared := st.prepared, composition := st.composition, remaining := st.remaining,
+                g := st.g })
+      | x => do
+        let a ←
+          array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+              pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+              field.QM31.ZERO claims
+        ok
+            (core.result.Result.Ok
+              { openings := st.openings, mask := a, selectors := st.selectors,
+                poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+                copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+                remaining := st.remaining, g := st.g })
+    | Event.selectors, st => do
+      let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := st.g })
+    | Event.poseidonSelectors, st => do
+      let selectors ← pool_v1.pair_forest_semantic_terminal.poseidon_selectors st.selectors
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors, poseidonSelectors := selectors,
+              poseidon := st.poseidon, semantic := st.semantic, h := st.h, copyVariant := st.copyVariant,
+              copy := st.copy, prepared := st.prepared, composition := st.composition, remaining := st.remaining,
+              g := st.g })
+    | Event.poseidon, st => do
+      let poseidon ← state_only_poseidon.evaluate_state_only_poseidon_oracle_projected st.openings st.poseidonSelectors
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := st.g })
+    | Event.semantic, st => do
+      let semantic ← pool_v1.pair_forest_semantic_terminal.semantic_packed pub st.openings st.selectors
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := st.g })
+    | Event.h, st => do
+      let column ← pool_v1.pair_forest_semantic_terminal.SELECTED_H1_COLUMN
+      let h ← pool_v1.pair_forest_semantic_terminal.selected_claim claims 0#usize column
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := st.g })
+    | Event.variant, st => do
+      let v ← pool_v1.pair_forest_semantic_terminal.copy_variant pub.variant
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := v, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := st.g })
+    | Event.copy, st => do
+      let copy ←
+        pool_v1.pair_forest_copy_terminal.evaluate_with_selectors st.openings.z st.h st.selectors lambda chi
+            pub.transition.live_snapshot.next_pair_index st.copyVariant
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := st.g })
+    | Event.prepare, st => do
+      let prepared ← field.PreparedQm31Multiplier.new theta
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := prepared, composition := st.copy.residual,
+              remaining := (↑st.semantic).reverse ++ (↑st.poseidon).reverse, g := st.g })
+    | Event.horner i, st =>
+      match st.remaining with
+      | [] => fail Error.panic
+      | lane :: rest => do
+        let product ← field.PreparedQm31Multiplier.mul st.prepared st.composition
+        let value ← product.add lane
+        ok
+            (core.result.Result.Ok
+              { openings := st.openings, mask := st.mask, selectors := st.selectors,
+                poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+                copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := value,
+                remaining := rest, g := st.g })
+    | Event.g, st => do
+      let column ← pool_v1.pair_forest_semantic_terminal.SELECTED_G_COLUMN
+      let g ← pool_v1.pair_forest_semantic_terminal.selected_claim claims 0#usize column
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := g })) =
+    ok (core.result.Result.Ok (stage p base 1))
+
+pub : Public
+claims : Std.Array NQ 84#usize
+point : Std.Array NQ 10#usize
+lambda chi theta : NQ
+p : NKR_TermGatherPoseidon.Packet claims point
+base : State
+⊢ (match Event.gather 0, stage p base 0 with
+    | Event.amount, st =>
+      match pub.withdrawal_amount with
+      | none => ok (core.result.Result.Ok st)
+      | some a =>
+        if a = 0#u32 ∨ 1073741824 ≤ ↑a then
+          ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+        else ok (core.result.Result.Ok st)
+    | Event.validate, st => do
+      let r ← pool_v1.pair_forest_semantic_terminal.validate_transition pub
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok a => ok (core.result.Result.Ok st)
+    | Event.gather i, st =>
+      match ↑i with
+      | 0 => do
+        let a ← ok p.z
+        ok
+            (core.result.Result.Ok
+              {
+                openings :=
+                  have __src := st.openings;
+                  { z := a, succ_z := __src.succ_z, xor12_z := __src.xor12_z },
+                mask := st.mask, selectors := st.selectors, poseidonSelectors := st.poseidonSelectors,
+                poseidon := st.poseidon, semantic := st.semantic, h := st.h, copyVariant := st.copyVariant,
+                copy := st.copy, prepared := st.prepared, composition := st.composition, remaining := st.remaining,
+                g := st.g })
+      | 1 => do
+        let a ←
+          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+              pool_v1.pair_forest_semantic_terminal.composition_parts.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+              field.QM31.ZERO claims
+        ok
+            (core.result.Result.Ok
+              {
+                openings :=
+                  have __src := st.openings;
+                  { z := __src.z, succ_z := a, xor12_z := __src.xor12_z },
+                mask := st.mask, selectors := st.selectors, poseidonSelectors := st.poseidonSelectors,
+                poseidon := st.poseidon, semantic := st.semantic, h := st.h, copyVariant := st.copyVariant,
+                copy := st.copy, prepared := st.prepared, composition := st.composition, remaining := st.remaining,
+                g := st.g })
+      | 2 => do
+        let a ←
+          array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+              pool_v1.pair_forest_semantic_terminal.composition_parts.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+              field.QM31.ZERO claims
+        ok
+            (core.result.Result.Ok
+              {
+                openings :=
+                  have __src := st.openings;
+                  { z := __src.z, succ_z := __src.succ_z, xor12_z := a },
+                mask := st.mask, selectors := st.selectors, poseidonSelectors := st.poseidonSelectors,
+                poseidon := st.poseidon, semantic := st.semantic, h := st.h, copyVariant := st.copyVariant,
+                copy := st.copy, prepared := st.prepared, composition := st.composition, remaining := st.remaining,
+                g := st.g })
+      | x => do
+        let a ←
+          array_from_fn_copy 10#usize field.QM31.Insts.CoreMarkerCopy
+              pool_v1.pair_forest_semantic_terminal.composition_parts.closure_3.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+              field.QM31.ZERO claims
+        ok
+            (core.result.Result.Ok
+              { openings := st.openings, mask := a, selectors := st.selectors,
+                poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+                copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+                remaining := st.remaining, g := st.g })
+    | Event.selectors, st => do
+      let selectors ← pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := st.g })
+    | Event.poseidonSelectors, st => do
+      let selectors ← pool_v1.pair_forest_semantic_terminal.poseidon_selectors st.selectors
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors, poseidonSelectors := selectors,
+              poseidon := st.poseidon, semantic := st.semantic, h := st.h, copyVariant := st.copyVariant,
+              copy := st.copy, prepared := st.prepared, composition := st.composition, remaining := st.remaining,
+              g := st.g })
+    | Event.poseidon, st => do
+      let poseidon ← state_only_poseidon.evaluate_state_only_poseidon_oracle_projected st.openings st.poseidonSelectors
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := st.g })
+    | Event.semantic, st => do
+      let semantic ← pool_v1.pair_forest_semantic_terminal.semantic_packed pub st.openings st.selectors
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := st.g })
+    | Event.h, st => do
+      let column ← pool_v1.pair_forest_semantic_terminal.SELECTED_H1_COLUMN
+      let h ← pool_v1.pair_forest_semantic_terminal.selected_claim claims 0#usize column
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := st.g })
+    | Event.variant, st => do
+      let v ← pool_v1.pair_forest_semantic_terminal.copy_variant pub.variant
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := v, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := st.g })
+    | Event.copy, st => do
+      let copy ←
+        pool_v1.pair_forest_copy_terminal.evaluate_with_selectors st.openings.z st.h st.selectors lambda chi
+            pub.transition.live_snapshot.next_pair_index st.copyVariant
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := st.g })
+    | Event.prepare, st => do
+      let prepared ← field.PreparedQm31Multiplier.new theta
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := prepared, composition := st.copy.residual,
+              remaining := (↑st.semantic).reverse ++ (↑st.poseidon).reverse, g := st.g })
+    | Event.horner i, st =>
+      match st.remaining with
+      | [] => fail Error.panic
+      | lane :: rest => do
+        let product ← field.PreparedQm31Multiplier.mul st.prepared st.composition
+        let value ← product.add lane
+        ok
+            (core.result.Result.Ok
+              { openings := st.openings, mask := st.mask, selectors := st.selectors,
+                poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+                copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := value,
+                remaining := rest, g := st.g })
+    | Event.g, st => do
+      let column ← pool_v1.pair_forest_semantic_terminal.SELECTED_G_COLUMN
+      let g ← pool_v1.pair_forest_semantic_terminal.selected_claim claims 0#usize column
+      ok
+          (core.result.Result.Ok
+            { openings := st.openings, mask := st.mask, selectors := st.selectors,
+              poseidonSelectors := st.poseidonSelectors, poseidon := st.poseidon, semantic := st.semantic, h := st.h,
+              copyVariant := st.copyVariant, copy := st.copy, prepared := st.prepared, composition := st.composition,
+              remaining := st.remaining, g := g })) =
+    ok (core.result.Result.Ok (stage p base 1))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NLH_CompGather0.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

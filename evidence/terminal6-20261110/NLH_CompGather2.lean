@@ -1,3 +1,4 @@
+import NKI_InitialPrefix
 import NLH_CompGathers
 set_option autoImplicit false
 noncomputable section
@@ -9,8 +10,7 @@ theorem step (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#us
  (lambda chi theta : NQ) (p : NKR_TermGatherPoseidon.Packet claims point) (base : State) :
  NLH_CompositionState.step pub claims point lambda chi theta (.gather 2) (stage p base 2)=
  ok (.Ok (stage p base 3)) := by
- unfold NLH_CompositionState.step
- rw [p.gather2,bind_tc_ok]
+ simp only [NLH_CompositionState.step,p.gather2,bind_tc_ok]
  rfl
 #print axioms step
 end AspisR1.NLH_CompGather2

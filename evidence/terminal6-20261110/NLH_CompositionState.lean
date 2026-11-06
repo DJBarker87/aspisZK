@@ -86,8 +86,7 @@ def step (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#usize)
    ok (.Ok {st with copy := copy})
  | .prepare, st => do
    let prepared ← field.PreparedQm31Multiplier.new theta
-   ok (.Ok {st with prepared := prepared, composition := st.copy.residual,
-     remaining := st.semantic.val.reverse ++ st.poseidon.val.reverse})
+   ok (.Ok {st with prepared := prepared, composition := st.copy.residual, remaining := st.semantic.val.reverse ++ st.poseidon.val.reverse})
  | .horner _, st =>
    match st.remaining with
    | [] => fail .panic

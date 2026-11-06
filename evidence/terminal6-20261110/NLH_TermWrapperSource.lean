@@ -11,7 +11,7 @@ open pool_v1.pair_forest_semantic_terminal
 abbrev Public := r0.Public
 abbrev Challenges := state_only_prefix.r0.Challenges
 
-def validated (pub : Public) (out : NQ) := do
+def validated (pub : Public) (out : NQ) : Result (core.result.Result NQ state_only_prefix.r0.Error) := do
  let result←validate_transition (NKR_TermPublic.value pub)
  match result with
  | .Err _=>ok (core.result.Result.Err state_only_prefix.r0.Error.Public)

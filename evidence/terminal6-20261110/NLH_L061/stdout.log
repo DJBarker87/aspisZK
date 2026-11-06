@@ -1,0 +1,265 @@
+theorem AspisR1.NLH_TermWrapperFactor.source : ∀ (pub : Public) (claims : NLH_TermSelected.Claims)
+  (point : Std.Array NQ 10#usize) (c : Challenges),
+  (∀ row ∈ ↑claims, FIw_ArrayValue.canonical row) →
+    ∃ selected,
+      array_from_fn_copy 84#usize field.QM31.Insts.CoreMarkerCopy NLH_TermSelected.builder field.QM31.ZERO claims =
+          ok selected ∧
+        FIw_ArrayValue.canonical selected ∧
+          r0.Public.terminal_qm31 pub claims point c = reference pub selected point c :=
+fun pub claims point c hc =>
+  let ⟨selected, h✝⟩ := NLH_TermSelected.source claims hc
+  let ⟨call, right✝⟩ := h✝
+  let ⟨canonical, right✝¹⟩ := right✝
+  Exists.intro selected
+    ⟨call,
+      ⟨canonical,
+        id
+          (id
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (do
+                        let selected ← _a
+                        let sp ← r0.Public.semantic pub
+                        let r ← terminal_parts sp selected point c.lambda c.chi c.theta c.zc c.mu
+                        let r1 ←
+                          core.result.Result.map
+                              r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                              r ()
+                        FIq_Native.core.result.Result.map_err
+                            r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                            r1 ()) =
+                      do
+                      let parts ←
+                        terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu
+                      after parts)
+                  call))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      _a = do
+                        let parts ←
+                          terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu
+                        after parts)
+                    (bind_tc_ok selected fun selected => do
+                      let sp ← r0.Public.semantic pub
+                      let r ← terminal_parts sp selected point c.lambda c.chi c.theta c.zc c.mu
+                      let r1 ←
+                        core.result.Result.map
+                            r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                            r ()
+                      FIq_Native.core.result.Result.map_err
+                          r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                          r1 ())))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (do
+                            let sp ← _a
+                            let r ← terminal_parts sp selected point c.lambda c.chi c.theta c.zc c.mu
+                            let r1 ←
+                              core.result.Result.map
+                                  r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                  r ()
+                            FIq_Native.core.result.Result.map_err
+                                r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                                r1 ()) =
+                          do
+                          let parts ←
+                            terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu
+                          after parts)
+                      (NKR_TermPublic.source pub)))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          _a = do
+                            let parts ←
+                              terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu
+                            after parts)
+                        (bind_tc_ok (NKR_TermPublic.value pub) fun sp => do
+                          let r ← terminal_parts sp selected point c.lambda c.chi c.theta c.zc c.mu
+                          let r1 ←
+                            core.result.Result.map
+                                r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                r ()
+                          FIq_Native.core.result.Result.map_err
+                              r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                              r1 ())))
+                    (casesOn (motive := fun t =>
+                      terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu = t →
+                        (do
+                            let r ←
+                              terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu
+                            let r1 ←
+                              core.result.Result.map
+                                  r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                  r ()
+                            FIq_Native.core.result.Result.map_err
+                                r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                                r1 ()) =
+                          do
+                          let parts ←
+                            terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu
+                          after parts)
+                      (terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu)
+                      (fun r h =>
+                        Eq.ndrec (motive := fun x =>
+                          terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu =
+                              x →
+                            (do
+                                let r ← x
+                                let r1 ←
+                                  core.result.Result.map
+                                      r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                      r ()
+                                FIq_Native.core.result.Result.map_err
+                                    r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                                    r1 ()) =
+                              do
+                              let parts ← x
+                              after parts)
+                          (fun actual =>
+                            core.result.Result.casesOn (motive := fun t =>
+                              r = t →
+                                (do
+                                    let r ← ok r
+                                    let r1 ←
+                                      core.result.Result.map
+                                          r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                          r ()
+                                    FIq_Native.core.result.Result.map_err
+                                        r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                                        r1 ()) =
+                                  do
+                                  let parts ← ok r
+                                  after parts)
+                              r
+                              (fun a h =>
+                                Eq.ndrec (motive := fun r =>
+                                  terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc
+                                        c.mu =
+                                      ok r →
+                                    (do
+                                        let r ← ok r
+                                        let r1 ←
+                                          core.result.Result.map
+                                              r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                              r ()
+                                        FIq_Native.core.result.Result.map_err
+                                            r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                                            r1 ()) =
+                                      do
+                                      let parts ← ok r
+                                      after parts)
+                                  (fun actual =>
+                                    Eq.refl do
+                                      let r ← ok (core.result.Result.Ok a)
+                                      let r1 ←
+                                        core.result.Result.map
+                                            r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                            r ()
+                                      FIq_Native.core.result.Result.map_err
+                                          r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                                          r1 ())
+                                  (Eq.symm h) actual)
+                              (fun a h =>
+                                Eq.ndrec (motive := fun r =>
+                                  terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc
+                                        c.mu =
+                                      ok r →
+                                    (do
+                                        let r ← ok r
+                                        let r1 ←
+                                          core.result.Result.map
+                                              r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                              r ()
+                                        FIq_Native.core.result.Result.map_err
+                                            r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                                            r1 ()) =
+                                      do
+                                      let parts ← ok r
+                                      after parts)
+                                  (fun actual =>
+                                    Eq.refl do
+                                      let r ← ok (core.result.Result.Err a)
+                                      let r1 ←
+                                        core.result.Result.map
+                                            r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                            r ()
+                                      FIq_Native.core.result.Result.map_err
+                                          r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                                          r1 ())
+                                  (Eq.symm h) actual)
+                              (Eq.refl r))
+                          (Eq.symm h)
+                          (Eq.refl
+                            (terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc
+                              c.mu)))
+                      (fun e h =>
+                        Eq.ndrec (motive := fun x =>
+                          terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu =
+                              x →
+                            (do
+                                let r ← x
+                                let r1 ←
+                                  core.result.Result.map
+                                      r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                      r ()
+                                FIq_Native.core.result.Result.map_err
+                                    r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                                    r1 ()) =
+                              do
+                              let parts ← x
+                              after parts)
+                          (fun actual =>
+                            Eq.refl do
+                              let r ← fail e
+                              let r1 ←
+                                core.result.Result.map
+                                    r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                    r ()
+                              FIq_Native.core.result.Result.map_err
+                                  r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                                  r1 ())
+                          (Eq.symm h)
+                          (Eq.refl
+                            (terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc
+                              c.mu)))
+                      (fun h =>
+                        Eq.ndrec (motive := fun x =>
+                          terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc c.mu =
+                              x →
+                            (do
+                                let r ← x
+                                let r1 ←
+                                  core.result.Result.map
+                                      r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                      r ()
+                                FIq_Native.core.result.Result.map_err
+                                    r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                                    r1 ()) =
+                              do
+                              let parts ← x
+                              after parts)
+                          (fun actual =>
+                            Eq.refl do
+                              let r ← div
+                              let r1 ←
+                                core.result.Result.map
+                                    r0.Public.terminal_qm31.closure_1.Insts.CoreOpsFunctionFnOnceTupleTupleQM31ArrayQM3116ArrayQM3110QM31QM31
+                                    r ()
+                              FIq_Native.core.result.Result.map_err
+                                  r0.Public.terminal_qm31.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestSemanticTerminalErrorV1Error
+                                  r1 ())
+                          (Eq.symm h)
+                          (Eq.refl
+                            (terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc
+                              c.mu)))
+                      (Eq.refl
+                        (terminal_parts (NKR_TermPublic.value pub) selected point c.lambda c.chi c.theta c.zc
+                          c.mu))))))))⟩⟩
+'AspisR1.NLH_TermWrapperFactor.source' depends on axioms: [propext, Classical.choice, Quot.sound]

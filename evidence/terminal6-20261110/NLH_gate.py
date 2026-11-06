@@ -23,6 +23,9 @@ if not (S/'crates/aspis-statement/src/pool_v1/NLH_Composition_native.rs').exists
 if not (S/'crates/aspis-statement/src/pool_v1/NLH_Leaves_native.rs').exists():
  subprocess.run(['git','apply','--check',str(B/'NLH_extend.patch')],cwd=S,check=True)
  subprocess.run(['git','apply',str(B/'NLH_extend.patch')],cwd=S,check=True)
+if not (S/'crates/aspis-statement/src/pool_v1/NLH_Std_native.rs').exists():
+ subprocess.run(['git','apply','--check',str(B/'NLH_std.patch')],cwd=S,check=True)
+ subprocess.run(['git','apply',str(B/'NLH_std.patch')],cwd=S,check=True)
 frozen='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
 assert sha(S/'Cargo.lock')==frozen,'STOP frozen lock mismatch before Kani'
 kmx={'KMX_stubs.rs': 'ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138', 'KMX_native.rs': 'cf719c47b5c8c91dcc369984c01bd0b8531b25210e344c9fd06db21b30171880', 'KMX_CopyMeaning.lean': '2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'}

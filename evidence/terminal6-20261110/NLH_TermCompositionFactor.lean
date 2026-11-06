@@ -11,7 +11,7 @@ open pool_v1.pair_forest_semantic_terminal
 validation Result arm, including ambient fail/div, retains its original place
 and no later continuation executes after a rejected/error prefix. -/
 def reference (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#usize)
- (lambda chi theta : NQ) := do
+ (lambda chi theta : NQ) : Result (core.result.Result NKR_TermTail.Carrier NKR_TermTail.Error) := do
  let (_,invalid)←NLH_TermAmount.run pub
  if invalid then ok (.Err .InvalidPublicAmount) else do
   let validation←validate_transition pub
@@ -45,7 +45,7 @@ theorem source (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#
  cases h : pub.withdrawal_amount with
  | none=>
    simp only [h,bind_tc_ok,Aeneas.Std.uncurry,Bool.false_eq_true,ite_false]
-   have same : {pub with withdrawal_amount:=none}=pub := by rw [←h];cases pub;rfl
+   have same : {pub with withdrawal_amount:=none}=pub := by rw [←h]
    rw [same]
    exact contEq
  | some a=>
@@ -56,7 +56,7 @@ theorem source (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#
      by_cases large : a>=1073741824#u32
      · simp only [large,decide_true,ite_true]
      · simp only [large,decide_false,Bool.false_eq_true,ite_false]
-       have same : {pub with withdrawal_amount:=some a}=pub := by rw [←h];cases pub;rfl
+       have same : {pub with withdrawal_amount:=some a}=pub := by rw [←h]
        rw [same]
        exact contEq
 

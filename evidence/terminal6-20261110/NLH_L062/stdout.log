@@ -1,0 +1,229 @@
+theorem AspisR1.NLH_TermWrapperSource.source : ∀ (pub : Public) (claims : NLH_TermSelected.Claims)
+  (point : Std.Array NQ 10#usize) (c : Challenges),
+  NKR_DigestChildren.Domain (NKR_TermPublic.value pub) →
+    (∀ row ∈ ↑claims, canonical row) →
+      canonical point →
+        canonical c.zc →
+          Canon c.lambda →
+            Canon c.chi →
+              Canon c.theta →
+                Canon c.mu →
+                  ↑(NKR_TermPublic.value pub).asset_id < 2147483647 →
+                    r0.Public.terminal_qm31 pub claims point c =
+                        ok (core.result.Result.Err state_only_prefix.r0.Error.Public) ∨
+                      ∃ out, r0.Public.terminal_qm31 pub claims point c = validated pub out ∧ Canon out :=
+fun pub claims point c hd hc hp hz hl hchi ht hm asset =>
+  let ⟨selected, h✝⟩ := NLH_TermWrapperFactor.source pub claims point c hc
+  let ⟨gather, right✝⟩ := h✝
+  let ⟨cs, wrapper⟩ := right✝
+  Or.casesOn
+    (NLH_TermPartsSource.source (NKR_TermPublic.value pub) selected point c.zc c.lambda c.chi c.theta c.mu hd cs hp hz
+      hl hchi ht hm asset)
+    (fun rejected =>
+      let ⟨left✝, parts⟩ := rejected
+      Or.inl
+        (Eq.mpr (id (congrArg (fun _a => _a = ok (core.result.Result.Err state_only_prefix.r0.Error.Public)) wrapper))
+          (id
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (do
+                        let parts ← _a
+                        NLH_TermWrapperFactor.after parts) =
+                      ok (core.result.Result.Err state_only_prefix.r0.Error.Public))
+                  parts))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => _a = ok (core.result.Result.Err state_only_prefix.r0.Error.Public))
+                    (bind_tc_ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                      NLH_TermWrapperFactor.after)))
+                (Eq.refl
+                  (NLH_TermWrapperFactor.after
+                    (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount))))))))
+    fun accepted =>
+    let ⟨parts, h✝¹⟩ := accepted
+    let ⟨left✝¹, right✝¹⟩ := h✝¹
+    let ⟨partsCall, right✝²⟩ := right✝¹
+    let ⟨co, right✝³⟩ := right✝²
+    let ⟨left✝², right✝⁴⟩ := right✝³
+    let ⟨left✝³, right✝⁵⟩ := right✝⁴
+    Or.inr
+      (Exists.intro parts.1
+        ⟨Eq.mpr (id (congrArg (fun _a => _a = validated pub parts.1) wrapper))
+            (id
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      (do
+                          let parts ← _a
+                          NLH_TermWrapperFactor.after parts) =
+                        validated pub parts.1)
+                    partsCall))
+                (id
+                  (id
+                    (casesOn (motive := fun t =>
+                      validate_transition (NKR_TermPublic.value pub) = t →
+                        (do
+                            let parts ←
+                              do
+                                let result ← validate_transition (NKR_TermPublic.value pub)
+                                match result with
+                                  | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                  | core.result.Result.Ok a => ok (core.result.Result.Ok parts)
+                            NLH_TermWrapperFactor.after parts) =
+                          do
+                          let result ← validate_transition (NKR_TermPublic.value pub)
+                          match result with
+                            | core.result.Result.Err a => ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                            | core.result.Result.Ok a => ok (core.result.Result.Ok parts.1))
+                      (validate_transition (NKR_TermPublic.value pub))
+                      (fun value h =>
+                        Eq.ndrec (motive := fun x =>
+                          validate_transition (NKR_TermPublic.value pub) = x →
+                            (do
+                                let parts ←
+                                  do
+                                    let result ← x
+                                    match result with
+                                      | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                      | core.result.Result.Ok a => ok (core.result.Result.Ok parts)
+                                NLH_TermWrapperFactor.after parts) =
+                              do
+                              let result ← x
+                              match result with
+                                | core.result.Result.Err a =>
+                                  ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                                | core.result.Result.Ok a => ok (core.result.Result.Ok parts.1))
+                          (fun result =>
+                            core.result.Result.casesOn (motive := fun t =>
+                              value = t →
+                                (do
+                                    let parts ←
+                                      do
+                                        let result ← ok value
+                                        match result with
+                                          | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                          | core.result.Result.Ok a => ok (core.result.Result.Ok parts)
+                                    NLH_TermWrapperFactor.after parts) =
+                                  do
+                                  let result ← ok value
+                                  match result with
+                                    | core.result.Result.Err a =>
+                                      ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                                    | core.result.Result.Ok a => ok (core.result.Result.Ok parts.1))
+                              value
+                              (fun a h =>
+                                Eq.ndrec (motive := fun value =>
+                                  validate_transition (NKR_TermPublic.value pub) = ok value →
+                                    (do
+                                        let parts ←
+                                          do
+                                            let result ← ok value
+                                            match result with
+                                              | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                              | core.result.Result.Ok a => ok (core.result.Result.Ok parts)
+                                        NLH_TermWrapperFactor.after parts) =
+                                      do
+                                      let result ← ok value
+                                      match result with
+                                        | core.result.Result.Err a =>
+                                          ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                                        | core.result.Result.Ok a => ok (core.result.Result.Ok parts.1))
+                                  (fun result =>
+                                    Eq.refl do
+                                      let parts ←
+                                        do
+                                          let result ← ok (core.result.Result.Ok a)
+                                          match result with
+                                            | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                            | core.result.Result.Ok a => ok (core.result.Result.Ok parts)
+                                      NLH_TermWrapperFactor.after parts)
+                                  (Eq.symm h) result)
+                              (fun a h =>
+                                Eq.ndrec (motive := fun value =>
+                                  validate_transition (NKR_TermPublic.value pub) = ok value →
+                                    (do
+                                        let parts ←
+                                          do
+                                            let result ← ok value
+                                            match result with
+                                              | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                              | core.result.Result.Ok a => ok (core.result.Result.Ok parts)
+                                        NLH_TermWrapperFactor.after parts) =
+                                      do
+                                      let result ← ok value
+                                      match result with
+                                        | core.result.Result.Err a =>
+                                          ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                                        | core.result.Result.Ok a => ok (core.result.Result.Ok parts.1))
+                                  (fun result =>
+                                    Eq.refl do
+                                      let parts ←
+                                        do
+                                          let result ← ok (core.result.Result.Err a)
+                                          match result with
+                                            | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                            | core.result.Result.Ok a => ok (core.result.Result.Ok parts)
+                                      NLH_TermWrapperFactor.after parts)
+                                  (Eq.symm h) result)
+                              (Eq.refl value))
+                          (Eq.symm h) (Eq.refl (validate_transition (NKR_TermPublic.value pub))))
+                      (fun e h =>
+                        Eq.ndrec (motive := fun x =>
+                          validate_transition (NKR_TermPublic.value pub) = x →
+                            (do
+                                let parts ←
+                                  do
+                                    let result ← x
+                                    match result with
+                                      | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                      | core.result.Result.Ok a => ok (core.result.Result.Ok parts)
+                                NLH_TermWrapperFactor.after parts) =
+                              do
+                              let result ← x
+                              match result with
+                                | core.result.Result.Err a =>
+                                  ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                                | core.result.Result.Ok a => ok (core.result.Result.Ok parts.1))
+                          (fun result =>
+                            Eq.refl do
+                              let parts ←
+                                do
+                                  let result ← fail e
+                                  match result with
+                                    | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                    | core.result.Result.Ok a => ok (core.result.Result.Ok parts)
+                              NLH_TermWrapperFactor.after parts)
+                          (Eq.symm h) (Eq.refl (validate_transition (NKR_TermPublic.value pub))))
+                      (fun h =>
+                        Eq.ndrec (motive := fun x =>
+                          validate_transition (NKR_TermPublic.value pub) = x →
+                            (do
+                                let parts ←
+                                  do
+                                    let result ← x
+                                    match result with
+                                      | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                      | core.result.Result.Ok a => ok (core.result.Result.Ok parts)
+                                NLH_TermWrapperFactor.after parts) =
+                              do
+                              let result ← x
+                              match result with
+                                | core.result.Result.Err a =>
+                                  ok (core.result.Result.Err state_only_prefix.r0.Error.Public)
+                                | core.result.Result.Ok a => ok (core.result.Result.Ok parts.1))
+                          (fun result =>
+                            Eq.refl do
+                              let parts ←
+                                do
+                                  let result ← div
+                                  match result with
+                                    | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                    | core.result.Result.Ok a => ok (core.result.Result.Ok parts)
+                              NLH_TermWrapperFactor.after parts)
+                          (Eq.symm h) (Eq.refl (validate_transition (NKR_TermPublic.value pub))))
+                      (Eq.refl (validate_transition (NKR_TermPublic.value pub)))))))),
+          co⟩)
+'AspisR1.NLH_TermWrapperSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,245 @@
+NLH_TermPartsSource.lean:55:7: error: Type mismatch: After simplification, term
+  tail
+ has type
+  @Eq (Result (core.result.Result NKR_TermTail.Output NKR_TermTail.Error))
+    (NKR_TermTail.after zc point mu (core.result.Result.Ok child))
+    (ok (core.result.Result.Ok (NKR_TermCut.observations zc point mu child c).result))
+but is expected to have type
+  @Eq
+    (Result
+      (core.result.Result (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+        PoolV1PairForestSemanticTerminalErrorV1))
+    (NKR_TermTail.after zc point mu (core.result.Result.Ok child)) (ok (core.result.Result.Ok out))
+NLH_TermPartsSource.lean:54:10: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+theorem AspisR1.NLH_TermPartsSource.source : ∀ (pub : Public) (claims : Std.Array NQ 84#usize)
+  (point zc : Std.Array NQ 10#usize) (lambda chi theta mu : NQ),
+  NKR_DigestChildren.Domain pub →
+    canonical claims →
+      canonical point →
+        canonical zc →
+          Canon lambda →
+            Canon chi →
+              Canon theta →
+                Canon mu →
+                  ↑pub.asset_id < 2147483647 →
+                    NLH_TermAmount.invalid pub.withdrawal_amount = true ∧
+                        terminal_parts pub claims point lambda chi theta zc mu =
+                          ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount) ∨
+                      ∃ out,
+                        NLH_TermAmount.invalid pub.withdrawal_amount = false ∧
+                          terminal_parts pub claims point lambda chi theta zc mu = validated pub out ∧
+                            Canon out.1 ∧ canonical out.2.1 ∧ canonical out.2.2.1 ∧ Canon out.2.2.2 :=
+fun pub claims point zc lambda chi theta mu hd hc hp hz hl hchi ht hm asset =>
+  Or.casesOn (NLH_TermCompositionSource.source pub claims point lambda chi theta hd hc hp hl hchi ht asset)
+    (fun rejected =>
+      let ⟨bad, comp⟩ := rejected
+      Or.inl
+        ⟨bad,
+          Eq.mpr
+            (id
+              (congrArg
+                (fun _a => _a = ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount))
+                (NLH_TermPartsFactor.source pub claims point lambda chi theta zc mu)))
+            (id
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      (do
+                          let child ← _a
+                          NKR_TermTail.after zc point mu child) =
+                        ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount))
+                    comp))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        _a = ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount))
+                      (bind_tc_ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+                        (NKR_TermTail.after zc point mu))))
+                  (Eq.refl
+                    (NKR_TermTail.after zc point mu
+                      (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount))))))⟩)
+    fun accepted =>
+    let ⟨child, h✝⟩ := accepted
+    let ⟨good, right✝⟩ := h✝
+    let ⟨comp, right✝¹⟩ := right✝
+    let ⟨cc, right✝²⟩ := right✝¹
+    let ⟨cg, right✝³⟩ := right✝²
+    let ⟨ch, right✝⁴⟩ := right✝³
+    let ⟨ca, right✝⁵⟩ := right✝⁴
+    let ⟨cz, cm⟩ := right✝⁵
+    let ⟨c, h✝¹⟩ := NKR_TermCut.source zc point mu child hz hp hm cc ch ca
+    let ⟨tail, right✝⁶⟩ := h✝¹
+    let ⟨cut, co⟩ := right✝⁶
+    let out := (c.out, child.2.1, child.2.2.1, child.2.2.2.1);
+    Or.inr
+      (Exists.intro out
+        ⟨good,
+          ⟨Eq.mpr
+              (id
+                (congrArg (fun _a => _a = validated pub out)
+                  (NLH_TermPartsFactor.source pub claims point lambda chi theta zc mu)))
+              (id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (do
+                            let child ← _a
+                            NKR_TermTail.after zc point mu child) =
+                          validated pub out)
+                      comp))
+                  (id
+                    (id
+                      (casesOn (motive := fun t =>
+                        validate_transition pub = t →
+                          (do
+                              let child ←
+                                do
+                                  let result ← validate_transition pub
+                                  match result with
+                                    | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                    | core.result.Result.Ok a => ok (core.result.Result.Ok child)
+                              NKR_TermTail.after zc point mu child) =
+                            do
+                            let result ← validate_transition pub
+                            match result with
+                              | core.result.Result.Err error => ok (core.result.Result.Err error)
+                              | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                        (validate_transition pub)
+                        (fun value h =>
+                          Eq.ndrec (motive := fun x =>
+                            validate_transition pub = x →
+                              (do
+                                  let child ←
+                                    do
+                                      let result ← x
+                                      match result with
+                                        | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                        | core.result.Result.Ok a => ok (core.result.Result.Ok child)
+                                  NKR_TermTail.after zc point mu child) =
+                                do
+                                let result ← x
+                                match result with
+                                  | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                  | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                            (fun result =>
+                              core.result.Result.casesOn (motive := fun t =>
+                                value = t →
+                                  (do
+                                      let child ←
+                                        do
+                                          let result ← ok value
+                                          match result with
+                                            | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                            | core.result.Result.Ok a => ok (core.result.Result.Ok child)
+                                      NKR_TermTail.after zc point mu child) =
+                                    do
+                                    let result ← ok value
+                                    match result with
+                                      | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                      | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                                value
+                                (fun unit h =>
+                                  Eq.ndrec (motive := fun value =>
+                                    validate_transition pub = ok value →
+                                      (do
+                                          let child ←
+                                            do
+                                              let result ← ok value
+                                              match result with
+                                                | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                                | core.result.Result.Ok a => ok (core.result.Result.Ok child)
+                                          NKR_TermTail.after zc point mu child) =
+                                        do
+                                        let result ← ok value
+                                        match result with
+                                          | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                          | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                                    (fun result => sorry) (Eq.symm h) result)
+                                (fun error h =>
+                                  Eq.ndrec (motive := fun value =>
+                                    validate_transition pub = ok value →
+                                      (do
+                                          let child ←
+                                            do
+                                              let result ← ok value
+                                              match result with
+                                                | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                                | core.result.Result.Ok a => ok (core.result.Result.Ok child)
+                                          NKR_TermTail.after zc point mu child) =
+                                        do
+                                        let result ← ok value
+                                        match result with
+                                          | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                          | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                                    (fun result =>
+                                      Eq.refl do
+                                        let child ←
+                                          do
+                                            let result ← ok (core.result.Result.Err error)
+                                            match result with
+                                              | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                              | core.result.Result.Ok a => ok (core.result.Result.Ok child)
+                                        NKR_TermTail.after zc point mu child)
+                                    (Eq.symm h) result)
+                                (Eq.refl value))
+                            (Eq.symm h) (Eq.refl (validate_transition pub)))
+                        (fun e h =>
+                          Eq.ndrec (motive := fun x =>
+                            validate_transition pub = x →
+                              (do
+                                  let child ←
+                                    do
+                                      let result ← x
+                                      match result with
+                                        | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                        | core.result.Result.Ok a => ok (core.result.Result.Ok child)
+                                  NKR_TermTail.after zc point mu child) =
+                                do
+                                let result ← x
+                                match result with
+                                  | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                  | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                            (fun result =>
+                              Eq.refl do
+                                let child ←
+                                  do
+                                    let result ← fail e
+                                    match result with
+                                      | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                      | core.result.Result.Ok a => ok (core.result.Result.Ok child)
+                                NKR_TermTail.after zc point mu child)
+                            (Eq.symm h) (Eq.refl (validate_transition pub)))
+                        (fun h =>
+                          Eq.ndrec (motive := fun x =>
+                            validate_transition pub = x →
+                              (do
+                                  let child ←
+                                    do
+                                      let result ← x
+                                      match result with
+                                        | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                        | core.result.Result.Ok a => ok (core.result.Result.Ok child)
+                                  NKR_TermTail.after zc point mu child) =
+                                do
+                                let result ← x
+                                match result with
+                                  | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                  | core.result.Result.Ok a => ok (core.result.Result.Ok out))
+                            (fun result =>
+                              Eq.refl do
+                                let child ←
+                                  do
+                                    let result ← div
+                                    match result with
+                                      | core.result.Result.Err error => ok (core.result.Result.Err error)
+                                      | core.result.Result.Ok a => ok (core.result.Result.Ok child)
+                                NKR_TermTail.after zc point mu child)
+                            (Eq.symm h) (Eq.refl (validate_transition pub)))
+                        (Eq.refl (validate_transition pub))))))),
+            ⟨co, ⟨cz, ⟨cm, cg⟩⟩⟩⟩⟩)
+'AspisR1.NLH_TermPartsSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

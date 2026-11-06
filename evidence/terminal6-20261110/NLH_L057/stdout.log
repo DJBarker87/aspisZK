@@ -1,0 +1,540 @@
+theorem AspisR1.NLH_TermPartsFactor.source : ∀ (pub : Public) (claims : Std.Array NQ 84#usize)
+  (point : Std.Array NQ 10#usize) (lambda chi theta : NQ) (zc : Std.Array NQ 10#usize) (mu : NQ),
+  pool_v1.pair_forest_semantic_terminal.terminal_parts pub claims point lambda chi theta zc mu =
+    reference pub claims point lambda chi theta zc mu :=
+fun pub claims point lambda chi theta zc mu =>
+  id
+    (id
+      (casesOn (motive := fun t =>
+        pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta = t →
+          (do
+              let r ← pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                  do
+                  let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                  let q1 ← q.mul composition
+                  let q2 ← field.QM31.mul mu h1_z
+                  let q3 ← q1.add q2
+                  let q4 ← field.QM31.mul mu mu
+                  let q5 ← field.QM31.ONE.sub copy_active
+                  let q6 ← q5.mul h1_z
+                  let q7 ← q4.mul q6
+                  let original ← q3.add q7
+                  ok (core.result.Result.Ok (original, c1, mask_only, g))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                    (core.convert.FromSame
+                      pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                    residual) =
+            do
+            let child ← pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta
+            NKR_TermTail.after zc point mu child)
+        (pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta)
+        (fun child h =>
+          Eq.ndrec (motive := fun x =>
+            pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta = x →
+              (do
+                  let r ← x
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val =>
+                      let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                      do
+                      let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                      let q1 ← q.mul composition
+                      let q2 ← field.QM31.mul mu h1_z
+                      let q3 ← q1.add q2
+                      let q4 ← field.QM31.mul mu mu
+                      let q5 ← field.QM31.ONE.sub copy_active
+                      let q6 ← q5.mul h1_z
+                      let q7 ← q4.mul q6
+                      let original ← q3.add q7
+                      ok (core.result.Result.Ok (original, c1, mask_only, g))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                        (core.convert.FromSame
+                          pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                        residual) =
+                do
+                let child ← x
+                NKR_TermTail.after zc point mu child)
+            (fun h =>
+              core.result.Result.casesOn (motive := fun t =>
+                child = t →
+                  (do
+                      let r ← ok child
+                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue val =>
+                          let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                          do
+                          let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                          let q1 ← q.mul composition
+                          let q2 ← field.QM31.mul mu h1_z
+                          let q3 ← q1.add q2
+                          let q4 ← field.QM31.mul mu mu
+                          let q5 ← field.QM31.ONE.sub copy_active
+                          let q6 ← q5.mul h1_z
+                          let q7 ← q4.mul q6
+                          let original ← q3.add q7
+                          ok (core.result.Result.Ok (original, c1, mask_only, g))
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                            (core.convert.FromSame
+                              pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                            residual) =
+                    do
+                    let child ← ok child
+                    NKR_TermTail.after zc point mu child)
+                child
+                (fun child_1 h_1 =>
+                  Eq.ndrec (motive := fun child =>
+                    pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta =
+                        ok child →
+                      (do
+                          let r ← ok child
+                          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                          match cf with
+                            | core.ops.control_flow.ControlFlow.Continue val =>
+                              let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                              do
+                              let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                              let q1 ← q.mul composition
+                              let q2 ← field.QM31.mul mu h1_z
+                              let q3 ← q1.add q2
+                              let q4 ← field.QM31.mul mu mu
+                              let q5 ← field.QM31.ONE.sub copy_active
+                              let q6 ← q5.mul h1_z
+                              let q7 ← q4.mul q6
+                              let original ← q3.add q7
+                              ok (core.result.Result.Ok (original, c1, mask_only, g))
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (field.QM31 ×
+                                  Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                                (core.convert.FromSame
+                                  pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                                residual) =
+                        do
+                        let child ← ok child
+                        NKR_TermTail.after zc point mu child)
+                    (fun h =>
+                      let ⟨comp, snd✝, h⟩ := child_1
+                      let ⟨c1, snd✝¹, h⟩ := snd✝
+                      let ⟨mask, snd✝², h⟩ := snd✝¹
+                      let ⟨g, snd✝³, h⟩ := snd✝²
+                      let ⟨h, active, h⟩ := snd✝³
+                      Eq.mpr
+                        (id
+                          (congr
+                            (congrArg Eq
+                              (Eq.trans
+                                (bind_tc_ok (core.result.Result.Ok (comp, c1, mask, g, h, active)) fun y => do
+                                  let cf ←
+                                    match y with
+                                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                      | core.result.Result.Err e =>
+                                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                                  match cf with
+                                    | core.ops.control_flow.ControlFlow.Continue val =>
+                                      let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                                      do
+                                      let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                                      let q1 ← q.mul composition
+                                      let q2 ← field.QM31.mul mu h1_z
+                                      let q3 ← q1.add q2
+                                      let q4 ← field.QM31.mul mu mu
+                                      let q5 ← field.QM31.ONE.sub copy_active
+                                      let q6 ← q5.mul h1_z
+                                      let q7 ← q4.mul q6
+                                      let original ← q3.add q7
+                                      ok (core.result.Result.Ok (original, c1, mask_only, g))
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (field.QM31 ×
+                                          Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                                        (core.convert.FromSame
+                                          pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                                        residual)
+                                (bind_tc_ok (core.ops.control_flow.ControlFlow.Continue (comp, c1, mask, g, h, active))
+                                  fun y =>
+                                  match y with
+                                  | core.ops.control_flow.ControlFlow.Continue val =>
+                                    let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                                    do
+                                    let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                                    let q1 ← q.mul composition
+                                    let q2 ← field.QM31.mul mu h1_z
+                                    let q3 ← q1.add q2
+                                    let q4 ← field.QM31.mul mu mu
+                                    let q5 ← field.QM31.ONE.sub copy_active
+                                    let q6 ← q5.mul h1_z
+                                    let q7 ← q4.mul q6
+                                    let original ← q3.add q7
+                                    ok (core.result.Result.Ok (original, c1, mask_only, g))
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (field.QM31 ×
+                                        Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                                      (core.convert.FromSame
+                                        pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                                      residual)))
+                            (Eq.trans
+                              (congrArg (Bind.bind (ok (core.result.Result.Ok (comp, c1, mask, g, h, active))))
+                                (funext fun child =>
+                                  congrArg
+                                    (NKR_TermTail.after.match_1
+                                      (fun x => Result (core.result.Result NKR_TermTail.Output NKR_TermTail.Error))
+                                      child fun e => ok (core.result.Result.Err e))
+                                    (funext fun child =>
+                                      Eq.trans
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg Bind.bind
+                                              (Eq.trans
+                                                (bind_assoc_eq
+                                                  (pool_v1.pair_forest_semantic_terminal.equality_value zc point)
+                                                  (fun eq => do
+                                                    let weighted ← eq.mul child.1
+                                                    let muH ← field.QM31.mul mu child.2.2.2.2.1
+                                                    let sum ← weighted.add muH
+                                                    let mu2 ← field.QM31.mul mu mu
+                                                    let inactive ← field.QM31.ONE.sub child.2.2.2.2.2
+                                                    let inactiveH ← inactive.mul child.2.2.2.2.1
+                                                    let extra ← mu2.mul inactiveH
+                                                    sum.add extra)
+                                                  fun original => ok (original, child.2.1, child.2.2.1, child.2.2.2.1))
+                                                (congrArg
+                                                  (Bind.bind
+                                                    (pool_v1.pair_forest_semantic_terminal.equality_value zc point))
+                                                  (funext fun x =>
+                                                    Eq.trans
+                                                      (bind_assoc_eq (x.mul child.1)
+                                                        (fun weighted => do
+                                                          let muH ← field.QM31.mul mu child.2.2.2.2.1
+                                                          let sum ← weighted.add muH
+                                                          let mu2 ← field.QM31.mul mu mu
+                                                          let inactive ← field.QM31.ONE.sub child.2.2.2.2.2
+                                                          let inactiveH ← inactive.mul child.2.2.2.2.1
+                                                          let extra ← mu2.mul inactiveH
+                                                          sum.add extra)
+                                                        fun original =>
+                                                        ok (original, child.2.1, child.2.2.1, child.2.2.2.1))
+                                                      (congrArg (Bind.bind (x.mul child.1))
+                                                        (funext fun x =>
+                                                          Eq.trans
+                                                            (bind_assoc_eq (field.QM31.mul mu child.2.2.2.2.1)
+                                                              (fun muH => do
+                                                                let sum ← x.add muH
+                                                                let mu2 ← field.QM31.mul mu mu
+                                                                let inactive ← field.QM31.ONE.sub child.2.2.2.2.2
+                                                                let inactiveH ← inactive.mul child.2.2.2.2.1
+                                                                let extra ← mu2.mul inactiveH
+                                                                sum.add extra)
+                                                              fun original =>
+                                                              ok (original, child.2.1, child.2.2.1, child.2.2.2.1))
+                                                            (congrArg (Bind.bind (field.QM31.mul mu child.2.2.2.2.1))
+                                                              (funext fun x_1 =>
+                                                                Eq.trans
+                                                                  (bind_assoc_eq (x.add x_1)
+                                                                    (fun sum => do
+                                                                      let mu2 ← field.QM31.mul mu mu
+                                                                      let inactive ← field.QM31.ONE.sub child.2.2.2.2.2
+                                                                      let inactiveH ← inactive.mul child.2.2.2.2.1
+                                                                      let extra ← mu2.mul inactiveH
+                                                                      sum.add extra)
+                                                                    fun original =>
+                                                                    ok (original, child.2.1, child.2.2.1, ⋯.2.1))
+                                                                  (congrArg (Bind.bind (x.add x_1))
+                                                                    (funext fun x =>
+                                                                      Eq.trans
+                                                                        (bind_assoc_eq (field.QM31.mul mu mu)
+                                                                          (fun mu2 => do
+                                                                            let inactive ← field.QM31.ONE.sub ⋯
+                                                                            let inactiveH ← inactive.mul ⋯
+                                                                            let extra ← mu2.mul inactiveH
+                                                                            x.add extra)
+                                                                          fun original => ok (original, ⋯))
+                                                                        (congrArg (Bind.bind (field.QM31.mul mu mu))
+                                                                          (funext fun x_2 => Eq.trans ⋯ ⋯))))))))))))
+                                            fun output => ok (core.result.Result.Ok output))
+                                          (bind_assoc_eq (pool_v1.pair_forest_semantic_terminal.equality_value zc point)
+                                            (fun x => do
+                                              let x ← x.mul child.1
+                                              let x_1 ← field.QM31.mul mu child.2.2.2.2.1
+                                              let x ← x.add x_1
+                                              let x_2 ← field.QM31.mul mu mu
+                                              let x_3 ← field.QM31.ONE.sub child.2.2.2.2.2
+                                              let x_4 ← x_3.mul child.2.2.2.2.1
+                                              let x_5 ← x_2.mul x_4
+                                              let original ← x.add x_5
+                                              ok (original, child.2.1, child.2.2.1, child.2.2.2.1))
+                                            fun output => ok (core.result.Result.Ok output)))
+                                        (congrArg
+                                          (Bind.bind (pool_v1.pair_forest_semantic_terminal.equality_value zc point))
+                                          (funext fun x =>
+                                            Eq.trans
+                                              (bind_assoc_eq (x.mul child.1)
+                                                (fun x => do
+                                                  let x_1 ← field.QM31.mul mu child.2.2.2.2.1
+                                                  let x ← x.add x_1
+                                                  let x_2 ← field.QM31.mul mu mu
+                                                  let x_3 ← field.QM31.ONE.sub child.2.2.2.2.2
+                                                  let x_4 ← x_3.mul child.2.2.2.2.1
+                                                  let x_5 ← x_2.mul x_4
+                                                  let original ← x.add x_5
+                                                  ok (original, child.2.1, child.2.2.1, child.2.2.2.1))
+                                                fun output => ok (core.result.Result.Ok output))
+                                              (congrArg (Bind.bind (x.mul child.1))
+                                                (funext fun x =>
+                                                  Eq.trans
+                                                    (bind_assoc_eq (field.QM31.mul mu child.2.2.2.2.1)
+                                                      (fun x_1 => do
+                                                        let x ← x.add x_1
+                                                        let x_2 ← field.QM31.mul mu mu
+                                                        let x_3 ← field.QM31.ONE.sub child.2.2.2.2.2
+                                                        let x_4 ← x_3.mul child.2.2.2.2.1
+                                                        let x_5 ← x_2.mul x_4
+                                                        let original ← x.add x_5
+                                                        ok (original, child.2.1, child.2.2.1, child.2.2.2.1))
+                                                      fun output => ok (core.result.Result.Ok output))
+                                                    (congrArg (Bind.bind (field.QM31.mul mu child.2.2.2.2.1))
+                                                      (funext fun x_1 =>
+                                                        Eq.trans
+                                                          (bind_assoc_eq (x.add x_1)
+                                                            (fun x => do
+                                                              let x_2 ← field.QM31.mul mu mu
+                                                              let x_3 ← field.QM31.ONE.sub child.2.2.2.2.2
+                                                              let x_4 ← x_3.mul child.2.2.2.2.1
+                                                              let x_5 ← x_2.mul x_4
+                                                              let original ← x.add x_5
+                                                              ok (original, child.2.1, child.2.2.1, child.2.2.2.1))
+                                                            fun output => ok (core.result.Result.Ok output))
+                                                          (congrArg (Bind.bind (x.add x_1))
+                                                            (funext fun x =>
+                                                              Eq.trans
+                                                                (bind_assoc_eq (field.QM31.mul mu mu)
+                                                                  (fun x_2 => do
+                                                                    let x_3 ← field.QM31.ONE.sub child.2.2.2.2.2
+                                                                    let x_4 ← x_3.mul child.2.2.2.2.1
+                                                                    let x_5 ← x_2.mul x_4
+                                                                    let original ← x.add x_5
+                                                                    ok (original, child.2.1, ⋯.1, ⋯.1))
+                                                                  fun output => ok (core.result.Result.Ok output))
+                                                                (congrArg (Bind.bind (field.QM31.mul mu mu))
+                                                                  (funext fun x_2 =>
+                                                                    Eq.trans
+                                                                      (bind_assoc_eq (field.QM31.ONE.sub ⋯.2.2)
+                                                                        (fun x_3 => do
+                                                                          let x_4 ← x_3.mul ⋯
+                                                                          let x_5 ← x_2.mul x_4
+                                                                          let original ← x.add x_5
+                                                                          ok ⋯)
+                                                                        fun output => ok (core.result.Result.Ok output))
+                                                                      (congrArg (Bind.bind (field.QM31.ONE.sub ⋯.2))
+                                                                        (funext fun x_3 => Eq.trans ⋯ ⋯)))))))))))))))
+                              (bind_tc_ok (core.result.Result.Ok (comp, c1, mask, g, h, active)) fun y =>
+                                match y with
+                                | core.result.Result.Err e => ok (core.result.Result.Err e)
+                                | core.result.Result.Ok child => do
+                                  let x ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                                  let x ← x.mul child.1
+                                  let x_1 ← field.QM31.mul mu child.2.2.2.2.1
+                                  let x ← x.add x_1
+                                  let x_2 ← field.QM31.mul mu mu
+                                  let x_3 ← field.QM31.ONE.sub child.2.2.2.2.2
+                                  let x_4 ← x_3.mul child.2.2.2.2.1
+                                  let x_5 ← x_2.mul x_4
+                                  let x ← x.add x_5
+                                  ok (core.result.Result.Ok (x, child.2.1, child.2.2.1, child.2.2.2.1))))))
+                        (Eq.refl
+                          (let (composition, c1, mask_only, g, h1_z, copy_active) := (comp, c1, mask, g, h, active)
+                          do
+                          let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                          let q1 ← q.mul composition
+                          let q2 ← field.QM31.mul mu h1_z
+                          let q3 ← q1.add q2
+                          let q4 ← field.QM31.mul mu mu
+                          let q5 ← field.QM31.ONE.sub copy_active
+                          let q6 ← q5.mul h1_z
+                          let q7 ← q4.mul q6
+                          let original ← q3.add q7
+                          ok (core.result.Result.Ok (original, c1, mask_only, g)))))
+                    (Eq.symm h_1) h)
+                (fun e h_1 =>
+                  Eq.ndrec (motive := fun child =>
+                    pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta =
+                        ok child →
+                      (do
+                          let r ← ok child
+                          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                          match cf with
+                            | core.ops.control_flow.ControlFlow.Continue val =>
+                              let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                              do
+                              let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                              let q1 ← q.mul composition
+                              let q2 ← field.QM31.mul mu h1_z
+                              let q3 ← q1.add q2
+                              let q4 ← field.QM31.mul mu mu
+                              let q5 ← field.QM31.ONE.sub copy_active
+                              let q6 ← q5.mul h1_z
+                              let q7 ← q4.mul q6
+                              let original ← q3.add q7
+                              ok (core.result.Result.Ok (original, c1, mask_only, g))
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (field.QM31 ×
+                                  Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                                (core.convert.FromSame
+                                  pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                                residual) =
+                        do
+                        let child ← ok child
+                        NKR_TermTail.after zc point mu child)
+                    (fun h =>
+                      Eq.refl do
+                        let r ← ok (core.result.Result.Err e)
+                        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                        match cf with
+                          | core.ops.control_flow.ControlFlow.Continue val =>
+                            let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                            do
+                            let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                            let q1 ← q.mul composition
+                            let q2 ← field.QM31.mul mu h1_z
+                            let q3 ← q1.add q2
+                            let q4 ← field.QM31.mul mu mu
+                            let q5 ← field.QM31.ONE.sub copy_active
+                            let q6 ← q5.mul h1_z
+                            let q7 ← q4.mul q6
+                            let original ← q3.add q7
+                            ok (core.result.Result.Ok (original, c1, mask_only, g))
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                              (core.convert.FromSame
+                                pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                              residual)
+                    (Eq.symm h_1) h)
+                (Eq.refl child))
+            (Eq.symm h)
+            (Eq.refl (pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta)))
+        (fun e h =>
+          Eq.ndrec (motive := fun x =>
+            pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta = x →
+              (do
+                  let r ← x
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val =>
+                      let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                      do
+                      let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                      let q1 ← q.mul composition
+                      let q2 ← field.QM31.mul mu h1_z
+                      let q3 ← q1.add q2
+                      let q4 ← field.QM31.mul mu mu
+                      let q5 ← field.QM31.ONE.sub copy_active
+                      let q6 ← q5.mul h1_z
+                      let q7 ← q4.mul q6
+                      let original ← q3.add q7
+                      ok (core.result.Result.Ok (original, c1, mask_only, g))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                        (core.convert.FromSame
+                          pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                        residual) =
+                do
+                let child ← x
+                NKR_TermTail.after zc point mu child)
+            (fun h =>
+              Eq.refl do
+                let r ← fail e
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val =>
+                    let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                    do
+                    let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                    let q1 ← q.mul composition
+                    let q2 ← field.QM31.mul mu h1_z
+                    let q3 ← q1.add q2
+                    let q4 ← field.QM31.mul mu mu
+                    let q5 ← field.QM31.ONE.sub copy_active
+                    let q6 ← q5.mul h1_z
+                    let q7 ← q4.mul q6
+                    let original ← q3.add q7
+                    ok (core.result.Result.Ok (original, c1, mask_only, g))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                      (core.convert.FromSame
+                        pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                      residual)
+            (Eq.symm h)
+            (Eq.refl (pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta)))
+        (fun h =>
+          Eq.ndrec (motive := fun x =>
+            pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta = x →
+              (do
+                  let r ← x
+                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue val =>
+                      let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                      do
+                      let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                      let q1 ← q.mul composition
+                      let q2 ← field.QM31.mul mu h1_z
+                      let q3 ← q1.add q2
+                      let q4 ← field.QM31.mul mu mu
+                      let q5 ← field.QM31.ONE.sub copy_active
+                      let q6 ← q5.mul h1_z
+                      let q7 ← q4.mul q6
+                      let original ← q3.add q7
+                      ok (core.result.Result.Ok (original, c1, mask_only, g))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                        (core.convert.FromSame
+                          pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                        residual) =
+                do
+                let child ← x
+                NKR_TermTail.after zc point mu child)
+            (fun h =>
+              Eq.refl do
+                let r ← div
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val =>
+                    let (composition, c1, mask_only, g, h1_z, copy_active) := val
+                    do
+                    let q ← pool_v1.pair_forest_semantic_terminal.equality_value zc point
+                    let q1 ← q.mul composition
+                    let q2 ← field.QM31.mul mu h1_z
+                    let q3 ← q1.add q2
+                    let q4 ← field.QM31.mul mu mu
+                    let q5 ← field.QM31.ONE.sub copy_active
+                    let q6 ← q5.mul h1_z
+                    let q7 ← q4.mul q6
+                    let original ← q3.add q7
+                    ok (core.result.Result.Ok (original, c1, mask_only, g))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (field.QM31 × Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31)
+                      (core.convert.FromSame
+                        pool_v1.pair_forest_semantic_terminal.PoolV1PairForestSemanticTerminalErrorV1)
+                      residual)
+            (Eq.symm h)
+            (Eq.refl (pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta)))
+        (Eq.refl (pool_v1.pair_forest_semantic_terminal.composition_parts pub claims point lambda chi theta))))
+'AspisR1.NLH_TermPartsFactor.source' depends on axioms: [propext, Classical.choice, Quot.sound]

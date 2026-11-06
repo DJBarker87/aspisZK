@@ -34,8 +34,8 @@ theorem step (pub : Public) (claims : Array NQ 84#usize) (point zc : Array NQ 10
  NLH_PartsState.step pub claims point zc lambda chi theta mu (.arithmetic i) (stage child p i.val)=
  ok (.Ok (stage child p (i.val+1))) := by
  change (do let reply ← NLH_PartsState.arithmetic zc point mu (stage child p i.val) i
-            ok (.Ok (NLH_PartsState.State.mk child
-              (fun j => if j=i then reply else snapshot p i.val j))))=_
+            ok (core.result.Result.Ok (NLH_PartsState.State.mk child
+              (fun j => if j=i then reply else snapshot p i.val j)) : core.result.Result NLH_PartsState.State NKR_TermTail.Error))=_
  rw [call,bind_tc_ok,NLH_PartsValues.update]
  rfl
 theorem arithmetic (pub : Public) (claims : Array NQ 84#usize) (point zc : Array NQ 10#usize)
@@ -44,7 +44,7 @@ theorem arithmetic (pub : Public) (claims : Array NQ 84#usize) (point zc : Array
  NLH_RustCuts.Cuts (NLH_PartsState.step pub claims point zc lambda chi theta mu)
  ((List.finRange 9).map NLH_PartsState.Event.arithmetic) (stage child p 0) (ok (.Ok (stage child p 9)))
  ((List.finRange 9).map NLH_PartsState.Event.arithmetic) := by
- change NLH_RustCuts.Cuts _ [.arithmetic 0,.arithmetic 1,.arithmetic 2,.arithmetic 3,.arithmetic 4,.arithmetic 5,.arithmetic 6,.arithmetic 7,.arithmetic 8] _ _ _
+ change NLH_RustCuts.Cuts _ [NLH_PartsState.Event.arithmetic 0,NLH_PartsState.Event.arithmetic 1,NLH_PartsState.Event.arithmetic 2,NLH_PartsState.Event.arithmetic 3,NLH_PartsState.Event.arithmetic 4,NLH_PartsState.Event.arithmetic 5,NLH_PartsState.Event.arithmetic 6,NLH_PartsState.Event.arithmetic 7,NLH_PartsState.Event.arithmetic 8] _ _ _
  exact .next (step pub claims point zc lambda chi theta mu child p 0)
   (.next (step pub claims point zc lambda chi theta mu child p 1)
    (.next (step pub claims point zc lambda chi theta mu child p 2)

@@ -1,0 +1,3 @@
+# Own client validation changes
+
+Only NLH_run.py is changed; S2W_run_host.py, the reservation barrier, shim and shared infrastructure stay byte-identical. The client now resolves `lake env printenv LEAN_PATH` before a Lean compile and pins the Aeneas/direct objects that this effective path selects. Native auditors use the direct configured path and are pinned on that path. This strengthens the original client, which pinned the configured path only. Historical receipt parity must be checked against the effective library selection; no unchanged proof replay is authorized merely to repeat an already identical selection. No cap, timeout, scope admission, source check or budget guard is relaxed.

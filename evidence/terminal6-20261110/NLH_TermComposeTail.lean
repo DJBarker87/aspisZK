@@ -128,7 +128,8 @@ theorem source (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#
    rw [ho,bind_tc_ok]
  simp only [NKR_TermHorner.run,FIv_FoldsTotal.body,bind_assoc_eq,bind_tc_ok] at mapped
  simpa only [FIq_Native.Array.Insts.CoreIterTraitsCollectIntoIteratorTIntoIter.into_iter,
-   core.iter.traits.iterator.Iterator.rev.trait_default,bind_tc_ok] using mapped
+   core.iter.traits.iterator.Iterator.rev.trait_default,
+   core.iter.traits.iterator.Iterator.rev.default,bind_tc_ok] using mapped
 #print axioms variant_source
 #print axioms hcolumn
 #print source

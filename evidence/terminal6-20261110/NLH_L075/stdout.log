@@ -1,0 +1,77 @@
+'AspisR1.NLH_TermHornerCut.step_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLH_TermHornerCut.loops_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLH_TermHornerCut.source : ∀ (semantic : Std.Array NQ 24#usize) (poseidon : Std.Array NQ 4#usize)
+  (theta seed : NQ),
+  canonical semantic →
+    canonical poseidon →
+      Canon theta →
+        Canon seed →
+          ∃ p middle out,
+            field.PreparedQm31Multiplier.new theta = ok p ∧
+              NJB_PreparedLaws.Domain p theta ∧
+                Trace p (↑semantic).reverse seed middle ∧
+                  Trace p (↑poseidon).reverse middle out ∧
+                    FIv_FoldsTotal.body semantic poseidon theta seed = ok out ∧ Canon out :=
+fun semantic poseidon theta seed hs hp ht hc =>
+  let ⟨p, h✝⟩ := NJB_PreparedLaws.new_result theta ht
+  let ⟨pc, dp⟩ := h✝
+  let ⟨middle, h✝¹⟩ := loops_source (↑semantic).reverse p theta seed ht hc dp fun x hx => hs x (List.mem_reverse.mp hx)
+  let ⟨first, right✝⟩ := h✝¹
+  let ⟨cm, right✝¹⟩ := right✝
+  let ⟨l0, right✝²⟩ := right✝¹
+  let ⟨out, h✝²⟩ := loops_source (↑poseidon).reverse p theta middle ht cm dp fun x hx => hp x (List.mem_reverse.mp hx)
+  let ⟨second, right✝³⟩ := h✝²
+  let ⟨co, right✝⁴⟩ := right✝³
+  let ⟨left✝, l1⟩ := right✝⁴
+  Exists.intro p
+    (Exists.intro middle
+      (Exists.intro out
+        ⟨pc,
+          ⟨dp,
+            ⟨first,
+              ⟨second,
+                ⟨of_eq_true
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind pc) fun prepared => do
+                                let middle ← composition_parts_loop0 { iter := ↑semantic } prepared seed
+                                composition_parts_loop1 { iter := ↑poseidon } prepared middle)
+                              (bind_tc_ok p fun y => do
+                                let middle ← composition_parts_loop0 { iter := ↑semantic } y seed
+                                composition_parts_loop1 { iter := ↑poseidon } y middle))
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg Bind.bind
+                                    (Eq.mp
+                                      (congrFun'
+                                        (congrArg Eq
+                                          (congrFun'
+                                            (congrFun'
+                                              (congrArg composition_parts_loop0
+                                                (congrArg core.iter.adapters.rev.Rev.mk
+                                                  (List.reverse_reverse ↑semantic)))
+                                              p)
+                                            seed))
+                                        (ok middle))
+                                      l0))
+                                  fun middle => composition_parts_loop1 { iter := ↑poseidon } p middle)
+                                (bind_tc_ok middle (composition_parts_loop1 { iter := ↑poseidon } p)))
+                              (Eq.mp
+                                (congrFun'
+                                  (congrArg Eq
+                                    (congrFun'
+                                      (congrFun'
+                                        (congrArg composition_parts_loop1
+                                          (congrArg core.iter.adapters.rev.Rev.mk (List.reverse_reverse ↑poseidon)))
+                                        p)
+                                      middle))
+                                  (ok out))
+                                l1))))
+                        (ok out))
+                      (eq_self (ok out))),
+                  co⟩⟩⟩⟩⟩))
+'AspisR1.NLH_TermHornerCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]

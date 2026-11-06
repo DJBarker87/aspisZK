@@ -9,7 +9,7 @@ open FIw_ArrayValue (canonical)
 open NKI_InitialPrefix (Public)
 open pool_v1.pair_forest_semantic_terminal
 
-def validated (pub : Public) (out : NKR_TermTail.Carrier) := do
+def validated (pub : Public) (out : NKR_TermTail.Carrier) : Result (core.result.Result NKR_TermTail.Carrier NKR_TermTail.Error) := do
  let result←validate_transition pub
  match result with
  | .Err error=>ok (.Err error)
@@ -30,11 +30,11 @@ theorem source (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#
   Canon out.1 ∧ Canon out.2.2.2.1 ∧ Canon out.2.2.2.2.1 ∧ Canon out.2.2.2.2.2 ∧
   canonical out.2.1 ∧ canonical out.2.2.1 := by
  cases bad : NLH_TermAmount.invalid pub.withdrawal_amount with
- | true=>exact Or.inl ⟨bad,NLH_TermAmount.rejected pub claims point lambda chi theta bad⟩
+ | true=>exact Or.inl ⟨rfl,NLH_TermAmount.rejected pub claims point lambda chi theta bad⟩
  | false=>
    have amount:=NLH_TermAmount.canonical pub bad
    obtain ⟨out,tail,cc,cg,ch,ca,cz,cm⟩:=NLH_TermComposeTail.source pub claims point lambda chi theta hd hc hp hl hchi ht asset amount
-   refine Or.inr ⟨out,bad,?_,cc,cg,ch,ca,cz,cm⟩
+   refine Or.inr ⟨out,rfl,?_,cc,cg,ch,ca,cz,cm⟩
    rw [NLH_TermCompositionFactor.source]
    unfold NLH_TermCompositionFactor.reference validated
    rw [NLH_TermAmount.source,bind_tc_ok]
