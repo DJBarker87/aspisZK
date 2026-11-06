@@ -1,0 +1,8 @@
+theorem AspisR1.NJF_FinishInstantiation.root : ∀ (r : NP6_StdModel.Reservation) (loc : Locations) (proof : Slice U8)
+  (v : verifier.View) (p : verifier.Prepared) (a : verifier.Accumulator),
+  NIG_FinishInput.Domain proof v p a →
+    Port3_NativeFinishBody.verifier.finish_relation (NIG_Slots.installed r) v p a none = G r loc v p a :=
+fun r loc proof v p a domain =>
+  Eq.trans (NIW_AlignFinishComposedSource.source r loc proof v p a domain) (Eq.symm (source r loc proof v p a domain))
+'AspisR1.NJF_FinishInstantiation.source' depends on axioms: [propext, choice, Quot.sound]
+'AspisR1.NJF_FinishInstantiation.root' depends on axioms: [propext, choice, Quot.sound]

@@ -38,6 +38,8 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
 paths=[B+'/NJF_objects',B+'/NJF_seed/objects',B+'/NJF_seed/base',C+'/NIQ_exports_20261107/objects',C+'/NIG_exports_20261107/objects',C+'/NIQ_seed',C+'/NIG_seed', '/home/dombarker/project-offloads/codex-cx-slice-d-pair6-20261107/NIT_seed',C+'/NIG_NHT_seed',C+'/NIQ_NHT_seed',C+'/NHX_exports_20261106/objects',C+'/NHM_exports_20261106/objects',C+'/NHI_exports_20261106/objects',C+'/NHE_exports_20261106/objects',C+'/NGW_exports_20261105/objects',C+'/NGW_NGK_seed',C+'/NGM_exports_20261105',C,'/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NGZ_flat',W,W+'/objects',T+'/lib/lean']
+extension=json.loads((E/'NJF_PATH_EXTENSION.json').read_text()) if (E/'NJF_PATH_EXTENSION.json').exists() else []
+paths=paths[:-1]+[x for x in extension if x not in paths]+paths[-1:]
 env=dict(CARGO_TARGET_DIR=B+'/NJF_target',LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NJF_tmp',LEAN_PATH=':'.join(paths))
 files={};sources=[]
 assert target.startswith('NJF_') or kind in ['auditbin','kani','extract','dependency']
@@ -92,7 +94,7 @@ if target in ['scan','queryscan']:
 cfg=dict(attempt=a,own_audit=(kind=='auditbin' and own),kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='Focused elaboration' if kind=='lean' else 'Optimized audit linker' if kind=='linkaudit' else 'Raw checked-kernel graph traversal')
 if kind=='kani':cfg['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NJF_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NJF_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
 if kind=='kani' and os.environ.get('NJF_WINDOW'):
- assert os.environ['NJF_WINDOW'] in ['args','control','scratch','parts','shared']
+ assert os.environ['NJF_WINDOW'] in ['args','control','scratch','parts','shared','partial_args','high_args','high_pre','high_value']
  env['RUSTFLAGS']+=' --cfg NJF_window_'+os.environ['NJF_WINDOW']
 if kind=='kani' and os.environ.get('NJF_OWNER_GROUP'):
  assert os.environ['NJF_OWNER_GROUP'] in ['factors','rest']

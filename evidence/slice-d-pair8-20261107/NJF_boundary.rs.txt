@@ -7,7 +7,7 @@ fn err(i:u8)->Error{match i%8{0=>Error::Parse,1=>Error::Transcript,2=>Error::Sem
 fn code(e:Error)->u8{match e{Error::Parse=>0,Error::Transcript=>1,Error::Semantic=>2,Error::Relation=>3,Error::Merkle=>4,Error::Query=>5,Error::Checkpoint=>6,Error::Allocation=>7}}
 fn unit()->Result<(),Error>{if kani::any(){Ok(())}else{Err(err(kani::any()))}}
 struct Log{regular:Result<(),Error>,partial:Result<[E;4],Error>,high:Result<(),Error>,
- scratch:[K;64],parts:[E;7],common:[K;16],high_parts:[E;7],
+ scratch:Vec<K>,parts:[E;7],common:[K;16],high_parts:[E;7],
  who:*const Weights,shared:bool,alpha:*const E,alpha_len:usize,message:*const u8,message_len:usize,folds:usize,n:usize,scratch_ptr:*const K,parts_ptr:*const E,ap0:[E;4],ap1:[E;4],
  events:[u8;4],count:usize,partial_common:K,high_before:E,high_partial:E,high_ptr:*const E,common_who:*const Weights,partial_message:*const u8,partial_message_len:usize,high_who:*const Weights,high_ap0:E,high_ap1:E}
 fn event(l:&mut Log,e:u8){l.events[l.count]=e;l.count+=1;}
@@ -30,8 +30,16 @@ fn boundary(w:&Weights,shared:bool,alpha:&[E],f:&[u8],ap0:&[E;4],ap1:&[E;4],scra
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn slice_boundary(){
  let shared:bool=kani::any();let i:usize=kani::any();kani::assume(i<16);let slot:usize=kani::any();kani::assume(slot<7);let power:usize=kani::any();kani::assume(power<4);let index:usize=kani::any();kani::assume(index<64);let limb:usize=kani::any();kani::assume(limb<8);
- let mut scratch:[K;64]=core::array::from_fn(|_|q(kani::any()));let post:[K;64]=core::array::from_fn(|_|q(kani::any()));
- let w=Weights{variant:Variant::S2,factors:core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|q(kani::any())))),points:core::array::from_fn(|_|core::array::from_fn(|_|q(kani::any()))),extra:[q(kani::any()),q(kani::any())]};
+ let mut scratch=Vec::<K>::with_capacity(64);let mut post=Vec::<K>::with_capacity(64);for _ in 0..64{scratch.push(q(kani::any()));post.push(q(kani::any()));}
+ let raw=Box::into_raw(Box::<Weights>::new_uninit()) as *mut Weights;
+ let w=unsafe{
+ core::ptr::addr_of_mut!((*raw).variant).write(Variant::S2);
+ for row in 0..5{for digit in 0..5{for col in 0..4{core::ptr::addr_of_mut!((*raw).factors[row][digit][col]).write(q(kani::any()));}}}
+ for row in 0..3{for digit in 0..10{core::ptr::addr_of_mut!((*raw).points[row][digit]).write(q(kani::any()));}}
+ for col in 0..2{core::ptr::addr_of_mut!((*raw).extra[col]).write(q(kani::any()));}
+ Box::from_raw(raw)
+ };
+ let owner=&*w as *const Weights;
  let alpha:[E;2]=[anye(),anye()];let f:[u8;2048]=kani::any();let ap0=core::array::from_fn(|_|anye());let ap1=core::array::from_fn(|_|anye());
  let scratch_ptr=scratch.as_ptr();
  let expected_q=qw(post[index]);let mut parts=core::array::from_fn(|_|anye());let parts_ptr=parts.as_ptr();
@@ -39,14 +47,16 @@ fn slice_boundary(){
  let out=boundary(&w,shared,&alpha,&f,&ap0,&ap1,&mut scratch,&mut parts,i,slot,power,&mut l);
  let entered_high=l.regular.is_ok()&&shared&&l.partial.is_ok();let entered_partial=l.regular.is_ok()&&shared;
  let expected=if let Err(e)=l.regular{Err(code(e))}else if !shared{Ok(())}else if let Err(e)=l.partial{Err(code(e))}else{l.high.map_err(code)};
- if cfg!(NJF_corrupt){l.events[0]=99;l.alpha=l.alpha.wrapping_add(1);l.high_before=E::ZERO;scratch[index]=K::ZERO;parts[slot]=E::ZERO;l.partial_common=K::ZERO;}
- if cfg!(NJF_window_args){assert!(l.who==&w as *const Weights&&l.shared==shared&&l.alpha==alpha.as_ptr()&&l.alpha_len==2&&l.message==f.as_ptr()&&l.message_len==2048&&l.folds==2&&l.n==64&&l.scratch_ptr==scratch_ptr&&l.parts_ptr==parts_ptr);
+ if cfg!(NJF_corrupt){l.events[0]=99;l.high_who=l.high_who.wrapping_add(1);l.high_ap0=E::ZERO;l.high_partial=E::ZERO;l.partial_message=l.partial_message.wrapping_add(1);l.alpha=l.alpha.wrapping_add(1);l.high_before=E::ZERO;scratch[index]=K::ZERO;parts[slot]=E::ZERO;l.partial_common=K::ZERO;}
+ if cfg!(NJF_window_args){assert!(l.who==owner&&l.shared==shared&&l.alpha==alpha.as_ptr()&&l.alpha_len==2&&l.message==f.as_ptr()&&l.message_len==2048&&l.folds==2&&l.n==64&&l.scratch_ptr==scratch_ptr&&l.parts_ptr==parts_ptr);
  assert!(l.ap0[power].to_limbs()[limb]==ap0[power].to_limbs()[limb]&&l.ap1[power].to_limbs()[limb]==ap1[power].to_limbs()[limb]);
  } if cfg!(NJF_window_control){assert!(out.map_err(code)==expected&&l.count==if !entered_partial{1}else if !entered_high{3}else{4});
  assert!(l.events[0]==0&&(!entered_partial||(l.events[1]==1&&l.events[2]==2))&&(!entered_high||l.events[3]==3));
  } if cfg!(NJF_window_scratch){assert!(scratch.len()==64&&scratch.as_ptr()==scratch_ptr&&qw(scratch[index])[limb&3]==expected_q[limb&3]);
  } if cfg!(NJF_window_parts){assert!(parts.as_ptr()==parts_ptr&&parts[slot].to_limbs()[limb]==if entered_high{l.high_parts[slot]}else{l.parts[slot]}.to_limbs()[limb]);
- } if cfg!(NJF_window_shared){if entered_partial{assert!(l.common_who==&w as *const Weights&&l.partial_message==f.as_ptr()&&l.partial_message_len==2048);assert!(qw(l.partial_common)[limb&3]==qw(l.common[i])[limb&3]);}
- if entered_high{let values=l.partial.unwrap();assert!(l.high_who==&w as *const Weights&&l.high_ap0.to_limbs()[limb]==ap0[power].to_limbs()[limb]&&l.high_ap1.to_limbs()[limb]==ap1[power].to_limbs()[limb]);assert!(l.high_ptr==parts_ptr&&l.high_before.to_limbs()[limb]==l.parts[slot].to_limbs()[limb]&&l.high_partial.to_limbs()[limb]==values[power].to_limbs()[limb]);}
+ } if cfg!(NJF_window_shared)||cfg!(NJF_window_partial_args){if entered_partial{assert!(l.common_who==owner&&l.partial_message==f.as_ptr()&&l.partial_message_len==2048);assert!(qw(l.partial_common)[limb&3]==qw(l.common[i])[limb&3]);}
+ } if cfg!(NJF_window_shared)||cfg!(NJF_window_high_args){if entered_high{let values=l.partial.unwrap();assert!(l.high_who==owner&&l.high_ap0.to_limbs()[limb]==ap0[power].to_limbs()[limb]&&l.high_ap1.to_limbs()[limb]==ap1[power].to_limbs()[limb]);assert!(l.high_ptr==parts_ptr);let _=values;}
 }
+ if cfg!(NJF_window_high_pre){if entered_high{assert!(l.high_before.to_limbs()[limb]==l.parts[slot].to_limbs()[limb]);}}
+ if cfg!(NJF_window_high_value){if entered_high{let values=l.partial.unwrap();assert!(l.high_partial.to_limbs()[limb]==values[power].to_limbs()[limb]);}}
 }

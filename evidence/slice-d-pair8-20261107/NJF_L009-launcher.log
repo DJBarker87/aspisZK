@@ -1,0 +1,52 @@
+{"attempt": "NJF_L009", "exit_status": 0, "wall_seconds": 4.67961396696046, "peak_rss_kib": "6018336", "swaps": "0", "print_axioms": ["'AspisR1.NJF_SharedContinuation.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJF_SharedContinuation.source : ∀ (c : Context) (scratch : Scratch) (parts : Parts),
+  NHI_TensorOuterStep.Factors c.w.value → continueWith c (stage c scratch parts) = shared c parts :=
+fun c scratch parts hf =>
+  have cz := fun x hx => Eq.symm (Eq.mp source._simp_1 hx).right ▸ NHX_FilledZero.zero_canonical;
+  have common := NIW_AlignCommonSource.source c.w.value hf (Array.repeat 16#usize NHX_FilledZero.zeroQ) cz;
+  casesOn (motive := fun t => commonReply c = t → continueWith c (stage c scratch parts) = shared c parts)
+    (commonReply c)
+    (fun value h =>
+      Eq.ndrec (motive := fun x => commonReply c = x → continueWith c (stage c scratch parts) = shared c parts)
+       
+...
+                      | fail e => False
+                          | div => False)
+                        hc))
+                    common).right)
+            common)
+        (Eq.symm h) (Eq.refl (commonReply c)))
+    (fun h =>
+      Eq.ndrec (motive := fun x => commonReply c = x → continueWith c (stage c scratch parts) = shared c parts)
+        (fun hc =>
+          id
+            (fun common =>
+              False.elim
+                (Eq.mp
+                    (congrArg
+                      (And
+                        (FIo_Native.weights.Weights.pair_loop1 { start := 0#usize, «end» := 16#usize } c.w.value
+                            (Array.repeat 16#usize NHX_FilledZero.zeroQ) =
+                          (NIW_AlignCommonCollect.collect c.w.value 17
+                              ({ start := 0#usize, «end» := 16#usize }, Array.repeat 16#usize NHX_FilledZero.zeroQ)).1))
+                      (congrArg
+                        (fun x =>
+                          match x with
+                          | ok value =>
+                            (fun out =>
+                                NIT_CommonChain.Trace c.w.value 17
+                                    ({ start := 0#usize, «end» := 16#usize },
+                                      Array.repeat 16#usize NHX_FilledZero.zeroQ)
+                                    out ∧
+                                  out.1 = c.w.value ∧ NHI_CellCanon.array out.2)
+                              value
+                          | fail e => False
+                          | div => False)
+                        hc))
+                    common).right)
+            common)
+        (Eq.symm h) (Eq.refl (commonReply c)))
+    (Eq.refl (commonReply c))
+'AspisR1.NJF_SharedContinuation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2c491f05cd904438b336bd92654564d3.scope; invocation ID: d9d68e54c6704a97a77bb991caf3ab9f

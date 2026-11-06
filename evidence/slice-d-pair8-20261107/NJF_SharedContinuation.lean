@@ -37,9 +37,11 @@ theorem source (c : Context) (scratch : Scratch) (parts : Parts)
  | fail err =>
   change _ ∧ NIW_AlignFieldReply.Produced (commonReply c) _ at common
   simp only [hc,NIW_AlignFieldReply.Produced] at common
+  exact False.elim common.2
  | div =>
   change _ ∧ NIW_AlignFieldReply.Produced (commonReply c) _ at common
   simp only [hc,NIW_AlignFieldReply.Produced] at common
+  exact False.elim common.2
  | ok value =>
   rcases value with ⟨owner,cells⟩
   change _ ∧ NIW_AlignFieldReply.Produced (commonReply c) _ at common
@@ -52,18 +54,18 @@ theorem source (c : Context) (scratch : Scratch) (parts : Parts)
    rw [←NIG_CommonLoop.common_source]
    exact common.1.trans hc
   cases hp : FIo_Native.weights.shared_partials c.f.value cells with
-  | fail err => simp only [stage,hc,hp,continueWith,NIT_PairControl.shared,reference,bind_tc_ok];rfl
-  | div => simp only [stage,hc,hp,continueWith,NIT_PairControl.shared,reference,bind_tc_ok];rfl
+  | fail err => simp only [stage,hc,hp,continueWith,NIT_PairControl.shared,reference,bind_tc_ok,uncurry];rfl
+  | div => simp only [stage,hc,hp,continueWith,NIT_PairControl.shared,reference,bind_tc_ok,uncurry];rfl
   | ok partials =>
    cases partials with
-   | Err err => simp only [stage,hc,hp,continueWith,NIT_PairControl.shared,reference,bind_tc_ok,afterPartial,afterHigh]
+   | Err err => simp only [stage,hc,hp,continueWith,NIT_PairControl.shared,reference,bind_tc_ok,uncurry,afterPartial,afterHigh]
    | Ok values =>
     cases hh : FIo_Native.weights.shared_high values c.w.value c.ap0.value c.ap1.value parts with
-    | fail err => simp only [stage,hc,hp,hh,continueWith,NIT_PairControl.shared,reference,bind_tc_ok,afterPartial];rfl
-    | div => simp only [stage,hc,hp,hh,continueWith,NIT_PairControl.shared,reference,bind_tc_ok,afterPartial];rfl
+    | fail err => simp only [stage,hc,hp,hh,continueWith,NIT_PairControl.shared,reference,bind_tc_ok,uncurry,afterPartial];rfl
+    | div => simp only [stage,hc,hp,hh,continueWith,NIT_PairControl.shared,reference,bind_tc_ok,uncurry,afterPartial];rfl
     | ok result =>
      rcases result with ⟨reply,after⟩
-     simp only [stage,hc,hp,hh,continueWith,NIT_PairControl.shared,reference,bind_tc_ok,afterPartial]
+     simp only [stage,hc,hp,hh,continueWith,NIT_PairControl.shared,reference,bind_tc_ok,uncurry,afterPartial]
 
 #print source
 #print axioms source

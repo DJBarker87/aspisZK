@@ -80,7 +80,7 @@ theorem source (c : Context) (before : Scratch) :
      cases hp : FIo_Native.weights.shared_partials c.f.value cells with
      | fail err => simp only [hp,G,ite_true,ite_false]
      | div => simp only [hp,G,ite_true,ite_false]
-     | ok partials => cases partials <;> simp only [hp,G,ite_true,ite_false]
+     | ok partials => cases partials <;> simp only [hp,G,ite_true] <;> rfl
 
 #print source
 #print axioms source

@@ -1,0 +1,38 @@
+{"attempt": "NJF_L024", "exit_status": 0, "wall_seconds": 6.4089729860424995, "peak_rss_kib": "6022912", "swaps": "0", "print_axioms": ["'AspisR1.NJF_SliceCuts.evaluator' depends on axioms: [propext, choice, Quot.sound]"]}
+NJF_generated/NJF_SliceCuts.lean:98:6: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+def AspisR1.NJF_SliceCuts.cut : Context → Bool → Replies → Arguments → Scratch → Parts → RU → (ℕ → ℕ) → ℕ → Prop :=
+fun c shared l args scratch parts out events calls =>
+  canonical l.parts ∧
+    canonical l.highParts ∧
+      (∀ (values : Powers), l.partialReply = core.result.Result.Ok values → canonical values) ∧
+        (↑(alloc.vec.Vec.deref l.scratch)).length = 64 ∧
+          args.regularOwner = c.w.address ∧
+            args.
+...
+               out = expected shared l ∧
+                                    calls = count shared l ∧
+                                      events 0 = 0 ∧
+                                        scratch = l.scratch ∧
+                                          (parts = if enteredHigh shared l then l.highParts else l.parts) ∧
+                                            (enteredPartial shared l →
+                                                events 1 = 1 ∧
+                                                  events 2 = 2 ∧
+                                                    args.commonOwner = c.w.address ∧
+                                                      args.partialMessage = c.f.address ∧
+                                                        args.partialMessageLength = 2048 ∧
+                                                          args.partialCommon = l.common) ∧
+                                              (enteredHigh shared l →
+                                                events 3 = 3 ∧
+                                                  args.highOwner = c.w.address ∧
+                                                    args.highParts = c.partsAddress ∧
+                                                      args.highAP0 = c.ap0.value ∧
+                                                        args.highAP1 = c.ap1.value ∧
+                                                          args.highBefore = l.parts ∧
+                                                            ∀ (values : Powers),
+                                                              l.partialReply = core.result.Result.Ok values →
+                                                                args.highPartial = values)
+'AspisR1.NJF_SliceCuts.evaluator' depends on axioms: [propext, choice, Quot.sound]
+
+Running as unit: run-r0ada41cb3ca24d49801bc28eeef09ab6.scope; invocation ID: 09e4132170354f4787c3b5ac41a6eaf7

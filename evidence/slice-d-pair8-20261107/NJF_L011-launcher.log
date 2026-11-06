@@ -1,0 +1,48 @@
+{"attempt": "NJF_L011", "exit_status": 1, "wall_seconds": 3.9771884069778025, "peak_rss_kib": "5975816", "swaps": "0", "print_axioms": ["'AspisR1.NJF_RegularContinuation.interpreted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJF_RegularContinuation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJF_generated/NJF_RegularContinuation.lean:33:4: error: Type mismatch
+  NJF_SharedContinuation.source c scratch parts hf
+has type
+  continueWith c (stage c scratch parts) = shared c parts
+but is expected to have type
+  continueWith c
+      (match commonReply c with
+        | fail err => (fail err, [0, 1])
+        | div => (div, [0, 1])
+        | ok (owner, cells) =>
+          match FIo_Native.weights.shared_partials c.f.value cells with
+          | fail err => (fail err, [0, 1, 2])
+          | div => (div, [0, 1, 2])
+          | ok (core.result.Result.Err err) => (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+          | ok (core.result.Result.Ok values) =>
+            match FI
+...
+
+          | fail err => (fail err, [0, 1, 2])
+          | div => (div, [0, 1, 2])
+          | ok (core.result.Result.Err err) => (ok (core.result.Result.Err err, scratch, parts), [0, 1, 2])
+          | ok (core.result.Result.Ok values) =>
+            match FIo_Native.weights.shared_high values owner c.ap0.value c.ap1.value parts with
+            | fail err => (fail err, [0, 1, 2, 3])
+            | div => (div, [0, 1, 2, 3])
+            | ok (reply, after) => (ok (reply, scratch, after), [0, 1, 2, 3])).1 =
+    shared c parts
+NJF_generated/NJF_RegularContinuation.lean:27:7: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+theorem AspisR1.NJF_RegularContinuation.source : ∀ [inst : FIo_Native.Allocation] (c : Context) (before : Scratch),
+  NIT_PairDomain.Domain c.w.value c.alpha.value c.f.value c.kappa →
+    canonical c.ap0.value →
+      canonical c.ap1.value →
+        NHX_RegularPost.Inv before initial →
+          continueWith c (G (NGM_GuardExact.guard c.w.value 2#usize) (instantiate c before)).1 =
+            (NIW_AlignRegularPhase.run c before).1 :=
+fun [FIo_Native.Allocation] c before domain c0 c1 inv =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => continueWith c _a.1 = (NIW_AlignRegularPhase.run c before).1)
+        (NJF_RegularInstantiation.source c before)))
+    (Eq.trans (interpreted c before domain.factors) (NIW_AlignRegularPhaseSource.source c before domain c0 c1 inv))
+'AspisR1.NJF_RegularContinuation.interpreted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJF_RegularContinuation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r19792f59b4ff48caa4bcac08bc7c3f58.scope; invocation ID: 7f65fff306144b4f8e86068ba2f9be9c
