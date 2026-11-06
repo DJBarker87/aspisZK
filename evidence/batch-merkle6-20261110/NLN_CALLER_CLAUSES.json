@@ -1,0 +1,400 @@
+{
+  "schema_version": 1,
+  "ruling": "bf(2), aq(2)",
+  "rows": [
+    {
+      "row": "TX2:055",
+      "root": "NLN_TX2_055.root",
+      "module": "NLN_TX2_055",
+      "statement": "theorem root (H : Bytes → State) (proof : Slice U8) (len : proof.val.length=57607)\n (p : OraclePortCompactDraft.Parsed) (wire : p.wire=MultiproofConeCanonical.bytesOf proof.val)\n (raw : Array U32 22#usize) (commitment : NLL.Root) (kind : Usize)\n (hk : kind.val<3) (canonical : ∀ j,j<22 → raw.val[j]!.val<262144)\n (rootValue : commitment=encodeState (OraclePortBatchDraft.committedRoot p kind.val)) :\n NLN.TreePacket H proof p raw commitment 1#usize kind",
+      "clauses": [
+        {
+          "name": "len",
+          "verbatim": "proof.val.length=57607",
+          "classification": "bf(2) own proof extent"
+        },
+        {
+          "name": "wire",
+          "verbatim": "p.wire=MultiproofConeCanonical.bytesOf proof.val",
+          "classification": "bf(2) own proof interpretation witness"
+        },
+        {
+          "name": "hk",
+          "verbatim": "kind.val<3",
+          "classification": "bf(2) own scalar range"
+        },
+        {
+          "name": "canonical",
+          "verbatim": "∀ j,j<22 → raw.val[j]!.val<262144",
+          "classification": "bf(2) own typed query array"
+        },
+        {
+          "name": "rootValue",
+          "verbatim": "commitment=encodeState (OraclePortBatchDraft.committedRoot p kind.val)",
+          "classification": "bf(2) root/proof interpretation"
+        }
+      ],
+      "caller_occurrences": [
+        {
+          "caller": "TX2:054",
+          "site": "candidate.rs:166",
+          "kind": 0,
+          "batch": 1,
+          "arguments": "proof, raw, rootAt roots 0, 1, 0, current idx, current val",
+          "discharged_by": "NLN_TX2_054.root / NLN.bindings / NLL_ValuesReturning.kinds",
+          "status": "INTERNAL_DISCHARGED"
+        },
+        {
+          "caller": "TX2:054",
+          "site": "candidate.rs:167",
+          "kind": 1,
+          "batch": 1,
+          "arguments": "proof, raw, rootAt roots 1, 1, 1, current idx, current val",
+          "discharged_by": "NLN_TX2_054.root / NLN.bindings / NLL_ValuesReturning.kinds",
+          "status": "INTERNAL_DISCHARGED"
+        },
+        {
+          "caller": "TX2:054",
+          "site": "candidate.rs:168",
+          "kind": 2,
+          "batch": 1,
+          "arguments": "proof, raw, rootAt roots 2, 1, 2, current idx, current val",
+          "discharged_by": "NLN_TX2_054.root / NLN.bindings / NLL_ValuesReturning.kinds",
+          "status": "INTERNAL_DISCHARGED"
+        }
+      ],
+      "query_count": {
+        "batch": 1,
+        "max_distinct": 12,
+        "byte_gate": 9216,
+        "status": "DERIVED internally, not extra caller hypothesis",
+        "theorems": [
+          "NLN.TreePacket.counts",
+          "NLN.TreePacket.abortCount",
+          "NLN.TreePacket.bytes"
+        ]
+      },
+      "inventory_check": {
+        "aq2": "reviewed NLL native cut transcription universally quantified in packet conclusion",
+        "bf2": "every explicit root premise is an own-input predicate",
+        "bf3": "no child result/success/endpoint, no global/headline/physical state, no Ops/Run hypothesis",
+        "parsed": "universally quantified local interpretation witness tied to proof/root inputs; no parse success assumed"
+      },
+      "specialized_batch_argument": 1,
+      "specialization_discharge": "literal0/1 at each listed frozen caller; no hidden runtime batch hypothesis",
+      "domain_satisfiability": "No success restriction: arbitrary valid proof bytes and canonical query words; choose local Parsed wire and bind roots to its named projections. Caller root/proof provenance remains recorded at external caller."
+    },
+    {
+      "row": "TX2:054",
+      "root": "NLN_TX2_054.root",
+      "module": "NLN_TX2_054",
+      "statement": "theorem root (H : Bytes → State) (proof : Slice U8) (len : proof.val.length=57607)\n (p : OraclePortCompactDraft.Parsed) (wire : p.wire=MultiproofConeCanonical.bytesOf proof.val)\n (raw : Array U32 22#usize) (roots : Roots)\n (canonical : ∀ j,j<22 → raw.val[j]!.val<262144)\n (rootValues : ∀ k : Fin 3, Port3_NativeBatchCalls.rootAt roots k=\n   encodeState (OraclePortBatchDraft.committedRoot p k.val)) :\n NLN.ValuesPacket H proof p raw roots 1#usize",
+      "clauses": [
+        {
+          "name": "len",
+          "verbatim": "proof.val.length=57607",
+          "classification": "bf(2) own proof extent"
+        },
+        {
+          "name": "wire",
+          "verbatim": "p.wire=MultiproofConeCanonical.bytesOf proof.val",
+          "classification": "bf(2) own proof interpretation witness"
+        },
+        {
+          "name": "canonical",
+          "verbatim": "∀ j,j<22 → raw.val[j]!.val<262144",
+          "classification": "bf(2) own typed query array"
+        },
+        {
+          "name": "rootValues",
+          "verbatim": "∀ k : Fin 3, Port3_NativeBatchCalls.rootAt roots k=\n   encodeState (OraclePortBatchDraft.committedRoot p k.val)",
+          "classification": "bf(2) three own root arguments"
+        }
+      ],
+      "caller_occurrences": [
+        {
+          "caller": "TX2:053",
+          "site": "candidate.rs:158",
+          "arguments": "proof, p.queries, NLL_BatchSource.roots p folded, 1",
+          "discharged_by": "NLN_TX2_053.root, literal SAME projections",
+          "status": "INTERNAL_DISCHARGED"
+        }
+      ],
+      "query_count": {
+        "batch": 1,
+        "max_distinct": 12,
+        "byte_gate": 9216,
+        "status": "DERIVED internally, not extra caller hypothesis",
+        "theorems": [
+          "NLN.TreePacket.counts",
+          "NLN.TreePacket.abortCount",
+          "NLN.TreePacket.bytes"
+        ]
+      },
+      "inventory_check": {
+        "aq2": "reviewed NLL native cut transcription universally quantified in packet conclusion",
+        "bf2": "every explicit root premise is an own-input predicate",
+        "bf3": "no child result/success/endpoint, no global/headline/physical state, no Ops/Run hypothesis",
+        "parsed": "universally quantified local interpretation witness tied to proof/root inputs; no parse success assumed"
+      },
+      "specialized_batch_argument": 1,
+      "specialization_discharge": "literal0/1 at each listed frozen caller; no hidden runtime batch hypothesis",
+      "domain_satisfiability": "No success restriction: arbitrary valid proof bytes and canonical query words; choose local Parsed wire and bind roots to its named projections. Caller root/proof provenance remains recorded at external caller."
+    },
+    {
+      "row": "TX2:053",
+      "root": "NLN_TX2_053.root",
+      "module": "NLN_TX2_053",
+      "statement": "theorem root (H : Bytes → State) (proof : Slice U8) (len : proof.val.length=57607)\n (parsed : OraclePortCompactDraft.Parsed) (wire : parsed.wire=MultiproofConeCanonical.bytesOf proof.val)\n (p : verifier.Prepared) (folded : NLL.Root)\n (canonical : ∀ j,j<22 → p.queries.val[j]!.val<262144)\n (rootValues : ∀ k : Fin 3, Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k=\n   encodeState (OraclePortBatchDraft.committedRoot parsed k.val)) :\n NLN.BatchPacket H proof parsed p folded 1#usize",
+      "clauses": [
+        {
+          "name": "len",
+          "verbatim": "proof.val.length=57607",
+          "classification": "bf(2) own proof extent"
+        },
+        {
+          "name": "wire",
+          "verbatim": "parsed.wire=MultiproofConeCanonical.bytesOf proof.val",
+          "classification": "bf(2) own proof interpretation witness"
+        },
+        {
+          "name": "canonical",
+          "verbatim": "∀ j,j<22 → p.queries.val[j]!.val<262144",
+          "classification": "bf(2) own Prepared query projection"
+        },
+        {
+          "name": "rootValues",
+          "verbatim": "∀ k : Fin 3, Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k=\n   encodeState (OraclePortBatchDraft.committedRoot parsed k.val)",
+          "classification": "bf(2) own Prepared roots and folded argument"
+        }
+      ],
+      "caller_occurrences": [
+        {
+          "caller": "TX2:065",
+          "site": "C04 Event.merkle in NJU_CommonObserved.run",
+          "arguments": "actual proof, actual Prepared, actual folded_root, 1",
+          "status": "CALLER_OWNED_OPEN",
+          "available_domain_producer": "NLL_Tx2AtActual.source",
+          "remaining": "Install extent, same proof/Parsed witness and all root bindings from this caller own fold; query producer must be applied at SAME arguments."
+        }
+      ],
+      "query_count": {
+        "batch": 1,
+        "max_distinct": 12,
+        "byte_gate": 9216,
+        "status": "DERIVED internally, not extra caller hypothesis",
+        "theorems": [
+          "NLN.TreePacket.counts",
+          "NLN.TreePacket.abortCount",
+          "NLN.TreePacket.bytes"
+        ]
+      },
+      "inventory_check": {
+        "aq2": "reviewed NLL native cut transcription universally quantified in packet conclusion",
+        "bf2": "every explicit root premise is an own-input predicate",
+        "bf3": "no child result/success/endpoint, no global/headline/physical state, no Ops/Run hypothesis",
+        "parsed": "universally quantified local interpretation witness tied to proof/root inputs; no parse success assumed"
+      },
+      "specialized_batch_argument": 1,
+      "specialization_discharge": "literal0/1 at each listed frozen caller; no hidden runtime batch hypothesis",
+      "domain_satisfiability": "No success restriction: arbitrary valid proof bytes and canonical query words; choose local Parsed wire and bind roots to its named projections. Caller root/proof provenance remains recorded at external caller."
+    },
+    {
+      "row": "TX1:083",
+      "root": "NLN_TX1_083.root",
+      "module": "NLN_TX1_083",
+      "statement": "theorem root (H : Bytes → State) (proof : Slice U8) (len : proof.val.length=57607)\n (p : OraclePortCompactDraft.Parsed) (wire : p.wire=MultiproofConeCanonical.bytesOf proof.val)\n (raw : Array U32 22#usize) (commitment : NLL.Root) (kind : Usize)\n (hk : kind.val<3) (canonical : ∀ j,j<22 → raw.val[j]!.val<262144)\n (rootValue : commitment=encodeState (OraclePortBatchDraft.committedRoot p kind.val)) :\n NLN.TreePacket H proof p raw commitment 0#usize kind",
+      "clauses": [
+        {
+          "name": "len",
+          "verbatim": "proof.val.length=57607",
+          "classification": "bf(2) own proof extent"
+        },
+        {
+          "name": "wire",
+          "verbatim": "p.wire=MultiproofConeCanonical.bytesOf proof.val",
+          "classification": "bf(2) own proof interpretation witness"
+        },
+        {
+          "name": "hk",
+          "verbatim": "kind.val<3",
+          "classification": "bf(2) own scalar range"
+        },
+        {
+          "name": "canonical",
+          "verbatim": "∀ j,j<22 → raw.val[j]!.val<262144",
+          "classification": "bf(2) own typed query array"
+        },
+        {
+          "name": "rootValue",
+          "verbatim": "commitment=encodeState (OraclePortBatchDraft.committedRoot p kind.val)",
+          "classification": "bf(2) root/proof interpretation"
+        }
+      ],
+      "caller_occurrences": [
+        {
+          "caller": "TX1:082",
+          "site": "candidate.rs:166",
+          "kind": 0,
+          "batch": 0,
+          "arguments": "proof, raw, rootAt roots 0, 0, 0, current idx, current val",
+          "discharged_by": "NLN_TX1_082.root / NLN.bindings / NLL_ValuesReturning.kinds",
+          "status": "INTERNAL_DISCHARGED"
+        },
+        {
+          "caller": "TX1:082",
+          "site": "candidate.rs:167",
+          "kind": 1,
+          "batch": 0,
+          "arguments": "proof, raw, rootAt roots 1, 0, 1, current idx, current val",
+          "discharged_by": "NLN_TX1_082.root / NLN.bindings / NLL_ValuesReturning.kinds",
+          "status": "INTERNAL_DISCHARGED"
+        },
+        {
+          "caller": "TX1:082",
+          "site": "candidate.rs:168",
+          "kind": 2,
+          "batch": 0,
+          "arguments": "proof, raw, rootAt roots 2, 0, 2, current idx, current val",
+          "discharged_by": "NLN_TX1_082.root / NLN.bindings / NLL_ValuesReturning.kinds",
+          "status": "INTERNAL_DISCHARGED"
+        }
+      ],
+      "query_count": {
+        "batch": 0,
+        "max_distinct": 10,
+        "byte_gate": 9216,
+        "status": "DERIVED internally, not extra caller hypothesis",
+        "theorems": [
+          "NLN.TreePacket.counts",
+          "NLN.TreePacket.abortCount",
+          "NLN.TreePacket.bytes"
+        ]
+      },
+      "inventory_check": {
+        "aq2": "reviewed NLL native cut transcription universally quantified in packet conclusion",
+        "bf2": "every explicit root premise is an own-input predicate",
+        "bf3": "no child result/success/endpoint, no global/headline/physical state, no Ops/Run hypothesis",
+        "parsed": "universally quantified local interpretation witness tied to proof/root inputs; no parse success assumed"
+      },
+      "specialized_batch_argument": 0,
+      "specialization_discharge": "literal0/1 at each listed frozen caller; no hidden runtime batch hypothesis",
+      "domain_satisfiability": "No success restriction: arbitrary valid proof bytes and canonical query words; choose local Parsed wire and bind roots to its named projections. Caller root/proof provenance remains recorded at external caller."
+    },
+    {
+      "row": "TX1:082",
+      "root": "NLN_TX1_082.root",
+      "module": "NLN_TX1_082",
+      "statement": "theorem root (H : Bytes → State) (proof : Slice U8) (len : proof.val.length=57607)\n (p : OraclePortCompactDraft.Parsed) (wire : p.wire=MultiproofConeCanonical.bytesOf proof.val)\n (raw : Array U32 22#usize) (roots : Roots)\n (canonical : ∀ j,j<22 → raw.val[j]!.val<262144)\n (rootValues : ∀ k : Fin 3, Port3_NativeBatchCalls.rootAt roots k=\n   encodeState (OraclePortBatchDraft.committedRoot p k.val)) :\n NLN.ValuesPacket H proof p raw roots 0#usize",
+      "clauses": [
+        {
+          "name": "len",
+          "verbatim": "proof.val.length=57607",
+          "classification": "bf(2) own proof extent"
+        },
+        {
+          "name": "wire",
+          "verbatim": "p.wire=MultiproofConeCanonical.bytesOf proof.val",
+          "classification": "bf(2) own proof interpretation witness"
+        },
+        {
+          "name": "canonical",
+          "verbatim": "∀ j,j<22 → raw.val[j]!.val<262144",
+          "classification": "bf(2) own typed query array"
+        },
+        {
+          "name": "rootValues",
+          "verbatim": "∀ k : Fin 3, Port3_NativeBatchCalls.rootAt roots k=\n   encodeState (OraclePortBatchDraft.committedRoot p k.val)",
+          "classification": "bf(2) three own root arguments"
+        }
+      ],
+      "caller_occurrences": [
+        {
+          "caller": "TX1:081",
+          "site": "candidate.rs:158",
+          "arguments": "proof, p.queries, NLL_BatchSource.roots p folded, 0",
+          "discharged_by": "NLN_TX1_081.root, literal SAME projections",
+          "status": "INTERNAL_DISCHARGED"
+        }
+      ],
+      "query_count": {
+        "batch": 0,
+        "max_distinct": 10,
+        "byte_gate": 9216,
+        "status": "DERIVED internally, not extra caller hypothesis",
+        "theorems": [
+          "NLN.TreePacket.counts",
+          "NLN.TreePacket.abortCount",
+          "NLN.TreePacket.bytes"
+        ]
+      },
+      "inventory_check": {
+        "aq2": "reviewed NLL native cut transcription universally quantified in packet conclusion",
+        "bf2": "every explicit root premise is an own-input predicate",
+        "bf3": "no child result/success/endpoint, no global/headline/physical state, no Ops/Run hypothesis",
+        "parsed": "universally quantified local interpretation witness tied to proof/root inputs; no parse success assumed"
+      },
+      "specialized_batch_argument": 0,
+      "specialization_discharge": "literal0/1 at each listed frozen caller; no hidden runtime batch hypothesis",
+      "domain_satisfiability": "No success restriction: arbitrary valid proof bytes and canonical query words; choose local Parsed wire and bind roots to its named projections. Caller root/proof provenance remains recorded at external caller."
+    },
+    {
+      "row": "TX1:081",
+      "root": "NLN_TX1_081.root",
+      "module": "NLN_TX1_081",
+      "statement": "theorem root (H : Bytes → State) (proof : Slice U8) (len : proof.val.length=57607)\n (parsed : OraclePortCompactDraft.Parsed) (wire : parsed.wire=MultiproofConeCanonical.bytesOf proof.val)\n (p : verifier.Prepared) (folded : NLL.Root)\n (canonical : ∀ j,j<22 → p.queries.val[j]!.val<262144)\n (rootValues : ∀ k : Fin 3, Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k=\n   encodeState (OraclePortBatchDraft.committedRoot parsed k.val)) :\n NLN.BatchPacket H proof parsed p folded 0#usize",
+      "clauses": [
+        {
+          "name": "len",
+          "verbatim": "proof.val.length=57607",
+          "classification": "bf(2) own proof extent"
+        },
+        {
+          "name": "wire",
+          "verbatim": "parsed.wire=MultiproofConeCanonical.bytesOf proof.val",
+          "classification": "bf(2) own proof interpretation witness"
+        },
+        {
+          "name": "canonical",
+          "verbatim": "∀ j,j<22 → p.queries.val[j]!.val<262144",
+          "classification": "bf(2) own Prepared query projection"
+        },
+        {
+          "name": "rootValues",
+          "verbatim": "∀ k : Fin 3, Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k=\n   encodeState (OraclePortBatchDraft.committedRoot parsed k.val)",
+          "classification": "bf(2) own Prepared roots and folded argument"
+        }
+      ],
+      "caller_occurrences": [
+        {
+          "caller": "TX1:094",
+          "site": "candidate::tx1 batch_merkle(proof,&p,&folded_root,0)",
+          "arguments": "actual proof, actual Prepared, actual folded_root, 0",
+          "status": "CALLER_OWNED_OPEN",
+          "available_domain_producer": "NLL_Tx1QueryCarrier.source",
+          "remaining": "Install extent, same proof/Parsed witness and all root bindings from this caller own fold; query producer must be applied at SAME arguments."
+        }
+      ],
+      "query_count": {
+        "batch": 0,
+        "max_distinct": 10,
+        "byte_gate": 9216,
+        "status": "DERIVED internally, not extra caller hypothesis",
+        "theorems": [
+          "NLN.TreePacket.counts",
+          "NLN.TreePacket.abortCount",
+          "NLN.TreePacket.bytes"
+        ]
+      },
+      "inventory_check": {
+        "aq2": "reviewed NLL native cut transcription universally quantified in packet conclusion",
+        "bf2": "every explicit root premise is an own-input predicate",
+        "bf3": "no child result/success/endpoint, no global/headline/physical state, no Ops/Run hypothesis",
+        "parsed": "universally quantified local interpretation witness tied to proof/root inputs; no parse success assumed"
+      },
+      "specialized_batch_argument": 0,
+      "specialization_discharge": "literal0/1 at each listed frozen caller; no hidden runtime batch hypothesis",
+      "domain_satisfiability": "No success restriction: arbitrary valid proof bytes and canonical query words; choose local Parsed wire and bind roots to its named projections. Caller root/proof provenance remains recorded at external caller."
+    }
+  ]
+}

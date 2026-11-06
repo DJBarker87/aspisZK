@@ -1,0 +1,53 @@
+NLN_ValuesPacket.lean:55:26: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+NLN_ValuesPacket.lean:56:26: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+NLN_ValuesPacket.lean:57:26: error: omega could not prove the goal:
+No usable constraints found. You may need to unfold definitions so `omega` can see linear arithmetic facts about `Nat` and `Int`, which may also involve multiplication, division, and modular remainder by constants.
+structure NLN.ValuesPacket (H : Bytes → State) (proof : Slice U8) (p : OraclePortCompactDraft.Parsed)
+  (raw : Std.Array U32 22#usize) (roots : Roots) (batch : Usize) : Prop
+number of parameters: 6
+fields:
+  NLN.ValuesPacket.returning : ∀ (history : History) (out : Reply),
+      NLL_Parent.Invocation H proof raw roots batch history out →
+        NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+              proof raw roots batch () =
+            ok out ∧
+          plan H proof p raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV = history ∧
+            NLL_ObservedCalls.calls H proof p raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+              (history, NKV_ParentSource.observe (ok out))
+  NLN.ValuesPacket.aborting : ∀ (history : History) (pending : Pending),
+      AbortValues H proof raw roots batch history pending →
+        NLL_Prefix.At (plan H proof p raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+            (history ++ pending.answered) pending.parts ∧
+          NLL_Prefix.At
+            (NLL_ObservedCalls.calls H proof p raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV).1
+            (history ++ pending.answered) pending.parts
+constructor:
+  NLN.ValuesPacket.mk {H : Bytes → State} {proof : Slice U8} {p : OraclePortCompactDraft.Parsed}
+    {raw : Std.Array U32 22#usize} {roots : Roots} {batch : Usize}
+    (returning :
+      ∀ (history : History) (out : Reply),
+        NLL_Parent.Invocation H proof raw roots batch history out →
+          NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                proof raw roots batch () =
+              ok out ∧
+            plan H proof p raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV = history ∧
+              NLL_ObservedCalls.calls H proof p raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+                (history, NKV_ParentSource.observe (ok out)))
+    (aborting :
+      ∀ (history : History) (pending : Pending),
+        AbortValues H proof raw roots batch history pending →
+          NLL_Prefix.At (plan H proof p raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+              (history ++ pending.answered) pending.parts ∧
+            NLL_Prefix.At
+              (NLL_ObservedCalls.calls H proof p raw batch (sites roots) NKV_ParentSource.zeroI
+                  NKV_ParentSource.zeroV).1
+              (history ++ pending.answered) pending.parts) :
+    ValuesPacket H proof p raw roots batch
+theorem NLN.values : ∀ (H : Bytes → State) (proof : Slice U8) (p : OraclePortCompactDraft.Parsed)
+  (raw : Std.Array U32 22#usize) (roots : Roots) (batch : Usize),
+  (∀ c ∈ sites roots, TreePacket H proof p raw c.1 batch c.2) → ValuesPacket H proof p raw roots batch :=
+⋯
+'NLN.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLN.bindings' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

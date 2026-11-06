@@ -1,0 +1,29 @@
+{"attempt": "NLN_L013", "exit_status": 0, "wall_seconds": 11.842133164871484, "peak_rss_kib": "6053216", "swaps": "0", "print_axioms": ["'NLN_TX2_053.root' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLN_TX2_053.root : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (p : verifier.Prepared) (folded : Root),
+          (∀ j < 22, ↑(↑p.queries)[j]! < 262144) →
+            (∀ (k : Fin 3),
+                Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k =
+                  encodeState (OraclePortBatchDraft.committedRoot parsed ↑k)) →
+              NLN.BatchPacket H proof parsed p folded 1#usize :=
+⋯
+'NLN_TX2_053.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+theorem NLN_TX2_053.root : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (p : verifier.Prepared) (folded : Root),
+          (∀ j < 22, ↑(↑p.queries)[j]! < 262144) →
+            (∀ (k : Fin 3),
+                Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots p folded) k =
+                  encodeState (OraclePortBatchDraft.committedRoot parsed ↑k)) →
+              NLN.BatchPacket H proof parsed p folded 1#usize :=
+⋯
+'NLN_TX2_053.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r037bb52e155d4bbaa95f710ff537cff9.scope; invocation ID: a774690202d74f548d6b23dd57eab665
