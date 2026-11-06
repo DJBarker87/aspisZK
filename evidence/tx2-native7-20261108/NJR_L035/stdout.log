@@ -1,0 +1,31 @@
+NJR_generated/NJR_DecodedWords.lean:14:51: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FoldedLeafCodec.decodeWide (bytesOf ↑b)
+in the target expression
+  (do
+      let q ← ok (Option.map rawE (FoldedLeafCodec.decodeWide (bytesOf ↑b.to_slice)))
+      ok (CheckpointBytes3Reader.optionE q)) =
+    ok (NJC_EReaderResults.naturalE b)
+
+b : Std.Array U8 32#usize
+x : AspisWideTower.WideExact
+run : FoldedLeafCodec.decodeWide (bytesOf ↑b) = some x
+j : Fin 8
+result :
+  (do
+      let q ← ok (Option.map rawE (FoldedLeafCodec.decodeWide (bytesOf ↑b.to_slice)))
+      ok (CheckpointBytes3Reader.optionE q)) =
+    ok (NJC_EReaderResults.naturalE b)
+⊢ NIG_FinishInput.word (↑b) (4 * ↑j) < 2147483647
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NJR_DecodedWords.decoded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJR_DecodedWords.window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

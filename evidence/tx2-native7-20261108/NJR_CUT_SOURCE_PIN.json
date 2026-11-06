@@ -1,0 +1,30 @@
+{
+  "source": "NJR_parent.rs.txt",
+  "sha256": "8cbf394e884584117bc5ec545546723403ab9a8ca81fe9d5a1b26f67a5295ca1",
+  "definitions": [
+    {
+      "module": "NJR_Cuts.lean",
+      "definition": "pending",
+      "harness": "pending_destination",
+      "assertion_quote": "assert_eq!(observed,ptr.wrapping_add(i) as *mut [u64;4]);\nassert_eq!(index,i+1);assert_eq!(raw.len(),64);assert_eq!(raw.capacity(),cap);assert_eq!(raw.as_ptr(),ptr);\nassert_eq!(raw[j][0],expected[0]);assert_eq!(raw[j][1],expected[1]);assert_eq!(raw[j][2],expected[2]);assert_eq!(raw[j][3],expected[3]);"
+    },
+    {
+      "module": "NJR_Cuts.lean",
+      "definition": "queryReturn",
+      "harness": "query_weights/query_raw/query_scalars",
+      "assertion_quote": "assert_eq!(log.calls,1);assert!(log.reply.is_none());\nmatch result{Err(e)=>assert_eq!(Some(e),err),Ok((weights,out_rhs,out_power,out_next,pending))=>{\nassert!(err.is_none());\nif C==0{assert_eq!(weights.as_ptr(),wp);assert_eq!(weights.len(),64);assert_eq!(weights.capacity(),wc);let mut expected=before[i];if cfg!(NJR_invert){expected[0]^=1;}assert_eq!(kw(weights[i]),expected);}\nif C==1{assert_eq!(pending.raw.as_ptr(),rp);assert_eq!(pending.raw.len(),64);assert_eq!(pending.raw.capacity(),rc);let mut expected=rows[i];if cfg!(NJR_invert){expected[0]^=1;}assert_eq!(pending.raw[i],expected);}\nif C==2{let mut expected=rhs.to_limbs();if cfg!(NJR_invert){expected[0]^=1;}assert_eq!(out_rhs.to_limbs(),expected);assert_eq!(out_power,power);assert_eq!(out_next,next);assert_eq!(pending.terms,terms);}"
+    },
+    {
+      "module": "NJR_Cuts.lean",
+      "definition": "flushStep",
+      "harness": "flush_receiver_window + flush_destination_window",
+      "assertion_quote": "let w=&mut slot;assert_eq!(w as *mut K,slot_ptr);\nassert_eq!(log.calls,1);assert_eq!(log.index,index);let seen=log.seen.unwrap();assert_eq!(seen as *const BatchedWeights,bp);assert_eq!(seen.terms,terms);assert_eq!(seen.raw.as_ptr(),rp);assert_eq!(seen.raw.capacity(),cap);assert_eq!(seen.raw.len(),64);assert_eq!(seen.raw[j],rows[j]);\nlet mut expected=kw(reply);if cfg!(NJR_invert){expected[0]^=1;}assert_eq!(kw(slot),expected);\nassert_eq!(index,i);assert_eq!(destination,ptr.wrapping_add(i^(if cfg!(NJR_bad_destination){1}else{0})) as *mut K);\nassert_eq!(weights.as_ptr(),ptr);assert_eq!(weights.capacity(),cap);assert_eq!(weights.len(),64);\nlet mut expected=if i==j{kw(reply)}else{before[j]};if cfg!(NJR_invert){expected[0]^=1;}assert_eq!(kw(weights[j]),expected);"
+    },
+    {
+      "module": "NJR_ReaderCut.lean",
+      "definition": "Cut",
+      "harness": "reader_backing",
+      "assertion_quote": "assert_eq!(r.at,self.at);\nassert_eq!(log.calls,1);let seen=log.seen.unwrap();assert_eq!(seen.as_ptr(),log.expected.as_ptr());assert_eq!(seen.len(),1768);assert_eq!(seen[b],bytes[b]);\nmatch result{Err(e)=>{assert_eq!(Some(e),err);assert!(log.freed);assert_eq!(log.freed_ptr,ptr);assert_eq!(log.freed_len,64);assert_eq!(log.freed_cap,cap);},Ok((out,cursor))=>{\nassert!(err.is_none());assert!(!log.freed);assert_eq!(cursor,post);assert_eq!(out.as_ptr(),ptr);assert_eq!(out.capacity(),cap);assert_eq!(out.len(),64);\nassert_eq!(kw(out[j]),expected);"
+    }
+  ]
+}
