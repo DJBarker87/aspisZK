@@ -1,0 +1,65 @@
+{"attempt": "NJE_L026", "exit_status": 0, "wall_seconds": 3.2822914759162813, "peak_rss_kib": "4327716", "swaps": "0", "print_axioms": ["'NJE_AllAdapter.loop_total' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_AllAdapter.default_all' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_AllAdapter.loop_total : ∀ {α : Type} (p : α → Bool) (xs : List α),
+  ∃ tail, loop (body p) (xs, ()) = ok (xs.all p, tail, ()) :=
+fun {α} p xs =>
+  List.rec
+    (Exists.intro []
+      (Eq.mpr (id (congrArg (fun _a => _a = ok ([].all p, [], ())) (loop.eq_def (body p) ([], ()))))
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | ok r =>
+                      match r with
+                      | cont x => loop (body p) x
+                      | done x => ok x
+                    | fail e => fail e
+                    | div => div)
+      
+...
+                (Eq.trans
+                          (uncurry_apply_pair
+                            (fun item tail =>
+                              match item with
+                              | none => ok (done (true, tail, ()))
+                              | some x => if p x = true then ok (cont (tail, ())) else ok (done (false, tail, ())))
+                            (some x) xs)
+                          (ite_cond_eq_false (ok (cont (xs, ()))) (ok (done (false, xs, ())))
+                            (Eq.trans (congrFun' (congrArg Eq (Bool.of_not_eq_true holds)) true)
+                              Bool.false_eq_true))))))
+                  (congrArg ok
+                    (congrFun'
+                      (congrArg Prod.mk
+                        (Eq.trans (congrFun' (congrArg and (Bool.of_not_eq_true holds)) (xs.all p))
+                          (Bool.false_and (xs.all p))))
+                      (xs, ()))))
+                (eq_self (ok (false, xs, ())))))))
+    xs
+'NJE_AllAdapter.loop_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_AllAdapter.default_all : ∀ {α : Type} (p : α → Bool) (xs : List α),
+  ∃ tail,
+    NFU_Retarget.core.iter.traits.iterator.Iterator.all.default (listInst α) (predicate p) xs () =
+      ok (xs.all p, tail) :=
+fun {α} p xs =>
+  let ⟨tail, h⟩ := loop_total p xs
+  Exists.intro tail
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let out ← _a
+                    ok (out.1, out.2.1)) =
+                  ok (xs.all p, tail))
+              h))
+          (Eq.refl do
+            let out ← ok (xs.all p, tail, ())
+            ok (out.1, out.2.1)))))
+'NJE_AllAdapter.default_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3231ca5fd5a544d39c0faf8cf9c02e7d.scope; invocation ID: c50d3b1b1fcf4c8187bc9fa1ed61f048

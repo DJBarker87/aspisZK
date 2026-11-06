@@ -1,0 +1,209 @@
+NJE_lean/NJE_WellPacket.lean:31:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) xs))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NJE_lean/NJE_WellPacket.lean:39:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable (AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) xs))
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+theorem NJE_WellPacket.emitted_value : ∀ (xs : List U32),
+  NJE_WellSource.emitted xs = ok (!xs.isEmpty && decide (xs.length ≤ 16) && ordered xs && domain xs) :=
+fun xs =>
+  id
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (if xs.isEmpty = true then ok false
+                  else
+                    if xs.length ≤ 16 then do
+                      let ordered ← _a
+                      if ordered = true then NJE_WellSource.allValues NJE_WellSource.domain xs else ok false
+                    else ok false) =
+                  ok
+                    (!xs.isEmpty && decide (xs.length ≤ 16) &&
+                        (NJA_WellIteration.windows xs).all NJE_WellSource.order &&
+                      xs.all NJE_WellSource.domain))
+              (NJE_WellSource.all_result NJE_WellSource.order (NJA_WellIteration.windows xs))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (if xs.isEmpty = true then ok false
+                    else
+                      if xs.length ≤ 16 then do
+                        let ordered ← ok ((NJA_WellIteration.windows xs).all NJE_WellSource.order)
+                        if ordered = true then _a else ok false
+                      else ok false) =
+                    ok
+                      (!xs.isEmpty && decide (xs.length ≤ 16) &&
+                          (NJA_WellIteration.windows xs).all NJE_WellSource.order &&
+                        xs.all NJE_WellSource.domain))
+                (NJE_WellSource.all_result NJE_WellSource.domain xs)))
+            (if empty : xs.isEmpty = true then
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (ite_cond_eq_true (ok false)
+                        (if xs.length ≤ 16 then do
+                          let ordered ← ok ((NJA_WellIteration.windows xs).all NJE_WellSource.order)
+                          if ordered = true then ok (xs.all NJE_WellSource.domain) else ok false
+                        else ok false)
+                        (Eq.trans (congrFun' (congrArg Eq empty) true) (eq_self true))))
+                    (congrArg ok
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg and
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg and
+                                  (Eq.trans
+                                    (congrFun' (congrArg and (Eq.trans (congrArg not empty) Bool.not_true))
+                                      (decide (xs.length ≤ 16)))
+                                    (Bool.false_and (decide (xs.length ≤ 16)))))
+                                ((NJA_WellIteration.windows xs).all NJE_WellSource.order))
+                              (Bool.false_and ((NJA_WellIteration.windows xs).all NJE_WellSource.order))))
+                          (xs.all NJE_WellSource.domain))
+                        (Bool.false_and (xs.all NJE_WellSource.domain)))))
+                  (eq_self (ok false)))
+            else
+              if small : xs.length ≤ 16 then
+                if o : (NJA_WellIteration.windows xs).all NJE_WellSource.order = true then
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_cond_eq_false (ok false)
+                              (if xs.length ≤ 16 then do
+                                let ordered ← ok ((NJA_WellIteration.windows xs).all NJE_WellSource.order)
+                                if ordered = true then ok (xs.all NJE_WellSource.domain) else ok false
+                              else ok false)
+                              (Eq.trans (congrFun' (congrArg Eq (Bool.of_not_eq_true empty)) true) Bool.false_eq_true))
+                            (Eq.trans
+                              (ite_cond_eq_true
+                                (do
+                                  let ordered ← ok ((NJA_WellIteration.windows xs).all NJE_WellSource.order)
+                                  if ordered = true then ok (xs.all NJE_WellSource.domain) else ok false)
+                                (ok false) (eq_true small))
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun' (congrArg Bind.bind (congrArg ok o)) fun ordered =>
+                                    if ordered = true then ok (xs.all NJE_WellSource.domain) else ok false)
+                                  (bind_tc_ok true fun y =>
+                                    if y = true then ok (xs.all NJE_WellSource.domain) else ok false))
+                                (ite_cond_eq_true (ok (xs.all NJE_WellSource.domain)) (ok false) (eq_self true))))))
+                        (congrArg ok
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg and
+                                (Eq.trans
+                                  (congr
+                                    (congrArg and
+                                      (Eq.trans
+                                        (congr
+                                          (congrArg and
+                                            (Eq.trans (congrArg not (Bool.of_not_eq_true empty)) Bool.not_false))
+                                          (Eq.trans (Decidable.decide.congr_simp (xs.length ≤ 16) True (eq_true small))
+                                            (decide_true instDecidableTrue)))
+                                        (Bool.and_self true)))
+                                    o)
+                                  (Bool.and_self true)))
+                              (xs.all NJE_WellSource.domain))
+                            (Bool.true_and (xs.all NJE_WellSource.domain)))))
+                      (eq_self (ok (xs.all NJE_WellSource.domain))))
+                else
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_cond_eq_false (ok false)
+                              (if xs.length ≤ 16 then do
+                                let ordered ← ok ((NJA_WellIteration.windows xs).all NJE_WellSource.order)
+                                if ordered = true then ok (xs.all NJE_WellSource.domain) else ok false
+                              else ok false)
+                              (Eq.trans (congrFun' (congrArg Eq (Bool.of_not_eq_true empty)) true) Bool.false_eq_true))
+                            (Eq.trans
+                              (ite_cond_eq_true
+                                (do
+                                  let ordered ← ok ((NJA_WellIteration.windows xs).all NJE_WellSource.order)
+                                  if ordered = true then ok (xs.all NJE_WellSource.domain) else ok false)
+                                (ok false) (eq_true small))
+                              (Eq.trans
+                                (Eq.trans
+                                  (congrFun' (congrArg Bind.bind (congrArg ok (Bool.of_not_eq_true o))) fun ordered =>
+                                    if ordered = true then ok (xs.all NJE_WellSource.domain) else ok false)
+                                  (bind_tc_ok false fun y =>
+                                    if y = true then ok (xs.all NJE_WellSource.domain) else ok false))
+                                (ite_cond_eq_false (ok (xs.all NJE_WellSource.domain)) (ok false)
+                                  Bool.false_eq_true)))))
+                        (congrArg ok
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg and
+                                (Eq.trans
+                                  (congr
+                                    (congrArg and
+                                      (Eq.trans
+                                        (congr
+                                          (congrArg and
+                                            (Eq.trans (congrArg not (Bool.of_not_eq_true empty)) Bool.not_false))
+                                          (Eq.trans (Decidable.decide.congr_simp (xs.length ≤ 16) True (eq_true small))
+                                            (decide_true instDecidableTrue)))
+                                        (Bool.and_self true)))
+                                    (Bool.of_not_eq_true o))
+                                  (Bool.and_false true)))
+                              (xs.all NJE_WellSource.domain))
+                            (Bool.false_and (xs.all NJE_WellSource.domain)))))
+                      (eq_self (ok false)))
+              else
+                of_eq_true
+                  (Eq.trans
+                    (congr
+                      (congrArg Eq
+                        (Eq.trans
+                          (ite_cond_eq_false (ok false)
+                            (if xs.length ≤ 16 then do
+                              let ordered ← ok ((NJA_WellIteration.windows xs).all NJE_WellSource.order)
+                              if ordered = true then ok (xs.all NJE_WellSource.domain) else ok false
+                            else ok false)
+                            (Eq.trans (congrFun' (congrArg Eq (Bool.of_not_eq_true empty)) true) Bool.false_eq_true))
+                          (ite_cond_eq_false
+                            (do
+                              let ordered ← ok ((NJA_WellIteration.windows xs).all NJE_WellSource.order)
+                              if ordered = true then ok (xs.all NJE_WellSource.domain) else ok false)
+                            (ok false) (eq_false small))))
+                      (congrArg ok
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg and
+                              (Eq.trans
+                                (congrFun'
+                                  (congrArg and
+                                    (Eq.trans
+                                      (congr
+                                        (congrArg and
+                                          (Eq.trans (congrArg not (Bool.of_not_eq_true empty)) Bool.not_false))
+                                        (Eq.trans (Decidable.decide.congr_simp (xs.length ≤ 16) False (eq_false small))
+                                          (decide_false instDecidableFalse)))
+                                      (Bool.and_false true)))
+                                  ((NJA_WellIteration.windows xs).all NJE_WellSource.order))
+                                (Bool.false_and ((NJA_WellIteration.windows xs).all NJE_WellSource.order))))
+                            (xs.all NJE_WellSource.domain))
+                          (Bool.false_and (xs.all NJE_WellSource.domain)))))
+                    (eq_self (ok false))))))))
+'NJE_WellPacket.emitted_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellPacket.TX1_128 : ∀ (xs : List U32) (out : Bool) (calls : ℕ),
+  Cut xs (ordered xs) (domain xs) out calls → NJE_WellSource.emitted xs = ok out ∧ out = sorry :=
+fun xs out calls cut =>
+  have source := NJE_WellSource.source xs;
+  sorry source
+'NJE_WellPacket.TX1_128' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_WellPacket.TX2_094 : ∀ (xs : List U32) (out : Bool) (calls : ℕ),
+  Cut xs (ordered xs) (domain xs) out calls → NJE_WellSource.emitted xs = ok out ∧ out = sorry :=
+fun xs out calls cut => TX1_128 xs out calls cut
+'NJE_WellPacket.TX2_094' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

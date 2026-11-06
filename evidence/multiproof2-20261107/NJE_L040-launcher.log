@@ -1,0 +1,48 @@
+{"attempt": "NJE_L040", "exit_status": 0, "wall_seconds": 4.439708332065493, "peak_rss_kib": "3843424", "swaps": "0", "print_axioms": ["'NJE_ConstantShifts.model' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_ConstantShifts.bound' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_ConstantShifts.model : ∀ (i : Fin 15), source i = R0P.poseidonInternalShifts i :=
+fun i =>
+  List.Mem.casesOn (motive := fun a x =>
+    List.finRange 15 = a → Fintype.complete i ≍ x → source i = R0P.poseidonInternalShifts i) (Fintype.complete i)
+    (fun «as» h =>
+      List.cons.noConfusion h fun head_eq =>
+        Eq.ndrec (motive := fun i =>
+          ∀ (this : i ∈ Fintype.elems),
+            (fun x1 x2 => (fun i => i) x1 :: x2)
+                  ⟨1,
+                    Nat.le_of_lt
+                      (Nat.le_of_lt
+                        (Nat.le_of_lt
+                          (Nat.le_of_lt
+                            (Nat.le_of_lt
+                              (Nat.le_of_
+...
+                                             ⋯ →
+                                                                                        source i =
+                                                                                          R0P.poseidonInternalShifts i)
+                                                                                    (fun a_6 h =>
+                                                                                      List.Mem.casesOn (motive :=
+                                                                                        fun a x => ⋯) ⋯ ⋯ ⋯ ⋯ ⋯)
+                                                                                    ⋯ ⋯)
+                                                                                ⋯)
+                                                                          ⋯ ⋯)
+                                                                      ⋯ ⋯)
+                                                                  ⋯)
+                                                            ⋯ ⋯)
+                                                        ⋯ ⋯)
+                                                    ⋯)
+                                              ⋯ ⋯)
+                                          ⋯ ⋯)
+                                      ⋯)
+                                ⋯ ⋯)
+                            ⋯ ⋯)
+                        ⋯)
+                  ⋯ ⋯)
+              ⋯ ⋯)
+          ⋯)
+    ⋯ ⋯
+'NJE_ConstantShifts.model' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ConstantShifts.bound : ∀ (i : Fin 15), source i ≤ 16 :=
+fun i => Eq.mpr (id (congrArg (fun _a => _a ≤ 16) (model i))) (NJA_Internal.shifts_bound i)
+'NJE_ConstantShifts.bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0cf60dd25b824943900e5e067ee1b3a2.scope; invocation ID: 4cf782ed292e41fda9fbd187d39b2908

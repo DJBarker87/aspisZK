@@ -1,0 +1,9 @@
+# NJE failed steps
+
+NJE_L007 queried guessed Poseidon names not present in the retained cohort; NJE_L018 resolves actual owners. NJE_L017 lacked explicit list bounds rewriting for getElem!; corrected source passed L021. NJE_L022 used reserved prefix identifier and over-unfolded ofFn; proof repaired for L025. NJE_L023 proved generic all-loop laws but an extra #print queried a missing specialized ABI; removal only for L026.
+
+NJE_K001 is a COMPILER FAILURE, not a semantic counterexample: exact KMX includes allocator_api generic Vec definitions, but verifier crate needs cfg(kani) feature(allocator_api). Add that attribute only in own scratch lib and retain complete patch. Frozen source validation restores lib before every graph check. Replacement K005 has the identical original harness name and property; no timeout, no memory kill, no name-sensitive verdict.
+
+L027/L030 were own statement/proof errors in ExternalStages (a field named args shadowed its carrier; then an if-True simplification). Fixed locally for L035, no shared module changed. L028 was only generic Bool/list normalization; fixed by named domain_all and explicit empty/cons cases, passing L031. Every failure is excluded from selected roots. No timeout or memory kill occurred.
+
+K012 native VERIFICATION SUCCESSFUL / receipt exit0. The owned client then falsely classified a positive control-flow harness as a negative because its original name ends in _control. Client repaired to classify the explicit mutation configuration (NJE_bad_argument), with optional explicit expected_failure, rather than infer from function names. No harness renamed, no Kani verdict changed, no run repeated. K013 remains the original-name matched semantic mutation. This is an own validation-script repair, not a K-2 finding. L039 attempted import-all without modern module syntax; ordinary import suffices for the owner query in L044.

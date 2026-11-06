@@ -1,0 +1,57 @@
+{"attempt": "NJE_L033", "exit_status": 1, "wall_seconds": 2.5807747521903366, "peak_rss_kib": "2621432", "swaps": "0", "print_axioms": ["'NJE_CountArithmetic.sub_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_CountArithmetic.add_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_CountArithmetic.update_result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_CountArithmetic.lean:14:1: error: Type mismatch
+  Nat.mod_eq_of_lt hb
+has type
+  ↑b % UScalar.size UScalarTy.Usize = ↑b
+but is expected to have type
+  (↑a - ↑b) % UScalar.size UScalarTy.Usize % UScalar.size UScalarTy.Usize = ↑a - ↑b
+NJE_lean/NJE_CountArithmetic.lean:21:61: error: Application type mismatch: The argument
+  ↑q
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.7
+of sort `Type (?u.7 + 1)` in the application
+  @InitialSeg ↑q
+NJE_lean/NJE_CountArithmetic.lean:21:61: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  LT (?m.7 + 2)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.
+...
+l_eq a b)))
+    (have ha := UScalar.hSize a;
+    sorry ha)
+'NJE_CountArithmetic.sub_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJE_CountArithmetic.add_value : ∀ (a b : Usize),
+  ↑a + ↑b < UScalar.size UScalarTy.Usize → ↑(a.wrapping_add b) = ↑a + ↑b :=
+fun a b small =>
+  Eq.mpr (id (congrArg (fun _a => _a = ↑a + ↑b) (Usize.wrapping_add_val_eq a b))) (Nat.mod_eq_of_lt small)
+'NJE_CountArithmetic.add_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+NJE_lean/NJE_CountArithmetic.lean:52:7: error(lean.unknownIdentifier): Unknown constant `deficit`
+NJE_lean/NJE_CountArithmetic.lean:53:14: error(lean.unknownIdentifier): Unknown constant `deficit`
+NJE_lean/NJE_CountArithmetic.lean:54:7: error(lean.unknownIdentifier): Unknown constant `count_value`
+NJE_lean/NJE_CountArithmetic.lean:55:14: error(lean.unknownIdentifier): Unknown constant `count_value`
+theorem NJE_CountArithmetic.update_result : ∀ {α : Type} (a : Std.Array α 16#usize) (w : Usize) (x : α),
+  ↑w < 16 → a.update w x = ok (a.set w x) :=
+fun {α} a w x bound =>
+  id
+    (have hw :=
+      have h := a.property;
+      Decidable.byContradiction fun a_1 => update_result._proof_1 a w bound h a_1;
+    id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (match _a with
+                | none => fail Error.arrayOutOfBounds
+                | some val => ok ⟨(↑a).set (↑w) x, Array.set._proof_1 a w x⟩) =
+                ok (a.set w x))
+            (List.getElem?_eq_getElem hw)))
+        (Eq.refl
+          (match some (↑a)[↑w] with
+          | none => fail Error.arrayOutOfBounds
+          | some val => ok ⟨(↑a).set (↑w) x, Array.set._proof_1 a w x⟩))))
+'NJE_CountArithmetic.update_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb623a92c9aaa466cb5979b54ef8c2187.scope; invocation ID: eef37a88bcd34334899ce1f4eef8b8a5

@@ -1,0 +1,337 @@
+theorem NJE_ParentPackets.TX1_123 : ∀ (hashv : Slice (Slice U8) → Digest) (values : Std.Array Digest 16#usize)
+  (i : Usize),
+  ↑i + 1 < 16 →
+    multiproof.occupied_binary_parent (backend hashv) () values i =
+      ok (hashv (parts (cell values ↑i) (cell values (↑i + 1)))) :=
+fun hashv values i bound =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = ok (hashv (parts (cell values ↑i) (cell values (↑i + 1)))))
+        (NJA_ParentAddress.occupied (backend hashv) () values i bound)))
+    (id
+      (of_eq_true
+        (Eq.trans
+          (congrArg (Eq (ok (hashv (parts (↑values)[↑i] (↑values)[↑i + 1]))))
+            (congrArg ok
+              (congrArg hashv
+                (congr
+                  (congrArg parts
+                    (getElem!_pos (↑values) (↑i)
+                      (have h := values.property;
+                      Decidable.byContradiction fun a => TX1_123._proof_3 values i bound h a)))
+                  (getElem!_pos (↑values) (↑i + 1)
+                    (have h := values.property;
+                    Decidable.byContradiction fun a => TX1_123._proof_4 values i bound h a))))))
+          (eq_self (ok (hashv (parts (↑values)[↑i] (↑values)[↑i + 1])))))))
+'NJE_ParentPackets.TX1_123' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ParentPackets.TX2_089 : ∀ (hashv : Slice (Slice U8) → Digest) (values : Std.Array Digest 16#usize)
+  (i : Usize),
+  ↑i + 1 < 16 →
+    multiproof.occupied_binary_parent (backend hashv) () values i =
+      ok (hashv (parts (cell values ↑i) (cell values (↑i + 1)))) :=
+fun hashv values i bound => TX1_123 hashv values i bound
+'NJE_ParentPackets.TX2_089' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ParentPackets.TX1_125 : ∀ (hashv : Slice (Slice U8) → Digest) (values : Std.Array Digest 16#usize)
+  (i : Usize),
+  ↑i < 16 →
+    ∀ (sibling : Digest) (left : Bool),
+      multiproof.sibling_binary_parent (backend hashv) () values i (Array.to_slice sibling) left =
+        ok (hashv (if left = true then parts (cell values ↑i) sibling else parts sibling (cell values ↑i))) :=
+fun hashv values i bound sibling left =>
+  Bool.casesOn (motive := fun t =>
+    left = t →
+      multiproof.sibling_binary_parent (backend hashv) () values i (Array.to_slice sibling) left =
+        ok (hashv (if left = true then parts (cell values ↑i) sibling else parts sibling (cell values ↑i))))
+    left
+    (fun h =>
+      Eq.symm h ▸
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                _a =
+                  ok (hashv (if false = true then parts (cell values ↑i) sibling else parts sibling (cell values ↑i))))
+              (NJA_ParentAddress.sibling_right (backend hashv) () values i bound (Array.to_slice sibling))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (Eq
+                  (ok
+                    (hashv
+                      ⟨[⟨[18#u8],
+                            Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                              (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                          Array.to_slice sibling,
+                          ⟨↑(↑values)[↑i],
+                            have h := (↑values)[↑i].property;
+                            NJA_ParentAddress.sibling_left._proof_3 values i bound⟩],
+                        Eq.mpr
+                          (id
+                            (congrFun'
+                              (congrArg LE.le
+                                (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                              Usize.max))
+                          (NJA_ParentAddress.sibling_left._proof_4 i)⟩)))
+                (congrArg ok
+                  (congrArg hashv
+                    (Eq.trans
+                      (ite_congr Bool.false_eq_true (fun a => Eq.refl (parts (cell values ↑i) sibling)) fun a =>
+                        Eq.refl (parts sibling (cell values ↑i)))
+                      (if_false (parts (cell values ↑i) sibling) (parts sibling (cell values ↑i))))))))
+            ((fun {α} v v_1 e_v => e_v ▸ Eq.refl (ok v))
+              (hashv
+                ⟨[⟨[18#u8],
+                      Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                        (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                    Array.to_slice sibling,
+                    ⟨↑(↑values)[↑i],
+                      have h := (↑values)[↑i].property;
+                      NJA_ParentAddress.sibling_left._proof_3 values i bound⟩],
+                  Eq.mpr
+                    (id
+                      (congrFun'
+                        (congrArg LE.le
+                          (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                        Usize.max))
+                    (NJA_ParentAddress.sibling_left._proof_4 i)⟩)
+              (hashv (parts sibling (cell values ↑i)))
+              ((fun a a_1 e_a => e_a ▸ Eq.refl (hashv a))
+                ⟨[⟨[18#u8],
+                      Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                        (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                    Array.to_slice sibling,
+                    ⟨↑(↑values)[↑i],
+                      have h := (↑values)[↑i].property;
+                      NJA_ParentAddress.sibling_left._proof_3 values i bound⟩],
+                  Eq.mpr
+                    (id
+                      (congrFun'
+                        (congrArg LE.le
+                          (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                        Usize.max))
+                    (NJA_ParentAddress.sibling_left._proof_4 i)⟩
+                (parts sibling (cell values ↑i))
+                (of_eq_true
+                  (Eq.trans
+                    (congrArg
+                      (Eq
+                        ⟨[⟨[18#u8],
+                              Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                                (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                            ⟨↑sibling, Array.to_slice._proof_1 sibling⟩,
+                            ⟨↑(↑values)[↑i],
+                              have h := (↑values)[↑i].property;
+                              NJA_ParentAddress.sibling_left._proof_3 values i bound⟩],
+                          id
+                              (Eq.refl
+                                [⟨[18#u8],
+                                    Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                                      (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                                  ⟨↑sibling, Array.to_slice._proof_1 sibling⟩,
+                                  ⟨↑(↑values)[↑i],
+                                    have h := (↑values)[↑i].property;
+                                    NJA_ParentAddress.sibling_left._proof_3 values i bound⟩]) ▸
+                            Eq.mpr
+                              (id
+                                (congrFun'
+                                  (congrArg LE.le
+                                    (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                  Usize.max))
+                              (NJA_ParentAddress.sibling_left._proof_4 i)⟩)
+                      (Subtype.mk.congr_simp
+                        [⟨[18#u8], parts._proof_6⟩, ⟨↑sibling, parts._proof_7 sibling⟩,
+                          ⟨↑(cell values ↑i), parts._proof_7 (cell values ↑i)⟩]
+                        [⟨[18#u8], parts._proof_6⟩, ⟨↑sibling, parts._proof_7 sibling⟩,
+                          ⟨↑(↑values)[↑i],
+                            congrArg Subtype.val
+                                (getElem!_pos (↑values) (↑i)
+                                  (have h := values.property;
+                                  Decidable.byContradiction fun a => TX1_125._proof_1 values i bound h a)) ▸
+                              parts._proof_7 (cell values ↑i)⟩]
+                        (congrArg (List.cons ⟨[18#u8], parts._proof_6⟩)
+                          (congrArg (List.cons ⟨↑sibling, parts._proof_7 sibling⟩)
+                            (congrFun'
+                              (congrArg List.cons
+                                (Subtype.mk.congr_simp (↑(cell values ↑i)) (↑(↑values)[↑i])
+                                  (congrArg Subtype.val
+                                    (getElem!_pos (↑values) (↑i)
+                                      (have h := values.property;
+                                      Decidable.byContradiction fun a => TX1_125._proof_1 values i bound h a)))
+                                  (parts._proof_7 (cell values ↑i))))
+                              [])))
+                        (parts._proof_8 sibling (cell values ↑i))))
+                    (eq_self
+                      ⟨[⟨[18#u8],
+                            Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                              (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                          ⟨↑sibling, Array.to_slice._proof_1 sibling⟩,
+                          ⟨↑(↑values)[↑i],
+                            have h := (↑values)[↑i].property;
+                            NJA_ParentAddress.sibling_left._proof_3 values i bound⟩],
+                        id
+                            (Eq.refl
+                              [⟨[18#u8],
+                                  Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                                    (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                                ⟨↑sibling, Array.to_slice._proof_1 sibling⟩,
+                                ⟨↑(↑values)[↑i],
+                                  have h := (↑values)[↑i].property;
+                                  NJA_ParentAddress.sibling_left._proof_3 values i bound⟩]) ▸
+                          Eq.mpr
+                            (id
+                              (congrFun'
+                                (congrArg LE.le
+                                  (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                Usize.max))
+                            (NJA_ParentAddress.sibling_left._proof_4 i)⟩)))))))
+    (fun h =>
+      Eq.symm h ▸
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                _a =
+                  ok (hashv (if true = true then parts (cell values ↑i) sibling else parts sibling (cell values ↑i))))
+              (NJA_ParentAddress.sibling_left (backend hashv) () values i bound (Array.to_slice sibling))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (Eq
+                  (ok
+                    (hashv
+                      ⟨[⟨[18#u8],
+                            Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                              (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                          ⟨↑(↑values)[↑i],
+                            have h := (↑values)[↑i].property;
+                            NJA_ParentAddress.sibling_left._proof_3 values i bound⟩,
+                          Array.to_slice sibling],
+                        Eq.mpr
+                          (id
+                            (congrFun'
+                              (congrArg LE.le
+                                (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                              Usize.max))
+                          (NJA_ParentAddress.sibling_left._proof_4 i)⟩)))
+                (congrArg ok
+                  (congrArg hashv
+                    (Eq.trans
+                      (ite_congr (eq_self true) (fun a => Eq.refl (parts (cell values ↑i) sibling)) fun a =>
+                        Eq.refl (parts sibling (cell values ↑i)))
+                      (if_true (parts (cell values ↑i) sibling) (parts sibling (cell values ↑i))))))))
+            ((fun {α} v v_1 e_v => e_v ▸ Eq.refl (ok v))
+              (hashv
+                ⟨[⟨[18#u8],
+                      Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                        (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                    ⟨↑(↑values)[↑i],
+                      have h := (↑values)[↑i].property;
+                      NJA_ParentAddress.sibling_left._proof_3 values i bound⟩,
+                    Array.to_slice sibling],
+                  Eq.mpr
+                    (id
+                      (congrFun'
+                        (congrArg LE.le
+                          (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                        Usize.max))
+                    (NJA_ParentAddress.sibling_left._proof_4 i)⟩)
+              (hashv (parts (cell values ↑i) sibling))
+              ((fun a a_1 e_a => e_a ▸ Eq.refl (hashv a))
+                ⟨[⟨[18#u8],
+                      Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                        (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                    ⟨↑(↑values)[↑i],
+                      have h := (↑values)[↑i].property;
+                      NJA_ParentAddress.sibling_left._proof_3 values i bound⟩,
+                    Array.to_slice sibling],
+                  Eq.mpr
+                    (id
+                      (congrFun'
+                        (congrArg LE.le
+                          (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                        Usize.max))
+                    (NJA_ParentAddress.sibling_left._proof_4 i)⟩
+                (parts (cell values ↑i) sibling)
+                (of_eq_true
+                  (Eq.trans
+                    (congrArg
+                      (Eq
+                        ⟨[⟨[18#u8],
+                              Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                                (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                            ⟨↑(↑values)[↑i],
+                              have h := (↑values)[↑i].property;
+                              NJA_ParentAddress.sibling_left._proof_3 values i bound⟩,
+                            ⟨↑sibling, Array.to_slice._proof_1 sibling⟩],
+                          id
+                              (Eq.refl
+                                [⟨[18#u8],
+                                    Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                                      (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                                  ⟨↑(↑values)[↑i],
+                                    have h := (↑values)[↑i].property;
+                                    NJA_ParentAddress.sibling_left._proof_3 values i bound⟩,
+                                  ⟨↑sibling, Array.to_slice._proof_1 sibling⟩]) ▸
+                            Eq.mpr
+                              (id
+                                (congrFun'
+                                  (congrArg LE.le
+                                    (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                  Usize.max))
+                              (NJA_ParentAddress.sibling_left._proof_4 i)⟩)
+                      (Subtype.mk.congr_simp
+                        [⟨[18#u8], parts._proof_6⟩, ⟨↑(cell values ↑i), parts._proof_7 (cell values ↑i)⟩,
+                          ⟨↑sibling, parts._proof_7 sibling⟩]
+                        [⟨[18#u8], parts._proof_6⟩,
+                          ⟨↑(↑values)[↑i],
+                            congrArg Subtype.val
+                                (getElem!_pos (↑values) (↑i)
+                                  (have h := values.property;
+                                  Decidable.byContradiction fun a => TX1_125._proof_1 values i bound h a)) ▸
+                              parts._proof_7 (cell values ↑i)⟩,
+                          ⟨↑sibling, parts._proof_7 sibling⟩]
+                        (congrArg (List.cons ⟨[18#u8], parts._proof_6⟩)
+                          (congrFun'
+                            (congrArg List.cons
+                              (Subtype.mk.congr_simp (↑(cell values ↑i)) (↑(↑values)[↑i])
+                                (congrArg Subtype.val
+                                  (getElem!_pos (↑values) (↑i)
+                                    (have h := values.property;
+                                    Decidable.byContradiction fun a => TX1_125._proof_1 values i bound h a)))
+                                (parts._proof_7 (cell values ↑i))))
+                            [⟨↑sibling, parts._proof_7 sibling⟩]))
+                        (parts._proof_8 (cell values ↑i) sibling)))
+                    (eq_self
+                      ⟨[⟨[18#u8],
+                            Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                              (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                          ⟨↑(↑values)[↑i],
+                            have h := (↑values)[↑i].property;
+                            NJA_ParentAddress.sibling_left._proof_3 values i bound⟩,
+                          ⟨↑sibling, Array.to_slice._proof_1 sibling⟩],
+                        id
+                            (Eq.refl
+                              [⟨[18#u8],
+                                  Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                                    (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                                ⟨↑(↑values)[↑i],
+                                  have h := (↑values)[↑i].property;
+                                  NJA_ParentAddress.sibling_left._proof_3 values i bound⟩,
+                                ⟨↑sibling, Array.to_slice._proof_1 sibling⟩]) ▸
+                          Eq.mpr
+                            (id
+                              (congrFun'
+                                (congrArg LE.le
+                                  (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                Usize.max))
+                            (NJA_ParentAddress.sibling_left._proof_4 i)⟩)))))))
+    (Eq.refl left)
+'NJE_ParentPackets.TX1_125' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ParentPackets.TX2_091 : ∀ (hashv : Slice (Slice U8) → Digest) (values : Std.Array Digest 16#usize)
+  (i : Usize),
+  ↑i < 16 →
+    ∀ (sibling : Digest) (left : Bool),
+      multiproof.sibling_binary_parent (backend hashv) () values i (Array.to_slice sibling) left =
+        ok (hashv (if left = true then parts (cell values ↑i) sibling else parts sibling (cell values ↑i))) :=
+fun hashv values i bound sibling left => TX1_125 hashv values i bound sibling left
+'NJE_ParentPackets.TX2_091' depends on axioms: [propext, Classical.choice, Quot.sound]

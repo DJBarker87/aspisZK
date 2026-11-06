@@ -1,0 +1,136 @@
+NJE_lean/NJE_CountGroup.lean:15:36: error: Application type mismatch: The argument
+  ↑q
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  ↑q ≤ ↑n ∧ ↑q
+NJE_lean/NJE_CountGroup.lean:12:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  LT (?m.57 + 2)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NJE_lean/NJE_CountGroup.lean:15:43: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.val` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `AddUnits.val`
+  [apply] `Byte.val`
+  [apply] `Char.val`
+  [apply] `Fin.val`
+  [apply] `Finset.val`
+  [apply] `Float.val`
+  [apply] `Float32.val`
+  [apply] `FloatSpec.val`
+  [apply] `IntermediateField.val`
+  [apply] `NonScalar.val`
+  [apply] `PNat.val`
+  [apply] `Subalgebra.val`
+  [apply] `SubalgebraClass.val`
+  [apply] `Subtype.val`
+  [apply] `Units.val`
+  [apply] `ZMod.val`
+  [apply] `Array.Mem.val`
+  [apply] `LLVM.AttributeIndex.val`
+  [apply] `LLVM.CodegenFileType.val`
+  [apply] `LLVM.DLLStorageClass.val`
+  [apply] `LLVM.IntPredicate.val`
+  [apply] `LLVM.Linkage.val`
+  [apply] `LLVM.Visibility.val`
+  [apply] `Lean.ElabBlock.val`
+  [apply] `Lean.ElabInline.val`
+  [apply] `Lean.ExprStructEq.val`
+  [apply] `NumberField.RingOfIntegers.val`
+  [apply] `OrderHom.Subtype.val`
+  [apply] `ST.Out.val`
+  [apply] `Valuation.IsUniformizer.val`
+  [apply] `Valuation.Uniformizer.val`
+  [apply] `Vector.Mem.val`
+  [apply] `IScalar.val`
+  [apply] `UScalar.val`
+  [apply] `Do.Tests.ExBox.val`
+  [apply] `Lean.Doc.Parser.val`
+  [apply] `Lean.Doc.WithSyntax.val`
+  [apply] `Lean.Elab.FieldInfo.val`
+  [apply] `Lean.Language.DynamicSnapshot.val`
+  [apply] `Lean.Language.SyntaxGuarded.val`
+  [apply] `Lean.Meta.InstanceEntry.val`
+  [apply] `Lean.Meta.UnificationHintEntry.val`
+  [apply] `Lean.Server.WithRpcRef.val`
+  [apply] `MultiproofConeRef.reference.Scratch.val`
+  [apply] `Std.Time.Timestamp.val`
+  [apply] `Std.Time.WallTime.val`
+  [apply] `Step.Test.U8.val`
+  [apply] `Batteries.BinomialHeap.Imp.FindMin.val`
+  [apply] `Lean.Elab.ComputedFields.Context.val`
+  [apply] `Lean.Elab.Term.LetRecToLift.val`
+  [apply] `Lean.Elab.Term.NamedArg.val`
+  [apply] `Lean.Meta.Match.Example.val`
+  [apply] `Lean.Meta.Match.Pattern.val`
+  [apply] `Lean.Meta.Sym.BitVecValue.val`
+  [apply] `Lean.Meta.Sym.FinValue.val`
+  [apply] `Lean.Meta.SynthInstance.Instance.val`
+  [apply] `Mathlib.Tactic.Determinant.Cert.val`
+  [apply] `Std.Sat.AIG.Fanin.val`
+  [apply] `Std.Time.Internal.UnitVal.val`
+  [apply] `Lean.Compiler.LCNF.FixedParams.AbsValue.val`
+  [apply] `Lean.Elab.Term.StructInst.FieldView.val`
+  [apply] `Lean.Meta.Try.Collector.InductionCandidate.val`
+  [apply] `Mathlib.Tactic.Ring.Common.Result.val`
+  [apply] `Std.Tactic.BVDecide.BVExpr.WithCache.val`
+  [apply] `Lean.Meta.Grind.Arith.Cutsat.SymbolicBound.val`
+NJE_lean/NJE_CountGroup.lean:19:3: error: Type mismatch: After simplification, term
+  sorted
+ has type
+  List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i)
+but is expected to have type
+  List.Pairwise (fun x1 x2 => x1 < x2) (k ↑i :: unread k (↑n) (↑i + 1))
+NJE_lean/NJE_CountGroup.lean:23:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  match unread k (↑n) (↑i + 1) with
+  | j :: tail => decide (paired (k ↑i) j)
+  | [] => false
+in the target expression
+  unread (NJA_CountDrop.keys a) ↑n ↑q =
+    if
+        (match unread k (↑n) (↑i + 1) with
+          | x :: tail => decide (paired (NJA_CountDrop.keys a ↑i) x)
+          | [] => false) =
+          true then
+      List.drop 1 (unread k (↑n) (↑i + 1))
+    else unread k (↑n) (↑i + 1)
+
+a : Std.Array U32 16#usize
+n i : Usize
+hn : ↑n ≤ 16
+active : ↑i < ↑n
+sorted : List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i)
+k : ℕ → ℕ := NJA_CountDrop.keys a
+head : unread k ↑n ↑i = k ↑i :: unread k (↑n) (↑i + 1)
+sorted' : List.Pairwise (fun x1 x2 => x1 < x2) (k ↑i :: unread k (↑n) (↑i + 1))
+q : Usize
+hq : multiproof.node_count_loop0_loop0_loop0 multiproof.Arity.Two a n ((↑a)[↑i].wrapping_shr 1#u32) i = ok q
+lower : ↑i ≤ ↑q
+upper : ↑q ≤ ↑n
+tail :
+  unread (NJA_CountDrop.keys a) ↑n ↑q =
+    if
+        (match unread k (↑n) (↑i + 1) with
+          | x :: tail => decide (paired (NJA_CountDrop.keys a ↑i) x)
+          | [] => false) =
+          true then
+      List.drop 1 (unread k (↑n) (↑i + 1))
+    else unread k (↑n) (↑i + 1)
+group :
+  (match unread k (↑n) (↑i + 1) with
+      | j :: tail => decide (paired (k ↑i) j)
+      | [] => false) =
+      decide (MultiproofConeLiveOrder.pairAt k ↑n ↑i) ∧
+    (if decide (MultiproofConeLiveOrder.pairAt k ↑n ↑i) = true then List.drop 1 (unread k (↑n) (↑i + 1))
+      else unread k (↑n) (↑i + 1)) =
+      unread k (↑n) (MultiproofConeLiveOrder.advance k ↑n ↑i)
+⊢ ∃ q, sorry
+theorem NJE_CountGroup.total : ∀ (a : Std.Array U32 16#usize) (n i : Usize),
+  ↑n ≤ 16 → ↑i < ↑n → List.Pairwise (fun x1 x2 => x1 < x2) (unread (NJA_CountDrop.keys a) ↑n ↑i) → ∃ q, sorry :=
+fun a n i hn active sorted =>
+  let k := NJA_CountDrop.keys a;
+  sorry k
+'NJE_CountGroup.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

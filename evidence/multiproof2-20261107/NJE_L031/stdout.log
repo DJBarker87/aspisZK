@@ -1,0 +1,386 @@
+NJE_lean/NJE_WellSource.lean:38:42: warning: This simp argument is unused:
+  List.all
+
+Hint: Omit it from the simp argument list.
+  simp [NJA_WellIteration.windows,L̵i̵s̵t̵.̵a̵l̵l̵,̵ ̲NJA_WellFormed.adjacent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJE_lean/NJE_WellSource.lean:41:44: warning: This simp argument is unused:
+  List.all
+
+Hint: Omit it from the simp argument list.
+  simp [NJA_WellIteration.windows,L̵i̵s̵t̵.̵a̵l̵l̵,̵ ̲NJA_WellFormed.adjacent]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJE_WellSource.all_result : ∀ {α : Type} (p : α → Bool) (xs : List α), allValues p xs = ok (xs.all p) :=
+fun {α} p xs =>
+  let ⟨tail, h⟩ := NJE_AllAdapter.default_all p xs
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans (congrFun' (congrArg Bind.bind h) (uncurry fun b _ => ok b))
+            (bind_tc_ok (xs.all p, tail) (uncurry fun b _ => ok b))))
+        (ok (xs.all p))))
+    (Eq.refl
+      (let (b, _) := (xs.all p, tail)
+      ok b))
+'NJE_WellSource.all_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellSource.order_pair : ∀ (a b : U32), order (NJA_WellPredicateLaws.pair a b) = decide (↑a < ↑b) :=
+fun a b =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Decidable.decide.congr_simp
+            (↑(↑(NJA_WellPredicateLaws.pair a b))[0]! < ↑(↑(NJA_WellPredicateLaws.pair a b))[1]!) (↑a < ↑b)
+            (congr
+              (congrArg LT.lt
+                (congrArg UScalar.val
+                  (getElem!_pos [a, b] 0
+                    (of_eq_true
+                      (Eq.trans
+                        (Eq.trans (congrArg (LT.lt 0) (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                          Order.lt_two_iff._simp_1)
+                        zero_le._simp_1)))))
+              (congrArg UScalar.val
+                (getElem!_pos [a, b] 1
+                  (of_eq_true
+                    (Eq.trans
+                      (Eq.trans (congrArg (LT.lt 1) (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                        Order.lt_two_iff._simp_1)
+                      (Std.le_refl._simp_1 1))))))))
+        (decide (↑a < ↑b)))
+      (eq_self (decide (↑a < ↑b))))
+'NJE_WellSource.order_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellSource.order_all : ∀ (xs : List U32),
+  (NJA_WellIteration.windows xs).all order = decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) :=
+fun xs =>
+  List.rec
+    (of_eq_true
+      (Eq.trans
+        (congrArg (Eq true)
+          (Eq.trans
+            (Decidable.decide.congr_simp (NJA_WellFormed.adjacent (List.map (fun x => ↑x) [])) True
+              NJA_WellFormed.adjacent.eq_1)
+            (decide_true instDecidableTrue)))
+        (eq_self true)))
+    (fun x xs ih =>
+      List.casesOn (motive := fun t =>
+        xs = t →
+          (NJA_WellIteration.windows (x :: xs)).all order =
+            decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) (x :: xs))))
+        xs
+        (fun h =>
+          Eq.ndrec (motive := fun xs =>
+            (NJA_WellIteration.windows xs).all order = decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) →
+              (NJA_WellIteration.windows (x :: xs)).all order =
+                decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) (x :: xs))))
+            (fun ih =>
+              of_eq_true
+                (Eq.trans
+                  (congrArg (Eq true)
+                    (Eq.trans
+                      (Decidable.decide.congr_simp (NJA_WellFormed.adjacent (List.map (fun x => ↑x) [x])) True
+                        (NJA_WellFormed.adjacent.eq_2 ↑x))
+                      (decide_true instDecidableTrue)))
+                  (eq_self true)))
+            (Eq.symm h) ih)
+        (fun y ys h =>
+          Eq.ndrec (motive := fun xs =>
+            (NJA_WellIteration.windows xs).all order = decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) →
+              (NJA_WellIteration.windows (x :: xs)).all order =
+                decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) (x :: xs))))
+            (fun ih =>
+              Eq.mpr
+                (id
+                  (congr (congrArg Eq (congr (congrArg and (order_pair x y)) ih))
+                    (Decidable.decide.congr_simp (NJA_WellFormed.adjacent (List.map (fun x => ↑x) (x :: y :: ys)))
+                      (↑x < ↑y ∧ NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys))
+                      (NJA_WellFormed.adjacent.eq_3 (↑x) (↑y) (List.map (fun x => ↑x) ys)))))
+                (if h : ↑x < ↑y then
+                  of_eq_true
+                    (Eq.trans
+                      (Eq.trans
+                        (congr
+                          (congrArg Eq
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg and
+                                  (Eq.trans (Decidable.decide.congr_simp (↑x < ↑y) True (eq_true h))
+                                    (decide_true instDecidableTrue)))
+                                (decide (NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys))))
+                              (Bool.true_and (decide (NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys))))))
+                          (Decidable.decide.congr_simp
+                            (↑x < ↑y ∧ NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys))
+                            (NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys))
+                            (Eq.trans
+                              (congrFun' (congrArg And (eq_true h))
+                                (NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys)))
+                              (true_and (NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys))))))
+                        decide_eq_decide._simp_1)
+                      (iff_self (NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys))))
+                else
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg and
+                                (Eq.trans (Decidable.decide.congr_simp (↑x < ↑y) False (eq_false h))
+                                  (decide_false instDecidableFalse)))
+                              (decide (NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys))))
+                            (Bool.false_and (decide (NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys))))))
+                        (Eq.trans
+                          (Decidable.decide.congr_simp
+                            (↑x < ↑y ∧ NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys)) False
+                            (Eq.trans
+                              (congrFun' (congrArg And (eq_false h))
+                                (NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys)))
+                              (false_and (NJA_WellFormed.adjacent (↑y :: List.map (fun x => ↑x) ys)))))
+                          (decide_false instDecidableFalse)))
+                      (eq_self false))))
+            (Eq.symm h) ih)
+        (Eq.refl xs))
+    xs
+'NJE_WellSource.order_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellSource.domain_all : ∀ (xs : List U32), xs.all domain = decide (∀ x ∈ xs, ↑x < 262144) :=
+fun xs =>
+  Bool.eq_iff_iff.mpr
+    (of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Iff
+            (Eq.trans List.all_eq_true._simp_1
+              (forall_congr fun x => implies_congr (Eq.refl (x ∈ xs)) decide_eq_true_eq)))
+          decide_eq_true_eq)
+        (iff_self (∀ x ∈ xs, ↑x < 262144))))
+'NJE_WellSource.domain_all' depends on axioms: [propext, Quot.sound]
+theorem NJE_WellSource.source : ∀ (xs : List U32),
+  emitted xs = ok (NJA_WellFormed.source (List.map (fun x => ↑x) xs)) :=
+fun xs =>
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (if xs.isEmpty = true then ok false
+                else
+                  if xs.length ≤ 16 then do
+                    let ordered ← _a
+                    if ordered = true then allValues domain xs else ok false
+                  else ok false) =
+                ok
+                  (if List.map (fun x => ↑x) xs = [] then false
+                  else
+                    if (List.map (fun x => ↑x) xs).length > 16 then false
+                    else
+                      if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                        decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                      else false))
+            (all_result order (NJA_WellIteration.windows xs))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (if xs.isEmpty = true then ok false
+                  else
+                    if xs.length ≤ 16 then do
+                      let ordered ← ok _a
+                      if ordered = true then allValues domain xs else ok false
+                    else ok false) =
+                  ok
+                    (if List.map (fun x => ↑x) xs = [] then false
+                    else
+                      if (List.map (fun x => ↑x) xs).length > 16 then false
+                      else
+                        if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                          decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                        else false))
+              (order_all xs)))
+          (Eq.mpr
+            (id
+              (congr
+                (congrArg Eq
+                  (ite_congr (Eq.refl (xs.isEmpty = true)) (fun a => Eq.refl (ok false)) fun a =>
+                    ite_congr (Eq.refl (xs.length ≤ 16))
+                      (fun a =>
+                        bind_tc_ok (decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs))) fun y =>
+                          if y = true then allValues domain xs else ok false)
+                      fun a => Eq.refl (ok false)))
+                (congrArg ok
+                  (ite_congr source._simp_1 (fun a => Eq.refl false) fun a =>
+                    ite_congr (congrFun' (congrArg GT.gt (List.length_map fun x => ↑x)) 16) (fun a => Eq.refl false)
+                      fun a =>
+                      Eq.refl
+                        (if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                          decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                        else false)))))
+            (if e : xs = [] then
+              of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (ite_cond_eq_true (ok false)
+                        (if xs.length ≤ 16 then
+                          if decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) = true then
+                            allValues domain xs
+                          else ok false
+                        else ok false)
+                        (Eq.trans (congrFun' (congrArg Eq (congrArg List.isEmpty e)) true) (eq_self true))))
+                    (congrArg ok
+                      (ite_cond_eq_true false
+                        (if xs.length > 16 then false
+                        else
+                          if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                            decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                          else false)
+                        (Eq.trans (congrFun' (congrArg Eq e) []) (eq_self [])))))
+                  (eq_self (ok false)))
+            else
+              if small : xs.length ≤ 16 then
+                if sorted : NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_cond_eq_false (ok false)
+                              (if xs.length ≤ 16 then
+                                if decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) = true then
+                                  allValues domain xs
+                                else ok false
+                              else ok false)
+                              (Eq.trans List.isEmpty_iff._simp_1 (eq_false e)))
+                            (Eq.trans
+                              (ite_cond_eq_true
+                                (if decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) = true then
+                                  allValues domain xs
+                                else ok false)
+                                (ok false) (eq_true small))
+                              (Eq.trans
+                                (ite_cond_eq_true (allValues domain xs) (ok false)
+                                  (Eq.trans
+                                    (congrFun'
+                                      (congrArg Eq
+                                        (Eq.trans
+                                          (Decidable.decide.congr_simp
+                                            (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) True (eq_true sorted))
+                                          (decide_true instDecidableTrue)))
+                                      true)
+                                    (eq_self true)))
+                                (Eq.trans (all_result domain xs) (congrArg ok (domain_all xs)))))))
+                        (congrArg ok
+                          (Eq.trans
+                            (ite_cond_eq_false false
+                              (if xs.length > 16 then false
+                              else
+                                if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                                  decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                                else false)
+                              (eq_false e))
+                            (Eq.trans
+                              (ite_cond_eq_false false
+                                (if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                                  decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                                else false)
+                                (Eq.trans gt_iff_lt._simp_1
+                                  (eq_false
+                                    (have this := fun a => source._proof_1 xs small a;
+                                    this))))
+                              (Eq.trans
+                                (ite_cond_eq_true (decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)) false
+                                  (eq_true sorted))
+                                (Decidable.decide.congr_simp (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                                  (∀ x ∈ xs, ↑x < 262144)
+                                  (Eq.trans
+                                    (forall_congr fun x =>
+                                      Eq.trans
+                                        (Eq.trans (implies_congr List.mem_map._simp_1 (Eq.refl (x < 262144)))
+                                          forall_exists_index._simp_1)
+                                        (forall_congr fun x_1 => and_imp._simp_1))
+                                    forall_apply_eq_imp_iff₂._simp_1)))))))
+                      (eq_self (ok (decide (∀ x ∈ xs, ↑x < 262144)))))
+                else
+                  of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (Eq.trans
+                            (ite_cond_eq_false (ok false)
+                              (if xs.length ≤ 16 then
+                                if decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) = true then
+                                  allValues domain xs
+                                else ok false
+                              else ok false)
+                              (Eq.trans List.isEmpty_iff._simp_1 (eq_false e)))
+                            (Eq.trans
+                              (ite_cond_eq_true
+                                (if decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) = true then
+                                  allValues domain xs
+                                else ok false)
+                                (ok false) (eq_true small))
+                              (ite_cond_eq_false (allValues domain xs) (ok false)
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (Eq.trans
+                                        (Decidable.decide.congr_simp
+                                          (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) False (eq_false sorted))
+                                        (decide_false instDecidableFalse)))
+                                    true)
+                                  Bool.false_eq_true)))))
+                        (congrArg ok
+                          (Eq.trans
+                            (ite_cond_eq_false false
+                              (if xs.length > 16 then false
+                              else
+                                if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                                  decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                                else false)
+                              (eq_false e))
+                            (Eq.trans
+                              (ite_congr gt_iff_lt._simp_1 (fun a => Eq.refl false) fun a =>
+                                ite_cond_eq_false (decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)) false
+                                  (eq_false sorted))
+                              (ite_self false)))))
+                      (eq_self (ok false)))
+              else
+                of_eq_true
+                  (Eq.trans
+                    (congr
+                      (congrArg Eq
+                        (Eq.trans
+                          (ite_cond_eq_false (ok false)
+                            (if xs.length ≤ 16 then
+                              if decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) = true then
+                                allValues domain xs
+                              else ok false
+                            else ok false)
+                            (Eq.trans List.isEmpty_iff._simp_1 (eq_false e)))
+                          (ite_cond_eq_false
+                            (if decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) = true then
+                              allValues domain xs
+                            else ok false)
+                            (ok false) (eq_false small))))
+                      (congrArg ok
+                        (Eq.trans
+                          (ite_cond_eq_false false
+                            (if xs.length > 16 then false
+                            else
+                              if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                                decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                              else false)
+                            (eq_false e))
+                          (ite_cond_eq_true false
+                            (if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                              decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                            else false)
+                            (Eq.trans gt_iff_lt._simp_1
+                              (eq_true
+                                (have this := Decidable.byContradiction fun a => source._proof_2 xs small a;
+                                this)))))))
+                    (eq_self (ok false))))))))
+'NJE_WellSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]

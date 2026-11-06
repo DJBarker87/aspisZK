@@ -1,0 +1,52 @@
+{"attempt": "NJE_L041", "exit_status": 0, "wall_seconds": 3.7350778488907963, "peak_rss_kib": "4319092", "swaps": "0", "print_axioms": ["'NJE_WellPacket.emitted_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_WellPacket.TX1_128' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_WellPacket.TX2_094' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_WellPacket.emitted_value : ∀ (xs : List U32),
+  NJE_WellSource.emitted xs = ok (!xs.isEmpty && decide (xs.length ≤ 16) && ordered xs && domain xs) :=
+fun xs =>
+  id
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (if xs.isEmpty = true then ok false
+                  else
+                    if xs.length ≤ 16 then do
+                      let ordered ← _a
+                      if ordered = true then NJE_WellSource.allValues NJE_WellSource.domain xs else ok false
+                    else ok false) =
+                  ok
+                    (!xs.isEmpty && decide (xs.length ≤ 16) &&
+                        (NJA_WellItera
+...
+lse)))
+                                      (Bool.and_false true)))
+                                  ((NJA_WellIteration.windows xs).all NJE_WellSource.order))
+                                (Bool.false_and ((NJA_WellIteration.windows xs).all NJE_WellSource.order))))
+                            (xs.all NJE_WellSource.domain))
+                          (Bool.false_and (xs.all NJE_WellSource.domain)))))
+                    (eq_self (ok false))))))))
+'NJE_WellPacket.emitted_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellPacket.TX1_128 : ∀ (xs : List U32) (out : Bool) (calls : ℕ),
+  Cut xs (ordered xs) (domain xs) out calls →
+    NJE_WellSource.emitted xs = ok out ∧
+      out = decide (AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) xs)) :=
+fun xs out calls cut =>
+  have source := NJE_WellSource.source xs;
+  have reply :=
+    Eq.mpr (id (congrArg (fun _a => _a = ok out) (emitted_value xs)))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => ok (!xs.isEmpty && decide (xs.length ≤ 16) && ordered xs && domain xs) = ok _a)
+            cut.left))
+        (Eq.refl (ok (!xs.isEmpty && decide (xs.length ≤ 16) && ordered xs && domain xs))));
+  ⟨reply, Eq.trans (ok.inj (Eq.trans (Eq.symm reply) source)) (NJA_WellFormed.source_eq (List.map (fun x => ↑x) xs))⟩
+'NJE_WellPacket.TX1_128' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_WellPacket.TX2_094 : ∀ (xs : List U32) (out : Bool) (calls : ℕ),
+  Cut xs (ordered xs) (domain xs) out calls →
+    NJE_WellSource.emitted xs = ok out ∧
+      out = decide (AspisR1.OraclePortFrozenOrder.wellFormed (List.map (fun x => ↑x) xs)) :=
+fun xs out calls cut => TX1_128 xs out calls cut
+'NJE_WellPacket.TX2_094' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r30a78d467c6b42a4afb949a31019259c.scope; invocation ID: b72b3a13184c4daaa7b1a09f0a26b343

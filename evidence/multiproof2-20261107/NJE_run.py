@@ -86,6 +86,6 @@ entry['full_receipt']=a+'/receipt.json'
 with (E/'NJE_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));
 if cfg['kind']=='kani' and rc['exit_status'] in (0,1):
- expected_fail=cfg.get('module','').endswith('_control')
+ expected_fail=cfg.get('expected_failure', 'NJE_bad_argument' in cfg.get('env',{}).get('RUSTFLAGS',''))
  if (rc['exit_status']==1)!=expected_fail: print('NJE review: unexpected semantic verdict '+a);sys.exit(2)
 sys.exit(rc['exit_status'])

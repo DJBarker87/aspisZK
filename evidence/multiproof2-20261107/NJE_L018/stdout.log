@@ -1,0 +1,75 @@
+NJE_BODY AspisR1.JFy_Specs.pow5 owner=RPv_JFy_Specs type=∀ (x : FIq_Native.field.QM31),
+  AspisR1.FIv_NativeValue.Canon x →
+    Aeneas.Std.WP.spec (FIq_Native.state_only_poseidon.pow5 x) fun out =>
+      AspisR1.FIv_NativeValue.Canon out value=fun x hx =>
+  let ⟨out, h✝⟩ := AspisR1.JFy_Pow5.source x hx
+  let ⟨call, right✝⟩ := h✝
+  let ⟨hc, right✝¹⟩ := right✝
+  Eq.mpr (id (congrArg (fun _a => Aeneas.Std.WP.spec _a fun out => AspisR1.FIv_NativeValue.Canon out) call)) hc
+NJE_BODY FIq_Native.state_only_poseidon.pow5 owner=RPu_FIq_Native04 type=FIq_Native.field.QM31 →
+  Aeneas.Std.Result FIq_Native.field.QM31 value=fun value => do
+  let square ← value.square
+  let q ← square.square
+  q.mul value
+NJE_BODY NFU_Retarget.core.ops.range.Range.Insts.CoreIterTraitsIteratorIterator.all owner=NFU_LPl_Kit_FunsExternal type={A
+    F : Type} →
+  Aeneas.Std.core.iter.range.Step A →
+    Aeneas.Std.core.ops.function.FnMut F A Bool →
+      Aeneas.Std.core.ops.range.Range A →
+        F →
+          Aeneas.Std.Result
+            (Bool ×
+              Aeneas.Std.core.ops.range.Range
+                A) value=fun {A F} StepInst opsfunctionFnMutFTupleABoolInst =>
+  NFU_Retarget.core.iter.traits.iterator.Iterator.all.default
+    (Aeneas.Std.core.iter.traits.iterator.IteratorRange StepInst) opsfunctionFnMutFTupleABoolInst
+NJE_BODY FIq_Native.state_only_poseidon.internal_linear_lazy owner=RPu_FIq_Native04 type=Aeneas.Std.Array
+    FIq_Native.field.QM31 16#usize →
+  Aeneas.Std.Result (Aeneas.Std.Array FIq_Native.field.QM31 16#usize) value=fun state => do
+  let q ← state.index_usize 0#usize
+  let old_zero ← FIq_Native.state_only_poseidon.extension_limbs q
+  have part_sum : Aeneas.Std.Array (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U64) 4#usize :=
+    Aeneas.Std.Array.repeat 4#usize 0#u64
+  let part_sum1 ← FIq_Native.state_only_poseidon.internal_linear_lazy_loop0 state part_sum 1#usize
+  let full_sum ←
+    FIq_Native.array_from_fn_copy 4#usize Aeneas.Std.core.marker.CopyU64
+        FIq_Native.state_only_poseidon.internal_linear_lazy.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU64 0#u64
+        (part_sum1, old_zero)
+  let a ←
+    FIq_Native.array_from_fn_copy 4#usize Aeneas.Std.core.marker.CopyU64
+        FIq_Native.state_only_poseidon.internal_linear_lazy.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeU64 0#u64
+        (part_sum1, old_zero)
+  let q1 ← FIq_Native.state_only_poseidon.extension_from_raw_limbs a
+  let a1 ← state.update 0#usize q1
+  FIq_Native.state_only_poseidon.internal_linear_lazy_loop1
+      { start := 1#usize, «end» := FIq_Native.poseidon2.POSEIDON2_WIDTH } a1 full_sum
+NJE_BODY NFU_Retarget.core.iter.traits.iterator.Iterator.all.default owner=NFU_LPl_Kit_FunsExternal type={Self F Item :
+    Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator Self Item →
+    Aeneas.Std.core.ops.function.FnMut F Item Bool →
+      Self → F → Aeneas.Std.Result (Bool × Self) value=fun {Self F Item} iterator fnMut self predicate => do
+  let outcome ←
+    Aeneas.Std.loop
+        (fun x =>
+          match x with
+          | (self', predicate') => do
+            let (item, self'') ← iterator.next self'
+            match item with
+              | none => Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (true, self'', predicate'))
+              | some value => do
+                let (holds, predicate'') ← fnMut.call_mut predicate' value
+                if holds = true then Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (self'', predicate''))
+                  else Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (false, self'', predicate'')))
+        (self, predicate)
+  Aeneas.Std.Result.ok (outcome.1, outcome.2.1)
+NJE_BODY FIq_Native.state_only_poseidon.external_linear_lazy owner=RPu_FIq_Native06 type=Aeneas.Std.Array
+    FIq_Native.field.QM31 16#usize →
+  Aeneas.Std.Result (Aeneas.Std.Array FIq_Native.field.QM31 16#usize) value=fun state => do
+  let state1 ← FIq_Native.state_only_poseidon.external_linear_lazy_loop0 state 0#usize
+  have a : Aeneas.Std.Array (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U64) 4#usize :=
+    Aeneas.Std.Array.repeat 4#usize 0#u64
+  let sums ←
+    FIq_Native.array_from_fn_copy 4#usize (Aeneas.Std.Array.Insts.CoreMarkerCopy 4#usize Aeneas.Std.core.marker.CopyU64)
+        FIq_Native.state_only_poseidon.external_linear_lazy.closure.Insts.CoreOpsFunctionFnMutTupleUsizeArrayU644 a
+        state1
+  FIq_Native.state_only_poseidon.external_linear_lazy_loop1 state1 sums 0#usize

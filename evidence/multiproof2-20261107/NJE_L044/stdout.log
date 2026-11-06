@@ -1,0 +1,12 @@
+NJE_PRIVATE_REUSE _private.R0P.Poseidon.0.R0P.poseidon_compose_steps : ∀ {σ : Type} {n : ℕ} (states : Fin (n + 1) → σ)
+  (steps : Fin n → σ → σ),
+  (∀ (i : Fin n), states i.succ = steps i (states i.castSucc)) →
+    List.foldl (fun state step => step state) (states 0) (List.ofFn steps) = states (Fin.last n)
+NJE_PRIVATE_REUSE _private.R0P.Poseidon.0.R0P.poseidon_rounds_split : ∀ {K : Type} [inst : Field K]
+  (state : Fin 16 → K),
+  List.foldl (fun s r => R0P.poseidonApplyRound r s) state (List.ofFn fun r => r) =
+    List.foldl R0P.poseidonFullRound
+      (List.foldl R0P.poseidonInternalRound
+        (List.foldl R0P.poseidonFullRound state (List.ofFn fun r => R0P.poseidonExternalInitial r))
+        (List.ofFn fun r => R0P.poseidonInternalConstants r))
+      (List.ofFn fun r => R0P.poseidonExternalFinal r)

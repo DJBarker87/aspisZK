@@ -1,0 +1,132 @@
+theorem NJE_SumStage.prefix_fold : ∀ (xs : List ℕ) (states : ℕ → ℕ),
+  states 0 = 0 →
+    (∀ (i : ℕ) (h : i < xs.length), states (i + 1) = states i + xs[i]) →
+      ∀ n ≤ xs.length, states n = List.foldl (fun x1 x2 => x1 + x2) 0 (List.take n xs) :=
+fun xs states start next n bound =>
+  Nat.recAux (motive := fun n => n ≤ xs.length → states n = List.foldl (fun x1 x2 => x1 + x2) 0 (List.take n xs))
+    (fun bound => id start)
+    (fun n ih bound =>
+      have h := Decidable.byContradiction fun a => prefix_fold._proof_1 xs states n bound a;
+      Eq.mpr (id (congrArg (fun _a => _a = List.foldl (fun x1 x2 => x1 + x2) 0 (List.take (n + 1) xs)) (next n h)))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a + xs[n] = List.foldl (fun x1 x2 => x1 + x2) 0 (List.take (n + 1) xs))
+              (ih (Decidable.byContradiction fun a => prefix_fold._proof_2 xs states n bound a))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  List.foldl (fun x1 x2 => x1 + x2) 0 (List.take n xs) + xs[n] = List.foldl (fun x1 x2 => x1 + x2) 0 _a)
+                (List.take_succ_eq_append_getElem h)))
+            (of_eq_true
+              (Eq.trans (congrArg (Eq (List.foldl (fun x1 x2 => x1 + x2) 0 (List.take n xs) + xs[n])) List.foldl_append)
+                (eq_self (List.foldl (fun x1 x2 => x1 + x2) 0 (List.take n xs) + xs[n])))))))
+    n bound
+'NJE_SumStage.prefix_fold' depends on axioms: [propext, Quot.sound]
+theorem NJE_SumStage.complete : ∀ (input : NJA_Internal.State) (states : ℕ → ℕ),
+  Cut input states → states 15 = NJA_Internal.part input :=
+fun input states cut =>
+  let xs := List.ofFn fun i => ↑(input i.succ);
+  have next := fun i h =>
+    have hi := Eq.mp (congrArg (LT.lt i) List.length_ofFn) h;
+    id (Eq.mpr (id (congrArg (fun _a => states (i + 1) = states i + _a) (List.getElem_ofFn hi))) (cut.right ⟨i, hi⟩));
+  have final :=
+    prefix_fold xs states cut.left next 15
+      (of_eq_true
+        (Eq.trans
+          (congrArg (LE.le 15)
+            (Eq.trans
+              (congrArg List.length
+                (Eq.trans List.ofFn_succ
+                  (congrArg (List.cons ↑(input 1))
+                    (Eq.trans List.ofFn_succ
+                      (congrArg (List.cons ↑(input 2))
+                        (Eq.trans List.ofFn_succ
+                          (congrArg (List.cons ↑(input 3))
+                            (Eq.trans List.ofFn_succ
+                              (congrArg (List.cons ↑(input 4))
+                                (Eq.trans List.ofFn_succ
+                                  (congrArg (List.cons ↑(input 5))
+                                    (Eq.trans List.ofFn_succ
+                                      (congrArg (List.cons ↑(input 6))
+                                        (Eq.trans List.ofFn_succ
+                                          (congrArg (List.cons ↑(input 7))
+                                            (Eq.trans List.ofFn_succ
+                                              (congrArg (List.cons ↑(input 8))
+                                                (Eq.trans List.ofFn_succ
+                                                  (congrArg (List.cons ↑(input 9))
+                                                    (Eq.trans List.ofFn_succ
+                                                      (congrArg (List.cons ↑(input 10))
+                                                        (Eq.trans List.ofFn_succ
+                                                          (congrArg (List.cons ↑(input 11))
+                                                            (Eq.trans List.ofFn_succ
+                                                              (congrArg (List.cons ↑(input 12))
+                                                                (Eq.trans List.ofFn_succ
+                                                                  (congrArg (List.cons ↑(input 13))
+                                                                    (Eq.trans List.ofFn_succ
+                                                                      (congrArg (List.cons ↑(input 14))
+                                                                        (Eq.trans List.ofFn_succ
+                                                                          (congrArg (List.cons ↑(input 15))
+                                                                            List.ofFn_zero)))))))))))))))))))))))))))))))
+              (congrFun'
+                (congrArg HAdd.hAdd
+                  (congrFun'
+                    (congrArg HAdd.hAdd
+                      (congrFun'
+                        (congrArg HAdd.hAdd
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (congrFun'
+                                (congrArg HAdd.hAdd
+                                  (congrFun'
+                                    (congrArg HAdd.hAdd
+                                      (congrFun'
+                                        (congrArg HAdd.hAdd
+                                          (congrFun'
+                                            (congrArg HAdd.hAdd
+                                              (congrFun'
+                                                (congrArg HAdd.hAdd
+                                                  (congrFun'
+                                                    (congrArg HAdd.hAdd
+                                                      (congrFun'
+                                                        (congrArg HAdd.hAdd
+                                                          (congrFun'
+                                                            (congrArg HAdd.hAdd
+                                                              (congrFun'
+                                                                (congrArg HAdd.hAdd
+                                                                  (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                1))
+                                                            1))
+                                                        1))
+                                                    1))
+                                                1))
+                                            1))
+                                        1))
+                                    1))
+                                1))
+                            1))
+                        1))
+                    1))
+                1)))
+          (Std.le_refl._simp_1 15)));
+  have len := List.length_ofFn;
+  Eq.mp (congrArg (fun _a => states xs.length = List.foldl (fun x1 x2 => x1 + x2) 0 _a) List.take_length)
+    (Eq.mp (congrArg (fun _a => states _a = List.foldl (fun x1 x2 => x1 + x2) 0 (List.take _a xs)) (Eq.symm len)) final)
+'NJE_SumStage.complete' depends on axioms: [propext, Quot.sound]
+theorem NJE_SumStage.native_domains : ∀ (input : NJA_Internal.State) (states : ℕ → ℕ),
+  Cut input states → (∀ (i : Fin 16), ↑(input i) < 2147483647) → ∀ n ≤ 15, states n ≤ n * 2147483647 :=
+fun input states cut canonical n bound =>
+  Nat.recAux (motive := fun n => n ≤ 15 → states n ≤ n * 2147483647)
+    (fun bound => of_eq_true (Eq.trans (congr (congrArg LE.le cut.left) (zero_mul 2147483647)) (Std.le_refl._simp_1 0)))
+    (fun n ih bound =>
+      have hn := Decidable.byContradiction fun a => native_domains._proof_1 n bound a;
+      Eq.mpr (id (congrArg (fun _a => _a ≤ (n + 1) * 2147483647) (cut.right ⟨n, hn⟩)))
+        (have before := ih (Decidable.byContradiction fun a => native_domains._proof_2 n bound a);
+        have term := canonical ⟨n, hn⟩.succ;
+        Eq.mpr
+          (id
+            (congrArg (LE.le (states n + ↑(input ⟨n, hn⟩.succ)))
+              (Eq.trans (Nat.add_mul n 1 2147483647) (congrArg (HAdd.hAdd (n * 2147483647)) (Nat.one_mul 2147483647)))))
+          (Decidable.byContradiction fun a => native_domains._proof_3 input states n hn before term a)))
+    n bound
+'NJE_SumStage.native_domains' depends on axioms: [propext, Quot.sound]

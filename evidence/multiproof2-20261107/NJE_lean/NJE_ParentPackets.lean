@@ -22,7 +22,8 @@ theorem TX1_123 (hashv : Slice (Slice U8) → Digest)
       ok (hashv (parts (cell values i.val) (cell values (i.val+1)))) := by
  rw [NJA_ParentAddress.occupied (backend hashv) () values i bound]
  simp only [backend,AspisR1.NGC_DigestBridge.forwarding]
- congr 2 <;> simp only [cell,getElem!_pos]
+ simp only [cell, getElem!_pos values.val i.val (by have h : values.val.length=16 := values.property; omega),
+   getElem!_pos values.val (i.val+1) (by have h : values.val.length=16 := values.property; omega)]
 
 theorem TX2_089 (hashv : Slice (Slice U8) → Digest)
     (values : Array Digest 16#usize) (i : Usize) (bound : i.val+1<16) :
@@ -39,11 +40,13 @@ theorem TX1_125 (hashv : Slice (Slice U8) → Digest)
  · rw [NJA_ParentAddress.sibling_right (backend hashv) () values i bound]
    simp only [backend,AspisR1.NGC_DigestBridge.forwarding,Bool.false_eq_true,if_false]
    congr 2
-   simp [parts,cell,Array.to_slice,getElem!_pos]
+   simp only [parts,cell,Array.to_slice,
+     getElem!_pos values.val i.val (by have h : values.val.length=16 := values.property; omega)]
  · rw [NJA_ParentAddress.sibling_left (backend hashv) () values i bound]
    simp only [backend,AspisR1.NGC_DigestBridge.forwarding,if_true]
    congr 2
-   simp [parts,cell,Array.to_slice,getElem!_pos]
+   simp only [parts,cell,Array.to_slice,
+     getElem!_pos values.val i.val (by have h : values.val.length=16 := values.property; omega)]
 
 theorem TX2_091 (hashv : Slice (Slice U8) → Digest)
     (values : Array Digest 16#usize) (i : Usize) (bound : i.val<16)

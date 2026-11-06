@@ -1,0 +1,53 @@
+{"attempt": "NJE_L024", "exit_status": 0, "wall_seconds": 2.526460940949619, "peak_rss_kib": "3837376", "swaps": "0", "print_axioms": ["'NJE_InternalPacket.result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_InternalPacket.result : ∀ (input : State) (sums : ℕ → ℕ) (full : ℕ) (args : Fin 16 → ℕ) (steps : ℕ → State),
+  (∀ (i : Fin 16), ↑(input i) < 2147483647) →
+    NJE_SumStage.Cut input sums →
+      NJE_InternalCut.Cut input (sums 15) full args steps →
+        (∀ (i : Fin 16), args i < 2 ^ 62) ∧
+          ∀ (i : Fin 16),
+            ↑(steps 16 i) < 2147483647 ∧ ↑↑(steps 16 i) = R0P.poseidonInternalLinear (fun j => ↑↑(input j)) i :=
+fun input sums full args steps canonical sum_cut cut =>
+  have part := NJE_SumStage.complete input sums sum_cut;
+  have args_source := NJE_InternalCut.args_source input (sums 15) full args steps cut part;
+  ⟨fun i =>
+    Eq.mpr (id (congrArg (fun _a => _a 
+...
+te input sums sum_cut;
+  have args_source := NJE_InternalCut.args_source input (sums 15) full args steps cut part;
+  ⟨fun i =>
+    Eq.mpr (id (congrArg (fun _a => _a < 2 ^ 62) (args_source i)))
+      (NJA_InternalReduce.argument_bound input i canonical),
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            ∀ (i : Fin 16), ↑(_a i) < 2147483647 ∧ ↑↑(_a i) = R0P.poseidonInternalLinear (fun j => ↑↑(input j)) i)
+          (NJE_InternalCut.frame_result input (sums 15) full args steps cut)))
+      fun i =>
+      have hz :=
+        NJA_Mat4Cut.reduction_determined (NJA_InternalReduce.word input i) (NJE_Residue.word (args i))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = ↑(NJA_InternalReduce.word input i) % 2147483647) (NJE_Residue.value (args i))))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => args i % 2147483647 = _a % 2147483647)
+                  (NJA_InternalReduce.word_value input i canonical)))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => _a % 2147483647 = NJA_InternalReduce.argument input i % 2147483647)
+                    (args_source i)))
+                (Eq.refl (NJA_InternalReduce.argument input i % 2147483647)))));
+      let ⟨z, h✝⟩ := NJA_InternalReduce.callee input i canonical
+      let ⟨hz', right✝⟩ := h✝
+      let ⟨cz, vz⟩ := right✝
+      have eq := ok.inj (Eq.trans (Eq.symm hz') hz);
+      ⟨id (Eq.mp (congrFun' (congrArg LT.lt (congrArg UScalar.val eq)) 2147483647) cz),
+        id
+          (Eq.mp
+            (congrFun' (congrArg Eq (congrArg Nat.cast (congrArg UScalar.val eq)))
+              (R0P.poseidonInternalLinear (fun j => ↑↑(input j)) i))
+            vz)⟩⟩
+'NJE_InternalPacket.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r999044f299a04aa298ee6240ef3426db.scope; invocation ID: df396414e6684cf7b7526e6adfb8e5bc

@@ -1,0 +1,50 @@
+{"attempt": "NJE_L028", "exit_status": 1, "wall_seconds": 3.213446717010811, "peak_rss_kib": "4302908", "swaps": "0", "print_axioms": ["'NJE_WellSource.all_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_WellSource.order_pair' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_WellSource.order_all' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJE_WellSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJE_lean/NJE_WellSource.lean:38:10: error: Tactic `rfl` failed: The left-hand side
+  (NJA_WellIteration.windows []).all order
+is not definitionally equal to the right-hand side
+  decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) []))
+
+case nil
+⊢ (NJA_WellIteration.windows []).all order = decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) []))
+NJE_lean/NJE_WellSource.lean:41:12: error: Tactic `rfl` failed: The left-hand side
+  (NJA_WellIteration.windows [x]).all order
+is not definitionally equal to the right-hand side
+  decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) [x]))
+
+case cons.nil
+x : U32
+ih : (NJA_WellIteration.windows []).all order = decide (NJA_WellFormed.adjacent
+...
+se)
+                            (if xs.length ≤ 16 then
+                              if decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) = true then
+                                allValues domain xs
+                              else ok false
+                            else ok false)
+                            (Eq.trans List.isEmpty_iff._simp_1 (eq_false e)))
+                          (ite_cond_eq_false
+                            (if decide (NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs)) = true then
+                              allValues domain xs
+                            else ok false)
+                            (ok false) (eq_false small))))
+                      (congrArg ok
+                        (Eq.trans
+                          (ite_cond_eq_false false
+                            (if xs.length > 16 then false
+                            else
+                              if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                                decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                              else false)
+                            (eq_false e))
+                          (ite_cond_eq_true false
+                            (if NJA_WellFormed.adjacent (List.map (fun x => ↑x) xs) then
+                              decide (∀ x ∈ List.map (fun x => ↑x) xs, x < 262144)
+                            else false)
+                            (Eq.trans gt_iff_lt._simp_1
+                              (eq_true
+                                (have this := Decidable.byContradiction fun a => source._proof_3 xs small a;
+                                this)))))))
+                    (eq_self (ok false))))))))
+'NJE_WellSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf805f6e0dfe242429f76724ba66ec449.scope; invocation ID: 13ac36ff0069434cada043dbf6799430

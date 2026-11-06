@@ -1,0 +1,51 @@
+{"attempt": "NJE_L021", "exit_status": 0, "wall_seconds": 8.740618366049603, "peak_rss_kib": "5864204", "swaps": "0", "print_axioms": ["'NJE_ParentPackets.TX1_123' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_ParentPackets.TX2_089' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_ParentPackets.TX1_125' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJE_ParentPackets.TX2_091' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJE_ParentPackets.TX1_123 : ∀ (hashv : Slice (Slice U8) → Digest) (values : Std.Array Digest 16#usize)
+  (i : Usize),
+  ↑i + 1 < 16 →
+    multiproof.occupied_binary_parent (backend hashv) () values i =
+      ok (hashv (parts (cell values ↑i) (cell values (↑i + 1)))) :=
+fun hashv values i bound =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = ok (hashv (parts (cell values ↑i) (cell values (↑i + 1)))))
+        (NJA_ParentAddress.occupied (backend hashv) () values i bound)))
+    (id
+      (of_eq_true
+        (Eq.trans
+          (congrArg (Eq (ok (hashv (parts (↑values)[↑i] (↑values)[↑i + 1]))))
+            (congrArg ok
+              (congrArg hashv
+                (congr
+            
+...
+property;
+                            NJA_ParentAddress.sibling_left._proof_3 values i bound⟩,
+                          ⟨↑sibling, Array.to_slice._proof_1 sibling⟩],
+                        id
+                            (Eq.refl
+                              [⟨[18#u8],
+                                  Eq.mpr (id (congrFun' (congrArg LE.le (zero_add 1)) Usize.max))
+                                    (NJA_ParentAddress.sibling_left._proof_1 i)⟩,
+                                ⟨↑(↑values)[↑i],
+                                  have h := (↑values)[↑i].property;
+                                  NJA_ParentAddress.sibling_left._proof_3 values i bound⟩,
+                                ⟨↑sibling, Array.to_slice._proof_1 sibling⟩]) ▸
+                          Eq.mpr
+                            (id
+                              (congrFun'
+                                (congrArg LE.le
+                                  (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                Usize.max))
+                            (NJA_ParentAddress.sibling_left._proof_4 i)⟩)))))))
+    (Eq.refl left)
+'NJE_ParentPackets.TX1_125' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ParentPackets.TX2_091 : ∀ (hashv : Slice (Slice U8) → Digest) (values : Std.Array Digest 16#usize)
+  (i : Usize),
+  ↑i < 16 →
+    ∀ (sibling : Digest) (left : Bool),
+      multiproof.sibling_binary_parent (backend hashv) () values i (Array.to_slice sibling) left =
+        ok (hashv (if left = true then parts (cell values ↑i) sibling else parts sibling (cell values ↑i))) :=
+fun hashv values i bound sibling left => TX1_125 hashv values i bound sibling left
+'NJE_ParentPackets.TX2_091' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc1257749f04e4e2c90209db1660408c7.scope; invocation ID: 0a92198528c94318b17067ed6914b69d
