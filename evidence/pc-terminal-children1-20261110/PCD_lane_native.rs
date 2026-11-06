@@ -1,5 +1,5 @@
     fn PCD_digest() -> [aspis_core::field::M31;8] {
-        kani::any::<[u32;8]>().map(aspis_core::field::M31)
+        [aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any())]
     }
     fn PCD_lane(next: u64) -> PoolV1PairForestLaneStateV1 {
         PoolV1PairForestLaneStateV1 {

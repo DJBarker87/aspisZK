@@ -15,9 +15,21 @@ for n,h in pins.items():
   text=raw.decode()[:-len(patch['suffix'])]
   assert text.count(patch['annotation'])==1
   raw=text.replace(patch['annotation'],'',1).encode()
+ if n=='programs/aspis-pool/src/lib.rs' and patch.get('root_annotation'):
+  assert raw.decode().startswith(patch['root_annotation'])
+  raw=raw.decode()[len(patch['root_annotation']):].encode()
  if hashlib.sha256(raw).hexdigest()!=h:errors.append(n)
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
 assert not errors,errors
+association=B/'PCD_FRAGMENT_ASSOCIATION.json'
+if association.exists():
+ q=json.loads(association.read_text());checks=[]
+ for q in q.get('spans',[q]):
+  span=q['span'];assert hashlib.sha256(span.encode()).hexdigest()==q['span_sha256']
+  original=(S/q['source']).read_text()[:-len(patch['suffix'])].replace(patch['annotation'],'',1)
+  assert original.count(span)==q['source_contains'] and patch['suffix'].count(span)==q['fragment_contains']
+  checks.append(dict(span_sha256=q['span_sha256'],source_count=original.count(span),fragment_count=patch['suffix'].count(span),domain=q['cut']))
+ (B/(a+'-fragment-check.json')).write_text(json.dumps(checks,indent=1)+'\n')
 assert os.environ['CARGO_NET_OFFLINE']=='true'
 assert Path(os.environ['CARGO_TARGET_DIR'])==B/'PCD_target'
 assert not (B/'PCD_target').is_symlink()
@@ -61,6 +73,8 @@ for label,cmd in [('cargo',['/home/dombarker/.cargo/bin/cargo','--version']),('k
  tools[label]=dict(command=cmd,stdout=q.stdout,stderr=q.stderr,path_sha256=sha(Path(cmd[0]).resolve()))
 assert '0.67.0' in tools['kani']['stdout']+tools['kani']['stderr']
 (B/(a+'-tool-pins.json')).write_text(json.dumps(tools,indent=1)+'\n')
+if x.get('expected_harness'):
+ assert x['native_command'][x['native_command'].index('--harness')+1]==x['expected_harness']
 try:
  status=subprocess.run(x['native_command'],cwd=B).returncode
 finally:

@@ -1,0 +1,24 @@
+from pathlib import Path
+import json,subprocess,hashlib,difflib
+E=Path(__file__).resolve().parent;sha=lambda s:hashlib.sha256(s.encode()).hexdigest()
+meta=json.loads((E/'PCD_NATIVE_PATCH_META.json').read_text());source=subprocess.check_output(['git','show','b936275465600469312d1f058cdc91ea2a11f3dc:'+meta['source']],text=True)
+a=source.index('        if (afterstate.next_pair_index >> level)');b=source.index('\n    }',a);span=source[a:b]
+frag=(E/'PCD_frontier_native.rs').read_text();frag=frag.replace('SOURCE_SPAN',span);assert span in frag
+(E/'PCD_frontier_generated.rs').write_text(frag)
+association={'source':meta['source'],'revision':'b936275465600469312d1f058cdc91ea2a11f3dc','function':'next_pair_forest_lane_v1','span':span,'span_sha256':sha(span),'source_contains':source.count(span),'fragment_contains':frag.count(span),'cut':'one enumerate-loop iteration, arbitrary result and level<20; node refers to SAME frontier[level]','status':'SOURCE_SEGMENT_CANDIDATE; complete native/model association and row gate still required','method_precedent':'NKV_FRAGMENT_ASSOCIATION under ruling ay(3); no whole-buffer unwind'}
+a=source.index('    Ok(PoolV1PairForestLaneStateV1 {',source.index('fn next_pair_forest_lane_v1('));b=source.index('\n}',a);tail=source[a:b]
+finish=(E/'PCD_finish_native.rs').read_text().replace('TAIL_SPAN',tail)
+(E/'PCD_finish_generated.rs').write_text(finish)
+association={'spans':[association,dict(source=meta['source'],revision=association['revision'],function=association['function'],span=tail,span_sha256=sha(tail),source_contains=source.count(tail),fragment_contains=finish.count(tail),cut='post-loop record return; arbitrary original lane/result; scalar observer tag/key_byte/level/word covers every returned field',status='SOURCE_SEGMENT_CANDIDATE')], 'status':'Native source segments; no whole-row certificate yet'}
+(E/'PCD_FRAGMENT_ASSOCIATION.json').write_text(json.dumps(association,indent=1)+'\n')
+base=(E/'PCD_lane_native.rs').read_text();base=base.replace('    #[kani::proof_for_contract(super::next_pair_forest_lane_v1)]','    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]\n    #[kani::proof_for_contract(super::next_pair_forest_lane_v1)]').replace('    #[kani::proof]\n    fn PCD_checked_rejection_control','    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]\n    #[kani::proof]\n    fn PCD_checked_rejection_control')
+kmx='    mod kmx { extern crate alloc; include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }\n'
+meta['root_annotation']='#![cfg_attr(kani, feature(allocator_api))]\n'
+meta['suffix']='\n#[cfg(kani)]\n#[allow(non_snake_case)]\nmod PCD_harness {\n    use super::*;\n'+kmx+base+frag+finish+'\n}\n'
+start=source.index('fn next_pair_forest_lane_v1(');modified=source[:start]+meta['annotation']+source[start:]+meta['suffix'];meta['modified_sha256']=sha(modified)
+(E/'PCD_NATIVE_PATCH_META.json').write_text(json.dumps(meta,indent=1)+'\n');(E/'PCD_native_packets.patch').write_text(''.join(difflib.unified_diff(source.splitlines(True),modified.splitlines(True),fromfile='a/'+meta['source'],tofile='b/'+meta['source'])))
+rootpath='programs/aspis-pool/src/lib.rs';root=subprocess.check_output(['git','show','b936275465600469312d1f058cdc91ea2a11f3dc:'+rootpath],text=True)
+rootmodified=meta['root_annotation']+root
+with (E/'PCD_native_packets.patch').open('a') as out:out.write(''.join(difflib.unified_diff(root.splitlines(True),rootmodified.splitlines(True),fromfile='a/'+rootpath,tofile='b/'+rootpath)))
+p=E/'PCD_NATIVE_REPAIR_FILES.json';f=json.loads(p.read_text());f['PCD_src/programs/aspis-pool/src/lib.rs']=rootmodified;f['PCD_src/'+meta['source']]=modified;f['PCD_NATIVE_PATCH_META.json']=json.dumps(meta,indent=1)+'\n';f['PCD_FRAGMENT_ASSOCIATION.json']=(E/'PCD_FRAGMENT_ASSOCIATION.json').read_text();p.write_text(json.dumps(f,indent=1)+'\n')
+print('PCD arbitrary-level native loop fragment prepared with exact frozen-span hashes and KMX stubs; not a row root.')

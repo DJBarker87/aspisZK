@@ -1,0 +1,28 @@
+{
+ "spans": [
+  {
+   "source": "programs/aspis-pool/src/pair_forest.rs",
+   "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+   "function": "next_pair_forest_lane_v1",
+   "span": "        if (afterstate.next_pair_index >> level) & 1 == 0\n            && *node != POOL_V1_PAIR_EMPTY_ROOTS[level]\n        {\n            return Err(PoolV1ProgramError::StateHistoryMismatch.into());\n        }",
+   "span_sha256": "923ab29798be9cad4de388b81b4398c82a1e78b9d7b3a0608684c322620b65d6",
+   "source_contains": 1,
+   "fragment_contains": 1,
+   "cut": "one enumerate-loop iteration, arbitrary result and level<20; node refers to SAME frontier[level]",
+   "status": "SOURCE_SEGMENT_CANDIDATE; complete native/model association and row gate still required",
+   "method_precedent": "NKV_FRAGMENT_ASSOCIATION under ruling ay(3); no whole-buffer unwind"
+  },
+  {
+   "source": "programs/aspis-pool/src/pair_forest.rs",
+   "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+   "function": "next_pair_forest_lane_v1",
+   "span": "    Ok(PoolV1PairForestLaneStateV1 {\n        master: lane.master,\n        bump: lane.bump,\n        lane_id: lane.lane_id,\n        tree: IncrementalMerkleTreeV1 {\n            next_leaf_index: afterstate.next_pair_index,\n            root: afterstate.next_root,\n            frontier: afterstate.next_frontier,\n        },\n    })",
+   "span_sha256": "43db8d5722e31b030ceba7530cef678451b7464bcfa2698c14283306882ee493",
+   "source_contains": 1,
+   "fragment_contains": 1,
+   "cut": "post-loop record return; arbitrary original lane/result; scalar observer tag/key_byte/level/word covers every returned field",
+   "status": "SOURCE_SEGMENT_CANDIDATE"
+  }
+ ],
+ "status": "Native source segments; no whole-row certificate yet"
+}

@@ -1,0 +1,57 @@
+{"attempt": "PCD_K004", "exit_status": 0, "wall_seconds": 3.5238029819447547, "peak_rss_kib": "340400", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ticated_afterstate_from_program_invariant` and `decode_from_program_invariant` are never used
+   --> programs/aspis-pool/src/pair_state.rs:188:19
+    |
+151 | impl PairPoolStateV1 {
+    | -------------------- associated items in this implementation
+...
+188 |     pub(crate) fn apply_authenticated_afterstate_from_program_invariant(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+369 |     pub(crate) fn decode_from_program_invariant(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `solana_sha256` is never used
+   --> programs/aspis-pool/src/processor.rs:113:4
+    |
+113 | fn solana_sha256(inputs: &[&[u8]]) -> [u8; 32] {
+    |    ^^^^^^^^^^^^^
+
+warning: methods `matches_policy` and `authenticated_at_slot` are never used
+   --> programs/aspis-pool/src/registry.rs:106:19
+    |
+105 | impl AuthenticatedVerifierSelectionV1 {
+    | ------------------------------------- methods in this implementation
+106 |     pub(crate) fn matches_policy(self, policy: &VerifierPolicyV1) -> bool {
+    |                   ^^^^^^^^^^^^^^
+...
+129 |     pub(crate) fn authenticated_at_slot(self) -> u64 {
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `derive_verifier_dispatch_claim_v1` is never used
+  --> programs/aspis-pool/src/verifier_dispatch.rs:56:15
+   |
+56 | pub(crate) fn derive_verifier_dispatch_claim_v1(
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.85s
+
+Running as unit: run-r39139b09adca4c999fe3e1688cc15717.scope; invocation ID: c5e4193ba6f949a29c356e9996a23ccc

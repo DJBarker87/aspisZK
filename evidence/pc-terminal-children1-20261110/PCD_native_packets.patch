@@ -10,7 +10,7 @@
  fn next_pair_forest_lane_v1(
      lane: &PoolV1PairForestLaneStateV1,
      result: &aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
-@@ -5792,3 +5795,44 @@
+@@ -5792,3 +5795,158 @@
          assert!(accounts[4].data.iter().any(|byte| *byte != 0));
      }
  }
@@ -19,8 +19,9 @@
 +#[allow(non_snake_case)]
 +mod PCD_harness {
 +    use super::*;
++    mod kmx { extern crate alloc; include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
 +    fn PCD_digest() -> [aspis_core::field::M31;8] {
-+        kani::any::<[u32;8]>().map(aspis_core::field::M31)
++        [aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any())]
 +    }
 +    fn PCD_lane(next: u64) -> PoolV1PairForestLaneStateV1 {
 +        PoolV1PairForestLaneStateV1 {
@@ -38,6 +39,7 @@
 +                next_pair_index: next, next_root: PCD_digest(), next_frontier: [PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest(),PCD_digest()] }
 +        }
 +    }
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
 +    #[kani::proof_for_contract(super::next_pair_forest_lane_v1)]
 +    fn PCD_checked_rejection_contract() {
 +        let old: u64 = kani::any(); let next: u64 = kani::any();
@@ -45,6 +47,7 @@
 +        let lane = PCD_lane(old); let result = PCD_result(next);
 +        let _ = super::next_pair_forest_lane_v1(&lane, &result);
 +    }
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
 +    #[kani::proof]
 +    fn PCD_checked_rejection_control() {
 +        let old: u64 = kani::any(); let next: u64 = kani::any();
@@ -53,5 +56,123 @@
 +        let out = super::next_pair_forest_lane_v1(&lane, &result);
 +        assert!(out != Err(PoolV1ProgramError::StateHistoryMismatch.into()));
 +    }
++    fn PCD_frontier_reference(next: u64, level: u32, node: [u32;8], empty: [u32;8]) -> bool {
++        if level >= 20 { return false; }
++        if (next >> level) & 1 != 0 { return true; }
++        node == empty
++    }
++    #[kani::requires(level < 20)]
++    #[kani::ensures(|out| {
++        let node = &result.verified_afterstate.next_frontier[level];
++        let empty = &POOL_V1_PAIR_EMPTY_ROOTS[level];
++        let words = [node[0].0,node[1].0,node[2].0,node[3].0,node[4].0,node[5].0,node[6].0,node[7].0];
++        let roots = [empty[0].0,empty[1].0,empty[2].0,empty[3].0,empty[4].0,empty[5].0,empty[6].0,empty[7].0];
++        let pass = PCD_frontier_reference(result.verified_afterstate.next_pair_index, level as u32, words, roots);
++        *out == if pass {Ok(())} else {Err(PoolV1ProgramError::StateHistoryMismatch.into())}
++    })]
++    #[kani::modifies()]
++    fn PCD_frontier_segment(
++        result: &aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
++        level: usize,
++    ) -> ProgramResult {
++        let afterstate = result.verified_afterstate;
++        let node = &afterstate.next_frontier[level];
++        if (afterstate.next_pair_index >> level) & 1 == 0
++            && *node != POOL_V1_PAIR_EMPTY_ROOTS[level]
++        {
++            return Err(PoolV1ProgramError::StateHistoryMismatch.into());
++        }
++        Ok(())
++    }
++    #[kani::proof_for_contract(PCD_frontier_segment)]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_frontier_contract() {
++        let level: usize = kani::any(); kani::assume(level < 20);
++        let result = PCD_result(kani::any());
++        let _ = PCD_frontier_segment(&result,level);
++    }
++    #[kani::proof]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_frontier_control() {
++        let level: usize = kani::any(); kani::assume(level < 20);
++        let result = PCD_result(kani::any());
++        let out = PCD_frontier_segment(&result,level);
++        let node = &result.verified_afterstate.next_frontier[level];
++        let empty = &POOL_V1_PAIR_EMPTY_ROOTS[level];
++        let pass = (result.verified_afterstate.next_pair_index >> level)&1 != 0 || *node == *empty;
++        assert!(out != if pass {Ok(())} else {Err(PoolV1ProgramError::StateHistoryMismatch.into())});
++    }
++    fn PCD_observe(lane: &PoolV1PairForestLaneStateV1, tag: u8, key_byte: usize, level: usize, word: usize) -> u64 {
++        match tag {
++            0 => lane.master[key_byte] as u64,
++            1 => lane.bump as u64,
++            2 => lane.lane_id as u64,
++            3 => lane.tree.next_leaf_index,
++            4 => lane.tree.root[word].0 as u64,
++            _ => lane.tree.frontier[level][word].0 as u64,
++        }
++    }
++    fn PCD_expected_observation(lane: &PoolV1PairForestLaneStateV1, result: &aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1, tag: u8, key_byte: usize, level: usize, word: usize) -> u64 {
++        match tag {
++            0 => lane.master[key_byte] as u64,
++            1 => lane.bump as u64,
++            2 => lane.lane_id as u64,
++            3 => result.verified_afterstate.next_pair_index,
++            4 => result.verified_afterstate.next_root[word].0 as u64,
++            _ => result.verified_afterstate.next_frontier[level][word].0 as u64,
++        }
++    }
++    #[kani::requires(tag < 6 && key_byte < 32 && level < 20 && word < 8)]
++    #[kani::ensures(|out| match out {
++        Ok(value) => PCD_observe(value, tag, key_byte, level, word) ==
++          PCD_expected_observation(lane,result,tag,key_byte,level,word),
++        Err(_) => false,
++    })]
++    #[kani::modifies()]
++    fn PCD_finish_segment(lane: &PoolV1PairForestLaneStateV1,
++        result: &aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
++        tag: u8, key_byte: usize, level: usize, word: usize,
++    ) -> Result<PoolV1PairForestLaneStateV1, ProgramError> {
++        let afterstate = result.verified_afterstate;
++    Ok(PoolV1PairForestLaneStateV1 {
++        master: lane.master,
++        bump: lane.bump,
++        lane_id: lane.lane_id,
++        tree: IncrementalMerkleTreeV1 {
++            next_leaf_index: afterstate.next_pair_index,
++            root: afterstate.next_root,
++            frontier: afterstate.next_frontier,
++        },
++    })
++    }
++    #[kani::proof_for_contract(PCD_finish_segment)]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_finish_contract() {
++        let lane = PCD_lane(kani::any()); let result = PCD_result(kani::any());
++        let tag: u8 = kani::any(); let key_byte:usize=kani::any();
++        let level:usize=kani::any(); let word:usize=kani::any();
++        kani::assume(tag<6 && key_byte<32 && level<20 && word<8);
++        let _ = PCD_finish_segment(&lane,&result,tag,key_byte,level,word);
++    }
++    #[kani::proof]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_finish_control() {
++        let lane = PCD_lane(kani::any()); let result = PCD_result(kani::any());
++        let tag: u8 = kani::any(); let key_byte:usize=kani::any();
++        let level:usize=kani::any(); let word:usize=kani::any();
++        kani::assume(tag<6 && key_byte<32 && level<20 && word<8);
++        let out = PCD_finish_segment(&lane,&result,tag,key_byte,level,word);
++        let exact = match out { Ok(value) =>
++            PCD_observe(&value,tag,key_byte,level,word) == PCD_expected_observation(&lane,&result,tag,key_byte,level,word),
++            Err(_) => false };
++        assert!(!exact);
++    }
 +
 +}
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes the pair-forest initialization, checkpoint,

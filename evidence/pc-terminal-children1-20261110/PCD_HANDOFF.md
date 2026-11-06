@@ -24,3 +24,12 @@ compiled emitted Types/Funs, exact emitted record/frame lemmas and symbolic firs
 E001 emitted an opaque external equality and is excluded; E002 explicit matching has no external template.
 L004/L006 owned proof errors retained/excluded; corrected L005/L007 pass, standard printed axioms.
 No row promotion. Native rejection-segment setup is in progress; all whole-row native associations remain open.
+
+Stage 2: state/event/complete-prefix bind, corrected c-a frame and typed runtime child targets compile.
+PCD_PRODUCERS compiles the exact NIB P1/P2/P3 target propositions; it proves NONE of those producer obligations.
+The extracted checked-add reference law and generic structural array-equality induction compile.
+Native early rejection segment: K011 PASS, K012 intended assertion FAIL, exact KMX stubs, frozen graph/features,
+post-run lock unchanged. No full-row or producer closure. K003 dependency compilation timeout was split into
+K004 code generation and a separate native rejection attempt; no timeout or cap increase.
+K013 fixed-size std comparison unwind failure retained. K015 wrong harness dispatch is excluded from frontier credit.
+Next: one arbitrary frontier iteration, post-loop return window, fixed model fold and coherent gate.
