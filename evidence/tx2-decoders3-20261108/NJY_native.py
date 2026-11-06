@@ -18,12 +18,18 @@ def baseline():
  files['NJY_gate.py']=g
  return x,files
 
-def submit(a,target,parent,module,text,mode='positive',edits=None):
+def submit(a,target,parent,module,text,mode='positive',edits=None,extra_sidecars=None):
  assert a.startswith('NJY_K') and 1<=int(a[-3:])<=90 and not (E/a).exists()
  x,files=baseline();key='NIJ_src/'+parent
  files[key]+='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod '+module+';\n'
  files['NIJ_src/'+str(Path(parent).parent/(module+'.rs'))]=text
  files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace("for module in [","for module in ['"+module+"',")
+ for extra_parent,extra_module,extra_text in (extra_sidecars or []):
+  extra_raw=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+extra_parent],text=True)
+  frozen_pins=json.loads(files['NGL_FROZEN_SOURCE_PINS.json']);assert sha(extra_raw.encode())==frozen_pins[extra_parent]
+  files['NIJ_src/'+extra_parent]=extra_raw+'\n#[cfg(kani)]\n#[path="'+extra_module+'.rs"]\nmod '+extra_module+';\n'
+  files['NIJ_src/'+str(Path(extra_parent).parent/(extra_module+'.rs'))]=extra_text
+  files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace("for module in [","for module in ['"+extra_module+"',")
  if edits:
   for old,new in edits:
    assert files[key].count(old)==1;files[key]=files[key].replace(old,new)

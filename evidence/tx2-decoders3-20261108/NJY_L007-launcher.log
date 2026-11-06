@@ -1,0 +1,60 @@
+{"attempt": "NJY_L007", "exit_status": 1, "wall_seconds": 11.444493836956099, "peak_rss_kib": "5931776", "swaps": "0", "print_axioms": ["'NJY_Roots.identity' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJY_Roots.checkpoint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJY_Roots.master' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJY_Roots.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJY_Roots.registry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJY_generated/NJY_Roots.lean:20:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NJQ_Checkpoint.model ?b
+in the target expression
+  ok out = NJY_Checkpoint.model b
+
+b : Slice U8
+out : core.result.Result NJQ_Checkpoint.C NJQ_Checkpoint.F
+cut : NJY_Checkpoint.Cut b out
+⊢ ok out = NJY_Checkpoint.model b
+NJY_generated/NJY_Roots.lean:26:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NJQ_Master.model ?b
+in the target expression
+  ok out = NJY_Master.model b
+
+b : Slice U8
+out : core.result.Result NJQ_Master.M NJQ_Master.F
+cut : NJY_Master.Cut b out
+⊢ ok out = NJY_Master.model b
+NJY_generated/NJY_Roots.lean:32:5: error: Tactic `rewrite` f
+...
+t = NJY_Entry.model b
+
+b : Slice U8
+log : Option NJI_V1Carrier.E
+out : core.result.Result NJI_V1Carrier.E NJI_V1Carrier.F
+cut : NJY_Entry.Cut b log out
+⊢ ok out = NJY_Entry.model b
+NJY_generated/NJY_Roots.lean:38:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NJQ_Registry.model ?b
+in the target expression
+  ok out = NJY_Registry.model b
+
+b : Slice U8
+log : Option NJI_V1Carrier.R
+out : core.result.Result NJI_V1Carrier.R NJI_V1Carrier.F
+cut : NJY_Registry.Cut b log out
+⊢ ok out = NJY_Registry.model b
+theorem NJY_Roots.identity : ∀ (b : Slice U8), NJY_Identity.reference b = NJY_Identity.model b :=
+⋯
+'NJY_Roots.identity' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJY_Roots.checkpoint : ∀ (b : Slice U8) (out : core.result.Result NJQ_Checkpoint.C NJQ_Checkpoint.F),
+  NJY_Checkpoint.Cut b out → ok out = NJY_Checkpoint.model b :=
+⋯
+'NJY_Roots.checkpoint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJY_Roots.master : ∀ (b : Slice U8) (out : core.result.Result NJQ_Master.M NJQ_Master.F),
+  NJY_Master.Cut b out → ok out = NJY_Master.model b :=
+⋯
+'NJY_Roots.master' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJY_Roots.entry : ∀ (b : Slice U8) (log : Option NJI_V1Carrier.E)
+  (out : core.result.Result NJI_V1Carrier.E NJI_V1Carrier.F), NJY_Entry.Cut b log out → ok out = NJY_Entry.model b :=
+⋯
+'NJY_Roots.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem NJY_Roots.registry : ∀ (b : Slice U8) (log : Option NJI_V1Carrier.R)
+  (out : core.result.Result NJI_V1Carrier.R NJI_V1Carrier.F),
+  NJY_Registry.Cut b log out → ok out = NJY_Registry.model b :=
+⋯
+'NJY_Roots.registry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r554044aadd654a2880478553215fd8aa.scope; invocation ID: f39d2c1e04f44382bb621d7bcf12ed93
