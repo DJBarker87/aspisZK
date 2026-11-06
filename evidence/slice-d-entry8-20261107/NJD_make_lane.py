@@ -1,0 +1,42 @@
+from pathlib import Path
+E=Path(__file__).resolve().parent
+s='''use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+struct Log { at:*const u8,len:usize,calls:u8,word:u32,index:usize }
+fn decode(bytes:&[u8;32],l:&mut Log)->Result<[M31;8],ProgramError>{
+ l.at=bytes.as_ptr();l.len=32;l.calls+=1;
+ let mut out=[M31::ZERO;8];let mut i=0;let mut valid=true;
+ while i<8{let word=u32::from_le_bytes([bytes[4*i],bytes[4*i+1],bytes[4*i+2],bytes[4*i+3]]);valid&=word<2147483647;out[i]=M31(word);i+=1;}
+ l.word=out[l.index].0;
+ if valid{Ok(out)}else{Err(ProgramError::InvalidAccountData)}
+}
+fn step(bytes:&[u8;32],level:usize,next_leaf_index:u64,node:&mut [M31;8],l:&mut Log)->ProgramResult{
+ use super::v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS;
+ *node=decode(bytes,l)?;
+ if (next_leaf_index>>level)&1==0 && *node!=V7_PAIR_EMPTY_ROOTS[level]{return Err(ProgramError::InvalidAccountData)}
+ Ok(())
+}
+fn check<const WRONG:bool>(){
+ use super::v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS;
+ let level:usize=kani::any();kani::assume(level<POOL_V1_PAIR_TREE_DEPTH);
+ let next:u64=kani::any();kani::assume(next<=POOL_V1_PAIR_CAPACITY);
+ let raw:[u8;32]=kani::any();let old:[u32;8]=kani::any();let mut node=old.map(M31);
+ let index:usize=kani::any();kani::assume(index<8);
+ let mut l=Log{at:core::ptr::null(),len:kani::any(),calls:0,word:kani::any(),index};
+ let out=step(&raw,level,next,&mut node,&mut l);
+ let mut words=[0u32;8];let mut i=0;let mut canonical=true;let mut same_empty=true;
+ while i<8{words[i]=u32::from_le_bytes([raw[4*i],raw[4*i+1],raw[4*i+2],raw[4*i+3]]);canonical&=words[i]<2147483647;same_empty&=words[i]==V7_PAIR_EMPTY_ROOTS[level][i].0;i+=1;}
+ let expected_ok=canonical&&(((next>>level)&1)!=0||same_empty);
+ let good=out.is_ok()==expected_ok&&matches!(out,Ok(())|Err(ProgramError::InvalidAccountData))&&node[index].0==if canonical{words[index]}else{old[index]}&&l.at==raw.as_ptr()&&l.len==32&&l.calls==1&&l.index==index&&l.word==words[index];
+ assert!(good!=WRONG,"NJD lane digest call cut exact reply post and frame");
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn frontier_decode_cut(){check::<false>()}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn frontier_decode_cut_wrong(){check::<true>()}
+'''
+p='programs/r1-cost-probe/src/NJD_lane.rs';(E/'NJD_lane.patch').write_text('--- /dev/null\n+++ b/'+p+'\n@@ -0,0 +1,'+str(len(s.splitlines()))+' @@\n'+''.join('+'+l for l in s.splitlines(True)))

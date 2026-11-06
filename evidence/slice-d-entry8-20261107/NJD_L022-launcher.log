@@ -1,0 +1,49 @@
+{"attempt": "NJD_L022", "exit_status": 0, "wall_seconds": 9.584718883037567, "peak_rss_kib": "6141248", "swaps": "0", "print_axioms": ["'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJD_GuardCuts.readonly_step : ∀ (a : NJD_GuardCuts.Account),
+  (do
+      let r ← AdapterRw.r1_pool_adapter.owned.require_readonly_buffer a
+      Aeneas.Std.Result.ok (NJD_GuardCuts.step r)) =
+    Aeneas.Std.Result.ok (NJD_GuardCuts.readonlyReply a) :=
+fun a =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          (do
+              let r ← _a
+              Aeneas.Std.Result.ok (NJD_GuardCuts.step r)) =
+            Aeneas.Std.Result.ok (NJD_GuardCuts.readonlyReply a))
+        (NJD_GuardCuts.readonly_source a)))
+    (of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+    
+...
+          (Aeneas.Std.UScalar.bound_suffices
+                                                                                                      Aeneas.Std.UScalarTy.U8
+                                                                                                      10
+                                                                                                      AspisR1.NJD_EntrySpine.fallback._proof_3)))
+                                                                                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                                                                                  (Aeneas.Std.UScalar.bound_suffices
+                                                                                                    Aeneas.Std.UScalarTy.U8
+                                                                                                    11 ⋯)))
+                                                                                              ⋯))
+                                                                                          ⋯))
+                                                                                      ⋯))
+                                                                                  ⋯))))
+                                                                          ⋯)
+                                                                        ⋯)))
+                                                                  ⋯)))
+                                                            ⋯)))))
+                                                  ⋯))
+                                              ⋯))))))
+                                ⋯)))))))
+                  ⋯)))
+            ⋯)
+          ⋯)
+        ⋯))
+    ⋯
+
+Running as unit: run-r5e224f49bb2e4bcf91caa775dacadfa1.scope; invocation ID: a8ea9126f6264020a76edb8ad6423fe6

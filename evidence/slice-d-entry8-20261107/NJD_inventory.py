@@ -16,7 +16,10 @@ for rid in ids:
   if s[i]=='{':depth+=1
   if s[i]=='}':depth-=1
   i+=1
- body=s[start+1:i-1];calls=[]
+ body=s[start+1:i-1]
+ if name=='process_r1_cost_probe_instruction':body=body.split('#[cfg(not(feature="pool-adapter"))]')[0]
+ if name=='observer':body='None' # cu-profiling is absent in deployed metadata
+ calls=[]
  for cm in re.finditer(r'([A-Za-z_][\w]*(?:::[A-Za-z_][\w]*)*)\s*\(',body):
   n=cm[1]
   if n in ['if','match','while','for','Some','Ok','Err']:continue
@@ -28,7 +31,7 @@ for rid in ids:
   matches=[z for z in ledger['rows'] if z['function'].endswith('::'+n) or z['function'].endswith('::'+n.split('::')[-1])]
   selected=[z for z in matches if z['function'] in r['canonical_callees']]
   known=[z for z in selected if z['status']=='CLOSED']
-  item=dict(order=len(calls)+1,callee=n,arguments=body[cm.end():k-1],line=s[:start+1+cm.start()].count('\n')+1)
+  item=dict(order=len(calls)+1,callee=n,arguments=body[cm.end():k-1],line=s[:start+1+cm.start()].count('\n')+1,end_offset=k)
   if known:item.update(law_class='CLOSED row (domain and full packet still to instantiate)',law_rows=[z['row'] for z in known],roots=[v for z in known for v in z['root_owners']])
   elif selected:item.update(law_class='MISSING CLOSED callee packet',law_rows=[z['row'] for z in selected])
   elif n in ['len','is_empty','first','get','copied','checked_add','map_err','new_from_array','to_bytes','as_ref','semantic_public','common','nullifier','tag']:item.update(law_class='P7 candidate: exact emitted specialization/domain/frame must be matched; not admitted by name')
@@ -38,10 +41,12 @@ for rid in ids:
   elif n in ['try_borrow_data','try_borrow_mut_data']:item.update(law_class='SDK borrow law requires pinned P7/retained S2TrustedSdkBorrow matching; RuntimeEntrypointAdmission alone insufficient')
   else:item.update(law_class='MISSING exact specialization/packet/frame lemma; cannot assume')
   calls.append(item)
+ calls.sort(key=lambda c:c['end_offset'])
+ for order,c in enumerate(calls,1):c['order']=order
  rows.append(dict(row=rid,function=r['function'],frozen_function_sha256=sha(s[m.start():i].encode()),start_line=s[:m.start()].count('\n')+1,calls=calls,canonical_callees=r['canonical_callees'],status='OPEN'))
 x=dict(frozen_revision=rev,baseline='NIU_LEDGER',baseline_sha256=sha(lzma.decompress((E.parent/'ledger13-20261107/NIU_LEDGER.json.xz').read_bytes())),source_pins=pins,rows=rows,method='Source-ordered call inventory cross-checked against canonical emitted slots; library candidates are NOT credited laws')
 (E/'NJD_INVOCATION.json').write_text(json.dumps(x,indent=1)+'\n')
-d=['# NJD invocation inventory','', 'All 17 rows remain OPEN. Frozen call arguments below are verbatim source expressions; the emitted canonical body inspection is NJD_INSPECT.txt. NIV_L022 supplies entry/process emission; owned bodies use canonical AdapterRwModel. Slot correction: digest/error are op43/op44; decoders master/checkpoint/lane are op48/op49/op50. SDK stages are wrappers, not declarations AdapterRw.r1_pool_adapter.owned.stage1/stage2.', '', 'A CLOSED row listed here identifies the law source, not a discharge. Each caller must instantiate its complete Result, same arguments and full frame under (aq). Unmatched primitive/SDK calls are exact missing-law entries, not P7 assumptions. Runtime entry admission supplies only its seven fields and does not prove SDK implementation laws. No candidate child success or RuntimeCpiReadonlyEntry7 is used.','']
+d=['# NJD invocation inventory','', 'All 17 rows remain OPEN. Calls are ordered by expression completion (arguments before their enclosing call), with conditional/loop guards retained in the pinned source; this is not an unconditional flat trace. Frozen call arguments below are verbatim source expressions; the emitted canonical body inspection is NJD_INSPECT.txt. NIV_L022 supplies entry/process emission; owned bodies use canonical AdapterRwModel. Slot correction: digest/error are op43/op44; decoders master/checkpoint/lane are op48/op49/op50. SDK stages are wrappers, not declarations AdapterRw.r1_pool_adapter.owned.stage1/stage2.', '', 'A CLOSED row listed here identifies the law source, not a discharge. Each caller must instantiate its complete Result, same arguments and full frame under (aq). Unmatched primitive/SDK calls are exact missing-law entries, not P7 assumptions. Runtime entry admission supplies only its seven fields and does not prove SDK implementation laws. No candidate child success or RuntimeCpiReadonlyEntry7 is used.','']
 for r in rows:
  d+=['## '+r['row']+' '+r['function'].split('::')[-1],'']
  for c in r['calls']:
