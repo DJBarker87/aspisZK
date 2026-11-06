@@ -1,0 +1,17 @@
+# NJG typed cuts and composition
+
+Target not yet established. No row is admitted. Native cut transcription is support under(ai)(5); actual child laws and native-to-source instantiation remain required by(aq)/(aq)(5). NJG_ROOT_INVENTORY.md and NJG_PRINTED_ROOTS.md distinguish complete source/model equations from native root closure.
+
+| Native certificate | Reviewed typed proposition / Lean assembly | Domain and limits |
+|---|---|---|
+| K003/K002 | RowWindows.selected/frame/complete | One indexed KMX u32 window, disjoint initialized frame; no allocator law. |
+| K004/K005, K006/K007, K008/K009 | RowWindows, RowPrefixes, ClaimsGeometry | Actual [QM31;29] write, all four limb windows and initialized other-row frame; row p<3, column<29. Pure prefix composition does not assert arbitrary uninitialized memory has a value. |
+| K024/K025 args, K026/K027 result | NativeCuts.claimsDomain/claimsArgs/claimsResult | SAME borrowed row25 frame<=3717, p<3, count<255; decoder Length25 or NonCanonical25 with29*p<=value<29*p+29; prior initialized row<p only when p>0. No current-row read on Err. The original comments naming K020–023 are superseded by these final absolute-index pairs. |
+| NIX_K073–076 retained | NIX_CertificateFrames; NJG_RoundResult.complete; RoundProducer/RoundCode/RoundDomains | Original round<10, framed<=3717, count<252; full decode/semantic rejection and SAME native post; parsed canonical coefficients/boundary derived separately. Complete native/model child-domain join still open. |
+| K016/K017 args, K018/K019 result | NativeCuts.roundsArgs/roundsResult; RoundsCompose.complete; RoundsCode/RoundsUnrolled | One original driver site r<10 on arbitrary carry; all11 WireError payloads, state,next,alpha,Q windows and local frame. A single SAME post is universally observed. Ten native independent posts are never composed as a common execution. |
+
+CanonicalPrefix.initial/set_prefix/step propagates earlier canonical alpha slots and writes the active slot using the SAME actual semantic child. Successful-step assumptions occur only in local invariant helpers, never in a native root certificate. RoundsUnrolled treats roundStep as opaque and proves one symbolic bind before the exact finite chain; it replaces L060's broad reduction, with unchanged caps and default heartbeat.
+
+FinishBody is the fresh E001 frozen definition with canonical type aliases and an explicit child dictionary, without importing the raw axiom template. FromFnCongruence/FinishClosures prove callback replacement only at actual visited indices; wrapping16+i equals checked addition for i<10. FinishInstall.source and ConfiguredFinish.source preserve complete Results, error mapping and source order. ObservedInstall/CurrentEquation transport the SAME complete result and actual inputs; CallerInstall proves model caller equations. No successful output, endpoint, external Run, cut-inverse or function-pointer-value law is promoted to a native root premise.
+
+The complete final scratch patch and exact added assertion text/SHA table are NJG_FINAL_NATIVE.patch and NJG_ASSERTIONS.json. Scratch source hashes, frozen dependency graph, deployed feature closure, offline mode and unchanged lock are checked independently for each native invocation. Stronger-domain earlier claims packets are excluded (F2/F5). No new runtime trust, multiplication Kani proof, SHA unwind, field-family bridge, function contract, Option<fn>, writable static or XRn_Join stand-in is used.
