@@ -11,3 +11,5 @@ Validation pending: complete statement/caller comparison against NJO, emitted bo
 Retained: frozen3, deployed headline, 100-bit per-attempt target, privacy, two transactions, all trust rows. K086 retained; (aj)(a) pending. (av) borrow-minimal references and TX1:256 ownership apply. (aw) TX2:115 remains conditionally CLOSED with a NEW OPEN off-domain child supplement; no new game premise.
 
 Next deliverable: input review and composed import, then capped replay. Exact scope receipts and section 6 fields will be recorded in NJW_ATTEMPTS.jsonl. No theorem/assumption discharge claimed yet.
+
+Stage review: combined import L001 and full owner inventory L002 PASS; all9214 NJO root statements/owners unchanged; NFX L008 PASS15843modules/0defects; L007 same-binary8fixtures PASS. Raw all-root campaign IN PROGRESS, no admission yet. NJI four candidate bodies emitted/nonopaque;52new-packet native runs plus5inherited NJM-native pairs checked read-only, no Kani launched. Own metadata parsers repaired for count/list root schema, multiline Lean def and NJI content-addressed native inputs; no validation requirement relaxed.
