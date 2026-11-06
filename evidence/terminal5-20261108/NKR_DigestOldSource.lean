@@ -56,7 +56,9 @@ theorem source (p : Public) (o : Openings) (s : Selectors)
  have call : pool_v1.pair_forest_semantic_terminal.public_digest_lanes p o s=ok out := by
   rw [FIy_PublicDigestSource.factor,pc,bind_tc_ok]
   unfold FIy_FrontierLoopStep.loop at mc
-  rw [mc,bind_tc_ok,oc]
+  rw [mc,bind_tc_ok]
+  change FIy_PublicDigestSuffix.run p o s middle p.transition.live_snapshot=ok out
+  exact oc
  exact ⟨out,call,hout,(FIy_PublicDigest.value p o s out hz hh hl hp.anchor hp.nullifier hp.recipient hp.change hp.frontier hp.nextRoot hp.nextFrontier call).2⟩
 #print axioms initial_prefix
 #print axioms suffix

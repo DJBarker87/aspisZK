@@ -1,0 +1,51 @@
+NKR_TermSelected.lean:21:69: error: unsolved goals
+claims : Claims
+i : Usize
+hi : ↑i < ↑84#usize
+ri : UScalar UScalarTy.Usize
+rc : i / 28#usize = ok ri
+rv : ↑ri = ↑i / ↑28#usize
+ci : UScalar UScalarTy.Usize
+cc : i % 28#usize = ok ci
+cv : ↑ci = ↑i % ↑28#usize
+rb : ↑ri < ↑3#usize
+cb : ↑ci < ↑29#usize
+row : Std.Array NQ 29#usize := (↑claims)[↑ri]
+readRow : Array.index_usize claims ri = ok row
+readCell : row.index_usize ci = ok (↑row)[↑ci]
+⊢ ok ((↑(↑claims)[↑i / ↑28#usize])[↑i % ↑28#usize], claims) = ok ((↑(↑claims)[↑i / 28])[↑i % 28], claims)
+'AspisR1.NKR_TermSelected.callback' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_TermSelected.calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKR_TermSelected.source : ∀ (claims : Claims),
+  (∀ row ∈ ↑claims, FIw_ArrayValue.canonical row) →
+    ∃ selected,
+      array_from_fn_copy 84#usize field.QM31.Insts.CoreMarkerCopy builder field.QM31.ZERO claims = ok selected ∧
+        FIw_ArrayValue.canonical selected ∧
+          ∀ (i : Fin ↑84#usize), NJB_ArrayCarrier.cell selected i = expected claims i :=
+fun claims hc =>
+  let ⟨selected, run⟩ := JFu_BoundedBuilder.source 84#usize builder claims (calls claims)
+  have called := run;
+  have values := fun i =>
+    let u := Usize.ofNatCore (↑i) (lt_trans i.isLt (UScalar.hBounds 84#usize));
+    have hi := i.isLt;
+    have actual :=
+      FJb_BuilderSelected.value 84#usize field.QM31.Insts.CoreMarkerCopy builder field.QM31.ZERO claims (calls claims)
+        selected called u hi;
+    have same := Prod.mk.inj (ok.inj (Eq.trans (Eq.symm actual) (callback claims u hi)));
+    same.left;
+  Exists.intro selected
+    ⟨called,
+      ⟨fun q mem =>
+        let ⟨i, h✝⟩ := List.mem_iff_getElem.mp mem
+        let ⟨hi, hq⟩ := h✝
+        have bound := Eq.mp (congrArg (LT.lt i) selected.property) hi;
+        have vi := values ⟨i, bound⟩;
+        have eq := Eq.mp (congrFun' (congrArg Eq hq) (expected claims ⟨i, bound⟩)) vi;
+        Eq.mpr (id (congrArg (fun _a => Canon _a) eq))
+          (id
+            (hc (↑claims)[↑⟨i, bound⟩ / 28] (List.getElem_mem (expected._proof_3 claims ⟨i, bound⟩))
+              (let row := (↑claims)[↑⟨i, bound⟩ / 28];
+              (↑row)[↑⟨i, bound⟩ % 28])
+              (List.getElem_mem (expected._proof_4 claims ⟨i, bound⟩)))),
+        values⟩⟩
+'AspisR1.NKR_TermSelected.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

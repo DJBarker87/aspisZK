@@ -26,6 +26,7 @@ theorem source (pub : Public) (claims : Array NQ 84#usize) (point : Array NQ 10#
    | Err e => rfl
    | Ok child =>
      rcases child with ⟨comp,c1,mask,g,h,active⟩
+     simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,NKR_TermTail.after,NKR_TermTail.tail,NKR_TermTail.arithmetic,bind_assoc_eq]
      rfl
 #print source
 #print axioms source

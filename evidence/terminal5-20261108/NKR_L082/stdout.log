@@ -1,0 +1,52 @@
+theorem AspisR1.NKR_SumCarrier.source : ∀ (l r : A4) (count : ℕ),
+  1 ≤ count →
+    count ≤ 4 →
+      FIw_ArrayValue.canonical l →
+        FIw_ArrayValue.canonical r →
+          ∃ out,
+            native l r count = ok out ∧
+              reference l r count = ok out ∧
+                Canon out ∧
+                  decode out = NGA_SumAlgebra.sumProducts (List.take count ((↑(encode l)).zip ↑(encode r))) ∧
+                    ∀ (seek : Fin 4),
+                      ↑seek < count →
+                        NKR_SumCuts.Cut (encode l) (encode r) count seek (qm out) (qm out)
+                          (NGA_Indexed.selected (encode l) seek) (NGA_Indexed.selected (encode r) seek) 1 count :=
+fun l r count lower upper hl hr =>
+  let ⟨out, h✝⟩ :=
+    NKR_SumCuts.source (encode l) (encode r) count lower upper (encoded_canonical l hl) (encoded_canonical r hr)
+  let ⟨hn, right✝⟩ := h✝
+  let ⟨href, right✝¹⟩ := right✝
+  let ⟨hco, right✝²⟩ := right✝¹
+  let ⟨hc, right✝³⟩ := right✝²
+  let ⟨hv, cut⟩ := right✝³
+  Exists.intro (back out)
+    ⟨of_eq_true
+        (Eq.trans (congrFun' (congrArg Eq (congrArg (FIv_Map.map back) hn)) (ok (back out))) (eq_self (ok (back out)))),
+      ⟨of_eq_true
+          (Eq.trans (congrFun' (congrArg Eq (congrArg (FIv_Map.map back) href)) (ok (back out)))
+            (eq_self (ok (back out)))),
+        ⟨id (Eq.mpr (id (congrArg (fun _a => NKR_SumDispatch.Canon _a) (roundtrip out))) hc),
+          ⟨id
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      ExtractedMaskQM31Exact.decode _a =
+                        NGA_SumAlgebra.sumProducts (List.take count ((↑(encode l)).zip ↑(encode r))))
+                    (roundtrip out)))
+                hv),
+            Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    ∀ (seek : Fin 4),
+                      ↑seek < count →
+                        NKR_SumCuts.Cut (encode l) (encode r) count seek _a _a (NGA_Indexed.selected (encode l) seek)
+                          (NGA_Indexed.selected (encode r) seek) 1 count)
+                  (roundtrip out)))
+              cut⟩⟩⟩⟩
+'AspisR1.NKR_SumCarrier.roundtrip' does not depend on any axioms
+'AspisR1.NKR_SumCarrier.back_roundtrip' does not depend on any axioms
+'AspisR1.NKR_SumCarrier.encoded_canonical' depends on axioms: [propext, Quot.sound]
+'AspisR1.NKR_SumCarrier.source' depends on axioms: [propext, Classical.choice, Quot.sound]

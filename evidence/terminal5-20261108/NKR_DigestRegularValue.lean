@@ -26,8 +26,7 @@ theorem left (high : NQ) (o : O) (d : D) (out : Fin 2 → NQ)
  apply congrArg NJB_PackLinearity.pack
  funext j
  unfold residual ocells dcells
- rw [NKR_DigestReads.cell]
- rfl
+ rw [NKR_DigestReads.cell] <;> rfl
 
 def row (i : Fin 64) : Fin 1024 := ⟨16*i.val+11,by have h:=i.isLt;omega⟩
 def binding (s : Selectors) (o : O) (i : Fin 64) (d : D) (g : Fin 2) : K :=

@@ -1,0 +1,68 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn NKR_copy_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+struct NKR_CopyLog{observe:usize,high_pick:usize,low_pick:usize,calls:usize,kind:[u8;3],index:u64,variant:PoolV1PairForestCompiledVariantV1,tag:u32,weight_kind:u8,weight_level:u8,weight_prow:u16,weight_crow:u16,weight_pslot:u8,weight_cslot:u8,weight_ppattern:u8,weight_cpattern:u8,side:[usize;2],row:[u16;2],slot:[u8;2],pattern:[u8;2],passed_tag:[u32;2],passed_weight:[u32;2],passed_scratch:[QM31;2],high:[QM31;2],low:[QM31;2],weight_reply:M31,replies:[QM31;4]}
+fn NKR_copy_weight(link:CompiledPoolV1PairForestLink,append:u64,variant:PoolV1PairForestCompiledVariantV1,l:&mut NKR_CopyLog)->M31{
+ l.calls+=1;l.kind[0]=0;l.index=append;l.variant=variant;l.tag=link.tag;l.weight_kind=link.weight_kind;l.weight_level=link.weight_level;l.weight_prow=link.producer.row;l.weight_crow=link.consumer.row;l.weight_pslot=link.producer.slot;l.weight_cslot=link.consumer.slot;l.weight_ppattern=link.producer.pattern;l.weight_cpattern=link.consumer.pattern;l.weight_reply
+}
+fn NKR_copy_endpoint(scratch:&mut[QM31],side:usize,endpoint:CompiledPoolV1PairForestEndpoint,tag:u32,weight:M31,selectors:&Selectors,l:&mut NKR_CopyLog){
+ let i=l.calls-1;l.calls+=1;l.kind[i+1]=1;l.side[i]=side;l.row[i]=endpoint.row;l.slot[i]=endpoint.slot;l.pattern[i]=endpoint.pattern;l.passed_tag[i]=tag;l.passed_weight[i]=weight.0;l.passed_scratch[i]=scratch[l.observe];l.high[i]=selectors.high[l.high_pick];l.low[i]=selectors.low[l.low_pick];
+ let group=side+usize::from(endpoint.slot);let local=usize::from(endpoint.row)&15;
+ let gc=usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local]);let pc=usize::from(COPY_PATTERN_LOCAL_COORDINATES[group][usize::from(endpoint.pattern)][local]);
+ scratch[COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+gc]=l.replies[2*i];scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET+pc]=l.replies[2*i+1];
+}
+fn NKR_copy_link(scratch:&mut[QM31],selectors:&Selectors,append_index:u64,variant:PoolV1PairForestCompiledVariantV1,mut link_index:usize,l:&mut NKR_CopyLog)->usize{
+ let link = constants::COPY_LINKS[link_index];
+ let weight = NKR_copy_weight(link, append_index, variant,l);
+ NKR_copy_endpoint(scratch,0,link.producer,link.tag,weight,selectors,l);
+ NKR_copy_endpoint(scratch,2,link.consumer,link.tag,weight,selectors,l);
+ link_index += 1;
+ link_index
+}
+#[kani::proof] #[kani::unwind(104)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_copy_link_cut(){
+ let mut scratch:[QM31;103]=unsafe{core::mem::transmute::<[[u32;4];103],[QM31;103]>(kani::any())};
+ let selectors=Selectors{high:unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())}};
+ let replies:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let wr:u32=kani::any();let append:u64=kani::any();let private:bool=kani::any();let variant=if private{PoolV1PairForestCompiledVariantV1::PrivateTransfer}else{PoolV1PairForestCompiledVariantV1::Withdrawal};
+ let index:usize=kani::any();let observe:usize=kani::any();let high_pick:usize=kani::any();let low_pick:usize=kani::any();let limb:usize=kani::any();kani::assume(index<136&&observe<103&&high_pick<64&&low_pick<16&&limb<4);
+ let link=constants::COPY_LINKS[index];let p=link.producer;let c=link.consumer;
+ let pg=usize::from(p.slot);let cg=2+usize::from(c.slot);
+ let pw=COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+usize::from(COPY_GROUP_LOCAL_COORDINATES[pg][usize::from(p.row)&15]);let pp=COPY_SELECTOR_TENSOR_PATTERN_OFFSET+usize::from(COPY_PATTERN_LOCAL_COORDINATES[pg][usize::from(p.pattern)][usize::from(p.row)&15]);
+ let cw=COPY_SELECTOR_TENSOR_WEIGHT_OFFSET+usize::from(COPY_GROUP_LOCAL_COORDINATES[cg][usize::from(c.row)&15]);let cp=COPY_SELECTOR_TENSOR_PATTERN_OFFSET+usize::from(COPY_PATTERN_LOCAL_COORDINATES[cg][usize::from(c.pattern)][usize::from(c.row)&15]);
+ let saved=scratch[observe];let middle=if observe==pp{replies[1]}else if observe==pw{replies[0]}else{saved};let after=if observe==cp{replies[3]}else if observe==cw{replies[2]}else{middle};
+ let mut l=NKR_CopyLog{observe,high_pick,low_pick,calls:0,kind:[255;3],index:0,variant,tag:0,weight_kind:0,weight_level:0,weight_prow:0,weight_crow:0,weight_pslot:0,weight_cslot:0,weight_ppattern:0,weight_cpattern:0,side:[999;2],row:[0;2],slot:[0;2],pattern:[0;2],passed_tag:[0;2],passed_weight:[0;2],passed_scratch:[QM31::ZERO;2],high:[QM31::ZERO;2],low:[QM31::ZERO;2],weight_reply:M31(wr),replies};
+ let next=NKR_copy_link(&mut scratch,&selectors,append,variant,index,&mut l);
+ assert_eq!(l.calls,3);assert_eq!(l.kind,[0,1,1]);assert_eq!(l.index,append);assert!(l.variant==variant);assert_eq!(l.tag,link.tag);assert_eq!(l.weight_kind,link.weight_kind);assert_eq!(l.weight_level,link.weight_level);assert_eq!(l.weight_prow,p.row);assert_eq!(l.weight_crow,c.row);assert_eq!(l.weight_pslot,p.slot);assert_eq!(l.weight_cslot,c.slot);assert_eq!(l.weight_ppattern,p.pattern);assert_eq!(l.weight_cpattern,c.pattern);assert_eq!(next,index+1);
+ assert_eq!(l.side,[0,2]);assert_eq!(l.row,[p.row,c.row]);assert_eq!(l.slot,[p.slot,c.slot]);assert_eq!(l.pattern,[p.pattern,c.pattern]);assert_eq!(l.passed_tag,[link.tag;2]);assert_eq!(l.passed_weight,[wr;2]);
+ assert_eq!(NKR_copy_words(l.passed_scratch[0])[limb],NKR_copy_words(saved)[limb]);assert_eq!(NKR_copy_words(l.passed_scratch[1])[limb],NKR_copy_words(middle)[limb]);
+ let call:usize=kani::any();kani::assume(call<2);assert_eq!(NKR_copy_words(l.high[call])[limb],NKR_copy_words(selectors.high[high_pick])[limb]);assert_eq!(NKR_copy_words(l.low[call])[limb],NKR_copy_words(selectors.low[low_pick])[limb]);
+ assert_eq!(NKR_copy_words(scratch[observe])[limb],NKR_copy_words(after)[limb]^if cfg!(NKR_invert){1}else{0});
+}
+struct NKR_CopyTailLog{calls:usize,high_pick:usize,low_pick:usize,pick:usize,high:QM31,low:QM31,row:[QM31;8],helper:QM31,chi:QM31,left:QM31,right:QM31,reply:[QM31;3]}
+fn NKR_copy_active(s:&Selectors,l:&mut NKR_CopyTailLog)->QM31{l.calls+=1;l.high=s.high[l.high_pick];l.low=s.low[l.low_pick];l.reply[0]}
+fn NKR_copy_residual(row:CopyRowExtension,helper:QM31,chi:QM31,l:&mut NKR_CopyTailLog)->QM31{l.calls+=1;l.row=[row.producer_values[0],row.producer_values[1],row.producer_weights[0],row.producer_weights[1],row.consumer_values[0],row.consumer_values[1],row.consumer_weights[0],row.consumer_weights[1]];l.helper=helper;l.chi=chi;l.reply[1]}
+fn NKR_copy_mul(left:QM31,right:QM31,l:&mut NKR_CopyTailLog)->QM31{l.calls+=1;l.left=left;l.right=right;l.reply[2]}
+fn NKR_copy_tail(mut row:CopyRowExtension,values:[QM31;4],weights:[QM31;4],selectors:&Selectors,h1_z:QM31,chi:QM31,l:&mut NKR_CopyTailLog)->PoolV1PairForestCompiledCopyTerminalV1{
+ row.producer_values = [values[0], values[1]];
+ row.consumer_values = [values[2], values[3]];
+ row.producer_weights = [weights[0], weights[1]];
+ row.consumer_weights = [weights[2], weights[3]];
+ let active = NKR_copy_active(selectors,l);
+ PoolV1PairForestCompiledCopyTerminalV1 {
+     residual: NKR_copy_mul(active,NKR_copy_residual(row, h1_z, chi,l),l),
+     active,
+ }
+}
+#[kani::proof] #[kani::unwind(104)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_copy_tail_cut(){
+ let selectors=Selectors{high:unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())}};
+ let v:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let w:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let reply:[QM31;3]=unsafe{core::mem::transmute::<[[u32;4];3],[QM31;3]>(kani::any())};let helper=unsafe{core::mem::transmute::<[u32;4],QM31>(kani::any())};let chi=unsafe{core::mem::transmute::<[u32;4],QM31>(kani::any())};
+ let old:[QM31;8]=unsafe{core::mem::transmute::<[[u32;4];8],[QM31;8]>(kani::any())};let row=CopyRowExtension{producer_values:[old[0],old[1]],producer_weights:[old[2],old[3]],consumer_values:[old[4],old[5]],consumer_weights:[old[6],old[7]]};
+ let pick:usize=kani::any();let high_pick:usize=kani::any();let low_pick:usize=kani::any();let limb:usize=kani::any();kani::assume(pick<8&&high_pick<64&&low_pick<16&&limb<4);
+ let mut l=NKR_CopyTailLog{calls:0,high_pick,low_pick,pick,high:QM31::ZERO,low:QM31::ZERO,row:[QM31::ZERO;8],helper:QM31::ZERO,chi:QM31::ZERO,left:QM31::ZERO,right:QM31::ZERO,reply};
+ let out=NKR_copy_tail(row,v,w,&selectors,helper,chi,&mut l);let expected=[v[0],v[1],w[0],w[1],v[2],v[3],w[2],w[3]];
+ assert_eq!(l.calls,3);assert_eq!(NKR_copy_words(l.high)[limb],NKR_copy_words(selectors.high[high_pick])[limb]);assert_eq!(NKR_copy_words(l.low)[limb],NKR_copy_words(selectors.low[low_pick])[limb]);assert_eq!(NKR_copy_words(l.row[pick])[limb],NKR_copy_words(expected[pick])[limb]);assert_eq!(NKR_copy_words(l.helper)[limb],NKR_copy_words(helper)[limb]);assert_eq!(NKR_copy_words(l.chi)[limb],NKR_copy_words(chi)[limb]);assert_eq!(NKR_copy_words(l.left)[limb],NKR_copy_words(reply[0])[limb]);assert_eq!(NKR_copy_words(l.right)[limb],NKR_copy_words(reply[1])[limb]);
+ assert_eq!(NKR_copy_words(out.active)[limb],NKR_copy_words(reply[0])[limb]);assert_eq!(NKR_copy_words(out.residual)[limb],NKR_copy_words(reply[2])[limb]^if cfg!(NKR_invert){1}else{0});
+}

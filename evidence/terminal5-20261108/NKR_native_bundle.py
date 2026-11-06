@@ -2,7 +2,7 @@ from pathlib import Path
 import difflib,subprocess,hashlib,json
 E=Path(__file__).resolve().parent
 rev='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387';pins={};patch=''
-for filename,mods in [('pair_forest_semantic_terminal.rs',[('NKR_schedule_native','NKR_native','NKR_schedule_native.rs.txt'),('NKR_Digest_native','NKR_digest_native','NKR_Digest_native.rs.txt')]),('pair_forest_copy_terminal.rs',[('NKR_Sum_native','NKR_sum_native','NKR_Sum_native.rs.txt')])]:
+for filename,mods in [('pair_forest_semantic_terminal.rs',[('NKR_schedule_native','NKR_native','NKR_schedule_native.rs.txt'),('NKR_Digest_native','NKR_digest_native','NKR_Digest_native.rs.txt'),('NKR_Term_native','NKR_term_native','NKR_Term_native.rs.txt')]),('pair_forest_copy_terminal.rs',[('NKR_Sum_native','NKR_sum_native','NKR_Sum_native.rs.txt'),('NKR_SumFinish_native','NKR_sum_finish_native','NKR_SumFinish_native.rs.txt'),('NKR_SumPattern_native','NKR_sum_pattern_native','NKR_SumPattern_native.rs.txt')])]:
  path='crates/aspis-statement/src/pool_v1/'+filename;old=subprocess.check_output(['git','show',rev+':'+path],text=True);new=old
  for stem,mod,txt in mods:
   new+='\n#[cfg(kani)]\n#[path="'+stem+'.rs"]\nmod '+mod+';\n';code=(E/txt).read_text();name='crates/aspis-statement/src/pool_v1/'+stem+'.rs'

@@ -1,5 +1,5 @@
 import NKR_SumCuts
-import FIw_ArrayValue
+import NJB_ArrayCarrier
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NKR_SumCarrier

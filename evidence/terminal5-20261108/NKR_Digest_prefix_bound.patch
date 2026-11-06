@@ -1,0 +1,11 @@
+--- a/crates/aspis-statement/src/pool_v1/NKR_Digest_native.rs
++++ b/crates/aspis-statement/src/pool_v1/NKR_Digest_native.rs
+@@ -27,7 +27,7 @@
+  let recipient:Digest=unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())};
+  SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(recipient)}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition}
+ }
+-#[kani::proof] #[kani::unwind(20)]
++#[kani::proof] #[kani::unwind(68)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ fn NKR_Digest_prefix_cut(){
+  let transition:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};

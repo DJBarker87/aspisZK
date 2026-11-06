@@ -13,3 +13,5 @@ Budget70 Kani/140 Lean/0 extraction. One capped scope at a time;admission exit0+
 Stage0 reading and seed preparation in progress.
 
 Stage1: NKR_ScheduleCut and NKR_ScheduleRoot focused PASS (L009/L010), candidate child260 conditional. Sum225 native windowK011PASS/K004matchedFAIL under KMX/frozen graph; source/cohort composition in progress. Whole scheduleK001timedout, retired and split;K003own source validation did not launch Kani. All failed receipts retained; no current row promotion.
+
+Stage2 current:225canonicalcarrierL082PASS,nativeK011/K004PASS/FAIL.232typed/rootL009/L010PASS,public/data/tuple/weight pairsPASS/FAIL;first-childwholeK005andparentK001timeouts excluded. Terminal263suffix/errorprefixnative pairsPASS/FAIL;upperrows remainOPEN. Fullgate not yet run. NKR_REMAINING records everymember; formal/nativebudget receipts remainauthoritative.

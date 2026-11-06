@@ -1,4 +1,5 @@
 import NKR_DigestRegularValue
+import NKR_DigestRows
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NKR_DigestKeyValues
@@ -22,21 +23,22 @@ theorem ordinary (p : Public) (o : Openings) (s : Selectors) (c : Children)
  have nv:=NKR_DigestRegularValue.scaled_cohort s o 26 p.nullifier c.nullifier hh ho hp.nullifier nm g
  have dv:=NKR_DigestRegularValue.scaled_cohort s o 32 p.change c.change hh ho hp.change dm g
  have rv:=NKR_DigestRegularValue.scaled_cohort s o 53 p.transition.candidate_afterstate.next_root c.nextRoot hh ho hp.nextRoot rootm g
+ unfold NKR_DigestRegularValue.binding NKR_DigestRegularValue.residual at av nv dv rv
+ rw [NKR_DigestRows.anchor_row] at av
+ rw [NKR_DigestRows.nullifier_row] at nv
+ rw [NKR_DigestRows.change_row] at dv
+ rw [NKR_DigestRows.nextRoot_row] at rv
  constructor
  · simpa only [term,NKR_DigestOldPack.contribution,R0P.digestRow,R0P.digestStart,R0P.digestTarget,FIw_PublicModel.ofPublic,
-    FIw_PublicModel.openings,NKR_DigestRegularValue.binding,NKR_DigestRegularValue.row,NKR_DigestRegularValue.residual,
-    show (0 : Fin 9).val=0 from rfl,Nat.zero_add] using av
+    FIw_PublicModel.openings,show (0 : Fin 9).val=0 from rfl,Nat.zero_add] using av
  constructor
  · simpa only [term,NKR_DigestOldPack.contribution,R0P.digestRow,R0P.digestStart,R0P.digestTarget,FIw_PublicModel.ofPublic,
-    FIw_PublicModel.openings,NKR_DigestRegularValue.binding,NKR_DigestRegularValue.row,NKR_DigestRegularValue.residual,
-    show (0 : Fin 9).val=0 from rfl,Nat.zero_add] using nv
+    FIw_PublicModel.openings,show (0 : Fin 9).val=0 from rfl,Nat.zero_add] using nv
  constructor
  · simpa only [term,NKR_DigestOldPack.contribution,R0P.digestRow,R0P.digestStart,R0P.digestTarget,FIw_PublicModel.ofPublic,
-    FIw_PublicModel.openings,NKR_DigestRegularValue.binding,NKR_DigestRegularValue.row,NKR_DigestRegularValue.residual,
-    show (0 : Fin 9).val=0 from rfl,Nat.zero_add] using dv
+    FIw_PublicModel.openings,show (0 : Fin 9).val=0 from rfl,Nat.zero_add] using dv
  · simpa only [term,NKR_DigestOldPack.contribution,R0P.digestRow,R0P.digestStart,R0P.digestTarget,FIw_PublicModel.ofPublic,
-    FIw_PublicModel.openings,NKR_DigestRegularValue.binding,NKR_DigestRegularValue.row,NKR_DigestRegularValue.residual,
-    show (0 : Fin 9).val=0 from rfl,Nat.zero_add] using rv
+    FIw_PublicModel.openings,show (0 : Fin 9).val=0 from rfl,Nat.zero_add] using rv
 
 #print axioms ordinary
 end AspisR1.NKR_DigestKeyValues

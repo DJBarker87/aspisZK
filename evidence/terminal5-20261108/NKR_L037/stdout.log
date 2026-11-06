@@ -1,0 +1,171 @@
+NKR_DigestAppendValue.lean:31:14: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+NKR_DigestAppendValue.lean:35:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑FIq_Native.pool_v1.pair_forest_semantic_terminal.constants.POOL_V1_PAIR_EMPTY_ROOTS_V1)[↑(NJX_AppendDomains.level
+        i)]?
+in the target expression
+  (↑FIq_Native.pool_v1.pair_forest_semantic_terminal.constants.POOL_V1_PAIR_EMPTY_ROOTS_V1)[↑i]?.getD
+      (Array.repeat 8#usize 0#u32) =
+    (packet i).expected
+
+p : Public
+o : Openings
+s : Selectors
+i : Fin 20
+packet :
+  NKI_LevelsChildren.Family p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z s.high
+k : Fin 8
+hv : decode (NJX_AppendDomains.high s.high i) = FIv_NativeArray.value s.high (34 + ↑i)
+hz :
+  NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) =
+    decide (↑p.transition.live_snapshot.next_pair_index >>> ↑(NJX_AppendDomains.level i) &&& 1 = 0)
+hz0 :
+  NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) =
+    decide (FIy_FrontierMeaning.zero p.transition.live_snapshot ↑i)
+row0d : (34 + ↑i) * 16 / 16 = 34 + ↑i
+row0m : (34 + ↑i) * 16 % 16 = 0
+row12d : ((34 + ↑i) * 16 + 12) / 16 = 34 + ↑i
+row12m : ((34 + ↑i) * 16 + 12) % 16 = 12
+zero : FIy_FrontierMeaning.zero p.transition.live_snapshot ↑i
+side : NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) = true
+ec : FIq_Native.pool_v1.pair_forest_semantic_terminal.empty_root (NJX_AppendDomains.level i) = ok (packet i).expected
+re :
+  (↑FIq_Native.pool_v1.pair_forest_semantic_terminal.constants.POOL_V1_PAIR_EMPTY_ROOTS_V1)[↑(NJX_AppendDomains.level
+            i)]? =
+      some (packet i).expected ∧
+    ∀ x ∈ ↑(packet i).expected, ↑x < FIw_ScalarArithmetic.P
+⊢ (↑FIq_Native.pool_v1.pair_forest_semantic_terminal.constants.POOL_V1_PAIR_EMPTY_ROOTS_V1)[↑i]?.getD
+      (Array.repeat 8#usize 0#u32) =
+    (packet i).expected
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NKR_DigestAppendValue.lean:64:91: error: unsolved goals
+case false.«0»
+p : Public
+o : Openings
+s : Selectors
+i : Fin 20
+packets :
+  NKI_LevelsChildren.Family p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z s.high
+side : NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) = false
+inc :
+  (fun k =>
+      FIy_FrontierMeaning.increment p.transition.live_snapshot s o.z ↑i
+        ↑(NJX_DigestGroups.index ((fun i => i) ⟨0, ⋯⟩) k)) =
+    fun k =>
+    (if NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) = true then
+        low0 s
+      else low12 s) *
+      NKI_AppendMeaning.residual (packets i) (NJX_DigestGroups.index ((fun i => i) ⟨0, ⋯⟩) k)
+⊢ (low12 s * NJB_PackLinearity.pack fun k => NKI_AppendMeaning.residual (packets i) (NJX_DigestGroups.index 0 k)) =
+    low0 s * NJB_PackLinearity.pack (NKI_AppendMeaning.contribution (packets i) 0) +
+      low12 s * NJB_PackLinearity.pack (NKI_AppendMeaning.contribution (packets i) 2)
+
+case false.«1»
+p : Public
+o : Openings
+s : Selectors
+i : Fin 20
+packets :
+  NKI_LevelsChildren.Family p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z s.high
+side : NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) = false
+inc :
+  (fun k =>
+      FIy_FrontierMeaning.increment p.transition.live_snapshot s o.z ↑i
+        ↑(NJX_DigestGroups.index ((fun i => i) ⟨1, ⋯⟩) k)) =
+    fun k =>
+    (if NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) = true then
+        low0 s
+      else low12 s) *
+      NKI_AppendMeaning.residual (packets i) (NJX_DigestGroups.index ((fun i => i) ⟨1, ⋯⟩) k)
+⊢ (low12 s * NJB_PackLinearity.pack fun k => NKI_AppendMeaning.residual (packets i) (NJX_DigestGroups.index 1 k)) =
+    low0 s * NJB_PackLinearity.pack (NKI_AppendMeaning.contribution (packets i) 1) +
+      low12 s * NJB_PackLinearity.pack (NKI_AppendMeaning.contribution (packets i) 3)
+
+case true.«0»
+p : Public
+o : Openings
+s : Selectors
+i : Fin 20
+packets :
+  NKI_LevelsChildren.Family p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z s.high
+side : NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) = true
+inc :
+  (fun k =>
+      FIy_FrontierMeaning.increment p.transition.live_snapshot s o.z ↑i
+        ↑(NJX_DigestGroups.index ((fun i => i) ⟨0, ⋯⟩) k)) =
+    fun k =>
+    (if NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) = true then
+        low0 s
+      else low12 s) *
+      NKI_AppendMeaning.residual (packets i) (NJX_DigestGroups.index ((fun i => i) ⟨0, ⋯⟩) k)
+⊢ (low0 s * NJB_PackLinearity.pack fun k => NKI_AppendMeaning.residual (packets i) (NJX_DigestGroups.index 0 k)) =
+    low0 s * NJB_PackLinearity.pack (NKI_AppendMeaning.contribution (packets i) 0) +
+      low12 s * NJB_PackLinearity.pack (NKI_AppendMeaning.contribution (packets i) 2)
+
+case true.«1»
+p : Public
+o : Openings
+s : Selectors
+i : Fin 20
+packets :
+  NKI_LevelsChildren.Family p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z s.high
+side : NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) = true
+inc :
+  (fun k =>
+      FIy_FrontierMeaning.increment p.transition.live_snapshot s o.z ↑i
+        ↑(NJX_DigestGroups.index ((fun i => i) ⟨1, ⋯⟩) k)) =
+    fun k =>
+    (if NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) = true then
+        low0 s
+      else low12 s) *
+      NKI_AppendMeaning.residual (packets i) (NJX_DigestGroups.index ((fun i => i) ⟨1, ⋯⟩) k)
+⊢ (low0 s * NJB_PackLinearity.pack fun k => NKI_AppendMeaning.residual (packets i) (NJX_DigestGroups.index 1 k)) =
+    low0 s * NJB_PackLinearity.pack (NKI_AppendMeaning.contribution (packets i) 1) +
+      low12 s * NJB_PackLinearity.pack (NKI_AppendMeaning.contribution (packets i) 3)
+NKR_DigestAppendValue.lean:71:8: warning: This simp argument is unused:
+  NKI_AppendMeaning.contribution
+
+Hint: Omit it from the simp argument list.
+  simp [̵N̵K̵I̵_̵A̵p̵p̵e̵n̵d̵M̵e̵a̵n̵i̵n̵g̵.̵c̵o̵n̵t̵r̵i̵b̵u̵t̵i̵o̵n̵,̵N̵K̵I̵_̵A̵p̵p̵e̵n̵d̵M̵e̵a̵n̵i̵n̵g̵.̵c̵h̵a̵n̵n̵e̵l̵,̵N̵K̵I̵_̵A̵p̵p̵e̵n̵d̵M̵e̵a̵n̵i̵n̵g̵.̵g̵r̵o̵u̵p̵,̵s̵i̵d̵e̵,̵N̵J̵B̵_̵P̵a̵c̵k̵L̵i̵n̵e̵a̵r̵i̵t̵y̵.̵z̵e̵r̵o̵]̵[̲N̲K̲I̲_̲A̲p̲p̲e̲n̲d̲M̲e̲a̲n̲i̲n̲g̲.̲c̲h̲a̲n̲n̲e̲l̲,̲ ̲N̲K̲I̲_̲A̲p̲p̲e̲n̲d̲M̲e̲a̲n̲i̲n̲g̲.̲g̲r̲o̲u̲p̲,̲ ̲s̲i̲d̲e̲,̲ ̲N̲J̲B̲_̲P̲a̲c̲k̲L̲i̲n̲e̲a̲r̲i̲t̲y̲.̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_DigestAppendValue.lean:71:39: warning: This simp argument is unused:
+  NKI_AppendMeaning.channel
+
+Hint: Omit it from the simp argument list.
+  simp [̵N̵K̵I̵_̵A̵p̵p̵e̵n̵d̵M̵e̵a̵n̵i̵n̵g̵.̵c̵o̵n̵t̵r̵i̵b̵u̵t̵i̵o̵n̵,̵N̵K̵I̵_̵A̵p̵p̵e̵n̵d̵M̵e̵a̵n̵i̵n̵g̵.̵c̵h̵a̵n̵n̵e̵l̵,̵N̵K̵I̵_̵A̵p̵p̵e̵n̵d̵M̵e̵a̵n̵i̵n̵g̵.̵g̵r̵o̵u̵p̵,̵s̵i̵d̵e̵,̵N̵J̵B̵_̵P̵a̵c̵k̵L̵i̵n̵e̵a̵r̵i̵t̵y̵.̵z̵e̵r̵o̵]̵[̲N̲K̲I̲_̲A̲p̲p̲e̲n̲d̲M̲e̲a̲n̲i̲n̲g̲.̲c̲o̲n̲t̲r̲i̲b̲u̲t̲i̲o̲n̲,̲ ̲N̲K̲I̲_̲A̲p̲p̲e̲n̲d̲M̲e̲a̲n̲i̲n̲g̲.̲g̲r̲o̲u̲p̲,̲ ̲s̲i̲d̲e̲,̲ ̲N̲J̲B̲_̲P̲a̲c̲k̲L̲i̲n̲e̲a̲r̲i̲t̲y̲.̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_DigestAppendValue.lean:71:65: warning: This simp argument is unused:
+  NKI_AppendMeaning.group
+
+Hint: Omit it from the simp argument list.
+  simp [̵N̵K̵I̵_̵A̵p̵p̵e̵n̵d̵M̵e̵a̵n̵i̵n̵g̵.̵c̵o̵n̵t̵r̵i̵b̵u̵t̵i̵o̵n̵,̵N̵K̵I̵_̵A̵p̵p̵e̵n̵d̵M̵e̵a̵n̵i̵n̵g̵.̵c̵h̵a̵n̵n̵e̵l̵,̵N̵K̵I̵_̵A̵p̵p̵e̵n̵d̵M̵e̵a̵n̵i̵n̵g̵.̵g̵r̵o̵u̵p̵,̵s̵i̵d̵e̵,̵N̵J̵B̵_̵P̵a̵c̵k̵L̵i̵n̵e̵a̵r̵i̵t̵y̵.̵z̵e̵r̵o̵]̵[̲N̲K̲I̲_̲A̲p̲p̲e̲n̲d̲M̲e̲a̲n̲i̲n̲g̲.̲c̲o̲n̲t̲r̲i̲b̲u̲t̲i̲o̲n̲,̲ ̲N̲K̲I̲_̲A̲p̲p̲e̲n̲d̲M̲e̲a̲n̲i̲n̲g̲.̲c̲h̲a̲n̲n̲e̲l̲,̲ ̲s̲i̲d̲e̲,̲ ̲N̲J̲B̲_̲P̲a̲c̲k̲L̲i̲n̲e̲a̲r̲i̲t̲y̲.̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_DigestAppendValue.lean:71:89: warning: This simp argument is unused:
+  side
+
+Hint: Omit it from the simp argument list.
+  simp [NKI_AppendMeaning.contribution, ̲NKI_AppendMeaning.channel, ̲NKI_AppendMeaning.group,s̵i̵d̵e̵,̵
+  ̲ ̲ ̲ ̲ ̲NJB_PackLinearity.zero]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_DigestAppendValue.lean:71:94: warning: This simp argument is unused:
+  NJB_PackLinearity.zero
+
+Hint: Omit it from the simp argument list.
+  simp [̵N̵K̵I̵_̵A̵p̵p̵e̵n̵d̵M̵e̵a̵n̵i̵n̵g̵.̵c̵o̵n̵t̵r̵i̵b̵u̵t̵i̵o̵n̵,̵N̵K̵I̵_̵A̵p̵p̵e̵n̵d̵M̵e̵a̵n̵i̵n̵g̵.̵c̵h̵a̵n̵n̵e̵l̵,̵N̵K̵I̵_̵A̵p̵p̵e̵n̵d̵M̵e̵a̵n̵i̵n̵g̵.̵g̵r̵o̵u̵p̵,̵s̵i̵d̵e̵,̵N̵J̵B̵_̵P̵a̵c̵k̵L̵i̵n̵e̵a̵r̵i̵t̵y̵.̵z̵e̵r̵o̵]̵[̲N̲K̲I̲_̲A̲p̲p̲e̲n̲d̲M̲e̲a̲n̲i̲n̲g̲.̲c̲o̲n̲t̲r̲i̲b̲u̲t̲i̲o̲n̲,̲ ̲N̲K̲I̲_̲A̲p̲p̲e̲n̲d̲M̲e̲a̲n̲i̲n̲g̲.̲c̲h̲a̲n̲n̲e̲l̲,̲ ̲N̲K̲I̲_̲A̲p̲p̲e̲n̲d̲M̲e̲a̲n̲i̲n̲g̲.̲g̲r̲o̲u̲p̲,̲ ̲s̲i̲d̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NKR_DigestAppendValue.increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_DigestAppendValue.packed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

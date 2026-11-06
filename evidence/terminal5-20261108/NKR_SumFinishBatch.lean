@@ -73,7 +73,7 @@ theorem source (tags weights lows : Fin 30 → NQ) (b : Fin 9) (before : State)
    dsimp only [afterWeights,NJB_StateUpdates.set]
    split <;> first | exact cw' | exact hb.2 i
  · intro i hi
-   simp only [values,afterWeights,NJB_StateUpdates.set,if_neg (Ne.symm hi)]
+   simp [values,afterWeights,NJB_StateUpdates.set,Ne.symm hi]
 
 #print axioms canonical_arguments
 #print axioms source

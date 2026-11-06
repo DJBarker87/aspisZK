@@ -1,0 +1,20 @@
+--- a/NKR_SumCopy_native.rs.txt
++++ b/NKR_SumCopy_native.rs.txt
+@@ -19,7 +19,7 @@
+  link_index += 1;
+  link_index
+ }
+-#[kani::proof] #[kani::unwind(8)]
++#[kani::proof] #[kani::unwind(104)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ fn NKR_copy_link_cut(){
+  let mut scratch:[QM31;103]=unsafe{core::mem::transmute::<[[u32;4];103],[QM31;103]>(kani::any())};
+@@ -54,7 +54,7 @@
+      active,
+  }
+ }
+-#[kani::proof] #[kani::unwind(8)]
++#[kani::proof] #[kani::unwind(65)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ fn NKR_copy_tail_cut(){
+  let selectors=Selectors{high:unsafe{core::mem::transmute::<[[u32;4];64],[QM31;64]>(kani::any())},low:unsafe{core::mem::transmute::<[[u32;4];16],[QM31;16]>(kani::any())}};

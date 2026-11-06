@@ -68,8 +68,7 @@ theorem source (p : Public) (o : Openings) (s : Selectors)
  obtain ⟨v5,vc5,h5,val5⟩ := NKR_DigestAdd.source v4 c.nextRoot h4 hroot
  obtain ⟨v6,vc6,h6,val6⟩ := NKR_DigestAdd.source v5 c.carried h5 hca
  refine ⟨c,![v0,v6,v12],?_,clauses,canonical,?_,?_⟩
- · have rec : (Children.mk c.anchor c.nullifier c.recipient c.change c.levels c.nextRoot c.carry c.carried)=c := by rfl
-   simp only [run,ac,nc,rc,dc,lc,rootc,cc,cac,vc1,vc2,vc3,vc4,vc0,vc12,vc5,vc6,bind_tc_ok,rec]
+ · simpa only [run,ac,nc,rc,dc,lc,rootc,cc,cac,vc1,vc2,vc3,vc4,vc0,vc12,vc5,vc6,bind_tc_ok]
  · intro g j
    fin_cases g
    · exact h0 j

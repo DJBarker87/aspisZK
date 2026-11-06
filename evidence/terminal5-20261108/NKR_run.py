@@ -49,6 +49,7 @@ p=b/{(a+'-reservation.json')!r};print(p.read_text() if p.exists() else 'MISSING'
   print('reservation wait',flush=True);time.sleep(60);time.sleep(60);time.sleep(60);continue
  raise RuntimeError('STOP admission')
 x.update(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True)
+assert all((E/n).is_file() for n in x['sources']), 'Missing required validation input'
 files={n:(base64.b64encode((E/n).read_bytes()).decode() if n.endswith('.xz') else (E/n).read_text()) for n in x['sources'] if (E/n).is_file()}
 files[a+'.json']=json.dumps(x)
 r=ssh('python3',f'''from pathlib import Path

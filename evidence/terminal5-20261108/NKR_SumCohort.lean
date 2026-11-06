@@ -64,8 +64,9 @@ theorem source (l r : A4) (count : Nat) (lower : 1≤count) (upper : count≤4)
    change native l r 4=_ at h
    rw [native_reference l r 4 hl hr] at h
    have len : (l.val.zip r.val).length=4 := by rw [d.1];rfl
+   have take0 : (l.val.zip r.val).take (l.val.zip r.val).length=l.val.zip r.val := List.take_length
    have take : (l.val.zip r.val).take 4=l.val.zip r.val := by
-    simpa only [len] using List.take_length (l.val.zip r.val)
+    simpa only [len] using take0
    rw [take]
    exact h
 

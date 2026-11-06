@@ -12,7 +12,6 @@ theorem cell {n : Usize} (a : Array NQ n) (i : Fin n.val) :
  decode (NJB_ArrayCarrier.cell a i)=FIv_NativeArray.value a i.val := by
  unfold NJB_ArrayCarrier.cell FIv_NativeArray.value
  rw [List.getElem?_eq_getElem (by rw [a.property];exact i.isLt)]
- rfl
 
 theorem target (d : NJX_DigestCohort.D) (right : Bool) (i : Fin 8) :
  NKI_DigestView.target d right i=FIy_DigestLane.target d right i.val := by

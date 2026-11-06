@@ -1,0 +1,24 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn NKR_prefix_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+fn NKR_prefix_public<'a>(t:&'a PoolV1PairLatePublicStatementV1)->SemanticPublic<'a>{SemanticPublic{variant:if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal},pool:kani::any(),deployment_domain:kani::any(),anchor:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},nullifier:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},asset_id:M31(kani::any()),recipient:if kani::any(){Some(unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())})}else{None},change:unsafe{core::mem::transmute::<[u32;8],Digest>(kani::any())},withdrawal_amount:if kani::any(){Some(kani::any())}else{None},transition:t}}
+fn NKR_prefix_pubword(p:SemanticPublic<'_>,k:usize,b:usize,d:usize,t:usize)->u64{let source=&p.transition.live_snapshot;let after=&p.transition.candidate_afterstate;match k{0=>match p.variant{CompiledVariant::PrivateTransfer=>0,CompiledVariant::Withdrawal=>1},1=>p.pool[b]as u64,2=>p.deployment_domain[b]as u64,3=>p.anchor[d].0 as u64,4=>p.nullifier[d].0 as u64,5=>p.asset_id.0 as u64,6=>p.recipient.is_some()as u64,7=>p.recipient.map_or(0,|x|x[d].0 as u64),8=>p.change[d].0 as u64,9=>p.withdrawal_amount.is_some()as u64,10=>p.withdrawal_amount.map_or(0,|x|x as u64),11=>source.pool[b]as u64,12=>source.deployment_domain[b]as u64,13=>source.sequence,14=>source.next_pair_index,15=>source.current_root[d].0 as u64,16=>source.frontier[t][d].0 as u64,17=>after.next_pair_index,18=>after.next_root[d].0 as u64,19=>after.next_frontier[t][d].0 as u64,_=>unreachable!()}}
+struct NKR_PrefixLog{calls:usize,k:usize,b:usize,d:usize,t:usize,seen:u64,reply:Result<(),PoolV1PairForestSemanticTerminalErrorV1>}
+fn NKR_prefix_validate(public:SemanticPublic<'_>,l:&mut NKR_PrefixLog)->Result<(),PoolV1PairForestSemanticTerminalErrorV1>{l.calls+=1;l.seen=NKR_prefix_pubword(public,l.k,l.b,l.d,l.t);l.reply}
+fn NKR_validation_prefix(public:SemanticPublic<'_>,l:&mut NKR_PrefixLog)->Result<bool,PoolV1PairForestSemanticTerminalErrorV1>{
+ let invalid_amount=match public.withdrawal_amount{None=>false,Some(amount)=>amount==0||amount>=(1<<30u32)};
+ if invalid_amount{return Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount);}
+ NKR_prefix_validate(public,l)?;
+ Ok(true)
+}
+#[kani::proof] #[kani::unwind(4)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_validation_prefix_cut(){
+ let t:PoolV1PairLatePublicStatementV1=unsafe{core::mem::transmute::<[u8;core::mem::size_of::<PoolV1PairLatePublicStatementV1>()],PoolV1PairLatePublicStatementV1>(kani::any())};let public=NKR_prefix_public(&t);let k:usize=kani::any();let b:usize=kani::any();let d:usize=kani::any();let level:usize=kani::any();kani::assume(k<20&&b<32&&d<8&&level<20);let error=if kani::any(){PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount}else{PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition};let reply=if kani::any(){Ok(())}else{Err(error)};let invalid=public.withdrawal_amount.map_or(false,|amount|amount==0||amount>=(1<<30u32));
+ let mut l=NKR_PrefixLog{calls:0,k,b,d,t:level,seen:0,reply};let out=NKR_validation_prefix(public,&mut l);assert_eq!(l.calls,if invalid{0}else{1});if !invalid{assert_eq!(l.seen,NKR_prefix_pubword(public,k,b,d,level));}
+ let want=if invalid{Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount)}else{reply.map(|()|true)};match(out,want){(Ok(got),Ok(_))=>assert_eq!(got,!cfg!(NKR_invert)),(Err(got),Err(expected))=>assert_eq!(got,if cfg!(NKR_invert){if expected==PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount{PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition}else{PoolV1PairForestSemanticTerminalErrorV1::InvalidPublicAmount}}else{expected}),_=>assert!(false)}
+}
+fn NKR_terminal_gather_cell(claims:&[[QM31;29];3],i:usize)->QM31{claims[i/28][i%28]}
+#[kani::proof] #[kani::unwind(4)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NKR_terminal_gather_cell_cut(){let words:[[[u32;4];29];3]=kani::any();let claims:[[QM31;29];3]=unsafe{core::mem::transmute(words)};let i:usize=kani::any();let limb:usize=kani::any();kani::assume(i<84&&limb<4);let out=NKR_terminal_gather_cell(&claims,i);assert_eq!(NKR_prefix_words(out)[limb],words[i/28][i%28][limb]^if cfg!(NKR_invert){1}else{0});}

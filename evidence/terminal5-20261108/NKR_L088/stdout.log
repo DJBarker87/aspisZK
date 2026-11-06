@@ -1,0 +1,6 @@
+theorem AspisR1.NKR_TermPublic.source : ∀ (pub : r0.Public), pub.semantic = ok (value pub) :=
+fun pub =>
+  r0.Public.casesOn (motive := fun t => pub = t → pub.semantic = ok (value pub)) pub
+    (fun a a_1 h => Eq.symm h ▸ Eq.refl (r0.Public.Transfer a a_1).semantic)
+    (fun a a_1 h => Eq.symm h ▸ Eq.refl (r0.Public.Withdrawal a a_1).semantic) (Eq.refl pub)
+'AspisR1.NKR_TermPublic.source' depends on axioms: [propext, Classical.choice, Quot.sound]

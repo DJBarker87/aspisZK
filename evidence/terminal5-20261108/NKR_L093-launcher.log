@@ -1,0 +1,58 @@
+{"attempt": "NKR_L093", "exit_status": 1, "wall_seconds": 14.806408914038911, "peak_rss_kib": "6149256", "swaps": "0", "print_axioms": ["'AspisR1.NKR_SumFinishBatch.canonical_arguments' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKR_SumFinishBatch.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKR_SumFinishBatch.lean:75:1: error: unsolved goals
+case refine_4
+tags weights lows : Fin 30 → NQ
+b : Fin 9
+before : State
+ht : ∀ (i : Fin 30), Canon (tags i)
+hw : ∀ (i : Fin 30), Canon (weights i)
+hl : ∀ (i : Fin 30), Canon (lows i)
+hb : (∀ (i : Fin 4), Canon (before.1 i)) ∧ ∀ (i : Fin 4), Canon (before.2 i)
+domain :
+  1 ≤ batchCount b ∧
+    batchCount b ≤ 4 ∧
+      batchStart b + batchCount b ≤ 30 ∧ batchCount b = min 4 (offsets (batchGroup b).succ - batchStart b)
+v : NQ
+nv : NKR_SumCarrier.native (arguments tags b) (arguments lows b) (batchCount b) = ok v
+rv : NKR_SumCarrier.reference (arguments tags b) (arguments lows b) (batchCount b) = ok v
+cv : Canon v
+vv :
+  decode v =
+    NGA_SumAlg
+...
+(NGA_Indexed.selected (NKR_SumCarrier.encode (arguments lows b)) seek) 1 (batchCount b)
+w : NQ
+nw : NKR_SumCarrier.native (arguments weights b) (arguments lows b) (batchCount b) = ok w
+rw : NKR_SumCarrier.reference (arguments weights b) (arguments lows b) (batchCount b) = ok w
+cw : Canon w
+vw :
+  decode w =
+    NGA_SumAlgebra.sumProducts
+      (List.take (batchCount b)
+        ((↑(NKR_SumCarrier.encode (arguments weights b))).zip ↑(NKR_SumCarrier.encode (arguments lows b))))
+cutw :
+  ∀ (seek : Fin 4),
+    ↑seek < batchCount b →
+      NKR_SumCuts.Cut (NKR_SumCarrier.encode (arguments weights b)) (NKR_SumCarrier.encode (arguments lows b))
+        (batchCount b) seek (FIv_NativeArithmetic.qm w) (FIv_NativeArithmetic.qm w)
+        (NGA_Indexed.selected (NKR_SumCarrier.encode (arguments weights b)) seek)
+        (NGA_Indexed.selected (NKR_SumCarrier.encode (arguments lows b)) seek) 1 (batchCount b)
+v' : FIq_Native.field.QM31
+av : FIq_Native.field.QM31.add (before.1 (batchGroup b)) v = ok v'
+cv' : Canon v'
+vv' : decode v' = decode (before.1 (batchGroup b)) + decode v
+w' : FIq_Native.field.QM31
+aw : FIq_Native.field.QM31.add (before.2 (batchGroup b)) w = ok w'
+cw' : Canon w'
+vw' : decode w' = decode (before.2 (batchGroup b)) + decode w
+values : Fin 4 → NQ := NJB_StateUpdates.set before.1 (batchGroup b) v'
+afterWeights : Fin 4 → NQ := NJB_StateUpdates.set before.2 (batchGroup b) w'
+hvalues : NJB_StateUpdates.add before.1 (batchGroup b) v = ok values
+hweights : NJB_StateUpdates.add before.2 (batchGroup b) w = ok afterWeights
+i : Fin 4
+hi : i ≠ batchGroup b
+⊢ True ∧ True
+'AspisR1.NKR_SumFinishBatch.canonical_arguments' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_SumFinishBatch.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r40944cabfb284d32acf6d26324e33e4a.scope; invocation ID: aeaef5659f0448619e9ef8b5f97723a2

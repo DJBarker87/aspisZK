@@ -1,0 +1,41 @@
+{"attempt": "NKR_L056", "exit_status": 0, "wall_seconds": 9.494170791003853, "peak_rss_kib": "6197120", "swaps": "0", "print_axioms": ["'AspisR1.NKR_DigestComplete.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NKR_DigestComplete.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain p →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical s.high →
+        FIw_ArrayValue.canonical s.low →
+          ∃ c sums out,
+            Clauses p o s c ∧
+              Canonical c ∧
+                NKR_DigestPrefix.run p o s = ok (c, sums) ∧
+                  NKR_DigestPrefix.Frame c sums ∧
+                    reference p o s = ok out ∧
+                      (∀ (j : Fin 2), Canon (out j)) ∧ ∀ (j : Fin 2), decode (out j) = model s c j :=
+fun p o s hp ho hh hl =>
+  let ⟨c, h✝⟩ := NKR_DigestPrefix.source p o s hp ho hh
+  let ⟨sums, h✝¹⟩ := h✝
+  let ⟨pc, righ
+...
+g.Common.add_pf_add_lt
+                                  (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                    (decode (c.nullifier j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                      (decode (c.recipient j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                        (decode (c.change j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                        (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                          (decode (c.nextRoot j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                          (decode (NKI_LowMixCaller.low s 1) ^ Nat.rawCast 1 *
+                                            (decode (c.carried j) ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                          (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                            (decode (NKI_LowMixCaller.low s 2) ^ Nat.rawCast 1 *
+                                                (decode (NKR_DigestPrefix.last c.levels j) ^ Nat.rawCast 1 *
+                                                  Nat.rawCast 1) +
+                                              0))))))))))))⟩⟩⟩⟩⟩⟩))
+'AspisR1.NKR_DigestComplete.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6213a8ba70ca4115be210ffa7ef07719.scope; invocation ID: b43921afce9d40babb5411b33319801e

@@ -28,12 +28,13 @@ theorem increment (p : Public) (o : Openings) (s : Selectors) (i : Fin 20)
  · have side : NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i)=true := by rw [hz0];simp only [zero,decide_true]
    have ec := (packet i).expected_call
    rw [side] at ec
-   simp only [Bool.true_eq_true,if_true] at ec
+   simp only [if_true] at ec
    have re := FIy_EmptyRoot.value (NJX_AppendDomains.level i) (packet i).expected ec
    have expected : FIy_FrontierMeaning.roots i.val=(packet i).expected := by
     unfold FIy_FrontierMeaning.roots
-    rw [re.1]
-    rfl
+    have slot:=re.1
+    simp only [NJX_AppendDomains.level_value] at slot
+    rw [slot] <;> rfl
    rw [side]
    simp only [if_true,NKI_AppendPacket.start]
    simp only [FIy_FrontierMeaning.increment,if_pos zero,FIy_FrontierMeaning.rowValue,row0d,row0m,
@@ -66,9 +67,10 @@ theorem packed (p : Public) (o : Openings) (s : Selectors) (i : Fin 20)
   (fun k=>(if NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) then low0 s else low12 s)*
    NKI_AppendMeaning.residual (packets i) (NJX_DigestGroups.index g k)) := funext (fun k=>increment p o s i packets _)
  rw [inc,NJB_PackLinearity.scale,NKI_AppendMeaning.source,NKI_AppendMeaning.source]
+ unfold NKI_AppendMeaning.contribution NKI_AppendMeaning.channel NKI_AppendMeaning.group
  cases side : NKI_AppendPacket.emptySide p.transition.live_snapshot.next_pair_index (NJX_AppendDomains.level i) <;>
   fin_cases g <;>
-  simp [NKI_AppendMeaning.contribution,NKI_AppendMeaning.channel,NKI_AppendMeaning.group,side,NJB_PackLinearity.zero]
+  simp [side,NJB_PackLinearity.zero]
 #print axioms increment
 #print axioms packed
 end AspisR1.NKR_DigestAppendValue

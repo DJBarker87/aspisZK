@@ -13,8 +13,12 @@ open NKR_SumFinishData
 min4 count,three padded arrays,tag count/order,op kinds[sum,add,sum,add],
 SAME argument pairs,coordinate+count,both complete output frames. Field
 child Results are separate Invocation clauses,never part of the native cut. -/
-def BatchCut (before after : State) (b : Fin 9) (v vr w wr : NQ)
+def BatchCut (tags weights lows : Fin 30 → NQ) (before after : State) (b : Fin 9) (v vr w wr : NQ)
+ (tagArray weightArray lowArray : Fin 4 → NQ) (tagCount : Nat)
+ (tagPositions : Fin (batchCount b) → Nat)
  (kinds : Fin 4 → Nat) (left right : Fin 4 → NQ) (calls next : Nat) : Prop :=
+ tagArray=padded tags b ∧ weightArray=padded weights b ∧ lowArray=padded lows b ∧
+ tagCount=batchCount b ∧ (∀ i,tagPositions i=batchStart b+i.val) ∧
  kinds=![0,1,0,1] ∧ calls=4 ∧ next=batchStart b+batchCount b ∧
  left 1=before.1 (batchGroup b) ∧ right 1=v ∧
  left 3=before.2 (batchGroup b) ∧ right 3=w ∧
@@ -29,7 +33,7 @@ def Invocation (tags weights lows : Fin 30 → NQ) (b : Fin 9) (before after : S
  FIq_Native.field.QM31.add (before.1 (batchGroup b)) v=ok vr ∧
  NKR_SumCarrier.reference (arguments weights b) (arguments lows b) (batchCount b)=ok w ∧
  FIq_Native.field.QM31.add (before.2 (batchGroup b)) w=ok wr ∧
- BatchCut before after b v vr w wr ![0,1,0,1]
+ BatchCut tags weights lows before after b v vr w wr (padded tags b) (padded weights b) (padded lows b) (batchCount b) (fun i=>batchStart b+i.val) ![0,1,0,1]
   ![FIq_Native.field.QM31.ZERO,before.1 (batchGroup b),FIq_Native.field.QM31.ZERO,before.2 (batchGroup b)]
   ![FIq_Native.field.QM31.ZERO,v,FIq_Native.field.QM31.ZERO,w] 4 (batchStart b+batchCount b)
 
@@ -49,7 +53,7 @@ theorem batch (tags weights lows : Fin 30 → NQ) (b : Fin 9) (before : State)
  let after : State := (NJB_StateUpdates.set before.1 (batchGroup b) vr,NJB_StateUpdates.set before.2 (batchGroup b) wr)
  refine ⟨after,?_,⟨v,vr,w,wr,rv,ar,rw,aw,?_⟩,?_,?_⟩
  · simp only [step,rv,rw,NJB_StateUpdates.add,ar,aw,bind_tc_ok];rfl
- · exact ⟨rfl,rfl,rfl,rfl,rfl,rfl,rfl,fun _=>rfl,fun _=>rfl⟩
+ · exact ⟨rfl,rfl,rfl,rfl,fun _=>rfl,rfl,rfl,rfl,rfl,rfl,rfl,rfl,fun _=>rfl,fun _=>rfl⟩
  · intro i
    dsimp only [after,NJB_StateUpdates.set]
    split <;> first | exact cvr | exact hb.1 i

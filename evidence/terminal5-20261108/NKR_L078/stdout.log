@@ -1,0 +1,35 @@
+NKR_TermSemanticModel.lean:17:100: error: Application type mismatch: The argument
+  amount
+has type
+  ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647
+but is expected to have type
+  ↑(pub.withdrawal_amount.getD 0#u32) < FJa_PublicBounds.P
+in the application
+  ⟨asset, amount⟩
+'AspisR1.NKR_TermSemanticModel.bounds' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKR_TermSemanticModel.source : ∀ (pub : Public) (o : Openings) (point : Std.Array NQ 10#usize),
+  NKR_DigestChildren.Domain pub →
+    canonical o.z →
+      canonical o.succ_z →
+        canonical o.xor12_z →
+          canonical point →
+            ↑pub.asset_id < 2147483647 →
+              ↑(core.option.Option.unwrap_or pub.withdrawal_amount 0#u32) < 2147483647 →
+                ∃ s,
+                  pool_v1.pair_forest_copy_terminal.Selectors.boxed_at_point point = ok s ∧
+                    ∃ p,
+                      pool_v1.pair_forest_semantic_terminal.semantic_packed pub o s = ok p.out ∧
+                        (fun j => embed (decoded p.out j)) = fun j =>
+                          R0P.pack4 ConcretePackBasis.basis fun i =>
+                            R0P.SemSource.scalarLaneAt (SpendDataMap.mapPublic (⇑embed) (FIw_PublicModel.ofPublic pub))
+                              (ValueFamilyFieldTransport.mapOpenings embed (FIw_PublicModel.openings o))
+                              (fun k => embed (FIw_PublicModel.selector s k)) (4 * ↑j + ↑i) :=
+fun pub o point hd hz hs hx hp asset amount =>
+  let ⟨s, h✝⟩ := NIH_AtPoint.boxed point hp
+  let ⟨sc, right✝⟩ := h✝
+  let ⟨ch, right✝¹⟩ := right✝
+  let ⟨cl, right✝²⟩ := right✝¹
+  let ⟨p, call⟩ := NKR_TermSemanticSource.source pub o s hd hz hs hx ch cl asset amount
+  have value := FJk_SemanticWideOnRun.value pub o s point p.out hz hs hx hp (bounds pub hd asset amount) sc call;
+  Exists.intro s ⟨sc, Exists.intro p ⟨call, value.right⟩⟩
+'AspisR1.NKR_TermSemanticModel.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

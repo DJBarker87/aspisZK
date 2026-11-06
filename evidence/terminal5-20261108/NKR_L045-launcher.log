@@ -1,0 +1,45 @@
+{"attempt": "NKR_L045", "exit_status": 0, "wall_seconds": 7.563039695844054, "peak_rss_kib": "5861356", "swaps": "0", "print_axioms": ["'NKR_SumCuts.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NKR_SumCuts.source : ∀ (l r : A4) (count : ℕ),
+  1 ≤ count →
+    count ≤ 4 →
+      (∀ q ∈ ↑l, Canon q) →
+        (∀ q ∈ ↑r, Canon q) →
+          ∃ out,
+            native l r count = ok out ∧
+              reference l r count = ok out ∧
+                NKJ_Cohort.run (List.take count ((↑l).zip ↑r)) = ok out ∧
+                  Canon out ∧
+                    AspisR1.ExtractedMaskQM31Exact.decode out =
+                        NGA_SumAlgebra.sumProducts (List.take count ((↑l).zip ↑r)) ∧
+                      ∀ (seek : Fin 4),
+                        ↑seek < count →
+                          Cut l r count seek out out (NGA_Indexed.selected l seek) (NGA_Indexed.selected r seek) 1
+       
+...
+theorem NKR_SumCuts.source : ∀ (l r : A4) (count : ℕ),
+  1 ≤ count →
+    count ≤ 4 →
+      (∀ q ∈ ↑l, Canon q) →
+        (∀ q ∈ ↑r, Canon q) →
+          ∃ out,
+            native l r count = ok out ∧
+              reference l r count = ok out ∧
+                NKJ_Cohort.run (List.take count ((↑l).zip ↑r)) = ok out ∧
+                  Canon out ∧
+                    AspisR1.ExtractedMaskQM31Exact.decode out =
+                        NGA_SumAlgebra.sumProducts (List.take count ((↑l).zip ↑r)) ∧
+                      ∀ (seek : Fin 4),
+                        ↑seek < count →
+                          Cut l r count seek out out (NGA_Indexed.selected l seek) (NGA_Indexed.selected r seek) 1
+                            count :=
+fun l r count lower upper hl hr =>
+  let ⟨out, h✝⟩ := NKR_SumCohort.result l r count lower upper hl hr
+  let ⟨hn, right✝⟩ := h✝
+  let ⟨hrun, right✝¹⟩ := right✝
+  let ⟨hcohort, right✝²⟩ := right✝¹
+  let ⟨hc, hv⟩ := right✝²
+  Exists.intro out
+    ⟨hn, ⟨hrun, ⟨hcohort, ⟨hc, ⟨hv, fun seek hs => ⟨lower, ⟨upper, ⟨hs, ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩⟩
+'NKR_SumCuts.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rabf4fba848aa4354a8bed8a93da90e7f.scope; invocation ID: 3749ad83b5394bbaa64c73d3766a6a4e

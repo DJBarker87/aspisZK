@@ -1,0 +1,136 @@
+NKR_ScheduleAssociation.lean:28:1: error: unsolved goals
+case refine_1
+packed : Std.Array NQ 24#usize
+p : Public
+o : Openings
+s : Selectors
+hp : FIw_ArrayValue.canonical packed
+hz : FIw_ArrayValue.canonical o.z
+hh : FIw_ArrayValue.canonical s.high
+hl : FIw_ArrayValue.canonical s.low
+l : NKI_InitialInvocation.Locals
+absorption : Std.Array NQ 16#usize
+calls : NKI_InitialInvocation.Clauses p o s l
+hc : NKI_InitialTrace.Canonical l
+reads : NKI_InitialReads.Reads s l
+wreads : NKI_InitialWriteReads.Reads l
+df : NJB_PreparedLaws.Domain l.full l.full_initial_selector
+dr : NJB_PreparedLaws.Domain l.full_or_rate l.q12
+lanes :
+  ∀ (i : Fin 16),
+    field.PreparedQm31Multiplier.mul (NKI_InitialLaneResults.cache l.full_or_rate l.full i)
+        (NJB_ArrayCarrier.cell o.z i) =
+      ok (NJB_ArrayCarrier.cell l.initial i)
+cut : NKI_InitialCuts.Cut p o s l absorption (NKI_InitialCuts.observations p o s l absorption) ![12, 2, 12, 9, 16, 4, 1]
+ca : NJB_Absorption.reference l.q38 l.fixed l.chunk_two1 l.chunk_eight1 l.nodes o.z = ok absorption
+cr : NKI_InitialAssociation.reference p o s = ok (l.initial2, absorption)
+cs : pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s = ok (l.initial2, absorption)
+hi : FIw_ArrayValue.canonical l.initial2
+ha : FIw_ArrayValue.canonical absorption
+middle : Std.Array field.QM31 24#usize
+cm : pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize l.initial2 = ok middle
+hm : FIw_ArrayValue.canonical middle
+vm :
+  ∀ (j : Fin ↑24#usize),
+    FIw_ArrayValue.decoded middle j =
+      FIw_ArrayValue.decoded packed j + FIx_SelectedMeaning.contribution (FIw_ArrayValue.decoded l.initial2) ↑0#usize ↑j
+out : Std.Array field.QM31 24#usize
+co : pool_v1.pair_forest_semantic_terminal.add_preweighted middle 16#usize absorption = ok out
+ho : FIw_ArrayValue.canonical out
+vo :
+  ∀ (j : Fin ↑24#usize),
+    FIw_ArrayValue.decoded out j =
+      FIw_ArrayValue.decoded middle j +
+        FIx_SelectedMeaning.contribution (FIw_ArrayValue.decoded absorption) ↑16#usize ↑j
+⊢ (let (initial, absorption) := (l.initial2, absorption)
+    do
+    let middle ← pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize initial
+    pool_v1.pair_forest_semantic_terminal.add_preweighted middle 16#usize absorption) =
+    ok out
+NKR_ScheduleAssociation.lean:28:27: warning: This simp argument is unused:
+  cm
+
+Hint: Omit it from the simp argument list.
+  simp only [reference, ̲cr, ̲cm̵,̵c̵o, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_ScheduleAssociation.lean:28:30: warning: This simp argument is unused:
+  co
+
+Hint: Omit it from the simp argument list.
+  simp only [reference, ̲cr, ̲cm,c̵o̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NKR_ScheduleAssociation.source : ∀ (packed : Std.Array NQ 24#usize) (p : Public) (o : Openings)
+  (s : Selectors),
+  FIw_ArrayValue.canonical packed →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical s.high →
+        FIw_ArrayValue.canonical s.low →
+          ∃ out,
+            reference packed p o s = ok out ∧
+              pool_v1.pair_forest_semantic_terminal.add_schedule_lanes packed p o s = ok out ∧
+                FIw_ArrayValue.canonical out :=
+fun packed p o s hp hz hh hl =>
+  let ⟨l, h✝⟩ := NKI_InitialRoot.source p o s hz hh hl
+  let ⟨absorption, h✝¹⟩ := h✝
+  let ⟨calls, right✝⟩ := h✝¹
+  let ⟨hc, right✝¹⟩ := right✝
+  let ⟨reads, right✝²⟩ := right✝¹
+  let ⟨wreads, right✝³⟩ := right✝²
+  let ⟨df, right✝⁴⟩ := right✝³
+  let ⟨dr, right✝⁵⟩ := right✝⁴
+  let ⟨lanes, right✝⁶⟩ := right✝⁵
+  let ⟨cut, right✝⁷⟩ := right✝⁶
+  let ⟨ca, right✝⁸⟩ := right✝⁷
+  let ⟨cr, right✝⁹⟩ := right✝⁸
+  let ⟨cs, right✝¹⁰⟩ := right✝⁹
+  let ⟨hi, ha⟩ := right✝¹⁰
+  let ⟨middle, h✝²⟩ :=
+    NHU_Preweighted.result packed 0#usize l.initial2 (of_decide_eq_true (id (Eq.refl true)))
+      (of_decide_eq_true (id (Eq.refl true))) hp hi
+  let ⟨cm, right✝¹¹⟩ := h✝²
+  let ⟨hm, vm⟩ := right✝¹¹
+  let ⟨out, h✝³⟩ :=
+    NHU_Preweighted.result middle 16#usize absorption (of_decide_eq_true (id (Eq.refl true)))
+      (of_decide_eq_true (id (Eq.refl true))) hm ha
+  let ⟨co, right✝¹²⟩ := h✝³
+  let ⟨ho, vo⟩ := right✝¹²
+  Exists.intro out
+    ⟨sorry,
+      ⟨id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (do
+                      let (initial, absorption) ← _a
+                      let packed1 ← pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize initial
+                      pool_v1.pair_forest_semantic_terminal.add_preweighted packed1 16#usize absorption) =
+                    ok out)
+                cs))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => _a = ok out)
+                  (bind_tc_ok (l.initial2, absorption)
+                    (uncurry fun initial absorption => do
+                      let packed1 ← pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize initial
+                      pool_v1.pair_forest_semantic_terminal.add_preweighted packed1 16#usize absorption))))
+              (id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (do
+                            let next ← _a
+                            pool_v1.pair_forest_semantic_terminal.add_preweighted next 16#usize absorption) =
+                          ok out)
+                      cm))
+                  (Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = ok out)
+                        (bind_tc_ok middle fun next =>
+                          pool_v1.pair_forest_semantic_terminal.add_preweighted next 16#usize absorption)))
+                    (Eq.mpr (id (congrArg (fun _a => _a = ok out) co)) (Eq.refl (ok out)))))))),
+        ho⟩⟩
+'AspisR1.NKR_ScheduleAssociation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

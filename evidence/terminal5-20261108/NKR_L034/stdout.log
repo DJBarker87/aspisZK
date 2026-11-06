@@ -1,0 +1,84 @@
+NKR_DigestOldSource.lean:23:14: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_DigestOldSource.lean:27:14: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKR_DigestOldSource.lean:24:34: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NKR_DigestOldSource.lean:28:34: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NKR_DigestOldSource.lean:24:34: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NKR_DigestOldSource.lean:28:34: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NKR_DigestOldSource.lean:43:32: warning: 'scalar_tac' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NKR_DigestOldSource.lean:43:45: warning: '(subst_vars;
+  exact
+    hf _
+      (List.getElem_mem (by rw [p.transition.candidate_afterstate.next_frontier.property]; omega)))' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NKR_DigestOldSource.lean:43:32: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NKR_DigestOldSource.lean:43:45: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NKR_DigestOldSource.lean:59:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIy_PublicDigestSuffix.run p o s middle p.transition.live_snapshot
+in the target expression
+  (let (middle, src) := (middle, p.transition.live_snapshot)
+    FIy_PublicDigestSuffix.run p o s middle src) =
+    ok out
+
+p : Public
+o : Openings
+s : Selectors
+hp : NKR_DigestChildren.Domain p
+hz : canonical o.z
+hh : canonical s.high
+hl : canonical s.low
+initial : Std.Array FIv_NativeArithmetic.NQ 8#usize
+pc : FIy_PublicDigestPrefix.run p o s = ok initial
+hp' : canonical initial
+middle : Std.Array field.QM31 8#usize
+mc :
+  pool_v1.pair_forest_semantic_terminal.public_digest_lanes_loop { start := 0#usize, «end» := 20#usize } o.z s initial
+      p.transition.live_snapshot =
+    ok (middle, p.transition.live_snapshot)
+hm : canonical middle
+out : Std.Array FIv_NativeArithmetic.NQ 8#usize
+oc : FIy_PublicDigestSuffix.run p o s middle p.transition.live_snapshot = ok out
+hout : canonical out
+⊢ (let (middle, src) := (middle, p.transition.live_snapshot)
+    FIy_PublicDigestSuffix.run p o s middle src) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NKR_DigestOldSource.initial_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_DigestOldSource.suffix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_DigestOldSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,13 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "source": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+  "original_link": "\n        let link = constants::COPY_LINKS[link_index];\n        let weight = link_weight(link, append_index, variant);\n        \n            accumulate_endpoint_selector_tensor_basis(\n                &mut selector_tensor_scratch,\n                0,\n                link.producer,\n                link.tag,\n                weight,\n                selectors,\n            );\n            accumulate_endpoint_selector_tensor_basis(\n                &mut selector_tensor_scratch,\n                2,\n                link.consumer,\n                link.tag,\n                weight,\n                selectors,\n            );\n        link_index += 1;",
+  "translated_link": "letlink=constants::COPY_LINKS[link_index];letweight=NKR_copy_weight(link,append_index,variant,l);NKR_copy_endpoint(scratch,0,link.producer,link.tag,weight,selectors,l);NKR_copy_endpoint(scratch,2,link.consumer,link.tag,weight,selectors,l);link_index+=1;",
+  "harness_link": "\n let link = constants::COPY_LINKS[link_index];\n let weight = NKR_copy_weight(link, append_index, variant,l);\n NKR_copy_endpoint(scratch,0,link.producer,link.tag,weight,selectors,l);\n NKR_copy_endpoint(scratch,2,link.consumer,link.tag,weight,selectors,l);\n link_index += 1;\n ",
+  "original_tail": "row.producer_values = [values[0], values[1]];\n        row.consumer_values = [values[2], values[3]];\n        row.producer_weights = [weights[0], weights[1]];\n        row.consumer_weights = [weights[2], weights[3]];\n        let active = selectors.active();\n    PoolV1PairForestCompiledCopyTerminalV1 {\n        residual: active.mul(copy_residual(row, h1_z, chi)),\n        active,\n    }\n",
+  "translated_tail": "row.producer_values=[values[0],values[1]];row.consumer_values=[values[2],values[3]];row.producer_weights=[weights[0],weights[1]];row.consumer_weights=[weights[2],weights[3]];letactive=NKR_copy_active(selectors,l);PoolV1PairForestCompiledCopyTerminalV1{residual:NKR_copy_mul(active,NKR_copy_residual(row,h1_z,chi,l),l),active,}",
+  "harness_tail": "\n row.producer_values = [values[0], values[1]];\n row.consumer_values = [values[2], values[3]];\n row.producer_weights = [weights[0], weights[1]];\n row.consumer_weights = [weights[2], weights[3]];\n let active = NKR_copy_active(selectors,l);\n PoolV1PairForestCompiledCopyTerminalV1 {\n     residual: NKR_copy_mul(active,NKR_copy_residual(row, h1_z, chi,l),l),\n     active,\n }\n",
+  "identity": true,
+  "source_sha256": "f38ca2bd28554e8f67b75b7b035f02648ea0b5d82f78d2457e10188e6402a3f0",
+  "harness_sha256": "65066039698a298ff2a20ca266542da8fdb0548d539b44cfbf44e99705077a58"
+}

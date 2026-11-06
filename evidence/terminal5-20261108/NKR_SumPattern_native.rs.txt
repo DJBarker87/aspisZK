@@ -10,7 +10,7 @@ fn NKR_pattern_step(scratch:&[QM31],selectors:&Selectors,pattern_selectors:&mut[
     coordinate += 1;
     coordinate
 }
-#[kani::proof] #[kani::unwind(8)]
+#[kani::proof] #[kani::unwind(104)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NKR_pattern_step_cut(){
  let scratch:[QM31;103]=unsafe{core::mem::transmute::<[[u32;4];103],[QM31;103]>(kani::any())};
@@ -34,7 +34,7 @@ fn NKR_finish_tail(values:[QM31;4],pattern_selectors:[QM31;26],patterns:&[QM31;1
         weights,
     )
 }
-#[kani::proof] #[kani::unwind(8)]
+#[kani::proof] #[kani::unwind(104)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn NKR_finish_tail_cut(){
  let values:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let weights:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};

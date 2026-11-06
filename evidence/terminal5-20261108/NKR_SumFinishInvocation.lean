@@ -1,5 +1,6 @@
 import NKR_SumFinishMeaning
-import NKR_SumFinishPattern
+import NKR_SumFinishTrace
+import NKR_SumPatternTrace
 import NJL_TagRoot
 import NJL_PatternRoot
 set_option autoImplicit false
@@ -33,6 +34,15 @@ theorem tag_calls (s : Selectors) (hs : FIw_ArrayValue.canonical s.high) :
  rw [tag]
  exact ⟨hout,hc,hv⟩
 
+/-- NKR_finish_tail_cut transcription:219 sees complete SAME values4,
+coefficients26,and patterns14;the parent's returned tuple contains all4reply
+cells and all4unchanged weights. No219 result is a cut premise. -/
+def TailCut (values : Array NQ 4#usize) (coefficients : Array NQ 26#usize)
+ (terms : Patterns) (weights reply : Array NQ 4#usize)
+ (seenValues : Array NQ 4#usize) (seenCoefficients : Array NQ 26#usize)
+ (seenTerms : Patterns) (out : Array NQ 4#usize × Array NQ 4#usize) (calls : Nat) : Prop :=
+ calls=1 ∧ seenValues=values ∧ seenCoefficients=coefficients ∧ seenTerms=terms ∧ out=(reply,weights)
+
 def reference (scratch : Scratch) (s : Selectors) (terms : Patterns) : Result (Array NQ 4#usize × Array NQ 4#usize) := do
  let dot ← NKR_SumFinishFold.run (tagValues s) (weightValues scratch) (lowValues s)
   NKR_SumFinishFold.order (zero4,zero4)
@@ -55,14 +65,20 @@ theorem source (scratch : Scratch) (s : Selectors) (terms : Patterns)
   decode (tags s c)=NJL_TagMeaning.model s (NJL_TagData.indices c)) ∧
  NKR_SumFinishFold.run (tagValues s) (weightValues scratch) (lowValues s)
   NKR_SumFinishFold.order (zero4,zero4)=ok dot ∧
- NKR_SumFinishFold.Trace (tagValues s) (weightValues scratch) (lowValues s)
+ NKR_SumFinishTrace.Trace (tagValues s) (weightValues scratch) (lowValues s)
   NKR_SumFinishFold.order (zero4,zero4) dot ∧
  NJB_StateUpdates.run
   (NKR_SumFinishPattern.step (NJB_ArrayCarrier.cell scratch) (NJB_ArrayCarrier.cell s.low))
   (List.finRange 43) zero26=ok coefficients ∧
+ NKR_SumPatternTrace.Trace (NJB_ArrayCarrier.cell scratch) (NJB_ArrayCarrier.cell s.low)
+  (List.finRange 43) zero26 coefficients ∧
  NJB_PatternReference.reference (NJB_ArrayCarrier.cell terms) coefficients dot.1=ok finished ∧
  NJL_PatternOuter.Trace (NJB_ArrayCarrier.cell terms) coefficients (List.ofFn (fun g : Fin 4=>g)) dot.1 finished ∧
  reference scratch s terms=ok (NJB_ArrayCarrier.array finished,NJB_ArrayCarrier.array dot.2) ∧
+ TailCut (NJB_ArrayCarrier.array dot.1) (NJB_ArrayCarrier.array coefficients) terms
+  (NJB_ArrayCarrier.array dot.2) (NJB_ArrayCarrier.array finished)
+  (NJB_ArrayCarrier.array dot.1) (NJB_ArrayCarrier.array coefficients) terms
+  (NJB_ArrayCarrier.array finished,NJB_ArrayCarrier.array dot.2) 1 ∧
  NKR_SumFinishMeaning.decoded dot=NKR_SumFinishFold.order.foldl
   (fun state b=>NKR_SumFinishMeaning.stepModel (tagValues s) (weightValues scratch) (lowValues s) b state)
   (NKR_SumFinishMeaning.decoded (zero4,zero4)) ∧
@@ -79,7 +95,7 @@ theorem source (scratch : Scratch) (s : Selectors) (terms : Patterns)
  have lcanon : ∀ i,Canon (lowValues s i) := fun i=>NJB_ArrayCarrier.canonical_cell s.low hl _
  have z4 : ∀ i,Canon (zero4 i) := fun _=>FIv_NativeValue.zero.1
  have z26 : ∀ i,Canon (zero26 i) := fun _=>FIv_NativeValue.zero.1
- obtain ⟨dot,dotCall,dotTrace,dcv,dcw⟩ := NKR_SumFinishFold.source
+ obtain ⟨dot,dotCall,dotTrace,dcv,dcw⟩ := NKR_SumFinishTrace.source
   (tagValues s) (weightValues scratch) (lowValues s) NKR_SumFinishFold.order (zero4,zero4)
   tcanon wcanon lcanon ⟨z4,z4⟩
  obtain ⟨dotOther,dotOtherCall,_,_,dotValue⟩ := NKR_SumFinishMeaning.source
@@ -90,6 +106,14 @@ theorem source (scratch : Scratch) (s : Selectors) (terms : Patterns)
  obtain ⟨coefficients,coeffCall,cc,coeffValue⟩ := NKR_SumFinishPattern.source
   (NJB_ArrayCarrier.cell scratch) (NJB_ArrayCarrier.cell s.low) (List.finRange 43) zero26
   (NJB_ArrayCarrier.canonical_cell scratch hsc) (NJB_ArrayCarrier.canonical_cell s.low hl) z26
+ obtain ⟨coefOther,coefOtherCall,coefOtherTrace,_⟩ := NKR_SumPatternTrace.source
+  (NJB_ArrayCarrier.cell scratch) (NJB_ArrayCarrier.cell s.low) (List.finRange 43) zero26
+  (NJB_ArrayCarrier.canonical_cell scratch hsc) (NJB_ArrayCarrier.canonical_cell s.low hl) z26
+ have coefSame : coefficients=coefOther := Result.ok.inj (coeffCall.symm.trans coefOtherCall)
+ have coefficientTrace : NKR_SumPatternTrace.Trace
+  (NJB_ArrayCarrier.cell scratch) (NJB_ArrayCarrier.cell s.low) (List.finRange 43) zero26 coefficients := by
+  rw [coefSame]
+  exact coefOtherTrace
  obtain ⟨finished,finishCall,finishTrace,finishCanon⟩ := NJL_PatternOuter.source
   (NJB_ArrayCarrier.cell terms) coefficients dot.1
   (NJB_ArrayCarrier.canonical_cell terms ht) cc dcv
@@ -97,7 +121,7 @@ theorem source (scratch : Scratch) (s : Selectors) (terms : Patterns)
   (NJB_ArrayCarrier.cell terms) coefficients dot.1
   (NJB_ArrayCarrier.canonical_cell terms ht) cc dcv
  have same : finished=other := Result.ok.inj (finishCall.symm.trans otherCall)
- refine ⟨dot,coefficients,finished,tc,dotCall,dotTrace,coeffCall,finishCall,finishTrace,?_,dotMeaning,coeffValue,finishCanon,dcw,?_⟩
+ refine ⟨dot,coefficients,finished,tc,dotCall,dotTrace,coeffCall,coefficientTrace,finishCall,finishTrace,?_,⟨rfl,rfl,rfl,rfl,rfl⟩,dotMeaning,coeffValue,finishCanon,dcw,?_⟩
  · simp only [reference,dotCall,coeffCall,finishCall,bind_tc_ok]
  · intro g
    rw [same]

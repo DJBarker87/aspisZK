@@ -1,0 +1,49 @@
+{"attempt": "NKR_L085", "exit_status": 1, "wall_seconds": 9.950428814161569, "peak_rss_kib": "6147284", "swaps": "0", "print_axioms": ["'AspisR1.NKR_TermAmount.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKR_TermAmount.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKR_TermAmount.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKR_TermAmount.lean:31:3: error: unsolved goals
+case neg
+p : Public
+a : U32
+h : p.withdrawal_amount = some a
+zero : ¬a = 0#u32
+shift : 1#u32 <<< 30#u32 = ok 1073741824#u32
+⊢ (do
+      let b ← if False then ok true else ok (decide (a ≥ 1073741824#u32))
+      ok (some a, b)) =
+    ok (some a, decide (1073741824 ≤ ↑a))
+NKR_TermAmount.lean:32:16: warning: This simp argument is unused:
+  if_neg zero
+
+Hint: Omit it from the simp argument list.
+  s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵i̵f̵_̵n̵e̵g̵ ̵z̵e̵r̵o̵,̵s̵h̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵f̵a̵l̵s̵e̵_̵o̵r̵,̵z̵e̵r̵o̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲s̲h̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲f̲a̲l̲s̲e̲_̲o̲r̲,̲ ̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linte
+...
+sIteratorIterator field.QM31 4#usize)
+                    (core.array.iter.IntoIter.Insts.CoreIterTraitsDouble_endedDoubleEndedIterator field.QM31 4#usize)
+                    ii1
+              let composition1 ← composition_parts_loop1 iter1 prepared_theta composition
+              let i1 ← SELECTED_G_COLUMN
+              let q ← selected_claim claims 0#usize i1
+              ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (field.QM31 ×
+                  Std.Array field.QM31 16#usize × Std.Array field.QM31 10#usize × field.QM31 × field.QM31 × field.QM31)
+                (core.convert.FromSame PoolV1PairForestSemanticTerminalErrorV1) residual) =
+    ok (core.result.Result.Err PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NKR_TermAmount.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKR_TermAmount.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKR_TermAmount.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-raa767ca1bd664965bd87092c30bc18a4.scope; invocation ID: 0c36428505df458aa8d26324c36824e1

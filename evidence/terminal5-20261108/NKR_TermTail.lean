@@ -65,6 +65,7 @@ theorem result (zc point : Array NQ 10#usize) (mu comp h active : NQ)
  let c : Calls zc point mu comp h active := ⟨eq,weighted,muH,sum,mu2,inactive,inactiveH,extra,out,ce,cw,cmh,cs,cm2,ci,cih,cx,co⟩
  refine ⟨c,?_,ho,?_⟩
  · simp only [arithmetic,ce,cw,cmh,cs,cm2,ci,cih,cx,co,bind_tc_ok]
+   rfl
  · change decode out=_
    rw [vo,vs,vw,vmh,vx,vm2,vih,vi,ve,FIv_NativeValue.one.2]
    ring

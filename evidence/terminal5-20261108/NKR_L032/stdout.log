@@ -1,0 +1,444 @@
+NKR_DigestPrefix.lean:71:1: error: unsolved goals
+case rec
+p : Public
+o : Openings
+s : Selectors
+hp : NKR_DigestChildren.Domain p
+ho : FIw_ArrayValue.canonical o.z
+hh : FIw_ArrayValue.canonical s.high
+c : Children
+clauses : Clauses p o s c
+canonical : Canonical c
+ac : NKR_DigestChildren.left s o 56 p.anchor = ok c.anchor
+am : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 56) o.z p.anchor = ok c.anchor
+nc : NKR_DigestChildren.left s o 26 p.nullifier = ok c.nullifier
+nm : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 26) o.z p.nullifier = ok c.nullifier
+rc : NJX_RecipientRoot.reference p.recipient o.z (NKR_DigestChildren.high s 29) = ok c.recipient
+rm : NJX_RecipientRoot.cohort p.recipient o.z (NKR_DigestChildren.high s 29) = ok c.recipient
+dc : NKR_DigestChildren.left s o 32 p.change = ok c.change
+dm : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 32) o.z p.change = ok c.change
+lc :
+  NKI_LevelsFrame.run p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z s.high
+      (List.finRange 20) NKI_LevelsRoot.zero =
+    ok c.levels
+rootc : NKR_DigestChildren.left s o 53 p.transition.candidate_afterstate.next_root = ok c.nextRoot
+rootm :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 53) o.z p.transition.candidate_afterstate.next_root = ok c.nextRoot
+cc :
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry p.transition.live_snapshot.next_pair_index =
+    ok c.carry
+cv : ↑c.carry = R0P.digestCarry ↑p.transition.live_snapshot.next_pair_index
+hcarry : ↑c.carry ≤ 20
+cac :
+  NJX_CarryRoot.reference (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+cam :
+  NJX_CarryRoot.cohort (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+ha : ∀ (j : Fin 2), Canon (c.anchor j)
+hn : ∀ (j : Fin 2), Canon (c.nullifier j)
+hr : ∀ (j : Fin 2), Canon (c.recipient j)
+hd : ∀ (j : Fin 2), Canon (c.change j)
+hl : ∀ (j : Fin 4), Canon (c.levels j)
+hroot : ∀ (j : Fin 2), Canon (c.nextRoot j)
+hca : ∀ (j : Fin 2), Canon (c.carried j)
+hz : ∀ (j : Fin 2), Canon (zero j)
+v1 : NKI_LowMix.State
+vc1 : NKR_DigestAdd.add zero c.anchor = ok v1
+h1 : ∀ (j : Fin 2), Canon (v1 j)
+val1 : ∀ (j : Fin 2), decode (v1 j) = decode (zero j) + decode (c.anchor j)
+v2 : NKI_LowMix.State
+vc2 : NKR_DigestAdd.add v1 c.nullifier = ok v2
+h2 : ∀ (j : Fin 2), Canon (v2 j)
+val2 : ∀ (j : Fin 2), decode (v2 j) = decode (v1 j) + decode (c.nullifier j)
+v3 : NKI_LowMix.State
+vc3 : NKR_DigestAdd.add v2 c.recipient = ok v3
+h3 : ∀ (j : Fin 2), Canon (v3 j)
+val3 : ∀ (j : Fin 2), decode (v3 j) = decode (v2 j) + decode (c.recipient j)
+v4 : NKI_LowMix.State
+vc4 : NKR_DigestAdd.add v3 c.change = ok v4
+h4 : ∀ (j : Fin 2), Canon (v4 j)
+val4 : ∀ (j : Fin 2), decode (v4 j) = decode (v3 j) + decode (c.change j)
+hf : ∀ (j : Fin 2), Canon (first c.levels j)
+ht : ∀ (j : Fin 2), Canon (last c.levels j)
+v0 : NKI_LowMix.State
+vc0 : NKR_DigestAdd.add zero (first c.levels) = ok v0
+h0 : ∀ (j : Fin 2), Canon (v0 j)
+val0 : ∀ (j : Fin 2), decode (v0 j) = decode (zero j) + decode (first c.levels j)
+v12 : NKI_LowMix.State
+vc12 : NKR_DigestAdd.add zero (last c.levels) = ok v12
+h12 : ∀ (j : Fin 2), Canon (v12 j)
+val12 : ∀ (j : Fin 2), decode (v12 j) = decode (zero j) + decode (last c.levels j)
+v5 : NKI_LowMix.State
+vc5 : NKR_DigestAdd.add v4 c.nextRoot = ok v5
+h5 : ∀ (j : Fin 2), Canon (v5 j)
+val5 : ∀ (j : Fin 2), decode (v5 j) = decode (v4 j) + decode (c.nextRoot j)
+v6 : NKI_LowMix.State
+vc6 : NKR_DigestAdd.add v5 c.carried = ok v6
+h6 : ∀ (j : Fin 2), Canon (v6 j)
+val6 : ∀ (j : Fin 2), decode (v6 j) = decode (v5 j) + decode (c.carried j)
+⊢ { anchor := c.anchor, nullifier := c.nullifier, recipient := c.recipient, change := c.change, levels := c.levels,
+      nextRoot := c.nextRoot, carry := c.carry, carried := c.carried } =
+    c
+
+case refine_1
+p : Public
+o : Openings
+s : Selectors
+hp : NKR_DigestChildren.Domain p
+ho : FIw_ArrayValue.canonical o.z
+hh : FIw_ArrayValue.canonical s.high
+c : Children
+clauses : Clauses p o s c
+canonical : Canonical c
+ac : NKR_DigestChildren.left s o 56 p.anchor = ok c.anchor
+am : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 56) o.z p.anchor = ok c.anchor
+nc : NKR_DigestChildren.left s o 26 p.nullifier = ok c.nullifier
+nm : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 26) o.z p.nullifier = ok c.nullifier
+rc : NJX_RecipientRoot.reference p.recipient o.z (NKR_DigestChildren.high s 29) = ok c.recipient
+rm : NJX_RecipientRoot.cohort p.recipient o.z (NKR_DigestChildren.high s 29) = ok c.recipient
+dc : NKR_DigestChildren.left s o 32 p.change = ok c.change
+dm : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 32) o.z p.change = ok c.change
+lc :
+  NKI_LevelsFrame.run p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z s.high
+      (List.finRange 20) NKI_LevelsRoot.zero =
+    ok c.levels
+rootc : NKR_DigestChildren.left s o 53 p.transition.candidate_afterstate.next_root = ok c.nextRoot
+rootm :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 53) o.z p.transition.candidate_afterstate.next_root = ok c.nextRoot
+cc :
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry p.transition.live_snapshot.next_pair_index =
+    ok c.carry
+cv : ↑c.carry = R0P.digestCarry ↑p.transition.live_snapshot.next_pair_index
+hcarry : ↑c.carry ≤ 20
+cac :
+  NJX_CarryRoot.reference (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+cam :
+  NJX_CarryRoot.cohort (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+ha : ∀ (j : Fin 2), Canon (c.anchor j)
+hn : ∀ (j : Fin 2), Canon (c.nullifier j)
+hr : ∀ (j : Fin 2), Canon (c.recipient j)
+hd : ∀ (j : Fin 2), Canon (c.change j)
+hl : ∀ (j : Fin 4), Canon (c.levels j)
+hroot : ∀ (j : Fin 2), Canon (c.nextRoot j)
+hca : ∀ (j : Fin 2), Canon (c.carried j)
+hz : ∀ (j : Fin 2), Canon (zero j)
+v1 : NKI_LowMix.State
+vc1 : NKR_DigestAdd.add zero c.anchor = ok v1
+h1 : ∀ (j : Fin 2), Canon (v1 j)
+val1 : ∀ (j : Fin 2), decode (v1 j) = decode (zero j) + decode (c.anchor j)
+v2 : NKI_LowMix.State
+vc2 : NKR_DigestAdd.add v1 c.nullifier = ok v2
+h2 : ∀ (j : Fin 2), Canon (v2 j)
+val2 : ∀ (j : Fin 2), decode (v2 j) = decode (v1 j) + decode (c.nullifier j)
+v3 : NKI_LowMix.State
+vc3 : NKR_DigestAdd.add v2 c.recipient = ok v3
+h3 : ∀ (j : Fin 2), Canon (v3 j)
+val3 : ∀ (j : Fin 2), decode (v3 j) = decode (v2 j) + decode (c.recipient j)
+v4 : NKI_LowMix.State
+vc4 : NKR_DigestAdd.add v3 c.change = ok v4
+h4 : ∀ (j : Fin 2), Canon (v4 j)
+val4 : ∀ (j : Fin 2), decode (v4 j) = decode (v3 j) + decode (c.change j)
+hf : ∀ (j : Fin 2), Canon (first c.levels j)
+ht : ∀ (j : Fin 2), Canon (last c.levels j)
+v0 : NKI_LowMix.State
+vc0 : NKR_DigestAdd.add zero (first c.levels) = ok v0
+h0 : ∀ (j : Fin 2), Canon (v0 j)
+val0 : ∀ (j : Fin 2), decode (v0 j) = decode (zero j) + decode (first c.levels j)
+v12 : NKI_LowMix.State
+vc12 : NKR_DigestAdd.add zero (last c.levels) = ok v12
+h12 : ∀ (j : Fin 2), Canon (v12 j)
+val12 : ∀ (j : Fin 2), decode (v12 j) = decode (zero j) + decode (last c.levels j)
+v5 : NKI_LowMix.State
+vc5 : NKR_DigestAdd.add v4 c.nextRoot = ok v5
+h5 : ∀ (j : Fin 2), Canon (v5 j)
+val5 : ∀ (j : Fin 2), decode (v5 j) = decode (v4 j) + decode (c.nextRoot j)
+v6 : NKI_LowMix.State
+vc6 : NKR_DigestAdd.add v5 c.carried = ok v6
+h6 : ∀ (j : Fin 2), Canon (v6 j)
+val6 : ∀ (j : Fin 2), decode (v6 j) = decode (v5 j) + decode (c.carried j)
+rec :
+  { anchor := c.anchor, nullifier := c.nullifier, recipient := c.recipient, change := c.change, levels := c.levels,
+      nextRoot := c.nextRoot, carry := c.carry, carried := c.carried } =
+    c
+⊢ run p o s = ok (c, ![v0, v6, v12])
+NKR_DigestPrefix.lean:53:44: error: unsolved goals
+case refine_2
+p : Public
+o : Openings
+s : Selectors
+hp : NKR_DigestChildren.Domain p
+ho : FIw_ArrayValue.canonical o.z
+hh : FIw_ArrayValue.canonical s.high
+c : Children
+clauses : Clauses p o s c
+canonical : Canonical c
+ac : NKR_DigestChildren.left s o 56 p.anchor = ok c.anchor
+am : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 56) o.z p.anchor = ok c.anchor
+nc : NKR_DigestChildren.left s o 26 p.nullifier = ok c.nullifier
+nm : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 26) o.z p.nullifier = ok c.nullifier
+rc : NJX_RecipientRoot.reference p.recipient o.z (NKR_DigestChildren.high s 29) = ok c.recipient
+rm : NJX_RecipientRoot.cohort p.recipient o.z (NKR_DigestChildren.high s 29) = ok c.recipient
+dc : NKR_DigestChildren.left s o 32 p.change = ok c.change
+dm : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 32) o.z p.change = ok c.change
+lc :
+  NKI_LevelsFrame.run p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z s.high
+      (List.finRange 20) NKI_LevelsRoot.zero =
+    ok c.levels
+rootc : NKR_DigestChildren.left s o 53 p.transition.candidate_afterstate.next_root = ok c.nextRoot
+rootm :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 53) o.z p.transition.candidate_afterstate.next_root = ok c.nextRoot
+cc :
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry p.transition.live_snapshot.next_pair_index =
+    ok c.carry
+cv : ↑c.carry = R0P.digestCarry ↑p.transition.live_snapshot.next_pair_index
+hcarry : ↑c.carry ≤ 20
+cac :
+  NJX_CarryRoot.reference (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+cam :
+  NJX_CarryRoot.cohort (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+ha : ∀ (j : Fin 2), Canon (c.anchor j)
+hn : ∀ (j : Fin 2), Canon (c.nullifier j)
+hr : ∀ (j : Fin 2), Canon (c.recipient j)
+hd : ∀ (j : Fin 2), Canon (c.change j)
+hl : ∀ (j : Fin 4), Canon (c.levels j)
+hroot : ∀ (j : Fin 2), Canon (c.nextRoot j)
+hca : ∀ (j : Fin 2), Canon (c.carried j)
+hz : ∀ (j : Fin 2), Canon (zero j)
+v1 : NKI_LowMix.State
+vc1 : NKR_DigestAdd.add zero c.anchor = ok v1
+h1 : ∀ (j : Fin 2), Canon (v1 j)
+val1 : ∀ (j : Fin 2), decode (v1 j) = decode (zero j) + decode (c.anchor j)
+v2 : NKI_LowMix.State
+vc2 : NKR_DigestAdd.add v1 c.nullifier = ok v2
+h2 : ∀ (j : Fin 2), Canon (v2 j)
+val2 : ∀ (j : Fin 2), decode (v2 j) = decode (v1 j) + decode (c.nullifier j)
+v3 : NKI_LowMix.State
+vc3 : NKR_DigestAdd.add v2 c.recipient = ok v3
+h3 : ∀ (j : Fin 2), Canon (v3 j)
+val3 : ∀ (j : Fin 2), decode (v3 j) = decode (v2 j) + decode (c.recipient j)
+v4 : NKI_LowMix.State
+vc4 : NKR_DigestAdd.add v3 c.change = ok v4
+h4 : ∀ (j : Fin 2), Canon (v4 j)
+val4 : ∀ (j : Fin 2), decode (v4 j) = decode (v3 j) + decode (c.change j)
+hf : ∀ (j : Fin 2), Canon (first c.levels j)
+ht : ∀ (j : Fin 2), Canon (last c.levels j)
+v0 : NKI_LowMix.State
+vc0 : NKR_DigestAdd.add zero (first c.levels) = ok v0
+h0 : ∀ (j : Fin 2), Canon (v0 j)
+val0 : ∀ (j : Fin 2), decode (v0 j) = decode (zero j) + decode (first c.levels j)
+v12 : NKI_LowMix.State
+vc12 : NKR_DigestAdd.add zero (last c.levels) = ok v12
+h12 : ∀ (j : Fin 2), Canon (v12 j)
+val12 : ∀ (j : Fin 2), decode (v12 j) = decode (zero j) + decode (last c.levels j)
+v5 : NKI_LowMix.State
+vc5 : NKR_DigestAdd.add v4 c.nextRoot = ok v5
+h5 : ∀ (j : Fin 2), Canon (v5 j)
+val5 : ∀ (j : Fin 2), decode (v5 j) = decode (v4 j) + decode (c.nextRoot j)
+v6 : NKI_LowMix.State
+vc6 : NKR_DigestAdd.add v5 c.carried = ok v6
+h6 : ∀ (j : Fin 2), Canon (v6 j)
+val6 : ∀ (j : Fin 2), decode (v6 j) = decode (v5 j) + decode (c.carried j)
+⊢ ∀ (g : Fin 3) (j : Fin 2), Canon (![v0, v6, v12] g j)
+
+case refine_3
+p : Public
+o : Openings
+s : Selectors
+hp : NKR_DigestChildren.Domain p
+ho : FIw_ArrayValue.canonical o.z
+hh : FIw_ArrayValue.canonical s.high
+c : Children
+clauses : Clauses p o s c
+canonical : Canonical c
+ac : NKR_DigestChildren.left s o 56 p.anchor = ok c.anchor
+am : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 56) o.z p.anchor = ok c.anchor
+nc : NKR_DigestChildren.left s o 26 p.nullifier = ok c.nullifier
+nm : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 26) o.z p.nullifier = ok c.nullifier
+rc : NJX_RecipientRoot.reference p.recipient o.z (NKR_DigestChildren.high s 29) = ok c.recipient
+rm : NJX_RecipientRoot.cohort p.recipient o.z (NKR_DigestChildren.high s 29) = ok c.recipient
+dc : NKR_DigestChildren.left s o 32 p.change = ok c.change
+dm : NJX_LeftRoot.cohort (NKR_DigestChildren.high s 32) o.z p.change = ok c.change
+lc :
+  NKI_LevelsFrame.run p.transition.live_snapshot.next_pair_index p.transition.live_snapshot.frontier o.z s.high
+      (List.finRange 20) NKI_LevelsRoot.zero =
+    ok c.levels
+rootc : NKR_DigestChildren.left s o 53 p.transition.candidate_afterstate.next_root = ok c.nextRoot
+rootm :
+  NJX_LeftRoot.cohort (NKR_DigestChildren.high s 53) o.z p.transition.candidate_afterstate.next_root = ok c.nextRoot
+cc :
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.bounded_append_carry p.transition.live_snapshot.next_pair_index =
+    ok c.carry
+cv : ↑c.carry = R0P.digestCarry ↑p.transition.live_snapshot.next_pair_index
+hcarry : ↑c.carry ≤ 20
+cac :
+  NJX_CarryRoot.reference (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+cam :
+  NJX_CarryRoot.cohort (↑c.carry) (NKI_PublicDomains.high s ↑c.carry) o.z
+      (NJX_AppendDomains.frontier p.transition.candidate_afterstate.next_frontier
+        (NKI_PublicDomains.carryLevel ↑c.carry)) =
+    ok c.carried
+ha : ∀ (j : Fin 2), Canon (c.anchor j)
+hn : ∀ (j : Fin 2), Canon (c.nullifier j)
+hr : ∀ (j : Fin 2), Canon (c.recipient j)
+hd : ∀ (j : Fin 2), Canon (c.change j)
+hl : ∀ (j : Fin 4), Canon (c.levels j)
+hroot : ∀ (j : Fin 2), Canon (c.nextRoot j)
+hca : ∀ (j : Fin 2), Canon (c.carried j)
+hz : ∀ (j : Fin 2), Canon (zero j)
+v1 : NKI_LowMix.State
+vc1 : NKR_DigestAdd.add zero c.anchor = ok v1
+h1 : ∀ (j : Fin 2), Canon (v1 j)
+val1 : ∀ (j : Fin 2), decode (v1 j) = decode (zero j) + decode (c.anchor j)
+v2 : NKI_LowMix.State
+vc2 : NKR_DigestAdd.add v1 c.nullifier = ok v2
+h2 : ∀ (j : Fin 2), Canon (v2 j)
+val2 : ∀ (j : Fin 2), decode (v2 j) = decode (v1 j) + decode (c.nullifier j)
+v3 : NKI_LowMix.State
+vc3 : NKR_DigestAdd.add v2 c.recipient = ok v3
+h3 : ∀ (j : Fin 2), Canon (v3 j)
+val3 : ∀ (j : Fin 2), decode (v3 j) = decode (v2 j) + decode (c.recipient j)
+v4 : NKI_LowMix.State
+vc4 : NKR_DigestAdd.add v3 c.change = ok v4
+h4 : ∀ (j : Fin 2), Canon (v4 j)
+val4 : ∀ (j : Fin 2), decode (v4 j) = decode (v3 j) + decode (c.change j)
+hf : ∀ (j : Fin 2), Canon (first c.levels j)
+ht : ∀ (j : Fin 2), Canon (last c.levels j)
+v0 : NKI_LowMix.State
+vc0 : NKR_DigestAdd.add zero (first c.levels) = ok v0
+h0 : ∀ (j : Fin 2), Canon (v0 j)
+val0 : ∀ (j : Fin 2), decode (v0 j) = decode (zero j) + decode (first c.levels j)
+v12 : NKI_LowMix.State
+vc12 : NKR_DigestAdd.add zero (last c.levels) = ok v12
+h12 : ∀ (j : Fin 2), Canon (v12 j)
+val12 : ∀ (j : Fin 2), decode (v12 j) = decode (zero j) + decode (last c.levels j)
+v5 : NKI_LowMix.State
+vc5 : NKR_DigestAdd.add v4 c.nextRoot = ok v5
+h5 : ∀ (j : Fin 2), Canon (v5 j)
+val5 : ∀ (j : Fin 2), decode (v5 j) = decode (v4 j) + decode (c.nextRoot j)
+v6 : NKI_LowMix.State
+vc6 : NKR_DigestAdd.add v5 c.carried = ok v6
+h6 : ∀ (j : Fin 2), Canon (v6 j)
+val6 : ∀ (j : Fin 2), decode (v6 j) = decode (v5 j) + decode (c.carried j)
+⊢ Frame c ![v0, v6, v12]
+NKR_DigestPrefix.lean:71:110: error: unexpected token ':='; expected command
+theorem AspisR1.NKR_DigestPrefix.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  NKR_DigestChildren.Domain p →
+    FIw_ArrayValue.canonical o.z →
+      FIw_ArrayValue.canonical s.high →
+        ∃ c sums,
+          run p o s = ok (c, sums) ∧
+            Clauses p o s c ∧ Canonical c ∧ (∀ (g : Fin 3) (j : Fin 2), Canon (sums g j)) ∧ Frame c sums :=
+fun p o s hp ho hh =>
+  let ⟨c, h✝⟩ := NKR_DigestChildren.source p o s hp ho hh
+  let ⟨hc, hcan⟩ := h✝
+  have clauses := hc;
+  have canonical := hcan;
+  let ⟨ac, right✝⟩ := hc
+  let ⟨am, right✝¹⟩ := right✝
+  let ⟨nc, right✝²⟩ := right✝¹
+  let ⟨nm, right✝³⟩ := right✝²
+  let ⟨rc, right✝⁴⟩ := right✝³
+  let ⟨rm, right✝⁵⟩ := right✝⁴
+  let ⟨dc, right✝⁶⟩ := right✝⁵
+  let ⟨dm, right✝⁷⟩ := right✝⁶
+  let ⟨lc, right✝⁸⟩ := right✝⁷
+  let ⟨rootc, right✝⁹⟩ := right✝⁸
+  let ⟨rootm, right✝¹⁰⟩ := right✝⁹
+  let ⟨cc, right✝¹¹⟩ := right✝¹⁰
+  let ⟨cv, right✝¹²⟩ := right✝¹¹
+  let ⟨hcarry, right✝¹³⟩ := right✝¹²
+  let ⟨cac, cam⟩ := right✝¹³
+  let ⟨ha, right✝¹⁴⟩ := hcan
+  let ⟨hn, right✝¹⁵⟩ := right✝¹⁴
+  let ⟨hr, right✝¹⁶⟩ := right✝¹⁵
+  let ⟨hd, right✝¹⁷⟩ := right✝¹⁶
+  let ⟨hl, right✝¹⁸⟩ := right✝¹⁷
+  let ⟨hroot, hca⟩ := right✝¹⁸
+  have hz := fun x => FIv_NativeValue.zero.left;
+  let ⟨v1, h✝¹⟩ := NKR_DigestAdd.source zero c.anchor hz ha
+  let ⟨vc1, right✝¹⁹⟩ := h✝¹
+  let ⟨h1, val1⟩ := right✝¹⁹
+  let ⟨v2, h✝²⟩ := NKR_DigestAdd.source v1 c.nullifier h1 hn
+  let ⟨vc2, right✝²⁰⟩ := h✝²
+  let ⟨h2, val2⟩ := right✝²⁰
+  let ⟨v3, h✝³⟩ := NKR_DigestAdd.source v2 c.recipient h2 hr
+  let ⟨vc3, right✝²¹⟩ := h✝³
+  let ⟨h3, val3⟩ := right✝²¹
+  let ⟨v4, h✝⁴⟩ := NKR_DigestAdd.source v3 c.change h3 hd
+  let ⟨vc4, right✝²²⟩ := h✝⁴
+  let ⟨h4, val4⟩ := right✝²²
+  have hf := fun j =>
+    List.Mem.casesOn (motive := fun a x =>
+      List.finRange ({ len := 1 }.len + 1) = a → Fintype.complete j ≍ x → Canon (first c.levels j)) (Fintype.complete j)
+      (fun «as» h =>
+        List.cons.noConfusion h fun head_eq =>
+          Eq.ndrec (motive := fun j =>
+            ∀ (this : j ∈ Fintype.elems),
+              ⋯ ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ [] ≍ «as» →
+                this ≍ List.Mem.head «as» → Canon (first c.levels j))
+            (fun this tail_eq =>
+              Eq.ndrec (motive := fun «as» => this ≍ ⋯ → Canon ⋯) (fun h => hl 0) (eq_of_heq tail_eq))
+            (eq_of_heq head_eq) (Fintype.complete j))
+      (fun b {«as»} a h =>
+        List.cons.noConfusion h fun head_eq =>
+          Eq.ndrec (motive := fun b =>
+            (fun x1 x2 => ⋯) ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ [] ≍ «as» →
+              Fintype.complete j ≍ List.Mem.tail b a → Canon (first c.levels j))
+            (fun tail_eq =>
+              Eq.ndrec (motive := fun {«as»} => ∀ (a : List.Mem j «as»), ⋯ → Canon (first c.levels j))
+                (fun a h =>
+                  List.Mem.casesOn (motive := fun a_1 x => ⋯) a (fun «as» h => ⋯) (fun b {«as»} a_1 h => ⋯) (Eq.refl ⋯)
+                    (HEq.refl a))
+                (eq_of_heq tail_eq) a)
+            (eq_of_heq head_eq))
+      (Eq.refl (List.finRange ({ len := 1 }.len + 1))) (HEq.refl (Fintype.complete j));
+  have ht := fun j =>
+    List.Mem.casesOn (motive := fun a x =>
+      List.finRange ({ len := 1 }.len + 1) = a → Fintype.complete j ≍ x → Canon (last c.levels j)) (Fintype.complete j)
+      (fun «as» h =>
+        List.cons.noConfusion h fun head_eq =>
+          Eq.ndrec (motive := fun j => ∀ (this : j ∈ Fintype.elems), ⋯ ≍ «as» → ⋯ → Canon (last c.levels j))
+            (fun this tail_eq => Eq.ndrec (motive := fun «as» => ⋯ → ⋯) (fun h => hl 2) (eq_of_heq tail_eq))
+            (eq_of_heq head_eq) (Fintype.complete j))
+      (fun b {«as»} a h =>
+        List.cons.noConfusion h fun head_eq =>
+          Eq.ndrec (motive := fun b =>
+            ⋯ ⟨1, Nat.le_refl ({ len := 1 }.len + 1)⟩ [] ≍ «as» →
+              Fintype.complete j ≍ List.Mem.tail b a → Canon (last c.levels j))
+            (fun tail_eq =>
+              Eq.ndrec (motive := fun {«as»} => ∀ (a : List.Mem j «as»), ⋯)
+                (fun a h => List.Mem.casesOn (motive := ⋯) a ⋯ ⋯ ⋯ ⋯) (eq_of_heq tail_eq) a)
+            (eq_of_heq head_eq))
+      (Eq.refl (List.finRange ({ len := 1 }.len + 1))) (HEq.refl (Fintype.complete j));
+  let ⟨v0, h✝⁵⟩ := NKR_DigestAdd.source zero (first c.levels) hz hf
+  let ⟨vc0, right✝²³⟩ := h✝⁵
+  let ⟨h0, val0⟩ := right✝²³
+  let ⟨v12, h✝⁶⟩ := NKR_DigestAdd.source zero (last c.levels) hz ht
+  let ⟨vc12, right✝²⁴⟩ := h✝⁶
+  let ⟨h12, val12⟩ := right✝²⁴
+  let ⟨v5, h✝⁷⟩ := NKR_DigestAdd.source v4 c.nextRoot h4 hroot
+  let ⟨vc5, right✝²⁵⟩ := h✝⁷
+  let ⟨h5, val5⟩ := right✝²⁵
+  let ⟨v6, h✝⁸⟩ := NKR_DigestAdd.source v5 c.carried h5 hca
+  ⋯
+'AspisR1.NKR_DigestPrefix.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
