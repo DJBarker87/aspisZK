@@ -1,0 +1,53 @@
+{"attempt": "NLM_L106", "exit_status": 1, "wall_seconds": 31.85133418510668, "peak_rss_kib": "5977356", "swaps": "0", "print_axioms": ["'NLM_SevenSplit.split' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_SevenSplit.lean:11:16: error: Ambiguous term
+  G
+Possible interpretations:
+  NLM_SevenSnapshots.G : (Site → Result Unit) → List Site → State → Run State
+  
+  NLM_Snapshot.G : State → ℕ → ℕ → ℕ → Result Unit → Run (Owned × State)
+NLM_generated/NLM_SevenSplit.lean:11:7: error: unsolved goals
+case nil
+allocation : Site → Result Unit
+ys : List Site
+s : State
+⊢ NLM_SevenSnapshots.G allocation ys s =
+    match (NLM_SevenSnapshots.G allocation [] s).result with
+    | Result.fail err => { result := Result.fail err, events := (NLM_SevenSnapshots.G allocation [] s).events }
+    | Result.div => { result := Result.div, events := (NLM_SevenSnapshots.G allocation [] s).events }
+    | Res
+...
+it.split : ∀ (allocation : Site → Result Unit) (xs ys : List Site) (s : State),
+  NLM_SevenSnapshots.G allocation (xs ++ ys) s =
+    NJU_Log.bind (NLM_SevenSnapshots.G allocation xs s) (NLM_SevenSnapshots.G allocation ys) :=
+fun allocation xs ys s =>
+  List.rec (motive := fun xs =>
+    ∀ (s : State),
+      NLM_SevenSnapshots.G allocation (xs ++ ys) s =
+        NJU_Log.bind (NLM_SevenSnapshots.G allocation xs s) (NLM_SevenSnapshots.G allocation ys))
+    (fun s => sorry)
+    (fun c cs ih s =>
+      id
+        (id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (NJU_Log.bind (NLM_Snapshot.G s c.account c.lo c.hi (allocation c)) fun p =>
+                      NLM_SevenSnapshots.G allocation (cs ++ ys) p.2) =
+                    _a)
+                (NLM_LogLaws.assoc (NLM_Snapshot.G s c.account c.lo c.hi (allocation c))
+                  (fun p => NLM_SevenSnapshots.G allocation cs p.2) (NLM_SevenSnapshots.G allocation ys))))
+            ((fun {E A B} m m_1 e_m =>
+                Eq.rec (motive := fun m_2 e_m =>
+                  ∀ (k k_1 : A → NJU_Log.Run E B), k = k_1 → NJU_Log.bind m k = NJU_Log.bind m_2 k_1)
+                  (fun k k_1 e_k => e_k ▸ Eq.refl (NJU_Log.bind m k)) e_m)
+              (NLM_Snapshot.G s c.account c.lo c.hi (allocation c))
+              (NLM_Snapshot.G s c.account c.lo c.hi (allocation c))
+              (Eq.refl (NLM_Snapshot.G s c.account c.lo c.hi (allocation c)))
+              (fun p => NLM_SevenSnapshots.G allocation (cs ++ ys) p.2)
+              (fun a => NJU_Log.bind (NLM_SevenSnapshots.G allocation cs a.2) (NLM_SevenSnapshots.G allocation ys))
+              (funext fun p => ih p.2)))))
+    xs s
+'NLM_SevenSplit.split' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rad344960fc1e4237bdaac3cbb5876f21.scope; invocation ID: e9fdc72f31704c5c8639e990b03233f7

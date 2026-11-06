@@ -1,0 +1,28 @@
+{"attempt": "NLM_L119", "exit_status": 0, "wall_seconds": 22.792462522163987, "peak_rss_kib": "6011116", "swaps": "0", "print_axioms": ["'NLM_SnapshotCallee.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_SnapshotCallee.returned' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_SnapshotCallee.source : ∀ (e : Entry) (a : ℕ) (lo hi : Usize),
+  reference e a lo hi = Result.ok (e.snapshot a ↑lo ↑hi) :=
+fun e a lo hi => NHJ_SnapshotPacket.cohort_return e a lo hi
+theorem NLM_SnapshotCallee.returned : ∀ (e : Entry) (t a : ℕ) (lo hi : Usize) (owned : List NLM_Snapshot.Owned)
+  (allocation : Result Unit) (value : NLM_Snapshot.Owned) (post : NLM_Snapshot.State),
+  (NLM_Snapshot.G (NLM_Snapshot.ready e t owned) a (↑lo) (↑hi) allocation).result = Result.ok (value, post) →
+    reference e a lo hi = Result.ok value :=
+fun e t a lo hi owned allocation value post entered =>
+  let ⟨same, right✝⟩ := NLM_Snapshot.returned_state e t a (↑lo) (↑hi) owned allocation value pos
+...
+theorem NLM_SnapshotCallee.source : ∀ (e : Entry) (a : ℕ) (lo hi : Usize),
+  reference e a lo hi = Result.ok (e.snapshot a ↑lo ↑hi) :=
+fun e a lo hi => NHJ_SnapshotPacket.cohort_return e a lo hi
+theorem NLM_SnapshotCallee.returned : ∀ (e : Entry) (t a : ℕ) (lo hi : Usize) (owned : List NLM_Snapshot.Owned)
+  (allocation : Result Unit) (value : NLM_Snapshot.Owned) (post : NLM_Snapshot.State),
+  (NLM_Snapshot.G (NLM_Snapshot.ready e t owned) a (↑lo) (↑hi) allocation).result = Result.ok (value, post) →
+    reference e a lo hi = Result.ok value :=
+fun e t a lo hi owned allocation value post entered =>
+  let ⟨same, right✝⟩ := NLM_Snapshot.returned_state e t a (↑lo) (↑hi) owned allocation value post entered
+  Eq.ndrec (motive := fun value =>
+    (NLM_Snapshot.G (NLM_Snapshot.ready e t owned) a (↑lo) (↑hi) allocation).result = Result.ok (value, post) →
+      reference e a lo hi = Result.ok value)
+    (fun entered => source e a lo hi) (Eq.symm same) entered
+'NLM_SnapshotCallee.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_SnapshotCallee.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rfb7648860c6b4df4afdf47e43eec71d2.scope; invocation ID: 035841808a174814b8e0c2c9b4979d6e

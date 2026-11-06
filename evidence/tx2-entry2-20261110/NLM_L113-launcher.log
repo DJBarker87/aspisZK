@@ -1,0 +1,43 @@
+{"attempt": "NLM_L113", "exit_status": 0, "wall_seconds": 16.520593678811565, "peak_rss_kib": "6000660", "swaps": "0", "print_axioms": ["'NLM_TokenChronology.projected' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_TokenChronology.lean:22:84: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+theorem NLM_TokenChronology.projected : ∀ (e : Entry) (t : ℕ) (owned : List NLM_Snapshot.Owned) (cs : List Site),
+  List.filterMap NLM_TokenEvents.sdk (chronological e t owned cs) = tokens e t owned cs :=
+fun e t owned cs =>
+  List.rec (motive := fun cs =>
+    ∀ (t : ℕ) (owned : List NLM_Snapshot.Owned),
+      List.filterMap NLM_TokenEvents.sdk (chronological e t owned cs) = tokens e t owned cs)
+    (fun t owned => Eq.refl (List.filterMap NLM_TokenEvents.sdk (chronological e t owned [])))
+    (fun 
+...
+NLM_TokenEvents.sdk (chronological e t owned [])))
+    (fun c cs ih t owned =>
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans List.filterMap_append
+                (congr (congrArg HAppend.hAppend (NLM_TokenEvents.normal (ready e t owned) c.account c.lo c.hi))
+                  ((fun t owned => ih t owned) (t + 1) (owned ++ [e.snapshot c.account c.lo c.hi])))))
+            ([NLF_ParentModel.Event.acquire c.account t NLF_RefCell.Kind.shared
+                  (Except.ok (NLM_Snapshot.guard (ready e t owned) c.account)),
+                NLF_ParentModel.Event.deref (NLM_Snapshot.guard (ready e t owned) c.account)
+                  (Except.ok
+                    (NLF_SdkModel.deref (acquired (ready e t owned) c.account)
+                      (NLM_Snapshot.guard (ready e t owned) c.account))),
+                NLF_ParentModel.Event.release (NLM_Snapshot.guard (ready e t owned) c.account) (Except.ok ())] ++
+              tokens e (t + 1) (owned ++ [e.snapshot c.account c.lo c.hi]) cs)))
+        (Eq.refl
+          ([NLF_ParentModel.Event.acquire c.account (ready e t owned).next NLF_RefCell.Kind.shared
+                (Except.ok (NLM_Snapshot.guard (ready e t owned) c.account)),
+              NLF_ParentModel.Event.deref (NLM_Snapshot.guard (ready e t owned) c.account)
+                (Except.ok
+                  (NLF_SdkModel.deref (acquired (ready e t owned) c.account)
+                    (NLM_Snapshot.guard (ready e t owned) c.account))),
+              NLF_ParentModel.Event.release (NLM_Snapshot.guard (ready e t owned) c.account) (Except.ok ())] ++
+            tokens e (t + 1) (owned ++ [e.snapshot c.account c.lo c.hi]) cs)))
+    cs t owned
+'NLM_TokenChronology.projected' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6ea093d4f8e642e9a3610576366e9458.scope; invocation ID: b0ae4970a0a247adbee4d642a7a9e380

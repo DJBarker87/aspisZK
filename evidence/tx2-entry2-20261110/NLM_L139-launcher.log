@@ -1,0 +1,55 @@
+{"attempt": "NLM_L139", "exit_status": 0, "wall_seconds": 27.39837639918551, "peak_rss_kib": "5945684", "swaps": "0", "print_axioms": ["'NLM_CheckedAddFacts.success' depends on axioms: [propext]", "'NLM_CheckedAddFacts.guard_eq' depends on axioms: [propext, Quot.sound]", "'NLM_CheckedAddFacts.proof_length' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_CheckedAddFacts.success : ∀ (a b c : Usize), a.checked_add b = some c → ↑c = ↑a + ↑b :=
+fun a b c returned =>
+  id
+    (fun returned =>
+      Decidable.casesOn (instDecidableEqBool (UScalar.check_bounds UScalarTy.Usize (↑a + ↑b)) true)
+        (fun h =>
+          let ⟨⟩ := some c
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (congrArg Option.ofResult (congrFun' (congrArg Result.ofOption (dif_neg h)) Error.integerOverflow)))
+              (some c))
+            returned)
+        fun h =>
+        let ⟨⟩ := some c
+        Eq.mp
+          (congrFun'
+            (congrArg Eq
+              (congrArg Option.ofResult (congrFun' (congrArg Result.ofOption
+...
+ion.ofResult (congrFun' (congrArg Result.ofOption (dif_pos h)) Error.integerOverflow)))
+            (some c))
+          returned)
+    returned
+theorem NLM_CheckedAddFacts.guard_eq : ∀ (bytes : Slice U8) (end_ : Usize),
+  (bytes.len != end_) = false → bytes.len = end_ :=
+fun bytes end_ entered =>
+  have same :=
+    Bool.casesOn (motive := fun t => (bytes.len == end_) = t → (bytes.len == end_) = true) (bytes.len == end_)
+      (fun h =>
+        Eq.ndrec (motive := fun x => (bytes.len == end_) = x → x = true)
+          (fun h =>
+            False.elim
+              (Eq.mp
+                (Eq.trans (congrFun' (congrArg Eq (Eq.trans (congrArg not h) Bool.not_false)) false) Bool.true_eq_false)
+                entered))
+          (Eq.symm h) (Eq.refl (bytes.len == end_)))
+      (fun h =>
+        Eq.ndrec (motive := fun x => (bytes.len == end_) = x → x = true) (fun h => of_eq_true (eq_self true))
+          (Eq.symm h) (Eq.refl (bytes.len == end_)))
+      (Eq.refl (bytes.len == end_));
+  eq_of_beq same
+theorem NLM_CheckedAddFacts.proof_length : ∀ (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8) (end_ length : Usize),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot 0 58295 58295) =
+      Result.ok (core.result.Result.Ok bytes) →
+    Usize.checked_add 688#usize length = some end_ → (bytes.len != end_) = false → ↑length = 57607 :=
+fun ops e bytes end_ length read checked guard =>
+  NLM_CheckedExtent.proof_length ops e bytes end_ length read (guard_eq bytes end_ guard)
+    (success 688#usize length end_ checked)
+'NLM_CheckedAddFacts.success' depends on axioms: [propext]
+'NLM_CheckedAddFacts.guard_eq' depends on axioms: [propext, Quot.sound]
+'NLM_CheckedAddFacts.proof_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r38cfc038fb7c4c96a56d55f6f537acc9.scope; invocation ID: 7c78f19d13254fc2a3074ee3770a856e

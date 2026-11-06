@@ -1,0 +1,55 @@
+{"attempt": "NLM_L090", "exit_status": 1, "wall_seconds": 0.431060692993924, "peak_rss_kib": "750332", "swaps": "0", "print_axioms": ["'NLM_CopyIteration.zero' depends on axioms: [propext, Quot.sound]", "'NLM_CopyIteration.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_CopyIteration.lean:24:7: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (if _a then src k else before k) = if start ≤ k ∧ k < start + (done + 1) then src k else before k
+Error: Application type mismatch: The argument
+  instDecidableAnd
+has type
+  Decidable (start ≤ k ∧ k < start + done)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite α _a instDecidableAnd
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the pr
+...
+ics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case neg
+α : Type
+src before after : Nat → α
+start done : Nat
+h : Invariant src before after start done
+k : Nat
+same : ¬k = start + done
+cond : (start ≤ k ∧ k < start + done) = (start ≤ k ∧ k < start + (done + 1))
+⊢ (if start ≤ k ∧ k < start + done then src k else before k) =
+    if start ≤ k ∧ k < start + (done + 1) then src k else before k
+theorem NLM_CopyIteration.zero : ∀ {α : Type} (src before : Nat → α) (start : Nat),
+  Invariant src before before start 0 :=
+fun {α} src before start k =>
+  Eq.mpr (id (congrArg (fun _a => before k = _a) (if_neg fun a => zero._proof_1 start k a))) (Eq.refl (before k))
+theorem NLM_CopyIteration.step : ∀ {α : Type} (src before after : Nat → α) (start done : Nat),
+  Invariant src before after start done →
+    Invariant src before (KMX_CopyMeaning.write after (start + done) (src (start + done))) start (done + 1) :=
+fun {α} src before after start done h k =>
+  id
+    (if same : k = start + done then
+      Eq.symm same ▸
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                _a =
+                  if start ≤ start + done ∧ start + done < start + (done + 1) then src (start + done)
+                  else before (start + done))
+              (if_pos rfl)))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => src (start + done) = _a)
+                (if_pos (Decidable.byContradiction fun a => step._proof_1 start done a))))
+            (Eq.refl (src (start + done))))
+    else sorry)
+'NLM_CopyIteration.zero' depends on axioms: [propext, Quot.sound]
+'NLM_CopyIteration.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r84248ff441d54c32b6491c9ea4450cc3.scope; invocation ID: b3cd432143384b169b3fd15241020bdc

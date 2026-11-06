@@ -1,0 +1,41 @@
+{"attempt": "NLM_L123", "exit_status": 0, "wall_seconds": 11.71714331000112, "peak_rss_kib": "5997852", "swaps": "0", "print_axioms": ["'NLM_CodeStep.cut' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_CodeStep.cut : ∀ {A B : Type} (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (r : Result A)
+  (k : A → Code B) (observed : A → NGP_L181.Observation B),
+  (∀ (a : A), r = Result.ok a → NHZ_DRIVER.Cuts hashv (k a) (observed a).result (observed a).attempted) →
+    NHZ_DRIVER.Cuts hashv (Code.step r k) (select r observed).result (select r observed).attempted :=
+fun {A B} hashv r k observed tail =>
+  Result.casesOn (motive := fun t =>
+    r = t → NHZ_DRIVER.Cuts hashv (Code.step r k) (select r observed).result (select r observed).attempted) r
+    (fun a h =>
+      Eq.ndrec (motive := fun r =>
+        (∀ (a : A), r = Result.ok a → NHZ_DRIVER.Cuts hashv (k a) (observed a).resul
+...
+NGP_L181.Observation B),
+  (∀ (a : A), r = Result.ok a → NHZ_DRIVER.Cuts hashv (k a) (observed a).result (observed a).attempted) →
+    NHZ_DRIVER.Cuts hashv (Code.step r k) (select r observed).result (select r observed).attempted :=
+fun {A B} hashv r k observed tail =>
+  Result.casesOn (motive := fun t =>
+    r = t → NHZ_DRIVER.Cuts hashv (Code.step r k) (select r observed).result (select r observed).attempted) r
+    (fun a h =>
+      Eq.ndrec (motive := fun r =>
+        (∀ (a : A), r = Result.ok a → NHZ_DRIVER.Cuts hashv (k a) (observed a).result (observed a).attempted) →
+          NHZ_DRIVER.Cuts hashv (Code.step r k) (select r observed).result (select r observed).attempted)
+        (fun tail =>
+          NHZ_DRIVER.Cuts.leaf
+            (NGQ_Cuts.Trace.stepOk (Result.ok a) k a rfl (select (Result.ok a) observed).result
+              (select (Result.ok a) observed).attempted (NHZ_DRIVER.trace (tail a rfl))))
+        (Eq.symm h) tail)
+    (fun err h =>
+      Eq.ndrec (motive := fun r =>
+        (∀ (a : A), r = Result.ok a → NHZ_DRIVER.Cuts hashv (k a) (observed a).result (observed a).attempted) →
+          NHZ_DRIVER.Cuts hashv (Code.step r k) (select r observed).result (select r observed).attempted)
+        (fun tail => NHZ_DRIVER.Cuts.leaf (NGQ_Cuts.Trace.stepFail (Result.fail err) k err rfl)) (Eq.symm h) tail)
+    (fun h =>
+      Eq.ndrec (motive := fun r =>
+        (∀ (a : A), r = Result.ok a → NHZ_DRIVER.Cuts hashv (k a) (observed a).result (observed a).attempted) →
+          NHZ_DRIVER.Cuts hashv (Code.step r k) (select r observed).result (select r observed).attempted)
+        (fun tail => NHZ_DRIVER.Cuts.leaf (NGQ_Cuts.Trace.stepDiv Result.div k rfl)) (Eq.symm h) tail)
+    (Eq.refl r)
+'NLM_CodeStep.cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3acaa821199a4bfb8fcc2f60394c4b1e.scope; invocation ID: 2be96b0922064244b3e1e22fb3222568

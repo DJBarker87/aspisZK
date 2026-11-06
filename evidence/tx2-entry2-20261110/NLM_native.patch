@@ -21,7 +21,7 @@ diff --git a/programs/r1-cost-probe/src/NLM_native.rs b/programs/r1-cost-probe/s
 new file mode 100644
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NLM_native.rs
-@@ -0,0 +1,132 @@
+@@ -0,0 +1,134 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +#[kani::requires(!bytes.is_empty()&&bytes.len()<=58295)]
@@ -71,14 +71,19 @@ new file mode 100644
 +fn view<const WRONG:bool>() {
 + let n:usize=kani::any();kani::assume(n<=58295);
 + let mut bytes=vec![0u8;58295];let a:&mut[u8;58295]=bytes.as_mut_slice().try_into().unwrap();havoc_bytes(a);bytes.truncate(n);let k:usize=kani::any();
-+ let value:u8=kani::any();if n>0{kani::assume(k<n);bytes[k]=value;}
 + let original=bytes.as_ptr();
 + let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
 + let declared=if kani::any(){Ok(kani::any::<usize>())}else{Err(ProgramError::Custom(kani::any()))};
 + let a=OwnedAccount{key,owner,is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:declared,bytes:Ok(bytes)};
-+ let result=a.data();
-+ let exact=match result{Ok(slice)=>slice.len()==n&&slice.as_ptr()==original&&(n==0||slice[k]==value),Err(_)=>false};
-+ assert!(exact!=WRONG,"NLM owned data SAME vector length pointer and one arbitrary byte");
++ let exact=match a.data(){Ok(slice)=>slice.len()==n&&slice.as_ptr()==original,Err(_)=>false};
++ assert!(exact!=WRONG,"NLM owned getter metadata on an arbitrary byte prestate");
++}
++fn byte_alias<const WRONG:bool>() {
++ let mut bytes=vec![0u8;58295];let a:&mut[u8;58295]=bytes.as_mut_slice().try_into().unwrap();havoc_bytes(a);
++ let k:usize=kani::any();kani::assume(k<58295);let before=bytes[k];
++ let key=Pubkey::new_from_array([0;32]);
++ let a=OwnedAccount{key,owner:key,is_signer:false,is_writable:false,executable:false,length:Ok(58295),bytes:Ok(bytes)};
++ assert!((a.data().unwrap()[k]==before)!=WRONG,"NLM actual getter preserves arbitrary byte at exact proof-account extent");
 +}
 +fn deferred<const WRONG:bool>() {
 + let value:u8=kani::any();let mut data=[value];let mut lamports:u64=kani::any();
@@ -99,14 +104,10 @@ new file mode 100644
 + drop(held);assert!(a.try_borrow_mut_data().is_ok());
 +}
 +fn copied<const WRONG:bool>() {
-+ let n:usize=kani::any();kani::assume(n>0&&n<=58295);
-+ let mut src=vec![0u8;58295];let mut dst=vec![0u8;58295];let a:&mut[u8;58295]=src.as_mut_slice().try_into().unwrap();havoc_bytes(a);let b:&mut[u8;58295]=dst.as_mut_slice().try_into().unwrap();havoc_bytes(b);src.truncate(n);dst.truncate(n);
-+ let k:usize=kani::any();let q:usize=kani::any();kani::assume(k<n&&q<n);
-+ let value:u8=kani::any();let old:u8=kani::any();src[k]=value;dst[q]=old;
-+ let pre=dst[q];
-+ unsafe{KMX_copy_nonoverlapping(src.as_ptr().add(k),dst.as_mut_ptr().add(k),1);}
-+ let exact=dst[k]==value&&(q==k||dst[q]==pre)&&src[k]==value&&src.len()==n&&dst.len()==n;
-+ assert!(exact!=WRONG,"NLM exact KMX one-window copy with arbitrary observer and full outside frame");
++ let src:[u8;1]=kani::any();let mut dst:[u8;2]=kani::any();let before=dst[1];let original=src[0];
++ unsafe{KMX_copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),1);}
++ let exact=dst[0]==original&&dst[1]==before&&src[0]==original;
++ assert!(exact!=WRONG,"NLM exact KMX one-byte iteration and disjoint observer, all local prestate bytes arbitrary");
 +}
 +fn end(length:usize,proof_length:usize)->Result<usize,ProgramError>{
 + let proof_start:usize=688;
@@ -147,10 +148,11 @@ new file mode 100644
 + fn $name(){$f::<$wrong>()}
 +}}
 +proof_seed!(havoc_frame_pass,havoc_frame,false);proof_seed!(havoc_frame_control,havoc_frame,true);
++proof_seed!(owned_byte,byte_alias,false);proof_seed!(owned_byte_control,byte_alias,true);
 +proof_seed!(owned_view,view,false);proof_seed!(owned_view_control,view,true);
 +proof!(snapshot_deferred,deferred,false);proof!(snapshot_deferred_control,deferred,true);
 +proof!(snapshot_conflict,conflict,false);proof!(snapshot_conflict_control,conflict,true);
-+proof_seed!(copy_window,copied,false);proof_seed!(copy_window_control,copied,true);
++proof!(copy_window,copied,false);proof!(copy_window_control,copied,true);
 +proof!(owned_end,end_check,false);proof!(owned_end_control,end_check,true);
 +proof!(owned_data_errors,data_errors,false);proof!(owned_data_errors_control,data_errors,true);
 +proof!(owned_length,length_reply,false);proof!(owned_length_control,length_reply,true);

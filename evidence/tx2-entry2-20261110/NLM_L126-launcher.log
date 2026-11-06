@@ -1,0 +1,49 @@
+{"attempt": "NLM_L126", "exit_status": 0, "wall_seconds": 15.228873977903277, "peak_rss_kib": "6041192", "swaps": "0", "print_axioms": ["'NLM_Process221.fallback_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_Process221.fallback_cuts : ∀ {Account Ambient : Type}
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (callee : ChildCode Account Ambient)
+  (child : ChildObservation Account Ambient),
+  Packet hashv callee child →
+    ∀ (s : State Account Ambient),
+      NHZ_DRIVER.Cuts hashv (fallback callee s) (fallbackObservation child s).result
+        (fallbackObservation child s).attempted :=
+fun {Account Ambient} hashv callee child packet s =>
+  id
+    (id
+      (NLM_CodeStep.cut hashv
+        (Hiq_DispatchSource.eqU8 s.frame.data (Array.make 2#usize [3#u8, 10#u8] fallback._proof_4))
+        (fun first =>
+          if first = true then callee Child.first s.frame s.world
+        
+...
+efl second))
+              (Eq.symm h) a)
+          (fun h =>
+            Eq.ndrec (motive := fun first =>
+              Hiq_DispatchSource.eqU8 s.frame.data (Array.make 2#usize [3#u8, 10#u8] fallback._proof_4) =
+                  Result.ok first →
+                NHZ_DRIVER.Cuts hashv
+                  (if first = true then callee Child.first s.frame s.world
+                  else
+                    CheckpointBytes5Effect.Code.step
+                      (Hiq_DispatchSource.eqU8 s.frame.data (Array.make 2#usize [3#u8, 11#u8] fallback._proof_6))
+                      fun second =>
+                      if second = true then callee Child.first s.frame s.world else callee Child.second s.frame s.world)
+                  (if first = true then child Child.first s.frame s.world
+                    else
+                      NLM_CodeStep.select
+                        (Hiq_DispatchSource.eqU8 s.frame.data (Array.make 2#usize [3#u8, 11#u8] fallback._proof_6))
+                        fun second =>
+                        if second = true then child Child.first s.frame s.world
+                        else child Child.second s.frame s.world).result
+                  (if first = true then child Child.first s.frame s.world
+                    else
+                      NLM_CodeStep.select
+                        (Hiq_DispatchSource.eqU8 s.frame.data (Array.make 2#usize [3#u8, 11#u8] fallback._proof_6))
+                        fun second =>
+                        if second = true then child Child.first s.frame s.world
+                        else child Child.second s.frame s.world).attempted)
+              (fun a => packet Child.first s.frame s.world) (Eq.symm h) a)
+          (Eq.refl first)))
+'NLM_Process221.fallback_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8789b7156d0f4cbfa384246f03f1891c.scope; invocation ID: 641d0d6bfd7e4840a1792ab24142dd9d

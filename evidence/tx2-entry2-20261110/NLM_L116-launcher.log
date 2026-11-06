@@ -1,0 +1,34 @@
+{"attempt": "NLM_L116", "exit_status": 0, "wall_seconds": 22.18885663105175, "peak_rss_kib": "5993844", "swaps": "0", "print_axioms": ["'NLM_SnapshotFrames.accounts' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_SnapshotFrames.other_cell' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_SnapshotFrames.source_frame' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@[defeq] theorem NLM_SnapshotFrames.accounts : ∀ (s : NLM_Snapshot.State) (a : ℕ),
+  (acquired s a).accounts = s.sdk.accounts :=
+fun s a => rfl
+theorem NLM_SnapshotFrames.other_cell : ∀ (s : NLM_Snapshot.State) (a i : ℕ),
+  i ≠ (s.sdk.accounts a).data → (acquired s a).cells i = s.sdk.cells i :=
+fun s a i other =>
+  put_other s.sdk (s.sdk.accounts a).data i
+    (have __src := s.sdk.cells (s.sdk.accounts a).data;
+    { payload := __src.payload, readers := s.next :: (s.sdk.cells (s.sdk.accounts a).data).readers,
+      writer := __src.writer })
+    other
+theorem NLM_SnapshotFrames.source_frame : ∀ (s : NLM_Snapshot.State) (a : ℕ),
+  (live s a).input = s.input ∧ (live s a).owned = s.owned ∧ (live
+...
+@[defeq] theorem NLM_SnapshotFrames.accounts : ∀ (s : NLM_Snapshot.State) (a : ℕ),
+  (acquired s a).accounts = s.sdk.accounts :=
+fun s a => rfl
+theorem NLM_SnapshotFrames.other_cell : ∀ (s : NLM_Snapshot.State) (a i : ℕ),
+  i ≠ (s.sdk.accounts a).data → (acquired s a).cells i = s.sdk.cells i :=
+fun s a i other =>
+  put_other s.sdk (s.sdk.accounts a).data i
+    (have __src := s.sdk.cells (s.sdk.accounts a).data;
+    { payload := __src.payload, readers := s.next :: (s.sdk.cells (s.sdk.accounts a).data).readers,
+      writer := __src.writer })
+    other
+theorem NLM_SnapshotFrames.source_frame : ∀ (s : NLM_Snapshot.State) (a : ℕ),
+  (live s a).input = s.input ∧ (live s a).owned = s.owned ∧ (live s a).next = s.next + 1 :=
+fun s a => ⟨rfl, ⟨rfl, rfl⟩⟩
+'NLM_SnapshotFrames.accounts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_SnapshotFrames.other_cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_SnapshotFrames.source_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4097aa712970498c8802ca5c3ef171a8.scope; invocation ID: dad99ee8091a4d9497dc01c4b67aa56e

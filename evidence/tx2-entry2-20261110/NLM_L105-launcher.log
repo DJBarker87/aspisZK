@@ -1,0 +1,46 @@
+{"attempt": "NLM_L105", "exit_status": 0, "wall_seconds": 17.70358609291725, "peak_rss_kib": "6015132", "swaps": "0", "print_axioms": ["'NLM_LogLaws.assoc' depends on axioms: [propext]"]}
+theorem NLM_LogLaws.assoc : ∀ {E A B C : Type} (m : NJU_Log.Run E A) (k : A → NJU_Log.Run E B)
+  (l : B → NJU_Log.Run E C), NJU_Log.bind (NJU_Log.bind m k) l = NJU_Log.bind m fun a => NJU_Log.bind (k a) l :=
+fun {E A B C} m k l =>
+  Result.casesOn (motive := fun t =>
+    m.result = t → NJU_Log.bind (NJU_Log.bind m k) l = NJU_Log.bind m fun a => NJU_Log.bind (k a) l) m.result
+    (fun a h =>
+      Eq.ndrec (motive := fun x =>
+        m.result = x → NJU_Log.bind (NJU_Log.bind m k) l = NJU_Log.bind m fun a => NJU_Log.bind (k a) l)
+        (fun h =>
+          Result.casesOn (motive := fun t =>
+            (k a).result = t → NJU_Log.bind (NJU_Log.bind m k) l = NJU_Log.bind m fun a => NJU_Log.bind
+...
+                { result := next.result, events := m.events ++ next.events }).result with
+                        | Result.fail err => { result := Result.fail err, events := (NJU_Log.bind m k).events }
+                        | Result.div => { result := Result.div, events := (NJU_Log.bind m k).events }
+                        | Result.ok a =>
+                          have next := l a;
+                          { result := next.result, events := (NJU_Log.bind m k).events ++ next.events })
+                      h)
+                    (congrArg (NJU_Log.Run.mk Result.div)
+                      (congrArg NJU_Log.Run.events
+                        (congrArg
+                          (fun x =>
+                            match x with
+                            | Result.fail err => { result := Result.fail err, events := m.events }
+                            | Result.div => { result := Result.div, events := m.events }
+                            | Result.ok a =>
+                              have next := k a;
+                              { result := next.result, events := m.events ++ next.events })
+                          h)))))
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | Result.fail err => { result := Result.fail err, events := m.events }
+                    | Result.div => { result := Result.div, events := m.events }
+                    | Result.ok a =>
+                      have next := (fun a => NJU_Log.bind (k a) l) a;
+                      { result := next.result, events := m.events ++ next.events })
+                  h))
+              (eq_self { result := Result.div, events := m.events })))
+        (Eq.symm h) (Eq.refl m.result))
+    (Eq.refl m.result)
+'NLM_LogLaws.assoc' depends on axioms: [propext]
+
+Running as unit: run-rff67b3e324b844f0a9b158ced1b3865b.scope; invocation ID: 462eed6a7ea845eabda128687d6f574f

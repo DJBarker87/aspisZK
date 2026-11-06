@@ -1,0 +1,57 @@
+{"attempt": "NLM_L082", "exit_status": 1, "wall_seconds": 15.425017152214423, "peak_rss_kib": "5968944", "swaps": "0", "print_axioms": ["'NLM_TokenAcquire.acquire' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_TokenAcquire.lean:21:1: error: No goals to be solved
+theorem NLM_TokenAcquire.acquire : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a : ℕ) (owned : List Owned)
+  (events : List NLF_ParentModel.Event),
+  NLF_ParentModel.acquire (parent (ready e t owned) events) a Kind.shared =
+    ({ state := acquired (ready e t owned) a, next := t + 1,
+        events :=
+          events ++
+            [NLF_ParentModel.Event.acquire a t Kind.shared (Except.ok (NLM_Snapshot.guard (ready e t owned) a))] },
+      Except.ok (NLM_Snapshot.guard (ready e t owned) a)) :=
+fun e t a owned events =>
+  id
+    (id
+      (have h := NLM_Snapshot.acquire e t a owned;
+      id
+        (fun h =>
+          Eq.mpr
+
+...
+NLM_generated/NLM_TokenAcquire.lean:21:1: error: No goals to be solved
+theorem NLM_TokenAcquire.acquire : ∀ (e : AspisR1.S2W_D189Entry.Entry) (t a : ℕ) (owned : List Owned)
+  (events : List NLF_ParentModel.Event),
+  NLF_ParentModel.acquire (parent (ready e t owned) events) a Kind.shared =
+    ({ state := acquired (ready e t owned) a, next := t + 1,
+        events :=
+          events ++
+            [NLF_ParentModel.Event.acquire a t Kind.shared (Except.ok (NLM_Snapshot.guard (ready e t owned) a))] },
+      Except.ok (NLM_Snapshot.guard (ready e t owned) a)) :=
+fun e t a owned events =>
+  id
+    (id
+      (have h := NLM_Snapshot.acquire e t a owned;
+      id
+        (fun h =>
+          Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  (let r := _a;
+                    ({ state := r.1, next := t + 1,
+                        events := events ++ [NLF_ParentModel.Event.acquire a t Kind.shared r.2] },
+                      r.2)) =
+                    ({ state := acquired (ready e t owned) a, next := t + 1,
+                        events :=
+                          events ++
+                            [NLF_ParentModel.Event.acquire a t Kind.shared
+                                (Except.ok (NLM_Snapshot.guard (ready e t owned) a))] },
+                      Except.ok (NLM_Snapshot.guard (ready e t owned) a)))
+                h))
+            (Eq.refl
+              (let r := (acquired (ready e t owned) a, Except.ok (NLM_Snapshot.guard (ready e t owned) a));
+              ({ state := r.1, next := t + 1, events := events ++ [NLF_ParentModel.Event.acquire a t Kind.shared r.2] },
+                r.2))))
+        h))
+'NLM_TokenAcquire.acquire' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r06dba27a3c8843ac8b10b61aded8a5cc.scope; invocation ID: 573e3ad584274ca596969202d7e58842

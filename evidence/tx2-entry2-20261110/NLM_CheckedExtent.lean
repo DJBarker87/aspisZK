@@ -14,7 +14,7 @@ theorem end_value (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8) (end_ : U
   (NLM_ActualRead.snapshot_bytes ops e 0 58295 58295 bytes read)
  have same := congrArg (fun n : Usize => n.val) guard
  rw [Slice.len_val] at same
- omega
+ exact same.symm.trans extent
 
 theorem proof_length (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8)
  (end_ length : Usize)

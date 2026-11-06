@@ -1,0 +1,49 @@
+{"attempt": "NLM_L115", "exit_status": 0, "wall_seconds": 23.747040134156123, "peak_rss_kib": "5995860", "swaps": "0", "print_axioms": ["'NLM_SnapshotBorrowFailure.failed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_SnapshotBorrowFailure.failed : ∀ (s : State) (a lo hi : ℕ) (allocation : Result Unit)
+  (err : NLF_SdkModel.ProgramError),
+  NLF_SdkModel.try_borrow_data s.sdk a s.next = (s.sdk, Except.error err) →
+    G s a lo hi allocation =
+      {
+        result :=
+          Result.ok
+            (value s a lo hi,
+              { input := s.input, sdk := s.sdk, next := s.next + 1, owned := s.owned ++ [value s a lo hi] }),
+        events :=
+          [Event.acquire s a s.next s.sdk (Result.ok (Except.error err)),
+            Event.returned s a lo hi (Result.ok (value s a lo hi))] } :=
+fun s a lo hi allocation err failure =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+   
+...
+r := __src.owner, is_signer := __src.is_signer, is_writable := __src.is_writable,
+                executable := __src.executable,
+                length := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed,
+                bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed };
+            do
+            let _ ← NJU_Log.record (Event.returned s a lo hi) (Result.ok value)
+            pure (value, { input := s.input, sdk := s.sdk, next := s.next + 1, owned := s.owned ++ [value] })
+          | Except.ok g =>
+            have live := { input := s.input, sdk := acquisition.1, next := s.next + 1, owned := s.owned };
+            do
+            let payload ← NJU_Log.record (Event.deref live g) (Result.ok (NLF_SdkModel.deref acquisition.1 g))
+            let allowed : Prop := payload.bytes.length = lo ∨ payload.bytes.length = hi
+            have __do_jp : Unit → Run (Owned × State) := fun __r => do
+              let dropped ← NJU_Log.record (Event.release live g) (Result.ok (NLF_SdkModel.release acquisition.1 g))
+              match dropped with
+                | Except.error a => liftM (Result.fail Error.panic)
+                | Except.ok restored =>
+                  have value := s.input.snapshot a lo hi;
+                  do
+                  let _ ← NJU_Log.record (Event.returned live a lo hi) (Result.ok value)
+                  pure (value, { input := s.input, sdk := restored, next := s.next + 1, owned := s.owned ++ [value] })
+            if allowed then do
+                NJU_Log.record (Event.allocate live g payload.bytes.length) allocation
+                __do_jp ()
+              else __do_jp ())))
+'NLM_SnapshotBorrowFailure.failed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-refa8116b4390480181567139f14f7f08.scope; invocation ID: 8e5f297bf16e49c195f6db27c4c6bfb8

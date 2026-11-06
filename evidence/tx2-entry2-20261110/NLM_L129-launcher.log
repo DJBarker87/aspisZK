@@ -1,0 +1,38 @@
+{"attempt": "NLM_L129", "exit_status": 0, "wall_seconds": 17.07444343715906, "peak_rss_kib": "6041724", "swaps": "0", "print_axioms": ["'NLM_Process221.dispatch_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_Process221.dispatch_cuts : ∀ {Account Ambient : Type}
+  (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest) (callee : ChildCode Account Ambient)
+  (child : ChildObservation Account Ambient),
+  Packet hashv callee child →
+    ∀ (s : State Account Ambient) (head : Option U8),
+      NHZ_DRIVER.Cuts hashv (dispatch callee s head) (dispatchObservation child s head).result
+        (dispatchObservation child s head).attempted :=
+fun {Account Ambient} hashv callee child packet s head =>
+  Option.casesOn (motive := fun t =>
+    head = t →
+      NHZ_DRIVER.Cuts hashv (dispatch callee s head) (dispatchObservation child s head).result
+        (dispatchObservation child s head).attempted)
+...
+four) x_0 x_1 x_2 x_3)
+                            (instDecidableEqUScalar_1 UScalarTy.U8 byte 4#u8) (NGP_L181.Observation (Out Ambient))
+                            (child Child.init s.frame s.world) (fallbackObservation child s)))))
+                    (congrArg NGP_L181.Observation.attempted
+                      (Eq.trans
+                        (ite_congr (Eq.refl (byte = 4#u8)) (fun a => Eq.refl (child Child.init s.frame s.world))
+                          fun a =>
+                          Eq.trans
+                            (ite_congr (Eq.refl (byte = 5#u8)) (fun a => Eq.refl (child Child.write s.frame s.world))
+                              fun a =>
+                              (fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg six) x_0 x_1 x_2 x_3)
+                                (instDecidableEqUScalar_1 UScalarTy.U8 byte 6#u8) (NGP_L181.Observation (Out Ambient))
+                                (child Child.finalize s.frame s.world) (fallbackObservation child s))
+                            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg five) x_0 x_1 x_2 x_3)
+                              (instDecidableEqUScalar_1 UScalarTy.U8 byte 5#u8) (NGP_L181.Observation (Out Ambient))
+                              (child Child.write s.frame s.world) (fallbackObservation child s)))
+                        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg four) x_0 x_1 x_2 x_3)
+                          (instDecidableEqUScalar_1 UScalarTy.U8 byte 4#u8) (NGP_L181.Observation (Out Ambient))
+                          (child Child.init s.frame s.world) (fallbackObservation child s))))))
+                (fallback_cuts hashv callee child packet s))
+    (Eq.refl head)
+'NLM_Process221.dispatch_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r124eae3978044881a10e005cedef5434.scope; invocation ID: acf9ad150571444a908fef6a3c83e0ba

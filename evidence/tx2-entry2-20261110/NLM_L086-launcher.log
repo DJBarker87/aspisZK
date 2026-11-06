@@ -1,0 +1,30 @@
+{"attempt": "NLM_L086", "exit_status": 0, "wall_seconds": 19.570464830845594, "peak_rss_kib": "5944528", "swaps": "0", "print_axioms": ["'NLM_CheckedExtent.end_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_CheckedExtent.proof_length' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_CheckedExtent.end_value : ∀ (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8) (end_ : Usize),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot 0 58295 58295) =
+      Result.ok (core.result.Result.Ok bytes) →
+    bytes.len = end_ → ↑end_ = 58295 :=
+fun ops e bytes end_ read guard =>
+  have extent := NLE_SnapshotClause.proof_bytes e bytes (NLM_ActualRead.snapshot_bytes ops e 0 58295 58295 bytes read);
+  have same := congrArg (fun n => ↑n) guard;
+  Eq.trans (Eq.symm (Eq.mp (congrArg (fun _a => _a = ↑end_) (Slice.len_val bytes)) same)) extent
+theorem NLM_CheckedExtent.proof_length : ∀ (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8)
+...
+theorem NLM_CheckedExtent.end_value : ∀ (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8) (end_ : Usize),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot 0 58295 58295) =
+      Result.ok (core.result.Result.Ok bytes) →
+    bytes.len = end_ → ↑end_ = 58295 :=
+fun ops e bytes end_ read guard =>
+  have extent := NLE_SnapshotClause.proof_bytes e bytes (NLM_ActualRead.snapshot_bytes ops e 0 58295 58295 bytes read);
+  have same := congrArg (fun n => ↑n) guard;
+  Eq.trans (Eq.symm (Eq.mp (congrArg (fun _a => _a = ↑end_) (Slice.len_val bytes)) same)) extent
+theorem NLM_CheckedExtent.proof_length : ∀ (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8) (end_ length : Usize),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (NGL_CloneDomain.install ops) (e.snapshot 0 58295 58295) =
+      Result.ok (core.result.Result.Ok bytes) →
+    bytes.len = end_ → ↑end_ = 688 + ↑length → ↑length = 57607 :=
+fun ops e bytes end_ length read guard checked =>
+  have extent := end_value ops e bytes end_ read guard;
+  Decidable.byContradiction fun a => proof_length._proof_1 end_ length checked extent a
+'NLM_CheckedExtent.end_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_CheckedExtent.proof_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rfff8446d42e2442dbfb5f511bb094a8a.scope; invocation ID: eeb545d147ac4312977cf801a874339d

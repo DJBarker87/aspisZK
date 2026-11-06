@@ -1,0 +1,28 @@
+{"attempt": "NLM_L095", "exit_status": 0, "wall_seconds": 21.815879902103916, "peak_rss_kib": "5990476", "swaps": "0", "print_axioms": ["'NLM_CellIdentity.data' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_CellIdentity.lamports' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_CellIdentity.shared_cell' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@[defeq] theorem NLM_CellIdentity.data : ∀ (e : Entry) (a t : ℕ) (owned : List NLM_Snapshot.Owned),
+  (NLM_Snapshot.guard (ready e t owned) a).cell = (e.handles a).1 :=
+fun e a t owned => rfl
+@[defeq] theorem NLM_CellIdentity.lamports : ∀ (e : Entry) (a t : ℕ) (owned : List NLM_Snapshot.Owned),
+  ((ready e t owned).sdk.accounts a).lamports = (e.handles a).2 :=
+fun e a t owned => rfl
+theorem NLM_CellIdentity.shared_cell : ∀ (e : Entry) (a b t : ℕ) (owned : List NLM_Snapshot.Owned),
+  (e.handles a).1 = (e.handles b).1 →
+    (NLM_Snapshot.guard (ready e t owned) a).cell = (NLM_Snapshot.guard (ready e t owned) b).cell :=
+fun e a b t owned same => same
+'NLM_CellIdentity.data' depends on axioms: [
+...
+@[defeq] theorem NLM_CellIdentity.data : ∀ (e : Entry) (a t : ℕ) (owned : List NLM_Snapshot.Owned),
+  (NLM_Snapshot.guard (ready e t owned) a).cell = (e.handles a).1 :=
+fun e a t owned => rfl
+@[defeq] theorem NLM_CellIdentity.lamports : ∀ (e : Entry) (a t : ℕ) (owned : List NLM_Snapshot.Owned),
+  ((ready e t owned).sdk.accounts a).lamports = (e.handles a).2 :=
+fun e a t owned => rfl
+theorem NLM_CellIdentity.shared_cell : ∀ (e : Entry) (a b t : ℕ) (owned : List NLM_Snapshot.Owned),
+  (e.handles a).1 = (e.handles b).1 →
+    (NLM_Snapshot.guard (ready e t owned) a).cell = (NLM_Snapshot.guard (ready e t owned) b).cell :=
+fun e a b t owned same => same
+'NLM_CellIdentity.data' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_CellIdentity.lamports' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_CellIdentity.shared_cell' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1b0c8524052d4fc58fb5345f33f21bf2.scope; invocation ID: 80fed51551334600adfe5b07b55e128c

@@ -3,7 +3,16 @@ from NLM_transport import *
 import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def run(a,kind,target,command=None,extra=None,env_extra=None):
-    assert ((a.startswith('NLM_L') and 1<=int(a[-3:])<=140) or (a.startswith('NLM_K') and 1<=int(a[-3:])<=40)) and not (E/a).exists()
+    assert ((a.startswith('NLM_L') and 1<=int(a[-3:])<=999) or (a.startswith('NLM_K') and 1<=int(a[-3:])<=999)) and not (E/a).exists()
+    assert kind!='extract','Extraction budget is zero'
+    if kind=='lean':
+        done=[json.loads(l) for l in (E/'NLM_ATTEMPTS.jsonl').read_text().splitlines()]
+        assert sum(x['kind']=='lean' for x in done)<140,'Actual Lean compiler budget exhausted'
+        if target not in ['NLM_COMBINED_IMPORT','NLM_ProofDriver','NLM_ScanDriver']:
+            assert sum(x['kind']=='lean' for x in done)<138,'Reserve two final import/audit compiler slots'
+    if kind=='kani':
+        done=[json.loads(l) for l in (E/'NLM_ATTEMPTS.jsonl').read_text().splitlines()]
+        assert sum(x['kind']=='kani' and x['attempt'] not in ['NLM_K001','NLM_K002'] for x in done)<40,'Actual cargo-kani budget exhausted'
     env=json.loads((E/'NLM_ENV.json').read_text())
     env['TMPDIR']=B+'/NLM_tmp'
     env['CARGO_TARGET_DIR']=B+'/NLM_target'
@@ -52,12 +61,19 @@ x['deps_fingerprint']['selected_objects']=pins;(b/{(a+'.json')!r}).write_text(js
 import json
 b=Path({B!r});a={a!r}
 names=[p for p in (b/a).rglob('*') if p.is_file() and 'sources' not in p.relative_to(b/a).parts]+[b/(a+'.json')]+[p for pat in ['-graph*','-source*','-lock*'] for p in b.glob(a+pat)]
+if {kind!r}=='audit':
+ names += [p for p in (b/'NLM_audit'/{target!r}).rglob('*') if p.is_file()]
+ names += [p for p in b.glob('NLM_LOADED_scan.jsonl') if p.is_file()]
+ for p in (b/'NLM_audit'/{target!r}).glob('*.json'):
+  for row in json.loads(p.read_text()).get('results',[]):
+   q=b/('NEP_'+p.stem+'_'+row['root']+'_REACHABLE.txt')
+   if q.is_file():names.append(q)
 print(json.dumps({{str(p.relative_to(b)):p.read_text() for p in names}}))
 ''');assert r.returncode==0,r.stderr
     out=json.loads(r.stdout)
     for n,t in out.items():
         p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
-        if n.endswith('.log'):
+        if n.endswith('.log') or n.endswith('_REACHABLE.txt') or n.endswith('LOADED_scan.jsonl'):
             p.with_name(p.name+'.xz').write_bytes(lzma.compress(t.encode()));p.with_name(p.name+'.sha256').write_text(sha(t.encode())+'\n')
         else:p.write_text(t)
     rc=json.loads(out[a+'/receipt.json'])
@@ -70,7 +86,9 @@ print(json.dumps({{str(p.relative_to(b)):p.read_text() for p in names}}))
         if not p.exists():p.write_bytes(lzma.compress(raw))
         idx['objects'][h]=dict(path=str(p.relative_to(E)),bytes=len(raw),archive_sha256=sha(p.read_bytes()));idx['attempts'].setdefault(a,{})[n]=h
     (E/'NLM_INPUTS.json').write_text(json.dumps(idx,indent=1)+'\n')
-    with (E/'NLM_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
+    summary={k:v for k,v in rc.items() if k!='deps_fingerprint'}
+    summary.update(full_receipt=a+'/receipt.json',full_receipt_sha256=sha((E/a/'receipt.json').read_bytes()))
+    with (E/'NLM_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(summary)+'\n')
     print(json.dumps({k:rc[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True)
     if rc['exit_status'] and kind=='lean':print(json.dumps(dict(attempt=a,error_excerpt=out[a+'/stdout.log'][:1800])),flush=True)
     return rc

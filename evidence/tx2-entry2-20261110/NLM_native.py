@@ -2,7 +2,7 @@ from NLM_formal import *
 import base64
 
 def native(a,target):
- assert a.startswith('NLM_K') and 1<=int(a[-3:])<=40
+ assert a.startswith('NLM_K') and 1<=int(a[-3:])<=999
  frozen=json.loads(lzma.decompress((E.parent/'sdk-borrow-20261109/NLF_FROZEN_INPUTS.json.xz').read_bytes()))
  lib=base64.b64decode(frozen['NLF_src/programs/r1-cost-probe/src/lib.rs']).decode()
  owned=base64.b64decode(frozen['NLF_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs']).decode()

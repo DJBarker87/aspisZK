@@ -21,10 +21,9 @@ trust removal.
 K015-K021 supply the ruling (t) controls for this exact fixed-array shape.
 The claimed domain is a safe mutable borrow of the entire 58295-byte initialized
 allocation, obtained with `try_into`, not a fabricated pointer or a claim about
-an arbitrary-capacity Vec. Whole-allocation frame and nonconstant-state probes
-are pending. Every eventual caller credit needs its matched control and exact
+an arbitrary-capacity Vec. Whole-allocation frame K023/K024 passes/fails as required; nonconstant-state control K025 fails as required. Every eventual caller credit needs its matched control and exact
 KMX configuration. The retired slice/subarray shapes are not renamed passes.
 
 K005/K006 are a restricted pre-state owned-data getter pair (zero bytes except
 one selected arbitrary byte). They do not justify arbitrary-buffer credit.
-All native claims are local support, not the five complete parameterized folds.
+All native claims are local support, not the five complete parameterized folds. See NLM_NATIVE_DOMAIN_FINDINGS.json: fixed capacity, restricted constructor partitions and local footprints are not silently generalized to every caller. K026/K029/K041 timeouts give no credit; K043/K044 only calibrate one local canonical KMX iteration.

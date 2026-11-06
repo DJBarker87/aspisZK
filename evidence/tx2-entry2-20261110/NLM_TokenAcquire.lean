@@ -14,9 +14,10 @@ theorem acquire (e : AspisR1.S2W_D189Entry.Entry) (t a : Nat)
    .ok (guard (ready e t owned) a)) := by
  unfold NLF_ParentModel.acquire
  change (let r := try_borrow_data (ready e t owned).sdk a t
-         (⟨r.1,t+1,events++[.acquire a t .shared r.2]⟩,r.2))=_
- rw [NLM_Snapshot.acquire]
- rfl
+         ((⟨r.1,t+1,events++[.acquire a t .shared r.2]⟩ : NLF_ParentModel.Parent),r.2))=_
+ have h := NLM_Snapshot.acquire e t a owned
+ change try_borrow_data (ready e t owned).sdk a t=_ at h
+ rw [h]
 #print acquire
 #print axioms acquire
 end NLM_TokenAcquire

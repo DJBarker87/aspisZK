@@ -1,0 +1,32 @@
+{"attempt": "NLM_L120", "exit_status": 0, "wall_seconds": 24.1546283129137, "peak_rss_kib": "5999848", "swaps": "0", "print_axioms": []}
+def NLM_Auth064Code.code : {Ambient H : Type} → ChildCode Ambient H → State Ambient H → Code (Out Ambient) :=
+fun {Ambient H} common s =>
+  Code.step (NLE_ParseInstall.parse s.input.proof) fun result =>
+    match result with
+    | core.result.Result.Err err => Code.done (core.result.Result.Err err, s.world)
+    | core.result.Result.Ok variant =>
+      Code.step (NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed) fun x =>
+        common (commonFrame { input := s.input, world := s.world, parsed := some variant }) s.world
+def NLM_Auth064Code.observation : {Ambient H : Type} →
+  ChildObservation Ambient H → State Ambient H → NGP_L181.Observation (Out Ambient) :=
+fun {A
+...
+def NLM_Auth064Code.code : {Ambient H : Type} → ChildCode Ambient H → State Ambient H → Code (Out Ambient) :=
+fun {Ambient H} common s =>
+  Code.step (NLE_ParseInstall.parse s.input.proof) fun result =>
+    match result with
+    | core.result.Result.Err err => Code.done (core.result.Result.Err err, s.world)
+    | core.result.Result.Ok variant =>
+      Code.step (NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed) fun x =>
+        common (commonFrame { input := s.input, world := s.world, parsed := some variant }) s.world
+def NLM_Auth064Code.observation : {Ambient H : Type} →
+  ChildObservation Ambient H → State Ambient H → NGP_L181.Observation (Out Ambient) :=
+fun {Ambient H} common s =>
+  match NLE_ParseInstall.parse s.input.proof with
+  | fail err => { result := fail err, attempted := [] }
+  | div => { result := div, attempted := [] }
+  | ok (core.result.Result.Err err) => { result := ok (core.result.Result.Err err, s.world), attempted := [] }
+  | ok (core.result.Result.Ok variant) =>
+    common (commonFrame { input := s.input, world := s.world, parsed := some variant }) s.world
+
+Running as unit: run-rb0d306bbd9784f588a2fbd4a3654439f.scope; invocation ID: 8f3b91d07a01497cbe9759b9854b414c

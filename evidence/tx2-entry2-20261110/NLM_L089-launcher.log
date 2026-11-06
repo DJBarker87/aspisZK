@@ -1,0 +1,44 @@
+{"attempt": "NLM_L089", "exit_status": 0, "wall_seconds": 0.5011501440312713, "peak_rss_kib": "761544", "swaps": "0", "print_axioms": ["'NLM_CopyFrames.adjacent' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_CopyFrames.inside' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_CopyFrames.outside' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_CopyFrames.adjacent : ∀ {α : Type} (src dst : Nat → α) (start n m : Nat),
+  KMX_CopyMeaning.loop src (KMX_CopyMeaning.loop src dst start n) (start + n) m =
+    KMX_CopyMeaning.loop src dst start (n + m) :=
+fun {α} src dst start n m =>
+  funext fun k =>
+    Eq.mpr
+      (id
+        (congr
+          (congrArg Eq
+            (Eq.trans (KMX_CopyMeaning.loop_spec src (KMX_CopyMeaning.loop src dst start n) (start + n) m k)
+              (ite_congr (Eq.refl (start + n ≤ k ∧ k < start + n + m)) (fun a => Eq.refl (src k)) fun a =>
+                KMX_CopyMeaning.loop_spec src dst start n k)))
+          (KMX_CopyMeaning.loop_spec src dst start (n + m) k)))
+      (if right : start + n ≤ k ∧
+...
+pos right)))
+          (Eq.mpr (id (congrArg (fun _a => src k = _a) (if_pos all))) (Eq.refl (src k)))
+      else
+        Eq.mpr (id (congrArg (fun _a => _a = if start ≤ k ∧ k < start + (n + m) then src k else dst k) (if_neg right)))
+          (if left : start ≤ k ∧ k < start + n then
+            have all := Decidable.byContradiction fun a => adjacent._proof_2 start n m k left a;
+            Eq.mpr
+              (id (congrArg (fun _a => _a = if start ≤ k ∧ k < start + (n + m) then src k else dst k) (if_pos left)))
+              (Eq.mpr (id (congrArg (fun _a => src k = _a) (if_pos all))) (Eq.refl (src k)))
+          else
+            have none := fun a => adjacent._proof_3 start n m k right left a;
+            Eq.mpr
+              (id (congrArg (fun _a => _a = if start ≤ k ∧ k < start + (n + m) then src k else dst k) (if_neg left)))
+              (Eq.mpr (id (congrArg (fun _a => dst k = _a) (if_neg none))) (Eq.refl (dst k)))))
+theorem NLM_CopyFrames.inside : ∀ {α : Type} (src dst : Nat → α) (n k : Nat),
+  k < n → KMX_CopyMeaning.loop src dst 0 n k = src k :=
+fun {α} src dst n k hk =>
+  Eq.mpr (id (congrArg (fun _a => _a = src k) (KMX_CopyMeaning.copy_prefix src dst n k)))
+    (Eq.mpr (id (congrArg (fun _a => _a = src k) (if_pos hk))) (Eq.refl (src k)))
+theorem NLM_CopyFrames.outside : ∀ {α : Type} (src dst : Nat → α) (n k : Nat),
+  n ≤ k → KMX_CopyMeaning.loop src dst 0 n k = dst k :=
+fun {α} src dst n k hk =>
+  KMX_CopyMeaning.copy_frame src dst 0 n k (Or.inr (Eq.mpr (id (congrFun' (congrArg LE.le (Nat.zero_add n)) k)) hk))
+'NLM_CopyFrames.adjacent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_CopyFrames.inside' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_CopyFrames.outside' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r2cdf9a9649de4976b3896552136d28f3.scope; invocation ID: b053e18efd5b48119664d23c2390db69

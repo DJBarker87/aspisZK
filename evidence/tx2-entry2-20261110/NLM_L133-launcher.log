@@ -1,0 +1,17 @@
+{"attempt": "NLM_L133", "exit_status": 0, "wall_seconds": 27.137494958005846, "peak_rss_kib": "6008824", "swaps": "0", "print_axioms": []}
+def NLM_Entry213.code : {Account Ambient : Type} →
+  ChildCode Account Ambient → State Account Ambient → Code (Out Ambient) :=
+fun {Account Ambient} callee s =>
+  Code.step (Hiq_DispatchSource.pool_route.admitted s.frame.data) fun allowed =>
+    if allowed = true then NLM_Process221.code callee s
+    else Code.done (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData, s.world)
+
+...
+def NLM_Entry213.code : {Account Ambient : Type} →
+  ChildCode Account Ambient → State Account Ambient → Code (Out Ambient) :=
+fun {Account Ambient} callee s =>
+  Code.step (Hiq_DispatchSource.pool_route.admitted s.frame.data) fun allowed =>
+    if allowed = true then NLM_Process221.code callee s
+    else Code.done (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData, s.world)
+
+Running as unit: run-r8b6c1e3fd9954846bf3fdc872b541e3f.scope; invocation ID: 772ed1dd28c341ff8b03eab9760e092e

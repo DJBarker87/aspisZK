@@ -1,0 +1,53 @@
+{"attempt": "NLM_L114", "exit_status": 0, "wall_seconds": 17.086133242817596, "peak_rss_kib": "5999520", "swaps": "0", "print_axioms": ["'NLM_TokenCounts.count' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLM_TokenCounts.seven' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_TokenCounts.lean:12:56: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+theorem NLM_TokenCounts.count : ∀ (e : Entry) (t : ℕ) (owned : List NLM_Snapshot.Owned) (cs : List Site),
+  (NLM_TokenChronology.tokens e t owned cs).length = 3 * cs.length :=
+fun e t owned cs =>
+  List.rec (motive := fun cs =>
+    ∀ (t : ℕ) (owned : List NLM_Snapshot.Owned), (NLM_TokenChronology.tokens e t owned cs).length = 3 * cs.length)
+    (fun t owned => Eq.refl (NLM_TokenChronology.tokens e t owned []).length)
+    (fun c cs ih t owned =>
+      Eq.mpr
+        (id
+          (congrFun'
+            
+...
+NLM_generated/NLM_TokenCounts.lean:12:56: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+theorem NLM_TokenCounts.count : ∀ (e : Entry) (t : ℕ) (owned : List NLM_Snapshot.Owned) (cs : List Site),
+  (NLM_TokenChronology.tokens e t owned cs).length = 3 * cs.length :=
+fun e t owned cs =>
+  List.rec (motive := fun cs =>
+    ∀ (t : ℕ) (owned : List NLM_Snapshot.Owned), (NLM_TokenChronology.tokens e t owned cs).length = 3 * cs.length)
+    (fun t owned => Eq.refl (NLM_TokenChronology.tokens e t owned []).length)
+    (fun c cs ih t owned =>
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (congrFun'
+                (congrArg HAdd.hAdd
+                  (congrFun'
+                    (congrArg HAdd.hAdd
+                      (congrFun'
+                        (congrArg HAdd.hAdd
+                          ((fun t owned => ih t owned) (t + 1) (owned ++ [e.snapshot c.account c.lo c.hi])))
+                        1))
+                    1))
+                1))
+            (3 * (cs.length + 1))))
+        (Decidable.byContradiction fun a => count._proof_1 cs a))
+    cs t owned
+theorem NLM_TokenCounts.seven : ∀ (e : Entry),
+  (List.filterMap NLM_TokenEvents.sdk (chronological e 0 [] NLM_SevenSites.sites)).length = 21 :=
+fun e =>
+  Eq.mpr (id (congrArg (fun _a => _a.length = 21) (NLM_TokenChronology.projected e 0 [] NLM_SevenSites.sites)))
+    (Eq.mpr (id (congrArg (fun _a => _a = 21) (count e 0 [] NLM_SevenSites.sites)))
+      (Eq.refl (3 * NLM_SevenSites.sites.length)))
+'NLM_TokenCounts.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLM_TokenCounts.seven' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9f6a559fcce04c4d804f088a0de7e917.scope; invocation ID: 095a2e5551244959b42945ef644c7ec8

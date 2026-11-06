@@ -1,0 +1,59 @@
+{"attempt": "NLM_L091", "exit_status": 0, "wall_seconds": 0.3519655140116811, "peak_rss_kib": "760988", "swaps": "0", "print_axioms": ["'NLM_CopyIteration.zero' depends on axioms: [propext, Quot.sound]", "'NLM_CopyIteration.step' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLM_CopyIteration.zero : ∀ {α : Type} (src before : Nat → α) (start : Nat),
+  Invariant src before before start 0 :=
+fun {α} src before start k =>
+  Eq.mpr (id (congrArg (fun _a => before k = _a) (if_neg fun a => zero._proof_1 start k a))) (Eq.refl (before k))
+theorem NLM_CopyIteration.step : ∀ {α : Type} (src before after : Nat → α) (start done : Nat),
+  Invariant src before after start done →
+    Invariant src before (KMX_CopyMeaning.write after (start + done) (src (start + done))) start (done + 1) :=
+fun {α} src before after start done h k =>
+  id
+    (if same : k = start + done then
+      Eq.symm same ▸
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+ 
+...
++ 1) :=
+fun {α} src before after start done h k =>
+  id
+    (if same : k = start + done then
+      Eq.symm same ▸
+        Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                _a =
+                  if start ≤ start + done ∧ start + done < start + (done + 1) then src (start + done)
+                  else before (start + done))
+              (if_pos rfl)))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => src (start + done) = _a)
+                (if_pos (Decidable.byContradiction fun a => step._proof_1 start done a))))
+            (Eq.refl (src (start + done))))
+    else
+      Eq.mpr
+        (id (congrArg (fun _a => _a = if start ≤ k ∧ k < start + (done + 1) then src k else before k) (if_neg same)))
+        (Eq.mpr (id (congrArg (fun _a => _a = if start ≤ k ∧ k < start + (done + 1) then src k else before k) (h k)))
+          (if old : start ≤ k ∧ k < start + done then
+            Eq.mpr
+              (id
+                (congrArg (fun _a => _a = if start ≤ k ∧ k < start + (done + 1) then src k else before k) (if_pos old)))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => src k = _a)
+                    (if_pos (Decidable.byContradiction fun a => step._proof_2 start done k old a))))
+                (Eq.refl (src k)))
+          else
+            Eq.mpr
+              (id
+                (congrArg (fun _a => _a = if start ≤ k ∧ k < start + (done + 1) then src k else before k) (if_neg old)))
+              (Eq.mpr (id (congrArg (fun _a => before k = _a) (if_neg fun a => step._proof_3 start done k same old a)))
+                (Eq.refl (before k))))))
+'NLM_CopyIteration.zero' depends on axioms: [propext, Quot.sound]
+'NLM_CopyIteration.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3599f7d96f0a498d8995aebdab077ef1.scope; invocation ID: 9f05c12073a94dfc9a24d04905118dbf

@@ -1,0 +1,17 @@
+{"attempt": "NLM_L130", "exit_status": 0, "wall_seconds": 18.517307361820713, "peak_rss_kib": "6010964", "swaps": "0", "print_axioms": []}
+def NLM_Process221.code : {Account Ambient : Type} →
+  ChildCode Account Ambient → State Account Ambient → Code (Out Ambient) :=
+fun {Account Ambient} callee s =>
+  Code.step (Hiq_DispatchSource.firstByte s.frame.data) fun head =>
+    Code.step (Hiq_DispatchSource.copied head) fun value =>
+      dispatch callee { frame := s.frame, world := s.world, head := some head } value
+
+...
+def NLM_Process221.code : {Account Ambient : Type} →
+  ChildCode Account Ambient → State Account Ambient → Code (Out Ambient) :=
+fun {Account Ambient} callee s =>
+  Code.step (Hiq_DispatchSource.firstByte s.frame.data) fun head =>
+    Code.step (Hiq_DispatchSource.copied head) fun value =>
+      dispatch callee { frame := s.frame, world := s.world, head := some head } value
+
+Running as unit: run-rbefdcf9d529f4c47a6673c08cb6ea16a.scope; invocation ID: e32d860b6202453fbe98bc02d6db916e
