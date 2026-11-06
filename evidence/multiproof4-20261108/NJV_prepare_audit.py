@@ -40,10 +40,10 @@ for n in ['NFA_WALKER','NFA_MemoryLimit']:
  old=P/'NJP_native'/('NJP_'+n+'.c');new=E/'NJV_native'/('NJV_'+n+'.c');new.write_bytes(old.read_bytes());adapt.append(dict(source=str(old),sha256=sha(old),destination=str(new),destination_sha256=sha(new),changes='byte-identical C helper'))
 (E/'NJV_AUDIT_ADAPTATIONS.json').write_text(json.dumps(adapt,indent=2)+'\n')
 files=['NJV_lean/NJV_ProofDriver.lean','NJV_native/NJV_NFA_WALKER.c','NJV_native/NJV_NFA_MemoryLimit.c','NJV_AUDIT_ROOTS.json','NJV_AUDIT_MODULES.json','NJV_EXPECTED_IMPORTS.jsonl']
-for old,num,kind in [('020',43,'lean'),('021',44,'lean'),('022',45,'link'),('023',46,'link'),('024',47,'audit'),('025',48,'lean'),('026',49,'audit'),('027',50,'audit')]:
+for old,num,kind in [('020',60,'lean'),('021',61,'lean'),('022',62,'link'),('023',63,'link'),('024',64,'audit'),('025',65,'lean'),('026',66,'audit'),('027',67,'audit')]:
  c=json.loads((P/f'NJP_L{old}.json').read_text());c['attempt']=f'NJV_L{num:03d}';c['module']=c['module'].replace('NJP','NJV');c['command']=[v.replace('NJP','NJV') for v in c['command']];c['env']=json.loads((E/'NJV_ENV.json').read_text());c['sources']=[v.replace('NJP','NJV') for v in c['sources']];c['upload']=[v.replace('NJP','NJV') for v in c.get('upload',[])];c['collect']=[v.replace('NJP','NJV') for v in c.get('collect',[])];c['expected_time']='Focused audit driver elaboration/link, fixtures, then ONE complete combined import/scan/raw ax2 gate; optimized audit binary, no arithmetic gate'
- if num in [43,44]:c['collect']=[f'NJV_native/{c["module"]}.c']
- if num in [45,46]:c['sources'].append(f'NJV_native/{c["module"]}.c')
- if num==50:c['collect']=[]
+ if num in [60,61]:c['collect']=[f'NJV_native/{c["module"]}.c']
+ if num in [62,63]:c['sources'].append(f'NJV_native/{c["module"]}.c')
+ if num==67:c['collect']=[]
  (E/(c['attempt']+'.json')).write_text(json.dumps(c,indent=2)+'\n')
 print(f'NJV audit prepared: {len(modules)} proof modules, {len(roots)} roots, NJO+NJP+deployed; algorithm unchanged')

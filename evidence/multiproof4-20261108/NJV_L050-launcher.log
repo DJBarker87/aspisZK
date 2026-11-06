@@ -1,0 +1,56 @@
+{"attempt": "NJV_L050", "exit_status": 0, "wall_seconds": 3.72792283189483, "peak_rss_kib": "4355108", "swaps": "0", "print_axioms": ["'NJV_NativeLevels.observation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_NativeLevels.returning' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJV_NativeLevels.observation : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length height : ℕ) (s : Scratch)
+  (history : List (Request × Digest)) (out : Level),
+  Invocation H nodes length height s history out → eval H (levels nodes length height s) = (history, ok out) :=
+fun H nodes length height s history out native =>
+  Invocation.rec (fun s => Eq.refl (eval H (levels nodes length 0 s)))
+    (fun height s after history row =>
+      have observed := NJV_NativeRows.observation H nodes length s.n s 0 0 history (Level.stop after) row;
+      of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (eval_bind (rows nodes length s.
+...
+congrArg Eq
+          (Eq.trans
+            (eval_bind (levels nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 })
+              (fun r =>
+                match r with
+                | ok a => Program.done (ok (finish root length a))
+                | fail e => Program.done (fail e)
+                | div => Program.done div)
+              H)
+            (congr
+              (congrArg Prod.mk
+                (Eq.trans
+                  (congr (congrArg HAppend.hAppend (congrArg Prod.fst observed))
+                    (congrArg Prod.fst
+                      (Eq.trans
+                        (congrArg (eval H)
+                          (congrArg
+                            (fun x =>
+                              match x.2 with
+                              | ok a => Program.done (ok (finish root length a))
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div)
+                            observed))
+                        (eval.eq_1 H (ok (finish root length out))))))
+                  (List.append_nil history)))
+              (congrArg Prod.snd
+                (Eq.trans
+                  (congrArg (eval H)
+                    (congrArg
+                      (fun x =>
+                        match x.2 with
+                        | ok a => Program.done (ok (finish root length a))
+                        | fail e => Program.done (fail e)
+                        | div => Program.done div)
+                      observed))
+                  (eval.eq_1 H (ok (finish root length out))))))))
+        (history, ok (finish root length out)))
+      (eq_self (history, ok (finish root length out))))
+'NJV_NativeLevels.returning' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7d411883facb4205bfeee3b7d23cb96c.scope; invocation ID: e6d7c253ce564a878662137d47cec3fe

@@ -9,7 +9,15 @@ open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 /-- The native 18-height controller consumes row loops in order, reinitializes
 (i,w) to (0,0), and installs their returned n. NJP_K066/067 (entry),
 K062/063 (row exit) and K068/069 (terminal) retain their own separate cuts;
-NJP_K062 is not used for any data value. Exact receipt map is NJV_CUTS.md. -/
+NJP_K062 is not used for any data value. Exact receipt map is NJV_CUTS.md.
+
+Native controller source: evidence/multiproof3-20261108/NJP_frontier_cuts.rs,
+sha256 d7437c9e40b56e1886d4441396d5bcea65cd3d53ff53ec893f1da382b88dcd51 (NJP_K064/065).
+Assertion excerpts: `assert_eq!(i,0);assert_eq!(w,0);`
+`assert_eq!(log.count,core::cmp::min(stop+1,18));`
+`assert_eq!(log.before[selected],if selected==0{n}else{log.after[selected-1]});`
+Rows are supplied by the separate full-state cuts, never by this control gate.
+ -/
 inductive Invocation (H : Request → Digest) (nodes : Nat → U8) (length : Nat) :
     Nat → Scratch → List (Request × Digest) → Level → Prop where
  | final (s : Scratch) : Invocation H nodes length 0 s [] (.done s)

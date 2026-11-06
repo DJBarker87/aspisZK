@@ -10,7 +10,20 @@ attribute [local instance] Classical.propDecidable
 
 /-- Pending native child frame, BEFORE any reply/write. Occupied: NJV_K002/003;
 sibling: NJP_K070/071 and K013..016 borrowed byte windows. The child's SAME
-slice arguments determine q; no reply or returned Result is included. -/
+slice arguments determine q; no reply or returned Result is included.
+
+Native source: evidence/multiproof4-20261108/NJV_multiproof.rs,
+sha256 b56ba8df20906b3ad4112375af36a79e8d9e35fa7dcbdbfcc8bf173c85179701 (NJV_K002/003).
+Assertion excerpts: `assert_eq!(idx[k],before_idx);`
+`assert_eq!(val[k][j],before_val);assert_eq!(at,before_at);`
+`assert_eq!(first[j],val[i][j]);assert_eq!(second[j],val[i+1][j]);`
+Sibling source: evidence/multiproof3-20261108/NJP_frontier_cuts.rs,
+sha256 d7437c9e40b56e1886d4441396d5bcea65cd3d53ff53ec893f1da382b88dcd51 (NJP_K070/071).
+Excerpts: `assert_eq!(at,old_at+32);` and
+`assert_eq!(idx[k],old_idx);assert_eq!(val[k][h],old_val);`
+The borrowed bytes and ordered child arguments are supplied by the SAME-input
+window/parent certificates, as NJV_CUTS.md specifies.
+ -/
 structure Cut (s : Scratch) (i length : Nat) (nodes : Nat → U8)
     (pending : Scratch) (q : Request) : Prop where
  active : i<s.n

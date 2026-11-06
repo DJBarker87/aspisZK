@@ -1,0 +1,99 @@
+NJV_lean/NJV_EntryGuard.lean:17:1: error: unsolved goals
+case pos
+physical : Slice U8
+s : reference.Scratch
+guard : NJV_Entry.Guard physical s
+d : 0 < ↑s.n ∧ ↑s.n ≤ 16
+⊢ (decide (AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)) && true) = true
+NJV_lean/NJV_EntryGuard.lean:18:22: warning: This simp argument is unused:
+  guard.1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵.̵1̵,̵d̵.̵2̵,̵g̵u̵a̵r̵d̵.̵1̵,̵g̵u̵a̵r̵d̵.̵2̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵a̵n̵d̵,̵g̵u̵a̵r̵d̵]̵[̲d̲.̲1̲,̲ ̲d̲.̲2̲,̲ ̲g̲u̲a̲r̲d̲.̲2̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲g̲u̲a̲r̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJV_lean/NJV_EntryGuard.lean:24:55: warning: This simp argument is unused:
+  false_iff
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵o̵o̵l̵.̵a̵n̵d̵_̵e̵q̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵e̵q̵_̵t̵r̵u̵e̵_̵e̵q̵,̵g̵u̵a̵r̵d̵,̵f̵a̵l̵s̵e̵_̵i̵f̵f̵]̵[̲B̲o̲o̲l̲.̲a̲n̲d̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲e̲q̲_̲t̲r̲u̲e̲_̲e̲q̲,̲ ̲g̲u̲a̲r̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJV_EntryGuard.same : ∀ (physical : Slice U8) (s : reference.Scratch),
+  (decide (0 < ↑s.n) && decide (↑s.n ≤ 16) &&
+        decide (AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)) &&
+      decide ((↑physical).length % 32 = 0)) =
+    decide (NJV_Entry.Guard physical s) :=
+fun physical s =>
+  if guard : NJV_Entry.Guard physical s then sorry
+  else
+    have no := fun h => guard ⟨h.right.right.left, h.right.right.right⟩;
+    Bool.eq_iff_iff.mpr
+      (Eq.mpr
+        (id
+          (congr
+            (congrArg Iff
+              (Eq.trans
+                (Bool.and_eq_true
+                  (decide (0 < ↑s.n) && decide (↑s.n ≤ 16) &&
+                    decide (AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)))
+                  (decide ((↑physical).length % 32 = 0)))
+                (congr
+                  (congrArg And
+                    (Eq.trans
+                      (Bool.and_eq_true (decide (0 < ↑s.n) && decide (↑s.n ≤ 16))
+                        (decide (AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s))))
+                      (congr
+                        (congrArg And
+                          (Eq.trans (Bool.and_eq_true (decide (0 < ↑s.n)) (decide (↑s.n ≤ 16)))
+                            (congr (congrArg And decide_eq_true_eq) decide_eq_true_eq)))
+                        decide_eq_true_eq)))
+                  decide_eq_true_eq)))
+            (Eq.trans
+              (congrFun' (congrArg Eq (Decidable.decide.congr_simp (NJV_Entry.Guard physical s) False (eq_false guard)))
+                true)
+              decide_eq_true_eq)))
+        (Or.casesOn (Decidable.not_and_iff_not_or_not'.mp no)
+          (fun h =>
+            {
+              mp := fun a =>
+                let ⟨left✝, right✝⟩ := a
+                let ⟨left✝¹, right✝¹⟩ := left✝
+                let ⟨left✝², right✝²⟩ := left✝¹
+                False.elim (h left✝²),
+              mpr := fun a =>
+                False.casesOn
+                  (fun x =>
+                    ((0 < ↑s.n ∧ ↑s.n ≤ 16) ∧ AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)) ∧
+                      (↑physical).length % 32 = 0)
+                  a })
+          fun h =>
+          {
+            mp := fun a =>
+              Or.casesOn (Decidable.not_and_iff_not_or_not'.mp h)
+                (fun h =>
+                  let ⟨left✝³, right✝³⟩ := a
+                  let ⟨left✝⁴, right✝⁴⟩ := left✝³
+                  let ⟨left✝⁵, right✝⁵⟩ := left✝⁴
+                  False.elim (h right✝⁵))
+                fun h =>
+                let ⟨left✝⁶, right✝⁶⟩ := a
+                let ⟨left✝⁷, right✝⁷⟩ := left✝⁶
+                let ⟨left✝⁸, right✝⁸⟩ := left✝⁷
+                Or.casesOn (Decidable.not_and_iff_not_or_not'.mp h) (fun h => False.elim (h right✝⁷)) fun h =>
+                  False.elim (h right✝⁶),
+            mpr := fun a =>
+              Or.casesOn (Decidable.not_and_iff_not_or_not'.mp h)
+                (fun h =>
+                  False.casesOn
+                    (fun x =>
+                      ((0 < ↑s.n ∧ ↑s.n ≤ 16) ∧ AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)) ∧
+                        (↑physical).length % 32 = 0)
+                    a)
+                fun h =>
+                False.casesOn
+                  (fun x =>
+                    ((0 < ↑s.n ∧ ↑s.n ≤ 16) ∧ AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)) ∧
+                      (↑physical).length % 32 = 0)
+                  a }))
+'NJV_EntryGuard.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

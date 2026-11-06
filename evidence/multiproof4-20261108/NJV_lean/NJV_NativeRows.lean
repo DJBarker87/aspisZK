@@ -13,7 +13,19 @@ def events (H : Request → Digest) (log : NJP_NativeRowCut.Log) :=
 /-- Reviewed native while cuts, NJP_K017..056 plus K060..063. Every
 constructor retains the SAME whole pre/post buffers and the exact recursive
 program counter. Child reply is installed at request(log), not a free result.
-This is the (ai)(5) invocation relation for the binary row loop. -/
+This is the (ai)(5) invocation relation for the binary row loop.
+
+Native sources: evidence/multiproof3-20261108/NJP_multiproof.rs,
+sha256 bf98425cd64ba4b1ae42ad2fadb443065339fbdfa1481265a0c9cbdfc0b593ed; NJP_frontier_cuts.rs,
+sha256 d7437c9e40b56e1886d4441396d5bcea65cd3d53ff53ec893f1da382b88dcd51.
+Assertion excerpts: `assert_eq!(log.calls,1);`
+`assert_eq!(idx[k],if k==oldw{parent}else{beforeidx});`
+`assert_eq!(log.write_byte,expectedreply);`
+`assert_eq!(val[k][h],beforeval);` and, on row exit/missing,
+`assert_eq!(log.calls,0);assert_eq!(log.write_calls,0);`
+`assert_eq!(i,oldi);assert_eq!(w,oldw);assert_eq!(at,oldat);`
+Every byte coordinate is universal; NJP_K023 stays excluded.
+ -/
 inductive Invocation (H : Request → Digest) (nodes : Nat → U8) (length : Nat) :
     Nat → Scratch → Nat → Nat → List (Request × Digest) → Level → Prop where
  | halt (fuel : Nat) (s : Scratch) (i w : Nat) (halted : s.n ≤ i) :

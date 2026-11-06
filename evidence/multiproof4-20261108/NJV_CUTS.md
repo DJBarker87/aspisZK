@@ -36,3 +36,7 @@ The original ten-leaf unit Domain (Arity Two, positive d<=10, sorted distinct ke
 Only deployed literal Arity::Two is covered. The Eight branch/parent_with_digest is not reached at candidate::batch_tree's literal call; no Eight credit or SHA unwinding. Actual inventory callers are TX1:083 and TX2:055 batch_tree (frozen candidate.rs:202), independently retained in NJV_CALLER_CLAUSES.json with every original clause. The convenience multiproof::verify wrapper is not an inventoried deployed incoming edge and earns no credit.
 
 Source-comment receipt-number corrections are rebuilt in L038/L040/L042; no theorem statement or proof changed.
+
+## Final provenance freeze
+
+After gate1, the four newly authored native-cut/induction docstrings were completed with direct harness paths, SHA256 and exact assertion excerpts required by (ai)(5). This changes source/compiled documentation metadata, no definition, hypothesis or proof. Focused replays and a second/final combined gate validate the final byte-pinned cohort. No third full audit is permitted.

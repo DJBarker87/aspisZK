@@ -1,0 +1,57 @@
+{"attempt": "NJV_L046", "exit_status": 1, "wall_seconds": 7.4931227010674775, "peak_rss_kib": "5840840", "swaps": "0", "print_axioms": ["'NJV_EntryGuard.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJV_lean/NJV_EntryGuard.lean:17:1: error: unsolved goals
+case pos
+physical : Slice U8
+s : reference.Scratch
+guard : NJV_Entry.Guard physical s
+d : 0 < ↑s.n ∧ ↑s.n ≤ 16
+⊢ (decide (AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)) && true) = true
+NJV_lean/NJV_EntryGuard.lean:18:22: warning: This simp argument is unused:
+  guard.1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵.̵1̵,̵d̵.̵2̵,̵g̵u̵a̵r̵d̵.̵1̵,̵g̵u̵a̵r̵d̵.̵2̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵a̵n̵d̵,̵g̵u̵a̵r̵d̵]̵[̲d̲.̲1̲,̲ ̲d̲.̲2̲,̲ ̲g̲u̲a̲r̲d̲.̲2̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲B̲o̲o̲l̲.̲t̲r̲u̲e̲_̲a̲n̲d̲,̲ ̲g̲u̲a̲r̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs f
+...
+                let ⟨left✝¹, right✝¹⟩ := left✝
+                let ⟨left✝², right✝²⟩ := left✝¹
+                False.elim (h left✝²),
+              mpr := fun a =>
+                False.casesOn
+                  (fun x =>
+                    ((0 < ↑s.n ∧ ↑s.n ≤ 16) ∧ AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)) ∧
+                      (↑physical).length % 32 = 0)
+                  a })
+          fun h =>
+          {
+            mp := fun a =>
+              Or.casesOn (Decidable.not_and_iff_not_or_not'.mp h)
+                (fun h =>
+                  let ⟨left✝³, right✝³⟩ := a
+                  let ⟨left✝⁴, right✝⁴⟩ := left✝³
+                  let ⟨left✝⁵, right✝⁵⟩ := left✝⁴
+                  False.elim (h right✝⁵))
+                fun h =>
+                let ⟨left✝⁶, right✝⁶⟩ := a
+                let ⟨left✝⁷, right✝⁷⟩ := left✝⁶
+                let ⟨left✝⁸, right✝⁸⟩ := left✝⁷
+                Or.casesOn (Decidable.not_and_iff_not_or_not'.mp h) (fun h => False.elim (h right✝⁷)) fun h =>
+                  False.elim (h right✝⁶),
+            mpr := fun a =>
+              Or.casesOn (Decidable.not_and_iff_not_or_not'.mp h)
+                (fun h =>
+                  False.casesOn
+                    (fun x =>
+                      ((0 < ↑s.n ∧ ↑s.n ≤ 16) ∧ AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)) ∧
+                        (↑physical).length % 32 = 0)
+                    a)
+                fun h =>
+                False.casesOn
+                  (fun x =>
+                    ((0 < ↑s.n ∧ ↑s.n ≤ 16) ∧ AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)) ∧
+                      (↑physical).length % 32 = 0)
+                  a }))
+'NJV_EntryGuard.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re570ce7f545445919f8c2d889f621c6f.scope; invocation ID: 43ef85d08ca64585a8f1705a3d608f62

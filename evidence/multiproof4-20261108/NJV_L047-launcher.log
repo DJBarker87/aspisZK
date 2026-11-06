@@ -1,0 +1,55 @@
+{"attempt": "NJV_L047", "exit_status": 0, "wall_seconds": 8.053648416884243, "peak_rss_kib": "5871628", "swaps": "0", "print_axioms": ["'NJV_EntryGuard.same' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJV_EntryGuard.same : ∀ (physical : Slice U8) (s : reference.Scratch),
+  (decide (0 < ↑s.n) && decide (↑s.n ≤ 16) &&
+        decide (AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)) &&
+      decide ((↑physical).length % 32 = 0)) =
+    decide (NJV_Entry.Guard physical s) :=
+fun physical s =>
+  Bool.eq_iff_iff.mpr
+    (Eq.mpr
+      (id
+        (congr
+          (congrArg Iff
+            (Eq.trans
+              (Bool.and_eq_true
+                (decide (0 < ↑s.n) && decide (↑s.n ≤ 16) &&
+                  decide (AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)))
+                (decide ((↑physical).length % 32 = 0)))
+              (congr
+                
+...
+theorem NJV_EntryGuard.same : ∀ (physical : Slice U8) (s : reference.Scratch),
+  (decide (0 < ↑s.n) && decide (↑s.n ≤ 16) &&
+        decide (AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)) &&
+      decide ((↑physical).length % 32 = 0)) =
+    decide (NJV_Entry.Guard physical s) :=
+fun physical s =>
+  Bool.eq_iff_iff.mpr
+    (Eq.mpr
+      (id
+        (congr
+          (congrArg Iff
+            (Eq.trans
+              (Bool.and_eq_true
+                (decide (0 < ↑s.n) && decide (↑s.n ≤ 16) &&
+                  decide (AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)))
+                (decide ((↑physical).length % 32 = 0)))
+              (congr
+                (congrArg And
+                  (Eq.trans
+                    (Bool.and_eq_true (decide (0 < ↑s.n) && decide (↑s.n ≤ 16))
+                      (decide (AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s))))
+                    (congr
+                      (congrArg And
+                        (Eq.trans (Bool.and_eq_true (decide (0 < ↑s.n)) (decide (↑s.n ≤ 16)))
+                          (congr (congrArg And decide_eq_true_eq) decide_eq_true_eq)))
+                      decide_eq_true_eq)))
+                decide_eq_true_eq)))
+          decide_eq_true_eq))
+      { mp := fun h => ⟨h.left.right, h.right⟩,
+        mpr := fun guard =>
+          have d := NJV_Entry.guard_domain physical s guard;
+          ⟨⟨⟨d.left, d.right⟩, guard.left⟩, guard.right⟩ })
+'NJV_EntryGuard.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4a5336ac8656496abdb0822e6b177925.scope; invocation ID: 6af2243a46e24057818327e64dbd2e8f

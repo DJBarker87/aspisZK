@@ -11,7 +11,17 @@ open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
 /-- Complete binary native entry, after CLOSED well_formed/parent/root replies
 are installed at SAME arguments. Constructors transcribe the early entry and
 terminal cuts plus the nested native cut chain, never a whole endpoint law.
-The Kani-to-constructor association is P6/D188 option-A transport. -/
+The Kani-to-constructor association is P6/D188 option-A transport.
+
+Native entry/terminal source: evidence/multiproof3-20261108/NJP_frontier_cuts.rs,
+sha256 d7437c9e40b56e1886d4441396d5bcea65cd3d53ff53ec893f1da382b88dcd51 (NJP_K066..069).
+Assertion excerpts: `assert_eq!(result,0<n&&n<=16&&reply&&length%32==0);`
+`assert_eq!(log.n,n);assert_eq!(log.ptr,idx.as_ptr());`
+`assert_eq!(result,n==1&&idx[0]==0&&reply&&at==length);`
+The two reply slots are instantiated internally by CLOSED well_formed and
+root_matches at those SAME arguments; NJV_WellInput and NJP_CohortTerminal
+justify the exact guard/finish normalization.
+ -/
 inductive Invocation (H : NJP_RowModel.Request → NJP_RowModel.Digest)
     (root : RefDigest) (physical : Slice U8) (s : reference.Scratch) :
     List (NJP_RowModel.Request × NJP_RowModel.Digest) → (Bool × NJP_RowModel.Scratch) → Prop where
