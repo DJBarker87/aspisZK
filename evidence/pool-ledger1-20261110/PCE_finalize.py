@@ -1,0 +1,47 @@
+from pathlib import Path
+import json,lzma,hashlib,subprocess
+E=Path(__file__).resolve().parent;read=lambda n:json.loads((E/n).read_text());a=[json.loads(l) for l in (E/'PCE_ATTEMPTS.jsonl').read_text().splitlines()];assert len(a)==25 and a[-1]['attempt']=='PCE_L025' and a[-1]['exit_status']==0
+assert read('PCE_VALIDATION.json')['status']=='PASS' and all(x['rejected'] for x in read('PCE_VALIDATION.json')['mutation_tests'])
+for r in a:
+ assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'},r['attempt']
+ assert r['swaps'] in [0,'0'],r['attempt']
+assert [r['attempt'] for r in a if r['exit_status']!=0]==['PCE_L002','PCE_L003','PCE_L007']
+ledger=read('PCE_LEDGER.json') if (E/'PCE_LEDGER.json').exists() else json.loads(lzma.decompress((E/'PCE_LEDGER.json.xz').read_bytes()));closed=[r for r in ledger['rows'] if r['credited_pool_row']];audit=read('PCE_AUDIT.json');scan=read('PCE_SCAN.json');v=read('PCE_VALIDATION.json');peak=max(int(r['peak_rss_kib']) for r in a);wall=sum(r['wall_seconds'] for r in a);newtrust=ledger['new_runtime_trust_item'];exp=read('PCE_EXPORT_MANIFEST.json')
+metrics=dict(scopes=25,scope_budget=25,kani=0,extraction=0,passes=22,own_input_failures=['PCE_L002','PCE_L003','PCE_L007'],wall_seconds=wall,peak_rss_kib=peak,swaps=0,source_revision=a[-1]['source_revision'],last_attempt='PCE_L025',last_exit_status=0,limits=a[-1]['limits'],timeout_or_memory_kill=False,cap_increase=False,unchanged_timeout_replay=False)
+(E/'PCE_BUDGET.json').write_text(json.dumps(metrics,indent=1)+'\n')
+text=f'''# PCE Pool ledger handoff
+
+**Completed re-gate/ledger job; target not yet established.** Branch `codex/pc-pool-ledger1-20261110`. Stage commits `1d609931970` (scope), `6260daaaccc` (stage1 gate); final ledger/evidence commit is this revision. Commit only; no push.
+
+{(E/'PCE_COUNT.md').read_text().strip()}
+
+## Exact established claim
+
+All397 NKZ ON occurrences recorded:278 new Stream C rows and119 shared bodies. New CLOSED rows: {', '.join(r['id'] for r in closed)}. The four former candidates370/371/344/290 are admitted by this ledger23 gate; no root, statement, quantifier, named hypothesis, caller clause or frozen body was repaired. Every record retains exact statement and hypotheses, caller/occurrence clauses, trust, source/body pins and gate attempt. All119 shared bodies match183 CLOSED ledger23 rows and retain Stream A ownership; every Pool caller must still establish SAME arguments, domain, carrier, state and ordered effects. No shared credit is added to278.
+
+PCE_COMBINED_IMPORT combines headline AspisR1.RPx_Deployed.deployed, actual ledger23 module NLS_COMBINED_IMPORT (NLO_COMBINED_IMPORT.lean is its required receipt filename), NLF SDK and all selected PCB/PCA modules. L001 compiled; no existing module rebuilt: all33141 common PCB imports are byte-identical to accepted objects. L022 inspects the full raw type expressions and checked statements of all75 roots. PCA contributes47 intermediate/support roots, zero Pool rows; its spec/RowSpecs/old CPI candidate are never treated as full owner bridges or newly adopted runtime facts.
+
+## Gate and evidence
+
+NFX scan L008 PASS across{scan['modules']} modules: zero dangling, canonical duplicate/incompatible owners or import defects;{scan['identical_cached_replicas']} structurally identical serialized cache replicas retained. Raw ax2 L009–021 covers75 roots, including headline, every PCB accepted/candidate root and every PCA root. Only propext/Classical.choice/Quot.sound appear. Exactly one collector disagreement, PCB_FinalLaws.preparation: collector[] versus raw standard three. Recorded under(ab')(3)/(c-d), no padding or proof repair. Eight planted/mutated fixtures L006 pass with the SAME optimized PCE executable used for scan/all roots; raw walker C hash is byte-identical to ledger23 linker inputs (PCE_TOOL_EQUIVALENCE.json). New Lean files are import/audit/type-inspection utilities; no new theorem/proof.
+
+L023 rehashed every33696 imported file, including Aeneas objects/sidecars. L024 revalidates33 retained native receipts and their matched controls, frozen offline graphs, unchanged locks and all-crate features; no native execution.27 missing committed candidate graph/lock/feature sidecars were recovered read-only from retained PCB host receipts and are now committed. Accepted older source/place packets and their limits are inherited, not silently rerun or broadened. Every scope has original receipts/config/source snapshots and a PCE_CONTEXT supplement with section6 metrics, exact revision/hash/dependency/axiom result and all-crate deployed feature resolution.
+
+L025 validator exit0,397 records and5/5 rejecting mutations: status, hypothesis, root, nonstandard axiom, shared-row credit. Exact71-input hash bundle is committed. PCE_VALIDATION.json, PCE_VALIDATOR.py, PCE_LEDGER.json.xz (+ original SHA256), PCE_AUDIT.json, PCE_SCAN.json and original-byte compressed graphs are authoritative. This is a focused coherent cached gate, not cold release replay, ELF reproduction or whole-Pool closure.
+
+## Resource and repair record
+
+25/25 serial Lean/link/audit scopes;0 Kani/0 extraction.22 pass; three own-input failures L002/L003/L007 (missing audit auxiliary objects, premature link, missing scan-manifest input) repaired with changed inputs in L004/L005/L008. See PCE_REPAIRS.md. Shared launcher/shim/reservation infrastructure unchanged. Every actual launch admission exit0 AND allowed:true, host free>=40GB. L025 reservation refusals were waited/retried, never launched on allowed:false/exit78. MemoryHigh6G/MemoryMax8G/swap0/tasks64; Lean-M7000; optimized linker. Total measured scope wall{wall:.6f}s; peakRSS{peak}KiB; swaps0. No timeout, memory kill, cap increase or unchanged failed-shape replay. Source revision and exact target/exit/time/RSS/swap/axioms per attempt, not guessed from the final commit.
+
+## Trust, remaining work and retention
+
+All263 other new rows remain OPEN; all3 ON guard owners OPEN;3 OFF owners retained outside counts. Every member and exact producer wait list is in PCE_REMAINING.md and PCE_COMPOSITION.md/.json: POOL.prefix_to_cpi, NIB-P1..P4 and POOL.read_to_settlement remain OPEN. Clear helper344 closes, not its dispatch/settlement parent. PCC owns328 deposit and PCD terminal P1..P3; these live dependencies were recorded, never duplicated.
+
+RuntimeCpiAccountView ADDED-LEAD-20261110 is recorded as required by open328/330; no newly CLOSED PCE root uses it. It is not guard/RefCell/key/handle/flag preservation, CPI success or token/system-program semantics. RuntimeCpiReadonlyEntry7 PENDING/UNUSED. P6/D188 option-A native transport and inherited std/compiler/ABI/source-to-ELF trust are reclassifications, never removals. Error-path effects remain exact obligations; shared records conservatively SOUNDNESS-ONLY and never privacy evidence. No new closed error-path abstraction is credited. Frozen3, L154 statement parameter, narrowedD188, RuntimePersistence data-only, approved two-transaction game, privacy and100-bit PER-ATTEMPT unchanged; no grinding credit. K086 liveness/abort only; production reachability/exclusion, owner(aj)(a), complete consumer/guard/producer/native bridges and L187/L188/provenance obligations remain.
+
+Frozen Pool b936275465600469312d1f058cdc91ea2a11f3dc; crates/programs/r1-cost-probe/Cargo.lock4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Inherited default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc. No shipped file changed; no rebuild trigger. No session-A/sibling/privacy tree edit, key/account/fund/authority operation, push or new trust adoption.
+
+Own cache retained: `{exp['base_cache']}`; own exports `{exp['export']}` (PCE_EXPORT_MANIFEST.json). Imports copied, never linked; every imported hash recorded. No source cache deletion/write. Small own objects retained for replay; no Rust target or solver temp created. PCE_hygiene.py preserves raw barrier bytes as.xz plus original SHA, removes own __pycache__, checks every file<=20MB and verifies all compressed SHA pairs before commit. No binaries, objects or ELFs are committed.
+'''
+(E/'PCE_HANDOFF.md').write_text(text)
+print('Final handoff prepared:25/25 scopes,15 new CLOSED,119 shared consumed,0 guard owners CLOSED; target not yet established.')
