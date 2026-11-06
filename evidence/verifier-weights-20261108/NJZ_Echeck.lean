@@ -1,8 +1,9 @@
-import LPt_LPl_EcheckResult
+import NFU_LPl_EcheckResult
 import NJJ_Chunks
 set_option autoImplicit false
 noncomputable section
 namespace NJZ_Echeck
+open NFU_Retarget
 open Aeneas Aeneas.Std Result
 abbrev Words := Fin 8 → Nat
 attribute [local instance] Classical.propDecidable
@@ -30,13 +31,13 @@ theorem step_iff (w : Words) (k : Bool) :
    simp [canonical]
 
 def words (bs : List U8) : Words := fun i=>
- LPt_LPl.Echeck.word ((bs.drop (4*i.val)).take 4)
+ LPl.Echeck.word ((bs.drop (4*i.val)).take 4)
 
 /-- Exact natural-byte guard, with every rejected and high-nonzero word. -/
 theorem chunk_iff (bs : List U8) (k : Bool) :
- LPt_LPl.Echeck.chunk bs k=true ↔
+ LPl.Echeck.chunk bs k=true ↔
  Canonical (words bs) ∧ (k=true→HighZero (words bs)) := by
- unfold LPt_LPl.Echeck.chunk
+ unfold LPl.Echeck.chunk
  rw [List.all_eq_true]
  constructor
  · intro all
@@ -72,7 +73,7 @@ theorem chunk_iff (bs : List U8) (k : Bool) :
      exact decide_eq_true h
 
 theorem step_chunk (bs : List U8) (k : Bool) :
- step (decode (words bs)) k=LPt_LPl.Echeck.chunk bs k := by
+ step (decode (words bs)) k=LPl.Echeck.chunk bs k := by
  apply Bool.eq_iff_iff.mpr
  exact (step_iff _ _).trans (chunk_iff _ _).symm
 
@@ -80,30 +81,30 @@ theorem step_chunk (bs : List U8) (k : Bool) :
 codec guard is installed on the SAME selected bytes. -/
 theorem at_window (bs : List U8) (k : Bool) (i : Nat) (out : Bool)
  (cut : StepCut (decode (words ((bs.drop (32*i)).take 32))) k out) :
- out=LPt_LPl_A.Echeck.predicate bs k i := by
- rw [cut,step_chunk,LPt_LPl.Echeck.chunk_eq]
+ out=LPl_A.Echeck.predicate bs k i := by
+ rw [cut,step_chunk,LPl.Echeck.chunk_eq]
  rfl
 
 /-- Retained first-error induction covers all complete chunks, including
 ignored incomplete suffixes. This composes local verdicts; it does not assert
 that an unreviewed raw extraction equals the source. -/
 theorem result (bs : Slice U8) (k out : Bool)
- (trace : LPt_LPl.Echeck.Trace bs.val k 0 out) :
- LPt_External.verifier.echeck bs k=
+ (trace : LPl.Echeck.Trace bs.val k 0 out) :
+ NFU_Retarget.verifier.echeck bs k=
  ok (if out then .Ok () else .Err .Parse) :=
- LPt_LPl.Echeck.native_result bs k out trace
+ LPl.Echeck.native_result bs k out trace
 
 /-- Positive model-side root: only reviewed one-iteration cuts are inputs;
 the enclosing Result is derived, with no trace/accepted-output premise. -/
 theorem root (bs : Slice U8) (k : Bool) (replies : Nat → Bool)
  (cuts : ∀ i,i<bs.val.length/32→
   StepCut (decode (words ((bs.val.drop (32*i)).take 32))) k (replies i)) :
- LPt_External.verifier.echeck bs k=
+ NFU_Retarget.verifier.echeck bs k=
  ok (if (List.range (bs.val.length/32)).all replies then .Ok () else .Err .Parse) := by
- have verdict : LPt_LPl_A.Echeck.loop bs.val k=
+ have verdict : LPl_A.Echeck.loop bs.val k=
    (List.range (bs.val.length/32)).all replies := by
-  rw [LPt_LPl_A.Echeck.loop_eq_model]
-  unfold LPt_LPl_Kit_Bytes.chunksValid
+  rw [LPl_A.Echeck.loop_eq_model]
+  unfold LPl_Kit_Bytes.chunksValid
   apply Bool.eq_iff_iff.mpr
   simp only [List.all_eq_true,List.mem_range]
   constructor
@@ -111,10 +112,10 @@ theorem root (bs : Slice U8) (k : Bool) (replies : Nat → Bool)
     rw [at_window bs.val k i (replies i) (cuts i hi)]
     exact all i hi
   · intro all i hi
-    change LPt_LPl_A.Echeck.predicate bs.val k i=true
+    change LPl_A.Echeck.predicate bs.val k i=true
     rw [←at_window bs.val k i (replies i) (cuts i hi)]
     exact all i hi
- rw [LPt_LPl_A.Echeck.shipped_leaf_model,verdict]
+ rw [LPl_A.Echeck.shipped_leaf_model,verdict]
 
 #print axioms step_iff
 #print axioms chunk_iff

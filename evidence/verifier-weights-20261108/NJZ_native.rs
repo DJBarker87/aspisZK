@@ -85,6 +85,8 @@ fn roots_step(){
 }
 #[kani::proof]
 #[kani::unwind(25)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn roots_control(){
  let mut seen=[0usize;20];let mut count=0;for level in 0..20{seen[count]=level;count+=1;}
  let j:usize=kani::any();kani::assume(j<20);assert_eq!(seen[j],j^(if cfg!(NJZ_invert){1}else{0}));assert_eq!(count,20);
@@ -150,19 +152,27 @@ fn fidelity_weak(_left:&PD,_right:&PD,log:&mut ParentLog)->PD{log.calls=1;[M31::
 fn fidelity_args()->(PD,PD,ParentLog){let left=pd();let right=pd();let log=ParentLog{left:&left,right:&right,left_value:left,right_value:right,reply:pd(),calls:0};(left,right,log)}
 #[kani::proof_for_contract(fidelity_weak)]
 #[kani::unwind(25)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn fidelity_contract(){let(l,r,mut log)=fidelity_args();let _out=fidelity_weak(&l,&r,&mut log);}
 #[kani::proof]
 #[kani::unwind(25)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn fidelity_real(){let(l,r,mut log)=fidelity_args();let out=fidelity_weak(&l,&r,&mut log);assert_eq!(out[1],M31::ZERO);}
 #[kani::proof]
 #[kani::unwind(25)]
 #[kani::stub_verified(fidelity_weak)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn fidelity_unimplied(){let(l,r,mut log)=fidelity_args();let out=fidelity_weak(&l,&r,&mut log);assert_eq!(out[1],M31::ZERO);}
 #[kani::ensures(|out| out[0]==M31::ZERO)]
 #[kani::modifies(&mut log.calls)]
 fn fidelity_modifies(_left:&PD,_right:&PD,log:&mut ParentLog)->PD{log.calls=1;if cfg!(NJZ_bad_modifies){log.reply[1]=M31(1);}[M31::ZERO;8]}
 #[kani::proof_for_contract(fidelity_modifies)]
 #[kani::unwind(25)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn fidelity_modifies_check(){let(l,r,mut log)=fidelity_args();let _out=fidelity_modifies(&l,&r,&mut log);}
 
 fn echeck_ref(reply:Option<E>,k:bool)->Result<(),Error>{match reply{None=>Err(Error::Parse),Some(x)=>if k&&x.c1()!=K::ZERO{Err(Error::Parse)}else{Ok(())}}}
@@ -208,19 +218,27 @@ fn default_contract(){let reply=PT{next_leaf_index:kani::any(),root:pd(),frontie
 fn tree_fidelity_weak()->PT{PT{next_leaf_index:0,root:[M31::ZERO;8],frontier:[[M31::ZERO;8];20]}}
 #[kani::proof_for_contract(tree_fidelity_weak)]
 #[kani::unwind(25)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn tree_fidelity_contract(){let _out=tree_fidelity_weak();}
 #[kani::proof]
 #[kani::unwind(25)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn tree_fidelity_real(){let out=tree_fidelity_weak();assert_eq!(out.root[0],M31::ZERO);}
 #[kani::proof]
 #[kani::unwind(25)]
 #[kani::stub_verified(tree_fidelity_weak)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn tree_fidelity_unimplied(){let out=tree_fidelity_weak();assert_eq!(out.root[0],M31::ZERO);}
 #[kani::ensures(|out| out.next_leaf_index==0)]
 #[kani::modifies(&mut state.next_leaf_index)]
 fn tree_fidelity_modifies(state:&mut PT)->PT{state.next_leaf_index=1;if cfg!(NJZ_bad_modifies){state.root[0]=M31(1);}PT{next_leaf_index:0,root:[M31::ZERO;8],frontier:[[M31::ZERO;8];20]}}
 #[kani::proof_for_contract(tree_fidelity_modifies)]
 #[kani::unwind(25)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn tree_fidelity_modifies_check(){let mut state=PT{next_leaf_index:kani::any(),root:[M31::ZERO;8],frontier:[[M31::ZERO;8];20]};let _out=tree_fidelity_modifies(&mut state);}
 // K037 split: only the actual eight-limb destination store is contracted.
 // K010/K011 carries its arbitrary21table destination/frame; no rerun of K037.
@@ -239,13 +257,19 @@ impl kani::Arbitrary for Error{fn any()->Self{match kani::any::<u8>()%8{0=>Error
 fn result_fidelity_weak(log:&mut ParseLog)->Result<(),Error>{log.calls=1;Ok(())}
 #[kani::proof_for_contract(result_fidelity_weak)]
 #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn result_fidelity_contract(){let bytes:[u8;32]=kani::any();let mut log=ParseLog{expected:&bytes,reply:None,calls:0};let _out=result_fidelity_weak(&mut log);}
 #[kani::proof]
 #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn result_fidelity_real(){let bytes:[u8;32]=kani::any();let mut log=ParseLog{expected:&bytes,reply:None,calls:0};let out=result_fidelity_weak(&mut log);assert!(out.is_ok());}
 #[kani::proof]
 #[kani::unwind(34)]
 #[kani::stub_verified(result_fidelity_weak)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn result_fidelity_unimplied(){let bytes:[u8;32]=kani::any();let mut log=ParseLog{expected:&bytes,reply:None,calls:0};let out=result_fidelity_weak(&mut log);assert!(out.is_ok());}
 #[kani::requires(log.calls==0)]
 #[kani::ensures(|out| out.is_ok())]
@@ -253,4 +277,6 @@ fn result_fidelity_unimplied(){let bytes:[u8;32]=kani::any();let mut log=ParseLo
 fn result_fidelity_modifies(log:&mut ParseLog)->Result<(),Error>{log.calls=1;if cfg!(NJZ_bad_modifies){log.reply=Some(E::ZERO);}Ok(())}
 #[kani::proof_for_contract(result_fidelity_modifies)]
 #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn result_fidelity_modifies_check(){let bytes:[u8;32]=kani::any();let mut log=ParseLog{expected:&bytes,reply:None,calls:0};let _out=result_fidelity_modifies(&mut log);}

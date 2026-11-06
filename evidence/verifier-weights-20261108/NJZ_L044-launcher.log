@@ -1,0 +1,34 @@
+{"attempt": "NJZ_L044", "exit_status": 0, "wall_seconds": 10.130347420927137, "peak_rss_kib": "6027192", "swaps": "0", "print_axioms": ["'NJZ_CodecSemantics.canonical_shape' depends on axioms: [propext, Quot.sound]", "'NJZ_CodecSemantics.high_four' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_CodecSemantics.high_shape' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_CodecSemantics.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_CodecSemantics.domain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_CodecSemantics.cut_projection' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_CodecSemantics.root' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NJZ_CodecSemantics.canonical_shape' depends on axioms: [propext, Quot.sound]
+'NJZ_CodecSemantics.high_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.high_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.cut_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJZ_CodecSemantics.root : ∀ (bs : Slice U8) (k : Bool) (replies : ℕ → Bool),
+  (∀ i < (↑bs).length / 32, ∃ b, ↑b = List.take 32 (List.drop (32 * i) ↑bs) ∧ Cut b k (
+...
+'NJZ_CodecSemantics.canonical_shape' depends on axioms: [propext, Quot.sound]
+'NJZ_CodecSemantics.high_four' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.high_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_CodecSemantics.cut_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJZ_CodecSemantics.root : ∀ (bs : Slice U8) (k : Bool) (replies : ℕ → Bool),
+  (∀ i < (↑bs).length / 32, ∃ b, ↑b = List.take 32 (List.drop (32 * i) ↑bs) ∧ Cut b k (replies i)) →
+    verifier.echeck bs k =
+      ok
+        (if (List.range ((↑bs).length / 32)).all replies = true then core.result.Result.Ok ()
+        else core.result.Result.Err LPl_Kit_Release.verifier.Error.Parse) :=
+fun bs k replies cuts =>
+  NJZ_Echeck.root bs k replies fun i hi =>
+    let ⟨b, h✝⟩ := cuts i hi
+    let ⟨window, cut⟩ := h✝
+    id
+      (Eq.mpr
+        (id (congrArg (fun _a => replies i = _a) (NJZ_Echeck.step_chunk (List.take 32 (List.drop (32 * i) ↑bs)) k)))
+        (Eq.mpr (id (congrArg (fun _a => replies i = LPl.Echeck.chunk _a k) (Eq.symm window)))
+          (Eq.trans (cut_projection b k (replies i) cut) (source b k))))
+'NJZ_CodecSemantics.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rdc44fe19769a43de8bc15719a643e081.scope; invocation ID: 7fd016c52ee64522a74a2848d4c3784d

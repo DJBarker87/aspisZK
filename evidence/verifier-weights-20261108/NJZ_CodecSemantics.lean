@@ -2,6 +2,7 @@ import NJZ_CodecProjection
 set_option autoImplicit false
 noncomputable section
 namespace NJZ_CodecSemantics
+open NFU_Retarget
 open Aeneas Aeneas.Std Result AspisR1
 open OraclePortCkptAbi4Decode CheckpointBytes3EShape CheckpointBytes3ScalarShape
 attribute [local instance] Classical.propDecidable
@@ -48,7 +49,7 @@ def parsedStep (b : Array U8 32#usize) (k : Bool) : Bool :=
 /-- CLOSED decoder guard and full decoded high limbs imply exactly the source
 one-iteration verdict on these SAME32bytes, including canonical rejection. -/
 theorem source (b : Array U8 32#usize) (k : Bool) :
- parsedStep b k=LPt_LPl.Echeck.chunk b.val k := by
+ parsedStep b k=LPl.Echeck.chunk b.val k := by
  have word_eq : (fun i=>(CheckpointBytes3EDecode.word32 b.to_slice b.property i).val)=
    NJZ_Echeck.words b.val := funext (NJZ_CodecProjection.word b)
  have can := canonical_shape (CheckpointBytes3EDecode.word32 b.to_slice b.property)
@@ -111,7 +112,7 @@ trace, parent result or child-success premise is used. -/
 theorem root (bs : Slice U8) (k : Bool) (replies : Nat → Bool)
  (cuts : ∀ i,i<bs.val.length/32→∃ b : Array U8 32#usize,
   b.val=(bs.val.drop (32*i)).take 32 ∧ Cut b k (replies i)) :
- LPt_External.verifier.echeck bs k=
+ NFU_Retarget.verifier.echeck bs k=
  ok (if (List.range (bs.val.length/32)).all replies then .Ok () else .Err .Parse) := by
  apply NJZ_Echeck.root bs k replies
  intro i hi
