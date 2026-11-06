@@ -68,12 +68,24 @@ if {kind!r}=='audit':
   for row in json.loads(p.read_text()).get('results',[]):
    q=b/('NEP_'+p.stem+'_'+row['root']+'_REACHABLE.txt')
    if q.is_file():names.append(q)
-print(json.dumps({{str(p.relative_to(b)):p.read_text() for p in names}}))
+if {kind!r}=='inspect':
+ names += [b/n for n in ['NLM_TOOL_PINS.json','NLM_RETENTION.json','NLM_EXPORT.json','NLM_CLOSURE_PINS.json.xz','NLM_CLOSURE_PINS.json.sha256'] if (b/n).is_file()]
+out={{}}
+for p in names:
+ n=str(p.relative_to(b))
+ if n.endswith('.xz'):
+  import base64
+  out[n+'.base64']=base64.b64encode(p.read_bytes()).decode()
+ else:out[n]=p.read_text()
+print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
     out=json.loads(r.stdout)
     for n,t in out.items():
         p=E/n;p.parent.mkdir(parents=True,exist_ok=True)
-        if n.endswith('.log') or n.endswith('_REACHABLE.txt') or n.endswith('LOADED_scan.jsonl'):
+        if n.endswith('.base64'):
+            import base64
+            (E/n.removesuffix('.base64')).write_bytes(base64.b64decode(t))
+        elif n.endswith('.log') or n.endswith('_REACHABLE.txt') or n.endswith('LOADED_scan.jsonl'):
             p.with_name(p.name+'.xz').write_bytes(lzma.compress(t.encode()));p.with_name(p.name+'.sha256').write_text(sha(t.encode())+'\n')
         else:p.write_text(t)
     rc=json.loads(out[a+'/receipt.json'])
