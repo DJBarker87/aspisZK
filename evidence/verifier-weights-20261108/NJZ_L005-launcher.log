@@ -1,0 +1,54 @@
+{"attempt": "NJZ_L005", "exit_status": 1, "wall_seconds": 10.27232751599513, "peak_rss_kib": "5975292", "swaps": "0", "print_axioms": ["'NJZ_Readers.raw' depends on axioms: [propext, Quot.sound]", "'NJZ_Readers.raw_cut' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_Readers.k_window' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_Readers.e_window' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_Readers.k_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJZ_Readers.e_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJZ_generated/NJZ_Readers.lean:70:12: error: unsolved goals
+case ok.none
+r : Fresh.R
+bound : ↑r.at + 16 ≤ (↑r.bytes).length
+bytes : Std.Array U8 16#usize
+out : Fresh.R
+cut : RawCut 16#usize r out bytes
+run :
+  NJC_ReaderEmission.verifier.Reader.raw 16#usize (core.result.Result.unwrap core.fmt.DebugTryFromSliceError) r =
+    ok (bytes, out)
+h : OraclePortCkptAbi2Extracted.decode_k_spec bytes.to_slice = ok none
+codec : ok (CheckpointBytes3Reader.optionK none) = ok (NJC_ReaderResults.naturalK bytes)
+valueEq : core.result.Result.Err AspisR1Stage2.verifier.Error.Checkpoint = NJC_ReaderResults.naturalK bytes
+⊢ ∃ x,
+    lift bytes.to_slice = ok x ∧
+      ∃ x_1,
+        (match OraclePortCkptAbi2Extr
+...
+liceError) r =
+    ok (bytes, out)
+val✝ : OraclePortCkptAbi2Extracted.aspis_core.field.wide_exact.WideExact
+h : OraclePortCkptAbi2Extracted.decode_e_spec bytes.to_slice = ok (some val✝)
+codec : ok (CheckpointBytes3Reader.optionE (some val✝)) = ok (NJC_EReaderResults.naturalE bytes)
+valueEq : core.result.Result.Ok (CheckpointBytes3Namespaces.fromE val✝) = NJC_EReaderResults.naturalE bytes
+⊢ ∃ x,
+    lift bytes.to_slice = ok x ∧
+      ∃ x_1,
+        (match OraclePortCkptAbi2Extracted.decode_e_spec x with
+            | ok x => ok (Option.map (fun x => unE (CheckpointBytes3Namespaces.fromE x)) x)
+            | fail err => fail err
+            | div => div) =
+            ok x_1 ∧
+          (match x_1 with
+            | none => ok (core.result.Result.Err NID_ResumeEmission.verifier.Error.Checkpoint)
+            | some value => ok (core.result.Result.Ok value)) =
+            ok (core.result.Result.Ok (unE (CheckpointBytes3Namespaces.fromE val✝)))
+NJZ_generated/NJZ_Readers.lean:97:17: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [parseE,h̵,̵ ̲outer, ̲NJC_ReaderEmission.core.option.Option.ok_or,
+  ̵  ̵ ̵ ̵ ̵ ̵unInner, ̲unError, ̲← ̲valueEq,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Function.comp_def]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NJZ_Readers.raw' depends on axioms: [propext, Quot.sound]
+'NJZ_Readers.raw_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_Readers.k_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_Readers.e_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_Readers.k_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJZ_Readers.e_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r791d7b763b1641b4ae4ee67c0d8586b7.scope; invocation ID: a4bececf024b40e1b64c9343273ff1f3

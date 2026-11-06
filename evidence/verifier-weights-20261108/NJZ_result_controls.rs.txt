@@ -1,0 +1,22 @@
+impl kani::Arbitrary for Error{fn any()->Self{match kani::any::<u8>()%8{0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}}
+#[kani::requires(log.calls==0)]
+#[kani::ensures(|out| (out.is_ok() || *out==Err(Error::Parse))^cfg!(NJZ_inverse_ensures))]
+#[kani::modifies(&mut log.calls)]
+fn result_fidelity_weak(log:&mut ParseLog)->Result<(),Error>{log.calls=1;Ok(())}
+#[kani::proof_for_contract(result_fidelity_weak)]
+#[kani::unwind(34)]
+fn result_fidelity_contract(){let bytes:[u8;32]=kani::any();let mut log=ParseLog{expected:&bytes,reply:None,calls:0};let _out=result_fidelity_weak(&mut log);}
+#[kani::proof]
+#[kani::unwind(34)]
+fn result_fidelity_real(){let bytes:[u8;32]=kani::any();let mut log=ParseLog{expected:&bytes,reply:None,calls:0};let out=result_fidelity_weak(&mut log);assert!(out.is_ok());}
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub_verified(result_fidelity_weak)]
+fn result_fidelity_unimplied(){let bytes:[u8;32]=kani::any();let mut log=ParseLog{expected:&bytes,reply:None,calls:0};let out=result_fidelity_weak(&mut log);assert!(out.is_ok());}
+#[kani::requires(log.calls==0)]
+#[kani::ensures(|out| out.is_ok())]
+#[kani::modifies(&mut log.calls)]
+fn result_fidelity_modifies(log:&mut ParseLog)->Result<(),Error>{log.calls=1;if cfg!(NJZ_bad_modifies){log.reply=Some(E::ZERO);}Ok(())}
+#[kani::proof_for_contract(result_fidelity_modifies)]
+#[kani::unwind(34)]
+fn result_fidelity_modifies_check(){let bytes:[u8;32]=kani::any();let mut log=ParseLog{expected:&bytes,reply:None,calls:0};let _out=result_fidelity_modifies(&mut log);}

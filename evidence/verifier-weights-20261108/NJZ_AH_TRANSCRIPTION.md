@@ -1,0 +1,19 @@
+# NJZ source/body transcription inventory
+
+Target not yet established. ReviewedTranscription scope is RECLASSIFICATION under option-A P6/D188, not a new runtime/cryptographic trust row or removal. Native packets remain candidates until the combined and next-ledger gates.
+
+The pinned extraction E001 selected all owned functions and emitted no body (Charon/cargo exit101, driver2, exact generic diagnostic retained). Under(ay)(2), this is the recorded failed-selection route to the(ah) alternative; no unsupported internal-error diagnosis is invented and no extraction is retried. Existing canonical emissions are reused wherever available. This alternative applies only to echeck and the four Pool leaves; the ten weights/Reader/validator occurrences use their retained emissions.
+
+| Frozen source fragment | Own native reference/certificate | Lean value/induction association |
+|---|---|---|
+| verifier.rs echeck, one `for c in b.chunks_exact(32)` body, `from_le_bytes(c).ok_or(Parse)?`, optional c1==ZERO guard | echeck_cut/echeck_ref; K035/036 contract, K006/007 local full Option reply/byte frame; Result shape controls K051–056 | NJZ_CodecSemantics.source/domain/root, NJZ_CodecProjection.word, NJZ_Echeck first-error/root; NJJ complete ChunksExact model and native differential K007/008 |
+| format.rs pool_v1_tree_parent, sole compression call | tree_parent_cut, K033/034 exact calls-only modifies; PD shape K027–032; arbitrary full reply and readonly caller args K008/009 | NJZ_TreeParent.source internally applies CLOSED NJP TX1_305 at SAME canonical inputs; no free child-result equation |
+| incremental_merkle.rs pool_v1_empty_roots, zero21table and20levels, selected `roots[level+1] = parent(&roots[level],&roots[level])` | K010/011 arbitrary21table iteration/frame, K012/013 exact control; K037 whole contract TIMEOUT EXCLUDED; K049/050 eight-limb actual store contract | NJZ_PoolRoot.domains/parent_clauses/roots installs child Result at each SAME level; NJZ_EmptyTree.frame finite induction; every untouched cell preserved |
+| IncrementalMerkleTreeV1::empty, after complete child table, next0/root20/frontier from_fn0..19 | empty_segment K039/040, complete native constructor K014/015, PoolTree shape K043–048; arbitrary observation index is ghost-only | NJZ_PoolRoot.empty derives the table before constructor; full field equality by finite extensionality |
+| Default::default, sole empty child returned unchanged | default_segment K041/042; full return frame K018/019 | NJZ_PoolRoot.default applies empty internally before the return cut, no assumed child output |
+
+Native references replace CHILD calls only with local logs/arbitrary full replies. Inputs, borrowed identity and byte/cell frames are those asserted by the named harnesses. They introduce no writable static, Option<fn> observer or field multiplication. Calibrated weak contracts are test fixtures only; no weak contract supplies a production result. Every production proof_for_contract has its own matched failing control.
+
+Loops obey B/(ad): one native body on arbitrary pre-state, data-independent20-level control where applicable, then Lean induction and SAME-call child/domain substitution. Copies use exactly KMX patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67. Safe std calls remain internal under(au); no additional producer row/dictionary is introduced. Abort-only child calls retain only the chronological prefix and no suffix under(an); no totality/success hypothesis is claimed.
+
+The macro `proof_for_contract` certificates are source-fragment contracts after the prescribed local CHILD-oracle instrumentation. They are not represented as a whole-buffer execution, a successful Charon/Aeneas extraction, a new ELF build or a new headline theorem. Whole21table timeout is not credited. The next ledger must review exact fragment/source and reference/model scopes together with the ten retained-emission packets.

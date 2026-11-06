@@ -1,0 +1,68 @@
+{"attempt": "NJZ_L020", "exit_status": 1, "wall_seconds": 8.889206005027518, "peak_rss_kib": "5987336", "swaps": "0", "print_axioms": ["'NJZ_Echeck.step_iff' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_Echeck.chunk_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJZ_Echeck.step_chunk' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJZ_Echeck.at_window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJZ_Echeck.result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_Echeck.root' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJZ_generated/NJZ_Echeck.lean:46:55: error: don't know how to synthesize placeholder for argument `b`
+context:
+bs : List U8
+k : Bool
+all :
+  ∀ x ∈ List.range 8,
+    (have n := LPt_LPl.Echeck.word (List.take 4 (List.drop (4 * x) bs));
+      decide (n < 2147483647) && (!k || decide (x < 4 ∨ n = 0))) =
+      true
+i : Fin 8
+h :
+  (have n := LPt_LPl.Echeck.word (List.take 4 (List.drop (4 * ↑i) bs));
+    decide (n < 2147483647) && (!k || decide (↑i < 4 ∨ n = 0))) =
+    true
+⊢ Prop
+NJZ_generated/NJZ_Echeck.lean:69:41: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 3
+  4 ≤ a ≤ 7
+where
+ a := ↑i
+ b := ↑↑⟨i, hi⟩
+NJZ_generated/NJZ_Echeck.lean:112:8
+...
+ = 0))) =
+    true
+⊢ Prop
+NJZ_generated/NJZ_Echeck.lean:69:41: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 3
+  4 ≤ a ≤ 7
+where
+ a := ↑i
+ b := ↑↑⟨i, hi⟩
+NJZ_generated/NJZ_Echeck.lean:112:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LPt_LPl_A.Echeck.predicate (↑bs) k i
+in the target expression
+  LPt_LPl_Kit_Bytes.validChunk 8 k (List.take 32 (List.drop (32 * i) ↑bs)) = true
+
+case mpr
+bs : Slice U8
+k : Bool
+replies : ℕ → Bool
+cuts : ∀ i < (↑bs).length / 32, StepCut (decode (words (List.take 32 (List.drop (32 * i) ↑bs)))) k (replies i)
+all : ∀ x < (↑bs).length / 32, replies x = true
+i : ℕ
+hi : i < (↑bs).length / 32
+⊢ LPt_LPl_Kit_Bytes.validChunk 8 k (List.take 32 (List.drop (32 * i) ↑bs)) = true
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bs
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑bs
+'NJZ_Echeck.step_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_Echeck.chunk_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJZ_Echeck.step_chunk' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJZ_Echeck.at_window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJZ_Echeck.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_Echeck.root' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8aa216b4d6f24d4fb90a8c7da27bc786.scope; invocation ID: c7c6748a290f4210bd2498b49ae258b7

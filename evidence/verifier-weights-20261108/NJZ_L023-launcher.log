@@ -1,0 +1,32 @@
+{"attempt": "NJZ_L023", "exit_status": 0, "wall_seconds": 3.3217248539440334, "peak_rss_kib": "4335848", "swaps": "0", "print_axioms": ["'NJZ_TreeParent.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJZ_TreeParent.source : ∀ (left right seenLeft seenRight out : Digest) (calls : ℕ),
+  Canonical left →
+    Canonical right →
+      Cut left right seenLeft seenRight (reply seenLeft seenRight) out calls →
+        out = parent left right ∧ calls = 1 ∧ Canonical out :=
+fun left right seenLeft seenRight out calls hl hr cut =>
+  have child :=
+    NJP_CompressionPacket.TX1_305 left right hl hr (NJE_CompressSeed.seed left right) (reply left right) 1
+      { seed := rfl, call_count := rfl, output := fun x => rfl };
+  have value :=
+    Eq.mpr (id (congrArg (fun _a => _a = parent left right) cut.output))
+      (Eq.mpr (id (congrArg (fun _a => reply _a seenRight = parent left right) cut.left))
+
+...
+theorem NJZ_TreeParent.source : ∀ (left right seenLeft seenRight out : Digest) (calls : ℕ),
+  Canonical left →
+    Canonical right →
+      Cut left right seenLeft seenRight (reply seenLeft seenRight) out calls →
+        out = parent left right ∧ calls = 1 ∧ Canonical out :=
+fun left right seenLeft seenRight out calls hl hr cut =>
+  have child :=
+    NJP_CompressionPacket.TX1_305 left right hl hr (NJE_CompressSeed.seed left right) (reply left right) 1
+      { seed := rfl, call_count := rfl, output := fun x => rfl };
+  have value :=
+    Eq.mpr (id (congrArg (fun _a => _a = parent left right) cut.output))
+      (Eq.mpr (id (congrArg (fun _a => reply _a seenRight = parent left right) cut.left))
+        (Eq.mpr (id (congrArg (fun _a => reply left _a = parent left right) cut.right)) child.left));
+  ⟨value, ⟨cut.count, Eq.mpr (id (congrArg (fun _a => Canonical _a) value)) (parent_canonical left right)⟩⟩
+'NJZ_TreeParent.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf8394e4f91d446dbad39e06f657dda93.scope; invocation ID: 07d75a722bf1409fb6dcd0ae0d9b606c

@@ -1,0 +1,223 @@
+def NJC_ConcreteUnwrap.raw : (n : Aeneas.Std.Usize) →
+  NIL_Carriers.Fresh.R → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 n × NJC_ReaderEmission.verifier.Reader) :=
+fun n r =>
+  NJC_ReaderEmission.verifier.Reader.raw n
+    (Aeneas.Std.core.result.Result.unwrap Aeneas.Std.core.fmt.DebugTryFromSliceError) r
+def NIL_FreshOps.readK : NIL_Carriers.Fresh.R →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result NIL_Carriers.Fresh.K NIL_Carriers.Fresh.Err × NIL_Carriers.Fresh.R) :=
+fun r =>
+  NIL_Carriers.outer (fun x => (NIL_Carriers.unInner NIL_Carriers.unK x.1, NIL_Carriers.unReader x.2))
+    (AspisR1.CheckpointBytes3Reader.readK (NIL_Carriers.reader r))
+def NIL_FreshOps.readE : NIL_Carriers.Fresh.R →
+  Aeneas.Std.Result
+    (Aeneas.Std.core.result.Result NIL_Carriers.Fresh.E NIL_Carriers.Fresh.Err × NIL_Carriers.Fresh.R) :=
+fun r =>
+  NIL_Carriers.outer (fun x => (NIL_Carriers.unInner NIL_Carriers.unE x.1, NIL_Carriers.unReader x.2))
+    (AspisR1.CheckpointBytes3Reader.readE (NIL_Carriers.reader r))
+theorem NIL_FreshOps.k_port : ∀ (r : NIL_Carriers.Fresh.R),
+  NIL_Carriers.outer (fun x => (NIL_Carriers.inner NIL_Carriers.k x.1, NIL_Carriers.reader x.2))
+      (NIL_FreshOps.readK r) =
+    AspisR1.CheckpointBytes3Reader.readK (NIL_Carriers.reader r) :=
+fun r =>
+  id
+    (NIL_ResultTransport.outer_roundtrip
+      (fun x => (NIL_Carriers.unInner NIL_Carriers.unK x.1, NIL_Carriers.unReader x.2))
+      (fun x => (NIL_Carriers.inner NIL_Carriers.k x.1, NIL_Carriers.reader x.2))
+      (fun x =>
+        let ⟨fst✝, snd✝, h✝⟩ := x
+        Eq.symm h✝ ▸
+          of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (congr
+                    (congrArg Prod.mk
+                      ((fun m =>
+                          NIL_ResultReverse.inner_reverse NIL_Carriers.unK NIL_Carriers.k NIL_Carriers.k_reverse m)
+                        fst✝))
+                    (NIL_Carriers.reader_reverse snd✝)))
+                (fst✝, snd✝))
+              (eq_self (fst✝, snd✝))))
+      (AspisR1.CheckpointBytes3Reader.readK (NIL_Carriers.reader r)))
+theorem NIL_FreshOps.e_port : ∀ (r : NIL_Carriers.Fresh.R),
+  NIL_Carriers.outer (fun x => (NIL_Carriers.inner NIL_Carriers.e x.1, NIL_Carriers.reader x.2))
+      (NIL_FreshOps.readE r) =
+    AspisR1.CheckpointBytes3Reader.readE (NIL_Carriers.reader r) :=
+fun r =>
+  id
+    (NIL_ResultTransport.outer_roundtrip
+      (fun x => (NIL_Carriers.unInner NIL_Carriers.unE x.1, NIL_Carriers.unReader x.2))
+      (fun x => (NIL_Carriers.inner NIL_Carriers.e x.1, NIL_Carriers.reader x.2))
+      (fun x =>
+        let ⟨fst✝, snd✝, h✝⟩ := x
+        Eq.symm h✝ ▸
+          of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (congr
+                    (congrArg Prod.mk
+                      ((fun m =>
+                          NIL_ResultReverse.inner_reverse NIL_Carriers.unE NIL_Carriers.e NIL_Carriers.e_reverse m)
+                        fst✝))
+                    (NIL_Carriers.reader_reverse snd✝)))
+                (fst✝, snd✝))
+              (eq_self (fst✝, snd✝))))
+      (AspisR1.CheckpointBytes3Reader.readE (NIL_Carriers.reader r)))
+theorem NJJ_Flush.source : ∀ (b : VTop_Stages.verifier.BatchedWeights) (old : Aeneas.Std.Slice NJJ_Flush.K),
+  (↑b.raw).length = 64 →
+    (↑old).length = 64 → AspisR1.Port3_FlushInstall.flush b old = Aeneas.Std.Result.ok (NJJ_Flush.output b) :=
+fun b old rawSize oldSize =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = Aeneas.Std.Result.ok (NJJ_Flush.output b))
+        (AspisR1.Port3_FlushInstall.flush_exact b old
+          (Decidable.byContradiction fun a => NJJ_Flush.source._proof_1 b old rawSize oldSize a))))
+    (congrArg Aeneas.Std.Result.ok
+      (Subtype.ext
+        (Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (congrArg Subtype.val
+                  (Subtype.mk.congr_simp
+                    (List.map AspisR1.Port3_FlushInstall.fromMutable
+                      ↑⟨List.map S8Kani2FinishReferenceJoin.toFinish
+                            ↑(S8JoinFinishExact.output b.raw (AspisR1.Port3_FlushInstall.toWeights old)),
+                          Eq.mpr
+                            (id
+                              (congrFun' (congrArg LE.le (List.length_map S8Kani2FinishReferenceJoin.toFinish))
+                                Aeneas.Std.Usize.max))
+                            (S8JoinFinishExact.output b.raw (AspisR1.Port3_FlushInstall.toWeights old)).property⟩)
+                    (List.map
+                      (AspisR1.Port3_FlushInstall.fromMutable ∘
+                        S8Kani2FinishReferenceJoin.toFinish ∘ S8OwnedP6Finish.modelValue)
+                      (List.take (↑old).length ↑b.raw))
+                    (Eq.trans
+                      (congrArg (List.map AspisR1.Port3_FlushInstall.fromMutable)
+                        (Eq.trans
+                          (congrArg (List.map S8Kani2FinishReferenceJoin.toFinish)
+                            (congrArg Subtype.val
+                              (Subtype.mk.congr_simp
+                                (List.map S8OwnedP6Finish.modelValue
+                                  (List.take
+                                    (Aeneas.Std.alloc.vec.Vec.length (AspisR1.Port3_FlushInstall.toWeights old))
+                                    ↑b.raw))
+                                (List.map S8OwnedP6Finish.modelValue (List.take (↑old).length ↑b.raw))
+                                (congrArg (List.map S8OwnedP6Finish.modelValue)
+                                  (congrFun' (congrArg List.take (List.length_map AspisR1.Port3_FlushInstall.toOwned))
+                                    ↑b.raw))
+                                (S8JoinFinishExact.output._proof_1 b.raw (AspisR1.Port3_FlushInstall.toWeights old)))))
+                          List.map_map))
+                      List.map_map)
+                    (AspisR1.Port3_FlushInstall.fromSlice._proof_1
+                      ⟨List.map S8Kani2FinishReferenceJoin.toFinish
+                          ↑(S8JoinFinishExact.output b.raw (AspisR1.Port3_FlushInstall.toWeights old)),
+                        Eq.mpr
+                          (id
+                            (congrFun' (congrArg LE.le (List.length_map S8Kani2FinishReferenceJoin.toFinish))
+                              Aeneas.Std.Usize.max))
+                          (S8JoinFinishExact.output b.raw (AspisR1.Port3_FlushInstall.toWeights old)).property⟩))))
+              ↑(NJJ_Flush.output b)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  List.map
+                      (AspisR1.Port3_FlushInstall.fromMutable ∘
+                        S8Kani2FinishReferenceJoin.toFinish ∘ S8OwnedP6Finish.modelValue)
+                      _a =
+                    ↑(NJJ_Flush.output b))
+                (List.take_of_length_le
+                  (Decidable.byContradiction fun a => NJJ_Flush.source._proof_2 b old rawSize oldSize a))))
+            (Eq.refl
+              (List.map
+                (AspisR1.Port3_FlushInstall.fromMutable ∘
+                  S8Kani2FinishReferenceJoin.toFinish ∘ S8OwnedP6Finish.modelValue)
+                ↑b.raw))))))
+theorem NHV_PendingPacket.source : ∀ (reserved : Bool) (a : AspisR1Stage2.verifier.Accumulator),
+  (↑a.weights).length = 64 →
+    AspisR1.Port3_NativePendingInstall.source reserved a.weights.deref =
+      if reserved = true then
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (AspisR1.NFW_QueryResume.pending a))
+      else
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation) :=
+fun reserved a width =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            if reserved = true then
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (AspisR1.NFW_QueryResume.pending a))
+            else
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation))
+        (AspisR1.Port3_NativePendingInstall.reference_eq reserved a.weights.deref width)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a =
+              if reserved = true then
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (AspisR1.NFW_QueryResume.pending a))
+              else
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation))
+          (AspisR1.Port3_PendingInstall.pending_exact reserved a.weights.deref)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (if reserved = true then
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok { raw := _a, terms := 0#usize })
+                else
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation)) =
+                if reserved = true then
+                  Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (AspisR1.NFW_QueryResume.pending a))
+                else
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation))
+            (NHV_PendingPacket.raw_same a)))
+        (Bool.casesOn (motive := fun t =>
+          reserved = t →
+            (if reserved = true then
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Ok
+                    { raw := S7Kani3CallerTrace.initialRaw (AspisR1.NFW_QueryResume.rowWeights a), terms := 0#usize })
+              else
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation)) =
+              if reserved = true then
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (AspisR1.NFW_QueryResume.pending a))
+              else
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation))
+          reserved
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl
+                (if false = true then
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Ok
+                      { raw := S7Kani3CallerTrace.initialRaw (AspisR1.NFW_QueryResume.rowWeights a), terms := 0#usize })
+                else
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation)))
+          (fun h =>
+            Eq.symm h ▸
+              Eq.refl
+                (if true = true then
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Ok
+                      { raw := S7Kani3CallerTrace.initialRaw (AspisR1.NFW_QueryResume.rowWeights a), terms := 0#usize })
+                else
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Allocation)))
+          (Eq.refl reserved))))
+NJZ_generated/NJZ_Inspect.lean:15:7: error(lean.unknownIdentifier): Unknown constant `AspisR1Stage2.verifier.echeck`
+NJZ_generated/NJZ_Inspect.lean:16:7: error(lean.unknownIdentifier): Unknown constant `AspisR1Stage2.verifier.Reader.k`
+NJZ_generated/NJZ_Inspect.lean:17:7: error(lean.unknownIdentifier): Unknown constant `AspisR1Stage2.verifier.Reader.e`

@@ -1,0 +1,61 @@
+{"attempt": "NJZ_L010", "exit_status": 1, "wall_seconds": 11.079295164905488, "peak_rss_kib": "5974376", "swaps": "0", "print_axioms": ["'NJZ_Readers.raw' depends on axioms: [propext, Quot.sound]", "'NJZ_Readers.raw_cut' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_Readers.k_window' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_Readers.e_window' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_Readers.k_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_Readers.e_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJZ_Readers.k_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJZ_Readers.e_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJZ_generated/NJZ_Readers.lean:127:17: error: Tactic `rfl` failed: The left-hand side
+  do
+    let value ← outer (Option.map (unK ∘ CheckpointBytes3Namespaces.fromK)) (fail err)
+    let reply ← NJC_ReaderEmission.core.option.Option.ok_or value NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (reply, unReader out)
+is not definitionally equal to the right-hand side
+  match
+    let (b, out) := (bytes, out)
+    do
+    let q ← OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice
+    ok (CheckpointBytes3Reader.optionK q, out) with
+  | ok x => ok (unInner unK x.1, unReader x.2)
+  | fail err => fail err
+  | div => div
+
+case ok.fail
+r : Fresh.R
+bytes : Std.Array U8 16#usize
+out : AspisR1Stage2.ver
+...
+)
+is not definitionally equal to the right-hand side
+  match
+    let (b, out) := (bytes, out)
+    do
+    let q ← OraclePortCkptAbi2Extracted.decode_e_spec b.to_slice
+    ok (CheckpointBytes3Reader.optionE q, out) with
+  | ok x => ok (unInner unE x.1, unReader x.2)
+  | fail err => fail err
+  | div => div
+
+case ok.ok.some
+r : Fresh.R
+bytes : Std.Array U8 32#usize
+out : AspisR1Stage2.verifier.Reader
+hraw : CheckpointBytes3Reader.raw 32#usize (reader r) = ok (bytes, out)
+val✝ : OraclePortCkptAbi2Extracted.aspis_core.field.wide_exact.WideExact
+hparse : OraclePortCkptAbi2Extracted.decode_e_spec bytes.to_slice = ok (some val✝)
+⊢ (do
+      let value ← outer (Option.map (unE ∘ CheckpointBytes3Namespaces.fromE)) (ok (some val✝))
+      let reply ← NJC_ReaderEmission.core.option.Option.ok_or value NID_ResumeEmission.verifier.Error.Checkpoint
+      ok (reply, unReader out)) =
+    match
+      let (b, out) := (bytes, out)
+      do
+      let q ← OraclePortCkptAbi2Extracted.decode_e_spec b.to_slice
+      ok (CheckpointBytes3Reader.optionE q, out) with
+    | ok x => ok (unInner unE x.1, unReader x.2)
+    | fail err => fail err
+    | div => div
+'NJZ_Readers.raw' depends on axioms: [propext, Quot.sound]
+'NJZ_Readers.raw_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_Readers.k_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_Readers.e_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_Readers.k_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_Readers.e_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_Readers.k_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJZ_Readers.e_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-reab3cf6b6a6044a59959c7d07f067148.scope; invocation ID: 9f08f4452aa5474b81711d5e185abaf2

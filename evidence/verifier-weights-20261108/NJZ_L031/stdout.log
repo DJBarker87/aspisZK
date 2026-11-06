@@ -1,0 +1,41 @@
+'NJZ_PoolRoot.reply_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJZ_PoolRoot.domains' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJZ_PoolRoot.parent_clauses : ∀ (states : ℕ → Table),
+  (∀ (j : Fin 21), states 0 j = zero) →
+    (∀ (n : ℕ) (hn : n < 20),
+        StepCut (states n) (states (n + 1)) ⟨n, hn⟩ (NJZ_TreeParent.reply (states n ⟨n, ⋯⟩) (states n ⟨n, ⋯⟩))) →
+      ∀ (n : ℕ) (hn : n < 20),
+        StepCut (states n) (states (n + 1)) ⟨n, hn⟩ (parent (states n ⟨n, ⋯⟩) (states n ⟨n, ⋯⟩)) :=
+fun states initial cuts n hn =>
+  let current := states n ⟨n, Decidable.byContradiction fun a => domains._proof_1 n hn a⟩;
+  have domain :=
+    domains states initial cuts n (Decidable.byContradiction fun a => parent_clauses._proof_1 n hn a)
+      ⟨n, Decidable.byContradiction fun a => domains._proof_1 n hn a⟩;
+  have child :=
+    NJZ_TreeParent.source current current current current (NJZ_TreeParent.reply current current) 1 domain domain
+      { left := rfl, right := rfl, output := rfl, count := rfl };
+  Eq.mpr (id (congrArg (fun _a => StepCut (states n) (states (n + 1)) ⟨n, hn⟩ _a) (Eq.symm child.left))) (cuts n hn)
+'NJZ_PoolRoot.parent_clauses' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJZ_PoolRoot.roots : ∀ (states : ℕ → Table),
+  (∀ (j : Fin 21), states 0 j = zero) →
+    (∀ (n : ℕ) (hn : n < 20),
+        StepCut (states n) (states (n + 1)) ⟨n, hn⟩ (NJZ_TreeParent.reply (states n ⟨n, ⋯⟩) (states n ⟨n, ⋯⟩))) →
+      ∀ (j : Fin 21), states 20 j = root ↑j :=
+fun states initial cuts => NJZ_EmptyTree.roots states initial (parent_clauses states initial cuts)
+'NJZ_PoolRoot.roots' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJZ_PoolRoot.empty : ∀ (states : ℕ → Table),
+  (∀ (j : Fin 21), states 0 j = zero) →
+    (∀ (n : ℕ) (hn : n < 20),
+        StepCut (states n) (states (n + 1)) ⟨n, hn⟩ (NJZ_TreeParent.reply (states n ⟨n, ⋯⟩) (states n ⟨n, ⋯⟩))) →
+      ∀ (out : NJZ_EmptyTree.Tree), EmptyCut (states 20) out → out = NJZ_EmptyTree.empty :=
+fun states initial cuts out constructor => empty_source (states 20) (roots states initial cuts) out constructor
+'NJZ_PoolRoot.empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJZ_PoolRoot.default : ∀ (states : ℕ → Table),
+  (∀ (j : Fin 21), states 0 j = zero) →
+    (∀ (n : ℕ) (hn : n < 20),
+        StepCut (states n) (states (n + 1)) ⟨n, hn⟩ (NJZ_TreeParent.reply (states n ⟨n, ⋯⟩) (states n ⟨n, ⋯⟩))) →
+      ∀ (child out : NJZ_EmptyTree.Tree),
+        EmptyCut (states 20) child → DefaultCut child out → out = NJZ_EmptyTree.default :=
+fun states initial cuts child out constructor returnCut =>
+  Eq.trans returnCut (empty states initial cuts child constructor)
+'NJZ_PoolRoot.default' depends on axioms: [propext, Classical.choice, Quot.sound]
