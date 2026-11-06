@@ -1,0 +1,72 @@
+{"attempt": "NJV_L043", "exit_status": 1, "wall_seconds": 7.813022326910868, "peak_rss_kib": "5838380", "swaps": "0", "print_axioms": ["'NJV_WellInput.keys' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJV_WellInput.reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJV_lean/NJV_WellInput.lean:23:90: error: Application type mismatch: The argument
+  arr
+has type
+  j < (↑s.idx).length
+but is expected to have type
+  ?m.68 ?m.72 j
+in the application
+  getElem!_pos ?m.72 j arr
+NJV_lean/NJV_WellInput.lean:19:1: error: unsolved goals
+case h
+s : reference.Scratch
+bound : ↑s.n ≤ 16
+len : (↑s.idx).length = 16
+j : ℕ
+hj : j < (NJV_UnitDomain.keys s).length
+hj' : j < (List.map (fun x => ↑x) (List.take ↑s.n ↑s.idx)).length
+jb : j < ↑s.n
+arr : j < (↑s.idx).length
+⊢ ↑(↑s.idx)[j]! = ↑(↑s.idx)[j]
+NJV_lean/NJV_WellInput.lean:31:40: error: Application type mismatch: The argument
+  Eq.le s.idx.property
+has type
+  (↑s.idx).length ≤ ↑16#usize
+but is expected to have type
+  ↑s
+...
+pacity := le_trans (List.length_take_le ↑s.n ↑s.idx) sorry;
+            capacity⟩)))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a = ok (decide (wellFormed (NJV_UnitDomain.keys s))))
+          (NJE_WellSource.source
+            ↑⟨List.take ↑s.n ↑s.idx,
+                have len := s.idx.property;
+                have capacity := le_trans (List.length_take_le ↑s.n ↑s.idx) sorry;
+                capacity⟩)))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => ok _a = ok (decide (wellFormed (NJV_UnitDomain.keys s))))
+            (NJA_WellFormed.source_eq
+              (List.map (fun x => ↑x)
+                ↑⟨List.take ↑s.n ↑s.idx,
+                    have len := s.idx.property;
+                    have capacity := le_trans (List.length_take_le ↑s.n ↑s.idx) sorry;
+                    capacity⟩))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                ok
+                    (decide
+                      (wellFormed
+                        (List.map (fun x => ↑x)
+                          ↑⟨List.take ↑s.n ↑s.idx,
+                              have len := s.idx.property;
+                              have capacity := le_trans (List.length_take_le ↑s.n ↑s.idx) sorry;
+                              capacity⟩))) =
+                  ok (decide (wellFormed _a)))
+              (keys s bound)))
+          (Eq.refl
+            (ok
+              (decide
+                (wellFormed
+                  (List.map (fun x => ↑x)
+                    ↑⟨List.take ↑s.n ↑s.idx,
+                        have len := s.idx.property;
+                        have capacity := le_trans (List.length_take_le ↑s.n ↑s.idx) sorry;
+                        capacity⟩))))))))
+'NJV_WellInput.reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd684bc5b2f72485a9631f40d25c9ba71.scope; invocation ID: bc1813bf335b457e99b54ce312508bca

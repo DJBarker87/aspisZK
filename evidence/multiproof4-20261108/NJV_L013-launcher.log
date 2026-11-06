@@ -1,0 +1,45 @@
+{"attempt": "NJV_L013", "exit_status": 1, "wall_seconds": 9.044079143088311, "peak_rss_kib": "5837876", "swaps": "0", "print_axioms": ["'NJV_NativeEntry.raw_observation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_NativeEntry.observation' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJV_lean/NJV_NativeEntry.lean:49:1: error: No goals to be solved
+theorem NJV_NativeEntry.raw_observation : ∀ (H : NJP_RowModel.Request → NJP_RowModel.Digest) (root : RefDigest)
+  (physical : Slice U8) (s : reference.Scratch) (history : List (NJP_RowModel.Request × NJP_RowModel.Digest))
+  (out : Bool × NJP_RowModel.Scratch),
+  Invocation H root physical s history out → eval H (NJV_Entry.rawProgram root physical s) = (history, ok out) :=
+fun H root physical s history out native =>
+  Invocation.casesOn (motive := fun a a_1 t =>
+    history = a → out = a_1 → native ≍ t → eval H (NJV_Entry.rawProgram root physical s) = (history, ok out)) native
+    (fun guard h =>
+      Eq.ndrec (motive := fun hi
+...
+refl out) (HEq.refl native)
+'NJV_NativeEntry.raw_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_NativeEntry.observation : ∀ (H : Slice (Slice U8) → RefDigest) (root : RefDigest) (physical : Slice U8)
+  (s : reference.Scratch) (history : List (NJP_RowModel.Request × NJP_RowModel.Digest))
+  (out : Bool × NJP_RowModel.Scratch),
+  Invocation (NJP_RequestTransport.hash H) root physical s history out →
+    have typed := eval H (NJV_Entry.program root physical s);
+    (typed.1, mapResult NJP_CohortReturning.answer typed.2) =
+      (List.map (fun e => (NJP_RequestTransport.address e.1, encode e.2)) history, ok out) :=
+fun H root physical s history out native =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a = (List.map (fun e => (NJP_RequestTransport.address e.1, encode e.2)) history, ok out))
+          (NJV_Entry.observation H root physical s)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a => _a = (List.map (fun e => (NJP_RequestTransport.address e.1, encode e.2)) history, ok out))
+            (NJP_RequestTransport.observation H (NJV_Entry.rawProgram root physical s))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) _a.1, _a.2) =
+                  (List.map (fun e => (NJP_RequestTransport.address e.1, encode e.2)) history, ok out))
+              (raw_observation (NJP_RequestTransport.hash H) root physical s history out native)))
+          (Eq.refl
+            (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) (history, ok out).1,
+              (history, ok out).2)))))
+'NJV_NativeEntry.observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9a73ab78c5e740c29ae3df681bf6cf4a.scope; invocation ID: 9216367999c34b6a965ef9e986371fdb

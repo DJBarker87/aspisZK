@@ -1,0 +1,341 @@
+info: nhr: no previous manifest, creating one from scratch
+info: toolchain not updated; no toolchain information found
+theorem NJV_VerifierView.returning : ∀ (H : Bytes → State) (root : RefDigest) (physical : Slice U8)
+  (s : reference.Scratch),
+  s.at = 0#usize →
+    AspisR1.MultiproofConeLevelIteration.Domain physical s →
+      (↑physical).length ≤ 9216 →
+        wellFormed (List.map Prod.fst (live s 0 ↑s.n)) ∧ (↑physical).length % 32 = 0 →
+          eval H (transport (NJP_CohortReturning.run root physical s)) =
+            ((eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).1,
+              ok (eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).2) :=
+fun H root physical s zero domain bytes guard =>
+  let ⟨out, returned⟩ := NJP_CohortTotal.levels (rawOracle H) 18 physical s domain bytes
+  have initial :=
+    Eq.mpr (id (congrArg (fun _a => { idx := s.idx, val := s.val, n := s.n, «at» := _a } = s) (Eq.symm zero)))
+      (Eq.refl { idx := s.idx, val := s.val, n := s.n, «at» := s.at });
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              eval H
+                  (transport
+                    (AspisR1.MultiproofConePhysicalLevels.bindRun
+                      (AspisR1.MultiproofConePhysicalLevels.levels 18 _a physical) fun out =>
+                      Program.done (ok (NJP_CohortReturning.finish root physical out)))) =
+                ((eval H
+                      (if wellFormed (List.map Prod.fst (live s 0 ↑s.n)) ∧ (↑physical).length % 32 = 0 then
+                        AspisV8R19.OracleProgramOps.bind
+                          (transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)) fun result =>
+                          Program.done (AspisR1.MultiproofConeVerifyState.finishState root physical s result)
+                      else Program.done (false, s))).1,
+                  ok
+                    (eval H
+                        (if wellFormed (List.map Prod.fst (live s 0 ↑s.n)) ∧ (↑physical).length % 32 = 0 then
+                          AspisV8R19.OracleProgramOps.bind
+                            (transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)) fun result =>
+                            Program.done (AspisR1.MultiproofConeVerifyState.finishState root physical s result)
+                        else Program.done (false, s))).2))
+            initial))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                eval H
+                    (transport
+                      (AspisR1.MultiproofConePhysicalLevels.bindRun
+                        (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical) fun out =>
+                        Program.done (ok (NJP_CohortReturning.finish root physical out)))) =
+                  ((eval H _a).1, ok (eval H _a).2))
+              (if_pos guard)))
+          (Eq.mpr
+            (id
+              (congr
+                (congrArg Eq
+                  (Eq.trans
+                    (transport_observation H
+                      (AspisV8R19.OracleProgramOps.bind (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)
+                        fun result =>
+                        match result with
+                        | ok x => Program.done (ok (NJP_CohortReturning.finish root physical x))
+                        | fail e => Program.done (fail e)
+                        | div => Program.done div))
+                    (congr
+                      (congrArg Prod.mk
+                        (congrArg
+                          (List.map fun e =>
+                            (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                              AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                          (congrArg Prod.fst
+                            (Eq.trans
+                              (eval_bind (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)
+                                (fun result =>
+                                  match result with
+                                  | ok x => Program.done (ok (NJP_CohortReturning.finish root physical x))
+                                  | fail e => Program.done (fail e)
+                                  | div => Program.done div)
+                                (rawOracle H))
+                              (congr
+                                (congrArg Prod.mk
+                                  (Eq.trans
+                                    (congrArg
+                                      (HAppend.hAppend
+                                        (eval (rawOracle H)
+                                            (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1)
+                                      (congrArg Prod.fst
+                                        (Eq.trans
+                                          (congrArg (eval (rawOracle H))
+                                            (congrArg
+                                              (fun x =>
+                                                match x with
+                                                | ok x => Program.done (ok (NJP_CohortReturning.finish root physical x))
+                                                | fail e => Program.done (fail e)
+                                                | div => Program.done div)
+                                              returned))
+                                          (eval.eq_1 (rawOracle H)
+                                            (ok (NJP_CohortReturning.finish root physical out))))))
+                                    (List.append_nil
+                                      (eval (rawOracle H)
+                                          (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1)))
+                                (congrArg Prod.snd
+                                  (Eq.trans
+                                    (congrArg (eval (rawOracle H))
+                                      (congrArg
+                                        (fun x =>
+                                          match x with
+                                          | ok x => Program.done (ok (NJP_CohortReturning.finish root physical x))
+                                          | fail e => Program.done (fail e)
+                                          | div => Program.done div)
+                                        returned))
+                                    (eval.eq_1 (rawOracle H) (ok (NJP_CohortReturning.finish root physical out))))))))))
+                      (congrArg Prod.snd
+                        (Eq.trans
+                          (eval_bind (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)
+                            (fun result =>
+                              match result with
+                              | ok x => Program.done (ok (NJP_CohortReturning.finish root physical x))
+                              | fail e => Program.done (fail e)
+                              | div => Program.done div)
+                            (rawOracle H))
+                          (congr
+                            (congrArg Prod.mk
+                              (Eq.trans
+                                (congrArg
+                                  (HAppend.hAppend
+                                    (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1)
+                                  (congrArg Prod.fst
+                                    (Eq.trans
+                                      (congrArg (eval (rawOracle H))
+                                        (congrArg
+                                          (fun x =>
+                                            match x with
+                                            | ok x => Program.done (ok (NJP_CohortReturning.finish root physical x))
+                                            | fail e => Program.done (fail e)
+                                            | div => Program.done div)
+                                          returned))
+                                      (eval.eq_1 (rawOracle H) (ok (NJP_CohortReturning.finish root physical out))))))
+                                (List.append_nil
+                                  (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1)))
+                            (congrArg Prod.snd
+                              (Eq.trans
+                                (congrArg (eval (rawOracle H))
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | ok x => Program.done (ok (NJP_CohortReturning.finish root physical x))
+                                      | fail e => Program.done (fail e)
+                                      | div => Program.done div)
+                                    returned))
+                                (eval.eq_1 (rawOracle H) (ok (NJP_CohortReturning.finish root physical out)))))))))))
+                (congr
+                  (congrArg Prod.mk
+                    (congrArg Prod.fst
+                      (Eq.trans
+                        (eval_bind (transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+                          (fun result =>
+                            Program.done (AspisR1.MultiproofConeVerifyState.finishState root physical s result))
+                          H)
+                        (congr
+                          (congrArg Prod.mk
+                            (Eq.trans
+                              (congr
+                                (congrArg HAppend.hAppend
+                                  (congrArg Prod.fst
+                                    (Eq.trans
+                                      (transport_observation H
+                                        (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+                                      (congrArg
+                                        (Prod.mk
+                                          (List.map
+                                            (fun e =>
+                                              (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                                                AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                                            (eval (rawOracle H)
+                                                (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1))
+                                        returned))))
+                                (congrArg Prod.fst
+                                  (congrArg (Prod.mk [])
+                                    (congrArg (AspisR1.MultiproofConeVerifyState.finishState root physical s)
+                                      (congrArg Prod.snd
+                                        (Eq.trans
+                                          (transport_observation H
+                                            (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+                                          (congrArg
+                                            (Prod.mk
+                                              (List.map
+                                                (fun e =>
+                                                  (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                                                    AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                                                (eval (rawOracle H)
+                                                    (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1))
+                                            returned)))))))
+                              (List.append_nil
+                                (List.map
+                                  (fun e =>
+                                    (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                                      AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                                  (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1))))
+                          (congrArg Prod.snd
+                            (congrArg (Prod.mk [])
+                              (congrArg (AspisR1.MultiproofConeVerifyState.finishState root physical s)
+                                (congrArg Prod.snd
+                                  (Eq.trans
+                                    (transport_observation H
+                                      (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+                                    (congrArg
+                                      (Prod.mk
+                                        (List.map
+                                          (fun e =>
+                                            (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                                              AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                                          (eval (rawOracle H)
+                                              (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1))
+                                      returned))))))))))
+                  (congrArg ok
+                    (congrArg Prod.snd
+                      (Eq.trans
+                        (eval_bind (transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+                          (fun result =>
+                            Program.done (AspisR1.MultiproofConeVerifyState.finishState root physical s result))
+                          H)
+                        (congr
+                          (congrArg Prod.mk
+                            (Eq.trans
+                              (congr
+                                (congrArg HAppend.hAppend
+                                  (congrArg Prod.fst
+                                    (Eq.trans
+                                      (transport_observation H
+                                        (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+                                      (congrArg
+                                        (Prod.mk
+                                          (List.map
+                                            (fun e =>
+                                              (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                                                AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                                            (eval (rawOracle H)
+                                                (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1))
+                                        returned))))
+                                (congrArg Prod.fst
+                                  (congrArg (Prod.mk [])
+                                    (congrArg (AspisR1.MultiproofConeVerifyState.finishState root physical s)
+                                      (congrArg Prod.snd
+                                        (Eq.trans
+                                          (transport_observation H
+                                            (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+                                          (congrArg
+                                            (Prod.mk
+                                              (List.map
+                                                (fun e =>
+                                                  (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                                                    AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                                                (eval (rawOracle H)
+                                                    (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1))
+                                            returned)))))))
+                              (List.append_nil
+                                (List.map
+                                  (fun e =>
+                                    (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                                      AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                                  (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1))))
+                          (congrArg Prod.snd
+                            (congrArg (Prod.mk [])
+                              (congrArg (AspisR1.MultiproofConeVerifyState.finishState root physical s)
+                                (congrArg Prod.snd
+                                  (Eq.trans
+                                    (transport_observation H
+                                      (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+                                    (congrArg
+                                      (Prod.mk
+                                        (List.map
+                                          (fun e =>
+                                            (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                                              AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                                          (eval (rawOracle H)
+                                              (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1))
+                                      returned)))))))))))))
+            (reference.Level.casesOn (motive := fun t =>
+              out = t →
+                (List.map
+                      (fun e =>
+                        (AspisV8R19.SqueezeOracleBridge.flatten e.1, AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                      (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1,
+                    ok (NJP_CohortReturning.finish root physical out)) =
+                  (List.map
+                      (fun e =>
+                        (AspisV8R19.SqueezeOracleBridge.flatten e.1, AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                      (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1,
+                    ok (AspisR1.MultiproofConeVerifyState.finishState root physical s (ok out))))
+              out
+              (fun a h =>
+                Eq.ndrec (motive := fun out =>
+                  (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).2 = ok out →
+                    (List.map
+                          (fun e =>
+                            (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                              AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                          (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1,
+                        ok (NJP_CohortReturning.finish root physical out)) =
+                      (List.map
+                          (fun e =>
+                            (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                              AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                          (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1,
+                        ok (AspisR1.MultiproofConeVerifyState.finishState root physical s (ok out))))
+                  (fun returned =>
+                    Eq.refl
+                      (List.map
+                          (fun e =>
+                            (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                              AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                          (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1,
+                        ok (NJP_CohortReturning.finish root physical (reference.Level.Stop a))))
+                  (Eq.symm h) returned)
+              (fun a h =>
+                Eq.ndrec (motive := fun out =>
+                  (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).2 = ok out →
+                    (List.map
+                          (fun e =>
+                            (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                              AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                          (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1,
+                        ok (NJP_CohortReturning.finish root physical out)) =
+                      (List.map
+                          (fun e =>
+                            (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                              AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                          (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1,
+                        ok (AspisR1.MultiproofConeVerifyState.finishState root physical s (ok out))))
+                  (fun returned =>
+                    Eq.refl
+                      (List.map
+                          (fun e =>
+                            (AspisV8R19.SqueezeOracleBridge.flatten e.1,
+                              AspisV8R19.SqueezeOracleBridge.decodeState e.2))
+                          (eval (rawOracle H) (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical)).1,
+                        ok (NJP_CohortReturning.finish root physical (reference.Level.Done a))))
+                  (Eq.symm h) returned)
+              (Eq.refl out))))))
+'NJV_VerifierView.returning' depends on axioms: [propext, Classical.choice, Quot.sound]

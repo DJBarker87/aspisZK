@@ -1,0 +1,41 @@
+theorem NJV_LevelDomains.progress : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s : Scratch)
+  (history : List (Request × Digest)) (out : Level),
+  NJV_NativeRows.Invocation H nodes length s.n s 0 0 history out → LevelDomain length s → LevelProgress length s out :=
+fun H nodes length s history out native domain =>
+  let ⟨model, h✝⟩ := NJP_LevelsTotal.level_total H nodes length s domain
+  let ⟨returned, valid⟩ := h✝
+  have observed := congrArg Prod.snd (NJV_NativeRows.observation H nodes length s.n s 0 0 history out native);
+  id
+    (fun observed =>
+      have same := ok.inj (Eq.trans (Eq.symm returned) observed);
+      Eq.mp (congrArg (fun _a => LevelProgress length s _a) same) valid)
+    observed
+'NJV_LevelDomains.progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_LevelDomains.all : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length height : ℕ) (s : Scratch)
+  (history : List (Request × Digest)) (out : Level),
+  NJV_NativeLevels.Invocation H nodes length height s history out →
+    LevelDomain length s → Admissible H nodes length height s history out :=
+fun H nodes length height s history out native domain =>
+  NJV_NativeLevels.Invocation.rec (motive := fun height s history out native =>
+    LevelDomain length s → Admissible H nodes length height s history out) (fun s domain => Admissible.final s domain)
+    (fun height s after history row domain =>
+      have rowDomain :=
+        ⟨domain.left,
+          ⟨domain.right.left,
+            ⟨Decidable.byContradiction fun a => all._proof_1 s a,
+              ⟨Decidable.byContradiction fun a => all._proof_2 a,
+                ⟨domain.right.right.left, domain.right.right.right⟩⟩⟩⟩⟩;
+      Admissible.stop height s after history domain
+        (NJV_RowDomains.all H nodes length s.n s 0 0 history (Level.stop after) row rowDomain))
+    (fun height s after first rest out row tail ih domain =>
+      have rowDomain :=
+        ⟨domain.left,
+          ⟨domain.right.left,
+            ⟨Decidable.byContradiction fun a => all._proof_1 s a,
+              ⟨Decidable.byContradiction fun a => all._proof_2 a,
+                ⟨domain.right.right.left, domain.right.right.right⟩⟩⟩⟩⟩;
+      have p := progress H nodes length s first (Level.done after) row domain;
+      Admissible.next height s after first rest out domain
+        (NJV_RowDomains.all H nodes length s.n s 0 0 first (Level.done after) row rowDomain) (ih p.left))
+    native domain
+'NJV_LevelDomains.all' depends on axioms: [propext, Classical.choice, Quot.sound]

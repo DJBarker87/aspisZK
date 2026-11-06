@@ -1,0 +1,45 @@
+theorem NJV_AbortDomains.rows : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length fuel : ℕ) (s : Scratch) (i w : ℕ)
+  (events : List (Request × Digest)) (q : Request) (pending : Scratch),
+  NJV_AbortRows.Invocation H nodes length fuel s i w events q pending →
+    Domain length s i w → LastDomain nodes length q pending :=
+fun H nodes length fuel s i w events q pending native domain =>
+  NJV_AbortRows.Invocation.rec (motive := fun fuel s i w events q pending native =>
+    Domain length s i w → LastDomain nodes length q pending)
+    (fun fuel s pending i w q cut domain => Exists.intro s (Exists.intro i (Exists.intro w ⟨domain, cut⟩)))
+    (fun fuel s after i w ni nw log events q pending active cut tail ih domain =>
+      have nextDomain := NJV_RowDomains.next_domain H nodes length s after i w ni nw log domain active cut;
+      ih nextDomain.right.left)
+    native domain
+'NJV_AbortDomains.rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_AbortDomains.levels : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length height : ℕ) (s : Scratch)
+  (events : List (Request × Digest)) (q : Request) (pending : Scratch),
+  NJV_AbortLevels.Invocation H nodes length height s events q pending →
+    LevelDomain length s → LastDomain nodes length q pending :=
+fun H nodes length height s events q pending native domain =>
+  NJV_AbortLevels.Invocation.rec (motive := fun height s events q pending native =>
+    LevelDomain length s → LastDomain nodes length q pending)
+    (fun height s pending events q row domain =>
+      rows H nodes length s.n s 0 0 events q pending row
+        ⟨domain.left,
+          ⟨domain.right.left,
+            ⟨Decidable.byContradiction fun a => levels._proof_1 s a,
+              ⟨Decidable.byContradiction fun a => levels._proof_2 a,
+                ⟨domain.right.right.left, domain.right.right.right⟩⟩⟩⟩⟩)
+    (fun height s after pending first rest q row tail ih domain =>
+      have progress := NJV_LevelDomains.progress H nodes length s first (Level.done after) row domain;
+      ih progress.left)
+    native domain
+'NJV_AbortDomains.levels' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_AbortDomains.entry : ∀ (H : NJP_RequestTransport.Address → NJP_DigestCarrier.RefDigest)
+  (root : NJP_DigestCarrier.RefDigest) (physical : Slice U8) (s : MultiproofConeRef.reference.Scratch),
+  (↑physical).length ≤ 9216 →
+    ∀ (events : List (Request × Digest)) (q : Request) (pending : Scratch),
+      NJV_AbortEntry.Invocation (NJP_RequestTransport.hash H) root physical s events q pending →
+        LastDomain (fun n => (↑physical)[n]!) (↑physical).length q pending :=
+fun H root physical s bytes events q pending native =>
+  have d := NJV_Entry.guard_domain physical s native.guard;
+  levels (NJP_RequestTransport.hash H) (fun n => (↑physical)[n]!) (↑physical).length 18
+    (let __src := NJP_ScratchCarrier.raw s;
+    { indices := __src.indices, values := __src.values, n := __src.n, cursor := 0 })
+    events q pending native.levels ⟨d.left, ⟨d.right, ⟨of_eq_true zero_le._simp_1, bytes⟩⟩⟩
+'NJV_AbortDomains.entry' depends on axioms: [propext, Classical.choice, Quot.sound]

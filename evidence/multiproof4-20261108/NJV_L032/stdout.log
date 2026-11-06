@@ -1,0 +1,116 @@
+NJV_lean/NJV_AbortEntry.lean:73:3: error: Type mismatch: After simplification, term
+  congrArg (Option.map fun r => flatten (NJP_RequestTransport.address r)) last
+ has type
+  @Eq (Option Bytes)
+    (Option.map ((fun r => flatten (NJP_RequestTransport.address r)) ∘ Prod.fst)
+      (eval (NJP_RequestTransport.hash (rawOracle H)) (NJV_Entry.rawProgram root physical s)).1[events.length]?)
+    (Option.map (fun r => flatten (NJP_RequestTransport.address r)) (some q))
+but is expected to have type
+  @Eq (Option Bytes)
+    (Option.map
+      (Prod.fst ∘
+        (fun e => (flatten e.1, decodeState e.2)) ∘ fun event => (NJP_RequestTransport.address event.1, encode event.2))
+      (eval (NJP_RequestTransport.hash (rawOracle H)) (NJV_Entry.rawProgram root physical s)).1[events.length]?)
+    (some (flatten (NJP_RequestTransport.address q)))
+NJV_lean/NJV_AbortEntry.lean:72:60: warning: This simp argument is unused:
+  Function.comp_apply
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵m̵a̵p̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵a̵p̵p̵l̵y̵]̵[̲L̲i̲s̲t̲.̲m̲a̲p̲_̲m̲a̲p̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲m̲a̲p̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲m̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJV_AbortEntry.raw_prefix : ∀ (H : NJP_RowModel.Request → NJP_RowModel.Digest) (root : RefDigest)
+  (physical : Slice U8) (s : reference.Scratch) (events : List (NJP_RowModel.Request × NJP_RowModel.Digest))
+  (q : NJP_RowModel.Request) (pending : NJP_RowModel.Scratch),
+  Invocation H root physical s events q pending →
+    NJP_AbortPrefix.pending H events.length (NJV_Entry.rawProgram root physical s) = some (events, q) :=
+fun H root physical s events q pending native =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congrArg (NJP_AbortPrefix.pending H events.length)
+            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos native.guard) x_0 x_1 x_2 x_3)
+              (Classical.propDecidable (NJV_Entry.Guard physical s))
+              (Program NJP_RowModel.Request NJP_RowModel.Digest (Result (Bool × NJP_RowModel.Scratch)))
+              (NJP_LoopModel.run (decode root) (fun n => (↑physical)[n]!) (↑physical).length (raw s))
+              (Program.done (ok (false, raw s))))))
+        (some (events, q))))
+    (NJV_AbortLevels.run H (fun n => (↑physical)[n]!) (↑physical).length (decode root) (raw s) events q pending
+      native.levels)
+'NJV_AbortEntry.raw_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_AbortEntry.physical_prefix : ∀ (H : Slice (Slice U8) → RefDigest) (root : RefDigest) (physical : Slice U8)
+  (s : reference.Scratch) (events : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (q : NJP_RowModel.Request)
+  (pending : NJP_RowModel.Scratch),
+  Invocation (NJP_RequestTransport.hash H) root physical s events q pending →
+    NJP_AbortTransport.physicalPending H events.length
+        (NJP_RequestTransport.transport (NJV_Entry.rawProgram root physical s)) =
+      some (NJP_AbortTransport.history events, NJP_RequestTransport.address q) :=
+fun H root physical s events q pending native =>
+  (NJP_AbortTransport.abort_prefix H events.length (NJV_Entry.rawProgram root physical s) events q
+      (raw_prefix (NJP_RequestTransport.hash H) root physical s events q pending native)).left
+'NJV_AbortEntry.physical_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_AbortEntry.adopted_prefix : ∀ (H : Bytes → State) (root : RefDigest) (physical : Slice U8)
+  (s : reference.Scratch),
+  s.at = 0#usize →
+    (↑physical).length ≤ 9216 →
+      ∀ (events : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (q : NJP_RowModel.Request)
+        (pending : NJP_RowModel.Scratch),
+        Invocation (NJP_RequestTransport.hash (rawOracle H)) root physical s events q pending →
+          have log := (eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).1;
+          List.take events.length log = NJV_AdoptedObservation.history events ∧
+            Option.map Prod.fst log[events.length]? = some (flatten (NJP_RequestTransport.address q)) :=
+fun H root physical s zero bytes events q pending native =>
+  id
+    (have p := raw_prefix (NJP_RequestTransport.hash (rawOracle H)) root physical s events q pending native;
+    let ⟨first, right✝⟩ :=
+      NJP_AbortPrefix.exact_prefix (NJP_RequestTransport.hash (rawOracle H)) events.length
+        (NJV_Entry.rawProgram root physical s) events q p
+    let ⟨len, last⟩ := right✝
+    have typed := NJV_Entry.observation (rawOracle H) root physical s;
+    have source := NJV_Entry.adopted H root physical s zero bytes;
+    have sourceLogs :=
+      congrArg Prod.fst
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              _a =
+                ((eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).1,
+                  ok (eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).2))
+            (transport_observation H (NJV_Entry.program root physical s)))
+          source);
+    have typedLogs :=
+      congrArg Prod.fst
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              ((eval (rawOracle H) (NJV_Entry.program root physical s)).1,
+                  NJP_CohortWrite.mapResult NJP_CohortReturning.answer
+                    (eval (rawOracle H) (NJV_Entry.program root physical s)).2) =
+                _a)
+            (NJP_RequestTransport.observation (rawOracle H) (NJV_Entry.rawProgram root physical s)))
+          typed);
+    have logs := Eq.trans (Eq.symm sourceLogs) (congrArg (List.map fun e => (flatten e.1, decodeState e.2)) typedLogs);
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            List.take events.length _a = NJV_AdoptedObservation.history events ∧
+              Option.map Prod.fst _a[events.length]? = some (flatten (NJP_RequestTransport.address q)))
+          logs))
+      ⟨of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans adopted_prefix._simp_1
+                  (congrArg (List.map fun e => (flatten e.1, decodeState e.2))
+                    (Eq.trans adopted_prefix._simp_1
+                      (congrArg (List.map fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                        (Eq.symm first))))))
+              (List.map (fun e => (flatten e.1, decodeState e.2))
+                (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) events)))
+            (eq_self
+              (List.map (fun e => (flatten e.1, decodeState e.2))
+                (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) events)))),
+        sorry⟩)
+'NJV_AbortEntry.adopted_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

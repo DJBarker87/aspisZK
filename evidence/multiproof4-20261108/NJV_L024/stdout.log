@@ -1,0 +1,152 @@
+theorem NJV_PendingBind.pending_bind : ∀ {α β : Type} (H : Request → Digest) (p : Program Request Digest α)
+  (f : α → Program Request Digest β) (n : ℕ) (history : List (Request × Digest)) (q : Request),
+  NJP_AbortPrefix.pending H n p = some (history, q) →
+    NJP_AbortPrefix.pending H n (AspisV8R19.OracleProgramOps.bind p f) = some (history, q) :=
+fun {α β} H p f n history q pending =>
+  Nat.recAux (motive := fun n =>
+    ∀ (p : Program Request Digest α) (history : List (Request × Digest)) (q : Request),
+      NJP_AbortPrefix.pending H n p = some (history, q) →
+        NJP_AbortPrefix.pending H n (AspisV8R19.OracleProgramOps.bind p f) = some (history, q))
+    (fun p history q pending =>
+      Program.casesOn (motive := fun t =>
+        p = t → NJP_AbortPrefix.pending H 0 (AspisV8R19.OracleProgramOps.bind p f) = some (history, q)) p
+        (fun a h =>
+          Eq.ndrec (motive := fun p =>
+            NJP_AbortPrefix.pending H 0 p = some (history, q) →
+              NJP_AbortPrefix.pending H 0 (AspisV8R19.OracleProgramOps.bind p f) = some (history, q))
+            (fun pending => False.elim (noConfusion_of_Nat Option.ctorIdx pending)) (Eq.symm h) pending)
+        (fun r next h =>
+          Eq.ndrec (motive := fun p =>
+            NJP_AbortPrefix.pending H 0 p = some (history, q) →
+              NJP_AbortPrefix.pending H 0 (AspisV8R19.OracleProgramOps.bind p f) = some (history, q))
+            (fun pending =>
+              Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (NJP_AbortPrefix.pending.eq_2 H r fun a => AspisV8R19.OracleProgramOps.bind (next a) f))
+                    (some (history, q))))
+                pending)
+            (Eq.symm h) pending)
+        (Eq.refl p))
+    (fun n ih p history q pending =>
+      Program.casesOn (motive := fun t =>
+        p = t → NJP_AbortPrefix.pending H (n + 1) (AspisV8R19.OracleProgramOps.bind p f) = some (history, q)) p
+        (fun a h =>
+          Eq.ndrec (motive := fun p =>
+            NJP_AbortPrefix.pending H (n + 1) p = some (history, q) →
+              NJP_AbortPrefix.pending H (n + 1) (AspisV8R19.OracleProgramOps.bind p f) = some (history, q))
+            (fun pending => False.elim (noConfusion_of_Nat Option.ctorIdx pending)) (Eq.symm h) pending)
+        (fun r next h =>
+          Eq.ndrec (motive := fun p =>
+            NJP_AbortPrefix.pending H (n + 1) p = some (history, q) →
+              NJP_AbortPrefix.pending H (n + 1) (AspisV8R19.OracleProgramOps.bind p f) = some (history, q))
+            (fun pending =>
+              Option.casesOn (motive := fun t =>
+                NJP_AbortPrefix.pending H n (next (H r)) = t →
+                  NJP_AbortPrefix.pending H (n + 1) (AspisV8R19.OracleProgramOps.bind (Program.ask r next) f) =
+                    some (history, q))
+                (NJP_AbortPrefix.pending H n (next (H r)))
+                (fun h =>
+                  Eq.ndrec (motive := fun x =>
+                    NJP_AbortPrefix.pending H n (next (H r)) = x →
+                      NJP_AbortPrefix.pending H (n + 1) (AspisV8R19.OracleProgramOps.bind (Program.ask r next) f) =
+                        some (history, q))
+                    (fun h =>
+                      False.elim
+                        (noConfusion_of_Nat Option.ctorIdx
+                          (Eq.mp
+                            (congrFun' (congrArg Eq (congrArg (Option.map fun x => ((r, H r) :: x.1, x.2)) h))
+                              (some (history, q)))
+                            pending)))
+                    (Eq.symm h) (Eq.refl (NJP_AbortPrefix.pending H n (next (H r)))))
+                (fun pair h =>
+                  Eq.ndrec (motive := fun x =>
+                    NJP_AbortPrefix.pending H n (next (H r)) = x →
+                      NJP_AbortPrefix.pending H (n + 1) (AspisV8R19.OracleProgramOps.bind (Program.ask r next) f) =
+                        some (history, q))
+                    (fun h =>
+                      let ⟨events, last, h⟩ := pair
+                      have tail := ih (next (H r)) events last h;
+                      Eq.mpr
+                        (id
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans
+                                (NJP_AbortPrefix.pending.eq_4 H n r fun a =>
+                                  AspisV8R19.OracleProgramOps.bind (next a) f)
+                                (congrArg (Option.map fun x => ((r, H r) :: x.1, x.2)) tail)))
+                            (some (history, q))))
+                        (Eq.mp
+                          (congrFun' (congrArg Eq (congrArg (Option.map fun x => ((r, H r) :: x.1, x.2)) h))
+                            (some (history, q)))
+                          pending))
+                    (Eq.symm h) (Eq.refl (NJP_AbortPrefix.pending H n (next (H r)))))
+                (Eq.refl (NJP_AbortPrefix.pending H n (next (H r)))))
+            (Eq.symm h) pending)
+        (Eq.refl p))
+    n p history q pending
+'NJV_PendingBind.pending_bind' does not depend on any axioms
+theorem NJV_PendingBind.after_return : ∀ {α β : Type} (H : Request → Digest) (p : Program Request Digest α)
+  (f : α → Program Request Digest β) (first rest : List (Request × Digest)) (a : α) (n : ℕ) (q : Request),
+  eval H p = (first, a) →
+    NJP_AbortPrefix.pending H n (f a) = some (rest, q) →
+      NJP_AbortPrefix.pending H (first.length + n) (AspisV8R19.OracleProgramOps.bind p f) = some (first ++ rest, q) :=
+fun {α β} H p f first rest a n q returned pending =>
+  Program.rec (motive := fun p =>
+    ∀ (first : List (Request × Digest)),
+      eval H p = (first, a) →
+        NJP_AbortPrefix.pending H (first.length + n) (AspisV8R19.OracleProgramOps.bind p f) = some (first ++ rest, q))
+    (fun a' first returned =>
+      have eqs := Prod.mk.inj returned;
+      let ⟨left✝, right✝⟩ := eqs
+      Eq.ndrec (motive := fun first =>
+        ([], a') = (first, a) →
+          NJP_AbortPrefix.pending H (first.length + n) (AspisV8R19.OracleProgramOps.bind (Program.done a') f) =
+            some (first ++ rest, q))
+        (fun returned =>
+          Eq.ndrec (motive := fun a =>
+            NJP_AbortPrefix.pending H n (f a) = some (rest, q) →
+              ([], a') = ([], a) →
+                NJP_AbortPrefix.pending H ([].length + n) (AspisV8R19.OracleProgramOps.bind (Program.done a') f) =
+                  some ([] ++ rest, q))
+            (fun pending returned =>
+              Eq.mpr
+                (id
+                  (congrFun' (congrArg Eq (congrFun' (congrArg (NJP_AbortPrefix.pending H) (Nat.zero_add n)) (f a')))
+                    (some (rest, q))))
+                pending)
+            right✝ pending returned)
+        left✝ returned)
+    (fun r next ih first returned =>
+      have firstEq := congrArg Prod.fst returned;
+      have valueEq := congrArg Prod.snd returned;
+      have tailReturned := Prod.ext rfl valueEq;
+      have tail := ih (H r) (eval H (next (H r))).1 tailReturned;
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              NJP_AbortPrefix.pending H (_a.length + n) (AspisV8R19.OracleProgramOps.bind (Program.ask r next) f) =
+                some (_a ++ rest, q))
+            (Eq.symm firstEq)))
+        (id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  NJP_AbortPrefix.pending H _a (AspisV8R19.OracleProgramOps.bind (Program.ask r next) f) =
+                    some ((r, H r) :: (eval H (next (H r))).1 ++ rest, q))
+                (Nat.add_right_comm (eval H (next (H r))).1.length 1 n)))
+            (of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (NJP_AbortPrefix.pending.eq_4 H ((eval H (next (H r))).1.length + n) r fun a =>
+                        AspisV8R19.OracleProgramOps.bind (next a) f)
+                      (congrArg (Option.map fun x => ((r, H r) :: x.1, x.2)) tail)))
+                  (some ((r, H r) :: ((eval H (next (H r))).1 ++ rest), q)))
+                (eq_self (some ((r, H r) :: ((eval H (next (H r))).1 ++ rest), q))))))))
+    p first returned
+'NJV_PendingBind.after_return' depends on axioms: [propext]

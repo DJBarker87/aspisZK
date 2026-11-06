@@ -1,0 +1,54 @@
+{"attempt": "NJV_L032", "exit_status": 1, "wall_seconds": 8.366519435076043, "peak_rss_kib": "5845132", "swaps": "0", "print_axioms": ["'NJV_AbortEntry.raw_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_AbortEntry.physical_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_AbortEntry.adopted_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJV_lean/NJV_AbortEntry.lean:73:3: error: Type mismatch: After simplification, term
+  congrArg (Option.map fun r => flatten (NJP_RequestTransport.address r)) last
+ has type
+  @Eq (Option Bytes)
+    (Option.map ((fun r => flatten (NJP_RequestTransport.address r)) ∘ Prod.fst)
+      (eval (NJP_RequestTransport.hash (rawOracle H)) (NJV_Entry.rawProgram root physical s)).1[events.length]?)
+    (Option.map (fun r => flatten (NJP_RequestTransport.address r)) (some q))
+but is expected to have type
+  @Eq (Option Bytes)
+    (Option.map
+      (Prod.fst ∘
+        (fun e => (flatten e.1, decodeState e.2)) ∘ fun event => (NJP_RequestTransport.address event.1, encode event.2))
+      (eval (NJP_RequestTrans
+...
+ root physical s)))
+          source);
+    have typedLogs :=
+      congrArg Prod.fst
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              ((eval (rawOracle H) (NJV_Entry.program root physical s)).1,
+                  NJP_CohortWrite.mapResult NJP_CohortReturning.answer
+                    (eval (rawOracle H) (NJV_Entry.program root physical s)).2) =
+                _a)
+            (NJP_RequestTransport.observation (rawOracle H) (NJV_Entry.rawProgram root physical s)))
+          typed);
+    have logs := Eq.trans (Eq.symm sourceLogs) (congrArg (List.map fun e => (flatten e.1, decodeState e.2)) typedLogs);
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            List.take events.length _a = NJV_AdoptedObservation.history events ∧
+              Option.map Prod.fst _a[events.length]? = some (flatten (NJP_RequestTransport.address q)))
+          logs))
+      ⟨of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans adopted_prefix._simp_1
+                  (congrArg (List.map fun e => (flatten e.1, decodeState e.2))
+                    (Eq.trans adopted_prefix._simp_1
+                      (congrArg (List.map fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                        (Eq.symm first))))))
+              (List.map (fun e => (flatten e.1, decodeState e.2))
+                (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) events)))
+            (eq_self
+              (List.map (fun e => (flatten e.1, decodeState e.2))
+                (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) events)))),
+        sorry⟩)
+'NJV_AbortEntry.adopted_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd550adf6b38b44bb94f4ee2d0d810056.scope; invocation ID: f44e150bafbf4ed5b9e49f0d5c056efa

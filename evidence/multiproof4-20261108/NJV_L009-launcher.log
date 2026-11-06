@@ -1,0 +1,44 @@
+{"attempt": "NJV_L009", "exit_status": 0, "wall_seconds": 3.554481578990817, "peak_rss_kib": "4350648", "swaps": "0", "print_axioms": ["'NJV_RowDomains.next_domain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_RowDomains.all' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJV_RowDomains.next_domain : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s after : Scratch)
+  (i w ni nw : ℕ) (log : NJP_NativeRowCut.Log),
+  Domain length s i w →
+    i < s.n →
+      NJP_NativeRowCut.Cut s i w length nodes (H (NJP_NativeRowCut.request log)) after ni nw true log →
+        after.n = s.n ∧ Domain length after ni nw ∧ i < ni ∧ nw = w + 1 :=
+fun H nodes length s after i w ni nw log domain active cut =>
+  let ⟨out, h✝⟩ := NJP_RowInvariant.node_progress H nodes length s i w domain active
+  let ⟨returned, progress⟩ := h✝
+  have observed := NJP_NativeStep.one H nodes length s i w after ni nw true log cut;
+  have same := congrArg Prod.snd observed;
+  have rowEq :=
+...
+ength s after i w ni nw log domain active cut =>
+  let ⟨out, h✝⟩ := NJP_RowInvariant.node_progress H nodes length s i w domain active
+  let ⟨returned, progress⟩ := h✝
+  have observed := NJP_NativeStep.one H nodes length s i w after ni nw true log cut;
+  have same := congrArg Prod.snd observed;
+  have rowEq :=
+    ok.inj
+      (Eq.mp
+        (congr (congrArg Eq returned)
+          (congrArg ok
+            (ite_congr (eq_self true) (fun a => Eq.refl (Row.next after ni nw)) fun a => Eq.refl (Row.stop after))))
+        same);
+  Eq.mp (congrArg (fun _a => NJP_RowInvariant.Progress length s i w _a) rowEq) progress
+'NJV_RowDomains.next_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_RowDomains.all : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length fuel : ℕ) (s : Scratch) (i w : ℕ)
+  (history : List (Request × Digest)) (out : Level),
+  NJV_NativeRows.Invocation H nodes length fuel s i w history out →
+    Domain length s i w → Admissible H nodes length fuel s i w history out :=
+fun H nodes length fuel s i w history out native domain =>
+  NJV_NativeRows.Invocation.rec (motive := fun fuel s i w history out native =>
+    Domain length s i w → Admissible H nodes length fuel s i w history out)
+    (fun fuel s i w halted domain => Admissible.halt fuel s i w halted domain)
+    (fun fuel s after i w ni nw log active cut domain => Admissible.stop fuel s after i w ni nw log active domain cut)
+    (fun fuel s after i w ni nw log history out active cut tail ih domain =>
+      have progress := next_domain H nodes length s after i w ni nw log domain active cut;
+      Admissible.next fuel s after i w ni nw log history out active domain cut (ih progress.right.left))
+    native domain
+'NJV_RowDomains.all' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd22ae42d93fd4544ab8abd1eb98aba39.scope; invocation ID: 2c5fd9e3d7914a87a2705f975c60683d

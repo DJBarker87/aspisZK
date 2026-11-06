@@ -1,0 +1,97 @@
+NJV_lean/NJV_NativeEntry.lean:49:1: error: No goals to be solved
+theorem NJV_NativeEntry.raw_observation : ∀ (H : NJP_RowModel.Request → NJP_RowModel.Digest) (root : RefDigest)
+  (physical : Slice U8) (s : reference.Scratch) (history : List (NJP_RowModel.Request × NJP_RowModel.Digest))
+  (out : Bool × NJP_RowModel.Scratch),
+  Invocation H root physical s history out → eval H (NJV_Entry.rawProgram root physical s) = (history, ok out) :=
+fun H root physical s history out native =>
+  Invocation.casesOn (motive := fun a a_1 t =>
+    history = a → out = a_1 → native ≍ t → eval H (NJV_Entry.rawProgram root physical s) = (history, ok out)) native
+    (fun guard h =>
+      Eq.ndrec (motive := fun history =>
+        ∀ (native : Invocation H root physical s history out),
+          out = (false, raw s) →
+            native ≍ Invocation.rejected guard → eval H (NJV_Entry.rawProgram root physical s) = (history, ok out))
+        (fun native h =>
+          Eq.ndrec (motive := fun out =>
+            ∀ (native : Invocation H root physical s [] out),
+              native ≍ Invocation.rejected guard → eval H (NJV_Entry.rawProgram root physical s) = ([], ok out))
+            (fun native h =>
+              of_eq_true
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans
+                        (congrArg (eval H)
+                          ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg guard) x_0 x_1 x_2 x_3)
+                            (Classical.propDecidable (NJV_Entry.Guard physical s))
+                            (Program NJP_RowModel.Request NJP_RowModel.Digest (Result (Bool × NJP_RowModel.Scratch)))
+                            (NJP_LoopModel.run (decode root) (fun n => (↑physical)[n]!) (↑physical).length (raw s))
+                            (Program.done (ok (false, raw s)))))
+                        (eval.eq_1 H (ok (false, raw s)))))
+                    ([], ok (false, raw s)))
+                  (eq_self ([], ok (false, raw s)))))
+            (Eq.symm h) native)
+        (Eq.symm h) native)
+    (fun history_1 out_1 guard levels h =>
+      Eq.ndrec (motive := fun history_2 =>
+        ∀
+          (levels :
+            NJV_NativeLevels.Invocation H (fun n => (↑physical)[n]!) (↑physical).length 18
+              (let __src := raw s;
+              { indices := __src.indices, values := __src.values, n := __src.n, cursor := 0 })
+              history_2 out_1),
+          out = NJP_LoopModel.finish (decode root) (↑physical).length out_1 →
+            native ≍ Invocation.returned history_2 out_1 guard levels →
+              eval H (NJV_Entry.rawProgram root physical s) = (history, ok out))
+        (fun levels h =>
+          Eq.ndrec (motive := fun out =>
+            ∀ (native : Invocation H root physical s history out),
+              native ≍ Invocation.returned history out_1 guard levels →
+                eval H (NJV_Entry.rawProgram root physical s) = (history, ok out))
+            (fun native h =>
+              Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (congrArg (eval H)
+                        ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos guard) x_0 x_1 x_2 x_3)
+                          (Classical.propDecidable (NJV_Entry.Guard physical s))
+                          (Program NJP_RowModel.Request NJP_RowModel.Digest (Result (Bool × NJP_RowModel.Scratch)))
+                          (NJP_LoopModel.run (decode root) (fun n => (↑physical)[n]!) (↑physical).length (raw s))
+                          (Program.done (ok (false, raw s))))))
+                    (history, ok (NJP_LoopModel.finish (decode root) (↑physical).length out_1))))
+                (NJV_NativeLevels.returning H (fun n => (↑physical)[n]!) (↑physical).length (decode root) (raw s)
+                  history out_1 levels))
+            (Eq.symm h) native)
+        h levels)
+    (Eq.refl history) (Eq.refl out) (HEq.refl native)
+'NJV_NativeEntry.raw_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_NativeEntry.observation : ∀ (H : Slice (Slice U8) → RefDigest) (root : RefDigest) (physical : Slice U8)
+  (s : reference.Scratch) (history : List (NJP_RowModel.Request × NJP_RowModel.Digest))
+  (out : Bool × NJP_RowModel.Scratch),
+  Invocation (NJP_RequestTransport.hash H) root physical s history out →
+    have typed := eval H (NJV_Entry.program root physical s);
+    (typed.1, mapResult NJP_CohortReturning.answer typed.2) =
+      (List.map (fun e => (NJP_RequestTransport.address e.1, encode e.2)) history, ok out) :=
+fun H root physical s history out native =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a = (List.map (fun e => (NJP_RequestTransport.address e.1, encode e.2)) history, ok out))
+          (NJV_Entry.observation H root physical s)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a => _a = (List.map (fun e => (NJP_RequestTransport.address e.1, encode e.2)) history, ok out))
+            (NJP_RequestTransport.observation H (NJV_Entry.rawProgram root physical s))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) _a.1, _a.2) =
+                  (List.map (fun e => (NJP_RequestTransport.address e.1, encode e.2)) history, ok out))
+              (raw_observation (NJP_RequestTransport.hash H) root physical s history out native)))
+          (Eq.refl
+            (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) (history, ok out).1,
+              (history, ok out).2)))))
+'NJV_NativeEntry.observation' depends on axioms: [propext, Classical.choice, Quot.sound]

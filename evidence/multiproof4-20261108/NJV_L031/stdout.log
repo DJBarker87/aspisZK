@@ -1,0 +1,64 @@
+theorem NJV_AbortLevels.same : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length height : ℕ) (s : Scratch)
+  (history : List (Request × Digest)) (q : Request) (pending : Scratch),
+  Invocation H nodes length height s history q pending →
+    NJP_AbortPrefix.pending H history.length (levels nodes length height s) = some (history, q) :=
+fun H nodes length height s history q pending native =>
+  Invocation.rec
+    (fun height s pending history q row =>
+      have pendingRow := NJV_AbortRows.same H nodes length s.n s 0 0 history q pending row;
+      id
+        (NJV_PendingBind.pending_bind H (level nodes length s)
+          (fun r =>
+            match r with
+            | ok a =>
+              match a with
+              | Level.stop stopped => Program.done (ok (Level.stop stopped))
+              | Level.done after => levels nodes length height after
+            | fail e => Program.done (fail e)
+            | div => Program.done div)
+          history.length history q pendingRow))
+    (fun height s after pending first rest q row tail ih =>
+      have returned := NJV_NativeRows.observation H nodes length s.n s 0 0 first (Level.done after) row;
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (congrFun' (congrArg (NJP_AbortPrefix.pending H) List.length_append)
+                (AspisV8R19.OracleProgramOps.bind (level nodes length s) fun r =>
+                  match r with
+                  | ok a =>
+                    match a with
+                    | Level.stop stopped => Program.done (ok (Level.stop stopped))
+                    | Level.done after => levels nodes length height after
+                  | fail e => Program.done (fail e)
+                  | div => Program.done div)))
+            (some (first ++ rest, q))))
+        (NJV_PendingBind.after_return H (level nodes length s)
+          (fun r =>
+            match r with
+            | ok a =>
+              match a with
+              | Level.stop stopped => Program.done (ok (Level.stop stopped))
+              | Level.done after => levels nodes length height after
+            | fail e => Program.done (fail e)
+            | div => Program.done div)
+          first rest (ok (Level.done after)) rest.length q returned ih))
+    native
+'NJV_AbortLevels.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_AbortLevels.run : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (root : Digest) (s : Scratch)
+  (history : List (Request × Digest)) (q : Request) (pending : Scratch),
+  Invocation H nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 } history q pending →
+    NJP_AbortPrefix.pending H history.length (NJP_LoopModel.run root nodes length s) = some (history, q) :=
+fun H nodes length root s history q pending native =>
+  have pendingPrefix :=
+    same H nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 } history q pending native;
+  id
+    (NJV_PendingBind.pending_bind H
+      (levels nodes length 18 { indices := s.indices, values := s.values, n := s.n, cursor := 0 })
+      (fun r =>
+        match r with
+        | ok a => Program.done (ok (finish root length a))
+        | fail e => Program.done (fail e)
+        | div => Program.done div)
+      history.length history q pendingPrefix)
+'NJV_AbortLevels.run' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,30 @@
+theorem NJV_CallerBounds.from_count : ∀ (physical : Slice U8) (s : reference.Scratch),
+  wellFormed (NJV_UnitDomain.keys s) →
+    (↑physical).length = 32 * nodeCount 18 (NJV_UnitDomain.keys s) → (↑physical).length ≤ 9216 :=
+fun physical s well count =>
+  have bounded :=
+    AspisR1.MultiproofConeCountBounds.eighteen_bound (NJV_UnitDomain.keys s) well.right.left well.right.right.left;
+  Eq.mpr (id (congrArg (fun _a => _a ≤ 9216) count))
+    (Decidable.byContradiction fun a =>
+      from_count._proof_1 physical s count
+        (Eq.mp
+          (congrArg (fun _a => _a ≤ 288)
+            (AspisR1.MultiproofConeCountLevels.count_eq 18 (NJV_UnitDomain.keys s) well.right.right.left))
+          bounded)
+        a)
+'NJV_CallerBounds.from_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_CallerBounds.unit_clauses : ∀ (physical slot : Slice U8) (s : reference.Scratch),
+  NJV_UnitDomain.Domain physical slot s →
+    ↑physical = List.take (32 * nodeCount 18 (NJV_UnitDomain.keys s)) ↑slot ∧
+      (∀ b ∈ List.drop (32 * nodeCount 18 (NJV_UnitDomain.keys s)) ↑slot, b = 0#u8) ∧
+        ↑s.n ≤ 10 ∧ wellFormed (NJV_UnitDomain.keys s) :=
+fun physical slot s domain =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          ↑physical = List.take _a ↑slot ∧
+            (∀ b ∈ List.drop _a ↑slot, b = 0#u8) ∧ ↑s.n ≤ 10 ∧ wellFormed (NJV_UnitDomain.keys s))
+        (Eq.symm domain.count)))
+    ⟨domain.nodePrefix, ⟨domain.padding, ⟨domain.batch, domain.sorted⟩⟩⟩
+'NJV_CallerBounds.unit_clauses' depends on axioms: [propext, Classical.choice, Quot.sound]

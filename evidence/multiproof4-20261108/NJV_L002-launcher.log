@@ -1,0 +1,52 @@
+{"attempt": "NJV_L002", "exit_status": 1, "wall_seconds": 8.290335871977732, "peak_rss_kib": "5839064", "swaps": "0", "print_axioms": ["'NJV_Entry.guard_domain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_Entry.observation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_Entry.adopted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJV_lean/NJV_Entry.lean:73:3: error: Tactic `rfl` failed: The left-hand side
+  eval H (transport (Program.done (ok (false, s))))
+is not definitionally equal to the right-hand side
+  ((eval H
+        (if wellFormed (List.map Prod.fst (live s 0 ↑s.n)) ∧ (↑physical).length % 32 = 0 then
+          AspisV8R19.OracleProgramOps.bind (transport (AspisR1.MultiproofConePhysicalLevels.levels 18 s physical))
+            fun result => Program.done (AspisR1.MultiproofConeVerifyState.finishState root physical s result)
+        else Program.done (false, s))).1,
+    ok
+      (eval H
+          (if wellFormed (List.map Prod.fst (live s 0 ↑s.n)) ∧ (↑physical).length % 32 = 0 then
+            AspisV8R19.OraclePr
+...
+m NJV_Entry.adopted : ∀ (H : Bytes → State) (root : RefDigest) (physical : Slice U8) (s : reference.Scratch),
+  s.at = 0#usize →
+    (↑physical).length ≤ 9216 →
+      eval H (transport (program root physical s)) =
+        ((eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).1,
+          ok (eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).2) :=
+fun H root physical s zero bytes =>
+  if guard : Guard physical s then
+    have d := guard_domain physical s guard;
+    have domain :=
+      ⟨d.left,
+        ⟨d.right,
+          Eq.mpr (id (congrArg (fun _a => ↑_a ≤ (↑physical).length) zero))
+            (of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg LE.le
+                    (UScalar.ofNatCore_val_eq
+                      (UScalar.bound_suffices UScalarTy.Usize 0 (of_decide_eq_true (id (Eq.refl true))))))
+                  (↑physical).length)
+                zero_le._simp_1))⟩⟩;
+    Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (congrArg (eval H)
+              (congrArg transport
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos guard) x_0 x_1 x_2 x_3)
+                  (Classical.propDecidable (Guard physical s))
+                  (AspisR1.MultiproofConePhysicalProgram.Run (Bool × reference.Scratch))
+                  (NJP_CohortReturning.run root physical s) (Program.done (ok (false, s)))))))
+          ((eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).1,
+            ok (eval H (AspisR1.MultiproofConeVerifyState.verifyState root physical s)).2)))
+      (NJV_VerifierView.returning H root physical s zero domain bytes guard)
+  else sorry
+'NJV_Entry.adopted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfcfbaa2f8f524ca8bedcfd8c4ae81ef0.scope; invocation ID: d4df9c7346d0440aa7d682dca0a1fb49

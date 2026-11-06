@@ -1,0 +1,47 @@
+{"attempt": "NJV_L020", "exit_status": 0, "wall_seconds": 8.944440013030544, "peak_rss_kib": "5866396", "swaps": "0", "print_axioms": ["'NJV_ChildArguments.occupied' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_ChildArguments.sibling' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_ChildArguments.domains' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJV_ChildArguments.occupied : ∀ (H : Slice (Slice U8) → RefDigest) (s : reference.Scratch) (i next : Usize),
+  ↑i + 1 < 16 →
+    ↑next = ↑i + 1 →
+      NJA_Multiproof.multiproof.occupied_binary_parent (NJE_ParentPackets.backend H) () s.val i =
+        ok (H (NJP_RequestTransport.address (NJP_RowModel.occupiedRequest (raw s) ↑i))) :=
+fun H s i next bound next_value =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = ok (H (NJP_RequestTransport.address (NJP_RowModel.occupiedRequest (raw s) ↑i))))
+        (NJE_ParentPackets.TX2_089 H s.val i bound)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            ok
+                (H
+                  (AspisR1.MultiproofConePh
+...
+               (congrArg Prod.fst
+                              (ite_congr (eq_self true)
+                                (fun a => congrFun' (congrArg Prod.mk (NJP_CohortRead.value s i bound)) (decode digest))
+                                fun a => congrArg (Prod.mk (decode digest)) (NJP_CohortRead.value s i bound))))
+                          (encode_decode (↑s.val)[↑i]!)))
+                      (Eq.trans
+                        (congrArg encode
+                          (congrArg Prod.snd
+                            (ite_congr (eq_self true)
+                              (fun a => congrFun' (congrArg Prod.mk (NJP_CohortRead.value s i bound)) (decode digest))
+                              fun a => congrArg (Prod.mk (decode digest)) (NJP_CohortRead.value s i bound))))
+                        (encode_decode digest))))))
+              (eq_self (ok (H (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! digest))))))
+      (Eq.refl left))
+'NJV_ChildArguments.sibling' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_ChildArguments.domains : ∀ (physical : Slice U8) (s : reference.Scratch) (i w : Usize),
+  AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w →
+    ↑i < ↑s.n → ↑i < 16 ∧ ↑w < 16 ∧ (NJP_RowModel.paired (raw s) ↑i → ↑i + 1 < 16) :=
+fun physical s i w domain active =>
+  have size := domain.right.left;
+  have write := domain.right.right.right.left;
+  ⟨Decidable.byContradiction fun a => domains._proof_1 s i w active size a,
+    ⟨Decidable.byContradiction fun a => domains._proof_2 s i w active size write a, fun both =>
+      have next := both.left;
+      id (fun next => Decidable.byContradiction fun a => domains._proof_3 s i w size next a) next⟩⟩
+'NJV_ChildArguments.domains' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb0cf8ed6c7994287a9ee234e82d355d9.scope; invocation ID: 9fd44576e9a64e079d049583b41bb032

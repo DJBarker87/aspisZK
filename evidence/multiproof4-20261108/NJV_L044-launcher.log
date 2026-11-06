@@ -1,0 +1,67 @@
+{"attempt": "NJV_L044", "exit_status": 1, "wall_seconds": 8.020018983166665, "peak_rss_kib": "5831356", "swaps": "0", "print_axioms": ["'NJV_WellInput.keys' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJV_WellInput.reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJV_lean/NJV_WellInput.lean:23:90: error: Application type mismatch: The argument
+  arr
+has type
+  j < (↑s.idx).length
+but is expected to have type
+  ?m.68 ?m.72 j
+in the application
+  getElem!_pos ?m.72 j arr
+NJV_lean/NJV_WellInput.lean:19:1: error: unsolved goals
+case h
+s : reference.Scratch
+bound : ↑s.n ≤ 16
+len : (↑s.idx).length = 16
+j : ℕ
+hj : j < (NJV_UnitDomain.keys s).length
+hj' : j < (List.map (fun x => ↑x) (List.take ↑s.n ↑s.idx)).length
+jb : j < ↑s.n
+arr : j < (↑s.idx).length
+⊢ ↑(↑s.idx)[j]! = ↑(↑s.idx)[j]
+theorem NJV_WellInput.keys : ∀ (s : reference.Scratch),
+  ↑s.n ≤ 16 → NJV_UnitDomain.keys s = List.map (fun x => ↑x) (List.take ↑s.n ↑s.idx) :=
+fun s bound =>
+  have len := s.id
+...
+JV_UnitDomain.keys s))))
+            (NJA_WellFormed.source_eq
+              (List.map (fun x => ↑x)
+                ↑⟨List.take ↑s.n ↑s.idx,
+                    have cap := s.idx.to_slice.property;
+                    id
+                      (fun cap =>
+                        Eq.mpr (id (congrFun' (congrArg LE.le List.length_take) Usize.max))
+                          (Decidable.byContradiction fun a => reply._proof_1 s cap a))
+                      cap⟩))))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                ok
+                    (decide
+                      (wellFormed
+                        (List.map (fun x => ↑x)
+                          ↑⟨List.take ↑s.n ↑s.idx,
+                              have cap := s.idx.to_slice.property;
+                              id
+                                (fun cap =>
+                                  Eq.mpr (id (congrFun' (congrArg LE.le List.length_take) Usize.max))
+                                    (Decidable.byContradiction fun a => reply._proof_1 s cap a))
+                                cap⟩))) =
+                  ok (decide (wellFormed _a)))
+              (keys s bound)))
+          (Eq.refl
+            (ok
+              (decide
+                (wellFormed
+                  (List.map (fun x => ↑x)
+                    ↑⟨List.take ↑s.n ↑s.idx,
+                        have cap := s.idx.to_slice.property;
+                        id
+                          (fun cap =>
+                            Eq.mpr (id (congrFun' (congrArg LE.le List.length_take) Usize.max))
+                              (Decidable.byContradiction fun a => reply._proof_1 s cap a))
+                          cap⟩))))))))
+'NJV_WellInput.reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9c25bb2cccbd43a5aa8fb989ebc2c5ea.scope; invocation ID: 7fd8c1220cab4f2b8e29ba79b2b72e68

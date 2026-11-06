@@ -1,0 +1,54 @@
+{"attempt": "NJV_L049", "exit_status": 0, "wall_seconds": 4.27761742984876, "peak_rss_kib": "4354220", "swaps": "0", "print_axioms": ["'NJV_NativeRows.observation' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJV_NativeRows.observation : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length fuel : ℕ) (s : Scratch) (i w : ℕ)
+  (history : List (Request × Digest)) (out : Level),
+  Invocation H nodes length fuel s i w history out → eval H (rows nodes length fuel s i w) = (history, ok out) :=
+fun H nodes length fuel s i w history out native =>
+  Invocation.rec
+    (fun fuel s i w halted =>
+      Nat.casesAuxOn (motive := fun a =>
+        fuel = a →
+          eval H (rows nodes length fuel s i w) =
+            ([], ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))
+        fuel
+        (fun h =>
+          Eq.symm h ▸
+            of_eq_true
+              (Eq.t
+...
+    Eq.refl (Row.stop after)))))
+                                step)))
+                          ih))))
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (congrArg (eval H)
+                        (congrArg
+                          (fun x =>
+                            match x.2 with
+                            | ok a =>
+                              match a with
+                              | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                              | Row.next after ni nw => rows nodes length fuel after ni nw
+                            | fail e => Program.done (fail e)
+                            | div => Program.done div)
+                          (Eq.mp
+                            (congrArg (Eq (eval H (node nodes length s i w)))
+                              (congrArg
+                                (Prod.mk
+                                  (if log.calls = 0 then []
+                                  else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))]))
+                                (congrArg ok
+                                  (ite_congr (eq_self true) (fun a => Eq.refl (Row.next after ni nw)) fun a =>
+                                    Eq.refl (Row.stop after)))))
+                            step)))
+                      ih)))))
+            ((if log.calls = 0 then [] else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))]) ++
+                history,
+              ok out))
+          (eq_self
+            ((if log.calls = 0 then [] else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))]) ++
+                history,
+              ok out))))
+    native
+'NJV_NativeRows.observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rdfc8c9b735ff486bbf7d97403b255ef5.scope; invocation ID: aa030b5172c7460d91f6fa6a768bc97c
