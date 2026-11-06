@@ -1,0 +1,10 @@
+theorem NKB_DomainFinding.unit_counterexample : ∀ (digest : Fin 12 → Std.Array U8 32#usize)
+  (before : reference.Scratch),
+  ↑before.n = 0 →
+    ∀ (physical slot : Slice U8),
+      ∃ after,
+        NKB_LeafChain.Chain (leaves digest) before (some after) ∧
+          ↑after.n = 12 ∧ ¬NJV_UnitDomain.Domain physical slot (NJV_EntryABI.initial after.idx after.val after.n) :=
+⋯
+'NKB_DomainFinding.indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_DomainFinding.unit_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]

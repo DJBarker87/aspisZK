@@ -1,0 +1,63 @@
+{"attempt": "NKB_L079", "exit_status": 1, "wall_seconds": 5.041421795031056, "peak_rss_kib": "4397960", "swaps": "0", "print_axioms": ["'NKB_CanonicalRows.opening' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKB_CanonicalRows.actual' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NKB_CanonicalRows.entered' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKB_lean/NKB_CanonicalRows.lean:10:59: error: Tactic `rfl` failed: The left-hand side
+  NJS_Extract.compact.OPENING
+is not definitionally equal to the right-hand side
+  ok 832#usize
+
+proof : Slice U8
+i : Usize
+⊢ NJS_Extract.compact.OPENING = ok 832#usize
+NKB_lean/NKB_CanonicalRows.lean:11:65: error: Tactic `rfl` failed: The left-hand side
+  NJS_Extract.compact.OFF_OPENINGS
+is not definitionally equal to the right-hand side
+  ok 10055#usize
+
+proof : Slice U8
+i : Usize
+width : NJS_Extract.compact.OPENING = ok 832#usize
+⊢ NJS_Extract.compact.OFF_OPENINGS = ok 10055#usize
+NKB_lean/NKB_CanonicalRows.lean:48:115: error: unsolved goals
+f : Std.Array U8 4#usize → Option U32
+g : Slice U8 → Option K
+e
+...
+railing q)) =
+            true then
+        (none, 1#u32)
+      else (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32))
+same :
+  (decide (accepted f g ec proof iter.start = allFrom (NKB_CanonicalSlotLoop.pass f g q) 0 4) && ec (trailing q)) = true
+⊢ (do
+      let __x ←
+        ok
+            (if
+                (allFrom (NKB_CanonicalSlotLoop.pass f g q) (↑{ start := 0#usize, «end» := 4#usize }.start) 4 &&
+                    ec (trailing q)) =
+                  true then
+              (none, 1#u32)
+            else (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32))
+      match __x.2 with
+        | 1#32#uscalar => ok (cont (iter1, __x.1))
+        | x =>
+          match __x.1 with
+          | none => ok (done none)
+          | some val => ok (done __x.1)) =
+    ok
+      (if accepted f g ec proof iter.start = true then cont (iter1, none)
+      else done (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse)))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NKB_CanonicalRows.opening' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKB_CanonicalRows.actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_CanonicalRows.entered' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rbc9cf7a60d7c48cd8a4c518550a76048.scope; invocation ID: 97190ff7c9874a168beaefe33fa99b38

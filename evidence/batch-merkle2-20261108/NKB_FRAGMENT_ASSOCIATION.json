@@ -1,0 +1,65 @@
+{
+  "spans": [
+    {
+      "body": "    let count = multiproof::node_count(Arity::Two, &idx[..d]).ok_or(Error::Merkle)?;\n    let nodes = slot(proof, s);\n    // Padding is whole 32-byte words: scan it 8 bytes at a time.\n    if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {\n        return Err(Error::Parse);\n    }\n    if !multiproof::verify_in_place(hash, Arity::Two, &root, idx, val, d, &nodes[..32 * count]) {\n        return Err(Error::Merkle);\n    }\n    Ok(())",
+      "sha256": "f0480cb98aefb8ff56b4d9828909929275674e1d156cbb61a18f7363adcad454",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "        let key = batch_key_at(&keys, key_position);\n        key_position += 1;\n        let index = (key >> 8) as u32;\n        let q = opening(proof, lo + (key & 0xff) as usize);\n        let leaf = batch_leaf(hash, tree, q);\n        if d > 0 && same_batch_index(idx, d - 1, index) {\n            if !same_batch_leaf(val, d - 1, leaf) {\n                return Err(Error::Merkle);\n            }\n            continue;\n        }\n        idx[d] = index;\n        val[d] = leaf;\n        d += 1;",
+      "sha256": "6370a6686ab057a5b100d64170d0685507f8d0d0cc49f7e1ab2c669a1195bd0e",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "        let key = batch_key_at(&keys, key_position);\n        key_position += 1;\n        let index = (key >> 8) as u32;\n        let q = opening(proof, lo + (key & 0xff) as usize);\n        let leaf = batch_leaf(hash, tree, q);\n",
+      "sha256": "c94e26ffa278b6790a7de31bd35df0aa5a08bcaabdd9dd4a2f7f983d49a01cda",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "        if d > 0 && same_batch_index(idx, d - 1, index) {\n            if !same_batch_leaf(val, d - 1, leaf) {\n                return Err(Error::Merkle);\n            }\n            continue;\n        }\n        idx[d] = index;\n        val[d] = leaf;\n        d += 1;",
+      "sha256": "f13a62768080063e2a530dc3bb1ed6dc843be598e7426f3764719c3bdfdded92",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "    let nodes = slot(proof, s);\n    // Padding is whole 32-byte words: scan it 8 bytes at a time.\n    if count > SLOT_NODES[s] || nodes[32 * count..].chunks_exact(8).any(|w| u64::from_le_bytes(w.try_into().unwrap()) != 0) {\n        return Err(Error::Parse);\n    }\n    if !multiproof::verify_in_place(hash, Arity::Two, &root, idx, val, d, &nodes[..32 * count]) {\n        return Err(Error::Merkle);\n    }\n    Ok(())",
+      "sha256": "f6f81097c0c98aef3b1e8263b1b2adfb6b483af98f1d14537b6d5624b4a5491e",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "u64::from_le_bytes(w.try_into().unwrap()) != 0",
+      "sha256": "ac3fca5c82c01e8d38260564e62d196e911d49861735975fb0917451cfd12f37",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "        return Err(Error::Parse);",
+      "sha256": "68ffd462d7875658c89246704af4d1b1f70e5920cb5e7a316233d6e0b719742c",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs",
+      "context": "batch_tree Parse branch after the count/padding guard"
+    },
+    {
+      "body": "                M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;",
+      "sha256": "cc707f197c394f5d821eea07e5e70b4f7f04e03d7936f6a98e97b9467d465a6b",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "            K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;",
+      "sha256": "8350ab0c9ffc38b15942e254bae2baec3c333872bacde4e3bbe992d8e9f57a73",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "                K::from_le_bytes(&q[480 + s * 32 + l * 16..480 + s * 32 + l * 16 + 16]).ok_or(Error::Parse)?;",
+      "sha256": "1663f45edcaab3cc0a5cbd2d716476c4dc46c3b543128a615a650db799aa93a0",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "        echeck(&q[672..800], false)?;",
+      "sha256": "19b1b8bc2b4b1836feebdaa2a6f7b36bf690d8ee261a395b1ccb427bcf9d410e",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    },
+    {
+      "body": "    compact::check_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE])?;\n    echeck(&proof[compact::OFF_INACTIVE..compact::OFF_INACTIVE + 32], false)?;\n    echeck(&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT], false)?;\n    echeck(&proof[compact::OFF_ROUND1..compact::OFF_OPENINGS], false)?;",
+      "sha256": "4f438ff5cd230a16390e4cadbbb8346845d29d64a0fd6640ced8a33d30929bb2",
+      "source": "crates/aspis-r1-cost-probe/src/candidate.rs"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+NKB_lean/NKB_CanonicalEcheck.lean:34:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LPl.Echeck.chunk (List.take 32 (List.drop (32 * i) ↑bs)) k
+in the target expression
+  pass bs k i = NJZ_CodecSemantics.replyStep (NJZ_CodecSemantics.decoded b) k
+
+bs : Slice U8
+k : Bool
+i : ℕ
+active : i < (↑bs).length / 32
+b : Std.Array U8 32#usize
+same : ↑b = List.take 32 (List.drop (32 * i) ↑bs)
+h : NJZ_CodecSemantics.parsedStep b k = LPl.Echeck.chunk (List.take 32 (List.drop (32 * i) ↑bs)) k
+⊢ pass bs k i = NJZ_CodecSemantics.replyStep (NJZ_CodecSemantics.decoded b) k
+'NKB_CanonicalEcheck.window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_CanonicalEcheck.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,933 @@
+# NKB printed statements
+
+Target not yet established. All are LOCAL SUPPORT / FINDINGS, not positive parent row roots.
+
+```lean
+theorem AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk
+                      (AspisR1.FIp_Install.configuration indexError
+                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisR1.ARW_Induced.issued native1 copy allocator
+                                                AspisR1.CPH_Program.verifier a H).length ≤
+                                            Q0 + Q1) →
+                                        have P :=
+                                          AspisR1.ARW_Induced.program native1 copy allocator
+                                            AspisR1.CPH_Program.verifier a;
+                                        have runtime :=
+                                          AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+                                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation)
+                                            indexError reservation native1 native2 hashv a;
+                                        have select := fun x =>
+                                          AspisR1.P2P_NativeSelection.pair
+                                            (AspisR1.DrvC_Installation.sdk
+                                              (AspisR1.FIp_Install.configuration indexError
+                                                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                  reservation)
+                                                reservation))
+                                            AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                        AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                            (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                            AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                            AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                          AspisR1.DrvC_Implementation.driver
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation) =
+                                              AspisR1.DrvC_SourceEntry.source
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation)
+                                                hashv ∧
+                                            AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                      reservation)
+                                                    reservation) =
+                                                AspisR1.SdkD_PairBatches.dictionary
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).boundaries
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).std ∧
+                                              AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.boundaries
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation).boundaries)
+                                                  reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1
+                                                  post2 H
+                                                  (AspisR1.DrvC_Implementation.driver
+                                                    (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation))
+                                                  prior (p.physicalEvents t) hashv
+                                                  (AspisR1.BinRawByteCollisionTargets.event
+                                                    AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.Hiq_RecordedJoint.program
+                                                        (AspisR1.F3X_Account.program
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P)
+                                                        AspisR1.F3X_Projection.project select))) ∧
+                                                (AspisR1.F3X_ModelClaims.Claims
+                                                      (AspisR1.FIp_Install.configuration indexError
+                                                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                          reservation)
+                                                        reservation)
+                                                      D P (Q0 + Q1) ∧
+                                                    AspisR1.F3Y_SourceClaims.Claims
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        D hashv P (Q0 + Q1) select ∧
+                                                      AspisR1.F3Y_AccountMass.Claims
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P (Q0 + Q1) select ∧
+                                                        ⋯) ∧
+                                                  (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                      (↑saved).length = 1768 ∧ ⋯) ∧
+                                                    AspisR1.Rc2_Events.Facts
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        hashv native1 native2 copy allocator
+                                                        AspisR1.CPH_Program.verifier H saved ∧
+                                                      AspisR1.CPH_Protection.Facts p t saved
+                                                          AspisR1.CPH_Program.verifier ∧
+                                                        ⋯ :=
+⋯
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_Rejection.lost_error : ∀ (idx : Aeneas.Std.Array Aeneas.Std.U32 16#usize)
+  (val : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize) (error : NJS_Extract.verifier.Error),
+  NKB_Rejection.boundary idx val none ≠ Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error, idx, val) :=
+⋯
+'NKB_Rejection.lost_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_Rejection.count_none : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (idx : Aeneas.Std.Array Aeneas.Std.U32 16#usize)
+  (val : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize),
+  NKB_Rejection.terminal proof root idx val = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done (idx, val, none)) :=
+⋯
+'NKB_Rejection.count_none' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_IndexFold.insert_bounds : ∀ (k : ℕ → ℕ) (d x : ℕ),
+  d ≤ (AspisR1.MultiproofConeLiveLeaves.insert k d x).2 ∧ (AspisR1.MultiproofConeLiveLeaves.insert k d x).2 ≤ d + 1 :=
+⋯
+'NKB_IndexFold.insert_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_IndexFold.build_bounds : ∀ (xs : List ℕ) (k : ℕ → ℕ) (d : ℕ),
+  d ≤ (AspisR1.MultiproofConeLiveLeaves.build xs k d).2 ∧
+    (AspisR1.MultiproofConeLiveLeaves.build xs k d).2 ≤ d + xs.length :=
+⋯
+'NKB_IndexFold.build_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_IndexFold.build_positive : ∀ (xs : List ℕ) (k : ℕ → ℕ) (d : ℕ),
+  0 < d ∨ xs ≠ [] → 0 < (AspisR1.MultiproofConeLiveLeaves.build xs k d).2 :=
+⋯
+'NKB_IndexFold.build_positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_IndexFold.build_upper : ∀ (xs : List ℕ) (k : ℕ → ℕ) (d ceiling : ℕ),
+  (∀ a < d, k a ≤ ceiling) →
+    (∀ x ∈ xs, x ≤ ceiling) →
+      ∀ a < (AspisR1.MultiproofConeLiveLeaves.build xs k d).2,
+        (AspisR1.MultiproofConeLiveLeaves.build xs k d).1 a ≤ ceiling :=
+⋯
+'NKB_IndexFold.build_upper' depends on axioms: [propext, Quot.sound]
+theorem NKB_IndexFold.producer : ∀ (leaves : List AspisR1.MultiproofConeLiveFold.Leaf)
+  (before after : MultiproofConeRef.reference.Scratch),
+  ↑before.n = 0 →
+    leaves ≠ [] →
+      leaves.length ≤ 12 →
+        List.Pairwise (fun x1 x2 => x1 ≤ x2) (List.map (fun x => ↑x.1) leaves) →
+          (∀ leaf ∈ leaves, ↑leaf.1 < 262144) →
+            AspisR1.MultiproofConeLiveFold.fold leaves before = Aeneas.Std.Result.ok (some after) →
+              0 < ↑after.n ∧
+                ↑after.n ≤ leaves.length ∧
+                  AspisR1.MultiproofConeLiveOrder.Strict (AspisR1.MultiproofConeLivePreservation.keys after) 0
+                      ↑after.n ∧
+                    ∀ a < ↑after.n, AspisR1.MultiproofConeLivePreservation.keys after a < 262144 :=
+⋯
+'NKB_IndexFold.producer' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CallerDomain.well : ∀ (s : MultiproofConeRef.reference.Scratch),
+  0 < ↑s.n →
+    ↑s.n ≤ 12 →
+      AspisR1.MultiproofConeLiveOrder.Strict (AspisR1.MultiproofConeLivePreservation.keys s) 0 ↑s.n →
+        (∀ j < ↑s.n, AspisR1.MultiproofConeLivePreservation.keys s j < 262144) →
+          AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) :=
+⋯
+'NKB_CallerDomain.well' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CallerPrefix.counted : ∀ (slot : Aeneas.Std.Slice Aeneas.Std.U8) (count : ℕ),
+  32 * count ≤ (↑slot).length → (↑(AspisR1.MultiproofConeSlotTail.prefixNodes slot count)).length = 32 * count :=
+⋯
+'NKB_CallerPrefix.counted' depends on axioms: [propext, Quot.sound]
+theorem NKB_CallerPrefix.bytes : ∀ (slot : Aeneas.Std.Slice Aeneas.Std.U8) (s : MultiproofConeRef.reference.Scratch),
+  AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s) →
+    32 * AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s) ≤ (↑slot).length →
+      (↑(AspisR1.MultiproofConeSlotTail.prefixNodes slot
+              (AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys s)))).length ≤
+        9216 :=
+⋯
+'NKB_CallerPrefix.bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_DedupCut.source : ∀ (s : MultiproofConeRef.reference.Scratch) (index : Aeneas.Std.U32)
+  (leaf : AspisR1.MultiproofConePhysicalLive.Digest),
+  ↑s.n < 16 →
+    ∀ (out : Option MultiproofConeRef.reference.Scratch),
+      NKB_DedupCut.Cut s index leaf out →
+        MultiproofConeRef.reference.leaf_step s index leaf = Aeneas.Std.Result.ok out :=
+⋯
+'NKB_DedupCut.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_DedupCut.cursor : ∀ (s : MultiproofConeRef.reference.Scratch) (index : Aeneas.Std.U32)
+  (leaf : AspisR1.MultiproofConePhysicalLive.Digest) (after : MultiproofConeRef.reference.Scratch),
+  NKB_DedupCut.Cut s index leaf (some after) → after.at = s.at :=
+⋯
+'NKB_DedupCut.cursor' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_LeafChain.source : ∀ (leaves : List AspisR1.MultiproofConeLiveFold.Leaf)
+  (s : MultiproofConeRef.reference.Scratch) (out : Option MultiproofConeRef.reference.Scratch),
+  NKB_LeafChain.Chain leaves s out → AspisR1.MultiproofConeLiveFold.fold leaves s = Aeneas.Std.Result.ok out :=
+⋯
+'NKB_LeafChain.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_LeafChain.cursor : ∀ (leaves : List AspisR1.MultiproofConeLiveFold.Leaf)
+  (s after : MultiproofConeRef.reference.Scratch), NKB_LeafChain.Chain leaves s (some after) → after.at = s.at :=
+⋯
+'NKB_LeafChain.cursor' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_PaddingFrame.aligned : ∀ (bytes : AspisV8R19.DuplexFrames.Bytes) (cap count : ℕ),
+  List.length bytes = 32 * cap →
+    count ≤ cap →
+      (List.drop (32 * count) bytes).length = 8 * (4 * (cap - count)) ∧ (List.drop (32 * count) bytes).length % 8 = 0 :=
+⋯
+'NKB_PaddingFrame.aligned' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_PaddingFrame.zero_suffix : ∀ (bytes : AspisV8R19.DuplexFrames.Bytes) (cap count : ℕ),
+  List.length bytes = 32 * cap →
+    count ≤ cap →
+      AspisR1.MultiproofConePadding.scan (4 * (cap - count)) (List.drop (32 * count) bytes) = true →
+        bytes = List.take (32 * count) bytes ++ List.replicate (32 * (cap - count)) 0 :=
+⋯
+'NKB_PaddingFrame.zero_suffix' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_PaddingFrame.nonzero_rejects : ∀ (bytes : AspisV8R19.DuplexFrames.Bytes) (cap count : ℕ),
+  List.length bytes = 32 * cap →
+    count ≤ cap →
+      (∃ b ∈ List.drop (32 * count) bytes, b ≠ 0) →
+        AspisR1.MultiproofConePadding.scan (4 * (cap - count)) (List.drop (32 * count) bytes) = false :=
+⋯
+'NKB_PaddingFrame.nonzero_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_PaddingPredicate.source : ∀ (chunk : Aeneas.Std.Slice Aeneas.Std.U8) (size : (↑chunk).length = 8),
+  NKB_PaddingPredicate.callback chunk =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.num.U64.from_le_bytes ⟨↑chunk, size⟩ != 0#u64, ()) :=
+⋯
+'NKB_PaddingPredicate.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_PaddingPredicate.zero_iff : ∀ (word : Aeneas.Std.Array Aeneas.Std.U8 8#usize),
+  Aeneas.Std.core.num.U64.from_le_bytes word = 0#u64 ↔ ∀ b ∈ ↑word, b = 0#u8 :=
+⋯
+'NKB_PaddingPredicate.zero_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_PaddingPredicate.first_nonzero : NKB_PaddingPredicate.callback
+    (Aeneas.Std.Array.make 8#usize [1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ⋯).to_slice =
+  Aeneas.Std.Result.ok (true, ()) :=
+⋯
+'NKB_PaddingPredicate.first_nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_ScanWindows.offsets : ∀ (s l : ℕ),
+  s < 4 →
+    l < 26 → s * 120 + l * 4 + 4 ≤ 480 ∧ s * 120 + 104 + 16 ≤ 480 ∧ 480 + s * 32 + 2 * 16 ≤ 608 ∧ 672 + 128 ≤ 832 :=
+⋯
+'NKB_ScanWindows.offsets' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_ScanWindows.subdomain : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (start finish : Aeneas.Std.Usize),
+      ↑start ≤ ↑finish →
+        ↑finish ≤ 832 →
+          Aeneas.Std.core.slice.index.Slice.index (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8)
+                q { start := start, «end» := finish } =
+              Aeneas.Std.Result.ok (AspisR1.MultiproofConeSlices.sub q start finish) ∧
+            (↑(AspisR1.MultiproofConeSlices.sub q start finish)).length = ↑finish - ↑start :=
+⋯
+'NKB_ScanWindows.subdomain' depends on axioms: [propext, Quot.sound]
+theorem NKB_SortProducer.sorted : ∀ (raw : Aeneas.Std.Array Aeneas.Std.U64 16#usize) (n : Aeneas.Std.Usize),
+  0 < ↑n →
+    ↑n ≤ 12 →
+      ∃ out,
+        NJS_Extract.verifier.candidate.sort_batch_keys raw n = Aeneas.Std.Result.ok out ∧
+          (↑out).Perm ↑raw ∧
+            List.Pairwise (fun x1 x2 => x1 ≤ x2) (List.take ↑n ↑out) ∧ List.drop ↑n ↑out = List.drop ↑n ↑raw :=
+⋯
+'NKB_SortProducer.sorted' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_SortProducer.tx2_keys : ∀ (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (tree : Aeneas.Std.Usize),
+  ↑tree < 3 →
+    (∀ j < 22, ↑(↑queries)[j]! < 262144) →
+      NJS_Extract.verifier.candidate.batch_keys queries 10#usize 12#usize tree =
+        Aeneas.Std.Result.ok (AspisR1.Port4B_KeyInstall.keyArray queries 1 ↑tree) :=
+⋯
+'NKB_SortProducer.tx2_keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_SortProducer.tx1_keys : ∀ (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (tree : Aeneas.Std.Usize),
+  ↑tree < 3 →
+    (∀ j < 22, ↑(↑queries)[j]! < 262144) →
+      NJS_Extract.verifier.candidate.batch_keys queries 0#usize 10#usize tree =
+        Aeneas.Std.Result.ok (AspisR1.Port4B_KeyInstall.keyArray queries 0 ↑tree) :=
+⋯
+'NKB_SortProducer.tx1_keys' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_StrictCount.build_count : ∀ (xs : List ℕ) (k : ℕ → ℕ) (d : ℕ),
+  List.Pairwise (fun x1 x2 => x1 < x2) xs →
+    (∀ a < d, ∀ x ∈ xs, k a < x) → (AspisR1.MultiproofConeLiveLeaves.build xs k d).2 = d + xs.length :=
+⋯
+'NKB_StrictCount.build_count' depends on axioms: [propext, Quot.sound]
+theorem NKB_StrictCount.ordered : List.Pairwise (fun x1 x2 => x1 < x2) NKB_StrictCount.tx2Indices :=
+⋯
+'NKB_StrictCount.ordered' depends on axioms: [propext, Quot.sound]
+theorem NKB_StrictCount.canonical : ∀ x ∈ NKB_StrictCount.tx2Indices, x < 262144 :=
+⋯
+'NKB_StrictCount.canonical' depends on axioms: [propext, Quot.sound]
+theorem NKB_StrictCount.twelve : ∀ (k : ℕ → ℕ),
+  (AspisR1.MultiproofConeLiveLeaves.build NKB_StrictCount.tx2Indices k 0).2 = 12 :=
+⋯
+'NKB_StrictCount.twelve' depends on axioms: [propext, Quot.sound]
+theorem NKB_StrictCount.not_ten : ∀ (k : ℕ → ℕ),
+  ¬(AspisR1.MultiproofConeLiveLeaves.build NKB_StrictCount.tx2Indices k 0).2 ≤ 10 :=
+⋯
+'NKB_StrictCount.not_ten' depends on axioms: [propext, Quot.sound]
+theorem NKB_StrictLeaves.total : ∀ (leaves : List AspisR1.MultiproofConeLiveFold.Leaf)
+  (s : MultiproofConeRef.reference.Scratch),
+  ↑s.n + leaves.length ≤ 16 →
+    List.Pairwise (fun x1 x2 => x1 < x2) (List.map (fun x => ↑x.1) leaves) →
+      (∀ a < ↑s.n, ∀ leaf ∈ leaves, AspisR1.MultiproofConeLivePreservation.keys s a < ↑leaf.1) →
+        ∃ after, NKB_LeafChain.Chain leaves s (some after) ∧ ↑after.n = ↑s.n + leaves.length :=
+⋯
+'NKB_StrictLeaves.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_StrictLeaves.twelve : ∀ (leaves : List AspisR1.MultiproofConeLiveFold.Leaf)
+  (s : MultiproofConeRef.reference.Scratch),
+  ↑s.n = 0 →
+    List.map (fun x => ↑x.1) leaves = NKB_StrictCount.tx2Indices →
+      ∃ after, NKB_LeafChain.Chain leaves s (some after) ∧ ↑after.n = 12 ∧ ¬↑after.n ≤ 10 :=
+⋯
+'NKB_StrictLeaves.twelve' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_DomainFinding.indices : ∀ (digest : Fin 12 → Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  List.map (fun x => ↑x.1) (NKB_DomainFinding.leaves digest) = NKB_StrictCount.tx2Indices :=
+⋯
+'NKB_DomainFinding.indices' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_DomainFinding.unit_counterexample : ∀ (digest : Fin 12 → Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (before : MultiproofConeRef.reference.Scratch),
+  ↑before.n = 0 →
+    ∀ (physical slot : Aeneas.Std.Slice Aeneas.Std.U8),
+      ∃ after,
+        NKB_LeafChain.Chain (NKB_DomainFinding.leaves digest) before (some after) ∧
+          ↑after.n = 12 ∧ ¬NJV_UnitDomain.Domain physical slot (NJV_EntryABI.initial after.idx after.val after.n) :=
+⋯
+'NKB_DomainFinding.unit_counterexample' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_ProducerChain.caller : ∀ (leaves : List AspisR1.MultiproofConeLiveFold.Leaf)
+  (before after : MultiproofConeRef.reference.Scratch),
+  ↑before.n = 0 →
+    leaves ≠ [] →
+      leaves.length ≤ 12 →
+        List.Pairwise (fun x1 x2 => x1 ≤ x2) (List.map (fun x => ↑x.1) leaves) →
+          (∀ leaf ∈ leaves, ↑leaf.1 < 262144) →
+            NKB_LeafChain.Chain leaves before (some after) →
+              0 < ↑after.n ∧
+                ↑after.n ≤ leaves.length ∧ AspisR1.OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys after) :=
+⋯
+'NKB_ProducerChain.caller' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_ProducerChain.verifier_bytes : ∀ (leaves : List AspisR1.MultiproofConeLiveFold.Leaf)
+  (before after : MultiproofConeRef.reference.Scratch) (slot : Aeneas.Std.Slice Aeneas.Std.U8),
+  ↑before.n = 0 →
+    leaves ≠ [] →
+      leaves.length ≤ 12 →
+        List.Pairwise (fun x1 x2 => x1 ≤ x2) (List.map (fun x => ↑x.1) leaves) →
+          (∀ leaf ∈ leaves, ↑leaf.1 < 262144) →
+            NKB_LeafChain.Chain leaves before (some after) →
+              32 * AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after) ≤ (↑slot).length →
+                (↑(AspisR1.MultiproofConeSlotTail.prefixNodes slot
+                        (AspisR1.OraclePortFrozenOrder.nodeCount 18 (NJV_UnitDomain.keys after)))).length ≤
+                  9216 :=
+⋯
+'NKB_ProducerChain.verifier_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_AnyModel.callback : ∀ (chunk : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑chunk).length = 8 →
+    NKB_AnyModel.predicate.call_mut () chunk = Aeneas.Std.Result.ok (NKB_AnyModel.nonzero chunk, ()) :=
+⋯
+'NKB_AnyModel.callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_AnyModel.total : ∀ (chunks : List (Aeneas.Std.Slice Aeneas.Std.U8))
+  (remainder : Aeneas.Std.Slice Aeneas.Std.U8),
+  (∀ c ∈ chunks, (↑c).length = 8) →
+    AspisR1.Port3_BatchStd.anyDefault (Aeneas.Std.core.iter.traits.iterator.IteratorChunksExact Aeneas.Std.U8)
+        NKB_AnyModel.predicate { chunks := chunks, remainder := remainder } () =
+      Aeneas.Std.Result.ok
+        ((NKB_AnyModel.scan chunks).1, { chunks := (NKB_AnyModel.scan chunks).2, remainder := remainder }) :=
+⋯
+'NKB_AnyModel.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_AnyModel.predicate_false : ∀ (chunk : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑chunk).length = 8 → (NKB_AnyModel.nonzero chunk = false ↔ ∀ b ∈ ↑chunk, b = 0#u8) :=
+⋯
+'NKB_AnyModel.predicate_false' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_AnyModel.false_iff : ∀ (chunks : List (Aeneas.Std.Slice Aeneas.Std.U8)),
+  (∀ c ∈ chunks, (↑c).length = 8) → ((NKB_AnyModel.scan chunks).1 = false ↔ ∀ c ∈ chunks, ∀ b ∈ ↑c, b = 0#u8) :=
+⋯
+'NKB_AnyModel.false_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_KeyStream.positive : ∀ (batch : ℕ), 0 < ↑(NKB_KeyStream.count batch) ∧ ↑(NKB_KeyStream.count batch) ≤ 12 :=
+⋯
+'NKB_KeyStream.positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_KeyStream.built : ∀ (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (batch : ℕ) (kind : Aeneas.Std.Usize),
+  ↑kind < 3 →
+    batch < 2 →
+      (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+        NJS_Extract.verifier.candidate.batch_keys raw (NKB_KeyStream.lo batch) (NKB_KeyStream.count batch) kind =
+          Aeneas.Std.Result.ok (AspisR1.Port4B_KeyInstall.keyArray raw batch ↑kind) :=
+⋯
+'NKB_KeyStream.built' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_KeyStream.initial : ∀ (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (batch : ℕ)
+  (kind : Aeneas.Std.Usize),
+  List.take ↑(NKB_KeyStream.count batch) ↑(AspisR1.Port4B_KeyInstall.keyArray raw batch ↑kind) =
+    List.map (AspisR1.MultiproofConeSortOrder.packed (AspisR1.Port4B_KeyInstall.queries raw) batch ↑kind)
+      (AspisR1.OraclePortSelectedDraft.batchPositions batch) :=
+⋯
+'NKB_KeyStream.initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_KeyStream.source : ∀ (raw : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (batch : ℕ) (kind : Aeneas.Std.Usize),
+  ↑kind < 3 →
+    batch < 2 →
+      (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+        ∃ out,
+          (do
+                let keys ←
+                  NJS_Extract.verifier.candidate.batch_keys raw (NKB_KeyStream.lo batch) (NKB_KeyStream.count batch)
+                      kind
+                NJS_Extract.verifier.candidate.sort_batch_keys keys (NKB_KeyStream.count batch)) =
+              Aeneas.Std.Result.ok out ∧
+            List.map (fun key => (↑key / 256, (if batch = 0 then 0 else 10) + ↑key % 256))
+                  (List.take ↑(NKB_KeyStream.count batch) ↑out) =
+                List.map
+                  (fun pos =>
+                    (AspisR1.OraclePortSelectedDraft.index (AspisR1.Port4B_KeyInstall.queries raw) (↑kind) pos, pos))
+                  (AspisR1.OraclePortFrozenOrder.sortedPositions (AspisR1.Port4B_KeyInstall.queries raw) batch ↑kind) ∧
+              List.drop ↑(NKB_KeyStream.count batch) ↑out =
+                List.drop ↑(NKB_KeyStream.count batch) ↑(AspisR1.Port4B_KeyInstall.keyArray raw batch ↑kind) :=
+⋯
+'NKB_KeyStream.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_ParseCut.mismatch : ∀ (idx : NKB_ParseCut.Indices) (val : NKB_ParseCut.Values)
+  (out : NKB_ParseCut.RustResult) (afterIdx : NKB_ParseCut.Indices) (afterVal : NKB_ParseCut.Values),
+  NKB_ParseCut.Cut idx val out afterIdx afterVal →
+    NKB_Rejection.boundary idx val none ≠ Aeneas.Std.Result.ok (out, afterIdx, afterVal) :=
+⋯
+'NKB_ParseCut.mismatch' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRange.next : ∀ (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+  ↑iter.start < ↑iter.end →
+    ∃ iter1,
+      Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize iter =
+          Aeneas.Std.Result.ok (some iter.start, iter1) ∧
+        ↑iter1.start = ↑iter.start + 1 ∧ iter1.end = iter.end :=
+⋯
+'NKB_CanonicalRange.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRange.stop : ∀ (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+  ↑iter.end ≤ ↑iter.start →
+    ∃ iter1,
+      Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize iter =
+        Aeneas.Std.Result.ok (none, iter1) :=
+⋯
+'NKB_CanonicalRange.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRange.address : ∀ (s l : Aeneas.Std.Usize),
+  ↑s < 4 →
+    ↑l < 2 →
+      ↑(NKB_CanonicalRange.start s l) = 480 + ↑s * 32 + ↑l * 16 ∧
+        ↑(NKB_CanonicalRange.finish s l) = 480 + ↑s * 32 + ↑l * 16 + 16 :=
+⋯
+'NKB_CanonicalRange.address' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRange.entered : ∀ (f : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8) (s : Aeneas.Std.Usize) (p : NKB_CanonicalRange.Pending)
+  (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+  (↑q).length = 832 →
+    ↑s < 4 →
+      ↑iter.start < 2 →
+        ↑iter.start < ↑iter.end →
+          ∃ iter1,
+            ↑iter1.start = ↑iter.start + 1 ∧
+              iter1.end = iter.end ∧
+                NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0.body
+                    (fun bs => Aeneas.Std.Result.ok (f bs)) q s p iter =
+                  Aeneas.Std.Result.ok
+                    (match f (NKB_CanonicalRange.window q s iter.start) with
+                    | none =>
+                      Aeneas.Std.ControlFlow.done
+                        (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse))
+                    | some val => Aeneas.Std.ControlFlow.cont iter1) :=
+⋯
+'NKB_CanonicalRange.entered' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalPair.source : ∀ (f : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8) (s : Aeneas.Std.Usize),
+  (↑q).length = 832 →
+    ↑s < 4 →
+      ∀ (p : NKB_CanonicalRange.Pending),
+        NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0 (fun bs => Aeneas.Std.Result.ok (f bs))
+            { start := 0#usize, «end» := 2#usize } q s p =
+          Aeneas.Std.Result.ok
+            (if
+                ((f (NKB_CanonicalRange.window q s 0#usize)).isSome &&
+                    (f (NKB_CanonicalRange.window q s 1#usize)).isSome) =
+                  true then
+              p
+            else some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse)) :=
+⋯
+'NKB_CanonicalPair.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalPair.loop : ∀ (f : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8) (s : Aeneas.Std.Usize),
+  (↑q).length = 832 →
+    ↑s < 4 →
+      ∀ (pass : ℕ → Bool),
+        (∀ (l : Aeneas.Std.Usize), ↑l < 2 → (f (NKB_CanonicalRange.window q s l)).isSome = pass ↑l) →
+          ∀ (fuel : ℕ) (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (p : NKB_CanonicalRange.Pending),
+            iter.end = 2#usize →
+              ↑iter.start + fuel = 2 →
+                NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0
+                    (fun bs => Aeneas.Std.Result.ok (f bs)) iter q s p =
+                  Aeneas.Std.Result.ok
+                    (if NKB_CanonicalPair.allFrom pass (↑iter.start) fuel = true then p
+                    else some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse)) :=
+⋯
+'NKB_CanonicalPair.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalar.address : ∀ (s l : Aeneas.Std.Usize),
+  ↑s < 4 →
+    ↑l < 26 →
+      ↑(NKB_CanonicalScalar.start s l) = ↑s * 120 + ↑l * 4 ∧
+        ↑(NKB_CanonicalScalar.finish s l) = ↑s * 120 + ↑l * 4 + 4 :=
+⋯
+'NKB_CanonicalScalar.address' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalar.size : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8) (s l : Aeneas.Std.Usize),
+  (↑q).length = 832 → ↑s < 4 → ↑l < 26 → (↑(NKB_CanonicalScalar.window q s l)).length = 4 :=
+⋯
+'NKB_CanonicalScalar.size' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalar.entered : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (q : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : Aeneas.Std.Usize) (p : NKB_CanonicalRange.Pending) (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize)
+  (length : (↑q).length = 832) (slot : ↑s < 4) (lane : ↑iter.start < 26),
+  ↑iter.start < ↑iter.end →
+    ∃ iter1,
+      ↑iter1.start = ↑iter.start + 1 ∧
+        iter1.end = iter.end ∧
+          NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0.body (fun b => Aeneas.Std.Result.ok (f b))
+              (fun b => Aeneas.Std.Result.ok (g b)) q s p iter =
+            Aeneas.Std.Result.ok
+              (match f ⟨↑(NKB_CanonicalScalar.window q s iter.start), ⋯⟩ with
+              | none =>
+                Aeneas.Std.ControlFlow.done
+                  (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32)
+              | some val => Aeneas.Std.ControlFlow.cont iter1) :=
+⋯
+'NKB_CanonicalScalar.entered' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalEcheck.window : ∀ (bs : Aeneas.Std.Slice Aeneas.Std.U8),
+  ∀ i < (↑bs).length / 32, ∃ b, ↑b = List.take 32 (List.drop (32 * i) ↑bs) :=
+⋯
+'NKB_CanonicalEcheck.window' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalEcheck.source : ∀ (bs : Aeneas.Std.Slice Aeneas.Std.U8) (k : Bool),
+  NFU_Retarget.verifier.echeck bs k =
+    Aeneas.Std.Result.ok
+      (if (List.range ((↑bs).length / 32)).all (NKB_CanonicalEcheck.pass bs k) = true then
+        Aeneas.Std.core.result.Result.Ok ()
+      else Aeneas.Std.core.result.Result.Err NFU_Retarget.LPl_Kit_Release.verifier.Error.Parse) :=
+⋯
+'NKB_CanonicalEcheck.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalTail.address : ∀ (s : Aeneas.Std.Usize),
+  ↑s < 4 → ↑(NKB_CanonicalTail.start s) = ↑s * 120 + 104 ∧ ↑(NKB_CanonicalTail.finish s) = ↑s * 120 + 120 :=
+⋯
+'NKB_CanonicalTail.address' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalTail.source : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (q : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : Aeneas.Std.Usize) (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+  (↑q).length = 832 →
+    ↑s < 4 →
+      ↑iter.end ≤ ↑iter.start →
+        NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0.body (fun b => Aeneas.Std.Result.ok (f b))
+            (fun b => Aeneas.Std.Result.ok (g b)) q s none iter =
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.ControlFlow.done
+              (if NKB_CanonicalTail.accepted g q s = true then (none, 1#u32)
+              else (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32))) :=
+⋯
+'NKB_CanonicalTail.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalarLoop.actual : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8) (s l : Aeneas.Std.Usize) (length : (↑q).length = 832) (slot : ↑s < 4)
+  (lane : ↑l < 26), NKB_CanonicalScalarLoop.pass f q s ↑l = (f ⟨↑(NKB_CanonicalScalar.window q s l), ⋯⟩).isSome :=
+⋯
+'NKB_CanonicalScalarLoop.actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalarLoop.source : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (q : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : Aeneas.Std.Usize),
+  (↑q).length = 832 →
+    ↑s < 4 →
+      ∀ (fuel : ℕ) (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+        iter.end = 26#usize →
+          ↑iter.start + fuel = 26 →
+            NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0 (fun b => Aeneas.Std.Result.ok (f b))
+                (fun b => Aeneas.Std.Result.ok (g b)) iter q s none =
+              Aeneas.Std.Result.ok
+                (if
+                    (NKB_CanonicalPair.allFrom (NKB_CanonicalScalarLoop.pass f q s) (↑iter.start) fuel &&
+                        NKB_CanonicalTail.accepted g q s) =
+                      true then
+                  (none, 1#u32)
+                else (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32)) :=
+⋯
+'NKB_CanonicalScalarLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalOpening.stop : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+      ↑iter.end ≤ ↑iter.start →
+        NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0.body (fun b => Aeneas.Std.Result.ok (f b))
+            (fun b => Aeneas.Std.Result.ok (g b)) (fun b x => Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (ec b)))
+            q iter none =
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.ControlFlow.done
+              (if ec (NKB_CanonicalOpening.trailing q) = true then (none, 1#u32)
+              else (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32))) :=
+⋯
+'NKB_CanonicalOpening.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalOpening.entered : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+      ↑iter.start < ↑iter.end →
+        ↑iter.start < 4 →
+          ∃ iter1,
+            ↑iter1.start = ↑iter.start + 1 ∧
+              iter1.end = iter.end ∧
+                NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0.body (fun b => Aeneas.Std.Result.ok (f b))
+                    (fun b => Aeneas.Std.Result.ok (g b))
+                    (fun b x => Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (ec b))) q iter none =
+                  Aeneas.Std.Result.ok
+                    (if NKB_CanonicalOpening.slot f g q iter.start = true then Aeneas.Std.ControlFlow.cont (iter1, none)
+                    else
+                      Aeneas.Std.ControlFlow.done
+                        (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32)) :=
+⋯
+'NKB_CanonicalOpening.entered' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalSlotLoop.actual : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (q : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : Aeneas.Std.Usize), ↑s < 4 → NKB_CanonicalSlotLoop.pass f g q ↑s = NKB_CanonicalOpening.slot f g q s :=
+⋯
+'NKB_CanonicalSlotLoop.actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalSlotLoop.source : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (fuel : ℕ) (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+      iter.end = 4#usize →
+        ↑iter.start + fuel = 4 →
+          NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0 (fun b => Aeneas.Std.Result.ok (f b))
+              (fun b => Aeneas.Std.Result.ok (g b))
+              (fun b x => Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (ec b))) iter q none =
+            Aeneas.Std.Result.ok
+              (if
+                  (NKB_CanonicalPair.allFrom (NKB_CanonicalSlotLoop.pass f g q) (↑iter.start) fuel &&
+                      ec (NKB_CanonicalOpening.trailing q)) =
+                    true then
+                (none, 1#u32)
+              else (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32)) :=
+⋯
+'NKB_CanonicalSlotLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalGeometry.cover : ∀ j < 152,
+  (∃ s l, s < 4 ∧ l < 26 ∧ j * 4 = s * 120 + l * 4) ∨
+    (∃ s w, s < 4 ∧ w < 4 ∧ j * 4 = s * 120 + 104 + w * 4) ∨
+      ∃ s l w, s < 4 ∧ l < 2 ∧ w < 4 ∧ j * 4 = 480 + s * 32 + l * 16 + w * 4 :=
+⋯
+'NKB_CanonicalGeometry.cover' depends on axioms: [propext, Quot.sound]
+theorem NKB_CanonicalGeometry.contiguous : ∀ (word : ℕ → Prop),
+  NKB_CanonicalGeometry.Matrix word ↔ ∀ j < 152, word (j * 4) :=
+⋯
+'NKB_CanonicalGeometry.contiguous' depends on axioms: [propext, Quot.sound]
+theorem NKB_CanonicalGeometry.salts : ∀ (s l w : ℕ),
+  s < 4 → l < 2 → w < 4 → 480 + s * 32 + l * 16 + w * 4 + 4 ≤ 608 ∧ 608 ≤ 672 ∧ 800 ≤ 832 :=
+⋯
+'NKB_CanonicalGeometry.salts' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRows.opening : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize),
+  NJS_Extract.verifier.candidate.opening proof i = AspisR1.Port4B_Opening.opening proof i :=
+⋯
+'NKB_CanonicalRows.opening' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRows.actual : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize),
+  ↑i < 22 → NKB_CanonicalRows.pass f g ec proof ↑i = NKB_CanonicalRows.accepted f g ec proof i :=
+⋯
+'NKB_CanonicalRows.actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRows.entered : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+      ↑iter.start < ↑iter.end →
+        ↑iter.start < 22 →
+          ∃ iter1,
+            ↑iter1.start = ↑iter.start + 1 ∧
+              iter1.end = iter.end ∧
+                NJS_Extract.verifier.candidate.canonical_scan_loop0.body (fun b => Aeneas.Std.Result.ok (f b))
+                    (fun b => Aeneas.Std.Result.ok (g b))
+                    (fun b x => Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (ec b))) proof iter none =
+                  Aeneas.Std.Result.ok
+                    (if NKB_CanonicalRows.accepted f g ec proof iter.start = true then
+                      Aeneas.Std.ControlFlow.cont (iter1, none)
+                    else
+                      Aeneas.Std.ControlFlow.done
+                        (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse))) :=
+⋯
+'NKB_CanonicalRows.entered' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRowsLoop.source : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (fuel : ℕ) (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+      iter.end = 22#usize →
+        ↑iter.start + fuel = 22 →
+          NJS_Extract.verifier.candidate.canonical_scan_loop0 (fun b => Aeneas.Std.Result.ok (f b))
+              (fun b => Aeneas.Std.Result.ok (g b))
+              (fun b x => Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (ec b))) iter proof none =
+            Aeneas.Std.Result.ok
+              (some
+                (NKB_CanonicalOpening.reply
+                  (NKB_CanonicalPair.allFrom (NKB_CanonicalRows.pass f g ec proof) (↑iter.start) fuel))) :=
+⋯
+'NKB_CanonicalRowsLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_y1 : NJS_Extract.compact.OFF_Y1 = Aeneas.Std.Result.ok 7031#usize :=
+⋯
+'NKB_CanonicalConstants.off_y1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_inactive : NJS_Extract.compact.OFF_INACTIVE = Aeneas.Std.Result.ok 7495#usize :=
+⋯
+'NKB_CanonicalConstants.off_inactive' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_round0 : NJS_Extract.compact.OFF_ROUND0 = Aeneas.Std.Result.ok 7527#usize :=
+⋯
+'NKB_CanonicalConstants.off_round0' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_folded_root : NJS_Extract.compact.OFF_FOLDED_ROOT =
+  Aeneas.Std.Result.ok 7751#usize :=
+⋯
+'NKB_CanonicalConstants.off_folded_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_round1 : NJS_Extract.compact.OFF_ROUND1 = Aeneas.Std.Result.ok 7783#usize :=
+⋯
+'NKB_CanonicalConstants.off_round1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_final : NJS_Extract.compact.OFF_FINAL = Aeneas.Std.Result.ok 8007#usize :=
+⋯
+'NKB_CanonicalConstants.off_final' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_openings : NJS_Extract.compact.OFF_OPENINGS = Aeneas.Std.Result.ok 10055#usize :=
+⋯
+'NKB_CanonicalConstants.off_openings' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.opening : NJS_Extract.compact.OPENING = Aeneas.Std.Result.ok 832#usize :=
+⋯
+'NKB_CanonicalConstants.opening' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalPrefix.source : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec cv : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    NJS_Extract.verifier.candidate.canonical_scan (fun b => Aeneas.Std.Result.ok (f b))
+        (fun b => Aeneas.Std.Result.ok (g b)) (fun b x => Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (ec b)))
+        (fun b => Aeneas.Std.Result.ok (NKB_CanonicalPrefix.codec (cv b))) proof =
+      Aeneas.Std.Result.ok
+        (NKB_CanonicalOpening.reply
+          (NKB_CanonicalPrefix.guard cv ec proof &&
+            NKB_CanonicalPair.allFrom (NKB_CanonicalRows.pass f g ec proof) 0 22)) :=
+⋯
+'NKB_CanonicalPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalCuts.read_result : ∀ (expected : Bool) (out : NKB_CanonicalRange.ScanResult),
+  NKB_CanonicalCuts.ReadCut expected out → out = NKB_CanonicalOpening.reply expected :=
+⋯
+'NKB_CanonicalCuts.read_result' depends on axioms: [propext]
+theorem NKB_CanonicalCuts.child_shape : ∀ (bs : Aeneas.Std.Slice Aeneas.Std.U8) (k : Bool),
+  NFU_Retarget.verifier.echeck bs k = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∨
+    NFU_Retarget.verifier.echeck bs k =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err NFU_Retarget.LPl_Kit_Release.verifier.Error.Parse) :=
+⋯
+'NKB_CanonicalCuts.child_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalCuts.child_ok : ∀ (bs : Aeneas.Std.Slice Aeneas.Std.U8) (k : Bool),
+  (List.range ((↑bs).length / 32)).all (NKB_CanonicalEcheck.pass bs k) = true →
+    NFU_Retarget.verifier.echeck bs k = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) :=
+⋯
+'NKB_CanonicalCuts.child_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalCuts.child_parse : ∀ (bs : Aeneas.Std.Slice Aeneas.Std.U8) (k : Bool),
+  (List.range ((↑bs).length / 32)).all (NKB_CanonicalEcheck.pass bs k) = false →
+    NFU_Retarget.verifier.echeck bs k =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err NFU_Retarget.LPl_Kit_Release.verifier.Error.Parse) :=
+⋯
+'NKB_CanonicalCuts.child_parse' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalCuts.call_result : ∀ (childOk : Bool) (out : NKB_CanonicalRange.ScanResult),
+  NKB_CanonicalCuts.CallCut childOk out → out = NKB_CanonicalOpening.reply childOk :=
+⋯
+'NKB_CanonicalCuts.call_result' depends on axioms: [propext]
+theorem NKB_CanonicalDomains.c1 : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 → ∀ (s : Aeneas.Std.Usize), ↑s < 4 → (↑(NKB_CanonicalTail.window q s)).length = 16 :=
+⋯
+'NKB_CanonicalDomains.c1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalDomains.c2 : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 → ∀ (s l : Aeneas.Std.Usize), ↑s < 4 → ↑l < 2 → (↑(NKB_CanonicalRange.window q s l)).length = 16 :=
+⋯
+'NKB_CanonicalDomains.c2' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalDomains.trailing : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 → (↑(NKB_CanonicalOpening.trailing q)).length = 128 :=
+⋯
+'NKB_CanonicalDomains.trailing' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalDomains.prefix_windows : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    (↑(NKB_CanonicalPrefix.values proof)).length = 464 ∧
+      (↑(NKB_CanonicalPrefix.inactive proof)).length = 32 ∧
+        (↑(NKB_CanonicalPrefix.round0 proof)).length = 224 ∧ (↑(NKB_CanonicalPrefix.round1 proof)).length = 2272 :=
+⋯
+'NKB_CanonicalDomains.prefix_windows' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalDomains.aligned : ∀ (proof q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    (↑q).length = 832 →
+      (↑(NKB_CanonicalPrefix.inactive proof)).length % 32 = 0 ∧
+        (↑(NKB_CanonicalPrefix.round0 proof)).length % 32 = 0 ∧
+          (↑(NKB_CanonicalPrefix.round1 proof)).length % 32 = 0 ∧
+            (↑(NKB_CanonicalOpening.trailing q)).length % 32 = 0 :=
+⋯
+'NKB_CanonicalDomains.aligned' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalCongruence.allFrom_congr : ∀ (p q : ℕ → Bool) (fuel start : ℕ),
+  (∀ (n : ℕ), start ≤ n → n < start + fuel → p n = q n) →
+    NKB_CanonicalPair.allFrom p start fuel = NKB_CanonicalPair.allFrom q start fuel :=
+⋯
+'NKB_CanonicalCongruence.allFrom_congr' depends on axioms: [propext, Quot.sound]
+theorem NKB_CanonicalScalarBridge.scalar_tag : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  (NKB_CanonicalScalarBridge.scalar b).isSome = NKB_CanonicalScalarBridge.good b :=
+⋯
+'NKB_CanonicalScalarBridge.scalar_tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalarBridge.caller_result : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  (do
+      let parsed ← AspisR1M31Parser.field.M31.from_le_bytes b
+      Aeneas.Std.Result.ok
+          (if parsed.isSome = true then Aeneas.Std.core.result.Result.Ok ()
+          else Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse)) =
+    Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (NKB_CanonicalScalarBridge.good b)) :=
+⋯
+'NKB_CanonicalScalarBridge.caller_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalarBridge.source : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  AspisR1M31Parser.field.M31.from_le_bytes b = Aeneas.Std.Result.ok (NKB_CanonicalScalarBridge.scalar b) :=
+⋯
+'NKB_CanonicalScalarBridge.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalarBridge.retained : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  NKB_CanonicalScalarBridge.good b =
+    decide (↑(AspisR1.RetainedFieldByteCodec.decodeWordLE (AspisR1.M31ParserArray.arrayBytes b)) < 2147483647) :=
+⋯
+'NKB_CanonicalScalarBridge.retained' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalarBridge.native_result : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize)
+  (out : NKB_CanonicalRange.ScanResult),
+  NKB_CanonicalCuts.ReadCut (NKB_CanonicalScalarBridge.good b) out →
+    out =
+      NKB_CanonicalOpening.reply
+        (decide (↑(AspisR1.RetainedFieldByteCodec.decodeWordLE (AspisR1.M31ParserArray.arrayBytes b)) < 2147483647)) :=
+⋯
+'NKB_CanonicalScalarBridge.native_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalKBridge.natural : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize),
+  NKB_CanonicalKBridge.caller (NJC_ReaderResults.naturalK b) =
+    NKB_CanonicalOpening.reply (NKB_CanonicalKBridge.good b) :=
+⋯
+'NKB_CanonicalKBridge.natural' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalKBridge.source : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize),
+  (do
+      let parsed ← OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice
+      Aeneas.Std.Result.ok
+          (if parsed.isSome = true then Aeneas.Std.core.result.Result.Ok ()
+          else Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse)) =
+    Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (NKB_CanonicalKBridge.good b)) :=
+⋯
+'NKB_CanonicalKBridge.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+```
