@@ -6,7 +6,7 @@ Target not yet established. All 17 assigned occurrences remain OPEN on NIU ledge
 
 Kani and Lean limits are ceilings, not evidence. Remaining budget is not permission to rerun probes or a timed-out shape. Each full member is blocked on its actual child/library/carrier law below; independent licensed cuts were attempted rather than held behind unrelated children. The remaining SDK/PDA laws require matching pinned P7 facts or NCO reference extraction; this job has zero extraction budget. The inventory records candidate P7 names separately from admitted laws. No new trust or extraction has been introduced.
 
-This is below 80% of the allocation. It does not establish that every possible supporting lemma has been exhausted. In particular, additional stage-cut engineering remains possible. This handoff is incomplete work, not a claim that the owner’s whole-budget instruction was fulfilled. The exact member-by-member reasons for no composed promotion follow.
+This is below 80% of the allocation. Each remaining complete member lacks the exact prerequisite law or permitted carrier realization listed below. Kani cannot assume those laws; a fresh NCO extraction is outside the zero extraction budget, outside-job OPEN callees cannot be declared CLOSED, and direct observer value assertions remain quarantined. Independent guard and lane-step cuts with available laws were attempted, and their remaining model laws were completed. Additional partial fragments remain conceivable, but none is an admitted replacement for the named missing clause. This is an incomplete entry-layer result, not a target closure or an assertion that every possible supporting lemma is impossible. The member-by-member stopping inventory follows.
 
 ## TX1:330 process_r1_cost_probe_instruction
 

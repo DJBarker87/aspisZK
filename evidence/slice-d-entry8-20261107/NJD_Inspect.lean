@@ -7,7 +7,7 @@ import NGK_COMBINED_IMPORT
 #print AdapterRw.r1_pool_adapter.owned.require_verifier_checkpoint
 #print AdapterRw.r1_pool_adapter.owned.OwnedAccount
 #print AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len
-#print AdapterRw.readonly_buffer_meta_ok
-#print AdapterRw.readonly_meta_ok
+#print AdapterRw.r1_pool_adapter.readonly_buffer_meta_ok
+#print AdapterRw.r1_pool_adapter.readonly_meta_ok
 #print AdapterRw.Ops
 #print axioms AspisR1.RPx_Deployed.deployed
