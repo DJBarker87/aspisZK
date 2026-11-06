@@ -1,0 +1,56 @@
+{"attempt": "NKL_L009", "exit_status": 1, "wall_seconds": 5.6224106720183045, "peak_rss_kib": "4407880", "swaps": "0", "print_axioms": ["'NKL_StepErasure.map_bind' does not depend on any axioms", "'NKL_StepErasure.map_ite' does not depend on any axioms", "'NKL_StepErasure.map_pair' does not depend on any axioms", "'NKL_StepErasure.map_cf' does not depend on any axioms", "'NKL_StepErasure.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKL_StepErasure.lean:52:3: error: Tactic `rfl` failed: The left-hand side
+  ok
+    (match x✝ with
+    | cont state => cont state
+    | done (idx, val, r, lost) => done (idx, val, if lost = true then none else some r))
+is not definitionally equal to the right-hand side
+  if pos < n then do
+    let key ← ops.op9 keys pos
+    let key_position1 ← lift (pos.wrapping_add 1#usize)
+    let i ← lift (key.wrapping_shr 8#u32)
+    let index ← lift (UScalar.cast UScalarTy.U32 i)
+    let i1 ← lift (key &&& 255#u64)
+    let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+    let i3 ← lift (lo.wrapping_add i2)
+    let q ← ops.op2 proof i3
+    let leaf ← ops.op6 D hash tree q
+    if d > 0#usize then do
+        l
+...
+ore.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                      ok (done (idx, val, returned, true)))))
+          (Eq.refl
+            (if pos < n then do
+              let key ← ops.op9 keys pos
+              let key_position1 ← lift (pos.wrapping_add 1#usize)
+              let i ← lift (key.wrapping_shr 8#u32)
+              let index ← lift (UScalar.cast UScalarTy.U32 i)
+              let i1 ← lift (key &&& 255#u64)
+              let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+              let i3 ← lift (lo.wrapping_add i2)
+              let q ← ops.op2 proof i3
+              let leaf ← ops.op6 D hash tree q
+              if d > 0#usize then do
+                  let i4 ← lift (d.wrapping_sub 1#usize)
+                  let b ← ops.op8 idx i4 index
+                  if b = true then do
+                      let i5 ← lift (d.wrapping_sub 1#usize)
+                      let b1 ← ops.op7 val i5 leaf
+                      if b1 = true then ok (cont (idx, val, d, key_position1))
+                        else ok (done (idx, val, core.result.Result.Err verifier.Error.Merkle, false))
+                    else do
+                      let idx1 ← Array.update idx d index
+                      let val1 ← Array.update val d leaf
+                      let d1 ← lift (d.wrapping_add ⋯)
+                      ⋯
+                else ⋯
+            else ⋯)))))
+'NKL_StepErasure.map_bind' does not depend on any axioms
+'NKL_StepErasure.map_ite' does not depend on any axioms
+'NKL_StepErasure.map_pair' does not depend on any axioms
+'NKL_StepErasure.map_cf' does not depend on any axioms
+'NKL_StepErasure.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3cef3ed02ffd46389f5e46b42089d090.scope; invocation ID: 6c7ffd0e77d548549898f797102b6e0b

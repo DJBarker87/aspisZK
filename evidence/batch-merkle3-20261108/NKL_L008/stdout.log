@@ -1,0 +1,77 @@
+NKL_VerifyCut.lean:39:27: error: Type mismatch: After simplification, term
+  left
+ has type
+  @LT.lt ℕ instLTNat j ↑16#usize
+but is expected to have type
+  @LT.lt ℕ instLTNat j 16
+NKL_VerifyCut.lean:52:28: error: Type mismatch: After simplification, term
+  left
+ has type
+  @LT.lt ℕ instLTNat j ↑16#usize
+but is expected to have type
+  @LT.lt ℕ instLTNat j 16
+NKL_VerifyCut.lean:53:13: error: Type mismatch: After simplification, term
+  a
+ has type
+  @LT.lt ℕ instLTNat k ↑32#usize
+but is expected to have type
+  @LT.lt ℕ instLTNat k 32
+theorem NKL_VerifyCut.result : ∀ (valid : Bool) (postIdx : Indices) (postVal : Values) (out : Reply)
+  (afterIdx : Indices) (afterVal : Values),
+  Cut valid postIdx postVal out afterIdx afterVal →
+    out = if valid = true then core.result.Result.Ok () else core.result.Result.Err NJS_Extract.verifier.Error.Merkle :=
+fun valid postIdx postVal out afterIdx afterVal cut =>
+  Bool.casesOn (motive := fun t =>
+    valid = t →
+      out = if valid = true then core.result.Result.Ok () else core.result.Result.Err NJS_Extract.verifier.Error.Merkle)
+    valid
+    (fun h =>
+      Eq.ndrec (motive := fun valid =>
+        Cut valid postIdx postVal out afterIdx afterVal →
+          out =
+            if valid = true then core.result.Result.Ok () else core.result.Result.Err NJS_Extract.verifier.Error.Merkle)
+        (fun cut => cut.error rfl) (Eq.symm h) cut)
+    (fun h =>
+      Eq.ndrec (motive := fun valid =>
+        Cut valid postIdx postVal out afterIdx afterVal →
+          out =
+            if valid = true then core.result.Result.Ok () else core.result.Result.Err NJS_Extract.verifier.Error.Merkle)
+        (fun cut =>
+          core.result.Result.casesOn (motive := fun t =>
+            out = t →
+              out =
+                if true = true then core.result.Result.Ok ()
+                else core.result.Result.Err NJS_Extract.verifier.Error.Merkle)
+            out
+            (fun u h =>
+              Eq.ndrec (motive := fun out =>
+                Cut true postIdx postVal out afterIdx afterVal →
+                  out =
+                    if true = true then core.result.Result.Ok ()
+                    else core.result.Result.Err NJS_Extract.verifier.Error.Merkle)
+                (fun cut =>
+                  let ⟨h✝⟩ := u
+                  Eq.ndrec (motive := fun u =>
+                    Cut true postIdx postVal (core.result.Result.Ok u) afterIdx afterVal →
+                      core.result.Result.Ok u =
+                        if true = true then core.result.Result.Ok ()
+                        else core.result.Result.Err NJS_Extract.verifier.Error.Merkle)
+                    (fun cut => Eq.refl (core.result.Result.Ok PUnit.unit)) (Eq.symm h✝) cut)
+                (Eq.symm h) cut)
+            (fun e h =>
+              Eq.ndrec (motive := fun out =>
+                Cut true postIdx postVal out afterIdx afterVal →
+                  out =
+                    if true = true then core.result.Result.Ok ()
+                    else core.result.Result.Err NJS_Extract.verifier.Error.Merkle)
+                (fun cut =>
+                  have impossible := cut.tag;
+                  let ⟨⟩ := true
+                  impossible)
+                (Eq.symm h) cut)
+            (Eq.refl out))
+        (Eq.symm h) cut)
+    (Eq.refl valid)
+'NKL_VerifyCut.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_VerifyCut.indices' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKL_VerifyCut.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,45 @@
+NKL_VerifyCut.lean:40:15: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  GetElem? ℕ ℕ ?m.42 LT.lt
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKL_VerifyCut.lean:40:37: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  GetElem? ℕ ℕ ?m.42 LT.lt
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKL_VerifyCut.lean:40:3: error: Type mismatch: After simplification, term
+  cut.indices ⟨j, Decidable.byContradiction fun a => indices._proof_1 postIdx afterIdx j left length a⟩
+ has type
+  (↑afterIdx)[j]! = (↑postIdx)[j]!
+but is expected to have type
+  (↑afterIdx)[j] = (↑postIdx)[j]
+NKL_VerifyCut.lean:55:17: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  GetElem? ℕ ℕ ?m.111 LT.lt
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKL_VerifyCut.lean:55:39: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  GetElem? ℕ ℕ ?m.111 LT.lt
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKL_VerifyCut.lean:56:7: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  GetElem? ℕ ℕ ?m.111 LT.lt
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKL_VerifyCut.lean:56:26: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  GetElem? ℕ ℕ ?m.111 LT.lt
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NKL_VerifyCut.lean:55:5: error: Type mismatch: After simplification, term
+  cut.values ⟨j, Decidable.byContradiction fun a => values._proof_1 postVal afterVal j left right k outer a⟩
+    ⟨k, Decidable.byContradiction fun a_1 => values._proof_2 postVal afterVal j left right k a inner a_1⟩
+ has type
+  (↑(↑afterVal)[j]!)[k]! = (↑(↑postVal)[j]!)[k]!
+but is expected to have type
+  (↑(↑afterVal)[j])[k] = (↑(↑postVal)[j])[k]
+theorem NKL_VerifyCut.result : ∀ (valid : Bool) (postIdx : Indices) (postVal : Values) (out : Reply)
+  (afterIdx : Indices) (afterVal : Values),
+  Cut valid postIdx postVal out afterIdx afterVal →
+    out = if valid = true then core.result.Result.Ok () else core.result.Result.Err NJS_Extract.verifier.Error.Merkle :=
+⋯
+'NKL_VerifyCut.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_VerifyCut.indices' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKL_VerifyCut.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

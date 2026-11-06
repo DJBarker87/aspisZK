@@ -1,0 +1,37 @@
+{"attempt": "NKL_L017", "exit_status": 1, "wall_seconds": 12.892263951944187, "peak_rss_kib": "5821428", "swaps": "0", "print_axioms": ["'NKL_LeafTotal.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NKL_LeafTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKL_LeafTotal.lean:25:70: error: unexpected identifier; expected '}'
+NKL_LeafTotal.lean:25:3: error: unsolved goals
+case neg
+rest : List Leaf
+ih : ∀ (s : reference.Scratch), ↑s.n + rest.length ≤ 16 → ∃ out, NKB_LeafChain.Chain rest s out
+s : reference.Scratch
+index : U32
+digest : Std.Array U8 32#usize
+room : ↑s.n + ((index, digest) :: rest).length ≤ 16
+cap : ↑s.n < 16
+same : ¬(0 < ↑s.n ∧ (↑s.idx)[↑s.n - 1]! = index)
+next : reference.Scratch := { idx := s.idx.set s.n index, val := s.val, n := s.n, «at» := s.at }
+⊢ ∃ out, NKB_LeafChain.Chain ((index, digest) :: rest) s out
+theorem NKL_LeafTotal.total : ∀ (leaves : List Leaf) (s : reference.Scratch),
+  ↑s.n + leaves.length ≤ 16 → ∃ out, NKB_Lea
+...
+NKL_LeafTotal.lean:25:70: error: unexpected identifier; expected '}'
+NKL_LeafTotal.lean:25:3: error: unsolved goals
+case neg
+rest : List Leaf
+ih : ∀ (s : reference.Scratch), ↑s.n + rest.length ≤ 16 → ∃ out, NKB_LeafChain.Chain rest s out
+s : reference.Scratch
+index : U32
+digest : Std.Array U8 32#usize
+room : ↑s.n + ((index, digest) :: rest).length ≤ 16
+cap : ↑s.n < 16
+same : ¬(0 < ↑s.n ∧ (↑s.idx)[↑s.n - 1]! = index)
+next : reference.Scratch := { idx := s.idx.set s.n index, val := s.val, n := s.n, «at» := s.at }
+⊢ ∃ out, NKB_LeafChain.Chain ((index, digest) :: rest) s out
+theorem NKL_LeafTotal.total : ∀ (leaves : List Leaf) (s : reference.Scratch),
+  ↑s.n + leaves.length ≤ 16 → ∃ out, NKB_LeafChain.Chain leaves s out :=
+⋯
+'NKL_LeafTotal.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKL_LeafTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-raf24607a65c6470d8dc4a543e6e43348.scope; invocation ID: 82c5b62f7f814d3bb700e26aea3ba786

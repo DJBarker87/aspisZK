@@ -1,0 +1,50 @@
+{"attempt": "NKL_L006", "exit_status": 1, "wall_seconds": 5.1632308778353035, "peak_rss_kib": "4404904", "swaps": "0", "print_axioms": ["'NKL_StepErasure.map_bind' does not depend on any axioms", "'NKL_StepErasure.map_ite' does not depend on any axioms", "'NKL_StepErasure.map_pair' does not depend on any axioms", "'NKL_StepErasure.map_cf' does not depend on any axioms", "'NKL_StepErasure.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKL_StepErasure.lean:51:1: error: Tactic `rfl` failed: The left-hand side
+  if pos < n then do
+    let x ← ops.op9 keys pos
+    let x_1 ← lift (pos.wrapping_add 1#usize)
+    let x_2 ← lift (x.wrapping_shr 8#u32)
+    let x_3 ← lift (UScalar.cast UScalarTy.U32 x_2)
+    let x ← lift (x &&& 255#u64)
+    let x ← lift (UScalar.cast UScalarTy.Usize x)
+    let x ← lift (lo.wrapping_add x)
+    let x ← ops.op2 proof x
+    let x ← ops.op6 D hash tree x
+    if d > 0#usize then do
+        let x_4 ← lift (d.wrapping_sub 1#usize)
+        let x_5 ← ops.op8 idx x_4 x_3
+        if x_5 = true then do
+            let x_6 ← lift (d.wrapping_sub 1#usize)
+            let x ← ops.op7 val x_6 x
+            if x = tr
+...
+                       { start := i1 }
+                      let ce ← core.slice.Slice.chunks_exact s2 8#usize
+                      let (b, _) ←
+                        ops.op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+                            (AspisR1.Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+                              ops D)
+                            ce ()
+                      if b = true then ok (done (idx, val, none))
+                        else do
+                          let i2 ← lift (Usize.wrapping_mul 32#usize val1)
+                          let s3 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) nodes
+                                { «end» := i2 }
+                          let (b1, idx1, val2) ←
+                            ops.op10 D hash AspisR1.Port3_NativeBatchBody.multiproof.Arity.Two root idx val d s3
+                          if b1 = true then ok (done (idx1, val2, some (core.result.Result.Ok ())))
+                            else ok (done (idx1, val2, none))
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let _ ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (done (idx, val, none)))))
+        sorry))
+'NKL_StepErasure.map_bind' does not depend on any axioms
+'NKL_StepErasure.map_ite' does not depend on any axioms
+'NKL_StepErasure.map_pair' does not depend on any axioms
+'NKL_StepErasure.map_cf' does not depend on any axioms
+'NKL_StepErasure.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2ad6d1daa3594a838d1539f067c772cf.scope; invocation ID: 545aa6ac4d3d4fe08ae7eed1e1348576

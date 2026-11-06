@@ -1,0 +1,19 @@
+theorem NKL_CanonicalChildren.compact_call : ∀ (bytes : Slice U8),
+  (do
+      let r ← NFU_Retarget.compact.check_values bytes
+      ok (convert r)) =
+    ok (NKB_CanonicalOpening.reply (compactGood bytes)) :=
+⋯
+theorem NKL_CanonicalChildren.echeck_call : ∀ (bytes : Slice U8),
+  (do
+      let r ← NFU_Retarget.verifier.echeck bytes false
+      ok
+          (match r with
+          | core.result.Result.Ok u => core.result.Result.Ok u
+          | core.result.Result.Err a => core.result.Result.Err NJS_Extract.verifier.Error.Parse)) =
+    ok (NKB_CanonicalOpening.reply (echeckGood bytes)) :=
+⋯
+'NKL_CanonicalChildren.compact_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_CanonicalChildren.echeck_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_CanonicalChildren.compact_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_CanonicalChildren.echeck_call' depends on axioms: [propext, Classical.choice, Quot.sound]

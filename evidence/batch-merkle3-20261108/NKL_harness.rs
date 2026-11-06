@@ -66,3 +66,29 @@ fn verify_finish(){
  #[cfg(NKL_invert)] assert_ne!(out.is_ok(),valid);
  if !valid{assert!(matches!(out,Err(Error::Merkle)))}
 }
+
+#[derive(Clone,Copy)]
+struct NoDigest;
+impl Digest32 for NoDigest {fn digest(&self,_:&[&[u8]])->[u8;32]{assert!(false,"no digest at rejected capacity");[0;32]}}
+fn forbidden_verify<H:Digest32>(_:H,_:Arity,_:&[u8;32],_:&mut[u32;16],_:&mut[[u8;32];16],_:usize,_:&[u8])->bool{assert!(false,"no verifier at rejected capacity");false}
+#[kani::proof]
+#[kani::unwind(64)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn capacity_exit(){
+ let s:usize=kani::any();let count:usize=kani::any();kani::assume(s<6);
+ let out=capacity_guard_fragment(count,s);
+ let cap=match s{0|1=>146,2=>128,3|4=>172,_=>150};let expected=count>cap;
+ #[cfg(not(NKL_invert))] assert_eq!(out,expected);
+ #[cfg(NKL_invert)] assert_ne!(out,expected);
+}
+
+#[kani::proof]
+#[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn count_input(){
+ let idx:[u32;16]=kani::any();let d:usize=kani::any();kani::assume(d<=12);
+ let front=count_input_fragment(&idx,d);assert_eq!(front.as_ptr(),idx.as_ptr());
+ #[cfg(not(NKL_invert))] assert_eq!(front.len(),d);
+ #[cfg(NKL_invert)] assert_ne!(front.len(),d);
+ let j:usize=kani::any();kani::assume(j<d);assert_eq!(front[j],idx[j]);
+}
