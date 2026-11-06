@@ -68,8 +68,8 @@ fn NJL_occupancy_control_cut(){
 fn NJL_words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
 fn NJL_q(w:[u32;4])->QM31{QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
 fn NJL_canon(w:[u32;4])->bool{w[0]<2147483647&&w[1]<2147483647&&w[2]<2147483647&&w[3]<2147483647}
-struct NJL_AddLog {left:QM31,right:QM31,reply:QM31,calls:usize}
-fn NJL_add(a:QM31,b:QM31,log:&mut NJL_AddLog)->QM31 {log.left=a;log.right=b;log.calls+=1;log.reply}
+struct NJL_AddLog {left:QM31,right:QM31,reply:QM31,calls:usize,kind:u8}
+fn NJL_add(a:QM31,b:QM31,log:&mut NJL_AddLog)->QM31 {log.left=a;log.right=b;log.kind=1;log.calls+=1;log.reply}
 fn NJL_endpoint_write(scratch:&mut[QM31],index:usize,rhs:QM31,log:&mut NJL_AddLog){
  scratch[index]=NJL_add(scratch[index],rhs,log);
 }
@@ -81,9 +81,9 @@ fn NJL_endpoint_write_cut(){
  kani::assume(index<103&&observe<103&&limb<4);
  let before=NJL_words(scratch[observe]);let old=scratch[index];let rhs:[u32;4]=kani::any();let reply:[u32;4]=kani::any();
  kani::assume(NJL_canon(NJL_words(old))&&NJL_canon(rhs)&&NJL_canon(reply));
- let mut log=NJL_AddLog{left:QM31::ZERO,right:QM31::ZERO,reply:NJL_q(reply),calls:0};
+ let mut log=NJL_AddLog{left:QM31::ZERO,right:QM31::ZERO,reply:NJL_q(reply),calls:0,kind:0};
  NJL_endpoint_write(&mut scratch,index,NJL_q(rhs),&mut log);
- assert_eq!(log.calls,1);assert_eq!(NJL_words(log.left)[limb],NJL_words(old)[limb]);assert_eq!(NJL_words(log.right)[limb],rhs[limb]);
+ assert_eq!(log.calls,1);assert_eq!(log.kind,1);assert_eq!(NJL_words(log.left)[limb],NJL_words(old)[limb]);assert_eq!(NJL_words(log.right)[limb],rhs[limb]);
  assert_eq!(NJL_words(scratch[observe])[limb],(if observe==index{reply[limb]}else{before[limb]}) ^ if cfg!(NJL_invert){1}else{0});
 }
 
@@ -109,5 +109,39 @@ fn NJL_endpoint_lookup_cut(){
  assert!(row<1024&&gc<30&&pc<43);assert_eq!(row,usize::from(e.row));
  assert_eq!(gc,NJL_group_model(group,local)+if cfg!(NJL_invert){1}else{0});
  assert_eq!(pc,NJL_pattern_model(group,usize::from(e.pattern),local));
+ let expected_gc=if consumer{NJL_CONSUMER_GC[index]}else{NJL_PRODUCER_GC[index]};
+ let expected_pc=if consumer{NJL_CONSUMER_PC[index]}else{NJL_PRODUCER_PC[index]};
+ assert_eq!(gc,expected_gc+if cfg!(NJL_invert){1}else{0});assert_eq!(pc,expected_pc);
+
  assert_eq!(NJL_words(high)[limb],NJL_words(selectors.high[row>>4])[limb]);
 }
+
+struct NJL_PatternControl {seek:usize,calls:usize,group:usize,coordinate:usize}
+fn NJL_pattern_control(log:&mut NJL_PatternControl)->usize {
+ let mut group=0usize;
+ while group<4 {
+  let mut coordinate=COPY_PATTERN_GROUP_OFFSETS[group];
+  while coordinate<COPY_PATTERN_GROUP_OFFSETS[group+1] {
+   if log.calls==log.seek {log.group=group;log.coordinate=coordinate;}
+   log.calls+=1;coordinate+=1;
+  }
+  group+=1;
+ }
+ group
+}
+#[kani::proof] #[kani::unwind(28)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJL_pattern_control_cut(){
+ let seek:usize=kani::any();kani::assume(seek<26);
+ let mut log=NJL_PatternControl{seek,calls:0,group:999,coordinate:999};
+ let next=NJL_pattern_control(&mut log);
+ let expected_group=if seek<9{0}else if seek<12{1}else if seek<21{2}else{3};
+ assert_eq!(next,4);assert_eq!(log.calls,26);assert_eq!(log.group,expected_group);
+ assert_eq!(log.coordinate,seek ^ if cfg!(NJL_invert){1}else{0});
+}
+const NJL_PRODUCER_ROW:[usize;136]=[27,43,411,443,459,491,507,11,12,44,60,44,460,508,1008,1010,1012,1014,64,913,523,475,523,1018,539,539,555,555,571,571,587,587,603,603,619,619,635,635,651,651,667,667,683,683,699,699,715,715,731,731,747,747,763,763,779,779,795,795,811,811,827,827,843,843,59,914,914,75,918,918,91,922,922,107,926,926,123,930,930,139,934,934,155,938,938,171,942,942,187,946,946,203,950,950,219,954,954,235,958,958,251,962,962,267,966,966,283,970,970,299,974,974,315,978,978,331,982,982,347,986,986,363,990,990,379,994,994,395,998,998,875,1002,1002,891,1006,1006];
+const NJL_PRODUCER_GC:[usize;136]=[6,6,6,6,6,6,6,6,7,7,7,13,7,7,0,2,3,4,0,1,6,6,12,5,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,12,6,2,9,6,4,10,6,5,11,6,8,14,6,2,9,6,4,10,6,5,11,6,8,14,6,2,9,6,4,10,6,5,11,6,8,14,6,2,9,6,4,10,6,5,11,6,8,14,6,2,9,6,4,10,6,5,11,6,8,14,6,2,9,6,4,10,6,5,11,6,8,14];
+const NJL_PRODUCER_PC:[usize;136]=[0,0,0,0,0,0,0,4,5,7,8,18,10,10,11,12,13,14,15,9,4,4,17,16,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,17,4,1,19,4,2,20,4,3,21,4,6,22,4,1,19,4,2,20,4,3,21,4,6,22,4,1,19,4,2,20,4,3,21,4,6,22,4,1,19,4,2,20,4,3,21,4,6,22,4,1,19,4,2,20,4,3,21,4,6,22,4,1,19,4,2,20,4,3,21,4,6,22];
+const NJL_CONSUMER_ROW:[usize;136]=[32,48,416,448,464,496,512,28,412,428,428,1008,1010,1012,1014,1014,1015,1015,1017,1017,1018,540,540,528,556,544,572,560,588,576,604,592,620,608,636,624,652,640,668,656,684,672,700,688,716,704,732,720,748,736,764,752,780,768,796,784,812,800,828,816,844,832,860,848,913,76,64,917,92,80,921,108,96,925,124,112,929,140,128,933,156,144,937,172,160,941,188,176,945,204,192,949,220,208,953,236,224,957,252,240,961,268,256,965,284,272,969,300,288,973,316,304,977,332,320,981,348,336,985,364,352,989,380,368,993,396,384,997,876,864,1001,892,880,1005,908,896];
+const NJL_CONSUMER_GC:[usize;136]=[15,15,15,15,15,15,15,24,24,24,29,15,17,18,20,26,21,27,22,28,23,24,29,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,24,15,16,24,15,19,24,15,22,24,15,25,24,15,16,24,15,19,24,15,22,24,15,25,24,15,16,24,15,19,24,15,22,24,15,25,24,15,16,24,15,19,24,15,22,24,15,25,24,15,16,24,15,19,24,15,22,24,15,25,24,15,16,24,15,19,24,15,22,24,15,25,24,15];
+const NJL_CONSUMER_PC:[usize;136]=[23,23,23,23,23,23,23,24,24,25,39,27,28,29,26,42,30,40,32,41,33,24,38,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,24,31,34,24,31,35,24,31,36,24,31,37,24,31,34,24,31,35,24,31,36,24,31,37,24,31,34,24,31,35,24,31,36,24,31,37,24,31,34,24,31,35,24,31,36,24,31,37,24,31,34,24,31,35,24,31,36,24,31,37,24,31,34,24,31,35,24,31,36,24,31,37,24,31];

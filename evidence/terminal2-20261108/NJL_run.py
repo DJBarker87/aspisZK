@@ -57,6 +57,16 @@ for entry in manifest['files']:
  assert hashlib.sha256(dst.read_bytes()).hexdigest()==entry['sha256'],str(dst)
  records.append(dict(path=str(dst),sha256=entry['sha256'],bytes=dst.stat().st_size))
 (b/'NJL_SEED.json').write_text(json.dumps(dict(files=records,total_bytes=sum(z['bytes'] for z in records))))
+if (b/'NJL_NIX_EXPORT.json').exists():
+ manifest2=json.loads((b/'NJL_NIX_EXPORT.json').read_text());seed2=b/'NJL_NIX_seed';seed2.mkdir(exist_ok=True);records2=[]
+ for entry in manifest2['files']:
+  src=Path(entry['path']);dst=seed2/src.name
+  assert hashlib.sha256(src.read_bytes()).hexdigest()==entry['sha256'],str(src)
+  if not dst.exists():shutil.copyfile(src,dst)
+  assert hashlib.sha256(dst.read_bytes()).hexdigest()==entry['sha256'],str(dst)
+  records2.append(dict(path=str(dst),sha256=entry['sha256'],bytes=dst.stat().st_size))
+ (b/'NJL_NIX_SEED.json').write_text(json.dumps(dict(files=records2,total_bytes=sum(z['bytes'] for z in records2))))
+
 
 p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x.get('env',{{}}).get('LEAN_PATH','').split(':');rels=set();pins={{}}
 if x['kind'] in ['lean','audit']:
@@ -68,7 +78,6 @@ if x['kind'] in ['lean','audit']:
  if x['kind']=='lean':
   for n in re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):rels.add(n.replace('.','/')+'.olean')
  else:
-  raise RuntimeError('NJL audit requires explicit root selection')
   modules=list(json.loads((b/'NJL_GATE_SOURCES.json').read_text())['passed'])+['NJL_COMBINED_IMPORT','NIU_COMBINED_IMPORT','NGK_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit']
   for n in modules:rels.add(n.replace('.','/')+'.olean')
  for rel in sorted(rels):

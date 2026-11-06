@@ -29,3 +29,11 @@ K012 PASS/K011 FAIL certifies ONE slice assignment at arbitrary index/observer o
 L032 one-cell cut, L033 disjoint indices, L035 both writes/full103frame, L039 lookup/caller provenance, L041 positive root compile with standard axioms. Exact first-match registries and uniqueness are pinned/proved; rowshift equals division16 by a named standard lemma. Input high canonicality is derived from SAME selectors.high. `caller_weight` instantiates NIH_LinkWeight.result on the SAME genuine compiled link, proving every enclosing call's weight≤1; no caller-success hypothesis. Root's only native-cut hypothesis is NJL_EndpointLookup.Cut (row<1024/gc<30/pc<43 after the native observed scan). This is precisely the allowed reviewed (ai)(5) predicate, not an endpoint/output equation. The concrete Copy marker is internal and unused by the CLOSED selected-binary reference, with every child Result instantiated.
 
 Complete model G: weightcell30+gc adds high*weight; patterncell60+pc adds high; every other103cell framed; tag ignored by deployed tagdot arm. This is the full mutable scratch helper Result, not a claim that the enclosing scratch basis/evaluator represents the old cohort; that parent association remains with218/220. Local combined/scan/raw gate pending.
+
+Endpoint preflight correction: typed operation kind1 is now explicitly logged/asserted by the strengthened K015PASS/K016FAIL pair. K012/011 remains frame SUPPORT only; row214 authority is K015/016. No Lean statement weakened, no timeout/cap raised, no unchanged replay or renaming.
+
+## First cumulative tool validation and final214 authority
+
+Gate1 all tool checks PASS, details NJL_GATE1.json: 15,157modules;63rawroots; standard axioms only; zero dangling/duplicate/import mismatch. Source-pinned historical import variant recorded, no loader override. This validates the old object snapshot and the five unchanged roots; final214 admission waits for the direct literal table source update.
+
+K019PASS/K020FAIL strengthens SAME lookup harness with direct136-cell expected arrays. L052/L053 compile the new exact shared-literal gc/pc definitions and dependent root; standard axioms. The former scan reference is NOT used as final cut authority. This is an explicit strengthening within the same input domain/source helper; no new extraction or trust. Final combined audit remains required and is budgeted once.

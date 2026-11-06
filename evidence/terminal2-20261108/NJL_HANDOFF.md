@@ -27,3 +27,13 @@ TX1:247 candidate added (L030/L031), complete17cell native-cut invocation and ex
 ## Stage 5
 
 TX1:214 candidate added: genuine lookup binding + two native one-write windows + disjoint full103cell frame and binary-weight caller provenance (L041). Missing windows K012PASS/K011FAIL andK013PASS/K014FAIL; predecessor K072 timeout never replayed. Six own candidates209/208/227/244/247/214 now await combined NGK+NIU+NJB+headline import, rawax2 and zero-defect scan; next ledger gate still controls credit. Root inventory accepts only typed same-call domain and reviewed lookup Cut; all child/results/frames are derived. NIX215 and NJB268 are consumed read-only, no duplicate proof. First cumulative gate is next; scope budget remains for further work afterward.
+
+First cumulative audit preparation: all6 roots green; endpoint kind observation strengthened K015PASS/K016FAIL before any admission. Copied pinned NIX export privately for read-only215 consumption. Kept NJB/NIU canonical import expectation for the single historical NGC_MemoryLimit variant in NIX baseline; scan still must validate every loaded module against the source-pinned selection. No loader-derived import expectation is accepted.
+
+## Stage 6: first cumulative tool gate
+
+Gate1 PASS: combined L046,8 same-binary fixtures L047,63 raw roots L048/L049 (all standard axioms, including headline and reused NIX215/NJB268), zero-defect scan L050 over15,157 modules. Exact metrics/pins in NJL_GATE1.json and nested receipts. Scan peak7,332,372KiB, swaps0, cap8G unchanged. One full combined audit used; one remains. Native kind correction K015PASS/K016FAIL done before gate1.
+
+Before final admission214, replaced its scan-based expected values with DIRECT literal expected arrays, avoiding any new unextracted reference-loop interpretation under extraction budget0. Strengthened SAME native harness K019PASS/K020FAIL, rebuilt Lookup L052 and dependent Root L053, both standard axioms. This source/dependency change requires final gate2; no unchanged audit replay. Scan helper remains SUPPORT only. Six own candidates still await final gate and next authoritative ledger. No target claim, no shipped edit/ELF rebuild, no new trust.
+
+Further independent work: pattern219 source cuts/finite induction/sparse meaning prepared; new control K017/018 next. Budget remains authorized and work continues.

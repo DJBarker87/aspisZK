@@ -10,3 +10,15 @@ No new arithmetic, copy, function-contract or runtime-value stub. Exact KMX patc
 | NJB_PreparedOps::NJB_mul | NJB_PreparedLaws.mul_result | SAME PreparedFor cache from constructor, canonical opened word |
 
 Active pairing is explicit in NJL_LowDischarge.Clauses and NJL_ActiveInvocation.HighStep. Prepared pairing is explicit in NJL_AbsorptionPrologue.Clauses. Canonical unused reply slots use the proved ZERO, never a stronger caller precondition.
+
+## Additional explicit pairings
+
+| Oracle/window | Named Lean value/domain law | Scope |
+|---|---|---|
+| NJL_add inside endpoint one-write | NJB_StubLaws.qm_add; NJL_EndpointCell.source | SAME canonical left/rhs; actual reply canonical; kind1 now explicitly observed K015/016 |
+| selected_binary_ref concrete erased Copy | NIH_SelectedBinary.result instantiated in NJL_EndpointRoot.selected_value | SAME canonical high, weight≤1; caller_weight derives bound for every actual genuine link |
+| NJL_lane_oracle inside std from_fn | NJB_AbsorptionLane.result, composed in NJL_AbsorptionInvocation.lanes | Structural constructor window only: lane/reply preserved; actual callback arguments/cache domain supplied by NJB_K046/047 and the SAME source closure |
+| NJB_occupancy/path field/prepared logging operations | NJB_StubLaws.qm_add/qm_sub/qm_mul; NJB_PreparedLaws.new_result/mul_result | Explicit Clauses/Step fields in NJL occupancy/path packets; canonical intermediate operands/cache domains all derived |
+| native loop control recording bodies | No arithmetic value credit | Original body arithmetic erased only for control/count; separate arbitrary-prestate value windows and Lean induction supply all values |
+
+The obsolete scan-based lookup expected function receives no final row authority: K019/020 uses direct pinned literal expected arrays, represented with the same decimal payloads in Lean. No new Rust reference-loop interpretation or extraction is relied on.

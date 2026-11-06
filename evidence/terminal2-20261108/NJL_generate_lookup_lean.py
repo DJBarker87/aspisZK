@@ -17,6 +17,10 @@ unique key once; the native cut checks its result against this scan. -/
 for name,keys in [('groupKeys',x['group_keys']),('patternKeys',x['pattern_keys'])]:
  ty='Nat × Nat'if len(keys[0])==2 else'Nat × Nat × Nat'
  s+=f'def {name} : List ({ty}) := ['+','.join('('+','.join(map(str,k))+')'for k in keys)+']\n'
+static=json.loads((E/'NJL_LOOKUP_STATIC.json').read_text())['tables']
+for side,data in static.items():
+ for field,values in data.items():
+  s+=f'def {side}_{field} : Fin 136 → Nat := !['+','.join(map(str,values))+']\n'
 s+='''def scanFrom {α : Type} [DecidableEq α] (key : α) : List α → Nat → Nat
  | [],_ => 255
  | x::xs,start => if key=x then start else scanFrom key xs (start+1)
@@ -35,9 +39,9 @@ def group (index : Fin 136) (consumer : Bool) : Nat :=
 def row (index : Fin 136) (consumer : Bool) : Nat := (endpoint index consumer).row.val
 def column (index : Fin 136) (consumer : Bool) : Nat := (row index consumer) &&& 15
 def gc (index : Fin 136) (consumer : Bool) : Nat :=
- scanFrom (group index consumer,column index consumer) groupKeys 0
+ if consumer then consumer_gc index else producer_gc index
 def pc (index : Fin 136) (consumer : Bool) : Nat :=
- scanFrom (group index consumer,(endpoint index consumer).pattern.val,column index consumer) patternKeys 0
+ if consumer then consumer_pc index else producer_pc index
 /-- Transcription of the genuine-endpoint lookup cut's bounds. The native
 observation also asserts gc/pc equal the pinned source-key scan and SAME
 high-word read at row>>4; those are the definitions above and `high` below.
