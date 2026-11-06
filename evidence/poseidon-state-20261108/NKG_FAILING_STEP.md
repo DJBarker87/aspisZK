@@ -11,3 +11,9 @@ K032 PASS with K033/K034 FAIL establishes raw nine-word prepared-cache forwardin
 K023 NKG_group_iteration TIMEOUT (98.919297326s wall, 2118508KiB peak RSS, zero swaps; fixed solver deadline90s), no credit. Controls K024/K025 were cancelled without launch. Replacement: source-ordered pack, subtraction, prepared-sum and final-multiply segments, each on arbitrary pre-state with full typed child replies, native controls and Lean frame composition. No cap/timeout increase or unchanged rerun.
 
 L034 stopped at the symbolic group association's chained rw (maximum recursion depth), not a failed field identity. No limit was raised. L035 replaces that rewrite with named differences and explicit congruence steps, keeping all field models symbolic.
+
+L047 was submitted and completed before the owned client failed constructing its binary-safe collector f-string (unescaped nested dictionary braces). The collector was repaired without changing validation, and the existing L047 receipt/sources/output were recovered READ-ONLY by NKG_recover.py. No compile was resubmitted; the recovered actual exit and resources remain authoritative.
+
+Finalizer repairs before output: recognize an explicitly suffixed compressed predecessor manifest; replace the mistaken assumption of a standalone CLOSED PreparedQm31Multiplier::mul row with the explicit field-product-rule-A supplement (see NKG_FINDINGS.md). No original ledger row was changed. The local validator now passes all exact baseline/receipt/source/audit comparisons. L055 pin/export/retention scope passed; it is not a second combined audit.
+
+Own final local manifest validator initially demanded an axiom-print directive even in structure-only cut modules with no theorem. Its check now applies to modules declaring theorems; all actual theorem roots remain in the47-root raw audit. No proof or audit criterion was relaxed.
