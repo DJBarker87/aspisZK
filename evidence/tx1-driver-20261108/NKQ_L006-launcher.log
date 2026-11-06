@@ -1,0 +1,62 @@
+{"attempt": "NKQ_L006", "exit_status": 1, "wall_seconds": 17.10483124991879, "peak_rss_kib": "6313764", "swaps": "0", "print_axioms": ["'AspisR1.NKQ_ObservedStages.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKQ_ObservedStages.parsed_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKQ_ObservedStages.parsed_fail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NKQ_ObservedStages.parsed_div' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKQ_generated/NKQ_ObservedStages.lean:32:5: error: Function expected at
+  r1_semantic.Verified H
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  (core.convert.FromSame r1_wire.Error)
+NKQ_generated/NKQ_ObservedStages.lean:30:7: error: Function expected at
+  r1_semantic.Verified H
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  (core.convert.FromSame r1_wire.Error)
+NKQ_generated/NKQ_ObservedStages.lean:28:9: error: Function expected at
+  r1_semantic.Verified H
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  (co
+...
+ifyPrefix.verify (fun {H} => F) D pub bytes hash none
+is not definitionally equal to the right-hand side
+  do
+    let r ← PrefixAdapter.parseAccepted bytes
+    afterParsed (fun {H} => F) D pub hash r
+
+F : VerifyPrefix.Finish
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+⊢ VerifyPrefix.verify (fun {H} => F) D pub bytes hash none = do
+    let r ← PrefixAdapter.parseAccepted bytes
+    afterParsed (fun {H} => F) D pub hash r
+NKQ_generated/NKQ_ObservedStages.lean:41:55: error: Tactic `rfl` failed: The left-hand side
+  afterParsed (fun {H} => F) D pub hash (core.result.Result.Err e)
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err e)
+
+F : VerifyPrefix.Finish
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+hash : H
+e : r1_wire.Error
+⊢ afterParsed (fun {H} => F) D pub hash (core.result.Result.Err e) = ok (core.result.Result.Err e)
+'AspisR1.NKQ_ObservedStages.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedStages.parsed_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedStages.parsed_fail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedStages.parsed_div' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_ObservedStages.factor : ∀ (F : VerifyPrefix.Finish) {H : Type} (D : aspis_core.Digest32 H)
+  (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H),
+  VerifyPrefix.verify (fun {H} => F) D pub bytes hash none = do
+    let r ← PrefixAdapter.parseAccepted bytes
+    afterParsed (fun {H} => F) D pub hash r :=
+fun F {H} D pub bytes hash => sorry
+
+Running as unit: run-r0605cf5e4d68450a9f35852b9ca08152.scope; invocation ID: e673494bce4a4b8087f54ff1a75dc014

@@ -45,7 +45,7 @@ p=b/{(a+'-reservation.json')!r};print(p.read_text() if p.exists() else 'MISSING'
   print('reservation wait',flush=True);time.sleep(60);time.sleep(60);time.sleep(60);continue
  raise RuntimeError('STOP admission')
 x.update(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True)
-files={n:(E/n).read_text() for n in x['sources'] if (E/n).is_file()}
+files={n:({'base64':__import__('base64').b64encode((E/n).read_bytes()).decode()} if n.endswith('.xz') else (E/n).read_text()) for n in x['sources'] if (E/n).is_file()}
 files[a+'.json']=json.dumps(x)
 r=ssh('python3',f'''from pathlib import Path
 import json,shutil,hashlib,re
@@ -53,7 +53,7 @@ b=Path({B!r});w=Path('/home/dombarker/project-offloads/codex-cx-sound-int2-20261
 for n in ['S2W_run_host.py','lakefile.toml','lake-manifest.json','lean-toolchain']:
  if not (b/n).exists():shutil.copyfile(w/n,b/n)
 for n,t in json.loads({json.dumps(files)!r}).items():
- p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+ p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(__import__('base64').b64decode(t['base64'])) if isinstance(t,dict) else p.write_text(t)
 for n in ['NKQ_objects','NKQ_generated','NKQ_tmp','NKQ_native']:(b/n).mkdir(exist_ok=True)
 p=b/{(a+'.json')!r};x=json.loads(p.read_text());roots=x.get('env',{{}}).get('LEAN_PATH','').split(':');rels=set();pins={{}}
 if x['kind']=='lean':

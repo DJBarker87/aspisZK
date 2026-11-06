@@ -1,0 +1,10 @@
+'AspisR1.NKQ_ObservedStages.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedStages.parsed_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedStages.parsed_fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedStages.parsed_div' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_ObservedStages.factor : ∀ (F : VerifyPrefix.Finish) {H : Type} (D : aspis_core.Digest32 H)
+  (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H),
+  VerifyPrefix.verify (fun {H} => F) D pub bytes hash none = do
+    let r ← PrefixAdapter.parseAccepted bytes
+    afterParsed (fun {H} => F) D pub hash r :=
+fun F {H} D pub bytes hash => Eq.refl (VerifyPrefix.verify (fun {H} => F) D pub bytes hash none)
