@@ -1,0 +1,90 @@
+def Aeneas.Std.alloc.vec.Vec.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Usize.max }
+NJT_generated/NJT_Inspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.vec.Vec.try_reserve_exact`
+Aeneas.Std.alloc.vec.Vec.resize {T : Type} (cloneInst : core.clone.Clone T) (v : alloc.vec.Vec T) (new_len : Usize)
+  (value : T) : Result (alloc.vec.Vec T)
+NJT_generated/NJT_Inspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.vec.Vec.into_boxed_slice`
+structure AspisR1.ClaimsUnrolledFinish.StdCalls : Type 1
+number of parameters: 0
+fields:
+  AspisR1.ClaimsUnrolledFinish.StdCalls.reserve : {T : Type} →
+      Type →
+        alloc.vec.Vec T →
+          Usize →
+            Result
+              (core.result.Result Unit AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError × alloc.vec.Vec T)
+  AspisR1.ClaimsUnrolledFinish.StdCalls.intoBox : {T : Type} → Type → alloc.vec.Vec T → Result (Slice T)
+constructor:
+  AspisR1.ClaimsUnrolledFinish.StdCalls.mk
+    (reserve :
+      {T : Type} →
+        Type →
+          alloc.vec.Vec T →
+            Usize →
+              Result
+                (core.result.Result Unit AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError ×
+                  alloc.vec.Vec T))
+    (intoBox : {T : Type} → Type → alloc.vec.Vec T → Result (Slice T)) : ClaimsUnrolledFinish.StdCalls
+def AspisR1ClaimsUnrolledParent.claimsReference : AspisR1ClaimsUnrolledParent.External →
+  AspisR1ClaimsUnrolledParent.r1_wire.Prefix →
+    Result
+      (core.result.Result (Std.Array (Std.Array AspisR1ClaimsUnrolledParent.aspis_core.field.QM31 29#usize) 3#usize)
+        AspisR1ClaimsUnrolledParent.r1_wire.Error) :=
+fun external prefix1 => do
+  let r ← external.validated prefix1 25#u8
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue vr => do
+      let q ← AspisR1ClaimsUnrolledParent.zero
+      have a : Std.Array AspisR1ClaimsUnrolledParent.aspis_core.field.QM31 29#usize := Array.repeat 29#usize q
+      let r1 ←
+        AspisR1ClaimsUnrolledParent.aspis_core.r0.heap.filled external
+            (Array.Insts.CoreMarkerCopy 29#usize AspisR1ClaimsUnrolledParent.aspis_core.field.QM31.Insts.CoreMarkerCopy)
+            3#usize a
+      let r2 ←
+        AspisR1ClaimsUnrolledParent.mapError
+            AspisR1ClaimsUnrolledParent.candidate_claims.claims.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r1 ()
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s ← external.intoBox Global val
+          let r3 ← AspisR1ClaimsUnrolledParent.boxArray 3#usize s
+          let r4 ←
+            AspisR1ClaimsUnrolledParent.mapError
+                AspisR1ClaimsUnrolledParent.candidate_claims.claims.closure_1.Insts.CoreOpsFunctionFnOnceTupleBoxSliceArrayQM3129Error
+                r3 ()
+          let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => AspisR1ClaimsUnrolledParent.decodeRows external vr
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array (Std.Array AspisR1ClaimsUnrolledParent.aspis_core.field.QM31 29#usize) 3#usize)
+                (core.convert.FromSame AspisR1ClaimsUnrolledParent.r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array (Std.Array AspisR1ClaimsUnrolledParent.aspis_core.field.QM31 29#usize) 3#usize)
+            (core.convert.FromSame AspisR1ClaimsUnrolledParent.r1_wire.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (Std.Array (Std.Array AspisR1ClaimsUnrolledParent.aspis_core.field.QM31 29#usize) 3#usize)
+        (core.convert.FromSame AspisR1ClaimsUnrolledParent.r1_wire.Error) residual
+structure AspisR1.S2W_D189Wrappers.Allocator (A : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1.S2W_D189Wrappers.Allocator.allocate : A → ℕ → Result A
+  AspisR1.S2W_D189Wrappers.Allocator.cleanup : A → Result A
+constructor:
+  AspisR1.S2W_D189Wrappers.Allocator.mk {A : Type} (allocate : A → ℕ → Result A) (cleanup : A → Result A) :
+    S2W_D189Wrappers.Allocator A
+structure AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError : Type
+number of parameters: 0
+fields:
+  AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError.kind : AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveErrorKind
+constructor:
+  AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError.mk
+    (kind : AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveErrorKind) :
+    AspisR1ClaimsUnrolledParent.alloc.collections.TryReserveError
+NJT_generated/NJT_Inspect.lean:11:7: error(lean.unknownIdentifier): Unknown identifier `aspis_core.r0.heap.filled`
+AspisR1PublicPreparation.aspis_core.r0.Error : Type
+core.result.Result.map_err {T E F O : Type} (f : core.ops.function.FnOnce O E F) :
+  core.result.Result T E → O → Result (core.result.Result T F)

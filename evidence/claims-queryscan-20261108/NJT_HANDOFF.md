@@ -9,3 +9,9 @@ Total budget 80 Kani / 100 Lean-support / 2 extractions. Root allocation 40 Kani
 Host workspace /home/dombarker/project-offloads/codex-cx-claims-queryscan-20261108; CARGO_TARGET_DIR NJT_target inside it. Seed NJM retained export first, NJO export second, preserving predecessor consumer path ordering. Import hashes, admission, caps, source/dependency pins, target/exit/wall/RSS/swap and axiom reports will accompany every actual result.
 
 No shipped changes, new trust, key operations, ELF rebuild or push. Frozen3, deployed headline, per-attempt target, privacy and two-transaction design retained.
+
+## Stage 1
+
+Changed reference unrolls offsets0/29/58 into values, assembles the complete array and calls filled(1,value) once. L002 frozen graph validation passes; L003 optimized Rust check passes; E001 Charon0/Aeneas0 emits the reference (79.149749s, peak538748KiB, swaps0). Tool pins and unchanged lock are in NJT_EXTRACTION_PINS.json. Raw external templates are retained uncompiled evidence, never imported. No row closes yet: extracted external installations, full Result/effect/native association and singleton carrier remain. Existing NJM E001 and K009 failures are preserved by citation.
+
+One owned validation-input repair occurred before L002: predecessor payload files are retained in extract-stage NHR, not duplicated in NJM local evidence; the host copy uses NJM bytes with the existing NHR hashes. No launch preceded that correction. NJO fallback paths are appended after NJM paths, preserving first precedence.
