@@ -30,3 +30,5 @@ Final parent: NKU_ParentFold.G (source/cohort/clauses). NKU_FineHeader stores th
 | guard/Box/pair/cleanup | TailSource/SourceConstructors + retained native value/owner/drop cuts; (aa)/(an)/(au) scope |
 
 Native proof/public scope and incoming C01 clause are explicit in NKU_NATIVE_INPUTS.md. The broader source theorem is not an unbounded native packet. Combined gate1 passed; final gate2 adds the caller-frame and live-iterator statements while retaining exact unchanged-root audits.
+
+Final gates PASS:86 selected modules/124 roots in NKU_COMBINED_IMPORT with NKN_COMBINED_IMPORT, NKK_COMBINED_IMPORT and the deployed headline. Raw ax2 equals collectAxioms, standard axioms only;8 fixtures pass in the final binary; NFX16339 modules/zero issues.99 unchanged walks are retained under the final walk manifest after32917 dependency-object hashes match;25 added roots were walked. Only the combined-import object changed among prior closure objects. Native row is a candidate pending the next ledger gate, with incoming scope explicit. No source suffix remains in NKU_ParentFold.G.
