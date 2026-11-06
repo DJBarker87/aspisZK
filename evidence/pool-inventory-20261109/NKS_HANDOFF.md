@@ -9,3 +9,5 @@ Budget ceiling: 0 Kani, 15 Lean (existing statements only), 6 MIR/Charon scopes,
 Stages: (1) authority and source roots; (2) compiler-backed closure and overlap; (3) obligations, tractability and estimate; commit after each stage, never push.
 
 Status: reading authority and predecessor evidence; exact finite Pool closure not yet established. NKN basis has 599 verifier rows and zero production Pool consumer occurrences. RuntimeCpiReadonlyEntry7 remains pending and unused; entry admission supplies initial fields only. K086 production reachability/exclusion remains unproved.
+
+Stage 1: retained exact deployed Pool SBF diagnostics read-only from Low2; all 133 repository compiler inputs agree with the frozen revision. Fourteen dispatch alternatives listed, nine conservative ON roots and five OFF routes. No host write/build scope or prover run.
