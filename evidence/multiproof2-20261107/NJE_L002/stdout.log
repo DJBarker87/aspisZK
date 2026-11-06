@@ -1,0 +1,16 @@
+theorem NJE_ReadPackets.TX1_121 : ∀ (a : Std.Array U32 16#usize) (i : Usize),
+  multiproof.index_at a i = AspisR1Stage2.multiproof.index_at a i ∧ multiproof.index_at a i = a.index_usize i :=
+fun a i => ⟨NJA_CohortArity.index a i, NJA_Arity.index_result a i⟩
+'NJE_ReadPackets.TX1_121' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ReadPackets.TX2_087 : ∀ (a : Std.Array U32 16#usize) (i : Usize),
+  multiproof.index_at a i = AspisR1Stage2.multiproof.index_at a i ∧ multiproof.index_at a i = a.index_usize i :=
+fun a i => TX1_121 a i
+'NJE_ReadPackets.TX2_087' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ReadPackets.TX1_126 : ∀ (a : Std.Array (Std.Array U8 32#usize) 16#usize) (i : Usize),
+  multiproof.value_at a i = AspisR1Stage2.multiproof.value_at a i ∧ multiproof.value_at a i = a.index_usize i :=
+fun a i => ⟨NJA_CohortArity.value a i, NJA_Arity.value_result a i⟩
+'NJE_ReadPackets.TX1_126' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_ReadPackets.TX2_092 : ∀ (a : Std.Array (Std.Array U8 32#usize) 16#usize) (i : Usize),
+  multiproof.value_at a i = AspisR1Stage2.multiproof.value_at a i ∧ multiproof.value_at a i = a.index_usize i :=
+fun a i => TX1_126 a i
+'NJE_ReadPackets.TX2_092' depends on axioms: [propext, Classical.choice, Quot.sound]

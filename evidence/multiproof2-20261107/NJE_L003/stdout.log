@@ -1,0 +1,18 @@
+theorem NJE_RootPackets.TX1_124 : ∀ {α : Type} (s : MultiproofConeRef.reference.Scratch) (root : Std.Array U8 32#usize)
+  (k : Bool → Result α),
+  multiproof.root_matches s.val root = ok (decide ((↑s.val)[0]! = root)) ∧
+    (do
+        let b ← multiproof.root_matches s.val root
+        k b) =
+      k (decide ((↑s.val)[0]! = root)) :=
+fun {α} s root k => ⟨NJA_Root.cohort_comparison s root, NJA_Context.root s root k⟩
+'NJE_RootPackets.TX1_124' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJE_RootPackets.TX2_090 : ∀ {α : Type} (s : MultiproofConeRef.reference.Scratch) (root : Std.Array U8 32#usize)
+  (k : Bool → Result α),
+  multiproof.root_matches s.val root = ok (decide ((↑s.val)[0]! = root)) ∧
+    (do
+        let b ← multiproof.root_matches s.val root
+        k b) =
+      k (decide ((↑s.val)[0]! = root)) :=
+fun {α} s root k => TX1_124 s root k
+'NJE_RootPackets.TX2_090' depends on axioms: [propext, Classical.choice, Quot.sound]
