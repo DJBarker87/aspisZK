@@ -11,3 +11,5 @@ Host workspace /home/dombarker/project-offloads/codex-cx-terminal6-20261110; CAR
 NKR timeouts K048/K054/K056 and NJX K021/K022 retired. NKR combined imports L182/L184 failed on source-level private helper lookup: import modules only in replacement; retain private helpers in raw audit. Collector disagreements NKR_ScheduleExt.transition and NHC_DecodeModel.decoder_error must remain listed.
 
 Trust unchanged; P6/D188 option A reclassification retained. No 100-bit soundness, privacy, or two-transaction closure claimed. Active work and attempt receipts will extend this handoff.
+
+Stage 1: L002 fold core, L005 indexed scalar definitions, L008 semantic parent state, L009 Rust-Err fold support pass focused. K002 SAME-argument semantic child argument window passes (75.97s, 1,010,552 KiB, swap0), control pending. L003 memory-heavy vector reduction is retired and split; exact failure retained. No row closed. Other prefix-owned state and source files are explicitly uncompiled WIP until their receipts exist.

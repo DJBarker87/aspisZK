@@ -1,0 +1,5 @@
+# Retained failure and replacement
+
+L003: repaired predecessor scalar split does not compile. Ready contained an unspaced < parsed as PrincipalSeg, and vector-based reductions in actual1/actual10 hit the kernel memory ceiling at -M7000 (exit 1, 118.36s, 7,168,616 KiB, swap 0). No unchanged rerun and no cap increase. L004 isolated definitions and retained the parser diagnostic. L005 corrects spacing and replaces vector lookup with direct natural-index match definitions, then passes (13.89s, 6,188,308 KiB, swap 0). Each scalar occurrence is now split into NLH_ScalarStep00..11; these are source/model support, not native credit. Full original logs, including nonstandard error-generated axiom summaries, remain in failed receipts and are excluded from credited roots.
+
+K001: code generation failed before any proof because the scratch crate lacked cfg(kani) allocator_api for exact KMX_stubs.rs. K002 adds the same cfg-only crate attribute used by NKR; KMX remains byte-identical. No shipped source changed; this is an own-input repair, not host infrastructure.

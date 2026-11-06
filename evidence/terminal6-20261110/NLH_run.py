@@ -74,7 +74,7 @@ if x['kind'] in ['lean','audit']:
  if x['kind']=='lean':
   for n in re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M):rels.add(n.replace('.','/')+'.olean')
  else:
-  modules=list(json.loads((b/'NLH_GATE_SOURCES.json').read_text())['passed'])+['NKN_COMBINED_IMPORT','NKI_COMBINED_IMPORT','NKC_COMBINED_IMPORT','NJX_COMBINED_IMPORT','NJO_COMBINED_IMPORT','NJL_COMBINED_IMPORT','NIU_COMBINED_IMPORT','NGK_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit']
+  modules=x.get('audit_modules',[])
   for n in modules:rels.add(n.replace('.','/')+'.olean')
  for rel in sorted(rels):
   q=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert q is not None,rel
