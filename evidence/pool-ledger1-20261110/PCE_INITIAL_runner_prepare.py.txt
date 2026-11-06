@@ -1,0 +1,46 @@
+HISTORICAL INITIAL GENERATOR: final PCE_TASKS.json/PCE_run.py and PCE_REPAIRS.md supersede this file. Do not execute.
+from pathlib import Path
+import json
+E=Path(__file__).resolve().parent
+s=(E.parent/'pc-helpers1-20261110/PCB_run.py').read_text().replace('PCB_','PCE_').replace('codex-pc-helpers1','codex-pc-pool-ledger1').replace('dict(lean=60,kani=100,extract=12)','dict(lean=25,kani=0,extract=0)').replace('33131 files pinned','Selected closure files pinned')
+s=s.replace("if kind=='kani':\n import re", "if kind=='kani':\n raise RuntimeError('Kani forbidden in PCE')\n import re")
+# Copy backend C from generated output during the driver's Lean attempt; never change shared launchers.
+s=s.replace("if task.get('native'):command+=['-c','PCE_native/'+target+'.c']", "if task.get('native'):command+=['-c','PCE_native/'+target+'.c']")
+s=s.replace("seed_note':'Selected closure files pinned by PCE_IMPORTS.json.xz, including all selected Aeneas objects and sidecars'", "seed_note':'Selected closure files pinned by PCE_IMPORTS.json.xz, including all selected Aeneas objects and sidecars'")
+(E/'PCE_run.py').write_text(s)
+T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
+tasks={'PCE_L001':dict(kind='lean',target='PCE_COMBINED_IMPORT'),'PCE_L002':dict(kind='lean',target='PCE_AuditDriver',native=True)}
+tasks['PCE_L003']=dict(kind='link',target='PCE_AuditDriver',command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','PCE_native/PCE_AuditDriver','PCE_native/PCE_AuditDriver.c','PCE_native/PCE_WALKER.c','PCE_native/PCE_MemoryLimit.c'])
+# Own audit wrapper checks raw output; NEP binary remains unchanged across all modes.
+runner='''from pathlib import Path
+import sys,subprocess,hashlib,json
+B=Path.cwd();mode=sys.argv[1];p=B/'PCE_native/PCE_AuditDriver';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();before=sha(p)
+allroots=json.loads((B/'PCE_ROOTS_ALL.json').read_text())['roots'];groups=json.loads((B/'PCE_GROUPS.json').read_text())
+if mode.startswith('roots'):
+ expected=groups[int(mode[5:])];(B/'PCE_AUDIT_ROOTS.json').write_text(json.dumps(dict(roots=expected)));arg='proof'
+else:expected=[];arg=mode
+r=subprocess.run([str(p),arg],capture_output=True,text=True);print(r.stdout,end='');print(r.stderr,end='',file=sys.stderr)
+results=[json.loads(l[11:]) for l in r.stdout.splitlines() if l.startswith('NEP_RESULT ')]
+std={'propext','Classical.choice','Quot.sound'}
+if mode.startswith('roots'):
+ assert [x['root'] for x in results]==expected,('missing/raw roots',mode)
+ assert all(set(x['walked_axioms'])<=std for x in results),'nonstandard raw axiom'
+ # Ruling (ab\')(3): raw ax2 walk is authoritative; retain every collector disagreement.
+ assert r.returncode in [0,1] and all(x.get('root') for x in results)
+ accepted=True
+elif mode=='fixtures':
+ assert r.returncode==0 and len(results)==8
+ assert all(x['equal'] and len(x['walked_axioms'])==(1 if i<4 else 0) for i,x in enumerate(results));accepted=True
+else:accepted=r.returncode==0
+assert before==sha(p)
+(B/('PCE_binary_'+mode+'.json')).write_text(json.dumps(dict(binary=str(p),sha256=before,unchanged=True,binary_exit=r.returncode,policy_exit=0 if accepted else r.returncode,results=results)))
+sys.exit(0 if accepted else r.returncode)
+'''
+(E/'PCE_audit_one.py').write_text(runner)
+roots=json.loads((E/'PCE_ROOTS.json').read_text())['roots'];groups=[roots[i:i+5] for i in range(0,len(roots),5)]
+(E/'PCE_GROUPS.json').write_text(json.dumps(groups,indent=1)+'\n')
+for i,mode in enumerate(['fixtures','scan']+['roots'+str(i) for i in range(len(groups))],4):
+ files={'PCE_audit_one.py':'PCE_audit_one.py','PCE_ROOTS_ALL.json':'PCE_ROOTS.json','PCE_GROUPS.json':'PCE_GROUPS.json','PCE_EXPECTED_IMPORTS.jsonl':'PCE_EXPECTED_IMPORTS.jsonl'}
+ tasks[f'PCE_L{i:03d}']=dict(kind='audit',target=mode,command=['python3','PCE_audit_one.py',mode],files=files,collect=['PCE_binary_'+mode+'.json'])
+(E/'PCE_TASKS.json').write_text(json.dumps(tasks,indent=1)+'\n')
+print('Prepared serial scoped runner and20 meaningful gate attempts; five scopes reserved for statement/provenance/validation gates.')
