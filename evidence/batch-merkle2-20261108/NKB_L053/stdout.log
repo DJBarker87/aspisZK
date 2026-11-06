@@ -1,0 +1,100 @@
+NKB_lean/NKB_CanonicalRange.lean:67:138: error: unexpected identifier; expected '}'
+NKB_lean/NKB_CanonicalRange.lean:66:14: error: unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+NKB_lean/NKB_CanonicalRange.lean:66:14: error: unexpected syntax
+  failed to pretty print term (use 'set_option pp.rawOnError true' for raw representation)
+NKB_lean/NKB_CanonicalRange.lean:58:64: error: unsolved goals
+case none
+f : Slice U8 → Option K
+q : Slice U8
+s : Usize
+p : Pending
+iter : core.ops.range.Range Usize
+size : (↑q).length = 832
+slot : ↑s < 4
+lane : ↑iter.start < 2
+active : ↑iter.start < ↑iter.end
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+run : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+a :
+  ↑(start s iter.start) = 480 + ↑s * 32 + ↑iter.start * 16 ∧
+    ↑(finish s iter.start) = 480 + ↑s * 32 + ↑iter.start * 16 + 16
+slice :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+      { start := start s iter.start, «end» := finish s iter.start } =
+    ok (MultiproofConeSlices.sub q (start s iter.start) (finish s iter.start))
+h : f (window q s iter.start) = none
+⊢ (do
+      let s1 ←
+        core.slice.index.SliceIndexRangeUsizeSlice.index
+            {
+              start :=
+                (Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add
+                  (iter.start.wrapping_mul 16#usize),
+              «end» :=
+                ((Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add
+                      (iter.start.wrapping_mul 16#usize)).wrapping_add
+                  16#usize }
+            q
+      let r ← NJS_Extract.core.option.Option.ok_or (f s1) NJS_Extract.verifier.Error.Parse
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont iter1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame NJS_Extract.verifier.Error) residual
+          ok (done (some r1))) =
+    ok (done (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse)))
+
+case some
+f : Slice U8 → Option K
+q : Slice U8
+s : Usize
+p : Pending
+iter : core.ops.range.Range Usize
+size : (↑q).length = 832
+slot : ↑s < 4
+lane : ↑iter.start < 2
+active : ↑iter.start < ↑iter.end
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+run : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+a :
+  ↑(start s iter.start) = 480 + ↑s * 32 + ↑iter.start * 16 ∧
+    ↑(finish s iter.start) = 480 + ↑s * 32 + ↑iter.start * 16 + 16
+slice :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+      { start := start s iter.start, «end» := finish s iter.start } =
+    ok (MultiproofConeSlices.sub q (start s iter.start) (finish s iter.start))
+val✝ : K
+h : f (window q s iter.start) = some val✝
+⊢ (do
+      let s1 ←
+        core.slice.index.SliceIndexRangeUsizeSlice.index
+            {
+              start :=
+                (Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add
+                  (iter.start.wrapping_mul 16#usize),
+              «end» :=
+                ((Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add
+                      (iter.start.wrapping_mul 16#usize)).wrapping_add
+                  16#usize }
+            q
+      let r ← NJS_Extract.core.option.Option.ok_or (f s1) NJS_Extract.verifier.Error.Parse
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont iter1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame NJS_Extract.verifier.Error) residual
+          ok (done (some r1))) =
+    ok (cont iter1)
+'NKB_CanonicalRange.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_CanonicalRange.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_CanonicalRange.address' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_CanonicalRange.entered' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

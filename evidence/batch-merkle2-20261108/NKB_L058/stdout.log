@@ -1,0 +1,25 @@
+NKB_lean/NKB_CanonicalPair.lean:23:68: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  g ≥ 3
+  0 ≤ e ≤ 3
+where
+ e := ↑↑s
+ g := ↑↑2#usize
+NKB_lean/NKB_CanonicalPair.lean:43:5: error: Type mismatch: After simplification, term
+  tail
+ has type
+  @Eq (Result (Option (core.result.Result Unit NJS_Extract.verifier.Error)))
+    (NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0 (fun bs => ok (f bs)) iter1 q s p)
+    (ok
+      (if allFrom pass (↑iter.start + 1) fuel = true then p
+      else some (core.result.Result.Err NJS_Extract.verifier.Error.Parse)))
+but is expected to have type
+  @Eq (Result (Option (core.result.Result Unit NJS_Extract.verifier.Error)))
+    (Std.loop
+      (fun iter1 =>
+        NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0.body (fun bs => ok (f bs)) q s p iter1)
+      iter1)
+    (ok
+      (if allFrom pass (↑iter.start + 1) fuel = true then p
+      else some (core.result.Result.Err NJS_Extract.verifier.Error.Parse)))
+'NKB_CanonicalPair.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

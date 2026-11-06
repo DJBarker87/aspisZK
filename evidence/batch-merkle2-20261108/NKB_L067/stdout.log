@@ -1,0 +1,40 @@
+NKB_lean/NKB_CanonicalTail.lean:32:84: error: unsolved goals
+case h_2
+f : Std.Array U8 4#usize → Option U32
+g : Slice U8 → Option K
+q : Slice U8
+s : Usize
+iter : core.ops.range.Range Usize
+length : (↑q).length = 832
+slot : ↑s < 4
+ended : ↑iter.end ≤ ↑iter.start
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+run : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter1)
+a : ↑(start s) = ↑s * 120 + 104 ∧ ↑(finish s) = ↑s * 120 + 120
+val✝¹ : K
+p✝ : Option (core.result.Result Unit NJS_Extract.verifier.Error)
+val✝ : core.result.Result Unit NJS_Extract.verifier.Error
+sliced :
+  core.slice.index.SliceIndexRangeUsizeSlice.index { start := start s, «end» := finish s } q =
+    ok (MultiproofConeSlices.sub q (start s) (finish s))
+pair :
+  NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0 (fun bs => ok (g bs))
+      { start := 0#usize, «end» := 2#usize } q s none =
+    ok (some val✝)
+h : g (window q s) = some val✝¹
+heq✝ :
+  ((g (NKB_CanonicalRange.window q s 0#usize)).isSome = true → g (NKB_CanonicalRange.window q s 1#usize) = none) ∧
+    core.result.Result.Err NJS_Extract.verifier.Error.Parse = val✝
+⊢ (if
+          (g (NKB_CanonicalRange.window q s 0#usize)).isSome = true ∧
+            (g (NKB_CanonicalRange.window q s 1#usize)).isSome = true then
+        none
+      else some val✝,
+      0#u32) =
+    if
+        (g (NKB_CanonicalRange.window q s 0#usize)).isSome = true ∧
+          (g (NKB_CanonicalRange.window q s 1#usize)).isSome = true then
+      (none, 1#u32)
+    else (some val✝, 0#u32)
+'NKB_CanonicalTail.address' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_CanonicalTail.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

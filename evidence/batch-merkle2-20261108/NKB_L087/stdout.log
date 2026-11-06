@@ -1,0 +1,26 @@
+NKB_lean/NKB_CanonicalRowsLoop.lean:44:5: error: Type mismatch: After simplification, term
+  tail
+ has type
+  Std.loop
+      (fun x =>
+        NJS_Extract.verifier.candidate.canonical_scan_loop0.body (fun b => ok (f b)) (fun b => ok (g b))
+          (fun b x => ok (reply (ec b))) proof x.1 x.2)
+      (iter1, none) =
+    ok (some (reply (allFrom (NKB_CanonicalRows.pass f g ec proof) (↑iter.start + 1) fuel)))
+but is expected to have type
+  (match
+      NJS_Extract.verifier.candidate.canonical_scan_loop0.body (fun b => ok (f b)) (fun b => ok (g b))
+        (fun b x => ok (reply (ec b))) proof iter none with
+    | ok r =>
+      match r with
+      | cont x =>
+        Std.loop
+          (fun x =>
+            NJS_Extract.verifier.candidate.canonical_scan_loop0.body (fun b => ok (f b)) (fun b => ok (g b))
+              (fun b x => ok (reply (ec b))) proof x.1 x.2)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (some (reply (allFrom (NKB_CanonicalRows.pass f g ec proof) (↑iter.start + 1) fuel)))
+'NKB_CanonicalRowsLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,117 @@
+NKB_lean/NKB_CanonicalRowsLoop.lean:17:7: error: unsolved goals
+case zero
+f : Std.Array U8 4#usize → Option U32
+g : Slice U8 → Option K
+ec : Slice U8 → Bool
+proof : Slice U8
+length : (↑proof).length = 57607
+iter : core.ops.range.Range Usize
+ending : iter.end = 22#usize
+span : ↑iter.start + 0 = 22
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+run : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (none, iter1)
+body :
+  NJS_Extract.verifier.candidate.canonical_scan_loop0.body (fun b => ok (f b)) (fun b => ok (g b))
+      (fun b x => ok (reply (ec b))) proof iter none =
+    ok (done (some (core.result.Result.Ok ())))
+⊢ (match
+      NJS_Extract.verifier.candidate.canonical_scan_loop0.body (fun b => ok (f b)) (fun b => ok (g b))
+        (fun b x =>
+          ok
+            (if ec b = true then core.result.Result.Ok () else core.result.Result.Err NJS_Extract.verifier.Error.Parse))
+        proof iter none with
+    | ok r =>
+      match r with
+      | cont x =>
+        Std.loop
+          (fun x =>
+            NJS_Extract.verifier.candidate.canonical_scan_loop0.body (fun b => ok (f b)) (fun b => ok (g b))
+              (fun b x =>
+                ok
+                  (if ec b = true then core.result.Result.Ok ()
+                  else core.result.Result.Err NJS_Extract.verifier.Error.Parse))
+              proof x.1 x.2)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (some (core.result.Result.Ok ()))
+NKB_lean/NKB_CanonicalRowsLoop.lean:32:10: error: unsolved goals
+case succ.false
+f : Std.Array U8 4#usize → Option U32
+g : Slice U8 → Option K
+ec : Slice U8 → Bool
+proof : Slice U8
+length : (↑proof).length = 57607
+fuel : ℕ
+ih :
+  ∀ (iter : core.ops.range.Range Usize),
+    iter.end = 22#usize →
+      ↑iter.start + fuel = 22 →
+        NJS_Extract.verifier.candidate.canonical_scan_loop0 (fun b => ok (f b)) (fun b => ok (g b))
+            (fun b x => ok (reply (ec b))) iter proof none =
+          ok (some (reply (allFrom (NKB_CanonicalRows.pass f g ec proof) (↑iter.start) fuel)))
+iter : core.ops.range.Range Usize
+ending : iter.end = 22#usize
+span : ↑iter.start + (fuel + 1) = 22
+bound : ↑iter.start < 22
+iter1 : core.ops.range.Range Usize
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+body :
+  NJS_Extract.verifier.candidate.canonical_scan_loop0.body (fun b => ok (f b)) (fun b => ok (g b))
+      (fun b x => ok (reply (ec b))) proof iter none =
+    ok
+      (if NKB_CanonicalRows.accepted f g ec proof iter.start = true then cont (iter1, none)
+      else done (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse)))
+tail :
+  NJS_Extract.verifier.candidate.canonical_scan_loop0 (fun b => ok (f b)) (fun b => ok (g b))
+      (fun b x => ok (reply (ec b))) iter1 proof none =
+    ok (some (reply (allFrom (NKB_CanonicalRows.pass f g ec proof) (↑iter1.start) fuel)))
+same : NKB_CanonicalRows.pass f g ec proof ↑iter.start = NKB_CanonicalRows.accepted f g ec proof iter.start
+verdict : NKB_CanonicalRows.accepted f g ec proof iter.start = false
+bad : NKB_CanonicalRows.pass f g ec proof ↑iter.start = false
+⊢ (match
+      NJS_Extract.verifier.candidate.canonical_scan_loop0.body (fun b => ok (f b)) (fun b => ok (g b))
+        (fun b x =>
+          ok
+            (if ec b = true then core.result.Result.Ok () else core.result.Result.Err NJS_Extract.verifier.Error.Parse))
+        proof iter none with
+    | ok r =>
+      match r with
+      | cont x =>
+        Std.loop
+          (fun x =>
+            NJS_Extract.verifier.candidate.canonical_scan_loop0.body (fun b => ok (f b)) (fun b => ok (g b))
+              (fun b x =>
+                ok
+                  (if ec b = true then core.result.Result.Ok ()
+                  else core.result.Result.Err NJS_Extract.verifier.Error.Parse))
+              proof x.1 x.2)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse))
+NKB_lean/NKB_CanonicalRowsLoop.lean:25:9: warning: This simp argument is unused:
+  body
+
+Hint: Omit it from the simp argument list.
+  simp [̵b̵o̵d̵y̵,̵a̵l̵l̵F̵r̵o̵m̵,̵r̵e̵p̵l̵y̵]̵[̲a̲l̲l̲F̲r̲o̲m̲,̲ ̲r̲e̲p̲l̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKB_lean/NKB_CanonicalRowsLoop.lean:36:11: warning: This simp argument is unused:
+  body
+
+Hint: Omit it from the simp argument list.
+  simp [̵b̵o̵d̵y̵,̵v̵e̵r̵d̵i̵c̵t̵,̵a̵l̵l̵F̵r̵o̵m̵,̵b̵a̵d̵,̵r̵e̵p̵l̵y̵]̵[̲v̲e̲r̲d̲i̲c̲t̲,̲ ̲a̲l̲l̲F̲r̲o̲m̲,̲ ̲b̲a̲d̲,̲ ̲r̲e̲p̲l̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKB_lean/NKB_CanonicalRowsLoop.lean:36:16: warning: This simp argument is unused:
+  verdict
+
+Hint: Omit it from the simp argument list.
+  simp [̵b̵o̵d̵y̵,̵v̵e̵r̵d̵i̵c̵t̵,̵a̵l̵l̵F̵r̵o̵m̵,̵b̵a̵d̵,̵r̵e̵p̵l̵y̵]̵[̲b̲o̲d̲y̲,̲ ̲a̲l̲l̲F̲r̲o̲m̲,̲ ̲b̲a̲d̲,̲ ̲r̲e̲p̲l̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NKB_CanonicalRowsLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

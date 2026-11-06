@@ -137,3 +137,141 @@ fn any_one_chunk(){
  #[cfg(not(NKB_invert))] assert_eq!(out,expected);
  #[cfg(NKB_invert)] assert_ne!(out,expected);
 }
+
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn scan_scalar(){
+ let q:[u8;832]=kani::any();let s:usize=kani::any();kani::assume(s<4);
+ let l:usize=kani::any();kani::assume(l<26);
+ let start=s*120+l*4;let out=scan_scalar_fragment(&q,s,l);
+ let w=|j:usize|u32::from_le_bytes([q[start+j],q[start+j+1],q[start+j+2],q[start+j+3]]);
+ let expected=w(0)<2147483647;
+ #[cfg(not(NKB_invert))] assert_eq!(out.is_ok(),expected);
+ #[cfg(NKB_invert)] assert_ne!(out.is_ok(),expected);
+ if !expected{assert!(matches!(out,Err(Error::Parse)))}
+}
+
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn scan_c1(){
+ let q:[u8;832]=kani::any();let s:usize=kani::any();kani::assume(s<4);
+ 
+ let start=s*120+104;let out=scan_c1_fragment(&q,s);
+ let w=|j:usize|u32::from_le_bytes([q[start+j],q[start+j+1],q[start+j+2],q[start+j+3]]);
+ let expected=w(0)<2147483647&&w(4)<2147483647&&w(8)<2147483647&&w(12)<2147483647;
+ #[cfg(not(NKB_invert))] assert_eq!(out.is_ok(),expected);
+ #[cfg(NKB_invert)] assert_ne!(out.is_ok(),expected);
+ if !expected{assert!(matches!(out,Err(Error::Parse)))}
+}
+
+#[kani::proof]
+#[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
+fn scan_c2(){
+ let q:[u8;832]=kani::any();let s:usize=kani::any();kani::assume(s<4);
+ let l:usize=kani::any();kani::assume(l<2);
+ let start=480+s*32+l*16;let out=scan_c2_fragment(&q,s,l);
+ let w=|j:usize|u32::from_le_bytes([q[start+j],q[start+j+1],q[start+j+2],q[start+j+3]]);
+ let expected=w(0)<2147483647&&w(4)<2147483647&&w(8)<2147483647&&w(12)<2147483647;
+ #[cfg(not(NKB_invert))] assert_eq!(out.is_ok(),expected);
+ #[cfg(NKB_invert)] assert_ne!(out.is_ok(),expected);
+ if !expected{assert!(matches!(out,Err(Error::Parse)))}
+}
+
+// Standard Range::next fidelity, one iteration at any of the four scan levels.
+#[kani::proof]
+#[kani::unwind(2)]
+fn scan_range(){
+ let start:usize=kani::any();let end:usize=kani::any();kani::assume(end==2||end==26||end==4||end==22);kani::assume(start<=end);
+ let mut iter=start..end;let out=iter.next();let expected=if start<end{Some(start)}else{None};
+ #[cfg(not(NKB_invert))] assert_eq!(out,expected);
+ #[cfg(NKB_invert)] assert_ne!(out,expected);
+ assert_eq!(iter.end,end);assert_eq!(iter.start,if start<end{start+1}else{start});
+}
+
+fn scan_child_ok(bytes:&[u8],k:bool)->Result<(),Error>{assert_eq!(bytes.len(),128);assert!(!k);Ok(())}
+fn scan_child_parse(bytes:&[u8],k:bool)->Result<(),Error>{assert_eq!(bytes.len(),128);assert!(!k);Err(Error::Parse)}
+#[kani::proof]
+#[kani::unwind(2)]
+#[kani::stub(echeck,scan_child_ok)]
+fn scan_ecall_ok(){let q:[u8;832]=kani::any();let out=scan_echeck_fragment(&q);
+ #[cfg(not(NKB_invert))] assert!(out.is_ok());
+ #[cfg(NKB_invert)] assert!(!out.is_ok());
+}
+#[kani::proof]
+#[kani::unwind(2)]
+#[kani::stub(echeck,scan_child_parse)]
+fn scan_ecall_parse(){let q:[u8;832]=kani::any();let out=scan_echeck_fragment(&q);
+ #[cfg(not(NKB_invert))] assert!(matches!(out,Err(Error::Parse)));
+ #[cfg(NKB_invert)] assert!(!matches!(out,Err(Error::Parse)));
+}
+#[kani::proof]
+#[kani::unwind(2)]
+fn scan_opening_args(){
+ let q:[u8;832]=kani::any();let bs=&q[672..800];let j:usize=kani::any();kani::assume(j<128);
+ assert_eq!(bs.len(),128);assert_eq!(bs.as_ptr(),q.as_ptr().wrapping_add(672));
+ #[cfg(not(NKB_invert))] assert_eq!(bs[j],q[672+j]);
+ #[cfg(NKB_invert)] assert_ne!(bs[j],q[672+j]);
+}
+
+fn scan_compact_ok(bytes:&[u8])->Result<(),compact::CodecError>{assert_eq!(bytes.len(),464);Ok(())}
+fn scan_compact_reject(bytes:&[u8])->Result<(),compact::CodecError>{assert_eq!(bytes.len(),464);Err(compact::CodecError::NonCanonical)}
+fn scan_prefix_ok(bytes:&[u8],k:bool)->Result<(),Error>{assert!(!k);assert!(bytes.len()==32||bytes.len()==224||bytes.len()==2272);Ok(())}
+fn scan_prefix_forbid(_:&[u8],_:bool)->Result<(),Error>{assert!(false,"no suffix after compact rejection");Ok(())}
+fn scan_prefix_reject32(bytes:&[u8],k:bool)->Result<(),Error>{assert!(!k);assert!(bytes.len()==32||bytes.len()==224||bytes.len()==2272);assert!(bytes.len()<=32,"no echeck suffix after rejection");if bytes.len()==32{Err(Error::Parse)}else{Ok(())}}
+fn scan_prefix_reject224(bytes:&[u8],k:bool)->Result<(),Error>{assert!(!k);assert!(bytes.len()==32||bytes.len()==224||bytes.len()==2272);assert!(bytes.len()<=224,"no echeck suffix after rejection");if bytes.len()==224{Err(Error::Parse)}else{Ok(())}}
+fn scan_prefix_reject2272(bytes:&[u8],k:bool)->Result<(),Error>{assert!(!k);assert!(bytes.len()==32||bytes.len()==224||bytes.len()==2272);assert!(bytes.len()<=2272,"no echeck suffix after rejection");if bytes.len()==2272{Err(Error::Parse)}else{Ok(())}}
+#[kani::proof]
+#[kani::unwind(2)]
+#[kani::stub(compact::check_values,scan_compact_ok)]
+#[kani::stub(echeck,scan_prefix_ok)]
+fn scan_prefix_ok_case(){let proof:[u8;57607]=kani::any();let out=scan_prefix_fragment(&proof);
+ #[cfg(not(NKB_invert))] assert!(out.is_ok());
+ #[cfg(NKB_invert)] assert!(!out.is_ok());
+}
+#[kani::proof]
+#[kani::unwind(2)]
+#[kani::stub(compact::check_values,scan_compact_reject)]
+#[kani::stub(echeck,scan_prefix_forbid)]
+fn scan_prefix_cv_reject(){let proof:[u8;57607]=kani::any();let out=scan_prefix_fragment(&proof);
+ #[cfg(not(NKB_invert))] assert!(matches!(out,Err(Error::Parse)));
+ #[cfg(NKB_invert)] assert!(!matches!(out,Err(Error::Parse)));
+}
+#[kani::proof]
+#[kani::unwind(2)]
+#[kani::stub(compact::check_values,scan_compact_ok)]
+#[kani::stub(echeck,scan_prefix_reject32)]
+fn scan_prefix_reject32_case(){let proof:[u8;57607]=kani::any();let out=scan_prefix_fragment(&proof);
+ #[cfg(not(NKB_invert))] assert!(matches!(out,Err(Error::Parse)));
+ #[cfg(NKB_invert)] assert!(!matches!(out,Err(Error::Parse)));
+}
+#[kani::proof]
+#[kani::unwind(2)]
+#[kani::stub(compact::check_values,scan_compact_ok)]
+#[kani::stub(echeck,scan_prefix_reject224)]
+fn scan_prefix_reject224_case(){let proof:[u8;57607]=kani::any();let out=scan_prefix_fragment(&proof);
+ #[cfg(not(NKB_invert))] assert!(matches!(out,Err(Error::Parse)));
+ #[cfg(NKB_invert)] assert!(!matches!(out,Err(Error::Parse)));
+}
+#[kani::proof]
+#[kani::unwind(2)]
+#[kani::stub(compact::check_values,scan_compact_ok)]
+#[kani::stub(echeck,scan_prefix_reject2272)]
+fn scan_prefix_reject2272_case(){let proof:[u8;57607]=kani::any();let out=scan_prefix_fragment(&proof);
+ #[cfg(not(NKB_invert))] assert!(matches!(out,Err(Error::Parse)));
+ #[cfg(NKB_invert)] assert!(!matches!(out,Err(Error::Parse)));
+}
+
+// Typed borrow cut for the four literal prefix-call windows, all bytes via arbitrary j.
+#[kani::proof]
+#[kani::unwind(2)]
+fn scan_prefix_args(){
+ let p:[u8;57607]=kani::any();let stage:usize=kani::any();kani::assume(stage<4);
+ let bs=match stage{0=>&p[compact::OFF_Y1..compact::OFF_INACTIVE],1=>&p[compact::OFF_INACTIVE..compact::OFF_INACTIVE+32],2=>&p[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT],_=>&p[compact::OFF_ROUND1..compact::OFF_OPENINGS]};
+ let (base,len)=match stage{0=>(7031,464),1=>(7495,32),2=>(7527,224),_=>(7783,2272)};
+ assert_eq!(bs.len(),len);assert_eq!(bs.as_ptr(),p.as_ptr().wrapping_add(base));let j:usize=kani::any();kani::assume(j<len);
+ #[cfg(not(NKB_invert))] assert_eq!(bs[j],p[base+j]);
+ #[cfg(NKB_invert)] assert_ne!(bs[j],p[base+j]);
+}

@@ -1,0 +1,75 @@
+NKB_lean/NKB_CanonicalOpening.lean:40:41: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [reply,h̵,̵ ̲core.result.Result.Insts.CoreOpsTry.branch,
+     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKB_lean/NKB_CanonicalOpening.lean:50:107: error: unsolved goals
+case false
+f : Std.Array U8 4#usize → Option U32
+g : Slice U8 → Option K
+ec : Slice U8 → Bool
+q : Slice U8
+length : (↑q).length = 832
+iter : core.ops.range.Range Usize
+active : ↑iter.start < ↑iter.end
+bound : ↑iter.start < 4
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+run : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+scalar :
+  NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0 (fun b => ok (f b)) (fun b => ok (g b))
+      { start := 0#usize, «end» := 26#usize } q iter.start none =
+    ok
+      (if
+          (allFrom (NKB_CanonicalScalarLoop.pass f q iter.start) (↑{ start := 0#usize, «end» := 26#usize }.start) 26 &&
+              NKB_CanonicalTail.accepted g q iter.start) =
+            true then
+        (none, 1#u32)
+      else (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32))
+h : slot f g q iter.start = false
+⊢ (match 0#u32 with
+    | 1#32#uscalar => ok (cont (iter1, some (core.result.Result.Err NJS_Extract.verifier.Error.Parse)))
+    | x => ok (done (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32))) =
+    ok (done (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32))
+
+case true
+f : Std.Array U8 4#usize → Option U32
+g : Slice U8 → Option K
+ec : Slice U8 → Bool
+q : Slice U8
+length : (↑q).length = 832
+iter : core.ops.range.Range Usize
+active : ↑iter.start < ↑iter.end
+bound : ↑iter.start < 4
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+run : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+scalar :
+  NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0 (fun b => ok (f b)) (fun b => ok (g b))
+      { start := 0#usize, «end» := 26#usize } q iter.start none =
+    ok
+      (if
+          (allFrom (NKB_CanonicalScalarLoop.pass f q iter.start) (↑{ start := 0#usize, «end» := 26#usize }.start) 26 &&
+              NKB_CanonicalTail.accepted g q iter.start) =
+            true then
+        (none, 1#u32)
+      else (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32))
+h : slot f g q iter.start = true
+⊢ (match 1#u32 with
+    | 1#32#uscalar => ok (cont (iter1, none))
+    | x => ok (done (none, 0#u32))) =
+    ok (cont (iter1, none))
+NKB_lean/NKB_CanonicalOpening.lean:68:41: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NKB_CanonicalOpening.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_CanonicalOpening.entered' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

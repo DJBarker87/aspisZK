@@ -75,3 +75,31 @@ fn padding_word_fragment(w:&[u8])->bool{u64::from_le_bytes(w.try_into().unwrap()
 fn parse_exit_fragment(_idx:&mut[u32;16],_val:&mut[[u8;32];16])->Result<(),Error>{
         return Err(Error::Parse);
 }
+
+fn scan_scalar_fragment(q:&[u8],s:usize,l:usize)->Result<(),Error>{
+                M31::from_le_bytes(q[s * 120 + l * 4..s * 120 + l * 4 + 4].try_into().unwrap()).ok_or(Error::Parse)?;
+Ok(())
+}
+
+fn scan_c1_fragment(q:&[u8],s:usize)->Result<(),Error>{
+            K::from_le_bytes(&q[s * 120 + 104..s * 120 + 120]).ok_or(Error::Parse)?;
+Ok(())
+}
+
+fn scan_c2_fragment(q:&[u8],s:usize,l:usize)->Result<(),Error>{
+                K::from_le_bytes(&q[480 + s * 32 + l * 16..480 + s * 32 + l * 16 + 16]).ok_or(Error::Parse)?;
+Ok(())
+}
+
+fn scan_echeck_fragment(q:&[u8])->Result<(),Error>{
+        echeck(&q[672..800], false)?;
+Ok(())
+}
+
+fn scan_prefix_fragment(proof:&[u8])->Result<(),Error>{
+    compact::check_values(&proof[compact::OFF_Y1..compact::OFF_INACTIVE])?;
+    echeck(&proof[compact::OFF_INACTIVE..compact::OFF_INACTIVE + 32], false)?;
+    echeck(&proof[compact::OFF_ROUND0..compact::OFF_FOLDED_ROOT], false)?;
+    echeck(&proof[compact::OFF_ROUND1..compact::OFF_OPENINGS], false)?;
+Ok(())
+}

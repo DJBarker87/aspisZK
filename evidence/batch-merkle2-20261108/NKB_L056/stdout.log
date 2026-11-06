@@ -1,0 +1,107 @@
+NKB_lean/NKB_CanonicalRange.lean:58:64: error: unsolved goals
+case none
+f : Slice U8 → Option K
+q : Slice U8
+s : Usize
+p : Pending
+iter : core.ops.range.Range Usize
+size : (↑q).length = 832
+slot : ↑s < 4
+lane : ↑iter.start < 2
+active : ↑iter.start < ↑iter.end
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+run : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+a :
+  ↑(start s iter.start) = 480 + ↑s * 32 + ↑iter.start * 16 ∧
+    ↑(finish s iter.start) = 480 + ↑s * 32 + ↑iter.start * 16 + 16
+slice :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+      { start := start s iter.start, «end» := finish s iter.start } =
+    ok (MultiproofConeSlices.sub q (start s iter.start) (finish s iter.start))
+h : f (window q s iter.start) = none
+⊢ (do
+      let r ←
+        match f (MultiproofConeSlices.sub q (start s iter.start) (finish s iter.start)) with
+          | none => ok (core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+          | some v => ok (core.result.Result.Ok v)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont iter1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit NJS_Extract.verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+          ok (done (some r1))) =
+    ok (done (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse)))
+
+case some
+f : Slice U8 → Option K
+q : Slice U8
+s : Usize
+p : Pending
+iter : core.ops.range.Range Usize
+size : (↑q).length = 832
+slot : ↑s < 4
+lane : ↑iter.start < 2
+active : ↑iter.start < ↑iter.end
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+run : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, iter1)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+a :
+  ↑(start s iter.start) = 480 + ↑s * 32 + ↑iter.start * 16 ∧
+    ↑(finish s iter.start) = 480 + ↑s * 32 + ↑iter.start * 16 + 16
+slice :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+      { start := start s iter.start, «end» := finish s iter.start } =
+    ok (MultiproofConeSlices.sub q (start s iter.start) (finish s iter.start))
+val✝ : K
+h : f (window q s iter.start) = some val✝
+⊢ (do
+      let r ←
+        match f (MultiproofConeSlices.sub q (start s iter.start) (finish s iter.start)) with
+          | none => ok (core.result.Result.Err NJS_Extract.verifier.Error.Parse)
+          | some v => ok (core.result.Result.Ok v)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont iter1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            match residual with
+              | core.result.Result.Ok x =>
+                core.convert.Infallible.rec (fun x => Result (core.result.Result Unit NJS_Extract.verifier.Error)) x
+              | core.result.Result.Err v => ok (core.result.Result.Err v)
+          ok (done (some r1))) =
+    ok (cont iter1)
+NKB_lean/NKB_CanonicalRange.lean:79:9: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [h̵,̵NJS_Extract.core.option.Option.ok_or, ̲core.result.Result.Insts.CoreOpsTry.branch,
+       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+       core.convert.FromSame]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKB_lean/NKB_CanonicalRange.lean:81:5: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp [h, ̲NJS_Extract.core.option.Option.ok_or, ̲core.result.Result.Insts.CoreOpsTry.branch,
+       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵
+  ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NKB_CanonicalRange.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_CanonicalRange.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_CanonicalRange.address' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKB_CanonicalRange.entered' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

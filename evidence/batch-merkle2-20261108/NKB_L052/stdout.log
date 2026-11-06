@@ -1,0 +1,162 @@
+NKB_lean/NKB_CanonicalRange.lean:11:59: error: Application type mismatch: The argument
+  ↑iter.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.5
+of sort `Type (?u.5 + 1)` in the application
+  @PrincipalSeg ↑iter.start
+NKB_lean/NKB_CanonicalRange.lean:11:75: error(lean.unknownIdentifier): Unknown identifier `ter.end.val`
+NKB_lean/NKB_CanonicalRange.lean:21:58: error: Application type mismatch: The argument
+  ↑iter.end
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.5
+of sort `Type (?u.5 + 1)` in the application
+  @InitialSeg ↑iter.end
+NKB_lean/NKB_CanonicalRange.lean:21:72: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+NKB_lean/NKB_CanonicalRange.lean:48:11: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  g - h ≥ 0
+  0 ≤ f ≤ 1
+  f ≥ 0
+  16*f - g + h ≤ 0
+  0 ≤ e ≤ 3
+  e ≥ 0
+  -479 ≤ 32*e + 16*f - g + h ≤ 0
+where
+ e := ↑↑s
+ f := ↑↑l
+ g := ↑↑(((Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add (l.wrapping_mul 16#usize)).wrapping_add
+      16#usize)
+ h := ↑↑16#usize
+NKB_lean/NKB_CanonicalRange.lean:48:20: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  g - h ≥ 0
+  0 ≤ f ≤ 1
+  f ≥ 0
+  16*f - g + h ≤ 0
+  0 ≤ e ≤ 3
+  e ≥ 0
+  32*e + 16*f - g ≥ -495
+  32*e + 16*f - g + h ≤ 0
+where
+ e := ↑↑s
+ f := ↑↑l
+ g := ↑↑(((Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add (l.wrapping_mul 16#usize)).wrapping_add
+      16#usize)
+ h := ↑↑16#usize
+NKB_lean/NKB_CanonicalRange.lean:52:54: error: Application type mismatch: The argument
+  ↑iter.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.29
+of sort `Type (?u.29 + 1)` in the application
+  @PrincipalSeg ↑iter.start
+NKB_lean/NKB_CanonicalRange.lean:52:70: error(lean.unknownIdentifier): Unknown identifier `ter.end.val`
+NKB_lean/NKB_CanonicalRange.lean:65:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+    { start := (Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add (iter.start.wrapping_mul 16#usize),
+      «end» :=
+        ((Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add
+              (iter.start.wrapping_mul 16#usize)).wrapping_add
+          16#usize }
+in the target expression
+  (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (done p)
+    | some l => do
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+            {
+              start :=
+                (Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add (Usize.wrapping_mul l 16#usize),
+              «end» :=
+                ((Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add
+                      (Usize.wrapping_mul l 16#usize)).wrapping_add
+                  16#usize }
+      let r ← NJS_Extract.core.option.Option.ok_or (f s1) NJS_Extract.verifier.Error.Parse
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont iter1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame NJS_Extract.verifier.Error) residual
+          ok (done (some r1))) =
+    ok
+      (match f (window q s iter.start) with
+      | none => done (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse))
+      | some val => cont iter1)
+
+f : Slice U8 → Option K
+q : Slice U8
+s : Usize
+p : Pending
+iter : core.ops.range.Range Usize
+size : (↑q).length = 832
+slot : ↑s < 4
+lane : ↑iter.start < 2
+active : PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+a :
+  ↑((Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add (iter.start.wrapping_mul 16#usize)) =
+      480 + ↑s * 32 + ↑iter.start * 16 ∧
+    ↑(((Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add
+              (iter.start.wrapping_mul 16#usize)).wrapping_add
+          16#usize) =
+      480 + ↑s * 32 + ↑iter.start * 16 + 16
+slice :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+      {
+        start :=
+          (Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add (iter.start.wrapping_mul 16#usize),
+        «end» :=
+          ((Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add
+                (iter.start.wrapping_mul 16#usize)).wrapping_add
+            16#usize } =
+    ok
+      (MultiproofConeSlices.sub q
+        ((Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add (iter.start.wrapping_mul 16#usize))
+        (((Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add
+              (iter.start.wrapping_mul 16#usize)).wrapping_add
+          16#usize))
+run : True
+⊢ (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (done p)
+    | some l => do
+      let s1 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) q
+            {
+              start :=
+                (Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add (Usize.wrapping_mul l 16#usize),
+              «end» :=
+                ((Usize.wrapping_add 480#usize (s.wrapping_mul 32#usize)).wrapping_add
+                      (Usize.wrapping_mul l 16#usize)).wrapping_add
+                  16#usize }
+      let r ← NJS_Extract.core.option.Option.ok_or (f s1) NJS_Extract.verifier.Error.Parse
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (cont iter1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame NJS_Extract.verifier.Error) residual
+          ok (done (some r1))) =
+    ok
+      (match f (window q s iter.start) with
+      | none => done (some (core.result.Result.Err NJS_Extract.verifier.Error.Parse))
+      | some val => cont iter1)
+'NKB_CanonicalRange.next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKB_CanonicalRange.stop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKB_CanonicalRange.address' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKB_CanonicalRange.entered' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
