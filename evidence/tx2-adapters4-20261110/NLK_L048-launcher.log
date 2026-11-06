@@ -1,0 +1,32 @@
+{"attempt": "NLK_L048", "exit_status": 0, "wall_seconds": 15.277897520922124, "peak_rss_kib": "6380884", "swaps": "0", "print_axioms": ["'NLK_SdkBytes.byte_value' does not depend on any axioms", "'NLK_SdkBytes.payload_length' depends on axioms: [propext]", "'NLK_SdkBytes.payload_values' depends on axioms: [propext]", "'NLK_SdkBytes.lane_bound' depends on axioms: [propext, Quot.sound]"]}
+@[defeq] theorem NLK_SdkBytes.byte_value : ∀ (b : UInt8), ↑(byte b) = b.toNat :=
+fun b => rfl
+'NLK_SdkBytes.byte_value' does not depend on any axioms
+theorem NLK_SdkBytes.payload_length : ∀ (b : NLF_SdkModel.Payload) (h : b.bytes.length ≤ Usize.max),
+  (↑(payload b h)).length = b.bytes.length :=
+fun b h => List.length_map byte
+'NLK_SdkBytes.payload_length' depends on axioms: [propext]
+theorem NLK_SdkBytes.payload_values : ∀ (b : NLF_SdkModel.Payload) (h : b.bytes.length ≤ Usize.max),
+  List.map UScalar.val ↑(payload b h) = List.map UInt8.toNat b.bytes :=
+fun b h =>
+  Eq.mpr (id (congrFun' (congrArg Eq List.map_map) (List.map UInt8.toNat b.bytes)))
+    (Eq.refl (List.map (UScalar.val ∘ byte) 
+...
+@[defeq] theorem NLK_SdkBytes.byte_value : ∀ (b : UInt8), ↑(byte b) = b.toNat :=
+fun b => rfl
+'NLK_SdkBytes.byte_value' does not depend on any axioms
+theorem NLK_SdkBytes.payload_length : ∀ (b : NLF_SdkModel.Payload) (h : b.bytes.length ≤ Usize.max),
+  (↑(payload b h)).length = b.bytes.length :=
+fun b h => List.length_map byte
+'NLK_SdkBytes.payload_length' depends on axioms: [propext]
+theorem NLK_SdkBytes.payload_values : ∀ (b : NLF_SdkModel.Payload) (h : b.bytes.length ≤ Usize.max),
+  List.map UScalar.val ↑(payload b h) = List.map UInt8.toNat b.bytes :=
+fun b h =>
+  Eq.mpr (id (congrFun' (congrArg Eq List.map_map) (List.map UInt8.toNat b.bytes)))
+    (Eq.refl (List.map (UScalar.val ∘ byte) b.bytes))
+'NLK_SdkBytes.payload_values' depends on axioms: [propext]
+theorem NLK_SdkBytes.lane_bound : ∀ (b : NLF_SdkModel.Payload), b.bytes.length = 768 → b.bytes.length ≤ Usize.max :=
+fun b size => Eq.mpr (id (congrArg (fun _a => _a ≤ Usize.max) size)) (lane_bound._proof_1 b)
+'NLK_SdkBytes.lane_bound' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-r3768d1da29f046968d15a82a435de8a6.scope; invocation ID: 1c75be1590df48bf9e4dd29e7f518113

@@ -1,0 +1,42 @@
+{"attempt": "NLK_L047", "exit_status": 1, "wall_seconds": 16.313126670895144, "peak_rss_kib": "6327464", "swaps": "0", "print_axioms": ["'NLK_SdkBytes.byte_value' does not depend on any axioms", "'NLK_SdkBytes.payload_length' depends on axioms: [propext, sorryAx]", "'NLK_SdkBytes.payload_values' depends on axioms: [propext, sorryAx]", "'NLK_SdkBytes.lane_bound' depends on axioms: [propext, Quot.sound]"]}
+NLK_generated/NLK_SdkBytes.lean:11:22: error: Type mismatch: After simplification, term
+  bound
+ has type
+  b.bytes.length < 18446744073709551616
+but is expected to have type
+  b.bytes.length ≤ Usize.max
+NLK_generated/NLK_SdkBytes.lean:17:12: warning: declaration uses `sorry`
+@[defeq] theorem NLK_SdkBytes.byte_value : ∀ (b : UInt8), ↑(byte b) = b.toNat :=
+fun b => rfl
+'NLK_SdkBytes.byte_value' does not depend on any axioms
+theorem NLK_SdkBytes.payload_length : ∀ (b : NLF_SdkModel.Payload) (h : b.bytes.length < 2 ^ 64),
+  (↑(payload b h)).length = b.bytes.length :=
+fun b h => List.length_map byte
+'NLK_SdkBytes.payload_length' depends on axioms: [propext, sorryAx]
+theorem NLK_SdkBytes.payload_
+...
+NLK_generated/NLK_SdkBytes.lean:11:22: error: Type mismatch: After simplification, term
+  bound
+ has type
+  b.bytes.length < 18446744073709551616
+but is expected to have type
+  b.bytes.length ≤ Usize.max
+NLK_generated/NLK_SdkBytes.lean:17:12: warning: declaration uses `sorry`
+@[defeq] theorem NLK_SdkBytes.byte_value : ∀ (b : UInt8), ↑(byte b) = b.toNat :=
+fun b => rfl
+'NLK_SdkBytes.byte_value' does not depend on any axioms
+theorem NLK_SdkBytes.payload_length : ∀ (b : NLF_SdkModel.Payload) (h : b.bytes.length < 2 ^ 64),
+  (↑(payload b h)).length = b.bytes.length :=
+fun b h => List.length_map byte
+'NLK_SdkBytes.payload_length' depends on axioms: [propext, sorryAx]
+theorem NLK_SdkBytes.payload_values : ∀ (b : NLF_SdkModel.Payload) (h : b.bytes.length < 2 ^ 64),
+  List.map UScalar.val ↑(payload b h) = List.map UInt8.toNat b.bytes :=
+fun b h =>
+  Eq.mpr (id (congrFun' (congrArg Eq List.map_map) (List.map UInt8.toNat b.bytes)))
+    (Eq.refl (List.map (UScalar.val ∘ byte) b.bytes))
+'NLK_SdkBytes.payload_values' depends on axioms: [propext, sorryAx]
+theorem NLK_SdkBytes.lane_bound : ∀ (b : NLF_SdkModel.Payload), b.bytes.length = 768 → b.bytes.length < 2 ^ 64 :=
+fun b size => Decidable.byContradiction fun a => lane_bound._proof_1 b size a
+'NLK_SdkBytes.lane_bound' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-r2338056fdfe947d3974e58e7afad8e25.scope; invocation ID: 51a8fb37e7f04cf28a8ef4869e5aeb5b

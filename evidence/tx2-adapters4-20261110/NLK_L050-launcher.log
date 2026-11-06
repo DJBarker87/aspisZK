@@ -1,0 +1,48 @@
+{"attempt": "NLK_L050", "exit_status": 0, "wall_seconds": 16.093085654079914, "peak_rss_kib": "6366204", "swaps": "0", "print_axioms": ["'NLK_LaneBorrow.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_LaneBorrow.state_frame' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_LaneBorrow.token_events' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_LaneBorrow.admitted' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLK_LaneBorrow.source : ∀ (p : Parent) (account : ℕ),
+  run p account =
+    have r := NLF_SnapshotEvents.step p account;
+    { parent := r.1,
+      result :=
+        ok
+          (match r.2 with
+          | Except.ok b => child b
+          | Except.error a =>
+            core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed) } :=
+⋯
+'NLK_LaneBorrow.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_LaneBorrow.state_frame : ∀ (p : Parent) (account : ℕ), (run p account).parent.state = p.state :=
+⋯
+'NLK_LaneBorrow.state_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_LaneBorrow.token_events : ∀ (p 
+...
+theorem NLK_LaneBorrow.source : ∀ (p : Parent) (account : ℕ),
+  run p account =
+    have r := NLF_SnapshotEvents.step p account;
+    { parent := r.1,
+      result :=
+        ok
+          (match r.2 with
+          | Except.ok b => child b
+          | Except.error a =>
+            core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed) } :=
+⋯
+'NLK_LaneBorrow.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_LaneBorrow.state_frame : ∀ (p : Parent) (account : ℕ), (run p account).parent.state = p.state :=
+⋯
+'NLK_LaneBorrow.state_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_LaneBorrow.token_events : ∀ (p : Parent) (account : ℕ),
+  (run p account).parent.events = p.events ++ NLF_SnapshotEvents.events p.state account p.next :=
+⋯
+'NLK_LaneBorrow.token_events' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_LaneBorrow.admitted : ∀ {F : Type} (heap : AspisR1.S2Trust.Heap F) (records : ℕ → Account) (money : ℕ → ℕ)
+  (n account : ℕ),
+  AspisR1.AdapterRw.RuntimeEntrypointAdmission heap (fun a => (records a).key) n →
+    Invariant (run (NLF_RuntimeInterpretation.install heap records money) account).parent ∧
+      (∀ (i : ℕ),
+          NLF_RefCell.flag ((NLF_RuntimeInterpretation.install heap records money).state.cells i) = heap.counter i) ∧
+        ∀ a < n, heap.ownerLive a = true :=
+⋯
+'NLK_LaneBorrow.admitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0dca6f8ee60e4e6f9c425d84fbc3133d.scope; invocation ID: f43e42a2ee654dbd8e799fbeeec72053

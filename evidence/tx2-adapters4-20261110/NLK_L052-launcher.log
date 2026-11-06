@@ -1,0 +1,62 @@
+{"attempt": "NLK_L052", "exit_status": 1, "wall_seconds": 15.552933332975954, "peak_rss_kib": "6334152", "swaps": "0", "print_axioms": ["'NLK_OwnedPrefixes.account_cardinality' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_OwnedPrefixes.instruction_extent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLK_generated/NLK_OwnedPrefixes.lean:36:2: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+pda : NLK_RegistryInstall.Pda
+loader : Key
+devnet : Bool
+verifier : Key
+accounts : Slice Account
+instruction : Slice U8
+slot : core.result.Result U64 AdapterRw.solana_program_error.ProgramError
+bad : instruction.len ≠ 320#usize
+⊢ (do
+      let i ← 3#usize * 32#usize
+      let i1 ← 8#usize + i
+      i1 + 216#usize) =
+    ok 320#usize
+theorem NLK_OwnedPrefixes.account_cardinality : ∀ (pda : NLK_RegistryInstall.Pda) (loader : Key) (devnet : Bool)
+  (verifier pool : Key) (accounts : Slice Account) (lane : U8) (slot : U6
+...
+nedPrefixes.lean:36:2: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+pda : NLK_RegistryInstall.Pda
+loader : Key
+devnet : Bool
+verifier : Key
+accounts : Slice Account
+instruction : Slice U8
+slot : core.result.Result U64 AdapterRw.solana_program_error.ProgramError
+bad : instruction.len ≠ 320#usize
+⊢ (do
+      let i ← 3#usize * 32#usize
+      let i1 ← 8#usize + i
+      i1 + 216#usize) =
+    ok 320#usize
+theorem NLK_OwnedPrefixes.account_cardinality : ∀ (pda : NLK_RegistryInstall.Pda) (loader : Key) (devnet : Bool)
+  (verifier pool : Key) (accounts : Slice Account) (lane : U8) (slot : U64),
+  accounts.len ≠ 7#usize →
+    AdapterRw.r1_pool_adapter.owned.authenticate_asq8_accounts (ops pda loader devnet) verifier accounts pool lane
+        slot =
+      if accounts.len < 7#usize then
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.NotEnoughAccountKeys)
+      else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument) :=
+⋯
+'NLK_OwnedPrefixes.account_cardinality' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_OwnedPrefixes.instruction_extent : ∀ (pda : NLK_RegistryInstall.Pda) (loader : Key) (devnet : Bool)
+  (verifier : Key) (accounts : Slice Account) (instruction : Slice U8)
+  (slot : core.result.Result U64 AdapterRw.solana_program_error.ProgramError),
+  instruction.len ≠ 320#usize →
+    AdapterRw.r1_pool_adapter.owned.validate_asq8 (ops pda loader devnet) verifier accounts instruction slot =
+      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData) :=
+⋯
+'NLK_OwnedPrefixes.instruction_extent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rca4d33c5748e4d899499a3be92ab9192.scope; invocation ID: fa410e418e8f4b4c9607ca0abfd281ea

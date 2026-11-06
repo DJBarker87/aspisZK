@@ -1,0 +1,33 @@
+{"attempt": "NLK_L053", "exit_status": 0, "wall_seconds": 15.233350991969928, "peak_rss_kib": "6369868", "swaps": "0", "print_axioms": ["'NLK_OwnedPrefixes.account_cardinality' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_OwnedPrefixes.instruction_extent' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLK_OwnedPrefixes.account_cardinality : ∀ (pda : NLK_RegistryInstall.Pda) (loader : Key) (devnet : Bool)
+  (verifier pool : Key) (accounts : Slice Account) (lane : U8) (slot : U64),
+  accounts.len ≠ 7#usize →
+    AdapterRw.r1_pool_adapter.owned.authenticate_asq8_accounts (ops pda loader devnet) verifier accounts pool lane
+        slot =
+      if accounts.len < 7#usize then
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.NotEnoughAccountKeys)
+      else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument) :=
+⋯
+'NLK_OwnedPrefixes.account_cardinality' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_
+...
+theorem NLK_OwnedPrefixes.account_cardinality : ∀ (pda : NLK_RegistryInstall.Pda) (loader : Key) (devnet : Bool)
+  (verifier pool : Key) (accounts : Slice Account) (lane : U8) (slot : U64),
+  accounts.len ≠ 7#usize →
+    AdapterRw.r1_pool_adapter.owned.authenticate_asq8_accounts (ops pda loader devnet) verifier accounts pool lane
+        slot =
+      if accounts.len < 7#usize then
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.NotEnoughAccountKeys)
+      else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument) :=
+⋯
+'NLK_OwnedPrefixes.account_cardinality' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_OwnedPrefixes.instruction_extent : ∀ (pda : NLK_RegistryInstall.Pda) (loader : Key) (devnet : Bool)
+  (verifier : Key) (accounts : Slice Account) (instruction : Slice U8)
+  (slot : core.result.Result U64 AdapterRw.solana_program_error.ProgramError),
+  instruction.len ≠ 320#usize →
+    AdapterRw.r1_pool_adapter.owned.validate_asq8 (ops pda loader devnet) verifier accounts instruction slot =
+      ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData) :=
+⋯
+'NLK_OwnedPrefixes.instruction_extent' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re97f6ffedd62496c88ac26ca09302165.scope; invocation ID: 26335afe1e914225a4811797afafce52
