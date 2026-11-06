@@ -1,16 +1,20 @@
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NJH_sdk.rs
-@@ -0,0 +1,24 @@
+@@ -0,0 +1,28 @@
 +use solana_program::{account_info::AccountInfo, pubkey::Pubkey, program_error::ProgramError};
 +use core::cell::{Ref,RefMut};
 +// Contract shape required by the account-acquisition stage cut. Calls the
 +// deployed SDK body unchanged. These wrappers are not SDK source contracts.
++#[kani::modifies(&*a.data)]
 +#[kani::ensures(|r| r.is_ok())]
-+fn shared<'a,'b>(a:&'a AccountInfo<'b>)->Result<Ref<'a,&'b mut [u8]>,ProgramError>{a.try_borrow_data()}
++fn shared<'a,'b>(a:&'a AccountInfo<'b>)->Result<Ref<'a,&'a mut [u8]>,ProgramError>{a.try_borrow_data()}
++#[kani::modifies(&*a.data)]
 +#[kani::ensures(|r| r.is_err())]
-+fn shared_inverted<'a,'b>(a:&'a AccountInfo<'b>)->Result<Ref<'a,&'b mut [u8]>,ProgramError>{a.try_borrow_data()}
++fn shared_inverted<'a,'b>(a:&'a AccountInfo<'b>)->Result<Ref<'a,&'a mut [u8]>,ProgramError>{a.try_borrow_data()}
++#[kani::modifies(&*a.data)]
 +#[kani::ensures(|r| r.is_ok())]
 +fn exclusive<'a,'b>(a:&'a AccountInfo<'b>)->Result<RefMut<'a,&'b mut [u8]>,ProgramError>{a.try_borrow_mut_data()}
++#[kani::modifies(&*a.data)]
 +#[kani::ensures(|r| r.is_err())]
 +fn exclusive_inverted<'a,'b>(a:&'a AccountInfo<'b>)->Result<RefMut<'a,&'b mut [u8]>,ProgramError>{a.try_borrow_mut_data()}
 +macro_rules! account {($f:ident)=>{{

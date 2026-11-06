@@ -1,0 +1,55 @@
+{"attempt": "NJH_K004", "exit_status": 0, "wall_seconds": 24.26849782001227, "peak_rss_kib": "673412", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+1-cost-probe/src/NJH_sdk.rs:27:68
+   |
+27 | #[kani::proof] #[kani::stub_verified(shared)] fn shared_callsite(){account!(shared);}
+   |                                                                    ^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+27 | #[kani::proof] #[kani::stub_verified(shared)] fn shared_callsite(){let _ = account!(shared);}
+   |                                                                    +++++++
+
+warning: unused `std::result::Result` that must be used
+  --> programs/r1-cost-probe/src/NJH_sdk.rs:28:74
+   |
+28 | #[kani::proof] #[kani::stub_verified(exclusive)] fn exclusive_callsite(){account!(exclusive);}
+   |                                                                          ^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+help: use `let _ = ...` to ignore the resulting value
+   |
+28 | #[kani::proof] #[kani::stub_verified(exclusive)] fn exclusive_callsite(){let _ = account!(exclusive);}
+   |                                                                          +++++++
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 5.06s
+Checking harness NJH_sdk::shared_contract...
+
+VERIFICATION RESULT:
+ ** 0 of 385 failed (2 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 17.276342s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r81e7ae85013d4e2da3097b3d66783cb3.scope; invocation ID: b3c39bf055cb48d7a7b86f2d65969e17

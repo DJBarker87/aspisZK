@@ -1,0 +1,47 @@
+{"attempt": "NJH_K003", "exit_status": 1, "wall_seconds": 4.628236070973799, "peak_rss_kib": "357192", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+variable: `loader`
+   --> programs/r1-cost-probe/src/NIJ_auth.rs:111:178
+    |
+111 | ...,registry_program:&Pubkey,loader:&Pubkey,registry_programdata:&Pubkey,verifier_program:&Pubkey,verifier_programdata:&Pubkey,curr...
+    |                              ^^^^^^ help: if this is intentional, prefix it with an underscore: `_loader`
+
+warning: unused variable: `registry_programdata`
+   --> programs/r1-cost-probe/src/NIJ_auth.rs:111:193
+    |
+111 | ...der:&Pubkey,registry_programdata:&Pubkey,verifier_program:&Pubkey,verifier_programdata:&Pubkey,current_slot:u64,j:usize){
+    |                ^^^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_registry_programdata`
+
+warning: unused variable: `verifier_programdata`
+   --> programs/r1-cost-probe/src/NIJ_auth.rs:111:247
+    |
+111 | ...ram:&Pubkey,verifier_programdata:&Pubkey,current_slot:u64,j:usize){
+    |                ^^^^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_verifier_programdata`
+
+warning: unused variable: `one`
+   --> programs/r1-cost-probe/src/NHY_error.rs:422:6
+    |
+422 |  let one=[byte];let mut text=core::mem::ManuallyDrop::new(String::with_capacity(18));
+    |      ^^^ help: if this is intentional, prefix it with an underscore: `_one`
+
+warning: unused variable: `one`
+   --> programs/r1-cost-probe/src/NHY_error.rs:435:6
+    |
+435 |  let one=[byte];let mut text=core::mem::ManuallyDrop::new(String::with_capacity(18));
+    |      ^^^ help: if this is intentional, prefix it with an underscore: `_one`
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 4 previous errors; 449 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 4 compilation errors.
+
+Running as unit: run-recbdcc56999d44cb9e7ded2708a27290.scope; invocation ID: 80e5a9ffadb14ab08f8f68fd8578bb00
