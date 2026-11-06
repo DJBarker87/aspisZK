@@ -1,6 +1,6 @@
 # NKA root inventory under(aq)(2)
 
-Target not yet established. Complete kernel statements are printed in focused receipts (ClaimsRoot L040; OuterCut L014), and will be printed again in the combined audit. All native-cut interpretations are existing P6/D188 option-A RECLASSIFICATION, not assumption removal.
+Target not yet established. Complete kernel statements are printed in final focused receipts (ClaimsRoot L065; OuterCut L014), complete L070 statement print, and final combined/raw audit L066/L068/L069. All native-cut interpretations are existing P6/D188 option-A RECLASSIFICATION, not assumption removal.
 
 | Root | Inputs and hypotheses | Classification |
 |---|---|---|
@@ -13,3 +13,5 @@ RowCut is only the success arm of the ONE native ptr::write iteration: the SAME 
 Reservation rejection is the actual mapped Allocation branch before any data construction; allocator abort is retained by the SAME opaque allocator action. The reference's pure decodes commute with that action on the internally proved parsed domain. NKA_ClaimsReference replays the exact NJT E001 body with only its existing external reserve interpretation at the original site. The success body is definitionally the original emission; rejection/error/fail/div are separately proved. No new extraction or ReviewedTranscription scope.
 
 The native source-site packet is a trust reclassification under(az)(2)/(au)(5), not proof of allocator internals. Native Kani does not exhibit OOM (K010 excluded); the full returning continuation K027/K028 takes the mapped actual reserve reply at its cut. No free runtime Bool is a root parameter.
+
+Final guards: AtAllocation matches the SAME opaque allocator Result: fail/div enter no owned-storage continuation; returning action plus reservation Err owns no converted claims. No success premise was added. K031/K032 now witness actual standard reserve rejection for a local failing Allocator and the total mapper, without claiming Global OOM. The coherent headline is AspisR1.RPx_Deployed.deployed; frozen3 is adopted, L154 is a statement parameter, D188 remains narrowed. Coherent SInt2 digest/error inventory slots are op43/op44, not legacy slots. Full stdout from L070 is retained in NKA_ROOT_STATEMENTS.md.

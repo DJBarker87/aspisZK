@@ -1,0 +1,336 @@
+{
+  "status": "PASS final local gate for069/129 candidates;136 support only",
+  "security_target_established": false,
+  "branch": "codex/cx-claims2-20261107",
+  "source_revision": "2d95f290af576c0b641bf002ed776e066df37eb0",
+  "source_tree_dirty": true,
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "headline": "AspisR1.RPx_Deployed.deployed",
+  "observed_child_admission": {
+    "gate": "PASS",
+    "headline": "AspisR1.RPx_Deployed.deployed",
+    "counts": {
+      "CLOSED": 514,
+      "OPEN": 85
+    },
+    "children": [
+      {
+        "row": "TX1:066",
+        "status": "CLOSED",
+        "function": "crates/aspis-core/src/r0_transcript.rs::QueryScan::finish",
+        "frozen_body_sha256": "7b5ee7968f5cfa93ce37def5be42d387dd49088e6f3120d2b40554714e98aaad",
+        "obligation_statement_hash": "5cdabf9f321d279a94b0a8540214ffa0658692b8efb6372af98abf59e81e9020",
+        "kernel_roots": [
+          {
+            "obligation_statement": "\u2200 (s : AspisR1.NJT_QBase.State) (out : AspisR1.NJT_QBase.Finish) (native : AspisR1.NJT_QLeaves.FinishCut s out),\n  @Eq.{1}\n    (Aeneas.Std.Result.{0}\n      (Aeneas.Std.core.result.Result.{0, 0}\n        (Aeneas.Std.Array.{0} Aeneas.Std.U32\n          (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))\n            (@of_decide_eq_true\n              (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))\n                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n              (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))\n                (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n              (@id.{0}\n                (@Eq.{1} Bool\n                  (@Decidable.decide\n                    (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))\n                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                    (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 22) (instOfNatNat (nat_lit 22)))\n                      (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n                  Bool.true)\n                (@Eq.refl.{1} Bool Bool.true)))))\n        AspisR1Query31Transcript.aspis_core.transcript.QuerySampleError))\n    (AspisR1Query31Transcript.aspis_core.r0_transcript.QueryScan.finish s)\n    (@Aeneas.Std.Result.ok.{0} AspisR1.NJT_QBase.Finish out)",
+            "owner_module": "NJT_QLeaves",
+            "root": "AspisR1.NJT_QLeaves.finish"
+          }
+        ],
+        "root_owners": [
+          {
+            "obligation_statement_sha256": "c96d22c36bf401ba1ddaaa2352b476e247044bec00c3051e896d6180d82b7f33",
+            "owner_module": "NJT_QLeaves",
+            "root": "AspisR1.NJT_QLeaves.finish"
+          }
+        ]
+      },
+      {
+        "row": "TX1:067",
+        "status": "CLOSED",
+        "function": "crates/aspis-core/src/r0_transcript.rs::QueryScan::scan",
+        "frozen_body_sha256": "69dbfce0fa1533d8cec2b12cb630f176a8c36e964ca44359ec477e8f48a06845",
+        "obligation_statement_hash": "5b3df46a4740c328bd8d46da164cb79d70a4bcae16e0a92ac4e3aae969240153",
+        "kernel_roots": [
+          {
+            "obligation_statement": "\u2200 (native : AspisR1.NJT_QScan.Native) (cut : AspisR1.NJT_QScan.Cut native)\n  (priorBlocks : List.{0} AspisR1.NJT_QBase.Bytes) (block : AspisR1.NJT_QBase.Bytes),\n  have before : AspisR1.NJT_QBase.State :=\n    AspisR1.NJT_QReached.carry native priorBlocks AspisR1.NGQ_SamplerPacket.initial;\n  And\n    (@Eq.{1} (Aeneas.Std.Result.{0} (Prod.{0, 0} Bool Query31ModelScanCall.QueryScan))\n      (Query31ModelScanCall.modelScanFn Query31ConcreteWordsDriverChain.actualQueryWords before block)\n      (@Aeneas.Std.Result.ok.{0} (Prod.{0, 0} Bool AspisR1.NJT_QBase.State)\n        (@Prod.mk.{0, 0} Bool AspisR1.NJT_QBase.State\n          (Query31ExplicitListLoop.optionStop\n            (@Prod.snd.{0, 0} AspisR1.NJT_QBase.State (Option.{0} Bool)\n              (AspisR1.NJT_QScan.run native\n                (@Subtype.val.{1} (List.{0} Aeneas.Std.U32)\n                  (fun (l : List.{0} Aeneas.Std.U32) =>\n                    @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U32 l)\n                      (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize\n                        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n                          AspisR1.NJT_QBase.Words._proof_1)))\n                  (AspisR1.NJT_QBase.words block))\n                before)))\n          (@Prod.fst.{0, 0} AspisR1.NJT_QBase.State (Option.{0} Bool)\n            (AspisR1.NJT_QScan.run native\n              (@Subtype.val.{1} (List.{0} Aeneas.Std.U32)\n                (fun (l : List.{0} Aeneas.Std.U32) =>\n                  @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U32 l)\n                    (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize\n                      (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n                        AspisR1.NJT_QBase.Words._proof_1)))\n                (AspisR1.NJT_QBase.words block))\n              before)))))\n    (And (AspisR1.NJT_QDomains.Domain before)\n      (AspisR1.NJT_QDomains.Domain\n        (@Prod.fst.{0, 0} AspisR1.NJT_QBase.State (Option.{0} Bool)\n          (AspisR1.NJT_QScan.run native\n            (@Subtype.val.{1} (List.{0} Aeneas.Std.U32)\n              (fun (l : List.{0} Aeneas.Std.U32) =>\n                @Eq.{1} Nat (@List.length.{0} Aeneas.Std.U32 l)\n                  (@Aeneas.Std.UScalar.val Aeneas.Std.UScalarTy.Usize\n                    (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n                      AspisR1.NJT_QBase.Words._proof_1)))\n              (AspisR1.NJT_QBase.words block))\n            before))))",
+            "owner_module": "NJT_QReached",
+            "root": "AspisR1.NJT_QReached.scan"
+          }
+        ],
+        "root_owners": [
+          {
+            "obligation_statement_sha256": "e4cdbba5e2ec6f70ac8112e6da2d34c801ddcee5c2fb927bde25f6ba417c92ef",
+            "owner_module": "NJT_QReached",
+            "root": "AspisR1.NJT_QReached.scan"
+          }
+        ]
+      },
+      {
+        "row": "TX1:068",
+        "status": "CLOSED",
+        "function": "crates/aspis-core/src/r0_transcript.rs::block_rank",
+        "frozen_body_sha256": "49ec5dd4d45ad00fbe1da699a9dbdcd9b838bada1b5fe26ac5a1a04388464cc9",
+        "obligation_statement_hash": "6fa46b40d6425eb49edd4be2e423a04b6b87239b8b4759bdd6c179e95d9a66bc",
+        "kernel_roots": [
+          {
+            "obligation_statement": "\u2200 (b : AspisR1.NJT_QBase.Bytes) (out : AspisR1.NJT_QBase.Words) (native : AspisR1.NJT_QLeaves.RankCut b out),\n  @Eq.{1}\n    (Aeneas.Std.Result.{0}\n      (Aeneas.Std.Array.{0} Aeneas.Std.U32\n        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n          (@of_decide_eq_true\n            (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n            (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n            (@id.{0}\n              (@Eq.{1} Bool\n                (@Decidable.decide\n                  (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n                    (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                  (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n                    (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n                Bool.true)\n              (@Eq.refl.{1} Bool Bool.true))))))\n    (AspisR1QueryScanUnrolled.r0_transcript.block_rank b) (@Aeneas.Std.Result.ok.{0} AspisR1.NJT_QBase.Words out)",
+            "owner_module": "NJT_QLeaves",
+            "root": "AspisR1.NJT_QLeaves.block_rank"
+          }
+        ],
+        "root_owners": [
+          {
+            "obligation_statement_sha256": "211a105a22300879bd4c0d47b4fa1a28cf8ea73767f17af4623699de3cc28f93",
+            "owner_module": "NJT_QLeaves",
+            "root": "AspisR1.NJT_QLeaves.block_rank"
+          }
+        ]
+      },
+      {
+        "row": "TX1:070",
+        "status": "CLOSED",
+        "function": "crates/aspis-core/src/r0_transcript.rs::query_words",
+        "frozen_body_sha256": "6e2dce93efe510cfffa10acc7674eb6e2412cc42362d922549eb14cab10517de",
+        "obligation_statement_hash": "19e5db41c2b65303e0ca17878a5cfc20e8e124c125caa409665e3e84eadc60d9",
+        "kernel_roots": [
+          {
+            "obligation_statement": "\u2200 (b : AspisR1.NJT_QBase.Bytes) (out : AspisR1.NJT_QBase.Words) (native : AspisR1.NJT_QLeaves.WordsCut b out),\n  @Eq.{1}\n    (Aeneas.Std.Result.{0}\n      (Aeneas.Std.Array.{0} Aeneas.Std.U32\n        (Aeneas.Std.Usize.ofNat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n          (@of_decide_eq_true\n            (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n            (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n              (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n            (@id.{0}\n              (@Eq.{1} Bool\n                (@Decidable.decide\n                  (@LE.le.{0} Nat instLENat (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n                    (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize))\n                  (Nat.decLe (@OfNat.ofNat.{0} Nat (nat_lit 8) (instOfNatNat (nat_lit 8)))\n                    (Aeneas.Std.UScalar.cMax Aeneas.Std.UScalarTy.Usize)))\n                Bool.true)\n              (@Eq.refl.{1} Bool Bool.true))))))\n    (Query31ConcreteWordsDriverChain.actualQueryWords b) (@Aeneas.Std.Result.ok.{0} AspisR1.NJT_QBase.Words out)",
+            "owner_module": "NJT_QLeaves",
+            "root": "AspisR1.NJT_QLeaves.query_words"
+          }
+        ],
+        "root_owners": [
+          {
+            "obligation_statement_sha256": "bf44911795452a3bb9a9af795b945fa7f90bc7b2ffb5294d1570f5c0595e1821",
+            "owner_module": "NJT_QLeaves",
+            "root": "AspisR1.NJT_QLeaves.query_words"
+          }
+        ]
+      }
+    ],
+    "source": "NKA_LEDGER17_OBSERVED.json.xz",
+    "frozen_body_hashes_match_NJT": true,
+    "next_gate_required_for_NKA": true
+  },
+  "gate": {
+    "combined": "NKA_L066",
+    "coherence": "NKA_L067",
+    "raw": [
+      "NKA_L068",
+      "NKA_L069"
+    ],
+    "fixtures": "NKA_L047",
+    "statements": "NKA_L070",
+    "retention": [
+      "NKA_L071",
+      "NKA_L072"
+    ]
+  },
+  "candidate_rows": [
+    "TX1:129",
+    "TX1:069"
+  ],
+  "authoritative_ledger_changed": false,
+  "full_combined_import_attempts": [
+    "NKA_L043",
+    "NKA_L066"
+  ],
+  "phase1": "Superseded129 initialization domain; retained uncredited native interpretation in NKA_PHASE1_* and NKA_INIT_DOMAIN_REVIEW.md",
+  "final_scan": {
+    "attempt": "NKA_L067",
+    "exit_status": 0,
+    "modules": 15877,
+    "declarations": 742855,
+    "references": 26478776,
+    "dangling": 0,
+    "incompatible_declarations": 0,
+    "import_mismatches": 0
+  },
+  "raw": {
+    "attempts": [
+      "NKA_L068",
+      "NKA_L069"
+    ],
+    "roots": 40,
+    "all_equal_collectAxioms": true,
+    "axioms": [
+      "Classical.choice",
+      "Quot.sound",
+      "propext"
+    ],
+    "headline": {
+      "collect_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ],
+      "edges_scanned": 5743676,
+      "equal": true,
+      "reachable_constants": 115256,
+      "root": "AspisR1.RPx_Deployed.deployed",
+      "walked_axioms": [
+        "Classical.choice",
+        "Quot.sound",
+        "propext"
+      ]
+    }
+  },
+  "fixtures": {
+    "attempt": "NKA_L047",
+    "cases": 8,
+    "pass_": true,
+    "same_final_binary": true
+  },
+  "new_modules": 14,
+  "budget": {
+    "lean_support": 75,
+    "kani": 32,
+    "extractions": 0,
+    "limits": {
+      "lean_support": 100,
+      "kani": 80,
+      "extractions": 0
+    },
+    "stop_reason": "See member-by-member NKA_REMAINING.md; no remaining authorized independent obligation while256 absent and ledger admission external"
+  },
+  "max_peak_rss_kib": 7596540,
+  "all_swaps_zero": true,
+  "exact_limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "all_admissions_allowed_and_exit0": true,
+  "excluded_native": [
+    "K008/K009 ineffective leak control",
+    "K010 no native Global OOM exhibited",
+    "K013 own missing-input compilation diagnostic"
+  ],
+  "isolated_lean": [
+    "L037 heartbeat200000; split Effects/Ownership/Root; no limit increase or unchanged repeat"
+  ],
+  "timeout_or_memory_killed": [],
+  "quarantined": [],
+  "suspended": [],
+  "trust_changes": {
+    "added": [],
+    "removed": [],
+    "widened": [],
+    "transport": "Existing P6/D188 option-A native semantic transport RECLASSIFICATION; existing Allocator/Std/P7 and ReviewedTranscription-queries_from_pairs only within its existing scope; no addition/removal/widening"
+  },
+  "shipped_source_changed": false,
+  "elf_rebuilt": false,
+  "inherited_elf_pins": {
+    "default": "f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4",
+    "devnet": "63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299",
+    "Pool": "121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548"
+  },
+  "export": {
+    "directory": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108",
+    "files": [
+      {
+        "module": "NKA_ClaimsEffects",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_ClaimsEffects.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_ClaimsEffects.olean",
+        "bytes": 130240,
+        "sha256": "b14df9e1a41737e821201dbbe18ae500b3ad653fef121c71a354b156d8c8fdcc"
+      },
+      {
+        "module": "NKA_ClaimsModel",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_ClaimsModel.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_ClaimsModel.olean",
+        "bytes": 157888,
+        "sha256": "506a719a334eeea95f0d8fae9783362204feb57c5b4009fd96d92e8431167f5e"
+      },
+      {
+        "module": "NKA_ClaimsOwnership",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_ClaimsOwnership.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_ClaimsOwnership.olean",
+        "bytes": 38104,
+        "sha256": "a2b1cd91e68d4c6d37e7f7024378d353977be1bcfc3aa186a8b8d1e385d83c3b"
+      },
+      {
+        "module": "NKA_ClaimsReference",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_ClaimsReference.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_ClaimsReference.olean",
+        "bytes": 540008,
+        "sha256": "c930a8d8a86864078b95796b3232fab5ba18ea218ff4412a2fbd660f0b3de29c"
+      },
+      {
+        "module": "NKA_ClaimsRoot",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_ClaimsRoot.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_ClaimsRoot.olean",
+        "bytes": 110776,
+        "sha256": "3f11b385db7ee32215571f719da9832e5bd0c3fe7ee766e52382afb53e335407"
+      },
+      {
+        "module": "NKA_FinishStages",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_FinishStages.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_FinishStages.olean",
+        "bytes": 311672,
+        "sha256": "f8199b210aa15b5790311a217bc814e099f16643ba5e897a283c737bd5526850"
+      },
+      {
+        "module": "NKA_FinishTrace",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_FinishTrace.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_FinishTrace.olean",
+        "bytes": 505640,
+        "sha256": "d4f5666a2261f602d024f17d7e36230ecf43a3cac1aeb4e258fa5f3417c4133c"
+      },
+      {
+        "module": "NKA_HeapCarrier",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_HeapCarrier.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_HeapCarrier.olean",
+        "bytes": 305696,
+        "sha256": "0534cd76629a24a35d530a2124de6717d294b45417bc42a8b7135512cdaaef1b"
+      },
+      {
+        "module": "NKA_InitHistory",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_InitHistory.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_InitHistory.olean",
+        "bytes": 175856,
+        "sha256": "68dbc64161a9b972d296c85c7ffaa1651c94745682ad39a96d3e1ddd6bb96583"
+      },
+      {
+        "module": "NKA_InitializedPrefix",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_InitializedPrefix.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_InitializedPrefix.olean",
+        "bytes": 69624,
+        "sha256": "488f29c5fbb7de3fdcdd57d5587879755d9cc3a8791a08c7f72b57384e8e71cb"
+      },
+      {
+        "module": "NKA_Layout",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_Layout.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_Layout.olean",
+        "bytes": 192744,
+        "sha256": "bc37e81125a4bf77c8ca6b3d2cbf98751faf3ea5a07eac46bc2e79b7d5552b75"
+      },
+      {
+        "module": "NKA_OuterCut",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_OuterCut.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_OuterCut.olean",
+        "bytes": 252296,
+        "sha256": "19059abfab1c05b58eaf3ff2ecc4a97696ff06ffcf06cae624c1812cb328b2e8"
+      },
+      {
+        "module": "NKA_QueryPairs",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_QueryPairs.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_QueryPairs.olean",
+        "bytes": 92896,
+        "sha256": "d8cb163c5afca59121462456c0a6cf0e0e0fae1a0ebc0885593b91ebfc6f16aa"
+      },
+      {
+        "module": "NKA_Reservation",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_Reservation.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_Reservation.olean",
+        "bytes": 83768,
+        "sha256": "029379d6bc2eeb36420bb75c514491f18be23c1e21e24e85d8e9580756b564b0"
+      },
+      {
+        "module": "NKA_COMBINED_IMPORT",
+        "source": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_objects/NKA_COMBINED_IMPORT.olean",
+        "path": "/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NKA_exports_final_20261108/NKA_COMBINED_IMPORT.olean",
+        "bytes": 3136,
+        "sha256": "12af8ee5ca9aeb5012d6ec31786340e4026c2aa25940596962ca503f179604a4"
+      }
+    ],
+    "total_bytes": 2970344,
+    "modules": 15,
+    "resolved_files": 32470,
+    "cargo_target_dir": "/home/dombarker/project-offloads/codex-cx-claims2-20261108/NKA_target"
+  },
+  "host_validation": "NKA_FINAL_HOST_VALIDATION.json",
+  "resources": "NKA_ATTEMPTS.jsonl and per-attempt receipts include exact target/exit/wall/RSS/swap/revision/source+dependency pins/axioms; CARGO_TARGET_DIR recorded in every scope"
+}
