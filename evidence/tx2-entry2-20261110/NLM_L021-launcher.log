@@ -1,0 +1,53 @@
+{"attempt": "NLM_L021", "exit_status": 1, "wall_seconds": 13.156246877042577, "peak_rss_kib": "5991184", "swaps": "0", "print_axioms": ["'NLM_Snapshot.normal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLM_generated/NLM_SnapshotTrace.lean:21:46: error: unsolved goals
+case isTrue
+e : Entry
+t a lo hi : ℕ
+owned : List Owned
+h✝ :
+  (deref (acquired (ready e t owned) a) (guard (ready e t owned) a)).bytes.length = lo ∨
+    (deref (acquired (ready e t owned) a) (guard (ready e t owned) a)).bytes.length = hi
+⊢ [Event.allocate
+        { input := e,
+          sdk :=
+            put (NLM_RuntimeInput.initial e).state ((NLM_RuntimeInput.initial e).state.accounts a).data
+              {
+                payload :=
+                  ((NLM_RuntimeInput.initial e).state.cells
+                      ((NLM_RuntimeInput.initial e).state.accounts a).data).payload,
+                readers :=
+                  t 
+...
+                                            ((NLM_RuntimeInput.initial e).state.accounts a).data t))))
+                                          lo))
+                                      (congrFun'
+                                        (congrArg Eq
+                                          (congrArg List.length
+                                            (congrArg Payload.bytes
+                                              (shared_deref (NLM_RuntimeInput.initial e).state
+                                                ((NLM_RuntimeInput.initial e).state.accounts a).data t))))
+                                        hi))
+                                    (fun a_1 =>
+                                      congrFun'
+                                        (congrArg List.cons
+                                          (congrFun'
+                                            (congrArg
+                                              (Event.allocate
+                                                { input := e,
+                                                  sdk :=
+                                                    put (NLM_RuntimeInput.initial e).state
+                                                      ((NLM_RuntimeInput.initial e).state.accounts a).data ⋯,
+                                                  next := ⋯, owned := ⋯ }
+                                                ⋯)
+                                              ⋯)
+                                            ⋯))
+                                        ⋯)
+                                    ⋯)))
+                              ⋯)))
+                        ⋯)
+                      ⋯))
+                  ⋯))
+            ⋯))))
+'NLM_Snapshot.normal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8fd6be6fe7b548beb68d9624312f6d1e.scope; invocation ID: fd4ec113f0794a649f98aeecfa4bca48

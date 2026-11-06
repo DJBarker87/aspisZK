@@ -72,7 +72,7 @@ print(json.dumps({{str(p.relative_to(b)):p.read_text() for p in names}}))
     (E/'NLM_INPUTS.json').write_text(json.dumps(idx,indent=1)+'\n')
     with (E/'NLM_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
     print(json.dumps({k:rc[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True)
-    if rc['exit_status'] and kind=='lean':print(json.dumps(dict(attempt=a,error_excerpt=out[a+'/stdout.log'][-1500:])),flush=True)
+    if rc['exit_status'] and kind=='lean':print(json.dumps(dict(attempt=a,error_excerpt=out[a+'/stdout.log'][:1800])),flush=True)
     return rc
 if __name__=='__main__':
     r=run(*sys.argv[1:]);sys.exit(r['exit_status'])

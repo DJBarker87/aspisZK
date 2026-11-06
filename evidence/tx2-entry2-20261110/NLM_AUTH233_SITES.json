@@ -1,0 +1,155 @@
+{
+ "emission_sha256": "c6aa4d351e409cc56ee59b64c573590fddca8831f7abba0634ac35ef80bcf497",
+ "sites": [
+  {
+   "binding": "r",
+   "event": ".readonlyBuffer proof_account",
+   "expression": "r1_pool_adapter.owned.require_readonly_buffer proof_account"
+  },
+  {
+   "binding": "r1",
+   "event": ".checkpointGuard verifier_checkpoint verifier_program false",
+   "expression": "(r1_pool_adapter.owned.require_verifier_checkpoint ops) verifier_checkpoint verifier_program false"
+  },
+  {
+   "binding": "r2",
+   "event": ".readonlyAccount master_account pool_program",
+   "expression": "(r1_pool_adapter.owned.require_readonly_account ops) master_account pool_program"
+  },
+  {
+   "binding": "r3",
+   "event": ".readonlyAccount checkpoint_account pool_program",
+   "expression": "(r1_pool_adapter.owned.require_readonly_account ops) checkpoint_account pool_program"
+  },
+  {
+   "binding": "r4",
+   "event": ".readonlyAccount lane_account pool_program",
+   "expression": "(r1_pool_adapter.owned.require_readonly_account ops) lane_account pool_program"
+  },
+  {
+   "binding": "r5",
+   "event": ".distinct (Array.make 7#usize [ proof_account, master_account, checkpoint_account, lane_account, registry_account, entry_account, verifier_checkpoint ])",
+   "expression": "(r1_pool_adapter.owned.require_distinct_accounts ops) (Array.make 7#usize [ proof_account, master_account, checkpoint_account, lane_account, registry_account, entry_account, verifier_checkpoint ])"
+  },
+  {
+   "binding": "r6",
+   "event": ".data master_account",
+   "expression": "(r1_pool_adapter.owned.OwnedAccount.data ops) master_account"
+  },
+  {
+   "binding": "r7",
+   "event": ".decodeMaster val",
+   "expression": "ops.op48 val"
+  },
+  {
+   "binding": "p",
+   "event": ".key master_account",
+   "expression": "r1_pool_adapter.owned.OwnedAccount.impl.key master_account"
+  },
+  {
+   "binding": "a",
+   "event": ".toBytes p",
+   "expression": "ops.op39 p"
+  },
+  {
+   "binding": "p1",
+   "event": ".fromBytes val1.identity.asset_mint",
+   "expression": "ops.op37 val1.identity.asset_mint"
+  },
+  {
+   "binding": "s",
+   "event": ".asRef p1",
+   "expression": "ops.op40 p1"
+  },
+  {
+   "binding": "r8",
+   "event": ".pda s2 pool_program",
+   "expression": "ops.op38 s2 pool_program"
+  },
+  {
+   "binding": "r10",
+   "event": ".registry verifier_program pool_program master_account val1 registry_account entry_account current_slot",
+   "expression": "(r1_pool_adapter.owned.authenticate_invariant_release_registry ops) verifier_program pool_program master_account val1 registry_account entry_account current_slot"
+  },
+  {
+   "binding": "r11",
+   "event": ".data checkpoint_account",
+   "expression": "(r1_pool_adapter.owned.OwnedAccount.data ops) checkpoint_account"
+  },
+  {
+   "binding": "r12",
+   "event": ".decodeCheckpoint val3",
+   "expression": "ops.op49 val3"
+  },
+  {
+   "binding": "a1",
+   "event": ".toBytes p",
+   "expression": "ops.op39 p"
+  },
+  {
+   "binding": "s3",
+   "event": ".asRef p",
+   "expression": "ops.op40 p"
+  },
+  {
+   "binding": "r13",
+   "event": ".pda s6 pool_program",
+   "expression": "ops.op38 s6 pool_program"
+  },
+  {
+   "binding": "p2",
+   "event": ".key checkpoint_account",
+   "expression": "r1_pool_adapter.owned.OwnedAccount.impl.key checkpoint_account"
+  },
+  {
+   "binding": "r15",
+   "event": ".data lane_account",
+   "expression": "(r1_pool_adapter.owned.OwnedAccount.data ops) lane_account"
+  },
+  {
+   "binding": "r16",
+   "event": ".decodeLane val6",
+   "expression": "ops.op50 val6"
+  },
+  {
+   "binding": "a3",
+   "event": ".toBytes p",
+   "expression": "ops.op39 p"
+  },
+  {
+   "binding": "s7",
+   "event": ".asRef p",
+   "expression": "ops.op40 p"
+  },
+  {
+   "binding": "r17",
+   "event": ".pda s10 pool_program",
+   "expression": "ops.op38 s10 pool_program"
+  },
+  {
+   "binding": "p3",
+   "event": ".key lane_account",
+   "expression": "r1_pool_adapter.owned.OwnedAccount.impl.key lane_account"
+  },
+  {
+   "binding": "a4",
+   "event": ".toBytes p",
+   "expression": "ops.op39 p"
+  },
+  {
+   "binding": "a5",
+   "event": ".toBytes p",
+   "expression": "ops.op39 p"
+  },
+  {
+   "binding": "a6",
+   "event": ".toBytes p2",
+   "expression": "ops.op39 p2"
+  },
+  {
+   "binding": "a7",
+   "event": ".toBytes p3",
+   "expression": "ops.op39 p3"
+  }
+ ]
+}
