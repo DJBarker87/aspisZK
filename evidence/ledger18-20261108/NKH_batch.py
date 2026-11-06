@@ -1,10 +1,11 @@
 """Each native child runs sequentially and has independent time/RSS/axiom receipt."""
 from pathlib import Path
-import subprocess,json,time,hashlib,re,sys
+import subprocess,json,time,hashlib,re,sys,os
 B=Path.cwd();mode=sys.argv[1];E=B/'NKH_audit'/mode;E.mkdir(parents=True,exist_ok=True)
 if mode=='close':
  exec(compile((B/'NKH_pin.py').read_text(),'NKH_pin.py','exec'));sys.exit(0)
-if mode.startswith('inventory-'):jobs=[(mode,['NKH_native/NKH_InventoryDriver',mode.split('-')[1]])]
+if mode=='review-close':jobs=[('review',[os.environ['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NKH_generated','-o','NKH_objects/NKH_HypothesisReview.olean','NKH_generated/NKH_HypothesisReview.lean'])]
+elif mode.startswith('inventory-'):jobs=[(mode,['NKH_native/NKH_InventoryDriver',mode.split('-')[1]])]
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NKH_native/'+('NKH_PoolDriver' if mode=='poolscan' else 'NKH_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
 elif mode in ['fixtures','scan','scan2']:jobs=[('scan' if mode=='scan2' else mode,['NKH_native/'+('NKH_Driver' if mode.startswith('scan') else 'NKH_ProofDriver'),'scan' if mode=='scan2' else mode])]
 else:
@@ -18,3 +19,7 @@ for name,command in jobs:
  receipt=dict(target=name,command=command,exit_status=r.returncode,wall_seconds=time.monotonic()-start,peak_rss_kib=metric('Maximum resident set size (kbytes)'),swaps=metric('Swaps'),print_axioms=[l for l in raw.splitlines() if 'depends on axioms' in l or 'does not depend on any axioms' in l],results=[json.loads(l[11:]) for l in raw.splitlines() if l.startswith('NEP_RESULT ')])
  (E/(name+'.json')).write_text(json.dumps(receipt,indent=1)+'\n');print(json.dumps(receipt),flush=True)
  if r.returncode:print(raw,flush=True);sys.exit(r.returncode)
+
+if mode=='review-close':
+ print(raw,flush=True)
+ exec(compile((B/'NKH_pin.py').read_text(),'NKH_pin.py','exec'))

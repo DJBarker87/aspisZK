@@ -16,8 +16,8 @@ for l in (q.read_text()if q.exists()else lzma.decompress(Path(str(q)+'.xz').read
 extra_statements=E/'NKH_EXTRA_STATEMENTS.json'
 if extra_statements.exists(): statements.update(J(extra_statements))
 missing_roots=sorted(set(J(E/'NKH_AUDIT_ROOTS.json')['roots'])-set(statements))
-assert missing_roots==['NJJ_Value.projection','NJR_WeightFailure.weights']
-assert len(statements)==10064
+assert missing_roots==([] if extra_statements.exists() else ['NJJ_Value.projection','NJR_WeightFailure.weights'])
+assert len(statements)==(10066 if extra_statements.exists() else 10064)
 old=J(P/'NKC_KERNEL_STATEMENTS.json.xz');wrong=[r for r in old if old[r]!=statements.get(r)];assert not wrong,wrong[:5]
 put('NKH_KERNEL_STATEMENTS.json.xz',statements);put('NKH_OWNER_COMPARISON.json',dict(status='PASS',predecessor_roots=len(old),identical=len(old),new_roots=len(statements)-len(old),mismatches=wrong))
 # Compare all original clauses, rather than candidate deltas from older ledgers.

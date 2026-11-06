@@ -47,9 +47,10 @@ elif kind=='link':
  sources=['NKH_native/'+target+'.c','NKH_native/NFA_WALKER.c','NKH_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NKH_native/'+target,*sources]
 elif kind=='audit':
- if target=='close':
+ if target in ['close','review-close']:
   files['NKH_pin.py']=(E/'NKH_pin.py').read_text();files['NKH_PREDECESSOR_PINS.json']=lzma.decompress((E.parent/'ledger17-20261108/NKC_CLOSURE_PINS.json.xz').read_bytes()).decode()
- sources=['NKH_generated/NKH_ProofDriver.lean','NKH_generated/NKH_Driver.lean','NKH_batch.py','NKH_AUDIT_ROOTS.json','NKH_AUDIT_MODULES.json','NKH_EXPECTED_IMPORTS.jsonl']+(['NKH_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NKH_pin.py','NKH_PREDECESSOR_PINS.json']if target=='close'else[])
+ if target=='review-close':files['NKH_generated/NKH_HypothesisReview.lean']=(E/'NKH_HypothesisReview.lean').read_text()
+ sources=['NKH_generated/NKH_ProofDriver.lean','NKH_generated/NKH_Driver.lean','NKH_batch.py','NKH_AUDIT_ROOTS.json','NKH_AUDIT_MODULES.json','NKH_EXPECTED_IMPORTS.jsonl']+(['NKH_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NKH_pin.py','NKH_PREDECESSOR_PINS.json']if target in ['close','review-close']else[])+(['NKH_generated/NKH_HypothesisReview.lean']if target=='review-close'else[])
  for n in sources:
   if n not in files:files[n]=(E/Path(n).name).read_text()
  command=['python3','NKH_batch.py',target]
@@ -92,7 +93,7 @@ import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NKH_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NKH_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NKH_LOADED_scan.jsonl','NKH_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
 out={{n:(b/n).read_text() for n in names}}
-if {target!r}=='close':
+if {target!r} in ['close','review-close']:
  for n in ['NKH_PREDECESSOR_COMPARISON.json','NKH_EXPORT.json','NKH_TOOL_PINS.json','NKH_CLOSURE_PINS.json.sha256']:out[n]=(b/n).read_text()
  out['NKH_CLOSURE_PINS.json.xz.hex']=(b/'NKH_CLOSURE_PINS.json.xz').read_bytes().hex()
 for name in ['NKH_Driver','NKH_ProofDriver','NKH_PoolProofDriver','NKH_PoolDriver']:

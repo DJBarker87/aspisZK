@@ -110,9 +110,9 @@ set_option pp.all true
 run_cmd do
   let env ← getEnv
   for root in #["NJJ_Value.projection", "NJR_WeightFailure.weights"] do
-    let name := root.toName
-    let some c := env.find? name | throwError "missing root {root}"
-    let some idx := env.getModuleIdxFor? name | throwError "missing owner {root}"
+    let declName := root.toName
+    let some c := env.find? declName | throwError "missing root {root}"
+    let some idx := env.getModuleIdxFor? declName | throwError "missing owner {root}"
     let statement ← liftTermElabM (PrettyPrinter.ppExpr c.type)
     let row := Json.mkObj [("root",toJson root),("owner_module",toJson env.header.moduleNames[idx]!.toString),("obligation_statement",toJson statement.pretty)]
     logInfo m!"NKH_OWNER {row.compress}"
@@ -123,7 +123,7 @@ run_cmd do
     let sourceModule := env.header.moduleNames[idx]!
     for declared in env.header.moduleData[idx]!.constants do
       let root := declared.name.toString
-      if ((root.splitOn "JFw_Validator").length > 1 ∨ (root.splitOn "JFw_Record").length > 1) ∧
+      if ((root.splitOn "JFw_Validator.").length > 1 ∨ (root.splitOn "JFw_Record.").length > 1) ∧
           (root.splitOn "match_").length > 1 then
         let some owner := env.getModuleIdxFor? declared.name | throwError "missing matcher owner {root}"
         let ownerModule := env.header.moduleNames[owner]!.toString

@@ -1,65 +1,101 @@
-"""Validate fail-closed reporting and the retained partial gate; no formal replay."""
+"""Receipt/obligation validation only; no prover or native compilation."""
 from pathlib import Path
-import json,lzma,hashlib,subprocess,copy
-E=Path(__file__).resolve().parent;R=E.parents[1];H=lambda b:hashlib.sha256(b).hexdigest()
-def J(p):return json.loads(lzma.decompress(p.read_bytes())if p.suffix=='.xz'else p.read_bytes())
-def read(p):return p.read_bytes()if p.exists()else lzma.decompress(Path(str(p)+'.xz').read_bytes())
-def validate(ledger,delta,audit,scan):
- assert ledger==basis
- assert delta['before']==delta['after']=={'CLOSED':514,'QUALIFIED':0,'OPEN':85}
- assert delta['new_count']==0 and delta['new_closed_rows']==[]and delta['rows']==[]
- assert len(set(delta['proposed_rows']))==len(delta['proposed_rows'])==28
- assert delta['gate']=='INCOMPLETE_HOST_HEALTH_STOP'and not delta['trust_rows_changed']
- assert not audit['full_composition_pass']and not audit['all_required_raw_roots_present']and not audit['raw_standard_axioms_only']
- assert audit['required_roots']==10066 and audit['audited_raw_roots']==5367 and len(audit['missing_roots'])==4699
- assert audit['complete_groups']==list(range(16))and audit['missing_groups']==list(range(16,30))
- assert audit['partial_raw_standard_axioms_only']and set(audit['partial_axioms'])<={'propext','Classical.choice','Quot.sound'}
- assert len(audit['fixtures'])==8 and audit['resources']['submitted_scopes']==25 and audit['resources']['complete_receipts']==24
- assert audit['resources']['unused_scopes']==15 and audit['resources']['complete_scope_swaps']==0
- assert scan['exit_status']==0 and scan['modules']==16128 and all(scan[k]==0 for k in ['dangling','incompatible_owners','import_mismatches','canonical_duplicate_owners'])
- assert delta['supplement_status']['status']=='OPEN'and delta['reviewed_transcription_additions']==[]
- assert not ledger['security_target_established']
-basis=J(E.parent/'ledger17-20261108/NKC_LEDGER.json.xz');ledger=J(E/'NKH_LEDGER.json.xz');delta=J(E/'NKH_LEDGER_DELTA.json');audit=J(E/'NKH_AUDIT.json');scan=J(E/'NKH_SCAN.json');validate(ledger,delta,audit,scan)
-assert (E/'NKH_LEDGER.json.xz').read_bytes()==(E.parent/'ledger17-20261108/NKC_LEDGER.json.xz').read_bytes()
-snapshots=0;receipts=0
-for p in E.glob('NKH_L[0-9][0-9][0-9]/receipt.json'):
- if not p.stat().st_size:continue
- r=J(p);receipts+=1;ad=J(E/(r['attempt']+'-admission.json'));assert ad['exit']==0 and ad['reservation']['allowed']is True
- for n,h in r['source_hashes'].items():assert H(read(p.parent/'sources'/n))==h,(r['attempt'],n);snapshots+=1
- assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
- assert str(r['swaps'])=='0'and all(k in r for k in ['module','exit_status','wall_seconds','peak_rss_kib','source_revision','deps_fingerprint','print_axioms'])
-assert receipts==24
-attempts=[json.loads(l)for l in(E/'NKH_ATTEMPTS.jsonl').read_text().splitlines()];assert len(attempts)==25 and len({r['attempt']for r in attempts})==25
-last=attempts[-1];assert last['attempt']=='NKH_L025'and last['exit_status']is None and last['wall_seconds']is None and last['peak_rss_kib']is None and last['swaps']is None and last['resubmitted']is False
-assert (E/'NKH_L025/receipt.partial.json.txt').stat().st_size==0
-compressed=0
-for p in E.rglob('*.xz'):
- sha=Path(str(p)[:-3]+'.sha256')
- if sha.exists():assert H(lzma.decompress(p.read_bytes()))==sha.read_text().strip();compressed+=1
-assert not any(p.is_file()and(p.stat().st_size>20000000 or p.suffix in ['.olean','.ir','.elf','.o'])for p in E.rglob('*'))
-source_paths=['crates','programs','Cargo.lock','docs/research/100bit-spend-path-20261013/crates','docs/research/100bit-spend-path-20261013/programs','docs/research/100bit-spend-path-20261013/Cargo.lock']
-assert not subprocess.check_output(['git','diff','--name-only','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','HEAD','--',*source_paths],cwd=R).strip()
-assert not subprocess.check_output(['git','diff','--name-only','HEAD','--',*source_paths],cwd=R).strip()
-physical=J(E/'NKH_PHYSICAL.json');assert sum(len(v)for v in physical['open_by_source'].values())==85
-assert physical['entry_native_counts']=={'b':{'CLOSED':38,'OPEN':15},'c':{'CLOSED':476,'OPEN':70}}
-disposition=J(E/'NKH_SCOPE_DISPOSITION.json');assert len(disposition['unused'])==15 and len(disposition['candidates'])==29
-mutations=[]
-for label,part,change in [
- ('ledger promotion','ledger',lambda x:next(r for r in x['rows']if r['status']=='OPEN').update(status='CLOSED')),
- ('delta promotion','delta',lambda x:x.update(new_count=1)),
- ('supplement promotion','delta',lambda x:x['supplement_status'].update(status='CLOSED')),
- ('trust addition','delta',lambda x:x['reviewed_transcription_additions'].append({'invented':'trust'})),
- ('gate overclaim','audit',lambda x:x.update(full_composition_pass=True)),
- ('all roots overclaim','audit',lambda x:x.update(all_required_raw_roots_present=True)),
- ('missing root hidden','audit',lambda x:x['missing_roots'].pop()),
- ('bad axioms','audit',lambda x:x.update(partial_axioms=['sorryAx'])),
- ('fixture omitted','audit',lambda x:x['fixtures'].pop()),
- ('wrong scope budget','audit',lambda x:x['resources'].update(submitted_scopes=40)),
- ('duplicate owner','scan',lambda x:x.update(incompatible_owners=1)),
- ('nonzero scan','scan',lambda x:x.update(exit_status=1))]:
- xs=dict(ledger=copy.deepcopy(ledger),delta=copy.deepcopy(delta),audit=copy.deepcopy(audit),scan=copy.deepcopy(scan));change(xs[part])
- try:validate(**xs)
- except AssertionError:mutations.append(label)
- else:raise AssertionError('mutation accepted: '+label)
-out=dict(status='PASS_FAIL_CLOSED_REPORTING_ONLY',composition_gate='INCOMPLETE_NO_ADMISSIONS',rows=599,new_rows=0,proposed_rows=28,complete_receipts=receipts,source_snapshots=snapshots,compressed_sha_pairs=compressed,mutation_rejections=mutations,shipped_source_unchanged=True,host_scopes_submitted=25,host_scope_budget=40,no_oversize_or_binary=True)
-(E/'NKH_VALIDATION.json').write_text(json.dumps(out,indent=1)+'\n');print(json.dumps(dict(validation=out['status'],source_snapshots=snapshots,compressed_sha_pairs=compressed,mutations_rejected=len(mutations))))
+import json,lzma,hashlib,copy,subprocess,collections,sys
+sys.dont_write_bytecode=True
+E=Path(__file__).resolve().parent;R=E.parents[1];P=E.parent/'ledger17-20261108';H=lambda b:hashlib.sha256(b).hexdigest()
+def raw(p):return lzma.decompress(p.read_bytes())if p.suffix=='.xz'else p.read_bytes()
+def J(p):return json.loads(raw(p))
+def need(ok,why):
+ if not ok:raise ValueError(why)
+def verify(L,D,A,S,C):
+ B=J(P/'NKC_LEDGER.json.xz');old={r['row']:r for r in B['rows']};new={r['row']:r for r in L['rows']};review={r['row']:r for r in C['rows']};parents=J(E/'NKH_PARENT_CLAUSES.json');parentids=set(parents['parents']);expected={r['row'] for r in J(E/'NKH_CANDIDATE_REVIEW.json')['rows']}
+ need(len(L['rows'])==len(new)==599,'inventory')
+ need(len(D['new_closed_rows'])==28 and set(D['new_closed_rows'])==expected and set(review)==expected,'candidate set/double count')
+ need({k for k in new if new[k]['status']!=old[k]['status']}==expected,'extra promotion')
+ need(L['trust_rows']==B['trust_rows']and not D['trust_rows_changed'],'trust change')
+ need(L['counts']==dict(collections.Counter(r['status']for r in L['rows']))=={'CLOSED':542,'OPEN':57},'counts')
+ need(not L['security_target_established']and not A['cold_release_replay'],'target overclaim')
+ need(J(E/'NKH_audit/review-close/review.json')['exit_status']==0 and J(E/'NKH_MATCHER_OWNERS.json')['status']=='PASS','final diagnostic replay')
+ need(A['full_composition_pass']and A['all_required_raw_roots_present']and A['raw_standard_axioms_only'],'raw gate')
+ need(A['required_roots']==len(J(E/'NKH_AUDIT_ROOTS.json')['roots']),'missing root')
+ need(S['exit_status']==0 and S['dangling']==S['incompatible_owners']==S['import_mismatches']==S['canonical_duplicate_owners']==0,'scan')
+ need(len(A['fixtures'])==8 and A['same_optimized_proof_binary_sha256'],'fixtures')
+ for rid,r in new.items():
+  p=old[rid]
+  if rid not in expected|parentids|{'TX1:069'}:need(r==p,'uncredited change '+rid);continue
+  need(all(r[k]==p[k]for k in['function','frozen_body_sha256','canonical_callees','transaction']),'source identity '+rid)
+  need(r['obligation_statement_hash']==H(json.dumps(r['obligation'],sort_keys=True,separators=(',',':')).encode()),'obligation hash '+rid)
+  o=r['obligation'];po=p['obligation']
+  if rid in expected:
+   need(p['status']=='OPEN'and r['status']=='CLOSED','status/double count')
+   need(o['basis_obligation']==po,'basis clauses')
+   need(r['root_owners']==[dict(root=x['root'],owner_module=x['owner_module'],obligation_statement_sha256=H(x['obligation_statement'].encode()))for x in review[rid]['kernel_statements']],'canonical roots')
+   need(r['owner_module']==next(k['owner_module']for k in review[rid]['kernel_statements']if k['root']==review[rid]['primary_root']),'primary owner')
+   need(not review[rid]['hypothesis_inventory'].get('extra_logical_hypotheses')and not review[rid]['hypothesis_inventory'].get('endpoint_or_success_premises')and not review[rid]['hypothesis_inventory'].get('added_game_hypotheses'),'banned root premise')
+  if rid in parentids:need(o['NKH_parent_basis_obligation']==po,'parent original')
+  for k in['named_hypotheses','inventory_domain_obligations']:need(o[k]==po[k],'lost original '+rid)
+  cs=o['caller_domain_obligations'];n=len(po['caller_domain_obligations']);need(cs[:n]==po['caller_domain_obligations'],'caller loss')
+  additions=[c['caller_clause']for c in parents['clauses']if c['parent']==rid]
+  need(cs[n:]==additions,'own domain silently dropped')
+  if rid not in expected:need(r['status']==p['status'],'parent promotion')
+ need(new['TX2:115']==old['TX2:115'],'115 changed instead of supplemented')
+ supp=L['supplemental_child_obligations'];need(len(supp)==1 and supp[0]['id']=='NJW-aw-TX2:115-off-domain'and supp[0]['status']=='CLOSED'and not supp[0]['new_game_premise'],'missing aw child')
+ need(J(E/'NKH_PREDECESSOR_COMPARISON.json')['status']=='PASS','cache drift')
+ need(J(E/'NKH_NATIVE_REVIEW.json')['status']=='PASS_READ_ONLY_RECEIPT_REVALIDATION','native receipts')
+ need([x['item'] for x in L['reviewed_transcription_inventory'][-5:]]==['NJZ-RT189','NJZ-RT201','NJZ-RT202','NJZ-RT203','NJZ-RT204'],'ReviewedTranscription inventory')
+ need(L['inventory_edge_reclassifications'][-1]['edge_retained'] and new['TX1:202']['function'] in new['TX1:069']['canonical_callees'],'az edge deleted')
+ return True
+
+def main():
+ need(H(lzma.decompress((P/'NKC_LEDGER.json.xz').read_bytes()))==(P/'NKC_LEDGER.json.sha256').read_text().split()[0],'basis uncompressed hash')
+ L=J(E/'NKH_LEDGER.json.xz');D=J(E/'NKH_LEDGER_DELTA.json');A=J(E/'NKH_AUDIT.json');S=J(E/'NKH_SCAN.json');C=J(E/'NKH_CANDIDATE_REVIEW.json');verify(L,D,A,S,C)
+ attempts=[json.loads(l)for l in(E/'NKH_ATTEMPTS.jsonl').read_text().splitlines()];need(len(attempts)==len({r['attempt']for r in attempts})==40,'budget');sourcechecks=0
+ for a in attempts:
+  if a['attempt']=='NKH_L025':
+   need(all(a[k] is None for k in ['exit_status','wall_seconds','peak_rss_kib','swaps']),'historical failure metrics');continue
+  rc=J(E/a['attempt']/'receipt.json');ad=J(E/(a['attempt']+'-admission.json'));need(ad['exit']==0 and ad['reservation']['allowed']is True,'admission')
+  need(rc['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'},'caps')
+  need(str(rc['swaps'])=='0','swap');need(rc['source_revision']and rc['command']and rc['wall_seconds']>=0 and rc['deps_fingerprint']['selected_objects'],'section6')
+  if rc['kind']=='lean':need('-M7000'in rc['command'],'Lean cap')
+  for n,h in rc['source_hashes'].items():
+   p=E/a['attempt']/'sources'/n
+   if not p.exists():p=Path(str(p)+'.xz')
+   need(p.exists()and H(raw(p))==h,'source snapshot '+str(p));sourcechecks+=1
+  need(rc['exit_status']==0 or a['attempt']in A['retained_nonzero_audit_exits']+A['retained_nonzero_compile_exits'],'unexplained nonzero')
+ results=[]
+ for i in range(30):results+=J(E/f'NKH_audit/batch{i}/proof{i}.json')['results']
+ need(len(results)==len({r['root']for r in results})==A['required_roots'],'all-root coverage')
+ need(all(set(r['walked_axioms'])<={'propext','Classical.choice','Quot.sound'}for r in results),'axioms')
+ need([r['root']for r in results if not r['equal']]==['NHC_DecodeModel.decoder_error'],'retained finding')
+ for p in E.glob('NKH_L[0-9][0-9][0-9]/NKH_ProofDriver_BINARY_PIN.json'):need(J(p)['sha256']==A['same_optimized_proof_binary_sha256'],'different proof binary')
+ for r in J(E/'NKH_INPUT_PINS.json'):need(H((R/r['path']).read_bytes())==r['sha256'],'input drift '+r['path'])
+ source_paths=['crates','programs','Cargo.lock','docs/research/100bit-spend-path-20261013/crates','docs/research/100bit-spend-path-20261013/programs','docs/research/100bit-spend-path-20261013/Cargo.lock']
+ need(not subprocess.check_output(['git','diff','--name-only','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','HEAD','--',*source_paths],cwd=R).strip(),'frozen source changed')
+ need(not subprocess.check_output(['git','diff','--name-only','HEAD','--',*source_paths],cwd=R).strip(),'uncommitted shipped change')
+ packed=0
+ for p in E.rglob('*.sha256'):
+  q=Path(str(p)[:-7]+'.xz')
+  if q.exists():need(H(lzma.decompress(q.read_bytes()))==p.read_text().split()[0],'compressed sha '+str(q));packed+=1
+ need(not any(p.is_file()and p.stat().st_size>20_000_000 for p in E.rglob('*')),'oversize')
+ # Mutation tests protect the concrete gate, original clauses and scope, not a mirror of theorem proofs.
+ mutations=[]
+ for name,mut in[
+  ('extra_row',lambda l,d,a,s,c:next(r for r in l['rows']if r['row']=='TX1:129').update(status='CLOSED')),
+  ('lost_caller',lambda l,d,a,s,c:next(r for r in l['rows']if r['row']=='TX1:189')['obligation']['caller_domain_obligations'].clear()),
+  ('lost_domain',lambda l,d,a,s,c:next(r for r in l['rows']if r['row']=='TX1:136')['obligation']['caller_domain_obligations'].pop()),
+  ('trust',lambda l,d,a,s,c:l['trust_rows'].append('invented')),
+  ('missing_root',lambda l,d,a,s,c:a.update(all_required_raw_roots_present=False)),
+  ('dangling',lambda l,d,a,s,c:s.update(dangling=1)),
+  ('duplicate',lambda l,d,a,s,c:s.update(canonical_duplicate_owners=1)),
+  ('target',lambda l,d,a,s,c:l.update(security_target_established=True)),
+  ('aw_supplement',lambda l,d,a,s,c:l.update(supplemental_child_obligations=[])),
+  ('az_deleted',lambda l,d,a,s,c:next(r for r in l['rows']if r['row']=='TX1:069')['canonical_callees'].clear()),
+  ('rt_removed',lambda l,d,a,s,c:l.update(reviewed_transcription_inventory=[])),
+  ('extra_premise',lambda l,d,a,s,c:c['rows'][0]['hypothesis_inventory'].setdefault('extra_logical_hypotheses',[]).append('child success'))]:
+  args=copy.deepcopy([L,D,A,S,C]);mut(*args)
+  try:verify(*args)
+  except(ValueError,KeyError,AssertionError):mutations.append(dict(control=name,rejected=True))
+  else:raise AssertionError('mutation accepted '+name)
+ x=dict(status='PASS',sources_checked=sourcechecks,compressed_sha_pairs=packed,input_pins=len(J(E/'NKH_INPUT_PINS.json')),mutations=mutations,scopes=40,raw_roots=len(results),new_closed=28,no_trust_row_change=True,no_shipped_change=True,security_target_established=False)
+ (E/'NKH_VALIDATION.json').write_text(json.dumps(x,indent=1)+'\n');print(json.dumps(dict(status='PASS',mutations=len(mutations),sources_checked=sourcechecks,compressed_pairs=packed)))
+if __name__=='__main__':main()
