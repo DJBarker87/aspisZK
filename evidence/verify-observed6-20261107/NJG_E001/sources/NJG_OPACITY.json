@@ -1,0 +1,74 @@
+{
+  "include_types": [
+    "crate::verifier::Prepared",
+    "crate::verifier::Accumulator",
+    "crate::verifier::BatchedWeights",
+    "crate::verifier::View",
+    "crate::verifier::Error",
+    "crate::verifier::Variant",
+    "crate::verifier::Phase",
+    "crate::verifier::QueryGeometry",
+    "crate::r1_semantic::Verified",
+    "crate::r1_wire::SemanticTranscript",
+    "crate::r1_wire::Challenges",
+    "aspis_core::field::M31",
+    "aspis_core::field::CM31",
+    "aspis_core::field::QM31",
+    "aspis_core::field::wide_exact::WideExact",
+    "aspis_core::circle::SecureCirclePoint"
+  ],
+  "verify_finish": [
+    {
+      "path": "crate::r1_semantic::semantic_rounds",
+      "why": "rounds133/134 complete Result and transcript remain explicit child obligations"
+    },
+    {
+      "path": "crate::r1_semantic::claims",
+      "why": "F2 arbitrary allocator and claims129 are OPEN; preserve all outcomes"
+    },
+    {
+      "path": "crate::r1_semantic::Public::terminal_qm31",
+      "why": "source-use alias of statement Public; canonical selector pins actual terminal256 declaration; sibling not assumed CLOSED",
+      "selector": "aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::_::terminal_qm31"
+    },
+    {
+      "path": "aspis_core::state_only_hiding::state_only_selected_mask_value",
+      "why": "retained mask child packet and exact argument domains"
+    },
+    {
+      "path": "aspis_core::field::QM31::mul",
+      "why": "field multiplication is opaque, paired existing Lean laws only",
+      "selector": "aspis_core::field::_::mul"
+    },
+    {
+      "path": "aspis_core::field::QM31::add",
+      "why": "CLOSED add law applied at caller-established canonical arguments",
+      "selector": "aspis_core::field::_::add"
+    },
+    {
+      "path": "crate::r1_wire::Prefix::validated_record",
+      "why": "CLOSED producer supplies SAME record",
+      "selector": "crate::r1_wire::_::validated_record"
+    },
+    {
+      "path": "crate::r1_wire::Prefix::payload",
+      "why": "root payload child preserves full returned slice and errors",
+      "selector": "crate::r1_wire::_::payload"
+    },
+    {
+      "path": "crate::r1_wire::ValidatedRecord::decode_k",
+      "why": "CLOSED decoder147, complete result and caller installs retained",
+      "selector": "crate::r1_wire::_::decode_k"
+    },
+    {
+      "path": "crate::r1_wire::SemanticTranscript::circle_validated",
+      "why": "NIX142 candidate retained; no automatic parent closure",
+      "selector": "crate::r1_wire::_::circle_validated"
+    },
+    {
+      "path": "crate::r1_wire::SemanticTranscript::state",
+      "why": "CLOSED transcript getter, complete SAME state",
+      "selector": "crate::r1_wire::_::state"
+    }
+  ]
+}

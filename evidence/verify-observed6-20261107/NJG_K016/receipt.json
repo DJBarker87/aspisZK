@@ -1,0 +1,83 @@
+{
+  "attempt": "NJG_K016",
+  "kind": "kani",
+  "module": "NJG_rounds_program::window",
+  "sources": [
+    "NJG_gate.py",
+    "NJG_SOURCE_PINS.json",
+    "NJG_FROZEN_FILE_PINS.json"
+  ],
+  "command": [
+    "python3",
+    "NJG_gate.py",
+    "NJG_K016.json"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-verify-observed6-20261107/NJG_target",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1 --cfg NJG_driver_args",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-verify-observed6-20261107/NJG_tmp"
+  },
+  "timeout": 180,
+  "expected_time": "optimized deployed compile then ONE arbitrary round134 call site args; no field arithmetic/whole driver",
+  "root_package": "aspis-r1-cost-probe-program",
+  "metadata_features": "aspis-r1-cost-probe-program/pool-adapter,aspis-r1-cost-probe-program/private-leaf-salts",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-verify-observed6-20261107/NJG_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-verify-observed6-20261107/NJG_target",
+    "--features",
+    "pool-adapter,private-leaf-salts",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "NJG_rounds_program::window",
+    "--output-format",
+    "terse"
+  ],
+  "collect": [
+    "NJG_K016-graph-check.json",
+    "NJG_K016-graph.stderr",
+    "NJG_K016-graph.json",
+    "NJG_K016-source-check.json",
+    "NJG_K016-lock-check.json"
+  ],
+  "source_revision": "fcd0c581255aa893c2b3c2abaa9029d7f42cbb0b",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "exit_status": 0,
+  "wall_seconds": 29.532862113788724,
+  "peak_rss_kib": "470352",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-re5bb1ca1ebcd4679ad9d70dde3625754.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "918556672",
+  "source_hashes": {
+    "NJG_gate.py": "6813f7ea63d7d32fde86837bdd6aa690d9e15d4f078c328bda5cf9efc0ed27b5",
+    "NJG_SOURCE_PINS.json": "6ef4de9c03daf9c565773bea3944a83392f0237d709b59540de29f9409f65ee4",
+    "NJG_FROZEN_FILE_PINS.json": "9849c8e225d327836238113ee49ac94d5cf0bab819e98f6a8c1d448cf661765c"
+  },
+  "print_axioms": "N/A: kani"
+}
