@@ -23,3 +23,7 @@ set_option pp.all true
 #print NKP_BoxCuts.MasterReturned
 #print NKP_BoxCuts.CheckpointReturned
 #print NKF_BoxModel.tail
+#print NKL_ScanSequence.Invoke
+#print AspisR1.NKI_AppendPacket.cohort
+#print AspisR1.NKI_AppendCut.Cut
+#print NKF_BoxModel.boxValue
