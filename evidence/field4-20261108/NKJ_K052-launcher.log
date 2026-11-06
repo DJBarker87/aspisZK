@@ -1,0 +1,47 @@
+{"attempt": "NKJ_K052", "exit_status": 1, "wall_seconds": 4.936494732042775, "peak_rss_kib": "587040", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-field4-20261108/NKJ_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, 
+...
+^^^^^^^^^^^^^ help: convert the identifier to snake case: `nkj_accumulate`
+
+warning: function `NKJ_words` should have a snake case name
+  --> crates/aspis-core/src/field/NKJ_reference.rs:15:4
+   |
+15 | fn NKJ_words(q:QM31)->[u32;4] {[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+   |    ^^^^^^^^^ help: convert the identifier to snake case: `nkj_words`
+
+warning: function `NKJ_small2` should have a snake case name
+  --> crates/aspis-core/src/field/NKJ_reference.rs:16:8
+   |
+16 | pub fn NKJ_small2(l:[QM31;2],r:[QM31;2])->QM31 {
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `nkj_small2`
+
+warning: function `NKJ_small3` should have a snake case name
+  --> crates/aspis-core/src/field/NKJ_reference.rs:21:8
+   |
+21 | pub fn NKJ_small3(l:[QM31;3],r:[QM31;3])->QM31 {
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `nkj_small3`
+
+warning: function `NKJ_small4` should have a snake case name
+  --> crates/aspis-core/src/field/NKJ_reference.rs:27:8
+   |
+27 | pub fn NKJ_small4(l:[QM31;4],r:[QM31;4])->QM31 {
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `nkj_small4`
+
+error: `field::QM31` doesn't implement `kani::Arbitrary`.
+ --> /home/runner/work/kani/kani/library/kani/src/lib.rs:57:0
+  |
+  = help: All objects in the modifies clause must implement the Arbitrary. The return type must also implement the Arbitrary trait if you are checking recursion or using verified stub.
+  = note: this error originates in the macro `kani_core::kani_intrinsics` which comes from the expansion of the macro `kani_core::kani_lib` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: could not compile `aspis-core` (lib) due to 1 previous error; 133 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-ref046d71dc654600bd9d2df9ce2b6d3e.scope; invocation ID: 0a87210516654114a18513c26675a509

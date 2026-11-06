@@ -1,0 +1,20 @@
+use super::*;
+use super::NKJ_reference::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+const NKJ_M:u64=4611686009837453316;
+// Source-ordered cut P: frozen inner-iteration RHS after selecting the two M31 words.
+#[kani::requires(a.0<P && b.0<P)]
+#[kani::ensures(|out| if cfg!(NKJ_invert) {*out!=NKJ_product(a.0,b.0)}else{*out==NKJ_product(a.0,b.0)})]
+fn NKJ_product_segment(a:M31,b:M31)->u64 {a.0 as u64 * b.0 as u64}
+#[kani::proof_for_contract(NKJ_product_segment)]
+fn NKJ_product_contract() {NKJ_product_segment(M31(kani::any()),M31(kani::any()));}
+// Source-ordered cut A: frozen +=, with its RHS named by preceding cut P.
+#[kani::requires(s<=3*NKJ_M && p<=NKJ_M)]
+#[kani::ensures(|out| if cfg!(NKJ_invert) {*out!=s+p}else{*out==s+p})]
+fn NKJ_add_segment(mut s:u64,p:u64)->u64 {s+=p;s}
+#[kani::proof_for_contract(NKJ_add_segment)]
+fn NKJ_add_contract() {NKJ_add_segment(kani::any(),kani::any());}
+// Unimplied assertion control for the scalar u64 contract interface.
+#[kani::proof]
+#[kani::stub_verified(NKJ_product_segment)]
+fn NKJ_product_unimplied(){let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<P&&b<P);let p=NKJ_product_segment(M31(a),M31(b));assert!(p==0);}

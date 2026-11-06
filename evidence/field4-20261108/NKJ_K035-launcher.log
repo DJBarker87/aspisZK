@@ -1,0 +1,58 @@
+{"attempt": "NKJ_K035", "exit_status": 0, "wall_seconds": 6.490951609099284, "peak_rss_kib": "683688", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-field4-20261108/NKJ_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, 
+...
+te(s:[[u64;3];3],l:[u32;4],r:[u32;4])->[[u64;3];3] {
+   |        ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nkj_accumulate`
+
+warning: function `NKJ_words` should have a snake case name
+  --> crates/aspis-core/src/field/NKJ_reference.rs:15:4
+   |
+15 | fn NKJ_words(q:QM31)->[u32;4] {[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+   |    ^^^^^^^^^ help: convert the identifier to snake case: `nkj_words`
+
+warning: function `NKJ_small2` should have a snake case name
+  --> crates/aspis-core/src/field/NKJ_reference.rs:16:8
+   |
+16 | pub fn NKJ_small2(l:[QM31;2],r:[QM31;2])->QM31 {
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `nkj_small2`
+
+warning: function `NKJ_small3` should have a snake case name
+  --> crates/aspis-core/src/field/NKJ_reference.rs:21:8
+   |
+21 | pub fn NKJ_small3(l:[QM31;3],r:[QM31;3])->QM31 {
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `nkj_small3`
+
+warning: function `NKJ_small4` should have a snake case name
+  --> crates/aspis-core/src/field/NKJ_reference.rs:27:8
+   |
+27 | pub fn NKJ_small4(l:[QM31;4],r:[QM31;4])->QM31 {
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `nkj_small4`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 4.58s
+Checking harness field::NKJ_segments::NKJ_range_copy...
+
+VERIFICATION RESULT:
+ ** 0 of 23 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.14341173s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-re9fc8b99e0d54dfe948ece0db75db89e.scope; invocation ID: 24a832941d3a4e538c99c1e24b5df080
