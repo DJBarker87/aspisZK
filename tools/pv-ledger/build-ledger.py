@@ -150,7 +150,19 @@ def main():
                 statement_sha256=hashlib.sha256(artifact.read_bytes()).hexdigest(),
                 proves='Local returned run/prefix or ownership Post fragment; see complete statement. Not a B-y contract.',
                 raw_audit='evidence/pv-evhB-20261103/thread-line/generated/session86/new-roots-audit/results.json' if path=='thread' else 'evidence/pv-stx-20261104/SLICE/raw99109/results.json',
-                audit_qualification='Existing audit candidate; theorem-specific coverage must be checked before closure. No CLOSED credit inferred from aggregate pass.'))
+                audit_qualification='Existing audit candidate; no CLOSED credit inferred from aggregate pass.'))
+            ev = row['evidence'][-1]
+            audit = json.loads(get(row['source']['revision'], ev['raw_audit']))
+            roots = audit if isinstance(audit, list) else audit['roots']
+            matches = [x for x in roots if x['root']==fq]
+            ev['raw_audit_root_present'] = bool(matches)
+            ev['raw_audit_standard_axioms'] = matches[0].get('walked_axioms') if matches else None
+            ev['raw_audit_check'] = 'exact root present; standard axioms only' if matches and set(matches[0].get('walked_axioms',[])) <= {'propext','Classical.choice','Quot.sound'} else 'No matching root in this receipt; no audit credit from this citation.'
+            ev['printed_hypothesis_inventory'] = None
+            ev['hypothesis_assessment'] = ('WholeReturn has entry cell/freshness and saved action plus body/child dispositions; LocalReturn derives dispositions. Counter, allocation and 312/313/217 returned cases remain; heap nonnull branch only; full frame and other branches missing.' if path=='thread' and i==124 else
+                'Entry cell/root/activation separation and saved action, plus body222 and child320 dispositions; root is legitimate valid-Arc Pre material, but actual caller must establish it. Complete call contract/frame and callee contract application absent.' if path=='thread' and i==126 else
+                'Positive allocation branch has bounded/overflow/fits/positive, reply/nonnull/success. These need entry typing or LEAF case discharge; constructor contracts, complete return/frame and other branches absent.' if path=='slice' and i==21 else
+                'Retained signature is cited verbatim. Entry-to-return, all-branch frame, BODY contract instantiations and printed hypothesis inventory are not established by this local result.')
         if row['evidence']:
             row['status']='PARTIAL'
             row['missing']=['Repackage at this function\'s own arbitrary call entry with entry facts in Pre.',
