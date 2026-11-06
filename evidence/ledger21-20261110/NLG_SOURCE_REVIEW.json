@@ -1,0 +1,46 @@
+{
+ "status": "PASS",
+ "rows": [
+  {
+   "row": "TX2:124",
+   "file": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "source_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+   "body_sha256": "cda471f445a69486a33ca0772766ec2bb5d3b947afdb2ea72f591cbfc2cb1b1f",
+   "function_text": "fn resume<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)->Result<(Box<Prepared>,Accumulator),Error> {\n    if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b\"R1P2CKP2\"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}\n    let end=bytes.len()-32;\n    if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b\"UNPROVED:R1:checkpoint\",&bytes[..end]]) {return Err(Error::Checkpoint);}\n    let mut r=Reader{bytes,at:80};let state=r.raw();let roots=[r.raw(),r.raw()];\n    let gamma=r.e()?;let kappa=r.e()?;let alpha=[r.e()?,r.e()?];let rho=r.k()?;\n    let queries=[\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n        u32::from_le_bytes(r.raw()),\n    ];\n    validate_checkpoint_queries(&queries)?;\n    let (semantic_alpha,at)=read_checkpoint_semantic_alpha(bytes,r.at)?;\n    r.at=at;\n    let z=[SecureCirclePoint{x:r.k()?,y:r.k()?},SecureCirclePoint{x:r.k()?,y:r.k()?}];\n    let claim=r.e()?;let rhs=r.e()?;let power=r.k()?;\n    let weights=aspis_core::r0::heap::filled(v.final_len(),K::ZERO).map_err(|_|Error::Allocation)?;\n    let (weights,at)=read_checkpoint_weights(bytes,r.at,weights)?;\n    if at!=end {return Err(Error::Checkpoint);}\n    Ok((Box::new(Prepared{variant:v,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}),Accumulator{weights,rhs,power,next:bytes[9] as usize}))\n}",
+   "same_frozen_function": true
+  },
+  {
+   "row": "TX1:235",
+   "file": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+   "source_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+   "body_sha256": "f028d64de4bba7c77181271e7370653155cbe295661967587ae6d3c299df5f1d",
+   "function_text": "fn append_levels_packed_selector_tensor(\n    next_pair_index: u64,\n    frontier: [Digest; 20],\n    opened: [QM31; POSEIDON2_WIDTH],\n    selector_high: [QM31; 64],\n) -> (\n    [QM31; DIGEST_ELEMS / 4],\n    [QM31; DIGEST_ELEMS / 4],\n) {\n    let mut local0 = [QM31::ZERO; DIGEST_ELEMS / 4];\n    let mut local12 = [QM31::ZERO; DIGEST_ELEMS / 4];\n    let mut level = 0usize;\n    while level < 20 {\n        let (level0, level12) = append_level_packed_selector_tensor(\n            next_pair_index,\n            level,\n            frontier[level],\n            opened,\n            selector_high[34 + level],\n        );\n        local0[0] = local0[0].add(level0[0]);\n        local0[1] = local0[1].add(level0[1]);\n        local12[0] = local12[0].add(level12[0]);\n        local12[1] = local12[1].add(level12[1]);\n        level += 1;\n    }\n    (local0, local12)\n}",
+   "same_frozen_function": true
+  },
+  {
+   "row": "TX2:216",
+   "file": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+   "source_sha256": "09ce3b480cf772c843315b9bcdabd9bf266f4065e5a524ae2a4d5560ea4feaf3",
+   "body_sha256": "227d3ac198b8b07532fed26b10d15540a91c66081a6936d1df3f02dd56991456",
+   "function_text": "fn decode_checkpoint_box(bytes: &[u8]) -> Result<Box<PoolV1PairForestCheckpointV1>, ProgramError> {\n    Ok(Box::new(\n        decode_pool_v1_pair_forest_checkpoint_v1(bytes)\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    ))\n}",
+   "same_frozen_function": true
+  },
+  {
+   "row": "TX2:218",
+   "file": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+   "source_sha256": "09ce3b480cf772c843315b9bcdabd9bf266f4065e5a524ae2a4d5560ea4feaf3",
+   "body_sha256": "2834e4d014e943361287288f828b5f9ca7ede77ff066f7ff97230129b02636bf",
+   "function_text": "fn decode_master_box(bytes: &[u8]) -> Result<Box<PoolV1PairForestMasterV1>, ProgramError> {\n    Ok(Box::new(\n        decode_pool_v1_pair_forest_master_v1(bytes)\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    ))\n}",
+   "same_frozen_function": true
+  }
+ ],
+ "literal_body_transport_exact": true,
+ "retained_emission_sha256": "a472b93d401e5390483923b51ff27cd3dabc6ff6178bce05cfbe09b621e796d4",
+ "bc": "tuple tail, no explicit post-loop return or question mark; unaffected",
+ "source_identity_exit": 0,
+ "verifier_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "pool_revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+ "pool_pin": "e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc",
+ "historical_pool_pin": "121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548",
+ "elf_rebuild_trigger": false
+}
