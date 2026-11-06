@@ -1,0 +1,21 @@
+{"attempt": "NKQ_L063", "exit_status": 0, "wall_seconds": 14.778279925929382, "peak_rss_kib": "6351908", "swaps": "0", "print_axioms": ["'AspisR1.NKQ_ObservedTrace.factor' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKQ_ObservedTrace.parser_rejection' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NKQ_ObservedTrace.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedTrace.parser_rejection' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_ObservedTrace.factor : ∀ (F : S1SemanticCode.Finish) {H : Type} (D : aspis_core.Digest32 H)
+  (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H),
+  S1SemanticCode.verify (fun {H} => F) D pub bytes hash none = do
+    let r ← liftM (PrefixAdapter.parseAccepted bytes)
+    afterParsed (fun {H} => F) D pub hash r :=
+fun F {H} D pub bytes hash => Eq.refl (S1SemanticCode.verify (fun {H} => F) D pub bytes hash none)
+
+...
+'AspisR1.NKQ_ObservedTrace.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedTrace.parser_rejection' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_ObservedTrace.factor : ∀ (F : S1SemanticCode.Finish) {H : Type} (D : aspis_core.Digest32 H)
+  (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H),
+  S1SemanticCode.verify (fun {H} => F) D pub bytes hash none = do
+    let r ← liftM (PrefixAdapter.parseAccepted bytes)
+    afterParsed (fun {H} => F) D pub hash r :=
+fun F {H} D pub bytes hash => Eq.refl (S1SemanticCode.verify (fun {H} => F) D pub bytes hash none)
+
+Running as unit: run-r4c9ad624a4d94a8aaf4e1bba68b7840e.scope; invocation ID: a230fd93c65f4cdfb373e0773d21dd2e

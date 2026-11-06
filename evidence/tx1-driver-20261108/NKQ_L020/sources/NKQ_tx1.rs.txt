@@ -1,0 +1,68 @@
+use super::*;
+use crate::r1_semantic::NKQ_rejections::{Hash,transition,transfer};
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn selected_error(bytes:&[u8])->Error{match bytes[0]%8{0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
+fn parse_error(bytes:&[u8])->Result<(),Error>{Err(selected_error(bytes))}
+fn parse_ok(_: &[u8])->Result<(),Error>{Ok(())}
+fn scan_error(bytes:&[u8])->Result<(),Error>{Err(selected_error(bytes))}
+fn scan_unreachable(_: &[u8])->Result<(),Error>{panic!("NKQ scan suffix")}
+fn prepare_unreachable<H:Digest32>(_:Public<'_>,_:&[u8],_:H,_:Observer,_:&mut[E;29])->Result<Box<Prepared>,Error>{panic!("NKQ prepare suffix")}
+fn check(mode:u8,bad:bool){let t=transition();let p=transfer();let proof:[u8;57607]=kani::any();let public_bytes:[u8;1880]=kani::any();let i:usize=kani::any();kani::assume(i<proof.len());let before=proof[i];let k=if mode==0{let k:usize=kani::any();kani::assume(k!=SPLIT);k}else{SPLIT};let expected=if mode==0{Error::Parse}else{selected_error(&proof)};
+ let out=tx1(Public::Transfer(&p,&t),&public_bytes,&proof,k,Hash,None);match out{Err(e)=>{if bad{assert_ne!(e,expected)}else{assert_eq!(e,expected)}},Ok(_)=>panic!("NKQ unexpected success")};assert_eq!(proof[i],before);
+}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(prepare,prepare_unreachable)]
+#[kani::stub(parse_shape,parse_error)]
+#[kani::stub(canonical_scan,scan_unreachable)]
+fn guard_cut(){check(0,false)}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(prepare,prepare_unreachable)]
+#[kani::stub(parse_shape,parse_error)]
+#[kani::stub(canonical_scan,scan_unreachable)]
+fn guard_control(){check(0,true)}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(prepare,prepare_unreachable)]
+#[kani::stub(parse_shape,parse_error)]
+#[kani::stub(canonical_scan,scan_unreachable)]
+fn parse_cut(){check(1,false)}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(prepare,prepare_unreachable)]
+#[kani::stub(parse_shape,parse_error)]
+#[kani::stub(canonical_scan,scan_unreachable)]
+fn parse_control(){check(1,true)}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(prepare,prepare_unreachable)]
+#[kani::stub(parse_shape,parse_ok)]
+#[kani::stub(canonical_scan,scan_error)]
+fn scan_cut(){check(2,false)}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(prepare,prepare_unreachable)]
+#[kani::stub(parse_shape,parse_ok)]
+#[kani::stub(canonical_scan,scan_error)]
+fn scan_control(){check(2,true)}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(prepare,prepare_unreachable)]
+#[kani::stub(parse_shape,parse_error)]
+#[kani::stub(canonical_scan,scan_unreachable)]
+fn guard_cut_stability(){check(0,false)}
+
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(prepare,prepare_unreachable)]
+#[kani::stub(parse_shape,parse_error)]
+#[kani::stub(canonical_scan,scan_unreachable)]
+fn guard_control_stability(){check(0,true)}

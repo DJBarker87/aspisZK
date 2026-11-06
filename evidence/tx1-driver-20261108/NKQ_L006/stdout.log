@@ -1,0 +1,92 @@
+NKQ_generated/NKQ_ObservedStages.lean:32:5: error: Function expected at
+  r1_semantic.Verified H
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  (core.convert.FromSame r1_wire.Error)
+NKQ_generated/NKQ_ObservedStages.lean:30:7: error: Function expected at
+  r1_semantic.Verified H
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  (core.convert.FromSame r1_wire.Error)
+NKQ_generated/NKQ_ObservedStages.lean:28:9: error: Function expected at
+  r1_semantic.Verified H
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  (core.convert.FromSame r1_wire.Error)
+NKQ_generated/NKQ_ObservedStages.lean:26:7: error: Type mismatch
+  F D pub p afterBegin challenges none
+has type
+  Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)
+but is expected to have type
+  Result Unit
+NKQ_generated/NKQ_ObservedStages.lean:27:26: error: Type mismatch
+  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+has type
+  (T : Type) →
+    {E F : Type} →
+      core.convert.From F E → core.result.Result core.convert.Infallible E → Result (core.result.Result T F)
+of sort `Type 1` but is expected to have type
+  Result Unit
+of sort `Type`
+NKQ_generated/NKQ_ObservedStages.lean:29:24: error: Type mismatch
+  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+has type
+  (T : Type) →
+    {E F : Type} →
+      core.convert.From F E → core.result.Result core.convert.Infallible E → Result (core.result.Result T F)
+of sort `Type 1` but is expected to have type
+  Result Unit
+of sort `Type`
+NKQ_generated/NKQ_ObservedStages.lean:31:22: error: Type mismatch
+  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+has type
+  (T : Type) →
+    {E F : Type} →
+      core.convert.From F E → core.result.Result core.convert.Infallible E → Result (core.result.Result T F)
+of sort `Type 1` but is expected to have type
+  Result Unit
+of sort `Type`
+NKQ_generated/NKQ_ObservedStages.lean:37:82: error: Tactic `rfl` failed: The left-hand side
+  VerifyPrefix.verify (fun {H} => F) D pub bytes hash none
+is not definitionally equal to the right-hand side
+  do
+    let r ← PrefixAdapter.parseAccepted bytes
+    afterParsed (fun {H} => F) D pub hash r
+
+F : VerifyPrefix.Finish
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+⊢ VerifyPrefix.verify (fun {H} => F) D pub bytes hash none = do
+    let r ← PrefixAdapter.parseAccepted bytes
+    afterParsed (fun {H} => F) D pub hash r
+NKQ_generated/NKQ_ObservedStages.lean:41:55: error: Tactic `rfl` failed: The left-hand side
+  afterParsed (fun {H} => F) D pub hash (core.result.Result.Err e)
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err e)
+
+F : VerifyPrefix.Finish
+H : Type
+D : aspis_core.Digest32 H
+pub : pool_v1.pair_forest_semantic_terminal.r0.Public
+hash : H
+e : r1_wire.Error
+⊢ afterParsed (fun {H} => F) D pub hash (core.result.Result.Err e) = ok (core.result.Result.Err e)
+'AspisR1.NKQ_ObservedStages.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedStages.parsed_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedStages.parsed_fail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedStages.parsed_div' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_ObservedStages.factor : ∀ (F : VerifyPrefix.Finish) {H : Type} (D : aspis_core.Digest32 H)
+  (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H),
+  VerifyPrefix.verify (fun {H} => F) D pub bytes hash none = do
+    let r ← PrefixAdapter.parseAccepted bytes
+    afterParsed (fun {H} => F) D pub hash r :=
+fun F {H} D pub bytes hash => sorry

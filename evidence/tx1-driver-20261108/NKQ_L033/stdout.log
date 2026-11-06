@@ -1,0 +1,9 @@
+'AspisR1.NKQ_Tx1Stages.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_Tx1Stages.query_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_Tx1Stages.writer_frame' depends on axioms: [propext]
+theorem AspisR1.NKQ_Tx1Stages.factor : ∀ (ops : Ops) {H : Type} (D : aspis_core.digest.Digest32 H)
+  (public_bytes proof : Slice U8) (k : Usize) (hash : H) (c : NHL_Tx1Stages.Context),
+  NHL_Tx1Stages.queryCut ops D public_bytes proof k hash none c = do
+    let r ← ops.op7 proof c.prepared c.accumulator c.scratch none c.geometry c.pending k
+    afterQuery ops D public_bytes proof hash c.prepared r :=
+fun ops {H} D public_bytes proof k hash c => Eq.refl (NHL_Tx1Stages.queryCut ops D public_bytes proof k hash none c)

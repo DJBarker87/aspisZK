@@ -1,0 +1,454 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -316,3 +316,11 @@
+     mark(obs, 1);
+     verify_finish(public, prefix, transcript, challenges, obs)
+ }
++
++#[cfg(kani)]
++#[path="NKQ_rejections.rs"]
++pub(crate) mod NKQ_rejections;
++
++#[cfg(kani)]
++#[path="NKQ_windows.rs"]
++pub(crate) mod NKQ_windows;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NKQ_rejections.rs
+@@ -0,0 +1,82 @@
++use super::*;
++use aspis_core::field::{M31,CM31};
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[derive(Clone,Copy)] pub struct Hash;
++impl Digest32 for Hash { fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("NKQ no digest after rejection")} }
++fn digest()->[M31;8]{let r:[u32;8]=kani::any();[M31(r[0]),M31(r[1]),M31(r[2]),M31(r[3]),M31(r[4]),M31(r[5]),M31(r[6]),M31(r[7])]}
++pub(crate) fn transition()->aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1{
++ use aspis_statement::pool_v1::{pair_tree_profile::*,PoolV1PairVerifiedAfterstateV1};
++ PoolV1PairLatePublicStatementV1{live_snapshot:PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:digest(),frontier:core::array::from_fn(|_|digest())},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:digest(),next_frontier:core::array::from_fn(|_|digest())}}
++}
++pub(crate) fn transfer()->aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1{
++ aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()}
++}
++fn error(bytes:&[u8])->Error{
++ let k=bytes[0];let row=bytes[1];let actual=bytes[2];let n=usize::from_le_bytes([bytes[3],bytes[4],bytes[5],bytes[6],bytes[7],bytes[8],bytes[9],bytes[10]]);
++ match k%12{0=>Error::Allocation,1=>Error::RowOrder{expected:row,actual},2=>Error::InvalidRow,3=>Error::Tag{row},4=>Error::Length{row},5=>Error::NonCanonical{row,value:n},6=>Error::Boundary{round:n},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}
++}
++fn parse_error<'a:'a>(bytes:&'a[u8])->Result<Prefix<'a>,Error>{Err(error(bytes))}
++fn unreachable_public<H:Digest32>(_:Public<'_>,_:H,_:&[u8;32])->Result<SemanticTranscript<H>,Error>{panic!("NKQ suffix public")}
++fn unreachable_begin<H:Digest32>(_:&Prefix<'_>,_:&mut SemanticTranscript<H>)->Result<Challenges,Error>{panic!("NKQ suffix begin")}
++fn unreachable_finish<H:Digest32>(_:Public<'_>,_:Prefix<'_>,_:SemanticTranscript<H>,_:Challenges,_:crate::verifier::Observer)->Result<Verified<H>,Error>{panic!("NKQ suffix finish")}
++fn check_parse_rejection(bad:bool){
++ let bytes:[u8;13831]=kani::any();let t=transition();let p=transfer();let expected=error(&bytes);let index:usize=kani::any();kani::assume(index<bytes.len());let before=bytes[index];
++ let out=verify_observed(Public::Transfer(&p,&t),&bytes,Hash,None);
++ match out {Err(e)=>{if bad{assert_ne!(e,expected)}else{assert_eq!(e,expected)}},Ok(_)=>panic!("NKQ unexpected success")};assert_eq!(bytes[index],before);
++}
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
++#[kani::stub(public_transcript,unreachable_public)]
++#[kani::stub(crate::r1_wire::begin,unreachable_begin)]
++#[kani::stub(verify_finish,unreachable_finish)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parse_rejection(){check_parse_rejection(false)}
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
++#[kani::stub(public_transcript,unreachable_public)]
++#[kani::stub(crate::r1_wire::begin,unreachable_begin)]
++#[kani::stub(verify_finish,unreachable_finish)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parse_rejection_control(){check_parse_rejection(true)}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
++#[kani::stub(public_transcript,unreachable_public)]
++#[kani::stub(crate::r1_wire::begin,unreachable_begin)]
++#[kani::stub(verify_finish,unreachable_finish)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parse_rejection_stability(){check_parse_rejection(false)}
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parse_error)]
++#[kani::stub(public_transcript,unreachable_public)]
++#[kani::stub(crate::r1_wire::begin,unreachable_begin)]
++#[kani::stub(verify_finish,unreachable_finish)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn parse_rejection_control_stability(){check_parse_rejection(true)}
++fn rounds_error<H:Digest32>(prefix:&Prefix<'_>,_:SemanticTranscript<H>)->Result<(QM31,[QM31;10],SemanticTranscript<H>),Error>{Err(error(prefix.c1_root))}
++fn claims_unreachable(_: &Prefix<'_>)->Result<Box<[[QM31;29];3]>,Error>{panic!("NKQ claims suffix")}
++fn check_rounds_rejection(bad:bool){let root:[u8;32]=kani::any();let t=transition();let p=transfer();let state:[u8;32]=kani::any();let row:u8=kani::any();let prefix=crate::r1_wire::NKQ_prefix(&root);let transcript=crate::r1_wire::NKQ_transcript(state,Hash,row);let challenges=super::NKQ_windows::challenges();let expected=error(&root);let i:usize=kani::any();kani::assume(i<32);let before=root[i];let out=verify_finish(Public::Transfer(&p,&t),prefix,transcript,challenges,None);match out{Err(e)=>{if bad{assert_ne!(e,expected)}else{assert_eq!(e,expected)}},Ok(_)=>panic!("NKQ unexpected finish success")};assert_eq!(root[i],before)}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(semantic_rounds,rounds_error)]
++#[kani::stub(claims,claims_unreachable)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_rejection(){check_rounds_rejection(false)}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(semantic_rounds,rounds_error)]
++#[kani::stub(claims,claims_unreachable)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_rejection_control(){check_rounds_rejection(true)}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(semantic_rounds,rounds_error)]
++#[kani::stub(claims,claims_unreachable)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_rejection_stability(){check_rounds_rejection(false)}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(semantic_rounds,rounds_error)]
++#[kani::stub(claims,claims_unreachable)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn rounds_rejection_control_stability(){check_rounds_rejection(true)}
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NKQ_windows.rs
+@@ -0,0 +1,127 @@
++use super::*;
++use aspis_core::field::{M31,CM31};
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++pub(crate) fn q()->QM31{let r:[u32;4]=kani::any();kani::assume(r[0]<2147483647&&r[1]<2147483647&&r[2]<2147483647&&r[3]<2147483647);QM31{c0:CM31{a:M31(r[0]),b:M31(r[1])},c1:CM31{a:M31(r[2]),b:M31(r[3])}}}
++pub(crate) fn challenges()->Challenges{Challenges{lambda:q(),chi:q(),theta:q(),zc:core::array::from_fn(|_|q()),mu:q(),eta:q()}}
++fn original(challenges:Challenges)->aspis_core::state_only_prefix::r0::Challenges{
++    let original_challenges = aspis_core::state_only_prefix::r0::Challenges {
++        lambda: challenges.lambda,
++        chi: challenges.chi,
++        theta: challenges.theta,
++        zc: challenges.zc,
++        mu: challenges.mu,
++        eta: challenges.eta,
++    };
++    original_challenges
++}
++fn select(c:&Challenges,i:usize)->QM31{match i{0=>c.lambda,1=>c.chi,2=>c.theta,3..=12=>c.zc[i-3],13=>c.mu,_=>c.eta}}
++fn check_original(bad:bool){let before=challenges();let i:usize=kani::any();kani::assume(i<15);let out=original(before);if bad{assert_ne!(select(&out,i),select(&before,i))}else{assert_eq!(select(&out,i),select(&before,i))}}
++struct MaskLog{cell:usize,low:QM31,high:QM31,blind:QM31,alpha:QM31,reply:QM31,calls:usize}
++impl MaskLog{
++ fn mask(&mut self,low:&[QM31;16],high:&[QM31;10],blind:QM31,alpha:&[QM31;10])->QM31{
++  self.low=low[self.cell];self.high=high[self.cell%10];self.blind=blind;self.alpha=alpha[self.cell%10];self.calls+=1;self.reply
++ }
++}
++fn mask_cut(claims:&[[QM31;29];3],alpha:&[QM31;10],log:&mut MaskLog)->QM31{
++    let mask = log.mask(
++        &core::array::from_fn(|i| claims[0][i]),
++        &core::array::from_fn(|i| claims[0][16 + i]),
++        claims[0][27],
++        &alpha,
++    );
++    mask
++}
++fn check_mask(mode:u8,bad:bool){
++ let claims=core::array::from_fn(|_|core::array::from_fn(|_|q()));let alpha=core::array::from_fn(|_|q());let i:usize=kani::any();kani::assume(i<16);
++ let mut log=MaskLog{cell:i,low:QM31::ZERO,high:QM31::ZERO,blind:QM31::ZERO,alpha:QM31::ZERO,reply:q(),calls:0};let out=mask_cut(&claims,&alpha,&mut log);
++ let (actual,expected)=match mode{0=>(log.low,claims[0][i]),1=>(log.high,claims[0][16+i%10]),2=>(log.blind,claims[0][27]),_=>(log.alpha,alpha[i%10])};
++ assert_eq!(log.calls,1);assert_eq!(out,log.reply);if bad{assert_ne!(actual,expected)}else{assert_eq!(actual,expected)}
++}
++fn terminal_guard(running:QM31,masked_terminal:QM31)->Result<(),Error>{
++    if running != masked_terminal {
++        return Err(Error::Terminal);
++    }
++    Ok(())
++}
++fn check_terminal(bad:bool){let running=q();let masked=q();let out=terminal_guard(running,masked);let expected=if running==masked{Ok(())}else{Err(Error::Terminal)};if bad{assert_ne!(out,expected)}else{assert_eq!(out,expected)}}
++fn circle_guard(z0:SecureCirclePoint,z1:SecureCirclePoint)->Result<(),Error>{
++    if z0 == z1 {
++        return Err(Error::EqualCirclePoints);
++    }
++    Ok(())
++}
++fn check_circle(bad:bool){let z0=SecureCirclePoint{x:q(),y:q()};let z1=SecureCirclePoint{x:q(),y:q()};let out=circle_guard(z0,z1);let expected=if z0==z1{Err(Error::EqualCirclePoints)}else{Ok(())};if bad{assert_ne!(out,expected)}else{assert_eq!(out,expected)}}
++fn check_extra(bad:bool){let extra:[QM31;29]=core::array::from_fn(|_|q());let selected=extra[28];let expected=extra[28];if bad{assert_ne!(selected,expected)}else{assert_eq!(selected,expected)}}
++fn root_copy(payload:&[u8])->[u8;32]{payload.try_into().unwrap()}
++fn check_root(bad:bool){let payload:[u8;32]=kani::any();let i:usize=kani::any();kani::assume(i<32);let out=root_copy(&payload);if bad{assert_ne!(out[i],payload[i])}else{assert_eq!(out[i],payload[i])}}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn original_cut(){check_original(false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn original_control(){check_original(true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn mask_low_cut(){check_mask(0,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn mask_low_control(){check_mask(0,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn mask_high_cut(){check_mask(1,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn mask_high_control(){check_mask(1,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn mask_blind_cut(){check_mask(2,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn mask_blind_control(){check_mask(2,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn mask_alpha_cut(){check_mask(3,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn mask_alpha_control(){check_mask(3,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn terminal_guard_cut(){check_terminal(false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn terminal_guard_control(){check_terminal(true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn circle_guard_cut(){check_circle(false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn circle_guard_control(){check_circle(true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn extra28_cut(){check_extra(false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn extra28_control(){check_extra(true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn root_copy_cut(){check_root(false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn root_copy_control(){check_root(true)}
++
++fn check_mask_frame(bad:bool){let claims=core::array::from_fn(|_|core::array::from_fn(|_|q()));let alpha=core::array::from_fn(|_|q());let i:usize=kani::any();kani::assume(i<16);let row:usize=kani::any();let column:usize=kani::any();let alpha_i:usize=kani::any();kani::assume(row<3&&column<29&&alpha_i<10);let claim_before=claims[row][column];let alpha_before=alpha[alpha_i];let reply=q();let mut log=MaskLog{cell:i,low:QM31::ZERO,high:QM31::ZERO,blind:QM31::ZERO,alpha:QM31::ZERO,reply,calls:0};let out=mask_cut(&claims,&alpha,&mut log);let good=claims[row][column]==claim_before&&alpha[alpha_i]==alpha_before&&log.cell==i&&log.reply==reply&&out==reply;if bad{assert!(!good)}else{assert!(good)}}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn mask_frame_cut(){check_mask_frame(false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn mask_frame_control(){check_mask_frame(true)}
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,11 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path="NKQ_tx1.rs"]
++mod NKQ_tx1;
++
++#[cfg(kani)]
++#[path="NKQ_entries.rs"]
++mod NKQ_entries;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NKQ_tx1.rs
+@@ -0,0 +1,68 @@
++use super::*;
++use crate::r1_semantic::NKQ_rejections::{Hash,transition,transfer};
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn selected_error(bytes:&[u8])->Error{match bytes[0]%8{0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}
++fn parse_error(bytes:&[u8])->Result<Variant,Error>{Err(selected_error(bytes))}
++fn parse_ok(_: &[u8])->Result<Variant,Error>{Ok(Variant::S2)}
++fn scan_error(bytes:&[u8])->Result<(),Error>{Err(selected_error(bytes))}
++fn scan_unreachable(_: &[u8])->Result<(),Error>{panic!("NKQ scan suffix")}
++fn prepare_unreachable<H:Digest32>(_:Public<'_>,_:&[u8],_:H,_:Observer,_:&mut[E;29])->Result<Box<Prepared>,Error>{panic!("NKQ prepare suffix")}
++fn check(mode:u8,bad:bool){let t=transition();let p=transfer();let proof:[u8;57607]=kani::any();let public_bytes:[u8;1880]=kani::any();let i:usize=kani::any();kani::assume(i<proof.len());let before=proof[i];let k=if mode==0{let k:usize=kani::any();kani::assume(k!=SPLIT);k}else{SPLIT};let expected=if mode==0{Error::Parse}else{selected_error(&proof)};
++ let out=tx1(Public::Transfer(&p,&t),&public_bytes,&proof,k,Hash,None);match out{Err(e)=>{if bad{assert_ne!(e,expected)}else{assert_eq!(e,expected)}},Ok(_)=>panic!("NKQ unexpected success")};assert_eq!(proof[i],before);
++}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(prepare,prepare_unreachable)]
++#[kani::stub(parse_shape,parse_error)]
++#[kani::stub(canonical_scan,scan_unreachable)]
++fn guard_cut(){check(0,false)}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(prepare,prepare_unreachable)]
++#[kani::stub(parse_shape,parse_error)]
++#[kani::stub(canonical_scan,scan_unreachable)]
++fn guard_control(){check(0,true)}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(prepare,prepare_unreachable)]
++#[kani::stub(parse_shape,parse_error)]
++#[kani::stub(canonical_scan,scan_unreachable)]
++fn parse_cut(){check(1,false)}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(prepare,prepare_unreachable)]
++#[kani::stub(parse_shape,parse_error)]
++#[kani::stub(canonical_scan,scan_unreachable)]
++fn parse_control(){check(1,true)}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(prepare,prepare_unreachable)]
++#[kani::stub(parse_shape,parse_ok)]
++#[kani::stub(canonical_scan,scan_error)]
++fn scan_cut(){check(2,false)}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(prepare,prepare_unreachable)]
++#[kani::stub(parse_shape,parse_ok)]
++#[kani::stub(canonical_scan,scan_error)]
++fn scan_control(){check(2,true)}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(prepare,prepare_unreachable)]
++#[kani::stub(parse_shape,parse_error)]
++#[kani::stub(canonical_scan,scan_unreachable)]
++fn guard_cut_stability(){check(0,false)}
++
++#[kani::proof] #[kani::unwind(22)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(prepare,prepare_unreachable)]
++#[kani::stub(parse_shape,parse_error)]
++#[kani::stub(canonical_scan,scan_unreachable)]
++fn guard_control_stability(){check(0,true)}
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -848,3 +848,6 @@
+         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+     }
+ }
++
++#[cfg(kani)] pub(crate) fn NKQ_prefix(root: &[u8;32])->Prefix<'_>{Prefix{c1_root:root,records:[&root[..0];27]}}
++#[cfg(kani)] pub(crate) fn NKQ_transcript<H:Digest32>(state:[u8;32],hash:H,next_row:u8)->SemanticTranscript<H>{SemanticTranscript{state,hash,next_row}}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NKQ_entries.rs
+@@ -0,0 +1,121 @@
++//! Entry windows only: these stop before each child return. No completed parent cut.
++use super::*;
++use crate::r1_semantic::NKQ_windows::q;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn e()->E{E::new(q(),q())}
++fn point()->SecureCirclePoint{SecureCirclePoint{x:q(),y:q()}}
++fn prepared()->Box<Prepared>{Box::new(Prepared{variant:Variant::S2,roots:kani::any(),gamma:e(),kappa:e(),alpha:[e(),e()],rho:q(),queries:kani::any(),semantic_alpha:core::array::from_fn(|_|q()),z:[point(),point()],claim:e(),state:kani::any()})}
++fn check_shape(mode:u8,bad:bool){
++ let proof:[u8;57607]=kani::any();let mut logical:[u8;14759]=kani::any();let pbase=proof.as_ptr() as usize;let lbase=logical.as_ptr() as usize;
++ let (semantic,y1)=logical.split_at_mut(compact::LOGICAL_SEMANTIC);
++ let input=if mode==0{&proof[compact::OFF_SEMANTIC..compact::OFF_Y1]}else{&proof[compact::OFF_Y1..compact::OFF_INACTIVE]};
++ let output=if mode==0{semantic}else{y1};let good=if mode==0{input.as_ptr() as usize==pbase+16&&input.len()==7015&&output.as_ptr() as usize==lbase&&output.len()==13831}else{input.as_ptr() as usize==pbase+7031&&input.len()==464&&output.as_ptr() as usize==lbase+13831&&output.len()==928};if bad{assert!(!good)}else{assert!(good)}
++}
++fn check_semantic_view(bad:bool){let logical:[u8;14759]=kani::any();let semantic=&logical[..compact::LOGICAL_SEMANTIC];let good=semantic.as_ptr()==logical.as_ptr()&&semantic.len()==13831;if bad{assert!(!good)}else{assert!(good)}}
++fn check_zero(bad:bool){let g=[E::ZERO;29];let i:usize=kani::any();kani::assume(i<29);if bad{assert_ne!(g[i],E::ZERO)}else{assert_eq!(g[i],E::ZERO)}}
++fn folded(proof:&[u8])->[u8;32]{
++ let folded_root: [u8; 32] = proof[compact::OFF_FOLDED_ROOT..compact::OFF_ROUND1].try_into().unwrap();
++ folded_root
++}
++fn check_folded(frame:bool,bad:bool){let proof:[u8;57607]=kani::any();let i:usize=kani::any();kani::assume(i<32);let cell:usize=kani::any();kani::assume(cell<proof.len());let before=proof[cell];let out=folded(&proof);let good=if frame{proof[cell]==before}else{out[i]==proof[compact::OFF_FOLDED_ROOT+i]};if bad{assert!(!good)}else{assert!(good)}}
++struct Entry{proof:usize,proof_len:usize,prepared:usize,root:u8,batch:usize,queries:usize,query:u32,start:usize,end:usize,weights:usize,weight:K,weights_len:usize,accumulator:usize,public:usize,public_len:usize,calls:usize,cell:usize}
++impl Entry{
++ fn new(cell:usize)->Self{Self{proof:0,proof_len:0,prepared:0,root:0,batch:99,queries:0,query:0,start:99,end:99,weights:0,weight:K::ZERO,weights_len:0,accumulator:0,public:0,public_len:0,calls:0,cell}}
++ fn batch<H:Digest32>(&mut self,proof:&[u8],p:&Prepared,folded_root:&[u8;32],batch:usize,_:H){self.proof=proof.as_ptr() as usize;self.proof_len=proof.len();self.prepared=p as *const _ as usize;self.root=folded_root[self.cell%32];self.batch=batch;self.calls+=1}
++ fn geometry(&mut self,queries:&[u32;22],start:usize,end:usize){self.queries=queries.as_ptr() as usize;self.query=queries[self.cell%22];self.start=start;self.end=end;self.calls+=1}
++ fn pending(&mut self,weights:&[K]){self.weights=weights.as_ptr() as usize;self.weights_len=weights.len();self.weight=weights[self.cell%64];self.calls+=1}
++ fn checkpoint<H:Digest32>(&mut self,p:&Prepared,a:&Accumulator,proof:&[u8],public_bytes:&[u8],_:H){self.prepared=p as *const _ as usize;self.accumulator=a as *const _ as usize;self.proof=proof.as_ptr() as usize;self.proof_len=proof.len();self.public=public_bytes.as_ptr() as usize;self.public_len=public_bytes.len();self.weights=a.weights.as_ptr() as usize;self.weight=a.weights[self.cell%64];self.weights_len=a.weights.len();self.calls+=1}
++}
++fn check_batch(bad:bool){let proof:[u8;57607]=kani::any();let p=prepared();let folded_root:[u8;32]=kani::any();let cell:usize=kani::any();kani::assume(cell<32);let mut log=Entry::new(cell);
++ log.batch(&proof,&p,&folded_root,0,crate::r1_semantic::NKQ_rejections::Hash);
++ let good=log.calls==1&&log.proof==proof.as_ptr() as usize&&log.proof_len==57607&&log.prepared==&*p as *const _ as usize&&log.root==folded_root[cell]&&log.batch==0;if bad{assert!(!good)}else{assert!(good)}}
++fn check_geometry(bad:bool){let p=prepared();let cell:usize=kani::any();kani::assume(cell<22);let mut log=Entry::new(cell);let k=SPLIT;
++ log.geometry(&p.queries,0,k);
++ let good=log.calls==1&&log.queries==p.queries.as_ptr() as usize&&log.query==p.queries[cell]&&log.start==0&&log.end==10;if bad{assert!(!good)}else{assert!(good)}}
++fn accumulator()->Accumulator{Accumulator{weights:Vec::from(core::array::from_fn::<K,64,_>(|_|q())),rhs:e(),power:q(),next:kani::any()}}
++fn check_pending(bad:bool){let a=accumulator();let cell:usize=kani::any();kani::assume(cell<64);let mut log=Entry::new(cell);
++ log.pending(&a.weights);
++ let good=log.calls==1&&log.weights==a.weights.as_ptr() as usize&&log.weights_len==64&&log.weight==a.weights[cell];if bad{assert!(!good)}else{assert!(good)}}
++fn check_checkpoint(bad:bool){let p=prepared();let a=accumulator();let proof:[u8;57607]=kani::any();let public_bytes:[u8;1880]=kani::any();let cell:usize=kani::any();kani::assume(cell<64);let mut log=Entry::new(cell);
++ log.checkpoint(&p,&a,&proof,&public_bytes,crate::r1_semantic::NKQ_rejections::Hash);
++ let good=log.calls==1&&log.prepared==&*p as *const _ as usize&&log.accumulator==&a as *const _ as usize&&log.proof==proof.as_ptr() as usize&&log.proof_len==57607&&log.public==public_bytes.as_ptr() as usize&&log.public_len==1880&&log.weights==a.weights.as_ptr() as usize&&log.weight==a.weights[cell]&&log.weights_len==64;if bad{assert!(!good)}else{assert!(good)}}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn semantic_shape_cut(){check_shape(0,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn semantic_shape_control(){check_shape(0,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn values_shape_cut(){check_shape(1,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn values_shape_control(){check_shape(1,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn semantic_view_cut(){check_semantic_view(false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn semantic_view_control(){check_semantic_view(true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn scratch_zero_cut(){check_zero(false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn scratch_zero_control(){check_zero(true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn folded_value_cut(){check_folded(false,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn folded_value_control(){check_folded(false,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn folded_frame_cut(){check_folded(true,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn folded_frame_control(){check_folded(true,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn batch_entry_cut(){check_batch(false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn batch_entry_control(){check_batch(true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn geometry_entry_cut(){check_geometry(false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn geometry_entry_control(){check_geometry(true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn pending_entry_cut(){check_pending(false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn pending_entry_control(){check_pending(true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn checkpoint_entry_cut(){check_checkpoint(false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn checkpoint_entry_control(){check_checkpoint(true)}

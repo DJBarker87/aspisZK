@@ -1,0 +1,21 @@
+{"attempt": "NKQ_L032", "exit_status": 0, "wall_seconds": 9.829662770032883, "peak_rss_kib": "5982704", "swaps": "0", "print_axioms": ["'AspisR1.NKQ_PrepareBuffer.factor' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NKQ_PrepareBuffer.buffer_error' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NKQ_PrepareBuffer.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_PrepareBuffer.buffer_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_PrepareBuffer.factor : ∀ (ops : Ops) {H : Type} (D : aspis_core.digest.Digest32 H)
+  (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (proof : Slice U8) (hash : H) (g : Scratch),
+  NHL_PrepareStages.run ops D pub proof hash none g = do
+    let r ← NHL_PrepareStages.buffers ops D proof
+    afterBuffer ops D pub hash g r :=
+fun ops {H} D pub proof hash g => Eq.refl (NHL_PrepareStages.run ops D pub proof hash none g)
+
+...
+'AspisR1.NKQ_PrepareBuffer.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_PrepareBuffer.buffer_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_PrepareBuffer.factor : ∀ (ops : Ops) {H : Type} (D : aspis_core.digest.Digest32 H)
+  (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (proof : Slice U8) (hash : H) (g : Scratch),
+  NHL_PrepareStages.run ops D pub proof hash none g = do
+    let r ← NHL_PrepareStages.buffers ops D proof
+    afterBuffer ops D pub hash g r :=
+fun ops {H} D pub proof hash g => Eq.refl (NHL_PrepareStages.run ops D pub proof hash none g)
+
+Running as unit: run-r4d04181af55048e299640303f923d915.scope; invocation ID: e1049d58c04b47318fcb83c0eb65990f

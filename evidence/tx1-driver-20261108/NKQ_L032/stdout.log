@@ -1,0 +1,8 @@
+'AspisR1.NKQ_PrepareBuffer.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_PrepareBuffer.buffer_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_PrepareBuffer.factor : ∀ (ops : Ops) {H : Type} (D : aspis_core.digest.Digest32 H)
+  (pub : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public) (proof : Slice U8) (hash : H) (g : Scratch),
+  NHL_PrepareStages.run ops D pub proof hash none g = do
+    let r ← NHL_PrepareStages.buffers ops D proof
+    afterBuffer ops D pub hash g r :=
+fun ops {H} D pub proof hash g => Eq.refl (NHL_PrepareStages.run ops D pub proof hash none g)

@@ -1,0 +1,54 @@
+{"attempt": "NKQ_L034", "exit_status": 0, "wall_seconds": 14.02090457919985, "peak_rss_kib": "6356460", "swaps": "0", "print_axioms": ["'AspisR1.NKQ_MaskCuts.arguments' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NKQ_MaskCuts.arguments' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_MaskCuts.arguments : ∀ (native : Native),
+  LowCut native →
+    HighCut native →
+      BlindCut native →
+        AlphaCut native →
+          FrameCut native →
+            ∀ (c : Claims) (a : Alpha) (i : ℕ) (reply : Q),
+              CanonClaims c →
+                CanonAlpha a →
+                  Canon reply →
+                    ∀ (inside : i < 16),
+                      have p := native c a i reply;
+                      p.calls = 1 ∧
+                        p.result = reply ∧
+                          p.low = low c i inside ∧
+                            p.high = high c i ∧
+     
+...
+'AspisR1.NKQ_MaskCuts.arguments' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_MaskCuts.arguments : ∀ (native : Native),
+  LowCut native →
+    HighCut native →
+      BlindCut native →
+        AlphaCut native →
+          FrameCut native →
+            ∀ (c : Claims) (a : Alpha) (i : ℕ) (reply : Q),
+              CanonClaims c →
+                CanonAlpha a →
+                  Canon reply →
+                    ∀ (inside : i < 16),
+                      have p := native c a i reply;
+                      p.calls = 1 ∧
+                        p.result = reply ∧
+                          p.low = low c i inside ∧
+                            p.high = high c i ∧
+                              p.blind = blind c ∧ p.alpha = alpha a i ∧ p.claimsAfter = c ∧ p.alphaAfter = a :=
+fun native lo hi bl al fr c a i reply cc ca cr inside =>
+  have l := lo c a i reply cc ca cr inside;
+  have h := hi c a i reply cc ca cr inside;
+  have b := bl c a i reply cc ca cr inside;
+  have v := al c a i reply cc ca cr inside;
+  have claims :=
+    extensional (native c a i reply).claimsAfter c fun row hr =>
+      extensional (cell (native c a i reply).claimsAfter row hr) (cell c row hr) fun col hc =>
+        (fr c a i reply cc ca cr inside row hr col hc 0 (of_decide_eq_true (id (Eq.refl true)))).left;
+  have alph :=
+    extensional (native c a i reply).alphaAfter a fun index bound =>
+      (fr c a i reply cc ca cr inside 0 (of_decide_eq_true (id (Eq.refl true))) 0
+            (of_decide_eq_true (id (Eq.refl true))) index bound).right.left;
+  ⟨l.left, ⟨l.right.left, ⟨l.right.right, ⟨h.right.right, ⟨b.right.right, ⟨v.right.right, ⟨claims, alph⟩⟩⟩⟩⟩⟩⟩
+
+Running as unit: run-rae5ec5a1d19d469ba6a37e30c318e119.scope; invocation ID: eedee7b389994eba800214e2b570b49d

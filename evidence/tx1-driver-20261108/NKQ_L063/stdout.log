@@ -1,0 +1,8 @@
+'AspisR1.NKQ_ObservedTrace.factor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKQ_ObservedTrace.parser_rejection' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_ObservedTrace.factor : ∀ (F : S1SemanticCode.Finish) {H : Type} (D : aspis_core.Digest32 H)
+  (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H),
+  S1SemanticCode.verify (fun {H} => F) D pub bytes hash none = do
+    let r ← liftM (PrefixAdapter.parseAccepted bytes)
+    afterParsed (fun {H} => F) D pub hash r :=
+fun F {H} D pub bytes hash => Eq.refl (S1SemanticCode.verify (fun {H} => F) D pub bytes hash none)

@@ -1,0 +1,50 @@
+# NKQ certificates and statement review
+
+Target not yet established. NKQ_CLOSED.json contains no closed row. NKQ_STATEMENTS.txt contains the complete printed headline and all54 selected new top statements; NKQ_HYPOTHESIS_INVENTORY.json records each declaration with its explicit premise classification. The full printer output, not the theorem name, is authoritative. Failed drafts and inspection modules are excluded.
+
+## (aq)(2) inventory decision
+
+There is no136/137/087/094 positive root to inspect or admit. No arbitrary native endpoint, free child Result, branch-success equation or operation dictionary is accepted as a root hypothesis. Generic/source helpers retain such local parameters transparently, and are marked NOT_A_ROW_ROOT. No before/after root premise removal is claimed; all baseline trust rows, L154 statement parameter and narrowed D188 remain unchanged. P6 semantic transport remains tool trust under option A, not a discharged assumption.
+
+| Module | Statement/domain review |
+|---|---|
+| NKQ_AlphaDomain | Retains certified134 observations/Cut and token/frame. full requires CanonicalBefore; source derives the domain from actual parsed-prefix/returned rounds branch. Not a native136 root. |
+| NKQ_ArrayWindows | Generic list/subtype bounds, extensional equality and closure invariant only. Fixed-array source mathematics, no native parent association. |
+| NKQ_CanonicalBridge | Definition-level canonical equivalence between flat4-limb and coherent probe-model predicates; no cryptographic assumption. |
+| NKQ_CircleDomains | Retains digest interpretation and template; source derives both getters and CLOSED142 circle laws for actual parsed records at arbitrary carries. Does not identify a full136 native log. |
+| NKQ_ClaimsDomain | Quantified Reservation is model allocation behavior. convert needs ParentCanon (derived by ClaimsMatrix); source obtains SAME actual claims for parsed prefix. No chosen child result is a root premise. |
+| NKQ_ClaimsMatrix | Decoder-success hypotheses are local source-helper inputs; reference uses the fixed claims reference and computes all three SAME decodes. These success equations are forbidden as external root inputs. |
+| NKQ_DecodeCanonical | Successful full decoder premise derives canonicality; callers StrictDecode/FinishSlots supply actual values. Not a substitute for native parent installation. |
+| NKQ_FinishMaskDomain | Retains certified134 Cut; parser/rounds/claims match binders are actual producer branches, not selected successful inputs. Mask arrays and domains derived. Mask reply canonicality/value and complete native136 fold still open. |
+| NKQ_FinishSlots | Only original byte slice is input; success branch derives actual25/87 and26/0 records, full decoder values and canonicality. No successful endpoint premise. |
+| NKQ_FinishStages | SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded. |
+| NKQ_FromFnIndices | Bounded total closure premise with state frame drives structural index-list induction. Actual closures discharge it in MaskArrays. No whole-buffer Kani induction. |
+| NKQ_GetterRepeat | SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded. |
+| NKQ_MaskArrays | Digest, reservation and original claims are arbitrary source inputs. Exact fixed16/10 constructor result, no external success premise. |
+| NKQ_MaskCanonical | Canonical claims/alpha premises are model domains, discharged at source callers by ClaimsDomain/AlphaDomain/FinishMaskDomain. Does not certify terminal256 or arithmetic native transport. |
+| NKQ_MaskCuts | Five external native-cut hypotheses transcribe K028/029 and K043..050 only. SAME c,a,i,reply with canonical inputs/bounds; full arrays framed by extensionality. Reply canonicality must come from CLOSED076 before future use. Generic component composition, not concrete native root. |
+| NKQ_MaskHighStep | Original claims, digest, bounded usize index; proves16+index fit/read with same state. No arbitrary callee operation dictionary. |
+| NKQ_MaskLowStep | Original claims, digest, bounded usize index. One emitted low closure iteration and exact state frame, no native free result. |
+| NKQ_ObservedContinuations | SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded. |
+| NKQ_ObservedStages | SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded. |
+| NKQ_ObservedTrace | SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded. |
+| NKQ_PrepareBuffer | SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded. |
+| NKQ_PrepareStages | SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded. |
+| NKQ_ReadTwo | Array index/domain premises and exact unchanged state of the two emitted reads; local source helper. |
+| NKQ_RecordDomains | Parsed-success premise, live/fields bounds and exact NGO Call are local caller domains. FinishSlots supplies actual parsed branch/constants. Full bytes/record value used, not pointer identity. |
+| NKQ_StrictDecode | Call/length/strict chunk premises require record producer. RecordDomains derives these from actual parser branch; never adopted as unproved root preconditions. |
+| NKQ_Tx1Stages | SOURCE SUPPORT ONLY. Arbitrary operation dictionaries/continuations and success/error premises describe local branch equations; they are not actual frozen native interpretations and are inadmissible as concrete row root premises. Full first-error/outer-abort cases are retained where stated; no full native log fold is concluded. |
+
+## Frozen target / AGENTS section6
+
+Protocol/model: adopted frozen3 two-transaction100-bit PER-ATTEMPT target; owner amendments retained, no work-normalised/grinding substitution. Frozen Rust:4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Stored TX1 proof57607 bytes; expanded semantic13831 bytes; y1 input928 bytes; split10, claims3x29, alphas10. Public Transfer native prefix fixture1880 bytes; Withdrawal/deployed Hash extension is not established by those windows. Native features: default library plus private-leaf-salts,optimized-terminal,program-build; all resolved features/dependency edges in each K-run graph check. Pinned frozen lock SHA2565782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef. Kani0.67.0, no unsupported --locked flag, offline cargo-metadata lock/graph checks; optimized native profile. Lean4.32.0; pinned Aeneas resolved objects per scope and final combined closure. Tool pins and source revisions reside in receipts and NKQ_TOOL_PINS.json.
+
+No shipped source changed. Scratch-only cfg harness patch is experimental evidence, not an adopted release or an ELF rebuild. Original artifact hashes reused from SInt2 handoff: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. These are inherited pins, not a fresh rebuild result. Thus no historical proof is attributed to a modified implementation.
+
+## Validation interpretation
+
+Focused new-module compiles precede one combined audit. Per-scope receipts record exact command/target, exit, wall seconds, peak RSS KiB, swaps, source revision, CARGO_TARGET_DIR and printed axioms; nested raw-audit receipts contain each root axiom list and reachable graph. Standard axioms only are allowed for selected theorem roots. Planted fixture axioms are expected controls in their separate environment. The raw inherited mismatch, if reproduced, retains its actual nonzero status and is not renamed away. No axioms audit or passing import promotes an OPEN row.
+
+Coherent SInt2 authority: replayed closure of AspisR1.RPx_Deployed.deployed; digest/error dictionary slots are op43/op44. Original generated-probe slot names are not substituted for those authoritative slots. The final predecessor object comparison pins the resolved SInt2/Aeneas closure.
+
+NKQ-F3 qualifies the typed mask hypotheses: their whole small-array window executions are not native one-iteration certificates. The conditional mathematical composition is audited; native loop-method admission remains OPEN. See NKQ_CUTS.md.

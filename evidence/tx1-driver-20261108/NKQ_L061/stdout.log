@@ -1,0 +1,150 @@
+NKQ_generated/NKQ_CircleDomains.lean:13:7: warning: Variable name `parsed` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.NKQ_CircleDomains.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_CircleDomains.source : ∀ {Pointer H : Type} (D : aspis_core.Digest32 H)
+  (template : NIX_DispatchCut.Pre Pointer) (bytes : Slice U8) (beforeFirst beforeSecond : r1_wire.SemanticTranscript H),
+  match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+  | ok (core.result.Result.Ok pre) =>
+    ∃ first second,
+      (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok first) ∧
+        (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok second) ∧
+          first.row = 25#u8 ∧
+            second.row = 26#u8 ∧
+              NJM_InvocationRoots.Circle D template beforeFirst first ∧
+                NJM_InvocationRoots.Circle D template beforeSecond second
+  | x => True :=
+fun {Pointer H} D template bytes beforeFirst beforeSecond =>
+  source.match_1.splitter
+    (fun x =>
+      AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+        match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+        | ok (core.result.Result.Ok pre) =>
+          ∃ first second,
+            (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok first) ∧
+              (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok second) ∧
+                first.row = 25#u8 ∧
+                  second.row = 26#u8 ∧
+                    NJM_InvocationRoots.Circle D template beforeFirst first ∧
+                      NJM_InvocationRoots.Circle D template beforeSecond second
+        | x => True)
+    (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+    (fun pre parsed h =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+          match parsed : x with
+          | ok (core.result.Result.Ok pre) =>
+            ∃ first second,
+              (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok first) ∧
+                (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok second) ∧
+                  first.row = 25#u8 ∧
+                    second.row = 26#u8 ∧
+                      NJM_InvocationRoots.Circle D template beforeFirst first ∧
+                        NJM_InvocationRoots.Circle D template beforeSecond second
+          | x_1 => True)
+        (fun heq =>
+          id
+            (have a :=
+              NJM_InvocationRoots.circle D template bytes beforeFirst ⟨25, of_decide_eq_true (id (Eq.refl true))⟩;
+            have b :=
+              NJM_InvocationRoots.circle D template bytes beforeSecond ⟨26, of_decide_eq_true (id (Eq.refl true))⟩;
+            let ⟨first, h✝⟩ :=
+              Eq.mp
+                (congrArg
+                  (fun _a =>
+                    match parsed : _a with
+                    | ok (core.result.Result.Ok pre) =>
+                      ∃ record,
+                        (PrefixAdapter.fromOld pre).validated_record
+                              (NJM_InvocationRoots.row ⟨25, of_decide_eq_true (id (Eq.refl true))⟩) =
+                            ok (core.result.Result.Ok record) ∧
+                          record.row = NJM_InvocationRoots.row ⟨25, of_decide_eq_true (id (Eq.refl true))⟩ ∧
+                            NJM_InvocationRoots.Circle D template beforeFirst record
+                    | ok (core.result.Result.Err a) => True
+                    | fail e => True
+                    | div => True)
+                  heq)
+                a
+            let ⟨ga, right✝⟩ := h✝
+            let ⟨ta, pa⟩ := right✝
+            let ⟨second, h✝¹⟩ :=
+              Eq.mp
+                (congrArg
+                  (fun _a =>
+                    match parsed : _a with
+                    | ok (core.result.Result.Ok pre) =>
+                      ∃ record,
+                        (PrefixAdapter.fromOld pre).validated_record
+                              (NJM_InvocationRoots.row ⟨26, of_decide_eq_true (id (Eq.refl true))⟩) =
+                            ok (core.result.Result.Ok record) ∧
+                          record.row = NJM_InvocationRoots.row ⟨26, of_decide_eq_true (id (Eq.refl true))⟩ ∧
+                            NJM_InvocationRoots.Circle D template beforeSecond record
+                    | ok (core.result.Result.Err a) => True
+                    | fail e => True
+                    | div => True)
+                  heq)
+                b
+            let ⟨gb, right✝¹⟩ := h✝¹
+            let ⟨tb, pb⟩ := right✝¹
+            Exists.intro first (Exists.intro second ⟨ga, ⟨gb, ⟨ta, ⟨tb, ⟨pa, pb⟩⟩⟩⟩⟩)))
+        (Eq.symm h) (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)))
+    (fun x x_1 parsed =>
+      Eq.ndrec (motive := fun x =>
+        (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+          AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = x →
+            match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+            | ok (core.result.Result.Ok pre) =>
+              ∃ first second,
+                (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok first) ∧
+                  (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok second) ∧
+                    first.row = 25#u8 ∧
+                      second.row = 26#u8 ∧
+                        NJM_InvocationRoots.Circle D template beforeFirst first ∧
+                          NJM_InvocationRoots.Circle D template beforeSecond second
+            | x => True)
+        (fun x h =>
+          Eq.ndrec (motive := fun x =>
+            (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+              match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+              | ok (core.result.Result.Ok pre) =>
+                ∃ first second,
+                  (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok first) ∧
+                    (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok second) ∧
+                      first.row = 25#u8 ∧
+                        second.row = 26#u8 ∧
+                          NJM_InvocationRoots.Circle D template beforeFirst first ∧
+                            NJM_InvocationRoots.Circle D template beforeSecond second
+              | x => True)
+            (fun x =>
+              Eq.ndrec (motive := fun x =>
+                (∀ (pre : AspisR1PrefixAggregateParser.r1_wire.Prefix), x = ok (core.result.Result.Ok pre) → False) →
+                  match parsed : x with
+                  | ok (core.result.Result.Ok pre) =>
+                    ∃ first second,
+                      (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok first) ∧
+                        (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok second) ∧
+                          first.row = 25#u8 ∧
+                            second.row = 26#u8 ∧
+                              NJM_InvocationRoots.Circle D template beforeFirst first ∧
+                                NJM_InvocationRoots.Circle D template beforeSecond second
+                  | x_3 => True)
+                (fun x =>
+                  Eq.mpr
+                    (id
+                      (source.match_1.eq_2 (fun x => Prop) (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+                        (fun pre parsed =>
+                          ∃ first second,
+                            (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok first) ∧
+                              (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok second) ∧
+                                first.row = 25#u8 ∧
+                                  second.row = 26#u8 ∧
+                                    NJM_InvocationRoots.Circle D template beforeFirst first ∧
+                                      NJM_InvocationRoots.Circle D template beforeSecond second)
+                        (fun x parsed => True) x))
+                    True.intro)
+                (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)) x)
+            h x)
+        parsed x_1)
+    (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes))

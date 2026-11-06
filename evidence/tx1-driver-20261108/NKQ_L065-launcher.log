@@ -1,0 +1,42 @@
+{"attempt": "NKQ_L065", "exit_status": 0, "wall_seconds": 13.731424608035013, "peak_rss_kib": "6358924", "swaps": "0", "print_axioms": ["'AspisR1.NKQ_FinishSlots.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NKQ_FinishSlots.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NKQ_FinishSlots.source : ∀ (bytes : Slice U8),
+  match parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes with
+  | ok (core.result.Result.Ok pre) =>
+    ∃ record25 record26 extra beforeZ1,
+      (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok record25) ∧
+        (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok record26) ∧
+          record25.row = 25#u8 ∧
+            record26.row = 26#u8 ∧
+              decodeMain 29#usize record25 87#usize = ok (core.result.Result.Ok extra) ∧
+                NKQ_DecodeCanonical.
+...
+      record25.row = 25#u8 ∧
+                            record26.row = 26#u8 ∧
+                              decodeMain 29#usize record25 87#usize = ok (core.result.Result.Ok extra) ∧
+                                NKQ_DecodeCanonical.MainRowCanon extra ∧
+                                  decodeMain 29#usize record26 0#usize = ok (core.result.Result.Ok beforeZ1) ∧
+                                    NKQ_DecodeCanonical.MainRowCanon beforeZ1
+                  | x_3 => True)
+                (fun x =>
+                  Eq.mpr
+                    (id
+                      (source.match_1.eq_2 (fun x => Prop) (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)
+                        (fun pre parsed =>
+                          ∃ record25 record26 extra beforeZ1,
+                            (PrefixAdapter.fromOld pre).validated_record 25#u8 = ok (core.result.Result.Ok record25) ∧
+                              (PrefixAdapter.fromOld pre).validated_record 26#u8 = ok (core.result.Result.Ok record26) ∧
+                                record25.row = 25#u8 ∧
+                                  record26.row = 26#u8 ∧
+                                    decodeMain 29#usize record25 87#usize = ok (core.result.Result.Ok extra) ∧
+                                      NKQ_DecodeCanonical.MainRowCanon extra ∧
+                                        decodeMain 29#usize record26 0#usize = ok (core.result.Result.Ok beforeZ1) ∧
+                                          NKQ_DecodeCanonical.MainRowCanon beforeZ1)
+                        (fun x parsed => True) x))
+                    True.intro)
+                (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes)) x)
+            h x)
+        parsed x_1)
+    (Eq.refl (AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes))
+
+Running as unit: run-rc4ca6394620744a0a1bd51ed6d2e6691.scope; invocation ID: 5c89a3f67c8049e285fcf53c5e79d962
