@@ -32,8 +32,9 @@ def attempt(a,part,mode):
  assert!(PROPERTY,"deployed PDA syscall ordered descriptors program output status frame");
 }
 '''.replace('BODY',body)
- props={'seeds':'calls==1&&seed_count==count as u64&&seed_len==lengths[selected]&&seed_byte==full[selected][coordinate]', 'program':'calls==1&&program_byte==raw_program[observer]', 'reply':'calls==1&&value_ok'}
- corrupt={'seeds':'seed_byte^=1;', 'program':'program_byte^=1;', 'reply':'out=Err(PubkeyError::MaxSeedLengthExceeded);'}
+ props={'frame':'calls==1&&frame[observer]==frame_before&&program.to_bytes()[observer]==raw_program[observer]', 'seeds':'calls==1&&seed_count==count as u64&&seed_len==lengths[selected]&&seed_byte==full[selected][coordinate]', 'program':'calls==1&&program_byte==raw_program[observer]', 'reply':'calls==1&&value_ok'}
+ corrupt={'frame':'frame[observer]^=1;', 'seeds':'seed_byte^=1;', 'program':'program_byte^=1;', 'reply':'out=Err(PubkeyError::MaxSeedLengthExceeded);'}
+ if part=='frame':text=text.replace('let mut out=(||','let mut frame:[u8;32]=kani::any();let frame_before=frame[observer];let mut out=(||')
  text=text.replace('PROPERTY',props[part]).replace('CORRUPT',corrupt[part] if mode=='inverse' else '')
  mod='NLK_pda'
  (E/(a+'_CUT.json')).write_text(json.dumps(dict(source=source['path'],source_sha256=source['sha256'],segment=segment,part=part,mode=mode,transcription='literal deployed branch; sole syscall replaced by local reply oracle; SUCCESS renamed to numeric0',domain='2..5 seeds, each length0..32; arbitrary seed/program/reply bytes; status0..2; selected nonempty byte',modifies='local log and exactly syscall output32',limits='unsupported-status abort separately required; local segment, no parent closure'),indent=1)+'\n')

@@ -30,3 +30,13 @@ unfolding; L008 passes. L013 adds the returned-Err Drop lemma. L014 rebuilds
 DriverFold because that direct dependency changed; not an unchanged regression.
 L012 PDA-domain draft had finite-list proof syntax errors; L015 corrected,
 L016 concrete site domains and L017 actual-owner suffix allocation law pass.
+
+Stage 3: native allowance exhausted at K060. Strict stdout validation reports
+26 passes and 26 matched assertion failures; five timeouts, two compile/gate
+rejections and one unwind failure receive no credit. Expanded lane and V2
+shapes were split after timeout; no timeout/cap increase. K039 timeout is NOT
+a passing negative control; K046's changed result-mutation control pairs K038.
+L018..L042 develop original-input lane header, digest, literal empty table,
+per-occurrence loop, complete conditional invocation/allocation schema and
+concrete registry callee installation. L041 had local decidability/name errors;
+L042 repairs them and prints only standard axioms. No row promotion.

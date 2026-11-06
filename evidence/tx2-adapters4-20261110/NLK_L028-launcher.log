@@ -1,0 +1,46 @@
+{"attempt": "NLK_L028", "exit_status": 1, "wall_seconds": 12.846376257948577, "peak_rss_kib": "5956604", "swaps": "0", "print_axioms": ["'NLK_LaneLoop.step_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLK_LaneLoop.fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLK_LaneLoop.shift_domain' depends on axioms: [propext, Quot.sound]", "'NLK_LaneLoop.count' depends on axioms: [propext]"]}
+NLK_generated/NLK_LaneLoop.lean:36:3: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x : core.result.Result Node Unit),
+    (step p next before level).2 level word =
+      match x, ⋯ with
+      | core.result.Result.Err a, result => before level word
+      | core.result.Result.Ok node, result => node word
+
+p : Sized
+next : U64
+before : Frontier
+level : Fin 20
+word : Fin 8
+⊢ (step p next before level).2 level word =
+    match raw p level, ⋯ with
+    | core.result.Result.Err a, result => before level word
+    | core.result.Result.Ok node, result => node word
+theorem NLK_LaneLoop.step_cut : ∀ (p : Sized) (next : U64) (before : Frontier) (level : Fin 20),
+  IterationCut (NLK_L
+...
+NLK_generated/NLK_LaneLoop.lean:36:3: error: Tactic `generalize` failed: result is not type correct
+  ∀ (x : core.result.Result Node Unit),
+    (step p next before level).2 level word =
+      match x, ⋯ with
+      | core.result.Result.Err a, result => before level word
+      | core.result.Result.Ok node, result => node word
+
+p : Sized
+next : U64
+before : Frontier
+level : Fin 20
+word : Fin 8
+⊢ (step p next before level).2 level word =
+    match raw p level, ⋯ with
+    | core.result.Result.Err a, result => before level word
+    | core.result.Result.Ok node, result => node word
+theorem NLK_LaneLoop.step_cut : ∀ (p : Sized) (next : U64) (before : Frontier) (level : Fin 20),
+  IterationCut (NLK_LaneTable.empty level) (occupied next level) before (step p next before level).2 level (raw p level)
+    (step p next before level).1 :=
+⋯
+'NLK_LaneLoop.step_cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLK_LaneLoop.fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLK_LaneLoop.shift_domain' depends on axioms: [propext, Quot.sound]
+'NLK_LaneLoop.count' depends on axioms: [propext]
+
+Running as unit: run-re62dafc60d6442759e3383c0ef5e3b20.scope; invocation ID: a3708f24ac75426ea9e551d833b12243

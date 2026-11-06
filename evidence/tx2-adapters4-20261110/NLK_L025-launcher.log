@@ -1,0 +1,59 @@
+{"attempt": "NLK_L025", "exit_status": 1, "wall_seconds": 12.156483317026868, "peak_rss_kib": "5954912", "swaps": "0", "print_axioms": ["'NLK_LaneDigest.child' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLK_LaneDigest.root_at_same_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLK_LaneDigest.frontier_at_same_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLK_generated/NLK_LaneDigest.lean:11:56: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  0 ≤ a ≤ 7
+  a - b ≥ 0
+where
+ a := ↑↑i
+ b := ↑(↑words).length
+theorem NLK_LaneDigest.child : ∀ (bytes : Std.Array U8 32#usize), source bytes = ok (decode bytes) :=
+fun bytes =>
+  have h := congrArg Prod.fst (NFY_NEQ_DecodeScalar.digest_result_state_effects bytes ());
+  id
+    (fun h =>
+      id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let reply ← _a
+                    ok (mapReply reply)) =
+                  ok (decode bytes))
+              h))
+          (Eq.refl do
+         
+...
+NLK_generated/NLK_LaneDigest.lean:11:56: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  0 ≤ a ≤ 7
+  a - b ≥ 0
+where
+ a := ↑↑i
+ b := ↑(↑words).length
+theorem NLK_LaneDigest.child : ∀ (bytes : Std.Array U8 32#usize), source bytes = ok (decode bytes) :=
+fun bytes =>
+  have h := congrArg Prod.fst (NFY_NEQ_DecodeScalar.digest_result_state_effects bytes ());
+  id
+    (fun h =>
+      id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let reply ← _a
+                    ok (mapReply reply)) =
+                  ok (decode bytes))
+              h))
+          (Eq.refl do
+            let reply ← ok (NFY_NBP_DigestDecode.decoded bytes)
+            ok (mapReply reply))))
+    h
+'NLK_LaneDigest.child' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLK_LaneDigest.root_at_same_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLK_LaneDigest.frontier_at_same_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4c7778a387404db3951090604e04c7dc.scope; invocation ID: c148037cf91d4e14aa1548ebafdf1d27

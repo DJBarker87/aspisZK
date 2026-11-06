@@ -1,0 +1,22 @@
+--- /dev/null
++++ b/NLK_pda_guard.rs
+@@ -0,0 +1,19 @@
++use super::*;
++use solana_program::pubkey::PubkeyError;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++const MAX_SEEDS:usize=16;const MAX_SEED_LEN:usize=32;
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage(){let raw:[u8;33]=kani::any();let lengths:[usize;17]=kani::any();for i in 0..17{kani::assume(lengths[i]<=33);}let count:usize=kani::any();kani::assume(count<=17);let all:[&[u8];17]=core::array::from_fn(|i|&raw[..lengths[i]]);let seeds=&all[..count];let mut suffix=0u8;
++let out=(||->Result<(),PubkeyError>{        if seeds.len() > MAX_SEEDS {
++            return Err(PubkeyError::MaxSeedLengthExceeded);
++        }
++        for seed in seeds.iter() {
++            if seed.len() > MAX_SEED_LEN {
++                return Err(PubkeyError::MaxSeedLengthExceeded);
++            }
++        }
++
++ suffix+=1;Ok(())})();
++let valid=count<=16&&(0..count).all(|i|lengths[i]<=32);
++assert!(out==if valid{Ok(())}else{Err(PubkeyError::MaxSeedLengthExceeded)}&&suffix==if valid{1}else{0},"pinned SDK ordered seed bounds reject before syscall and preserve prefix");}

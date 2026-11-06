@@ -1,0 +1,58 @@
+{"attempt": "NLK_L033", "exit_status": 1, "wall_seconds": 11.45272047794424, "peak_rss_kib": "5960612", "swaps": "0", "print_axioms": ["'NLK_LaneLoopSource.one_source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_LaneLoopSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLK_generated/NLK_LaneLoopSource.lean:46:37: error: Tactic `rfl` failed: The left-hand side
+  let (reply, after) := (core.result.Result.Ok u, after)
+  match reply with
+  | core.result.Result.Err e => ok (core.result.Result.Err e, after, [level])
+  | core.result.Result.Ok a =>
+    let (result, final, calls) := NKP_LaneInduction.fold (NLK_LaneLoop.step p next) rest after
+    ok (result, final, level :: calls)
+is not definitionally equal to the right-hand side
+  ok ((result, fst✝, snd✝).1, (result, fst✝, snd✝).2.1, level :: (result, fst✝, snd✝).2.2)
+
+case cons.mk.Ok.mk.mk
+p : Sized
+next : U64
+level : Fin 20
+rest : List (Fin 20)
+ih : ∀ (before : Frontier), run p next rest before = ok (NKP_LaneIn
+...
+((result, fst✝, snd✝).1, (result, fst✝, snd✝).2.1, level :: (result, fst✝, snd✝).2.2)
+
+case cons.mk.Ok.mk.mk
+p : Sized
+next : U64
+level : Fin 20
+rest : List (Fin 20)
+ih : ∀ (before : Frontier), run p next rest before = ok (NKP_LaneInduction.fold (NLK_LaneLoop.step p next) rest before)
+before : Frontier
+after : NKF_LaneTrace.Frontier
+u : Unit
+h : NLK_LaneLoop.step p next before level = (core.result.Result.Ok u, after)
+result : Reply
+fst✝ : Frontier
+snd✝ : List (Fin 20)
+z : NKP_LaneInduction.fold (NLK_LaneLoop.step p next) rest after = (result, fst✝, snd✝)
+⊢ (let (reply, after) := (core.result.Result.Ok u, after)
+    match reply with
+    | core.result.Result.Err e => ok (core.result.Result.Err e, after, [level])
+    | core.result.Result.Ok a =>
+      let (result, final, calls) := NKP_LaneInduction.fold (NLK_LaneLoop.step p next) rest after
+      ok (result, final, level :: calls)) =
+    ok ((result, fst✝, snd✝).1, (result, fst✝, snd✝).2.1, level :: (result, fst✝, snd✝).2.2)
+NLK_generated/NLK_LaneLoopSource.lean:40:15: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLK_LaneLoopSource.one_source : ∀ (p : Sized) (next : U64) (before : Frontier) (level : Fin 20),
+  one p next before level = ok (NLK_LaneLoop.step p next before level) :=
+⋯
+'NLK_LaneLoopSource.one_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_LaneLoopSource.source : ∀ (p : Sized) (next : U64) (levels : List (Fin 20)) (before : Frontier),
+  run p next levels before = ok (NKP_LaneInduction.fold (NLK_LaneLoop.step p next) levels before) :=
+⋯
+'NLK_LaneLoopSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r700c03df54e2452a9c1faa70f8938d2a.scope; invocation ID: d5d2a9f1a5464f699ebaf6e10a13b7c3

@@ -1,0 +1,34 @@
+{"attempt": "NLK_L039", "exit_status": 0, "wall_seconds": 22.934096347773448, "peak_rss_kib": "6354412", "swaps": "0", "print_axioms": ["'NLK_LaneInvocation.value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_LaneInvocation.owner' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_LaneInvocation.owned' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLK_LaneInvocation.log_irrelevant' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLK_LaneInvocation.value : ∀ (bytes : Slice U8) (allocated : ℕ)
+  (out : core.result.Result (NKY_BoxAction.Owned Lane) PE),
+  Cut bytes allocated out → ok (NKY_BoxCarrier.erase out) = NLK_LaneProgram.reference bytes :=
+⋯
+'NLK_LaneInvocation.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_LaneInvocation.owner : ∀ (bytes : Slice U8) (allocated : ℕ)
+  (out : core.result.Result (NKY_BoxAction.Owned Lane) PE),
+  Cut bytes allocated out → NKY_BoxCarrier.Owner allocated out :=
+⋯
+'NLK_LaneInvocation.owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_LaneInvocation.owned : ∀ {S : Type} (allocator : S2W_D189Wrappers.Allocator S) (before 
+...
+theorem NLK_LaneInvocation.value : ∀ (bytes : Slice U8) (allocated : ℕ)
+  (out : core.result.Result (NKY_BoxAction.Owned Lane) PE),
+  Cut bytes allocated out → ok (NKY_BoxCarrier.erase out) = NLK_LaneProgram.reference bytes :=
+⋯
+'NLK_LaneInvocation.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_LaneInvocation.owner : ∀ (bytes : Slice U8) (allocated : ℕ)
+  (out : core.result.Result (NKY_BoxAction.Owned Lane) PE),
+  Cut bytes allocated out → NKY_BoxCarrier.Owner allocated out :=
+⋯
+'NLK_LaneInvocation.owner' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NLK_LaneInvocation.owned : ∀ {S : Type} (allocator : S2W_D189Wrappers.Allocator S) (before : S)
+  (reservation : NP6_StdModel.Reservation) (bytes : Slice U8) (allocated : ℕ)
+  (out : core.result.Result (NKY_BoxAction.Owned Lane) PE),
+  Cut bytes allocated out →
+    NKY_BoxCarrier.native allocator before 720 reservation out =
+      NLK_LaneProgram.owned allocator before reservation allocated bytes :=
+⋯
+'NLK_LaneInvocation.owned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLK_LaneInvocation.log_irrelevant' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra9905357358a461d9179d0edb0621106.scope; invocation ID: 2f0a07ad3e234d0ca976edb1458e07f6

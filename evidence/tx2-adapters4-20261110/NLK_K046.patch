@@ -1,0 +1,30 @@
+--- /dev/null
++++ b/NLK_lane_suffix.rs
+@@ -0,0 +1,27 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++
++fn digest()->[M31;8]{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++struct State{root:Result<[M31;8],aspis_statement::AtomicStatementError>,loop_ok:bool,frontier:[[M31;8];20],root_calls:u8,loop_calls:u8,allocated:usize,input_byte:u8,coordinate:usize,next:u64}
++fn root(input:&[u8;32],s:&mut State)->Result<[M31;8],aspis_statement::AtomicStatementError>{s.root_calls+=1;s.input_byte=input[s.coordinate];s.root}
++fn loop_summary(_tree:&[u8],next:u64,s:&mut State)->Result<[[M31;8];20],ProgramError>{s.loop_calls+=1;s.next=next;if s.loop_ok{Ok(s.frontier)}else{Err(ProgramError::InvalidAccountData)}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage(){
++ use v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS;
++ let bytes:[u8;73]=kani::any();let master:[u8;32]=kani::any();let next_leaf_index:u64=kani::any();let root=digest();let raw:[[u32;8];20]=kani::any();let frontier=raw.map(|r|r.map(M31));let i:usize=kani::any();let row:usize=kani::any();let word:usize=kani::any();kani::assume(i<32&&row<20&&word<8);
++ let mut allocated=0usize;let mut out=(||->Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>{    if next_leaf_index == 0 && root != V7_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH] {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let boxed=Box::new(PoolV1PairForestLaneStateV1 {
++        bump: bytes[72],
++        master,
++        lane_id: bytes[5],
++        tree: IncrementalMerkleTreeV1 {
++            next_leaf_index,
++            root,
++            frontier,
++        },
++    }); allocated=(&*boxed as *const PoolV1PairForestLaneStateV1) as usize;Ok(boxed)})();
++ let expected=next_leaf_index!=0||root==V7_PAIR_EMPTY_ROOTS[20];if let Ok(v)=out.as_mut(){v.bump^=1;}let mut good=match out{Ok(v)=>expected&&v.bump==bytes[72]&&v.lane_id==bytes[5]&&v.master[i]==master[i]&&v.tree.next_leaf_index==next_leaf_index,Err(e)=>!expected&&e==ProgramError::InvalidAccountData&&allocated==0};
++  assert!(good,"post-loop terminal rejection full Result actual allocation-site owned carrier and all windows");}

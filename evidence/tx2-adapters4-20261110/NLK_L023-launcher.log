@@ -1,0 +1,46 @@
+{"attempt": "NLK_L023", "exit_status": 1, "wall_seconds": 13.28557316493243, "peak_rss_kib": "5963708", "swaps": "0", "print_axioms": ["'NLK_LaneHeader.source_order' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLK_LaneHeader.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLK_LaneHeader.admitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLK_LaneHeader.source_fields' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLK_generated/NLK_LaneHeader.lean:46:61: error: unsolved goals
+case pos
+p : Sized
+h : header p
+m : master p = Array.repeat 32#usize 0#u8
+t : treeHeader p
+n : ↑(fields p).next ≤ 1048576
+⊢ core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    if Array.repeat 32#usize 0#u8 ≠ Array.repeat 32#usize 0#u8 then core.result.Result.Ok (fields p)
+    else core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+
+case pos
+p : Sized
+h : header p
+m : ¬master p = Array.repeat 32#usize 0#u8
+t : treeHeader p
+n : ↑(fields p).next ≤ 1048576
+⊢ core.result.Result.Ok (fields p) =
+    if master p ≠ Array.repeat 32#usize 0#u8 then core.result.Result
+...
+Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)))
+                      fun a =>
+                      Eq.refl (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+                    (if_false (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                      (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData))))
+                (Eq.trans
+                  (ite_congr
+                    (Eq.trans
+                      (congr (congrArg And (eq_false h))
+                        (Eq.trans
+                          (congrArg (And (master p ≠ Array.repeat 32#usize 0#u8))
+                            (Eq.trans (congr (congrArg And (eq_false t)) (eq_false n)) (and_false False)))
+                          (and_false (master p ≠ Array.repeat 32#usize 0#u8))))
+                      (and_false False))
+                    (fun a => Eq.refl (core.result.Result.Ok (fields p))) fun a =>
+                    Eq.refl (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData))
+                  (if_false (core.result.Result.Ok (fields p))
+                    (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData))))
+              (eq_self (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)))
+'NLK_LaneHeader.source_order' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLK_LaneHeader.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLK_LaneHeader.admitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLK_LaneHeader.source_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9da20773d2234067a22f8863307c1b32.scope; invocation ID: 75d346bb180041cea39e56735cfe93af
