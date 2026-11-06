@@ -1,0 +1,21 @@
+pub(crate) fn create_or_allocate_pda<'info, R: PoolCpiRuntimeV1>(
+    runtime: &mut R,
+    payer: &AccountInfo<'info>,
+    account: &AccountInfo<'info>,
+    system_program_account: &AccountInfo<'info>,
+    exact_bytes: usize,
+    owner: &Pubkey,
+    signer_seeds: &[&[u8]],
+) -> ProgramResult {
+    let rent = Rent::get()?;
+    create_or_allocate_pda_with_rent(
+        runtime,
+        payer,
+        account,
+        system_program_account,
+        exact_bytes,
+        owner,
+        signer_seeds,
+        &rent,
+    )
+}

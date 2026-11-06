@@ -1,0 +1,21 @@
+fn require_payer_and_system_program(
+    payer: &AccountInfo<'_>,
+    system_program_account: &AccountInfo<'_>,
+) -> ProgramResult {
+    if !payer.is_signer
+        || !payer.is_writable
+        || payer.executable
+        || payer.owner != &system_program::id()
+    {
+        return Err(PoolV1ProgramError::InvalidPayer.into());
+    }
+    if system_program_account.key != &system_program::id()
+        || system_program_account.owner != &native_loader::id()
+        || !system_program_account.executable
+        || system_program_account.is_signer
+        || system_program_account.is_writable
+    {
+        return Err(PoolV1ProgramError::InvalidSystemProgram.into());
+    }
+    Ok(())
+}

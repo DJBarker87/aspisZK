@@ -1,0 +1,32 @@
+import PCA_PageFold
+set_option autoImplicit false
+namespace PCA
+open Transcription
+/-- Global counter-ledger preservation for this concrete transcription, ONLY
+relative to child preservation. It does not prove live-guard restoration, child
+RowSpecs, native association or POOL:328 closure. -/
+theorem deposit_preserves : Preserves Borrow.Invariant deposit := by
+  unfold deposit
+  repeat' (first
+    | apply bind_preserves
+    | apply call_preserves
+    | apply selectMode_preserves
+    | apply preparePage_preserves
+    | apply Borrow.acquire_preserves
+    | apply Borrow.copy_preserves
+    | apply Borrow.read_preserves
+    | apply account_preserves
+    | apply check_preserves
+    | apply get_preserves
+    | apply pure_preserves
+    | intro x
+    | split)
+
+theorem owner_counter_invariant (k : Children) (s : PCA_State)
+    (children : ChildPreserves Borrow.Invariant k) (initial : Borrow.Invariant s) :
+    Borrow.Invariant (PCA_Owner.spec k s).state :=
+  Borrow.finish_preserves _ (deposit_preserves k s children initial)
+
+#print axioms deposit_preserves
+#print axioms owner_counter_invariant
+end PCA

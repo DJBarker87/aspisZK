@@ -1,0 +1,9 @@
+{
+ "source": "programs/aspis-pool/src/pair_forest.rs",
+ "source_sha256": "d9589cfde4f9c74c022850ba624f359b6dc35efa211ce1b117042f6984d085e4",
+ "modified_sha256": "8ab9998285996812bf8d6b9c5869bbae6b9ff3fe025d5df0b126072edea1bc1b",
+ "annotation": "#[cfg_attr(kani, kani::ensures(|result| result == &PCA_harness::PCA_count_reference(accounts, expected)))]\n#[cfg_attr(kani, kani::modifies())]\n",
+ "suffix": "\n#[cfg(kani)]\n#[allow(non_snake_case)]\nmod PCA_harness {\n    use super::*;\n    pub(super) fn PCA_count_reference(accounts: &[AccountInfo<'_>], expected: usize) -> ProgramResult {\n        if accounts.len() != expected {\n            return Err(if accounts.len() < expected {\n                ProgramError::NotEnoughAccountKeys\n            } else {\n                ProgramError::InvalidArgument\n            });\n        }\n        Ok(())\n    }\n    #[kani::proof_for_contract(super::require_exact_account_count)]\n    fn PCA_count_contract() {\n        let accounts: &[AccountInfo<'_>] = kani::any();\n        let expected: usize = kani::any();\n        let _ = require_exact_account_count(accounts, expected);\n    }\n}\n",
+ "reference_body_sha256": "acbcab8e02927a9dea75e90cf92c96eda3495c0bc12c027c8410c80a9b40b06f",
+ "classification": "scratch cfg(kani) contract target only; no repository shipped mutation; exact count helper native signature retained"
+}
