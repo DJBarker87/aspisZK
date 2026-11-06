@@ -1,0 +1,1868 @@
+NLU_generated/NLU_FoldProjection.lean:47:55: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (digestLog (fold n { machine := after, owner := carryOwner s }).events,
+      eraseReply (fold n { machine := after, owner := carryOwner s }).reply).1
+in the target expression
+  (log ++ digestLog (fold n { machine := after, owner := carryOwner s }).events,
+      eraseReply (fold n { machine := after, owner := carryOwner s }).reply) =
+    (log ++ (run (NLC_Finish.fold n after)).1, (run (NLC_Finish.fold n after)).2)
+
+case succ.mk.ok.inr
+H : Type
+n : ℕ
+ih : ∀ (s : State H), (digestLog (fold n s).events, eraseReply (fold n s).reply) = run (NLC_Finish.fold n s.machine)
+s : State H
+log : PreparedHashCode.Log
+after : NLC_Finish.State H
+h : run (NLC_Finish.step s.machine) = (log, ok (Sum.inr after))
+next :
+  (digestLog (fold n { machine := after, owner := carryOwner s }).events,
+      eraseReply (fold n { machine := after, owner := carryOwner s }).reply) =
+    run (NLC_Finish.fold n { machine := after, owner := carryOwner s }.machine)
+logs :
+  (digestLog (fold n { machine := after, owner := carryOwner s }).events,
+        eraseReply (fold n { machine := after, owner := carryOwner s }).reply).1 =
+    (run (NLC_Finish.fold n { machine := after, owner := carryOwner s }.machine)).1
+values :
+  (digestLog (fold n { machine := after, owner := carryOwner s }).events,
+        eraseReply (fold n { machine := after, owner := carryOwner s }).reply).2 =
+    (run (NLC_Finish.fold n { machine := after, owner := carryOwner s }.machine)).2
+noAcquire : digestLog (if s.machine.next = NLC_Finish.Event.claims then [Event.acquire] else []) = []
+⊢ (log ++ digestLog (fold n { machine := after, owner := carryOwner s }).events,
+      eraseReply (fold n { machine := after, owner := carryOwner s }).reply) =
+    (log ++ (run (NLC_Finish.fold n after)).1, (run (NLC_Finish.fold n after)).2)
+'AspisR1.NLU.fold_projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLU.fold_projection : ∀ {H : Type} (n : ℕ) (s : State H),
+  (digestLog (fold n s).events, eraseReply (fold n s).reply) = run (NLC_Finish.fold n s.machine) :=
+fun {H} n s =>
+  Nat.recAux (motive := fun n =>
+    ∀ (s : State H), (digestLog (fold n s).events, eraseReply (fold n s).reply) = run (NLC_Finish.fold n s.machine))
+    (fun s => Eq.refl (digestLog (fold 0 s).events, eraseReply (fold 0 s).reply))
+    (fun n ih s =>
+      id
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => (digestLog (fold (n + 1) s).events, eraseReply (fold (n + 1) s).reply) = _a)
+              (AuS1_Trace.run_bind (NLC_Finish.step s.machine) fun post =>
+                match post with
+                | Sum.inl out => pure out
+                | Sum.inr after => NLC_Finish.fold n after)))
+          (let ⟨log, reply, h✝⟩ := run (NLC_Finish.step s.machine)
+          Eq.ndrec (motive := fun x =>
+            run (NLC_Finish.step s.machine) = x →
+              (digestLog (fold (n + 1) s).events, eraseReply (fold (n + 1) s).reply) =
+                AuS1_Trace.continueRun x.1 x.2 fun post =>
+                  match post with
+                  | Sum.inl out => pure out
+                  | Sum.inr after => NLC_Finish.fold n after)
+            (fun h =>
+              casesOn (motive := fun t =>
+                reply = t →
+                  (digestLog (fold (n + 1) s).events, eraseReply (fold (n + 1) s).reply) =
+                    AuS1_Trace.continueRun (log, reply).1 (log, reply).2 fun post =>
+                      match post with
+                      | Sum.inl out => pure out
+                      | Sum.inr after => NLC_Finish.fold n after)
+                reply
+                (fun post h_1 =>
+                  Eq.ndrec (motive := fun reply =>
+                    run (NLC_Finish.step s.machine) = (log, reply) →
+                      (digestLog (fold (n + 1) s).events, eraseReply (fold (n + 1) s).reply) =
+                        AuS1_Trace.continueRun (log, reply).1 (log, reply).2 fun post =>
+                          match post with
+                          | Sum.inl out => pure out
+                          | Sum.inr after => NLC_Finish.fold n after)
+                    (fun h =>
+                      Sum.casesOn (motive := fun t =>
+                        post = t →
+                          (digestLog (fold (n + 1) s).events, eraseReply (fold (n + 1) s).reply) =
+                            AuS1_Trace.continueRun (log, ok post).1 (log, ok post).2 fun post =>
+                              match post with
+                              | Sum.inl out => pure out
+                              | Sum.inr after => NLC_Finish.fold n after)
+                        post
+                        (fun out h_2 =>
+                          Eq.ndrec (motive := fun post =>
+                            run (NLC_Finish.step s.machine) = (log, ok post) →
+                              (digestLog (fold (n + 1) s).events, eraseReply (fold (n + 1) s).reply) =
+                                AuS1_Trace.continueRun (log, ok post).1 (log, ok post).2 fun post =>
+                                  match post with
+                                  | Sum.inl out => pure out
+                                  | Sum.inr after => NLC_Finish.fold n after)
+                            (fun h =>
+                              core.result.Result.casesOn (motive := fun t =>
+                                out = t →
+                                  (digestLog (fold (n + 1) s).events, eraseReply (fold (n + 1) s).reply) =
+                                    AuS1_Trace.continueRun (log, ok (Sum.inl out)).1 (log, ok (Sum.inl out)).2
+                                      fun post =>
+                                      match post with
+                                      | Sum.inl out => pure out
+                                      | Sum.inr after => NLC_Finish.fold n after)
+                                out
+                                (fun value h_3 =>
+                                  Eq.ndrec (motive := fun out =>
+                                    run (NLC_Finish.step s.machine) = (log, ok (Sum.inl out)) →
+                                      (digestLog (fold (n + 1) s).events, eraseReply (fold (n + 1) s).reply) =
+                                        AuS1_Trace.continueRun (log, ok (Sum.inl out)).1 (log, ok (Sum.inl out)).2
+                                          fun post =>
+                                          match post with
+                                          | Sum.inl out => pure out
+                                          | Sum.inr after => NLC_Finish.fold n after)
+                                    (fun h =>
+                                      Eq.mpr
+                                        (id
+                                          (congrFun'
+                                            (congrArg Eq
+                                              (congr
+                                                (congrArg Prod.mk
+                                                  (Eq.trans
+                                                    (Eq.trans
+                                                      (congrArg digestLog
+                                                        (congrArg Observation.events
+                                                          (Eq.trans
+                                                            (congrArg
+                                                              (fun x =>
+                                                                match x.reply with
+                                                                | fail e =>
+                                                                  { input := (step s).input, events := (step s).events,
+                                                                    reply := fail e }
+                                                                | div =>
+                                                                  { input := (step s).input, events := (step s).events,
+                                                                    reply := div }
+                                                                | ok (Sum.inl out) =>
+                                                                  { input := (step s).input, events := (step s).events,
+                                                                    reply := ok out }
+                                                                | ok (Sum.inr after) =>
+                                                                  have tail := fold n after;
+                                                                  { input := tail.input,
+                                                                    events := (step s).events ++ tail.events,
+                                                                    reply := tail.reply })
+                                                              (Eq.trans
+                                                                (congrArg
+                                                                  (fun x =>
+                                                                    match x.2 with
+                                                                    | fail e =>
+                                                                      { input := s.machine.input,
+                                                                        events :=
+                                                                          entered s ++
+                                                                            List.map Event.digest
+                                                                              (run (NLC_Finish.step s.machine)).1,
+                                                                        reply := fail e }
+                                                                    | div =>
+                                                                      { input := s.machine.input,
+                                                                        events :=
+                                                                          entered s ++
+                                                                            List.map Event.digest
+                                                                              (run (NLC_Finish.step s.machine)).1,
+                                                                        reply := div }
+                                                                    | ok post =>
+                                                                      have next := carry s post;
+                                                                      { input := s.machine.input,
+                                                                        events :=
+                                                                          entered s ++
+                                                                              List.map Event.digest
+                                                                                (run (NLC_Finish.step s.machine)).1 ++
+                                                                            next.1,
+                                                                        reply := ok next.2 })
+                                                                  h)
+                                                                (congrFun'
+                                                                  (congrArg (StepObservation.mk s.machine.input)
+                                                                    (congrFun'
+                                                                      (congrArg HAppend.hAppend
+                                                                        (congrArg (HAppend.hAppend (entered s))
+                                                                          (congrArg (List.map Event.digest)
+                                                                            (congrArg Prod.fst h))))
+                                                                      [Event.transfer]))
+                                                                  (ok
+                                                                    (Sum.inl
+                                                                      (core.result.Result.Ok value,
+                                                                        Owner.transferred))))))
+                                                            (congrFun'
+                                                              (congr
+                                                                (congrArg Observation.mk
+                                                                  (congrArg StepObservation.input
+                                                                    (Eq.trans
+                                                                      (congrArg
+                                                                        (fun x =>
+                                                                          match x.2 with
+                                                                          | fail e =>
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                                              reply := fail e }
+                                                                          | div =>
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                                              reply := div }
+                                                                          | ok post =>
+                                                                            have next := carry s post;
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                    List.map Event.digest
+                                                                                      (run
+                                                                                          (NLC_Finish.step
+                                                                                            s.machine)).1 ++
+                                                                                  next.1,
+                                                                              reply := ok next.2 })
+                                                                        h)
+                                                                      (congrFun'
+                                                                        (congrArg (StepObservation.mk s.machine.input)
+                                                                          (congrFun'
+                                                                            (congrArg HAppend.hAppend
+                                                                              (congrArg (HAppend.hAppend (entered s))
+                                                                                (congrArg (List.map Event.digest)
+                                                                                  (congrArg Prod.fst h))))
+                                                                            [Event.transfer]))
+                                                                        (ok
+                                                                          (Sum.inl
+                                                                            (core.result.Result.Ok value,
+                                                                              Owner.transferred)))))))
+                                                                (congrArg StepObservation.events
+                                                                  (Eq.trans
+                                                                    (congrArg
+                                                                      (fun x =>
+                                                                        match x.2 with
+                                                                        | fail e =>
+                                                                          { input := s.machine.input,
+                                                                            events :=
+                                                                              entered s ++
+                                                                                List.map Event.digest
+                                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                                            reply := fail e }
+                                                                        | div =>
+                                                                          { input := s.machine.input,
+                                                                            events :=
+                                                                              entered s ++
+                                                                                List.map Event.digest
+                                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                                            reply := div }
+                                                                        | ok post =>
+                                                                          have next := carry s post;
+                                                                          { input := s.machine.input,
+                                                                            events :=
+                                                                              entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run
+                                                                                        (NLC_Finish.step
+                                                                                          s.machine)).1 ++
+                                                                                next.1,
+                                                                            reply := ok next.2 })
+                                                                      h)
+                                                                    (congrFun'
+                                                                      (congrArg (StepObservation.mk s.machine.input)
+                                                                        (congrFun'
+                                                                          (congrArg HAppend.hAppend
+                                                                            (congrArg (HAppend.hAppend (entered s))
+                                                                              (congrArg (List.map Event.digest)
+                                                                                (congrArg Prod.fst h))))
+                                                                          [Event.transfer]))
+                                                                      (ok
+                                                                        (Sum.inl
+                                                                          (core.result.Result.Ok value,
+                                                                            Owner.transferred)))))))
+                                                              (ok (core.result.Result.Ok value, Owner.transferred))))))
+                                                      (digest_append (entered s ++ List.map Event.digest log)
+                                                        [Event.transfer]))
+                                                    (congrFun'
+                                                      (congrArg HAppend.hAppend
+                                                        (Eq.trans
+                                                          (digest_append (entered s) (List.map Event.digest log))
+                                                          (congr (congrArg HAppend.hAppend (entered_digest s))
+                                                            (map_digest log))))
+                                                      (digestLog [Event.transfer]))))
+                                                (Eq.trans
+                                                  (congrFun'
+                                                    (congrArg Bind.bind
+                                                      (congrArg Observation.reply
+                                                        (Eq.trans
+                                                          (congrArg
+                                                            (fun x =>
+                                                              match x.reply with
+                                                              | fail e =>
+                                                                { input := (step s).input, events := (step s).events,
+                                                                  reply := fail e }
+                                                              | div =>
+                                                                { input := (step s).input, events := (step s).events,
+                                                                  reply := div }
+                                                              | ok (Sum.inl out) =>
+                                                                { input := (step s).input, events := (step s).events,
+                                                                  reply := ok out }
+                                                              | ok (Sum.inr after) =>
+                                                                have tail := fold n after;
+                                                                { input := tail.input,
+                                                                  events := (step s).events ++ tail.events,
+                                                                  reply := tail.reply })
+                                                            (Eq.trans
+                                                              (congrArg
+                                                                (fun x =>
+                                                                  match x.2 with
+                                                                  | fail e =>
+                                                                    { input := s.machine.input,
+                                                                      events :=
+                                                                        entered s ++
+                                                                          List.map Event.digest
+                                                                            (run (NLC_Finish.step s.machine)).1,
+                                                                      reply := fail e }
+                                                                  | div =>
+                                                                    { input := s.machine.input,
+                                                                      events :=
+                                                                        entered s ++
+                                                                          List.map Event.digest
+                                                                            (run (NLC_Finish.step s.machine)).1,
+                                                                      reply := div }
+                                                                  | ok post =>
+                                                                    have next := carry s post;
+                                                                    { input := s.machine.input,
+                                                                      events :=
+                                                                        entered s ++
+                                                                            List.map Event.digest
+                                                                              (run (NLC_Finish.step s.machine)).1 ++
+                                                                          next.1,
+                                                                      reply := ok next.2 })
+                                                                h)
+                                                              (congrFun'
+                                                                (congrArg (StepObservation.mk s.machine.input)
+                                                                  (congrFun'
+                                                                    (congrArg HAppend.hAppend
+                                                                      (congrArg (HAppend.hAppend (entered s))
+                                                                        (congrArg (List.map Event.digest)
+                                                                          (congrArg Prod.fst h))))
+                                                                    [Event.transfer]))
+                                                                (ok
+                                                                  (Sum.inl
+                                                                    (core.result.Result.Ok value,
+                                                                      Owner.transferred))))))
+                                                          (congrFun'
+                                                            (congr
+                                                              (congrArg Observation.mk
+                                                                (congrArg StepObservation.input
+                                                                  (Eq.trans
+                                                                    (congrArg
+                                                                      (fun x =>
+                                                                        match x.2 with
+                                                                        | fail e =>
+                                                                          { input := s.machine.input,
+                                                                            events :=
+                                                                              entered s ++
+                                                                                List.map Event.digest
+                                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                                            reply := fail e }
+                                                                        | div =>
+                                                                          { input := s.machine.input,
+                                                                            events :=
+                                                                              entered s ++
+                                                                                List.map Event.digest
+                                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                                            reply := div }
+                                                                        | ok post =>
+                                                                          have next := carry s post;
+                                                                          { input := s.machine.input,
+                                                                            events :=
+                                                                              entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run
+                                                                                        (NLC_Finish.step
+                                                                                          s.machine)).1 ++
+                                                                                next.1,
+                                                                            reply := ok next.2 })
+                                                                      h)
+                                                                    (congrFun'
+                                                                      (congrArg (StepObservation.mk s.machine.input)
+                                                                        (congrFun'
+                                                                          (congrArg HAppend.hAppend
+                                                                            (congrArg (HAppend.hAppend (entered s))
+                                                                              (congrArg (List.map Event.digest)
+                                                                                (congrArg Prod.fst h))))
+                                                                          [Event.transfer]))
+                                                                      (ok
+                                                                        (Sum.inl
+                                                                          (core.result.Result.Ok value,
+                                                                            Owner.transferred)))))))
+                                                              (congrArg StepObservation.events
+                                                                (Eq.trans
+                                                                  (congrArg
+                                                                    (fun x =>
+                                                                      match x.2 with
+                                                                      | fail e =>
+                                                                        { input := s.machine.input,
+                                                                          events :=
+                                                                            entered s ++
+                                                                              List.map Event.digest
+                                                                                (run (NLC_Finish.step s.machine)).1,
+                                                                          reply := fail e }
+                                                                      | div =>
+                                                                        { input := s.machine.input,
+                                                                          events :=
+                                                                            entered s ++
+                                                                              List.map Event.digest
+                                                                                (run (NLC_Finish.step s.machine)).1,
+                                                                          reply := div }
+                                                                      | ok post =>
+                                                                        have next := carry s post;
+                                                                        { input := s.machine.input,
+                                                                          events :=
+                                                                            entered s ++
+                                                                                List.map Event.digest
+                                                                                  (run (NLC_Finish.step s.machine)).1 ++
+                                                                              next.1,
+                                                                          reply := ok next.2 })
+                                                                    h)
+                                                                  (congrFun'
+                                                                    (congrArg (StepObservation.mk s.machine.input)
+                                                                      (congrFun'
+                                                                        (congrArg HAppend.hAppend
+                                                                          (congrArg (HAppend.hAppend (entered s))
+                                                                            (congrArg (List.map Event.digest)
+                                                                              (congrArg Prod.fst h))))
+                                                                        [Event.transfer]))
+                                                                    (ok
+                                                                      (Sum.inl
+                                                                        (core.result.Result.Ok value,
+                                                                          Owner.transferred)))))))
+                                                            (ok (core.result.Result.Ok value, Owner.transferred))))))
+                                                    fun out => ok out.1)
+                                                  (bind_tc_ok (core.result.Result.Ok value, Owner.transferred) fun y =>
+                                                    ok y.1))))
+                                            (log ++ (run (pure (core.result.Result.Ok value))).1,
+                                              (run (pure (core.result.Result.Ok value))).2)))
+                                        (Eq.refl (log ++ digestLog [Event.transfer], ok (core.result.Result.Ok value))))
+                                    (Eq.symm h_3) h)
+                                (fun err h_3 =>
+                                  Eq.ndrec (motive := fun out =>
+                                    run (NLC_Finish.step s.machine) = (log, ok (Sum.inl out)) →
+                                      (digestLog (fold (n + 1) s).events, eraseReply (fold (n + 1) s).reply) =
+                                        AuS1_Trace.continueRun (log, ok (Sum.inl out)).1 (log, ok (Sum.inl out)).2
+                                          fun post =>
+                                          match post with
+                                          | Sum.inl out => pure out
+                                          | Sum.inr after => NLC_Finish.fold n after)
+                                    (fun h =>
+                                      if live : s.owner = Owner.live then
+                                        Eq.mpr
+                                          (id
+                                            (congrFun'
+                                              (congrArg Eq
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (Eq.trans
+                                                      (Eq.trans
+                                                        (congrArg digestLog
+                                                          (congrArg Observation.events
+                                                            (Eq.trans
+                                                              (congrArg
+                                                                (fun x =>
+                                                                  match x.reply with
+                                                                  | fail e =>
+                                                                    { input := (step s).input,
+                                                                      events := (step s).events, reply := fail e }
+                                                                  | div =>
+                                                                    { input := (step s).input,
+                                                                      events := (step s).events, reply := div }
+                                                                  | ok (Sum.inl out) =>
+                                                                    { input := (step s).input,
+                                                                      events := (step s).events, reply := ok out }
+                                                                  | ok (Sum.inr after) =>
+                                                                    have tail := fold n after;
+                                                                    { input := tail.input,
+                                                                      events := (step s).events ++ tail.events,
+                                                                      reply := tail.reply })
+                                                                (Eq.trans
+                                                                  (congrArg
+                                                                    (fun x =>
+                                                                      match x.2 with
+                                                                      | fail e =>
+                                                                        { input := s.machine.input,
+                                                                          events :=
+                                                                            entered s ++
+                                                                              List.map Event.digest
+                                                                                (run (NLC_Finish.step s.machine)).1,
+                                                                          reply := fail e }
+                                                                      | div =>
+                                                                        { input := s.machine.input,
+                                                                          events :=
+                                                                            entered s ++
+                                                                              List.map Event.digest
+                                                                                (run (NLC_Finish.step s.machine)).1,
+                                                                          reply := div }
+                                                                      | ok post =>
+                                                                        have next := carry s post;
+                                                                        { input := s.machine.input,
+                                                                          events :=
+                                                                            entered s ++
+                                                                                List.map Event.digest
+                                                                                  (run (NLC_Finish.step s.machine)).1 ++
+                                                                              next.1,
+                                                                          reply := ok next.2 })
+                                                                    h)
+                                                                  (congr
+                                                                    (congrArg (StepObservation.mk s.machine.input)
+                                                                      (congr
+                                                                        (congrArg HAppend.hAppend
+                                                                          (congrArg (HAppend.hAppend (entered s))
+                                                                            (congrArg (List.map Event.digest)
+                                                                              (congrArg Prod.fst h))))
+                                                                        (congrArg Prod.fst
+                                                                          (ite_congr
+                                                                            (Eq.trans
+                                                                              (congrFun' (congrArg Eq live) Owner.live)
+                                                                              (eq_self Owner.live))
+                                                                            (fun a =>
+                                                                              Eq.refl
+                                                                                ([Event.release],
+                                                                                  Sum.inl
+                                                                                    (core.result.Result.Err err,
+                                                                                      Owner.dropped)))
+                                                                            fun a =>
+                                                                            congrArg (Prod.mk [])
+                                                                              (congrArg Sum.inl
+                                                                                (congrArg
+                                                                                  (Prod.mk (core.result.Result.Err err))
+                                                                                  live))))))
+                                                                    (congrArg ok
+                                                                      (congrArg Prod.snd
+                                                                        (ite_congr
+                                                                          (Eq.trans
+                                                                            (congrFun' (congrArg Eq live) Owner.live)
+                                                                            (eq_self Owner.live))
+                                                                          (fun a =>
+                                                                            Eq.refl
+                                                                              ([Event.release],
+                                                                                Sum.inl
+                                                                                  (core.result.Result.Err err,
+                                                                                    Owner.dropped)))
+                                                                          fun a =>
+                                                                          congrArg (Prod.mk [])
+                                                                            (congrArg Sum.inl
+                                                                              (congrArg
+                                                                                (Prod.mk (core.result.Result.Err err))
+                                                                                live))))))))
+                                                              (congrFun'
+                                                                (congr
+                                                                  (congrArg Observation.mk
+                                                                    (congrArg StepObservation.input
+                                                                      (Eq.trans
+                                                                        (congrArg
+                                                                          (fun x =>
+                                                                            match x.2 with
+                                                                            | fail e =>
+                                                                              { input := s.machine.input,
+                                                                                events :=
+                                                                                  entered s ++
+                                                                                    List.map Event.digest
+                                                                                      (run
+                                                                                          (NLC_Finish.step
+                                                                                            s.machine)).1,
+                                                                                reply := fail e }
+                                                                            | div =>
+                                                                              { input := s.machine.input,
+                                                                                events :=
+                                                                                  entered s ++
+                                                                                    List.map Event.digest
+                                                                                      (run
+                                                                                          (NLC_Finish.step
+                                                                                            s.machine)).1,
+                                                                                reply := div }
+                                                                            | ok post =>
+                                                                              have next := carry s post;
+                                                                              { input := s.machine.input,
+                                                                                events :=
+                                                                                  entered s ++
+                                                                                      List.map Event.digest
+                                                                                        (run
+                                                                                            (NLC_Finish.step
+                                                                                              s.machine)).1 ++
+                                                                                    next.1,
+                                                                                reply := ok next.2 })
+                                                                          h)
+                                                                        (congr
+                                                                          (congrArg (StepObservation.mk s.machine.input)
+                                                                            (congr
+                                                                              (congrArg HAppend.hAppend
+                                                                                (congrArg (HAppend.hAppend (entered s))
+                                                                                  (congrArg (List.map Event.digest)
+                                                                                    (congrArg Prod.fst h))))
+                                                                              (congrArg Prod.fst
+                                                                                (ite_congr
+                                                                                  (Eq.trans
+                                                                                    (congrFun' (congrArg Eq live)
+                                                                                      Owner.live)
+                                                                                    (eq_self Owner.live))
+                                                                                  (fun a =>
+                                                                                    Eq.refl
+                                                                                      ([Event.release],
+                                                                                        Sum.inl
+                                                                                          (core.result.Result.Err err,
+                                                                                            Owner.dropped)))
+                                                                                  fun a =>
+                                                                                  congrArg (Prod.mk [])
+                                                                                    (congrArg Sum.inl
+                                                                                      (congrArg
+                                                                                        (Prod.mk
+                                                                                          (core.result.Result.Err err))
+                                                                                        live))))))
+                                                                          (congrArg ok
+                                                                            (congrArg Prod.snd
+                                                                              (ite_congr
+                                                                                (Eq.trans
+                                                                                  (congrFun' (congrArg Eq live)
+                                                                                    Owner.live)
+                                                                                  (eq_self Owner.live))
+                                                                                (fun a =>
+                                                                                  Eq.refl
+                                                                                    ([Event.release],
+                                                                                      Sum.inl
+                                                                                        (core.result.Result.Err err,
+                                                                                          Owner.dropped)))
+                                                                                fun a =>
+                                                                                congrArg (Prod.mk [])
+                                                                                  (congrArg Sum.inl
+                                                                                    (congrArg
+                                                                                      (Prod.mk
+                                                                                        (core.result.Result.Err err))
+                                                                                      live)))))))))
+                                                                  (congrArg StepObservation.events
+                                                                    (Eq.trans
+                                                                      (congrArg
+                                                                        (fun x =>
+                                                                          match x.2 with
+                                                                          | fail e =>
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                                              reply := fail e }
+                                                                          | div =>
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                                              reply := div }
+                                                                          | ok post =>
+                                                                            have next := carry s post;
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                    List.map Event.digest
+                                                                                      (run
+                                                                                          (NLC_Finish.step
+                                                                                            s.machine)).1 ++
+                                                                                  next.1,
+                                                                              reply := ok next.2 })
+                                                                        h)
+                                                                      (congr
+                                                                        (congrArg (StepObservation.mk s.machine.input)
+                                                                          (congr
+                                                                            (congrArg HAppend.hAppend
+                                                                              (congrArg (HAppend.hAppend (entered s))
+                                                                                (congrArg (List.map Event.digest)
+                                                                                  (congrArg Prod.fst h))))
+                                                                            (congrArg Prod.fst
+                                                                              (ite_congr
+                                                                                (Eq.trans
+                                                                                  (congrFun' (congrArg Eq live)
+                                                                                    Owner.live)
+                                                                                  (eq_self Owner.live))
+                                                                                (fun a =>
+                                                                                  Eq.refl
+                                                                                    ([Event.release],
+                                                                                      Sum.inl
+                                                                                        (core.result.Result.Err err,
+                                                                                          Owner.dropped)))
+                                                                                fun a =>
+                                                                                congrArg (Prod.mk [])
+                                                                                  (congrArg Sum.inl
+                                                                                    (congrArg
+                                                                                      (Prod.mk
+                                                                                        (core.result.Result.Err err))
+                                                                                      live))))))
+                                                                        (congrArg ok
+                                                                          (congrArg Prod.snd
+                                                                            (ite_congr
+                                                                              (Eq.trans
+                                                                                (congrFun' (congrArg Eq live)
+                                                                                  Owner.live)
+                                                                                (eq_self Owner.live))
+                                                                              (fun a =>
+                                                                                Eq.refl
+                                                                                  ([Event.release],
+                                                                                    Sum.inl
+                                                                                      (core.result.Result.Err err,
+                                                                                        Owner.dropped)))
+                                                                              fun a =>
+                                                                              congrArg (Prod.mk [])
+                                                                                (congrArg Sum.inl
+                                                                                  (congrArg
+                                                                                    (Prod.mk
+                                                                                      (core.result.Result.Err err))
+                                                                                    live)))))))))
+                                                                (ok (core.result.Result.Err err, Owner.dropped))))))
+                                                        (digest_append (entered s ++ List.map Event.digest log)
+                                                          [Event.release]))
+                                                      (congrFun'
+                                                        (congrArg HAppend.hAppend
+                                                          (Eq.trans
+                                                            (digest_append (entered s) (List.map Event.digest log))
+                                                            (congr (congrArg HAppend.hAppend (entered_digest s))
+                                                              (map_digest log))))
+                                                        (digestLog [Event.release]))))
+                                                  (Eq.trans
+                                                    (congrFun'
+                                                      (congrArg Bind.bind
+                                                        (congrArg Observation.reply
+                                                          (Eq.trans
+                                                            (congrArg
+                                                              (fun x =>
+                                                                match x.reply with
+                                                                | fail e =>
+                                                                  { input := (step s).input, events := (step s).events,
+                                                                    reply := fail e }
+                                                                | div =>
+                                                                  { input := (step s).input, events := (step s).events,
+                                                                    reply := div }
+                                                                | ok (Sum.inl out) =>
+                                                                  { input := (step s).input, events := (step s).events,
+                                                                    reply := ok out }
+                                                                | ok (Sum.inr after) =>
+                                                                  have tail := fold n after;
+                                                                  { input := tail.input,
+                                                                    events := (step s).events ++ tail.events,
+                                                                    reply := tail.reply })
+                                                              (Eq.trans
+                                                                (congrArg
+                                                                  (fun x =>
+                                                                    match x.2 with
+                                                                    | fail e =>
+                                                                      { input := s.machine.input,
+                                                                        events :=
+                                                                          entered s ++
+                                                                            List.map Event.digest
+                                                                              (run (NLC_Finish.step s.machine)).1,
+                                                                        reply := fail e }
+                                                                    | div =>
+                                                                      { input := s.machine.input,
+                                                                        events :=
+                                                                          entered s ++
+                                                                            List.map Event.digest
+                                                                              (run (NLC_Finish.step s.machine)).1,
+                                                                        reply := div }
+                                                                    | ok post =>
+                                                                      have next := carry s post;
+                                                                      { input := s.machine.input,
+                                                                        events :=
+                                                                          entered s ++
+                                                                              List.map Event.digest
+                                                                                (run (NLC_Finish.step s.machine)).1 ++
+                                                                            next.1,
+                                                                        reply := ok next.2 })
+                                                                  h)
+                                                                (congr
+                                                                  (congrArg (StepObservation.mk s.machine.input)
+                                                                    (congr
+                                                                      (congrArg HAppend.hAppend
+                                                                        (congrArg (HAppend.hAppend (entered s))
+                                                                          (congrArg (List.map Event.digest)
+                                                                            (congrArg Prod.fst h))))
+                                                                      (congrArg Prod.fst
+                                                                        (ite_congr
+                                                                          (Eq.trans
+                                                                            (congrFun' (congrArg Eq live) Owner.live)
+                                                                            (eq_self Owner.live))
+                                                                          (fun a =>
+                                                                            Eq.refl
+                                                                              ([Event.release],
+                                                                                Sum.inl
+                                                                                  (core.result.Result.Err err,
+                                                                                    Owner.dropped)))
+                                                                          fun a =>
+                                                                          congrArg (Prod.mk [])
+                                                                            (congrArg Sum.inl
+                                                                              (congrArg
+                                                                                (Prod.mk (core.result.Result.Err err))
+                                                                                live))))))
+                                                                  (congrArg ok
+                                                                    (congrArg Prod.snd
+                                                                      (ite_congr
+                                                                        (Eq.trans
+                                                                          (congrFun' (congrArg Eq live) Owner.live)
+                                                                          (eq_self Owner.live))
+                                                                        (fun a =>
+                                                                          Eq.refl
+                                                                            ([Event.release],
+                                                                              Sum.inl
+                                                                                (core.result.Result.Err err,
+                                                                                  Owner.dropped)))
+                                                                        fun a =>
+                                                                        congrArg (Prod.mk [])
+                                                                          (congrArg Sum.inl
+                                                                            (congrArg
+                                                                              (Prod.mk (core.result.Result.Err err))
+                                                                              live))))))))
+                                                            (congrFun'
+                                                              (congr
+                                                                (congrArg Observation.mk
+                                                                  (congrArg StepObservation.input
+                                                                    (Eq.trans
+                                                                      (congrArg
+                                                                        (fun x =>
+                                                                          match x.2 with
+                                                                          | fail e =>
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                                              reply := fail e }
+                                                                          | div =>
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                                              reply := div }
+                                                                          | ok post =>
+                                                                            have next := carry s post;
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                    List.map Event.digest
+                                                                                      (run
+                                                                                          (NLC_Finish.step
+                                                                                            s.machine)).1 ++
+                                                                                  next.1,
+                                                                              reply := ok next.2 })
+                                                                        h)
+                                                                      (congr
+                                                                        (congrArg (StepObservation.mk s.machine.input)
+                                                                          (congr
+                                                                            (congrArg HAppend.hAppend
+                                                                              (congrArg (HAppend.hAppend (entered s))
+                                                                                (congrArg (List.map Event.digest)
+                                                                                  (congrArg Prod.fst h))))
+                                                                            (congrArg Prod.fst
+                                                                              (ite_congr
+                                                                                (Eq.trans
+                                                                                  (congrFun' (congrArg Eq live)
+                                                                                    Owner.live)
+                                                                                  (eq_self Owner.live))
+                                                                                (fun a =>
+                                                                                  Eq.refl
+                                                                                    ([Event.release],
+                                                                                      Sum.inl
+                                                                                        (core.result.Result.Err err,
+                                                                                          Owner.dropped)))
+                                                                                fun a =>
+                                                                                congrArg (Prod.mk [])
+                                                                                  (congrArg Sum.inl
+                                                                                    (congrArg
+                                                                                      (Prod.mk
+                                                                                        (core.result.Result.Err err))
+                                                                                      live))))))
+                                                                        (congrArg ok
+                                                                          (congrArg Prod.snd
+                                                                            (ite_congr
+                                                                              (Eq.trans
+                                                                                (congrFun' (congrArg Eq live)
+                                                                                  Owner.live)
+                                                                                (eq_self Owner.live))
+                                                                              (fun a =>
+                                                                                Eq.refl
+                                                                                  ([Event.release],
+                                                                                    Sum.inl
+                                                                                      (core.result.Result.Err err,
+                                                                                        Owner.dropped)))
+                                                                              fun a =>
+                                                                              congrArg (Prod.mk [])
+                                                                                (congrArg Sum.inl
+                                                                                  (congrArg
+                                                                                    (Prod.mk
+                                                                                      (core.result.Result.Err err))
+                                                                                    live)))))))))
+                                                                (congrArg StepObservation.events
+                                                                  (Eq.trans
+                                                                    (congrArg
+                                                                      (fun x =>
+                                                                        match x.2 with
+                                                                        | fail e =>
+                                                                          { input := s.machine.input,
+                                                                            events :=
+                                                                              entered s ++
+                                                                                List.map Event.digest
+                                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                                            reply := fail e }
+                                                                        | div =>
+                                                                          { input := s.machine.input,
+                                                                            events :=
+                                                                              entered s ++
+                                                                                List.map Event.digest
+                                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                                            reply := div }
+                                                                        | ok post =>
+                                                                          have next := carry s post;
+                                                                          { input := s.machine.input,
+                                                                            events :=
+                                                                              entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run
+                                                                                        (NLC_Finish.step
+                                                                                          s.machine)).1 ++
+                                                                                next.1,
+                                                                            reply := ok next.2 })
+                                                                      h)
+                                                                    (congr
+                                                                      (congrArg (StepObservation.mk s.machine.input)
+                                                                        (congr
+                                                                          (congrArg HAppend.hAppend
+                                                                            (congrArg (HAppend.hAppend (entered s))
+                                                                              (congrArg (List.map Event.digest)
+                                                                                (congrArg Prod.fst h))))
+                                                                          (congrArg Prod.fst
+                                                                            (ite_congr
+                                                                              (Eq.trans
+                                                                                (congrFun' (congrArg Eq live)
+                                                                                  Owner.live)
+                                                                                (eq_self Owner.live))
+                                                                              (fun a =>
+                                                                                Eq.refl
+                                                                                  ([Event.release],
+                                                                                    Sum.inl
+                                                                                      (core.result.Result.Err err,
+                                                                                        Owner.dropped)))
+                                                                              fun a =>
+                                                                              congrArg (Prod.mk [])
+                                                                                (congrArg Sum.inl
+                                                                                  (congrArg
+                                                                                    (Prod.mk
+                                                                                      (core.result.Result.Err err))
+                                                                                    live))))))
+                                                                      (congrArg ok
+                                                                        (congrArg Prod.snd
+                                                                          (ite_congr
+                                                                            (Eq.trans
+                                                                              (congrFun' (congrArg Eq live) Owner.live)
+                                                                              (eq_self Owner.live))
+                                                                            (fun a =>
+                                                                              Eq.refl
+                                                                                ([Event.release],
+                                                                                  Sum.inl
+                                                                                    (core.result.Result.Err err,
+                                                                                      Owner.dropped)))
+                                                                            fun a =>
+                                                                            congrArg (Prod.mk [])
+                                                                              (congrArg Sum.inl
+                                                                                (congrArg
+                                                                                  (Prod.mk (core.result.Result.Err err))
+                                                                                  live)))))))))
+                                                              (ok (core.result.Result.Err err, Owner.dropped))))))
+                                                      fun out => ok out.1)
+                                                    (bind_tc_ok (core.result.Result.Err err, Owner.dropped) fun y =>
+                                                      ok y.1))))
+                                              (log ++ (run (pure (core.result.Result.Err err))).1,
+                                                (run (pure (core.result.Result.Err err))).2)))
+                                          (Eq.refl (log ++ digestLog [Event.release], ok (core.result.Result.Err err)))
+                                      else
+                                        Eq.mpr
+                                          (id
+                                            (congrFun'
+                                              (congrArg Eq
+                                                (congr
+                                                  (congrArg Prod.mk
+                                                    (Eq.trans
+                                                      (Eq.trans
+                                                        (congrArg digestLog
+                                                          (congrArg Observation.events
+                                                            (Eq.trans
+                                                              (congrArg
+                                                                (fun x =>
+                                                                  match x.reply with
+                                                                  | fail e =>
+                                                                    { input := (step s).input,
+                                                                      events := (step s).events, reply := fail e }
+                                                                  | div =>
+                                                                    { input := (step s).input,
+                                                                      events := (step s).events, reply := div }
+                                                                  | ok (Sum.inl out) =>
+                                                                    { input := (step s).input,
+                                                                      events := (step s).events, reply := ok out }
+                                                                  | ok (Sum.inr after) =>
+                                                                    have tail := fold n after;
+                                                                    { input := tail.input,
+                                                                      events := (step s).events ++ tail.events,
+                                                                      reply := tail.reply })
+                                                                (Eq.trans
+                                                                  (congrArg
+                                                                    (fun x =>
+                                                                      match x.2 with
+                                                                      | fail e =>
+                                                                        { input := s.machine.input,
+                                                                          events :=
+                                                                            entered s ++
+                                                                              List.map Event.digest
+                                                                                (run (NLC_Finish.step s.machine)).1,
+                                                                          reply := fail e }
+                                                                      | div =>
+                                                                        { input := s.machine.input,
+                                                                          events :=
+                                                                            entered s ++
+                                                                              List.map Event.digest
+                                                                                (run (NLC_Finish.step s.machine)).1,
+                                                                          reply := div }
+                                                                      | ok post =>
+                                                                        have next := carry s post;
+                                                                        { input := s.machine.input,
+                                                                          events :=
+                                                                            entered s ++
+                                                                                List.map Event.digest
+                                                                                  (run (NLC_Finish.step s.machine)).1 ++
+                                                                              next.1,
+                                                                          reply := ok next.2 })
+                                                                    h)
+                                                                  (congr
+                                                                    (congrArg (StepObservation.mk s.machine.input)
+                                                                      (congr
+                                                                        (congrArg HAppend.hAppend
+                                                                          (congrArg (HAppend.hAppend (entered s))
+                                                                            (congrArg (List.map Event.digest)
+                                                                              (congrArg Prod.fst h))))
+                                                                        (congrArg Prod.fst
+                                                                          (ite_congr (eq_false live)
+                                                                            (fun a =>
+                                                                              Eq.refl
+                                                                                ([Event.release],
+                                                                                  Sum.inl
+                                                                                    (core.result.Result.Err err,
+                                                                                      Owner.dropped)))
+                                                                            fun a =>
+                                                                            Eq.refl
+                                                                              ([],
+                                                                                Sum.inl
+                                                                                  (core.result.Result.Err err,
+                                                                                    s.owner))))))
+                                                                    (congrArg ok
+                                                                      (congrArg Prod.snd
+                                                                        (ite_congr (eq_false live)
+                                                                          (fun a =>
+                                                                            Eq.refl
+                                                                              ([Event.release],
+                                                                                Sum.inl
+                                                                                  (core.result.Result.Err err,
+                                                                                    Owner.dropped)))
+                                                                          fun a =>
+                                                                          Eq.refl
+                                                                            ([],
+                                                                              Sum.inl
+                                                                                (core.result.Result.Err err,
+                                                                                  s.owner))))))))
+                                                              (congrFun'
+                                                                (congr
+                                                                  (congrArg Observation.mk
+                                                                    (congrArg StepObservation.input
+                                                                      (Eq.trans
+                                                                        (congrArg
+                                                                          (fun x =>
+                                                                            match x.2 with
+                                                                            | fail e =>
+                                                                              { input := s.machine.input,
+                                                                                events :=
+                                                                                  entered s ++
+                                                                                    List.map Event.digest
+                                                                                      (run
+                                                                                          (NLC_Finish.step
+                                                                                            s.machine)).1,
+                                                                                reply := fail e }
+                                                                            | div =>
+                                                                              { input := s.machine.input,
+                                                                                events :=
+                                                                                  entered s ++
+                                                                                    List.map Event.digest
+                                                                                      (run
+                                                                                          (NLC_Finish.step
+                                                                                            s.machine)).1,
+                                                                                reply := div }
+                                                                            | ok post =>
+                                                                              have next := carry s post;
+                                                                              { input := s.machine.input,
+                                                                                events :=
+                                                                                  entered s ++
+                                                                                      List.map Event.digest
+                                                                                        (run
+                                                                                            (NLC_Finish.step
+                                                                                              s.machine)).1 ++
+                                                                                    next.1,
+                                                                                reply := ok next.2 })
+                                                                          h)
+                                                                        (congr
+                                                                          (congrArg (StepObservation.mk s.machine.input)
+                                                                            (congr
+                                                                              (congrArg HAppend.hAppend
+                                                                                (congrArg (HAppend.hAppend (entered s))
+                                                                                  (congrArg (List.map Event.digest)
+                                                                                    (congrArg Prod.fst h))))
+                                                                              (congrArg Prod.fst
+                                                                                (ite_congr (eq_false live)
+                                                                                  (fun a =>
+                                                                                    Eq.refl
+                                                                                      ([Event.release],
+                                                                                        Sum.inl
+                                                                                          (core.result.Result.Err err,
+                                                                                            Owner.dropped)))
+                                                                                  fun a =>
+                                                                                  Eq.refl
+                                                                                    ([],
+                                                                                      Sum.inl
+                                                                                        (core.result.Result.Err err,
+                                                                                          s.owner))))))
+                                                                          (congrArg ok
+                                                                            (congrArg Prod.snd
+                                                                              (ite_congr (eq_false live)
+                                                                                (fun a =>
+                                                                                  Eq.refl
+                                                                                    ([Event.release],
+                                                                                      Sum.inl
+                                                                                        (core.result.Result.Err err,
+                                                                                          Owner.dropped)))
+                                                                                fun a =>
+                                                                                Eq.refl
+                                                                                  ([],
+                                                                                    Sum.inl
+                                                                                      (core.result.Result.Err err,
+                                                                                        s.owner)))))))))
+                                                                  (congrArg StepObservation.events
+                                                                    (Eq.trans
+                                                                      (congrArg
+                                                                        (fun x =>
+                                                                          match x.2 with
+                                                                          | fail e =>
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                                              reply := fail e }
+                                                                          | div =>
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                                              reply := div }
+                                                                          | ok post =>
+                                                                            have next := carry s post;
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                    List.map Event.digest
+                                                                                      (run
+                                                                                          (NLC_Finish.step
+                                                                                            s.machine)).1 ++
+                                                                                  next.1,
+                                                                              reply := ok next.2 })
+                                                                        h)
+                                                                      (congr
+                                                                        (congrArg (StepObservation.mk s.machine.input)
+                                                                          (congr
+                                                                            (congrArg HAppend.hAppend
+                                                                              (congrArg (HAppend.hAppend (entered s))
+                                                                                (congrArg (List.map Event.digest)
+                                                                                  (congrArg Prod.fst h))))
+                                                                            (congrArg Prod.fst
+                                                                              (ite_congr (eq_false live)
+                                                                                (fun a =>
+                                                                                  Eq.refl
+                                                                                    ([Event.release],
+                                                                                      Sum.inl
+                                                                                        (core.result.Result.Err err,
+                                                                                          Owner.dropped)))
+                                                                                fun a =>
+                                                                                Eq.refl
+                                                                                  ([],
+                                                                                    Sum.inl
+                                                                                      (core.result.Result.Err err,
+                                                                                        s.owner))))))
+                                                                        (congrArg ok
+                                                                          (congrArg Prod.snd
+                                                                            (ite_congr (eq_false live)
+                                                                              (fun a =>
+                                                                                Eq.refl
+                                                                                  ([Event.release],
+                                                                                    Sum.inl
+                                                                                      (core.result.Result.Err err,
+                                                                                        Owner.dropped)))
+                                                                              fun a =>
+                                                                              Eq.refl
+                                                                                ([],
+                                                                                  Sum.inl
+                                                                                    (core.result.Result.Err err,
+                                                                                      s.owner)))))))))
+                                                                (ok (core.result.Result.Err err, s.owner))))))
+                                                        (digest_append (entered s ++ List.map Event.digest log) []))
+                                                      (congrFun'
+                                                        (congrArg HAppend.hAppend
+                                                          (Eq.trans
+                                                            (digest_append (entered s) (List.map Event.digest log))
+                                                            (congr (congrArg HAppend.hAppend (entered_digest s))
+                                                              (map_digest log))))
+                                                        (digestLog []))))
+                                                  (Eq.trans
+                                                    (congrFun'
+                                                      (congrArg Bind.bind
+                                                        (congrArg Observation.reply
+                                                          (Eq.trans
+                                                            (congrArg
+                                                              (fun x =>
+                                                                match x.reply with
+                                                                | fail e =>
+                                                                  { input := (step s).input, events := (step s).events,
+                                                                    reply := fail e }
+                                                                | div =>
+                                                                  { input := (step s).input, events := (step s).events,
+                                                                    reply := div }
+                                                                | ok (Sum.inl out) =>
+                                                                  { input := (step s).input, events := (step s).events,
+                                                                    reply := ok out }
+                                                                | ok (Sum.inr after) =>
+                                                                  have tail := fold n after;
+                                                                  { input := tail.input,
+                                                                    events := (step s).events ++ tail.events,
+                                                                    reply := tail.reply })
+                                                              (Eq.trans
+                                                                (congrArg
+                                                                  (fun x =>
+                                                                    match x.2 with
+                                                                    | fail e =>
+                                                                      { input := s.machine.input,
+                                                                        events :=
+                                                                          entered s ++
+                                                                            List.map Event.digest
+                                                                              (run (NLC_Finish.step s.machine)).1,
+                                                                        reply := fail e }
+                                                                    | div =>
+                                                                      { input := s.machine.input,
+                                                                        events :=
+                                                                          entered s ++
+                                                                            List.map Event.digest
+                                                                              (run (NLC_Finish.step s.machine)).1,
+                                                                        reply := div }
+                                                                    | ok post =>
+                                                                      have next := carry s post;
+                                                                      { input := s.machine.input,
+                                                                        events :=
+                                                                          entered s ++
+                                                                              List.map Event.digest
+                                                                                (run (NLC_Finish.step s.machine)).1 ++
+                                                                            next.1,
+                                                                        reply := ok next.2 })
+                                                                  h)
+                                                                (congr
+                                                                  (congrArg (StepObservation.mk s.machine.input)
+                                                                    (congr
+                                                                      (congrArg HAppend.hAppend
+                                                                        (congrArg (HAppend.hAppend (entered s))
+                                                                          (congrArg (List.map Event.digest)
+                                                                            (congrArg Prod.fst h))))
+                                                                      (congrArg Prod.fst
+                                                                        (ite_congr (eq_false live)
+                                                                          (fun a =>
+                                                                            Eq.refl
+                                                                              ([Event.release],
+                                                                                Sum.inl
+                                                                                  (core.result.Result.Err err,
+                                                                                    Owner.dropped)))
+                                                                          fun a =>
+                                                                          Eq.refl
+                                                                            ([],
+                                                                              Sum.inl
+                                                                                (core.result.Result.Err err,
+                                                                                  s.owner))))))
+                                                                  (congrArg ok
+                                                                    (congrArg Prod.snd
+                                                                      (ite_congr (eq_false live)
+                                                                        (fun a =>
+                                                                          Eq.refl
+                                                                            ([Event.release],
+                                                                              Sum.inl
+                                                                                (core.result.Result.Err err,
+                                                                                  Owner.dropped)))
+                                                                        fun a =>
+                                                                        Eq.refl
+                                                                          ([],
+                                                                            Sum.inl
+                                                                              (core.result.Result.Err err,
+                                                                                s.owner))))))))
+                                                            (congrFun'
+                                                              (congr
+                                                                (congrArg Observation.mk
+                                                                  (congrArg StepObservation.input
+                                                                    (Eq.trans
+                                                                      (congrArg
+                                                                        (fun x =>
+                                                                          match x.2 with
+                                                                          | fail e =>
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                                              reply := fail e }
+                                                                          | div =>
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                                              reply := div }
+                                                                          | ok post =>
+                                                                            have next := carry s post;
+                                                                            { input := s.machine.input,
+                                                                              events :=
+                                                                                entered s ++
+                                                                                    List.map Event.digest
+                                                                                      (run
+                                                                                          (NLC_Finish.step
+                                                                                            s.machine)).1 ++
+                                                                                  next.1,
+                                                                              reply := ok next.2 })
+                                                                        h)
+                                                                      (congr
+                                                                        (congrArg (StepObservation.mk s.machine.input)
+                                                                          (congr
+                                                                            (congrArg HAppend.hAppend
+                                                                              (congrArg (HAppend.hAppend (entered s))
+                                                                                (congrArg (List.map Event.digest)
+                                                                                  (congrArg Prod.fst h))))
+                                                                            (congrArg Prod.fst
+                                                                              (ite_congr (eq_false live)
+                                                                                (fun a =>
+                                                                                  Eq.refl
+                                                                                    ([Event.release],
+                                                                                      Sum.inl
+                                                                                        (core.result.Result.Err err,
+                                                                                          Owner.dropped)))
+                                                                                fun a =>
+                                                                                Eq.refl
+                                                                                  ([],
+                                                                                    Sum.inl
+                                                                                      (core.result.Result.Err err,
+                                                                                        s.owner))))))
+                                                                        (congrArg ok
+                                                                          (congrArg Prod.snd
+                                                                            (ite_congr (eq_false live)
+                                                                              (fun a =>
+                                                                                Eq.refl
+                                                                                  ([Event.release],
+                                                                                    Sum.inl
+                                                                                      (core.result.Result.Err err,
+                                                                                        Owner.dropped)))
+                                                                              fun a =>
+                                                                              Eq.refl
+                                                                                ([],
+                                                                                  Sum.inl
+                                                                                    (core.result.Result.Err err,
+                                                                                      s.owner)))))))))
+                                                                (congrArg StepObservation.events
+                                                                  (Eq.trans
+                                                                    (congrArg
+                                                                      (fun x =>
+                                                                        match x.2 with
+                                                                        | fail e =>
+                                                                          { input := s.machine.input,
+                                                                            events :=
+                                                                              entered s ++
+                                                                                List.map Event.digest
+                                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                                            reply := fail e }
+                                                                        | div =>
+                                                                          { input := s.machine.input,
+                                                                            events :=
+                                                                              entered s ++
+                                                                                List.map Event.digest
+                                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                                            reply := div }
+                                                                        | ok post =>
+                                                                          have next := carry s post;
+                                                                          { input := s.machine.input,
+                                                                            events :=
+                                                                              entered s ++
+                                                                                  List.map Event.digest
+                                                                                    (run
+                                                                                        (NLC_Finish.step
+                                                                                          s.machine)).1 ++
+                                                                                next.1,
+                                                                            reply := ok next.2 })
+                                                                      h)
+                                                                    (congr
+                                                                      (congrArg (StepObservation.mk s.machine.input)
+                                                                        (congr
+                                                                          (congrArg HAppend.hAppend
+                                                                            (congrArg (HAppend.hAppend (entered s))
+                                                                              (congrArg (List.map Event.digest)
+                                                                                (congrArg Prod.fst h))))
+                                                                          (congrArg Prod.fst
+                                                                            (ite_congr (eq_false live)
+                                                                              (fun a =>
+                                                                                Eq.refl
+                                                                                  ([Event.release],
+                                                                                    Sum.inl
+                                                                                      (core.result.Result.Err err,
+                                                                                        Owner.dropped)))
+                                                                              fun a =>
+                                                                              Eq.refl
+                                                                                ([],
+                                                                                  Sum.inl
+                                                                                    (core.result.Result.Err err,
+                                                                                      s.owner))))))
+                                                                      (congrArg ok
+                                                                        (congrArg Prod.snd
+                                                                          (ite_congr (eq_false live)
+                                                                            (fun a =>
+                                                                              Eq.refl
+                                                                                ([Event.release],
+                                                                                  Sum.inl
+                                                                                    (core.result.Result.Err err,
+                                                                                      Owner.dropped)))
+                                                                            fun a =>
+                                                                            Eq.refl
+                                                                              ([],
+                                                                                Sum.inl
+                                                                                  (core.result.Result.Err err,
+                                                                                    s.owner)))))))))
+                                                              (ok (core.result.Result.Err err, s.owner))))))
+                                                      fun out => ok out.1)
+                                                    (bind_tc_ok (core.result.Result.Err err, s.owner) fun y =>
+                                                      ok y.1))))
+                                              (log ++ (run (pure (core.result.Result.Err err))).1,
+                                                (run (pure (core.result.Result.Err err))).2)))
+                                          (Eq.refl (log ++ digestLog [], ok (core.result.Result.Err err))))
+                                    (Eq.symm h_3) h)
+                                (Eq.refl out))
+                            (Eq.symm h_2) h)
+                        (fun after h_2 =>
+                          Eq.ndrec (motive := fun post =>
+                            run (NLC_Finish.step s.machine) = (log, ok post) →
+                              (digestLog (fold (n + 1) s).events, eraseReply (fold (n + 1) s).reply) =
+                                AuS1_Trace.continueRun (log, ok post).1 (log, ok post).2 fun post =>
+                                  match post with
+                                  | Sum.inl out => pure out
+                                  | Sum.inr after => NLC_Finish.fold n after)
+                            (fun h => sorry) (Eq.symm h_2) h)
+                        (Eq.refl post))
+                    (Eq.symm h_1) h)
+                (fun err h_1 =>
+                  Eq.ndrec (motive := fun reply =>
+                    run (NLC_Finish.step s.machine) = (log, reply) →
+                      (digestLog (fold (n + 1) s).events, eraseReply (fold (n + 1) s).reply) =
+                        AuS1_Trace.continueRun (log, reply).1 (log, reply).2 fun post =>
+                          match post with
+                          | Sum.inl out => pure out
+                          | Sum.inr after => NLC_Finish.fold n after)
+                    (fun h =>
+                      of_eq_true
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congr
+                                (congrArg Prod.mk
+                                  (Eq.trans
+                                    (Eq.trans
+                                      (congrArg digestLog
+                                        (congrArg Observation.events
+                                          (Eq.trans
+                                            (congrArg
+                                              (fun x =>
+                                                match x.reply with
+                                                | fail e =>
+                                                  { input := (step s).input, events := (step s).events,
+                                                    reply := fail e }
+                                                | div =>
+                                                  { input := (step s).input, events := (step s).events, reply := div }
+                                                | ok (Sum.inl out) =>
+                                                  { input := (step s).input, events := (step s).events,
+                                                    reply := ok out }
+                                                | ok (Sum.inr after) =>
+                                                  have tail := fold n after;
+                                                  { input := tail.input, events := (step s).events ++ tail.events,
+                                                    reply := tail.reply })
+                                              (Eq.trans
+                                                (congrArg
+                                                  (fun x =>
+                                                    match x.2 with
+                                                    | fail e =>
+                                                      { input := s.machine.input,
+                                                        events :=
+                                                          entered s ++
+                                                            List.map Event.digest (run (NLC_Finish.step s.machine)).1,
+                                                        reply := fail e }
+                                                    | div =>
+                                                      { input := s.machine.input,
+                                                        events :=
+                                                          entered s ++
+                                                            List.map Event.digest (run (NLC_Finish.step s.machine)).1,
+                                                        reply := div }
+                                                    | ok post =>
+                                                      have next := carry s post;
+                                                      { input := s.machine.input,
+                                                        events :=
+                                                          entered s ++
+                                                              List.map Event.digest
+                                                                (run (NLC_Finish.step s.machine)).1 ++
+                                                            next.1,
+                                                        reply := ok next.2 })
+                                                  h)
+                                                (congrFun'
+                                                  (congrArg (StepObservation.mk s.machine.input)
+                                                    (congrArg (HAppend.hAppend (entered s))
+                                                      (congrArg (List.map Event.digest) (congrArg Prod.fst h))))
+                                                  (fail err))))
+                                            (congrFun'
+                                              (congr
+                                                (congrArg Observation.mk
+                                                  (congrArg StepObservation.input
+                                                    (Eq.trans
+                                                      (congrArg
+                                                        (fun x =>
+                                                          match x.2 with
+                                                          | fail e =>
+                                                            { input := s.machine.input,
+                                                              events :=
+                                                                entered s ++
+                                                                  List.map Event.digest
+                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                              reply := fail e }
+                                                          | div =>
+                                                            { input := s.machine.input,
+                                                              events :=
+                                                                entered s ++
+                                                                  List.map Event.digest
+                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                              reply := div }
+                                                          | ok post =>
+                                                            have next := carry s post;
+                                                            { input := s.machine.input,
+                                                              events :=
+                                                                entered s ++
+                                                                    List.map Event.digest
+                                                                      (run (NLC_Finish.step s.machine)).1 ++
+                                                                  next.1,
+                                                              reply := ok next.2 })
+                                                        h)
+                                                      (congrFun'
+                                                        (congrArg (StepObservation.mk s.machine.input)
+                                                          (congrArg (HAppend.hAppend (entered s))
+                                                            (congrArg (List.map Event.digest) (congrArg Prod.fst h))))
+                                                        (fail err)))))
+                                                (congrArg StepObservation.events
+                                                  (Eq.trans
+                                                    (congrArg
+                                                      (fun x =>
+                                                        match x.2 with
+                                                        | fail e =>
+                                                          { input := s.machine.input,
+                                                            events :=
+                                                              entered s ++
+                                                                List.map Event.digest
+                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                            reply := fail e }
+                                                        | div =>
+                                                          { input := s.machine.input,
+                                                            events :=
+                                                              entered s ++
+                                                                List.map Event.digest
+                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                            reply := div }
+                                                        | ok post =>
+                                                          have next := carry s post;
+                                                          { input := s.machine.input,
+                                                            events :=
+                                                              entered s ++
+                                                                  List.map Event.digest
+                                                                    (run (NLC_Finish.step s.machine)).1 ++
+                                                                next.1,
+                                                            reply := ok next.2 })
+                                                      h)
+                                                    (congrFun'
+                                                      (congrArg (StepObservation.mk s.machine.input)
+                                                        (congrArg (HAppend.hAppend (entered s))
+                                                          (congrArg (List.map Event.digest) (congrArg Prod.fst h))))
+                                                      (fail err)))))
+                                              (fail err)))))
+                                      (digest_append (entered s) (List.map Event.digest log)))
+                                    (congr (congrArg HAppend.hAppend (entered_digest s)) (map_digest log))))
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Bind.bind
+                                      (congrArg Observation.reply
+                                        (Eq.trans
+                                          (congrArg
+                                            (fun x =>
+                                              match x.reply with
+                                              | fail e =>
+                                                { input := (step s).input, events := (step s).events, reply := fail e }
+                                              | div =>
+                                                { input := (step s).input, events := (step s).events, reply := div }
+                                              | ok (Sum.inl out) =>
+                                                { input := (step s).input, events := (step s).events, reply := ok out }
+                                              | ok (Sum.inr after) =>
+                                                have tail := fold n after;
+                                                { input := tail.input, events := (step s).events ++ tail.events,
+                                                  reply := tail.reply })
+                                            (Eq.trans
+                                              (congrArg
+                                                (fun x =>
+                                                  match x.2 with
+                                                  | fail e =>
+                                                    { input := s.machine.input,
+                                                      events :=
+                                                        entered s ++
+                                                          List.map Event.digest (run (NLC_Finish.step s.machine)).1,
+                                                      reply := fail e }
+                                                  | div =>
+                                                    { input := s.machine.input,
+                                                      events :=
+                                                        entered s ++
+                                                          List.map Event.digest (run (NLC_Finish.step s.machine)).1,
+                                                      reply := div }
+                                                  | ok post =>
+                                                    have next := carry s post;
+                                                    { input := s.machine.input,
+                                                      events :=
+                                                        entered s ++
+                                                            List.map Event.digest (run (NLC_Finish.step s.machine)).1 ++
+                                                          next.1,
+                                                      reply := ok next.2 })
+                                                h)
+                                              (congrFun'
+                                                (congrArg (StepObservation.mk s.machine.input)
+                                                  (congrArg (HAppend.hAppend (entered s))
+                                                    (congrArg (List.map Event.digest) (congrArg Prod.fst h))))
+                                                (fail err))))
+                                          (congrFun'
+                                            (congr
+                                              (congrArg Observation.mk
+                                                (congrArg StepObservation.input
+                                                  (Eq.trans
+                                                    (congrArg
+                                                      (fun x =>
+                                                        match x.2 with
+                                                        | fail e =>
+                                                          { input := s.machine.input,
+                                                            events :=
+                                                              entered s ++
+                                                                List.map Event.digest
+                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                            reply := fail e }
+                                                        | div =>
+                                                          { input := s.machine.input,
+                                                            events :=
+                                                              entered s ++
+                                                                List.map Event.digest
+                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                            reply := div }
+                                                        | ok post =>
+                                                          have next := carry s post;
+                                                          { input := s.machine.input,
+                                                            events :=
+                                                              entered s ++
+                                                                  List.map Event.digest
+                                                                    (run (NLC_Finish.step s.machine)).1 ++
+                                                                next.1,
+                                                            reply := ok next.2 })
+                                                      h)
+                                                    (congrFun'
+                                                      (congrArg (StepObservation.mk s.machine.input)
+                                                        (congrArg (HAppend.hAppend (entered s))
+                                                          (congrArg (List.map Event.digest) (congrArg Prod.fst h))))
+                                                      (fail err)))))
+                                              (congrArg StepObservation.events
+                                                (Eq.trans
+                                                  (congrArg
+                                                    (fun x =>
+                                                      match x.2 with
+                                                      | fail e =>
+                                                        { input := s.machine.input,
+                                                          events :=
+                                                            entered s ++
+                                                              List.map Event.digest (run (NLC_Finish.step s.machine)).1,
+                                                          reply := fail e }
+                                                      | div =>
+                                                        { input := s.machine.input,
+                                                          events :=
+                                                            entered s ++
+                                                              List.map Event.digest (run (NLC_Finish.step s.machine)).1,
+                                                          reply := div }
+                                                      | ok post =>
+                                                        have next := carry s post;
+                                                        { input := s.machine.input,
+                                                          events :=
+                                                            entered s ++
+                                                                List.map Event.digest
+                                                                  (run (NLC_Finish.step s.machine)).1 ++
+                                                              next.1,
+                                                          reply := ok next.2 })
+                                                    h)
+                                                  (congrFun'
+                                                    (congrArg (StepObservation.mk s.machine.input)
+                                                      (congrArg (HAppend.hAppend (entered s))
+                                                        (congrArg (List.map Event.digest) (congrArg Prod.fst h))))
+                                                    (fail err)))))
+                                            (fail err)))))
+                                    fun out => ok out.1)
+                                  (bind_tc_fail err fun y => ok y.1))))
+                            (log, fail err))
+                          (eq_self (log, fail err))))
+                    (Eq.symm h_1) h)
+                (fun h_1 =>
+                  Eq.ndrec (motive := fun reply =>
+                    run (NLC_Finish.step s.machine) = (log, reply) →
+                      (digestLog (fold (n + 1) s).events, eraseReply (fold (n + 1) s).reply) =
+                        AuS1_Trace.continueRun (log, reply).1 (log, reply).2 fun post =>
+                          match post with
+                          | Sum.inl out => pure out
+                          | Sum.inr after => NLC_Finish.fold n after)
+                    (fun h =>
+                      of_eq_true
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg Eq
+                              (congr
+                                (congrArg Prod.mk
+                                  (Eq.trans
+                                    (Eq.trans
+                                      (congrArg digestLog
+                                        (congrArg Observation.events
+                                          (Eq.trans
+                                            (congrArg
+                                              (fun x =>
+                                                match x.reply with
+                                                | fail e =>
+                                                  { input := (step s).input, events := (step s).events,
+                                                    reply := fail e }
+                                                | div =>
+                                                  { input := (step s).input, events := (step s).events, reply := div }
+                                                | ok (Sum.inl out) =>
+                                                  { input := (step s).input, events := (step s).events,
+                                                    reply := ok out }
+                                                | ok (Sum.inr after) =>
+                                                  have tail := fold n after;
+                                                  { input := tail.input, events := (step s).events ++ tail.events,
+                                                    reply := tail.reply })
+                                              (Eq.trans
+                                                (congrArg
+                                                  (fun x =>
+                                                    match x.2 with
+                                                    | fail e =>
+                                                      { input := s.machine.input,
+                                                        events :=
+                                                          entered s ++
+                                                            List.map Event.digest (run (NLC_Finish.step s.machine)).1,
+                                                        reply := fail e }
+                                                    | div =>
+                                                      { input := s.machine.input,
+                                                        events :=
+                                                          entered s ++
+                                                            List.map Event.digest (run (NLC_Finish.step s.machine)).1,
+                                                        reply := div }
+                                                    | ok post =>
+                                                      have next := carry s post;
+                                                      { input := s.machine.input,
+                                                        events :=
+                                                          entered s ++
+                                                              List.map Event.digest
+                                                                (run (NLC_Finish.step s.machine)).1 ++
+                                                            next.1,
+                                                        reply := ok next.2 })
+                                                  h)
+                                                (congrFun'
+                                                  (congrArg (StepObservation.mk s.machine.input)
+                                                    (congrArg (HAppend.hAppend (entered s))
+                                                      (congrArg (List.map Event.digest) (congrArg Prod.fst h))))
+                                                  div)))
+                                            (congrFun'
+                                              (congr
+                                                (congrArg Observation.mk
+                                                  (congrArg StepObservation.input
+                                                    (Eq.trans
+                                                      (congrArg
+                                                        (fun x =>
+                                                          match x.2 with
+                                                          | fail e =>
+                                                            { input := s.machine.input,
+                                                              events :=
+                                                                entered s ++
+                                                                  List.map Event.digest
+                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                              reply := fail e }
+                                                          | div =>
+                                                            { input := s.machine.input,
+                                                              events :=
+                                                                entered s ++
+                                                                  List.map Event.digest
+                                                                    (run (NLC_Finish.step s.machine)).1,
+                                                              reply := div }
+                                                          | ok post =>
+                                                            have next := carry s post;
+                                                            { input := s.machine.input,
+                                                              events :=
+                                                                entered s ++
+                                                                    List.map Event.digest
+                                                                      (run (NLC_Finish.step s.machine)).1 ++
+                                                                  next.1,
+                                                              reply := ok next.2 })
+                                                        h)
+                                                      (congrFun'
+                                                        (congrArg (StepObservation.mk s.machine.input)
+                                                          (congrArg (HAppend.hAppend (entered s))
+                                                            (congrArg (List.map Event.digest) (congrArg Prod.fst h))))
+                                                        div))))
+                                                (congrArg StepObservation.events
+                                                  (Eq.trans
+                                                    (congrArg
+                                                      (fun x =>
+                                                        match x.2 with
+                                                        | fail e =>
+                                                          { input := s.machine.input,
+                                                            events :=
+                                                              entered s ++
+                                                                List.map Event.digest
+                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                            reply := fail e }
+                                                        | div =>
+                                                          { input := s.machine.input,
+                                                            events :=
+                                                              entered s ++
+                                                                List.map Event.digest
+                                                                  (run (NLC_Finish.step s.machine)).1,
+                                                            reply := div }
+                                                        | ok post =>
+                                                          have next := carry s post;
+                                                          { input := s.machine.input,
+                                                            events :=
+                                                              entered s ++
+                                                                  List.map Event.digest
+                                                                    (run (NLC_Finish.step s.machine)).1 ++
+                                                                next.1,
+                                                            reply := ok next.2 })
+                                                      h)
+                                                    (congrFun'
+                                                      (congrArg (StepObservation.mk s.machine.input)
+                                                        (congrArg (HAppend.hAppend (entered s))
+                                                          (congrArg (List.map Event.digest) (congrArg Prod.fst h))))
+                                                      div))))
+                                              div))))
+                                      (digest_append (entered s) (List.map Event.digest log)))
+                                    (congr (congrArg HAppend.hAppend (entered_digest s)) (map_digest log))))
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Bind.bind (congrArg Observation.reply (Eq.trans (congrArg ⋯ ⋯) ⋯))) ⋯)
+                                  ⋯)))
+                            ⋯)
+                          ⋯))
+                    ⋯ ⋯)
+                ⋯)
+            ⋯ ⋯)))
+    ⋯ ⋯

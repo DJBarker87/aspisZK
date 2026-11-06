@@ -1,0 +1,66 @@
+{"attempt": "NLU_L005", "exit_status": 1, "wall_seconds": 35.34164573485032, "peak_rss_kib": "6323552", "swaps": "0", "print_axioms": ["'AspisR1.NLU.digest_append' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLU.entered_digest' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLU.carry_digest' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NLU.map_digest' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLU_generated/NLU_EventProjection.lean:17:39: error: Tactic `rfl` failed: The left-hand side
+  digestLog
+    (if s.machine.next = NLC_Finish.Event.claims then [Event.acquire] else [],
+        Sum.inr { machine := after✝, owner := carryOwner s }).1
+is not definitionally equal to the right-hand side
+  []
+
+case h_1
+H : Type
+s : State H
+after : NLC_Finish.State H
+post✝ : NLC_Finish.Post H
+after✝ : NLC_Finish.State H
+heq✝ : Sum.inr after = Sum.inr after✝
+⊢ digestLog
+      (if s.machine.next = NLC_Finish.Event.claims then [Event.acquire] else [],
+          Sum.inr { machine := after✝, owner := carryOwner s }).1 =
+    []
+NLU_generated/NLU_EventProjection.lean:17:39: error: Tactic `rfl` failed: The 
+...
+efinitionally equal to the right-hand side
+  []
+
+case h_1
+H : Type
+s : State H
+err : r1_wire.Error
+post✝ : NLC_Finish.Post H
+after✝ : NLC_Finish.State H
+heq✝ : Sum.inl (core.result.Result.Err err) = Sum.inr after✝
+⊢ digestLog
+      (if s.machine.next = NLC_Finish.Event.claims then [Event.acquire] else [],
+          Sum.inr { machine := after✝, owner := carryOwner s }).1 =
+    []
+NLU_generated/NLU_EventProjection.lean:20:39: error: Tactic `rfl` failed: The left-hand side
+  digestLog
+    (match out✝ with
+      | core.result.Result.Err err =>
+        if s.owner = Owner.live then ([Event.release], Sum.inl (core.result.Result.Err err, Owner.dropped))
+        else ([], Sum.inl (core.result.Result.Err err, s.owner))
+      | core.result.Result.Ok value => ([Event.transfer], Sum.inl (core.result.Result.Ok value, Owner.transferred))).1
+is not definitionally equal to the right-hand side
+  []
+
+case h_2
+H : Type
+s : State H
+err : r1_wire.Error
+post✝ : NLC_Finish.Post H
+out✝ : NLC_Finish.Out H
+heq✝ : Sum.inl (core.result.Result.Err err) = Sum.inl out✝
+⊢ digestLog
+      (match out✝ with
+        | core.result.Result.Err err =>
+          if s.owner = Owner.live then ([Event.release], Sum.inl (core.result.Result.Err err, Owner.dropped))
+          else ([], Sum.inl (core.result.Result.Err err, s.owner))
+        | core.result.Result.Ok value =>
+          ([Event.transfer], Sum.inl (core.result.Result.Ok value, Owner.transferred))).1 =
+    []
+'AspisR1.NLU.digest_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLU.entered_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLU.carry_digest' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLU.map_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rdba67098ac074649be22775c4ccfc538.scope; invocation ID: 9dd1bd081ed74f7780ce02d32f6e260a
