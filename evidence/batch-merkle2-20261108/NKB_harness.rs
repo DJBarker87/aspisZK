@@ -157,7 +157,7 @@ fn scan_scalar(){
 #[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
 fn scan_c1(){
  let q:[u8;832]=kani::any();let s:usize=kani::any();kani::assume(s<4);
- 
+
  let start=s*120+104;let out=scan_c1_fragment(&q,s);
  let w=|j:usize|u32::from_le_bytes([q[start+j],q[start+j+1],q[start+j+2],q[start+j+3]]);
  let expected=w(0)<2147483647&&w(4)<2147483647&&w(8)<2147483647&&w(12)<2147483647;

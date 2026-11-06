@@ -15,3 +15,12 @@ No field multiplication is reached or stubbed. No unpaired multiplication law is
 ## Canonical continuation
 
 M31/K scalar/extension decoders execute natively in K029/30, K025/26 and K027/28: no field stubs and no multiplication. K033/34 and K049/36 separately enumerate the echeck Ok and Parse constructors; the caller-domain shape is NKB_CanonicalCuts.child_shape, with each branch identified by child_ok/child_parse on the SAME slice and false flag. These conditional constructor tests do not by themselves discharge the complete parent child-interpretation equation. Prefix stubs similarly select explicit Ok/NonCanonical or Ok/Parse cases; their Result/no-suffix properties are local support, not an unconstrained successful child assumption at a row root. Compact NonCanonical is the actual check_values rejection constructor; its all-input SAME-argument root substitution remains OPEN. No new trust row is claimed.
+
+| Stub | Paired law / domain | Semantic status |
+|---|---|---|
+| scan_child_ok / scan_child_parse | NKB_CanonicalCuts.child_ok/child_parse, SAME128 bytes,false, selected actual closed-child guard branch | Conditional local law; parent installation OPEN |
+| scan_prefix_ok / scan_prefix_reject32/224/2272 | child_ok/child_parse at SAME32/224/2272 bytes,false; first selected rejection, earlier selected Ok replies | Concrete constructor-case installation OPEN |
+| scan_compact_ok / scan_compact_reject | No installed compact check_values law at SAME464 bytes yet; NonCanonical is the selected rejection constructor | OPEN; no semantic native bridge pass |
+| scan_prefix_forbid | No suffix after the selected compact Err; conditional generic source law NKB_CanonicalPrefix.source | Parent installation OPEN |
+
+Twenty matched positive/negative native properties are verified under their recorded stubs; this is not twenty semantic bridge passes. NKB_NATIVE_PAIRS.json marks these OPEN obligations and grants no parent credit. There are no field multiplication stubs.

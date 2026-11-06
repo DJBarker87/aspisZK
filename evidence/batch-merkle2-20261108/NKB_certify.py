@@ -19,10 +19,18 @@ for a,b,scope in pairs:
   assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'} and str(r['swaps'])=='0'
   graph=json.loads(NKB_resolve.read(name+'_validation/NHR_GRAPH_CHECK.json'));lock=json.loads(NKB_resolve.read(name+'_validation/NKB_LOCK.json'))
   assert graph['graph_matches_frozen'] and lock['unchanged'];assert r['env']['CARGO_NET_OFFLINE']=='true'
+  assert '-Copt-level=3' in r['env']['RUSTFLAGS'],'STOP unoptimized native evidence'
   assert r['source_hashes']['NKB_KMX.patch']=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
   for source,sha in r['source_hashes'].items():assert hashlib.sha256(NKB_resolve.read(name+'/sources/'+source)).hexdigest()==sha
   pins.append(dict(attempt=name,exit=r['exit_status'],wall=r['wall_seconds'],rss_kib=r['peak_rss_kib'],swaps=r['swaps'],source_revision=r['source_revision'],features=graph['features'],cargo_target=r['env']['CARGO_TARGET_DIR']))
  rows.append(dict(pair=ids,scope=scope,source_hashes=receipts[0]['source_hashes'],metrics=pins,credit='DIAGNOSTIC ONLY' if a==1 else 'LOCAL SUPPORT ONLY; no parent row admitted'))
+for row in rows:
+ row['native_property_verified_under_recorded_stubs']=True
+ row['closed_parent_credit']=False
+ if 'prefix' in row['scope'] and 'argument frame' not in row['scope'] and 'leaf' not in row['scope']:
+  row['stub_semantic_obligation']='OPEN: compact::check_values SAME-argument law and concrete constructor-case installation are not discharged at a parent root'
+ elif 'echeck' in row['scope'] and 'constructor' in row['scope']:
+  row['stub_semantic_obligation']='CONDITIONAL child_ok/child_parse; concrete parent installation OPEN'
 (E/'NKB_NATIVE_PAIRS.json').write_text(json.dumps(rows,indent=2)+'\n')
 with (E/'NKB_CERTIFICATES.md').open('w') as f:
  f.write('# NKB certificate associations\n\nTarget not yet established. No parent row is CLOSED.\n\n')

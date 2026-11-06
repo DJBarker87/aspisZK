@@ -1,6 +1,7 @@
 import NJW_COMBINED_IMPORT
 import NJS_COMBINED_IMPORT
 import NJV_COMBINED_IMPORT
+import NJZ_COMBINED_IMPORT
 import NKB_Rejection
 import NKB_IndexFold
 import NKB_CallerDomain
@@ -18,6 +19,24 @@ import NKB_ProducerChain
 import NKB_AnyModel
 import NKB_KeyStream
 import NKB_ParseCut
+import NKB_CanonicalRange
+import NKB_CanonicalPair
+import NKB_CanonicalScalar
+import NKB_CanonicalEcheck
+import NKB_CanonicalTail
+import NKB_CanonicalScalarLoop
+import NKB_CanonicalOpening
+import NKB_CanonicalSlotLoop
+import NKB_CanonicalGeometry
+import NKB_CanonicalRows
+import NKB_CanonicalRowsLoop
+import NKB_CanonicalConstants
+import NKB_CanonicalPrefix
+import NKB_CanonicalCuts
+import NKB_CanonicalDomains
+import NKB_CanonicalCongruence
+import NKB_CanonicalScalarBridge
+import NKB_CanonicalKBridge
 
 set_option pp.proofs false
 #print AspisR1.RPx_Deployed.deployed
@@ -112,3 +131,109 @@ set_option pp.proofs false
 #print axioms NKB_KeyStream.source
 #print NKB_ParseCut.mismatch
 #print axioms NKB_ParseCut.mismatch
+#print NKB_CanonicalRange.next
+#print axioms NKB_CanonicalRange.next
+#print NKB_CanonicalRange.stop
+#print axioms NKB_CanonicalRange.stop
+#print NKB_CanonicalRange.address
+#print axioms NKB_CanonicalRange.address
+#print NKB_CanonicalRange.entered
+#print axioms NKB_CanonicalRange.entered
+#print NKB_CanonicalPair.source
+#print axioms NKB_CanonicalPair.source
+#print NKB_CanonicalPair.loop
+#print axioms NKB_CanonicalPair.loop
+#print NKB_CanonicalScalar.address
+#print axioms NKB_CanonicalScalar.address
+#print NKB_CanonicalScalar.size
+#print axioms NKB_CanonicalScalar.size
+#print NKB_CanonicalScalar.entered
+#print axioms NKB_CanonicalScalar.entered
+#print NKB_CanonicalEcheck.window
+#print axioms NKB_CanonicalEcheck.window
+#print NKB_CanonicalEcheck.source
+#print axioms NKB_CanonicalEcheck.source
+#print NKB_CanonicalTail.address
+#print axioms NKB_CanonicalTail.address
+#print NKB_CanonicalTail.source
+#print axioms NKB_CanonicalTail.source
+#print NKB_CanonicalScalarLoop.actual
+#print axioms NKB_CanonicalScalarLoop.actual
+#print NKB_CanonicalScalarLoop.source
+#print axioms NKB_CanonicalScalarLoop.source
+#print NKB_CanonicalOpening.stop
+#print axioms NKB_CanonicalOpening.stop
+#print NKB_CanonicalOpening.entered
+#print axioms NKB_CanonicalOpening.entered
+#print NKB_CanonicalSlotLoop.actual
+#print axioms NKB_CanonicalSlotLoop.actual
+#print NKB_CanonicalSlotLoop.source
+#print axioms NKB_CanonicalSlotLoop.source
+#print NKB_CanonicalGeometry.cover
+#print axioms NKB_CanonicalGeometry.cover
+#print NKB_CanonicalGeometry.contiguous
+#print axioms NKB_CanonicalGeometry.contiguous
+#print NKB_CanonicalGeometry.salts
+#print axioms NKB_CanonicalGeometry.salts
+#print NKB_CanonicalRows.opening
+#print axioms NKB_CanonicalRows.opening
+#print NKB_CanonicalRows.actual
+#print axioms NKB_CanonicalRows.actual
+#print NKB_CanonicalRows.entered
+#print axioms NKB_CanonicalRows.entered
+#print NKB_CanonicalRowsLoop.source
+#print axioms NKB_CanonicalRowsLoop.source
+#print NKB_CanonicalConstants.off_y1
+#print axioms NKB_CanonicalConstants.off_y1
+#print NKB_CanonicalConstants.off_inactive
+#print axioms NKB_CanonicalConstants.off_inactive
+#print NKB_CanonicalConstants.off_round0
+#print axioms NKB_CanonicalConstants.off_round0
+#print NKB_CanonicalConstants.off_folded_root
+#print axioms NKB_CanonicalConstants.off_folded_root
+#print NKB_CanonicalConstants.off_round1
+#print axioms NKB_CanonicalConstants.off_round1
+#print NKB_CanonicalConstants.off_final
+#print axioms NKB_CanonicalConstants.off_final
+#print NKB_CanonicalConstants.off_openings
+#print axioms NKB_CanonicalConstants.off_openings
+#print NKB_CanonicalConstants.opening
+#print axioms NKB_CanonicalConstants.opening
+#print NKB_CanonicalPrefix.source
+#print axioms NKB_CanonicalPrefix.source
+#print NKB_CanonicalCuts.read_result
+#print axioms NKB_CanonicalCuts.read_result
+#print NKB_CanonicalCuts.child_shape
+#print axioms NKB_CanonicalCuts.child_shape
+#print NKB_CanonicalCuts.child_ok
+#print axioms NKB_CanonicalCuts.child_ok
+#print NKB_CanonicalCuts.child_parse
+#print axioms NKB_CanonicalCuts.child_parse
+#print NKB_CanonicalCuts.call_result
+#print axioms NKB_CanonicalCuts.call_result
+#print NKB_CanonicalDomains.c1
+#print axioms NKB_CanonicalDomains.c1
+#print NKB_CanonicalDomains.c2
+#print axioms NKB_CanonicalDomains.c2
+#print NKB_CanonicalDomains.trailing
+#print axioms NKB_CanonicalDomains.trailing
+#print NKB_CanonicalDomains.prefix_windows
+#print axioms NKB_CanonicalDomains.prefix_windows
+#print NKB_CanonicalDomains.aligned
+#print axioms NKB_CanonicalDomains.aligned
+#print NKB_CanonicalCongruence.allFrom_congr
+#print axioms NKB_CanonicalCongruence.allFrom_congr
+#print NKB_CanonicalScalarBridge.scalar_tag
+#print axioms NKB_CanonicalScalarBridge.scalar_tag
+#print NKB_CanonicalScalarBridge.caller_result
+#print axioms NKB_CanonicalScalarBridge.caller_result
+#print NKB_CanonicalScalarBridge.source
+#print axioms NKB_CanonicalScalarBridge.source
+#print NKB_CanonicalScalarBridge.retained
+#print axioms NKB_CanonicalScalarBridge.retained
+#print NKB_CanonicalScalarBridge.native_result
+#print axioms NKB_CanonicalScalarBridge.native_result
+#print NKB_CanonicalKBridge.natural
+#print axioms NKB_CanonicalKBridge.natural
+#print NKB_CanonicalKBridge.source
+#print axioms NKB_CanonicalKBridge.source

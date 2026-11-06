@@ -512,5 +512,422 @@ theorem NKB_ParseCut.mismatch : ∀ (idx : NKB_ParseCut.Indices) (val : NKB_Pars
     NKB_Rejection.boundary idx val none ≠ Aeneas.Std.Result.ok (out, afterIdx, afterVal) :=
 ⋯
 'NKB_ParseCut.mismatch' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRange.next : ∀ (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+  ↑iter.start < ↑iter.end →
+    ∃ iter1,
+      Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize iter =
+          Aeneas.Std.Result.ok (some iter.start, iter1) ∧
+        ↑iter1.start = ↑iter.start + 1 ∧ iter1.end = iter.end :=
+⋯
+'NKB_CanonicalRange.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRange.stop : ∀ (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+  ↑iter.end ≤ ↑iter.start →
+    ∃ iter1,
+      Aeneas.Std.core.iter.range.IteratorRange.next Aeneas.Std.core.iter.range.StepUsize iter =
+        Aeneas.Std.Result.ok (none, iter1) :=
+⋯
+'NKB_CanonicalRange.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRange.address : ∀ (s l : Aeneas.Std.Usize),
+  ↑s < 4 →
+    ↑l < 2 →
+      ↑(NKB_CanonicalRange.start s l) = 480 + ↑s * 32 + ↑l * 16 ∧
+        ↑(NKB_CanonicalRange.finish s l) = 480 + ↑s * 32 + ↑l * 16 + 16 :=
+⋯
+'NKB_CanonicalRange.address' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRange.entered : ∀ (f : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8) (s : Aeneas.Std.Usize) (p : NKB_CanonicalRange.Pending)
+  (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+  (↑q).length = 832 →
+    ↑s < 4 →
+      ↑iter.start < 2 →
+        ↑iter.start < ↑iter.end →
+          ∃ iter1,
+            ↑iter1.start = ↑iter.start + 1 ∧
+              iter1.end = iter.end ∧
+                NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0.body
+                    (fun bs => Aeneas.Std.Result.ok (f bs)) q s p iter =
+                  Aeneas.Std.Result.ok
+                    (match f (NKB_CanonicalRange.window q s iter.start) with
+                    | none =>
+                      Aeneas.Std.ControlFlow.done
+                        (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse))
+                    | some val => Aeneas.Std.ControlFlow.cont iter1) :=
+⋯
+'NKB_CanonicalRange.entered' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalPair.source : ∀ (f : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8) (s : Aeneas.Std.Usize),
+  (↑q).length = 832 →
+    ↑s < 4 →
+      ∀ (p : NKB_CanonicalRange.Pending),
+        NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0 (fun bs => Aeneas.Std.Result.ok (f bs))
+            { start := 0#usize, «end» := 2#usize } q s p =
+          Aeneas.Std.Result.ok
+            (if
+                ((f (NKB_CanonicalRange.window q s 0#usize)).isSome &&
+                    (f (NKB_CanonicalRange.window q s 1#usize)).isSome) =
+                  true then
+              p
+            else some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse)) :=
+⋯
+'NKB_CanonicalPair.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalPair.loop : ∀ (f : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8) (s : Aeneas.Std.Usize),
+  (↑q).length = 832 →
+    ↑s < 4 →
+      ∀ (pass : ℕ → Bool),
+        (∀ (l : Aeneas.Std.Usize), ↑l < 2 → (f (NKB_CanonicalRange.window q s l)).isSome = pass ↑l) →
+          ∀ (fuel : ℕ) (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (p : NKB_CanonicalRange.Pending),
+            iter.end = 2#usize →
+              ↑iter.start + fuel = 2 →
+                NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0_loop0
+                    (fun bs => Aeneas.Std.Result.ok (f bs)) iter q s p =
+                  Aeneas.Std.Result.ok
+                    (if NKB_CanonicalPair.allFrom pass (↑iter.start) fuel = true then p
+                    else some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse)) :=
+⋯
+'NKB_CanonicalPair.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalar.address : ∀ (s l : Aeneas.Std.Usize),
+  ↑s < 4 →
+    ↑l < 26 →
+      ↑(NKB_CanonicalScalar.start s l) = ↑s * 120 + ↑l * 4 ∧
+        ↑(NKB_CanonicalScalar.finish s l) = ↑s * 120 + ↑l * 4 + 4 :=
+⋯
+'NKB_CanonicalScalar.address' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalar.size : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8) (s l : Aeneas.Std.Usize),
+  (↑q).length = 832 → ↑s < 4 → ↑l < 26 → (↑(NKB_CanonicalScalar.window q s l)).length = 4 :=
+⋯
+'NKB_CanonicalScalar.size' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalar.entered : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (q : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : Aeneas.Std.Usize) (p : NKB_CanonicalRange.Pending) (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize)
+  (length : (↑q).length = 832) (slot : ↑s < 4) (lane : ↑iter.start < 26),
+  ↑iter.start < ↑iter.end →
+    ∃ iter1,
+      ↑iter1.start = ↑iter.start + 1 ∧
+        iter1.end = iter.end ∧
+          NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0.body (fun b => Aeneas.Std.Result.ok (f b))
+              (fun b => Aeneas.Std.Result.ok (g b)) q s p iter =
+            Aeneas.Std.Result.ok
+              (match f ⟨↑(NKB_CanonicalScalar.window q s iter.start), ⋯⟩ with
+              | none =>
+                Aeneas.Std.ControlFlow.done
+                  (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32)
+              | some val => Aeneas.Std.ControlFlow.cont iter1) :=
+⋯
+'NKB_CanonicalScalar.entered' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalEcheck.window : ∀ (bs : Aeneas.Std.Slice Aeneas.Std.U8),
+  ∀ i < (↑bs).length / 32, ∃ b, ↑b = List.take 32 (List.drop (32 * i) ↑bs) :=
+⋯
+'NKB_CanonicalEcheck.window' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalEcheck.source : ∀ (bs : Aeneas.Std.Slice Aeneas.Std.U8) (k : Bool),
+  NFU_Retarget.verifier.echeck bs k =
+    Aeneas.Std.Result.ok
+      (if (List.range ((↑bs).length / 32)).all (NKB_CanonicalEcheck.pass bs k) = true then
+        Aeneas.Std.core.result.Result.Ok ()
+      else Aeneas.Std.core.result.Result.Err NFU_Retarget.LPl_Kit_Release.verifier.Error.Parse) :=
+⋯
+'NKB_CanonicalEcheck.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalTail.address : ∀ (s : Aeneas.Std.Usize),
+  ↑s < 4 → ↑(NKB_CanonicalTail.start s) = ↑s * 120 + 104 ∧ ↑(NKB_CanonicalTail.finish s) = ↑s * 120 + 120 :=
+⋯
+'NKB_CanonicalTail.address' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalTail.source : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (q : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : Aeneas.Std.Usize) (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+  (↑q).length = 832 →
+    ↑s < 4 →
+      ↑iter.end ≤ ↑iter.start →
+        NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0.body (fun b => Aeneas.Std.Result.ok (f b))
+            (fun b => Aeneas.Std.Result.ok (g b)) q s none iter =
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.ControlFlow.done
+              (if NKB_CanonicalTail.accepted g q s = true then (none, 1#u32)
+              else (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32))) :=
+⋯
+'NKB_CanonicalTail.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalarLoop.actual : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8) (s l : Aeneas.Std.Usize) (length : (↑q).length = 832) (slot : ↑s < 4)
+  (lane : ↑l < 26), NKB_CanonicalScalarLoop.pass f q s ↑l = (f ⟨↑(NKB_CanonicalScalar.window q s l), ⋯⟩).isSome :=
+⋯
+'NKB_CanonicalScalarLoop.actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalarLoop.source : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (q : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : Aeneas.Std.Usize),
+  (↑q).length = 832 →
+    ↑s < 4 →
+      ∀ (fuel : ℕ) (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+        iter.end = 26#usize →
+          ↑iter.start + fuel = 26 →
+            NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0_loop0 (fun b => Aeneas.Std.Result.ok (f b))
+                (fun b => Aeneas.Std.Result.ok (g b)) iter q s none =
+              Aeneas.Std.Result.ok
+                (if
+                    (NKB_CanonicalPair.allFrom (NKB_CanonicalScalarLoop.pass f q s) (↑iter.start) fuel &&
+                        NKB_CanonicalTail.accepted g q s) =
+                      true then
+                  (none, 1#u32)
+                else (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32)) :=
+⋯
+'NKB_CanonicalScalarLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalOpening.stop : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+      ↑iter.end ≤ ↑iter.start →
+        NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0.body (fun b => Aeneas.Std.Result.ok (f b))
+            (fun b => Aeneas.Std.Result.ok (g b)) (fun b x => Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (ec b)))
+            q iter none =
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.ControlFlow.done
+              (if ec (NKB_CanonicalOpening.trailing q) = true then (none, 1#u32)
+              else (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32))) :=
+⋯
+'NKB_CanonicalOpening.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalOpening.entered : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+      ↑iter.start < ↑iter.end →
+        ↑iter.start < 4 →
+          ∃ iter1,
+            ↑iter1.start = ↑iter.start + 1 ∧
+              iter1.end = iter.end ∧
+                NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0.body (fun b => Aeneas.Std.Result.ok (f b))
+                    (fun b => Aeneas.Std.Result.ok (g b))
+                    (fun b x => Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (ec b))) q iter none =
+                  Aeneas.Std.Result.ok
+                    (if NKB_CanonicalOpening.slot f g q iter.start = true then Aeneas.Std.ControlFlow.cont (iter1, none)
+                    else
+                      Aeneas.Std.ControlFlow.done
+                        (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32)) :=
+⋯
+'NKB_CanonicalOpening.entered' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalSlotLoop.actual : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (q : Aeneas.Std.Slice Aeneas.Std.U8)
+  (s : Aeneas.Std.Usize), ↑s < 4 → NKB_CanonicalSlotLoop.pass f g q ↑s = NKB_CanonicalOpening.slot f g q s :=
+⋯
+'NKB_CanonicalSlotLoop.actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalSlotLoop.source : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 →
+    ∀ (fuel : ℕ) (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+      iter.end = 4#usize →
+        ↑iter.start + fuel = 4 →
+          NJS_Extract.verifier.candidate.canonical_scan_loop0_loop0 (fun b => Aeneas.Std.Result.ok (f b))
+              (fun b => Aeneas.Std.Result.ok (g b))
+              (fun b x => Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (ec b))) iter q none =
+            Aeneas.Std.Result.ok
+              (if
+                  (NKB_CanonicalPair.allFrom (NKB_CanonicalSlotLoop.pass f g q) (↑iter.start) fuel &&
+                      ec (NKB_CanonicalOpening.trailing q)) =
+                    true then
+                (none, 1#u32)
+              else (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse), 0#u32)) :=
+⋯
+'NKB_CanonicalSlotLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalGeometry.cover : ∀ j < 152,
+  (∃ s l, s < 4 ∧ l < 26 ∧ j * 4 = s * 120 + l * 4) ∨
+    (∃ s w, s < 4 ∧ w < 4 ∧ j * 4 = s * 120 + 104 + w * 4) ∨
+      ∃ s l w, s < 4 ∧ l < 2 ∧ w < 4 ∧ j * 4 = 480 + s * 32 + l * 16 + w * 4 :=
+⋯
+'NKB_CanonicalGeometry.cover' depends on axioms: [propext, Quot.sound]
+theorem NKB_CanonicalGeometry.contiguous : ∀ (word : ℕ → Prop),
+  NKB_CanonicalGeometry.Matrix word ↔ ∀ j < 152, word (j * 4) :=
+⋯
+'NKB_CanonicalGeometry.contiguous' depends on axioms: [propext, Quot.sound]
+theorem NKB_CanonicalGeometry.salts : ∀ (s l w : ℕ),
+  s < 4 → l < 2 → w < 4 → 480 + s * 32 + l * 16 + w * 4 + 4 ≤ 608 ∧ 608 ≤ 672 ∧ 800 ≤ 832 :=
+⋯
+'NKB_CanonicalGeometry.salts' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRows.opening : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize),
+  NJS_Extract.verifier.candidate.opening proof i = AspisR1.Port4B_Opening.opening proof i :=
+⋯
+'NKB_CanonicalRows.opening' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRows.actual : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize),
+  ↑i < 22 → NKB_CanonicalRows.pass f g ec proof ↑i = NKB_CanonicalRows.accepted f g ec proof i :=
+⋯
+'NKB_CanonicalRows.actual' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRows.entered : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+      ↑iter.start < ↑iter.end →
+        ↑iter.start < 22 →
+          ∃ iter1,
+            ↑iter1.start = ↑iter.start + 1 ∧
+              iter1.end = iter.end ∧
+                NJS_Extract.verifier.candidate.canonical_scan_loop0.body (fun b => Aeneas.Std.Result.ok (f b))
+                    (fun b => Aeneas.Std.Result.ok (g b))
+                    (fun b x => Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (ec b))) proof iter none =
+                  Aeneas.Std.Result.ok
+                    (if NKB_CanonicalRows.accepted f g ec proof iter.start = true then
+                      Aeneas.Std.ControlFlow.cont (iter1, none)
+                    else
+                      Aeneas.Std.ControlFlow.done
+                        (some (Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse))) :=
+⋯
+'NKB_CanonicalRows.entered' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalRowsLoop.source : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    ∀ (fuel : ℕ) (iter : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize),
+      iter.end = 22#usize →
+        ↑iter.start + fuel = 22 →
+          NJS_Extract.verifier.candidate.canonical_scan_loop0 (fun b => Aeneas.Std.Result.ok (f b))
+              (fun b => Aeneas.Std.Result.ok (g b))
+              (fun b x => Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (ec b))) iter proof none =
+            Aeneas.Std.Result.ok
+              (some
+                (NKB_CanonicalOpening.reply
+                  (NKB_CanonicalPair.allFrom (NKB_CanonicalRows.pass f g ec proof) (↑iter.start) fuel))) :=
+⋯
+'NKB_CanonicalRowsLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_y1 : NJS_Extract.compact.OFF_Y1 = Aeneas.Std.Result.ok 7031#usize :=
+⋯
+'NKB_CanonicalConstants.off_y1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_inactive : NJS_Extract.compact.OFF_INACTIVE = Aeneas.Std.Result.ok 7495#usize :=
+⋯
+'NKB_CanonicalConstants.off_inactive' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_round0 : NJS_Extract.compact.OFF_ROUND0 = Aeneas.Std.Result.ok 7527#usize :=
+⋯
+'NKB_CanonicalConstants.off_round0' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_folded_root : NJS_Extract.compact.OFF_FOLDED_ROOT =
+  Aeneas.Std.Result.ok 7751#usize :=
+⋯
+'NKB_CanonicalConstants.off_folded_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_round1 : NJS_Extract.compact.OFF_ROUND1 = Aeneas.Std.Result.ok 7783#usize :=
+⋯
+'NKB_CanonicalConstants.off_round1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_final : NJS_Extract.compact.OFF_FINAL = Aeneas.Std.Result.ok 8007#usize :=
+⋯
+'NKB_CanonicalConstants.off_final' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.off_openings : NJS_Extract.compact.OFF_OPENINGS = Aeneas.Std.Result.ok 10055#usize :=
+⋯
+'NKB_CanonicalConstants.off_openings' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalConstants.opening : NJS_Extract.compact.OPENING = Aeneas.Std.Result.ok 832#usize :=
+⋯
+'NKB_CanonicalConstants.opening' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalPrefix.source : ∀ (f : Aeneas.Std.Array Aeneas.Std.U8 4#usize → Option Aeneas.Std.U32)
+  (g : Aeneas.Std.Slice Aeneas.Std.U8 → Option NKB_CanonicalRange.K) (ec cv : Aeneas.Std.Slice Aeneas.Std.U8 → Bool)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    NJS_Extract.verifier.candidate.canonical_scan (fun b => Aeneas.Std.Result.ok (f b))
+        (fun b => Aeneas.Std.Result.ok (g b)) (fun b x => Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (ec b)))
+        (fun b => Aeneas.Std.Result.ok (NKB_CanonicalPrefix.codec (cv b))) proof =
+      Aeneas.Std.Result.ok
+        (NKB_CanonicalOpening.reply
+          (NKB_CanonicalPrefix.guard cv ec proof &&
+            NKB_CanonicalPair.allFrom (NKB_CanonicalRows.pass f g ec proof) 0 22)) :=
+⋯
+'NKB_CanonicalPrefix.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalCuts.read_result : ∀ (expected : Bool) (out : NKB_CanonicalRange.ScanResult),
+  NKB_CanonicalCuts.ReadCut expected out → out = NKB_CanonicalOpening.reply expected :=
+⋯
+'NKB_CanonicalCuts.read_result' depends on axioms: [propext]
+theorem NKB_CanonicalCuts.child_shape : ∀ (bs : Aeneas.Std.Slice Aeneas.Std.U8) (k : Bool),
+  NFU_Retarget.verifier.echeck bs k = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∨
+    NFU_Retarget.verifier.echeck bs k =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err NFU_Retarget.LPl_Kit_Release.verifier.Error.Parse) :=
+⋯
+'NKB_CanonicalCuts.child_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalCuts.child_ok : ∀ (bs : Aeneas.Std.Slice Aeneas.Std.U8) (k : Bool),
+  (List.range ((↑bs).length / 32)).all (NKB_CanonicalEcheck.pass bs k) = true →
+    NFU_Retarget.verifier.echeck bs k = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) :=
+⋯
+'NKB_CanonicalCuts.child_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalCuts.child_parse : ∀ (bs : Aeneas.Std.Slice Aeneas.Std.U8) (k : Bool),
+  (List.range ((↑bs).length / 32)).all (NKB_CanonicalEcheck.pass bs k) = false →
+    NFU_Retarget.verifier.echeck bs k =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err NFU_Retarget.LPl_Kit_Release.verifier.Error.Parse) :=
+⋯
+'NKB_CanonicalCuts.child_parse' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalCuts.call_result : ∀ (childOk : Bool) (out : NKB_CanonicalRange.ScanResult),
+  NKB_CanonicalCuts.CallCut childOk out → out = NKB_CanonicalOpening.reply childOk :=
+⋯
+'NKB_CanonicalCuts.call_result' depends on axioms: [propext]
+theorem NKB_CanonicalDomains.c1 : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 → ∀ (s : Aeneas.Std.Usize), ↑s < 4 → (↑(NKB_CanonicalTail.window q s)).length = 16 :=
+⋯
+'NKB_CanonicalDomains.c1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalDomains.c2 : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 → ∀ (s l : Aeneas.Std.Usize), ↑s < 4 → ↑l < 2 → (↑(NKB_CanonicalRange.window q s l)).length = 16 :=
+⋯
+'NKB_CanonicalDomains.c2' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalDomains.trailing : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑q).length = 832 → (↑(NKB_CanonicalOpening.trailing q)).length = 128 :=
+⋯
+'NKB_CanonicalDomains.trailing' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalDomains.prefix_windows : ∀ (proof : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    (↑(NKB_CanonicalPrefix.values proof)).length = 464 ∧
+      (↑(NKB_CanonicalPrefix.inactive proof)).length = 32 ∧
+        (↑(NKB_CanonicalPrefix.round0 proof)).length = 224 ∧ (↑(NKB_CanonicalPrefix.round1 proof)).length = 2272 :=
+⋯
+'NKB_CanonicalDomains.prefix_windows' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalDomains.aligned : ∀ (proof q : Aeneas.Std.Slice Aeneas.Std.U8),
+  (↑proof).length = 57607 →
+    (↑q).length = 832 →
+      (↑(NKB_CanonicalPrefix.inactive proof)).length % 32 = 0 ∧
+        (↑(NKB_CanonicalPrefix.round0 proof)).length % 32 = 0 ∧
+          (↑(NKB_CanonicalPrefix.round1 proof)).length % 32 = 0 ∧
+            (↑(NKB_CanonicalOpening.trailing q)).length % 32 = 0 :=
+⋯
+'NKB_CanonicalDomains.aligned' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalCongruence.allFrom_congr : ∀ (p q : ℕ → Bool) (fuel start : ℕ),
+  (∀ (n : ℕ), start ≤ n → n < start + fuel → p n = q n) →
+    NKB_CanonicalPair.allFrom p start fuel = NKB_CanonicalPair.allFrom q start fuel :=
+⋯
+'NKB_CanonicalCongruence.allFrom_congr' depends on axioms: [propext, Quot.sound]
+theorem NKB_CanonicalScalarBridge.scalar_tag : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  (NKB_CanonicalScalarBridge.scalar b).isSome = NKB_CanonicalScalarBridge.good b :=
+⋯
+'NKB_CanonicalScalarBridge.scalar_tag' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalarBridge.caller_result : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  (do
+      let parsed ← AspisR1M31Parser.field.M31.from_le_bytes b
+      Aeneas.Std.Result.ok
+          (if parsed.isSome = true then Aeneas.Std.core.result.Result.Ok ()
+          else Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse)) =
+    Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (NKB_CanonicalScalarBridge.good b)) :=
+⋯
+'NKB_CanonicalScalarBridge.caller_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalarBridge.source : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  AspisR1M31Parser.field.M31.from_le_bytes b = Aeneas.Std.Result.ok (NKB_CanonicalScalarBridge.scalar b) :=
+⋯
+'NKB_CanonicalScalarBridge.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalarBridge.retained : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  NKB_CanonicalScalarBridge.good b =
+    decide (↑(AspisR1.RetainedFieldByteCodec.decodeWordLE (AspisR1.M31ParserArray.arrayBytes b)) < 2147483647) :=
+⋯
+'NKB_CanonicalScalarBridge.retained' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalScalarBridge.native_result : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 4#usize)
+  (out : NKB_CanonicalRange.ScanResult),
+  NKB_CanonicalCuts.ReadCut (NKB_CanonicalScalarBridge.good b) out →
+    out =
+      NKB_CanonicalOpening.reply
+        (decide (↑(AspisR1.RetainedFieldByteCodec.decodeWordLE (AspisR1.M31ParserArray.arrayBytes b)) < 2147483647)) :=
+⋯
+'NKB_CanonicalScalarBridge.native_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalKBridge.natural : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize),
+  NKB_CanonicalKBridge.caller (NJC_ReaderResults.naturalK b) =
+    NKB_CanonicalOpening.reply (NKB_CanonicalKBridge.good b) :=
+⋯
+'NKB_CanonicalKBridge.natural' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NKB_CanonicalKBridge.source : ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 16#usize),
+  (do
+      let parsed ← OraclePortCkptAbi2Extracted.decode_k_spec b.to_slice
+      Aeneas.Std.Result.ok
+          (if parsed.isSome = true then Aeneas.Std.core.result.Result.Ok ()
+          else Aeneas.Std.core.result.Result.Err NJS_Extract.verifier.Error.Parse)) =
+    Aeneas.Std.Result.ok (NKB_CanonicalOpening.reply (NKB_CanonicalKBridge.good b)) :=
+⋯
+'NKB_CanonicalKBridge.source' depends on axioms: [propext, Classical.choice, Quot.sound]
 
 ```
