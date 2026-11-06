@@ -1,0 +1,278 @@
+NJB_AbsorptionScales.lean:49:39: warning: This simp argument is unused:
+  a2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵f̵e̵r̵e̵n̵c̵e̵,̵h̵0̵,̵n̵0̵,̵a̵1̵,̵h̵1̵,̵n̵1̵,̵a̵2̵,̵a̵3̵,̵a̵4̵,̵h̵2̵,̵n̵2̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲r̲e̲f̲e̲r̲e̲n̲c̲e̲,̲ ̲h̲0̲,̲ ̲n̲0̲,̲ ̲a̲1̲,̲ ̲h̲1̲,̲ ̲n̲1̲,̲ ̲a̲3̲,̲ ̲a̲4̲,̲ ̲h̲2̲,̲ ̲n̲2̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NJB_AbsorptionScales.result : ∀ (low fixed two eight nodes : NQ),
+  Canon low →
+    Canon fixed →
+      Canon two →
+        Canon eight →
+          Canon nodes →
+            ∃ out,
+              reference low fixed two eight nodes = ok out ∧
+                ∀ (i : Fin 3),
+                  Canon (out i).value ∧
+                    NJB_PreparedLaws.Domain (out i).cache (out i).value ∧
+                      decode (out i).value =
+                        model (decode low) (decode fixed) (decode two) (decode eight) (decode nodes) i :=
+fun low fixed two eight nodes hl hf ht he hn =>
+  let ⟨q0, h✝⟩ := NJB_StubLaws.qm_mul low fixed hl hf
+  let ⟨h0, right✝⟩ := h✝
+  let ⟨c0, v0⟩ := right✝
+  let ⟨p0, h✝¹⟩ := NJB_PreparedLaws.new_result q0 c0
+  let ⟨n0, d0⟩ := h✝¹
+  let ⟨t1, h✝²⟩ := NJB_StubLaws.qm_add fixed two hf ht
+  let ⟨a1, right✝¹⟩ := h✝²
+  let ⟨ct1, vt1⟩ := right✝¹
+  let ⟨q1, h✝³⟩ := NJB_StubLaws.qm_mul low t1 hl ct1
+  let ⟨h1, right✝²⟩ := h✝³
+  let ⟨c1, v1⟩ := right✝²
+  let ⟨p1, h✝⁴⟩ := NJB_PreparedLaws.new_result q1 c1
+  let ⟨n1, d1⟩ := h✝⁴
+  let ⟨t2, h✝⁵⟩ := NJB_StubLaws.qm_add fixed two hf ht
+  let ⟨a2, right✝³⟩ := h✝⁵
+  let ⟨ct2, vt2⟩ := right✝³
+  let ⟨t3, h✝⁶⟩ := NJB_StubLaws.qm_add t2 eight ct2 he
+  let ⟨a3, right✝⁴⟩ := h✝⁶
+  let ⟨ct3, vt3⟩ := right✝⁴
+  let ⟨t4, h✝⁷⟩ := NJB_StubLaws.qm_add t3 nodes ct3 hn
+  let ⟨a4, right✝⁵⟩ := h✝⁷
+  let ⟨ct4, vt4⟩ := right✝⁵
+  let ⟨q2, h✝⁸⟩ := NJB_StubLaws.qm_mul low t4 hl ct4
+  let ⟨h2, right✝⁶⟩ := h✝⁸
+  let ⟨c2, v2⟩ := right✝⁶
+  let ⟨p2, h✝⁹⟩ := NJB_PreparedLaws.new_result q2 c2
+  let ⟨n2, d2⟩ := h✝⁹
+  have repeated := ok.inj (Eq.trans (Eq.symm a2) a1);
+  Eq.ndrec (motive := fun t2 =>
+    FIq_Native.field.QM31.add fixed two = ok t2 →
+      Canon t2 →
+        decode t2 = decode fixed + decode two →
+          t2.add eight = ok t3 →
+            decode t3 = decode t2 + decode eight →
+              ∃ out,
+                reference low fixed two eight nodes = ok out ∧
+                  ∀ (i : Fin 3),
+                    Canon (out i).value ∧
+                      NJB_PreparedLaws.Domain (out i).cache (out i).value ∧
+                        decode (out i).value =
+                          model (decode low) (decode fixed) (decode two) (decode eight) (decode nodes) i)
+    (fun a2 ct2 vt2 a3 vt3 =>
+      Exists.intro ![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]
+        ⟨of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans
+                      (congr (congrArg Bind.bind h0)
+                        (funext fun q0 =>
+                          congrArg (Bind.bind (FIq_Native.field.PreparedQm31Multiplier.new q0))
+                            (funext fun p0 =>
+                              Eq.trans
+                                (Eq.trans
+                                  (congr (congrArg Bind.bind a1)
+                                    (funext fun t1_1 => congrArg (Bind.bind (FIq_Native.field.QM31.mul low t1_1)) ⋯))
+                                  (bind_tc_ok t1 fun y => do
+                                    let q1 ← FIq_Native.field.QM31.mul low y
+                                    let p1 ← FIq_Native.field.PreparedQm31Multiplier.new q1
+                                    ok
+                                        ![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                          { value := q2, cache := p2 }]))
+                                (Eq.trans
+                                  (Eq.trans
+                                    (congrFun' (congrArg Bind.bind h1) fun q1 => do
+                                      let p1 ← FIq_Native.field.PreparedQm31Multiplier.new q1
+                                      ok
+                                          ![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                            { value := q2, cache := p2 }])
+                                    (bind_tc_ok q1 fun y => do
+                                      let p1 ← FIq_Native.field.PreparedQm31Multiplier.new y
+                                      ok
+                                          ![{ value := q0, cache := p0 }, { value := y, cache := p1 },
+                                            { value := q2, cache := p2 }]))
+                                  (Eq.trans
+                                    (congrFun' (congrArg Bind.bind n1) fun p1 =>
+                                      ok
+                                        ![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                          { value := q2, cache := p2 }])
+                                    (bind_tc_ok p1 fun y =>
+                                      ok
+                                        ![{ value := q0, cache := p0 }, { value := q1, cache := y },
+                                          { value := q2, cache := p2 }]))))))
+                      (bind_tc_ok q0 fun y => do
+                        let p0 ← FIq_Native.field.PreparedQm31Multiplier.new y
+                        ok ![{ value := y, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]))
+                    (Eq.trans
+                      (congrFun' (congrArg Bind.bind n0) fun p0 =>
+                        ok ![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }])
+                      (bind_tc_ok p0 fun y =>
+                        ok
+                          ![{ value := q0, cache := y }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]))))
+                (ok ![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]))
+              (eq_self
+                (ok ![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]))),
+          fun i =>
+          List.Mem.casesOn (motive := fun a x =>
+            List.finRange ({ len := 2 }.len + 1) = a →
+              Fintype.complete i ≍ x →
+                Canon
+                    (![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]
+                        i).value ∧
+                  NJB_PreparedLaws.Domain
+                      (![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]
+                          i).cache
+                      (![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]
+                          i).value ∧
+                    decode
+                        (![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]
+                            i).value =
+                      model (decode low) (decode fixed) (decode two) (decode eight) (decode nodes) i)
+            (Fintype.complete i)
+            (fun «as» h =>
+              List.cons.noConfusion h fun head_eq =>
+                Eq.ndrec (motive := fun i =>
+                  ∀ (this : i ∈ Fintype.elems),
+                    (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1))⟩
+                          ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl ({ len := 2 }.len + 1)⟩ []) ≍
+                        «as» →
+                      this ≍ List.Mem.head «as» →
+                        Canon
+                            (![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]
+                                i).value ∧
+                          NJB_PreparedLaws.Domain
+                              (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                    { value := q2, cache := p2 }]
+                                  i).cache
+                              (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                    { value := q2, cache := p2 }]
+                                  i).value ∧
+                            decode
+                                (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                      { value := q2, cache := p2 }]
+                                    i).value =
+                              model (decode low) (decode fixed) (decode two) (decode eight) (decode nodes) i)
+                  (fun this tail_eq =>
+                    Eq.ndrec (motive := fun «as» =>
+                      this ≍ List.Mem.head «as» →
+                        Canon
+                            (![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]
+                                ((fun i => i)
+                                  ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1)))⟩)).value ∧
+                          NJB_PreparedLaws.Domain
+                              (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                    { value := q2, cache := p2 }]
+                                  ((fun i => i)
+                                    ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1)))⟩)).cache
+                              (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                    { value := q2, cache := p2 }]
+                                  ((fun i => i)
+                                    ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1)))⟩)).value ∧
+                            decode
+                                (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                      { value := q2, cache := p2 }]
+                                    ((fun i => i)
+                                      ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1)))⟩)).value =
+                              model (decode low) (decode fixed) (decode two) (decode eight) (decode nodes)
+                                ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1)))⟩))
+                      (fun h => ⟨c0, ⟨d0, v0⟩⟩) (eq_of_heq tail_eq))
+                  (eq_of_heq head_eq) (Fintype.complete i))
+            (fun b {«as»} a h =>
+              List.cons.noConfusion h fun head_eq =>
+                Eq.ndrec (motive := fun b =>
+                  (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1))⟩
+                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl ({ len := 2 }.len + 1)⟩ []) ≍
+                      «as» →
+                    Fintype.complete i ≍ List.Mem.tail b a →
+                      Canon
+                          (![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]
+                              i).value ∧
+                        NJB_PreparedLaws.Domain
+                            (![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]
+                                i).cache
+                            (![{ value := q0, cache := p0 }, { value := q1, cache := p1 }, { value := q2, cache := p2 }]
+                                i).value ∧
+                          decode
+                              (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                    { value := q2, cache := p2 }]
+                                  i).value =
+                            model (decode low) (decode fixed) (decode two) (decode eight) (decode nodes) i)
+                  (fun tail_eq =>
+                    Eq.ndrec (motive := fun {«as»} =>
+                      ∀ (a : List.Mem i «as»),
+                        Fintype.complete i ≍
+                            List.Mem.tail
+                              ((fun i => i) ⟨0, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1)))⟩) a →
+                          Canon
+                              (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                    { value := q2, cache := p2 }]
+                                  i).value ∧
+                            NJB_PreparedLaws.Domain
+                                (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                      { value := q2, cache := p2 }]
+                                    i).cache
+                                (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                      { value := q2, cache := p2 }]
+                                    i).value ∧
+                              decode
+                                  (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                        { value := q2, cache := p2 }]
+                                      i).value =
+                                model (decode low) (decode fixed) (decode two) (decode eight) (decode nodes) i)
+                      (fun a h =>
+                        List.Mem.casesOn (motive := fun a_1 x =>
+                          (fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1))⟩
+                                ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl ({ len := 2 }.len + 1)⟩ []) =
+                              a_1 →
+                            a ≍ x →
+                              Canon
+                                  (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                        { value := q2, cache := p2 }]
+                                      i).value ∧
+                                NJB_PreparedLaws.Domain
+                                    (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                          { value := q2, cache := p2 }]
+                                        i).cache
+                                    (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                          { value := q2, cache := p2 }]
+                                        i).value ∧
+                                  decode
+                                      (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                            { value := q2, cache := p2 }]
+                                          i).value =
+                                    model (decode low) (decode fixed) (decode two) (decode eight) (decode nodes) i)
+                          a
+                          (fun «as» h =>
+                            List.cons.noConfusion h fun head_eq =>
+                              Eq.ndrec (motive := fun i =>
+                                ∀ (a : List.Mem i (⋯ ⟨1, Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1))⟩ ⋯)),
+                                  ⋯ ≍ «as» → ⋯ → ⋯)
+                                (fun a tail_eq =>
+                                  Eq.ndrec (motive := fun «as» => ⋯ → ⋯) (fun h => ⟨c1, ⋯⟩) (eq_of_heq tail_eq))
+                                (eq_of_heq head_eq) a)
+                          (fun b {«as»} a_1 h =>
+                            List.cons.noConfusion h fun head_eq =>
+                              Eq.ndrec (motive := fun b =>
+                                ⋯ ⟨2, Nat.le_refl ({ len := 2 }.len + 1)⟩ [] ≍ «as» →
+                                  a ≍ List.Mem.tail b a_1 →
+                                    Canon
+                                        (![{ value := q0, cache := p0 }, { value := q1, cache := p1 },
+                                              { value := q2, cache := p2 }]
+                                            i).value ∧
+                                      ⋯)
+                                (fun tail_eq =>
+                                  Eq.ndrec (motive := fun {«as»} => ∀ (a_2 : List.Mem i «as»), ⋯)
+                                    (fun a_2 h => List.Mem.casesOn (motive := ⋯) a_2 ⋯ ⋯ ⋯ ⋯) (eq_of_heq tail_eq) a_1)
+                                (eq_of_heq head_eq))
+                          (Eq.refl
+                            ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨1, Nat.le_of_lt (Nat.le_refl ({ len := 2 }.len + 1))⟩
+                              ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨2, Nat.le_refl ({ len := 2 }.len + 1)⟩ [])))
+                          (HEq.refl a))
+                      (eq_of_heq tail_eq) a)
+                  (eq_of_heq head_eq))
+            (Eq.refl (List.finRange ({ len := 2 }.len + 1))) (HEq.refl (Fintype.complete i))⟩)
+    (Eq.symm repeated) a2 ct2 vt2 a3 vt3
+'AspisR1.NJB_AbsorptionScales.result' depends on axioms: [propext, Classical.choice, Quot.sound]

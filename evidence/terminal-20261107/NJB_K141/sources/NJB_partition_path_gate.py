@@ -1,0 +1,3 @@
+from pathlib import Path
+import json,hashlib,subprocess,sys
+b=Path.cwd();s=b/'NJB_src';pins=json.loads((b/'NJB_SOURCE_PINS.json').read_text());q='crates/aspis-statement/src/pool_v1/NJB_path_split.rs';p=s/q;assert hashlib.sha256(p.read_bytes()).hexdigest()==pins[q];p.write_bytes((b/'NJB_path_split_partition.rs.txt').read_bytes());pins[q]=hashlib.sha256(p.read_bytes()).hexdigest();(b/'NJB_SOURCE_PINS.json').write_text(json.dumps(pins));print('K134 same-name/property domain split: ordinary k<7 versus final k=7; validator unchanged',flush=True);sys.exit(subprocess.run([sys.executable,'NJB_gate.py',sys.argv[1]]).returncode)

@@ -1,0 +1,8 @@
+{
+ "source": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+ "high_body": "\n            let mask = constants::ACTIVE_ROW_MASKS[block];\n            let coordinate = match mask {\n                6144 => 0,\n                6145 => 1,\n                4097 => 2,\n                2048 => 3,\n                2049 => 4,\n                26214 => 5,\n                1749 => 6,\n                _ => unreachable!(\"generated Copy active mask outside frozen basis\"),\n            };\n            high_sums[coordinate] = high_sums[coordinate].add(self.high[block]);\n            block += 1;\n        ",
+ "low_body": "\n            let low_sum = match coordinate {\n                0 => self.low[11].add(self.low[12]),\n                1 => self.low[0].add(self.low[11]).add(self.low[12]),\n                2 => self.low[0].add(self.low[12]),\n                3 => self.low[11],\n                4 => self.low[0].add(self.low[11]),\n                5 => self.low[1].add(self.low[2]).add(self.low[5]).add(self.low[6])\n                    .add(self.low[9]).add(self.low[10]).add(self.low[13]).add(self.low[14]),\n                6 => self.low[0].add(self.low[2]).add(self.low[4]).add(self.low[6])\n                    .add(self.low[7]).add(self.low[9]).add(self.low[10]),\n                _ => unreachable!(\"coordinate outside frozen active-mask basis\"),\n            };\n            sum = sum.add(high_sums[coordinate].mul(low_sum));\n            coordinate += 1;\n        ",
+ "high_sha256": "65f914e1dea5d102537e8ed0db8499ba2f95fde11b99662995a9171c805f7277",
+ "low_sha256": "b26a7c50cf9b46d2b813c7df4154954e22284022ccc83a8210809757412b361d",
+ "erasure_equal": true
+}

@@ -1,0 +1,23 @@
+{"attempt": "NJB_L003", "exit_status": 0, "wall_seconds": 9.604470038088039, "peak_rss_kib": "6152148", "swaps": "0", "print_axioms": ["'AspisR1.NJB_SemanticPublic.result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJB_SemanticPublic.result : ∀ (statement : PoolV1PairForestTerminalStatementV1),
+  statement.semantic_public = ok (value statement) :=
+fun statement =>
+  PoolV1PairForestTerminalStatementV1.casesOn (motive := fun t =>
+    statement = t → statement.semantic_public = ok (value statement)) statement
+    (fun a a_1 h => Eq.symm h ▸ Eq.refl (PoolV1PairForestTerminalStatementV1.PrivateTransfer a a_1).semantic_public)
+    (fun a a_1 h => Eq.symm h ▸ Eq.refl (PoolV1PairForestTerminalStatementV1.Withdrawal a a_1).semantic_public)
+    (Eq.refl statement)
+'AspisR1.NJB_SemanticPublic.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+theorem AspisR1.NJB_SemanticPublic.result : ∀ (statement : PoolV1PairForestTerminalStatementV1),
+  statement.semantic_public = ok (value statement) :=
+fun statement =>
+  PoolV1PairForestTerminalStatementV1.casesOn (motive := fun t =>
+    statement = t → statement.semantic_public = ok (value statement)) statement
+    (fun a a_1 h => Eq.symm h ▸ Eq.refl (PoolV1PairForestTerminalStatementV1.PrivateTransfer a a_1).semantic_public)
+    (fun a a_1 h => Eq.symm h ▸ Eq.refl (PoolV1PairForestTerminalStatementV1.Withdrawal a a_1).semantic_public)
+    (Eq.refl statement)
+'AspisR1.NJB_SemanticPublic.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9847a3bb02aa4622960aef3120292ee6.scope; invocation ID: bc8eff0beceb42fc8b778bf7e9656780

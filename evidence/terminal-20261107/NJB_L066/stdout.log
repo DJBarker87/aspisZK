@@ -1,0 +1,44 @@
+NJB_PatternArray.lean:41:3: error: Type mismatch: After simplification, term
+  vo
+ has type
+  @Eq (Fin 4 → FIv_NativeValue.K) (NJB_StateUpdates.decoded out)
+    (NJB_PatternReference.model (fun i => decode (patterns terms i)) (fun i => decode (selectors weights i))
+      (NJB_StateUpdates.decoded (state values)))
+but is expected to have type
+  @Eq (Fin 4 → FIv_NativeValue.K) (fun i => decode (out i))
+    (NJB_PatternReference.model (fun i => decode (patterns terms i)) (fun i => decode (selectors weights i)) fun i =>
+      decode (state values i))
+theorem AspisR1.NJB_PatternArray.result : ∀ (values : Std.Array NQ 4#usize) (weights : Std.Array NQ 26#usize)
+  (terms : Std.Array NQ 14#usize),
+  FIw_ArrayValue.canonical values →
+    FIw_ArrayValue.canonical weights →
+      FIw_ArrayValue.canonical terms →
+        ∃ out,
+          reference values weights terms = ok out ∧
+            FIw_ArrayValue.canonical out ∧
+              (fun i => decode (state out i)) =
+                NJB_PatternReference.model (fun i => decode (patterns terms i)) (fun i => decode (selectors weights i))
+                  fun i => decode (state values i) :=
+fun values weights terms hv hw ht =>
+  let ⟨out, h✝⟩ :=
+    NJB_PatternReference.result (patterns terms) (selectors weights) (state values)
+      (fun i => NJB_ArrayCarrier.canonical_cell terms ht (Fin.cast patterns._proof_2 i))
+      (fun i => NJB_ArrayCarrier.canonical_cell weights hw (Fin.cast selectors._proof_2 i)) fun i =>
+      NJB_ArrayCarrier.canonical_cell values hv (Fin.cast state._proof_2 i)
+  let ⟨call, right✝⟩ := h✝
+  let ⟨ho, vo⟩ := right✝
+  Exists.intro (pack out)
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans (congrFun' (congrArg Bind.bind call) fun out => ok (pack out))
+                (bind_tc_ok out fun y => ok (pack y))))
+            (ok (pack out)))
+          (eq_self (ok (pack out)))),
+      ⟨NJB_ArrayCarrier.canonical_array (fun i => out (Fin.cast size4 i)) fun i => ho (Fin.cast size4 i), sorry⟩⟩
+'AspisR1.NJB_PatternArray.size4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_PatternArray.size14' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_PatternArray.size26' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_PatternArray.state_pack' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_PatternArray.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,62 @@
+theorem AspisR1.NJB_AbsorptionAssociation.result : ∀ (low fixed two eight nodes : NQ) (opened : Std.Array NQ 16#usize),
+  Canon low →
+    Canon fixed →
+      Canon two →
+        Canon eight →
+          Canon nodes →
+            FIw_ArrayValue.canonical opened →
+              NJB_Absorption.reference low fixed two eight nodes opened =
+                pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal low fixed two eight nodes opened :=
+fun low fixed two eight nodes opened hl hf ht he hn ho =>
+  let ⟨a, h✝⟩ := NJB_Absorption.result low fixed two eight nodes opened hl hf ht he hn ho
+  let ⟨ra, right✝⟩ := h✝
+  let ⟨ca, va⟩ := right✝
+  let ⟨b, h✝¹⟩ := WP.spec_imp_exists (JFy_AbsorptionBuilder.source low fixed two eight nodes opened hf ht he hn hl ho)
+  let ⟨rb, cb⟩ := h✝¹
+  have vb := FIx_AbsorptionArray.value low fixed two eight nodes opened b hl hf ht he hn ho rb;
+  have sameModel :=
+    funext fun lane =>
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              NJB_AbsorptionLane.literal (decode low) (decode fixed) (decode two) (decode eight) (decode nodes)
+                  (decode (NJB_Absorption.cell opened lane)) lane =
+                decode low * FIx_Absorption.blocks (decode fixed) (decode two) (decode eight) (decode nodes) ↑lane * _a)
+            (NJB_ArrayReads.value opened (↑lane)
+              (Eq.mpr (id (congrArg (fun _a => ↑lane < _a) opened.property))
+                (Eq.mpr (id (congrArg (fun _a => ↑lane < _a) NJB_Absorption.size)) lane.isLt)))))
+        (Eq.refl
+          (NJB_AbsorptionLane.literal (decode low) (decode fixed) (decode two) (decode eight) (decode nodes)
+            (decode (NJB_Absorption.cell opened lane)) lane));
+  have equalValues :=
+    Eq.mpr (id (congrArg (fun _a => _a = List.map decode ↑b) va))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (List.ofFn fun lane =>
+                  NJB_AbsorptionLane.literal (decode low) (decode fixed) (decode two) (decode eight) (decode nodes)
+                    (decode (NJB_Absorption.cell opened lane)) lane) =
+                _a)
+            vb.right))
+        (Eq.mpr
+          (id
+            (congrArg
+              (Eq
+                (List.ofFn fun lane =>
+                  NJB_AbsorptionLane.literal (decode low) (decode fixed) (decode two) (decode eight) (decode nodes)
+                    (decode (NJB_Absorption.cell opened lane)) lane))
+              (List.ofFn_congr NJB_Absorption.size fun i =>
+                decode low * FIx_Absorption.blocks (decode fixed) (decode two) (decode eight) (decode nodes) ↑i *
+                  FIv_NativeArray.value opened ↑i)))
+          (congrArg (fun f => List.ofFn f) sameModel)));
+  have same := NJB_DecodeInjective.array a b ca cb equalValues;
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => _a = pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal low fixed two eight nodes opened)
+        ra))
+    (Eq.mpr (id (congrArg (fun _a => ok a = _a) rb))
+      (Eq.mpr (id (congrArg (fun _a => ok _a = ok b) same)) (Eq.refl (ok b))))
+'AspisR1.NJB_AbsorptionAssociation.result' depends on axioms: [propext, Classical.choice, Quot.sound]

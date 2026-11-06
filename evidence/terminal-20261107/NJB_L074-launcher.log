@@ -1,0 +1,43 @@
+{"attempt": "NJB_L074", "exit_status": 0, "wall_seconds": 9.97935383208096, "peak_rss_kib": "6191716", "swaps": "0", "print_axioms": ["'AspisR1.NJB_PackLaw.qm_raw' does not depend on any axioms", "'AspisR1.NJB_PackLaw.length' depends on axioms: [propext, Quot.sound]", "'AspisR1.NJB_PackLaw.result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJB_PackLaw.lean:37:48: warning: This simp argument is unused:
+  length
+
+Hint: Omit it from the simp argument list.
+  simp [NFT_Pack.Whole, ̲NFT_Pack.paddedSlice, ̲NFT_Pack.padded,
+       ̲ExtractedMaskQmPackBase4Whole.inputAt, ̲slice,l̵e̵n̵g̵t̵h̵,̵ ̲Array.to_slice, ̲Array.make]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NJB_PackLaw.result : ∀ (v : Fin 4 → NQ),
+  (∀ (i : Fin 4), Canon (v i)) → ∃ out, reference v = ok out ∧ Canon out ∧ decode out = model v :=
+fun v hv =>
+  have short := Eq.mpr (id (congrArg (fun _a => _a ≤ 4) (length v))) (le_refl 4);
+  have canonical := fun q h =>
+    let ⟨i, hi⟩ := List.mem_ofFn.mp h
+    Eq.mpr (id (cong
+...
+                               (eq_of_heq tail_eq) a)
+                                                      (eq_of_heq head_eq))
+                                                (Eq.refl
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])))
+                                                (HEq.refl a_2))
+                                            (eq_of_heq tail_eq) a_1)
+                                        (eq_of_heq head_eq))
+                                  (Eq.refl
+                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                          []))))
+                                  (HEq.refl a))
+                              (eq_of_heq tail_eq) a)
+                          (eq_of_heq head_eq))
+                    (Eq.refl (List.finRange ({ len := 3 }.len + 1))) (HEq.refl (Fintype.complete i))))))⟩⟩
+'AspisR1.NJB_PackLaw.qm_raw' does not depend on any axioms
+'AspisR1.NJB_PackLaw.length' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJB_PackLaw.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7025a3992c854974b1c3f18bab3650ce.scope; invocation ID: c0a08c3a17244c2186602fcae2c9050d

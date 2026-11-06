@@ -1,0 +1,53 @@
+{"attempt": "NJB_L027", "exit_status": 1, "wall_seconds": 8.043833781033754, "peak_rss_kib": "6127856", "swaps": "0", "print_axioms": ["'AspisR1.NJB_Traverse.result' depends on axioms: [propext, sorryAx, Quot.sound]", "'AspisR1.NJB_Traverse.failed_head' depends on axioms: [propext]", "'AspisR1.NJB_Traverse.diverged_head' depends on axioms: [propext]"]}
+NJB_Traverse.lean:25:3: error: unsolved goals
+case cons.refine_1
+α β γ : Type
+f : α → Result β
+p : β → Prop
+decode : β → γ
+value : α → γ
+x : α
+xs : List α
+ih :
+  (∀ x ∈ xs, ∃ y, f x = ok y ∧ p y ∧ decode y = value x) →
+    ∃ ys, run f xs = ok ys ∧ (∀ y ∈ ↑ys, p y) ∧ List.map decode ↑ys = List.map value xs
+child : ∀ x_1 ∈ x :: xs, ∃ y, f x_1 = ok y ∧ p y ∧ decode y = value x_1
+y : β
+call : f x = ok y
+hy : p y
+vy : decode y = value x
+ys : { ys // ys.length = xs.length }
+rest : run f xs = ok ys
+hs : ∀ y ∈ ↑ys, p y
+vs : List.map decode ↑ys = List.map value xs
+⊢ pure ⟨y :: ↑ys, ⋯⟩ = ok ⟨y :: ↑ys, ⋯⟩
+'AspisR1.NJB_Traverse.result' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.NJB_Trave
+...
+NJB_Traverse.lean:25:3: error: unsolved goals
+case cons.refine_1
+α β γ : Type
+f : α → Result β
+p : β → Prop
+decode : β → γ
+value : α → γ
+x : α
+xs : List α
+ih :
+  (∀ x ∈ xs, ∃ y, f x = ok y ∧ p y ∧ decode y = value x) →
+    ∃ ys, run f xs = ok ys ∧ (∀ y ∈ ↑ys, p y) ∧ List.map decode ↑ys = List.map value xs
+child : ∀ x_1 ∈ x :: xs, ∃ y, f x_1 = ok y ∧ p y ∧ decode y = value x_1
+y : β
+call : f x = ok y
+hy : p y
+vy : decode y = value x
+ys : { ys // ys.length = xs.length }
+rest : run f xs = ok ys
+hs : ∀ y ∈ ↑ys, p y
+vs : List.map decode ↑ys = List.map value xs
+⊢ pure ⟨y :: ↑ys, ⋯⟩ = ok ⟨y :: ↑ys, ⋯⟩
+'AspisR1.NJB_Traverse.result' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.NJB_Traverse.failed_head' depends on axioms: [propext]
+'AspisR1.NJB_Traverse.diverged_head' depends on axioms: [propext]
+
+Running as unit: run-r01bb192cf67a4ce994ee8d0ccb568098.scope; invocation ID: dc7e61d46eb142e7b3af0c42042a5dff

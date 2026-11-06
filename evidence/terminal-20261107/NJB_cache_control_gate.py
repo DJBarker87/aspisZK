@@ -1,0 +1,3 @@
+from pathlib import Path
+import json,hashlib,subprocess,sys
+b=Path.cwd();s=b/'NJB_src';pins=json.loads((b/'NJB_SOURCE_PINS.json').read_text());q='crates/aspis-statement/src/pool_v1/NJB_windowed.rs';p=s/q;assert hashlib.sha256(p.read_bytes()).hexdigest()==pins[q];p.write_bytes((b/'NJB_windowed_cache_control.rs.txt').read_bytes());pins[q]=hashlib.sha256(p.read_bytes()).hexdigest();(b/'NJB_SOURCE_PINS.json').write_text(json.dumps(pins));print('additional actual-cache-identity negative control; operational body/domains/validator unchanged',flush=True);sys.exit(subprocess.run([sys.executable,'NJB_gate.py',sys.argv[1]]).returncode)

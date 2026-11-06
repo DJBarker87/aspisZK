@@ -1,0 +1,25 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+fn q(w:[u32;4])->QM31{QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn canon(w:[u32;4])->bool{w[0]<2147483647&&w[1]<2147483647&&w[2]<2147483647&&w[3]<2147483647}
+struct NJB_Log{left:[[u32;4];17],right:[[u32;4];17],reply:[[u32;4];17],kind:[u8;17],calls:usize}
+trait NJB_Ops{fn NJB_mul(self,r:Self,l:&mut NJB_Log)->Self;fn NJB_add(self,r:Self,l:&mut NJB_Log)->Self;fn NJB_sub(self,r:Self,l:&mut NJB_Log)->Self;}
+fn event(a:QM31,b:QM31,kind:u8,l:&mut NJB_Log)->QM31{let j=l.calls;assert!(j<17);assert!(canon(words(a))&&canon(words(b)));l.left[j]=words(a);l.right[j]=words(b);l.kind[j]=kind;l.calls+=1;q(l.reply[j])}
+impl NJB_Ops for QM31{
+fn NJB_mul(self,r:Self,l:&mut NJB_Log)->Self{event(self,r,0,l)}
+fn NJB_add(self,r:Self,l:&mut NJB_Log)->Self{event(self,r,1,l)}
+fn NJB_sub(self,r:Self,l:&mut NJB_Log)->Self{event(self,r,2,l)}}
+fn NJB_pattern_step(values:&mut[QM31;4],pattern_selectors:&[QM31;26],patterns:&[QM31;14],group:usize,mut coordinate:usize,log:&mut NJB_Log)->usize{
+            let pattern = usize::from(COPY_PATTERN_COORDINATE_PATTERNS[coordinate]);
+            values[group] = values[group].NJB_add(patterns[pattern].NJB_mul(pattern_selectors[coordinate],log),log);
+            coordinate += 1;
+        coordinate}
+
+#[kani::proof]#[kani::unwind(35)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJB_pattern_inner(){let patterns:[QM31;14]=unsafe{core::mem::transmute::<[[u32;4];14],[QM31;14]>(kani::any())};let selectors:[QM31;26]=unsafe{core::mem::transmute::<[[u32;4];26],[QM31;26]>(kani::any())};let mut values:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let before=values;let group:usize=kani::any();let coordinate:usize=kani::any();kani::assume(group<4);kani::assume(coordinate>=COPY_PATTERN_GROUP_OFFSETS[group]&&coordinate<COPY_PATTERN_GROUP_OFFSETS[group+1]);let p=usize::from(COPY_PATTERN_COORDINATE_PATTERNS[coordinate]);let r0:[u32;4]=kani::any();let r1:[u32;4]=kani::any();kani::assume(canon(words(patterns[p]))&&canon(words(selectors[coordinate]))&&canon(words(before[group]))&&canon(r0)&&canon(r1));let mut r=[[0;4];17];r[0]=r0;r[1]=r1;let mut log=NJB_Log{left:[[0;4];17],right:[[0;4];17],reply:r,kind:[0;17],calls:0};let next=NJB_pattern_step(&mut values,&selectors,&patterns,group,coordinate,&mut log);let limb:usize=kani::any();let k:usize=kani::any();kani::assume(limb<4&&k<4);assert_eq!(log.calls,2);assert_eq!(log.kind[0],0);assert_eq!(log.kind[1],1);assert_eq!(log.left[0][limb],words(patterns[p])[limb]);assert_eq!(log.right[0][limb],words(selectors[coordinate])[limb]);assert_eq!(log.left[1][limb],words(before[group])[limb]);assert_eq!(log.right[1][limb],r0[limb]);assert_eq!(next,coordinate+1);assert_eq!(words(values[k])[limb],(if k==group{r1[limb]}else{words(before[k])[limb]}) ^ if cfg!(NJB_invert){1}else{0});}
+struct NJB_Inner{group:usize,start:usize,end:usize,before:[QM31;4],selectors:[QM31;26],patterns:*const [QM31;14],reply:[QM31;4],calls:usize}
+fn NJB_inner(values:&mut[QM31;4],selectors:&[QM31;26],patterns:&[QM31;14],g:usize,start:usize,end:usize,log:&mut NJB_Inner){assert_eq!(log.calls,0);log.group=g;log.start=start;log.end=end;log.before=*values;log.selectors=*selectors;log.patterns=patterns;*values=log.reply;log.calls+=1;}
+fn NJB_pattern_outer_step(mut values:[QM31;4],pattern_selectors:[QM31;26],patterns:&[QM31;14],mut group:usize,log:&mut NJB_Inner)->([QM31;4],usize){let coordinate=COPY_PATTERN_GROUP_OFFSETS[group];NJB_inner(&mut values,&pattern_selectors,patterns,group,coordinate,COPY_PATTERN_GROUP_OFFSETS[group+1],log);group+=1;(values,group)}
+#[kani::proof]#[kani::unwind(35)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJB_pattern_outer(){let patterns:[QM31;14]=unsafe{core::mem::transmute::<[[u32;4];14],[QM31;14]>(kani::any())};let selectors:[QM31;26]=unsafe{core::mem::transmute::<[[u32;4];26],[QM31;26]>(kani::any())};let values:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let reply:[QM31;4]=unsafe{core::mem::transmute::<[[u32;4];4],[QM31;4]>(kani::any())};let g:usize=kani::any();kani::assume(g<4);let mut log=NJB_Inner{group:0,start:0,end:0,before:values,selectors,patterns:core::ptr::null(),reply,calls:0};let(out,next)=NJB_pattern_outer_step(values,selectors,&patterns,g,&mut log);let k:usize=kani::any();let j:usize=kani::any();let limb:usize=kani::any();kani::assume(k<4&&j<26&&limb<4);assert_eq!(log.calls,1);assert_eq!(log.group,g);assert_eq!(log.start,COPY_PATTERN_GROUP_OFFSETS[g]);assert_eq!(log.end,COPY_PATTERN_GROUP_OFFSETS[g+1]);assert_eq!(next,g+1);assert_eq!(words(log.before[k])[limb],words(values[k])[limb]);assert_eq!(words(log.selectors[j])[limb],words(selectors[j])[limb]);assert!(core::ptr::eq(log.patterns,&patterns));assert_eq!(words(out[k])[limb],words(reply[k])[limb] ^ if cfg!(NJB_invert){1}else{0});}

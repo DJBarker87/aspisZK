@@ -1,0 +1,47 @@
+{"attempt": "NJB_L098", "exit_status": 0, "wall_seconds": 10.684317667037249, "peak_rss_kib": "6177928", "swaps": "0", "print_axioms": ["'AspisR1.NJB_TagReduce.reduce' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJB_TagReduce.add' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJB_TagReduce.result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJB_TagReduce.result : ∀ (old : U32) (raw : U64),
+  ↑old < P → ∃ out, reference old raw = ok out ∧ ↑out = (↑old + ↑raw % P) % P ∧ ↑out < P :=
+fun old raw canonical =>
+  let ⟨r, h✝⟩ := reduce raw
+  let ⟨cr, right✝⟩ := h✝
+  let ⟨vr, hr⟩ := right✝
+  let ⟨out, h✝¹⟩ := add old r canonical hr
+  let ⟨co, right✝¹⟩ := h✝¹
+  let ⟨vo, ho⟩ := right✝¹
+  Exists.intro out
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans (congrFun' (congrArg Bind.bind cr) fun residue => FIq_Native.field.M31.add old residue)
+                  (bind_tc_ok r (FIq_Native.field.M31.add old)))
+                co))
+            (ok out)
+...
+theorem AspisR1.NJB_TagReduce.result : ∀ (old : U32) (raw : U64),
+  ↑old < P → ∃ out, reference old raw = ok out ∧ ↑out = (↑old + ↑raw % P) % P ∧ ↑out < P :=
+fun old raw canonical =>
+  let ⟨r, h✝⟩ := reduce raw
+  let ⟨cr, right✝⟩ := h✝
+  let ⟨vr, hr⟩ := right✝
+  let ⟨out, h✝¹⟩ := add old r canonical hr
+  let ⟨co, right✝¹⟩ := h✝¹
+  let ⟨vo, ho⟩ := right✝¹
+  Exists.intro out
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans (congrFun' (congrArg Bind.bind cr) fun residue => FIq_Native.field.M31.add old residue)
+                  (bind_tc_ok r (FIq_Native.field.M31.add old)))
+                co))
+            (ok out))
+          (eq_self (ok out))),
+      ⟨Eq.mp (congrArg (Eq ↑out) (congrFun' (congrArg HMod.hMod (congrArg (HAdd.hAdd ↑old) vr)) P)) vo, ho⟩⟩
+'AspisR1.NJB_TagReduce.reduce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_TagReduce.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_TagReduce.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r642059361c0d4440912b24b38e478915.scope; invocation ID: 1bc9ccf8528c4baf932476590e599606

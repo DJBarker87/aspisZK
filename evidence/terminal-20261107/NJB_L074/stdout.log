@@ -1,0 +1,556 @@
+NJB_PackLaw.lean:37:48: warning: This simp argument is unused:
+  length
+
+Hint: Omit it from the simp argument list.
+  simp [NFT_Pack.Whole, ̲NFT_Pack.paddedSlice, ̲NFT_Pack.padded,
+       ̲ExtractedMaskQmPackBase4Whole.inputAt, ̲slice,l̵e̵n̵g̵t̵h̵,̵ ̲Array.to_slice, ̲Array.make]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NJB_PackLaw.result : ∀ (v : Fin 4 → NQ),
+  (∀ (i : Fin 4), Canon (v i)) → ∃ out, reference v = ok out ∧ Canon out ∧ decode out = model v :=
+fun v hv =>
+  have short := Eq.mpr (id (congrArg (fun _a => _a ≤ 4) (length v))) (le_refl 4);
+  have canonical := fun q h =>
+    let ⟨i, hi⟩ := List.mem_ofFn.mp h
+    Eq.mpr (id (congrArg ExtractedMaskTowerAdd.CanonicalQM (Eq.symm hi))) (hv i);
+  let ⟨p, h✝⟩ := NFT_Pack.source (slice v) short canonical
+  let ⟨call, right✝⟩ := h✝
+  let ⟨hp, vp⟩ := right✝
+  Exists.intro (raw p)
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (congrArg
+                (fun x =>
+                  match x with
+                  | ok x => ok (raw x)
+                  | fail e => fail e
+                  | div => div)
+                call))
+            (ok (raw p)))
+          (eq_self (ok (raw p)))),
+      ⟨id (Eq.mpr (id (congrArg ExtractedMaskQM31Exact.CurrentCanonicalQM (qm_raw p))) hp),
+        id
+          (Eq.mpr (id (congrArg (fun _a => ExtractedMaskQM31Exact.decode _a = model v) (qm_raw p)))
+            (Eq.mpr (id (congrArg (fun _a => _a = model v) vp))
+              ((fun v v_1 e_v => e_v ▸ Eq.refl (ExtractedMaskQmPackBase4Arithmetic.mathematicalPack v))
+                (NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short) (NFT_Pack.padded_length (slice v) short))
+                (fun i => qm (v i))
+                (funext fun i =>
+                  List.Mem.casesOn (motive := fun a x =>
+                    List.finRange ({ len := 3 }.len + 1) = a →
+                      Fintype.complete i ≍ x →
+                        NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short) (NFT_Pack.padded_length (slice v) short)
+                            i =
+                          qm (v i))
+                    (Fintype.complete i)
+                    (fun «as» h =>
+                      List.cons.noConfusion h fun head_eq =>
+                        Eq.ndrec (motive := fun i =>
+                          ∀ (this : i ∈ Fintype.elems),
+                            (fun x1 x2 => (fun i => i) x1 :: x2)
+                                  ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                    ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                    ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])) ≍
+                                «as» →
+                              this ≍ List.Mem.head «as» →
+                                NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                    (NFT_Pack.padded_length (slice v) short) i =
+                                  qm (v i))
+                          (fun this tail_eq =>
+                            Eq.ndrec (motive := fun «as» =>
+                              this ≍ List.Mem.head «as» →
+                                NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                    (NFT_Pack.padded_length (slice v) short)
+                                    ((fun i => i)
+                                      ⟨0,
+                                        Nat.le_of_lt
+                                          (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩) =
+                                  qm
+                                    (v
+                                      ((fun i => i)
+                                        ⟨0,
+                                          Nat.le_of_lt
+                                            (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩)))
+                              (fun h =>
+                                of_eq_true
+                                  (Eq.trans
+                                    (congrFun'
+                                      (congrArg Eq
+                                        (GetElem.getElem.congr_simp ↑(NFT_Pack.paddedSlice (slice v) short)
+                                          [qm (v 0), qm (v 1), qm (v 2), qm (v 3)]
+                                          (congrArg Subtype.val
+                                            (Subtype.mk.congr_simp ↑(NFT_Pack.padded (slice v) short)
+                                              [qm (v 0), qm (v 1), qm (v 2), qm (v 3)]
+                                              (congrArg Subtype.val
+                                                (Subtype.mk.congr_simp
+                                                  (↑(slice v) ++
+                                                    List.replicate (4 - (slice v).length)
+                                                      AspisR1SelectedMaskProbe.field.QM31.ZERO)
+                                                  [qm (v 0), qm (v 1), qm (v 2), qm (v 3)]
+                                                  (Eq.trans
+                                                    (congr
+                                                      (congrArg HAppend.hAppend
+                                                        (congrArg Subtype.val
+                                                          (Subtype.mk.congr_simp (List.ofFn fun i => qm (v i))
+                                                            [qm (v 0), qm (v 1), qm (v 2), qm (v 3)]
+                                                            (Eq.trans List.ofFn_succ
+                                                              (congrArg (List.cons (qm (v 0)))
+                                                                (Eq.trans List.ofFn_succ
+                                                                  (congrArg (List.cons (qm (v 1)))
+                                                                    (Eq.trans List.ofFn_succ
+                                                                      (congrArg (List.cons (qm (v 2)))
+                                                                        (Eq.trans List.ofFn_succ
+                                                                          (congrArg (List.cons (qm (v 3)))
+                                                                            List.ofFn_zero))))))))
+                                                            (slice._proof_2 v))))
+                                                      (congrFun'
+                                                        (congrArg List.replicate
+                                                          (Eq.trans
+                                                            (congrArg (HSub.hSub 4)
+                                                              (Eq.trans
+                                                                (congrArg List.length
+                                                                  (congrArg Subtype.val
+                                                                    (Subtype.mk.congr_simp (List.ofFn fun i => qm (v i))
+                                                                      [qm (v 0), qm (v 1), qm (v 2), qm (v 3)]
+                                                                      (Eq.trans List.ofFn_succ
+                                                                        (congrArg (List.cons (qm (v 0)))
+                                                                          (Eq.trans List.ofFn_succ
+                                                                            (congrArg (List.cons (qm (v 1)))
+                                                                              (Eq.trans List.ofFn_succ
+                                                                                (congrArg (List.cons (qm (v ⋯)))
+                                                                                  (Eq.trans List.ofFn_succ
+                                                                                    (congrArg (List.cons (qm (v 3)))
+                                                                                      List.ofFn_zero))))))))
+                                                                      (slice._proof_2 v))))
+                                                                (congrFun'
+                                                                  (congrArg HAdd.hAdd
+                                                                    (congrFun'
+                                                                      (congrArg HAdd.hAdd
+                                                                        (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                                                      1))
+                                                                  1)))
+                                                            (tsub_self 4)))
+                                                        AspisR1SelectedMaskProbe.field.QM31.ZERO))
+                                                    (List.append_nil [qm (v 0), qm (v 1), qm (v 2), qm (v 3)]))
+                                                  (NFT_Pack.padded._proof_3 (slice v) short)))
+                                              (Array.to_slice._proof_1 (NFT_Pack.padded (slice v) short))))
+                                          (↑((fun i => i)
+                                              ⟨0,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩))
+                                          0 (Eq.refl 0)
+                                          (ExtractedMaskQmPackBase4Whole.inputAt._proof_1
+                                            (NFT_Pack.paddedSlice (slice v) short)
+                                            (NFT_Pack.padded_length (slice v) short)
+                                            ((fun i => i)
+                                              ⟨0,
+                                                Nat.le_of_lt
+                                                  (Nat.le_of_lt
+                                                    (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩))))
+                                      (qm (v 0)))
+                                    (eq_self (qm (v 0)))))
+                              (eq_of_heq tail_eq))
+                          (eq_of_heq head_eq) (Fintype.complete i))
+                    (fun b {«as»} a h =>
+                      List.cons.noConfusion h fun head_eq =>
+                        Eq.ndrec (motive := fun b =>
+                          (fun x1 x2 => (fun i => i) x1 :: x2)
+                                ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                  ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                  ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])) ≍
+                              «as» →
+                            Fintype.complete i ≍ List.Mem.tail b a →
+                              NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                  (NFT_Pack.padded_length (slice v) short) i =
+                                qm (v i))
+                          (fun tail_eq =>
+                            Eq.ndrec (motive := fun {«as»} =>
+                              ∀ (a : List.Mem i «as»),
+                                Fintype.complete i ≍
+                                    List.Mem.tail
+                                      ((fun i => i)
+                                        ⟨0,
+                                          Nat.le_of_lt
+                                            (Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))))⟩)
+                                      a →
+                                  NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                      (NFT_Pack.padded_length (slice v) short) i =
+                                    qm (v i))
+                              (fun a h =>
+                                List.Mem.casesOn (motive := fun a_1 x =>
+                                  (fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                          ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                          ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                            [])) =
+                                      a_1 →
+                                    a ≍ x →
+                                      NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                          (NFT_Pack.padded_length (slice v) short) i =
+                                        qm (v i))
+                                  a
+                                  (fun «as» h =>
+                                    List.cons.noConfusion h fun head_eq =>
+                                      Eq.ndrec (motive := fun i =>
+                                        ∀
+                                          (a :
+                                            List.Mem i
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])))),
+                                          (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                  ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []) ≍
+                                              «as» →
+                                            a ≍ List.Mem.head «as» →
+                                              NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                                  (NFT_Pack.padded_length (slice v) short) i =
+                                                qm (v i))
+                                        (fun a tail_eq =>
+                                          Eq.ndrec (motive := fun «as» =>
+                                            a ≍ List.Mem.head «as» →
+                                              NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                                  (NFT_Pack.padded_length (slice v) short)
+                                                  ((fun i => i)
+                                                    ⟨1,
+                                                      Nat.le_of_lt
+                                                        (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩) =
+                                                qm
+                                                  (v
+                                                    ((fun i => i)
+                                                      ⟨1,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩)))
+                                            (fun h =>
+                                              of_eq_true
+                                                (Eq.trans
+                                                  (congrFun'
+                                                    (congrArg Eq
+                                                      (GetElem.getElem.congr_simp
+                                                        ↑(NFT_Pack.paddedSlice (slice v) short)
+                                                        [qm (v 0), qm (v 1), qm (v 2), qm (v 3)]
+                                                        (congrArg Subtype.val
+                                                          (Subtype.mk.congr_simp ↑(NFT_Pack.padded (slice v) short)
+                                                            [qm (v 0), qm (v 1), qm (v 2), qm (v 3)]
+                                                            (congrArg Subtype.val
+                                                              (Subtype.mk.congr_simp
+                                                                (↑(slice v) ++
+                                                                  List.replicate (4 - (slice v).length)
+                                                                    AspisR1SelectedMaskProbe.field.QM31.ZERO)
+                                                                [qm (v 0), qm (v 1), qm (v 2), qm (v 3)]
+                                                                (Eq.trans
+                                                                  (congr
+                                                                    (congrArg HAppend.hAppend
+                                                                      (congrArg Subtype.val
+                                                                        (Subtype.mk.congr_simp
+                                                                          (List.ofFn fun i => qm (v i))
+                                                                          [qm (v 0), qm (v 1), qm (v 2), qm (v 3)]
+                                                                          (Eq.trans List.ofFn_succ
+                                                                            (congrArg (List.cons (qm (v 0)))
+                                                                              (Eq.trans List.ofFn_succ
+                                                                                (congrArg (List.cons (qm ⋯))
+                                                                                  (Eq.trans List.ofFn_succ
+                                                                                    (congrArg ⋯ ⋯))))))
+                                                                          (slice._proof_2 v))))
+                                                                    (congrFun'
+                                                                      (congrArg List.replicate
+                                                                        (Eq.trans
+                                                                          (congrArg (HSub.hSub 4)
+                                                                            (Eq.trans
+                                                                              (congrArg List.length
+                                                                                (congrArg Subtype.val
+                                                                                  (Subtype.mk.congr_simp
+                                                                                    (List.ofFn fun i => qm (v i)) [⋯, ⋯]
+                                                                                    (Eq.trans List.ofFn_succ ⋯)
+                                                                                    (slice._proof_2 v))))
+                                                                              (congrFun'
+                                                                                (congrArg HAdd.hAdd
+                                                                                  (congrFun' (congrArg HAdd.hAdd ⋯) 1))
+                                                                                1)))
+                                                                          (tsub_self 4)))
+                                                                      AspisR1SelectedMaskProbe.field.QM31.ZERO))
+                                                                  (List.append_nil
+                                                                    [qm (v 0), qm (v 1), qm (v 2), qm (v 3)]))
+                                                                (NFT_Pack.padded._proof_3 (slice v) short)))
+                                                            (Array.to_slice._proof_1
+                                                              (NFT_Pack.padded (slice v) short))))
+                                                        (↑((fun i => i)
+                                                            ⟨1,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩))
+                                                        1 (Eq.refl 1)
+                                                        (ExtractedMaskQmPackBase4Whole.inputAt._proof_1
+                                                          (NFT_Pack.paddedSlice (slice v) short)
+                                                          (NFT_Pack.padded_length (slice v) short)
+                                                          ((fun i => i)
+                                                            ⟨1,
+                                                              Nat.le_of_lt
+                                                                (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩))))
+                                                    (qm (v 1)))
+                                                  (eq_self (qm (v 1)))))
+                                            (eq_of_heq tail_eq))
+                                        (eq_of_heq head_eq) a)
+                                  (fun b {«as»} a_1 h =>
+                                    List.cons.noConfusion h fun head_eq =>
+                                      Eq.ndrec (motive := fun b =>
+                                        (fun x1 x2 => (fun i => i) x1 :: x2)
+                                              ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []) ≍
+                                            «as» →
+                                          a ≍ List.Mem.tail b a_1 →
+                                            NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                                (NFT_Pack.padded_length (slice v) short) i =
+                                              qm (v i))
+                                        (fun tail_eq =>
+                                          Eq.ndrec (motive := fun {«as»} =>
+                                            ∀ (a_2 : List.Mem i «as»),
+                                              a ≍
+                                                  List.Mem.tail
+                                                    ((fun i => i)
+                                                      ⟨1,
+                                                        Nat.le_of_lt
+                                                          (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩)
+                                                    a_2 →
+                                                NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                                    (NFT_Pack.padded_length (slice v) short) i =
+                                                  qm (v i))
+                                            (fun a_2 h =>
+                                              List.Mem.casesOn (motive := fun a x =>
+                                                (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                        ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []) =
+                                                    a →
+                                                  a_2 ≍ x →
+                                                    NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                                        (NFT_Pack.padded_length (slice v) short) i =
+                                                      qm (v i))
+                                                a_2
+                                                (fun «as» h =>
+                                                  List.cons.noConfusion h fun head_eq =>
+                                                    Eq.ndrec (motive := fun i =>
+                                                      ∀
+                                                        (a :
+                                                          List.Mem i
+                                                            ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                              ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []))),
+                                                        (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                              ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [] ≍
+                                                            «as» →
+                                                          a ≍ List.Mem.head «as» →
+                                                            NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                                                (NFT_Pack.padded_length (slice v) short) i =
+                                                              qm (v i))
+                                                      (fun a tail_eq =>
+                                                        Eq.ndrec (motive := fun «as» =>
+                                                          a ≍ List.Mem.head «as» →
+                                                            NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                                                (NFT_Pack.padded_length (slice v) short)
+                                                                ((fun i => i)
+                                                                  ⟨2,
+                                                                    Nat.le_of_lt
+                                                                      (Nat.le_refl ({ len := 3 }.len + 1))⟩) =
+                                                              qm
+                                                                (v
+                                                                  ((fun i => i)
+                                                                    ⟨2,
+                                                                      Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 3 }.len + 1))⟩)))
+                                                          (fun h =>
+                                                            of_eq_true
+                                                              (Eq.trans
+                                                                (congrFun'
+                                                                  (congrArg Eq
+                                                                    (GetElem.getElem.congr_simp
+                                                                      ↑(NFT_Pack.paddedSlice (slice v) short)
+                                                                      [qm (v 0), qm (v 1), qm (v 2), qm (v 3)]
+                                                                      (congrArg Subtype.val
+                                                                        (Subtype.mk.congr_simp
+                                                                          ↑(NFT_Pack.padded (slice v) short)
+                                                                          [qm (v 0), qm (v 1), qm (v ⋯), qm (v 3)]
+                                                                          (congrArg Subtype.val
+                                                                            (Subtype.mk.congr_simp
+                                                                              (↑(slice v) ++
+                                                                                List.replicate (4 - (slice v).length)
+                                                                                  AspisR1SelectedMaskProbe.field.QM31.ZERO)
+                                                                              [qm (v 0), qm ⋯, ⋯, qm (v 3)]
+                                                                              (Eq.trans
+                                                                                (congr (congrArg HAppend.hAppend ⋯)
+                                                                                  (congrFun' ⋯
+                                                                                    AspisR1SelectedMaskProbe.field.QM31.ZERO))
+                                                                                (List.append_nil [⋯, ⋯]))
+                                                                              (NFT_Pack.padded._proof_3 (slice v)
+                                                                                short)))
+                                                                          (Array.to_slice._proof_1
+                                                                            (NFT_Pack.padded (slice v) short))))
+                                                                      (↑((fun i => i)
+                                                                          ⟨2,
+                                                                            Nat.le_of_lt
+                                                                              (Nat.le_refl ({ len := 3 }.len + 1))⟩))
+                                                                      2 (Eq.refl 2)
+                                                                      (ExtractedMaskQmPackBase4Whole.inputAt._proof_1
+                                                                        (NFT_Pack.paddedSlice (slice v) short)
+                                                                        (NFT_Pack.padded_length (slice v) short)
+                                                                        ((fun i => i)
+                                                                          ⟨2,
+                                                                            Nat.le_of_lt
+                                                                              (Nat.le_refl ({ len := 3 }.len + 1))⟩))))
+                                                                  (qm (v 2)))
+                                                                (eq_self (qm (v 2)))))
+                                                          (eq_of_heq tail_eq))
+                                                      (eq_of_heq head_eq) a_2)
+                                                (fun b {«as»} a h =>
+                                                  List.cons.noConfusion h fun head_eq =>
+                                                    Eq.ndrec (motive := fun b =>
+                                                      (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                            ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [] ≍
+                                                          «as» →
+                                                        a_2 ≍ List.Mem.tail b a →
+                                                          NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                                              (NFT_Pack.padded_length (slice v) short) i =
+                                                            qm (v i))
+                                                      (fun tail_eq =>
+                                                        Eq.ndrec (motive := fun {«as»} =>
+                                                          ∀ (a : List.Mem i «as»),
+                                                            a_2 ≍
+                                                                List.Mem.tail
+                                                                  ((fun i => i)
+                                                                    ⟨2,
+                                                                      Nat.le_of_lt
+                                                                        (Nat.le_refl ({ len := 3 }.len + 1))⟩)
+                                                                  a →
+                                                              NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                                                  (NFT_Pack.padded_length (slice v) short) i =
+                                                                qm (v i))
+                                                          (fun a h =>
+                                                            List.Mem.casesOn (motive := fun a_3 x =>
+                                                              (fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                    ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [] =
+                                                                  a_3 →
+                                                                a ≍ x →
+                                                                  NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short)
+                                                                      (NFT_Pack.padded_length (slice v) short) i =
+                                                                    qm (v i))
+                                                              a
+                                                              (fun «as» h =>
+                                                                List.cons.noConfusion h fun head_eq =>
+                                                                  Eq.ndrec (motive := fun i =>
+                                                                    ∀
+                                                                      (a :
+                                                                        List.Mem i
+                                                                          ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                            ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                                                            [])),
+                                                                      [] ≍ «as» →
+                                                                        a ≍ List.Mem.head «as» →
+                                                                          NFT_Pack.Whole
+                                                                              (NFT_Pack.paddedSlice (slice v) short)
+                                                                              (NFT_Pack.padded_length (slice v) short)
+                                                                              i =
+                                                                            qm (v i))
+                                                                    (fun a tail_eq =>
+                                                                      Eq.ndrec (motive := fun «as» =>
+                                                                        a ≍ List.Mem.head «as» →
+                                                                          NFT_Pack.Whole
+                                                                              (NFT_Pack.paddedSlice (slice v) short)
+                                                                              (NFT_Pack.padded_length (slice v) short)
+                                                                              ((fun i => i)
+                                                                                ⟨3,
+                                                                                  Nat.le_refl ({ len := 3 }.len + 1)⟩) =
+                                                                            qm
+                                                                              (v
+                                                                                ((fun i => i)
+                                                                                  ⟨3,
+                                                                                    Nat.le_refl
+                                                                                      ({ len := 3 }.len + 1)⟩)))
+                                                                        (fun h =>
+                                                                          of_eq_true
+                                                                            (Eq.trans
+                                                                              (congrFun' (congrArg Eq ⋯) (qm (v 3)))
+                                                                              (eq_self (qm (v 3)))))
+                                                                        (eq_of_heq tail_eq))
+                                                                    (eq_of_heq head_eq) a)
+                                                              (fun b {«as»} a_3 h =>
+                                                                List.cons.noConfusion h fun head_eq =>
+                                                                  Eq.ndrec (motive := fun b =>
+                                                                    [] ≍ «as» →
+                                                                      a ≍ List.Mem.tail b a_3 →
+                                                                        NFT_Pack.Whole
+                                                                            (NFT_Pack.paddedSlice (slice v) short)
+                                                                            (NFT_Pack.padded_length (slice v) short) i =
+                                                                          qm (v i))
+                                                                    (fun tail_eq =>
+                                                                      Eq.ndrec (motive := fun {«as»} =>
+                                                                        ∀ (a_4 : List.Mem i «as»),
+                                                                          a ≍
+                                                                              List.Mem.tail
+                                                                                ((fun i => i)
+                                                                                  ⟨3,
+                                                                                    Nat.le_refl ({ len := 3 }.len + 1)⟩)
+                                                                                a_4 →
+                                                                            NFT_Pack.Whole
+                                                                                (NFT_Pack.paddedSlice (slice v) short)
+                                                                                (NFT_Pack.padded_length (slice v) short)
+                                                                                i =
+                                                                              qm (v i))
+                                                                        (fun a_4 h =>
+                                                                          List.Mem.casesOn (motive := fun a x =>
+                                                                            [] = a →
+                                                                              ⋯ →
+                                                                                NFT_Pack.Whole
+                                                                                    (NFT_Pack.paddedSlice (slice v)
+                                                                                      short)
+                                                                                    (NFT_Pack.padded_length (slice v)
+                                                                                      short)
+                                                                                    i =
+                                                                                  qm (v i))
+                                                                            a_4
+                                                                            (fun «as» h =>
+                                                                              False.elim
+                                                                                (noConfusion_of_Nat List.ctorIdx h))
+                                                                            (fun b {«as»} a h =>
+                                                                              False.elim
+                                                                                (noConfusion_of_Nat List.ctorIdx h))
+                                                                            (Eq.refl []) (HEq.refl a_4))
+                                                                        (eq_of_heq tail_eq) a_3)
+                                                                    (eq_of_heq head_eq))
+                                                              (Eq.refl
+                                                                ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                                  ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ []))
+                                                              (HEq.refl a))
+                                                          (eq_of_heq tail_eq) a)
+                                                      (eq_of_heq head_eq))
+                                                (Eq.refl
+                                                  ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                    ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                                      ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩ [])))
+                                                (HEq.refl a_2))
+                                            (eq_of_heq tail_eq) a_1)
+                                        (eq_of_heq head_eq))
+                                  (Eq.refl
+                                    ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                      ⟨1, Nat.le_of_lt (Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1)))⟩
+                                      ((fun x1 x2 => (fun i => i) x1 :: x2)
+                                        ⟨2, Nat.le_of_lt (Nat.le_refl ({ len := 3 }.len + 1))⟩
+                                        ((fun x1 x2 => (fun i => i) x1 :: x2) ⟨3, Nat.le_refl ({ len := 3 }.len + 1)⟩
+                                          []))))
+                                  (HEq.refl a))
+                              (eq_of_heq tail_eq) a)
+                          (eq_of_heq head_eq))
+                    (Eq.refl (List.finRange ({ len := 3 }.len + 1))) (HEq.refl (Fintype.complete i))))))⟩⟩
+'AspisR1.NJB_PackLaw.qm_raw' does not depend on any axioms
+'AspisR1.NJB_PackLaw.length' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJB_PackLaw.result' depends on axioms: [propext, Classical.choice, Quot.sound]

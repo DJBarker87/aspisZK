@@ -1,0 +1,16 @@
+theorem AspisR1.NJB_SharedReference.result : ∀ (v : Fin 33 → NQ) (selector : NQ) (s : Fin 24 → NQ),
+  (∀ (i : Fin 33), Canon (v i)) →
+    Canon selector →
+      NJB_StateUpdates.canonical s →
+        ∃ out,
+          reference v selector s = ok out ∧
+            NJB_StateUpdates.canonical out ∧
+              NJB_StateUpdates.decoded out =
+                List.foldl (fun state g => stepModel v selector g state) (NJB_StateUpdates.decoded s)
+                  (List.finRange 9) :=
+fun v selector s hv hc hs =>
+  NJB_StateUpdates.run_result (step v selector) (stepModel v selector) (List.finRange 9) s hs fun g x before hb =>
+    step_result v selector g before hv hc hb
+'AspisR1.NJB_SharedReference.lanes_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_SharedReference.step_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_SharedReference.result' depends on axioms: [propext, Classical.choice, Quot.sound]

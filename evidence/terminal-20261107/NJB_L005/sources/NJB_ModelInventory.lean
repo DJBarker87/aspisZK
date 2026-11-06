@@ -1,0 +1,40 @@
+import NIU_COMBINED_IMPORT
+import NGK_COMBINED_IMPORT
+open Lean Elab Command
+run_cmd do
+ let env ← getEnv
+ for n in [`FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.active,
+`FIq_Native.pool_v1.pair_forest_copy_terminal.Selectors.active_mask_basis,
+`FIq_Native.pool_v1.pair_forest_copy_terminal.accumulate_endpoint_selector_tensor_basis,
+`FIq_Native.pool_v1.pair_forest_copy_terminal.copy_residual,
+`FIq_Native.pool_v1.pair_forest_copy_terminal.copy_tag_coordinate_dot,
+`FIq_Native.pool_v1.pair_forest_copy_terminal.copy_tag_coordinate_value,
+`FIq_Native.pool_v1.pair_forest_copy_terminal.evaluate_with_selectors,
+`FIq_Native.pool_v1.pair_forest_copy_terminal.finish_pattern_basis_values,
+`FIq_Native.pool_v1.pair_forest_copy_terminal.finish_selector_tensor_basis,
+`FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values,
+`FIq_Native.pool_v1.pair_forest_copy_terminal.pattern_values_windowed,
+`FIq_Native.pool_v1.pair_forest_copy_terminal.qm31_sum_products_up_to4,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.absorption_lanes_factored,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.add_occupancy_lanes,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.add_path_lanes,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.add_preweighted_shared_selector,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.add_schedule_lanes,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.add_value_lanes,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.append_level_packed_selector_tensor,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.append_levels_packed_selector_tensor,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.composition_parts,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.left_digest_packed_selector_tensor,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.occupancy_lanes_factored,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.optional_carry_packed_selector_tensor,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.optional_recipient_packed_selector_tensor,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.path_lanes_factored,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_packed,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.public_digest_packed_selector_tensor,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.semantic_packed,
+`FIq_Native.pool_v1.pair_forest_semantic_terminal.terminal_parts,
+`AspisR1PublicPreparation.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.semantic_public] do
+  match env.find? n with
+  | none => logInfo m!"MISSING {n}"
+  | some _ => elabCommand (← `(command| #print $(mkIdent n)))

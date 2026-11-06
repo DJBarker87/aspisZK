@@ -1,0 +1,51 @@
+{"attempt": "NJB_L075", "exit_status": 0, "wall_seconds": 10.778094456996769, "peak_rss_kib": "6173716", "swaps": "0", "print_axioms": ["'AspisR1.NJB_CutDischarge.high' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJB_CutDischarge.high : ∀ (source : Fin 64 → NQ) (before : Fin 7 → NQ) (b : Fin 64),
+  (∀ (i : Fin 64), Canon (source i)) →
+    (∀ (i : Fin 7), Canon (before i)) →
+      ∃ reply,
+        FIq_Native.field.QM31.add (before (NJB_ActiveModel.key b)) (source b) = ok reply ∧
+          Canon reply ∧
+            ∀ (after : Fin 7 → NQ) (event : NJB_Cuts.Event) (calls next : ℕ),
+              NJB_Cuts.high source before after b reply event calls next →
+                NJB_ActiveRawHigh.step source before b = ok after :=
+fun source before b hh hs =>
+  let ⟨reply, h✝⟩ := NJB_StubLaws.qm_add (before (NJB_ActiveModel.key b)) (source b) (hs (NJB_ActiveModel.key b)) (hh b)
+  let ⟨call, right
+...
+vent) (calls next : ℕ),
+              NJB_Cuts.high source before after b reply event calls next →
+                NJB_ActiveRawHigh.step source before b = ok after :=
+fun source before b hh hs =>
+  let ⟨reply, h✝⟩ := NJB_StubLaws.qm_add (before (NJB_ActiveModel.key b)) (source b) (hs (NJB_ActiveModel.key b)) (hh b)
+  let ⟨call, right✝⟩ := h✝
+  let ⟨hr, right✝¹⟩ := right✝
+  Exists.intro reply
+    ⟨call,
+      ⟨hr, fun after event calls next cut =>
+        have key :=
+          Eq.mpr
+            (id
+              (congrArg (fun _a => R0P.activeMaskCoordinate _a = NJB_ActiveModel.key b)
+                (NJB_MaskTable.source_eq_model b)))
+            (Eq.refl (R0P.activeMaskCoordinate (R0P.copyActiveRowMasks b)));
+        have frame := cut.right.right.right.right.right.right.right.right;
+        have same :=
+          funext fun i =>
+            Eq.mp
+              (congrArg (Eq (after i))
+                (ite_congr (congrFun' (congrArg Eq key) i) (fun a => Eq.refl reply) fun a => Eq.refl (before i)))
+              (frame i);
+        Eq.mpr (id (congrArg (fun _a => NJB_ActiveRawHigh.step source before b = ok _a) same))
+          (of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (congrFun' (congrArg Bind.bind call) fun out =>
+                      ok fun i => if NJB_ActiveModel.key b = i then out else before i)
+                    (bind_tc_ok reply fun y => ok fun i => if NJB_ActiveModel.key b = i then y else before i)))
+                (ok fun i => if NJB_ActiveModel.key b = i then reply else before i))
+              (eq_self (ok fun i => if NJB_ActiveModel.key b = i then reply else before i))))⟩⟩
+'AspisR1.NJB_CutDischarge.high' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc4ecf9a68b93471097f45c43af1b9e6d.scope; invocation ID: 34da25b71474499cb4debc3f2d626d3f

@@ -1,0 +1,56 @@
+theorem AspisR1.NJB_PatternCuts.discharge : ∀ (terms : Fin 14 → NQ) (weights : Fin 26 → NQ) (before : State) (g : Fin 4)
+  (c : Fin 26),
+  (∀ (i : Fin 14), Canon (terms i)) →
+    (∀ (i : Fin 26), Canon (weights i)) →
+      (∀ (i : Fin 4), Canon (before i)) →
+        ∃ product reply,
+          FIq_Native.field.QM31.mul (terms (pattern c)) (weights c) = ok product ∧
+            FIq_Native.field.QM31.add (before g) product = ok reply ∧
+              Canon product ∧
+                Canon reply ∧
+                  ∀ (events : Fin 2 → NJB_Cuts.Event) (calls next : ℕ) (after : State),
+                    inner terms weights before g c product reply events calls next after →
+                      NJB_StateUpdates.mulAdd before g (terms (pattern c)) (weights c) = ok after :=
+fun terms weights before g c ht hw hb =>
+  let ⟨p, h✝⟩ := NJB_StubLaws.qm_mul (terms (pattern c)) (weights c) (ht (pattern c)) (hw c)
+  let ⟨cp, right✝⟩ := h✝
+  let ⟨hp, right✝¹⟩ := right✝
+  let ⟨r, h✝¹⟩ := NJB_StubLaws.qm_add (before g) p (hb g) hp
+  let ⟨cr, right✝²⟩ := h✝¹
+  let ⟨hr, right✝³⟩ := right✝²
+  Exists.intro p
+    (Exists.intro r
+      ⟨cp,
+        ⟨cr,
+          ⟨hp,
+            ⟨hr, fun events calls next after cut =>
+              have frame :=
+                cut.right.right.right.right.right.right.right.right.right.right.right.right.right.right.right;
+              have same :=
+                funext fun i =>
+                  id
+                    (Eq.mp
+                      (congrArg (Eq (after i))
+                        (ite_congr discharge._simp_1 (fun a => Eq.refl r) fun a => Eq.refl (before i)))
+                      (frame i));
+              Eq.mpr
+                (id
+                  (congrArg (fun _a => NJB_StateUpdates.mulAdd before g (terms (pattern c)) (weights c) = ok _a) same))
+                (of_eq_true
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (Eq.trans
+                          (Eq.trans
+                            (congrFun' (congrArg Bind.bind cp) fun product => do
+                              let out ← FIq_Native.field.QM31.add (before g) product
+                              ok (NJB_StateUpdates.set before g out))
+                            (bind_tc_ok p fun y => do
+                              let out ← FIq_Native.field.QM31.add (before g) y
+                              ok (NJB_StateUpdates.set before g out)))
+                          (Eq.trans
+                            (congrFun' (congrArg Bind.bind cr) fun out => ok (NJB_StateUpdates.set before g out))
+                            (bind_tc_ok r fun y => ok (NJB_StateUpdates.set before g y)))))
+                      (ok (NJB_StateUpdates.set before g r)))
+                    (eq_self (ok (NJB_StateUpdates.set before g r)))))⟩⟩⟩⟩)
+'AspisR1.NJB_PatternCuts.discharge' depends on axioms: [propext, Classical.choice, Quot.sound]

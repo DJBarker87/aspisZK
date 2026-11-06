@@ -1,0 +1,9 @@
+{
+ "source": "crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+ "original": "fn copy_residual(row: CopyRowExtension, helper: QM31, chi: QM31) -> QM31 {\n    let denominators = [\n        chi.sub(row.producer_values[0]),\n        chi.sub(row.producer_values[1]),\n        chi.sub(row.consumer_values[0]),\n        chi.sub(row.consumer_values[1]),\n    ];\n    let producer_denominator = denominators[0].mul(denominators[1]);\n    let consumer_denominator = denominators[2].mul(denominators[3]);\n    let producer_numerator = row.producer_weights[0]\n        .mul(denominators[1])\n        .add(row.producer_weights[1].mul(denominators[0]));\n    let consumer_numerator = row.consumer_weights[0]\n        .mul(denominators[3])\n        .add(row.consumer_weights[1].mul(denominators[2]));\n    producer_denominator\n        .mul(helper.mul(consumer_denominator).add(consumer_numerator))\n        .sub(consumer_denominator.mul(producer_numerator))\n}",
+ "original_sha256": "95de504b57c17d572cfc9d5b51ef8da2670cd3893bb6c8a8628c3e6e1966f759",
+ "transformed_sha256": "34195fe76847aff25d72d07aa55c7121f63d5577f4ebf26006b5d23a9f42493d",
+ "erasure_equal": true,
+ "operation_count": 17,
+ "actual_field_multiplication_in_Kani": false
+}

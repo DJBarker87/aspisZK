@@ -1,0 +1,3 @@
+from pathlib import Path
+import json,hashlib
+b=Path(__file__).resolve().parent;s=b/'NJB_src';pins=json.loads((b/'NJB_SOURCE_PINS.json').read_text());q='crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs';p=s/q;assert hashlib.sha256(p.read_bytes()).hexdigest()==pins[q];p.write_text(p.read_text()+'\n#[cfg(kani)]\n#[path="NJB_digest.rs"]\nmod NJB_digest_native;\n');pins[q]=hashlib.sha256(p.read_bytes()).hexdigest();q='crates/aspis-statement/src/pool_v1/NJB_digest.rs';(s/q).write_bytes((b/'NJB_digest.rs.txt').read_bytes());pins[q]=hashlib.sha256((s/q).read_bytes()).hexdigest();(b/'NJB_SOURCE_PINS.json').write_text(json.dumps(pins));print('real prepared digest/carry/recipient windows installed')

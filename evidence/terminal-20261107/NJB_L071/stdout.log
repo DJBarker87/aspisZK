@@ -1,0 +1,88 @@
+NJB_PackLaw.lean:32:1: error: unsolved goals
+case refine_3.«0»
+v : Fin 4 → NQ
+hv : ∀ (i : Fin 4), Canon (v i)
+short : (slice v).length ≤ 4
+canonical : ∀ q ∈ ↑(slice v), ExtractedMaskTowerAdd.CanonicalQM q
+p : NFT_Pack.Q
+call : AspisR1SelectedMaskProbe.field.qm31_pack_base4 (slice v) = ok p
+hp : NFT_Pack.Canonical p
+vp :
+  ExtractedMaskQM31Exact.decode p =
+    ExtractedMaskQmPackBase4Arithmetic.mathematicalPack (NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short) ⋯)
+⊢ (↑(Array.make 4#usize [qm (v 0), qm (v 1), qm (v 2), qm (v 3)] ⋯))[0] = qm (v 0)
+
+case refine_3.«1»
+v : Fin 4 → NQ
+hv : ∀ (i : Fin 4), Canon (v i)
+short : (slice v).length ≤ 4
+canonical : ∀ q ∈ ↑(slice v), ExtractedMaskTowerAdd.CanonicalQM q
+p : NFT_Pack.Q
+call : AspisR1SelectedMaskProbe.field.qm31_pack_base4 (slice v) = ok p
+hp : NFT_Pack.Canonical p
+vp :
+  ExtractedMaskQM31Exact.decode p =
+    ExtractedMaskQmPackBase4Arithmetic.mathematicalPack (NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short) ⋯)
+⊢ (↑(Array.make 4#usize [qm (v 0), qm (v 1), qm (v 2), qm (v 3)] ⋯))[1] = qm (v 1)
+
+case refine_3.«2»
+v : Fin 4 → NQ
+hv : ∀ (i : Fin 4), Canon (v i)
+short : (slice v).length ≤ 4
+canonical : ∀ q ∈ ↑(slice v), ExtractedMaskTowerAdd.CanonicalQM q
+p : NFT_Pack.Q
+call : AspisR1SelectedMaskProbe.field.qm31_pack_base4 (slice v) = ok p
+hp : NFT_Pack.Canonical p
+vp :
+  ExtractedMaskQM31Exact.decode p =
+    ExtractedMaskQmPackBase4Arithmetic.mathematicalPack (NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short) ⋯)
+⊢ (↑(Array.make 4#usize [qm (v 0), qm (v 1), qm (v 2), qm (v 3)] ⋯))[2] = qm (v 2)
+
+case refine_3.«3»
+v : Fin 4 → NQ
+hv : ∀ (i : Fin 4), Canon (v i)
+short : (slice v).length ≤ 4
+canonical : ∀ q ∈ ↑(slice v), ExtractedMaskTowerAdd.CanonicalQM q
+p : NFT_Pack.Q
+call : AspisR1SelectedMaskProbe.field.qm31_pack_base4 (slice v) = ok p
+hp : NFT_Pack.Canonical p
+vp :
+  ExtractedMaskQM31Exact.decode p =
+    ExtractedMaskQmPackBase4Arithmetic.mathematicalPack (NFT_Pack.Whole (NFT_Pack.paddedSlice (slice v) short) ⋯)
+⊢ (↑(Array.make 4#usize [qm (v 0), qm (v 1), qm (v 2), qm (v 3)] ⋯))[3] = qm (v 3)
+NJB_PackLaw.lean:37:48: warning: This simp argument is unused:
+  length
+
+Hint: Omit it from the simp argument list.
+  simp [NFT_Pack.Whole, ̲NFT_Pack.paddedSlice, ̲NFT_Pack.padded,
+       ̲ExtractedMaskQmPackBase4Whole.inputAt, ̲slice,l̵e̵n̵g̵t̵h̵,̵ ̲Array.to_slice]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem AspisR1.NJB_PackLaw.result : ∀ (v : Fin 4 → NQ),
+  (∀ (i : Fin 4), Canon (v i)) → ∃ out, reference v = ok out ∧ Canon out ∧ decode out = model v :=
+fun v hv =>
+  have short := Eq.mpr (id (congrArg (fun _a => _a ≤ 4) (length v))) (le_refl 4);
+  have canonical := fun q h =>
+    let ⟨i, hi⟩ := List.mem_ofFn.mp h
+    Eq.mpr (id (congrArg ExtractedMaskTowerAdd.CanonicalQM (Eq.symm hi))) (hv i);
+  let ⟨p, h✝⟩ := NFT_Pack.source (slice v) short canonical
+  let ⟨call, right✝⟩ := h✝
+  let ⟨hp, vp⟩ := right✝
+  Exists.intro (raw p)
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (congrArg
+                (fun x =>
+                  match x with
+                  | ok x => ok (raw x)
+                  | fail e => fail e
+                  | div => div)
+                call))
+            (ok (raw p)))
+          (eq_self (ok (raw p)))),
+      ⟨id (Eq.mpr (id (congrArg ExtractedMaskQM31Exact.CurrentCanonicalQM (qm_raw p))) hp), sorry⟩⟩
+'AspisR1.NJB_PackLaw.qm_raw' does not depend on any axioms
+'AspisR1.NJB_PackLaw.length' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJB_PackLaw.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

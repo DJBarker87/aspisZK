@@ -1,0 +1,48 @@
+{"attempt": "NJB_K012", "exit_status": 1, "wall_seconds": 1.7481924600433558, "peak_rss_kib": "310496", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+8:16
+    |
+358 |     let (w, p, v, q) = arbitrary_records();
+    |                ^ help: if this is intentional, prefix it with an underscore: `_v`
+
+warning: unnecessary `unsafe` block
+  --> crates/aspis-statement/src/pool_v1/NJB_active.rs:48:26
+   |
+48 |  let selectors:Selectors=unsafe{kani::any_raw()};let mut sums:[QM31;7]=unsafe{kani::any_raw()};let hs=sums;let b:usize=kani::any();k...
+   |                          ^^^^^^ unnecessary `unsafe` block
+   |
+   = note: `#[warn(unused_unsafe)]` (part of `#[warn(unused)]`) on by default
+
+warning: unnecessary `unsafe` block
+  --> crates/aspis-statement/src/pool_v1/NJB_active.rs:48:72
+   |
+48 |  let selectors:Selectors=unsafe{kani::any_raw()};let mut sums:[QM31;7]=unsafe{kani::any_raw()};let hs=sums;let b:usize=kani::any();k...
+   |                                                                        ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+  --> crates/aspis-statement/src/pool_v1/NJB_active.rs:59:26
+   |
+59 |  let selectors:Selectors=unsafe{kani::any_raw()};let high_sums:[QM31;7]=unsafe{kani::any_raw()};let hs=high_sums.map(words);let lo=s...
+   |                          ^^^^^^ unnecessary `unsafe` block
+
+warning: unnecessary `unsafe` block
+  --> crates/aspis-statement/src/pool_v1/NJB_active.rs:59:73
+   |
+59 |  let selectors:Selectors=unsafe{kani::any_raw()};let high_sums:[QM31;7]=unsafe{kani::any_raw()};let hs=high_sums.map(words);let lo=s...
+   |                                                                         ^^^^^^ unnecessary `unsafe` block
+
+For more information about this error, try `rustc --explain E0603`.
+error: could not compile `aspis-statement` (lib) due to 4 previous errors; 96 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 4 compilation errors.
+
+Running as unit: run-r7e06cfc6574e47c7bde121ac9614f803.scope; invocation ID: 838023bffce74b459ebc4e3720f6e5e2

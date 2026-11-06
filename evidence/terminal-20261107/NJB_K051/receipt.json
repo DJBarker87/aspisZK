@@ -1,0 +1,101 @@
+{
+  "attempt": "NJB_K051",
+  "kind": "kani",
+  "module": "NJB_shared_group",
+  "sources": [
+    "NJB_gate.py",
+    "NJB_SOURCE_PINS.json",
+    "NJB_FROZEN_FILE_PINS.json",
+    "NJB_terminal.rs.txt",
+    "NJB_native.patch",
+    "NJB_KMX.patch",
+    "NJB_residual.rs.txt",
+    "NJB_RESIDUAL_ERASURE.json",
+    "NJB_shared.rs.txt",
+    "NJB_SHARED_ERASURE.json"
+  ],
+  "env": {
+    "LEAN_SYSROOT": "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-terminal-20261107/NJB_tmp",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1 --cfg NJB_invert",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-terminal-20261107/NJB_target"
+  },
+  "timeout": 180,
+  "expected_time": "Optimized shared-selector group window, field/pack calls opaque; N33/start49 only deployed instance",
+  "root_package": "aspis-statement",
+  "metadata_features": "aspis-statement/pool-v1-kernel,aspis-statement/pool-v1-pair-forest-active-mask-basis-audit,aspis-statement/pool-v1-pair-forest-binary-copy-weights-audit,aspis-statement/pool-v1-pair-forest-copy-finish-dot-basis-audit,aspis-statement/pool-v1-pair-forest-copy-pattern-basis-audit,aspis-statement/pool-v1-pair-forest-copy-selector-tensor-basis-audit,aspis-statement/pool-v1-pair-forest-copy-tag-dot-basis-audit,aspis-statement/pool-v1-pair-forest-endpoint-selector-cache-audit,aspis-statement/pool-v1-pair-forest-packed-digest-audit,aspis-statement/pool-v1-pair-forest-packed-digest-selector-tensor-audit,aspis-statement/pool-v1-pair-forest-packed-range-audit,aspis-statement/pool-v1-pair-forest-pattern-window-audit,aspis-statement/pool-v1-pair-forest-semantic-factor-audit,aspis-statement/r0,aspis-statement/spend-dynamic-rate512",
+  "command": [
+    "python3",
+    "NJB_gate.py",
+    "NJB_K051.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-terminal-20261107/NJB_src/crates/aspis-statement/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-terminal-20261107/NJB_target",
+    "--features",
+    "pool-v1-kernel,pool-v1-pair-forest-active-mask-basis-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-copy-pattern-basis-audit,pool-v1-pair-forest-copy-selector-tensor-basis-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-packed-digest-audit,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-semantic-factor-audit,r0,spend-dynamic-rate512",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "pool_v1::pair_forest_semantic_terminal::NJB_shared_native::NJB_shared_group",
+    "--output-format",
+    "terse"
+  ],
+  "collect": [
+    "NJB_K051-graph-check.json",
+    "NJB_K051-graph.stderr",
+    "NJB_K051-graph.json",
+    "NJB_K051-source-check.json",
+    "NJB_K051-lock-check.json"
+  ],
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "source_tree_dirty": true,
+  "source_revision": "a79217f812e7d4d04089e6155dcadfffcc616236",
+  "exit_status": 1,
+  "wall_seconds": 23.616199686191976,
+  "peak_rss_kib": "1427836",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r9f9d3407012141ba90b14cf278856590.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1594593280",
+  "source_hashes": {
+    "NJB_gate.py": "cd6ed4d184d1601087af54239a04eec48e9206605b09d50dd23279b6bdf8fcd6",
+    "NJB_SOURCE_PINS.json": "f717ad1089151b4b961476137b1d1164fac1e00bd216d27696f2e1e35c4ffd1f",
+    "NJB_FROZEN_FILE_PINS.json": "fe0e99cbbece639cb71405d9523a7d243a46751fd5f793e1dfd026752e892c62",
+    "NJB_terminal.rs.txt": "fcc2e55c32c7b6684b6be56d6b2a7966236ab2e094541a06da23f1c72dccfdce",
+    "NJB_native.patch": "efa66fa87686391f60b83a3b20db9749ee2286caa0e567f9c399deaac059b837",
+    "NJB_KMX.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NJB_residual.rs.txt": "b3f685fcdc888271d999a1bb6b5ce7fcd3d1181a285f36aaf26e1747ef55c750",
+    "NJB_RESIDUAL_ERASURE.json": "7e9cd572008b8017dbc0485ba6ed83acb0087ede1578d852bf30a681180b3b4c",
+    "NJB_shared.rs.txt": "354e5e10cf39350e2cc3f37c48697db073161126ab373b20255f217bfac1cdcd",
+    "NJB_SHARED_ERASURE.json": "56aad915328c3c21f658f2180b7c462b0ddc16fac9bc59237f80ae5f84c41d64"
+  },
+  "print_axioms": "N/A: kani"
+}

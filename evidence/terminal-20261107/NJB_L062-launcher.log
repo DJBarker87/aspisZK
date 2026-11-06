@@ -1,0 +1,31 @@
+{"attempt": "NJB_L062", "exit_status": 0, "wall_seconds": 9.839454680215567, "peak_rss_kib": "6168332", "swaps": "0", "print_axioms": ["'AspisR1.NJB_PatternReference.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJB_PatternReference.inner_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJB_PatternReference.result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJB_PatternReference.result : ∀ (patterns : Fin 14 → NQ) (selectors : Fin 26 → NQ) (s : State),
+  (∀ (i : Fin 14), Canon (patterns i)) →
+    (∀ (i : Fin 26), Canon (selectors i)) →
+      canonical s →
+        ∃ out,
+          reference patterns selectors s = ok out ∧
+            canonical out ∧
+              decoded out = model (fun i => decode (patterns i)) (fun i => decode (selectors i)) (decoded s) :=
+fun patterns selectors s hp ht hs =>
+  NJB_StateUpdates.run_result (fun g state => inner patterns selectors g state)
+    (groupModel (fun i => decode (patterns i)) fun i => decode (selectors i)) (List.ofFn fun g => g) s hs
+    fun g x before hb => inner_result patterns select
+...
+theorem AspisR1.NJB_PatternReference.result : ∀ (patterns : Fin 14 → NQ) (selectors : Fin 26 → NQ) (s : State),
+  (∀ (i : Fin 14), Canon (patterns i)) →
+    (∀ (i : Fin 26), Canon (selectors i)) →
+      canonical s →
+        ∃ out,
+          reference patterns selectors s = ok out ∧
+            canonical out ∧
+              decoded out = model (fun i => decode (patterns i)) (fun i => decode (selectors i)) (decoded s) :=
+fun patterns selectors s hp ht hs =>
+  NJB_StateUpdates.run_result (fun g state => inner patterns selectors g state)
+    (groupModel (fun i => decode (patterns i)) fun i => decode (selectors i)) (List.ofFn fun g => g) s hs
+    fun g x before hb => inner_result patterns selectors g before hp ht hb
+'AspisR1.NJB_PatternReference.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_PatternReference.inner_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_PatternReference.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7374ae39d93d42158a4c07815fd0d741.scope; invocation ID: e9f66866c6514dc8ac4f207468bac0c2

@@ -1,0 +1,42 @@
+{"attempt": "NJB_K034", "exit_status": 1, "wall_seconds": 6.096446641953662, "peak_rss_kib": "610876", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+tubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 4.27s
+Checking harness pool_v1::pair_forest_copy_terminal::NJB_forward_native::NJB_active_forward...
+
+VERIFICATION RESULT:
+ ** 1 of 221 failed (220 undetermined)
+Failed Checks: unwinding assertion loop 0
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs", line 897, in core::array::try_from_fn_erased::<[u32; 4], core::ops::try_trait::NeverShortCircuit<[u32; 4]>, {closure@core::array::try_from_trusted_iterator::next<core::ops::try_trait::NeverShortCircuit<[u32; 4]>, core::iter::Map<core::array::drain::Drain<'_, ()>, {closure@core::ops::try_trait::NeverShortCircuit<[u32; 4]>::wrap_mut_1<(), {closure@<[u32; 4] as kani::Arbitrary>::any_array<80>::{closure#0}}>::{closure#0}}>>::{closure#0}}>
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 0.22038314s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_forest_copy_terminal::NJB_forward_native::NJB_active_forward
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r2863fa1d332e43b486ab4bd3c7d4c18b.scope; invocation ID: 8d2d41eca1be4e9e8b419bb59f90e666

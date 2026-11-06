@@ -1,0 +1,38 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+fn q(w:[u32;4])->QM31{QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn canon(w:[u32;4])->bool{w[0]<2147483647&&w[1]<2147483647&&w[2]<2147483647&&w[3]<2147483647}
+struct NJB_Log{left:[[u32;4];17],right:[[u32;4];17],reply:[[u32;4];17],kind:[u8;17],calls:usize,weight:u32,selected:[u32;4],selected_reply:[u32;4],selections:usize}
+trait NJB_Ops{fn NJB_mul(self,r:Self,l:&mut NJB_Log)->Self;fn NJB_add(self,r:Self,l:&mut NJB_Log)->Self;fn NJB_sub(self,r:Self,l:&mut NJB_Log)->Self;}
+fn event(a:QM31,b:QM31,kind:u8,l:&mut NJB_Log)->QM31{let j=l.calls;assert!(j<17);assert!(canon(words(a))&&canon(words(b)));l.left[j]=words(a);l.right[j]=words(b);l.kind[j]=kind;l.calls+=1;q(l.reply[j])}
+impl NJB_Ops for QM31{
+fn NJB_mul(self,r:Self,l:&mut NJB_Log)->Self{event(self,r,0,l)}
+fn NJB_add(self,r:Self,l:&mut NJB_Log)->Self{event(self,r,1,l)}
+fn NJB_sub(self,r:Self,l:&mut NJB_Log)->Self{event(self,r,2,l)}}
+fn NJB_selected_binary_weight(high:QM31,weight:M31,l:&mut NJB_Log)->QM31{assert_eq!(l.selections,0);l.selected=words(high);l.weight=weight.0;l.selections+=1;q(l.selected_reply)}
+fn NJB_endpoint(scratch:&mut[QM31],side:usize,endpoint:CompiledPoolV1PairForestEndpoint,tag:u32,weight:M31,selectors:&Selectors,log:&mut NJB_Log){
+    let group = side + usize::from(endpoint.slot);
+    let row = usize::from(endpoint.row);
+    let local = row & 15;
+    let high = selectors.high[row >> 4];
+    let group_local = usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local]);
+    #[cfg(not(feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit"))]
+    {
+        scratch[COPY_SELECTOR_TENSOR_TAG_OFFSET + group_local] =
+            scratch[COPY_SELECTOR_TENSOR_TAG_OFFSET + group_local].NJB_add(high.NJB_mul_m31(M31(tag),log),log);
+    }
+    #[cfg(feature = "pool-v1-pair-forest-copy-tag-dot-basis-audit")]
+    let _ = tag;
+    let weight_index = COPY_SELECTOR_TENSOR_WEIGHT_OFFSET + group_local;
+    scratch[weight_index] =
+        scratch[weight_index].NJB_add(NJB_selected_binary_weight(high, weight, log),log);
+    let pattern_local =
+        usize::from(COPY_PATTERN_LOCAL_COORDINATES[group][usize::from(endpoint.pattern)][local]);
+    scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET + pattern_local] =
+        scratch[COPY_SELECTOR_TENSOR_PATTERN_OFFSET + pattern_local].NJB_add(high,log);
+}
+#[kani::proof]#[kani::unwind(105)]#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NJB_endpoint_step(){let selectors:Selectors=unsafe{core::mem::transmute::<[[u32;4];80],Selectors>(kani::any())};let mut scratch:[QM31;103]=unsafe{core::mem::transmute::<[[u32;4];103],[QM31;103]>(kani::any())};let before=scratch;let index:usize=kani::any();let first=if cfg!(NJB_partition_0){0}else if cfg!(NJB_partition_1){34}else if cfg!(NJB_partition_2){68}else if cfg!(NJB_partition_3){102}else{panic!("partition required")};kani::assume(index>=first&&index<first+34);let consumer:bool=kani::any();let link=constants::COPY_LINKS[index];let (side,endpoint)=if consumer{(2,link.consumer)}else{(0,link.producer)};let group=side+usize::from(endpoint.slot);let row=usize::from(endpoint.row);let local=row&15;let gc=usize::from(COPY_GROUP_LOCAL_COORDINATES[group][local]);let pc=usize::from(COPY_PATTERN_LOCAL_COORDINATES[group][usize::from(endpoint.pattern)][local]);assert!(group<4&&row<1024&&gc<30&&pc<43);let wi=30+gc;let pi=60+pc;let weight:u32=kani::any();kani::assume(weight<=1);let r0:[u32;4]=kani::any();let r1:[u32;4]=kani::any();let r2:[u32;4]=kani::any();kani::assume(canon(words(selectors.high[row>>4]))&&canon(words(before[wi]))&&canon(words(before[pi]))&&canon(r0)&&canon(r1)&&canon(r2));let mut r=[[0;4];17];r[0]=r0;r[1]=r1;let mut log=NJB_Log{left:[[0;4];17],right:[[0;4];17],reply:r,kind:[0;17],calls:0,weight:0,selected:[0;4],selected_reply:r2,selections:0};
+// Selection's reply and the first add's reply have distinct slots.
+log.reply[0]=r0;NJB_endpoint(&mut scratch,side,endpoint,link.tag,M31(weight),&selectors,&mut log);let k:usize=kani::any();let limb:usize=kani::any();kani::assume(k<103&&limb<4);assert_eq!(log.selections,1);assert_eq!(log.weight,weight);assert_eq!(log.selected[limb],words(selectors.high[row>>4])[limb]);assert_eq!(log.calls,2);assert_eq!(log.kind[0],1);assert_eq!(log.kind[1],1);assert_eq!(log.left[0][limb],words(before[wi])[limb]);assert_eq!(log.right[0][limb],r2[limb]);assert_eq!(log.left[1][limb],words(before[pi])[limb]);assert_eq!(log.right[1][limb],words(selectors.high[row>>4])[limb]);assert_eq!(words(scratch[k])[limb],(if k==wi{r0[limb]}else if k==pi{r1[limb]}else{words(before[k])[limb]})^if cfg!(NJB_invert){1}else{0});}

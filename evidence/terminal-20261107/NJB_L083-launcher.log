@@ -1,0 +1,88 @@
+{"attempt": "NJB_L083", "exit_status": 1, "wall_seconds": 9.014705910114571, "peak_rss_kib": "6144868", "swaps": "0", "print_axioms": ["'AspisR1.NJB_TagRaw.four_products_fit' does not depend on any axioms", "'AspisR1.NJB_TagRaw.product_bound' depends on axioms: [propext, Quot.sound]", "'AspisR1.NJB_TagRaw.product' depends on axioms: [propext, sorryAx, Quot.sound]", "'AspisR1.NJB_TagRaw.step_bound' depends on axioms: [propext, sorryAx, Quot.sound]", "'AspisR1.NJB_TagRaw.sum_bound' depends on axioms: [propext, sorryAx]", "'AspisR1.NJB_TagRaw.chunk_bound' depends on axioms: [propext, sorryAx]"]}
+NJB_TagRaw.lean:12:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.U64.mul`
+NJB_TagRaw.lean:12:28: error(lean.invalidField): Invalid field notation: Type of
+  out
+is not known; cannot resolve field `val`
+
+Hint: Consider replacing the field projection with a call to one of the following:
+  • `AddUnits.val`
+  • `Byte.val`
+  • `Char.val`
+  • `Fin.val`
+  • `Finset.val`
+  • `Float.val`
+  • `Float32.val`
+  • `FloatSpec.val`
+  • `IntermediateField.val`
+  • `NonScalar.val`
+  • `PNat.val`
+  • `Subalgebra.val`
+  • `SubalgebraClass.val`
+  • `Subtype.val`
+  • `Units.val`
+  • `ZMod.val`
+  • `Array.Mem.val`
+  • `LLVM.AttributeIndex.val`
+  • `LLVM.CodegenFileType.val`
+  • `LLVM.DLLStorageCla
+...
+Lean.Meta.Match.Pattern.val`
+  • `Lean.Meta.Sym.BitVecValue.val`
+  • `Lean.Meta.Sym.FinValue.val`
+  • `Lean.Meta.SynthInstance.Instance.val`
+  • `Mathlib.Tactic.Determinant.Cert.val`
+  • `Std.Sat.AIG.Fanin.val`
+  • `Std.Time.Internal.UnitVal.val`
+  • `Lean.Compiler.LCNF.FixedParams.AbsValue.val`
+  • `Lean.Elab.Term.StructInst.FieldView.val`
+  • `Lean.Meta.Try.Collector.InductionCandidate.val`
+  • `Mathlib.Tactic.Ring.Common.Result.val`
+  • `Std.Tactic.BVDecide.BVExpr.WithCache.val`
+  • `Lean.Meta.Grind.Arith.Cutsat.SymbolicBound.val`
+NJB_TagRaw.lean:18:36: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  j ≥ 0
+  i ≥ 0
+  h ≥ 0
+  h - i ≥ 0
+  g ≥ 0
+  g + i - j ≥ 1
+  f ≥ 0
+  f - g ≥ 0
+  0 ≤ e ≤ 3
+where
+ e := ↑k
+ f := ↑k * ↑B
+ g := ↑raw
+ h := ↑B
+ i := ↑product
+ j := ↑(k + 1) * ↑B
+NJB_TagRaw.lean:30:3: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  i ≥ 0
+  h ≥ 0
+  g ≥ 0
+  g - h ≥ 0
+  f ≥ 0
+  f + h - i ≥ 1
+  e ≥ 0
+  e - f ≥ 0
+where
+ e := ↑B
+ f := ↑p
+ g := ↑ps.length * ↑B
+ h := ↑ps.sum
+ i := ↑(ps.length + 1) * ↑B
+theorem AspisR1.NJB_TagRaw.product.{u_1} : ∀ (x y : U64) (hx : ↑x < 2147483647) (hy : ↑y < 2147483647),
+  ∃ out, sorry = ok out ∧ sorry = ↑x * ↑y ∧ sorry ≤ B :=
+fun x y hx hy =>
+  have bound := product_bound (↑x) (↑y) hx hy;
+  sorry bound
+'AspisR1.NJB_TagRaw.four_products_fit' does not depend on any axioms
+'AspisR1.NJB_TagRaw.product_bound' depends on axioms: [propext, Quot.sound]
+'AspisR1.NJB_TagRaw.product' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.NJB_TagRaw.step_bound' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.NJB_TagRaw.sum_bound' depends on axioms: [propext, sorryAx]
+'AspisR1.NJB_TagRaw.chunk_bound' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r3080627b9cc2416da5fc1cd0c5afd072.scope; invocation ID: 9861d7801fc64126bb0a5aa77adcfa24

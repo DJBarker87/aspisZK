@@ -1,0 +1,52 @@
+{"attempt": "NJB_L050", "exit_status": 1, "wall_seconds": 7.85219785082154, "peak_rss_kib": "6147616", "swaps": "0", "print_axioms": ["'AspisR1.NJB_ActiveAssociation.index_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJB_ActiveAssociation.high_same' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJB_ActiveAssociation.low_same' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJB_ActiveAssociation.model_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJB_ActiveAssociation.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJB_ActiveAssociation.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJB_ActiveAssociation.lean:24:7: error(lean.unknownIdentifier): Unknown constant `R0P.CopySelectors.ext`
+NJB_ActiveAssociation.lean:25:1: error: No goals to be solved
+NJB_ActiveAssociation.lean:38:3: error: Type mismatch: After simplification, term
+  v
+ has type
+  @Eq K (decode out) (List.foldl (FJk_ActiveValue.step s) 0 (List.ofFn id))
+but is expected to have type
+  @Eq K (decode out)
+    (List.foldl
+      (fun sum block =>
+        if R0P.copyActiveRowMasks block ≠ 0 then
+          sum +
+            FIv_NativeArray.value s.high ↑block *
+              R0P.copySelectorMaskSum16 (fun c => FIv_NativeArray.value s.low ↑c) (R0P.copyActiveRowMasks block)
+        else sum)
+      0 (List.ofFn fun bl
+...
+ have type
+  @Eq K (decode out)
+    (List.foldl
+      (fun sum block =>
+        if R0P.copyActiveRowMasks block ≠ 0 then
+          sum +
+            FIv_NativeArray.value s.high ↑block *
+              R0P.copySelectorMaskSum16 (fun c => FIv_NativeArray.value s.low ↑c) (R0P.copyActiveRowMasks block)
+        else sum)
+      0 (List.ofFn fun block => block))
+theorem AspisR1.NJB_ActiveAssociation.result : ∀ (s : Selectors),
+  FIw_ArrayValue.canonical s.high → FIw_ArrayValue.canonical s.low → NJB_ActiveReference.reference s = s.active :=
+fun s hh hl =>
+  let ⟨a, h✝⟩ := NJB_ActiveReference.result s hh hl
+  let ⟨ra, right✝⟩ := h✝
+  let ⟨ca, va⟩ := right✝
+  let ⟨b, h✝¹⟩ := cohort s hh hl
+  let ⟨rb, right✝¹⟩ := h✝¹
+  let ⟨cb, vb⟩ := right✝¹
+  have sameValue :=
+    Eq.mpr (id (congrArg (fun _a => _a = decode b) va))
+      (Eq.mpr (id (congrArg (fun _a => R0P.copyActiveLiteral _a = decode b) (model_same s))) (Eq.symm vb));
+  have same := NJB_DecodeInjective.qm a b ca cb sameValue;
+  Eq.mpr (id (congrArg (fun _a => _a = s.active) ra))
+    (Eq.mpr (id (congrArg (fun _a => ok a = _a) rb))
+      (Eq.mpr (id (congrArg (fun _a => ok _a = ok b) same)) (Eq.refl (ok b))))
+'AspisR1.NJB_ActiveAssociation.index_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_ActiveAssociation.high_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_ActiveAssociation.low_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJB_ActiveAssociation.model_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJB_ActiveAssociation.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJB_ActiveAssociation.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r53cbccf4c74340db8d10152df2083d5b.scope; invocation ID: 44a2869fbb7c46c5b3c209842daa29a9

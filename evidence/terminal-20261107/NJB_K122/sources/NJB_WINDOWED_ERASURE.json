@@ -1,0 +1,63 @@
+{
+ "frozen_body_sha256": "70908749d0d6a622b4b25c296f6549d129895e68e889e48625c3ea6346e4269a",
+ "assignments": {
+  "0": {
+   "original": "window_0.add(prepared[7].mul(window_8))",
+   "logged": "windows[0].NJB_add(prepared[7].NJB_mul(windows[3],log),log)"
+  },
+  "1": {
+   "original": "window_0",
+   "logged": "windows[0]"
+  },
+  "2": {
+   "original": "window_2\n        .sub(prepared[6].mul(openings[8]))\n        .sub(prepared[7].mul(openings[9]))",
+   "logged": "windows[2]\n        .NJB_sub(prepared[6].NJB_mul(openings[8],log),log)\n        .NJB_sub(prepared[7].NJB_mul(openings[9],log),log)"
+  },
+  "3": {
+   "original": "window_0\n        .sub(prepared[6].mul(openings[6]))\n        .sub(prepared[7].mul(openings[7]))",
+   "logged": "windows[0]\n        .NJB_sub(prepared[6].NJB_mul(openings[6],log),log)\n        .NJB_sub(prepared[7].NJB_mul(openings[7],log),log)"
+  },
+  "4": {
+   "original": "prepared[0]\n        .mul(openings[0])\n        .add(prepared[1].mul(openings[1]))",
+   "logged": "prepared[0]\n        .NJB_mul(openings[0],log)\n        .NJB_add(prepared[1].NJB_mul(openings[1],log),log)"
+  },
+  "5": {
+   "original": "prepared[0]\n        .mul(openings[6])\n        .add(prepared[1].mul(openings[7]))",
+   "logged": "prepared[0]\n        .NJB_mul(openings[6],log)\n        .NJB_add(prepared[1].NJB_mul(openings[7],log),log)"
+  },
+  "6": {
+   "original": "prepared[0].mul(openings[0])",
+   "logged": "prepared[0].NJB_mul(openings[0],log)"
+  },
+  "7": {
+   "original": "prepared[0].mul(openings[10])",
+   "logged": "prepared[0].NJB_mul(openings[10],log)"
+  },
+  "8": {
+   "original": "prepared[0].mul(openings[1])",
+   "logged": "prepared[0].NJB_mul(openings[1],log)"
+  },
+  "9": {
+   "original": "prepared[0].mul(openings[2])",
+   "logged": "prepared[0].NJB_mul(openings[2],log)"
+  },
+  "10": {
+   "original": "window_8.add(prepared[7].mul(lift_m31(M31(1_051_521_018))))",
+   "logged": "windows[3].NJB_add(prepared[7].NJB_mul(lift_m31(M31(1_051_521_018)),log),log)"
+  },
+  "11": {
+   "original": "window_2",
+   "logged": "windows[2]"
+  },
+  "12": {
+   "original": "window_1",
+   "logged": "windows[1]"
+  },
+  "13": {
+   "original": "window_8",
+   "logged": "windows[3]"
+  }
+ },
+ "source_body": "\n    let mut powers = [QM31::ZERO; 8];\n    let mut power = lambda;\n    let mut slot = 0usize;\n    while slot < powers.len() {\n        powers[slot] = power;\n        power = power.mul(lambda);\n        slot += 1;\n    }\n    let prepared: [PreparedQm31Multiplier; 8] = powers.map(PreparedQm31Multiplier::new);\n    let window = |start: usize| {\n        let mut value = QM31::ZERO;\n        let mut slot = 0usize;\n        while slot < 8 {\n            value = value.add(prepared[slot].mul(openings[start + slot]));\n            slot += 1;\n        }\n        value\n    };\n    let window_0 = window(0);\n    let window_1 = window(1);\n    let window_2 = window(2);\n    let window_8 = window(8);\n    let mut result = [QM31::ZERO; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1];\n    result[0] = window_0.add(prepared[7].mul(window_8));\n    result[1] = window_0;\n    result[2] = window_2\n        .sub(prepared[6].mul(openings[8]))\n        .sub(prepared[7].mul(openings[9]));\n    result[3] = window_0\n        .sub(prepared[6].mul(openings[6]))\n        .sub(prepared[7].mul(openings[7]));\n    result[4] = prepared[0]\n        .mul(openings[0])\n        .add(prepared[1].mul(openings[1]));\n    result[5] = prepared[0]\n        .mul(openings[6])\n        .add(prepared[1].mul(openings[7]));\n    result[6] = prepared[0].mul(openings[0]);\n    result[7] = prepared[0].mul(openings[10]);\n    result[8] = prepared[0].mul(openings[1]);\n    result[9] = prepared[0].mul(openings[2]);\n    result[10] = window_8.add(prepared[7].mul(lift_m31(M31(1_051_521_018))));\n    result[11] = window_2;\n    result[12] = window_1;\n    result[13] = window_8;\n    result\n",
+ "map_slot": "callback/one-slot prototype; complete Std array::map association remains OPEN"
+}
