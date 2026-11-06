@@ -1,0 +1,39 @@
+{"attempt": "NLD_L019", "exit_status": 1, "wall_seconds": 19.198508678004146, "peak_rss_kib": "5959244", "swaps": "0", "print_axioms": ["'AspisR1.NLD_Stage1Source.erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLD_generated/NLD_Stage1Source.lean:633:80: error: unsolved goals
+case isFalse
+ops : Ops
+program : solana_pubkey.Pubkey
+accounts : Slice r1_pool_adapter.owned.OwnedAccount
+data : Slice U8
+h✝ : ¬(accounts.len != 3#usize) = true
+⊢ (do
+      let x ← ops.op1 core.cmp.PartialEqU8 data (Array.make 2#usize [3#u8, 10#u8] stage1Owned._proof_4)
+      if x = true then do
+          let x ← accounts.index_usize 0#usize
+          let x_1 ← accounts.index_usize 1#usize
+          let x_2 ← accounts.index_usize 2#usize
+          let x_3 ← r1_pool_adapter.owned.require_distinct_accounts ops (Array.make 3#usize [x, x_1, x_2] ⋯)
+          let x_4 ← core.result.Result.Insts.CoreOpsTry.branch x_3
+          (match
+...
+lloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError)
+                                      residual
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame solana_program_error.ProgramError) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                  (core.convert.FromSame solana_program_error.ProgramError) residual
+          else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+'AspisR1.NLD_Stage1Source.erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb9e719f4b48841f5b69988deb19b84d7.scope; invocation ID: e2a06a232f6e464c966b905eeebcbfac

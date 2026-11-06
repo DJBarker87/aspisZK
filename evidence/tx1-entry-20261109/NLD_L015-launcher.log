@@ -1,0 +1,52 @@
+{"attempt": "NLD_L015", "exit_status": 1, "wall_seconds": 20.56961140409112, "peak_rss_kib": "5943088", "swaps": "0", "print_axioms": ["'AspisR1.NLD_Dispatch.fallback_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NLD_Dispatch.dispatch_erasure' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLD_Dispatch.process_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NLD_Dispatch.entry_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLD_generated/NLD_DispatchFold.lean:48:65: error: unsolved goals
+Account : Type
+ops : Boundaries Account
+p : Key
+a : Slice Account
+d : Slice U8
+s : ParentState
+⊢ (do
+      let b ← ops.eq d (Array.make 2#usize [3#u8, 10#u8] fallback._proof_4)
+      (run
+            (if b = true then returned Site.dispatch (ops.first p a d)
+            else
+              Program.step Site.instructionEleven
+                (fun s => (ops.eq d (Array.make 2#usize [3#u8, 11#u8] fallback._proof_6), s)) fun eleven x =>
+                if eleven = true then returned Site.dispatch (ops.first p a d)
+                else returned Site.dispatch (ops.second p a d))
+            s).1) =
+    do
+    let ten ← ops.eq d (Array
+...
+       Program.step Site.instructionEleven
+                (fun s => (ops.eq d (Array.make 2#usize [3#u8, 11#u8] fallback._proof_6), s)) fun eleven x =>
+                if eleven = true then returned Site.dispatch (ops.first p a d)
+                else returned Site.dispatch (ops.second p a d))
+            s).1) =
+    do
+    let ten ← ops.eq d (Array.make 2#usize [3#u8, 10#u8] ⋯)
+    if ten = true then ops.first p a d
+      else do
+        let eleven ← ops.eq d (Array.make 2#usize [3#u8, 11#u8] ⋯)
+        if eleven = true then ops.first p a d else ops.second p a d
+NLD_generated/NLD_DispatchFold.lean:49:34: warning: This simp argument is unused:
+  apply_ite
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵a̵l̵l̵b̵a̵c̵k̵,̵s̵t̵e̵p̵_̵r̵e̵s̵u̵l̵t̵,̵a̵p̵p̵l̵y̵_̵i̵t̵e̵,̵r̵e̵t̵u̵r̵n̵e̵d̵_̵r̵e̵s̵u̵l̵t̵]̵[̲f̲a̲l̲l̲b̲a̲c̲k̲,̲ ̲s̲t̲e̲p̲_̲r̲e̲s̲u̲l̲t̲,̲ ̲r̲e̲t̲u̲r̲n̲e̲d̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLD_generated/NLD_DispatchFold.lean:49:44: warning: This simp argument is unused:
+  returned_result
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵a̵l̵l̵b̵a̵c̵k̵,̵s̵t̵e̵p̵_̵r̵e̵s̵u̵l̵t̵,̵a̵p̵p̵l̵y̵_̵i̵t̵e̵,̵r̵e̵t̵u̵r̵n̵e̵d̵_̵r̵e̵s̵u̵l̵t̵]̵[̲f̲a̲l̲l̲b̲a̲c̲k̲,̲ ̲s̲t̲e̲p̲_̲r̲e̲s̲u̲l̲t̲,̲ ̲a̲p̲p̲l̲y̲_̲i̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NLD_Dispatch.fallback_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLD_Dispatch.dispatch_erasure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLD_Dispatch.process_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLD_Dispatch.entry_erasure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r926cc2879c8a4a8e91c31872b5d50cee.scope; invocation ID: aff2a7153ce549a3b771f34b144b24ca

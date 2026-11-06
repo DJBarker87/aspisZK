@@ -25,3 +25,27 @@ and caller clauses, empty kernel_roots and named_hypotheses; there is no typed
 094 row-packet statement to quote as the (bd)(3) parameter. NLD_OBLIGATIONS
 preserves those exact clauses. An arbitrary child output or whole-result
 equation would be a replacement interface, not the requested exact packet.
+
+## Further source folds
+
+NLD_DispatchFold gives the process and entry syntax in the same ParentState
+carrier. It preserves head/copied/comparison/child/admission order and erases
+to NIV's canonical emitted-forward models for arbitrary complete Results.
+Lifecycle and stage2 alternatives remain in the full source model; a TX1
+root must derive their exclusion from the literal admitted route.
+
+NLD_Stage1Source instruments every monadic call in the canonical emitted
+stage1_owned, including every Continue/Break and outer abort alternative.
+There are 116 occurrence locations because the emission duplicates the two
+instruction branches. NLD_generate_stage1.py --check verifies that the
+instrumentation and occurrence manifest reproduce byte-for-byte. Its erasure
+is proved equal to AdapterRw.r1_pool_adapter.owned.stage1_owned. It reuses
+NJD_Trace's existing chronological Result algebra rather than duplicating
+that proof. Its event carrier contains source occurrence locations only;
+it is NOT the requested complete native event type with SDK heap and allocator
+post-states. No native folded row is inferred.
+
+There is no canonical emitted borrowed stage1 body in the inspected
+AdapterRwModel (only owned.stage1_owned), and this job has zero extraction
+allowance. Its snapshot/borrow/copy/drop assembly is not supplied by the four
+source erasures. The gap is preserved in NLD_REMAINING and NLD_FAILING_STEP.
