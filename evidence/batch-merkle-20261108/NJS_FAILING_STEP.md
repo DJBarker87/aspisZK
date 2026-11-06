@@ -9,3 +9,9 @@ L002 found missing section-variable arguments in nested emitted calls and two I3
 NJS_L017 first preparation stopped before compiler submission: direct import NDI_BatchWord.olean absent in resolved paths. The exploratory KeyWord module did not require this import, so it was removed; the same unused attempt ID is launched only after this input fix. The original admission is kept as NJS_L017_PRELAUNCH; transport log retains the exact pinning assertion. No submitted process was retried.
 
 L056 failed before C output creation because owned NJS_native directory was absent. L058 uploads the two unchanged canonical C inputs first, creating that directory; no validation or memory limit changed.
+
+A003 scan exit1:15713 modules, zero dangling references and duplicate owners, but9 newly loaded unchanged support modules were absent from expected-import inventory. A004 adds independently Git-pinned source-derived imports for those9 modules. No expected imports are copied from loader output without source equality. Second/final combined scan; raw proof traversal is not repeated.
+
+P005 final validation failed before metadata validation because the owned output directory was not created. P006 creates that directory explicitly; same strict validation, no build or timeout/memory failure. No cleanup/export occurred in P005.
+
+Local validator found snapshot differences in3 older pairs: K012/013 differ only in unrelated LeafOracle functions, K022/023 only in added prefix metadata, K028/029 only in patch packaging. To eliminate source-equivalence judgment, exact-current-snapshot pairs K034/035(slot), K036/037(shape prefix), K038/039(key step) supersede those pairs. No failed shape timed out or hit memory pressure; no full regression/audit replay.

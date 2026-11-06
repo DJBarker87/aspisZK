@@ -30,3 +30,5 @@ Target not yet established. This is an interim inventory, not an early-stop repo
 - TX2:063 sort_batch_keys: native/model/composed packet pending
 
 Slice boundary: canonical_scan calls echeck (TX1:189), OPEN in NJO and outside this job list. Reuse NJC/NJJ cuts and CLOSED decoders; do not author an echeck row. batch_tree depends on verify_in_place TX1:127/TX2:093, owned by NJP; consume only after merge. These do not block the independent keys, leaf, shape and slot members.
+
+Latest dependency check: NJP merged into research47477b58165 (currenta8863b281c90), but merged NJP_REMAINING explicitly retains BOTH verify_in_place rows OPEN. Its shared loop/abort theorems do not constitute the TX1/TX2 entry/caller packets. Pinned read-only merged sources in NJS_MERGED_NJP_INPUTS.json. No unmerged/suspended candidate is imported or credited.
