@@ -1,0 +1,57 @@
+{"attempt": "NKE_K004", "exit_status": 1, "wall_seconds": 95.13005159189925, "peak_rss_kib": "6344748", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+/aspis-r1-cost-probe/src/NKE_parent.rs line 11 column 2 function verifier::candidate::NKE_parent::FinishLog::<'_>::finish thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs line 51 column 21 function verifier::candidate::NKE_parent::finish_call thread 0
+Runtime Symex: 5.59003s
+size of program expression: 151577 steps
+slicing removed 120652 assignments
+Generated 11755 VCC(s), 530 remaining after simplification
+Runtime Postprocess Equation: 0.0839655s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 8.16242s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 5.883e-06s
+Solving with CaDiCaL 2.0.0
+5243589 variables, 39822245 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 13.558s
+Runtime decision procedure: 21.7937s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+5243590 variables, 39822246 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.494197s
+Runtime decision procedure: 0.542965s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+5243591 variables, 39822247 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 47.4071s
+Runtime decision procedure: 47.4618s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+5243592 variables, 39822248 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 3.27381s
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKE_parent::finish_call
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rbd316ab974a049b0b5ccb55c5c528bd4.scope; invocation ID: 3b21a083cf5d4e899edd074a4c36003d

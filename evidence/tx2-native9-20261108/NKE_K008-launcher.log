@@ -1,0 +1,24 @@
+{"attempt": "NKE_K008", "exit_status": 1, "wall_seconds": 94.20476671587676, "peak_rss_kib": "4236400", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+om_fn_erased::<aspis_core::field::M31, core::ops::try_trait::NeverShortCircuit<aspis_core::field::M31>, {closure@core::array::try_from_trusted_iterator::next<core::ops::try_trait::NeverShortCircuit<aspis_core::field::M31>, core::iter::Map<core::array::drain::Drain<'_, u32>, {closure@core::ops::try_trait::NeverShortCircuit<aspis_core::field::M31>::wrap_mut_1<u32, fn(u32) -> aspis_core::field::M31 {aspis_core::field::M31}>::{closure#0}}>>::{closure#0}}> thread 0
+Unwinding loop _RINvNtCsci0VKyKEi6N_4core5array18try_from_fn_erasedNtNtCs3J3QIYe7q3r_10aspis_core5field3M31INtNtNtB4_3ops9try_trait17NeverShortCircuitBN_ENCINvNvB2_25try_from_trusted_iterator4nextB1r_INtNtNtNtB4_4iter8adapters3map3MapINtNtB2_5drain5DrainmENCINvMB1u_B1r_10wrap_mut_1mNcBN_0E0EE0ECsfWDlomp3Mzz_19aspis_r1_cost_probe.0 iteration 4 file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs line 897 column 5 function core::array::try_from_fn_erased::<aspis_core::field::M31, core::ops::try_trait::NeverShortCircuit<aspis_core::field::M31>, {closure@core::array::try_from_trusted_iterator::next<core::ops::try_trait::NeverShortCircuit<aspis_core::field::M31>, core::iter::Map<core::array::drain::Drain<'_, u32>, {closure@core::ops::try_trait::NeverShortCircuit<aspis_core::field::M31>::wrap_mut_1<u32, fn(u32) -> aspis_core::field::M31 {aspis_core::field::M31}>::{closure#0}}>>::{closure#0}}> thread 0
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NKE_parent::geometry_start
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rb7ea51865a7945439582f232433b6628.scope; invocation ID: 55ec39d5183c4ab9929014c68d99ffe6

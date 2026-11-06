@@ -1,0 +1,164 @@
+NKE_generated/NKE_FreeReplay.lean:37:67: error: Type mismatch
+  rfl
+has type
+  ?m.13 = ?m.13
+but is expected to have type
+  G (Program.call codec first next) log = G (Program.call codec second next) log
+NKE_generated/NKE_FreeReplay.lean:55:3: error: 'change' tactic failed, pattern
+  (match codec.decode (codec.encode (ok value)) with
+    | none => State.invalid
+    | some (ok v) => G (next v) (eval (next value)).events
+    | some (fail err) => State.done (fail err) (eval (next value)).events
+    | some div => State.done div (eval (next value)).events) =
+    ?m.130
+is not definitionally equal to target
+  G (Program.call codec (ok value) next) (eval (Program.call codec (ok value) next)).events =
+    State.done (eval (Program.call codec (ok value) next)).result []
+NKE_generated/NKE_FreeReplay.lean:71:18: error: failed to prove termination, possible solutions:
+  - Use `have`-expressions to prove the remaining goals
+  - Use `termination_by` to specify a different well-founded relation
+  - Use `decreasing_by` to specify your own tactic for discharging this kind of goal
+E A : Type
+n : ℕ
+log : List E
+B✝ : Type
+next : B✝ → Program E A
+value : B✝
+⊢ sizeOf (next value) ≤ 1
+NKE_generated/NKE_FreeReplay.lean:94:18: error: failed to prove termination, possible solutions:
+  - Use `have`-expressions to prove the remaining goals
+  - Use `termination_by` to specify a different well-founded relation
+  - Use `decreasing_by` to specify your own tactic for discharging this kind of goal
+E A : Type
+n : ℕ
+B✝ : Type
+next : B✝ → Program E A
+value : B✝
+⊢ sizeOf (next value) ≤ 1
+NKE_generated/NKE_FreeReplay.lean:112:16: error: Tactic `rfl` failed: The left-hand side
+  advance n (Program.ret value) (eval (Program.ret value)).events
+is not definitionally equal to the right-hand side
+  sourcePrefix n (Program.ret value)
+
+case ret
+E A : Type
+value : A
+n : ℕ
+⊢ advance n (Program.ret value) (eval (Program.ret value)).events = sourcePrefix n (Program.ret value)
+NKE_generated/NKE_FreeReplay.lean:115:16: error: Tactic `rfl` failed: The left-hand side
+  advance n (Program.prim (fail err) next) (eval (Program.prim (fail err) next)).events
+is not definitionally equal to the right-hand side
+  sourcePrefix n (Program.prim (fail err) next)
+
+case prim.fail
+E A B✝ : Type
+next : B✝ → Program E A
+ih : ∀ (a : B✝) (n : ℕ), advance n (next a) (eval (next a)).events = sourcePrefix n (next a)
+n : ℕ
+err : Error
+⊢ advance n (Program.prim (fail err) next) (eval (Program.prim (fail err) next)).events =
+    sourcePrefix n (Program.prim (fail err) next)
+NKE_generated/NKE_FreeReplay.lean:116:11: error: Tactic `rfl` failed: The left-hand side
+  advance n (Program.prim div next) (eval (Program.prim div next)).events
+is not definitionally equal to the right-hand side
+  sourcePrefix n (Program.prim div next)
+
+case prim.div
+E A B✝ : Type
+next : B✝ → Program E A
+ih : ∀ (a : B✝) (n : ℕ), advance n (next a) (eval (next a)).events = sourcePrefix n (next a)
+n : ℕ
+⊢ advance n (Program.prim div next) (eval (Program.prim div next)).events = sourcePrefix n (Program.prim div next)
+NKE_generated/NKE_FreeReplay.lean:117:16: error: Type mismatch
+  ih value n
+has type
+  advance n (next value) (eval (next value)).events = sourcePrefix n (next value)
+but is expected to have type
+  advance n (Program.prim (ok value) next) (eval (Program.prim (ok value) next)).events =
+    sourcePrefix n (Program.prim (ok value) next)
+NKE_generated/NKE_FreeReplay.lean:120:12: error: Tactic `rfl` failed: The left-hand side
+  advance 0 (Program.call codec actual next) (eval (Program.call codec actual next)).events
+is not definitionally equal to the right-hand side
+  sourcePrefix 0 (Program.call codec actual next)
+
+case call.zero
+E A B✝ : Type
+codec : Codec E B✝
+actual : Result B✝
+next : B✝ → Program E A
+ih : ∀ (a : B✝) (n : ℕ), advance n (next a) (eval (next a)).events = sourcePrefix n (next a)
+⊢ advance 0 (Program.call codec actual next) (eval (Program.call codec actual next)).events =
+    sourcePrefix 0 (Program.call codec actual next)
+NKE_generated/NKE_FreeReplay.lean:123:14: error: unsolved goals
+case call.succ.fail
+E A B✝ : Type
+codec : Codec E B✝
+next : B✝ → Program E A
+ih : ∀ (a : B✝) (n : ℕ), advance n (next a) (eval (next a)).events = sourcePrefix n (next a)
+n : ℕ
+err : Error
+⊢ advance (n + 1) (Program.call codec (fail err) next) [codec.encode (fail err)] =
+    sourcePrefix (n + 1) (Program.call codec (fail err) next)
+NKE_generated/NKE_FreeReplay.lean:124:9: error: unsolved goals
+case call.succ.div
+E A B✝ : Type
+codec : Codec E B✝
+next : B✝ → Program E A
+ih : ∀ (a : B✝) (n : ℕ), advance n (next a) (eval (next a)).events = sourcePrefix n (next a)
+n : ℕ
+⊢ advance (n + 1) (Program.call codec div next) [codec.encode div] = sourcePrefix (n + 1) (Program.call codec div next)
+NKE_generated/NKE_FreeReplay.lean:126:4: error: 'change' tactic failed, pattern
+  (match codec.decode (codec.encode (ok value)) with
+    | none => State.invalid
+    | some (ok v) => advance n (next v) (eval (next value)).events
+    | some (fail err) => State.done (fail err) (eval (next value)).events
+    | some div => State.done div (eval (next value)).events) =
+    ?m.159
+is not definitionally equal to target
+  advance (n + 1) (Program.call codec (ok value) next) (eval (Program.call codec (ok value) next)).events =
+    sourcePrefix (n + 1) (Program.call codec (ok value) next)
+NKE_generated/NKE_FreeReplay.lean:123:28: warning: This simp argument is unused:
+  advance
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵d̵v̵a̵n̵c̵e̵,̵s̵o̵u̵r̵c̵e̵P̵r̵e̵f̵i̵x̵,̵e̵v̵a̵l̵,̵c̵o̵d̵e̵c̵.̵r̵o̵u̵n̵d̵t̵r̵i̵p̵]̵[̲s̲o̲u̲r̲c̲e̲P̲r̲e̲f̲i̲x̲,̲ ̲e̲v̲a̲l̲,̲ ̲c̲o̲d̲e̲c̲.̲r̲o̲u̲n̲d̲t̲r̲i̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKE_generated/NKE_FreeReplay.lean:123:36: warning: This simp argument is unused:
+  sourcePrefix
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵d̵v̵a̵n̵c̵e̵,̵s̵o̵u̵r̵c̵e̵P̵r̵e̵f̵i̵x̵,̵e̵v̵a̵l̵,̵c̵o̵d̵e̵c̵.̵r̵o̵u̵n̵d̵t̵r̵i̵p̵]̵[̲a̲d̲v̲a̲n̲c̲e̲,̲ ̲e̲v̲a̲l̲,̲ ̲c̲o̲d̲e̲c̲.̲r̲o̲u̲n̲d̲t̲r̲i̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKE_generated/NKE_FreeReplay.lean:123:54: warning: This simp argument is unused:
+  codec.roundtrip
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵d̵v̵a̵n̵c̵e̵,̵s̵o̵u̵r̵c̵e̵P̵r̵e̵f̵i̵x̵,̵e̵v̵a̵l̵,̵c̵o̵d̵e̵c̵.̵r̵o̵u̵n̵d̵t̵r̵i̵p̵]̵[̲a̲d̲v̲a̲n̲c̲e̲,̲ ̲s̲o̲u̲r̲c̲e̲P̲r̲e̲f̲i̲x̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKE_generated/NKE_FreeReplay.lean:124:23: warning: This simp argument is unused:
+  advance
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵d̵v̵a̵n̵c̵e̵,̵s̵o̵u̵r̵c̵e̵P̵r̵e̵f̵i̵x̵,̵e̵v̵a̵l̵,̵c̵o̵d̵e̵c̵.̵r̵o̵u̵n̵d̵t̵r̵i̵p̵]̵[̲s̲o̲u̲r̲c̲e̲P̲r̲e̲f̲i̲x̲,̲ ̲e̲v̲a̲l̲,̲ ̲c̲o̲d̲e̲c̲.̲r̲o̲u̲n̲d̲t̲r̲i̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKE_generated/NKE_FreeReplay.lean:124:31: warning: This simp argument is unused:
+  sourcePrefix
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵d̵v̵a̵n̵c̵e̵,̵s̵o̵u̵r̵c̵e̵P̵r̵e̵f̵i̵x̵,̵e̵v̵a̵l̵,̵c̵o̵d̵e̵c̵.̵r̵o̵u̵n̵d̵t̵r̵i̵p̵]̵[̲a̲d̲v̲a̲n̲c̲e̲,̲ ̲e̲v̲a̲l̲,̲ ̲c̲o̲d̲e̲c̲.̲r̲o̲u̲n̲d̲t̲r̲i̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKE_generated/NKE_FreeReplay.lean:124:49: warning: This simp argument is unused:
+  codec.roundtrip
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵d̵v̵a̵n̵c̵e̵,̵s̵o̵u̵r̵c̵e̵P̵r̵e̵f̵i̵x̵,̵e̵v̵a̵l̵,̵c̵o̵d̵e̵c̵.̵r̵o̵u̵n̵d̵t̵r̵i̵p̵]̵[̲a̲d̲v̲a̲n̲c̲e̲,̲ ̲s̲o̲u̲r̲c̲e̲P̲r̲e̲f̲i̲x̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NKE_FreeReplay.seed_unused' depends on axioms: [sorryAx]
+'NKE_FreeReplay.source' depends on axioms: [propext, sorryAx]
+'NKE_FreeReplay.prefixes' depends on axioms: [sorryAx]

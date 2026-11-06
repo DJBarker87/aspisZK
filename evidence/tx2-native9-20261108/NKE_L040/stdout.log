@@ -1,0 +1,359 @@
+NKE_generated/NKE_CommonEval.lean:10:72: error: unsolved goals
+wr rr : NP6_StdModel.Reservation
+merkle : Merkle
+finish : Finish
+H : Type
+d : aspis_core.digest.Digest32 H
+pub proof ck : Slice U8
+hash : H
+⊢ (do
+      let value ←
+        NJU_Log.record (Event.resume ck proof pub)
+            (NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash)
+      let value ← liftM (core.result.Result.Insts.CoreOpsTry.branch value)
+      NKE_Free.eval
+          (match value with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            if (val.2.next != NHT_Constants.compact.SPLIT) = true then
+              liftM (ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint))
+            else do
+              let g ←
+                NKE_Free.record
+                    { encode := Event.powers val.1.gamma,
+                      decode := fun event =>
+                        match event with
+                        | Event.powers x0 reply => if x0 = val.1.gamma then some reply else none
+                        | x => none,
+                      roundtrip := ⋯ }
+                    (NHT_PacketOps.powers 29#usize val.1.gamma)
+              liftM (NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead)
+              let i ← liftM NHT_Constants.compact.OFF_INACTIVE
+              let i1 ← liftM NHT_Constants.compact.OFF_ROUND0
+              let s ←
+                liftM
+                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                      { start := i, «end» := i1 })
+              let o ←
+                NKE_Free.record
+                    { encode := Event.inactive s,
+                      decode := fun event =>
+                        match event with
+                        | Event.inactive x0 reply => if x0 = s then some reply else none
+                        | x => none,
+                      roundtrip := ⋯ }
+                    (NJC_ClosedCalls.inactive s)
+              let r1 ←
+                liftM (NHT_Constants.core.option.Option.ok_or o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse)
+              let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let i2 ← liftM NHT_Constants.compact.OFF_FOLDED_ROOT
+                  let i3 ← liftM NHT_Constants.compact.OFF_ROUND1
+                  let s1 ←
+                    liftM
+                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                          { start := i2, «end» := i3 })
+                  let r2 ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1)
+                  let folded_root ← liftM (core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2)
+                  let r3 ←
+                    NKE_Free.record
+                        { encode := Event.merkle proof val.1 folded_root,
+                          decode := fun event =>
+                            match event with
+                            | Event.merkle x0 x1 x2 reply =>
+                              if x0 = proof ∧ x1 = val.1 ∧ x2 = folded_root then some reply else none
+                            | x => none,
+                          roundtrip := ⋯ }
+                        (merkle d proof val.1 folded_root 1#usize hash)
+                  let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue a => do
+                      liftM
+                          (NHV_ReleaseOps.mark none
+                            (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle NHT_Constants.compact.SPLIT))
+                      let r4 ←
+                        NKE_Free.record
+                            { encode := Event.geometry val.1.queries val.2.next,
+                              decode := fun event =>
+                                match event with
+                                | Event.geometry x0 x1 reply =>
+                                  if x0 = val.1.queries ∧ x1 = val.2.next then some reply else none
+                                | x => none,
+                              roundtrip := ⋯ }
+                            (NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize)
+                      let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          let r5 ←
+                            NKE_Free.record
+                                { encode := Event.pending val.2.weights.deref,
+                                  decode := fun event =>
+                                    match event with
+                                    | Event.pending x0 reply => if x0 = val.2.weights.deref then some reply else none
+                                    | x => none,
+                                  roundtrip := ⋯ }
+                                (NJJ_Common.pending rr val.2.weights.deref)
+                          let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                          match cf4 with
+                            | core.ops.control_flow.ControlFlow.Continue val3 => do
+                              let r6 ←
+                                NKE_Free.record
+                                    { encode := Event.query proof val.1 val.2 g val2 val3,
+                                      decode := fun event =>
+                                        match event with
+                                        | Event.query x0 x1 x2 x3 x4 x5 reply =>
+                                          if x0 = proof ∧ x1 = val.1 ∧ x2 = val.2 ∧ x3 = g ∧ x4 = val2 ∧ x5 = val3 then
+                                            some reply
+                                          else none
+                                        | x => none,
+                                      roundtrip := ⋯ }
+                                    (NJJ_Common.query proof val.1 val.2 g none val2 val3 22#usize)
+                              let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                              match cf5 with
+                                | core.ops.control_flow.ControlFlow.Continue val4 => do
+                                  let __x ← liftM (lift val4.1.weights.deref_mut)
+                                  let s4 ←
+                                    NKE_Free.record
+                                        { encode := Event.flush val4.2 __x.1,
+                                          decode := fun event =>
+                                            match event with
+                                            | Event.flush x0 x1 reply =>
+                                              if x0 = val4.2 ∧ x1 = __x.1 then some reply else none
+                                            | x => none,
+                                          roundtrip := ⋯ }
+                                        (Port3_FlushInstall.flush val4.2 __x.1)
+                                  let s5 ← liftM (lift (Std.Array.empty U8).to_slice)
+                                  let s6 ← liftM (lift (Std.Array.empty U8).to_slice)
+                                  let s7 ←
+                                    liftM
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                          proof { start := i1, «end» := i2 })
+                                  let i4 ← liftM NHT_Constants.compact.OFF_FINAL
+                                  let s8 ←
+                                    liftM
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                          proof { start := i3, «end» := i4 })
+                                  let i5 ← liftM NHT_Constants.compact.OFF_OPENINGS
+                                  let s9 ←
+                                    liftM
+                                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                          proof { start := i4, «end» := i5 })
+                                  let s10 ← liftM (lift (Std.Array.empty U8).to_slice)
+                                  NKE_Free.record
+                                      {
+                                        encode :=
+                                          Event.finish
+                                            { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6,
+                                              inactive := val1, round0 := s7, folded_root := none, round1 := s8,
+                                              final_message := s9, query_bytes := s10 }
+                                            val.1
+                                            { weights := __x.2 s4, rhs := val4.1.rhs, power := val4.1.power,
+                                              next := val4.1.next },
+                                        decode := fun event =>
+                                          match event with
+                                          | Event.finish x0 x1 x2 reply =>
+                                            if
+                                                x0 =
+                                                    { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5,
+                                                      y1 := s6, inactive := val1, round0 := s7, folded_root := none,
+                                                      round1 := s8, final_message := s9, query_bytes := s10 } ∧
+                                                  x1 = val.1 ∧
+                                                    x2 =
+                                                      { weights := __x.2 s4, rhs := val4.1.rhs, power := val4.1.power,
+                                                        next := val4.1.next } then
+                                              some reply
+                                            else none
+                                          | x => none,
+                                        roundtrip := ⋯ }
+                                      (finish
+                                        { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6,
+                                          inactive := val1, round0 := s7, folded_root := none, round1 := s8,
+                                          final_message := s9, query_bytes := s10 }
+                                        val.1
+                                        { weights := __x.2 s4, rhs := val4.1.rhs, power := val4.1.power,
+                                          next := val4.1.next }
+                                        none)
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      Unit (core.convert.FromSame verifier.Error) residual)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame verifier.Error) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame verifier.Error) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame verifier.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame verifier.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual))) =
+    do
+    let r ←
+      NJU_Log.record (Event.resume ck proof pub)
+          (NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash)
+    let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        if (val.2.next != NHT_Constants.compact.SPLIT) = true then
+          liftM (ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint))
+        else do
+          let g ← NJU_Log.record (Event.powers val.1.gamma) (NHT_PacketOps.powers 29#usize val.1.gamma)
+          liftM (NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead)
+          let i ← liftM NHT_Constants.compact.OFF_INACTIVE
+          let i1 ← liftM NHT_Constants.compact.OFF_ROUND0
+          let s ←
+            liftM
+                (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                  { start := i, «end» := i1 })
+          let o ← NJU_Log.record (Event.inactive s) (NJC_ClosedCalls.inactive s)
+          let r1 ← liftM (NHT_Constants.core.option.Option.ok_or o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse)
+          let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let i2 ← liftM NHT_Constants.compact.OFF_FOLDED_ROOT
+              let i3 ← liftM NHT_Constants.compact.OFF_ROUND1
+              let s1 ←
+                liftM
+                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                      { start := i2, «end» := i3 })
+              let r2 ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1)
+              let folded_root ← liftM (core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2)
+              let r3 ←
+                NJU_Log.record (Event.merkle proof val.1 folded_root) (merkle d proof val.1 folded_root 1#usize hash)
+              let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => do
+                  liftM
+                      (NHV_ReleaseOps.mark none
+                        (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle NHT_Constants.compact.SPLIT))
+                  let r4 ←
+                    NJU_Log.record (Event.geometry val.1.queries val.2.next)
+                        (NJC_ClosedCalls.geometry val.1.queries val.2.next 22#usize)
+                  let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      let r5 ←
+                        NJU_Log.record (Event.pending val.2.weights.deref) (NJJ_Common.pending rr val.2.weights.deref)
+                      let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                      match cf4 with
+                        | core.ops.control_flow.ControlFlow.Continue val3 => do
+                          let r6 ←
+                            NJU_Log.record (Event.query proof val.1 val.2 g val2 val3)
+                                (NJJ_Common.query proof val.1 val.2 g none val2 val3 22#usize)
+                          let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                          match cf5 with
+                            | core.ops.control_flow.ControlFlow.Continue val4 => do
+                              let __x ← liftM (lift val4.1.weights.deref_mut)
+                              let s4 ← NJU_Log.record (Event.flush val4.2 __x.1) (Port3_FlushInstall.flush val4.2 __x.1)
+                              let s5 ← liftM (lift (Std.Array.empty U8).to_slice)
+                              let s6 ← liftM (lift (Std.Array.empty U8).to_slice)
+                              let s7 ←
+                                liftM
+                                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                      { start := i1, «end» := i2 })
+                              let i4 ← liftM NHT_Constants.compact.OFF_FINAL
+                              let s8 ←
+                                liftM
+                                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                      { start := i3, «end» := i4 })
+                              let i5 ← liftM NHT_Constants.compact.OFF_OPENINGS
+                              let s9 ←
+                                liftM
+                                    (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                      { start := i4, «end» := i5 })
+                              let s10 ← liftM (lift (Std.Array.empty U8).to_slice)
+                              NJU_Log.record
+                                  (Event.finish
+                                    { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6,
+                                      inactive := val1, round0 := s7, folded_root := none, round1 := s8,
+                                      final_message := s9, query_bytes := s10 }
+                                    val.1
+                                    { weights := __x.2 s4, rhs := val4.1.rhs, power := val4.1.power,
+                                      next := val4.1.next })
+                                  (finish
+                                    { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6,
+                                      inactive := val1, round0 := s7, folded_root := none, round1 := s8,
+                                      final_message := s9, query_bytes := s10 }
+                                    val.1
+                                    { weights := __x.2 s4, rhs := val4.1.rhs, power := val4.1.power,
+                                      next := val4.1.next }
+                                    none)
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              liftM
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame verifier.Error) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                              (core.convert.FromSame verifier.Error) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame verifier.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame verifier.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame verifier.Error) residual)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        liftM
+          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual)
+NKE_generated/NKE_CommonEval.lean:11:117: warning: This simp argument is unused:
+  NKE_Free.eval_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [NKE_CommonProgram.run, ̲NJU_CommonObserved.run, ̲NKE_Free.eval_bind, ̲NKE_Free.eval_record,
+  ̲ ̲ ̲ ̲NKE_Free.eval_liftM, ̲NKE_Free.eval_p̵u̵r̵e̵,̵N̵K̵E̵_̵F̵r̵e̵e̵.̵e̵v̵a̵l̵_̵if, ̲NKE_Free.eval_flow, ̲NJU_Log.prod_cases,
+  ̲ ̲ ̲ ̲NKE_CommonCodec.resume, ̲NKE_CommonCodec.powers, ̲NKE_CommonCodec.inactive, ̲NKE_CommonCodec.merkle,
+  ̲ ̲ ̲ ̲NKE_CommonCodec.geometry, ̲NKE_CommonCodec.pending, ̲NKE_CommonCodec.query, ̲NKE_CommonCodec.flush,
+  ̲ ̲ ̲ ̲NKE_CommonCodec.finish]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKE_generated/NKE_CommonEval.lean:11:136: warning: This simp argument is unused:
+  NKE_Free.eval_if
+
+Hint: Omit it from the simp argument list.
+  simp only [NKE_CommonProgram.run, ̲NJU_CommonObserved.run, ̲NKE_Free.eval_bind, ̲NKE_Free.eval_record,
+  ̲ ̲ ̲ ̲NKE_Free.eval_liftM, ̲NKE_Free.eval_pure, ̲NKE_Free.eval_i̵f,̵N̵K̵E̵_̵F̵r̵e̵e̵.̵e̵v̵a̵l_̵f̵l̵ow, ̲NJU_Log.prod_cases,
+  ̲ ̲ ̲ ̲NKE_CommonCodec.resume, ̲NKE_CommonCodec.powers, ̲NKE_CommonCodec.inactive, ̲NKE_CommonCodec.merkle,
+  ̲ ̲ ̲ ̲NKE_CommonCodec.geometry, ̲NKE_CommonCodec.pending, ̲NKE_CommonCodec.query, ̲NKE_CommonCodec.flush,
+  ̲ ̲ ̲ ̲NKE_CommonCodec.finish]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKE_generated/NKE_CommonEval.lean:11:153: warning: This simp argument is unused:
+  NKE_Free.eval_flow
+
+Hint: Omit it from the simp argument list.
+  simp only [NKE_CommonProgram.run, ̲NJU_CommonObserved.run, ̲NKE_Free.eval_bind, ̲NKE_Free.eval_record,
+  ̲ ̲ ̲ ̲NKE_Free.eval_liftM, ̲NKE_Free.eval_pure, ̲NKE_Free.eval_if, ̲NK̵E̵_̵F̵r̵e̵e̵.̵e̵v̵a̵l̵_̵f̵l̵o̵w̵,̵N̵JU_Log.prod_cases,
+  ̲ ̲ ̲ ̲NKE_CommonCodec.resume, ̲NKE_CommonCodec.powers, ̲NKE_CommonCodec.inactive, ̲NKE_CommonCodec.merkle,
+  ̲ ̲ ̲ ̲NKE_CommonCodec.geometry, ̲NKE_CommonCodec.pending, ̲NKE_CommonCodec.query, ̲NKE_CommonCodec.flush,
+  ̲ ̲ ̲ ̲NKE_CommonCodec.finish]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKE_generated/NKE_CommonEval.lean:11:172: warning: This simp argument is unused:
+  NJU_Log.prod_cases
+
+Hint: Omit it from the simp argument list.
+  simp only [NKE_CommonProgram.run, ̲NJU_CommonObserved.run, ̲NKE_Free.eval_bind, ̲NKE_Free.eval_record,
+  ̲ ̲ ̲ ̲NKE_Free.eval_liftM, ̲NKE_Free.eval_pure, ̲NKE_Free.eval_if, ̲NKE_Free.eval_flow,
+  ̲ ̲ ̲ ̲NJ̵U̵_̵L̵o̵g̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵s̵,̵N̵KE_CommonCodec.resume, ̲NKE_CommonCodec.powers, ̲NKE_CommonCodec.inactive, ̲NKE_CommonCodec.merkle,
+  ̲ ̲ ̲ ̲NKE_CommonCodec.geometry, ̲NKE_CommonCodec.pending, ̲NKE_CommonCodec.query, ̲NKE_CommonCodec.flush,
+  ̲ ̲ ̲ ̲NKE_CommonCodec.finish]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NKE_CommonEval.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

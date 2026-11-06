@@ -1,0 +1,244 @@
+{
+  "Common": [
+    {
+      "name": "resume",
+      "args": [
+        [
+          "ck",
+          "Slice U8"
+        ],
+        [
+          "proof",
+          "Slice U8"
+        ],
+        [
+          "pub",
+          "Slice U8"
+        ]
+      ],
+      "reply": "core.result.Result (verifier.Prepared \u00d7 verifier.Accumulator) verifier.Error"
+    },
+    {
+      "name": "powers",
+      "args": [
+        [
+          "gamma",
+          "aspis_core.field.wide_exact.WideExact"
+        ]
+      ],
+      "reply": "Array aspis_core.field.wide_exact.WideExact 29#usize"
+    },
+    {
+      "name": "inactive",
+      "args": [
+        [
+          "bytes",
+          "Slice U8"
+        ]
+      ],
+      "reply": "Option aspis_core.field.wide_exact.WideExact"
+    },
+    {
+      "name": "merkle",
+      "args": [
+        [
+          "proof",
+          "Slice U8"
+        ],
+        [
+          "p",
+          "verifier.Prepared"
+        ],
+        [
+          "root",
+          "Array U8 32#usize"
+        ]
+      ],
+      "reply": "core.result.Result (Unit) verifier.Error"
+    },
+    {
+      "name": "geometry",
+      "args": [
+        [
+          "queries",
+          "Array U32 22#usize"
+        ],
+        [
+          "next",
+          "Usize"
+        ]
+      ],
+      "reply": "core.result.Result (verifier.QueryGeometry) verifier.Error"
+    },
+    {
+      "name": "pending",
+      "args": [
+        [
+          "weights",
+          "Slice aspis_core.field.QM31"
+        ]
+      ],
+      "reply": "core.result.Result (verifier.BatchedWeights) verifier.Error"
+    },
+    {
+      "name": "query",
+      "args": [
+        [
+          "proof",
+          "Slice U8"
+        ],
+        [
+          "p",
+          "verifier.Prepared"
+        ],
+        [
+          "a",
+          "verifier.Accumulator"
+        ],
+        [
+          "g",
+          "Array aspis_core.field.wide_exact.WideExact 29#usize"
+        ],
+        [
+          "geometry",
+          "verifier.QueryGeometry"
+        ],
+        [
+          "pending",
+          "verifier.BatchedWeights"
+        ]
+      ],
+      "reply": "core.result.Result (verifier.Accumulator \u00d7 verifier.BatchedWeights) verifier.Error"
+    },
+    {
+      "name": "flush",
+      "args": [
+        [
+          "pending",
+          "verifier.BatchedWeights"
+        ],
+        [
+          "weights",
+          "Slice aspis_core.field.QM31"
+        ]
+      ],
+      "reply": "Slice aspis_core.field.QM31"
+    },
+    {
+      "name": "finish",
+      "args": [
+        [
+          "v",
+          "verifier.View"
+        ],
+        [
+          "p",
+          "verifier.Prepared"
+        ],
+        [
+          "a",
+          "verifier.Accumulator"
+        ]
+      ],
+      "reply": "core.result.Result (Unit) verifier.Error"
+    }
+  ],
+  "Resume": [
+    {
+      "name": "digest",
+      "args": [
+        [
+          "chunks",
+          "Slice (Slice U8)"
+        ]
+      ],
+      "reply": "Array U8 32#usize"
+    },
+    {
+      "name": "headerAny",
+      "args": [
+        [
+          "it",
+          "core.slice.iter.Iter U8"
+        ]
+      ],
+      "reply": "Bool \u00d7 core.slice.iter.Iter U8"
+    },
+    {
+      "name": "k",
+      "args": [
+        [
+          "reader",
+          "verifier.Reader"
+        ]
+      ],
+      "reply": "core.result.Result (aspis_core.field.QM31) verifier.Error \u00d7 verifier.Reader"
+    },
+    {
+      "name": "e",
+      "args": [
+        [
+          "reader",
+          "verifier.Reader"
+        ]
+      ],
+      "reply": "core.result.Result (aspis_core.field.wide_exact.WideExact) verifier.Error \u00d7 verifier.Reader"
+    },
+    {
+      "name": "semantic",
+      "args": [
+        [
+          "bytes",
+          "Slice U8"
+        ],
+        [
+          "cursor",
+          "Usize"
+        ]
+      ],
+      "reply": "core.result.Result (Array aspis_core.field.QM31 10#usize \u00d7 Usize) verifier.Error"
+    },
+    {
+      "name": "weights",
+      "args": [
+        [
+          "bytes",
+          "Slice U8"
+        ],
+        [
+          "cursor",
+          "Usize"
+        ],
+        [
+          "before",
+          "alloc.vec.Vec aspis_core.field.QM31"
+        ]
+      ],
+      "reply": "core.result.Result (alloc.vec.Vec aspis_core.field.QM31 \u00d7 Usize) verifier.Error"
+    },
+    {
+      "name": "validate",
+      "args": [
+        [
+          "queries",
+          "Array U32 22#usize"
+        ]
+      ],
+      "reply": "core.result.Result (Unit) verifier.Error"
+    },
+    {
+      "name": "filled",
+      "args": [
+        [
+          "n",
+          "Usize"
+        ],
+        [
+          "value",
+          "aspis_core.field.QM31"
+        ]
+      ],
+      "reply": "core.result.Result (alloc.vec.Vec aspis_core.field.QM31) aspis_core.r0.Error"
+    }
+  ]
+}

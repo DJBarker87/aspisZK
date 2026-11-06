@@ -1,0 +1,16 @@
+theorem NKE_ResumeAtCommon.source : ∀ (wr rr : NP6_StdModel.Reservation) (merkle : Merkle) (finish : Finish) {H : Type}
+  (d : aspis_core.digest.Digest32 H) (pub proof ck : Slice U8) (hash : H)
+  (reply : R (verifier.Prepared × verifier.Accumulator)),
+  Event.resume ck proof pub reply ∈ (run wr rr (fun {H} => merkle) finish d pub proof ck hash none).events →
+    reply =
+      NHT_ResultPort.action
+        (NIL_StatePort.reply
+          (NKE_Free.eval
+              (NKE_ResumeProgram.run wr (NJC_ResumeCalls.digest d) ck proof pub NID_ResumeEmission.transport.Variant.S2
+                hash)).result) :=
+fun wr rr merkle finish {H} d pub proof ck hash reply entered =>
+  have clause :=
+    NKE_CommonCalls.source wr rr (fun {H} => merkle) finish d pub proof ck hash (Event.resume ck proof pub reply)
+      entered;
+  id (fun clause => Eq.trans clause (Eq.symm (NKE_ResumeAssociation.at_common wr d ck proof pub hash))) clause
+'NKE_ResumeAtCommon.source' depends on axioms: [propext, Classical.choice, Quot.sound]

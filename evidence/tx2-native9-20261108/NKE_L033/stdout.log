@@ -1,0 +1,29 @@
+NKE_generated/NKE_FreeReplay.lean:38:67: error: Type mismatch
+  rfl
+has type
+  ?m.13 = ?m.13
+but is expected to have type
+  G (Program.call codec first next) log = G (Program.call codec second next) log
+NKE_generated/NKE_FreeReplay.lean:56:3: error: 'change' tactic failed, pattern
+  (match codec.decode (codec.encode (ok value)) with
+    | none => State.invalid
+    | some (ok v) => G (next v) (eval (next value)).events
+    | some (fail err) => State.done (fail err) (eval (next value)).events
+    | some div => State.done div (eval (next value)).events) =
+    ?m.130
+is not definitionally equal to target
+  G (Program.call codec (ok value) next) (eval (Program.call codec (ok value) next)).events =
+    State.done (eval (Program.call codec (ok value) next)).result []
+NKE_generated/NKE_FreeReplay.lean:127:4: error: 'change' tactic failed, pattern
+  (match codec.decode (codec.encode (ok value)) with
+    | none => State.invalid
+    | some (ok v) => advance n (next v) (eval (next value)).events
+    | some (fail err) => State.done (fail err) (eval (next value)).events
+    | some div => State.done div (eval (next value)).events) =
+    ?m.157
+is not definitionally equal to target
+  advance (n + 1) (Program.call codec (ok value) next) (eval (Program.call codec (ok value) next)).events =
+    sourcePrefix (n + 1) (Program.call codec (ok value) next)
+'NKE_FreeReplay.seed_unused' depends on axioms: [sorryAx]
+'NKE_FreeReplay.source' depends on axioms: [propext, sorryAx]
+'NKE_FreeReplay.prefixes' depends on axioms: [propext, sorryAx]

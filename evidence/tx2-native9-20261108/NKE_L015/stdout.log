@@ -1,0 +1,90 @@
+NKE_generated/NKE_CommonSource.lean:11:56: error: unsolved goals
+case h_1
+wr rr : NP6_StdModel.Reservation
+merkle : Merkle
+finish : Finish
+H : Type
+d : aspis_core.digest.Digest32 H
+pub proof ck : Slice U8
+hash : H
+value✝¹⁵ : core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error)
+    (verifier.Prepared × verifier.Accumulator)
+x✝ : verifier.Prepared × verifier.Accumulator
+p✝ : verifier.Prepared
+a✝¹ : verifier.Accumulator
+h✝ : ¬(a✝¹.next != NHT_Constants.compact.SPLIT) = true
+value✝¹⁴ : Std.Array E 29#usize
+value✝¹³ : Unit
+value✝¹² value✝¹¹ : Usize
+value✝¹⁰ : Slice U8
+value✝⁹ : Option E
+value✝⁸ : core.result.Result E AdapterRw.aspis_r1_cost_probe.verifier.Error
+cf1✝ :
+  core.ops.control_flow.ControlFlow
+    (core.result.Result core.convert.Infallible AdapterRw.aspis_r1_cost_probe.verifier.Error) E
+val1✝ : E
+value✝⁷ value✝⁶ : Usize
+value✝⁵ : Slice U8
+value✝⁴ : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError
+value✝³ : Std.Array U8 32#usize
+value✝² : core.result.Result Unit verifier.Error
+cf2✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) Unit
+a✝ value✝¹ : Unit
+value✝ : core.result.Result verifier.QueryGeometry verifier.Error
+cf3✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible verifier.Error) verifier.QueryGeometry
+val2✝ : verifier.QueryGeometry
+⊢ NKE_EventAll.Holds (NKE_CommonClauses.Clause rr)
+    (have s2 := a✝¹.weights.deref;
+    do
+    let r5 ← NJU_Log.record (Event.pending s2) (NJJ_Common.pending rr s2)
+    let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+    match cf4 with
+      | core.ops.control_flow.ControlFlow.Continue val3 => do
+        let r6 ←
+          NJU_Log.record (Event.query proof p✝ a✝¹ value✝¹⁴ val2✝ val3)
+              (NJJ_Common.query proof p✝ a✝¹ value✝¹⁴ none val2✝ val3 22#usize)
+        let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+        match cf5 with
+          | core.ops.control_flow.ControlFlow.Continue val4 =>
+            match val4 with
+            | (a1, pending) => do
+              let __x ← liftM (lift a1.weights.deref_mut)
+              match __x with
+                | (s3, deref_mut_back) => do
+                  let s4 ← NJU_Log.record (Event.flush pending s3) (Port3_FlushInstall.flush pending s3)
+                  have weights : alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 := deref_mut_back s4
+                  let s5 ← liftM (lift (Std.Array.empty U8).to_slice)
+                  let s6 ← liftM (lift (Std.Array.empty U8).to_slice)
+                  let s7 ←
+                    liftM
+                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                          { start := value✝¹¹, «end» := value✝⁷ })
+                  let i4 ← liftM NHT_Constants.compact.OFF_FINAL
+                  let s8 ←
+                    liftM
+                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                          { start := value✝⁶, «end» := i4 })
+                  let i5 ← liftM NHT_Constants.compact.OFF_OPENINGS
+                  let s9 ←
+                    liftM
+                        (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                          { start := i4, «end» := i5 })
+                  let s10 ← liftM (lift (Std.Array.empty U8).to_slice)
+                  have finalView : verifier.View :=
+                    { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6, inactive := val1✝,
+                      round0 := s7, folded_root := none, round1 := s8, final_message := s9, query_bytes := s10 }
+                  have actual : verifier.Accumulator :=
+                    { weights := weights, rhs := a1.rhs, power := a1.power, next := a1.next }
+                  NJU_Log.record (Event.finish finalView p✝ actual) (finish finalView p✝ actual none)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        liftM
+          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual))
+'NKE_CommonSource.clauses' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

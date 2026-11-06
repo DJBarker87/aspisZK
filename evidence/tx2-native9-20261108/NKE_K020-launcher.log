@@ -1,0 +1,51 @@
+{"attempt": "NKE_K020", "exit_status": 0, "wall_seconds": 98.32706102286465, "peak_rss_kib": "5248252", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+reference failure: pointer NULL"
+	 - Location: crates/aspis-r1-cost-probe/src/transport.rs:2:27 in function <transport::Variant as core::cmp::PartialEq>::eq
+
+Check 318: <transport::Variant as core::cmp::PartialEq>::eq.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: crates/aspis-r1-cost-probe/src/transport.rs:2:27 in function <transport::Variant as core::cmp::PartialEq>::eq
+
+Check 319: <transport::Variant as core::cmp::PartialEq>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: crates/aspis-r1-cost-probe/src/transport.rs:2:27 in function <transport::Variant as core::cmp::PartialEq>::eq
+
+Check 320: <transport::Variant as core::cmp::PartialEq>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: crates/aspis-r1-cost-probe/src/transport.rs:2:27 in function <transport::Variant as core::cmp::PartialEq>::eq
+
+Check 321: <transport::Variant as core::cmp::PartialEq>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: crates/aspis-r1-cost-probe/src/transport.rs:2:27 in function <transport::Variant as core::cmp::PartialEq>::eq
+
+Check 322: <transport::Variant as core::cmp::PartialEq>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: crates/aspis-r1-cost-probe/src/transport.rs:2:27 in function <transport::Variant as core::cmp::PartialEq>::eq
+
+
+SUMMARY:
+ ** 0 of 322 failed (6 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 94.484055s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r296929fab9cb4547b54f8beb9ef00184.scope; invocation ID: e32fcec20bce41e3941592b6e28dc7a6
