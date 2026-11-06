@@ -1,0 +1,39 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJQ_identity.rs
+@@ -0,0 +1,36 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++pub fn decode_ref(bytes: &[u8]) -> Result<PoolIdentityV1, PoolV1FormatError> {
++    if bytes.len() != POOL_V1_IDENTITY_BYTES {
++        return Err(PoolV1FormatError::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_IDENTITY_MAGIC {
++        return Err(PoolV1FormatError::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_IDENTITY_VERSION {
++        return Err(PoolV1FormatError::WrongVersion);
++    }
++    if bytes[5..8] != [0u8; 3] || bytes[108..112] != [0u8; 4] {
++        return Err(PoolV1FormatError::NonZeroReserved);
++    }
++    let raw_asset_id = u32::from_le_bytes(bytes[104..108].try_into().unwrap());
++    if raw_asset_id >= P {
++        return Err(PoolV1FormatError::NonCanonicalAssetId);
++    }
++    Ok(PoolIdentityV1 {
++        pool: bytes[8..40].try_into().unwrap(),
++        asset_mint: bytes[40..72].try_into().unwrap(),
++        token_program: bytes[72..104].try_into().unwrap(),
++        asset_id: M31(raw_asset_id),
++        deployment_domain: bytes[112..144].try_into().unwrap(),
++    })
++}
++
++
++#[kani::proof_for_contract(super::decode_pool_identity_v1)]
++#[kani::unwind(145)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn decode_contract() {
++ let bytes:[u8;144]=kani::any();
++ let _=super::decode_pool_identity_v1(&bytes);
++}

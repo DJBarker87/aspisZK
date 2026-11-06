@@ -1,0 +1,37 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJQ_stages.rs
+@@ -0,0 +1,34 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++use crate::pool_v1::format::{PoolIdentityV1,PoolV1FormatError,POOL_V1_IDENTITY_BYTES};
++fn identity_prefix(len:usize)->Option<Result<PoolIdentityV1,PoolV1FormatError>>{
++ if len!=POOL_V1_IDENTITY_BYTES{Some(Err(PoolV1FormatError::WrongLength))}else{None}
++}
++#[kani::proof] #[kani::unwind(2)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn identity_length(){let n:usize=kani::any();assert!(POOL_V1_IDENTITY_BYTES==144);
++ let r=identity_prefix(n);let rejected=matches!(r,Some(Err(PoolV1FormatError::WrongLength)));
++ assert!((rejected==(n!=144))!=cfg!(NJQ_invert));if n==144{assert!(r.is_none());}}
++fn word(b:&[u8],a:usize)->u64{
++ (b[a] as u64)|((b[a+1] as u64)<<8)|((b[a+2] as u64)<<16)|((b[a+3] as u64)<<24)|((b[a+4] as u64)<<32)|((b[a+5] as u64)<<40)|((b[a+6] as u64)<<48)|((b[a+7] as u64)<<56)
++}
++fn master_iteration(bytes:&[u8;384],lane:usize,lanes:&mut [u64;8])->Option<()> {
++ let mut it=lanes[lane..].iter_mut();let sequence=it.next()?;
++ let start = MASTER_LAST_SEQUENCES_OFFSET + 8 * lane;
++ *sequence = u64::from_le_bytes(bytes[start..start + 8].try_into().unwrap());
++ Some(())
++}
++#[kani::proof] #[kani::unwind(12)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn master_step(){
++ let b:[u8;384]=kani::any();let before:[u64;8]=kani::any();
++ let j:usize=kani::any();kani::assume(j<8);let original=before[j];
++ let byte_index:usize=kani::any();kani::assume(byte_index<384);let original_byte=b[byte_index];
++ let lane:usize=kani::any();kani::assume(lane<=8);
++ let mut after=before;let r=master_iteration(&b,lane,&mut after);
++ assert!(before[j]==original);assert!(b[byte_index]==original_byte);
++ if lane<8{let value=word(&b,320+8*lane);
++  assert!((after[lane]==value)!=cfg!(NJQ_invert));
++  assert!(after[j]==if j==lane{value}else{before[j]});assert!(r==Some(()));
++ }else{assert!(r.is_none());assert!(after[j]==before[j]);}
++}

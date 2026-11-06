@@ -1,0 +1,56 @@
+--- NJI/NHR_stage.py
++++ NJQ/NHR_stage.py
+@@ -148,7 +148,35 @@
+     assert ok, report
+     return manifest
+ 
++def njq_options(args, workspace, out):
++    # Additive selector: use the actual frozen statement crate so root locality is retained.
++    from types import SimpleNamespace
++    old = SimpleNamespace(function='nji_tx2_decoders',opacity=args.opacity)
++    pin = options(old,workspace,out)
++    cmd = pin['charon_command']
++    root = 'aspis_statement::pool_v1::format::decode_pool_identity_v1'
++    cmd[cmd.index('--dest-file'):cmd.index('--dest-file')] = ['--start-from',root]
++    idx = cmd.index('--manifest-path')+1
++    cmd[idx] = str(workspace/'crates/aspis-statement/Cargo.toml')
++    graph = json.loads((out/'NHR_GRAPH_CHECK.json').read_text())
++    features = next(x['features'] for x in graph['features'] if x['name']=='aspis-statement')
++    cmd[cmd.index('--features')+1] = ','.join(features)
++    # Identity is in scope and must be emitted; other CLOSED children remain opaque.
++    i = cmd.index('aspis_statement::pool_v1::format::decode_pool_identity_v1',cmd.index('--opaque'))
++    del cmd[i-1:i+1]
++    pin['opacity'] = [x for x in pin['opacity'] if not x['path'].endswith('decode_pool_identity_v1')]
++    for selector in ['core::iter::traits::iterator::Iterator::any','core::slice::iter::_::any','core::slice::iter::_::next']:
++        cmd[cmd.index('--dest-file'):cmd.index('--dest-file')] = ['--opaque',selector]
++        pin['opacity'].append(dict(path=selector,selector=selector,why='NJQ rule-3 library boundary under (au)(3)'))
++    for token in ['-namespace','-subdir']:
++        pin['aeneas_command'][pin['aeneas_command'].index(token)+1] = 'NJQ_Extracted'
++    cmd[cmd.index('--dest-file')+1] = str(out/'njq_tx2_decoders.llbc')
++    pin['aeneas_command'][-1] = str(out/'njq_tx2_decoders.llbc')
++    pin['statement_features'] = features
++    return pin
++
+ def options(args, workspace, out):
++    if args.function == 'njq_tx2_decoders': return njq_options(args,workspace,out)
+     root = 'crate::verifier::candidate::'+args.function
+     # Additive NJI batch selector; existing four selectors are byte-equivalent.
+     roots = ['aspis_statement::pool_v1::format::decode_verifier_policy_v1', 'aspis_statement::pool_v1::pair_forest_accounts::decode_pool_v1_pair_forest_checkpoint_v1', 'aspis_statement::pool_v1::pair_forest_accounts::decode_pool_v1_pair_forest_master_v1', 'aspis_statement::pool_v1::pair_forest_accounts::validate_master', 'aspis_statement::pool_v1::verifier_registry::decode_verifier_registry_entry_v1', 'aspis_statement::pool_v1::verifier_registry::decode_verifier_registry_v1', 'aspis_statement::pool_v1::verifier_registry::validate_verifier_registry_entry_v1', 'aspis_statement::pool_v1::verifier_registry::validate_verifier_registry_v1'] if args.function == 'nji_tx2_decoders' else [root]
+@@ -175,7 +203,7 @@
+     pins = options(args,workspace,out)
+     for name,h in PINS.items(): assert sha((TOOLROOT/name).read_bytes())==h
+     pins.update(frozen_revision=REV,tools=PINS,lock_before=sha((workspace/'Cargo.lock').read_bytes()),manifest_sha256=sha((E/'NHR_STAGING_MANIFEST.json').read_bytes()),candidate_sha256=sha((workspace/'crates/aspis-r1-cost-probe/src/candidate.rs').read_bytes()))
+-    env = dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_TARGET_DIR=str(E/'NJI_target'),CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1')
++    env = dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_TARGET_DIR=str(E/('NJQ_target' if args.function == 'njq_tx2_decoders' else 'NJI_target')),CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1')
+     write(out/'NHR_PINS.json',pins); print(json.dumps(pins),flush=True)
+     try:
+         r = subprocess.run(pins['charon_command'],cwd=workspace,env=env); pins['charon_exit']=r.returncode
+@@ -223,7 +251,7 @@
+     modes=p.add_mutually_exclusive_group(required=True)
+     for name in ['export','check','extract','options']: modes.add_argument('--'+name,action='store_true')
+     p.add_argument('--workspace',type=Path,default=E/'NHR_workspace'); p.add_argument('--out',type=Path,default=E/'NHR_preflight')
+-    p.add_argument('--cargo',default='/home/dombarker/.cargo/bin/cargo'); p.add_argument('--function',choices=['prepare','tx1','tx2_authenticated','tx2_common','nji_tx2_decoders']); p.add_argument('--opacity',default=str(E/'NHR_OPACITY.json'))
++    p.add_argument('--cargo',default='/home/dombarker/.cargo/bin/cargo'); p.add_argument('--function',choices=['prepare','tx1','tx2_authenticated','tx2_common','nji_tx2_decoders','njq_tx2_decoders']); p.add_argument('--opacity',default=str(E/'NHR_OPACITY.json'))
+     a=p.parse_args()
+     if a.export: export(); return 0
+     a.workspace=a.workspace.resolve(); a.out=a.out.resolve(); a.out.mkdir(parents=True,exist_ok=True)

@@ -1,0 +1,46 @@
+{"attempt": "NJQ_L011", "exit_status": 1, "wall_seconds": 7.302858578041196, "peak_rss_kib": "5959804", "swaps": "0", "print_axioms": ["'NJQ_Registry.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJQ_generated/NJQ_Registry.lean:77:9: error: unsolved goals
+case pos
+b : Slice U8
+len : (↑b).length = 128
+size : b.len = 128#usize
+header : NCX_Reference.magic b magic = ok (decide (List.take 4 ↑b = ↑magic))
+v4 : b.index_usize 4#usize = ok (NHY_ZeroStep.byte b ↑4#usize)
+v5 : b.index_usize 5#usize = ok (NHY_ZeroStep.byte b ↑5#usize)
+v6 : b.index_usize 6#usize = ok (NHY_ZeroStep.byte b ↑6#usize)
+v7 : b.index_usize 7#usize = ok (NHY_ZeroStep.byte b ↑7#usize)
+tail : NJQ_Read.read b 120#usize 8#usize = ok (NHY_NaturalReads.array b (↑120#usize) 8#usize ⋯)
+pool : NJQ_Read.read b 8#usize 32#usize = ok (NHY_NaturalReads.array b (↑8#usize) 32#usize ⋯)
+authority : NJQ_Read.read b 40#usize 32#usize = ok
+...
+(Eq.trans (Decidable.decide.congr_simp (List.take 4 ↑b = ↑magic) False (eq_false hm))
+                                  (decide_false instDecidableFalse)))
+                              Bool.not_false))
+                          true)
+                        (eq_self true))))
+                  (ite_cond_eq_false
+                    (if NHY_ZeroStep.byte b 4 = 2#u8 then
+                      if NHY_ZeroStep.byte b 7 = 0#u8 ∧ List.take 8 (List.drop 120 ↑b) = List.replicate 8 0#u8 then do
+                        let checked ← NJI_V1Models.registry (record b h)
+                        match checked with
+                          | core.result.Result.Ok a => ok (core.result.Result.Ok (record b h))
+                          | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      else
+                        ok
+                          (core.result.Result.Err
+                            NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.NonZeroReserved)
+                    else
+                      ok
+                        (core.result.Result.Err
+                          NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.WrongVersion))
+                    (ok
+                      (core.result.Result.Err
+                        NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.WrongMagic))
+                    (eq_false hm)))
+                (eq_self
+                  (ok
+                    (core.result.Result.Err
+                      NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.WrongMagic)))))))
+'NJQ_Registry.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r96dee764b91b4b16ab512de1e0388144.scope; invocation ID: c12483f71986451f92962e073e70237a

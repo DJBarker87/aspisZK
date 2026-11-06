@@ -1,0 +1,35 @@
+{"attempt": "NJQ_L034", "exit_status": 1, "wall_seconds": 7.222880329936743, "peak_rss_kib": "5946392", "swaps": "0", "print_axioms": ["'NJQ_ArrayAll.coordinates' depends on axioms: [propext]", "'NJQ_ArrayAll.all_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJQ_ArrayAll.loop_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJQ_ArrayAll.native_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJQ_generated/NJQ_ArrayAll.lean:27:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∀ j < ↑?m.30, ?P (NHY_ArrayExt.coord ?a j)
+in the target expression
+  (∀ j < ↑8#usize, NHY_ArrayExt.coord target j ≤ capacity) ↔ ((↑target).any fun x => decide (x > capacity)) = false
+
+target : Words
+⊢ (∀ j < ↑8#usize, NHY_ArrayExt.coord target j ≤ capacity) ↔ ((↑target).any fun x => decide (x > capacity)) = false
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to 
+...
+NJQ_generated/NJQ_ArrayAll.lean:27:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ∀ j < ↑?m.30, ?P (NHY_ArrayExt.coord ?a j)
+in the target expression
+  (∀ j < ↑8#usize, NHY_ArrayExt.coord target j ≤ capacity) ↔ ((↑target).any fun x => decide (x > capacity)) = false
+
+target : Words
+⊢ (∀ j < ↑8#usize, NHY_ArrayExt.coord target j ≤ capacity) ↔ ((↑target).any fun x => decide (x > capacity)) = false
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NJQ_ArrayAll.coordinates' depends on axioms: [propext]
+'NJQ_ArrayAll.all_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJQ_ArrayAll.loop_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJQ_ArrayAll.native_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3b519f4704ad4d87b3a4f76516da01b7.scope; invocation ID: 82b5d59d825245e9ade8a86431558f55

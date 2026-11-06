@@ -1,0 +1,46 @@
+{"attempt": "NJQ_L040", "exit_status": 0, "wall_seconds": 7.04891243414022, "peak_rss_kib": "5980220", "swaps": "0", "print_axioms": ["'NJQ_RegistryTotal.native_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJQ_RegistryTotal.native_source : ∀ (b : Slice U8) (log : Option R) (out : core.result.Result R F),
+  Cut b log out → ok out = NJQ_Registry.reference b :=
+fun b log out h =>
+  Decidable.casesOn (instDecidableEqNat (↑b).length 128)
+    (fun h_1 =>
+      Eq.mpr (id (congrArg (fun _a => ok out = _a) (NJQ_Registry.source b)))
+        (Eq.mpr
+          (id
+            (congrArg (Eq (ok out))
+              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg h_1) x_0 x_1 x_2 x_3)
+                (instDecidableEqNat (↑b).length 128) (Result (core.result.Result R F))
+                (fun len =>
+                  if List.take 4 ↑b = ↑NJQ_Registry.magic then
+                    if NHY_Zero
+...
+   (instDecidableEqNat (↑b).length 128) (Result (core.result.Result R F))
+                (fun len =>
+                  if List.take 4 ↑b = ↑NJQ_Registry.magic then
+                    if NHY_ZeroStep.byte b 4 = 2#u8 then
+                      if NHY_ZeroStep.byte b 7 = 0#u8 ∧ List.take 8 (List.drop 120 ↑b) = List.replicate 8 0#u8 then do
+                        let checked ← NJI_V1Models.registry (NJQ_Registry.record b len)
+                        match checked with
+                          | core.result.Result.Ok a => ok (core.result.Result.Ok (NJQ_Registry.record b len))
+                          | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      else
+                        ok
+                          (core.result.Result.Err
+                            NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.NonZeroReserved)
+                    else
+                      ok
+                        (core.result.Result.Err
+                          NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.WrongVersion)
+                  else
+                    ok
+                      (core.result.Result.Err
+                        NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.WrongMagic))
+                fun len =>
+                ok
+                  (core.result.Result.Err
+                    NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.WrongLength))))
+          (congrArg ok (Eq.mp (dif_neg h_1) h).right)))
+    fun h_1 => NJQ_RegistryCut.native_source b h_1 log out (Eq.mp (dif_pos h_1) h)
+'NJQ_RegistryTotal.native_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rc91e19db83e5468893b30ff2a6724b73.scope; invocation ID: 048432add6584933b8499657526a9258

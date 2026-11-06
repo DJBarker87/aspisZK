@@ -1,0 +1,105 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJQ_registry.rs
+@@ -0,0 +1,102 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++pub(super) fn validate_ref(
++    registry: &VerifierRegistryV1,
++) -> Result<(), PoolV1VerifierRegistryFormatError> {
++    if registry.flags & !POOL_V1_VERIFIER_REGISTRY_FLAGS_MASK != 0 {
++        return Err(PoolV1VerifierRegistryFormatError::UnsupportedFlags);
++    }
++    if required_binding_is_zero(&registry.pool)
++        || required_binding_is_zero(&registry.policy_binding)
++    {
++        return Err(PoolV1VerifierRegistryFormatError::ZeroRequiredBinding);
++    }
++    if registry.is_immutable() != required_binding_is_zero(&registry.authority) {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidAuthorityMode);
++    }
++    if registry.minimum_activation_delay_slots == 0 {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidActivationDelay);
++    }
++    Ok(())
++}
++pub(super) fn decode_ref(
++    bytes: &[u8],
++) -> Result<VerifierRegistryV1, PoolV1VerifierRegistryFormatError> {
++    if bytes.len() != POOL_V1_VERIFIER_REGISTRY_BYTES {
++        return Err(PoolV1VerifierRegistryFormatError::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_VERIFIER_REGISTRY_MAGIC {
++        return Err(PoolV1VerifierRegistryFormatError::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_VERIFIER_REGISTRY_VERSION {
++        return Err(PoolV1VerifierRegistryFormatError::WrongVersion);
++    }
++    if bytes[7] != 0 || bytes[120..128] != [0u8; 8] {
++        return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);
++    }
++    let registry = VerifierRegistryV1 {
++        flags: bytes[5],
++        bump: bytes[6],
++        pool: bytes[8..40].try_into().unwrap(),
++        authority: bytes[40..72].try_into().unwrap(),
++        policy_binding: bytes[72..104].try_into().unwrap(),
++        generation: u64::from_le_bytes(bytes[104..112].try_into().unwrap()),
++        minimum_activation_delay_slots: u64::from_le_bytes(bytes[112..120].try_into().unwrap()),
++    };
++    validate_ref(&registry)?;
++    Ok(registry)
++}
++#[kani::proof_for_contract(super::decode_verifier_registry_v1)]
++#[kani::unwind(193)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[cfg_attr(NJQ_composed,kani::stub_verified(super::validate_verifier_registry_v1))]
++fn decode_contract() {let bytes:[u8;128]=kani::any();let _=super::decode_verifier_registry_v1(&bytes);}
++
++fn view(p:&VerifierRegistryV1,f:usize,i:usize)->u64{match f{0=>p.flags as u64,1=>p.bump as u64,2=>p.pool[i] as u64,3=>p.authority[i] as u64,4=>p.policy_binding[i] as u64,5=>p.generation,_=>p.minimum_activation_delay_slots}}
++pub(super) fn matches_reference(b:&[u8],out:&Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>)->bool {
++ let f:usize=kani::any();kani::assume(f<7);let i:usize=kani::any();kani::assume(i<32);
++ match (out,decode_ref(b)){(Ok(p),Ok(q))=>view(p,f,i)==view(&q,f,i),(Err(e),Err(f))=>e==&f,_=>false}
++}
++
++#[cfg(any(NJQ_composed,NJQ_validator_enabled))]
++#[kani::proof_for_contract(super::validate_verifier_registry_v1)]
++#[kani::unwind(193)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn validate_contract(){let r=VerifierRegistryV1{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any()};let _=super::validate_verifier_registry_v1(&r);}
++
++#[cfg(NJQ_composed)]
++impl kani::Arbitrary for PoolV1VerifierRegistryFormatError {fn any()->Self {let t:u8=kani::any();kani::assume(t<12);match t {0=>Self::WrongLength,1=>Self::WrongMagic,2=>Self::WrongVersion,3=>Self::NonZeroReserved,4=>Self::UnsupportedFlags,5=>Self::InvalidStatus,6=>Self::InvalidAuthorityMode,7=>Self::ZeroRequiredBinding,8=>Self::InvalidActivationDelay,9=>Self::InvalidStatementVersion,10=>Self::InvalidRetirementSlot,_=>Self::InvalidDeploymentMode}}}
++
++pub(super) fn header_ok(b:&[u8])->bool {b.len()==128 && b[..4]==POOL_V1_VERIFIER_REGISTRY_MAGIC && b[4]==POOL_V1_VERIFIER_REGISTRY_VERSION && b[7]==0 && b[120..128]==[0;8]}
++fn header_error(b:&[u8])->Option<PoolV1VerifierRegistryFormatError>{
++ type F=PoolV1VerifierRegistryFormatError;
++ if b[..4]!=POOL_V1_VERIFIER_REGISTRY_MAGIC{Some(F::WrongMagic)}else if b[4]!=POOL_V1_VERIFIER_REGISTRY_VERSION{Some(F::WrongVersion)}else if b[7]!=0||b[120..128]!=[0;8]{Some(F::NonZeroReserved)}else{None}
++}
++fn expected(b:&[u8],f:usize,i:usize)->u64{match f{0=>b[5] as u64,1=>b[6] as u64,2=>b[8+i] as u64,3=>b[40+i] as u64,4=>b[72+i] as u64,5=>u64::from_le_bytes([b[104],b[105],b[106],b[107],b[108],b[109],b[110],b[111]]),_=>u64::from_le_bytes([b[112],b[113],b[114],b[115],b[116],b[117],b[118],b[119]])}}
++pub(super) fn check_coordinates(b:&[u8],out:&Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>)->bool{
++ match out{Err(_)=>true,Ok(p)=>{let f:usize=kani::any();kani::assume(f<7);let i:usize=kani::any();kani::assume(i<32);(view(p,f,i)==expected(b,f,i))!=cfg!(NJQ_invert)}}
++}
++pub(super) fn check_head(b:&[u8],out:&Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>)->bool{
++ type F=PoolV1VerifierRegistryFormatError;
++ match header_error(b){Some(e)=>matches!(out,Err(f) if e==*f),None=>!matches!(out,Err(F::WrongLength|F::WrongMagic|F::WrongVersion|F::NonZeroReserved))}
++}
++pub(super) fn check_range(_b:&[u8],out:&Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>)->bool{
++ type F=PoolV1VerifierRegistryFormatError;
++ matches!(out,Ok(_)|Err(F::WrongMagic|F::WrongVersion|F::NonZeroReserved|F::UnsupportedFlags|F::ZeroRequiredBinding|F::InvalidAuthorityMode|F::InvalidActivationDelay))
++}
++pub(super) fn check_flags(b:&[u8],out:&Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>)->bool{
++ matches!(out,Err(PoolV1VerifierRegistryFormatError::UnsupportedFlags))==matches!(decode_ref(b),Err(PoolV1VerifierRegistryFormatError::UnsupportedFlags))
++}
++pub(super) fn check_zero(b:&[u8],out:&Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>)->bool{
++ matches!(out,Err(PoolV1VerifierRegistryFormatError::ZeroRequiredBinding))==matches!(decode_ref(b),Err(PoolV1VerifierRegistryFormatError::ZeroRequiredBinding))
++}
++pub(super) fn check_authority(b:&[u8],out:&Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>)->bool{
++ matches!(out,Err(PoolV1VerifierRegistryFormatError::InvalidAuthorityMode))==matches!(decode_ref(b),Err(PoolV1VerifierRegistryFormatError::InvalidAuthorityMode))
++}
++pub(super) fn check_delay(b:&[u8],out:&Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>)->bool{
++ matches!(out,Err(PoolV1VerifierRegistryFormatError::InvalidActivationDelay))==matches!(decode_ref(b),Err(PoolV1VerifierRegistryFormatError::InvalidActivationDelay))
++}
++
++pub(super) fn check_bump(b:&[u8],out:&Result<VerifierRegistryV1,PoolV1VerifierRegistryFormatError>)->bool{
++ match out{Err(_)=>true,Ok(p)=>(p.bump==b[6])!=cfg!(NJQ_invert)}
++}

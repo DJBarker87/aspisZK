@@ -1,0 +1,46 @@
+{"attempt": "NJQ_L041", "exit_status": 0, "wall_seconds": 6.888249479001388, "peak_rss_kib": "5980364", "swaps": "0", "print_axioms": ["'NJQ_EntryTotal.native_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJQ_EntryTotal.native_source : ∀ (b : Slice U8) (log : Option E) (out : core.result.Result E F),
+  Cut b log out → ok out = NJQ_Entry.reference b :=
+fun b log out h =>
+  Decidable.casesOn (instDecidableEqNat (↑b).length 192)
+    (fun h_1 =>
+      Eq.mpr (id (congrArg (fun _a => ok out = _a) (NJQ_Entry.source b)))
+        (Eq.mpr
+          (id
+            (congrArg (Eq (ok out))
+              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg h_1) x_0 x_1 x_2 x_3)
+                (instDecidableEqNat (↑b).length 192) (Result (core.result.Result E F))
+                (fun len =>
+                  if List.take 4 ↑b = ↑NJQ_Entry.magic then
+                    if NHY_ZeroStep.byte b 
+...
+StatusV1.Insts.CoreConvertTryFromU8PoolV1VerifierRegistryFormatError.try_from
+                              (NHY_ZeroStep.byte b 5)
+                        match converted with
+                          | core.result.Result.Err e => ok (core.result.Result.Err e)
+                          | core.result.Result.Ok status => do
+                            let checked ← NJI_V1Models.entry (NJQ_Entry.record b len status)
+                            match checked with
+                              | core.result.Result.Ok a => ok (core.result.Result.Ok (NJQ_Entry.record b len status))
+                              | core.result.Result.Err e => ok (core.result.Result.Err e)
+                      else
+                        ok
+                          (core.result.Result.Err
+                            NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.NonZeroReserved)
+                    else
+                      ok
+                        (core.result.Result.Err
+                          NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.WrongVersion)
+                  else
+                    ok
+                      (core.result.Result.Err
+                        NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.WrongMagic))
+                fun len =>
+                ok
+                  (core.result.Result.Err
+                    NJI_Extracted.aspis_statement.pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.WrongLength))))
+          (congrArg ok (Eq.mp (dif_neg h_1) h).right)))
+    fun h_1 => NJQ_EntryCut.native_source b h_1 log out (Eq.mp (dif_pos h_1) h)
+'NJQ_EntryTotal.native_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-racada0fc6464480289aede9408b886f3.scope; invocation ID: 9a11cb9b4d8e4c359f3fb65baf100715

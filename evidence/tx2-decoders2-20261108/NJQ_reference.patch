@@ -1,0 +1,207 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJQ_reference.rs
+@@ -0,0 +1,204 @@
++use super::*;
++use aspis_core::field::{M31,P};
++use crate::pool_v1::format::*;
++use crate::pool_v1::verifier_registry::*;
++// Hand reference input for (ah) review. Native loop bodies are checked ONE
++// iteration only; these full Rust functions are not run as whole-buffer Kani jobs.
++
++pub fn decode_pool_identity_v1_ref(bytes: &[u8]) -> Result<PoolIdentityV1, PoolV1FormatError> {
++    if bytes.len() != POOL_V1_IDENTITY_BYTES {
++        return Err(PoolV1FormatError::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_IDENTITY_MAGIC {
++        return Err(PoolV1FormatError::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_IDENTITY_VERSION {
++        return Err(PoolV1FormatError::WrongVersion);
++    }
++    if bytes[5..8] != [0u8; 3] || bytes[108..112] != [0u8; 4] {
++        return Err(PoolV1FormatError::NonZeroReserved);
++    }
++    let raw_asset_id = u32::from_le_bytes(bytes[104..108].try_into().unwrap());
++    if raw_asset_id >= P {
++        return Err(PoolV1FormatError::NonCanonicalAssetId);
++    }
++    Ok(PoolIdentityV1 {
++        pool: bytes[8..40].try_into().unwrap(),
++        asset_mint: bytes[40..72].try_into().unwrap(),
++        token_program: bytes[72..104].try_into().unwrap(),
++        asset_id: M31(raw_asset_id),
++        deployment_domain: bytes[112..144].try_into().unwrap(),
++    })
++}
++
++pub fn decode_pool_v1_pair_forest_checkpoint_v1_ref(
++    bytes: &[u8],
++) -> Result<PoolV1PairForestCheckpointV1, PoolV1PairForestAccountErrorV1> {
++    if bytes.len() != POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES {
++        return Err(PoolV1PairForestAccountErrorV1::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_PAIR_FOREST_CHECKPOINT_MAGIC {
++        return Err(PoolV1PairForestAccountErrorV1::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_PAIR_FOREST_CHECKPOINT_VERSION {
++        return Err(PoolV1PairForestAccountErrorV1::WrongVersion);
++    }
++    if bytes[5] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8 {
++        return Err(PoolV1PairForestAccountErrorV1::WrongLaneCount);
++    }
++    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
++        return Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding);
++    }
++    if bytes[176..].iter().any(|byte| *byte != 0) {
++        return Err(PoolV1PairForestAccountErrorV1::NonZeroReserved);
++    }
++    let master: [u8; 32] = bytes[CHECKPOINT_MASTER_OFFSET..CHECKPOINT_DOMAIN_OFFSET]
++        .try_into()
++        .unwrap();
++    let deployment_domain: [u8; 32] = bytes[CHECKPOINT_DOMAIN_OFFSET..CHECKPOINT_SEQUENCE_OFFSET]
++        .try_into()
++        .unwrap();
++    if master == [0u8; 32] || deployment_domain == [0u8; 32] {
++        return Err(PoolV1PairForestAccountErrorV1::ZeroRequiredBinding);
++    }
++    let global_root = decode_digest_canonical(
++        bytes[CHECKPOINT_GLOBAL_ROOT_OFFSET..CHECKPOINT_LANE_SEQUENCES_OFFSET]
++            .try_into()
++            .unwrap(),
++    )
++    .map_err(|_| PoolV1PairForestAccountErrorV1::NonCanonicalDigest)?;
++    let mut lane_sequences = [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT];
++    for (lane, sequence) in lane_sequences.iter_mut().enumerate() {
++        let start = CHECKPOINT_LANE_SEQUENCES_OFFSET + 8 * lane;
++        *sequence = u64::from_le_bytes(bytes[start..start + 8].try_into().unwrap());
++        if *sequence > POOL_V1_PAIR_CAPACITY {
++            return Err(PoolV1PairForestAccountErrorV1::InvalidMasterState);
++        }
++    }
++    Ok(PoolV1PairForestCheckpointV1 {
++        bump: bytes[7],
++        master,
++        deployment_domain,
++        checkpoint_sequence: u64::from_le_bytes(
++            bytes[CHECKPOINT_SEQUENCE_OFFSET..CHECKPOINT_GLOBAL_ROOT_OFFSET]
++                .try_into()
++                .unwrap(),
++        ),
++        global_root,
++        lane_sequences,
++    })
++}
++
++pub fn decode_pool_v1_pair_forest_master_v1_ref(
++    bytes: &[u8],
++) -> Result<PoolV1PairForestMasterV1, PoolV1PairForestAccountErrorV1> {
++    if bytes.len() != POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES {
++        return Err(PoolV1PairForestAccountErrorV1::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_PAIR_FOREST_MASTER_MAGIC {
++        return Err(PoolV1PairForestAccountErrorV1::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_PAIR_FOREST_MASTER_VERSION {
++        return Err(PoolV1PairForestAccountErrorV1::WrongVersion);
++    }
++    if bytes[5] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8 {
++        return Err(PoolV1PairForestAccountErrorV1::WrongLaneCount);
++    }
++    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
++        return Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding);
++    }
++    if bytes[50..64].iter().any(|byte| *byte != 0) || bytes[312..320] != [0u8; 8] {
++        return Err(PoolV1PairForestAccountErrorV1::NonZeroReserved);
++    }
++    if bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING {
++        return Err(PoolV1PairForestAccountErrorV1::WrongFormatBinding);
++    }
++    let has_checkpoint = match bytes[MASTER_HAS_CHECKPOINT_OFFSET] {
++        0 => false,
++        1 => true,
++        _ => return Err(PoolV1PairForestAccountErrorV1::InvalidBoolean),
++    };
++    let identity = decode_pool_identity_v1(&bytes[MASTER_IDENTITY_OFFSET..MASTER_POLICY_OFFSET])
++        .map_err(|_| PoolV1PairForestAccountErrorV1::Identity)?;
++    let verifier_policy = decode_verifier_policy_v1(&bytes[MASTER_POLICY_OFFSET..312])
++        .map_err(|_| PoolV1PairForestAccountErrorV1::Policy)?;
++    let mut last_checkpoint_lane_sequences = [0u64; POOL_V1_PAIR_FOREST_LANE_COUNT];
++    for (lane, sequence) in last_checkpoint_lane_sequences.iter_mut().enumerate() {
++        let start = MASTER_LAST_SEQUENCES_OFFSET + 8 * lane;
++        *sequence = u64::from_le_bytes(bytes[start..start + 8].try_into().unwrap());
++    }
++    let master = PoolV1PairForestMasterV1 {
++        bump: bytes[7],
++        identity,
++        verifier_policy,
++        initialized_lane_mask: bytes[MASTER_INITIALIZED_MASK_OFFSET],
++        has_checkpoint,
++        next_checkpoint_sequence: u64::from_le_bytes(
++            bytes[MASTER_NEXT_CHECKPOINT_OFFSET..MASTER_INITIALIZED_MASK_OFFSET]
++                .try_into()
++                .unwrap(),
++        ),
++        last_checkpoint_lane_sequences,
++    };
++    validate_master(&master)?;
++    Ok(master)
++}
++
++pub fn decode_verifier_registry_entry_v1_ref(
++    bytes: &[u8],
++) -> Result<VerifierRegistryEntryV1, PoolV1VerifierRegistryFormatError> {
++    if bytes.len() != POOL_V1_VERIFIER_ENTRY_BYTES {
++        return Err(PoolV1VerifierRegistryFormatError::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_VERIFIER_ENTRY_MAGIC {
++        return Err(PoolV1VerifierRegistryFormatError::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_VERIFIER_ENTRY_VERSION {
++        return Err(PoolV1VerifierRegistryFormatError::WrongVersion);
++    }
++    if bytes[184..192] != [0u8; 8] {
++        return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);
++    }
++    let entry = VerifierRegistryEntryV1 {
++        status: VerifierEntryStatusV1::try_from(bytes[5])?,
++        statement_version: bytes[6],
++        bump: bytes[7],
++        pool: bytes[8..40].try_into().unwrap(),
++        verifier_program: bytes[40..72].try_into().unwrap(),
++        profile_binding: bytes[72..104].try_into().unwrap(),
++        release_binding: bytes[104..136].try_into().unwrap(),
++        activation_slot: u64::from_le_bytes(bytes[136..144].try_into().unwrap()),
++        retirement_slot: u64::from_le_bytes(bytes[144..152].try_into().unwrap()),
++        policy_binding: bytes[152..184].try_into().unwrap(),
++    };
++    validate_verifier_registry_entry_v1(&entry)?;
++    Ok(entry)
++}
++
++pub fn decode_verifier_registry_v1_ref(
++    bytes: &[u8],
++) -> Result<VerifierRegistryV1, PoolV1VerifierRegistryFormatError> {
++    if bytes.len() != POOL_V1_VERIFIER_REGISTRY_BYTES {
++        return Err(PoolV1VerifierRegistryFormatError::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_VERIFIER_REGISTRY_MAGIC {
++        return Err(PoolV1VerifierRegistryFormatError::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_VERIFIER_REGISTRY_VERSION {
++        return Err(PoolV1VerifierRegistryFormatError::WrongVersion);
++    }
++    if bytes[7] != 0 || bytes[120..128] != [0u8; 8] {
++        return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);
++    }
++    let registry = VerifierRegistryV1 {
++        flags: bytes[5],
++        bump: bytes[6],
++        pool: bytes[8..40].try_into().unwrap(),
++        authority: bytes[40..72].try_into().unwrap(),
++        policy_binding: bytes[72..104].try_into().unwrap(),
++        generation: u64::from_le_bytes(bytes[104..112].try_into().unwrap()),
++        minimum_activation_delay_slots: u64::from_le_bytes(bytes[112..120].try_into().unwrap()),
++    };
++    validate_verifier_registry_v1(&registry)?;
++    Ok(registry)
++}
