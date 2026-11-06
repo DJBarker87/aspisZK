@@ -25,7 +25,7 @@
 +mod NJR_parent;
 --- a/crates/aspis-r1-cost-probe/src/NJR_parent.rs
 +++ b/crates/aspis-r1-cost-probe/src/NJR_parent.rs
-@@ -0,0 +1,127 @@
+@@ -0,0 +1,158 @@
 +use super::*;
 +use crate::{KMX_copy_nonoverlapping,KMX_copy_from_slice};
 +use aspis_core::field::{M31,CM31};
@@ -153,3 +153,34 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn query_scalars(){query_check::<2>();}
++// NJR_K011 replacement A: split before the caller's selected *w store. Full
++// arbitrary receiver; selected mutable weight is an arbitrary slot window.
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn flush_receiver_window(){
++ let rows:[[u64;4];64]=kani::any();let terms:usize=kani::any();let index:usize=kani::any();let j:usize=kani::any();kani::assume(index<64&&j<64);
++ let mut raw=alloc::vec::Vec::with_capacity(64);for row in rows{raw.push(row);}
++ let b=BatchedWeights{raw,terms};let bp=&b as *const BatchedWeights;let rp=b.raw.as_ptr();let cap=b.raw.capacity();
++ let mut slot=k(kani::any());let slot_ptr=&mut slot as *mut K;let reply=k(kani::any());let mut log=ValueLog{expected:&b,seen:None,index:0,reply,calls:0};
++ let w=&mut slot;assert_eq!(w as *mut K,slot_ptr);*w=log.value(&b,index^(if cfg!(NJR_bad_receiver){1}else{0}));
++ assert_eq!(log.calls,1);assert_eq!(log.index,index);let seen=log.seen.unwrap();assert_eq!(seen as *const BatchedWeights,bp);assert_eq!(seen.terms,terms);assert_eq!(seen.raw.as_ptr(),rp);assert_eq!(seen.raw.capacity(),cap);assert_eq!(seen.raw.len(),64);assert_eq!(seen.raw[j],rows[j]);
++ let mut expected=kw(reply);if cfg!(NJR_invert){expected[0]^=1;}assert_eq!(kw(slot),expected);
++}
++// Replacement B: ONE actual arbitrary weight-vector iteration, destination and
++// complete frame. The child is opaque; receiver payload is not read in this
++// segment and its full immutable view is supplied by replacement A.
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn flush_destination_window(){
++ let before:[[u32;4];64]=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<64&&j<64);
++ let mut weights=alloc::vec::Vec::with_capacity(64);for row in before{weights.push(k(row));}
++ let ptr=weights.as_ptr();let cap=weights.capacity();let reply=k(kani::any());
++ let mut it=weights.iter_mut().enumerate();let (index,w)=it.nth(i).unwrap();let destination=w as *mut K;*w=reply;drop(it);
++ assert_eq!(index,i);assert_eq!(destination,ptr.wrapping_add(i^(if cfg!(NJR_bad_destination){1}else{0})) as *mut K);
++ assert_eq!(weights.as_ptr(),ptr);assert_eq!(weights.capacity(),cap);assert_eq!(weights.len(),64);
++ let mut expected=if i==j{kw(reply)}else{before[j]};if cfg!(NJR_invert){expected[0]^=1;}assert_eq!(kw(weights[j]),expected);
++}

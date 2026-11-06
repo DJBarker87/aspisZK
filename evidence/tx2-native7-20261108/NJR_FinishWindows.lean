@@ -3,20 +3,20 @@ set_option autoImplicit false
 namespace NJR_FinishWindows
 open Aeneas Aeneas.Std
 
-/-- Raw word obligations at the three proof regions. This predicate is an
+/-- Raw word obligations pos the three proof regions. This predicate is an
 explicit missing history obligation, never a root hypothesis or a certificate. -/
 def History (proof : Slice U8) : Prop :=
  (∀ i, i<7 → ∀ j, j<8 → NIG_FinishInput.word proof.val (7527+32*i+4*j)<2147483647) ∧
  (∀ i, i<7 → ∀ j, j<8 → NIG_FinishInput.word proof.val (7783+32*i+4*j)<2147483647) ∧
  (∀ i, i<64 → ∀ j, j<8 → NIG_FinishInput.word proof.val (8007+32*i+4*j)<2147483647)
 
-theorem word_window (bytes : List U8) (lo n at : Nat) (inside : at+4≤n) :
- NIG_FinishInput.word ((bytes.drop lo).take n) at=
- NIG_FinishInput.word bytes (lo+at) := by
+theorem word_window (bytes : List U8) (lo n pos : Nat) (inside : pos+4≤n) :
+ NIG_FinishInput.word ((bytes.drop lo).take n) pos=
+ NIG_FinishInput.word bytes (lo+pos) := by
  unfold NIG_FinishInput.word
  simp only [List.getElem?_take, List.getElem?_drop]
- simp only [show at<n by omega,show at+1<n by omega,show at+2<n by omega,
-  show at+3<n by omega,ite_true]
+ simp only [show pos<n by omega,show pos+1<n by omega,show pos+2<n by omega,
+  show pos+3<n by omega,ite_true]
  congr 2 <;> congr 1 <;> omega
 
 /-- Reusable window transport. No concrete proof numeral is normalized. -/
@@ -33,7 +33,7 @@ theorem windows (proof bytes : Slice U8) (lo n : Nat)
    rw [view,word_window _ lo (32*n) (32*i+4*j) (by omega)]
    simpa only [Nat.add_assoc] using words i hi j hj
 
-/-- Precisely the raw-history component required at the ACTUAL finish View.
+/-- Precisely the raw-history component required pos the ACTUAL finish View.
 The history predicate is a named missing upstream lemma, not proof of it. -/
 theorem three (proof r0 r1 final : Slice U8)
  (size : 10055≤proof.val.length)
