@@ -1,0 +1,33 @@
+#[cfg(kani)] pub mod NJG_claims_loop {
+ use super::*;use core::mem::MaybeUninit;use aspis_core::field::{CM31,M31};
+ type Claims=[[QM31;29];3];
+ struct Log{row:u8,ptr:*const u8,len:usize,offset:usize,count:u8,frame:u64}
+ fn word(q:QM31,i:u8)->u32{match i{0=>q.c0.a.0,1=>q.c0.b.0,2=>q.c1.a.0,_=>q.c1.b.0}}
+ fn decode(record:wire::ValidatedRecord<'_>,offset:usize,reply:Result<[QM31;29],Error>,l:&mut Log)->Result<[QM31;29],Error>{l.row=record.row();l.ptr=record.framed().as_ptr();l.len=record.framed().len();l.offset=offset;l.count+=1;reply}
+ fn step(record:wire::ValidatedRecord<'_>,out:&mut MaybeUninit<Claims>,p:usize,reply:Result<[QM31;29],Error>,log:&mut Log)->Result<(),Error>{
+  unsafe {out.as_mut_ptr().cast::<[QM31;29]>().add(p).write(decode(record,p*29,reply,log)?);}
+  Ok(())
+ }
+ pub fn check(negative:bool){
+  let bytes:[u8;3717]=kani::any();let len:usize=kani::any();kani::assume(len<=3717);let framed=&bytes[..len];
+  let record=wire::NJG_claims_record(framed);
+  let p:usize=kani::any();kani::assume(p<3);let k:usize=kani::any();kani::assume(k<29);let limb:u8=kani::any();kani::assume(limb<4);
+  let ok:bool=kani::any();let tag:bool=kani::any();let bad:usize=kani::any();kani::assume(bad<29);
+  let row:[QM31;29]=core::array::from_fn(|_|QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}});
+  let reply=if ok{Ok(row)}else{Err(if tag{Error::Length{row:25}}else{Error::NonCanonical{row:25,value:bad}})};
+  let before:u32=kani::any();let count:u8=kani::any();kani::assume(count<255);let frame:u64=kani::any();
+  let mut log=Log{row:0,ptr:core::ptr::null(),len:0,offset:99,count,frame};let mut out=MaybeUninit::<Claims>::uninit();
+  unsafe{out.as_mut_ptr().cast::<u32>().add(4*(29*p+k)+limb as usize).write(before);}
+  let result=step(record,&mut out,p,reply,&mut log);
+  #[cfg(NJG_loop_args)]{
+   if negative {log.offset^=1;}
+   assert_eq!(log.row,25);assert_eq!(log.ptr,framed.as_ptr());assert_eq!(log.len,len);assert_eq!(log.offset,p*29);assert_eq!(log.count,count+1);assert_eq!(log.frame,frame);
+  }
+  #[cfg(NJG_loop_result)]{
+   let got=unsafe{out.as_mut_ptr().cast::<u32>().add(4*(29*p+k)+limb as usize).read()};
+   if negative {assert_eq!(got,if ok{word(row[k],limb)^1}else{before^1});}
+   else{assert_eq!(got,if ok{word(row[k],limb)}else{before});}
+   match result{Ok(())=>assert!(ok),Err(e)=>{assert!(!ok);if tag{assert!(matches!(e,Error::Length{row:25}));}else{assert!(matches!(e,Error::NonCanonical{row:25,value:v} if v==bad));}}}
+  }
+ }
+}

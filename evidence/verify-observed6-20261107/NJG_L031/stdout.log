@@ -1,0 +1,121 @@
+NJG_generated/NJG_RoundCode.lean:51:54: error: unsolved goals
+case h_1.isFalse
+H : Type
+B : RoundModel.Boundaries
+D : aspis_core.Digest32 H
+pre : AspisR1PrefixAggregateParser.r1_wire.Prefix
+t : r1_wire.SemanticTranscript H
+alpha : Alpha
+running : Q
+round : Usize
+bound : ↑round < 10
+record : r1_wire.ValidatedRecord
+getter :
+  (PrefixAdapter.fromOld pre).validated_record (NJG_RoundProducer.row round bound) = ok (core.result.Result.Ok record)
+tag : record.row = NJG_RoundProducer.row round bound
+frame : record.framed = FJb_TailCell.cell pre.records ⟨15 + ↑round, ⋯⟩
+reply✝⁷ : Result (core.result.Result (Std.Array aspis_core.field.QM31 28#usize) r1_wire.Error)
+value✝⁵ : core.result.Result (Std.Array aspis_core.field.QM31 28#usize) r1_wire.Error
+reply✝⁶ :
+  Result
+    (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error)
+      (Std.Array aspis_core.field.QM31 28#usize))
+cf1✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error)
+    (Std.Array aspis_core.field.QM31 28#usize)
+val✝ : Std.Array aspis_core.field.QM31 28#usize
+reply✝⁵ : Result aspis_core.field.QM31
+value✝⁴ : aspis_core.field.QM31
+reply✝⁴ : Result Bool
+value✝³ : Bool
+reply✝³ : Result (core.result.Result (Std.Array aspis_core.field.QM31 28#usize) r1_wire.Error)
+value✝² : core.result.Result (Std.Array aspis_core.field.QM31 28#usize) r1_wire.Error
+reply✝² : Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) Poly)
+cf✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) Poly
+polynomial✝ : Poly
+reply✝¹ : Result aspis_core.field.QM31
+value✝¹ : aspis_core.field.QM31
+reply✝ : Result Bool
+value✝ : Bool
+heq✝⁶ : value✝² = value✝⁵
+heq✝⁵ :
+  (match value✝⁵ with
+    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+    | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))) =
+    ok (core.ops.control_flow.ControlFlow.Continue polynomial✝)
+heq✝⁴ : value✝¹ = value✝⁴
+heq✝³ : core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 value✝⁴ running = ok false
+h✝¹ : value✝³ = false
+heq✝² : B.decode 28#usize record 0#usize = ok value✝⁵
+heq✝¹ : val✝ = polynomial✝
+heq✝ : B.boundary polynomial✝ = ok value✝⁴
+h✝ : value✝ = false
+⊢ (run do
+      let __x ← S1SemanticCode.semanticValidated D t record
+      let cf3 ←
+        liftM
+            (match __x.1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+      match cf3 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let alpha1 ← liftM (Array.update alpha round val1)
+          let value ← liftM (B.value polynomial✝ alpha1 round)
+          pure (core.result.Result.Ok (value, alpha1, __x.2))
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+              (core.convert.FromSame r1_wire.Error) residual)) =
+    run do
+      let __x ← S1SemanticCode.semanticValidated D t record
+      let cf ←
+        liftM
+            (match __x.1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (Q × Alpha × r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)
+        | core.ops.control_flow.ControlFlow.Continue challenge => do
+          let updated ← liftM (Array.update alpha round challenge)
+          let value ← liftM (B.value polynomial✝ updated round)
+          pure (core.result.Result.Ok (value, updated, __x.2))
+NJG_generated/NJG_RoundCode.lean:55:47: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [S1SemanticCode.roundStep, ̲NGX_CodeTrace.lift_bind, ̲lift,
+     ̲NJG_RoundProducer.row_add round bound,g̵e̵t̵t̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ g̲e̲t̲t̲e̲r̲,̲ core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲fromRecord, ̲afterDecode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_RoundCode.lean:59:60: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [NGX_CodeTrace.lift_bind,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_RoundCode.lean:61:21: warning: This simp argument is unused:
+  NGX_CodeTrace.lift_bind
+
+Hint: Omit it from the simp argument list.
+  simp_all [NGX_CodeTrace.l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵N̵G̵X̵_̵C̵o̵d̵e̵T̵r̵a̵c̵e̵.̵pure_run, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲Result.ok.injEq, ̲core.ops.control_flow.ControlFlow.Continue.injEq,
+  ̲ ̲ ̲ ̲core.ops.control_flow.ControlFlow.Break.injEq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_RoundCode.lean:61:68: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵N̵G̵X̵_̵C̵o̵d̵e̵T̵r̵a̵c̵e̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵N̵G̵X̵_̵C̵o̵d̵e̵T̵r̵a̵c̵e̵.̵p̵u̵r̵e̵_̵r̵u̵n̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵R̵e̵s̵u̵l̵t̵.̵o̵k̵.̵i̵n̵j̵E̵q̵,̵c̵o̵r̵e̵.̵o̵p̵s̵.̵c̵o̵n̵t̵r̵o̵l̵_̵f̵l̵o̵w̵.̵C̵o̵n̵t̵r̵o̵l̵F̵l̵o̵w̵.̵C̵o̵n̵t̵i̵n̵u̵e̵.̵i̵n̵j̵E̵q̵,̵c̵o̵r̵e̵.̵o̵p̵s̵.̵c̵o̵n̵t̵r̵o̵l̵_̵f̵l̵o̵w̵.̵C̵o̵n̵t̵r̵o̵l̵F̵l̵o̵w̵.̵B̵r̵e̵a̵k̵.̵i̵n̵j̵E̵q̵]̵[̲N̲G̲X̲_̲C̲o̲d̲e̲T̲r̲a̲c̲e̲.̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲N̲G̲X̲_̲C̲o̲d̲e̲T̲r̲a̲c̲e̲.̲p̲u̲r̲e̲_̲r̲u̲n̲,̲ ̲R̲e̲s̲u̲l̲t̲.̲o̲k̲.̲i̲n̲j̲E̲q̲,̲
+  ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲o̲p̲s̲.̲c̲o̲n̲t̲r̲o̲l̲_̲f̲l̲o̲w̲.̲C̲o̲n̲t̲r̲o̲l̲F̲l̲o̲w̲.̲C̲o̲n̲t̲i̲n̲u̲e̲.̲i̲n̲j̲E̲q̲,̲ ̲c̲o̲r̲e̲.̲o̲p̲s̲.̲c̲o̲n̲t̲r̲o̲l̲_̲f̲l̲o̲w̲.̲C̲o̲n̲t̲r̲o̲l̲F̲l̲o̲w̲.̲B̲r̲e̲a̲k̲.̲i̲n̲j̲E̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NJG_RoundCode.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJG_RoundCode.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]

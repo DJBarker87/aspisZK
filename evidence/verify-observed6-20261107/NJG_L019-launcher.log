@@ -1,0 +1,51 @@
+{"attempt": "NJG_L019", "exit_status": 1, "wall_seconds": 6.239581095054746, "peak_rss_kib": "6009684", "swaps": "0", "print_axioms": ["'AspisR1.NJG_RoundCode.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJG_RoundCode.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJG_generated/NJG_RoundCode.lean:51:48: error: unsolved goals
+H : Type
+B : RoundModel.Boundaries
+D : aspis_core.Digest32 H
+pre : AspisR1PrefixAggregateParser.r1_wire.Prefix
+t : r1_wire.SemanticTranscript H
+alpha : Alpha
+running : Q
+round : Usize
+bound : ↑round < 10
+record : r1_wire.ValidatedRecord
+getter :
+  (PrefixAdapter.fromOld pre).validated_record (NJG_RoundProducer.row round bound) = ok (core.result.Result.Ok record)
+tag : record.row = NJG_RoundProducer.row round bound
+frame : record.framed = FJb_TailCell.cell pre.records ⟨15 + ↑round, ⋯⟩
+⊢ (do
+      let i ← liftM (lift (UScalar.cast UScalarTy.U8 round))
+      let row ← liftM (15#u8 + i)
+      let r ← liftM ((PrefixAdapter.fromOld pre)
+...
+̵p̵,̵N̵G̵X̵_̵C̵o̵d̵e̵T̵r̵a̵c̵e̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵N̵J̵G̵_̵R̵o̵u̵n̵d̵P̵r̵o̵d̵u̵c̵e̵r̵.̵r̵o̵w̵_̵a̵d̵d̵ ̵r̵o̵u̵n̵d̵ ̵b̵o̵u̵n̵d̵,̵g̵e̵t̵t̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵f̵r̵o̵m̵R̵e̵c̵o̵r̵d̵,̵a̵f̵t̵e̵r̵D̵e̵c̵o̵d̵e̵]̵[̲S̲1̲S̲e̲m̲a̲n̲t̲i̲c̲C̲o̲d̲e̲.̲r̲o̲u̲n̲d̲S̲t̲e̲p̲,̲ ̲N̲G̲X̲_̲C̲o̲d̲e̲T̲r̲a̲c̲e̲.̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲g̲e̲t̲t̲e̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲f̲r̲o̲m̲R̲e̲c̲o̲r̲d̲,̲ ̲a̲f̲t̲e̲r̲D̲e̲c̲o̲d̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_RoundCode.lean:55:40: warning: This simp argument is unused:
+  getter
+
+Hint: Omit it from the simp argument list.
+  simp only [S1SemanticCode.roundStep, ̲NGX_CodeTrace.lift_bind,
+     ̲NJG_RoundProducer.row_add round bound,g̵e̵t̵t̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲fromRecord, ̲afterDecode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_RoundCode.lean:55:47: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [S1SemanticCode.roundStep, ̲NGX_CodeTrace.lift_bind,
+     ̲NJG_RoundProducer.row_add round bound,g̵e̵t̵t̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ g̲e̲t̲t̲e̲r̲,̲ core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲fromRecord, ̲afterDecode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NJG_RoundCode.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJG_RoundCode.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9e359ca96be0432da61ae4e263989f37.scope; invocation ID: 252d005cdd7c416f8b33372af0696949

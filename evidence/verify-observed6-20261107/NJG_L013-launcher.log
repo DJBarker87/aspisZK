@@ -1,0 +1,61 @@
+{"attempt": "NJG_L013", "exit_status": 1, "wall_seconds": 6.289853767026216, "peak_rss_kib": "6012532", "swaps": "0", "print_axioms": ["'AspisR1.NJG_RoundProducer.row_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJG_RoundProducer.row_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJG_RoundProducer.same_record' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NJG_RoundProducer.framed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJG_generated/NJG_RoundProducer.lean:14:1: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+r : Usize
+bound : ↑r < 10
+⊢ 15#u8 + UScalar.cast UScalarTy.U8 r = ok (row r bound)
+NJG_generated/NJG_RoundProducer.lean:20:15: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  0 ≤ e ≤ 9
+  e - f ≥ -15
+where
+ e := ↑↑r
+ f := ↑↑27#usize
+NJG_generated/NJG_RoundProducer.lean:37:1: error: Tactic `split_ifs` failed: no if-then-else conditions to split
+
+bytes : Slice U8
+pre : AspisR1PrefixAggregateParser.r1_wire.Prefix
+parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.
+...
+NJG_generated/NJG_RoundProducer.lean:14:1: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+r : Usize
+bound : ↑r < 10
+⊢ 15#u8 + UScalar.cast UScalarTy.U8 r = ok (row r bound)
+NJG_generated/NJG_RoundProducer.lean:20:15: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  0 ≤ e ≤ 9
+  e - f ≥ -15
+where
+ e := ↑↑r
+ f := ↑↑27#usize
+NJG_generated/NJG_RoundProducer.lean:37:1: error: Tactic `split_ifs` failed: no if-then-else conditions to split
+
+bytes : Slice U8
+pre : AspisR1PrefixAggregateParser.r1_wire.Prefix
+parsed : AspisR1PrefixAggregateParser.r1_wire.Prefix.parse bytes = ok (core.result.Result.Ok pre)
+r : Usize
+bound : ↑r < 10
+record : r1_wire.ValidatedRecord
+run : (PrefixAdapter.fromOld pre).validated_record (row r bound) = ok (core.result.Result.Ok record)
+tag : record.row = row r bound
+width : (↑record.framed).length = NGX_PrefixGeometry.width ↑(row r bound)
+low : 15 ≤ ↑(row r bound)
+high : ↑(row r bound) ≤ 24
+⊢ 5 + NFU_PacketDomains.payloadSize ↑(row r bound) = 896
+'AspisR1.NJG_RoundProducer.row_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJG_RoundProducer.row_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJG_RoundProducer.same_record' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJG_RoundProducer.framed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r94fe1e506c23408dad3eea92a647c313.scope; invocation ID: 8e5b5484408c46e5907e6c92f976745a

@@ -1,0 +1,157 @@
+NJG_generated/NJG_RoundCode.lean:51:48: error: unsolved goals
+H : Type
+B : RoundModel.Boundaries
+D : aspis_core.Digest32 H
+pre : AspisR1PrefixAggregateParser.r1_wire.Prefix
+t : r1_wire.SemanticTranscript H
+alpha : Alpha
+running : Q
+round : Usize
+bound : ↑round < 10
+record : r1_wire.ValidatedRecord
+getter :
+  (PrefixAdapter.fromOld pre).validated_record (NJG_RoundProducer.row round bound) = ok (core.result.Result.Ok record)
+tag : record.row = NJG_RoundProducer.row round bound
+frame : record.framed = FJb_TailCell.cell pre.records ⟨15 + ↑round, ⋯⟩
+⊢ (do
+      let i ← liftM (lift (UScalar.cast UScalarTy.U8 round))
+      let row ← liftM (15#u8 + i)
+      let r ← liftM ((PrefixAdapter.fromOld pre).validated_record row)
+      let cf ←
+        liftM
+            (match r with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue vr => do
+          let r1 ← liftM (B.decode 28#usize vr 0#usize)
+          let cf1 ←
+            liftM
+                (match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let boundary ← liftM (B.boundary val)
+              let b ←
+                liftM
+                    (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary
+                      running)
+              if b = true then pure (core.result.Result.Err (r1_wire.Error.Boundary round))
+                else do
+                  let cf2 ←
+                    liftM
+                        (match r with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                      let __x ← S1SemanticCode.semanticValidated D t vr1
+                      let cf3 ←
+                        liftM
+                            (match __x.1 with
+                            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                            | core.result.Result.Err e =>
+                              ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                      match cf3 with
+                        | core.ops.control_flow.ControlFlow.Continue val1 => do
+                          let alpha1 ← liftM (Array.update alpha round val1)
+                          let value ← liftM (B.value val alpha1 round)
+                          pure (core.result.Result.Ok (value, alpha1, __x.2))
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (aspis_core.field.QM31 ×
+                                Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                              (core.convert.FromSame r1_wire.Error) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (aspis_core.field.QM31 ×
+                            Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                          (core.convert.FromSame r1_wire.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                  (core.convert.FromSame r1_wire.Error) residual)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+              (core.convert.FromSame r1_wire.Error) residual)) =
+    do
+    let decoded ← liftM (B.decode 28#usize record 0#usize)
+    let cf ←
+      liftM
+          (match decoded with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        liftM
+          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Q × Alpha × r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)
+      | core.ops.control_flow.ControlFlow.Continue polynomial => do
+        let boundary ← liftM (B.boundary polynomial)
+        let unequal ←
+          liftM (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary running)
+        if unequal = true then pure (core.result.Result.Err (r1_wire.Error.Boundary round))
+          else do
+            let __x ← S1SemanticCode.semanticValidated D t record
+            let cf ←
+              liftM
+                  (match __x.1 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+            match cf with
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Q × Alpha × r1_wire.SemanticTranscript H) (core.convert.FromSame r1_wire.Error) residual)
+              | core.ops.control_flow.ControlFlow.Continue challenge => do
+                let updated ← liftM (Array.update alpha round challenge)
+                let value ← liftM (B.value polynomial updated round)
+                pure (core.result.Result.Ok (value, updated, __x.2))
+NJG_generated/NJG_RoundCode.lean:54:37: warning: This simp argument is unused:
+  NGX_CodeTrace.lift_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [S1SemanticCode.roundStep,N̵G̵X̵_̵C̵o̵d̵e̵T̵r̵a̵c̵e̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵
+  ̵  ̵NJG_RoundProducer.row_add round bound, ̲getter, ̲bind_tc_ok,
+     ̲core.result.Result.Insts.CoreOpsTry.branch, ̲fromRecord, ̲afterDecode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_RoundCode.lean:55:2: warning: This simp argument is unused:
+  NJG_RoundProducer.row_add round bound
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵1̵S̵e̵m̵a̵n̵t̵i̵c̵C̵o̵d̵e̵.̵r̵o̵u̵n̵d̵S̵t̵e̵p̵,̵N̵G̵X̵_̵C̵o̵d̵e̵T̵r̵a̵c̵e̵.̵l̵i̵f̵t̵_̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵N̵J̵G̵_̵R̵o̵u̵n̵d̵P̵r̵o̵d̵u̵c̵e̵r̵.̵r̵o̵w̵_̵a̵d̵d̵ ̵r̵o̵u̵n̵d̵ ̵b̵o̵u̵n̵d̵,̵g̵e̵t̵t̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵f̵r̵o̵m̵R̵e̵c̵o̵r̵d̵,̵a̵f̵t̵e̵r̵D̵e̵c̵o̵d̵e̵]̵[̲S̲1̲S̲e̲m̲a̲n̲t̲i̲c̲C̲o̲d̲e̲.̲r̲o̲u̲n̲d̲S̲t̲e̲p̲,̲ ̲N̲G̲X̲_̲C̲o̲d̲e̲T̲r̲a̲c̲e̲.̲l̲i̲f̲t̲_̲b̲i̲n̲d̲,̲ ̲g̲e̲t̲t̲e̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲f̲r̲o̲m̲R̲e̲c̲o̲r̲d̲,̲ ̲a̲f̲t̲e̲r̲D̲e̲c̲o̲d̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_RoundCode.lean:55:40: warning: This simp argument is unused:
+  getter
+
+Hint: Omit it from the simp argument list.
+  simp only [S1SemanticCode.roundStep, ̲NGX_CodeTrace.lift_bind,
+     ̲NJG_RoundProducer.row_add round bound,g̵e̵t̵t̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲fromRecord, ̲afterDecode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_RoundCode.lean:55:47: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [S1SemanticCode.roundStep, ̲NGX_CodeTrace.lift_bind,
+     ̲NJG_RoundProducer.row_add round bound,g̵e̵t̵t̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ g̲e̲t̲t̲e̲r̲,̲ core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲fromRecord, ̲afterDecode]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NJG_RoundCode.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJG_RoundCode.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
