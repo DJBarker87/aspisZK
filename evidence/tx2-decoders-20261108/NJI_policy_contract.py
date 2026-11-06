@@ -1,3 +1,4 @@
+from NJI_patch import read_patch,write_patch
 from NJI_rerun import *
 def contract(a,name,invert=False):
  x,original,files=historical('NIJ_K120')
@@ -5,7 +6,7 @@ def contract(a,name,invert=False):
  key='NIJ_src/crates/aspis-statement/src/pool_v1/format.rs'
  if key not in files:
   raw=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+key.removeprefix('NIJ_src/')]);assert sha(raw)==json.loads(files['NIJ_SOURCE_PINS.json'])[key.removeprefix('NIJ_src/')];files[key]=raw.decode()
- text=(E/'NJI_policy.rs').read_text()
+ text=read_patch('NJI_policy')
  files[key]+='\n#[cfg(kani)]\n#[path="NJI_policy.rs"]\nmod NJI_policy;\n'
  files['NIJ_src/crates/aspis-statement/src/pool_v1/NJI_policy.rs']=text
  anns=json.loads(files['NGL_CONTRACT_ANNOTATIONS.json'])

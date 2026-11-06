@@ -1,3 +1,4 @@
+from NJI_patch import read_patch,write_patch
 from pathlib import Path
 import subprocess,json,hashlib
 E=Path(__file__).resolve().parent
@@ -27,5 +28,5 @@ fn cut(){let b:[u8;SIZE]=kani::any();let frame_i:usize=kani::any();kani::assume(
  match error{Some(e)=>{assert!(log.is_none());assert!(matches!(out,Err(a) if a==e));},None=>{let p=log.expect("child entered");assert!((view(&p,f,i)==expected(&b,f,i))!=cfg!(NJI_invert));match reply{Err(e)=>assert!(matches!(out,Err(a) if a==e)),Ok(())=>{let p=out.expect("child success");assert!(view(&p,f,i)==expected(&b,f,i));}}}}
 }
 '''.replace('SIZE',str(size)).replace('FIELDS',str(len(fields))).replace('ERROR',error)
- (E/('NJI_'+name+'_cut.rs')).write_text(text)
+ write_patch('NJI_'+name+'_cut',text)
  (E/('NJI_'+name.upper()+'_CUT_FIDELITY.json')).write_text(json.dumps(dict(frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',function=f,frozen_file='crates/aspis-statement/src/pool_v1/verifier_registry.rs',source_file_sha256=hashlib.sha256(s.encode()).hexdigest(),body_sha256=hashlib.sha256(body.encode()).hexdigest(),stage_sha256=hashlib.sha256(text.encode()).hexdigest(),replacement=dict(old=old,new=replacement),erasure_restores_exact_body=stage.replace(replacement,old)==body,fields=fields),indent=2))

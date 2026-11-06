@@ -1,9 +1,10 @@
+from NJI_patch import read_patch,write_patch
 from NJI_rerun import *
 def contract(a,name,invert=False):
  x,original,files=historical('NIJ_K120')
  files['NIJ_erasure.py']=files['NIJ_erasure.py'].replace("['NIJ_entry'","['NJI_v1','NJI_policy','NJI_accounts','NJI_decoder','NIJ_entry'")
  key='NIJ_src/crates/aspis-statement/src/pool_v1/verifier_registry.rs'
- text=(E/'NJI_v1.rs').read_text()
+ text=read_patch('NJI_v1')
  files[key]+='\n#[cfg(kani)]\n#[path="NJI_v1.rs"]\nmod NJI_v1;\n'
  files['NIJ_src/crates/aspis-statement/src/pool_v1/NJI_v1.rs']=text
  anns=json.loads(files['NGL_CONTRACT_ANNOTATIONS.json'])

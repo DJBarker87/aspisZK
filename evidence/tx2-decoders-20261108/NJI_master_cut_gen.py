@@ -1,3 +1,4 @@
+from NJI_patch import read_patch,write_patch
 from pathlib import Path
 import subprocess,json,hashlib
 E=Path(__file__).resolve().parent
@@ -39,5 +40,5 @@ fn any_step(){let values:[u64;8]=kani::any();let k:usize=kani::any();kani::assum
  if k<8{let value=got.expect("entered iteration");assert!((*value==original_k)!=cfg!(NJI_invert));let greater=*value>POOL_V1_PAIR_CAPACITY;assert!(greater==(original_k>1048576));assert!(it.len()+1==before);}else{assert!(got.is_none());assert!(it.len()==before);}
 }
 '''
-(E/'NJI_master_cut.rs').write_text(text)
+write_patch('NJI_master_cut',text)
 (E/'NJI_MASTER_CUT_FIDELITY.json').write_text(json.dumps(dict(frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',source_file_sha256=hashlib.sha256(s.encode()).hexdigest(),body_sha256=hashlib.sha256(body.encode()).hexdigest(),stage_sha256=hashlib.sha256(text.encode()).hexdigest(),replacements=[dict(old=old,new=new),dict(old=anyold,new=anynew)],erasure_restores_exact_body=stage.replace(new,old).replace(anynew,anyold)==body,loop_domain='ONE iteration, arbitrary values[8], k<=8 including exhaustion; no whole-loop native unrolling'),indent=2))

@@ -107,3 +107,18 @@ TX2:146 digest decode CLOSED;151 policy validator CLOSED;192 status CLOSED;193/1
 ## Extraction finding NJI-F1
 
 Single Charon run produced all eight LLBC roots. Aeneas0 omitted decoder152/153/201/203 after the missing Iterator.any warning. No emitted-body closure for those rows; no hidden replacement. Master157 emitted but capacity parameter propagation and library IterMut ABI prevent aggregate compilation. Core split retains policy150 and validators206/208 without altered bodies. Raw artifacts and L003 failure retained.
+
+## Final model and method resolution
+
+| Row | Emitted/model association | Final state |
+|---|---|---|
+|150|NJI_PolicyParser.source, natural body with canonical CLOSED NHY_PolicyModel op15 through NJI_PolicyPort; NJI_PolicyTotal.native_source combines exact coordinate cut and unrestricted length stage|Local audited candidate; next ledger gate required|
+|152|No emitted definition; native checkpoint iteration and Lean NJI_CheckpointLoop support reuse NFY/NHY frame/extensionality method|OPEN, missing body/full decoder composition|
+|153|No emitted definition; policy150/master157 candidate children; identity149 outside slice OPEN|OPEN|
+|157|NJI_MasterModel.source full guards/Result; NJI_MasterCut.native_source and child_arguments; NJI_MasterIteration.source_association instantiates emitted capacity callback and canonical std source induction|Local audited candidate; next ledger gate required|
+|201|No emitted definition; entry coordinate/status/validator/input-frame cut follows NIS method but lacks complete parser/op32 join|OPEN|
+|203|No emitted definition; registry coordinate/validator/input-frame cut follows NHY method but lacks complete parser/op31 join|OPEN|
+|206|NJI_V1Models.entry_source and NJI_V1Join.entry_source/entry_domain; complete canonical AdapterRw record/error carrier, actual native full Result contract|Local audited candidate; next ledger gate required|
+|208|NJI_V1Models.registry_source and NJI_V1Join.registry_source/registry_domain; complete canonical AdapterRw record/error carrier, actual native full Result contract|Local audited candidate; next ledger gate required|
+
+The authoritative row obligations do not name a pre-existing standalone internal policy-decoder/master-validator model definition; these explicit full-result definitions expose those internal semantics. Installed decoder slots31/32/48/49 are not claimed CLOSED by defining an internal helper. Full original row obligations and hashes remain in NJI_BASELINE_ROWS.json.xz. NJI_HYPOTHESES.json checks the four proposed root statements against(aq)(2); the raw statements and all58 roots are retained from the actual combined import.

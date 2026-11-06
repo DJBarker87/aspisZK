@@ -1,3 +1,4 @@
+from NJI_patch import read_patch,write_patch
 from pathlib import Path
 import subprocess,json,hashlib
 E=Path(__file__).resolve().parent
@@ -29,5 +30,5 @@ fn cut(){
  }
 }
 '''
-(E/'NJI_policy_cut.rs').write_text(source)
+write_patch('NJI_policy_cut',source)
 (E/'NJI_POLICY_CUT_FIDELITY.json').write_text(json.dumps(dict(frozen_file='crates/aspis-statement/src/pool_v1/format.rs',frozen_body_sha256=hashlib.sha256(s[a:end].encode()).hexdigest(),body_sha256=hashlib.sha256(body.encode()).hexdigest(),stage_sha256=hashlib.sha256(source.encode()).hexdigest(),replacement=dict(old=old,new='*log=Some(policy); reply?;'),erasure_restores_exact_body=modified.replace('*log=Some(policy); reply?;',old)==body),indent=2))

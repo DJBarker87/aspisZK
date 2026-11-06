@@ -1,0 +1,48 @@
+{"attempt": "NJI_K048", "exit_status": 1, "wall_seconds": 6.164579312084243, "peak_rss_kib": "507048", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:131:20
+    |
+131 |         assert_eq!(ACTUAL_CALL, 4);
+    |                    ^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+    Finished `dev` profile [optimized] target(s) in 4.94s
+Checking harness pool_v1::verifier_registry::NJI_shape::inverted_proof...
+
+VERIFICATION RESULT:
+ ** 1 of 31 failed
+Failed Checks: |r| r.is_err()
+ File: "crates/aspis-statement/src/pool_v1/NJI_shape.rs", line 13, in pool_v1::verifier_registry::NJI_shape::inverted::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.05285318s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::verifier_registry::NJI_shape::inverted_proof
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r106107e1606c422d8fa605ae1bfab6be.scope; invocation ID: d716e160c34c4d7cac1e1db578a2a5da
