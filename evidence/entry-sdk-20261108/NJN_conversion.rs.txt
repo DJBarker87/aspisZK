@@ -1,0 +1,40 @@
+use solana_program::{program_error::ProgramError,pubkey::PubkeyError};
+extern crate alloc;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[path="NJN_reference.rs"] mod reference;
+fn image(e:&ProgramError)->(u32,u32,bool) {
+ match e {
+ ProgramError::Custom(v)=>(0,*v,true),
+ ProgramError::InvalidArgument=>(2,0,true),ProgramError::InvalidInstructionData=>(3,0,true),
+ ProgramError::InvalidAccountData=>(4,0,true),ProgramError::AccountDataTooSmall=>(5,0,true),
+ ProgramError::InsufficientFunds=>(6,0,true),ProgramError::IncorrectProgramId=>(7,0,true),
+ ProgramError::MissingRequiredSignature=>(8,0,true),ProgramError::AccountAlreadyInitialized=>(9,0,true),
+ ProgramError::UninitializedAccount=>(10,0,true),ProgramError::NotEnoughAccountKeys=>(11,0,true),
+ ProgramError::AccountBorrowFailed=>(12,0,true),ProgramError::MaxSeedLengthExceeded=>(13,0,true),
+ ProgramError::InvalidSeeds=>(14,0,true),ProgramError::BorshIoError(s)=>(15,0,s.as_bytes()==b"Unknown"),
+ ProgramError::AccountNotRentExempt=>(16,0,true),ProgramError::UnsupportedSysvar=>(17,0,true),
+ ProgramError::IllegalOwner=>(18,0,true),ProgramError::MaxAccountsDataAllocationsExceeded=>(19,0,true),
+ ProgramError::InvalidRealloc=>(20,0,true),ProgramError::MaxInstructionTraceLengthExceeded=>(21,0,true),
+ ProgramError::BuiltinProgramsMustConsumeComputeUnits=>(22,0,true),ProgramError::InvalidAccountOwner=>(23,0,true),
+ ProgramError::ArithmeticOverflow=>(24,0,true),ProgramError::Immutable=>(25,0,true),ProgramError::IncorrectAuthority=>(26,0,true)
+ }
+}
+fn matches(e:&ProgramError,status:u64)->bool {let r=reference::program_error_ref(status);image(e)==(r.kind,r.custom,true)}
+#[kani::ensures(|r|matches(r,status))]
+fn convert(status:u64)->ProgramError{ProgramError::from(status)}
+#[kani::ensures(|r|matches(r,status))]
+fn convert_bad(status:u64)->ProgramError{let _=ProgramError::from(status);ProgramError::Custom(17)}
+#[kani::proof_for_contract(convert)] #[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn conversion(){let status:u64=kani::any();let _=convert(status);}
+#[kani::proof_for_contract(convert_bad)] #[kani::unwind(10)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn conversion_control(){let status:u64=kani::any();let _=convert_bad(status);}
+#[kani::requires(status<=2)]
+#[kani::ensures(|r| matches!((status,r),(0,PubkeyError::MaxSeedLengthExceeded)|(1,PubkeyError::InvalidSeeds)|(2,PubkeyError::IllegalOwner)))]
+fn pda_convert(status:u64)->PubkeyError{PubkeyError::from(status)}
+#[kani::requires(status<=2)]
+#[kani::ensures(|r| matches!((status,r),(0,PubkeyError::MaxSeedLengthExceeded)|(1,PubkeyError::InvalidSeeds)|(2,PubkeyError::IllegalOwner)))]
+fn pda_convert_bad(status:u64)->PubkeyError{let _=PubkeyError::from(status);PubkeyError::InvalidSeeds}
+#[kani::proof_for_contract(pda_convert)] fn pda_conversion(){let s:u64=kani::any();kani::assume(s<=2);let _=pda_convert(s);}
+#[kani::proof_for_contract(pda_convert_bad)] fn pda_conversion_control(){let s:u64=kani::any();kani::assume(s<=2);let _=pda_convert_bad(s);}

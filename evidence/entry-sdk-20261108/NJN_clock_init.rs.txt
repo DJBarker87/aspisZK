@@ -1,0 +1,22 @@
+use solana_program::clock::Clock;
+extern crate alloc;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[path="NJN_reference.rs"] mod reference;
+fn matches(r:&Clock)->bool {
+ let f=reference::clock_ref(0,reference::Clock{slot:0,epoch_start_timestamp:0,epoch:0,leader_schedule_epoch:0,unix_timestamp:0});
+ match f {reference::ClockReply::Ok(v)=>r.slot==v.slot && r.epoch_start_timestamp==v.epoch_start_timestamp && r.epoch==v.epoch && r.leader_schedule_epoch==v.leader_schedule_epoch && r.unix_timestamp==v.unix_timestamp,_=>false}
+}
+#[kani::ensures(|r|matches(r))]
+fn clock_default()->Clock{Clock::default()}
+#[kani::ensures(|r|matches(r))]
+fn clock_default_bad()->Clock{let mut c=Clock::default();c.slot=1;c}
+#[kani::proof_for_contract(clock_default)] #[kani::unwind(41)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn clock_default_contract(){
+ let r=clock_default();assert_eq!(core::mem::size_of::<Clock>(),40);assert_eq!(core::mem::align_of::<Clock>(),8);
+ let i:usize=kani::any();kani::assume(i<40);
+ assert_eq!(unsafe{*(&r as *const Clock as *const u8).add(i)},0);
+}
+#[kani::proof_for_contract(clock_default_bad)] #[kani::unwind(41)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn clock_default_control(){let _=clock_default_bad();}

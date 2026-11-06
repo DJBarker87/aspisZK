@@ -1,0 +1,32 @@
+use solana_program::{account_info::AccountInfo,pubkey::Pubkey};
+extern crate alloc;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn window(wrong:u8){
+ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
+ let mut lamports:u64=kani::any();let old_lamports=lamports;
+ let mut bytes=kani::vec::exact_vec::<u8,1768>();
+ let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<1768 && j<1768 && i!=j);
+ let old_outside=bytes[j];let value:u8=kani::any();
+ let signer:bool=kani::any();let writable:bool=kani::any();let executable:bool=kani::any();let rent:u64=kani::any();
+ let a=AccountInfo::new(&key,signer,writable,&mut lamports,&mut bytes,&owner,executable,rent);
+ let mut guard=a.try_borrow_mut_data().unwrap();
+ assert_eq!(guard.len(),1768);
+ let source=[if wrong==1 {value^1}else{value}];
+ guard[i..i+1].copy_from_slice(&source);
+ if wrong==2 {guard[j]^=1;}
+ assert_eq!(guard[i],value);assert_eq!(guard[j],old_outside);
+ drop(guard);
+ let read=a.try_borrow_data().unwrap();assert_eq!(read[i],value);assert_eq!(read[j],old_outside);drop(read);
+ let again=a.try_borrow_mut_data().unwrap();assert_eq!(again.len(),1768);drop(again);
+ assert_eq!(*a.key,key);assert_eq!(*a.owner,owner);assert_eq!(a.lamports(),old_lamports);
+ assert_eq!(a.is_signer,signer);assert_eq!(a.is_writable,writable);assert_eq!(a.executable,executable);assert_eq!(a.rent_epoch,rent);
+}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn exclusive_window(){window(0);}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn exclusive_window_corrupt(){window(1);}
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn exclusive_window_frame(){window(2);}

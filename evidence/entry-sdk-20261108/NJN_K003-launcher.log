@@ -1,0 +1,45 @@
+{"attempt": "NJN_K003", "exit_status": 1, "wall_seconds": 6.293862794991583, "peak_rss_kib": "381444", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+'1`
+58 | });}
+   | - `l` dropped here while still borrowed
+
+error[E0597]: `d` does not live long enough
+  --> programs/r1-cost-probe/src/NJN_sdk.rs:56:101
+   |
+55 | fn shared_cell_control(){setup!(|a:&AccountInfo,pre,p|{
+   |                                  - has type `&solana_program::solana_account_info::AccountInfo<'1>`
+56 |  let k=Pubkey::default();let mut l=0;let mut d=[0u8;2];let b=AccountInfo::new(&k,false,false,&mut l,&mut d,&k,false,0);
+   |                                          ----- binding `d` declared here                            ^^^^^^ borrowed value does not live long enough
+57 |  let r=shared_cell_bad(a,&b,pre,p,2);drop(r);
+   |        ----------------------------- argument requires that `d` is borrowed for `'1`
+58 | });}
+   | - `d` dropped here while still borrowed
+
+error[E0597]: `k` does not live long enough
+  --> programs/r1-cost-probe/src/NJN_sdk.rs:56:108
+   |
+55 | fn shared_cell_control(){setup!(|a:&AccountInfo,pre,p|{
+   |                                  - has type `&solana_program::solana_account_info::AccountInfo<'1>`
+56 |  let k=Pubkey::default();let mut l=0;let mut d=[0u8;2];let b=AccountInfo::new(&k,false,false,&mut l,&mut d,&k,false,0);
+   |      - binding `k` declared here                                                                           ^^ borrowed value does not live long enough
+57 |  let r=shared_cell_bad(a,&b,pre,p,2);drop(r);
+   |        ----------------------------- argument requires that `k` is borrowed for `'1`
+58 | });}
+   | - `k` dropped here while still borrowed
+
+For more information about this error, try `rustc --explain E0597`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 4 previous errors; 449 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 4 compilation errors.
+
+Running as unit: run-rf4f556fbbeb04ab5a4c2443764e001d0.scope; invocation ID: fe147f08f48249d0a308913db1c719f7

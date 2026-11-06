@@ -1,0 +1,39 @@
+use solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError};
+use std::rc::Rc;
+extern crate alloc;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn counter(a:&AccountInfo)->isize{unsafe{*Rc::as_ptr(&a.data).cast::<isize>()}}
+struct Cut { cell:*const u8, length:usize, before:isize, error:bool, after:isize }
+// Smaller interface for K016: execute the actual SDK call in a local-record
+// error cut. This does not certify its proof-for-contract carrier interface.
+fn error_cut(wrong:u8){
+ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
+ let mut lamports:u64=kani::any();let old_lamports=lamports;
+ let mut bytes=kani::vec::exact_vec::<u8,58295>();let ptr=bytes.as_ptr();
+ let i:usize=kani::any();kani::assume(i<58295);let old=bytes[i];
+ let signer:bool=kani::any();let writable:bool=kani::any();let executable:bool=kani::any();let rent:u64=kani::any();
+ let a=AccountInfo::new(&key,signer,writable,&mut lamports,&mut bytes,&owner,executable,rent);
+ let mut other_lamports=0;let mut other_data=[0u8;2];
+ let b=AccountInfo::new(&key,false,false,&mut other_lamports,&mut other_data,&owner,false,0);
+ let mut held=Some(a.try_borrow_mut_data().unwrap());
+ let before=counter(&a);assert_eq!(before,-1);
+ if wrong==1 {drop(held.take());}
+ let r=if wrong==2 {b.try_borrow_data()}else{a.try_borrow_data()};
+ let error=matches!(&r,Err(ProgramError::AccountBorrowFailed));drop(r);
+ let c=Cut{cell:ptr,length:58295,before,error,after:counter(&a)};
+ assert_eq!(c.cell,ptr);assert_eq!(c.length,58295);assert_eq!(c.before,-1);
+ assert!(c.error);assert_eq!(c.after,-1);
+ if let Some(g)=&held {assert_eq!(g.len(),58295);assert_eq!(g.as_ptr(),c.cell);assert_eq!(g[i],old);}
+ drop(held.take());assert_eq!(counter(&a),0);
+ assert_eq!(*a.key,key);assert_eq!(*a.owner,owner);assert_eq!(a.lamports(),old_lamports);
+ assert_eq!(a.is_signer,signer);assert_eq!(a.is_writable,writable);assert_eq!(a.executable,executable);assert_eq!(a.rent_epoch,rent);
+}
+#[kani::proof] #[kani::unwind(129)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn shared_contract(){error_cut(0);}
+#[kani::proof] #[kani::unwind(129)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn shared_counter_control(){error_cut(1);}
+#[kani::proof] #[kani::unwind(129)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn shared_cell_control(){error_cut(2);}

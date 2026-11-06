@@ -1,0 +1,54 @@
+{"attempt": "NJN_L004", "exit_status": 1, "wall_seconds": 1.6121277939528227, "peak_rss_kib": "2619624", "swaps": "0", "print_axioms": ["'NJN_GuardModel.shared_error' depends on axioms: [propext]", "'NJN_GuardModel.exclusive_error' depends on axioms: [propext]", "'NJN_GuardModel.shared_ok' depends on axioms: [sorryAx]", "'NJN_GuardModel.exclusive_ok' depends on axioms: [sorryAx]", "'NJN_GuardModel.acquire_frame' depends on axioms: [sorryAx]"]}
+NJN_generated/NJN_AcquireLaws.lean:18:59: error: unexpected token '('; expected '}'
+NJN_generated/NJN_AcquireLaws.lean:26:59: error: unexpected token '('; expected '}'
+NJN_generated/NJN_AcquireLaws.lean:36:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: If you meant to destruct this conjunction, use the `cases` tactic instead
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+h : Heap
+a t j : ℕ
+ex : Bool
+⊢ (have cell := (h.accounts a).cell;
+          have n := (h.cells cell).counter;
+          let allowed := if ex = true then n = 0 else 0 ≤ n ∧ n < 9223372036854775807;
+          if allowed then
+    
+...
+e (h, Except.error ())).1.accounts =
+      h.accounts ∧
+    (have cell := (h.accounts a).cell;
+            have n := (h.cells cell).counter;
+            let allowed := if ex = true then n = 0 else 0 ≤ n ∧ n < 9223372036854775807;
+            if allowed then
+              have g := { cell := cell, exclusive := ex };
+              have c :=
+                have __src := h.cells cell;
+                { counter := if ex = true then -1 else n + 1, length := __src.length, bytes := __src.bytes };
+              ({ accounts := h.accounts, cells := replace h.cells cell c, tokens := replace h.tokens t (some g),
+                  count := h.count },
+                Except.ok g)
+            else (h, Except.error ())).1.count =
+        h.count ∧
+      ((have cell := (h.accounts a).cell;
+                have n := (h.cells cell).counter;
+                let allowed := if ex = true then n = 0 else 0 ≤ n ∧ n < 9223372036854775807;
+                if allowed then
+                  have g := { cell := cell, exclusive := ex };
+                  have c :=
+                    have __src := h.cells cell;
+                    { counter := if ex = true then -1 else n + 1, length := __src.length, bytes := __src.bytes };
+                  ({ accounts := h.accounts, cells := replace h.cells cell c, tokens := replace h.tokens t (some g),
+                      count := h.count },
+                    Except.ok g)
+                else (h, Except.error ())).1.cells
+            j).bytes =
+        (h.cells j).bytes
+'NJN_GuardModel.shared_error' depends on axioms: [propext]
+'NJN_GuardModel.exclusive_error' depends on axioms: [propext]
+'NJN_GuardModel.shared_ok' depends on axioms: [sorryAx]
+'NJN_GuardModel.exclusive_ok' depends on axioms: [sorryAx]
+'NJN_GuardModel.acquire_frame' depends on axioms: [sorryAx]
+
+Running as unit: run-r9a6f9a0ba799406da2851c67961ff25d.scope; invocation ID: 8811a99f57ed41a6bff6237b5be9bbed
