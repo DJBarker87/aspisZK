@@ -12,6 +12,16 @@ frozen_pins=json.loads((B/'NLC_FROZEN_FILE_PINS.json').read_text())
 errors=[n for n,h in {**frozen_pins,**pins}.items() if not (S/n).is_file() or sha(S/n)!=h]
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
 assert not errors,errors
+expected=json.loads((B/'NLC_BASE_EXPECTED.json').read_text())
+base_errors=[]
+for n,h in expected.items():
+ p=S/n;raw=p.read_bytes()
+ for module in ['NLC_native','NLC_factory']:
+  for suffix in [('\n#[cfg(kani)]\npub(crate) mod '+module+';\n').encode(),('\n#[cfg(kani)]\n#[path = \"'+module+'.rs\"]\npub(crate) mod '+module+';\n').encode()]:
+   if raw.endswith(suffix):raw=raw[:-len(suffix)]
+ if hashlib.sha256(raw).hexdigest()!=h:base_errors.append(n)
+(B/(a+'-baseline-check.json')).write_text(json.dumps(dict(expected_files=len(expected),errors=base_errors),indent=2))
+assert not base_errors,('STOP frozen predecessor source mismatch',base_errors)
 features=x['metadata_features'] if 'metadata_features' in x else 'aspis-core/r0' if x.get('root_package')=='aspis-core' else 'aspis-r1-cost-probe-program/pool-adapter,aspis-r1-cost-probe-program/private-leaf-salts' if x.get('root_package')=='aspis-r1-cost-probe-program' else 'aspis-r1-cost-probe/optimized-terminal,aspis-r1-cost-probe/program-build'
 r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--features',features],cwd=S,capture_output=True,text=True)
 (B/(a+'-graph.stderr')).write_text(r.stderr)

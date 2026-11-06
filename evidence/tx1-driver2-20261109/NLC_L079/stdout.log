@@ -1,0 +1,35 @@
+NLC_generated/NLC_Frame_mark5.lean:16:4: warning: 'change ∀ _, _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_mark5.lean:16:19: warning: 'intro' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_mark5.lean:19:3: warning: 'exact frame_next s _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_mark5.lean:20:3: warning: '(change True; trivial)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_mark5.lean:21:3: warning: 'split' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_mark5.lean:16:19: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_mark5.lean:19:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_mark5.lean:20:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_mark5.lean:21:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.NLC_Finish.frame_mark5' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.frame_mark5 : ∀ {H : Type} (s : State H),
+  s.next = Event.mark5 → AllLeaves (FramePost s) (step s) :=
+fun {H} s atSite =>
+  Eq.mpr (id (congrArg (fun _a => AllLeaves (FramePost s) _a) (step_mark5 s atSite)))
+    (id
+      (all_bind (liftM (VerifyPrefix.mark none 5#u8)) (fun __r => pure (Sum.inr (setNext s Event.circleGuard)))
+        (FramePost s) fun a => frame_put s Event.circleGuard s.locals))

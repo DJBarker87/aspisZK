@@ -1,0 +1,91 @@
+NLC_generated/NLC_Frame_terminal.lean:16:4: warning: 'change ∀ _, _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_terminal.lean:16:19: warning: 'intro' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_terminal.lean:19:3: warning: 'exact frame_next s _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_terminal.lean:20:3: warning: '(change True; trivial)' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_terminal.lean:21:3: warning: 'split' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_terminal.lean:16:19: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_terminal.lean:19:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_terminal.lean:20:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NLC_generated/NLC_Frame_terminal.lean:21:3: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.NLC_Finish.frame_terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.frame_terminal : ∀ {H : Type} (s : State H),
+  s.next = Event.terminal → AllLeaves (FramePost s) (step s) :=
+fun {H} s atSite =>
+  Eq.mpr (id (congrArg (fun _a => AllLeaves (FramePost s) _a) (step_terminal s atSite)))
+    (id
+      (all_bind (liftM (read s.locals.claims))
+        (fun c => do
+          let a ← liftM (read s.locals.alpha)
+          let r ←
+            liftM ((IDa_Deployed.boundaries s.input.reservation).terminal s.input.publicValue c a s.input.challenges)
+          pure
+              (Sum.inr
+                (put s Event.mapPublic
+                  { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                    claims := s.locals.claims, terminalReply := some r, terminal := s.locals.terminal,
+                    low := s.locals.low, high := s.locals.high, blind := s.locals.blind, mask := s.locals.mask,
+                    extra := s.locals.extra, product := s.locals.product, partialValue := s.locals.partialValue,
+                    masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                    beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                    record26 := s.locals.record26, payload := s.locals.payload, extraCell := s.locals.extraCell,
+                    root := s.locals.root })))
+        (FramePost s) fun a =>
+        all_bind (liftM (read s.locals.alpha))
+          (fun a_1 => do
+            let r ←
+              liftM
+                  ((IDa_Deployed.boundaries s.input.reservation).terminal s.input.publicValue a a_1 s.input.challenges)
+            pure
+                (Sum.inr
+                  (put s Event.mapPublic
+                    { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                      claims := s.locals.claims, terminalReply := some r, terminal := s.locals.terminal,
+                      low := s.locals.low, high := s.locals.high, blind := s.locals.blind, mask := s.locals.mask,
+                      extra := s.locals.extra, product := s.locals.product, partialValue := s.locals.partialValue,
+                      masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                      beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                      record26 := s.locals.record26, payload := s.locals.payload, extraCell := s.locals.extraCell,
+                      root := s.locals.root })))
+          (FramePost s) fun a_1 =>
+          all_bind
+            (liftM
+              ((IDa_Deployed.boundaries s.input.reservation).terminal s.input.publicValue a a_1 s.input.challenges))
+            (fun r =>
+              pure
+                (Sum.inr
+                  (put s Event.mapPublic
+                    { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                      claims := s.locals.claims, terminalReply := some r, terminal := s.locals.terminal,
+                      low := s.locals.low, high := s.locals.high, blind := s.locals.blind, mask := s.locals.mask,
+                      extra := s.locals.extra, product := s.locals.product, partialValue := s.locals.partialValue,
+                      masked := s.locals.masked, stateBefore := s.locals.stateBefore, z0 := s.locals.z0,
+                      beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1, record25 := s.locals.record25,
+                      record26 := s.locals.record26, payload := s.locals.payload, extraCell := s.locals.extraCell,
+                      root := s.locals.root })))
+            (FramePost s) fun a =>
+            frame_put s Event.mapPublic
+              { running := s.locals.running, alpha := s.locals.alpha, transcript := s.locals.transcript,
+                claims := s.locals.claims, terminalReply := some a, terminal := s.locals.terminal, low := s.locals.low,
+                high := s.locals.high, blind := s.locals.blind, mask := s.locals.mask, extra := s.locals.extra,
+                product := s.locals.product, partialValue := s.locals.partialValue, masked := s.locals.masked,
+                stateBefore := s.locals.stateBefore, z0 := s.locals.z0, beforeZ1 := s.locals.beforeZ1,
+                z1 := s.locals.z1, record25 := s.locals.record25, record26 := s.locals.record26,
+                payload := s.locals.payload, extraCell := s.locals.extraCell, root := s.locals.root }))

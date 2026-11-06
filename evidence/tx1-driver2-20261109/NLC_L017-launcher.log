@@ -1,0 +1,39 @@
+{"attempt": "NLC_L017", "exit_status": 0, "wall_seconds": 34.564340990036726, "peak_rss_kib": "6347068", "swaps": "0", "print_axioms": ["'AspisR1.NLC_Finish.constructor' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLC_Finish.constructor' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.constructor : ∀ {H : Type} (i : Input H) (alpha : Alpha) (claims : Claims)
+  (extra before : Words) (state root : Std.Array U8 32#usize) (z0 z1 : Point)
+  (transcript : r1_wire.SemanticTranscript H),
+  run
+      (step
+        { input := i, locals := constructorLocals alpha claims extra before state root z0 z1 transcript,
+          next := Event.verified }) =
+    ([],
+      ok
+        (Sum.inl
+          (core.result.Result.Ok
+            { roots := Array.make 2#usize [i.prefix1.c1_root, root] ⋯, challenges := i.challenges, alpha := alpha,
+              claims := claims, extra
+...
+'AspisR1.NLC_Finish.constructor' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.constructor : ∀ {H : Type} (i : Input H) (alpha : Alpha) (claims : Claims)
+  (extra before : Words) (state root : Std.Array U8 32#usize) (z0 z1 : Point)
+  (transcript : r1_wire.SemanticTranscript H),
+  run
+      (step
+        { input := i, locals := constructorLocals alpha claims extra before state root z0 z1 transcript,
+          next := Event.verified }) =
+    ([],
+      ok
+        (Sum.inl
+          (core.result.Result.Ok
+            { roots := Array.make 2#usize [i.prefix1.c1_root, root] ⋯, challenges := i.challenges, alpha := alpha,
+              claims := claims, extra := extra, before_z1 := before, state_before_z0 := state,
+              z := Array.make 2#usize [z0, z1] ⋯, transcript := transcript }))) :=
+fun {H} i alpha claims extra before state root z0 z1 transcript =>
+  Eq.refl
+    (run
+      (step
+        { input := i, locals := constructorLocals alpha claims extra before state root z0 z1 transcript,
+          next := Event.verified }))
+
+Running as unit: run-r911844527d974405a08877f3e606cf4a.scope; invocation ID: 11539a3bc2874533ac35731e3ff04ab0

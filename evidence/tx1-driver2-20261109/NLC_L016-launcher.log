@@ -1,0 +1,45 @@
+{"attempt": "NLC_L016", "exit_status": 0, "wall_seconds": 21.263053748058155, "peak_rss_kib": "6347536", "swaps": "0", "print_axioms": ["'AspisR1.NLC_Finish.map_error' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLC_Finish.map_value' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLC_Finish.map_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLC_Finish.map_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.map_error : ∀ {H : Type} (i : Input H) (l : Locals H)
+  (e : aspis_core.state_only_prefix.r0.Error),
+  run
+      (step
+        { input := i,
+          locals :=
+            { running := l.running, alpha := l.alpha, transcript := l.transcript, claims := l.claims,
+              terminalReply := some (core.result.Result.Err e), terminal := l.terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partia
+...
+asked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+          record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+          root := l.root },
+      next := Event.mapPublic };
+  run (step before) =
+    ([],
+      ok
+        (Sum.inr
+          (put before Event.mark3
+            (have __src := before.locals;
+            { running := __src.running, alpha := __src.alpha, transcript := __src.transcript, claims := __src.claims,
+              terminalReply := __src.terminalReply, terminal := some q, low := __src.low, high := __src.high,
+              blind := __src.blind, mask := __src.mask, extra := __src.extra, product := __src.product,
+              partialValue := __src.partialValue, masked := __src.masked, stateBefore := __src.stateBefore,
+              z0 := __src.z0, beforeZ1 := __src.beforeZ1, z1 := __src.z1, record25 := __src.record25,
+              record26 := __src.record26, payload := __src.payload, extraCell := __src.extraCell,
+              root := __src.root })))) :=
+fun {H} i l q =>
+  Eq.refl
+    (run
+      (step
+        { input := i,
+          locals :=
+            { running := l.running, alpha := l.alpha, transcript := l.transcript, claims := l.claims,
+              terminalReply := some (core.result.Result.Ok q), terminal := l.terminal, low := l.low, high := l.high,
+              blind := l.blind, mask := l.mask, extra := l.extra, product := l.product, partialValue := l.partialValue,
+              masked := l.masked, stateBefore := l.stateBefore, z0 := l.z0, beforeZ1 := l.beforeZ1, z1 := l.z1,
+              record25 := l.record25, record26 := l.record26, payload := l.payload, extraCell := l.extraCell,
+              root := l.root },
+          next := Event.mapPublic }))
+
+Running as unit: run-r2c1466abf0be481dae78880c374f9695.scope; invocation ID: d1db6efd4d4d4286af24e30725af2c29

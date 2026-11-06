@@ -1,0 +1,38 @@
+NLC_generated/NLC_Frame_terminalGuard.lean:16:4: warning: 'change ∀ _, _' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_terminalGuard.lean:16:19: warning: 'intro' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLC_generated/NLC_Frame_terminalGuard.lean:16:19: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.NLC_Finish.frame_terminalGuard' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLC_Finish.frame_terminalGuard : ∀ {H : Type} (s : State H),
+  s.next = Event.terminalGuard → AllLeaves (FramePost s) (step s) :=
+fun {H} s atSite =>
+  Eq.mpr (id (congrArg (fun _a => AllLeaves (FramePost s) _a) (step_terminalGuard s atSite)))
+    (id
+      (all_bind (liftM (read s.locals.running))
+        (fun running => do
+          let masked ← liftM (read s.locals.masked)
+          let reject ←
+            liftM (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 running masked)
+          if reject = true then pure (Sum.inl (core.result.Result.Err r1_wire.Error.Terminal))
+            else pure (Sum.inr (setNext s Event.mark4)))
+        (FramePost s) fun a =>
+        all_bind (liftM (read s.locals.masked))
+          (fun masked => do
+            let reject ←
+              liftM (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 a masked)
+            if reject = true then pure (Sum.inl (core.result.Result.Err r1_wire.Error.Terminal))
+              else pure (Sum.inr (setNext s Event.mark4)))
+          (FramePost s) fun a_1 =>
+          all_bind (liftM (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 a a_1))
+            (fun reject =>
+              if reject = true then pure (Sum.inl (core.result.Result.Err r1_wire.Error.Terminal))
+              else pure (Sum.inr (setNext s Event.mark4)))
+            (FramePost s) fun a =>
+            Decidable.casesOn (instDecidableEqBool a true)
+              (fun h => Eq.mpr (id (congrArg (AllLeaves (FramePost s)) (if_neg h))) (frame_put s Event.mark4 s.locals))
+              fun h => Eq.mpr (id (congrArg (AllLeaves (FramePost s)) (if_pos h))) (id True.intro)))
