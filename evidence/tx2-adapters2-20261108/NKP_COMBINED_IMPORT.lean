@@ -1,8 +1,12 @@
 import NKH_COMBINED_IMPORT
 import NKF_COMBINED_IMPORT
 import NKP_BoxCuts
+import NKP_BoxUniformity
 import NKP_LaneCuts
 import NKP_LaneInduction
+import NKP_LaneCarrier
+import NKP_LaneCompletion
+import NKP_RegistryCuts
 
 #check AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.RPx_Deployed.deployed
@@ -112,6 +116,14 @@ import NKP_LaneInduction
 #print axioms NKP_BoxCuts.master
 #check NKP_BoxCuts.checkpoint
 #print axioms NKP_BoxCuts.checkpoint
+#check NKP_BoxUniformity.master_bytes_irrelevant
+#print axioms NKP_BoxUniformity.master_bytes_irrelevant
+#check NKP_BoxUniformity.checkpoint_bytes_irrelevant
+#print axioms NKP_BoxUniformity.checkpoint_bytes_irrelevant
+#check NKP_BoxUniformity.master_any_bytes
+#print axioms NKP_BoxUniformity.master_any_bytes
+#check NKP_BoxUniformity.checkpoint_any_bytes
+#print axioms NKP_BoxUniformity.checkpoint_any_bytes
 #check NKP_LaneCuts.iteration
 #print axioms NKP_LaneCuts.iteration
 #check NKP_LaneCuts.constructor
@@ -122,6 +134,32 @@ import NKP_LaneInduction
 #print axioms NKP_LaneInduction.compose
 #check NKP_LaneInduction.chronological
 #print axioms NKP_LaneInduction.chronological
+#check NKP_LaneCarrier.node_at
+#print axioms NKP_LaneCarrier.node_at
+#check NKP_LaneCarrier.frontier_at
+#print axioms NKP_LaneCarrier.frontier_at
+#check NKP_LaneCarrier.root_at
+#print axioms NKP_LaneCarrier.root_at
+#check NKP_LaneCarrier.frontier_row
+#print axioms NKP_LaneCarrier.frontier_row
+#check NKP_LaneCarrier.returned
+#print axioms NKP_LaneCarrier.returned
+#check NKP_LaneCompletion.loop_error
+#print axioms NKP_LaneCompletion.loop_error
+#check NKP_LaneCompletion.rejected_root
+#print axioms NKP_LaneCompletion.rejected_root
+#check NKP_LaneCompletion.constructed
+#print axioms NKP_LaneCompletion.constructed
+#check NKP_LaneCompletion.log_frame
+#print axioms NKP_LaneCompletion.log_frame
+#check NKP_LaneCompletion.compose
+#print axioms NKP_LaneCompletion.compose
+#check NKP_RegistryCuts.comparison
+#print axioms NKP_RegistryCuts.comparison
+#check NKP_RegistryCuts.rejection_no_suffix
+#print axioms NKP_RegistryCuts.rejection_no_suffix
+#check NKP_RegistryCuts.accepted_continuation
+#print axioms NKP_RegistryCuts.accepted_continuation
 
 set_option pp.proofs false in
 #print NKP_BoxCuts.MasterCut
