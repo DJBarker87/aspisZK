@@ -1,0 +1,5 @@
+# NJQ failed extraction
+
+E001: Charon exit0, Aeneas exit2 after 62.415s overall, peak RSS605244KiB, swap0, admitted 6G/8G/swap0/tasks64. No timeout or memory kill. Exact frozen source and lock preserved. Requested core Iterator.any and slice iterator any/next declarations are verified Opaque in NHR_PINS.json. Statement roots are now local. Aeneas crashes with uncaught Not_found at InterpReduceCollapse.ml:1991 during collapse_ctx_following_sequence / eval_loop_symbolic_apply_loop. No Lean output was written; the single extraction allowance is consumed, never rerun.
+
+NJI-F1 omission was independently diagnosed before launch: unused external roots filtered before body translation. This run fixes locality but exposes the known loop join tool boundary. It does not show that the two non-loop registry bodies intrinsically fail. The whole batch failed before emission, so none receives emitted-body credit. Continue reference-contract work under (ah); distinguish hand transcription and native fidelity from emitted-source evidence. No generic assumption replaces an absent body.
