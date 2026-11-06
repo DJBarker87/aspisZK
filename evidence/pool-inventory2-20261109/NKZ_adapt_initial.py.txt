@@ -1,0 +1,13 @@
+"""Mechanical NKS producer retarget; removal-aware reporting is separately recorded."""
+from pathlib import Path
+E=Path(__file__).resolve().parent; O=E.parent/'pool-inventory-20261109'
+F='b936275465600469312d1f058cdc91ea2a11f3dc';C='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
+s=(O/'NKS_inventory.py').read_text().replace('NKS_','NKZ_').replace("F='"+C+"'","F='"+F+"';C='"+C+"'")
+s=s.replace("['git','show',F+':'+p]","['git','show',(F if p.startswith('programs/aspis-pool/') else C)+':'+p]")
+s=s.replace("roots=[]\nfor magic", "removed_magics={'ASIN','ASDI','ASPT','ASWD','ASPP','ASPF','ASPX'}\nrootspec=[r for r in rootspec if r[0] not in removed_magics]\nroots=[]\nfor magic")
+s=s.replace("for key in sorted({x['function'] for x in owner_review}-seen):", "for key in sorted(({x['function'] for x in owner_review}&set(bykey))-seen):")
+s=s.replace('121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548','e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc')
+s=s.replace("schema='NKS-Pool-inventory-v1'","schema='NKZ-Pool-inventory-v1'")
+s=s.replace("frozen_revision=F,pool_elf", "frozen_revision=F,crates_revision=C,pool_elf")
+s=s.replace("'No registry-maintenance/admin/standalone-close dispatch branch in Pool; close_program_account_v1 is an ON cancel/settle callee, not an OFF instruction.'", "'No registry-maintenance/admin/standalone-close dispatch branch remains. Seven legacy magics now reject; see NKZ_DIFF.md.'")
+(E/'NKZ_inventory.py').write_text(s)

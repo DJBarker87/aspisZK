@@ -1,0 +1,44 @@
+"""Mechanical NKS producer retarget; removal-aware reporting is separately recorded."""
+from pathlib import Path
+E=Path(__file__).resolve().parent; O=E.parent/'pool-inventory-20261109'
+F='b936275465600469312d1f058cdc91ea2a11f3dc';C='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
+s=(O/'NKS_inventory.py').read_text().replace('NKS_','NKZ_').replace("F='"+C+"'","F='"+F+"';C='"+C+"'")
+s=s.replace("['git','show',F+':'+p]","['git','show',(F if p.startswith('programs/aspis-pool/') else C)+':'+p]")
+s=s.replace("roots=[]\nfor magic", "removed_magics={'ASIN','ASDI','ASPT','ASWD','ASPP','ASPF','ASPX'}\nrootspec=[r for r in rootspec if r[0] not in removed_magics]\nroots=[]\nfor magic")
+s=s.replace("for key in sorted({x['function'] for x in owner_review}-seen):", "for key in sorted(({x['function'] for x in owner_review}&set(bykey))-seen):")
+s=s.replace('121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548','e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc')
+s=s.replace("schema='NKS-Pool-inventory-v1'","schema='NKZ-Pool-inventory-v1'")
+s=s.replace("frozen_revision=F,pool_elf", "frozen_revision=F,crates_revision=C,pool_elf")
+s=s.replace("'No registry-maintenance/admin/standalone-close dispatch branch in Pool; close_program_account_v1 is an ON cancel/settle callee, not an OFF instruction.'", "'No registry-maintenance/admin/standalone-close dispatch branch remains. Seven legacy magics now reject; see NKZ_DIFF.md.'")
+(E/'NKZ_inventory.py').write_text(s)
+s=(O/'NKS_report.py').read_text().replace('NKS_','NKZ_').replace("F='"+C+"'","F='"+F+"';C='"+C+"'")
+s=s.replace("owners=niz['owners'];ownerkeys", "owners=[o for o in niz['owners'] if o['function'] in ast];ownerkeys")
+a=s.index('checks=[]');b=s.index('# Retained helper laws')
+s=s[:a]+'''checks=[]
+for p in nik['source_pins']:
+ r=subprocess.run(['git','show',F+':'+p['path']],cwd=R,capture_output=True)
+ checks.append(dict(**p,actual_sha256=sha(r.stdout) if r.returncode==0 else None,matches=r.returncode==0 and sha(r.stdout)==p['sha256'],disposition='REUSE WHOLE FILE' if r.returncode==0 and sha(r.stdout)==p['sha256'] else 'REMOVED OR CHANGED: no whole-file native reuse'))
+native_bodies={f['function']:f for f in nik['functions']}
+corroborated=[r['id'] for r in rows if r['function'] in native_bodies and native_bodies[r['function']].get('body_sha256')==r['frozen_body_sha256'] and native_bodies[r['function']]['mir_headers']]
+put('NKZ_NATIVE_SBF.json',dict(native_census='evidence/pool-borrow-20261107/NIK_CENSUS.json',native_source_checks=checks,native_mir_sha256=nik['mir_sha256'],native_compiler='historical rustc 1.94.1 --release, deployed Pool features',sbf_compiler='rustc 1.89.0-sbpf-solana-v1.52 --target sbpf-solana-solana -C opt-level=3',on_rows_native_body_corroborated=corroborated,warning='Native historical whole-file reuse restricted to equal hashes; changed processor entry reviewed from new source and new deployed SBF MIR. Native-only cfg is source-reviewed separately. No native compilation or new native credit.',mir_builds_reused=True))
+''' +s[b:]
+# New source AST supplies accessor lines; never retain stale deleted source sites.
+a=s.index('access=[]');b=s.index('held_names=')
+s=s[:a]+'''access=[]
+emitted_graph=json.loads(lzma.open(E/'NKZ_GRAPH.json.xz').read())
+emitted={h['owner'] for h in emitted_graph['headers'] if h['owner']}|{f for h in emitted_graph['headers'] for f in h['conservative_owners']}
+for d in ast.values():
+ if not d['file'].startswith('programs/aspis-pool/') or d['function'] not in emitted:continue
+ for c in d['calls']:
+  name=c['expression'].split('.')[-1]
+  if name not in ['data_is_empty','data_len','lamports']:continue
+  r=by.get(d['function']);access.append(dict(function=d['function'],line=c['line'],accessor=name,row=r['id'] if r else None,scope=r['scope'] if r else 'OFF_HELPER_NOT_IN_ON_CLOSURE',status='OPEN caller borrowability; K086 production reachability/exclusion unproved' if name=='data_is_empty' else 'OPEN caller/data-or-lamport scope association'))
+''' +s[b:]
+s=s.replace(" r=next(r for r in allrows if r['function'].endswith('::'+name));held.append", " r=next((r for r in allrows if r['function'].endswith('::'+name)),None)\n if r is None:continue\n held.append")
+s=s.replace('all four held sites and all thirteen whole original guard scopes remain OPEN','all retained held sites and exclusive-guard scopes remain OPEN; removed sites/owners are listed in NKZ_DIFF.md')
+s=s.replace('all21 accessor sites','all current accessor sites')
+s=s.replace('Three held units remain in the ON union. The checkpoint root and close helper remain ON; closing is a settlement/cancel callee, never an executed cleanup here.','Two held units remain in the ON union; the legacy transition callback was deleted. The checkpoint root remains ON; legacy close/cancel/prepared settlement were deleted.')
+s=s.replace('All21 accessors (7 data_is_empty,5 data_len,9 lamports) are numbered or explicitly OFF','All current accessor sites are numbered or explicitly OFF')
+s=s.replace('Four OFF guard owners are separately numbered.',"{len(review)} OFF guard owners are separately numbered.")
+s=s.replace('Across the guard campaigns,0/13 original guard owners and0/4 held-boundary certificates were completed.','Historically,0/13 guard owners and0/4 held-boundary certificates were completed; removal is scope reduction, not proof closure.')
+(E/'NKZ_report.py').write_text(s)
