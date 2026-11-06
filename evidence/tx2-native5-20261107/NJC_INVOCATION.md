@@ -31,3 +31,9 @@ canonical_scan TX1:084 is only the retained history producer child law, outside 
 ## Gate interpretation
 
 An (aq) clause must be proved with the listed theorem and SAME decoded arguments, including full post frame. Ledger CLOSED does not by itself prove the parent domain. No clause is accepted as a root hypothesis. Until every M01..M11 and caller domain is installed, no positive native root theorem or ledger promotion is claimed.
+
+## Installed clauses and current split
+
+NJC_OrderedCalls consumes the CLOSED mark/None law at both phases and the complete powers29 law at the SAME gamma. NJC_QueryOccurrence derives its canonical domain from the same successful reference resume; that reached-branch lemma is not a root premise. NJC_ClosedCalls installs literal parser/geometry children in the source-ordered parent. NJC_ValidateCalls installs the complete freshly emitted validator at the nested resume call; NJC_ResumeCalls and NJC_OrderedCalls compose through NIY_ResumePort.source. The printed parent retains an arbitrary base dictionary and unbound native resume primitives, so TX2:065 stays OPEN. NJC_REMAINING.md is the exact current M01–M13 inventory; old baseline statuses above are not silently changed.
+
+NJC_ValidatePort.source/frame and NJC_ValidateResult.source are the candidate complete TX2:126 child law, on every array22 (no acceptance or uniqueness precondition). Admission/credit waits for the next ledger gate. NJC_RawPort and NJC_RawWindows preserve complete Result/backing through explicit unwrap/parser boundaries; they do not silently identify the concrete debug-bearing unwrap. NJC_ScanViews uses CLOSED opening bytes at the same arguments; a pointer never proves payload contents.

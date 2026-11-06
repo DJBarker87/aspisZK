@@ -90,6 +90,7 @@ if kind=='kani':
  if os.environ.get('NJC_BAD_STAGE'):config['env']['RUSTFLAGS']+=' --cfg NJC_bad_stage'
  if os.environ.get('NJC_BAD_VIEW'):config['env']['RUSTFLAGS']+=' --cfg NJC_bad_view'
  if os.environ.get('NJC_BAD_ALLOC'):config['env']['RUSTFLAGS']+=' --cfg NJC_bad_alloc'
+ if os.environ.get('NJC_BAD_ERROR'):config['env']['RUSTFLAGS']+=' --cfg NJC_bad_error'
  if os.environ.get('NJC_BAD_BOX_VALUE'):config['env']['RUSTFLAGS']+=' --cfg NJC_bad_box_value'
  if os.environ.get('NJC_CORRUPT_ARGUMENT') is not None:
   z=os.environ['NJC_CORRUPT_ARGUMENT'];assert re.fullmatch('[0-9]',z);config['env']['RUSTFLAGS']+=' --cfg NJC_corrupt'+z

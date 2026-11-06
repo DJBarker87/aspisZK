@@ -4,7 +4,7 @@ E=Path(__file__).resolve().parent;P=E.parent/'tx2-native4-20261107'
 selected={}
 for p in sorted(E.glob('NJC_L[0-9][0-9][0-9]/receipt.json')):
  r=json.loads(p.read_text());m=r['module'];src=E/(m+'.lean')
- if r['kind']!='lean' or r['exit_status']!=0 or not src.exists() or m in ['NJC_Inspect','NJC_Driver','NJC_ProofDriver','NJC_COMBINED_IMPORT']:continue
+ if r['kind']!='lean' or r['exit_status']!=0 or not src.exists() or m in ['NJC_Inspect','NJC_ValidateInspect','NJC_ValidateInspect2','NJC_Driver','NJC_ProofDriver','NJC_COMBINED_IMPORT']:continue
  if r['source_hashes'].get('NJC_generated/'+m+'.lean')!=hashlib.sha256(src.read_bytes()).hexdigest():continue
  selected[m]=dict(module=m,receipt=str(p.relative_to(E)),source_sha256=hashlib.sha256(src.read_bytes()).hexdigest())
 mods=list(selected);roots=[]

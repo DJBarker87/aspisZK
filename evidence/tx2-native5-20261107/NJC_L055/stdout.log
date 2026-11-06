@@ -1,0 +1,384 @@
+NJC_generated/NJC_RawWindows.lean:24:40: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NJC_generated/NJC_RawWindows.lean:36:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  parse b.to_slice
+in the target expression
+  (let (a, self1) := (b, out)
+    do
+    let o ← parse a.to_slice
+    let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (r, self1)) =
+    do
+    let (reply, _) ←
+      let (a, self1) := (b, out')
+        do
+        let o ← parse a.to_slice
+        let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+        ok (r, self1)
+    ok (reply, out)
+
+case fail
+unwrap : core.result.Result (Std.Array U8 16#usize) core.array.TryFromSliceError → Result (Std.Array U8 16#usize)
+unwrap_ok : ∀ (b : Std.Array U8 16#usize), unwrap (core.result.Result.Ok b) = ok b
+parse : Slice U8 → Result (Option Fresh.K)
+r : Fresh.R
+bound : ↑r.at + 16 ≤ (↑r.bytes).length
+b : Std.Array U8 16#usize
+out : Fresh.R
+run : NJC_ReaderEmission.verifier.Reader.raw 16#usize unwrap r = ok (b, out)
+contents : ↑b = List.take (↑16#usize) (List.drop ↑r.at ↑r.bytes)
+cursor : ↑out.at = ↑r.at + ↑16#usize
+backing : out.bytes = r.bytes
+out' : Fresh.R
+left✝ : ↑out'.at = ↑{ bytes := b.to_slice, «at» := 0#usize }.at + ↑16#usize
+right✝ : out'.bytes = { bytes := b.to_slice, «at» := 0#usize }.bytes
+run' : NJC_ReaderEmission.verifier.Reader.raw 16#usize unwrap { bytes := b.to_slice, «at» := 0#usize } = ok (b, out')
+contents' :
+  ↑b =
+    List.take (↑16#usize)
+      (List.drop ↑{ bytes := b.to_slice, «at» := 0#usize }.at ↑{ bytes := b.to_slice, «at» := 0#usize }.bytes)
+err : Error
+h : parse b.to_slice = fail err
+⊢ (let (a, self1) := (b, out)
+    do
+    let o ← parse a.to_slice
+    let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (r, self1)) =
+    do
+    let (reply, _) ←
+      let (a, self1) := (b, out')
+        do
+        let o ← parse a.to_slice
+        let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+        ok (r, self1)
+    ok (reply, out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJC_generated/NJC_RawWindows.lean:37:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  parse b.to_slice
+in the target expression
+  (let (a, self1) := (b, out)
+    do
+    let o ← parse a.to_slice
+    let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (r, self1)) =
+    do
+    let (reply, _) ←
+      let (a, self1) := (b, out')
+        do
+        let o ← parse a.to_slice
+        let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+        ok (r, self1)
+    ok (reply, out)
+
+case div
+unwrap : core.result.Result (Std.Array U8 16#usize) core.array.TryFromSliceError → Result (Std.Array U8 16#usize)
+unwrap_ok : ∀ (b : Std.Array U8 16#usize), unwrap (core.result.Result.Ok b) = ok b
+parse : Slice U8 → Result (Option Fresh.K)
+r : Fresh.R
+bound : ↑r.at + 16 ≤ (↑r.bytes).length
+b : Std.Array U8 16#usize
+out : Fresh.R
+run : NJC_ReaderEmission.verifier.Reader.raw 16#usize unwrap r = ok (b, out)
+contents : ↑b = List.take (↑16#usize) (List.drop ↑r.at ↑r.bytes)
+cursor : ↑out.at = ↑r.at + ↑16#usize
+backing : out.bytes = r.bytes
+out' : Fresh.R
+left✝ : ↑out'.at = ↑{ bytes := b.to_slice, «at» := 0#usize }.at + ↑16#usize
+right✝ : out'.bytes = { bytes := b.to_slice, «at» := 0#usize }.bytes
+run' : NJC_ReaderEmission.verifier.Reader.raw 16#usize unwrap { bytes := b.to_slice, «at» := 0#usize } = ok (b, out')
+contents' :
+  ↑b =
+    List.take (↑16#usize)
+      (List.drop ↑{ bytes := b.to_slice, «at» := 0#usize }.at ↑{ bytes := b.to_slice, «at» := 0#usize }.bytes)
+h : parse b.to_slice = div
+⊢ (let (a, self1) := (b, out)
+    do
+    let o ← parse a.to_slice
+    let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (r, self1)) =
+    do
+    let (reply, _) ←
+      let (a, self1) := (b, out')
+        do
+        let o ← parse a.to_slice
+        let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+        ok (r, self1)
+    ok (reply, out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJC_generated/NJC_RawWindows.lean:38:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  parse b.to_slice
+in the target expression
+  (let (a, self1) := (b, out)
+    do
+    let o ← parse a.to_slice
+    let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (r, self1)) =
+    do
+    let (reply, _) ←
+      let (a, self1) := (b, out')
+        do
+        let o ← parse a.to_slice
+        let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+        ok (r, self1)
+    ok (reply, out)
+
+case ok
+unwrap : core.result.Result (Std.Array U8 16#usize) core.array.TryFromSliceError → Result (Std.Array U8 16#usize)
+unwrap_ok : ∀ (b : Std.Array U8 16#usize), unwrap (core.result.Result.Ok b) = ok b
+parse : Slice U8 → Result (Option Fresh.K)
+r : Fresh.R
+bound : ↑r.at + 16 ≤ (↑r.bytes).length
+b : Std.Array U8 16#usize
+out : Fresh.R
+run : NJC_ReaderEmission.verifier.Reader.raw 16#usize unwrap r = ok (b, out)
+contents : ↑b = List.take (↑16#usize) (List.drop ↑r.at ↑r.bytes)
+cursor : ↑out.at = ↑r.at + ↑16#usize
+backing : out.bytes = r.bytes
+out' : Fresh.R
+left✝ : ↑out'.at = ↑{ bytes := b.to_slice, «at» := 0#usize }.at + ↑16#usize
+right✝ : out'.bytes = { bytes := b.to_slice, «at» := 0#usize }.bytes
+run' : NJC_ReaderEmission.verifier.Reader.raw 16#usize unwrap { bytes := b.to_slice, «at» := 0#usize } = ok (b, out')
+contents' :
+  ↑b =
+    List.take (↑16#usize)
+      (List.drop ↑{ bytes := b.to_slice, «at» := 0#usize }.at ↑{ bytes := b.to_slice, «at» := 0#usize }.bytes)
+value : Option Fresh.K
+h : parse b.to_slice = ok value
+⊢ (let (a, self1) := (b, out)
+    do
+    let o ← parse a.to_slice
+    let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (r, self1)) =
+    do
+    let (reply, _) ←
+      let (a, self1) := (b, out')
+        do
+        let o ← parse a.to_slice
+        let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+        ok (r, self1)
+    ok (reply, out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJC_generated/NJC_RawWindows.lean:54:40: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NJC_generated/NJC_RawWindows.lean:66:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  parse b.to_slice
+in the target expression
+  (let (a, self1) := (b, out)
+    do
+    let o ← parse a.to_slice
+    let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (r, self1)) =
+    do
+    let (reply, _) ←
+      let (a, self1) := (b, out')
+        do
+        let o ← parse a.to_slice
+        let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+        ok (r, self1)
+    ok (reply, out)
+
+case fail
+unwrap : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError → Result (Std.Array U8 32#usize)
+unwrap_ok : ∀ (b : Std.Array U8 32#usize), unwrap (core.result.Result.Ok b) = ok b
+parse : Slice U8 → Result (Option Fresh.E)
+r : Fresh.R
+bound : ↑r.at + 32 ≤ (↑r.bytes).length
+b : Std.Array U8 32#usize
+out : Fresh.R
+run : NJC_ReaderEmission.verifier.Reader.raw 32#usize unwrap r = ok (b, out)
+contents : ↑b = List.take (↑32#usize) (List.drop ↑r.at ↑r.bytes)
+cursor : ↑out.at = ↑r.at + ↑32#usize
+backing : out.bytes = r.bytes
+out' : Fresh.R
+left✝ : ↑out'.at = ↑{ bytes := b.to_slice, «at» := 0#usize }.at + ↑32#usize
+right✝ : out'.bytes = { bytes := b.to_slice, «at» := 0#usize }.bytes
+run' : NJC_ReaderEmission.verifier.Reader.raw 32#usize unwrap { bytes := b.to_slice, «at» := 0#usize } = ok (b, out')
+contents' :
+  ↑b =
+    List.take (↑32#usize)
+      (List.drop ↑{ bytes := b.to_slice, «at» := 0#usize }.at ↑{ bytes := b.to_slice, «at» := 0#usize }.bytes)
+err : Error
+h : parse b.to_slice = fail err
+⊢ (let (a, self1) := (b, out)
+    do
+    let o ← parse a.to_slice
+    let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (r, self1)) =
+    do
+    let (reply, _) ←
+      let (a, self1) := (b, out')
+        do
+        let o ← parse a.to_slice
+        let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+        ok (r, self1)
+    ok (reply, out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJC_generated/NJC_RawWindows.lean:67:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  parse b.to_slice
+in the target expression
+  (let (a, self1) := (b, out)
+    do
+    let o ← parse a.to_slice
+    let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (r, self1)) =
+    do
+    let (reply, _) ←
+      let (a, self1) := (b, out')
+        do
+        let o ← parse a.to_slice
+        let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+        ok (r, self1)
+    ok (reply, out)
+
+case div
+unwrap : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError → Result (Std.Array U8 32#usize)
+unwrap_ok : ∀ (b : Std.Array U8 32#usize), unwrap (core.result.Result.Ok b) = ok b
+parse : Slice U8 → Result (Option Fresh.E)
+r : Fresh.R
+bound : ↑r.at + 32 ≤ (↑r.bytes).length
+b : Std.Array U8 32#usize
+out : Fresh.R
+run : NJC_ReaderEmission.verifier.Reader.raw 32#usize unwrap r = ok (b, out)
+contents : ↑b = List.take (↑32#usize) (List.drop ↑r.at ↑r.bytes)
+cursor : ↑out.at = ↑r.at + ↑32#usize
+backing : out.bytes = r.bytes
+out' : Fresh.R
+left✝ : ↑out'.at = ↑{ bytes := b.to_slice, «at» := 0#usize }.at + ↑32#usize
+right✝ : out'.bytes = { bytes := b.to_slice, «at» := 0#usize }.bytes
+run' : NJC_ReaderEmission.verifier.Reader.raw 32#usize unwrap { bytes := b.to_slice, «at» := 0#usize } = ok (b, out')
+contents' :
+  ↑b =
+    List.take (↑32#usize)
+      (List.drop ↑{ bytes := b.to_slice, «at» := 0#usize }.at ↑{ bytes := b.to_slice, «at» := 0#usize }.bytes)
+h : parse b.to_slice = div
+⊢ (let (a, self1) := (b, out)
+    do
+    let o ← parse a.to_slice
+    let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (r, self1)) =
+    do
+    let (reply, _) ←
+      let (a, self1) := (b, out')
+        do
+        let o ← parse a.to_slice
+        let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+        ok (r, self1)
+    ok (reply, out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJC_generated/NJC_RawWindows.lean:68:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  parse b.to_slice
+in the target expression
+  (let (a, self1) := (b, out)
+    do
+    let o ← parse a.to_slice
+    let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (r, self1)) =
+    do
+    let (reply, _) ←
+      let (a, self1) := (b, out')
+        do
+        let o ← parse a.to_slice
+        let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+        ok (r, self1)
+    ok (reply, out)
+
+case ok
+unwrap : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError → Result (Std.Array U8 32#usize)
+unwrap_ok : ∀ (b : Std.Array U8 32#usize), unwrap (core.result.Result.Ok b) = ok b
+parse : Slice U8 → Result (Option Fresh.E)
+r : Fresh.R
+bound : ↑r.at + 32 ≤ (↑r.bytes).length
+b : Std.Array U8 32#usize
+out : Fresh.R
+run : NJC_ReaderEmission.verifier.Reader.raw 32#usize unwrap r = ok (b, out)
+contents : ↑b = List.take (↑32#usize) (List.drop ↑r.at ↑r.bytes)
+cursor : ↑out.at = ↑r.at + ↑32#usize
+backing : out.bytes = r.bytes
+out' : Fresh.R
+left✝ : ↑out'.at = ↑{ bytes := b.to_slice, «at» := 0#usize }.at + ↑32#usize
+right✝ : out'.bytes = { bytes := b.to_slice, «at» := 0#usize }.bytes
+run' : NJC_ReaderEmission.verifier.Reader.raw 32#usize unwrap { bytes := b.to_slice, «at» := 0#usize } = ok (b, out')
+contents' :
+  ↑b =
+    List.take (↑32#usize)
+      (List.drop ↑{ bytes := b.to_slice, «at» := 0#usize }.at ↑{ bytes := b.to_slice, «at» := 0#usize }.bytes)
+value : Option Fresh.E
+h : parse b.to_slice = ok value
+⊢ (let (a, self1) := (b, out)
+    do
+    let o ← parse a.to_slice
+    let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+    ok (r, self1)) =
+    do
+    let (reply, _) ←
+      let (a, self1) := (b, out')
+        do
+        let o ← parse a.to_slice
+        let r ← NJC_ReaderEmission.core.option.Option.ok_or o NID_ResumeEmission.verifier.Error.Checkpoint
+        ok (r, self1)
+    ok (reply, out)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NJC_RawWindows.k' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJC_RawWindows.e' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

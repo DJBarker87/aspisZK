@@ -1,0 +1,25 @@
+def Aeneas.Std.core.array.Array.index : {T I Output : Type} →
+  {N : Usize} → core.ops.index.Index (Slice T) I Output → Std.Array T N → I → Result Output :=
+fun {T I Output} {N} inst a i => inst.index a.to_slice i
+def Aeneas.Std.core.ops.index.IndexSlice : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → core.ops.index.Index (Slice T) I Output :=
+fun {T I Output} inst => { index := core.slice.index.Slice.index inst }
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if ↑r.end ≤ s.length then ok ⟨List.slice 0 ↑r.end ↑s, ⋯⟩ else fail Error.panic
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+@[reducible] def Aeneas.Std.core.cmp.PartialEqU32 : core.cmp.PartialEq U32 U32 :=
+{ eq := liftFun2 core.cmp.impls.PartialEqU32.eq, ne := liftFun2 core.cmp.impls.PartialEqU32.ne }
+Aeneas.Std.Array.index_usize_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize)
+  (hbound : ↑i < v.length) : v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄
+Aeneas.Std.Array.index_SliceIndexRangeToUsizeSlice {T : Type} {N : Usize} (a : Std.Array T N)
+  (r : core.ops.range.RangeTo Usize) :
+  core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice T)) a r =
+    core.slice.index.SliceIndexRangeToUsizeSlice.index r a.to_slice
+List.take_succ.{u_1} {α : Type u_1} {l : List α} {i : ℕ} : List.take (i + 1) l = List.take i l ++ l[i]?.toList
+List.take_succ_eq_append_getElem.{u_1} {α : Type u_1} {i : ℕ} {l : List α} (h : i < l.length) :
+  List.take (i + 1) l = List.take i l ++ [l[i]]

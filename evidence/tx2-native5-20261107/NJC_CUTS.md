@@ -13,3 +13,9 @@ Native parent cut transcriptions must stay within NHV_native.rs.txt's actual ass
 - FlushLog asserts the local selected caller/read/post/frame facts only; no full flush result law is available in ledger13.
 
 NJC_ReaderResults is an (aq)(3) child-law completion candidate: a complete decoder specification plus emitted backing frame. Its compiling selected version and matching native checks are required before it may enter NJC_CERTIFICATES. No failed version or sorryAx-bearing object is selected.
+
+## Fresh source installation stage
+
+NJC_ValidateEmission is the actual E001 frozen validator body (checked18-bit shift and checked cursor increment). NJC_Contains proves the reached Aeneas standard contains implementation on the exact U32 prefix. NJC_ValidateStep and NJC_ValidatePort prove one-step and suffix induction, complete Result and unchanged-state/empty-event frame. NJC_ValidateCalls.clause discharges the child's complete reply by applying that theorem at the SAME array22, and NJC_ValidateCalls.resume installs it at the literal NID resume call. NJC_ResumeCalls.parent then composes through NIY_ResumePort.source. No child Result hypothesis is added. The parent still contains OPEN base operations and reference-only primitives, so it fails the positive-root hypothesis audit.
+
+NJC_RawPort.transport/bounded keep the exact raw read/range/copy sequencing with an explicit lawful unwrap. Concrete debug instance identity is OPEN; the nonstandard Formatter boundary is not imported. NJC_ScanViews obtains full U8 bytes from the CLOSED opening theorem, then exact nested subwindows. NJC_ScanPartition proves the pure word-set layout symbolically; it does not claim that the outstanding native trace/iterator-frame obligations have been discharged.

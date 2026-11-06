@@ -1,4 +1,5 @@
 import NJC_ClosedCalls
+import NJC_ValidateCalls
 set_option autoImplicit false
 noncomputable section
 namespace NJC_ResumeCalls
@@ -18,7 +19,7 @@ primitive/allocator/header dictionary equals this reference dictionary. -/
 def reference (reserved : Bool) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
  (ck proof pub : Slice U8) (v : transport.Variant) (hash : H) :=
  match v with
- | .S2 => NIL_StatePort.reply (NIL_FreshOps.resume reserved (digest d) ck proof pub .S2 hash)
+ | .S2 => NIL_StatePort.reply (NJC_ValidateCalls.resume reserved (digest d) ck proof pub .S2 hash)
  | _ => cohort reserved d ck proof pub v hash
 
 theorem clause (reserved : Bool) {H : Type} (d : VTop_Stages.aspis_core.digest.Digest32 H)
@@ -27,7 +28,7 @@ theorem clause (reserved : Bool) {H : Type} (d : VTop_Stages.aspis_core.digest.D
  cases v with
  | S1 => rfl
  | D => rfl
- | S2 => exact NIY_ResumePort.source reserved (digest d) ck proof pub hash
+ | S2 => exact NJC_ValidateCalls.source reserved (digest d) ck proof pub hash
 
 def literal (base : VTop_Stages.Ops) (reserved : Bool) : VTop_Stages.Ops :=
  {NJC_ClosedCalls.literal base with op18:=fun d ck proof pub v hash=>NHT_ResultPort.action (reference reserved d ck proof pub v hash)}

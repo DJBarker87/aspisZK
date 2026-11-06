@@ -26,3 +26,18 @@ fn validate_step(){check();}
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn validate_step_renamed(){check();}
+
+fn end_check(){let queries:[u32;22]=kani::any();let i:usize=kani::any();kani::assume(i>=22);
+ let result:Result<(),Error>=if i<queries.len(){unreachable!()}else{Ok(())};
+ assert_eq!(result.is_ok(),!cfg!(NJC_invert));
+}
+#[kani::proof]
+#[kani::unwind(26)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn validate_end(){end_check();}
+#[kani::proof]
+#[kani::unwind(26)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn validate_end_renamed(){end_check();}
