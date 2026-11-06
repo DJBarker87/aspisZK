@@ -1,0 +1,45 @@
+{"attempt": "NKI_L062", "exit_status": 0, "wall_seconds": 9.860756610054523, "peak_rss_kib": "6186096", "swaps": "0", "print_axioms": ["'AspisR1.NKI_ScheduleSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NKI_ScheduleSource.source : ∀ (packed : Std.Array NQ 24#usize) (p : Public) (o : Openings)
+  (s : Selectors),
+  canonical packed →
+    canonical o.z →
+      canonical s.high →
+        canonical s.low →
+          ∃ l absorption middle out,
+            NKI_InitialInvocation.Clauses p o s l ∧
+              NKI_InitialCuts.Cut p o s l absorption (NKI_InitialCuts.observations p o s l absorption)
+                  ![12, 2, 12, 9, 16, 4, 1] ∧
+                pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s =
+                    ok (l.initial2, absorption) ∧
+                  pool_v1.pair_forest_semantic_terminal.add_preweighted packed 0#usize l.initial2 = 
+...
+  (Eq.mpr
+                                  (id
+                                    (congrArg (fun _a => _a = ok out)
+                                      (bind_tc_ok middle fun next =>
+                                        pool_v1.pair_forest_semantic_terminal.add_preweighted next 16#usize
+                                          absorption)))
+                                  (Eq.mpr (id (congrArg (fun _a => _a = ok out) co)) (Eq.refl (ok out)))))))),
+                      ⟨ho, fun j =>
+                        Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                _a =
+                                  decoded packed j + FIx_SelectedMeaning.contribution (decoded l.initial2) 0 ↑j +
+                                    FIx_SelectedMeaning.contribution (decoded absorption) 16 ↑j)
+                              (vo j)))
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  _a + FIx_SelectedMeaning.contribution (decoded absorption) ↑16#usize ↑j =
+                                    decoded packed j + FIx_SelectedMeaning.contribution (decoded l.initial2) 0 ↑j +
+                                      FIx_SelectedMeaning.contribution (decoded absorption) 16 ↑j)
+                                (vm j)))
+                            (Eq.refl
+                              (decoded packed j + FIx_SelectedMeaning.contribution (decoded l.initial2) ↑0#usize ↑j +
+                                FIx_SelectedMeaning.contribution (decoded absorption) ↑16#usize ↑j)))⟩⟩⟩⟩⟩⟩⟩)))
+'AspisR1.NKI_ScheduleSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4906d7f801ed4c089bce2c5f0e612a70.scope; invocation ID: 02fb94c0d2d948e58d04e866110ccc6c

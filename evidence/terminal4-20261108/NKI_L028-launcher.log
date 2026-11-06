@@ -1,0 +1,68 @@
+{"attempt": "NKI_L028", "exit_status": 1, "wall_seconds": 8.82576160109602, "peak_rss_kib": "6147824", "swaps": "0", "print_axioms": ["'AspisR1.NKI_InitialFactor.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKI_InitialFactor.lean:14:94: error: unsolved goals
+p : Public
+o : Openings
+s : Selectors
+⊢ (do
+      let x ←
+        lift
+            (Array.make 2#usize [{ start := 4#usize, «end» := 25#usize }, { start := 33#usize, «end» := 57#usize }]
+                NKI_InitialPrefix.run._proof_6).to_slice
+      let x ← pool_v1.pair_forest_semantic_terminal.sum_high s x
+      let x_1 ← s.high.index_usize 0#usize
+      let x_2 ← s.high.index_usize 1#usize
+      let x_3 ← x_1.add x_2
+      let x_4 ← s.high.index_usize 25#usize
+      let x_5 ← x_3.add x_4
+      let x_6 ← s.high.index_usize 30#usize
+      let x_7 ← x_5.add x_6
+      let x_8 ← s.high.index_usize 27#usize
+      let x_9 ← s.high.index_usize 28
+...
+l_m31 spend.DOMAIN_NOTE
+    let q16 ← q14.add q15
+    let q17 ← q3.mul_m31 spend.DOMAIN_NULLIFIER
+    let domain ← q16.add q17
+    let q18 ← q.mul_m31 8#u32
+    let q19 ← note_first.mul_m31 18#u32
+    let q20 ← q18.add q19
+    let q21 ← q3.mul_m31 16#u32
+    let length ← q20.add q21
+    let q22 ← initial.index_usize poseidon2.RATE
+    let q23 ← q9.mul domain
+    let q24 ← q22.sub q23
+    let initial1 ← initial.update poseidon2.RATE q24
+    let i ← poseidon2.RATE + 1#usize
+    let q25 ← initial1.index_usize i
+    let q26 ← q9.mul length
+    let q27 ← q25.sub q26
+    let initial2 ← initial1.update i q27
+    let q28 ← q.add q1
+    let q29 ← s.high.index_usize 2#usize
+    let q30 ← q28.add q29
+    let q31 ← q30.add q3
+    let q32 ← s.high.index_usize 26#usize
+    let q33 ← q31.add q32
+    let q34 ← q33.add q5
+    let q35 ← s.high.index_usize 31#usize
+    let chunk_eight ← q34.add q35
+    let q36 ← s.high.index_usize 3#usize
+    let q37 ← s.high.index_usize 32#usize
+    let chunk_two ← q36.add q37
+    let chunk_eight1 ← chunk_eight.add private_chunk_eight
+    let chunk_two1 ← chunk_two.add private_chunk_two
+    let q38 ← s.low.index_usize 12#usize
+    let absorption ←
+      pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal q38 fixed chunk_two1 chunk_eight1 nodes o.z
+    ok (initial2, absorption)
+NKI_InitialFactor.lean:15:126: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [literal, ̲NKI_InitialPrefix.run,
+  ̲ ̲ ̲ ̲pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption, ̲bind_assoc_eq,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NKI_InitialFactor.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf4005748f85d4cfba1f514aa53825c53.scope; invocation ID: a026edbc63f644a591d763f8ca31de90

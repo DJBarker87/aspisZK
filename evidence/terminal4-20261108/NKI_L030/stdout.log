@@ -1,0 +1,77 @@
+theorem AspisR1.NKI_InitialAssociation.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  canonical o.z →
+    canonical s.high →
+      canonical s.low →
+        ∃ t absorption,
+          NKI_InitialPrefix.run p o s = ok t ∧
+            NKI_InitialTotal.Canonical t ∧
+              NJB_Absorption.reference t.low t.fixed t.two t.eight t.nodes o.z = ok absorption ∧
+                pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal t.low t.fixed t.two t.eight t.nodes o.z =
+                    ok absorption ∧
+                  canonical absorption ∧
+                    reference p o s = ok (t.initial, absorption) ∧
+                      pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s =
+                        ok (t.initial, absorption) :=
+fun p o s hz hh hl =>
+  let ⟨t, h✝⟩ := spec_imp_exists (NKI_InitialTotal.source p o s hz hh hl)
+  let ⟨ct, ht⟩ := h✝
+  let ⟨r, h✝¹⟩ :=
+    NJL_AbsorptionInvocation.source t.low t.fixed t.two t.eight t.nodes o.z ht.right.left ht.right.right.left
+      ht.right.right.right.left ht.right.right.right.right.left ht.right.right.right.right.right hz
+  let ⟨caches, h✝²⟩ := h✝¹
+  let ⟨scales, h✝³⟩ := h✝²
+  let ⟨ys, h✝⁴⟩ := h✝³
+  let ⟨absorption, h✝⁵⟩ := h✝⁴
+  let ⟨cut, right✝⟩ := h✝⁵
+  let ⟨clauses, right✝¹⟩ := right✝
+  let ⟨trace, right✝²⟩ := right✝¹
+  let ⟨eq, right✝³⟩ := right✝²
+  let ⟨ha, right✝⁴⟩ := right✝³
+  let ⟨ca, co⟩ := right✝⁴
+  Exists.intro t
+    (Exists.intro absorption
+      ⟨ct,
+        ⟨ht,
+          ⟨ca,
+            ⟨co,
+              ⟨ha,
+                ⟨of_eq_true
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans
+                            (Eq.trans
+                              (congrFun' (congrArg Bind.bind ct) fun t => do
+                                let absorption ← NJB_Absorption.reference t.low t.fixed t.two t.eight t.nodes o.z
+                                ok (t.initial, absorption))
+                              (bind_tc_ok t fun y => do
+                                let absorption ← NJB_Absorption.reference y.low y.fixed y.two y.eight y.nodes o.z
+                                ok (y.initial, absorption)))
+                            (Eq.trans (congrFun' (congrArg Bind.bind ca) fun absorption => ok (t.initial, absorption))
+                              (bind_tc_ok absorption fun y => ok (t.initial, y)))))
+                        (ok (t.initial, absorption)))
+                      (eq_self (ok (t.initial, absorption)))),
+                  Eq.mpr
+                    (id
+                      (congrArg (fun _a => _a = ok (t.initial, absorption)) (Eq.symm (NKI_InitialFactor.source p o s))))
+                    (of_eq_true
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (Eq.trans
+                                (congrFun' (congrArg Bind.bind ct) fun t => do
+                                  let absorption ←
+                                    pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal t.low t.fixed t.two
+                                        t.eight t.nodes o.z
+                                  ok (t.initial, absorption))
+                                (bind_tc_ok t fun y => do
+                                  let absorption ←
+                                    pool_v1.pair_forest_semantic_terminal.absorption_lanes_literal y.low y.fixed y.two
+                                        y.eight y.nodes o.z
+                                  ok (y.initial, absorption)))
+                              (Eq.trans (congrFun' (congrArg Bind.bind co) fun absorption => ok (t.initial, absorption))
+                                (bind_tc_ok absorption fun y => ok (t.initial, y)))))
+                          (ok (t.initial, absorption)))
+                        (eq_self (ok (t.initial, absorption)))))⟩⟩⟩⟩⟩⟩)
+'AspisR1.NKI_InitialAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]

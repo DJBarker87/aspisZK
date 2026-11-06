@@ -1,0 +1,60 @@
+{"attempt": "NKI_L053", "exit_status": 1, "wall_seconds": 15.79597893403843, "peak_rss_kib": "6143684", "swaps": "0", "print_axioms": ["'AspisR1.NKI_InitialRoot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NKI_InitialRoot.lean:27:48: error: unsolved goals
+case this
+p : Public
+o : Openings
+s : Selectors
+hz : canonical o.z
+hh : canonical s.high
+hl : canonical s.low
+l : Locals
+cl : NKI_InitialTrace.run p o s = ok l
+hc : NKI_InitialTrace.Canonical l
+calls : NKI_InitialInvocation.Clauses p o s l
+domains : NJB_PreparedLaws.Domain l.full l.full_initial_selector ∧ NJB_PreparedLaws.Domain l.full_or_rate l.q12
+⊢ ?m.88
+
+p : Public
+o : Openings
+s : Selectors
+hz : canonical o.z
+hh : canonical s.high
+hl : canonical s.low
+l : Locals
+cl : NKI_InitialTrace.run p o s = ok l
+hc : NKI_InitialTrace.Canonical l
+calls : NKI_InitialInvocation.Clauses p o s l
+domains : NJB_PreparedLaws.Domain l.full l.full_initial_sel
+...
+ identifier; expected prec
+NKI_InitialRoot.lean:36:84: error: unexpected token ')'; expected ':'
+theorem AspisR1.NKI_InitialRoot.source : ∀ (p : Public) (o : Openings) (s : Selectors),
+  canonical o.z →
+    canonical s.high →
+      canonical s.low →
+        ∃ l absorption,
+          NKI_InitialInvocation.Clauses p o s l ∧
+            NKI_InitialTrace.Canonical l ∧
+              NKI_InitialReads.Reads s l ∧
+                NJB_PreparedLaws.Domain l.full l.full_initial_selector ∧
+                  NJB_PreparedLaws.Domain l.full_or_rate l.q12 ∧
+                    (∀ (i : Fin 16),
+                        field.PreparedQm31Multiplier.mul (NKI_InitialLaneResults.cache l.full_or_rate l.full i)
+                            (NJB_ArrayCarrier.cell o.z i) =
+                          ok (NJB_ArrayCarrier.cell l.initial i)) ∧
+                      NKI_InitialCuts.Cut p o s l absorption (NKI_InitialCuts.observations p o s l absorption)
+                          ![12, 2, 12, 9, 16, 4, 1] ∧
+                        NJB_Absorption.reference l.q38 l.fixed l.chunk_two1 l.chunk_eight1 l.nodes o.z = ok absorption ∧
+                          NKI_InitialAssociation.reference p o s = ok (l.initial2, absorption) ∧
+                            pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption p o s =
+                                ok (l.initial2, absorption) ∧
+                              canonical l.initial2 ∧ canonical absorption :=
+fun p o s hz hh hl =>
+  let ⟨l, h✝⟩ := spec_imp_exists (NKI_InitialTrace.source p o s hz hh hl)
+  let ⟨cl, hc⟩ := h✝
+  have calls := NKI_InitialTraceFactor.clauses p o s l cl;
+  have domains := NKI_InitialDomains.source p o s l calls hc;
+  sorry
+'AspisR1.NKI_InitialRoot.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf3d87190ff49476baa70dcca38c1b339.scope; invocation ID: dc5f37134e79479c86a225c20d18ace7

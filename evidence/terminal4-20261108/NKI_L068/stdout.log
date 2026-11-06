@@ -1,0 +1,65 @@
+NKI_RangeModel.lean:35:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if 10 * ↑view ≤ ↑(index view i) ∧ ↑(index view i) < 10 * ↑view + 10 then ?m.60 else ?m.61
+in the target expression
+  (if h : 10 * ↑view ≤ ↑(index view i) ∧ ↑(index view i) < 10 * ↑view + 10 then
+      value xs ⟨↑(index view i) - 10 * ↑view, ⋯⟩
+    else 0) =
+    value xs i
+
+view : Fin 3
+xs : Fin 10 → NQ
+i : Fin 10
+hi : ↑i < 10
+bounds : 10 * ↑view ≤ ↑(index view i) ∧ ↑(index view i) < 10 * ↑view + 10
+⊢ (if h : 10 * ↑view ≤ ↑(index view i) ∧ ↑(index view i) < 10 * ↑view + 10 then
+      value xs ⟨↑(index view i) - 10 * ↑view, ⋯⟩
+    else 0) =
+    value xs i
+NKI_RangeModel.lean:57:1: error: unsolved goals
+case pos
+view : Fin 3
+xs : Fin 10 → NQ
+old : Fin 33 → K
+values : Fin 33 → K := closed view xs fun x => 0
+step :
+  (fun s i => NJX_RangeFold.modelStep view xs i s) = fun s i =>
+    NJL_WriteFrame.write s (index view i) (values (index view i))
+mapped :
+  List.foldl (fun s i => NJL_WriteFrame.write s (index view i) (values (index view i))) old (List.finRange 10) =
+    List.foldl (fun s i => NJL_WriteFrame.write s i (values i)) old (List.map (index view) (List.finRange 10))
+j : Fin 33
+h : 10 * ↑view ≤ ↑j ∧ ↑j < 10 * ↑view + 10
+⊢ (if h : 10 * ↑view ≤ ↑j ∧ ↑j < 10 * ↑view + 10 then value xs ⟨↑j - 10 * ↑view, ⋯⟩ else 0) =
+    if h : 10 * ↑view ≤ ↑j ∧ ↑j < 10 * ↑view + 10 then value xs ⟨↑j - 10 * ↑view, ⋯⟩ else old j
+NKI_RangeModel.lean:59:1: error: unsolved goals
+case neg
+view : Fin 3
+xs : Fin 10 → NQ
+old : Fin 33 → K
+values : Fin 33 → K := closed view xs fun x => 0
+step :
+  (fun s i => NJX_RangeFold.modelStep view xs i s) = fun s i =>
+    NJL_WriteFrame.write s (index view i) (values (index view i))
+mapped :
+  List.foldl (fun s i => NJL_WriteFrame.write s (index view i) (values (index view i))) old (List.finRange 10) =
+    List.foldl (fun s i => NJL_WriteFrame.write s i (values i)) old (List.map (index view) (List.finRange 10))
+j : Fin 33
+h : ¬(10 * ↑view ≤ ↑j ∧ ↑j < 10 * ↑view + 10)
+⊢ old j = if h : 10 * ↑view ≤ ↑j ∧ ↑j < 10 * ↑view + 10 then value xs ⟨↑j - 10 * ↑view, ⋯⟩ else old j
+NKI_RangeModel.lean:58:28: warning: This simp argument is unused:
+  if_pos h
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵a̵l̵u̵e̵s̵,̵c̵l̵o̵s̵e̵d̵,̵i̵f̵_̵p̵o̵s̵ ̵h̵]̵[̲v̲a̲l̲u̲e̲s̲,̲ ̲c̲l̲o̲s̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NKI_RangeModel.lean:60:21: warning: This simp argument is unused:
+  if_neg h
+
+Hint: Omit it from the simp argument list.
+  simp only [closed,̵i̵f̵_̵n̵e̵g̵ ̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NKI_RangeModel.membership' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NKI_RangeModel.at_index' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NKI_RangeModel.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

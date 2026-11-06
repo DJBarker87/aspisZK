@@ -1,0 +1,201 @@
+NKI_InitialTotal.lean:14:55: error: unsolved goals
+p : Public
+o : Openings
+s✝ : Selectors
+hz : canonical o.z
+hh : canonical s✝.high
+hl : canonical s✝.low
+zero : Canon field.QM31.ZERO
+s : Slice (core.ops.range.Range Usize)
+_✝⁵⁶ :
+  [> let s ←
+    lift
+      (Array.make 2#usize [{ start := 4#usize, «end» := 25#usize }, { start := 33#usize, «end» := 57#usize }]
+          NKI_InitialPrefix.run._proof_6).to_slice <]
+s_post :
+  s =
+    (Array.make 2#usize [{ start := 4#usize, «end» := 25#usize }, { start := 33#usize, «end» := 57#usize }]
+        NKI_InitialPrefix.run._proof_6).to_slice
+nodes : field.QM31
+_✝⁵⁵ : [> let nodes ← pool_v1.pair_forest_semantic_terminal.sum_high s✝ s <]
+nodes_post : Canon nodes
+q : field.QM31
+_✝⁵⁴ : [> let q ← s✝.high.index_usize 0#usize <]
+q_post : Canon q
+q1 : field.QM31
+_✝⁵³ : [> let q1 ← s✝.high.index_usize 1#usize <]
+q1_post : Canon q1
+q2 : field.QM31
+_✝⁵² : [> let q2 ← q.add q1 <]
+q2_post : Canon q2
+q3 : field.QM31
+_✝⁵¹ : [> let q3 ← s✝.high.index_usize 25#usize <]
+q3_post : Canon q3
+q4 : field.QM31
+_✝⁵⁰ : [> let q4 ← q2.add q3 <]
+q4_post : Canon q4
+q5 : field.QM31
+_✝⁴⁹ : [> let q5 ← s✝.high.index_usize 30#usize <]
+q5_post : Canon q5
+first_common : field.QM31
+_✝⁴⁸ : [> let first_common ← q4.add q5 <]
+first_common_post : Canon first_common
+q6 : field.QM31
+_✝⁴⁷ : [> let q6 ← s✝.high.index_usize 27#usize <]
+q6_post : Canon q6
+q7 : field.QM31
+_✝⁴⁶ : [> let q7 ← s✝.high.index_usize 28#usize <]
+q7_post : Canon q7
+q8 : field.QM31
+_✝⁴⁵ : [> let q8 ← s✝.high.index_usize 29#usize <]
+q8_post : Canon q8
+transfer_first fixed private_chunk_eight private_chunk_two : field.QM31
+_✝⁴⁴ :
+  [> let(transfer_first, fixed, private_chunk_eight, private_chunk_two) ←
+    pool_v1.pair_forest_semantic_terminal.initial_variant_selectors p.variant q6 q7 q8 <]
+transfer_first_post1 : Canon transfer_first
+transfer_first_post2 : Canon fixed
+transfer_first_post3 : Canon private_chunk_eight
+transfer_first_post4 : Canon private_chunk_two
+q9 : field.QM31
+_✝⁴³ : [> let q9 ← s✝.low.index_usize 0#usize <]
+q9_post : Canon q9
+q10 : field.QM31
+_✝⁴² : [> let q10 ← first_common.add transfer_first <]
+q10_post : Canon q10
+q11 : field.QM31
+_✝⁴¹ : [> let q11 ← q10.add fixed <]
+q11_post : Canon q11
+full_initial_selector : field.QM31
+_✝⁴⁰ : [> let full_initial_selector ← q9.mul q11 <]
+full_initial_selector_post : Canon full_initial_selector
+rate_initial_selector : field.QM31
+_✝³⁹ : [> let rate_initial_selector ← q9.mul nodes <]
+rate_initial_selector_post : Canon rate_initial_selector
+full : field.PreparedQm31Multiplier
+_✝³⁸ : [> let full ← field.PreparedQm31Multiplier.new full_initial_selector <]
+full_post : JFy_PreparedSteps.Valid full
+q12 : field.QM31
+_✝³⁷ : [> let q12 ← full_initial_selector.add rate_initial_selector <]
+q12_post : Canon q12
+full_or_rate : field.PreparedQm31Multiplier
+_✝³⁶ : [> let full_or_rate ← field.PreparedQm31Multiplier.new q12 <]
+full_or_rate_post : JFy_PreparedSteps.Valid full_or_rate
+initial : Std.Array field.QM31 16#usize
+_✝³⁵ :
+  [> let initial ←
+    array_from_fn_copy 16#usize field.QM31.Insts.CoreMarkerCopy
+      pool_v1.pair_forest_semantic_terminal.semantic_initial_and_absorption.closure.Insts.CoreOpsFunctionFnMutTupleUsizeQM31
+      field.QM31.ZERO (full_or_rate, o, full) <]
+initial_post : canonical initial
+q13 : field.QM31
+_✝³⁴ : [> let q13 ← q1.add q5 <]
+q13_post : Canon q13
+note_first : field.QM31
+_✝³³ : [> let note_first ← q13.add transfer_first <]
+note_first_post : Canon note_first
+q14 : field.QM31
+_✝³² : [> let q14 ← q.mul_m31 spend.DOMAIN_OWNER_KEY <]
+q14_post : Canon q14
+q15 : field.QM31
+_✝³¹ : [> let q15 ← note_first.mul_m31 spend.DOMAIN_NOTE <]
+q15_post : Canon q15
+q16 : field.QM31
+_✝³⁰ : [> let q16 ← q14.add q15 <]
+q16_post : Canon q16
+q17 : field.QM31
+_✝²⁹ : [> let q17 ← q3.mul_m31 spend.DOMAIN_NULLIFIER <]
+q17_post : Canon q17
+domain : field.QM31
+_✝²⁸ : [> let domain ← q16.add q17 <]
+domain_post : Canon domain
+q18 : field.QM31
+_✝²⁷ : [> let q18 ← q.mul_m31 8#u32 <]
+q18_post : Canon q18
+q19 : field.QM31
+_✝²⁶ : [> let q19 ← note_first.mul_m31 18#u32 <]
+q19_post : Canon q19
+q20 : field.QM31
+_✝²⁵ : [> let q20 ← q18.add q19 <]
+q20_post : Canon q20
+q21 : field.QM31
+_✝²⁴ : [> let q21 ← q3.mul_m31 16#u32 <]
+q21_post : Canon q21
+length : field.QM31
+_✝²³ : [> let length ← q20.add q21 <]
+length_post : Canon length
+q22 : field.QM31
+_✝²² : [> let q22 ← initial.index_usize 8#usize <]
+q22_post : Canon q22
+q23 : field.QM31
+_✝²¹ : [> let q23 ← q9.mul domain <]
+q23_post : Canon q23
+q24 : field.QM31
+_✝²⁰ : [> let q24 ← q22.sub q23 <]
+q24_post : Canon q24
+initial1 : Std.Array field.QM31 16#usize
+_✝¹⁹ : [> let initial1 ← initial.update 8#usize q24 <]
+initial1_post : canonical initial1
+i : Usize
+_✝¹⁸ : [> let i ← 8#usize + 1#usize <]
+i_post : ↑i = 8 + 1
+q25 : field.QM31
+_✝¹⁷ : [> let q25 ← initial1.index_usize i <]
+q25_post : Canon q25
+q26 : field.QM31
+_✝¹⁶ : [> let q26 ← q9.mul length <]
+q26_post : Canon q26
+q27 : field.QM31
+_✝¹⁵ : [> let q27 ← q25.sub q26 <]
+q27_post : Canon q27
+initial2 : Std.Array field.QM31 16#usize
+_✝¹⁴ : [> let initial2 ← initial1.update i q27 <]
+initial2_post : canonical initial2
+q28 : field.QM31
+_✝¹³ : [> let q28 ← q.add q1 <]
+q28_post : Canon q28
+q29 : field.QM31
+_✝¹² : [> let q29 ← s✝.high.index_usize 2#usize <]
+q29_post : Canon q29
+q30 : field.QM31
+_✝¹¹ : [> let q30 ← q28.add q29 <]
+q30_post : Canon q30
+q31 : field.QM31
+_✝¹⁰ : [> let q31 ← q30.add q3 <]
+q31_post : Canon q31
+q32 : field.QM31
+_✝⁹ : [> let q32 ← s✝.high.index_usize 26#usize <]
+q32_post : Canon q32
+q33 : field.QM31
+_✝⁸ : [> let q33 ← q31.add q32 <]
+q33_post : Canon q33
+q34 : field.QM31
+_✝⁷ : [> let q34 ← q33.add q5 <]
+q34_post : Canon q34
+q35 : field.QM31
+_✝⁶ : [> let q35 ← s✝.high.index_usize 31#usize <]
+q35_post : Canon q35
+chunk_eight : field.QM31
+_✝⁵ : [> let chunk_eight ← q34.add q35 <]
+chunk_eight_post : Canon chunk_eight
+q36 : field.QM31
+_✝⁴ : [> let q36 ← s✝.high.index_usize 3#usize <]
+q36_post : Canon q36
+q37 : field.QM31
+_✝³ : [> let q37 ← s✝.high.index_usize 32#usize <]
+q37_post : Canon q37
+chunk_two : field.QM31
+_✝² : [> let chunk_two ← q36.add q37 <]
+chunk_two_post : Canon chunk_two
+chunk_eight1 : field.QM31
+_✝¹ : [> let chunk_eight1 ← chunk_eight.add private_chunk_eight <]
+chunk_eight1_post : Canon chunk_eight1
+chunk_two1 : field.QM31
+_✝ : [> let chunk_two1 ← chunk_two.add private_chunk_two <]
+chunk_two1_post : Canon chunk_two1
+q38 : field.QM31
+_ : [> let q38 ← s✝.low.index_usize 12#usize <]
+q38_post : Canon q38
+⊢ Canonical
+    { initial := initial2, low := q38, fixed := fixed, two := chunk_two1, eight := chunk_eight1, nodes := nodes }
+'AspisR1.NKI_InitialTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

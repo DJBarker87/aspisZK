@@ -1,0 +1,57 @@
+{"attempt": "NKI_L069", "exit_status": 0, "wall_seconds": 9.312907505081967, "peak_rss_kib": "6185288", "swaps": "0", "print_axioms": ["'AspisR1.NKI_ValueAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NKI_ValueAssociation.source : ∀ (packed : Std.Array NQ 24#usize) (o : Openings) (s : Selectors),
+  canonical packed →
+    canonical o.z →
+      canonical o.succ_z →
+        canonical o.xor12_z →
+          canonical s.high →
+            canonical s.low →
+              ∃ t middle out,
+                NKI_ValuePrefix.run o s = ok t ∧
+                  t.openings = o ∧
+                    NKI_ValueTotal.Canonical t ∧
+                      NJL_SharedRoot.reference packed t.range t.selector = ok middle ∧
+                        NKI_ValueFinish.conservation middle o s = ok out ∧
+                          canonical middle ∧
+                            canonical out ∧
+                
+...
+Arg Eq
+              (Eq.trans
+                (Eq.trans (congrFun' (congrArg Bind.bind cm) fun middle => NKI_ValueFinish.conservation middle o s)
+                  (bind_tc_ok (NJB_ArrayCarrier.array after) fun y => NKI_ValueFinish.conservation y o s))
+                co))
+            (ok out))
+          (eq_self (ok out))));
+  Exists.intro t
+    (Exists.intro (NJB_ArrayCarrier.array after)
+      (Exists.intro out
+        ⟨ct,
+          ⟨ot,
+            ⟨ht,
+              ⟨cm,
+                ⟨co,
+                  ⟨hm,
+                    ⟨ho,
+                      ⟨cr,
+                        Eq.mpr (id (congrArg (fun _a => _a = ok out) (Eq.symm (NKI_ValueFactor.source packed o s))))
+                          (of_eq_true
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Eq
+                                  (Eq.trans
+                                    (Eq.trans
+                                      (congrFun' (congrArg Bind.bind ct) fun t =>
+                                        JGa_ValueFinish.run packed t.openings s t.range t.selector)
+                                      (bind_tc_ok t fun y =>
+                                        JGa_ValueFinish.run packed y.openings s y.range y.selector))
+                                    (Eq.trans
+                                      (congrFun'
+                                        (congrFun' (congrFun' (congrArg (JGa_ValueFinish.run packed) ot) s) t.range)
+                                        t.selector)
+                                      cf)))
+                                (ok out))
+                              (eq_self (ok out))))⟩⟩⟩⟩⟩⟩⟩⟩))
+'AspisR1.NKI_ValueAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7ee293440b084180a9b7c18fdbc63854.scope; invocation ID: 6c4359c1f7f64337b7cf14d0bab38d0b

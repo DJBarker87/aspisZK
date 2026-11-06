@@ -1,0 +1,97 @@
+theorem AspisR1.NKI_ValueAssociation.source : ∀ (packed : Std.Array NQ 24#usize) (o : Openings) (s : Selectors),
+  canonical packed →
+    canonical o.z →
+      canonical o.succ_z →
+        canonical o.xor12_z →
+          canonical s.high →
+            canonical s.low →
+              ∃ t middle out,
+                NKI_ValuePrefix.run o s = ok t ∧
+                  t.openings = o ∧
+                    NKI_ValueTotal.Canonical t ∧
+                      NJL_SharedRoot.reference packed t.range t.selector = ok middle ∧
+                        NKI_ValueFinish.conservation middle o s = ok out ∧
+                          canonical middle ∧
+                            canonical out ∧
+                              reference packed o s = ok out ∧
+                                pool_v1.pair_forest_semantic_terminal.add_value_lanes packed o s = ok out :=
+fun packed o s hp hz hs hx hh hl =>
+  let ⟨t, h✝⟩ := spec_imp_exists (NKI_ValueTotal.source o s hz hs hx hh hl)
+  let ⟨ct, right✝⟩ := h✝
+  let ⟨ot, ht⟩ := right✝
+  let ⟨weighted, h✝¹⟩ := NJL_SharedRoot.source packed t.range t.selector hp ht.right ht.left
+  let ⟨after, h✝²⟩ := h✝¹
+  let ⟨muls, right✝¹⟩ := h✝²
+  let ⟨cm, right✝²⟩ := right✝¹
+  let ⟨trace, right✝³⟩ := right✝²
+  let ⟨old, right✝⁴⟩ := right✝³
+  let ⟨hm, vm⟩ := right✝⁴
+  let ⟨out, h✝³⟩ :=
+    spec_imp_exists (NKI_ValueFinish.conservation_source (NJB_ArrayCarrier.array after) o s hm hz hs hh hl)
+  let ⟨co, ho⟩ := h✝³
+  have cr :=
+    of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (Eq.trans
+                (congrFun' (congrArg Bind.bind ct) fun t => do
+                  let middle ← NJL_SharedRoot.reference packed t.range t.selector
+                  NKI_ValueFinish.conservation middle t.openings s)
+                (bind_tc_ok t fun y => do
+                  let middle ← NJL_SharedRoot.reference packed y.range y.selector
+                  NKI_ValueFinish.conservation middle y.openings s))
+              (Eq.trans
+                (Eq.trans
+                  (congr (congrArg Bind.bind cm)
+                    (funext fun middle => congrFun' (congrArg (NKI_ValueFinish.conservation middle) ot) s))
+                  (bind_tc_ok (NJB_ArrayCarrier.array after) fun y => NKI_ValueFinish.conservation y o s))
+                co)))
+          (ok out))
+        (eq_self (ok out)));
+  have cf :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = ok out)
+          (Eq.symm (NKI_ValueFinish.association packed o s t.range t.selector hp ht.right ht.left))))
+      (of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans (congrFun' (congrArg Bind.bind cm) fun middle => NKI_ValueFinish.conservation middle o s)
+                  (bind_tc_ok (NJB_ArrayCarrier.array after) fun y => NKI_ValueFinish.conservation y o s))
+                co))
+            (ok out))
+          (eq_self (ok out))));
+  Exists.intro t
+    (Exists.intro (NJB_ArrayCarrier.array after)
+      (Exists.intro out
+        ⟨ct,
+          ⟨ot,
+            ⟨ht,
+              ⟨cm,
+                ⟨co,
+                  ⟨hm,
+                    ⟨ho,
+                      ⟨cr,
+                        Eq.mpr (id (congrArg (fun _a => _a = ok out) (Eq.symm (NKI_ValueFactor.source packed o s))))
+                          (of_eq_true
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Eq
+                                  (Eq.trans
+                                    (Eq.trans
+                                      (congrFun' (congrArg Bind.bind ct) fun t =>
+                                        JGa_ValueFinish.run packed t.openings s t.range t.selector)
+                                      (bind_tc_ok t fun y =>
+                                        JGa_ValueFinish.run packed y.openings s y.range y.selector))
+                                    (Eq.trans
+                                      (congrFun'
+                                        (congrFun' (congrFun' (congrArg (JGa_ValueFinish.run packed) ot) s) t.range)
+                                        t.selector)
+                                      cf)))
+                                (ok out))
+                              (eq_self (ok out))))⟩⟩⟩⟩⟩⟩⟩⟩))
+'AspisR1.NKI_ValueAssociation.source' depends on axioms: [propext, Classical.choice, Quot.sound]

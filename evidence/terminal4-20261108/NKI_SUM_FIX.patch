@@ -1,0 +1,9 @@
+--- a/crates/aspis-statement/src/pool_v1/NKI_append_native.rs
++++ b/crates/aspis-statement/src/pool_v1/NKI_append_native.rs
+@@ -116,5 +116,5 @@
+ fn NKI_sum_window_cut(){
+  let hi:usize=kani::any();let lo:usize=kani::any();let limb:usize=kani::any();kani::assume(hi<64&&lo<16&&limb<4);let hw:[u32;4]=kani::any();let lw:[u32;4]=kani::any();let reply=NKI_q(kani::any());let mut high=[QM31::ZERO;64];let mut low=[QM31::ZERO;16];high[hi]=NKI_q(hw);low[lo]=NKI_q(lw);let s=Selectors{high,low};let mut l=NKI_SumLog{hi,lo,high:[0;4],low:[0;4],ranges:[0;4],calls:0,reply};
+  let nodes=NKI_sum(&s,&[4..25,33..57],&mut l);
+- assert_eq!(l.calls,1);assert_eq!(l.ranges,[4,25,33,57]);assert_eq!(l.high[limb],hw[limb]);assert_eq!(l.low[limb],lw[limb]);assert_eq!(NKI_words(nodes)[limb],NKI_words(reply)[limb]^if cfg!(NKI_invert){1}else{0});
++ assert_eq!(l.calls,1);let r:usize=kani::any();kani::assume(r<4);assert_eq!(l.ranges[r],[4,25,33,57][r]);assert_eq!(l.high[limb],hw[limb]);assert_eq!(l.low[limb],lw[limb]);assert_eq!(NKI_words(nodes)[limb],NKI_words(reply)[limb]^if cfg!(NKI_invert){1}else{0});
+ }

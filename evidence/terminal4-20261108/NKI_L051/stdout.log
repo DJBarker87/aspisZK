@@ -1,0 +1,35 @@
+def AspisR1.NKI_InitialCuts.Cut : Public →
+  Openings → Selectors → Locals → Std.Array NQ 16#usize → Observations → (Fin 7 → ℕ) → Prop :=
+fun p o s l absorption ob counts =>
+  counts = ![12, 2, 12, 9, 16, 4, 1] ∧
+    (∀ (j : Fin 12),
+        (ob.prologue j).kind = proKind j ∧ (ob.prologue j).left = proLeft l j ∧ (ob.prologue j).right = proRight l j) ∧
+      ob.variant = p.variant ∧
+        ob.variantArgs = ![l.q6, l.q7, l.q8] ∧
+          ob.caches = ![l.full, l.full_or_rate] ∧
+            ob.prologueResult =
+                (l.nodes, l.transfer_first, l.fixed, l.private_chunk_eight, l.private_chunk_two,
+                  l.full_initial_selector, l.full, l.full_or_rate) ∧
+              ob.constantResult = (l.domain, l.length) ∧
+                ob.chunkResult = (l.chunk_eight1, l.chunk_two1) ∧
+                  (∀ (j : Fin 12),
+                      (ob.constants j).kind = constantKind j ∧
+                        (ob.constants j).left = constantLeft l j ∧ (ob.constants j).right = constantRight l j) ∧
+                    (∀ (j : Fin 9),
+                        (ob.chunks j).kind = 1 ∧
+                          (ob.chunks j).left = chunkLeft l j ∧ (ob.chunks j).right = chunkRight l j) ∧
+                      (∀ (i : Fin 16),
+                          ob.laneCache i = NJB_PreparedCarrier.words (if ↑i < 8 then l.full_or_rate else l.full) ∧
+                            ob.laneOpened i = NJB_ArrayCarrier.cell o.z i ∧
+                              ob.laneReply i = NJB_ArrayCarrier.cell l.initial i) ∧
+                        (∀ (j : Fin 4), (ob.writes j).left = writeLeft l j ∧ (ob.writes j).right = writeRight l j) ∧
+                          (∀ (j : Fin ↑16#usize),
+                              NJB_ArrayCarrier.cell ob.after j =
+                                if ↑j = 8 then l.q24 else if ↑j = 9 then l.q27 else NJB_ArrayCarrier.cell l.initial j) ∧
+                            ob.absorptionArgs = args l ∧
+                              ob.absorptionOpened = o.z ∧
+                                ob.returned = (l.initial2, absorption) ∧
+                                  (∀ (i : Fin 64), ob.sumHigh i = NJB_ArrayCarrier.cell s.high i) ∧
+                                    (∀ (i : Fin 16), ob.sumLow i = NJB_ArrayCarrier.cell s.low i) ∧
+                                      ob.ranges = ![4, 25, 33, 57]
+'AspisR1.NKI_InitialCuts.source' depends on axioms: [propext, Classical.choice, Quot.sound]
