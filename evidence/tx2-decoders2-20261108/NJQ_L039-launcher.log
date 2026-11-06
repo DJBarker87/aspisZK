@@ -1,0 +1,53 @@
+{"attempt": "NJQ_L039", "exit_status": 1, "wall_seconds": 7.124933845130727, "peak_rss_kib": "5950056", "swaps": "0", "print_axioms": ["'NJQ_Checkpoint.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJQ_generated/NJQ_Checkpoint.lean:78:3: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    trailing b len
+  has type
+    Std.Array U8 16#usize
+  but is expected to have type
+    { l // l.length = ↑16#usize }
+  in the application
+    ↑(trailing b len)
+NJQ_generated/NJQ_Checkpoint.lean:109:14: warning: This simp argument is unused:
+  dif_neg wrong
+
+Hint: 
+...
+NJQ_generated/NJQ_Checkpoint.lean:78:3: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    trailing b len
+  has type
+    Std.Array U8 16#usize
+  but is expected to have type
+    { l // l.length = ↑16#usize }
+  in the application
+    ↑(trailing b len)
+NJQ_generated/NJQ_Checkpoint.lean:109:14: warning: This simp argument is unused:
+  dif_neg wrong
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵d̵i̵f̵_̵n̵e̵g̵ ̵w̵r̵o̵n̵g̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJQ_Checkpoint.source : ∀ (b : Slice U8), reference b = model b :=
+fun b =>
+  id
+    (id
+      (Decidable.casesOn (instDecidableEqNat (↑b).length 192)
+        (fun h =>
+          Eq.mpr (id (congr (congrArg Eq (dif_neg h)) (dif_neg h)))
+            (of_eq_true
+              (eq_self
+                (ok
+                  (core.result.Result.Err
+                    NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.WrongLength)))))
+        fun h => Eq.mpr (id (congr (congrArg Eq (dif_pos h)) (dif_pos h))) sorry))
+'NJQ_Checkpoint.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r47ea7143fb59426bb5e29d6ecf2e62a2.scope; invocation ID: ceb2dc3a5bde486c9b38638d68c2c618

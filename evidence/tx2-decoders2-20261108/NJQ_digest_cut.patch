@@ -1,0 +1,16 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJQ_digest_cut.rs
+@@ -0,0 +1,13 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++type E=crate::atomic_statement::AtomicStatementError;
++type F=PoolV1PairForestAccountErrorV1;
++fn stage(reply:Result<[aspis_core::field::M31;8],E>,loop_entered:&mut bool)->Result<[aspis_core::field::M31;8],F>{
++ let global_root=reply.map_err(|_|F::NonCanonicalDigest)?;
++ *loop_entered=true;Ok(global_root)
++}
++#[kani::proof] #[kani::unwind(12)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn digest_boundary(){let raw:[u32;8]=kani::any();let root=[aspis_core::field::M31(raw[0]),aspis_core::field::M31(raw[1]),aspis_core::field::M31(raw[2]),aspis_core::field::M31(raw[3]),aspis_core::field::M31(raw[4]),aspis_core::field::M31(raw[5]),aspis_core::field::M31(raw[6]),aspis_core::field::M31(raw[7])];let t:u8=kani::any();kani::assume(t<8);let reply=match t{0=>Err(E::NonCanonicalDigest),1=>Err(E::NonCanonicalAssetId),2=>Err(E::FeeOutOfRange),3=>Err(E::PathDepthMismatch),4=>Err(E::InsertionIndexOutOfRange),5=>Err(E::CurrentAnchorMismatch),6=>Err(E::OutputAnchorMismatch),_=>Ok(root)};let j:usize=kani::any();kani::assume(j<8);let original=raw[j];let mut loop_entered=false;let out=stage(reply,&mut loop_entered);assert!(raw[j]==original);
++ match reply{Err(_)=>{assert!(matches!(out,Err(F::NonCanonicalDigest)));assert!(!loop_entered);},Ok(root)=>{assert!(loop_entered);let out=out.expect("digest Ok");assert!((out[j].0==root[j].0)!=cfg!(NJQ_invert));}}
++}

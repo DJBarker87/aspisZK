@@ -1,9 +1,9 @@
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NJQ_entry.rs
-@@ -0,0 +1,61 @@
+@@ -0,0 +1,79 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
-+fn validate_ref(
++pub(super) fn validate_ref(
 +    entry: &VerifierRegistryEntryV1,
 +) -> Result<(), PoolV1VerifierRegistryFormatError> {
 +    if entry.statement_version == 0 {
@@ -55,10 +55,28 @@
 +#[kani::proof_for_contract(super::decode_verifier_registry_entry_v1)]
 +#[kani::unwind(193)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[cfg_attr(NJQ_composed,kani::stub_verified(super::validate_verifier_registry_entry_v1))]
 +fn decode_contract() {let bytes:[u8;192]=kani::any();let _=super::decode_verifier_registry_entry_v1(&bytes);}
 +
 +fn view(p:&VerifierRegistryEntryV1,f:usize,i:usize)->u64{match f{0=>p.status as u8 as u64,1=>p.statement_version as u64,2=>p.bump as u64,3=>p.pool[i] as u64,4=>p.verifier_program[i] as u64,5=>p.profile_binding[i] as u64,6=>p.release_binding[i] as u64,7=>p.activation_slot,8=>p.retirement_slot,_=>p.policy_binding[i] as u64}}
 +pub(super) fn matches_reference(b:&[u8],out:&Result<VerifierRegistryEntryV1,PoolV1VerifierRegistryFormatError>)->bool {
 + let f:usize=kani::any();kani::assume(f<10);let i:usize=kani::any();kani::assume(i<32);
 + match (out,decode_ref(b)){(Ok(p),Ok(q))=>view(p,f,i)==view(&q,f,i),(Err(e),Err(f))=>e==&f,_=>false}
++}
++
++#[cfg(any(NJQ_composed,NJQ_validator_enabled))]
++#[kani::proof_for_contract(super::validate_verifier_registry_entry_v1)]
++#[kani::unwind(193)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn validate_contract(){let r=VerifierRegistryEntryV1{status:match kani::any::<u8>()%4{0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired},statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()};let _=super::validate_verifier_registry_entry_v1(&r);}
++
++#[cfg(NJQ_composed)]
++impl kani::Arbitrary for PoolV1VerifierRegistryFormatError {fn any()->Self {let t:u8=kani::any();kani::assume(t<12);match t {0=>Self::WrongLength,1=>Self::WrongMagic,2=>Self::WrongVersion,3=>Self::NonZeroReserved,4=>Self::UnsupportedFlags,5=>Self::InvalidStatus,6=>Self::InvalidAuthorityMode,7=>Self::ZeroRequiredBinding,8=>Self::InvalidActivationDelay,9=>Self::InvalidStatementVersion,10=>Self::InvalidRetirementSlot,_=>Self::InvalidDeploymentMode}}}
++
++pub(super) fn check_head(b:&[u8],out:&Result<VerifierRegistryEntryV1,PoolV1VerifierRegistryFormatError>)->bool{
++ type F=PoolV1VerifierRegistryFormatError;
++ if b[..4]!=POOL_V1_VERIFIER_ENTRY_MAGIC {matches!(out,Err(F::WrongMagic))}
++ else if b[4]!=POOL_V1_VERIFIER_ENTRY_VERSION {matches!(out,Err(F::WrongVersion))}
++ else if b[184..192]!=[0;8] {matches!(out,Err(F::NonZeroReserved))}
++ else {!matches!(out,Err(F::WrongLength|F::WrongMagic|F::WrongVersion|F::NonZeroReserved))}
 +}

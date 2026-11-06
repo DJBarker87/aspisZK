@@ -2,7 +2,7 @@ import NJQ_Read
 set_option autoImplicit false
 namespace NJQ_IterMut
 /-- Library lens for the uncons operation of a valid mutable slice iterator.
-The original allocation prefix is owned by the enclosing loop frame. -/
+The original allocation front is owned by the enclosing loop frame. -/
 def next {T : Type} (xs : List T) : Option (T × List T × (T → List T → List T)) :=
  match xs with
  | [] => none
@@ -14,9 +14,9 @@ theorem entered {T : Type} (x : T) (rest : List T) :
  next (x::rest)=some (x,rest,fun value tail=>value::tail) := rfl
 
 /-- Returning the borrowed head writes only that cell; no immutable suffix loss. -/
-theorem writeback_frame {T : Type} (prefix : List T) (x value : T) (rest : List T) :
- (prefix ++ (fun value tail=>value::tail) value rest).take prefix.length=prefix ∧
- (prefix ++ (fun value tail=>value::tail) value rest).drop (prefix.length+1)=rest := by
+theorem writeback_frame {T : Type} (front : List T) (x value : T) (rest : List T) :
+ (front ++ (fun value tail=>value::tail) value rest).take front.length=front ∧
+ (front ++ (fun value tail=>value::tail) value rest).drop (front.length+1)=rest := by
  constructor
  · simp
  · simp

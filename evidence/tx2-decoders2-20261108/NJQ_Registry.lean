@@ -68,14 +68,22 @@ theorem source (b : Slice U8) : reference b=model b := by
    have delay := NJQ_Read.value b 112#usize 8#usize (by change 112+8≤b.val.length;omega)
    simp only [reference,size,show (128#usize != 128#usize)=false from rfl,Bool.false_eq_true,ite_false,
     header,v4,v5,v6,v7,tail,pool,authority,binding,generation,delay,bind_tc_ok]
+   simp only [show (4#usize).val=4 from rfl,show (5#usize).val=5 from rfl,show (6#usize).val=6 from rfl,show (7#usize).val=7 from rfl]
    by_cases hm : b.val.take 4=magic.val
    · simp only [hm,decide_true,Bool.not_true,Bool.false_eq_true,ite_false,ite_true]
      by_cases hv : NHY_ZeroStep.byte b 4=2#u8
      · simp only [hv,show (2#u8 != 2#u8)=false from rfl,Bool.false_eq_true,ite_false,ite_true]
        by_cases h7 : NHY_ZeroStep.byte b 7=0#u8
-       · by_cases hz : (b.val.drop 120).take 8=List.replicate 8 0#u8
-         · simp [h7,hz,record,NHY_NaturalReads.array,NJQ_Read.zero_eq,finish,NJI_V1Models.registry_source]
-         · simp [h7,hz,NHY_NaturalReads.array,NJQ_Read.zero_eq]
+       · simp only [h7,show (0#u8 != 0#u8)=false from rfl,Bool.false_eq_true,ite_false,true_and]
+         by_cases hz : (b.val.drop 120).take 8=List.replicate 8 0#u8
+         · simp only [NHY_NaturalReads.array,show (8#usize).val=8 from rfl,show (120#usize).val=120 from rfl,
+             hz,ne_self_iff_false,ite_false,ite_true]
+           change finish (record b len) = _
+           simp only [finish,NJI_V1Models.registry_source]
+           rfl
+         · simp only [NHY_NaturalReads.array,show (8#usize).val=8 from rfl,show (120#usize).val=120 from rfl,
+             hz,ite_false]
+           rw [if_pos hz]
        · simp [h7]
      · simp [hv]
    · simp [hm]

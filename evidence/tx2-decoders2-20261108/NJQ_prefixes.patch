@@ -1,0 +1,62 @@
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NJQ_prefixes.rs
+@@ -0,0 +1,59 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++type F=PoolV1PairForestAccountErrorV1;
++#[derive(Default)] struct Log {any_called:bool,any_byte:u8,any_reply:bool,child_called:bool,child_byte:u8,parsed_bool:Option<bool>}
++// Native prefix outside the std any loop. That loop is ONE native iteration
++// plus NJQ_Library/NJQ_Reserved induction; any_reply is its universally
++// quantified local reply, instantiated internally by the composing root.
++fn checkpoint_prefix(b:&[u8;192],any_reply:bool,j:usize,i:usize,log:&mut Log)->Result<(),F>{
++ if b.len()!=POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES{return Err(F::WrongLength)}
++ if b[..4]!=POOL_V1_PAIR_FOREST_CHECKPOINT_MAGIC{return Err(F::WrongMagic)}
++ if b[4]!=POOL_V1_PAIR_FOREST_CHECKPOINT_VERSION{return Err(F::WrongVersion)}
++ if b[5]!=POOL_V1_PAIR_FOREST_LANE_COUNT as u8{return Err(F::WrongLaneCount)}
++ if b[6]!=POOL_V1_DIGEST_ENCODING_VERSION{return Err(F::WrongDigestEncoding)}
++ let any_input=&b[176..];log.any_called=true;log.any_byte=any_input[j];log.any_reply=any_reply;
++ if any_reply{return Err(F::NonZeroReserved)}
++ let master:[u8;32]=b[CHECKPOINT_MASTER_OFFSET..CHECKPOINT_DOMAIN_OFFSET].try_into().unwrap();
++ let domain:[u8;32]=b[CHECKPOINT_DOMAIN_OFFSET..CHECKPOINT_SEQUENCE_OFFSET].try_into().unwrap();
++ if master==[0;32]||domain==[0;32]{return Err(F::ZeroRequiredBinding)}
++ let arg:[u8;32]=b[CHECKPOINT_GLOBAL_ROOT_OFFSET..CHECKPOINT_LANE_SEQUENCES_OFFSET].try_into().unwrap();
++ log.child_called=true;log.child_byte=arg[i];Ok(())
++}
++fn checkpoint_error(b:&[u8;192],reply:bool)->Option<F>{
++ if b[..4]!=POOL_V1_PAIR_FOREST_CHECKPOINT_MAGIC{Some(F::WrongMagic)}
++ else if b[4]!=2{Some(F::WrongVersion)}else if b[5]!=8{Some(F::WrongLaneCount)}else if b[6]!=1{Some(F::WrongDigestEncoding)}
++ else if reply{Some(F::NonZeroReserved)}else if b[8..40]==[0;32]||b[40..72]==[0;32]{Some(F::ZeroRequiredBinding)}else{None}
++}
++#[kani::proof] #[kani::unwind(65)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn checkpoint_head(){let b:[u8;192]=kani::any();let reply:bool=kani::any();let i:usize=kani::any();kani::assume(i<32);let j:usize=kani::any();kani::assume(j<16);let f:usize=kani::any();kani::assume(f<192);let original=b[f];let mut log=Log::default();let out=checkpoint_prefix(&b,reply,j,i,&mut log);assert!(b[f]==original);
++ let reached=b[..4]==POOL_V1_PAIR_FOREST_CHECKPOINT_MAGIC&&b[4]==2&&b[5]==8&&b[6]==1;
++ assert!(log.any_called==reached);if reached{assert!(log.any_byte==b[176+j]);assert!(log.any_reply==reply);}
++ match checkpoint_error(&b,reply){Some(e)=>{assert!(out==Err(e));assert!(!log.child_called);},None=>{assert!(out==Ok(()));assert!(log.child_called);assert!((log.child_byte==b[80+i])!=cfg!(NJQ_invert));}}
++}
++fn master_prefix(b:&[u8;384],any_reply:bool,j:usize,i:usize,log:&mut Log)->Result<(),F>{
++ if b.len()!=POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES{return Err(F::WrongLength)}
++ if b[..4]!=POOL_V1_PAIR_FOREST_MASTER_MAGIC{return Err(F::WrongMagic)}
++ if b[4]!=POOL_V1_PAIR_FOREST_MASTER_VERSION{return Err(F::WrongVersion)}
++ if b[5]!=POOL_V1_PAIR_FOREST_LANE_COUNT as u8{return Err(F::WrongLaneCount)}
++ if b[6]!=POOL_V1_DIGEST_ENCODING_VERSION{return Err(F::WrongDigestEncoding)}
++ let any_input=&b[50..64];log.any_called=true;log.any_byte=any_input[j];log.any_reply=any_reply;
++ if any_reply||b[312..320]!=[0;8]{return Err(F::NonZeroReserved)}
++ if b[8..40]!=POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING{return Err(F::WrongFormatBinding)}
++ let has_checkpoint=match b[MASTER_HAS_CHECKPOINT_OFFSET]{0=>false,1=>true,_=>return Err(F::InvalidBoolean)};
++ log.parsed_bool=Some(has_checkpoint);
++ let arg=&b[MASTER_IDENTITY_OFFSET..MASTER_POLICY_OFFSET];log.child_called=true;log.child_byte=arg[i];Ok(())
++}
++fn master_error(b:&[u8;384],reply:bool)->Option<F>{
++ if b[..4]!=POOL_V1_PAIR_FOREST_MASTER_MAGIC{Some(F::WrongMagic)}
++ else if b[4]!=2{Some(F::WrongVersion)}else if b[5]!=8{Some(F::WrongLaneCount)}else if b[6]!=1{Some(F::WrongDigestEncoding)}
++ else if reply||b[312..320]!=[0;8]{Some(F::NonZeroReserved)}else if b[8..40]!=POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING{Some(F::WrongFormatBinding)}
++ else if b[49]>1{Some(F::InvalidBoolean)}else{None}
++}
++#[kani::proof] #[kani::unwind(65)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn master_head(){let b:[u8;384]=kani::any();let reply:bool=kani::any();let i:usize=kani::any();kani::assume(i<144);let j:usize=kani::any();kani::assume(j<14);let f:usize=kani::any();kani::assume(f<384);let original=b[f];let mut log=Log::default();let out=master_prefix(&b,reply,j,i,&mut log);assert!(b[f]==original);
++ let reached=b[..4]==POOL_V1_PAIR_FOREST_MASTER_MAGIC&&b[4]==2&&b[5]==8&&b[6]==1;
++ assert!(log.any_called==reached);if reached{assert!(log.any_byte==b[50+j]);assert!(log.any_reply==reply);}
++ match master_error(&b,reply){Some(e)=>{assert!(out==Err(e));assert!(!log.child_called);assert!(log.parsed_bool.is_none());},None=>{assert!(out==Ok(()));assert!(log.child_called);assert!(log.parsed_bool==Some(b[49]==1));assert!((log.child_byte==b[64+i])!=cfg!(NJQ_invert));}}
++}

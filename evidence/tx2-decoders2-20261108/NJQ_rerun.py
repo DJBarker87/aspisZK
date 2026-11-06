@@ -20,6 +20,10 @@ def historical(old):
             raw=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+parent])
             assert sha(raw)==pins[parent]
             files[key]=raw.decode()
+    marker="(B/(a+'-graph-check.json')).write_text"
+    assert files['NIJ_gate.py'].count(marker)==1
+    extra="out['all_features']=[dict(name=p['name'],version=p['version'],source=p.get('source'),features=nodes[p['id']]['features']) for p in sorted(m['packages'],key=lambda p:(p['name'],p['version'],p['id']))]\n"
+    files['NIJ_gate.py']=files['NIJ_gate.py'].replace(marker,extra+marker)
     return x,cfg,files
 def run(a,old,prepared=None):
     assert a.startswith('NJQ_K') and 1<=int(a[-3:])<=60
@@ -33,7 +37,7 @@ def run(a,old,prepared=None):
     x['native_command'][x['native_command'].index('--target-dir')+1]=B+'/NJQ_target'
     for k in ['metadata_manifest']:
         if k in x:x[k]=x[k].replace(oldB+'/',B+'/')
-    # Original gate and erasure implementation remain byte-identical.
+    # Frozen graph/lock/erasure checks retained; owned gate adds all-crate feature retention (NJQ_GATE.diff).
     x.update(attempt=a,original_attempt=old,original_config_file='NJQ_originals/'+old+'.json',original_config_sha256=sha(original),old_target=oldtarget,historical_gate_command=[*x['command'][:-1],a+'.json'],command=['python3','NJQ_isolation.py',a+'.json'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True)
     x['env'].update(TMPDIR=B+'/NJQ_tmp',CARGO_TARGET_DIR=B+'/NJQ_target',CARGO_NET_OFFLINE='true')
     files[x['original_config_file']]=original.decode()

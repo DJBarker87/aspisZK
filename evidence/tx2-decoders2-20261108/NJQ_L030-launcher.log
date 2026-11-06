@@ -1,0 +1,24 @@
+{"attempt": "NJQ_L030", "exit_status": 0, "wall_seconds": 16.213484874926507, "peak_rss_kib": "5962944", "swaps": "0", "print_axioms": ["'NJQ_RegistryCut.complete_record' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJQ_RegistryCut.cut_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJQ_RegistryCut.child' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJQ_RegistryCut.body_closed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJQ_RegistryCut.native_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJQ_RegistryCut.native_source : ∀ (b : Slice U8) (len : (↑b).length = 128) (log : Option R)
+  (out : core.result.Result R F), Cut b len (closedReply b len) log out → ok out = NJQ_Registry.reference b :=
+fun b len log out cut =>
+  Eq.mpr (id (congrArg (fun _a => ok out = _a) (NJQ_Registry.source b)))
+    (Eq.mpr (id (congrArg (fun _a => ok out = _a) (body_closed b len)))
+      (congrArg ok (cut_result b len (closedReply b len) log out cut)))
+'NJQ_RegistryCut.complete_record' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJQ_RegistryCut.cut_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJQ_RegistryCut.child' depends on axioms: [propext, Classical.cho
+...
+theorem NJQ_RegistryCut.native_source : ∀ (b : Slice U8) (len : (↑b).length = 128) (log : Option R)
+  (out : core.result.Result R F), Cut b len (closedReply b len) log out → ok out = NJQ_Registry.reference b :=
+fun b len log out cut =>
+  Eq.mpr (id (congrArg (fun _a => ok out = _a) (NJQ_Registry.source b)))
+    (Eq.mpr (id (congrArg (fun _a => ok out = _a) (body_closed b len)))
+      (congrArg ok (cut_result b len (closedReply b len) log out cut)))
+'NJQ_RegistryCut.complete_record' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJQ_RegistryCut.cut_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJQ_RegistryCut.child' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJQ_RegistryCut.body_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJQ_RegistryCut.native_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rca19abdb14814c2eafeb55e09859267e.scope; invocation ID: 0accb74583eb4d9886611dfb5fd99b74

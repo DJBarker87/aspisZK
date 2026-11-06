@@ -7,14 +7,14 @@ abbrev any := @NJI_Any.any
 abbrev run := @NJI_Any.run
 
 theorem empty {T F : Type} (cmp : core.ops.function.FnMut F T Bool) (f : F) :
- run cmp [] f=ok (false,0,f) := rfl
+ run cmp [] f=ok (false,0,f) := by simp [run,NJI_Any.run]
 
 theorem stop_true {T F : Type} (cmp : core.ops.function.FnMut F T Bool)
  (x : T) (xs : List T) (f f' : F) (call : cmp.call_mut f x=ok (true,f')) :
  run cmp (x::xs) f=ok (true,1,f') := by simp [run,NJI_Any.run,call]
 
 theorem stop_fail {T F : Type} (cmp : core.ops.function.FnMut F T Bool)
- (x : T) (xs : List T) (f : F) (e : Aeneas.Error)
+ (x : T) (xs : List T) (f : F) (e : Error)
  (call : cmp.call_mut f x=.fail e) : run cmp (x::xs) f=.fail e := by
  simp [run,NJI_Any.run,call]
 

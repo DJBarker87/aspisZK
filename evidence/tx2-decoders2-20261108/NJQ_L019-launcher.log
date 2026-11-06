@@ -1,0 +1,47 @@
+{"attempt": "NJQ_L019", "exit_status": 1, "wall_seconds": 15.318267498165369, "peak_rss_kib": "5946108", "swaps": "0", "print_axioms": ["'NJQ_RegistryCut.complete_record' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJQ_RegistryCut.cut_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJQ_RegistryCut.child' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJQ_RegistryCut.body_closed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJQ_RegistryCut.native_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJQ_generated/NJQ_RegistryCut.lean:102:21: error: simp_all made no progress
+NJQ_generated/NJQ_RegistryCut.lean:108:58: error: unsolved goals
+case pos
+b : Slice U8
+len : (↑b).length = 128
+hm : List.take 4 ↑b = ↑NJQ_Registry.magic
+hv : NHY_ZeroStep.byte b 4 = 2#u8
+h7 : NHY_ZeroStep.byte b 7 = 0#u8
+hz : List.take 8 (List.drop 120 ↑b) = [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8]
+⊢ (match closedReply b ⋯ with
+    | core.result.Result.Ok a => ok (core.result.Result.Ok (NJQ_Registry.record b ⋯))
+    | core.result.Result.Err e => ok (core.result.Result.Err e)) =
+    ok
+      (match closedReply b len with
+      | core.result.Result.Ok a => core.result.Result.Ok (NJQ_Registry.record b len)
+     
+...
+NJQ_generated/NJQ_RegistryCut.lean:102:21: error: simp_all made no progress
+NJQ_generated/NJQ_RegistryCut.lean:108:58: error: unsolved goals
+case pos
+b : Slice U8
+len : (↑b).length = 128
+hm : List.take 4 ↑b = ↑NJQ_Registry.magic
+hv : NHY_ZeroStep.byte b 4 = 2#u8
+h7 : NHY_ZeroStep.byte b 7 = 0#u8
+hz : List.take 8 (List.drop 120 ↑b) = [0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8]
+⊢ (match closedReply b ⋯ with
+    | core.result.Result.Ok a => ok (core.result.Result.Ok (NJQ_Registry.record b ⋯))
+    | core.result.Result.Err e => ok (core.result.Result.Err e)) =
+    ok
+      (match closedReply b len with
+      | core.result.Result.Ok a => core.result.Result.Ok (NJQ_Registry.record b len)
+      | core.result.Result.Err e => core.result.Result.Err e)
+theorem NJQ_RegistryCut.native_source : ∀ (b : Slice U8) (len : (↑b).length = 128) (log : Option R)
+  (out : core.result.Result R F), Cut b len (closedReply b len) log out → ok out = NJQ_Registry.reference b :=
+fun b len log out cut =>
+  Eq.mpr (id (congrArg (fun _a => ok out = _a) (NJQ_Registry.source b)))
+    (Eq.mpr (id (congrArg (fun _a => ok out = _a) (body_closed b len)))
+      (congrArg ok (cut_result b len (closedReply b len) log out cut)))
+'NJQ_RegistryCut.complete_record' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJQ_RegistryCut.cut_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJQ_RegistryCut.child' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJQ_RegistryCut.body_closed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJQ_RegistryCut.native_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1c14029ff1ff43e690c062b6bd42aa9a.scope; invocation ID: c510aca7cc20468a8e5cce94481b9cda

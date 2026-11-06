@@ -73,9 +73,11 @@ s+='''   simp only [reference,size,show (192#usize != 192#usize)=false from rfl,
      by_cases hv : NHY_ZeroStep.byte b 4=2#u8
      · simp only [hv,show (2#u8 != 2#u8)=false from rfl,Bool.false_eq_true,ite_false,ite_true]
        by_cases hz : (b.val.drop 184).take 8=List.replicate 8 0#u8
-       · simp only [NHY_NaturalReads.array,show (8#usize).val=8 from rfl,show (184#usize).val=184 from rfl,hz,not_true_eq_false,ite_false,ite_true]
+       · simp only [NHY_NaturalReads.array,show (8#usize).val=8 from rfl,show (184#usize).val=184 from rfl,hz,ne_self_iff_false,not_true_eq_false,ite_false,ite_true]
          simp only [record,finish,NJI_V1Models.entry_source]
-       · simp [hz,NHY_NaturalReads.array]
+         rfl
+       · simp only [NHY_NaturalReads.array,show (8#usize).val=8 from rfl,show (184#usize).val=184 from rfl,hz,ite_false]
+         rw [if_pos hz]
      · simp [hv]
    · simp [hm]
  · rename_i len
