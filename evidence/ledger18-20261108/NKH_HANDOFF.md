@@ -1,0 +1,7 @@
+# NKH ledger18 handoff
+
+Target not yet established. Stage 0: review and combined gate pending. Basis NKC ledger17: 514 CLOSED / 0 QUALIFIED / 85 OPEN of 599. Candidate occurrences: NJZ15, NKD8, NJX5; NJU TX2:115 off-domain supplement separate from 599. No candidate credited before complete statement/domain/caller review and combined replay, full NFX scan, all-root raw ax2 audit and eight same-binary fixtures.
+
+Only NKH modules and evidence/ledger18-20261108 are writable. No shipped-source, trust-row, sibling/session-A worktree, key or fund changes. Commit each stage; never push. Budget 40 serial Lean/link/audit scopes, zero Kani/extraction. Ordinary caps 6G/8G/swap0/tasks64/-M7000; at most one approved aggregation scope 14G/16G/-M15000. Admission requires exit0 AND allowed:true; no resubmission after transport loss following launch.
+
+Pending: exact candidate obligations and (aq)(2) inventory; NJZ Reader call widths/backing and all echeck arms/record controls; deployed SolanaDigest-only NKD; NJX same-argument NJL children and unique parser matcher owners; NJU complementary off-window Err/abort law. All baseline caller clauses retained. Runtime/cryptographic trust unchanged; native transport is P6/D188 option-A reclassification. K086 retained; owner (aj)(a) pending. Headline AspisR1.RPx_Deployed.deployed; frozen3/L154/narrowed D188 and 100-bit per-attempt/privacy/two-transaction requirements unchanged.
