@@ -30,6 +30,8 @@ fn boundary(w:&Weights,shared:bool,alpha:&[E],f:&[u8],ap0:&[E;4],ap1:&[E;4],scra
 #[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 fn slice_boundary(){
  let shared:bool=kani::any();let i:usize=kani::any();kani::assume(i<16);let slot:usize=kani::any();kani::assume(slot<7);let power:usize=kani::any();kani::assume(power<4);let index:usize=kani::any();kani::assume(index<64);let limb:usize=kani::any();kani::assume(limb<8);
+ if cfg!(NJF_select_slot_low){kani::assume(slot<3);} if cfg!(NJF_select_slot_high){kani::assume(slot>=3);}
+ if cfg!(NJF_select_power_low){kani::assume(power<2);} if cfg!(NJF_select_power_high){kani::assume(power>=2);}
  let mut scratch=Vec::<K>::with_capacity(64);let mut post=Vec::<K>::with_capacity(64);for _ in 0..64{scratch.push(q(kani::any()));post.push(q(kani::any()));}
  let raw=Box::into_raw(Box::<Weights>::new_uninit()) as *mut Weights;
  let w=unsafe{
@@ -57,6 +59,6 @@ fn slice_boundary(){
  } if cfg!(NJF_window_shared)||cfg!(NJF_window_partial_args){if entered_partial{assert!(l.common_who==owner&&l.partial_message==f.as_ptr()&&l.partial_message_len==2048);assert!(qw(l.partial_common)[limb&3]==qw(l.common[i])[limb&3]);}
  } if cfg!(NJF_window_shared)||cfg!(NJF_window_high_args){if entered_high{let values=l.partial.unwrap();assert!(l.high_who==owner&&l.high_ap0.to_limbs()[limb]==ap0[power].to_limbs()[limb]&&l.high_ap1.to_limbs()[limb]==ap1[power].to_limbs()[limb]);assert!(l.high_ptr==parts_ptr);let _=values;}
 }
- if cfg!(NJF_window_high_pre){if entered_high{assert!(l.high_before.to_limbs()[limb]==l.parts[slot].to_limbs()[limb]);}}
+ if cfg!(NJF_window_high_pre){if entered_high{if cfg!(NJF_mask_wrong){assert!(l.high_before.to_limbs()[limb]!=l.parts[slot].to_limbs()[limb]);}else{assert!(l.high_before.to_limbs()[limb]==l.parts[slot].to_limbs()[limb]);}}}
  if cfg!(NJF_window_high_value){if entered_high{let values=l.partial.unwrap();assert!(l.high_partial.to_limbs()[limb]==values[power].to_limbs()[limb]);}}
 }

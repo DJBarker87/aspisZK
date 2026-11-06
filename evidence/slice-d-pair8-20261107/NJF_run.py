@@ -96,6 +96,9 @@ if kind=='kani':cfg['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','
 if kind=='kani' and os.environ.get('NJF_WINDOW'):
  assert os.environ['NJF_WINDOW'] in ['args','control','scratch','parts','shared','partial_args','high_args','high_pre','high_value']
  env['RUSTFLAGS']+=' --cfg NJF_window_'+os.environ['NJF_WINDOW']
+if kind=='kani' and os.environ.get('NJF_SELECT'):
+ assert os.environ['NJF_SELECT'] in ['slot_low','slot_high','power_low','power_high']
+ env['RUSTFLAGS']+=' --cfg NJF_select_'+os.environ['NJF_SELECT']
 if kind=='kani' and os.environ.get('NJF_OWNER_GROUP'):
  assert os.environ['NJF_OWNER_GROUP'] in ['factors','rest']
  env['RUSTFLAGS']+=' --cfg NJF_owner_'+os.environ['NJF_OWNER_GROUP']

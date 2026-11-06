@@ -12,7 +12,9 @@ import NJF_RegularContinuation
 import NJF_RegularCut
 import NJF_RegularInstantiation
 import NJF_Root
+import NJF_ScratchCarrier
 import NJF_SharedContinuation
 import NJF_SliceCuts
 import NJF_StageProjection
+import NJF_WindowPartitions
 #print axioms AspisR1.RPx_Deployed.deployed
