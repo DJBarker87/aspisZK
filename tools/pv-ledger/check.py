@@ -147,7 +147,12 @@ def check_statement(closure, row, rows):
         require(role == 'hypothesis', 'unclassified printed binder')
         category = item.get('category')
         if category == 'Pre':
-            require(row['kind']=='BODY' and typ.startswith(row['contract']['lean_pre'] + ' '), 'wrong row Pre')
+            if row['kind']=='BODY':
+                require(typ.startswith(row['contract']['lean_pre'] + ' '), 'wrong row Pre')
+            else:
+                # LEAF rows (D869): the leaf's own declared Pre, e.g. slice-9 well-formedness and argument shape.
+                lp = row.get('leaf', {}).get('lean_pre')
+                require(bool(lp) and typ.startswith(lp + ' '), 'wrong leaf Pre (row lacks leaf.lean_pre or mismatch)')
             has_pre = True
         elif category in FACT_PREFIX:
             fact = item.get('fact', '')
