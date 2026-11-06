@@ -1,0 +1,53 @@
+{"attempt": "NJL_L058", "exit_status": 0, "wall_seconds": 13.858209816971794, "peak_rss_kib": "6174832", "swaps": "0", "print_axioms": ["'AspisR1.NJL_PatternRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NJL_PatternRoot.source : ∀ (values : Std.Array NQ 4#usize) (weights : Std.Array NQ 26#usize)
+  (terms : Std.Array NQ 14#usize),
+  FIw_ArrayValue.canonical values →
+    FIw_ArrayValue.canonical weights →
+      FIw_ArrayValue.canonical terms →
+        ∃ after,
+          NJL_PatternOuter.Trace (patterns terms) (selectors weights) (List.ofFn fun g => g) (state values) after ∧
+            NJB_PatternArray.reference values weights terms = ok (pack after) ∧
+              FIw_ArrayValue.canonical (pack after) ∧
+                ∀ (g : Fin 4),
+                  decode (state (pack after) g) =
+                    decode (state values g) +
+                      NJL_PatternMeaning.dot (fu
+...
+proof_2 x);
+  have cv := fun x => NJB_ArrayCarrier.canonical_cell values hv (Fin.cast state._proof_2 x);
+  let ⟨after, h✝⟩ := NJL_PatternOuter.source (patterns terms) (selectors weights) (state values) cp cw cv
+  let ⟨call, right✝⟩ := h✝
+  let ⟨trace, ha⟩ := right✝
+  let ⟨other, h✝¹⟩ := NJB_PatternReference.result (patterns terms) (selectors weights) (state values) cp cw cv
+  let ⟨otherCall, right✝¹⟩ := h✝¹
+  let ⟨left✝, otherValue⟩ := right✝¹
+  have same := ok.inj (Eq.trans (Eq.symm call) otherCall);
+  have value := Eq.trans (congrArg (fun s => NJB_StateUpdates.decoded s) same) otherValue;
+  Exists.intro after
+    ⟨trace,
+      ⟨of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans (congrFun' (congrArg Bind.bind call) fun out => ok (pack out))
+                  (bind_tc_ok after fun y => ok (pack y))))
+              (ok (pack after)))
+            (eq_self (ok (pack after)))),
+        ⟨NJB_ArrayCarrier.canonical_array (fun i => after (Fin.cast NJB_PatternArray.size4 i)) fun x =>
+            ha (Fin.cast NJB_PatternArray.size4 x),
+          fun g =>
+          Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  decode (_a g) =
+                    decode (state values g) +
+                      NJL_PatternMeaning.dot (fun i => decode (patterns terms i))
+                        (fun i => decode (selectors weights i)) g)
+                (NJB_PatternArray.state_pack after)))
+            (Eq.trans (congrFun value g)
+              (NJL_PatternMeaning.value (fun i => decode (patterns terms i)) (fun i => decode (selectors weights i))
+                (NJB_StateUpdates.decoded (state values)) g))⟩⟩⟩
+'AspisR1.NJL_PatternRoot.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r33cd5ba036f748a9977d994d5e8831d4.scope; invocation ID: 20e93d1a88f046ef9504d3d06cfb8da9

@@ -37,3 +37,11 @@ Endpoint preflight correction: typed operation kind1 is now explicitly logged/as
 Gate1 all tool checks PASS, details NJL_GATE1.json: 15,157modules;63rawroots; standard axioms only; zero dangling/duplicate/import mismatch. Source-pinned historical import variant recorded, no loader override. This validates the old object snapshot and the five unchanged roots; final214 admission waits for the direct literal table source update.
 
 K019PASS/K020FAIL strengthens SAME lookup harness with direct136-cell expected arrays. L052/L053 compile the new exact shared-literal gc/pc definitions and dependent root; standard axioms. The former scan reference is NOT used as final cut authority. This is an explicit strengthening within the same input domain/source helper; no new extraction or trust. Final combined audit remains required and is budgeted once.
+
+## TX1:219 pattern basis candidate
+
+L054 exact inner/outer cuts, L055 arbitrary source interval inner trace, L056 four-group outer trace, L059 symbolic sparse meaning and L058 full4-array root compile with standard axioms. Root: SAME canonical input values4/weights26/terms14 only; both native traces and exact full reference Result are derived, each output g = input g + sum over its frozen coordinate interval of terms[pattern[c]]*weights[c]. The model interface is the retained NJB_PatternArray/reference basis model; no emitted optimized helper exists. The enclosing selector-tensor/evaluate proof must still associate its actual coefficient arrays with the retained whole Copy-row meaning; that parent obligation is not claimed here.
+
+NJB_K036/037 inner and038/039 outer reused. New control K017PASS/K018FAIL executes both frozen while guards/counters with LOCAL recording body: group ends4, calls26, each arbitrary seek observes exact source group and coordinate. All field multiplication is Lean-discharged. No native array payload is inferred from a separately written pointer: outer patterns are the SAME immutable borrowed source.
+
+Parser-only L057 reserved identifier failure excluded; corrected fold_prefix compiles L059. L058 first client submission was refused prelaunch on missing dependency, then launched only after L059 green; no prover process resubmitted. Final gate2 and next ledger admission remain required.
