@@ -1,0 +1,50 @@
+{"attempt": "NLA_L005", "exit_status": 0, "wall_seconds": 14.312855408061296, "peak_rss_kib": "5987140", "swaps": "0", "print_axioms": ["'NLA_LaneStep.source_steps' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLA_LaneStep.bad_root' does not depend on any axioms"]}
+NLA_generated/NLA_LaneStep.lean:10:2: warning: Variable name `empty` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NLA_generated/NLA_LaneStep.lean:10:26: warning: Variable name `occupied` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NLA_generated/NLA_LaneStep.lean:11:2: warning: Variable name `raw` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This 
+...
+ith `set_option linter.unusedVariables false`
+NLA_generated/NLA_LaneStep.lean:10:26: warning: Variable name `occupied` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NLA_generated/NLA_LaneStep.lean:11:2: warning: Variable name `raw` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+theorem NLA_LaneStep.source_steps : ∀ {F : Type} (root : Result (core.result.Result Node F)) (empty : Fin 20 → Node)
+  (occupied : Fin 20 → Bool) (raw : Fin 20 → core.result.Result Node F) (step : Frontier → Fin 20 → Reply × Frontier),
+  (∀ (before : Frontier) (level : Fin 20),
+      IterationCut (empty level) (occupied level) before (step before level).2 level (raw level)
+        (step before level).1) →
+    ∀ (levels : List (Fin 20)) (before : Frontier),
+      run root empty occupied raw step levels before =
+        NLA_RootPrefix.enter root fun x => ok (NKF_LaneTrace.run empty occupied raw levels before) :=
+fun {F} root empty occupied raw step cuts levels before =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (NLA_RootPrefix.enter root fun x => ok _a) =
+              NLA_RootPrefix.enter root fun x => ok (NKF_LaneTrace.run empty occupied raw levels before))
+          (NKP_LaneInduction.compose empty occupied raw step cuts levels before)))
+      (Eq.refl (NLA_RootPrefix.enter root fun x => ok (NKF_LaneTrace.run empty occupied raw levels before))))
+'NLA_LaneStep.source_steps' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLA_LaneStep.bad_root' does not depend on any axioms
+
+Running as unit: run-r7f438935ed044107b8e534d1600cf942.scope; invocation ID: 6477c6772dc941128740a26dac5c52bf

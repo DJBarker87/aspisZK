@@ -1,0 +1,13 @@
+--- /dev/null
++++ b/NLA_tail.rs
+@@ -0,0 +1,10 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn digest()->[M31;8]{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn frontier()->[[M31;8];20]{let raw:[[u32;8];20]=kani::any();raw.map(|r|r.map(|x|M31(x)))}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage(){let bytes:[u8;768]=kani::any();let i:usize=kani::any();kani::assume(i<32);let tree = &bytes[POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES..];
++  let mut observed=tree[16..48][i];observed^=1;
++  assert!(observed==bytes[96+i],"absolute root original byte window");}
++  

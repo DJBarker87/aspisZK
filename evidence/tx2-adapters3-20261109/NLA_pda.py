@@ -29,7 +29,8 @@ def shape(case,field,mode):
  assert!(good,"PDA same-call seeds reply comparison and error prefix");}
  """.replace('SEGMENT',call).replace('NAME',name)
  # Exact seed expressions and program id taken from the source call itself.
- content=segment[segment.index('(')+1:segment.rindex(')')].strip()
+ closing=re.search(r'\n\s*\)\n\s*\.map_err',segment).start()
+ content=segment[segment.index('(')+1:closing].strip()
  # Format contains trailing comma after &program; parse last comma-terminated arg.
  split=content.rsplit('\n',1);program=split[-1].strip().rstrip(',');seeds=split[0].rstrip().rstrip(',')
  expected_seeds='let seeds:&[&[u8]]='+seeds+';'

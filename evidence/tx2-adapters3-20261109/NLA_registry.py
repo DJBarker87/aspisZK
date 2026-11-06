@@ -78,6 +78,17 @@ def data(version,entry,field,mode):
  corrupt=['out=if out.is_ok(){Err(ProgramError::InvalidAccountData)}else{Ok(raw)};','log.calls^=1;']
  return text.replace('PROPERTY',props[field]).replace('CORRUPT',corrupt[field] if mode=='inverse' else ''),segment
 
+def readonly_data(mode):
+ segment='require_readonly_account(&account,&owner)?;\nlet data=account.data()?;'
+ text=COMMON+ANN+"""fn stage(){let bytes:[u8;32]=kani::any();let coordinate:usize=kani::any();kani::assume(coordinate<32);let tag:u8=kani::any();kani::assume(tag<3);
+ let account=OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:Ok(32),bytes:match tag{0=>Ok(bytes.to_vec()),1=>Err(ProgramError::AccountBorrowFailed),_=>Err(ProgramError::InvalidAccountData)}};
+ let owner=Pubkey::new_from_array(kani::any());let mut data_entered=0u8;let mut suffix=0u8;
+ let mut out=(||->Result<u8,ProgramError>{require_readonly_account(&account,&owner)?;data_entered+=1;let data=account.data()?;suffix+=1;Ok(data[coordinate])})();CORRUPT
+ let readonly=require_readonly_account(&account,&owner);let readonly_ok=readonly.is_ok();let expected=readonly.and_then(|_|account.data()).map(|data|data[coordinate]);
+ assert!(out==expected&&data_entered==if readonly_ok{1}else{0}&&suffix==if expected.is_ok(){1}else{0},"readonly precedes data; each error stops exact suffix");}
+ """.replace('CORRUPT','data_entered^=1;' if mode=='inverse' else '')
+ return text,segment
+
 def attempt(a,part,mode,version=1,entry=False,field=0):
  text,segment= data(version,entry,field,mode) if part=='data' else globals()[part](mode)
  mod='NLA_registry'

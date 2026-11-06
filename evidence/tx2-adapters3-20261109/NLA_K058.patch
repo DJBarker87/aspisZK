@@ -1,0 +1,16 @@
+--- /dev/null
++++ b/NLA_tail.rs
+@@ -0,0 +1,13 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn digest()->[M31;8]{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn frontier()->[[M31;8];20]{let raw:[[u32;8];20]=kani::any();raw.map(|r|r.map(|x|M31(x)))}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage(){let before=digest();let words=digest();let ok:bool=kani::any();let next_leaf_index:u64=kani::any();let level:usize=kani::any();let word:usize=kani::any();kani::assume(level<20&&word<8);let mut after=before;let node=&mut after;
++ let reply=if ok{Ok(words)}else{Err(aspis_statement::AtomicStatementError::NonCanonicalDigest)};let mut suffix=0u8;
++ let mut out=(||->ProgramResult{*node = reply.map_err(|_|ProgramError::InvalidAccountData)?;
++  if (next_leaf_index >> level) & 1 == 0 && *node != v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS[level] {return Err(ProgramError::InvalidAccountData);} suffix+=1;Ok(())})();after[word].0^=1;
++ let guard=(next_leaf_index>>level)&1!=0||words==v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS[level];let expected=ok&&guard;
++ assert!(out==if expected{Ok(())}else{Err(ProgramError::InvalidAccountData)}&&after[word].0==if ok{words[word].0}else{before[word].0}&&suffix==if expected{1}else{0},"one iteration assignment before rejection and Result");}
++ 

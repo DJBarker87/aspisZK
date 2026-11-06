@@ -24,7 +24,7 @@ theorem success {A E : Type} (bytes : Slice U8)
 
 theorem mapped_error {A E : Type} (bytes : Slice U8) (e : E) :
  decode (ok (.Ok bytes)) (fun _ => (ok (.Err e) : Result (core.result.Result A E))) =
- ok (.Err PE.InvalidAccountData) := rfl
+ ok (.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData) := rfl
 
 theorem abort {A E : Type} (e : Error)
  (decoder : Slice U8 → Result (core.result.Result A E)) :

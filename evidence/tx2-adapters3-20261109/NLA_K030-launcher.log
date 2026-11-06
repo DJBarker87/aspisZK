@@ -1,0 +1,51 @@
+{"attempt": "NLA_K030", "exit_status": 1, "wall_seconds": 0.9535575960762799, "peak_rss_kib": "101352", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+elf {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+   Compiling aspis-r1-cost-probe-program v0.1.0 (/home/dombarker/project-offloads/codex-cx-tx2-adapters3-20261109/NLA_src/programs/r1-cost-probe)
+error: mismatched closing delimiter: `}`
+  --> programs/r1-cost-probe/src/NLA_pda.rs:53:226
+   |
+53 | ...&log.program==(.map_err(|_| ProgramError::InvalidAccountData).to_bytes()[coordinate]};
+   |                  ^ unclosed delimiter                                                  ^ mismatched closing delimiter
+
+error: unexpected closing delimiter: `}`
+  --> programs/r1-cost-probe/src/NLA_pda.rs:54:72
+   |
+47 |  let good={let seeds:&[&[u8]]=&[
+   |           - the nearest open delimiter
+...
+53 |         );let size=if slot<seeds.len(){seeds[slot].len()}else{0};let byte=if slot<seeds.len()&&coordinate<size{seeds[slot][coordinat...
+   |         - missing open `(` for this delimiter
+54 |  assert!(good,"PDA same-call seeds reply comparison and error prefix");}
+   |                                                                        ^ unexpected closing delimiter
+
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 2 previous errors
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
+
+Running as unit: run-r19800f455bc0416e9b8ec1ea211853a3.scope; invocation ID: d147b43b5d5146a4837d2e28e2f3bb5a

@@ -1,0 +1,63 @@
+{"attempt": "NLA_L008", "exit_status": 0, "wall_seconds": 11.353907576063648, "peak_rss_kib": "5990468", "swaps": "0", "print_axioms": ["'NLA_OwnedData.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLA_OwnedData.irrelevant_slots' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLA_OwnedData.same_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLA_OwnedData.source : ∀ (ops : AdapterRw.Ops) (account : Account),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data (cloneOps ops) account = ok (view account) :=
+fun ops account =>
+  id
+    (id
+      (core.result.Result.casesOn (motive := fun t =>
+        account.bytes = t →
+          (match account.bytes with
+            | core.result.Result.Ok bytes =>
+              have s := bytes.deref;
+              ok (core.result.Result.Ok s)
+            | core.result.Result.Err error1 => do
+              let pe ← (cloneOps ops).op35 error1
+              ok (core.result.Result.Err pe)) =
+            ok
+              (match account.bytes with
+              | core.result.Result.Ok bytes => c
+...
+edAccount.data (cloneOps ops) account = ok (view account) :=
+fun ops account =>
+  id
+    (id
+      (core.result.Result.casesOn (motive := fun t =>
+        account.bytes = t →
+          (match account.bytes with
+            | core.result.Result.Ok bytes =>
+              have s := bytes.deref;
+              ok (core.result.Result.Ok s)
+            | core.result.Result.Err error1 => do
+              let pe ← (cloneOps ops).op35 error1
+              ok (core.result.Result.Err pe)) =
+            ok
+              (match account.bytes with
+              | core.result.Result.Ok bytes => core.result.Result.Ok bytes.deref
+              | core.result.Result.Err e => core.result.Result.Err e))
+        account.bytes
+        (fun a h =>
+          Eq.symm h ▸
+            Eq.refl
+              (match core.result.Result.Ok a with
+              | core.result.Result.Ok bytes =>
+                have s := bytes.deref;
+                ok (core.result.Result.Ok s)
+              | core.result.Result.Err error1 => do
+                let pe ← (cloneOps ops).op35 error1
+                ok (core.result.Result.Err pe)))
+        (fun a h =>
+          Eq.symm h ▸
+            Eq.refl
+              (match core.result.Result.Err a with
+              | core.result.Result.Ok bytes =>
+                have s := bytes.deref;
+                ok (core.result.Result.Ok s)
+              | core.result.Result.Err error1 => do
+                let pe ← (cloneOps ops).op35 error1
+                ok (core.result.Result.Err pe)))
+        (Eq.refl account.bytes)))
+'NLA_OwnedData.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLA_OwnedData.irrelevant_slots' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLA_OwnedData.same_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb2a26b1386154988a47de074a7b122f5.scope; invocation ID: d4735a338f6a4bde9d30309b25079416

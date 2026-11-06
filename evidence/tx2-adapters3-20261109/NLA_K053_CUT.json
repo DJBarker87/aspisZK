@@ -1,0 +1,8 @@
+{
+ "part": "length",
+ "source": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+ "segment": "    if bytes.len() != POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES\n        || bytes[..4] != POOL_V1_PAIR_FOREST_LANE_MAGIC\n        || bytes[4] != POOL_V1_PAIR_FOREST_LANE_VERSION\n        || usize::from(bytes[5]) >= POOL_V1_PAIR_FOREST_LANE_COUNT\n        || bytes[6] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8\n        || bytes[7] != POOL_V1_PAIR_TREE_DEPTH as u8\n        || bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING\n        || bytes[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]\n            .iter()\n            .any(|byte| *byte != 0)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n",
+ "mode": "positive",
+ "domain": "source stage prestate; lengths arbitrary usize for length cut; Box returning arm only; status1or2 for conversion; status>2 for panic witness",
+ "limits": "no allocator totality, deployed syscall ABI or row closure is claimed"
+}

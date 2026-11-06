@@ -1,0 +1,52 @@
+--- /dev/null
++++ b/NLA_pda.rs
+@@ -0,0 +1,49 @@
++use super::*;
++use aspis_statement::pool_v1::{PoolV1PairForestAccountErrorV1 as F,PoolIdentityV1,VerifierPolicyV1};
++extern crate alloc;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn any_field()->M31{M31(kani::any())}
++fn any_digest()->[M31;8]{[any_field(),any_field(),any_field(),any_field(),any_field(),any_field(),any_field(),any_field()]}
++fn any_error()->F{
++ let i:u8=kani::any();kani::assume(i<=20);
++ match i{0=>F::WrongLength,1=>F::WrongMagic,2=>F::WrongVersion,3=>F::WrongLaneCount,4=>F::WrongDigestEncoding,5=>F::WrongDepth,6=>F::WrongFormatBinding,7=>F::NonZeroReserved,8=>F::ZeroRequiredBinding,9=>F::InvalidBoolean,10=>F::InvalidMasterState,11=>F::InvalidLane,12=>F::LaneMasterMismatch,13=>F::LaneOrderMismatch,14=>F::LaneSequenceDecreased,15=>F::DuplicateCheckpoint,16=>F::CheckpointSequenceOverflow,17=>F::NonCanonicalDigest,18=>F::Identity,19=>F::Policy,_=>{
++ use aspis_statement::pool_v1::PoolV1TreeError as T;let j:u8=kani::any();kani::assume(j<13);
++ F::Tree(match j{0=>T::TreeFull,1=>T::InsufficientCapacity,2=>T::IndexOutOfRange,3=>T::RootMismatch,4=>T::NonCanonicalFrontier,5=>T::WrongLength,6=>T::WrongMagic,7=>T::WrongVersion,8=>T::WrongDepth,9=>T::WrongTreeHash,10=>T::WrongDigestEncoding,11=>T::NonCanonicalDigest,_=>T::NonZeroReserved})}}
++}
++fn any_master()->PoolV1PairForestMasterV1{PoolV1PairForestMasterV1{
++ bump:kani::any(),identity:PoolIdentityV1{pool:kani::any(),asset_mint:kani::any(),token_program:kani::any(),asset_id:any_field(),deployment_domain:kani::any()},verifier_policy:VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()},initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()}}
++fn any_checkpoint()->PoolV1PairForestCheckpointV1{PoolV1PairForestCheckpointV1{bump:kani::any(),master:kani::any(),deployment_domain:kani::any(),checkpoint_sequence:kani::any(),global_root:any_digest(),lane_sequences:kani::any()}}
++
++use aspis_statement::pool_v1::{VerifierRegistryV1,VerifierRegistryV2,VerifierRegistryEntryV1,VerifierRegistryEntryV2,VerifierEntryStatusV1};
++fn status()->VerifierEntryStatusV1{let s:u8=kani::any();kani::assume(s<4);match s{0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired}}
++fn registry1()->VerifierRegistryV1{VerifierRegistryV1{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any()}}
++fn registry2()->VerifierRegistryV2{VerifierRegistryV2{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any(),registry_program:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any()}}
++fn entry1()->VerifierRegistryEntryV1{VerifierRegistryEntryV1{status:status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
++fn entry2()->VerifierRegistryEntryV2{VerifierRegistryEntryV2{status:status(),statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any(),expected_upgrade_authority:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
++
++ use solana_program::pubkey::PubkeyError;
++ struct Log{count:usize,lens:[usize;5],bytes:[u8;5],program:u8}
++ fn oracle(log:&mut Log,i:usize,reply:Result<Pubkey,PubkeyError>,seeds:&[&[u8]],program:&Pubkey)->Result<Pubkey,PubkeyError>{log.count=seeds.len();for n in 0..seeds.len(){log.lens[n]=seeds[n].len();log.bytes[n]=if i<seeds[n].len(){seeds[n][i]}else{0};}log.program=program.to_bytes()[i];reply}
++ fn reply()->Result<Pubkey,PubkeyError>{let tag:u8=kani::any();kani::assume(tag<4);match tag{0=>Ok(Pubkey::new_from_array(kani::any())),1=>Err(PubkeyError::MaxSeedLengthExceeded),2=>Err(PubkeyError::InvalidSeeds),_=>Err(PubkeyError::IllegalOwner)}}
++ #[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stage(){let master_account=OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:Ok(0),bytes:Ok(Vec::new())};
++ let registry_program=Pubkey::new_from_array(kani::any());let loader=Pubkey::new_from_array(kani::any());let verifier_program=Pubkey::new_from_array(kani::any());
++ let registry=registry1();let entry=entry1();
++ 
++ let coordinate:usize=kani::any();let slot:usize=kani::any();kani::assume(coordinate<32&&slot<5);
++ let reply=reply();let expected_key=Pubkey::new_from_array(kani::any());let returned=reply.clone();let mut suffix=0u8;
++ let mut log=Log{count:0,lens:[0;5],bytes:[0;5],program:0};
++ let mut result=(||->ProgramResult{let expected_registry = oracle(&mut log,coordinate,reply,
++        &[
++            VERIFIER_REGISTRY_SEED,
++            master_account.key().as_ref(),
++            &[registry.bump],
++        ],
++        &registry_program,
++    )
++    .map_err(|_| ProgramError::InvalidAccountData)?; if expected_registry!=expected_key{return Err(ProgramError::InvalidAccountData);}suffix+=1;Ok(())})();
++ let expected=returned.map_err(|_|ProgramError::InvalidAccountData).and_then(|p|if p==expected_key{Ok(())}else{Err(ProgramError::InvalidAccountData)});
++ let good=result==expected&&suffix==if expected.is_ok(){1}else{0};
++ assert!(good,"PDA same-call seeds reply comparison and error prefix");}
++ 
