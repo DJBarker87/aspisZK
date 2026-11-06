@@ -1,0 +1,121 @@
+{
+ "entry": "programs/aspis-pool/src/processor.rs::process_instruction",
+ "entrypoint": "SDK entrypoint! -> processor::process_instruction",
+ "invalid_magic": "Err(InvalidInstructionData); return-data cleared initially and on error",
+ "non_dispatch_admin": "No registry-maintenance/admin/standalone-close dispatch branch in Pool; close_program_account_v1 is an ON cancel/settle callee, not an OFF instruction.",
+ "roots": [
+  {
+   "classification": "OFF",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/pair_forest.rs::process_pair_forest_initialize_with_runtime_v1",
+   "magic": "AS8I",
+   "reason": "Creates master/lane state; initialization before a spend.",
+   "source_line": 1994
+  },
+  {
+   "classification": "ON",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/pair_forest.rs::process_pair_forest_checkpoint_with_runtime_v1",
+   "magic": "AS8C",
+   "reason": "Retains the authenticated forest checkpoint consumed by terminal settlement.",
+   "source_line": 2130
+  },
+  {
+   "classification": "ON",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/pair_forest.rs::process_pair_forest_deposit_with_runtime_v1",
+   "magic": "AS8D",
+   "reason": "Vault-backed deposit updates the forest used by the spend.",
+   "source_line": 988
+  },
+  {
+   "classification": "ON",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/pair_forest.rs::process_pair_forest_terminal_v1",
+   "magic": "ASQ8",
+   "reason": "Deployed compact verifier-gated terminal, transfer/withdrawal continuation.",
+   "source_line": 1823
+  },
+  {
+   "classification": "OFF",
+   "emitted_in_sbf_MIR": false,
+   "function": "programs/aspis-pool/src/pair_forest.rs::process_pair_forest_terminal_full_asf8_v1",
+   "magic": "ASF8",
+   "reason": "Full transport is cfg-disabled in pinned deployed features.",
+   "source_line": 1890
+  },
+  {
+   "classification": "OFF",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/processor.rs::process_initialize_with_runtime_v1",
+   "magic": "ASIN",
+   "reason": "Initializes legacy Pool accounts before a spend.",
+   "source_line": 625
+  },
+  {
+   "classification": "ON",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/processor.rs::process_deposit_with_runtime_v1",
+   "magic": "ASDI",
+   "reason": "Legacy vault-backed deposit; conservatively retained deployed alternative.",
+   "source_line": 738
+  },
+  {
+   "classification": "ON",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/processor.rs::process_prepare_settlement_with_runtime_v1",
+   "magic": "ASPP",
+   "reason": "Creates the retained prepared-settlement state.",
+   "source_line": 1167
+  },
+  {
+   "classification": "ON",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/processor.rs::process_cancel_prepared_settlement_with_runtime_v1",
+   "magic": "ASPX",
+   "reason": "Cancels/refunds a prepared settlement and closes its accounts.",
+   "source_line": 1484
+  },
+  {
+   "classification": "ON",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/processor.rs::process_settle_prepared_with_runtime_v1",
+   "magic": "ASPF",
+   "reason": "Consumes the prepared plan and persists settlement.",
+   "source_line": 1674
+  },
+  {
+   "classification": "OFF",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/pair_processor.rs::process_pair_private_transfer_with_verifier_v1",
+   "magic": "ASJP",
+   "reason": "pair-afterstate-evidence is cfg-disabled in deployed features.",
+   "source_line": 277
+  },
+  {
+   "classification": "OFF",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/pair_processor.rs::process_pair_withdrawal_with_verifier_v1",
+   "magic": "ASJW",
+   "reason": "pair-afterstate-evidence is cfg-disabled in deployed features; held-site review retained separately.",
+   "source_line": 418
+  },
+  {
+   "classification": "ON",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/processor.rs::process_private_transfer_with_runtime_v1",
+   "magic": "ASPT",
+   "reason": "Verifier-gated legacy private transfer; retained alternative.",
+   "source_line": 2024
+  },
+  {
+   "classification": "ON",
+   "emitted_in_sbf_MIR": true,
+   "function": "programs/aspis-pool/src/processor.rs::process_withdrawal_with_runtime_v1",
+   "magic": "ASWD",
+   "reason": "Verifier-gated legacy withdrawal; retained alternative.",
+   "source_line": 2189
+  }
+ ],
+ "scope": "Conservative union of all deployed spend/lifecycle alternatives; not a claim each instruction occurs in one two-transaction trace. AS8C included conservatively as checkpoint preparation."
+}
