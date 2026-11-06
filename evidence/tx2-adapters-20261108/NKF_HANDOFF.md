@@ -13,3 +13,5 @@ No shipped source, session A, sibling worktree, wallet or key changes authorized
 Next: seed/pin host dependencies, inspect canonical installed wrapper/body definitions and plan exact cuts.
 
 Stage 1: copied NKC1365368bytes first, NJY269624bytes second; exact imported hashes NKF_SEED.json. Private corpus NKF_src, own CARGO_TARGET_DIR NKF_target. Five inherited seed instrumentation files restored from the frozen payload before extraction; full replacements recorded. One successful Charon invocation then Aeneas failure (L002); no Lean output, all six selected roots eligible under(ay)(2). L001 was only a failed source preflight. No source/ELF change or new closure claimed.
+
+Stage 2: all14 master return-field/window contracts PASS with14 matched semantic failures on identical harness sources (K004/K005, K006-K031). Arbitrary byte/word windows replace the retired whole-record/mixed-field reductions K002/K003. No timeout repeated or cap raised. Exact raw child and ProgramError map compiled in L004-L007, with standard axioms; slots48/49 installation preserves43/44. Whole allocation/fidelity and final typed frame-root gate are still pending. No row promotion.
