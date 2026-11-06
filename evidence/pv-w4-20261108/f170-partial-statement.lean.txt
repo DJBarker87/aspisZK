@@ -1,0 +1,9 @@
+theorem PV_FN_THREAD_f170.fullReply : ∀ {W E : Type} (base : PV_STX2_Store.Carrier W PV_STX2_Syntax.Data)
+  (ctl : PV_STX2_SliceMachine.Control) (programs : PV_STX2_Syntax.Data → Option PV_STX2_SliceSyntax.Program)
+  (handler : PV_STX2_Native.Request PV_STX2_Syntax.Data → W → PV_STX_Machine.Reply W E PV_STX2_Syntax.Data)
+  (s : PV_STX2_Store.Store PV_STX2_Syntax.Data) (a ka kl : ℕ) (callback : PV_STX2_Syntax.Data) (b : Bool)
+  (parents : List PV_STX2_SliceMachine.Frame) (w : W) (pre : PV_FN_THREAD_f170.EntryPre s a ka kl callback b),
+  PV_THR2_Execution.advance (PV_THR2_EntryDynamic.carrier base b) ctl (PV_THR2_RunEntryDynamic.table programs) handler
+      (10 + 1 + 2 + 1 + 1)
+      {
+        status :=

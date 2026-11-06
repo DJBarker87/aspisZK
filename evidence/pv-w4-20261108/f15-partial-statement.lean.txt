@@ -1,0 +1,14 @@
+theorem PV_FN_THREAD_f15.throughHandles : ∀ {W E : Type} (base : PV_STX2_Store.Carrier W PV_STX2_Syntax.Data)
+  (ctl : PV_STX2_SliceMachine.Control) (fallback : PV_STX2_Syntax.Data → Option PV_STX2_SliceSyntax.Program)
+  (handler : PV_STX2_Native.Request PV_STX2_Syntax.Data → W → PV_STX_Machine.Reply W E PV_STX2_Syntax.Data)
+  (s : PV_STX2_Store.Store PV_STX2_Syntax.Data) (a : ℕ) (parents : List PV_STX2_SliceMachine.Frame)
+  (p : PV_STX2_Store.Address) (b : Bool) (w : W) (es : List E) (stack : List PV_STX2_SliceMachine.Config)
+  (pre : PV_FN_THREAD_f15.HandlesPre s a parents p),
+  PV_THR2_IntrinsicState.advance (PV_FN_THREAD_f164.carrier base b) ctl
+      (PV_THR2_Source208Table.table (PV_THR2_Source15Table.resolve (PV_THR2_OwnInitChildren.resolve fallback))) handler
+      (6 +
+        (4 +
+          PV_THR2_Source164Continue268.steps
+            (PV_FN_THREAD_f164.reply handler (PV_FN_THREAD_f15.entry164 s a parents p).store w)))
+      {
+        current :=
