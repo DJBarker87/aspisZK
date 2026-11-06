@@ -1,6 +1,8 @@
 use solana_program::{account_info::AccountInfo,pubkey::Pubkey,program_error::ProgramError};
 use core::cell::{Ref,RefMut};
 use std::rc::Rc;
+extern crate alloc;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 // Pinned native observation, NEVER used to create or havoc a typed guard.
 // The harness first checks this field against safely constructed live guards.
 fn counter(a:&AccountInfo)->isize {unsafe{*Rc::as_ptr(&a.data).cast::<isize>()}}
@@ -40,21 +42,41 @@ macro_rules! setup {($body:expr)=>{{
  let mut lamports:u64=kani::any();let mut bytes=[kani::any::<u8>();2];let p=bytes.as_ptr();
  let a=AccountInfo::new(&key,false,false,&mut lamports,&mut bytes,&owner,false,0);
  let held:usize=kani::any();kani::assume(held<=7);
+ let exclusive_held:bool=kani::any();
+ let mut xguard=if exclusive_held {Some(a.try_borrow_mut_data().unwrap())}else{None};
+ let held=if exclusive_held {0}else{held};
  let mut guards:[Option<Ref<&mut[u8]>>;7]=core::array::from_fn(|_|None);
  for i in 0..held {guards[i]=Some(a.try_borrow_data().unwrap());}
- assert_eq!(counter(&a),held as isize);
- ($body)(&a,held as isize,p);
+ let pre=if exclusive_held {-1}else{held as isize};
+ assert_eq!(counter(&a),pre);
+ ($body)(&a,pre,p);
  for i in 0..held {drop(guards[i].take());}
+ drop(xguard.take());
  assert_eq!(counter(&a),0);
 }}}
-#[kani::proof_for_contract(shared)] #[kani::unwind(9)]
+#[kani::proof_for_contract(shared)] #[kani::unwind(129)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn shared_contract(){setup!(|a:&AccountInfo,pre,p|{let r=shared(a,pre,p,2);drop(r);assert_eq!(counter(a),pre);});}
-#[kani::proof_for_contract(shared_counter_bad)] #[kani::unwind(9)]
+#[kani::proof_for_contract(shared_counter_bad)] #[kani::unwind(129)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn shared_counter_control(){setup!(|a:&AccountInfo,pre,p|{let r=shared_counter_bad(a,pre,p,2);drop(r);});}
-#[kani::proof_for_contract(shared_cell_bad)] #[kani::unwind(9)]
+#[kani::proof_for_contract(shared_cell_bad)] #[kani::unwind(129)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn shared_cell_control(){setup!(|a:&AccountInfo,pre,p|{
  let k=Pubkey::default();let mut l=0;let mut d=[0u8;2];let b=AccountInfo::new(&k,false,false,&mut l,&mut d,&k,false,0);
  let r=shared_cell_bad(a,&b,pre,p,2);drop(r);
 });}
-#[kani::proof_for_contract(exclusive)] #[kani::unwind(9)]
+#[kani::proof_for_contract(exclusive)] #[kani::unwind(129)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn exclusive_contract(){setup!(|a:&AccountInfo,pre,p|{let r=exclusive(a,pre,p,2);drop(r);assert_eq!(counter(a),pre);});}
+
+#[kani::requires(counter(a)==pre)]
+#[kani::modifies(&*b.data)]
+#[kani::ensures(|r| exclusive_post(a,r,pre,p,n))]
+fn exclusive_cell_bad<'a,'b,'c>(a:&AccountInfo<'c>,b:&'a AccountInfo<'b>,pre:isize,p:*const u8,n:usize)->Result<RefMut<'a,&'b mut[u8]>,ProgramError>{b.try_borrow_mut_data()}
+#[kani::proof_for_contract(exclusive_cell_bad)] #[kani::unwind(129)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn exclusive_cell_control(){setup!(|a:&AccountInfo,pre,p|{
+ let k=Pubkey::default();let mut l=0;let mut d=[0u8;2];let b=AccountInfo::new(&k,false,false,&mut l,&mut d,&k,false,0);
+ let r=exclusive_cell_bad(a,&b,pre,p,2);drop(r);
+});}

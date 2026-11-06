@@ -5,7 +5,7 @@ sha=lambda b:hashlib.sha256(b).hexdigest()
 def run(a,kind,target,command=None,extra=None,env_extra=None):
     assert a.startswith('NJN_L') and 1<=int(a[-3:])<=70 and not (E/a).exists()
     env=json.loads((E.parent/'ledger14-20261108/NJK_L001.json').read_text())['env']
-    env['LEAN_PATH']=':'.join(dict.fromkeys([B+'/NJN_objects',B+'/NJN_seed']+env['LEAN_PATH'].split(':')))
+    env['LEAN_PATH']=':'.join(dict.fromkeys([B+'/NJN_objects',B+'/NJN_seed','/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NJK_20261108/NJK_exports_20261108']+env['LEAN_PATH'].split(':')))
     env['TMPDIR']=B+'/NJN_tmp'
     env['CARGO_TARGET_DIR']=B+'/NJN_target'
     env['CARGO_NET_OFFLINE']='true'
@@ -45,6 +45,7 @@ for rel in sorted(rels):
   if z.is_file():pins[str(z)]={{'path':str(z),'sha256':hashlib.sha256(z.read_bytes()).hexdigest()}}
 x['deps_fingerprint']['selected_objects']=pins;(b/{(a+'.json')!r}).write_text(json.dumps(x,indent=1)+'\\n')
 (b/'NJN_objects'/{target.replace('.','/')!r}).parent.mkdir(parents=True,exist_ok=True)
+(b/'NJN_native').mkdir(exist_ok=True)
 ''');assert r.returncode==0,r.stderr
     r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
     (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)

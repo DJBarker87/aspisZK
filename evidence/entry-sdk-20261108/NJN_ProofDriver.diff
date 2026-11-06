@@ -1,0 +1,43 @@
+--- NJH_ProofDriver.lean
++++ NJN_ProofDriver.lean
+@@ -2,7 +2,7 @@
+ import NFA_WALKER
+ import NFA_MemoryLimit
+ open Lean Elab Command
+-namespace NJH_Audit
++namespace NJN_Audit
+ /-- Include recursor reduction rules and constant-name metadata, not only values. -/
+ def referenceNames (c : ConstantInfo) : Array Name := Id.run do
+  let mut refs := c.type.getUsedConstants ++ ((c.value? true).map Expr.getUsedConstants).getD #[]
+@@ -54,7 +54,7 @@
+    ("loader_imports",toJson loaderImports), ("imports_match",toJson importMatch), ("dangling",toJson dangling),
+    ("declarations",toJson data.constants.size), ("edges",toJson edges)]).compress
+  return failed
+-end NJH_Audit
++end NJN_Audit
+ 
+ /-- Standalone runtime avoids restoring a pre-initialization command environment. -/
+ unsafe def main (args : List String) : IO UInt32 := do
+@@ -69,11 +69,11 @@
+          `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+          `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+     else do
+-      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NJH_AUDIT_ROOTS.json"))
++      let manifest ← IO.ofExcept (Json.parse (← IO.FS.readFile "NJN_AUDIT_ROOTS.json"))
+       let groups ← IO.ofExcept (manifest.getObjValAs? (Array (Array String)) "groups")
+       let some idx := (mode.drop 5).toString.toNat? | throw (IO.userError "invalid proof mode")
+       let some names := groups[idx]? | throw (IO.userError "proof group out of range")
+-      let selected ← IO.ofExcept (Json.parse (← IO.FS.readFile "NJH_AUDIT_MODULES.json"))
++      let selected ← IO.ofExcept (Json.parse (← IO.FS.readFile "NJN_AUDIT_MODULES.json"))
+       let selected ← IO.ofExcept (fromJson? selected : Except String (Array (Array String)))
+       let some modules := selected[idx]? | throw (IO.userError "module group out of range")
+       pure (modules.map String.toName, names.map String.toName)
+@@ -85,7 +85,7 @@
+       let j ← IO.ofExcept (Json.parse line)
+       expected := expected.insert (← IO.ofExcept (j.getObjValAs? String "module"))
+         (← IO.ofExcept (j.getObjValAs? (Array String) "imports"))
+-    let failed ← NJH_Audit.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NFN_LOADED_scan.jsonl") expected
++    let failed ← NJN_Audit.loadedScan env (if mode == "queryscan" then "NFN_QUERY_LOADED_scan.jsonl" else "NFN_LOADED_scan.jsonl") expected
+     IO.println (if failed then "NFN_SCAN_FAILED" else "NFN_SCAN_ZERO_DANGLING")
+     return if failed then 1 else 0
+   let ctx : Command.Context := {
