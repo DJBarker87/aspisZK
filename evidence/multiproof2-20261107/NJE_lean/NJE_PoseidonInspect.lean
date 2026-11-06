@@ -1,0 +1,5 @@
+import R22Stage2LocalBodies
+#print AspisR1Stage2.aspis_statement.poseidon2.apply_mat4_lazy
+#print AspisR1Stage2.aspis_statement.poseidon2.external_linear_lazy
+#print AspisR1Stage2.aspis_statement.poseidon2.internal_linear_lazy
+#print AspisR1Stage2.aspis_statement.poseidon2.pow5
