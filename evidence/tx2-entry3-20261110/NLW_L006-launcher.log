@@ -1,0 +1,44 @@
+{"attempt": "NLW_L006", "exit_status": 0, "wall_seconds": 17.26835904014297, "peak_rss_kib": "6024888", "swaps": "0", "print_axioms": ["'NLW_AuthPacketFold.parameterized' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_AuthPacketFold.parameterized : ∀ {Ambient H : Type} (child : Child Ambient)
+  (wr rr : NP6_StdModel.Reservation) (merkle : NJJ_Common.Merkle) (finish : NJJ_Common.Finish),
+  RowSpec_065 (fun {H} => child) wr rr (fun {H} => merkle) finish →
+    ∀ (s : State Ambient H),
+      (↑s.args.publicBytes).length ≤ 1880 →
+        NLW_Root0.Binds s.args.checkpoint s.args.proof →
+          NLW_AuthSegments.fold (fun {H} => child) s =
+            transcription (fun {H} => reference wr rr (fun {H} => merkle) finish) s :=
+fun {Ambient H} child wr rr merkle finish packet s publicBound roots =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = transcription (fun {H} => reference wr rr (fun {H} => m
+...
+      run := { result := c.run.result, events := [e, Event.parsed s, Event.common s c] } }) =
+                have p := x;
+                have e := Event.parse s p;
+                match p with
+                | fail err => { post := s.world, run := { result := fail err, events := [e] } }
+                | div => { post := s.world, run := { result := div, events := [e] } }
+                | ok (core.result.Result.Err err) =>
+                  { post := s.world, run := { result := ok (core.result.Result.Err err), events := [e] } }
+                | ok (core.result.Result.Ok a) =>
+                  have c := (fun {H} => reference wr rr (fun {H} => merkle) finish) s.args s.world;
+                  { post := c.post,
+                    run := { result := c.run.result, events := [e, Event.parsed s, Event.common s c] } })
+            (fun p =>
+              Eq.refl
+                (have p := div;
+                have e := Event.parse s p;
+                match p with
+                | fail err => { post := s.world, run := { result := fail err, events := [e] } }
+                | div => { post := s.world, run := { result := div, events := [e] } }
+                | ok (core.result.Result.Err err) =>
+                  { post := s.world, run := { result := ok (core.result.Result.Err err), events := [e] } }
+                | ok (core.result.Result.Ok a) =>
+                  have c := (fun {H} => child) s.args s.world;
+                  { post := c.post,
+                    run := { result := c.run.result, events := [e, Event.parsed s, Event.common s c] } }))
+            (Eq.symm h) (Eq.refl (NLE_ParseInstall.parse s.args.proof)))
+        (Eq.refl (NLE_ParseInstall.parse s.args.proof))))
+'NLW_AuthPacketFold.parameterized' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3a0c904e3470477a98cc2ede22887240.scope; invocation ID: 67c6eb92c339498eb618b75610255b33

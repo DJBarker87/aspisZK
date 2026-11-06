@@ -1,0 +1,44 @@
+{"attempt": "NLW_L004", "exit_status": 1, "wall_seconds": 28.985313934041187, "peak_rss_kib": "5970892", "swaps": "0", "print_axioms": ["'NLW_AuthFold.transcription' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLW_generated/NLW_AuthFold.lean:19:2: error: unexpected token 'public'; expected '_' or identifier
+NLW_generated/NLW_AuthFold.lean:19:8: error: unexpected token ':'; expected 'lemma'
+NLW_generated/NLW_AuthFold.lean:21:60: error: unexpected token '⟩'; expected 'lemma'
+theorem NLW_AuthFold.transcription : ∀ {Ambient H : Type} (child : Child Ambient) (s : State Ambient H),
+  NLW_AuthSegments.fold (fun {H} => child) s = NLW_AuthState.transcription (fun {H} => child) s :=
+fun {Ambient H} child s =>
+  id
+    (id
+      (casesOn (motive := fun t =>
+        NLE_ParseInstall.parse s.args.proof = t →
+          (have p := NLE_ParseInstall.parse s.args.proof;
+            have e := Event.parse s p;
+      
+...
+events := [e] } }
+                | ok (core.result.Result.Err err) =>
+                  { post := s.world, run := { result := ok (core.result.Result.Err err), events := [e] } }
+                | ok (core.result.Result.Ok a) =>
+                  have c := (fun {H} => child) s.args s.world;
+                  { post := c.post,
+                    run := { result := c.run.result, events := [e, Event.parsed s, Event.common s c] } })
+            (fun p =>
+              Eq.refl
+                (have p := div;
+                have e := Event.parse s p;
+                match NLW_AuthSegments.parse s p with
+                | NLW_AuthSegments.ParseCut.aborted err =>
+                  { post := s.world, run := { result := fail err, events := [e] } }
+                | NLW_AuthSegments.ParseCut.diverged => { post := s.world, run := { result := div, events := [e] } }
+                | NLW_AuthSegments.ParseCut.rejected err =>
+                  { post := s.world, run := { result := ok (core.result.Result.Err err), events := [e] } }
+                | NLW_AuthSegments.ParseCut.entered =>
+                  have next := NLW_AuthSegments.marker s;
+                  have c := NLW_AuthSegments.common (fun {H} {H} => child) next;
+                  { post := c.post,
+                    run := { result := c.run.result, events := [e, Event.parsed next, Event.common next c] } }))
+            (Eq.symm h) (Eq.refl (NLE_ParseInstall.parse s.args.proof)))
+        (Eq.refl (NLE_ParseInstall.parse s.args.proof))))
+NLW_generated/NLW_AuthFold.lean:23:7: error(lean.unknownIdentifier): Unknown constant `common_domain`
+'NLW_AuthFold.transcription' depends on axioms: [propext, Classical.choice, Quot.sound]
+NLW_generated/NLW_AuthFold.lean:25:14: error(lean.unknownIdentifier): Unknown constant `common_domain`
+
+Running as unit: run-r13a12d9b2ad74be1aff7b1240e3a300b.scope; invocation ID: 0940cdd0e4d9421ea8b3bcc10326b172

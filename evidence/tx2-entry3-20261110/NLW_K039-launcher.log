@@ -1,0 +1,51 @@
+{"attempt": "NLW_K039", "exit_status": 1, "wall_seconds": 116.20148532697931, "peak_rss_kib": "1494924", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+st=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-tx2-entry3-20261110/NLW_src/programs/r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - TerminatorKind::InlineAsm (2)
+             - caller_location (1)
+             - foreign function (12)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+warning: Kani currently does not support concurrency. The following constructs will be treated as sequential operations:
+             - atomic_xadd (5)
+             - atomic_cxchgweak (15)
+             - atomic_store (3)
+             - atomic_xchg (5)
+             - atomic_cxchg (15)
+             - atomic_xsub (5)
+             - atomic_load (6)
+         
+
+    Finished `dev` profile [optimized] target(s) in 4.68s
+Checking harness r1_pool_adapter::owned::NLW_program::NLW_process_fallback...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - r1_pool_adapter::owned::NLW_program::NLW_process_fallback
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rae9913e57a1c48f1bff3a9447f548912.scope; invocation ID: 4651ad543576432a9ab31713029bdc7f

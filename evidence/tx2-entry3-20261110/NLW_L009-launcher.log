@@ -1,0 +1,60 @@
+{"attempt": "NLW_L009", "exit_status": 0, "wall_seconds": 16.622672857018188, "peak_rss_kib": "5969872", "swaps": "0", "print_axioms": ["'NLW_GetterSuccess.stored' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_GetterSuccess.returned' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_GetterSuccess.stored : ∀ (ops : Ops) (a : Owned) (bytes : Slice U8),
+  r1_pool_adapter.owned.OwnedAccount.data ops a = ok (core.result.Result.Ok bytes) →
+    a.bytes = core.result.Result.Ok bytes :=
+fun ops a bytes read =>
+  core.result.Result.casesOn (motive := fun t => a.bytes = t → a.bytes = core.result.Result.Ok bytes) a.bytes
+    (fun value h =>
+      Eq.ndrec (motive := fun x => a.bytes = x → x = core.result.Result.Ok bytes)
+        (fun hb =>
+          let ⟨⟩ := ok (core.result.Result.Ok bytes)
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | core.r
+...
+                   (congrFun'
+                          (congrArg Eq
+                            (congrArg
+                              (fun x =>
+                                match x with
+                                | core.result.Result.Ok bytes =>
+                                  have s := bytes.deref;
+                                  ok (core.result.Result.Ok s)
+                                | core.result.Result.Err error1 => do
+                                  let pe ← ops.op35 error1
+                                  ok (core.result.Result.Err pe))
+                              hb))
+                          (ok (core.result.Result.Ok bytes)))
+                        read)))
+                (Eq.symm h) (Eq.refl (ops.op35 err)))
+            (Eq.refl (ops.op35 err)))
+        (Eq.symm h) (Eq.refl a.bytes))
+    (Eq.refl a.bytes)
+theorem NLW_GetterSuccess.returned : ∀ (ops : Ops) (a : Owned) (bytes : Slice U8),
+  a.bytes = core.result.Result.Ok bytes →
+    r1_pool_adapter.owned.OwnedAccount.data ops a = ok (core.result.Result.Ok bytes) :=
+fun ops a bytes stored =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congrArg
+            (fun x =>
+              match x with
+              | core.result.Result.Ok bytes =>
+                have s := bytes.deref;
+                ok (core.result.Result.Ok s)
+              | core.result.Result.Err error1 => do
+                let pe ← ops.op35 error1
+                ok (core.result.Result.Err pe))
+            stored))
+        (ok (core.result.Result.Ok bytes))))
+    (Eq.refl (ok (core.result.Result.Ok (alloc.vec.Vec.deref bytes))))
+'NLW_GetterSuccess.stored' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_GetterSuccess.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6a7b5d3539ed489ba37756fa854a7339.scope; invocation ID: 4c541f09cf394063998eb4f11de346c0

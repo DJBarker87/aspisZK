@@ -1,0 +1,49 @@
+{"attempt": "NLW_L013", "exit_status": 0, "wall_seconds": 20.766890557017177, "peak_rss_kib": "6011008", "swaps": "0", "print_axioms": ["'NLW_DigestBoundary.roots_or_collision' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def NLW_DigestBoundary.Collision : {D : Type} → (List U8 → D) → Slice U8 → Slice U8 → Prop :=
+fun {D} hash a b => ↑a ≠ ↑b ∧ hash ↑a = hash ↑b
+theorem NLW_DigestBoundary.roots_or_collision : ∀ {D : Type} (hash : List U8 → D)
+  (checkpoint oldProof proof : Slice U8),
+  NLW_Root0.Binds checkpoint oldProof →
+    hash ↑oldProof = hash ↑proof → NLW_Root0.Binds checkpoint proof ∨ Collision hash oldProof proof :=
+fun {D} hash checkpoint oldProof proof saved checked =>
+  if roots : NLW_Root0.Binds checkpoint proof then Or.inl roots
+  else
+    Or.inr
+      ⟨fun same =>
+        roots
+          (id
+            (Eq.mp
+              (congrArg (Eq (List.take 32 (List.drop 112 ↑checkpoint)))
+               
+...
+def NLW_DigestBoundary.Collision : {D : Type} → (List U8 → D) → Slice U8 → Slice U8 → Prop :=
+fun {D} hash a b => ↑a ≠ ↑b ∧ hash ↑a = hash ↑b
+theorem NLW_DigestBoundary.roots_or_collision : ∀ {D : Type} (hash : List U8 → D)
+  (checkpoint oldProof proof : Slice U8),
+  NLW_Root0.Binds checkpoint oldProof →
+    hash ↑oldProof = hash ↑proof → NLW_Root0.Binds checkpoint proof ∨ Collision hash oldProof proof :=
+fun {D} hash checkpoint oldProof proof saved checked =>
+  if roots : NLW_Root0.Binds checkpoint proof then Or.inl roots
+  else
+    Or.inr
+      ⟨fun same =>
+        roots
+          (id
+            (Eq.mp
+              (congrArg (Eq (List.take 32 (List.drop 112 ↑checkpoint)))
+                (congrArg Subtype.val
+                  (congrArg AspisV8R19.SqueezeOracleBridge.encodeState
+                    (congrFun'
+                      (congrArg Option.getD
+                        (congrArg SemanticRecordCodec.decodeState
+                          (congrFun'
+                            (congrFun'
+                              (congrArg OraclePortCompactDraft.slice (congrArg MultiproofConeCanonical.bytesOf same))
+                              16)
+                            32)))
+                      fun x => 0))))
+              saved)),
+        checked⟩
+'NLW_DigestBoundary.roots_or_collision' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7c85ba15dacf41e0b8ca1c69d289b008.scope; invocation ID: 6286ee897b204d6e94e404cd5d5225fa

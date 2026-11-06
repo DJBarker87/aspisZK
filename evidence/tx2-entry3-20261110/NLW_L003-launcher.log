@@ -1,0 +1,30 @@
+{"attempt": "NLW_L003", "exit_status": 0, "wall_seconds": 25.597264091018587, "peak_rss_kib": "6027756", "swaps": "0", "print_axioms": []}
+def NLW_AuthSegments.fold : {Ambient H : Type} →
+  Child Ambient → State Ambient H → Observation Ambient (Event Ambient H) Reply :=
+fun {Ambient H} child s =>
+  have p := NLE_ParseInstall.parse s.args.proof;
+  have e := Event.parse s p;
+  match parse s p with
+  | ParseCut.aborted err => { post := s.world, run := { result := fail err, events := [e] } }
+  | ParseCut.diverged => { post := s.world, run := { result := div, events := [e] } }
+  | ParseCut.rejected err => { post := s.world, run := { result := ok (core.result.Result.Err err), events := [e] } }
+  | ParseCut.entered =>
+    have next := marker s;
+    have c := common (fun {H} => child) next;
+    { post := c.post, run := { result := c.ru
+...
+def NLW_AuthSegments.fold : {Ambient H : Type} →
+  Child Ambient → State Ambient H → Observation Ambient (Event Ambient H) Reply :=
+fun {Ambient H} child s =>
+  have p := NLE_ParseInstall.parse s.args.proof;
+  have e := Event.parse s p;
+  match parse s p with
+  | ParseCut.aborted err => { post := s.world, run := { result := fail err, events := [e] } }
+  | ParseCut.diverged => { post := s.world, run := { result := div, events := [e] } }
+  | ParseCut.rejected err => { post := s.world, run := { result := ok (core.result.Result.Err err), events := [e] } }
+  | ParseCut.entered =>
+    have next := marker s;
+    have c := common (fun {H} => child) next;
+    { post := c.post, run := { result := c.run.result, events := [e, Event.parsed next, Event.common next c] } }
+
+Running as unit: run-r80b4a27993734ce08ccadb9109e98546.scope; invocation ID: 842b7f52f3644b329f8d3ab16797e4ef
