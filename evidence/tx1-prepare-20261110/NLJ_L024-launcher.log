@@ -1,0 +1,46 @@
+{"attempt": "NLJ_L024", "exit_status": 1, "wall_seconds": 16.74323723698035, "peak_rss_kib": "6312948", "swaps": "0", "print_axioms": ["'AspisR1.NLJ_Observed.source_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLJ_generated/NLJ_ObservedSourceStep.lean:16:19: error: unsolved goals
+case mk.parse
+H : Type
+input : Input H
+x : core.result.Result r1_wire.Prefix r1_wire.Error
+⊢ (do
+      let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch x)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue p => do
+          liftM (VerifyPrefix.mark none 0#u8)
+          let r1 ← S1SemanticCode.publicTranscript input.digest input.publicValue input.hash p.c1_root
+          let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let __x ← S1SemanticCode.begin input.digest p val
+    
+...
+sult.Result.Insts.CoreOpsTry.branch r1)
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let __x ← S1SemanticCode.begin after.input.digest p val
+                  match __x with
+                    | (r2, val1) => do
+                      let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          liftM (VerifyPrefix.mark none 1#u8)
+                          (fun {H_1} =>
+                                S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation))
+                              after.input.digest after.input.publicValue p val1 val2 none
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+'AspisR1.NLJ_Observed.source_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc846742f9d984b97ba7abfb2c235fafb.scope; invocation ID: 328ee0b1f3e843ab96496b002375f317

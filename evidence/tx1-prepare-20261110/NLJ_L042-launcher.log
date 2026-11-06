@@ -1,0 +1,46 @@
+{"attempt": "NLJ_L042", "exit_status": 0, "wall_seconds": 32.58876041905023, "peak_rss_kib": "6344748", "swaps": "0", "print_axioms": ["'AspisR1.NLJ_ObservedDirect.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLJ_ObservedDirect.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_ObservedDirect.source : ∀ (F : S1SemanticCode.Finish) {H : Type} (D : aspis_core.Digest32 H)
+  (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H),
+  run (verify (fun {H} => F) D pub bytes hash) = run (S1SemanticCode.verify (fun {H} => F) D pub bytes hash none) :=
+fun F {H} D pub bytes hash =>
+  id
+    (id
+      (id
+        (NLJ_RunAlgebra.bind_congr
+          (have this := liftM (PrefixAdapter.parseAccepted bytes);
+          this)
+          (fun reply => afterParsed (fun {H} {H} => F) D pub hash reply)
+          (fun r => do
+            let cf 
+...
+one 1#u8)
+                                            (fun {H} => F) D pub p val1 val2 none
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            liftM
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error)
+                                                residual)))
+                                beginReply
+                                (fun a h =>
+                                  Eq.symm h ▸
+                                    Eq.refl
+                                      (run
+                                        (match (core.result.Result.Ok a, after) with
+                                        | (reply, after) => afterBegin (fun {H} {H} {H} {H} => F) D pub p after reply)))
+                                (fun a h =>
+                                  Eq.symm h ▸
+                                    Eq.refl
+                                      (run
+                                        (match (core.result.Result.Err a, after) with
+                                        | (reply, after) => afterBegin (fun {H} {H} {H} {H} => F) D pub p after reply)))
+                                (Eq.refl beginReply)))
+                      (fun e h =>
+                        Eq.symm h ▸
+                          Eq.refl (run (afterPublic (fun {H} {H} {H} => F) D pub p (core.result.Result.Err e))))
+                      (Eq.refl publicReply)))
+            (fun e h =>
+              Eq.symm h ▸ Eq.refl (run (afterParsed (fun {H} {H} => F) D pub hash (core.result.Result.Err e))))
+            (Eq.refl reply))))
+
+Running as unit: run-r9607ae4e3c444de38145bee86da07e4a.scope; invocation ID: 66ce0399d98e446ca8cec7a67b53a1c9

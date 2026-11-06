@@ -1,0 +1,413 @@
+NLJ_generated/NLJ_ObservedSourceStep.lean:16:19: error: unsolved goals
+case mk.parse
+H : Type
+input : Input H
+x : core.result.Result r1_wire.Prefix r1_wire.Error
+⊢ (do
+      let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch x)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue p => do
+          liftM (VerifyPrefix.mark none 0#u8)
+          let r1 ← S1SemanticCode.publicTranscript input.digest input.publicValue input.hash p.c1_root
+          let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let __x ← S1SemanticCode.begin input.digest p val
+              match __x with
+                | (r2, val1) => do
+                  let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      liftM (VerifyPrefix.mark none 1#u8)
+                      (fun {H_1} => S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries input.reservation))
+                          input.digest input.publicValue p val1 val2 none
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+              (core.convert.FromSame r1_wire.Error) residual)) =
+    PreparedHashCode.bind
+      ((fun b =>
+          PreparedHashCode.bind (Code.done b) fun r =>
+            match r with
+            | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+            | core.result.Result.Ok p => pure (Sum.inr { input := input, locals := Local.mark0 p }))
+        x)
+      fun post =>
+      match post with
+      | Sum.inl out => pure out
+      | Sum.inr after =>
+        match after.locals with
+        | Local.finish p t c =>
+          S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation) after.input.digest
+            after.input.publicValue p t c none
+        | Local.mark1 p t c => do
+          liftM (VerifyPrefix.mark none 1#u8)
+          S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation) after.input.digest
+              after.input.publicValue p t c none
+        | Local.begin p t => do
+          let __x ← S1SemanticCode.begin after.input.digest p t
+          match __x.1 with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok c => do
+              liftM (VerifyPrefix.mark none 1#u8)
+              S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation) after.input.digest
+                  after.input.publicValue p __x.2 c none
+        | Local.publicTranscript p => do
+          let r ← S1SemanticCode.publicTranscript after.input.digest after.input.publicValue after.input.hash p.c1_root
+          match r with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok t => do
+              let __x ← S1SemanticCode.begin after.input.digest p t
+              match __x.1 with
+                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                | core.result.Result.Ok c => do
+                  liftM (VerifyPrefix.mark none 1#u8)
+                  S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation)
+                      after.input.digest after.input.publicValue p __x.2 c none
+        | Local.mark0 p => do
+          liftM (VerifyPrefix.mark none 0#u8)
+          let r ← S1SemanticCode.publicTranscript after.input.digest after.input.publicValue after.input.hash p.c1_root
+          match r with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok t => do
+              let __x ← S1SemanticCode.begin after.input.digest p t
+              match __x.1 with
+                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                | core.result.Result.Ok c => do
+                  liftM (VerifyPrefix.mark none 1#u8)
+                  S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation)
+                      after.input.digest after.input.publicValue p __x.2 c none
+        | Local.parse => do
+          let r ← liftM (PrefixAdapter.parseAccepted after.input.bytes)
+          let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue p => do
+              liftM (VerifyPrefix.mark none 0#u8)
+              let r1 ←
+                S1SemanticCode.publicTranscript after.input.digest after.input.publicValue after.input.hash p.c1_root
+              let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let __x ← S1SemanticCode.begin after.input.digest p val
+                  match __x with
+                    | (r2, val1) => do
+                      let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          liftM (VerifyPrefix.mark none 1#u8)
+                          (fun {H_1} =>
+                                S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation))
+                              after.input.digest after.input.publicValue p val1 val2 none
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+
+case mk.publicTranscript
+H : Type
+input : Input H
+prefix1✝ : r1_wire.Prefix
+⊢ (do
+      let r ← S1SemanticCode.publicTranscript input.digest input.publicValue input.hash prefix1✝.c1_root
+      match r with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok t => do
+          let __x ← S1SemanticCode.begin input.digest prefix1✝ t
+          match __x.1 with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok c => do
+              liftM (VerifyPrefix.mark none 1#u8)
+              S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries input.reservation) input.digest
+                  input.publicValue prefix1✝ __x.2 c none) =
+    do
+    let post ←
+      do
+        let r ← S1SemanticCode.publicTranscript input.digest input.publicValue input.hash prefix1✝.c1_root
+        match r with
+          | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+          | core.result.Result.Ok t => pure (Sum.inr { input := input, locals := Local.begin prefix1✝ t })
+    match post with
+      | Sum.inl out => pure out
+      | Sum.inr after =>
+        match after.locals with
+        | Local.finish p t c =>
+          S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation) after.input.digest
+            after.input.publicValue p t c none
+        | Local.mark1 p t c => do
+          liftM (VerifyPrefix.mark none 1#u8)
+          S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation) after.input.digest
+              after.input.publicValue p t c none
+        | Local.begin p t => do
+          let __x ← S1SemanticCode.begin after.input.digest p t
+          match __x.1 with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok c => do
+              liftM (VerifyPrefix.mark none 1#u8)
+              S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation) after.input.digest
+                  after.input.publicValue p __x.2 c none
+        | Local.publicTranscript p => do
+          let r ← S1SemanticCode.publicTranscript after.input.digest after.input.publicValue after.input.hash p.c1_root
+          match r with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok t => do
+              let __x ← S1SemanticCode.begin after.input.digest p t
+              match __x.1 with
+                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                | core.result.Result.Ok c => do
+                  liftM (VerifyPrefix.mark none 1#u8)
+                  S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation)
+                      after.input.digest after.input.publicValue p __x.2 c none
+        | Local.mark0 p => do
+          liftM (VerifyPrefix.mark none 0#u8)
+          let r ← S1SemanticCode.publicTranscript after.input.digest after.input.publicValue after.input.hash p.c1_root
+          match r with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok t => do
+              let __x ← S1SemanticCode.begin after.input.digest p t
+              match __x.1 with
+                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                | core.result.Result.Ok c => do
+                  liftM (VerifyPrefix.mark none 1#u8)
+                  S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation)
+                      after.input.digest after.input.publicValue p __x.2 c none
+        | Local.parse => do
+          let r ← liftM (PrefixAdapter.parseAccepted after.input.bytes)
+          let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue p => do
+              liftM (VerifyPrefix.mark none 0#u8)
+              let r1 ←
+                S1SemanticCode.publicTranscript after.input.digest after.input.publicValue after.input.hash p.c1_root
+              let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let __x ← S1SemanticCode.begin after.input.digest p val
+                  match __x with
+                    | (r2, val1) => do
+                      let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          liftM (VerifyPrefix.mark none 1#u8)
+                          (fun {H_1} =>
+                                S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation))
+                              after.input.digest after.input.publicValue p val1 val2 none
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+
+case mk.begin
+H : Type
+input : Input H
+prefix1✝ : r1_wire.Prefix
+transcript✝ : r1_wire.SemanticTranscript H
+⊢ (do
+      let __x ← S1SemanticCode.begin input.digest prefix1✝ transcript✝
+      match __x.1 with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok c => do
+          liftM (VerifyPrefix.mark none 1#u8)
+          S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries input.reservation) input.digest
+              input.publicValue prefix1✝ __x.2 c none) =
+    do
+    let post ←
+      do
+        let __x ← S1SemanticCode.begin input.digest prefix1✝ transcript✝
+        match __x.1 with
+          | core.result.Result.Err e => pure (Sum.inl (core.result.Result.Err e))
+          | core.result.Result.Ok c => pure (Sum.inr { input := input, locals := Local.mark1 prefix1✝ __x.2 c })
+    match post with
+      | Sum.inl out => pure out
+      | Sum.inr after =>
+        match after.locals with
+        | Local.finish p t c =>
+          S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation) after.input.digest
+            after.input.publicValue p t c none
+        | Local.mark1 p t c => do
+          liftM (VerifyPrefix.mark none 1#u8)
+          S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation) after.input.digest
+              after.input.publicValue p t c none
+        | Local.begin p t => do
+          let __x ← S1SemanticCode.begin after.input.digest p t
+          match __x.1 with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok c => do
+              liftM (VerifyPrefix.mark none 1#u8)
+              S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation) after.input.digest
+                  after.input.publicValue p __x.2 c none
+        | Local.publicTranscript p => do
+          let r ← S1SemanticCode.publicTranscript after.input.digest after.input.publicValue after.input.hash p.c1_root
+          match r with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok t => do
+              let __x ← S1SemanticCode.begin after.input.digest p t
+              match __x.1 with
+                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                | core.result.Result.Ok c => do
+                  liftM (VerifyPrefix.mark none 1#u8)
+                  S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation)
+                      after.input.digest after.input.publicValue p __x.2 c none
+        | Local.mark0 p => do
+          liftM (VerifyPrefix.mark none 0#u8)
+          let r ← S1SemanticCode.publicTranscript after.input.digest after.input.publicValue after.input.hash p.c1_root
+          match r with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok t => do
+              let __x ← S1SemanticCode.begin after.input.digest p t
+              match __x.1 with
+                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                | core.result.Result.Ok c => do
+                  liftM (VerifyPrefix.mark none 1#u8)
+                  S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation)
+                      after.input.digest after.input.publicValue p __x.2 c none
+        | Local.parse => do
+          let r ← liftM (PrefixAdapter.parseAccepted after.input.bytes)
+          let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue p => do
+              liftM (VerifyPrefix.mark none 0#u8)
+              let r1 ←
+                S1SemanticCode.publicTranscript after.input.digest after.input.publicValue after.input.hash p.c1_root
+              let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let __x ← S1SemanticCode.begin after.input.digest p val
+                  match __x with
+                    | (r2, val1) => do
+                      let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          liftM (VerifyPrefix.mark none 1#u8)
+                          (fun {H_1} =>
+                                S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation))
+                              after.input.digest after.input.publicValue p val1 val2 none
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+
+case mk.finish
+H : Type
+input : Input H
+prefix1✝ : r1_wire.Prefix
+transcript✝ : r1_wire.SemanticTranscript H
+challenges✝ : r1_wire.Challenges
+⊢ S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries input.reservation) input.digest input.publicValue
+      prefix1✝ transcript✝ challenges✝ none =
+    do
+    let post ←
+      do
+        let r ←
+          S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries input.reservation) input.digest
+              input.publicValue prefix1✝ transcript✝ challenges✝ none
+        pure (Sum.inl r)
+    match post with
+      | Sum.inl out => pure out
+      | Sum.inr after =>
+        match after.locals with
+        | Local.finish p t c =>
+          S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation) after.input.digest
+            after.input.publicValue p t c none
+        | Local.mark1 p t c => do
+          liftM (VerifyPrefix.mark none 1#u8)
+          S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation) after.input.digest
+              after.input.publicValue p t c none
+        | Local.begin p t => do
+          let __x ← S1SemanticCode.begin after.input.digest p t
+          match __x.1 with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok c => do
+              liftM (VerifyPrefix.mark none 1#u8)
+              S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation) after.input.digest
+                  after.input.publicValue p __x.2 c none
+        | Local.publicTranscript p => do
+          let r ← S1SemanticCode.publicTranscript after.input.digest after.input.publicValue after.input.hash p.c1_root
+          match r with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok t => do
+              let __x ← S1SemanticCode.begin after.input.digest p t
+              match __x.1 with
+                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                | core.result.Result.Ok c => do
+                  liftM (VerifyPrefix.mark none 1#u8)
+                  S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation)
+                      after.input.digest after.input.publicValue p __x.2 c none
+        | Local.mark0 p => do
+          liftM (VerifyPrefix.mark none 0#u8)
+          let r ← S1SemanticCode.publicTranscript after.input.digest after.input.publicValue after.input.hash p.c1_root
+          match r with
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+            | core.result.Result.Ok t => do
+              let __x ← S1SemanticCode.begin after.input.digest p t
+              match __x.1 with
+                | core.result.Result.Err e => pure (core.result.Result.Err e)
+                | core.result.Result.Ok c => do
+                  liftM (VerifyPrefix.mark none 1#u8)
+                  S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation)
+                      after.input.digest after.input.publicValue p __x.2 c none
+        | Local.parse => do
+          let r ← liftM (PrefixAdapter.parseAccepted after.input.bytes)
+          let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue p => do
+              liftM (VerifyPrefix.mark none 0#u8)
+              let r1 ←
+                S1SemanticCode.publicTranscript after.input.digest after.input.publicValue after.input.hash p.c1_root
+              let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let __x ← S1SemanticCode.begin after.input.digest p val
+                  match __x with
+                    | (r2, val1) => do
+                      let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                      match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 => do
+                          liftM (VerifyPrefix.mark none 1#u8)
+                          (fun {H_1} =>
+                                S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries after.input.reservation))
+                              after.input.digest after.input.publicValue p val1 val2 none
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+'AspisR1.NLJ_Observed.source_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

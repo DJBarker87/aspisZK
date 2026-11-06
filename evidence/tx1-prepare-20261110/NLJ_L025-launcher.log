@@ -1,0 +1,49 @@
+{"attempt": "NLJ_L025", "exit_status": 1, "wall_seconds": 14.329567190958187, "peak_rss_kib": "6320324", "swaps": "0", "print_axioms": ["'AspisR1.NLJ_Observed.finish_packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLJ_generated/NLJ_FinishPacket.lean:34:11: error: Tactic `rfl` failed: The left-hand side
+  ((native call).log ++ (run (PreparedHashCode.Code.done (Sum.inl v✝))).1,
+    (run (PreparedHashCode.Code.done (Sum.inl v✝))).2)
+is not definitionally equal to the right-hand side
+  ((native (finishInput i p t c)).log, ok (Sum.inl v✝))
+
+case ok
+H : Type
+native : NLC_Finish.Input H → NLI_Interface.Observation H
+child136 : NLI_Interface.RowSpec_136 native
+i : Input H
+p : r1_wire.Prefix
+t : r1_wire.SemanticTranscript H
+c : r1_wire.Challenges
+call : NLC_Finish.Input H := finishInput i p t c
+frame : (native call).afterInput = call
+left✝ :
+  NLC_Finish.InitializedInvocation (NLC_Finish.fuel (NLC_Finish.initi
+...
+Trace.continueRun ((native call).log, (native call).reply).1
+                      ((native call).log, (native call).reply).2 fun r => PreparedHashCode.Code.done (Sum.inl r)) =
+                    ((native (finishInput i p t c)).log, returnedReply (native call).reply))
+                (native call).reply
+                (fun v h =>
+                  Eq.ndrec (motive := fun x =>
+                    (native call).reply = x →
+                      (AuS1_Trace.continueRun ((native call).log, x).1 ((native call).log, x).2 fun r =>
+                          PreparedHashCode.Code.done (Sum.inl r)) =
+                        ((native (finishInput i p t c)).log, returnedReply x))
+                    (fun h => id sorry) (Eq.symm h) (Eq.refl (native call).reply))
+                (fun e h =>
+                  Eq.ndrec (motive := fun x =>
+                    (native call).reply = x →
+                      (AuS1_Trace.continueRun ((native call).log, x).1 ((native call).log, x).2 fun r =>
+                          PreparedHashCode.Code.done (Sum.inl r)) =
+                        ((native (finishInput i p t c)).log, returnedReply x))
+                    (fun h => id (Eq.refl ((native call).log, fail e))) (Eq.symm h) (Eq.refl (native call).reply))
+                (fun h =>
+                  Eq.ndrec (motive := fun x =>
+                    (native call).reply = x →
+                      (AuS1_Trace.continueRun ((native call).log, x).1 ((native call).log, x).2 fun r =>
+                          PreparedHashCode.Code.done (Sum.inl r)) =
+                        ((native (finishInput i p t c)).log, returnedReply x))
+                    (fun h => id (Eq.refl ((native call).log, div))) (Eq.symm h) (Eq.refl (native call).reply))
+                (Eq.refl (native call).reply)))
+          reply))⟩
+
+Running as unit: run-rd68c9da924a847c8aa8a0084d17e3c5c.scope; invocation ID: dc12e965cff44e209be8ebe314610f47

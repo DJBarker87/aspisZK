@@ -1,0 +1,10 @@
+def AspisR1.NLI_Interface.RowSpec_136 : {H : Type} → (Input H → Observation H) → Prop :=
+fun {H} native =>
+  ∀ (input : Input H),
+    (native input).afterInput = input ∧
+      InitializedInvocation (fuel (initial input)) (initial input) (native input).reply (native input).log
+          (native input).events ∧
+        PreparedHashCode.run
+            (S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries input.reservation) input.digest
+              input.publicValue input.prefix1 input.transcript input.challenges none) =
+          ((native input).log, (native input).reply)

@@ -1,0 +1,96 @@
+NLJ_generated/NLJ_FinishPacket.lean:34:11: error: Tactic `rfl` failed: The left-hand side
+  ((native call).log ++ (run (PreparedHashCode.Code.done (Sum.inl v✝))).1,
+    (run (PreparedHashCode.Code.done (Sum.inl v✝))).2)
+is not definitionally equal to the right-hand side
+  ((native (finishInput i p t c)).log, ok (Sum.inl v✝))
+
+case ok
+H : Type
+native : NLC_Finish.Input H → NLI_Interface.Observation H
+child136 : NLI_Interface.RowSpec_136 native
+i : Input H
+p : r1_wire.Prefix
+t : r1_wire.SemanticTranscript H
+c : r1_wire.Challenges
+call : NLC_Finish.Input H := finishInput i p t c
+frame : (native call).afterInput = call
+left✝ :
+  NLC_Finish.InitializedInvocation (NLC_Finish.fuel (NLC_Finish.initial call)) (NLC_Finish.initial call)
+    (native call).reply (native call).log (native call).events
+reply :
+  run
+      (S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries i.reservation) i.digest i.publicValue p t c
+        none) =
+    ((native call).log, (native call).reply)
+v✝ : NLC_Finish.Out H
+h : (native call).reply = ok v✝
+⊢ ((native call).log ++ (run (PreparedHashCode.Code.done (Sum.inl v✝))).1,
+      (run (PreparedHashCode.Code.done (Sum.inl v✝))).2) =
+    ((native (finishInput i p t c)).log, ok (Sum.inl v✝))
+NLJ_generated/NLJ_FinishPacket.lean:33:83: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵u̵S̵1̵_̵T̵r̵a̵c̵e̵.̵c̵o̵n̵t̵i̵n̵u̵e̵R̵u̵n̵,̵r̵e̵t̵u̵r̵n̵e̵d̵R̵e̵p̵l̵y̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲A̲u̲S̲1̲_̲T̲r̲a̲c̲e̲.̲c̲o̲n̲t̲i̲n̲u̲e̲R̲u̲n̲,̲ ̲r̲e̲t̲u̲r̲n̲e̲d̲R̲e̲p̲l̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NLJ_Observed.finish_packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_Observed.finish_packet : ∀ {H : Type} (native : NLC_Finish.Input H → NLI_Interface.Observation H),
+  NLI_Interface.RowSpec_136 native →
+    ∀ (i : Input H) (p : r1_wire.Prefix) (t : r1_wire.SemanticTranscript H) (c : r1_wire.Challenges),
+      have call := finishInput i p t c;
+      (native call).afterInput = call ∧
+        run (step { input := i, locals := Local.finish p t c }) =
+          ((native call).log, returnedReply (native call).reply) :=
+fun {H} native child136 i p t c =>
+  let call := finishInput i p t c;
+  let ⟨frame, right✝⟩ := child136 call
+  let ⟨left✝, reply⟩ := right✝
+  ⟨frame,
+    id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a => _a = ((native (finishInput i p t c)).log, returnedReply (native (finishInput i p t c)).reply))
+            (AuS1_Trace.run_bind
+              (S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries i.reservation) i.digest i.publicValue p t
+                c none)
+              fun r => PreparedHashCode.Code.done (Sum.inl r))))
+        (id
+          (fun reply =>
+            Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (AuS1_Trace.continueRun _a.1 _a.2 fun r => PreparedHashCode.Code.done (Sum.inl r)) =
+                      ((native (finishInput i p t c)).log, returnedReply (native (finishInput i p t c)).reply))
+                  reply))
+              (casesOn (motive := fun t_1 =>
+                (native call).reply = t_1 →
+                  (AuS1_Trace.continueRun ((native call).log, (native call).reply).1
+                      ((native call).log, (native call).reply).2 fun r => PreparedHashCode.Code.done (Sum.inl r)) =
+                    ((native (finishInput i p t c)).log, returnedReply (native call).reply))
+                (native call).reply
+                (fun v h =>
+                  Eq.ndrec (motive := fun x =>
+                    (native call).reply = x →
+                      (AuS1_Trace.continueRun ((native call).log, x).1 ((native call).log, x).2 fun r =>
+                          PreparedHashCode.Code.done (Sum.inl r)) =
+                        ((native (finishInput i p t c)).log, returnedReply x))
+                    (fun h => id sorry) (Eq.symm h) (Eq.refl (native call).reply))
+                (fun e h =>
+                  Eq.ndrec (motive := fun x =>
+                    (native call).reply = x →
+                      (AuS1_Trace.continueRun ((native call).log, x).1 ((native call).log, x).2 fun r =>
+                          PreparedHashCode.Code.done (Sum.inl r)) =
+                        ((native (finishInput i p t c)).log, returnedReply x))
+                    (fun h => id (Eq.refl ((native call).log, fail e))) (Eq.symm h) (Eq.refl (native call).reply))
+                (fun h =>
+                  Eq.ndrec (motive := fun x =>
+                    (native call).reply = x →
+                      (AuS1_Trace.continueRun ((native call).log, x).1 ((native call).log, x).2 fun r =>
+                          PreparedHashCode.Code.done (Sum.inl r)) =
+                        ((native (finishInput i p t c)).log, returnedReply x))
+                    (fun h => id (Eq.refl ((native call).log, div))) (Eq.symm h) (Eq.refl (native call).reply))
+                (Eq.refl (native call).reply)))
+          reply))⟩

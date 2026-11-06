@@ -5,13 +5,12 @@ namespace AspisR1.NLJ_Observed
 open Aeneas Aeneas.Std Result AspisR1PublicPreparation
 open PreparedHashCode (Code)
 def rank {H : Type} (s : State H) : Nat :=
- let F := S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries s.input.reservation)
  match s.locals with
  | .parse => 6 | .mark0 _ => 5 | .publicTranscript _ => 4
  | .begin _ _ => 3 | .mark1 _ _ _ => 2 | .finish _ _ _ => 1
 /-- Exact source continuation, with no native endpoint premise. -/
 def denote {H : Type} (s : State H) : Code (Out H) :=
- let F := S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries s.input.reservation)
+ let F : S1SemanticCode.Finish := S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries s.input.reservation)
  match s.locals with
  | .finish p t c => F s.input.digest s.input.publicValue p t c none
  | .mark1 p t c => do

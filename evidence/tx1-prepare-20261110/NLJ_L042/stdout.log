@@ -1,0 +1,185 @@
+'AspisR1.NLJ_ObservedDirect.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLJ_ObservedDirect.source : ∀ (F : S1SemanticCode.Finish) {H : Type} (D : aspis_core.Digest32 H)
+  (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H),
+  run (verify (fun {H} => F) D pub bytes hash) = run (S1SemanticCode.verify (fun {H} => F) D pub bytes hash none) :=
+fun F {H} D pub bytes hash =>
+  id
+    (id
+      (id
+        (NLJ_RunAlgebra.bind_congr
+          (have this := liftM (PrefixAdapter.parseAccepted bytes);
+          this)
+          (fun reply => afterParsed (fun {H} {H} => F) D pub hash reply)
+          (fun r => do
+            let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue p => do
+                liftM (VerifyPrefix.mark none 0#u8)
+                let r1 ← S1SemanticCode.publicTranscript D pub hash p.c1_root
+                let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let __x ← S1SemanticCode.begin D p val
+                    match __x with
+                      | (r2, val1) => do
+                        let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                        match cf2 with
+                          | core.ops.control_flow.ControlFlow.Continue val2 => do
+                            liftM (VerifyPrefix.mark none 1#u8)
+                            (fun {H} => F) D pub p val1 val2 none
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual))
+          fun reply =>
+          core.result.Result.casesOn (motive := fun t =>
+            reply = t →
+              run (afterParsed (fun {H} {H} => F) D pub hash reply) =
+                run do
+                  let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch reply)
+                  match cf with
+                    | core.ops.control_flow.ControlFlow.Continue p => do
+                      liftM (VerifyPrefix.mark none 0#u8)
+                      let r1 ← S1SemanticCode.publicTranscript D pub hash p.c1_root
+                      let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                      match cf1 with
+                        | core.ops.control_flow.ControlFlow.Continue val => do
+                          let __x ← S1SemanticCode.begin D p val
+                          match __x with
+                            | (r2, val1) => do
+                              let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                              match cf2 with
+                                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                  liftM (VerifyPrefix.mark none 1#u8)
+                                  (fun {H} => F) D pub p val1 val2 none
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      liftM
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual))
+            reply
+            (fun p h =>
+              Eq.symm h ▸
+                id
+                  (NLJ_RunAlgebra.bind_congr (S1SemanticCode.publicTranscript D pub hash p.c1_root)
+                    (fun reply => afterPublic (fun {H} {H} {H} => F) D pub p reply)
+                    (fun r1 => do
+                      let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                      match cf1 with
+                        | core.ops.control_flow.ControlFlow.Continue val => do
+                          let __x ← S1SemanticCode.begin D p val
+                          match __x with
+                            | (r2, val1) => do
+                              let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                              match cf2 with
+                                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                  liftM (VerifyPrefix.mark none 1#u8)
+                                  (fun {H} => F) D pub p val1 val2 none
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  liftM
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          liftM
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual))
+                    fun publicReply =>
+                    core.result.Result.casesOn (motive := fun t =>
+                      publicReply = t →
+                        run (afterPublic (fun {H} {H} {H} => F) D pub p publicReply) =
+                          run do
+                            let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch publicReply)
+                            match cf1 with
+                              | core.ops.control_flow.ControlFlow.Continue val => do
+                                let __x ← S1SemanticCode.begin D p val
+                                match __x with
+                                  | (r2, val1) => do
+                                    let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                                    match cf2 with
+                                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                        liftM (VerifyPrefix.mark none 1#u8)
+                                        (fun {H} => F) D pub p val1 val2 none
+                                      | core.ops.control_flow.ControlFlow.Break residual =>
+                                        liftM
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual))
+                      publicReply
+                      (fun t h =>
+                        Eq.symm h ▸
+                          id
+                            (NLJ_RunAlgebra.bind_congr (S1SemanticCode.begin D p t)
+                              (fun __x =>
+                                match __x with
+                                | (reply, after) => afterBegin (fun {H} {H} {H} {H} => F) D pub p after reply)
+                              (fun __x =>
+                                match __x with
+                                | (r2, val1) => do
+                                  let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                                  match cf2 with
+                                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                      liftM (VerifyPrefix.mark none 1#u8)
+                                      (fun {H} => F) D pub p val1 val2 none
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      liftM
+                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual))
+                              fun beginPair =>
+                              let ⟨beginReply, after⟩ := beginPair
+                              core.result.Result.casesOn (motive := fun t =>
+                                beginReply = t →
+                                  run
+                                      (match (beginReply, after) with
+                                      | (reply, after) => afterBegin (fun {H} {H} {H} {H} => F) D pub p after reply) =
+                                    run
+                                      (match (beginReply, after) with
+                                      | (r2, val1) => do
+                                        let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                                        match cf2 with
+                                          | core.ops.control_flow.ControlFlow.Continue val2 => do
+                                            liftM (VerifyPrefix.mark none 1#u8)
+                                            (fun {H} => F) D pub p val1 val2 none
+                                          | core.ops.control_flow.ControlFlow.Break residual =>
+                                            liftM
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error)
+                                                residual)))
+                                beginReply
+                                (fun a h =>
+                                  Eq.symm h ▸
+                                    Eq.refl
+                                      (run
+                                        (match (core.result.Result.Ok a, after) with
+                                        | (reply, after) => afterBegin (fun {H} {H} {H} {H} => F) D pub p after reply)))
+                                (fun a h =>
+                                  Eq.symm h ▸
+                                    Eq.refl
+                                      (run
+                                        (match (core.result.Result.Err a, after) with
+                                        | (reply, after) => afterBegin (fun {H} {H} {H} {H} => F) D pub p after reply)))
+                                (Eq.refl beginReply)))
+                      (fun e h =>
+                        Eq.symm h ▸
+                          Eq.refl (run (afterPublic (fun {H} {H} {H} => F) D pub p (core.result.Result.Err e))))
+                      (Eq.refl publicReply)))
+            (fun e h =>
+              Eq.symm h ▸ Eq.refl (run (afterParsed (fun {H} {H} => F) D pub hash (core.result.Result.Err e))))
+            (Eq.refl reply))))

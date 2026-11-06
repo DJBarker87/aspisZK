@@ -1,4 +1,4 @@
-import NLJ_ObservedDenote
+import NLJ_CodeRight
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NLJ_Observed
@@ -15,11 +15,14 @@ theorem source_step {H : Type} (s : State H) :
  cases s with
  | mk input locals =>
   cases locals
-  all_goals simp only [step,denote,advance]
-  all_goals simp only [NLJ_Monad.bind_assoc,NLJ_Monad.bind_pure]
-  all_goals first
+  all_goals dsimp only [step,denote,advance]
+  all_goals try simp only [Bind.bind,Pure.pure,NLJ_Monad.bind_assoc,NLJ_Monad.bind_pure,NLJ_CodeRight.right]
+  all_goals repeat' first
   | rfl
-  | (unfold S1SemanticCode.verify; simp only [NLJ_Monad.bind_assoc,NLJ_Monad.bind_pure]; rfl)
+  | (apply NLJ_CodeRight.same; intro x; cases x)
+  | (split <;> simp only [Bind.bind,Pure.pure,NLJ_Monad.bind_assoc,NLJ_Monad.bind_pure,NLJ_CodeRight.right])
+  | (unfold S1SemanticCode.verify)
+
 #print axioms source_step
 end AspisR1.NLJ_Observed
 end

@@ -1,0 +1,338 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -328,3 +328,7 @@
+ #[cfg(kani)]
+ #[path = "NLC_native.rs"]
+ pub(crate) mod NLC_native;
++
++#[cfg(kani)]
++#[path = "NLJ_native.rs"]
++pub(crate) mod NLJ_native;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NLJ_native.rs
+@@ -0,0 +1,307 @@
++//! Reviewed source-control-flow candidate for verify_observed. Local oracle
++//! record only; all replies independent of original input bytes. Err-prefix
++//! scope only: successful finish forwarding remains an explicit obligation.
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++use aspis_core::field::{M31,CM31};
++#[derive(Clone,Copy,PartialEq,Eq,Debug)] struct Hash;
++impl Digest32 for Hash {fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("NLJ no SHA body")}}
++fn q()->QM31{let w:[u32;4]=kani::any();QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
++fn challenge()->Challenges{Challenges{lambda:q(),chi:q(),theta:q(),zc:[q(),q(),q(),q(),q(),q(),q(),q(),q(),q()],mu:q(),eta:q()}}
++fn select(c:&Challenges,j:usize)->QM31{match j{0=>c.lambda,1=>c.chi,2=>c.theta,3..=12=>c.zc[j-3],13=>c.mu,_=>c.eta}}
++fn error()->Error{let tag:u8=kani::any();let row:u8=kani::any();let actual:u8=kani::any();let n:usize=kani::any();match tag%11{0=>Error::Allocation,1=>Error::RowOrder{expected:row,actual},2=>Error::InvalidRow,3=>Error::Tag{row},4=>Error::Length{row},5=>Error::NonCanonical{row,value:n},6=>Error::Boundary{round:n},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}}
++struct Log<'a>{
++ stop:u8, error:Error, success:Option<Verified<Hash>>, calls:[u8;4],count:usize,
++ prefix:Option<Prefix<'a>>, public:Option<Public<'a>>,root:Option<&'a[u8;32]>,hash:Option<Hash>,
++ initial:([u8;32],Hash,u8), after:([u8;32],Hash,u8),
++ begin_root:Option<&'a[u8;32]>,begin_records:Option<[&'a[u8];27]>,begin_state:Option<([u8;32],Hash,u8)>,
++ finish_root:Option<&'a[u8;32]>,finish_records:Option<[&'a[u8];27]>,finish_state:Option<([u8;32],Hash,u8)>,
++ expected_ch:QM31, actual_ch:Option<QM31>,j:usize,
++ parse_input:Option<&'a[u8]>,finish_public:Option<Public<'a>>
++}
++impl<'a> Log<'a>{
++ fn enter(&mut self,tag:u8){self.calls[self.count]=tag;self.count+=1;}
++ fn parse(&mut self,bytes:&'a[u8])->Result<Prefix<'a>,Error>{self.enter(0);self.parse_input=Some(bytes);if self.stop==0{Err(self.error)}else{Ok(self.prefix.take().unwrap())}}
++ fn public_transcript(&mut self,public:Public<'a>,hash:Hash,root:&'a[u8;32])->Result<SemanticTranscript<Hash>,Error>{self.enter(1);self.public=Some(public);self.root=Some(root);self.hash=Some(hash);if self.stop==1{Err(self.error)}else{Ok(crate::r1_wire::NLJ_factory::make(self.initial.1,self.initial.0,self.initial.2))}}
++ fn begin(&mut self,prefix:&Prefix<'a>,t:&mut SemanticTranscript<Hash>)->Result<Challenges,Error>{self.enter(2);self.begin_root=Some(prefix.c1_root);self.begin_records=Some(crate::r1_wire::NLJ_factory::records(prefix));self.begin_state=Some(crate::r1_wire::NLJ_factory::snapshot(t));*t=crate::r1_wire::NLJ_factory::make(self.after.1,self.after.0,self.after.2);if self.stop==2{Err(self.error)}else{let c=challenge();self.expected_ch=select(&c,self.j);Ok(c)}}
++ fn finish(&mut self,public:Public<'a>,prefix:Prefix<'a>,t:SemanticTranscript<Hash>,c:Challenges)->Result<Verified<Hash>,Error>{self.enter(3);self.finish_public=Some(public);self.finish_root=Some(prefix.c1_root);self.finish_records=Some(crate::r1_wire::NLJ_factory::records(&prefix));self.finish_state=Some(crate::r1_wire::NLJ_factory::snapshot(&t));self.actual_ch=Some(select(&c,self.j));if self.stop==4{Ok(self.success.take().unwrap())}else{Err(self.error)}}
++}
++fn source<'a>(public:Public<'a>,bytes:&'a[u8],hash:Hash,log:&mut Log<'a>)->Result<Verified<Hash>,Error>{
++ let prefix=log.parse(bytes)?;
++ super::mark(None,0);
++ let mut transcript=log.public_transcript(public,hash,prefix.c1_root)?;
++ let challenges=log.begin(&prefix,&mut transcript)?;
++ super::mark(None,1);
++ log.finish(public,prefix,transcript,challenges)
++}
++fn same_public(a:Option<Public<'_>>,b:Public<'_>)->bool{match(a,b){(Some(Public::Transfer(p,t)),Public::Transfer(q,u))=>core::ptr::eq(p,q)&&core::ptr::eq(t,u)&&p.pool==q.pool&&p.nullifier==q.nullifier,(Some(Public::Withdrawal(p,t)),Public::Withdrawal(q,u))=>core::ptr::eq(p,q)&&core::ptr::eq(t,u)&&p.pool==q.pool&&p.amount==q.amount,_=>false}}
++fn withdraw()->aspis_statement::pool_v1::PoolV1WithdrawalPublicV1{use aspis_statement::pool_v1::PoolV1WithdrawalPublicV1;fn d()->[M31;8]{let w:[u32;8]=kani::any();[M31(w[0]),M31(w[1]),M31(w[2]),M31(w[3]),M31(w[4]),M31(w[5]),M31(w[6]),M31(w[7])]}PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:d(),nullifier:d(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:d()}}
++fn same_record(a:&[u8],b:&[u8],offset:usize)->bool{a.len()==b.len()&&core::ptr::eq(a.as_ptr(),b.as_ptr())&&(b.is_empty()||a[offset%b.len()]==b[offset%b.len()])}
++fn prefix_record(a:&[u8],b:&[u8])->bool{let structural=a.len()==b.len()&&core::ptr::eq(a.as_ptr(),b.as_ptr());if b.is_empty(){structural}else{let position:usize=kani::any();kani::assume(position<b.len());structural&&a[position]==b[position]}}
++fn check(mode:u8,bad:bool){
++ let bytes:[u8;13831]=kani::any();let root:[u8;32]=kani::any();let index:usize=kani::any();let row:usize=kani::any();let off:usize=kani::any();let j:usize=kani::any();kani::assume(index<bytes.len()&&row<27&&off<bytes.len()&&j<15);
++ let lo:[usize;27]=kani::any();let hi:[usize;27]=kani::any();
++ kani::assume(lo[0]<=hi[0]&&hi[0]<=bytes.len());
++ kani::assume(lo[1]<=hi[1]&&hi[1]<=bytes.len());
++ kani::assume(lo[2]<=hi[2]&&hi[2]<=bytes.len());
++ kani::assume(lo[3]<=hi[3]&&hi[3]<=bytes.len());
++ kani::assume(lo[4]<=hi[4]&&hi[4]<=bytes.len());
++ kani::assume(lo[5]<=hi[5]&&hi[5]<=bytes.len());
++ kani::assume(lo[6]<=hi[6]&&hi[6]<=bytes.len());
++ kani::assume(lo[7]<=hi[7]&&hi[7]<=bytes.len());
++ kani::assume(lo[8]<=hi[8]&&hi[8]<=bytes.len());
++ kani::assume(lo[9]<=hi[9]&&hi[9]<=bytes.len());
++ kani::assume(lo[10]<=hi[10]&&hi[10]<=bytes.len());
++ kani::assume(lo[11]<=hi[11]&&hi[11]<=bytes.len());
++ kani::assume(lo[12]<=hi[12]&&hi[12]<=bytes.len());
++ kani::assume(lo[13]<=hi[13]&&hi[13]<=bytes.len());
++ kani::assume(lo[14]<=hi[14]&&hi[14]<=bytes.len());
++ kani::assume(lo[15]<=hi[15]&&hi[15]<=bytes.len());
++ kani::assume(lo[16]<=hi[16]&&hi[16]<=bytes.len());
++ kani::assume(lo[17]<=hi[17]&&hi[17]<=bytes.len());
++ kani::assume(lo[18]<=hi[18]&&hi[18]<=bytes.len());
++ kani::assume(lo[19]<=hi[19]&&hi[19]<=bytes.len());
++ kani::assume(lo[20]<=hi[20]&&hi[20]<=bytes.len());
++ kani::assume(lo[21]<=hi[21]&&hi[21]<=bytes.len());
++ kani::assume(lo[22]<=hi[22]&&hi[22]<=bytes.len());
++ kani::assume(lo[23]<=hi[23]&&hi[23]<=bytes.len());
++ kani::assume(lo[24]<=hi[24]&&hi[24]<=bytes.len());
++ kani::assume(lo[25]<=hi[25]&&hi[25]<=bytes.len());
++ kani::assume(lo[26]<=hi[26]&&hi[26]<=bytes.len());
++ let records=[&bytes[lo[0]..hi[0]],&bytes[lo[1]..hi[1]],&bytes[lo[2]..hi[2]],&bytes[lo[3]..hi[3]],&bytes[lo[4]..hi[4]],&bytes[lo[5]..hi[5]],&bytes[lo[6]..hi[6]],&bytes[lo[7]..hi[7]],&bytes[lo[8]..hi[8]],&bytes[lo[9]..hi[9]],&bytes[lo[10]..hi[10]],&bytes[lo[11]..hi[11]],&bytes[lo[12]..hi[12]],&bytes[lo[13]..hi[13]],&bytes[lo[14]..hi[14]],&bytes[lo[15]..hi[15]],&bytes[lo[16]..hi[16]],&bytes[lo[17]..hi[17]],&bytes[lo[18]..hi[18]],&bytes[lo[19]..hi[19]],&bytes[lo[20]..hi[20]],&bytes[lo[21]..hi[21]],&bytes[lo[22]..hi[22]],&bytes[lo[23]..hi[23]],&bytes[lo[24]..hi[24]],&bytes[lo[25]..hi[25]],&bytes[lo[26]..hi[26]]];
++ let prefix=crate::r1_wire::NLJ_factory::prefix(&root,records);
++ let transition=super::NKQ_rejections::transition();let transfer=super::NKQ_rejections::transfer();let withdrawal=withdraw();let which:bool=kani::any();let public=if which{Public::Transfer(&transfer,&transition)}else{Public::Withdrawal(&withdrawal,&transition)};
++ let hash=Hash;let initial=(kani::any(),Hash,kani::any());let after=(kani::any(),Hash,kani::any());let e=error();
++ let stop=if mode<8{mode%4}else{3};
++ let old=bytes[index];let oldroot=root[off%32];
++ let mut log=Log{stop,error:e,success:None,calls:[255;4],count:0,prefix:Some(prefix),public:None,root:None,hash:None,initial,after,begin_root:None,begin_records:None,begin_state:None,finish_root:None,finish_records:None,finish_state:None,expected_ch:q(),actual_ch:None,j,parse_input:None,finish_public:None};
++ let out=source(public,&bytes,hash,&mut log);
++ let result=matches!(out,Err(err) if err==e);
++ let ordered=log.count==stop as usize+1&&log.calls[0]==0&&(stop<1||log.calls[1]==1)&&(stop<2||log.calls[2]==2)&&(stop<3||log.calls[3]==3);
++ let good=match mode{0..=3=>result,4..=7=>ordered,
++ 8=>same_public(log.public,public)&&log.hash==Some(hash)&&log.root==Some(&root),
++ 9=>same_record(log.parse_input.unwrap(),&bytes,index)&&bytes[index]==old&&root[off%32]==oldroot,
++ 10=>log.begin_root==Some(&root)&&prefix_record(log.begin_records.unwrap()[row],records[row]),
++ 11=>log.begin_state==Some(initial),
++ 12=>log.finish_root==Some(&root)&&prefix_record(log.finish_records.unwrap()[row],records[row]),
++ 13=>log.finish_state==Some(after)&&same_public(log.finish_public,public),
++ 14=>log.actual_ch==Some(log.expected_ch),
++ _=>result&&ordered&&bytes[index]==old&&root[off%32]==oldroot};
++ if bad{assert!(!good)}else{assert!(good)}
++}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_00_cut(){check(0,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_00_control(){check(0,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_01_cut(){check(1,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_01_control(){check(1,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_02_cut(){check(2,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_02_control(){check(2,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_03_cut(){check(3,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_03_control(){check(3,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_04_cut(){check(4,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_04_control(){check(4,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_05_cut(){check(5,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_05_control(){check(5,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_06_cut(){check(6,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_06_control(){check(6,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_07_cut(){check(7,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_07_control(){check(7,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_08_cut(){check(8,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_08_control(){check(8,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_09_cut(){check(9,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_09_control(){check(9,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_10_cut(){check(10,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_10_control(){check(10,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_11_cut(){check(11,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_11_control(){check(11,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_12_cut(){check(12,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_12_control(){check(12,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_13_cut(){check(13,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_13_control(){check(13,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_14_cut(){check(14,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_14_control(){check(14,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_15_cut(){check(15,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_15_control(){check(15,true)}
++
++#[derive(Clone,Copy,PartialEq,Eq,Debug)] enum Atom{Q(QM31),Byte(u8),Number(u64)}
++fn arbitrary_verified()->Verified<Hash>{Verified{roots:kani::any(),challenges:challenge(),alpha:[q(),q(),q(),q(),q(),q(),q(),q(),q(),q()],claims:Box::new([[q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q()],[q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q()],[q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q()]]),extra:[q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q()],before_z1:[q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q(),q()],state_before_z0:kani::any(),z:[SecureCirclePoint{x:q(),y:q()},SecureCirclePoint{x:q(),y:q()}],transcript:crate::r1_wire::NLJ_factory::make(Hash,kani::any(),kani::any())}}
++fn selected(v:&Verified<Hash>,mode:u8,which:usize,j:usize,row:usize,col:usize)->Atom{match mode{
++ 16=>match which%6{0=>Atom::Byte(v.roots[0][j]),1=>Atom::Byte(v.roots[1][j]),2=>Atom::Byte(v.state_before_z0[j]),3=>Atom::Byte(crate::r1_wire::NLJ_factory::snapshot(&v.transcript).0[j]),4=>Atom::Number(0),_=>Atom::Byte(crate::r1_wire::NLJ_factory::snapshot(&v.transcript).2)},
++ 17=>if which%2==0{Atom::Q(select(&v.challenges,j%15))}else{Atom::Q(v.alpha[j%10])},
++ 18=>match which%7{0=>Atom::Q(v.claims[row][col]),1=>Atom::Q(v.extra[col]),2=>Atom::Q(v.before_z1[col]),3=>Atom::Q(v.z[0].x),4=>Atom::Q(v.z[0].y),5=>Atom::Q(v.z[1].x),_=>Atom::Q(v.z[1].y)},
++ _=>Atom::Q(match which%4{0=>v.z[0].x,1=>v.z[0].y,2=>v.z[1].x,_=>v.z[1].y})}}
++fn check_success(mode:u8,bad:bool){
++ let bytes:[u8;13831]=kani::any();let root:[u8;32]=kani::any();let index:usize=kani::any();let row:usize=kani::any();let off:usize=kani::any();let j:usize=kani::any();kani::assume(index<bytes.len()&&row<27&&off<bytes.len()&&j<15);
++ let lo:[usize;27]=kani::any();let hi:[usize;27]=kani::any();
++ kani::assume(lo[0]<=hi[0]&&hi[0]<=bytes.len());
++ kani::assume(lo[1]<=hi[1]&&hi[1]<=bytes.len());
++ kani::assume(lo[2]<=hi[2]&&hi[2]<=bytes.len());
++ kani::assume(lo[3]<=hi[3]&&hi[3]<=bytes.len());
++ kani::assume(lo[4]<=hi[4]&&hi[4]<=bytes.len());
++ kani::assume(lo[5]<=hi[5]&&hi[5]<=bytes.len());
++ kani::assume(lo[6]<=hi[6]&&hi[6]<=bytes.len());
++ kani::assume(lo[7]<=hi[7]&&hi[7]<=bytes.len());
++ kani::assume(lo[8]<=hi[8]&&hi[8]<=bytes.len());
++ kani::assume(lo[9]<=hi[9]&&hi[9]<=bytes.len());
++ kani::assume(lo[10]<=hi[10]&&hi[10]<=bytes.len());
++ kani::assume(lo[11]<=hi[11]&&hi[11]<=bytes.len());
++ kani::assume(lo[12]<=hi[12]&&hi[12]<=bytes.len());
++ kani::assume(lo[13]<=hi[13]&&hi[13]<=bytes.len());
++ kani::assume(lo[14]<=hi[14]&&hi[14]<=bytes.len());
++ kani::assume(lo[15]<=hi[15]&&hi[15]<=bytes.len());
++ kani::assume(lo[16]<=hi[16]&&hi[16]<=bytes.len());
++ kani::assume(lo[17]<=hi[17]&&hi[17]<=bytes.len());
++ kani::assume(lo[18]<=hi[18]&&hi[18]<=bytes.len());
++ kani::assume(lo[19]<=hi[19]&&hi[19]<=bytes.len());
++ kani::assume(lo[20]<=hi[20]&&hi[20]<=bytes.len());
++ kani::assume(lo[21]<=hi[21]&&hi[21]<=bytes.len());
++ kani::assume(lo[22]<=hi[22]&&hi[22]<=bytes.len());
++ kani::assume(lo[23]<=hi[23]&&hi[23]<=bytes.len());
++ kani::assume(lo[24]<=hi[24]&&hi[24]<=bytes.len());
++ kani::assume(lo[25]<=hi[25]&&hi[25]<=bytes.len());
++ kani::assume(lo[26]<=hi[26]&&hi[26]<=bytes.len());
++ let records=[&bytes[lo[0]..hi[0]],&bytes[lo[1]..hi[1]],&bytes[lo[2]..hi[2]],&bytes[lo[3]..hi[3]],&bytes[lo[4]..hi[4]],&bytes[lo[5]..hi[5]],&bytes[lo[6]..hi[6]],&bytes[lo[7]..hi[7]],&bytes[lo[8]..hi[8]],&bytes[lo[9]..hi[9]],&bytes[lo[10]..hi[10]],&bytes[lo[11]..hi[11]],&bytes[lo[12]..hi[12]],&bytes[lo[13]..hi[13]],&bytes[lo[14]..hi[14]],&bytes[lo[15]..hi[15]],&bytes[lo[16]..hi[16]],&bytes[lo[17]..hi[17]],&bytes[lo[18]..hi[18]],&bytes[lo[19]..hi[19]],&bytes[lo[20]..hi[20]],&bytes[lo[21]..hi[21]],&bytes[lo[22]..hi[22]],&bytes[lo[23]..hi[23]],&bytes[lo[24]..hi[24]],&bytes[lo[25]..hi[25]],&bytes[lo[26]..hi[26]]];
++ let prefix=crate::r1_wire::NLJ_factory::prefix(&root,records);
++ let transition=super::NKQ_rejections::transition();let transfer=super::NKQ_rejections::transfer();let withdrawal=withdraw();let which:bool=kani::any();let public=if which{Public::Transfer(&transfer,&transition)}else{Public::Withdrawal(&withdrawal,&transition)};
++ let hash=Hash;let initial=(kani::any(),Hash,kani::any());let after=(kani::any(),Hash,kani::any());let e=error();
++ let stop=4;
++ let old=bytes[index];let oldroot=root[off%32];
++ let v=arbitrary_verified();let field:usize=kani::any();let byte:usize=kani::any();let col:usize=kani::any();let claim_row:usize=kani::any();kani::assume(byte<32&&col<29&&claim_row<3);let expected=selected(&v,mode,field,byte,claim_row,col);let owner=(&*v.claims as *const [[QM31;29];3]) as usize;
++ let mut log=Log{stop,error:e,success:Some(v),calls:[255;4],count:0,prefix:Some(prefix),public:None,root:None,hash:None,initial,after,begin_root:None,begin_records:None,begin_state:None,finish_root:None,finish_records:None,finish_state:None,expected_ch:q(),actual_ch:None,j,parse_input:None,finish_public:None};
++ let out=source(public,&bytes,hash,&mut log);
++ let good=match out{Ok(v)=>selected(&v,mode,field,byte,claim_row,col)==expected&&(&*v.claims as *const [[QM31;29];3]) as usize==owner&&log.count==4&&bytes[index]==old&&root[off%32]==oldroot,Err(_)=>false};
++ if bad{assert!(!good)}else{assert!(good)}
++}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_16_cut(){check_success(16,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_16_control(){check_success(16,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_17_cut(){check_success(17,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_17_control(){check_success(17,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_18_cut(){check_success(18,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_18_control(){check_success(18,true)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_19_cut(){check_success(19,false)}
++
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn observed_19_control(){check_success(19,true)}
++
++// Additional negative calibration: the independent child Error must not be
++// chosen from proof bytes (the retired NKQ-F2 coupling).
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn independent_error_mutation_control(){let expected=error();let bytes:[u8;1]=kani::any();let coupled=if bytes[0]%2==0{Error::Terminal}else{Error::Public};assert_eq!(coupled,expected);}
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -855,3 +855,7 @@
+ #[cfg(kani)]
+ #[path = "NLC_factory.rs"]
+ pub(crate) mod NLC_factory;
++
++#[cfg(kani)]
++#[path = "NLJ_factory.rs"]
++pub(crate) mod NLJ_factory;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NLJ_factory.rs
+@@ -0,0 +1,5 @@
++use super::*;
++pub(crate) fn prefix<'a>(root:&'a[u8;32],records:[&'a[u8];27])->Prefix<'a>{Prefix{c1_root:root,records}}
++pub(crate) fn records<'a>(prefix:&Prefix<'a>)->[&'a[u8];27]{prefix.records}
++pub(crate) fn make<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->SemanticTranscript<H>{SemanticTranscript{state,hash,next_row}}
++pub(crate) fn snapshot<H:Digest32+Copy>(t:&SemanticTranscript<H>)->([u8;32],H,u8){(t.state,t.hash,t.next_row)}
