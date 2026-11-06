@@ -16,3 +16,11 @@ program branch. The changed setup uses Box<[u8]>::into_vec to transfer ownership
 without that bulk copy; no unwind/cap/timeout increase. K022/K023 certify V1;
 K024 V2 timed out, replaced by registry/entry halves K026..K029. K032 expanded
 233 prefix timed out; it is split by source boundary for subsequent attempts.
+
+K057/58 add unchanged program/output-frame observations; K059/60 cover the
+pinned SDK seed-bounds prelude. NLK_PdaSites derives fixed-format caller
+domains instead of adding stronger preconditions to a row root. Status>2
+still lacks its universal native abort certificate. Four data/decoder pairs
+K047..K054 use actual owned234 extents128/192/256/320. Existing CLOSED emitted
+decoder laws must be instantiated internally before any such local oracle
+cut could participate in row credit. None is a positive root here.

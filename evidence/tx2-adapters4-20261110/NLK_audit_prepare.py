@@ -23,7 +23,7 @@ old=json.loads((E.parent/'ledger21-20261110/NLG_AUDIT_ROOTS.json').read_text())[
 oldset={r for g in old for r in g};additional=[r for r in roots if r not in oldset]
 groups=old+[additional] if additional else old
 (E/'NLK_AUDIT_ROOTS.json').write_text(json.dumps(dict(groups=groups,roots=roots,new_roots=new,scope='full ledger21 plus NLA/NLF and every current NLK support theorem; no proposed CLOSED root'),indent=1)+'\n')
-s='import NLG_COMBINED_IMPORT\nimport NLA_COMBINED_IMPORT\nimport NLF_SdkBorrowLaw\n'+''.join('import '+m+'\n' for m in mods)
+s='import NLG_COMBINED_IMPORT\nimport NLA_COMBINED_IMPORT\nimport NLF_COMBINED_IMPORT\nimport NLF_SdkBorrowLaw\n'+''.join('import '+m+'\n' for m in mods)
 s+='\n#print AspisR1.RPx_Deployed.deployed\n#print axioms AspisR1.RPx_Deployed.deployed\n'
 s+='\n'.join('#print '+r+'\n#print axioms '+r for r in new)+'\n'
 (E/'NLK_COMBINED_IMPORT.lean').write_text(s)

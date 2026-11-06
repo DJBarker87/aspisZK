@@ -40,3 +40,23 @@ L018..L042 develop original-input lane header, digest, literal empty table,
 per-occurrence loop, complete conditional invocation/allocation schema and
 concrete registry callee installation. L041 had local decidability/name errors;
 L042 repairs them and prints only standard axioms. No row promotion.
+
+Stage4 semantic source commit256baac6480:25 current modules,95 public theorem
+roots. L054 combined import exits0 (19.67s,6493068KiB,swap0); fixtures L055
+exit0. The one full extended audit imports ledger21+NLA+NLF with the deployed
+headline and traverses11035 roots in31 groups. Eight completed groups have
+exit0; audit peak so far6780468KiB,swap0. Resource review: this is explicit
+final axiom traversal, not arithmetic normalization; every group emits new
+root results. Focused predecessors are green. No cap/timeout is raised and no
+unchanged full regression is repeated. Final counts/verdicts supersede this
+in-progress note in NLK_AUDIT.json.
+
+Stage5 audit gate: first30 raw batches cover10720 inherited roots. L086's
+missing-import finding is retained without partial credit; L087 adds NLF's
+combined module and L088 rechecks315 added roots plus headline/known finding.
+Only the known NHC_DecodeModel.decoder_error collector disagreement remains.
+NFX scan L091 exits0 (51.39s,7740184KiB,swap0); closure pins L092 exit0
+(37.01s,131380KiB,swap0), with no inherited object/sidecar mismatch. One full
+raw traversal, two combined imports and one import-repair delta recheck; no
+second unchanged full manifest replay. L085's allowed:false admission was
+waited out and allowed:true/exit0 obtained before launch. No row promotion.
