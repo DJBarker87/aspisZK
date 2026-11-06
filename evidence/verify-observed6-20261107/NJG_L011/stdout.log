@@ -1,0 +1,83 @@
+def AspisR1PublicPreparation.RoundModel.step : RoundModel.Boundaries →
+  {H : Type} →
+    aspis_core.Digest32 H →
+      r1_wire.Prefix →
+        r1_wire.SemanticTranscript H →
+          Std.Array aspis_core.field.QM31 10#usize →
+            aspis_core.field.QM31 →
+              Usize →
+                Result
+                  (core.result.Result
+                    (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                    r1_wire.Error) :=
+fun B {H} aspis_coreDigest32Inst prefix1 transcript alpha running round => do
+  let i ← lift (UScalar.cast UScalarTy.U8 round)
+  let row ← 15#u8 + i
+  let r ← prefix1.validated_record row
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue vr => do
+      let r1 ← B.decode 28#usize vr 0#usize
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let boundary ← B.boundary val
+          let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 boundary running
+          if b = true then ok (core.result.Result.Err (r1_wire.Error.Boundary round))
+            else do
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue vr1 => do
+                  let (r2, transcript1) ←
+                    r1_wire.SemanticTranscript.semantic_validated aspis_coreDigest32Inst transcript vr1
+                  let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r2
+                  match cf3 with
+                    | core.ops.control_flow.ControlFlow.Continue val1 => do
+                      let alpha1 ← alpha.update round val1
+                      let value ← B.value val alpha1 round
+                      ok (core.result.Result.Ok (value, alpha1, transcript1))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (aspis_core.field.QM31 ×
+                          Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                        (core.convert.FromSame r1_wire.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                    (core.convert.FromSame r1_wire.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+            (core.convert.FromSame r1_wire.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+        (core.convert.FromSame r1_wire.Error) residual
+NJG_generated/NJG_InspectRound.lean:4:7: error(lean.unknownIdentifier): Unknown identifier `S1SemanticCode.semantic`
+NJG_generated/NJG_InspectRound.lean:5:7: error(lean.unknownIdentifier): Unknown identifier `S1SemanticCode.semantic_validated`
+AspisR1PublicPreparation.RoundModel.rounds (B : RoundModel.Boundaries) {H : Type}
+  (aspis_coreDigest32Inst : aspis_core.Digest32 H) (prefix1 : r1_wire.Prefix)
+  (transcript : r1_wire.SemanticTranscript H) :
+  Result
+    (core.result.Result
+      (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H) r1_wire.Error)
+structure AspisR1PublicPreparation.r1_semantic.Verified (H : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1PublicPreparation.r1_semantic.Verified.roots : Std.Array (Std.Array U8 32#usize) 2#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.challenges : r1_wire.Challenges
+  AspisR1PublicPreparation.r1_semantic.Verified.alpha : Std.Array aspis_core.field.QM31 10#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.claims : Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.extra : Std.Array aspis_core.field.QM31 29#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.before_z1 : Std.Array aspis_core.field.QM31 29#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.state_before_z0 : Std.Array U8 32#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.transcript : r1_wire.SemanticTranscript H
+constructor:
+  AspisR1PublicPreparation.r1_semantic.Verified.mk {H : Type} (roots : Std.Array (Std.Array U8 32#usize) 2#usize)
+    (challenges : r1_wire.Challenges) (alpha : Std.Array aspis_core.field.QM31 10#usize)
+    (claims : Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize)
+    (extra before_z1 : Std.Array aspis_core.field.QM31 29#usize) (state_before_z0 : Std.Array U8 32#usize)
+    (z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize) (transcript : r1_wire.SemanticTranscript H) :
+    r1_semantic.Verified H
+NJG_generated/NJG_InspectRound.lean:8:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.NIX_EmittedTypes.r1_semantic.Verified`

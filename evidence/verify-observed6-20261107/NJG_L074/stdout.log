@@ -1,0 +1,39 @@
+NJG_generated/NJG_CurrentEquation.lean:35:122: error: unsolved goals
+R : RoundModel.Boundaries
+seed : FinishModel.Boundaries
+std : ClaimsUnrolledFinish.StdCalls
+H : Type
+D : aspis_core.digest.Digest32 H
+pubdata : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+⊢ (do
+      let result ←
+        VerifyPrefix.verify
+            (fun {H} =>
+              FinishModel.finish R
+                (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std (FIp_Install.boundaries seed))))
+            (retainedDigest D) (FirstComposition.toRetainedPublic pubdata) bytes hash none
+      ok
+          (match result with
+          | core.result.Result.Ok value => core.result.Result.Ok (currentSem value)
+          | core.result.Result.Err error => core.result.Result.Err (currentWireError error))) =
+    do
+    let result ←
+      VerifyPrefix.verify
+          (fun {H} =>
+            FinishModel.finish R
+              (S1SemanticRootCopy.install (ClaimsUnrolledFinish.install std (FIp_Install.boundaries seed))))
+          (retainedDigest D) (FirstComposition.toRetainedPublic pubdata) bytes hash none
+    ok
+        (match result with
+        | core.result.Result.Ok sem => core.result.Result.Ok (currentSem sem)
+        | core.result.Result.Err error => core.result.Result.Err (currentWireError error))
+NJG_generated/NJG_CurrentEquation.lean:42:22: warning: Variable name `H` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'AspisR1.NJG_CurrentEquation.claims_model' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJG_CurrentEquation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJG_CurrentEquation.slot' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

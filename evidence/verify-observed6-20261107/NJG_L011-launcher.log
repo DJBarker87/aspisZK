@@ -1,0 +1,44 @@
+{"attempt": "NJG_L011", "exit_status": 1, "wall_seconds": 4.888771598925814, "peak_rss_kib": "5997356", "swaps": "0", "print_axioms": []}
+def AspisR1PublicPreparation.RoundModel.step : RoundModel.Boundaries →
+  {H : Type} →
+    aspis_core.Digest32 H →
+      r1_wire.Prefix →
+        r1_wire.SemanticTranscript H →
+          Std.Array aspis_core.field.QM31 10#usize →
+            aspis_core.field.QM31 →
+              Usize →
+                Result
+                  (core.result.Result
+                    (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H)
+                    r1_wire.Error) :=
+fun B {H} aspis_coreDigest32Inst prefix1 transcript alpha running round => do
+  let i ← lift (UScalar.cast UScalarTy.U8 round)
+  let row ← 15#u8 + i
+  let r ← prefix1.validated_record row
+  let cf
+...
+lt
+    (core.result.Result
+      (aspis_core.field.QM31 × Std.Array aspis_core.field.QM31 10#usize × r1_wire.SemanticTranscript H) r1_wire.Error)
+structure AspisR1PublicPreparation.r1_semantic.Verified (H : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1PublicPreparation.r1_semantic.Verified.roots : Std.Array (Std.Array U8 32#usize) 2#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.challenges : r1_wire.Challenges
+  AspisR1PublicPreparation.r1_semantic.Verified.alpha : Std.Array aspis_core.field.QM31 10#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.claims : Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.extra : Std.Array aspis_core.field.QM31 29#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.before_z1 : Std.Array aspis_core.field.QM31 29#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.state_before_z0 : Std.Array U8 32#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.transcript : r1_wire.SemanticTranscript H
+constructor:
+  AspisR1PublicPreparation.r1_semantic.Verified.mk {H : Type} (roots : Std.Array (Std.Array U8 32#usize) 2#usize)
+    (challenges : r1_wire.Challenges) (alpha : Std.Array aspis_core.field.QM31 10#usize)
+    (claims : Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize)
+    (extra before_z1 : Std.Array aspis_core.field.QM31 29#usize) (state_before_z0 : Std.Array U8 32#usize)
+    (z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize) (transcript : r1_wire.SemanticTranscript H) :
+    r1_semantic.Verified H
+NJG_generated/NJG_InspectRound.lean:8:7: error(lean.unknownIdentifier): Unknown constant `AspisR1.NIX_EmittedTypes.r1_semantic.Verified`
+
+Running as unit: run-r2a330a7f72354dcdbf91b3be4200501b.scope; invocation ID: a6d30b7218224fc2b1168120367e1595

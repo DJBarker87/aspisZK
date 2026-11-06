@@ -1,0 +1,47 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -350,3 +350,25 @@
+   }
+  }
+ }
++
++#[cfg(kani)] pub mod NJG_rounds_driver {
++ use super::*;use aspis_core::field::{CM31,M31};
++ fn q()->QM31{QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}}
++ fn word(v:QM31,i:u8)->u32{match i{0=>v.c0.a.0,1=>v.c0.b.0,2=>v.c1.a.0,_=>v.c1.b.0}}
++ fn error()->Error{let n:u8=kani::any();kani::assume(n<11);match n{0=>Error::Allocation,1=>Error::RowOrder{expected:kani::any(),actual:kani::any()},2=>Error::InvalidRow,3=>Error::Tag{row:kani::any()},4=>Error::Length{row:kani::any()},5=>Error::NonCanonical{row:kani::any(),value:kani::any()},6=>Error::Boundary{round:kani::any()},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}}
++ struct Log{prefix:u64,round:usize,alpha:u32,running:u32,state:u8,next:u8,count:u8,frame:u64}
++ fn child<H:Digest32>(prefix:u64,transcript:SemanticTranscript<H>,alpha:[QM31;10],running:QM31,round:usize,reply:Result<(QM31,[QM31;10],SemanticTranscript<H>),Error>,k:usize,z:usize,limb:u8,l:&mut Log)->Result<(QM31,[QM31;10],SemanticTranscript<H>),Error>{l.prefix=prefix;l.round=round;l.alpha=word(alpha[k],limb);l.running=word(running,limb);l.state=transcript.state()[z];l.next=transcript.next_row();l.count+=1;reply}
++ fn site<H:Digest32>(prefix:u64,mut transcript:SemanticTranscript<H>,mut alpha:[QM31;10],mut running:QM31,round:usize,reply:Result<(QM31,[QM31;10],SemanticTranscript<H>),Error>,k:usize,z:usize,limb:u8,l:&mut Log)->Result<(QM31,[QM31;10],SemanticTranscript<H>),Error>{
++  (running,alpha,transcript)=child(prefix,transcript,alpha,running,round,reply,k,z,limb,l)?;
++  Ok((running,alpha,transcript))
++ }
++ pub fn check<H:Digest32>(hash:H,negative:bool){
++  let prefix:u64=kani::any();let round:usize=kani::any();kani::assume(round<10);let k:usize=kani::any();kani::assume(k<10);let z:usize=kani::any();kani::assume(z<32);let limb:u8=kani::any();kani::assume(limb<4);
++  let alpha:[QM31;10]=core::array::from_fn(|_|q());let running=q();let state:[u8;32]=kani::any();let next:u8=kani::any();let after:[QM31;10]=core::array::from_fn(|_|q());let value=q();let newstate:[u8;32]=kani::any();let newnext:u8=kani::any();let ok:bool=kani::any();let err=error();
++  let reply=if ok{Ok((value,after,wire::NJG_round_transcript(hash,newstate,newnext)))}else{Err(err)};
++  let count:u8=kani::any();kani::assume(count<255);let frame:u64=kani::any();let mut l=Log{prefix:0,round:99,alpha:0,running:0,state:0,next:0,count,frame};
++  let t=wire::NJG_round_transcript(hash,state,next);let mut result=site(prefix,t,alpha,running,round,reply,k,z,limb,&mut l);
++  #[cfg(NJG_driver_args)]{if negative{l.round^=1;}assert_eq!(l.prefix,prefix);assert_eq!(l.round,round);assert_eq!(l.alpha,word(alpha[k],limb));assert_eq!(l.running,word(running,limb));assert_eq!(l.state,state[z]);assert_eq!(l.next,next);assert_eq!(l.count,count+1);assert_eq!(l.frame,frame);}
++  #[cfg(NJG_driver_result)]{if negative{result=if ok{Err(Error::Public)}else{Err(if matches!(err,Error::Public){Error::Allocation}else{Error::Public})};}match result{Ok((r,a,t))=>{assert!(ok);assert_eq!(word(r,limb),word(value,limb));assert_eq!(word(a[k],limb),word(after[k],limb));assert_eq!(t.state()[z],newstate[z]);assert_eq!(t.next_row(),newnext);},Err(e)=>{assert!(!ok);assert_eq!(e,err);}}assert_eq!(l.frame,frame);}
++ }
++}
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -850,3 +850,5 @@
+ }
+ 
+ #[cfg(kani)] pub fn NJG_claims_record(framed:&[u8])->ValidatedRecord<'_>{ValidatedRecord{row:25,framed}}
++
++#[cfg(kani)] pub fn NJG_round_transcript<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->SemanticTranscript<H>{SemanticTranscript{hash,state,next_row}}
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -177,3 +177,8 @@
+ }
+ 
+ #[cfg(kani)] extern crate alloc;
++
++#[cfg(kani)] mod NJG_rounds_program {
++ #[kani::proof] #[kani::unwind(200)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NJG_kmx::KMX_copy_nonoverlapping)] fn window(){aspis_r1_cost_probe::r1_semantic::NJG_rounds_driver::check(super::SolanaDigest,false);}
++ #[kani::proof] #[kani::unwind(200)] #[kani::stub(core::ptr::copy_nonoverlapping,crate::NJG_kmx::KMX_copy_nonoverlapping)] fn control(){aspis_r1_cost_probe::r1_semantic::NJG_rounds_driver::check(super::SolanaDigest,true);}
++}

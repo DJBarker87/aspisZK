@@ -1,0 +1,28 @@
+--- a/crates/aspis-core/src/r0/heap.rs
++++ b/crates/aspis-core/src/r0/heap.rs
+@@ -42,3 +42,25 @@
+   }
+  }
+ }
++
++#[cfg(kani)]
++mod NJG_row_store {
++ use super::*;use crate::field::{QM31,CM31,M31};
++ type Claims=[[QM31;29];3];
++ #[kani::proof] #[kani::unwind(32)]
++ #[kani::stub(core::ptr::copy_nonoverlapping,crate::NJG_kmx::KMX_copy_nonoverlapping)]
++ fn row_value() {
++  // Split from NIX_K017/K043-046: NO allocator, NO disjoint heap object,
++  // NO cleanup or frame assertion, and only a selected raw-limb window.
++  let p:usize=kani::any();kani::assume(p<3);
++  let k:usize=kani::any();kani::assume(k<29);
++  let row:[QM31;29]=core::array::from_fn(|_|QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}});
++  let mut out=MaybeUninit::<Claims>::uninit();
++  unsafe {
++   let dst=out.as_mut_ptr().cast::<[QM31;29]>().add(p);
++   dst.write(row);
++   #[cfg(not(NJG_negative))] assert_eq!((*dst)[k].c0.a.0,row[k].c0.a.0);
++   #[cfg(NJG_negative)] assert_eq!((*dst)[k].c0.a.0,row[k].c0.a.0^1);
++  }
++ }
++}

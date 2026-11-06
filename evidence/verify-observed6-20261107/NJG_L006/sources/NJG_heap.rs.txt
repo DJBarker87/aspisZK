@@ -1,0 +1,22 @@
+#[cfg(kani)]
+mod NJG_heap {
+ use super::*;
+ // One native iteration of the EXACT KMX indexed-copy loop. The aggregate
+ // ptr::write-to-window lowering is a separate obligation, never assumed here.
+ #[kani::proof] #[kani::unwind(3)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,crate::NJG_kmx::KMX_copy_nonoverlapping)]
+ fn window() {
+  let p:usize=kani::any();kani::assume(p<3);
+  let i:usize=kani::any();kani::assume(i<116);
+  let j:usize=kani::any();kani::assume(j<348 && (j<116*p || j>=116*(p+1)));
+  let word:u32=kani::any();let before:u32=kani::any();
+  let mut out=MaybeUninit::<[u32;348]>::uninit();let base=out.as_mut_ptr().cast::<u32>();
+  unsafe {
+   base.add(j).write(before);
+   core::ptr::copy_nonoverlapping(&word,base.add(116*p+i),1);
+   assert_eq!(base.add(j).read(),before);
+   #[cfg(not(NJG_negative))] assert_eq!(base.add(116*p+i).read(),word);
+   #[cfg(NJG_negative)] assert_eq!(base.add(116*p+i).read(),word^1);
+  }
+ }
+}

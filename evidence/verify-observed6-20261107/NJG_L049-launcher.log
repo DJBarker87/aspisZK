@@ -1,0 +1,43 @@
+{"attempt": "NJG_L049", "exit_status": 1, "wall_seconds": 10.59129882697016, "peak_rss_kib": "6021432", "swaps": "0", "print_axioms": ["'AspisR1.NJG_FinishInstall.first_callback' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJG_FinishInstall.error_callback' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NJG_FinishInstall.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJG_generated/NJG_FinishInstall.lean:51:22: error(lean.unknownIdentifier): Unknown identifier `r1_semantic.mark`
+NJG_generated/NJG_FinishInstall.lean:47:67: error: unsolved goals
+H : Type
+R : RoundModel.Boundaries
+F : FinishModel.Boundaries
+D : aspis_core.Digest32 H
+pubdata : pool_v1.pair_forest_semantic_terminal.r0.Public
+pre : r1_wire.Prefix
+t : r1_wire.SemanticTranscript H
+challenges : r1_wire.Challenges
+⊢ (do
+      let r ← RoundModel.rounds R D pre t
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (running, alpha, transcript1) := val
+          do
+          let r1 ← F.claims pre
+     
+...
+                   core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (r1_semantic.Verified H) (core.convert.FromSame r1_wire.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+              (core.convert.FromSame r1_wire.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+          (core.convert.FromSame r1_wire.Error) residual
+'AspisR1.NJG_FinishInstall.first_callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJG_FinishInstall.error_callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NJG_FinishInstall.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rff532e7a3b3a4eda8f086c6c6d960bac.scope; invocation ID: 0a574a29542244f783e7209d1ebcd2d3

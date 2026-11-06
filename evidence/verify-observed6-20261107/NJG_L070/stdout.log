@@ -1,0 +1,269 @@
+NJG_generated/NJG_ObservedInstall.lean:52:14: error: unsolved goals
+case ok.Err
+H : Type
+R : RoundModel.Boundaries
+F : FinishModel.Boundaries
+D : NIX_EmittedTypes.aspis_core.digest.Digest32 H
+pubdata : NIX_EmittedTypes.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+error : r1_wire.Error
+hp : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Err error)
+⊢ ok (core.result.Result.Err (upError (core.convert.FromSame.from (downError error)))) =
+    ok (core.result.Result.Err (core.convert.FromSame.from error))
+NJG_generated/NJG_ObservedInstall.lean:62:18: error: unsolved goals
+case ok.Ok.ok.Err
+H : Type
+R : RoundModel.Boundaries
+F : FinishModel.Boundaries
+D : NIX_EmittedTypes.aspis_core.digest.Digest32 H
+pubdata : NIX_EmittedTypes.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+pre : r1_wire.Prefix
+hp : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+root_eq : (downPrefix pre).c1_root = pre.c1_root
+error : r1_wire.Error
+ht : r1_semantic.public_transcript (upDigest D) (upPublic pubdata) hash pre.c1_root = ok (core.result.Result.Err error)
+⊢ ok (core.result.Result.Err (upError (core.convert.FromSame.from (downError error)))) =
+    ok (core.result.Result.Err (core.convert.FromSame.from error))
+NJG_generated/NJG_ObservedInstall.lean:70:22: error: unsolved goals
+case ok.Ok.ok.Ok.ok.Err
+H : Type
+R : RoundModel.Boundaries
+F : FinishModel.Boundaries
+D : NIX_EmittedTypes.aspis_core.digest.Digest32 H
+pubdata : NIX_EmittedTypes.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+pre : r1_wire.Prefix
+hp : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+root_eq : (downPrefix pre).c1_root = pre.c1_root
+t : r1_wire.SemanticTranscript H
+ht : r1_semantic.public_transcript (upDigest D) (upPublic pubdata) hash pre.c1_root = ok (core.result.Result.Ok t)
+post : r1_wire.SemanticTranscript H
+error : r1_wire.Error
+hb : r1_wire.begin (upDigest D) pre t = ok (core.result.Result.Err error, post)
+⊢ (match
+      let (r2, val1) := (core.result.Result.Err (downError error), downTranscript post)
+      do
+      let cf2 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue val2 =>
+          downResult
+            (NJG_FinishBody.r1_semantic.verify_finish (NJG_FinishInstall.install R F) (upDigest D) (upPublic pubdata)
+              pre (upTranscript val1) (upChallenge val2) none)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec
+              (fun x =>
+                Result (core.result.Result (NIX_EmittedTypes.r1_semantic.Verified H) NIX_EmittedTypes.r1_wire.Error))
+              x
+          | core.result.Result.Err e => ok (core.result.Result.Err (core.convert.FromSame.from e)) with
+    | ok (core.result.Result.Ok v) => ok (core.result.Result.Ok (upVerified v))
+    | ok (core.result.Result.Err e) => ok (core.result.Result.Err (upError e))
+    | fail e => fail e
+    | div => div) =
+    let (r2, val1) := (core.result.Result.Err error, post)
+    do
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val2 =>
+        FinishModel.finish R (NJG_FinishInstall.model F) (upDigest D) (upPublic pubdata) pre val1 val2 none
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        match residual with
+        | core.result.Result.Ok x =>
+          core.convert.Infallible.rec (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)) x
+        | core.result.Result.Err e => ok (core.result.Result.Err (core.convert.FromSame.from e))
+NJG_generated/NJG_ObservedInstall.lean:72:17: error: unsolved goals
+case ok.Ok.ok.Ok.ok.Ok
+H : Type
+R : RoundModel.Boundaries
+F : FinishModel.Boundaries
+D : NIX_EmittedTypes.aspis_core.digest.Digest32 H
+pubdata : NIX_EmittedTypes.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+bytes : Slice U8
+hash : H
+pre : r1_wire.Prefix
+hp : PrefixAdapter.parseAccepted bytes = ok (core.result.Result.Ok pre)
+root_eq : (downPrefix pre).c1_root = pre.c1_root
+t : r1_wire.SemanticTranscript H
+ht : r1_semantic.public_transcript (upDigest D) (upPublic pubdata) hash pre.c1_root = ok (core.result.Result.Ok t)
+post : r1_wire.SemanticTranscript H
+c : r1_wire.Challenges
+hb : r1_wire.begin (upDigest D) pre t = ok (core.result.Result.Ok c, post)
+⊢ upResult
+      (let (r2, val1) := (core.result.Result.Ok (downChallenge c), downTranscript post)
+      do
+      let cf2 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue val2 =>
+          downResult
+            (FinishModel.finish R (NJG_FinishInstall.model F) (upDigest D) (upPublic pubdata) pre (upTranscript val1)
+              (upChallenge val2) none)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (NIX_EmittedTypes.r1_semantic.Verified H) (core.convert.FromSame NIX_EmittedTypes.r1_wire.Error) residual) =
+    let (r2, val1) := (core.result.Result.Ok c, post)
+    do
+    let cf2 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val2 =>
+        FinishModel.finish R (NJG_FinishInstall.model F) (upDigest D) (upPublic pubdata) pre val1 val2 none
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (r1_semantic.Verified H)
+          (core.convert.FromSame r1_wire.Error) residual
+NJG_generated/NJG_ObservedInstall.lean:52:42: warning: This simp argument is unused:
+  NJG_Results.error_back
+
+Hint: Omit it from the simp argument list.
+  simp only [lower, ̲upResult,N̵J̵G̵_̵R̵e̵s̵u̵l̵t̵s̵.̵e̵r̵r̵o̵r̵_̵ ̲ba̵c̵k̵,̵b̵ind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,
+       ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲ ̲ ̲core.convert.FromSame]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:53:87: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [lower, ̲upResult, ̲NJG_Results.error_back, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+       ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:62:31: warning: This simp argument is unused:
+  lower
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵o̵w̵e̵r̵,̵upResult, ̲NJG_Results.error_back, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+       ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.convert.FromSame]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:62:46: warning: This simp argument is unused:
+  NJG_Results.error_back
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵w̵e̵r̵,̵u̵p̵R̵e̵s̵u̵l̵t̵,̵N̵J̵G̵_̵R̵e̵s̵u̵l̵t̵s̵.̵e̵r̵r̵o̵r̵_̵b̵a̵c̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵[̲l̲o̲w̲e̲r̲,̲ ̲u̲p̲R̲e̲s̲u̲l̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲o̲n̲v̲e̲r̲t̲.̲F̲r̲o̲m̲S̲a̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:62:80: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵w̵e̵r̵,̵u̵p̵R̵e̵s̵u̵l̵t̵,̵N̵J̵G̵_̵R̵e̵s̵u̵l̵t̵s̵.̵e̵r̵r̵o̵r̵_̵b̵a̵c̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵[̲l̲o̲w̲e̲r̲,̲ ̲u̲p̲R̲e̲s̲u̲l̲t̲,̲ ̲N̲J̲G̲_̲R̲e̲s̲u̲l̲t̲s̲.̲e̲r̲r̲o̲r̲_̲b̲a̲c̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲o̲n̲v̲e̲r̲t̲.̲F̲r̲o̲m̲S̲a̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:63:87: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [lower, ̲upResult, ̲NJG_Results.error_back, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+       ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:65:20: warning: This simp argument is unused:
+  lower
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵o̵w̵e̵r̵,̵bind_tc_ok, ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲NJG_CarrierBack.transcript]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:65:37: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵w̵e̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵]̵[̲l̲o̲w̲e̲r̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲N̲J̲G̲_̲C̲a̲r̲r̲i̲e̲r̲B̲a̲c̲k̲.̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:70:55: warning: This simp argument is unused:
+  NJG_Results.error_back
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵w̵e̵r̵B̵e̵g̵i̵n̵,̵u̵p̵R̵e̵s̵u̵l̵t̵,̵N̵J̵G̵_̵R̵e̵s̵u̵l̵t̵s̵.̵e̵r̵r̵o̵r̵_̵b̵a̵c̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵[̲l̲o̲w̲e̲r̲B̲e̲g̲i̲n̲,̲ ̲u̲p̲R̲e̲s̲u̲l̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲o̲n̲v̲e̲r̲t̲.̲F̲r̲o̲m̲S̲a̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:70:89: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵w̵e̵r̵B̵e̵g̵i̵n̵,̵u̵p̵R̵e̵s̵u̵l̵t̵,̵N̵J̵G̵_̵R̵e̵s̵u̵l̵t̵s̵.̵e̵r̵r̵o̵r̵_̵b̵a̵c̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵[̲l̲o̲w̲e̲r̲B̲e̲g̲i̲n̲,̲ ̲u̲p̲R̲e̲s̲u̲l̲t̲,̲ ̲N̲J̲G̲_̲R̲e̲s̲u̲l̲t̲s̲.̲e̲r̲r̲o̲r̲_̲b̲a̲c̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲o̲n̲v̲e̲r̲t̲.̲F̲r̲o̲m̲S̲a̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:71:87: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵w̵e̵r̵B̵e̵g̵i̵n̵,̵u̵p̵R̵e̵s̵u̵l̵t̵,̵N̵J̵G̵_̵R̵e̵s̵u̵l̵t̵s̵.̵e̵r̵r̵o̵r̵_̵b̵a̵c̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵T̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵R̵e̵s̵u̵l̵t̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]̵[̲l̲o̲w̲e̲r̲B̲e̲g̲i̲n̲,̲ ̲u̲p̲R̲e̲s̲u̲l̲t̲,̲ ̲N̲J̲G̲_̲R̲e̲s̲u̲l̲t̲s̲.̲e̲r̲r̲o̲r̲_̲b̲a̲c̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲T̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲R̲e̲s̲u̲l̲t̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:73:46: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵w̵e̵r̵B̵e̵g̵i̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵,̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵c̵h̵a̵l̵l̵e̵n̵g̵e̵,̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵r̵e̵s̵u̵l̵t̵,̵[̲l̲o̲w̲e̲r̲B̲e̲g̲i̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲N̲J̲G̲_̲C̲a̲r̲r̲i̲e̲r̲B̲a̲c̲k̲.̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲J̲G̲_̲C̲a̲r̲r̲i̲e̲r̲B̲a̲c̲k̲.̲c̲h̲a̲l̲l̲e̲n̲g̲e̲,̲ ̲N̲J̲G̲_̲C̲a̲r̲r̲i̲e̲r̲B̲a̲c̲k̲.̲r̲e̲s̲u̲l̲t̲,̲ NJG_FinishInstall.source]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:74:14: warning: This simp argument is unused:
+  NJG_CarrierBack.transcript
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵w̵e̵r̵B̵e̵g̵i̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵,̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵c̵h̵a̵l̵l̵e̵n̵g̵e̵,̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵r̵e̵s̵u̵l̵t̵,̵[̲l̲o̲w̲e̲r̲B̲e̲g̲i̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲J̲G̲_̲C̲a̲r̲r̲i̲e̲r̲B̲a̲c̲k̲.̲c̲h̲a̲l̲l̲e̲n̲g̲e̲,̲ ̲N̲J̲G̲_̲C̲a̲r̲r̲i̲e̲r̲B̲a̲c̲k̲.̲r̲e̲s̲u̲l̲t̲,̲ NJG_FinishInstall.source]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:74:41: warning: This simp argument is unused:
+  NJG_CarrierBack.challenge
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵w̵e̵r̵B̵e̵g̵i̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵,̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵c̵h̵a̵l̵l̵e̵n̵g̵e̵,̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵r̵e̵s̵u̵l̵t̵,̵[̲l̲o̲w̲e̲r̲B̲e̲g̲i̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲J̲G̲_̲C̲a̲r̲r̲i̲e̲r̲B̲a̲c̲k̲.̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲,̲ ̲N̲J̲G̲_̲C̲a̲r̲r̲i̲e̲r̲B̲a̲c̲k̲.̲r̲e̲s̲u̲l̲t̲,̲ NJG_FinishInstall.source]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJG_generated/NJG_ObservedInstall.lean:74:67: warning: This simp argument is unused:
+  NJG_CarrierBack.result
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵o̵w̵e̵r̵B̵e̵g̵i̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵t̵r̵a̵n̵s̵c̵r̵i̵p̵t̵,̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵c̵h̵a̵l̵l̵e̵n̵g̵e̵,̵N̵J̵G̵_̵C̵a̵r̵r̵i̵e̵r̵B̵a̵c̵k̵.̵r̵e̵s̵u̵l̵t̵,̵[̲l̲o̲w̲e̲r̲B̲e̲g̲i̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲J̲G̲_̲C̲a̲r̲r̲i̲e̲r̲B̲a̲c̲k̲.̲t̲r̲a̲n̲s̲c̲r̲i̲p̲t̲,̲ ̲N̲J̲G̲_̲C̲a̲r̲r̲i̲e̲r̲B̲a̲c̲k̲.̲c̲h̲a̲l̲l̲e̲n̲g̲e̲,̲ NJG_FinishInstall.source]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NJG_ObservedInstall.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

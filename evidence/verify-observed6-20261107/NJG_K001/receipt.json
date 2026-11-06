@@ -1,0 +1,83 @@
+{
+  "attempt": "NJG_K001",
+  "kind": "kani",
+  "module": "r0::heap::NJG_heap::window",
+  "sources": [
+    "NJG_gate.py",
+    "NJG_SOURCE_PINS.json",
+    "NJG_FROZEN_FILE_PINS.json"
+  ],
+  "command": [
+    "python3",
+    "NJG_gate.py",
+    "NJG_K001.json"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-verify-observed6-20261107/NJG_target",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "RUSTFLAGS": "-Copt-level=3 -C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-verify-observed6-20261107/NJG_tmp"
+  },
+  "timeout": 180,
+  "expected_time": "optimized core helper compile then ONE u32 KMX iteration, arbitrary row offset and disjoint initialized frame; no field arithmetic",
+  "root_package": "aspis-core",
+  "metadata_features": "aspis-core/r0",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-verify-observed6-20261107/NJG_src/crates/aspis-core/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-verify-observed6-20261107/NJG_target",
+    "--features",
+    "r0",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r0::heap::NJG_heap::window",
+    "--output-format",
+    "terse"
+  ],
+  "collect": [
+    "NJG_K001-graph-check.json",
+    "NJG_K001-graph.stderr",
+    "NJG_K001-graph.json",
+    "NJG_K001-source-check.json",
+    "NJG_K001-lock-check.json"
+  ],
+  "source_revision": "0e0ca30b2ea819810dd9c09004afcf2c711317be",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "selected_objects": {}
+  },
+  "exit_status": 1,
+  "wall_seconds": 4.672120201867074,
+  "peak_rss_kib": "504492",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r79c3560146ec49cfb2cd220035107da0.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "553947136",
+  "source_hashes": {
+    "NJG_gate.py": "6813f7ea63d7d32fde86837bdd6aa690d9e15d4f078c328bda5cf9efc0ed27b5",
+    "NJG_SOURCE_PINS.json": "f1cbc7305360002b4b5461a908e92c0f4d6b584c9ad3cf3be5b9ffb69d09d121",
+    "NJG_FROZEN_FILE_PINS.json": "279853ba333cba65a2361960cbd36c6d0afcdbe48ab5d8640145efd77a141226"
+  },
+  "print_axioms": "N/A: kani"
+}
