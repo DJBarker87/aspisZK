@@ -1,29 +1,95 @@
-# NJP multiproof and Poseidon2 part 3
+# NJP handoff
 
-Target not yet established. Work in progress; no new row credit.
+Target not established. TX1:306 and TX1:305 have locally gated CLOSED candidate
+packets. TX1:127 and TX2:093 remain OPEN. No authoritative ledger change or push.
+Only NJP-prefixed evidence/modules were changed; no sibling/session-A worktree
+was modified. Frozen crates/, programs/ and Cargo.lock remain byte-identical.
 
-Scope, in order: TX1:306 controller/zip/deployed callback transport; TX1:305 SAME seeded-state caller and output; TX1:127 and TX2:093 full-range window and abort-prefix composition. Predecessor NJE support is read-only and not relabelled as native closure.
+## Candidate packets
 
-Budget: 70 Kani, 80 Lean/link/audit, 0 extraction. At most two admitted capped scopes permitted by this job; start serially. Every launch requires reservation exit 0 and allowed:true, limits MemoryHigh=6G MemoryMax=8G MemorySwapMax=0 TasksMax=64, Lean -M7000. No timeout/cap increases or unchanged failed-shape replay. Full combined audits at most twice.
+Read NJP_CLOSED.json, NJP_ROW_PACKETS.json, NJP_ROOT_STATEMENTS.md and
+NJP_LEDGER_DELTA.json. The baseline is ledger14's NJK_LEDGER, not running
+ledger15. Lead credit must wait for the next ledger gate, including NJE's callee
+candidates. The roots are NJP_PermutationPacket.TX1_306 and
+NJP_CompressionPacket.TX1_305. These are direct P6 hybrid packets under recorded
+own domains, with child models substituted at SAME arguments. Native semantic
+transport is P6/D188 option-A reclassification; no trust item was removed/added.
 
-Own host workspace: /home/dombarker/project-offloads/codex-cx-multiproof3-20261108. Own target: that workspace/NJP_target. Seed: predecessor retained NJE_exports_20261107, copy first, hash and size before use. Host initial disk observation: 99%, 18G available; keep scratch small. No caches deleted.
+306: K006/K007 bind the 22 actual round/kind descriptors; K008/K009 establish
+noop-callback rename stability. NJP_ControllerTrace threads NJE's round
+witnesses, including canonicality and final fold. Arithmetic bodies in this
+controller gate are control-only records, not field-value credit.
+305: K057/K058/K059 refresh exact KMX slice-copy coverage and prove SAME complete
+seeded state and SAME first-eight returned limbs, including readonly inputs.
+NJP_CompressionPacket installs the permutation candidate at that exact seed.
 
-Frozen source 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. No shipped changes authorized by this job beyond scratch-only patches. Inherited release ELF pins (not rebuilt): default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. Source change invalidation assessment: no shipped source change, so ELF rebuild trigger absent. Headline AspisR1.RPx_Deployed.deployed; L154 statement parameter; narrowed D188 and native semantic transport retained as trust reclassification. No trust item added; RuntimeCpiReadonlyEntry7 unused.
+## Shared verifier work
 
-Validation: initial read-only source/rule review only; no prover launched. Exact claim established: none yet. No assumptions discharged or changed. Section 6 protocol/feature/toolchain/wire pins inherited from NJE release pins, will be independently recorded before native credit. Standard axioms required on each new top theorem; no theorem yet.
+K013–K073 provide full-range windows, separate occupied/supplied branches,
+real write windows, full frames, outer/entry/terminal control, pending sibling
+prefix and scalar cuts with semantic controls. K023 is a timeout with no credit;
+the replacement uses split windows instead of its duplicate payload product.
+NJP_NATIVE_SUMMARY.json gives all 70 native outcomes: 33 positives, 35 semantic
+negative controls, one setup failure, one timeout. No multiplication in Kani,
+no new copy stub, no Option<fn>-dependent credit, no function contracts.
 
-Next deliverable: actual frozen permutation controller harness plus perturbation control. Four rows remain OPEN pending native cuts, Lean composition, combined NJK+NJE+deployed import, NFX scan, raw ax2 and next ledger gate. No keys created or removed; no push; no other worktree modified.
+NJP_NativeCohortStep.observation, NJP_CohortNode.observation,
+NJP_CohortRowLoop.rows, NJP_CohortHeightLoop.levels,
+NJP_CohortReturning.observation and NJP_CohortTotal.levels compile. They carry
+complete Result, both full buffers, cursor and chronological request/reply log.
+The totality bound is 9216 bytes; no <=5504 strengthening was introduced.
+NJP_CohortTerminal.same checks all terminal clauses without acceptance premises.
+NJP_AbortTransport.abort_prefix retains the unanswered pending request.
+These are shared support roots, not complete verifier-row certificates.
 
-Controller stage: K006/K007 and stability K008/K009 semantic pass/fail. L002 compiles witness-threading and chronology (standard axioms only). K001 compiler failure and L001 unsolved Fin goal excluded. No combined audit/row admission yet. Seed copied 43 files / 7,347,304 bytes; hashes in NJP_SEED.json.
+NJP_REMAINING.md lists both verifier obligations separately. L076's
+NJP_VerifierView is UNCOMPILED (namespace/guard elaboration), excluded from the
+combined import/export/axiom root set. Its historical failed output may contain
+diagnostic sorryAx and has no credit. Native entry/wrapper association, exact
+adopted endpoints, all caller unit-domain clauses and complete native abort
+prefix attachment still need their final TX1/TX2 packets. Lean-only work remains;
+the stopping reason is the exhausted Lean budget, not Kani exhaustion.
 
-Compression stage: K010 passes, K011 and K012 semantic controls fail; L003/L004/L006 pass standard axioms, including full raw permutation result and SAME-state compression root. L005 congr tactic heartbeat timeout excluded; replaced by symbolic seed congrArg in L006 without raising limits. K013 selected 32-byte borrow over all-arbitrary 9216 bytes passes; K014 failure selected its missing-window branch, so a payload-specific control remains required before payload credit.
+## Audit and resources
 
-First combined gate PASS: NJK+NJE+deployed, 15,446 modules, zero coherence defects, 18 raw roots standard-only, eight fixtures. Gate used once. TX1:306 is a local candidate only; TX1:305 is temporarily held for an explicit slice-copy-stub refresh (K057..K059), in addition to its existing pointer-copy mitigation. The Lean root/combined import are unchanged and remain audited. Neither verifier occurrence is admitted.
+Exactly 70/70 Kani and 80/80 Lean/link/audit scopes, zero extraction. Every
+attempt has its configuration, admission, frozen dependency/unchanged-lock
+validation where applicable, source/revision pins and resource receipt.
+NJP_RESOURCE_SUMMARY.json indexes target, exit, wall time, peak RSS and swap;
+receipts also contain limits, source and selected Aeneas-object hashes.
+CARGO_TARGET_DIR was always the owned workspace's NJP_target. Host scope caps
+were MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64. Lean used -M7000;
+no cap/timeout increase or unchanged timeout/memory-kill rerun.
 
-Compression refresh supersedes hold: K057 PASS, K058/K059 semantic FAIL with explicit slice-copy AND ptr-copy KMX annotations, frozen offline graph, unchanged lock and exact deployed features. Same function/harness names. The unchanged Lean root reuses gate1; no combined replay repeated. TX1:305 rejoins TX1:306 as a locally gated candidate; next lead ledger admission still required.
+Both allowed combined audits passed. Final L078 imports NJK_COMBINED_IMPORT,
+NJE_COMBINED_IMPORT and 33 own modules with AspisR1.RPx_Deployed.deployed.
+L079's NFX scan: exit 0, 15,474 modules, zero dangling/duplicate/import defects,
+36.0735s, peak 7,390,924 KiB, swap 0. L080 raw ax2: exit 0, 102 roots,
+22.0718s, peak 6,784,324 KiB, swap 0; raw walk equals collectAxioms for every
+root and only propext/Classical.choice/Quot.sound occur. Every new accepted top
+theorem has #print axioms. L024's eight fixtures/mutations remain valid for the
+unchanged driver algorithm. See NJP_AUDIT.json and NJP_RAW_RESULTS_GATE2.json.
+No third full audit or release manifest replay was run.
 
-Native allocation exhausted exactly: 70/70 scopes. {'COMPILER_OR_SETUP_FAILURE_EXCLUDED': 1, 'SEMANTIC_FAILING_CONTROL': 35, 'SEMANTIC_PASS': 33, 'TIMEOUT_EXCLUDED': 1}. All 70 use frozen offline lock/graph checks, own target, 6G/8G/swap0/tasks64 caps and matched controls for claimed passes. No timeout/cap increase. New full-range cuts, real write windows, entry/terminal/18-height controllers, missing/exhausted prefixes and pending-digest array frame are retained. Both verifier occurrences remain OPEN until the complete typed cohort/return/buffer/query-prefix composition is proved; Lean work continues.
+## Retained host export and cleanup
 
-## Lean transport stage
+Workspace: /home/dombarker/project-offloads/codex-cx-multiproof3-20261108
+Retained export:
+/home/dombarker/project-offloads/codex-cx-slice-d-prepared-cache-20261104/NJP_20261108/NJP_exports_20261108
 
-NJP_CohortNode.observation, NJP_CohortRowLoop.rows, NJP_CohortHeightLoop.levels, NJP_CohortReturning.observation, NJP_CohortTotal.levels and NJP_NativeCohortStep.observation compile. They retain complete Result, mutable scratch and chronological query replies; NJP_AbortTransport.abort_prefix retains the unanswered pending request. The final verifier view L076 remains uncompiled (namespace/guard elaboration); neither verifier row is CLOSED. Final combined audit is prepared as L078–L080.
+Seeded by copying NJE's retained export first: 43 files, 7,347,304 bytes;
+NJP_SEED.json records imported hashes. Final own export: 36 compiled files,
+6,882,584 bytes; NJP_EXPORT.json pins every retained object and the 3,119 owned
+build artifacts before cleanup. Use this export before any new build, together
+with the pinned coherent dependency paths in NJP_ENV_COMBINED.json and receipts.
+Own seed/cache were retained. After hash-verified export, only own rebuildable
+NJP_target, NJP_objects and the two audit executables were removed; native C,
+scratch sources and receipts remain. Host free space increased from
+10,653,093,888 to 15,031,365,632 bytes. No wallet/account key was created,
+deleted or otherwise touched.
+
+No shipped-file change triggered ELF rebuilds. Inherited ELF identities remain
+recorded in NJP_SHIPPED_IDENTITY_FINAL.json and NJP_RELEASE_PINS_REFERENCE.json;
+this run does not claim new ELF measurements. The headline remains deployed,
+frozen3 and the approved two-transaction model with L154 a statement parameter
+and narrowed D188. RuntimeCpiReadonlyEntry7 was not used.

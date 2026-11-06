@@ -1,6 +1,6 @@
 # NJP certificates
 
-Target not yet established. No ledger promotion or combined audit yet.
+Target not established. Two local CLOSED candidates; no authoritative ledger promotion. The audit history below is chronological.
 
 ## Controller stage
 
@@ -10,6 +10,11 @@ L001 failed one Fin equality goal; not admitted and its diagnostic sorryAx is no
 
 Every reviewed cut association is P6/D188 native-contract semantic transport reclassification, never removal. No trust row added. No shipped source touched or ELF rebuild triggered.
 
-Compression native stage: K010 returning caller passes, K011 output perturbation and K012 seeded-state perturbation fail semantically; arbitrary full sixteen-limb reply, exact one permutation call, both input digests readonly. Exact actual-target features and frozen graph/unchanged lock recorded. L003 proves canonical word encoding and injectivity; L004 proves complete raw sixteen-limb output and Result unit/state for TX1:306, no external callee endpoint premise. Still pending combined gate.
+Compression native stage: K010 returning caller passes, K011 output perturbation and K012 seeded-state perturbation fail semantically; arbitrary full sixteen-limb reply, exact one permutation call, both input digests readonly. Exact actual-target features and frozen graph/unchanged lock recorded. L003 proves canonical word encoding and injectivity; L004 proves complete raw sixteen-limb output and Result unit/state for TX1:306, no external callee endpoint premise. Subsequently admitted by the first combined gate.
 
 First combined audit L025/L026/L027: 15,446 modules, zero dangling/duplicate/import defects; 18 raw roots agree with collectAxioms and use only standard axioms. L024: eight fixtures/mutations match. Full-gate count 1/2. TX1:306 is a gated local candidate; TX1:305 held for stronger explicit slice-copy KMX coverage. NativeContract transport remains reclassification, no headline hypothesis removed.
+
+
+Explicit compression refresh K057/K058/K059 restores the compression candidate after exact KMX slice-copy coverage. All 70 native attempt dispositions are in NJP_NATIVE_SUMMARY.json and NJP_ATTEMPTS.jsonl. The final proof inventory lists the 33 compiled modules and 102 roots selected for L078/L079/L080, the second and final combined audit. Full per-target commands, revision, exit, wall, peak RSS, cgroup, zero swap, source and Aeneas-object hashes are retained in each receipt; raw audit results are authoritative for accepted roots. Verifier rows remain OPEN.
+
+Final combined audit PASS: L078/L079/L080; 15,474 coherent modules and 102 raw roots, only standard axioms. Both combined audits used. 306/305 remain local candidates pending lead ledger; 127/093 OPEN. Full resource metrics and export pins are in NJP_RESOURCE_SUMMARY.json and NJP_EXPORT.json.

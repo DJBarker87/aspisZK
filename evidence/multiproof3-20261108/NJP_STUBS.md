@@ -13,3 +13,13 @@ Copy builtins use exactly KMX_copy_stubs.patch sha256 bcdf749b78eb6143789500d98d
 | NJP_digest_write_record | Real NJP_digest_write_window plus NJP_CopyFrame.flat_window/outside/digest_write_ext | Arbitrary original full byte[16][32], target row<16 and byte<32; no field arithmetic |
 
 Natural field values are installed by those named emitted laws during Lean composition, rather than verified as multiplication in Kani. Native arbitrary-reply stubs never supply an unproved successful endpoint to a root. The compression row remains conditional on admission of the permutation candidate at the next lead gate.
+
+Final association: NJP_NativeCohortStep.observation pairs each row arbitrary reply
+with NJP_RequestTransport.hash H at exactly NJP_NativeRowCut.request log.
+NJP_CohortSupplied.available derives the full borrowed window from physical_read
+and read32, without a <=5504 strengthening. The proof carries up to 9216 bytes.
+NJP_CohortRowLoop.digest is a concrete total interpretation for proving the
+cohort iteration invariant; it is not an added runtime trust item or a free
+successful-child premise at an admitted root. No proof_for_contract/stub_verified
+or interface-shape contract was used, and no function-pointer quarantine credit
+is claimed. Runtime digest values retain the existing runtime trust row.

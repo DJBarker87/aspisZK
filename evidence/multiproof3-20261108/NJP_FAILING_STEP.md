@@ -7,3 +7,13 @@ L005: heartbeat timeout in congr tactic while comparing expanded Poseidon terms;
 K023: full-range duplicate first/second payload-product observation TIMEOUT (95.048 s scope, 90 s solver, 1,823,840 KiB RSS, zero swap). K024 never launched. No credit. Replacement uses K021/K022 SAME pointer/index plus universal coordinate/byte prestate assertions, CLOSED child argument formation, and K015/K016 borrowed-window payload, with source-stage logging and a separate real write-window cut. No unchanged timeout replay or limit increase.
 
 L031: attempted to reuse the one-height Stop invariant (n unchanged) across multiple completed heights. That statement is false: initial indices [0,1], no sibling nodes, first occupied step completes a height with n=1, then the next height stops on a missing sibling; n is 1, not initial 2. No proof/credit. Replaced by HeightProgress retaining exact partial scratch and monotone n<=initial n, not an unchanged-n hypothesis. This corrects a support statement, not the security contract or target.
+
+Final incomplete proof: L076 NJP_VerifierView.returning fails at unqualified
+OraclePortFrozenOrder/wellFormed and its resulting guard elaboration. It is not
+imported into the final combined module or counted as an accepted theorem.
+Its endpoint/wrapper association and the TX1/TX2 caller-clause inventories remain
+OPEN, even though the shared row/height, complete returning-state and local
+native-to-cohort proofs compile. Failed elaborations' diagnostic sorryAx outputs
+are never admitted; the final raw audit covers only successfully compiled roots.
+L071–L074 split out and repair the totality proof; L074 compiles. L075's let-bound
+rewriting is corrected in L077, which compiles. Neither was a timeout rerun.
