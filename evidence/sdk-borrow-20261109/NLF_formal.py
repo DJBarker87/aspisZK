@@ -20,7 +20,7 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
         command=[env['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NLF_generated','-o','NLF_objects/'+target.replace('.','/')+'.olean',src]
         if target in ['NLF_ProofDriver','NLF_ScanDriver']:command+=['-c','NLF_native/'+target+'.c']
     assert command
-    cfg=dict(attempt=a,kind=kind,module=target,command=command,env=env,sources=list(files),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='focused Lean elaboration' if kind=='lean' else 'optimized audit link or named raw axiom/module scan')
+    cfg=dict(attempt=a,kind=kind,module=target,command=command,env=env,sources=list(files),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time=('focused Lean elaboration' if kind=='lean' else 'optimized Rust compilation then CBMC verification of '+target if kind=='kani' else 'optimized audit link' if kind=='link' else 'named raw axiom/module scan' if kind=='audit' else 'bounded source, metadata, export or hashing inspection'))
     files[a+'.json']=json.dumps(cfg)
     admission(a)
     r=ssh('python3',f'''from pathlib import Path

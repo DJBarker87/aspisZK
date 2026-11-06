@@ -7,7 +7,7 @@ def native(a,target):
     lib='#![cfg_attr(kani,feature(allocator_api))]\n'+lib+'\n#[cfg(kani)]\n#[path="NLF_sdk.rs"]\nmod NLF_sdk;\n'
     patch=frozen['NLF_KMX_copy_stubs.patch']
     files={'NLF_src/programs/r1-cost-probe/src/lib.rs':lib,
-      'NLF_src/programs/r1-cost-probe/src/NLF_sdk.rs':(E/'NLF_sdk.rs').read_text(),
+      'NLF_src/programs/r1-cost-probe/src/NLF_sdk.rs':''.join(l[1:] for l in (E/'NLF_native_packets.patch').read_text().split('+++ b/programs/r1-cost-probe/src/NLF_sdk.rs\n',1)[1].splitlines(True) if l.startswith('+')),
       'NLF_gate.py':(E/'NLF_gate.py').read_text(),'NLF_expected_KMX.patch':patch}
     env=json.loads((E.parent/'entry-sdk-20261108/NJN_K032.json').read_text())['env']
     env.update(TMPDIR=B+'/NLF_tmp',CARGO_TARGET_DIR=B+'/NLF_target',CARGO_NET_OFFLINE='true')
