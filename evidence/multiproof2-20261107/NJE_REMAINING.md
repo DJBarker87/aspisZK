@@ -23,3 +23,15 @@ Still OPEN on its REAL dependency TX1:306. NJA seed copies, tweak/addition and s
 Fourteen have passed the first combined/NFX/ax2 gate. Ten (two count, two well_formed, four digest parents, two linear layers) are assembled and pending the final combined gate. Each occurrence has its own root, original inventory/caller clauses and complete carrier. Any final gate failure must keep the affected rows OPEN. No new trust row is requested; P6/D188 semantic transport is a reclassification only.
 
 Budget, final attempt totals and exact terminal reasons will be appended at handoff. No early-stop claim is made.
+
+## Final terminal status
+
+Both allocations are fully consumed:60 Kani and100 Lean/link/audit,0 extraction. All24 other occurrences passed final combined/NFX/ax2 admission (118 roots, standard axioms,15,163 coherent modules); lead ledger credit is still pending. The earlier “pending” checkpoint is superseded by this terminal status.
+
+TX1:127 and TX2:093 still need native full-range window/control transport and complete returning/mutating/query-prefix composition; K044 is unpaired because K045 timed out, and K046 broad abort cut timed out. The isolated missing/exit branch replacements passed but do not close the full verifier. Native window payload was not run. Additional Lean invariant/abort-prefix work also remains after the native boundary is repaired; no budget remains for it here.
+
+TX1:306 now has completed Lean-side round witness transport, canonicality, exact22 event descriptors/inputs/outputs and final fold (NJE_L095). Its missing native controller/zip/no-op-callback association still requires Kani, not multiplication or a larger timeout.
+
+TX1:305 now has completed Lean-side canonical seed/tweak and eight-limb output composition (NJE_L096); the missing native permutation gate and SAME-state caller/output association still require Kani. Neither pure composition theorem is admitted as a source row.
+
+No unrelated open member was used to hold node_count, well_formed, linear layers or digest parents. There is no early stop below80percent. Target not established.

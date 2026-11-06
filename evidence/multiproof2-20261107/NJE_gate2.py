@@ -17,7 +17,11 @@ assert sorted(r['root'] for r in raw)==sorted(roots)
 assert all(r['equal'] and set(r['walked_axioms'])<={'propext','Classical.choice','Quot.sound'} for r in raw)
 scan=[json.loads(l) for l in read(E/'NJE_LOADED_scan.jsonl').splitlines()]
 assert scan and all(not r['dangling'] and not r['duplicate_owners'] and r['imports_match'] for r in scan)
-closed=json.load(open(E/'NJE_CLOSED.json'));pending=json.load(open(E/'NJE_PENDING.json'))['functions'];allfunctions=closed['functions']+pending
+closed=json.load(open(E/'NJE_CLOSED.json'));pending=json.load(open(E/'NJE_PENDING.json'))['functions'];allfunctions=[];byrows={}
+for entry in closed['functions']+pending:
+ key=tuple(entry['rows'])
+ if key in byrows:assert byrows[key]==entry,'conflicting duplicate packet '+str(key)
+ else:byrows[key]=entry;allfunctions.append(entry)
 assert len(allfunctions)==24
 assert len({r for f in allfunctions for r in f['rows']})==24
 pins=json.load(open(E/'NJE_REUSED_PINS.json'))
@@ -33,7 +37,14 @@ for f in allfunctions:
    assert 'timed out' not in log.lower(),attempt+' timeout gives no credit'
    assert ('VERIFICATION:- SUCCESSFUL' in log or 'VERIFICATION SUCCESSFUL' in log or 'VERIFICATION:- FAILED' in log or 'VERIFICATION FAILED' in log),attempt+' no semantic verdict'
    validation=directory/(attempt+'_validation')
-   graph=json.load(open(validation/'NHR_GRAPH_CHECK.json'));assert graph['graph_matches_frozen'] and not graph['added'] and not graph['missing'] and not graph['edge_errors'],attempt
+   graph=json.load(open(validation/'NHR_GRAPH_CHECK.json'))
+   inactive={('aspis-r1-cert-build','0.0.0',None),('aspis-r1-cert-check','0.0.0',None),('aspis-z4b-probe','0.1.0',None)}
+   missing={tuple(x) for x in graph['missing']}
+   # Match the pinned canonical stage validator's active frozen closure exactly.
+   # The three inactive optional packages are audit entries, not reached edges.
+   assert graph['graph_matches_frozen'] and not graph['added'] and not graph['edge_errors'],attempt
+   assert not (missing-inactive),attempt+' active dependency missing'
+   if missing:assert not any('r1p-check' in p['features'] for p in graph['features']),attempt+' inactive-package condition false'
    lock=json.load(open(validation/(prefix+'_LOCK.json')));assert lock['unchanged'] and lock['before']==lock['after']==graph['lock_before']==graph['lock_after']
    inputs=json.load(open(validation/(prefix+'_INPUTS.json')))
    native=inputs['native_command'];features=native[native.index('--features')+1] if '--features' in native else ''
