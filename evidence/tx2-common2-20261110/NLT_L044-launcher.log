@@ -1,0 +1,46 @@
+{"attempt": "NLT_L044", "exit_status": 0, "wall_seconds": 19.842197582125664, "peak_rss_kib": "6413248", "swaps": "0", "print_axioms": ["'NLT_Root.root' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLT_Root.root : ∀ (H : Bytes → State) (pub proof ck : Slice U8),
+  (↑proof).length = 57607 → (↑pub).length ≤ 1880 → NLP_InputDomain.Root0 ck proof → RowSpec H pub proof ck :=
+⋯
+def NLT_Root.RowSpec : (Bytes → State) → Slice U8 → Slice U8 → Slice U8 → Prop :=
+fun H pub proof ck =>
+  (∀ (result : R Unit) (records : List (Occurrence H (NLT_RuntimeDigest.digest H) ())),
+      Invocation H (NLT_RuntimeDigest.digest H) ()
+          (NLT_NativeSource.skeleton H (NLT_RuntimeDigest.digest H) pub proof ck ()) result records →
+        have f := NLT_FrameFromCuts.frame records;
+        result =
+            NJJ_Common.run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.fin
+...
+ | Event.query pr p a g geo pending reply =>
+    NLT_ParentCuts.Query
+      { proof := pr, prepared := p, accumulator := a, powers := g, geometry := geo, pending := pending }
+  | x => PUnit.{1}
+structure NLT_ParentCuts.Query (before : NKE_QueryInput.Args) : Type
+number of parameters: 1
+fields:
+  NLT_ParentCuts.Query.observation : NLB_Parent.QueryObservation
+  NLT_ParentCuts.Query.frame : NLB_Parent.QueryCut before self.observation
+constructor:
+  NLT_ParentCuts.Query.mk {before : NKE_QueryInput.Args} (observation : NLB_Parent.QueryObservation)
+    (frame : NLB_Parent.QueryCut before observation) : NLT_ParentCuts.Query before
+def NLB_Parent.QueryCut : NKE_QueryInput.Args → NLB_Parent.QueryObservation → Prop :=
+fun before o =>
+  ↑before.proof = NKO_ReadonlyFrame.view o.heap o.proofBase (↑before.proof).length ∧
+    (o.proofBase + (↑before.proof).length ≤ o.logBase ∨ o.logBase + o.logSize ≤ o.proofBase) ∧
+      NJJ_Constructors.PreparedCut before.prepared o.args.prepared ∧
+        NJJ_Constructors.AccumulatorCut before.accumulator o.args.accumulator ∧
+          (∀ (i : Fin 29), (↑o.args.powers)[↑i]? = (↑before.powers)[↑i]?) ∧
+            NKE_GeometryCuts.Cut before.geometry o.args.geometry ∧
+              (↑o.args.pending.raw).length = 64 ∧
+                (∀ i < 64, (↑o.args.pending.raw)[i]? = (↑before.pending.raw)[i]?) ∧
+                  o.args.pending.terms = before.pending.terms
+def NLP_InputDomain.Root0 : Slice U8 → Slice U8 → Prop :=
+fun ck proof =>
+  List.take 32 (List.drop 112 ↑ck) =
+    ↑(AspisV8R19.SqueezeOracleBridge.encodeState
+        ((SemanticRecordCodec.decodeState
+              (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+          fun x => 0))
+'NLT_Root.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7fd1967abf4f4400a60316763173b593.scope; invocation ID: 204bd7d7b0b0440fa4eb64bf89890990

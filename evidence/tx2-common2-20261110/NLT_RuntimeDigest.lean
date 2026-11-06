@@ -12,6 +12,7 @@ def digest (H : Bytes → State) : VTop_Stages.aspis_core.digest.Digest32 Unit :
  ⟨(NKV_ConcreteChildren.digest H).coremarkerCopyInst,(NKV_ConcreteChildren.digest H).digest⟩
 theorem resume_same (H : Bytes → State) :
  NJC_ResumeCalls.digest (digest H)=NKV_ConcreteChildren.digest H := by
+ unfold digest NJC_ResumeCalls.digest
  cases NKV_ConcreteChildren.digest H
  rfl
 theorem reply_same (H : Bytes → State) (chunks : Slice (Slice U8)) :

@@ -4,7 +4,7 @@ import json,re,hashlib,difflib,subprocess
 E=Path(__file__).resolve().parent;P=Path('evidence/tx2-common-20261110')
 modules=sorted(p.stem for p in E.glob('NLT_*.lean') if not p.stem.endswith('Driver') and p.stem!='NLT_COMBINED_IMPORT')
 combined=''.join('import '+m+'\n' for m in ['NLO_COMBINED_IMPORT','NLP_COMBINED_IMPORT','NLB_COMBINED_IMPORT','NKU_COMBINED_IMPORT','NLN_COMBINED_IMPORT',*modules])
-combined+='set_option pp.proofs false\n#check AspisR1.RPx_Deployed.deployed\n#print axioms AspisR1.RPx_Deployed.deployed\n'
+combined+='set_option pp.proofs false\n#check AspisR1.RPx_Deployed.deployed\n#check NLT_Root.root\n#print axioms AspisR1.RPx_Deployed.deployed\n#print axioms NLT_Root.root\n'
 (E/'NLT_COMBINED_IMPORT.lean').write_text(combined)
 roots=[]
 for m in modules:
@@ -14,7 +14,7 @@ roots=list(dict.fromkeys(roots+['NLB_Parent.native_fold','NKU_ParentFold.source'
 groups=[roots[i:i+12] for i in range(0,len(roots),12)]
 (E/'NLT_AUDIT_ROOTS.json').write_text(json.dumps(dict(roots=roots,groups=groups),indent=2)+'\n')
 for name in ['NLT_Driver','NLT_ProofDriver']:
- old=(P/(name.replace('NLT','NLP')+'.lean')).read_text();s=old.replace('NLP','NLT')
+ old=(P/(name.replace('NLT','NLP')+'.lean')).read_text();s=old.replace('NLP','NLT').replace('codex-cx-tx2-common-20261110','codex-cx-tx2-common2-20261110')
  if name.endswith('ProofDriver'):
   a=s.index('    else if mode == "proof0"');b=s.index('    else (#[], #[])',a)
   part=''.join('    else if mode == "proof'+str(i)+'" then\n      (#[`NLT_COMBINED_IMPORT], #['+', '.join('`'+r for r in group)+'])\n' for i,group in enumerate(groups))

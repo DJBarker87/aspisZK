@@ -1,0 +1,16 @@
+NLT_generated/NLT_RuntimeDigest.lean:16:1: error: Tactic `rfl` failed: The left-hand side
+  NJC_ResumeCalls.digest (digest H)
+is not definitionally equal to the right-hand side
+  { coremarkerCopyInst := coremarkerCopyInst✝, digest := digest✝ }
+
+case mk
+H : Bytes → State
+coremarkerCopyInst✝ : core.marker.Copy Unit
+digest✝ : Unit → Slice (Slice U8) → Result (Std.Array U8 32#usize)
+⊢ NJC_ResumeCalls.digest (digest H) = { coremarkerCopyInst := coremarkerCopyInst✝, digest := digest✝ }
+def NLT_RuntimeDigest.digest : (Bytes → State) → VTop_Stages.aspis_core.digest.Digest32 Unit :=
+fun H =>
+  { coremarkerCopyInst := (NKV_ConcreteChildren.digest H).coremarkerCopyInst,
+    digest := (NKV_ConcreteChildren.digest H).digest }
+'NLT_RuntimeDigest.resume_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLT_RuntimeDigest.reply_same' depends on axioms: [propext, Classical.choice, Quot.sound]
