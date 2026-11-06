@@ -8,10 +8,6 @@ import NJR_ReaderCut
 #print NJC_ConcreteUnwrap.raw
 #print NIL_FreshOps.readK
 #print NIL_FreshOps.readE
-#print NIL_FreshOps.k_port
-#print NIL_FreshOps.e_port
-#print NJJ_Flush.source
-#print NHV_PendingPacket.source
-#print AspisR1Stage2.verifier.echeck
-#print AspisR1Stage2.verifier.Reader.k
-#print AspisR1Stage2.verifier.Reader.e
+#print NJJ_Common.pending
+#print Port3_FlushInstall.flush
+#print NJC_ValidateResult.source

@@ -97,6 +97,8 @@ if kind=='kani':
  if os.environ.get('NJZ_BAD_BACKING'):config['env']['RUSTFLAGS']+=' --cfg NJZ_bad_backing'
  if os.environ.get('NJZ_BAD_DROP'):config['env']['RUSTFLAGS']+=' --cfg NJZ_bad_drop'
  if os.environ.get('NJZ_BAD_DECODE_ARG'):config['env']['RUSTFLAGS']+=' --cfg NJZ_bad_decode_arg'
+ if os.environ.get('NJZ_INVERSE_ENSURES'):config['env']['RUSTFLAGS']+=' --cfg NJZ_inverse_ensures'
+ if os.environ.get('NJZ_BAD_MODIFIES'):config['env']['RUSTFLAGS']+=' --cfg NJZ_bad_modifies'
  if os.environ.get('NJZ_BAD_REPLY'):config['env']['RUSTFLAGS']+=' --cfg NJZ_bad_reply'
  if os.environ.get('NJZ_BAD_EXPAND'):config['env']['RUSTFLAGS']+=' --cfg NJZ_bad_expand'
  if os.environ.get('NJZ_BAD_STAGE'):config['env']['RUSTFLAGS']+=' --cfg NJZ_bad_stage'

@@ -105,10 +105,72 @@ theorem e_source (r : Fresh.R) (bound : r.at.val+32≤r.bytes.val.length) :
     simp [parseE,h,outer,NJC_ReaderEmission.core.option.Option.ok_or,
       unInner,unError,←valueEq,Function.comp_def]
 
+/-- All pre-states, including raw panic/divergence: concrete child/parser
+substitution equals the adopted Reader model with exact nominal transport. -/
+theorem k_reference (r : Fresh.R) : k r=NIL_FreshOps.readK r := by
+ unfold k NJC_ReaderEmission.verifier.Reader.k
+ change (do let (bytes,out) ← NJC_ConcreteUnwrap.raw 16#usize r
+            let value ← parseK bytes.to_slice
+            let reply ← NJC_ReaderEmission.core.option.Option.ok_or value
+              NID_ResumeEmission.verifier.Error.Checkpoint
+            ok (reply,out))=_
+ rw [raw]
+ unfold NIL_FreshOps.raw NIL_FreshOps.readK CheckpointBytes3Reader.readK
+ cases hraw : CheckpointBytes3Reader.raw 16#usize (reader r) with
+ | fail err => rfl
+ | div => rfl
+ | ok pair =>
+   rcases pair with ⟨bytes,out⟩
+   simp only [outer,bind_tc_ok]
+   change (do let value ← outer (Option.map (unK ∘ CheckpointBytes3Namespaces.fromK))
+                       (OraclePortCkptAbi2Extracted.decode_k_spec bytes.to_slice)
+              let reply ← NJC_ReaderEmission.core.option.Option.ok_or value
+                NID_ResumeEmission.verifier.Error.Checkpoint
+              ok (reply,unReader out)) =
+     outer (fun x=>(unInner unK x.1,unReader x.2))
+       (do let value ← OraclePortCkptAbi2Extracted.decode_k_spec bytes.to_slice
+           ok (CheckpointBytes3Reader.optionK value,out))
+   cases hparse : OraclePortCkptAbi2Extracted.decode_k_spec bytes.to_slice with
+   | fail err => rfl
+   | div => rfl
+   | ok value => cases value <;> rfl
+
+/-- All pre-states, including raw panic/divergence: concrete child/parser
+substitution equals the adopted Reader model with exact nominal transport. -/
+theorem e_reference (r : Fresh.R) : e r=NIL_FreshOps.readE r := by
+ unfold e NJC_ReaderEmission.verifier.Reader.e
+ change (do let (bytes,out) ← NJC_ConcreteUnwrap.raw 32#usize r
+            let value ← parseE bytes.to_slice
+            let reply ← NJC_ReaderEmission.core.option.Option.ok_or value
+              NID_ResumeEmission.verifier.Error.Checkpoint
+            ok (reply,out))=_
+ rw [raw]
+ unfold NIL_FreshOps.raw NIL_FreshOps.readE CheckpointBytes3Reader.readE
+ cases hraw : CheckpointBytes3Reader.raw 32#usize (reader r) with
+ | fail err => rfl
+ | div => rfl
+ | ok pair =>
+   rcases pair with ⟨bytes,out⟩
+   simp only [outer,bind_tc_ok]
+   change (do let value ← outer (Option.map (unE ∘ CheckpointBytes3Namespaces.fromE))
+                       (OraclePortCkptAbi2Extracted.decode_e_spec bytes.to_slice)
+              let reply ← NJC_ReaderEmission.core.option.Option.ok_or value
+                NID_ResumeEmission.verifier.Error.Checkpoint
+              ok (reply,unReader out)) =
+     outer (fun x=>(unInner unE x.1,unReader x.2))
+       (do let value ← OraclePortCkptAbi2Extracted.decode_e_spec bytes.to_slice
+           ok (CheckpointBytes3Reader.optionE value,out))
+   cases hparse : OraclePortCkptAbi2Extracted.decode_e_spec bytes.to_slice with
+   | fail err => rfl
+   | div => rfl
+   | ok value => cases value <;> rfl
+
 #print axioms raw
 #print axioms raw_cut
 #print axioms k_window
 #print axioms e_window
 #print axioms k_source
 #print axioms e_source
+#print axioms k_reference
+#print axioms e_reference
 end NJZ_Readers
