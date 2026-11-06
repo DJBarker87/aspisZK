@@ -1,0 +1,55 @@
+{"attempt": "NJV_L024", "exit_status": 0, "wall_seconds": 3.6005749320611358, "peak_rss_kib": "4351052", "swaps": "0", "print_axioms": ["'NJV_PendingBind.pending_bind' does not depend on any axioms", "'NJV_PendingBind.after_return' depends on axioms: [propext]"]}
+theorem NJV_PendingBind.pending_bind : ∀ {α β : Type} (H : Request → Digest) (p : Program Request Digest α)
+  (f : α → Program Request Digest β) (n : ℕ) (history : List (Request × Digest)) (q : Request),
+  NJP_AbortPrefix.pending H n p = some (history, q) →
+    NJP_AbortPrefix.pending H n (AspisV8R19.OracleProgramOps.bind p f) = some (history, q) :=
+fun {α β} H p f n history q pending =>
+  Nat.recAux (motive := fun n =>
+    ∀ (p : Program Request Digest α) (history : List (Request × Digest)) (q : Request),
+      NJP_AbortPrefix.pending H n p = some (history, q) →
+        NJP_AbortPrefix.pending H n (AspisV8R19.OracleProgramOps.bind p f) = some (history, q))
+    (fun p history q pending =>
+  
+...
+nding returned =>
+              Eq.mpr
+                (id
+                  (congrFun' (congrArg Eq (congrFun' (congrArg (NJP_AbortPrefix.pending H) (Nat.zero_add n)) (f a')))
+                    (some (rest, q))))
+                pending)
+            right✝ pending returned)
+        left✝ returned)
+    (fun r next ih first returned =>
+      have firstEq := congrArg Prod.fst returned;
+      have valueEq := congrArg Prod.snd returned;
+      have tailReturned := Prod.ext rfl valueEq;
+      have tail := ih (H r) (eval H (next (H r))).1 tailReturned;
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              NJP_AbortPrefix.pending H (_a.length + n) (AspisV8R19.OracleProgramOps.bind (Program.ask r next) f) =
+                some (_a ++ rest, q))
+            (Eq.symm firstEq)))
+        (id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  NJP_AbortPrefix.pending H _a (AspisV8R19.OracleProgramOps.bind (Program.ask r next) f) =
+                    some ((r, H r) :: (eval H (next (H r))).1 ++ rest, q))
+                (Nat.add_right_comm (eval H (next (H r))).1.length 1 n)))
+            (of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (NJP_AbortPrefix.pending.eq_4 H ((eval H (next (H r))).1.length + n) r fun a =>
+                        AspisV8R19.OracleProgramOps.bind (next a) f)
+                      (congrArg (Option.map fun x => ((r, H r) :: x.1, x.2)) tail)))
+                  (some ((r, H r) :: ((eval H (next (H r))).1 ++ rest), q)))
+                (eq_self (some ((r, H r) :: ((eval H (next (H r))).1 ++ rest), q))))))))
+    p first returned
+'NJV_PendingBind.after_return' depends on axioms: [propext]
+
+Running as unit: run-r2eff0de1f2824e0eb3185e7a1f6dd90a.scope; invocation ID: 2421fb07012f4c529986173727274d4e

@@ -1,0 +1,66 @@
+--- a/crates/aspis-statement/src/poseidon2.rs
++++ b/crates/aspis-statement/src/poseidon2.rs
+@@ -908,3 +908,5 @@
+ #[cfg(any(kani, aeneas_ref))]
+ #[path = "../../../tools/r1-builder-reference/poseidon.rs"]
+ mod builder_reference;
++
++#[cfg(kani)] mod NJV_native { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NJV_poseidon.rs")); }
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -5,6 +5,7 @@
+ //! constraint-composition kernel that Stage 2 must make correct before any
+ //! statement proof is wired into the PCS.
+ 
++#![cfg_attr(kani, feature(allocator_api))]
+ #![no_std]
+ 
+ extern crate alloc;
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,4 +1,5 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
++#![cfg_attr(kani, feature(allocator_api))]
+ #![no_std]
+ extern crate alloc;
+ pub mod sampler;
+--- a/crates/aspis-r1-cost-probe/src/multiproof.rs
++++ b/crates/aspis-r1-cost-probe/src/multiproof.rs
+@@ -354,3 +354,5 @@
+         assert_eq!(node_count(Arity::Eight, &spread(12, 16)), Some(346));
+     }
+ }
++
++#[cfg(kani)] mod NJV_native { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NJV_multiproof.rs")); }
+--- /dev/null
++++ b/NJV_poseidon.rs
+@@ -0,0 +1 @@
++// No poseidon native run in NJV; frozen source unmodified apart from cfg(kani) overlay.
+--- /dev/null
++++ b/NJV_multiproof.rs
+@@ -0,0 +1,21 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++// Pending occupied-arm frame, at the actual frozen child boundary; no reply.
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::unwind(40)]
++fn NJV_pending_occupied() {
++ let mut idx:[u32;16]=kani::any();let val:[[u8;32];16]=kani::any();
++ let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();let at:usize=kani::any();let k:usize=kani::any();let j:usize=kani::any();
++ kani::assume(0<n&&n<=16&&i<n&&w<=i&&at<=9216&&k<16&&j<32);
++ kani::assume(i+1<n&&idx[i+1]==idx[i]^1);
++ let before_idx=idx[k];let before_val=val[k][j];let before_at=at;
++ let parent=super::index_at(&idx,i)>>super::Arity::Two.bits();
++ // Stop immediately BEFORE occupied_binary_parent(hash,val,i).
++ let first=&val[i];let second=&val[i+1];
++ if cfg!(NJV_bad_argument){idx[k]^=1;}
++ assert_eq!(idx[k],before_idx);assert_eq!(val[k][j],before_val);assert_eq!(at,before_at);
++ assert_eq!(parent,(idx[i] as u64/2)as u32);
++ assert_eq!(first.as_ptr(),val[i].as_ptr());assert_eq!(second.as_ptr(),val[i+1].as_ptr());
++ assert_eq!(first[j],val[i][j]);assert_eq!(second[j],val[i+1][j]);
++}
+--- /dev/null
++++ b/NJV_frontier_cuts.rs
+@@ -0,0 +1 @@
++// No additional include required.

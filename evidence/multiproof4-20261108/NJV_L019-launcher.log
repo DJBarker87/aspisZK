@@ -1,0 +1,48 @@
+{"attempt": "NJV_L019", "exit_status": 0, "wall_seconds": 3.705107904970646, "peak_rss_kib": "4349004", "swaps": "0", "print_axioms": ["'NJV_Pending.request' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_Pending.frame' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJV_Pending.request : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length : ℕ) (s pending : Scratch) (i w : ℕ)
+  (q : Request),
+  Cut s i length nodes pending q → NJP_AbortPrefix.pending H 0 (node nodes length s i w) = some ([], q) :=
+fun H nodes length s pending i w q cut =>
+  if both : paired s i then
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = some ([], q))
+          (NJP_AbortPrefix.occupied_pending H nodes length s i w cut.active both)))
+      (Eq.mpr (id (congrArg (fun _a => some ([], occupiedRequest s i) = some ([], _a)) cut.arguments))
+        (Eq.mpr (id (congrArg (fun _a => some ([], occupiedRequest s i) = some ([], _a)) (if_pos both)))
+          (Eq.refl (some ([]
+...
+
+  (q : Request),
+  Cut s i length nodes pending q → NJP_AbortPrefix.pending H 0 (node nodes length s i w) = some ([], q) :=
+fun H nodes length s pending i w q cut =>
+  if both : paired s i then
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = some ([], q))
+          (NJP_AbortPrefix.occupied_pending H nodes length s i w cut.active both)))
+      (Eq.mpr (id (congrArg (fun _a => some ([], occupiedRequest s i) = some ([], _a)) cut.arguments))
+        (Eq.mpr (id (congrArg (fun _a => some ([], occupiedRequest s i) = some ([], _a)) (if_pos both)))
+          (Eq.refl (some ([], occupiedRequest s i)))))
+  else
+    have available := Or.resolve_left cut.available both;
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = some ([], q))
+          (NJP_AbortPrefix.sibling_pending H nodes length s i w cut.active both available)))
+      (Eq.mpr (id (congrArg (fun _a => some ([], siblingRequest s i nodes) = some ([], _a)) cut.arguments))
+        (Eq.mpr (id (congrArg (fun _a => some ([], siblingRequest s i nodes) = some ([], _a)) (if_neg both)))
+          (Eq.refl (some ([], siblingRequest s i nodes)))))
+'NJV_Pending.request' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_Pending.frame : ∀ (nodes : ℕ → U8) (length : ℕ) (s pending : Scratch) (i : ℕ) (q : Request),
+  Cut s i length nodes pending q →
+    pending =
+      { indices := s.indices, values := s.values, n := s.n,
+        cursor := if paired s i then s.cursor else s.cursor + 32 } :=
+fun nodes length s pending i q cut =>
+  NJP_WriteCarrier.state_ext pending
+    { indices := s.indices, values := s.values, n := s.n, cursor := if paired s i then s.cursor else s.cursor + 32 }
+    cut.indices cut.values cut.count cut.cursor
+'NJV_Pending.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra9d9ccd6f4f648aeb6193bbe8900eb4d.scope; invocation ID: cb347c24c66743a889b8f23c37b44a3a

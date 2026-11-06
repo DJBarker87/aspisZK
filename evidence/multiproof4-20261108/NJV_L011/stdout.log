@@ -1,0 +1,34 @@
+theorem NJV_UnitDomain.key_length : ∀ (s : reference.Scratch), (keys s).length = ↑s.n :=
+fun s =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq (Eq.trans (List.length_map Prod.fst) (AspisR1.MultiproofConeRootGuard.live_length s 0 ↑s.n))) ↑s.n)
+      (eq_self ↑s.n))
+'NJV_UnitDomain.key_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_UnitDomain.bytes : ∀ (physical slot : Slice U8) (s : reference.Scratch),
+  Domain physical slot s → (↑physical).length ≤ 9216 :=
+fun physical slot s domain =>
+  have small :=
+    Eq.mpr (id (congrArg (fun _a => _a ≤ 16) (key_length s)))
+      (have h := domain.batch;
+      Decidable.byContradiction fun a => bytes._proof_1 s h a);
+  have counted := AspisR1.MultiproofConeCountBounds.eighteen_bound (keys s) small domain.sorted.right.right.left;
+  Eq.mpr (id (congrArg (fun _a => _a ≤ 9216) domain.count))
+    (Decidable.byContradiction fun a =>
+      bytes._proof_2 s
+        (Eq.mp
+          (congrArg (fun _a => _a ≤ 288)
+            (AspisR1.MultiproofConeCountLevels.count_eq 18 (keys s) domain.sorted.right.right.left))
+          counted)
+        a)
+'NJV_UnitDomain.bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_UnitDomain.guard : ∀ (physical slot : Slice U8) (s : reference.Scratch),
+  Domain physical slot s → NJV_Entry.Guard physical s :=
+fun physical slot s domain =>
+  ⟨domain.sorted,
+    Eq.mpr (id (congrArg (fun _a => _a % 32 = 0) domain.count)) (Decidable.byContradiction fun a => guard._proof_1 s a)⟩
+'NJV_UnitDomain.guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_UnitDomain.twelve_size : ∀ (s : reference.Scratch), ↑s.n ≤ 12 → ↑s.n ≤ 16 :=
+fun s size => Decidable.byContradiction fun a => twelve_size._proof_1 s size a
+'NJV_UnitDomain.twelve_size' depends on axioms: [propext, Classical.choice, Quot.sound]

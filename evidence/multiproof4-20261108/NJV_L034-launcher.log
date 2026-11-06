@@ -1,0 +1,43 @@
+{"attempt": "NJV_L034", "exit_status": 0, "wall_seconds": 9.775559804867953, "peak_rss_kib": "5880652", "swaps": "0", "print_axioms": ["'NJV_AbortEntry.raw_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_AbortEntry.physical_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_AbortEntry.adopted_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NJV_lean/NJV_AbortEntry.lean:72:78: warning: This simp argument is unused:
+  Option.map_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵m̵a̵p̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵m̵a̵p̵,̵F̵u̵n̵c̵t̵i̵o̵n̵.̵c̵o̵m̵p̵_̵d̵e̵f̵,̵O̵p̵t̵i̵o̵n̵.̵m̵a̵p̵_̵s̵o̵m̵e̵]̵[̲L̲i̲s̲t̲.̲m̲a̲p̲_̲m̲a̲p̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲m̲a̲p̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲m̲a̲p̲_̲m̲a̲p̲,̲ ̲F̲u̲n̲c̲t̲i̲o̲n̲.̲c̲o̲m̲p̲_̲d̲e̲f̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NJV_AbortEntry.raw_prefix : ∀ (H : NJP_RowModel.Request → NJP_RowModel.Digest) (root : RefDigest)
+  (physical : Slice U8) (s : reference.Scratch) (events : List (N
+...
+> (flatten e.1, decodeState e.2))
+                    (Eq.trans adopted_prefix._simp_1
+                      (congrArg (List.map fun event => (NJP_RequestTransport.address event.1, encode event.2))
+                        (Eq.symm first))))))
+              (List.map (fun e => (flatten e.1, decodeState e.2))
+                (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) events)))
+            (eq_self
+              (List.map (fun e => (flatten e.1, decodeState e.2))
+                (List.map (fun event => (NJP_RequestTransport.address event.1, encode event.2)) events)))),
+        Eq.mpr
+          (id
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congrArg (Option.map Prod.fst)
+                    (Eq.trans (congrFun' (congrArg getElem? List.map_map) events.length) List.getElem?_map))
+                  (Option.map_map Prod.fst
+                    (fun x => (flatten (NJP_RequestTransport.address x.1), decodeState (encode x.2)))
+                    (eval (NJP_RequestTransport.hash (rawOracle H))
+                          (NJV_Entry.rawProgram root physical s)).1[events.length]?)))
+              (some (flatten (NJP_RequestTransport.address q)))))
+          (Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (Option.map_map (fun r => flatten (NJP_RequestTransport.address r)) Prod.fst
+                  (eval (NJP_RequestTransport.hash (rawOracle H))
+                        (NJV_Entry.rawProgram root physical s)).1[events.length]?))
+              (some (flatten (NJP_RequestTransport.address q))))
+            (congrArg (Option.map fun r => flatten (NJP_RequestTransport.address r)) last))⟩)
+'NJV_AbortEntry.adopted_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r64674631d8894d2e9edd8ff340fc021f.scope; invocation ID: ad2b413987c34e8eafb102e9a2519818

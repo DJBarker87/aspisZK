@@ -1,0 +1,41 @@
+{"attempt": "NJV_L025", "exit_status": 0, "wall_seconds": 8.038965684128925, "peak_rss_kib": "5872724", "swaps": "0", "print_axioms": ["'NJV_EntryABI.zero' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJV_EntryABI.rejection' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@[defeq] theorem NJV_EntryABI.zero : ∀ (idx : Std.Array U32 16#usize) (val : Std.Array RefDigest 16#usize) (n : Usize),
+  (initial idx val n).at = 0#usize :=
+fun idx val n => rfl
+'NJV_EntryABI.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_EntryABI.rejection : ∀ (H : Slice (Slice U8) → RefDigest) (root : RefDigest) (physical : Slice U8)
+  (idx : Std.Array U32 16#usize) (val : Std.Array RefDigest 16#usize) (n : Usize),
+  ¬NJV_Entry.Guard physical (initial idx val n) →
+    AspisV8R19.MemoizedProgramLaw.eval H (NJV_Entry.program root physical (initial idx val n)) =
+      ([], ok (false, initial idx val n)) :=
+fun H root physical idx val n guard =>
+  of_eq_true
+    
+...
+@[defeq] theorem NJV_EntryABI.zero : ∀ (idx : Std.Array U32 16#usize) (val : Std.Array RefDigest 16#usize) (n : Usize),
+  (initial idx val n).at = 0#usize :=
+fun idx val n => rfl
+'NJV_EntryABI.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_EntryABI.rejection : ∀ (H : Slice (Slice U8) → RefDigest) (root : RefDigest) (physical : Slice U8)
+  (idx : Std.Array U32 16#usize) (val : Std.Array RefDigest 16#usize) (n : Usize),
+  ¬NJV_Entry.Guard physical (initial idx val n) →
+    AspisV8R19.MemoizedProgramLaw.eval H (NJV_Entry.program root physical (initial idx val n)) =
+      ([], ok (false, initial idx val n)) :=
+fun H root physical idx val n guard =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg (AspisV8R19.MemoizedProgramLaw.eval H)
+              ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg guard) x_0 x_1 x_2 x_3)
+                (Classical.propDecidable (NJV_Entry.Guard physical (initial idx val n)))
+                (AspisR1.MultiproofConePhysicalProgram.Run (Bool × reference.Scratch))
+                (NJP_CohortReturning.run root physical (initial idx val n))
+                (AspisV8R19.MemoizedProgramLaw.Program.done (ok (false, initial idx val n)))))
+            (AspisV8R19.MemoizedProgramLaw.eval.eq_1 H (ok (false, initial idx val n)))))
+        ([], ok (false, initial idx val n)))
+      (eq_self ([], ok (false, initial idx val n))))
+'NJV_EntryABI.rejection' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r79810e22699e403998f6553d6673e33a.scope; invocation ID: de3f636842a0432999b323301a860001

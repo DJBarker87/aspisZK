@@ -1,0 +1,59 @@
+{"attempt": "NJV_L022", "exit_status": 1, "wall_seconds": 3.789498971076682, "peak_rss_kib": "4260136", "swaps": "0", "print_axioms": ["'NJV_PendingBind.pending_bind' does not depend on any axioms", "'NJV_PendingBind.after_return' depends on axioms: [sorryAx]"]}
+NJV_lean/NJV_PendingBind.lean:54:3: error: Tactic `assumption` failed
+
+case ask
+α β : Type
+H : Request → Digest
+f : α → Program Request Digest β
+rest : List (Request × Digest)
+a : α
+n : ℕ
+q : Request
+pending : NJP_AbortPrefix.pending H n (f a) = some (rest, q)
+r : Request
+next : Digest → Program Request Digest α
+ih :
+  ∀ (a_1 : Digest) (first : List (Request × Digest)),
+    eval H (next a_1) = (first, a) →
+      NJP_AbortPrefix.pending H (first.length + n) (AspisV8R19.OracleProgramOps.bind (next a_1) f) =
+        some (first ++ rest, q)
+first : List (Request × Digest)
+returned : ((r, H r) :: (eval H (next (H r))).1, (eval H (next (H r))).2) = (first, a)
+firstEq : (r, H r) :: (eval H (next (H
+...
+ depend on any axioms
+theorem NJV_PendingBind.after_return : ∀ {α β : Type} (H : Request → Digest) (p : Program Request Digest α)
+  (f : α → Program Request Digest β) (first rest : List (Request × Digest)) (a : α) (n : ℕ) (q : Request),
+  eval H p = (first, a) →
+    NJP_AbortPrefix.pending H n (f a) = some (rest, q) →
+      NJP_AbortPrefix.pending H (first.length + n) (AspisV8R19.OracleProgramOps.bind p f) = some (first ++ rest, q) :=
+fun {α β} H p f first rest a n q returned pending =>
+  Program.rec (motive := fun p =>
+    ∀ (first : List (Request × Digest)),
+      eval H p = (first, a) →
+        NJP_AbortPrefix.pending H (first.length + n) (AspisV8R19.OracleProgramOps.bind p f) = some (first ++ rest, q))
+    (fun a' first returned =>
+      have eqs := Prod.mk.inj returned;
+      let ⟨left✝, right✝⟩ := eqs
+      Eq.ndrec (motive := fun first =>
+        ([], a') = (first, a) →
+          NJP_AbortPrefix.pending H (first.length + n) (AspisV8R19.OracleProgramOps.bind (Program.done a') f) =
+            some (first ++ rest, q))
+        (fun returned =>
+          Eq.ndrec (motive := fun a =>
+            NJP_AbortPrefix.pending H n (f a) = some (rest, q) →
+              ([], a') = ([], a) →
+                NJP_AbortPrefix.pending H ([].length + n) (AspisV8R19.OracleProgramOps.bind (Program.done a') f) =
+                  some ([] ++ rest, q))
+            (fun pending returned =>
+              Eq.mpr
+                (id
+                  (congrFun' (congrArg Eq (congrFun' (congrArg (NJP_AbortPrefix.pending H) (Nat.zero_add n)) (f a')))
+                    (some (rest, q))))
+                pending)
+            right✝ pending returned)
+        left✝ returned)
+    (fun r next ih first returned => sorry) p first returned
+'NJV_PendingBind.after_return' depends on axioms: [sorryAx]
+
+Running as unit: run-r9acaccc59ec441529b82a14aa1031208.scope; invocation ID: c6be93f645174010996bfcd93d3c4fce

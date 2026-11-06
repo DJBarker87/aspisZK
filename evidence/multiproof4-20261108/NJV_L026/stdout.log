@@ -1,0 +1,123 @@
+NJV_lean/NJV_AbortRows.lean:39:47: error: Application type mismatch: The argument
+  observed
+has type
+  eval H (node nodes length s i w) =
+    (if log.calls = 0 then [] else [(NJP_NativeRowCut.request log, H (NJP_NativeRowCut.request log))],
+      ok (Row.next after ni nw))
+but is expected to have type
+  eval H (node nodes length s i w) = (NJV_NativeRows.events H log, ok ?m.82)
+in the application
+  NJV_PendingBind.after_return H (node nodes length s i w)
+    (fun r =>
+      match r with
+      | ok a =>
+        match a with
+        | Row.stop stopped => Program.done (ok (Level.stop stopped))
+        | Row.next after ni nw => rows nodes length fuel after ni nw
+      | fail e => Program.done (fail e)
+      | div => Program.done div)
+    (NJV_NativeRows.events H log) history (ok ?m.82) history.length q observed
+theorem NJV_AbortRows.same : ∀ (H : Request → Digest) (nodes : ℕ → U8) (length fuel : ℕ) (s : Scratch) (i w : ℕ)
+  (history : List (Request × Digest)) (q : Request) (pending : Scratch),
+  Invocation H nodes length fuel s i w history q pending →
+    NJP_AbortPrefix.pending H history.length (rows nodes length fuel s i w) = some (history, q) :=
+fun H nodes length fuel s i w history q pending native =>
+  Invocation.rec
+    (fun fuel s pending i w q cut =>
+      have pendingNode := NJV_Pending.request H nodes length s pending i w q cut;
+      have notDone :=
+        have h := cut.active;
+        fun a => same._proof_1 s i h a;
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (congrArg (NJP_AbortPrefix.pending H 0)
+                (Eq.trans
+                  (ite_congr (Eq.refl (s.n ≤ i))
+                    (fun a =>
+                      Eq.refl
+                        (Program.done
+                          (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor }))))
+                    fun a =>
+                    Eq.refl
+                      (AspisV8R19.OracleProgramOps.bind (node nodes length s i w) fun r =>
+                        match r with
+                        | ok a =>
+                          match a with
+                          | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                          | Row.next after ni nw => rows nodes length fuel after ni nw
+                        | fail e => Program.done (fail e)
+                        | div => Program.done div))
+                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg notDone) x_0 x_1 x_2 x_3) (s.n.decLe i)
+                    (Program Request Digest (Result Level))
+                    (Program.done
+                      (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))
+                    (AspisV8R19.OracleProgramOps.bind (node nodes length s i w) fun r =>
+                      match r with
+                      | ok a =>
+                        match a with
+                        | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                        | Row.next after ni nw => rows nodes length fuel after ni nw
+                      | fail e => Program.done (fail e)
+                      | div => Program.done div)))))
+            (some ([], q))))
+        (NJV_PendingBind.pending_bind H (node nodes length s i w)
+          (fun r =>
+            match r with
+            | ok a =>
+              match a with
+              | Row.stop stopped => Program.done (ok (Level.stop stopped))
+              | Row.next after ni nw => rows nodes length fuel after ni nw
+            | fail e => Program.done (fail e)
+            | div => Program.done div)
+          0 [] q pendingNode))
+    (fun fuel s after i w ni nw log history q pending active cut tail ih =>
+      have observed := NJP_NativeStep.one H nodes length s i w after ni nw true log cut;
+      have notDone := fun a => same._proof_1 s i active a;
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (congr (congrArg (NJP_AbortPrefix.pending H) List.length_append)
+                (Eq.trans
+                  (ite_congr (Eq.refl (s.n ≤ i))
+                    (fun a =>
+                      Eq.refl
+                        (Program.done
+                          (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor }))))
+                    fun a =>
+                    Eq.refl
+                      (AspisV8R19.OracleProgramOps.bind (node nodes length s i w) fun r =>
+                        match r with
+                        | ok a =>
+                          match a with
+                          | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                          | Row.next after ni nw => rows nodes length fuel after ni nw
+                        | fail e => Program.done (fail e)
+                        | div => Program.done div))
+                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg notDone) x_0 x_1 x_2 x_3) (s.n.decLe i)
+                    (Program Request Digest (Result Level))
+                    (Program.done
+                      (ok (Level.done { indices := s.indices, values := s.values, n := w, cursor := s.cursor })))
+                    (AspisV8R19.OracleProgramOps.bind (node nodes length s i w) fun r =>
+                      match r with
+                      | ok a =>
+                        match a with
+                        | Row.stop stopped => Program.done (ok (Level.stop stopped))
+                        | Row.next after ni nw => rows nodes length fuel after ni nw
+                      | fail e => Program.done (fail e)
+                      | div => Program.done div)))))
+            (some (NJV_NativeRows.events H log ++ history, q))))
+        (NJV_PendingBind.after_return H (node nodes length s i w)
+          (fun r =>
+            match r with
+            | ok a =>
+              match a with
+              | Row.stop stopped => Program.done (ok (Level.stop stopped))
+              | Row.next after ni nw => rows nodes length fuel after ni nw
+            | fail e => Program.done (fail e)
+            | div => Program.done div)
+          (NJV_NativeRows.events H log) history (ok (Row.next after ni nw)) history.length q sorry sorry))
+    native
+'NJV_AbortRows.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

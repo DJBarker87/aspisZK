@@ -1,0 +1,54 @@
+theorem NJV_WordDomains.initial : ∀ (s : MultiproofConeRef.reference.Scratch), Words (NJP_ScratchCarrier.raw s) :=
+fun s => NJP_ScratchCarrier.index_bound s
+'NJV_WordDomains.initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_WordDomains.index : ∀ (s : Scratch), Words s → ∀ (i : ℕ), NJP_RowModel.index s i < 2 ^ 32 :=
+fun s words i =>
+  if small : i < 16 then
+    Eq.mpr
+      (id
+        (congrFun'
+          (congrArg LT.lt
+            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_pos small) x_0 x_1 x_2 x_3) (i.decLt 16) ℕ
+              (fun h => s.indices ⟨i, h⟩) fun h => 0))
+          (2 ^ 32)))
+      (words ⟨i, small⟩)
+  else
+    Eq.mpr
+      (id
+        (congrFun'
+          (congrArg LT.lt
+            ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => dif_neg small) x_0 x_1 x_2 x_3) (i.decLt 16) ℕ
+              (fun h => s.indices ⟨i, h⟩) fun h => 0))
+          (2 ^ 32)))
+      (Mathlib.Meta.NormNum.isNat_lt_true (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 0))
+        (Mathlib.Meta.NormNum.isNat_pow (Eq.refl HPow.hPow) (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 2))
+          (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 32))
+          (Mathlib.Meta.NormNum.IsNatPowT.run
+            (Mathlib.Meta.NormNum.IsNatPowT.trans
+              (Mathlib.Meta.NormNum.IsNatPowT.trans
+                (Mathlib.Meta.NormNum.IsNatPowT.trans Mathlib.Meta.NormNum.IsNatPowT.bit0
+                  Mathlib.Meta.NormNum.IsNatPowT.bit0)
+                Mathlib.Meta.NormNum.IsNatPowT.bit0)
+              (Mathlib.Meta.NormNum.IsNatPowT.trans Mathlib.Meta.NormNum.IsNatPowT.bit0
+                Mathlib.Meta.NormNum.IsNatPowT.bit0))))
+        (Eq.refl false))
+'NJV_WordDomains.index' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_WordDomains.step : ∀ (nodes : ℕ → U8) (length : ℕ) (s after : Scratch) (i w ni nw : ℕ) (reply : Digest)
+  (returned : Bool) (log : NJP_NativeRowCut.Log),
+  NJP_NativeRowCut.Cut s i w length nodes reply after ni nw returned log → Words s → Words after :=
+fun nodes length s after i w ni nw reply returned log cut words k =>
+  Eq.mpr (id (congrArg (fun _a => _a < 2 ^ 32) (cut.indexValues k)))
+    (Decidable.casesOn instDecidableAnd
+      (fun h => Eq.mpr (id (congrFun' (congrArg LT.lt (if_neg h)) (2 ^ 32))) (words k)) fun h =>
+      Eq.mpr (id (congrFun' (congrArg LT.lt (if_pos h)) (2 ^ 32)))
+        (have b := index s words i;
+        lt_of_le_of_lt (Nat.div_le_self (NJP_RowModel.index s i) 2) b))
+'NJV_WordDomains.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_WordDomains.representable : ∀ (s : Scratch),
+  Words s → s.n ≤ 9216 → s.cursor ≤ 9216 → NJP_ScratchCarrier.raw (NJP_ScratchCarrier.emitted s) = s :=
+fun s words count cursor =>
+  NJP_WriteCarrier.state_ext (NJP_ScratchCarrier.raw (NJP_ScratchCarrier.emitted s)) s
+    (funext fun k => NJP_ScratchCarrier.indices_coordinate s.indices words k)
+    (funext fun k => NJP_DigestCarrier.values_coordinate s.values k) (NJP_WriteCarrier.small_size s.n count)
+    (NJP_WriteCarrier.small_size s.cursor cursor)
+'NJV_WordDomains.representable' depends on axioms: [propext, Classical.choice, Quot.sound]

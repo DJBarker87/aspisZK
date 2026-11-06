@@ -1,0 +1,138 @@
+theorem NJV_ChildArguments.occupied : ∀ (H : Slice (Slice U8) → RefDigest) (s : reference.Scratch) (i next : Usize),
+  ↑i + 1 < 16 →
+    ↑next = ↑i + 1 →
+      NJA_Multiproof.multiproof.occupied_binary_parent (NJE_ParentPackets.backend H) () s.val i =
+        ok (H (NJP_RequestTransport.address (NJP_RowModel.occupiedRequest (raw s) ↑i))) :=
+fun H s i next bound next_value =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = ok (H (NJP_RequestTransport.address (NJP_RowModel.occupiedRequest (raw s) ↑i))))
+        (NJE_ParentPackets.TX2_089 H s.val i bound)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            ok
+                (H
+                  (AspisR1.MultiproofConePhysicalDigest.parts (NJE_ParentPackets.cell s.val ↑i)
+                    (NJE_ParentPackets.cell s.val (↑i + 1)))) =
+              ok (H _a))
+          (NJP_CohortRead.occupied_address s i next
+            (Decidable.byContradiction fun a => occupied._proof_1 i next bound next_value a)
+            (Decidable.byContradiction fun a => occupied._proof_2 i next bound next_value a) next_value)))
+      (of_eq_true
+        (Eq.trans
+          (congrArg (Eq (ok (H (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑i + 1]!))))
+            (congrArg ok
+              (congrArg H
+                (congrArg (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]!)
+                  (congrArg (getElem! ↑s.val) next_value)))))
+          (eq_self (ok (H (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! (↑s.val)[↑i + 1]!)))))))
+'NJV_ChildArguments.occupied' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_ChildArguments.sibling : ∀ (H : Slice (Slice U8) → RefDigest) (s : reference.Scratch) (i : Usize),
+  ↑i < 16 →
+    ∀ (digest : RefDigest) (left : Bool),
+      NJA_Multiproof.multiproof.sibling_binary_parent (NJE_ParentPackets.backend H) () s.val i (Array.to_slice digest)
+          left =
+        ok
+          (H
+            (NJP_RequestTransport.address
+              (if left = true then (NJP_RowModel.value (raw s) ↑i, decode digest)
+              else (decode digest, NJP_RowModel.value (raw s) ↑i)))) :=
+fun H s i bound digest left =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            ok
+              (H
+                (NJP_RequestTransport.address
+                  (if left = true then (NJP_RowModel.value (raw s) ↑i, decode digest)
+                  else (decode digest, NJP_RowModel.value (raw s) ↑i)))))
+        (NJE_ParentPackets.TX2_091 H s.val i bound digest left)))
+    (Bool.casesOn (motive := fun t =>
+      left = t →
+        ok
+            (H
+              (if left = true then AspisR1.MultiproofConePhysicalDigest.parts (NJE_ParentPackets.cell s.val ↑i) digest
+              else AspisR1.MultiproofConePhysicalDigest.parts digest (NJE_ParentPackets.cell s.val ↑i))) =
+          ok
+            (H
+              (NJP_RequestTransport.address
+                (if left = true then (NJP_RowModel.value (raw s) ↑i, decode digest)
+                else (decode digest, NJP_RowModel.value (raw s) ↑i)))))
+      left
+      (fun h =>
+        Eq.symm h ▸
+          of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg Eq
+                  (congrArg ok
+                    (congrArg H
+                      (ite_congr Bool.false_eq_true
+                        (fun a => Eq.refl (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! digest)) fun a =>
+                        Eq.refl (AspisR1.MultiproofConePhysicalDigest.parts digest (↑s.val)[↑i]!)))))
+                (congrArg ok
+                  (congrArg H
+                    (congr
+                      (congrArg AspisR1.MultiproofConePhysicalDigest.parts
+                        (Eq.trans
+                          (congrArg encode
+                            (congrArg Prod.fst
+                              (ite_congr Bool.false_eq_true
+                                (fun a => congrFun' (congrArg Prod.mk (NJP_CohortRead.value s i bound)) (decode digest))
+                                fun a => congrArg (Prod.mk (decode digest)) (NJP_CohortRead.value s i bound))))
+                          (encode_decode digest)))
+                      (Eq.trans
+                        (congrArg encode
+                          (congrArg Prod.snd
+                            (ite_congr Bool.false_eq_true
+                              (fun a => congrFun' (congrArg Prod.mk (NJP_CohortRead.value s i bound)) (decode digest))
+                              fun a => congrArg (Prod.mk (decode digest)) (NJP_CohortRead.value s i bound))))
+                        (encode_decode (↑s.val)[↑i]!))))))
+              (eq_self (ok (H (AspisR1.MultiproofConePhysicalDigest.parts digest (↑s.val)[↑i]!))))))
+      (fun h =>
+        Eq.symm h ▸
+          of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg Eq
+                  (congrArg ok
+                    (congrArg H
+                      (ite_congr (eq_self true)
+                        (fun a => Eq.refl (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! digest)) fun a =>
+                        Eq.refl (AspisR1.MultiproofConePhysicalDigest.parts digest (↑s.val)[↑i]!)))))
+                (congrArg ok
+                  (congrArg H
+                    (congr
+                      (congrArg AspisR1.MultiproofConePhysicalDigest.parts
+                        (Eq.trans
+                          (congrArg encode
+                            (congrArg Prod.fst
+                              (ite_congr (eq_self true)
+                                (fun a => congrFun' (congrArg Prod.mk (NJP_CohortRead.value s i bound)) (decode digest))
+                                fun a => congrArg (Prod.mk (decode digest)) (NJP_CohortRead.value s i bound))))
+                          (encode_decode (↑s.val)[↑i]!)))
+                      (Eq.trans
+                        (congrArg encode
+                          (congrArg Prod.snd
+                            (ite_congr (eq_self true)
+                              (fun a => congrFun' (congrArg Prod.mk (NJP_CohortRead.value s i bound)) (decode digest))
+                              fun a => congrArg (Prod.mk (decode digest)) (NJP_CohortRead.value s i bound))))
+                        (encode_decode digest))))))
+              (eq_self (ok (H (AspisR1.MultiproofConePhysicalDigest.parts (↑s.val)[↑i]! digest))))))
+      (Eq.refl left))
+'NJV_ChildArguments.sibling' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_ChildArguments.domains : ∀ (physical : Slice U8) (s : reference.Scratch) (i w : Usize),
+  AspisR1.MultiproofConeNodeDomain.RowDomain physical s i w →
+    ↑i < ↑s.n → ↑i < 16 ∧ ↑w < 16 ∧ (NJP_RowModel.paired (raw s) ↑i → ↑i + 1 < 16) :=
+fun physical s i w domain active =>
+  have size := domain.right.left;
+  have write := domain.right.right.right.left;
+  ⟨Decidable.byContradiction fun a => domains._proof_1 s i w active size a,
+    ⟨Decidable.byContradiction fun a => domains._proof_2 s i w active size write a, fun both =>
+      have next := both.left;
+      id (fun next => Decidable.byContradiction fun a => domains._proof_3 s i w size next a) next⟩⟩
+'NJV_ChildArguments.domains' depends on axioms: [propext, Classical.choice, Quot.sound]

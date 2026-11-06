@@ -1,0 +1,36 @@
+theorem NJV_TX2.TX2_093 : ∀ (H : Bytes → State) (root : RefDigest) (physical : Slice U8) (idx : Std.Array U32 16#usize)
+  (val : Std.Array RefDigest 16#usize) (n : Usize),
+  (↑physical).length ≤ 9216 →
+    ∀ (events : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (out : Bool × NJP_RowModel.Scratch),
+      NJV_NativeEntry.Invocation (NJP_RequestTransport.hash (rawOracle H)) root physical
+          (NJV_EntryABI.initial idx val n) events out →
+        (have adopted := eval H (NJV_TX2Returning.endpoint root physical idx val n);
+          (adopted.1, ok (NJP_CohortReturning.answer adopted.2)) = (NJV_AdoptedObservation.history events, ok out)) ∧
+          NJV_Admission.Admissible (NJP_RequestTransport.hash (rawOracle H)) root physical
+            (NJV_EntryABI.initial idx val n) events out :=
+fun H root physical idx val n bytes events out native =>
+  ⟨NJV_TX2Returning.returning H root physical idx val n bytes events out native,
+    NJV_Admission.all (NJP_RequestTransport.hash (rawOracle H)) root physical (NJV_EntryABI.initial idx val n) bytes
+      events out native⟩
+'NJV_TX2.TX2_093' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NJV_TX2.abort : ∀ (H : Bytes → State) (root : RefDigest) (physical : Slice U8) (idx : Std.Array U32 16#usize)
+  (val : Std.Array RefDigest 16#usize) (n : Usize),
+  (↑physical).length ≤ 9216 →
+    ∀ (events : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (q : NJP_RowModel.Request)
+      (pending : NJP_RowModel.Scratch),
+      NJV_AbortEntry.Invocation (NJP_RequestTransport.hash (rawOracle H)) root physical (NJV_EntryABI.initial idx val n)
+          events q pending →
+        (have log := (eval H (NJV_TX2Returning.endpoint root physical idx val n)).1;
+          List.take events.length log = NJV_AdoptedObservation.history events ∧
+            Option.map Prod.fst log[events.length]? = some (flatten (NJP_RequestTransport.address q))) ∧
+          NJP_AbortTransport.physicalPending (rawOracle H) events.length
+                (NJP_RequestTransport.transport (NJV_Entry.rawProgram root physical (NJV_EntryABI.initial idx val n))) =
+              some (NJP_AbortTransport.history events, NJP_RequestTransport.address q) ∧
+            NJV_AbortDomains.LastDomain (fun j => (↑physical)[j]!) (↑physical).length q pending :=
+fun H root physical idx val n bytes events q pending native =>
+  ⟨NJV_AbortEntry.adopted_prefix H root physical (NJV_EntryABI.initial idx val n) rfl bytes events q pending native,
+    ⟨NJV_AbortEntry.physical_prefix (rawOracle H) root physical (NJV_EntryABI.initial idx val n) events q pending
+        native,
+      NJV_AbortDomains.entry (rawOracle H) root physical (NJV_EntryABI.initial idx val n) bytes events q pending
+        native⟩⟩
+'NJV_TX2.abort' depends on axioms: [propext, Classical.choice, Quot.sound]

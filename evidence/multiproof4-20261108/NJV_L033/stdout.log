@@ -1,0 +1,47 @@
+theorem NJV_Admission.all : ∀ (H : NJP_RowModel.Request → NJP_RowModel.Digest) (root : RefDigest) (physical : Slice U8)
+  (s : reference.Scratch),
+  (↑physical).length ≤ 9216 →
+    ∀ (events : List (NJP_RowModel.Request × NJP_RowModel.Digest)) (out : Bool × NJP_RowModel.Scratch),
+      NJV_NativeEntry.Invocation H root physical s events out → Admissible H root physical s events out :=
+fun H root physical s bytes events out native =>
+  NJV_NativeEntry.Invocation.casesOn (motive := fun a a_1 t =>
+    events = a → out = a_1 → native ≍ t → Admissible H root physical s events out) native
+    (fun guard h =>
+      Eq.ndrec (motive := fun events =>
+        ∀ (native : NJV_NativeEntry.Invocation H root physical s events out),
+          out = (false, raw s) →
+            native ≍ NJV_NativeEntry.Invocation.rejected guard → Admissible H root physical s events out)
+        (fun native h =>
+          Eq.ndrec (motive := fun out =>
+            ∀ (native : NJV_NativeEntry.Invocation H root physical s [] out),
+              native ≍ NJV_NativeEntry.Invocation.rejected guard → Admissible H root physical s [] out)
+            (fun native h => Admissible.rejected guard) (Eq.symm h) native)
+        (Eq.symm h) native)
+    (fun events_1 out_1 guard levels h =>
+      Eq.ndrec (motive := fun events_2 =>
+        ∀
+          (levels :
+            NJV_NativeLevels.Invocation H (fun n => (↑physical)[n]!) (↑physical).length 18
+              (let __src := raw s;
+              { indices := __src.indices, values := __src.values, n := __src.n, cursor := 0 })
+              events_2 out_1),
+          out = NJP_LoopModel.finish (decode root) (↑physical).length out_1 →
+            native ≍ NJV_NativeEntry.Invocation.returned events_2 out_1 guard levels →
+              Admissible H root physical s events out)
+        (fun levels h =>
+          Eq.ndrec (motive := fun out =>
+            ∀ (native : NJV_NativeEntry.Invocation H root physical s events out),
+              native ≍ NJV_NativeEntry.Invocation.returned events out_1 guard levels →
+                Admissible H root physical s events out)
+            (fun native h =>
+              have d := NJV_Entry.guard_domain physical s guard;
+              have domain := ⟨d.left, ⟨d.right, ⟨of_eq_true zero_le._simp_1, bytes⟩⟩⟩;
+              Admissible.returned events out_1 guard
+                (NJV_LevelDomains.all H (fun n => (↑physical)[n]!) (↑physical).length 18
+                  (let __src := raw s;
+                  { indices := __src.indices, values := __src.values, n := __src.n, cursor := 0 })
+                  events out_1 levels domain))
+            (Eq.symm h) native)
+        h levels)
+    (Eq.refl events) (Eq.refl out) (HEq.refl native)
+'NJV_Admission.all' depends on axioms: [propext, Classical.choice, Quot.sound]
