@@ -6,10 +6,19 @@ import NLN_COMBINED_IMPORT
 import NLT_AllocationInstalled
 import NLT_C04Installed
 import NLT_C04NativeInstalled
+import NLT_C04Stop
+import NLT_C04StopChronology
+import NLT_C04StopFacts
+import NLT_C04StopOrder
+import NLT_C04StopParent
+import NLT_C04StopPrefix
+import NLT_C04StopReseed
 import NLT_Chronology
 import NLT_CodecQuestions
+import NLT_CompleteRoot
 import NLT_Continuation
 import NLT_EraseCompatible
+import NLT_EvalOrder
 import NLT_FinishInstalled
 import NLT_FrameFromCuts
 import NLT_Interpreted
@@ -36,6 +45,6 @@ import NLT_SiteOrder
 import NLT_Subcuts
 set_option pp.proofs false
 #check AspisR1.RPx_Deployed.deployed
-#check NLT_Root.root
+#check NLT_CompleteRoot.root
 #print axioms AspisR1.RPx_Deployed.deployed
-#print axioms NLT_Root.root
+#print axioms NLT_CompleteRoot.root

@@ -4,7 +4,7 @@ import json,re,hashlib,difflib,subprocess
 E=Path(__file__).resolve().parent;P=Path('evidence/tx2-common-20261110')
 modules=sorted(p.stem for p in E.glob('NLT_*.lean') if not p.stem.endswith('Driver') and p.stem!='NLT_COMBINED_IMPORT')
 combined=''.join('import '+m+'\n' for m in ['NLO_COMBINED_IMPORT','NLP_COMBINED_IMPORT','NLB_COMBINED_IMPORT','NKU_COMBINED_IMPORT','NLN_COMBINED_IMPORT',*modules])
-combined+='set_option pp.proofs false\n#check AspisR1.RPx_Deployed.deployed\n#check NLT_Root.root\n#print axioms AspisR1.RPx_Deployed.deployed\n#print axioms NLT_Root.root\n'
+combined+='set_option pp.proofs false\n#check AspisR1.RPx_Deployed.deployed\n#check NLT_CompleteRoot.root\n#print axioms AspisR1.RPx_Deployed.deployed\n#print axioms NLT_CompleteRoot.root\n'
 (E/'NLT_COMBINED_IMPORT.lean').write_text(combined)
 roots=[]
 for m in modules:

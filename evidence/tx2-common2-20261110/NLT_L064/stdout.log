@@ -1,0 +1,10 @@
+theorem NLT_C04StopFacts.resume_scope : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    (↑pub).length ≤ 1880 →
+      ∀ (records : List (Occurrence H d hash)) (cut : NLT_C04Stop.Cut H),
+        NLT_C04Stop.At H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records cut →
+          ∀ r ∈ records, NLT_NativeFacts.ResumeScope r.entered r.input :=
+⋯
+'NLT_C04StopFacts.member' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_C04StopFacts.resume_scope' depends on axioms: [propext, Classical.choice, Quot.sound]

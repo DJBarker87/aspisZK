@@ -11,14 +11,14 @@ theorem not_merkle (H : Bytes → State) (e : Event) (different : rank e≠3) :
  NLP_C04Chronology.atEvent H e=[] := by
  cases e with
  | merkle pr p folded reply => exact False.elim (different rfl)
- | resume .. => rfl
- | powers .. => rfl
- | inactive .. => rfl
- | geometry .. => rfl
- | pending .. => rfl
- | query .. => rfl
- | flush .. => rfl
- | finish .. => rfl
+ | resume ck proof pub reply => rfl
+ | powers gamma reply => rfl
+ | inactive bytes reply => rfl
+ | geometry queries next reply => rfl
+ | pending weights reply => rfl
+ | query pr p a g geo pending reply => rfl
+ | flush pending weights reply => rfl
+ | finish v p a reply => rfl
 theorem empty (H : Bytes → State) (events : List Event) (none : ∀ e∈events,rank e≠3) :
  NLP_EffectOrder.expand (NLP_C04Chronology.atEvent H) events=[] := by
  induction events with
@@ -26,6 +26,7 @@ theorem empty (H : Bytes → State) (events : List Event) (none : ∀ e∈events
  | cons e rest ih =>
    change NLP_C04Chronology.atEvent H e++NLP_EffectOrder.expand (NLP_C04Chronology.atEvent H) rest=[]
    rw [not_merkle H e (none e List.mem_cons_self),ih (fun e member=>none e (List.mem_cons_of_mem _ member))]
+   rfl
 /-- The whole parent's C04 expansion is this SAME child plan. Native execution
 stops at its pending query; the ideal model suffix is not deleted or required
 to fail. -/
@@ -54,8 +55,9 @@ theorem installed (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest
    (NLB_Parent.finish (.Ok ())) d pub proof ck hash)).2.2.2
  have beforeEmpty:=empty H (records.map actual) (by
   intro e member
-  obtain ⟨r,member,rfl⟩:=List.mem_map.mp member
-  have h:=less r member
+  obtain ⟨r,inRecords,equal⟩:=List.mem_map.mp member
+  subst e
+  have h:=less r inRecords
   omega)
  have childPrefix:=(NLT_C04StopParent.installed H d pub proof ck hash len root0 records cut stopped).1
  dsimp only

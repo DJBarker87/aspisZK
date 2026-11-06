@@ -14,15 +14,19 @@ unsafe def main (args : List String) : IO UInt32 := do
        `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
        `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
     else if mode == "proof0" then
-      (#[`NLT_COMBINED_IMPORT], #[`NLT_AllocationInstalled.resume, `NLT_AllocationInstalled.pending, `NLT_C04Installed.at_event, `NLT_C04Installed.installed, `NLT_C04NativeInstalled.installed, `NLT_Chronology.prepend, `NLT_Chronology.native, `NLT_Chronology.installed, `NLT_CodecQuestions.resume, `NLT_CodecQuestions.powers, `NLT_CodecQuestions.inactive, `NLT_CodecQuestions.merkle])
+      (#[`NLT_COMBINED_IMPORT], #[`NLT_AllocationInstalled.resume, `NLT_AllocationInstalled.pending, `NLT_C04Installed.at_event, `NLT_C04Installed.installed, `NLT_C04NativeInstalled.installed, `NLT_C04StopChronology.not_merkle, `NLT_C04StopChronology.empty, `NLT_C04StopChronology.installed, `NLT_C04StopFacts.member, `NLT_C04StopFacts.resume_scope, `NLT_C04StopOrder.ordered, `NLT_C04StopParent.source_prefix])
     else if mode == "proof1" then
-      (#[`NLT_COMBINED_IMPORT], #[`NLT_CodecQuestions.geometry, `NLT_CodecQuestions.pending, `NLT_CodecQuestions.query, `NLT_CodecQuestions.flush, `NLT_CodecQuestions.finish, `NLT_Continuation.source, `NLT_EraseCompatible.erase, `NLT_FinishInstalled.installed, `NLT_FrameFromCuts.resume_rank, `NLT_FrameFromCuts.pending_rank, `NLT_FrameFromCuts.finish_rank, `NLT_FrameFromCuts.compatible])
+      (#[`NLT_COMBINED_IMPORT], #[`NLT_C04StopParent.installed, `NLT_C04StopPrefix.source, `NLT_C04StopPrefix.merkle_of_question, `NLT_C04StopReseed.forward, `NLT_Chronology.prepend, `NLT_Chronology.native, `NLT_Chronology.installed, `NLT_CodecQuestions.resume, `NLT_CodecQuestions.powers, `NLT_CodecQuestions.inactive, `NLT_CodecQuestions.merkle, `NLT_CodecQuestions.geometry])
     else if mode == "proof2" then
-      (#[`NLT_COMBINED_IMPORT], #[`NLT_Interpreted.step, `NLT_Continuation.no_invalid, `NLT_InvalidTransport.ordered, `NLT_InvalidTransport.reseed, `NLT_InvalidTransport.erase, `NLT_NativeFacts.member, `NLT_NativeFacts.resume_scope, `NLT_NativeInvocation.erase, `NLT_NativeOrder.rank_call, `NLT_NativeOrder.ordered, `NLT_NativeSource.source, `NLT_NativeWindows.interpreted])
+      (#[`NLT_COMBINED_IMPORT], #[`NLT_CodecQuestions.pending, `NLT_CodecQuestions.query, `NLT_CodecQuestions.flush, `NLT_CodecQuestions.finish, `NLT_CompleteRoot.root, `NLT_Continuation.source, `NLT_EraseCompatible.erase, `NLT_EvalOrder.ordered, `NLT_FinishInstalled.installed, `NLT_FrameFromCuts.resume_rank, `NLT_FrameFromCuts.pending_rank, `NLT_FrameFromCuts.finish_rank])
     else if mode == "proof3" then
-      (#[`NLT_COMBINED_IMPORT], #[`NLT_NativeWindows.rank_question, `NLT_NativeWindows.rank_window, `NLT_NoInvalid.source, `NLT_ParentInvocation.source, `NLT_QueryInstalled.installed, `NLT_QuestionStep.source, `NLT_RecordFrames.questions, `NLT_RecordFrames.parent, `NLT_ReplyInstalled.at_event, `NLT_ReplyInstalled.installed, `NLT_Reseed.source, `NLT_ReseedTransport.forward])
+      (#[`NLT_COMBINED_IMPORT], #[`NLT_FrameFromCuts.compatible, `NLT_Interpreted.step, `NLT_Continuation.no_invalid, `NLT_InvalidTransport.ordered, `NLT_InvalidTransport.reseed, `NLT_InvalidTransport.erase, `NLT_NativeFacts.member, `NLT_NativeFacts.resume_scope, `NLT_NativeInvocation.erase, `NLT_NativeOrder.rank_call, `NLT_NativeOrder.ordered, `NLT_NativeSource.source])
     else if mode == "proof4" then
-      (#[`NLT_COMBINED_IMPORT], #[`NLT_Root.root, `NLT_RuntimeDigest.resume_same, `NLT_RuntimeDigest.reply_same, `NLT_Select.unique, `NLT_SiteOrder.source, `NLT_Subcuts.erase, `NLB_Parent.native_fold, `NKU_ParentFold.source, `NKU_ParentFold.cohort, `NKU_ParentFold.clauses, `NLN_TX2_053.root, `AspisR1.RPx_Deployed.deployed])
+      (#[`NLT_COMBINED_IMPORT], #[`NLT_NativeWindows.interpreted, `NLT_NativeWindows.rank_question, `NLT_NativeWindows.rank_window, `NLT_NoInvalid.source, `NLT_ParentInvocation.source, `NLT_QueryInstalled.installed, `NLT_QuestionStep.source, `NLT_RecordFrames.questions, `NLT_RecordFrames.parent, `NLT_ReplyInstalled.at_event, `NLT_ReplyInstalled.installed, `NLT_Reseed.source])
+    else if mode == "proof5" then
+      (#[`NLT_COMBINED_IMPORT], #[`NLT_ReseedTransport.forward, `NLT_Root.root, `NLT_RuntimeDigest.resume_same, `NLT_RuntimeDigest.reply_same, `NLT_Select.unique, `NLT_SiteOrder.source, `NLT_Subcuts.erase, `NLB_Parent.native_fold, `NKU_ParentFold.source, `NKU_ParentFold.cohort, `NKU_ParentFold.clauses, `NLN_TX2_053.root])
+    else if mode == "proof6" then
+      (#[`NLT_COMBINED_IMPORT], #[`AspisR1.RPx_Deployed.deployed])
     else (#[], #[])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)

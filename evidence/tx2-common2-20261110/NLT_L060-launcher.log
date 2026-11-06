@@ -1,0 +1,44 @@
+{"attempt": "NLT_L060", "exit_status": 0, "wall_seconds": 29.835842474130914, "peak_rss_kib": "6403416", "swaps": "0", "print_axioms": ["'NLT_C04StopParent.source_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLT_C04StopParent.installed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLT_C04StopParent.source_prefix : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀ (records : List (Occurrence H d hash)) (cut : NLT_C04Stop.Cut H),
+      NLT_C04Stop.At H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records cut →
+        have f := NLT_FrameFromCuts.frame records;
+        ∃ reply suffix,
+          (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof ck
+                hash none).events =
+            List.map actual records ++ Event.merkle cut.proof cut.prepared cut.folded reply :: suffix :=
+⋯
+theorem NLT_C04Stop
+...
+
+      NLT_C04Stop.At H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records cut →
+        have f := NLT_FrameFromCuts.frame records;
+        ∃ reply suffix,
+          (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof ck
+                hash none).events =
+            List.map actual records ++ Event.merkle cut.proof cut.prepared cut.folded reply :: suffix :=
+⋯
+theorem NLT_C04StopParent.installed : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    NLP_InputDomain.Root0 ck proof →
+      ∀ (records : List (Occurrence H d hash)) (cut : NLT_C04Stop.Cut H),
+        NLT_C04Stop.At H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) records cut →
+          NLL_Prefix.At
+              (NLL_Parent.plan H cut.proof (NLP_RootCodec.parsed cut.proof (Port3_BatchStage.root1 cut.prepared))
+                cut.prepared.queries 1#usize (NLL_Parent.sites (NLL_BatchSource.roots cut.prepared cut.folded))
+                NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+              (cut.inside ++ cut.pending.answered) cut.pending.parts ∧
+            NLL_Prefix.At
+              (NLL_ObservedCalls.calls H cut.proof
+                  (NLP_RootCodec.parsed cut.proof (Port3_BatchStage.root1 cut.prepared)) cut.prepared.queries 1#usize
+                  (NLL_Parent.sites (NLL_BatchSource.roots cut.prepared cut.folded)) NKV_ParentSource.zeroI
+                  NKV_ParentSource.zeroV).1
+              (cut.inside ++ cut.pending.answered) cut.pending.parts :=
+⋯
+'NLT_C04StopParent.source_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_C04StopParent.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8c84160932074e42a02492b8aace148a.scope; invocation ID: 548ac858b61148018041a3c918e44e4e
