@@ -1,0 +1,10 @@
+fn require_unique_accounts(accounts: &[AccountInfo<'_>]) -> ProgramResult {
+    for left in 0..accounts.len() {
+        for right in left + 1..accounts.len() {
+            if accounts[left].key == accounts[right].key {
+                return Err(ProgramError::InvalidArgument);
+            }
+        }
+    }
+    Ok(())
+}

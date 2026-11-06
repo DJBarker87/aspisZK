@@ -1,4 +1,5 @@
 import NLF_ProgramFold
+import PCA_Errors
 set_option autoImplicit false
 namespace PCA
 abbrev Bytes := List UInt8
@@ -7,7 +8,7 @@ abbrev Digest := Vector UInt32 8
 abbrev ProgramError := UInt64
 inductive Outcome (α : Type) where
   | ok (value : α)
-  | error (code : ProgramError)
+  | error (code : Failure)
   | abort (reason : String)
 structure Meta where
   key : Key
@@ -74,6 +75,11 @@ structure Lane where
   master : Key
   laneId : UInt8
   tree : Tree
+structure PairWitness where
+  firstCommitment : Digest
+  secondOccupied : UInt32
+  secondCommitment : Digest
+  secondOccupancyInverse : UInt32
 structure Location where
   pageNumber : UInt64
   slot : UInt16

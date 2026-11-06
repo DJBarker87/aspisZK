@@ -10,8 +10,8 @@ inductive Call : Type → Type where
   | commitment (owner : Digest) (amount : UInt32) (asset : UInt32) (salt : Digest) : Call Digest
   | laneId (commitment : Digest) : Call UInt8
   | lane (program : Key) (master : Bytes) (laneId : UInt8) (account : Nat) : Call Lane
-  | singleOutput (commitment : Digest) : Call (Vector (UInt32 × Digest) 2)
-  | leafDigest (witness : Vector (UInt32 × Digest) 2) : Call Digest
+  | singleOutput (commitment : Digest) : Call (PairWitness)
+  | leafDigest (witness : PairWitness) : Call Digest
   | prepare (lane : Lane) (laneId : UInt8) (leaf : Digest) : Call (Append × Vector UInt8 768)
   | location (sequence : UInt64) : Call Location
   | empty (account : Nat) : Call Bool
@@ -41,8 +41,8 @@ inductive PCA_Event where
   | enter {α : Type} (site : Nat) (call : Call α) (before : PCA_State)
   | leave {α : Type} (site : Nat) (reply : Outcome α) (after : PCA_State)
   | branch (site : Nat) (taken : Bool)
-  | mapError (site : Nat) (fromCode toCode : ProgramError)
-  | propagate (site : Nat) (code : ProgramError)
+  | mapError (site : Nat) (fromCode toCode : Failure)
+  | propagate (site : Nat) (code : Failure)
   | token (event : NLF_ParentModel.Event)
   | copy (site : Nat) (guard : NLF_RefCell.Guard) (bytes : Bytes)
   | cpiBegin (invocation : Invocation)

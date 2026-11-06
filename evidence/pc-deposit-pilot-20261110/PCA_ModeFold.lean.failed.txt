@@ -1,0 +1,21 @@
+import PCA_Borrow
+set_option autoImplicit false
+namespace PCA
+open Transcription
+/-- Every mode branch carries the SAME state through its child calls.
+ChildPreserves is a still-undischarged intermediate obligation, not a row root. -/
+theorem selectMode_preserves (P : PCA_State → Prop) (s : PCA_State) (lane : Lane) (append : Append) :
+    Preserves P (selectMode s lane append) := by
+  unfold selectMode
+  repeat' (first
+    | apply bind_preserves
+    | apply call_preserves
+    | apply branch_preserves
+    | apply check_preserves
+    | apply account_preserves
+    | apply pure_preserves
+    | intro x
+    | split)
+
+#print axioms selectMode_preserves
+end PCA

@@ -1,0 +1,11 @@
+fn require_token_program_account(account: &AccountInfo<'_>) -> ProgramResult {
+    if account.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
+        || !account.executable
+        || account.is_signer
+        || account.is_writable
+        || !supported_program_loader(account.owner)
+    {
+        return Err(PoolV1ProgramError::InvalidTokenProgram.into());
+    }
+    Ok(())
+}

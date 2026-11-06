@@ -1,0 +1,19 @@
+import PCA_ModeFold
+set_option autoImplicit false
+namespace PCA
+open Transcription
+/-- Fresh creation can have arbitrary effects admitted by the child invariant;
+no CPI frame candidate is discharged by this fold. -/
+theorem preparePage_preserves (P : PCA_State → Prop) (s : PCA_State) (mode : Mode) :
+    Preserves P (preparePage s mode) := by
+  cases mode <;> unfold preparePage
+  all_goals repeat' (first
+    | apply bind_preserves
+    | apply call_preserves
+    | apply branch_preserves
+    | apply pure_preserves
+    | intro x
+    | split)
+
+#print axioms preparePage_preserves
+end PCA

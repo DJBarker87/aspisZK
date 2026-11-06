@@ -1,0 +1,54 @@
+fn create_or_allocate_pda_with_rent<'info, R: PoolCpiRuntimeV1>(
+    runtime: &mut R,
+    payer: &AccountInfo<'info>,
+    account: &AccountInfo<'info>,
+    system_program_account: &AccountInfo<'info>,
+    exact_bytes: usize,
+    owner: &Pubkey,
+    signer_seeds: &[&[u8]],
+    rent: &Rent,
+) -> ProgramResult {
+    require_payer_and_system_program(payer, system_program_account)?;
+    if account.owner != &system_program::id() || !account.data_is_empty() {
+        return Err(PoolV1ProgramError::InvalidFreshAccount.into());
+    }
+    let required_lamports = rent.minimum_balance(exact_bytes).max(1);
+    let infos = [
+        payer.clone(),
+        account.clone(),
+        system_program_account.clone(),
+    ];
+    let signer_seed_sets = [signer_seeds];
+    if account.lamports() == 0 {
+        runtime.invoke_signed(
+            &system_instruction::create_account(
+                payer.key,
+                account.key,
+                required_lamports,
+                exact_bytes as u64,
+                owner,
+            ),
+            &infos,
+            &signer_seed_sets,
+        )?;
+    } else {
+        let deficit = required_lamports.saturating_sub(account.lamports());
+        if deficit != 0 {
+            runtime.invoke(
+                &system_instruction::transfer(payer.key, account.key, deficit),
+                &infos,
+            )?;
+        }
+        runtime.invoke_signed(
+            &system_instruction::allocate(account.key, exact_bytes as u64),
+            &infos,
+            &signer_seed_sets,
+        )?;
+        runtime.invoke_signed(
+            &system_instruction::assign(account.key, owner),
+            &infos,
+            &signer_seed_sets,
+        )?;
+    }
+    Ok(())
+}

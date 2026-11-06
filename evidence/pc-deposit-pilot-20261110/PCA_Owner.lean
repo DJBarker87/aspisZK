@@ -21,7 +21,7 @@ def check (site : Nat) (condition : Bool) (error : ProgramError) : Plan Unit :=
 def branch (site : Nat) (condition : Bool) : Plan Bool :=
   ⟨fun _ s => ⟨s,[.branch site condition],.ok condition⟩⟩
 def call {α : Type} (site : Nat) (c : Call α)
-    (map : ProgramError → ProgramError := id) : Plan α := ⟨fun k s =>
+    (map : Failure → Failure := id) : Plan α := ⟨fun k s =>
   let r := k site c s
   let eventPrefix := [.enter site c s] ++ r.events
   let returning := eventPrefix ++ [.leave site r.reply r.state]
@@ -41,6 +41,13 @@ def acquire (site account : Nat) : Plan NLF_RefCell.Guard := ⟨fun _ s =>
   match r.2 with
   | .ok g => ⟨{s' with liveGuards := g :: s.liveGuards},[event],.ok g⟩
   | .error _ => ⟨s',[event,.propagate site borrowFailed],.error borrowFailed⟩⟩
+def readGuard (g : NLF_RefCell.Guard) : Plan Unit := ⟨fun _ s =>
+  let r := NLF_ParentModel.deref s.loans g
+  let state := {s with loans := r.1}
+  let events := [PCA_Event.token (.deref g r.2)]
+  match r.2 with
+  | .ok _ => ⟨state,events,.ok ()⟩
+  | .error _ => ⟨state,events,.abort "invalid live page guard"⟩⟩
 def copy (site : Nat) (g : NLF_RefCell.Guard) (bytes : Bytes) : Plan Unit := ⟨fun _ s =>
   let d := NLF_ParentModel.deref s.loans g
   let s' := {s with loans := d.1}
@@ -51,7 +58,7 @@ def copy (site : Nat) (g : NLF_RefCell.Guard) (bytes : Bytes) : Plan Unit := ⟨
       let payload := {old with bytes := bytes}
       let loans := {s'.loans with state := NLF_ViewLaws.write s'.loans.state g payload}
       ⟨{s' with loans := loans},events ++ [.copy site g bytes],.ok ()⟩
-    else ⟨s',events,.abort "copy_from_slice length mismatch"⟩⟩
+    else ⟨s',events ++ [.copy site g bytes],.abort "copy_from_slice length mismatch"⟩⟩
 end Plan
 
 def key (s : PCA_State) (a : Nat) : Bytes := (s.loans.state.accounts a).key
@@ -133,6 +140,7 @@ def deposit : Plan Unit := do
   Plan.call 1170 (.invoke transfer.instruction infos)
   Plan.call 1171 (.delta tokenAccounts transfer)
   Plan.copy 1173 laneGuard image.toList
+  Plan.readGuard pageGuard
   match mode with
   | .fresh .. => Plan.call 1175 (.writePage pageGuard (key s laneAccount) 0 0 [lane.tree.root,append.root])
   | .same header => Plan.call 1183 (.appendRoots pageGuard header [append.root])

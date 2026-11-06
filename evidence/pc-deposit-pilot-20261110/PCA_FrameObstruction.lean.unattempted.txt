@@ -1,0 +1,39 @@
+import PCA_CpiFrame
+import NLF_StateLaws
+set_option autoImplicit false
+namespace PCA
+/-- Abstract countermodel operation ONLY, never asserted to be a Solana CPI.
+Counter-ledger validity alone permits changing an account payload. -/
+def changedPayload (s : PCA_State) (a : Nat) (bytes : Bytes) : PCA_State :=
+  let cell := (s.loans.state.accounts a).data
+  let guard : NLF_RefCell.Guard := ⟨cell,0,.exclusive⟩
+  let payload := {(s.loans.state.cells cell).payload with bytes := bytes}
+  {s with loans := {s.loans with state := NLF_ViewLaws.write s.loans.state guard payload}}
+
+theorem changedPayload_invariant (s : PCA_State) (a : Nat) (bytes : Bytes)
+    (h : NLF_ParentModel.Invariant s.loans) :
+    NLF_ParentModel.Invariant (changedPayload s a bytes).loans :=
+  NLF_StateLaws.write_invariant s.loans _ _ h
+
+theorem changedPayload_bytes (s : PCA_State) (a : Nat) (bytes : Bytes) :
+    (view (changedPayload s a bytes) a).data = bytes := by
+  simp [changedPayload,view,NLF_ViewLaws.write,NLF_SdkModel.put]
+
+/-- Entry/counter facts do not supply the unpassed CPI view-frame. This is not
+native reachability, a protocol finding, or a transaction/exploit input. -/
+theorem counter_validity_is_not_cpi_frame (s : PCA_State) (a : Nat) (bytes : Bytes)
+    (infos : List Nat) (finalView : Nat → AccountView)
+    (h : NLF_ParentModel.Invariant s.loans) (bound : a < s.accountCount)
+    (separate : a ∉ infos) (changed : bytes ≠ (view s a).data) :
+    NLF_ParentModel.Invariant (changedPayload s a bytes).loans ∧
+    ¬ PCA_CpiFrameCandidate s (changedPayload s a bytes) infos finalView := by
+  refine ⟨changedPayload_invariant s a bytes h, ?_⟩
+  intro candidate
+  have equality := congrArg AccountView.data (candidate.unpassed a bound separate)
+  rw [changedPayload_bytes] at equality
+  exact changed equality
+
+#print axioms changedPayload_invariant
+#print axioms changedPayload_bytes
+#print axioms counter_validity_is_not_cpi_frame
+end PCA
