@@ -19,7 +19,9 @@ theorem e (r : verifier.Reader) (bound : r.at.val+32≤r.bytes.val.length) :
   {bytes:=b.to_slice,«at»:=0#usize} (by simpa using b.property.ge)
  have same : b'=b := by
   apply Subtype.ext
-  simpa only [List.drop_zero,List.take_of_length_le b.property.le] using contents'
+  change b'.val=(b.val.drop 0).take 32 at contents'
+  have length : b.val.length=32 := b.property
+  simpa only [List.drop_zero,List.take_of_length_le length.le] using contents'
  subst b'
  refine ⟨b,out,contents,cursor,backing,?_⟩
  rw [run,run']
@@ -39,7 +41,9 @@ theorem k (r : verifier.Reader) (bound : r.at.val+16≤r.bytes.val.length) :
   {bytes:=b.to_slice,«at»:=0#usize} (by simpa using b.property.ge)
  have same : b'=b := by
   apply Subtype.ext
-  simpa only [List.drop_zero,List.take_of_length_le b.property.le] using contents'
+  change b'.val=(b.val.drop 0).take 16 at contents'
+  have length : b.val.length=16 := b.property
+  simpa only [List.drop_zero,List.take_of_length_le length.le] using contents'
  subst b'
  refine ⟨b,out,contents,cursor,backing,?_⟩
  rw [run,run']

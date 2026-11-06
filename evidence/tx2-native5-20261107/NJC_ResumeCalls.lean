@@ -30,10 +30,10 @@ theorem clause (reserved : Bool) {H : Type} (d : VTop_Stages.aspis_core.digest.D
  | S2 => exact NIY_ResumePort.source reserved (digest d) ck proof pub hash
 
 def literal (base : VTop_Stages.Ops) (reserved : Bool) : VTop_Stages.Ops :=
- {NJC_ClosedCalls.literal base with op18:=@reference reserved}
+ {NJC_ClosedCalls.literal base with op18:=fun d ck proof pub v hash=>NHT_ResultPort.action (reference reserved d ck proof pub v hash)}
 
 def model (base : VTop_Stages.Ops) (reserved : Bool) : VTop_Stages.Ops :=
- {NJC_ClosedCalls.cohort base with op18:=@cohort reserved}
+ {NJC_ClosedCalls.cohort base with op18:=fun d ck proof pub v hash=>NHT_ResultPort.action (cohort reserved d ck proof pub v hash)}
 
 theorem installed (base : VTop_Stages.Ops) (reserved : Bool) :
  literal base reserved=model base reserved := by

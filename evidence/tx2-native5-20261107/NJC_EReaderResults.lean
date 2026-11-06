@@ -21,14 +21,14 @@ theorem decodeE (b : Array U8 32#usize) :
    if CanonicalWide (eWords (word32 b.to_slice b.property)) then
     ok (some (eWords (word32 b.to_slice b.property))) else ok none := by
   apply e_shape b.to_slice b.property (word32 b.to_slice b.property)
-  · simpa [word32] using word_total b.to_slice 0#usize (by change 0+4≤b.val.length;rw [b.property];omega)
-  · simpa [word32] using word_total b.to_slice 4#usize (by change 4+4≤b.val.length;rw [b.property];omega)
-  · simpa [word32] using word_total b.to_slice 8#usize (by change 8+4≤b.val.length;rw [b.property];omega)
-  · simpa [word32] using word_total b.to_slice 12#usize (by change 12+4≤b.val.length;rw [b.property];omega)
-  · simpa [word32] using word_total b.to_slice 16#usize (by change 16+4≤b.val.length;rw [b.property];omega)
-  · simpa [word32] using word_total b.to_slice 20#usize (by change 20+4≤b.val.length;rw [b.property];omega)
-  · simpa [word32] using word_total b.to_slice 24#usize (by change 24+4≤b.val.length;rw [b.property];omega)
-  · simpa [word32] using word_total b.to_slice 28#usize (by change 28+4≤b.val.length;rw [b.property];omega)
+  · simpa [word32] using word_total b.to_slice 0#usize (by change 0+4≤b.val.length;rw [b.property];change _≤32;omega)
+  · simpa [word32] using word_total b.to_slice 4#usize (by change 4+4≤b.val.length;rw [b.property];change _≤32;omega)
+  · simpa [word32] using word_total b.to_slice 8#usize (by change 8+4≤b.val.length;rw [b.property];change _≤32;omega)
+  · simpa [word32] using word_total b.to_slice 12#usize (by change 12+4≤b.val.length;rw [b.property];change _≤32;omega)
+  · simpa [word32] using word_total b.to_slice 16#usize (by change 16+4≤b.val.length;rw [b.property];change _≤32;omega)
+  · simpa [word32] using word_total b.to_slice 20#usize (by change 20+4≤b.val.length;rw [b.property];change _≤32;omega)
+  · simpa [word32] using word_total b.to_slice 24#usize (by change 24+4≤b.val.length;rw [b.property];change _≤32;omega)
+  · simpa [word32] using word_total b.to_slice 28#usize (by change 28+4≤b.val.length;rw [b.property];change _≤32;omega)
  rw [source]
  dsimp only [naturalE]
  split_ifs <;> rfl
