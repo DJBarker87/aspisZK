@@ -1,0 +1,24 @@
+use solana_program::{account_info::AccountInfo, pubkey::Pubkey, program_error::ProgramError};
+use core::cell::{Ref,RefMut};
+// Contract shape required by the account-acquisition stage cut. Calls the
+// deployed SDK body unchanged. These wrappers are not SDK source contracts.
+#[kani::ensures(|r| r.is_ok())]
+fn shared<'a,'b>(a:&'a AccountInfo<'b>)->Result<Ref<'a,&'a mut [u8]>,ProgramError>{a.try_borrow_data()}
+#[kani::ensures(|r| r.is_err())]
+fn shared_inverted<'a,'b>(a:&'a AccountInfo<'b>)->Result<Ref<'a,&'a mut [u8]>,ProgramError>{a.try_borrow_data()}
+#[kani::ensures(|r| r.is_ok())]
+fn exclusive<'a,'b>(a:&'a AccountInfo<'b>)->Result<RefMut<'a,&'b mut [u8]>,ProgramError>{a.try_borrow_mut_data()}
+#[kani::ensures(|r| r.is_err())]
+fn exclusive_inverted<'a,'b>(a:&'a AccountInfo<'b>)->Result<RefMut<'a,&'b mut [u8]>,ProgramError>{a.try_borrow_mut_data()}
+macro_rules! account {($f:ident)=>{{
+ let key=Pubkey::default();let owner=Pubkey::default();
+ let mut lamports:u64=kani::any();let mut bytes=[kani::any::<u8>()];
+ let a=AccountInfo::new(&key,false,false,&mut lamports,&mut bytes,&owner,false,0);
+ $f(&a);
+}}}
+#[kani::proof_for_contract(shared)] fn shared_contract(){account!(shared);}
+#[kani::proof_for_contract(shared_inverted)] fn shared_negative(){account!(shared_inverted);}
+#[kani::proof_for_contract(exclusive)] fn exclusive_contract(){account!(exclusive);}
+#[kani::proof_for_contract(exclusive_inverted)] fn exclusive_negative(){account!(exclusive_inverted);}
+#[kani::proof] #[kani::stub_verified(shared)] fn shared_callsite(){account!(shared);}
+#[kani::proof] #[kani::stub_verified(exclusive)] fn exclusive_callsite(){account!(exclusive);}

@@ -4,10 +4,8 @@ import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def run(a,kind,target,command=None,extra=None,env_extra=None):
     assert a.startswith('NJH_L') and 1<=int(a[-3:])<=60 and not (E/a).exists()
-    env=json.loads((E.parent/'slice-d-entry7-20261107/NIV_L027.json').read_text())['env']
-    env['LEAN_PATH']=B+'/NJH_seed:'+B+'/NJH_objects:/home/dombarker/project-offloads/codex-cx-slice-d-entry-cache-20261104/NJD_seed_20261107:'+':'.join(p for p in env['LEAN_PATH'].split(':') if not p.endswith('/NIV_objects'))
-    env['LEAN_PATH']=':'.join(dict.fromkeys([B+'/NJH_objects',B+'/NJH_seed','/home/dombarker/project-offloads/codex-cx-ledger8-cache-20261104/NIU_20261107/NIU_exports_20261107']+json.loads((E.parent/'ledger13-20261107/NIU_PATHS.json').read_text())+env['LEAN_PATH'].split(':')))
-    env['LEAN_PATH']=B+'/NJH_seed:'+env['LEAN_PATH']
+    env=json.loads((E.parent/'slice-d-entry8-20261107/NJD_L033.json').read_text())['env']
+    env['LEAN_PATH']=':'.join(dict.fromkeys([B+'/NJH_objects',B+'/NJH_seed']+env['LEAN_PATH'].split(':')))
     env['TMPDIR']=B+'/NJH_tmp'
     env['CARGO_TARGET_DIR']=B+'/NJH_target'
     env['CARGO_NET_OFFLINE']='true'
