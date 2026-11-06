@@ -1,0 +1,23 @@
+[
+  {
+    "function": "secure_circle_point_from_parameter",
+    "frozen_body": "pub fn secure_circle_point_from_parameter(\n    parameter: QM31,\n) -> Result<SecureCirclePoint, CirclePointError> {\n    let square = parameter.square();\n    let inverse_denominator = QM31::ONE\n        .add(square)\n        .try_inv()\n        .ok_or(CirclePointError::SingularParameter)?;\n    Ok(SecureCirclePoint {\n        x: QM31::ONE.sub(square).mul(inverse_denominator),\n        y: parameter.add(parameter).mul(inverse_denominator),\n    })\n}",
+    "cut_body": "pub fn secure_circle_point_from_parameter(\n    parameter: QM31, l: &mut Log,\n) -> Result<SecureCirclePoint, CirclePointError> {\n    let square = square(l,parameter);\n    let denominator = add(l,QM31::ONE,square);\n    let inverse_denominator = inverse(l,denominator)\n        .ok_or(CirclePointError::SingularParameter)?;\n    Ok(SecureCirclePoint {\n        x: { let n=sub(l,QM31::ONE,square); product(l,n,inverse_denominator) },\n        y: { let n=add(l,parameter,parameter); product(l,n,inverse_denominator) },\n    })\n}",
+    "frozen_sha256": "5547413c54cb2a7ee857fc93dbc0d9a7cb0fd0ffa1b8d33018051a2058391bf9",
+    "cut_sha256": "2a11624e88d54a983b71dfab211c00cc532b32f5bba5e047949d8cf208723494"
+  },
+  {
+    "function": "secure_ood_circle_point_from_parameter",
+    "frozen_body": "pub fn secure_ood_circle_point_from_parameter(\n    parameter: QM31,\n) -> Result<SecureCirclePoint, CirclePointError> {\n    // Check the singularity first so `t = \u00b1i` has the precise algebraic error\n    // even though those two roots also lie in CM31.\n    let point = secure_circle_point_from_parameter(parameter)?;\n    if parameter.c1 == CM31::ZERO {\n        return Err(CirclePointError::ParameterInCm31Subfield);\n    }\n    Ok(point)\n}",
+    "cut_body": "pub fn secure_ood_circle_point_from_parameter(\n    parameter: QM31, l: &mut Child,\n) -> Result<SecureCirclePoint, CirclePointError> {\n    // Check the singularity first so `t = \u00b1i` has the precise algebraic error\n    // even though those two roots also lie in CM31.\n    let point = child(parameter,l)?;\n    if parameter.c1 == CM31::ZERO {\n        return Err(CirclePointError::ParameterInCm31Subfield);\n    }\n    Ok(point)\n}",
+    "frozen_sha256": "87a0fa38b7b73999c24f8ea44170fb2f55609dfbcb23fa28884f3fc6af5fd38f",
+    "cut_sha256": "3c68b009464330e4c9651d588b8b6e0ba2f10e16b57dcbf2063a90188340f446"
+  },
+  {
+    "function": "circle_fallback_point",
+    "frozen_body": "pub fn circle_fallback_point(sample: usize) -> SecureCirclePoint {\n    let parameter = CIRCLE_FALLBACK_PARAMETERS[sample % 2];\n    match secure_ood_circle_point_from_parameter(parameter) {\n        Ok(point) => point,\n        // Unreachable: `c1 = 1 \u2260 0` for both parameters.\n        Err(_) => SecureCirclePoint {\n            x: QM31::ONE,\n            y: QM31::ZERO,\n        },\n    }\n}",
+    "cut_body": "pub fn circle_fallback_point(sample: usize,l: &mut Child) -> SecureCirclePoint {\n    let parameter = CIRCLE_FALLBACK_PARAMETERS[sample % 2];\n    match child(parameter,l) {\n        Ok(point) => point,\n        // Unreachable: `c1 = 1 \u2260 0` for both parameters.\n        Err(_) => SecureCirclePoint {\n            x: QM31::ONE,\n            y: QM31::ZERO,\n        },\n    }\n}",
+    "frozen_sha256": "c78cd2d041f649a4d646e4c7b33ce9b24703578abbd96c5bcca242998b8b8ac3",
+    "cut_sha256": "3f9dbfd070eb7a562f0d9a4cf4a0a38407e679dfb211bccdaef5654ed1b55098"
+  }
+]

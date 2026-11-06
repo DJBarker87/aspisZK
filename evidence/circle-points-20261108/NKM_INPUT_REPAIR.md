@@ -1,0 +1,2 @@
+NKM_E001 stopped before Charon: own adapted validator looked for optional aspis-z4b-probe in the core manifest. The dependency belongs to the original verifier manifest. Restored that unchanged disabled-dependency check; graph validation remains equally strict. E002 is the corrected input. E001 has zero Charon/Aeneas launches, no proof result.
+NKM_L003 elaborated generated Types but could not write its nested output directory. Own client now creates the module output parent; L006 has changed launcher inputs. No theorem/source error or proof credit from L003.
