@@ -6,16 +6,20 @@ T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 proof='/home/dombarker/project-offloads/codex-cx-tx2-decoders2-20261107/NJQ_native/NJQ_RetainedProofDriver'
 proofhash='82898d45b249439ff7c1c6ed03b4c5c49d72888643aadc82896987c668613c76'
 result={}
-result['combined']=run('NKF_L024','lean','NKF_COMBINED_IMPORT')['exit_status']
-result['scan_compile']=run('NKF_L025','lean','NKF_ScanDriver',extra={'NKF_native/.keep':'owned optimized audit outputs\n'})['exit_status']
+def completed(a,target):
+ rc=json.loads((E/a/'receipt.json').read_text())
+ assert rc['exit_status']==0 and sha((E/(target+'.lean')).read_bytes()) in rc['source_hashes'].values()
+ return rc['exit_status']
+result['combined']=completed('NKF_L024','NKF_COMBINED_IMPORT')
+result['scan_compile']=completed('NKF_L025','NKF_ScanDriver')
 if result['scan_compile']==0:
  r=ssh('cat '+B+'/NKF_native/NKF_ScanDriver.c');assert r.returncode==0
  files={'NKF_native/NKF_ScanDriver.c':r.stdout}
  # Retrieve immutable predecessor C inputs from the committed SHA corpus.
- q=E.parent/'tx2-decoders2-20261108';idx=json.loads((q/'NJQ_INPUTS.json').read_text())
+ q='evidence/tx2-decoders2-20261108';get=lambda n:subprocess.check_output(['git','show','HEAD:'+q+'/'+n]);idx=json.loads(get('NJQ_INPUTS.json'))
  for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
   h=idx['attempts']['NJQ_L070']['NJQ_native/'+n]
-  raw=lzma.decompress((q/idx['objects'][h]['path']).read_bytes());assert sha(raw)==h
+  raw=lzma.decompress(get(idx['objects'][h]['path']));assert sha(raw)==h
   files['NKF_native/'+n]=raw.decode()
  result['scan_link']=run('NKF_L026','link','NKF_ScanDriver',[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NKF_native/NKF_ScanDriver',*files],files)['exit_status']
 else:result['scan_link']='BLOCKED_COMPILE'
