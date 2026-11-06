@@ -20,9 +20,9 @@ unsafe def main (args : List String) : IO UInt32 := do
     else if mode == "proof2" then
       (#[`NJC_COMBINED_IMPORT], #[`NJC_ValidatePort.source, `NJC_ValidatePort.frame, `NJC_ValidateCalls.clause, `NJC_ValidateCalls.reference, `NJC_ValidateCalls.source, `NJC_FilledClause.zero, `NJC_FilledClause.source, `NJC_RawPort.transport, `NJC_RawPort.bounded, `NJC_ScanPartition.thirty, `NJC_ScanPartition.blocks, `NJC_ScanPartition.opening, `NJC_ScanViews.query, `NJC_ScanViews.subwindow, `NJC_ScanViews.final])
     else if mode == "proof3" then
-      (#[`NJC_COMBINED_IMPORT], #[`NJC_ResumeCalls.clause, `NJC_ResumeCalls.installed, `NJC_ResumeCalls.parent, `NJC_RawWindows.k, `NJC_RawWindows.e, `NJC_OrderedCalls.mark, `NJC_OrderedCalls.powers, `NJC_OrderedCalls.installed, `NJC_OrderedCalls.parent, `NJC_OptionClause.source, `NJC_OptionClause.frame, `NJC_ValidateResult.model, `NJC_ValidateResult.source, `NJC_CopyFrame.window, `NJC_CopyFrame.frame])
+      (#[`NJC_COMBINED_IMPORT], #[`NJC_RawWindows.k, `NJC_RawWindows.e, `NJC_OrderedCalls.mark, `NJC_OrderedCalls.powers, `NJC_OrderedCalls.installed, `NJC_OrderedCalls.parent, `NJC_OptionClause.source, `NJC_OptionClause.frame, `NJC_ValidateResult.model, `NJC_ValidateResult.source, `NJC_CopyFrame.window, `NJC_CopyFrame.frame, `NJC_CopyFrame.compose, `NJC_ConcreteUnwrap.source, `NJC_ConcreteUnwrap.bounded])
     else if mode == "proof4" then
-      (#[`NJC_COMBINED_IMPORT], #[`NJC_CopyFrame.compose, `AspisR1.RPx_Deployed.deployed])
+      (#[`NJC_COMBINED_IMPORT], #[`NJC_ConcreteUnwrap.clause, `NJC_RawCalls.reference, `NJC_RawCalls.source, `NJC_ResumeCalls.clause, `NJC_ResumeCalls.installed, `NJC_ResumeCalls.parent, `AspisR1.RPx_Deployed.deployed])
     else (#[], #[])
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)

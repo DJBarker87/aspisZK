@@ -19,12 +19,14 @@ import NJC_ReaderEmission
 import NJC_RawPort
 import NJC_ScanPartition
 import NJC_ScanViews
-import NJC_ResumeCalls
 import NJC_RawWindows
 import NJC_OrderedCalls
 import NJC_OptionClause
 import NJC_ValidateResult
 import NJC_CopyFrame
+import NJC_ConcreteUnwrap
+import NJC_RawCalls
+import NJC_ResumeCalls
 
 #check NJC_ClosedCalls.inactive_clause
 #print axioms NJC_ClosedCalls.inactive_clause
@@ -116,12 +118,6 @@ import NJC_CopyFrame
 #print axioms NJC_ScanViews.subwindow
 #check NJC_ScanViews.final
 #print axioms NJC_ScanViews.final
-#check NJC_ResumeCalls.clause
-#print axioms NJC_ResumeCalls.clause
-#check NJC_ResumeCalls.installed
-#print axioms NJC_ResumeCalls.installed
-#check NJC_ResumeCalls.parent
-#print axioms NJC_ResumeCalls.parent
 #check NJC_RawWindows.k
 #print axioms NJC_RawWindows.k
 #check NJC_RawWindows.e
@@ -148,5 +144,21 @@ import NJC_CopyFrame
 #print axioms NJC_CopyFrame.frame
 #check NJC_CopyFrame.compose
 #print axioms NJC_CopyFrame.compose
+#check NJC_ConcreteUnwrap.source
+#print axioms NJC_ConcreteUnwrap.source
+#check NJC_ConcreteUnwrap.bounded
+#print axioms NJC_ConcreteUnwrap.bounded
+#check NJC_ConcreteUnwrap.clause
+#print axioms NJC_ConcreteUnwrap.clause
+#check NJC_RawCalls.reference
+#print axioms NJC_RawCalls.reference
+#check NJC_RawCalls.source
+#print axioms NJC_RawCalls.source
+#check NJC_ResumeCalls.clause
+#print axioms NJC_ResumeCalls.clause
+#check NJC_ResumeCalls.installed
+#print axioms NJC_ResumeCalls.installed
+#check NJC_ResumeCalls.parent
+#print axioms NJC_ResumeCalls.parent
 #check AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.RPx_Deployed.deployed
