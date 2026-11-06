@@ -1,0 +1,57 @@
+{"attempt": "NKJ_K068", "exit_status": 1, "wall_seconds": 5.204104647040367, "peak_rss_kib": "588432", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-field4-20261108/NKJ_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, 
+...
+me
+  --> crates/aspis-core/src/field/NKJ_reference.rs:11:8
+   |
+11 | pub fn NKJ_accumulate(s:[[u64;3];3],l:[u32;4],r:[u32;4])->[[u64;3];3] {
+   |        ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nkj_accumulate`
+
+warning: function `NKJ_words` should have a snake case name
+  --> crates/aspis-core/src/field/NKJ_reference.rs:15:4
+   |
+15 | fn NKJ_words(q:QM31)->[u32;4] {[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+   |    ^^^^^^^^^ help: convert the identifier to snake case: `nkj_words`
+
+warning: function `NKJ_small2` should have a snake case name
+  --> crates/aspis-core/src/field/NKJ_reference.rs:16:8
+   |
+16 | pub fn NKJ_small2(l:[QM31;2],r:[QM31;2])->QM31 {
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `nkj_small2`
+
+warning: function `NKJ_small3` should have a snake case name
+  --> crates/aspis-core/src/field/NKJ_reference.rs:21:8
+   |
+21 | pub fn NKJ_small3(l:[QM31;3],r:[QM31;3])->QM31 {
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `nkj_small3`
+
+warning: function `NKJ_small4` should have a snake case name
+  --> crates/aspis-core/src/field/NKJ_reference.rs:27:8
+   |
+27 | pub fn NKJ_small4(l:[QM31;4],r:[QM31;4])->QM31 {
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `nkj_small4`
+
+    Finished `dev` profile [optimized] target(s) in 4.02s
+Checking harness field::NKJ_segments::NKJ_range_unimplied...
+
+VERIFICATION RESULT:
+ ** 1 of 10 failed
+Failed Checks: assertion failed: o[0] == s[0]
+ File: "crates/aspis-core/src/field/NKJ_segments.rs", line 141, in field::NKJ_segments::NKJ_range_unimplied
+
+VERIFICATION:- FAILED
+Verification Time: 0.030079309s
+
+Manual Harness Summary:
+Verification failed for - field::NKJ_segments::NKJ_range_unimplied
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r90ea5274995944a1910260026a14a232.scope; invocation ID: 0b00d3530bae416ea47d4e6134454195

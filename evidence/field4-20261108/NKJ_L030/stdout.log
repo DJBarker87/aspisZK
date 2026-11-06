@@ -1,0 +1,40 @@
+NKJ_Cohort.lean:28:22: error: failed to synthesize
+  Decidable (Canon zero)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NKJ_Cohort.lean:27:7: error: unsolved goals
+case nil
+domain : ∀ x ∈ [], Canon x.1 ∧ Canon x.2
+⊢ { re := { re := 0, im := 0 }, im := { re := 0, im := 0 } } = 0
+NKJ_Cohort.lean:36:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1.ExtractedMaskQM31Exact.decode out
+in the target expression
+  decode out = NGA_SumAlgebra.sumProducts (x :: xs)
+
+case cons
+x : Input
+xs : List Input
+ih : (∀ x ∈ xs, Canon x.1 ∧ Canon x.2) → ∃ out, run xs = ok out ∧ Canon out ∧ decode out = NGA_SumAlgebra.sumProducts xs
+domain : ∀ x_1 ∈ x :: xs, Canon x_1.1 ∧ Canon x_1.2
+hl : Canon x.1
+hr : Canon x.2
+p : AspisR1.ExtractedMaskQM31Exact.CurrentQM
+hp : field.QM31.mul x.1 x.2 = ok p
+cp : AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM p
+vp :
+  AspisR1.ExtractedMaskQM31Exact.decode p =
+    AspisR1.ExtractedMaskQM31Exact.decode x.1 * AspisR1.ExtractedMaskQM31Exact.decode x.2
+tail : Q
+ht : run xs = ok tail
+ct : Canon tail
+vt : decode tail = NGA_SumAlgebra.sumProducts xs
+out : AspisR1.ExtractedMaskQM31Exact.CurrentQM
+ho : field.QM31.add p tail = ok out
+co : AspisR1.ExtractedMaskQM31Exact.CurrentCanonicalQM out
+vo :
+  AspisR1.ExtractedMaskQM31Exact.decode out =
+    AspisR1.ExtractedMaskQM31Exact.decode p + AspisR1.ExtractedMaskQM31Exact.decode tail
+⊢ decode out = NGA_SumAlgebra.sumProducts (x :: xs)
+'NKJ_Cohort.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NKJ_Cohort.injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKJ_Cohort.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

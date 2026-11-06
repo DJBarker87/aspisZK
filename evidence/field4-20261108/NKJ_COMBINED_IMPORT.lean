@@ -17,6 +17,7 @@ import NKJ_NativeSmall
 import NKJ_Accumulate
 import NKJ_Wrap32
 import NKJ_Cache
+import NKJ_Cohort
 
 #print axioms NKJ_Extracted.roundtrip
 #print axioms NKJ_Small2.literal
@@ -55,3 +56,6 @@ import NKJ_Cache
 #print axioms NKJ_Wrap32.add
 #print axioms NKJ_Cache.source
 #print axioms AspisR1.RPx_Deployed.deployed
+#print axioms NKJ_Cohort.value
+#print axioms NKJ_Cohort.injective
+#print axioms NKJ_Cohort.source
