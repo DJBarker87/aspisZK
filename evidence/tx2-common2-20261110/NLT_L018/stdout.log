@@ -1,0 +1,15 @@
+theorem NLT_NativeOrder.rank_call : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {B : Type} (codec : Codec Event B) (seed : Result B) (record : Occurrence H d hash),
+  NLT_NativeWindows.question record.entered = NLT_NativeWindows.question (codec.encode seed) →
+    rank (actual record) = rank (codec.encode seed) :=
+⋯
+theorem NLT_NativeOrder.ordered : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (p : Program Event A) (result : Result A) (records : List (Occurrence H d hash)),
+  Invocation H d hash p result records →
+    ∀ (n : ℕ),
+      Shape n p →
+        (∀ record ∈ records, n ≤ rank (actual record)) ∧
+          List.Pairwise (fun left right => rank (actual left) < rank (actual right)) records :=
+⋯
+'NLT_NativeOrder.rank_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_NativeOrder.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]

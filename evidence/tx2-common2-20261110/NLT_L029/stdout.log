@@ -1,0 +1,24 @@
+NLT_generated/NLT_NativeFacts.lean:38:38: error(lean.unknownIdentifier): Unknown identifier `ck`
+NLT_generated/NLT_NativeFacts.lean:38:41: error(lean.unknownIdentifier): Unknown identifier `proof`
+NLT_generated/NLT_NativeFacts.lean:38:47: error(lean.unknownIdentifier): Unknown identifier `pub`
+theorem NLT_NativeFacts.member : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀ (result : R Unit) (records : List (Occurrence H d hash)),
+      Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records →
+        ∀ r ∈ records,
+          have f := NLT_FrameFromCuts.frame records;
+          actual r ∈
+            (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof ck
+                hash none).events :=
+⋯
+theorem NLT_NativeFacts.resume_scope : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    (↑pub).length ≤ 1880 →
+      ∀ (result : R Unit) (records : List (Occurrence H d hash)),
+        Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records →
+          ∀ r ∈ records, ResumeScope r.entered r.input :=
+⋯
+'NLT_NativeFacts.member' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_NativeFacts.resume_scope' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,51 @@
+{"attempt": "NLT_L028", "exit_status": 1, "wall_seconds": 22.84979406790808, "peak_rss_kib": "6383136", "swaps": "0", "print_axioms": ["'NLT_NativeFacts.member' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NLT_NativeFacts.resume_scope' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLT_generated/NLT_NativeFacts.lean:16:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (run (NLT_FrameFromCuts.frame records).resume (NLT_FrameFromCuts.frame records).pending
+      (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish (NLT_FrameFromCuts.frame records).finish) d pub proof
+      ck hash none).events
+in the target expression
+  let f := NLT_FrameFromCuts.frame records;
+  actual r ∈
+    (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof ck hash
+        none).events
+
+H : Bytes → State
+X : Type
+d : aspis_core.digest.Digest32 X
+pub proof ck : Slice U8
+hash : X
+len : (↑proof).length = 57607
+res
+...
+un {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof ck hash
+          none).events
+⊢ let f := NLT_FrameFromCuts.frame records;
+  actual r ∈
+    (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof ck hash
+        none).events
+NLT_generated/NLT_NativeFacts.lean:37:38: error(lean.unknownIdentifier): Unknown identifier `ck`
+NLT_generated/NLT_NativeFacts.lean:37:41: error(lean.unknownIdentifier): Unknown identifier `proof`
+NLT_generated/NLT_NativeFacts.lean:37:47: error(lean.unknownIdentifier): Unknown identifier `pub`
+theorem NLT_NativeFacts.member : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀ (result : R Unit) (records : List (Occurrence H d hash)),
+      Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records →
+        ∀ r ∈ records,
+          have f := NLT_FrameFromCuts.frame records;
+          actual r ∈
+            (run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H) (NLB_Parent.finish f.finish) d pub proof ck
+                hash none).events :=
+⋯
+theorem NLT_NativeFacts.resume_scope : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    (↑pub).length ≤ 1880 →
+      ∀ (result : R Unit) (records : List (Occurrence H d hash)),
+        Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records →
+          ∀ r ∈ records, ResumeScope r.entered r.input :=
+⋯
+'NLT_NativeFacts.member' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NLT_NativeFacts.resume_scope' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7ede5aba40ea4cd6b7664b2149ef3d69.scope; invocation ID: cf2b216ee7394c178fa05df07b4e28ea

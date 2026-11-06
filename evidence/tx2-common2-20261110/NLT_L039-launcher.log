@@ -1,0 +1,29 @@
+{"attempt": "NLT_L039", "exit_status": 0, "wall_seconds": 14.587778261862695, "peak_rss_kib": "6422292", "swaps": "0", "print_axioms": ["'NLT_AllocationInstalled.resume' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLT_AllocationInstalled.pending' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLT_generated/NLT_AllocationInstalled.lean:47:8: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+theorem NLT_AllocationInstalled.resume : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X) (hash : X)
+  (r : Occurrence H d hash), ResumeLaw d hash r.entered r.input :=
+⋯
+theorem NLT_AllocationInstalled.pending : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀ (result : R Unit) (records : List (Occurrence H d h
+...
+NLT_generated/NLT_AllocationInstalled.lean:47:8: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+theorem NLT_AllocationInstalled.resume : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X) (hash : X)
+  (r : Occurrence H d hash), ResumeLaw d hash r.entered r.input :=
+⋯
+theorem NLT_AllocationInstalled.pending : ∀ (H : Bytes → State) {X : Type} (d : aspis_core.digest.Digest32 X)
+  (pub proof ck : Slice U8) (hash : X),
+  (↑proof).length = 57607 →
+    ∀ (result : R Unit) (records : List (Occurrence H d hash)),
+      Invocation H d hash (NLT_NativeSource.skeleton H d pub proof ck hash) result records →
+        ∀ r ∈ records, PendingLaw r.entered r.input :=
+⋯
+'NLT_AllocationInstalled.resume' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_AllocationInstalled.pending' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r8e4f8b1e6921400db797e461f6ec49c3.scope; invocation ID: 8415821dab294c069b567aab9960e27f

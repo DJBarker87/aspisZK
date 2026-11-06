@@ -1,0 +1,31 @@
+{"attempt": "NLT_L018", "exit_status": 0, "wall_seconds": 16.25538958213292, "peak_rss_kib": "6413640", "swaps": "0", "print_axioms": ["'NLT_NativeOrder.rank_call' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLT_NativeOrder.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLT_NativeOrder.rank_call : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {B : Type} (codec : Codec Event B) (seed : Result B) (record : Occurrence H d hash),
+  NLT_NativeWindows.question record.entered = NLT_NativeWindows.question (codec.encode seed) →
+    rank (actual record) = rank (codec.encode seed) :=
+⋯
+theorem NLT_NativeOrder.ordered : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (p : Program Event A) (result : Result A) (records : List (Occurrence H d hash)),
+  Invocation H d hash p result records →
+    ∀ (n : ℕ),
+      Shape n p →
+        (∀ record ∈ records, n ≤ rank (actual record)) ∧
+       
+...
+theorem NLT_NativeOrder.rank_call : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {B : Type} (codec : Codec Event B) (seed : Result B) (record : Occurrence H d hash),
+  NLT_NativeWindows.question record.entered = NLT_NativeWindows.question (codec.encode seed) →
+    rank (actual record) = rank (codec.encode seed) :=
+⋯
+theorem NLT_NativeOrder.ordered : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (p : Program Event A) (result : Result A) (records : List (Occurrence H d hash)),
+  Invocation H d hash p result records →
+    ∀ (n : ℕ),
+      Shape n p →
+        (∀ record ∈ records, n ≤ rank (actual record)) ∧
+          List.Pairwise (fun left right => rank (actual left) < rank (actual right)) records :=
+⋯
+'NLT_NativeOrder.rank_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLT_NativeOrder.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re08509c39c9a4bf99fc33a3bac099c28.scope; invocation ID: f2a5d0bea6a54e489df94208df7ad076

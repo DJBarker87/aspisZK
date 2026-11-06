@@ -1,0 +1,8 @@
+theorem NLT_EraseCompatible.erase : ∀ {H : Bytes → State} {X : Type} {d : aspis_core.digest.Digest32 X} {hash : X}
+  {A : Type} (f : NLT_Interpreted.Uninstalled) (p : Program Event A) (result : Result A)
+  (records : List (Occurrence H d hash)),
+  Invocation H d hash p result records →
+    (∀ r ∈ records, NLT_NativeWindows.Compatible f r.entered r.input) →
+      NLT_Continuation.Invocation (Local f H d hash) p result (List.map actual records) :=
+⋯
+'NLT_EraseCompatible.erase' depends on axioms: [propext, Classical.choice, Quot.sound]
