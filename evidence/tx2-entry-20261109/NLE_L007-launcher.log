@@ -1,0 +1,52 @@
+{"attempt": "NLE_L007", "exit_status": 0, "wall_seconds": 13.859437885927036, "peak_rss_kib": "6020828", "swaps": "0", "print_axioms": ["'NLE_Auth.parse_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_Auth.parse_frame' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLE_Auth.parse_reject' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLE_generated/NLE_AuthParse.lean:26:41: warning: This simp argument is unused:
+  NJU_Log.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵G̵,̵p̵a̵r̵s̵e̵,̵N̵J̵U̵_̵L̵o̵g̵.̵r̵e̵c̵o̵r̵d̵,̵r̵e̵p̵l̵y̵,̵N̵J̵U̵_̵L̵o̵g̵.̵b̵i̵n̵d̵,̵t̵r̵y̵R̵]̵[̲G̲,̲ ̲p̲a̲r̲s̲e̲,̲ ̲N̲J̲U̲_̲L̲o̲g̲.̲r̲e̲c̲o̲r̲d̲,̲ ̲r̲e̲p̲l̲y̲,̲ ̲t̲r̲y̲R̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLE_Auth.parse_result : ∀ {H : Type} (ops : Ops) (s : State H),
+  (parse ops s).result = do
+    let reply ← ops.op3 s.frame.proof
+    match reply with
+      | core.result.Result.Ok variant =>
+        ok (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.his
+...
+ngrFun'
+                (congrArg Bind.bind
+                  (congr (congrArg NJU_Log.Run.mk reply)
+                    (congrFun' (congrArg List.cons (congrArg (Event.parse s.frame.proof) reply)) [])))
+                fun reply =>
+                match reply with
+                | core.result.Result.Ok a =>
+                  pure (core.result.Result.Ok { frame := s.frame, parsed := some a, history := s.history })
+                | core.result.Result.Err e => pure (core.result.Result.Err e)))
+            fun reply =>
+            match reply with
+            | core.result.Result.Ok a => do
+              let next ← mark ops a
+              common (fun x => div) next
+            | core.result.Result.Err e => pure (core.result.Result.Err e)))
+        { result := ok (core.result.Result.Err err),
+          events := [Event.parse s.frame.proof (ok (core.result.Result.Err err))] }))
+    (Eq.refl do
+      let reply ←
+        do
+          let reply ←
+            { result := ok (core.result.Result.Err err),
+                events := [Event.parse s.frame.proof (ok (core.result.Result.Err err))] }
+          match reply with
+            | core.result.Result.Ok a =>
+              pure (core.result.Result.Ok { frame := s.frame, parsed := some a, history := s.history })
+            | core.result.Result.Err e => pure (core.result.Result.Err e)
+      match reply with
+        | core.result.Result.Ok a => do
+          let next ← mark ops a
+          common (fun x => div) next
+        | core.result.Result.Err e => pure (core.result.Result.Err e))
+'NLE_Auth.parse_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Auth.parse_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Auth.parse_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0e44be111c50493f81c2cf75f817f592.scope; invocation ID: 6b87ffdbdcfb4168a4d422915de99849

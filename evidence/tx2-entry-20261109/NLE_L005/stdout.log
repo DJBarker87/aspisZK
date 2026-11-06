@@ -1,0 +1,31 @@
+NLE_generated/NLE_AuthState.lean:29:1: error: Type mismatch
+  NKK_Try.emitted ?m.13 fun variant =>
+    pure (core.result.Result.Ok { frame := s.frame, parsed := some variant, history := s.history })
+has type
+  NJU_Log.Run ?m.10 (core.result.Result (State H) NID_ResumeEmission.verifier.Error)
+but is expected to have type
+  Run H (core.result.Result (State H) verifier.Error)
+NLE_generated/NLE_AuthState.lean:38:1: error: Type mismatch
+  NKK_Try.emitted ?m.7 fun post => do
+    let next ← mark ops post
+    ?m.21 post next ()
+has type
+  NJU_Log.Run (Event H) (core.result.Result ?m.6 NID_ResumeEmission.verifier.Error)
+but is expected to have type
+  Run H Reply
+NLE_generated/NLE_AuthState.lean:46:1: error: Type mismatch
+  child s.frame
+has type
+  Result Reply
+but is expected to have type
+  NJU_Log.Run ?m.4 (core.result.Result ?m.6 NID_ResumeEmission.verifier.Error)
+NLE_generated/NLE_AuthState.lean:44:17: error: Application type mismatch: The argument
+  reply
+has type
+  core.result.Result transport.Variant verifier.Error
+but is expected to have type
+  core.result.Result ?m.5 NID_ResumeEmission.verifier.Error
+in the application
+  NKK_Try.emitted reply
+def NLE_Auth.G : {H : Type} → Ops → Common H → State H → Run H Reply :=
+sorry

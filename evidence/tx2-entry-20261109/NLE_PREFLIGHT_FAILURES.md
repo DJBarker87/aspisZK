@@ -1,0 +1,3 @@
+# NLE preserved preflight failures
+
+L001 launched no scope: dependency pinning refused missing NLA_OwnedData. Removed that unused inspection import. L002/L003 rejected invalid inspection names; no timeout/memory kill. L005 rejected using NKK_Try across nominally different verifier error types; replaced with the local generic match tryR. L010/L012/L014 rejected proof tactics in fold_source; normalized Result binds before case splitting. L013 rejected the first whole source-erasure tactic; changed to the predecessor symbolic bind-congruence method. These are own-input/proof repairs under local rule11, not launcher repairs. Successful selectors must exclude failed axioms containing sorryAx.

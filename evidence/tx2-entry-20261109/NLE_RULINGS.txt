@@ -1,3 +1,32 @@
+## Addendum (lead, 2026-10-23 01:20): S2 diagnosis and route B adopted (delegated decision, D177)
+
+Diagnosis (`evidence/s2-lead-20261023/DIAGNOSIS.md`): the v7 counterexample shows
+the proposed contract's *representation* is insufficient. Its postcondition sees
+the borrow counter go 0→1 and passes the integer-address checks, but the typed
+guard's Drop reads 0 and leaves the account counter at 1. Integer address equality
+does not encode typed guard identity, provenance or borrow ownership. This is not
+evidence of a shipped SDK bug. Plan: `design/S2-LEAD-PLAN-20261023.md` (nine work
+packages, Required14 mapping).
+
+**Decision (lead, under the user's overnight delegation D177; reversible by the
+user):** adopt **route B**. Add one named trust item, `S2TrustedSdkBorrow`: the
+pinned Solana SDK `AccountInfo` data-borrow semantics and the underlying `RefCell`
+guard semantics, in exactly the fifteen fields of the plan
+(`account_data_cell`, `cell_payload`, `cell_counter`, `shared_ok`, `shared_err`,
+`exclusive_ok`, `exclusive_err`, `shared_deref`, `exclusive_deref`,
+`guard_move`, `shared_drop`, `exclusive_drop`, `error_move_drop`,
+`borrow_frame`, `guard_liveness`), pinned to solana-account-info 2.3.0 and the
+production dependency lock once checked. Reasons: the same policy as TrustedStd
+(D133/D145), which trusts documented library semantics rather than verifying library
+internals; route A has repeatedly timed out on the SDK's guard internals; the
+fields mention no caller success, bytes, output, log or interface field, per the plan's
+conclusion-hiding audit. D157 excluded interior mutability from its standing
+permission, so this is a distinct ruling. It is listed in the headline trust list
+beside TrustedStd, P6/P7, E1 and E2. Excluded and still requiring proof or a further
+ruling: `Ref::clone`/`map_split`/`leak`, realloc, Rc clone/free, lamport borrows,
+CPI, re-entrancy and concurrency. Every caller obligation remains a proof
+obligation.
+
 ### Lead ruling (ax2), 2026-11-04: admitted audit-driver adaptations
 
 The hardened walker is the module NEP_WALKER (evidence/axaudit2-20261102). An audit run may use an adapted DRIVER only if: (1) the walker file is byte-identical to NEP_WALKER.lean, which must be checked and recorded; (2) the driver's changes are limited to the module and root lists and runtime setup that does not change the audit: a memory limit equal to the scope's -M cap, search-path initialisation, and compiled instead of interpreted execution; (3) the adapted driver, built the same way, is also run on NEP_'s eight planted fixtures and their mutations, and reproduces the expected results (each planted axiom reported; each mutation reports none; all equal to collectAxioms); (4) the full driver diff is committed with the audit. Stream B's evhc9/evhc10 adaptation meets the same terms.
@@ -6,6 +35,265 @@ NFA_ (merged, evidence/slice-q-mul4-20261104): walker byte-identical (diff empty
 ### Lead addendum, 2026-11-04: (ax2) condition 3 met; NEV_ 4 rows CREDITED; dot rows blocked on module naming
 
 NFC_ (evidence/slice-q-mul5-20261104) ran NFA_s adapted driver on NEP_s eight planted fixtures: all eight pass, walker sha e93447db... unchanged (NFC_AUDIT.json, receipt NFC_L005). NEV_s 4 rows (batch_prefix_products, accumulate_batched_with_node) are therefore CREDITED. NFC_s own 70 standalone roots pass the raw audit with standard axioms. The four_dots rows stay OPEN: their packets import FIo_ReduceBounds, while the headline closure uses the retargeted RPt_FIo_ReduceBounds (from NDR_). Transporting them onto the RPt_ names is the next task.
+
+## Lead ruling (ai): staged-cut composition for long driver functions (2026-11-05)
+
+Evidence: evidence/slice-d-prepare-20261104 (NFW_: 100 Kani / 70 Lean / 3 extraction, only powers CLOSED; the named
+shared obstruction is the complete native-to-model producer/callee association for Prepared::new, prepare,
+verify_observed, tx1 and tx2_common). Under AGENTS.md section 7 the lead fixes the interface rather than commissioning
+more fragments. A driver function whose callees are CLOSED packets is certified by: (1) stage cuts at callee
+boundaries, each a Kani local-record harness on an arbitrary pre-state under the stage invariant, callees replaced by
+logging stubs constrained to their Lean-discharged packet laws (rule A pattern generalised), asserting exact callee
+arguments, the stage post-state as a function of pre-state and logged results, and the exact modifies set, with a
+matched failing control; (2) a Lean frame chain proving each stage's asserted post-state satisfies the next stage's
+invariant on the same variables, with uncovered variables listed as the function's own precondition; (3) the emitted
+body with callee packets substituted, proved equal to the adopted model; (4) composition native cuts + frame chain +
+packets = emitted body = model, replayed in the combined import with RPx, ax2 standard axioms, scan clean. Rows closed
+this way are CLOSED under (y) with route tag (ai). A failing step is reported as tool limit, missing callee law or real
+mismatch; never bridged by a success premise. Job NGN_ applies it to Prepared::new (TX1:179) alone.
+Target not yet established.
+
+## Lead note: ruling (ai) verdict on Prepared::new; the blocker is callee packets, not the recipe (2026-11-05)
+
+NGN_ (evidence/slice-d-prepared-20261105, merged 09410e8691c; 31/80 Kani, 33/70 Lean, 1/1 extraction): the staged-cut
+recipe holds on the model side: E001 extracts the actual frozen Prepared::new, L016 proves the emitted body equals the
+adopted constructor and the staged model (after replacing a heartbeat-limited direct comparison with small arithmetic
+laws and child-bind cuts, no limit raised), stage frames and domains are proved, Box ownership is checked natively with
+corrupt-value and different-allocation controls. TX1:179 stays OPEN because three callees have no complete packet:
+(1) Transcript::scalar / scalar_k (TX1:169/170; stages S1-S4): no native sampler law covering the deployed 928/2048-byte
+payloads, only <= 32-byte parts and sparse windows; (2) Transcript::queries (TX1:168; stage S5): NGQ_ in progress;
+(3) prepared_claim (TX1:193; stage S8): the KNF/LPt packet needs a canonical direct association; the legacy XRn kit
+route is forbidden. None is a solver timeout or a native/model mismatch. Decision: certify the callee rows first
+(NGT_ scalars, NGQ_ queries, then prepared_claim), then re-run the Prepared::new composition with the recipe unchanged.
+This is the expected shape of the remaining driver work: the drivers are blocked by their leaves, not by composition.
+Target not yet established.
+
+## Lead note: first driver rows CLOSED under (ai): Prepared::new TX1:179 and checkpoint TX1:186 (2026-11-06)
+
+evidence/prepared-close-20261106 (NHS_, merged): ruling (ai) assembled in full for Prepared::new: NGN_'s native stage
+cuts (five positive/control pairs re-validated, none rerun unchanged), the Lean frame chain, and the callee laws
+substituted: NGT_CallerInterface.scalar/scalar_k (S1-S4/S6), AspisR1.NGQ_TRANSCRIPT.actual_queries with NHK_'s
+same-invocation Trace (S5; NHS_QueryPacket consumes the full Observation interface on the SAME row 30/31 and
+final_message and projects only the returning pair into NGN_'s logging cut, retaining chronology separately and
+Error/fail/div in NHS_QueryFailures), NGY_'s packet (S8); composition equals the emitted body equals the adopted
+constructor (NGN_ L016 / NHL_PreparedRecompose). With that packet, NGC_PreparationBoundary.NFW_Obligation and the
+initial pending binding are instantiated and NGC_'s 116-transition writer packet closes checkpoint TX1:186. 60 roots
+standard axioms, eight fixtures, 13,712-module scan clean; validated delta 335 -> 337 on the NHO_ basis. No
+native/model mismatch anywhere in the chain. Remaining on the TX1 path: verify_observed TX1:137 (NHU_) and the
+identification of the tx1 query bridge with NFS_QueryOps.installed (NHS_TX1_PATH.md), then candidate::tx1 and
+prepare are instantiations of NHL_'s models. Target not yet established.
+
+## Lead ruling (an): the native failure boundary of abort-only callees is the abort prefix (2026-11-06)
+
+Evidence: evidence/event-realize-20261106 (NIA_, merged): the frozen transcript scalar and digest signatures have no
+Rust Err arm; their only failure is a runtime abort inside the syscall (or an allocation failure inside Box), after
+which the program does not continue. NIA_ asked how the model's fail/div arms are to be realized natively. Ruling: for
+a callee whose Rust signature has no Err arm and whose only failure is a runtime abort, no native Err-arm certificate
+is required; the native failure boundary is the abort prefix: the chronological event log ends at the aborting call
+and no later event exists (exactly NHZ_DRIVER's "fail/div have no suffix" rule), and the accepted RuntimeSyscall row
+(returningValue on successful calls, no totality) and the retained allocator row are what connect the model's fail/div
+arm to that abort. A native certificate therefore covers (a) the returning arm with its exact log, and (b) the fact
+that no event is emitted after the call site on any path, which is a frame/no-suffix assertion, not an Err-arm
+assertion. Callees that DO have Rust Err arms (map_err, Result-carrying helpers) remain under (ak). For the NFS
+query-loop event kinds, "native effect interpretation" means a native purity certificate: a harness in which every
+syscall and return-data stub asserts unreachability, run per callee under rule B for its loops, with the existing
+value bridges reused; the Lean side then interprets the event kind as effect-free. Target not yet established.
+
+## Lead clarification (ai)(5): the composing job authors the typed cut propositions (2026-11-07)
+
+Evidence: evidence/slice-d-pair5-20261107 (NIQ_, merged b7c64ebf668, 9/40 Kani, 15/100 Lean, early stop). NIQ_ built the
+supporting lemmas for TX2:129 (pair) and TX2:115 (finish) and then stopped at one exact point: the native local records
+(Initial, PairEdges/SameGuard, Common, Low, LibraLog, Final, NewPort/PairPort/FinishLog) have no Lean proposition on
+which the NIG_ frame and step equalities can act (NIQ_INTERFACE_INVENTORY.json: zero matching exported carriers). It
+declined to write one because the brief said the per-cut certificate propositions were to be "imported, not
+restated". That instruction was wrong about the method, and the fault is the lead's, not the worker's.
+
+Under ruling (ai) the cut proposition is authored by the composing job: NGN_ did exactly this for Prepared::new
+(evidence/slice-d-prepared-20261105/NGN_Cuts.lean: claimCut, powersCut, rhoCut, queryCut are Lean definitions on the
+model boundary types, each the transcription of one Kani stage harness's asserted pre/post), and NHS_ consumed them.
+Clarification, binding from now:
+1. For each pinned native record R the composing job writes one Lean definition `cutR : pre -> logged replies -> post
+   -> Prop` on the model's types, transcribing exactly the harness's assumed pre-state, logged callee replies and
+   asserted post-state and modifies set. The docstring cites the harness file and its sha256 and quotes the assertion
+   lines. Nothing beyond the asserted lines may appear in the definition; in particular no output-success, no
+   endpoint equality, no interpretation of an opaque reply beyond what the harness asserts of it.
+2. The harness-to-definition association is a reviewed transcription of the kind already classified under the
+   2026-10-28 composition-trust option A (native contract semantic transport = P6/D188 tool trust, reported as
+   reclassification). Each new cut definition is listed in the job's CERTIFICATES file as one such item; nothing is
+   added to the trust inventory and nothing is removed.
+3. The composition theorem then instantiates each CLOSED callee law on the SAME decoded arguments and logged replies,
+   and proves the frame / finite-induction chain cut to cut, with outer abort prefixes under (an), to the emitted body
+   where Aeneas emitted one and to the model. If a cut's post does not meet the next cut's pre, the gap is a missing
+   observation, a tool limit or a real mismatch, in that order of suspicion, and is reported; it is never bridged by a
+   premise.
+NIQ_'s supporting lemmas stand. Job NIT_ applies this to pair and finish. Target not yet established.
+
+## Lead ruling (ap): RuntimeEntrypointAdmission stated for the Pool program's entrypoint (ADDED-LEAD); verify_observed stager root (2026-11-07)
+
+Evidence: evidence/pool-borrow2-20261107 (NIO_, merged 3f935db1af3), NIO_CPI_GUARDS.md. At each of the four sites where
+the Pool holds an exclusive data guard across a token-program CPI or the before_persist callback, the frozen source
+already checks require_unique_accounts over the instruction's whole account list (pair_forest.rs:1081, :1307 and the
+withdrawal analogue) and fixes the layout, and the guarded indices and the CPI's passed indices are given exactly
+(deposit: guarded accounts[1], [2] if fresh, [3] if rollover; passed token_start + [1,0,3,2,4] with token_start 3 or 4).
+What NIO_ could not get is the step from "distinct keys" to "distinct physical data cells". For the verifier entries
+that step is the named contract row RuntimeEntrypointAdmission, field sharedCellsOnlyEqualKeys (a shared cell implies
+equal keys) together with duplicateKeysShareCell; its scope (inventory line 44, appendix line 210) is the two
+verifier entries only. Nothing states it for the Pool program's entry.
+1. RuntimeEntrypointAdmission-Pool is ADDED-LEAD-20261107: the SAME structure AdapterRw.RuntimeEntrypointAdmission with
+   the SAME fields verbatim (valid, freshGuards, noExternalBorrows, liveAccount, counterZero, sharedCellsOnlyEqualKeys,
+   duplicateKeysShareCell), instantiated at the Pool program's entrypoint heap and its instruction's account count.
+   It is a Solana runtime assumption of the class the owner approved on 2026-11-04 (entrypoint deserialization), the
+   lead may add it, and it is reported to the owner. Nothing about CPI frames, the token program's behaviour,
+   success, or the callee's account access is included; those remain source or native obligations.
+2. With it, a guarded cell is disjoint from every account passed to the CPI whenever the source's own uniqueness check
+   has passed and the guarded and passed index sets are disjoint on the reached layout. The index disjointness is a
+   source fact to prove per site (including the rollover / fresh / token_start case split); it is not assumed. Where
+   the sets do intersect on some reached layout, the guard is live across a CPI that receives the same account: that
+   is a finding, reported exactly, and its consequence (runtime borrow failure, i.e. a liveness failure) stated; it
+   is never assumed away.
+3. Stager: NHR_stage.py may be extended by a job ONLY additively (a new root selector entry for
+   r1_semantic::verify_observed), with the stager's own check rerun and the diff committed as evidence; no
+   hand-staged body. This resolves NIH_'s second obstruction.
+4. Credit: NIS_'s five and NIH_'s twenty row candidates are not counted until ledger13 replays them in the all-slices
+   combined import with the headline.
+Target not yet established.
+
+## Lead ruling (aq): CLOSED child results as clauses of a native invocation relation (2026-11-07)
+
+Evidence: evidence/slice-d-pair7-20261107 (NIW_), NIW_OPEN_EDGE.md, NIW_REMAINING.md. NIW_ asked whether the ban on
+endpoint-equality, successful-child and address-implies-payload premises permits a source-ordered invocation relation
+whose clauses are the complete per-child Results supplied by already CLOSED rows, or whether a separate binding
+interface must derive those equations first. Ruling (ai)(5)(3) already intends the first reading; this states it as a
+principle.
+1. Permitted. The relation may contain, for each entered child call, the clause "the observed reply and post-state at
+   the observed decoded arguments equal the CLOSED child's complete Result", covering every arm (ok, fail, div) and the
+   full mutable post-state with its frame. This is assume-guarantee composition. It is admissible because the root
+   theorem DISCHARGES every such clause by applying the CLOSED row's theorem at those arguments. A clause left as a
+   field of a hypothesis that the root theorem takes, rather than instantiates, is an endpoint premise and is banned.
+2. Hypothesis inventory. The positive root theorem's statement may take only the headline's own hypotheses, the (ai)(5)
+   reviewed cut transcriptions of the parent's harness, and the retained SAME-call NIG_FinishInput.Domain. The job
+   prints the root's full statement and lists each hypothesis against this inventory in the handoff. Anything else
+   means the row stays OPEN.
+3. Missing parts of a child law. Where the CLOSED child statement lacks something the parent needs (the full post-state
+   beyond the cells a stub writes, the frame of an abort prefix, a domain fact), that is a child obligation. The job
+   proves it from the child's frozen source and emitted Lean in its own namespace, or reports it as the exact missing
+   lemma. It is never assumed. An oracle seed such as PairEdges.regular_post is never equated wholesale with the
+   child's post. The actual post is the child's proved post composed with its proved frame.
+4. Same invocation. The parent's emitted source-ordered body and its own cut transcription fix the order and identity of
+   the child calls. Logs from separate harness runs are joined only through that body and its cuts: each is a
+   projection of one call site, matched by site and decoded arguments. No invocation ID, exporter or trust row is
+   added.
+Target not yet established.
+
+## Lead ruling (ar): entry-layer method is the (ai) stage cut, not probes; rule-7 note on three stops (2026-11-07)
+
+Evidence: evidence/slice-d-entry7-20261107 (NIV_, merged bc053194325), tx2-native4-20261107 (NIY_), and the stopped
+NIW_ (slice-d-pair7). All three ended with zero promotions on the same named gap: the actual frozen native call
+occurrences are not bound to the model. NIV_ extracted the frozen entry bodies and proved body-to-model reply
+association, then spent its whole native budget (120/120) on 58 small positive probes with controls (result tags,
+byte coordinates, early registry errors). Probes of this kind are not a route to any row; the (ai) route is.
+1. For each entry function, the native obligation is the (ai)(1) stage cut: ONE Kani local-record harness per callee
+   boundary on an arbitrary pre-state under the stage invariant, every callee (including SDK functions such as
+   account borrow/data access, decoders and the owned child) replaced by a logging stub constrained to its law,
+   asserting the exact callee arguments, the post-state as a function of pre-state and logged results, and the
+   exact modifies set, with a matched failing control. Its typed cut is authored under (ai)(5) and the composition
+   follows (aq). A probe that does not serve a named cut is not to be spent from the budget.
+2. Callee laws for SDK externals come from, in order: a CLOSED row; the pinned Aeneas library (P7); the entrypoint
+   trust row RuntimeEntrypointAdmission (verifier entries) for what it states; or a law proved in the job by the
+   NCO_ contract method (f_ref, proof_for_contract on the actual SDK function, matched control). A law not obtained
+   in one of these ways is reported as an exact missing lemma, never assumed.
+3. Order is the shortest spine (ledger8 note): TX1 entry, process, stage1, stage1_owned, first_decoded; then TX2
+   entry, process, stage2, stage2_owned. The decoder and authentication rows proceed in parallel where they do not
+   depend on an open member.
+4. Rule 7: the three jobs now running on this gap (NJC_ under (aq), the resumed NIW_, and the entry successor) apply
+   (aq) and this ruling. If two of them return the same unbridged step after doing so, the lead investigates that step
+   directly before any further job is commissioned on it.
+Target not yet established.
+
+## Lead ruling (aq)(5): the native-to-source step is the (y)(3) instantiation, not an inverse log association (2026-11-08)
+
+Evidence: evidence/slice-d-pair7-20261107 (NIW_, merged 11b672ea676). Under (aq) NIW_ proved the SOURCE invocation
+theorem NIW_AlignComposedRoot.source: the emitted pair/finish bodies execute with every child Result clause discharged
+internally, all abort prefixes kept, hypotheses only the retained NIG_FinishInput.Domain and the reviewed PairPort cut.
+It stopped at "associate the independent native parent records with the source stream" (RegularProjection,
+PairWitness, FinishProjection), framed as an inverse association of raw logs.
+1. No inverse association is needed. Each native parent cut is a Kani theorem universally quantified over its oracle
+   replies: for every pre-state and every reply the child oracles give, the frozen parent's post-state, Result and
+   call log equal G(pre, log). Ruling (y)(1)-(3): instantiate each logged reply with the CLOSED child's result at the
+   logged arguments (the assume-guarantee step, option-A P6/D188 tool trust), then prove in Lean that G with those
+   replies equals the corresponding segment of the source invocation. That direction runs from the native theorem to
+   the source stream; it never needs a raw log to be shown equal to a source stream after the fact.
+2. Where a native cut's oracle or modifies set does not cover the child's actual footprint (an oracle seed such as
+   PairEdges.regular_post writing only selected cells), the cut is too narrow: the remedy is a corrected cut (oracle
+   havocs the child's full declared footprint per its CLOSED frame) with a matched control, not a projection lemma.
+3. Where no native cut exists for a branch (NIW_: shared regular success projects to none), that branch needs its
+   own cut. It is a Kani obligation and is budgeted as such.
+Target not yet established.
+
+## Lead ruling (as): the entry layer closes last; entry work restricted to independent leaves; observer rows (2026-11-08)
+
+Evidence: evidence/slice-d-entry8-20261107 (NJD_, merged d89d2120899; 24/100 Kani, 33/90 Lean, stopped with
+member-by-member reasons). NJD_INVOCATION shows every entry spine function's child is OPEN down to verifier::tx1
+(TX1:094) and the TX2 authenticated/common rows. Under the conservative composed-row semantics a row is CLOSED only when
+its whole subtree is, so process_r1_cost_probe_instruction, process, stage1/2, stage1/2_owned and first_decoded close
+only after the driver spine beneath them. This is the expected bottom-up order, not an obstruction; the lead's (ar)(3)
+ordering was premature, and NJD_'s early stop is accepted.
+1. Until the driver spine closes, entry jobs work only on members that do not depend on an OPEN driver row: the SDK
+   callee laws (account acquisition/deref/drop and exclusive-copy ABI, Clock::get carrier, Pubkey::create_program_address
+   seed/reply/frame) by the NCO_ contract method or pinned P7 facts, which needs an extraction allowance; the decoder
+   leaves whose decoders are reachable; and the native stage cuts with those laws, kept ready for the final composition.
+2. create_program_address: the PDA value is a runtime syscall. FixturePdaRuntime covers only seven fixture invocations
+   (non-vacuity). If the authentication rows need the syscall's value law at deployed seeds, the job states the exact
+   law needed (syscall bytes in, reply out, value per the Solana derivation with the SHA row and the curve check) as a
+   proposed row text; the lead decides whether to add it as a runtime row of the approved class and reports it.
+   It is never assumed in a proof before that decision.
+3. observer (TX1:329, TX2:212): the deployed body is the literal None. The rule 14 quarantine concerns Kani verdicts
+   that depend on a function-pointer value; it does not forbid a Lean proof about the emitted body. The row may be
+   CLOSED by: the emitted Aeneas body of observer() (from NIV_L022) proved equal to the model's constant None, plus the
+   ruling (z)(1) release-observer pin (NEF_OBSERVER_CERTIFICATE: cfg-constant None, deployed feature graph), with no
+   native assertion on the Option<fn> value. Labelled "CLOSED under (as)(3)".
+Target not yet established.
+
+## Lead ruling (at): no PDA value row; the PDA reply is the quantified op38 slot; observer provenance NJH-F1 accepted for review (2026-11-08)
+
+Evidence: evidence/entry-leaves-20261107 (NJH_, merged; 13/60 Kani, 26/60 Lean, 1/1 extraction), NJH_PDA_PROPOSAL.md.
+1. RuntimeProgramDerivedAddress is NOT added. The headline quantifies op38 (PDA) as a free slot (ruling (s); the
+   2026-10-28 FixturePdaRuntime decision records that soundness does not use a PDA value law). The authentication rows
+   therefore need only the native bridge of lane ruling (2): the exact ordered seed slices, program id and output
+   region passed to sol_create_program_address, the reply and status forwarded unchanged into the SDK conversion and
+   the caller's comparison, and the frame. The value returned is whatever op38 gives; no derivation, SHA or curve law
+   is assumed or needed. FixturePdaRuntime stays non-vacuity only. If a later step is found to depend on the PDA
+   value rather than on equality with the passed account key, that is a finding to report, not a reason to add the row.
+2. NJH-F1: NIV_L022's emission omitted observer(); NJH_ used the coherent canonical emitted AdapterRwModel.observer
+   (same frozen body, separately pinned by NEF_). The ledger gate checks that this emission is the canonical owner's
+   Aeneas output of revision 4bb3b3f5 before admitting TX1:329/TX2:212 under (as)(3).
+Target not yet established.
+
+## Lead ruling (au): standard-library operations inside a parent are not child rows; no Ops-dictionary parameter at a root (2026-11-08)
+
+Evidence: rule-7 review of two returns after (aq): NIW_ (slice-d-pair7, "native parent-log projection") and NJC_
+(tx2-native5, merged; NJC_REMAINING M01, M03, M05, M07, M09, M11-M13). The shared residue is not a child row: it is
+safe standard-library operations in the parent's own body (Vec reserve/resize/push/iter/iter_mut/deref_mut writeback,
+Box::new, slice chunks_exact, Iterator::any, from_le_bytes, unwrap), each treated as needing its own "native producer
+association". NJC_'s root is also parameterized by an arbitrary dictionary base : VTop_Stages.Ops.
+1. Extraction side. Safe std/alloc operations in an emitted body are interpreted by the pinned Aeneas standard-library
+   model: the 2026-10-26 native Vec/Box ruling (a), part of the existing AeneasExtraction (D188) trust. Box allocation
+   follows ruling (aa). Nothing new is trusted.
+2. Native side. Under ruling (y) the parent's native cut executes the frozen parent with CHILD ROWS as oracles; the std
+   operations are not oracles and not children. They execute inside the cut under Kani's own Vec/Box model (rule 16,
+   KMX copy rule, matched controls), and the cut's asserted post-state already includes their effect. Where a
+   whole-buffer std operation times out, split by window at an arbitrary offset plus a Lean frame composition over the
+   KMX value laws (existing rule); never a separate producer-association obligation per std call.
+3. Externals that the pinned Aeneas leaves opaque (emitted only in FunsExternal_Template: e.g. Iterator::any,
+   ChunksExact) take a hand library model under kit-method rule 3: fidelity by citation to the pinned Aeneas std
+   library (P7) or by a proof against documented Rust semantics plus ONE native differential harness with a matched
+   failing control. Recorded once per external and reused by every caller.
+4. Unsafe code (MaybeUninit/uninit, raw pointer writes) is unchanged: the P6 route of 2026-10-26 (b).
+5. Roots. An arbitrary operation dictionary (such as base : VTop_Stages.Ops) or a free Bool standing for a runtime
+   outcome is not in the (aq)(2) inventory. Every operation in such a dictionary is instantiated by a CLOSED row, the
+   Aeneas std model, a rule-3 library model, or an existing named trust row (allocator, runtime) on its stated scope;
+   a reserve outcome is tied to the actual allocator item, not left as a parameter.
+Target not yet established.
 
 ### Lead ruling (bc), 2026-11-09: extractor mistranslates explicit returns after a loop (batch_tree); emission-fidelity audit
 

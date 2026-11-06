@@ -1,0 +1,54 @@
+theorem NLE_Auth.mark_result : ∀ {H : Type} (ops : Ops) (s : State H),
+  (mark ops s).result = do
+    ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+    ok s :=
+fun {H} ops s =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a = do
+              ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed
+              ok s)
+          (NJU_Log.erase_bind
+            (NJU_Log.record (Event.mark s.frame.observer)
+              (ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed))
+            fun __x => pure s)))
+      (Eq.refl do
+        (NJU_Log.record (Event.mark s.frame.observer)
+              (ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed)).result
+        (pure s).result))
+@[defeq] theorem NLE_Auth.common_result : ∀ {H : Type} (child : Common H) (s : State H),
+  (common child s).result = child s.frame :=
+fun {H} child s => rfl
+theorem NLE_Auth.mark_abort : ∀ {H : Type} (ops : Ops) (child : Common H) (s : State H) (err : Error),
+  ops.op13 s.frame.observer AdapterRw.aspis_r1_cost_probe.verifier.Phase.Parsed = fail err →
+    (do
+        let next ← mark ops s
+        common child next) =
+      { result := fail err, events := [Event.mark s.frame.observer (fail err)] } :=
+fun {H} ops child s err failed =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let next ←
+                  do
+                    NJU_Log.record (Event.mark s.frame.observer) _a
+                    pure s
+                common child next) =
+              { result := fail err, events := [Event.mark s.frame.observer (fail err)] })
+          failed))
+      (Eq.refl do
+        let next ←
+          do
+            NJU_Log.record (Event.mark s.frame.observer) (fail err)
+            pure s
+        common child next))
+'NLE_Auth.mark_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Auth.mark_events' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Auth.common_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLE_Auth.mark_abort' depends on axioms: [propext, Classical.choice, Quot.sound]
