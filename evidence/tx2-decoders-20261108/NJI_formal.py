@@ -8,7 +8,7 @@ def run(a,kind,target,command=None,extra=None):
     files=dict(extra or {})
     if kind=='lean':
         text=(E/(target+'.lean')).read_text()
-        for dep in re.findall(r'^import (NJI_[\w.]+)',text,re.M):
+        for dep in re.findall(r'^(?:public )?import(?: all)? (NJI_[\w.]+)',text,re.M):
             h=sha((E/(dep+'.lean')).read_bytes())
             assert any(x['module']==dep and x['exit_status']==0 and h in x['source_hashes'].values() for x in [json.loads(l) for l in (E/'NJI_ATTEMPTS.jsonl').read_text().splitlines()]),'Compile current direct import first: '+dep
         src='NJI_generated/'+target.replace('.','/')+'.lean';files[src]=text
@@ -19,7 +19,7 @@ def run(a,kind,target,command=None,extra=None):
     files[a+'.json']=json.dumps(cfg)
     admission(a)
     r=ssh('python3',f'''from pathlib import Path
-import json,hashlib
+import json,hashlib,re
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
 for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
@@ -32,7 +32,8 @@ for root in roots:
 for n,t in files.items():
  if n.endswith('.lean'):
   for line in t.splitlines():
-   if line.startswith('import '):rels.update(d.replace('.','/')+'.olean' for d in line[7:].split() if d!='all')
+   match=re.match(r'^(?:public )?import(?: all)? (.*)',line)
+   if match:rels.update(d.replace('.','/')+'.olean' for d in match[1].split())
 if {kind!r}!='lean':rels.update(n+'.olean' for n in ['NJI_COMBINED_IMPORT','NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations'])
 for rel in sorted(rels):
  p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None);assert p is not None,rel

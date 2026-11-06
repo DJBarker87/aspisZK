@@ -27,8 +27,8 @@ fn oracle()->Result<(),F>{let t:u8=kani::any();kani::assume(t<9);match t{0=>Ok((
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn cut(){
- let b:[u8;104]=kani::any();let reply=oracle();let mut log=None;
- let out=stage(&b,reply,&mut log);let i:usize=kani::any();kani::assume(i<32);
+ let b:[u8;104]=kani::any();let frame_i:usize=kani::any();kani::assume(frame_i<104);let original=b[frame_i];let reply=oracle();let mut log=None;
+ let out=stage(&b,reply,&mut log);assert!(b[frame_i]==original);let i:usize=kani::any();kani::assume(i<32);
  let live=b[..4]==POOL_V1_VERIFIER_POLICY_MAGIC && b[4]==POOL_V1_VERIFIER_POLICY_VERSION && b[6]==0 && b[7]==0;
  if live{
   let p=log.expect("child entered");

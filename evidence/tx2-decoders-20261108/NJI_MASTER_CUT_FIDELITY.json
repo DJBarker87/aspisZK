@@ -1,0 +1,18 @@
+{
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "source_file_sha256": "1992026c00dbced3a0c475b6e2be0a72fae1a7e859dd041e741707384e727ba3",
+  "body_sha256": "99d9dc42a2881ad9422eccec887f19ea0be2cf9695b964b55ceb8fc8a48004f9",
+  "stage_sha256": "7d3fa86ab609da19616b0c3f7088de42ef906d5dad4c53c4e5653b4aa035645d",
+  "replacements": [
+    {
+      "old": "validate_verifier_policy_v1(&master.verifier_policy)",
+      "new": "{*log=Some(master.verifier_policy); policy_reply}"
+    },
+    {
+      "old": "master\n        .last_checkpoint_lane_sequences\n        .iter()\n        .any(|sequence| *sequence > POOL_V1_PAIR_CAPACITY)",
+      "new": "{*seq_log=Some(master.last_checkpoint_lane_sequences); seq_any}"
+    }
+  ],
+  "erasure_restores_exact_body": true,
+  "loop_domain": "ONE iteration, arbitrary values[8], k<=8 including exhaustion; no whole-loop native unrolling"
+}

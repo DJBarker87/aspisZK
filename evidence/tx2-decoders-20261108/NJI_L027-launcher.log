@@ -1,0 +1,56 @@
+{"attempt": "NJI_L027", "exit_status": 1, "wall_seconds": 1.5699566169641912, "peak_rss_kib": "2632732", "swaps": "0", "print_axioms": ["'NJI_Any.pure_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJI_Any.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NJI_Any.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NJI_generated/NJI_Any.lean:36:30: error: Tactic `rfl` failed: The left-hand side
+  run cmp [] f
+is not definitionally equal to the right-hand side
+  ok ([].any predicate, 0, f)
+
+T F : Type
+cmp : core.ops.function.FnMut F T Bool
+predicate : T → Bool
+law : ∀ (f : F) (x : T), cmp.call_mut f x = ok (predicate x, f)
+f : F
+⊢ run cmp [] f = ok ([].any predicate, 0, f)
+NJI_generated/NJI_Any.lean:41:23: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵l̵a̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵x̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵L̵i̵s̵t̵.̵a̵n̵y̵_̵c̵o̵n̵s̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵o̵r̵]̵[̲r̲u̲n̲,̲ ̲l̲a̲w̲,̲ ̲h̲x̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲L̲i̲s̲t̲.̲a̲n̲y̲_̲c̲o̲n̲s̲
+...
+̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵a̵n̵y̵_̵c̵o̵n̵s̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵o̵r̵]̵[̲r̲u̲n̲,̲ ̲l̲a̲w̲,̲ ̲h̲x̲'̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲h̲,̲ ̲L̲i̲s̲t̲.̲a̲n̲y̲_̲c̲o̲n̲s̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJI_generated/NJI_Any.lean:54:83: error: unsolved goals
+T F : Type
+cmp : core.ops.function.FnMut F T Bool
+predicate : T → Bool
+law : ∀ (f : F) (x : T), cmp.call_mut f x = ok (predicate x, f)
+it : core.slice.iter.Iter T
+f : F
+n : ℕ
+left✝ : n ≤ (List.drop it.i ↑it.slice).length
+h : run cmp (List.drop it.i ↑it.slice) f = ok ((List.drop it.i ↑it.slice).any predicate, n, f)
+⊢ (do
+      let (b, _) ←
+        let (b, n, _) := ((List.drop it.i ↑it.slice).any predicate, n, f)
+          ok (b, { slice := it.slice, i := it.i + n })
+      ok b) =
+    ok ((List.drop it.i ↑it.slice).any predicate)
+NJI_generated/NJI_Any.lean:64:28: error: unsolved goals
+T F : Type
+cmp : core.ops.function.FnMut F T Bool
+predicate : T → Bool
+law : ∀ (f : F) (x : T), cmp.call_mut f x = ok (predicate x, f)
+it : core.slice.iter.Iter T
+f : F
+n : ℕ
+left✝ : n ≤ (List.drop it.i ↑it.slice).length
+h : run cmp (List.drop it.i ↑it.slice) f = ok ((List.drop it.i ↑it.slice).any predicate, n, f)
+⊢ (let (b, n, _) := ((List.drop it.i ↑it.slice).any predicate, n, f)
+    ok (b, { slice := it.slice, i := it.i + n })) =
+    ok ((List.drop it.i ↑it.slice).any predicate, { slice := it.slice, i := it.i + n })
+'NJI_Any.pure_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJI_Any.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NJI_Any.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2e59d57838234453b023b797cff00ecd.scope; invocation ID: 73bb82491ffa4ccbbc684c5e39d535f1

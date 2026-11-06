@@ -19,3 +19,9 @@ L002 generated Types passes. L003 aggregate Funs fails (no credit). L004 isolate
 K003/004 registry and K005/006 entry give two native pass/intended-fail contract pairs on actual frozen functions with empty modifies. L005 total two-sided carriers, L009 complete emitted guard laws, L010 canonical record/Result joins all pass with standard axioms. Root statements take only the input record; CLOSED zero-binding law is applied internally. Candidates206/208 await the final combined/scan/raw audit; no ledger delta yet.
 
 Policy whole-return K008 timed out90s and is excluded. Its distinct source-cut/coordinate replacement K009 passed10.054s/608396KiB/swap0; K010 intended argument corruption fails. No timeout/cap increase. Policy full parser Lean proof continues. All own source-copy, compiler include, collector and proof-input repairs remain in NJI_FAILING_STEP and receipts. No shared infrastructure change.
+
+## Parser/master stage (before final audit)
+
+All native K001..K044 allocations are accounted for (K007 stopped prelaunch, conservatively charged). Final strengthened pass/control pairs: master parent K023/024, policy K025/026, entry K027/028, registry K029/030, master one-step K031/032, checkpoint one-step K033/034; unrestricted first-length cuts K035..044. Earlier pairs retained without double credit. Exact KMX patch, every-run frozen graph/lock and full source identity checks retained. No new writable static, Option<fn>, SHA unwinding, field multiplication or new trust.
+
+Green policy all-input native/source join L055; master full emitted body/model L053, child-argument/cut join L056; source iterator induction L047 and checkpoint frame/abort-prefix L052. Candidates150/157/206/208 are NOT ledger credit. Four decoders152/153/201/203 remain OPEN because extraction omitted their bodies;153 also needs outside-slice identity149. Combined import/raw ax2/NFX gate next, at most two full audits.

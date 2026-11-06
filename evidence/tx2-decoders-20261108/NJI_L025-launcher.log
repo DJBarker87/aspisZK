@@ -1,0 +1,24 @@
+{"attempt": "NJI_L025", "exit_status": 0, "wall_seconds": 11.514832266839221, "peak_rss_kib": "5986904", "swaps": "0", "print_axioms": ["'NJI_PolicyCut.field_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJI_PolicyCut.complete_record' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJI_PolicyCut.cut_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJI_PolicyCut.body_closed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJI_PolicyCut.native_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJI_PolicyCut.native_source : ∀ (b : Slice U8) (len : (↑b).length = 104) (log : Option P)
+  (out : core.result.Result P F), Cut b (closedReply b len) log out → ok out = NJI_PolicyParser.raw b :=
+fun b len log out cut =>
+  Eq.mpr (id (congrArg (fun _a => ok out = _a) (NJI_PolicyParser.source b)))
+    (Eq.mpr (id (congrArg (fun _a => ok out = _a) (body_closed b len)))
+      (congrArg ok (cut_result b len (closedReply b len) log out cut)))
+'NJI_PolicyCut.field_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_PolicyCut.complete_record' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_PolicyCut.cut_result' depends on axioms: [propext, Classical.ch
+...
+theorem NJI_PolicyCut.native_source : ∀ (b : Slice U8) (len : (↑b).length = 104) (log : Option P)
+  (out : core.result.Result P F), Cut b (closedReply b len) log out → ok out = NJI_PolicyParser.raw b :=
+fun b len log out cut =>
+  Eq.mpr (id (congrArg (fun _a => ok out = _a) (NJI_PolicyParser.source b)))
+    (Eq.mpr (id (congrArg (fun _a => ok out = _a) (body_closed b len)))
+      (congrArg ok (cut_result b len (closedReply b len) log out cut)))
+'NJI_PolicyCut.field_coordinate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_PolicyCut.complete_record' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_PolicyCut.cut_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_PolicyCut.body_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_PolicyCut.native_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r4dfe635050ad489fac54dcd36589cfd9.scope; invocation ID: 651633c8d93b403fb3afe2df87f0b39c

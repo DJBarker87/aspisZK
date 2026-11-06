@@ -1,0 +1,46 @@
+{"attempt": "NJI_L056", "exit_status": 0, "wall_seconds": 10.51429696707055, "peak_rss_kib": "6000592", "swaps": "0", "print_axioms": ["'NJI_MasterCut.same_policy' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJI_MasterCut.policy_reply' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJI_MasterCut.child_arguments' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NJI_MasterCut.native_source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NJI_MasterCut.native_source : ∀ (m : M) (p : Option P) (s : Option (Std.Array U64 8#usize))
+  (out : core.result.Result Unit F),
+  Cut m (closedReply m) ((↑m.last_checkpoint_lane_sequences).any tooLarge) p s out → ok out = raw m :=
+fun m p s out h =>
+  Eq.mpr (id (congrArg (fun _a => ok out = _a) (source m)))
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              ok out =
+                if m.identity.pool = Array.repeat 32#usize 0#u8 then
+                  ok
+                    (core.result.Result.Err
+                      NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.ZeroRequiredBinding)
+              
+...
+        match x with
+                                        | core.result.Result.Err a =>
+                                          s = none ∧
+                                            out =
+                                              core.result.Result.Err
+                                                NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.Policy
+                                        | core.result.Result.Ok a =>
+                                          (∃ s_1,
+                                              s = some s_1 ∧
+                                                ∀ j < 8,
+                                                  NHY_ArrayExt.coord s_1 j =
+                                                    NHY_ArrayExt.coord m.last_checkpoint_lane_sequences j) ∧
+                                            if (↑m.last_checkpoint_lane_sequences).any tooLarge = true ∨ invalid m then
+                                              out =
+                                                core.result.Result.Err
+                                                  NJI_Extracted.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1.InvalidMasterState
+                                            else out = core.result.Result.Ok ())
+                                      ⋯))))
+                          ⋯)
+                    ⋯))
+              ⋯ ⋯)
+          ⋯)))
+'NJI_MasterCut.same_policy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_MasterCut.policy_reply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_MasterCut.child_arguments' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NJI_MasterCut.native_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r59a3f19ce3784c158b820172a8a89f09.scope; invocation ID: 28c2914b360d46709cd5cbd298db202b

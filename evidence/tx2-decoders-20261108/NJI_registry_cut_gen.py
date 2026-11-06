@@ -22,7 +22,7 @@ for name,size,record in [('registry',128,'VerifierRegistryV1'),('entry',192,'Ver
  error='if b[..4]!='+magic+'{Some(F::WrongMagic)}else if b[4]!='+version+'{Some(F::WrongVersion)}else if '+reserved+'{Some(F::NonZeroReserved)}'+('else if b[5]>3{Some(F::InvalidStatus)}' if name=='entry' else '')+'else{None}'
  text+='''#[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn cut(){let b:[u8;SIZE]=kani::any();let reply=oracle();let mut log=None;let out=stage(&b,reply,&mut log);let i:usize=kani::any();kani::assume(i<32);let f:usize=kani::any();kani::assume(f<FIELDS);
+fn cut(){let b:[u8;SIZE]=kani::any();let frame_i:usize=kani::any();kani::assume(frame_i<SIZE);let original=b[frame_i];let reply=oracle();let mut log=None;let out=stage(&b,reply,&mut log);assert!(b[frame_i]==original);let i:usize=kani::any();kani::assume(i<32);let f:usize=kani::any();kani::assume(f<FIELDS);
  let error=ERROR;
  match error{Some(e)=>{assert!(log.is_none());assert!(matches!(out,Err(a) if a==e));},None=>{let p=log.expect("child entered");assert!((view(&p,f,i)==expected(&b,f,i))!=cfg!(NJI_invert));match reply{Err(e)=>assert!(matches!(out,Err(a) if a==e)),Ok(())=>{let p=out.expect("child success");assert!(view(&p,f,i)==expected(&b,f,i));}}}}
 }

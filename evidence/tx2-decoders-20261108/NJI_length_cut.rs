@@ -1,0 +1,25 @@
+use super::*;
+use crate::pool_v1::verifier_registry::{VerifierRegistryV1,VerifierRegistryEntryV1,PoolV1VerifierRegistryFormatError as RF,POOL_V1_VERIFIER_REGISTRY_BYTES,POOL_V1_VERIFIER_ENTRY_BYTES};
+use crate::pool_v1::pair_forest_accounts::{PoolV1PairForestMasterV1,PoolV1PairForestCheckpointV1,PoolV1PairForestAccountErrorV1 as AF,POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES,POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES};
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+// The first frozen guard is an unrestricted descriptor cut. None means the
+// continuation is entered; Some contains the ORIGINAL full typed Err carrier.
+// No fake large slice is made and no payload is read.
+fn prefix<T,E>(len:usize,width:usize,error:E)->Option<Result<T,E>>{
+ if len!=width{Some(Err(error))}else{None}
+}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn policy(){let n:usize=kani::any();assert!(POOL_V1_VERIFIER_POLICY_BYTES==104);let out:Option<Result<VerifierPolicyV1,PoolV1FormatError>>=prefix(n,POOL_V1_VERIFIER_POLICY_BYTES,PoolV1FormatError::WrongLength);let error=matches!(out,Some(Err(PoolV1FormatError::WrongLength)));assert!((error==(n!=104))!=cfg!(NJI_invert));if n==104{assert!(out.is_none());}}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn registry(){let n:usize=kani::any();assert!(POOL_V1_VERIFIER_REGISTRY_BYTES==128);let out:Option<Result<VerifierRegistryV1,RF>>=prefix(n,POOL_V1_VERIFIER_REGISTRY_BYTES,RF::WrongLength);let error=matches!(out,Some(Err(RF::WrongLength)));assert!((error==(n!=128))!=cfg!(NJI_invert));if n==128{assert!(out.is_none());}}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn entry(){let n:usize=kani::any();assert!(POOL_V1_VERIFIER_ENTRY_BYTES==192);let out:Option<Result<VerifierRegistryEntryV1,RF>>=prefix(n,POOL_V1_VERIFIER_ENTRY_BYTES,RF::WrongLength);let error=matches!(out,Some(Err(RF::WrongLength)));assert!((error==(n!=192))!=cfg!(NJI_invert));if n==192{assert!(out.is_none());}}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn master(){let n:usize=kani::any();assert!(POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES==384);let out:Option<Result<PoolV1PairForestMasterV1,AF>>=prefix(n,POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES,AF::WrongLength);let error=matches!(out,Some(Err(AF::WrongLength)));assert!((error==(n!=384))!=cfg!(NJI_invert));if n==384{assert!(out.is_none());}}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn checkpoint(){let n:usize=kani::any();assert!(POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES==192);let out:Option<Result<PoolV1PairForestCheckpointV1,AF>>=prefix(n,POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES,AF::WrongLength);let error=matches!(out,Some(Err(AF::WrongLength)));assert!((error==(n!=192))!=cfg!(NJI_invert));if n==192{assert!(out.is_none());}}

@@ -1,0 +1,47 @@
+{"attempt": "NJI_K032", "exit_status": 1, "wall_seconds": 5.22763375681825, "peak_rss_kib": "549320", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ion, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.50s
+Checking harness pool_v1::pair_forest_accounts::NJI_master_cut::any_step...
+
+VERIFICATION RESULT:
+ ** 1 of 131 failed (2 unreachable)
+Failed Checks: assertion failed: (*value == original_k) != cfg!(NJI_invert)
+ File: "crates/aspis-statement/src/pool_v1/NJI_master_cut.rs", line 48, in pool_v1::pair_forest_accounts::NJI_master_cut::any_step
+
+VERIFICATION:- FAILED
+Verification Time: 0.5978587s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_forest_accounts::NJI_master_cut::any_step
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rd2ce7d633edd4f868de3b0fffc36d230.scope; invocation ID: 9288323e2b52465794d4b3f400fee121

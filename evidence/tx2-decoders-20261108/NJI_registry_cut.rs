@@ -34,7 +34,7 @@ fn word(b:&[u8],a:usize)->u64{u64::from_le_bytes([b[a],b[a+1],b[a+2],b[a+3],b[a+
 fn status(t:u8)->VerifierEntryStatusV1{match t{0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired}}
 #[kani::proof] #[kani::unwind(35)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
-fn cut(){let b:[u8;128]=kani::any();let reply=oracle();let mut log=None;let out=stage(&b,reply,&mut log);let i:usize=kani::any();kani::assume(i<32);let f:usize=kani::any();kani::assume(f<7);
+fn cut(){let b:[u8;128]=kani::any();let frame_i:usize=kani::any();kani::assume(frame_i<128);let original=b[frame_i];let reply=oracle();let mut log=None;let out=stage(&b,reply,&mut log);assert!(b[frame_i]==original);let i:usize=kani::any();kani::assume(i<32);let f:usize=kani::any();kani::assume(f<7);
  let error=if b[..4]!=POOL_V1_VERIFIER_REGISTRY_MAGIC{Some(F::WrongMagic)}else if b[4]!=POOL_V1_VERIFIER_REGISTRY_VERSION{Some(F::WrongVersion)}else if b[7]!=0||b[120..128]!=[0;8]{Some(F::NonZeroReserved)}else{None};
  match error{Some(e)=>{assert!(log.is_none());assert!(matches!(out,Err(a) if a==e));},None=>{let p=log.expect("child entered");assert!((view(&p,f,i)==expected(&b,f,i))!=cfg!(NJI_invert));match reply{Err(e)=>assert!(matches!(out,Err(a) if a==e)),Ok(())=>{let p=out.expect("child success");assert!(view(&p,f,i)==expected(&b,f,i));}}}}
 }
