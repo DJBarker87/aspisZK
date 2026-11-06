@@ -1,0 +1,58 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,5 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)] mod NKL_native { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NKL_harness.rs")); }
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,4 +1,5 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
++#![cfg_attr(kani, feature(allocator_api))]
+ #![no_std]
+ extern crate alloc;
+ pub mod sampler;
+--- /dev/null
++++ b/NKL_fragments.rs
+@@ -0,0 +1,7 @@
++fn merkle_exit_fragment(_idx:&mut[u32;16],_val:&mut[[u8;32];16])->Result<(),Error>{
++return Err(Error::Merkle);
++}
++
++fn ok_exit_fragment(_idx:&mut[u32;16],_val:&mut[[u8;32];16])->Result<(),Error>{
++Ok(())
++}
+
+--- /dev/null
++++ b/NKL_harness.rs
+@@ -0,0 +1,28 @@
++use super::*;
++#[allow(non_snake_case)]
++mod kmx { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../NKL_fragments.rs"));
++#[kani::proof]
++#[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
++fn merkle_exit(){
++ let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();
++ let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16&&k<32);
++ let before_i=idx[j];let before_v=val[j][k];
++ let out=merkle_exit_fragment(&mut idx,&mut val);
++ #[cfg(not(NKL_invert))] assert!(matches!(out,Err(Error::Merkle)));
++ #[cfg(NKL_invert)] assert!(!(matches!(out,Err(Error::Merkle))));
++ assert_eq!(idx[j],before_i);assert_eq!(val[j][k],before_v);
++}
++#[kani::proof]
++#[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,kmx::KMX_copy_nonoverlapping)]
++fn ok_exit(){
++ let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();
++ let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16&&k<32);
++ let before_i=idx[j];let before_v=val[j][k];
++ let out=ok_exit_fragment(&mut idx,&mut val);
++ #[cfg(not(NKL_invert))] assert!(matches!(out,Ok(())));
++ #[cfg(NKL_invert)] assert!(!(matches!(out,Ok(()))));
++ assert_eq!(idx[j],before_i);assert_eq!(val[j][k],before_v);
++}

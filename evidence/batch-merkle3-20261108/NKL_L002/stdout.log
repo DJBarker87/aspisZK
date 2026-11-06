@@ -1,0 +1,20 @@
+NKL_ExitTransport.lean:45:16: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NKL_ExitTransport.lean:45:16: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NKL_ExitTransport.lean:45:16: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+theorem NKL_ExitTransport.result : ∀ (exit : Exit) (idx : Indices) (val : Values) (out : Reply) (afterIdx : Indices)
+  (afterVal : Values), Cut exit idx val out afterIdx afterVal → (out, afterIdx, afterVal) = (reply exit, idx, val) :=
+fun exit idx val out afterIdx afterVal cut =>
+  Eq.mpr (id (congrArg (fun _a => (_a, afterIdx, afterVal) = (reply exit, idx, val)) cut.result))
+    (Eq.mpr (id (congrArg (fun _a => (reply exit, _a, afterVal) = (reply exit, idx, val)) cut.indices))
+      (Eq.mpr (id (congrArg (fun _a => (reply exit, idx, _a) = (reply exit, idx, val)) cut.values))
+        (Eq.refl (reply exit, idx, val))))
+'NKL_ExitTransport.parse_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ExitTransport.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ExitTransport.observed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ExitTransport.no_suffix' depends on axioms: [propext, Classical.choice, Quot.sound]

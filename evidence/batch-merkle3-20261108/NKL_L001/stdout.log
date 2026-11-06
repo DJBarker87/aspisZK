@@ -1,0 +1,62 @@
+NKL_ExitTransport.lean:45:5: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    observe _a afterIdx afterVal =
+      match exit, cut with
+      | Exit.success, cut => ok ((), idx, val)
+      | x, cut => fail Error.panic
+Error: Application type mismatch: The argument
+  cut
+has type
+  Cut exit idx val out afterIdx afterVal
+but is expected to have type
+  Cut exit idx val _a afterIdx afterVal
+in the application
+  observed.match_1 idx val _a afterIdx afterVal (fun exit cut => Result (Unit × Indices × Values)) exit cut
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+exit : Exit
+idx : Indices
+val : Values
+out : Reply
+afterIdx : Indices
+afterVal : Values
+cut : Cut exit idx val out afterIdx afterVal
+⊢ observe out afterIdx afterVal =
+    match exit, cut with
+    | Exit.success, cut => ok ((), idx, val)
+    | x, cut => fail Error.panic
+NKL_ExitTransport.lean:50:27: error: unexpected token 'prefix'; expected '_' or identifier
+NKL_ExitTransport.lean:50:35: error: unexpected identifier; expected prec
+NKL_ExitTransport.lean:51:42: error: unexpected token ','; expected ':'
+NKL_ExitTransport.lean:53:7: error: unexpected token 'prefix'; expected identifier
+NKL_ExitTransport.lean:58:8: error: Tactic `unfold` failed: expression [anonymous] is not a global or local constant
+
+Event : Type
+events : List Event
+exit : Exit
+idx : Indices
+val : Values
+out : Reply
+afterIdx : Indices
+afterVal : Values
+cut : Cut exit idx val out afterIdx afterVal
+⊢ sorry =
+    (events,
+      match exit with
+      | Exit.success => ok ((), idx, val)
+      | x => fail Error.panic)
+theorem NKL_ExitTransport.result : ∀ (exit : Exit) (idx : Indices) (val : Values) (out : Reply) (afterIdx : Indices)
+  (afterVal : Values), Cut exit idx val out afterIdx afterVal → (out, afterIdx, afterVal) = (reply exit, idx, val) :=
+fun exit idx val out afterIdx afterVal cut =>
+  Eq.mpr (id (congrArg (fun _a => (_a, afterIdx, afterVal) = (reply exit, idx, val)) cut.result))
+    (Eq.mpr (id (congrArg (fun _a => (reply exit, _a, afterVal) = (reply exit, idx, val)) cut.indices))
+      (Eq.mpr (id (congrArg (fun _a => (reply exit, idx, _a) = (reply exit, idx, val)) cut.values))
+        (Eq.refl (reply exit, idx, val))))
+'NKL_ExitTransport.parse_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ExitTransport.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NKL_ExitTransport.observed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NKL_ExitTransport.lean:65:7: error(lean.unknownIdentifier): Unknown constant `axioms`
+NKL_ExitTransport.lean:65:20: error: unexpected token 'end'; expected ':'
