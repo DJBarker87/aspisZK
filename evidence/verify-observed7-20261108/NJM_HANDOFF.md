@@ -11,3 +11,5 @@ Predecessor export first: /home/dombarker/project-offloads/codex-cx-slice-d-prep
 Initial source review confirms NJG closed no row and ledger14 rejected circle_validated for an uninstalled dictionary and unconsumed dispatch cut. First deliverable is a complete SAME-argument 133 child/Code join, with every rejection, effect and abort case. No unsupported endpoint hypothesis will be counted.
 
 Assumptions discharged/added/changed: none. Retained: existing headline/trust/source-to-ELF qualifications, option-A P6/D188 semantic transport as reclassification. ELF pins inherited, no rebuild trigger. No wallet/key operation.
+
+Stage 1 support: L010 checked NJM_RoundJoin.prepared; L007 and L015 checked concrete circle sampler/continuation/dispatch source association. All print standard axioms. No native cut root yet; no row closure, no combined audit. Initial elaboration failures retained/excluded. Seed is 5,884,744 bytes, hashes in NJM_SEED.json. No new trust or shipped changes.

@@ -1,0 +1,137 @@
+NJM_generated/NJM_CircleCode.lean:36:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run (?code >>= ?next)
+in the target expression
+  (NGX_RunBind.appendResult (run (S1SemanticCode.sampleBlock D t 25#u8 record.framed)).1
+      (run (S1SemanticCode.sampleBlock D t 25#u8 record.framed)).2 fun pair =>
+      NIX_ValidatedCut.after (F3M_CircleSource.install B) FinishModel.CircleRow.First pair.2 pair.1) =
+    run
+      (match 25#u8 with
+      | 25#8#uscalar => do
+        let pair ← S1SemanticCode.sampleBlock D t 25#u8 record.framed
+        NJM_CircleJoin.after FinishModel.CircleRow.First pair
+      | 26#8#uscalar => do
+        let pair ← S1SemanticCode.sampleBlock D t 26#u8 record.framed
+        NJM_CircleJoin.after FinishModel.CircleRow.Second pair
+      | x => pure (core.result.Result.Err r1_wire.Error.InvalidRow, t))
+
+case pos
+H : Type
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 H
+t : r1_wire.SemanticTranscript H
+record : r1_wire.ValidatedRecord
+⊢ (NGX_RunBind.appendResult (run (S1SemanticCode.sampleBlock D t 25#u8 record.framed)).1
+      (run (S1SemanticCode.sampleBlock D t 25#u8 record.framed)).2 fun pair =>
+      NIX_ValidatedCut.after (F3M_CircleSource.install B) FinishModel.CircleRow.First pair.2 pair.1) =
+    run
+      (match 25#u8 with
+      | 25#8#uscalar => do
+        let pair ← S1SemanticCode.sampleBlock D t 25#u8 record.framed
+        NJM_CircleJoin.after FinishModel.CircleRow.First pair
+      | 26#8#uscalar => do
+        let pair ← S1SemanticCode.sampleBlock D t 26#u8 record.framed
+        NJM_CircleJoin.after FinishModel.CircleRow.Second pair
+      | x => pure (core.result.Result.Err r1_wire.Error.InvalidRow, t))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJM_generated/NJM_CircleCode.lean:42:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run (?code >>= ?next)
+in the target expression
+  (NGX_RunBind.appendResult (run (S1SemanticCode.sampleBlock D t 26#u8 record.framed)).1
+      (run (S1SemanticCode.sampleBlock D t 26#u8 record.framed)).2 fun pair =>
+      NIX_ValidatedCut.after (F3M_CircleSource.install B) FinishModel.CircleRow.Second pair.2 pair.1) =
+    run
+      (match 26#u8 with
+      | 25#8#uscalar => do
+        let pair ← S1SemanticCode.sampleBlock D t 25#u8 record.framed
+        NJM_CircleJoin.after FinishModel.CircleRow.First pair
+      | 26#8#uscalar => do
+        let pair ← S1SemanticCode.sampleBlock D t 26#u8 record.framed
+        NJM_CircleJoin.after FinishModel.CircleRow.Second pair
+      | x => pure (core.result.Result.Err r1_wire.Error.InvalidRow, t))
+
+case pos
+H : Type
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 H
+t : r1_wire.SemanticTranscript H
+record : r1_wire.ValidatedRecord
+first : ¬26#u8 = 25#u8
+⊢ (NGX_RunBind.appendResult (run (S1SemanticCode.sampleBlock D t 26#u8 record.framed)).1
+      (run (S1SemanticCode.sampleBlock D t 26#u8 record.framed)).2 fun pair =>
+      NIX_ValidatedCut.after (F3M_CircleSource.install B) FinishModel.CircleRow.Second pair.2 pair.1) =
+    run
+      (match 26#u8 with
+      | 25#8#uscalar => do
+        let pair ← S1SemanticCode.sampleBlock D t 25#u8 record.framed
+        NJM_CircleJoin.after FinishModel.CircleRow.First pair
+      | 26#8#uscalar => do
+        let pair ← S1SemanticCode.sampleBlock D t 26#u8 record.framed
+        NJM_CircleJoin.after FinishModel.CircleRow.Second pair
+      | x => pure (core.result.Result.Err r1_wire.Error.InvalidRow, t))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NJM_generated/NJM_CircleCode.lean:44:3: error: unsolved goals
+case neg
+H : Type
+B : FinishModel.Boundaries
+D : aspis_core.Digest32 H
+t : r1_wire.SemanticTranscript H
+record : r1_wire.ValidatedRecord
+row : U8
+first : ¬row = 25#u8
+second : ¬row = 26#u8
+⊢ run
+      (match row with
+      | 25#8#uscalar => do
+        let frame ← liftM (r1_wire.ValidatedRecord.impl.framed record)
+        let __x ← S1SemanticCode.sampleBlock D t 25#u8 frame
+        NIX_ValidatedCut.after (F3M_CircleSource.install B) FinishModel.CircleRow.First __x.2 __x.1
+      | 26#8#uscalar => do
+        let frame ← liftM (r1_wire.ValidatedRecord.impl.framed record)
+        let __x ← S1SemanticCode.sampleBlock D t 26#u8 frame
+        NIX_ValidatedCut.after (F3M_CircleSource.install B) FinishModel.CircleRow.Second __x.2 __x.1
+      | x => pure (core.result.Result.Err r1_wire.Error.InvalidRow, t)) =
+    run
+      (match row with
+      | 25#8#uscalar => do
+        let pair ← S1SemanticCode.sampleBlock D t 25#u8 record.framed
+        NJM_CircleJoin.after FinishModel.CircleRow.First pair
+      | 26#8#uscalar => do
+        let pair ← S1SemanticCode.sampleBlock D t 26#u8 record.framed
+        NJM_CircleJoin.after FinishModel.CircleRow.Second pair
+      | x => pure (core.result.Result.Err r1_wire.Error.InvalidRow, t))
+NJM_generated/NJM_CircleCode.lean:44:51: warning: This simp argument is unused:
+  first
+
+Hint: Omit it from the simp argument list.
+  simp only [NIX_ValidatedCut.dispatch, ̲dispatch,f̵i̵r̵ ̲st̵,̵s̵econd]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NJM_generated/NJM_CircleCode.lean:44:57: warning: This simp argument is unused:
+  second
+
+Hint: Omit it from the simp argument list.
+  simp only [NIX_ValidatedCut.dispatch, ̲dispatch, ̲first,̵s̵e̵c̵o̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NJM_CircleCode.dispatch_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NJM_CircleCode.original' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
