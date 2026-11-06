@@ -1,0 +1,42 @@
+{"attempt": "NLG_L039", "exit_status": 0, "wall_seconds": 28.33480397798121, "peak_rss_kib": "6468764", "swaps": "0", "print_axioms": []}
+def NKU_ParentFold.G : {H : Type} →
+  (d : AspisR1Stage2.aspis_core.digest.Digest32 H) →
+    (hash : H) →
+      (s : NKU.State) →
+        NKU_Chronology.Run (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error) :=
+fun {H : Type} (d : AspisR1Stage2.aspis_core.digest.Digest32 H) (hash : H) (s : NKU.State) =>
+  @Bind.bind.{0, 0} NKU_Chronology.Run
+    (@Monad.toBind.{0, 0} NKU_Chronology.Run (@NJU_Log.instMonadRun NJU_ResumeObserved.Event))
+    (Aeneas.Std.core.result.Result.{0, 0} (Prod.{0, 0} Unit NKU.State) NID_ResumeEmission.verifier.Error)
+    (Aeneas.Std.core.result.Result.{0, 0} NKU.Pair NID_ResumeEmission.verifier.Error) (@NKU_FineHeader.run H d s)
+    fun (r
+...
+Aeneas.Std.Result.ok.{0}
+            (Prod.{0, 0} (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE)
+              S)
+            (@Prod.mk.{0, 0}
+              (Aeneas.Std.core.result.Result.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE) S
+              (@Aeneas.Std.core.result.Result.Ok.{0, 0} (AspisR1.NKY_BoxAction.Owned T) AspisR1.NKY_BoxAction.PE box)
+              post))
+def AspisR1.NKY_BoxPost.Windows : {T F S : Type} →
+  (W : T → T → Prop) →
+    (a : AspisR1.S2W_D189Wrappers.Allocator S) →
+      (s : S) →
+        (bytes : Nat) →
+          (r : AspisR1.NP6_StdModel.Reservation) →
+            (raw : Aeneas.Std.core.result.Result.{0, 0} T F) →
+              (box : AspisR1.NKY_BoxAction.Owned T) →
+                (before : AspisR1.NKY_BoxFrame.Heap T) → (readsAfter : Nat → T) → Prop :=
+fun {T F S : Type} (W : T → T → Prop) (a : AspisR1.S2W_D189Wrappers.Allocator S) (s : S) (bytes : Nat)
+    (r : AspisR1.NP6_StdModel.Reservation) (raw : Aeneas.Std.core.result.Result.{0, 0} T F)
+    (box : AspisR1.NKY_BoxAction.Owned T) (before : AspisR1.NKY_BoxFrame.Heap T) (readsAfter : Nat → T) =>
+  @AspisR1.NKY_BoxPost.Windows.match_2.{1} T F (fun (raw : Aeneas.Std.core.result.Result.{0, 0} T F) => Prop) raw
+    (fun (a : F) => @AspisR1.NKY_BoxPost.Readonly T W before readsAfter) fun (a_1 : T) =>
+    @AspisR1.NKY_BoxPost.Windows.match_1.{1} S
+      (fun (x : Aeneas.Std.Result.{0} S) (r : AspisR1.NP6_StdModel.Reservation) => Prop)
+      (@AspisR1.S2W_D189Wrappers.Allocator.allocate S a s bytes) r
+      (fun (v : S) (a : Unit) =>
+        @AspisR1.NKY_BoxPost.Allocated T W before readsAfter (@AspisR1.NKY_BoxAction.Owned.owner T box))
+      fun (x : Aeneas.Std.Result.{0} S) (x_1 : AspisR1.NP6_StdModel.Reservation) => True
+
+Running as unit: run-rfe2eff107e15456988841b29dee4cad2.scope; invocation ID: 82bcba930f4942be9e8ba4d99ae952c1
