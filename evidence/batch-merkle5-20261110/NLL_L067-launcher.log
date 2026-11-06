@@ -1,0 +1,27 @@
+{"attempt": "NLL_L067", "exit_status": 0, "wall_seconds": 13.801292923046276, "peak_rss_kib": "5981256", "swaps": "0", "print_axioms": ["'NLL_Tx1QueryCarrier.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLL_Tx1QueryCarrier.source : ∀ (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (self : transcript.Transcript Unit) (row : U8) (payload : Slice U8)
+  (observed : NGP_L181.Observation NGQ_Effects.Reply),
+  NHK_Invocation.Cuts hashv self row payload observed →
+    ∀ (qs : Std.Array U32 22#usize) (after : transcript.Transcript Unit),
+      observed.result = ok (core.result.Result.Ok qs, after) →
+        ∀ (sem : r1_semantic.Verified Unit) (v : verifier.View) (gamma kappa claim : aspis_core.field.WideExact)
+          (alpha : Std.Array aspis_core.field.WideExact 2#usize) (rho : aspis_core.field.QM31)
+          (last : transcript.Transcript Unit),
+          have p := PreparedScra
+...
+theorem NLL_Tx1QueryCarrier.source : ∀ (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (self : transcript.Transcript Unit) (row : U8) (payload : Slice U8)
+  (observed : NGP_L181.Observation NGQ_Effects.Reply),
+  NHK_Invocation.Cuts hashv self row payload observed →
+    ∀ (qs : Std.Array U32 22#usize) (after : transcript.Transcript Unit),
+      observed.result = ok (core.result.Result.Ok qs, after) →
+        ∀ (sem : r1_semantic.Verified Unit) (v : verifier.View) (gamma kappa claim : aspis_core.field.WideExact)
+          (alpha : Std.Array aspis_core.field.WideExact 2#usize) (rho : aspis_core.field.QM31)
+          (last : transcript.Transcript Unit),
+          have p := PreparedScratchReachability.output sem v gamma kappa alpha rho qs claim last;
+          ∀ j < 22, ↑(↑(NFW_PreparedPort.prepared p).queries)[j]! < 262144 :=
+⋯
+'NLL_Tx1QueryCarrier.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r22ceb2e487ab4bf9b62e4a5ca8a8ffdb.scope; invocation ID: 12660be9c0c94d1fa0f5a8320df6b0d0

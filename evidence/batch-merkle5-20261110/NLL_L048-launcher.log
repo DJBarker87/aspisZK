@@ -1,0 +1,34 @@
+{"attempt": "NLL_L048", "exit_status": 0, "wall_seconds": 14.47476562904194, "peak_rss_kib": "6035056", "swaps": "0", "print_axioms": ["'NLL_BatchReturning.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLL_BatchReturning.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (p : verifier.Prepared) (folded : Root) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑p.queries)[j]! < 262144) →
+              ∀ (history : History) (out : Reply),
+                NLL_BatchSource.Invocation H proof p folded batch history out →
+                  NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                        proof p folded batch () =
+                      ok out ∧
+          
+...
+theorem NLL_BatchReturning.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (parsed : OraclePortCompactDraft.Parsed),
+      parsed.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (p : verifier.Prepared) (folded : Root) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑p.queries)[j]! < 262144) →
+              ∀ (history : History) (out : Reply),
+                NLL_BatchSource.Invocation H proof p folded batch history out →
+                  NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                        proof p folded batch () =
+                      ok out ∧
+                    plan H proof parsed p.queries batch (sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI
+                        NKV_ParentSource.zeroV =
+                      history :=
+⋯
+'NLL_BatchReturning.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r931da18eae2343fcb7000eff93e0b5dd.scope; invocation ID: 5d5422b89b4a4d62a7c679ce25632368

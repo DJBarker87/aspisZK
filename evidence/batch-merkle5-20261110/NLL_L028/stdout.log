@@ -1,0 +1,80 @@
+NLL_ParentSource.lean:17:1: error: 'change' tactic failed, pattern
+  (NKV_ParentSource.three
+      (fun i v =>
+        NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof raw
+          (Port3_NativeBatchCalls.rootAt roots 0) batch 0#usize i v ())
+      (fun i v =>
+        NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof raw
+          (Port3_NativeBatchCalls.rootAt roots 1) batch 1#usize i v ())
+      fun i v =>
+      NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof raw
+        (Port3_NativeBatchCalls.rootAt roots 2) batch 2#usize i v ()) =
+    ?m.52
+is not definitionally equal to target
+  (do
+      let root0 ← Array.index_usize roots 0#usize
+      let root1 ← Array.index_usize roots 1#usize
+      let root2 ← Array.index_usize roots 2#usize
+      let (r, idx1, val1) ←
+        NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof raw
+            root0 batch 0#usize (Array.repeat 16#usize 0#u32) (Array.repeat 16#usize (Array.repeat 32#usize 0#u8)) ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r1, idx2, val2) ←
+            NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+                raw root1 batch 1#usize idx1 val1 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let (r2, _, _) ←
+                NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                    proof raw root2 batch 2#usize idx2 val2 ()
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    model H proof raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV
+NLL_ParentSource.lean:16:12: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [h0̵,̵h̵1, ̲h2, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLL_ParentSource.lean:16:15: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, ̲h1̵,̵h̵2, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLL_ParentSource.lean:16:18: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, ̲h1,h̵2̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLL_ParentSource.lean:16:21: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵1̵,̵h̵2̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLL_ParentSource.source : ∀ (H : Bytes → State) (proof : Slice U8) (raw : Std.Array U32 22#usize)
+  (roots : Roots) (batch : Usize),
+  NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof raw
+      roots batch () =
+    model H proof raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV :=
+⋯
+'NLL_ParentSource.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

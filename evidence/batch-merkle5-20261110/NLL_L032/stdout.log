@@ -1,0 +1,7 @@
+theorem NLL_ParentSource.source : ∀ (H : Bytes → State) (proof : Slice U8) (raw : Std.Array U32 22#usize)
+  (roots : Roots) (batch : Usize),
+  NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof raw
+      roots batch () =
+    model H proof raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV :=
+⋯
+'NLL_ParentSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]

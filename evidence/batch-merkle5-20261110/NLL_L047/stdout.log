@@ -1,0 +1,13 @@
+theorem NLL_ValuesAbort.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (roots : Roots) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∀ (history : History) (pending : Pending),
+                AbortValues H proof raw roots batch history pending →
+                  NLL_Prefix.At (plan H proof p raw batch (sites roots) NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+                    (history ++ pending.answered) pending.parts :=
+⋯
+'NLL_ValuesAbort.source' depends on axioms: [propext, Classical.choice, Quot.sound]

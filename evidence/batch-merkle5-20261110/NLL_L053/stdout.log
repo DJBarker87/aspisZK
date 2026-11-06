@@ -1,0 +1,16 @@
+theorem NLL_CallerInstall.returning : ∀ (H : Bytes → State) (proof : Std.Array U8 57607#usize) (p : verifier.Prepared)
+  (a : verifier.Accumulator) (pm : OraclePortCheckpointAbiC5.Prepared)
+  (am : QueryAccumulator.State OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E),
+  CheckpointBytes4SavedFields.BodyMatches p a pm am →
+    ∀ (folded : Root) (batch : Usize),
+      ↑batch < 2 →
+        ∀ (history : History) (out : Reply),
+          NLL_BatchSource.Invocation H proof.to_slice p folded batch history out →
+            NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                  proof.to_slice p folded batch () =
+                ok out ∧
+              plan H proof.to_slice (NLL_PhysicalPlan.physical proof.to_slice) p.queries batch
+                  (sites (NLL_BatchSource.roots p folded)) NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+                history :=
+⋯
+'NLL_CallerInstall.returning' depends on axioms: [propext, Classical.choice, Quot.sound]

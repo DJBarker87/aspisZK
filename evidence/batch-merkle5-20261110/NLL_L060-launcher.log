@@ -1,0 +1,39 @@
+{"attempt": "NLL_L060", "exit_status": 0, "wall_seconds": 20.938086794223636, "peak_rss_kib": "5848624", "swaps": "0", "print_axioms": []}
+theorem AspisR1ClaimPreparedBridge.prepared_candidate_samplers_canonical : ∀ {H : Type}
+  (sampling : AspisR1PublicPreparation.PreparedModel.Boundaries) (D : AspisR1PublicPreparation.aspis_core.Digest32 H)
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H) (v : AspisR1PublicPreparation.verifier.View) (hash : H)
+  (out : AspisR1PublicPreparation.verifier.Prepared)
+  (scratch scratchIn : Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE 29#usize),
+  AspisR1PublicPreparation.PreparedScratchModel.prepare
+        (AspisR1ClaimPreparedBridge.concreteBoundaries (AspisR1ClaimPreparedBridge.withCandidateSamplers sampling)) D
+        sem v hash scratchIn =
+      Aeneas.Std.Result.ok (Aeneas.Std.co
+...
+dBridge.toClaimE out.gamma) ∧
+      AspisR1CurrentPreparedClaim.Concrete.Canonical (AspisR1ClaimPreparedBridge.toClaimE out.kappa) :=
+⋯
+def AspisR1ClaimPreparedBridge.withCandidateSamplers : AspisR1PublicPreparation.PreparedModel.Boundaries →
+  AspisR1PublicPreparation.PreparedModel.Boundaries :=
+fun sampling =>
+  AspisR1ClaimPreparedBridge.withCandidateGamma (AspisR1Post25SamplerOrdinaryCallbackV2.withCandidateOrdinary sampling)
+theorem AspisR1.NFW_PreparedCalls.calls : ∀ {H : Type} (B : AspisR1PublicPreparation.PreparedScratchModel.Boundaries)
+  (D : AspisR1PublicPreparation.aspis_core.Digest32 H) (sem : AspisR1PublicPreparation.r1_semantic.Verified H)
+  (v : AspisR1PublicPreparation.verifier.View) (hash : H) (out : AspisR1PublicPreparation.verifier.Prepared)
+  (scratch old : Aeneas.Std.Array AspisR1PublicPreparation.aspis_core.field.WideExact 29#usize),
+  AspisR1PublicPreparation.PreparedScratchModel.prepare B D sem v hash old =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out, scratch) →
+    B.powers 29#usize out.gamma = Aeneas.Std.Result.ok scratch ∧
+      B.claim D sem v.y1 v.inactive scratch out.kappa =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.claim) ∧
+        ∃ row before afterQueries last,
+          (row = 30#u8 ∨ row = 31#u8) ∧
+            B.sampling.queries D before row v.final_message =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out.queries, afterQueries) ∧
+              AspisR1PublicPreparation.PreparedModel.scalar_k B.sampling D afterQueries
+                    (if row = 30#u8 then 31#u8 else 32#u8)
+                    AspisR1PublicPreparation.PreparedScratchReachability.emptyPayload =
+                  Aeneas.Std.Result.ok (out.rho, last) ∧
+                out.state = last.state :=
+⋯
+
+Running as unit: run-r77d2e8bcc5a2443ba1910604f10593f7.scope; invocation ID: 1019b645eded47129ca2d4a58e88e298

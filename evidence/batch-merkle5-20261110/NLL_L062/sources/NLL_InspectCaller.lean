@@ -1,0 +1,9 @@
+import NFW_PreparedCalls
+import NFW_SampledDomains
+set_option pp.proofs false
+#print AspisR1ClaimPreparedBridge.prepared_candidate_samplers_canonical
+#print AspisR1ClaimPreparedBridge.withCandidateSamplers
+#print AspisR1.NFW_PreparedCalls.calls
+#print AspisR1.NGT_NBA_Installed.actual
+#print AspisR1.NHL_PreparedScalars.actual
+#print AspisR1PublicPreparation.transcript.Transcript

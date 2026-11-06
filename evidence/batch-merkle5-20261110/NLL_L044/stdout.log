@@ -1,0 +1,8 @@
+theorem NLL_BatchSource.source : ∀ (H : Bytes → State) (proof : Slice U8) (p : verifier.Prepared) (folded : Root)
+  (batch : Usize),
+  NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof p folded
+      batch () =
+    NKV_FRef.verifier.candidate.batch_merkle_values (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof
+      p.queries (roots p folded) batch () :=
+⋯
+'NLL_BatchSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]

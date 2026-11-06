@@ -1,0 +1,33 @@
+{"attempt": "NLL_L055", "exit_status": 0, "wall_seconds": 24.558022613171488, "peak_rss_kib": "6032496", "swaps": "0", "print_axioms": ["'NLL_ParentAdoptedAbort.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLL_ParentAdoptedAbort.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∀ (sites : List Call),
+                (∀ c ∈ sites, ↑c.2 < 3) →
+                  (∀ c ∈ sites, c.1 = encodeState (OraclePortBatchDraft.committedRoot p ↑c.2)) →
+                    ∀ (idx : Indices) (val : Values) (history : History) (pending : Pending),
+                      AbortCalls H proof raw batch sites idx val history pending →
+          
+...
+theorem NLL_ParentAdoptedAbort.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∀ (sites : List Call),
+                (∀ c ∈ sites, ↑c.2 < 3) →
+                  (∀ c ∈ sites, c.1 = encodeState (OraclePortBatchDraft.committedRoot p ↑c.2)) →
+                    ∀ (idx : Indices) (val : Values) (history : History) (pending : Pending),
+                      AbortCalls H proof raw batch sites idx val history pending →
+                        NLL_Prefix.At (NLL_ObservedCalls.calls H proof p raw batch sites idx val).1
+                          (history ++ pending.answered) pending.parts :=
+⋯
+'NLL_ParentAdoptedAbort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra177993050ba4393b3f5b81240731c56.scope; invocation ID: 3aba5412fe674c09bd55370fecff8e35

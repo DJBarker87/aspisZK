@@ -1,0 +1,34 @@
+{"attempt": "NLL_L033", "exit_status": 0, "wall_seconds": 11.603515838040039, "peak_rss_kib": "6038296", "swaps": "0", "print_axioms": ["'NLL_TreeAbort.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLL_TreeAbort.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Root) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : Indices) (val : Values) (events : List Event) (pending : Pending),
+                  AbortInvocation H proof raw root batch kind idx val events pending →
+                    NLL_Prefix.At
+                      (NKV_QueryPlan.plan H p (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+                   
+...
+theorem NLL_TreeAbort.source : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Root) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                ∀ (idx : Indices) (val : Values) (events : List Event) (pending : Pending),
+                  AbortInvocation H proof raw root batch kind idx val events pending →
+                    NLL_Prefix.At
+                      (NKV_QueryPlan.plan H p (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+                        (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind)) root
+                        (NJV_EntryABI.initial idx val 0#usize))
+                      (leafHistory kind events ++ pending.answered) pending.parts :=
+⋯
+'NLL_TreeAbort.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re76b31a11eb04fa683ce52f55d3b1212.scope; invocation ID: 321f3cb4a5f749ffa79456da1869db3b

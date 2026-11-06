@@ -1,0 +1,38 @@
+{"attempt": "NLL_L039", "exit_status": 0, "wall_seconds": 23.174674455076456, "peak_rss_kib": "6040168", "swaps": "0", "print_axioms": ["'NLL_TreeAdopted.returning' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLL_TreeAdopted.returning : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Root) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                root = encodeState (OraclePortBatchDraft.committedRoot p ↑kind) →
+                  ∀ (idx : Indices) (val : Values) (events : List Event) (out : Answer),
+                    Invocation H proof raw root batch kind idx val events out →
+                      have model :=
+                        eval H
+    
+...
+theorem NLL_TreeAdopted.returning : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (root : Root) (batch kind : Usize),
+          ↑batch < 2 →
+            ↑kind < 3 →
+              (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+                root = encodeState (OraclePortBatchDraft.committedRoot p ↑kind) →
+                  ∀ (idx : Indices) (val : Values) (events : List Event) (out : Answer),
+                    Invocation H proof raw root batch kind idx val events out →
+                      have model :=
+                        eval H
+                          (MultiproofConeSlotState.slotState p (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+                            (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind))
+                            (NJV_EntryABI.initial idx val 0#usize));
+                      (leafHistory kind events, NKV_ReturnBoundary.reject (ok out)) =
+                        (model.1, NKV_TailModel.model model.2) :=
+⋯
+'NLL_TreeAdopted.returning' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r510fa0b142af4e89b09233281f6e46b7.scope; invocation ID: 8c933c7221f34859a57da554962b2e28

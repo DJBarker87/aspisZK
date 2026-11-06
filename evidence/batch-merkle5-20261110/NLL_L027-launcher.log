@@ -1,0 +1,67 @@
+{"attempt": "NLL_L027", "exit_status": 1, "wall_seconds": 17.641140626976267, "peak_rss_kib": "6008568", "swaps": "0", "print_axioms": ["'NLL_ParentReturning.calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLL_ParentReturning.lean:25:3: error: unsolved goals
+case error.left
+H : Bytes → State
+proof : Slice U8
+len : (↑proof).length = 57607
+p : OraclePortCompactDraft.Parsed
+wire : p.wire = MultiproofConeCanonical.bytesOf ↑proof
+raw : Std.Array U32 22#usize
+batch : Usize
+hb : ↑batch < 2
+canonical : ∀ j < 22, ↑(↑raw)[j]! < 262144
+sites : List Call
+idx✝ : Indices
+val✝ : Values
+history : History
+out : Reply
+root : Root
+kind : Usize
+rest : List Call
+idx nextIdx : Indices
+val nextVal : Values
+events : List Event
+error : verifier.Error
+child : NLL.Invocation H proof raw root batch kind idx val events (core.result.Result.Err error, nextIdx, nextVal)
+kinds : ∀ c ∈ (root, kind) :: rest, ↑c.2 < 3
+packet :
+ 
+...
+size
+rest : List Call
+idx nextIdx : Indices
+val nextVal : Values
+events : List Event
+error : verifier.Error
+child : NLL.Invocation H proof raw root batch kind idx val events (core.result.Result.Err error, nextIdx, nextVal)
+kinds : ∀ c ∈ (root, kind) :: rest, ↑c.2 < 3
+packet :
+  NKV_FRef.verifier.candidate.batch_tree (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H) proof raw root
+        batch kind idx val () =
+      ok (core.result.Result.Err error, nextIdx, nextVal) ∧
+    leafHistory kind events =
+      NKV_QueryPlan.plan H p (Port4B_KeyInstall.queries raw) (↑batch) (↑kind)
+        (nodeView H proof ((Usize.wrapping_mul 3#usize batch).wrapping_add kind)) root
+        (NJV_EntryABI.initial idx val 0#usize)
+⊢ (let (r, i, v) := (core.result.Result.Err error, nextIdx, nextVal)
+    match r with
+    | core.result.Result.Ok a => model H proof raw batch rest i v
+    | core.result.Result.Err e => ok (core.result.Result.Err e)) =
+    ok (core.result.Result.Err error)
+theorem NLL_ParentReturning.calls : ∀ (H : Bytes → State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (raw : Std.Array U32 22#usize) (batch : Usize),
+          ↑batch < 2 →
+            (∀ j < 22, ↑(↑raw)[j]! < 262144) →
+              ∀ (sites : List Call),
+                (∀ c ∈ sites, ↑c.2 < 3) →
+                  ∀ (idx : Indices) (val : Values) (history : History) (out : Reply),
+                    Calls H proof raw batch sites idx val history out →
+                      model H proof raw batch sites idx val = ok out ∧
+                        plan H proof p raw batch sites idx val = history :=
+⋯
+'NLL_ParentReturning.calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd79845be409940738a97157b498811bc.scope; invocation ID: 4ee47534a0ef4b0f83a22f587b71c912

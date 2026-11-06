@@ -1,0 +1,40 @@
+{"attempt": "NLL_L025", "exit_status": 0, "wall_seconds": 14.690713569987565, "peak_rss_kib": "6055596", "swaps": "0", "print_axioms": ["'NLL_AbortHistory.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLL_AbortHistory.source : ∀ (H : Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch : ℕ) (kind lo n slot : Usize) (root : Root),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                (↑lo = if batch = 0 then 0 else 10) →
+                  ↑n ≤ 16 →
+                    ∀ (positions : List ℕ) (f : Frame),
+                      (∀ selected ∈ positions, selected ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+                        ↑f.position + posi
+...
+theorem NLL_AbortHistory.source : ∀ (H : Bytes → AspisV8R19.SourceDuplexStep.State) (proof : Slice U8),
+  (↑proof).length = 57607 →
+    ∀ (p : OraclePortCompactDraft.Parsed),
+      p.wire = MultiproofConeCanonical.bytesOf ↑proof →
+        ∀ (q : Fin 22 → Fin 262144) (batch : ℕ) (kind lo n slot : Usize) (root : Root),
+          batch < 2 →
+            ↑kind < 3 →
+              ↑slot = 3 * batch + ↑kind →
+                (↑lo = if batch = 0 then 0 else 10) →
+                  ↑n ≤ 16 →
+                    ∀ (positions : List ℕ) (f : Frame),
+                      (∀ selected ∈ positions, selected ∈ OraclePortFrozenOrder.sortedPositions q batch ↑kind) →
+                        ↑f.position + positions.length = ↑n →
+                          ↑f.scratch.n + positions.length ≤ 16 →
+                            Port4B_LeafLoop.KeyStream q batch (↑kind) f.keys f.position positions →
+                              ∀ (events : List Event) (pending : Pending),
+                                AbortLoop H proof root batch kind lo n slot f events pending →
+                                  NLL_Prefix.At
+                                    (NLL_LoopHistory.expected H p q batch kind (nodeView H proof slot) root positions
+                                      f.scratch)
+                                    (leafHistory kind events ++ pending.answered) pending.parts :=
+⋯
+'NLL_AbortHistory.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra2a52bfd3bc14706b6369c1549952fdb.scope; invocation ID: cb0201001e2049c8a5cc13bd14c7a659

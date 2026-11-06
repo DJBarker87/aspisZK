@@ -1,0 +1,41 @@
+{"attempt": "NLL_L052", "exit_status": 0, "wall_seconds": 18.511975747998804, "peak_rss_kib": "6044652", "swaps": "0", "print_axioms": ["'NLL_PhysicalPlan.returning' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLL_PhysicalPlan.abort' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLL_PhysicalPlan.returning : ∀ (H : Bytes → State) (proof : Std.Array U8 57607#usize) (p : verifier.Prepared)
+  (folded : Root) (batch : Usize),
+  ↑batch < 2 →
+    (∀ j < 22, ↑(↑p.queries)[j]! < 262144) →
+      ∀ (history : History) (out : Reply),
+        NLL_BatchSource.Invocation H proof.to_slice p folded batch history out →
+          NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                proof.to_slice p folded batch () =
+              ok out ∧
+            plan H proof.to_slice (physical proof.to_slice) p.queries batch (sites (NLL_BatchSource.roots p folded))
+                NKV_ParentSource.zeroI NKV_ParentSource.zero
+...
+theorem NLL_PhysicalPlan.returning : ∀ (H : Bytes → State) (proof : Std.Array U8 57607#usize) (p : verifier.Prepared)
+  (folded : Root) (batch : Usize),
+  ↑batch < 2 →
+    (∀ j < 22, ↑(↑p.queries)[j]! < 262144) →
+      ∀ (history : History) (out : Reply),
+        NLL_BatchSource.Invocation H proof.to_slice p folded batch history out →
+          NKV_FRef.verifier.candidate.batch_merkle (NKV_ConcreteChildren.ops H) (NKV_ConcreteChildren.digest H)
+                proof.to_slice p folded batch () =
+              ok out ∧
+            plan H proof.to_slice (physical proof.to_slice) p.queries batch (sites (NLL_BatchSource.roots p folded))
+                NKV_ParentSource.zeroI NKV_ParentSource.zeroV =
+              history :=
+⋯
+theorem NLL_PhysicalPlan.abort : ∀ (H : Bytes → State) (proof : Std.Array U8 57607#usize) (p : verifier.Prepared)
+  (folded : Root) (batch : Usize),
+  ↑batch < 2 →
+    (∀ j < 22, ↑(↑p.queries)[j]! < 262144) →
+      ∀ (history : History) (pending : Pending),
+        NLL_BatchAbort.Invocation H proof.to_slice p folded batch history pending →
+          NLL_Prefix.At
+            (plan H proof.to_slice (physical proof.to_slice) p.queries batch (sites (NLL_BatchSource.roots p folded))
+              NKV_ParentSource.zeroI NKV_ParentSource.zeroV)
+            (history ++ pending.answered) pending.parts :=
+⋯
+'NLL_PhysicalPlan.returning' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLL_PhysicalPlan.abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r54e761e772bc45e0b09a60299c35c80c.scope; invocation ID: 43966bdebd174463ba128a9eb3d5a059
