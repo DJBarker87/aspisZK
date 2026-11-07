@@ -147,3 +147,5 @@ Attempt 49666: PV_LIB_SLICE_F33, exit1.
 Attempt 49667: PV_LIB_SLICE_F33, exit1.
 
 Attempt 49668: PV_LIB_SLICE_F33, exit0.
+
+Attempt 49669: PV_LIB_SLICE_TypedDrop, exit1.
