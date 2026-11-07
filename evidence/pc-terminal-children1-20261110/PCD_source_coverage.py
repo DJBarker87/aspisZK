@@ -32,8 +32,10 @@ def function_body(text,name):
 assert normalize(function_body(refs,'checked_next'))==normalize(function_body((E/'PCD_guard_native.rs').read_text(),'PCD_checked_reference'))
 assert normalize(function_body(refs,'frontier_step'))==normalize(function_body((E/'PCD_frontier_native.rs').read_text(),'PCD_frontier_reference'))
 fragment=meta['suffix']
-assert 'cursor.next()' in fragment and 'core::ptr::eq(node, &afterstate.next_frontier[level])' in fragment
-assert 'assert!(native_level == level)' in fragment
+assert 'cursor.next()' in fragment and normalize('core::ptr::eq(node, &afterstate.next_frontier[level])') in normalize(fragment)
+assert normalize('assert!(native_level == level)') in normalize(fragment)
+assert normalize('None => { assert!(level==20); false }') in normalize(fragment)
+assert normalize('requires(level <= 20)') in normalize(fragment)
 errsource=subprocess.check_output(['git','show',rev+':programs/aspis-pool/src/error.rs'],text=True)
 assert 'StateHistoryMismatch = 0x4153_2003' in errsource and 'Self::Custom(error as u32)' in errsource
 # Planted source-association faults must each be rejected by the same checks.
@@ -57,7 +59,7 @@ rows=[]
 for n,line in enumerate(function.splitlines(),source[:start].count('\n')+1):
  if not line.strip():continue
  rows.append(dict(line=n,source=line,category='signature' if n<source[:opening].count('\n')+1 else 'native guard/loop/returned-record and symbolic fold'))
-out=dict(status='SOURCE_COVERAGE_PASS_ONLY; not a row promotion',row='POOL:320',revision=rev,source=path,source_sha256=hashlib.sha256(source.encode()).hexdigest(),function_sha256=hashlib.sha256(function.encode()).hexdigest(),body_sha256=hashlib.sha256(body.encode()).hexdigest(),lines=rows,spans=spans,reference_source_sha256=pins['rust_reference_sha256'],error_conversion_source_sha256=hashlib.sha256(errsource.encode()).hexdigest(),mutations=checks,missing='actual-body extraction eligibility, final native controls, full formal/source certificate and coherent gate')
+out=dict(status='SOURCE_COVERAGE_PASS_ONLY; not a row promotion',row='POOL:320',revision=rev,source=path,source_sha256=hashlib.sha256(source.encode()).hexdigest(),function_sha256=hashlib.sha256(function.encode()).hexdigest(),body_sha256=hashlib.sha256(body.encode()).hexdigest(),lines=rows,spans=spans,reference_source_sha256=pins['rust_reference_sha256'],error_conversion_source_sha256=hashlib.sha256(errsource.encode()).hexdigest(),mutations=checks,missing='final native controls and coherent gate; actual-body eligibility is separately recorded in E006/E007')
 (E/'PCD_SOURCE_COVERAGE.json').write_text(json.dumps(out,indent=1)+'\n')
 (E/'PCD_FROZEN_FUNCTION.rs.txt').write_text(function+'\n')
 print('PCD source coverage passes for every frozen POOL:320 statement; ten planted correspondence faults rejected; no row promoted.')

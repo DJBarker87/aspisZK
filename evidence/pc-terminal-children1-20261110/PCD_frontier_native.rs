@@ -18,12 +18,7 @@
         level: usize,
     ) -> ProgramResult {
         let afterstate = result.verified_afterstate;
-        let mut cursor = afterstate.next_frontier.iter().enumerate();
-        if level != 0 { let _ = cursor.nth(level - 1); }
-        let Some((native_level, node)) = cursor.next() else { panic!("PCD valid iterator cut"); };
-        assert!(native_level == level);
-        assert!(core::ptr::eq(node, &afterstate.next_frontier[level]));
-        let level = native_level;
+        let node = &afterstate.next_frontier[level];
 SOURCE_SPAN
         Ok(())
     }

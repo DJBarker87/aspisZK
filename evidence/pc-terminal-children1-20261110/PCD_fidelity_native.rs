@@ -77,16 +77,16 @@
     #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
     fn PCD_fidelity_real_caller() {
         let lane=PCD_lane(kani::any());let result=PCD_result(kani::any());let reject:bool=kani::any();let mut log=PCD_FidelityLog::default();
-        let out=PCD_fid_weak(&lane,&result,reject,&mut log);
+        let out=PCD_fid_body(&lane,&result,reject,&mut log);
         assert!(log.called&&log.lane_ptr==&lane as *const _ as usize&&log.result_ptr==&result as *const _ as usize);
         assert!(PCD_fid_exact(&out,&result,reject));
     }
     #[kani::proof]
-    #[kani::stub(PCD_fid_weak,PCD_fid_oracle)]
+    #[kani::stub(PCD_fid_body,PCD_fid_oracle)]
     #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
     fn PCD_fidelity_unimplied_caller() {
         let lane=PCD_lane(kani::any());let result=PCD_result(kani::any());let reject:bool=kani::any();let mut log=PCD_FidelityLog::default();
-        let out=PCD_fid_weak(&lane,&result,reject,&mut log);
+        let out=PCD_fid_body(&lane,&result,reject,&mut log);
         assert!(log.called&&log.lane_ptr==&lane as *const _ as usize&&log.result_ptr==&result as *const _ as usize);
         assert!(PCD_fid_exact(&out,&result,reject));
     }

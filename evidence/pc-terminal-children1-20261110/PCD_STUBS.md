@@ -1,0 +1,7 @@
+# PCD native substitutions
+
+No field multiplication or other field-operation stub is used: POOL:320 performs checked integer addition, shifts, fixed raw-word equality and record construction. Thus there is no new LPh_ arithmetic obligation.
+
+Every credited copy-dependent native check uses ONLY the exact KMX_copy_stubs.patch (SHA256 bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67), the generic core::ptr::copy_nonoverlapping replacement, and a matched failing control in the same configuration. Its unchanged value laws are KMX_CopyMeaning.loop_spec/copy_prefix/copy_frame (source hash in PCD_KMX_VALUE_LAWS.txt); they are specifications under existing P6 tool trust, not a new claimed universal Rust theorem. Inputs are Copy scalar/fixed-record values, with valid nonoverlapping SDK/Rust-created regions; no Vec growth or custom clone effects are reached by this row. Native Kani safety/unwinding checks remain enabled.
+
+Returned-record calibration uses an explicit constructor oracle ONLY in the unimplied-assertion control. It logs immutable argument identities and a scalar reply window; it is not used to substitute a child in any credited Pool row. All reachable callee errors in that calibration are full ProgramError::Custom(payload). No contract stub_verified, function-pointer-dependent property, or writable static is used.

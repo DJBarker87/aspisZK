@@ -10,7 +10,7 @@
  fn next_pair_forest_lane_v1(
      lane: &PoolV1PairForestLaneStateV1,
      result: &aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
-@@ -5792,3 +5795,287 @@
+@@ -5792,3 +5795,314 @@
          assert!(accounts[4].data.iter().any(|byte| *byte != 0));
      }
  }
@@ -76,12 +76,7 @@
 +        level: usize,
 +    ) -> ProgramResult {
 +        let afterstate = result.verified_afterstate;
-+        let mut cursor = afterstate.next_frontier.iter().enumerate();
-+        if level != 0 { let _ = cursor.nth(level - 1); }
-+        let Some((native_level, node)) = cursor.next() else { panic!("PCD valid iterator cut"); };
-+        assert!(native_level == level);
-+        assert!(core::ptr::eq(node, &afterstate.next_frontier[level]));
-+        let level = native_level;
++        let node = &afterstate.next_frontier[level];
 +        if (afterstate.next_pair_index >> level) & 1 == 0
 +            && *node != POOL_V1_PAIR_EMPTY_ROOTS[level]
 +        {
@@ -196,6 +191,38 @@
 +        let out=PCD_guard_segment(&lane,&result);
 +        assert!(out == PCD_checked_reference(lane.tree.next_leaf_index,result.verified_afterstate.next_pair_index));
 +    }
++    #[kani::requires(level <= 20)]
++    #[kani::ensures(|out| *out == (level < 20))]
++    #[kani::modifies()]
++    fn PCD_iterator_segment(
++        result:&aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,
++        level:usize,
++    )->bool {
++        let afterstate = result.verified_afterstate;
++        let mut cursor = afterstate.next_frontier.iter().enumerate();
++        if level != 0 { let _ = cursor.nth(level - 1); }
++        match cursor.next() {
++            Some((native_level,node)) => {
++                assert!(native_level==level);
++                assert!(level<20);
++                assert!(core::ptr::eq(node,&afterstate.next_frontier[level]));
++                true
++            },
++            None => { assert!(level==20); false }
++        }
++    }
++    #[kani::proof_for_contract(PCD_iterator_segment)]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_iterator_contract() {
++        let result=PCD_result(kani::any());let level:usize=kani::any();kani::assume(level<=20);
++        let _=PCD_iterator_segment(&result,level);
++    }
++    #[kani::proof]
++    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
++    fn PCD_iterator_control() {
++        let result=PCD_result(kani::any());let level:usize=kani::any();kani::assume(level<=20);
++        let out=PCD_iterator_segment(&result,level);assert!(out!=(level<20));
++    }
 +    #[derive(Default)]
 +    struct PCD_FidelityLog {
 +        called: bool,
@@ -275,16 +302,16 @@
 +    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
 +    fn PCD_fidelity_real_caller() {
 +        let lane=PCD_lane(kani::any());let result=PCD_result(kani::any());let reject:bool=kani::any();let mut log=PCD_FidelityLog::default();
-+        let out=PCD_fid_weak(&lane,&result,reject,&mut log);
++        let out=PCD_fid_body(&lane,&result,reject,&mut log);
 +        assert!(log.called&&log.lane_ptr==&lane as *const _ as usize&&log.result_ptr==&result as *const _ as usize);
 +        assert!(PCD_fid_exact(&out,&result,reject));
 +    }
 +    #[kani::proof]
-+    #[kani::stub(PCD_fid_weak,PCD_fid_oracle)]
++    #[kani::stub(PCD_fid_body,PCD_fid_oracle)]
 +    #[kani::stub(core::ptr::copy_nonoverlapping, kmx::KMX_copy_nonoverlapping)]
 +    fn PCD_fidelity_unimplied_caller() {
 +        let lane=PCD_lane(kani::any());let result=PCD_result(kani::any());let reject:bool=kani::any();let mut log=PCD_FidelityLog::default();
-+        let out=PCD_fid_weak(&lane,&result,reject,&mut log);
++        let out=PCD_fid_body(&lane,&result,reject,&mut log);
 +        assert!(log.called&&log.lane_ptr==&lane as *const _ as usize&&log.result_ptr==&result as *const _ as usize);
 +        assert!(PCD_fid_exact(&out,&result,reject));
 +    }

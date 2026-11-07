@@ -5,7 +5,7 @@ meta=json.loads((E/'PCD_NATIVE_PATCH_META.json').read_text());source=subprocess.
 a=source.index('        if (afterstate.next_pair_index >> level)');b=source.index('\n    }',a);span=source[a:b]
 frag=(E/'PCD_frontier_native.rs').read_text();frag=frag.replace('SOURCE_SPAN',span);assert span in frag
 (E/'PCD_frontier_generated.rs').write_text(frag)
-association={'source':meta['source'],'revision':'b936275465600469312d1f058cdc91ea2a11f3dc','function':'next_pair_forest_lane_v1','span':span,'span_sha256':sha(span),'source_contains':source.count(span),'fragment_contains':frag.count(span),'cut':'one native enumerate next from arbitrary admissible level<20; cursor constructed without evaluating earlier body conditions; native level and node pointer checked at SAME frontier[level]','status':'SOURCE_SEGMENT_CANDIDATE; complete native/model association and row gate still required','method_precedent':'NKV_FRAGMENT_ASSOCIATION under ruling ay(3); no whole-buffer unwind'}
+association={'source':meta['source'],'revision':'b936275465600469312d1f058cdc91ea2a11f3dc','function':'next_pair_forest_lane_v1','span':span,'span_sha256':sha(span),'source_contains':source.count(span),'fragment_contains':frag.count(span),'cut':'frontier comparison body at arbitrary level<20; iterator association is a separate native cut','status':'SOURCE_SEGMENT_CANDIDATE; complete native/model association and row gate still required','method_precedent':'NKV_FRAGMENT_ASSOCIATION under ruling ay(3); no whole-buffer unwind'}
 a=source.index('    Ok(PoolV1PairForestLaneStateV1 {',source.index('fn next_pair_forest_lane_v1('));b=source.index('\n}',a);tail=source[a:b]
 finish=(E/'PCD_finish_native.rs').read_text().replace('TAIL_SPAN',tail)
 (E/'PCD_finish_generated.rs').write_text(finish)
@@ -20,7 +20,7 @@ base=(E/'PCD_lane_native.rs').read_text();base=base.replace('    #[kani::proof_f
 kmx='    mod kmx { extern crate alloc; include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }\n'
 meta['annotation']=meta['annotation'].replace('Err(PoolV1ProgramError::StateHistoryMismatch.into())','Err(ProgramError::Custom(0x41532003))')
 meta['root_annotation']='#![cfg_attr(kani, feature(allocator_api))]\n'
-meta['suffix']='\n#[cfg(kani)]\n#[allow(non_snake_case)]\nmod PCD_harness {\n    use super::*;\n'+kmx+base+frag+finish+guardFragment+(E/'PCD_fidelity_native.rs').read_text()+'\n}\n'
+meta['suffix']='\n#[cfg(kani)]\n#[allow(non_snake_case)]\nmod PCD_harness {\n    use super::*;\n'+kmx+base+frag+finish+guardFragment+(E/'PCD_iterator_native.rs').read_text()+(E/'PCD_fidelity_native.rs').read_text()+'\n}\n'
 start=source.index('fn next_pair_forest_lane_v1(');modified=source[:start]+meta['annotation']+source[start:]+meta['suffix'];meta['modified_sha256']=sha(modified)
 (E/'PCD_NATIVE_PATCH_META.json').write_text(json.dumps(meta,indent=1)+'\n');(E/'PCD_native_packets.patch').write_text(''.join(difflib.unified_diff(source.splitlines(True),modified.splitlines(True),fromfile='a/'+meta['source'],tofile='b/'+meta['source'])))
 rootpath='programs/aspis-pool/src/lib.rs';root=subprocess.check_output(['git','show','b936275465600469312d1f058cdc91ea2a11f3dc:'+rootpath],text=True)
