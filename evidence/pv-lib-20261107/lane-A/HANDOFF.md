@@ -199,3 +199,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49879 passed exact pinned replay PV_THR2_SourceOwnership; see receipt for time/RSS/swap/revision/axioms.
 
 49880 passed exact pinned replay PV_THR2_OwnInitHandlerCases; see receipt for time/RSS/swap/revision/axioms.
+
+49881 passed exact pinned replay PV_THR2_OwnInitAllocationOwnedAtState; see receipt for time/RSS/swap/revision/axioms.
