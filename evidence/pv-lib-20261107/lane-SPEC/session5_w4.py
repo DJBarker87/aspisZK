@@ -44,6 +44,14 @@ p=pathlib.Path('lean')/(ns+'.lean');assert not p.exists();p.write_text(text)
 subprocess.run(['python3',str(L/'finish_statement.py'),ns,str(a),'w3'],check=True)
 # Only after the whole new statement compiles, write the old-cohort comparison.
 ns=f'PV_LIB_SPEC_F{n}PackageComparison';prefix=oldns+'.';pres='PreNumbered' if n==170 else 'Pre';machine='OriginalMachineSpec' if n==170 else 'MachineSpecWithOriginal';contract='OriginalContract' if n==170 else 'ContractWithOriginal'
+cmp = ('''def Comparison {E : Type} (M : PV_FN_W4_ContractEntry.Machine E)
+    (base : PV_STX2_Store.Carrier PV_EVHB_OwnerMachine.OWNER PV_STX2_Syntax.Data)
+    (D : PV_FN_W4_NativeFootprint.Effects) (newContract : Prop) : Prop :=
+  PV_FN_THREAD_f170.OriginalContract M base D ∧ newContract''' if n==170 else f'''def Comparison {{E : Type}} (M : PV_FN_W4_ContractEntry.Machine E)
+    (base : PV_STX2_Store.Carrier PV_EVHB_OwnerMachine.OWNER PV_STX2_Syntax.Data)
+    (D : PV_FN_W4_NativeFootprint.Effects) (ctl : PV_STX2_SliceMachine.Control)
+    (newContract : Prop) : Prop :=
+  {oldns}.OriginalBodyContract M base D ctl ∧ newContract''')
 text=f'''import {oldmod}
 set_option autoImplicit false
 noncomputable section
@@ -58,7 +66,7 @@ abbrev PackageContract := @{prefix}{contract}
 /-- The complete old contract TYPE is retained by the alias, including all
 pending dependency arguments. A newContract parameter is a statement target,
 not a proved new row, assumed leaf law or added endpoint hypothesis. -/
-def Comparison (newContract : Prop) : Prop := newContract
+{cmp}
 #print axioms PackagePre
 #print axioms PackageMachineSpec
 #print axioms PackagePost
