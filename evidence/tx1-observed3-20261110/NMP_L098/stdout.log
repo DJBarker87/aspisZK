@@ -1,0 +1,304 @@
+NMP_generated/NMP_ObservedFold.lean:15:36: error: unsolved goals
+H W : Type
+c : Calls
+s : Parent H W
+⊢ (Std.bind
+      (Std.bind (c.c6 s.bytes) fun a =>
+        erase
+          (match a with
+          | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+          | core.result.Result.Ok p => Code.done (Sum.inr (State.mark0 s p))))
+      fun a =>
+      erase
+        (match a with
+        | Sum.inl out => Code.done out
+        | Sum.inr next =>
+          NMT_CallTree.bind
+            (match next with
+            | State.parse s =>
+              NMT_CallTree.bind (invoke "TX1:138/parse" s.bytes (c.c6 s.bytes)) fun r =>
+                match r with
+                | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                | core.result.Result.Ok p => Code.done (Sum.inr (State.mark0 s p))
+            | State.mark0 s p =>
+              NMT_CallTree.bind (invoke "TX1:130/mark0" (s.observer, 0#u8) (c.c8 s.observer 0#u8)) fun __x =>
+                Code.done (Sum.inr (State.publicTranscript s p))
+            | State.publicTranscript s p =>
+              NMT_CallTree.bind
+                (invoke "TX1:131/public_transcript" (s.publicValue, s.hash, p.c1_root)
+                  (c.c9 s.digest s.publicValue s.hash p.c1_root))
+                fun r =>
+                match r with
+                | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                | core.result.Result.Ok t => Code.done (Sum.inr (State.begin_ s p t))
+            | State.begin_ s p t =>
+              NMT_CallTree.bind (invoke "TX1:150/begin" (p, t) (c.c5 s.digest p t)) fun __x =>
+                match __x.1 with
+                | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                | core.result.Result.Ok ch => Code.done (Sum.inr (State.mark1 s p __x.2 ch))
+            | State.mark1 s p t ch =>
+              NMT_CallTree.bind (invoke "TX1:130/mark1" (s.observer, 1#u8) (c.c8 s.observer 1#u8)) fun __x =>
+                Code.done (Sum.inr (State.finish s p t ch))
+            | State.finish s p t ch =>
+              NMT_CallTree.bind
+                (invoke "TX1:136/verify_finish" (s.publicValue, p, t, ch, s.observer)
+                  (c.c7 s.digest s.publicValue p t ch s.observer))
+                fun r => Code.done (Sum.inl r))
+            fun r =>
+            match r with
+            | Sum.inl out => Code.done out
+            | Sum.inr next =>
+              NMT_CallTree.bind
+                (match next with
+                | State.parse s =>
+                  NMT_CallTree.bind (invoke "TX1:138/parse" s.bytes (c.c6 s.bytes)) fun r =>
+                    match r with
+                    | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                    | core.result.Result.Ok p => Code.done (Sum.inr (State.mark0 s p))
+                | State.mark0 s p =>
+                  NMT_CallTree.bind (invoke "TX1:130/mark0" (s.observer, 0#u8) (c.c8 s.observer 0#u8)) fun __x =>
+                    Code.done (Sum.inr (State.publicTranscript s p))
+                | State.publicTranscript s p =>
+                  NMT_CallTree.bind
+                    (invoke "TX1:131/public_transcript" (s.publicValue, s.hash, p.c1_root)
+                      (c.c9 s.digest s.publicValue s.hash p.c1_root))
+                    fun r =>
+                    match r with
+                    | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                    | core.result.Result.Ok t => Code.done (Sum.inr (State.begin_ s p t))
+                | State.begin_ s p t =>
+                  NMT_CallTree.bind (invoke "TX1:150/begin" (p, t) (c.c5 s.digest p t)) fun __x =>
+                    match __x.1 with
+                    | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                    | core.result.Result.Ok ch => Code.done (Sum.inr (State.mark1 s p __x.2 ch))
+                | State.mark1 s p t ch =>
+                  NMT_CallTree.bind (invoke "TX1:130/mark1" (s.observer, 1#u8) (c.c8 s.observer 1#u8)) fun __x =>
+                    Code.done (Sum.inr (State.finish s p t ch))
+                | State.finish s p t ch =>
+                  NMT_CallTree.bind
+                    (invoke "TX1:136/verify_finish" (s.publicValue, p, t, ch, s.observer)
+                      (c.c7 s.digest s.publicValue p t ch s.observer))
+                    fun r => Code.done (Sum.inl r))
+                fun r =>
+                match r with
+                | Sum.inl out => Code.done out
+                | Sum.inr next =>
+                  NMT_CallTree.bind
+                    (match next with
+                    | State.parse s =>
+                      NMT_CallTree.bind (invoke "TX1:138/parse" s.bytes (c.c6 s.bytes)) fun r =>
+                        match r with
+                        | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                        | core.result.Result.Ok p => Code.done (Sum.inr (State.mark0 s p))
+                    | State.mark0 s p =>
+                      NMT_CallTree.bind (invoke "TX1:130/mark0" (s.observer, 0#u8) (c.c8 s.observer 0#u8)) fun __x =>
+                        Code.done (Sum.inr (State.publicTranscript s p))
+                    | State.publicTranscript s p =>
+                      NMT_CallTree.bind
+                        (invoke "TX1:131/public_transcript" (s.publicValue, s.hash, p.c1_root)
+                          (c.c9 s.digest s.publicValue s.hash p.c1_root))
+                        fun r =>
+                        match r with
+                        | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                        | core.result.Result.Ok t => Code.done (Sum.inr (State.begin_ s p t))
+                    | State.begin_ s p t =>
+                      NMT_CallTree.bind (invoke "TX1:150/begin" (p, t) (c.c5 s.digest p t)) fun __x =>
+                        match __x.1 with
+                        | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                        | core.result.Result.Ok ch => Code.done (Sum.inr (State.mark1 s p __x.2 ch))
+                    | State.mark1 s p t ch =>
+                      NMT_CallTree.bind (invoke "TX1:130/mark1" (s.observer, 1#u8) (c.c8 s.observer 1#u8)) fun __x =>
+                        Code.done (Sum.inr (State.finish s p t ch))
+                    | State.finish s p t ch =>
+                      NMT_CallTree.bind
+                        (invoke "TX1:136/verify_finish" (s.publicValue, p, t, ch, s.observer)
+                          (c.c7 s.digest s.publicValue p t ch s.observer))
+                        fun r => Code.done (Sum.inl r))
+                    fun r =>
+                    match r with
+                    | Sum.inl out => Code.done out
+                    | Sum.inr next =>
+                      NMT_CallTree.bind
+                        (match next with
+                        | State.parse s =>
+                          NMT_CallTree.bind (invoke "TX1:138/parse" s.bytes (c.c6 s.bytes)) fun r =>
+                            match r with
+                            | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                            | core.result.Result.Ok p => Code.done (Sum.inr (State.mark0 s p))
+                        | State.mark0 s p =>
+                          NMT_CallTree.bind (invoke "TX1:130/mark0" (s.observer, 0#u8) (c.c8 s.observer 0#u8))
+                            fun __x => Code.done (Sum.inr (State.publicTranscript s p))
+                        | State.publicTranscript s p =>
+                          NMT_CallTree.bind
+                            (invoke "TX1:131/public_transcript" (s.publicValue, s.hash, p.c1_root)
+                              (c.c9 s.digest s.publicValue s.hash p.c1_root))
+                            fun r =>
+                            match r with
+                            | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                            | core.result.Result.Ok t => Code.done (Sum.inr (State.begin_ s p t))
+                        | State.begin_ s p t =>
+                          NMT_CallTree.bind (invoke "TX1:150/begin" (p, t) (c.c5 s.digest p t)) fun __x =>
+                            match __x.1 with
+                            | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                            | core.result.Result.Ok ch => Code.done (Sum.inr (State.mark1 s p __x.2 ch))
+                        | State.mark1 s p t ch =>
+                          NMT_CallTree.bind (invoke "TX1:130/mark1" (s.observer, 1#u8) (c.c8 s.observer 1#u8))
+                            fun __x => Code.done (Sum.inr (State.finish s p t ch))
+                        | State.finish s p t ch =>
+                          NMT_CallTree.bind
+                            (invoke "TX1:136/verify_finish" (s.publicValue, p, t, ch, s.observer)
+                              (c.c7 s.digest s.publicValue p t ch s.observer))
+                            fun r => Code.done (Sum.inl r))
+                        fun r =>
+                        match r with
+                        | Sum.inl out => Code.done out
+                        | Sum.inr next =>
+                          NMT_CallTree.bind
+                            (match next with
+                            | State.parse s =>
+                              NMT_CallTree.bind (invoke "TX1:138/parse" s.bytes (c.c6 s.bytes)) fun r =>
+                                match r with
+                                | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                                | core.result.Result.Ok p => Code.done (Sum.inr (State.mark0 s p))
+                            | State.mark0 s p =>
+                              NMT_CallTree.bind (invoke "TX1:130/mark0" (s.observer, 0#u8) (c.c8 s.observer 0#u8))
+                                fun __x => Code.done (Sum.inr (State.publicTranscript s p))
+                            | State.publicTranscript s p =>
+                              NMT_CallTree.bind
+                                (invoke "TX1:131/public_transcript" (s.publicValue, s.hash, p.c1_root)
+                                  (c.c9 s.digest s.publicValue s.hash p.c1_root))
+                                fun r =>
+                                match r with
+                                | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                                | core.result.Result.Ok t => Code.done (Sum.inr (State.begin_ s p t))
+                            | State.begin_ s p t =>
+                              NMT_CallTree.bind (invoke "TX1:150/begin" (p, t) (c.c5 s.digest p t)) fun __x =>
+                                match __x.1 with
+                                | core.result.Result.Err e => Code.done (Sum.inl (core.result.Result.Err e))
+                                | core.result.Result.Ok ch => Code.done (Sum.inr (State.mark1 s p __x.2 ch))
+                            | State.mark1 s p t ch =>
+                              NMT_CallTree.bind (invoke "TX1:130/mark1" (s.observer, 1#u8) (c.c8 s.observer 1#u8))
+                                fun __x => Code.done (Sum.inr (State.finish s p t ch))
+                            | State.finish s p t ch =>
+                              NMT_CallTree.bind
+                                (invoke "TX1:136/verify_finish" (s.publicValue, p, t, ch, s.observer)
+                                  (c.c7 s.digest s.publicValue p t ch s.observer))
+                                fun r => Code.done (Sum.inl r))
+                            fun r =>
+                            match r with
+                            | Sum.inl out => Code.done out
+                            | Sum.inr next => Code.plain (fail Error.panic) Code.done)) =
+    Std.bind (c.c6 s.bytes) fun r =>
+      Std.bind
+        (match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+        fun cf =>
+        match cf with
+        | core.ops.control_flow.ControlFlow.Continue p =>
+          Std.bind (c.c8 s.observer 0#u8) fun _ =>
+            Std.bind (c.c9 s.digest s.publicValue s.hash p.c1_root) fun r1 =>
+              Std.bind
+                (match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                fun cf1 =>
+                match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val =>
+                  Std.bind (c.c5 s.digest p val)
+                    (uncurry fun r2 val1 =>
+                      Std.bind
+                        (match r2 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                        fun cf2 =>
+                        match cf2 with
+                        | core.ops.control_flow.ControlFlow.Continue val2 =>
+                          Std.bind (c.c8 s.observer 1#u8) fun _ => c.c7 s.digest s.publicValue p val1 val2 s.observer
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          match residual with
+                          | core.result.Result.Ok x =>
+                            core.convert.Infallible.rec
+                              (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)) x
+                          | core.result.Result.Err e =>
+                            Std.bind (ok (core.convert.FromSame.from e)) fun v => ok (core.result.Result.Err v))
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  match residual with
+                  | core.result.Result.Ok x =>
+                    core.convert.Infallible.rec
+                      (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)) x
+                  | core.result.Result.Err e =>
+                    Std.bind (ok (core.convert.FromSame.from e)) fun v => ok (core.result.Result.Err v)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          match residual with
+          | core.result.Result.Ok x =>
+            core.convert.Infallible.rec (fun x => Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)) x
+          | core.result.Result.Err e =>
+            Std.bind (ok (core.convert.FromSame.from e)) fun v => ok (core.result.Result.Err v)
+NMP_generated/NMP_ObservedFold.lean:17:95: warning: This simp argument is unused:
+  NMT_CallTree.erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [execute, ̲step, ̲Bind.bind, ̲Pure.pure, ̲NMT_CallTree.erase_bind, ̲NMT_CallTree.erase_invoke,
+  ̲ ̲ ̲ ̲NMT_CallTree.e̵ra̵s̵e_̵p̵u̵r̵e̵,̵N̵M̵T̵_̵C̵a̵l̵l̵T̵r̵e̵e̵.̵r̵e̵sult_right, ̲bind_tc_ok, ̲bind_tc_fail, ̲bind_tc_div,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲core.convert.FromSame]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NMP_generated/NMP_ObservedFold.lean:17:119: warning: This simp argument is unused:
+  NMT_CallTree.result_right
+
+Hint: Omit it from the simp argument list.
+  simp only [execute, ̲step, ̲Bind.bind, ̲Pure.pure, ̲NMT_CallTree.erase_bind, ̲NMT_CallTree.erase_invoke,
+  ̲ ̲ ̲ ̲NMT_CallTree.erase_pure,N̵M̵T̵_̵C̵a̵l̵l̵T̵r̵e̵e̵.̵r̵e̵s̵u̵l̵t̵_̵r̵i̵g̵h̵t̵,̵ ̲bind_tc_ok, ̲bind_tc_fail, ̲bind_tc_div,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲core.convert.FromSame]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NMP_generated/NMP_ObservedFold.lean:17:145: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [execute, ̲step, ̲Bind.bind, ̲Pure.pure, ̲NMT_CallTree.erase_bind, ̲NMT_CallTree.erase_invoke,
+  ̲ ̲ ̲ ̲NMT_CallTree.erase_pure, ̲NMT_CallTree.result_right, ̲bind_tc_o̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵fail, ̲bind_tc_div,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲core.convert.FromSame]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NMP_generated/NMP_ObservedFold.lean:17:156: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [execute, ̲step, ̲Bind.bind, ̲Pure.pure, ̲NMT_CallTree.erase_bind, ̲NMT_CallTree.erase_invoke,
+  ̲ ̲ ̲ ̲NMT_CallTree.erase_pure, ̲NMT_CallTree.result_right, ̲bind_tc_ok, ̲bind_tc_f̵a̵i̵l̵,̵b̵i̵n̵d_̵t̵c̵_̵d̵iv,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲core.convert.FromSame]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NMP_generated/NMP_ObservedFold.lean:17:169: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [execute, ̲step, ̲Bind.bind, ̲Pure.pure, ̲NMT_CallTree.erase_bind, ̲NMT_CallTree.erase_invoke,
+  ̲ ̲ ̲ ̲NMT_CallTree.erase_pure, ̲NMT_CallTree.result_right, ̲bind_tc_ok, ̲bind_tc_fail,b̵i̵n̵d̵_̵t̵
+  ̲ ̲ ̲ ̲c_̵d̵i̵v̵,̵c̵ore.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̲ ̲ ̲ ̲core.convert.FromSame]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NMP_generated/NMP_ObservedFold.lean:17:307: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [execute, ̲step, ̲Bind.bind, ̲Pure.pure, ̲NMT_CallTree.erase_bind, ̲NMT_CallTree.erase_invoke,
+  ̲ ̲ ̲ ̲NMT_CallTree.erase_pure, ̲NMT_CallTree.result_right, ̲bind_tc_ok, ̲bind_tc_fail, ̲bind_tc_div,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NMP_ObservedSteps.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

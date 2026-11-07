@@ -80,6 +80,7 @@ for i,(name,args,st,rhs) in enumerate([
       pure (.inr (.finish s p t ch)))'''),
  ('finish','(p : r1_wire.Prefix) (t : r1_wire.SemanticTranscript H) (ch : aspis_core.state_only_prefix.r0.Challenges)', '.finish s p t ch','''(do let r ← invoke "TX1:136/verify_finish" (s.publicValue,p,t,ch,s.observer) (c.c7 s.digest s.publicValue p t ch s.observer)
       pure (.inl r))''')]):
+ rhs=rhs.replace('(do let','(do\n      let')
  module='NMP_ObservedStep'+str(i)
  text=header.replace('import NMP_EmittedContext','import NMP_ObservedState')+f'''/-- Occurrence {i}, {name}; exact full typed call, no callee-law premise. -/
 theorem occurrence{i} {{H W : Type}} (c : Calls) (s : Parent H W) {args} :

@@ -48,3 +48,15 @@ L083 copies/pins existing NMT_CallTree objects; L084 exact12-boundary parent
 context passes. Six137 occurrence modules are drafted, not yet validated.
 Host-share follows bm4e whole-host six-scope replacement; prior stricter waits
 are retained. No Kani, no frozen-file edits, no row closure claimed.
+
+Stage:137 occurrences0..5 PASS at L095/L089-L093, standard axioms. The
+parent context's universe issue was repaired (L086), State passedL087.
+Full-machine erasure attemptsL096/L098 are retired; isolated suffix proof
+normalization now uses separately checked NMP_DirectBind (L109 PASS).
+Structural inverses to CLOSED semantic carriers are compiling (L110 onward).
+Canonical specs copied as prior checked NMT objects at L097; exact sources
+match RSL_ modulo import prefix, pinned in NMP_BM_RSL_SOURCE_PINS.json.
+NMP-BM-S1: mark130 packet is None-only, canonical137 arbitraryobs; source
+ignores obs but no broader ledger application is claimed. NMP-BM-S2:179
+success theorem needs its all-outcome companions and caller-domain proof.
+Prepare state/occurrence/suffix files are DRAFT until their own receipts pass.

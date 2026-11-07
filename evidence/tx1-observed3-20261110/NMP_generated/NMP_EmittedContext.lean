@@ -46,7 +46,8 @@ structure Calls where
       compact.CodecError) × (Slice Std.U8))
  c11 : (Slice Std.U8) → (Slice Std.U8) → Result ((core.result.Result Unit
       compact.CodecError) × (Slice Std.U8))
-/-- One parent state retains original arguments, the world and ordered prefix.
+/-- One parent state retains original arguments, the world and ordered site prefix.
+The Code interpreter carries the full typed argument/reply event log.
 No post-abort world or scratch is synthesized by this carrier. -/
 structure Parent (H W : Type) where
  digest : aspis_core.digest.Digest32 H
@@ -56,7 +57,7 @@ structure Parent (H W : Type) where
  observer : Observer
  scratch : Scratch
  world : W
- events : List NMT_CallTree.Event
+ sites : List String
 
 def observed {H W : Type} (c : Calls) (s : Parent H W) : Result (SemanticOut H) :=
  NMP_prepare.r1_semantic.verify_observed c.c5 c.c6 c.c7 c.c8 c.c9
