@@ -51,7 +51,6 @@ theorem fold (base : Ops) (D : RSL.DeployedIds) (env : RSL.Env)
   simpa only [reply,RSL.RS.ofExcept,RSL.RS.seq,RSL.RS.bind,RSL.Spec.bind_pure] using hn
  | Err e =>
   simp only [reply,RSL.RS.ofExcept,RSL.RS.seq,RSL.RS.bind,RSL.Spec.bind_pure,NMX_R3_RegistryEffectLaws.map_pure]
-  rfl
 #print axioms source
 #print axioms model
 #print axioms fold
