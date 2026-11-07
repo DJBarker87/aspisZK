@@ -1,0 +1,39 @@
+import NLX_COMBINED_IMPORT
+import NMM_LaneTranscription
+import NMM_LaneReplies
+import NMM_RegistryTranscription
+import NMM_Ownership233
+import NMM_AccountsTranscription
+
+#print NMM_LaneTranscription.adopted_value
+#print axioms NMM_LaneTranscription.adopted_value
+#print NMM_LaneTranscription.adopted_owned
+#print axioms NMM_LaneTranscription.adopted_owned
+#print NMM_LaneTranscription.complete_value
+#print axioms NMM_LaneTranscription.complete_value
+#print NMM_LaneReplies.run_closed
+#print axioms NMM_LaneReplies.run_closed
+#print NMM_LaneReplies.closed
+#print axioms NMM_LaneReplies.closed
+#print NMM_LaneReplies.adopted
+#print axioms NMM_LaneReplies.adopted
+#print NMM_RegistryTranscription.adopted
+#print axioms NMM_RegistryTranscription.adopted
+#print NMM_Ownership233.cleanup_reverse
+#print axioms NMM_Ownership233.cleanup_reverse
+#print NMM_Ownership233.cleanup_no_double_release
+#print axioms NMM_Ownership233.cleanup_no_double_release
+#print NMM_Ownership233.cleanup_before_master
+#print axioms NMM_Ownership233.cleanup_before_master
+#print NMM_Ownership233.cleanup_after_master
+#print axioms NMM_Ownership233.cleanup_after_master
+#print NMM_Ownership233.cleanup_after_checkpoint
+#print axioms NMM_Ownership233.cleanup_after_checkpoint
+#print NMM_Ownership233.cleanup_after_lane
+#print axioms NMM_Ownership233.cleanup_after_lane
+#print NMM_Ownership233.cleanup_after_snapshot
+#print axioms NMM_Ownership233.cleanup_after_snapshot
+#print NMM_AccountsTranscription.adopted
+#print axioms NMM_AccountsTranscription.adopted
+#print AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.RPx_Deployed.deployed

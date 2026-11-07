@@ -35,8 +35,9 @@ theorem cleanup_no_double_release {M C L S : Type} (r : Returned M C L S)
  rw [cleanup_reverse]
  exact List.nodup_reverse.mpr valid
 
-/-- All earlier returned owners are released on a later error/abort. Prefix
-length selects the exact lexical acquisition stage, never a successful child. -/
+/-- Algebraic reverse-prefix list for optional normal-return pure cleanup.
+This has no post-abort interpretation. Under (bl), pure heap cleanup is outside
+the row obligation; account/return-data writes would remain in scope. -/
 def prefixCleanup {M C L S : Type} (r : Returned M C L S) (acquired : Nat) : List Nat :=
  ((allocationOrder r).take acquired).reverse
 

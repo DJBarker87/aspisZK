@@ -23,7 +23,7 @@ def baseline():
  files['NMM_gate.py']=gate
  return x,files
 
-def submit(a,target,parent,module,text,mode='positive',edits=None,extra_sidecars=None):
+def submit(a,target,parent,module,text,mode='positive',edits=None,extra_sidecars=None,solver=None):
  assert a.startswith('NMM_K') and 1<=int(a[-3:]) and not (E/a).exists()
  used=[json.loads(line) for line in (E/'NMM_ATTEMPTS.jsonl').read_text().splitlines() if json.loads(line).get('kind')=='kani']
  assert len(used)<80,'Kani invocation budget exhausted; all receipt-bearing attempts count except verified prelaunch K001'
@@ -50,6 +50,8 @@ def submit(a,target,parent,module,text,mode='positive',edits=None,extra_sidecars
   if n.startswith('NMM_src/') and not n.endswith('Cargo.lock'):pins[n[8:]]=sha(t.encode())
  files['NIJ_SOURCE_PINS.json']=json.dumps(pins)
  x['native_command'][x['native_command'].index('--harness')+1]=target
+ if solver:
+  assert solver in ['cadical','kissat','minisat'];x['native_command']+=['--solver',solver]
  x.update(attempt=a,module=target,command=['python3','NMM_gate.py',a+'.json'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,expected_time='optimized compilation, then '+target,control=mode)
  for k in ['historical_gate_command','original_attempt','original_config_file','original_config_sha256','old_target']:x.pop(k,None)
  x['sources']=list(files);x['deps_fingerprint']={'selected_objects':{}}
