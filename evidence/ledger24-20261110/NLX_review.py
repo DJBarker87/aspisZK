@@ -13,14 +13,14 @@ def put(n,x):
   Path(str(p)+'.xz').write_bytes(lzma.compress(b,preset=6));Path(str(p)+'.sha256').write_text(H(b)+'\n')
  else:p.write_bytes(b)
 basis=J(P/'NLO_LEDGER.json.xz');r=next(r for r in basis['rows']if r['row']=='TX2:065');assert r['status']=='OPEN'
-source_review=[]
+source_review=[];exports_by_module={Path(x['path']).stem:x for x in J(Q/'NLT_EXPORT.json')['files']}
 for m in J(Q/'NLT_MODULES.json'):
  p=Q/(m['module']+'.lean');b=p.read_bytes();assert H(b)==m['sha256'],m['module']
  rc=J(Q/m['passing_attempt']/'receipt.json');assert rc['exit_status']==0
  matches=[(name,sha)for name,sha in rc['source_hashes'].items()if name.endswith('/'+p.name)]
  assert len(matches)==1 and matches[0][1]==H(b),(m['module'],matches)
  snap=raw(Q/m['passing_attempt']/'sources'/matches[0][0]);assert snap==b
- source_review.append(dict(**m,bytes=len(b),receipt_sha256=H(raw(Q/m['passing_attempt']/'receipt.json')),snapshot_match=True))
+ source_review.append(dict(**m,bytes=len(b),receipt_sha256=H(raw(Q/m['passing_attempt']/'receipt.json')),snapshot_match=True,retained_compiled_object=exports_by_module[m['module']]))
 put('NLX_SOURCE_REVIEW.json',dict(status='PASS',sources=source_review))
 root=(Q/'NLT_CompleteRoot.lean').read_text();statement=root[root.index('theorem root'):root.index(' := by',root.index('theorem root'))]
 assert '(proofLength : proof.val.length=57607)'in statement and '(publicLength : pub.val.length≤1880)'in statement and '(root0 : NLP_InputDomain.Root0 ck proof)'in statement
@@ -31,7 +31,7 @@ caller=J(Q/'NLT_CALLER_CLAUSES.json');assert caller['root']=='NLT_CompleteRoot.r
 clauses=[]
 def walk(x,path):
  if isinstance(x,dict):
-  if ('required'in x or 'domain'in x)and ('status'in x or 'id'in x):clauses.append(dict(path=path,original=x))
+  if any(k in x for k in ['required','domain','required_named_hypotheses'])or ('status'in x and any(k in x for k in ['callee','caller_clause','helper'])):clauses.append(dict(path=path,original=x))
   for k,v in x.items():walk(v,path+'.'+k)
  elif isinstance(x,list):
   for i,v in enumerate(x):walk(v,path+'['+str(i)+']')

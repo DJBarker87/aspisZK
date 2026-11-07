@@ -29,17 +29,20 @@ for n,x in [('AUDIT_ROOTS',dict(roots=roots,groups=[roots[i*len(roots)//30:(i+1)
  (E/f'NLX_{n}.json').write_text(json.dumps(x,indent=1)+'\n')
 (E/'NLX_COMBINED_IMPORT.lean').write_text('import NLS_COMBINED_IMPORT\nimport NLT_COMBINED_IMPORT\nimport RPx_Deployed\n#print axioms NLT_CompleteRoot.root\n#print axioms AspisR1.RPx_Deployed.deployed\n')
 for name in ['Driver','ProofDriver','OwnerStatements']:
- (E/f'NLX_{name}.lean').write_text((P/f'NLS_{name}.lean').read_text().replace('NLS_','NLX_'))
+ p=E/f'NLX_{name}.lean'
+ if not p.exists():p.write_text((P/f'NLS_{name}.lean').read_text().replace('NLS_','NLX_'))
 for name in ['run','batch','setup','pin','scope40','hygiene']:
  s=(P/f'NLS_{name}.py').read_text().replace('NLS_','NLX_').replace('codex-cx-ledger23-20261110','codex-cx-ledger24-20261110')
  s=s.replace("E.parent/'ledger22-20261110/NLO_CLOSURE_PINS.json.xz'","E.parent/'ledger23-20261110/NLS_CLOSURE_PINS.json.xz'")
- (E/f'NLX_{name}.py').write_text(s)
+ p=E/f'NLX_{name}.py'
+ if not p.exists():p.write_text(s)
 # Scope8 prints the exact complete candidate statement and definition inventory.
 s='import NLX_COMBINED_IMPORT\nset_option pp.proofs false\n'
-for n in ['NLT_CompleteRoot.root','NLT_CompleteRoot.RowSpec','NLT_CompleteRoot.Native','NLT_CompleteRoot.Law','NLT_CompleteRoot.ResolvedLaw','NLT_CompleteRoot.StoppedLaw','NLT_CompleteRoot.CallLaw','NLT_C04Stop.Cut','NLT_C04Stop.At','NLT_NativeInvocation.Occurrence','NLT_NativeInvocation.Invocation','NLT_NativeInvocation.Input','NLT_NativeInvocation.Detail']:
+for n in ['NLT_CompleteRoot.root','NLT_CompleteRoot.RowSpec','NLT_CompleteRoot.Native','NLT_CompleteRoot.Law','NLT_CompleteRoot.ResolvedLaw','NLT_CompleteRoot.StoppedLaw','NLT_CompleteRoot.CallLaw','NLT_C04Stop.Cut','NLT_C04Stop.At','NLT_NativeInvocation.Occurrence','NLT_NativeInvocation.Invocation','NLT_NativeWindows.Input','NLT_NativeInvocation.Detail']:
  s+='#print '+n+'\n'
 s+='#print axioms NLT_CompleteRoot.root\n'
-(E/'NLX_HypothesisReview.lean').write_text(s)
+p=E/'NLX_HypothesisReview.lean'
+if not p.exists():p.write_text(s)
 for p in E.glob('NLX_*.lean'):expected[p.stem]=list(dict.fromkeys(['Init']+re.findall(r'^import ([\w.]+)',p.read_text(),re.M)))
 (E/'NLX_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(dict(module=m,imports=v))+'\n'for m,v in sorted(expected.items())))
 assert not conflicts,conflicts

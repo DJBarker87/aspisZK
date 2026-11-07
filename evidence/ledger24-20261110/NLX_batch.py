@@ -10,7 +10,7 @@ elif mode.startswith('inventory-'):jobs=[(mode,['NLX_native/NLX_InventoryDriver'
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NLX_native/'+('NLX_PoolDriver' if mode=='poolscan' else 'NLX_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
 elif mode in ['fixtures','scan','scan2']:jobs=[('scan' if mode=='scan2' else mode,['NLX_native/'+('NLX_Driver' if mode.startswith('scan') else 'NLX_ProofDriver'),'scan' if mode=='scan2' else mode])]
 else:
- batch=int(mode.removeprefix('batch').split('-')[0]);last=29 if mode=='batch28-29' else batch;groups=json.loads((B/'NLX_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NLX_native/NLX_ProofDriver','proof'+str(i)]) for i in range(batch,min(last+1,len(groups)))];assert jobs
+ parts=mode.removeprefix('batch').split('-');batch=int(parts[0]);last=int(parts[-1]);groups=json.loads((B/'NLX_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NLX_native/NLX_ProofDriver','proof'+str(i)]) for i in range(batch,min(last+1,len(groups)))];assert jobs
 for name,command in jobs:
  start=time.monotonic()
  with (E/(name+'.log')).open('w') as out:r=subprocess.run(['/usr/bin/time','-v','-o',str(E/(name+'.time')),*command],stdout=out,stderr=subprocess.STDOUT)

@@ -10,7 +10,9 @@ for i,kind,target in jobs:
  (E/(a+'-client.log')).write_text(r.stdout+r.stderr)
  if r.returncode:
   if kind=='audit'and target.startswith('batch')and p.exists():
-   x=json.loads((E/'NLX_audit'/target/('proof'+target[5:]+'.json')).read_text())
+   result=E/'NLX_audit'/target/('proof'+target[5:]+'.json')
+   if not result.exists():print(a+' STOP missing batch receipt; inspect retained scope verdict',flush=True);sys.exit(r.returncode)
+   x=json.loads(result.read_text())
    group=json.loads((E/'NLX_AUDIT_ROOTS.json').read_text())['groups'][int(target[5:])]
    allowed={'NHC_DecodeModel.decoder_error','AspisR1.NKR_ScheduleExt.transition'}
    assert [z['root']for z in x['results']]==group and all(set(z['walked_axioms'])<={'propext','Classical.choice','Quot.sound'}and(z['equal']or z['root']in allowed)for z in x['results'])
