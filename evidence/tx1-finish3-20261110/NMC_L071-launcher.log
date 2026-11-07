@@ -1,0 +1,23 @@
+{"attempt": "NMC_L071", "exit_status": 0, "wall_seconds": 25.39796866895631, "peak_rss_kib": "6512516", "swaps": "0", "print_axioms": ["'AspisR1.NMC_Terminal.installed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NMC_Terminal.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMC_Terminal.installed : ∀ {A : Type} (allocator : S2W_D189Wrappers.Allocator A) (state : A)
+  (heap : Heap) (identity : ℕ) (pub : Public) (claims : NLC_Finish.Claims) (alpha : NLC_Finish.Alpha)
+  (challenges : r1_wire.Challenges),
+  NLU_Terminal.InputDomain pub challenges →
+    (∀ row ∈ ↑(mapArray (mapArray toQ) claims), FIw_ArrayValue.canonical row) →
+      FIw_ArrayValue.canonical (mapArray toQ alpha) →
+        NMC_Exit.publicResult allocator state heap identity (NLU_Terminal.nativeTerminal pub claims alpha challenges) =
+          NMC_Exit.publicResult allocator state heap identity 
+...
+'AspisR1.NMC_Terminal.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMC_Terminal.installed : ∀ {A : Type} (allocator : S2W_D189Wrappers.Allocator A) (state : A)
+  (heap : Heap) (identity : ℕ) (pub : Public) (claims : NLC_Finish.Claims) (alpha : NLC_Finish.Alpha)
+  (challenges : r1_wire.Challenges),
+  NLU_Terminal.InputDomain pub challenges →
+    (∀ row ∈ ↑(mapArray (mapArray toQ) claims), FIw_ArrayValue.canonical row) →
+      FIw_ArrayValue.canonical (mapArray toQ alpha) →
+        NMC_Exit.publicResult allocator state heap identity (NLU_Terminal.nativeTerminal pub claims alpha challenges) =
+          NMC_Exit.publicResult allocator state heap identity (FIq_Terminal.terminal pub claims alpha challenges) :=
+⋯
+
+Running as unit: run-rd71d3ac6b68b4a229f9163209ec1b7d1.scope; invocation ID: 209f3be6b77b443e99a5c722438bd949

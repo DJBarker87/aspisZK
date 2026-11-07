@@ -27,7 +27,7 @@ theorem cleanup_abort {A : Type} (allocator : S2W_D189Wrappers.Allocator A) (sta
  cleanup allocator state heap identity=fail error := by simp only [cleanup,aborted,bind_tc_fail]
 /-- Error mapping executes before Box cleanup. There is no cleanup on an
 outer nonreturning child, and no successful child premise is introduced. -/
-def public {A E T : Type} (allocator : S2W_D189Wrappers.Allocator A) (state : A)
+def publicResult {A E T : Type} (allocator : S2W_D189Wrappers.Allocator A) (state : A)
  (heap : Heap) (identity : Nat) (reply : Result (core.result.Result T E)) :
  Result (core.result.Result T AspisR1PublicPreparation.r1_wire.Error×A×Heap) := do
  let result ← reply
@@ -38,7 +38,7 @@ def public {A E T : Type} (allocator : S2W_D189Wrappers.Allocator A) (state : A)
    ok (.Err .Public,after.1,after.2)
 theorem public_abort {A E T : Type} (allocator : S2W_D189Wrappers.Allocator A) (state : A)
  (heap : Heap) (identity : Nat) (error : Error) :
- public (E:=E) (T:=T) allocator state heap identity (fail error)=fail error := rfl
+ publicResult (E:=E) (T:=T) allocator state heap identity (fail error)=fail error := rfl
 #print axioms cleanup_frame
 #print axioms cleanup_abort
 #print axioms public_abort

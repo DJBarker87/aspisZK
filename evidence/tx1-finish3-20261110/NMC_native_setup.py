@@ -1,3 +1,4 @@
+from NMC_patch_inputs import moduleText
 from pathlib import Path
 import json,hashlib,shutil,difflib
 B=Path(__file__).resolve().parent;P=Path('/home/dombarker/project-offloads/codex-cx-tx1-finish2-20261110');S=B/'NMC_src'
@@ -9,7 +10,7 @@ shutil.copytree(P/'NLU_src',S)
 patch=''
 for path,module in [('crates/aspis-r1-cost-probe/src/r1_semantic.rs','NMC_segments'),('programs/r1-cost-probe/src/lib.rs','NMC_program')]:
  p=S/path;before=p.read_text();after=before+'\n#[cfg(kani)]\n#[path = "'+module+'.rs"]\npub mod '+module+';\n';p.write_text(after)
- q=p.with_name(module+'.rs');q.write_text((B/(module+'.rs.txt')).read_text())
+ q=p.with_name(module+'.rs');q.write_text(moduleText(module))
  patch+=''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='a/'+path,tofile='b/'+path))
  patch+='--- /dev/null\n+++ b/'+str(q.relative_to(S))+'\n@@ -0,0 +1,'+str(len(q.read_text().splitlines()))+' @@\n'+''.join('+'+l+'\n' for l in q.read_text().splitlines())
  pins[path]=H(p);pins[str(q.relative_to(S))]=H(q)

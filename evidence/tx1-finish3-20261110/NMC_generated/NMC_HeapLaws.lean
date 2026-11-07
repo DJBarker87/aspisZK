@@ -8,7 +8,7 @@ theorem write_frame (heap : Heap) (owner address : Nat) (value : Option Claims)
  (disjoint : address≠owner) : write heap owner value address=heap address := by
  simp only [write,if_neg disjoint]
 theorem write_owner (heap : Heap) (owner : Nat) (value : Option Claims) :
- write heap owner value owner=value := by simp [write]
+ write heap owner value owner=value.map Region.claims := by simp [write]
 /-- Installing the complete returned value and then releasing it does not
 recover arbitrary stale bytes. Only other allocation identities are framed. -/
 theorem release_frame (heap : Heap) (owner address : Nat) (value : Claims)

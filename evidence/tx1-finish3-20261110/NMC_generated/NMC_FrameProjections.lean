@@ -121,6 +121,8 @@ theorem claims_value (a b : Value) (same : Same a b) : a.claims.value=b.claims.v
  intro row hrow
  apply NLU.cells_ext
  intro col hcol
+ change row<3 at hrow
+ change col<29 at hcol
  apply NLU.word_ext
  intro j
  apply UScalar.eq_of_val_eq

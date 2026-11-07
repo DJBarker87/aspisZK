@@ -1,0 +1,37 @@
+{"attempt": "NMC_L015", "exit_status": 0, "wall_seconds": 28.984490435104817, "peak_rss_kib": "6566400", "swaps": "0", "print_axioms": ["'AspisR1.NMC_Claims.installed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NMC_Claims.frame' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NMC_Claims.abort' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NMC_Claims.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMC_Claims.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMC_Claims.abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMC_Claims.installed : ∀ {A H : Type} (input : NLU.Input H),
+  NLU.InputDomain input →
+    ∀ (allocator : S2W_D189Wrappers.Allocator A) (state : A) (rows : NKA_HeapCarrier.RowNative),
+      NKA_HeapCarrier.RowCut rows →
+        ∀ (box : NKA_HeapCarrier.BoxNative),
+          NKA_HeapCarrier.BoxCut box →
+            ∀ (identity : ℕ) (before : NKA_InitializedPrefix.Memory) (heap : Heap),
+              ∃ value,
+           
+...
+'AspisR1.NMC_Claims.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMC_Claims.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMC_Claims.abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMC_Claims.installed : ∀ {A H : Type} (input : NLU.Input H),
+  NLU.InputDomain input →
+    ∀ (allocator : S2W_D189Wrappers.Allocator A) (state : A) (rows : NKA_HeapCarrier.RowNative),
+      NKA_HeapCarrier.RowCut rows →
+        ∀ (box : NKA_HeapCarrier.BoxNative),
+          NKA_HeapCarrier.BoxCut box →
+            ∀ (identity : ℕ) (before : NKA_InitializedPrefix.Memory) (heap : Heap),
+              ∃ value,
+                NKA_ClaimsOwnership.AtAllocation (NKA_ClaimsEffects.allocate allocator state) input.reservation rows box
+                    identity before value ∧
+                  attach heap identity
+                        (NKA_ClaimsEffects.native allocator state input.reservation rows box identity before value) =
+                      attach heap identity (NKA_ClaimsEffects.cohort allocator state input.reservation input.prefix1) ∧
+                    attach heap identity
+                        (NKA_ClaimsEffects.native allocator state input.reservation rows box identity before value) =
+                      attach heap identity
+                        (NKA_ClaimsEffects.reference allocator state input.reservation input.prefix1) :=
+⋯
+
+Running as unit: run-rd71ef88b04264c22a5415e07e1df18ed.scope; invocation ID: 5ee434575673496985f196c0903c582b

@@ -1,0 +1,251 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_semantic.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_semantic.rs
+@@ -332,3 +332,7 @@
+ #[cfg(kani)]
+ #[path = "NLI_rounds.rs"]
+ pub mod NLI_rounds;
++
++#[cfg(kani)]
++#[path = "NMC_segments.rs"]
++pub mod NMC_segments;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NMC_segments.rs
+@@ -0,0 +1,47 @@
++//! Source-ordered cuts of frozen r1_semantic.rs:232-308.
++//! Explicit owned parent carrier. Child replies are LOCAL values, never statics.
++use super::*;
++use aspis_core::state_only_prefix::r0::{Challenges as Original,Error as PublicError};
++pub type Claims=Box<[[QM31;29];3]>;
++pub struct Parent<H:Digest32>{
++ pub running:QM31,pub alpha:[QM31;10],pub transcript:SemanticTranscript<H>,
++ pub challenges:Challenges,pub claims:Claims,
++ pub terminal:QM31,pub mask:QM31,pub extra:[QM31;29],pub before:[QM31;29],
++ pub state:[u8;32],pub z0:SecureCirclePoint,pub z1:SecureCirclePoint,
++ // Ghost disjoint rest-heap/allocator observation; no body writes it.
++ pub rest:[u8;32],pub reservation:usize,
++}
++pub struct TerminalLog{pub public_variant:bool,pub public_first:usize,pub public_transition:usize,pub calls:usize,pub owner:usize,pub claims:[[QM31;29];3],pub alpha:[QM31;10],pub original:Original,pub reply:Result<QM31,PublicError>}
++impl TerminalLog{
++ fn terminal_qm31(&mut self,public:Public<'_>,claims:&Claims,alpha:&[QM31;10],ch:&Original)->Result<QM31,PublicError>{
++  let (variant,first,transition)=match public{Public::Transfer(a,b)=>(false,a as *const _ as usize,b as *const _ as usize),Public::Withdrawal(a,b)=>(true,a as *const _ as usize,b as *const _ as usize)};
++  self.public_variant=variant;self.public_first=first;self.public_transition=transition;
++  self.calls+=1;self.owner=(&**claims as *const [[QM31;29];3])as usize;
++  self.claims=**claims;self.alpha=*alpha;self.original=*ch;self.reply
++ }
++}
++// The actual terminal call's full Result is retained before map_err. The
++// borrowed public receiver is the cut point; its law is Actual256, not a stub.
++pub fn terminal<H:Digest32>(p:&Parent<H>,public:Public<'_>,log:&mut TerminalLog)->Result<QM31,PublicError>{
++ let original_challenges=Original{lambda:p.challenges.lambda,chi:p.challenges.chi,theta:p.challenges.theta,zc:p.challenges.zc,mu:p.challenges.mu,eta:p.challenges.eta};
++ log.terminal_qm31(public,&p.claims,&p.alpha,&original_challenges)
++}
++pub fn map_public<H:Digest32>(p:&mut Parent<H>,reply:Result<QM31,PublicError>)->Result<(),Error>{
++ let terminal=reply.map_err(|_|Error::Public)?;p.terminal=terminal;Ok(())
++}
++pub fn terminal_guard<H:Digest32>(p:&Parent<H>,masked_terminal:QM31)->Result<(),Error>{
++ if p.running != masked_terminal {return Err(Error::Terminal);} Ok(())
++}
++pub fn circle_guard<H:Digest32>(p:&Parent<H>)->Result<(),Error>{
++ if p.z0 == p.z1 {return Err(Error::EqualCirclePoints);} Ok(())
++}
++pub fn low<H:Digest32>(p:&Parent<H>,i:usize,slot:&mut core::mem::MaybeUninit<QM31>){slot.write(p.claims[0][i]);}
++pub fn high<H:Digest32>(p:&Parent<H>,i:usize,slot:&mut core::mem::MaybeUninit<QM31>){slot.write(p.claims[0][16+i]);}
++pub fn blind<H:Digest32>(p:&Parent<H>)->QM31{p.claims[0][27]}
++pub fn extra28<H:Digest32>(p:&Parent<H>)->QM31{p.extra[28]}
++pub fn state_before<H:Digest32>(p:&mut Parent<H>){let state_before_z0=p.transcript.state();p.state=state_before_z0;}
++// At the returned-error frontier, the parent is still the last entered frame.
++// Its actual function-exit Drop is a separate segment, never a fabricated post.
++pub fn decoded<H:Digest32>(p:&mut Parent<H>,reply:Result<[QM31;29],Error>,second:bool)->Result<(),Error>{
++ let value=reply?;if second{p.before=value}else{p.extra=value};Ok(())
++}
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -176,3 +176,7 @@
+ #[cfg(kani)]
+ #[path = "NLU_program.rs"]
+ pub mod NLU_program;
++
++#[cfg(kani)]
++#[path = "NMC_program.rs"]
++pub mod NMC_program;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NMC_program.rs
+@@ -0,0 +1,178 @@
++//! One original owned parent through each entered native segment.
++use super::*;
++use aspis_core::{field::{QM31,CM31,M31},circle::SecureCirclePoint};
++use aspis_r1_cost_probe::{r1_semantic::NMC_segments as S,r1_wire::{NLI_factory,Challenges,Error}};
++use aspis_core::state_only_prefix::r0::{Challenges as Original,Error as PublicError};
++use aspis_r1_cost_probe::r1_semantic::NLI_rounds::KMX_copy_nonoverlapping;
++fn q()->QM31{let a:[u32;4]=kani::any();QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{a:M31(a[2]),b:M31(a[3])}}}
++fn point()->SecureCirclePoint{SecureCirclePoint{x:q(),y:q()}}
++fn ch()->Challenges{Challenges{lambda:q(),chi:q(),theta:q(),zc:core::array::from_fn(|_|q()),mu:q(),eta:q()}}
++fn parent()->S::Parent<SolanaDigest>{S::Parent{running:q(),alpha:core::array::from_fn(|_|q()),transcript:NLI_factory::make(SolanaDigest,kani::any(),kani::any()),challenges:ch(),claims:Box::new(core::array::from_fn(|_|core::array::from_fn(|_|q()))),terminal:q(),mask:q(),extra:core::array::from_fn(|_|q()),before:core::array::from_fn(|_|q()),state:kani::any(),z0:point(),z1:point(),rest:kani::any(),reservation:kani::any()}}
++fn word(q:QM31,j:usize)->u32{match j{0=>q.c0.a.0,1=>q.c0.b.0,2=>q.c1.a.0,_=>q.c1.b.0}}
++// Every projection of the explicit parent, not a seed equality. Together
++// with the selector's finite coverage this is the complete value/frame law.
++fn observe(p:&S::Parent<SolanaDigest>,tag:u8,i:usize,j:usize)->u64{
++ match tag{0=>word(p.running,j)as u64,1=>word(p.alpha[i%10],j)as u64,2=>word(p.claims[i/29][i%29],j)as u64,
++ 3=>word(p.terminal,j)as u64,4=>word(p.mask,j)as u64,5=>word(p.extra[i%29],j)as u64,6=>word(p.before[i%29],j)as u64,
++ 7=>p.state[i%32]as u64,8=>word(p.z0.x,j)as u64,9=>word(p.z0.y,j)as u64,10=>word(p.z1.x,j)as u64,11=>word(p.z1.y,j)as u64,
++ 12=>p.rest[i%32]as u64,13=>p.reservation as u64,14=>(&*p.claims as *const [[QM31;29];3])as usize as u64,
++ 15=>NLI_factory::snapshot(&p.transcript).0[i%32]as u64,16=>NLI_factory::snapshot(&p.transcript).2 as u64,
++ 17=>word(p.challenges.lambda,j)as u64,18=>word(p.challenges.chi,j)as u64,19=>word(p.challenges.theta,j)as u64,
++ 20=>word(p.challenges.zc[i%10],j)as u64,21=>word(p.challenges.mu,j)as u64,_=>word(p.challenges.eta,j)as u64}
++}
++fn public_error()->PublicError{let tag:u8=kani::any();kani::assume(tag<11);match tag{0=>PublicError::Allocation,1=>PublicError::RowOrder{expected:kani::any(),actual:kani::any()},2=>PublicError::InvalidRow,3=>PublicError::Tag{row:kani::any()},4=>PublicError::Length{row:kani::any()},5=>PublicError::NonCanonical{row:kani::any(),value:kani::any()},6=>PublicError::Boundary{round:kani::any()},7=>PublicError::Terminal,8=>PublicError::EqualCirclePoints,9=>PublicError::TrailingBytes,_=>PublicError::Public}}
++fn error()->Error{let tag:u8=kani::any();kani::assume(tag<11);match tag{0=>Error::Allocation,1=>Error::RowOrder{expected:kani::any(),actual:kani::any()},2=>Error::InvalidRow,3=>Error::Tag{row:kani::any()},4=>Error::Length{row:kani::any()},5=>Error::NonCanonical{row:kani::any(),value:kani::any()},6=>Error::Boundary{round:kani::any()},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}}
++fn check(ok:bool,bad:bool){if bad{assert!(!ok)}else{assert!(ok)}}
++fn run<const TAG:u8>(site:u8,bad:bool){
++ let mut p=parent();let tag:u8=if TAG==255{kani::any()}else{TAG};let i:usize=kani::any();let j:usize=kani::any();kani::assume(tag<23&&i<87&&j<4);
++ let before=observe(&p,tag,i,j);
++ match site{
++ 0=>{let good:bool=kani::any();let value=q();let reply=if good{Ok(value)}else{Err(public_error())};
++ let expected=if tag==3{word(value,j)as u64}else{before};let out=S::map_public(&mut p,reply);
++ let law=match out{Ok(())=>good&&observe(&p,tag,i,j)==expected,Err(e)=>!good&&e==Error::Public&&observe(&p,tag,i,j)==before};check(law,bad)},
++ 1=>{let masked=q();let reject=p.running!=masked;let out=S::terminal_guard(&p,masked);let law=match out{Ok(())=>!reject&&observe(&p,tag,i,j)==before,Err(e)=>reject&&e==Error::Terminal&&observe(&p,tag,i,j)==before};check(law,bad)},
++ 2=>{let reject=p.z0==p.z1;let out=S::circle_guard(&p);let law=match out{Ok(())=>!reject&&observe(&p,tag,i,j)==before,Err(e)=>reject&&e==Error::EqualCirclePoints&&observe(&p,tag,i,j)==before};check(law,bad)},
++ 3|4=>{let at:usize=kani::any();kani::assume(at<if site==3{16}else{10});let expected=word(p.claims[0][if site==3{at}else{16+at}],j);let mut slot=core::mem::MaybeUninit::uninit();if site==3{S::low(&p,at,&mut slot)}else{S::high(&p,at,&mut slot)};let actual=unsafe{slot.assume_init()};check(word(actual,j)==expected&&observe(&p,tag,i,j)==before,bad)},
++ 5|6=>{let expected=word(if site==5{p.claims[0][27]}else{p.extra[28]},j);let value=if site==5{S::blind(&p)}else{S::extra28(&p)};check(word(value,j)==expected&&observe(&p,tag,i,j)==before,bad)},
++ 7=>{let expected=if tag==7{NLI_factory::snapshot(&p.transcript).0[i%32]as u64}else{before};S::state_before(&mut p);check(observe(&p,tag,i,j)==expected,bad)},
++ 8|9=>{let good:bool=kani::any();let values=core::array::from_fn(|_|q());let err=error();let reply=if good{Ok(values)}else{Err(err)};let expected=if tag==if site==8{5}else{6}{word(values[i%29],j)as u64}else{before};let out=S::decoded(&mut p,reply,site==9);let law=match out{Ok(())=>good&&observe(&p,tag,i,j)==expected,Err(e)=>!good&&e==err&&observe(&p,tag,i,j)==before};check(law,bad)},
++ _=>unreachable!(),
++ }
++}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_public_cut(){run::<3>(0,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_public_control(){run::<3>(0,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn terminal_guard_cut(){run::<14>(1,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn terminal_guard_control(){run::<14>(1,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn circle_guard_cut(){run::<14>(2,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn circle_guard_control(){run::<14>(2,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn low_cut(){run::<14>(3,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn low_control(){run::<14>(3,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn high_cut(){run::<14>(4,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn high_control(){run::<14>(4,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn blind_cut(){run::<14>(5,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn blind_control(){run::<14>(5,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn extra28_cut(){run::<14>(6,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn extra28_control(){run::<14>(6,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn state_before_cut(){run::<7>(7,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn state_before_control(){run::<7>(7,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn decode25_cut(){run::<5>(8,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn decode25_control(){run::<5>(8,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn decode26_cut(){run::<6>(9,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn decode26_control(){run::<6>(9,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_owner_cut(){run::<14>(0,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_owner_control(){run::<14>(0,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_claims_cut(){run::<2>(0,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_claims_control(){run::<2>(0,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_alpha_cut(){run::<1>(0,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_alpha_control(){run::<1>(0,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_extra_cut(){run::<5>(0,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_extra_control(){run::<5>(0,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_transcript_cut(){run::<15>(0,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_transcript_control(){run::<15>(0,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_challenges_cut(){run::<22>(0,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_challenges_control(){run::<22>(0,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_allocator_cut(){run::<13>(0,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_allocator_control(){run::<13>(0,true)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_rest_cut(){run::<12>(0,false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn map_rest_control(){run::<12>(0,true)}
++
++use aspis_statement::pool_v1::{payment_relation::{PoolV1PrivateTransferPublicV1,PoolV1WithdrawalPublicV1},pair_tree_profile::{PoolV1PairLatePublicStatementV1,PoolV1PairLiveSnapshotV1},pair_terminal::PoolV1PairVerifiedAfterstateV1};
++use aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public;
++fn digest()->[M31;8]{core::array::from_fn(|_|M31(kani::any()))}
++fn terminal_entry(bad:bool){
++ let p=parent();let tag:u8=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(tag<23&&i<87&&j<4);
++ let before=observe(&p,tag,i,j);
++ let transfer=PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()};
++ let withdrawal=PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:digest()};
++ let transition=PoolV1PairLatePublicStatementV1{live_snapshot:PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:digest(),frontier:core::array::from_fn(|_|digest())},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:digest(),next_frontier:core::array::from_fn(|_|digest())}};
++ let choose:bool=kani::any();let public=if choose{Public::Withdrawal(&withdrawal,&transition)}else{Public::Transfer(&transfer,&transition)};
++ let expected_first=if choose{&withdrawal as *const _ as usize}else{&transfer as *const _ as usize};
++ let good:bool=kani::any();let value=q();let err=public_error();let reply=if good{Ok(value)}else{Err(err)};
++ let zero=Original{lambda:q(),chi:q(),theta:q(),zc:core::array::from_fn(|_|q()),mu:q(),eta:q()};
++ let mut log=S::TerminalLog{public_variant:false,public_first:0,public_transition:0,calls:0,owner:0,claims:core::array::from_fn(|_|core::array::from_fn(|_|q())),alpha:core::array::from_fn(|_|q()),original:zero,reply};
++ let owner=(&*p.claims as *const [[QM31;29];3])as usize;
++ let out=S::terminal(&p,public,&mut log);
++ let result=match out{Ok(v)=>good&&v==value,Err(e)=>!good&&e==err};
++ let word_claims=word(log.claims[i/29][i%29],j)==word(p.claims[i/29][i%29],j);
++ let word_alpha=word(log.alpha[i%10],j)==word(p.alpha[i%10],j);
++ let channel:u8=kani::any();kani::assume(channel<6);let old=match channel{0=>p.challenges.lambda,1=>p.challenges.chi,2=>p.challenges.theta,3=>p.challenges.zc[i%10],4=>p.challenges.mu,_=>p.challenges.eta};let seen=match channel{0=>log.original.lambda,1=>log.original.chi,2=>log.original.theta,3=>log.original.zc[i%10],4=>log.original.mu,_=>log.original.eta};
++ check(result&&log.calls==1&&log.owner==owner&&log.public_variant==choose&&log.public_first==expected_first&&log.public_transition==&transition as *const _ as usize&&word_claims&&word_alpha&&word(old,j)==word(seen,j)&&observe(&p,tag,i,j)==before,bad)
++}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn terminal_entry_cut(){terminal_entry(false)}
++#[kani::proof] #[kani::unwind(90)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn terminal_entry_control(){terminal_entry(true)}

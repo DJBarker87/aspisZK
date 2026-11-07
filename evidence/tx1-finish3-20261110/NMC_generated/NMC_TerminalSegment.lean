@@ -15,9 +15,9 @@ theorem installed {A : Type} (allocator : S2W_D189Wrappers.Allocator A) (state :
  (challenges : r1_wire.Challenges) (domain : NLU_Terminal.InputDomain pub challenges)
  (hc : ∀ row∈(mapArray (mapArray toQ) claims).val,FIw_ArrayValue.canonical row)
  (ha : FIw_ArrayValue.canonical (mapArray toQ alpha)) :
- NMC_Exit.public allocator state heap identity (NLU_Terminal.nativeTerminal pub claims alpha challenges)=
- NMC_Exit.public allocator state heap identity (FIq_Terminal.terminal pub claims alpha challenges) := by
- exact congrArg (NMC_Exit.public allocator state heap identity)
+ NMC_Exit.publicResult allocator state heap identity (NLU_Terminal.nativeTerminal pub claims alpha challenges)=
+ NMC_Exit.publicResult allocator state heap identity (FIq_Terminal.terminal pub claims alpha challenges) := by
+ exact congrArg (NMC_Exit.publicResult allocator state heap identity)
    (NLU_Terminal.installed pub claims alpha challenges domain hc ha)
 #print axioms installed
 set_option pp.proofs false in #print installed

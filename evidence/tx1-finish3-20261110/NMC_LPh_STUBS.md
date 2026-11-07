@@ -1,0 +1,5 @@
+# NMC stub and native boundary table
+
+No field operation executes in NMC Kani, and NMC adds no field stub. The inherited three-call arithmetic segment and emitted multiplication/addition pairings remain exactly NLU_LPh_STUBS.md; their actual parent operand installation is OPEN. Every inherited stub needs that named law and canonical domain before use.
+
+The only NMC Kani stub is core::ptr::copy_nonoverlapping -> the exact KMX_copy_stubs.patch implementation. Patch SHA256 bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67; KMX_stubs.rs SHA256 ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138, checked before each native run. KMX value/frame composition is retained, not a custom stub. Every credited positive needs its failing control in the same deployed/offline configuration. No proof_for_contract/stub_verified interface or Option<fn>-dependent assertion is used. No writable static exists. The Box error-frontier window deliberately stops before cleanup; cleanup remains a separate std/allocator/native association.
