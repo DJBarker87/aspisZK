@@ -32,6 +32,6 @@ for item in json.load(open(E/sys.argv[1])):
   hand=E/'HANDOFF.md';hand.write_text(hand.read_text()+f'\n{a} passed exact pinned replay {m}; see receipt for time/RSS/swap/revision/axioms.\n')
   files += [p,str(hand),str(E/'compile.py'),str(E/'replay.py'),str(E/sys.argv[1])]
   subprocess.run(['git','add','--sparse',*files],check=True)
-  subprocess.run(['git','commit','--only',*files,'-m','Replay Lane A pinned provider '+m],check=True)
+  subprocess.run(['git','commit','--only',*files,'-m',('Add Lane A graph ' if m.startswith('PV_LIB_A_') else 'Replay Lane A pinned provider ')+m],check=True)
   break
  else:sys.exit('ten refusals')
