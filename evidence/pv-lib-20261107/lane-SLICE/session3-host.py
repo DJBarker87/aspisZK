@@ -36,6 +36,11 @@ for file in ev.glob('receipt-*.json'):
   assert sha(object_path)==old['object_sha256'], 'own object changed'
   assert sha(P/'sources'/(old['target']+'.lean'))==old['source_sha256'], 'own source changed'
   checks[old['target']]={'path':str(object_path),'sha256':old['object_sha256']}
+# Walker is byte-identical to the accepted session2 audit dependency.
+if module == 'PV_LIB_SLICE_RawAudit3':
+ walker=pathlib.Path('/home/dombarker/project-offloads/codex-pv-evh-20261029/objects/PV_EVHB_OwnerRawWalker.olean')
+ assert sha(walker)=='74ca90062bd6f2d42f66e112ee6ae05011a20bed56f2a94e8aaf86b7eb88ae27'
+ auth['PV_EVHB_OwnerRawWalker']={'path':str(walker),'sha256':sha(walker)}
 for m,x in auth.items():
  path=pathlib.Path(x['path'])
  actual=sha(path)

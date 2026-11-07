@@ -25,7 +25,11 @@ No later row or source7 composition has been started while f21 is incomplete.
 axioms only. One standalone STREAMB_SLOTS=3 SSH turn per ID, admitted true,
 6G/8G/swap0/Tasks64/-M7000. Reused SPEC's pinned STX authority READ-ONLY in an
 isolated own objects-stx/J-stx cohort; no cold replay or mixed D937 imports.
-Next Lean49922; next strict raw49692 (new roots only; not yet run).
+Audit driver PV_LIB_SLICE_RawAudit3 compiled49922:exit0,wall0:00.81,
+RSS1588244KiB,swaps0,standard axioms. It reuses the session2 private importAll
+walker/collector unchanged; new module/root arrays and explicit reached-constructor
+summary candidates only. STX walker bytes match the accepted49919 dependency.
+Next Lean49923; next strict raw49692 (new roots only; not yet run).
 No frozen prose/shared map/ledger/checker/pv-common/package branch/key action,
 row consumption, endpoint premise, trust field or metric changed. No push/merge.
 
