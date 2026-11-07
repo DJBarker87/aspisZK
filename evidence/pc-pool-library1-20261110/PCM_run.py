@@ -62,7 +62,8 @@ print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
   print('PCM admission refusal; waiting',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP shared admission failure')
-source=(E/(target+'.lean')).read_text()
+source_path=(E/(target+'.lean')) if target.startswith('PCM_') else (E/'PCM_dependency_inputs'/(target+'.lean'))
+source=source_path.read_text()
 files={'PCM_sources/'+target+'.lean':source}
 config=dict(attempt=a,kind='lean',module=target,sources=list(files),command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','PCM_sources','-o','PCM_objects/'+target+'.olean','PCM_sources/'+target+'.lean'],env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/PCM_tmp',LEAN_PATH=B+'/PCM_objects:'+B+'/PCM_seed:'+B+'/PCM_children:'+B+'/PCM_dependencies:'+B+'/PCM_context'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused PCM declaration elaboration')
 config['deployed_resolved_packages']=json.loads((E/'PCM_DEPLOYED_FEATURES.json').read_text())
