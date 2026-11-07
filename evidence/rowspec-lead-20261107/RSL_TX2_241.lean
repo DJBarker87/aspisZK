@@ -45,7 +45,11 @@ structure V2Lib where
   /-- NLP_InputDomain.Root0 (checkpoint, proof) on byte carriers. -/
   Root0 : Bytes → Bytes → Prop
   /-- TX2:064 `tx2_authenticated(public, proof, checkpoint, SolanaDigest, None)`:
-  its complete law (NMN_064.RowSpec: Law + chronology, abort = prefix only). -/
+  its complete law (NMN_064.RowSpec: Law + chronology, abort = prefix only).
+  Revision 3 (ruling (bq), LIB0_ F1): the heap::filled reservations reached
+  through `resume` (verifier.rs:428) read `Env.reservation`
+  (`Spec.tryReserve`), so on `Dom064` the law is a function of the arguments
+  and Env (`Spec.Functional (tx2auth x.1 x.2.1 x.2.2)`, required at the gate). -/
   tx2auth : Bytes → Bytes → Bytes → Spec (Except VErr Unit)
 
 /-- TX2:064's own-input domain (NMN_064.Domain). -/

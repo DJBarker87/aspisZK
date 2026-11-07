@@ -1,0 +1,2886 @@
+{
+ "title": "LIB0 field map: RSL rev2 library structures -> CLOSED ledger roots (F1/F2 resolved by RSL rev3)",
+ "target_established": false,
+ "rsl_revision": "be66076856e (RSL rev2, frozen by ruling (bp)(4)); F1/F2 resolved by RSL rev3 (ruling (bq), branch codex/cx-rsl-rev3-20261107)",
+ "ledger": "evidence/ledger25-20261111/NMQ_LEDGER.json.xz (sha256 in NMQ_LEDGER.json.sha256), 582 CLOSED / 17 OPEN",
+ "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "research_base": "3493d38575c",
+ "counts": {
+  "total": 106,
+  "by_status": {
+   "definitional": 44,
+   "root+adapter-exists": 20,
+   "root+adapter-new": 33,
+   "unsupplied-or-partial": 3,
+   "trust-row": 6
+  },
+  "by_struct": {
+   "PoolLib": 20,
+   "DeployedIds": 2,
+   "V2Lib": 4,
+   "S1Lib": 6,
+   "VLib": 67,
+   "PreparedNew": 1,
+   "Env/EnvRep": 6
+  }
+ },
+ "fields": [
+  {
+   "struct": "PoolLib",
+   "field": "Request",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := emitted PoolV1PairForestTerminalRequestV1 of the copy used by TX2:163 roots (NFY_Part059); identify with the AdapterRw copy",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "opaque carrier; must be the TX2:163 output type",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "Statement",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := emitted PoolV1PairForestTerminalStatementV1 (TX2:224 output = TX2:165/219 input); one copy for all three",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "Afterstate",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := scan_proof_buffer candidate afterstate (TX2:226 output = TX2:224 input)",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "decodeRequest",
+   "rows": [
+    "TX2:163"
+   ],
+   "cls": "ROOT",
+   "adapter": "Slice U8/Std.Result(Result Request DecodeErr) -> Bytes -> Option Request (byte image + Ok/Err->some/none); all lengths",
+   "adapter_exists": "NMS_ NMS_R2DecoderImage.full, NMS_R2RequestBranches (partial)",
+   "flag": null,
+   "note": "NMS_REMAINING: concrete request B32 byte representation still to fix",
+   "supplying": [
+    {
+     "row": "TX2:163",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::decode_pool_v1_pair_forest_terminal_request_v1",
+     "owner_module": "NFY_Part059",
+     "roots": [
+      "NFY_NFD_RequestDomains.binding_fields",
+      "NFY_NFD_RequestDomains.payment_length",
+      "NFY_NFD_RequestDomains.payment_window",
+      "NFY_NFD_RequestDomains.wrong_length",
+      "NFY_NFD_RequestField00.alignment",
+      "NFY_NFD_RequestField01.alignment",
+      "NFY_NFD_RequestField02.alignment",
+      "NFY_NFD_RequestField03.alignment",
+      "NFY_NFD_RequestField04.alignment",
+      "NFY_NFD_RequestField05.alignment",
+      "NFY_NFD_RequestField06.alignment",
+      "NFY_NFD_RequestField07.alignment",
+      "NFY_NFD_RequestField08.alignment",
+      "NFY_NFD_RequestField09.alignment",
+      "NFY_NFD_RequestField10.alignment",
+      "NFY_NFD_RequestField11.alignment",
+      "NFY_NFD_RequestField12.alignment",
+      "NFY_NFD_RequestField13.alignment",
+      "NFY_NFD_RequestOracle.array_result_state_effects",
+      "NFY_NFD_RequestOracle.result_state_effects",
+      "NFY_NFD_RequestProjection.complete",
+      "NFY_NFD_RequestProjection.transfer_roundtrip",
+      "NFY_NFD_RequestProjection.withdrawal_roundtrip"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "reqProfile",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "field read; [u8;32] -> B32 adapter",
+   "adapter_exists": "NMS_ NMS_R2Gated242 (literal key guards)",
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "reqRelease",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "field read; [u8;32] -> B32 adapter",
+   "adapter_exists": "NMS_ NMS_R2Gated242",
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "reqPoolProgram",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "field read; [u8;32] -> B32 adapter",
+   "adapter_exists": "NMS_ NMS_R2Gated242",
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "reqNullifier",
+   "rows": [
+    "TX2:158"
+   ],
+   "cls": "ROOT",
+   "adapter": "native eight-word nullifier array -> B32 (32 bytes) representation",
+   "adapter_exists": "NMS_ NMS_R2NullifierCarrier.full (partial: B32 byte rep not fixed)",
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX2:158",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalPaymentV1::nullifier",
+     "owner_module": "NGE_NEQ_NullifierDomains",
+     "roots": [
+      "NGE_NEQ_NullifierDomains.common_independent",
+      "NGE_NEQ_NullifierDomains.payment_result_frame",
+      "NGE_NEQ_NullifierDomains.statement_result_frame"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "outputLane",
+   "rows": [
+    "TX2:156"
+   ],
+   "cls": "ROOT",
+   "adapter": "B32 -> Option UInt8 from lane_instance model; nullifier byte link",
+   "adapter_exists": "NMS_ NMS_R2LaneModel.full (partial: outputLane link open)",
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX2:156",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::pool_v1_pair_forest_output_lane_v1",
+     "owner_module": "NFY_Part031",
+     "roots": [
+      "NFY_NEM_LaneReached.lane_instance",
+      "NFY_NEM_LaneReached.lane_reached"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "decodeMaster",
+   "rows": [
+    "TX2:153"
+   ],
+   "cls": "ROOT",
+   "adapter": "NJY_Master.model (Cut-indexed, functional model) -> Option RSL.Master field-by-field (PoolIdentity, VerifierPolicy, Digest=List UInt32)",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "RSL comment cites TX2:218 (the Box wrapper, transcribed as decodeMasterBox); the decoder itself is TX2:153. NND A2/233 lists the payload decoder as remaining",
+   "supplying": [
+    {
+     "row": "TX2:153",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::decode_pool_v1_pair_forest_master_v1",
+     "owner_module": "NJY_Roots",
+     "roots": [
+      "NJY_Roots.master",
+      "NJQ_Master.source",
+      "NJQ_Canonical.master_result"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "decodeCheckpoint",
+   "rows": [
+    "TX2:152"
+   ],
+   "cls": "ROOT",
+   "adapter": "NJY_Checkpoint.model -> Option RSL.Checkpoint",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "RSL comment cites TX2:216 (Box wrapper); decoder is TX2:152",
+   "supplying": [
+    {
+     "row": "TX2:152",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::decode_pool_v1_pair_forest_checkpoint_v1",
+     "owner_module": "NJY_Roots",
+     "roots": [
+      "NJY_Roots.checkpoint",
+      "NJQ_Checkpoint.source",
+      "NJQ_Canonical.checkpoint_result"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "validatePolicy",
+   "rows": [
+    "TX2:151"
+   ],
+   "cls": "ROOT",
+   "adapter": "is_ok of NHY_PolicyModel on VerifierPolicy carrier",
+   "adapter_exists": "NND_ NND_RegistryLibrary.install / NND_PolicyValue.native",
+   "flag": null,
+   "note": "NND link is to AdapterRw op15; LIB must also tie it to NHY_PolicyModel.actual_slot",
+   "supplying": [
+    {
+     "row": "TX2:151",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/format.rs::validate_verifier_policy_v1",
+     "owner_module": "NHY_PolicyModel",
+     "roots": [
+      "NHY_PolicyModel.actual_slot"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "decodeRegistryV1",
+   "rows": [
+    "TX2:203"
+   ],
+   "cls": "ROOT",
+   "adapter": "Option image of NJY_Roots.registry model",
+   "adapter_exists": "NND_ NND_V1DecoderValues.registry",
+   "flag": null,
+   "note": "NND link is to AdapterRw op31; tie to NJY_Roots.registry",
+   "supplying": [
+    {
+     "row": "TX2:203",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_v1",
+     "owner_module": "NJY_Roots",
+     "roots": [
+      "NJY_Roots.registry",
+      "NJQ_Registry.source",
+      "NJQ_Canonical.registry_result"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "decodeRegistryV2",
+   "rows": [
+    "TX2:204"
+   ],
+   "cls": "ROOT",
+   "adapter": "Option image of NHY_RegistryJoin.cohort",
+   "adapter_exists": "NND_ NND_V2DecoderValues.registry",
+   "flag": null,
+   "note": "tie to NHY_RegistryJoin.cohort",
+   "supplying": [
+    {
+     "row": "TX2:204",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_v2",
+     "owner_module": "NHY_RegistryJoin",
+     "roots": [
+      "NHY_RegistryJoin.cohort"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "decodeEntryV1",
+   "rows": [
+    "TX2:201"
+   ],
+   "cls": "ROOT",
+   "adapter": "Option image of NJY_Roots.entry",
+   "adapter_exists": "NND_ NND_V1DecoderValues.entry",
+   "flag": null,
+   "note": "tie to NJY_Roots.entry",
+   "supplying": [
+    {
+     "row": "TX2:201",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_entry_v1",
+     "owner_module": "NJY_Roots",
+     "roots": [
+      "NJY_Roots.entry",
+      "NJQ_Entry.source",
+      "NJQ_Canonical.entry_result"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "decodeEntryV2",
+   "rows": [
+    "TX2:202"
+   ],
+   "cls": "ROOT",
+   "adapter": "Option image of NIJ_EntryJoin.cohort",
+   "adapter_exists": "NND_ NND_V2DecoderValues.entry",
+   "flag": null,
+   "note": "tie to NIJ_EntryJoin.cohort",
+   "supplying": [
+    {
+     "row": "TX2:202",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::decode_verifier_registry_entry_v2",
+     "owner_module": "NIS_EntryJoin",
+     "roots": [
+      "NIJ_EntryJoin.cohort"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "scanProof",
+   "rows": [
+    "TX2:226"
+   ],
+   "cls": "ROOT",
+   "adapter": "RS image incl. Box site; byte image of the 58295-byte buffer",
+   "adapter_exists": "NMS_ NMS_R2PoolSites.scan (+NMS_R2N_ScanSites.interpreted, scanner_extent)",
+   "flag": null,
+   "note": "representation image of a fixed source model; NMS: not a physical producer certificate",
+   "supplying": [
+    {
+     "row": "TX2:226",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::scan_proof_buffer",
+     "owner_module": "NFY_Part060",
+     "roots": [
+      "NFY_NFJ_Comparison.completion",
+      "NFY_NFJ_Comparison.header_length",
+      "NFY_NFJ_Comparison.nativeEqualityBridge",
+      "NFY_NFJ_Comparison.same_buffer_lengths",
+      "NFY_NFJ_Comparison.slot_zero_iff",
+      "NFY_NFJ_Scanner.decode_domain",
+      "NFY_NFJ_Scanner.encode_domain",
+      "NFY_NFJ_Scanner.result_state_effects",
+      "NFY_NFJ_Scanner.tag_domain"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "reconstruct",
+   "rows": [
+    "TX2:224"
+   ],
+   "cls": "ROOT",
+   "adapter": "RS image incl. both Box-site aborts; Authenticated carrier map",
+   "adapter_exists": "NMS_ NMS_R2PoolSites.reconstruct (+NMS_R2N_ReconstructSites.meaning)",
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX2:224",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::reconstruct_asq8_statement",
+     "owner_module": "NFY_Part057",
+     "roots": [
+      "NFY_NEU_CallDomains.common_packet",
+      "NFY_NEU_CallDomains.reached_domains",
+      "NFY_NEU_CallDomains.transfer_packet",
+      "NFY_NEU_CallDomains.transfer_reply_range",
+      "NFY_NEU_CallDomains.withdrawal_packet",
+      "NFY_NEU_CallDomains.withdrawal_reply_range",
+      "NFY_NEU_ReconstructAdopted.result_state_effects",
+      "NFY_NEU_ReconstructCore.result_state_effects"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "encodeStatement",
+   "rows": [
+    "TX2:165"
+   ],
+   "cls": "ROOT",
+   "adapter": "[u8;1880] by value -> Spec (Option Bytes), no allocation arm",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "NMS_REMAINING: fix the CLOSED 1880-array encoder law",
+   "supplying": [
+    {
+     "row": "TX2:165",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::encode_pool_v1_pair_forest_terminal_statement_v1",
+     "owner_module": "NFY_Part053",
+     "roots": [
+      "NFY_NEQ_EncoderOracle.result_state_effects",
+      "NFY_NEQ_EncoderOracle.substitution",
+      "NGE_NEM_EncoderReceiver.sequence_width",
+      "NGE_NEM_KindInstance.statement_window",
+      "NGE_NEQ_EncoderDomains.header_length",
+      "NGE_NEQ_EncoderDomains.reached_domains",
+      "NGE_NEQ_LateBorrow.after_preserves_child",
+      "NGE_NEQ_LateBorrow.poststate",
+      "NGE_NEQ_LateBorrow.rejoin",
+      "NGE_NEQ_RootFrame.array_ext",
+      "NGE_NEQ_RootFrame.assembled",
+      "NGE_NEQ_RootFrame.cover",
+      "NGE_NEQ_RootFrame.finish",
+      "NGE_NEQ_RootFrame.header_frame",
+      "NGE_NEQ_RootFrame.scalar_frame"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "PoolLib",
+   "field": "emitResult",
+   "rows": [
+    "TX2:219"
+   ],
+   "cls": "ROOT",
+   "adapter": "RS Unit with the returnData event (sol_set_return_data)",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "NMS_REMAINING: return-data child law not installed",
+   "supplying": [
+    {
+     "row": "TX2:219",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::emit_result",
+     "owner_module": "NFY_Part058",
+     "roots": [
+      "NFY_NEY_EmitComposed.encoder_bridge",
+      "NFY_NEY_EmitComposed.reached_encoder",
+      "NFY_NEY_EmitComposed.result_state_effects",
+      "NFY_NFD_EmitProjection.alignment0",
+      "NFY_NFD_EmitProjection.alignment1",
+      "NFY_NFD_EmitProjection.alignment2",
+      "NFY_NFD_EmitProjection.alignment3",
+      "NFY_NFD_EmitProjection.alignment4",
+      "NFY_NFD_EmitProjection.alignment5",
+      "NFY_NFD_EmitProjection.alignment6",
+      "NFY_NFD_EmitProjection.alignment7",
+      "NFY_NFD_EmitProjection.complete"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "DeployedIds",
+   "field": "pool",
+   "rows": [
+    "TX2:220"
+   ],
+   "cls": "ROOT",
+   "adapter": ".rodata 32-byte constant -> B32 literal",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "trivial; NMS_R2Gated242 already uses the frozen deployed-pool value",
+   "supplying": [
+    {
+     "row": "TX2:220",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::pool_program_id",
+     "owner_module": "NHJ_DeployedIds",
+     "roots": [
+      "NHJ_DeployedIds.pool_actual"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "DeployedIds",
+   "field": "registry",
+   "rows": [
+    "TX2:225"
+   ],
+   "cls": "ROOT",
+   "adapter": ".rodata 32-byte constant -> B32 literal",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX2:225",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::registry_program_id",
+     "owner_module": "NHJ_DeployedIds",
+     "roots": [
+      "NHJ_DeployedIds.registry_actual"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "V2Lib",
+   "field": "VErr",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := verifier::Error (8 variants); SAME copy as NMN_064 error carrier and VLib.VErr",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "V2Lib",
+   "field": "debug",
+   "rows": [
+    "TX2:211"
+   ],
+   "cls": "ROOT",
+   "adapter": "NGL_ErrorModel.label/message: Debug string of verifier::Error",
+   "adapter_exists": "NMS_ NMS_R2ErrorSource.full (partial)",
+   "flag": null,
+   "note": "CLOSED law has no format! allocation; harmless: impl subset Ref because Ref admits the returned arm",
+   "supplying": [
+    {
+     "row": "TX2:211",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/lib.rs::error",
+     "owner_module": "NIS_ErrorJoin",
+     "roots": [
+      "NIJ_ErrorJoin.source"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "V2Lib",
+   "field": "Root0",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "NLP_InputDomain.Root0 on byte carriers (headline domain predicate, not a ledger row)",
+   "adapter_exists": "NNC_ WeakR0Rep.at_entry, NNC_ByteCarriers",
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "V2Lib",
+   "field": "tx2auth",
+   "rows": [
+    "TX2:064"
+   ],
+   "cls": "ROOT",
+   "adapter": "NMN_064.RowSpec Law + chronology over NLW_Full064.Frame/End -> Bytes^3 -> Spec (Except VErr Unit), abort = prefix",
+   "adapter_exists": null,
+   "flag": "F1(resolved rev3)",
+   "note": "canonical rendering (TAS name NMN_064.rslRefines) not built; NNC_ObservedLaw.w + contains_native cover only the weak (Root0-free) library. Resume fills (verifier.rs:428) read Env.reservation (rev3); the law must be Spec.Functional on Dom064",
+   "supplying": [
+    {
+     "row": "TX2:064",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/candidate.rs::tx2_authenticated",
+     "owner_module": "NMN_064",
+     "roots": [
+      "NMN_064.root"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "S1Lib",
+   "field": "Statement",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := emitted terminal statement of TX1:332 (NMT Statement)",
+   "adapter_exists": "NMT_ NMT_R2_ConcreteS1.library",
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "S1Lib",
+   "field": "decodeStatement",
+   "rows": [
+    "TX1:332"
+   ],
+   "cls": "ROOT",
+   "adapter": "1880-byte slice decode -> Option Statement",
+   "adapter_exists": "NMT_ NMT_R2_ConcreteS1.decode (partial: total decoder transport open)",
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:332",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_public_statement_box",
+     "owner_module": "NFY_Part058",
+     "roots": [
+      "NFY_NEX_PublicModel.result_state_effects",
+      "NGF_NEX_StatementExt.complete",
+      "NGF_NEY_Field00.alignment",
+      "NGF_NEY_Field01.alignment",
+      "NGF_NEY_Field02.alignment",
+      "NGF_NEY_Field03.alignment",
+      "NGF_NEY_Field04.alignment",
+      "NGF_NEY_Field05.alignment",
+      "NGF_NEY_Field06.alignment",
+      "NGF_NEY_Field07.alignment",
+      "NGF_NEY_Field08.alignment",
+      "NGF_NEY_Field09.alignment",
+      "NGF_NEY_Field10.alignment",
+      "NGF_NEY_Field11.alignment",
+      "NGF_NEY_Field12.alignment",
+      "NGF_NEY_Field13.alignment",
+      "NGF_NEY_Field14.alignment",
+      "NGF_NEY_Field15.alignment",
+      "NGF_NEY_Field16.alignment",
+      "NGF_NEY_Field17.alignment",
+      "NGF_NEY_Field18.alignment",
+      "NGF_NEY_Field19.alignment",
+      "NGF_NEY_Field20.alignment",
+      "NGF_NEY_Field21.alignment",
+      "NGF_NEY_Field22.alignment",
+      "NGF_NEY_Field23.alignment",
+      "NGF_NEY_Field24.alignment",
+      "NGF_NEY_Field25.alignment"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "S1Lib",
+   "field": "decodeReachesAlloc",
+   "rows": [
+    "TX1:332"
+   ],
+   "cls": "ROOT",
+   "adapter": "Bool: decoder reached a Box site",
+   "adapter_exists": null,
+   "flag": "F4",
+   "note": "no TX1:332 root mentions an allocation site (all 28 are allocation-free); NMT_R2_ReachLibrary.reaches is source-derived (NMT_R2_Reach*, wrong-length lemma) without the association",
+   "supplying": [
+    {
+     "row": "TX1:332",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_public_statement_box",
+     "owner_module": "NFY_Part058",
+     "roots": [
+      "NFY_NEX_PublicModel.result_state_effects",
+      "NGF_NEX_StatementExt.complete",
+      "NGF_NEY_Field00.alignment",
+      "NGF_NEY_Field01.alignment",
+      "NGF_NEY_Field02.alignment",
+      "NGF_NEY_Field03.alignment",
+      "NGF_NEY_Field04.alignment",
+      "NGF_NEY_Field05.alignment",
+      "NGF_NEY_Field06.alignment",
+      "NGF_NEY_Field07.alignment",
+      "NGF_NEY_Field08.alignment",
+      "NGF_NEY_Field09.alignment",
+      "NGF_NEY_Field10.alignment",
+      "NGF_NEY_Field11.alignment",
+      "NGF_NEY_Field12.alignment",
+      "NGF_NEY_Field13.alignment",
+      "NGF_NEY_Field14.alignment",
+      "NGF_NEY_Field15.alignment",
+      "NGF_NEY_Field16.alignment",
+      "NGF_NEY_Field17.alignment",
+      "NGF_NEY_Field18.alignment",
+      "NGF_NEY_Field19.alignment",
+      "NGF_NEY_Field20.alignment",
+      "NGF_NEY_Field21.alignment",
+      "NGF_NEY_Field22.alignment",
+      "NGF_NEY_Field23.alignment",
+      "NGF_NEY_Field24.alignment",
+      "NGF_NEY_Field25.alignment"
+     ]
+    }
+   ],
+   "status": "unsupplied-or-partial"
+  },
+  {
+   "struct": "S1Lib",
+   "field": "validateStatement",
+   "rows": [
+    "TX1:276"
+   ],
+   "cls": "ROOT",
+   "adapter": "is_ok of the validator Result",
+   "adapter_exists": "NMT_ NMT_R2_PublicLibrary.valid",
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:276",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::validate_pool_v1_pair_forest_terminal_statement_v1",
+     "owner_module": "NFY_Part031",
+     "roots": [
+      "NFY_NEM_LaneReached.lane_reached",
+      "NFY_NEM_LateOracle.late_reached",
+      "NFY_NEM_PaymentReached.payment_reached",
+      "NFY_NEM_ValidatorComposed.result_state_effects"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "S1Lib",
+   "field": "encodeCandidate",
+   "rows": [
+    "TX1:278",
+    "TX1:267"
+   ],
+   "cls": "ROOT",
+   "adapter": "encoder of common().lane_transition.candidate_afterstate -> Option Bytes",
+   "adapter_exists": "NMT_ NMT_R2_ConcreteS1.encode (partial: total encoder transport open)",
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:278",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/pair_terminal.rs::encode_pool_v1_pair_verified_afterstate_v1",
+     "owner_module": "NGE_NEM_EncoderFrame",
+     "roots": [
+      "NGE_NEM_EncoderFrame.after_step_and_bytes",
+      "NGE_NEM_EncoderFrame.after_value_and_frame",
+      "NGE_NEM_EncoderFrame.frontier_next"
+     ]
+    },
+    {
+     "row": "TX1:267",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common",
+     "owner_module": "NFY_Part053",
+     "roots": [
+      "NFY_NED_ReconstructCarriers.common_argument"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "S1Lib",
+   "field": "semanticPublic",
+   "rows": [
+    "TX1:268"
+   ],
+   "cls": "ROOT",
+   "adapter": "statement.semantic_public() -> VLib.Public",
+   "adapter_exists": "NMT_ NMT_345.semanticValue via NMT_R2_ConcreteS1.library",
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:268",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::semantic_public",
+     "owner_module": "NJB_SemanticPublic",
+     "roots": [
+      "AspisR1.NJB_SemanticPublic.result"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "VLib",
+   "field": "Public",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := r0::Public (NMT Public / NKR_TermPublic), shared with S1Lib.semanticPublic codomain",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "Prefix",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := parsed Prefix that remembers its source bytes: 129/134/142 roots are stated on bytes with parse bytes = ok pre; AspisR1PrefixAggregateParser -> AspisR1PublicPreparation via PrefixAdapter.fromOld",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "Transcript",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := SemanticTranscript<SolanaDigest>",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "Challenges",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := r1_wire::Challenges",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "OrigChallenges",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := state_only_prefix::r0::Challenges",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "QM31",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := canonical subtype {x : NQ // canonQ x} (needed for total qadd/qmul)",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "Alpha",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := [QM31;10] over the canonical carrier",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "Claims",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := Box<[[QM31;29];3]>",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "K29",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := [QM31;29]",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "Point",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := SecureCirclePoint",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "Record",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := r1_wire::ValidatedRecord",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "WErr",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := r1_wire::Error",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "VErr",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := verifier::Error, SAME carrier as V2Lib.VErr",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "CodecErr",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := compact::CodecError",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "View",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := verifier::View",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "Prepared",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := verifier::Prepared",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "E29",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := [E;29] (WideExact copy used by TX1:179/186)",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "Acc",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := verifier::Accumulator",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "Geo",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := verifier::QueryGeometry",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "Weights",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "carrier := verifier::BatchedWeights",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "one emitted copy per carrier across all child roots; cross-copy identifications are carrier adapters",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "qDec",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "DecidableEq on the canonical QM31 carrier",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "pDec",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "DecidableEq on Point",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "wTerminal",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "constructor of the emitted error enum",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "wEqualCirclePoints",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "constructor of the emitted error enum",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "wPublic",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "constructor of the emitted error enum",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "vParse",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "constructor of the emitted error enum",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "vSemantic",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "constructor of the emitted error enum",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "vAllocation",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "constructor of the emitted error enum",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "codecToV",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "impl From<CodecError> for Error (candidate.rs:22): constant Parse; no ledger row (inlined); one lemma on the emitted From body",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "debugV",
+   "rows": [
+    "TX1:NGB001"
+   ],
+   "cls": "ROOT",
+   "adapter": "NGL_ErrorModel.label (shared with V2Lib.debug)",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "same function as TX2:211; no TX1-side installation yet",
+   "supplying": [
+    {
+     "row": "TX1:NGB001",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/lib.rs::error",
+     "owner_module": "NIS_ErrorJoin",
+     "roots": [
+      "NIJ_ErrorJoin.source"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "finishInputDom",
+   "rows": [],
+   "cls": "ROOT",
+   "adapter": "conjunction of the 136 child clauses that 136 cannot discharge internally (ledger NJW-caller 134/142, NKN-caller 129, NLS-bf 256 hd..asset, NLS-context)",
+   "adapter_exists": null,
+   "flag": "F7",
+   "note": "ledger clause records, not a root; several are prose and need a Lean transcription; canonicality clauses hc..hm need 129/142/150 exports or must be carried here and derived by 137 from begin",
+   "supplying": [],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "publicDom",
+   "rows": [],
+   "cls": "ROOT",
+   "adapter": "NLS-bf:TX1:136:TX1:256:hd = NKR_DigestChildren.Domain (NKR_TermPublic.value pub)",
+   "adapter_exists": "NMT_ NMT_345PublicDomain.publicDomain; NMT_R2_PublicLibrary.withPublic; discharge NMT_345.validated_public_domain",
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "VLib",
+   "field": "semanticBytesDom",
+   "rows": [
+    "TX1:138"
+   ],
+   "cls": "ROOT",
+   "adapter": "NGX_PrefixCarrier.producer_domain on the byte argument",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:138",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::parse",
+     "owner_module": "NGX_PrefixCarrier",
+     "roots": [
+      "AspisR1.NGX_PrefixCarrier.fields",
+      "AspisR1.NGX_PrefixCarrier.full_result",
+      "AspisR1.NGX_PrefixCarrier.producer_domain",
+      "AspisR1.NGX_PrefixGeometry.next",
+      "AspisR1.NGX_PrefixGeometry.terminal",
+      "AspisR1.NGX_PrefixSource.source"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "checkValuesDom",
+   "rows": [
+    "TX1:179"
+   ],
+   "cls": "ROOT",
+   "adapter": "NHS_PreparedPacket.source premise compact_check (check_values compact = ok (Ok ())) on the 464-byte y1 slice, verbatim",
+   "adapter_exists": null,
+   "flag": "F2(resolved rev3)",
+   "note": "RSL rev3 field: own-input clause (R4) of TX1:087; discharged at 094 by TX1:084 canonical_scan (TX1_094.R4Discharge, to be proved from NKL_ScanRoot)",
+   "supplying": [
+    {
+     "row": "TX1:179",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Prepared::new",
+     "owner_module": "NHS_PreparedPacket",
+     "roots": [
+      "AspisR1.NHS_PreparedPacket.source"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "semanticRounds",
+   "rows": [
+    "TX1:134"
+   ],
+   "cls": "ROOT",
+   "adapter": "graph of the NJM rounds model at SAME (Prefix, Transcript); Cut-indexed root -> deterministic law; dom = NJW-caller 134 clauses",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:134",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_rounds",
+     "owner_module": "NJM_InvocationRoots",
+     "roots": [
+      "AspisR1.NJM_InvocationRoots.rounds"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "claims",
+   "rows": [
+    "TX1:129"
+   ],
+   "cls": "ROOT",
+   "adapter": "graph of NKA claims reference incl. Box carrier; dom = NKN-caller 129",
+   "adapter_exists": null,
+   "flag": "F1(resolved rev3)",
+   "note": "root quantifies allocator/reservation; heap::uninit at r1_semantic.rs:45 returns Err(Allocation); rev3: instantiate the reservation with Env.reservation (Spec.tryReserve), law Child.Functional",
+   "supplying": [
+    {
+     "row": "TX1:129",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::claims",
+     "owner_module": "NKA_ClaimsRoot",
+     "roots": [
+      "AspisR1.NKA_ClaimsRoot.claims"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "origChallenges",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "struct literal (r1_semantic lines 239-246)",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "terminalQm31",
+   "rows": [
+    "TX1:256"
+   ],
+   "cls": "ROOT",
+   "adapter": "NLH_WrapperRoot.source law; dom = NLS-bf 256 clauses",
+   "adapter_exists": "NMT_ NMT_R2_PublicLibrary.withPublic (Public transport only)",
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:256",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::terminal_qm31",
+     "owner_module": "NLH_WrapperRoot",
+     "roots": [
+      "AspisR1.NLH_WrapperRoot.source"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "VLib",
+   "field": "maskValue",
+   "rows": [
+    "TX1:076"
+   ],
+   "cls": "ROOT",
+   "adapter": "NHU_Mask.result value on canonical carriers",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:076",
+     "status": "CLOSED",
+     "function": "crates/aspis-core/src/state_only_hiding.rs::state_only_selected_mask_value",
+     "owner_module": "NHU_Mask",
+     "roots": [
+      "AspisR1.NHU_Mask.result"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "validatedRecord",
+   "rows": [
+    "TX1:141"
+   ],
+   "cls": "ROOT",
+   "adapter": "NFU_PrefixRecords.validated_record (equation); row U8 vs Nat index adapter",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:141",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::validated_record",
+     "owner_module": "NFU_PrefixRecords",
+     "roots": [
+      "NFU_PrefixRecords.validated_record"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "decodeK29",
+   "rows": [
+    "TX1:147"
+   ],
+   "cls": "ROOT",
+   "adapter": "NGO_CallCases / NGO_DecodeComposed value",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:147",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::ValidatedRecord<'a>::decode_k",
+     "owner_module": "NGO_CallCases",
+     "roots": [
+      "NGO_CallCases.claims",
+      "NGO_CallCases.round",
+      "NGO_CallerDomains.numeric",
+      "NGO_CallerDomains.record_domain",
+      "NGO_DecodeComposed.result",
+      "NGO_EntryFacts.construct",
+      "NGO_FirstError.suffix",
+      "NGO_LiftTrace.lift",
+      "NGO_NativeConstruct.construct",
+      "NGO_QBridge.stub_law",
+      "NGO_SourceDomain.caller",
+      "NGO_TraceInputs.selected"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "eta",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "field read",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "qadd",
+   "rows": [
+    "TX1:024"
+   ],
+   "cls": "ROOT",
+   "adapter": "QM31::add Ok value on canonQ inputs, closed under canonC",
+   "adapter_exists": null,
+   "flag": "F5",
+   "note": "ledger root NEB_ArrayRefs.qm_injective is not a value law; the value law is certificate theorem NEB_QMCalls.add (+NEB_AdditiveFrames.qm_add)",
+   "supplying": [
+    {
+     "row": "TX1:024",
+     "status": "CLOSED",
+     "function": "crates/aspis-core/src/field.rs::QM31::add",
+     "owner_module": "NHV_NEB_ArrayRefs",
+     "roots": [
+      "NEB_ArrayRefs.qm_injective"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "qmul",
+   "rows": [
+    "TX1:029"
+   ],
+   "cls": "ROOT",
+   "adapter": "QM31::mul Ok value on canonQ inputs",
+   "adapter_exists": null,
+   "flag": "F5",
+   "note": "ledger root AspisR1.NFS_QueryLoopRoot.root is the query-loop root, not a mul law; value law is NEB_QMCalls.multiply (+NEB_FieldFrames.qm_mul)",
+   "supplying": [
+    {
+     "row": "TX1:029",
+     "status": "CLOSED",
+     "function": "crates/aspis-core/src/field.rs::QM31::mul",
+     "owner_module": "NFS_QueryLoopRoot",
+     "roots": [
+      "AspisR1.NFS_QueryLoopRoot.root"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "at28",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "extra[28]",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "state",
+   "rows": [
+    "TX1:146"
+   ],
+   "cls": "ROOT",
+   "adapter": "NGX_StateImpl.source/state_effects (pure, no event)",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:146",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::state",
+     "owner_module": "NGX_StateImpl",
+     "roots": [
+      "AspisR1.NGX_StateImpl.source",
+      "AspisR1.NGX_StateImpl.state_effects"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "circle",
+   "rows": [
+    "TX1:142"
+   ],
+   "cls": "ROOT",
+   "adapter": "graph of NJM circle model; dom = NJW-caller 142",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:142",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::SemanticTranscript<H>::circle_validated",
+     "owner_module": "NJM_InvocationRoots",
+     "roots": [
+      "AspisR1.NJM_InvocationRoots.circle"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "payload",
+   "rows": [
+    "TX1:139"
+   ],
+   "cls": "ROOT",
+   "adapter": "NGX_Payload.source/tail_total",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:139",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::payload",
+     "owner_module": "NGX_Payload",
+     "roots": [
+      "AspisR1.NGX_Payload.source",
+      "AspisR1.NGX_Payload.tail_total"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "c1Root",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "*prefix.c1_root field read",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "parsePrefix",
+   "rows": [
+    "TX1:138"
+   ],
+   "cls": "ROOT",
+   "adapter": "NGX_PrefixCarrier.full_result into the parsed-Prefix carrier",
+   "adapter_exists": "NMP_ parse138 full Result/type inverse at identical bytes (partial)",
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:138",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::Prefix<'a>::parse",
+     "owner_module": "NGX_PrefixCarrier",
+     "roots": [
+      "AspisR1.NGX_PrefixCarrier.fields",
+      "AspisR1.NGX_PrefixCarrier.full_result",
+      "AspisR1.NGX_PrefixCarrier.producer_domain",
+      "AspisR1.NGX_PrefixGeometry.next",
+      "AspisR1.NGX_PrefixGeometry.terminal",
+      "AspisR1.NGX_PrefixSource.source"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "VLib",
+   "field": "publicTranscript",
+   "rows": [
+    "TX1:131"
+   ],
+   "cls": "ROOT",
+   "adapter": "NHG_Lengths/NHG_PublicCarrier/NHG_PublicTranscript with digest events from Env.sha256",
+   "adapter_exists": "NMP_ public131 adapters, NMP_Transcription137 (partial: digest/allocation prefixes open)",
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:131",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::public_transcript",
+     "owner_module": "NHG_Lengths",
+     "roots": [
+      "AspisR1.NHG_Lengths.digest_domain",
+      "AspisR1.NHG_Lengths.returned",
+      "AspisR1.NHG_PublicCarrier.new_carrier",
+      "AspisR1.NHG_PublicCarrier.same_execution",
+      "AspisR1.NHG_PublicTranscript.code",
+      "AspisR1.NHG_PublicTranscript.source"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "VLib",
+   "field": "begin",
+   "rows": [
+    "TX1:150"
+   ],
+   "cls": "ROOT",
+   "adapter": "NGX_BeginDomains/NHG_BeginFrame with digest events",
+   "adapter_exists": "NMP_ begin150 adapter (partial)",
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:150",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/r1_wire.rs::begin",
+     "owner_module": "NGX_BeginDomains",
+     "roots": [
+      "AspisR1.NGX_BeginDomains.cursor_step",
+      "AspisR1.NGX_BeginDomains.frame_domain",
+      "AspisR1.NGX_PrefixCarrier.producer_domain",
+      "AspisR1.NHG_BeginFrame.composed",
+      "AspisR1.NHG_BeginFrame.effects",
+      "AspisR1.NHG_FrontComposition.staged",
+      "AspisR1.NHG_PublicCarrier.begin_carrier"
+     ]
+    }
+   ],
+   "status": "root+adapter-exists"
+  },
+  {
+   "struct": "VLib",
+   "field": "filled",
+   "rows": [
+    "TX1:064"
+   ],
+   "cls": "ROOT",
+   "adapter": "heap::filled law (NGC_ReferenceValues.heap; same function as TX2:045 NIG_FilledCoverage.source)",
+   "adapter_exists": null,
+   "flag": "F1(resolved rev3)",
+   "note": "fallible try_reserve_exact (r0/heap.rs:5-10); rev3: Err iff Env.reservation = false (Spec.tryReserve), law Child.Functional",
+   "supplying": [
+    {
+     "row": "TX1:064",
+     "status": "CLOSED",
+     "function": "crates/aspis-core/src/r0/heap.rs::filled",
+     "owner_module": "NGC_DigestBridge",
+     "roots": [
+      "AspisR1.NGC_DigestBridge.forwarding",
+      "AspisR1.NGC_FinishContents.contents",
+      "AspisR1.NGC_Initialization.constructor",
+      "AspisR1.NGC_ReferenceValues.heap",
+      "AspisR1.NGC_ValueBridge.value"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "expandSemantic",
+   "rows": [
+    "TX1:098"
+   ],
+   "cls": "ROOT",
+   "adapter": "NGV_* expansion law (src, dst) -> written dst",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "NMP: concrete expansion interpretation still to install",
+   "supplying": [
+    {
+     "row": "TX1:098",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/compact.rs::expand_semantic",
+     "owner_module": "NGV_AtPacket",
+     "roots": [
+      "NGV_AtPacket.result",
+      "NGV_DecodeAfterParse.result",
+      "NGV_ExpandAssociation.result",
+      "NGV_ParsePacket.result",
+      "NGV_RowFrame.outside",
+      "NGV_RowPayload.domains",
+      "NGV_SemanticDomains.row",
+      "NGV_SemanticPacket.coverage",
+      "NGV_SemanticPacket.result",
+      "NGV_SemanticStep.result",
+      "NGV_SemanticValues.rows",
+      "NGV_Validator.result"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "expandValues",
+   "rows": [
+    "TX1:099"
+   ],
+   "cls": "ROOT",
+   "adapter": "NFU_CompactLeaves.expand_result",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:099",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/compact.rs::expand_values",
+     "owner_module": "NFU_CompactLeaves",
+     "roots": [
+      "NFU_CompactLeaves.expand_result"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "wideView",
+   "rows": [
+    "TX1:095"
+   ],
+   "cls": "ROOT",
+   "adapter": "NHF_View*/NEO_FieldView/NET_WideModel",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:095",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/candidate.rs::wide_view",
+     "owner_module": "NHF_ViewDecoder",
+     "roots": [
+      "AspisR1.NHF_ViewDecoder.result",
+      "AspisR1.NHF_ViewFinish.result",
+      "AspisR1.NHF_ViewInstalled.result",
+      "AspisR1.NHF_ViewResult.result",
+      "AspisR1.NHF_ViewResult.result_state_effects",
+      "NEO_FieldView.addresses",
+      "NEO_FieldView.result",
+      "NET_WideModel.result",
+      "NET_WideModel.result_state_effects",
+      "NET_WideModel.roundtrip"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "viewSemantic",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "v.semantic field read",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "parseShape",
+   "rows": [
+    "TX1:086"
+   ],
+   "cls": "ROOT",
+   "adapter": "NJS_Parse.source (NJS_Extract = Op3I_Source copies)",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:086",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/candidate.rs::parse_shape",
+     "owner_module": "NJS_Parse",
+     "roots": [
+      "NJS_Parse.source",
+      "NJS_Parse.proof_bytes"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "canonicalScan",
+   "rows": [
+    "TX1:084"
+   ],
+   "cls": "ROOT",
+   "adapter": "NKL_ScanRoot.deployed/adopted/success_events",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:084",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/candidate.rs::canonical_scan",
+     "owner_module": "NKL_ScanRoot",
+     "roots": [
+      "NKL_ScanRoot.deployed",
+      "NKL_ScanRoot.adopted",
+      "NKL_ScanRoot.no_later_event",
+      "NKL_ScanRoot.success_events"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "zeroE29",
+   "rows": [],
+   "cls": "DEF",
+   "adapter": "[E::ZERO;29] literal",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "definitional"
+  },
+  {
+   "struct": "VLib",
+   "field": "accNew",
+   "rows": [
+    "TX1:174"
+   ],
+   "cls": "ROOT",
+   "adapter": "Accumulator::new(S2) law (NGC cohort roots)",
+   "adapter_exists": null,
+   "flag": "F1(resolved rev3)",
+   "note": "calls heap::filled (verifier.rs:93): Err(Allocation) iff Env.reservation = false (rev3), law Child.Functional",
+   "supplying": [
+    {
+     "row": "TX1:174",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Accumulator::new",
+     "owner_module": "NGC_DigestBridge",
+     "roots": [
+      "AspisR1.NGC_DigestBridge.forwarding",
+      "AspisR1.NGC_FinishContents.contents",
+      "AspisR1.NGC_Initialization.constructor",
+      "AspisR1.NGC_ReferenceValues.heap",
+      "AspisR1.NGC_ValueBridge.value"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "batchMerkle",
+   "rows": [
+    "TX1:081"
+   ],
+   "cls": "ROOT",
+   "adapter": "NLN_TX1_081.root; dom = NLO-bf:TX1:094:TX1:081:64-67 (len, wire, canonical queries, rootValues)",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "094 discharges dom from parseShape and from P (query range, root bindings): see F3",
+   "supplying": [
+    {
+     "row": "TX1:081",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/candidate.rs::batch_merkle",
+     "owner_module": "NLN_TX1_081",
+     "roots": [
+      "NLN_TX1_081.root"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "geometry",
+   "rows": [
+    "TX1:181"
+   ],
+   "cls": "ROOT",
+   "adapter": "NFN_NFB_GeometryComposed.result_state_effects",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:181",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range",
+     "owner_module": "NFN_GeometryPart08",
+     "roots": [
+      "NFN_NFB_GeometryComposed.accepted_physical",
+      "NFN_NFB_GeometryComposed.result_state_effects"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "weightsNew",
+   "rows": [
+    "TX1:176"
+   ],
+   "cls": "ROOT",
+   "adapter": "NJZ_Weights.new_source (AdapterRw/VTop copy)",
+   "adapter_exists": null,
+   "flag": "F1(resolved rev3)",
+   "note": "calls heap::filled (verifier.rs:207); ledger caller clause NKH asks for both reservation arms: both arms now selected by Env.reservation (rev3), law Child.Functional",
+   "supplying": [
+    {
+     "row": "TX1:176",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::new",
+     "owner_module": "NJZ_Weights",
+     "roots": [
+      "NJZ_Weights.new_source"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "queryLoop",
+   "rows": [
+    "TX1:088"
+   ],
+   "cls": "ROOT",
+   "adapter": "NFG_QueryLoopSource.complete / NFP / NFS roots",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:088",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/candidate.rs::query_loop",
+     "owner_module": "NFG_QueryLoopSource",
+     "roots": [
+      "AspisR1.NFG_QueryLoopSource.complete",
+      "AspisR1.NFP_LoopTerminals.error",
+      "AspisR1.NFP_QueryAdvance.accepted",
+      "AspisR1.NFP_Resume.tx1",
+      "AspisR1.NFS_LoopTrace.source",
+      "AspisR1.NFS_LoopTraceDefs.compare",
+      "AspisR1.NFS_PacketRoot.loop",
+      "AspisR1.NFS_QueryInvariant.active",
+      "AspisR1.NFS_QueryLoopRoot.finite",
+      "AspisR1.NFS_QueryLoopRoot.tx1"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "finish",
+   "rows": [
+    "TX1:175"
+   ],
+   "cls": "ROOT",
+   "adapter": "BatchedWeights::finish (NGC_FinishContents.contents)",
+   "adapter_exists": null,
+   "flag": null,
+   "note": "",
+   "supplying": [
+    {
+     "row": "TX1:175",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::finish",
+     "owner_module": "NGC_DigestBridge",
+     "roots": [
+      "AspisR1.NGC_DigestBridge.forwarding",
+      "AspisR1.NGC_FinishContents.contents",
+      "AspisR1.NGC_Initialization.constructor",
+      "AspisR1.NGC_ReferenceValues.heap",
+      "AspisR1.NGC_ValueBridge.value"
+     ]
+    }
+   ],
+   "status": "root+adapter-new"
+  },
+  {
+   "struct": "VLib",
+   "field": "checkpoint",
+   "rows": [
+    "TX1:186"
+   ],
+   "cls": "ROOT",
+   "adapter": "NHS_CheckpointPacket.source; dom := DriverEstablishedDomain (op3/op4/op7/op12 Ok, heap reservation Ok) at SAME proof",
+   "adapter_exists": null,
+   "flag": "F6",
+   "note": "root is conditioned on predecessor results and on allocation success; the Vec abort arm named in the RSL comment is not exposed",
+   "supplying": [
+    {
+     "row": "TX1:186",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/verifier.rs::checkpoint",
+     "owner_module": "NHS_CheckpointPacket",
+     "roots": [
+      "AspisR1.NHS_CheckpointPacket.source"
+     ]
+    }
+   ],
+   "status": "unsupplied-or-partial"
+  },
+  {
+   "struct": "PreparedNew",
+   "field": "P (dom, law)",
+   "rows": [
+    "TX1:179"
+   ],
+   "cls": "ROOT",
+   "adapter": "NHS_PreparedPacket.source + error/abort companions at SAME (Verified, View, g)",
+   "adapter_exists": "NMP_ fresh source call and g result (partial)",
+   "flag": "F2,F3",
+   "note": "root is Ok-arm only (premises semantic_finish, compact_check, returned = ok); 179 domain needs compact464 checked: rev3 (R4) on 087 now supplies it; F3 (Ok-arm-only law) remains",
+   "supplying": [
+    {
+     "row": "TX1:179",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/verifier.rs::Prepared::new",
+     "owner_module": "NHS_PreparedPacket",
+     "roots": [
+      "AspisR1.NHS_PreparedPacket.source"
+     ]
+    }
+   ],
+   "status": "unsupplied-or-partial"
+  },
+  {
+   "struct": "Env/EnvRep",
+   "field": "Env.sha256",
+   "rows": [],
+   "cls": "TRUST",
+   "adapter": "SolanaDigest via sol_sha256 (TX1:327/TX2:210 NGC_DigestBridge.forwarding) bound to the headline syscall/p1",
+   "adapter_exists": "NNC_ NNC_RuntimeOracle, NNC_DigestTrace (partial)",
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "trust-row"
+  },
+  {
+   "struct": "Env/EnvRep",
+   "field": "Env.pda",
+   "rows": [],
+   "cls": "TRUST",
+   "adapter": "create_program_address reply, ruling (at) quantified slot",
+   "adapter_exists": "NND_ NND_RuntimePartial (partial)",
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "trust-row"
+  },
+  {
+   "struct": "Env/EnvRep",
+   "field": "Env.clock",
+   "rows": [],
+   "cls": "TRUST",
+   "adapter": "RuntimeClockSlotBinding (clock := .ok slot at TX2)",
+   "adapter_exists": "NNE_ NNE_Clock",
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "trust-row"
+  },
+  {
+   "struct": "Env/EnvRep",
+   "field": "Env.reservation",
+   "rows": [],
+   "cls": "TRUST",
+   "adapter": "RSL rev3: try_reserve reply (true = Ok), bound in EnvRep to the headline binder reservation : NP6_StdModel.Reservation (env.reservation = true <-> reservation = .Ok ())",
+   "adapter_exists": null,
+   "flag": "F1(resolved rev3)",
+   "note": "single reply for every try_reserve occurrence, same shape as NP6_StdModel.calls",
+   "supplying": [],
+   "status": "trust-row"
+  },
+  {
+   "struct": "Env/EnvRep",
+   "field": "EnvRep (+env1_rep, env2_rep)",
+   "rows": [],
+   "cls": "TRUST",
+   "adapter": "agreement of env with the ctx runtime oracles",
+   "adapter_exists": "NNE_ (host definitions, NNE_RecordSig)",
+   "flag": "F1(resolved rev3)",
+   "note": "RSL rev3: EnvRep also binds Env.reservation to the headline reservation binder (TAS_Interfaces EnvRep docstring); the host definition must include that conjunct",
+   "supplying": [],
+   "status": "trust-row"
+  },
+  {
+   "struct": "Env/EnvRep",
+   "field": "readerHeader",
+   "rows": [],
+   "cls": "TRUST",
+   "adapter": "NLW_ReaderHeader.decode ck = some (h pr, h pub)",
+   "adapter_exists": "NNC_ NNC_ObservedLaw.accepted_header",
+   "flag": null,
+   "note": "",
+   "supplying": [],
+   "status": "trust-row"
+  }
+ ],
+ "transcriptions": [
+  {
+   "transcription": "readonlyBuffer",
+   "supplying": [
+    {
+     "row": "TX1:340",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_buffer",
+     "owner_module": "NFU_AdapterGetters",
+     "roots": [
+      "NFU_AdapterGetters.readonly"
+     ]
+    },
+    {
+     "row": "TX2:237",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_buffer",
+     "owner_module": "NFU_AdapterGetters",
+     "roots": [
+      "NFU_AdapterGetters.readonly"
+     ]
+    }
+   ],
+   "adapter": "exists in forest",
+   "note": ""
+  },
+  {
+   "transcription": "readonlyAccount",
+   "supplying": [
+    {
+     "row": "TX2:236",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_readonly_account",
+     "owner_module": "NIM_NHJ_ReadonlyPacket",
+     "roots": [
+      "NHJ_ReadonlyPacket.readonly"
+     ]
+    }
+   ],
+   "adapter": "new",
+   "note": ""
+  },
+  {
+   "transcription": "verifierCheckpoint (incl. data_len clone arm)",
+   "supplying": [
+    {
+     "row": "TX1:341",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint",
+     "owner_module": "NHJ_CheckpointPacket",
+     "roots": [
+      "NHJ_CheckpointPacket.substitute"
+     ]
+    },
+    {
+     "row": "TX2:238",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_verifier_checkpoint",
+     "owner_module": "NHJ_CheckpointPacket",
+     "roots": [
+      "NHJ_CheckpointPacket.substitute"
+     ]
+    }
+   ],
+   "adapter": "partial",
+   "note": "CLOSED packet restricted to snapshot error variants (NMT, NMX: NGL_LengthCarrier.domain); Domain-True rows need the unrestricted law, i.e. the transcription itself"
+  },
+  {
+   "transcription": "requireDistinct",
+   "supplying": [
+    {
+     "row": "TX1:339",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts",
+     "owner_module": "NHJ_DistinctPacket",
+     "roots": [
+      "NHJ_DistinctPacket.three"
+     ]
+    },
+    {
+     "row": "TX2:235",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_distinct_accounts",
+     "owner_module": "NHJ_DistinctPacket",
+     "roots": [
+      "NHJ_DistinctPacket.seven"
+     ]
+    }
+   ],
+   "adapter": "new",
+   "note": "three (TX1) and seven (TX2) account forms"
+  },
+  {
+   "transcription": "requireZero",
+   "supplying": [
+    {
+     "row": "TX1:342",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::require_zero",
+     "owner_module": "NFU_ZeroPort",
+     "roots": [
+      "NFU_ZeroPort.head",
+      "NFU_ZeroPort.source"
+     ]
+    }
+   ],
+   "adapter": "exists",
+   "note": "frozen suffix loop vs historical index loop: NND L117 symbolic equality"
+  },
+  {
+   "transcription": "OwnedAccount.data / data_len",
+   "supplying": [
+    {
+     "row": "TX1:335",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
+     "owner_module": "NHJ_DataPacket",
+     "roots": [
+      "NHJ_DataPacket.substitute"
+     ]
+    },
+    {
+     "row": "TX2:229",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::data",
+     "owner_module": "NHJ_DataPacket",
+     "roots": [
+      "NHJ_DataPacket.substitute"
+     ]
+    }
+   ],
+   "adapter": "partial",
+   "note": "NMS_R2GetterLink.full gives the unrestricted getter with clone arm; NHJ_DataPacket is restricted"
+  },
+  {
+   "transcription": "OwnedAccount.key",
+   "supplying": [
+    {
+     "row": "TX2:231",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::OwnedAccount::key",
+     "owner_module": "NFU_AdapterGetters",
+     "roots": [
+      "NFU_AdapterGetters.key"
+     ]
+    }
+   ],
+   "adapter": "new",
+   "note": ""
+  },
+  {
+   "transcription": "snapshot",
+   "supplying": [
+    {
+     "row": "TX1:343",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot",
+     "owner_module": "NIM_NHY_SnapshotJoin",
+     "roots": [
+      "NHY_SnapshotJoin.source"
+     ]
+    },
+    {
+     "row": "TX2:239",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs::snapshot",
+     "owner_module": "NIM_NHY_SnapshotJoin",
+     "roots": [
+      "NHY_SnapshotJoin.source"
+     ]
+    }
+   ],
+   "adapter": "exists",
+   "note": "NMV snapshot/window laws complete; snapAll_errs/snapAll_getters_plain in RSL_TX1_344"
+  },
+  {
+   "transcription": "is_active_at V1/V2",
+   "supplying": [
+    {
+     "row": "TX2:194",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::is_active_at",
+     "owner_module": "NIS_ActiveSlots",
+     "roots": [
+      "NIJ_ActiveSlots.op30_exact"
+     ]
+    },
+    {
+     "row": "TX2:196",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::is_active_at",
+     "owner_module": "NIS_ActiveSlots",
+     "roots": [
+      "NIJ_ActiveSlots.op29_exact"
+     ]
+    }
+   ],
+   "adapter": "new",
+   "note": ""
+  },
+  {
+   "transcription": "is_paused / is_immutable V1/V2",
+   "supplying": [
+    {
+     "row": "TX2:197",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_immutable",
+     "owner_module": "NHY_RegistryPipeline",
+     "roots": [
+      "NHY_RegistryPipeline.immutable_v1"
+     ]
+    },
+    {
+     "row": "TX2:198",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_paused",
+     "owner_module": "NHY_RegistryPipeline",
+     "roots": [
+      "NHY_RegistryPipeline.paused_v1"
+     ]
+    },
+    {
+     "row": "TX2:199",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_immutable",
+     "owner_module": "NHY_RegistryPipeline",
+     "roots": [
+      "NHY_RegistryPipeline.immutable_v2"
+     ]
+    },
+    {
+     "row": "TX2:200",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_paused",
+     "owner_module": "NHY_RegistryPipeline",
+     "roots": [
+      "NHY_RegistryPipeline.paused_v2"
+     ]
+    }
+   ],
+   "adapter": "new",
+   "note": ""
+  },
+  {
+   "transcription": "decodeMasterBox / decodeCheckpointBox",
+   "supplying": [
+    {
+     "row": "TX2:218",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_master_box",
+     "owner_module": "NKY_BoxSource",
+     "roots": [
+      "AspisR1.NKY_BoxSource.master",
+      "AspisR1.NKY_BoxTotal.master"
+     ]
+    },
+    {
+     "row": "TX2:216",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::decode_checkpoint_box",
+     "owner_module": "NKY_BoxSource",
+     "roots": [
+      "AspisR1.NKY_BoxSource.checkpoint",
+      "AspisR1.NKY_BoxTotal.checkpoint"
+     ]
+    }
+   ],
+   "adapter": "partial",
+   "note": "native Cut/Windows/Heap roots; NMX_REMAINING: instantiate their Box/allocator representations at SAME calls"
+  },
+  {
+   "transcription": "admitted / stage1Route",
+   "supplying": [
+    {
+     "row": "TX1:331",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/pool_route.rs::admitted",
+     "owner_module": "NHJ_RoutePacket",
+     "roots": [
+      "NHJ_RoutePacket.associate"
+     ]
+    },
+    {
+     "row": "TX2:214",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/pool_route.rs::admitted",
+     "owner_module": "NHJ_RoutePacket",
+     "roots": [
+      "NHJ_RoutePacket.associate"
+     ]
+    }
+   ],
+   "adapter": "new",
+   "note": "NNF_ has the route lemmas over RSL"
+  },
+  {
+   "transcription": "decode_digest_canonical (217 body)",
+   "supplying": [
+    {
+     "row": "TX2:146",
+     "status": "CLOSED",
+     "function": "crates/aspis-statement/src/atomic_statement.rs::decode_digest_canonical",
+     "owner_module": "NFY_Part005",
+     "roots": [
+      "NFY_NEQ_DecodeScalar.digest_result_state_effects",
+      "NFY_NEQ_DecodeScalar.digest_word_domain",
+      "NGE_NEQ_ParserCanonical.some_canonical"
+     ]
+    }
+   ],
+   "adapter": "new",
+   "note": ""
+  },
+  {
+   "transcription": "error / mapVErr",
+   "supplying": [
+    {
+     "row": "TX1:NGB001",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/lib.rs::error",
+     "owner_module": "NIS_ErrorJoin",
+     "roots": [
+      "NIJ_ErrorJoin.source"
+     ]
+    },
+    {
+     "row": "TX2:211",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/lib.rs::error",
+     "owner_module": "NIS_ErrorJoin",
+     "roots": [
+      "NIJ_ErrorJoin.source"
+     ]
+    }
+   ],
+   "adapter": "partial",
+   "note": "NMS_R2ErrorSource.full on TX2; CLOSED law has no format! allocation (harmless direction)"
+  },
+  {
+   "transcription": "observer",
+   "supplying": [
+    {
+     "row": "TX1:329",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/lib.rs::observer",
+     "owner_module": "NJH_Observer",
+     "roots": [
+      "AspisR1.NJH_Observer.emitted"
+     ]
+    },
+    {
+     "row": "TX2:212",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/lib.rs::observer",
+     "owner_module": "NJH_Observer",
+     "roots": [
+      "AspisR1.NJH_Observer.emitted"
+     ]
+    }
+   ],
+   "adapter": "exists",
+   "note": "None in the release build, ruling (al)"
+  },
+  {
+   "transcription": "r1_semantic::mark (no-op)",
+   "supplying": [
+    {
+     "row": "TX1:130",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/r1_semantic.rs::mark",
+     "owner_module": "NHU_Mark",
+     "roots": [
+      "AspisR1.NHU_Mark.effects",
+      "AspisR1.NHU_Mark.frame",
+      "AspisR1.NHU_Mark.result"
+     ]
+    }
+   ],
+   "adapter": "missing lemma",
+   "note": "F8: CLOSED NHU_Mark packet is None-only; RowSpec_136/137 quantify obs; frozen body is let _=(obs,i) without detail-phases"
+  },
+  {
+   "transcription": "verifier::mark",
+   "supplying": [
+    {
+     "row": "TX1:191",
+     "status": "CLOSED",
+     "function": "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
+     "owner_module": "NFS_QueryLoopRoot",
+     "roots": [
+      "AspisR1.NFS_QueryLoopRoot.root"
+     ]
+    }
+   ],
+   "adapter": "exists",
+   "note": "NEO observer root, None-only; 087/094 fix obs=None"
+  },
+  {
+   "transcription": "transfer/withdrawal_statement_box (inside reconstruct)",
+   "supplying": [
+    {
+     "row": "TX2:227",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::transfer_statement_box",
+     "owner_module": "NFY_Part056",
+     "roots": [
+      "NFY_NEU_BoxModel.transfer",
+      "NFY_NEU_BoxModel.transfer_result_state_effects",
+      "NFY_NEU_BoxModel.validator",
+      "NFY_NEU_CallDomains.transfer_packet",
+      "NFY_NEU_CallDomains.transfer_reply_range"
+     ]
+    },
+    {
+     "row": "TX2:228",
+     "status": "CLOSED",
+     "function": "programs/r1-cost-probe/src/r1_pool_adapter.rs::withdrawal_statement_box",
+     "owner_module": "NFY_Part056",
+     "roots": [
+      "NFY_NEU_BoxModel.validator",
+      "NFY_NEU_BoxModel.withdrawal",
+      "NFY_NEU_BoxModel.withdrawal_result_state_effects",
+      "NFY_NEU_CallDomains.withdrawal_packet",
+      "NFY_NEU_CallDomains.withdrawal_reply_range"
+     ]
+    }
+   ],
+   "adapter": "inside NMS_R2PoolSites.reconstruct",
+   "note": ""
+  }
+ ],
+ "flags": {
+  "F1": {
+   "fields": [
+    "VLib.filled",
+    "VLib.accNew",
+    "VLib.weightsNew",
+    "VLib.claims",
+    "V2Lib.tx2auth"
+   ],
+   "classification": "demonstrable error in RSL rev2 (Env/nondeterminism)",
+   "evidence": "crates/aspis-core/src/r0/heap.rs:5-10 (filled: try_reserve_exact -> Err(Allocation)), :11-14 (uninit); callers candidate.rs:256 (prepare), verifier.rs:93 (Accumulator::new), verifier.rs:207 (BatchedWeights::new), verifier.rs:428 (resume, TX2:064), r1_semantic.rs:45 (claims). The CLOSED roots quantify the reservation (NKA_ClaimsRoot.claims: allocator/state/reservation; NGC/NIG filled roots: reservation; NKH caller clause: both arms).",
+   "consequence": "RSL.Env carries sha256/pda/clock only, so a fallible reservation outcome is not an oracle reply. A faithful Child law for these fields must admit both Ok and Err(Allocation) at the same arguments and Env, and impl : Args -> Env -> Obs cannot be the actual function. The RowSpec proofs are unaffected (a relational law admits the impl), but the TX1 returned path 345->328->094->087->filled/accNew/weightsNew and 136->claims becomes nondeterministic at fixed Env, so AMN.a1_forces_det makes A1 (NND_A1/A1min Err arm) and NND_Tx1ReturnedValues.returned unprovable; TX2 tx2auth gives the same for NND_Tx2Values.auth_ret. The rev2 header claim that the only nondeterminism is the aborting allocation site is false for try_reserve sites.",
+   "recommendation": "lead applies a rev2 patch: add a quantified reservation reply to RSL.Env (ruling (at) shape, one reply per fallible site occurrence), make the four VLib children and the 064 law read it, and bind it in Sig.EnvRep to the headline reservation binder. Alternative (worse): an owner ruling that try_reserve failure is outside the obligation, which would be a trust addition. LIB builds every other field now and leaves these five behind a parameter until the lead rules.",
+   "status": "RESOLVED by RSL rev3 (ruling (bq))",
+   "resolution": "RSL.Env.reservation : Bool (try_reserve reply; true = Ok) and Spec.tryReserve; Spec.Functional / Child.Functional required at the gate for filled, accNew, weightsNew, claims (on dom) and tx2auth (on Dom064); TAS Sig.EnvRep binds env.reservation = true <-> headline reservation = .Ok (). See evidence/rowspec-lead-20261107/RSL_REVISION3.md. The five fields are no longer blocked by a spec error; they remain to be instantiated (adapter new)."
+  },
+  "F2": {
+   "fields": [
+    "PreparedNew.dom (TX1:087 call)"
+   ],
+   "classification": "demonstrable error in RSL rev2 (TX1:087 Domain incomplete), unless the lead prefers a new TX1:179 law",
+   "evidence": "TX1:179 root NHS_PreparedPacket.source has premise compact_check : check_values compact = ok (Ok ()) on the 464-byte y1 slice; ledger 179 inventory domain says \"LPt compact464 checked\". Frozen prepare (candidate.rs:255-264) runs expand_values (compact.rs:127-136, no canonicality check) and never calls check_values; only tx1 calls canonical_scan (candidate.rs:275) before prepare. RowSpec_087 Domain is R1-R3 only. NMP_REMAINING records the same gap (\"179 canonicality\").",
+   "consequence": "With P.dom verbatim from 179 (the RSL rule), RowSpec_087 is unprovable: the parent cannot discharge the child domain at the call.",
+   "recommendation": "add own-input clause (R4) \"proof[7031..7495] passes check_values\" to RowSpec_087, discharged in RowSpec_094 from the TX1:084 canonical_scan law at SAME proof. This narrows 087 only and does not propagate past 094.",
+   "status": "RESOLVED by RSL rev3 (ruling (bq))",
+   "resolution": "RowSpec_087 Domain gains (R4) V.checkValuesDom (slice proof OFF_Y1 OFF_INACTIVE) (new VLib field checkValuesDom := 179 compact_check premise verbatim); recorded as caller clause RSL3-caller:TX1:094:TX1:087:R4 and discharged in 094 by canonical_scan via TX1_094.R4Discharge / r4_of_scan. PreparedNew stays blocked by F3 (missing TX1:179 child lemmas, LIB_)."
+  },
+  "F3": {
+   "fields": [
+    "PreparedNew.law",
+    "VLib.batchMerkle.dom discharge at 094"
+   ],
+   "classification": "missing child lemma (TX1:179)",
+   "evidence": "NHS_PreparedPacket.source is stated under semantic_finish/compact_check/returned = ok: Ok arm only. Missing: Err arms of t.queries(..)? and prepared_claim(..)? (verifier.rs:83,87), the Vec::with_capacity and Box::new abort arms (verifier.rs:78, 88), g on every arm, and the exports 094 needs for batch_merkle: queries[j] < 262144 and root bindings (NLO-bf:TX1:094:TX1:081:66/67).",
+   "consequence": "PreparedNew cannot be instantiated with a complete law; 094 cannot discharge the 081 domain.",
+   "recommendation": "prove from the same emitted Prepared::new body (NGN_Emitted.prepared) with the NHS/NFW/NHL support already used by the root; RSL_INDEX item 4 anticipated this."
+  },
+  "F4": {
+   "fields": [
+    "S1Lib.decodeReachesAlloc"
+   ],
+   "classification": "missing child lemma (TX1:332), not an RSL error",
+   "evidence": "none of the 28 TX1:332 roots mentions an allocation site; Aeneas emits Box::new as pure, so the reached sites are visible only in source positions (pair_tree_profile.rs:665/675/742, pair_forest_terminal.rs:351/379/394). NMT has the source-derived definition NMT_R2_ReachLibrary.reaches and the wrong-length zero-allocation lemma.",
+   "consequence": "non-blocking for RowSpec_345 and A1 (allocIf admits the returned arm for any Bool), but the gate requires the unique admissible instantiation.",
+   "recommendation": "prove reaches = the decoder reached-site predicate from NMT_R2_Reach* plus the extraction item; record its reliance on source positions."
+  },
+  "F5": {
+   "fields": [
+    "VLib.qadd",
+    "VLib.qmul"
+   ],
+   "classification": "supplied by a CLOSED certificate theorem, not by the named ledger root (ledger hygiene); no RSL change",
+   "evidence": "TX1:024 root_owners = NEB_ArrayRefs.qm_injective; TX1:029 root_owners = AspisR1.NFS_QueryLoopRoot.root; certificates cite NEB_QMCalls.add/multiply, NEB_AdditiveFrames.qm_add, NEB_FieldFrames.qm_mul (canonQ inputs).",
+   "consequence": "LIB must cite the certificate theorems and use the canonical-subtype carrier so the functions are total.",
+   "recommendation": "report the root-name mismatch to the ledger owner at the next ledger."
+  },
+  "F6": {
+   "fields": [
+    "VLib.checkpoint"
+   ],
+   "classification": "adapter plus missing child lemma (TX1:186 allocation-failure arm)",
+   "evidence": "NHS_CheckpointPacket.source premises: parsed (op3), scan (op4), preparation (op7), newA (op12) = ok and allocation : NHS_PendingReservation.heap .. = ok. Ledger HYP DriverEstablishedDomain.",
+   "consequence": "dom must be the existential predecessor history at SAME proof (discharged by 094 from its own earlier calls); the Vec abort arm is not exposed.",
+   "recommendation": "install dom := DriverEstablishedDomain verbatim; prove the reservation-failure branch from NHS_PendingReservation (or fold it into the F1 channel if the reservation is fallible)."
+  },
+  "F7": {
+   "fields": [
+    "VLib.finishInputDom"
+   ],
+   "classification": "open derivation; possible missing child lemmas (canonicality exports of TX1:129, TX1:142, TX1:150); not an RSL error yet",
+   "evidence": "RSL_LEDGER_CLAUSES TX1:136: NLS-bf hd/hc/hp/hz/hl/hchi/ht/hm/asset, NJW-caller 134/142 (prose), NKN-caller 129 (prose), NLS-context.",
+   "consequence": "until each clause is classified as internally discharged or carried, 137 cannot prove finishInputDom from parse/public_transcript/begin.",
+   "recommendation": "LIB writes the clause-by-clause table and Lean transcription; carried clauses must be stated over (public, prefix, transcript, challenges) only."
+  },
+  "F8": {
+   "fields": [
+    "(transcription) TX1:130 mark"
+   ],
+   "classification": "missing child lemma, trivial (TX1:130 at arbitrary obs)",
+   "evidence": "r1_semantic.rs:75-80: let _=(obs,i) without detail-phases; ledger packet None-only (NMP_REMAINING).",
+   "consequence": "RowSpec_136/137 quantify obs.",
+   "recommendation": "one lemma on the emitted no-op body."
+  }
+ },
+ "order": [
+  {
+   "module": "LIB_Carriers",
+   "content": "byte/array/Result/Obs adapters, Spec.graph and Child.ofFn, Returns glue (AMN_ReturnedPath, NND_Returned), emitted-copy identifications",
+   "after": []
+  },
+  {
+   "module": "LIB_Env",
+   "content": "Env.sha256/pda/clock bindings (reuse NNC_RuntimeOracle, NNC_DigestTrace, NNE_Clock)",
+   "after": [
+    "LIB_Carriers"
+   ]
+  },
+  {
+   "module": "LIB_Deployed",
+   "content": "DeployedIds",
+   "after": [
+    "LIB_Carriers"
+   ]
+  },
+  {
+   "module": "LIB_ErrorDebug",
+   "content": "V2Lib.VErr/debug, VLib.VErr/debugV",
+   "after": [
+    "LIB_Carriers"
+   ]
+  },
+  {
+   "module": "LIB_Root0",
+   "content": "V2Lib.Root0 and the NNC R0 byte link",
+   "after": [
+    "LIB_Carriers"
+   ]
+  },
+  {
+   "module": "LIB_Transcribed",
+   "content": "transcription lemmas (bm)(2)(c)",
+   "after": [
+    "LIB_Carriers",
+    "LIB_Env"
+   ]
+  },
+  {
+   "module": "LIB_PoolCarriers",
+   "content": "PoolLib carriers, Master/Checkpoint/Registry/Entry carrier maps",
+   "after": [
+    "LIB_Carriers"
+   ]
+  },
+  {
+   "module": "LIB_PoolRegistry",
+   "content": "validatePolicy, registry/entry decoders (for 234)",
+   "after": [
+    "LIB_PoolCarriers"
+   ]
+  },
+  {
+   "module": "LIB_PoolAccounts",
+   "content": "decodeMaster, decodeCheckpoint (for 233)",
+   "after": [
+    "LIB_PoolCarriers"
+   ]
+  },
+  {
+   "module": "LIB_PoolDecoders",
+   "content": "decodeRequest, req*, reqNullifier, outputLane (for 242)",
+   "after": [
+    "LIB_PoolCarriers"
+   ]
+  },
+  {
+   "module": "LIB_PoolEffects",
+   "content": "scanProof, reconstruct, encodeStatement, emitResult (for 242/241)",
+   "after": [
+    "LIB_PoolDecoders",
+    "LIB_Env"
+   ]
+  },
+  {
+   "module": "LIB_PoolLib",
+   "content": "bundle L* and D*; NND_PoolValues.Values L*",
+   "after": [
+    "LIB_PoolRegistry",
+    "LIB_PoolAccounts",
+    "LIB_PoolEffects",
+    "LIB_Deployed"
+   ]
+  },
+  {
+   "module": "LIB_Tx2Auth",
+   "content": "canonical tx2auth from NMN_064.root; weak w registration; Refines064 forms",
+   "after": [
+    "LIB_ErrorDebug",
+    "LIB_Root0",
+    "LIB_Env"
+   ]
+  },
+  {
+   "module": "LIB_V2Lib",
+   "content": "bundle V0*; TAS.lib V0*",
+   "after": [
+    "LIB_Tx2Auth"
+   ]
+  },
+  {
+   "module": "LIB_VCarriers",
+   "content": "VLib carriers, constructors, reads, codecToV",
+   "after": [
+    "LIB_Carriers"
+   ]
+  },
+  {
+   "module": "LIB_VField",
+   "content": "qadd, qmul, maskValue, eta, at28",
+   "after": [
+    "LIB_VCarriers"
+   ]
+  },
+  {
+   "module": "LIB_VRecords",
+   "content": "validatedRecord, decodeK29, payload, state, c1Root",
+   "after": [
+    "LIB_VCarriers"
+   ]
+  },
+  {
+   "module": "LIB_VParse",
+   "content": "parsePrefix, semanticBytesDom, publicTranscript, begin",
+   "after": [
+    "LIB_VCarriers",
+    "LIB_Env"
+   ]
+  },
+  {
+   "module": "LIB_VSemantic",
+   "content": "semanticRounds, circle, claims, terminalQm31, publicDom, finishInputDom",
+   "after": [
+    "LIB_VField",
+    "LIB_VRecords",
+    "LIB_VParse"
+   ]
+  },
+  {
+   "module": "LIB_VPrepare",
+   "content": "filled, expandSemantic, expandValues, wideView, viewSemantic",
+   "after": [
+    "LIB_VCarriers"
+   ]
+  },
+  {
+   "module": "LIB_VTx1A",
+   "content": "parseShape, canonicalScan, accNew, weightsNew, finish, zeroE29",
+   "after": [
+    "LIB_VCarriers"
+   ]
+  },
+  {
+   "module": "LIB_VTx1B",
+   "content": "batchMerkle, geometry, queryLoop, checkpoint",
+   "after": [
+    "LIB_VTx1A"
+   ]
+  },
+  {
+   "module": "LIB_VLib",
+   "content": "bundle VL*; per-field Returns evaluators",
+   "after": [
+    "LIB_VSemantic",
+    "LIB_VPrepare",
+    "LIB_VTx1B",
+    "LIB_ErrorDebug"
+   ]
+  },
+  {
+   "module": "LIB_Prepared",
+   "content": "P* (blocked by F2/F3)",
+   "after": [
+    "LIB_VLib"
+   ]
+  },
+  {
+   "module": "LIB_S1",
+   "content": "C* (retarget NMT_R2_ReachLibrary to RSL.TX1_345.S1Lib; F4)",
+   "after": [
+    "LIB_VCarriers"
+   ]
+  },
+  {
+   "module": "LIB_Instances",
+   "content": "final bundle; rfl checks against TAS_Interfaces and the principal fold statements; axioms",
+   "after": [
+    "LIB_PoolLib",
+    "LIB_V2Lib",
+    "LIB_VLib",
+    "LIB_Prepared",
+    "LIB_S1",
+    "LIB_Transcribed"
+   ]
+  }
+ ]
+}
