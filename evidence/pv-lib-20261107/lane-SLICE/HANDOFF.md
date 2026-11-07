@@ -127,3 +127,5 @@ Attempt 49656: PV_W5_F32SourceTail, passed pinned focused replay.
 Attempt 49657: PV_W5_F32AfterFirst, passed pinned focused replay.
 
 Attempt 49658: PV_W5_F32Contract, passed pinned focused replay.
+
+Attempt 49659: PV_W5_F33Specification, passed pinned focused replay.
