@@ -16,10 +16,15 @@ theorem value (b : Slice U8) (master : Array U8 32#usize) (laneId : U8)
   rw [NMX_R3_LaneQuestionCuts.digest_map]
   simpa only [NMX_R3_Indices.v16] using mapped
  rw [NMX_R3_LaneQuestionCuts.digest]
- exact NMX_R3_LaneTry.fold (NCV_Reference.digest t 16#usize) r
+ have joined := NMX_R3_LaneTry.fold (NCV_Reference.digest t 16#usize) r
   (fun a => a.val.map word) (TX2_217.decodeDigestCanonical (slice (t.val.map byte) 16 48))
   (fun root => NMX_R3_LaneCuts.frontier b master laneId t next root)
   (NMX_R3_LaneModels.frontier (b.val.map byte) (key master) (byte laneId) (t.val.map byte) (long next))
   call same (fun root => NMX_R3_LaneFrontier.value b master laneId t next root bExtent tExtent)
+ rw [joined]
+ unfold NMX_R3_LaneModels.digest
+ generalize TX2_217.decodeDigestCanonical (slice (t.val.map byte) 16 48) = model
+ cases model <;> rfl
+
 #print axioms value
 end NMX_R3_LaneDigest

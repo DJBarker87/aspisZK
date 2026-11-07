@@ -13,11 +13,17 @@ theorem value (b : Slice U8) (master : Array U8 32#usize) (laneId : U8)
   (t.val.map byte) (long next) (root.val.map word)) := by
  obtain ⟨r,call,mapped⟩ := NMX_R3_FrontierBridge.value t next (by omega) (by omega)
  rw [NMX_R3_LaneQuestionCuts.frontier]
- exact NMX_R3_LaneTry.fold (NCV_Reference.decode_frontier t next) r
+ have joined := NMX_R3_LaneTry.fold (NCV_Reference.decode_frontier t next) r
   (fun (f : Array (Array U32 8#usize) 20#usize) => f.val.map (fun (row : Array U32 8#usize) => row.val.map word))
   (TX2_217.frontierLoop (t.val.map byte) (long next) 20)
   (fun f => NMX_R3_LaneCuts.finish b master laneId next root f)
   (NMX_R3_LaneModels.emit (b.val.map byte) (key master) (byte laneId) (long next) (root.val.map word))
   call ((NMX_R3_LaneQuestionCuts.frontier_map r).trans mapped) (fun f => NMX_R3_LaneFinish.value b master laneId next root f bExtent)
+ rw [joined]
+ unfold NMX_R3_LaneModels.frontier
+ simp only [TREE_DEPTH]
+ generalize TX2_217.frontierLoop (t.val.map byte) (long next) 20 = model
+ cases model <;> rfl
+
 #print axioms value
 end NMX_R3_LaneFrontier

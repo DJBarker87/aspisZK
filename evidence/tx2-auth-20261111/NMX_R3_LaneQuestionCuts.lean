@@ -41,6 +41,11 @@ theorem digest_map (r : core.result.Result (Array U32 8#usize) Unit) :
  cases r with
  | Ok a => rfl
  | Err u => cases u; rfl
+theorem option_bind {A B : Type} (m : Option A) (f : A → Option B) :
+ m.bind f = (match m with | none => none | some a => f a) := by
+ cases m <;> rfl
+#print axioms option_bind
+
 #print axioms frontier_map
 #print axioms digest_map
 

@@ -267,3 +267,22 @@ modifies only node; its before-value ghost is checked from the arbitrary state;
 all M31 representations are admitted by the cfg-only Arbitrary implementation.
 K014 API/type failure receives no proof credit. Native source/frame/induction
 composition, full reference equality and final allocation observation stay OPEN.
+
+### Fallback stage D: complete emitted reference versus revision3
+
+L839/L840/L841 accept frontier/digest/counter joins via generic result folds;
+L852 tree, L858 master, L869 header, L872 pure model factoring, L875 total raw
+reference (every Slice length and Result), L878 all-Bytes first-arm port, L879
+allocation interpretation and full RowSpec. Tops:
+`NMX_R3_LaneTotal.value`, `NMX_R3_LanePort.pure_eq`,
+`NMX_R3_LaneAllocation.reference_eq`, `.observations`, `.root`, `.complete`.
+These all use standard axioms only. `.complete` includes BOTH silent final-Box
+allocation outcomes and excludes abort on earlier rejection. No extent is an
+own-input clause; the first source test derives it internally. The port only
+materializes bytes on that 768-byte branch, while `.value` covers every raw slice.
+The revised generic result-cut adapter uses continuation congruence, avoiding
+opaque compiled-match definitional equality and the retired concrete-recursion
+case split. K019 master-zero contract PASS / K020 intended ensures FAIL; same
+frozen graph, features, KMX patch, no writes. No native row candidate yet:
+source-ordered full native contextual association remains to be assembled.
+234 and233 remain untouched under child-first order.
