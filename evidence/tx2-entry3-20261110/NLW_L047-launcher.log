@@ -1,0 +1,59 @@
+{"attempt": "NLW_L047", "exit_status": 1, "wall_seconds": 28.35540124285035, "peak_rss_kib": "5986004", "swaps": "0", "print_axioms": ["'NLW_WriterPair.map_slice' depends on axioms: [propext]", "'NLW_WriterPair.encoded_state_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_WriterPair.both' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLW_generated/NLW_WriterPair.lean:37:50: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  MultiproofConeCanonical.bytesOf ↑(encodeState ?s)
+in the target expression
+  bytes (p.roots 1) = MultiproofConeCanonical.bytesOf (NLW_CommittedRoots.proofRoot proof 63)
+
+case right
+H : Bytes → State
+proof pub saved : Slice U8
+p : Prepared
+a : QueryAccumulator.State K E
+encoding :
+  MultiproofConeCanonical.bytesOf ↑saved =
+    encode H (MultiproofConeCanonical.bytesOf ↑proof) (MultiproofConeCanonical.bytesOf ↑pub) p a
+roots : Roots p proof
+⊢ bytes (p.roots 1) = MultiproofConeCanonical.bytesOf (NLW_CommittedRoots.proofRoot proof 63)
+def NLW_WriterPair.Roots : Prepared → Slice U8
+...
+rg
+              (fun _a =>
+                slice _a 112 32 =
+                  MultiproofConeCanonical.bytesOf
+                    ↑(encodeState
+                        ((SemanticRecordCodec.decodeState (slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+                          fun x => 0)))
+              encoding))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  _a =
+                    MultiproofConeCanonical.bytesOf
+                      ↑(encodeState
+                          ((SemanticRecordCodec.decodeState (slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+                            fun x => 0)))
+                (NLW_WriterRoot0.encoded H (MultiproofConeCanonical.bytesOf ↑proof)
+                  (MultiproofConeCanonical.bytesOf ↑pub) p a)))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => bytes (p.roots 0) = _a)
+                  (encoded_state_bytes
+                    ((SemanticRecordCodec.decodeState (slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+                      fun x => 0))))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      bytes _a =
+                        bytes
+                          ((SemanticRecordCodec.decodeState (slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+                            fun x => 0))
+                    roots.left))
+                (Eq.refl (bytes (rootState proof 16)))))))),
+    sorry⟩
+'NLW_WriterPair.map_slice' depends on axioms: [propext]
+'NLW_WriterPair.encoded_state_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_WriterPair.both' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd6b2ac4872ad4df7be5275a25e1d5dfd.scope; invocation ID: ea843c0d4f244eef9f156b462f4a4472

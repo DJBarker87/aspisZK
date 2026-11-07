@@ -1,0 +1,38 @@
+{"attempt": "NLW_L054", "exit_status": 0, "wall_seconds": 24.521551487967372, "peak_rss_kib": "6417548", "swaps": "0", "print_axioms": []}
+def NLW_Full064.ChildBridge : (Bytes → State) → Prop :=
+fun H =>
+  ∀ {X : Type} (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+    (↑proof).length = 57607 →
+      (↑pub).length ≤ 1880 → NLP_InputDomain.Root0 ck proof → NLW_RowSpec_065.RowSpec_065 H d pub proof ck hash
+inductive NLW_Full064.Invocation : {Ambient X : Type} →
+  (H : Bytes → State) → (s : Frame Ambient X) → End H s.args → List (Event Ambient X) → Prop
+number of parameters: 4
+constructors:
+NLW_Full064.Invocation.fail : ∀ {Ambient X : Type} {H : Bytes → State} {s : Frame Ambient X} (e : Error),
+  NLE_ParseInstall.parse s.args.proof = fail e → Invocation H s (End.parseFail e) [Event.parse s (fail e)]
+NLW_F
+...
+def NLW_Full064.ChildBridge : (Bytes → State) → Prop :=
+fun H =>
+  ∀ {X : Type} (d : aspis_core.digest.Digest32 X) (pub proof ck : Slice U8) (hash : X),
+    (↑proof).length = 57607 →
+      (↑pub).length ≤ 1880 → NLP_InputDomain.Root0 ck proof → NLW_RowSpec_065.RowSpec_065 H d pub proof ck hash
+inductive NLW_Full064.Invocation : {Ambient X : Type} →
+  (H : Bytes → State) → (s : Frame Ambient X) → End H s.args → List (Event Ambient X) → Prop
+number of parameters: 4
+constructors:
+NLW_Full064.Invocation.fail : ∀ {Ambient X : Type} {H : Bytes → State} {s : Frame Ambient X} (e : Error),
+  NLE_ParseInstall.parse s.args.proof = fail e → Invocation H s (End.parseFail e) [Event.parse s (fail e)]
+NLW_Full064.Invocation.div : ∀ {Ambient X : Type} {H : Bytes → State} {s : Frame Ambient X},
+  NLE_ParseInstall.parse s.args.proof = div → Invocation H s End.parseDiv [Event.parse s div]
+NLW_Full064.Invocation.reject : ∀ {Ambient X : Type} {H : Bytes → State} {s : Frame Ambient X} (e : verifier.Error),
+  NLE_ParseInstall.parse s.args.proof = ok (core.result.Result.Err e) →
+    Invocation H s (End.parseReject e) [Event.parse s (ok (core.result.Result.Err e))]
+NLW_Full064.Invocation.common : ∀ {Ambient X : Type} {H : Bytes → State} {s : Frame Ambient X} (v : transport.Variant),
+  NLE_ParseInstall.parse s.args.proof = ok (core.result.Result.Ok v) →
+    ∀ (outcome : NLT_CompleteRoot.End H s.args.digest s.args.hash),
+      NLT_CompleteRoot.Native H s.args.digest s.args.publicBytes s.args.proof s.args.checkpoint s.args.hash outcome →
+        Invocation H s (End.common outcome)
+          [Event.parse s (ok (core.result.Result.Ok v)), Event.marker s, Event.commonEnter s]
+
+Running as unit: run-r4a15f6cff1cc4710b9c7e47541572f64.scope; invocation ID: d3b3b13899424c479e06d8e13ff1aba1

@@ -1,0 +1,50 @@
+{"attempt": "NLW_L063", "exit_status": 0, "wall_seconds": 17.890380390919745, "peak_rss_kib": "6029136", "swaps": "0", "print_axioms": ["'NLW_WriterHeader.fields' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_WriterHeader.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLW_generated/NLW_WriterHeader.lean:38:80: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵L̵W̵_̵R̵e̵a̵d̵e̵r̵H̵e̵a̵d̵e̵r̵.̵d̵e̵c̵o̵d̵e̵,̵h̵p̵,̵h̵u̵,̵S̵e̵m̵a̵n̵t̵i̵c̵R̵e̵c̵o̵r̵d̵C̵o̵d̵e̵c̵.̵d̵e̵c̵o̵d̵e̵S̵t̵a̵t̵e̵_̵b̵y̵t̵e̵s̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]̵[̲N̲L̲W̲_̲R̲e̲a̲d̲e̲r̲H̲e̲a̲d̲e̲r̲.̲d̲e̲c̲o̲d̲e̲,̲ ̲h̲p̲,̲ ̲h̲u̲,̲ ̲S̲e̲m̲a̲n̲t̲i̲c̲R̲e̲c̲o̲r̲d̲C̲o̲d̲e̲c̲.̲d̲e̲c̲o̲d̲e̲S̲t̲a̲t̲e̲_̲b̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLW_WriterHeader.fields : ∀ (H : Bytes → State) (proof pub : Bytes) (p : Prepared)
+  (a : QueryAccumulator.State K E),
+  slice (encode H 
+...
+meDraft.magic ++
+                                                                              ([2, 10, 1, 0, 0, 0, 0, 0] ++
+                                                                                (bytes (H proof) ++
+                                                                                  (bytes (H pub) ++
+                                                                                    (bytes p.state ++
+                                                                                      (bytes (p.roots ⋯) ++ ⋯))))))))))
+                                                                    ⋯)))))))))))))))))))))))))))
+              ⋯)
+            ⋯))
+        ⋯);
+  ⋯
+theorem NLW_WriterHeader.decoded : ∀ (H : Bytes → State) (proof pub : Bytes) (p : Prepared)
+  (a : QueryAccumulator.State K E), NLW_ReaderHeader.decode (encode H proof pub p a) = some (H proof, H pub) :=
+fun H proof pub p a =>
+  let ⟨hp, hu⟩ := fields H proof pub p a
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congr
+            (congrArg Bind.bind
+              (Eq.trans (congrArg SemanticRecordCodec.decodeState hp)
+                (SemanticRecordCodec.decodeState_bytes (H proof))))
+            (funext fun proof_1 =>
+              congrFun'
+                (congrArg Bind.bind
+                  (Eq.trans (congrArg SemanticRecordCodec.decodeState hu)
+                    (SemanticRecordCodec.decodeState_bytes (H pub))))
+                fun pub => pure (proof_1, pub))))
+        (some (H proof, H pub))))
+    (Eq.refl do
+      let proof ← some (H proof)
+      let pub ← some (H pub)
+      pure (proof, pub))
+'NLW_WriterHeader.fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_WriterHeader.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra748f48a48ee456aabf375485afa2552.scope; invocation ID: 91df136dcbcc4c58b11ae81a101b4ce4

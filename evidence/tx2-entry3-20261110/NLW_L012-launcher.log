@@ -1,0 +1,51 @@
+{"attempt": "NLW_L012", "exit_status": 0, "wall_seconds": 16.821494844043627, "peak_rss_kib": "6015580", "swaps": "0", "print_axioms": ["'NLW_Persistence.loaded_success' depends on axioms: [propext]", "'NLW_Persistence.loaded_bytes' depends on axioms: [propext]"]}
+NLW_generated/NLW_Persistence.lean:18:12: warning: This simp argument is unused:
+  Bool.true_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵e̵q̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵v̵i̵s̵i̵b̵l̵e̵,̵l̵i̵v̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲v̲i̲s̲i̲b̲l̲e̲,̲ ̲l̲i̲v̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLW_Persistence.loaded_success : ∀ {Tx Key : Type} (next : Tx → Tx → Prop) (ordinary : Tx → Key → Prop)
+  (before tentative : Tx → Key → Image) (success : Tx → Bool)
+  (loaded : Tx → Key → Option AspisV8R19.DuplexFrames.Bytes),
+  TwoTransactionLaw next ordinary before tentative suc
+...
+ before t key) = some (tentative t key).data)
+          accepted))
+      (of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (ite_cond_eq_false none (some (if true = true then tentative t key else before t key).data)
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg Image.lamports (ite_cond_eq_true (tentative t key) (before t key) (eq_self true))))
+                      0)
+                    (eq_false live)))
+                (congrArg some
+                  (congrArg Image.data (ite_cond_eq_true (tentative t key) (before t key) (eq_self true))))))
+            (some (tentative t key).data))
+          (eq_self (some (tentative t key).data)))))
+theorem NLW_Persistence.loaded_bytes : ∀ {Tx Key : Type} (next : Tx → Tx → Prop) (ordinary : Tx → Key → Prop)
+  (before tentative : Tx → Key → Image) (success : Tx → Bool)
+  (loaded : Tx → Key → Option AspisV8R19.DuplexFrames.Bytes),
+  TwoTransactionLaw next ordinary before tentative success loaded →
+    ∀ (t u : Tx) (key : Key),
+      next t u →
+        ordinary t key →
+          success t = true →
+            (tentative t key).lamports ≠ 0 →
+              ∀ (checkpoint : AspisV8R19.DuplexFrames.Bytes),
+                loaded u key = some checkpoint → checkpoint = (tentative t key).data :=
+fun {Tx Key} next ordinary before tentative success loaded law t u key adjacent eligible accepted live checkpoint
+    read =>
+  Option.some.inj
+    (Eq.trans (Eq.symm read)
+      (loaded_success next ordinary before tentative success loaded law t u key adjacent eligible accepted live))
+'NLW_Persistence.loaded_success' depends on axioms: [propext]
+'NLW_Persistence.loaded_bytes' depends on axioms: [propext]
+
+Running as unit: run-r79b97c564ce34211837d13b27af92d63.scope; invocation ID: b2627317dbde4dd1b1897bac769aa5b7

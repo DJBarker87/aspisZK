@@ -1,0 +1,29 @@
+{"attempt": "NLW_L001", "exit_status": 0, "wall_seconds": 26.398134539136663, "peak_rss_kib": "6017752", "swaps": "0", "print_axioms": ["'NLW_Root0.sizes' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def NLW_Root0.Binds : Slice U8 → Slice U8 → Prop :=
+fun checkpoint proof =>
+  List.take 32 (List.drop 112 ↑checkpoint) =
+    ↑(encodeState
+        ((SemanticRecordCodec.decodeState
+              (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+          fun x => 0))
+def NLW_Root0.Domain : {H : Type} → NLM_RowSpec_065.Frame H → Prop :=
+fun {H} f => NLM_RowSpec_065.Domain f ∧ Binds f.checkpoint f.proof
+theorem NLW_Root0.sizes : ∀ {H : Type} (f : NLM_RowSpec_065.Frame H), Domain f → NLM_RowSpec_065.Domain f :=
+fun {H} f h => h.left
+'NLW_Root0.sizes' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+def NLW_Root0.Binds : Slice U8 → Slice U8 → Prop :=
+fun checkpoint proof =>
+  List.take 32 (List.drop 112 ↑checkpoint) =
+    ↑(encodeState
+        ((SemanticRecordCodec.decodeState
+              (OraclePortCompactDraft.slice (MultiproofConeCanonical.bytesOf ↑proof) 16 32)).getD
+          fun x => 0))
+def NLW_Root0.Domain : {H : Type} → NLM_RowSpec_065.Frame H → Prop :=
+fun {H} f => NLM_RowSpec_065.Domain f ∧ Binds f.checkpoint f.proof
+theorem NLW_Root0.sizes : ∀ {H : Type} (f : NLM_RowSpec_065.Frame H), Domain f → NLM_RowSpec_065.Domain f :=
+fun {H} f h => h.left
+'NLW_Root0.sizes' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7feed932550743f7b9cb44403acb6896.scope; invocation ID: eef89024798a48fc93f8a000c72e4486

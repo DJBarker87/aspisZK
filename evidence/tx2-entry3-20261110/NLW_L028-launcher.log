@@ -1,0 +1,36 @@
+{"attempt": "NLW_L028", "exit_status": 0, "wall_seconds": 30.653954876121134, "peak_rss_kib": "6419684", "swaps": "0", "print_axioms": []}
+inductive NLW_064Invocation.Invocation : {Ambient : Type} →
+  (H : Bytes → State) → Frame Ambient → Result Reply → Records H → List (Event Ambient H) → Prop
+number of parameters: 3
+constructors:
+NLW_064Invocation.Invocation.fail : ∀ {Ambient : Type} {H : Bytes → State} {s : Frame Ambient} (e : Error),
+  NLE_ParseInstall.parse s.args.proof = fail e → Invocation H s (fail e) [] [Event.parse s (fail e)]
+NLW_064Invocation.Invocation.div : ∀ {Ambient : Type} {H : Bytes → State} {s : Frame Ambient},
+  NLE_ParseInstall.parse s.args.proof = div → Invocation H s div [] [Event.parse s div]
+NLW_064Invocation.Invocation.reject : ∀ {Ambient : Type} {H : Bytes → State} {s : Frame Ambient} (e : verifier.Er
+...
+inductive NLW_064Invocation.Invocation : {Ambient : Type} →
+  (H : Bytes → State) → Frame Ambient → Result Reply → Records H → List (Event Ambient H) → Prop
+number of parameters: 3
+constructors:
+NLW_064Invocation.Invocation.fail : ∀ {Ambient : Type} {H : Bytes → State} {s : Frame Ambient} (e : Error),
+  NLE_ParseInstall.parse s.args.proof = fail e → Invocation H s (fail e) [] [Event.parse s (fail e)]
+NLW_064Invocation.Invocation.div : ∀ {Ambient : Type} {H : Bytes → State} {s : Frame Ambient},
+  NLE_ParseInstall.parse s.args.proof = div → Invocation H s div [] [Event.parse s div]
+NLW_064Invocation.Invocation.reject : ∀ {Ambient : Type} {H : Bytes → State} {s : Frame Ambient} (e : verifier.Error),
+  NLE_ParseInstall.parse s.args.proof = ok (core.result.Result.Err e) →
+    Invocation H s (ok (core.result.Result.Err e)) [] [Event.parse s (ok (core.result.Result.Err e))]
+NLW_064Invocation.Invocation.common : ∀ {Ambient : Type} {H : Bytes → State} {s : Frame Ambient}
+  (v : transport.Variant),
+  NLE_ParseInstall.parse s.args.proof = ok (core.result.Result.Ok v) →
+    ∀ (result : Result Reply) (records : Records H),
+      NLT_NativeInvocation.Invocation H (NLT_RuntimeDigest.digest H) () (childCode H s.args) result records →
+        Invocation H s result records
+          [Event.parse s (ok (core.result.Result.Ok v)), Event.marker s, Event.common s result records]
+def NLW_064Invocation.ChildBridge : (Bytes → State) → Prop :=
+fun H =>
+  ∀ (pub proof ck : Slice U8),
+    (↑proof).length = 57607 →
+      (↑pub).length ≤ 1880 → NLP_InputDomain.Root0 ck proof → NLW_RowSpec_065.RowSpec_065 H pub proof ck
+
+Running as unit: run-r3a3596e65f5b4412a74c3235ed947904.scope; invocation ID: cd16b7281dc3489899be46df129ddf28

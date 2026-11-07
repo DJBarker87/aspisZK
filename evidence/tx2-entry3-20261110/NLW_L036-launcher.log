@@ -1,0 +1,50 @@
+{"attempt": "NLW_L036", "exit_status": 1, "wall_seconds": 38.94696620898321, "peak_rss_kib": "5982272", "swaps": "0", "print_axioms": ["'NLW_ProcessLocalFold.cuts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLW_generated/NLW_ProcessLocalFold.lean:22:49: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_tc_ok`
+NLW_generated/NLW_ProcessLocalFold.lean:22:78: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_tc_ok`
+NLW_generated/NLW_ProcessLocalFold.lean:23:1: error: Type mismatch
+  selected
+has type
+  NLW_ProcessSelect.dispatch { frame := s.frame, world := s.world, head := some head }.frame.data value = Result.ok kind
+but is expected to have type
+  (do
+      let head ← Result.ok head
+      let value ← Hiq_DispatchSource.copied head
+      NLW_ProcessSelect.dispatch s.frame.data value) =
+    Result.ok kind
+NLW_generated/NLW_ProcessLocalFold.lean:22:67: war
+...
+NLW_generated/NLW_ProcessLocalFold.lean:23:1: error: Type mismatch
+  selected
+has type
+  NLW_ProcessSelect.dispatch { frame := s.frame, world := s.world, head := some head }.frame.data value = Result.ok kind
+but is expected to have type
+  (do
+      let head ← Result.ok head
+      let value ← Hiq_DispatchSource.copied head
+      NLW_ProcessSelect.dispatch s.frame.data value) =
+    Result.ok kind
+NLW_generated/NLW_ProcessLocalFold.lean:22:67: warning: This simp argument is unused:
+  copiedCall
+
+Hint: Omit it from the simp argument list.
+  simp only [NLW_ProcessSelect.selected, ̲firstCall, ̲Result.bind_tc_ok,c̵o̵p̵i̵e̵d̵C̵a̵l̵l̵,̵ ̲Result.bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem NLW_ProcessLocalFold.cuts : ∀ {Account Ambient : Type} (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+  (callee : ChildCode Account Ambient) (child : ChildObservation Account Ambient) (s : State Account Ambient),
+  NLW_ProcessSelect.LocalPacket hashv callee child s →
+    NHZ_DRIVER.Cuts hashv (code callee s) (observation child s).result (observation child s).attempted :=
+fun {Account Ambient} hashv callee child s packet =>
+  id
+    (id
+      (NLM_CodeStep.cut hashv (Hiq_DispatchSource.firstByte s.frame.data)
+        (fun head =>
+          CheckpointBytes5Effect.Code.step (Hiq_DispatchSource.copied head) fun value =>
+            dispatch callee { frame := s.frame, world := s.world, head := some head } value)
+        (fun head =>
+          NLM_CodeStep.select (Hiq_DispatchSource.copied head) fun value =>
+            dispatchObservation child { frame := s.frame, world := s.world, head := some head } value)
+        fun head => sorry head))
+'NLW_ProcessLocalFold.cuts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rdf9c78be87e8482597f43d28de0fc7cc.scope; invocation ID: fa09c7b188f94807b200f76408bec7a5

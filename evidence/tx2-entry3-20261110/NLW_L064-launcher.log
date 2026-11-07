@@ -1,0 +1,38 @@
+{"attempt": "NLW_L064", "exit_status": 1, "wall_seconds": 20.25268950802274, "peak_rss_kib": "5978460", "swaps": "0", "print_axioms": ["'NLW_AuthenticatedRoots.digest_matches' depends on axioms: [propext]", "'NLW_AuthenticatedRoots.both' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLW_generated/NLW_AuthenticatedRoots.lean:25:6: error(lean.unknownIdentifier): Unknown identifier `OraclePortCompactDraft.Prepared`
+theorem NLW_AuthenticatedRoots.digest_matches : ∀ (H : Bytes → State) (saved loaded proof1 pub1 proof2 pub2 : Slice U8),
+  bytesOf ↑loaded = bytesOf ↑saved →
+    NLW_ReaderHeader.decode (bytesOf ↑saved) = some (H (bytesOf ↑proof1), H (bytesOf ↑pub1)) →
+      NLW_ReaderHeader.decode (bytesOf ↑loaded) = some (H (bytesOf ↑proof2), H (bytesOf ↑pub2)) →
+        R9PoolRuntimeBinding.digestMatches H { proof := bytesOf ↑proof1, pub := bytesOf ↑pub1 }
+          { proof := bytesOf ↑proof2, pub := bytesOf ↑pub2 } :=
+fun H saved loaded proof1 pub1 proof2 pub2 persisted writ
+...
+n.some.inj
+      (Eq.mp (congrArg (fun _a => _a = some (H (bytesOf ↑proof2), H (bytesOf ↑pub2))) writer)
+        (Eq.mp
+          (congrArg (fun _a => NLW_ReaderHeader.decode _a = some (H (bytesOf ↑proof2), H (bytesOf ↑pub2))) persisted)
+          reader));
+  ⟨Eq.symm (congrArg Prod.fst eq), Eq.symm (congrArg Prod.snd eq)⟩
+theorem NLW_AuthenticatedRoots.both.{u_1} : ∀ (H : Bytes → State) (saved loaded proof1 pub1 proof2 pub2 : Slice U8)
+  (p : sorry) (a : QueryAccumulator.State OraclePortCheckpointAbiC5.K OraclePortCheckpointAbiC5.E),
+  bytesOf ↑saved = OraclePortCheckpointAbiC5.encode H (bytesOf ↑proof1) (bytesOf ↑pub1) sorry a →
+    NLW_WriterPair.Roots sorry proof1 →
+      bytesOf ↑loaded = bytesOf ↑saved →
+        NLW_ReaderHeader.decode (bytesOf ↑loaded) = some (H (bytesOf ↑proof2), H (bytesOf ↑pub2)) →
+          R9PoolRuntimeBinding.P2Prime H { proof := bytesOf ↑proof1, pub := bytesOf ↑pub1 }
+              { proof := bytesOf ↑proof2, pub := bytesOf ↑pub2 } →
+            NLW_CommittedRoots.Both loaded proof2 :=
+fun H saved loaded proof1 pub1 proof2 pub2 p a encoding oldRoots persisted reader binding =>
+  have writer :=
+    Eq.mpr
+      (id (congrArg (fun _a => NLW_ReaderHeader.decode _a = some (H (bytesOf ↑proof1), H (bytesOf ↑pub1))) encoding))
+      (NLW_WriterHeader.decoded H (bytesOf ↑proof1) (bytesOf ↑pub1) sorry a);
+  have checked := digest_matches H saved loaded proof1 pub1 proof2 pub2 persisted writer reader;
+  have equal := binding checked;
+  NLW_ByteIdentity.both_transport saved loaded proof1 proof2
+    (NLW_WriterPair.both H proof1 pub1 saved sorry a encoding oldRoots) persisted equal.left
+'NLW_AuthenticatedRoots.digest_matches' depends on axioms: [propext]
+'NLW_AuthenticatedRoots.both' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r9768c7faaa6e4b8b9399b945d2c95374.scope; invocation ID: 4ff6b6b367394a0d9f2248531ab2db24

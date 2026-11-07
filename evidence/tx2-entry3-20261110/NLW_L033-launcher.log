@@ -1,0 +1,31 @@
+{"attempt": "NLW_L033", "exit_status": 0, "wall_seconds": 21.498244585003704, "peak_rss_kib": "5987196", "swaps": "0", "print_axioms": []}
+def NLW_ProcessSelect.selected : Slice U8 → Result Child :=
+fun data => do
+  let head ← Hiq_DispatchSource.firstByte data
+  let value ← Hiq_DispatchSource.copied head
+  dispatch data value
+def NLW_ProcessSelect.LocalPacket : {Account Ambient : Type} →
+  (SdkC_Source.Parts → Result SdkC_Source.Digest) →
+    ChildCode Account Ambient → ChildObservation Account Ambient → State Account Ambient → Prop :=
+fun {Account Ambient} hashv callee child s =>
+  ∀ (kind : Child),
+    selected s.frame.data = Result.ok kind →
+      NHZ_DRIVER.Cuts hashv (callee kind s.frame s.world) (child kind s.frame s.world).result
+        (child kind s.frame s.world).attempted
+
+...
+def NLW_ProcessSelect.selected : Slice U8 → Result Child :=
+fun data => do
+  let head ← Hiq_DispatchSource.firstByte data
+  let value ← Hiq_DispatchSource.copied head
+  dispatch data value
+def NLW_ProcessSelect.LocalPacket : {Account Ambient : Type} →
+  (SdkC_Source.Parts → Result SdkC_Source.Digest) →
+    ChildCode Account Ambient → ChildObservation Account Ambient → State Account Ambient → Prop :=
+fun {Account Ambient} hashv callee child s =>
+  ∀ (kind : Child),
+    selected s.frame.data = Result.ok kind →
+      NHZ_DRIVER.Cuts hashv (callee kind s.frame s.world) (child kind s.frame s.world).result
+        (child kind s.frame s.world).attempted
+
+Running as unit: run-r3be6dac6d8b846e1a7dab475ad2b463c.scope; invocation ID: e9567773436a414fb9aa87d792af4c92

@@ -1,0 +1,119 @@
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. Local measurement entrypoint only.
+ use aspis_r1_cost_probe::verifier::{self,Phase};
+ use aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1;
+--- a/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs
+@@ -479,3 +479,7 @@
+     let current_slot = match Clock::get() { Ok(clock) => Ok(clock.slot), Err(error) => Err(error) };
+     stage2_owned(program_id, &owned, data, current_slot)
+ }
++
++#[cfg(kani)]
++#[path="NLW_program.rs"]
++mod NLW_program;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NLW_program.rs
+@@ -0,0 +1,99 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NLW_owned_reject<const INVERSE:bool>() {
++ let key=Pubkey::new_from_array(kani::any());
++ let n:usize=kani::any();kani::assume(n<7);
++ let accounts:[OwnedAccount;7]=core::array::from_fn(|_|OwnedAccount{key,owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:if kani::any(){Ok(kani::any())}else{Err(ProgramError::AccountBorrowFailed)},bytes:Err(ProgramError::InvalidAccountData)});
++ let byte:u8=kani::any();let data=[byte];let slot=if kani::any(){Ok(kani::any())}else{Err(ProgramError::AccountBorrowFailed)};
++ let out=stage2_owned(&key,&accounts[..n],&data,slot);
++ assert!((out==Err(ProgramError::InvalidInstructionData))!=INVERSE,"NLW actual241 count rejection before every child");
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(validate_asq8,NLW_unreached_validate)]
++fn NLW_owned_count(){NLW_owned_reject::<false>();}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(validate_asq8,NLW_unreached_validate)]
++fn NLW_owned_count_inverse(){NLW_owned_reject::<true>();}
++fn NLW_sdk_reject<const INVERSE:bool>() {
++ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut lamports=kani::any::<u64>();let mut bytes=[kani::any::<u8>()];
++ let a=AccountInfo::new(&key,kani::any(),kani::any(),&mut lamports,&mut bytes,&owner,kani::any(),0);
++ let n:usize=kani::any();kani::assume(n<7);
++ let accounts=[a.clone(),a.clone(),a.clone(),a.clone(),a.clone(),a.clone(),a.clone()];
++ let data=[kani::any::<u8>()];let out=stage2(&key,&accounts[..n],&data);
++ let exact=out==Err(ProgramError::InvalidInstructionData)&&a.try_borrow_mut_data().is_ok();
++ assert!(exact!=INVERSE,"NLW actual240 count rejection, live cell remains borrowable");
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(stage2_owned,NLW_unreached_owned)]
++fn NLW_sdk_count(){NLW_sdk_reject::<false>();}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(stage2_owned,NLW_unreached_owned)]
++fn NLW_sdk_count_inverse(){NLW_sdk_reject::<true>();}
++fn NLW_entry_reject<const INVERSE:bool>() {
++ let key=Pubkey::new_from_array(kani::any());let tag:u8=kani::any();
++ let data=[tag];let out=super::super::super::process_r1_cost_probe_instruction(&key,&[],&data);
++ assert!((out==Err(ProgramError::InvalidInstructionData))!=INVERSE,"NLW actual213 admission rejection");
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::super::super::r1_pool_adapter::process,NLW_unreached_process)]
++fn NLW_entry_rejects(){NLW_entry_reject::<false>();}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(super::super::super::r1_pool_adapter::process,NLW_unreached_process)]
++fn NLW_entry_rejects_inverse(){NLW_entry_reject::<true>();}
++fn NLW_process_empty<const INVERSE:bool>() {
++ let key=Pubkey::new_from_array(kani::any());let out=super::super::process(&key,&[],&[]);
++ assert!((out==Err(ProgramError::InvalidInstructionData))!=INVERSE,"NLW actual221 empty instruction dispatch to240 rejection");
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(stage2_owned,NLW_unreached_owned)]
++fn NLW_process_empty_rejects(){NLW_process_empty::<false>();}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(stage2_owned,NLW_unreached_owned)]
++fn NLW_process_empty_inverse(){NLW_process_empty::<true>();}
++fn NLW_unreached_validate(_p:&Pubkey,_a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->Result<ValidatedAsqa,ProgramError>{panic!("NLW validation cut reached after a rejecting prefix")}
++fn NLW_unreached_owned(_p:&Pubkey,_a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{panic!("NLW owned continuation reached after a rejecting prefix")}
++fn NLW_unreached_process(_p:&Pubkey,_a:&[AccountInfo<'_>],_d:&[u8])->ProgramResult{panic!("NLW process continuation reached after admission rejection")}
++fn NLW_owned_magic_reject<const INVERSE:bool>() {
++ let key=Pubkey::new_from_array(kani::any());
++ let accounts:[OwnedAccount;7]=core::array::from_fn(|_|OwnedAccount{key,owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:if kani::any(){Ok(kani::any())}else{Err(ProgramError::AccountBorrowFailed)},bytes:Err(ProgramError::InvalidAccountData)});
++ let out=stage2_owned(&key,&accounts,&[],Ok(kani::any()));
++ assert!((out==Err(ProgramError::InvalidInstructionData))!=INVERSE,"NLW actual241 missing magic with exact seven records");
++}
++#[kani::proof]#[kani::stub(validate_asq8,NLW_unreached_validate)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLW_owned_magic(){NLW_owned_magic_reject::<false>();}
++#[kani::proof]#[kani::stub(validate_asq8,NLW_unreached_validate)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLW_owned_magic_inverse(){NLW_owned_magic_reject::<true>();}
++fn NLW_sdk_magic_reject<const INVERSE:bool>() {
++ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut lamports=kani::any::<u64>();let mut bytes=[kani::any::<u8>()];
++ let a=AccountInfo::new(&key,kani::any(),kani::any(),&mut lamports,&mut bytes,&owner,kani::any(),0);
++ let accounts=[a.clone(),a.clone(),a.clone(),a.clone(),a.clone(),a.clone(),a.clone()];
++ let out=stage2(&key,&accounts,&[]);
++ assert!((out==Err(ProgramError::InvalidInstructionData)&&a.try_borrow_mut_data().is_ok())!=INVERSE,"NLW actual240 missing magic retains borrowable cell");
++}
++#[kani::proof]#[kani::stub(stage2_owned,NLW_unreached_owned)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLW_sdk_magic(){NLW_sdk_magic_reject::<false>();}
++#[kani::proof]#[kani::stub(stage2_owned,NLW_unreached_owned)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLW_sdk_magic_inverse(){NLW_sdk_magic_reject::<true>();}
++fn NLW_process_fallback_reject<const INVERSE:bool>() {
++ let key=Pubkey::new_from_array(kani::any());let tag:u8=kani::any();kani::assume(tag!=4&&tag!=5&&tag!=6);
++ let out=super::super::process(&key,&[],&[tag]);
++ assert!((out==Err(ProgramError::InvalidInstructionData))!=INVERSE,"NLW actual221 non-lifecycle one-byte dispatch to240 rejection");
++}
++#[kani::proof]#[kani::stub(stage2_owned,NLW_unreached_owned)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLW_process_fallback(){NLW_process_fallback_reject::<false>();}
++#[kani::proof]#[kani::stub(stage2_owned,NLW_unreached_owned)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NLW_process_fallback_inverse(){NLW_process_fallback_reject::<true>();}

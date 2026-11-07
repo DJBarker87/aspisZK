@@ -1,0 +1,62 @@
+{"attempt": "NLW_L060", "exit_status": 1, "wall_seconds": 15.287373197963461, "peak_rss_kib": "5995264", "swaps": "0", "print_axioms": ["'NLW_ReaderHeader.calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLW_generated/NLW_ReaderHeader.lean:22:77: error: unsolved goals
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+oracle : CheckpointBytes5Inputs.Oracle D hash H
+ck proof pub : Slice U8
+c : Tx2ResumeDigests.Calls D hash ck proof pub
+length : (↑ck).length = 1768
+pf :
+  ↑c.storedProof = List.take (↑48#usize - ↑16#usize) (List.drop ↑16#usize ↑ck) ∧
+    (↑c.storedProof).length = ↑48#usize - ↑16#usize
+pu :
+  ↑c.storedPublic = List.take (↑80#usize - ↑48#usize) (List.drop ↑48#usize ↑ck) ∧
+    (↑c.storedPublic).length = ↑80#usize - ↑48#usize
+v16 : ↑16#usize = 16
+v48 : ↑48#usize = 48
+v80 : ↑80#usize = 80
+pfBytes : ↑c.storedProof = List.take 32 (List.drop 16 ↑ck)
+puBytes : ↑c.store
+...
+fDigest c.proofCall)))
+                (Eq.mpr (id (congrArg (fun _a => some (H _a) = some (H (bytesOf ↑proof))) pp))
+                  (Eq.refl (some (H (bytesOf ↑proof))))))))));
+  have hu :=
+    Eq.mpr
+      (id
+        (congrArg (fun _a => SemanticRecordCodec.decodeState _a = some (H (bytesOf ↑pub)))
+          (Eq.symm (NLW_WriterPair.map_slice (↑ck) 48 32))))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => SemanticRecordCodec.decodeState (bytesOf _a) = some (H (bytesOf ↑pub)))
+            (Eq.symm puBytes)))
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => SemanticRecordCodec.decodeState (bytesOf _a) = some (H (bytesOf ↑pub))) c.publicEqual))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => SemanticRecordCodec.decodeState _a = some (H (bytesOf ↑pub)))
+                (Eq.symm (CheckpointBytesDigest.bytes_stateOf c.publicDigest))))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => _a = some (H (bytesOf ↑pub)))
+                  (SemanticRecordCodec.decodeState_bytes (CheckpointBytesDigest.stateOf c.publicDigest))))
+              (Eq.mpr
+                (id
+                  (congrArg (fun _a => some _a = some (H (bytesOf ↑pub)))
+                    (oracle c.publicParts c.publicDigest c.publicCall)))
+                (Eq.mpr (id (congrArg (fun _a => some (H _a) = some (H (bytesOf ↑pub))) up))
+                  (Eq.refl (some (H (bytesOf ↑pub))))))))));
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congr (congrArg Bind.bind hp)
+            (funext fun proof => congrFun' (congrArg Bind.bind hu) fun pub => pure (proof, pub))))
+        (some (H (bytesOf ↑proof), H (bytesOf ↑pub)))))
+    sorry
+'NLW_ReaderHeader.calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rae6decfaae194348842bacf899dcd88d.scope; invocation ID: d8babb0986b7476cb764d9ec6fea0985

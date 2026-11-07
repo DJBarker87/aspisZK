@@ -1,0 +1,44 @@
+{"attempt": "NLW_L040", "exit_status": 0, "wall_seconds": 27.46121873590164, "peak_rss_kib": "5990200", "swaps": "0", "print_axioms": ["'NLW_OwnedReject.count' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_OwnedReject.count : ∀ (ops : Ops) (s : NLE_Owned.State),
+  (s.frame.accounts.len != 7#usize) = true →
+    NLE_Owned.G ops s =
+      { result := ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData),
+        events := [] } :=
+fun ops s guard =>
+  id
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (ite_cond_eq_true (pure (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData))
+              (do
+                let o ←
+                  liftM
+                      (core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) s.frame.data
+                        { «end» := 4#usize })
+      
+...
+error.ProgramError) residual)
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    liftM
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit (core.convert.FromSame solana_program_error.ProgramError) residual)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame solana_program_error.ProgramError) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame solana_program_error.ProgramError) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame solana_program_error.ProgramError) residual))
+              (Eq.trans (congrFun' (congrArg Eq guard) true) (eq_self true))))
+          { result := ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData),
+            events := [] }))
+      (Eq.refl (pure (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData))))
+'NLW_OwnedReject.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1144c17702344869b47eae0c6df2e077.scope; invocation ID: 68f3793cec054f85a3e2405caf62de03

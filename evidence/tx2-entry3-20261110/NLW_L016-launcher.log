@@ -1,0 +1,27 @@
+{"attempt": "NLW_L016", "exit_status": 0, "wall_seconds": 18.01807487104088, "peak_rss_kib": "6016084", "swaps": "0", "print_axioms": ["'NLW_ActualGetterScope.stored' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_ActualGetterScope.proof_extent' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_ActualGetterScope.checkpoint_extent' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_ActualGetterScope.stored : ∀ (ops : AdapterRw.Ops) (e : Entry) (a lo hi : ℕ) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot a lo hi) = ok (core.result.Result.Ok bytes) →
+    (e.snapshot a lo hi).bytes = core.result.Result.Ok bytes :=
+fun ops e a lo hi bytes read => NLW_GetterSuccess.stored ops (e.snapshot a lo hi) bytes read
+theorem NLW_ActualGetterScope.proof_extent : ∀ (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 0 58295 58295) = ok (core.result.Result.Ok bytes) →
+    (↑bytes).length = 58295 :=
+fun ops e bytes read => NLE_SnapshotClause.proof_bytes e bytes (stor
+...
+theorem NLW_ActualGetterScope.stored : ∀ (ops : AdapterRw.Ops) (e : Entry) (a lo hi : ℕ) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot a lo hi) = ok (core.result.Result.Ok bytes) →
+    (e.snapshot a lo hi).bytes = core.result.Result.Ok bytes :=
+fun ops e a lo hi bytes read => NLW_GetterSuccess.stored ops (e.snapshot a lo hi) bytes read
+theorem NLW_ActualGetterScope.proof_extent : ∀ (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 0 58295 58295) = ok (core.result.Result.Ok bytes) →
+    (↑bytes).length = 58295 :=
+fun ops e bytes read => NLE_SnapshotClause.proof_bytes e bytes (stored ops e 0 58295 58295 bytes read)
+theorem NLW_ActualGetterScope.checkpoint_extent : ∀ (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 6 1768 1768) = ok (core.result.Result.Ok bytes) →
+    (↑bytes).length = 1768 :=
+fun ops e bytes read => NLE_CallerScope.checkpoint e bytes (stored ops e 6 1768 1768 bytes read)
+'NLW_ActualGetterScope.stored' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_ActualGetterScope.proof_extent' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_ActualGetterScope.checkpoint_extent' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0096c14a9d0749b1b7698eec08409537.scope; invocation ID: c80221fa1c344ebe998f1cf5241c6370

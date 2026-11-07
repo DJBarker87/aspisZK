@@ -1,0 +1,21 @@
+{"attempt": "NLW_L018", "exit_status": 0, "wall_seconds": 22.65375698893331, "peak_rss_kib": "5999912", "swaps": "0", "print_axioms": ["'NLW_ActualLength.length' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_ActualLength.length : ∀ (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8) (start end_ size : Usize),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 0 58295 58295) = ok (core.result.Result.Ok bytes) →
+    AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok start →
+      start.checked_add size = some end_ → (bytes.len != end_) = false → ↑size = 57607 :=
+fun ops e bytes start end_ size read startCall checked guard =>
+  let ⟨⟩ := ok start
+  Eq.mp (congrArg (fun _a => _a = ok start) (NLW_StartScope.proof_start ops)) startCall
+'NLW_ActualLength.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+...
+theorem NLW_ActualLength.length : ∀ (ops : AdapterRw.Ops) (e : Entry) (bytes : Slice U8) (start end_ size : Usize),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 0 58295 58295) = ok (core.result.Result.Ok bytes) →
+    AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok start →
+      start.checked_add size = some end_ → (bytes.len != end_) = false → ↑size = 57607 :=
+fun ops e bytes start end_ size read startCall checked guard =>
+  let ⟨⟩ := ok start
+  Eq.mp (congrArg (fun _a => _a = ok start) (NLW_StartScope.proof_start ops)) startCall
+'NLW_ActualLength.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rbfb43d7ac42a4c949c34713aa890c34e.scope; invocation ID: 82ba218e2b604c3f8ca7b23aadfa6c7c

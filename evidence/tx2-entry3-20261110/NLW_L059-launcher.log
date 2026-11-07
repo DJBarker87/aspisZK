@@ -1,0 +1,50 @@
+{"attempt": "NLW_L059", "exit_status": 1, "wall_seconds": 22.814815710065886, "peak_rss_kib": "5971352", "swaps": "0", "print_axioms": ["'NLW_ReaderHeader.calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLW_generated/NLW_ReaderHeader.lean:28:14: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ofNatCore_val`
+NLW_generated/NLW_ReaderHeader.lean:28:2: error: Type mismatch: After simplification, term
+  pf.left
+ has type
+  @Eq (List U8) (↑c.storedProof) (List.take (↑48#usize - ↑16#usize) (List.drop ↑16#usize ↑ck))
+but is expected to have type
+  @Eq (List U8) (↑c.storedProof) (List.take 32 (List.drop 16 ↑ck))
+NLW_generated/NLW_ReaderHeader.lean:30:14: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ofNatCore_val`
+NLW_generated/NLW_ReaderHeader.lean:30:2: error: Type mismatch: After simplification, term
+  pu.left
+ has type
+  @Eq (List U8) (↑c.storedPublic) (
+...
+̵s̵o̵m̵e̵]̵[̲d̲e̲c̲o̲d̲e̲,̲ ̲h̲p̲,̲ ̲h̲u̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+def NLW_ReaderHeader.decode : Bytes → Option (State × State) :=
+fun cp => do
+  let proof ← SemanticRecordCodec.decodeState (slice cp 16 32)
+  let pub ← SemanticRecordCodec.decodeState (slice cp 48 32)
+  pure (proof, pub)
+theorem NLW_ReaderHeader.calls : ∀ {X : Type} (D : aspis_core.digest.Digest32 X) (hash : X) (H : Bytes → State),
+  CheckpointBytes5Inputs.Oracle D hash H →
+    ∀ (ck proof pub : Slice U8) (c : Tx2ResumeDigests.Calls D hash ck proof pub),
+      (↑ck).length = 1768 → decode (bytesOf ↑ck) = some (H (bytesOf ↑proof), H (bytesOf ↑pub)) :=
+fun {X} D hash H oracle ck proof pub c length =>
+  have pf :=
+    AdapterRw.Ranges.selected_exact ck c.storedProof 16#usize 48#usize (of_decide_eq_true (id (Eq.refl true)))
+      (id (Decidable.byContradiction fun a => calls._proof_1 ck length a)) c.proofField;
+  have pu :=
+    AdapterRw.Ranges.selected_exact ck c.storedPublic 48#usize 80#usize (of_decide_eq_true (id (Eq.refl true)))
+      (id (Decidable.byContradiction fun a => calls._proof_2 D hash ck proof pub c length a)) c.publicField;
+  have pfBytes := sorry;
+  have puBytes := sorry;
+  have pp := (CheckpointBytes5Inputs.calls_inputs D hash ck proof pub c length).left;
+  have up := (CheckpointBytes5Inputs.calls_inputs D hash ck proof pub c length).right.left;
+  have hp := sorry;
+  have hu := sorry;
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congr (congrArg Bind.bind hp)
+            (funext fun proof => congrFun' (congrArg Bind.bind hu) fun pub => pure (proof, pub))))
+        (some (H (bytesOf ↑proof), H (bytesOf ↑pub)))))
+    sorry
+'NLW_ReaderHeader.calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1898a96a0035452299af895908f0883e.scope; invocation ID: 5e90cfc56c9a4ea2b0c617f5c35f250d

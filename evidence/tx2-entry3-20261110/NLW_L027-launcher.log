@@ -1,0 +1,42 @@
+{"attempt": "NLW_L027", "exit_status": 0, "wall_seconds": 38.00821694498882, "peak_rss_kib": "6407784", "swaps": "0", "print_axioms": ["'NLW_RowSpec_065.root0_same' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@[reducible] def NLW_RowSpec_065.RowSpec_065 : (Bytes → State) → Slice U8 → Slice U8 → Slice U8 → Prop :=
+fun H pub proof ck => NLT_Root.RowSpec H pub proof ck
+def NLT_Root.RowSpec : (Bytes → State) → Slice U8 → Slice U8 → Slice U8 → Prop :=
+fun H pub proof ck =>
+  (∀ (result : NJU_CommonObserved.R Unit)
+      (records : List (NLT_NativeInvocation.Occurrence H (NLT_RuntimeDigest.digest H) ())),
+      NLT_NativeInvocation.Invocation H (NLT_RuntimeDigest.digest H) ()
+          (NLT_NativeSource.skeleton H (NLT_RuntimeDigest.digest H) pub proof ck ()) result records →
+        have f := NLT_FrameFromCuts.frame records;
+        result =
+            NJJ_Common.run f.resume f.pending (fun {H_1} => 
+...
+meDigest.digest H) pub proof ck () none ∧
+          List.map NLT_NativeInvocation.actual records =
+              (NJU_CommonObserved.run f.resume f.pending (fun {H_1} => NLP_NativeMerkle.action H)
+                  (NLB_Parent.finish f.finish) (NLT_RuntimeDigest.digest H) pub proof ck () none).events ∧
+            (∀ r ∈ records,
+                NLT_NativeWindows.question (NLT_NativeInvocation.actual r) = NLT_NativeWindows.question r.entered) ∧
+              (∀ r ∈ records, NLT_Root.CallLaw H r) ∧
+                ∀ (inside : NLL.History),
+                  NLT_Chronology.completed records = some inside →
+                    NLP_EffectOrder.expand (NLP_C04Chronology.atEvent H)
+                        (List.map NLT_NativeInvocation.actual records) =
+                      inside) ∧
+    ∀ (records : List (NLT_NativeInvocation.Occurrence H (NLT_RuntimeDigest.digest H) ())),
+      ¬NLT_NativeInvocation.Invalid H (NLT_RuntimeDigest.digest H) ()
+          (NLT_NativeSource.skeleton H (NLT_RuntimeDigest.digest H) pub proof ck ()) records
+def NLT_Root.CallLaw : (H : Bytes → State) → NLT_NativeInvocation.Occurrence H (NLT_RuntimeDigest.digest H) () → Prop :=
+fun H r =>
+  NLT_AllocationInstalled.ResumeLaw (NLT_RuntimeDigest.digest H) () r.entered r.input ∧
+    NLT_NativeFacts.ResumeScope r.entered r.input ∧
+      NLT_AllocationInstalled.PendingLaw r.entered r.input ∧
+        NLT_QueryInstalled.Law r.entered r.input ∧
+          NLT_FinishInstalled.Law r.entered r.input ∧
+            NLT_C04Installed.Law H r.detail ∧ NLT_ReplyInstalled.Law H r.detail
+theorem NLW_RowSpec_065.root0_same : ∀ (ck proof : Slice U8),
+  NLW_Root0.Binds ck proof ↔ NLP_InputDomain.Root0 ck proof :=
+fun ck proof => Iff.rfl
+'NLW_RowSpec_065.root0_same' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6d25787f567347d2bf3f78977dcfb02d.scope; invocation ID: dd5cbae48da44c2f88a8a5dedbc747fb

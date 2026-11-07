@@ -1,0 +1,46 @@
+{"attempt": "NLW_L042", "exit_status": 0, "wall_seconds": 28.289815190946683, "peak_rss_kib": "6418392", "swaps": "0", "print_axioms": ["'NLW_HeapFrame.preserve' depends on axioms: [propext]"]}
+def NLW_HeapFrame.Decodes : {Heap Ambient : Type} →
+  (Heap → ℕ → ℕ → Option (List U8)) →
+    (Heap → Meta → Option (NLM_PacketTypes.World Ambient)) → Native Heap → Frame Ambient → Prop :=
+fun {Heap Ambient} read context native frame =>
+  read native.heap native.metadata.publicAddress native.metadata.publicLength = some ↑frame.args.publicBytes ∧
+    read native.heap native.metadata.proofAddress native.metadata.proofLength = some ↑frame.args.proof ∧
+      read native.heap native.metadata.checkpointAddress native.metadata.checkpointLength =
+          some ↑frame.args.checkpoint ∧
+        context native.heap native.metadata = some frame.world
+theorem NLW_HeapFrame.preserve : ∀ {Heap Ambient : T
+...
+ength = some ↑frame.args.publicBytes ∧
+    read native.heap native.metadata.proofAddress native.metadata.proofLength = some ↑frame.args.proof ∧
+      read native.heap native.metadata.checkpointAddress native.metadata.checkpointLength =
+          some ↑frame.args.checkpoint ∧
+        context native.heap native.metadata = some frame.world
+theorem NLW_HeapFrame.preserve : ∀ {Heap Ambient : Type} (read : Heap → ℕ → ℕ → Option (List U8))
+  (context : Heap → Meta → Option (NLM_PacketTypes.World Ambient)) (before after : Native Heap) (frame : Frame Ambient),
+  after.metadata = before.metadata →
+    after.heap = before.heap → Decodes read context before frame → Decodes read context after frame :=
+fun {Heap Ambient} read context before after frame metadata heap input =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            read after.heap _a.publicAddress _a.publicLength = some ↑frame.args.publicBytes ∧
+              read after.heap _a.proofAddress _a.proofLength = some ↑frame.args.proof ∧
+                read after.heap _a.checkpointAddress _a.checkpointLength = some ↑frame.args.checkpoint ∧
+                  context after.heap _a = some frame.world)
+          metadata))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              read _a before.metadata.publicAddress before.metadata.publicLength = some ↑frame.args.publicBytes ∧
+                read _a before.metadata.proofAddress before.metadata.proofLength = some ↑frame.args.proof ∧
+                  read _a before.metadata.checkpointAddress before.metadata.checkpointLength =
+                      some ↑frame.args.checkpoint ∧
+                    context _a before.metadata = some frame.world)
+            heap))
+        input))
+'NLW_HeapFrame.preserve' depends on axioms: [propext]
+
+Running as unit: run-r958a41ee62554de8b6daaa6dc42584df.scope; invocation ID: efabc0432ba541fc97f3feea82d13278

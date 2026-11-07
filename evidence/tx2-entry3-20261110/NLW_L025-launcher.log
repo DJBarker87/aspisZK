@@ -1,0 +1,56 @@
+{"attempt": "NLW_L025", "exit_status": 0, "wall_seconds": 16.791063725948334, "peak_rss_kib": "6012468", "swaps": "0", "print_axioms": ["'NLW_AuthReturn.entered' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_AuthReturn.marker_frame' does not depend on any axioms"]}
+theorem NLW_AuthReturn.entered : ∀ {Ambient H : Type} (child : Child Ambient) (s : State Ambient H)
+  (v : transport.Variant),
+  NLE_ParseInstall.parse s.args.proof = ok (core.result.Result.Ok v) →
+    NLW_AuthSegments.fold (fun {H} => child) s =
+      { post := (child s.args s.world).post,
+        run :=
+          { result := (child s.args s.world).run.result,
+            events :=
+              [Event.parse s (ok (core.result.Result.Ok v)), Event.parsed s,
+                Event.common s (child s.args s.world)] } } :=
+fun {Ambient H} child s v h =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            { post := (child s.args s.world).post,
+              run :=
+     
+...
+run :=
+                        { result := ok (core.result.Result.Err err),
+                          events := [Event.parse s (NLE_ParseInstall.parse s.args.proof)] } }
+                  | ok (core.result.Result.Ok a) =>
+                    have c := (fun {H} => child) s.args s.world;
+                    { post := c.post,
+                      run :=
+                        { result := c.run.result,
+                          events :=
+                            [Event.parse s (NLE_ParseInstall.parse s.args.proof), Event.parsed s, Event.common s c] } })
+                h)
+              (congrArg (Observation.mk (child s.args s.world).post)
+                (congrArg (NJU_Log.Run.mk (child s.args s.world).run.result)
+                  (congrFun' (congrArg List.cons (congrArg (Event.parse s) h))
+                    [Event.parsed s, Event.common s (child s.args s.world)])))))
+          { post := (child s.args s.world).post,
+            run :=
+              { result := (child s.args s.world).run.result,
+                events :=
+                  [Event.parse s (ok (core.result.Result.Ok v)), Event.parsed s,
+                    Event.common s (child s.args s.world)] } })
+        (eq_self
+          { post := (child s.args s.world).post,
+            run :=
+              { result := (child s.args s.world).run.result,
+                events :=
+                  [Event.parse s (ok (core.result.Result.Ok v)), Event.parsed s,
+                    Event.common s (child s.args s.world)] } })))
+@[defeq] theorem NLW_AuthReturn.marker_frame : ∀ {Ambient H : Type} (s : State Ambient H),
+  NLW_AuthSegments.marker s = s :=
+fun {Ambient H} s => rfl
+'NLW_AuthReturn.entered' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_AuthReturn.marker_frame' does not depend on any axioms
+
+Running as unit: run-rd04200caf4734c7b883d6bf528ef4de3.scope; invocation ID: 128faf0ed4c5405294a0ade0e15318a4

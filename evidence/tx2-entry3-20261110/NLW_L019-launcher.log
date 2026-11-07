@@ -1,0 +1,30 @@
+{"attempt": "NLW_L019", "exit_status": 0, "wall_seconds": 19.26078630099073, "peak_rss_kib": "6010232", "swaps": "0", "print_axioms": ["'NLW_ActualScope.scope' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_ActualScope.scope : ∀ (ops : AdapterRw.Ops) (e : Entry) (account proof checkpoint : Slice U8)
+  (publicBytes : Std.Array U8 1880#usize) (start end_ : Usize) (pa pra ca : ℕ),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 0 58295 58295) =
+      ok (core.result.Result.Ok account) →
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 6 1768 1768) =
+        ok (core.result.Result.Ok checkpoint) →
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok start →
+        (account.len != end_) = false →
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) account
+        
+...
+theorem NLW_ActualScope.scope : ∀ (ops : AdapterRw.Ops) (e : Entry) (account proof checkpoint : Slice U8)
+  (publicBytes : Std.Array U8 1880#usize) (start end_ : Usize) (pa pra ca : ℕ),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 0 58295 58295) =
+      ok (core.result.Result.Ok account) →
+    AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (e.snapshot 6 1768 1768) =
+        ok (core.result.Result.Ok checkpoint) →
+      AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops = ok start →
+        (account.len != end_) = false →
+          core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) account
+                { start := start, «end» := end_ } =
+              ok proof →
+            NLE_SafeCuts.Scope (NLE_CallerScope.metadata pa pra ca publicBytes.to_slice proof checkpoint) :=
+fun ops e account proof checkpoint publicBytes start end_ pa pra ca readProof readCheckpoint startCall guard range =>
+  let ⟨⟩ := ok start
+  Eq.mp (congrArg (fun _a => _a = ok start) (NLW_StartScope.proof_start ops)) startCall
+'NLW_ActualScope.scope' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r3293a36de75f4f399caae3dc013bb2b7.scope; invocation ID: 7c704a00cbe94d48bcf7dcab44a4bfde

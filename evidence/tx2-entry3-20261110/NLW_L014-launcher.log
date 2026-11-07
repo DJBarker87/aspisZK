@@ -1,0 +1,54 @@
+{"attempt": "NLW_L014", "exit_status": 0, "wall_seconds": 28.585343119921163, "peak_rss_kib": "6017504", "swaps": "0", "print_axioms": ["'NLW_AuthPrefixes.reject' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_AuthPrefixes.abort' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_AuthPrefixes.diverge' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_AuthPrefixes.reject : ∀ {Ambient H : Type} (child : Child Ambient) (s : State Ambient H)
+  (err : verifier.Error),
+  NLE_ParseInstall.parse s.args.proof = ok (core.result.Result.Err err) →
+    NLW_AuthSegments.fold (fun {H} => child) s =
+      { post := s.world,
+        run :=
+          { result := ok (core.result.Result.Err err),
+            events := [Event.parse s (ok (core.result.Result.Err err))] } } :=
+fun {Ambient H} child s err h =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            { post := s.world,
+              run :=
+                { result := ok (core.result.Result.Err err),
+                  events := [Event.parse s (ok (core.result.Res
+...
+n'
+          (congrArg Eq
+            (Eq.trans
+              (congrArg
+                (fun x =>
+                  match x with
+                  | fail err =>
+                    { post := s.world,
+                      run := { result := fail err, events := [Event.parse s (NLE_ParseInstall.parse s.args.proof)] } }
+                  | div =>
+                    { post := s.world,
+                      run := { result := div, events := [Event.parse s (NLE_ParseInstall.parse s.args.proof)] } }
+                  | ok (core.result.Result.Err err) =>
+                    { post := s.world,
+                      run :=
+                        { result := ok (core.result.Result.Err err),
+                          events := [Event.parse s (NLE_ParseInstall.parse s.args.proof)] } }
+                  | ok (core.result.Result.Ok a) =>
+                    have c := (fun {H} => child) s.args s.world;
+                    { post := c.post,
+                      run :=
+                        { result := c.run.result,
+                          events :=
+                            [Event.parse s (NLE_ParseInstall.parse s.args.proof), Event.parsed s, Event.common s c] } })
+                h)
+              (congrArg (Observation.mk s.world)
+                (congrArg (NJU_Log.Run.mk div) (congrFun' (congrArg List.cons (congrArg (Event.parse s) h)) [])))))
+          { post := s.world, run := { result := div, events := [Event.parse s div] } })
+        (eq_self { post := s.world, run := { result := div, events := [Event.parse s div] } })))
+'NLW_AuthPrefixes.reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_AuthPrefixes.abort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_AuthPrefixes.diverge' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r66230cf7a9354a3a8b02123ef182ed46.scope; invocation ID: 2bc14ed98776495abc2ea3e513e381b2

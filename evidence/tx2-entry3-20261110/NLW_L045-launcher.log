@@ -1,0 +1,36 @@
+{"attempt": "NLW_L045", "exit_status": 0, "wall_seconds": 7.099734338000417, "peak_rss_kib": "4349644", "swaps": "0", "print_axioms": ["'NLW_WriterRoot0.encoded' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_WriterRoot0.encoded : ∀ (H : Bytes → State) (stored pub : Bytes) (p : Prepared)
+  (a : QueryAccumulator.State K E), slice (encode H stored pub p a) 112 32 = bytes (p.roots 0) :=
+fun H stored pub p a =>
+  let header := OraclePortPhysicalFrameDraft.magic ++ [2, 10, 1, 0, 0, 0, 0, 0];
+  let pre := header ++ bytes (H stored) ++ bytes (H pub) ++ bytes p.state;
+  let after :=
+    [bytes (p.roots 1), encodeE p.gamma, encodeE p.kappa, encodeE (p.alpha 0), encodeE (p.alpha 1), encodeK p.rho,
+          queryBytes p.queries, encodeKs p.semanticAlpha, encodeKs p.coordinates, encodeE p.claim, encodeE a.rhs,
+          encodeK a.power, encodeKs a.weights].flatten ++
+      bytes (H (OraclePortPh
+...
+                                                                      ⋯)))))))))))))))))))
+                                                          (congrArg (HAppend.hAppend (encodeE a.rhs))
+                                                            (List.append_assoc (encodeK a.power) (encodeKs a.weights)
+                                                              (bytes
+                                                                (H
+                                                                  (OraclePortPhysicalFrameDraft.domain ++
+                                                                    (OraclePortPhysicalFrameDraft.magic ++
+                                                                      ([2, 10, 1, 0, 0, 0, 0, 0] ++
+                                                                        (bytes (H stored) ++
+                                                                          (bytes (H pub) ++
+                                                                            (bytes p.state ++
+                                                                              (bytes (p.roots 0) ++
+                                                                                (bytes (p.roots 1) ++
+                                                                                  (encodeE p.gamma ++
+                                                                                    (encodeE p.kappa ++
+                                                                                      (⋯ ++
+                                                                                        ⋯)))))))))))))))))))))))))))))))))))))
+              ⋯)
+            ⋯))
+        ⋯);
+  ⋯
+'NLW_WriterRoot0.encoded' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rfe96245c140d4bb1add684d5f8973183.scope; invocation ID: 759d090222a34840b511966264820b2e

@@ -1,0 +1,35 @@
+{"attempt": "NLW_L030", "exit_status": 0, "wall_seconds": 24.977755704894662, "peak_rss_kib": "6409472", "swaps": "0", "print_axioms": ["'NLW_064Common.install' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_064Common.install : ∀ (H : Bytes → State),
+  ChildBridge H →
+    ∀ (a : Args),
+      (↑a.publicBytes).length ≤ 1880 →
+        NLW_Root0.Binds a.checkpoint a.proof →
+          ∀ (v : transport.Variant),
+            NLE_ParseInstall.parse a.proof = ok (core.result.Result.Ok v) →
+              ∀ (result : Result Reply) (records : Records H),
+                NLT_NativeInvocation.Invocation H (NLT_RuntimeDigest.digest H) () (childCode H a) result records →
+                  CommonFacts H a result records :=
+fun H bridge a publicBound root0 v parsed result records child =>
+  have size := (NLE_ParseInstall.success a.proof v parsed).right;
+  have packet :=
+    bridge a.publicBytes a.proo
+...
+theorem NLW_064Common.install : ∀ (H : Bytes → State),
+  ChildBridge H →
+    ∀ (a : Args),
+      (↑a.publicBytes).length ≤ 1880 →
+        NLW_Root0.Binds a.checkpoint a.proof →
+          ∀ (v : transport.Variant),
+            NLE_ParseInstall.parse a.proof = ok (core.result.Result.Ok v) →
+              ∀ (result : Result Reply) (records : Records H),
+                NLT_NativeInvocation.Invocation H (NLT_RuntimeDigest.digest H) () (childCode H a) result records →
+                  CommonFacts H a result records :=
+fun H bridge a publicBound root0 v parsed result records child =>
+  have size := (NLE_ParseInstall.success a.proof v parsed).right;
+  have packet :=
+    bridge a.publicBytes a.proof a.checkpoint size publicBound
+      ((NLW_RowSpec_065.root0_same a.checkpoint a.proof).mp root0);
+  packet.left result records child
+'NLW_064Common.install' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r805fc0271e864966b42746514e9b30ef.scope; invocation ID: 23d6a5d41d1c4c38801c3c413a32ca2c
