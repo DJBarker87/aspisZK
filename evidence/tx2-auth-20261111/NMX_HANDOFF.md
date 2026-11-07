@@ -141,3 +141,7 @@ all launch caps and timeout/admission policies are unchanged.
 ## Revision 2 resumption: R0
 
 Prior receipts count287 formal scopes,2 extraction,0 Kani. Latest allowance supplies at least150 further formal scopes (total437); no extraction. L481 repaired retention PASS:41.108s,366716KiB,swap0. Full revision1 support export retained; no row root inferred. Revision2 getter clone abort arms replace the former target mismatch without narrowing DomainTrue. Original revision1 proofs remain historical support and must not be loaded as revision2 evidence. NMM still has no217/234 candidates.
+
+## Revision 2 R1 checkpoint
+
+Original RSL module owners rebuilt privately at L483–487 from the exact five committed revision2 sources. L482 failed solely on the missing own output directory; the corrected input creates it before compilation. New NMX_R2_CanonicalTarget (L500) aliases the exact revised233/234/217. Canonical continuations CB00–05 now include three data clone sites and the data_len site in the checkpoint guard. Carrier/key/source-cut layers are accepted individually; dependent observation folds are WIP until their receipts exist. Old revision1 modules are not reused when transitively importing RSL; the generated NMX_R2 names isolate every such dependency. New WIP modules do not constitute a candidate root.
