@@ -7,3 +7,7 @@ Route: this job owns G1a/G1c/R0-rep/case split, not a fresh native row. The expl
 Validation: not yet run. Budget 0/250 scopes. Coherent host seed planned from NLX export plus NMN objects, read-only sources copied into own workspace. One scope at a time;6G/8G/swap0/tasks64,-M7000; admission allowed:true AND exit0;disk>=40GB; whole-host running codex scope count<6.
 
 Next: weak common law, success-to-header, authenticated lift, native selection without SourceCuts.second, byte representation, collision/case split, own-root raw audit and ledger24 combined import.
+
+## Stage 1: weak native verifier law
+NNC_CommonWeak.root, NNC_ResumeHeader.native_ok and NNC_064Weak.root/accepted_header compile on the seeded closure (L001-L003), standard axioms only. Domain is exactly proof57607/checkpoint1768/public<=1880, without Root0. All resolved results/events and stopped source prefixes are retained; C04 oracle expansion is deliberately absent. The accepted native064 outcome implies the original resume's checkpoint header matched H(proof),H(pub). No headline call/extraction.stage2 is used. Budget3/250 scopes,0 Kani,0 extraction.
+Own runner repair: share-check/wait rows do not have module/exit_status fields; filtering uses get, preserving direct-import hash/exit validation. Prelaunch parser failure launched no scope. Private seed43 files/3423841bytes, hashes NNC_SEED.json.

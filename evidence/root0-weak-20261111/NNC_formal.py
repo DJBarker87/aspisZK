@@ -7,12 +7,12 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
     assert kind in ['lean','link','audit','inspect'],'No Kani or extraction submissions'
     if kind=='lean':
         done=[json.loads(l) for l in (E/'NNC_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x['kind']=='lean' for x in done)<250,'Actual Lean compiler budget exhausted'
+        assert sum(x.get('kind')=='lean' for x in done)<250,'Actual Lean compiler budget exhausted'
         if target not in ['NNC_COMBINED_IMPORT','NNC_ProofDriver','NNC_ScanDriver']:
-            assert sum(x['kind']=='lean' for x in done)<248,'Reserve two final import/audit compiler slots'
+            assert sum(x.get('kind')=='lean' for x in done)<248,'Reserve two final import/audit compiler slots'
     if kind=='kani':
         done=[json.loads(l) for l in (E/'NNC_ATTEMPTS.jsonl').read_text().splitlines()]
-        assert sum(x['kind']=='kani' for x in done)<40,'Actual cargo-kani budget exhausted'
+        assert sum(x.get('kind')=='kani' for x in done)<40,'Actual cargo-kani budget exhausted'
     assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in [json.loads(l) for l in (E/'NNC_ATTEMPTS.jsonl').read_text().splitlines()])<250,'80 total scope budget exhausted'
     env=json.loads((E/'NNC_ENV.json').read_text())
     env['TMPDIR']=B+'/NNC_tmp'
@@ -24,7 +24,7 @@ def run(a,kind,target,command=None,extra=None,env_extra=None):
         text=(E/(target+'.lean')).read_text()
         for dep in re.findall(r'^import (NNC_[\w.]+)',text,re.M):
             h=sha((E/(dep+'.lean')).read_bytes())
-            assert any(x['module']==dep and x['exit_status']==0 and h in x['source_hashes'].values() for x in [json.loads(l) for l in (E/'NNC_ATTEMPTS.jsonl').read_text().splitlines()]),'Compile current direct import first: '+dep
+            assert any(x.get('module')==dep and x.get('exit_status')==0 and h in x['source_hashes'].values() for x in [json.loads(l) for l in (E/'NNC_ATTEMPTS.jsonl').read_text().splitlines()]),'Compile current direct import first: '+dep
         src='NNC_generated/'+target.replace('.','/')+'.lean';files[src]=text
         command=[env['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNC_generated','-o','NNC_objects/'+target.replace('.','/')+'.olean',src]
         if target in ['NNC_ProofDriver','NNC_ScanDriver']:command+=['-c','NNC_native/'+target+'.c']
