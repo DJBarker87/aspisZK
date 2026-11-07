@@ -9,3 +9,5 @@ Local discovery repair: pin-output hash values may be nested dictionaries; recur
 Only whole-byte identity or NHR discriminant metadata removal establishes reproduction. Namespaces, imports, parameters and checked/wrapping arithmetic remain visible. Any comparison without a compiled equality or semantic witness stays UNCLASSIFIED. The sole inherited reproduced blob retains NMH's original receipt rather than spending an unchanged replay.
 
 Archived full-package extension: Cargo package/lib paths in the producing packet are recorded with Git blobs, even where full configuration is absent. Executable additions require the recorded command output LLBC name, exact embedded source SHA256, and matching start/include/opaque options. Original package files are retained. A historical --locked command with an unarchived lock may fail; no lock or flag is silently fabricated or relaxed.
+
+Receipt-context repair before any submission: source revision/dirty state is refreshed after admission waits, immediately before uploading exact source snapshots. The initial local share waiter was terminated with no admission or submitted scope and restarted; zero tool charge.

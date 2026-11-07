@@ -53,6 +53,9 @@ print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
  if (r.returncode==78 or ad.get('allowed') is False) and n<10:
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
+# Refresh revision after potentially long share/reservation waits. Exact source hashes remain independently retained.
+cfg["source_revision"]=subprocess.check_output(["git","rev-parse","HEAD"],cwd=E,text=True).strip()
+cfg["source_tree_dirty"]=bool(subprocess.check_output(["git","status","--porcelain"],cwd=E,text=True).strip())
 # Upload only owned configuration / source inputs, after admission.
 files={a+'.json':base64.b64encode(json.dumps(cfg).encode()).decode()}
 for name in cfg.pop('upload',[]):files[name]=base64.b64encode((E/name).read_bytes()).decode()

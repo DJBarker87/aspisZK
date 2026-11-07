@@ -1,11 +1,19 @@
 # NML archive extraction provenance handoff
 
-Target not yet established. Work in progress; no reproduction credit claimed.
+**Target not yet established.** Branch codex/cx-emission-repro2-20261107. Local commits only; no push.
 
-Scope: recover actual archived reference inputs and configurations for NMH gaps, run pinned Charon/Aeneas only through NHR_stage.py, classify the 17 byte differences with Lean equality evidence where justified, and conservatively recompute affected CLOSED rows. No Kani, row proof, ledger/trust edit, or shipped-source edit is authorized.
+Scope: archived-input provenance for 336 NMH blobs, including the 195 reference-crate and 81 configuration gaps; semantic classification of 17 byte differences. No Kani, row proof, ledger edit, trust edit or shipped-source edit.
 
-Budgets: 40 Charon / 40 Aeneas / 20 Lean / 0 Kani. One admitted capped scope at a time: MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64. Host workspace /home/dombarker/project-offloads/codex-cx-emission-repro2-20261110. Stream A saturation and disk checks precede every submission. Frozen crates/verifier/lock 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; Pool b936275465, ELF e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc (corrects the old NMH handoff pin).
+Current verdicts: {'NOT_REPRODUCED': 335, 'REPRODUCED_FROM_ARCHIVE': 1}. Conservative remaining CLOSED-row impact: 563/581, with rootless TX1:059/TX2:040 still unassessed. This is the unchanged NMH lexical declaration/root-list method, not a selected-source/object certification and not a row reopening.
 
-No assumptions discharged, added or changed. Headline AspisR1.RPx_Deployed.deployed, L154 statement parameter, D188 narrowed. No theorem added; #print axioms not applicable yet. No wallet operation. No shipped change means no ELF rebuild trigger. Commits remain local, no push.
+30 recovered input groups; 40 distinct planned configurations. Completed extraction scopes: 0/40. Tool charges: {'Charon': 0, 'Aeneas': 0, 'Lean': 0, 'Kani': 0}; limits 40 Charon / 40 Aeneas / 20 Lean / 0 Kani. All remaining members and classification obligations are listed in NML_REMAINING.md. Work continues after share admission.
 
-Archive input map and 40 distinct serial configurations are now committed, covering 30 input groups. The share gate is currently waiting; no extraction or Lean result is claimed yet. Missing configuration and source ambiguity remain explicit. Final receipts will record command, exact inputs/tool pins, revision, exit, wall, peak RSS, swap and axioms status.
+NML_INPUT_MAP.json records producing receipts, Git blobs, exact embedded-LLBC source hashes, manifests and configurations. NML_PLAN.json records the grouped commands. NML_PROVENANCE.json covers every blob; NML_DEFINITION_COMPARISONS.json.xz retains exact declaration segment comparisons. Only whole-byte identity or NHR_parameterize.py discriminant metadata removal is accepted. Namespace/import/parameter changes are never normalized away.
+
+The unchanged pinned NHR_stage.py performs frozen source/graph/lock/tool checks. Owned controllers independently check archived source/manifests. Host workspace /home/dombarker/project-offloads/codex-cx-emission-repro2-20261110 only; one scope at a time. Every submitted scope requires Stream A count <2, reservation exit0 AND allowed:true, >=40 GB free, and exact caps 6G high / 8G max / swap0 / 64 tasks. Receipts retain command, tool pins, input hashes, source revision, exit, wall, peak RSS, swap and axioms status. Current scoped wall 0.000s; maximum process RSS 0KiB. Refusals are recorded waits, not launches.
+
+Frozen crates/verifier/lock 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; Pool b936275465. Correct inherited Pool ELF: e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc; default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299. These are inherited artifact pins, not rebuilt here. No shipped change triggers a rebuild. No wallet/key operation occurred.
+
+No assumption is added, discharged or changed. Headline remains AspisR1.RPx_Deployed.deployed; L154 is a statement parameter; D188 remains narrowed. Uncompiled external templates are evidence only and never trusted new axioms. Lean checks, if successful, classify exact compared bodies only and do not close a native caller row.
+
+Validation: NML_tests.py rejects namespace/body/addition/partial-match mutants; NML_validate.py audits coverage, budgets, source hashes, admitted/capped receipts and 20 MB hygiene. PASS_WITH_PROVENANCE_GAPS is never a universal extraction or 100-bit security pass.
