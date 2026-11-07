@@ -320,7 +320,7 @@ theorem Spec.bind_det {α β : Type} (m : Spec α) (k : α → Spec β) (env : E
   · intro h
     exact Or.inl ⟨x, [], o, (hm _).mpr rfl, h, by cases o; rfl⟩
 
-/-- A `throw` reference admits exactly one observation. -/
+
 theorem RS.throw_obs {α : Type} (e : ProgramError) (env : Env) (o : Obs (Except ProgramError α)) :
     (RS.throw e : RS α) env o ↔ o = ⟨.ret (.error e), []⟩ := Iff.rfl
 
@@ -499,5 +499,29 @@ def snapshot (a : AccountInfo) (length1 length2 : Nat) (s : SdkState) :
           Spec.bind (release a t .shared s1) (fun s2 =>
             Spec.pure (⟨a.key, a.owner, a.is_signer, a.is_writable, a.executable,
               .ok n, if admitted then .ok data else .error .invalidAccountData⟩, s2))))
+
+
+/-- Nonempty event logs propagate through `bind` from the first step. -/
+theorem Spec.bind_nonempty {α β : Type} (m : Spec α) (k : α → Spec β) (env : Env) (o : Obs β)
+    (hm : ∀ o', m env o' → o'.events ≠ []) (h : Spec.bind m k env o) : o.events ≠ [] := by
+  rcases h with ⟨a, e1, o2, h1, _, ho⟩ | ⟨e1, h1, ho⟩ | ⟨e1, h1, ho⟩
+  · subst ho; have := hm _ h1; simp only at this ⊢; intro hc
+    exact this (List.append_eq_nil_iff.mp hc).1
+  · subst ho; exact hm _ h1
+  · subst ho; exact hm _ h1
+
+theorem Spec.emit_bind_nonempty {β : Type} (ev : Event) (k : Unit → Spec β) (env : Env) (o : Obs β)
+    (h : Spec.bind (Spec.emit ev) k env o) : o.events ≠ [] := by
+  obtain ⟨rest, hr⟩ := Spec.bind_emit_head ev k env o h
+  rw [hr]; exact List.cons_ne_nil _ _
+
+theorem acquire_nonempty (a : AccountInfo) (k : Kind) (s : SdkState) (env : Env)
+    (o : Obs (Except ProgramError Nat × SdkState)) (h : acquire a k s env o) : o.events ≠ [] := by
+  unfold acquire at h
+  cases k <;> (simp only at h; split at h <;> exact Spec.emit_bind_nonempty _ _ _ _ h)
+
+theorem snapshot_nonempty (a : AccountInfo) (l1 l2 : Nat) (s : SdkState) (env : Env)
+    (o : Obs (OwnedAccount × SdkState)) (h : snapshot a l1 l2 s env o) : o.events ≠ [] :=
+  Spec.bind_nonempty _ _ _ _ (fun o' h' => acquire_nonempty a .shared s env o' h') h
 
 end RSL

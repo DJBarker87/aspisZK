@@ -10,7 +10,7 @@ for f in "$@"; do
   wall=$(printf '%s\n' "$out" | awk '/ real /{print $1}')
   rss=$(printf '%s\n' "$out" | awk '/maximum resident set size/{print $1}')
   swaps=$(printf '%s\n' "$out" | awk '/ swaps$/{print $1}')
-  printf '%s\texit=%s\twall_s=%s\tpeak_rss_bytes=%s\tswaps=%s\n' "$f" "$rc" "$wall" "$rss" "$swaps" | tee -a RSL_COMPILE_LOG.tsv
+  printf '%s\texit=%s\twall_s=%s\tpeak_rss_bytes=%s\tswaps=%s\n' "$f" "$rc" "$wall" "$rss" "$swaps" | tee -a "${RSL_LOG:-RSL_COMPILE_LOG.tsv}"
   printf '%s\n' "$out" | grep -v '^ *[0-9]\+  [a-z]' | grep -v ' real ' | head -60
   [ $rc -ne 0 ] && exit $rc
 done
