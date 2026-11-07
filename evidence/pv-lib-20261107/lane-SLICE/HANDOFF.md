@@ -63,3 +63,5 @@ Attempt 49624: PV_W5_F32FormatJoin, passed pinned focused replay.
 Attempt 49625: PV_W5_F32PanicCall, passed pinned focused replay.
 
 Attempt 49626: PV_W5_F32PanicPrefix, passed pinned focused replay.
+
+Attempt 49627: PV_W5_F32FormatFrame, passed pinned focused replay.
