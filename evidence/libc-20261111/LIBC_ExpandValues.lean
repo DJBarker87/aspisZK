@@ -17,7 +17,7 @@ def child : Child (Bytes × Bytes) (Except CodecErr Bytes) :=
  LIB_Carriers.ofFn Domain value (fun _ _ => [])
 /-- A native Err is exactly Length on this complete leaf domain (native_result).
 Its mutable byte frame is exported before the RSL Result carrier port. -/
-def port (r : core.result.Result Unit NFU_Retarget.compact.CodecError × Slice U8) :
+def port (r : core.result.Result Unit NFU_Retarget.LPl_Kit_Release.compact.CodecError × Slice U8) :
  Except CodecErr Bytes := match r.1 with
  | .Ok _ => .ok (LIB_Carriers.bytes r.2)
  | .Err _ => .error .Length
@@ -25,8 +25,12 @@ theorem native_result (a : Bytes × Bytes) (h : Domain a) :
  NFU_Retarget.compact.expand_values (LIBC_Bytes.raw a.1) (LIBC_Bytes.raw a.2) =
  ok (if Good a then (.Ok (),LIBC_ExpandValuesModel.output (LIBC_Bytes.raw a.1) (LIBC_Bytes.raw a.2))
      else (.Err .Length,LIBC_Bytes.raw a.2)) := by
- have b1 : a.1.length ≤ Usize.max := by have : 1856 ≤ Usize.max := by scalar_tac;omega
- have b2 : a.2.length ≤ Usize.max := by have : 3712 ≤ Usize.max := by scalar_tac;omega
+ have b1 : a.1.length ≤ Usize.max := by
+  have big : 1856 ≤ Usize.max := by scalar_tac
+  exact Nat.le_trans h.1 big
+ have b2 : a.2.length ≤ Usize.max := by
+  have big : 3712 ≤ Usize.max := by scalar_tac
+  exact Nat.le_trans h.2 big
  have l1 := LIBC_Bytes.raw_length a.1 b1
  have l2 := LIBC_Bytes.raw_length a.2 b2
  rw [LIBC_ExpandValuesModel.source _ _ (by rw [l1];exact h.1),l1,l2]
