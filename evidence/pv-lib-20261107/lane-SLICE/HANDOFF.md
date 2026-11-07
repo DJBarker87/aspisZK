@@ -86,3 +86,5 @@ D978 attempt 49911: PV_FN_SLICE_f7_RuntimeDrop: passing pinned replay.
 D978 49912: full runtime Drop adapter compiled (exit0, wall0:02.14, peak4812488KiB, swaps0). Exact source178 suffix graph and installed-handler binding; no full f7 row closure. All14 pinned RuntimeDrop prerequisites passed. Raw audit pending new roots.
 
 D978 attempt 49913: PV_STX2_Source7EntryOwnedRegistered: passing pinned replay.
+
+D978 attempt 49914: PV_STX2_Source7EntryOwnedWellFormed: passing pinned replay.
