@@ -153,3 +153,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49856 passed exact pinned replay PV_THR2_ClosureBoxActivationReply; see receipt for time/RSS/swap/revision/axioms.
 
 49857 passed exact pinned replay PV_THR2_OperatorSemantics_14119; see receipt for time/RSS/swap/revision/axioms.
+
+49858 passed exact pinned replay PV_THR2_OperatorSemantics_14121; see receipt for time/RSS/swap/revision/axioms.
