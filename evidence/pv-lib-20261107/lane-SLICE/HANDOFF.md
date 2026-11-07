@@ -9,3 +9,5 @@ No endpoint premises removed/added. Target not yet established.
 Root HANDOFF.md is the base handoff; the requested nested HANDOFF.md is absent at base.
 
 Next: focused pinned f32/f33 replay then deterministic provider graphs.
+
+Attempt 49600: PV_W5_LocalClears, passed pinned focused replay.
