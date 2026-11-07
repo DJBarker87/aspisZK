@@ -44,3 +44,57 @@ Native small carriers are explicit bounded diagnostic/call-boundary classes unti
   hashing/export, before tool-pin/retention completion. L080 supplies that
   archived file and passes the same validation; no proof replay, timeout/cap
   change, shared infrastructure fix or final credit from L079.
+
+- NMV-E2 (bn resume): E003/L081 Charon translated both generic, guard-free
+  fission wrappers, Aeneas failed with internal `Not_found` in context-collapse
+  joining (not guard Drop). E004/L082 isolates only stage2 and reproduces the
+  internal context-join failure (0.781s/141504KiB/swap0). Neither emitted a body;
+  the two-extraction allowance is spent. This generic-log extraction family is
+  retired. Proceed to (bn)'s explicit-window Kani fallback, retaining the exact
+  mechanically checked copies. No body or post-loop-return audit pass is claimed.
+
+- NMV-K9: K045 combines two independent full ProgramError enum generators
+  (Clock and child), symbolic child Vec extents and whole-argument coordinate
+  checks. It times out at the unchanged90s external limit; no verdict/credit.
+  This cross-product shape is retired. Split into full child reply with
+  successful Clock, and full Clock reply with successful child. The source
+  wrapper is unchanged; each independent reply/argument/footprint check is
+  retained. No timeout/cap increase, no unchanged rerun. Reported parent/time
+  RSS is only the timeout wrapper, never aggregate CBMC memory.
+
+- NMV-K10: K046's strengthened whole-reply/whole-coordinate checker also
+  times out90s. Retire the combined checker family after its two failures;
+  do not run its remaining controls. Replacement is independent, disjoint
+  slice-descriptor forwarding (pointer+length, immutable input), full Clock
+  reply forwarding to an owned local slot, and checkpoint Vec descriptor
+  forwarding. Original K035-K044 full-child enum/control evidence is retained.
+  These cuts add the missing descriptor/Clock facts without another enum
+  cross product or native payload scan. Every buffer-content law stays Lean.
+
+- NMV-L1: L099's generic write-free automation for241 hit Lean's default
+  heartbeat limit (200000) during whnf, with no wall/memory cap increase.
+  The completed233/242 lemmas are isolated in NMV_NoWriteOwned;241 moves to
+  NMV_NoWrite241 with explicit one-call-at-a-time composition. No heartbeat
+  option is added, and the timed-out automation is retired.
+
+## Binding native-control disposition (bn continuation)
+
+NMV-CONTROL-1: On final statement review the argument controls K037/K043
+mutate `Log::args`'s recorded Owned argument, and K049/K053 mutate its
+recorded slice address. The parent call site itself is unchanged. These
+are RECEIVER-LOG MUTATIONS, not the PARENT-ARGUMENT mutants required by
+(bj)/(bl). Their FAIL verdicts are real but do not satisfy that required
+control. Native closure for344/240 is therefore NOT established; no native
+producer or CANDIDATE is claimed. Earlier progress phrases saying all three
+required controls passed are superseded by this disposition. The positive
+certificates, reply-dependence and omitted-footprint failures remain evidence
+within their actual classes, not whole-row credit. This finding does not
+withdraw or alter a trust row.
+
+All26 newly authorized Kani scopes are spent (K035-K060), including the two
+retired timeouts. Two correctly scoped parent-call-site controls are prepared
+as pending source, using the unmodified Log<0> receiver and perturbing only
+`&owned` to `&owned[1..]` at the actual fission child call. They have NOT run.
+No scope is relabelled or charged to the Lean allowance. A new Kani allowance
+is required to run them; no additional Kani is launched in this continuation.
+Lean-only composition and gates continue under the remaining formal budget.

@@ -1,3 +1,5 @@
+CURRENT (bn continuation): target not established; 344/240 remain OPEN. Full-carrier concrete window folds and exact TAS fields compile; mandatory parent-argument controls are NOT satisfied (NMV-CONTROL-1). Children345/241 and four canonical library effect-law installations remain open. Historical stop reasons and progress claims below are superseded where noted.
+
 FINAL STATUS: target not established; no CANDIDATE wrapper root, no row credit. Canonical full-strength parametric transcription folds and Root0-free weak-instance G2 state frame PASS. Actual universal native producers and child345/241 installation remain OPEN. Historical stage notes follow; the250 formal-scope amendment supersedes the original50 text.
 
 # NMV stage-wrapper handoff
@@ -63,3 +65,124 @@ FINAL budget:76/250 formal scopes (39 Lean,21 unchanged-spec support,1 optimized
 Final sibling review: NMT32a1a38db02 and NMS8c611eb403c still supply support rather than actual canonical345/241 roots. NMS now has the arbitrary-V canonical241 relational fold; it does not install actual emission/opaque child owners. No sibling worktree was written or proof duplicated.
 
 No candidate wrapper root or row credit. The deliverables are the exact RSL-parametric transcription folds, weak G2 full SDK-cell/token frame, full physical carrier interfaces, bounded controlled native snapshot/guard cuts, and complete remaining-obligation receipts. All final changes are committed locally; no push.
+
+## Resumed under ruling (bn)
+
+New run allowance: 2 extraction, 174 formal scopes, 26 Kani, preserving prior
+receipts and retired families. Both source-fission bodies erase mechanically
+to their frozen bodies using the PCG_ASSOCIATIONS method (NMV_fission.py,
+NMV_ASSOCIATIONS.json). Window arguments retain original program/accounts/data,
+all snapshot length pairs, full Vec/ProgramError child replies, and Clock slot.
+The generic Windows record is explicit/local; no writable static. Snapshot is
+one window interpreted by the existing full SDK/std snapshot law. Mutable
+borrow returns a guard-free handle consumed by the logged copy window.
+First route: fresh pinned extraction of both fission copies together; Kani
+is eligible only if a copy does not emit. Source signatures use abstract
+account/owned/handle descriptors; their interpretation remains a Lean obligation.
+The only new trust reliance is the lead's already-added ReviewedTranscription
+TX1:344/TX2:240 items; no trust-file edit is made here. TAS NMV_Roots is the
+required final interface. No actual row root is yet claimed by this stage.
+
+L081 / resumed E003: Charon PASS, Aeneas exits2 with `Not_found` at
+InterpReduceCollapse.collapse_ctx_following_sequence while joining contexts.
+No Lean body emitted and no native credit. Wall1.722s/RSS143616KiB/swap0.
+Next extraction isolates stage2 from the stage1 mutable handle/copy path;
+this is not an unchanged timeout or memory retry. Kani remains deferred until
+this isolation determines which individual bodies fail emission.
+
+E004/L082 isolated stage2 also fails Aeneas's internal context joining.
+Both resumed extractions are spent. No body emitted, hence no (bc) body audit
+is claimed. Fallback eligibility under (bn) is established for these copies;
+next stage is small symbolic descriptor/local-window Kani and three controls.
+
+## Window fallback and full-carrier composition
+
+Initial native fission classes K035-K044: stage2 full child error/return;
+stage1 full child error, exclusive failure, copy success PASS; each wrapper's
+reply/argument/write-footprint controls FAIL at intended assertions. Exact
+source/input hashes and frozen graph/offline/post-lock receipts retained.
+K045/K046 combined strengthened checker timeouts earn no credit and are
+retired; replacement independent slice/Clock/Vec descriptor cuts are running.
+
+L083 NMV_WindowEval (SDK/std/runtime window laws and exact stopped/returned
+bind) PASS; L085 NMV_WindowClock exact runtime reply/event PASS; L087
+NMV_WindowStage.cut240/cut344 PASS; L088 NMV_WindowRoots.root240/root344,
+weak240/weak_sdk PASS. The roots now produce canonical RowSpecs for the
+window-interpreted fission execution, not an arbitrary supplied wrapper
+observation. Their only external laws are individual SDK/std/runtime laws in
+Windows and full child241/345 packets. No free whole-wrapper producer,
+child-success, endpoint or Root0 premise is introduced. Native-to-full-carrier
+cut association and TAS field checks remain the current gate; no row self-credit.
+L084/L086 are retained local elaboration errors, excluded; changed proofs
+pass with standard axioms. No existing proved module was edited.
+
+L090 NMV_NoWrite primitive effect algebra PASS after changed local equality
+orientation repair (L089 excluded). G2's event clause needs four individual
+PoolLib effect laws (scanProof/reconstruct/encodeStatement/emitResult), not
+only verifier w write-freeness. TAS_WIRING already flags part of this issue;
+no unconstrained library dictionary is silently assumed write-free.
+
+## Concrete interpretation and exact TAS stage
+
+Concrete acquire/release/allocation, snapshot and copy interpretations now
+compile: L101/L102/L108/L109, full carriers and all failure/stopped prefixes.
+`NMV_ConcreteWindows.root240/root344` specialize the window fold without a
+free Windows/Ops or whole-wrapper-result premise. Allocation choices are
+universally quantified per invocation; neither allocation success nor a caller
+buffer bound is assumed. NLF SDK/std/runtime interpretation and the lead's
+ReviewedTranscription344/240 trust items are retained, never claimed removed.
+
+`NMV_TasRoots.field240/field344` match the TAS fields at the SAME Impl child
+constants; `packet` and `weak240/weakFrame` compile L111. This is a statement
+and interpreter proof, NOT an actual native root: the source association is
+OPEN under NMV-CONTROL-1. G2's full event/state clause is proved with explicit
+PoolLaws (scan226, reconstruct224, encode165, emit219) and verifier w effect
+laws; canonical library installation is a slice boundary, not a new caller
+hypothesis/trust item. NMT345 and NMS241 have no candidate at the latest
+committed review (0ee9ec4cc53 /3278354f9fe); no sibling worktree touched.
+
+K035-K060 exhaust THIS continuation's26 Kani scopes. K045/K046 are retired
+90s timeouts. Four receiver-log argument controls are excluded from required
+parent-mutant credit. The two correct parent-call mutants are committed as
+NOT_RUN pending sources; no result is invented, no Kani is charged to the
+formal budget. All remaining independent Lean/gate work continues.
+L091/L093/L094/L096-L099/L103/L104 are retained failed elaborations/automation;
+changed focused proofs pass, and L099's heartbeat shape is retired and split.
+The new raw ax2 and focused combined-import gates are next.
+
+## Final (bn) gate and disposition
+
+L112 final focused NLX closure plus all old/new NMV modules and exact TAS
+package PASS18.0669s/6733664KiB/swap0. L113-L119 raw ax2 audits PASS for all55
+new tops, raw walker/collector agree, only propext/Classical.choice/Quot.sound;
+all have printed axioms. Old74 audits and8 unchanged fidelity fixtures reused,
+not rerun. No all-roots audit, frozen manifest replay, native_decide or added
+axiom/heartbeat option. `NMV_AUDIT.json` records129 total checked tops.
+
+L120 retention PASS0.4751s/86536KiB/swap0:316 selected objects and78 seed files
+rehashed,118 source/object export files retained, unchanged SInt2 launcher hash
+61cf135a…, no inherited dependency variants. Hostfree95838191616bytes;
+workspace1760041853bytes. Prepend NMV_exports_20261111 to the exact inherited
+NMV_ENV.LEAN_PATH and import NMV_BN_COMBINED_IMPORT. Export/tool/closure pins
+are updated. No cache, target, key or external workspace deleted.
+
+Final new budget2/2 extraction,38/174 formal,26/26 Kani; total114/250 formal,
+60/60 Kani. Local validation checks193 archived inputs,882 compressed SHA pairs,
+129 raw/printed standard-only tops and8 retained fixtures; no file>20MB.
+All26 new Kani runs pass frozen graph/offline/features/post-lock validation.
+The two timeouts and four invalid receiver-log argument controls remain explicit.
+
+**No CANDIDATE/actual wrapper root/row credit.** Correct parent-call-site
+argument controls are prepared but unrun; native-to-full-carrier association
+still needs review. Exact model/interpreter TAS fields compile, with the four
+canonical PoolLib effect-law installations exposed for G2. Child345/241 remain
+full-strength parameters: read-only NMT0ee9ec4cc539 and NMS3278354f9fec have no
+candidate. NMV_REMAINING lists every member and why no remaining formal-only
+step closes it. Nothing is charged to another allowance to evade the Kani cap.
+
+ReviewedTranscription344/240 is retained option-A reclassification, no trust
+removed or added here. Frozen verifier/lock4bb3b3f51e16; Poolb936275465. No
+crates/programs/lock changes, hence no ELF rebuild trigger. Inherited ELF pins
+f8c0ec72…/63ad3e9c…/e0e49c34… are inventory, not new reproduction. Frozen3,
+RuntimePersistence, L154 parameter, narrowedD188,100-bit PER-ATTEMPT/privacy/two
+transactions unchanged. No push; no sibling/session-A live worktree touched.

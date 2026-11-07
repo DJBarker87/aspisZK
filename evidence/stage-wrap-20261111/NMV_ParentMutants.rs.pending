@@ -1,0 +1,35 @@
+use super::super::NMV_Fission::*;
+pub fn stage1<W: Windows>(log: &mut W, program_id: &Pubkey, accounts: &[W::Account], data: &[u8]) -> ProgramResult {
+    if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {
+        return Err(ProgramError::InvalidInstructionData);
+    }
+    let owned = [
+        W::snapshot(log, &accounts[0], POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES, POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES),
+        W::snapshot(log, &accounts[1], POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES, POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES),
+        W::snapshot(log, &accounts[2], CHECKPOINT_TAIL_BYTES, CHECKPOINT_TAIL_BYTES),
+    ];
+    let checkpoint = W::stage1_owned(log, program_id, &owned[1..], data)?;
+    W::try_borrow_mut_data(log, &accounts[2])?.copy_from_slice(log, &checkpoint);
+    #[cfg(feature="cu-profiling")]
+    { msg!("r1:pool-adapter-stage1-checkpoint-written"); solana_program::log::sol_log_compute_units(); }
+    Ok(())
+}
+pub fn stage2<W: Windows>(log: &mut W, program_id: &Pubkey, accounts: &[W::Account], data: &[u8]) -> ProgramResult {
+    if accounts.len() != 7 || data.get(..4) != Some(&POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC[..]) {
+        return Err(ProgramError::InvalidInstructionData);
+    }
+    W::set_return_data(log, &[]);
+    #[cfg(feature="cu-profiling")]
+    { msg!("r1:pool-adapter-stage2-begin"); solana_program::log::sol_log_compute_units(); }
+    let owned = [
+        W::snapshot(log, &accounts[0], POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES, POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES + verifier::PROOF_BYTES),
+        W::snapshot(log, &accounts[1], POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES),
+        W::snapshot(log, &accounts[2], POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES),
+        W::snapshot(log, &accounts[3], POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES, POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES),
+        W::snapshot(log, &accounts[4], POOL_V1_VERIFIER_REGISTRY_BYTES, POOL_V1_VERIFIER_REGISTRY_V2_BYTES),
+        W::snapshot(log, &accounts[5], POOL_V1_VERIFIER_ENTRY_BYTES, POOL_V1_VERIFIER_ENTRY_V2_BYTES),
+        W::snapshot(log, &accounts[6], CHECKPOINT_TAIL_BYTES, CHECKPOINT_TAIL_BYTES),
+    ];
+    let current_slot = match W::clock_get(log) { Ok(clock) => Ok(clock.slot), Err(error) => Err(error) };
+    W::stage2_owned(log, program_id, &owned[1..], data, current_slot)
+}
