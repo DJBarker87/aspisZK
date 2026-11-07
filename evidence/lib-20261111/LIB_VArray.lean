@@ -10,6 +10,6 @@ theorem raw_lift {n : Usize} (a : Array RawQ n) (h : Canonical a) :
  array toRaw (lift a h) = a := by
  apply Subtype.ext
  simp only [array,lift,List.map_map,Function.comp_def,toRaw_ofRaw]
- exact List.map_subtype_val_attach a.val
+ simp
 #print axioms raw_lift
 end LIB_VArray
