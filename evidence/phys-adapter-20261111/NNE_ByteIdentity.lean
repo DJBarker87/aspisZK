@@ -6,14 +6,15 @@ open Aeneas Aeneas.Std AspisR1.S2W_ReturnedCheckpoint
 theorem byte (a b : U8) (h : nativeByte a = nativeByte b) : a = b := by
  have hv := congrArg UInt8.toNat h
  have hv' : a.val = b.val := by
-  simpa only [nativeByte,UInt8.toNat_ofNat_of_lt' a.bv.isLt,
-   UInt8.toNat_ofNat_of_lt' b.bv.isLt] using hv
+  have ha : (UInt8.ofNat a.val).toNat = a.val := UInt8.toNat_ofNat_of_lt' a.bv.isLt
+  have hb : (UInt8.ofNat b.val).toNat = b.val := UInt8.toNat_ofNat_of_lt' b.bv.isLt
+  exact ha.symm.trans (hv.trans hb)
  exact UScalar.eq_of_val_eq hv'
 
 theorem list (a b : List U8) (h : a.map nativeByte = b.map nativeByte) : a = b := by
  induction a generalizing b with
  | nil => cases b <;> simp_all
- | cons a as ih =>
+ | cons a xs ih =>
   cases b with
   | nil => simp at h
   | cons b bs =>
