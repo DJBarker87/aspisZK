@@ -30,11 +30,17 @@ for n in [217,312,313,320,134,344]:
     field('thread:f'+str(n),'PV_LIB_PureLeaves','PV_LIB_PureLeaves.model'+str(n),
         'PV_LIB_PureLeaves.law'+str(n),'PV_LIB_PureLeaves.certified'+str(n),
         'Graph of literal CLOSED pure-leaf call function, with separate root certificate. Native binding/source representation validity on the actual caller machine remains the named documented-semantics obligation; arbitrary provider Post is not used as law.')
-if (E/'RAW_AUDIT.json').exists():
-    audit=json.loads((E/'RAW_AUDIT.json').read_text())
-    audited={r['root'] for r in audit['roots'] if r['equal']}
-    for f in fields.values():
-        f['raw_audited']=f['compiled'] and f['theorem'] in audited
-        f['audit_attempt']=audit['attempt'] if f['raw_audited'] else None
+if (E/'SESSION2_FIELDS.json').exists():
+    for f in json.loads((E/'SESSION2_FIELDS.json').read_text()):
+        field(f['row'],f['module'],f['model'],f['law'],f['theorem'],f['qualification'])
+audited=set()
+for audit_path in [E/'RAW_AUDIT.json',E/'SESSION2_RAW_AUDIT.json']:
+    if audit_path.exists():
+        audit=json.loads(audit_path.read_text())
+        roots={r['root'] for r in audit['roots'] if r['equal']}
+        for f in fields.values():
+            if f['compiled'] and f['theorem'] in roots:
+                f['raw_audited']=True
+                f['audit_attempt']=audit['attempt']
 (E/'INSTANCES.json').write_text(json.dumps(fields,indent=2)+'\n')
 print(sum(f['compiled'] for f in fields.values()),'compiled provider fields;',sum(not f['compiled'] for f in fields.values()),'not yet compiled')
