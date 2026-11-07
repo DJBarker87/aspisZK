@@ -34,7 +34,7 @@
 +#[cfg(kani)] #[path="NMX_217_native.rs"] mod NMX_217_native;
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NMX_217_native.rs
-@@ -0,0 +1,22 @@
+@@ -0,0 +1,24 @@
 +use super::*;
 +use crate::NMX_217_reference as R;
 +pub const INVERSE: bool = option_env!("NMX_217_INVERSE").is_some();
@@ -57,6 +57,8 @@
 +    let n:usize=kani::any(); kani::assume(n<=1);
 +    let _=super::decode_lane_from_pool_release(&b[..n]);
 +}
++
++#[path="NMX_217_fidelity.rs"] mod fidelity;
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NMX_217_reference.rs
 @@ -0,0 +1,79 @@
@@ -139,3 +141,31 @@
 +pub fn valid_sequences(seq:&[u64;8])->bool{let mut i=0;while i<8{if seq[i]>1048576{return false}i+=1;}true}
 +pub fn zero_sequences(seq:&[u64;8])->bool{let mut i=0;while i<8{if seq[i]!=0{return false}i+=1;}true}
 +pub fn decode_frontier(tree:&[u8],next:u64)->Result<[[u32;8];20],()>{let mut frontier=[[0u32;8];20];let mut level=0;while level<20{let node=digest(tree,48+32*level)?;frontier[level]=node;if (next>>level)&1==0&&!eq_digest(&node,&EMPTY[level]){return Err(())}level+=1;}Ok(frontier)}
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NMX_217_fidelity.rs
+@@ -0,0 +1,25 @@
++use super::*;
++// Result<Box<Lane>,ProgramError> contract interface controls only.
++#[kani::ensures(|r: &Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>| r.is_err())]
++#[kani::modifies()]
++fn NMX_shape()->Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>{
++    Err(ProgramError::InvalidAccountData)
++}
++#[kani::proof_for_contract(NMX_shape)]
++fn NMX_shape_contract(){let _=NMX_shape();}
++#[kani::proof]
++fn NMX_shape_real(){
++    assert!(matches!(NMX_shape(),Err(ProgramError::InvalidAccountData)),"NMX uninferred caller assertion");
++}
++#[kani::proof]
++#[kani::stub_verified(NMX_shape)]
++fn NMX_shape_stub(){
++    assert!(matches!(NMX_shape(),Err(ProgramError::InvalidAccountData)),"NMX uninferred caller assertion");
++}
++#[kani::modifies()]
++#[kani::ensures(|r: &Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>| r.is_err())]
++fn NMX_shape_write(x:&mut u8)->Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>{
++    *x=1; Err(ProgramError::InvalidAccountData)
++}
++#[kani::proof_for_contract(NMX_shape_write)]
++fn NMX_shape_modifies(){let mut x=0;let _=NMX_shape_write(&mut x);}

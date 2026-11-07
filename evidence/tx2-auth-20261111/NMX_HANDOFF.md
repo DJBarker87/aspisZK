@@ -211,3 +211,36 @@ that byte-independent arm association remains explicit. Expected-length native
 iteration, total emitted-reference/canonical correspondence and the full native
 composition remain OPEN.234 then uses the two deployment-ID opacity amendment;
 233 cannot resume until both candidates. No row credit or security claim.
+
+### Fallback stage B: length native pair and symbolic byte helpers
+
+K005 PASS / K006 intended ensures FAIL: actual frozen decoder, deployed features,
+strict offline frozen graph/unchanged lock, modifies(), symbolic lengths0/1
+on a one-byte backing array. These are the small native arm cut, NOT an
+all-length native theorem. K001 died in dependency compilation after hitting
+the task cap; source/input repair serializes Cargo and Rayon without changing
+caps/timeouts. K003/K004 found omitted proof-only #[path] files; one-file
+staging is retired in favor of all20 exact frozen extra Rust inputs and path
+preflight. No solver credit for compilation failures.
+
+Result<Box<Lane>,ProgramError> fidelity: K008 actual synthetic contract PASS,
+K009 real caller assertion PASS, K011 forbidden write detected. K010 does NOT
+count as the stub_verified failure control: Kani rejects its missing Arbitrary
+implementation before verification. Queue formerly treated exit1 as enough
+and wrongly advanced to K011; repaired now to require semantic verification
+failure text. No stub_verified use is admitted or installed.
+
+L675 frontier length/rejection-suffix, L677 scalar/window maps, L679 full byte
+comparison, L689 bit wrappers, L691 byte widening, L694 full zero predicate,
+and L697–703 four symbolic byte-position windows plus exact little-endian
+word32 carrier all PASS, standard axioms only. No complete217/234 candidate.
+L693 compiled with a tactic-generated native-validation axiom and is explicitly
+EXCLUDED (not accepted support); replacements L697–703 use named kernel laws
+and no native validation. Own runner now requires printed axioms to be a subset
+of propext/Classical.choice/Quot.sound before downstream acceptance. Its raw
+exit0 receipt is unchanged. Failed drafts/objects never enter an export.
+
+LIB read-only snapshot4e5247eee31 has revision3 owners and concrete Deployed IDs;
+its handoff still records digest association and complete bundles pending.
+No LIB instance is constructed or overwritten. Native loop/context/source join,
+total217 reference canonical equality and allocation observation remain OPEN.

@@ -2,12 +2,35 @@
 from pathlib import Path
 import hashlib,json,subprocess,sys,os
 B=Path(__file__).resolve().parent;S=B/'NMX_src';a,h=sys.argv[1:]
+os.environ['CARGO_BUILD_JOBS']='1'
+os.environ['RAYON_NUM_THREADS']='1'
 tools={}
 for name,path in [('kani','/home/dombarker/.kani/kani-0.67.0/bin/kani-driver'),('cbmc','/home/dombarker/.kani/kani-0.67.0/bin/cbmc')]:
  p=Path(path);v=subprocess.run([str(p),'--version'],capture_output=True,text=True);assert v.returncode==0,(path,v.stderr)
  tools[name]=dict(path=str(p),version=v.stdout.strip(),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
 assert '0.67.0' in tools['kani']['version'] and '6.8.0' in tools['cbmc']['version'],tools
 print(json.dumps(dict(tool_pins=tools)),flush=True)
+# Validate the two modified files and both new modules against the retained
+# patch; every unchanged frozen source stays byte-identical to the payload.
+import base64,lzma,difflib
+payload=json.loads(lzma.decompress((B/'NMX_FROZEN_PAYLOAD.json.xz').read_bytes()))
+manifest=json.loads((B/'NMX_STAGING_MANIFEST.json').read_text())
+modified=['programs/r1-cost-probe/src/lib.rs','programs/r1-cost-probe/src/r1_pool_adapter.rs']
+for rel,pin in manifest['files'].items():
+ if rel in modified:continue
+ assert hashlib.sha256((S/rel).read_bytes()).hexdigest()==pin['sha256'],('frozen source drift',rel)
+extra_inputs=json.loads((B/'NMX_217_KANI_EXTRA_INPUTS.json').read_text())
+for rel,pin in extra_inputs['files'].items():assert hashlib.sha256((S/rel).read_bytes()).hexdigest()==pin['sha256'],('proof input drift',rel)
+for parent,rel,target in extra_inputs['path_edges']:assert (S/target).is_file(),(parent,rel,target)
+diffs=[]
+for rel in modified:
+ original=base64.b64decode(payload[rel]).decode()
+ diffs.extend(difflib.unified_diff(original.splitlines(True),(S/rel).read_text().splitlines(True),fromfile='a/'+rel,tofile='b/'+rel))
+for name in ['NMX_217_native.rs','NMX_217_reference.rs','NMX_217_fidelity.rs']:
+ rel='programs/r1-cost-probe/src/'+name
+ diffs.extend(difflib.unified_diff([], (S/rel).read_text().splitlines(True),fromfile='/dev/null',tofile='b/'+rel))
+assert ''.join(diffs)==(B/'NMX_217_harness.patch').read_text(),'scratch patch drift'
+
 lock=S/'Cargo.lock';before=hashlib.sha256(lock.read_bytes()).hexdigest()
 assert before=='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
 assert hashlib.sha256((B/'NMX_KMX_copy_stubs.patch').read_bytes()).hexdigest()=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'

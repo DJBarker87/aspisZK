@@ -1,3 +1,25 @@
+# Authorized fallback status
+
+217 is OPEN. Authorization now permits the pinned NCV emitted reference and
+30 native Kani runs with controls, split by length; two further extractions
+are available for234. The prior zero-Kani stop below is historical.
+
+Accepted model-side nonexpected-length arm: NMX_R3_LaneLength.reference and
+observation (L669), NMX_R3_ReferenceLength.emitted and canonical (L672).
+They do not constitute a217 candidate. L671 failed elaboration and is excluded.
+L670 copied NCV objects with NMX_NCV_SEED.json hashes. L673 prepared cfg(kani)
+contracts on the actual frozen body in own scratch with the byte-identical
+reference. K001 timed out during dependency compilation after a TasksMax64
+thread-spawn failure; no solver/native credit. The changed K003 uses
+CARGO_BUILD_JOBS=1 and RAYON_NUM_THREADS=1, keeping all caps/timeouts unchanged.
+
+Remaining217: total expected-length emitted reference vs canonical Result and
+allocation observation; one native loop iteration on arbitrary pre-state and
+its Lean induction; full source-order native segment/argument/frame join;
+matched failing controls; full-length-domain association; own raw ax2 and focused
+combined import, final retention.234 follows217.233 stays frozen at the two
+named R2 fold targets and its items1–5. No new PoolLib/DeployedIds instance.
+
 # Current child-first redirect status
 
 Target not yet established; no217 or234 CANDIDATE. Rev3 canonical TX2 owners rebuilt L661–665.217 Charon succeeds but both pinned Aeneas loop encodings fail before Lean body emission: [exact finding](NMX_217_EXTRACTION_FINDING.json). No(bc)-flagged emitted exit authorizes Kani.234 has a diagnostic emitted root only, with failed deployment-ID children replaced by generated admissions; these files were never compiled: [exact finding](NMX_234_EXTRACTION_FINDING.json). Principal234 proofs await217 under the prescribed order.

@@ -9,7 +9,7 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
         assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<676,'Redirect formal allowance exhausted (426 previous + 250)' 
         combined=E/'NMX_COMBINED_IMPORT.lean'
-        combined_green=combined.is_file() and any(x.get('module')=='NMX_COMBINED_IMPORT' and x.get('exit_status')==0 and sha(combined.read_bytes()) in x.get('source_hashes',{}).values() for x in done)
+        combined_green=combined.is_file() and any(x.get('module')=='NMX_COMBINED_IMPORT' and x.get('exit_status')==0 and x.get('axioms_accepted',True) and sha(combined.read_bytes()) in x.get('source_hashes',{}).values() for x in done)
         # Revision2 has two new-root audits, its own combined import and retention.
         # Keep these slots even though the historical revision1 import is green.
         pending_final_slots=4
@@ -35,7 +35,7 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
         text=(E/(target+'.lean')).read_text()
         for dep in re.findall(r'^import (NMX_[\w.]+)',text,re.M):
             h=sha((E/(dep+'.lean')).read_bytes())
-            assert any(x.get('module')==dep and x.get('exit_status')==0 and h in x['source_hashes'].values() for x in [json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]),'Compile current direct import first: '+dep
+            assert any(x.get('module')==dep and x.get('exit_status')==0 and x.get('axioms_accepted',True) and h in x['source_hashes'].values() for x in [json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]),'Compile current direct import first: '+dep
         src='NMX_generated/'+target.replace('.','/')+'.lean';files[src]=text
         command=[env['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NMX_generated','-o','NMX_objects/'+target.replace('.','/')+'.olean',src]
         if target in ['NMX_ProofDriver','NMX_ScanDriver']:command+=['-c','NMX_native/'+target+'.c']
@@ -113,11 +113,19 @@ print(json.dumps(out))
         idx['objects'][h]=dict(path=str(p.relative_to(E)),bytes=len(raw),archive_sha256=sha(p.read_bytes()));idx['attempts'].setdefault(a,{})[n]=h
     (E/'NMX_INPUTS.json').write_text(json.dumps(idx,indent=1)+'\n')
     summary={k:v for k,v in rc.items() if k not in ['deps_fingerprint','env']}
+    nonstandard=[]
+    if kind=='lean':
+        for line in rc['print_axioms']:
+            found=re.search(r'depends on axioms: \[([^\]]*)\]',line)
+            if found:nonstandard += [v.strip() for v in found.group(1).split(',') if v.strip() not in {'propext','Classical.choice','Quot.sound'}]
+        summary['axioms_accepted']=not nonstandard
+        summary['nonstandard_axioms']=nonstandard
     summary['environment_retained_in_full_receipt']=a+'/receipt.json'
     summary.update(full_receipt=a+'/receipt.json',full_receipt_sha256=sha((E/a/'receipt.json').read_bytes()))
     with (E/'NMX_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(summary)+'\n')
     print(json.dumps({k:rc[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True)
     if rc['exit_status'] and kind=='lean':print(json.dumps(dict(attempt=a,error_excerpt=out[a+'/stdout.log'][:1800])),flush=True)
+    if kind=='lean' and nonstandard:raise RuntimeError('STOP: axioms gate rejected '+str(nonstandard))
     return rc
 def run(*args,**kwargs):
     import os
