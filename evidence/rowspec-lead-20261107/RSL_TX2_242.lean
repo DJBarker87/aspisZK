@@ -19,6 +19,9 @@ or return data and is outside the obligation ((bl)(3)), so the spec carries the
 owners in full through `authenticated` up to that call and no cleanup event.
 Argument evaluation order at line 358-364: `current_slot?` is evaluated after
 the request/lane checks and before TX2:233 is entered.
+Revision 2 (RSL_REVISION2.md): the proof account's `data()?` clone is an
+allocation site for a heap-carrying deferred error (`RS.ofCloned`, NMT-S1
+shape).  Domain unchanged.
 -/
 import RSL_TX2_233
 set_option autoImplicit false
@@ -48,7 +51,7 @@ def Ref (L : PoolLib) (D : DeployedIds) (a : Args) : RS (Validated L) :=
   RS.bind (Spec.call TX2_233.Domain (TX2_233.Ref L D)
             ⟨a.verifier_program, a.accounts, pool, lane, slot⟩) fun auth =>
   RS.bind (RS.ofOption a.accounts.head? .notEnoughAccountKeys) fun proofAccount =>
-  RS.bind (RS.ofExcept proofAccount.data) fun pdata =>
+  RS.bind proofAccount.data fun pdata =>
   RS.bind (L.scanProof pdata) fun scanned =>
   RS.bind (L.reconstruct q auth scanned.1) fun statement =>
   RS.pure { statement := statement, proof_length := scanned.2 }

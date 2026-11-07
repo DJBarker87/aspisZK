@@ -1,0 +1,78 @@
+import NNC_WriteFree
+import NNC_SnapshotRep
+import NMS_RSLStepFacts
+set_option autoImplicit false
+namespace NNC_RSLAccepted
+open RSL RSL.TX2_241 NMS_RSLRefine NMS_RSLStepFacts
+
+theorem lift_return {A : Type} (m : Spec A) (env : Env) (a : A) (events : List Event)
+ (run : RS.lift m env ⟨.ret (.ok a),events⟩) : m env ⟨.ret a,events⟩ := by
+ unfold RS.lift Spec.map at run
+ obtain ⟨a',e1,e2,hm,hp,he⟩ := NMV_RslLaws.bind_return _ _ _ _ _ run
+ simp only [Spec.pure,Obs.mk.injEq,Exit.ret.injEq,Except.ok.injEq] at hp
+ rcases hp with ⟨rfl,rfl⟩
+ simpa only [he,List.append_nil] using hm
+
+/-- Accepted241 reference exposes the actual successful064 call and its OWN
+three extents. This is inversion of a full reference, never a successful
+child as an exported row premise. Root0 is absent in the weak instance. -/
+theorem cut (L : PoolLib) (D : DeployedIds) (V : V2Lib) (a : Args)
+ (env : Env) (events : List Event)
+ (run : Ref L D V a env ⟨.ret (.ok ()),events⟩) :
+ ∃ (acc0 acc6 : OwnedAccount) (proofData checkpointData publicBytes : Bytes) (n : Nat)
+  (verifyEvents : List Event),
+  a.accounts.length=7 ∧ a.accounts[0]?=some acc0 ∧ a.accounts[6]?=some acc6 ∧
+  acc0.bytes=.ok proofData ∧ acc6.bytes=.ok checkpointData ∧
+  proofData.length=AFTERSTATE_BYTES+n ∧ publicBytes.length=STATEMENT_BYTES ∧
+  Dom064 V (publicBytes,slice proofData AFTERSTATE_BYTES (AFTERSTATE_BYTES+n),checkpointData) ∧
+  V.tx2auth publicBytes (slice proofData AFTERSTATE_BYTES (AFTERSTATE_BYTES+n)) checkpointData
+   env ⟨.ret (.ok ()),verifyEvents⟩ := by
+ unfold Ref at run
+ obtain ⟨u,_,_,guard,h,_⟩ := rsbind_return _ _ _ _ _ run
+ have passed := check_return _ _ _ _ guard
+ simp only [Bool.or_eq_false_iff] at passed
+ have count : a.accounts.length=7 := by simpa using passed.1.1
+ obtain ⟨validated,_,_,_,h,_⟩ := rsbind_return _ _ _ _ _ h
+ obtain ⟨acc0,_,_,index0,h,_⟩ := rsbind_return _ _ _ _ _ h
+ obtain ⟨proofData,_,_,read0,h,_⟩ := rsbind_return _ _ _ _ _ h
+ obtain ⟨acc6,_,_,index6,h,_⟩ := rsbind_return _ _ _ _ _ h
+ obtain ⟨checkpointData,_,_,read6,h,_⟩ := rsbind_return _ _ _ _ _ h
+ obtain ⟨_,_,_,_,h,_⟩ := rsbind_return _ _ _ _ _ h
+ obtain ⟨_,_,_,lengthGuard,h,_⟩ := rsbind_return _ _ _ _ _ h
+ have proofLength : proofData.length=AFTERSTATE_BYTES+validated.proof_length := by
+  simpa using check_return _ _ _ _ lengthGuard
+ obtain ⟨encoded,_,_,_,h,_⟩ := rsbind_return _ _ _ _ _ h
+ obtain ⟨publicBytes,_,_,_,h,_⟩ := rsbind_return _ _ _ _ _ h
+ obtain ⟨_,_,_,publicGuard,h,_⟩ := rsbind_return _ _ _ _ _ h
+ have publicLength : publicBytes.length=STATEMENT_BYTES := by
+  simpa using check_return _ _ _ _ publicGuard
+ obtain ⟨reply,verifyEvents,_,auth,h,_⟩ := rsbind_return _ _ _ _ _ h
+ obtain ⟨_,_,_,mapped,_,_⟩ := rsbind_return _ _ _ _ _ h
+ have replyOk : reply=.ok () := by
+  cases reply with
+  | ok unit => cases unit; rfl
+  | error error =>
+   unfold mapVErr at mapped
+   obtain ⟨_,_,_,_,impossible,_⟩ := rsbind_return _ _ _ _ _ mapped
+   cases congrArg Obs.exit impossible
+ have called := lift_return _ _ _ _ auth
+ rw [replyOk] at called
+ refine ⟨acc0,acc6,proofData,checkpointData,publicBytes,validated.proof_length,verifyEvents,?_⟩
+ constructor
+ · exact count
+ constructor
+ · exact index_return _ _ _ _ _ index0
+ constructor
+ · exact index_return _ _ _ _ _ index6
+ constructor
+ · exact ofExcept_return _ _ _ _ read0
+ constructor
+ · exact ofExcept_return _ _ _ _ read6
+ constructor
+ · exact proofLength
+ constructor
+ · exact publicLength
+ exact called
+#print axioms lift_return
+#print axioms cut
+end NNC_RSLAccepted
