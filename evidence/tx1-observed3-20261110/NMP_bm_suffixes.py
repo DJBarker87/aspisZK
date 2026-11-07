@@ -56,6 +56,9 @@ for i in range(5,-1,-1):
  | (apply NMT_CallTree.result_congr; intro x; simp only '''+laws+''')
  | (split <;> simp only '''+laws+''')
 '''
+ if i<=3:proof=proof.replace('intro x; simp only','intro x; try simp only').replace('split <;> simp only','split <;> try simp only')
+ if i==3:
+  proof=' rw [execute]\n simp only '+laws+'\n apply NMT_CallTree.result_congr\n rintro ⟨r,after⟩\n cases r <;> simp only '+laws+' <;> rfl\n'
  text=head.replace('import NMP_ObservedState','import '+dep+'\nimport NMP_DirectBind')+f'''/-- One source occurrence and the already-compiled suffix; all Result arms. -/
 theorem fold{i} {{H W : Type}} (c : Calls) (s : Parent H W) {args[i]} :
  erase (execute c {6-i} ({states[i]})) = f{i} c s{extra[i]} := by

@@ -60,3 +60,14 @@ NMP-BM-S1: mark130 packet is None-only, canonical137 arbitraryobs; source
 ignores obs but no broader ledger application is claimed. NMP-BM-S2:179
 success theorem needs its all-outcome companions and caller-domain proof.
 Prepare state/occurrence/suffix files are DRAFT until their own receipts pass.
+
+137 emitted erasure complete: NMP_ObservedSuffix.source/emitted PASS atL108
+(no successful-child/input/endpoint assumptions; full outer and Rust Result).
+Suffixes L127/L102/L133/L104-L106 pass; six original occurrence lemmas remain
+standard-only. This is source/body support, not a canonical row root or credit.
+Constants now use named generic Usize arithmetic laws L130, specializedL129;
+no large concrete buffers or recurrence terms were evaluated. Std map_err
+and both fixed error callbacks passL131. All fourteen semantic carrier
+inverses passL111-L124. Prepare134-152 and installation153-162 are queued.
+NMP-BM-S3 records that expansion success does not establish y1 canonicality
+required by the successful179 packet; no stronger087 domain was adopted.

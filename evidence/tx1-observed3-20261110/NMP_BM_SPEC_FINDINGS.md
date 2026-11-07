@@ -54,3 +54,18 @@ on every return plus abort prefixes; successful NHS.source alone does not.
 This is an installation/coverage obligation, not a reopened ledger assertion
 or a change to the canonical target. No arbitrary String error is cloned by
 the parents' mapping closures.
+
+## NMP-BM-S3: y1 canonicality is not established by prepare's own prefix
+
+Frozen compact.rs127-136 explicitly omits canonicality checking in
+expand_values. prepare expands y1, constructs wide_view, verifies ONLY
+v.semantic, then calls179. The canonical087 Domain is proof length57607,
+observerNone and publicDom; it contains no stored-y1 canonicality clause.
+The successful179 packet requires check_values on the SAME464 compact bytes.
+That clause cannot be inferred merely from successful expansion (which only
+checks lengths). Prior NMP_Canonical179/NMP_CallerCanonical support instead
+uses the UPSTREAM tx1 canonical_scan fact. Such a fact must either become an
+explicit approved own-input087 caller clause discharged by094, or be avoided
+by installing179's complete law on noncanonical inputs, including its Err.
+No stronger087 precondition or upstream caller success is silently adopted.
+This is source/domain analysis, not a completed runtime counterexample.
