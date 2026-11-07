@@ -6,7 +6,7 @@ index=json.loads((E/'NMM_INPUTS.json').read_text());parts=[];rows=[]
 for attempt,files in sorted(index['attempts'].items()):
  if not attempt.startswith('NMM_K') or attempt=='NMM_K001':continue
  for name,h in sorted(files.items()):
-  if Path(name).name not in ['NMM_bl_lane.rs','NMM_bl_registry.rs','NMM_legacy.rs']:continue
+  if Path(name).name not in ['NMM_bl_lane.rs','NMM_bl_registry.rs','NMM_legacy.rs','NMM_order.rs']:continue
   raw=lzma.decompress((E/index['objects'][h]['path']).read_bytes());assert hashlib.sha256(raw).hexdigest()==h
   text=raw.decode();dest='NMM_replay/'+attempt+'/'+name
   parts.append('diff --git a/'+dest+' b/'+dest+'\nnew file mode 100644\n--- /dev/null\n+++ b/'+dest+'\n@@ -0,0 +1,'+str(len(text.splitlines()))+' @@\n'+''.join('+'+l+'\n' for l in text.splitlines()))

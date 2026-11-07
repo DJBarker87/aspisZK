@@ -1,0 +1,513 @@
+[
+ {
+  "rust_line": 1,
+  "rust": "fn decode_lane_from_pool_release(",
+  "phase": "Signature and constant import",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value/sized"
+ },
+ {
+  "rust_line": 2,
+  "rust": "    bytes: &[u8],",
+  "phase": "Signature and constant import",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value/sized"
+ },
+ {
+  "rust_line": 3,
+  "rust": ") -> Result<Box<PoolV1PairForestLaneStateV1>, ProgramError> {",
+  "phase": "Signature and constant import",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value/sized"
+ },
+ {
+  "rust_line": 4,
+  "rust": "    use v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS;",
+  "phase": "Signature and constant import",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value/sized"
+ },
+ {
+  "rust_line": 5,
+  "rust": "    if bytes.len() != POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 6,
+  "rust": "        || bytes[..4] != POOL_V1_PAIR_FOREST_LANE_MAGIC",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 7,
+  "rust": "        || bytes[4] != POOL_V1_PAIR_FOREST_LANE_VERSION",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 8,
+  "rust": "        || usize::from(bytes[5]) >= POOL_V1_PAIR_FOREST_LANE_COUNT",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 9,
+  "rust": "        || bytes[6] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 10,
+  "rust": "        || bytes[7] != POOL_V1_PAIR_TREE_DEPTH as u8",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 11,
+  "rust": "        || bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 12,
+  "rust": "        || bytes[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 13,
+  "rust": "            .iter()",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 14,
+  "rust": "            .any(|byte| *byte != 0)",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 15,
+  "rust": "    {",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 16,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 17,
+  "rust": "    }",
+  "phase": "Extent and lane header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "value length branch / NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 18,
+  "rust": "    let master: [u8; 32] = bytes[40..72]",
+  "phase": "Master bytes and nonzero guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 19,
+  "rust": "        .try_into()",
+  "phase": "Master bytes and nonzero guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 20,
+  "rust": "        .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "Master bytes and nonzero guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 21,
+  "rust": "    if master == [0u8; 32] {",
+  "phase": "Master bytes and nonzero guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 22,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "Master bytes and nonzero guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 23,
+  "rust": "    }",
+  "phase": "Master bytes and nonzero guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 24,
+  "rust": "    let tree = &bytes[POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES..];",
+  "phase": "Tree header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 25,
+  "rust": "    if tree[..4] != POOL_V1_TREE_STATE_MAGIC",
+  "phase": "Tree header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 26,
+  "rust": "        || tree[4] != POOL_V1_TREE_STATE_VERSION",
+  "phase": "Tree header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 27,
+  "rust": "        || tree[5] != POOL_V1_PAIR_TREE_DEPTH as u8",
+  "phase": "Tree header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 28,
+  "rust": "        || tree[6] != POOL_V1_TREE_HASH_VERSION",
+  "phase": "Tree header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 29,
+  "rust": "        || tree[7] != POOL_V1_DIGEST_ENCODING_VERSION",
+  "phase": "Tree header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 30,
+  "rust": "    {",
+  "phase": "Tree header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 31,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "Tree header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 32,
+  "rust": "    }",
+  "phase": "Tree header guards",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 33,
+  "rust": "    let next_leaf_index = u64::from_le_bytes(",
+  "phase": "Sequence decode and capacity guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 34,
+  "rust": "        tree[8..16]",
+  "phase": "Sequence decode and capacity guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 35,
+  "rust": "            .try_into()",
+  "phase": "Sequence decode and capacity guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 36,
+  "rust": "            .map_err(|_| ProgramError::InvalidAccountData)?,",
+  "phase": "Sequence decode and capacity guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 37,
+  "rust": "    );",
+  "phase": "Sequence decode and capacity guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 38,
+  "rust": "    if next_leaf_index > POOL_V1_PAIR_CAPACITY {",
+  "phase": "Sequence decode and capacity guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 39,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "Sequence decode and capacity guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 40,
+  "rust": "    }",
+  "phase": "Sequence decode and capacity guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneHeader.sourcePrefix"
+ },
+ {
+  "rust_line": 41,
+  "rust": "    let root = decode_digest_canonical(",
+  "phase": "Root call at exact32 bytes and error mapping",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneDigest.source"
+ },
+ {
+  "rust_line": 42,
+  "rust": "        tree[16..48]",
+  "phase": "Root call at exact32 bytes and error mapping",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneDigest.source"
+ },
+ {
+  "rust_line": 43,
+  "rust": "            .try_into()",
+  "phase": "Root call at exact32 bytes and error mapping",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneDigest.source"
+ },
+ {
+  "rust_line": 44,
+  "rust": "            .map_err(|_| ProgramError::InvalidAccountData)?,",
+  "phase": "Root call at exact32 bytes and error mapping",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneDigest.source"
+ },
+ {
+  "rust_line": 45,
+  "rust": "    )",
+  "phase": "Root call at exact32 bytes and error mapping",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneDigest.source"
+ },
+ {
+  "rust_line": 46,
+  "rust": "    .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "Root call at exact32 bytes and error mapping",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneDigest.source"
+ },
+ {
+  "rust_line": 47,
+  "rust": "    let mut frontier = [[M31::ZERO; 8]; POOL_V1_PAIR_TREE_DEPTH];",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 48,
+  "rust": "    for (level, node) in frontier.iter_mut().enumerate() {",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 49,
+  "rust": "        let start = 48 + 32 * level;",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 50,
+  "rust": "        *node = decode_digest_canonical(",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 51,
+  "rust": "            tree[start..start + 32]",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 52,
+  "rust": "                .try_into()",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 53,
+  "rust": "                .map_err(|_| ProgramError::InvalidAccountData)?,",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 54,
+  "rust": "        )",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 55,
+  "rust": "        .map_err(|_| ProgramError::InvalidAccountData)?;",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 56,
+  "rust": "        if (next_leaf_index >> level) & 1 == 0 && *node != V7_PAIR_EMPTY_ROOTS[level] {",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 57,
+  "rust": "            return Err(ProgramError::InvalidAccountData);",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 58,
+  "rust": "        }",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 59,
+  "rust": "    }",
+  "phase": "Frontier initialization and20 ordered native iterations, rejecting after write",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NLK_LaneLoopSource.run"
+ },
+ {
+  "rust_line": 60,
+  "rust": "    if next_leaf_index == 0 && root != V7_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH] {",
+  "phase": "Terminal zero-sequence root guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCompletion.finish"
+ },
+ {
+  "rust_line": 61,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "Terminal zero-sequence root guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCompletion.finish"
+ },
+ {
+  "rust_line": 62,
+  "rust": "    }",
+  "phase": "Terminal zero-sequence root guard",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCompletion.finish"
+ },
+ {
+  "rust_line": 63,
+  "rust": "    Ok(Box::new(PoolV1PairForestLaneStateV1 {",
+  "phase": "Complete returned Box payload",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCarrier.make"
+ },
+ {
+  "rust_line": 64,
+  "rust": "        bump: bytes[72],",
+  "phase": "Complete returned Box payload",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCarrier.make"
+ },
+ {
+  "rust_line": 65,
+  "rust": "        master,",
+  "phase": "Complete returned Box payload",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCarrier.make"
+ },
+ {
+  "rust_line": 66,
+  "rust": "        lane_id: bytes[5],",
+  "phase": "Complete returned Box payload",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCarrier.make"
+ },
+ {
+  "rust_line": 67,
+  "rust": "        tree: IncrementalMerkleTreeV1 {",
+  "phase": "Complete returned Box payload",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCarrier.make"
+ },
+ {
+  "rust_line": 68,
+  "rust": "            next_leaf_index,",
+  "phase": "Complete returned Box payload",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCarrier.make"
+ },
+ {
+  "rust_line": 69,
+  "rust": "            root,",
+  "phase": "Complete returned Box payload",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCarrier.make"
+ },
+ {
+  "rust_line": 70,
+  "rust": "            frontier,",
+  "phase": "Complete returned Box payload",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCarrier.make"
+ },
+ {
+  "rust_line": 71,
+  "rust": "        },",
+  "phase": "Complete returned Box payload",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCarrier.make"
+ },
+ {
+  "rust_line": 72,
+  "rust": "    }))",
+  "phase": "Complete returned Box payload",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCarrier.make"
+ },
+ {
+  "rust_line": 73,
+  "rust": "}",
+  "phase": "Complete returned Box payload",
+  "lean_symbol": "NMM_LaneTranscription.value",
+  "lean_region": "NKP_LaneCarrier.make"
+ }
+]

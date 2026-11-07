@@ -1,0 +1,179 @@
+--- /dev/null
++++ b/NMM_bl_lane.rs
+@@ -0,0 +1,176 @@
++use super::*;
++use core::cell::UnsafeCell;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++// One real local allocation. Every log region is disjoint from shared bytes.
++#[repr(C,align(8))]
++struct NMM_Input { bytes:[u8;768], args:UnsafeCell<[u8;768]>, replies:UnsafeCell<[u32;192]>, flags:UnsafeCell<[u8;768]> }
++fn NMM_error(tag:u8)->aspis_statement::AtomicStatementError {
++ use aspis_statement::AtomicStatementError::*;
++ match tag {1=>NonCanonicalDigest,2=>NonCanonicalAssetId,3=>FeeOutOfRange,4=>PathDepthMismatch,5=>InsertionIndexOutOfRange,6=>CurrentAnchorMismatch,_=>OutputAnchorMismatch}
++}
++fn NMM_digest_cut(bytes:&[u8;32])->Result<[M31;8],aspis_statement::AtomicStatementError>{
++ let raw:[u32;8]=kani::any();let tag:u8=kani::any();kani::assume(tag<8);
++ unsafe {
++  let p=bytes.as_ptr();
++  let args=p.add(768) as *const UnsafeCell<[u8;32]>;
++  let reply=p.add(1536) as *const UnsafeCell<[u32;8]>;
++  let flag=p.add(2304) as *const UnsafeCell<u8>;
++  (*args).get().cast::<*const u8>().write(bytes.as_ptr());
++  (*reply).get().write(raw);
++  assert!(*(*flag).get()==0,"child input window called once");
++  (*flag).get().write(tag+1);
++ }
++ if tag==0 {Ok([M31(raw[0]),M31(raw[1]),M31(raw[2]),M31(raw[3]),M31(raw[4]),M31(raw[5]),M31(raw[6]),M31(raw[7])])}else{Err(NMM_error(tag))}
++}
++fn NMM_replay(log:&NMM_Input,bytes:&[u8;32])->Result<[M31;8],aspis_statement::AtomicStatementError>{
++ let offset=unsafe{bytes.as_ptr().offset_from(log.bytes.as_ptr())};
++ assert!(offset>=0 && offset<=736 && offset%32==0,"transcription call window");
++ let k=offset as usize;
++ unsafe {
++  let tag=(*log.flags.get())[k];
++  assert!(tag>0 && tag<=8,"recorded call present");
++  kani::assume(tag>0 && tag<=8);
++  (*log.flags.get())[k]=0;
++  let ptr=log.args.get().cast::<u8>().add(k).cast::<*const u8>().read();assert!(ptr==bytes.as_ptr(),"exact recorded callee argument pointer");
++  let mut raw=[0u32;8];for j in 0..8 {raw[j]=(*log.replies.get())[k/4+j];}
++  if tag==1 {Ok([M31(raw[0]),M31(raw[1]),M31(raw[2]),M31(raw[3]),M31(raw[4]),M31(raw[5]),M31(raw[6]),M31(raw[7])])}else{Err(NMM_error(tag-1))}
++ }
++}
++fn NMM_same(a:&Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>,b:&Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>)->bool{
++ match(a,b){(Err(x),Err(y))=>x==y,(Ok(x),Ok(y))=>x.bump==y.bump&&x.master==y.master&&x.lane_id==y.lane_id&&x.tree.next_leaf_index==y.tree.next_leaf_index&&x.tree.root==y.tree.root&&x.tree.frontier==y.tree.frontier,_=>false}
++}
++fn NMM_reference(log:&NMM_Input,
++    bytes: &[u8],
++) -> Result<Box<PoolV1PairForestLaneStateV1>, ProgramError> {
++    use v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS;
++    if bytes.len() != POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES
++        || bytes[..4] != POOL_V1_PAIR_FOREST_LANE_MAGIC
++        || bytes[4] != POOL_V1_PAIR_FOREST_LANE_VERSION
++        || usize::from(bytes[5]) >= POOL_V1_PAIR_FOREST_LANE_COUNT
++        || bytes[6] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8
++        || bytes[7] != POOL_V1_PAIR_TREE_DEPTH as u8
++        || bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING
++        || bytes[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
++            .iter()
++            .any(|byte| *byte != 0)
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let master: [u8; 32] = bytes[40..72]
++        .try_into()
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++    if master == [0u8; 32] {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let tree = &bytes[POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES..];
++    if tree[..4] != POOL_V1_TREE_STATE_MAGIC
++        || tree[4] != POOL_V1_TREE_STATE_VERSION
++        || tree[5] != POOL_V1_PAIR_TREE_DEPTH as u8
++        || tree[6] != POOL_V1_TREE_HASH_VERSION
++        || tree[7] != POOL_V1_DIGEST_ENCODING_VERSION
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let next_leaf_index = u64::from_le_bytes(
++        tree[8..16]
++            .try_into()
++            .map_err(|_| ProgramError::InvalidAccountData)?,
++    );
++    if next_leaf_index > POOL_V1_PAIR_CAPACITY {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let root = NMM_replay(log,
++        tree[16..48]
++            .try_into()
++            .map_err(|_| ProgramError::InvalidAccountData)?,
++    )
++    .map_err(|_| ProgramError::InvalidAccountData)?;
++    let mut frontier = [[M31::ZERO; 8]; POOL_V1_PAIR_TREE_DEPTH];
++    for (level, node) in frontier.iter_mut().enumerate() {
++        let start = 48 + 32 * level;
++        *node = NMM_replay(log,
++            tree[start..start + 32]
++                .try_into()
++                .map_err(|_| ProgramError::InvalidAccountData)?,
++        )
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++        if (next_leaf_index >> level) & 1 == 0 && *node != V7_PAIR_EMPTY_ROOTS[level] {
++            return Err(ProgramError::InvalidAccountData);
++        }
++    }
++    if next_leaf_index == 0 && root != V7_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH] {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    Ok(Box::new(PoolV1PairForestLaneStateV1 {
++        bump: bytes[72],
++        master,
++        lane_id: bytes[5],
++        tree: IncrementalMerkleTreeV1 {
++            next_leaf_index,
++            root,
++            frontier,
++        },
++    }))
++}
++struct NMM_Header{bump:u8,master:[u8;32],lane:u8,next:u64}
++fn NMM_prefix(bytes:&[u8])->Result<NMM_Header,ProgramError>{
++    use v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS;
++    if bytes.len() != POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES
++        || bytes[..4] != POOL_V1_PAIR_FOREST_LANE_MAGIC
++        || bytes[4] != POOL_V1_PAIR_FOREST_LANE_VERSION
++        || usize::from(bytes[5]) >= POOL_V1_PAIR_FOREST_LANE_COUNT
++        || bytes[6] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8
++        || bytes[7] != POOL_V1_PAIR_TREE_DEPTH as u8
++        || bytes[8..40] != POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING
++        || bytes[73..POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES]
++            .iter()
++            .any(|byte| *byte != 0)
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let master: [u8; 32] = bytes[40..72]
++        .try_into()
++        .map_err(|_| ProgramError::InvalidAccountData)?;
++    if master == [0u8; 32] {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let tree = &bytes[POOL_V1_PAIR_FOREST_LANE_HEADER_BYTES..];
++    if tree[..4] != POOL_V1_TREE_STATE_MAGIC
++        || tree[4] != POOL_V1_TREE_STATE_VERSION
++        || tree[5] != POOL_V1_PAIR_TREE_DEPTH as u8
++        || tree[6] != POOL_V1_TREE_HASH_VERSION
++        || tree[7] != POOL_V1_DIGEST_ENCODING_VERSION
++    {
++        return Err(ProgramError::InvalidAccountData);
++    }
++    let next_leaf_index = u64::from_le_bytes(
++        tree[8..16]
++            .try_into()
++            .map_err(|_| ProgramError::InvalidAccountData)?,
++    );
++    if next_leaf_index > POOL_V1_PAIR_CAPACITY {
++        return Err(ProgramError::InvalidAccountData);
++    }
++Ok(NMM_Header{bump:bytes[72],master,lane:bytes[5],next:next_leaf_index})}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(aspis_statement::atomic_statement::decode_digest_canonical,NMM_digest_cut)]
++fn stage(){
++ let input=NMM_Input{bytes:kani::any(),args:UnsafeCell::new([0;768]),replies:UnsafeCell::new([0;192]),flags:UnsafeCell::new([0;768])};
++ let observer:usize=kani::any();kani::assume(observer<768);let before=input.bytes[observer];
++ let level:usize=kani::any();kani::assume(level<20);let word:usize=kani::any();kani::assume(word<8);let byte=observer%32;
++ let other=NMM_Input{bytes:input.bytes,args:UnsafeCell::new([0;768]),replies:UnsafeCell::new([0;192]),flags:UnsafeCell::new([0;768])};let native=decode_lane_from_pool_release(&other.bytes);
++ if let Ok(value)=native {
++  let prefix=NMM_prefix(&input.bytes);assert!(prefix.is_ok(),"success establishes complete header prefix");
++  if let Ok(h)=prefix {
++   let offset=128+32*level;
++   let root=unsafe{(*input.replies.get())[24+word]};let frontier=unsafe{(*input.replies.get())[offset/4+word]};
++   assert!(unsafe{(*input.flags.get())[96]==1&&(*input.flags.get())[offset]==1},"success uses Ok replies at exact occurrences");
++   let rootptr=unsafe{input.args.get().cast::<u8>().add(96).cast::<*const u8>().read()};let nodeptr=unsafe{input.args.get().cast::<u8>().add(offset).cast::<*const u8>().read()};
++   assert!(rootptr==unsafe{input.bytes.as_ptr().add(96)}&&nodeptr==unsafe{input.bytes.as_ptr().add(offset)},"success exact digest argument windows");
++   assert!(value.tree.frontier[level][word].0==frontier,"complete payload word equals recorded reply");
++   if (h.next>>level)&1==0 {assert!(frontier==v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS[level][word].0,"success establishes source frontier guard");}
++  }
++ }
++ assert!(input.bytes[observer]==before,"immutable input frame");
++}

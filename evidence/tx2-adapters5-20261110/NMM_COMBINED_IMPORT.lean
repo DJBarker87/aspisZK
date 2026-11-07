@@ -9,6 +9,11 @@ import NMM_OutcomeCases
 import NMM_LaneScalarLoop
 import NMM_LaneScalarSource
 import NMM_LaneAcceptance
+import NMM_PayloadComponents
+import NMM_LaneSymbolic
+import NMM_LaneSuccess
+import NMM_OrderedPrefix
+import NMM_TraceState
 
 #print NMM_LaneTranscription.adopted_value
 #print axioms NMM_LaneTranscription.adopted_value
@@ -68,5 +73,39 @@ import NMM_LaneAcceptance
 #print axioms NMM_LaneAcceptance.writeAll_frame
 #print NMM_LaneAcceptance.writeAll_selected
 #print axioms NMM_LaneAcceptance.writeAll_selected
+#print NMM_PayloadComponents.fields_complete
+#print axioms NMM_PayloadComponents.fields_complete
+#print NMM_PayloadComponents.result_complete
+#print axioms NMM_PayloadComponents.result_complete
+#print NMM_LaneSymbolic.bad_length
+#print axioms NMM_LaneSymbolic.bad_length
+#print NMM_LaneSymbolic.run_recorded
+#print axioms NMM_LaneSymbolic.run_recorded
+#print NMM_LaneSymbolic.body_recorded
+#print axioms NMM_LaneSymbolic.body_recorded
+#print NMM_LaneSymbolic.transcription
+#print axioms NMM_LaneSymbolic.transcription
+#print NMM_LaneSymbolic.projection
+#print axioms NMM_LaneSymbolic.projection
+#print NMM_LaneSymbolic.closed
+#print axioms NMM_LaneSymbolic.closed
+#print NMM_LaneSuccess.levels_unique
+#print axioms NMM_LaneSuccess.levels_unique
+#print NMM_LaneSuccess.loop
+#print axioms NMM_LaneSuccess.loop
+#print NMM_LaneSuccess.body
+#print axioms NMM_LaneSuccess.body
+#print NMM_OrderedPrefix.complete
+#print axioms NMM_OrderedPrefix.complete
+#print NMM_OrderedPrefix.next
+#print axioms NMM_OrderedPrefix.next
+#print NMM_OrderedPrefix.bounded_prefix
+#print axioms NMM_OrderedPrefix.bounded_prefix
+#print NMM_TraceState.initial_valid
+#print axioms NMM_TraceState.initial_valid
+#print NMM_TraceState.push_valid
+#print axioms NMM_TraceState.push_valid
+#print NMM_TraceState.stopped_prefix
+#print axioms NMM_TraceState.stopped_prefix
 #print AspisR1.RPx_Deployed.deployed
 #print axioms AspisR1.RPx_Deployed.deployed

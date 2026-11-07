@@ -1,0 +1,744 @@
+[
+ {
+  "rust_line": 1,
+  "rust": "fn authenticate_asq8_accounts(",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 2,
+  "rust": "    verifier_program: &Pubkey,",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 3,
+  "rust": "    accounts: &[OwnedAccount],",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 4,
+  "rust": "    pool_program: &Pubkey,",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 5,
+  "rust": "    output_lane: u8,",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 6,
+  "rust": "    current_slot: u64,",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 7,
+  "rust": ") -> Result<AuthenticatedAsq8Accounts, ProgramError> {",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 8,
+  "rust": "    let [proof_account, master_account, checkpoint_account, lane_account, registry_account, entry_account, verifier_checkpoint] =",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 9,
+  "rust": "        accounts",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 10,
+  "rust": "    else {",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 11,
+  "rust": "        return Err(if accounts.len() < 7 {",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 12,
+  "rust": "            ProgramError::NotEnoughAccountKeys",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 13,
+  "rust": "        } else {",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 14,
+  "rust": "            ProgramError::InvalidArgument",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 15,
+  "rust": "        });",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 16,
+  "rust": "    };",
+  "phase": "Signature, exact seven-account destructure and length errors",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription"
+ },
+ {
+  "rust_line": 17,
+  "rust": "    require_readonly_buffer(proof_account)?;",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 18,
+  "rust": "    require_verifier_checkpoint(verifier_checkpoint, verifier_program, false)?;",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 19,
+  "rust": "    require_readonly_account(master_account, pool_program)?;",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 20,
+  "rust": "    require_readonly_account(checkpoint_account, pool_program)?;",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 21,
+  "rust": "    require_readonly_account(lane_account, pool_program)?;",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 22,
+  "rust": "    require_distinct_accounts(&[",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 23,
+  "rust": "        proof_account,",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 24,
+  "rust": "        master_account,",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 25,
+  "rust": "        checkpoint_account,",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 26,
+  "rust": "        lane_account,",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 27,
+  "rust": "        registry_account,",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 28,
+  "rust": "        entry_account,",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 29,
+  "rust": "        verifier_checkpoint,",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 30,
+  "rust": "    ])?;",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 31,
+  "rust": "",
+  "phase": "Owner, readonly, distinctness and verifier-checkpoint checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: initial guards"
+ },
+ {
+  "rust_line": 32,
+  "rust": "    let master = decode_master_box(master_account.data()?)?;",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 33,
+  "rust": "    if master.identity.pool != master_account.key().to_bytes()",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 34,
+  "rust": "        || master.initialized_lane_mask != POOL_V1_PAIR_FOREST_ALL_LANES_MASK",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 35,
+  "rust": "        || Pubkey::create_program_address(",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 36,
+  "rust": "            &[",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 37,
+  "rust": "                PAIR_FOREST_MASTER_SEED,",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 38,
+  "rust": "                Pubkey::new_from_array(master.identity.asset_mint).as_ref(),",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 39,
+  "rust": "                &[master.bump],",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 40,
+  "rust": "            ],",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 41,
+  "rust": "            pool_program,",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 42,
+  "rust": "        )",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 43,
+  "rust": "        .map_err(|_| ProgramError::InvalidAccountData)? != *master_account.key()",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 44,
+  "rust": "    {",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 45,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 46,
+  "rust": "    }",
+  "phase": "Master decode and master identity/PDA checks",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: master branch"
+ },
+ {
+  "rust_line": 47,
+  "rust": "    authenticate_invariant_release_registry(",
+  "phase": "Release-registry authentication with original master and accounts",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: registry branch"
+ },
+ {
+  "rust_line": 48,
+  "rust": "        verifier_program,",
+  "phase": "Release-registry authentication with original master and accounts",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: registry branch"
+ },
+ {
+  "rust_line": 49,
+  "rust": "        pool_program,",
+  "phase": "Release-registry authentication with original master and accounts",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: registry branch"
+ },
+ {
+  "rust_line": 50,
+  "rust": "        master_account,",
+  "phase": "Release-registry authentication with original master and accounts",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: registry branch"
+ },
+ {
+  "rust_line": 51,
+  "rust": "        &master,",
+  "phase": "Release-registry authentication with original master and accounts",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: registry branch"
+ },
+ {
+  "rust_line": 52,
+  "rust": "        registry_account,",
+  "phase": "Release-registry authentication with original master and accounts",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: registry branch"
+ },
+ {
+  "rust_line": 53,
+  "rust": "        entry_account,",
+  "phase": "Release-registry authentication with original master and accounts",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: registry branch"
+ },
+ {
+  "rust_line": 54,
+  "rust": "        current_slot,",
+  "phase": "Release-registry authentication with original master and accounts",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: registry branch"
+ },
+ {
+  "rust_line": 55,
+  "rust": "    )?;",
+  "phase": "Release-registry authentication with original master and accounts",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: registry branch"
+ },
+ {
+  "rust_line": 56,
+  "rust": "",
+  "phase": "Release-registry authentication with original master and accounts",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: registry branch"
+ },
+ {
+  "rust_line": 57,
+  "rust": "    let checkpoint = decode_checkpoint_box(checkpoint_account.data()?)?;",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 58,
+  "rust": "    if checkpoint.master != master_account.key().to_bytes()",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 59,
+  "rust": "        || checkpoint.deployment_domain != master.identity.deployment_domain",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 60,
+  "rust": "        || Pubkey::create_program_address(",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 61,
+  "rust": "            &[",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 62,
+  "rust": "                PAIR_FOREST_CHECKPOINT_SEED,",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 63,
+  "rust": "                master_account.key().as_ref(),",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 64,
+  "rust": "                &checkpoint.checkpoint_sequence.to_le_bytes(),",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 65,
+  "rust": "                &[checkpoint.bump],",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 66,
+  "rust": "            ],",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 67,
+  "rust": "            pool_program,",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 68,
+  "rust": "        )",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 69,
+  "rust": "        .map_err(|_| ProgramError::InvalidAccountData)? != *checkpoint_account.key()",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 70,
+  "rust": "    {",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 71,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 72,
+  "rust": "    }",
+  "phase": "Checkpoint decode, identity and PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: checkpoint branch"
+ },
+ {
+  "rust_line": 73,
+  "rust": "    let selected_lane = decode_lane_from_pool_release(lane_account.data()?)?;",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 74,
+  "rust": "    if selected_lane.master != master_account.key().to_bytes()",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 75,
+  "rust": "        || selected_lane.lane_id != output_lane",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 76,
+  "rust": "        || Pubkey::create_program_address(",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 77,
+  "rust": "            &[",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 78,
+  "rust": "                PAIR_FOREST_LANE_SEED,",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 79,
+  "rust": "                master_account.key().as_ref(),",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 80,
+  "rust": "                &[output_lane],",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 81,
+  "rust": "                &[selected_lane.bump],",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 82,
+  "rust": "            ],",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 83,
+  "rust": "            pool_program,",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 84,
+  "rust": "        )",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 85,
+  "rust": "        .map_err(|_| ProgramError::InvalidAccountData)? != *lane_account.key()",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 86,
+  "rust": "    {",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 87,
+  "rust": "        return Err(ProgramError::InvalidAccountData);",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 88,
+  "rust": "    }",
+  "phase": "Lane decode, lane selection and saved-bump PDA guards",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: lane branch"
+ },
+ {
+  "rust_line": 89,
+  "rust": "    let live_snapshot = Box::new(PoolV1PairLiveSnapshotV1 {",
+  "phase": "Complete live-snapshot Box payload",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: live snapshot"
+ },
+ {
+  "rust_line": 90,
+  "rust": "        pool: master_account.key().to_bytes(),",
+  "phase": "Complete live-snapshot Box payload",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: live snapshot"
+ },
+ {
+  "rust_line": 91,
+  "rust": "        deployment_domain: master.identity.deployment_domain,",
+  "phase": "Complete live-snapshot Box payload",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: live snapshot"
+ },
+ {
+  "rust_line": 92,
+  "rust": "        sequence: selected_lane.tree.next_leaf_index,",
+  "phase": "Complete live-snapshot Box payload",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: live snapshot"
+ },
+ {
+  "rust_line": 93,
+  "rust": "        next_pair_index: selected_lane.tree.next_leaf_index,",
+  "phase": "Complete live-snapshot Box payload",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: live snapshot"
+ },
+ {
+  "rust_line": 94,
+  "rust": "        current_root: selected_lane.tree.root,",
+  "phase": "Complete live-snapshot Box payload",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: live snapshot"
+ },
+ {
+  "rust_line": 95,
+  "rust": "        frontier: selected_lane.tree.frontier,",
+  "phase": "Complete live-snapshot Box payload",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: live snapshot"
+ },
+ {
+  "rust_line": 96,
+  "rust": "    });",
+  "phase": "Complete live-snapshot Box payload",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: live snapshot"
+ },
+ {
+  "rust_line": 97,
+  "rust": "    Ok(AuthenticatedAsq8Accounts {",
+  "phase": "Return four authenticated owned payloads and account metadata",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: final Ok"
+ },
+ {
+  "rust_line": 98,
+  "rust": "        master_account: master_account.key().to_bytes(),",
+  "phase": "Return four authenticated owned payloads and account metadata",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: final Ok"
+ },
+ {
+  "rust_line": 99,
+  "rust": "        checkpoint_account: checkpoint_account.key().to_bytes(),",
+  "phase": "Return four authenticated owned payloads and account metadata",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: final Ok"
+ },
+ {
+  "rust_line": 100,
+  "rust": "        selected_lane_account: lane_account.key().to_bytes(),",
+  "phase": "Return four authenticated owned payloads and account metadata",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: final Ok"
+ },
+ {
+  "rust_line": 101,
+  "rust": "        master,",
+  "phase": "Return four authenticated owned payloads and account metadata",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: final Ok"
+ },
+ {
+  "rust_line": 102,
+  "rust": "        checkpoint,",
+  "phase": "Return four authenticated owned payloads and account metadata",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: final Ok"
+ },
+ {
+  "rust_line": 103,
+  "rust": "        selected_lane,",
+  "phase": "Return four authenticated owned payloads and account metadata",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: final Ok"
+ },
+ {
+  "rust_line": 104,
+  "rust": "        live_snapshot,",
+  "phase": "Return four authenticated owned payloads and account metadata",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: final Ok"
+ },
+ {
+  "rust_line": 105,
+  "rust": "    })",
+  "phase": "Return four authenticated owned payloads and account metadata",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: final Ok"
+ },
+ {
+  "rust_line": 106,
+  "rust": "}",
+  "phase": "Return four authenticated owned payloads and account metadata",
+  "lean_symbol": "NMM_AccountsTranscription.transcription",
+  "lean_region": "transcription: final Ok"
+ }
+]

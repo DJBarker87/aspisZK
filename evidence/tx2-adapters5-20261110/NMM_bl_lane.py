@@ -47,6 +47,8 @@ ANN='''#[kani::proof] #[kani::unwind(35)]
 #[kani::stub(aspis_statement::atomic_statement::decode_digest_canonical,NMM_digest_cut)]
 '''
 def attempt(a,branch,mode,solver=None):
+ omitted_record=mode=="footprint_record"
+ if omitted_record:mode="footprint"
  witness=mode.endswith("_witness")
  if witness:mode=mode.removesuffix("_witness")
  direct=branch.startswith("direct_");branch=branch.removeprefix("direct_")
@@ -252,6 +254,10 @@ fn NMM_reference(log:&NMM_Input,selected:usize,word:usize,byte:usize,bytes:&[u8]
   text=text.replace('if tag==0 {Ok('+words+')}else{Err(NMM_error(tag))}','Err(NMM_error(tag))')
   text=text.replace('if tag==1 {Ok('+words+')}else{Err(NMM_error(tag-1))}','Err(NMM_error(tag-1))')
   text=text.replace('let reference=NMM_reference(&input,&input.bytes);','kani::assume(unsafe{(*input.flags.get())[96]>1&&(*input.flags.get())[96]<9});let reference=NMM_reference(&input,&input.bytes);')
+ if omitted_record:
+  old='for j in 0..7 {(*(*reply).get())[j]=raw[j];}'
+  assert old in text
+  text=text.replace(old,'let mut observed=raw;observed[7]=0;(*reply).get().write(observed);')
  (E/(a+'.patch')).write_text('--- /dev/null\n+++ b/NMM_bl_lane.rs\n@@ -0,0 +1,'+str(len(text.splitlines()))+' @@\n'+''.join('+'+l for l in text.splitlines(True)))
  return submit(a,'r1_pool_adapter::NMM_bl_lane::stage',P,'NMM_bl_lane',text,mode,solver=solver)
 if __name__=='__main__':

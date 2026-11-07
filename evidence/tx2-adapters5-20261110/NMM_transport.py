@@ -4,6 +4,8 @@ import json, subprocess, time
 E=Path(__file__).resolve().parent
 B='/home/dombarker/project-offloads/codex-cx-tx2-adapters5-20261110'
 H='dombarker@100.108.41.90'
+def note_wait(a,reason,seconds,**extra):
+    with (E/'NMM_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait',reason=reason,wait_seconds=seconds,observed_at_unix=time.time(),**extra))+'\n')
 def ssh(code, data=None, submitted=False):
     for retry in range(11):
         r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,text=True,capture_output=True)
@@ -35,7 +37,7 @@ print(json.dumps(dict(count=len(active),scopes=active)))
 """)
         assert count.returncode==0, 'Stream A count probe failed'
         current=json.loads(count.stdout)
-        with (E/'NMM_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait' if current['count']>=2 else 'share_check',probe=current))+'\n')
+        with (E/'NMM_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,kind='wait' if current['count']>=2 else 'share_check',reason='stream_a_limit' if current['count']>=2 else 'stream_a_admitted',wait_seconds=180 if current['count']>=2 else 0,observed_at_unix=time.time(),probe=current))+'\n')
         if current['count']<2:break
         for _ in range(3):time.sleep(60)
     for disk_retry in range(7):
@@ -45,6 +47,7 @@ print(json.dumps(dict(count=len(active),scopes=active)))
         (E/(a+f'-disk-{disk_retry}.json')).write_text(json.dumps(dict(free_bytes=free,minimum_bytes=40_000_000_000,allowed=free>=40_000_000_000))+'\n')
         if free>=40_000_000_000:break
         if disk_retry==6:raise RuntimeError('STOP: disk below40GB after6 waits')
+        note_wait(a,'disk_below40GB',600,free_bytes=free)
         for _ in range(10):time.sleep(60)
     for retry in range(11):
         r=ssh('python3',f'''from pathlib import Path
@@ -57,9 +60,9 @@ print(p.read_text() if p.exists() else 'MISSING');sys.exit(r.returncode)
         (E/(a+f'-barrier-{retry}.log')).write_text(r.stdout+r.stderr)
         try:ad=json.loads(r.stdout)
         except json.JSONDecodeError:
-            if retry==0:time.sleep(30);continue
+            if retry==0:note_wait(a,'missing_admission_reply',30);time.sleep(30);continue
             raise RuntimeError('Infrastructure STOP: missing admission')
         (E/(a+'-admission.json')).write_text(json.dumps(dict(exit=r.returncode,reservation=ad),indent=1)+'\n')
         if r.returncode==0 and ad.get('allowed') is True:return
-        if (r.returncode==78 or ad.get('allowed') is False) and retry<10:[time.sleep(60) for _ in range(3)];continue
+        if (r.returncode==78 or ad.get('allowed') is False) and retry<10:note_wait(a,'reservation_refused',180,exit_status=r.returncode,allowed=ad.get('allowed'));[time.sleep(60) for _ in range(3)];continue
         raise RuntimeError('Infrastructure STOP: admission')

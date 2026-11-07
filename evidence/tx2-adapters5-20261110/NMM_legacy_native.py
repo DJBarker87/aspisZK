@@ -117,6 +117,13 @@ def attempt(a,mode,branch="all",version="1"):
   new='let tag:u8=kani::any();kani::assume(tag<3);let out=match tag{0=>Err(MaxSeedLengthExceeded),1=>Err(InvalidSeeds),_=>Err(IllegalOwner)};'
   assert old in text;text=text.replace(old,new)
   text=text.replace('r.reply},None=>Err(solana_program::pubkey::PubkeyError::InvalidSeeds)', 'match r.reply{Err(e)=>Err(e),Ok(_)=>{assert!(false,"selected first PDA error arm");Err(solana_program::pubkey::PubkeyError::InvalidSeeds)}}},None=>Err(solana_program::pubkey::PubkeyError::InvalidSeeds)')
+ if branch in ['second_error','all_ok']:
+  assert version==1,'V2 second call has no local argument channel; never launch this shape'
+  old='let tag:u8=kani::any();kani::assume(tag<4);let out=match tag{0=>Ok(Pubkey::new_from_array(kani::any())),1=>Err(MaxSeedLengthExceeded),2=>Err(InvalidSeeds),_=>Err(IllegalOwner)};'
+  if branch=='second_error':
+   new='let c=NMM_from_seeds(seeds);let first=unsafe{*c.nw.get()==0};let tag:u8=kani::any();kani::assume(tag<3);let out=if first{Ok(Pubkey::new_from_array(kani::any()))}else{match tag{0=>Err(MaxSeedLengthExceeded),1=>Err(InvalidSeeds),_=>Err(IllegalOwner)}};'
+  else:new='let out=Ok(Pubkey::new_from_array(kani::any()));'
+  assert old in text;text=text.replace(old,new)
  if mode=='reply':text=text.replace('Some((p,n,r))=>{assert!(p==bytes.as_ptr()&&n==bytes.len(),"exact registry arguments");r}', 'Some((p,n,r))=>{assert!(p==bytes.as_ptr()&&n==bytes.len(),"exact registry arguments");r.map(|mut value|{value.bump=0;value})}')
  if mode=='argument':text=text.replace('&master,&reg.account,&ent.account,slot);','&master,&ent.account,&reg.account,slot);',1)
  if mode=='footprint':text=text.replace('let byte=if i<seeds.len()&&j<seeds[i].len(){Some(seeds[i][j])}else{None};','let byte=None;',1)
