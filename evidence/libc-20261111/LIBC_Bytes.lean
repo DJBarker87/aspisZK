@@ -9,8 +9,10 @@ noncomputable def raw (b : RSL.Bytes) : Slice U8 :=
 theorem raw_val (b : RSL.Bytes) (h : b.length ≤ Usize.max) :
  (raw b).val = LIB_Carriers.rawBytes b := by simp only [raw,dif_pos h]
 theorem raw_length (b : RSL.Bytes) (h : b.length ≤ Usize.max) :
- (raw b).val.length = b.length := by rw [raw_val b h];rfl
- theorem from_native (s : Slice U8) : raw (LIB_Carriers.bytes s) = s := by
+ (raw b).val.length = b.length := by
+ rw [raw_val b h]
+ simp only [NNC_ByteCarriers.nativeList,List.length_map]
+theorem from_native (s : Slice U8) : raw (LIB_Carriers.bytes s) = s := by
  have bound : (LIB_Carriers.bytes s).length ≤ Usize.max := by
   change (s.val.map _).length ≤ Usize.max
   simpa only [List.length_map] using s.property
