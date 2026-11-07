@@ -1,0 +1,71 @@
+NLV_generated/NLV_RowSpec087.lean:27:25: error: Ambiguous term
+  r1_semantic.Verified
+Possible interpretations:
+  AspisR1PublicPreparation.r1_semantic.Verified Unit : Type
+  
+  AspisR1CurrentCaller.r1_semantic.Verified Unit : Type
+NLV_generated/NLV_RowSpec087.lean:29:24: error: Ambiguous term
+  verifier.Prepared
+Possible interpretations:
+  AspisR1PublicPreparation.verifier.Prepared : Type
+  
+  AspisR1CurrentCaller.verifier.Prepared : Type
+NLV_generated/NLV_RowSpec087.lean:58:36: error: Ambiguous term
+  r1_semantic.Verified
+Possible interpretations:
+  AspisR1PublicPreparation.r1_semantic.Verified Unit : Type
+  
+  AspisR1CurrentCaller.r1_semantic.Verified Unit : Type
+NLV_generated/NLV_RowSpec087.lean:80:2: warning: declaration uses `sorry`
+NLV_generated/NLV_RowSpec087.lean:70:4: warning: declaration uses `sorry`
+NLV_generated/NLV_RowSpec087.lean:125:4: warning: declaration uses `sorry`
+'AspisR1.NLV_Resource087.source_projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+def AspisR1.NLV_Resource087.RowSpec_087 : NLJ_Prepare.Configuration → NLR_Interface.Native087 → Native → Prop :=
+fun cfg valueNative native =>
+  NLR_Interface.RowSpec_087 cfg valueNative ∧
+    ∀ (s : State),
+      Admission s →
+        have out := native s;
+        out.value = valueNative s.sourceState.input s.external ∧
+          out.value.afterInput = s.sourceState.input ∧
+            out.value.afterFrame = s.external ∧
+              Invocation cfg 12 s out.value.reply out.value.log out.events out.after ∧
+                Returned out.value.reply out.after ∧
+                  out.after.external = s.external ∧ out.after.scratchAddress = s.scratchAddress
+def AspisR1.NLV_Resource087.Bindings : State → Prop :=
+fun s =>
+  (match logicalValue s.sourceState.locals with
+    | none => s.logical = none
+    | some bytes => ∃ a, s.logical = some a ∧ allocationLive a ∧ a.bytes = bytes) ∧
+    (match viewValues s.sourceState.locals with
+      | none => True
+      | some pair =>
+        ∃ a sv yv,
+          s.logical = some a ∧
+            s.semanticView = some sv ∧
+              s.y1View = some yv ∧
+                viewBound a sv ∧
+                  viewBound a yv ∧
+                    sv.offset = 0 ∧
+                      yv.offset = (↑pair.1).length ∧
+                        sv.length = (↑pair.1).length ∧
+                          yv.length = (↑pair.2).length ∧
+                            sv.values = ↑pair.1 ∧ yv.values = ↑pair.2 ∧ sv.offset + sv.length ≤ yv.offset) ∧
+      match semanticValue s.sourceState.locals with
+      | none => True
+      | some sem => s.semanticValue = some sem ∧ ∃ owner, s.semanticOwner = some owner ∧ allocationLive owner
+def AspisR1.NLV_Resource087.Returned : Result NLJ_Prepare.Out → State → Prop :=
+fun reply after =>
+  match reply with
+  | ok (r, scratch) =>
+    after.scratchValue = scratch ∧
+      after.scratchExclusive = false ∧
+        after.logical = none ∧
+          after.semanticOwner = none ∧
+            after.semanticView = none ∧
+              after.y1View = none ∧
+                match r with
+                | core.result.Result.Err a => after.preparedOwner = none ∧ after.preparedValue = none
+                | core.result.Result.Ok p => sorry ∧ ∃ owner, after.preparedOwner = some owner ∧ allocationLive owner
+  | fail e => True
+  | div => True

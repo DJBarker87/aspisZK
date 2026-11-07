@@ -1,0 +1,47 @@
+{"attempt": "NLV_L099", "exit_status": 0, "wall_seconds": 16.14466170500964, "peak_rss_kib": "6075400", "swaps": "0", "print_axioms": ["'AspisR1.NLV_BatchInstall.event_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLV_BatchInstall.event_extents' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLV_BatchInstall.at_call' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NLV_BatchInstall.event_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLV_BatchInstall.event_extents' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLV_BatchInstall.at_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLV_BatchInstall.at_call : ∀ (H : Bytes → State) (s : NLV.State) (g : NLJ_Tx1.Scratch)
+  (p : verifier.Prepared) (a : verifier.Accumulator) (root : NLJ_Tx1.Root),
+  s.core.locals = NLJ_Tx1.Local.batch0 g p a root →
+    NLV_Interface.BatchDomain s →
+      ∃ parsed,
+        parsed.wire = MultiproofConeCanonical.bytesOf ↑s.core.input.proof ∧
+          NLN.BatchPacket H s.core.input.proof par
+...
+'AspisR1.NLV_BatchInstall.event_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLV_BatchInstall.event_extents' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLV_BatchInstall.at_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLV_BatchInstall.at_call : ∀ (H : Bytes → State) (s : NLV.State) (g : NLJ_Tx1.Scratch)
+  (p : verifier.Prepared) (a : verifier.Accumulator) (root : NLJ_Tx1.Root),
+  s.core.locals = NLJ_Tx1.Local.batch0 g p a root →
+    NLV_Interface.BatchDomain s →
+      ∃ parsed,
+        parsed.wire = MultiproofConeCanonical.bytesOf ↑s.core.input.proof ∧
+          NLN.BatchPacket H s.core.input.proof parsed (Tx1Q_Carriers.prepared p) root 0#usize :=
+fun H s g p a root site domain =>
+  let ⟨len, right✝⟩ :=
+    Eq.mp
+      (congrArg
+        (fun _a =>
+          match _a with
+          | NLJ_Tx1.Local.batch0 scratch p accumulator folded =>
+            have prepared := Tx1Q_Carriers.prepared p;
+            (↑s.core.input.proof).length = 57607 ∧
+              ∃ parsed,
+                parsed.wire = MultiproofConeCanonical.bytesOf ↑s.core.input.proof ∧
+                  (∀ j < 22, ↑(↑prepared.queries)[j]! < 262144) ∧
+                    ∀ (k : Fin 3),
+                      Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots prepared folded) k =
+                        AspisV8R19.SqueezeOracleBridge.encodeState (OraclePortBatchDraft.committedRoot parsed ↑k)
+          | x => True)
+        site)
+      domain
+  let ⟨parsed, h✝⟩ := right✝
+  let ⟨wire, right✝¹⟩ := h✝
+  let ⟨canonical, roots⟩ := right✝¹
+  Exists.intro parsed
+    ⟨wire, NLN_TX1_081.root H s.core.input.proof len parsed wire (Tx1Q_Carriers.prepared p) root canonical roots⟩
+
+Running as unit: run-r07b9799f47314b22a9f3c027395ce44a.scope; invocation ID: 68c7a62f724e49fda2c5a3c1b229115a

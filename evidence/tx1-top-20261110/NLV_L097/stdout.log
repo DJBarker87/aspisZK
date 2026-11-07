@@ -1,0 +1,29 @@
+'AspisR1.NLV_PreparePacket.full_source_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLV_PreparePacket.at_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLV_PreparePacket.source_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLV_PreparePacket.at_call : ∀ (cfg : NLJ_Tx1.Configuration) (native : Native087),
+  SourceRowSpec_087 (configuration cfg) native →
+    ∀ (i : NLJ_Tx1.Input) (g : NLJ_Tx1.Scratch) (frame : NLR_Interface.ExternalFrame),
+      SdkD_PrepareLower.Associated i.hashv (code cfg i g) →
+        ∀ (before : SdkC_Source.Log),
+          have observed := native (input i g) frame;
+          observed.afterInput = input i g ∧
+            observed.afterFrame = frame ∧
+              SdkC_Source.run i.hashv (SdkD_PrepareLower.lower (code cfg i g)) before =
+                (observed.reply, before ++ List.map NLV_LowerTrace.event observed.log) :=
+fun cfg native child i g frame associated before =>
+  have packet := child (input i g) frame;
+  ⟨packet.left,
+    ⟨packet.right.left,
+      have source := NLV_LowerTrace.source i.hashv (code cfg i g) associated before;
+      have actual := packet.right.right.right;
+      id
+        (fun actual =>
+          Eq.mp
+            (congrArg
+              (fun _a =>
+                SdkC_Source.run i.hashv (SdkD_PrepareLower.lower (code cfg i g)) before =
+                  (_a.2, before ++ List.map NLV_LowerTrace.event _a.1))
+              actual)
+            source)
+        actual⟩⟩

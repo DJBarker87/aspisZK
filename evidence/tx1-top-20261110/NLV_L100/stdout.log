@@ -1,0 +1,1004 @@
+'AspisR1.RPx_Deployed.deployed' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀ (missing : AspisR1.IDa_Deployed.Uninstalled CoreError) (indexError : CoreError)
+                (reservation : AspisR1.NP6_StdModel.Reservation) (native1 : AspisR1.S2W_ExtractionBoundary.First)
+                (native2 : AspisR1.S2W_ExtractionBoundary.Second)
+                (hashv : AspisR1.S2Z.Oracle.Parts → Aeneas.Std.Result AspisR1.S2Z.Oracle.Digest),
+                AspisR1.S2W_DigestExtraction.AeneasExtraction
+                    (AspisR1.DrvC_Installation.sdk
+                      (AspisR1.FIp_Install.configuration indexError
+                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation) reservation))
+                    native1 native2 hashv →
+                  ∀ (sha256 H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                    AspisR1.S2W_ExtractionBoundary.P1 sha256 H →
+                      AspisR1.S2W_ExtractionBoundary.RuntimeSyscall hashv sha256 →
+                        ∀ (data1 data2 : Aeneas.Std.Slice Aeneas.Std.U8) (slot : AspisR1.S2W_ExtractionBoundary.Slot)
+                          (state1 state2 final1 final2 : A) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+                          (post1 post2 : AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record)),
+                          AspisR1.S2W_D189Wrappers.first native1 copy allocator e1 AspisR1.CPH_Program.verifier data1
+                                state1 =
+                              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (saved, post1, final1)) →
+                            AspisR1.S2W_D189Wrappers.second native2 allocator e2 AspisR1.CPH_Program.verifier data2 slot
+                                  state2 =
+                                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (post2, final2)) →
+                              ∀ (root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (length : Aeneas.Std.U32)
+                                (prior :
+                                  AspisV8R19.MemoizedProgramLaw.Program AspisV8R19.DuplexFrames.Bytes
+                                    AspisV8R19.SourceDuplexStep.State Unit)
+                                (words : AspisR1.CanonicalCutEnrichedTranscript.Words)
+                                (p : AspisR1.CPG_Projection.Observations Tx A) (t u : Tx)
+                                (actions : List (AspisR1.CPP_BankState.Action A)),
+                                AspisR1.CPH_Game.DeployedPairExecution p t u e1 e2 saved actions native1 native2 copy
+                                    allocator AspisR1.CPH_Program.verifier →
+                                  AspisR1.CPR_DataPersistence.TwoTransactionLaw (AspisR1.CPG_Projection.adjacent p)
+                                      (AspisR1.CPG_Projection.ordinary p (AspisR1.Hist_Nonvacuity.key 0#u8))
+                                      (AspisR1.CPG_Projection.before p) (AspisR1.CPG_Projection.tentative p)
+                                      (AspisR1.CPG_Projection.success p) (AspisR1.CPG_Projection.loaded p) →
+                                    ∀ (D : AspisR1.LiteralByteProtocol.Decoder) (a : AspisR1.SCE_Experiment.Adversary A)
+                                      (Q0 Q1 : ℕ),
+                                      (∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+                                          (AspisR1.ARW_Induced.issued native1 copy allocator
+                                                AspisR1.CPH_Program.verifier a H).length ≤
+                                            Q0 + Q1) →
+                                        have P :=
+                                          AspisR1.ARW_Induced.program native1 copy allocator
+                                            AspisR1.CPH_Program.verifier a;
+                                        have runtime :=
+                                          AspisR1.ARX_AdmittedRuntime.runtime L copy allocator
+                                            (AspisR1.IDa_Deployed.deployedConfiguration missing indexError reservation)
+                                            indexError reservation native1 native2 hashv a;
+                                        have select := fun x =>
+                                          AspisR1.P2P_NativeSelection.pair
+                                            (AspisR1.DrvC_Installation.sdk
+                                              (AspisR1.FIp_Install.configuration indexError
+                                                (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                  reservation)
+                                                reservation))
+                                            AspisR1.CPH_Program.verifier e1 e2 data2 slot;
+                                        AspisR1.MultiproofConeP6Frozen2Stage.P6Boundary
+                                            (AspisR1.P6C_Extension.dictionary hashv H) () H AspisR1.Op5T_P6.parent
+                                            AspisR1.Op5T_P6.parent AspisR1.Op5T_P6.parent
+                                            AspisR1.MultiproofConeP6Batch.referenceLeaf ∧
+                                          AspisR1.DrvC_Implementation.driver
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation) =
+                                              AspisR1.DrvC_SourceEntry.source
+                                                (AspisR1.FIp_Install.configuration indexError
+                                                  (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                    reservation)
+                                                  reservation)
+                                                hashv ∧
+                                            AspisR1.DrvC_Installation.sdk
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                      reservation)
+                                                    reservation) =
+                                                AspisR1.SdkD_PairBatches.dictionary
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).boundaries
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).std ∧
+                                              AspisR1.FJv_DResult.Outcome L e1 e2 w1 w2
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).adapter
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).currentBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).reserved
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).query
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).geometry
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).stageBase
+                                                  (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation).finish
+                                                  (AspisR1.FIp_Install.boundaries
+                                                    (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation).boundaries)
+                                                  reservation AspisR1.CPH_Program.verifier data1 data2 slot saved post1
+                                                  post2 H
+                                                  (AspisR1.DrvC_Implementation.driver
+                                                    (AspisR1.FIp_Install.configuration indexError
+                                                      (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                        reservation)
+                                                      reservation))
+                                                  prior (p.physicalEvents t) hashv
+                                                  (AspisR1.BinRawByteCollisionTargets.event
+                                                    AspisR1.SelectedTranscriptParams.params.iv (Q0 + Q1 + 2965)
+                                                    (AspisV8R19.MemoizedProgramLaw.eval H
+                                                      (AspisR1.Hiq_RecordedJoint.program
+                                                        (AspisR1.F3X_Account.program
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P)
+                                                        AspisR1.F3X_Projection.project select))) ∧
+                                                (AspisR1.F3X_ModelClaims.Claims
+                                                      (AspisR1.FIp_Install.configuration indexError
+                                                        (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                          reservation)
+                                                        reservation)
+                                                      D P (Q0 + Q1) ∧
+                                                    AspisR1.F3Y_SourceClaims.Claims
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        D hashv P (Q0 + Q1) select ∧
+                                                      AspisR1.F3Y_AccountMass.Claims
+                                                          (AspisR1.FIp_Install.configuration indexError
+                                                            (AspisR1.IDa_Deployed.deployedConfiguration missing
+                                                              indexError reservation)
+                                                            reservation)
+                                                          hashv P (Q0 + Q1) select ∧
+                                                        ⋯) ∧
+                                                  (native1 AspisR1.CPH_Program.verifier e1.first data1 =
+                                                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) ∧
+                                                      (↑saved).length = 1768 ∧ ⋯) ∧
+                                                    AspisR1.Rc2_Events.Facts
+                                                        (AspisR1.FIp_Install.configuration indexError
+                                                          (AspisR1.IDa_Deployed.deployedConfiguration missing indexError
+                                                            reservation)
+                                                          reservation)
+                                                        hashv native1 native2 copy allocator
+                                                        AspisR1.CPH_Program.verifier H saved ∧
+                                                      AspisR1.CPH_Protection.Facts p t saved
+                                                          AspisR1.CPH_Program.verifier ∧
+                                                        ⋯
+'AspisR1.NLV.admission' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV.admission : ∀ (s : AspisR1.NLV.State) (nextLocal : AspisR1.NLJ_Tx1.Local),
+  AspisR1.NLV.InputAdmission s → AspisR1.NLV.InputAdmission (AspisR1.NLV.valueAdvance s nextLocal)
+'AspisR1.NLV.effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV.effects : ∀ {cfg : AspisR1.NLJ_Tx1.Configuration}
+  {hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest} {n : ℕ}
+  {s last : AspisR1.NLV.State} {out : Aeneas.Std.Result AspisR1.NLJ_Tx1.Out} {log : AspisR1.SdkC_Source.Log}
+  {events : List AspisR1.NLV.Event},
+  AspisR1.NLV.Invocation cfg hashv n s out log events last → last.attempted = s.attempted ++ log
+'AspisR1.NLV.external_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV.external_frame : ∀ (s : AspisR1.NLV.State) (nextLocal : AspisR1.NLJ_Tx1.Local),
+  (AspisR1.NLV.valueAdvance s nextLocal).external = s.external
+'AspisR1.NLV.external_frame_chain' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV.external_frame_chain : ∀ {cfg : AspisR1.NLJ_Tx1.Configuration}
+  {hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest} {n : ℕ}
+  {s last : AspisR1.NLV.State} {out : Aeneas.Std.Result AspisR1.NLJ_Tx1.Out} {log : AspisR1.SdkC_Source.Log}
+  {events : List AspisR1.NLV.Event},
+  AspisR1.NLV.Invocation cfg hashv n s out log events last → last.external = s.external
+'AspisR1.NLV.initial_admission' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV.initial_admission : ∀ (i : AspisR1.NLJ_Tx1.Input) (frame : AspisR1.NLJ_Packets.Frame094),
+  AspisR1.NLV.InputAdmission (AspisR1.NLV.initial i frame)
+'AspisR1.NLV.initial_external' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV.initial_external : ∀ (i : AspisR1.NLJ_Tx1.Input) (frame : AspisR1.NLJ_Packets.Frame094),
+  (AspisR1.NLV.initial i frame).external.externalBytes = frame.externalBytes ∧
+    (AspisR1.NLV.initial i frame).external.externalMetadata = frame.externalMetadata ∧
+      (AspisR1.NLV.initial i frame).external.authority = frame.authority
+'AspisR1.NLV.initial_private' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV.initial_private : ∀ (i : AspisR1.NLJ_Tx1.Input) (frame : AspisR1.NLJ_Packets.Frame094)
+  (kind : AspisR1.NLV.OwnedKind), (AspisR1.NLV.initial i frame).ownership.allocations kind = none
+'AspisR1.NLV.input_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV.input_frame : ∀ (s : AspisR1.NLV.State) (nextLocal : AspisR1.NLJ_Tx1.Local),
+  (AspisR1.NLV.valueAdvance s nextLocal).core.input = s.core.input
+'AspisR1.NLV.input_frame_chain' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV.input_frame_chain : ∀ {cfg : AspisR1.NLJ_Tx1.Configuration}
+  {hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest} {n : ℕ}
+  {s last : AspisR1.NLV.State} {out : Aeneas.Std.Result AspisR1.NLJ_Tx1.Out} {log : AspisR1.SdkC_Source.Log}
+  {events : List AspisR1.NLV.Event},
+  AspisR1.NLV.Invocation cfg hashv n s out log events last → last.core.input = s.core.input
+'AspisR1.NLV.source_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV.source_cuts : ∀ {cfg : AspisR1.NLJ_Tx1.Configuration}
+  {hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest} {n : ℕ}
+  {s last : AspisR1.NLV.State} {out : Aeneas.Std.Result AspisR1.NLJ_Tx1.Out} {log : AspisR1.SdkC_Source.Log}
+  {events : List AspisR1.NLV.Event},
+  AspisR1.NLV.Invocation cfg hashv n s out log events last →
+    AspisR1.NHZ_DRIVER.Cuts hashv (AspisR1.NLJ_Tx1.fold cfg n s.core) out log
+'AspisR1.NLV_Algebra.assoc' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_Algebra.assoc : ∀ {A B C : Type} (c : AspisR1.CheckpointBytes5Effect.Code A)
+  (f : A → AspisR1.CheckpointBytes5Effect.Code B) (g : B → AspisR1.CheckpointBytes5Effect.Code C),
+  AspisR1.CheckpointBytes5Effect.bind (AspisR1.CheckpointBytes5Effect.bind c f) g =
+    AspisR1.CheckpointBytes5Effect.bind c fun a => AspisR1.CheckpointBytes5Effect.bind (f a) g
+'AspisR1.NLV_Algebra.norm_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_Algebra.norm_bind : ∀ {A B : Type} (c : AspisR1.CheckpointBytes5Effect.Code A)
+  (f : A → AspisR1.CheckpointBytes5Effect.Code B),
+  AspisR1.NGQ_Normalize.normalize (AspisR1.CheckpointBytes5Effect.bind c f) =
+    AspisR1.NGQ_Normalize.normalize (AspisR1.CheckpointBytes5Effect.bind (AspisR1.NGQ_Normalize.normalize c) f)
+'AspisR1.NLV_Algebra.right' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_Algebra.right : ∀ {A : Type} (c : AspisR1.CheckpointBytes5Effect.Code A),
+  AspisR1.CheckpointBytes5Effect.bind c AspisR1.CheckpointBytes5Effect.Code.done = c
+'AspisR1.NLV_Algebra.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_Algebra.same : ∀ {A B : Type} (c : AspisR1.CheckpointBytes5Effect.Code A)
+  (f g : A → AspisR1.CheckpointBytes5Effect.Code B),
+  (∀ (a : A), f a = g a) → AspisR1.CheckpointBytes5Effect.bind c f = AspisR1.CheckpointBytes5Effect.bind c g
+'AspisR1.NLV_BatchInstall.at_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_BatchInstall.at_call : ∀ (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+  (s : AspisR1.NLV.State) (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (root : AspisR1.NLJ_Tx1.Root),
+  s.core.locals = AspisR1.NLJ_Tx1.Local.batch0 g p a root →
+    AspisR1.NLV_Interface.BatchDomain s →
+      ∃ parsed,
+        parsed.wire = AspisR1.MultiproofConeCanonical.bytesOf ↑s.core.input.proof ∧
+          NLN.BatchPacket H s.core.input.proof parsed (AspisR1.Tx1Q_Carriers.prepared p) root 0#usize
+'AspisR1.NLV_BatchInstall.event_extents' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_BatchInstall.event_extents : ∀ {cfg : AspisR1.NLJ_Tx1.Configuration} (i : AspisR1.NLJ_Tx1.Input)
+  (frame : AspisR1.NLJ_Packets.Frame094) (last : AspisR1.NLV.State) (out : Aeneas.Std.Result AspisR1.NLJ_Tx1.Out)
+  (log : AspisR1.SdkC_Source.Log) (events : List AspisR1.NLV.Event),
+  AspisR1.NLV.Invocation cfg i.hashv 20 (AspisR1.NLV.initial i frame) out log events last →
+    AspisR1.NLV_Interface.CallerDomain i →
+      ∀ e ∈ events, (↑e.pre.core.input.proof).length = 57607 ∧ (↑e.pre.core.input.publicBytes).length = 1880
+'AspisR1.NLV_BatchInstall.event_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_BatchInstall.event_inputs : ∀ {cfg : AspisR1.NLJ_Tx1.Configuration}
+  {h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest} {n : ℕ} {s last : AspisR1.NLV.State}
+  {out : Aeneas.Std.Result AspisR1.NLJ_Tx1.Out} {log : AspisR1.SdkC_Source.Log} {events : List AspisR1.NLV.Event},
+  AspisR1.NLV.Invocation cfg h n s out log events last → ∀ e ∈ events, e.pre.core.input = s.core.input
+'AspisR1.NLV_Deployed.dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_Deployed.dictionary : ∀ {C : Type} (missing : AspisR1.IDa_Deployed.Uninstalled C) (indexError : C)
+  (reservation : AspisR1.NP6_StdModel.Reservation),
+  AspisR1.NLJ_Tx1.ops (AspisR1.NLV_Deployed.configuration missing indexError reservation) =
+    AspisR1.DrvC_Installation.currentInstalled (AspisR1.NLV_Deployed.installed missing indexError reservation)
+'AspisR1.NLV_Deployed.digest_slot' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_Deployed.digest_slot : ∀ {C : Type} (missing : AspisR1.IDa_Deployed.Uninstalled C) (indexError : C)
+  (reservation : AspisR1.NP6_StdModel.Reservation) (parts : Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8)),
+  (AspisR1.NLV_Deployed.digest missing indexError reservation).digest () parts =
+    (AspisR1.DrvC_Installation.sdk (AspisR1.NLV_Deployed.installed missing indexError reservation)).op43 () parts
+'AspisR1.NLV_EmissionSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmissionSource.source : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.NLV_Emitted.suffix_guard cfg i =
+    AspisR1.GExp_FirstCode.code cfg.base cfg.boundaries cfg.std i.hashv i.digest i.publicValue i.publicBytes i.proof i.k
+'AspisR1.NLV_EmitProof.eq_accumulator' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_accumulator : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_accumulator cfg i g p) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_accumulator cfg i g p) before
+'AspisR1.NLV_EmitProof.eq_batch0' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_batch0 : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (root : AspisR1.NLJ_Tx1.Root) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_batch0 cfg i g p a root) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_batch0 cfg i g p a root) before
+'AspisR1.NLV_EmitProof.eq_checkpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_checkpoint : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_checkpoint cfg i p a) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_checkpoint cfg i p a) before
+'AspisR1.NLV_EmitProof.eq_finishPending' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_finishPending : ∀
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (cfg : AspisR1.NLJ_Tx1.Configuration)
+  (i : AspisR1.NLJ_Tx1.Input) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (pending : AspisR1CurrentCaller.verifier.BatchedWeights)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_finishPending cfg i p a pending) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_finishPending cfg i p a pending) before
+'AspisR1.NLV_EmitProof.eq_foldedCopy' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_foldedCopy : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (slice : Aeneas.Std.Slice Aeneas.Std.U8) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_foldedCopy cfg i g p a slice) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_foldedCopy cfg i g p a slice) before
+'AspisR1.NLV_EmitProof.eq_foldedSlice' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_foldedSlice : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_foldedSlice cfg i g p a) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_foldedSlice cfg i g p a) before
+'AspisR1.NLV_EmitProof.eq_foldedUnwrap' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_foldedUnwrap : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (r : Aeneas.Std.core.result.Result AspisR1.NLJ_Tx1.Root Aeneas.Std.core.array.TryFromSliceError)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_foldedUnwrap cfg i g p a r) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_foldedUnwrap cfg i g p a r) before
+'AspisR1.NLV_EmitProof.eq_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_geometry : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_geometry cfg i g p a) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_geometry cfg i g p a) before
+'AspisR1.NLV_EmitProof.eq_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_guard : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_guard cfg i) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_guard cfg i) before
+'AspisR1.NLV_EmitProof.eq_markCheckpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_markCheckpoint : ∀
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (cfg : AspisR1.NLJ_Tx1.Configuration)
+  (i : AspisR1.NLJ_Tx1.Input) (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_markCheckpoint cfg i bytes) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_markCheckpoint cfg i bytes) before
+'AspisR1.NLV_EmitProof.eq_markMerkle' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_markMerkle : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_markMerkle cfg i g p a) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_markMerkle cfg i g p a) before
+'AspisR1.NLV_EmitProof.eq_markParsed' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_markParsed : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_markParsed cfg i) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_markParsed cfg i) before
+'AspisR1.NLV_EmitProof.eq_markPrepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_markPrepare : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_markPrepare cfg i g p a) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_markPrepare cfg i g p a) before
+'AspisR1.NLV_EmitProof.eq_parse' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_parse : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_parse cfg i) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_parse cfg i) before
+'AspisR1.NLV_EmitProof.eq_pending' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_pending : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (geom : AspisR1CurrentCaller.verifier.QueryGeometry) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_pending cfg i g p a geom) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_pending cfg i g p a geom) before
+'AspisR1.NLV_EmitProof.eq_prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_prepare : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_prepare cfg i g) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_prepare cfg i g) before
+'AspisR1.NLV_EmitProof.eq_query' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_query : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (geom : AspisR1CurrentCaller.verifier.QueryGeometry) (pending : AspisR1CurrentCaller.verifier.BatchedWeights)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_query cfg i g p a geom pending) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_query cfg i g p a geom pending) before
+'AspisR1.NLV_EmitProof.eq_returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_returned : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_returned cfg i bytes) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_returned cfg i bytes) before
+'AspisR1.NLV_EmitProof.eq_scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_scan : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_scan cfg i) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_scan cfg i) before
+'AspisR1.NLV_EmitProof.eq_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_EmitProof.eq_zero : ∀ (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.suffix_zero cfg i) before =
+    AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.suffix_zero cfg i) before
+'AspisR1.NLV_Emitted.try_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_Emitted.try_run : ∀ {A : Type}
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (r : Aeneas.Std.core.result.Result A AspisR1CurrentCaller.verifier.Error)
+  (k : A → AspisR1.CheckpointBytes5Effect.Code AspisR1.NLJ_Tx1.Out) (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLV_Emitted.emittedTry r k) before =
+    match r with
+    | Aeneas.Std.core.result.Result.Err e => (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err e), before)
+    | Aeneas.Std.core.result.Result.Ok a => AspisR1.SdkC_Source.run h (k a) before
+'AspisR1.NLV_EvalTrace.exists_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_EvalTrace.exists_trace : ∀ {A : Type}
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (c : AspisR1.CheckpointBytes5Effect.Code A), ∃ out log, AspisR1.NGQ_Cuts.Trace h c out log
+'AspisR1.NLV_EvalTrace.of_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_EvalTrace.of_run : ∀ {A : Type}
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (c : AspisR1.CheckpointBytes5Effect.Code A) (out : Aeneas.Std.Result A) (log : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h c [] = (out, log) → AspisR1.NGQ_Cuts.Trace h c out log
+'AspisR1.NLV_LowerTrace.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_LowerTrace.source : ∀ {A : Type}
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (c : AspisR1PublicPreparation.PreparedHashCode.Code A),
+  AspisR1.SdkD_PrepareLower.Associated h c →
+    ∀ (before : AspisR1.SdkC_Source.Log),
+      AspisR1.SdkC_Source.run h (AspisR1.SdkD_PrepareLower.lower c) before =
+        ((AspisR1PublicPreparation.PreparedHashCode.run c).2,
+          before ++ List.map AspisR1.NLV_LowerTrace.event (AspisR1PublicPreparation.PreparedHashCode.run c).1)
+'AspisR1.NLV_ObservationIndex.bound' depends on axioms: [propext, Quot.sound]
+AspisR1.NLV_ObservationIndex.bound : ∀ j < 57607, j < 65536
+'AspisR1.NLV_ObservationIndex.independent' depends on axioms: [propext, Quot.sound]
+AspisR1.NLV_ObservationIndex.independent : ∀ (field row col : ℕ),
+  field < 9 →
+    row < 64 →
+      col < 32 →
+        ∃ selector coordinate,
+          selector < 576 ∧ coordinate < 57607 ∧ selector % 9 = field ∧ selector / 9 = row ∧ coordinate % 32 = col
+'AspisR1.NLV_ObservationIndex.modulo' depends on axioms: [propext, Quot.sound]
+AspisR1.NLV_ObservationIndex.modulo : ∀ j < 57607, j % 65536 = j
+'AspisR1.NLV_PairElim.elim' does not depend on any axioms
+@AspisR1.NLV_PairElim.elim : ∀ {A B C : Type} (p : A × B) (f : A → B → C),
+  (match p with
+    | (a, b) => f a b) =
+    f p.1 p.2
+'AspisR1.NLV_PreparePacket.at_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_PreparePacket.at_call : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration)
+  (native : AspisR1.NLV_PreparePacket.Native087),
+  AspisR1.NLV_PreparePacket.SourceRowSpec_087 (AspisR1.NLV_PreparePacket.configuration cfg) native →
+    ∀ (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch) (frame : AspisR1.NLR_Interface.ExternalFrame),
+      AspisR1.SdkD_PrepareLower.Associated i.hashv (AspisR1.NLV_PreparePacket.code cfg i g) →
+        ∀ (before : AspisR1.SdkC_Source.Log),
+          have observed := native (AspisR1.NLV_PreparePacket.input i g) frame;
+          observed.afterInput = AspisR1.NLV_PreparePacket.input i g ∧
+            observed.afterFrame = frame ∧
+              AspisR1.SdkC_Source.run i.hashv (AspisR1.SdkD_PrepareLower.lower (AspisR1.NLV_PreparePacket.code cfg i g))
+                  before =
+                (observed.reply, before ++ List.map AspisR1.NLV_LowerTrace.event observed.log)
+'AspisR1.NLV_PreparePacket.full_source_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_PreparePacket.full_source_cut : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration)
+  (native : AspisR1.NLV_PreparePacket.Native087) (resourceNative : AspisR1.NLV_Resource087.Native),
+  AspisR1.NLV_Resource087.RowSpec_087 (AspisR1.NLV_PreparePacket.configuration cfg) native resourceNative →
+    ∀ (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch) (frame : AspisR1.NLR_Interface.ExternalFrame),
+      AspisR1.SdkD_PrepareLower.Associated i.hashv (AspisR1.NLV_PreparePacket.code cfg i g) →
+        AspisR1.NHZ_DRIVER.Cuts i.hashv (AspisR1.SdkD_PrepareLower.lower (AspisR1.NLV_PreparePacket.code cfg i g))
+          (native (AspisR1.NLV_PreparePacket.input i g) frame).reply
+          (List.map AspisR1.NLV_LowerTrace.event (native (AspisR1.NLV_PreparePacket.input i g) frame).log)
+'AspisR1.NLV_PreparePacket.source_cut' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_PreparePacket.source_cut : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration)
+  (native : AspisR1.NLV_PreparePacket.Native087),
+  AspisR1.NLV_PreparePacket.SourceRowSpec_087 (AspisR1.NLV_PreparePacket.configuration cfg) native →
+    ∀ (i : AspisR1.NLJ_Tx1.Input) (g : AspisR1.NLJ_Tx1.Scratch) (frame : AspisR1.NLR_Interface.ExternalFrame),
+      AspisR1.SdkD_PrepareLower.Associated i.hashv (AspisR1.NLV_PreparePacket.code cfg i g) →
+        AspisR1.NHZ_DRIVER.Cuts i.hashv (AspisR1.SdkD_PrepareLower.lower (AspisR1.NLV_PreparePacket.code cfg i g))
+          (native (AspisR1.NLV_PreparePacket.input i g) frame).reply
+          (List.map AspisR1.NLV_LowerTrace.event (native (AspisR1.NLV_PreparePacket.input i g) frame).log)
+'AspisR1.NLV_QueryCanonical.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_QueryCanonical.source : ∀ (ops : AspisR1CurrentCaller.Ops)
+  (B : AspisR1PublicPreparation.FinishModel.Boundaries) (std : AspisR1.ClaimsUnrolledFinish.StdCalls) {H : Type}
+  (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H) (hash : H)
+  (pub : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8)
+  (input scratch : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+  (p : AspisR1CurrentCaller.verifier.Prepared),
+  AspisR1CurrentCaller.verifier.candidate.prepare (AspisR1.RowShape_InstalledSlots.verifierOps ops B std) D pub proof
+        hash none input =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p, scratch) →
+    ∀ j < 22, ↑(↑p.queries)[j]! < 262144
+'AspisR1.NLV_Resource087.source_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Resource087.source_projection : ∀ (cfg : AspisR1.NLJ_Prepare.Configuration)
+  (valueNative : AspisR1.NLR_Interface.Native087) (native : AspisR1.NLV_Resource087.Native),
+  AspisR1.NLV_Resource087.RowSpec_087 cfg valueNative native → AspisR1.NLR_Interface.RowSpec_087 cfg valueNative
+'AspisR1.NLV_RunLaws.bind_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_RunLaws.bind_run : ∀ {A B : Type}
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (c : AspisR1.CheckpointBytes5Effect.Code A) (k : A → AspisR1.CheckpointBytes5Effect.Code B)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.CheckpointBytes5Effect.bind c k) before =
+    match AspisR1.SdkC_Source.run h c before with
+    | (Aeneas.Std.Result.ok a, after) => AspisR1.SdkC_Source.run h (k a) after
+    | (Aeneas.Std.Result.fail e, after) => (Aeneas.Std.Result.fail e, after)
+    | (Aeneas.Std.Result.div, after) => (Aeneas.Std.Result.div, after)
+'AspisR1.NLV_RunLaws.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_RunLaws.same : ∀ {A B : Type}
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (c : AspisR1.CheckpointBytes5Effect.Code A) (f g : A → AspisR1.CheckpointBytes5Effect.Code B),
+  (∀ (a : A) (before : AspisR1.SdkC_Source.Log),
+      AspisR1.SdkC_Source.run h (f a) before = AspisR1.SdkC_Source.run h (g a) before) →
+    ∀ (before : AspisR1.SdkC_Source.Log),
+      AspisR1.SdkC_Source.run h (AspisR1.CheckpointBytes5Effect.bind c f) before =
+        AspisR1.SdkC_Source.run h (AspisR1.CheckpointBytes5Effect.bind c g) before
+'AspisR1.NLV_Tree.decrease' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.decrease : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration)
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (s after : AspisR1.NLJ_Tx1.State)
+  (before log : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLJ_Tx1.step cfg s) before = (Aeneas.Std.Result.ok (Sum.inr after), log) →
+    AspisR1.NLV_Tree.rank after < AspisR1.NLV_Tree.rank s
+'AspisR1.NLV_Tree.exact_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.exact_source : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration)
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (n : ℕ) (s : AspisR1.NLJ_Tx1.State),
+  AspisR1.NLV_Tree.rank s ≤ n →
+    ∀ (before : AspisR1.SdkC_Source.Log),
+      AspisR1.SdkC_Source.run h (AspisR1.NLJ_Tx1.fold cfg n s) before =
+        AspisR1.SdkC_Source.run h (AspisR1.NLV_Tree.denote cfg s) before
+'AspisR1.NLV_Tree.frame_accumulator' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_accumulator : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.accumulator g p })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.accumulator g p })
+'AspisR1.NLV_Tree.frame_batch0' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_batch0 : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (root : AspisR1.NLJ_Tx1.Root),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.batch0 g p a root })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.batch0 g p a root })
+'AspisR1.NLV_Tree.frame_checkpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_checkpoint : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.checkpoint p a })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.checkpoint p a })
+'AspisR1.NLV_Tree.frame_finishPending' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_finishPending : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (pending : AspisR1CurrentCaller.verifier.BatchedWeights),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.finishPending p a pending })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.finishPending p a pending })
+'AspisR1.NLV_Tree.frame_foldedCopy' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_foldedCopy : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (slice : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedCopy g p a slice })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedCopy g p a slice })
+'AspisR1.NLV_Tree.frame_foldedSlice' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_foldedSlice : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedSlice g p a })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedSlice g p a })
+'AspisR1.NLV_Tree.frame_foldedUnwrap' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_foldedUnwrap : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (r : Aeneas.Std.core.result.Result AspisR1.NLJ_Tx1.Root Aeneas.Std.core.array.TryFromSliceError),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedUnwrap g p a r })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedUnwrap g p a r })
+'AspisR1.NLV_Tree.frame_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_geometry : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.geometry g p a })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.geometry g p a })
+'AspisR1.NLV_Tree.frame_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_guard : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.guard })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.guard })
+'AspisR1.NLV_Tree.frame_markCheckpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_markCheckpoint : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.markCheckpoint bytes })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markCheckpoint bytes })
+'AspisR1.NLV_Tree.frame_markMerkle' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_markMerkle : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.markMerkle g p a })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markMerkle g p a })
+'AspisR1.NLV_Tree.frame_markParsed' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_markParsed : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.markParsed })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markParsed })
+'AspisR1.NLV_Tree.frame_markPrepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_markPrepare : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.markPrepare g p a })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markPrepare g p a })
+'AspisR1.NLV_Tree.frame_parse' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_parse : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.parse })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.parse })
+'AspisR1.NLV_Tree.frame_pending' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_pending : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (geom : AspisR1CurrentCaller.verifier.QueryGeometry),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.pending g p a geom })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.pending g p a geom })
+'AspisR1.NLV_Tree.frame_prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_prepare : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.prepare g })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.prepare g })
+'AspisR1.NLV_Tree.frame_query' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_query : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (geom : AspisR1CurrentCaller.verifier.QueryGeometry)
+  (pending : AspisR1CurrentCaller.verifier.BatchedWeights),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.query g p a geom pending })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.query g p a geom pending })
+'AspisR1.NLV_Tree.frame_returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_returned : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.returned bytes })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.returned bytes })
+'AspisR1.NLV_Tree.frame_scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_scan : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.scan })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.scan })
+'AspisR1.NLV_Tree.frame_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.frame_zero : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.FramePost { input := i, locals := AspisR1.NLJ_Tx1.Local.zero })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.zero })
+'AspisR1.NLV_Tree.from_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.from_cuts : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (frame : AspisR1.NLJ_Packets.Frame094) (observed : AspisR1.NGP_L181.Observation AspisR1.NLJ_Tx1.Out)
+  (events : List AspisR1.NLV.Event) (last : AspisR1.NLV.State),
+  AspisR1.NLV.Invocation cfg i.hashv 20 (AspisR1.NLV.initial i frame) observed.result observed.attempted events last →
+    AspisR1.NGP_L181.NativeAssociation i.hashv
+        (AspisR1.NGQ_Normalize.normalize
+          (AspisR1.GExp_FirstCode.code cfg.base cfg.boundaries cfg.std i.hashv i.digest i.publicValue i.publicBytes
+            i.proof i.k))
+        observed ∧
+      last.external = (AspisR1.NLV.initial i frame).external ∧ last.core.input = i
+'AspisR1.NLV_Tree.initial_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.initial_source : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration)
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (i : AspisR1.NLJ_Tx1.Input)
+  (before : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLJ_Tx1.fold cfg 20 { input := i, locals := AspisR1.NLJ_Tx1.Local.guard }) before =
+    AspisR1.SdkC_Source.run h
+      (AspisR1.GExp_FirstCode.code cfg.base cfg.boundaries cfg.std i.hashv i.digest i.publicValue i.publicBytes i.proof
+        i.k)
+      before
+'AspisR1.NLV_Tree.input_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.input_frame : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration)
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest) (s after : AspisR1.NLJ_Tx1.State)
+  (before log : AspisR1.SdkC_Source.Log),
+  AspisR1.SdkC_Source.run h (AspisR1.NLJ_Tx1.step cfg s) before = (Aeneas.Std.Result.ok (Sum.inr after), log) →
+    after.input = s.input
+'AspisR1.NLV_Tree.leaves_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_Tree.leaves_bind : ∀ {A B : Type} (P : B → Prop) (c : AspisR1.CheckpointBytes5Effect.Code A)
+  (k : A → AspisR1.CheckpointBytes5Effect.Code B),
+  (∀ (a : A), AspisR1.NLV_Tree.AllLeaves P (k a)) →
+    AspisR1.NLV_Tree.AllLeaves P (AspisR1.CheckpointBytes5Effect.bind c k)
+'AspisR1.NLV_Tree.leaves_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+@AspisR1.NLV_Tree.leaves_run : ∀ {A : Type} (P : A → Prop)
+  (h : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest)
+  (c : AspisR1.CheckpointBytes5Effect.Code A),
+  AspisR1.NLV_Tree.AllLeaves P c →
+    ∀ (a : A) (before after : AspisR1.SdkC_Source.Log),
+      AspisR1.SdkC_Source.run h c before = (Aeneas.Std.Result.ok a, after) → P a
+'AspisR1.NLV_Tree.positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.positive : ∀ (s : AspisR1.NLJ_Tx1.State), 0 < AspisR1.NLV_Tree.rank s
+'AspisR1.NLV_Tree.progress_accumulator' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_accumulator : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.accumulator g p })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.accumulator g p })
+'AspisR1.NLV_Tree.progress_batch0' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_batch0 : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (root : AspisR1.NLJ_Tx1.Root),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.batch0 g p a root })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.batch0 g p a root })
+'AspisR1.NLV_Tree.progress_checkpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_checkpoint : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.checkpoint p a })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.checkpoint p a })
+'AspisR1.NLV_Tree.progress_finishPending' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_finishPending : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (pending : AspisR1CurrentCaller.verifier.BatchedWeights),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.finishPending p a pending })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.finishPending p a pending })
+'AspisR1.NLV_Tree.progress_foldedCopy' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_foldedCopy : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (slice : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedCopy g p a slice })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedCopy g p a slice })
+'AspisR1.NLV_Tree.progress_foldedSlice' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_foldedSlice : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedSlice g p a })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedSlice g p a })
+'AspisR1.NLV_Tree.progress_foldedUnwrap' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_foldedUnwrap : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (r : Aeneas.Std.core.result.Result AspisR1.NLJ_Tx1.Root Aeneas.Std.core.array.TryFromSliceError),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedUnwrap g p a r })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedUnwrap g p a r })
+'AspisR1.NLV_Tree.progress_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_geometry : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.geometry g p a })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.geometry g p a })
+'AspisR1.NLV_Tree.progress_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_guard : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.guard })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.guard })
+'AspisR1.NLV_Tree.progress_markCheckpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_markCheckpoint : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.markCheckpoint bytes })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markCheckpoint bytes })
+'AspisR1.NLV_Tree.progress_markMerkle' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_markMerkle : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.markMerkle g p a })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markMerkle g p a })
+'AspisR1.NLV_Tree.progress_markParsed' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_markParsed : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.markParsed })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markParsed })
+'AspisR1.NLV_Tree.progress_markPrepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_markPrepare : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.markPrepare g p a })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markPrepare g p a })
+'AspisR1.NLV_Tree.progress_parse' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_parse : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.parse })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.parse })
+'AspisR1.NLV_Tree.progress_pending' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_pending : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (geom : AspisR1CurrentCaller.verifier.QueryGeometry),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.pending g p a geom })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.pending g p a geom })
+'AspisR1.NLV_Tree.progress_prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_prepare : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.prepare g })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.prepare g })
+'AspisR1.NLV_Tree.progress_query' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_query : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (geom : AspisR1CurrentCaller.verifier.QueryGeometry)
+  (pending : AspisR1CurrentCaller.verifier.BatchedWeights),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.query g p a geom pending })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.query g p a geom pending })
+'AspisR1.NLV_Tree.progress_returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_returned : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  AspisR1.NLV_Tree.AllLeaves
+    (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.returned bytes })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.returned bytes })
+'AspisR1.NLV_Tree.progress_scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_scan : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.scan })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.scan })
+'AspisR1.NLV_Tree.progress_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.progress_zero : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.ProgressPost { input := i, locals := AspisR1.NLJ_Tx1.Local.zero })
+    (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.zero })
+'AspisR1.NLV_Tree.source_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.source_frame : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (s : AspisR1.NLJ_Tx1.State),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.FramePost s) (AspisR1.NLJ_Tx1.step cfg s)
+'AspisR1.NLV_Tree.source_progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.source_progress : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (s : AspisR1.NLJ_Tx1.State),
+  AspisR1.NLV_Tree.AllLeaves (AspisR1.NLV_Tree.ProgressPost s) (AspisR1.NLJ_Tx1.step cfg s)
+'AspisR1.NLV_Tree.source_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.source_step : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (s : AspisR1.NLJ_Tx1.State),
+  AspisR1.CheckpointBytes5Effect.bind (AspisR1.NLJ_Tx1.step cfg s) (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg s
+'AspisR1.NLV_Tree.step_accumulator' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_accumulator : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.accumulator g p })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.accumulator g p }
+'AspisR1.NLV_Tree.step_batch0' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_batch0 : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (root : AspisR1.NLJ_Tx1.Root),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.batch0 g p a root })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.batch0 g p a root }
+'AspisR1.NLV_Tree.step_checkpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_checkpoint : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.checkpoint p a })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.checkpoint p a }
+'AspisR1.NLV_Tree.step_finishPending' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_finishPending : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (p : AspisR1CurrentCaller.verifier.Prepared) (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (pending : AspisR1CurrentCaller.verifier.BatchedWeights),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.finishPending p a pending })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.finishPending p a pending }
+'AspisR1.NLV_Tree.step_foldedCopy' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_foldedCopy : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (slice : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedCopy g p a slice })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedCopy g p a slice }
+'AspisR1.NLV_Tree.step_foldedSlice' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_foldedSlice : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedSlice g p a })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedSlice g p a }
+'AspisR1.NLV_Tree.step_foldedUnwrap' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_foldedUnwrap : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator)
+  (r : Aeneas.Std.core.result.Result AspisR1.NLJ_Tx1.Root Aeneas.Std.core.array.TryFromSliceError),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedUnwrap g p a r })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.foldedUnwrap g p a r }
+'AspisR1.NLV_Tree.step_geometry' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_geometry : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.geometry g p a })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.geometry g p a }
+'AspisR1.NLV_Tree.step_guard' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_guard : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.CheckpointBytes5Effect.bind (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.guard })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.guard }
+'AspisR1.NLV_Tree.step_markCheckpoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_markCheckpoint : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markCheckpoint bytes })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markCheckpoint bytes }
+'AspisR1.NLV_Tree.step_markMerkle' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_markMerkle : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markMerkle g p a })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markMerkle g p a }
+'AspisR1.NLV_Tree.step_markParsed' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_markParsed : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markParsed })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markParsed }
+'AspisR1.NLV_Tree.step_markPrepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_markPrepare : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markPrepare g p a })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.markPrepare g p a }
+'AspisR1.NLV_Tree.step_parse' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_parse : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.CheckpointBytes5Effect.bind (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.parse })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.parse }
+'AspisR1.NLV_Tree.step_pending' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_pending : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (geom : AspisR1CurrentCaller.verifier.QueryGeometry),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.pending g p a geom })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.pending g p a geom }
+'AspisR1.NLV_Tree.step_prepare' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_prepare : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.prepare g })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.prepare g }
+'AspisR1.NLV_Tree.step_query' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_query : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (g : AspisR1.NLJ_Tx1.Scratch) (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) (geom : AspisR1CurrentCaller.verifier.QueryGeometry)
+  (pending : AspisR1CurrentCaller.verifier.BatchedWeights),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.query g p a geom pending })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.query g p a geom pending }
+'AspisR1.NLV_Tree.step_returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_returned : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  AspisR1.CheckpointBytes5Effect.bind
+      (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.returned bytes })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.returned bytes }
+'AspisR1.NLV_Tree.step_scan' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_scan : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.CheckpointBytes5Effect.bind (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.scan })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.scan }
+'AspisR1.NLV_Tree.step_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+AspisR1.NLV_Tree.step_zero : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input),
+  AspisR1.CheckpointBytes5Effect.bind (AspisR1.NLJ_Tx1.step cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.zero })
+      (AspisR1.NLV_Tree.continuation cfg) =
+    AspisR1.NLV_Tree.denote cfg { input := i, locals := AspisR1.NLJ_Tx1.Local.zero }
+theorem AspisR1.NLV_Tree.from_cuts : ∀ (cfg : AspisR1.NLJ_Tx1.Configuration) (i : AspisR1.NLJ_Tx1.Input)
+  (frame : AspisR1.NLJ_Packets.Frame094) (observed : AspisR1.NGP_L181.Observation AspisR1.NLJ_Tx1.Out)
+  (events : List AspisR1.NLV.Event) (last : AspisR1.NLV.State),
+  AspisR1.NLV.Invocation cfg i.hashv 20 (AspisR1.NLV.initial i frame) observed.result observed.attempted events last →
+    AspisR1.NGP_L181.NativeAssociation i.hashv
+        (AspisR1.NGQ_Normalize.normalize
+          (AspisR1.GExp_FirstCode.code cfg.base cfg.boundaries cfg.std i.hashv i.digest i.publicValue i.publicBytes
+            i.proof i.k))
+        observed ∧
+      last.external = (AspisR1.NLV.initial i frame).external ∧ last.core.input = i :=
+⋯
+theorem AspisR1.NLV.source_cuts : ∀ {cfg : AspisR1.NLJ_Tx1.Configuration}
+  {hashv : AspisR1.SdkC_Source.Parts → Aeneas.Std.Result AspisR1.SdkC_Source.Digest} {n : ℕ}
+  {s last : AspisR1.NLV.State} {out : Aeneas.Std.Result AspisR1.NLJ_Tx1.Out} {log : AspisR1.SdkC_Source.Log}
+  {events : List AspisR1.NLV.Event},
+  AspisR1.NLV.Invocation cfg hashv n s out log events last →
+    AspisR1.NHZ_DRIVER.Cuts hashv (AspisR1.NLJ_Tx1.fold cfg n s.core) out log :=
+⋯

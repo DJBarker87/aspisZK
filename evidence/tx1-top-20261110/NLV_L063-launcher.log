@@ -1,0 +1,52 @@
+{"attempt": "NLV_L063", "exit_status": 1, "wall_seconds": 23.739075483055785, "peak_rss_kib": "5967348", "swaps": "0", "print_axioms": ["'AspisR1.NLV.source_cuts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NLV.external_frame' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLV.input_frame_chain' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NLV.effects' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NLV_generated/NLV_CutFold.lean:47:3: error: Type mismatch: After simplification, term
+  NHZ_DRIVER.Cuts.next head.source (NHZ_DRIVER.Cuts.leaf (NGQ_Cuts.Trace.done (Sum.inl out✝)))
+ has type
+  NHZ_DRIVER.Cuts hashv (CheckpointBytes5Effect.bind (NLJ_Tx1.step cfg s✝.core) Code.done) (ok (Sum.inl out✝)) log✝
+but is expected to have type
+  NHZ_DRIVER.Cuts hashv
+    (do
+      let post ← NLJ_Tx1.step cfg s✝.core
+      match post with
+        | Sum.inl out => pure out
+        | Sum.inr after => NLJ_Tx1.fold cfg n✝ after)
+    (ok out✝) log✝
+NLV_generated/NLV_CutFold.lean:52:8: error: `AspisR1.NLV.external_frame` has already been declared
+'AspisR1.NLV.source_cuts' depends on axioms: [propext, sorryAx
+...
+ut✝)))
+ has type
+  NHZ_DRIVER.Cuts hashv (CheckpointBytes5Effect.bind (NLJ_Tx1.step cfg s✝.core) Code.done) (ok (Sum.inl out✝)) log✝
+but is expected to have type
+  NHZ_DRIVER.Cuts hashv
+    (do
+      let post ← NLJ_Tx1.step cfg s✝.core
+      match post with
+        | Sum.inl out => pure out
+        | Sum.inr after => NLJ_Tx1.fold cfg n✝ after)
+    (ok out✝) log✝
+NLV_generated/NLV_CutFold.lean:52:8: error: `AspisR1.NLV.external_frame` has already been declared
+'AspisR1.NLV.source_cuts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLV.external_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLV.input_frame_chain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLV.effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLV.source_cuts : ∀ {cfg : NLJ_Tx1.Configuration}
+  {hashv : SdkC_Source.Parts → Result SdkC_Source.Digest} {n : ℕ} {s last : State} {out : Result NLJ_Tx1.Out}
+  {log : SdkC_Source.Log} {events : List Event},
+  Invocation cfg hashv n s out log events last → NHZ_DRIVER.Cuts hashv (NLJ_Tx1.fold cfg n s.core) out log :=
+fun {cfg} {hashv} {n} {s last} {out} {log} {events} cuts =>
+  Invocation.rec (fun {n} {s after} {out} {log} head => sorry)
+    (fun {n} {s middle last} {out} {log suffix} {events} head tail ih => NHZ_DRIVER.Cuts.next head.source ih)
+    (fun {n} {s after} {error} {log} head =>
+      NHZ_DRIVER.Cuts.fail head.source fun post =>
+        match post with
+        | Sum.inl out => pure out
+        | Sum.inr after => NLJ_Tx1.fold cfg n after)
+    (fun {n} {s after} {log} head =>
+      NHZ_DRIVER.Cuts.div head.source fun post =>
+        match post with
+        | Sum.inl out => pure out
+        | Sum.inr after => NLJ_Tx1.fold cfg n after)
+    cuts
+
+Running as unit: run-rc9d84eac79934aaeb0d13f0cad166ece.scope; invocation ID: edd7a2d34f9945fab816daa5392a67ca

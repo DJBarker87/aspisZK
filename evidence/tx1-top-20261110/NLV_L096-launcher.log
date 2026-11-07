@@ -1,0 +1,54 @@
+{"attempt": "NLV_L096", "exit_status": 0, "wall_seconds": 25.38809290388599, "peak_rss_kib": "6092240", "swaps": "0", "print_axioms": []}
+def AspisR1.NLV_Interface.CarrierBindings : NLV.State → ResourceSnapshot → Prop :=
+fun s r =>
+  (∀ (kind : NLV.OwnedKind),
+      r.payload kind ≠ none →
+        r.initialized kind = true ∧
+          ∃ a, s.ownership.allocations kind = some a ∧ a.live = true ∧ a.address > 0 ∧ a.initialized ≤ a.capacity) ∧
+    match s.core.locals with
+    | NLJ_Tx1.Local.prepare g => r.payload NLV.OwnedKind.scratch = some (Payload.scratch g)
+    | NLJ_Tx1.Local.accumulator g p =>
+      r.payload NLV.OwnedKind.scratch = some (Payload.scratch g) ∧
+        r.payload NLV.OwnedKind.prepared = some (Payload.prepared p)
+    | NLJ_Tx1.Local.markPrepare g p a =>
+      r.payload NLV.OwnedKind.scratch = some (Payload.scr
+...
+
+  out.terminal = Option.map (fun e => e.kind) out.events.getLast? ∧
+    match out.raw with
+    | ok (core.result.Result.Ok bytes) => out.model.result = ok (core.result.Result.Ok bytes)
+    | ok (core.result.Result.Err e) =>
+      if out.terminal = some NLJ_Tx1.Event.batch0 then
+        (e = verifier.Error.Parse ∨ e = verifier.Error.Merkle) ∧
+          (out.model.result = ok (core.result.Result.Err e) ∨ out.model.result = fail Error.panic)
+      else out.model.result = ok (core.result.Result.Err e)
+    | fail e => out.model.result = fail e
+    | div => out.model.result = div
+def AspisR1.NLV_Interface.BatchDomain : NLV.State → Prop :=
+fun s =>
+  match s.core.locals with
+  | NLJ_Tx1.Local.batch0 scratch p accumulator folded =>
+    have prepared := Tx1Q_Carriers.prepared p;
+    (↑s.core.input.proof).length = 57607 ∧
+      ∃ parsed,
+        parsed.wire = MultiproofConeCanonical.bytesOf ↑s.core.input.proof ∧
+          (∀ j < 22, ↑(↑prepared.queries)[j]! < 262144) ∧
+            ∀ (k : Fin 3),
+              Port3_NativeBatchCalls.rootAt (NLL_BatchSource.roots prepared folded) k =
+                AspisV8R19.SqueezeOracleBridge.encodeState (OraclePortBatchDraft.committedRoot parsed ↑k)
+  | x => True
+def AspisR1.NLV_Interface.CheckpointDomain : NLV.State → Prop :=
+fun s =>
+  match s.core.locals with
+  | NLJ_Tx1.Local.checkpoint p a =>
+    ↑s.core.input.k = 10 ∧
+      p.variant = transport.Variant.S2 ∧
+        (↑s.core.input.proof).length = 57607 ∧
+          (↑s.core.input.publicBytes).length = 1880 ∧
+            ↑a.next = 10 ∧
+              (↑a.weights).length = 64 ∧
+                NGC_KNE_Caller.WriterDomain (CheckpointBytes3Namespaces.toPrepared (Tx1Q_Carriers.prepared p))
+                  (CheckpointBytes3Namespaces.toAccumulator (Tx1Q_Carriers.accumulator a))
+  | x => True
+
+Running as unit: run-r9a8793e00b734434aba69fb63eb7a954.scope; invocation ID: f3efec49561f4f7f81898ac1d19bda80

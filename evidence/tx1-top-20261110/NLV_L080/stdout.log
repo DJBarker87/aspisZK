@@ -1,0 +1,209 @@
+NLV_generated/NLV_LowerTrace.lean:16:29: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  HAppend SdkC_Source.Log (List (SdkC_Source.Parts × Result SdkC_Source.Digest)) ?m.16
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NLV_generated/NLV_LowerTrace.lean:18:10: error: unsolved goals
+case done
+A : Type
+h : SdkC_Source.Parts → Result SdkC_Source.Digest
+a : A
+associated : SdkD_PrepareLower.Associated h (PreparedHashCode.Code.done a)
+before : SdkC_Source.Log
+⊢ (ok a, before) = (ok a, sorry)
+NLV_generated/NLV_LowerTrace.lean:22:12: error: unsolved goals
+case step.fail
+A : Type
+h : SdkC_Source.Parts → Result SdkC_Source.Digest
+B✝ : Type
+k : B✝ → PreparedHashCode.Code A
+ih :
+  ∀ (a : B✝),
+    SdkD_PrepareLower.Associated h (k a) →
+      ∀ (before : SdkC_Source.Log),
+        SdkC_Source.run h (SdkD_PrepareLower.lower (k a)) before = ((PreparedHashCode.run (k a)).2, sorry)
+before : SdkC_Source.Log
+e : Error
+associated : SdkD_PrepareLower.Associated h (PreparedHashCode.Code.step (fail e) k)
+⊢ (fail e, before) = (fail e, sorry)
+NLV_generated/NLV_LowerTrace.lean:23:9: error: unsolved goals
+case step.div
+A : Type
+h : SdkC_Source.Parts → Result SdkC_Source.Digest
+B✝ : Type
+k : B✝ → PreparedHashCode.Code A
+ih :
+  ∀ (a : B✝),
+    SdkD_PrepareLower.Associated h (k a) →
+      ∀ (before : SdkC_Source.Log),
+        SdkC_Source.run h (SdkD_PrepareLower.lower (k a)) before = ((PreparedHashCode.run (k a)).2, sorry)
+before : SdkC_Source.Log
+associated : SdkD_PrepareLower.Associated h (PreparedHashCode.Code.step div k)
+⊢ (div, before) = (div, sorry)
+NLV_generated/NLV_LowerTrace.lean:31:5: error: No goals to be solved
+NLV_generated/NLV_LowerTrace.lean:32:12: error: unsolved goals
+case digest.fail
+A : Type
+h : SdkC_Source.Parts → Result SdkC_Source.Digest
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+k : Std.Array U8 32#usize → PreparedHashCode.Code A
+ih :
+  ∀ (a : Std.Array U8 32#usize),
+    SdkD_PrepareLower.Associated h (k a) →
+      ∀ (before : SdkC_Source.Log),
+        SdkC_Source.run h (SdkD_PrepareLower.lower (k a)) before = ((PreparedHashCode.run (k a)).2, sorry)
+associated : SdkD_PrepareLower.Associated h (PreparedHashCode.Code.digest D hash parts k)
+before : SdkC_Source.Log
+same : D.digest hash parts = h parts
+e : Error
+edge : h parts = fail e
+⊢ (fail e, before ++ [{ parts := parts, returned := fail e }]) = (fail e, sorry)
+NLV_generated/NLV_LowerTrace.lean:33:9: error: unsolved goals
+case digest.div
+A : Type
+h : SdkC_Source.Parts → Result SdkC_Source.Digest
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+k : Std.Array U8 32#usize → PreparedHashCode.Code A
+ih :
+  ∀ (a : Std.Array U8 32#usize),
+    SdkD_PrepareLower.Associated h (k a) →
+      ∀ (before : SdkC_Source.Log),
+        SdkC_Source.run h (SdkD_PrepareLower.lower (k a)) before = ((PreparedHashCode.run (k a)).2, sorry)
+associated : SdkD_PrepareLower.Associated h (PreparedHashCode.Code.digest D hash parts k)
+before : SdkC_Source.Log
+same : D.digest hash parts = h parts
+edge : h parts = div
+⊢ (div, before ++ [{ parts := parts, returned := div }]) = (div, sorry)
+NLV_generated/NLV_LowerTrace.lean:18:85: warning: This simp argument is unused:
+  List.map_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵D̵_̵P̵r̵e̵p̵a̵r̵e̵L̵o̵w̵e̵r̵.̵l̵o̵w̵e̵r̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲S̲d̲k̲D̲_̲P̲r̲e̲p̲a̲r̲e̲L̲o̲w̲e̲r̲.̲l̲o̲w̲e̲r̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲r̲u̲n̲,̲
+  ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:18:98: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵D̵_̵P̵r̵e̵p̵a̵r̵e̵L̵o̵w̵e̵r̵.̵l̵o̵w̵e̵r̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲S̲d̲k̲D̲_̲P̲r̲e̲p̲a̲r̲e̲L̲o̲w̲e̲r̲.̲l̲o̲w̲e̲r̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲r̲u̲n̲,̲
+  ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:22:87: warning: This simp argument is unused:
+  List.map_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵D̵_̵P̵r̵e̵p̵a̵r̵e̵L̵o̵w̵e̵r̵.̵l̵o̵w̵e̵r̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲S̲d̲k̲D̲_̲P̲r̲e̲p̲a̲r̲e̲L̲o̲w̲e̲r̲.̲l̲o̲w̲e̲r̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲r̲u̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:22:100: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵D̵_̵P̵r̵e̵p̵a̵r̵e̵L̵o̵w̵e̵r̵.̵l̵o̵w̵e̵r̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲S̲d̲k̲D̲_̲P̲r̲e̲p̲a̲r̲e̲L̲o̲w̲e̲r̲.̲l̲o̲w̲e̲r̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲r̲u̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:23:84: warning: This simp argument is unused:
+  List.map_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵D̵_̵P̵r̵e̵p̵a̵r̵e̵L̵o̵w̵e̵r̵.̵l̵o̵w̵e̵r̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲S̲d̲k̲D̲_̲P̲r̲e̲p̲a̲r̲e̲L̲o̲w̲e̲r̲.̲l̲o̲w̲e̲r̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲r̲u̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:23:97: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵D̵_̵P̵r̵e̵p̵a̵r̵e̵L̵o̵w̵e̵r̵.̵l̵o̵w̵e̵r̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲S̲d̲k̲D̲_̲P̲r̲e̲p̲a̲r̲e̲L̲o̲w̲e̲r̲.̲l̲o̲w̲e̲r̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲r̲u̲n̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:32:66: warning: This simp argument is unused:
+  edge
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run,e̵d̵g̵e̵,̵ ̲PreparedHashCode.run, ̲same,
+  ̲ ̲ ̲ ̲ ̲ ̲edge, ̲List.map_cons, ̲List.map_nil, ̲event, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:32:102: warning: This simp argument is unused:
+  List.map_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run, ̲edge, ̲PreparedHashCode.run,
+  ̲ ̲ ̲ ̲ ̲ ̲same, ̲edge, ̲List.map_c̵o̵ns̵,̵L̵is̵t̵.̵m̵a̵p̵_̵n̵i̵l, ̲event, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:32:116: warning: This simp argument is unused:
+  List.map_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run, ̲edge, ̲PreparedHashCode.run,
+  ̲ ̲ ̲ ̲ ̲ ̲same, ̲edge, ̲List.map_cons,L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵ ̲event, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:32:129: warning: This simp argument is unused:
+  event
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run, ̲edge, ̲PreparedHashCode.run,
+  ̲ ̲ ̲ ̲ ̲ ̲same, ̲edge, ̲List.map_cons, ̲List.map_nil,e̵v̵e̵n̵t̵,̵ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:32:135: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵D̵_̵P̵r̵e̵p̵a̵r̵e̵L̵o̵w̵e̵r̵.̵l̵o̵w̵e̵r̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵e̵d̵g̵e̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵s̵a̵m̵e̵,̵e̵d̵g̵e̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵e̵v̵e̵n̵t̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲S̲d̲k̲D̲_̲P̲r̲e̲p̲a̲r̲e̲L̲o̲w̲e̲r̲.̲l̲o̲w̲e̲r̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲e̲d̲g̲e̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲r̲u̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲s̲a̲m̲e̲,̲ ̲e̲d̲g̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲e̲v̲e̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:33:63: warning: This simp argument is unused:
+  edge
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run,e̵d̵g̵e̵,̵ ̲PreparedHashCode.run, ̲same, ̲edge,
+  ̲ ̲ ̲ ̲ ̲ ̲List.map_cons, ̲List.map_nil, ̲event, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:33:99: warning: This simp argument is unused:
+  List.map_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run, ̲edge, ̲PreparedHashCode.run, ̲same,
+  ̲ ̲ ̲ ̲ ̲ ̲edge, ̲List.map_c̵o̵ns̵,̵L̵is̵t̵.̵m̵a̵p̵_̵n̵i̵l, ̲event, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:33:113: warning: This simp argument is unused:
+  List.map_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run, ̲edge, ̲PreparedHashCode.run, ̲same,
+  ̲ ̲ ̲ ̲ ̲ ̲edge, ̲List.map_cons,L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵ ̲event, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:33:126: warning: This simp argument is unused:
+  event
+
+Hint: Omit it from the simp argument list.
+  simp only [SdkD_PrepareLower.lower, ̲SdkC_Source.run, ̲edge, ̲PreparedHashCode.run, ̲same,
+  ̲ ̲ ̲ ̲ ̲ ̲edge, ̲List.map_cons, ̲List.map_nil,e̵v̵e̵n̵t̵,̵ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NLV_generated/NLV_LowerTrace.lean:33:132: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵S̵d̵k̵D̵_̵P̵r̵e̵p̵a̵r̵e̵L̵o̵w̵e̵r̵.̵l̵o̵w̵e̵r̵,̵S̵d̵k̵C̵_̵S̵o̵u̵r̵c̵e̵.̵r̵u̵n̵,̵e̵d̵g̵e̵,̵P̵r̵e̵p̵a̵r̵e̵d̵H̵a̵s̵h̵C̵o̵d̵e̵.̵r̵u̵n̵,̵s̵a̵m̵e̵,̵e̵d̵g̵e̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵n̵i̵l̵,̵e̵v̵e̵n̵t̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲S̲d̲k̲D̲_̲P̲r̲e̲p̲a̲r̲e̲L̲o̲w̲e̲r̲.̲l̲o̲w̲e̲r̲,̲ ̲S̲d̲k̲C̲_̲S̲o̲u̲r̲c̲e̲.̲r̲u̲n̲,̲ ̲e̲d̲g̲e̲,̲ ̲P̲r̲e̲p̲a̲r̲e̲d̲H̲a̲s̲h̲C̲o̲d̲e̲.̲r̲u̲n̲,̲ ̲s̲a̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲e̲d̲g̲e̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲n̲i̲l̲,̲ ̲e̲v̲e̲n̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NLV_LowerTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

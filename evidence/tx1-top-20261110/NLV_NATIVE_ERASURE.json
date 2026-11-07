@@ -1,0 +1,23 @@
+{
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "frozen_body_sha256": "15310822387cdba697c789bed2e90f62fd77f9425d205ba6f9866a90f956cf46",
+  "native_input_sha256": "e1e79ceb3e50c386d2030e8c74d573dcca51ab8cabe00df3c6548513701c5ef1",
+  "child_replacements": {
+    "parse_shape(": "log.parse(",
+    "canonical_scan(": "log.scan(",
+    "prepare(": "log.prepare(",
+    "Accumulator::new(": "log.accumulator(",
+    "batch_merkle(": "log.batch(",
+    "QueryGeometry::for_range(": "log.geometry(",
+    "BatchedWeights::new(": "log.pending(",
+    "query_loop(": "log.query(",
+    "pending.finish(&mut a.weights)": "log.finish(&pending,&mut a.weights)",
+    "checkpoint(": "log.checkpoint("
+  },
+  "ghost_statements": [
+    "log.flush_other=acell(&a,1+log.tag%3,log.j);",
+    "assert_eq!(acell(&a,1+log.tag%3,log.j),log.flush_other);"
+  ],
+  "erasure_matches": true,
+  "scope": "control body only; no physical producer or child law inferred"
+}

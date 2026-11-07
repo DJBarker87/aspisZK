@@ -1,0 +1,23 @@
+# Retained failures
+
+No failure earns row credit. No timeout/cap was raised.
+
+- L002: own prelaunch input error, missing NLN_TX1_081 object in inherited path;
+  no scope. Added authoritative ledger23 NLO paths read-only, L003 passed.
+- L004: own Lean syntax/ambiguous bind draft. Corrected explicit namespaces
+  and indentation, L005 passed with standard axioms.
+- Client serialization refusal before L006: guard prevented a second scope;
+  waited for L005 and submitted L006 once.
+- L022: prepare continuation needed explicit splitting of the returned pair
+  and its inner Result; L023 corrects that proof, preserving the SAME scratch.
+- L030: reserved identifier `local` in proposed physical-state helper;
+  renamed the binder, L031 passed.
+- L034: direct whole-body rfl failed; no equality admitted.
+- L035: broad whole-body unfolding/congruence hit the default heartbeat limit.
+  RETIRED. No unchanged replay or limit increase. Replacement splits the
+  emission definitions, pair-elimination lemma, individual suffix transports,
+  and focused structural source normalization. No recurrence normalization.
+
+L103 prelaunch refused subprocess.olean: link config put own Python script first and the strict Lean import parser treated its import as a Lean module. No scope launched. L104 repair explicitly lists actual Lean drivers first, retaining all C/Python source inputs and stronger actual dependency coverage. No validation, cap or timeout weakened.
+
+L121/proof14: all391 raw verdicts complete in178.27547175297514s, expected inherited NKR collector/raw mismatch, inner exit1; outer packaging reached180s and actual scope exit124. No cap/timeout increase or walker rerun. L138 is a separate packaging-only completion plus retention/integrity check; original exit124 remains a finding.

@@ -1,0 +1,63 @@
+{"attempt": "NLV_L094", "exit_status": 1, "wall_seconds": 22.259526065085083, "peak_rss_kib": "6330128", "swaps": "0", "print_axioms": ["'AspisR1.NLV_Resource087.source_projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLV_generated/NLV_RowSpec087.lean:27:25: error: Ambiguous term
+  r1_semantic.Verified
+Possible interpretations:
+  AspisR1PublicPreparation.r1_semantic.Verified Unit : Type
+  
+  AspisR1CurrentCaller.r1_semantic.Verified Unit : Type
+NLV_generated/NLV_RowSpec087.lean:29:24: error: Ambiguous term
+  verifier.Prepared
+Possible interpretations:
+  AspisR1PublicPreparation.verifier.Prepared : Type
+  
+  AspisR1CurrentCaller.verifier.Prepared : Type
+NLV_generated/NLV_RowSpec087.lean:58:36: error: Ambiguous term
+  r1_semantic.Verified
+Possible interpretations:
+  AspisR1PublicPreparation.r1_semantic.Verified Unit : Type
+  
+  AspisR1CurrentCaller.r1_semantic.Verified Unit : Type
+NLV_generated/NLV_RowSpec0
+...
+r ∧
+                Returned out.value.reply out.after ∧
+                  out.after.external = s.external ∧ out.after.scratchAddress = s.scratchAddress
+def AspisR1.NLV_Resource087.Bindings : State → Prop :=
+fun s =>
+  (match logicalValue s.sourceState.locals with
+    | none => s.logical = none
+    | some bytes => ∃ a, s.logical = some a ∧ allocationLive a ∧ a.bytes = bytes) ∧
+    (match viewValues s.sourceState.locals with
+      | none => True
+      | some pair =>
+        ∃ a sv yv,
+          s.logical = some a ∧
+            s.semanticView = some sv ∧
+              s.y1View = some yv ∧
+                viewBound a sv ∧
+                  viewBound a yv ∧
+                    sv.offset = 0 ∧
+                      yv.offset = (↑pair.1).length ∧
+                        sv.length = (↑pair.1).length ∧
+                          yv.length = (↑pair.2).length ∧
+                            sv.values = ↑pair.1 ∧ yv.values = ↑pair.2 ∧ sv.offset + sv.length ≤ yv.offset) ∧
+      match semanticValue s.sourceState.locals with
+      | none => True
+      | some sem => s.semanticValue = some sem ∧ ∃ owner, s.semanticOwner = some owner ∧ allocationLive owner
+def AspisR1.NLV_Resource087.Returned : Result NLJ_Prepare.Out → State → Prop :=
+fun reply after =>
+  match reply with
+  | ok (r, scratch) =>
+    after.scratchValue = scratch ∧
+      after.scratchExclusive = false ∧
+        after.logical = none ∧
+          after.semanticOwner = none ∧
+            after.semanticView = none ∧
+              after.y1View = none ∧
+                match r with
+                | core.result.Result.Err a => after.preparedOwner = none ∧ after.preparedValue = none
+                | core.result.Result.Ok p => sorry ∧ ∃ owner, after.preparedOwner = some owner ∧ allocationLive owner
+  | fail e => True
+  | div => True
+
+Running as unit: run-r10c862991fbd4b739f244b7662986fda.scope; invocation ID: f79f3a8384a84fabb6f4ff2898a55d88
