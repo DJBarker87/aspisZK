@@ -4,7 +4,7 @@ import json,hashlib,os
 B=Path.cwd();J=lambda p:json.loads(p.read_text());H=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 manifest=J(B/'NNK_AUDIT_ROOTS.json');groups=manifest['groups'];seen=[];findings=[]
 for i,expected in enumerate(groups):
- d=J(B/'NNK_audit'/('batch'+str(i))/('proof'+str(i)+'.json'))
+ d=J(B/'NNK_audit'/('split41a'if i==41 else'split41b'if i==48 else'batch42-43'if i in [42,43]else'batch'+str(i))/('proof'+str(i)+'.json'))
  assert [r['root']for r in d['results']]==expected
  for r in d['results']:
   assert set(r['walked_axioms'])<={'propext','Classical.choice','Quot.sound'}
@@ -18,7 +18,7 @@ assert J(B/'NNK_audit/scan/scan.json')['exit_status']==0
 for l in(B/'NNK_LOADED_scan.jsonl').read_text().splitlines():
  r=json.loads(l);assert not r['dangling']and not r['duplicate_owners']and r['imports_match']
 owners={}
-for l in(B/'NNK_L056/stdout.log').read_text().splitlines():
+for l in(B/'NNK_L057/stdout.log').read_text().splitlines():
  if 'NNK_OWNER 'in l:
   r=json.loads(l.split('NNK_OWNER ',1)[1]);assert r['root']not in owners;owners[r['root']]=r
 assert set(owners)==set(manifest['roots'])
@@ -33,7 +33,7 @@ for p in B.glob('NNK_L[0-9][0-9][0-9]/receipt.json'):
  assert r['kind']in ['lean','audit','link']
  for name,digest in r['source_hashes'].items():assert H(p.parent/'sources'/name)==digest
  receipts.append(r['attempt'])
-assert len(receipts)==58,(len(receipts),receipts)
+assert len(receipts)==59,(len(receipts),receipts)
 assert J(B/'NNK_PREDECESSOR_COMPARISON.json')['status']=='PASS'
 x=dict(status='PASS',roots=len(seen),groups=len(groups),fixtures=8,collector_findings=findings,exact_owners=len(owners),candidate_rows=[r['row']for r in reviews],completed_prior_receipts=len(receipts),new_kani=0,new_extraction=0,headline_established=False)
-p=B/'NNK_audit/verify/NNK_GATE_INTEGRITY.json';p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,indent=1)+'\n');print(json.dumps(x))
+p=B/'NNK_audit/verify-retention/NNK_GATE_INTEGRITY.json';p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(x,indent=1)+'\n');print(json.dumps(x))

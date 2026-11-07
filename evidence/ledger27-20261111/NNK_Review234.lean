@@ -15,3 +15,6 @@ example (allocationSucceeded : RSL.Bytes → RSL.Env → Bool) :
 #print NMX_R3_DecoderFold.complete
 #print axioms NMX_R3_RegistryRoot.root
 #print axioms NMX_R3_DecoderFold.root
+example (a : RSL.TX2_234.Args) : RSL.TX2_234.Domain a = True := rfl
+example (bytes : RSL.Bytes) : RSL.TX2_217.Domain bytes = True := rfl
+#print axioms RSL.TX2_234.rejects_constAbort

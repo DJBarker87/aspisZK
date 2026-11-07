@@ -15,3 +15,5 @@ example (a : RSL.TX1_087.Args LIB_Instances.VL) (obs : RSL.Observer) :
 #print axioms NNG_Candidate087.candidate
 #print axioms NNG_Producer087.source
 #print axioms NNG_PreparedOccurrence087.occurrence
+#print axioms RSL.TX1_087.domain_needs_R4
+#print axioms RSL.TX1_087.rejects_wrong_g

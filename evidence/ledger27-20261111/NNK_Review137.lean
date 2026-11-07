@@ -12,3 +12,4 @@ example (a : RSL.TX1_137.Args LIB_VLib.library) :
 #print axioms NNG_Candidate137.candidate
 #print axioms NNG_FinishOccurrence137.occurrence
 #print axioms NNG_Candidate136.candidate
+#print axioms RSL.TX1_137.rejects_constErr

@@ -71,13 +71,13 @@ elif kind=='audit':
  if target in ['close','review-close','review-retention','acc-close']:
   files['NNK_pin.py']=(E/'NNK_pin.py').read_text();files['NNK_PREDECESSOR_PINS.json']=lzma.decompress((E.parent/'ledger26-20261111/NNI_CLOSURE_PINS.json.xz').read_bytes()).decode()
  if target in ['review-close','review-retention']:files['NNK_generated/NNK_HypothesisReview.lean']=(E/'NNK_HypothesisReview.lean').read_text()
- if target in ['close','retention','review-retention','acc-close']:files['NNK_scope40.py']=(E/'NNK_scope40.py').read_text();files['NNK_SEED_INPUTS.json']=(E/'NNK_SEED_INPUTS.json').read_text()
+ if target in ['close','retention','review-retention','acc-close','verify-retention']:files['NNK_scope40.py']=(E/'NNK_scope40.py').read_text();files['NNK_SEED_INPUTS.json']=(E/'NNK_SEED_INPUTS.json').read_text()
  if target=='acc-close':files['NNK_generated/NNK_COMBINED_IMPORT.lean']=(E/'NNK_COMBINED_IMPORT.lean').read_text()
  sources=['NNK_generated/NNK_Driver.lean','NNK_batch.py','NNK_AUDIT_ROOTS.json','NNK_AUDIT_MODULES.json','NNK_EXPECTED_IMPORTS.jsonl']+(['NNK_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NNK_pin.py','NNK_PREDECESSOR_PINS.json']if target in ['close','review-close','review-retention','acc-close']else[])+(['NNK_generated/NNK_HypothesisReview.lean']if target in ['review-close','review-retention']else[])
- if target=='verify':sources+=['NNK_gate_check.py','NNK_PREVIOUS_FIXTURES.json','NNK_EXPECTED_RAW_BINARY.json','NNK_CANDIDATE_REVIEW.json','NNK_SYNTAX_ASSOCIATION.json','NNK_NNJ_VALIDATION.json']
+ if target in ['verify','verify-retention']:sources+=['NNK_gate_check.py','NNK_PREVIOUS_FIXTURES.json','NNK_EXPECTED_RAW_BINARY.json','NNK_CANDIDATE_REVIEW.json','NNK_SYNTAX_ASSOCIATION.json','NNK_NNJ_VALIDATION.json']
  for n in sources:
   if n not in files:files[n]=(E/Path(n).name).read_text()
- if target in ['close','retention','review-retention','acc-close']:sources+=['NNK_scope40.py','NNK_SEED_INPUTS.json']
+ if target in ['close','retention','review-retention','acc-close','verify-retention']:sources+=['NNK_scope40.py','NNK_SEED_INPUTS.json']
  if target=='acc-close':sources+=['NNK_generated/NNK_COMBINED_IMPORT.lean']
  command=['python3','NNK_batch.py',target]
 else:raise ValueError(kind)
@@ -96,7 +96,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=['NFA_WALKER','NFA_MemoryLimit','NEP_Planted','NEP_Mutations']
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
-elif x['kind']=='audit':modules += ['NNK_COMBINED_IMPORT']+(['NNI_CollectorAcc'] if x['module']=='batch43' else [])
+elif x['kind']=='audit':modules += ['NNK_COMBINED_IMPORT']+(['NNI_CollectorAcc'] if x['module']in ['batch43','batch42-43'] else [])
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:
@@ -123,7 +123,7 @@ if {target!r} in ['close','review-close','review-retention','acc-close']:
  for n in ['NNK_PREDECESSOR_COMPARISON.json','NNK_EXPORT.json','NNK_TOOL_PINS.json','NNK_CLOSURE_PINS.json.sha256']:
   if (b/n).exists():out[n]=(b/n).read_text()
  if (b/'NNK_CLOSURE_PINS.json.xz').exists():out['NNK_CLOSURE_PINS.json.xz.hex']=(b/'NNK_CLOSURE_PINS.json.xz').read_bytes().hex()
-if {target!r} in ['close','retention','review-retention','acc-close']:
+if {target!r} in ['close','retention','review-retention','acc-close','verify-retention']:
  if (b/'NNK_FINAL_HOST.json').exists():out['NNK_FINAL_HOST.json']=(b/'NNK_FINAL_HOST.json').read_text()
 for name in ['NNK_Driver','NNK_ProofDriver','NNK_PoolProofDriver','NNK_PoolDriver']:
  p=b/'NNK_native'/name

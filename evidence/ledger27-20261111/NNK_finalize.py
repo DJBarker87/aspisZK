@@ -10,10 +10,10 @@ def put(n,x,compress=False):
  b=(json.dumps(x,sort_keys=True,indent=1)+'\n').encode();p=E/('NNK_'+n+'.json')
  if compress or len(b)>20_000_000:Path(str(p)+'.xz').write_bytes(lzma.compress(b,preset=6));Path(str(p)+'.sha256').write_text(H(b)+'\n')
  else:p.write_bytes(b)
-assert J(E/'NNK_audit/verify/NNK_GATE_INTEGRITY.json')['status']=='PASS'
+assert J(E/'NNK_audit/verify-retention/NNK_GATE_INTEGRITY.json')['status']=='PASS'
 required=J(E/'NNK_AUDIT_ROOTS.json');results=[];disagreements=[]
 for i,group in enumerate(required['groups']):
- d=J(E/'NNK_audit'/('batch'+str(i))/('proof'+str(i)+'.json'));assert [r['root']for r in d['results']]==group,(i,len(d['results']),len(group))
+ d=J(E/'NNK_audit'/('split41a'if i==41 else'split41b'if i==48 else'batch42-43'if i in [42,43]else'batch'+str(i))/('proof'+str(i)+'.json'));assert [r['root']for r in d['results']]==group,(i,len(d['results']),len(group))
  for r in d['results']:
   assert set(r['walked_axioms'])<={'propext','Classical.choice','Quot.sound'},r
   if not r['equal']:
@@ -27,7 +27,7 @@ loaded=[json.loads(l)for l in raw(E/'NNK_LOADED_scan.jsonl').decode().splitlines
 assert all(not r['dangling']and not r['duplicate_owners']and r['imports_match']for r in loaded)
 put('SCAN',dict(status='PASS',exit_status=0,combined='NNK_COMBINED_IMPORT',modules=len(loaded),dangling=0,canonical_duplicate_owners=0,import_mismatches=0,cached_replicas=sum(len(r['cached_replicas'])for r in loaded)))
 statements={}
-for l in raw(E/'NNK_L056/stdout.log').decode().splitlines():
+for l in raw(E/'NNK_L057/stdout.log').decode().splitlines():
  if 'NNK_OWNER 'in l:
   r=json.loads(l.split('NNK_OWNER ',1)[1]);assert r['root']not in statements;statements[r['root']]=r
 assert set(statements)==set(required['roots'])
@@ -40,8 +40,9 @@ for row in receipts:
  assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
  assert str(r['swaps'])=='0';assert any(J(p)['free']>=40_000_000_000 for p in E.glob(a+'-disk*.json'))
  checks=[c for c in entries if c.get('attempt')==a and c.get('event')=='share_check'];assert checks and checks[-1]['host']['count']<6
- if r['exit_status']:assert r['kind']=='audit'and r['module'].startswith('batch'),(a,r['exit_status'])
-resources=dict(scopes=len(receipts),budget=60,unused=60-len(receipts),kinds=dict(collections.Counter(r['kind']for r in receipts)),wall_seconds=sum(r['wall_seconds']for r in receipts),peak_rss_kib=max(int(r['peak_rss_kib'])for r in receipts),swaps=sum(int(r['swaps'])for r in receipts),kani=0,extraction=0,aggregation16G_scopes=0,one_scope_at_a_time=True,retained_collector_exit_attempts=[r['attempt']for r in receipts if r['exit_status']],timeout_or_memory_kill=[])
+ if r['exit_status']:
+  assert (a=='NNK_L046'and r['exit_status']==124)or(a in ['NNK_L021','NNK_L028','NNK_L045']and r['exit_status']==1),(a,r['exit_status'])
+resources=dict(scopes=len(receipts),budget=60,unused=60-len(receipts),kinds=dict(collections.Counter(r['kind']for r in receipts)),wall_seconds=sum(r['wall_seconds']for r in receipts),peak_rss_kib=max(int(r['peak_rss_kib'])for r in receipts),swaps=sum(int(r['swaps'])for r in receipts),kani=0,extraction=0,aggregation16G_scopes=0,one_scope_at_a_time=True,retained_collector_exit_attempts=[r['attempt']for r in receipts if r['exit_status']==1],timeout_or_memory_kill=['NNK_L046'])
 binary=J(E/'NNK_L001/NNK_ProofDriver_BINARY_PIN.json')['sha256'];assert binary==J(P/'NNI_AUDIT.json')['same_optimized_proof_binary_sha256']
 assert J(E/'NNK_PREDECESSOR_COMPARISON.json')['status']=='PASS'and J(E/'NNK_FINAL_HOST.json')['status']=='PASS'
 put('RESOURCES',resources);put('AUDIT',dict(status='PASS_REQUIRED_RAW_ROOTS_WITH_RETAINED_COLLECTOR_FINDINGS',full_composition_pass=True,combined='NNK_COMBINED_IMPORT',combined_attempt='NNK_L001',headline='AspisR1.RPx_Deployed.deployed',required_roots=len(results),new_roots=len(statements)-len(prior),all_required_raw_roots_present=True,raw_standard_axioms_only=True,axioms=sorted({a for r in results for a in r['walked_axioms']}),collect_axioms_disagreements=disagreements,raw_authoritative_ruling="(ab')(3)/(ax2)",same_optimized_proof_binary_sha256=binary,fixtures=fixtures['results'],scanner='NNK_SCAN.json',walker=J(P/'NNI_AUDIT.json')['walker'],resources=resources,cold_release_replay=False,security_target_established=False))
@@ -57,6 +58,7 @@ for c in review['candidates']:
   for z in o[kind]:z.update(status='INTERNAL_DISCHARGED_WITH_OWN_INPUT_PROVENANCE_RETAINED',discharged_by=name,NNK_evidence=c.get('source_chain',c.get('reference_roots')),NNK_note='Full canonical RowSpec fold at same entered arguments; original own-input clauses remain upstream. Historical provenance-support clauses retain source meaning; no new child edge or stronger input premise.')
  o['certificate'].update(bridge_status='CLOSED',composed_status='CLOSED',NNK_root=name,NNK_gate='PASS',NNK_route=c.get('source_route','(ah) reviewed reference / actual native segment contracts and Lean induction; ruling(br)'),no_credit_reason='Historical rejection retained in NNK_basis_obligation, superseded for this row by complete NNK gate')
  trust=set(r.get('consumes_trust',[]))|{'NativeContractSemanticTransport','TrustedStd','AllocatorABICompilerSourceToELF'}
+ for child in c['canonical_children']:trust.update(by[child['row']].get('consumes_trust',[]))
  if r['row']=='TX2:217':trust.add('ReviewedTranscription-TX2:217')
  r.update(previous_status='OPEN',status='CLOSED',owner_module=c['owner'],owner_role='canonical complete revision3 source/observation root',root_owners=[dict(root=name,owner_module=c['owner'],obligation_statement_sha256=H(statements[name]['obligation_statement'].encode()))],evidence_dir='evidence/ledger27-20261111',consumes_trust=sorted(trust),consumes_trust_inherited_children=[dict(row=z['row'],roots=z['roots'],retained_row_consumes_trust=by[z['row']].get('consumes_trust',[]),certificate_trust=by[z['row']]['obligation']['certificate'].get('trust'))for z in c['canonical_children']])
  newrows.append(r['row'])
@@ -74,6 +76,10 @@ for t in ledger['trust_rows']:
  if t['id']in ['ReviewedTranscription-TX1:344','ReviewedTranscription-TX2:240']:assert not t.get('consumed_by_closed_rows')
 for t in ledger['reviewed_transcription_inventory']:
  if t['id']=='ReviewedTranscription-TX2:217':t['NNK_consumer_addition']='TX2:217 gate admitted under(br)';t['consumed_by_closed_rows']=['TX2:217'];t['direct_closed_rows']=['TX2:217']
+adds=J(E/'NNK_TRUST_ADDITIONS.json');adds['NNK_carry_basis']='NNI additions retained, statements/status/removal conditions unchanged; current217 consumer is an addition only'
+for t in adds['additions']:
+ if t['id']=='ReviewedTranscription-TX2:217':t['NNK_consumer_addition']='CLOSED TX2:217 NMX_R3_DecoderFold.root under(br)';t['consumed_by_closed_rows']=['TX2:217'];t['direct_closed_rows']=['TX2:217']
+put('TRUST_ADDITIONS',adds)
 ledger['NNK_top_composition']=J(E/'NNK_TOP_COMPOSITION.json');ledger['NNK_specification']=J(E/'NNK_SPECIFICATION.json');ledger['NNK_K086']=J(E/'NNK_K086.json');prov=J(E/'NNK_PROVENANCE.json');assert prov['gate_reachability_used'];ledger['NNK_extraction_provenance']=prov
 for r in ledger['rows']:
  assert r['canonical_callees']==oldby[r['row']]['canonical_callees']

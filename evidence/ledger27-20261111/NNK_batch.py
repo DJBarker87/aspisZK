@@ -9,9 +9,10 @@ E=B/'NNK_audit'/mode;E.mkdir(parents=True,exist_ok=True)
 if mode=='close':
  exec(compile((B/'NNK_pin.py').read_text(),'NNK_pin.py','exec'));exec(compile((B/'NNK_scope40.py').read_text(),'NNK_scope40.py','exec'));sys.exit(0)
 if mode=='acc-close':jobs=[('combined',[os.environ['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNK_generated','-o','NNK_objects/NNK_COMBINED_IMPORT.olean','NNK_generated/NNK_COMBINED_IMPORT.lean']),('scan',['NNK_native/NNK_Driver','scan'])]
-elif mode=='verify':jobs=[('verify',['python3','NNK_gate_check.py'])]
+elif mode in ['verify','verify-retention']:jobs=[('verify',['python3','NNK_gate_check.py'])]
 elif mode=='retention':jobs=[('retention',['python3','NNK_scope40.py'])]
 elif mode in ['review-close','review-retention']:jobs=[('review',[os.environ['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NNK_generated','-o','NNK_objects/NNK_HypothesisReview.olean','NNK_generated/NNK_HypothesisReview.lean'])]
+elif mode in ['split41a','split41b']:jobs=[('proof'+str(i),['NNK_native/NNK_ProofDriver','proof'+str(i)])for i in [41 if mode=='split41a'else 48]]
 elif mode.startswith('inventory-'):jobs=[(mode,['NNK_native/NNK_InventoryDriver',mode.split('-')[1]])]
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NNK_native/'+('NNK_PoolDriver' if mode=='poolscan' else 'NNK_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
 elif mode in ['fixtures','scan','scan2']:jobs=[('scan' if mode=='scan2' else mode,['NNK_native/'+('NNK_Driver' if mode.startswith('scan') else 'NNK_ProofDriver'),'scan' if mode=='scan2' else mode])]
@@ -36,4 +37,7 @@ if mode=="review-retention":
 
 if mode=='acc-close':
  exec(compile((B/'NNK_pin.py').read_text(),'NNK_pin.py','exec'))
+ exec(compile((B/'NNK_scope40.py').read_text(),'NNK_scope40.py','exec'))
+
+if mode=='verify-retention':
  exec(compile((B/'NNK_scope40.py').read_text(),'NNK_scope40.py','exec'))
