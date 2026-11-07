@@ -17,6 +17,10 @@ for item in json.load(open(E/sys.argv[1])):
   used=[int(q.stem.split('-')[-1]) for q in E.glob('turn-*.json') if int(q.stem.split('-')[-1])<49480 or 49800<=int(q.stem.split('-')[-1])<=49889]
   a=max(used)+1
   if a==49480:a=49800
+  if len(sys.argv)>2 and a>int(sys.argv[2]):
+   subprocess.run(['git','restore','--staged','--',p],check=True)
+   (E/'BUDGET_REPLAY_STOP.json').write_text(json.dumps(dict(next_module=m,next_attempt=a,reserved_for_audit_driver=True,plan=sys.argv[1]),indent=2)+'\n')
+   print('RESERVED AUDIT DRIVER',a,m,flush=True);sys.exit(0)
   assert 49458<=a<=49479 or 49800<=a<=49889
   print('REPLAY',a,m,flush=True)
   r=subprocess.run([sys.executable,str(E/'compile.py'),str(a),m,p])
