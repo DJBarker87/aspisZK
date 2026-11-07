@@ -88,3 +88,5 @@ D978 49912: full runtime Drop adapter compiled (exit0, wall0:02.14, peak4812488K
 D978 attempt 49913: PV_STX2_Source7EntryOwnedRegistered: passing pinned replay.
 
 D978 attempt 49914: PV_STX2_Source7EntryOwnedWellFormed: passing pinned replay.
+
+D978 attempt 49915: PV_STX2_Source7EntryOwnedIndexed: passing pinned replay.
