@@ -138,3 +138,5 @@ Session4 49111: pinned PV_THR2_OwnInitBridgeTypedRepresentation passed; session4
 Session4 49112: pinned PV_EVHB_OrderedFamiliesEntry passed; session4 receipt records resources/axioms.
 
 Session4 49113: pinned PV_THR2_OrderedFamiliesEntryRefined passed; session4 receipt records resources/axioms.
+
+Session4 49114: pinned PV_THR2_TypedRepresentation_Thread passed; session4 receipt records resources/axioms.
