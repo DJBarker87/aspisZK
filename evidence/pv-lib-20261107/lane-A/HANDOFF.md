@@ -81,3 +81,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49817 passed exact pinned replay PV_FN_SLICE_f7_DropRuntime; see receipt for time/RSS/swap/revision/axioms.
 
 49818 passed exact pinned replay PV_FN_SLICE_f7_HandlerSpec; see receipt for time/RSS/swap/revision/axioms.
+
+49819 passed exact pinned replay PV_FN_SLICE_RuntimeBindings; see receipt for time/RSS/swap/revision/axioms.
