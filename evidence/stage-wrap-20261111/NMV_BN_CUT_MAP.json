@@ -1,0 +1,84 @@
+{
+  "status": "INTERPRETER_LAWS_CHECKED_NATIVE_SOURCE_ASSOCIATION_OPEN",
+  "mechanical": "NMV_ASSOCIATIONS.json",
+  "source_signature_mapping": {
+    "program": "full [u8;32] Pubkey",
+    "accounts": "W::Account descriptor; RSL full metadata and cell identity at interpretation",
+    "snapshots": "W::Owned opaque descriptor; RSL full OwnedAccount including complete Result lengths/bytes",
+    "checkpoint": "actual Vec<u8> passed as slice; RSL arbitrary Bytes",
+    "errors": "complete ProgramError enum including Custom and BorshIoError(String)"
+  },
+  "cuts": [
+    {
+      "site": "snapshot x3/x7",
+      "native": [
+        "K035-K044",
+        "K047-K054"
+      ],
+      "law": "SDK borrow/std to_vec including allocation abort/drop",
+      "lean": [
+        "NMV_SnapshotExec.law",
+        "NMV_WindowEval.snapshots_law"
+      ]
+    },
+    {
+      "site": "stage1_owned/stage2_owned",
+      "native": [
+        "K035-K044",
+        "K047-K054"
+      ],
+      "law": "full child RowSpec at SAME program/snapshots/data and Clock reply",
+      "lean": [
+        "NMV_RslFold.fold344",
+        "NMV_RslFold.fold240",
+        "NMV_ConcreteWindows.root344",
+        "NMV_ConcreteWindows.root240"
+      ]
+    },
+    {
+      "site": "stage2 set_return_data(empty)",
+      "native": [
+        "K035/K038",
+        "K047/K050"
+      ],
+      "law": "RuntimeReturnDataClear",
+      "lean": [
+        "NMV_ConcreteWindows.windows",
+        "NMV_WindowStage.cut240"
+      ]
+    },
+    {
+      "site": "Clock::get projection, complete Result",
+      "native": [
+        "K055/K056"
+      ],
+      "law": "RuntimeClockSlotBinding",
+      "lean": [
+        "NMV_WindowClock.exact_clock",
+        "NMV_ConcreteWindows.windows"
+      ]
+    },
+    {
+      "site": "exclusive acquisition and checkpoint copy",
+      "native": [
+        "K040/K041/K044",
+        "K051/K054",
+        "K057",
+        "K058/K059"
+      ],
+      "law": "SDK exclusive/guard and TrustedStd copy length panic/write/frame",
+      "lean": [
+        "NMV_CopyExec.law",
+        "NMV_ConcreteWindows.windows"
+      ]
+    }
+  ],
+  "native_limits": "Small symbolic descriptors; payload facts are Lean laws. No bounded-buffer premise is a caller clause.",
+  "required_control": "PARENT-call-site argument mutants pending, NOT satisfied by K037/K043/K049/K053",
+  "pending": "NMV_PARENT_MUTANTS_PENDING.json",
+  "trust_reclassification": [
+    "ReviewedTranscription-TX1:344",
+    "ReviewedTranscription-TX2:240"
+  ],
+  "removed_trust": []
+}

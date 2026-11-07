@@ -149,3 +149,40 @@ formal budget. All remaining independent Lean/gate work continues.
 L091/L093/L094/L096-L099/L103/L104 are retained failed elaborations/automation;
 changed focused proofs pass, and L099's heartbeat shape is retired and split.
 The new raw ax2 and focused combined-import gates are next.
+
+## Final (bn) gate and disposition
+
+L112 final focused NLX closure plus all old/new NMV modules and exact TAS
+package PASS18.0669s/6733664KiB/swap0. L113-L119 raw ax2 audits PASS for all55
+new tops, raw walker/collector agree, only propext/Classical.choice/Quot.sound;
+all have printed axioms. Old74 audits and8 unchanged fidelity fixtures reused,
+not rerun. No all-roots audit, frozen manifest replay, native_decide or added
+axiom/heartbeat option. `NMV_AUDIT.json` records129 total checked tops.
+
+L120 retention PASS0.4751s/86536KiB/swap0:316 selected objects and78 seed files
+rehashed,118 source/object export files retained, unchanged SInt2 launcher hash
+61cf135a…, no inherited dependency variants. Hostfree95838191616bytes;
+workspace1760041853bytes. Prepend NMV_exports_20261111 to the exact inherited
+NMV_ENV.LEAN_PATH and import NMV_BN_COMBINED_IMPORT. Export/tool/closure pins
+are updated. No cache, target, key or external workspace deleted.
+
+Final new budget2/2 extraction,38/174 formal,26/26 Kani; total114/250 formal,
+60/60 Kani. Local validation checks193 archived inputs,882 compressed SHA pairs,
+129 raw/printed standard-only tops and8 retained fixtures; no file>20MB.
+All26 new Kani runs pass frozen graph/offline/features/post-lock validation.
+The two timeouts and four invalid receiver-log argument controls remain explicit.
+
+**No CANDIDATE/actual wrapper root/row credit.** Correct parent-call-site
+argument controls are prepared but unrun; native-to-full-carrier association
+still needs review. Exact model/interpreter TAS fields compile, with the four
+canonical PoolLib effect-law installations exposed for G2. Child345/241 remain
+full-strength parameters: read-only NMT0ee9ec4cc539 and NMS3278354f9fec have no
+candidate. NMV_REMAINING lists every member and why no remaining formal-only
+step closes it. Nothing is charged to another allowance to evade the Kani cap.
+
+ReviewedTranscription344/240 is retained option-A reclassification, no trust
+removed or added here. Frozen verifier/lock4bb3b3f51e16; Poolb936275465. No
+crates/programs/lock changes, hence no ELF rebuild trigger. Inherited ELF pins
+f8c0ec72…/63ad3e9c…/e0e49c34… are inventory, not new reproduction. Frozen3,
+RuntimePersistence, L154 parameter, narrowedD188,100-bit PER-ATTEMPT/privacy/two
+transactions unchanged. No push; no sibling/session-A live worktree touched.
