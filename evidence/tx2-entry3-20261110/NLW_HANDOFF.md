@@ -45,3 +45,15 @@ are retained. No shipped source/ELF/key change or push.
 ## Corrected child and source scope stage
 
 40/40 Kani invocations are complete; no further native invocation is authorized by this budget. K039 timed out and was retired. K040 matches K028 on the final program harness source. Native pairs are calibration/support only, with exact KMX configuration and frozen dependency graph receipts; no new CLOSED row. The corrected NLT complete-outcome interface replaces the withdrawn abort-incomplete projection; physical parent Frame binding remains OPEN. Writer/root/data persistence source support has been compiled through L048; subsequent focused receipts are authoritative for current sources.
+
+## Provenance and combined-gate stage
+
+Current source support:42 NLW modules and56 top theorems; full audit manifest adds the deployed headline as root57. L061ReaderHeader,L062ResumeHeader,L063WriterHeader,L065AuthenticatedRoots,L066PersistedRoots,L067RootCollision compile with standard axioms. Both-root serialization uses checkpoint112/144 and original proof16/63. RuntimePersistence is data-only. The concrete resume comparison records preserve partial digest execution. The conditional P2Prime theorem is support only; the collision alternative adds no injectivity hypothesis. OLD writer semantic root provenance and actual native game occurrence installation remain OPEN.
+
+Combined import L068 passes49.492s,peak6686900KiB,swap0; L069ScanDriver and L070optimized audit link pass. It imports the ledger23 receipt via its canonical NLS_COMBINED_IMPORT module map,plus NLE/NLF and current NLW modules. Corrected NLT expected-import inventory is pinned from immutablefc8f4700f49. FixturesL071 pass; final NFX/raw audit and retention status are recorded in NLW_AUDIT.json. No second unchanged combined audit is planned.
+
+Remaining member-specific native/resource/child/Root0 obligations and unused Lean allowance are disclosed in NLW_REMAINING.md. Support proofs are not reclassified as row closure.
+
+## Merged child candidate reuse
+
+L081 NLW_064CandidateFold.child/fold compile and discharge the ChildBridge parameter using the corrected merged NLT_CompleteRoot.root. This does not supply the actual native parent Frame producer or caller root provenance and is not a row root. First raw audit covers57 roots with standard axioms only; L075 preserves exit1 for the marker_frame collector disagreement, classified under(ab')(3)/(ax2). The unchanged walker canonical source and selected object match ledger23 (NLW_WALKER_PIN.json); full driver diff is committed. The final focused extension adds2 roots,an extended combined import and a second NFX scan,without repeating the57 unchanged raw roots.

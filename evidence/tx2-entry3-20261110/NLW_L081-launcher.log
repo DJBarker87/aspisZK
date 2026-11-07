@@ -1,0 +1,25 @@
+{"attempt": "NLW_L081", "exit_status": 0, "wall_seconds": 16.43072124198079, "peak_rss_kib": "6429448", "swaps": "0", "print_axioms": ["'NLW_064CandidateFold.child' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NLW_064CandidateFold.fold' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NLW_064CandidateFold.child : ∀ (H : Bytes → State), ChildBridge H :=
+fun H {X} d pub proof ck hash length bound roots => NLT_CompleteRoot.root H d pub proof ck hash length bound roots
+theorem NLW_064CandidateFold.fold : ∀ {Ambient X : Type} (H : Bytes → State) (s : Frame Ambient X),
+  (↑s.args.publicBytes).length ≤ 1880 →
+    NLW_Root0.Binds s.args.checkpoint s.args.proof →
+      ∀ (outcome : End H s.args) (events : List (Event Ambient X)),
+        Invocation H s outcome events → Law H s.args outcome ∧ events = chronology H s outcome :=
+fun {Ambient X} H s publicBound root0 outcome events native =>
+  NLW_Full064.fold H (fun {X} => child H) s publicBound root0 outcome events native
+'N
+...
+theorem NLW_064CandidateFold.child : ∀ (H : Bytes → State), ChildBridge H :=
+fun H {X} d pub proof ck hash length bound roots => NLT_CompleteRoot.root H d pub proof ck hash length bound roots
+theorem NLW_064CandidateFold.fold : ∀ {Ambient X : Type} (H : Bytes → State) (s : Frame Ambient X),
+  (↑s.args.publicBytes).length ≤ 1880 →
+    NLW_Root0.Binds s.args.checkpoint s.args.proof →
+      ∀ (outcome : End H s.args) (events : List (Event Ambient X)),
+        Invocation H s outcome events → Law H s.args outcome ∧ events = chronology H s outcome :=
+fun {Ambient X} H s publicBound root0 outcome events native =>
+  NLW_Full064.fold H (fun {X} => child H) s publicBound root0 outcome events native
+'NLW_064CandidateFold.child' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NLW_064CandidateFold.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r9947ed5014774e5f8636105512283b71.scope; invocation ID: f8fd78c05e9e4e7b8a9099aec7612549

@@ -25,3 +25,7 @@ verdict. This consumes the last native allowance;it is not a replay ofK039.
 ## Native parent/full-frame binding finding
 
 The current segment contracts are copied scalar fragments, not installed call-boundary segments of the ACTUAL compiled parent under an arbitrary payload/context decoder. The actual064 harness runs only zero-content carriers. Together they do not establish the(bg) native producer. Therefore no complete parent native fold or ReviewedTranscription admission is claimed. A future fix needs new scoped native windows and matched controls under the same frozen graph/KMX/deployed-feature rules; the remaining Lean allowance cannot substitute for that evidence. See NLW_INTERFACE_FINDINGS.md for paused adapter and root-timing gaps.
+
+## Raw ax2 collector disagreement
+
+L075/batch2 exits1 because NLW_AuthReturn.marker_frame has collectAxioms=[] but the unchanged raw graph walker finds onlypropext/Classical.choice/Quot.sound. All8 roots in the batch are present and raw-standard-only. The ax2 addendum (C3-BIN,2026-11-04; NFO_ReadModel treatment) makes the raw walk authoritative and requires recording this as a tooling finding,not a proof failure. The exit1 is retained. No walker/driver validation is relaxed,no theorem is renamed,and no unchanged rerun is made. The owned queue now checks complete root coverage and standard-only raw axioms on such an exit before continuing; any missing root,nonstandard axiom,unexpected diagnostic or unexplained exit still stops.
