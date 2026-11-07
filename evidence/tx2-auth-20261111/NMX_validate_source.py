@@ -2,10 +2,12 @@ from pathlib import Path
 import json,hashlib,re,subprocess,lzma
 E=Path(__file__).resolve().parent
 sha=lambda b:hashlib.sha256(b).hexdigest()
+def read(p):
+ return p.read_bytes() if p.is_file() else lzma.decompress(p.with_name(p.name+'.xz').read_bytes())
 b=E/'NMX_auth_cut_emitted';pins=json.loads((b/'NMX_PINS.json').read_text())
 assert pins['charon_exit']==pins['aeneas_exit']==pins['exit']==0
 assert pins['lock_before']==pins['lock_after']
-for p,h in pins['outputs'].items():assert sha((b/p).read_bytes())==h,p
+for p,h in pins['outputs'].items():assert sha(read(b/p))==h,p
 assert json.loads((b/'NMX_GRAPH_CHECK.json').read_text())['graph_matches_frozen']
 f=(b/'raw/NMX_auth/Funs.lean').read_text();s=f[f.index('def r1_pool_adapter.owned.authenticate_asq8_accounts\n'):f.rindex('end NMX_auth')]
 n=json.loads((E/'NMX_NORMALIZATION.json').read_text())
@@ -17,7 +19,7 @@ assert not re.search(r'\b(loop|while)\b',f),'own body has loop; review bc'
 manifest=json.loads((E/'NMX_STAGING_MANIFEST.json').read_text())
 for p in ['Cargo.lock','programs/r1-cost-probe/src/r1_pool_adapter_owned.rs','programs/r1-cost-probe/src/r1_pool_adapter.rs']:
  raw=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+p]);assert sha(raw)==manifest['files'][p]['sha256']
-md=json.loads((b/'metadata.json').read_text());pkgs={p['id']:p for p in md['packages']};nodes={p['id']:p for p in md['resolve']['nodes']}
+md=json.loads(read(b/'metadata.json').decode());pkgs={p['id']:p for p in md['packages']};nodes={p['id']:p for p in md['resolve']['nodes']}
 root=next(i for i,p in pkgs.items() if p['name']=='aspis-r1-cost-probe-program');seen=set()
 def visit(i):
  if i in seen:return

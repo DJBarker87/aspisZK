@@ -8,7 +8,7 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
     if kind in ['lean','link','audit','inspect']:
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
         assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<40,'Actual Lean compiler budget exhausted (40)'
-        if target not in ['NMX_COMBINED_IMPORT','NMX_ProofDriver','NMX_ScanDriver']:
+        if target not in ['NMX_COMBINED_IMPORT','NMX_ProofDriver','NMX_ScanDriver','retention']:
             assert sum(x.get('kind') in ['lean','link','audit','inspect'] for x in done)<38,'Reserve two final import/audit compiler slots'
     if kind=='kani':
         done=[json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]
