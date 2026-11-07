@@ -35,3 +35,5 @@ Preparatory inspection: requested evidence/HANDOFF.md absent; root HANDOFF.md re
 49472 passed exact pinned replay PV_FN_W4_ReplaceEffects; see receipt for time/RSS/swap/revision/axioms.
 
 49473 passed exact pinned replay PV_THR2_LibrarySemantics_TLSFrames; see receipt for time/RSS/swap/revision/axioms.
+
+49474 passed exact pinned replay PV_FN_THREAD_f170_ActualNativeFrames; see receipt for time/RSS/swap/revision/axioms.
