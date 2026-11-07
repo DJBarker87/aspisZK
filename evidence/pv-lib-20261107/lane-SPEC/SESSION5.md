@@ -42,3 +42,12 @@ adequacy remains open. 49740 used the wrong Address field name; source changed
 to localIndex before49741. Receipt49740's literal revision label HEAD resolves
 to34e6cadb4f1, the local submission head; exact failed source hash retained.
 49741:2.75s,peak4704440KiB,swap0,standard summary axioms only. Next166.
+
+## thread:f166
+
+49742 passed full statements and exact f166SummaryRun formula comparison:
+2.06s,peak4711208KiB,swap0,standard summary axioms only. The generic frame for
+subsequent intrinsic callers preserves the original suspended stack as a SUFFIX
+while their callback is executing; equality at those prefixes would wrongly
+exclude a real pending callback. FrameComparison states the precise relation
+to the no-intrinsic-prefix frame used by270. Statements only; next15.
