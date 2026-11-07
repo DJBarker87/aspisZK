@@ -1,6 +1,6 @@
 # PCF remaining obligations
 
-1 assigned rows CLOSED under PCF_AUDIT_STAGE1.json. Budget remains; work continues.
+2 assigned rows CLOSED under PCF_AUDIT_STAGE1.json. Budget remains; work continues.
 
 - POOL:272: Calls OPEN outside-job POOL:273 spend::note_commitment_with. No ledger23 CLOSED packet exists. Do not duplicate this callee or unwind field multiplication/hash.
 - POOL:165: SAME owner_key/value/asset_id/salt wrapper needs POOL:272; that row depends on outside-job273. Wrapper cannot close with a child-result hypothesis.
@@ -13,4 +13,3 @@
 - POOL:309: Actual body calls outside-job OPEN277 decode_deposit_instruction_with_magic_v1. PCC decoder target remains a draft; no callee packet exists to instantiate.
 - POOL:326: Actual body calls outside-job OPEN168 append_one_with_empty_roots and a lane-state encoder without a CLOSED ledger23 packet. Complete owned Box/allocation/errors and exact SAME tree/leaf/encoder arguments remain.
 - POOL:332: All-Nat source/reference count split L002 and scalar reference extraction E001 exist. Direct frozen-body extraction E003 and native exhaustive count-split association remain to be attempted; no bounded account-count substitute is admitted.
-- POOL:365: Actual complete ProgramResult positive/inverse K003/K004 and extracted model law L005 pass. Adopted full-state association L014 and combined Stream C gate remain.

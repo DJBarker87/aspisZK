@@ -28,3 +28,5 @@ PCF_L010 disk preflight observed39968239616 bytes free (<40000000000), so no pro
 PCF_AccountLaws contains checked extracted-reference equalities; PCF_LaneShape and PCF_LaneValue are pending drafts, not accepted roots. Full gate and adopted account-state/lane association remain open.
 
 POOL:364 NEW CLOSED: PCF_Payer.result_state_effects, actual native PCF_K017,PCF_K018,PCF_K021,PCF_K022, E001 reference, full adopted state/effect law and PCF_AUDIT_STAGE1.json gate. No semantic domain hypothesis beyond valid live Rust inputs; aliasing permitted. Total 1 CLOSED. Remaining work continues.
+
+POOL:365 NEW CLOSED: PCF_Token.result_state_effects, actual native PCF_K019,PCF_K020, E001 reference, full adopted state/effect law and PCF_AUDIT_STAGE1.json gate. No semantic domain hypothesis beyond valid live Rust inputs; aliasing permitted. Total 2 CLOSED. Remaining work continues.
