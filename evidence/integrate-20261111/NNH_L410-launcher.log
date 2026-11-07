@@ -1,0 +1,46 @@
+{"attempt": "NNH_L410", "exit_status": 1, "wall_seconds": 3.4900591981131583, "peak_rss_kib": "5899692", "swaps": "0", "print_axioms": ["'AspisR1.NNH_MerkleTerminalExecute.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNH_generated/NNH_MerkleTerminalExecute.lean:44:3: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isFalse
+H : Bytes → State
+root : Root
+batch kind : ℕ
+nodes : Slice U8
+s : MultiproofConeRef.reference.Scratch
+well✝ : ¬¬OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)
+well : OraclePortFrozenOrder.wellFormed (NJV_UnitDomain.keys s)
+⊢ Terminal H root batch kind nodes s
+    (have capacity := OraclePortSelectedDraft.capacity (3 * batch + kind);
+      if count s > capacity then
+        ([Event.capacity nodes (count s)], core.result.Result.Err AspisR1St
+...
+ount s)], core.result.Result.Err AspisR1Stage2.verifier.Error.Parse, s.idx, s.val)
+        else
+          have physical := MultiproofConeSlotTail.prefixNodes nodes (count s);
+          have entry :=
+            NNH_MerkleLevelsExecute.entry (NJP_RequestTransport.hash (MultiproofConePhysicalTransport.rawOracle H)) root
+              physical (NJV_EntryABI.initial s.idx s.val s.n);
+          ([Event.verify nodes (count s) s entry.1 entry.2],
+            if entry.2.1 = true then core.result.Result.Ok ()
+            else core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle,
+            (NJP_ScratchCarrier.emitted entry.2.2).idx, (NJP_ScratchCarrier.emitted entry.2.2).val)).1
+    (have capacity := OraclePortSelectedDraft.capacity (3 * batch + kind);
+      if count s > capacity then
+        ([Event.capacity nodes (count s)], core.result.Result.Err AspisR1Stage2.verifier.Error.Parse, s.idx, s.val)
+      else
+        if padded nodes capacity s = false then
+          ([Event.padding nodes (count s)], core.result.Result.Err AspisR1Stage2.verifier.Error.Parse, s.idx, s.val)
+        else
+          have physical := MultiproofConeSlotTail.prefixNodes nodes (count s);
+          have entry :=
+            NNH_MerkleLevelsExecute.entry (NJP_RequestTransport.hash (MultiproofConePhysicalTransport.rawOracle H)) root
+              physical (NJV_EntryABI.initial s.idx s.val s.n);
+          ([Event.verify nodes (count s) s entry.1 entry.2],
+            if entry.2.1 = true then core.result.Result.Ok ()
+            else core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle,
+            (NJP_ScratchCarrier.emitted entry.2.2).idx, (NJP_ScratchCarrier.emitted entry.2.2).val)).2
+'AspisR1.NNH_MerkleTerminalExecute.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4e6812ff50ab486eb12f8b23e0118141.scope; invocation ID: 892619d71209443e86c2ecbf4f927a35

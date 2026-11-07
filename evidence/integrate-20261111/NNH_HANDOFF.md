@@ -159,3 +159,45 @@ Final retention and handoff (L400–L401):
   owned Lean constructions and external candidate gates in NNH_REMAINING.md
   and per-field NNH_G0_MISSING.json. No LIB wait, row credit, stronger trust,
   invented native observation, final soundness claim or hidden assumption.
+
+2026-11-07 lead continuation: reconciled 400 completed actual submissions
+(L001–L401 except never-launched L048). Latest lead allowance adds 300 scopes,
+so the owned client now admits at most 700 total actual submissions. No host
+launcher, cap, timeout, reservation or validation changed. Final 16GiB scope
+remains unused and reserved for the final combined G0 import. Local disk
+47GiB free; earlier disk-full incidents retained. No unchanged rebuild/audit.
+
+Continuation item1: concrete total064 constructed (L406–438). Native row cuts
+are computed from arbitrary row prestates, followed by symbolic row/height
+induction, exact tree/three-call construction, explicit disjoint query frame
+and structural program-record induction. No native/library Spec witness is
+chosen. NNH_064Execute computes every parser/common Result and its rich trace.
+NNH_064Install.root fills the exact TAS.NMN_Root at install I0 (L435), and
+NNH_064WeakField.weak/writeFree supply the Root0-free observer (L437).
+The external SDK frame is universally quantified in the native proof; the
+empty auxiliary frame used for the canonical field is not a physical World.
+No literal-host association or final G1a/NMF_B is claimed: the SAME runtime
+digest43/error44 and header realization still belong to that installation.
+The independent stopped-C04 arms of the supplier law are retained unchanged;
+the deterministic Env-backed execution uses its returning runtime oracle.
+
+One fixed-heartbeat failure (L411) came from elaborating the concrete terminal
+constructor. It was split into a symbolic result/constructor helper (L412)
+and direct application (L413), both pass; no limits/options changed. Other
+failed source/input/representation tactics are retained and uncredited.
+NNH_RecordedCharge.bound (L405) instantiates the full-space E_rec expectation
+for a-top's actual bounded recorder, one accountLoss Q; the inclusion from
+actual top failure at that SAME recorder remains open. No Realizes filter.
+NNH_GATE_REFRESH pins immutable read-only branch evidence: NNI_ credits136
+only (583 CLOSED,16 OPEN);217 is rejected pending ruling(t) Kani controls.
+NMX has since published/audited234, not yet ledger-credited; no native credit
+is inferred here and no sibling worktree is modified.
+
+Item1 consumer gate: L439 passes NNH_G0With064.deployed_splitB_conditional
+with nmn removed from its argument list and NNH_064Install.refines supplied
+concretely. L440 audits only that NEW consumer, concrete weak field and
+a-top recorder bound: raw=collector, standard axioms only, zero swaps. This
+transitively covers the new native execution chain. The top remains a
+conditional scaffold over unfinished physical host/row/A1/A2/NMF fields.
+439 completed actual scopes throughL440;39 new of300,261 remain. No unresolved
+submission, extraction or Kani. No 16GiB scope used. Continuing item2.

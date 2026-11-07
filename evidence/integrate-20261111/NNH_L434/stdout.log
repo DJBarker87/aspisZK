@@ -1,0 +1,27 @@
+NNH_generated/NNH_064Install.lean:47:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  LIB_Bytes.bytes (LIB_Bytes.fromBytes ?bs ?h)
+in the target expression
+  V0.tx2auth (LIB_Carriers.bytes pu) (LIB_Carriers.bytes pr) (LIB_Carriers.bytes cp) env
+    (NNH_064Execute.observation env pu pr cp)
+
+x : RSL.Bytes × RSL.Bytes × RSL.Bytes
+env : RSL.Env
+domain : RSL.TX2_241.Dom064 (RSL.TAS.lib V0 V0.Root0 V0.tx2auth) x
+fits : LIBB_Tx2Auth.Fits x.1 x.2.1 x.2.2
+pu : Slice U8 := LIB_Bytes.fromBytes x.1 ⋯
+pr : Slice U8 := LIB_Bytes.fromBytes x.2.1 ⋯
+cp : Slice U8 := LIB_Bytes.fromBytes x.2.2 ⋯
+bytes : (LIB_Carriers.bytes pu, LIB_Carriers.bytes pr, LIB_Carriers.bytes cp) = x
+exactDomain : RSL.TX2_241.Dom064 V0 (LIB_Carriers.bytes pu, LIB_Carriers.bytes pr, LIB_Carriers.bytes cp)
+folded :
+  V0.tx2auth (LIB_Carriers.bytes pu) (LIB_Carriers.bytes pr) (LIB_Carriers.bytes cp) env
+    (NNH_064Execute.observation env pu pr cp)
+⊢ V0.tx2auth x.1 x.2.1 x.2.2 env
+    (NNH_064Execute.observation env (LIB_Bytes.fromBytes x.1 ⋯) (LIB_Bytes.fromBytes x.2.1 ⋯)
+      (LIB_Bytes.fromBytes x.2.2 ⋯))
+NNH_generated/NNH_064Install.lean:50:0: warning: Definition `root` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+'AspisR1.NNH_064Install.same' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NNH_064Install.refines' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNH_064Install.root' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
