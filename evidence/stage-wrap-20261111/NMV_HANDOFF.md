@@ -1,3 +1,5 @@
+CURRENT (bn continuation): target not established; 344/240 remain OPEN. Full-carrier concrete window folds and exact TAS fields compile; mandatory parent-argument controls are NOT satisfied (NMV-CONTROL-1). Children345/241 and four canonical library effect-law installations remain open. Historical stop reasons and progress claims below are superseded where noted.
+
 FINAL STATUS: target not established; no CANDIDATE wrapper root, no row credit. Canonical full-strength parametric transcription folds and Root0-free weak-instance G2 state frame PASS. Actual universal native producers and child345/241 installation remain OPEN. Historical stage notes follow; the250 formal-scope amendment supersedes the original50 text.
 
 # NMV stage-wrapper handoff
@@ -119,3 +121,31 @@ orientation repair (L089 excluded). G2's event clause needs four individual
 PoolLib effect laws (scanProof/reconstruct/encodeStatement/emitResult), not
 only verifier w write-freeness. TAS_WIRING already flags part of this issue;
 no unconstrained library dictionary is silently assumed write-free.
+
+## Concrete interpretation and exact TAS stage
+
+Concrete acquire/release/allocation, snapshot and copy interpretations now
+compile: L101/L102/L108/L109, full carriers and all failure/stopped prefixes.
+`NMV_ConcreteWindows.root240/root344` specialize the window fold without a
+free Windows/Ops or whole-wrapper-result premise. Allocation choices are
+universally quantified per invocation; neither allocation success nor a caller
+buffer bound is assumed. NLF SDK/std/runtime interpretation and the lead's
+ReviewedTranscription344/240 trust items are retained, never claimed removed.
+
+`NMV_TasRoots.field240/field344` match the TAS fields at the SAME Impl child
+constants; `packet` and `weak240/weakFrame` compile L111. This is a statement
+and interpreter proof, NOT an actual native root: the source association is
+OPEN under NMV-CONTROL-1. G2's full event/state clause is proved with explicit
+PoolLaws (scan226, reconstruct224, encode165, emit219) and verifier w effect
+laws; canonical library installation is a slice boundary, not a new caller
+hypothesis/trust item. NMT345 and NMS241 have no candidate at the latest
+committed review (0ee9ec4cc53 /3278354f9fe); no sibling worktree touched.
+
+K035-K060 exhaust THIS continuation's26 Kani scopes. K045/K046 are retired
+90s timeouts. Four receiver-log argument controls are excluded from required
+parent-mutant credit. The two correct parent-call mutants are committed as
+NOT_RUN pending sources; no result is invented, no Kani is charged to the
+formal budget. All remaining independent Lean/gate work continues.
+L091/L093/L094/L096-L099/L103/L104 are retained failed elaborations/automation;
+changed focused proofs pass, and L099's heartbeat shape is retired and split.
+The new raw ax2 and focused combined-import gates are next.

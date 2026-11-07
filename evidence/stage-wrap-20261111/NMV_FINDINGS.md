@@ -70,3 +70,31 @@ Native small carriers are explicit bounded diagnostic/call-boundary classes unti
   forwarding. Original K035-K044 full-child enum/control evidence is retained.
   These cuts add the missing descriptor/Clock facts without another enum
   cross product or native payload scan. Every buffer-content law stays Lean.
+
+- NMV-L1: L099's generic write-free automation for241 hit Lean's default
+  heartbeat limit (200000) during whnf, with no wall/memory cap increase.
+  The completed233/242 lemmas are isolated in NMV_NoWriteOwned;241 moves to
+  NMV_NoWrite241 with explicit one-call-at-a-time composition. No heartbeat
+  option is added, and the timed-out automation is retired.
+
+## Binding native-control disposition (bn continuation)
+
+NMV-CONTROL-1: On final statement review the argument controls K037/K043
+mutate `Log::args`'s recorded Owned argument, and K049/K053 mutate its
+recorded slice address. The parent call site itself is unchanged. These
+are RECEIVER-LOG MUTATIONS, not the PARENT-ARGUMENT mutants required by
+(bj)/(bl). Their FAIL verdicts are real but do not satisfy that required
+control. Native closure for344/240 is therefore NOT established; no native
+producer or CANDIDATE is claimed. Earlier progress phrases saying all three
+required controls passed are superseded by this disposition. The positive
+certificates, reply-dependence and omitted-footprint failures remain evidence
+within their actual classes, not whole-row credit. This finding does not
+withdraw or alter a trust row.
+
+All26 newly authorized Kani scopes are spent (K035-K060), including the two
+retired timeouts. Two correctly scoped parent-call-site controls are prepared
+as pending source, using the unmodified Log<0> receiver and perturbing only
+`&owned` to `&owned[1..]` at the actual fission child call. They have NOT run.
+No scope is relabelled or charged to the Lean allowance. A new Kani allowance
+is required to run them; no additional Kani is launched in this continuation.
+Lean-only composition and gates continue under the remaining formal budget.

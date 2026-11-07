@@ -5,7 +5,7 @@ open RSL NMV_NoWrite
 
 theorem acquire_free (a : AccountInfo) (k : Kind) (s : SdkState) : Free (acquire a k s) := by
  unfold acquire
- split <;> apply bind_free
+ cases k <;> (simp only; split) <;> apply bind_free
  all_goals first
  | apply emit_free; intro c b; intro h; cases h
  | intro _; exact pure_free _
