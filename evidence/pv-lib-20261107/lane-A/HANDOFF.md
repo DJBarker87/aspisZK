@@ -17,3 +17,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 46313 ScopeDispatchV2 passed after46312 reserved-name parser repair: OWNER-aware candidate includes13 new meanings plus original5, generic neutral agreement and full-reply effects. Typed Drop, destructor branches and native backing adequacy remain open.
 
 46315 CellTakeV2 passed after46314 keyword repair.641 derives SpawnHooks::default from the existing source type metadata.683 nonempty-source weak count and486 strong decrement PREFIX projections compile; neither is installed as complete destructor semantics.
+
+46316 OwnerStoreV2 candidate passed: original5+14 new source projections, all-answer641 effects, OWNER-aware neutral agreement and trace-indexed finite lift. Complete Drop/opaque-wrapper/source-backing adequacy remains open; no final corrected-machine or row claim.
