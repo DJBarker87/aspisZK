@@ -1,0 +1,55 @@
+{"attempt": "PCG_K082", "exit_status": 1, "wall_seconds": 2.3101737019605935, "peak_rss_kib": "277196", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: failed to connect to jobserver from environment variable `CARGO_MAKEFLAGS="-j --jobserver-fds=8,9 --jobserver-auth=8,9"`: cannot open file descriptor 8 from the jobserver environment variable value: Bad file descriptor (os error 9)
+  |
+  = note: the build environment is likely misconfigured
+
+warning: unexpected `cfg` condition value: `static-syscalls`
+ --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-define-syscall-2.3.0/src/lib.rs:5:7
+  |
+5 | #[cfg(target_feature = "static-syscalls")]
+  |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: expected values for `target_feature` are: `10e60`, `2e3`, `32s`, `3e3
+...
+` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_src/programs/aspis-pool/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_src/programs/aspis-pool/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: module `PCG_318` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest.rs:5798:5
+     |
+5798 | mod PCG_318;
+     |     ^^^^^^^ help: convert the identifier to snake case: `pcg_318`
+
+warning: module `PCG_324` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest.rs:5802:5
+     |
+5802 | mod PCG_324;
+     |     ^^^^^^^ help: convert the identifier to snake case: `pcg_324`
+
+warning: module `PCG_345` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest_dispatch.rs:1186:5
+     |
+1186 | mod PCG_345;
+     |     ^^^^^^^ help: convert the identifier to snake case: `pcg_345`
+
+warning: module `PCG_368` should have a snake case name
+   --> programs/aspis-pool/src/processor.rs:687:5
+    |
+687 | mod PCG_368;
+    |     ^^^^^^^ help: convert the identifier to snake case: `pcg_368`
+
+    Finished `dev` profile [optimized] target(s) in 1.15s
+Manual Harness Summary:
+error: no harnesses matched the harness filter: `PCG_SdkPda::`
+
+Running as unit: run-r6bce0c3a31f24a28b8e890405f3ea91d.scope; invocation ID: bcdaef347ce2429197a8ca8bfeb91fd7

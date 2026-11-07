@@ -1,0 +1,646 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -20,6 +20,7 @@
+ 
+ /// M31 base field element, canonical representation in [0, P).
+ #[derive(Clone, Copy, PartialEq, Eq, Debug, Default)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct M31(pub u32);
+ 
+ /// 1/2 in M31 (P is odd, so (P+1)/2 = 2^30).
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani,feature(allocator_api))]
+ //! Aspis SpendV0 statement layer, built evaluator-first.
+ //!
+ //! This crate deliberately contains no proof system. It defines the exact
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCG_159.rs
+@@ -0,0 +1,4 @@
++use super::*;
++pub(super) fn reference(e:PoolV1VerifierDispatchFormatError)->PoolV1AuthorizationReceiptError{PoolV1AuthorizationReceiptError::Dispatch(e)}
++#[kani::proof]
++fn all_arms(){let tag:u8=kani::any();kani::assume(tag<16);let e=match tag{0=>PoolV1VerifierDispatchFormatError::WrongLength,1=>PoolV1VerifierDispatchFormatError::WrongMagic,2=>PoolV1VerifierDispatchFormatError::WrongVersion,3=>PoolV1VerifierDispatchFormatError::WrongStatementVersion,4=>PoolV1VerifierDispatchFormatError::WrongHashAlgorithm,5=>PoolV1VerifierDispatchFormatError::WrongStatementDigestVersion,6=>PoolV1VerifierDispatchFormatError::WrongVerifyCode,7=>PoolV1VerifierDispatchFormatError::WrongSuccessCode,8=>PoolV1VerifierDispatchFormatError::NonZeroReserved,9=>PoolV1VerifierDispatchFormatError::InvalidTransitionKind,10=>PoolV1VerifierDispatchFormatError::ZeroRequiredBinding,11=>PoolV1VerifierDispatchFormatError::InvalidAnchorSequence,12=>PoolV1VerifierDispatchFormatError::InvalidProofBodyLength,13=>PoolV1VerifierDispatchFormatError::InvalidStatementPayloadLength,14=>PoolV1VerifierDispatchFormatError::StatementPayloadDigestMismatch,15=>PoolV1VerifierDispatchFormatError::NonCanonicalDigest,_=>unreachable!()};let got=<PoolV1AuthorizationReceiptError as From<PoolV1VerifierDispatchFormatError>>::from(e);let mut expected=reference(e);if cfg!(PCG_NEG_159) && tag==0{expected=reference(PoolV1VerifierDispatchFormatError::WrongMagic);}assert_eq!(got,expected);}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCG_160.rs
+@@ -0,0 +1,5 @@
++use super::*;
++use crate::pool_v1::verifier_dispatch::PoolV1VerifierDispatchFormatError;
++pub(super) fn reference(e:PoolV1AuthorizationReceiptError)->PoolV1AuthorizationReceiptAccountErrorV1{PoolV1AuthorizationReceiptAccountErrorV1::Receipt(e)}
++#[kani::proof]
++fn all_arms(){let tag:u8=kani::any();kani::assume(tag<24);let e=match tag{0=>PoolV1AuthorizationReceiptError::WrongLength,1=>PoolV1AuthorizationReceiptError::WrongMagic,2=>PoolV1AuthorizationReceiptError::WrongVersion,3=>PoolV1AuthorizationReceiptError::WrongHashAlgorithm,4=>PoolV1AuthorizationReceiptError::WrongStatus,5=>PoolV1AuthorizationReceiptError::DigestMismatch,6=>PoolV1AuthorizationReceiptError::FutureReceipt,7=>PoolV1AuthorizationReceiptError::BindingMismatch,8=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongLength),9=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongMagic),10=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongVersion),11=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongStatementVersion),12=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongHashAlgorithm),13=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongStatementDigestVersion),14=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongVerifyCode),15=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::WrongSuccessCode),16=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::NonZeroReserved),17=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::InvalidTransitionKind),18=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::ZeroRequiredBinding),19=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::InvalidAnchorSequence),20=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::InvalidProofBodyLength),21=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::InvalidStatementPayloadLength),22=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::StatementPayloadDigestMismatch),23=>PoolV1AuthorizationReceiptError::Dispatch(PoolV1VerifierDispatchFormatError::NonCanonicalDigest),_=>unreachable!()};let got=<PoolV1AuthorizationReceiptAccountErrorV1 as From<PoolV1AuthorizationReceiptError>>::from(e);let mut expected=reference(e);if cfg!(PCG_NEG_160) && tag==0{expected=reference(PoolV1AuthorizationReceiptError::WrongMagic);}assert_eq!(got,expected);}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCG_181.rs
+@@ -0,0 +1,13 @@
++extern crate alloc;
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::proof] #[kani::unwind(1100)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn owned_window(){
++ let inner:IncrementalMerkleTreeV1=kani::any();let empty=[[M31::ZERO;8];POOL_V1_TREE_DEPTH+1];
++ let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<8&&j<POOL_V1_TREE_DEPTH);
++ let n=inner.next_leaf_index;let r=inner.root[i].0;let f=inner.frontier[j][i].0;
++ let out=ValidatedIncrementalMerkleTreeV1{inner,empty:&empty}.into_inner();
++ assert_eq!(out.next_leaf_index,n);assert_eq!(out.frontier[j][i].0,f);
++ assert!((out.root[i].0==r)!=cfg!(PCG_NEG_OWNED));
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCG_184.rs
+@@ -0,0 +1,16 @@
++extern crate alloc;
++use super::*;
++use aspis_core::field::M31;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn encoder_reply(digest:&Digest)->[u8;32]{
++ let a=digest[0].0.to_le_bytes();let b=digest[1].0.to_le_bytes();let c=digest[2].0.to_le_bytes();let d=digest[3].0.to_le_bytes();let e=digest[4].0.to_le_bytes();let f=digest[5].0.to_le_bytes();let g=digest[6].0.to_le_bytes();let h=digest[7].0.to_le_bytes();
++ [a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3],c[0],c[1],c[2],c[3],d[0],d[1],d[2],d[3],e[0],e[1],e[2],e[3],f[0],f[1],f[2],f[3],g[0],g[1],g[2],g[3],h[0],h[1],h[2],h[3]]
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(crate::encode_digest_canonical,encoder_reply)]
++fn marker_encoding(){
++ let raw:[u32;8]=kani::any();let digest=[M31(raw[0]),M31(raw[1]),M31(raw[2]),M31(raw[3]),M31(raw[4]),M31(raw[5]),M31(raw[6]),M31(raw[7])];
++ let marker=PoolV1NullifierMarkerV1{transition_kind:PoolV1TransitionKind::PrivateTransfer,pool:[0;32],deployment_domain:[0;32],nullifier:digest,retained_anchor_sequence:0,retained_anchor_root:[M31(0);8],verifier_profile:[0;32],verifier_release:[0;32]};
++ let got=marker.canonical_nullifier_encoding();let expected=encoder_reply(&digest);assert!((got==expected)!=cfg!(PCG_NEG_MARKER));
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCG_186.rs
+@@ -0,0 +1,6 @@
++use super::*;
++use aspis_core::field::M31;
++// The actual frozen closure, applied for one Iterator::all iteration.
++fn predicate(limb:&M31)->bool{limb.0<P}
++#[kani::proof]
++fn arbitrary_step(){let prefix:bool=kani::any();let word:u32=kani::any();let item=[M31(word)];let got=prefix&&item.iter().all(predicate);let expected=prefix&&(u64::from(word)<2147483647);assert!((got==expected)!=cfg!(PCG_NEG_CANONICAL));}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCG_189.rs
+@@ -0,0 +1,4 @@
++use super::*;
++pub(super) fn reference(e:PoolV1TreeError)->PoolV1PairForestAccountErrorV1{PoolV1PairForestAccountErrorV1::Tree(e)}
++#[kani::proof]
++fn all_arms(){let tag:u8=kani::any();kani::assume(tag<13);let e=match tag{0=>PoolV1TreeError::TreeFull,1=>PoolV1TreeError::InsufficientCapacity,2=>PoolV1TreeError::IndexOutOfRange,3=>PoolV1TreeError::RootMismatch,4=>PoolV1TreeError::NonCanonicalFrontier,5=>PoolV1TreeError::WrongLength,6=>PoolV1TreeError::WrongMagic,7=>PoolV1TreeError::WrongVersion,8=>PoolV1TreeError::WrongDepth,9=>PoolV1TreeError::WrongTreeHash,10=>PoolV1TreeError::WrongDigestEncoding,11=>PoolV1TreeError::NonCanonicalDigest,12=>PoolV1TreeError::NonZeroReserved,_=>unreachable!()};let got=<PoolV1PairForestAccountErrorV1 as From<PoolV1TreeError>>::from(e);let mut expected=reference(e);if cfg!(PCG_NEG_189) && tag==0{expected=reference(PoolV1TreeError::InsufficientCapacity);}assert_eq!(got,expected);}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCG_242.rs
+@@ -0,0 +1,19 @@
++use super::*;
++#[kani::proof]
++fn scalar_full(){
++ let mut p=RootHistoryPageV1{pool:[0;32],page_number:0,first_sequence:0,filled:0,roots:[[M31(0);8];256]};
++ // Overwrite the sole field read after construction; no assertion depends on a page copy.
++ let filled:u16=kani::any();p.filled=filled;
++ assert!((p.is_full()==(filled==256))!=cfg!(PCG_NEG_PAGE));
++}
++#[kani::proof]
++fn borrowed_get(){
++ let mut p=RootHistoryPageV1{pool:[0;32],page_number:0,first_sequence:0,filled:0,roots:[[M31(0);8];256]};
++ let page:u64=kani::any();let filled:u16=kani::any();let sequence:u64=kani::any();
++ p.page_number=page;p.filled=filled;
++ let location=root_history_location(sequence);
++ assert!(location.slot<256);assert_eq!(location.page_number,sequence/256);assert_eq!(location.slot,(sequence%256) as u16);
++ let got=p.get(sequence);
++ if location.page_number!=page || location.slot>=filled {assert!(got.is_none());}
++ else {let root=got.unwrap();let slot=usize::from(location.slot);let expected=unsafe{p.roots.as_ptr().add(if cfg!(PCG_NEG_PAGE){(slot+1)%256}else{slot})};assert!(core::ptr::eq(root,expected));}
++}
+--- a/crates/aspis-statement/src/pool_v1/authorization_receipt.rs
++++ b/crates/aspis-statement/src/pool_v1/authorization_receipt.rs
+@@ -242,3 +242,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCG_159.rs"]
++mod PCG_159;
+--- a/crates/aspis-statement/src/pool_v1/authorization_receipt_account.rs
++++ b/crates/aspis-statement/src/pool_v1/authorization_receipt_account.rs
+@@ -914,3 +914,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCG_160.rs"]
++mod PCG_160;
+--- a/crates/aspis-statement/src/pool_v1/incremental_merkle.rs
++++ b/crates/aspis-statement/src/pool_v1/incremental_merkle.rs
+@@ -61,6 +61,7 @@
+ }
+ 
+ #[derive(Clone, Copy, Debug, PartialEq, Eq)]
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+ pub struct IncrementalMerkleTreeV1 {
+     pub next_leaf_index: u64,
+     pub root: Digest,
+@@ -764,3 +765,7 @@
+ #[cfg(any(kani, aeneas_ref))]
+ #[path = "../../../../tools/r1-builder-reference/tree.rs"]
+ pub mod tree_reference;
++
++#[cfg(kani)]
++#[path="PCG_181.rs"]
++mod PCG_181;
+--- a/crates/aspis-statement/src/pool_v1/nullifier_marker.rs
++++ b/crates/aspis-statement/src/pool_v1/nullifier_marker.rs
+@@ -277,3 +277,11 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCG_186.rs"]
++mod PCG_186;
++
++#[cfg(kani)]
++#[path="PCG_184.rs"]
++mod PCG_184;
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+@@ -819,3 +819,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCG_189.rs"]
++mod PCG_189;
+--- a/crates/aspis-statement/src/pool_v1/root_history.rs
++++ b/crates/aspis-statement/src/pool_v1/root_history.rs
+@@ -619,3 +619,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCG_242.rs"]
++mod PCG_242;
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_287.rs
+@@ -0,0 +1,4 @@
++use super::*;
++pub(super) fn reference(_e:DepositInstructionFormatErrorV1)->PoolInstructionFormatErrorV1{PoolInstructionFormatErrorV1::InvalidDeposit}
++#[cfg(kani)] #[kani::proof]
++fn all_arms(){let tag:u8=kani::any();kani::assume(tag<7);let e=match tag{0=>DepositInstructionFormatErrorV1::WrongLength,1=>DepositInstructionFormatErrorV1::WrongMagic,2=>DepositInstructionFormatErrorV1::WrongVersion,3=>DepositInstructionFormatErrorV1::NonZeroReserved,4=>DepositInstructionFormatErrorV1::InvalidAmount,5=>DepositInstructionFormatErrorV1::InvalidPayloadLength,6=>DepositInstructionFormatErrorV1::NonCanonicalDigest,_=>unreachable!()};let got=<PoolInstructionFormatErrorV1 as From<DepositInstructionFormatErrorV1>>::from(e);let mut expected=reference(e);if cfg!(PCG_NEG_287) && tag==0{expected=PoolInstructionFormatErrorV1::WrongLength;}assert_eq!(got,expected);}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_288.rs
+@@ -0,0 +1,4 @@
++use super::*;
++pub(super) fn reference(_e:PoolInstructionFormatErrorV1)->ProgramError{ProgramError::InvalidInstructionData}
++#[cfg(kani)] #[kani::proof]
++fn all_arms(){let tag:u8=kani::any();kani::assume(tag<13);let e=match tag{0=>PoolInstructionFormatErrorV1::WrongLength,1=>PoolInstructionFormatErrorV1::WrongMagic,2=>PoolInstructionFormatErrorV1::WrongVersion,3=>PoolInstructionFormatErrorV1::WrongTransitionKind,4=>PoolInstructionFormatErrorV1::WrongDigestEncoding,5=>PoolInstructionFormatErrorV1::NonZeroReserved,6=>PoolInstructionFormatErrorV1::InvalidEnvelope,7=>PoolInstructionFormatErrorV1::EnvelopeStatementMismatch,8=>PoolInstructionFormatErrorV1::InvalidPolicy,9=>PoolInstructionFormatErrorV1::NonCanonicalField,10=>PoolInstructionFormatErrorV1::InvalidWithdrawalAmount,11=>PoolInstructionFormatErrorV1::InvalidDestination,12=>PoolInstructionFormatErrorV1::InvalidDeposit,_=>unreachable!()};let got=<ProgramError as From<PoolInstructionFormatErrorV1>>::from(e);let mut expected=reference(e);if cfg!(PCG_NEG_288) && tag==0{expected=ProgramError::InvalidArgument;}assert_eq!(got,expected);}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_293.rs
+@@ -0,0 +1,13 @@
++extern crate alloc;
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[path="PCG_pack_reference.rs"] mod reference;
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn word_association(){let digest:[u8;32]=kani::any();let chunk:usize=kani::any();let byte:usize=kani::any();let word:u64=kani::any();kani::assume(chunk<4&&byte<7);kani::assume(word<(1u64<<(8*byte)));let actual=(word<<8)|u64::from(digest[7*chunk+byte]);let expected=reference::word_step(word,digest[7*chunk+byte]);assert!((actual==expected)!=cfg!(PCG_NEG_PACK));}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn write_window(){let mut seed:[u8;32]=kani::any();let chunk:usize=kani::any();let group:usize=kani::any();let other:usize=kani::any();let word:u64=kani::any();kani::assume(chunk<4&&group<8&&other<32);let old=seed[other];let offset=8*chunk+group;seed[offset]=((word>>(7*(7-group)))&0x7f)as u8;assert_eq!(seed[offset],((word>>(49-7*group))&127)as u8);if other!=offset{assert_eq!(seed[other],old);}assert!((seed[offset]<128)!=cfg!(PCG_NEG_PACK));}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn group_association(){let word:u64=kani::any();let group:usize=kani::any();kani::assume(group<8);let actual=((word>>(7*(7-group)))&0x7f)as u8;let expected=reference::group(word,group);assert!((actual==expected)!=cfg!(PCG_NEG_PACK));}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_296.rs
+@@ -0,0 +1,30 @@
++extern crate alloc;
++use super::*;
++use core::cell::Cell;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[repr(C)]
++struct Context{pool:Pubkey,encoding:[u8;32],digest:[u8;32],calls:Cell<u8>}
++fn hash_reply(parts:&[&[u8]])->solana_program::hash::Hash{
++ assert_eq!(parts.len(),3);
++ let c=unsafe{&*core::ptr::with_exposed_provenance::<Context>(parts[1].as_ptr() as usize)};
++ assert_eq!(parts[0],POOL_V1_PAIR_FOREST_MARKER_SEED_DOMAIN);assert_eq!(parts[1],c.pool.as_ref());assert_eq!(parts[2],&c.encoding);c.calls.set(c.calls.get()+1);
++ solana_program::hash::Hash::new_from_array(c.digest)
++}
++// Injective byte diagnostic only. The arbitrary child reply is proved by the
++// exact source-fission log below, rather than assigning a hash or pack value.
++fn pack_probe(digest:&[u8;32])->[u8;32]{let mut out=[0;32];for i in 0..32{out[i]=digest[i]^((i as u8).wrapping_mul(7));}out}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(solana_program::hash::hashv,hash_reply)]
++#[kani::stub(pack_pool_v1_pair_forest_marker_seed_v1,pack_probe)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn marker_arguments(){let c=Context{pool:Pubkey::new_from_array(kani::any()),encoding:kani::any(),digest:kani::any(),calls:Cell::new(0)};let _=core::ptr::addr_of!(c).expose_provenance();let got=pool_v1_pair_forest_marker_seed_v1(&c.pool,&c.encoding);let expected=pack_probe(&c.digest);assert_eq!(c.calls.get(),1);assert!((got==expected)!=cfg!(PCG_NEG_MARKER));}
++struct Log{digest:[u8;32],reply:[u8;32],pool:Pubkey,encoding:[u8;32],hash_calls:u8,pack_calls:u8}
++fn hash_window(parts:&[&[u8]],log:&mut Log)->solana_program::hash::Hash{assert_eq!(parts.len(),3);assert_eq!(parts[0],POOL_V1_PAIR_FOREST_MARKER_SEED_DOMAIN);assert_eq!(parts[1],log.pool.as_ref());assert_eq!(parts[2],&log.encoding);log.hash_calls+=1;solana_program::hash::Hash::new_from_array(log.digest)}
++fn pack_window(digest:&[u8;32],log:&mut Log)->[u8;32]{assert_eq!(digest,&log.digest);log.pack_calls+=1;log.reply}
++fn marker_window(pool:&Pubkey,canonical_nullifier_encoding:&[u8;32],log:&mut Log)->[u8;32]{
++ let digest=hash_window(&[POOL_V1_PAIR_FOREST_MARKER_SEED_DOMAIN,pool.as_ref(),canonical_nullifier_encoding],log).to_bytes();
++ pack_window(&digest,log)
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn marker_reply(){let pool=Pubkey::new_from_array(kani::any());let encoding:[u8;32]=kani::any();let mut log=Log{digest:kani::any(),reply:kani::any(),pool,encoding,hash_calls:0,pack_calls:0};let got=marker_window(&pool,&encoding,&mut log);assert_eq!(log.hash_calls,1);assert_eq!(log.pack_calls,1);assert!((got==log.reply)!=cfg!(PCG_NEG_MARKER));}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_318.rs
+@@ -0,0 +1,18 @@
++use super::*;
++use crate::PCG_Address::{Context,reference,KMX_copy_nonoverlapping};
++fn parent_reply(seeds:&[&[u8]],program:&Pubkey,key:&Pubkey)->bool{
++ let c=unsafe{&*(core::ptr::with_exposed_provenance::<Context<'_>>(program as *const Pubkey as usize))};
++ assert_eq!(seeds.len(),c.request.count);
++ for i in 0..c.request.count{assert_eq!(seeds[i],&c.request.seeds[i][..c.request.lengths[i]]);}
++ assert_eq!(*key,c.reply);c.calls.set(c.calls.get()+1);c.is_ok
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(crate::registry::stored_bump_address_matches,parent_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn master_request(){
++ let mint:[u8;32]=kani::any();let bump:u8=kani::any();let program:[u8;32]=kani::any();
++ let master=PoolV1PairForestMasterV1{bump,identity:aspis_statement::pool_v1::PoolIdentityV1{pool:[0;32],asset_mint:mint,token_program:[0;32],asset_id:aspis_core::field::M31::ZERO,deployment_domain:[0;32]},verifier_policy:aspis_statement::pool_v1::VerifierPolicyV1{flags:0,registry_program:[0;32],registry_authority:[0;32],policy_binding:[0;32]},initialized_lane_mask:0,has_checkpoint:false,next_checkpoint_sequence:0,last_checkpoint_lane_sequences:[0;8]};
++ let mut domain=[0u8;32];for i in 0..POOL_V1_PAIR_FOREST_MASTER_SEED.len(){domain[i]=POOL_V1_PAIR_FOREST_MASTER_SEED[i];}let mut bump_seed=[0u8;32];bump_seed[0]=bump;
++ let c=Context{program:Pubkey::new_from_array(program),request:reference::Request{program,seeds:[domain,mint,bump_seed,[0;32]],lengths:[POOL_V1_PAIR_FOREST_MASTER_SEED.len(),32,1,0],count:3},outer:core::ptr::null(),reply:Pubkey::new_from_array(kani::any()),bump:0,is_ok:kani::any(),error:0,calls:core::cell::Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();
++ let got=master_address_matches(&c.program,&master,&c.reply);assert_eq!(c.calls.get(),1);assert!((got==c.is_ok)!=cfg!(PCG_NEG_MASTER));
++}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_324.rs
+@@ -0,0 +1,34 @@
++use super::*;
++use crate::PCG_Address::KMX_copy_nonoverlapping;
++fn canonical(d:&Digest)->bool{d.iter().all(|v|v.0<aspis_core::field::P)}
++fn diagnostic_parent(l:&Digest,r:&Digest)->Digest{
++ assert!(canonical(l)&&canonical(r));
++ [aspis_core::field::M31((l[0].0.rotate_left(1)^r[0].0.rotate_right(1))&0x3fffffff),aspis_core::field::M31((l[1].0.rotate_left(1)^r[1].0.rotate_right(1))&0x3fffffff),aspis_core::field::M31((l[2].0.rotate_left(1)^r[2].0.rotate_right(1))&0x3fffffff),aspis_core::field::M31((l[3].0.rotate_left(1)^r[3].0.rotate_right(1))&0x3fffffff),aspis_core::field::M31((l[4].0.rotate_left(1)^r[4].0.rotate_right(1))&0x3fffffff),aspis_core::field::M31((l[5].0.rotate_left(1)^r[5].0.rotate_right(1))&0x3fffffff),aspis_core::field::M31((l[6].0.rotate_left(1)^r[6].0.rotate_right(1))&0x3fffffff),aspis_core::field::M31((l[7].0.rotate_left(1)^r[7].0.rotate_right(1))&0x3fffffff)]
++}
++struct Log{replies:[Digest;7],left:[Digest;7],right:[Digest;7],calls:usize}
++fn parent_window(left:&Digest,right:&Digest,log:&mut Log)->Digest{
++ assert!(canonical(left)&&canonical(right));let k=log.calls;log.left[k]=*left;log.right[k]=*right;log.calls+=1;log.replies[k]
++}
++// Exact frozen324 body, with only child calls given their local oracle log.
++fn global_window(lane_roots:&[Digest;8],log:&mut Log)->Digest{
++ let level_one=[parent_window(&lane_roots[0],&lane_roots[1],log),parent_window(&lane_roots[2],&lane_roots[3],log),parent_window(&lane_roots[4],&lane_roots[5],log),parent_window(&lane_roots[6],&lane_roots[7],log)];
++ let level_two=[parent_window(&level_one[0],&level_one[1],log),parent_window(&level_one[2],&level_one[3],log)];
++ parent_window(&level_two[0],&level_two[1],log)
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn seven_calls(){
++ let roots:[Digest;8]=kani::any();let replies:[Digest;7]=kani::any();for d in roots.iter(){kani::assume(canonical(d));}for d in replies.iter(){kani::assume(canonical(d));}
++ let mut log=Log{replies,left:[[aspis_core::field::M31(0);8];7],right:[[aspis_core::field::M31(0);8];7],calls:0};let out=global_window(&roots,&mut log);let i:usize=kani::any();let limb:usize=kani::any();kani::assume(i<7&&limb<8);
++ let left=match i{0=>roots[0],1=>roots[2],2=>roots[4],3=>roots[6],4=>replies[0],5=>replies[2],6=>replies[4],_=>unreachable!()};let right=match i{0=>roots[1],1=>roots[3],2=>roots[5],3=>roots[7],4=>replies[1],5=>replies[3],6=>replies[5],_=>unreachable!()};
++ assert_eq!(log.calls,7);assert_eq!(log.left[i][limb].0,left[limb].0);assert_eq!(log.right[i][limb].0,right[limb].0);assert!((out[limb].0==replies[6][limb].0)!=cfg!(PCG_NEG_GLOBAL));
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(aspis_statement::pool_v1::pool_v1_tree_parent,diagnostic_parent)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn actual_call_structure(){
++ let roots:[Digest;8]=kani::any();for d in roots.iter(){kani::assume(canonical(d));}
++ let got=pool_v1_pair_forest_global_root_v1(&roots);
++ let a=diagnostic_parent(&roots[0],&roots[1]);let b=diagnostic_parent(&roots[2],&roots[3]);let c=diagnostic_parent(&roots[4],&roots[5]);let d=diagnostic_parent(&roots[6],&roots[7]);let e=diagnostic_parent(&a,&b);let f=diagnostic_parent(&c,&d);let expected=diagnostic_parent(&e,&f);
++ let i:usize=kani::any();kani::assume(i<8);assert!((got[i].0==expected[i].0)!=cfg!(PCG_NEG_GLOBAL));
++}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_345.rs
+@@ -0,0 +1,26 @@
++extern crate alloc;
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn none_reply()->Option<(Pubkey,Vec<u8>)>{None}
++fn fixed_reply()->Option<(Pubkey,Vec<u8>)>{Some((Pubkey::new_from_array([42;32]),alloc::vec![37]))}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(program::get_return_data,none_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn actual_none(){let mut rt=SolanaPairForestVerifierRuntimeV1;let got=rt.get_return_data();assert!(got.is_none()!=cfg!(PCG_NEG_RETURN));}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(program::get_return_data,fixed_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn actual_some(){let mut rt=SolanaPairForestVerifierRuntimeV1;let (key,bytes)=rt.get_return_data().unwrap();assert_eq!(bytes.len(),1);assert_eq!(bytes[0],37);assert!((key==Pubkey::new_from_array([42;32]))!=cfg!(PCG_NEG_RETURN));}
++struct Log{reply:Option<(Pubkey,Vec<u8>)>,calls:u8}
++fn reply_window(log:&mut Log)->Option<(Pubkey,Vec<u8>)>{log.calls+=1;log.reply.take()}
++// Literal frozen return expression, with only the SDK cut given its local log.
++fn get_window(log:&mut Log)->Option<(Pubkey,Vec<u8>)>{reply_window(log)}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn owned_reply_window(){
++ let n:usize=kani::any();kani::assume(n<=1024);let k:usize=kani::any();if n>0{kani::assume(k<n);}else{kani::assume(k==0);}
++ let mut bytes=alloc::vec![0u8;n];if n>0{bytes[k]=kani::any();}let pointer=bytes.as_ptr();let capacity=bytes.capacity();let old=if n>0{bytes[k]}else{0};let key:[u8;32]=kani::any();let some:bool=kani::any();
++ let mut log=Log{reply:if some{Some((Pubkey::new_from_array(key),bytes))}else{None},calls:0};
++ let got=get_window(&mut log);assert_eq!(log.calls,1);assert!(log.reply.is_none());
++ match got{None=>assert!(!some),Some((mut who,data))=>{assert!(some);if cfg!(PCG_NEG_RETURN){who=Pubkey::new_from_array([key[0]^1,key[1],key[2],key[3],key[4],key[5],key[6],key[7],key[8],key[9],key[10],key[11],key[12],key[13],key[14],key[15],key[16],key[17],key[18],key[19],key[20],key[21],key[22],key[23],key[24],key[25],key[26],key[27],key[28],key[29],key[30],key[31]]);}assert_eq!(who,Pubkey::new_from_array(key));assert_eq!(data.as_ptr(),pointer);assert_eq!(data.len(),n);assert_eq!(data.capacity(),capacity);if n>0{assert_eq!(data[k],old);}}}
++}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_368.rs
+@@ -0,0 +1,20 @@
++extern crate alloc;
++use super::*;
++use core::cell::Cell;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[repr(C)]
++struct Context<'a>{parts:[&'a[u8];9],count:usize,outer:*const &'a[u8],reply:[u8;32],calls:Cell<u8>}
++fn hashv_reply(parts:&[&[u8]])->solana_program::hash::Hash{
++ let c=unsafe{&*(core::ptr::with_exposed_provenance::<Context<'_>>(parts.as_ptr() as usize))};
++ assert_eq!(parts.as_ptr(),c.outer);assert_eq!(parts.len(),c.count);c.calls.set(c.calls.get()+1);
++ solana_program::hash::Hash::new_from_array(c.reply)
++}
++#[kani::proof] #[kani::unwind(200)]
++#[kani::stub(solana_program::hash::hashv,hashv_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn digest_forward(){
++ let a:[u8;57607]=kani::any();let b:[u8;57607]=kani::any();let d:[u8;57607]=kani::any();let e:[u8;57607]=kani::any();let f:[u8;57607]=kani::any();let g:[u8;57607]=kani::any();let h:[u8;57607]=kani::any();let i:[u8;57607]=kani::any();let j:[u8;57607]=kani::any();
++ let lengths:[usize;9]=kani::any();for k in 0..9{kani::assume(lengths[k]<=57607);}let n:usize=kani::any();kani::assume(n<=9);
++ let mut c=Context{parts:[&a[..lengths[0]],&b[..lengths[1]],&d[..lengths[2]],&e[..lengths[3]],&f[..lengths[4]],&g[..lengths[5]],&h[..lengths[6]],&i[..lengths[7]],&j[..lengths[8]]],count:n,outer:core::ptr::null(),reply:kani::any(),calls:Cell::new(0)};c.outer=c.parts.as_ptr();let _ = core::ptr::addr_of!(c).expose_provenance();
++ let got=solana_sha256(&c.parts[..n]);assert_eq!(c.calls.get(),1);assert!((got==c.reply)!=cfg!(PCG_NEG_DIGEST));
++}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_Address.rs
+@@ -0,0 +1,58 @@
++extern crate alloc;
++use solana_program::pubkey::{Pubkey,PubkeyError};
++use core::cell::Cell;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[path="PCG_address_reference.rs"] pub(crate) mod reference;
++#[repr(C)]
++pub(crate) struct Context<'a>{pub(crate) program:Pubkey,pub(crate) request:reference::Request,pub(crate) outer:*const &'a[u8],pub(crate) reply:Pubkey,pub(crate) bump:u8,pub(crate) is_ok:bool,pub(crate) error:u8,pub(crate) calls:Cell<u8>}
++fn create_reply(seeds:&[&[u8]],program:&Pubkey)->Result<Pubkey,PubkeyError>{
++ let c=unsafe{&*(core::ptr::with_exposed_provenance::<Context<'_>>(program as *const Pubkey as usize))};
++ assert_eq!(seeds.as_ptr(),c.outer);assert_eq!(seeds.len(),c.request.count);c.calls.set(c.calls.get()+1);
++ if c.is_ok{Ok(c.reply)}else{Err(match c.error{0=>PubkeyError::MaxSeedLengthExceeded,1=>PubkeyError::InvalidSeeds,2=>PubkeyError::IllegalOwner,_=>unreachable!()})}
++}
++fn find_reply(seeds:&[&[u8]],program:&Pubkey)->(Pubkey,u8){
++ let c=unsafe{&*(core::ptr::with_exposed_provenance::<Context<'_>>(program as *const Pubkey as usize))};
++ assert_eq!(seeds.len(),c.request.count);
++ for i in 0..c.request.count{assert_eq!(seeds[i],&c.request.seeds[i][..c.request.lengths[i]]);}
++ c.calls.set(c.calls.get()+1);(c.reply,c.bump)
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(Pubkey::create_program_address,create_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn stored_matches(){
++ let storage:[[u8;32];16]=kani::any();let lengths:[usize;16]=kani::any();let n:usize=kani::any();kani::assume(n<=16);
++ let mut parts:[&[u8];16]=[&[];16];for i in 0..16{kani::assume(lengths[i]<=32);parts[i]=&storage[i][..lengths[i]];}let key=Pubkey::new_from_array(kani::any());let error:u8=kani::any();kani::assume(error<3);
++ let program:[u8;32]=kani::any();let c=Context{program:Pubkey::new_from_array(program),request:reference::Request{program,seeds:[[0;32];4],lengths:[0;4],count:n},outer:parts.as_ptr(),reply:Pubkey::new_from_array(kani::any()),bump:kani::any(),is_ok:kani::any(),error,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();
++ let got=crate::registry::stored_bump_address_matches(&parts[..n],&c.program,&key);
++ assert_eq!(c.calls.get(),1);let expected=c.is_ok&&c.reply==key;
++ assert!((got==expected)!=cfg!(PCG_NEG_ADDRESS));
++}
++// Generated exact-request helper harnesses.
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(Pubkey::find_program_address,find_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn request_374(){let program:[u8;32]=kani::any();let pool:[u8;32]=kani::any();let profile:[u8;32]=kani::any();let release:[u8;32]=kani::any();let request=reference::request_374(program,pool,profile,release);let c=Context{program:Pubkey::new_from_array(program),request,outer:core::ptr::null(),reply:Pubkey::new_from_array(kani::any()),bump:kani::any(),is_ok:true,error:0,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();let got=crate::registry::pool_v1_verifier_entry_address(&c.program,&Pubkey::new_from_array(pool),&profile,&release);assert_eq!(c.calls.get(),1);assert!((got==(c.reply,c.bump))!=cfg!(PCG_NEG_ADDRESS));}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(Pubkey::find_program_address,find_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn request_375(){let program:[u8;32]=kani::any();let pool:[u8;32]=kani::any();let profile:[u8;32]=kani::any();let release:[u8;32]=kani::any();let request=reference::request_375(program,pool,profile,release);let c=Context{program:Pubkey::new_from_array(program),request,outer:core::ptr::null(),reply:Pubkey::new_from_array(kani::any()),bump:kani::any(),is_ok:true,error:0,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();let got=crate::registry::pool_v1_verifier_entry_v2_address(&c.program,&Pubkey::new_from_array(pool),&profile,&release);assert_eq!(c.calls.get(),1);assert!((got==(c.reply,c.bump))!=cfg!(PCG_NEG_ADDRESS));}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(Pubkey::find_program_address,find_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn request_376(){let program:[u8;32]=kani::any();let pool:[u8;32]=kani::any();let request=reference::request_376(program,pool);let c=Context{program:Pubkey::new_from_array(program),request,outer:core::ptr::null(),reply:Pubkey::new_from_array(kani::any()),bump:kani::any(),is_ok:true,error:0,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();let got=crate::registry::pool_v1_verifier_registry_address(&c.program,&Pubkey::new_from_array(pool));assert_eq!(c.calls.get(),1);assert!((got==(c.reply,c.bump))!=cfg!(PCG_NEG_ADDRESS));}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(Pubkey::find_program_address,find_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn request_377(){let program:[u8;32]=kani::any();let pool:[u8;32]=kani::any();let request=reference::request_377(program,pool);let c=Context{program:Pubkey::new_from_array(program),request,outer:core::ptr::null(),reply:Pubkey::new_from_array(kani::any()),bump:kani::any(),is_ok:true,error:0,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();let got=crate::registry::pool_v1_verifier_registry_v2_address(&c.program,&Pubkey::new_from_array(pool));assert_eq!(c.calls.get(),1);assert!((got==(c.reply,c.bump))!=cfg!(PCG_NEG_ADDRESS));}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(Pubkey::find_program_address,find_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn request_390(){let program:[u8;32]=kani::any();let pool:[u8;32]=kani::any();let request=reference::request_390(program,pool);let c=Context{program:Pubkey::new_from_array(program),request,outer:core::ptr::null(),reply:Pubkey::new_from_array(kani::any()),bump:kani::any(),is_ok:true,error:0,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();let got=crate::vault::pool_v1_vault_authority_address(&c.program,&Pubkey::new_from_array(pool));assert_eq!(c.calls.get(),1);assert!((got==(c.reply,c.bump))!=cfg!(PCG_NEG_ADDRESS));}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(Pubkey::find_program_address,find_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn request_391(){let program:[u8;32]=kani::any();let pool:[u8;32]=kani::any();let request=reference::request_391(program,pool);let c=Context{program:Pubkey::new_from_array(program),request,outer:core::ptr::null(),reply:Pubkey::new_from_array(kani::any()),bump:kani::any(),is_ok:true,error:0,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();let got=crate::vault::pool_v1_vault_token_account_address(&c.program,&Pubkey::new_from_array(pool));assert_eq!(c.calls.get(),1);assert!((got==(c.reply,c.bump))!=cfg!(PCG_NEG_ADDRESS));}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(Pubkey::find_program_address,find_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn request_323(){let program:[u8;32]=kani::any();let pool:[u8;32]=kani::any();let sequence:u64=kani::any();let request=reference::request_323(program,pool,sequence);let c=Context{program:Pubkey::new_from_array(program),request,outer:core::ptr::null(),reply:Pubkey::new_from_array(kani::any()),bump:kani::any(),is_ok:true,error:0,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();let got=crate::pair_forest::pool_v1_pair_forest_checkpoint_address(&c.program,&Pubkey::new_from_array(pool),sequence);assert_eq!(c.calls.get(),1);assert!((got==(c.reply,c.bump))!=cfg!(PCG_NEG_ADDRESS));}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_SdkPda.rs
+@@ -0,0 +1,125 @@
++extern crate alloc;
++use solana_program::pubkey::{Pubkey,PubkeyError};
++use core::cell::Cell;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++// The first member is the only member visible to the actual SDK wrapper.
++// The syscall oracle recovers this harness-owned local context by provenance.
++#[repr(C)]
++struct Context<'a>{program:Pubkey,seeds:*const &'a[u8],count:usize,reply:[u8;32],bump:u8,status:u64,calls:Cell<u8>}
++unsafe fn create_oracle(seeds:*const u8,n:u64,program:*const u8,out:*const u8)->u64{
++ let c=&*(core::ptr::with_exposed_provenance::<Context<'_>>(program as usize));
++ assert_eq!(seeds,c.seeds as *const u8);assert_eq!(n,c.count as u64);
++ c.calls.set(c.calls.get()+1);
++ *(out as *mut [u8;32])=c.reply;
++ c.status
++}
++unsafe fn find_oracle(seeds:*const u8,n:u64,program:*const u8,out:*const u8,bump:*const u8)->u64{
++ let c=&*(core::ptr::with_exposed_provenance::<Context<'_>>(program as usize));
++ assert_eq!(seeds,c.seeds as *const u8);assert_eq!(n,c.count as u64);
++ c.calls.set(c.calls.get()+1);
++ *(out as *mut [u8;32])=c.reply;*(bump as *mut u8)=c.bump;
++ c.status
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_create_program_address,create_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn create_forward(){
++ let storage:[[u8;32];16]=kani::any();let lengths:[usize;16]=kani::any();
++ let mut parts:[&[u8];16]=[&[];16];for i in 0..16{kani::assume(lengths[i]<=32);parts[i]=&storage[i][..lengths[i]];}
++ let n:usize=kani::any();kani::assume(n<=1);let status:u64=kani::any();kani::assume(status<=2);
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:n,reply:kani::any(),bump:kani::any(),status,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();
++ let got=Pubkey::create_program_address(&parts[..n],&c.program);
++ assert_eq!(c.calls.get(),1);
++ let want=match status{0=>Ok(Pubkey::new_from_array(c.reply)),1=>Err(PubkeyError::InvalidSeeds),2=>Err(PubkeyError::IllegalOwner),_=>unreachable!()};
++ assert!((got==want)!=cfg!(PCG_NEG_PDA));
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_try_find_program_address,find_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn find_forward(){
++ let storage:[[u8;32];16]=kani::any();let lengths:[usize;16]=kani::any();
++ let mut parts:[&[u8];16]=[&[];16];for i in 0..16{kani::assume(lengths[i]<=32);parts[i]=&storage[i][..lengths[i]];}
++ let n:usize=kani::any();kani::assume(n<=16);let status:u64=kani::any();
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:n,reply:kani::any(),bump:kani::any(),status,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();
++ let got=Pubkey::try_find_program_address(&parts[..n],&c.program);
++ assert_eq!(c.calls.get(),1);
++ let want=if status==0{Some((Pubkey::new_from_array(c.reply),c.bump))}else{None};
++ assert!((got==want)!=cfg!(PCG_NEG_PDA));
++}
++
++// Source-ordered SDK segment: the deployed syscall tail after seed validation.
++// PCG_sdk_source.py checks this block against pinned SDK lib.rs943..959;
++// only the crate-path spelling and SUCCESS constant are resolved locally.
++fn create_tail(seeds:&[&[u8]],program_id:&Pubkey)->Result<Pubkey,PubkeyError>{
++    let mut bytes = [0; 32];
++    let result = unsafe {
++        solana_program::pubkey::syscalls::sol_create_program_address(
++            seeds as *const _ as *const u8,
++            seeds.len() as u64,
++            program_id as *const _ as *const u8,
++            &mut bytes as *mut _ as *mut u8,
++        )
++    };
++    match result {
++        0 => Ok(Pubkey::from(bytes)),
++        _ => Err(result.into()),
++    }
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_create_program_address,create_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn create_tail_forward(){
++ let storage:[u8;32]=kani::any();let parts:[&[u8];16]=[&storage;16];
++ let n:usize=kani::any();kani::assume(n<=16);let status:u64=kani::any();kani::assume(status<=2);
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:n,reply:kani::any(),bump:kani::any(),status,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();
++ let got=create_tail(&parts[..n],&c.program);
++ assert_eq!(c.calls.get(),1);
++ let want=match status{0=>Ok(Pubkey::new_from_array(c.reply)),1=>Err(PubkeyError::InvalidSeeds),2=>Err(PubkeyError::IllegalOwner),_=>unreachable!()};
++ assert!((got==want)!=cfg!(PCG_NEG_PDA));
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_create_program_address,create_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn create_validation_step(){
++ let storage:[u8;33]=kani::any();let len:usize=kani::any();kani::assume(len<=33);let parts=[&storage[..len]];
++ let status:u64=kani::any();kani::assume(status<=2);
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:1,reply:kani::any(),bump:kani::any(),status,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();
++ let got=Pubkey::create_program_address(&parts,&c.program);
++ let want=if len>32{Err(PubkeyError::MaxSeedLengthExceeded)}else{match status{0=>Ok(Pubkey::new_from_array(c.reply)),1=>Err(PubkeyError::InvalidSeeds),2=>Err(PubkeyError::IllegalOwner),_=>unreachable!()}};
++ assert_eq!(c.calls.get(),if len>32{0}else{1});
++ assert!((got==want)!=cfg!(PCG_NEG_PDA));
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_try_find_program_address,find_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn find_success(){
++ let storage:[u8;32]=kani::any();let parts:[&[u8];16]=[&storage;16];let n:usize=kani::any();kani::assume(n<=16);
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:n,reply:kani::any(),bump:kani::any(),status:0,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();
++ let got=Pubkey::find_program_address(&parts[..n],&c.program);assert_eq!(c.calls.get(),1);
++ assert!((got==(Pubkey::new_from_array(c.reply),c.bump))!=cfg!(PCG_NEG_PDA));
++}
++#[kani::proof] #[kani::should_panic] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_try_find_program_address,find_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn find_rejection(){
++ let parts:[&[u8];0]=[];let status:u64=kani::any();kani::assume(status!=0);
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:0,reply:kani::any(),bump:kani::any(),status,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();
++ if !cfg!(PCG_NEG_PDA){let _=Pubkey::find_program_address(&parts,&c.program);}
++}
++#[kani::proof] #[kani::should_panic] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_create_program_address,create_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn create_unknown_status(){
++ let parts:[&[u8];0]=[];let status:u64=kani::any();kani::assume(status>2);
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:0,reply:kani::any(),bump:kani::any(),status,calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();
++ if !cfg!(PCG_NEG_PDA){let _=Pubkey::create_program_address(&parts,&c.program);}
++}
++#[kani::proof] #[kani::unwind(70)]
++#[kani::stub(solana_program::pubkey::syscalls::sol_create_program_address,create_oracle)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn create_count_rejection(){
++ let parts:[&[u8];17]=[&[];17];
++ let c=Context{program:Pubkey::new_from_array(kani::any()),seeds:parts.as_ptr(),count:17,reply:kani::any(),bump:kani::any(),status:kani::any(),calls:Cell::new(0)};let _ = core::ptr::addr_of!(c).expose_provenance();
++ let got=Pubkey::create_program_address(&parts,&c.program);assert_eq!(c.calls.get(),0);
++ assert!((got==Err(PubkeyError::MaxSeedLengthExceeded))!=cfg!(PCG_NEG_PDA));
++}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_address_reference.rs
+@@ -0,0 +1,14 @@
++pub type Key=[u8;32];
++#[derive(Clone,Copy)]
++pub struct Request{pub program:Key,pub seeds:[Key;4],pub lengths:[usize;4],pub count:usize}
++pub fn request_374(program:Key,pool:Key,profile:Key,release:Key)->Request{Request{program,seeds:[[97, 115, 112, 105, 115, 45, 118, 101, 114, 105, 102, 105, 101, 114, 45, 101, 110, 116, 114, 121, 45, 118, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0],pool,profile,release],lengths:[23, 32, 32, 32],count:4}}
++pub fn request_375(program:Key,pool:Key,profile:Key,release:Key)->Request{Request{program,seeds:[[97, 115, 112, 105, 115, 45, 118, 101, 114, 105, 102, 105, 101, 114, 45, 101, 110, 116, 114, 121, 45, 118, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0],pool,profile,release],lengths:[23, 32, 32, 32],count:4}}
++pub fn request_376(program:Key,pool:Key)->Request{Request{program,seeds:[[97, 115, 112, 105, 115, 45, 118, 101, 114, 105, 102, 105, 101, 114, 45, 114, 101, 103, 105, 115, 116, 114, 121, 45, 118, 49, 0, 0, 0, 0, 0, 0],pool,[0;32],[0;32]],lengths:[26, 32, 0, 0],count:2}}
++pub fn request_377(program:Key,pool:Key)->Request{Request{program,seeds:[[97, 115, 112, 105, 115, 45, 118, 101, 114, 105, 102, 105, 101, 114, 45, 114, 101, 103, 105, 115, 116, 114, 121, 45, 118, 50, 0, 0, 0, 0, 0, 0],pool,[0;32],[0;32]],lengths:[26, 32, 0, 0],count:2}}
++pub fn request_390(program:Key,pool:Key)->Request{Request{program,seeds:[[97, 115, 112, 105, 115, 45, 112, 111, 111, 108, 45, 118, 97, 117, 108, 116, 45, 97, 117, 116, 104, 111, 114, 105, 116, 121, 45, 118, 49, 0, 0, 0],pool,[0;32],[0;32]],lengths:[29, 32, 0, 0],count:2}}
++pub fn request_391(program:Key,pool:Key)->Request{Request{program,seeds:[[97, 115, 112, 105, 115, 45, 112, 111, 111, 108, 45, 118, 97, 117, 108, 116, 45, 116, 111, 107, 101, 110, 45, 118, 49, 0, 0, 0, 0, 0, 0, 0],pool,[0;32],[0;32]],lengths:[25, 32, 0, 0],count:2}}
++pub fn request_323(program:Key,pool:Key,sequence:u64)->Request{Request{program,seeds:[[97, 115, 112, 105, 115, 45, 112, 97, 105, 114, 45, 102, 111, 114, 101, 115, 116, 45, 99, 104, 101, 99, 107, 112, 111, 105, 110, 116, 45, 118, 49, 0],pool,le_padded(sequence),[0;32]],lengths:[31, 32, 8, 0],count:3}}
++pub fn le_padded(x:u64)->Key{let b=x.to_le_bytes();[b[0],b[1],b[2],b[3],b[4],b[5],b[6],b[7],0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
++#[derive(Clone,Copy)]
++pub enum PdaError{MaxSeedLengthExceeded,InvalidSeeds,IllegalOwner}
++pub fn stored_matches(reply:Result<Key,PdaError>,key:Key)->bool{match reply{Ok(address)=>address==key,Err(_)=>false}}
+--- /dev/null
++++ b/programs/aspis-pool/src/PCG_pack_reference.rs
+@@ -0,0 +1,3 @@
++pub fn word_step(word:u64,byte:u8)->u64{word*256+u64::from(byte)}
++pub fn denominator(group:usize)->u64{match group{0=>562949953421312,1=>4398046511104,2=>34359738368,3=>268435456,4=>2097152,5=>16384,6=>128,_=>1}}
++pub fn group(word:u64,group:usize)->u8{((word/denominator(group))%128)as u8}
+--- a/programs/aspis-pool/src/instruction.rs
++++ b/programs/aspis-pool/src/instruction.rs
+@@ -644,3 +644,11 @@
+         verifier_policy,
+     })
+ }
++
++#[cfg(any(kani,PCG_EXTRACT))]
++#[path="PCG_287.rs"]
++mod PCG_287;
++
++#[cfg(any(kani,PCG_EXTRACT))]
++#[path="PCG_288.rs"]
++mod PCG_288;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -7,6 +7,7 @@
+ //! No raw append instruction exists.
+ 
+ #![no_std]
++#![cfg_attr(kani,feature(allocator_api))]
+ #![allow(unexpected_cfgs)]
+ 
+ #[cfg(test)]
+@@ -105,3 +106,11 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(all(kani,PCG_SDK_NATIVE))]
++#[path="PCG_SdkPda.rs"]
++mod PCG_SdkPda;
++
++#[cfg(kani)]
++#[path="PCG_Address.rs"]
++mod PCG_Address;
+--- a/programs/aspis-pool/src/nullifier.rs
++++ b/programs/aspis-pool/src/nullifier.rs
+@@ -807,3 +807,11 @@
+         assert_eq!(zeroed, before);
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCG_293.rs"]
++mod PCG_293;
++
++#[cfg(kani)]
++#[path="PCG_296.rs"]
++mod PCG_296;
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -5792,3 +5792,11 @@
+         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
+     }
+ }
++
++#[cfg(kani)]
++#[path="PCG_318.rs"]
++mod PCG_318;
++
++#[cfg(kani)]
++#[path="PCG_324.rs"]
++mod PCG_324;
+--- a/programs/aspis-pool/src/pair_forest_dispatch.rs
++++ b/programs/aspis-pool/src/pair_forest_dispatch.rs
+@@ -1180,3 +1180,7 @@
+ 
+     const _: () = assert!(POOL_V1_PAIR_TREE_DEPTH == 20);
+ }
++
++#[cfg(kani)]
++#[path="PCG_345.rs"]
++mod PCG_345;
+--- a/programs/aspis-pool/src/processor.rs
++++ b/programs/aspis-pool/src/processor.rs
+@@ -681,3 +681,7 @@
+     }
+ 
+ }
++
++#[cfg(kani)]
++#[path="PCG_368.rs"]
++mod PCG_368;

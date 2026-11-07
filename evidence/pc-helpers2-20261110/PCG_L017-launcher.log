@@ -1,0 +1,48 @@
+{"attempt": "PCG_L017", "exit_status": 1, "wall_seconds": 4.043516665929928, "peak_rss_kib": "5315788", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Slice.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Aeneas.Std.Usize.max }
+PCG_generated/PCG_Inspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.mk`
+def Aeneas.Std.Array.{u} : Type u → Aeneas.Std.Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }
+def Aeneas.Std.core.num.U64.to_le_bytes : Aeneas.Std.U64 → Aeneas.Std.Array Aeneas.Std.U8 8#usize :=
+fun x => ⟨List.map Aeneas.Std.UScalar.mk x.bv.toLEBytes, ⋯⟩
+theorem NGK_NFV_RequestGuards.array : ∀ {N : Aeneas.Std.Usize} (a b : Aeneas.Std.Array Aeneas.Std.U8 N),
+  Aeneas.Std.core.array.equality.PartialEqArray.eq Aeneas.Std.core.cmp.PartialEqU8 a b =
+    Aeneas.Std.Result.ok (de
+...
+def Aeneas.Std.Slice.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Aeneas.Std.Usize.max }
+PCG_generated/PCG_Inspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.mk`
+def Aeneas.Std.Array.{u} : Type u → Aeneas.Std.Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }
+def Aeneas.Std.core.num.U64.to_le_bytes : Aeneas.Std.U64 → Aeneas.Std.Array Aeneas.Std.U8 8#usize :=
+fun x => ⟨List.map Aeneas.Std.UScalar.mk x.bv.toLEBytes, ⋯⟩
+theorem NGK_NFV_RequestGuards.array : ∀ {N : Aeneas.Std.Usize} (a b : Aeneas.Std.Array Aeneas.Std.U8 N),
+  Aeneas.Std.core.array.equality.PartialEqArray.eq Aeneas.Std.core.cmp.PartialEqU8 a b =
+    Aeneas.Std.Result.ok (decide (↑a = ↑b)) :=
+fun {N} a b =>
+  have lengths :=
+    Eq.mpr (id (congrArg (fun _a => _a = (↑b).length) a.property))
+      (Eq.mpr (id (congrArg (fun _a => ↑N = _a) b.property)) (Eq.refl ↑N));
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (ite_congr (Eq.trans (congr (congrArg Eq a.property) b.property) (eq_self ↑N))
+            (fun a_1 =>
+              Eq.refl
+                (List.allM
+                  (fun x => do
+                    let b ← Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU8.ne x.1 x.2
+                    Aeneas.Std.Result.ok (decide ¬b = true))
+                  ((↑a).zip ↑b)))
+            fun a => Eq.refl (Aeneas.Std.Result.ok false)))
+        (Aeneas.Std.Result.ok (decide (↑a = ↑b)))))
+    (id
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = Aeneas.Std.Result.ok (decide (↑a = ↑b)))
+            (NGK_NFV_RequestGuards.lists (↑a) (↑b) lengths)))
+        (Eq.refl (Aeneas.Std.Result.ok (decide (↑a = ↑b))))))
+
+Running as unit: run-ra5a5f4646553455dad5411dfb50472df.scope; invocation ID: 1ed6b4867e4c4e5eafc3a78907f81f7e

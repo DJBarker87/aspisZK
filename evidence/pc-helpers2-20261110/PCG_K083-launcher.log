@@ -1,0 +1,63 @@
+{"attempt": "PCG_K083", "exit_status": 1, "wall_seconds": 58.107738964958116, "peak_rss_kib": "1254608", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`
+...
+s PCG_SdkPda::create_validation_step...
+
+VERIFICATION RESULT:
+ ** 1 of 236 failed (1 unreachable)
+Failed Checks: assertion failed: (got == want) != cfg!(PCG_NEG_PDA)
+ File: "programs/aspis-pool/src/PCG_SdkPda.rs", line 90, in PCG_SdkPda::create_validation_step
+
+VERIFICATION:- FAILED
+Verification Time: 0.5411258s
+
+Checking harness PCG_SdkPda::create_tail_forward...
+
+VERIFICATION RESULT:
+ ** 1 of 155 failed (1 unreachable)
+Failed Checks: assertion failed: (got == want) != cfg!(PCG_NEG_PDA)
+ File: "programs/aspis-pool/src/PCG_SdkPda.rs", line 78, in PCG_SdkPda::create_tail_forward
+
+VERIFICATION:- FAILED
+Verification Time: 0.4867152s
+
+Checking harness PCG_SdkPda::find_forward...
+
+VERIFICATION RESULT:
+ ** 1 of 287 failed (8 unreachable)
+Failed Checks: assertion failed: (got == want) != cfg!(PCG_NEG_PDA)
+ File: "programs/aspis-pool/src/PCG_SdkPda.rs", line 47, in PCG_SdkPda::find_forward
+
+VERIFICATION:- FAILED
+Verification Time: 4.237364s
+
+Checking harness PCG_SdkPda::create_forward...
+
+VERIFICATION RESULT:
+ ** 1 of 394 failed (8 unreachable)
+Failed Checks: assertion failed: (got == want) != cfg!(PCG_NEG_PDA)
+ File: "programs/aspis-pool/src/PCG_SdkPda.rs", line 34, in PCG_SdkPda::create_forward
+
+VERIFICATION:- FAILED
+Verification Time: 19.03586s
+
+Manual Harness Summary:
+Verification failed for - PCG_SdkPda::create_count_rejection
+Verification failed for - PCG_SdkPda::create_unknown_status
+Verification failed for - PCG_SdkPda::find_rejection
+Verification failed for - PCG_SdkPda::find_success
+Verification failed for - PCG_SdkPda::create_validation_step
+Verification failed for - PCG_SdkPda::create_tail_forward
+Verification failed for - PCG_SdkPda::find_forward
+Verification failed for - PCG_SdkPda::create_forward
+Complete - 0 successfully verified harnesses, 8 failures, 8 total.
+
+Running as unit: run-r743118fe5de54a988c349062c714b9f4.scope; invocation ID: a9ec6f02b3a947908fde5889871b7145

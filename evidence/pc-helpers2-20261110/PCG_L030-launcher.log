@@ -1,0 +1,68 @@
+{"attempt": "PCG_L030", "exit_status": 1, "wall_seconds": 3.705093410797417, "peak_rss_kib": "2604728", "swaps": "0", "print_axioms": ["'PCG_PageLaws.full_scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCG_PageLaws.row_242' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCG_PageLaws.index_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCG_PageLaws.row_241' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'PCG_PageLaws.in_range' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+PCG_generated/PCG_PageLaws.lean:12:1: error: unsolved goals
+case pos
+filled : U16
+h : ↑filled = 256
+hc : core.convert.num.FromUsizeU16.from filled = 256#usize
+⊢ (do
+      let i ← lift 256#usize
+      ok (decide (i = 256#usize))) =
+    ok true
+PCG_generated/PCG_PageLaws.lean:14:1: error: unsolved goals
+case neg
+filled : U16
+h : ¬↑filled = 256
+hc : core.convert.num.FromUsizeU16.from filled ≠ 256#usize
+⊢ (do
+      let i ← lift (core.convert.num.FromUsizeU16.from filled)
+      ok (decide (i = 256#usize))) =
+    ok false
+PCG_generated/PCG_PageLaws.lean:15:28: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp [PCG_HelperRef.full, ̲hc̵,̵h̵]
+
+Note: This l
+...
+_generated/PCG_PageLaws.lean:51:39: warning: This simp argument is unused:
+  nepage
+
+Hint: Omit it from the simp argument list.
+  simp [̵P̵C̵G̵_̵H̵e̵l̵p̵e̵r̵R̵e̵f̵.̵g̵e̵t̵_̵i̵n̵d̵e̵x̵,̵h̵q̵,̵h̵r̵,̵n̵e̵p̵a̵g̵e̵,̵m̵o̵d̵e̵l̵I̵n̵d̵e̵x̵,̵h̵p̵]̵[̲P̲C̲G̲_̲H̲e̲l̲p̲e̲r̲R̲e̲f̲.̲g̲e̲t̲_̲i̲n̲d̲e̲x̲,̲ ̲h̲q̲,̲ ̲h̲r̲,̲ ̲m̲o̲d̲e̲l̲I̲n̲d̲e̲x̲,̲ ̲h̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+PCG_generated/PCG_PageLaws.lean:64:64: error: unsolved goals
+case h_1
+page : Page
+sequence : U64
+index✝ : Option Usize
+heq✝ :
+  (if ↑sequence / 256 = ↑page.page_number ∧ ↑sequence % 256 < ↑page.filled then some (slot sequence) else none) = none
+⊢ ↑sequence / 256 = ↑page.page_number → ↑sequence % 256 < ↑page.filled → 256 ≤ ↑sequence % 256
+
+case h_2
+page : Page
+sequence : U64
+index✝ : Option Usize
+i✝ : Usize
+heq✝ :
+  (if ↑sequence / 256 = ↑page.page_number ∧ ↑sequence % 256 < ↑page.filled then some (slot sequence) else none) =
+    some i✝
+⊢ (↑page.roots)[↑i✝]? =
+    if ↑sequence / 256 = ↑page.page_number ∧ ↑sequence % 256 < ↑page.filled then (↑page.roots)[↑sequence % 256]?
+    else none
+PCG_generated/PCG_PageLaws.lean:66:17: warning: This simp argument is unused:
+  slot
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵s̵l̵o̵t̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PCG_PageLaws.full_scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCG_PageLaws.row_242' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCG_PageLaws.index_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCG_PageLaws.row_241' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PCG_PageLaws.in_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rf7ef682c3eac4b39994b8044ceb9db24.scope; invocation ID: 73a9b0a1f2df43dc868f8eabaee00350

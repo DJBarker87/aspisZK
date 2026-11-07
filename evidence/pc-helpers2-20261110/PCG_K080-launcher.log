@@ -1,0 +1,60 @@
+{"attempt": "PCG_K080", "exit_status": 0, "wall_seconds": 3.1642715530470014, "peak_rss_kib": "278952", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: failed to connect to jobserver from environment variable `CARGO_MAKEFLAGS="-j --jobserver-fds=8,9 --jobserver-auth=8,9"`: cannot open file descriptor 8 from the jobserver environment variable value: Bad file descriptor (os error 9)
+  |
+  = note: the build environment is likely misconfigured
+
+warning: unexpected `cfg` condition value: `static-syscalls`
+ --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/solana-define-syscall-2.3.0/src/lib.rs:5:7
+  |
+5 | #[cfg(target_feature = "static-syscalls")]
+  |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: expected values for `target_feature` are: `10e60`, `2e3`, `32s`, `3e3
+...
+ KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pc-helpers2-20261110/PCG_src/programs/aspis-pool/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: module `PCG_318` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest.rs:5798:5
+     |
+5798 | mod PCG_318;
+     |     ^^^^^^^ help: convert the identifier to snake case: `pcg_318`
+
+warning: module `PCG_324` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest.rs:5802:5
+     |
+5802 | mod PCG_324;
+     |     ^^^^^^^ help: convert the identifier to snake case: `pcg_324`
+
+warning: module `PCG_345` should have a snake case name
+    --> programs/aspis-pool/src/pair_forest_dispatch.rs:1186:5
+     |
+1186 | mod PCG_345;
+     |     ^^^^^^^ help: convert the identifier to snake case: `pcg_345`
+
+warning: module `PCG_368` should have a snake case name
+   --> programs/aspis-pool/src/processor.rs:687:5
+    |
+687 | mod PCG_368;
+    |     ^^^^^^^ help: convert the identifier to snake case: `pcg_368`
+
+    Finished `dev` profile [optimized] target(s) in 1.51s
+Checking harness nullifier::PCG_293::group_association...
+
+VERIFICATION RESULT:
+ ** 0 of 8 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.052507248s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r599467ef47e4478d89f62f70f9f34639.scope; invocation ID: 6d305c6a48a34c7896749df30df67624

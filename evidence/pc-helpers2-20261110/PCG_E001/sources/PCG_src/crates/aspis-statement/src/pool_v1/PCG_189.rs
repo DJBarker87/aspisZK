@@ -1,0 +1,4 @@
+use super::*;
+pub(super) fn reference(e:PoolV1TreeError)->PoolV1PairForestAccountErrorV1{PoolV1PairForestAccountErrorV1::Tree(e)}
+#[kani::proof]
+fn all_arms(){let tag:u8=kani::any();kani::assume(tag<13);let e=match tag{0=>PoolV1TreeError::TreeFull,1=>PoolV1TreeError::InsufficientCapacity,2=>PoolV1TreeError::IndexOutOfRange,3=>PoolV1TreeError::RootMismatch,4=>PoolV1TreeError::NonCanonicalFrontier,5=>PoolV1TreeError::WrongLength,6=>PoolV1TreeError::WrongMagic,7=>PoolV1TreeError::WrongVersion,8=>PoolV1TreeError::WrongDepth,9=>PoolV1TreeError::WrongTreeHash,10=>PoolV1TreeError::WrongDigestEncoding,11=>PoolV1TreeError::NonCanonicalDigest,12=>PoolV1TreeError::NonZeroReserved,_=>unreachable!()};let got=<PoolV1PairForestAccountErrorV1 as From<PoolV1TreeError>>::from(e);let mut expected=reference(e);if cfg!(PCG_NEG_189) && tag==0{expected=reference(PoolV1TreeError::InsufficientCapacity);}assert_eq!(got,expected);}

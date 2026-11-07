@@ -1,0 +1,39 @@
+{"attempt": "PCG_L040", "exit_status": 1, "wall_seconds": 4.24426254699938, "peak_rss_kib": "5295368", "swaps": "0", "print_axioms": ["'PCG_MasterAddress.request' depends on axioms: [propext, Classical.choice, Quot.sound]", "'PCG_MasterAddress.row_318' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+PCG_generated/PCG_MasterAddress.lean:45:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'PCG_AddressRoots.nativeStored', which is 'noncomputable'
+PCG_generated/PCG_MasterAddress.lean:61:14: error: trying to realize `_private.Lean.Environment.0.Lean.Environment.RealizeConstKey` value but `enableRealizationsForConst` must be called for 'PCG_MasterAddress.native' first
+PCG_generated/PCG_MasterAddress.lean:61:3: error: `simp` made no progress
+PCG_generated/PCG_MasterAddress.lean:64:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑(PCG_RequestCarrier.request ?m.55).seeds).length
+in th
+...
+PCG_generated/PCG_MasterAddress.lean:45:4: error(lean.dependsOnNoncomputable): failed to compile definition, consider marking it as 'noncomputable' because it depends on 'PCG_AddressRoots.nativeStored', which is 'noncomputable'
+PCG_generated/PCG_MasterAddress.lean:61:14: error: trying to realize `_private.Lean.Environment.0.Lean.Environment.RealizeConstKey` value but `enableRealizationsForConst` must be called for 'PCG_MasterAddress.native' first
+PCG_generated/PCG_MasterAddress.lean:61:3: error: `simp` made no progress
+PCG_generated/PCG_MasterAddress.lean:64:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑(PCG_RequestCarrier.request ?m.55).seeds).length
+in the target expression
+  (↑(q program master).seeds).length = 3
+
+case right
+program : Key
+master : Master
+key : Key
+op38 : PCG_AddressRoots.Op38
+domain : PCG_SdkPda.Domain (q program master)
+⊢ (↑(q program master).seeds).length = 3
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (q program master).seeds
+  has type
+    PCG_SdkPda.Seeds
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑(q program master).seeds
+PCG_generated/PCG_MasterAddress.lean:64:44: error: `simp` made no progress
+'PCG_MasterAddress.request' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PCG_MasterAddress.row_318' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r25c1a4a89919422c98611b2045784822.scope; invocation ID: 8418fe25b67a4a9d9a956dabac145dfe

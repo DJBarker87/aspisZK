@@ -1,0 +1,4 @@
+use super::*;
+pub(super) fn reference(_e:DepositInstructionFormatErrorV1)->PoolInstructionFormatErrorV1{PoolInstructionFormatErrorV1::InvalidDeposit}
+#[cfg(kani)] #[kani::proof]
+fn all_arms(){let tag:u8=kani::any();kani::assume(tag<7);let e=match tag{0=>DepositInstructionFormatErrorV1::WrongLength,1=>DepositInstructionFormatErrorV1::WrongMagic,2=>DepositInstructionFormatErrorV1::WrongVersion,3=>DepositInstructionFormatErrorV1::NonZeroReserved,4=>DepositInstructionFormatErrorV1::InvalidAmount,5=>DepositInstructionFormatErrorV1::InvalidPayloadLength,6=>DepositInstructionFormatErrorV1::NonCanonicalDigest,_=>unreachable!()};let got=<PoolInstructionFormatErrorV1 as From<DepositInstructionFormatErrorV1>>::from(e);let mut expected=reference(e);if cfg!(PCG_NEG_287) && tag==0{expected=PoolInstructionFormatErrorV1::WrongLength;}assert_eq!(got,expected);}
