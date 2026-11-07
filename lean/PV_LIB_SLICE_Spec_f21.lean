@@ -179,9 +179,29 @@ theorem package_success_forces_zero (resources : Resources) (encode : Encode)
   obtain ⟨other,eqn⟩ := h.vector
   exact Option.some.inj (congrArg encodedLength eqn)
 
-/-- Candidate elaboration only: the residual primitive/source binding and
-D877 child-summary transport are not certified by these statements. See the
-row comparison before counting this as the full frozen contract. -/
+/-- Full heap frame: only a source-defined fresh allocation reached in this
+invocation may receive writes. The trace uses allocator metadata, never a
+caller-supplied footprint or a desired memory-equality premise. -/
+def FreshByte (resources : Resources) (encode : Encode) (m : Machine) (e : Entry)
+    (fuel address : Nat) : Prop :=
+  ∃ k, k ≤ fuel ∧ ∃ pointer allocation,
+    e.owner.world.allocator.metadata pointer = none ∧
+    (execution resources encode m e k).world.world.allocator.metadata pointer = some allocation ∧
+    pointer ≤ address ∧ address < pointer + allocation.bytes
+
+/-- No post-abort heap or continuation is observable. At an own completion
+or nested pending poll, the original lower callers remain an exact suffix. -/
+def FullFrame (resources : Resources) (encode : Encode) (m : Machine) (e : Entry)
+    (fuel : Nat) (out : Prefix OWNER Event) : Prop :=
+  match out.status with
+  | .fault .abort _ => True
+  | _ =>
+    (∀ address, ¬ FreshByte resources encode m e fuel address →
+      out.world.world.memory address = e.owner.world.memory address) ∧
+    (∀ c, out.status = .running c → ∃ upper, c.callers = upper ++ (start e).callers)
+
+/-- Complete statement only. Primitive adequacy, D877 summary transport and
+all frame preservation proofs are obligations of a future Contract proof. -/
 def Post (resources : Resources) (encode : Encode)
     (granted : PV_OWN2_FreshAllocation.GrantedRegions) (m : Machine) (e : Entry)
     (impl : Outcome) : Prop :=
@@ -190,7 +210,7 @@ def Post (resources : Resources) (encode : Encode)
     ¬ ∃ a s, (execution resources encode m e n).status = .undefined a s) ∧
   (∀ n, First resources encode m e n →
     let out := execution resources encode m e n
-    (∃ suffix, out.events = e.prior ++ suffix) ∧ Frame e out ∧ SourceFrame e out ∧
+    (∃ suffix, out.events = e.prior ++ suffix) ∧ Frame e out ∧ SourceFrame e out ∧ FullFrame resources encode m e n out ∧
     (∀ c value, out.status = .running c → c.frame.completed = some (.ok value) →
       Success resources encode granted e out value))
 
@@ -265,6 +285,8 @@ theorem abort_prefix (s : Store Data) (w : OWNER) (es : List Event) :
 #print axioms final_length
 #print axioms construction_length
 #print axioms package_success_forces_zero
+#print axioms FreshByte
+#print axioms FullFrame
 #print axioms Post
 #print axioms Contract
 #print axioms pre_comparison

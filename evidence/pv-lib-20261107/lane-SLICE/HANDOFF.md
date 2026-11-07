@@ -1,3 +1,10 @@
+# Session 4 in progress
+
+f21 full statement compiled49924; comparison SESSION4_f21_COMPARISON.md.
+Statements only, no Contract instance. Next f13. New artifacts isolated in
+objects-stx4/sources-stx4, preserving accepted session3 objects read-only.
+Next Lean49925, raw49693.
+
 # SLICE D983 session3 checkpoint — incomplete
 
 Resumed e440502a81e on codex/pv-lib-slice-20261107, same worktree.
