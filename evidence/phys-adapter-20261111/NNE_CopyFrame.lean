@@ -19,6 +19,7 @@ theorem copy_ok (a : AccountInfo) (ck : Bytes) (s post : SdkState) (env : Env)
  cases r with
  | error error => simp [Spec.pure] at hk
  | ok token =>
+  dsimp only at hk
   split at hk
   next mismatch => simp [Spec.panic] at hk
   next lengths =>
