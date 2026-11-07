@@ -14,6 +14,28 @@ def ssh(code, data=None, submitted=False):
         if retry<10:time.sleep(60)
     raise RuntimeError('Transport exhausted')
 def admission(a):
+    while True:
+        r=ssh('python3', """import subprocess,pathlib,json
+names=subprocess.check_output(['systemctl','--user','list-units','--type=scope','--state=running','--no-legend','--plain'],text=True).splitlines()
+active=[]
+for line in names:
+ unit=line.split()[0]
+ cg=subprocess.check_output(['systemctl','--user','show',unit,'-p','ControlGroup','--value'],text=True).strip()
+ root=pathlib.Path('/sys/fs/cgroup')/cg.lstrip('/')
+ hit=False
+ for f in root.rglob('cgroup.procs'):
+  for pid in f.read_text().split():
+   try:hit |= str(pathlib.Path('/proc',pid,'cwd').resolve()).startswith('/home/dombarker/project-offloads/codex-cx-')
+   except OSError:pass
+ if hit:active.append(unit)
+print(json.dumps({'stream_a_scopes':active,'count':len(active)}))
+""")
+        assert r.returncode==0,r.stderr
+        share=json.loads(r.stdout)
+        with (E/'NMN_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(kind='wait' if share['count']>=2 else 'share_check',attempt=a,**share))+'\n')
+        if share['count']<2:break
+        print(json.dumps(dict(attempt=a,status='wait',reason='Stream A saturation',**share)),flush=True)
+        for _ in range(3):time.sleep(60)
     for disk_retry in range(7):
         r=ssh("python3", "import shutil,json;print(json.dumps({'free_bytes':shutil.disk_usage('/home/dombarker/project-offloads').free}))")
         assert r.returncode==0,r.stderr
