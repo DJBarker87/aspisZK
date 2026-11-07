@@ -4,7 +4,7 @@ import LIBB_FlattenBytes
 set_option autoImplicit false
 noncomputable section
 namespace LIBB_PartitionEnv
-open Aeneas Aeneas.Std
+open Aeneas Aeneas.Std AspisR1
 open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
 /-- C04 model addresses retain their original physical hashv partition.
 Resume calls the actual partitioned Env oracle directly. No invariance of an
