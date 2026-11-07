@@ -17,7 +17,8 @@ x=dict(attempt=a,module=m,source=raw,source_revision=subprocess.check_output(['g
        source_path=str(p),source_index_blob=subprocess.check_output(['git','rev-parse',':'+str(p)],text=True).strip(),audit=audit,turn=t)
 if audit:
     x['audit_wrapper']=pathlib.Path('tools/pv-lib-20261107/run-thread-audit.py').read_text()
-    x['runtime_modules']=json.loads((E/'AUDIT_ROOTS.json').read_text())['modules']
+    manifest='SESSION2_AUDIT_ROOTS.json' if m=='PV_LIB_RawAudit2' else 'AUDIT_ROOTS.json'
+    x['runtime_modules']=json.loads((E/manifest).read_text())['modules']
 code=pathlib.Path('tools/pv-lib-20261107/focused-host.py').read_text()
 q=subprocess.run(['ssh',host,'python3 -c '+shlex.quote(code)],input=json.dumps(x),text=True,capture_output=True)
 (E/f'transport-{a}.json').write_text(json.dumps(dict(exit=q.returncode,stdout=q.stdout,stderr=q.stderr),indent=2)+'\n')
