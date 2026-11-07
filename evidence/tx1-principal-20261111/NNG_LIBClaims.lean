@@ -17,6 +17,7 @@ theorem raise_raw (value : LIB_VCarriers.Claims) :
   apply Subtype.ext
   simp only [NNG_InstallClaims.raiseClaims,LIB_VCarriers.claimsRaw,LIB_VCarriers.k29Raw,
     LIB_VScalarCarriers.array,lowerClaims,lowerArray,lower,arr,List.map_map,Function.comp_def]
+  rfl
 #print axioms raise_raw
 
 def call (env : RSL.Env) (p : NNG_verify_finish.r1_wire.Prefix) := NNG_InstallClaims.claims (reservation env) p
@@ -32,12 +33,12 @@ theorem call_model (env : RSL.Env) (p : LIB_VCarriers.Prefix) :
     rfl
   | true =>
     simp only [reservation,h,if_true,LIB_VClaims.success_exact]
-    change Result.ok (.Ok (NNG_InstallClaims.raiseClaims (LIB_VCarriers.claimsRaw (LIB_VClaims.value p)))) = _
+    change (Result.ok (core.result.Result.Ok (NNG_InstallClaims.raiseClaims (LIB_VCarriers.claimsRaw (LIB_VClaims.value p)))) : Result (core.result.Result Claims NNG_verify_finish.r1_wire.Error)) = _
     rw [raise_raw]
 #print axioms call_model
 
 def projectReply (fallback : Value) :
-    NNG_verify_finish.core.result.Result Claims NNG_verify_finish.r1_wire.Error → Except LIB_VCarriers.WErr LIB_VCarriers.Claims
+    core.result.Result Claims NNG_verify_finish.r1_wire.Error → Except LIB_VCarriers.WErr LIB_VCarriers.Claims
   | .Ok c => .ok (projectClaims fallback c)
   | .Err e => .error (toT13 e)
 
