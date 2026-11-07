@@ -146,3 +146,10 @@ PV_LIB_SPEC_F5PackageComparison compiled49768, cohortw4: exit0, wall0:02.13, pea
 PV_LIB_SPEC_F2Full compiled49769, cohortw3: exit0, wall0:02.08, peak4727944KiB, swap0; standard summary axioms only. Statement only.
 
 PV_LIB_SPEC_F2PackageComparison compiled49770, cohortw4: exit0, wall0:02.08, peak4626780KiB, swap0; standard summary axioms only. Statement only.
+
+## thread:f1
+
+PV_LIB_SPEC_F1Full: whole Pre/MachineSpec/Post/Contract compiled49771;
+exact literal package prefix proposition plus comparison compiled in same module.
+No row proof or comparison implication claimed. Wall0:02.16;
+peak4711264KiB;swap0;standard summary axioms only.
