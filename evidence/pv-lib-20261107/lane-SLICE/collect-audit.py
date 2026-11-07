@@ -15,7 +15,7 @@ summary=dict(attempt=49690,strict_raw=True,root_count=len(results),unresolved=0,
 code=r'''
 import pathlib,hashlib,json,lzma
 p=pathlib.Path('/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/evidence/raw-audit')
-roots=['PV_LIB_SLICE_BoundedRun.selected', 'PV_LIB_SLICE_BoundedRun.least', 'PV_LIB_SLICE_F32.certified', 'PV_LIB_SLICE_F32.functional', 'PV_LIB_SLICE_F33.certified', 'PV_LIB_SLICE_F33.functional', 'PV_LIB_SLICE_TypedDrop.certified', 'PV_LIB_SLICE_TypedDrop.selected', 'PV_LIB_SLICE_EntryReference.certified', 'PV_LIB_SLICE_EntryReference.old_entry']
+roots=['PV_LIB_SLICE_BoundedRun.selected', 'PV_LIB_SLICE_BoundedRun.least', 'PV_LIB_SLICE_F32.certified', 'PV_LIB_SLICE_F32.functional', 'PV_LIB_SLICE_F33.certified', 'PV_LIB_SLICE_F33.functional', 'PV_LIB_SLICE_TypedDrop.certified', 'PV_LIB_SLICE_TypedDrop.selected']
 files=[q for q in p.iterdir() if q.is_file() and any(q.name.startswith('NEP_pv-thread_'+root+'_') for root in roots)]
 manifest=[dict(name=q.name,bytes=q.stat().st_size,sha256=hashlib.sha256(q.read_bytes()).hexdigest()) for q in files]
 payload={q.name:q.read_text() for q in files if q.suffix in ['.txt','.json']}

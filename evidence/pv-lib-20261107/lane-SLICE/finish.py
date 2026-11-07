@@ -28,10 +28,8 @@ def launch(m,provider=False,revision=None):
   if r.returncode==0:return
   for _ in range(3):time.sleep(60)
  sys.exit('ten refusals')
-for m in ['PV_LIB_SLICE_BoundedRun','PV_LIB_SLICE_F32','PV_LIB_SLICE_F33','PV_LIB_SLICE_TypedDrop']:
- if not any(json.loads(p.read_text()).get('target')==m and json.loads(p.read_text()).get('accepted') for p in E.glob('receipt-*.json')):launch(m)
-entry=json.loads((E/'ENTRY_PREFLIGHT.json').read_text())
-for m in entry['missing_modules'][:5]:
- if not any(json.loads(p.read_text()).get('target')==m and json.loads(p.read_text()).get('accepted') for p in E.glob('receipt-*.json')):launch(m,True,entry['revision'])
-for m in ['PV_LIB_SLICE_EntryReference','PV_LIB_SLICE_RawAudit']:
+plan=json.loads((E/'TYPED_DROP_PREFLIGHT.json').read_text())
+for m in plan['missing_authorized_modules'][:15]+['PV_FN_SLICE_f7_DestructorBinding']:
+ if not any(json.loads(p.read_text()).get('target')==m and json.loads(p.read_text()).get('accepted') for p in E.glob('receipt-*.json')):launch(m,True,plan['revision'])
+for m in ['PV_LIB_SLICE_TypedDrop','PV_LIB_SLICE_RawAudit']:
  if not any(json.loads(p.read_text()).get('target')==m and json.loads(p.read_text()).get('accepted') for p in E.glob('receipt-*.json')):launch(m)
