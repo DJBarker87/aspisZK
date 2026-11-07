@@ -1,0 +1,40 @@
+{"attempt": "NMT_L353", "exit_status": 0, "wall_seconds": 13.79037332884036, "peak_rss_kib": "5996920", "swaps": "0", "print_axioms": []}
+NFY_NFD_WideSerialization.result_state_effects: ∀ {State : Type} (x : NFY_NBG_WriterPorts.NE) (state : State),
+  ∃ out,
+    (AspisR1WideToBytesSource.field.wide_exact.WideExact.to_le_bytes (NFY_NBG_WriterPorts.port x), state, []) =
+        (Aeneas.Std.Result.ok out, state, []) ∧
+      ↑out =
+        List.flatMap (fun word => ↑(Aeneas.Std.core.num.U32.to_le_bytes word))
+          [x.c0.c0.a, x.c0.c0.b, x.c0.c1.a, x.c0.c1.b, x.c1.c0.a, x.c1.c0.b, x.c1.c1.a, x.c1.c1.b]
+NFY_NEE_ValidatorGate.result._proof_2: ∀ (c : NFY_NED_ReconstructCarriers.Common),
+  Aeneas.Std.core.convert.num.FromUsizeU8.from c.output_lane = Aeneas.Std.Usize.ofNatCore ↑c.output_lane ⋯
+NFY_NED_LiveEncodingCohort.result: ∀ (s
+...
+eneas.Std.U8 32#usize),
+  NFY_NBP_DecodeWord.word bytes 0 < NFY_NBP_DecodeWord.P →
+    NFY_NBP_DecodeWord.word bytes 1 < NFY_NBP_DecodeWord.P →
+      NFY_NBP_DecodeWord.word bytes 2 < NFY_NBP_DecodeWord.P →
+        NFY_NBP_DecodeWord.word bytes 3 < NFY_NBP_DecodeWord.P →
+          NFY_NBP_DecodeWord.word bytes 4 < NFY_NBP_DecodeWord.P →
+            NFY_NBP_DecodeWord.word bytes 5 ≥ NFY_NBP_DecodeWord.P →
+              AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical bytes =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err
+                    AspisR1TerminalDecoder.atomic_statement.AtomicStatementError.NonCanonicalDigest)
+NFY_NED_ScannerCohorts.profile_result: ∀ (d : Aeneas.Std.Array Aeneas.Std.U32 8#usize),
+  AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_tree_profile.digest_is_canonical d =
+    Aeneas.Std.Result.ok (decide (NBD_DigestInduction.Canonical d))
+NFY_NFJ_Scanner.decode_domain: ∀ (bytes : List Aeneas.Std.U8),
+  bytes.length = 58295 → (NFY_NFJ_Comparison.header bytes).length = 688
+NFY_NBP_WithdrawalEncode.result: ∀ (p : NFY_NBP_PaymentModel.W),
+  AspisR1TerminalDecoder.pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1 p =
+    Aeneas.Std.Result.ok (NFY_NBP_PaymentModel.withdrawal_encoded p)
+NFY_NBP_CommonDecode.result: ∀ (b : Aeneas.Std.Array Aeneas.Std.U8 216#usize),
+  AspisR1TerminalDecoder.pool_v1.payment_relation.decode_common b =
+    Aeneas.Std.Result.ok (NFY_NBP_CommonDecode.decoded b)
+NFY_NEQ_PaymentDecode.transfer_result_state_effects: ∀ {State : Type} (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (state : State),
+  (NFY_NEQ_PaymentDecode.transferFull bytes, state, []) =
+    (AspisR1TerminalDecoder.pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1 bytes, state, [])
+
+Running as unit: run-r39020325077b451a90cf757610bd76a7.scope; invocation ID: d63b7eb77bcb403da577a023f46df0f3

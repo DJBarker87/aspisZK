@@ -1,0 +1,46 @@
+{"attempt": "NMT_L305", "exit_status": 1, "wall_seconds": 14.248970721149817, "peak_rss_kib": "5927204", "swaps": "0", "print_axioms": ["'NMT_R2_CheckpointEquation.equation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMT_generated/NMT_R2_CheckpointEquation.lean:27:1: error: 'change' tactic failed, pattern
+  (have this := do
+      let b ← Result.ok (decide (a.owner ≠ program))
+      if b = true then Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+        else
+          if a.is_signer = true then
+            Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+          else
+            if a.executable = true then
+              Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+            else
+              if (a.is_writable != writable) = true then
+                
+...
+
+              else do
+                let r ← AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len (ops keep) (toAccount a)
+                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                match cf with
+                  | core.ops.control_flow.ControlFlow.Continue val => do
+                    let i ← (ops keep).op12 AdapterRw.aspis_r1_cost_probe.transport.Variant.S2
+                    if (val != i) = true then
+                        Result.ok
+                          (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                      else Result.ok (core.result.Result.Ok ())
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual) =
+    if a.owner ≠ program then
+      Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+    else
+      if a.is_signer = true then
+        Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+      else
+        if a.executable = true then
+          Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+        else
+          if (a.is_writable != writable) = true then
+            Result.ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+          else do
+            let length ← AdapterRw.r1_pool_adapter.owned.OwnedAccount.data_len (ops keep) (toAccount a)
+            finish length
+'NMT_R2_CheckpointEquation.equation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6b1f7103137f4802a290502335ecdb10.scope; invocation ID: d321c668c2f144b69cd4d7ef5b607561

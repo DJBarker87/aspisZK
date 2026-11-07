@@ -1,0 +1,37 @@
+{"attempt": "NMT_L375", "exit_status": 0, "wall_seconds": 13.31164830015041, "peak_rss_kib": "5996432", "swaps": "0", "print_axioms": []}
+NFY_NBN_EncoderDomains.late: ∀ (s : NFY_NBN_StatementResult.Statement),
+  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) →
+    AspisS6OuterEncodeSuccess.late_ready
+      (AspisS6OuterCarrierBridge.fromPoolV1PairLatePublicStatementV1 (NFY_NBN_StatementResult.common s).lane_transition)
+NFY_NBN_AfterDecodeParent.source: ∀ (child : NFY_NBN_AfterDecodeTypes.Decode),
+  NFY_NBN_AfterDecodeTypes.NBN_Dep_DigestDecode child →
+    ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+      NFY_NBN_AfterDecodeParent.run child bytes =
+        AspisR1TerminalDecoder.pool_v1.pair_terminal.deco
+...
+der.aspis_core.field.M31 8#usize →
+                                Aeneas.Std.Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize →
+                                  Aeneas.Std.Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize →
+                                    Aeneas.Std.Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize →
+                                      Aeneas.Std.Result
+                                        (Aeneas.Std.core.result.Result
+                                          AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+                                          AspisR1TerminalDecoder.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+NFY_NBN_ValidatorDomains.afterstate: ∀ (a : NFY_NBH_Validators.Afterstate),
+  NFY_NBH_Validators.afterResult a = Aeneas.Std.core.result.Result.Ok () →
+    0 < ↑a.next_pair_index ∧
+      ↑a.next_pair_index ≤ 1048576 ∧
+        NBD_DigestInduction.Canonical a.next_root ∧ NBH_Frontier.CanonicalFrom a.next_frontier 0
+NFY_NBN_IteratorAssociation.exhausted: ∀ (rows : NFY_NBN_IteratorAssociation.Rows),
+  NFY_NBN_IteratorAssociation.projected rows 20#usize = Aeneas.Std.Result.ok (none, 20, 0)
+NFY_NBN_AccountCallbackObstruction.checkpoint_unconstrained: ∀ {F E : Type}
+  (c : AspisR1.DrvC_Installation.Configuration F E) (input : Aeneas.Std.Slice Aeneas.Std.U8)
+  (m : AdapterRw.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestCheckpointV1),
+  ∃ reject accept,
+    (AspisR1.DrvC_Installation.sdk reject).op49 input =
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData) ∧
+      (AspisR1.DrvC_Installation.sdk accept).op49 input = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok m)
+
+Running as unit: run-rbdf14a1d4e4d423ba91577d0d995a904.scope; invocation ID: 66b1f668ed0943a3ac3d3f88f73910c3

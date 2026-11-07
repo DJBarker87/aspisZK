@@ -1,0 +1,35 @@
+{"attempt": "NMT_L380", "exit_status": 0, "wall_seconds": 21.800922704860568, "peak_rss_kib": "6093680", "swaps": "0", "print_axioms": []}
+AspisS6NativeLateChildDecode.snapshot_spec: ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  Aeneas.Std.WP.spec (AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pair_live_snapshot_boxed_v1 bytes)
+    fun result =>
+    ∀ (value : AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1),
+      result = Aeneas.Std.core.result.Result.Ok value →
+        AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1 bytes =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value)
+AspisS6NativeSnapshotDecodeTotal.accepted_frames: ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (snapshot : AspisR1TerminalDecoder.pool_v1.pair_tree_profile.Pool
+...
+.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1 bytes =
+      Aeneas.Std.Result.ok result
+AspisS6NativeLateDecoderSplit.decode_source: ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  AspisS6NativeLateDecoderSplit.decode bytes =
+    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1 bytes
+AspisS6NativeLateChildDecode.snapshot_spec.mvcgen_spec: ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  ⦃⌜True⌝⦄
+    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pair_live_snapshot_boxed_v1
+      bytes ⦃Std.Do.PostCond.noThrow fun r =>
+      ⌜∀ (value : AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1),
+          r = Aeneas.Std.core.result.Result.Ok value →
+            AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1 bytes =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok value)⌝⦄
+AspisS6NativeLateDecodeTotal.accepted_validity: ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (statement : AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1),
+  AspisR1TerminalDecoder.pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1 bytes =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok statement) →
+    AspisR1TerminalDecoder.pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1 statement.live_snapshot =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+      AspisR1TerminalDecoder.pool_v1.pair_terminal.validate_verified_afterstate statement.candidate_afterstate =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ()) ∧
+        statement.live_snapshot.next_pair_index.checked_add 1#u64 = some statement.candidate_afterstate.next_pair_index
+
+Running as unit: run-r857be436d74c4f5cb400596097086484.scope; invocation ID: 407894f8927a4d479e2af685c913df9a
