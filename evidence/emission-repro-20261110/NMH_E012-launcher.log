@@ -1,0 +1,39 @@
+{"attempt": "NMH_E012", "exit_status": 0, "wall_seconds": 112.53794625913724, "peak_rss_kib": "559852", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::compact::compact_row", "--dest-file", "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E012_emitted/repro.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_workspace/crates/aspis-r1-cost-probe/Cargo.toml", "--locked", "--offline", "--release", "--lib", "--jobs", "1", "--features", "private-leaf-salts,optimi
+...
+->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 51s
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E012_emitted/repro.llbc
+
+=== Translation time per function ===
+  aspis_r1_cost_probe::compact::compact_row: 0.0236s (size: 5, rank: 1)
+[[92mInfo[39m ] Creating missing directory: /home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E012_emitted/raw/NMH_compact_view
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E012_emitted/raw/NMH_compact_view/Types.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E012_emitted/raw/NMH_compact_view/Funs.lean
+[[92mInfo[39m ] Total execution time: 0.183971 seconds
+{"attempt": "NMH_E012", "exit": 0}
+
+Running as unit: run-racf230ca53cb48dbaf4d25c7bd7682f8.scope; invocation ID: 8faaf0178a664fa0bf7bba1395f03ce6

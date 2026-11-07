@@ -1,0 +1,404 @@
+{
+  "aeneas_command": [
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended",
+    "-diagnose-translation",
+    "-sequential",
+    "-no-progress-bar",
+    "-abort-on-error",
+    "-backend",
+    "lean",
+    "-namespace",
+    "NHR_verify_observed",
+    "-dest",
+    "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E030_emitted/raw",
+    "-subdir",
+    "NHR_verify_observed",
+    "-split-files",
+    "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E030_emitted/repro.llbc"
+  ],
+  "aeneas_exit": 0,
+  "candidate_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+  "charon_command": [
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--include",
+    "core::option::Option",
+    "--include",
+    "core::result::Result",
+    "--include",
+    "core::option::_::ok_or",
+    "--start-from",
+    "crate::r1_semantic::verify_observed",
+    "--opaque",
+    "crate::r1_semantic::mark",
+    "--opaque",
+    "crate::r1_semantic::verify_finish",
+    "--opaque",
+    "crate::r1_semantic::public_transcript",
+    "--opaque",
+    "crate::r1_wire::begin",
+    "--opaque",
+    "crate::r1_wire::_::parse",
+    "--include",
+    "crate::verifier::Prepared",
+    "--include",
+    "crate::verifier::Accumulator",
+    "--include",
+    "crate::verifier::BatchedWeights",
+    "--include",
+    "crate::verifier::View",
+    "--include",
+    "crate::verifier::Error",
+    "--include",
+    "crate::verifier::Variant",
+    "--include",
+    "crate::verifier::Phase",
+    "--include",
+    "crate::verifier::QueryGeometry",
+    "--include",
+    "crate::r1_semantic::Verified",
+    "--include",
+    "crate::r1_wire::SemanticTranscript",
+    "--include",
+    "crate::r1_wire::Challenges",
+    "--include",
+    "aspis_core::field::M31",
+    "--include",
+    "aspis_core::field::CM31",
+    "--include",
+    "aspis_core::field::QM31",
+    "--include",
+    "aspis_core::field::wide_exact::WideExact",
+    "--include",
+    "aspis_core::circle::SecureCirclePoint",
+    "--dest-file",
+    "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E030_emitted/repro.llbc",
+    "--",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_workspace/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--locked",
+    "--offline",
+    "--release",
+    "--lib",
+    "--jobs",
+    "1",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build"
+  ],
+  "charon_exit": 0,
+  "exit": 0,
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "llbc_sha256": "cdf1476ddc3925028b9aebd3d00f7bb71bb6309cc55ede480d5763abbc4c4c09",
+  "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+  "lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+  "manifest_sha256": "5b1ac57398e2a9c68e199f98e9827a5a99cc176fb3dfa56d7d6066524d56f5ab",
+  "opacity": [
+    {
+      "path": "crate::r1_semantic::mark",
+      "why": "Actual frozen local mark callee; corrected dead verifier-mark expectation, still require reached declaration and Opaque body."
+    },
+    {
+      "path": "crate::r1_semantic::verify_finish",
+      "why": "Finish packet remains OPEN; preserve its complete result as explicit callee boundary, never a success premise."
+    },
+    {
+      "path": "crate::r1_semantic::public_transcript",
+      "why": "Retained CLOSED NHG packet with same public/hash/root domain."
+    },
+    {
+      "path": "crate::r1_wire::begin",
+      "why": "Retained CLOSED NHG packet, original state/callee frame obligation remains."
+    },
+    {
+      "path": "crate::r1_wire::{impl crate::r1_wire::Prefix}::parse",
+      "selector": "crate::r1_wire::_::parse",
+      "why": "Retained CLOSED NGX packet, all rejected prefixes remain in complete result."
+    }
+  ],
+  "outputs": {
+    "raw/NHR_verify_observed/Funs.lean": "ab74fc85ea8d3ee03ebe9cc65ab6bbc5c924f13fff86868793c86cb54eb39b81",
+    "raw/NHR_verify_observed/FunsExternal_Template.lean": "bafa9fadb1845fbeeea1233b5c25349eb42de2a94f07d22de090a7372e13795a",
+    "raw/NHR_verify_observed/Types.lean": "12b9119d2c2e892a8aa9c30f21d097ba5195e3e14f6c421ff8f2c570b1d1117d"
+  },
+  "root": [
+    "crate::r1_semantic::verify_observed"
+  ],
+  "tools": {
+    "aeneas-b59d5188-extended": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958",
+    "charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8"
+  },
+  "validated_opacity": [
+    {
+      "boundary": {
+        "path": "crate::r1_semantic::mark",
+        "why": "Actual frozen local mark callee; corrected dead verifier-mark expectation, still require reached declaration and Opaque body."
+      },
+      "matches": [
+        {
+          "body_kind": "Opaque",
+          "id": 3,
+          "name": [
+            {
+              "Ident": [
+                "aspis_r1_cost_probe",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "r1_semantic",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "mark",
+                0
+              ]
+            }
+          ],
+          "opacity": "Opaque",
+          "source_sha256": "555c5156146811da00c61e332409113a00b4f522934ea65c7bb2015ff80777b2",
+          "span": {
+            "data": {
+              "beg": {
+                "col": 0,
+                "line": 75
+              },
+              "end": {
+                "col": 1,
+                "line": 80
+              },
+              "file_id": 0
+            },
+            "generated_from_span": null
+          }
+        }
+      ]
+    },
+    {
+      "boundary": {
+        "path": "crate::r1_semantic::verify_finish",
+        "why": "Finish packet remains OPEN; preserve its complete result as explicit callee boundary, never a success premise."
+      },
+      "matches": [
+        {
+          "body_kind": "Opaque",
+          "id": 7,
+          "name": [
+            {
+              "Ident": [
+                "aspis_r1_cost_probe",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "r1_semantic",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "verify_finish",
+                0
+              ]
+            }
+          ],
+          "opacity": "Opaque",
+          "source_sha256": "e35ca50a3b472d40538941b6c5eb2a28e31ab0143966925a99a1a851572495c7",
+          "span": {
+            "data": {
+              "beg": {
+                "col": 0,
+                "line": 232
+              },
+              "end": {
+                "col": 1,
+                "line": 308
+              },
+              "file_id": 0
+            },
+            "generated_from_span": null
+          }
+        }
+      ]
+    },
+    {
+      "boundary": {
+        "path": "crate::r1_semantic::public_transcript",
+        "why": "Retained CLOSED NHG packet with same public/hash/root domain."
+      },
+      "matches": [
+        {
+          "body_kind": "Opaque",
+          "id": 4,
+          "name": [
+            {
+              "Ident": [
+                "aspis_r1_cost_probe",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "r1_semantic",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "public_transcript",
+                0
+              ]
+            }
+          ],
+          "opacity": "Opaque",
+          "source_sha256": "4b080011c6da8b6063e12c705a94e6653323ac48cd89e46791e4b6fc2a4f7dd0",
+          "span": {
+            "data": {
+              "beg": {
+                "col": 0,
+                "line": 63
+              },
+              "end": {
+                "col": 1,
+                "line": 73
+              },
+              "file_id": 0
+            },
+            "generated_from_span": null
+          }
+        }
+      ]
+    },
+    {
+      "boundary": {
+        "path": "crate::r1_wire::begin",
+        "why": "Retained CLOSED NHG packet, original state/callee frame obligation remains."
+      },
+      "matches": [
+        {
+          "body_kind": "Opaque",
+          "id": 6,
+          "name": [
+            {
+              "Ident": [
+                "aspis_r1_cost_probe",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "r1_wire",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "begin",
+                0
+              ]
+            }
+          ],
+          "opacity": "Opaque",
+          "source_sha256": "f7f4232f384de89b49721bf105ab36c696aea0652af20fe95ae65d7cd3ec8215",
+          "span": {
+            "data": {
+              "beg": {
+                "col": 0,
+                "line": 390
+              },
+              "end": {
+                "col": 1,
+                "line": 418
+              },
+              "file_id": 11
+            },
+            "generated_from_span": null
+          }
+        }
+      ]
+    },
+    {
+      "boundary": {
+        "path": "crate::r1_wire::{impl crate::r1_wire::Prefix}::parse",
+        "selector": "crate::r1_wire::_::parse",
+        "why": "Retained CLOSED NGX packet, all rejected prefixes remain in complete result."
+      },
+      "matches": [
+        {
+          "body_kind": "Opaque",
+          "id": 1,
+          "name": [
+            {
+              "Ident": [
+                "aspis_r1_cost_probe",
+                0
+              ]
+            },
+            {
+              "Ident": [
+                "r1_wire",
+                0
+              ]
+            },
+            {
+              "Impl": {
+                "Ty": {
+                  "kind": "InherentImplBlock",
+                  "params": {
+                    "const_generics": [],
+                    "regions": [
+                      {
+                        "index": 0,
+                        "mutability": "Unknown",
+                        "name": "'a"
+                      }
+                    ],
+                    "regions_outlive": [],
+                    "trait_clauses": [],
+                    "trait_type_constraints": [],
+                    "types": [],
+                    "types_outlive": []
+                  },
+                  "skip_binder": {
+                    "Deduplicated": 1697
+                  }
+                }
+              }
+            },
+            {
+              "Ident": [
+                "parse",
+                0
+              ]
+            }
+          ],
+          "opacity": "Opaque",
+          "source_sha256": "ab59f2431b0de5e5e6feb533d322980b0f54f384df7036b583237fbe6370cdd7",
+          "span": {
+            "data": {
+              "beg": {
+                "col": 4,
+                "line": 292
+              },
+              "end": {
+                "col": 5,
+                "line": 337
+              },
+              "file_id": 11
+            },
+            "generated_from_span": null
+          }
+        }
+      ]
+    }
+  ]
+}
