@@ -1,187 +1,34 @@
-# SLICE lane — first session in progress
-
-Branch codex/pv-lib-slice-20261107, base 5e397cb3878.
-Host writes only /home/dombarker/project-offloads/codex-pv-lib-slice-20261107.
-Assigned Lean49600–49689, raw49690–49699. One scope,6G/8G/swap0/Tasks64/-M7000; separate STREAMB_SLOTS=3 turn before each ID.
-
-No frozen specs, shared map, ledger, package branches, row consumers or endpoint changed.
-No endpoint premises removed/added. Target not yet established.
-Root HANDOFF.md is the base handoff; the requested nested HANDOFF.md is absent at base.
-
-Next: focused pinned f32/f33 replay then deterministic provider graphs.
-
-Attempt 49600: PV_W5_LocalClears, passed pinned focused replay.
-
-Attempt 49601: PV_W5_FrameComposition, passed pinned focused replay.
-
-Attempt 49602: PV_W5_F32Specification, passed pinned focused replay.
-
-Attempt 49603: PV_W5_LocalCompletion, passed pinned focused replay.
-
-Attempt 49604: PV_W5_UbCheckOperators, passed pinned focused replay.
-
-Attempt 49605: PV_W5_F32Prelude, passed pinned focused replay.
-
-Attempt 49606: PV_W5_F32Count, passed pinned focused replay.
-
-Attempt 49607: PV_W5_F32AlignEntry, passed pinned focused replay.
-
-Attempt 49608: PV_W5_F32Call, passed pinned focused replay.
-
-Attempt 49609: PV_W5_F32PanicLeaf, passed pinned focused replay.
-
-Attempt 49610: PV_W5_LocalCall, passed pinned focused replay.
-
-Attempt 49611: PV_W5_F32OriginalSpecification, passed pinned focused replay.
-
-Attempt 49612: PV_W5_F32LiteralSpecification, passed pinned focused replay.
-
-Attempt 49613: PV_W5_F32FormatPrimitives, passed pinned focused replay.
-
-Attempt 49614: PV_W5_LocalBind, passed pinned focused replay.
-
-Attempt 49615: PV_W5_F32FormatMessage, passed pinned focused replay.
-
-Attempt 49616: PV_W5_F32FormatReference, passed pinned focused replay.
-
-Attempt 49617: PV_W5_F32FormatCast, passed pinned focused replay.
-
-Attempt 49618: PV_W5_F32FormatPointer, passed pinned focused replay.
-
-Attempt 49619: PV_W5_F32FormatLengthValue, passed pinned focused replay.
-
-Attempt 49620: PV_W5_F32FormatEncoding, passed pinned focused replay.
-
-Attempt 49621: PV_W5_F32FormatPack, passed pinned focused replay.
-
-Attempt 49622: PV_W5_F32FormatPayload, passed pinned focused replay.
-
-Attempt 49623: PV_W5_F32FormatLength, passed pinned focused replay.
-
-Attempt 49624: PV_W5_F32FormatJoin, passed pinned focused replay.
-
-Attempt 49625: PV_W5_F32PanicCall, passed pinned focused replay.
-
-Attempt 49626: PV_W5_F32PanicPrefix, passed pinned focused replay.
-
-Attempt 49627: PV_W5_F32FormatFrame, passed pinned focused replay.
-
-Attempt 49628: PV_W5_LocalReplyFrame, passed pinned focused replay.
-
-Attempt 49629: PV_W5_F32Abort, passed pinned focused replay.
-
-Attempt 49630: PV_W5_F32PanicFrame, passed pinned focused replay.
-
-Attempt 49631: PV_W5_F32AbortCompletion, passed pinned focused replay.
-
-Attempt 49632: PV_W5_F32PanicCompletion, passed pinned focused replay.
-
-Attempt 49633: PV_W5_LocalCompletionEvents, passed pinned focused replay.
-
-Attempt 49634: PV_W5_F32UnitReturn, passed pinned focused replay.
-
-Attempt 49635: PV_W5_F32UnitCompletion, passed pinned focused replay.
-
-Attempt 49636: PV_W5_LocalBranch, passed pinned focused replay.
-
-Attempt 49637: PV_W5_F32OverlapTail, passed pinned focused replay.
-
-Attempt 49638: PV_W5_LocalCallCompletion, passed pinned focused replay.
-
-Attempt 49639: PV_W5_F32Booleans, passed pinned focused replay.
-
-Attempt 49640: PV_W5_F32CallsCompletion, passed pinned focused replay.
-
-Attempt 49641: PV_W5_F32Entry, passed pinned focused replay.
-
-Attempt 49642: PV_W5_F32LiteralPrefix, passed pinned focused replay.
-
-Attempt 49643: PV_W5_F32LiteralEntry, passed pinned focused replay.
-
-Attempt 49644: PV_W5_F32Stable, passed pinned focused replay.
-
-Attempt 49645: PV_W5_F32CallInputs, passed pinned focused replay.
-
-Attempt 49646: PV_W5_F32OverlapCompletion, passed pinned focused replay.
-
-Attempt 49647: PV_W5_F32EmptyOverlap, passed pinned focused replay.
-
-Attempt 49648: PV_W5_F32PointerWords, passed pinned focused replay.
-
-Attempt 49649: PV_W5_F32DestinationWords, passed pinned focused replay.
-
-Attempt 49650: PV_W5_F32LocalContinuations, passed pinned focused replay.
-
-Attempt 49651: PV_W5_F32DestinationTail, passed pinned focused replay.
-
-Attempt 49652: PV_W5_F32AfterSecond, passed pinned focused replay.
-
-Attempt 49653: PV_W5_F32SecondCompletion, passed pinned focused replay.
-
-Attempt 49654: PV_W5_F32DestinationPrep, passed pinned focused replay.
-
-Attempt 49655: PV_W5_F32DestinationPrepCompletion, passed pinned focused replay.
-
-Attempt 49656: PV_W5_F32SourceTail, passed pinned focused replay.
-
-Attempt 49657: PV_W5_F32AfterFirst, passed pinned focused replay.
-
-Attempt 49658: PV_W5_F32Contract, passed pinned focused replay.
-
-Attempt 49659: PV_W5_F33Specification, passed pinned focused replay.
-
-Attempt 49660: PV_W5_F33Format, passed pinned focused replay.
-
-Attempt 49661: PV_W5_F33Panic, passed pinned focused replay.
-
-Attempt 49662: PV_W5_F33ActualPanic, passed pinned focused replay.
-
-Attempt 49663: PV_W5_F33Contract, passed pinned focused replay.
-
-Attempt 49664: PV_LIB_SLICE_BoundedRun, exit0.
-
-Attempt 49665: PV_LIB_SLICE_F32, exit0.
-
-Attempt 49666: PV_LIB_SLICE_F33, exit1.
-
-Attempt 49667: PV_LIB_SLICE_F33, exit1.
-
-Attempt 49668: PV_LIB_SLICE_F33, exit0.
-
-Attempt 49669: PV_LIB_SLICE_TypedDrop, exit1.
-
-Attempt 49670: PV_FN_SLICE_f8_PrefixData, exit0.
-
-Attempt 49671: PV_FN_SLICE_f8_Prefix, exit0.
-
-Attempt 49672: PV_FN_W2_LifetimePrefix, exit0.
-
-Attempt 49673: PV_STX2_StoreCounter, exit0.
-
-Attempt 49674: PV_STX2_LiveNumbering, exit0.
-
-Attempt 49675: PV_FN_SLICE_f9_Prefix, exit0.
-
-Attempt 49676: PV_FN_SLICE_f4_Prefix, exit0.
-
-Attempt 49677: PV_FN_SLICE_f4_Repeat, exit0.
-
-Attempt 49678: PV_FN_SLICE_f4_ArrayBuiltins, exit0.
-
-Attempt 49679: PV_FN_SLICE_f7_DropStatements, exit0.
-
-Attempt 49680: PV_FN_SLICE_f7_DropContract, exit0.
-
-Attempt 49681: PV_FN_SLICE_f7_DropRuntime, exit0.
-
-Attempt 49682: PV_FN_SLICE_f7_HandlerSpec, exit0.
-
-Attempt 49683: PV_FN_SLICE_RuntimeBindings, exit0.
-
-Attempt 49684: PV_FN_SLICE_f22_TypedDestructor, exit0.
-
-Attempt 49685: PV_FN_SLICE_f7_DestructorBinding, exit0.
-
-Attempt 49686: PV_LIB_SLICE_TypedDrop, exit0.
-
-Attempt 49687: PV_LIB_SLICE_RawAudit, exit0.
+# SLICE lane — pre-audit checkpoint
+
+Branch codex/pv-lib-slice-20261107; base5e397cb3878. Own host directory
+/home/dombarker/project-offloads/codex-pv-lib-slice-20261107.
+No shared map, frozen specification, ledger, checker, package branch, row
+consumer, implementation, endpoint, T field or key changed. No push/merge.
+Endpoint premises removed0/added0. Target not yet established.
+
+F32/F33 bounded deterministic supplied-machine graph adapters compiled. They
+select the least prefix satisfying the literal provider boundary/frame/events
+clauses on the actual interpreter run; the laws are function graphs, never
+native-reply relations. No first-source-boundary strengthening, actual caller
+domain discharge, full frozen-contract equivalence or root composition claimed.
+See MODEL_SCOPE.md and MAP_DELTA.json:2 qualified graph slots,14 still missing.
+
+TypedDrop support certifies exactly the provider's three-instruction typed-f22
+prefix and Regular22 selection. Return is still pending: see the explicit
+source-header wording correction in INSTANCE_CORRECTIONS.md. The full runtime
+facet remains missing.49669 stopped before Lean because a present object lacked
+accepted cohort authority. The full runtime cone needs30 pinned modules; only
+the16-module prefix/selector cone fits the remaining block and was replayed.
+No unverified object was loaded. Source7 entry validity and all upper-chain
+providers remain as enumerated in REMAINING.md; no placeholder theorem.
+
+85 passing focused compiles:80 byte-identical provider replays,4 new proof
+modules,1 audit driver. F33 failures49666/49667 are archived; the combined-simp
+shape was retired and replaced by separate entry projections + explicit run
+rewrite49668. No memory kill, cap change, cold build, full manifest or unchanged
+failed-proof rerun. All source changes compile-green. Strict raw690 is next.
+
+Next Lean49688–49689; raw49690–49699. One scope at a time;6G/8G/swap0/Tasks64,
+Lean-M7000. Standalone STREAMB_SLOTS=3 turn before every ID; admission requires
+exit0 and allowed:true. HOST D931: writes only own directory, no host deletion.
+The base handoff is root HANDOFF.md; requested nested HANDOFF.md absent at base.

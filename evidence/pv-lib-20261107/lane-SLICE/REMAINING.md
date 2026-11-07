@@ -28,3 +28,12 @@ The graph adapters do not prove machine/source adequacy, first-boundary
 strengthenings absent from old contracts, actual-caller domain discharge,
 joint premise nonemptiness, or source7 composition. Those limits are retained
 in the map delta. No frozen specification is changed to match these gaps.
+
+Focused replay checkpoint: f32/f33 provider graphs are compiled; actual f21
+caller discharge and frozen first-boundary/source adequacy remain. The typed
+f22 three-instruction prefix graph and selector are supporting evidence only.
+After the16-module narrowed replay,14 additional W2 modules remain before
+RuntimeDrop can be imported authoritatively; then its full source178 suffix
+graph must be installed. Only two Lean IDs remain in this session block.
+The source7-entry preflight found at least111 missing object modules and is
+not a cohort-acceptance proof; the actual Foundation builder obligation remains.

@@ -27,7 +27,9 @@ separate caller/composition/adequacy obligations, as with the base adapters.
 The typed Drop support model reuses W2's actual `TypedDestructor.state` and
 `finalStore` by name. Its execution graph is certified by `TypedDestructor.run`,
 and source178 selects Regular22 by `DestructorBinding.selected`. This is the
-f22 body graph only. The RuntimeDrop/source178 suffix import stopped before
+three-instruction f22 prefix graph only: its Return node is still pending.
+INSTANCE_CORRECTIONS.md corrects the own-source header wording; no completion
+or full destructor-call claim follows from advance3. The RuntimeDrop/source178 suffix import stopped before
 Lean because the pathname was outside the accepted cache authority; its30-module
 replay cone exceeded the20 remaining Lean IDs. The smaller16-module body/selector
 cone is replayed instead. No object was loaded just because a pathname existed.
