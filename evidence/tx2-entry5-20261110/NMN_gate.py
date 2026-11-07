@@ -64,6 +64,7 @@ out=dict(graph_matches_frozen=not added and not(missing-allowed_missing) and not
 out['all_crate_features']=[dict(name=p['name'],version=p['version'],source=p.get('source'),features=nodes[p['id']]['features']) for p in m['packages']]
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n');assert out['graph_matches_frozen'],out
 assert sha(S/'Cargo.lock')==frozen,'STOP metadata changed lock'
+(B/(a+'-kani-submitted.json')).write_text(json.dumps({'command':x['native_command'],'offline':os.environ['CARGO_NET_OFFLINE']})+'\n')
 status=subprocess.run(x['native_command'],cwd=B).returncode
 last=sha(S/'Cargo.lock');(B/(a+'-lock-check.json')).write_text(json.dumps(dict(before=frozen,after=last,unchanged=last==frozen),indent=2)+'\n');assert last==frozen,'STOP Kani changed lock'
 sys.exit(status)
