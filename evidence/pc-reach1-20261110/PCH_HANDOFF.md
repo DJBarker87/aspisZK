@@ -25,3 +25,15 @@ PCH_A001 exit 0, wall 0.12 s, peak RSS 45760 KiB, swaps 0; axioms N/A.
 Host free space 163604512768 bytes before scope; reservation allowed true,
 exit 0. Only own cache created; no cache corpus copied because blocked
 before graph construction. No Aeneas object selection or LEAN_PATH used.
+
+Final disposition: explicit Stage 1 stop, not completed stages 2–4.
+PCH_FINDINGS.md contains PCH-F1 and the concrete lead remedy. PCH_REMAINING.md
+lists all 278 members and explains the unused budget for each. PCH_VERDICTS.json
+records NOT ASSESSED (null verdict), never an unresolved-edge or exclusion claim.
+Graph and validator implementation are intentionally absent; PCH_VALIDATION.json
+records all five mutation tests NOT RUN. The empty PCH_LEDGER_DELTA.json changes
+no row, including live PCD_/PCF_ rows. PCH_COUNT.md preserves 39 inherited CLOSED,
+0 exclusions, 239 OPEN (A74/B124/C11/D30); reachable counts remain unknown.
+No assumptions discharged, retained trust unchanged, none added or reclassified.
+No new theorem and #print axioms N/A. No transaction shapes or exploit inputs.
+No shipped files, siblings, host infrastructure or keys modified; no push.
