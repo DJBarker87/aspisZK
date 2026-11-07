@@ -7,22 +7,28 @@
  //! This crate deliberately contains no proof system. It defines the exact
 --- a/crates/aspis-statement/src/spend.rs
 +++ b/crates/aspis-statement/src/spend.rs
-@@ -654,3 +654,6 @@
+@@ -654,3 +654,9 @@
  #[cfg(any(kani, aeneas_ref))]
  #[path = "../../../tools/r1-builder-reference/nullifier.rs"]
  mod nullifier_reference;
 +
 +#[cfg(kani)]
 +#[path="PCI_NoteNative.rs"] mod PCI_NoteNative;
++
++#[cfg(kani)]
++#[path="PCI_NoteCallers.rs"] mod PCI_NoteCallers;
 --- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
 +++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
-@@ -982,3 +982,6 @@
+@@ -982,3 +982,9 @@
          ));
      }
  }
 +
 +#[cfg(kani)]
 +#[path="PCI_ValidateNative.rs"]mod PCI_ValidateNative;
++
++#[cfg(kani)]
++#[path="PCI_SingleNative.rs"]mod PCI_SingleNative;
 --- a/programs/aspis-pool/src/lib.rs
 +++ b/programs/aspis-pool/src/lib.rs
 @@ -1,3 +1,4 @@
@@ -84,6 +90,40 @@
 @@ -0,0 +1,3 @@
 +pub fn note_input(owner_key: [u32;8], value: u32, asset_id: u32, salt: [u32;8]) -> [u32;18] {
 +    [ owner_key[0], owner_key[1], owner_key[2], owner_key[3], owner_key[4], owner_key[5], owner_key[6], owner_key[7], value, asset_id, salt[0], salt[1], salt[2], salt[3], salt[4], salt[5], salt[6], salt[7] ]
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/PCI_NoteCallers.rs
+@@ -0,0 +1,31 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[path="PCI_NoteReference.rs"] mod reference;
++static mut EXPECTED:[u32;18]=[0;18];
++static mut REPLY:[u32;8]=[0;8];
++static mut CALLS:usize=0;
++fn hash_reply(domain:M31,input:&[M31])->Digest{
++ assert_eq!(domain,DOMAIN_NOTE);assert_eq!(input.len(),18);
++ for i in 0..18{assert_eq!(input[i].0,unsafe{EXPECTED[i]});}
++ unsafe{CALLS+=1;REPLY.map(M31)}
++}
++// Generic signature preserved: exact closed273 forwarding law, not a monomorphic wrapper.
++fn note_cut<H:FnMut(M31,&[M31])->Digest>(owner:&Digest,value:u32,asset:M31,salt:&Digest,hash:&mut H)->Digest{
++ assert!(value<P);
++ let words=reference::note_input(owner.map(|x|x.0),value,asset.0,salt.map(|x|x.0));
++ let mut fields=words.map(M31);
++ #[cfg(PCI_NOTE_CUT_MUTANT)]{fields[0].0^=1;}
++ hash(DOMAIN_NOTE,&fields)
++}
++#[kani::proof] #[kani::unwind(100)]
++#[kani::stub(note_commitment_with,note_cut)]
++#[kani::stub(crate::poseidon2::hash_fields,hash_reply)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn note_caller(){
++ let owner:[u32;8]=kani::any();let salt:[u32;8]=kani::any();let value:u32=kani::any();kani::assume(value<P);let asset:u32=kani::any();let reply:[u32;8]=kani::any();
++ unsafe{EXPECTED=reference::note_input(owner,value,asset,salt);REPLY=reply;CALLS=0;}
++ let mut input=owner.map(M31);
++ #[cfg(PCI_NOTE_CALLER_MUTANT)]{input[0].0^=1;}
++ let got=note_commitment(&input,value,M31(asset),&salt.map(M31));
++ assert!((got.map(|x|x.0)==reply && unsafe{CALLS}==1)!=cfg!(PCI_NEG_NOTE_CALLER));
 +}
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/PCI_ValidateNative.rs
@@ -242,6 +282,34 @@
 +        }
 +        Ok(())
 +    }
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/PCI_SingleNative.rs
+@@ -0,0 +1,25 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn canonical(d:[u32;8])->bool{d[0]<P && d[1]<P && d[2]<P && d[3]<P && d[4]<P && d[5]<P && d[6]<P && d[7]<P}
++// Assertions establish the call-site specialization from the ACTUAL parent's constructor.
++// PCI_SingleValidation.validation proves this is the exact CLOSED223 law on this shape.
++fn validate_spec(w:&PoolV1PairLeafWitnessV1)->Result<(),PoolV1PairLeafErrorV1>{
++ assert_eq!(w.second_occupied,M31::ZERO);assert_eq!(w.second_occupancy_inverse,M31::ZERO);
++ assert_eq!(w.second_commitment,[M31::ZERO;8]);
++ let ok:bool=kani::any();
++ kani::assume(ok==(canonical(w.first_commitment.map(|x|x.0))!=cfg!(PCI_SINGLE_SPEC_MUTANT)));
++ if ok{Ok(())}else{Err(PoolV1PairLeafErrorV1::NonCanonicalCommitment)}
++}
++#[kani::proof] #[kani::unwind(100)]
++#[kani::stub(PoolV1PairLeafWitnessV1::validate,validate_spec)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn single_output(){
++ let d:[u32;8]=kani::any();let mut input=d.map(M31);
++ #[cfg(PCI_SINGLE_ARG_MUTANT)]{input[0].0^=1;}
++ let got=PoolV1PairLeafWitnessV1::single_output(input);
++ let same=match got{
++  Ok(w)=>canonical(d)&&w.first_commitment.map(|x|x.0)==d&&w.second_occupied==M31::ZERO&&w.second_occupancy_inverse==M31::ZERO&&w.second_commitment==[M31::ZERO;8],
++  Err(e)=>!canonical(d)&&e==PoolV1PairLeafErrorV1::NonCanonicalCommitment
++ };
++ assert!(same!=cfg!(PCI_NEG_SINGLE));
++}
 --- /dev/null
 +++ b/programs/aspis-pool/src/PCI_CountNative.rs
 @@ -0,0 +1,25 @@

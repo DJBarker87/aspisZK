@@ -1,0 +1,55 @@
+{"attempt": "PCI_L057", "exit_status": 0, "wall_seconds": 3.1344429538585246, "peak_rss_kib": "5106848", "swaps": "0", "print_axioms": []}
+DEF NFY_NBP_DigestDecode.decoded
+TYPE Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+  Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+    AspisR1TerminalDecoder.atomic_statement.AtomicStatementError
+VALUE fun bytes =>
+  if NFY_NBP_DecodeWord.word bytes 0 ≥ NFY_NBP_DecodeWord.P then
+    Aeneas.Std.core.result.Result.Err AspisR1TerminalDecoder.atomic_statement.AtomicStatementError.NonCanonicalDigest
+  else
+    if NFY_NBP_DecodeWord.word bytes 1 ≥ NFY_NBP_DecodeWord.P then
+      Aeneas.Std.core.result.Result.Err AspisR1TerminalDecoder.atomic_statement.AtomicStatementError.NonCanonicalDigest
+    else
+      if NFY_NBP_DecodeWord.word bytes 2 ≥ NFY_NBP_DecodeWord.P then
+       
+...
+.Array U N → Aeneas.Std.Result Bool
+VALUE fun {T U} {N} partialEqInst a0 a1 =>
+  if a0.length = a1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Aeneas.Std.Result.ok (decide ¬b = true))
+      ((↑a0).zip ↑a1)
+  else Aeneas.Std.Result.ok false
+DEF Aeneas.Std.core.num.U16.from_le_bytes
+TYPE Aeneas.Std.Array Aeneas.Std.U8 2#usize → Aeneas.Std.U16
+VALUE fun a => BitVec.cast ⋯ (BitVec.fromLEBytes (List.map Aeneas.Std.U8.bv ↑a))#uscalar
+DEF Aeneas.Std.core.array.TryFromArrayCopySlice.try_from
+TYPE {T : Type} →
+  (N : Aeneas.Std.Usize) →
+    Aeneas.Std.core.marker.Copy T →
+      Aeneas.Std.Slice T →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result (Aeneas.Std.Array T N) Aeneas.Std.core.array.TryFromSliceError)
+VALUE fun {T} N _copyInst s =>
+  if h0 : s.length = ↑N then Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ⟨↑s, ⋯⟩)
+  else Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err ())
+DEF Aeneas.Std.core.array.TryFromSharedArraySlice.try_from
+TYPE {T : Type} →
+  (N : Aeneas.Std.Usize) →
+    Aeneas.Std.Slice T →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result (Aeneas.Std.Array T N) Aeneas.Std.core.array.TryFromSliceError)
+VALUE fun {T} N s =>
+  if h : s.len = N then Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ⟨↑s, ⋯⟩)
+  else Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err ())
+DEF Aeneas.Std.core.array.equality.PartialEqArray.ne
+TYPE {T U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Array T N → Aeneas.Std.Array U N → Aeneas.Std.Result Bool
+VALUE fun {T U} {N} partialEqInst a0 a1 => do
+  let b ← Aeneas.Std.core.array.equality.PartialEqArray.eq partialEqInst a0 a1
+  Aeneas.Std.Result.ok (decide ¬b = true)
+
+Running as unit: run-r53b1eff354c645779677ef5f07adc2d0.scope; invocation ID: 06375841fc72404ca2a7816cf3adc0bd

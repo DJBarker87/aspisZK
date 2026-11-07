@@ -28,7 +28,7 @@ def aspis_core.field.M31 := Std.U32
     Name pattern: [aspis_statement::atomic_statement::AtomicStatementError]
     Visibility: public -/
 abbrev aspis_statement.atomic_statement.AtomicStatementError :=
-  AspisR1AdapterReconstruct.aspis_statement.atomic_statement.AtomicStatementError
+  AspisR1TerminalDecoder.atomic_statement.AtomicStatementError
 
 /-- [aspis_pool::deposit::DepositRequestV1]
     Source: 'programs/aspis-pool/src/deposit.rs', lines 6:0-11:1
