@@ -99,3 +99,12 @@ retained compressed. Changed import opening before49717.
 SPEC-C2 at actual14320, every environment. Exit0;wall0:02.25;peak4706924KiB;
 swap0;parenta20eb0c570d;standard summary axioms. See FINDINGS and correction
 proposal. Not full joint contradiction. Next Lean49718.
+
+49718 failed only the symbolic away proof's match rewrite, archived;49719
+changed that proof and passed. ThreadMachine is a SPEC-C2 correction candidate,
+retaining intrinsic/OWNER/operator/bridged allocation layers, selecting the
+pinned concrete writer step ONLY at real ordinary native writer polls.
+away/writer/registration are compiled comparisons; source adequacy remains a
+named target, not a premise or discharge. No full contract count increases.
+Exit0;wall0:02.34;peak4714176KiB;swap0;parentf4e814b61f1;standard summary axioms.
+Next Lean49720; new-root audit still pending.
