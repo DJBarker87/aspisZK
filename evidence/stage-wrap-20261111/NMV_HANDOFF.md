@@ -204,3 +204,13 @@ frozen/fission/receiver sources, exact environment and every crate feature
 with reused K035/K041 passes. Parent copies differ only by the two explicit
 &owned[1..] substitutions (module import aside). Graph/offline/post-lock and
 KMX identical. Two of12 authorized controls spent; no passing rerun.
+
+Candidate packet stage: NMV_CandidateRoots exports exact canonical parent
+RowSpecs and TAS packet; L122 passes0.226s/489776KiB/swap0. Source-fission
+association and limits are reviewed explicitly in NMV_CANDIDATE_PACKET.md.
+New NNC weak specialization is being checked; failed namespace elaborations
+L123/L124 are retained/excluded, with no cap/timeout change. NNC missing
+objects are copied privately (L121), hashes NMV_NNC_SEED.json. The nonselected
+242 variant is rejected; NNC's actual selected242 object matches our closure.
+Full345/241 remain parameters (NMV_RESUME_SIBLINGS.json); canonical PoolLaws
+for G2 remain an explicit library installation boundary, not a new caller input.
