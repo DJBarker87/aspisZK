@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_FN_SLICE_f8_Suffix.lean:57:25: warning: This simp argument is unused:
+  readAddress
+
+Hint: Omit it from the simp argument list.
+  simp [PV_THR2_IntrinsicFrameAggregate.after, ̲PV_STX2_Store.bind, ̲evaluate, ̲operands, ̲operand,
+        PV_STX2_Store.read, ̲readA̵d̵d̵r̵e̵s̵s̵,̵r̵e̵a̵d̵Fields, ̲locate, ̲writeAddress, ̲write, ̲store1, ̲store2, ̲store3,
+        pre.result, ̲agg, ̲q]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_FN_SLICE_f8_Suffix.lean:57:37: warning: This simp argument is unused:
+  readFields
+
+Hint: Omit it from the simp argument list.
+  simp [PV_THR2_IntrinsicFrameAggregate.after, ̲PV_STX2_Store.bind, ̲evaluate, ̲operands, ̲operand,
+        PV_STX2_Store.read, ̲readAddress,r̵e̵a̵d̵F̵i̵e̵ ̲ld̵s̵,̵l̵ocate, ̲writeAddress, ̲write, ̲store1, ̲store2, ̲store3,
+        pre.result, ̲agg, ̲q]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_FN_SLICE_f8_Suffix.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_FN_SLICE_f8_Suffix.frame' depends on axioms: [propext, Quot.sound]
+'PV_FN_SLICE_f8_Suffix.value_field' depends on axioms: [propext]
+theorem PV_FN_SLICE_f8_Suffix.run : ∀ {E : Type} (x : PV_FN_SLICE_f8_Suffix.Input E)
+  (pre : PV_FN_SLICE_f8_Suffix.Pre x),
+  PV_THR2_IntrinsicState.advance (PV_FN_SLICE_ValueCarrier.carrier x.C) x.K x.P x.H 9
+      {
+        current :=
+          {
+            status :=
+              PV_STX2_SliceMachine.Status.running
+                { frame := { activation := x.a, remaining := List.drop 9 PV_STX2_SliceF8.program.body },
+                  callers := x.parent :: x.parents, store := x.s },
+            world := x.w, events := x.es },
+        suspended := x.stack } =
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              {
+                frame :=
+                  have __src := x.parent;
+                  { activation := __src.activation, remaining := __src.remaining, loops := __src.loops,
+                    unwinding := __src.unwinding, completed := __src.completed },
+                callers := x.parents, store := PV_FN_SLICE_f8_Suffix.finalStore x },
+          world := x.w, events := x.es },
+      suspended := x.stack } :=
+⋯
