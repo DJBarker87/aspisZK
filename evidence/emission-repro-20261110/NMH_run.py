@@ -78,7 +78,15 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 r=ssh('python3',f'''from pathlib import Path
 import json
-b=Path({B!r});paths=list((b/{a!r}).rglob('*'))
+b=Path({B!r})
+import hashlib
+manifest=json.loads((b/'NMH_STAGING_MANIFEST.json').read_text());w=b/'NMH_workspace'
+changed=[n for n,v in manifest['files'].items() if not (w/n).is_file() or hashlib.sha256((w/n).read_bytes()).hexdigest()!=v['sha256']]
+post=dict(attempt={a!r},source_drift=changed,lock_sha256=hashlib.sha256((w/'Cargo.lock').read_bytes()).hexdigest(),expected_lock_sha256=manifest['files']['Cargo.lock']['sha256'],owned_bytes=sum(p.stat().st_size for p in b.rglob('*') if p.is_file()),axioms='not applicable: extraction only')
+(b/{a!r}/'NMH_POSTCHECK.json').write_text(json.dumps(post,indent=2))
+assert not changed and post['lock_sha256']==post['expected_lock_sha256'],'STOP frozen source/lock drift'
+assert post['owned_bytes']<30_000_000_000,'STOP owned disk exceeds 30 GB'
+paths=list((b/{a!r}).rglob('*'))
 for n in {cfg.get('collect',[])!r}:
  p=b/n;paths+=list(p.rglob('*')) if p.is_dir() else [p]
 print(json.dumps({{str(p.relative_to(b)):p.read_text() for p in paths if p.is_file() and p.suffix != '.llbc' and p.name not in ['metadata.json','metadata.stdout']}}))

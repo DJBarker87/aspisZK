@@ -1,7 +1,7 @@
 {
-  "run": "NMH_E030",
-  "label": "wire-record",
   "configuration": {
+    "receipt": "evidence/verify-observed5-20261107/NIX_emitted/verify_observed/NHR_PINS.json",
+    "receipt_sha256": "5bfae56e16f711ef5d581e495d3c24058cfaed7dc2559e07a5b5f24a28147732",
     "charon_command": [
       "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
       "cargo",
@@ -18,7 +18,49 @@
       "--include",
       "core::option::_::ok_or",
       "--start-from",
-      "crate::r1_wire::parse_record",
+      "crate::r1_semantic::verify_observed",
+      "--opaque",
+      "crate::r1_semantic::mark",
+      "--opaque",
+      "crate::r1_semantic::verify_finish",
+      "--opaque",
+      "crate::r1_semantic::public_transcript",
+      "--opaque",
+      "crate::r1_wire::begin",
+      "--opaque",
+      "crate::r1_wire::_::parse",
+      "--include",
+      "crate::verifier::Prepared",
+      "--include",
+      "crate::verifier::Accumulator",
+      "--include",
+      "crate::verifier::BatchedWeights",
+      "--include",
+      "crate::verifier::View",
+      "--include",
+      "crate::verifier::Error",
+      "--include",
+      "crate::verifier::Variant",
+      "--include",
+      "crate::verifier::Phase",
+      "--include",
+      "crate::verifier::QueryGeometry",
+      "--include",
+      "crate::r1_semantic::Verified",
+      "--include",
+      "crate::r1_wire::SemanticTranscript",
+      "--include",
+      "crate::r1_wire::Challenges",
+      "--include",
+      "aspis_core::field::M31",
+      "--include",
+      "aspis_core::field::CM31",
+      "--include",
+      "aspis_core::field::QM31",
+      "--include",
+      "aspis_core::field::wide_exact::WideExact",
+      "--include",
+      "aspis_core::circle::SecureCirclePoint",
       "--dest-file",
       "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E030_emitted/repro.llbc",
       "--",
@@ -42,24 +84,87 @@
       "-backend",
       "lean",
       "-namespace",
-      "NMH_wire_record",
+      "NHR_verify_observed",
       "-dest",
       "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E030_emitted/raw",
       "-subdir",
-      "NMH_wire_record",
+      "NHR_verify_observed",
       "-split-files",
       "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E030_emitted/repro.llbc"
     ],
     "roots": [
-      "crate::r1_wire::parse_record"
+      "crate::r1_semantic::verify_observed"
     ],
-    "opaque": [],
+    "features": [
+      "private-leaf-salts,optimized-terminal,program-build"
+    ],
+    "opaque": [
+      "crate::r1_semantic::mark",
+      "crate::r1_semantic::verify_finish",
+      "crate::r1_semantic::public_transcript",
+      "crate::r1_wire::begin",
+      "crate::r1_wire::_::parse"
+    ],
+    "include": [
+      "core::option::Option",
+      "core::result::Result",
+      "core::option::_::ok_or",
+      "crate::verifier::Prepared",
+      "crate::verifier::Accumulator",
+      "crate::verifier::BatchedWeights",
+      "crate::verifier::View",
+      "crate::verifier::Error",
+      "crate::verifier::Variant",
+      "crate::verifier::Phase",
+      "crate::verifier::QueryGeometry",
+      "crate::r1_semantic::Verified",
+      "crate::r1_wire::SemanticTranscript",
+      "crate::r1_wire::Challenges",
+      "aspis_core::field::M31",
+      "aspis_core::field::CM31",
+      "aspis_core::field::QM31",
+      "aspis_core::field::wide_exact::WideExact",
+      "aspis_core::circle::SecureCirclePoint"
+    ],
     "manifest": "crates/aspis-r1-cost-probe/Cargo.toml",
     "namespace": [
-      "NMH_wire_record"
+      "NHR_verify_observed"
     ],
-    "receipt": null
+    "opacity": [
+      {
+        "path": "crate::r1_semantic::mark",
+        "why": "Actual frozen local mark callee; corrected dead verifier-mark expectation, still require reached declaration and Opaque body."
+      },
+      {
+        "path": "crate::r1_semantic::verify_finish",
+        "why": "Finish packet remains OPEN; preserve its complete result as explicit callee boundary, never a success premise."
+      },
+      {
+        "path": "crate::r1_semantic::public_transcript",
+        "why": "Retained CLOSED NHG packet with same public/hash/root domain."
+      },
+      {
+        "path": "crate::r1_wire::begin",
+        "why": "Retained CLOSED NHG packet, original state/callee frame obligation remains."
+      },
+      {
+        "path": "crate::r1_wire::{impl crate::r1_wire::Prefix}::parse",
+        "selector": "crate::r1_wire::_::parse",
+        "why": "Retained CLOSED NGX packet, all rejected prefixes remain in complete result."
+      }
+    ]
   },
+  "groups": [
+    "NMH_G047",
+    "NMH_G119"
+  ],
+  "members": [
+    "6f30719c8bb4fe504b260c0cdaa51677b6ebc371e2160d638bd77f5e7af609df",
+    "d8d428b038558cca6c89092257b3ad1a18a355141dce25df4ce05c9a38767e89",
+    "16cdf784efd3a74e45cbf15a14b4a2b80a3b45b410d917c381ddea45d2b8f613"
+  ],
+  "bytes": 22823,
+  "run": "NMH_E030",
   "charon_command": [
     "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
     "cargo",
@@ -76,7 +181,49 @@
     "--include",
     "core::option::_::ok_or",
     "--start-from",
-    "crate::r1_wire::parse_record",
+    "crate::r1_semantic::verify_observed",
+    "--opaque",
+    "crate::r1_semantic::mark",
+    "--opaque",
+    "crate::r1_semantic::verify_finish",
+    "--opaque",
+    "crate::r1_semantic::public_transcript",
+    "--opaque",
+    "crate::r1_wire::begin",
+    "--opaque",
+    "crate::r1_wire::_::parse",
+    "--include",
+    "crate::verifier::Prepared",
+    "--include",
+    "crate::verifier::Accumulator",
+    "--include",
+    "crate::verifier::BatchedWeights",
+    "--include",
+    "crate::verifier::View",
+    "--include",
+    "crate::verifier::Error",
+    "--include",
+    "crate::verifier::Variant",
+    "--include",
+    "crate::verifier::Phase",
+    "--include",
+    "crate::verifier::QueryGeometry",
+    "--include",
+    "crate::r1_semantic::Verified",
+    "--include",
+    "crate::r1_wire::SemanticTranscript",
+    "--include",
+    "crate::r1_wire::Challenges",
+    "--include",
+    "aspis_core::field::M31",
+    "--include",
+    "aspis_core::field::CM31",
+    "--include",
+    "aspis_core::field::QM31",
+    "--include",
+    "aspis_core::field::wide_exact::WideExact",
+    "--include",
+    "aspis_core::circle::SecureCirclePoint",
     "--dest-file",
     "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E030_emitted/repro.llbc",
     "--",
@@ -100,27 +247,38 @@
     "-backend",
     "lean",
     "-namespace",
-    "NMH_wire_record",
+    "NHR_verify_observed",
     "-dest",
     "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E030_emitted/raw",
     "-subdir",
-    "NMH_wire_record",
+    "NHR_verify_observed",
     "-split-files",
     "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_E030_emitted/repro.llbc"
   ],
-  "opacity": [],
-  "groups": [
-    "NMH_G154",
-    "NMH_G160"
+  "opacity": [
+    {
+      "path": "crate::r1_semantic::mark",
+      "why": "Actual frozen local mark callee; corrected dead verifier-mark expectation, still require reached declaration and Opaque body."
+    },
+    {
+      "path": "crate::r1_semantic::verify_finish",
+      "why": "Finish packet remains OPEN; preserve its complete result as explicit callee boundary, never a success premise."
+    },
+    {
+      "path": "crate::r1_semantic::public_transcript",
+      "why": "Retained CLOSED NHG packet with same public/hash/root domain."
+    },
+    {
+      "path": "crate::r1_wire::begin",
+      "why": "Retained CLOSED NHG packet, original state/callee frame obligation remains."
+    },
+    {
+      "path": "crate::r1_wire::{impl crate::r1_wire::Prefix}::parse",
+      "selector": "crate::r1_wire::_::parse",
+      "why": "Retained CLOSED NGX packet, all rejected prefixes remain in complete result."
+    }
   ],
-  "members": [
-    "3d8605fb60608f8de0d94ae84f9e1fafbdbdf301ed6e0e9b4cbf727b2f6a64d8",
-    "49dc98897501386c94fba6e7350855892718e9bf1c5c2d0dd74878b6e0b0a5af",
-    "4e04e86392953c0aabc037cff0e19630a06267c59874aeba6a6391743dee433a",
-    "6c7fd788f20aad862364869a478cac4234ec82b888a030092d279258779964ca",
-    "f71ad7af3cf775fc72d8ca2cd136c38ab2e8002dc170f45916f82f5ffc2595ec"
-  ],
-  "bytes": 185300,
-  "basis": "Diagnostic native-definition projection from archived source annotation; original historical full configuration remains unresolved. Deployed verifier features and NHR core Option/Result includes. Opaque boundaries are explicit in command, not a fidelity claim.",
-  "diagnostic_only": true
+  "basis": "Owned input repair from actual frozen call at r1_semantic.rs verify_observed. Exact prior configuration retained as failed E006; replace dead verifier::mark selector with actual semantic::mark. All NHR opacity checks retained, no removed expectation.",
+  "label": "verify-observed-opacity-repair",
+  "repairs": "NMH_E006: expected verifier::mark absent; actual reached r1_semantic::mark must be selected and checked opaque"
 }

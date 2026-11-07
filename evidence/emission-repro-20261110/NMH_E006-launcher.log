@@ -1,0 +1,41 @@
+{"attempt": "NMH_E006", "exit_status": 1, "wall_seconds": 128.08345882711, "peak_rss_kib": "558400", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::r1_semantic::verify_observed", "--opaque", "crate::verifier::mark", "--opaque", "crate::r1_semantic::verify_finish", "--opaque", "crate::r1_semantic::public_transcript", "--opaque", "crate::r1_wire::begin", "--opaque", "crate::r1_wire::_::parse", "--include", "crate::verifier::Prepared", "--include", "crate::verifier::Accumulator", "--include", "crate::verifier::BatchedWeights", "
+...
+        #[inline(always)] pub fn half(self)->Self {
+   |                                  ^^^^
+...
+51 |         pub fn half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: `aspis-r1-cost-probe` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-r1-cost-probe` to apply 3 suggestions)
+    Finished `release` profile [optimized] target(s) in 2m 06s
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_extract.py", line 38, in <module>
+    status=m.extract(args,E/'NMH_workspace',out)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dombarker/project-offloads/codex-cx-emission-repro-20261110/NMH_NHR_stage.py", line 197, in extract
+    assert hits, ('OWN INPUT: unmatched opacity',boundary)
+           ^^^^
+AssertionError: ('OWN INPUT: unmatched opacity', {'path': 'crate::verifier::mark', 'why': 'Deployed observer boundary; retained phase-erasure packet, no callback implementation expanded.'})
+
+Running as unit: run-recc5b31a4737421f9f4f696c5f6263e1.scope; invocation ID: 13a3d66496454d12a9971e968b855d32
