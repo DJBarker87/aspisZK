@@ -19,3 +19,23 @@ Native small carriers are explicit bounded diagnostic/call-boundary classes unti
 - NMV-K6: K020 full-ProgramError stage1 error and K021 stage1 return both timed out at90s. The RefCell-logging whole-parent family is retired. A distinct local-record diagnostic replaces only harness-owned logging RefCells with disjoint stack UnsafeCell records, and keeps the harness's original account array in ManuallyDrop under(bl)(3) (private Rc cleanup is not a row effect). Actual stage1 and its SDK/copy sites remain unchanged. This is not a caller restriction or a stronger domain clause; universal native producer credit is still absent. No record is static and no guard is fabricated.
 
 - NMV-K7: K023 local-record return still timed out90s. Inspection of the test helper found both stage1 and stage2 syntactically present under a const-generic selector, while each harness cut only its selected owned child. A replacement direct stage1 helper removes the unrelated TX2 call from the native harness source and avoids constructing an unused full-error oracle on the success branch. This isolates the actual frozen stage1 call, not a copied parent body; original harness identity is retained. No verdict is attributed to the unselected cone, no timeout is increased, and the broad selector helper is retired.
+
+## Resume review
+
+- NMV-K8: The WIP also contains K025 (90.659s, exit124), a further stage1
+  local-record return attempt after K023/K024. Its source hash differs
+  (`NMV_parent.rs`6005bd94… versus6171ce7c… atK024), so it was not an unchanged
+  rerun, but it remains a near-duplicate in the already failing return family.
+  It supplies no native credit. This continuation retires the entire family
+  and does not launch another parent-return specialization. The late WIP
+  attempt is retained for lead cost-rule review rather than omitted.
+- NMV-I3: The WIP had archived the harnesses into NMV_HARNESSES.patch but left
+  NMV_program.py reading removed raw .rs files. The own runner now reconstructs
+  only added cfg(kani) artifact files from the committed patch. No shared
+  launcher/validation/source pin is weakened. New shared-loan harness generation
+  uses immutable68730c8ae22 as its archived input and is deterministic.
+- NMV-G2: The proved G2 is a complete SDK/account-state frame on RETURNS,
+  including all borrow-token cell fields and exact token-counter progress.
+  RSL carries no post-abort state. It is parametric in the full weak packet;
+  neither an actual native packet nor arbitrary-dictionary event-write exclusion
+  is claimed. NMV_REVIEWED_TRANSCRIPTIONS.json records the exact scope.

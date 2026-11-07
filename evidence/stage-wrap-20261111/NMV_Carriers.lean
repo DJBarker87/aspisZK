@@ -32,7 +32,7 @@ theorem list_injective : Function.Injective (List.map byte) := by
    | nil => cases h
    | cons y ys =>
      have head : x=y := byte_injective (List.cons.inj h).1
-     have tail : xs=ys := ih ys (List.cons.inj h).2
+     have tail : xs=ys := ih (List.cons.inj h).2
      cases head; cases tail; rfl
 
 theorem bytes_injective : Function.Injective bytes := by
