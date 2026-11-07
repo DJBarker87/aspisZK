@@ -1,5 +1,5 @@
 {
-  "status": "target not yet established",
+  "status": "target not yet established; supporting results checked",
   "credited_rows": [],
   "interface_fields": [],
   "support": [
@@ -124,6 +124,18 @@
         "pointwise deployed sdk model transports",
         "NND_Missing total installation"
       ]
+    },
+    {
+      "stage": "G0 available installation",
+      "modules": [
+        "NNH_InstalledImpl"
+      ],
+      "receipts": [
+        "NNH_L054"
+      ],
+      "claim": "exact wrapper/dispatcher installation; all12 child fields unchanged; NMV/NMW record fields transported individually",
+      "credit": "support only; actual I0 and concrete libraries not instantiated",
+      "finding": "NMV_Roots is indexed by the entire Impl; the packet at I1 is not definitionally equal to the packet type at NNF.install I1. Rebuilding the record from its3 projections checks field types without a representation premise."
     }
   ],
   "hypotheses": {
@@ -133,5 +145,992 @@
       "existing runtime/std/copy/extraction trust",
       "L154 queries"
     ]
-  }
+  },
+  "own_roots": [
+    {
+      "root": "NNH_AuthEval.pda_guard",
+      "module": "NNH_AuthEval",
+      "source_sha256": "dd5f3a41a5bff26697042a64cb78bc2ddb19fe1a869df75c7972f27cf9a6a586",
+      "statement_source": "theorem pda_guard (env : Env) (bad : Bool) (seeds : List Bytes) (program expected : B32) :\n Returns (if bad then RS.throw .invalidAccountData else\n  RS.bind (RSL.pdaOrErr seeds program) (fun k => RS.check (decide (k \u2260 expected)) .invalidAccountData)) env\n (if bad then Except.error .invalidAccountData else\n  ebind (NNH_RegistryEval.pdaValue env seeds program) (fun k => echeck (decide (k \u2260 expected)) .invalidAccountData))",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_AuthEval.body_returned",
+      "module": "NNH_AuthEval",
+      "source_sha256": "dd5f3a41a5bff26697042a64cb78bc2ddb19fe1a869df75c7972f27cf9a6a586",
+      "statement_source": "theorem body_returned (L : PoolLib) (D : DeployedIds) (a : Args)\n (p m c l r e v : OwnedAccount) (env : Env) :\n Returns (body L D a p m c l r e v) env (bodyValue L D a p m c l r e v env)",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_AuthEval.returned",
+      "module": "NNH_AuthEval",
+      "source_sha256": "dd5f3a41a5bff26697042a64cb78bc2ddb19fe1a869df75c7972f27cf9a6a586",
+      "statement_source": "theorem returned (L : PoolLib) (D : DeployedIds) (a : Args) (env : Env) :\n Returns (Ref L D a) env (value L D a env)",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_CandidateRoots.root344",
+      "module": "NNH_CandidateRoots",
+      "source_sha256": "2a6955edfec750c969997009a214770643f25b6ae1d0a89a7e27a92d3c93bf8c",
+      "statement_source": "theorem root344 (V : VLib) (P : PreparedNew V) (C : TX1_345.S1Lib V)\n (allocation : NMV_ConcreteWindows.Allocation)\n (child : TX1_345.Args \u2192 Env \u2192 Obs (Except ProgramError Bytes))\n (packet : TX1_345.RowSpec_345 V P C child) :\n TX1_344.RowSpec_344 V P C (NMV_ConcreteWindows.stage1 allocation child)",
+      "hypotheses": {
+        "open_installation": [
+          "canonical PoolLaws for packet",
+          "child RowSpec345/241 at SAME child constants"
+        ],
+        "classification": "wrapper folds; no row credited"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_CandidateRoots.root240",
+      "module": "NNH_CandidateRoots",
+      "source_sha256": "2a6955edfec750c969997009a214770643f25b6ae1d0a89a7e27a92d3c93bf8c",
+      "statement_source": "theorem root240 (L : PoolLib) (D : DeployedIds) (V : TX2_241.V2Lib)\n (allocation : NMV_ConcreteWindows.Allocation)\n (child : TX2_241.Args \u2192 Env \u2192 Obs (Except ProgramError Unit))\n (packet : TX2_241.RowSpec_241 L D V child) :\n TX2_240.RowSpec_240 L D V (NMV_ConcreteWindows.stage2 allocation child)",
+      "hypotheses": {
+        "open_installation": [
+          "canonical PoolLaws for packet",
+          "child RowSpec345/241 at SAME child constants"
+        ],
+        "classification": "wrapper folds; no row credited"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_CandidateRoots.packet",
+      "module": "NNH_CandidateRoots",
+      "source_sha256": "2a6955edfec750c969997009a214770643f25b6ae1d0a89a7e27a92d3c93bf8c",
+      "statement_source": "def packet (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib)\n (P : PreparedNew VL) (C : TX1_345.S1Lib VL)\n (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation)\n (pl : NMV_NoWrite.PoolLaws L) :\n TAS.NMV_Roots L D V0 VL P C (NNH_TasRoots.implementation I a1 a2)",
+      "hypotheses": {
+        "open_installation": [
+          "canonical PoolLaws for packet",
+          "child RowSpec345/241 at SAME child constants"
+        ],
+        "classification": "wrapper folds; no row credited"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_G2Reference.reference_free",
+      "module": "NNH_G2Reference",
+      "source_sha256": "4aeb2c01420c4a8ea605f3fe3385c754c3e4ba6f6c593b3bf956755faad7e667",
+      "statement_source": "theorem reference_free (L : PoolLib) (D : DeployedIds) (V : TX2_241.V2Lib)\n (pl : PoolLaws L) (hw : \u2200 p q r, Free (V.tx2auth p q r))\n (a : TX2_240.Args) (s : SdkState) : Free (TX2_240.Ref L D V a s)",
+      "hypotheses": {
+        "open_installation": [
+          "PoolLaws",
+          "writeFree verifier law"
+        ],
+        "classification": "reference frame proof only"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_G2Reference.frame",
+      "module": "NNH_G2Reference",
+      "source_sha256": "4aeb2c01420c4a8ea605f3fe3385c754c3e4ba6f6c593b3bf956755faad7e667",
+      "statement_source": "theorem frame (L : PoolLib) (D : DeployedIds) (V : TX2_241.V2Lib)\n (pl : PoolLaws L) (law : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V.VErr Unit))\n (hw : \u2200 p q r, Free (law p q r))\n (a : TX2_240.Args) (s : SdkState) (env : Env) (o : Obs (Except ProgramError Unit \u00d7 SdkState))\n (h : TX2_240.Ref L D (TCK.weaken V law) a s env o) :\n (\u2200 c b, Event.write c b \u2209 o.events) \u2227\n (\u2200 r s', o.exit = .ret (r,s') \u2192 \u2200 i, (s'.cells i).payload=(s.cells i).payload)",
+      "hypotheses": {
+        "open_installation": [
+          "PoolLaws",
+          "writeFree verifier law"
+        ],
+        "classification": "reference frame proof only"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_InstalledImpl.wrappers",
+      "module": "NNH_InstalledImpl",
+      "source_sha256": "3c616f33a39855ed23a99ecd8f97652755638b72e0689463d79b0ff0c8cd345f",
+      "statement_source": "theorem wrappers {L : PoolLib} {V0 : V2Lib} {VL : VLib}\n (I0 : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) :\n (install I0 a1 a2).f344 = NMV_ConcreteWindows.stage1 a1 I0.f345 \u2227\n (install I0 a1 a2).f240 = NMV_ConcreteWindows.stage2 a2 I0.f241",
+      "hypotheses": {
+        "open_installation": [
+          "actual I0 and canonical libraries",
+          "PoolLaws L for stages only"
+        ],
+        "note": "dispatch/wrapper/children constructors take no new proof premise; stage package PoolLaws is not discharged"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_InstalledImpl.children",
+      "module": "NNH_InstalledImpl",
+      "source_sha256": "3c616f33a39855ed23a99ecd8f97652755638b72e0689463d79b0ff0c8cd345f",
+      "statement_source": "theorem children {L : PoolLib} {V0 : V2Lib} {VL : VLib}\n (I0 : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) :\n (install I0 a1 a2).f217=I0.f217 \u2227 (install I0 a1 a2).f234=I0.f234 \u2227\n (install I0 a1 a2).f233=I0.f233 \u2227 (install I0 a1 a2).f242=I0.f242 \u2227\n (install I0 a1 a2).f064=I0.f064 \u2227 (install I0 a1 a2).f241=I0.f241 \u2227\n (install I0 a1 a2).f136=I0.f136 \u2227 (install I0 a1 a2).f137=I0.f137 \u2227\n (install I0 a1 a2).f087=I0.f087 \u2227 (install I0 a1 a2).f094=I0.f094 \u2227\n (install I0 a1 a2).f328=I0.f328 \u2227 (install I0 a1 a2).f345=I0.f345",
+      "hypotheses": {
+        "open_installation": [
+          "actual I0 and canonical libraries",
+          "PoolLaws L for stages only"
+        ],
+        "note": "dispatch/wrapper/children constructors take no new proof premise; stage package PoolLaws is not discharged"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_InstalledImpl.dispatch",
+      "module": "NNH_InstalledImpl",
+      "source_sha256": "3c616f33a39855ed23a99ecd8f97652755638b72e0689463d79b0ff0c8cd345f",
+      "statement_source": "theorem dispatch (L : PoolLib) (D : DeployedIds) (V0 : V2Lib) (VL : VLib)\n (P : PreparedNew VL) (C : S1Lib VL) (I0 : TAS.Impl L V0 VL)\n (a1 a2 : NMV_ConcreteWindows.Allocation) :\n TAS.NMW_Roots L D V0 VL P C (install I0 a1 a2)",
+      "hypotheses": {
+        "open_installation": [
+          "actual I0 and canonical libraries",
+          "PoolLaws L for stages only"
+        ],
+        "note": "dispatch/wrapper/children constructors take no new proof premise; stage package PoolLaws is not discharged"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_InstalledImpl.stages",
+      "module": "NNH_InstalledImpl",
+      "source_sha256": "3c616f33a39855ed23a99ecd8f97652755638b72e0689463d79b0ff0c8cd345f",
+      "statement_source": "theorem stages (L : PoolLib) (D : DeployedIds) (V0 : V2Lib) (VL : VLib)\n (P : PreparedNew VL) (C : S1Lib VL) (I0 : TAS.Impl L V0 VL)\n (a1 a2 : NMV_ConcreteWindows.Allocation) (pl : NMV_NoWrite.PoolLaws L) :\n TAS.NMV_Roots L D V0 VL P C (install I0 a1 a2)",
+      "hypotheses": {
+        "open_installation": [
+          "actual I0 and canonical libraries",
+          "PoolLaws L for stages only"
+        ],
+        "note": "dispatch/wrapper/children constructors take no new proof premise; stage package PoolLaws is not discharged"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NMFPrime.alternative",
+      "module": "NNH_NMFPrime",
+      "source_sha256": "5863f680f858d44d32da4fc15e497682940b272f8f65effc6fc1d47ecfcbe6e8",
+      "statement_source": "theorem alternative {A Ambient X : Type} (p : Packet A Ambient X) :\n (NLP_InputDomain.Root0 p.s.checkpoint p.s.proof \u2227\n  NLT_CompleteRoot.RowSpec p.H p.d p.s.pub p.s.proof p.s.checkpoint p.hash) \u2228 charged p",
+      "hypotheses": {
+        "open_installation": [
+          "Packet SAME native/cuts/writer/persistence/domain facts",
+          "selected actual packet producer",
+          "rootImage",
+          "eventImage"
+        ],
+        "classification": "intermediate fold, not a completed NMF_B field or allowed root hypothesis"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NMFPrime.assemble",
+      "module": "NNH_NMFPrime",
+      "source_sha256": "5863f680f858d44d32da4fc15e497682940b272f8f65effc6fc1d47ecfcbe6e8",
+      "statement_source": "def assemble {A Ambient X : Type}\n (S : Sig) (L : RSL.PoolLib) (D : RSL.DeployedIds) (V0 : RSL.TX2_241.V2Lib)\n (VL : RSL.VLib) (P : RSL.PreparedNew VL) (C : RSL.TX1_345.S1Lib VL)\n (I : Impl L V0 VL) (g : RSL.TAS.NNC_G1a S L V0 VL I) (R : RSL.EVB.RecSig S)\n (Associated : S.Ctx \u2192 Packet A Ambient X \u2192 Prop)\n (selected : \u2200 c, S.Exhibited c \u2192\n  (\u2200 a s env, RSL.TX2_213.Ref L D (lib V0 (fun _ _=>True) g.w)\n   (RSL.TX1_344.asStage1 VL P C) a s env (I.entry a s env)) \u2192\n  (\u2203 s', (I.entry (S.args2 c) (S.state2 c) (S.env2 c)).exit=.ret (.ok (),s')) \u2192\n  S.Accepted1 c (S.model1 c) \u2192 S.Game c (S.model1 c) (S.model2 c) \u2192\n  S.Extraction c (S.model1 c) (S.model2 c) \u2192 S.Queries c (S.model1 c) \u2192 R.SelectsPair c \u2192\n  \u2203 p : Packet A Ambient X, Associated c p)\n (rootImage : \u2200 c (p : Packet A Ambient X), Associated c p \u2192 NLP_InputDomain.Root0 p.s.checkpoint p.s.proof \u2192\n  S.Root0Native c)\n (eventImage : \u2200 c (p : Packet A Ambient X), Associated c p \u2192 (charged p \u2194 R.EventRec c)) :\n RSL.EVB.NNC_NMFPrimeB S L D V0 VL P C I g R",
+      "hypotheses": {
+        "open_installation": [
+          "Packet SAME native/cuts/writer/persistence/domain facts",
+          "selected actual packet producer",
+          "rootImage",
+          "eventImage"
+        ],
+        "classification": "intermediate fold, not a completed NMF_B field or allowed root hypothesis"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWrite241.error_free",
+      "module": "NNH_NoWrite241",
+      "source_sha256": "988d9c55cafe12b16b5f2aed82649526bfc06715f4024ca63650d01d5b83216f",
+      "statement_source": "theorem error_free (V : TX2_241.V2Lib) (r : Except V.VErr Unit) :\n Free (TX2_241.mapVErr V r)",
+      "hypotheses": {
+        "open_installation": [
+          "PoolLaws L",
+          "writeFree verifier law"
+        ],
+        "classification": "reference write-freeness, not native source refinement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWrite241.owned241_free",
+      "module": "NNH_NoWrite241",
+      "source_sha256": "988d9c55cafe12b16b5f2aed82649526bfc06715f4024ca63650d01d5b83216f",
+      "statement_source": "theorem owned241_free (L : PoolLib) (D : DeployedIds) (V : TX2_241.V2Lib)\n (pl : PoolLaws L) (hw : \u2200 p q r, Free (V.tx2auth p q r)) (a : TX2_241.Args) :\n Free (TX2_241.Ref L D V a)",
+      "hypotheses": {
+        "open_installation": [
+          "PoolLaws L",
+          "writeFree verifier law"
+        ],
+        "classification": "reference write-freeness, not native source refinement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWriteOwned.auth_body_free",
+      "module": "NNH_NoWriteOwned",
+      "source_sha256": "e5cbbb3a8806bbe878948064934bd0e301e60876b74be6e9a63afef39d12b11e",
+      "statement_source": "theorem auth_body_free (L : PoolLib) (D : DeployedIds) (pl : PoolLaws L)\n (a : TX2_233.Args) (p m c l r e v : OwnedAccount) :\n Free (TX2_233.body L D a p m c l r e v)",
+      "hypotheses": {
+        "open_installation": [
+          "PoolLaws L"
+        ],
+        "classification": "reference write-freeness, not native source refinement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWriteOwned.auth_free",
+      "module": "NNH_NoWriteOwned",
+      "source_sha256": "e5cbbb3a8806bbe878948064934bd0e301e60876b74be6e9a63afef39d12b11e",
+      "statement_source": "theorem auth_free (L : PoolLib) (D : DeployedIds) (pl : PoolLaws L) (a : TX2_233.Args) :\n Free (TX2_233.Ref L D a)",
+      "hypotheses": {
+        "open_installation": [
+          "PoolLaws L"
+        ],
+        "classification": "reference write-freeness, not native source refinement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWriteOwned.validate_free",
+      "module": "NNH_NoWriteOwned",
+      "source_sha256": "e5cbbb3a8806bbe878948064934bd0e301e60876b74be6e9a63afef39d12b11e",
+      "statement_source": "theorem validate_free (L : PoolLib) (D : DeployedIds) (pl : PoolLaws L) (a : TX2_242.Args) :\n Free (TX2_242.Ref L D a)",
+      "hypotheses": {
+        "open_installation": [
+          "PoolLaws L"
+        ],
+        "classification": "reference write-freeness, not native source refinement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWritePool.data_free",
+      "module": "NNH_NoWritePool",
+      "source_sha256": "cf094b76a12bd8395c7cae16b6ffd8cfd1b919f8dfdc0cc1677e5ad18831649c",
+      "statement_source": "theorem data_free (x : OwnedAccount) : Free x.data",
+      "hypotheses": {
+        "retained": [
+          "canonical PoolLib data parameter where used"
+        ],
+        "classification": "reference write-freeness helpers"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWritePool.dataLen_free",
+      "module": "NNH_NoWritePool",
+      "source_sha256": "cf094b76a12bd8395c7cae16b6ffd8cfd1b919f8dfdc0cc1677e5ad18831649c",
+      "statement_source": "theorem dataLen_free (x : OwnedAccount) : Free x.data_len",
+      "hypotheses": {
+        "retained": [
+          "canonical PoolLib data parameter where used"
+        ],
+        "classification": "reference write-freeness helpers"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWritePool.ofCloned_free",
+      "module": "NNH_NoWritePool",
+      "source_sha256": "cf094b76a12bd8395c7cae16b6ffd8cfd1b919f8dfdc0cc1677e5ad18831649c",
+      "statement_source": "theorem ofCloned_free {A : Type} (r : Except ProgramError A) : Free (RS.ofCloned r)",
+      "hypotheses": {
+        "retained": [
+          "canonical PoolLib data parameter where used"
+        ],
+        "classification": "reference write-freeness helpers"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWritePool.verifierCheckpoint_free",
+      "module": "NNH_NoWritePool",
+      "source_sha256": "cf094b76a12bd8395c7cae16b6ffd8cfd1b919f8dfdc0cc1677e5ad18831649c",
+      "statement_source": "theorem verifierCheckpoint_free (x : OwnedAccount) (program : B32) (writable : Bool) :\n Free (verifierCheckpoint x program writable)",
+      "hypotheses": {
+        "retained": [
+          "canonical PoolLib data parameter where used"
+        ],
+        "classification": "reference write-freeness helpers"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWritePool.pda_free",
+      "module": "NNH_NoWritePool",
+      "source_sha256": "cf094b76a12bd8395c7cae16b6ffd8cfd1b919f8dfdc0cc1677e5ad18831649c",
+      "statement_source": "theorem pda_free (seeds : List Bytes) (p : B32) : Free (pdaOrErr seeds p)",
+      "hypotheses": {
+        "retained": [
+          "canonical PoolLib data parameter where used"
+        ],
+        "classification": "reference write-freeness helpers"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWritePool.master_free",
+      "module": "NNH_NoWritePool",
+      "source_sha256": "cf094b76a12bd8395c7cae16b6ffd8cfd1b919f8dfdc0cc1677e5ad18831649c",
+      "statement_source": "theorem master_free (L : PoolLib) (b : Bytes) : Free (decodeMasterBox L b)",
+      "hypotheses": {
+        "retained": [
+          "canonical PoolLib data parameter where used"
+        ],
+        "classification": "reference write-freeness helpers"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWritePool.checkpoint_free",
+      "module": "NNH_NoWritePool",
+      "source_sha256": "cf094b76a12bd8395c7cae16b6ffd8cfd1b919f8dfdc0cc1677e5ad18831649c",
+      "statement_source": "theorem checkpoint_free (L : PoolLib) (b : Bytes) : Free (decodeCheckpointBox L b)",
+      "hypotheses": {
+        "retained": [
+          "canonical PoolLib data parameter where used"
+        ],
+        "classification": "reference write-freeness helpers"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWritePool.lane_free",
+      "module": "NNH_NoWritePool",
+      "source_sha256": "cf094b76a12bd8395c7cae16b6ffd8cfd1b919f8dfdc0cc1677e5ad18831649c",
+      "statement_source": "theorem lane_free (b : Bytes) : Free (TX2_217.Ref b)",
+      "hypotheses": {
+        "retained": [
+          "canonical PoolLib data parameter where used"
+        ],
+        "classification": "reference write-freeness helpers"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWritePool.registry_immutable_free",
+      "module": "NNH_NoWritePool",
+      "source_sha256": "cf094b76a12bd8395c7cae16b6ffd8cfd1b919f8dfdc0cc1677e5ad18831649c",
+      "statement_source": "theorem registry_immutable_free (L : PoolLib) (D : DeployedIds) (a : TX2_234.Args) :\n Free (TX2_234.immutableBranch L D a)",
+      "hypotheses": {
+        "retained": [
+          "canonical PoolLib data parameter where used"
+        ],
+        "classification": "reference write-freeness helpers"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWritePool.registry_v1_free",
+      "module": "NNH_NoWritePool",
+      "source_sha256": "cf094b76a12bd8395c7cae16b6ffd8cfd1b919f8dfdc0cc1677e5ad18831649c",
+      "statement_source": "theorem registry_v1_free (L : PoolLib) (D : DeployedIds) (a : TX2_234.Args) :\n Free (TX2_234.v1Branch L D a)",
+      "hypotheses": {
+        "retained": [
+          "canonical PoolLib data parameter where used"
+        ],
+        "classification": "reference write-freeness helpers"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_NoWritePool.registry_free",
+      "module": "NNH_NoWritePool",
+      "source_sha256": "cf094b76a12bd8395c7cae16b6ffd8cfd1b919f8dfdc0cc1677e5ad18831649c",
+      "statement_source": "theorem registry_free (L : PoolLib) (D : DeployedIds) (a : TX2_234.Args) :\n Free (TX2_234.Ref L D a)",
+      "hypotheses": {
+        "retained": [
+          "canonical PoolLib data parameter where used"
+        ],
+        "classification": "reference write-freeness helpers"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_RSLAuth.lift_return",
+      "module": "NNH_RSLAuth",
+      "source_sha256": "48b8aa59fb3690d6b493c6ad6ff5863b7f7f2c5d28308a40ee932a6d7f756ff3",
+      "statement_source": "theorem lift_return {A : Type} (m : Spec A) (env : Env) (a : A) (events : List Event)\n (run : RS.lift m env \u27e8.ret (.ok a),events\u27e9) : m env \u27e8.ret a,events\u27e9",
+      "hypotheses": {
+        "retained": [
+          "SAME successful reference observation"
+        ],
+        "classification": "accepted-reference inversion support"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_RSLAuth.successful",
+      "module": "NNH_RSLAuth",
+      "source_sha256": "48b8aa59fb3690d6b493c6ad6ff5863b7f7f2c5d28308a40ee932a6d7f756ff3",
+      "statement_source": "theorem successful (V : V2Lib) (m : Spec (Except V.VErr Unit)) (tail : RS Unit)\n (env : Env) (events : List Event)\n (run : RS.bind (RS.lift m) (fun r=>RS.seq (mapVErr V r) tail)\n  env \u27e8.ret (.ok ()),events\u27e9) :\n \u2203 verifyEvents, m env \u27e8.ret (.ok ()),verifyEvents\u27e9",
+      "hypotheses": {
+        "retained": [
+          "SAME successful reference observation"
+        ],
+        "classification": "accepted-reference inversion support"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_RSLAuth.call",
+      "module": "NNH_RSLAuth",
+      "source_sha256": "48b8aa59fb3690d6b493c6ad6ff5863b7f7f2c5d28308a40ee932a6d7f756ff3",
+      "statement_source": "theorem call (V : V2Lib) (pub proof ck : Bytes) (tail : RS Unit)\n (env : Env) (events : List Event)\n (run : RS.bind (RS.lift (Spec.call (Dom064 V)\n  (fun x=>V.tx2auth x.1 x.2.1 x.2.2) (pub,proof,ck)))\n  (fun r=>RS.seq (mapVErr V r) tail) env \u27e8.ret (.ok ()),events\u27e9) :\n \u2203 verifyEvents, Dom064 V (pub,proof,ck) \u2227\n  V.tx2auth pub proof ck env \u27e8.ret (.ok ()),verifyEvents\u27e9",
+      "hypotheses": {
+        "retained": [
+          "SAME successful reference observation"
+        ],
+        "classification": "accepted-reference inversion support"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_RSLReads.from_reference",
+      "module": "NNH_RSLReads",
+      "source_sha256": "fd25d729df8b6c0f6779efceea53a08dce8fe0ac5ba0c2802b59983ba88df8d8",
+      "statement_source": "theorem from_reference (L : PoolLib) (D : DeployedIds) (V : V2Lib) (a : Args)\n (env : Env) (events : List Event)\n (run : Ref L D V a env \u27e8.ret (.ok ()),events\u27e9) : Nonempty (Cut V a env)",
+      "hypotheses": {
+        "retained": [
+          "SAME successful241 reference observation"
+        ],
+        "classification": "accepted-reference inversion support"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_ReaderCut.matched",
+      "module": "NNH_ReaderCut",
+      "source_sha256": "c7799566d8ba693aaa3a6637eb56e2c39fffe14f2b6b845b8c5b97a6d5e59eab",
+      "statement_source": "theorem matched (S : Sig) (L : PoolLib) (V0 : V2Lib) (VL : VLib)\n (I : Impl L V0 VL) (g : RSL.TAS.NNC_G1a S L V0 VL I)\n (pub proof ck : Bytes) (tail : RS Unit) (env : Env) (events : List Event)\n (run : RS.bind (RS.lift (Spec.call (Dom064 (lib V0 (fun _ _=>True) g.w))\n  (fun x=>g.w x.1 x.2.1 x.2.2) (pub,proof,ck)))\n  (fun r=>RS.seq (mapVErr (lib V0 (fun _ _=>True) g.w) r) tail)\n  env \u27e8.ret (.ok ()),events\u27e9) : S.readerHeader env pub proof ck",
+      "hypotheses": {
+        "open_installation": [
+          "actual NNC_G1a field"
+        ],
+        "retained": [
+          "SAME successful weak reference suffix"
+        ],
+        "classification": "conditional reader inversion"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_RegistryEval.immutable_returned",
+      "module": "NNH_RegistryEval",
+      "source_sha256": "022e761f31e280fe1f159095ff7243365aa4e818d381cd7cf1f2929fc538fd9c",
+      "statement_source": "theorem immutable_returned (L : PoolLib) (D : DeployedIds) (a : Args) (env : Env) :\n Returns (immutableBranch L D a) env (immutableValue L D a env)",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_RegistryEval.v1_returned",
+      "module": "NNH_RegistryEval",
+      "source_sha256": "022e761f31e280fe1f159095ff7243365aa4e818d381cd7cf1f2929fc538fd9c",
+      "statement_source": "theorem v1_returned (L : PoolLib) (D : DeployedIds) (a : Args) (env : Env) :\n Returns (v1Branch L D a) env (v1Value L D a env)",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_RegistryEval.returned",
+      "module": "NNH_RegistryEval",
+      "source_sha256": "022e761f31e280fe1f159095ff7243365aa4e818d381cd7cf1f2929fc538fd9c",
+      "statement_source": "theorem returned (L : PoolLib) (D : DeployedIds) (a : Args) (env : Env) :\n Returns (Ref L D a) env (value L D a env)",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_ReturnedClone.ofCloned",
+      "module": "NNH_ReturnedClone",
+      "source_sha256": "88d0b33d9637c60aed0b6c4d4ef98d1fb605a0c27bd0bdc0e6d165fc071d1064",
+      "statement_source": "theorem ofCloned {\u03b1 : Type} (env : Env) (x : Except ProgramError \u03b1) :\n Returns (RS.ofCloned x) env x",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_ReturnedClone.allocIf",
+      "module": "NNH_ReturnedClone",
+      "source_sha256": "88d0b33d9637c60aed0b6c4d4ef98d1fb605a0c27bd0bdc0e6d165fc071d1064",
+      "statement_source": "theorem allocIf (env : Env) (b : Bool) : Returns (Spec.allocIf b) env ()",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_ReturnedClone.checkpoint_returned",
+      "module": "NNH_ReturnedClone",
+      "source_sha256": "88d0b33d9637c60aed0b6c4d4ef98d1fb605a0c27bd0bdc0e6d165fc071d1064",
+      "statement_source": "theorem checkpoint_returned (env : Env) (a : OwnedAccount) (program : B32) (writable : Bool) :\n Returns (verifierCheckpoint a program writable) env (checkpointValue a program writable)",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_Rev2Support.rsbind_ok",
+      "module": "NNH_Rev2Support",
+      "source_sha256": "9c06d1837868005b4b0a92b785ea52a7fcaed4c52f736c4ece7a14d0e605332b",
+      "statement_source": "theorem rsbind_ok {\u03b1 \u03b2 : Type} (m : RS \u03b1) (k : \u03b1 \u2192 RS \u03b2) (env : Env) (b : \u03b2)\n    (es : List Event) (h : RS.bind m k env \u27e8.ret (.ok b), es\u27e9) :\n    \u2203 a e1 e2, m env \u27e8.ret (.ok a), e1\u27e9 \u2227 k a env \u27e8.ret (.ok b), e2\u27e9 \u2227 es = e1 ++ e2",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_Rev2Support.ofCloned_return",
+      "module": "NNH_Rev2Support",
+      "source_sha256": "9c06d1837868005b4b0a92b785ea52a7fcaed4c52f736c4ece7a14d0e605332b",
+      "statement_source": "theorem ofCloned_return {\u03b1 : Type} (x : Except ProgramError \u03b1) (env : Env) (a : \u03b1)\n    (es : List Event) (h : RS.ofCloned x env \u27e8.ret (.ok a), es\u27e9) : x = .ok a",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_Rev2Support.data_return",
+      "module": "NNH_Rev2Support",
+      "source_sha256": "9c06d1837868005b4b0a92b785ea52a7fcaed4c52f736c4ece7a14d0e605332b",
+      "statement_source": "theorem data_return (x : OwnedAccount) (env : Env) (d : Bytes) (es : List Event)\n    (h : x.data env \u27e8.ret (.ok d), es\u27e9) : x.bytes = .ok d",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_Rev2Support.mapVErr241_error_not_ok",
+      "module": "NNH_Rev2Support",
+      "source_sha256": "9c06d1837868005b4b0a92b785ea52a7fcaed4c52f736c4ece7a14d0e605332b",
+      "statement_source": "theorem mapVErr241_error_not_ok (V : TX2_241.V2Lib) (e : V.VErr) (env : Env) (u : Unit)\n    (es : List Event) : \u00ac TX2_241.mapVErr V (.error e) env \u27e8.ret (.ok u), es\u27e9",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_SelectedReader.extent",
+      "module": "NNH_SelectedReader",
+      "source_sha256": "8cdb1c66dd2aa96fa6d91c4a36a55b9ce4e26f31c2ddbad25808bf58f3f48821",
+      "statement_source": "theorem extent (V : V2Lib) (a : Args) (env : Env) (c : NNH_RSLReads.Cut V a env) :\n c.n=57607 \u2227 c.proofData.length=58295",
+      "hypotheses": {
+        "open_installation": [
+          "actual NNC_G1a field"
+        ],
+        "retained": [
+          "SAME successful weak241 reference"
+        ],
+        "classification": "conditional reader inversion"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_SelectedReader.from_reference",
+      "module": "NNH_SelectedReader",
+      "source_sha256": "8cdb1c66dd2aa96fa6d91c4a36a55b9ce4e26f31c2ddbad25808bf58f3f48821",
+      "statement_source": "theorem from_reference (S : Sig) (L : PoolLib) (D : DeployedIds)\n (V0 : V2Lib) (VL : VLib) (I : Impl L V0 VL)\n (g : RSL.TAS.NNC_G1a S L V0 VL I) (a : Args) (env : Env) (events : List Event)\n (run : Ref L D (lib V0 (fun _ _=>True) g.w) a env \u27e8.ret (.ok ()),events\u27e9) :\n \u2203 c : NNH_RSLReads.Cut (lib V0 (fun _ _=>True) g.w) a env,\n  c.n=57607 \u2227 c.proofData.length=58295 \u2227\n  S.readerHeader env c.publicBytes (slice c.proofData AFTERSTATE_BYTES PROOF_ACCOUNT_BYTES) c.checkpointData",
+      "hypotheses": {
+        "open_installation": [
+          "actual NNC_G1a field"
+        ],
+        "retained": [
+          "SAME successful weak241 reference"
+        ],
+        "classification": "conditional reader inversion"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_Stage1Eval.body_returned",
+      "module": "NNH_Stage1Eval",
+      "source_sha256": "a83a91497950516ae7753729e6efcb8206147cbb6ef584eff5023675f16e6914",
+      "statement_source": "theorem body_returned (V : VLib) (P : PreparedNew V) (F : NNH_Tx1ReturnedValues.Values V P)\n (C : S1Lib V) (a : Args) (p pub ck : OwnedAccount) (env : Env) :\n Returns (body V P C a p pub ck) env (bodyValue V P F C a p pub ck env)",
+      "hypotheses": {
+        "open_installation": [
+          "NNH_Tx1ReturnedValues.Values V P"
+        ],
+        "classification": "returned evaluator support, not A1"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_Stage1RefEval.returned",
+      "module": "NNH_Stage1RefEval",
+      "source_sha256": "6e266cd6d1669bd0ca299c14f6f4ebb4b6eda5f1e20b66b632f6816e97f02a68",
+      "statement_source": "theorem returned (V : VLib) (P : PreparedNew V) (F : NNH_Tx1ReturnedValues.Values V P)\n (C : S1Lib V) (a : Args) (env : Env) :\n Returns (Ref V P C a) env (value V P F C a env)",
+      "hypotheses": {
+        "open_installation": [
+          "NNH_Tx1ReturnedValues.Values V P"
+        ],
+        "classification": "returned evaluator support, not A1"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_Stage2Eval.returned",
+      "module": "NNH_Stage2Eval",
+      "source_sha256": "83cdedc1ae8008da0f5404fe4a441ef6a9697e986fcb6e6ea174389afa25b716",
+      "statement_source": "theorem returned (L : PoolLib) (D : DeployedIds) (V : V2Lib)\n (v : NND_PoolValues.Values L) (w : NNH_Tx2Values.Values V) (a : Args) (env : Env) :\n Returns (Ref L D V a) env (value L D V v w a env)",
+      "hypotheses": {
+        "open_installation": [
+          "NND_PoolValues.Values L",
+          "NNH_Tx2Values.Values V"
+        ],
+        "classification": "returned evaluator support, not A2"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "AspisR1.NNH_StateNormalize.eval_map",
+      "module": "NNH_StateNormalize",
+      "source_sha256": "5e8cc28d1ae5183984bc0de061615b97eb2882cc9c8abbd830d6826552d3718c",
+      "statement_source": "theorem eval_map {I V A B : Type} (H : I \u2192 V) (f : A \u2192 B) (p : Program I V A) :\n eval H (mapOutput f p) = ((eval H p).1, f (eval H p).2)",
+      "hypotheses": {
+        "retained": [],
+        "new_headline_hypotheses": [],
+        "note": "universal a; concrete normalization; phase logs at same arguments only"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "AspisR1.NNH_StateNormalize.first_eval",
+      "module": "NNH_StateNormalize",
+      "source_sha256": "5e8cc28d1ae5183984bc0de061615b97eb2882cc9c8abbd830d6826552d3718c",
+      "statement_source": "theorem first_eval (a : Adversary Bool) (H : Bytes \u2192 State) :\n eval H (normalize a).first = ((eval H a.first).1, firstTop (eval H a.first).2)",
+      "hypotheses": {
+        "retained": [],
+        "new_headline_hypotheses": [],
+        "note": "universal a; concrete normalization; phase logs at same arguments only"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "AspisR1.NNH_StateNormalize.second_eval",
+      "module": "NNH_StateNormalize",
+      "source_sha256": "5e8cc28d1ae5183984bc0de061615b97eb2882cc9c8abbd830d6826552d3718c",
+      "statement_source": "theorem second_eval (a : Adversary Bool) (H : Bytes \u2192 State)\n (i : FirstInputs Bool) (saved : alloc.vec.Vec U8) (post : Heap (Nat \u2192 Record)) (final : Bool) :\n eval H ((normalize a).second i saved post final) =\n ((eval H (a.second i saved post final)).1, secondTop (eval H (a.second i saved post final)).2)",
+      "hypotheses": {
+        "retained": [],
+        "new_headline_hypotheses": [],
+        "note": "universal a; concrete normalization; phase logs at same arguments only"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "AspisR1.NNH_StateNormalize.realizes",
+      "module": "NNH_StateNormalize",
+      "source_sha256": "5e8cc28d1ae5183984bc0de061615b97eb2882cc9c8abbd830d6826552d3718c",
+      "statement_source": "theorem realizes (a : Adversary Bool) (H : Bytes \u2192 State)\n (saved : alloc.vec.Vec U8) (post : Heap (Nat \u2192 Record)) (final : Bool) :\n (eval H (normalize a).first).2 = firstAt a H \u2227\n (eval H ((normalize a).second (firstAt a H) saved post final)).2 = secondAt a H saved post final",
+      "hypotheses": {
+        "retained": [],
+        "new_headline_hypotheses": [],
+        "note": "universal a; concrete normalization; phase logs at same arguments only"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "AspisR1.NNH_StateNormalize.states_true",
+      "module": "NNH_StateNormalize",
+      "source_sha256": "5e8cc28d1ae5183984bc0de061615b97eb2882cc9c8abbd830d6826552d3718c",
+      "statement_source": "theorem states_true (a : Adversary Bool) (H : Bytes \u2192 State)\n (saved : alloc.vec.Vec U8) (post : Heap (Nat \u2192 Record)) (final : Bool) :\n (firstAt a H).state = true \u2227 (secondAt a H saved post final).state = true",
+      "hypotheses": {
+        "retained": [],
+        "new_headline_hypotheses": [],
+        "note": "universal a; concrete normalization; phase logs at same arguments only"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "AspisR1.NNH_StateNormalize.logs",
+      "module": "NNH_StateNormalize",
+      "source_sha256": "5e8cc28d1ae5183984bc0de061615b97eb2882cc9c8abbd830d6826552d3718c",
+      "statement_source": "theorem logs (a : Adversary Bool) (H : Bytes \u2192 State)\n (i : FirstInputs Bool) (saved : alloc.vec.Vec U8) (post : Heap (Nat \u2192 Record)) (final : Bool) :\n (eval H (normalize a).first).1 = (eval H a.first).1 \u2227\n (eval H ((normalize a).second i saved post final)).1 = (eval H (a.second i saved post final)).1",
+      "hypotheses": {
+        "retained": [],
+        "new_headline_hypotheses": [],
+        "note": "universal a; concrete normalization; phase logs at same arguments only"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "AspisR1.NNH_StateSelect.first_eq",
+      "module": "NNH_StateSelect",
+      "source_sha256": "95e094592731908af0ea4437937717c3d7b80ccbdaaffd264b8ad30cd6691417",
+      "statement_source": "theorem first_eq (a : Adversary Bool) (H : Bytes \u2192 State) :\n NNC_ActualChoices.first (normalize a) H = firstAt a H",
+      "hypotheses": {
+        "retained": [
+          "original extraction",
+          "accepted1 at normalized actual first input",
+          "p1 and RuntimeSyscall",
+          "L154 queries on normalize a"
+        ],
+        "new_headline_hypotheses": []
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "AspisR1.NNH_StateSelect.second_eq",
+      "module": "NNH_StateSelect",
+      "source_sha256": "95e094592731908af0ea4437937717c3d7b80ccbdaaffd264b8ad30cd6691417",
+      "statement_source": "theorem second_eq (a : Adversary Bool) (H : Bytes \u2192 State)\n (saved : alloc.vec.Vec U8) (post : Heap (Nat \u2192 Record)) (final : Bool) :\n NNC_ActualChoices.second (normalize a) H saved post final = secondAt a H saved post final",
+      "hypotheses": {
+        "retained": [
+          "original extraction",
+          "accepted1 at normalized actual first input",
+          "p1 and RuntimeSyscall",
+          "L154 queries on normalize a"
+        ],
+        "new_headline_hypotheses": []
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "AspisR1.NNH_StateSelect.selects",
+      "module": "NNH_StateSelect",
+      "source_sha256": "95e094592731908af0ea4437937717c3d7b80ccbdaaffd264b8ad30cd6691417",
+      "statement_source": "theorem selects {C : Type}\n (copy : Heap (Nat \u2192 Record) \u2192 Nat \u2192 Payload \u2192 S2W_TrustedStd.Outcome (Nat \u2192 Record))\n (base : DrvC_Installation.Configuration FIo_Install.W C)\n (err : C) (reservation : NP6_StdModel.Reservation)\n (native1 : S2W_ExtractionBoundary.First) (native2 : S2W_ExtractionBoundary.Second)\n (hashv : SdkC_Source.Parts \u2192 Result SdkC_Source.Digest)\n (extraction : S2W_DigestExtraction.AeneasExtraction\n  (DrvC_Installation.sdk (FIp_Install.configuration err base reservation)) native1 native2 hashv)\n (sha256 H : Bytes \u2192 State) (p1 : S2W_ExtractionBoundary.P1 sha256 H)\n (syscall : S2W_ExtractionBoundary.RuntimeSyscall hashv sha256)\n (a : Adversary Bool) (saved : alloc.vec.Vec U8) (post : Heap (Nat \u2192 Record))\n (accepted1 : S2W_D189Wrappers.first native1 copy NNE_AbortIndicator.allocator\n  (firstAt a H).entry CPH_Program.verifier (firstAt a H).data true = ok (.Ok (saved,post,true)))\n (Q0 Q1 : Nat) (queries : \u2200 K,\n  (ARW_Induced.issued native1 copy NNE_AbortIndicator.allocator CPH_Program.verifier\n   (normalize a) K).length \u2264 Q0+Q1) :\n ARQ_Observer.select (FIp_Install.configuration err base reservation) CPH_Program.verifier\n  (eval H (ARX_LocalCharge.bounded\n   (ART_PartialAccount.account (FIp_Install.configuration err base reservation)\n    hashv copy NNE_AbortIndicator.allocator CPH_Program.verifier (normalize a)) (Q0+Q1))).2 =\n P2P_NativeSelection.pair (DrvC_Installation.sdk (FIp_Install.configuration err base reservation))\n  CPH_Program.verifier (firstAt a H).entry (secondAt a H saved post true).entry\n   (secondAt a H saved post true).data (secondAt a H saved post true).slot",
+      "hypotheses": {
+        "retained": [
+          "original extraction",
+          "accepted1 at normalized actual first input",
+          "p1 and RuntimeSyscall",
+          "L154 queries on normalize a"
+        ],
+        "new_headline_hypotheses": []
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_TasRoots.children_same",
+      "module": "NNH_TasRoots",
+      "source_sha256": "b4356ed8601f2645851f9213bcbe0de3e02eab08c7dd9c3273fe3bce9f3d8724",
+      "statement_source": "theorem children_same {L : PoolLib} {V0 : TX2_241.V2Lib} {VL : VLib}\n (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) :\n (implementation I a1 a2).f241=I.f241 \u2227 (implementation I a1 a2).f345=I.f345",
+      "hypotheses": {
+        "open_installation": [
+          "canonical PoolLaws for packet/frame",
+          "child RowSpecs where in the field type"
+        ],
+        "classification": "exact field constructors; not concrete canonical instances"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_TasRoots.field240",
+      "module": "NNH_TasRoots",
+      "source_sha256": "b4356ed8601f2645851f9213bcbe0de3e02eab08c7dd9c3273fe3bce9f3d8724",
+      "statement_source": "theorem field240 (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib)\n (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) :\n \u2200 V : TX2_241.V2Lib,\n TX2_241.RowSpec_241 L D V (implementation I a1 a2).f241 \u2192\n TX2_240.RowSpec_240 L D V (implementation I a1 a2).f240",
+      "hypotheses": {
+        "open_installation": [
+          "canonical PoolLaws for packet/frame",
+          "child RowSpecs where in the field type"
+        ],
+        "classification": "exact field constructors; not concrete canonical instances"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_TasRoots.field344",
+      "module": "NNH_TasRoots",
+      "source_sha256": "b4356ed8601f2645851f9213bcbe0de3e02eab08c7dd9c3273fe3bce9f3d8724",
+      "statement_source": "theorem field344 (L : PoolLib) (V0 : TX2_241.V2Lib) (VL : VLib)\n (P : PreparedNew VL) (C : TX1_345.S1Lib VL)\n (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation) :\n TX1_345.RowSpec_345 VL P C (implementation I a1 a2).f345 \u2192\n TX1_344.RowSpec_344 VL P C (implementation I a1 a2).f344",
+      "hypotheses": {
+        "open_installation": [
+          "canonical PoolLaws for packet/frame",
+          "child RowSpecs where in the field type"
+        ],
+        "classification": "exact field constructors; not concrete canonical instances"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_TasRoots.packet",
+      "module": "NNH_TasRoots",
+      "source_sha256": "b4356ed8601f2645851f9213bcbe0de3e02eab08c7dd9c3273fe3bce9f3d8724",
+      "statement_source": "def packet (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib)\n (P : PreparedNew VL) (C : TX1_345.S1Lib VL)\n (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation)\n (pl : NMV_NoWrite.PoolLaws L) :\n TAS.NMV_Roots L D V0 VL P C (implementation I a1 a2)",
+      "hypotheses": {
+        "open_installation": [
+          "canonical PoolLaws for packet/frame",
+          "child RowSpecs where in the field type"
+        ],
+        "classification": "exact field constructors; not concrete canonical instances"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_TasRoots.weak240",
+      "module": "NNH_TasRoots",
+      "source_sha256": "b4356ed8601f2645851f9213bcbe0de3e02eab08c7dd9c3273fe3bce9f3d8724",
+      "statement_source": "theorem weak240 (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib)\n (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation)\n (law : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V0.VErr Unit))\n (child : TX2_241.RowSpec_241 L D (TCK.weaken V0 law) I.f241)\n (a : TX2_240.Args) (s : SdkState) (env : Env) :\n TX2_240.Ref L D (TCK.weaken V0 law) a s env ((implementation I a1 a2).f240 a s env)",
+      "hypotheses": {
+        "open_installation": [
+          "canonical PoolLaws for packet/frame",
+          "child RowSpecs where in the field type"
+        ],
+        "classification": "exact field constructors; not concrete canonical instances"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_TasRoots.weakFrame",
+      "module": "NNH_TasRoots",
+      "source_sha256": "b4356ed8601f2645851f9213bcbe0de3e02eab08c7dd9c3273fe3bce9f3d8724",
+      "statement_source": "theorem weakFrame (L : PoolLib) (D : DeployedIds) (V0 : TX2_241.V2Lib) (VL : VLib)\n (I : TAS.Impl L V0 VL) (a1 a2 : NMV_ConcreteWindows.Allocation)\n (pl : NMV_NoWrite.PoolLaws L)\n (law : Bytes \u2192 Bytes \u2192 Bytes \u2192 Spec (Except V0.VErr Unit))\n (hw : \u2200 p q r, TAS.WriteFree (law p q r))\n (child : TX2_241.RowSpec_241 L D (TCK.weaken V0 law) I.f241)\n (a : TX2_240.Args) (s : SdkState) (env : Env) :\n TAS.Frame s ((implementation I a1 a2).f240 a s env)",
+      "hypotheses": {
+        "open_installation": [
+          "canonical PoolLaws for packet/frame",
+          "child RowSpecs where in the field type"
+        ],
+        "classification": "exact field constructors; not concrete canonical instances"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_Tx1ReturnedValues.mapVErr_returned",
+      "module": "NNH_Tx1ReturnedValues",
+      "source_sha256": "9f32fb7f50e3d8b21ec3d042f94693e184f6c2660a002d0e96c5060f8b35509a",
+      "statement_source": "theorem mapVErr_returned (V : VLib) (r : Except V.VErr Bytes) (env : Env) :\n Returns (TX1_328.mapVErr V r) env (mapVErrValue V r)",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_Tx1ReturnedValues.first_returned",
+      "module": "NNH_Tx1ReturnedValues",
+      "source_sha256": "9f32fb7f50e3d8b21ec3d042f94693e184f6c2660a002d0e96c5060f8b35509a",
+      "statement_source": "theorem first_returned (V : VLib) (P : PreparedNew V) (F : Values V P)\n (a : TX1_328.Args V) (env : Env) :\n Returns (TX1_328.Ref V P a) env (mapVErrValue V (F.tx1 a env))",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_Tx2Values.call_returned",
+      "module": "NNH_Tx2CallReturned",
+      "source_sha256": "1ffc4d859ec54add942f94aff3d91b1eca5fbc81215ead71b373e98e83842579",
+      "statement_source": "theorem call_returned (V : V2Lib) (w : Values V) (p q r : Bytes) (env : Env) :\n Returns (RS.lift (Spec.call (Dom064 V) (fun x => V.tx2auth x.1 x.2.1 x.2.2) (p,q,r)))\n env (.ok (w.auth p q r env))",
+      "hypotheses": {
+        "open_installation": [
+          "NNH_Tx2Values.Values V"
+        ],
+        "classification": "Dom064 recovered from admitted call; no caller success premise"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_Tx2Values.mapVErr_returned",
+      "module": "NNH_Tx2Values",
+      "source_sha256": "579bd411b79ed0f620504c80ad2d9b413b10078417f6049b2d92367042cc465e",
+      "statement_source": "theorem mapVErr_returned (V : V2Lib) (r : Except V.VErr Unit) (env : Env) :\n Returns (mapVErr V r) env (mapError r)",
+      "hypotheses": {
+        "retained": [],
+        "classification": "pure/returned-law support; data parameters and source relations are explicit in the statement"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    },
+    {
+      "root": "NNH_ValidateEval.returned",
+      "module": "NNH_ValidateEval",
+      "source_sha256": "fee68a1383d046b967c1679c6d37f5a304729a7ac9828ed1815ad95f74f243ce",
+      "statement_source": "theorem returned (L : PoolLib) (D : DeployedIds) (v : NND_PoolValues.Values L) (a : Args) (env : Env) :\n Returns (Ref L D a) env (value L D v a env)",
+      "hypotheses": {
+        "open_installation": [
+          "NND_PoolValues.Values L"
+        ],
+        "classification": "returned evaluator support"
+      },
+      "credited_row": false,
+      "concrete_top_field": false
+    }
+  ],
+  "own_root_count": 70
 }

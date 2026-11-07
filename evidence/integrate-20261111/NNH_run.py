@@ -68,15 +68,14 @@ elif kind=='link':
  sources=['NNH_native/'+target+'.c','NNH_native/NFA_WALKER.c','NNH_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NNH_native/'+target,*sources]
 elif kind=='audit':
- if target in ['close','review-close','review-retention']:
-  files['NNH_pin.py']=(E/'NNH_pin.py').read_text();files['NNH_PREDECESSOR_PINS.json']=lzma.decompress((E.parent/'ledger24-20261110/NLX_CLOSURE_PINS.json.xz').read_bytes()).decode()
- if target in ['review-close','review-retention']:files['NNH_generated/NNH_HypothesisReview.lean']=(E/'NNH_HypothesisReview.lean').read_text()
- if target in ['close','retention','review-retention']:files['NNH_scope40.py']=(E/'NNH_scope40.py').read_text();files['NNH_SEED_INPUTS.json']=(E/'NNH_SEED_INPUTS.json').read_text()
- sources=['NNH_generated/NNH_Driver.lean','NNH_batch.py','NNH_AUDIT_ROOTS.json','NNH_AUDIT_MODULES.json','NNH_EXPECTED_IMPORTS.jsonl']+(['NNH_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NNH_pin.py','NNH_PREDECESSOR_PINS.json']if target in ['close','review-close','review-retention']else[])+(['NNH_generated/NNH_HypothesisReview.lean']if target in ['review-close','review-retention']else[])
- for n in sources:
-  if n not in files:files[n]=(E/Path(n).name).read_text()
- if target in ['close','retention','review-retention']:sources+=['NNH_scope40.py','NNH_SEED_INPUTS.json']
- command=['python3','NNH_batch.py',target]
+ sources=['NNH_AUDIT_ROOTS.json','NNH_AUDIT_MODULES.json','NNH_RAW_BINARY_PIN.json','NNH_RAW_DRIVER_SOURCE.txt']
+ if target=='retention':sources += ['NNH_finalize_host.py','NNH_NND_IMPORTS.json','NNH_SEED_WAdm_Fissioned.json']
+ for n in sources:files[n]=(E/n).read_text()
+ files['NLX_AUDIT_ROOTS.json']=(E/'NNH_AUDIT_ROOTS.json').read_text()
+ files['NLX_AUDIT_MODULES.json']=(E/'NNH_AUDIT_MODULES.json').read_text()
+ sources += ['NLX_AUDIT_ROOTS.json','NLX_AUDIT_MODULES.json']
+ command=['python3','NNH_finalize_host.py'] if target=='retention' else ['NNH_native/NNH_ProofDriver',target]
+
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNH_tmp',CARGO_TARGET_DIR=B+'/NNH_target',LEAN_PATH=':'.join([B+'/NNH_objects']+json.loads((E/'NNH_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
@@ -93,7 +92,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=[]
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
-elif x['kind']=='audit':modules += ['NNH_COMBINED_IMPORT']
+elif x['kind']=='audit':modules += ['NNH_COMBINED_IMPORT'] if x['module']=='retention' else json.loads((b/'NNH_AUDIT_MODULES.json').read_text())[int(x['module'][5:])]
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:
@@ -106,6 +105,8 @@ for rel in sorted(rels):
  assert p is not None,rel
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
   if z.is_file():pins[str(z)]={{'path':str(z),'sha256':hashlib.sha256(z.read_bytes()).hexdigest()}}
+if x['kind']=='audit':
+ binary=json.loads((b/'NNH_RAW_BINARY_PIN.json').read_text());assert hashlib.sha256(Path(binary['destination']).read_bytes()).hexdigest()==binary['sha256'];x['raw_ax2_binary']=binary
 x['deps_fingerprint']={{'selected_objects':pins,'cache_imports_manifest_sha256':hashlib.sha256((b/'NNH_CACHE_IMPORTS.json.xz').read_bytes()).hexdigest()}}
 (b/{(a+'.json')!r}).write_text(json.dumps(x))
 ''');assert r.returncode==0,r.stderr
@@ -114,8 +115,12 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
-if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NNH_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NNH_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NNH_LOADED_scan.jsonl','NNH_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
+if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*') if p.is_file()]
+
 out={{n:(b/n).read_text() for n in names}}
+if {target!r}=='retention':
+ for n in ['NNH_EXPORT.json','NNH_FINAL_HOST.json','NNH_CLOSURE_PINS.json.sha256']:out[n]=(b/n).read_text()
+ out['NNH_CLOSURE_PINS.json.xz.hex']=(b/'NNH_CLOSURE_PINS.json.xz').read_bytes().hex()
 if {target!r} in ['close','review-close','review-retention']:
  for n in ['NNH_PREDECESSOR_COMPARISON.json','NNH_EXPORT.json','NNH_TOOL_PINS.json','NNH_CLOSURE_PINS.json.sha256']:
   if (b/n).exists():out[n]=(b/n).read_text()
