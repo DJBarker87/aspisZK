@@ -24,5 +24,11 @@ failed=[dict(attempt=r['attempt'],kind=r['kind'],target=r['module'],exit=r['exit
 summary=dict(target_established=False,row_credit_claimed=False,report_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),budget=300,scopes_used=len(receipts),scopes_remaining=300-len(receipts),kani_used=0,extractions_used=0,outer_wall_seconds=sum(r['wall_seconds']for r in receipts),peak_rss_kib=max(int(r['peak_rss_kib'])for r in receipts),swaps=sum(int(r['swaps'])for r in receipts),failed_scopes=failed,changed_source_modules=list(accepted),own_roots=len(idx),raw_audits_completed=len(audits),pending_raw_audits=[x['root'] for x in coverage if x['status']=='pending'],scope_fields=[{k:r.get(k) for k in ['attempt','kind','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','source_hashes','print_axioms','limits','command']} for r in receipts],scope_receipt_pattern='LIBB_LNNN/receipt.json',caps=dict(memoryHigh='6G',memoryMax='8G',memorySwapMax=0,tasksMax=64,leanM=7000),no_caps_raised=True,no_timeouts_raised=True,standard_axioms=['propext','Classical.choice','Quot.sound'],shipped_source_changes=False,combined_import=next((r['attempt']for r in receipts if r['module']=='LIBB_COMBINED_IMPORT'and r['exit_status']==0),'pending'),retained_cache='/home/dombarker/project-offloads/codex-cx-libb-20261111')
 (E/'LIBB_VALIDATION.json').write_text(json.dumps(summary,indent=1)+'\n')
 (E/'LIBB_AUDIT_COVERAGE.json').write_text(json.dumps(coverage,indent=1)+'\n')
+cols=['attempt','kind','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision']
+lines=['\t'.join(cols+['print_axioms','receipt'])]
+for r in receipts:
+ ax=' ; '.join(r['print_axioms']).replace('\t',' ').replace('\n',' ')
+ lines.append('\t'.join(str(r.get(k,''))for k in cols)+'\t'+ax+'\t'+r['attempt']+'/receipt.json')
+(E/'LIBB_TRANSCRIPT.tsv').write_text('\n'.join(lines)+'\n')
 assert not any(p.stat().st_size>20_000_000 for p in E.rglob('*')if p.is_file())
 print(json.dumps({k:summary[k]for k in ['scopes_used','scopes_remaining','own_roots','raw_audits_completed','swaps']}))
