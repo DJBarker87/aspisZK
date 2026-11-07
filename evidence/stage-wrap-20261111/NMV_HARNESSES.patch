@@ -115,42 +115,66 @@
 +include!("NMV_parent.rs");
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NMV_parent.rs
-@@ -0,0 +1,180 @@
+@@ -0,0 +1,335 @@
++use core::cell::UnsafeCell;
++fn any_program_error()->ProgramError{
++ let tag:u8=kani::any();kani::assume(tag<26);
++ match tag{
++ 0=>ProgramError::Custom(kani::any()),
++ 1=>ProgramError::InvalidArgument,2=>ProgramError::InvalidInstructionData,3=>ProgramError::InvalidAccountData,
++ 4=>ProgramError::AccountDataTooSmall,5=>ProgramError::InsufficientFunds,6=>ProgramError::IncorrectProgramId,
++ 7=>ProgramError::MissingRequiredSignature,8=>ProgramError::AccountAlreadyInitialized,9=>ProgramError::UninitializedAccount,
++ 10=>ProgramError::NotEnoughAccountKeys,11=>ProgramError::AccountBorrowFailed,12=>ProgramError::MaxSeedLengthExceeded,
++ 13=>ProgramError::InvalidSeeds,14=>{let c:char=kani::any();ProgramError::BorshIoError(c.to_string())},
++ 15=>ProgramError::AccountNotRentExempt,16=>ProgramError::UnsupportedSysvar,17=>ProgramError::IllegalOwner,
++ 18=>ProgramError::MaxAccountsDataAllocationsExceeded,19=>ProgramError::InvalidRealloc,20=>ProgramError::MaxInstructionTraceLengthExceeded,
++ 21=>ProgramError::BuiltinProgramsMustConsumeComputeUnits,22=>ProgramError::InvalidAccountOwner,
++ 23=>ProgramError::ArithmeticOverflow,24=>ProgramError::Immutable,_=>ProgramError::IncorrectAuthority,
++ }
++}
 +// Parent-only oracle: original program-id reference points into this local
 +// allocation; snapshots and child replies have independent full typed slots.
 +#[repr(C)]
-+struct ParentPort { key: Pubkey, log: RefCell<ParentLog> }
++struct ParentPort { key: Pubkey, log: UnsafeCell<ParentLog> }
++#[repr(C)]
++struct AccountPort { key:Pubkey, log:UnsafeCell<Log> }
++fn account_port<'a>(a:&'a AccountInfo<'_>)->&'a AccountPort{unsafe{&*(a.key as *const Pubkey as *const AccountPort)}}
++fn exclusive_parent<'a,'info: 'info>(a:&'a AccountInfo<'info>)->Result<core::cell::RefMut<'a,&'info mut [u8]>,ProgramError>{
++ unsafe{(*account_port(a).log.get()).writes+=1;}
++ a.data.try_borrow_mut().map_err(|_|ProgramError::AccountBorrowFailed)
++}
 +struct ParentLog {
 + expected: *const AccountInfo<'static>, count:usize,
-+ data:*const u8, len:usize, selected:usize, byte:usize,
++ data:*const u8, len:usize, payload_length:usize, selected:usize, byte:usize,
 + calls:usize, seen_data:*const u8, seen_len:usize,
 + reply:Option<Result<Vec<u8>,ProgramError>>,
 + seen_slot:Option<Result<u64,ProgramError>>,
 +}
 +fn parent_port(p:&Pubkey)->&ParentPort{unsafe{&*(p as *const Pubkey as *const ParentPort)}}
 +fn snapshot_log(a:&AccountInfo<'_>,l1:usize,l2:usize)->OwnedAccount{
-+ {let mut l=port(a).log.borrow_mut();l.first=l1;l.second=l2;}
-+ let (length,bytes)=match a.data.try_borrow(){
-+  Ok(data)=>{let n=data.len();(Ok(n),if n==l1||n==l2 {Ok(data.to_vec())}else{Err(ProgramError::InvalidAccountData)})},
-+  Err(_)=>(Err(ProgramError::AccountBorrowFailed),Err(ProgramError::AccountBorrowFailed)),
-+ };
++ {let mut l=unsafe{&mut *account_port(a).log.get()};l.first=l1;l.second=l2;}
++ // CLOSED snapshot boundary specialized to the small free/read-shared class.
++ // Every admitted source constant exceeds4, so the deferred bytes Err is exact;
++ // NLF supplies acquire/drop and universal byte laws in the Lean composition.
++ assert!(l1>4&&l2>4);
++ let length=Ok(4);let bytes=Err(ProgramError::InvalidAccountData);
 + OwnedAccount{key:*a.key,owner:*a.owner,is_signer:a.is_signer,is_writable:a.is_writable,executable:a.executable,length,bytes}
 +}
 +fn inspect_parent(p:&Pubkey,a:&[OwnedAccount],d:&[u8]){
-+ let mut log=parent_port(p).log.borrow_mut();log.calls+=1;log.seen_data=d.as_ptr();log.seen_len=d.len();
++ let mut log=unsafe{&mut *parent_port(p).log.get()};log.calls+=1;log.seen_data=d.as_ptr();log.seen_len=d.len();
 + assert_eq!(a.len(),log.count);assert_eq!(d.as_ptr(),log.data);assert_eq!(d.len(),log.len);
 + let i=log.selected;let k=log.byte;let expected=unsafe{&*log.expected.add(i)};
 + assert_eq!(a[i].key.as_ref()[k],expected.key.as_ref()[k]);
 + assert_eq!(a[i].owner.as_ref()[k],expected.owner.as_ref()[k]);
 + assert_eq!(a[i].is_signer,expected.is_signer);assert_eq!(a[i].is_writable,expected.is_writable);assert_eq!(a[i].executable,expected.executable);
-+ assert_eq!(a[i].length,Ok(4));
++ assert_eq!(a[i].length,Ok(log.payload_length));
 + assert!(matches!(a[i].bytes,Err(ProgramError::InvalidAccountData)));
 +}
 +fn child1(p:&Pubkey,a:&[OwnedAccount],d:&[u8])->Result<Vec<u8>,ProgramError>{
-+ inspect_parent(p,a,d);parent_port(p).log.borrow_mut().reply.take().unwrap()
++ inspect_parent(p,a,d);unsafe{&mut *parent_port(p).log.get()}.reply.take().unwrap()
 +}
 +fn child2(p:&Pubkey,a:&[OwnedAccount],d:&[u8],slot:Result<u64,ProgramError>)->ProgramResult{
-+ inspect_parent(p,a,d);let mut l=parent_port(p).log.borrow_mut();l.seen_slot=Some(slot);
++ inspect_parent(p,a,d);let mut l=unsafe{&mut *parent_port(p).log.get()};l.seen_slot=Some(slot);
 + l.reply.take().unwrap().map(|_|())
 +}
 +fn clear(d:&[u8]){assert!(d.is_empty(),"empty return-data clear argument");}
@@ -158,141 +182,272 @@
 + if kani::any(){Ok(Clock{slot:kani::any(),epoch_start_timestamp:kani::any(),epoch:kani::any(),leader_schedule_epoch:kani::any(),unix_timestamp:kani::any()})}
 + else{Err(ProgramError::Custom(kani::any()))}
 +}
-+fn parent_test<const SECOND:bool,const MODE:u8,const ARM:u8>(){
-+ let ports:[Port;7]=core::array::from_fn(|_|Port{key:Pubkey::new_from_array(kani::any()),log:RefCell::new(Log::default())});
++fn parent_test<const SECOND:bool,const MODE:u8,const ARM:u8,const PORT:usize>(){
++ let ports:[AccountPort;7]=core::array::from_fn(|_|AccountPort{key:Pubkey::new_from_array(kani::any()),log:UnsafeCell::new(Log::default())});
 + let owners:[Pubkey;7]=core::array::from_fn(|_|Pubkey::new_from_array(kani::any()));
 + let signs:[bool;7]=kani::any();let writes:[bool;7]=kani::any();let execs:[bool;7]=kani::any();
 + let mut money:[u64;7]=kani::any();let mut bytes:[[u8;4];7]=kani::any();let original=bytes;
-+ let [m0,m1,m2,m3,m4,m5,m6]=&mut money;let [b0,b1,b2,b3,b4,b5,b6]=&mut bytes;
-+ let accounts=[
-+ AccountInfo::new(&ports[0].key,signs[0],writes[0],m0,b0,&owners[0],execs[0],0),
-+ AccountInfo::new(&ports[1].key,signs[1],writes[1],m1,b1,&owners[1],execs[1],0),
-+ AccountInfo::new(&ports[2].key,signs[2],writes[2],m2,b2,&owners[2],execs[2],0),
-+ AccountInfo::new(&ports[3].key,signs[3],writes[3],m3,b3,&owners[3],execs[3],0),
-+ AccountInfo::new(&ports[4].key,signs[4],writes[4],m4,b4,&owners[4],execs[4],0),
-+ AccountInfo::new(&ports[5].key,signs[5],writes[5],m5,b5,&owners[5],execs[5],0),
-+ AccountInfo::new(&ports[6].key,signs[6],writes[6],m6,b6,&owners[6],execs[6],0)];
-+ let selected:usize=kani::any();kani::assume(selected<if SECOND{7}else{3});let byte:usize=kani::any();kani::assume(byte<32);
++ let [m0,_,m2,_,_,_,_]=&mut money;let [b0,_,b2,_,_,_,_]=&mut bytes;
++ let a=AccountInfo::new(&ports[0].key,signs[0],writes[0],m0,b0,&owners[0],execs[0],0);
++ let c=AccountInfo::new(&ports[2].key,signs[2],writes[2],m2,b2,&owners[2],execs[2],0);
++ let mut accounts=core::mem::ManuallyDrop::new([a.clone(),a.clone(),c.clone(),a.clone(),a.clone(),a.clone(),a.clone()]);
++ for j in 0..7 {accounts[j].key=&ports[j].key;accounts[j].owner=&owners[j];accounts[j].is_signer=signs[j];accounts[j].is_writable=writes[j];accounts[j].executable=execs[j];}
++ let selected:usize=PORT;let byte:usize=kani::any();kani::assume(byte<32);
 + let data1=[3u8,if kani::any(){10}else{11}];let data2=[65u8,83,81,56];let data=if SECOND{&data2[..]}else{&data1[..]};
-+ let input:[u8;4]=kani::any();let code:u32=kani::any();let n:usize=if ARM==3{3}else{4};let mut checkpoint=Vec::new();for i in 0..n{checkpoint.push(input[i]);}
-+ let reply=if ARM==1 {Err(ProgramError::Custom(code))}else{Ok(checkpoint)};
-+ let p=ParentPort{key:Pubkey::new_from_array(kani::any()),log:RefCell::new(ParentLog{expected:accounts.as_ptr().cast(),count:if SECOND{7}else{3},data:data.as_ptr(),len:data.len(),selected,byte,calls:0,seen_data:core::ptr::null(),seen_len:0,reply:Some(reply),seen_slot:None})};
++ let input:[u8;4]=kani::any();let error=if ARM==1{any_program_error()}else{ProgramError::Custom(0)};let expected_error=error.clone();let n:usize=if ARM==3{3}else{4};let mut checkpoint=Vec::new();for i in 0..n{checkpoint.push(input[i]);}
++ let reply=if ARM==1 {Err(error)}else{Ok(checkpoint)};
++ let p=ParentPort{key:Pubkey::new_from_array(kani::any()),log:UnsafeCell::new(ParentLog{expected:accounts.as_ptr().cast(),count:if SECOND{7}else{3},data:data.as_ptr(),len:data.len(),payload_length:4,selected,byte,calls:0,seen_data:core::ptr::null(),seen_len:0,reply:Some(reply),seen_slot:None})};
 + let hold=if ARM==2 {Some(accounts[2].data.borrow())}else{None};
-+ if MODE==2 {p.log.borrow_mut().expected=unsafe{accounts.as_ptr().add(1)}.cast();p.log.borrow_mut().selected=0;}
-+ let result=if SECOND{stage2(&p.key,&accounts,data)}else{stage1(&p.key,&accounts[..3],data)};
-+ let l=p.log.borrow();assert_eq!(l.calls,1);
++ if MODE==2 {unsafe{&mut *p.log.get()}.expected=unsafe{accounts.as_ptr().add(1)}.cast();unsafe{&mut *p.log.get()}.selected=0;}
++ let result=if SECOND{stage2(&p.key,&accounts[..],data)}else{stage1(&p.key,&accounts[..3],data)};
++ let l=unsafe{&*p.log.get()};assert_eq!(l.calls,1);
 + assert_eq!(l.seen_data,data.as_ptr());assert_eq!(l.seen_len,data.len());
-+ if ARM==1 {assert_eq!(result,Err(ProgramError::Custom(if MODE==1{code^1}else{code})));}
++ if ARM==1 {if MODE==1{assert!(result.is_ok());}else{assert_eq!(result,Err(expected_error));}}
 + else if ARM==2&&!SECOND {assert_eq!(result,Err(ProgramError::AccountBorrowFailed));}
 + else {assert!(result.is_ok());}
 + let i:usize=kani::any();kani::assume(i<4);
 + let aidx:usize=kani::any();kani::assume(aidx<if SECOND{7}else{3});
 + if !SECOND&&ARM==0&&aidx==2 {assert_eq!(accounts[aidx].data.borrow()[i],input[i]);}
-+ else {assert_eq!(accounts[aidx].data.borrow()[i],original[aidx][i]);}
++ else {assert_eq!(accounts[aidx].data.borrow()[i],original[if aidx==2{2}else{0}][i]);}
 + for j in 0..if SECOND{7}else{3} {
 +  let expect=if SECOND{match j{0=>(58295,58295),1=>(384,384),2=>(192,192),3=>(768,768),4=>(128,256),5=>(192,320),_=>(1768,1768)}}else{match j{0=>(58295,58295),1=>(1880,1880),_=>(1768,1768)}};
-+  let log=ports[j].log.borrow();assert_eq!((log.first,log.second),expect);
++  let log=unsafe{&*ports[j].log.get()};assert_eq!((log.first,log.second),expect);
 + }
 + drop(hold);
 +}
 +
-+fn child1_omit(p:&Pubkey,a:&[OwnedAccount],d:&[u8])->Result<Vec<u8>,ProgramError>{inspect_parent(p,a,d);parent_port(p).log.borrow_mut().calls-=1;parent_port(p).log.borrow_mut().reply.take().unwrap()}
-+fn child2_omit(p:&Pubkey,a:&[OwnedAccount],d:&[u8],slot:Result<u64,ProgramError>)->ProgramResult{inspect_parent(p,a,d);let mut l=parent_port(p).log.borrow_mut();l.calls-=1;l.seen_slot=Some(slot);l.reply.take().unwrap().map(|_|())}
++fn child1_omit(p:&Pubkey,a:&[OwnedAccount],d:&[u8])->Result<Vec<u8>,ProgramError>{inspect_parent(p,a,d);unsafe{&mut *parent_port(p).log.get()}.calls-=1;unsafe{&mut *parent_port(p).log.get()}.reply.take().unwrap()}
++fn child2_omit(p:&Pubkey,a:&[OwnedAccount],d:&[u8],slot:Result<u64,ProgramError>)->ProgramResult{inspect_parent(p,a,d);let mut l=unsafe{&mut *parent_port(p).log.get()};l.calls-=1;l.seen_slot=Some(slot);l.reply.take().unwrap().map(|_|())}
 +#[kani::proof]#[kani::unwind(8)]
 +#[kani::stub(super::snapshot,snapshot_log)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive)]
++#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive_parent)]
 +#[kani::stub(super::stage2_owned,child2)]
 +#[kani::stub(solana_program::program::set_return_data,clear)]
 +#[kani::stub(Clock::get,clock)]
-+fn NMV_stage2_return(){parent_test::<true,0,0>();}
++fn NMV_stage2_return(){parent_test::<true,0,0,0>();}
 +#[kani::proof]#[kani::unwind(8)]
 +#[kani::stub(super::snapshot,snapshot_log)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive)]
++#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive_parent)]
 +#[kani::stub(super::stage2_owned,child2)]
 +#[kani::stub(solana_program::program::set_return_data,clear)]
 +#[kani::stub(Clock::get,clock)]
-+fn NMV_stage2_error(){parent_test::<true,0,1>();}
++fn NMV_stage2_error(){parent_test::<true,0,1,0>();}
 +#[kani::proof]#[kani::unwind(8)]
 +#[kani::stub(super::snapshot,snapshot_log)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive)]
++#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive_parent)]
 +#[kani::stub(super::stage2_owned,child2)]
 +#[kani::stub(solana_program::program::set_return_data,clear)]
 +#[kani::stub(Clock::get,clock)]
-+fn NMV_stage2_reply_control(){parent_test::<true,1,1>();}
++fn NMV_stage2_reply_control(){parent_test::<true,1,1,0>();}
 +#[kani::proof]#[kani::unwind(8)]
 +#[kani::stub(super::snapshot,snapshot_log)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive)]
++#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive_parent)]
 +#[kani::stub(super::stage2_owned,child2)]
 +#[kani::stub(solana_program::program::set_return_data,clear)]
 +#[kani::stub(Clock::get,clock)]
-+fn NMV_stage2_argument_control(){parent_test::<true,2,1>();}
++fn NMV_stage2_argument_control(){parent_test::<true,2,1,0>();}
 +#[kani::proof]#[kani::unwind(8)]
 +#[kani::stub(super::snapshot,snapshot_log)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive)]
++#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive_parent)]
 +#[kani::stub(super::stage2_owned,child2_omit)]
 +#[kani::stub(solana_program::program::set_return_data,clear)]
 +#[kani::stub(Clock::get,clock)]
-+fn NMV_stage2_footprint_control(){parent_test::<true,3,1>();}
++fn NMV_stage2_footprint_control(){parent_test::<true,3,1,0>();}
 +#[kani::proof]#[kani::unwind(8)]
 +#[kani::stub(super::snapshot,snapshot_log)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive)]
++#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive_parent)]
 +#[kani::stub(super::stage1_owned,child1)]
-+fn NMV_stage1_return(){parent_test::<false,0,0>();}
++fn NMV_stage1_return(){parent_test::<false,0,0,0>();}
 +#[kani::proof]#[kani::unwind(8)]
 +#[kani::stub(super::snapshot,snapshot_log)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive)]
++#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive_parent)]
 +#[kani::stub(super::stage1_owned,child1)]
-+fn NMV_stage1_error(){parent_test::<false,0,1>();}
++fn NMV_stage1_error(){parent_test::<false,0,1,0>();}
 +#[kani::proof]#[kani::unwind(8)]
 +#[kani::stub(super::snapshot,snapshot_log)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive)]
++#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive_parent)]
 +#[kani::stub(super::stage1_owned,child1)]
-+fn NMV_stage1_borrow_error(){parent_test::<false,0,2>();}
++fn NMV_stage1_borrow_error(){parent_test::<false,0,2,0>();}
 +#[kani::proof]#[kani::unwind(8)]
 +#[kani::stub(super::snapshot,snapshot_log)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive)]
++#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive_parent)]
 +#[kani::stub(super::stage1_owned,child1)]
-+fn NMV_stage1_reply_control(){parent_test::<false,1,1>();}
++fn NMV_stage1_reply_control(){parent_test::<false,1,1,0>();}
 +#[kani::proof]#[kani::unwind(8)]
 +#[kani::stub(super::snapshot,snapshot_log)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive)]
++#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive_parent)]
 +#[kani::stub(super::stage1_owned,child1)]
-+fn NMV_stage1_argument_control(){parent_test::<false,2,1>();}
++fn NMV_stage1_argument_control(){parent_test::<false,2,1,0>();}
 +#[kani::proof]#[kani::unwind(8)]
 +#[kani::stub(super::snapshot,snapshot_log)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
-+#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive)]
++#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive_parent)]
 +#[kani::stub(super::stage1_owned,child1_omit)]
-+fn NMV_stage1_footprint_control(){parent_test::<false,3,1>();}
++fn NMV_stage1_footprint_control(){parent_test::<false,3,1,0>();}
++#[kani::proof]#[kani::unwind(8)]
++#[kani::stub(super::snapshot,snapshot_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(super::stage2_owned,child2)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn NMV_stage2_error_port0(){parent_test::<true,0,1,0>();}
++#[kani::proof]#[kani::unwind(8)]
++#[kani::stub(super::snapshot,snapshot_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(super::stage2_owned,child2)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn NMV_stage2_error_port1(){parent_test::<true,0,1,1>();}
++#[kani::proof]#[kani::unwind(8)]
++#[kani::stub(super::snapshot,snapshot_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(super::stage2_owned,child2)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn NMV_stage2_error_port2(){parent_test::<true,0,1,2>();}
++#[kani::proof]#[kani::unwind(8)]
++#[kani::stub(super::snapshot,snapshot_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(super::stage2_owned,child2)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn NMV_stage2_error_port3(){parent_test::<true,0,1,3>();}
++#[kani::proof]#[kani::unwind(8)]
++#[kani::stub(super::snapshot,snapshot_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(super::stage2_owned,child2)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn NMV_stage2_error_port4(){parent_test::<true,0,1,4>();}
++#[kani::proof]#[kani::unwind(8)]
++#[kani::stub(super::snapshot,snapshot_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(super::stage2_owned,child2)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn NMV_stage2_error_port5(){parent_test::<true,0,1,5>();}
++#[kani::proof]#[kani::unwind(8)]
++#[kani::stub(super::snapshot,snapshot_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(super::stage2_owned,child2)]
++#[kani::stub(solana_program::program::set_return_data,clear)]
++#[kani::stub(Clock::get,clock)]
++fn NMV_stage2_error_port6(){parent_test::<true,0,1,6>();}
++fn forbidden1(_p:&Pubkey,_a:&[OwnedAccount],_d:&[u8])->Result<Vec<u8>,ProgramError>{panic!("rejected wrapper must not enter child")}
++fn forbidden2(_p:&Pubkey,_a:&[OwnedAccount],_d:&[u8],_slot:Result<u64,ProgramError>)->ProgramResult{panic!("rejected wrapper must not enter child")}
++fn guard_test<const SECOND:bool,const WRONG:bool>(){
++ let p=Pubkey::new_from_array(kani::any());let input:[u8;8]=kani::any();let n:usize=kani::any();kani::assume(n<=8);
++ let r=if SECOND{stage2(&p,&[],&input[..n])}else{stage1(&p,&[],&input[..n])};
++ let exact=matches!(r,Err(ProgramError::InvalidInstructionData));assert!(exact!=WRONG);
++}
++#[kani::proof]#[kani::unwind(8)]
++#[kani::stub(super::stage2_owned,forbidden2)]
++fn NMV_stage2_wrong_count(){guard_test::<true,false>();}
++#[kani::proof]#[kani::unwind(8)]
++#[kani::stub(super::stage2_owned,forbidden2)]
++fn NMV_stage2_wrong_count_control(){guard_test::<true,true>();}
++#[kani::proof]#[kani::unwind(8)]
++#[kani::stub(super::stage1_owned,forbidden1)]
++fn NMV_stage1_wrong_count(){guard_test::<false,false>();}
++#[kani::proof]#[kani::unwind(8)]
++#[kani::stub(super::stage1_owned,forbidden1)]
++fn NMV_stage1_wrong_count_control(){guard_test::<false,true>();}
++#[kani::proof]#[kani::unwind(8)]
++#[kani::stub(super::snapshot,snapshot_one)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(solana_program::account_info::AccountInfo::try_borrow_mut_data,exclusive_parent)]
++#[kani::stub(super::stage1_owned,child1)]
++fn NMV_stage1_return_localrecord(){parent_stage1_direct::<0,0,0>();}
++
++fn parent_stage1_direct<const MODE:u8,const ARM:u8,const PORT:usize>(){
++ let ports:[AccountPort;7]=core::array::from_fn(|_|AccountPort{key:Pubkey::new_from_array(kani::any()),log:UnsafeCell::new(Log::default())});
++ let owners:[Pubkey;7]=core::array::from_fn(|_|Pubkey::new_from_array(kani::any()));
++ let signs:[bool;7]=kani::any();let writes:[bool;7]=kani::any();let execs:[bool;7]=kani::any();
++ let mut money:[u64;7]=kani::any();let mut bytes:[[u8;1];7]=kani::any();let original=bytes;
++ let [m0,_,m2,_,_,_,_]=&mut money;let [b0,_,b2,_,_,_,_]=&mut bytes;
++ let a=AccountInfo::new(&ports[0].key,signs[0],writes[0],m0,b0,&owners[0],execs[0],0);
++ let c=AccountInfo::new(&ports[2].key,signs[2],writes[2],m2,b2,&owners[2],execs[2],0);
++ let mut accounts=core::mem::ManuallyDrop::new([a.clone(),a.clone(),c.clone(),a.clone(),a.clone(),a.clone(),a.clone()]);
++ for j in 0..7 {accounts[j].key=&ports[j].key;accounts[j].owner=&owners[j];accounts[j].is_signer=signs[j];accounts[j].is_writable=writes[j];accounts[j].executable=execs[j];}
++ let selected:usize=PORT;let byte:usize=kani::any();kani::assume(byte<32);
++ let data1=[3u8,if kani::any(){10}else{11}];let data2=[65u8,83,81,56];let data=if false{&data2[..]}else{&data1[..]};
++ let input:[u8;1]=kani::any();let error=ProgramError::Custom(kani::any());let expected_error=error.clone();let n:usize=if ARM==3{0}else{1};let mut checkpoint=Vec::new();for i in 0..n{checkpoint.push(input[i]);}
++ let reply=if ARM==1 {Err(error)}else{Ok(checkpoint)};
++ let p=ParentPort{key:Pubkey::new_from_array(kani::any()),log:UnsafeCell::new(ParentLog{expected:accounts.as_ptr().cast(),count:if false{7}else{3},data:data.as_ptr(),len:data.len(),payload_length:1,selected,byte,calls:0,seen_data:core::ptr::null(),seen_len:0,reply:Some(reply),seen_slot:None})};
++ let hold=if ARM==2 {Some(accounts[2].data.borrow())}else{None};
++ if MODE==2 {unsafe{&mut *p.log.get()}.expected=unsafe{accounts.as_ptr().add(1)}.cast();unsafe{&mut *p.log.get()}.selected=0;}
++ let result=stage1(&p.key,&accounts[..3],data);
++ let l=unsafe{&*p.log.get()};assert_eq!(l.calls,1);
++ assert_eq!(l.seen_data,data.as_ptr());assert_eq!(l.seen_len,data.len());
++ if ARM==1 {if MODE==1{assert!(result.is_ok());}else{assert_eq!(result,Err(expected_error));}}
++ else if ARM==2&&!false {assert_eq!(result,Err(ProgramError::AccountBorrowFailed));}
++ else {assert!(result.is_ok());}
++ let i:usize=kani::any();kani::assume(i<1);
++ let aidx:usize=kani::any();kani::assume(aidx<if false{7}else{3});
++ if !false&&ARM==0&&aidx==2 {assert_eq!(accounts[aidx].data.borrow()[i],input[i]);}
++ else {assert_eq!(accounts[aidx].data.borrow()[i],original[if aidx==2{2}else{0}][i]);}
++ for j in 0..if false{7}else{3} {
++  let expect=if false{match j{0=>(58295,58295),1=>(384,384),2=>(192,192),3=>(768,768),4=>(128,256),5=>(192,320),_=>(1768,1768)}}else{match j{0=>(58295,58295),1=>(1880,1880),_=>(1768,1768)}};
++  let log=unsafe{&*ports[j].log.get()};assert_eq!((log.first,log.second),expect);
++ }
++ drop(hold);
++}
++
++
++fn snapshot_one(a:&AccountInfo<'_>,l1:usize,l2:usize)->OwnedAccount{
++ {let mut l=unsafe{&mut *account_port(a).log.get()};l.first=l1;l.second=l2;}
++ // CLOSED snapshot boundary specialized to the small free/read-shared class.
++ // Every admitted source constant exceeds4, so the deferred bytes Err is exact;
++ // NLF supplies acquire/drop and universal byte laws in the Lean composition.
++ assert!(l1>1&&l2>1);
++ let length=Ok(1);let bytes=Err(ProgramError::InvalidAccountData);
++ OwnedAccount{key:*a.key,owner:*a.owner,is_signer:a.is_signer,is_writable:a.is_writable,executable:a.executable,length,bytes}
++}
