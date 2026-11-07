@@ -78,3 +78,10 @@ source inputs changed before49747. No source implementation changed.
 49747:2.11s,peak4726484KiB,swap0,standard summary axioms only.
 Native source/runtime/library graph binding and actual table completeness are
 still adequacy obligations; mere definition or elaboration supplies neither.
+
+## thread:f15
+
+PV_LIB_SPEC_F15Full: whole Pre/MachineSpec/Post/Contract compiled49750;
+exact literal package prefix proposition plus comparison compiled in same module.
+No row proof or comparison implication claimed. Wall0:02.46;
+peak4707620KiB;swap0;standard summary axioms only.
