@@ -24,7 +24,7 @@ for r in receipts:
  assert lib==library,(a,'Aeneas selection changed')
  assert any(J(p)['free']>=40_000_000_000 for p in E.glob(a+'-disk*.json'))
  if rc['kind']=='lean':assert '-M7000'in rc['command']
-rootset=set(J(E/'NLX_AUDIT_ROOTS.json')['roots']);statements=J(E/'NLX_KERNEL_STATEMENTS.json.xz');assert rootset==set(statements)
+manifest=J(E/'NLX_AUDIT_ROOTS.json');rootset=set(manifest['roots']);statements=J(E/'NLX_KERNEL_STATEMENTS.json.xz');assert rootset==set(statements)
 old=J(P/'NLS_KERNEL_STATEMENTS.json.xz');assert all(statements[k]==v for k,v in old.items())
 ledger=J(E/'NLX_LEDGER.json.xz');basis=J(P/'NLO_LEDGER.json.xz');delta=J(E/'NLX_LEDGER_DELTA.json');review=J(E/'NLX_CANDIDATE_REVIEW.json')
 group_plan=J(E/'NLX_AUDIT_GROUPS.json')['required']
@@ -75,6 +75,11 @@ physical=J(E/'NLX_PHYSICAL.json');assert set(physical['unowned_open_rows'])=={'T
 assert physical['entry_native_counts']=={'b':{'CLOSED':40,'OPEN':13},'c':{'CLOSED':541,'OPEN':5}}
 assert[(x['transaction'],x['open_distance'],x['edges'])for x in physical['shortest_spines']]==[('TX1',6,5),('TX2',5,6)]
 assert J(E/'NLX_FINAL_HOST.json')['status']=='PASS'
+root_groups={r:g['group']for g in group_plan for r in manifest['groups'][g['group']]}
+progress=J(E/'NLX_TIMEOUT_PROGRESS.json');assert progress['replacement_byte_identical_outputs']==319 and not progress['replacement_byte_mismatches']
+for row in progress['partial_outputs']:
+ group=root_groups[row['root']]
+ p=E/('NLX_NEP_proof'+str(group)+'_'+row['root']+'_REACHABLE.txt.sha256');assert p.read_text().strip()==row['sha256']
 for p in E.glob('NLX_*.lean'):
  s=p.read_text();assert not any(word in s for word in ['sorry','native_decide','maxRecDepth','maxHeartbeats'])
 # Every changed tracked path is confined to the assigned evidence directory.

@@ -5,7 +5,7 @@ B=Path.cwd();mode=sys.argv[1];E=B/'NLX_audit'/mode;E.mkdir(parents=True,exist_ok
 if mode=='close':
  exec(compile((B/'NLX_pin.py').read_text(),'NLX_pin.py','exec'));sys.exit(0)
 if mode=='retention':jobs=[('retention',['python3','NLX_scope40.py'])]
-elif mode=='review-close':jobs=[('review',[os.environ['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NLX_generated','-o','NLX_objects/NLX_HypothesisReview.olean','NLX_generated/NLX_HypothesisReview.lean'])]
+elif mode in ['review-close','review-retention']:jobs=[('review',[os.environ['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NLX_generated','-o','NLX_objects/NLX_HypothesisReview.olean','NLX_generated/NLX_HypothesisReview.lean'])]
 elif mode.startswith('inventory-'):jobs=[(mode,['NLX_native/NLX_InventoryDriver',mode.split('-')[1]])]
 elif mode in ['poolfixtures','poolroots','poolscan']:jobs=[('scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0',['NLX_native/'+('NLX_PoolDriver' if mode=='poolscan' else 'NLX_PoolProofDriver'), 'scan' if mode=='poolscan' else 'fixtures' if mode=='poolfixtures' else 'proof0'])]
 elif mode in ['fixtures','scan','scan2']:jobs=[('scan' if mode=='scan2' else mode,['NLX_native/'+('NLX_Driver' if mode.startswith('scan') else 'NLX_ProofDriver'),'scan' if mode=='scan2' else mode])]
@@ -21,6 +21,9 @@ for name,command in jobs:
  (E/(name+'.json')).write_text(json.dumps(receipt,indent=1)+'\n');print(json.dumps(receipt),flush=True)
  if r.returncode:print(raw,flush=True);sys.exit(r.returncode)
 
-if mode=='review-close':
+if mode in ['review-close','review-retention']:
  print(raw,flush=True)
  exec(compile((B/'NLX_pin.py').read_text(),'NLX_pin.py','exec'))
+
+if mode=="review-retention":
+ exec(compile((B/"NLX_scope40.py").read_text(),"NLX_scope40.py","exec"))

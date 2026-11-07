@@ -49,14 +49,14 @@ elif kind=='link':
  sources=['NLX_native/'+target+'.c','NLX_native/NFA_WALKER.c','NLX_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NLX_native/'+target,*sources]
 elif kind=='audit':
- if target in ['close','review-close']:
+ if target in ['close','review-close','review-retention']:
   files['NLX_pin.py']=(E/'NLX_pin.py').read_text();files['NLX_PREDECESSOR_PINS.json']=lzma.decompress((E.parent/'ledger23-20261110/NLS_CLOSURE_PINS.json.xz').read_bytes()).decode()
- if target=='review-close':files['NLX_generated/NLX_HypothesisReview.lean']=(E/'NLX_HypothesisReview.lean').read_text()
- if target=='retention':files['NLX_scope40.py']=(E/'NLX_scope40.py').read_text();files['NLX_SEED_INPUTS.json']=(E/'NLX_SEED_INPUTS.json').read_text()
- sources=['NLX_generated/NLX_ProofDriver.lean','NLX_generated/NLX_Driver.lean','NLX_batch.py','NLX_AUDIT_ROOTS.json','NLX_AUDIT_MODULES.json','NLX_EXPECTED_IMPORTS.jsonl']+(['NLX_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NLX_pin.py','NLX_PREDECESSOR_PINS.json']if target in ['close','review-close']else[])+(['NLX_generated/NLX_HypothesisReview.lean']if target=='review-close'else[])
+ if target in ['review-close','review-retention']:files['NLX_generated/NLX_HypothesisReview.lean']=(E/'NLX_HypothesisReview.lean').read_text()
+ if target in ['retention','review-retention']:files['NLX_scope40.py']=(E/'NLX_scope40.py').read_text();files['NLX_SEED_INPUTS.json']=(E/'NLX_SEED_INPUTS.json').read_text()
+ sources=['NLX_generated/NLX_ProofDriver.lean','NLX_generated/NLX_Driver.lean','NLX_batch.py','NLX_AUDIT_ROOTS.json','NLX_AUDIT_MODULES.json','NLX_EXPECTED_IMPORTS.jsonl']+(['NLX_POOL_ROOTS.json'] if target.startswith('pool') else [])+(['NLX_pin.py','NLX_PREDECESSOR_PINS.json']if target in ['close','review-close','review-retention']else[])+(['NLX_generated/NLX_HypothesisReview.lean']if target in ['review-close','review-retention']else[])
  for n in sources:
   if n not in files:files[n]=(E/Path(n).name).read_text()
- if target=='retention':sources+=['NLX_scope40.py','NLX_SEED_INPUTS.json']
+ if target in ['retention','review-retention']:sources+=['NLX_scope40.py','NLX_SEED_INPUTS.json']
  command=['python3','NLX_batch.py',target]
 else:raise ValueError(kind)
 config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NLX_tmp',CARGO_TARGET_DIR=B+'/NLX_target',LEAN_PATH=':'.join([B+'/NLX_objects']+json.loads((E/'NLX_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
@@ -97,10 +97,12 @@ import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 if {kind!r}=='audit':names += [str(p.relative_to(b)) for p in (b/'NLX_audit'/{target!r}).rglob('*') if p.is_file()]+[str(p.relative_to(b)) for modepath in (b/'NLX_audit'/{target!r}).glob('*.json') for row in json.loads(modepath.read_text()).get('results',[]) for p in [b/('NEP_'+modepath.stem+'_'+row['root']+'_REACHABLE.txt')] if p.exists()]+([n for n in ['NLX_LOADED_scan.jsonl','NLX_POOL_LOADED_scan.jsonl'] if (b/n).exists()])
 out={{n:(b/n).read_text() for n in names}}
-if {target!r} in ['close','review-close']:
- for n in ['NLX_PREDECESSOR_COMPARISON.json','NLX_EXPORT.json','NLX_TOOL_PINS.json','NLX_CLOSURE_PINS.json.sha256']:out[n]=(b/n).read_text()
- out['NLX_CLOSURE_PINS.json.xz.hex']=(b/'NLX_CLOSURE_PINS.json.xz').read_bytes().hex()
-if {target!r}=='retention':out['NLX_FINAL_HOST.json']=(b/'NLX_FINAL_HOST.json').read_text()
+if {target!r} in ['close','review-close','review-retention']:
+ for n in ['NLX_PREDECESSOR_COMPARISON.json','NLX_EXPORT.json','NLX_TOOL_PINS.json','NLX_CLOSURE_PINS.json.sha256']:
+  if (b/n).exists():out[n]=(b/n).read_text()
+ if (b/'NLX_CLOSURE_PINS.json.xz').exists():out['NLX_CLOSURE_PINS.json.xz.hex']=(b/'NLX_CLOSURE_PINS.json.xz').read_bytes().hex()
+if {target!r} in ['retention','review-retention']:
+ if (b/'NLX_FINAL_HOST.json').exists():out['NLX_FINAL_HOST.json']=(b/'NLX_FINAL_HOST.json').read_text()
 for name in ['NLX_Driver','NLX_ProofDriver','NLX_PoolProofDriver','NLX_PoolDriver']:
  p=b/'NLX_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))

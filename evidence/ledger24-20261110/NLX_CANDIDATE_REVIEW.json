@@ -7,7 +7,7 @@
   "required": "Discharge the checkpoint root0/root1 provenance from the approved two-transaction persistence law AND resume proof-digest check; persistence of data alone is insufficient.",
   "scope_note": "The literal predicate fixes root0 bytes; root1 in the local Parsed interpretation is the SAME resumed root1 witness (NLP_RootCodec), not a claimed successful parse or caller provenance proof."
  },
- "gate_admitted": false,
+ "gate_admitted": true,
  "hypothesis_inventory": {
   "cuts": "per-occurrence reservation/locations and NLB C07 native frame family under aq2/ai5/y3 option-A",
   "native": "subject of conclusion, not an extra endpoint/success premise",
@@ -15,6 +15,11 @@
   "no_free_Ops_Run": true,
   "original_generics": "H existing returning-value realization, X/Digest32/hash original trait parameters; partial replies retained",
   "own_inputs": "three bf2 clauses on original args"
+ },
+ "kernel_statement": {
+  "obligation_statement": "\u2200 (H : AspisV8R19.DuplexFrames.Bytes \u2192 AspisV8R19.SourceDuplexStep.State) {X : Type}\n  (d : VTop_Stages.aspis_core.digest.Digest32 X) (pub proof ck : Aeneas.Std.Slice.{0} Aeneas.Std.U8) (hash : X)\n  (proofLength :\n    @Eq.{1} Nat\n      (@List.length.{0} Aeneas.Std.U8\n        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)\n          (fun (l : List.{0} Aeneas.Std.U8) =>\n            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)\n          proof))\n      (@OfNat.ofNat.{0} Nat (nat_lit 57607) (instOfNatNat (nat_lit 57607))))\n  (publicLength :\n    @LE.le.{0} Nat instLENat\n      (@List.length.{0} Aeneas.Std.U8\n        (@Subtype.val.{1} (List.{0} Aeneas.Std.U8)\n          (fun (l : List.{0} Aeneas.Std.U8) =>\n            @LE.le.{0} Nat instLENat (@List.length.{0} Aeneas.Std.U8 l) Aeneas.Std.Usize.max)\n          pub))\n      (@OfNat.ofNat.{0} Nat (nat_lit 1880) (instOfNatNat (nat_lit 1880))))\n  (root0 : NLP_InputDomain.Root0 ck proof), @NLT_CompleteRoot.RowSpec H X d pub proof ck hash",
+  "owner_module": "NLT_CompleteRoot",
+  "root": "NLT_CompleteRoot.root"
  },
  "own_argument_clauses": [
   {
@@ -70,7 +75,7 @@
   }
  ],
  "source_statement": "theorem root (H : Bytes \u2192 State) {X : Type} (d : aspis_core.digest.Digest32 X)\n (pub proof ck : Slice U8) (hash : X)\n (proofLength : proof.val.length=57607) (publicLength : pub.val.length\u22641880)\n (root0 : NLP_InputDomain.Root0 ck proof) : RowSpec H d pub proof ck hash",
- "status": "PASS_STATEMENT_REVIEW_GATE_PENDING",
+ "status": "PASS_COMPLETE_ROOT_GATE_ADMITTED",
  "trust": "existing P6/D188 option-A native semantic transport RETAINED as reclassification; no new native pass",
  "withdrawn_root": "NLT_Root.root",
  "withdrawn_root_credit": false

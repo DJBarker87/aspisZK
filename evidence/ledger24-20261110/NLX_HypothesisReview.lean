@@ -30,3 +30,5 @@ set_option pp.proofs false
 #print NJJ_Constructors.PreparedCut
 #print NJJ_Constructors.AccumulatorCut
 #print NKE_GeometryCuts.Cut
+#print AspisR1.NP6_StdModel.Reservation
+#print AspisR1.NIW_AlignFinishComposed.Locations
