@@ -65,3 +65,16 @@ PV_LIB_SPEC_F208Whole: whole Pre/MachineSpec/Post/Contract compiled49744;
 exact literal package prefix proposition plus comparison compiled in same module.
 No row proof or comparison implication claimed. Wall0:02.09;
 peak4710280KiB;swap0;standard summary axioms only.
+
+## Authoritative full-body statements (supersede early Whole drafts)
+
+49747 compiled PV_LIB_SPEC_F361Full and the exact28-BODY reference table.
+The early Whole drafts retain old prefix-table exclusions and are historical,
+NOT the authoritative final reference. Full suffix modules use Full.programs.
+The full table is explicit even for CLOSED124/126/222 and source setter207;
+318 remains the higher-order intrinsic. The failed49745 missing207 import
+was repaired with a privately replayed byte-identical pinned W4 source49746;
+source inputs changed before49747. No source implementation changed.
+49747:2.11s,peak4726484KiB,swap0,standard summary axioms only.
+Native source/runtime/library graph binding and actual table completeness are
+still adequacy obligations; mere definition or elaboration supplies neither.
