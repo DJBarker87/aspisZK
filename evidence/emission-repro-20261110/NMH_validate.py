@@ -34,6 +34,8 @@ def main():
   if pins.exists():
    z=load(pins)
    if 'lock_after' in z:assert z['lock_after']==z['lock_before']
+   if z.get('llbc_sha256'):
+    q=E/(a+'_emitted')/'repro.llbc.xz';raw=lzma.decompress(q.read_bytes());assert sha(raw)==z['llbc_sha256'];assert sha(raw)==q.with_suffix('.sha256').read_text().strip()
    if z.get('aeneas_exit')==0:
     for name,h in z['outputs'].items():
      f=E/(a+'_emitted')/name
@@ -54,6 +56,8 @@ def main():
  for p in E.rglob('*'):
   if p.is_file():assert p.stat().st_size<=20_000_000,p
  assert not list(E.rglob('__pycache__'))
+ post=load(E/'NMH_HOST_POSTCHECK.json');assert not post['source_drift'] and not post['owned_processes'];assert post['lock_sha256']==post['expected_lock_sha256'] and post['owned_bytes']<30_000_000_000
+ assert all(c['equal'] for c in load(E/'NMH_SHIPPED_IDENTITY.json')['checks'])
  changed=subprocess.check_output(['git','diff','--name-only',inv['revision'],'--','crates','programs','Cargo.lock'],text=True);assert not changed,'shipped source changed'
  print(json.dumps(dict(status='PASS_WITH_PROVENANCE_GAPS',blobs=336,verdicts=provenance['counts'],completed_runs=len(completed),budget=budgets,ledger_unchanged=True,target_established=False)))
 if __name__=='__main__':main()

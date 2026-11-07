@@ -22,9 +22,10 @@ def main():
   for d in declarations(text):
    names[d['name']].add(h)
    if d['private']:private_names[d['name']].add(h)
- ledger=json.loads(lzma.decompress((L/'NLX_LEDGER.json.xz').read_bytes()));rows=collections.defaultdict(set)
+ ledger=json.loads(lzma.decompress((L/'NLX_LEDGER.json.xz').read_bytes()));rows=collections.defaultdict(set);rootless=[]
  for r in ledger['rows']:
   if r['status']=='CLOSED':
+   if not r.get('root_owners'):rootless.append(r['row'])
    for root in r.get('root_owners',[]):rows[root['root']].add(r['row'])
  # Reuse NKT indexed receipts where NLX does not have a matching root filename.
  nkt={r['root']:r for r in json.loads((A/'NKT_ROOT_REACHABILITY.json').read_text())}
@@ -51,7 +52,7 @@ def main():
  out=[]
  for h,b in blobs.items():
   roots=[dict(root=r,names=sorted(ns),rows=sorted(rows[r])) for r,ns in sorted(hits[h].items())]
-  out.append(dict(blob=h,affected_CLOSED_rows=sorted({rr for r in roots for rr in r['rows']}),reaching_roots=roots,mapping='Lexical fully qualified declaration names and scoped _private suffix aliases intersect checked root lists; historical aliases sharing the same names remain conservative until selected source-to-object mapping is recovered.',unresolved_root_lists=len(missing)))
- raw=json.dumps(dict(ledger_sha256=sha((L/'NLX_LEDGER.json.xz').read_bytes()),closed_rows=sum(r['status']=='CLOSED' for r in ledger['rows']),roots=len(rows),missing_root_lists=missing,receipts=receipts,blobs=out),indent=2).encode();(E/'NMH_ROW_IMPACT.json.xz').write_bytes(lzma.compress(raw,preset=6));(E/'NMH_ROW_IMPACT.json.sha256').write_text(sha(raw)+'\n')
+  out.append(dict(blob=h,affected_CLOSED_rows=sorted({rr for r in roots for rr in r['rows']}),reaching_roots=roots,mapping='Lexical fully qualified declaration names and scoped _private suffix aliases intersect checked root lists; historical aliases sharing the same names remain conservative until selected source-to-object mapping is recovered.',unresolved_root_lists=len(missing),unassessed_rootless_CLOSED_rows=rootless))
+ raw=json.dumps(dict(ledger_sha256=sha((L/'NLX_LEDGER.json.xz').read_bytes()),closed_rows=sum(r['status']=='CLOSED' for r in ledger['rows']),roots=len(rows),missing_root_lists=missing,rootless_CLOSED_rows=rootless,rootless_finding='NKT-F3 retained; no named root exists to establish emission impact for these rows',receipts=receipts,blobs=out),indent=2).encode();(E/'NMH_ROW_IMPACT.json.xz').write_bytes(lzma.compress(raw,preset=6));(E/'NMH_ROW_IMPACT.json.sha256').write_text(sha(raw)+'\n')
  print(json.dumps(dict(blobs=len(out),roots=len(rows),checked=len(receipts),missing=len(missing),affected_blobs=sum(bool(x['affected_CLOSED_rows']) for x in out))))
 if __name__=='__main__':main()
