@@ -53,5 +53,5 @@ def Cut (native : Native) : Prop := ∀ f,
   cell (cell f.expected.roots root.val root.isLt) byte.val byte.isLt) ∧
  (∀ byte : Fin 32,cell (native f).value.transcript.state byte.val byte.isLt=
   cell f.expected.transcript.state byte.val byte.isLt) ∧
- (native f).value.transcript.next=f.expected.transcript.next
+ (native f).value.transcript.next_row=f.expected.transcript.next_row
 end AspisR1.NLU_Construct

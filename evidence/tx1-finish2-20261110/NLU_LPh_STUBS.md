@@ -1,12 +1,12 @@
 # NLU opaque arithmetic and copy table
 
-No field arithmetic implementation is proved in Kani. The arithmetic_arguments window is a LOCAL opaque call log with three independent replies. It checks the parent call order, operands and carry only. It is SUPPORT ONLY until those replies are substituted with emitted-definition/natural-spec laws on caller-established canonical domains, and its literal source association is reviewed. No kani::stub field implementation is installed and no field packet is claimed closed by this window.
+No field multiplication/addition implementation is evaluated in Kani. K023/K024 check the LOCAL opaque three-call operand/order/reply log. Replies are independently arbitrary there and are instantiated in Lean with the SAME emitted values by NLU_Arithmetic.source. This is component support, not full136 closure.
 
-| Call | Actual frozen operation | Lean pairing / domain | Status |
+| Call | Frozen operation | Named paired Lean theorem / domain | Parent status |
 |---|---|---|---|
-| 0 | QM31.mul(eta,terminal) | Named emitted-definition ok/natural-value law required; eta canonical from own input, terminal canonical from SAME256 output | OPEN integration |
-| 1 | QM31.add(mask,product) | Canonical mask from SAME147, product from call0 law; exact emitted add law required | OPEN integration |
-| 2 | QM31.add(partial,extra28) | Canonical partial from call1, extra28 from SAME decoded25 row; exact emitted add law required | OPEN integration |
-| copy_nonoverlapping | Exact KMX patch | Hash in NLU_INPUT_PINS, own positive/control pairs plus existing KMX value/frame laws | Per-pair receipts decide support |
+|0|QM31.mul(eta,terminal)|AspisR1.NLU_Generated.emitted_mul proves the actual emitted definition returns ok with canonical exact decoded product, using generated_qm_mul_eq_probe. AspisR1.NLU_FieldValues.mul_value transports the same law to fixed deployed boundaries. Both operands canonical.|eta own-input clause; SAME256 output canonicality proved in NLU_Terminal.source; actual parent slot integration OPEN|
+|1|QM31.add(mask,product)|AspisR1.NLU_FieldValues.add_value, from existing NJB_StubLaws.qm_add and emitted/probe transport. Canon both operands; product canonicality derived internally.|mask from actual CLOSED TX1:076 NHU_Mask.result, not147; full source/native parent slot association OPEN|
+|2|QM31.add(partial,extra28)|Same add_value law. Canon partial from call1; Canon extra28 from SAME decoded25 value.|147 is decode_k; exact row25/29/87 domain derived in NLU_Decode.source; full parent value/cut integration OPEN|
+|copy_nonoverlapping|Exact KMX_copy_stubs.patch|Exact patch/source hashes in NLU_INPUT_PINS, source pins and each native gate. Paired arbitrary-offset controls and existing KMX value/frame laws.|per-member support; no full-parent heap claim|
 
-An independent arbitrary reply is not equated wholesale with an actual field result at a root. A missing emitted law/domain is an OPEN obligation, never a pass. No new trust row is introduced; eligible reviewed native-contract transport would remain existing option-A P6/D188 reclassification.
+NLU_FieldValues and NLU_GeneratedMul have focused successful standard-axiom receipts. NLU_Arithmetic instantiates all three value laws and logs internally at SAME original/intermediate operands. Canonicality of its segment inputs is an explicit helper domain, not an allowed leftover136 root premise. It must be derived from the parent state before a136 root could use the segment. No unpaired field stub is claimed a pass, no new axiom/trust row is introduced, and eligible transport remains existing option-A P6/D188 reclassification.

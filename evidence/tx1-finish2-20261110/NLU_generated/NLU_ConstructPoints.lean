@@ -9,6 +9,7 @@ theorem points (native : Native) (cut : Cut native) (f : Frame) :
  (native f).value.z=f.expected.z := by
  apply NLU.cells_ext
  intro i hi
+ change i<2 at hi
  have options : i=0 ∨ i=1 := by omega
  rcases options with rfl|rfl
  · apply point_ext

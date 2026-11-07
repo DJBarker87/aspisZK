@@ -1,0 +1,10 @@
+'AspisR1.NLU.some_of_initialized' does not depend on any axioms
+'AspisR1.NLU.verified_constructed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLU.verified_constructed : ∀ {H : Type} (input : Input H) (s : State H),
+  Reachable input s →
+    s.machine.next = NLC_Finish.Event.verified →
+      ∃ verified,
+        (step s).reply = ok (Sum.inl (core.result.Result.Ok verified, Owner.transferred)) ∧
+          s.machine.locals.claims = some verified.claims ∧
+            verified.challenges = input.challenges ∧ s.owner = Owner.live :=
+⋯

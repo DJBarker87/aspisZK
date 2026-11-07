@@ -31,6 +31,7 @@ theorem source (r : NP6_StdModel.Reservation) (native : NLU_FieldLog.Native)
  have calls:=NLU_FieldLog.complete native cut f replies
  refine ⟨replies,?_,hfinal,calls.1,calls.2.1,calls.2.2,?_⟩
  · simp only [code,mul,add1,add2,bind_tc_ok]
+   rfl
  · change FIv_NativeValue.decode (FIq_Carriers.toQ total)=_
    rw [vfinal,vpartial,vp]
 #print axioms source

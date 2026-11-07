@@ -36,6 +36,8 @@ for name in ['Driver','ProofDriver']:
 for name in ['audit_batch.py','audit_config.py','pin.py']:
  s=(E.parent/'tx1-finish-20261110'/('NLI_'+name)).read_text().replace('NLI','NLU').replace('codex-cx-tx1-finish-20261110','codex-cx-tx1-finish2-20261110')
  (E/('NLU_'+name)).write_text(s)
+p=E/'NLU_audit_batch.py';s=p.read_text().replace("exec(compile((B/'NLU_pin.py').read_text(),'NLU_pin.py','exec'));sys.exit(0)","exec(compile((B/'NLU_pin.py').read_text(),'NLU_pin.py','exec'));exec(compile((B/'NLU_preflight.py').read_text(),'NLU_preflight.py','exec'));sys.exit(0)");p.write_text(s)
+p=E/'NLU_audit_config.py';s=p.read_text().replace("['NLU_pin.py','NLU_PREDECESSORS.json.xz']","['NLU_pin.py','NLU_PREDECESSORS.json.xz','NLU_preflight.py']").replace("'NLU_EXPORT.json']","'NLU_EXPORT.json','NLU_PREFLIGHT.json']");p.write_text(s)
 (E/'NLU_native').mkdir(exist_ok=True);cpins={}
 for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
  src=E.parent/'tx1-finish-20261110/NLI_native'/n;shutil.copyfile(src,E/'NLU_native'/n);cpins[n]=hashlib.sha256(src.read_bytes()).hexdigest()

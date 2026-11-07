@@ -1,0 +1,53 @@
+{"attempt": "NLU_L090", "exit_status": 1, "wall_seconds": 20.236702439840883, "peak_rss_kib": "6525380", "swaps": "0", "print_axioms": ["'AspisR1.NLU_Arithmetic.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLU_generated/NLU_Arithmetic.lean:33:1: error: unsolved goals
+case refine_1
+r : NP6_StdModel.Reservation
+native : NLU_FieldLog.Native
+cut : NLU_FieldLog.Cut native
+f : Frame
+he : JFv_RoundArithmetic.Canonical f.eta
+ht : JFv_RoundArithmetic.Canonical f.terminal
+hm : JFv_RoundArithmetic.Canonical f.mask
+hx : JFv_RoundArithmetic.Canonical f.extra
+product : aspis_core.field.QM31
+mul : (IDa_Deployed.boundaries r).mul f.eta f.terminal = ok product
+hp : JFv_RoundArithmetic.Canonical product
+vp :
+  FIv_NativeValue.decode (FIq_Carriers.toQ product) =
+    FIv_NativeValue.decode (FIq_Carriers.toQ f.eta) * FIv_NativeValue.decode (FIq_Carriers.toQ f.terminal)
+partialValue : aspis_core.field.QM31
+add1 : (
+...
+dd partialValue f.extra = ok total
+hfinal : JFv_RoundArithmetic.Canonical total
+vfinal :
+  FIv_NativeValue.decode (FIq_Carriers.toQ total) =
+    FIv_NativeValue.decode (FIq_Carriers.toQ partialValue) + FIv_NativeValue.decode (FIq_Carriers.toQ f.extra)
+replies : Replies := { product := product, partialValue := partialValue, total := total }
+calls :
+  (native f replies).calls = 3 ∧
+    (∀ (i : Fin 3), NLU.cell (native f replies).args ↑i ⋯ = NLU_FieldLog.arguments f replies i) ∧
+      (native f replies).returned = replies.total
+⊢ ok total = ok replies.total
+'AspisR1.NLU_Arithmetic.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLU_Arithmetic.source : ∀ (r : NP6_StdModel.Reservation) (native : NLU_FieldLog.Native),
+  NLU_FieldLog.Cut native →
+    ∀ (f : Frame),
+      JFv_RoundArithmetic.Canonical f.eta →
+        JFv_RoundArithmetic.Canonical f.terminal →
+          JFv_RoundArithmetic.Canonical f.mask →
+            JFv_RoundArithmetic.Canonical f.extra →
+              ∃ replies,
+                code r f = ok replies.total ∧
+                  JFv_RoundArithmetic.Canonical replies.total ∧
+                    (native f replies).calls = 3 ∧
+                      (∀ (i : Fin 3), NLU.cell (native f replies).args ↑i ⋯ = NLU_FieldLog.arguments f replies i) ∧
+                        (native f replies).returned = replies.total ∧
+                          FIv_NativeValue.decode (FIq_Carriers.toQ replies.total) =
+                            FIv_NativeValue.decode (FIq_Carriers.toQ f.mask) +
+                                FIv_NativeValue.decode (FIq_Carriers.toQ f.eta) *
+                                  FIv_NativeValue.decode (FIq_Carriers.toQ f.terminal) +
+                              FIv_NativeValue.decode (FIq_Carriers.toQ f.extra) :=
+⋯
+
+Running as unit: run-r84d7217d74314e2e8f56866ad7e4c629.scope; invocation ID: e0c5153583124ca7912ee34ebfb9bda0

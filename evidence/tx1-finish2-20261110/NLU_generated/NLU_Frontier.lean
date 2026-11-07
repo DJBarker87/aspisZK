@@ -31,7 +31,7 @@ theorem summary {H : Type} (n : Nat) (s : NLU.State H) :
    | div=>rfl
    | ok post=>cases post with
      | inl out=>rfl
-     | inr after=>rw [ih]
+     | inr after=>simp only [ih]
 /-- The same reachable-state invariant holds at every abort/return frontier.
 It describes the prefix before the last entered occurrence, never the heap
 post of an aborting child. -/

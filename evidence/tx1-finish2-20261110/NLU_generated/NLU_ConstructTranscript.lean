@@ -4,11 +4,11 @@ namespace AspisR1.NLU_Construct
 open Aeneas Aeneas.Std AspisR1PublicPreparation
 open NLU (cell)
 theorem transcript_ext (a b : r1_wire.SemanticTranscript Unit)
- (hs : a.state=b.state) (hn : a.next=b.next) : a=b := by
+ (hs : a.state=b.state) (hn : a.next_row=b.next_row) : a=b := by
  cases a with
- | mk ah ast an=>
+ | mk ast ah an=>
    cases b with
-   | mk bh bst bn=>
+   | mk bst bh bn=>
      cases ah;cases bh;cases hs;cases hn;rfl
 theorem transcript (native : Native) (cut : Cut native) (f : Frame) :
  (native f).value.transcript=f.expected.transcript := by

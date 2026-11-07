@@ -19,3 +19,11 @@ Next client after the current native campaign terminates: python3 evidence/tx1-f
 The planned one combined gate uses NLO_COMBINED_IMPORT plus NLI/NLC/NLH modules and the deployed headline. Recheck research for any merged NLS ledger before preparing it. NLU_prepare_audit.py prepares support imports/manifests only; it has not run a combined gate. Reserve111..150 for combined compilation, optimized unchanged walker drivers, eight controls, NFX scan,31 raw ax2 groups and final pins/export. Do not claim a root from an imported theorem count or a source interpreter.
 
 Native136 full heap/allocator/frame/callee-domain installation remains OPEN. NLU_CALLER_CLAUSES is proposed own-input inventory, not a reviewed root. NLU_CLOSED and NLU_LEDGER_DELTA remain zero credit. All hard security/trust/release constraints remain unchanged; target not yet established.
+
+## Focused stage complete
+
+Every current new proof module has a matching successful focused source snapshot; only inspection modules are excluded from that proof list. Source abort frontier L108/L109, full helper statements L110 and dependent high-loop recheck L150 pass at the original caps with standard axioms. NLU_STATEMENTS.txt is the exact printed statement inventory. The native136/full parameterized native fold is independently OPEN as detailed in NLU_FAILING_STEP/NLU_REMAINING.
+
+The sole disk wait was L108:39,959,629,824bytes free, below40GB. No launch occurred. After the mandated ten-minute wait, the next check passed with115,987,435,520bytes free. Own completed graph evidence was losslessly deduplicated by SHA, freeing51,631,792bytes; no cache, target or TMPDIR was deleted. All native source/graph/lock evidence remains retained.
+
+Research before the gate is bc8ea3c8d199 (full pin in NLU_RESEARCH_FINAL_GATE.json), with no merged NLS_HANDOFF anywhere under evidence. The combined baseline remains NLO ledger22; the actual NLH candidate is imported at its real arguments/domains. No256 or136 ledger admission is fabricated.

@@ -16,7 +16,7 @@ theorem source {H : Type} (input : NLU.Input H) :
  NLU.eraseReply (run (NLC_Finish.fuel (NLC_Finish.initial input)) (NLU.initial input)).summary.reply)=
  PreparedHashCode.run (S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries input.reservation)
  input.digest input.publicValue input.prefix1 input.transcript input.challenges none) := by
- rw [summary]
+ simp only [summary]
  exact NLU.source_projection input
 #print axioms initialized_frontier
 #print axioms source
