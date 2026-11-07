@@ -1,0 +1,56 @@
+{"attempt": "PCF_L016", "exit_status": 0, "wall_seconds": 3.4259578541386873, "peak_rss_kib": "5313136", "swaps": "0", "print_axioms": []}
+FOUND AspisR1.S2K.DigestBytes.bytes
+TYPE AspisR1.S2K.DigestTotal.Digest → Aeneas.Std.Array Aeneas.Std.U8 32#usize
+VALUE fun rows => AspisR1.S2K.DigestBytes.fold (↑rows) 0 (Aeneas.Std.Array.repeat 32#usize 0#u8)
+MISSING AspisR1.S2K.DigestBytes.word
+MISSING AspisR1.S2K.DigestBytes.wordBytes
+MISSING AspisR1.S2K.DigestBytes.byte
+FOUND AspisR1.S2K.DigestBytes.exact
+TYPE ∀ (rows : AspisR1.S2K.DigestTotal.Digest),
+  AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical rows =
+    Aeneas.Std.Result.ok (AspisR1.S2K.DigestBytes.bytes rows)
+VALUE fun rows =>
+  have h :=
+    AspisR1.S2K.DigestBytes.loop_exact rows 0#usize (of_decide_eq_true (id (Eq.refl true)))
+      (Aeneas.Std.Array.repeat 3
+...
+0 (Aeneas.Std.Array.repeat 32#usize 0#u8)
+MISSING AspisR1.S2K.DigestBytes.word
+MISSING AspisR1.S2K.DigestBytes.wordBytes
+MISSING AspisR1.S2K.DigestBytes.byte
+FOUND AspisR1.S2K.DigestBytes.exact
+TYPE ∀ (rows : AspisR1.S2K.DigestTotal.Digest),
+  AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical rows =
+    Aeneas.Std.Result.ok (AspisR1.S2K.DigestBytes.bytes rows)
+VALUE fun rows =>
+  have h :=
+    AspisR1.S2K.DigestBytes.loop_exact rows 0#usize (of_decide_eq_true (id (Eq.refl true)))
+      (Aeneas.Std.Array.repeat 32#usize 0#u8);
+  id
+    (have zero := rfl;
+    id
+      (Eq.mp
+        (congrArg
+          (Eq
+            (AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical_loop
+              (AspisR1.S2K.DigestTotal.cursor rows 0#usize) (Aeneas.Std.Array.repeat 32#usize 0#u8)))
+          (congrArg Aeneas.Std.Result.ok
+            (congrFun' (congr (congrArg AspisR1.S2K.DigestBytes.fold (congrFun' (congrArg List.drop zero) ↑rows)) zero)
+              (Aeneas.Std.Array.repeat 32#usize 0#u8))))
+        h))
+FOUND NFY_NBP_DigestEncode.result
+TYPE ∀ (digest : Aeneas.Std.Array Aeneas.Std.U32 8#usize),
+  AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical digest =
+    Aeneas.Std.Result.ok (AspisR1.S2K.DigestBytes.bytes digest)
+VALUE fun digest => AspisR1.S2K.DigestBytes.exact digest
+FOUND Aeneas.Std.Slice.setSlice!
+TYPE {α : Type u} → Aeneas.Std.Slice α → ℕ → List α → Aeneas.Std.Slice α
+VALUE fun {α} s i s' => ⟨(↑s).setSlice! i s', ⋯⟩
+FOUND Aeneas.Std.core.slice.iter.Iter.mk
+TYPE {T : Type} → Aeneas.Std.Slice T → ℕ → Aeneas.Std.core.slice.iter.Iter T
+VALUE <not-available>
+FOUND Aeneas.Std.core.iter.adapters.enumerate.Enumerate.mk
+TYPE {I : Type u} → I → Aeneas.Std.Usize → Aeneas.Std.core.iter.adapters.enumerate.Enumerate I
+VALUE <not-available>
+
+Running as unit: run-r4dcfa7839fe34e4c8789882ec7b9a873.scope; invocation ID: dafe876d72cf4b63a60d2492acaa25e6

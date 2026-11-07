@@ -597,5 +597,911 @@
  "PCF_L012": {
   "kind": "lean",
   "target": "PCF_AppendProbe"
+ },
+ "PCF_L013": {
+  "kind": "lean",
+  "target": "PCF_Payer"
+ },
+ "PCF_L014": {
+  "kind": "lean",
+  "target": "PCF_Token"
+ },
+ "PCF_E003": {
+  "kind": "extract",
+  "target": "Actual frozen POOL:332 count checker",
+  "command": [
+   "python3",
+   "PCF_extract_count_native.py"
+  ],
+  "files": {
+   "PCF_extract_count_native.py": "PCF_extract_count_native.py"
+  },
+  "collect": [
+   "PCF_COUNT_NATIVE_EXTRACTION_PINS.json"
+  ],
+  "expected_time": "Optimized full frozen Pool compilation for direct count-only extraction, followed by pinned Aeneas; no account data dereference, guard drop, hash or arithmetic gate"
+ },
+ "PCF_K011": {
+  "kind": "kani",
+  "target": "POOL:364 actual contract shared RefCell cells",
+  "files": {
+   "PCF_gate.py": "PCF_gate.py",
+   "PCF_src/programs/aspis-pool/src/processor.rs": "PCF_processor.rs.txt",
+   "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "PCF_Processor.rs",
+   "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "PCF_AccountReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCF_gate.py",
+   "PCF_K011.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "processor::PCF_Processor::payer_alias_contract_proof",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCF_K011-graph-check.json",
+   "PCF_K011-graph.stderr",
+   "PCF_K011-lock-check.json",
+   "PCF_K011-source-check.json",
+   "PCF_K011-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCF_K012": {
+  "kind": "kani",
+  "target": "POOL:364 inverted contract shared RefCell cells",
+  "files": {
+   "PCF_gate.py": "PCF_gate.py",
+   "PCF_src/programs/aspis-pool/src/processor.rs": "PCF_processor.rs.txt",
+   "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "PCF_Processor.rs",
+   "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "PCF_AccountReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCF_gate.py",
+   "PCF_K012.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "processor::PCF_Processor::payer_alias_contract_proof",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCF_K012-graph-check.json",
+   "PCF_K012-graph.stderr",
+   "PCF_K012-lock-check.json",
+   "PCF_K012-source-check.json",
+   "PCF_K012-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCF_NEG_PAYER"
+  }
+ },
+ "PCF_L015": {
+  "kind": "lean",
+  "target": "PCF_ChildLaws"
+ },
+ "PCF_L016": {
+  "kind": "lean",
+  "target": "PCF_ChildProbe"
+ },
+ "PCF_L017": {
+  "kind": "lean",
+  "target": "PCF_Payer"
+ },
+ "PCF_L018": {
+  "kind": "lean",
+  "target": "PCF_ChildLaws"
+ },
+ "PCF_L019": {
+  "kind": "lean",
+  "target": "PCF_PCB_ACCEPTED_IMPORT"
+ },
+ "PCF_L020": {
+  "kind": "lean",
+  "target": "PCF_COMBINED_IMPORT"
+ },
+ "PCF_L021": {
+  "kind": "lean",
+  "target": "PCF_AuditDriver",
+  "native": true
+ },
+ "PCF_L022": {
+  "kind": "link",
+  "target": "PCF_AuditDriver",
+  "command": [
+   "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake",
+   "env",
+   "leanc",
+   "-O3",
+   "-rdynamic",
+   "-o",
+   "PCF_native/PCF_AuditDriver",
+   "PCF_native/PCF_AuditDriver.c",
+   "PCF_native/PCF_WALKER.c",
+   "PCF_native/PCF_MemoryLimit.c"
+  ],
+  "files": {
+   "PCF_native/PCF_WALKER.c": "PCF_WALKER.c",
+   "PCF_native/PCF_MemoryLimit.c": "PCF_MemoryLimit.c"
+  },
+  "expected_time": "Optimized link of exact unchanged NEP raw walker and own driver; no arithmetic elimination"
+ },
+ "PCF_L023": {
+  "kind": "audit",
+  "target": "Eight NEP fixtures in PCF audit binary",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "fixtures"
+  ],
+  "expected_time": "Eight fidelity fixtures; same binary subsequently used for scan/raw root audit"
+ },
+ "PCF_L024": {
+  "kind": "lean",
+  "target": "PCF_ChildLaws"
+ },
+ "PCF_L025": {
+  "kind": "lean",
+  "target": "PCF_WordBridge"
+ },
+ "PCF_L026": {
+  "kind": "lean",
+  "target": "PCF_CountWord"
+ },
+ "PCF_K013": {
+  "kind": "kani",
+  "target": "PCA fixed program IDs equal actual frozen SDK/Pool IDs",
+  "files": {
+   "PCF_gate.py": "PCF_gate.py",
+   "PCF_src/programs/aspis-pool/src/processor.rs": "PCF_processor.rs.txt",
+   "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "PCF_Processor.rs",
+   "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "PCF_AccountReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCF_gate.py",
+   "PCF_K013.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "processor::PCF_Processor::constants_proof",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCF_K013-graph-check.json",
+   "PCF_K013-graph.stderr",
+   "PCF_K013-lock-check.json",
+   "PCF_K013-source-check.json",
+   "PCF_K013-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCF_K014": {
+  "kind": "kani",
+  "target": "PCA fixed program IDs equal actual frozen SDK/Pool IDs wrong-ID control",
+  "files": {
+   "PCF_gate.py": "PCF_gate.py",
+   "PCF_src/programs/aspis-pool/src/processor.rs": "PCF_processor.rs.txt",
+   "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "PCF_Processor.rs",
+   "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "PCF_AccountReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCF_gate.py",
+   "PCF_K014.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "processor::PCF_Processor::constants_proof",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCF_K014-graph-check.json",
+   "PCF_K014-graph.stderr",
+   "PCF_K014-lock-check.json",
+   "PCF_K014-source-check.json",
+   "PCF_K014-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCF_NEG_IDS"
+  }
+ },
+ "PCF_L027": {
+  "kind": "audit",
+  "target": "NFX whole combined import scan",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "scan"
+  ],
+  "files": {
+   "PCF_EXPECTED_IMPORTS.jsonl": "PCF_EXPECTED_IMPORTS.jsonl",
+   "PCF_AUDIT_ROOTS.json": "PCF_ALL_AUDIT_ROOTS.json"
+  },
+  "collect": [
+   "PCF_LOADED_scan.jsonl"
+  ],
+  "expected_time": "One canonical owner/declaration/import scan of the exact loaded combined closure"
+ },
+ "PCF_L028": {
+  "kind": "audit",
+  "target": "Raw NEP ax2 all roots batch 0",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof0"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_ROOTS_00.json"
+  },
+  "expected_time": "Exact raw ax2 traversal of the named root batch; same unchanged NEP walker and same PCF binary as eight fixtures"
+ },
+ "PCF_L029": {
+  "kind": "audit",
+  "target": "Raw NEP ax2 all roots batch 1",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof1"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_ROOTS_01.json"
+  },
+  "expected_time": "Exact raw ax2 traversal of the named root batch; same unchanged NEP walker and same PCF binary as eight fixtures"
+ },
+ "PCF_L030": {
+  "kind": "audit",
+  "target": "Raw NEP ax2 all roots batch 2",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof2"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_ROOTS_02.json"
+  },
+  "expected_time": "Exact raw ax2 traversal of the named root batch; same unchanged NEP walker and same PCF binary as eight fixtures"
+ },
+ "PCF_L031": {
+  "kind": "audit",
+  "target": "Raw NEP ax2 all roots batch 3",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof3"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_ROOTS_03.json"
+  },
+  "expected_time": "Exact raw ax2 traversal of the named root batch; same unchanged NEP walker and same PCF binary as eight fixtures"
+ },
+ "PCF_L032": {
+  "kind": "audit",
+  "target": "Raw NEP ax2 all roots batch 4",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof4"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_ROOTS_04.json"
+  },
+  "expected_time": "Exact raw ax2 traversal of the named root batch; same unchanged NEP walker and same PCF binary as eight fixtures"
+ },
+ "PCF_L033": {
+  "kind": "audit",
+  "target": "Raw NEP ax2 all roots batch 5",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof5"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_ROOTS_05.json"
+  },
+  "expected_time": "Exact raw ax2 traversal of the named root batch; same unchanged NEP walker and same PCF binary as eight fixtures"
+ },
+ "PCF_L034": {
+  "kind": "audit",
+  "target": "Raw NEP ax2 all roots batch 6",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof6"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_ROOTS_06.json"
+  },
+  "expected_time": "Exact raw ax2 traversal of the named root batch; same unchanged NEP walker and same PCF binary as eight fixtures"
+ },
+ "PCF_L035": {
+  "kind": "audit",
+  "target": "Raw NEP ax2 all roots batch 7",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof7"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_ROOTS_07.json"
+  },
+  "expected_time": "Exact raw ax2 traversal of the named root batch; same unchanged NEP walker and same PCF binary as eight fixtures"
+ },
+ "PCF_L036": {
+  "kind": "audit",
+  "target": "Raw NEP ax2 all roots batch 8",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof8"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_ROOTS_08.json"
+  },
+  "expected_time": "Exact raw ax2 traversal of the named root batch; same unchanged NEP walker and same PCF binary as eight fixtures"
+ },
+ "PCF_L037": {
+  "kind": "audit",
+  "target": "Raw NEP ax2 all roots batch 9",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof9"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_ROOTS_09.json"
+  },
+  "expected_time": "Exact raw ax2 traversal of the named root batch; same unchanged NEP walker and same PCF binary as eight fixtures"
+ },
+ "PCF_L038": {
+  "kind": "audit",
+  "target": "Raw NEP ax2 all roots batch 10",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof10"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_ROOTS_10.json"
+  },
+  "expected_time": "Exact raw ax2 traversal of the named root batch; same unchanged NEP walker and same PCF binary as eight fixtures"
+ },
+ "PCF_L039": {
+  "kind": "audit",
+  "target": "Raw NEP ax2 all roots batch 11",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof11"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_ROOTS_11.json"
+  },
+  "expected_time": "Exact raw ax2 traversal of the named root batch; same unchanged NEP walker and same PCF binary as eight fixtures"
+ },
+ "PCF_K015": {
+  "kind": "kani",
+  "target": "ProgramResult/AccountInfo explicit empty frame positive",
+  "files": {
+   "PCF_gate.py": "PCF_gate.py",
+   "PCF_src/programs/aspis-pool/src/processor.rs": "PCF_processor.rs.txt",
+   "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "PCF_Processor.rs",
+   "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "PCF_AccountReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCF_gate.py",
+   "PCF_K015.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "processor::PCF_Processor::empty_frame_proof",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCF_K015-graph-check.json",
+   "PCF_K015-graph.stderr",
+   "PCF_K015-lock-check.json",
+   "PCF_K015-source-check.json",
+   "PCF_K015-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCF_K016": {
+  "kind": "kani",
+  "target": "ProgramResult/AccountInfo explicit empty frame modifies violation control",
+  "files": {
+   "PCF_gate.py": "PCF_gate.py",
+   "PCF_src/programs/aspis-pool/src/processor.rs": "PCF_processor.rs.txt",
+   "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "PCF_Processor.rs",
+   "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "PCF_AccountReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCF_gate.py",
+   "PCF_K016.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "processor::PCF_Processor::bad_frame_proof",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCF_K016-graph-check.json",
+   "PCF_K016-graph.stderr",
+   "PCF_K016-lock-check.json",
+   "PCF_K016-source-check.json",
+   "PCF_K016-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCF_K017": {
+  "kind": "kani",
+  "target": "POOL:364 actual contract; explicit modifies()",
+  "files": {
+   "PCF_gate.py": "PCF_gate.py",
+   "PCF_src/programs/aspis-pool/src/processor.rs": "PCF_processor.rs.txt",
+   "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "PCF_Processor.rs",
+   "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "PCF_AccountReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCF_gate.py",
+   "PCF_K017.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "processor::PCF_Processor::payer_contract_proof",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCF_K017-graph-check.json",
+   "PCF_K017-graph.stderr",
+   "PCF_K017-lock-check.json",
+   "PCF_K017-source-check.json",
+   "PCF_K017-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCF_K018": {
+  "kind": "kani",
+  "target": "POOL:364 inverted contract; explicit modifies()",
+  "files": {
+   "PCF_gate.py": "PCF_gate.py",
+   "PCF_src/programs/aspis-pool/src/processor.rs": "PCF_processor.rs.txt",
+   "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "PCF_Processor.rs",
+   "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "PCF_AccountReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCF_gate.py",
+   "PCF_K018.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "processor::PCF_Processor::payer_contract_proof",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCF_K018-graph-check.json",
+   "PCF_K018-graph.stderr",
+   "PCF_K018-lock-check.json",
+   "PCF_K018-source-check.json",
+   "PCF_K018-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCF_NEG_PAYER"
+  }
+ },
+ "PCF_K019": {
+  "kind": "kani",
+  "target": "POOL:365 actual contract; explicit modifies()",
+  "files": {
+   "PCF_gate.py": "PCF_gate.py",
+   "PCF_src/programs/aspis-pool/src/processor.rs": "PCF_processor.rs.txt",
+   "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "PCF_Processor.rs",
+   "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "PCF_AccountReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCF_gate.py",
+   "PCF_K019.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "processor::PCF_Processor::token_contract_proof",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCF_K019-graph-check.json",
+   "PCF_K019-graph.stderr",
+   "PCF_K019-lock-check.json",
+   "PCF_K019-source-check.json",
+   "PCF_K019-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCF_K020": {
+  "kind": "kani",
+  "target": "POOL:365 inverted contract; explicit modifies()",
+  "files": {
+   "PCF_gate.py": "PCF_gate.py",
+   "PCF_src/programs/aspis-pool/src/processor.rs": "PCF_processor.rs.txt",
+   "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "PCF_Processor.rs",
+   "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "PCF_AccountReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCF_gate.py",
+   "PCF_K020.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "processor::PCF_Processor::token_contract_proof",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCF_K020-graph-check.json",
+   "PCF_K020-graph.stderr",
+   "PCF_K020-lock-check.json",
+   "PCF_K020-source-check.json",
+   "PCF_K020-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCF_NEG_TOKEN"
+  }
+ },
+ "PCF_K021": {
+  "kind": "kani",
+  "target": "POOL:364 actual contract shared RefCell cells; explicit modifies()",
+  "files": {
+   "PCF_gate.py": "PCF_gate.py",
+   "PCF_src/programs/aspis-pool/src/processor.rs": "PCF_processor.rs.txt",
+   "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "PCF_Processor.rs",
+   "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "PCF_AccountReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCF_gate.py",
+   "PCF_K021.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "processor::PCF_Processor::payer_alias_contract_proof",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCF_K021-graph-check.json",
+   "PCF_K021-graph.stderr",
+   "PCF_K021-lock-check.json",
+   "PCF_K021-source-check.json",
+   "PCF_K021-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop"
+ },
+ "PCF_K022": {
+  "kind": "kani",
+  "target": "POOL:364 inverted contract shared RefCell cells; explicit modifies()",
+  "files": {
+   "PCF_gate.py": "PCF_gate.py",
+   "PCF_src/programs/aspis-pool/src/processor.rs": "PCF_processor.rs.txt",
+   "PCF_src/programs/aspis-pool/src/PCF_Processor.rs": "PCF_Processor.rs",
+   "PCF_src/programs/aspis-pool/src/PCF_AccountReference.rs": "PCF_AccountReference.rs"
+  },
+  "command": [
+   "python3",
+   "PCF_gate.py",
+   "PCF_K022.json"
+  ],
+  "native_command": [
+   "/home/dombarker/.cargo/bin/cargo-kani",
+   "kani",
+   "--manifest-path",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/Cargo.toml",
+   "--target-dir",
+   "/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_target",
+   "--lib",
+   "--features",
+   "default,pair-forest-account-evidence,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit,pair-forest-verifier-lane-invariant-audit,r1-split-checkpoint",
+   "-j",
+   "1",
+   "-Z",
+   "unstable-options",
+   "-Z",
+   "function-contracts",
+   "-Z",
+   "stubbing",
+   "--harness-timeout",
+   "90s",
+   "--exact",
+   "--harness",
+   "processor::PCF_Processor::payer_alias_contract_proof",
+   "--output-format",
+   "terse"
+  ],
+  "pool_features": "aspis-pool/default,aspis-pool/pair-forest-account-evidence,aspis-pool/pair-forest-source-invariant-audit,aspis-pool/pair-forest-source-result-invariant-audit,aspis-pool/pair-forest-verifier-lane-invariant-audit,aspis-pool/r1-split-checkpoint",
+  "collect": [
+   "PCF_K022-graph-check.json",
+   "PCF_K022-graph.stderr",
+   "PCF_K022-lock-check.json",
+   "PCF_K022-source-check.json",
+   "PCF_K022-selected-features.txt"
+  ],
+  "expected_time": "Frozen dependency compilation then scalar record contract; no field multiplication or loop",
+  "env": {
+   "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg PCF_NEG_PAYER"
+  }
+ },
+ "PCF_L040": {
+  "kind": "lean",
+  "target": "PCF_WordBridge"
+ },
+ "PCF_L041": {
+  "kind": "lean",
+  "target": "PCF_SliceProbe"
+ },
+ "PCF_L042": {
+  "kind": "audit",
+  "target": "Corrected raw ax2 required roots 0",
+  "command": [
+   "PCF_native/PCF_AuditDriver",
+   "proof12"
+  ],
+  "files": {
+   "PCF_AUDIT_ROOTS.json": "PCF_REPAIR_ROOTS_00.json"
+  },
+  "expected_time": "Corrected required-root manifest; unchanged binary/fixtures/walker and frozen theorem targets; historical unrelated NJN roots recorded separately"
+ },
+ "PCF_L043": {
+  "kind": "audit",
+  "target": "Gate evidence: exact binary pins, imported-object hashes, streamed raw graphs",
+  "command": [
+   "python3",
+   "PCF_collect_artifacts.py"
+  ],
+  "files": {
+   "PCF_collect_artifacts.py": "PCF_collect_artifacts.py"
+  },
+  "collect": [
+   "PCF_AUDIT_BINARY_PINS.json",
+   "PCF_RAW_MANIFEST.json",
+   "PCF_native/PCF_AuditDriver.c"
+  ],
+  "expected_time": "Streaming raw text compression and immutable object hashing; <=1MiB input buffers; no proof generation or arithmetic"
  }
 }

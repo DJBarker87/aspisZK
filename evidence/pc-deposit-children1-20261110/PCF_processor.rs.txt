@@ -133,6 +133,7 @@ pub(crate) fn require_unique_accounts(accounts: &[AccountInfo<'_>]) -> ProgramRe
 
 #[cfg_attr(all(kani,not(PCF_NEG_PAYER)),kani::ensures(|r| PCF_Processor::payer_contract(payer,system_program_account,r)))]
 #[cfg_attr(all(kani,PCF_NEG_PAYER),kani::ensures(|r| !PCF_Processor::payer_contract(payer,system_program_account,r)))]
+#[cfg_attr(kani,kani::modifies())]
 pub(crate) fn require_payer_and_system_program(
     payer: &AccountInfo<'_>,
     system_program_account: &AccountInfo<'_>,
@@ -335,6 +336,7 @@ pub(crate) fn create_or_allocate_with_seed_with_rent<'info, R: PoolCpiRuntimeV1>
 
 #[cfg_attr(all(kani,not(PCF_NEG_TOKEN)),kani::ensures(|r| PCF_Processor::token_contract(account,r)))]
 #[cfg_attr(all(kani,PCF_NEG_TOKEN),kani::ensures(|r| !PCF_Processor::token_contract(account,r)))]
+#[cfg_attr(kani,kani::modifies())]
 pub(crate) fn require_token_program_account(account: &AccountInfo<'_>) -> ProgramResult {
     if account.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
         || !account.executable

@@ -26,3 +26,5 @@ POOL:199 native/control PCF_K009/010 have expected PASS/FAIL on the actual froze
 PCF_L010 disk preflight observed39968239616 bytes free (<40000000000), so no prover was launched and the client waits10minutes before rechecking. PCF_BUILD_HYGIENE.json records697679486 bytes of terminal own Rust incremental outputs removed; all inputs, evidence, compiled dependencies and entire retained own cache remain. Future native runs disable incremental compilation to avoid that scratch growth. No other job/cache was altered. Read-only PCB append support/imports have been copied and pinned for the independent279 Lean obligations.
 
 PCF_AccountLaws contains checked extracted-reference equalities; PCF_LaneShape and PCF_LaneValue are pending drafts, not accepted roots. Full gate and adopted account-state/lane association remain open.
+
+POOL:364 NEW CLOSED: PCF_Payer.result_state_effects, actual native PCF_K017,PCF_K018,PCF_K021,PCF_K022, E001 reference, full adopted state/effect law and PCF_AUDIT_STAGE1.json gate. No semantic domain hypothesis beyond valid live Rust inputs; aliasing permitted. Total 1 CLOSED. Remaining work continues.

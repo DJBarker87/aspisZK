@@ -7,6 +7,8 @@ category=lambda k:'lean' if k in ['lean','link','audit'] else k
 assert sum(category(r['kind'])==category(kind) for r in used)<dict(lean=110,kani=110,extract=14)[category(kind)]
 assert 'extra_rustflags' not in task,'use explicit env.RUSTFLAGS; ignored flags forbidden'
 assert not (E/a/'receipt.json').exists(),'terminal receipt exists; no rerun'
+transport_records=[json.loads(l) for l in (E/'PCF_TRANSPORT.jsonl').read_text().splitlines()] if (E/'PCF_TRANSPORT.jsonl').exists() else []
+assert not any(r.get('attempt')==a and r.get('submitted') is True for r in transport_records),'already submitted; recover read-only, never resubmit'
 guard=E/'PCF_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 def ssh(code,data=None,submitted=False):
  for retry in range(11):

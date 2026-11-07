@@ -1,24 +1,26 @@
 --- a/programs/aspis-pool/src/processor.rs
 +++ b/programs/aspis-pool/src/processor.rs
-@@ -131,6 +131,8 @@
+@@ -131,6 +131,9 @@
      Ok(())
  }
  
 +#[cfg_attr(all(kani,not(PCF_NEG_PAYER)),kani::ensures(|r| PCF_Processor::payer_contract(payer,system_program_account,r)))]
 +#[cfg_attr(all(kani,PCF_NEG_PAYER),kani::ensures(|r| !PCF_Processor::payer_contract(payer,system_program_account,r)))]
++#[cfg_attr(kani,kani::modifies())]
  pub(crate) fn require_payer_and_system_program(
      payer: &AccountInfo<'_>,
      system_program_account: &AccountInfo<'_>,
-@@ -331,6 +333,8 @@
+@@ -331,6 +334,9 @@
      Ok(())
  }
  
 +#[cfg_attr(all(kani,not(PCF_NEG_TOKEN)),kani::ensures(|r| PCF_Processor::token_contract(account,r)))]
 +#[cfg_attr(all(kani,PCF_NEG_TOKEN),kani::ensures(|r| !PCF_Processor::token_contract(account,r)))]
++#[cfg_attr(kani,kani::modifies())]
  pub(crate) fn require_token_program_account(account: &AccountInfo<'_>) -> ProgramResult {
      if account.key != &LEGACY_SPL_TOKEN_PROGRAM_ID
          || !account.executable
-@@ -681,3 +685,7 @@
+@@ -681,3 +687,7 @@
      }
  
  }
