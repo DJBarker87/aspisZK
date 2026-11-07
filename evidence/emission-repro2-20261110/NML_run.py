@@ -118,7 +118,7 @@ for n,t in json.loads(r.stdout).items():
  if len(raw)>1000000:
   p.with_name(p.name+'.xz').write_bytes(lzma.compress(raw,preset=6));p.with_name(p.name+'.sha256').write_text(hashlib.sha256(raw).hexdigest()+'\n')
  else:p.write_bytes(raw)
-r=ssh('python3',f"from pathlib import Path;import json,base64,lzma,hashlib;b=Path({B!r});print(json.dumps({{str(p.relative_to(b)):dict(data=base64.b64encode(lzma.compress(p.read_bytes(),preset=6)).decode(),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in (b/( {a!r}+'_emitted')).glob('*.llbc')}}))")
+r=ssh('python3',f"from pathlib import Path;import json,base64,lzma,hashlib;b=Path({B!r});print(json.dumps({{str(p.relative_to(b)):dict(data=base64.b64encode(lzma.compress(p.read_bytes(),preset=6)).decode(),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for d in {cfg.get('collect',[])!r} for p in (b/d).glob('*.llbc') if d.endswith('_emitted')}}))")
 assert r.returncode==0,r.stderr
 for n,d in json.loads(r.stdout).items():
  p=E/n;p.with_name(p.name+'.xz').write_bytes(base64.b64decode(d['data']));p.with_name(p.name+'.sha256').write_text(d['sha256']+'\n')

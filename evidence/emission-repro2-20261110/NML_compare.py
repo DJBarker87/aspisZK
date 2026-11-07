@@ -12,7 +12,9 @@ def definitions(s):
 def main():
  old=load(OLD/'NMH_PROVENANCE.json');plan=load(E/'NML_PLAN.json');outputs=[];attempts={};tools=collections.Counter();detail=[]
  for q in plan['runs']:
-  a=q['run'];p=E/a/'receipt.json';n=E/(a+'_emitted')/'NHR_PINS.json'
+  a=q['run'];p=E/a/'receipt.json'
+  if not p.exists():p=E/a/'configuration_receipt.json'
+  n=E/(a+'_emitted')/'NHR_PINS.json'
   if p.exists():attempts[a]=load(p)
   if not p.exists() or not n.exists():continue
   pin=load(n)

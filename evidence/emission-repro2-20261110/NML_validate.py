@@ -15,7 +15,7 @@ def main():
   ref=E/r['reference_directory'];assert sha((ref/r['source_relative']).read_bytes())==r['reference_sha256'];assert sha((ref/'Cargo.toml').read_bytes())==r['manifest_sha256']
   assert '--release' in r['charon_command']
   for ex in r.get('package_extras',[]):assert sha((ref/ex['relative_path']).read_bytes())==ex['sha256']
- for f in E.glob('NML_[EL][0-9][0-9][0-9]/receipt.json'):
+ for f in list(E.glob('NML_[ELB][0-9][0-9][0-9]/receipt.json')):
   rc=load(f);a=rc['attempt'];ad=load(E/(a+'-admission.json'));assert ad['exit']==0 and ad['reservation']['allowed'] is True
   assert rc['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
   assert rc['timeout']==180
@@ -26,6 +26,11 @@ def main():
    # Host launcher retains the exact source bytes for this attempt, even if an owned controller is later repaired.
    snap=f.parent/'sources'/n
    if snap.exists():assert sha(snap.read_bytes())==h,(a,n)
+  if rc['kind']=='lean' and rc['exit_status']==0:
+   assert rc['print_axioms'] and isinstance(rc['print_axioms'],list)
+   for line in rc['print_axioms']:
+    m=re.search(r'depends on axioms: \[(.*?)\]',line)
+    assert (m is not None and set(x.strip() for x in m[1].split(',') if x.strip())<={'propext','Classical.choice','Quot.sound'}) or 'does not depend on any axioms' in line,line
   completed.append(dict(attempt=a,exit=rc['exit_status'],wall_seconds=rc['wall_seconds'],peak_rss_kib=rc['peak_rss_kib'],swaps=rc['swaps'],source_revision=rc['source_revision'],print_axioms=rc['print_axioms']))
  last_refusal={}
  for e in events:
@@ -34,6 +39,10 @@ def main():
   if e.get('kind')=='wait' and obs.get('stream_a_count',0)>=2:last_refusal[a]=obs['time']
   elif e.get('kind')=='share_check':
    if a in last_refusal:assert obs['time']-last_refusal.pop(a)>=180,(a,'short share recheck')
+ for f in E.glob('NML_E[0-9][0-9][0-9]/configuration_receipt.json'):
+  rc=load(f);scope=rc['scope_attempt'];outer=load(E/scope/'receipt.json');assert rc['limits']==outer['limits'];assert rc['source_revision']==outer['source_revision'];assert outer['exit_status']==0
+  assert rc['peak_rss_kib'] is not None and rc['swaps'] is not None and rc['inherited_scope_timeout']==180
+  completed.append(dict(attempt=rc['attempt'],scope_attempt=scope,exit=rc['exit_status'],wall_seconds=rc['wall_seconds'],peak_rss_kib=rc['peak_rss_kib'],swaps=rc['swaps'],source_revision=rc['source_revision'],print_axioms=rc['print_axioms']))
  for b in p['blobs']:
   if b.get('run')=='NML_E001':assert b['verdict']!='REPRODUCED_FROM_ARCHIVE'
   if b['verdict']=='REPRODUCED_FROM_ARCHIVE' and b.get('input',{}).get('directory'):assert b['run'] in {r['attempt'] for r in completed}

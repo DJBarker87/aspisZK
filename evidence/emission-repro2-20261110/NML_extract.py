@@ -26,7 +26,7 @@ original_run=subprocess.run
 def measured(cmd,*a,**kw):
  tool=next((k for k in ['charon','aeneas'] if cmd[0]==spec[k+'_command'][0]),None)
  if not tool:return original_run(cmd,*a,**kw)
- entry=dict(attempt=run,tool=tool,command=cmd,started_unix=time.time(),source_revision=json.loads((E/(run+'.json')).read_text())['source_revision'],frozen_validation_revision=m.REV,archive_source_git_blob=spec['configuration']['source']['git_blob'],tool_sha256=hashlib.sha256(Path(cmd[0]).read_bytes()).hexdigest(),archive_source_sha256=spec['reference_sha256'],archive_manifest_sha256=spec['manifest_sha256'])
+ entry=dict(attempt=run,tool=tool,command=cmd,started_unix=time.time(),source_revision=json.loads((E/(os.environ.get('NML_BATCH_ATTEMPT',run)+'.json')).read_text())['source_revision'],frozen_validation_revision=m.REV,archive_source_git_blob=spec['configuration']['source']['git_blob'],tool_sha256=hashlib.sha256(Path(cmd[0]).read_bytes()).hexdigest(),archive_source_sha256=spec['reference_sha256'],archive_manifest_sha256=spec['manifest_sha256'])
  with (E/'NML_TOOL_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n');f.flush();os.fsync(f.fileno())
  r=original_run(['/usr/bin/time','-v','-o',str(out/(tool+'.time'))]+cmd,*a,**kw)
  entry.update(exit=r.returncode,wall_seconds=time.time()-entry['started_unix'],time_receipt=str(out/(tool+'.time')))
@@ -46,6 +46,6 @@ finally:
  assert hashlib.sha256(source.read_bytes()).hexdigest()==spec['reference_sha256'],'STOP archive input drift'
  assert hashlib.sha256(manifest.read_bytes()).hexdigest()==spec['manifest_sha256'],'STOP archive manifest drift'
  lock=ref/'Cargo.lock'
- (out/'NML_REFERENCE_POSTCHECK.json').write_text(json.dumps(dict(source_sha256=spec['reference_sha256'],manifest_sha256=spec['manifest_sha256'],reference_basis=spec['reference_basis'],manifest_basis=spec['manifest_basis'],reference_lock_sha256=hashlib.sha256(lock.read_bytes()).hexdigest() if lock.exists() else None,reference_lock_note='Historical standalone std-only crate; no frozen-release dependency is substituted. Frozen release Cargo.lock independently checked by NHR_stage.',source_revision=json.loads((E/(run+'.json')).read_text())['source_revision']),indent=2))
+ (out/'NML_REFERENCE_POSTCHECK.json').write_text(json.dumps(dict(source_sha256=spec['reference_sha256'],manifest_sha256=spec['manifest_sha256'],reference_basis=spec['reference_basis'],manifest_basis=spec['manifest_basis'],reference_lock_sha256=hashlib.sha256(lock.read_bytes()).hexdigest() if lock.exists() else None,reference_lock_note='Historical standalone std-only crate; no frozen-release dependency is substituted. Frozen release Cargo.lock independently checked by NHR_stage.',source_revision=json.loads((E/(os.environ.get('NML_BATCH_ATTEMPT',run)+'.json')).read_text())['source_revision']),indent=2))
 print(json.dumps(dict(attempt=run,exit=status)),flush=True)
 sys.exit(status)

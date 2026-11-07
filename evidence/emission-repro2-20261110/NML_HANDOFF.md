@@ -17,3 +17,5 @@ Frozen crates/verifier/lock 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; Pool b9362
 No assumption is added, discharged or changed. Headline remains AspisR1.RPx_Deployed.deployed; L154 is a statement parameter; D188 remains narrowed. Uncompiled external templates are evidence only and never trusted new axioms. Lean checks, if successful, classify exact compared bodies only and do not close a native caller row.
 
 Validation: NML_tests.py rejects namespace/body/addition/partial-match mutants; NML_validate.py audits coverage, budgets, source hashes, admitted/capped receipts and 20 MB hygiene. PASS_WITH_PROVENANCE_GAPS is never a universal extraction or 100-bit security pass.
+
+Procedural finding: E001 is excluded from all provenance credit because its restarted waiter rechecked after 15.095 seconds rather than 180. Its tool charges remain; resource admission/caps passed. NML_ADMISSION_FINDING.json and NML_FINDINGS.md retain the evidence. The client now preserves refusal deadlines across restarts. No unchanged rerun.

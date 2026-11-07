@@ -23,3 +23,7 @@ The unchanged NHR_stage.py validates the frozen source/graph/lock and tool pins 
 ## NML-F4: E001 restart violated the share recheck interval
 
 NML_ADMISSION_FINDING.json records a 15.095-second recheck after the last >=2 refusal, caused by the owned receipt-context repair restarting its local waiter. Actual prelaunch count, reservation, caps and disk passed, but the required 180-second wait did not. E001 earns no provenance credit and its Charon/Aeneas charges remain. The owned client now preserves the deadline across restarts. No unchanged rerun was made. This finding does not affect the independently admitted NML_L001 arithmetic check.
+
+## NML-F5: two compared total scalar bodies are semantically different
+
+NML_L001 passed on NML_DiffArithmetic.lean: exit0, wall3.148678s, peakRSS2602496KiB, swaps0; exact revision/source/dependency hashes are retained in its receipt. All five printed theorems use only [propext, Classical.choice, Quot.sound]. NML_Diffs.body_difference0 and body_difference1 compare the exact field.M31.add body segments of the two NFG inverse blobs against NMH_E008's emitted definition. At U32 inputs (4294967295,1), checked addition fails integerOverflow and wrapping addition returns ok0. This establishes DIFFERS_SEMANTIC for these total scalar functions. The witness is outside canonical M31; it proves no canonical-domain caller or native security defect, closes no row, and does not alter trust. The remaining 15 original NMH differences remain UNCLASSIFIED.
