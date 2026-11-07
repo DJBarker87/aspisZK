@@ -1,81 +1,78 @@
-# SPEC lane — in progress
+# SPEC lane, first-session partial handoff
 
-Branch codex/pv-lib-spec-20261107, base 5e397cb3878. D976 specifications and
-composition only; no row consumption, ledger, shared map or package edits.
-Host writes only /home/dombarker/project-offloads/codex-pv-lib-spec-20261107.
-One capped scope at a time; STREAMB_SLOTS=3 turn.sh before every attempt.
-Lean49700–49789; raw49790–49799. No attempts used yet.
+Branch codex/pv-lib-spec-20261107; base5e397cb38787124d8a4bce7d3ea54f2d38e6c7e7.
+D976 preparation only. Target not yet established. The requested29 complete
+contracts/comparisons and both full compositions are UNFINISHED;0/29 full
+frozen contracts are claimed. IDs remain available. See REMAINING.md and
+CONTRACT_INDEX.json, not commit/root counts, for the completion frontier.
 
-Read the frozen29 specs, PSPEC_COMMON, TOP_COMPOSITION, REMAINING and root
-HANDOFF. FINDINGS.md retains the existing checked interface obstructions.
-The first target is an exact own-completion/pending/abort/divergence boundary,
-then explicit comparisons against the pinned statements. No row proved.
+## Exact established components
 
-Focused49701 passed PV_LIB_SPEC_Boundary (wall1.78s, peak2688408KiB,
-swaps0); three generic boundary/observation theorems, standard axioms only
-(summary).49700 failed on reserved binder `at`; changed to `address` before
-49701; failed input archived. No row contract or composition proved yet.
-Next Lean49702. One strict own-root raw audit remains due at session end.
+* PV_LIB_SPEC_ToVec: typed Pre/MachineSpec aliases use literal pinned STX
+  definitions; deterministic independent reference, all-prefix infinite outcome,
+  corrected consumed-pending/first boundary, event-only abort, provider frame/
+  Success clauses, and explicit undefined-representation obligation are stated.
+  pre_same, pending_implies_old and no_false_pending11 compare the ACTUAL package
+  predicates and actual source581 BODY-push prefix. This is a statement component,
+  not the completed frozen specification or a theorem proving the row.
+* PV_LIB_SPEC_Source7Entry.entry_nonempty: ONE concrete model OWNER and sixteen
+  empty columns jointly satisfy the provider's complete five-prime source7
+  reference/registration entry clauses and allocation OWNER invariant.
+  toVec_entry_nonempty inhabits the literal to_vec.Pre with its actual caller
+  setup and numbering lemma by name. These are entry-component witnesses, not
+  actual Foundation-builder discharge or full machine/source joint witnesses.
+* PV_LIB_SPEC_Composition.legacy_joint_contradiction: the provider's tagged Box
+  constructor and old decoder-success premise cannot coexist. This is NOT a
+  contradiction of frozen decodeBridged/allBridged premises or an actual14756
+  same-history binding. W3's existing actual-site finding remains the provenance.
+* PV_LIB_SPEC_Environment: explicit site/occurrence/arguments/pre-world FULL
+  allocation/reservation channels, graph uniqueness and abort-prefix observation.
+  Channel-type nonemptiness is not source-associated environment binding.
+* PV_LIB_SPEC_Delivery: callback_return_not_boundary excludes a nested intrinsic
+  successful return from the enclosing row's boundary. It supersedes the first
+  generic Boundary.Terminal/Boundary/First/Diverges (SPEC-B1). Other generic
+  uniqueness/body-push/abort theorems remain valid. No row consumes any module.
 
-Focused49704 passed PV_LIB_SPEC_ToVec (4.12s,4738392KiB,swap0).
-Defines MachineSpec/Pre by literal pinned STX definitions and a NEW deterministic
-reference/graph Post, corrected first pending boundary, prefix-only abort,
-provider Success/Frame, undefined-representation obligation and infinite trace.
-Compiled comparisons: pre_same, pending_implies_old, no_false_pending11.
-This is a typed statement/corrected-boundary component, NOT a full29-contract
-elaboration or a proved source/resource environment binding. No row proof.
-49702 fixed classical decidability and record syntax;49703 fixed alias unfolding
-before reusing the provider entry10. Both failed inputs archived, never imported.
-The STX coherent cache is read-only and isolated under objects-stx/J-stx.json;
-146 base/STX object conflicts forbid combining the two environments as one
-composition. TOVEC_REPLAY_PLAN.json gives222 absent base modules; none replayed.
-Host turn.sh now also obeys its D977 cap file (currently2) despite requested
-STREAMB_SLOTS=3. No cap or gate file edited. Next Lean49705.
+No endpoint premise removed, added or changed; no trust/metric change. Shared
+map/ledger/package branches/frozen implementation untouched. MAP_DELTA.json
+attaches component evidence to four slots while preserving ALL statuses.
+ADEQUACY_OBLIGATIONS.md is prose, not a claimed compiled complete package.
 
-Focused49706 passed PV_LIB_SPEC_Composition (2.01s,4607428KiB,swap0).
-Legacy tagged-Box/old-decoder conjunction is checked contradictory. This is
-NOT a contradiction of the frozen bridged OwnInit premises. Generic joint
-nonemptiness definition is only bookkeeping; not a top-level witness.
-49705 reserved binder `instance` fixed to `x`; failed input archived.
-Next Lean49707; no raw audit run yet.
+## Validation and exact limits
 
-Focused49708 passed PV_LIB_SPEC_Source7Entry (2.56s,4741648KiB,swap0).
-entry_nonempty witnesses TOGETHER the complete existing five-prime source7
-entry validity/registration clauses and full allocation OWNER invariant.
-It uses a concrete OWNER with sixteen empty columns, non-null aligned dangling
-references, bounded byte extents, chosen entry headers and registrations.
-toVec_entry_nonempty additionally inhabits the literal STX to_vec.Pre, including
-its real saved caller, call argument store, full OWNER invariant and thread25
-numbering (provider start lemma BY NAME). These are entry-component witnesses,
-NOT full composed-machine/source-adequacy conjunctions or deployed builder proofs.
-49707 broad simplification of replicate/getElem was replaced with the symbolic
-List.getElem_replicate rewrite; failed input retained. Next Lean49709.
+8 passing focused compiles:6 component modules and2 audit drivers. Each passing
+compile was immediately committed.5 elaboration failures were changed before
+retry and retained compressed; none is an accepted source/object. No OOM, raised
+limits, unchanged failed proof, provider replay, Rust/Kani/extraction, manifest
+or unrelated regression occurred. VALIDATION.json retains exact source hashes,
+source parent revisions, target/exit/wall/RSS/swap and summary-based axioms.
 
-Focused49709 passed PV_LIB_SPEC_Environment (1.25s,2606324KiB,swap0).
-Full site/occurrence/arguments/pre-world allocation and reservation channels,
-graph uniqueness and event-only abort observation are compiled. pendingEnv
-inhabits the CHANNEL TYPE only. No actual row handler/resource schedule binding
-or joint source/machine nonemptiness follows from this. Next Lean49710.
+ONE strict raw attempt49790 PASSED90/90 explicit own roots:42 base and48 STX,
+run sequentially in separate processes within ONE capped scope. Zero unresolved,
+zero raw/summary disagreements, only propext/Classical.choice/Quot.sound.
+Exit0; wall1:14.96; peak6722060KiB;swap0; source82b1243f6c0.
+RAW_AUDIT.json, RAW_GRAPH_MANIFEST.json and RAW_GRAPH_ARCHIVE.json.xz retain the
+walks. The inherited private importAll/hard-unresolved walker and collector
+suffix are unchanged; only module/root lists differ. Do not rerun unchanged.
 
-Focused49710 passed PV_LIB_SPEC_Delivery (1.26s,2685364KiB,swap0).
-SPEC-B1 correction: enclosing-row success is not the nested intrinsic callback's
-returned prefix. callback_return_not_boundary excludes it, with the actual
-run_succ identity connecting a consumed pending transition to its post-state.
-Use Delivery.Boundary/First; Boundary.Terminal/Boundary/First/Diverges are
-SUPERSEDED support definitions and are not full row specifications. Existing
-uniqueness/abort/body-push theorems remain mathematically valid. No row uses
-these modules. Next Lean49711. Frozen PSPECs remain unchanged.
+The two audited environments are NOT a combined coherent composition. STX and
+D937 have146 conflicting object hashes;722 equal overlaps. The diagnostic cone
+has222 modules absent from the base authority, all cached in STX. Reused exact
+pinned object authorities read-only and isolated objects-stx/J-stx; no mixed
+cohort, cache overwrite, provider edit or hard link. This is not a proved minimal
+replay count. Toolchain githash8c9756b28d64dab099da31a4c09229a9e6a2ef35.
 
-Focused49711 compiled the base-partition audit driver (0.78s,1583968KiB,
-swap0).42 explicit own definitions/theorems, unchanged private importAll
-collector suffix. This compile is not a raw audit. Next49712 stages the48-root
-STX partition; one serial capped raw attempt49790 will audit both in separate
-processes, with no combined cohort assertion. No row/root composition proved.
+All33 frozen package files checked unchanged. Write-boundary validation PASS.
+No sorry/admit/axiom/native_decide placeholder in active Lean. No file>20MiB.
+Recheck retained evidence without a new proof run:
+python3 evidence/pv-lib-20261107/lane-SPEC/validate.py
 
-Focused49712 compiled the48-root STX audit driver (1.02s,1586232KiB,swap0).
-CONTRACT_INDEX.json explicitly records0/29 FULL frozen-contract elaborations;
-the ToVec component is not miscounted as the completed frozen specification.
-ADEQUACY_OBLIGATIONS.md records the remaining source/machine/resource targets;
-these are not yet complete Lean obligations or proofs. MAP_DELTA.json attaches
-component evidence to four slots, preserving every shared status. Next49713;
-strict raw49790 is the next operation, not an unchanged baseline replay.
+## Resume
+
+Next Lean49713..49789; next raw49791..49799 only for changed/new roots.
+Host writes ONLY /home/dombarker/project-offloads/codex-pv-lib-spec-20261107;
+no host deletion. One6G/8G/swap0/Tasks64/-M7000 scope at a time. Before EACH ID
+run standalone SSH STREAMB_SLOTS=3 /home/dombarker/streamb-slots/turn.sh.
+The script's D977 cap file currently lowers this to2; it was never bypassed.
+No admission refusals or transport failures. No scope remains active. No push,
+merge, package-branch/ledger/checker/pv-common edits or wallet/key action.
