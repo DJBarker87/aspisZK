@@ -1,52 +1,90 @@
-# PCH reachability handoff
+# PCH round-2 handoff
 
-Stage 1 authority audit in progress. No exclusions or ledger changes admitted.
-Branch codex/pc-reach1-20261110. Scope: 278 new NKZ ON Pool occurrences only.
-No Kani or Lean proofs are authorized or run. Frozen files and sibling worktrees remain unchanged.
-The retained Pool ELF receipt matches e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc,
-but NKZ_aspis_pool.command.json names the 1.89.0-sbpf-solana-v1.52 compiler,
-whereas ruling (c-g)(2)(a) requires rustc 1.94.1. This must be resolved before graph authority.
-Stages 2–4 depend on Stage 1 admission; no conservative graph is promoted.
-Target not yet established.
+Branch: codex/pc-reach1-20261110. No push. Target not yet established.
 
-Stage 1 completed as a blocked authority audit (PCH_AUTHORITY.json).
-The retained receipt establishes the expected ELF hash for rustc 1.89.0-dev,
-NOT rustc 1.94.1. Host PCH_A001 independently checked the pinned compiler hash
-and version and both compilers' supported target lists. Native rustc 1.94.1
-has no sbpf-solana-solana target. Receipt native_rustc_version is not the SBF
-compiler version. All retained compiler-source checks match the requested
-frozen revisions; the frozen lock and receipt before/after hashes match.
+## Result
 
-No rebuild was launched: the specified 1.94.1/SBF toolchain is unavailable,
-and repeating the retained 1.89 build cannot meet the literal authority rule.
-Per the explicit Stage 1 stop instruction, no graph/exclusion is admitted.
-One admitted capped script/audit scope used; zero build/Kani/Lean scopes.
-PCH_A001 exit 0, wall 0.12 s, peak RSS 45760 KiB, swaps 0; axioms N/A.
-Host free space 163604512768 bytes before scope; reservation allowed true,
-exit 0. Only own cache created; no cache corpus copied because blocked
-before graph construction. No Aeneas object selection or LEAN_PATH used.
+Stage 1 is admitted under the corrected (c-g) authority. Solana platform-tools
+rustc 1.89.0-dev, sha256 d95c95b68e321ad76634e1fd26b0a7c20ccdbae9ad9ca733f3ae2f2b4a0b6002,
+target sbpf-solana-solana, frozen Pool b936275465600469312d1f058cdc91ea2a11f3dc,
+crates and lock 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387.
+PCH_B003 reproduces ELF e0e49c344d35575116c0359450315ea4334bfb03006551727f67c04a8cfe09dc
+using freshly re-emitted B002 core/statement objects. B001 plus corrected A003
+postprocessing also reproduces the pin with copied retained objects. B006's
+source-span diagnostic build reproduces the pin again. B005/B006 preserve their
+respective baseline codegen definition symbol sets. See PCH_AUTHORITY.json,
+PCH_B003_BUILD.json, PCH_B002_DEPENDENCIES.json and PCH_B005/B006_DUMP.json.
+The round-1 compiler contradiction is resolved by the explicit lead correction;
+its historical commits 62cb716c9bc and 11ae2cd6ec2 remain retained.
 
-Final disposition: explicit Stage 1 stop, not completed stages 2–4.
-PCH_FINDINGS.md contains PCH-F1 and the concrete lead remedy. PCH_REMAINING.md
-lists all 278 members and explains the unused budget for each. PCH_VERDICTS.json
-records NOT ASSESSED (null verdict), never an unresolved-edge or exclusion claim.
-Graph and validator implementation are intentionally absent; PCH_VALIDATION.json
-records all five mutation tests NOT RUN. The empty PCH_LEDGER_DELTA.json changes
-no row, including live PCD_/PCF_ rows. PCH_COUNT.md preserves 39 inherited CLOSED,
-0 exclusions, 239 OPEN (A74/B124/C11/D30); reachable counts remain unknown.
-No assumptions discharged, retained trust unchanged, none added or reclassified.
-No new theorem and #print axioms N/A. No transaction shapes or exploit inputs.
-No shipped files, siblings, host infrastructure or keys modified; no push.
+Stage 2 is PARTIAL. PCH_GRAPH.json.xz is a conservative compiler-instance
+supergraph, with 87,358 nodes, 285,351 edges, 6,392 printed mono items and
+78,743 MIR sites. Resolved LLVM references use exact mangled-symbol identities.
+Generic MIR templates are not falsely identified with instantiated callers.
+Unresolved indirect/external/handler edges conservatively include every candidate.
+All 278 rows therefore remain UNRESOLVED. LLVM diagnostic paths never become
+resolved source-instance witnesses. No exclusion is proposed. PCH_REMAINING.md
+lists the exact remaining association for every member. PCH_DIFF_PCB_REACH.md
+explains all 71 differences from PCB's source-graph assessments. Handler and tag
+review is recorded separately; no cfg-disabled row is excluded. The 119 shared
+observations are in PCH_SHARED_FOR_STREAM_A.json and change no Stream A status.
 
-Round 2 resumes under the corrected (c-g) compiler authority: Solana rustc
-1.89.0-dev d95c95b6..., target sbpf-solana-solana. The round-1 contradiction
-is superseded by the lead correction, not silently reinterpreted. Budget:
-6 build / 19 script-audit scopes remaining, zero Kani and zero Lean.
-Own cache only. Frozen payload is reconstructed from pinned git objects;
-retained dependency objects are copied, never linked or modified in place.
+Stage 3's evidence-integrity validator passes. A009 is the baseline; A010–A014
+reject all five required mutations, including direct/function-pointer/vtable edge
+deletions with the superficial edge count repaired. It independently re-reads raw
+compiler evidence for completeness. The validator does not establish the missing
+resolved MIR association or certify any exclusion. See PCH_VALIDATION.json.
 
-Round 2 stage 1 ADMITTED. B003 reproduces the exact deployed ELF using B002 freshly re-emitted core/statement dependencies. B001 plus A003 independently reproduces it using copied retained dependencies. B001/A002 script filename errors are recorded, corrected, and never claimed as passes. No timeout/memory kill. Both Pool LLVM definition symbol sets are identical. New authoritative artifacts are PCH_B002_* and PCH_B003_*; NKZ conservative graph remains an assessment input only. Stage 1 uses 3 build / 2 audit scopes; no Kani/Lean or keys.
+Stage 4's delta is empty. Pool rows CLOSED: 39 of 278 new
+(A 39 / B 0 / C 0 / D 0); EXCLUDED 0 (unreachable in the deployed build; not closed);
+OPEN 239; target not yet established. The 39 closures are inherited from PCE plus
+PCG, without a proof-gate replay here. No live PCD_/PCF_ row changes status;
+PCH_LIVE_ROWS.json records their verdicts only. No new theorem, Kani pass,
+source/model refinement, trust item or cryptographic premise discharge is claimed.
+#print axioms is N/A for every attempt; zero Lean and zero Kani scopes.
 
-Stage 2 produced a fail-closed compiler supergraph, not a complete resolved MIR association. Every one of 278 rows is UNRESOLVED. LLVM diagnostic witnesses never become source-instance proofs. Shared observations are separate (119 rows). Scope A007 completed after the memory-safe serialization split; A004/A005 are recorded input errors, A006 a voluntary stop. No exclusions or status changes.
+## Resources, failures and reproducibility
 
-Stage 3 validator baseline A009 passed and mandatory controls A010–A014 all rejected: planted POOL:246, deleted direct call, deleted function materialisation, deleted vtable member, absent codegen exclusion check. Deletion controls repair the superficial edge count, so raw compiler evidence completeness must reject them. A008 found external-boundary symbol hashes were distinct from declaration-line hashes; the validator now requires exact symbol presence in the pinned declaration and checks that hash explicitly. This is own-script repair, not weakened validation. No graph completeness beyond the explicitly conservative supergraph is claimed.
+Own cache: /home/dombarker/project-offloads/codex-pc-reach1-cache-20261110.
+Every retained object is copied and hashed, never hardlinked or written in place.
+B001/B003 input manifests record all copied dependency hashes and frozen payload
+hashes; B002 records the copied generated core table. Frozen Cargo.lock remains
+5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef.
+Compiler cfg per project crate and the retained per-package resolved feature list
+are recorded; metadata output is not confused with actual SBF compiler cfg.
+No Aeneas library objects or LEAN_PATH are used by this job.
+
+All scopes use MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64.
+Admission requires both exit 0 and allowed:true; refusals wait and retry. Disk
+preflight requires 40 GB free before each scope. Exact argv, source revision/hash,
+exit and available wall/RSS/swap metrics are in PCH_ATTEMPTS.jsonl and raw time
+files. Deliberately stopped scopes may lack completed time output and receive no
+success credit. Caches are retained and no key/account/fund is created or changed.
+
+B004 was mistakenly overlapped with A006. Its own scope was immediately stopped,
+gets no evidence credit and consumes a build slot. The client now has an exclusive
+own-job guard. A006 was then voluntarily stopped at observed RSS 6,388,064 KiB to
+split serialization. A007 stores raw-artifact locations and hashes, streams the
+compressed graph, and completes at 600,280 KiB peak RSS. No cap was raised and no
+timeout or memory-killed shape was rerun unchanged. B001/A002's wrong ELF filename,
+A004's build.rs association, A005's unqualified MIR header, and A008's external
+symbol/declaration hash distinction are retained own-input/validator repairs.
+
+No shipped source, root/session-A/sibling worktree, shared host infrastructure or
+other job cache was modified. No cache was deleted. No file over 20 MB, ELF,
+compiled object or key is committed. Large textual evidence is compressed with
+uncompressed SHA-256 sidecars. The final budget/accounting audit supplements this
+handoff; each completed stage is committed separately.
+
+## Next concrete deliverable
+
+A compiler-backed generic-template-to-instance association, including substitutions,
+all indirect type-compatible targets, vtable/drop/inlined edges and complete
+panic/abort/allocator closure, bound to this exact ELF. Only then can codegen absence
+support a candidate exclusion. The current universal unknown edges cannot do so.
+
+## Final disposition
+
+All round-2 slots are consumed: 6/6 build scopes, 19/19 script/audit scopes, zero Kani/Lean; see PCH_BUDGET.json. A015 source-span census, A016 deployed root/tag review, A017 frozen input/features audit, A018 three extra corruption controls, A019 accounting and A020 supplemental artifact audit all exit 0. The adopted validator is the exact A010–A014 source, whose validate() AST equals the A009 passing baseline. A018 ran three extra controls, not the locally edited four-control/mandatory-retest plan. The mutable post-run client source hash for A018 was corrected from its immutable upload snapshot, and the erroneous hash is preserved (PCH-F4). The later validator/audit strengthening is retained as uncredited; active scripts are restored to the tested versions. No claim relies on that strengthening.
+
+PCH_FINAL_CHECK.json records local packaging/hygiene only, not another proof or host scope. All slots, including deliberately stopped/error scopes, are charged. No scope is rerun unchanged after a timeout or memory kill. No exclusion is admitted and every remaining member still needs the exact instance/handler association listed in PCH_REMAINING.md.

@@ -37,6 +37,7 @@ p=b/{(a+'-reservation.json')!r};print(p.read_text() if p.exists() else 'MISSING'
  raise RuntimeError('infrastructure admission failure')
 (E/(a+'_source.py')).write_text((E/script).read_text())
 files={script:(E/script).read_text()}
+if script=='PCH_audit.py':files['PCH_VALIDATOR.py']=(E/'PCH_VALIDATOR.py').read_text()
 for n in ['PCH_BUILD_INPUT.json','PCH_FROZEN.json.xz','PCH_GRAPH_INPUT.json.xz']:
  p=E/n
  if p.exists():files[n]=p.read_bytes().hex()
@@ -59,6 +60,6 @@ r2=remote(f'''import pathlib,json
 b=pathlib.Path({B!r}); names=[p.name for p in b.glob({(a+'*')!r}) if p.is_file() and p.stat().st_size<20_000_000];names += [p.name for p in b.glob('PCH_*.json') if p.is_file() and p.stat().st_size<20_000_000 and p.name not in names and p.name!='PCH_BUILD_INPUT.json'];print(json.dumps({{n:(b/n).read_bytes().hex() for n in names}}))
 ''');assert r2.returncode==0,r2.stderr
 for n,v in json.loads(r2.stdout).items():(E/n).write_bytes(bytes.fromhex(v))
-rec=dict(attempt=a,scope_kind=kind,exit_status=r.returncode,target=script,command=cmd,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=hashlib.sha256((E/script).read_bytes()).hexdigest(),disk_free_before_bytes=disk,admission_exit_status=0,admission_allowed=True,print_axioms='N/A: no Lean',limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),time_file=a+'.time')
+rec=dict(attempt=a,scope_kind=kind,exit_status=r.returncode,target=script,command=cmd,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=hashlib.sha256(files[script].encode()).hexdigest(),disk_free_before_bytes=disk,admission_exit_status=0,admission_allowed=True,print_axioms='N/A: no Lean',limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),time_file=a+'.time')
 with (E/'PCH_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rec)+'\n')
 sys.exit(r.returncode)

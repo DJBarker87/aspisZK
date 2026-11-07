@@ -1,75 +1,77 @@
-# PCB comparison
+# Comparison with PCB_REACH
 
-PCB_REACH is a conservative source-graph assessment of 71 class-A rows. It does not supply a compiled-instance exclusion. PCH has 278 UNRESOLVED verdicts after adding the corrected handler roots and retaining unknown edges under (c-g)(5). Consequently none of PCB's alternative-only assessments is promoted to exclusion. Every assessed PCB row remains UNRESOLVED in PCH; its earlier shortest source-name path is not an exact instance witness.
+All 71 earlier source-graph assessments are retained. PCH now includes deployed handler roots and keeps every unresolved template, indirect call and external boundary as a universal candidate set under (c-g)(5). None of PCB's alternative-only source paths establishes a resolved compiler-instance exclusion. Each earlier assessment therefore maps to UNRESOLVED; this is a stricter authority requirement, not a claim that its source path was false.
 
-| POOL:002 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:003 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:004 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:006 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:008 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:009 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:010 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:011 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:012 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:013 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:014 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:015 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:019 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:022 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:032 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:033 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:041 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:042 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:047 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:056 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:058 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:073 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:074 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:075 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:076 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:078 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:082 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:083 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:087 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:088 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:089 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:097 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:102 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:107 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:109 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:110 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:112 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:113 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:115 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:116 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:117 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:118 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:120 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:121 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:122 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:123 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:124 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:125 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:128 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:132 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:139 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:140 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:141 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:142 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:143 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:145 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:147 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:149 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:150 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:154 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:155 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:156 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:158 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:265 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:266 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:271 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:272 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:273 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:274 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:275 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
-| POOL:276 | UNRESOLVED: runtime/indirect/template association retained; no exclusion. |
+| Row | Earlier: all paths require explicit alternative? | PCH | Difference explained |
+|---|---|---|---|
+| POOL:002 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:003 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:004 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:006 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:008 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:009 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:010 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:011 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:012 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:013 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:014 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:015 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:019 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:022 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:032 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:033 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:041 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:042 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:047 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:056 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:058 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:073 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:074 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:075 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:076 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:078 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:082 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:083 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:087 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:088 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:089 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:097 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:102 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:107 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:109 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:110 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:112 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:113 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:115 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:116 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:117 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:118 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:120 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:121 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:122 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:123 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:124 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:125 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:128 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:132 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:139 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:140 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:141 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:142 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:143 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:145 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:147 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:149 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:150 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:154 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:155 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:156 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:158 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:265 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:266 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:271 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:272 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:273 | False | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:274 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:275 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
+| POOL:276 | True | UNRESOLVED | No exact MIR instance substitution/handler closure; source-name alternatives are never exclusions. |
