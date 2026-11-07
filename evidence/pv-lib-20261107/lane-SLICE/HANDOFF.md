@@ -11,3 +11,5 @@ Root HANDOFF.md is the base handoff; the requested nested HANDOFF.md is absent a
 Next: focused pinned f32/f33 replay then deterministic provider graphs.
 
 Attempt 49600: PV_W5_LocalClears, passed pinned focused replay.
+
+Attempt 49601: PV_W5_FrameComposition, passed pinned focused replay.
