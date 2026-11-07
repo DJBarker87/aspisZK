@@ -1,0 +1,49 @@
+{"attempt": "PCF_K050", "exit_status": 1, "wall_seconds": 3.157656444935128, "peak_rss_kib": "283552", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ssert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/programs/aspis-pool/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: module `PCF_Processor` should have a snake case name
+   --> programs/aspis-pool/src/processor.rs:693:5
+    |
+693 | mod PCF_Processor;
+    |     ^^^^^^^^^^^^^ help: convert the identifier to snake case: `pcf_processor`
+
+    Finished `dev` profile [optimized] target(s) in 1.43s
+Checking harness history::PCF_AppendNative::shape_bad_frame_proof...
+
+VERIFICATION RESULT:
+ ** 1 of 92 failed (2 unreachable)
+Failed Checks: Check that var_11.data[1] is assignable
+ File: "programs/aspis-pool/src/PCF_AppendNative.rs", line 26, in history::PCF_AppendNative::shape_bad_frame::{closure#2}::{closure#1}
+
+VERIFICATION:- FAILED
+Verification Time: 0.095792525s
+
+Manual Harness Summary:
+Verification failed for - history::PCF_AppendNative::shape_bad_frame_proof
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-ra21723d1e41245f4b1f2e09b2f67d94f.scope; invocation ID: 5a4b556d95b6411c94e6ca0a05131f2e

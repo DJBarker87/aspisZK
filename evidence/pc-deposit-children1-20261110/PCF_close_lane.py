@@ -1,0 +1,20 @@
+from pathlib import Path
+import json,sys,hashlib,subprocess,shutil
+E=Path(__file__).resolve().parent;rid='POOL:199';a=json.loads((E/'PCF_AUDIT_STAGE2.json').read_text());assert a['status']=='PASS_STAGE2'
+closed=json.loads((E/'PCF_CLOSED.json').read_text());closed=closed if isinstance(closed,list) else closed['closed'];assert not any(r['id']==rid for r in closed)
+inv=json.loads((E.parent/'pool-inventory2-20261109/NKZ_INVENTORY.json').read_text());r=next(x for x in inv['rows'] if x['id']==rid);mod='PCF_LaneModel';domain='All valid live shared Digest inputs, with all eight raw u32 limbs unrestricted; no additional semantic hypothesis.'
+row=dict(id=rid,function=r['function'],status='CLOSED',classification='NEW_NCO_BORROW_MINIMAL_REFERENCE',root=mod+'.complete',statement_file=mod+'.lean',statement_source_sha256=hashlib.sha256((E/(mod+'.lean')).read_bytes()).hexdigest(),claim='Actual frozen complete Result<u8,PoolV1PairForestAccountErrorV1> agrees with E002 extracted scalar reference; PCC.laneReference gives identical Ok/NonCanonicalDigest result, entire unchanged state and empty ordered effects.',named_hypotheses=[],caller_clause=domain,native=['PCF_K009','PCF_K010'],modifies=[],frame='Pinned default free-function contract wrapper (); K025 explicit empty annotation compiler ICE excluded',effects=[],error_carrier='Exact complete native Result enum with its sole reachable Err NonCanonicalDigest; no generic ABI quotient.',extraction='PCF_E002',lean='PCF_L063',children={'POOL:193':'PCF_ChildLaws.scanner + PCF_CanonicalWords.complete','POOL:197':'PCF_FirstStub.first_reply + low_byte'},frozen_body_sha256=r['frozen_body_sha256'],gate='PCF_AUDIT_STAGE2.json',correspondence='PCF_CORRESPONDENCE.md; PCF_STUBS.md',trust='P6/D188 option-A native semantic transport RECLASSIFICATION; standard axioms and existing realization trust retained, no new trust item or premise removal',headline_security_claim=False)
+
+closed.append(row);(E/'PCF_CLOSED.json').write_text(json.dumps(closed,indent=1)+'\n')
+delta=json.loads((E/'PCF_LEDGER_DELTA.json').read_text());delta.append(dict(id=rid,old='OPEN',new='CLOSED',root=row['root'],gate=row['gate'],frozen_body_sha256=r['frozen_body_sha256']));(E/'PCF_LEDGER_DELTA.json').write_text(json.dumps(delta,indent=1)+'\n')
+cl=json.loads((E/'PCF_CALLER_CLAUSES.json').read_text());x=next(x for x in cl if x['row']==rid);x.update(status='CLOSED',domain_hypotheses=[],verbatim_domain=domain,root=row['root'])
+for occurrence in x['occurrences']:occurrence['verbatim_domain']=domain
+(E/'PCF_CALLER_CLAUSES.json').write_text(json.dumps(cl,indent=1)+'\n')
+rem=json.loads((E/'PCF_REMAINING.json').read_text());rem=[x for x in rem if x['row']!=rid];(E/'PCF_REMAINING.json').write_text(json.dumps(rem,indent=1)+'\n');(E/'PCF_REMAINING.md').write_text('# PCF remaining obligations\n\n'+str(len(closed))+' assigned rows CLOSED under PCF_AUDIT_STAGE2.json. Budget remains; work continues.\n\n'+''.join('- '+x['row']+': '+x['blocking_fact']+'\n' for x in rem))
+with (E/'PCF_HANDOFF.md').open('a') as f:f.write('\nPOOL:199 NEW CLOSED: PCF_LaneModel.complete; K009/K010, E002, complete state/effects/Result association, SAME shared scanner/first-byte children, and PCF_AUDIT_STAGE2.json. Total3 CLOSED; append work continues.\n')
+used=list(map(json.loads,(E/'PCF_ATTEMPTS.jsonl').read_text().splitlines()));count={k:sum(('lean' if r['kind'] in ['lean','link','audit'] else r['kind'])==k for r in used) for k in ['kani','lean','extract']};(E/'PCF_BUDGET.json').write_text(json.dumps(dict(limits=dict(kani=110,lean=110,extract=14),used=count,one_scope_at_a_time=True),indent=1)+'\n')
+for p in E.rglob('__pycache__'):shutil.rmtree(p)
+files=[p for p in E.rglob('*') if p.is_file() and p.name not in ['PCF_ACTIVE','PCF_AppendEncoder.lean']];assert not [str(p) for p in files if p.stat().st_size>20*1024*1024]
+subprocess.run(['git','diff','--check'],check=True);subprocess.run(['git','add','--',*[str(p) for p in files]],check=True)
+subprocess.run(['git','commit','-q','-m','Close POOL:199 deposit lane selection'],check=True)
+print(rid+' CLOSED and committed; budgets '+json.dumps(count))

@@ -1,0 +1,18 @@
+PCF_generated/PCF_CopyMap.lean:23:4: error: Type mismatch: After simplification, term
+  hm
+ has type
+  (do
+      let d ←
+        let (window, back) := (window, back)
+          do
+          let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 window src
+          ok (back copied)
+      ok (f d)) =
+    ok (f (data.setSlice! ↑r.start ↑src))
+but is expected to have type
+  (let (window, back) := (window, back)
+    do
+    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 window src
+    ok (f (back copied))) =
+    ok (f (data.setSlice! ↑r.start ↑src))
+'PCF_CopyMap.result' depends on axioms: [propext, sorryAx, Quot.sound]

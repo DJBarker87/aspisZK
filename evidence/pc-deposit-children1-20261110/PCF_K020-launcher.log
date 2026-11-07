@@ -1,0 +1,56 @@
+{"attempt": "PCF_K020", "exit_status": 1, "wall_seconds": 23.912422490073368, "peak_rss_kib": "787440", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-pc-deposit-children1-20261110/PCF_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx
+...
+| impl AuthenticatedVerifierSelectionV1 {
+    | ------------------------------------- methods in this implementation
+106 |     pub(crate) fn matches_policy(self, policy: &VerifierPolicyV1) -> bool {
+    |                   ^^^^^^^^^^^^^^
+...
+129 |     pub(crate) fn authenticated_at_slot(self) -> u64 {
+    |                   ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `derive_verifier_dispatch_claim_v1` is never used
+  --> programs/aspis-pool/src/verifier_dispatch.rs:56:15
+   |
+56 | pub(crate) fn derive_verifier_dispatch_claim_v1(
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: module `PCF_Processor` should have a snake case name
+   --> programs/aspis-pool/src/processor.rs:693:5
+    |
+693 | mod PCF_Processor;
+    |     ^^^^^^^^^^^^^ help: convert the identifier to snake case: `pcf_processor`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 12.39s
+Checking harness processor::PCF_Processor::token_contract_proof...
+
+VERIFICATION RESULT:
+ ** 1 of 485 failed (5 unreachable)
+Failed Checks: |r| !PCF_Processor::token_contract(account,r)
+ File: "programs/aspis-pool/src/processor.rs", line 338, in processor::require_token_program_account::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 8.743605s
+
+Manual Harness Summary:
+Verification failed for - processor::PCF_Processor::token_contract_proof
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r680c4028a84546509477a31069608092.scope; invocation ID: a7285261caa04001962ad819a81e06d0

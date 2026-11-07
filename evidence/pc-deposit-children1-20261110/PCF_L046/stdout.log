@@ -1,0 +1,12 @@
+PCF_generated/PCF_CopyRange.lean:18:2: error: Tactic `split_ifs` failed: no if-then-else conditions to split
+
+data src : Slice U8
+r : core.ops.range.Range Usize
+bounds : r.start ≤ r.end ∧ ↑r.end ≤ data.length
+width : src.length = ↑r.end - ↑r.start
+⊢ (let (window, back) := (⟨List.slice ↑r.start ↑r.end ↑data, ⋯⟩, fun s' => ⟨(↑data).setSlice! ↑r.start ↑s', ⋯⟩)
+    do
+    let copied ← if window.len = src.len then ok src else fail Error.panic
+    ok (back copied)) =
+    ok (data.setSlice! ↑r.start ↑src)
+'PCF_CopyRange.result' depends on axioms: [propext, sorryAx, Quot.sound]

@@ -1,0 +1,366 @@
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_20
+TYPE ∀ {α : Type u_1} (P : Unit → Prop) (k : Unit → Aeneas.Std.Result α) (Q : α → Prop),
+  Aeneas.Std.WP.qimp_spec P k Q = (P () → Aeneas.Std.WP.spec (k ()) Q)
+VALUE fun {α} P k Q => propext (Aeneas.Std.WP.qimp_spec_unit P k Q)
+FOUND Aeneas.Std.Array.getElem?_Nat_eq
+TYPE ∀ {α : Type u} {n : Aeneas.Std.Usize} (v : Aeneas.Std.Array α n) (i : ℕ), v[i]? = (↑v)[i]?
+VALUE fun {α} {n} v i => Eq.refl v[i]?
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_24
+TYPE ∀ {p : Prop}, (∀ (a : Unit), p) = p
+VALUE fun {p} => propext Aeneas.Std.WP.forall_unit
+FOUND Aeneas.Std.Array.index_usize.match_1.congr_eq_1
+TYPE ∀ {α : Type u_1} (motive : Option α → Sort u_2) (x : Option α) (h_1 : Unit → motive none)
+  (h_2 : (x : α) → motive (some x)),
+  x = none →
+    (match x with
+      | none => h_1 ()
+      | some x => h_2 x) ≍
+      h_1 ()
+VALUE fun {α} motive x h_1 h_2 heq_1 => Eq.symm heq_1 ▸ id (heq_of_eq (id (Eq.refl (h_1 ()))))
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_26
+TYPE ∀ {α : Sort u_1} {β : Type u_2} (P : α → Prop) (k : α → Aeneas.Std.Result β) (Q : β → Prop),
+  Aeneas.Std.WP.qimp_spec P k Q = ∀ (x : α), Aeneas.Std.WP.imp (P x) (Aeneas.Std.WP.spec (k x) Q)
+VALUE fun {α} {β} P k Q => propext (Aeneas.Std.WP.qimp_spec_iff P k Q)
+FOUND Aeneas.Std.Array.index_usize_const_spec.aux
+TYPE ∀ {n : Aeneas.Std.Usize} {α : Type u_1} [inst : Inhabited α] (p : Aeneas.Std.Usize → α → Bool)
+  (p' : Aeneas.Std.Usize → α → Prop) (a : Aeneas.Std.Array α n),
+  (∀ (i : Aeneas.Std.Usize) (x : α), p i x = true ↔ p' i x) →
+    ∀ (i : Aeneas.Std.Usize) (l : List α) (i_1 : ℕ),
+      i_1 + l.length = ↑n →
+        (∀ (j : ℕ), l[j]! = a[i_1 + j]!) →
+          Aeneas.Std.Array.allIdx p l i_1 = true →
+            ∀ (j : ℕ), i_1 + j < ↑n → ∀ (hij : i_1 + j < Aeneas.Std.U32.max), p' (i_1 + j)#usize a[i_1 + j]!
+VALUE fun {n} {α} [Inhabited α] p p' a hp i l i_1 hi hl h j hj hij =>
+  List.brecOn (motive := fun l =>
+    ∀ (i_2 : ℕ),
+      i_2 + l.length = ↑n →
+        (∀ (j : ℕ), l[j]! = a[i_2 + j]!) →
+          Aeneas.Std.Array.allIdx p l i_2 = true →
+            ∀ (j : ℕ), i_2 + j < ↑n → ∀ (hij : i_2 + j < Aeneas.Std.U32.max), p' (i_2 + j)#usize a[i_2 + j]!)
+    l (Aeneas.Std.Array.index_usize_const_spec.aux._f p p' a hp i) i_1 hi hl h j hj hij
+FOUND Aeneas.Std.Array.index_usize_spec
+TYPE ∀ {α : Type u} {n : Aeneas.Std.Usize} (v : Aeneas.Std.Array α n) (i : Aeneas.Std.Usize) (hbound : ↑i < v.length),
+  Aeneas.Std.WP.spec (v.index_usize i) fun x => x = (↑v)[↑i]
+VALUE fun {α} {n} v i hbound => Aeneas.Std.Array.index_usize_spec._proof_1_5 v i hbound
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_30
+TYPE ∀ {a b c : Prop}, (a ∧ b → c) = (a → b → c)
+VALUE fun {a b c} => propext and_imp
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_21
+TYPE ∀ (P Q : Unit → Prop), Aeneas.Std.WP.qimp P Q = (P () → Q ())
+VALUE fun P Q => propext (Aeneas.Std.WP.qimp_unit P Q)
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_31
+TYPE ∀ {α : Sort u_1} {p : α → Prop} {b : Prop}, ((∃ x, p x) → b) = ∀ (x : α), p x → b
+VALUE fun {α} {p} {b} => propext exists_imp
+FOUND Aeneas.Std.Array.index_usize.match_1.congr_eq_2
+TYPE ∀ {α : Type u_1} (motive : Option α → Sort u_2) (x : Option α) (h_1 : Unit → motive none)
+  (h_2 : (x : α) → motive (some x)) (x_1 : α),
+  x = some x_1 →
+    (match x with
+      | none => h_1 ()
+      | some x => h_2 x) ≍
+      h_2 x_1
+VALUE fun {α} motive x h_1 h_2 x_1 heq_1 => Eq.symm heq_1 ▸ id (heq_of_eq (id (Eq.refl (h_2 x_1))))
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_22
+TYPE ∀ {α : Sort u_1} {β : Type u_2} {γ : Sort u_3} (P : γ → α → Prop) (k : α → Aeneas.Std.Result β) (Q : β → Prop),
+  Aeneas.Std.WP.qimp_spec (fun x => ∃ y, P y x) k Q = ∀ (x : γ), Aeneas.Std.WP.qimp_spec (P x) k Q
+VALUE fun {α} {β} {γ} P k Q => propext (Aeneas.Std.WP.qimp_spec_exists P k Q)
+FOUND Aeneas.Std.Array.index_usize.match_1
+TYPE {α : Type u_1} →
+  (motive : Option α → Sort u_2) → (x : Option α) → (Unit → motive none) → ((x : α) → motive (some x)) → motive x
+VALUE fun {α} motive x h_1 h_2 => Option.casesOn x (h_1 ()) fun val => h_2 val
+FOUND Aeneas.Std.Array.index_usize_const_spec
+TYPE ∀ {n : Aeneas.Std.Usize} {α : Type u_1} [Inhabited α] (p : Aeneas.Std.Usize → α → Bool)
+  (p' : Aeneas.Std.Usize → α → Prop) (a : Aeneas.Std.Array α n),
+  (∀ (i : Aeneas.Std.Usize) (x : α), p i x = true ↔ p' i x) →
+    Aeneas.Std.Array.allIdx p ↑a = true →
+      ∀ (i : Aeneas.Std.Usize), ↑i < ↑n → ↑n ≤ Aeneas.Std.U32.max → Aeneas.Std.WP.spec (a.index_usize i) fun v => p' i v
+VALUE fun {n} {α} [Inhabited α] p p' a hp hPred i h hn =>
+  have hi :=
+    Aeneas.Std.Array.index_usize_const_spec.aux p p' a hp i (↑a) 0
+      (Aeneas.Std.Array.index_usize_const_spec._proof_1_16 a)
+      (of_eq_true
+        (Eq.trans
+          (forall_congr fun j =>
+            Eq.trans
+              (congr (congrArg Eq List.getElem!_eq_getElem?_getD)
+                (Eq.trans (Eq.trans (congrArg (getElem! a) (zero_add j)) (Aeneas.Std.Array.getElem!_Nat_eq a j))
+                  List.getElem!_eq_getElem?_getD))
+              (eq_self ((↑a)[j]?.getD default)))
+          (implies_true ℕ)))
+      hPred (↑i) (Aeneas.Std.Array.index_usize_const_spec._proof_1_17 a i h)
+      (Aeneas.Std.Array.index_usize_const_spec._proof_1_18 a i h hn);
+  Aeneas.Std.WP.spec_mono'
+    (Aeneas.Std.Array.index_usize_spec a i
+      (Eq.mpr (id (congrArg (LT.lt ↑i) (Aeneas.Std.Array.length_eq a)))
+        (Aeneas.Std.Array.index_usize_const_spec._proof_1_19 i h)))
+    (Eq.mpr (id (Aeneas.Std.Array.index_usize_const_spec._simp_1_27 (fun x => x = (↑a)[↑i]) fun v => p' i v))
+      (id fun _x hx =>
+        Aeneas.Std.Array.index_usize_const_spec._proof_1_34 p' a i h
+          (Eq.mp
+            (congr
+              (congrArg p'
+                (Eq.trans
+                  (Aeneas.Std.Usize.ofNat.congr_simp (0 + ↑i) (↑i) (zero_add ↑i)
+                    (Aeneas.Std.Array.index_usize_const_spec._proof_1_1 a i (↑a) 0 (↑i)
+                      (Aeneas.Std.Array.index_usize_const_spec._proof_1_18 a i h hn)))
+                  (Aeneas.Std.UScalar.ofNat_self_val i
+                    (zero_add ↑i ▸
+                      Aeneas.Std.Array.index_usize_const_spec._proof_1_1 a i (↑a) 0 (↑i)
+                        (Aeneas.Std.Array.index_usize_const_spec._proof_1_18 a i h hn)))))
+              (Eq.trans (Eq.trans (congrArg (getElem! a) (zero_add ↑i)) (Aeneas.Std.Array.getElem!_Nat_eq a ↑i))
+                List.getElem!_eq_getElem?_getD))
+            hi)
+          _x hx))
+FOUND Aeneas.Std.Array.index_usize_const_spec.aux._f
+TYPE ∀ {n : Aeneas.Std.Usize} {α : Type u_1} [inst : Inhabited α] (p : Aeneas.Std.Usize → α → Bool)
+  (p' : Aeneas.Std.Usize → α → Prop) (a : Aeneas.Std.Array α n),
+  (∀ (i : Aeneas.Std.Usize) (x : α), p i x = true ↔ p' i x) →
+    ∀ (i : Aeneas.Std.Usize) (l : List α)
+      (f :
+        List.below (motive := fun l =>
+          ∀ (i_1 : ℕ),
+            i_1 + l.length = ↑n →
+              (∀ (j : ℕ), l[j]! = a[i_1 + j]!) →
+                Aeneas.Std.Array.allIdx p l i_1 = true →
+                  ∀ (j : ℕ), i_1 + j < ↑n → ∀ (hij : i_1 + j < Aeneas.Std.U32.max), p' (i_1 + j)#usize a[i_1 + j]!)
+          l)
+      (i_1 : ℕ),
+      i_1 + l.length = ↑n →
+        (∀ (j : ℕ), l[j]! = a[i_1 + j]!) →
+          Aeneas.Std.Array.allIdx p l i_1 = true →
+            ∀ (j : ℕ), i_1 + j < ↑n → ∀ (hij : i_1 + j < Aeneas.Std.U32.max), p' (i_1 + j)#usize a[i_1 + j]!
+VALUE fun {n} {α} [Inhabited α] p p' a hp i l f i_1 hi hl h j hj hij =>
+  (match (motive :=
+      ∀ (l : List α),
+        i_1 + l.length = ↑n →
+          (∀ (j : ℕ), l[j]! = a[i_1 + j]!) →
+            Aeneas.Std.Array.allIdx p l i_1 = true →
+              ∀
+                (x :
+                  List.below (motive := fun l =>
+                    ∀ (i_2 : ℕ),
+                      i_2 + l.length = ↑n →
+                        (∀ (j : ℕ), l[j]! = a[i_2 + j]!) →
+                          Aeneas.Std.Array.allIdx p l i_2 = true →
+                            ∀ (j : ℕ),
+                              i_2 + j < ↑n → ∀ (hij : i_2 + j < Aeneas.Std.U32.max), p' (i_2 + j)#usize a[i_2 + j]!)
+                    l),
+                p' (i_1 + j)#usize a[i_1 + j]!)
+      l, hi, hl, h with
+    | [], hi, hl, h => fun x => Aeneas.Std.Array.index_usize_const_spec._proof_1_5 p' a i i_1 j hj hij hi
+    | hd :: l, hi, hl, h => fun x =>
+      have this := Aeneas.Std.Array.index_usize_const_spec._proof_1_9 a i i_1 j hij l;
+      if hj : j = 0 then
+        have hl' := hl 0;
+        have hp' := hp i_1#usize a[i_1]!;
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg p'
+                (Aeneas.Std.Usize.ofNat.congr_simp (i_1 + j) i_1 (Eq.trans (congrArg (HAdd.hAdd i_1) hj) (add_zero i_1))
+                  (Aeneas.Std.Array.index_usize_const_spec._proof_1_1 a i (hd :: l) i_1 j hij)))
+              (Eq.trans
+                (Eq.trans (congrArg (getElem! a) (Eq.trans (congrArg (HAdd.hAdd i_1) hj) (add_zero i_1)))
+                  (Aeneas.Std.Array.getElem!_Nat_eq a i_1))
+                List.getElem!_eq_getElem?_getD))
+            (eq_true
+              (Eq.mp
+                (Eq.trans
+                  (congr
+                    (congrArg Iff
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg Eq
+                            (Eq.trans
+                              (congrArg (p i_1#usize)
+                                (Eq.trans (Aeneas.Std.Array.getElem!_Nat_eq a i_1) List.getElem!_eq_getElem?_getD))
+                              (Eq.mp
+                                  (congrFun'
+                                    (congrArg And
+                                      (congrFun'
+                                        (congrArg Eq
+                                          (congrArg (p i_1#usize)
+                                            (Eq.mp
+                                              (congr
+                                                (congrArg Eq
+                                                  (getElem!_pos (hd :: l) 0
+                                                    (of_eq_true
+                                                      (Eq.trans (lt_add_iff_pos_left._simp_1 0)
+                                                        (Eq.trans Order.lt_add_one_iff._simp_1 zero_le._simp_1)))))
+                                                (Eq.trans
+                                                  (Eq.trans (congrArg (getElem! a) (add_zero i_1))
+                                                    (Aeneas.Std.Array.getElem!_Nat_eq a i_1))
+                                                  List.getElem!_eq_getElem?_getD))
+                                              hl')))
+                                        true))
+                                    (Aeneas.Std.Array.allIdx p l (i_1 + 1) = true))
+                                  (Eq.mp
+                                    (congrFun'
+                                      (congrArg And
+                                        (Eq.trans
+                                          (propext
+                                            (exists_prop_congr (fun h => Iff.of_eq (Eq.refl (p i_1#usize hd = true)))
+                                              (Iff.of_eq (eq_true this))))
+                                          exists_true_left._simp_1))
+                                      (Aeneas.Std.Array.allIdx p l (i_1 + 1) = true))
+                                    (Eq.mp
+                                      (Eq.trans
+                                        (Eq.trans
+                                          (congrFun'
+                                            (congrArg Eq
+                                              (dite_congr (Eq.refl (i_1 ≤ Aeneas.Std.U32.max))
+                                                (fun h =>
+                                                  Eq.trans
+                                                    (Bool.decide_and (p i_1#usize hd = true)
+                                                      (Aeneas.Std.Array.allIdx p l (i_1 + 1) = true))
+                                                    (congr (congrArg and Bool.decide_eq_true) Bool.decide_eq_true))
+                                                fun h => Eq.refl false))
+                                            true)
+                                          Bool.dite_else_false._simp_1)
+                                        (Eq.trans
+                                          (propext
+                                            (exists_prop_congr
+                                              (fun h =>
+                                                Iff.of_eq
+                                                  (Bool.and_eq_true (p i_1#usize hd)
+                                                    (Aeneas.Std.Array.allIdx p l (i_1 + 1))))
+                                              (Iff.of_eq (Eq.refl (i_1 ≤ Aeneas.Std.U32.max)))))
+                                          exists_and_right._simp_1))
+                                      h))).1))
+                          true)
+                        (eq_self true)))
+                    (congrArg (p' i_1#usize)
+                      (Eq.trans (Aeneas.Std.Array.getElem!_Nat_eq a i_1) List.getElem!_eq_getElem?_getD)))
+                  (true_iff (p' i_1#usize ((↑a)[i_1]?.getD default))))
+                hp')))
+      else
+        have hind :=
+          x.1 (i_1 + 1) (Aeneas.Std.Array.index_usize_const_spec._proof_1_11 a i i_1 j hd l hi)
+            (fun j_1 =>
+              have hl := hl (j_1 + 1);
+              have this :=
+                Decidable.byContradiction fun a =>
+                  Aeneas.Std.Array.index_usize_const_spec._proof_1_12 i i_1 j hd l j_1 a;
+              Eq.mpr
+                (id
+                  (congr (congrArg Eq List.getElem!_eq_getElem?_getD)
+                    (Eq.trans (Aeneas.Std.Array.getElem!_Nat_eq a (i_1 + 1 + j_1)) List.getElem!_eq_getElem?_getD)))
+                (Eq.mpr (id (congrArg (fun _a => l[j_1]?.getD default = (↑a)[_a]?.getD default) this))
+                  (Eq.mp
+                    (congr (congrArg Eq List.getElem!_eq_getElem?_getD)
+                      (Eq.trans (Aeneas.Std.Array.getElem!_Nat_eq a (i_1 + (j_1 + 1))) List.getElem!_eq_getElem?_getD))
+                    hl)))
+            (of_eq_true
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.mp
+                        (congrFun'
+                          (congrArg And
+                            (Eq.trans
+                              (propext
+                                (exists_prop_congr (fun h => Iff.of_eq (Eq.refl (p i_1#usize hd = true)))
+                                  (Iff.of_eq (eq_true this))))
+                              exists_true_left._simp_1))
+                          (Aeneas.Std.Array.allIdx p l (i_1 + 1) = true))
+                        (Eq.mp
+                          (Eq.trans
+                            (Eq.trans
+                              (congrFun'
+                                (congrArg Eq
+                                  (dite_congr (Eq.refl (i_1 ≤ Aeneas.Std.U32.max))
+                                    (fun h =>
+                                      Eq.trans
+                                        (Bool.decide_and (p i_1#usize hd = true)
+                                          (Aeneas.Std.Array.allIdx p l (i_1 + 1) = true))
+                                        (congr (congrArg and Bool.decide_eq_true) Bool.decide_eq_true))
+                                    fun h => Eq.refl false))
+                                true)
+                              Bool.dite_else_false._simp_1)
+                            (Eq.trans
+                              (propext
+                                (exists_prop_congr
+                                  (fun h =>
+                                    Iff.of_eq
+                                      (Bool.and_eq_true (p i_1#usize hd) (Aeneas.Std.Array.allIdx p l (i_1 + 1))))
+                                  (Iff.of_eq (Eq.refl (i_1 ≤ Aeneas.Std.U32.max)))))
+                              exists_and_right._simp_1))
+                          h)).2)
+                  true)
+                (eq_self true)))
+            (j - 1)
+            (Decidable.byContradiction fun a =>
+              Aeneas.Std.Array.index_usize_const_spec._proof_1_13 i i_1 j hj hd l hi hj a)
+            (Decidable.byContradiction fun a =>
+              Aeneas.Std.Array.index_usize_const_spec._proof_1_14 i i_1 j hij hd l hj a);
+        have this :=
+          Decidable.byContradiction fun a => Aeneas.Std.Array.index_usize_const_spec._proof_1_15 i i_1 j hd l hj a;
+        of_eq_true
+          (Eq.trans
+            (congrArg (p' (i_1 + j)#usize)
+              (Eq.trans (Aeneas.Std.Array.getElem!_Nat_eq a (i_1 + j)) List.getElem!_eq_getElem?_getD))
+            (eq_true
+              (Eq.mp
+                (congr
+                  (congrArg p'
+                    (Aeneas.Std.Usize.ofNat.congr_simp (i_1 + 1 + (j - 1)) (i_1 + j) this
+                      (Aeneas.Std.Array.index_usize_const_spec._proof_1_1 a i l (i_1 + 1) (j - 1)
+                        (Decidable.byContradiction fun a =>
+                          Aeneas.Std.Array.index_usize_const_spec._proof_1_14 i i_1 j hij hd l hj a))))
+                  (Eq.trans (Eq.trans (congrArg (getElem! a) this) (Aeneas.Std.Array.getElem!_Nat_eq a (i_1 + j)))
+                    List.getElem!_eq_getElem?_getD))
+                hind))))
+    f
+FOUND Aeneas.Std.Array.index_usize.eq_1
+TYPE ∀ {α : Type u} {n : Aeneas.Std.Usize} (v : Aeneas.Std.Array α n) (i : Aeneas.Std.Usize),
+  v.index_usize i =
+    match v[i]? with
+    | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+    | some x => Aeneas.Std.Result.ok x
+VALUE fun {α} {n} v i => Eq.refl (v.index_usize i)
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_29
+TYPE ∀ {α : Sort u_1} (P : α → Prop) (Q : Prop), Aeneas.Std.WP.imp (∃ x, P x) Q = ∀ (x : α), Aeneas.Std.WP.imp (P x) Q
+VALUE fun {α} P Q => propext (Aeneas.Std.WP.imp_exists_iff P Q)
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_28
+TYPE ∀ (P0 P1 Q : Prop), Aeneas.Std.WP.imp (P0 ∧ P1) Q = (P0 → Aeneas.Std.WP.imp P1 Q)
+VALUE fun P0 P1 Q => propext (Aeneas.Std.WP.imp_and_iff P0 P1 Q)
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_27
+TYPE ∀ {α : Sort u_1} (P₀ P₁ : Aeneas.Std.WP.Post α),
+  Aeneas.Std.WP.qimp P₀ P₁ = ∀ (x : α), Aeneas.Std.WP.imp (P₀ x) (P₁ x)
+VALUE fun {α} P₀ P₁ => propext (Aeneas.Std.WP.qimp_iff P₀ P₁)
+FOUND Aeneas.Std.Array.getElem?_Usize_eq
+TYPE ∀ {α : Type u} {n : Aeneas.Std.Usize} (v : Aeneas.Std.Array α n) (i : Aeneas.Std.Usize), v[i]? = (↑v)[↑i]?
+VALUE fun {α} {n} v i => Eq.refl v[i]?
+FOUND Aeneas.Std.Array.index_usize_spec.mvcgen_spec
+TYPE ∀ {α : Type u} {n : Aeneas.Std.Usize} (v : Aeneas.Std.Array α n) (i : Aeneas.Std.Usize) (hbound : ↑i < v.length),
+  ⦃⌜True⌝⦄ v.index_usize i ⦃Std.Do.PostCond.noThrow fun r => ⌜r = (↑v)[↑i]⌝⦄
+VALUE fun {α} {n} v i hbound => Aeneas.Std.WP.spec_to_mvcgen (Aeneas.Std.Array.index_usize_spec v i hbound)
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_23
+TYPE ∀ {α : Sort u_1} {β : Sort u_2} (P₀ : β → Aeneas.Std.WP.Post α) (P₁ : Aeneas.Std.WP.Post α),
+  Aeneas.Std.WP.qimp (fun x => ∃ y, P₀ y x) P₁ = ∀ (x : β), Aeneas.Std.WP.qimp (P₀ x) P₁
+VALUE fun {α} {β} P₀ P₁ => propext (Aeneas.Std.WP.qimp_exists P₀ P₁)
+FOUND Aeneas.Std.Array.index_usize
+TYPE {α : Type u} → {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Usize → Aeneas.Std.Result α
+VALUE fun {α} {n} v i =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some x => Aeneas.Std.Result.ok x
+FOUND Aeneas.Std.Array.index_usize_const_spec._simp_1_25
+TYPE ∀ {α : Prop}, (True → α) = α
+VALUE fun {α} => propext true_imp_iff
+FOUND Aeneas.Std.Array.index_usize_const_spec.match_1_2
+TYPE ∀ {n : Aeneas.Std.Usize} {α : Type u_1} [inst : Inhabited α] (p : Aeneas.Std.Usize → α → Bool)
+  (a : Aeneas.Std.Array α n) (i : ℕ)
+  (motive :
+    (l : List α) → i + l.length = ↑n → (∀ (j : ℕ), l[j]! = a[i + j]!) → Aeneas.Std.Array.allIdx p l i = true → Prop)
+  (l : List α) (hi : i + l.length = ↑n) (hl : ∀ (j : ℕ), l[j]! = a[i + j]!) (h : Aeneas.Std.Array.allIdx p l i = true),
+  (∀ (hi : i + [].length = ↑n) (hl : ∀ (j : ℕ), [][j]! = a[i + j]!) (h : Aeneas.Std.Array.allIdx p [] i = true),
+      motive [] hi hl h) →
+    (∀ (hd : α) (l : List α) (hi : i + (hd :: l).length = ↑n) (hl : ∀ (j : ℕ), (hd :: l)[j]! = a[i + j]!)
+        (h : Aeneas.Std.Array.allIdx p (hd :: l) i = true), motive (hd :: l) hi hl h) →
+      motive l hi hl h
+VALUE fun {n} {α} [Inhabited α] p a i motive l hi hl h h_1 h_2 =>
+  List.casesOn (motive := fun x =>
+    ∀ (hi : i + x.length = ↑n) (hl : ∀ (j : ℕ), x[j]! = a[i + j]!) (h : Aeneas.Std.Array.allIdx p x i = true),
+      motive x hi hl h)
+    l (fun hi hl h => h_1 hi hl h) (fun head tail hi hl h => h_2 head tail hi hl h) hi hl h

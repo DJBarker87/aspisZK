@@ -1,0 +1,145 @@
+[
+ {
+  "row": "POOL:272",
+  "function": "crates/aspis-statement/src/spend.rs::note_commitment",
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "body_sha256": "2059f44c0a0919ca21b16614684f70994e0bb3fc02908f3dca4a92635c4a8e93",
+  "source_lines": [
+   146,
+   148
+  ],
+  "text": "pub fn note_commitment(owner_key: &Digest, value: u32, asset_id: M31, salt: &Digest) -> Digest {\n    note_commitment_with(owner_key, value, asset_id, salt, &mut hash_fields)\n}"
+ },
+ {
+  "row": "POOL:165",
+  "function": "crates/aspis-statement/src/pool_v1/format.rs::pool_v1_note_commitment",
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "body_sha256": "0658c705877683d96675bc08251e5b243ac0c9b401cf5dade8af33870a1f73e8",
+  "source_lines": [
+   225,
+   232
+  ],
+  "text": "pub fn pool_v1_note_commitment(\n    owner_key: &Digest,\n    value: u32,\n    asset_id: M31,\n    salt: &Digest,\n) -> Digest {\n    note_commitment(owner_key, value, asset_id, salt)\n}"
+ },
+ {
+  "row": "POOL:279",
+  "function": "programs/aspis-pool/src/history.rs::append_roots_unchecked",
+  "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+  "body_sha256": "23e0a8f60e4d62618896d5ef03af93e04140a34deccfaff736190c03fa9bf8c9",
+  "source_lines": [
+   273,
+   282
+  ],
+  "text": "pub(crate) fn append_roots_unchecked(data: &mut [u8], header: RootPageHeaderV1, roots: &[Digest]) {\n    debug_assert!(usize::from(header.filled) + roots.len() <= POOL_V1_ROOT_HISTORY_CAPACITY);\n    for (offset, root) in roots.iter().enumerate() {\n        let slot = usize::from(header.filled) + offset;\n        let start = PAGE_ROOTS_OFFSET + slot * 32;\n        data[start..start + 32].copy_from_slice(&encode_digest_canonical(root));\n    }\n    let filled = header.filled + roots.len() as u16;\n    data[PAGE_FILLED_OFFSET..58].copy_from_slice(&filled.to_le_bytes());\n}"
+ },
+ {
+  "row": "POOL:280",
+  "function": "programs/aspis-pool/src/history.rs::pool_v1_root_page_address",
+  "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+  "body_sha256": "adc1d3fa31be9502a429748e73f62ccacf7f54e194d54aa3144fe3aea36517f0",
+  "source_lines": [
+   32,
+   46
+  ],
+  "text": "pub fn pool_v1_root_page_address(\n    program_id: &Pubkey,\n    pool: &Pubkey,\n    page_number: u64,\n) -> (Pubkey, u8) {\n    let page_number_bytes = page_number.to_le_bytes();\n    Pubkey::find_program_address(\n        &[\n            POOL_V1_ROOT_HISTORY_PAGE_SEED,\n            pool.as_ref(),\n            &page_number_bytes,\n        ],\n        program_id,\n    )\n}"
+ },
+ {
+  "row": "POOL:220",
+  "function": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs::PoolV1PairLeafWitnessV1::leaf_digest",
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "body_sha256": "d422f6dbccfe1b9a1ca608db1ebc1111db73d496809e63959c105af83452b3b2",
+  "source_lines": [
+   164,
+   170
+  ],
+  "text": "    pub fn leaf_digest(&self) -> Result<Digest, PoolV1PairLeafErrorV1> {\n        self.validate()?;\n        Ok(pool_v1_tree_parent(\n            &self.first_commitment,\n            &self.second_commitment,\n        ))\n    }"
+ },
+ {
+  "row": "POOL:222",
+  "function": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs::PoolV1PairLeafWitnessV1::single_output",
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "body_sha256": "7597b96e5f498169b9949e22cdb6597b80908f8a3567136bd497aa4fcd162ad5",
+  "source_lines": [
+   193,
+   202
+  ],
+  "text": "    pub fn single_output(first_commitment: Digest) -> Result<Self, PoolV1PairLeafErrorV1> {\n        let result = Self {\n            first_commitment,\n            second_occupied: M31::ZERO,\n            second_commitment: [M31::ZERO; 8],\n            second_occupancy_inverse: M31::ZERO,\n        };\n        result.validate()?;\n        Ok(result)\n    }"
+ },
+ {
+  "row": "POOL:199",
+  "function": "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::pool_v1_pair_forest_deposit_lane_v1",
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "body_sha256": "2f52928d3b3c299fa9774824cb80a9c9adbdb55d3a9c4fc397e67ad388f277da",
+  "source_lines": [
+   195,
+   202
+  ],
+  "text": "pub fn pool_v1_pair_forest_deposit_lane_v1(\n    commitment: &Digest,\n) -> Result<u8, PoolV1PairForestAccountErrorV1> {\n    if !digest_is_canonical(commitment) {\n        return Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest);\n    }\n    Ok(first_canonical_byte(commitment) & 7)\n}"
+ },
+ {
+  "row": "POOL:304",
+  "function": "programs/aspis-pool/src/pair_forest.rs::decode_deposit_lane_box_v1",
+  "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+  "body_sha256": "64ba9162b68e5ea93e8133e144e4d4cb9a46f3a6b33c570eebe1d75bc66ba844",
+  "source_lines": [
+   954,
+   977
+  ],
+  "text": "fn decode_deposit_lane_box_v1(\n    program_id: &Pubkey,\n    master: &Pubkey,\n    lane_id: u8,\n    lane_account: &AccountInfo<'_>,\n) -> Result<Box<PoolV1PairForestLaneStateV1>, ProgramError> {\n    #[cfg(feature = \"pair-forest-deposit-invariant-audit\")]\n    return Ok(Box::new(decode_lane_account_from_program_invariant_v1(\n        program_id,\n        master,\n        lane_id,\n        lane_account,\n        true,\n    )?));\n\n    #[cfg(not(feature = \"pair-forest-deposit-invariant-audit\"))]\n    Ok(Box::new(decode_lane_account(\n        program_id,\n        master,\n        lane_id,\n        lane_account,\n        true,\n    )?))\n}"
+ },
+ {
+  "row": "POOL:309",
+  "function": "programs/aspis-pool/src/pair_forest.rs::decode_pair_forest_deposit_instruction_v1",
+  "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+  "body_sha256": "06927d0c9cecad13258481b5caaa3e5217b16c02603f5aa774dbec567d976459",
+  "source_lines": [
+   287,
+   291
+  ],
+  "text": "pub fn decode_pair_forest_deposit_instruction_v1(\n    bytes: &[u8],\n) -> Result<DepositRequestV1<'_>, DepositInstructionFormatErrorV1> {\n    decode_deposit_instruction_with_magic_v1(bytes, POOL_V1_PAIR_FOREST_DEPOSIT_INSTRUCTION_MAGIC)\n}"
+ },
+ {
+  "row": "POOL:326",
+  "function": "programs/aspis-pool/src/pair_forest.rs::prepare_deposit_append_v1",
+  "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+  "body_sha256": "48a1f39280f60fff8e313d470ccb4372b8ca282a8cc2be7bef618fdf3a909e5a",
+  "source_lines": [
+   919,
+   951
+  ],
+  "text": "fn prepare_deposit_append_v1(\n    lane: &PoolV1PairForestLaneStateV1,\n    lane_id: u8,\n    pair_leaf: Digest,\n) -> Result<\n    (\n        AppendOneV1,\n        Box<[u8; POOL_V1_PAIR_FOREST_LANE_ACCOUNT_BYTES]>,\n    ),\n    ProgramError,\n> {\n    #[cfg(not(feature = \"pair-forest-deposit-invariant-audit\"))]\n    let (next_tree, append) = lane\n        .tree\n        .append_one_with_empty_roots(pair_leaf, &POOL_V1_PAIR_EMPTY_ROOTS)\n        .map_err(|_| PoolV1ProgramError::StateHistoryMismatch)?;\n    #[cfg(feature = \"pair-forest-deposit-invariant-audit\")]\n    let (next_tree, append) = append_pair_leaf_from_program_invariant_v1(&lane.tree, pair_leaf)?;\n    let next_lane = Box::new(PoolV1PairForestLaneStateV1 {\n        bump: lane.bump,\n        master: lane.master,\n        lane_id,\n        tree: next_tree,\n    });\n    #[cfg(not(feature = \"pair-forest-deposit-invariant-audit\"))]\n    let next_lane_image = Box::new(\n        encode_pool_v1_pair_forest_lane_state_v1(&next_lane, &POOL_V1_PAIR_EMPTY_ROOTS)\n            .map_err(|_| PoolV1ProgramError::StateHistoryMismatch)?,\n    );\n    #[cfg(feature = \"pair-forest-deposit-invariant-audit\")]\n    let next_lane_image = Box::new(encode_lane_from_authenticated_result_v1(&next_lane)?);\n    Ok((append, next_lane_image))\n}"
+ },
+ {
+  "row": "POOL:332",
+  "function": "programs/aspis-pool/src/pair_forest.rs::require_exact_account_count",
+  "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+  "body_sha256": "428250fc1e12cb65af0c52774b08f6b4787decf034d375143e8d6efc79d6fa99",
+  "source_lines": [
+   371,
+   380
+  ],
+  "text": "fn require_exact_account_count(accounts: &[AccountInfo<'_>], expected: usize) -> ProgramResult {\n    if accounts.len() != expected {\n        return Err(if accounts.len() < expected {\n            ProgramError::NotEnoughAccountKeys\n        } else {\n            ProgramError::InvalidArgument\n        });\n    }\n    Ok(())\n}"
+ },
+ {
+  "row": "POOL:364",
+  "function": "programs/aspis-pool/src/processor.rs::require_payer_and_system_program",
+  "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+  "body_sha256": "ee25ecc8ff03cd63093a3a6b9ef3c8241fc5b92c13118b6772b7e8dc316c16be",
+  "source_lines": [
+   134,
+   154
+  ],
+  "text": "pub(crate) fn require_payer_and_system_program(\n    payer: &AccountInfo<'_>,\n    system_program_account: &AccountInfo<'_>,\n) -> ProgramResult {\n    if !payer.is_signer\n        || !payer.is_writable\n        || payer.executable\n        || payer.owner != &system_program::id()\n    {\n        return Err(PoolV1ProgramError::InvalidPayer.into());\n    }\n    if system_program_account.key != &system_program::id()\n        || system_program_account.owner != &native_loader::id()\n        || !system_program_account.executable\n        || system_program_account.is_signer\n        || system_program_account.is_writable\n    {\n        return Err(PoolV1ProgramError::InvalidSystemProgram.into());\n    }\n    Ok(())\n}"
+ },
+ {
+  "row": "POOL:365",
+  "function": "programs/aspis-pool/src/processor.rs::require_token_program_account",
+  "revision": "b936275465600469312d1f058cdc91ea2a11f3dc",
+  "body_sha256": "df28cb0315e8471392eb5f513c72a9d61c5c9b70eb8f1de31f16b4b0141f14e2",
+  "source_lines": [
+   334,
+   344
+  ],
+  "text": "pub(crate) fn require_token_program_account(account: &AccountInfo<'_>) -> ProgramResult {\n    if account.key != &LEGACY_SPL_TOKEN_PROGRAM_ID\n        || !account.executable\n        || account.is_signer\n        || account.is_writable\n        || !supported_program_loader(account.owner)\n    {\n        return Err(PoolV1ProgramError::InvalidTokenProgram.into());\n    }\n    Ok(())\n}"
+ }
+]
