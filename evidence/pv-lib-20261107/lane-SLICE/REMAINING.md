@@ -1,3 +1,20 @@
+# D983 session3 remaining — whole-contract-first order
+
+Full contracts0/11. Only PV_LIB_SLICE_Spec_f21 candidate is compiled/audited;
+its filename does not count as full contract delivery. Complete the three
+full-statement gates in SESSION3_f21_COMPARISON.md before f13. Then follow:
+f13,f6,f5,f8,f7,f9,f4,f2,f1,f0/source7, one compiled full contract AND explicit
+package comparison before the next. Contract is a Prop; do not prove rows.
+
+The full source7 joint premise witness/checked contradiction remains absent;
+entry witnesses or the package length-shape diagnostic are not substitutes.
+The one session3 strict audit49692 passed33 roots. Reuse unchanged evidence.
+Next Lean49923; raw49693 for new/changed inputs. No exhaustion/impossibility claim.
+
+Historical D978 obligations follow.
+
+---
+
 # SLICE lane remaining obligations after D978
 
 Target not yet established. No row consumes this library.

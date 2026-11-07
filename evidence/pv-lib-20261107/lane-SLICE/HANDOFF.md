@@ -29,7 +29,23 @@ Audit driver PV_LIB_SLICE_RawAudit3 compiled49922:exit0,wall0:00.81,
 RSS1588244KiB,swaps0,standard axioms. It reuses the session2 private importAll
 walker/collector unchanged; new module/root arrays and explicit reached-constructor
 summary candidates only. STX walker bytes match the accepted49919 dependency.
-Next Lean49923; next strict raw49692 (new roots only; not yet run).
+ONE session3 strict raw49692 PASSED33/33 new candidate roots, exit0,
+wall0:22.58,peak6711192KiB,swaps0,source eb81d6aa740; standard axioms only,
+zero unresolved/constants-summary disagreements. SESSION3_RAW_AUDIT.json and
+SESSION3_RAW_GRAPH_ARCHIVE.json.xz retain results and actual reachable walks.
+Do not repeat this audit unchanged. Historical49690/49691 evidence reused.
+No new root was added after this audit. Driver/walker/collector unchanged except
+module/root arrays and explicit reached-constructor summary candidate names.
+
+SESSION3_VALIDATION.json/session3-validate.py check the2 passing focused compiles,
+failed source archive, full caps/admissions/turns, read-only frozen input bytes,
+raw archive hashes, active sources and lane write boundary without Lean replay.
+No own host scope remains. Next Lean49923; next raw49693, new/changed roots only.
+Full contracts remain0/11 and source7 full joint witnesses/contradictions0/1.
+Target not yet established. No IDs are exhausted; work remains in f21's complete
+primitive semantics/resource/child-summary/heap-continuation contract, THEN f13.
+The package final-value-shape defect is checked but does not justify stopping
+or weakening the requested full contract; it is retained for the continuation.
 No frozen prose/shared map/ledger/checker/pv-common/package branch/key action,
 row consumption, endpoint premise, trust field or metric changed. No push/merge.
 
