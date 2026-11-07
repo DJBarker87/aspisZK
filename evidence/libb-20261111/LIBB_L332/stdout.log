@@ -1,0 +1,140 @@
+LIBB_generated/LIBB_ReturnRun.lean:32:79: error: unsolved goals
+case hm
+wr rr : NP6_StdModel.Reservation
+merkle : Merkle
+finish : Finish
+H : Type
+d : aspis_core.digest.Digest32 H
+pub proof ck : Slice U8
+hash : H
+⊢ Safe
+    (NJU_Log.record (Event.resume ck proof pub)
+      (NJJ_Common.resume wr d ck proof pub AspisR1Stage2.transport.Variant.S2 hash))
+
+case hk
+wr rr : NP6_StdModel.Reservation
+merkle : Merkle
+finish : Finish
+H : Type
+d : aspis_core.digest.Digest32 H
+pub proof ck : Slice U8
+hash : H
+x✝ : core.result.Result (verifier.Prepared × verifier.Accumulator) verifier.Error
+⊢ Safe do
+    let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch x✝)
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        match val with
+        | (p, a) =>
+          if (a.next != NHT_Constants.compact.SPLIT) = true then
+            liftM (Result.ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint))
+          else do
+            let g ← NJU_Log.record (Event.powers p.gamma) (NHT_PacketOps.powers 29#usize p.gamma)
+            liftM (NHV_ReleaseOps.mark none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead)
+            let i ← liftM NHT_Constants.compact.OFF_INACTIVE
+            let i1 ← liftM NHT_Constants.compact.OFF_ROUND0
+            let s ←
+              liftM
+                  (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                    { start := i, «end» := i1 })
+            let o ← NJU_Log.record (Event.inactive s) (NJC_ClosedCalls.inactive s)
+            let r1 ← liftM (NHT_Constants.core.option.Option.ok_or o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse)
+            let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let i2 ← liftM NHT_Constants.compact.OFF_FOLDED_ROOT
+                let i3 ← liftM NHT_Constants.compact.OFF_ROUND1
+                let s1 ←
+                  liftM
+                      (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                        { start := i2, «end» := i3 })
+                let r2 ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1)
+                let folded_root ← liftM (core.result.Result.unwrap core.fmt.DebugTryFromSliceError r2)
+                let r3 ←
+                  NJU_Log.record (Event.merkle proof p folded_root)
+                      ((fun {H} => merkle) d proof p folded_root 1#usize hash)
+                let cf2 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a_1 => do
+                    liftM
+                        (NHV_ReleaseOps.mark none
+                          (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle NHT_Constants.compact.SPLIT))
+                    let r4 ←
+                      NJU_Log.record (Event.geometry p.queries a.next)
+                          (NJC_ClosedCalls.geometry p.queries a.next 22#usize)
+                    let cf3 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue val2 =>
+                        have s2 := a.weights.deref;
+                        do
+                        let r5 ← NJU_Log.record (Event.pending s2) (NJJ_Common.pending rr s2)
+                        let cf4 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r5)
+                        match cf4 with
+                          | core.ops.control_flow.ControlFlow.Continue val3 => do
+                            let r6 ←
+                              NJU_Log.record (Event.query proof p a g val2 val3)
+                                  (NJJ_Common.query proof p a g none val2 val3 22#usize)
+                            let cf5 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r6)
+                            match cf5 with
+                              | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                match val4 with
+                                | (a1, pending) => do
+                                  let __x ← liftM (Std.lift a1.weights.deref_mut)
+                                  match __x with
+                                    | (s3, deref_mut_back) => do
+                                      let s4 ←
+                                        NJU_Log.record (Event.flush pending s3) (Port3_FlushInstall.flush pending s3)
+                                      have weights : alloc.vec.Vec AspisR1Stage2.aspis_core.field.QM31 :=
+                                        deref_mut_back s4
+                                      let s5 ← liftM (Std.lift (Std.Array.empty U8).to_slice)
+                                      let s6 ← liftM (Std.lift (Std.Array.empty U8).to_slice)
+                                      let s7 ←
+                                        liftM
+                                            (core.slice.index.Slice.index
+                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                              { start := i1, «end» := i2 })
+                                      let i4 ← liftM NHT_Constants.compact.OFF_FINAL
+                                      let s8 ←
+                                        liftM
+                                            (core.slice.index.Slice.index
+                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                              { start := i3, «end» := i4 })
+                                      let i5 ← liftM NHT_Constants.compact.OFF_OPENINGS
+                                      let s9 ←
+                                        liftM
+                                            (core.slice.index.Slice.index
+                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                              { start := i4, «end» := i5 })
+                                      let s10 ← liftM (Std.lift (Std.Array.empty U8).to_slice)
+                                      have finalView : verifier.View :=
+                                        { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6,
+                                          inactive := val1, round0 := s7, folded_root := none, round1 := s8,
+                                          final_message := s9, query_bytes := s10 }
+                                      have actual : verifier.Accumulator :=
+                                        { weights := weights, rhs := a1.rhs, power := a1.power, next := a1.next }
+                                      NJU_Log.record (Event.finish finalView p actual) (finish finalView p actual none)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame verifier.Error) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame verifier.Error) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        liftM
+          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual)
+'LIBB_ReturnRun.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

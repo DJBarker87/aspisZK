@@ -19,3 +19,7 @@ L301: unknown flatten-map name and dependent elimination at an already evaluated
 The completed source fold and full-law Returns do not establish whole-Obs Functional. No claim is made that these two propositions coincide. The explicit requested whole-field formula is retained in LIBB_REMAINING.md, pending its interpretation against the frozen allocation-abort exemption; no spec amendment or domain change is applied by this worker.
 
 L322: focused combined import lacked unchanged nested NMT_tx1 objects. L323 changes only the selected dependency environment by copying missing unchanged objects from the merged TX1 pinned seeds; source/object hashes in LIBB_BUNDLE_DEPS_REUSE.json. L323/L324 pass. No shared infrastructure or sibling source was edited.
+
+## Returned-observation gate continuation (bq clarification)
+
+L326 and L330 were explicitly stopped during broad tactic proof search (exit143;33.919s/9188660KiB and63.057s/11422196KiB respectively;swap0). The identical search shape is retired. Its replacement splits generic Safe bind/record lemmas (L328) from a syntactically dispatched source traversal; it never unfolds child calls to discover the constructor. L327 used an incorrect Result.bind identifier, repaired by case analysis on NJU_Log.bind. L329 missed the AspisR1 namespace; L331 introduced the record inequality twice, replaced by an explicit constructor-disjointness proof. No failure is accepted as evidence; no cap or timeout is raised.
