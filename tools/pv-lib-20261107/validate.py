@@ -11,6 +11,8 @@ for r in json.loads((E/'INPUT_MANIFEST.json').read_text()):
     assert sha(lzma.decompress((E/r['archive']).read_bytes()))==r['sha256']
 deps=json.loads((E/'DEPENDENCIES.json').read_text());assert not deps['cycles']
 m=json.loads((E/'PLIB_MAP.json').read_text());assert len(m['slots'])==170
+instances=json.loads((E/'INSTANCES.json').read_text())
+assert len(instances)==83 and all(f['compiled'] and f['raw_audited'] for f in instances.values())
 for s in m['slots']:
     if s['root']:assert s['provider_status']=='CLOSED'
     if s['status']=='INSTANTIATED':assert s['instance']['compiled'] and s['instance']['raw_audited']

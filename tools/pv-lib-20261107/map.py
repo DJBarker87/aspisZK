@@ -23,7 +23,7 @@ for parent in dep['order']:
   slots.append(dict(slot=parent+' -> '+child,parent=parent,child=child,sites=sites,
    provider_status=c['status'],root=p,provider_definitions=definitions,
    adapter='Literal provider Input/Pre/value/finalStore/output definitions listed here; SAME emitted operands and current entry state. Graph equality, required-cell frame and numbering; reached-machine transport where specialized. No whole-store/counter equality.',
-   status=status,reason=reason,instance=None))
+   status=status,reason=reason,instance=inst))
 facets=[
  ('thread:OwnInit','decodeBridged14756','SPEC-ERROR','PV_THR2_OwnInitSourceCodec.decodeBridged; PV_THR2_BoxDynRepresentationBridge; PV_THR2_OwnInitActualAllocationOwned.allBridged; SourceInitBoxOwnership','Old decode/all/Shape cannot be used at tagged source14756. Full actual bridge/source/binary adequacy and continuous milestone composition remain missing.'),
  ('slice:f21','actualPending','SPEC-ERROR','PV_STX2_ToVecCallSummary.Pending; PV_STX2_ToVecCallPendingDiagnostic.actual_entry_false_pending','Old pending accepts an ignored native answer on BODY push. Need completed=none and resolver=none recognizer tests.'),
