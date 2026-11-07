@@ -7,7 +7,10 @@ E=Path(__file__).resolve().parent;P=E.parent/'ledger24-20261110';Q=E.parent/'tx2
 def raw(p):
  if p.exists():return p.read_bytes()
  b=lzma.decompress(Path(str(p)+'.xz').read_bytes());assert H(b)==Path(str(p)+'.sha256').read_text().strip();return b
-J=lambda p:json.loads(lzma.decompress(p.read_bytes())if p.suffix=='.xz'else raw(p))
+def J(p):
+ if p.suffix=='.xz':
+  b=lzma.decompress(p.read_bytes());assert H(b)==Path(str(p)[:-3]+'.sha256').read_text().strip();return json.loads(b)
+ return json.loads(raw(p))
 def put(n,x):
  b=(json.dumps(x,sort_keys=True,indent=1)+'\n').encode();p=E/n
  if n in ['NMQ_LEDGER.json','NMQ_KERNEL_STATEMENTS.json']or len(b)>20_000_000:
@@ -53,7 +56,8 @@ basis=J(P/'NLX_LEDGER.json.xz');ledger=copy.deepcopy(basis);by={r['row']:r for r
 assert all(next(z for z in ledger['rows']if z['transaction']=='TX2'and z['function']==c)['status']=='CLOSED'for c in r['canonical_callees'])
 o=copy.deepcopy(r['obligation']);o['NMQ_basis_obligation']=copy.deepcopy(r['obligation']);o['NMQ_complete_clause_review']=J(E/'NMQ_CLAUSE_REVIEW.json');o['NMQ_hypothesis_inventory']=review['hypothesis_inventory'];o['NMQ_root_domain']=review['own_argument_clauses'];o['NMQ_root0_decision']=review['root0_decision'];o['kernel_roots']=[statements['NMN_064.root']]
 o['certificate'].update(bridge_status='CLOSED',composed_status='CLOSED',NMQ_provider='NMN',NMQ_root='NMN_064.root',NMQ_gate='PASS',NMQ_route='bl whole actual-parent native G with full Result havocs, SAME arguments and Lean canonical child composition',NMQ_trust='Existing P6/D188 option-A native semantic transport RECLASSIFICATION; no removal',NMQ_no_new_native_or_extraction_run=True)
-for c in o['caller_domain_obligations']:c.update(status='INTERNAL_DISCHARGED',discharged_by='NMN_064.root; NMQ_CLAUSE_REVIEW.json classifies every SAME actual call and nested canonical child domain under aq2/bl4')
+for c in o['caller_domain_obligations']:
+ c.update(status='INTERNAL_SUPPLIED_FROM_OWN_INPUT_CLAUSE'if c['id'].startswith('NLX-bf:')else'INTERNAL_DISCHARGED',discharged_by='NMN_064.root; NMQ_CLAUSE_REVIEW.json distinguishes supplied bf2 own-input predicates retained at OPEN241 from internally derived SAME child laws and nested aq2/bl4 cuts')
 for c in o['inventory_domain_obligations']:c.update(status='INTERNAL_DISCHARGED_WITH_CALLER_PROVENANCE_RETAINED',discharged_by='NMN_064.root; four original-input bf2 clauses remain explicitly at241; NMF accepted-headline Root0 OR existing collision occurrence')
 r.update(previous_status='OPEN',status='CLOSED',obligation=o,owner_module='NMN_064',owner_role='canonical complete064 row packet; all Result/error/stopped prefixes',root_owners=[dict(root='NMN_064.root',owner_module='NMN_064',obligation_statement_sha256=H(statements['NMN_064.root']['obligation_statement'].encode()))],evidence_dir='evidence/ledger25-20261111')
 par=by['TX2:241'];assert par['status']=='OPEN';par['obligation']['NMQ_parent_basis_obligation']=copy.deepcopy(oldby['TX2:241']['obligation']);parent=J(E/'NMQ_PARENT_CLAUSES.json');par['obligation']['NMQ_explicit_child_domains']=parent

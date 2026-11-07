@@ -29,6 +29,7 @@ for entry in controls['runs']:
  assert {'r0','pool-v1-kernel'}<=set(features['aspis-statement'])
  runs.append(dict(attempt=a,root=r['module'],exit=r['exit_status'],verdict='PASS'if expected==0 else'FAIL',native_sha256=entry['source_sha256'],graph_sha256=graph['graph_sha256'],lock_sha256=lock['after'],log_sha256=H(s.encode()),configuration_sha256=H(json.dumps(configs[-1],sort_keys=True).encode()),receipt=str(Q/a/'receipt.json')))
 assert all(c==configs[0]for c in configs)
+assert len({r["graph_sha256"]for r in runs})==1
 source=snapshot(controls['current_native_sha256']).decode();assert 'static mut'not in source and not re.search(r'^static ',source,re.M)
 for text in ['public:[u8;1880]=kani::any()','checkpoint:[u8;1768]=kani::any()','header:kani::any(),root:kani::any(),suffix:kani::any()','kani::assume(n<=1880)','kani::assume(tag<11)','kani::assume(tag<9)','tx2_authenticated(pub_,if MUTANT{other}else{proof},&checkpoint,NMN_Hash(&log),None)','assert!(matches!(p,Phase::Parsed))']:
  assert text in source,text
@@ -50,7 +51,20 @@ review=dict(row='TX2:064',primary_root='NMN_064.root',owner_module='NMN_064',sta
 # Preserve every old clause and classify the real three-call parent vs flattened inventory.
 matrix=[]
 for c in row['obligation']['caller_domain_obligations']:
- z=copy.deepcopy(c);z['NMQ_classification']='aq2 transitive inventory/use, internally composed by NMN_064.root at canonical child; actual parent has only parse_shape, mark and tx2_common';z['NMQ_discharge']='NMN_OracleFold.installed/composed; NMN_Relation.composition; NLW_064CandidateFold.child; NMK_Domain.child';matrix.append(z)
+ z=copy.deepcopy(c)
+ if c['id'].startswith('NLX-bf:'):
+  z['NMQ_classification']='bf2 own-input clause, consumed at SAME common call; retained as064 Domain and OPEN241 caller clause, not a removed assumption'
+  z['NMQ_discharge']='NMK_Domain.child: NLE_ParseInstall.success supplies entered proof extent; Domain supplies publicBound/root0; NMF supplies Root0 OR existing collision only at the accepted headline occurrence'
+ elif 'parse_shape'in c.get('callee','')and 'inventory:'not in c['id']:
+  z['NMQ_classification']='Canonical total parser refinement on SAME typed proof Slice; native parent certificate restricted explicitly to own57607 input class'
+  z['NMQ_discharge']='NMN_064.parser from NLE_ParseInstall.emitted; NMN_OracleFold.installed'
+ elif c.get('callee','').endswith('::mark'):
+  z['NMQ_classification']='Original deployed None/Parsed unit call; exact native phase assertion, no observer value comparison'
+  z['NMQ_discharge']='NHV_ReleaseOps.mark; NMN_Observer.marker/success/rejection; K014/K015 marker cut'
+ else:
+  z['NMQ_classification']='Canonical common/transitive inventory; SAME actual child invocation and internally supplied child law, nested aq2 cuts retained'
+  z['NMQ_discharge']='NLW_064CandidateFold.child and NMK_Domain.child apply NLT_CompleteRoot.root; its complete NLX-gated clauses retain all failure/stop arms'
+ matrix.append(z)
 (E/'NMQ_CLAUSE_REVIEW.json').write_text(json.dumps(dict(row='TX2:064',original_clauses=matrix,own_input_clauses=clauses,caller='TX2:241',caller_status='OPEN',inventory=row['obligation']['inventory_domain_obligations'],scope='bl4 classification retains full Result/reject/abort/effects and canonical nested child domains; no literal whole-parent requirement discarded'),indent=1)+'\n')
 (E/'NMQ_PARENT_CLAUSES.json').write_text(json.dumps(dict(parent='TX2:241',helper='TX2:064',clauses=clauses,status='OPEN_CALLER_CLAUSES',root0_provenance=review['root0_decision']),indent=1)+'\n')
 print(json.dumps(dict(status='PASS_STATIC_REVIEW',native_runs=len(runs),clauses=len(matrix),gate='pending')))
