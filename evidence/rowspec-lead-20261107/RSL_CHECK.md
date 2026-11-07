@@ -1,5 +1,7 @@
 # RSL check record
 
+Revision 2: the compile and axiom record for the revised package is in RSL_REVISION2.md section 6, RSL_COMPILE_REV2.tsv and RSL_AUDIT_OUTPUT_REV2.txt. The record below is Revision 1.
+
 Target not yet established. This record covers specifications only. No proof that any frozen function satisfies its RowSpec was attempted.
 
 ## What compiled locally
@@ -46,7 +48,7 @@ Every theorem below is a compiled Lean `theorem`.
 | 136 / 137 | `rejects_constErr` | conditional on the CLOSED semantic_rounds or parse law having a silent Err-only argument |
 | 087 | `rejects_wrong_g` | the `&mut g` frame is pinned on early Err arms |
 | 094 | `rejects_constErr` | Parse vs Allocation |
-| 328 | `rejects_silent` | every event-free outcome at k ≠ 10 |
+| 328 | `rejects_silentRet` (Revision 2; `ref_admits_abort` records the admitted abort) | every event-free returning outcome at k ≠ 10. Revision 1's rejection of the constant abort is superseded, see RSL_REVISION2.md |
 | 345 | `rejects_constErr`, `rejects_constAbort` | wrong route vs duplicate keys |
 | 344 | `rejects_silentErr`, `rejects_constAbort` | as for 240 |
 

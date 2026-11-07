@@ -1,0 +1,52 @@
+{"attempt": "NNC_L011", "exit_status": 1, "wall_seconds": 25.098161737201735, "peak_rss_kib": "6677180", "swaps": "0", "print_axioms": ["'NNC_Persistence.checkpoint_buffer' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NNC_Persistence.reader_load' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NNC_Persistence.persisted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNC_generated/NNC_Persistence.lean:34:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(e2.buffers (e2.handles 6).1)
+in the target expression
+  CPG_Projection.loaded p u ((p.layout u).handles 6).1 = some (bytesOf ↑(e2.buffers ((p.layout u).handles 6).1))
+
+Tx A : Type
+p : CPG_Projection.Observations Tx A
+u : Tx
+e2 : Entry
+entry : e2 = CPG_Projection.entry p u
+ck : Slice U8
+read : ↑ck = ↑(e2.buffers (e2.handles 6).1)
+length : (↑ck).length = 1768
+positive : 0 < (p.bank u).lamports ((p.layout u).handles 6).1
+live : CPG_Projection.loaded p u ((p.layout u).handles 6).1 = some (bytesOf ↑(e2.buffers ((p.layout u).handles 6).1))
+⊢ CPG_Projection.loaded p u ((p.layout u
+...
+Arg (fun _a => CPG_Projection.loaded p u _a = some (bytesOf ↑s.checkpoint))
+            (Eq.symm game.checkpoint.left))
+          loaded))
+      (Eq.mp
+        (congrArg (Eq (CPG_Projection.loaded p u ((p.layout t).handles 2).1))
+          (congrArg CPR_DataPersistence.visible
+            (ite_cond_eq_true (CPG_Projection.tentative p t ((p.layout t).handles 2).1)
+              (CPG_Projection.before p t ((p.layout t).handles 2).1) (eq_self true))))
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              CPG_Projection.loaded p u ((p.layout t).handles 2).1 =
+                CPR_DataPersistence.visible
+                  (if _a = true then CPG_Projection.tentative p t ((p.layout t).handles 2).1
+                  else CPG_Projection.before p t ((p.layout t).handles 2).1))
+            game.parent)
+          law));
+  Decidable.casesOn (instDecidableEqNat (CPG_Projection.tentative p t ((p.layout t).handles 2).1).lamports 0)
+    (fun h =>
+      have same := Option.some.inj (Eq.mp (congrArg (Eq (some (bytesOf ↑s.checkpoint))) (if_neg h)) visible);
+      have framed := writerProtection.right.right.right.right.left;
+      _root_.id
+        (fun same =>
+          Eq.trans (Eq.mp (congrArg (fun _a => bytesOf ↑s.checkpoint = bytesOf ↑_a.data) framed) same)
+            (CPR_SourceBank.copied_data (CPG_Projection.cached (p.bank t)) ((p.layout t).handles 2).1 saved))
+        same)
+    fun h =>
+    let ⟨⟩ := none
+    Eq.mp (congrArg (Eq (some (bytesOf ↑s.checkpoint))) (if_pos h)) visible
+'NNC_Persistence.checkpoint_buffer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNC_Persistence.reader_load' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NNC_Persistence.persisted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5b37ebc34a6841779ae7287d264e1578.scope; invocation ID: bc11d13108134883905e7b7b5b927d78

@@ -1,0 +1,28 @@
+import NMT_345MapLaws
+import NMT_345ScalarSize
+import NMT_345RSLCarriers
+set_option autoImplicit false
+noncomputable section
+namespace NMT_345
+open Aeneas Aeneas.Std Result
+attribute [local instance] Classical.propDecidable
+/-- The isolated canonical model bridge: no native reply or parent success
+hypothesis, and arbitrary deferred ProgramError payloads are preserved. -/
+theorem checkpoint_model_bridge (a : Account) (program : Key) (w : Bool) :
+ rustResult id (mapCore id fromPE
+   (NGL_CheckpointModel.reply (toAccount a) program w)) =
+ RSL.verifierCheckpoint (account a) (key program) w := by
+ have scalarEq (n : Usize) : n.val = 1768 ↔ n = 1768#usize :=
+  ⟨fun h => UScalar.eq_of_val_eq h,fun h => by subst n; rfl⟩
+ by_cases own : a.owner = program
+ · unfold NGL_CheckpointModel.reply toAccount RSL.verifierCheckpoint RSL.OwnedAccount.data_len account
+   have kown : key a.owner = key program := congrArg key own
+   cases a.is_signer <;> cases a.is_writable <;> cases a.executable <;> cases w <;>
+    cases a.length <;>
+    simp [own,kown,mapCore,rustResult,from_toPE,fromPE,pe,RSL.CHECKPOINT_BYTES,bne,scalarEq]
+ · have kown : key a.owner ≠ key program := fun h => own (key_injective h)
+   simp [NGL_CheckpointModel.reply,toAccount,RSL.verifierCheckpoint,account,own,kown,
+    mapCore,rustResult,fromPE,pe]
+ all_goals split <;> rfl
+#print axioms checkpoint_model_bridge
+end NMT_345

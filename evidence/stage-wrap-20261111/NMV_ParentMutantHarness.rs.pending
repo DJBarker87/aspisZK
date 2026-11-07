@@ -1,0 +1,17 @@
+// To append to NMV_FissionHarness only for the two pending negative runs.
+#[path="NMV_ParentMutants.rs"] mod parent_mutants;
+#[kani::proof]#[kani::unwind(16)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn NMV_fission_stage1_parent_argument_control(){
+ let a:[u64;3]=kani::any();let p:Pubkey=kani::any();let mut l=log::<0>(Ok(0));
+ l.borrow_ok=true;l.cp=Some(Ok(vec![kani::any()]));
+ assert!(parent_mutants::stage1(&mut l,&p,&a,&[3,10]).is_ok());assert_eq!(l.count,3);
+}
+#[kani::proof]#[kani::unwind(16)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn NMV_fission_stage2_parent_argument_control(){
+ let a:[u64;7]=kani::any();let p:Pubkey=kani::any();let mut l=log::<0>(Ok(0));l.reply=Some(Ok(()));
+ assert!(parent_mutants::stage2(&mut l,&p,&a,&[65,83,81,56]).is_ok());assert_eq!(l.count,7);
+}
