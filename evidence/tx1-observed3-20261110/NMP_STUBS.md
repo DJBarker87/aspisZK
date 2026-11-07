@@ -24,3 +24,5 @@ rename-stability calibration are tracked separately; no rename repairs a verdict
 Full Rust signature/domain and callee-root inventory is in NMP_CHILDREN.json.
 Kani passes here remain local cut/projection support until all remaining native
 frames, full-type cases and SAME-child laws have been composed and gated.
+
+Auxiliary generator point<const N> (N=13831 or928) is admitted after K070-K085 controls. Returns unit, modifies only complete fixed array, chosen byte tied to recorded arbitrary word. Kani covers the actual point contract, inverse fails, real weak body passes, weak stub does not imply assertion (fails), modifies violation detected, point caller passes with failing corrupt-word control. Lean NMP_ByteHavocLaw.covers proves every equal-length byte post-state is admitted. This is not an encoded child law. Dynamic-slice form K068 hit compiler ICE and is not used. No field multiplication stub is used.

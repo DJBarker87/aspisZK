@@ -84,7 +84,7 @@ fn check(stop:u8,control:u8){
  let gi:usize=kani::any();kani::assume(gi<29);let mut g=[E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary()];let old_g=g[gi];
  let probe_sem:usize=kani::any();let probe_y:usize=kani::any();kani::assume(probe_sem<13831&&probe_y<928);
  let ci:usize=kani::any();let ri:usize=kani::any();let qi:usize=kani::any();kani::assume(ci<3&&ri<64&&qi<22);
- let dummy=Meta{ptr:core::ptr::null(),len:0};let owned=if stop>=7{Some(arbitrary_prepared())}else{None};let expected_prepared=owned.as_ref().map(|p|prepared_probe(p,gi,ci,ri,qi));let prepared_ptr=owned.as_ref().map_or(core::ptr::null(),|p|&**p as *const Prepared);
+ let dummy=Meta{ptr:core::ptr::null(),len:0};let owned=if stop>=7||control==1{Some(arbitrary_prepared())}else{None};let expected_prepared=owned.as_ref().map(|p|prepared_probe(p,gi,ci,ri,qi));let prepared_ptr=owned.as_ref().map_or(core::ptr::null(),|p|&**p as *const Prepared);
  let mut f=Frame{proof:kani::any(),log:Log{public,stop,control,phase:0,side:kani::any(),probe_sem,probe_y,gi,ci,ri,qi,sem_src:dummy,sem_dst:dummy,y_src:dummy,y_dst:dummy,sem_byte:0,y_byte:0,observed_sem_byte:0,constructor_y_byte:0,observed_public:None,observed_bytes:dummy,sem_probe:None,constructor_probe:None,view_sem:dummy,view_y:dummy,view_folded:None,view_query:dummy,view_r0:dummy,view_r1:dummy,view_final:dummy,view_inactive:E::ZERO,view_variant:Variant::S2,old_g:E::ZERO,new_g:E::ZERO,prepared_ptr,expected_prepared,owned,error:any_error()}};
  // Functional/call-log split after retired K018; proof-buffer frame remains separate.
  let inactive=E::from_le_bytes(&f.proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]);
@@ -194,3 +194,53 @@ fn footprint_control(){check(7,3)}
 #[kani::stub(crate::verifier::Prepared::new,constructor)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn branch_7_stability(){check(7,0)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
+#[kani::stub(aspis_core::r0::heap::filled,filled)]
+#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
+#[kani::stub(crate::compact::expand_values,expand_values)]
+#[kani::stub(crate::r1_semantic::verify_observed,observed)]
+#[kani::stub(crate::verifier::Prepared::new,constructor)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch6_reply(){check(6,1)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
+#[kani::stub(aspis_core::r0::heap::filled,filled)]
+#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
+#[kani::stub(crate::compact::expand_values,expand_values)]
+#[kani::stub(crate::r1_semantic::verify_observed,observed)]
+#[kani::stub(crate::verifier::Prepared::new,constructor)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch6_argument(){check(6,2)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
+#[kani::stub(aspis_core::r0::heap::filled,filled)]
+#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
+#[kani::stub(crate::compact::expand_values,expand_values)]
+#[kani::stub(crate::r1_semantic::verify_observed,observed)]
+#[kani::stub(crate::verifier::Prepared::new,constructor)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch6_footprint(){check(6,3)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
+#[kani::stub(aspis_core::r0::heap::filled,filled)]
+#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
+#[kani::stub(crate::compact::expand_values,expand_values)]
+#[kani::stub(crate::r1_semantic::verify_observed,observed)]
+#[kani::stub(crate::verifier::Prepared::new,constructor)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch5_reply(){check(5,1)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
+#[kani::stub(aspis_core::r0::heap::filled,filled)]
+#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
+#[kani::stub(crate::compact::expand_values,expand_values)]
+#[kani::stub(crate::r1_semantic::verify_observed,observed)]
+#[kani::stub(crate::verifier::Prepared::new,constructor)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn branch5_argument(){check(5,2)}

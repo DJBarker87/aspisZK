@@ -4,13 +4,13 @@ Target not yet established. Ledger24 remains581/0/18. No new row root.
 
 | Member | Established support | Exact outstanding obligation |
 |---|---|---|
-|137 parse cut|original13831 window, arbitrary payload/Error relay, argument/reply controls; CLOSED138 source/model roots retained|full Rust Prefix reply allocation/extent coverage; current generator is input-backed only; formal coverage witness pending |
+|137 parse cut|original13831 window, arbitrary payload/Error relay, argument/reply controls; CLOSED138 source/model roots retained|full Rust Prefix reply allocation/extent coverage; current generator is input-backed only; valid initialized two-allocation coverage counterexample proved by NMP_ParserCoverage |
 |137 public cut|free runtime transcript/Error and exact public/root metadata on returning/error call-log split|immutable input/frame composition and all full-type/carrier erasure cases |
 |137 begin cut|free Challenges, full mutable transcript state/row, exact incoming Prefix and state checks|per-harness omitted-write control and full source/heap association |
 |137 finish cut|Err forwarding/call arguments; free owned Verified constructors|all returning-field windows and controls, claims owner/full frame, candidate136 or full canonical RowSpec136 parameter |
 |137 parent fold|standard-axiom transcription, value/log fold, corrected stopped-resource conditional fold|native relation is not yet a complete same-world producer; Chain remains a proof obligation, never a positive-root premise |
 |087 allocation|split Result/scratch allocation-error check passes; fixed14759 shape|actual split/view/frame/call-log returning native windows; allocator internals outside obligation under(bl)(3) |
-|087 expansions|typed full-array havoc source prepared at original7015/464→13831/928 extents|native proof/control results, arbitrary-offset mutable-byte frame composition, same14759 allocation and both retained views |
+|087 expansions|full byte mutation via calibrated fixed-array contract generator drafted at original7015/464→13831/928 extents|native proof/control results, arbitrary-offset mutable-byte frame composition, same14759 allocation and both retained views |
 |087 wide_view|actual frozen body executes fixed slicing/32-byte decoder|capture every View field at179, including folded_root/query_bytes; full native argument association |
 |087 observed137|typed owned reply constructors, any Error mapped toSemantic|all native branches/controls and full137 law; does not delay native work under(bl) |
 |087 constructor179|arbitrary Prepared and whole scratch havoc source prepared|full native Result/fields/g writeback/call arguments and controls; SAME caller domains below |
@@ -27,3 +27,5 @@ or unchanged timeout rerun. A local pass is never complete-row credit.
 This is not an early-stop report. Native and independent Lean work continue.
 Remaining native slots and Lean/support slots are still available. Counts come
 from actual receipts, excluding reservation/share waits and unsubmitted configs.
+
+K011 combined return/call-log/retained928 projection also timed out at90s. It is retired; separate return and retained-halo windows are now planned under the same frozen body. Calibrated mutable frame contracts for13831 and928 are usable; the dynamic-slice stub_verified form K068 is retired after a compiler ICE. Native new shapes remain required. No RowSpec is claimed from conditional algebra.

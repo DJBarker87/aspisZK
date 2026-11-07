@@ -21,7 +21,7 @@
 +pub(crate) mod NMP_havoc;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NMP_native.rs
-@@ -0,0 +1,547 @@
+@@ -0,0 +1,563 @@
 +include!("NMP_helpers.rs");
 +#[repr(transparent)] #[derive(Clone,Copy)]
 +pub(crate) struct LoggedHash(pub(crate) *mut ());
@@ -51,6 +51,7 @@
 +fn parse_cut<'a:'a>(bytes:&'a[u8])->Result<Prefix<'a>,Error>{
 + let ptr=unsafe{bytes.as_ptr().add(core::mem::offset_of!(Frame<'static>,log)) as *mut Log<'a>};
 + let log=unsafe{&mut *ptr};assert_eq!(log.phase,0);log.parse_arg=meta(bytes);log.phase=1;
++ if log.control==4{unsafe{*bytes.as_ptr().add(13831).cast_mut()^=1;}}
 + if log.control==2{log.parse_arg.len+=1;}
 + if log.stop==1{return Err(if log.control==1{flip(log.error)}else{log.error})}
 + let off:u16=kani::any();kani::assume((off as usize)+32<=bytes.len());
@@ -108,8 +109,8 @@
 + let hash=LoggedHash(&mut f.log as *mut _ as *mut ());
 + let row:usize=kani::any();kani::assume(row<27);
 + let bi:usize=kani::any();kani::assume(bi<13831);let before=if stop==1{f.bytes[bi]}else{0};
-+ let hi:usize=kani::any();kani::assume(hi<928);let halo=f.retained[hi];
-+ let out=super::verify_observed(public,&f.bytes,hash,None);let log=&f.log;assert_eq!(f.retained[hi],halo);
++ let hi:usize=kani::any();kani::assume(hi<928);let halo=if group==5{f.retained[hi]}else{0};
++ let out=super::verify_observed(public,&f.bytes,hash,None);let log=&f.log;if group==5{assert_eq!(f.retained[hi],halo);return}
 + assert!(same(log.parse_arg,meta(&f.bytes)));if stop==1{assert_eq!(f.bytes[bi],before);}
 + assert_eq!(log.phase,if stop<5{stop}else{4});
 + if stop>=2{assert!(same_public(log.public_arg.unwrap(),public));assert!(same(log.public_root,log.root));}
@@ -569,6 +570,21 @@
 +#[kani::stub(verify_finish,finish_cut)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn returning_0_transfer_stability(){check_variant(5,0,0,1)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn returning_halo_transfer(){check_variant(5,0,5,1)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn returning_halo_corruption(){check_variant(5,4,5,1)}
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NMP_havoc.rs
 @@ -0,0 +1,70 @@
@@ -692,7 +708,7 @@
 +pub(crate) mod NMP_prepare;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NMP_prepare.rs
-@@ -0,0 +1,196 @@
+@@ -0,0 +1,246 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +use crate::r1_semantic::NMP_native::{transition,transfer,withdraw,arbitrary_verified,LoggedHash};
@@ -779,7 +795,7 @@
 + let gi:usize=kani::any();kani::assume(gi<29);let mut g=[E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary(),E::NMP_arbitrary()];let old_g=g[gi];
 + let probe_sem:usize=kani::any();let probe_y:usize=kani::any();kani::assume(probe_sem<13831&&probe_y<928);
 + let ci:usize=kani::any();let ri:usize=kani::any();let qi:usize=kani::any();kani::assume(ci<3&&ri<64&&qi<22);
-+ let dummy=Meta{ptr:core::ptr::null(),len:0};let owned=if stop>=7{Some(arbitrary_prepared())}else{None};let expected_prepared=owned.as_ref().map(|p|prepared_probe(p,gi,ci,ri,qi));let prepared_ptr=owned.as_ref().map_or(core::ptr::null(),|p|&**p as *const Prepared);
++ let dummy=Meta{ptr:core::ptr::null(),len:0};let owned=if stop>=7||control==1{Some(arbitrary_prepared())}else{None};let expected_prepared=owned.as_ref().map(|p|prepared_probe(p,gi,ci,ri,qi));let prepared_ptr=owned.as_ref().map_or(core::ptr::null(),|p|&**p as *const Prepared);
 + let mut f=Frame{proof:kani::any(),log:Log{public,stop,control,phase:0,side:kani::any(),probe_sem,probe_y,gi,ci,ri,qi,sem_src:dummy,sem_dst:dummy,y_src:dummy,y_dst:dummy,sem_byte:0,y_byte:0,observed_sem_byte:0,constructor_y_byte:0,observed_public:None,observed_bytes:dummy,sem_probe:None,constructor_probe:None,view_sem:dummy,view_y:dummy,view_folded:None,view_query:dummy,view_r0:dummy,view_r1:dummy,view_final:dummy,view_inactive:E::ZERO,view_variant:Variant::S2,old_g:E::ZERO,new_g:E::ZERO,prepared_ptr,expected_prepared,owned,error:any_error()}};
 + // Functional/call-log split after retired K018; proof-buffer frame remains separate.
 + let inactive=E::from_le_bytes(&f.proof[compact::OFF_INACTIVE..compact::OFF_ROUND0]);
@@ -889,6 +905,56 @@
 +#[kani::stub(crate::verifier::Prepared::new,constructor)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn branch_7_stability(){check(7,0)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
++#[kani::stub(aspis_core::r0::heap::filled,filled)]
++#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
++#[kani::stub(crate::compact::expand_values,expand_values)]
++#[kani::stub(crate::r1_semantic::verify_observed,observed)]
++#[kani::stub(crate::verifier::Prepared::new,constructor)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn branch6_reply(){check(6,1)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
++#[kani::stub(aspis_core::r0::heap::filled,filled)]
++#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
++#[kani::stub(crate::compact::expand_values,expand_values)]
++#[kani::stub(crate::r1_semantic::verify_observed,observed)]
++#[kani::stub(crate::verifier::Prepared::new,constructor)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn branch6_argument(){check(6,2)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
++#[kani::stub(aspis_core::r0::heap::filled,filled)]
++#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
++#[kani::stub(crate::compact::expand_values,expand_values)]
++#[kani::stub(crate::r1_semantic::verify_observed,observed)]
++#[kani::stub(crate::verifier::Prepared::new,constructor)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn branch6_footprint(){check(6,3)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
++#[kani::stub(aspis_core::r0::heap::filled,filled)]
++#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
++#[kani::stub(crate::compact::expand_values,expand_values)]
++#[kani::stub(crate::r1_semantic::verify_observed,observed)]
++#[kani::stub(crate::verifier::Prepared::new,constructor)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn branch5_reply(){check(5,1)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub_verified(crate::r1_semantic::NMP_havoc::point)]
++#[kani::stub(aspis_core::r0::heap::filled,filled)]
++#[kani::stub(crate::compact::expand_semantic,expand_semantic)]
++#[kani::stub(crate::compact::expand_values,expand_values)]
++#[kani::stub(crate::r1_semantic::verify_observed,observed)]
++#[kani::stub(crate::verifier::Prepared::new,constructor)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn branch5_argument(){check(5,2)}
 --- a/crates/aspis-core/src/field/wide_exact.rs
 +++ b/crates/aspis-core/src/field/wide_exact.rs
 @@ -626,3 +626,7 @@

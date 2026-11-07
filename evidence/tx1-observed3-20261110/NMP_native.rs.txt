@@ -27,6 +27,7 @@ fn record(bytes:&[u8])->&[u8]{let a:u16=kani::any();let n:u16=kani::any();kani::
 fn parse_cut<'a:'a>(bytes:&'a[u8])->Result<Prefix<'a>,Error>{
  let ptr=unsafe{bytes.as_ptr().add(core::mem::offset_of!(Frame<'static>,log)) as *mut Log<'a>};
  let log=unsafe{&mut *ptr};assert_eq!(log.phase,0);log.parse_arg=meta(bytes);log.phase=1;
+ if log.control==4{unsafe{*bytes.as_ptr().add(13831).cast_mut()^=1;}}
  if log.control==2{log.parse_arg.len+=1;}
  if log.stop==1{return Err(if log.control==1{flip(log.error)}else{log.error})}
  let off:u16=kani::any();kani::assume((off as usize)+32<=bytes.len());
@@ -84,8 +85,8 @@ fn check_variant(stop:u8,control:u8,group:u8,pub_mode:u8){
  let hash=LoggedHash(&mut f.log as *mut _ as *mut ());
  let row:usize=kani::any();kani::assume(row<27);
  let bi:usize=kani::any();kani::assume(bi<13831);let before=if stop==1{f.bytes[bi]}else{0};
- let hi:usize=kani::any();kani::assume(hi<928);let halo=f.retained[hi];
- let out=super::verify_observed(public,&f.bytes,hash,None);let log=&f.log;assert_eq!(f.retained[hi],halo);
+ let hi:usize=kani::any();kani::assume(hi<928);let halo=if group==5{f.retained[hi]}else{0};
+ let out=super::verify_observed(public,&f.bytes,hash,None);let log=&f.log;if group==5{assert_eq!(f.retained[hi],halo);return}
  assert!(same(log.parse_arg,meta(&f.bytes)));if stop==1{assert_eq!(f.bytes[bi],before);}
  assert_eq!(log.phase,if stop<5{stop}else{4});
  if stop>=2{assert!(same_public(log.public_arg.unwrap(),public));assert!(same(log.public_root,log.root));}
@@ -545,3 +546,18 @@ fn returning_4_withdrawal_footprint(){check_variant(5,3,4,2)}
 #[kani::stub(verify_finish,finish_cut)]
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 fn returning_0_transfer_stability(){check_variant(5,0,0,1)}
+
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_halo_transfer(){check_variant(5,0,5,1)}
+#[kani::proof] #[kani::unwind(40)]
+#[kani::stub(crate::r1_wire::Prefix::parse,parse_cut)]
+#[kani::stub(public_transcript,public_cut)]
+#[kani::stub(crate::r1_wire::begin,begin_cut)]
+#[kani::stub(verify_finish,finish_cut)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn returning_halo_corruption(){check_variant(5,4,5,1)}

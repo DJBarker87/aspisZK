@@ -30,3 +30,5 @@ The 137 cut reply constructor's input-backed Prefix domain is recorded as a
 full-type gap, not hidden as native closure. Existing root/record geometry
 laws and source folds remain model facts until their native interpretation
 and complete child law composition are supplied.
+
+The single final raw ax2 audit is segmented by distinct root:31 current new support theorems and the headline, one root per capped scope. This isolates any offending closure and records target-specific peak RSS. No proof is rebuilt for this segmentation; imports are cached. This is not repeated full-manifest regression. Four remaining Lean/support slots are reserved for final pins, native fidelity inventory, retention and summary (or focused diagnosis if needed).
