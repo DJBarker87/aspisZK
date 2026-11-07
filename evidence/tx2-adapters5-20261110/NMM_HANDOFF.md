@@ -11,3 +11,9 @@ Method: ruling (bj), full native parent outcomes and exact-signature CLOSED spec
 Host workspace: /home/dombarker/project-offloads/codex-cx-tx2-adapters5-20261110. Seed order: ledger24 NLX exports, NLK export, NMD export, by copying with hashes. One capped scope at a time; admission requires exit 0 and allowed true, disk >=40 GB and fewer than two Stream A scopes. Caps: 6G/8G/swap0/tasks64; Lean -M7000.
 
 Next: inspect exact baseline clauses, source and predecessor interfaces; validate host availability and seed provenance before any compile.
+
+## Seed and admission stage
+
+Copied FIRST NLX exports, then NLK exports, then NMD exports. NMM_SEED.json retains every imported file hash (6129527 bytes total). Shared caches and sibling worktrees remain read-only. S2W_run_host.py and lakefile copied unchanged from NLK. Own transport/validation runner copies are NMM-prefixed and recorded, with share/disk/admission gates.
+
+Prepared NMM_LaneTranscription, NMM_RegistryTranscription, NMM_AccountsTranscription and NMM_Ownership233. They have not compiled yet and earn no credit. NMM_L001 is waiting for Stream A count below2; every wait is in NMM_ATTEMPTS. No Lean/Kani/extraction process has been submitted.
