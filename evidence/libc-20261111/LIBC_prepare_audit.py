@@ -11,8 +11,10 @@ for mod,(p,j) in accepted.items():
  if not src.exists():continue
  h=hashlib.sha256(src.read_bytes()).hexdigest()
  assert j['source_hashes']['LIBC_generated/'+mod+'.lean']==h,(mod,'source differs from accepted receipt')
- code=src.read_text();ns=re.search(r'^namespace (\S+)',code,re.M)[1]
+ code=src.read_text()
  names=re.findall(r'^(?:@\[[^\n]*\] )?theorem (\w+)',code,re.M)
+ if not names:continue
+ ns=re.search(r'^namespace (\S+)',code,re.M)[1]
  roots += [ns+'.'+n for n in names]
  matched.append(dict(module=mod,receipt=str(p.relative_to(E)),sha256=h,roots=[ns+'.'+n for n in names]))
 roots=sorted(set(roots));groups=[roots[i:i+40] for i in range(0,len(roots),40)]
