@@ -1,0 +1,46 @@
+{"attempt": "NMB_L038", "exit_status": 0, "wall_seconds": 14.137995668919757, "peak_rss_kib": "6002228", "swaps": "0", "print_axioms": ["'NMB_CheckpointLength.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_CheckpointLength.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+  (d : Slice U8) (saved : alloc.vec.Vec U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    (↑saved).length = (↑(x.buffers (x.handles 2).1)).length :=
+fun x ops p d saved accepted =>
+  let ⟨ca, h✝⟩ := AdapterRw.Cuts.stage1_checkpoint_length ops p (NMB_ThreeSnapshots.first x) d saved accepted
+  let ⟨bytes, h✝¹⟩ := h✝
+  let ⟨ic, right✝⟩ := h✝¹
+  let ⟨read, sameLength⟩ := right✝
+  have eqc := ok.inj (Eq.trans (Eq.symm ic) (NMB_FirstIndex.source x).right.right);
+  Eq.ndrec (motive := fun ca =>
+    (N
+...
+).1)).length)
+    (fun ic read =>
+      let ⟨copied, h✝²⟩ := S2W.SnapshotJoin.data_success ops (x.snapshot 2 1768 1768) bytes read
+      let ⟨stored, view⟩ := h✝²
+      have extent := NMB_CheckpointExtent.source x ops p d saved accepted;
+      have same :=
+        have normal := stored;
+        congrArg (fun v => ↑v)
+          (core.result.Result.Ok.inj
+            (Eq.mp
+              (congrFun'
+                (congrArg Eq
+                  (congrArg AdapterRw.r1_pool_adapter.owned.OwnedAccount.bytes
+                    (congrArg
+                      (AdapterRw.r1_pool_adapter.owned.OwnedAccount.mk (x.descriptors 2).key (x.descriptors 2).owner
+                        (x.descriptors 2).is_signer (x.descriptors 2).is_writable (x.descriptors 2).executable
+                        (core.result.Result.Ok (x.buffers (x.handles 2).1).len))
+                      ((fun x_0 x_1 x_2 x_3 x_4 =>
+                          (fun x_0 x_1 x_2 x_3 x_4 => if_pos (Or.inl extent)) x_0 x_1 x_2 x_3 x_4)
+                        ((↑(x.buffers (x.handles 2).1)).length = 1768) instDecidableOr
+                        (core.result.Result (alloc.vec.Vec U8) AdapterRw.solana_program_error.ProgramError)
+                        (core.result.Result.Ok (x.buffers (x.handles 2).1))
+                        (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)))))
+                (core.result.Result.Ok copied))
+              normal));
+      have raw := congrArg UScalar.val sameLength;
+      id (fun raw => Eq.mp (congrArg (fun _a => (↑saved).length = _a.length) (Eq.symm same)) raw)
+        (Eq.mp (congrArg (fun _a => ↑saved.len = ↑_a.len) (Eq.symm view)) raw))
+    (Eq.symm eqc) ic read
+'NMB_CheckpointLength.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-re505630d543145d4a1da7367cf73d35d.scope; invocation ID: f905cd72a73346f6848438901dda5f05

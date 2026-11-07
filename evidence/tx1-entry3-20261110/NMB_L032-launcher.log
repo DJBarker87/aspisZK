@@ -1,0 +1,52 @@
+{"attempt": "NMB_L032", "exit_status": 0, "wall_seconds": 28.46602703211829, "peak_rss_kib": "5999596", "swaps": "0", "print_axioms": ["'NMB_Stage1Tail.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_Stage1Tail.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8),
+  G x ops p d (ok ()) (ok ()) (ok ()) =
+    have tail := continuation ops p d (NMB_ThreeSnapshots.first x) (ready x);
+    { result := tail.result, post := tail.post,
+      events := List.map Event.snapshot (NMB_ThreeSnapshots.G x (ok ()) (ok ()) (ok ())).events ++ tail.events } :=
+fun x ops p d =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (congrArg
+            (fun x_1 =>
+              match x_1 with
+              | fail err =>
+                { result := fail err,
+                  post :=
+                    {
+                      snapshots :=
+                    
+...
+MB_ThreeSnapshots.G x (ok ()) (ok ()) (ok ())).events }
+              | div =>
+                { result := div,
+                  post :=
+                    {
+                      snapshots :=
+                        NMB_SnapshotReplay.replay (NMB_Snapshot.ready x 0 [])
+                          (NMB_ThreeSnapshots.G x (ok ()) (ok ()) (ok ())).events },
+                  events := List.map Event.snapshot (NMB_ThreeSnapshots.G x (ok ()) (ok ()) (ok ())).events }
+              | ok (accounts, post) =>
+                have tail := continuation ops p d accounts { snapshots := post };
+                { result := tail.result, post := tail.post,
+                  events :=
+                    List.map Event.snapshot (NMB_ThreeSnapshots.G x (ok ()) (ok ()) (ok ())).events ++ tail.events })
+            (NMB_ThreeSnapshots.result x)))
+        { result := (continuation ops p d (NMB_ThreeSnapshots.first x) (ready x)).result,
+          post := (continuation ops p d (NMB_ThreeSnapshots.first x) (ready x)).post,
+          events :=
+            List.map Event.snapshot (NMB_ThreeSnapshots.G x (ok ()) (ok ()) (ok ())).events ++
+              (continuation ops p d (NMB_ThreeSnapshots.first x) (ready x)).events }))
+    (Eq.refl
+      {
+        result :=
+          (continuation ops p d (NMB_ThreeSnapshots.first x) { snapshots := NMB_ThreeSnapshots.final x }).result,
+        post := (continuation ops p d (NMB_ThreeSnapshots.first x) { snapshots := NMB_ThreeSnapshots.final x }).post,
+        events :=
+          List.map Event.snapshot (NMB_ThreeSnapshots.G x (ok ()) (ok ()) (ok ())).events ++
+            (continuation ops p d (NMB_ThreeSnapshots.first x) { snapshots := NMB_ThreeSnapshots.final x }).events })
+'NMB_Stage1Tail.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r67f550d3bffa4a80b9176344cca698f2.scope; invocation ID: d302a26b34a84fefbb7d5d08e86b2c9c

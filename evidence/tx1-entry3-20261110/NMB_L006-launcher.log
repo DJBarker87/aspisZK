@@ -1,0 +1,45 @@
+{"attempt": "NMB_L006", "exit_status": 1, "wall_seconds": 7.645883576013148, "peak_rss_kib": "3411236", "swaps": "0", "print_axioms": ["'NMB_MetadataCopy.write' does not depend on any axioms", "'NMB_MetadataCopy.copy' depends on axioms: [propext, sorryAx, Quot.sound]"]}
+NMB_generated/NMB_MetadataCopy.lean:26:68: error: unexpected token '('; expected '}'
+NMB_generated/NMB_MetadataCopy.lean:26:46: error: Type mismatch
+  NLF_CopyValue.copy src
+has type
+  List UInt8 → ℕ → ℕ → List UInt8
+but is expected to have type
+  List UInt8
+NMB_generated/NMB_MetadataCopy.lean:25:5: error: Tactic `cases` failed: major premise type is not an inductive type
+  Guard → Except Error State
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case mk.ok.isTrue
+s : State
+r : ℕ → 
+...
+ => NLF_CopyStep.Outcome.returned s' (Except.error e)
+                        | (s', Except.ok g) =>
+                          have p := NLF_SdkModel.deref s' g;
+                          if src.length = p.bytes.length then
+                            have v := { bytes := NLF_CopyValue.copy src p.bytes 0 src.length, money := p.money };
+                            match NLF_SdkModel.release (NLF_ViewLaws.write s' g v) g with
+                            | Except.ok s'' => NLF_CopyStep.Outcome.returned s'' (Except.ok ())
+                            | Except.error a => NLF_CopyStep.Outcome.abort s'
+                          else NLF_CopyStep.Outcome.abort s') =
+                        outcome r
+                          (match (post, v) with
+                          | (s', Except.error e) => NLF_CopyStep.Outcome.returned s' (Except.error e)
+                          | (s', Except.ok g) =>
+                            have p := NLF_SdkModel.deref s' g;
+                            if src.length = p.bytes.length then
+                              have v := { bytes := NLF_CopyValue.copy src p.bytes 0 src.length, money := p.money };
+                              match NLF_SdkModel.release (NLF_ViewLaws.write s' g v) g with
+                              | Except.ok s'' => NLF_CopyStep.Outcome.returned s'' (Except.ok ())
+                              | Except.error a => NLF_CopyStep.Outcome.abort s'
+                            else NLF_CopyStep.Outcome.abort s'))
+                    (fun h => sorry) (Eq.symm h_1) h)
+                (Eq.refl v))
+            (Eq.symm h) (Eq.refl (try_borrow_mut_data s a t)))
+        (Eq.refl (try_borrow_mut_data s a t))))
+'NMB_MetadataCopy.write' does not depend on any axioms
+'NMB_MetadataCopy.copy' depends on axioms: [propext, sorryAx, Quot.sound]
+
+Running as unit: run-r071b334b67b541ed8a20f1b0366b16be.scope; invocation ID: b3b10f27891743c6a2af7ce325635c3d

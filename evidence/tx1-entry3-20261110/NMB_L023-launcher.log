@@ -1,0 +1,54 @@
+{"attempt": "NMB_L023", "exit_status": 1, "wall_seconds": 20.52543814200908, "peak_rss_kib": "5967792", "swaps": "0", "print_axioms": ["'NMB_SnapshotPrefix.failure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMB_SnapshotPrefix.divergence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMB_generated/NMB_SnapshotPrefix.lean:8:26: error: Ambiguous term
+  State
+Possible interpretations:
+  NMB_Snapshot.State : Type
+  
+  NLF_SdkModel.State : Type
+NMB_generated/NMB_SnapshotPrefix.lean:23:21: error: Invalid simp theorem: Expected a proposition, but found
+  NMB_Snapshot.State → ℕ → Guard
+NMB_generated/NMB_SnapshotPrefix.lean:24:80: error: Ambiguous term
+  live
+Possible interpretations:
+  NMB_Snapshot.live : NMB_Snapshot.State → ℕ → NMB_Snapshot.State
+  
+  NLF_RefCell.live : Cell ?m.32 → ℕ → Kind → Prop
+NMB_generated/NMB_SnapshotPrefix.lean:24:85: error: Ambiguous term
+  guard
+Possible interpretations:
+  _root_.guard : (p : Prop) → [Decidable p] → ?m.32 Unit
+  
+  NMB_Snapshot.guard
+...
+readers,
+                                              writer :=
+                                                ((ready x t owned).sdk.cells
+                                                    ((ready x t owned).sdk.accounts a).data).writer },
+                                        next := (ready x t owned).next + 1, owned := (ready x t owned).owned }
+                                      (NMB_Snapshot.guard (ready x t owned) a)
+                                      (ok
+                                        (deref
+                                          (put (ready x t owned).sdk ((ready x t owned).sdk.accounts a).data
+                                            {
+                                              payload :=
+                                                ((ready x t owned).sdk.cells
+                                                    ((ready x t owned).sdk.accounts a).data).payload,
+                                              readers :=
+                                                (ready x t owned).next ::
+                                                  ((ready x t owned).sdk.cells
+                                                      ((ready x t owned).sdk.accounts ⋯).data).readers,
+                                              writer := ⋯ })
+                                          ⋯))
+                                      ⋯ ⋯ ⋯)
+                                    ⋯))
+                                ⋯)
+                              ⋯)
+                            ⋯)))
+                      ⋯)
+                    ⋯)))
+              ⋯)))
+        ⋯))
+'NMB_SnapshotPrefix.failure' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NMB_SnapshotPrefix.divergence' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf6e784dd59f6483aa5edb0431e5e8474.scope; invocation ID: babe1145d70742558983bf0edc3798a1

@@ -1,0 +1,27 @@
+{"attempt": "NMB_L040", "exit_status": 0, "wall_seconds": 34.358658383833244, "peak_rss_kib": "5957780", "swaps": "0", "print_axioms": ["'NMB_DataAccess.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_DataAccess.fixed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_DataAccess.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (a lo hi : ℕ) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (x.snapshot a lo hi) = ok (core.result.Result.Ok bytes) →
+    bytes = x.buffers (x.handles a).1 ∧ (↑(x.buffers (x.handles a).1)).length = lo ∨
+      bytes = x.buffers (x.handles a).1 ∧ (↑(x.buffers (x.handles a).1)).length = hi :=
+fun x ops a lo hi bytes read =>
+  have h := NLQ_SnapshotData.returned (NMB_SnapshotPacket.entryAt x a) ops a lo hi bytes read;
+  let ⟨same, right✝⟩ := h
+  Or.casesOn right✝ (fun low => Or.inl ⟨same, low⟩) fun high => Or.inr ⟨same, high⟩
+theorem NMB_DataAccess.fixed : ∀ (x : NMB_Input.Input) (ops : Ad
+...
+theorem NMB_DataAccess.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (a lo hi : ℕ) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (x.snapshot a lo hi) = ok (core.result.Result.Ok bytes) →
+    bytes = x.buffers (x.handles a).1 ∧ (↑(x.buffers (x.handles a).1)).length = lo ∨
+      bytes = x.buffers (x.handles a).1 ∧ (↑(x.buffers (x.handles a).1)).length = hi :=
+fun x ops a lo hi bytes read =>
+  have h := NLQ_SnapshotData.returned (NMB_SnapshotPacket.entryAt x a) ops a lo hi bytes read;
+  let ⟨same, right✝⟩ := h
+  Or.casesOn right✝ (fun low => Or.inl ⟨same, low⟩) fun high => Or.inr ⟨same, high⟩
+theorem NMB_DataAccess.fixed : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (a n : ℕ) (bytes : Slice U8),
+  AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops (x.snapshot a n n) = ok (core.result.Result.Ok bytes) →
+    bytes = x.buffers (x.handles a).1 ∧ (↑(x.buffers (x.handles a).1)).length = n :=
+fun x ops a n bytes read => Or.elim (source x ops a n n bytes read) id id
+'NMB_DataAccess.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_DataAccess.fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6df7aefe755a4d3e8b629bdbe4daee07.scope; invocation ID: 69bacf8976db464494729db033c8aa61

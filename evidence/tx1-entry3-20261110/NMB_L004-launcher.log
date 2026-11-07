@@ -1,0 +1,44 @@
+{"attempt": "NMB_L004", "exit_status": 0, "wall_seconds": 4.800308938836679, "peak_rss_kib": "3409180", "swaps": "0", "print_axioms": ["'NMB_MetadataScalar.scalar' depends on axioms: [propext, Quot.sound]"]}
+theorem NMB_MetadataScalar.scalar : ∀ (s : State) (r : ℕ → Account) (i t : ℕ) (f : Payload → ℕ),
+  NLF_SdkModel.scalar (install s r) i t f = reply r (NLF_SdkModel.scalar s i t f) :=
+fun s r i t f =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (match _a with
+              | (s', Except.error e) => (s', Except.error e)
+              | (s', Except.ok g) =>
+                match NLF_SdkModel.release s' g with
+                | Except.ok s'' => (s'', Except.ok (f (NLF_SdkModel.deref s' g)))
+                | Except.error a => (s', Except.error ProgramError.accountBorrowFailed)) =
+              reply r
+                (match NLF_SdkModel.wrap s i t Kind.shared wit
+...
+                      | Except.ok s'' => (s'', Except.ok (f (NLF_SdkModel.deref (install post r) g)))
+                                    | Except.error a =>
+                                      (install post r, Except.error ProgramError.accountBorrowFailed)) =
+                                    (install
+                                        (match x with
+                                          | Except.ok s'' => (s'', Except.ok (f (NLF_SdkModel.deref post g)))
+                                          | Except.error a => (post, Except.error ProgramError.accountBorrowFailed)).1
+                                        r,
+                                      (match x with
+                                        | Except.ok s'' => (s'', Except.ok (f (NLF_SdkModel.deref post g)))
+                                        | Except.error a => (post, Except.error ProgramError.accountBorrowFailed)).2))
+                                (fun hr =>
+                                  Eq.refl
+                                    (match Except.map (fun post => install post r) (Except.ok a) with
+                                    | Except.ok s'' => (s'', Except.ok (f (NLF_SdkModel.deref (install post r) g)))
+                                    | Except.error a =>
+                                      (install post r, Except.error ProgramError.accountBorrowFailed)))
+                                (Eq.symm h) (Eq.refl (NLF_SdkModel.release post g)))
+                            (Eq.refl (NLF_SdkModel.release post g)))))
+                    (Eq.symm h_1) h)
+                (Eq.refl out))
+            (Eq.symm h) (Eq.refl (NLF_SdkModel.wrap s i t Kind.shared)))
+        (Eq.refl (NLF_SdkModel.wrap s i t Kind.shared))))
+'NMB_MetadataScalar.scalar' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-r48e3ff3ed32d40869a8e1b68dec4d622.scope; invocation ID: 36c1d7f045b2446e84cf6348f88d4045

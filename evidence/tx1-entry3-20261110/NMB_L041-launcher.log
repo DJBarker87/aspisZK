@@ -1,0 +1,52 @@
+{"attempt": "NMB_L041", "exit_status": 0, "wall_seconds": 15.319079895038158, "peak_rss_kib": "5963132", "swaps": "0", "print_axioms": ["'NMB_AcceptedExtents.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_AcceptedExtents.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+  (d : Slice U8) (saved : alloc.vec.Vec U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    (↑(x.buffers (x.handles 0).1)).length = 58295 ∧
+      (↑(x.buffers (x.handles 1).1)).length = 1880 ∧ (↑(x.buffers (x.handles 2).1)).length = 1768 :=
+fun x ops p d saved accepted =>
+  let ⟨pa, h✝⟩ := AdapterRw.Cuts.stage1_call ops p (NMB_ThreeSnapshots.first x) d saved accepted
+  let ⟨pu, h✝¹⟩ := h✝
+  let ⟨pub, h✝²⟩ := h✝¹
+  let ⟨proof, h✝³⟩ := h✝²
+  let ⟨statement, h✝⁴⟩ := h✝³
+  let ⟨semantic, h✝⁵⟩ := h✝⁴
+ 
+...
+length = 1880 ∧ (↑(x.buffers (x.handles 2).1)).length = 1768 :=
+fun x ops p d saved accepted =>
+  let ⟨pa, h✝⟩ := AdapterRw.Cuts.stage1_call ops p (NMB_ThreeSnapshots.first x) d saved accepted
+  let ⟨pu, h✝¹⟩ := h✝
+  let ⟨pub, h✝²⟩ := h✝¹
+  let ⟨proof, h✝³⟩ := h✝²
+  let ⟨statement, h✝⁴⟩ := h✝³
+  let ⟨semantic, h✝⁵⟩ := h✝⁴
+  let ⟨selected, h✝⁶⟩ := h✝⁵
+  let ⟨split, h✝⁷⟩ := h✝⁶
+  let ⟨start, h✝⁸⟩ := h✝⁷
+  let ⟨finish, h✝⁹⟩ := h✝⁸
+  let ⟨ip, right✝⟩ := h✝⁹
+  let ⟨iu, right✝¹⟩ := right✝
+  let ⟨rp, right✝²⟩ := right✝¹
+  let ⟨ru, right✝³⟩ := right✝²
+  have eqp := ok.inj (Eq.trans (Eq.symm ip) (NMB_FirstIndex.source x).left);
+  have equ := ok.inj (Eq.trans (Eq.symm iu) (NMB_FirstIndex.source x).right.left);
+  Eq.ndrec (motive := fun pa =>
+    (NMB_ThreeSnapshots.first x).index_usize 0#usize = ok pa →
+      AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops pa = ok (core.result.Result.Ok proof) →
+        (↑(x.buffers (x.handles 0).1)).length = 58295 ∧
+          (↑(x.buffers (x.handles 1).1)).length = 1880 ∧ (↑(x.buffers (x.handles 2).1)).length = 1768)
+    (fun ip rp =>
+      Eq.ndrec (motive := fun pu =>
+        (NMB_ThreeSnapshots.first x).index_usize 1#usize = ok pu →
+          AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops pu = ok (core.result.Result.Ok pub) →
+            (↑(x.buffers (x.handles 0).1)).length = 58295 ∧
+              (↑(x.buffers (x.handles 1).1)).length = 1880 ∧ (↑(x.buffers (x.handles 2).1)).length = 1768)
+        (fun iu ru =>
+          ⟨(NMB_DataAccess.fixed x ops 0 58295 proof rp).right,
+            ⟨(NMB_DataAccess.fixed x ops 1 1880 pub ru).right, NMB_CheckpointExtent.source x ops p d saved accepted⟩⟩)
+        (Eq.symm equ) iu ru)
+    (Eq.symm eqp) ip rp
+'NMB_AcceptedExtents.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r783c0656168849478cd3922f0ea9a22f.scope; invocation ID: cc410633e8b848c19306f6a726179da3

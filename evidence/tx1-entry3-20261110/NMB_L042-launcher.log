@@ -1,0 +1,24 @@
+{"attempt": "NMB_L042", "exit_status": 0, "wall_seconds": 20.6742405469995, "peak_rss_kib": "5967376", "swaps": "0", "print_axioms": ["'NMB_HandleSeparation.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_HandleSeparation.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+  (d : Slice U8) (saved : alloc.vec.Vec U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    (x.handles 0).1 ≠ (x.handles 1).1 ∧ (x.handles 0).1 ≠ (x.handles 2).1 ∧ (x.handles 1).1 ≠ (x.handles 2).1 :=
+fun x ops p d saved accepted =>
+  let ⟨proof, right✝⟩ := NMB_AcceptedExtents.source x ops p d saved accepted
+  let ⟨pub, cp⟩ := right✝
+  ⟨fun eq => source._proof_1 x (Eq.mp (congrArg (fun _a => (↑(x.buffers _a)).length = 58295) eq) proof) pub,
+    ⟨fun eq => source._proof_2 x (Eq.mp (congrArg (fun _
+...
+theorem NMB_HandleSeparation.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+  (d : Slice U8) (saved : alloc.vec.Vec U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    (x.handles 0).1 ≠ (x.handles 1).1 ∧ (x.handles 0).1 ≠ (x.handles 2).1 ∧ (x.handles 1).1 ≠ (x.handles 2).1 :=
+fun x ops p d saved accepted =>
+  let ⟨proof, right✝⟩ := NMB_AcceptedExtents.source x ops p d saved accepted
+  let ⟨pub, cp⟩ := right✝
+  ⟨fun eq => source._proof_1 x (Eq.mp (congrArg (fun _a => (↑(x.buffers _a)).length = 58295) eq) proof) pub,
+    ⟨fun eq => source._proof_2 x (Eq.mp (congrArg (fun _a => (↑(x.buffers _a)).length = 58295) eq) proof) cp, fun eq =>
+      source._proof_3 x (Eq.mp (congrArg (fun _a => (↑(x.buffers _a)).length = 1880) eq) pub) cp⟩⟩
+'NMB_HandleSeparation.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rb25f794ac4424d75b19018910f539608.scope; invocation ID: ff01bf8f33284aaaba016445325f775a

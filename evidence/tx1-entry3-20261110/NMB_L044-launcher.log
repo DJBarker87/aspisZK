@@ -1,0 +1,48 @@
+{"attempt": "NMB_L044", "exit_status": 1, "wall_seconds": 23.025754536967725, "peak_rss_kib": "5962836", "swaps": "0", "print_axioms": ["'NMB_Stage1Post.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMB_generated/NMB_Stage1Post.lean:21:12: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.54 = ?m.54
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+NMB_generated/NMB_Stage1Post.lean:21:16: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.58 = ?m.58
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+theorem NMB_Stage1Post.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8) (saved : Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    have out := G x ops p d (ok ()) (ok ()) (ok ());
+    out.post.snapshots.sdk
+...
+opy
+                                                      (NLQ_CopyTrace.G (NMB_Stage1Tail.ready x).snapshots.sdk 2
+                                                          (NMB_Stage1Tail.ready x).snapshots.next
+                                                          (S2W_ReturnedCheckpoint.nativeBytes saved)).events ++
+                                                    [Event.cleanup before after] }
+                                            | NLF_CopyStep.Outcome.abort sdk =>
+                                              { result := fail Error.panic,
+                                                post :=
+                                                  {
+                                                    snapshots :=
+                                                      have __src := (NMB_Stage1Tail.ready x).snapshots;
+                                                      { input := __src.input, sdk := sdk, next := __src.next,
+                                                        owned := __src.owned },
+                                                    checkpoint := some saved },
+                                                events :=
+                                                  List.map Event.copy
+                                                    (NLQ_CopyTrace.G (NMB_Stage1Tail.ready x).snapshots.sdk 2
+                                                        (NMB_Stage1Tail.ready x).snapshots.next
+                                                        (S2W_ReturnedCheckpoint.nativeBytes saved)).events })
+                                          copied)))))))))
+                        x))))))
+            ⟨rfl, ⟨sorry, ⟨sorry, ⟨rfl, rfl⟩⟩⟩⟩)))
+    copied
+'NMB_Stage1Post.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0614dc4a04024ffebd86eb0bafde769d.scope; invocation ID: 998be00dfa6e4f17b05a7307147a4722

@@ -1,0 +1,55 @@
+{"attempt": "NMB_L007", "exit_status": 0, "wall_seconds": 19.102646465878934, "peak_rss_kib": "6030860", "swaps": "0", "print_axioms": []}
+structure NMB_Snapshot.State : Type
+number of parameters: 0
+fields:
+  NMB_Snapshot.State.input : NMB_Input.Input
+  NMB_Snapshot.State.sdk : NLF_SdkModel.State
+  NMB_Snapshot.State.next : ℕ
+  NMB_Snapshot.State.owned : List Owned
+constructor:
+  NMB_Snapshot.State.mk (input : NMB_Input.Input) (sdk : NLF_SdkModel.State) (next : ℕ) (owned : List Owned) : State
+def NMB_Snapshot.G : State → ℕ → ℕ → ℕ → Result Unit → Run (Owned × State) :=
+fun s a lo hi allocation =>
+  have acquisition := try_borrow_data s.sdk a s.next;
+  do
+  let guardReply ← NJU_Log.record (Event.acquire s a s.next acquisition.1) (ok acquisition.2)
+  match guardReply with
+    | Except.error a_1 =>
+      have value :=
+        have
+...
+State) :=
+fun s a lo hi allocation =>
+  have acquisition := try_borrow_data s.sdk a s.next;
+  do
+  let guardReply ← NJU_Log.record (Event.acquire s a s.next acquisition.1) (ok acquisition.2)
+  match guardReply with
+    | Except.error a_1 =>
+      have value :=
+        have __src := s.input.descriptors a;
+        { key := __src.key, owner := __src.owner, is_signer := __src.is_signer, is_writable := __src.is_writable,
+          executable := __src.executable,
+          length := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed,
+          bytes := core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed };
+      do
+      let _ ← NJU_Log.record (Event.returned s a lo hi) (ok value)
+      pure (value, { input := s.input, sdk := s.sdk, next := s.next + 1, owned := s.owned ++ [value] })
+    | Except.ok g =>
+      have live := { input := s.input, sdk := acquisition.1, next := s.next + 1, owned := s.owned };
+      do
+      let payload ← NJU_Log.record (Event.deref live g) (ok (deref acquisition.1 g))
+      have __do_jp : Unit → Run (Owned × State) := fun __r => do
+        let dropped ← NJU_Log.record (Event.release live g) (ok (release acquisition.1 g))
+        match dropped with
+          | Except.error a => liftM (fail Error.panic)
+          | Except.ok restored =>
+            have value := s.input.snapshot a lo hi;
+            do
+            let _ ← NJU_Log.record (Event.returned live a lo hi) (ok value)
+            pure (value, { input := s.input, sdk := restored, next := s.next + 1, owned := s.owned ++ [value] })
+      if payload.bytes.length = lo ∨ payload.bytes.length = hi then do
+          NJU_Log.record (Event.allocate live g payload.bytes.length) allocation
+          __do_jp ()
+        else __do_jp ()
+
+Running as unit: run-r6936b4509e964d79bdca56470403f62a.scope; invocation ID: c7c16d35a74f40538ced76360e8fe6cd

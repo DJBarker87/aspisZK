@@ -1,0 +1,53 @@
+{"attempt": "NMB_L025", "exit_status": 0, "wall_seconds": 21.779857844812796, "peak_rss_kib": "5946596", "swaps": "0", "print_axioms": ["'NMB_SnapshotPacket.value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_SnapshotPacket.bracket' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_SnapshotPacket.value : ∀ (x : NMB_Input.Input) (a : ℕ) (l1 l2 : Usize),
+  have d := x.descriptors a;
+  (do
+      let returned ←
+        NHJ_SnapshotReference.snapshot_ref d.key d.owner d.is_signer d.is_writable d.executable l1 l2
+            (core.result.Result.Ok (x.buffers (x.handles a).1))
+      ok (NHJ_SnapshotAssociation.port returned)) =
+    ok (x.snapshot a ↑l1 ↑l2) :=
+fun x a l1 l2 => NHJ_SnapshotPacket.cohort_return (entryAt x a) a l1 l2
+theorem NMB_SnapshotPacket.bracket : ∀ {W : Type} (x : NMB_Input.Input) (L : Library W (ℕ → NMB_Input.Owned)),
+  S2TrustedSdkBorrow L →
+    ∀ (w : W),
+      L.related w (NMB_Heap.heap x) →
+        Valid (NMB_Heap.heap x) →
+          ∀ (a
+...
+ have d := x.descriptors a;
+  (do
+      let returned ←
+        NHJ_SnapshotReference.snapshot_ref d.key d.owner d.is_signer d.is_writable d.executable l1 l2
+            (core.result.Result.Ok (x.buffers (x.handles a).1))
+      ok (NHJ_SnapshotAssociation.port returned)) =
+    ok (x.snapshot a ↑l1 ↑l2) :=
+fun x a l1 l2 => NHJ_SnapshotPacket.cohort_return (entryAt x a) a l1 l2
+theorem NMB_SnapshotPacket.bracket : ∀ {W : Type} (x : NMB_Input.Input) (L : Library W (ℕ → NMB_Input.Owned)),
+  S2TrustedSdkBorrow L →
+    ∀ (w : W),
+      L.related w (NMB_Heap.heap x) →
+        Valid (NMB_Heap.heap x) →
+          ∀ (a : ℕ),
+            ∃ token owner w1 w2 w3,
+              L.run w (Op.shared a token owner) = (w1, Reply.guard token) ∧
+                L.run w1 (Op.deref token) =
+                    (w2, Reply.payload ((NMB_Heap.heap x).payload ((NMB_Heap.heap x).accounts a).1)) ∧
+                  L.run w2 (Op.drop token) = (w3, Reply.unit) ∧ L.related w3 (NMB_Heap.heap x) :=
+fun {W} x L sdk w related valid a =>
+  let ⟨token, h✝⟩ := NHJ_SdkDomains.enabled_exists (NMB_Heap.heap x) a rfl
+  let ⟨owner, enabled⟩ := h✝
+  let ⟨w1, h✝¹⟩ :=
+    NHJ_SdkBorrowPacket.returning_shared L sdk w (NMB_Heap.heap x) related valid a token owner enabled
+      (id (Decidable.byContradiction fun a => bracket._proof_1 a))
+      (id (id (Decidable.byContradiction fun a => bracket._proof_2 a)))
+  let ⟨w2, h✝²⟩ := h✝¹
+  let ⟨w3, h✝³⟩ := h✝²
+  let ⟨h1, right✝⟩ := h✝³
+  let ⟨h2, right✝¹⟩ := right✝
+  let ⟨h3, h4⟩ := right✝¹
+  Exists.intro token (Exists.intro owner (Exists.intro w1 (Exists.intro w2 (Exists.intro w3 ⟨h1, ⟨h2, ⟨h3, h4⟩⟩⟩))))
+'NMB_SnapshotPacket.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_SnapshotPacket.bracket' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r6043345517b843aabd37a23803416794.scope; invocation ID: 90ce28c679d74fcbae9cc8e576f1bc9b

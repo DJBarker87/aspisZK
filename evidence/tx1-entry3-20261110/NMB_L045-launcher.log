@@ -1,0 +1,35 @@
+{"attempt": "NMB_L045", "exit_status": 0, "wall_seconds": 13.910287480102852, "peak_rss_kib": "6027752", "swaps": "0", "print_axioms": ["'NMB_Stage1Readonly.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_Stage1Readonly.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8)
+  (saved : Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    have sdk := (G x ops p d (ok ()) (ok ()) (ok ())).post.snapshots.sdk;
+    sdk.cells (x.sdk.accounts 0).data = x.sdk.cells (x.sdk.accounts 0).data ∧
+      sdk.cells (x.sdk.accounts 1).data = x.sdk.cells (x.sdk.accounts 1).data :=
+fun x ops p d saved branch =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a.cells (x.sdk.accounts 0).data = x.sdk.cells (x.sdk.accounts 0).data ∧
+              _a.cells (x.sdk.accounts 
+...
+theorem NMB_Stage1Readonly.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8)
+  (saved : Bytes),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    have sdk := (G x ops p d (ok ()) (ok ()) (ok ())).post.snapshots.sdk;
+    sdk.cells (x.sdk.accounts 0).data = x.sdk.cells (x.sdk.accounts 0).data ∧
+      sdk.cells (x.sdk.accounts 1).data = x.sdk.cells (x.sdk.accounts 1).data :=
+fun x ops p d saved branch =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a.cells (x.sdk.accounts 0).data = x.sdk.cells (x.sdk.accounts 0).data ∧
+              _a.cells (x.sdk.accounts 1).data = x.sdk.cells (x.sdk.accounts 1).data)
+          (NMB_Stage1Post.source x ops p d saved branch).left))
+      (NMB_ReadonlyFrame.source x ops p d saved branch))
+'NMB_Stage1Readonly.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0f1eeeff57fe4383b43043b00b30135c.scope; invocation ID: 592f6dd220d845529ad5ff1fbbf5e0ef

@@ -1,0 +1,36 @@
+{"attempt": "NMB_L056", "exit_status": 0, "wall_seconds": 26.934552140999585, "peak_rss_kib": "6013676", "swaps": "0", "print_axioms": ["'NMB_Cleanup.saved_first' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_Cleanup.no_saved' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_Cleanup.three' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_Cleanup.snapshot' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+@[defeq] theorem NMB_Cleanup.saved_first : ∀ (s : State) (saved : Bytes),
+  G { snapshots := s.snapshots, checkpoint := some saved } = Drop.checkpoint saved :: owned 0 s.snapshots.owned :=
+fun s saved => rfl
+theorem NMB_Cleanup.three : ∀ (a b c : NMB_Input.Owned),
+  owned 0 [a, b, c] = account 0 a ++ account 1 b ++ account 2 c :=
+fun a b c =>
+  of_eq_true
+    (Eq.trans
+      (congr
+        (congrArg Eq
+          (congrArg (HAppend.hAppend (account 0 a))
+            (congrArg (HAppend.hAppend (account (0 + 1) b)) (List.append_nil (account (0 + 1 + 1) c)))))
+        (List.append_assoc (account 0 a) (account 1 b) (account 2 c)))
+      (eq_self (account 0 a ++ (account (0 + 1) b ++ account (0 + 
+...
+@[defeq] theorem NMB_Cleanup.saved_first : ∀ (s : State) (saved : Bytes),
+  G { snapshots := s.snapshots, checkpoint := some saved } = Drop.checkpoint saved :: owned 0 s.snapshots.owned :=
+fun s saved => rfl
+theorem NMB_Cleanup.three : ∀ (a b c : NMB_Input.Owned),
+  owned 0 [a, b, c] = account 0 a ++ account 1 b ++ account 2 c :=
+fun a b c =>
+  of_eq_true
+    (Eq.trans
+      (congr
+        (congrArg Eq
+          (congrArg (HAppend.hAppend (account 0 a))
+            (congrArg (HAppend.hAppend (account (0 + 1) b)) (List.append_nil (account (0 + 1 + 1) c)))))
+        (List.append_assoc (account 0 a) (account 1 b) (account 2 c)))
+      (eq_self (account 0 a ++ (account (0 + 1) b ++ account (0 + 1 + 1) c))))
+'NMB_Cleanup.saved_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_Cleanup.no_saved' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_Cleanup.three' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_Cleanup.snapshot' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r10859449d71a4c5ab483353abceab7dd.scope; invocation ID: 135fadaf41ab432985d070ed936784c2

@@ -1,0 +1,32 @@
+{"attempt": "NMB_L058", "exit_status": 0, "wall_seconds": 19.259535116143525, "peak_rss_kib": "5999264", "swaps": "0", "print_axioms": ["'NMB_ArrayFrame.one' does not depend on any axioms", "'NMB_ArrayFrame.source' depends on axioms: [propext, Quot.sound]"]}
+structure NMB_ArrayFrame.Cut (before after : List Native) (old new : Heap) : Prop
+number of parameters: 4
+fields:
+  NMB_ArrayFrame.Cut.headers : after = before
+  NMB_ArrayFrame.Cut.frame : ∀ n ∈ before, ∀ (h : Header), n.bytes = Except.ok h → new h.allocation = old h.allocation
+constructor:
+  NMB_ArrayFrame.Cut.mk {before after : List Native} {old new : Heap} (headers : after = before)
+    (frame : ∀ n ∈ before, ∀ (h : Header), n.bytes = Except.ok h → new h.allocation = old h.allocation) :
+    Cut before after old new
+theorem NMB_ArrayFrame.source : ∀ (before after : List Native) (old new : Heap),
+  Cut before after old new → List.map (value new) after = List.map (value old) before :=
+fun be
+...
+structure NMB_ArrayFrame.Cut (before after : List Native) (old new : Heap) : Prop
+number of parameters: 4
+fields:
+  NMB_ArrayFrame.Cut.headers : after = before
+  NMB_ArrayFrame.Cut.frame : ∀ n ∈ before, ∀ (h : Header), n.bytes = Except.ok h → new h.allocation = old h.allocation
+constructor:
+  NMB_ArrayFrame.Cut.mk {before after : List Native} {old new : Heap} (headers : after = before)
+    (frame : ∀ n ∈ before, ∀ (h : Header), n.bytes = Except.ok h → new h.allocation = old h.allocation) :
+    Cut before after old new
+theorem NMB_ArrayFrame.source : ∀ (before after : List Native) (old new : Heap),
+  Cut before after old new → List.map (value new) after = List.map (value old) before :=
+fun before after old new cut =>
+  Eq.mpr (id (congrArg (fun _a => List.map (value new) _a = List.map (value old) before) cut.headers))
+    (List.map_congr_left fun n member => one old new n (cut.frame n member))
+'NMB_ArrayFrame.one' does not depend on any axioms
+'NMB_ArrayFrame.source' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-re37c40c315ba4be7b1aebc5837fb9d3f.scope; invocation ID: 3e3549fdc0d44de5959d11bfc0655112

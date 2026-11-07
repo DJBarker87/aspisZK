@@ -1,0 +1,44 @@
+{"attempt": "NMB_L024", "exit_status": 0, "wall_seconds": 7.88328533899039, "peak_rss_kib": "4385372", "swaps": "0", "print_axioms": ["'NMB_Heap.bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_Heap.installation' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_Heap.installation : ∀ (x : NMB_Input.Input),
+  (NLF_RuntimeInterpretation.install (heap x) x.records x.money).state = x.sdk :=
+fun x =>
+  id
+    ((fun accounts accounts_1 e_accounts =>
+        Eq.rec (motive := fun accounts_2 e_accounts =>
+          ∀ (cells cells_1 : ℕ → NLF_RefCell.Cell NLF_SdkModel.Payload),
+            cells = cells_1 → { accounts := accounts, cells := cells } = { accounts := accounts_2, cells := cells_1 })
+          (fun cells cells_1 e_cells => e_cells ▸ Eq.refl { accounts := accounts, cells := cells }) e_accounts)
+      (fun a =>
+        have __src := x.records a;
+        { key := __src.key, owner := __src.owner, data := ((heap x).accounts a).1, lamports :
+...
+rs readers_1 : List ℕ),
+                readers = readers_1 →
+                  ∀ (writer writer_1 : Option ℕ),
+                    writer = writer_1 →
+                      { payload := payload, readers := readers, writer := writer } =
+                        { payload := payload_2, readers := readers_1, writer := writer_1 })
+              (fun readers readers_1 e_readers =>
+                Eq.rec (motive := fun readers_2 e_readers =>
+                  ∀ (writer writer_1 : Option ℕ),
+                    writer = writer_1 →
+                      { payload := payload, readers := readers, writer := writer } =
+                        { payload := payload, readers := readers_2, writer := writer_1 })
+                  (fun writer writer_1 e_writer =>
+                    e_writer ▸ Eq.refl { payload := payload, readers := readers, writer := writer })
+                  e_readers)
+              e_payload)
+          { bytes := NLF_RuntimeInterpretation.byteList (heap x) i, money := x.money i }
+          { bytes := nativeBytes (x.buffers i), money := x.money i }
+          ((fun bytes bytes_1 e_bytes =>
+              Eq.rec (motive := fun bytes_2 e_bytes =>
+                ∀ (money money_1 : ℕ),
+                  money = money_1 → { bytes := bytes, money := money } = { bytes := bytes_2, money := money_1 })
+                (fun money money_1 e_money => e_money ▸ Eq.refl { bytes := bytes, money := money }) e_bytes)
+            (NLF_RuntimeInterpretation.byteList (heap x) i) (nativeBytes (x.buffers i)) (bytes x i) (x.money i)
+            (x.money i) (Eq.refl (x.money i)))
+          [] [] (Eq.refl []) none none (Eq.refl none)))
+'NMB_Heap.bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_Heap.installation' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rdc1dd48945614b04a8adf0412e090f79.scope; invocation ID: 5d81ae2734e64c5c960908e84e0606ef

@@ -1,0 +1,51 @@
+{"attempt": "NMB_L052", "exit_status": 0, "wall_seconds": 20.421184750040993, "peak_rss_kib": "6008668", "swaps": "0", "print_axioms": ["'NMB_Stage1Guards.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_Stage1Guards.wrong_count' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_Stage1Guards.rejected : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8) (n : ℕ)
+  (a0 a1 a2 : Result Unit),
+  ¬NLQ_Route.Tx1 d →
+    NMB_Stage1Parent.G x ops p d n a0 a1 a2 =
+      { result := ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+        post := initial x,
+        events := [Event.instruction (initial x) d 10#u8 false, Event.instruction (initial x) d 11#u8 false] } :=
+fun x ops p d n a0 a1 a2 bad =>
+  have ten := fun h => bad (Or.inl h);
+  have eleven := fun h => bad (Or.inr h);
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (ite_cond_eq_false
+      
+...
+      Event.instruction (initial x) d 11#u8 (decide (↑d = [3#u8, 11#u8]))] }
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (Eq.trans (Decidable.decide.congr_simp (↑d = [3#u8, 11#u8]) False (eq_false eleven))
+                                  (decide_false instDecidableFalse)))
+                              true)
+                            Bool.false_eq_true))
+                        (congrArg
+                          (NMB_Stage1Parent.Run.mk
+                            (ok
+                              (core.result.Result.Err
+                                AdapterRw.solana_program_error.ProgramError.InvalidInstructionData))
+                            (initial x))
+                          (congr
+                            (congrArg List.cons
+                              (congrArg (Event.instruction (initial x) d 10#u8)
+                                (Eq.trans (Decidable.decide.congr_simp (↑d = [3#u8, 10#u8]) False (eq_false ten))
+                                  (decide_false instDecidableFalse))))
+                            (congrFun'
+                              (congrArg List.cons
+                                (congrArg (Event.instruction (initial x) d 11#u8)
+                                  (Eq.trans (Decidable.decide.congr_simp (↑d = [3#u8, 11#u8]) False (eq_false eleven))
+                                    (decide_false instDecidableFalse))))
+                              [])))))))
+                (initial x))
+              (eq_self (initial x))))
+          (and_self True))
+'NMB_Stage1Guards.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_Stage1Guards.wrong_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r5b3cf0809b104d268022c607cbe04999.scope; invocation ID: 0639cf6e09a247e294508918792de89f

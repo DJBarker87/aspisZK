@@ -1,0 +1,26 @@
+{"attempt": "NMB_L043", "exit_status": 0, "wall_seconds": 23.749946721829474, "peak_rss_kib": "5991956", "swaps": "0", "print_axioms": ["'NMB_ReadonlyFrame.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_ReadonlyFrame.metadata' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_ReadonlyFrame.money_tokens' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_ReadonlyFrame.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+  (d : Slice U8) (saved : alloc.vec.Vec U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    (after x saved).cells (x.sdk.accounts 0).data = x.sdk.cells (x.sdk.accounts 0).data ∧
+      (after x saved).cells (x.sdk.accounts 1).data = x.sdk.cells (x.sdk.accounts 1).data :=
+fun x ops p d saved accepted =>
+  have separate := NMB_HandleSeparation.source x ops p d saved accepted;
+  ⟨NLQ_CopyFrame.outside x.sdk 2 (x.sdk.accounts 0).data (S2W_ReturnedCheckpoint.nativeBytes saved) separate.right.left,
+    NLQ
+...
+theorem NMB_ReadonlyFrame.source : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : AdapterRw.solana_pubkey.Pubkey)
+  (d : Slice U8) (saved : alloc.vec.Vec U8),
+  AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d = ok (core.result.Result.Ok saved) →
+    (after x saved).cells (x.sdk.accounts 0).data = x.sdk.cells (x.sdk.accounts 0).data ∧
+      (after x saved).cells (x.sdk.accounts 1).data = x.sdk.cells (x.sdk.accounts 1).data :=
+fun x ops p d saved accepted =>
+  have separate := NMB_HandleSeparation.source x ops p d saved accepted;
+  ⟨NLQ_CopyFrame.outside x.sdk 2 (x.sdk.accounts 0).data (S2W_ReturnedCheckpoint.nativeBytes saved) separate.right.left,
+    NLQ_CopyFrame.outside x.sdk 2 (x.sdk.accounts 1).data (S2W_ReturnedCheckpoint.nativeBytes saved)
+      separate.right.right⟩
+'NMB_ReadonlyFrame.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_ReadonlyFrame.metadata' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_ReadonlyFrame.money_tokens' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r0b62a99d9cc443aaa4889da77b8cc2be.scope; invocation ID: 76f7010762f5486bae63cca04dc63b87

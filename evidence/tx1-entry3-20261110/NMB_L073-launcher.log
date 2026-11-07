@@ -1,0 +1,44 @@
+{"attempt": "NMB_L073", "exit_status": 1, "wall_seconds": 19.39749444904737, "peak_rss_kib": "5973508", "swaps": "0", "print_axioms": ["'NMB_TypedParentFold.copy' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_TypedParentFold.continuation' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_TypedParentFold.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMB_generated/NMB_TypedParentFold.lean:14:95: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+NMB_generated/NMB_TypedParentFold.lean:50:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  { result := (NMB_TypedParent.continuation ops p d pair.1 { snapshots := pair.2 }).result,
+      post := (NMB_TypedParent.continuation ops p d pair.1 { snapshots := pair.2 }).post,
+      events :=
+        List.map eraseEvent (NMB_TypedParent.continuation ops p d pair.1 { snapshots := pair.2 }).events }.events
+in the target expression
+  List.map NMB_Stage1Source.Event.snapshot (NMB
+...
+            {
+                    snapshots :=
+                      NMB_SnapshotReplay.replay (NMB_Snapshot.ready x 0 [])
+                        (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).events }
+                  (List.map NMB_Stage1Source.Event.snapshot (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).events)))
+              (Eq.trans
+                (congr (congrArg And (eq_self div))
+                  (Eq.trans
+                    (congr
+                      (congrArg And
+                        (eq_self
+                          {
+                            snapshots :=
+                              NMB_SnapshotReplay.replay (NMB_Snapshot.ready x 0 [])
+                                (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).events }))
+                      (Eq.trans List.map_inj_left._simp_1
+                        (Eq.trans
+                          (forall_congr fun a =>
+                            Eq.trans
+                              (implies_congr (Eq.refl (a ∈ (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).events))
+                                (eq_self (NMB_Stage1Source.Event.snapshot a)))
+                              (implies_true (a ∈ (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).events)))
+                          (implies_true NMB_Snapshot.Event))))
+                    (and_self True)))
+                (and_self True))))
+        (Eq.symm h) (Eq.refl (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).result))
+    (Eq.refl (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).result)
+'NMB_TypedParentFold.copy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_TypedParentFold.continuation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_TypedParentFold.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r165167cc65634528b11bd0093fedd60e.scope; invocation ID: b1c131b328e14cc99c74af151ca4296b

@@ -1,0 +1,23 @@
+{"attempt": "NMB_L003", "exit_status": 0, "wall_seconds": 4.845197342103347, "peak_rss_kib": "3399696", "swaps": "0", "print_axioms": ["'NMB_MetadataAdmission.installation' does not depend on any axioms", "'NMB_MetadataAdmission.admission' depends on axioms: [Quot.sound]"]}
+theorem NMB_MetadataAdmission.admission : ∀ {F : Type} (h : S2Trust.Heap F) (keys : ℕ → List UInt8) (r : ℕ → Account)
+  (n : ℕ),
+  AdapterRw.RuntimeEntrypointAdmission h keys n →
+    (∀ (a : ℕ), (r a).key = keys a) → AdapterRw.RuntimeEntrypointAdmission h (fun a => (r a).key) n :=
+fun {F} h keys r n runtime same =>
+  have eq := funext same;
+  Eq.mpr (id (congrArg (fun _a => AdapterRw.RuntimeEntrypointAdmission h _a n) eq)) runtime
+'NMB_MetadataAdmission.installation' does not depend on any axioms
+'NMB_MetadataAdmission.admission' depends on axioms: [Quot.sound]
+
+...
+theorem NMB_MetadataAdmission.admission : ∀ {F : Type} (h : S2Trust.Heap F) (keys : ℕ → List UInt8) (r : ℕ → Account)
+  (n : ℕ),
+  AdapterRw.RuntimeEntrypointAdmission h keys n →
+    (∀ (a : ℕ), (r a).key = keys a) → AdapterRw.RuntimeEntrypointAdmission h (fun a => (r a).key) n :=
+fun {F} h keys r n runtime same =>
+  have eq := funext same;
+  Eq.mpr (id (congrArg (fun _a => AdapterRw.RuntimeEntrypointAdmission h _a n) eq)) runtime
+'NMB_MetadataAdmission.installation' does not depend on any axioms
+'NMB_MetadataAdmission.admission' depends on axioms: [Quot.sound]
+
+Running as unit: run-re41d40fe3d1a4bc9bb578b094cdf3d2c.scope; invocation ID: 55e1f683b7b449f8a7b98373ea4392d6

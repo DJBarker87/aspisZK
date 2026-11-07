@@ -1,0 +1,45 @@
+{"attempt": "NMB_L031", "exit_status": 0, "wall_seconds": 21.92695786501281, "peak_rss_kib": "5987716", "swaps": "0", "print_axioms": []}
+structure NMB_Stage1Source.State : Type
+number of parameters: 0
+fields:
+  NMB_Stage1Source.State.snapshots : NMB_Snapshot.State
+  NMB_Stage1Source.State.checkpoint : Option Bytes :=
+    none
+constructor:
+  NMB_Stage1Source.State.mk (snapshots : NMB_Snapshot.State) (checkpoint : Option Bytes) : State
+def NMB_Stage1Source.G : NMB_Input.Input →
+  AdapterRw.Ops → Key → Slice U8 → Result Unit → Result Unit → Result Unit → Run :=
+fun x ops p d alloc0 alloc1 alloc2 =>
+  have snapshots := NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2;
+  have events := List.map Event.snapshot snapshots.events;
+  match snapshots.result with
+  | fail err =>
+    { result := fail err,
+      post := { snapshots := NMB_Snaps
+...
+structure NMB_Stage1Source.State : Type
+number of parameters: 0
+fields:
+  NMB_Stage1Source.State.snapshots : NMB_Snapshot.State
+  NMB_Stage1Source.State.checkpoint : Option Bytes :=
+    none
+constructor:
+  NMB_Stage1Source.State.mk (snapshots : NMB_Snapshot.State) (checkpoint : Option Bytes) : State
+def NMB_Stage1Source.G : NMB_Input.Input →
+  AdapterRw.Ops → Key → Slice U8 → Result Unit → Result Unit → Result Unit → Run :=
+fun x ops p d alloc0 alloc1 alloc2 =>
+  have snapshots := NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2;
+  have events := List.map Event.snapshot snapshots.events;
+  match snapshots.result with
+  | fail err =>
+    { result := fail err,
+      post := { snapshots := NMB_SnapshotReplay.replay (NMB_Snapshot.ready x 0 []) snapshots.events },
+      events := events }
+  | div =>
+    { result := div, post := { snapshots := NMB_SnapshotReplay.replay (NMB_Snapshot.ready x 0 []) snapshots.events },
+      events := events }
+  | ok (accounts, post) =>
+    have tail := continuation ops p d accounts { snapshots := post };
+    { result := tail.result, post := tail.post, events := events ++ tail.events }
+
+Running as unit: run-rfb170c8c96144e7aaba236933a1c1587.scope; invocation ID: bcfaf24cfeca412dbda3d2f49f350860

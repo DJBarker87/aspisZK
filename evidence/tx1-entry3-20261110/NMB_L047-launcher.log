@@ -1,0 +1,45 @@
+{"attempt": "NMB_L047", "exit_status": 1, "wall_seconds": 17.451443273108453, "peak_rss_kib": "5984012", "swaps": "0", "print_axioms": ["'NMB_SnapshotReplayNormal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMB_generated/NMB_SnapshotReplayNormal.lean:12:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+x : NMB_Input.Input
+t a lo hi : ℕ
+owned : List Owned
+⊢ NMB_SnapshotReplay.replay (ready x t owned)
+      (have g := NMB_Snapshot.guard (ready x t owned) a;
+      have payload := NLF_SdkModel.deref (acquired (ready x t owned) a) g;
+      ([Event.acquire (ready x t owned) a (ready x t owned).next (acquired (ready x t owned) a) (ok (Except.ok g)),
+            Event.deref (live (ready x t owned) a) g (ok payload)] ++
+          if payload.bytes.length = lo ∨ payload.b
+...
+NMB_generated/NMB_SnapshotReplayNormal.lean:12:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+x : NMB_Input.Input
+t a lo hi : ℕ
+owned : List Owned
+⊢ NMB_SnapshotReplay.replay (ready x t owned)
+      (have g := NMB_Snapshot.guard (ready x t owned) a;
+      have payload := NLF_SdkModel.deref (acquired (ready x t owned) a) g;
+      ([Event.acquire (ready x t owned) a (ready x t owned).next (acquired (ready x t owned) a) (ok (Except.ok g)),
+            Event.deref (live (ready x t owned) a) g (ok payload)] ++
+          if payload.bytes.length = lo ∨ payload.bytes.length = hi then
+            [Event.allocate (live (ready x t owned) a) g payload.bytes.length (ok ())]
+          else []) ++
+        [Event.release (live (ready x t owned) a) g (ok (Except.ok (ready x t owned).sdk)),
+          Event.returned (live (ready x t owned) a) a lo hi (ok ((ready x t owned).input.snapshot a lo hi))]) =
+    returned (ready x t owned) a lo hi
+theorem NMB_SnapshotReplayNormal.source : ∀ (x : NMB_Input.Input) (t a lo hi : ℕ) (owned : List Owned),
+  NMB_SnapshotReplay.replay (ready x t owned) (G (ready x t owned) a lo hi (ok ())).events =
+    returned (ready x t owned) a lo hi :=
+fun x t a lo hi owned =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => NMB_SnapshotReplay.replay (ready x t owned) _a = returned (ready x t owned) a lo hi)
+        (NMB_SnapshotTrace.source x t a lo hi owned)))
+    (id sorry)
+'NMB_SnapshotReplayNormal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5d794c0f09c34db790dba48a0ccba82b.scope; invocation ID: 69d16b2a774b4848a08c9a87cd0b5c19

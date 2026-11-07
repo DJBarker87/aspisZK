@@ -1,0 +1,55 @@
+{"attempt": "NMB_L036", "exit_status": 0, "wall_seconds": 13.714064563857391, "peak_rss_kib": "5951588", "swaps": "0", "print_axioms": ["'NMB_SnapshotChain.three' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def NMB_SnapshotChain.Step : {W : Type} → NMB_Input.Input → Library W (ℕ → NMB_Input.Owned) → W → W → ℕ → Prop :=
+fun {W} x L before after a =>
+  ∃ token owner w1 w2,
+    L.run before (Op.shared a token owner) = (w1, Reply.guard token) ∧
+      L.run w1 (Op.deref token) = (w2, Reply.payload ((NMB_Heap.heap x).payload ((NMB_Heap.heap x).accounts a).1)) ∧
+        L.run w2 (Op.drop token) = (after, Reply.unit) ∧ L.related after (NMB_Heap.heap x)
+theorem NMB_SnapshotChain.three : ∀ {W : Type} (x : NMB_Input.Input) (L : Library W (ℕ → NMB_Input.Owned)),
+  S2TrustedSdkBorrow L →
+    ∀ (w : W),
+      L.related w (NMB_Heap.heap x) →
+        Valid (NMB_Heap.heap x) → ∃ w1 w2 w3, Step x L w w1 0 ∧ Step
+...
+ token owner) = (w1, Reply.guard token) ∧
+      L.run w1 (Op.deref token) = (w2, Reply.payload ((NMB_Heap.heap x).payload ((NMB_Heap.heap x).accounts a).1)) ∧
+        L.run w2 (Op.drop token) = (after, Reply.unit) ∧ L.related after (NMB_Heap.heap x)
+theorem NMB_SnapshotChain.three : ∀ {W : Type} (x : NMB_Input.Input) (L : Library W (ℕ → NMB_Input.Owned)),
+  S2TrustedSdkBorrow L →
+    ∀ (w : W),
+      L.related w (NMB_Heap.heap x) →
+        Valid (NMB_Heap.heap x) → ∃ w1 w2 w3, Step x L w w1 0 ∧ Step x L w1 w2 1 ∧ Step x L w2 w3 2 :=
+fun {W} x L sdk w related valid =>
+  let ⟨t0, h✝⟩ := NMB_SnapshotPacket.bracket x L sdk w related valid 0
+  let ⟨o0, h✝¹⟩ := h✝
+  let ⟨a0, h✝²⟩ := h✝¹
+  let ⟨b0, h✝³⟩ := h✝²
+  let ⟨w1, h✝⁴⟩ := h✝³
+  let ⟨h01, right✝⟩ := h✝⁴
+  let ⟨h02, right✝¹⟩ := right✝
+  let ⟨h03, h04⟩ := right✝¹
+  let ⟨t1, h✝⁵⟩ := NMB_SnapshotPacket.bracket x L sdk w1 h04 valid 1
+  let ⟨o1, h✝⁶⟩ := h✝⁵
+  let ⟨a1, h✝⁷⟩ := h✝⁶
+  let ⟨b1, h✝⁸⟩ := h✝⁷
+  let ⟨w2, h✝⁹⟩ := h✝⁸
+  let ⟨h11, right✝²⟩ := h✝⁹
+  let ⟨h12, right✝³⟩ := right✝²
+  let ⟨h13, h14⟩ := right✝³
+  let ⟨t2, h✝¹⁰⟩ := NMB_SnapshotPacket.bracket x L sdk w2 h14 valid 2
+  let ⟨o2, h✝¹¹⟩ := h✝¹⁰
+  let ⟨a2, h✝¹²⟩ := h✝¹¹
+  let ⟨b2, h✝¹³⟩ := h✝¹²
+  let ⟨w3, h✝¹⁴⟩ := h✝¹³
+  let ⟨h21, right✝⁴⟩ := h✝¹⁴
+  let ⟨h22, right✝⁵⟩ := right✝⁴
+  let ⟨h23, h24⟩ := right✝⁵
+  Exists.intro w1
+    (Exists.intro w2
+      (Exists.intro w3
+        ⟨Exists.intro t0 (Exists.intro o0 (Exists.intro a0 (Exists.intro b0 ⟨h01, ⟨h02, ⟨h03, h04⟩⟩⟩))),
+          ⟨Exists.intro t1 (Exists.intro o1 (Exists.intro a1 (Exists.intro b1 ⟨h11, ⟨h12, ⟨h13, h14⟩⟩⟩))),
+            Exists.intro t2 (Exists.intro o2 (Exists.intro a2 (Exists.intro b2 ⟨h21, ⟨h22, ⟨h23, h24⟩⟩⟩)))⟩⟩))
+'NMB_SnapshotChain.three' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra1c9d95145ab468ab6ae2ce0afcb84c8.scope; invocation ID: b18a7c7b98a0445cbcdf38c7b4777b44

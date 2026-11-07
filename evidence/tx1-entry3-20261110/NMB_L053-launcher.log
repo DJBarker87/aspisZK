@@ -1,0 +1,49 @@
+{"attempt": "NMB_L053", "exit_status": 0, "wall_seconds": 16.406972244149074, "peak_rss_kib": "6016220", "swaps": "0", "print_axioms": ["'NMB_Stage1Admitted.body' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_Stage1Admitted.result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_Stage1Admitted.body : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8)
+  (a0 a1 a2 : Result Unit),
+  NLQ_Route.Tx1 d →
+    (NMB_Stage1Parent.G x ops p d 3 a0 a1 a2).result = (NMB_Stage1Source.G x ops p d a0 a1 a2).result ∧
+      (NMB_Stage1Parent.G x ops p d 3 a0 a1 a2).post = (NMB_Stage1Source.G x ops p d a0 a1 a2).post :=
+fun x ops p d a0 a1 a2 tx1 =>
+  Or.casesOn tx1
+    (fun ten =>
+      of_eq_true
+        (Eq.trans
+          (congr
+            (congrArg And
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congrArg NMB_Stage1Parent.Run.result
+                      (Eq.trans
+                        (it
+...
+rue instDecidableTrue))))
+                                  [])))
+                            (congrArg NMB_Stage1Parent.Run.events
+                              (ite_cond_eq_true
+                                (have body := NMB_Stage1Source.G x ops p d a0 a1 a2;
+                                { result := body.result, post := body.post,
+                                  events := Event.count (initial x) 3 :: List.map Event.body body.events })
+                                {
+                                  result :=
+                                    ok
+                                      (core.result.Result.Err
+                                        AdapterRw.solana_program_error.ProgramError.InvalidInstructionData),
+                                  post := initial x, events := [Event.count (initial x) 3] }
+                                (eq_self 3)))))))))
+                (NMB_Stage1Source.G x ops p d a0 a1 a2).post)
+              (eq_self (NMB_Stage1Source.G x ops p d a0 a1 a2).post)))
+          (and_self True))
+theorem NMB_Stage1Admitted.result : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8),
+  NLQ_Route.Tx1 d →
+    (NMB_Stage1Parent.G x ops p d 3 (ok ()) (ok ()) (ok ())).result = do
+      let child ← AdapterRw.r1_pool_adapter.owned.stage1_owned ops p (NMB_ThreeSnapshots.first x) d
+      match child with
+        | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+        | core.result.Result.Err error => ok (core.result.Result.Err error) :=
+fun x ops p d tx1 => Eq.trans (body x ops p d (ok ()) (ok ()) (ok ()) tx1).left (NMB_Stage1Result.result x ops p d)
+'NMB_Stage1Admitted.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_Stage1Admitted.result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rea26931bda544a0e9ac461af51465a4f.scope; invocation ID: f775cf80a18f4209a34d2a383c86a0e3

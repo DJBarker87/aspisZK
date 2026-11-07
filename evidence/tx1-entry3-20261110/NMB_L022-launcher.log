@@ -1,0 +1,64 @@
+{"attempt": "NMB_L022", "exit_status": 1, "wall_seconds": 16.78498339187354, "peak_rss_kib": "5996872", "swaps": "0", "print_axioms": ["'NMB_Guard.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_Guard.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMB_generated/NMB_Guard.lean:26:54: error: unsolved goals
+data : List U8
+count : ℕ
+⊢ count = 3 → (¬data = [3#u8, 10#u8] → data = [3#u8, 11#u8] ↔ data = [3#u8, 10#u8] ∨ data = [3#u8, 11#u8])
+theorem NMB_Guard.source : ∀ (data : List U8) (count : ℕ), reject data count = reference data count :=
+fun data count =>
+  List.casesOn (motive := fun t => data = t → reject data count = reference data count) data
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congr
+                    (congrArg or
+                      (Eq.trans
+                        (congrArg not
+                     
+...
+                 ⋯)
+                                      ⋯))
+                                  ⋯)
+                                ⋯)
+                          else ⋯
+                      else ⋯)
+                ⋯ ⋯)
+          ⋯)
+    ⋯
+theorem NMB_Guard.accepted : ∀ (data : List U8) (count : ℕ),
+  reject data count = false ↔ (data = [3#u8, 10#u8] ∨ data = [3#u8, 11#u8]) ∧ count = 3 :=
+fun data count =>
+  Eq.mpr
+    (id
+      (Eq.trans
+        (congrFun'
+          (congrArg Iff
+            (Eq.trans
+              (Eq.trans
+                (congrFun'
+                  (congrArg Eq
+                    (congr (congrArg or (Bool.not_or (decide (data = [3#u8, 10#u8])) (decide (data = [3#u8, 11#u8]))))
+                      decide_not))
+                  false)
+                Bool.or_eq_false_iff._simp_1)
+              (congr
+                (congrArg And
+                  (Eq.trans Bool.and_eq_false_imp._simp_1
+                    (implies_congr
+                      (Eq.trans Bool.not_eq_eq_eq_not._simp_1
+                        (Eq.trans (congrArg (Eq (decide (data = [3#u8, 10#u8]))) Bool.not_true)
+                          decide_eq_false_iff_not._simp_1))
+                      (Eq.trans Bool.not_eq_eq_eq_not._simp_1
+                        (Eq.trans (congrArg (Eq (decide (data = [3#u8, 11#u8]))) Bool.not_false) decide_eq_true_eq)))))
+                (Eq.trans Bool.not_eq_eq_eq_not._simp_1
+                  (Eq.trans (congrArg (Eq (decide (count = 3))) Bool.not_false) decide_eq_true_eq)))))
+          ((data = [3#u8, 10#u8] ∨ data = [3#u8, 11#u8]) ∧ count = 3))
+        and_congr_left_iff._simp_1))
+    sorry
+'NMB_Guard.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_Guard.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8c374f0e972d4057ba352da2ca340cfa.scope; invocation ID: 7b8dc1b60ffd4eb29f1f2b6c87b9b16b

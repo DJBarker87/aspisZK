@@ -1,0 +1,48 @@
+{"attempt": "NMB_L072", "exit_status": 1, "wall_seconds": 31.468951585004106, "peak_rss_kib": "5963816", "swaps": "0", "print_axioms": ["'NMB_TypedParentFold.copy' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMB_TypedParentFold.continuation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NMB_TypedParentFold.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMB_generated/NMB_TypedParentFold.lean:11:83: error: unsolved goals
+case returned
+s : State
+saved : Bytes
+state✝ : NLF_SdkModel.State
+reply✝ : Except NLF_SdkModel.ProgramError Unit
+h :
+  (NLQ_CopyTrace.G s.snapshots.sdk 2 s.snapshots.next (S2W_ReturnedCheckpoint.nativeBytes saved)).outcome =
+    NLF_CopyStep.Outcome.returned state✝ reply✝
+⊢ (match reply✝ with
+    | Except.ok a => core.result.Result.Ok ()
+    | Except.error a => core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed) =
+    match reply✝ with
+    | Except.ok a => core.result.Result.Ok ()
+    | Except.error a => core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountBorrowFailed
+...
+                snapshots :=
+                      NMB_SnapshotReplay.replay (NMB_Snapshot.ready x 0 [])
+                        (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).events }
+                  (List.map NMB_Stage1Source.Event.snapshot (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).events)))
+              (Eq.trans
+                (congr (congrArg And (eq_self div))
+                  (Eq.trans
+                    (congr
+                      (congrArg And
+                        (eq_self
+                          {
+                            snapshots :=
+                              NMB_SnapshotReplay.replay (NMB_Snapshot.ready x 0 [])
+                                (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).events }))
+                      (Eq.trans List.map_inj_left._simp_1
+                        (Eq.trans
+                          (forall_congr fun a =>
+                            Eq.trans
+                              (implies_congr (Eq.refl (a ∈ (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).events))
+                                (eq_self (NMB_Stage1Source.Event.snapshot a)))
+                              (implies_true (a ∈ (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).events)))
+                          (implies_true NMB_Snapshot.Event))))
+                    (and_self True)))
+                (and_self True))))
+        (Eq.symm h) (Eq.refl (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).result))
+    (Eq.refl (NMB_ThreeSnapshots.G x alloc0 alloc1 alloc2).result)
+'NMB_TypedParentFold.copy' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NMB_TypedParentFold.continuation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NMB_TypedParentFold.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0645dd48947c407fadb6376050d00a65.scope; invocation ID: 4e16ddd0eca541a48d5a8e30f381a1eb

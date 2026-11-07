@@ -1,0 +1,46 @@
+{"attempt": "NMB_L039", "exit_status": 0, "wall_seconds": 12.67878158413805, "peak_rss_kib": "6005004", "swaps": "0", "print_axioms": ["'NMB_Stage1ChildPrefixes.fail' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NMB_Stage1ChildPrefixes.divergence' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NMB_Stage1ChildPrefixes.fail : ∀ (x : NMB_Input.Input) (ops : AdapterRw.Ops) (p : Key) (d : Slice U8)
+  (err : Error),
+  (NLD_Stage1Source.stage1Owned ops p (NMB_ThreeSnapshots.first x) d).2 = Result.fail err →
+    have s := NMB_Stage1Tail.ready x;
+    G x ops p d (ok ()) (ok ()) (ok ()) =
+      { result := Result.fail err, post := s,
+        events :=
+          List.map Event.snapshot (NMB_ThreeSnapshots.G x (ok ()) (ok ()) (ok ())).events ++
+            [Event.owned s s p (NMB_ThreeSnapshots.first x) d (Result.fail err)
+                (NLD_Stage1Source.stage1Owned ops p (NMB_ThreeSnapshots.first x) d).1] } :=
+fun x ops p d err branch =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+...
+NMB_ThreeSnapshots.first x) d).2
+                                    (NLD_Stage1Source.stage1Owned ops p (NMB_ThreeSnapshots.first x) d).1 ::
+                                  copied.events })
+                        branch)
+                      (congrArg (Run.mk div (NMB_Stage1Tail.ready x))
+                        (congrFun'
+                          (congrArg List.cons
+                            (congrFun'
+                              (congrArg
+                                (Event.owned (NMB_Stage1Tail.ready x) (NMB_Stage1Tail.ready x) p
+                                  (NMB_ThreeSnapshots.first x) d)
+                                branch)
+                              (NLD_Stage1Source.stage1Owned ops p (NMB_ThreeSnapshots.first x) d).1))
+                          [])))))))
+            { result := div, post := NMB_Stage1Tail.ready x,
+              events :=
+                List.map Event.snapshot (NMB_ThreeSnapshots.G x (ok ()) (ok ()) (ok ())).events ++
+                  [Event.owned (NMB_Stage1Tail.ready x) (NMB_Stage1Tail.ready x) p (NMB_ThreeSnapshots.first x) d div
+                      (NLD_Stage1Source.stage1Owned ops p (NMB_ThreeSnapshots.first x) d).1] })
+          (eq_self
+            { result := div, post := NMB_Stage1Tail.ready x,
+              events :=
+                List.map Event.snapshot (NMB_ThreeSnapshots.G x (ok ()) (ok ()) (ok ())).events ++
+                  [Event.owned (NMB_Stage1Tail.ready x) (NMB_Stage1Tail.ready x) p (NMB_ThreeSnapshots.first x) d div
+                      (NLD_Stage1Source.stage1Owned ops p (NMB_ThreeSnapshots.first x) d).1] }))))
+'NMB_Stage1ChildPrefixes.fail' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NMB_Stage1ChildPrefixes.divergence' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r7275c60867944fc2aa65421804f3c80c.scope; invocation ID: 8a94099bc93e4cada7e3f98e198b72e1
