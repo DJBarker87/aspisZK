@@ -1,0 +1,48 @@
+{"attempt": "NND_L256", "exit_status": 1, "wall_seconds": 4.203454996924847, "peak_rss_kib": "6557920", "swaps": "0", "print_axioms": ["'NND_RegistryV2HeadTransport.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NND_generated/NND_RegistryV2HeadTransport.lean:21:5: error(lean.unknownIdentifier): Unknown identifier `NND_RegistryScalarOps.loader`
+NND_generated/NND_RegistryV2HeadTransport.lean:18:97: error: unsolved goals
+base : Ops
+L : RSL.PoolLib
+D : RSL.DeployedIds
+env : RSL.Env
+v p : solana_pubkey.Pubkey
+m : r1_pool_adapter.owned.OwnedAccount
+s : aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1
+r e : r1_pool_adapter.owned.OwnedAccount
+t : U64
+rp : solana_pubkey.Pubkey
+F : RSL.RegistryV2 → Except RSL.ProgramError Unit
+hc :
+  ∀ (reg : aspis_statement.pool_v1.verifier_registry.VerifierRegistryV2),
+    outer (reply id)
+        (NND_RegistryV2Head.decoded (NND_RegistryOps.install bas
+...
+gistryV2Head.decoded (NND_RegistryOps.install base D env) v p m s r e t rp (unkey RSL.LOADER_ID) reg) =
+      ok (F (registryV2 reg))
+⊢ (outer (reply id) do
+      let loader ← (NND_RegistryOps.install base D env).op41
+      let r3 ← r1_pool_adapter.owned.OwnedAccount.data (NND_RegistryOps.install base D env) r
+      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r4 ← (NND_RegistryOps.install base D env).op33 val
+          let r5 ←
+            AdapterRw.core.result.Result.map_err
+                r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1VerifierRegistryFormatErrorProgramError
+                r4 ()
+          let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r5
+          match cf3 with
+            | core.ops.control_flow.ControlFlow.Continue val1 =>
+              NND_RegistryV2Head.decoded (NND_RegistryOps.install base D env) v p m s r e t rp loader val1
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame solana_program_error.ProgramError) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame solana_program_error.ProgramError) residual) =
+    ok
+      (ebind (account r).data fun b =>
+        ebind (option ((NND_RegistryLibrary.install L).decodeRegistryV2 b) RSL.ProgramError.invalidAccountData) F)
+'NND_RegistryV2HeadTransport.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0921cf3ed5504a02a5cfa04977c95139.scope; invocation ID: aad630ee52144ca6925574e32aabe122

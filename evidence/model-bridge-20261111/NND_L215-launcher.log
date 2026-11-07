@@ -1,0 +1,48 @@
+{"attempt": "NND_L215", "exit_status": 1, "wall_seconds": 3.2480318599846214, "peak_rss_kib": "6572280", "swaps": "0", "print_axioms": ["'NND_Registry1GuardRSL.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NND_generated/NND_Registry1GuardRSL.lean:30:3: error: Type mismatch
+  NND_Entry1ReadonlyValue.value base L D env v p m s r e t
+has type
+  outer (reply id) (NND_Entry1Readonly.run (NND_RegistryOps.install base D env) v m.key (unkey D.registry) e t) =
+    ok
+      (eseq (RSL.readonlyAccount (account e) D.registry)
+        (ebind (account e).data fun b =>
+          ebind (option ((NND_RegistryLibrary.install L).decodeEntryV1 b) RSL.ProgramError.invalidAccountData)
+            (NND_Entry1DecodedValue.tail env D (NND_RegistryArgs.args v p m s r e t))))
+but is expected to have type
+  outer (reply id)
+      (if (false || false) = true then ok (core.result.Result.Err solana_program_error.ProgramErro
+...
+ v p m s r e t).entry_account D.registry)
+          (ebind (NND_RegistryArgs.args v p m s r e t).entry_account.data fun b =>
+            ebind (option ((NND_RegistryLibrary.install L).decodeEntryV1 b) RSL.ProgramError.invalidAccountData)
+              (NND_Entry1DecodedValue.tail env D (NND_RegistryArgs.args v p m s r e t))))))
+
+case true.true
+base : Ops
+L : RSL.PoolLib
+D : RSL.DeployedIds
+env : RSL.Env
+v p : solana_pubkey.Pubkey
+m : r1_pool_adapter.owned.OwnedAccount
+s : aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1
+r e : r1_pool_adapter.owned.OwnedAccount
+t : U64
+reg : aspis_statement.pool_v1.verifier_registry.VerifierRegistryV1
+expected : solana_pubkey.Pubkey
+hk : decide (key r.key ≠ key expected) = true
+hb : RSL.TX2_234.registryV1Bad (NND_RegistryArgs.args v p m s r e t) (registryV1 reg) = true
+⊢ outer (reply id)
+      (if (true || true) = true then ok (core.result.Result.Err solana_program_error.ProgramError.InvalidAccountData)
+      else NND_Entry1Readonly.run (NND_RegistryOps.install base D env) v m.key (unkey D.registry) e t) =
+    ok
+      (eseq
+        (echeck (decide ((NND_RegistryArgs.args v p m s r e t).registry_account.key ≠ key expected))
+          RSL.ProgramError.invalidAccountData)
+        (eseq (echeck true RSL.ProgramError.invalidAccountData)
+          (eseq (RSL.readonlyAccount (NND_RegistryArgs.args v p m s r e t).entry_account D.registry)
+            (ebind (NND_RegistryArgs.args v p m s r e t).entry_account.data fun b =>
+              ebind (option ((NND_RegistryLibrary.install L).decodeEntryV1 b) RSL.ProgramError.invalidAccountData)
+                (NND_Entry1DecodedValue.tail env D (NND_RegistryArgs.args v p m s r e t))))))
+'NND_Registry1GuardRSL.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rcafdc1d13a1b44f895df8bc8a845edd6.scope; invocation ID: 915a6cc9b6594c50b176a8552b5fb96f

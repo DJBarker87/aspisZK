@@ -1,0 +1,42 @@
+{"attempt": "NND_L187", "exit_status": 1, "wall_seconds": 3.5736214469652623, "peak_rss_kib": "6576488", "swaps": "0", "print_axioms": ["'NND_Entry1Pda.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NND_generated/NND_Entry1Pda.lean:62:1: error: Type mismatch
+  NND_FormatControl.source ((NND_RegistryOps.install base D env).op38 (NND_PdaSeeds.entry1 p entry.bump) rp)
+    r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_10.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+    () (fun x => rfl) (NND_RegistryEntry1Check.check (NND_RegistryOps.install base D env) v p e t entry)
+has type
+  (do
+      let out ← (NND_RegistryOps.install base D env).op38 (NND_PdaSeeds.entry1 p entry.bump) rp
+      let mapped ←
+        AdapterRw.core.result.Result.map_err
+            r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_10.Insts.CoreOpsFunctionFnOnceTupleP
+...
+rol_flow.ControlFlow.Break e =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame solana_program_error.ProgramError) e) =
+    NND_FormatControl.thenCall ((NND_RegistryOps.install base D env).op38 (NND_PdaSeeds.entry1 p entry.bump) rp)
+      (NND_RegistryEntry1Check.check (NND_RegistryOps.install base D env) v p e t entry)
+but is expected to have type
+  (do
+      let r12 ←
+        (NND_RegistryOps.install base D env).op38
+            (Array.make 5#usize
+                [r1_pool_adapter.VERIFIER_ENTRY_SEED, Array.to_slice p, r1_pool_adapter.PROFILE_BINDING.to_slice,
+                  r1_pool_adapter.RELEASE_BINDING.to_slice, (Array.make 1#usize [entry.bump] ⋯).to_slice]
+                ⋯).to_slice
+            rp
+      let r13 ←
+        AdapterRw.core.result.Result.map_err
+            r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_10.Insts.CoreOpsFunctionFnOnceTuplePubkeyErrorProgramError
+            r12 ()
+      let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r13
+      match cf8 with
+        | core.ops.control_flow.ControlFlow.Continue val5 =>
+          NND_RegistryEntry1Check.check (NND_RegistryOps.install base D env) v p e t entry val5
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame solana_program_error.ProgramError) residual) =
+    NND_FormatControl.thenCall ((NND_RegistryOps.install base D env).op38 (NND_PdaSeeds.entry1 p entry.bump) rp)
+      (NND_RegistryEntry1Check.check (NND_RegistryOps.install base D env) v p e t entry)
+'NND_Entry1Pda.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8de8c17a54844a6ebfaa9f59830138d3.scope; invocation ID: 4149dbf5f6624442bb2b990555938856
