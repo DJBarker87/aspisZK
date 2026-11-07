@@ -76,3 +76,13 @@ run standalone SSH STREAMB_SLOTS=3 /home/dombarker/streamb-slots/turn.sh.
 The script's D977 cap file currently lowers this to2; it was never bypassed.
 No admission refusals or transport failures. No scope remains active. No push,
 merge, package-branch/ledger/checker/pv-common edits or wallet/key action.
+
+## Session 2 continuation
+
+49713 replayed pinned unchanged SourceStoreNative in an isolated W3 package
+cohort, read-only snapshot of its own J.json resolution. This is dependency
+preparation, not a completed contract. Exit0, wall0:02.66, peak2680076KiB,
+swap0; source parent4fcc1573c698; standard summary axioms only. Source hash
+9688d25201d49d0639a4f68fe4127c798636acd50aa6fb987d1827db151f2bde
+matches W4 pin ce2f78097fa7. Host writes remain in the SPEC directory.
+Next Lean49714; strict new-root audit not yet run.
