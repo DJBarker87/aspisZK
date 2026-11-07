@@ -14,7 +14,7 @@ def registry (verifier pool : solana_pubkey.Pubkey)
   account registry,account entry,long slot⟩
 
 theorem count (a : NMX_RowSpec_233.Args) :
- (auth a).accounts.length = a.accounts.val.length := List.length_map
+ (auth a).accounts.length = a.accounts.val.length := by simp only [auth,List.length_map]
 
 theorem seven (a : NMX_RowSpec_233.Args)
  (p m c l r e v : r1_pool_adapter.owned.OwnedAccount)

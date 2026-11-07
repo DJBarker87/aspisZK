@@ -16,11 +16,14 @@ theorem data (ops : Ops) (a : r1_pool_adapter.owned.OwnedAccount)
     (NGL_CloneDomain.install (NMX_LeafInstall.install ops)) a) = _
  rw [closed]
  cases hb : a.bytes with
- | Ok v => rfl
+ | Ok v =>
+   simp only [NHJ_DataPacket.G,NHJ_DataPacket.childReply,RSL.OwnedAccount.data,
+    account,hb,observe,NMX_Carrier.reply,bytes]
+   rfl
  | Err e =>
    simp only [NHJ_DataPacket.G,NHJ_DataPacket.childReply,hb]
    rw [NHJ_DataPacket.exact_error e (errors e hb)]
-   rfl
+   simp only [observe,NMX_Carrier.reply,RSL.OwnedAccount.data,account,hb]
 #print axioms data
 end NMX_DataCarrier
 end

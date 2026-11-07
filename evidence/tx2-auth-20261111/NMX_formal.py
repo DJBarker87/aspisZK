@@ -27,7 +27,7 @@ def _run(a,kind,target,command=None,extra=None,env_extra=None):
         text=(E/(target+'.lean')).read_text()
         for dep in re.findall(r'^import (NMX_[\w.]+)',text,re.M):
             h=sha((E/(dep+'.lean')).read_bytes())
-            assert any(x.get('module')==dep and x['exit_status']==0 and h in x['source_hashes'].values() for x in [json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]),'Compile current direct import first: '+dep
+            assert any(x.get('module')==dep and x.get('exit_status')==0 and h in x['source_hashes'].values() for x in [json.loads(l) for l in (E/'NMX_ATTEMPTS.jsonl').read_text().splitlines()]),'Compile current direct import first: '+dep
         src='NMX_generated/'+target.replace('.','/')+'.lean';files[src]=text
         command=[env['LEAN_SYSROOT']+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NMX_generated','-o','NMX_objects/'+target.replace('.','/')+'.olean',src]
         if target in ['NMX_ProofDriver','NMX_ScanDriver']:command+=['-c','NMX_native/'+target+'.c']

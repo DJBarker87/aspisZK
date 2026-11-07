@@ -21,16 +21,14 @@ theorem bound (prior : List Nat) (n : Nat) (member : n ∈ prior) : n ≤ ceilin
 
 theorem distinct (prior : List Nat) :
  [(owners prior).master,(owners prior).checkpoint,(owners prior).lane,(owners prior).snapshot].Nodup := by
- simp only [owners,List.nodup_cons,List.mem_cons,List.mem_singleton,List.not_mem_nil,
-   List.nodup_nil,and_true,not_or]
- omega
+ simp [owners] <;> omega
 
 theorem fresh (prior : List Nat) (n : Nat)
  (member : n ∈ [(owners prior).master,(owners prior).checkpoint,(owners prior).lane,(owners prior).snapshot]) :
  n ∉ prior := by
  intro old
  have hb := bound prior n old
- simp only [owners,List.mem_cons,List.mem_singleton] at member
+ simp [owners] at member
  rcases member with rfl | rfl | rfl | rfl <;> omega
 
 /-- All four full payloads remain in the SAME returned packet. -/

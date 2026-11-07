@@ -15,21 +15,22 @@ theorem scalar_roundtrip (b : U8) : fromByte (byte b) = b := by
  apply UScalar.eq_of_val_eq
  simp only [fromByte,UScalar.ofNatCore_val_eq,byte_value]
 
+theorem b32_ext (a b : RSL.B32) (same : a.bytes = b.bytes) : a = b := by
+ cases a
+ cases b
+ cases same
+ rfl
+
 theorem key_roundtrip (k : RSL.B32) : key (fromKey k) = k := by
- cases k with
- | mk values size =>
-   apply RSL.B32.mk.injEq.mpr
-   simp only [key,fromKey,List.map_map]
-   have identity : (fun b => byte (fromByte b)) = id := funext byte_roundtrip
-   rw [identity,List.map_id]
+ apply b32_ext
+ simp [key,fromKey,List.map_map,Function.comp_def,byte_roundtrip]
 
 theorem array_roundtrip (k : Array U8 32#usize) : fromKey (key k) = k := by
  apply Subtype.ext
- simp only [fromKey,key,List.map_map]
- have identity : (fun b => fromByte (byte b)) = id := funext scalar_roundtrip
- rw [identity,List.map_id]
+ simp [fromKey,key,List.map_map,Function.comp_def,scalar_roundtrip]
 #print axioms byte_roundtrip
 #print axioms scalar_roundtrip
+#print axioms b32_ext
 #print axioms key_roundtrip
 #print axioms array_roundtrip
 end NMX_InverseBytes
