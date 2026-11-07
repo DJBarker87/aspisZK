@@ -97,3 +97,5 @@ Resumed bbb785242b8; D984 FIRST inventory underway. store-write-leaves-v2.md/.js
 46354 exact pinned f6 provider replay PV_FN_THREAD_f6CatchPre passed; cache preparation only, not caller/transport closure. See receipt.
 
 46355 exact pinned f6 provider replay PV_FN_THREAD_f6DerefPre passed; cache preparation only, not caller/transport closure. See receipt.
+
+46356 exact pinned f6 provider replay PV_FN_THREAD_f6Provider126Entry passed; cache preparation only, not caller/transport closure. See receipt.
