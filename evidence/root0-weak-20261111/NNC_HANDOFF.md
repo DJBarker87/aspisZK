@@ -102,3 +102,16 @@ NNC_ObservedLaw.w. No canonical Root0/C04 source equality is assumed in the
 trace decoration. The actual `I.f064`/per-Env interpretation at final host
 assembly is still explicit. NNC_EVENT_TRANSPORT.md gives the SAME-site map.
 No actual native cut or trace was obtained from model TX2 acceptance.
+
+L094 unconditional recorded numerical envelope PASS (no NativeInclusion or
+Realizes assumption); L095 exact actual pair at that recorder output PASS.
+L097 all064 extents from SAME native weak-parent snapshots/range PASS; no
+scanner success endpoint retained. L099 concrete NNE Entry-state Root0/byte
+representation PASS, with a proved symbolic UInt8 carrier conversion (L098's
+rfl mismatch retained). NNE_Entry/SdkState/SdkCells copied read-only with
+current committed-source/object hashes in NNC_NNE_SEED.json. L100 focused
+ledger24+all current option-B/native-observer modules combined import PASS.
+NNC_ProbabilityFold is superseded/retired, never exported as an assumption-based
+final theorem. NNC_OPTIONB_STATUS.md states exactly which native installations
+still prevent final coverage. Scope count100/250; own raw audit follows only
+for the71 new active roots (previous56 audits reused unchanged).

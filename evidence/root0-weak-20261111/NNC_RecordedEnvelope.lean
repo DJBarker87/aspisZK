@@ -52,7 +52,7 @@ theorem bound
   let recorder := Hiq_RecordedJoint.program capped ARQ_Observer.project (ARQ_Observer.select cfg CPH_Program.verifier)
   let runtime := ARX_AdmittedRuntime.runtime (Tx := Tx) L copy allocator c err r native1 native2 hashv a
   let model := F3T_Charged.projected D (F3T_Canon.canon (F3T_ByteCarrier.lift cfg (submission a)))
-  let event := BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0+Q1+2965)
+  let event : View Bytes State (View Bytes State (GExq_AccountExperiment.Outcome A)) → Prop := BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q0+Q1+2965)
   have each := NNC_RuntimePointwise.each (Tx := Tx) L copy allocator c err r native1 native2 hashv a
     extraction std D words owners Q0 Q1 queries
   have averaged := NNC_NoSecondCharge.average recorder runtime model F3T_Runtime.runtimeMass
