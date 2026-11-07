@@ -438,3 +438,9 @@ L1046 PDA atom, L1047 opaque deployment-ID bindings and L1049 full actual-data-c
 NMX_234_VALIDATION.json, NMX_234_CUTMAP.json (132 original lexical call occurrences), NMX_234_EXPORT.json and compressed closure pins are the complete234 packet. No all-roots audit or unchanged full regression. Candidate remains subject to the ledger, no CLOSED credit claimed.
 
 The first authorized233 instantiation scopes are now in progress after both child candidates exist and234 gates pass. No new233 reification/bounds/association was attempted while its child gate was open.
+
+### Stage K: frozen233 targets instantiated
+
+L1065 LaneInstance PASS14.4888s/6018192KiB/swap0, L1067 RegistryArguments PASS15.0316s/6025056KiB/swap0 (L1066 exposed only an unfolded bytes-map rewrite; repaired with supplied pointwise byte equality), L1068 Instantiated233 PASS19.2117s/6765944KiB/swap0. NMX_R3_Instantiated233.native and .represented instantiate EXACTLY the frozen NMX_R2_NativeCanonical.fold / NMX_R2_RepresentedFold.fold with complete217 and234 packets and LIBB module8. .library is definitional equality to the supplied instance; no PoolLib/DeployedIds fields constructed. Lane transport includes every input length/Result; registry original tuple carrier equality is NMX_R3_RegistryArguments.same. No child-law/success/extent premise survives.
+
+This discharges NMX_REV2_REMAINING items4 and5 (library equality and child instantiation). Items1–3 remain: physical Box native cuts at actual233 sites, full emitted effects association, and all-Args canonical implementation port. The represented theorem retains explicit bounds as support and never changes Domain=True. These are operational instantiated folds, NOT a RowSpec233 candidate. Own new-root audits/import/export and exact242/241 readiness follow; no unchanged234 audit is repeated.

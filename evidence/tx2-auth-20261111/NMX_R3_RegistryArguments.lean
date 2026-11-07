@@ -17,7 +17,7 @@ theorem account (a : r1_pool_adapter.owned.OwnedAccount) :
  NMX_R2_Carrier.account a = NMX_R3_RegistryCarrier.account a := by
  cases hlen : a.length <;> cases hbytes : a.bytes <;>
  simp only [NMX_R2_Carrier.account,NMX_R3_RegistryCarrier.account,NMX_R2_Carrier.reply,NND_Carrier.reply,
-  hlen,hbytes,key,error,LIBB_AccountCarriers.bytes]
+  hlen,hbytes,key,error,NND_Carrier.bytes,LIBB_AccountCarriers.byte]
 
 theorem same (v p : solana_pubkey.Pubkey) (m : r1_pool_adapter.owned.OwnedAccount)
  (s : aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1)
