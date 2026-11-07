@@ -1,0 +1,30 @@
+import NNH_MEntry2PdaSource
+import NNH_MEntry2ExpectedValue
+set_option autoImplicit false
+noncomputable section
+namespace NNH_MEntry2PdaValue
+open Aeneas Aeneas.Std Result AdapterRw NND_Carrier NND_Returned NNH_ModelCarrier
+attribute [local instance] Classical.propDecidable
+
+def tail (env : RSL.Env) (D : RSL.DeployedIds) (a : RSL.TX2_234.Args) (entry : RSL.EntryV2) : Except RSL.ProgramError Unit :=
+ ebind (option (env.pda [RSL.SEED_ENTRY_V2,a.master_account.key.bytes,RSL.PROFILE_BINDING.bytes,RSL.RELEASE_BINDING.bytes,[entry.bump]] D.registry) .invalidAccountData)
+  (NNH_MEntry2ExpectedValue.tail env a entry)
+
+theorem value (base : Ops) (D : RSL.DeployedIds) (env : RSL.Env)
+ (v p : solana_pubkey.Pubkey) (m : r1_pool_adapter.owned.OwnedAccount)
+ (s : aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestMasterV1)
+ (r e : r1_pool_adapter.owned.OwnedAccount) (t : U64)
+ (entry : aspis_statement.pool_v1.verifier_registry.VerifierRegistryEntryV2) :
+ outer (reply id) (NNH_MEntry2Pda.run (NNH_MRegistryOps.install base D env) v m.key (unkey D.registry) (unkey RSL.LOADER_ID) e t (unkey RSL.LOADER_ID) entry) =
+ ok (tail env D (NNH_MRegistryArgs.args v p m s r e t) (entryV2 entry)) := by
+ rw [NNH_MEntry2PdaSource.source]
+ have h := NNH_MPdaTransport.value env (NNH_MPdaSeeds.entry2 m.key entry.bump) (unkey D.registry)
+  (NNH_MEntry2Expected.run (NNH_MRegistryOps.install base D env) v m.key (unkey RSL.LOADER_ID) e t (unkey RSL.LOADER_ID) entry) id
+  (NNH_MEntry2ExpectedValue.tail env (NNH_MRegistryArgs.args v p m s r e t) (entryV2 entry))
+  (fun expected => NNH_MEntry2ExpectedValue.value base D env v p m s r e t entry expected)
+ rw [NNH_MPdaSeeds.entry2_bytes,key_forth] at h
+ exact h
+
+#print axioms value
+end NNH_MEntry2PdaValue
+end

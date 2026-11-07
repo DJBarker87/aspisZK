@@ -1,0 +1,45 @@
+{"attempt": "NNH_L261", "exit_status": 1, "wall_seconds": 3.1139154979027808, "peak_rss_kib": "6614240", "swaps": "0", "print_axioms": ["'NNH_Tx1Returns.prepared_returned' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NNH_Tx1Returns.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NNH_Tx1Returns.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNH_generated/NNH_Tx1Returns.lean:53:1: error: Tactic `apply` failed: could not unify the conclusion of `NNH_ReturnedRE.bind
+  ((Spec.call (fun x => TX1_087.Domain V x none) (TX1_087.Ref V P) ?m.60).bind fun r =>
+    match r.1 with
+    | Except.ok p => Spec.pure (Except.ok (p, r.2))
+    | Except.error e => Spec.pure (Except.error e))
+  ?m.57 env (preparedValue ?m.60 env) ?m.59 (prepared_returned ?m.60 env)`
+  Returns
+    (RE.bind
+      ((Spec.call (fun x => TX1_087.Domain V x none) (TX1_087.Ref V P) ?m.60).bind fun r =>
+        match r.1 with
+        | Except.ok p => Spec.pure (Except.ok (p, r.2))
+        | Except.error e => Spec.pure (Except.error e))
+      ?m.57)
+    env (bindValue (prepar
+...
+lice a.proof OFF_FOLDED_ROOT OFF_ROUND1) with
+        | none => RE.lift Spec.panic
+        | some folded =>
+          RE.bind (V.batchMerkle.run (a.proof, p, folded, 0)) fun x =>
+            RE.bind (V.geometry.run (p, 0, a.k)) fun geo =>
+              RE.bind (V.weightsNew.run acc) fun pending =>
+                RE.bind (V.queryLoop.run (a.proof, p, acc, g, geo, pending, a.k)) fun r =>
+                  (RE.lift (V.finish.run (r.2, r.1))).bind fun acc2 =>
+                    (RE.lift (V.checkpoint.run (p, acc2, a.proof, a.public_bytes))).bind fun bytes => RE.pure bytes)
+    env
+    (bindValue (preparedValue { public_ := a.public_, proof := a.proof, g := V.zeroE29 } env) fun pg =>
+      have p := pg.1;
+      have g := pg.2;
+      bindValue (LIB_VLib.accNewValue () env) fun acc =>
+        match TX1_136.toB32 (slice a.proof OFF_FOLDED_ROOT OFF_ROUND1) with
+        | none => Except.error V.vParse
+        | some folded =>
+          bindValue (LIB_VLib.batchMerkleValue (a.proof, p, folded, 0) env) fun x =>
+            bindValue (LIB_VLib.geometryValue (p, 0, a.k) env) fun geo =>
+              bindValue (LIB_VLib.weightsNewValue acc env) fun pending =>
+                bindValue (LIB_VLib.queryLoopValue (a.proof, p, acc, g, geo, pending, a.k) env) fun r =>
+                  bindValue (Except.ok (LIB_VLib.finishValue (r.2, r.1) env)) fun acc2 =>
+                    bindValue (Except.ok (LIB_VLib.checkpointValue (p, acc2, a.proof, a.public_bytes) env)) fun bytes =>
+                      Except.ok bytes)
+'NNH_Tx1Returns.prepared_returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NNH_Tx1Returns.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NNH_Tx1Returns.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc683ee739d1d49f2a43cb15a396da731.scope; invocation ID: 478c34a161b048d6bf1df706c6baa206

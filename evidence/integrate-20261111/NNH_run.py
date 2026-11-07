@@ -5,7 +5,18 @@ E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-integrate-20261111';C='/home/dombarker/project-offloads/codex-cx-integrate-20261111';W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 if (E/'NNH_HOLD').exists():sys.exit(75)
 guard=E/'NNH_CLIENT_ACTIVE'; fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,str(os.getpid()).encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
-a,kind,target=sys.argv[1:];assert re.fullmatch('NNH_L[0-9]{3}',a) and 1<=int(a[-3:])<=400 and not (E/a).exists()
+a,kind,target=sys.argv[1:];assert re.fullmatch('NNH_L[0-9]{3}',a) and 1<=int(a[-3:]) and not (E/a).exists()
+# Budget actual submissions, including unresolved ones, rather than ID suffixes.
+# L048 never launched. This does not increase the400-scope authorization.
+used=set()
+for n in ['NNH_ATTEMPTS.jsonl','NNH_TRANSPORT.jsonl']:
+ p=E/n
+ if not p.exists():continue
+ for line in p.read_text().splitlines():
+  row=json.loads(line)
+  if 'exit_status' in row or row.get('submitted') is True:used.add(row['attempt'])
+assert len(used)<400, 'Authorized400 actual Lean/link/audit scopes exhausted'
+
 def ssh(code,data=None,submitted=False):
  for retry in range(11):
   r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15',H,code],input=data,capture_output=True,text=True)
@@ -69,7 +80,7 @@ elif kind=='link':
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NNH_native/'+target,*sources]
 elif kind=='audit':
  sources=['NNH_AUDIT_ROOTS.json','NNH_AUDIT_MODULES.json','NNH_RAW_BINARY_PIN.json','NNH_RAW_DRIVER_SOURCE.txt']
- if target=='retention':sources += ['NNH_finalize_host.py','NNH_NND_IMPORTS.json','NNH_SEED_WAdm_Fissioned.json']
+ if target=='retention':sources += ['NNH_finalize_host.py','NNH_NND_IMPORTS.json','NNH_SEED_WAdm_Fissioned.json','NNH_RESUME_LIBRARY_IMPORTS.json','NNH_RESUME_DEPENDENCY_IMPORTS.json','NNH_RESUME_FLAT_IMPORTS.json','NNH_LANE_IMPORTS.json','NNH_FINISH_DEPENDENCY_IMPORTS.json','NNH_FINISH_IMPORTS.json','NNH_SEED_NMT_tx1.json']
  for n in sources:files[n]=(E/n).read_text()
  files['NLX_AUDIT_ROOTS.json']=(E/'NNH_AUDIT_ROOTS.json').read_text()
  files['NLX_AUDIT_MODULES.json']=(E/'NNH_AUDIT_MODULES.json').read_text()
@@ -77,7 +88,7 @@ elif kind=='audit':
  command=['python3','NNH_finalize_host.py'] if target=='retention' else ['NNH_native/NNH_ProofDriver',target]
 
 else:raise ValueError(kind)
-config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNH_tmp',CARGO_TARGET_DIR=B+'/NNH_target',LEAN_PATH=':'.join([B+'/NNH_objects']+json.loads((E/'NNH_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
+config=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NNH_tmp',CARGO_TARGET_DIR=B+'/NNH_target',LEAN_PATH=':'.join(([B+'/NNH_exports_resume_20261111'] if target=='NNH_ExportCheck' else [])+[B+'/NNH_objects']+json.loads((E/'NNH_PATHS.json').read_text()))),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={},expected_time='Focused import elaboration' if kind=='lean' else 'Optimized linker' if kind=='link' else 'Raw ax2 traversal / coherence scan')
 files[a+'.json']=json.dumps(config)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib,re,shutil
@@ -92,7 +103,7 @@ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:
 x=json.loads((b/{(a+'.json')!r}).read_text());roots=x['env']['LEAN_PATH'].split(':');pins={{}}
 modules=[]
 if x['kind']=='lean':modules += re.findall(r'^import ([\\w.]+)',(b/x['sources'][0]).read_text(),re.M)
-elif x['kind']=='audit':modules += ['NNH_COMBINED_IMPORT'] if x['module']=='retention' else json.loads((b/'NNH_AUDIT_MODULES.json').read_text())[int(x['module'][5:])]
+elif x['kind']=='audit':modules += ['NNH_FINAL_COMBINED_IMPORT'] if x['module']=='retention' else json.loads((b/'NNH_AUDIT_MODULES.json').read_text())[int(x['module'][5:])]
 rels=set()
 for root in roots:
  for stem in ['Aeneas','AeneasMeta']:

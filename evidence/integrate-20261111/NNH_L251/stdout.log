@@ -1,0 +1,114 @@
+NNH_generated/NNH_FinishReturns.lean:54:1: error: Tactic `apply` failed: could not unify the conclusion of `NNH_ReturnedRE.bind (RE.check ?m.97 ?m.98) ?m.93 env
+  (if ?m.97 = true then Except.error ?m.98 else Except.ok ()) ?m.95 (NNH_ReturnedRE.check env ?m.97 ?m.98)`
+  Returns ((RE.check ?m.97 ?m.98).bind ?m.93) env
+    (bindValue (if ?m.97 = true then Except.error ?m.98 else Except.ok ()) ?m.95)
+with the goal
+  Returns
+    (have masked := V.qadd (V.qadd (V.maskValue claims r.2.1) (V.qmul (V.eta a.challenges) terminal)) (V.at28 extra);
+    (RE.check (decide (r.1 ≠ masked)) V.wTerminal).bind fun x =>
+      have stateBefore := V.state r.2.2;
+      (RE.ofExcept (V.validatedRecord a.prefix_ 25)).bind fun rec25' =>
+        RE.bind (V.circle.run (r.2.2, rec25')) fun c0 =>
+          have z0 := c0.1;
+          have t2 := c0.2;
+          (RE.ofExcept (V.validatedRecord a.prefix_ 26)).bind fun rec26 =>
+            (RE.ofExcept (V.decodeK29 rec26 0)).bind fun beforeZ1 =>
+              (RE.ofExcept (V.validatedRecord a.prefix_ 26)).bind fun rec26' =>
+                RE.bind (V.circle.run (t2, rec26')) fun c1 =>
+                  have z1 := c1.1;
+                  have t3 := c1.2;
+                  (RE.check (decide (z0 = z1)) V.wEqualCirclePoints).bind fun x =>
+                    (RE.ofExcept (V.payload a.prefix_ 2)).bind fun p2 =>
+                      match TX1_136.toB32 p2 with
+                      | none => RE.lift Spec.panic
+                      | some root1 =>
+                        RE.pure
+                          { roots := (V.c1Root a.prefix_, root1), challenges := a.challenges, alpha := r.2.1,
+                            claims := claims, extra := extra, before_z1 := beforeZ1, state_before_z0 := stateBefore,
+                            z := (z0, z1), transcript := t3 })
+    env
+    (have masked := V.qadd (V.qadd (V.maskValue claims r.2.1) (V.qmul (V.eta a.challenges) terminal)) (V.at28 extra);
+    bindValue (if decide (r.1 ≠ masked) = true then Except.error V.wTerminal else Except.ok ()) fun x =>
+      have stateBefore := V.state r.2.2;
+      bindValue (V.validatedRecord a.prefix_ 25) fun rec25' =>
+        bindValue (LIB_VLib.circleValue (r.2.2, rec25') env) fun c0 =>
+          have z0 := c0.1;
+          have t2 := c0.2;
+          bindValue (V.validatedRecord a.prefix_ 26) fun rec26 =>
+            bindValue (V.decodeK29 rec26 0) fun beforeZ1 =>
+              bindValue (V.validatedRecord a.prefix_ 26) fun rec26' =>
+                bindValue (LIB_VLib.circleValue (t2, rec26') env) fun c1 =>
+                  have z1 := c1.1;
+                  have t3 := c1.2;
+                  bindValue (if decide (z0 = z1) = true then Except.error V.wEqualCirclePoints else Except.ok ())
+                    fun x =>
+                    bindValue (V.payload a.prefix_ 2) fun p2 =>
+                      match TX1_136.toB32 p2 with
+                      | none => Except.error V.wPublic
+                      | some root1 =>
+                        Except.ok
+                          { roots := (V.c1Root a.prefix_, root1), challenges := a.challenges, alpha := r.2.1,
+                            claims := claims, extra := extra, before_z1 := beforeZ1, state_before_z0 := stateBefore,
+                            z := (z0, z1), transcript := t3 })
+
+Note: The full type of `NNH_ReturnedRE.bind (RE.check ?m.97 ?m.98) ?m.93 env
+  (if ?m.97 = true then Except.error ?m.98 else Except.ok ()) ?m.95 (NNH_ReturnedRE.check env ?m.97 ?m.98)` is
+  (∀ (a : Unit), Returns (?m.93 a) env (?m.95 a)) →
+    Returns ((RE.check ?m.97 ?m.98).bind ?m.93) env
+      (bindValue (if ?m.97 = true then Except.error ?m.98 else Except.ok ()) ?m.95)
+
+a : TX1_136.Args V
+env : Env
+r : LIB_VLib.library.QM31 × LIB_VLib.library.Alpha × LIB_VLib.library.Transcript
+claims : LIB_VLib.library.Claims
+terminal : LIB_VLib.library.QM31
+rec25 : V.Record
+extra : V.K29
+⊢ Returns
+    (have masked := V.qadd (V.qadd (V.maskValue claims r.2.1) (V.qmul (V.eta a.challenges) terminal)) (V.at28 extra);
+    (RE.check (decide (r.1 ≠ masked)) V.wTerminal).bind fun x =>
+      have stateBefore := V.state r.2.2;
+      (RE.ofExcept (V.validatedRecord a.prefix_ 25)).bind fun rec25' =>
+        RE.bind (V.circle.run (r.2.2, rec25')) fun c0 =>
+          have z0 := c0.1;
+          have t2 := c0.2;
+          (RE.ofExcept (V.validatedRecord a.prefix_ 26)).bind fun rec26 =>
+            (RE.ofExcept (V.decodeK29 rec26 0)).bind fun beforeZ1 =>
+              (RE.ofExcept (V.validatedRecord a.prefix_ 26)).bind fun rec26' =>
+                RE.bind (V.circle.run (t2, rec26')) fun c1 =>
+                  have z1 := c1.1;
+                  have t3 := c1.2;
+                  (RE.check (decide (z0 = z1)) V.wEqualCirclePoints).bind fun x =>
+                    (RE.ofExcept (V.payload a.prefix_ 2)).bind fun p2 =>
+                      match TX1_136.toB32 p2 with
+                      | none => RE.lift Spec.panic
+                      | some root1 =>
+                        RE.pure
+                          { roots := (V.c1Root a.prefix_, root1), challenges := a.challenges, alpha := r.2.1,
+                            claims := claims, extra := extra, before_z1 := beforeZ1, state_before_z0 := stateBefore,
+                            z := (z0, z1), transcript := t3 })
+    env
+    (have masked := V.qadd (V.qadd (V.maskValue claims r.2.1) (V.qmul (V.eta a.challenges) terminal)) (V.at28 extra);
+    bindValue (if decide (r.1 ≠ masked) = true then Except.error V.wTerminal else Except.ok ()) fun x =>
+      have stateBefore := V.state r.2.2;
+      bindValue (V.validatedRecord a.prefix_ 25) fun rec25' =>
+        bindValue (LIB_VLib.circleValue (r.2.2, rec25') env) fun c0 =>
+          have z0 := c0.1;
+          have t2 := c0.2;
+          bindValue (V.validatedRecord a.prefix_ 26) fun rec26 =>
+            bindValue (V.decodeK29 rec26 0) fun beforeZ1 =>
+              bindValue (V.validatedRecord a.prefix_ 26) fun rec26' =>
+                bindValue (LIB_VLib.circleValue (t2, rec26') env) fun c1 =>
+                  have z1 := c1.1;
+                  have t3 := c1.2;
+                  bindValue (if decide (z0 = z1) = true then Except.error V.wEqualCirclePoints else Except.ok ())
+                    fun x =>
+                    bindValue (V.payload a.prefix_ 2) fun p2 =>
+                      match TX1_136.toB32 p2 with
+                      | none => Except.error V.wPublic
+                      | some root1 =>
+                        Except.ok
+                          { roots := (V.c1Root a.prefix_, root1), challenges := a.challenges, alpha := r.2.1,
+                            claims := claims, extra := extra, before_z1 := beforeZ1, state_before_z0 := stateBefore,
+                            z := (z0, z1), transcript := t3 })
+'NNH_FinishReturns.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

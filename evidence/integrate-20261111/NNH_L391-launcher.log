@@ -1,0 +1,54 @@
+{"attempt": "NNH_L391", "exit_status": 1, "wall_seconds": 4.484718545107171, "peak_rss_kib": "6590772", "swaps": "0", "print_axioms": ["'AspisR1.NNH_064Prefix.weak' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NNH_064Prefix.remaining' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNH_generated/NNH_064Prefix.lean:35:2: error: Type mismatch: After simplification, term
+  initial
+ has type
+  @NNC_ObservedLaw.w Ambient Unit (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) () world
+    (LIB_Carriers.bytes pub) (LIB_Carriers.bytes proof) (LIB_Carriers.bytes ck) env
+    (LIB_Carriers.resultObs
+      (fun r =>
+        match r with
+        | core.result.Result.Ok PUnit.unit => Except.ok ()
+        | core.result.Result.Err e => Except.error e)
+      [] do
+      let parsed ← Result.fail e
+      match parsed with
+        | core.result.Result.Err e => Result.ok (core.result.Result.Err e)
+        | core.result.Result.Ok a => LIBB_Tx2EnvCode.common env pub proof ck)
+but is e
+...
+Tx2EnvCode.common env pub proof ck)
+but is expected to have type
+  @NNC_ObservedLaw.w Ambient Unit (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) () world
+    (LIB_Carriers.bytes pub) (LIB_Carriers.bytes proof) (LIB_Carriers.bytes ck) env
+    { exit := RSL.Exit.diverge, events := [] }
+NNH_generated/NNH_064Prefix.lean:48:4: error: Type mismatch: After simplification, term
+  initial
+ has type
+  @NNC_ObservedLaw.w Ambient Unit (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) () world
+    (LIB_Carriers.bytes pub) (LIB_Carriers.bytes proof) (LIB_Carriers.bytes ck) env
+    (LIB_Carriers.resultObs
+      (fun r =>
+        match r with
+        | core.result.Result.Ok PUnit.unit => Except.ok ()
+        | core.result.Result.Err e => Except.error e)
+      [] do
+      let parsed ← Result.ok (core.result.Result.Err e)
+      match parsed with
+        | core.result.Result.Err e => Result.ok (core.result.Result.Err e)
+        | core.result.Result.Ok a => LIBB_Tx2EnvCode.common env pub proof ck)
+but is expected to have type
+  @NNC_ObservedLaw.w Ambient Unit (LIBB_PartitionEnv.H env) (LIBB_PartitionEnv.digest env) () world
+    (LIB_Carriers.bytes pub) (LIB_Carriers.bytes proof) (LIB_Carriers.bytes ck) env
+    { exit := RSL.Exit.ret (Except.error e), events := [] }
+NNH_generated/NNH_064Prefix.lean:84:42: error: Application type mismatch: The argument
+  parsed
+has type
+  NLE_ParseInstall.parse proof = Result.ok (core.result.Result.Ok v)
+but is expected to have type
+  Result.ok (core.result.Result.Ok v) = Result.ok (core.result.Result.Ok v)
+in the application
+  And.intro parsed
+'AspisR1.NNH_064Prefix.weak' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NNH_064Prefix.remaining' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r916d35d4e5b5437785d4185aae58b864.scope; invocation ID: 27bdbb09c23c4e24bc9c1dfcbcff9855

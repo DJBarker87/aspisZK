@@ -33,3 +33,129 @@ Authoritative rev3 checkpoint (supersedes historical stage summaries above):
 - L237 retains and hashes the new source/object closure in the same private workspace/export. Complete raw receipts carry revision, source and Aeneas/dependency pins, exit, wall, RSS and swaps. No final NFX/non-vacuity/release replay is claimed because there is no final host theorem.
 - Budget used: 236/400 actual scopes (149 after redirect),0/1 extraction,0 Kani; remaining 164 scopes. L048 never launched (no local/host artifact or transport record). Compile allowance is not the blocker. NNH_REMAINING and NNH_G0_MISSING enumerate every member preventing a further concrete host field; these are missing LIB/principal/actual-host terms, not intrinsically Kani obligations.
 - Disk incident retained: earlier recursive historical setup traversal exhausted the host disk BEFORE any compile. Only redundant own-workspace nested copies were removed; retained source/selected caches remain. Bounded direct-import/module enumeration replaced it. No key/wallet action occurred. Host disk passed >=40GB before every redirect scope. The private retained cache/export is kept. No sibling worktree, shipped file, trust row, security metric or frozen source was changed. No push. Target not yet established; top not assembled.
+
+2026-11-07 resume: exact ledger count is 236 launched scopes through L237;
+L048 did not launch. At least150 additional scopes authorized; original runner
+ceiling400 retains163 unused identifiers. Rev3 rebuild L089–204 and consumer
+root audit L236 already completed; no unchanged rerun planned. Local disk now
+49GiB free. The lead reports a second local ENOSPC stop caused by another
+stream's checkout bug; work was WIP committed and merged by the lead. No cleanup
+outside this job is performed. Bounded library manifest imports resume the
+actual-field work; library completion supersedes all earlier library-wait text.
+L238/239 found missing retained dependency namespaces before elaboration;
+copy missing objects from selected closure manifests rather than recursively
+traversing historical caches. These failed imports receive no proof credit.
+
+Resume composition checkpoint: canonical TX1 VL/P/C/D and TX2 L/V0-star copied
+from supplier manifests plus the exact L344 LEAN_PATH, with bounded flat module
+and specific namespace enumeration. NNH_RESUME_*IMPORTS/PREFLIGHT record every
+copy hash; no supplier workspace changed. Early imports exposed stale/missing
+export dependencies; flat imports are now repaired and L245 passes.
+
+Stage3 producer: NNH_Entry241.actual/weak (L260) invert the ACTUAL installed
+ASQ8 entry and its actual f241 observation; snapshot consistency is derived.
+NNH_WeakEntryNative.produce (L263) then derives native064 records and exact
+rendered events through the UNCHANGED NNC weak law at delivered V0-star. Inputs
+are accepted actual entry and the exact weak241 row field, never child success,
+Root0 or an assumed selector. The source witness is derived from the complete
+weak reference; identifying it with the headline's source-cut recorder and
+installing concrete I.f064 remain OPEN, not hidden in the claimed field.
+
+Stage5 installed library fields: NNH_LibraryStages.stages (L246) concretely fills
+r240/r344/g2 at NNH_Libraries L/D/V0/VL/P/C. PoolLaws is discharged with
+LIBB_PoolNoWrite.laws. NNH_G0Libraries.deployed_splitB_conditional (L265) removes
+all six library arguments and the nmv proof argument from the earlier scaffold.
+It remains CONDITIONAL on unfinished host/row/recorder/A1/A2 fields and is not
+the literal-host theorem. The single L267 raw audit covers this consumer and
+Stage3 producer, collector=raw with standard axioms only. No support-root audit
+series is repeated. Pure TX1 Returns composition continues; failed parser and
+elaboration attempts are retained with no credit. No extraction/Kani/source,
+trust-row, ELF or wallet change. Target not yet established; top not assembled.
+
+Stage4 RSL Returns complete (model transport remains): NNH_FinishReturns,
+ObservedReturns, PrepareReturns and Tx1Returns compose actual LIB child Values
+through136/137/087/094; NNH_ReturnsBundle.tx1_returns then composes328/345.
+NNH_ReturnsBundle.tx2_returns composes actual Pool/V0 Values through241.
+L254/257/258/268/269 pass, with standard printed axioms. L270 audits only the
+two complete Returns roots, raw=collector and standard-only, preserving the
+L267 G0/native-producer audit without rerun. No native=model or liveness claim.
+Proof diagnostics found distinct compiled match-helper constants on symbolic
+Except; the replacement proves the prepared stage in place by Cases on its
+actual returned pair (L268), rather than relying on hidden helper definitional
+equality. Concrete equality decisions use V.qDec/pDec exactly. No unfolding of
+large arithmetic or raised heartbeat/cap was used.
+
+Accounting through L270: 269 actual scopes (L048 never launched),0 extraction,
+0 Kani;131 original runner slots remain, and the lead's continuation allowance
+is not a stop condition. All resumed scopes terminal; no timeout or memory kill.
+Remaining is owned model/source/host composition, plus the listed principal row
+candidates. No LIB blocker remains. NNH_REMAINING.md is rewritten accordingly.
+
+Final continuation work (through L399, gates still being retained):
+- Rev3 registry transport could not import old NND_AccountCarrier: its stale
+  RSL.OwnedAccount.data equation collided with the new owner. NNH_REGISTRY_PORT
+  records the94 affected source restatements; pure unaffected converters are
+  reused, raw bytes/length getter values repaired and each module compiled.
+  The generator --check passes. No existing module/library/source was edited.
+- NNH_RegistryModel.represented (L380) transports full canonical234 returned
+  Ok/Err to the actual deployed SDK configuration at the same runtime EnvRep.
+  NNH_LaneModel / ModelLeafPorts.lane supplies the all-length217 value port to
+  actual sdk.op50. Native candidate acceptance is left to the ledger.
+- ModelConfig selects reserved:=env.reservation. ModelLeafPorts.pending (L395)
+  proves the native C06 constructor equals that model at the original width64,
+  both reservation arms. The earlier true-Bool mismatch is not retained at this
+  selected configuration. ModelConfig still has unfinished base DATA; it is
+  NOT total Missing.instance, A1 or A2.
+- Actual064 source prefix: parser fail/div/Err, and entered common's actual
+  resume fail/div/Err, now construct native records directly and prove exact
+  weak observations. Resume Err also has its canonical fold at original Dom064.
+  Original reservation payloads and exact attempted/replied digest prefixes
+  survive; no witness is selected from a Spec. Prefix.run computes endpoints;
+  None means ONLY the successful-resume continuation still needing execution.
+  PrefixCoverage.unfinished_iff/classify (L396) expose the exact remaining
+  variant/prepared/accumulator, without filtering inputs or inventing aborts.
+  Total I.f064, G1a and NMF_B are NOT claimed. These prefix support roots have
+  standard printed axioms; unused support roots were not raw-audited again.
+- Candidate fields: published complete136 and217 mathematical roots are copied
+  read-only with hashes and installed by LeafInstall. G0Candidates (L369) uses
+  them and actual libraries/stage/G2/dispatch/physical adapters. It has no nmo
+  proof argument and only r234 remains from nmm. Their native NNI_ ledger26 gate
+  is pending; integration assigns no row credit. Other row waits are exactly
+  234/233/242/241 and137/087/094/328/345, not LIB fields.
+- L397 final focused cached combined import passes. L398 raw-audits ONLY the
+  new G0 consumer and complete registry/pending/lane model ports: standard-only,
+  raw=collector, zero swaps. L399 inspects the actual consumer and missing field
+  statements. No final literal-host theorem, ExecB/RZ installation, probability
+  averaging, full NFX/non-vacuity/release replay or100-bit claim is made.
+- Owned client now charges actual submissions, including unresolved ones,
+  rather than identifier suffixes (L048 never launched); the400-scope ceiling
+  is unchanged. Owned finalizer reads receipts once, with the identical strict
+  successful-source hash check, and verifies added imports. It writes a NEW
+  retained export rather than overwriting the earlier one. Host launchers,
+  reservations, shared workspaces, caps and timeouts are untouched.
+
+Final retention and handoff (L400–L401):
+- Source stages committed as34460051273 and326296cf1fe; no push. Subsequent
+  commit contains retention/check receipts and this final accounting.
+- Exactly400 actual completed Lean/link/audit scopes (L001–L401 except L048,
+  which never launched);164 since restart. Zero unresolved submissions,
+  zero extractions, zero Kani. NNH_FINAL_VALIDATION.json records all159 current
+  NNH Lean sources with matching successful source-hash receipts. This does not
+  mean every support root was separately raw-audited: only consumer roots were.
+- L400 retained272 module objects at
+  /home/dombarker/project-offloads/codex-cx-integrate-20261111/NNH_exports_resume_20261111.
+  It verified50816 imported objects and51679 selected search objects; exit0,
+  wall72.27s, peakRSS308132KiB, swaps0. Earlier export/cache retained intact.
+- L401 imports the final combined and statement modules with that NEW export
+  first in LEAN_PATH; exit0, wall4.405989621s, peakRSS6687188KiB, swaps0. Exact
+  source revision, dirty-source hashes, selected dependency/Aeneas pins and
+  cgroup limits are in each receipt. No cold/full unchanged release replay.
+- L398 consumer raw audit matches collect_axioms exactly for all four roots:
+  propext/Classical.choice/Quot.sound only. L397 focused combined import passes.
+  NNH_SCOPE_SUMMARIES.tsv provides one-line transcript summaries; raw receipts
+  carry section6 fields. No shipped source changed; no ELF rebuild triggered;
+  no key actions. Disk-exhaustion incident remains recorded; no cache deleted.
+- Target NOT established, top NOT assembled. Remaining items are exactly the
+  owned Lean constructions and external candidate gates in NNH_REMAINING.md
+  and per-field NNH_G0_MISSING.json. No LIB wait, row credit, stronger trust,
+  invented native observation, final soundness claim or hidden assumption.

@@ -1,25 +1,35 @@
 """Read-only imported-object retention checks plus private owned export."""
 from pathlib import Path
 import json,hashlib,lzma,shutil,os
-b=Path.cwd();root=b/'NNH_objects';exports=b/'NNH_exports_20261111';exports.mkdir(exist_ok=True)
+b=Path.cwd();root=b/'NNH_objects';exports=b/'NNH_exports_resume_20261111';exports.mkdir(exist_ok=True)
 assert shutil.disk_usage(b).free>=40_000_000_000
 manifests=[json.loads(lzma.decompress((b/'NNH_CACHE_IMPORTS.json.xz').read_bytes()))['files']]
 for n in ['NNH_NND_IMPORTS.json','NNH_SEED_WAdm_Fissioned.json']:
  if (b/n).exists():manifests.append(json.loads((b/n).read_text()))
+# Verify every additional retained import, including candidate-only inputs.
+for n in ['NNH_RESUME_LIBRARY_IMPORTS.json','NNH_RESUME_DEPENDENCY_IMPORTS.json',
+ 'NNH_RESUME_FLAT_IMPORTS.json','NNH_LANE_IMPORTS.json',
+ 'NNH_FINISH_DEPENDENCY_IMPORTS.json','NNH_FINISH_IMPORTS.json','NNH_SEED_NMT_tx1.json']:
+ if (b/n).exists():
+  data=json.loads((b/n).read_text())
+  manifests.append(data['objects'] if isinstance(data,dict) else data)
 verified=0
 for manifest in manifests:
  for row in manifest:
   p=Path(row['destination']);assert hashlib.sha256(p.read_bytes()).hexdigest()==row['sha256'],str(p)
   verified+=1
 source_rows=[];files=[]
+# Read each receipt once. The source/object association check stays identical.
+receipts=[json.loads(q.read_text()) for q in b.glob('NNH_L*/receipt.json')]
+latest={}
+for r in sorted(receipts,key=lambda r:r['attempt']):
+ if r.get('kind')=='lean' and r['exit_status']==0:latest[r['module']]=r
 for p in sorted((b/'NNH_generated').glob('*.lean')):
  obj=root/(p.stem+'.olean')
  if not obj.exists():continue
  # Export only the exact successful final source/object association.
- receipts=[json.loads(q.read_text()) for q in b.glob('NNH_L*/receipt.json')]
- receipts=[r for r in receipts if r.get('kind')=='lean' and r.get('module')==p.stem and r['exit_status']==0]
- if not receipts:continue
- r=sorted(receipts,key=lambda r:r['attempt'])[-1];expected=r['source_hashes']['NNH_generated/'+p.name]
+ if p.stem not in latest:continue
+ r=latest[p.stem];expected=r['source_hashes']['NNH_generated/'+p.name]
  assert hashlib.sha256(p.read_bytes()).hexdigest()==expected,str(p)
  source_rows.append(dict(module=p.stem,source=str(p),source_sha256=expected,receipt=r['attempt'],source_revision=r['source_revision']))
  for q in [obj,Path(str(obj)+'.private'),Path(str(obj)+'.server'),obj.with_suffix('.ir')]:
