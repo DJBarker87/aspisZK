@@ -2,6 +2,8 @@
 
 Target not yet established. This is a mapping. It closes no row, discharges no premise and proves no Lean theorem. It gives the shared instantiation job (LIB, ruling (bp)(2)(c)) the supplier of every field it must instantiate, so that it does not rediscover them.
 
+**Update 2026-11-07, RSL revision 3 (ruling (bq)).** F1 and F2 are resolved in the specs (evidence/rowspec-lead-20261107/RSL_REVISION3.md). F1: `RSL.Env` has a reservation reply `reservation : Bool`, read by `Spec.tryReserve` and bound in `TAS.Sig.EnvRep` to the headline `reservation` binder; the gate requires `Child.Functional` / `Spec.Functional` of `filled`, `accNew`, `weightsNew`, `claims` and `tx2auth`. F2: RowSpec_087 has own-input clause (R4) `V.checkValuesDom (slice proof OFF_Y1 OFF_INACTIVE)`, a new VLib field equal to the TX1:179 `compact_check` premise, recorded as caller clause RSL3-caller:TX1:094:TX1:087:R4 and discharged in RowSpec_094 by canonical_scan (`TX1_094.R4Discharge`, `r4_of_scan`). The map now has 106 fields (new: `VLib.checkValuesDom`, `Env.reservation`). The five F1 fields move to "root, adapter new". `PreparedNew` stays unsupplied because of F3. The rest of this document is the rev2 analysis, kept as written except for the marked lines.
+
 **Inputs.**
 - The frozen specs are RSL rev2 (be66076856e): RSL_Base, RSL_Pool, RSL_Verifier and the 17 row modules in evidence/rowspec-lead-20261107.
 - The top interfaces are TAS_Interfaces, TAS_Top, TAS_TopB and TAS_TopB_NNE in evidence/top-assembly-20261107.
@@ -15,21 +17,21 @@ Target not yet established. This is a mapping. It closes no row, discharges no p
 
 ## 1. Summary
 
-104 fields: PoolLib 20, DeployedIds 2, V2Lib 4, S1Lib 6, VLib 66, PreparedNew 1, and the Env/EnvRep group of the TAS `Sig` 5. `Stage1` is not a LIB field: it is `TX1_344.asStage1 VL P C`, which is defined from the OPEN row 344.
+106 fields (rev3; 104 at rev2): PoolLib 20, DeployedIds 2, V2Lib 4, S1Lib 6, VLib 67, PreparedNew 1, and the Env/EnvRep group of the TAS `Sig` 6. `Stage1` is not a LIB field: it is `TX1_344.asStage1 VL P C`, which is defined from the OPEN row 344.
 
 | Status | Count | Meaning |
 |---|---|---|
 | Definitional | 44 | A carrier choice, constructor, field read, literal or headline predicate (`Root0`). No CLOSED root is needed. Each carrier must still be the one emitted copy that its child roots use. |
-| Trust row | 5 | `Env.sha256/pda/clock`, `EnvRep` and `readerHeader`. These are bound by the accepted runtime rows and NNE_/NNC_ host definitions, not by ledger roots. |
+| Trust row | 6 | `Env.sha256/pda/clock/reservation` (rev3 adds `reservation`), `EnvRep` and `readerHeader`. These are bound by the accepted runtime rows and NNE_/NNC_ host definitions, not by ledger roots. |
 | Root, adapter exists | 20 | A CLOSED root supplies the field and a merged job has an installation term. Most of these terms are partial (see the notes). |
-| Root, adapter new | 27 | A CLOSED root supplies the field and LIB must write the representation adapter. Includes `qadd`/`qmul`, which are supplied by certificate theorems (F5), and `finishInputDom` (F7). |
-| Unsupplied or partial | 8 | `filled`, `accNew`, `weightsNew`, `claims`, `tx2auth` (F1); `PreparedNew` (F2, F3); `decodeReachesAlloc` (F4); `checkpoint` (F6). |
+| Root, adapter new | 33 | A CLOSED root supplies the field and LIB must write the representation adapter. Includes `qadd`/`qmul`, which are supplied by certificate theorems (F5), and `finishInputDom` (F7). Rev3 adds the five F1 fields and `checkValuesDom`. |
+| Unsupplied or partial | 3 | `PreparedNew` (F3; F2 resolved by rev3); `decodeReachesAlloc` (F4); `checkpoint` (F6). At rev2 this was 8, including the five F1 fields. |
 
 Root-supplied fields in all: 55 = 20 + 27 + 8. Every root-supplied field needs at least the generic carrier adapter, because every CLOSED root is stated over Aeneas carriers: `Slice U8`, `Std.Result` with `ok/fail/div`, emitted structs, often an Ops dictionary, and several different emitted copies (AspisR1PrefixAggregateParser, AspisR1PublicPreparation, VTop_Stages, FIo_Native, AdapterRw, NFY_*). RSL is stated over `Bytes`, `Except` and `Obs`.
 
 ## 2. Unsupplied fields and their classification
 
-**F1. Fallible reservation (try_reserve) Err arms. Affects `VLib.filled`, `VLib.accNew`, `VLib.weightsNew`, `VLib.claims` and `V2Lib.tx2auth`. Classification: demonstrable error in RSL rev2.**
+**[RESOLVED by RSL rev3, ruling (bq): `Env.reservation`, `Spec.tryReserve`, `Child.Functional`; EnvRep binding.]** **F1. Fallible reservation (try_reserve) Err arms. Affects `VLib.filled`, `VLib.accNew`, `VLib.weightsNew`, `VLib.claims` and `V2Lib.tx2auth`. Classification: demonstrable error in RSL rev2.**
 
 Evidence:
 - `heap::filled` and `heap::uninit` return `Err(Allocation)` when `try_reserve_exact` fails (crates/aspis-core/src/r0/heap.rs:5-14).
@@ -44,7 +46,7 @@ Consequences:
 
 Recommendation, for the lead to apply: add a quantified reservation reply to `RSL.Env`, in the ruling (at) shape with one reply per fallible-site occurrence. Make these five laws read it, and bind it in `Sig.EnvRep` to the headline `reservation` binder. The worse alternative is an owner ruling that a try_reserve failure is outside the obligation, which would add trust. LIB builds everything else now and keeps these five fields as named parameters until the lead rules.
 
-**F2. Domain of `PreparedNew` at the TX1:087 call. Classification: demonstrable error in RSL rev2 (RowSpec_087 Domain is incomplete), unless the lead commissions a new TX1:179 law.**
+**[RESOLVED by RSL rev3, ruling (bq): (R4) on RowSpec_087, discharged in 094 by canonical_scan.]** **F2. Domain of `PreparedNew` at the TX1:087 call. Classification: demonstrable error in RSL rev2 (RowSpec_087 Domain is incomplete), unless the lead commissions a new TX1:179 law.**
 
 Evidence:
 - The TX1:179 root (`NHS_PreparedPacket.source`) assumes `compact_check : check_values compact = ok (Ok ())` on the 464-byte y1 slice. Its ledger domain says "LPt compact464 checked".
@@ -142,7 +144,7 @@ Two field-level points are not flags. The RSL comments for `decodeMaster` and `d
 | `VErr` | - | carrier := verifier::Error (8 variants); SAME copy as NMN_064 error carrier and VLib.VErr | none | DEF |  |
 | `debug` | TX2:211 `NIJ_ErrorJoin.source` (NIS_ErrorJoin) | NGL_ErrorModel.label/message: Debug string of verifier::Error | NMS_ NMS_R2ErrorSource.full (partial) | ROOT, adapter exists | CLOSED law has no format! allocation; harmless: impl subset Ref because Ref admits the returned arm |
 | `Root0` | - | NLP_InputDomain.Root0 on byte carriers (headline domain predicate, not a ledger row) | NNC_ WeakR0Rep.at_entry, NNC_ByteCarriers | DEF |  |
-| `tx2auth` | TX2:064 `NMN_064.root` (NMN_064) | NMN_064.RowSpec Law + chronology over NLW_Full064.Frame/End -> Bytes^3 -> Spec (Except VErr Unit), abort = prefix | none | **UNSUPPLIED/PARTIAL** | F1: canonical rendering (TAS name NMN_064.rslRefines) not built; NNC_ObservedLaw.w + contains_native cover only the weak (Root0-free) library. Resume fills (verifier.rs:428) make the returned law reservation-dependent (F1) |
+| `tx2auth` | TX2:064 `NMN_064.root` (NMN_064) | NMN_064.RowSpec Law + chronology over NLW_Full064.Frame/End -> Bytes^3 -> Spec (Except VErr Unit), abort = prefix | none | root+adapter-new (rev3) | F1 (resolved rev3): canonical rendering (TAS name NMN_064.rslRefines) not built; NNC_ObservedLaw.w + contains_native cover only the weak (Root0-free) library. Resume fills (verifier.rs:428) make the returned law reservation-dependent (F1) |
 
 ### S1Lib (6 fields)
 
@@ -192,8 +194,9 @@ Two field-level points are not flags. The RSL comments for `decodeMaster` and `d
 | `finishInputDom` | - | conjunction of the 136 child clauses that 136 cannot discharge internally (ledger NJW-caller 134/142, NKN-caller 129, NLS-bf 256 hd..asset, NLS-context) | none | ROOT, adapter new | F7: ledger clause records, not a root; several are prose and need a Lean transcription; canonicality clauses hc..hm need 129/142/150 exports or must be carried here and derived by 137 from begin |
 | `publicDom` | - | NLS-bf:TX1:136:TX1:256:hd = NKR_DigestChildren.Domain (NKR_TermPublic.value pub) | NMT_ NMT_345PublicDomain.publicDomain; NMT_R2_PublicLibrary.withPublic; discharge NMT_345.validated_public_domain | ROOT, adapter exists |  |
 | `semanticBytesDom` | TX1:138 `AspisR1.NGX_PrefixCarrier.fields +5` (NGX_PrefixCarrier) | NGX_PrefixCarrier.producer_domain on the byte argument | none | ROOT, adapter new |  |
+| `checkValuesDom` | TX1:179 `AspisR1.NHS_PreparedPacket.source` (NHS_PreparedPacket) | the root premise `compact_check` (check_values on the 464-byte y1 slice = Ok), verbatim | none | root+adapter-new (rev3) | F2 (resolved rev3): own-input clause (R4) of TX1:087; discharged at 094 from the TX1:084 canonical_scan law (`TX1_094.R4Discharge`, to be proved from NKL_ScanRoot) |
 | `semanticRounds` | TX1:134 `AspisR1.NJM_InvocationRoots.rounds` (NJM_InvocationRoots) | graph of the NJM rounds model at SAME (Prefix, Transcript); Cut-indexed root -> deterministic law; dom = NJW-caller 134 clauses | none | ROOT, adapter new |  |
-| `claims` | TX1:129 `AspisR1.NKA_ClaimsRoot.claims` (NKA_ClaimsRoot) | graph of NKA claims reference incl. Box carrier; dom = NKN-caller 129 | none | **UNSUPPLIED/PARTIAL** | F1: root quantifies allocator/reservation; heap::uninit at r1_semantic.rs:45 returns Err(Allocation): returned law not a function of Env |
+| `claims` | TX1:129 `AspisR1.NKA_ClaimsRoot.claims` (NKA_ClaimsRoot) | graph of NKA claims reference incl. Box carrier; dom = NKN-caller 129 | none | root+adapter-new (rev3) | F1 (resolved rev3): root quantifies allocator/reservation; heap::uninit at r1_semantic.rs:45 returns Err(Allocation): returned law not a function of Env |
 | `origChallenges` | - | struct literal (r1_semantic lines 239-246) | none | DEF |  |
 | `terminalQm31` | TX1:256 `AspisR1.NLH_WrapperRoot.source` (NLH_WrapperRoot) | NLH_WrapperRoot.source law; dom = NLS-bf 256 clauses | NMT_ NMT_R2_PublicLibrary.withPublic (Public transport only) | ROOT, adapter exists |  |
 | `maskValue` | TX1:076 `AspisR1.NHU_Mask.result` (NHU_Mask) | NHU_Mask.result value on canonical carriers | none | ROOT, adapter new |  |
@@ -210,7 +213,7 @@ Two field-level points are not flags. The RSL comments for `decodeMaster` and `d
 | `parsePrefix` | TX1:138 `AspisR1.NGX_PrefixCarrier.fields +5` (NGX_PrefixCarrier) | NGX_PrefixCarrier.full_result into the parsed-Prefix carrier | NMP_ parse138 full Result/type inverse at identical bytes (partial) | ROOT, adapter exists |  |
 | `publicTranscript` | TX1:131 `AspisR1.NHG_Lengths.digest_domain +5` (NHG_Lengths) | NHG_Lengths/NHG_PublicCarrier/NHG_PublicTranscript with digest events from Env.sha256 | NMP_ public131 adapters, NMP_Transcription137 (partial: digest/allocation prefixes open) | ROOT, adapter exists |  |
 | `begin` | TX1:150 `AspisR1.NGX_BeginDomains.cursor_step +6` (NGX_BeginDomains) | NGX_BeginDomains/NHG_BeginFrame with digest events | NMP_ begin150 adapter (partial) | ROOT, adapter exists |  |
-| `filled` | TX1:064 `AspisR1.NGC_DigestBridge.forwarding +4` (NGC_DigestBridge) | heap::filled law (NGC_ReferenceValues.heap; same function as TX2:045 NIG_FilledCoverage.source) | none | **UNSUPPLIED/PARTIAL** | F1: fallible try_reserve_exact (r0/heap.rs:5-10): returned Err depends on the allocator reservation, which Env does not carry |
+| `filled` | TX1:064 `AspisR1.NGC_DigestBridge.forwarding +4` (NGC_DigestBridge) | heap::filled law (NGC_ReferenceValues.heap; same function as TX2:045 NIG_FilledCoverage.source) | none | root+adapter-new (rev3) | F1 (resolved rev3): fallible try_reserve_exact (r0/heap.rs:5-10): returned Err depends on the allocator reservation, which Env does not carry |
 | `expandSemantic` | TX1:098 `NGV_AtPacket.result +11` (NGV_AtPacket) | NGV_* expansion law (src, dst) -> written dst | none | ROOT, adapter new | NMP: concrete expansion interpretation still to install |
 | `expandValues` | TX1:099 `NFU_CompactLeaves.expand_result` (NFU_CompactLeaves) | NFU_CompactLeaves.expand_result | none | ROOT, adapter new |  |
 | `wideView` | TX1:095 `AspisR1.NHF_ViewDecoder.result +9` (NHF_ViewDecoder) | NHF_View*/NEO_FieldView/NET_WideModel | none | ROOT, adapter new |  |
@@ -218,10 +221,10 @@ Two field-level points are not flags. The RSL comments for `decodeMaster` and `d
 | `parseShape` | TX1:086 `NJS_Parse.source +1` (NJS_Parse) | NJS_Parse.source (NJS_Extract = Op3I_Source copies) | none | ROOT, adapter new |  |
 | `canonicalScan` | TX1:084 `NKL_ScanRoot.deployed +3` (NKL_ScanRoot) | NKL_ScanRoot.deployed/adopted/success_events | none | ROOT, adapter new |  |
 | `zeroE29` | - | [E::ZERO;29] literal | none | DEF |  |
-| `accNew` | TX1:174 `AspisR1.NGC_DigestBridge.forwarding +4` (NGC_DigestBridge) | Accumulator::new(S2) law (NGC cohort roots) | none | **UNSUPPLIED/PARTIAL** | F1: calls heap::filled (verifier.rs:93): Err(Allocation) reservation-dependent |
+| `accNew` | TX1:174 `AspisR1.NGC_DigestBridge.forwarding +4` (NGC_DigestBridge) | Accumulator::new(S2) law (NGC cohort roots) | none | root+adapter-new (rev3) | F1 (resolved rev3): calls heap::filled (verifier.rs:93): Err(Allocation) reservation-dependent |
 | `batchMerkle` | TX1:081 `NLN_TX1_081.root` (NLN_TX1_081) | NLN_TX1_081.root; dom = NLO-bf:TX1:094:TX1:081:64-67 (len, wire, canonical queries, rootValues) | none | ROOT, adapter new | 094 discharges dom from parseShape and from P (query range, root bindings): see F3 |
 | `geometry` | TX1:181 `NFN_NFB_GeometryComposed.accepted_physical +1` (NFN_GeometryPart08) | NFN_NFB_GeometryComposed.result_state_effects | none | ROOT, adapter new |  |
-| `weightsNew` | TX1:176 `NJZ_Weights.new_source` (NJZ_Weights) | NJZ_Weights.new_source (AdapterRw/VTop copy) | none | **UNSUPPLIED/PARTIAL** | F1: calls heap::filled (verifier.rs:207); ledger caller clause NKH asks for both reservation arms |
+| `weightsNew` | TX1:176 `NJZ_Weights.new_source` (NJZ_Weights) | NJZ_Weights.new_source (AdapterRw/VTop copy) | none | root+adapter-new (rev3) | F1 (resolved rev3): calls heap::filled (verifier.rs:207); ledger caller clause NKH asks for both reservation arms |
 | `queryLoop` | TX1:088 `AspisR1.NFG_QueryLoopSource.complete +9` (NFG_QueryLoopSource) | NFG_QueryLoopSource.complete / NFP / NFS roots | none | ROOT, adapter new |  |
 | `finish` | TX1:175 `AspisR1.NGC_DigestBridge.forwarding +4` (NGC_DigestBridge) | BatchedWeights::finish (NGC_FinishContents.contents) | none | ROOT, adapter new |  |
 | `checkpoint` | TX1:186 `AspisR1.NHS_CheckpointPacket.source` (NHS_CheckpointPacket) | NHS_CheckpointPacket.source; dom := DriverEstablishedDomain (op3/op4/op7/op12 Ok, heap reservation Ok) at SAME proof | none | **UNSUPPLIED/PARTIAL** | F6: root is conditioned on predecessor results and on allocation success; the Vec abort arm named in the RSL comment is not exposed |
@@ -230,7 +233,7 @@ Two field-level points are not flags. The RSL comments for `decodeMaster` and `d
 
 | Field | Supplying row, root (owner module) | Representation adapter | Existing adapter | Status | Flag / note |
 |---|---|---|---|---|---|
-| `P (dom, law)` | TX1:179 `AspisR1.NHS_PreparedPacket.source` (NHS_PreparedPacket) | NHS_PreparedPacket.source + error/abort companions at SAME (Verified, View, g) | NMP_ fresh source call and g result (partial) | **UNSUPPLIED/PARTIAL** | F2,F3: root is Ok-arm only (premises semantic_finish, compact_check, returned = ok); 179 domain needs compact464 checked, which 087 cannot discharge |
+| `P (dom, law)` | TX1:179 `AspisR1.NHS_PreparedPacket.source` (NHS_PreparedPacket) | NHS_PreparedPacket.source + error/abort companions at SAME (Verified, View, g) | NMP_ fresh source call and g result (partial) | **UNSUPPLIED/PARTIAL** | F2 (resolved rev3), F3: root is Ok-arm only (premises semantic_finish, compact_check, returned = ok); 179 domain needs compact464 checked, which 087 cannot discharge |
 
 ### Env/EnvRep (5 fields)
 
@@ -239,7 +242,8 @@ Two field-level points are not flags. The RSL comments for `decodeMaster` and `d
 | `Env.sha256` | - | SolanaDigest via sol_sha256 (TX1:327/TX2:210 NGC_DigestBridge.forwarding) bound to the headline syscall/p1 | NNC_ NNC_RuntimeOracle, NNC_DigestTrace (partial) | TRUST |  |
 | `Env.pda` | - | create_program_address reply, ruling (at) quantified slot | NND_ NND_RuntimePartial (partial) | TRUST |  |
 | `Env.clock` | - | RuntimeClockSlotBinding (clock := .ok slot at TX2) | NNE_ NNE_Clock | TRUST |  |
-| `EnvRep (+env1_rep, env2_rep)` | - | agreement of env with the ctx runtime oracles | NNE_ (host definitions, NNE_RecordSig) | TRUST | if the F1 fix is adopted, EnvRep also binds the reservation channel to the headline reservation binder |
+| `Env.reservation` | - | RSL rev3: try_reserve reply (`true` = Ok), bound in EnvRep to the headline binder `reservation : NP6_StdModel.Reservation` (`env.reservation = true ↔ reservation = .Ok ()`) | none | TRUST | F1 (resolved rev3): one reply for every try_reserve occurrence, the shape of `NP6_StdModel.calls` |
+| `EnvRep (+env1_rep, env2_rep)` | - | agreement of env with the ctx runtime oracles | NNE_ (host definitions, NNE_RecordSig) | TRUST | F1 (resolved rev3): EnvRep also binds `Env.reservation` to the headline `reservation` binder (TAS_Interfaces EnvRep docstring); the host definition must include that conjunct |
 | `readerHeader` | - | NLW_ReaderHeader.decode ck = some (h pr, h pub) | NNC_ NNC_ObservedLaw.accepted_header | TRUST |  |
 
 ### Transcribed helpers ((bm)(2)(c) lemmas, not fields)
@@ -289,4 +293,4 @@ The dependency order is in the `order` list of LIB0_MAP.json, and LIB0_BRIEF.md 
 - About 140 focused single-file Lean scopes, range 110-200. That is 2-4 each for definitional and bundle modules, and 6-10 each for the VLib child modules, which carry most of the copy bridges.
 - Plus one focused combined import and one own-root raw axiom audit at the end.
 - 0 Kani and 0 extraction. The F4 association relies on the existing extraction item and adds no extraction.
-- F1 and F2 need lead rulings first. Until then, LIB_Prepared and the five F1 fields stay parameters, and the other 98 fields can be completed.
+- ~~F1 and F2 need lead rulings first.~~ Ruled (bq) and applied in RSL rev3: the five F1 fields and `checkValuesDom` can be instantiated now. LIB_Prepared still waits for F3.
