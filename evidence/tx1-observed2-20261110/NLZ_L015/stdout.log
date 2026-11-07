@@ -1,0 +1,107 @@
+structure AspisR1PublicPreparation.r1_semantic.Verified (H : Type) : Type
+number of parameters: 1
+fields:
+  AspisR1PublicPreparation.r1_semantic.Verified.roots : Std.Array (Std.Array U8 32#usize) 2#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.challenges : r1_wire.Challenges
+  AspisR1PublicPreparation.r1_semantic.Verified.alpha : Std.Array aspis_core.field.QM31 10#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.claims : Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.extra : Std.Array aspis_core.field.QM31 29#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.before_z1 : Std.Array aspis_core.field.QM31 29#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.state_before_z0 : Std.Array U8 32#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize
+  AspisR1PublicPreparation.r1_semantic.Verified.transcript : r1_wire.SemanticTranscript H
+constructor:
+  AspisR1PublicPreparation.r1_semantic.Verified.mk {H : Type} (roots : Std.Array (Std.Array U8 32#usize) 2#usize)
+    (challenges : r1_wire.Challenges) (alpha : Std.Array aspis_core.field.QM31 10#usize)
+    (claims : Std.Array (Std.Array aspis_core.field.QM31 29#usize) 3#usize)
+    (extra before_z1 : Std.Array aspis_core.field.QM31 29#usize) (state_before_z0 : Std.Array U8 32#usize)
+    (z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize) (transcript : r1_wire.SemanticTranscript H) :
+    r1_semantic.Verified H
+structure AspisR1PublicPreparation.verifier.Prepared : Type
+number of parameters: 0
+fields:
+  AspisR1PublicPreparation.verifier.Prepared.variant : transport.Variant
+  AspisR1PublicPreparation.verifier.Prepared.roots : Std.Array (Std.Array U8 32#usize) 2#usize
+  AspisR1PublicPreparation.verifier.Prepared.gamma : aspis_core.field.WideExact
+  AspisR1PublicPreparation.verifier.Prepared.kappa : aspis_core.field.WideExact
+  AspisR1PublicPreparation.verifier.Prepared.alpha : Std.Array aspis_core.field.WideExact 2#usize
+  AspisR1PublicPreparation.verifier.Prepared.rho : aspis_core.field.QM31
+  AspisR1PublicPreparation.verifier.Prepared.queries : Std.Array U32 22#usize
+  AspisR1PublicPreparation.verifier.Prepared.semantic_alpha : Std.Array aspis_core.field.QM31 10#usize
+  AspisR1PublicPreparation.verifier.Prepared.z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize
+  AspisR1PublicPreparation.verifier.Prepared.claim : aspis_core.field.WideExact
+  AspisR1PublicPreparation.verifier.Prepared.state : Std.Array U8 32#usize
+constructor:
+  AspisR1PublicPreparation.verifier.Prepared.mk (variant : transport.Variant)
+    (roots : Std.Array (Std.Array U8 32#usize) 2#usize) (gamma kappa : aspis_core.field.WideExact)
+    (alpha : Std.Array aspis_core.field.WideExact 2#usize) (rho : aspis_core.field.QM31)
+    (queries : Std.Array U32 22#usize) (semantic_alpha : Std.Array aspis_core.field.QM31 10#usize)
+    (z : Std.Array aspis_core.circle.SecureCirclePoint 2#usize) (claim : aspis_core.field.WideExact)
+    (state : Std.Array U8 32#usize) : verifier.Prepared
+theorem AspisR1.NHS_PreparedPacket.source : ∀ (B : FinishModel.Boundaries)
+  (hashv : AspisR1.SdkC_Source.Parts → Result AspisR1.SdkC_Source.Digest)
+  (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
+  (beforeSemantic : r1_wire.SemanticTranscript Unit) (challenges : r1_wire.Challenges)
+  (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (sem : r1_semantic.Verified Unit),
+  FinishModel.finish AspisS1ExtractedRoundChildren.children
+        { fromFn := @FinishModel.Boundaries.fromFn B, mask := B.mask, add := B.add, mul := B.mul,
+          terminal := B.terminal, circle := B.circle, unwrapRoot := B.unwrapRoot,
+          claims := AspisR1.ClaimsUnrolledFinish.claims (AspisR1.NP6_StdModel.calls (core.result.Result.Ok ())) }
+        (AspisR1.NGQ_Effects.dictionary hashv) pub pre beforeSemantic challenges obs =
+      ok (core.result.Result.Ok sem) →
+    ∀ (compact before y1 : Slice U8),
+      (↑compact).length = 464 →
+        (↑before).length = 928 →
+          NFU_Retarget.compact.check_values compact = ok (core.result.Result.Ok ()) →
+            NFU_Retarget.LPn.Expand.NativeTrace (↑compact) (↑before) 29 ↑y1 →
+              ∀ (v : verifier.View) (hash : Unit) (old : AspisR1.NFW_PreparedControl.Scratch)
+                (packet : AspisR1.NHL_OpeningPacket.Packet (AspisR1.NGQ_Effects.dictionary hashv) sem v hash),
+                v.y1 = y1 →
+                  AspisR1.NFN_LPi_FieldValues.canonE (AspisR1.NFW_SampledDomains.toNative v.inactive) →
+                    ∀ (qs : Std.Array U32 22#usize) (afterQueries : transcript.Transcript Unit)
+                      (observed : AspisR1.NGP_L181.Observation AspisR1.NGQ_Effects.Reply),
+                      AspisR1.NHK_Invocation.Cuts hashv packet.opening.transcript packet.opening.row v.final_message
+                          observed →
+                        observed.result = ok (core.result.Result.Ok qs, afterQueries) →
+                          ∀
+                            (rhoBlock :
+                              AspisR1.NGT_NBL_BlockTrace.Block (AspisR1.NGQ_Effects.dictionary hashv) afterQueries
+                                (AspisR1.NHL_OpeningPacket.nextRow packet.opening)
+                                PreparedScratchReachability.emptyPayload)
+                            (rho : aspis_core.field.QM31) (rhoReduction : AspisR1.NGT_Reduction.K rhoBlock.value rho),
+                            ∃ g out,
+                              FIo_Native.weights.powers 29#usize
+                                    (AspisR1.NFW_SampledDomains.toNative packet.opening.gamma) =
+                                  ok g ∧
+                                AspisR1.NFN_LPi_FieldValues.canonE out ∧
+                                  AspisR1.NGN_Emitted.prepared AspisR1.NHL_PreparedScalars.actual
+                                      (AspisR1.NGQ_Effects.dictionary hashv) sem v hash old =
+                                    ok
+                                      (core.result.Result.Ok
+                                          (PreparedScratchReachability.output sem v packet.opening.gamma
+                                            packet.opening.kappa packet.opening.alpha rho qs
+                                            (AspisR1.NFW_PowersCohort.toPublic out)
+                                            { state := rhoBlock.final, hash := afterQueries.hash }),
+                                        AspisR1.NFW_PowersCohort.mapArray AspisR1.NFW_PowersCohort.toPublic g) :=
+⋯
+theorem AspisR1.NLZ_Segments137.fold : ∀ {i : AspisR1.NLJ_Observed.Input Unit}
+  {before after : AspisR1.NLZ_Resources.Heap} {out : Result (AspisR1.NLJ_Observed.Out Unit)}
+  {log : PreparedHashCode.Log} {events : List AspisR1.NLJ_Observed.Event} {effects : List AspisR1.NLZ_Resources.Effect},
+  AspisR1.NLZ_Segments137.Chain 6 { machine := AspisR1.NLJ_Observed.initial i, heap := before } out log events effects
+      after →
+    PreparedHashCode.run
+        (S1SemanticCode.verify
+          (fun {H} => S1SemanticCode.finish AspisR1.NJM_RoundJoin.R (AspisR1.IDa_Deployed.boundaries i.reservation))
+          i.digest i.publicValue i.bytes i.hash none) =
+      (log, out) :=
+⋯
+theorem AspisR1.NLZ_Segments087.fold : ∀ (cfg : AspisR1.NLJ_Prepare.Configuration) {i : AspisR1.NLJ_Prepare.Input Unit}
+  {before after : AspisR1.NLZ_Resources.Heap} {out : Result AspisR1.NLJ_Prepare.Out} {log : PreparedHashCode.Log}
+  {events : List AspisR1.NLJ_Prepare.Event} {effects : List AspisR1.NLZ_Resources.Effect},
+  AspisR1.NLZ_Segments087.Chain cfg 12 { machine := AspisR1.NLJ_Prepare.initial i, heap := before } out log events
+      effects after →
+    PreparedHashCode.run
+        (AspisR1.SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash
+          i.scratch) =
+      (log, out) :=
+⋯

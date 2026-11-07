@@ -10,7 +10,7 @@
 +pub(crate) mod NLZ_native;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NLZ_native.rs
-@@ -0,0 +1,40 @@
+@@ -0,0 +1,410 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +#[derive(Clone,Copy)] struct Hash;
@@ -25,14 +25,14 @@
 + aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()}
 +}
 +
-+fn parse_error<'a>(_:&'a[u8])->Result<Prefix<'a>,Error>{Err(Error::Terminal)}
++fn parse_error<'a:'a>(_:&'a[u8])->Result<Prefix<'a>,Error>{Err(Error::Terminal)}
 +fn unreachable_public<H:Digest32>(_:Public<'_>,_:H,_:&[u8;32])->Result<SemanticTranscript<H>,Error>{panic!("suffix public")}
 +fn unreachable_begin<H:Digest32>(_:&Prefix<'_>,_:&mut SemanticTranscript<H>)->Result<Challenges,Error>{panic!("suffix begin")}
 +fn unreachable_finish<H:Digest32>(_:Public<'_>,_:Prefix<'_>,_:SemanticTranscript<H>,_:Challenges,_:crate::verifier::Observer)->Result<Verified<H>,Error>{panic!("suffix finish")}
 +fn check(bad:bool){
 + let bytes:[u8;13831]=kani::any();
 + let transition=transition();let transfer=transfer();
-+ let public=Public::Transfer(&transfer,&transition);
++ let withdrawal=withdraw();let variant:bool=kani::any();let public=if variant{Public::Transfer(&transfer,&transition)}else{Public::Withdrawal(&withdrawal,&transition)};
 + let out=super::verify_observed(public,&bytes,Hash,None);
 + let good=matches!(out,Err(Error::Terminal));
 + if bad{assert!(!good)}else{assert!(good)}
@@ -51,6 +51,376 @@
 +#[kani::stub(verify_finish,unreachable_finish)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn parse_error_control(){check(true)}
++
++// ACTUAL verify_observed, child calls replaced by local-record oracles.
++// Hash is instantiated ONLY by LoggedHash; generic oracle casts access that
++// concrete local record. No writable static, callback value assertion or SHA.
++#[repr(transparent)] #[derive(Clone,Copy)] struct LoggedHash(*mut ());
++impl Digest32 for LoggedHash {fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("no SHA in parent cuts")}}
++struct ParentLog<'a>{
++ public:Public<'a>, bytes:&'a[u8], stop:u8, bad:bool, mode:u8,
++ phase:u8, error:Error, initial:([u8;32],u8),after:([u8;32],u8),
++ challenges:Challenges, row:usize,offset:usize, owned:Option<OwnedFields>,
++}
++unsafe fn local<'a,H:Digest32>(hash:H)->&'a mut ParentLog<'a>{
++ assert_eq!(core::mem::size_of::<H>(),core::mem::size_of::<LoggedHash>());
++ let ptr=unsafe{(*(&hash as *const H as *const LoggedHash)).0};
++ unsafe{&mut *(ptr as *mut ParentLog<'a>)}
++}
++fn same_public_value(a:Public<'_>,b:Public<'_>)->bool{match(a,b){
++ (Public::Transfer(p,t),Public::Transfer(q,u))=>core::ptr::eq(p,q)&&core::ptr::eq(t,u),
++ (Public::Withdrawal(p,t),Public::Withdrawal(q,u))=>core::ptr::eq(p,q)&&core::ptr::eq(t,u),_=>false}}
++fn assert_segment(good:bool,log:&ParentLog<'_>,mode:u8){if log.mode==mode&&log.bad{assert!(!good)}else{assert!(good)}}
++fn parsed<'a:'a>(bytes:&'a[u8])->Result<Prefix<'a>,Error>{
++ assert_eq!(bytes.len(),13831);
++ let root:&[u8;32]=bytes[..32].try_into().unwrap();
++ let rows=[&bytes[32..37],&bytes[37..42],&bytes[42..79],&bytes[79..84],&bytes[84..89],&bytes[89..94],&bytes[94..99],&bytes[99..104],&bytes[104..109],&bytes[109..114],&bytes[114..119],&bytes[119..124],&bytes[124..129],&bytes[129..134],&bytes[134..171],&bytes[171..1072],&bytes[1072..1973],&bytes[1973..2874],&bytes[2874..3775],&bytes[3775..4676],&bytes[4676..5577],&bytes[5577..6478],&bytes[6478..7379],&bytes[7379..8280],&bytes[8280..9181],&bytes[9181..12898],&bytes[12898..13831]];
++ Ok(crate::r1_wire::NLZ_factory::prefix(root,rows))
++}
++fn prefix_frame(prefix:&Prefix<'_>,log:&ParentLog<'_>)->bool{
++ let (expected_off,expected_len)=match log.row{0=>(32usize,5usize),1=>(37usize,5usize),2=>(42usize,37usize),3=>(79usize,5usize),4=>(84usize,5usize),5=>(89usize,5usize),6=>(94usize,5usize),7=>(99usize,5usize),8=>(104usize,5usize),9=>(109usize,5usize),10=>(114usize,5usize),11=>(119usize,5usize),12=>(124usize,5usize),13=>(129usize,5usize),14=>(134usize,37usize),15=>(171usize,901usize),16=>(1072usize,901usize),17=>(1973usize,901usize),18=>(2874usize,901usize),19=>(3775usize,901usize),20=>(4676usize,901usize),21=>(5577usize,901usize),22=>(6478usize,901usize),23=>(7379usize,901usize),24=>(8280usize,901usize),25=>(9181usize,3717usize),26=>(12898usize,933usize),_=>unreachable!()};
++ let rec=crate::r1_wire::NLZ_factory::record(prefix,log.row);
++ let expected=&log.bytes[expected_off..expected_off+expected_len];
++ rec.len()==expected.len()&&core::ptr::eq(rec.as_ptr(),expected.as_ptr())&&core::ptr::eq(prefix.c1_root.as_ptr(),log.bytes.as_ptr())&&prefix.c1_root[log.offset%32]==log.bytes[log.offset%32]
++}
++fn public_cut<H:Digest32>(public:Public<'_>,hash:H,root:&[u8;32])->Result<SemanticTranscript<H>,Error>{
++ let log=unsafe{local(hash)};
++ assert_segment(log.phase==0&&same_public_value(public,log.public)&&core::ptr::eq(root.as_ptr(),log.bytes.as_ptr())&&root[log.offset%32]==log.bytes[log.offset%32],log,0);
++ log.phase=1;
++ if log.stop==1{return Err(log.error)}
++ Ok(crate::r1_wire::NLZ_factory::make(hash,log.initial.0,log.initial.1))
++}
++fn begin_cut<H:Digest32>(prefix:&Prefix<'_>,t:&mut SemanticTranscript<H>)->Result<Challenges,Error>{
++ let (state,hash,row)=crate::r1_wire::NLZ_factory::snapshot(t);let log=unsafe{local(hash)};
++ let good=if log.mode==1{log.phase==1&&prefix_frame(prefix,log)}else if log.mode==4{log.phase==1&&state==log.initial.0&&row==log.initial.1}else{log.phase==1};
++ if log.mode==1||log.mode==4{assert_segment(good,log,log.mode)}else{assert!(good)}
++ log.phase=2;
++ *t=crate::r1_wire::NLZ_factory::make(hash,log.after.0,log.after.1);
++ if log.stop==2{Err(log.error)}else{Ok(log.challenges)}
++}
++fn finish_cut<H:Digest32>(public:Public<'_>,prefix:Prefix<'_>,t:SemanticTranscript<H>,c:Challenges,_:crate::verifier::Observer)->Result<Verified<H>,Error>{
++ let (state,hash,row)=crate::r1_wire::NLZ_factory::snapshot(&t);let log=unsafe{local(hash)};
++ let good=if log.mode==2{log.phase==2&&same_public_value(public,log.public)&&prefix_frame(&prefix,log)}else if log.mode==5{log.phase==2&&state==log.after.0&&row==log.after.1}else if log.mode==6{log.phase==2&&c==log.challenges}else{log.phase==2};
++ if log.mode==2||log.mode==5||log.mode==6{assert_segment(good,log,log.mode)}else{assert!(good)}
++ log.phase=3;Err(log.error)
++}
++fn arbitrary_q()->QM31{let w:[u32;4]=kani::any();QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
++fn arbitrary_challenges()->Challenges{Challenges{lambda:arbitrary_q(),chi:arbitrary_q(),theta:arbitrary_q(),zc:[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],mu:arbitrary_q(),eta:arbitrary_q()}}
++fn arbitrary_error()->Error{let tag:u8=kani::any();let row:u8=kani::any();let actual:u8=kani::any();let n:usize=kani::any();match tag%11{0=>Error::Allocation,1=>Error::RowOrder{expected:row,actual},2=>Error::InvalidRow,3=>Error::Tag{row},4=>Error::Length{row},5=>Error::NonCanonical{row,value:n},6=>Error::Boundary{round:n},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}}
++fn withdraw()->aspis_statement::pool_v1::PoolV1WithdrawalPublicV1{use aspis_statement::pool_v1::PoolV1WithdrawalPublicV1;fn d()->[M31;8]{let w:[u32;8]=kani::any();[M31(w[0]),M31(w[1]),M31(w[2]),M31(w[3]),M31(w[4]),M31(w[5]),M31(w[6]),M31(w[7])]}PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:d(),nullifier:d(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:d()}}
++fn parent_check(stop:u8,mode:u8,bad:bool){
++ let bytes:[u8;13831]=kani::any();let transition=transition();let transfer=transfer();let withdrawal=withdraw();let variant:bool=kani::any();let public=if variant{Public::Transfer(&transfer,&transition)}else{Public::Withdrawal(&withdrawal,&transition)};
++ let row:usize=kani::any();kani::assume(row<27);let offset:usize=kani::any();kani::assume(offset<5+crate::r1_wire::row_shape(row as u8).unwrap().1);
++ let snapshot_index:usize=kani::any();kani::assume(snapshot_index<bytes.len());let before=bytes[snapshot_index];
++ let mut log=ParentLog{public,bytes:&bytes,stop,bad,mode,phase:0,error:arbitrary_error(),initial:(kani::any(),kani::any()),after:(kani::any(),kani::any()),challenges:arbitrary_challenges(),row,offset,owned:None};
++ let hash=LoggedHash(&mut log as *mut _ as *mut ());
++ let result=super::verify_observed(public,&bytes,hash,None);
++ assert_segment(matches!(result,Err(e) if e==log.error)&&log.phase==stop&&bytes[snapshot_index]==before,&log,3);
++}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_public_cut(){parent_check(1,0,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_public_control(){parent_check(1,0,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_begin_cut(){parent_check(2,1,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_begin_control(){parent_check(2,1,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_finish_cut(){parent_check(3,2,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_finish_control(){parent_check(3,2,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_public_return_cut(){parent_check(1,3,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_public_return_control(){parent_check(1,3,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_begin_return_cut(){parent_check(2,3,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_begin_return_control(){parent_check(2,3,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_finish_return_cut(){parent_check(3,3,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_finish_return_control(){parent_check(3,3,true)}
++
++
++struct OwnedFields{
++ roots:[[u8;32];2], challenges:Challenges, alpha:[QM31;10],
++ claims:Box<[[QM31;29];3]>,extra:[QM31;29],before_z1:[QM31;29],
++ state_before_z0:[u8;32],z:[SecureCirclePoint;2],transcript_state:[u8;32],transcript_row:u8,
++}
++fn finish_success<H:Digest32>(public:Public<'_>,prefix:Prefix<'_>,t:SemanticTranscript<H>,c:Challenges,_:crate::verifier::Observer)->Result<Verified<H>,Error>{
++ let (state,hash,row)=crate::r1_wire::NLZ_factory::snapshot(&t);let log=unsafe{local(hash)};
++ assert!(log.phase==2&&same_public_value(public,log.public)&&state==log.after.0&&row==log.after.1&&c==log.challenges&&prefix_frame(&prefix,log));
++ log.phase=3;let v=log.owned.take().unwrap();
++ Ok(Verified{roots:v.roots,challenges:v.challenges,alpha:v.alpha,claims:v.claims,extra:v.extra,before_z1:v.before_z1,state_before_z0:v.state_before_z0,z:v.z,transcript:crate::r1_wire::NLZ_factory::make(hash,v.transcript_state,v.transcript_row)})
++}
++fn success_check(mode:u8,bad:bool){
++ let bytes:[u8;13831]=kani::any();let transition=transition();let transfer=transfer();let withdrawal=withdraw();let variant:bool=kani::any();let public=if variant{Public::Transfer(&transfer,&transition)}else{Public::Withdrawal(&withdrawal,&transition)};
++ let row:usize=kani::any();kani::assume(row<27);let offset:usize=kani::any();kani::assume(offset<5+crate::r1_wire::row_shape(row as u8).unwrap().1);
++ let ci:usize=kani::any();let cj:usize=kani::any();kani::assume(ci<3&&cj<29);
++ let roots:[[u8;32];2]=kani::any();let ch=arbitrary_challenges();let alpha=[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()];
++ let claims=Box::new([[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()],[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()]]);let expected_ptr=&*claims as *const [[QM31;29];3];let expected_claim=claims[ci][cj];
++ let extra=[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()];let before_z1=[arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q(),arbitrary_q()];let state_before_z0:[u8;32]=kani::any();
++ let z=[SecureCirclePoint{x:arbitrary_q(),y:arbitrary_q()},SecureCirclePoint{x:arbitrary_q(),y:arbitrary_q()}];
++ let transcript_state:[u8;32]=kani::any();let transcript_row:u8=kani::any();
++ let mut log=ParentLog{public,bytes:&bytes,stop:3,bad,mode:mode+10,phase:0,error:arbitrary_error(),initial:(kani::any(),kani::any()),after:(kani::any(),kani::any()),challenges:arbitrary_challenges(),row,offset,owned:Some(OwnedFields{roots,challenges:ch,alpha,claims,extra,before_z1,state_before_z0,z,transcript_state,transcript_row})};
++ let hash=LoggedHash(&mut log as *mut _ as *mut ());let out=super::verify_observed(public,&bytes,hash,None).unwrap();
++ let good=match mode{
++ 0=>out.roots==roots,1=>out.challenges==ch&&out.alpha==alpha,
++ 2=>core::ptr::eq(&*out.claims,expected_ptr)&&out.claims[ci][cj]==expected_claim,
++ 3=>out.extra==extra,4=>out.before_z1==before_z1,5=>out.state_before_z0==state_before_z0,
++ 6=>out.z==z,_=>{let(st,h,r)=crate::r1_wire::NLZ_factory::snapshot(&out.transcript);st==transcript_state&&r==transcript_row&&h.0==hash.0}
++ };
++ assert_segment(good&&log.phase==3&&log.owned.is_none(),&log,mode+10);
++}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_00_cut(){success_check(0,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_00_control(){success_check(0,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_01_cut(){success_check(1,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_01_control(){success_check(1,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_02_cut(){success_check(2,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_02_control(){success_check(2,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_03_cut(){success_check(3,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_03_control(){success_check(3,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_04_cut(){success_check(4,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_04_control(){success_check(4,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_05_cut(){success_check(5,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_05_control(){success_check(5,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_06_cut(){success_check(6,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_06_control(){success_check(6,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_07_cut(){success_check(7,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_success)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn success_07_control(){success_check(7,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_begin_state_cut(){parent_check(2,4,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_begin_state_control(){parent_check(2,4,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_finish_state_cut(){parent_check(3,5,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_finish_state_control(){parent_check(3,5,true)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_finish_challenges_cut(){parent_check(3,6,false)}
++
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(crate::r1_wire::Prefix::parse,parsed)]
++#[kani::stub(public_transcript,public_cut)]
++#[kani::stub(crate::r1_wire::begin,begin_cut)]
++#[kani::stub(verify_finish,finish_cut)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn segment_finish_challenges_control(){parent_check(3,6,true)}
 --- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
 +++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
 @@ -848,3 +848,7 @@

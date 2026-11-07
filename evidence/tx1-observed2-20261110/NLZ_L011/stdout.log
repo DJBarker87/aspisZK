@@ -1,0 +1,13 @@
+'AspisR1.NLZ_Segments137.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NLZ_Segments137.fold' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLZ_Segments137.fold : ∀ {i : NLJ_Observed.Input Unit} {before after : Heap}
+  {out : Result (NLJ_Observed.Out Unit)} {log : PreparedHashCode.Log} {events : List NLJ_Observed.Event}
+  {effects : List Effect},
+  Chain 6 { machine := NLJ_Observed.initial i, heap := before } out log events effects after →
+    PreparedHashCode.run
+        (S1SemanticCode.verify
+          (fun {H} => S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries i.reservation)) i.digest
+          i.publicValue i.bytes i.hash none) =
+      (log, out) :=
+fun {i} {before after} {out} {log} {events} {effects} chain =>
+  NLJ_Observed.events_from_cuts i out log events (source chain)
