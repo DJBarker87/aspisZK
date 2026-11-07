@@ -17,7 +17,7 @@ No result is promoted by this table. Every callee use must be instantiated at SA
 - POOL:207 (B) decode_pool_v1_pair_forest_terminal_request_v1 — Stream A CLOSED packet; exact own-argument domain still required
 
 ## POOL:319 next_lane_image_box_v1
-- POOL:320 (B) next_pair_forest_lane_v1 — PCD candidate; no closure until native packet and combined gate
+- POOL:320 (B) next_pair_forest_lane_v1 — PCD CLOSED under (ah)/(ay)(3); exact full native/model/gate packet in PCD_CLOSED.json
 - POOL:315 (B) encode_lane_from_authenticated_result_v1 — OPEN Pool child / native packet required
 
 ## POOL:320 next_pair_forest_lane_v1
@@ -52,6 +52,9 @@ No result is promoted by this table. Every callee use must be instantiated at SA
 
 ## Standard operations
 Box allocation, scalar checked addition, raw fixed-array comparison, iteration, Vec/Rc operations and cleanup execute in the appropriate native cut under (au), the exact KMX rule and std/allocator trust. They are not extra child rows. Abort/cleanup prefixes are still obligations.
+
+## Closed constituents
+POOL:314 and POOL:320 passed the final Stream C gate. The former consumes the CLOSED NLO decoder at SAME bytes; the latter executes every reached frozen error-conversion arm natively, without re-owning278. No open helper is assumed as a callee packet.
 
 ## Shared findings
 The three boxed account decoders need the actual current-state SDK/decoder packets (306/307/310), not three new runtime success assumptions. POOL:319 also needs the deployed 315 encoder; POOL:339 needs the three actual Box statement constructors. These are recorded once here; no wrapper assumes them CLOSED.
