@@ -244,3 +244,26 @@ LIB read-only snapshot4e5247eee31 has revision3 owners and concrete Deployed IDs
 its handoff still records digest association and complete bundles pending.
 No LIB instance is constructed or overwritten. Native loop/context/source join,
 total217 reference canonical equality and allocation observation remain OPEN.
+
+### Fallback stage C: symbolic decoder components and native loop cuts
+
+Accepted L706–780 (individual receipts are authoritative): total word32/64,
+digest and frontier success/error correspondences, exact scalar shifts, original
+byte addresses and arrays, pinned binding/empty constants, all frontier failure
+positions, and final root/bump/payload construction. Recursive terms stay folded;
+word64 uses eight symbolic byte-position proofs generated with --check. All
+accepted new mathematical tops use only standard axioms. L693 remains excluded.
+L782/L785 direct concrete-result case splitting reached the unchanged default
+heartbeat and that shape is retired; use generic LaneTry.fold (L788) instead.
+The result-cut adapter is currently under repair; no frontier/digest/body join
+has yet been accepted. No full217 or234 candidate exists.
+
+Native K012/K013 first-guard scalar pair covers every usize without a backing
+buffer. K015/K016 assignment pair and K017/K018 empty-root guard pair each have
+PASS / intended ensures FAIL, unchanged caps, exact KMX patch, frozen offline
+lock/features and source-fragment validation. They cover one arbitrary native
+iteration cut, not a whole-buffer unwind or a full-function candidate. Assignment
+modifies only node; its before-value ghost is checked from the arbitrary state;
+all M31 representations are admitted by the cfg-only Arbitrary implementation.
+K014 API/type failure receives no proof credit. Native source/frame/induction
+composition, full reference equality and final allocation observation stay OPEN.

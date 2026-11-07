@@ -15,7 +15,7 @@ print(json.dumps(dict(tool_pins=tools)),flush=True)
 import base64,lzma,difflib
 payload=json.loads(lzma.decompress((B/'NMX_FROZEN_PAYLOAD.json.xz').read_bytes()))
 manifest=json.loads((B/'NMX_STAGING_MANIFEST.json').read_text())
-modified=['programs/r1-cost-probe/src/lib.rs','programs/r1-cost-probe/src/r1_pool_adapter.rs']
+modified=['programs/r1-cost-probe/src/lib.rs','programs/r1-cost-probe/src/r1_pool_adapter.rs','crates/aspis-core/src/field.rs']
 for rel,pin in manifest['files'].items():
  if rel in modified:continue
  assert hashlib.sha256((S/rel).read_bytes()).hexdigest()==pin['sha256'],('frozen source drift',rel)
@@ -26,9 +26,11 @@ diffs=[]
 for rel in modified:
  original=base64.b64decode(payload[rel]).decode()
  diffs.extend(difflib.unified_diff(original.splitlines(True),(S/rel).read_text().splitlines(True),fromfile='a/'+rel,tofile='b/'+rel))
-for name in ['NMX_217_native.rs','NMX_217_reference.rs','NMX_217_fidelity.rs']:
+for name in ['NMX_217_native.rs','NMX_217_reference.rs','NMX_217_fidelity.rs','NMX_217_iteration.rs']:
  rel='programs/r1-cost-probe/src/'+name
  diffs.extend(difflib.unified_diff([], (S/rel).read_text().splitlines(True),fromfile='/dev/null',tofile='b/'+rel))
+rel='crates/aspis-core/src/NMX_217_arbitrary.rs'
+diffs.extend(difflib.unified_diff([], (S/rel).read_text().splitlines(True),fromfile='/dev/null',tofile='b/'+rel))
 assert ''.join(diffs)==(B/'NMX_217_harness.patch').read_text(),'scratch patch drift'
 
 lock=S/'Cargo.lock';before=hashlib.sha256(lock.read_bytes()).hexdigest()
