@@ -1,4 +1,4 @@
-# NMB cut table (in progress)
+# NMB final cut inventory
 
 Target not yet established. No full native row credit or promotion.
 
