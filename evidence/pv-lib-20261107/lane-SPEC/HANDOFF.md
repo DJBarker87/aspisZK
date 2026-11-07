@@ -112,3 +112,12 @@ Next Lean49720; new-root audit still pending.
 49720 replayed pinned unchanged STX LiveNumbering in isolated W3;exit0;
 wall0:01.26;peak2626372KiB;swap0;parentd9ba6113daf;standard summary axioms.
 No counter lemmas re-proved or counter equality introduced. Next Lean49721.
+
+49721 failed a reserved parser identifier; exact source archived.49722 changed
+that name and compiled F361Entry's literal provider comparison: EntryComponent
+is exactly old Pre plus provider EntryName, provider Scope.Shape and actual
+current/suspended Numbered. implies_package/name/scope and post_literal compiled.
+It deliberately claims ENTRY COMPONENT only, not missing full common validity/
+resource bindings or a full MachineSpec/Pre/Post. Full count stays0/29.
+Exit0;wall0:02.25;peak4723240KiB;swap0;parent02f95d7c494;standard summary axioms.
+Next Lean49723.
