@@ -190,3 +190,5 @@ Session4 49137: pinned PV_FN_THREAD_f361OwnEntry passed; session4 receipt record
 Session4 49138: pinned PV_THR2_PacketBoxImageAway passed; session4 receipt records resources/axioms.
 
 Session4 49139: pinned PV_THR2_PacketJoinedHandler passed; session4 receipt records resources/axioms.
+
+Session4 49140: pinned PV_THR2_PacketJoinedHandlerAway passed; session4 receipt records resources/axioms.
