@@ -1,0 +1,92 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_SourceWriters.lean:13:12: error: Ambiguous term
+  Site
+Possible interpretations:
+  PV_THR2_SourceStoreNative.Site : Type
+  
+  PV_STX2_Syntax.Site : Type
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_SourceWriters.lean:21:12: error: Ambiguous term
+  Site
+Possible interpretations:
+  PV_THR2_SourceStoreNative.Site : Type
+  
+  PV_STX2_Syntax.Site : Type
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_SourceWriters.lean:25:12: error: Ambiguous term
+  Site
+Possible interpretations:
+  PV_THR2_SourceStoreNative.Site : Type
+  
+  PV_STX2_Syntax.Site : Type
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_SourceWriters.lean:34:34: error: Ambiguous term
+  Site
+Possible interpretations:
+  PV_THR2_SourceStoreNative.Site : Type
+  
+  PV_STX2_Syntax.Site : Type
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_SourceWriters.lean:41:22: error: Invalid argument: Variable `selected` is not a proposition or let-declaration
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_SourceWriters.lean:39:39: error: unsolved goals
+W E : Type
+C : Carrier W Data
+ctl : Control
+programs : Data → Option PV_STX2_SliceSyntax.Program
+H : PV_STX2_Native.Request Data → W → Reply W E Data
+values : Values W E
+c : Config
+w : W
+es : List E
+stack : List Config
+site : sorry
+ordinary : PV_THR2_Catch316Segment.select c = none
+selected : sorry
+⊢ PV_LIB.observe
+      (match select programs c with
+      | none =>
+        PV_THR2_IntrinsicState.step C ctl programs H
+          { current := { status := PV_STX2_SliceMachine.Status.running c, world := w, events := es },
+            suspended := stack }
+      | some site =>
+        match interpret C values site.meaning site.callee site.arguments c.store w (H site.waiting.request w) with
+        | none =>
+          {
+            current :=
+              { status := Status.undefined none c.store, world := (H site.waiting.request w).world,
+                events := es ++ (H site.waiting.request w).events },
+            suspended := stack }
+        | some store =>
+          {
+            current :=
+              {
+                status :=
+                  (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store }
+                      site.waiting (H site.waiting.request w)).status,
+                world :=
+                  (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store }
+                      site.waiting (H site.waiting.request w)).world,
+                events :=
+                  es ++
+                    (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store }
+                        site.waiting (H site.waiting.request w)).events },
+            suspended := stack }) =
+    PV_LIB.observe
+      (match interpret C values sorry sorry sorry c.store w (H sorry w) with
+      | none =>
+        {
+          current :=
+            { status := Status.undefined none c.store, world := (H sorry w).world, events := es ++ (H sorry w).events },
+          suspended := stack }
+      | some store =>
+        {
+          current :=
+            {
+              status :=
+                (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store } sorry
+                    (H sorry w)).status,
+              world :=
+                (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store } sorry
+                    (H sorry w)).world,
+              events :=
+                es ++
+                  (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store } sorry
+                      (H sorry w)).events },
+          suspended := stack })
+'PV_LIB_A_SourceWriters.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_SourceWriters.meanings' depends on axioms: [propext, Classical.choice, Quot.sound]

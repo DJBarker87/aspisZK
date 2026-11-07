@@ -1,0 +1,62 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_SourceWriters.lean:39:39: error: unsolved goals
+W E : Type
+C : Carrier W Data
+ctl : Control
+programs : Data → Option PV_STX2_SliceSyntax.Program
+H : PV_STX2_Native.Request Data → W → Reply W E Data
+values : Values W E
+c : Config
+w : W
+es : List E
+stack : List Config
+site : PV_THR2_SourceStoreNative.Site
+ordinary : PV_THR2_Catch316Segment.select c = none
+selected : select programs c = some site
+⊢ PV_LIB.observe
+      (match interpret C values site.meaning site.callee site.arguments c.store w (H site.waiting.request w) with
+      | none =>
+        {
+          current :=
+            { status := Status.undefined none c.store, world := (H site.waiting.request w).world,
+              events := es ++ (H site.waiting.request w).events },
+          suspended := stack }
+      | some store =>
+        {
+          current :=
+            {
+              status :=
+                (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store }
+                    site.waiting (H site.waiting.request w)).status,
+              world :=
+                (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store }
+                    site.waiting (H site.waiting.request w)).world,
+              events :=
+                es ++
+                  (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store }
+                      site.waiting (H site.waiting.request w)).events },
+          suspended := stack }) =
+    PV_LIB.observe
+      (match interpret C values site.meaning site.callee site.arguments c.store w (H site.waiting.request w) with
+      | none =>
+        {
+          current :=
+            { status := Status.undefined none c.store, world := (H site.waiting.request w).world,
+              events := es ++ (H site.waiting.request w).events },
+          suspended := stack }
+      | some store =>
+        {
+          current :=
+            {
+              status :=
+                (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store }
+                    site.waiting (H site.waiting.request w)).status,
+              world :=
+                (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store }
+                    site.waiting (H site.waiting.request w)).world,
+              events :=
+                es ++
+                  (PV_THR2_ChildBoundary.delivered C { frame := c.frame, callers := c.callers, store := store }
+                      site.waiting (H site.waiting.request w)).events },
+          suspended := stack })
+'PV_LIB_A_SourceWriters.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_SourceWriters.meanings' depends on axioms: [propext, Classical.choice, Quot.sound]

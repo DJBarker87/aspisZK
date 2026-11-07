@@ -1,0 +1,67 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_Range165.lean:77:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  replyModel original w
+    (PV_THR2_OwnUniformResourceHandler.lift H
+      (PV_STX2_Native.Request.child (PV_W1_NativeLeaves.entry165 e e.arguments).callee
+        (PV_W1_NativeLeaves.entry165 e e.arguments).store.nextActivation
+        (PV_W1_NativeLeaves.entry165 e e.arguments).arguments)
+      w)
+in the target expression
+  PV_LIB.observe
+      (deliver C d
+        (PV_THR2_OwnUniformResourceHandler.lift H
+          (PV_STX2_Native.Request.child (PV_W1_NativeLeaves.entry165 e e.arguments).callee
+            (PV_W1_NativeLeaves.entry165 e e.arguments).store.nextActivation
+            (PV_W1_NativeLeaves.entry165 e e.arguments).arguments)
+          w)
+        es) =
+    have d := PV_W1_NativeLeaves.entry165 e e.arguments;
+    PV_LIB.observe
+      (deliver C d
+        (replyModel original w
+          (PV_THR2_OwnUniformResourceHandler.lift H
+            (PV_STX2_Native.Request.child d.callee d.store.nextActivation d.arguments) w))
+        es)
+
+E : Type
+C : Carrier OWNER Data
+D : Effects
+H : Backend E
+semantics : PV_THR2_LibrarySemantics_RangeIntoIter165 C D H
+e : Entry
+w : OWNER
+es : List E
+original : Data
+args : e.arguments = [original]
+pre : PV_W1_NativeLeaves.Pre e w
+facts :
+  have d := PV_W1_NativeLeaves.entry165 e e.arguments;
+  (Confined C d w (D d w) fun x => False) ∧
+    ∀ (v : Data),
+      have r :=
+        PV_THR2_OwnUniformResourceHandler.lift H
+          (PV_STX2_Native.Request.child d.callee d.store.nextActivation d.arguments) w;
+      r.answer = Answer.returned (Aeneas.Std.Result.ok v) → v = original ∧ r.world = w ∧ r.events = []
+d : Entry := PV_W1_NativeLeaves.entry165 e e.arguments
+pure : PV_W1_ArgumentEffects.finalStore C d w (D d w) = d.store
+after : PV_W1_ArgumentEffects.afterEffects C d w (D d w) = d
+⊢ PV_LIB.observe
+      (deliver C d
+        (PV_THR2_OwnUniformResourceHandler.lift H
+          (PV_STX2_Native.Request.child (PV_W1_NativeLeaves.entry165 e e.arguments).callee
+            (PV_W1_NativeLeaves.entry165 e e.arguments).store.nextActivation
+            (PV_W1_NativeLeaves.entry165 e e.arguments).arguments)
+          w)
+        es) =
+    have d := PV_W1_NativeLeaves.entry165 e e.arguments;
+    PV_LIB.observe
+      (deliver C d
+        (replyModel original w
+          (PV_THR2_OwnUniformResourceHandler.lift H
+            (PV_STX2_Native.Request.child d.callee d.store.nextActivation d.arguments) w))
+        es)
+'PV_LIB_A_Range165.old_contract_allows_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_A_Range165.sourceRange_distinct' depends on axioms: [propext]
+'PV_LIB_A_Range165.sourceRange_not_null' depends on axioms: [propext]
+'PV_LIB_A_Range165.reply_exact' depends on axioms: [propext]
+'PV_LIB_A_Range165.certified' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_A_Range165.old_contract_allows_null' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,56 @@
+/home/dombarker/project-offloads/codex-pv-lib-20261107/lane-A/sources/PV_LIB_A_TypedDrop178.lean:31:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_THR2_IntrinsicState.advance (PV_FN_SLICE_ValueCarrier.carrier x.C) x.K x.P x.H
+    (1 + 1 +
+      PV_FN_SLICE_f7_AfterDrop.steps (x.H (PV_STX2_Native.Request.drop PV_FN_SLICE_f7_AfterDrop.source.1 capture) x.w))
+    {
+      current :=
+        {
+          status :=
+            PV_STX2_SliceMachine.Status.running
+              { frame := { activation := x.a, remaining := List.drop 4 PV_STX2_SliceF7.program.body },
+                callers := x.parent :: x.parents, store := x.s },
+          world := x.w, events := x.es },
+      suspended := x.stack }
+in the target expression
+  let r := x.H (PV_STX2_Native.Request.drop PV_FN_SLICE_f7_AfterDrop.source.1 capture) x.w;
+  PV_LIB.observe
+      (PV_THR2_IntrinsicState.advance (PV_FN_SLICE_ValueCarrier.carrier x.C) x.K x.P x.H
+        (1 + 1 + PV_FN_SLICE_f7_AfterDrop.steps r)
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := x.a, remaining := List.drop 4 PV_STX2_SliceF7.program.body },
+                    callers := x.parent :: x.parents, store := x.s },
+              world := x.w, events := x.es },
+          suspended := x.stack }) =
+    PV_LIB.observe
+      (PV_FN_SLICE_f7_AfterDrop.finish x capture
+        (x.H (PV_STX2_Native.Request.drop PV_FN_SLICE_f7_AfterDrop.source.1 capture) x.w))
+
+x : Input
+capture : Data
+spec : PV_FN_SLICE_RuntimeBindings.DropSemantics x.H
+cell : x.s.cells { activation := x.a, localIndex := 1 } = some capture
+value : x.s.cells { activation := x.a, localIndex := 0 } = some x.ptr
+saved : x.parent.waiting = some x.wait
+action : x.wait.action = PV_STX2_Native.ReturnAction.child x.a (Place.local x.dest)
+pre : PV_W1_OwnerWellFormed.OwnerWellFormed x.w x.s.nextActivation
+⊢ let r := x.H (PV_STX2_Native.Request.drop PV_FN_SLICE_f7_AfterDrop.source.1 capture) x.w;
+  PV_LIB.observe
+      (PV_THR2_IntrinsicState.advance (PV_FN_SLICE_ValueCarrier.carrier x.C) x.K x.P x.H
+        (1 + 1 + PV_FN_SLICE_f7_AfterDrop.steps r)
+        {
+          current :=
+            {
+              status :=
+                PV_STX2_SliceMachine.Status.running
+                  { frame := { activation := x.a, remaining := List.drop 4 PV_STX2_SliceF7.program.body },
+                    callers := x.parent :: x.parents, store := x.s },
+              world := x.w, events := x.es },
+          suspended := x.stack }) =
+    PV_LIB.observe
+      (PV_FN_SLICE_f7_AfterDrop.finish x capture
+        (x.H (PV_STX2_Native.Request.drop PV_FN_SLICE_f7_AfterDrop.source.1 capture) x.w))
+'PV_LIB_A_TypedDrop178.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
