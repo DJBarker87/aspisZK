@@ -17,9 +17,10 @@ def ssh(code,data=None,submitted=False):
  raise RuntimeError('Transport exhausted')
 # Disk admission before EVERY scope; no compiler runs here.
 for disk_retry in range(7):
- r=ssh('python3',f"import shutil,json;print(json.dumps(dict(free=shutil.disk_usage({B!r}.rsplit('/',1)[0]).free)))")
+ r=ssh('python3',f"import shutil,json,os;root={B!r};print(json.dumps(dict(free=shutil.disk_usage(root.rsplit('/',1)[0]).free,owned_bytes=sum(os.stat(os.path.join(d,n)).st_size for d,ds,ns in os.walk(root) for n in ns))))")
  assert r.returncode==0,r.stderr
  disk=json.loads(r.stdout);(E/(a+f'-disk-{disk_retry}.json')).write_text(json.dumps(disk)+'\n')
+ assert disk['owned_bytes']<30_000_000_000, 'STOP owned host writes exceed 30 GB'
  if disk['free']>=40_000_000_000:break
  if disk_retry==6:raise RuntimeError('STOP host disk below 40 GB')
  time.sleep(600)
