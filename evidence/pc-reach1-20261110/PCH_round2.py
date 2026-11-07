@@ -1,7 +1,7 @@
 """Serial PCH scope client; never resubmits a submitted transport failure."""
 import pathlib,subprocess,json,sys,time,shlex,hashlib,os,atexit
 E=pathlib.Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-pc-reach1-cache-20261110';H='dombarker@100.108.41.90'
-a,kind,script=sys.argv[1:]; assert kind in ['build','audit']
+a,kind,script=sys.argv[1:4];extra=sys.argv[4:]; assert kind in ['build','audit']
 guard=E/'PCH_ACTIVE';fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY);os.write(fd,a.encode());os.close(fd);atexit.register(lambda:guard.unlink(missing_ok=True))
 def remote(code,submitted=False):
  for i in range(11):
@@ -35,6 +35,7 @@ p=b/{(a+'-reservation.json')!r};print(p.read_text() if p.exists() else 'MISSING'
   for _ in range(3):time.sleep(60)
   continue
  raise RuntimeError('infrastructure admission failure')
+(E/(a+'_source.py')).write_text((E/script).read_text())
 files={script:(E/script).read_text()}
 for n in ['PCH_BUILD_INPUT.json','PCH_FROZEN.json.xz','PCH_GRAPH_INPUT.json.xz']:
  p=E/n
@@ -46,7 +47,7 @@ for n,v in files.items():
  if n.endswith(('.xz','.json')):p.write_bytes(bytes.fromhex(v))
  else:p.write_text(v)
 ''');assert r.returncode==0,r.stderr
-cmd=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',B+'/'+a+'.time','python3',B+'/'+script,a]
+cmd=['systemd-run','--user','--scope','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',B+'/'+a+'.time','python3',B+'/'+script,a,*extra]
 r=remote(f'''import subprocess,pathlib,sys
 b=pathlib.Path({B!r})
 with (b/{(a+'.stdout')!r}).open('w') as o,(b/{(a+'.stderr')!r}).open('w') as e:r=subprocess.run({cmd!r},stdout=o,stderr=e)

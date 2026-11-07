@@ -1,14 +1,41 @@
 {
-  "status": "NOT_RUN_STAGE1_BLOCKED",
-  "validator_exit_status": null,
-  "scope_exit_status": null,
-  "mutation_tests": {
-    "planted_POOL_246": "NOT_RUN",
-    "deleted_real_call": "NOT_RUN",
-    "deleted_fn_pointer": "NOT_RUN",
-    "deleted_vtable": "NOT_RUN",
-    "missing_codegen_check": "NOT_RUN"
+  "status": "PASS_FAIL_CLOSED_SUPERGRAPH",
+  "validator": "PCH_VALIDATOR.py",
+  "validator_exit_status": 0,
+  "baseline": "PCH_A009_VALIDATION.json",
+  "mutations": {
+    "planted_POOL_246": {
+      "exit_status": 0,
+      "rejected": true,
+      "diagnostic": "('unresolved edge supports exclusion', 'POOL:246')",
+      "receipt": "PCH_A010_VALIDATION.json"
+    },
+    "deleted_real_call": {
+      "exit_status": 0,
+      "rejected": true,
+      "diagnostic": "('deleted codegen edge', 'PCH_B003_aspis_pool.ll.xz', 124, 'LLVM_DIRECT_OR_INTRINSIC', '_ZN4core5slice5index22slice_index_order_fail17h80817da18ae50333E')",
+      "receipt": "PCH_A011_VALIDATION.json"
+    },
+    "deleted_fn_pointer": {
+      "exit_status": 0,
+      "rejected": true,
+      "diagnostic": "('deleted codegen edge', 'PCH_B003_aspis_pool.ll.xz', 27438, 'LLVM_FUNCTION_OR_GLOBAL_MATERIALISATION', '\"_ZN44_$LT$$RF$T$u20$as$u20$core..fmt..Display$GT$3fmt17h0c1eaea794448319E\"')",
+      "receipt": "PCH_A012_VALIDATION.json"
+    },
+    "deleted_vtable": {
+      "exit_status": 0,
+      "rejected": true,
+      "diagnostic": "('deleted codegen edge', 'PCH_B002_aspis_core-268c35f57b2871a4.ll.xz', 55, 'VTABLE_MATERIALISATION', '\"_ZN42_$LT$$RF$T$u20$as$u20$core..fmt..Debug$GT$3fmt17h4adf6a4d7bfd85deE\"')",
+      "receipt": "PCH_A013_VALIDATION.json"
+    },
+    "missing_codegen_check": {
+      "exit_status": 0,
+      "rejected": true,
+      "diagnostic": "('missing codegen exclusion cross-check', 'POOL:001')",
+      "receipt": "PCH_A014_VALIDATION.json"
+    }
   },
-  "validation_claim": null,
-  "reason": "No authoritative graph; no validator pass or mutation rejection is claimed."
+  "graph_sha256": "5ca864aa401f2413d3a1dd39fbbb52d4ff9d1d8751c752cd1d8e69a8bd8ac92a",
+  "claim": "Compiler evidence integrity and rejection of the five required mutations; no complete resolved MIR association or exclusion claim.",
+  "all_exclusions": 0
 }

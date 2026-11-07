@@ -30,7 +30,10 @@ def validate(g,v):
   byloc[(e['artifact'],e['line'])].append(e)
   if e['artifact'] in lines:
    text=lines[e['artifact']][e['line']-1]
-   assert e['text_sha256'] in [sha(text.encode()),sha(text.strip().encode())],('edge text mismatch',e['id'])
+   allowed=[sha(text.encode()),sha(text.strip().encode())]
+   if e['kind']=='EXTERNAL_UNRESOLVED':
+    symbol=g['nodes'][e['source']]['symbol'];assert '@'+symbol in text,('external symbol/declaration mismatch',e['id']);allowed.append(sha(symbol.encode()))
+   assert e['text_sha256'] in allowed,('edge text mismatch',e['id'])
  # MIR census does not rely on the producer's stored site list or counts.
  for p,ls in lines.items():
   if '.mir.' not in p:continue
@@ -64,9 +67,8 @@ def validate(g,v):
     assert any(e['kind']==kind and e['source']==source and e['target']==key for e in byloc[(p,i)]),('deleted codegen edge',p,i,kind,target)
    if line=='}':active=None
  # Closure under universal indirect uncertainty and all required handler roots.
- for key in g['nodes']:
-  if key=='PCH_UNKNOWN' or key.startswith('runtime-root:'):continue
-  assert any(e['source']=='PCH_UNKNOWN' and e['target']==key for e in g['edges_by_target'].get(key,[])) if 'edges_by_target' in g else True
+ universal={e['target'] for e in g['edges'] if e['source']=='PCH_UNKNOWN' and e['kind']=='UNRESOLVED_UNIVERSAL_TARGET'}
+ assert universal=={k for k in g['nodes'] if k!='PCH_UNKNOWN' and not k.startswith('runtime-root:')},'deleted universal fn-pointer target'
  roots={r['instance'] for r in g['roots']};assert any('process_instruction' in k for k in roots),'processor root'
  for name in ['abort','__rust_alloc','__rust_dealloc','__rust_realloc','__rust_alloc_zeroed','__rust_alloc_error_handler']:assert 'runtime-root:'+name in roots,('handler root',name)
  for r in v['rows']:
@@ -75,7 +77,12 @@ def validate(g,v):
    assert r.get('caller_MIR_instances_resolved') is True,('unresolved exclusion',r['row'])
    assert not r.get('unresolved_witness'),('unresolved edge supports exclusion',r['row'])
    assert not r.get('resolved_codegen_witness'),('reachable row planted as exclusion',r['row'])
-  elif r['verdict']=='UNRESOLVED':assert r.get('unresolved_witness'),('no unresolved path',r['row'])
+  elif r['verdict']=='UNRESOLVED':
+   path=r.get('unresolved_witness');assert path,('no unresolved path',r['row'])
+   edgebyid={e['id']:e for e in g['edges']} if 'edgebyid' not in locals() else edgebyid
+   walk=[edgebyid[i] for i in path];assert walk[0]['source'] in roots and walk[-1]['target']=='row:'+r['row'],('bad path endpoints',r['row'])
+   assert all(x['target']==y['source'] for x,y in zip(walk,walk[1:])),('broken witness',r['row'])
+   assert any(not e['resolved'] for e in walk),('no unresolved edge',r['row'])
   else:assert False,('unsupported verdict',r['row'])
  return True
 
@@ -83,7 +90,7 @@ def main():
  a=sys.argv[1];control=sys.argv[2] if len(sys.argv)>2 else 'baseline';assert shutil.disk_usage(B).free>=40_000_000_000
  g=load_graph();v=json.loads((B/'PCH_VERDICTS.json').read_text());mutation=None
  if control=='planted_POOL_246':
-  row=next(r for r in v['rows'] if r['row']=='POOL:246');assert row['inherited_status']=='CLOSED';row['verdict']='EXCLUDED-CANDIDATE';mutation=dict(row='POOL:246',kind='planted known CLOSED reachable row')
+  row=next(r for r in v['rows'] if r['row']=='POOL:246');assert row['inherited_status']=='CLOSED';row['verdict']='EXCLUDED-CANDIDATE';row['codegen_cross_check']['absence_established']=True;row['caller_MIR_instances_resolved']=True;row['resolved_codegen_witness']=None;mutation=dict(row='POOL:246',kind='planted known CLOSED reachable row')
  elif control in ['deleted_real_call','deleted_fn_pointer','deleted_vtable']:
   kinds={'deleted_real_call':'LLVM_DIRECT_OR_INTRINSIC','deleted_fn_pointer':'LLVM_FUNCTION_OR_GLOBAL_MATERIALISATION','deleted_vtable':'VTABLE_MATERIALISATION'}
   candidate=next(e for e in g['edges'] if e['kind']==kinds[control] and (control!='deleted_fn_pointer' or g['nodes'][e['target']].get('definitions')))
