@@ -40,14 +40,44 @@ for m in sorted(closure):
 roots=list(dict.fromkeys(['AspisR1.RPx_Deployed.deployed']+own))
 (E/'PCI_AUDIT_ROOTS_ALL.json').write_text(json.dumps({'roots':roots,'own':own,'module_closure':sorted(closure)},indent=1)+'\n')
 T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0';x=json.loads((E/'PCI_TASKS.json').read_text())
-x['PCI_L101']={'kind':'lean','target':'PCI_COMBINED_IMPORT'}
-x['PCI_L102']={'kind':'lean','target':'PCI_AuditDriver','native':True}
-x['PCI_L103']={'kind':'link','target':'PCI_AuditDriver','command':[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','PCI_native/PCI_AuditDriver','PCI_native/PCI_AuditDriver.c','PCI_native/PCI_WALKER.c','PCI_native/PCI_MemoryLimit.c'],'files':{'PCI_native/PCI_WALKER.c':'PCI_WALKER.c','PCI_native/PCI_MemoryLimit.c':'PCI_MemoryLimit.c'}}
-x['PCI_L104']={'kind':'audit','target':'Eight unchanged NEP fixtures, same final binary','command':['PCI_native/PCI_AuditDriver','fixtures']}
-x['PCI_L105']={'kind':'audit','target':'NFX whole combined import scan','command':['PCI_native/PCI_AuditDriver','scan'],'files':{'PCI_EXPECTED_IMPORTS.jsonl':'PCI_EXPECTED_IMPORTS.jsonl','PCI_AUDIT_ROOTS.json':'PCI_AUDIT_ROOTS_ALL.json'},'collect':['PCI_LOADED_scan.jsonl']}
-batches=[roots[i:i+25] for i in range(0,len(roots),25)]
-for i,b in enumerate(batches):
- n=f'PCI_ROOTS_{i:02}.json';(E/n).write_text(json.dumps({'roots':b},indent=1)+'\n');x[f'PCI_L{106+i:03}']={'kind':'audit','target':f'All own raw ax2 roots batch{i}','command':['PCI_native/PCI_AuditDriver',f'proof{i}'],'files':{'PCI_AUDIT_ROOTS.json':n}}
+used=sum(r['kind'] in ['lean','link','audit'] for r in records)
+base=max(int(r['attempt'][-3:]) for r in records if r['kind'] in ['lean','link','audit'])+1
+numraw=120-used-6
+assert 1<=numraw<=14
+buckets=[[] for _ in range(14)]
+def bucket(n):
+ if n=='AspisR1.RPx_Deployed.deployed':return 0
+ if n.startswith('PCI_Note.'):return 1
+ if n.startswith(('PCI_Count.','PCI_CountState.')):return 2
+ if n.startswith('PCI_RootAddress.'):return 3
+ if n.startswith(('PCI_ValidateWords.','PCI_ValidateCarrier.','PCI_DigestCarrier.','PCI_DigestRoundtrip.')):return 4
+ if n.startswith(('PCI_Mul.','PCI_ValidateField.','PCI_ValidateSub.','PCI_SizeArithmetic.')):return 5
+ if n.startswith('PCI_ValidatePrefix.'):return 6
+ if n.startswith('PCI_ValidateScan.'):return 7
+ if n.startswith(('PCI_ValidateDomainAtoms.','PCI_ValidateDomains.')):return 8
+ if n.startswith(('PCI_ValidateComplete.','PCI_ValidateFull.','PCI_ValidatePacket.','PCI_SharedScanner.')):return 9
+ if n.startswith('PCI_Single'):return 10
+ if n.startswith(('PCI_DepositRead.','PCI_DepositWords.','PCI_DepositWordWindow.','PCI_DepositDigestLaw.')):return 11
+ if n.startswith(('PCI_DepositRange.','PCI_DepositConvert.','PCI_DepositExtents.','PCI_DepositSuffix.','PCI_DepositCopyExtents.','PCI_DepositHeader.','PCI_ListWindow.')):return 12
+ if n.startswith(('PCI_DepositReferenceModel.','PCI_DepositLimits.','PCI_DepositErrorCarrier.','PCI_Byte','PCI_ArrayCanonical.','PCI_IteTransport.')):return 13
+ raise AssertionError(n)
+for root in roots:buckets[bucket(root)].append(root)
+assert all(buckets)
+while len(buckets)>numraw:
+ # Merge neighbouring small semantic groups; no root repeated or dropped.
+ i=min(range(1,len(buckets)-1),key=lambda i:len(buckets[i])+len(buckets[i+1]))
+ buckets[i:i+2]=[buckets[i]+buckets[i+1]]
+aid=lambda i:f'PCI_L{base+i:03}'
+x[aid(0)]={'kind':'lean','target':'PCI_COMBINED_IMPORT'}
+x[aid(1)]={'kind':'lean','target':'PCI_AuditDriver','native':True}
+x[aid(2)]={'kind':'link','target':'PCI_AuditDriver','command':[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','PCI_native/PCI_AuditDriver','PCI_native/PCI_AuditDriver.c','PCI_native/PCI_WALKER.c','PCI_native/PCI_MemoryLimit.c'],'files':{'PCI_native/PCI_WALKER.c':'PCI_WALKER.c','PCI_native/PCI_MemoryLimit.c':'PCI_MemoryLimit.c'}}
+wrapper={'PCI_audit_once.py':'PCI_audit_once.py'}
+x[aid(3)]={'kind':'audit','target':'Eight unchanged NEP fixtures, same final binary','command':['python3','PCI_audit_once.py','fixtures'],'files':wrapper,'collect':['PCI_BINARY_BASE.json','PCI_BINARY_fixtures.json']}
+x[aid(4)]={'kind':'audit','target':'NFX whole combined import scan','command':['python3','PCI_audit_once.py','scan'],'files':dict(wrapper,**{'PCI_EXPECTED_IMPORTS.jsonl':'PCI_EXPECTED_IMPORTS.jsonl','PCI_AUDIT_ROOTS.json':'PCI_AUDIT_ROOTS_ALL.json'}),'collect':['PCI_LOADED_scan.jsonl','PCI_BINARY_scan.json']}
+for i,b in enumerate(buckets):
+ n=f'PCI_ROOTS_{i:02}.json';(E/n).write_text(json.dumps({'roots':b},indent=1)+'\n');x[aid(5+i)]={'kind':'audit','target':f'Disjoint raw ax2 semantic group{i}','command':['python3','PCI_audit_once.py',f'proof{i}'],'files':dict(wrapper,**{'PCI_AUDIT_ROOTS.json':n}),'raw_expected':b,'collect':[f'PCI_BINARY_proof{i}.json']}
+last=aid(5+len(buckets))
+x[last]={'kind':'audit','target':'Final raw artifacts and immutable accepted object export','command':['python3','PCI_collect_final.py'],'files':{'PCI_collect_final.py':'PCI_collect_final.py','PCI_AUDIT_ROOTS_ALL.json':'PCI_AUDIT_ROOTS_ALL.json'},'collect':['PCI_RAW_BUNDLE.tar.xz','PCI_RAW_BUNDLE.tar.xz.sha256','PCI_RAW_MANIFEST.json','PCI_AUDIT_BINARY_PINS.json','PCI_IMPORTS.json.xz','PCI_EXPORT.json']}
 (E/'PCI_TASKS.json').write_text(json.dumps(x,indent=2)+'\n')
-(E/'PCI_GATE_PLAN.json').write_text(json.dumps({'combined':'PCI_L101','driver':'PCI_L102','link':'PCI_L103','fixtures':'PCI_L104','scan':'PCI_L105','raw':[f'PCI_L{106+i:03}' for i in range(len(batches))],'own_roots':own,'total_roots':len(roots),'walker_sha256':hashlib.sha256((E/'PCI_WALKER.c').read_bytes()).hexdigest(),'baseline':'exact ledger24 and accepted NLF/PCE/PCG/PCF hashes; unchanged accepted raw gates retained, no unchanged whole-verifier replay'},indent=1)+'\n')
-print('PCI final gate prepared: '+str(len(own))+' own roots, '+str(len(batches))+' raw batches')
+(E/'PCI_GATE_PLAN.json').write_text(json.dumps({'combined':aid(0),'driver':aid(1),'link':aid(2),'fixtures':aid(3),'scan':aid(4),'raw':[aid(5+i) for i in range(len(buckets))],'collect':last,'own_roots':own,'total_roots':len(roots),'walker_sha256':hashlib.sha256((E/'PCI_WALKER.c').read_bytes()).hexdigest(),'formal_used_before_gate':used,'formal_after_gate':used+6+len(buckets),'partition':'disjoint semantic groups; every own root once; headline separate','baseline':'exact ledger24 and accepted NLF/PCE/PCG/PCF hashes; unchanged accepted raw gates retained'},indent=1)+'\n')
+print('PCI final gate prepared: '+str(len(own))+' own roots, '+str(len(buckets))+' disjoint raw groups, formal total120')

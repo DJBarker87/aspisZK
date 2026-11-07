@@ -1,0 +1,29 @@
+import RPx_Deployed
+import NLX_COMBINED_IMPORT
+import NLF_SdkBorrowLaw
+import PCE_COMBINED_IMPORT
+import PCG_COMBINED_IMPORT
+import PCF_COMBINED_IMPORT
+import PCI_Note
+import PCI_CountState
+import PCI_RootAddress
+import PCI_ValidatePacket
+import PCI_SinglePacket
+import PCI_DepositReferenceModel
+import PCI_DepositLimits
+import PCI_DepositExtents
+import PCI_DepositSuffix
+import PCI_ByteArrayComparison
+import PCI_ListWindow
+import PCI_IteTransport
+import PCI_DepositWordWindow
+import PCI_DepositDigestLaw
+import PCI_DepositHeader
+import PCI_DepositCopyExtents
+import PCI_DepositErrorCarrier
+#print axioms AspisR1.RPx_Deployed.deployed
+#print axioms PCI_ValidatePacket.full
+#print axioms PCI_SinglePacket.full
+#print axioms PCI_RootAddress.complete
+#print axioms PCI_CountState.complete
+#print axioms PCI_Note.forwarding

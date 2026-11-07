@@ -1,25 +1,19 @@
 # PCI certificates
 
-PCI_K001: compiler rejection E0658 before semantic execution: exact KMX stubs require allocator_api on the statement harness crate. PCI_K003 adds only cfg(kani) feature attribute in scratch; original harness name retained. This is an own-input repair, no retired timeout replay or verdict change.
+Final gate PASS. Exactly5 CLOSED Pool rows and12 OPEN; no global security target established. Native55/130; formal120/120; extraction6/14.
 
-PCI_L003 excluded: an under-instantiated Array.index rewrite left unsolved goals (the compiler printed sorryAx for the failed draft). No admitted result. PCI_L004 supplies all16 explicit index bounds; no sorry/admit/axiom is present in source.
+|Row|Complete root|Native positive|Failing controls|
+|---|---|---|---|
+|POOL:273|PCI_Note.forwarding|PCI_K003|PCI_K002|
+|POOL:223|PCI_ValidatePacket.full|PCI_K021, PCI_K024, PCI_K026, PCI_K028|PCI_K022, PCI_K023, PCI_K025, PCI_K027, PCI_K029, PCI_K030|
+|POOL:222|PCI_SinglePacket.full|PCI_K049|PCI_K050, PCI_K051, PCI_K052|
+|POOL:280|PCI_RootAddress.complete|PCI_K020|PCI_K013, PCI_K014|
+|POOL:332|PCI_CountState.complete|PCI_K006, PCI_K008, PCI_K010|PCI_K007, PCI_K009, PCI_K011|
 
-PCI_K004: whole ProgramResult equality timed out at90s, no native credit, never repeated. PCI_K005 unsubmitted shape retired. Replacement partitions all usize pairs into equal/short/long, matches only the exact reachable constructor without generic ProgramError equality; same original harness name retained. K006..K011 each carry the inverse control.
+Combined PCI_L104 imports RPx_Deployed, ledger24 NLX, NLF, PCE/PCG/PCF accepted forests and all own checked support. PCI_L105 compiles the private driver, PCI_L106 links it with -O3 and the unchanged NEP walker; PCI_L107 checks eight fixtures; PCI_L108 scans17428 modules with zero dangling, duplicate-owner or import defects. PCI_L109, PCI_L110, PCI_L111, PCI_L112, PCI_L113, PCI_L114, PCI_L115, PCI_L116, PCI_L117, PCI_L118, PCI_L119 audit104 disjoint roots (103 own plus headline), all raw axioms standard, no collector disagreement. PCI_L120 verifies all imported hashes and exports accepted objects. One binary is pinned before/after every mode.
 
-PCI_K003 PASS/K002 intended inverse FAIL: exact note input/domain, one hash call, arbitrary reply returned unchanged. E001 pinned reference extraction PASS; L001 Types/L002 Funs/L004 extracted_input and forwarding PASS, all printed axioms standard. Native/modelling support only until the full Stream C gate, not a CLOSED Pool row.
+Each receipt records exact target/command, revision and source hashes, wall/RSS/swap/exit, cgroup limits and resolved LEAN_PATH. Kani receipts add complete per-crate deployed features, frozen graph and unchanged lock hash. Every launched scope has allowed:true/exit0 admission and disk>=40GB. No timeout/cap increase or unchanged killed shape rerun.
 
-PCI_K012 compiler-only rejection: own Root module omitted extern crate alloc for KMX; the inactive count harness also lacked a default cfg branch. Root module now imports alloc and count harness is compiled only under its explicit branch cfgs. PCI_K020 retains the original root_address name and assertion; K013/K014 were not launched after the rejection. No semantic verdict was changed.
+Excluded attempts: PCI_K004 full-carrier timeout split into length classes; PCI_K015/K018 natural-product timeouts replaced by source-ordered field segments; PCI_L029 kernel-memory limit replaced by atom/domain split. Compiler/elaboration-only attempts remain in PCI_ATTEMPTS.jsonl and never count as passes. PCI_L102 missing unchanged PCC_LaneReference is repaired by private byte-identical PCI_L103 before the sole successful combined import PCI_L104.
 
-PCI_K015: three-product validator prefix TIMEOUT90s (96.81s including compile), no credit. K016/K017 unsubmitted shape retired. Replacement isolates zero-product gates, single-product stages and the one-iteration scan; unchanged timeout/caps. PCI_K018 is the already-prepared independent single-iteration shape, not a replay of K015.
-
-POOL:332: K006/007 equal, K008/009 shorter, K010/011 longer PASS/inverse FAIL cover all usize pairs with full exact ProgramResult constructors. L005 all_counts/complete standard. ReviewedTranscription replaces only accounts.len() with len; both association mutations rejected.
-
-POOL:280: E002 and L007/L008/L009 PASS; K020 actual helper PASS, K013 reply inverse FAIL, K014 pool-argument mutant FAIL. Reuses repaired PCG_SdkPda at SAME ordered23/32/8-byte seed windows and program id; all statuses/abort from existing SDK packet, no PDA value trust. Final Stream C gate pending for both rows.
-
-PCI_K018 single-product/scan step also TIMEOUT90s, no credit; K019 unsubmitted retired. Next replacement splits native operand preparation and post-product comparison at the already CLOSED M31 call, rather than asking CBMC to solve the natural-product assumption. These are source-ordered (ay)(3) segments; PCI_Mul.value is consumed internally at the same operands in Lean. No unconstrained product stub is claimed as a pass. The original natural-spec stub remains excluded and unchanged in its failed snapshots.
-
-PCI_L011 parser failure: Aeneas emitted unescaped Lean keyword `def prefix`. Compiled new-module copy now uses `def «prefix»`, the identical Lean constant name/body; raw emission remains retained with its original pins. L015 recompiles this own parser repair, with no Rust/function/harness renaming. L012..L014 were not launched by the fail-closed sequencer.
-
-PCI_L012 hit the default heartbeat limit in the prefix proof; no admitted theorem. L016 replaces branch splitting with symbolic distribution of Result.ok over conditionals, without raising heartbeats or unfolding arithmetic.
-
-PCI_L029: kernel excessive-memory exit1 at7,168,832KiB RSS, swap0, -M7000; entered_domains was not checked and its self-axiom print is EXCLUDED. No larger cap or unchanged retry. L032 isolates generic domain facts; L033 replaces whole-goal simplification by opaque, typed lemma applications.
+All import hashes: PCI_IMPORTS.json.xz. Accepted export: /home/dombarker/project-offloads/codex-pc-deposit-children2-cache-20261110/PCI_exports_20261110_95d1bb90e888 (63 files, copied and verified; five logical PCC dependencies are unchanged private builds, not newly owned modules). Native/Lean artifacts remain on host; no executable or olean is committed. Raw text is compressed in PCI_RAW_FINAL and PCI_RAW_BUNDLE.tar.xz with both compressed/uncompressed hashes.
