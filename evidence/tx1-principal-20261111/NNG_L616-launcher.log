@@ -1,0 +1,55 @@
+{"attempt": "NNG_L616", "exit_status": 1, "wall_seconds": 22.630740839987993, "peak_rss_kib": "6758584", "swaps": "0", "print_axioms": ["'AspisR1.NNG_Candidate087.candidate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NNG_generated/NNG_Candidate087.lean:23:8: error: unsolved goals
+case Err
+a : RSL.TX1_087.Args LIB_Instances.VL
+obs : RSL.Observer
+env : RSL.Env
+domain : RSL.TX1_087.Domain LIB_Instances.VL a obs
+e : verifier.Error
+returned :
+  (observation id (NNG_Events087.events env)
+        (NNG_Front087.tree (NNG_PrepareEmission087.calls env) (NNG_PrepareInput087.input a obs env))).exit =
+    RSL.Exit.ret (core.result.Result.Err e)
+⊢ {
+      exit :=
+        match (run (pure (core.result.Result.Err e, (NNG_PrepareInput087.input a obs env).scratch))).1 with
+        | ok a =>
+          RSL.Exit.ret
+            (match a.1 with
+              | core.result.Result.Ok p => Except.ok (NNG_PrepareCarriers087.prepa
+...
+)
+        (NNG_Front087.tree (NNG_PrepareEmission087.calls env) (NNG_PrepareInput087.input a obs env))).exit =
+    RSL.Exit.ret (core.result.Result.Err e)
+⊢ {
+      exit :=
+        match (run (pure (core.result.Result.Err e, (NNG_PrepareInput087.input a obs env).scratch))).1 with
+        | ok a =>
+          RSL.Exit.ret
+            (match a.1 with
+              | core.result.Result.Ok p => Except.ok (NNG_PrepareCarriers087.prepared p)
+              | core.result.Result.Err e => Except.error (NNG_PrepareErrors087.error e),
+              NMT_Transport.arr NNG_PrepareCarriers087.wide a.2)
+        | fail e => RSL.Exit.abort
+        | div => RSL.Exit.diverge,
+      events :=
+        List.flatMap (NNG_Events087.events env)
+          (run (pure (core.result.Result.Err e, (NNG_PrepareInput087.input a obs env).scratch))).2 } =
+    { exit := RSL.Exit.ret (Except.error (NNG_PrepareErrors087.error e), a.g), events := [] }
+NNG_generated/NNG_Candidate087.lean:28:13: warning: This simp argument is unused:
+  run
+
+Hint: Omit it from the simp argument list.
+  simp only [r̵u̵n̵,̵exit, ̲NNG_PreparedCall087.port, ̲NNG_PrepareInput087.scratch_exact]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NNG_generated/NNG_Candidate087.lean:28:47: warning: This simp argument is unused:
+  NNG_PrepareInput087.scratch_exact
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵e̵x̵i̵t̵,̵N̵N̵G̵_̵P̵r̵e̵p̵a̵r̵e̵d̵C̵a̵l̵l̵0̵8̵7̵.̵p̵o̵r̵t̵,̵N̵N̵G̵_̵P̵r̵e̵p̵a̵r̵e̵I̵n̵p̵u̵t̵0̵8̵7̵.̵s̵c̵r̵a̵t̵c̵h̵_̵e̵x̵a̵c̵t̵]̵[̲r̲u̲n̲,̲ ̲e̲x̲i̲t̲,̲ ̲N̲N̲G̲_̲P̲r̲e̲p̲a̲r̲e̲d̲C̲a̲l̲l̲0̲8̲7̲.̲p̲o̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NNG_Candidate087.candidate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb9e0504576444a7cb8da7f6ae9459e7b.scope; invocation ID: 3612d9aee6ea413b8441588e4c826b30
