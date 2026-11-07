@@ -1,0 +1,776 @@
+/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/sources-stx4/PV_LIB_SLICE_Spec_Source7Joint.lean:68:0: warning: Definition `indexed` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/sources-stx4/PV_LIB_SLICE_Spec_Source7Joint.lean:81:0: warning: Definition `valid` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/sources-stx4/PV_LIB_SLICE_Spec_Source7Joint.lean:118:2: error: unsolved goals
+case refine_1
+r : Resources
+enc : Encode
+⊢ (if
+        PV_STX2_SliceArrayInterpretation.isRawCast
+            (Data.object
+              [("Cast",
+                  Data.object
+                    [("Transmute",
+                        Data.array
+                          [Data.object [("Deduplicated", Data.number 2739)],
+                            Data.object [("Deduplicated", Data.number 2205)]])])]) =
+          true then
+      Option.map (fun x => PV_STX2_SliceArrayInterpretation.elementPointer x.1 0)
+        (PV_STX2_TypedReferences.decode (Data.number 4))
+    else
+      if
+          PV_STX2_SliceClonePointers.isTransmute
+              (Data.object
+                [("Cast",
+                    Data.object
+                      [("Transmute",
+                          Data.array
+                            [Data.object [("Deduplicated", Data.number 2739)],
+                              Data.object [("Deduplicated", Data.number 2205)]])])]) =
+            true then
+        match PV_STX2_TypedReferences.decode (Data.number 4) with
+        | some (address, snd) => some (PV_STX2_TypedReferences.reference address Data.null)
+        | none =>
+          (PV_STX2_Source7CapacityScalars.carrier
+                { global := fun u x => none,
+                  constant := fun d =>
+                    match d with
+                    |
+                    Data.object
+                        [("kind",
+                            Data.object
+                              [("Literal",
+                                  Data.object
+                                    [("Scalar",
+                                        Data.object
+                                          [("Unsigned",
+                                              Data.array [Data.atom "Usize", Data.atom "9223372036854775808"])])])]),
+                          ("ty", snd)] =>
+                      some (Data.number 9223372036854775808)
+                    | x => some d,
+                  dereference := fun u x => none,
+                  field := fun v i =>
+                    match v with
+                    | Data.array xs => xs[i]?
+                    | x => none,
+                  replaceField := fun x x_1 x_2 => none, metadata := fun x => none,
+                  reference := PV_STX2_TypedReferences.reference,
+                  aggregate := fun tag vs => some (PV_STX2_Aggregates.pack tag vs),
+                  unary := fun op v =>
+                    match op, v with
+                    |
+                    Data.object
+                        [("Cast",
+                            Data.object
+                              [("Transmute",
+                                  Data.array
+                                    [Data.object [("Deduplicated", Data.number 2739)],
+                                      Data.object [("Deduplicated", Data.number 940)]])])],
+                      Data.number n => some (Data.number n)
+                    | x, x_1 =>
+                      if PV_STX2_Source7QRuntimeValues.scalarCast op = true then
+                        match v with
+                        | Data.number n => some (Data.number n)
+                        | x => none
+                      else
+                        if PV_STX2_Source7QRuntimeValues.partsCast op = true then
+                          match v with
+                          |
+                          Data.object
+                              [("aggregate-kind", Data.atom "allocation-pointer-parts"),
+                                ("aggregate-slots",
+                                  Data.array [Data.array [Data.number p], Data.array [Data.number n]])] =>
+                            some (PV_STX2_Source7QRuntimeValues.parts p n)
+                          | x => none
+                        else
+                          if PV_STX2_Source7QRuntimeValues.thinCast op = true then
+                            match v with
+                            |
+                            Data.object
+                                [("aggregate-kind", Data.atom "allocation-pointer-parts"),
+                                  ("aggregate-slots",
+                                    Data.array [Data.array [Data.number p], Data.array [Data.number n]])] =>
+                              some (Data.number p)
+                            | x => none
+                          else
+                            (PV_STX2_Source7CapacityScalars.carrier
+                                  { global := fun u x => none, constant := fun v => some v,
+                                    dereference := fun u x => none,
+                                    field := fun v i =>
+                                      match v with
+                                      | Data.array xs => xs[i]?
+                                      | x => none,
+                                    replaceField := fun x x_2 x_3 => none, metadata := fun x => none,
+                                    reference := PV_STX2_TypedReferences.reference,
+                                    aggregate := fun tag vs => some (PV_STX2_Aggregates.pack tag vs),
+                                    unary := fun op value =>
+                                      if op = PV_STX2_Source7QF31Capacity.cast then
+                                        match value with
+                                        | Data.number n => some (Data.number n)
+                                        | x => none
+                                      else
+                                        if PV_STX2_Source7QRuntimeValues.scalarCast op = true then
+                                          match value with
+                                          | Data.number n => some (Data.number n)
+                                          | x => none
+                                        else
+                                          if PV_STX2_Source7QRuntimeValues.partsCast op = true then
+                                            match value with
+                                            |
+                                            Data.object
+                                                [("aggregate-kind", Data.atom "allocation-pointer-parts"),
+                                                  ("aggregate-slots",
+                                                    Data.array
+                                                      [Data.array [Data.number p], Data.array [Data.number n]])] =>
+                                              some (PV_STX2_Source7QRuntimeValues.parts p n)
+                                            | x => none
+                                          else
+                                            if PV_STX2_Source7QRuntimeValues.thinCast op = true then
+                                              match value with
+                                              |
+                                              Data.object
+                                                  [("aggregate-kind", Data.atom "allocation-pointer-parts"),
+                                                    ("aggregate-slots",
+                                                      Data.array
+                                                        [Data.array [Data.number p], Data.array [Data.number n]])] =>
+                                                some (Data.number p)
+                                              | x => none
+                                            else
+                                              (PV_STX2_Source7CapacityScalars.carrier
+                                                    {
+                                                      global :=
+                                                        (PV_STX2_SliceToVecBranch.comparisons
+                                                            { global := fun x x_2 => none, constant := fun v => some v,
+                                                              dereference := fun x x_2 => none,
+                                                              field := fun v i =>
+                                                                match v with
+                                                                | Data.array xs => xs[i]?
+                                                                | x => none,
+                                                              replaceField := fun x x_2 x_3 => none,
+                                                              metadata := fun x => none,
+                                                              reference := PV_STX2_TypedReferences.reference,
+                                                              aggregate := fun tag vs =>
+                                                                some (PV_STX2_Aggregates.pack tag vs),
+                                                              unary := fun x v => some v,
+                                                              binary := fun x x_2 x_3 => none,
+                                                              nullary := fun x x_2 => none, truth := fun x => none,
+                                                              matchesKey := fun x x_2 => false }).global,
+                                                      constant :=
+                                                        (PV_STX2_SliceToVecBranch.comparisons
+                                                            { global := fun x x_2 => none, constant := fun v => some v,
+                                                              dereference := fun x x_2 => none,
+                                                              field := fun v i =>
+                                                                match v with
+                                                                | Data.array xs => xs[i]?
+                                                                | x => none,
+                                                              replaceField := fun x x_2 x_3 => none,
+                                                              metadata := fun x => none,
+                                                              reference := PV_STX2_TypedReferences.reference,
+                                                              aggregate := fun tag vs =>
+                                                                some (PV_STX2_Aggregates.pack tag vs),
+                                                              unary := fun x v => some v,
+                                                              binary := fun x x_2 x_3 => none,
+                                                              nullary := fun x x_2 => none, truth := fun x => none,
+                                                              matchesKey := fun x x_2 => false }).constant,
+                                                      dereference :=
+                                                        (PV_STX2_SliceToVecBranch.comparisons
+                                                            { global := fun x x_2 => none, constant := fun v => some v,
+                                                              dereference := fun x x_2 => none,
+                                                              field := fun v i =>
+                                                                match v with
+                                                                | Data.array xs => xs[i]?
+                                                                | x => none,
+                                                              replaceField := fun x x_2 x_3 => none,
+                                                              metadata := fun x => none,
+                                                              reference := PV_STX2_TypedReferences.reference,
+                                                              aggregate := fun tag vs =>
+                                                                some (PV_STX2_Aggregates.pack tag vs),
+                                                              unary := fun x v => some v,
+                                                              binary := fun x x_2 x_3 => none,
+                                                              nullary := fun x x_2 => none, truth := fun x => none,
+                                                              matchesKey := fun x x_2 => false }).dereference,
+                                                      field :=
+                                                        (PV_STX2_SliceToVecBranch.comparisons
+                                                            { global := fun x x_2 => none, constant := fun v => some v,
+                                                              dereference := fun x x_2 => none,
+                                                              field := fun v i =>
+                                                                match v with
+                                                                | Data.array xs => xs[i]?
+                                                                | x => none,
+                                                              replaceField := fun x x_2 x_3 => none,
+                                                              metadata := fun x => none,
+                                                              reference := PV_STX2_TypedReferences.reference,
+                                                              aggregate := fun tag vs =>
+                                                                some (PV_STX2_Aggregates.pack tag vs),
+                                                              unary := fun x v => some v,
+                                                              binary := fun x x_2 x_3 => none,
+                                                              nullary := fun x x_2 => none, truth := fun x => none,
+                                                              matchesKey := fun x x_2 => false }).field,
+                                                      replaceField :=
+                                                        (PV_STX2_SliceToVecBranch.comparisons
+                                                            { global := fun x x_2 => none, constant := fun v => some v,
+                                                              dereference := fun x x_2 => none,
+                                                              field := fun v i =>
+                                                                match v with
+                                                                | Data.array xs => xs[i]?
+                                                                | x => none,
+                                                              replaceField := fun x x_2 x_3 => none,
+                                                              metadata := fun x => none,
+                                                              reference := PV_STX2_TypedReferences.reference,
+                                                              aggregate := fun tag vs =>
+                                                                some (PV_STX2_Aggregates.pack tag vs),
+                                                              unary := fun x v => some v,
+                                                              binary := fun x x_2 x_3 => none,
+                                                              nullary := fun x x_2 => none, truth := fun x => none,
+                                                              matchesKey := fun x x_2 => false }).replaceField,
+                                                      metadata :=
+                                                        (PV_STX2_SliceToVecBranch.comparisons
+                                                            { global := fun x x_2 => none, constant := fun v => some v,
+                                                              dereference := fun x x_2 => none,
+                                                              field := fun v i =>
+                                                                match v with
+                                                                | Data.array xs => xs[i]?
+                                                                | x => none,
+                                                              replaceField := fun x x_2 x_3 => none,
+                                                              metadata := fun x => none,
+                                                              reference := PV_STX2_TypedReferences.reference,
+                                                              aggregate := fun tag vs =>
+                                                                some (PV_STX2_Aggregates.pack tag vs),
+                                                              unary := fun x v => some v,
+                                                              binary := fun x x_2 x_3 => none,
+                                                              nullary := fun x x_2 => none, truth := fun x => none,
+                                                              matchesKey := fun x x_2 => false }).metadata,
+                                                      reference :=
+                                                        (PV_STX2_SliceToVecBranch.comparisons
+                                                            { global := fun x x_2 => none, constant := fun v => some v,
+                                                              dereference := fun x x_2 => none,
+                                                              field := fun v i =>
+                                                                match v with
+                                                                | Data.array xs => xs[i]?
+                                                                | x => none,
+                                                              replaceField := fun x x_2 x_3 => none,
+                                                              metadata := fun x => none,
+                                                              reference := PV_STX2_TypedReferences.reference,
+                                                              aggregate := fun tag vs =>
+                                                                some (PV_STX2_Aggregates.pack tag vs),
+                                                              unary := fun x v => some v,
+                                                              binary := fun x x_2 x_3 => none,
+                                                              nullary := fun x x_2 => none, truth := fun x => none,
+                                                              matchesKey := fun x x_2 => false }).reference,
+                                                      aggregate :=
+                                                        (PV_STX2_SliceToVecBranch.comparisons
+                                                            { global := fun x x_2 => none, constant := fun v => some v,
+                                                              dereference := fun x x_2 => none,
+                                                              field := fun v i =>
+                                                                match v with
+                                                                | Data.array xs => xs[i]?
+                                                                | x => none,
+                                                              replaceField := fun x x_2 x_3 => none,
+                                                              metadata := fun x => none,
+                                                              reference := PV_STX2_TypedReferences.reference,
+                                                              aggregate := fun tag vs =>
+                                                                some (PV_STX2_Aggregates.pack tag vs),
+                                                              unary := fun x v => some v,
+                                                              binary := fun x x_2 x_3 => none,
+                                                              nullary := fun x x_2 => none, truth := fun x => none,
+                                                              matchesKey := fun x x_2 => false }).aggregate,
+                                                      unary := fun op value =>
+                                                        match op, value with
+                                                        | Data.atom "Not", Data.boolean b => some (Data.boolean !b)
+                                                        | x, x_2 => some value,
+                                                      binary :=
+                                                        (PV_STX2_SliceToVecBranch.comparisons
+                                                            { global := fun x x_2 => none, constant := fun v => some v,
+                                                              dereference := fun x x_2 => none,
+                                                              field := fun v i =>
+                                                                match v with
+                                                                | Data.array xs => xs[i]?
+                                                                | x => none,
+                                                              replaceField := fun x x_2 x_3 => none,
+                                                              metadata := fun x => none,
+                                                              reference := PV_STX2_TypedReferences.reference,
+                                                              aggregate := fun tag vs =>
+                                                                some (PV_STX2_Aggregates.pack tag vs),
+                                                              unary := fun x v => some v,
+                                                              binary := fun x x_2 x_3 => none,
+                                                              nullary := fun x x_2 => none, truth := fun x => none,
+                                                              matchesKey := fun x x_2 => false }).binary,
+                                                      nullary :=
+                                                        (PV_STX2_SliceToVecBranch.comparisons
+                                                            { global := fun x x_2 => none, constant := fun v => some v,
+                                                              dereference := fun x x_2 => none,
+                                                              field := fun v i =>
+                                                                match v with
+                                                                | Data.array xs => xs[i]?
+                                                                | x => none,
+                                                              replaceField := fun x x_2 x_3 => none,
+                                                              metadata := fun x => none,
+                                                              reference := PV_STX2_TypedReferences.reference,
+                                                              aggregate := fun tag vs =>
+                                                                some (PV_STX2_Aggregates.pack tag vs),
+                                                              unary := fun x v => some v,
+                                                              binary := fun x x_2 x_3 => none,
+                                                              nullary := fun x x_2 => none, truth := fun x => none,
+                                                              matchesKey := fun x x_2 => false }).nullary,
+                                                      truth :=
+                                                        (PV_STX2_SliceToVecBranch.comparisons
+                                                            { global := fun x x_2 => none, constant := fun v => some v,
+                                                              dereference := fun x x_2 => none,
+                                                              field := fun v i =>
+                                                                match v with
+                                                                | Data.array xs => xs[i]?
+                                                                | x => none,
+                                                              replaceField := fun x x_2 x_3 => none,
+                                                              metadata := fun x => none,
+                                                              reference := PV_STX2_TypedReferences.reference,
+                                                              aggregate := fun tag vs =>
+                                                                some (PV_STX2_Aggregates.pack tag vs),
+                                                              unary := fun x v => some v,
+                                                              binary := fun x x_2 x_3 => none,
+                                                              nullary := fun x x_2 => none, truth := fun x => none,
+                                                              matchesKey := fun x x_2 => false }).truth,
+                                                      matchesKey :=
+                                                        (PV_STX2_SliceToVecBranch.comparisons
+                                                            { global := fun x x_2 => none, constant := fun v => some v,
+                                                              dereference := fun x x_2 => none,
+                                                              field := fun v i =>
+                                                                match v with
+                                                                | Data.array xs => xs[i]?
+                                                                | x => none,
+                                                              replaceField := fun x x_2 x_3 => none,
+                                                              metadata := fun x => none,
+                                                              reference := PV_STX2_TypedReferences.reference,
+                                                              aggregate := fun tag vs =>
+                                                                some (PV_STX2_Aggregates.pack tag vs),
+                                                              unary := fun x v => some v,
+                                                              binary := fun x x_2 x_3 => none,
+                                                              nullary := fun x x_2 => none, truth := fun x => none,
+                                                              matchesKey := fun x x_2 => false }).matchesKey }).unary
+                                                op value,
+                                    binary :=
+                                      (PV_STX2_SliceToVecBranch.comparisons
+                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                            dereference := fun x x_2 => none,
+                                            field := fun v i =>
+                                              match v with
+                                              | Data.array xs => xs[i]?
+                                              | x => none,
+                                            replaceField := fun x x_2 x_3 => none, metadata := fun x => none,
+                                            reference := PV_STX2_TypedReferences.reference,
+                                            aggregate := fun tag vs => some (PV_STX2_Aggregates.pack tag vs),
+                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                            matchesKey := fun x x_2 => false }).binary,
+                                    nullary := fun u x => none, truth := fun x => none,
+                                    matchesKey := fun x x_2 => false }).unary
+                              op v,
+                  binary :=
+                    (PV_STX2_SliceToVecBranch.comparisons
+                        { global := fun x x_1 => none, constant := fun v => some v, dereference := fun x x_1 => none,
+                          field := fun v i =>
+                            match v with
+                            | Data.array xs => xs[i]?
+                            | x => none,
+                          replaceField := fun x x_1 x_2 => none, metadata := fun x => none,
+                          reference := PV_STX2_TypedReferences.reference,
+                          aggregate := fun tag vs => some (PV_STX2_Aggregates.pack tag vs), unary := fun x v => some v,
+                          binary := fun x x_1 x_2 => none, nullary := fun x x_1 => none, truth := fun x => none,
+                          matchesKey := fun x x_1 => false }).binary,
+                  nullary := fun u x => none, truth := fun x => none,
+                  matchesKey := fun v k =>
+                    match v, k with
+                    | Data.number n,
+                      Data.object
+                        [("Scalar", Data.object [("Unsigned", Data.array [Data.atom "Usize", Data.atom "0"])])] =>
+                      n == 0
+                    | x, x_1 => false }).unary
+            (Data.object
+              [("Cast",
+                  Data.object
+                    [("Transmute",
+                        Data.array
+                          [Data.object [("Deduplicated", Data.number 2739)],
+                            Data.object [("Deduplicated", Data.number 2205)]])])])
+            (Data.number 4)
+      else
+        (PV_STX2_Source7CapacityScalars.carrier
+              { global := fun u x => none,
+                constant := fun d =>
+                  match d with
+                  |
+                  Data.object
+                      [("kind",
+                          Data.object
+                            [("Literal",
+                                Data.object
+                                  [("Scalar",
+                                      Data.object
+                                        [("Unsigned",
+                                            Data.array [Data.atom "Usize", Data.atom "9223372036854775808"])])])]),
+                        ("ty", snd)] =>
+                    some (Data.number 9223372036854775808)
+                  | x => some d,
+                dereference := fun u x => none,
+                field := fun v i =>
+                  match v with
+                  | Data.array xs => xs[i]?
+                  | x => none,
+                replaceField := fun x x_1 x_2 => none, metadata := fun x => none,
+                reference := PV_STX2_TypedReferences.reference,
+                aggregate := fun tag vs => some (PV_STX2_Aggregates.pack tag vs),
+                unary := fun op v =>
+                  match op, v with
+                  |
+                  Data.object
+                      [("Cast",
+                          Data.object
+                            [("Transmute",
+                                Data.array
+                                  [Data.object [("Deduplicated", Data.number 2739)],
+                                    Data.object [("Deduplicated", Data.number 940)]])])],
+                    Data.number n => some (Data.number n)
+                  | x, x_1 =>
+                    if PV_STX2_Source7QRuntimeValues.scalarCast op = true then
+                      match v with
+                      | Data.number n => some (Data.number n)
+                      | x => none
+                    else
+                      if PV_STX2_Source7QRuntimeValues.partsCast op = true then
+                        match v with
+                        |
+                        Data.object
+                            [("aggregate-kind", Data.atom "allocation-pointer-parts"),
+                              ("aggregate-slots",
+                                Data.array [Data.array [Data.number p], Data.array [Data.number n]])] =>
+                          some (PV_STX2_Source7QRuntimeValues.parts p n)
+                        | x => none
+                      else
+                        if PV_STX2_Source7QRuntimeValues.thinCast op = true then
+                          match v with
+                          |
+                          Data.object
+                              [("aggregate-kind", Data.atom "allocation-pointer-parts"),
+                                ("aggregate-slots",
+                                  Data.array [Data.array [Data.number p], Data.array [Data.number n]])] =>
+                            some (Data.number p)
+                          | x => none
+                        else
+                          (PV_STX2_Source7CapacityScalars.carrier
+                                { global := fun u x => none, constant := fun v => some v,
+                                  dereference := fun u x => none,
+                                  field := fun v i =>
+                                    match v with
+                                    | Data.array xs => xs[i]?
+                                    | x => none,
+                                  replaceField := fun x x_2 x_3 => none, metadata := fun x => none,
+                                  reference := PV_STX2_TypedReferences.reference,
+                                  aggregate := fun tag vs => some (PV_STX2_Aggregates.pack tag vs),
+                                  unary := fun op value =>
+                                    if op = PV_STX2_Source7QF31Capacity.cast then
+                                      match value with
+                                      | Data.number n => some (Data.number n)
+                                      | x => none
+                                    else
+                                      if PV_STX2_Source7QRuntimeValues.scalarCast op = true then
+                                        match value with
+                                        | Data.number n => some (Data.number n)
+                                        | x => none
+                                      else
+                                        if PV_STX2_Source7QRuntimeValues.partsCast op = true then
+                                          match value with
+                                          |
+                                          Data.object
+                                              [("aggregate-kind", Data.atom "allocation-pointer-parts"),
+                                                ("aggregate-slots",
+                                                  Data.array
+                                                    [Data.array [Data.number p], Data.array [Data.number n]])] =>
+                                            some (PV_STX2_Source7QRuntimeValues.parts p n)
+                                          | x => none
+                                        else
+                                          if PV_STX2_Source7QRuntimeValues.thinCast op = true then
+                                            match value with
+                                            |
+                                            Data.object
+                                                [("aggregate-kind", Data.atom "allocation-pointer-parts"),
+                                                  ("aggregate-slots",
+                                                    Data.array
+                                                      [Data.array [Data.number p], Data.array [Data.number n]])] =>
+                                              some (Data.number p)
+                                            | x => none
+                                          else
+                                            (PV_STX2_Source7CapacityScalars.carrier
+                                                  {
+                                                    global :=
+                                                      (PV_STX2_SliceToVecBranch.comparisons
+                                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                                            dereference := fun x x_2 => none,
+                                                            field := fun v i =>
+                                                              match v with
+                                                              | Data.array xs => xs[i]?
+                                                              | x => none,
+                                                            replaceField := fun x x_2 x_3 => none,
+                                                            metadata := fun x => none,
+                                                            reference := PV_STX2_TypedReferences.reference,
+                                                            aggregate := fun tag vs =>
+                                                              some (PV_STX2_Aggregates.pack tag vs),
+                                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                                            matchesKey := fun x x_2 => false }).global,
+                                                    constant :=
+                                                      (PV_STX2_SliceToVecBranch.comparisons
+                                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                                            dereference := fun x x_2 => none,
+                                                            field := fun v i =>
+                                                              match v with
+                                                              | Data.array xs => xs[i]?
+                                                              | x => none,
+                                                            replaceField := fun x x_2 x_3 => none,
+                                                            metadata := fun x => none,
+                                                            reference := PV_STX2_TypedReferences.reference,
+                                                            aggregate := fun tag vs =>
+                                                              some (PV_STX2_Aggregates.pack tag vs),
+                                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                                            matchesKey := fun x x_2 => false }).constant,
+                                                    dereference :=
+                                                      (PV_STX2_SliceToVecBranch.comparisons
+                                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                                            dereference := fun x x_2 => none,
+                                                            field := fun v i =>
+                                                              match v with
+                                                              | Data.array xs => xs[i]?
+                                                              | x => none,
+                                                            replaceField := fun x x_2 x_3 => none,
+                                                            metadata := fun x => none,
+                                                            reference := PV_STX2_TypedReferences.reference,
+                                                            aggregate := fun tag vs =>
+                                                              some (PV_STX2_Aggregates.pack tag vs),
+                                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                                            matchesKey := fun x x_2 => false }).dereference,
+                                                    field :=
+                                                      (PV_STX2_SliceToVecBranch.comparisons
+                                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                                            dereference := fun x x_2 => none,
+                                                            field := fun v i =>
+                                                              match v with
+                                                              | Data.array xs => xs[i]?
+                                                              | x => none,
+                                                            replaceField := fun x x_2 x_3 => none,
+                                                            metadata := fun x => none,
+                                                            reference := PV_STX2_TypedReferences.reference,
+                                                            aggregate := fun tag vs =>
+                                                              some (PV_STX2_Aggregates.pack tag vs),
+                                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                                            matchesKey := fun x x_2 => false }).field,
+                                                    replaceField :=
+                                                      (PV_STX2_SliceToVecBranch.comparisons
+                                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                                            dereference := fun x x_2 => none,
+                                                            field := fun v i =>
+                                                              match v with
+                                                              | Data.array xs => xs[i]?
+                                                              | x => none,
+                                                            replaceField := fun x x_2 x_3 => none,
+                                                            metadata := fun x => none,
+                                                            reference := PV_STX2_TypedReferences.reference,
+                                                            aggregate := fun tag vs =>
+                                                              some (PV_STX2_Aggregates.pack tag vs),
+                                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                                            matchesKey := fun x x_2 => false }).replaceField,
+                                                    metadata :=
+                                                      (PV_STX2_SliceToVecBranch.comparisons
+                                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                                            dereference := fun x x_2 => none,
+                                                            field := fun v i =>
+                                                              match v with
+                                                              | Data.array xs => xs[i]?
+                                                              | x => none,
+                                                            replaceField := fun x x_2 x_3 => none,
+                                                            metadata := fun x => none,
+                                                            reference := PV_STX2_TypedReferences.reference,
+                                                            aggregate := fun tag vs =>
+                                                              some (PV_STX2_Aggregates.pack tag vs),
+                                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                                            matchesKey := fun x x_2 => false }).metadata,
+                                                    reference :=
+                                                      (PV_STX2_SliceToVecBranch.comparisons
+                                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                                            dereference := fun x x_2 => none,
+                                                            field := fun v i =>
+                                                              match v with
+                                                              | Data.array xs => xs[i]?
+                                                              | x => none,
+                                                            replaceField := fun x x_2 x_3 => none,
+                                                            metadata := fun x => none,
+                                                            reference := PV_STX2_TypedReferences.reference,
+                                                            aggregate := fun tag vs =>
+                                                              some (PV_STX2_Aggregates.pack tag vs),
+                                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                                            matchesKey := fun x x_2 => false }).reference,
+                                                    aggregate :=
+                                                      (PV_STX2_SliceToVecBranch.comparisons
+                                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                                            dereference := fun x x_2 => none,
+                                                            field := fun v i =>
+                                                              match v with
+                                                              | Data.array xs => xs[i]?
+                                                              | x => none,
+                                                            replaceField := fun x x_2 x_3 => none,
+                                                            metadata := fun x => none,
+                                                            reference := PV_STX2_TypedReferences.reference,
+                                                            aggregate := fun tag vs =>
+                                                              some (PV_STX2_Aggregates.pack tag vs),
+                                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                                            matchesKey := fun x x_2 => false }).aggregate,
+                                                    unary := fun op value =>
+                                                      match op, value with
+                                                      | Data.atom "Not", Data.boolean b => some (Data.boolean !b)
+                                                      | x, x_2 => some value,
+                                                    binary :=
+                                                      (PV_STX2_SliceToVecBranch.comparisons
+                                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                                            dereference := fun x x_2 => none,
+                                                            field := fun v i =>
+                                                              match v with
+                                                              | Data.array xs => xs[i]?
+                                                              | x => none,
+                                                            replaceField := fun x x_2 x_3 => none,
+                                                            metadata := fun x => none,
+                                                            reference := PV_STX2_TypedReferences.reference,
+                                                            aggregate := fun tag vs =>
+                                                              some (PV_STX2_Aggregates.pack tag vs),
+                                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                                            matchesKey := fun x x_2 => false }).binary,
+                                                    nullary :=
+                                                      (PV_STX2_SliceToVecBranch.comparisons
+                                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                                            dereference := fun x x_2 => none,
+                                                            field := fun v i =>
+                                                              match v with
+                                                              | Data.array xs => xs[i]?
+                                                              | x => none,
+                                                            replaceField := fun x x_2 x_3 => none,
+                                                            metadata := fun x => none,
+                                                            reference := PV_STX2_TypedReferences.reference,
+                                                            aggregate := fun tag vs =>
+                                                              some (PV_STX2_Aggregates.pack tag vs),
+                                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                                            matchesKey := fun x x_2 => false }).nullary,
+                                                    truth :=
+                                                      (PV_STX2_SliceToVecBranch.comparisons
+                                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                                            dereference := fun x x_2 => none,
+                                                            field := fun v i =>
+                                                              match v with
+                                                              | Data.array xs => xs[i]?
+                                                              | x => none,
+                                                            replaceField := fun x x_2 x_3 => none,
+                                                            metadata := fun x => none,
+                                                            reference := PV_STX2_TypedReferences.reference,
+                                                            aggregate := fun tag vs =>
+                                                              some (PV_STX2_Aggregates.pack tag vs),
+                                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                                            matchesKey := fun x x_2 => false }).truth,
+                                                    matchesKey :=
+                                                      (PV_STX2_SliceToVecBranch.comparisons
+                                                          { global := fun x x_2 => none, constant := fun v => some v,
+                                                            dereference := fun x x_2 => none,
+                                                            field := fun v i =>
+                                                              match v with
+                                                              | Data.array xs => xs[i]?
+                                                              | x => none,
+                                                            replaceField := fun x x_2 x_3 => none,
+                                                            metadata := fun x => none,
+                                                            reference := PV_STX2_TypedReferences.reference,
+                                                            aggregate := fun tag vs =>
+                                                              some (PV_STX2_Aggregates.pack tag vs),
+                                                            unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                                            nullary := fun x x_2 => none, truth := fun x => none,
+                                                            matchesKey := fun x x_2 => false }).matchesKey }).unary
+                                              op value,
+                                  binary :=
+                                    (PV_STX2_SliceToVecBranch.comparisons
+                                        { global := fun x x_2 => none, constant := fun v => some v,
+                                          dereference := fun x x_2 => none,
+                                          field := fun v i =>
+                                            match v with
+                                            | Data.array xs => xs[i]?
+                                            | x => none,
+                                          replaceField := fun x x_2 x_3 => none, metadata := fun x => none,
+                                          reference := PV_STX2_TypedReferences.reference,
+                                          aggregate := fun tag vs => some (PV_STX2_Aggregates.pack tag vs),
+                                          unary := fun x v => some v, binary := fun x x_2 x_3 => none,
+                                          nullary := fun x x_2 => none, truth := fun x => none,
+                                          matchesKey := fun x x_2 => false }).binary,
+                                  nullary := fun u x => none, truth := fun x => none,
+                                  matchesKey := fun x x_2 => false }).unary
+                            op v,
+                binary :=
+                  (PV_STX2_SliceToVecBranch.comparisons
+                      { global := fun x x_1 => none, constant := fun v => some v, dereference := fun x x_1 => none,
+                        field := fun v i =>
+                          match v with
+                          | Data.array xs => xs[i]?
+                          | x => none,
+                        replaceField := fun x x_1 x_2 => none, metadata := fun x => none,
+                        reference := PV_STX2_TypedReferences.reference,
+                        aggregate := fun tag vs => some (PV_STX2_Aggregates.pack tag vs), unary := fun x v => some v,
+                        binary := fun x x_1 x_2 => none, nullary := fun x x_1 => none, truth := fun x => none,
+                        matchesKey := fun x x_1 => false }).binary,
+                nullary := fun u x => none, truth := fun x => none,
+                matchesKey := fun v k =>
+                  match v, k with
+                  | Data.number n,
+                    Data.object
+                      [("Scalar", Data.object [("Unsigned", Data.array [Data.atom "Usize", Data.atom "0"])])] =>
+                    n == 0
+                  | x, x_1 => false }).unary
+          (Data.object
+            [("Cast",
+                Data.object
+                  [("Transmute",
+                      Data.array
+                        [Data.object [("Deduplicated", Data.number 2739)],
+                          Data.object [("Deduplicated", Data.number 2205)]])])])
+          (Data.number 4)) =
+    some (Data.number 4)
+/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/sources-stx4/PV_LIB_SLICE_Spec_Source7Joint.lean:167:52: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/sources-stx4/PV_LIB_SLICE_Spec_Source7Joint.lean:184:2: error: unsolved goals
+case refine_2
+i : Fin 16
+root_cell : (PV_LIB_SLICE_Spec_f0.start entry).store.cells { activation := 0, localIndex := 0 } = some root
+⊢ [vector (source 0).header, vector (source 1).header, vector (source 2).header, vector (source 3).header,
+        vector (source 4).header, vector (source 5).header, vector (source 6).header, vector (source 7).header,
+        vector (source 8).header, vector (source 9).header, vector (source 10).header, vector (source 11).header,
+        vector (source 12).header, vector (source 13).header, vector (source 14).header,
+        vector (source 15).header][↑i] =
+    vector (source i).header
+/home/dombarker/project-offloads/codex-pv-lib-slice-20261107/sources-stx4/PV_LIB_SLICE_Spec_Source7Joint.lean:188:48: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵A̵d̵d̵r̵e̵s̵s̵,̵r̵e̵a̵d̵F̵i̵e̵l̵d̵s̵,̵r̵o̵o̵t̵_̵c̵e̵l̵l̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵]̵[̲r̲e̲a̲d̲A̲d̲d̲r̲e̲s̲s̲,̲ ̲r̲e̲a̲d̲F̲i̲e̲l̲d̲s̲,̲ ̲r̲o̲o̲t̲_̲c̲e̲l̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_LIB_SLICE_Spec_Source7Joint.wf' depends on axioms: [propext]
+'PV_LIB_SLICE_Spec_Source7Joint.typed' depends on axioms: [propext, Quot.sound]
+'PV_LIB_SLICE_Spec_Source7Joint.owned' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SLICE_Spec_Source7Joint.valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_LIB_SLICE_Spec_Source7Joint.machine_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SLICE_Spec_Source7Joint.source_valid' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SLICE_Spec_Source7Joint.pre' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_LIB_SLICE_Spec_Source7Joint.joint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
