@@ -1,73 +1,75 @@
-# NMP TX1:137 and TX1:087 handoff
+# NMP budget-end handoff under bm
 
-IN PROGRESS. Target not yet established. No candidate root or closure credit.
-Branch codex/cx-tx1-observed3-20261107. Baseline ledger24: 581 CLOSED / 0 QUALIFIED / 18 OPEN.
+**Target not yet established. TX1:137 and087 remain OPEN. No candidate root,
+ledger promotion, or100-bit release conclusion is claimed.** Branch:
+`codex/cx-tx1-observed3-20261107`. No push; no shipped-file/ELF/key changes.
+Baseline ledger24 remains581 CLOSED /0 QUALIFIED /18 OPEN.
 
-Method: ruling (bl), actual frozen parents, full-type child reply and mutable-byte havoc,
-existing-argument local logs, complete transcription outcome and three control families.
-Composition follows in Lean; unfinished child laws remain explicit parameters.
-Only NMP_ modules and this evidence directory are writable. No shipped file changes,
-no push, no key cleanup. All compiled work uses existing host launcher in serial
-6G/8G/no-swap/64-task scopes; Lean -M7000, deployed features and offline frozen lock.
-Budget: 100 Kani, 80 Lean/support, zero extraction. Attempts and audit status will be
-updated as stages complete. Formal-result fields live in per-attempt receipts.
+## Established source claims
 
-## Live checkpoint after mutable-frame calibration
-Target not yet established; no candidate root, no ledger delta. Both fixed-array generator interfaces passed K070-K085 and standard-axiom ByteHavocLaw covers all post-bytes. Dynamic slice K068 is an unadmitted compiler ICE. Copy K095/K100 passes/fails under current configuration. K011 combined return/halo timed out; retired. Split return K086 passed75.16s, zero swap. Root Transfer K012 reply, K013 argument, K014 omitted-write controls fail as intended; K012 formatting was manually reviewed, not rerun. Withdrawal K015 passed and K016/K017 controls fail; queue continues.
+Fresh pinned E002 jointly emits actual frozen `verify_observed` and `prepare`;
+E001's own PATH failure happened before Rust extraction. Both scopes are
+receipted. Frozen verifier/crates/lock4bb3b3f5, exact Poolb936275465 payload,
+metadata/features/lock checks, LLBC, raw outputs and tool hashes are retained.
+The bc audit passes15 own source spans, with no post-loop-return pattern.
 
-Own local clients are sequential and preconditioned: NMP_native_queue continuing RETURN_PLAN after existing receipts; later prepare client waits K063, then runs K087-K099 excluding already-completed K095 and K100. NMP_AFTER_NATIVE waits K099's intended verdict, checks research for a merged NMO candidate read-only, compiles new rejection-resource support at L078 FIRST, refreshes audit inputs, then L038-L077, L079, L080. No scope is submitted while Stream A count>=2; all such waits are retained. Never blindly restart/resubmit a label with a receipt or active guard.
+`AspisR1.NMP_ObservedSuffix.emitted` (L108) proves the six-step machine erases
+to the fresh137 body for complete arbitrary child Results.
+`AspisR1.NMP_PrepareSuffix.emitted` (L152) proves the eight-step087 identity,
+with std map_err's complete law. Actual split/reassembly closures and the
+post-begin transcript are retained; early Rust errors preserve original g.
+One small occurrence lemma per call compiled in source order.
 
-L078 is now the new NMP_RejectionResources module (not the originally drafted native-final check). L077 pins/exports; L079 checks retention; final L080 runs native inventory then audit summary in one capped scope. Final audit uses32 distinct root groups (a few roots in one group, plus headline) and unchanged raw ax2 walker; final input generation occurs AFTER L078 is green. The local runner and scripts remain repairable only within own evidence; shared launcher/reservation are untouched.
+Carrier inverses and138/131/150 SAME-argument full-Result adapters compile.
+The136 adapter remains parametric. Canonical conditional folds L161/L162 use
+EXACT RowSpec_136/137, complete PreparedNew and ordered relational effects.
+These are support, not the actual full-observation canonical implementation
+instance. Own-domain7015/464 source widths and14759->13831/928 widths passL167.
 
-New support corrects inner Rust Err classification as well as outer failures: exact error value retained, no invented post-abort heap. Earlier generic ResourceFold is conditional returning-frame algebra only, never a native producer or row root. Full Prefix borrowed-object/extent coverage, hash-channel erasure, physical resource producer and SAME179 caller clauses remain OPEN. Full child136 law is explicit, never the weak NLI interface. All actual outcomes still need to be collected before final status.
+## Final validation
 
-### Updated final-plan authority
-NMP_FINAL_PLAN.json supersedes the earlier live checkpoint's order. After native K099, the waiting client reads this plan: L078 rejection resources, L038/L039/L040 focused symbolic pass/digits/rho-certificate construction, then regenerate all audit inputs. L041 combined import, L042/L043 drivers, L044/L045 optimized links, L046 fixtures, L047 scan, L048-L07629 distinct raw groups, L077 closure pins/export, L079 retention, L080 native inventory plus audit summary. All80 labels remain unique. The new rho modules are DRAFT until their focused receipts are green; no rho clause is promoted yet. Raw collection globs point to each actual proof group. Native return queue and host caps are unchanged.
+NMP_COMBINED_IMPORT L168 passes with the headline
+`AspisR1.RPx_Deployed.deployed`. Planted/mutation controls match all8 expected
+results. NFX scan L271 exits0 over17,544 modules, with zero dangling/owner/
+import issues. Raw ax2 L171-L267 audits every101 new support roots plus the
+headline, once each, in97 groups: collectors agree and only standard axioms
+occur. See NMP_AUDIT.json and individual receipts for exact targets, status,
+wall time, peak RSS, swap, source revision, hashes and #print axioms lines.
 
-Latest correction: K089 was a selector-input failure; K090 reached CBMC and crashed139 in the heap-contract context. L079 now installs explicit typed-array byte havoc before the eight remaining native labels. NMP_FINAL_PLAN.json skips already-consumed L079; L080 now performs native inventory, retention and audit summary sequentially. No parent uses point/stub_verified after this install; standalone stack calibration remains separately retained.
+All200 fresh charged L scopes are terminal:92 Lean,2 links,103 audits and3
+seed/copy validation scopes. Both extraction scopes are spent; zero new Kani.
+All swap metrics are zero; maximum RSS8,072,976KiB was the successful scan,
+below the fixed8GiB cap. No timeout/OOM rerun, cap increase or full unchanged
+regression occurred. The shared launcher/checker infrastructure was unchanged;
+own client parsing/type/normalization repairs are receipted. Full budget detail
+is NMP_BM_BUDGET.json. Earlier100 Kani/80 support allowance remains exhausted.
 
-## Ruling bm continuation (2026-11-07)
-Prior 100 Kani/80 Lean allowance is spent. Whole-parent Kani for137/087 is
-retired after CBMC139 and receives no further attempts. New budget: E001-E002
-(two fresh pinned extractions), L081-L280 (200 Lean/link/audit scopes), zero Kani.
-Route: emitted ACTUAL frozen bodies, bc exit audit, source-order step modules,
-SAME-argument child transports. Child136 is canonical RSL RowSpec_136 until a
-gated NMO candidate exists. Canonical RowSpec_137/087 remain the targets.
-Allocation aborts and error clones are audited explicitly; no silent weakening.
-The amended NMW transport payload supplies exact b936275465 Pool files.
-Existing objects and NMP support are reused; no frozen source changes.
+L277 exports pinned objects to the OWN retained host cache:
+`/home/dombarker/project-offloads/codex-cx-tx1-observed3-20261110/NMP_BM_exports_20261107`.
+NMP_BM_EXPORT.json records hashes/sizes; no .olean/binary is committed. L278-L280
+validate raw results, sources/lock/imported hashes, output size and scope
+accounting. No cache/TMPDIR/key was deleted. No native whole-parent route remains.
 
-E001 exited101 before Rust extraction: own input PATH lacked rustup. Frozen graph/lock check passed. E002 repairs PATH and emits prepare plus reached verify_observed together; the137 opaque boundary is removed only to emit that same frozen child body. Both rows will have the SAME fresh extraction receipt. No Kani launched.
+## Exact remaining obligations
 
-E002 joint extraction PASS: exit0,84.7748s,538816KiB RSS,swap0; both actual
-parents emitted under one receipt, pins/graph/declaration inventory retained.
-BC audit passes15 own source spans: no loops or post-loop exits. L081 Types
-and L082 parameterized Funs pass; each emitted definition prints no axioms.
-Raw FunsExternal templates remain evidence only, never imported as axioms.
-L083 copies/pins existing NMT_CallTree objects; L084 exact12-boundary parent
-context passes. Six137 occurrence modules are drafted, not yet validated.
-Host-share follows bm4e whole-host six-scope replacement; prior stricter waits
-are retained. No Kani, no frozen-file edits, no row closure claimed.
+See NMP_REMAINING.md and NMP_BM_SPEC_FINDINGS.md. In particular:
 
-Stage:137 occurrences0..5 PASS at L095/L089-L093, standard axioms. The
-parent context's universe issue was repaired (L086), State passedL087.
-Full-machine erasure attemptsL096/L098 are retired; isolated suffix proof
-normalization now uses separately checked NMP_DirectBind (L109 PASS).
-Structural inverses to CLOSED semantic carriers are compiling (L110 onward).
-Canonical specs copied as prior checked NMT objects at L097; exact sources
-match RSL_ modulo import prefix, pinned in NMP_BM_RSL_SOURCE_PINS.json.
-NMP-BM-S1: mark130 packet is None-only, canonical137 arbitraryobs; source
-ignores obs but no broader ledger application is claimed. NMP-BM-S2:179
-success theorem needs its all-outcome companions and caller-domain proof.
-Prepare state/occurrence/suffix files are DRAFT until their own receipts pass.
+- Install the actual full-observation CLOSED-library interpretation/domains
+  over the SAME emitted arguments, including complete digest/allocation
+  prefixes. Value/type equality alone is not that producer.
+- Ledger130 covers None; canonical137 quantifies arbitrary observers. No
+  silent observer restriction or over-broad CLOSED application is made.
+- Child136 is still OPEN on its committed branch; no candidate packet was
+  found on research. Keep EXACT canonical RowSpec_136 explicit until gated.
+- Complete179's error/fail/div/allocation/effect companions at SAME arguments;
+  its successful NHS theorem alone is insufficient. Expansion does NOT prove
+  y1 canonicality, absent from canonical087's current Domain.
+- Justify the begin-Err dead-local transcript projection while preserving all
+  ordered effects; the typed source log retains the complete after-transcript.
 
-137 emitted erasure complete: NMP_ObservedSuffix.source/emitted PASS atL108
-(no successful-child/input/endpoint assumptions; full outer and Rust Result).
-Suffixes L127/L102/L133/L104-L106 pass; six original occurrence lemmas remain
-standard-only. This is source/body support, not a canonical row root or credit.
-Constants now use named generic Usize arithmetic laws L130, specializedL129;
-no large concrete buffers or recurrence terms were evaluated. Std map_err
-and both fixed error callbacks passL131. All fourteen semantic carrier
-inverses passL111-L124. Prepare134-152 and installation153-162 are queued.
-NMP-BM-S3 records that expansion success does not establish y1 canonicality
-required by the successful179 packet; no stronger087 domain was adopted.
+No assumption is silently discharged, added, or weakened. Existing std,
+ABI/compiler/runtime/source-to-ELF and narrowed extraction trust remain;
+bm increases reliance on that extraction item without adding a trust row.
+The next deliverable is the concrete canonical library/domain composition
+and child-root instantiation. It is Lean/packet work, not another whole-parent
+Kani experiment. This run stops because its fresh budget is exhausted.
