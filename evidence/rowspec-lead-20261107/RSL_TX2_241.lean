@@ -21,9 +21,15 @@ Own-input domain ((bf)(2)), recorded as caller clauses of TX2:240:
        OPEN at 241.  It propagates to TX2:240/221/213 and is discharged at the
        entry only by the headline hypotheses (RuntimePersistence data-only plus
        NMF_GameRoot "Root0 or existing charged collision"), see RSL_INDEX.md.
-Effects, in order: TX2:242's events; the encoder's allocation; TX2:064's
+Effects, in order: TX2:242's events; the encoder (CLOSED law; the frozen
+encoder returns an array); TX2:064's
 ordered digest/oracle chronology (its abort arm carries only its prefix);
 on a TX2:064 Err one log line; then emit_result's return-data event.
+Revision 2 (RSL_REVISION2.md): the two `data()?` clones are allocation sites for
+a heap-carrying deferred error (`RS.ofCloned`, NMT-S1 shape), and the `error`
+path has its `format!` allocation before the log line.  At the only caller,
+TX2:240, every snapshot satisfies `OwnedAccount.SnapshotErrs`
+(RSL_TX1_344.snapAll_errs), so the clone arms are unreachable there.
 -/
 import RSL_TX2_242
 set_option autoImplicit false
@@ -47,12 +53,14 @@ def Dom064 (V : V2Lib) (x : Bytes × Bytes × Bytes) : Prop :=
   x.2.1.length = PROOF_BYTES ∧ x.2.2.length = CHECKPOINT_BYTES ∧ x.1.length ≤ STATEMENT_BYTES
   ∧ V.Root0 x.2.2 x.2.1
 
-/-- `.map_err(super::super::error)?` (lib.rs:40): one log line, then
-InvalidInstructionData. -/
+/-- `.map_err(super::super::error)?` (lib.rs:40): the `format!` String
+allocation of `msg!("r1:error:{:?}", e)` (Revision 2; abort = prefix so far),
+one log line, then InvalidInstructionData. -/
 def mapVErr (V : V2Lib) (r : Except V.VErr Unit) : RS Unit :=
   match r with
   | .ok () => RS.pure ()
-  | .error e => RS.seq (RS.lift (Spec.emit (.log ("r1:error:" ++ V.debug e))))
+  | .error e => RS.seq (RS.lift Spec.alloc) <|   -- format! builds the message String
+               RS.seq (RS.lift (Spec.emit (.log ("r1:error:" ++ V.debug e))))
                   (RS.throw .invalidInstructionData)
 
 structure Args where
@@ -70,9 +78,9 @@ def Ref (L : PoolLib) (D : DeployedIds) (V : V2Lib) (a : Args) : RS Unit :=
   RS.bind (Spec.call TX2_242.Domain (TX2_242.Ref L D)
             ⟨a.program_id, a.accounts, a.data, a.current_slot⟩) fun validated =>
   RS.bind (RS.index a.accounts 0) fun acc0 =>
-  RS.bind (RS.ofExcept acc0.data) fun proofData =>
+  RS.bind acc0.data fun proofData =>
   RS.bind (RS.index a.accounts 6) fun acc6 =>
-  RS.bind (RS.ofExcept acc6.data) fun checkpointData =>
+  RS.bind acc6.data fun checkpointData =>
   RS.seq (RS.check (decide (USIZE_LIMIT ≤ AFTERSTATE_BYTES + validated.proof_length))
             .invalidAccountData) <|
   let proofEnd := AFTERSTATE_BYTES + validated.proof_length

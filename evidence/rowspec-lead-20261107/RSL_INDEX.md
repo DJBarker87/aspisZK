@@ -2,12 +2,14 @@
 
 Target not yet established. These are specifications, not proofs. No row is closed by this package.
 
+**Revision 2 (2026-11-07).** RSL_REVISION2.md supersedes parts of this index. It adds the clone allocation arm to the owned getters (NMT-S1), the decoder's reached-allocation arm to TX1:345 (NMT-S2) and the `format!` allocation in `lib.rs::error` (TX1:328, TX2:241). Domains are unchanged. TX1:328 no longer rejects the constant abort, because the frozen function can abort silently at that `format!` site.
+
 Frozen source 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387, release features {pool-adapter, private-leaf-salts}, with cu-profiling, prover and detail-phases off. Each module defines `RowSpec_<row>` over the observed semantics of the actual frozen function, `impl : Args -> [SdkState ->] Env -> Obs Ret`. The spec says that on the row's own-input domain, the observation lies in `Ref`, a line-by-line transcription of the frozen body. Read the header of RSL_Base.lean first. The semantic choices that make the package full-strength are these:
 
 - **Complete Result.** Every `Ok` and `Err` value is exact. `ProgramError` is the complete solana-program-error 2.2.2 carrier, payload variants included.
 - **Ordered effects.** Every observable effect is an `Event` in source order: the PDA, sha256 and Clock syscalls with their quantified replies (ruling (at)), log lines, return data, account-data writes and RefCell acquire/release tokens.
 - **Aborts.** A panic, a stopped child or an allocation failure is `Exit.abort` with only the event prefix (ruling (bl)(3)). No post-abort state is stated.
-- **Only one source of nondeterminism.** The only nondeterministic branch is the allocation-failure arm at each named allocation site. There is no generic "may abort" clause, so a constant Err or a constant abort cannot satisfy a spec. Each module proves this in Lean (see RSL_CHECK.md).
+- **Only one source of nondeterminism.** The only nondeterministic branch is the allocation-failure arm at each named allocation site. There is no generic "may abort" clause, so a constant Err cannot satisfy a spec, and neither can a constant abort except at TX1:328, where a silent allocation site is reachable on every input (Revision 2). Each module proves this in Lean (see RSL_CHECK.md).
 - **Child calls at SAME arguments.** A child is entered through `Spec.call dom law` (or `Child.run`) at SAME arguments. The parent spec is therefore provable only if the parent discharges the child's (bf)(2) domain at that call. Caller-clause discharge is part of the statement and is never a hypothesis.
 - **The three NMG_ defects are avoided.**
   - The spec constrains the actual function's observation, not an invocation relation, so the empty relation does not satisfy it (NLJ094).
@@ -184,7 +186,7 @@ Own-input clauses:
 | Frozen signature | `fn stage1_owned(program_id: &Pubkey, accounts: &[OwnedAccount], data: &[u8]) -> Result<Vec<u8>, ProgramError>` |
 | Spec | `RowSpec_345 V P C`, module RSL_TX1_345.lean |
 | Own-input clauses | none |
-| Children | CLOSED TX1:339/340/341/335/342/332/276/267/278/173/268 (`C`, transcribed helpers); OPEN `TX1_328.Ref` |
+| Children | CLOSED TX1:339/340/341/335/342/332/276/267/278/173/268 (`C`, transcribed helpers; Revision 2: getter clone arms, `S1Lib.decodeReachesAlloc`); OPEN `TX1_328.Ref` |
 | Shape | (bm) |
 
 ### TX1:344 stage1

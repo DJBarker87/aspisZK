@@ -20,7 +20,8 @@ open RSL
 #print axioms TX1_137.rejects_constErr
 #print axioms TX1_087.rejects_wrong_g
 #print axioms TX1_094.rejects_constErr
-#print axioms TX1_328.rejects_silent
+#print axioms TX1_328.rejects_silentRet
+#print axioms TX1_328.ref_admits_abort
 #print axioms TX1_345.rejects_constErr
 #print axioms TX1_345.rejects_constAbort
 #print axioms TX1_344.rejects_silentErr
@@ -28,6 +29,19 @@ open RSL
 #print axioms TX1_333.rejects_silentErr
 #print axioms TX1_330.rejects_constAbort
 #print axioms TX1_330.rejects_silentErr
+-- Revision 2 support lemmas
+#print axioms RS.ofCloned_error
+#print axioms RS.ofCloned_eq_ofExcept
+#print axioms RS.ofCloned_heap_abort
+#print axioms RS.ofCloned_plain_no_abort
+#print axioms OwnedAccount.data_of_snapshotErrs
+#print axioms OwnedAccount.data_len_of_snapshotErrs
+#print axioms Spec.bind_two
+#print axioms RS.alloc_seq_iff
+#print axioms Spec.bind_ret_inv
+#print axioms TX1_344.snapshot_errs
+#print axioms TX1_344.snapAll_errs
+#print axioms TX1_344.snapAll_getters_plain
 #check @TX2_217.RowSpec_217
 #check @TX2_234.RowSpec_234
 #check @TX2_233.RowSpec_233

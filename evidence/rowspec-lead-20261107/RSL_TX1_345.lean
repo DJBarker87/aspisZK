@@ -20,6 +20,14 @@ the CLOSED decode/validate laws at the decoded statement.  If those laws do
 not export it, that is a missing child lemma under (aq)(3), not a domain clause.
 Effects: the statement Box allocation; then first_decoded's events; abort =
 prefix.  The returned Vec is the checkpoint image written by TX1:344.
+Revision 2 (RSL_REVISION2.md): (NMT-S1) the three `data()?` calls and the
+`data_len()?` inside require_verifier_checkpoint clone a deferred ProgramError;
+the clone of a nonempty BorshIoError String is an allocation site
+(`RS.ofCloned`).  At the only caller, TX1:344, every snapshot satisfies
+`OwnedAccount.SnapshotErrs` (RSL_TX1_344.snapAll_errs), so these arms are
+unreachable there; the domain stays True.  (NMT-S2) the decoder's internal
+allocation sites reached before a later Err are represented by
+`S1Lib.decodeReachesAlloc`.
 -/
 import RSL_TX1_328
 import RSL_Pool
@@ -29,8 +37,21 @@ namespace RSL.TX1_345
 
 structure S1Lib (V : VLib) where
   Statement : Type
-  /-- decoder inside decode_public_statement_box (CLOSED TX1:332, NFY_Part058). -/
+  /-- decoder inside decode_public_statement_box (CLOSED TX1:332, NFY_Part058):
+  the Result value (`none` = any decoder Err, mapped to InvalidAccountData). -/
   decodeStatement : Bytes → Option Statement
+  /-- Revision 2 (NMT-S2).  `true` exactly when the frozen decoder
+  `decode_pool_v1_pair_forest_terminal_statement_v1` run on these bytes reaches
+  at least one of its internal allocation sites before it returns, whether it
+  then returns Ok or a later Err: the Box::new sites of
+  decode_pair_live_snapshot_boxed_v1 / decode_pair_afterstate_boxed_v1 /
+  decode_pool_v1_pair_late_public_statement_boxed_v1 (pair_tree_profile.rs:665,
+  675, 742), decode_terminal_common_boxed_v1 (pair_forest_terminal.rs:351) and
+  the transfer/withdrawal statement Box (379/394).  A total function of the
+  bytes fixed by the frozen decoder (CLOSED TX1:332 full observation, with its
+  reached allocation sites, at SAME argument); it is `false` on every input
+  rejected by the length/magic/version/kind/encoding checks of lines 403-416. -/
+  decodeReachesAlloc : Bytes → Bool
   /-- `validate_..._statement_v1(..).is_ok()` (CLOSED TX1:276, NFY_Part031). -/
   validateStatement : Statement → Bool
   /-- encode_pool_v1_pair_verified_afterstate_v1 at
@@ -55,15 +76,20 @@ def body (V : VLib) (P : PreparedNew V) (C : S1Lib V) (a : Args) (p pub ck : Own
   RS.seq (RS.ofExcept (requireDistinct [p, pub, ck])) <|
   RS.seq (RS.ofExcept (readonlyBuffer p)) <|
   RS.seq (RS.ofExcept (readonlyBuffer pub)) <|
-  RS.seq (RS.ofExcept (verifierCheckpoint ck a.program_id true)) <|
-  RS.bind (RS.ofExcept ck.data) fun checkpointData =>
+  RS.seq (verifierCheckpoint ck a.program_id true) <|
+  RS.bind ck.data fun checkpointData =>
   RS.seq (RS.ofExcept (requireZero checkpointData)) <|
-  RS.bind (RS.ofExcept pub.data) fun publicData =>
+  RS.bind pub.data fun publicData =>
+  -- decode_public_statement_box (r1_pool_adapter.rs:237-244).  The decoder emits
+  -- no event, so its reached internal allocation sites (each: continue or abort
+  -- with the prefix so far) collapse to one `allocIf` before its Result; then the
+  -- outer Box::new on Ok.
+  RS.seq (RS.lift (Spec.allocIf (C.decodeReachesAlloc publicData))) <|
   RS.bind (RS.ofOption (C.decodeStatement publicData) .invalidAccountData) fun st =>
   RS.seq (RS.lift Spec.alloc) <|
   RS.seq (RS.check (!C.validateStatement st) .invalidAccountData) <|
   RS.bind (RS.ofOption (C.encodeCandidate st) .invalidAccountData) fun candidate =>
-  RS.bind (RS.ofExcept p.data) fun proofData =>
+  RS.bind p.data fun proofData =>
   RS.seq (RS.check (proofData.length != PROOF_ACCOUNT_BYTES
                     || proofData.take AFTERSTATE_BYTES != candidate
                     || proofData.getD (AFTERSTATE_BYTES + 8) 0 != S2_TAG) .invalidAccountData) <|
