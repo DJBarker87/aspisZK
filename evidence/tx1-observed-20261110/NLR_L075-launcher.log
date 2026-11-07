@@ -1,0 +1,54 @@
+{"attempt": "NLR_L075", "exit_status": 1, "wall_seconds": 20.141218665987253, "peak_rss_kib": "6309180", "swaps": "0", "print_axioms": ["'AspisR1.NLR_Prepare.run_constructor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NLR_generated/NLR_PrepareRun_constructor.lean:18:1: error: Tactic `apply` failed: could not unify the conclusion of `NLJ_RunAlgebra.bind_congr closed`
+  run (AspisR1PublicPreparation.PreparedHashCode.bind closed ?f) =
+    run (AspisR1PublicPreparation.PreparedHashCode.bind closed ?g)
+with the goal
+  run
+      (AspisR1PublicPreparation.PreparedHashCode.bind closed fun a =>
+        AspisR1PublicPreparation.PreparedHashCode.bind (Code.done (Sum.inl a)) (continuation cfg)) =
+    run closed
+
+Note: The full type of `NLJ_RunAlgebra.bind_congr closed` is
+  ∀
+    (f g :
+      core.result.Result verifier.Prepared verifier.Error × Std.Array aspis_core.field.wide_exact.WideExact 29#usize →
+        Code 
+...
+NLR_generated/NLR_PrepareRun_constructor.lean:18:1: error: Tactic `apply` failed: could not unify the conclusion of `NLJ_RunAlgebra.bind_congr closed`
+  run (AspisR1PublicPreparation.PreparedHashCode.bind closed ?f) =
+    run (AspisR1PublicPreparation.PreparedHashCode.bind closed ?g)
+with the goal
+  run
+      (AspisR1PublicPreparation.PreparedHashCode.bind closed fun a =>
+        AspisR1PublicPreparation.PreparedHashCode.bind (Code.done (Sum.inl a)) (continuation cfg)) =
+    run closed
+
+Note: The full type of `NLJ_RunAlgebra.bind_congr closed` is
+  ∀
+    (f g :
+      core.result.Result verifier.Prepared verifier.Error × Std.Array aspis_core.field.wide_exact.WideExact 29#usize →
+        Code ?m.29),
+    (∀
+        (a :
+          core.result.Result verifier.Prepared verifier.Error ×
+            Std.Array aspis_core.field.wide_exact.WideExact 29#usize),
+        run (f a) = run (g a)) →
+      run (AspisR1PublicPreparation.PreparedHashCode.bind closed f) =
+        run (AspisR1PublicPreparation.PreparedHashCode.bind closed g)
+
+cfg : Configuration
+H : Type
+i : Input H
+logical : alloc.vec.Vec U8
+v : verifier.View
+sem : r1_semantic.Verified H
+closed :
+  Code (core.result.Result verifier.Prepared verifier.Error × Std.Array aspis_core.field.wide_exact.WideExact 29#usize)
+hclosed : BorrowedClaimPrepared.closedPreparationCode i.digest sem v i.hash i.scratch = closed
+⊢ run
+      (AspisR1PublicPreparation.PreparedHashCode.bind closed fun a =>
+        AspisR1PublicPreparation.PreparedHashCode.bind (Code.done (Sum.inl a)) (continuation cfg)) =
+    run closed
+'AspisR1.NLR_Prepare.run_constructor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rec4635e52a484391a5628b8f51085a5c.scope; invocation ID: 4948b0d4a76f4f6fbbde24a23771fabe

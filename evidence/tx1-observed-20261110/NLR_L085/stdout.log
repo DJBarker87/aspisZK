@@ -1,0 +1,20 @@
+NLR_generated/NLR_PrepareStep137.lean:35:1: warning: 'all_goals rfl' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NLR_generated/NLR_PrepareStep137.lean:35:11: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'AspisR1.NLR_PrepareStep137.semantic_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_PrepareStep137.semantic_step : ∀ (native : NLR_Interface.Native137),
+  NLR_Interface.RowSpec_137 native →
+    ∀ (base : Ops) (reservation : NP6_StdModel.Reservation) (i : NLJ_Prepare.Input Unit) (logical : alloc.vec.Vec U8)
+      (v : verifier.View) (before : NLR_Interface.ExternalFrame),
+      (↑v.semantic).length = 13831 →
+        have call := NLR_PrepareSemantic137.observedInput reservation i v;
+        (native call before).afterInput = call ∧
+          (native call before).afterFrame = before ∧
+            run
+                (NLJ_Prepare.step (NLR_PrepareSemantic137.configuration base reservation)
+                  { input := i, locals := NLJ_Prepare.Local.semantic logical v }) =
+              ((native call before).log, post i logical v (native call before).reply) :=
+⋯

@@ -1,0 +1,84 @@
+NLR_generated/NLR_PrepareSemantic137.lean:32:1: error: Tactic `rfl` failed: The left-hand side
+  S1SemanticCodeInstallation.code AspisS1ExtractedRoundChildren.children
+    (ClaimsUnrolledFinish.install (NP6_StdModel.calls reservation) (IDa_Deployed.boundaries reservation)) i.digest
+    i.publicValue v.semantic i.hash
+is not definitionally equal to the right-hand side
+  AspisR1PublicPreparation.PreparedHashCode.bind
+    (AspisR1PublicPreparation.S1SemanticCode.verify
+      (fun {H} => AspisR1PublicPreparation.S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation))
+      (observedInput reservation i v).digest (observedInput reservation i v).publicValue v.semantic i.hash none)
+    fun r => pure (convert r)
+
+reservation : NP6_StdModel.Reservation
+i : NLJ_Prepare.Input Unit
+v : verifier.View
+⊢ S1SemanticCodeInstallation.code AspisS1ExtractedRoundChildren.children
+      (ClaimsUnrolledFinish.install (NP6_StdModel.calls reservation) (IDa_Deployed.boundaries reservation)) i.digest
+      i.publicValue v.semantic i.hash =
+    AspisR1PublicPreparation.PreparedHashCode.bind
+      (AspisR1PublicPreparation.S1SemanticCode.verify
+        (fun {H} =>
+          AspisR1PublicPreparation.S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation))
+        (observedInput reservation i v).digest (observedInput reservation i v).publicValue v.semantic i.hash none)
+      fun r => pure (convert r)
+NLR_generated/NLR_PrepareSemantic137.lean:45:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  run
+    (AspisR1PublicPreparation.S1SemanticCode.verify
+      (fun {H} =>
+        AspisR1PublicPreparation.S1SemanticCode.finish NJM_RoundJoin.R
+          (IDa_Deployed.boundaries (observedInput reservation i v).reservation))
+      (observedInput reservation i v).digest (observedInput reservation i v).publicValue
+      (observedInput reservation i v).bytes (observedInput reservation i v).hash none)
+in the target expression
+  (AuS1_Trace.continueRun
+      (run
+          (AspisR1PublicPreparation.S1SemanticCode.verify
+            (fun {H} =>
+              AspisR1PublicPreparation.S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation))
+            (observedInput reservation i v).digest (observedInput reservation i v).publicValue v.semantic i.hash
+            none)).1
+      (run
+          (AspisR1PublicPreparation.S1SemanticCode.verify
+            (fun {H} =>
+              AspisR1PublicPreparation.S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation))
+            (observedInput reservation i v).digest (observedInput reservation i v).publicValue v.semantic i.hash
+            none)).2
+      fun r => pure (convert r)) =
+    ((native (observedInput reservation i v) before).log, reply (native (observedInput reservation i v) before).reply)
+
+native : NLR_Interface.Native137
+child137 : NLR_Interface.RowSpec_137 native
+reservation : NP6_StdModel.Reservation
+i : NLJ_Prepare.Input Unit
+v : verifier.View
+before : NLR_Interface.ExternalFrame
+domain : (↑v.semantic).length = 13831
+⊢ (AuS1_Trace.continueRun
+      (run
+          (AspisR1PublicPreparation.S1SemanticCode.verify
+            (fun {H} =>
+              AspisR1PublicPreparation.S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation))
+            (observedInput reservation i v).digest (observedInput reservation i v).publicValue v.semantic i.hash
+            none)).1
+      (run
+          (AspisR1PublicPreparation.S1SemanticCode.verify
+            (fun {H} =>
+              AspisR1PublicPreparation.S1SemanticCode.finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation))
+            (observedInput reservation i v).digest (observedInput reservation i v).publicValue v.semantic i.hash
+            none)).2
+      fun r => pure (convert r)) =
+    ((native (observedInput reservation i v) before).log, reply (native (observedInput reservation i v) before).reply)
+'AspisR1.NLR_PrepareSemantic137.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NLR_PrepareSemantic137.packet' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_PrepareSemantic137.packet : ∀ (native : NLR_Interface.Native137),
+  NLR_Interface.RowSpec_137 native →
+    ∀ (reservation : NP6_StdModel.Reservation) (i : NLJ_Prepare.Input Unit) (v : verifier.View)
+      (before : NLR_Interface.ExternalFrame),
+      (↑v.semantic).length = 13831 →
+        run
+            (S1SemanticCodeInstallation.code AspisS1ExtractedRoundChildren.children
+              (ClaimsUnrolledFinish.install (NP6_StdModel.calls reservation) (IDa_Deployed.boundaries reservation))
+              i.digest i.publicValue v.semantic i.hash) =
+          ((native (observedInput reservation i v) before).log,
+            reply (native (observedInput reservation i v) before).reply) :=
+⋯

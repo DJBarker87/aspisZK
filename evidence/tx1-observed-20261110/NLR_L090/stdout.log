@@ -1,0 +1,23 @@
+'AspisR1.NLR_SemanticFinishCaller.reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_SemanticFinishCaller.reached : ∀ (native : NLR_Interface.Native137),
+  NLR_Interface.RowSpec_137 native →
+    ∀ (reservation : NP6_StdModel.Reservation) (i : NLJ_Prepare.Input Unit) (v : verifier.View)
+      (before : NLR_Interface.ExternalFrame),
+      (↑v.semantic).length = 13831 →
+        ∀ (sem : r1_semantic.Verified Unit),
+          NLR_PrepareSemantic137.reply (native (NLR_PrepareSemantic137.observedInput reservation i v) before).reply =
+              ok (core.result.Result.Ok sem) →
+            have call := NLR_PrepareSemantic137.observedInput reservation i v;
+            ∃ p initial after c,
+              AspisR1PublicPreparation.PrefixAdapter.parseAccepted call.bytes = ok (core.result.Result.Ok p) ∧
+                (AspisR1PublicPreparation.PreparedHashCode.run
+                        (AspisR1PublicPreparation.S1SemanticCode.publicTranscript call.digest call.publicValue call.hash
+                          p.c1_root)).2 =
+                    ok (core.result.Result.Ok initial) ∧
+                  (AspisR1PublicPreparation.PreparedHashCode.run
+                          (AspisR1PublicPreparation.S1SemanticCode.begin call.digest p initial)).2 =
+                      ok (core.result.Result.Ok c, after) ∧
+                    AspisR1PublicPreparation.FinishModel.finish NJM_RoundJoin.R (IDa_Deployed.boundaries reservation)
+                        call.digest call.publicValue p after c none =
+                      ok (core.result.Result.Ok ((S1SemanticCarrier.semanticEquiv Unit).symm sem)) :=
+⋯

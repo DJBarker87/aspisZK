@@ -1,0 +1,20 @@
+'AspisR1.NLR_PreparedSemanticClause.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_PreparedSemanticClause.source : ∀ (native : NLR_Interface.Native137),
+  NLR_Interface.RowSpec_137 native →
+    ∀ (reservation : NP6_StdModel.Reservation) (i : NLJ_Prepare.Input Unit) (v : verifier.View)
+      (frame : NLR_Interface.ExternalFrame),
+      (↑v.semantic).length = 13831 →
+        ∀ (sem : r1_semantic.Verified Unit),
+          NLR_PrepareSemantic137.reply (native (NLR_PrepareSemantic137.observedInput reservation i v) frame).reply =
+              ok (core.result.Result.Ok sem) →
+            have call := NLR_PrepareSemantic137.observedInput reservation i v;
+            ∃ p before c,
+              AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children
+                  (have __src := IDa_Deployed.boundaries reservation;
+                  { fromFn := @AspisR1PublicPreparation.FinishModel.Boundaries.fromFn __src, mask := __src.mask,
+                    add := __src.add, mul := __src.mul, terminal := __src.terminal, circle := __src.circle,
+                    unwrapRoot := __src.unwrapRoot,
+                    claims := ClaimsUnrolledFinish.claims (NP6_StdModel.calls (core.result.Result.Ok ())) })
+                  call.digest call.publicValue p before c none =
+                ok (core.result.Result.Ok ((S1SemanticCarrier.semanticEquiv Unit).symm sem)) :=
+⋯

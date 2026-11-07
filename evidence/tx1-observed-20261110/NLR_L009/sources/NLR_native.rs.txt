@@ -1,0 +1,124 @@
+//! NLR smaller source windows of frozen verify_observed (r1_semantic.rs:311).
+//! SPLIT after K001 timeout: one32-byte physical window; full13831 association
+//! requires the Lean KMX frame law. This restricted run alone is not a row packet.
+//! Prefix payload is checked by direct index as well as physical slice identity.
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[derive(Clone,Copy,PartialEq,Eq)] struct Hash;
+impl Digest32 for Hash { fn digest(&self,_:&[&[u8]])->[u8;32]{panic!("unreachable digest")} }
+fn parse_window<'a>(reply:Result<Prefix<'a>,Error>)->Result<Prefix<'a>,Error>{
+ let prefix=reply?; super::mark(None,0); Ok(prefix)
+}
+fn begin_window<'a>(prefix:Prefix<'a>,transcript:&mut SemanticTranscript<Hash>,
+ after:SemanticTranscript<Hash>,reply:Result<Challenges,Error>)->Result<(Prefix<'a>,Challenges),Error>{
+ // Child begin writes its complete declared transcript footprint, even on Err.
+ *transcript=after;
+ let challenges=reply?;super::mark(None,1);Ok((prefix,challenges))
+}
+fn finish_window<'a>(prefix:Prefix<'a>)->Prefix<'a>{prefix}
+fn check(mode:u8,bad:bool){
+ let bytes:[u8;32]=kani::any();let root:[u8;32]=kani::any();
+ let row:usize=kani::any();let index:usize=kani::any();kani::assume(row<27);
+ let lo0:usize=kani::any();let hi0:usize=kani::any();kani::assume(lo0<=hi0&&hi0<=bytes.len());
+ let lo1:usize=kani::any();let hi1:usize=kani::any();kani::assume(lo1<=hi1&&hi1<=bytes.len());
+ let lo2:usize=kani::any();let hi2:usize=kani::any();kani::assume(lo2<=hi2&&hi2<=bytes.len());
+ let lo3:usize=kani::any();let hi3:usize=kani::any();kani::assume(lo3<=hi3&&hi3<=bytes.len());
+ let lo4:usize=kani::any();let hi4:usize=kani::any();kani::assume(lo4<=hi4&&hi4<=bytes.len());
+ let lo5:usize=kani::any();let hi5:usize=kani::any();kani::assume(lo5<=hi5&&hi5<=bytes.len());
+ let lo6:usize=kani::any();let hi6:usize=kani::any();kani::assume(lo6<=hi6&&hi6<=bytes.len());
+ let lo7:usize=kani::any();let hi7:usize=kani::any();kani::assume(lo7<=hi7&&hi7<=bytes.len());
+ let lo8:usize=kani::any();let hi8:usize=kani::any();kani::assume(lo8<=hi8&&hi8<=bytes.len());
+ let lo9:usize=kani::any();let hi9:usize=kani::any();kani::assume(lo9<=hi9&&hi9<=bytes.len());
+ let lo10:usize=kani::any();let hi10:usize=kani::any();kani::assume(lo10<=hi10&&hi10<=bytes.len());
+ let lo11:usize=kani::any();let hi11:usize=kani::any();kani::assume(lo11<=hi11&&hi11<=bytes.len());
+ let lo12:usize=kani::any();let hi12:usize=kani::any();kani::assume(lo12<=hi12&&hi12<=bytes.len());
+ let lo13:usize=kani::any();let hi13:usize=kani::any();kani::assume(lo13<=hi13&&hi13<=bytes.len());
+ let lo14:usize=kani::any();let hi14:usize=kani::any();kani::assume(lo14<=hi14&&hi14<=bytes.len());
+ let lo15:usize=kani::any();let hi15:usize=kani::any();kani::assume(lo15<=hi15&&hi15<=bytes.len());
+ let lo16:usize=kani::any();let hi16:usize=kani::any();kani::assume(lo16<=hi16&&hi16<=bytes.len());
+ let lo17:usize=kani::any();let hi17:usize=kani::any();kani::assume(lo17<=hi17&&hi17<=bytes.len());
+ let lo18:usize=kani::any();let hi18:usize=kani::any();kani::assume(lo18<=hi18&&hi18<=bytes.len());
+ let lo19:usize=kani::any();let hi19:usize=kani::any();kani::assume(lo19<=hi19&&hi19<=bytes.len());
+ let lo20:usize=kani::any();let hi20:usize=kani::any();kani::assume(lo20<=hi20&&hi20<=bytes.len());
+ let lo21:usize=kani::any();let hi21:usize=kani::any();kani::assume(lo21<=hi21&&hi21<=bytes.len());
+ let lo22:usize=kani::any();let hi22:usize=kani::any();kani::assume(lo22<=hi22&&hi22<=bytes.len());
+ let lo23:usize=kani::any();let hi23:usize=kani::any();kani::assume(lo23<=hi23&&hi23<=bytes.len());
+ let lo24:usize=kani::any();let hi24:usize=kani::any();kani::assume(lo24<=hi24&&hi24<=bytes.len());
+ let lo25:usize=kani::any();let hi25:usize=kani::any();kani::assume(lo25<=hi25&&hi25<=bytes.len());
+ let lo26:usize=kani::any();let hi26:usize=kani::any();kani::assume(lo26<=hi26&&hi26<=bytes.len());
+ let records=[&bytes[lo0..hi0],&bytes[lo1..hi1],&bytes[lo2..hi2],&bytes[lo3..hi3],&bytes[lo4..hi4],&bytes[lo5..hi5],&bytes[lo6..hi6],&bytes[lo7..hi7],&bytes[lo8..hi8],&bytes[lo9..hi9],&bytes[lo10..hi10],&bytes[lo11..hi11],&bytes[lo12..hi12],&bytes[lo13..hi13],&bytes[lo14..hi14],&bytes[lo15..hi15],&bytes[lo16..hi16],&bytes[lo17..hi17],&bytes[lo18..hi18],&bytes[lo19..hi19],&bytes[lo20..hi20],&bytes[lo21..hi21],&bytes[lo22..hi22],&bytes[lo23..hi23],&bytes[lo24..hi24],&bytes[lo25..hi25],&bytes[lo26..hi26]];
+ let prefix=crate::r1_wire::NLR_factory::prefix(&root,records);
+ let expected=records[row];
+ let nonempty=!expected.is_empty();kani::assume(!nonempty||index<expected.len());
+ let returned=match mode/3 {
+  0=>parse_window(Ok(prefix)).unwrap(),
+  1=>{
+   let mut transcript=crate::r1_wire::NLR_factory::make(Hash,kani::any(),kani::any());
+   let after=crate::r1_wire::NLR_factory::make(Hash,kani::any(),kani::any());
+   let challenges=Challenges{lambda:QM31::ZERO,chi:QM31::ZERO,theta:QM31::ZERO,zc:[QM31::ZERO;10],mu:QM31::ZERO,eta:QM31::ZERO};
+   begin_window(prefix,&mut transcript,after,Ok(challenges)).unwrap().0
+  },
+  _=>finish_window(prefix)
+ };
+ let selected=crate::r1_wire::NLR_factory::record(&returned,row);
+ let good=match mode%3 {
+  0=>selected.len()==expected.len()&&core::ptr::eq(selected.as_ptr(),expected.as_ptr())&&(!nonempty||selected[index]==expected[index]),
+  1=>core::ptr::eq(returned.c1_root,&root)&&returned.c1_root[0]==root[0],
+  _=>selected.is_empty()==expected.is_empty()
+ };
+ if bad{assert!(!good)}else{assert!(good)}
+}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_00_cut(){check(0,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_00_control(){check(0,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_01_cut(){check(1,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_01_control(){check(1,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_02_cut(){check(2,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_02_control(){check(2,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_03_cut(){check(3,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_03_control(){check(3,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_04_cut(){check(4,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_04_control(){check(4,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_05_cut(){check(5,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_05_control(){check(5,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_06_cut(){check(6,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_06_control(){check(6,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_07_cut(){check(7,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_07_control(){check(7,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_08_cut(){check(8,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn window_08_control(){check(8,true)}

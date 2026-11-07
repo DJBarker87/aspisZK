@@ -1,0 +1,1863 @@
+'AspisR1.NLR_PrepareTails.tail_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NLR_PrepareTails.tail_source : ∀ (cfg : NLJ_Prepare.Configuration) {H : Type} (i : NLJ_Prepare.Input H),
+  run (tail_allocate cfg i) =
+    run (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash i.scratch) :=
+fun cfg {H} i =>
+  id
+    (id
+      (id
+        (id
+          (id
+            (id
+              (id
+                (id
+                  (id
+                    (id
+                      (id
+                        (id
+                          (id
+                            (id
+                              (NLJ_RunAlgebra.bind_congr (liftM (compact.LOGICAL_SEMANTIC (NLJ_Prepare.ops cfg)))
+                                (fun n => do
+                                  let ny ← liftM compact.LOGICAL_Y1
+                                  let total ← liftM (n + ny)
+                                  let r ← liftM ((NLJ_Prepare.ops cfg).op1 core.marker.CopyU8 total 0#u8)
+                                  match r with
+                                    | core.result.Result.Err a =>
+                                      pure (core.result.Result.Err verifier.Error.Allocation, i.scratch)
+                                    | core.result.Result.Ok logical =>
+                                      have o := NLJ_Prepare.ops cfg;
+                                      do
+                                      let __x ← liftM (lift logical.deref_mut)
+                                      match __x with
+                                        | (bytes, vecBack) => do
+                                          let __x ← liftM (core.slice.Slice.split_at_mut bytes n)
+                                          match __x with
+                                            | ((semantic, y1), splitBack) =>
+                                              have o := NLJ_Prepare.ops cfg;
+                                              do
+                                              let off ← liftM (compact.OFF_SEMANTIC o)
+                                              let offY1 ← liftM (compact.OFF_Y1 o)
+                                              let compressed ←
+                                                liftM
+                                                    (core.slice.index.Slice.index
+                                                      (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                      { start := off, «end» := offY1 })
+                                              have o : Ops := NLJ_Prepare.ops cfg
+                                              let __x ← liftM (o.op10 compressed semantic)
+                                              match __x with
+                                                | (r, semanticAfter) =>
+                                                  match r with
+                                                  | core.result.Result.Ok a =>
+                                                    have o := NLJ_Prepare.ops cfg;
+                                                    do
+                                                    let offInactive ← liftM (compact.OFF_INACTIVE o)
+                                                    let compressed ←
+                                                      liftM
+                                                          (core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                            { start := offY1, «end» := offInactive })
+                                                    have o : Ops := NLJ_Prepare.ops cfg
+                                                    let __x ← liftM (o.op11 compressed y1)
+                                                    match __x with
+                                                      | (r, y1After) =>
+                                                        match r with
+                                                        | core.result.Result.Ok a =>
+                                                          have o := NLJ_Prepare.ops cfg;
+                                                          have logical := vecBack (splitBack (semanticAfter, y1After));
+                                                          do
+                                                          let semanticFull ←
+                                                            liftM
+                                                                (alloc.vec.Vec.index
+                                                                  (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                                  logical { «end» := n })
+                                                          let y1Full ←
+                                                            liftM
+                                                                (alloc.vec.Vec.index
+                                                                  (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                                                  logical { start := n })
+                                                          have o : Ops := NLJ_Prepare.ops cfg
+                                                          let r ← liftM (o.op5 i.proof semanticFull y1Full)
+                                                          match r with
+                                                            | core.result.Result.Err e =>
+                                                              pure (core.result.Result.Err e, i.scratch)
+                                                            | core.result.Result.Ok v =>
+                                                              have o := NLJ_Prepare.ops cfg;
+                                                              do
+                                                              let r ←
+                                                                S1SemanticCodeInstallation.code
+                                                                    AspisS1ExtractedRoundChildren.children
+                                                                    (ClaimsUnrolledFinish.install cfg.std
+                                                                      cfg.boundaries)
+                                                                    i.digest i.publicValue v.semantic i.hash
+                                                              have o : Ops := NLJ_Prepare.ops cfg
+                                                              match r with
+                                                                | core.result.Result.Err a =>
+                                                                  pure
+                                                                    (core.result.Result.Err verifier.Error.Semantic,
+                                                                      i.scratch)
+                                                                | core.result.Result.Ok sem =>
+                                                                  have o := NLJ_Prepare.ops cfg;
+                                                                  do
+                                                                  liftM (verifier.mark none verifier.Phase.Semantic)
+                                                                  have o : Ops := NLJ_Prepare.ops cfg
+                                                                  BorrowedClaimPrepared.closedPreparationCode i.digest
+                                                                      sem v i.hash i.scratch
+                                                        | core.result.Result.Err e => do
+                                                          let r ←
+                                                            liftM
+                                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  verifier.Prepared
+                                                                  (verifier.Error.Insts.CoreConvertFromCodecError o)
+                                                                  (core.result.Result.Err e))
+                                                          pure (r, i.scratch)
+                                                  | core.result.Result.Err e => do
+                                                    let r ←
+                                                      liftM
+                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            verifier.Prepared
+                                                            (verifier.Error.Insts.CoreConvertFromCodecError o)
+                                                            (core.result.Result.Err e))
+                                                    pure (r, i.scratch))
+                                (fun i_1 => do
+                                  let i1 ← liftM compact.LOGICAL_Y1
+                                  let i2 ← liftM (i_1 + i1)
+                                  let r ←
+                                    liftM
+                                        ((BorrowedClaimPrepared.NativeBuffers.install
+                                              (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                              AspisS1ValuesOwnedInstallation.nativeValues
+                                              AspisS1ExtractedRoundChildren.children
+                                              (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)).op1
+                                          core.marker.CopyU8 i2 0#u8)
+                                  let r1 ←
+                                    liftM
+                                        (AspisR1CurrentCaller.core.result.Result.map_err
+                                          (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                            i.digest)
+                                          r ())
+                                  let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                                  match cf with
+                                    | core.ops.control_flow.ControlFlow.Continue val => do
+                                      let __x ← liftM (lift val.deref_mut)
+                                      match __x with
+                                        | (s, deref_mut_back) => do
+                                          let __x ← liftM (core.slice.Slice.split_at_mut s i_1)
+                                          match __x with
+                                            | ((semantic, y1), split_at_mut_back) => do
+                                              let i3 ←
+                                                liftM
+                                                    (compact.OFF_SEMANTIC
+                                                      (BorrowedClaimPrepared.NativeBuffers.install
+                                                        (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                        AspisS1ValuesOwnedInstallation.nativeValues
+                                                        AspisS1ExtractedRoundChildren.children
+                                                        (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)))
+                                              let i4 ←
+                                                liftM
+                                                    (compact.OFF_Y1
+                                                      (BorrowedClaimPrepared.NativeBuffers.install
+                                                        (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                        AspisS1ValuesOwnedInstallation.nativeValues
+                                                        AspisS1ExtractedRoundChildren.children
+                                                        (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)))
+                                              let s1 ←
+                                                liftM
+                                                    (core.slice.index.Slice.index
+                                                      (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                      { start := i3, «end» := i4 })
+                                              let __x ←
+                                                liftM
+                                                    ((BorrowedClaimPrepared.NativeBuffers.install
+                                                          (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                          AspisS1ValuesOwnedInstallation.nativeValues
+                                                          AspisS1ExtractedRoundChildren.children
+                                                          (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)).op10
+                                                      s1 semantic)
+                                              match __x with
+                                                | (r2, semantic1) => do
+                                                  let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                                                  match cf1 with
+                                                    | core.ops.control_flow.ControlFlow.Continue a => do
+                                                      let i5 ←
+                                                        liftM
+                                                            (compact.OFF_INACTIVE
+                                                              (BorrowedClaimPrepared.NativeBuffers.install
+                                                                (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                                AspisS1ValuesOwnedInstallation.nativeValues
+                                                                AspisS1ExtractedRoundChildren.children
+                                                                (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)))
+                                                      let s2 ←
+                                                        liftM
+                                                            (core.slice.index.Slice.index
+                                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                              { start := i4, «end» := i5 })
+                                                      let __x ←
+                                                        liftM
+                                                            ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                  (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                                  AspisS1ValuesOwnedInstallation.nativeValues
+                                                                  AspisS1ExtractedRoundChildren.children
+                                                                  (ClaimsUnrolledFinish.install cfg.std
+                                                                    cfg.boundaries)).op11
+                                                              s2 y1)
+                                                      match __x with
+                                                        | (r3, y11) => do
+                                                          let cf2 ←
+                                                            liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                                                          match cf2 with
+                                                            | core.ops.control_flow.ControlFlow.Continue a =>
+                                                              have s3 := split_at_mut_back (semantic1, y11);
+                                                              have val1 := deref_mut_back s3;
+                                                              do
+                                                              let s4 ←
+                                                                liftM
+                                                                    (alloc.vec.Vec.index
+                                                                      (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                                      val1 { «end» := i_1 })
+                                                              let s5 ←
+                                                                liftM
+                                                                    (alloc.vec.Vec.index
+                                                                      (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                        U8)
+                                                                      val1 { start := i_1 })
+                                                              let r4 ←
+                                                                liftM
+                                                                    ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                          (AspisS1ValuesOwnedInstallation.withValues
+                                                                            cfg.base)
+                                                                          AspisS1ValuesOwnedInstallation.nativeValues
+                                                                          AspisS1ExtractedRoundChildren.children
+                                                                          (ClaimsUnrolledFinish.install cfg.std
+                                                                            cfg.boundaries)).op5
+                                                                      i.proof s4 s5)
+                                                              let cf3 ←
+                                                                liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                                                              match cf3 with
+                                                                | core.ops.control_flow.ControlFlow.Continue v => do
+                                                                  let r5 ←
+                                                                    S1SemanticCodeInstallation.code
+                                                                        AspisS1ExtractedRoundChildren.children
+                                                                        (ClaimsUnrolledFinish.install cfg.std
+                                                                          cfg.boundaries)
+                                                                        i.digest i.publicValue v.semantic i.hash
+                                                                  let r6 ←
+                                                                    liftM
+                                                                        (AspisR1CurrentCaller.core.result.Result.map_err
+                                                                          (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                                            i.digest)
+                                                                          r5 ())
+                                                                  let cf4 ←
+                                                                    liftM
+                                                                        (core.result.Result.Insts.CoreOpsTry.branch r6)
+                                                                  match cf4 with
+                                                                    | core.ops.control_flow.ControlFlow.Continue val2 =>
+                                                                      do
+                                                                      liftM (verifier.mark none verifier.Phase.Semantic)
+                                                                      BorrowedClaimPrepared.closedPreparationCode
+                                                                          i.digest val2 v i.hash i.scratch
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      do
+                                                                      let r7 ←
+                                                                        liftM
+                                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                              verifier.Prepared
+                                                                              (core.convert.FromSame verifier.Error)
+                                                                              residual)
+                                                                      pure (r7, i.scratch)
+                                                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                                                  let r5 ←
+                                                                    liftM
+                                                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                          verifier.Prepared
+                                                                          (core.convert.FromSame verifier.Error)
+                                                                          residual)
+                                                                  pure (r5, i.scratch)
+                                                            | core.ops.control_flow.ControlFlow.Break residual => do
+                                                              let r4 ←
+                                                                liftM
+                                                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      verifier.Prepared
+                                                                      (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                        (BorrowedClaimPrepared.NativeBuffers.install
+                                                                          (AspisS1ValuesOwnedInstallation.withValues
+                                                                            cfg.base)
+                                                                          AspisS1ValuesOwnedInstallation.nativeValues
+                                                                          AspisS1ExtractedRoundChildren.children
+                                                                          (ClaimsUnrolledFinish.install cfg.std
+                                                                            cfg.boundaries)))
+                                                                      residual)
+                                                              pure (r4, i.scratch)
+                                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                                      let r3 ←
+                                                        liftM
+                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              verifier.Prepared
+                                                              (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                (BorrowedClaimPrepared.NativeBuffers.install
+                                                                  (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                                  AspisS1ValuesOwnedInstallation.nativeValues
+                                                                  AspisS1ExtractedRoundChildren.children
+                                                                  (ClaimsUnrolledFinish.install cfg.std
+                                                                    cfg.boundaries)))
+                                                              residual)
+                                                      pure (r3, i.scratch)
+                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                      let r2 ←
+                                        liftM
+                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                      pure (r2, i.scratch))
+                                fun a =>
+                                NLJ_RunAlgebra.bind_congr (liftM compact.LOGICAL_Y1)
+                                  (fun ny => do
+                                    let total ← liftM (a + ny)
+                                    let r ← liftM ((NLJ_Prepare.ops cfg).op1 core.marker.CopyU8 total 0#u8)
+                                    match r with
+                                      | core.result.Result.Err a =>
+                                        pure (core.result.Result.Err verifier.Error.Allocation, i.scratch)
+                                      | core.result.Result.Ok logical =>
+                                        have o := NLJ_Prepare.ops cfg;
+                                        do
+                                        let __x ← liftM (lift logical.deref_mut)
+                                        match __x with
+                                          | (bytes, vecBack) => do
+                                            let __x ← liftM (core.slice.Slice.split_at_mut bytes a)
+                                            match __x with
+                                              | ((semantic, y1), splitBack) =>
+                                                have o := NLJ_Prepare.ops cfg;
+                                                do
+                                                let off ← liftM (compact.OFF_SEMANTIC o)
+                                                let offY1 ← liftM (compact.OFF_Y1 o)
+                                                let compressed ←
+                                                  liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                        { start := off, «end» := offY1 })
+                                                have o : Ops := NLJ_Prepare.ops cfg
+                                                let __x ← liftM (o.op10 compressed semantic)
+                                                match __x with
+                                                  | (r, semanticAfter) =>
+                                                    match r with
+                                                    | core.result.Result.Ok a_1 =>
+                                                      have o := NLJ_Prepare.ops cfg;
+                                                      do
+                                                      let offInactive ← liftM (compact.OFF_INACTIVE o)
+                                                      let compressed ←
+                                                        liftM
+                                                            (core.slice.index.Slice.index
+                                                              (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                              { start := offY1, «end» := offInactive })
+                                                      have o : Ops := NLJ_Prepare.ops cfg
+                                                      let __x ← liftM (o.op11 compressed y1)
+                                                      match __x with
+                                                        | (r, y1After) =>
+                                                          match r with
+                                                          | core.result.Result.Ok a_2 =>
+                                                            have o := NLJ_Prepare.ops cfg;
+                                                            have logical :=
+                                                              vecBack (splitBack (semanticAfter, y1After));
+                                                            do
+                                                            let semanticFull ←
+                                                              liftM
+                                                                  (alloc.vec.Vec.index
+                                                                    (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                                    logical { «end» := a })
+                                                            let y1Full ←
+                                                              liftM
+                                                                  (alloc.vec.Vec.index
+                                                                    (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                                                    logical { start := a })
+                                                            have o : Ops := NLJ_Prepare.ops cfg
+                                                            let r ← liftM (o.op5 i.proof semanticFull y1Full)
+                                                            match r with
+                                                              | core.result.Result.Err e =>
+                                                                pure (core.result.Result.Err e, i.scratch)
+                                                              | core.result.Result.Ok v =>
+                                                                have o := NLJ_Prepare.ops cfg;
+                                                                do
+                                                                let r ←
+                                                                  S1SemanticCodeInstallation.code
+                                                                      AspisS1ExtractedRoundChildren.children
+                                                                      (ClaimsUnrolledFinish.install cfg.std
+                                                                        cfg.boundaries)
+                                                                      i.digest i.publicValue v.semantic i.hash
+                                                                have o : Ops := NLJ_Prepare.ops cfg
+                                                                match r with
+                                                                  | core.result.Result.Err a =>
+                                                                    pure
+                                                                      (core.result.Result.Err verifier.Error.Semantic,
+                                                                        i.scratch)
+                                                                  | core.result.Result.Ok sem =>
+                                                                    have o := NLJ_Prepare.ops cfg;
+                                                                    do
+                                                                    liftM (verifier.mark none verifier.Phase.Semantic)
+                                                                    have o : Ops := NLJ_Prepare.ops cfg
+                                                                    BorrowedClaimPrepared.closedPreparationCode i.digest
+                                                                        sem v i.hash i.scratch
+                                                          | core.result.Result.Err e => do
+                                                            let r ←
+                                                              liftM
+                                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    verifier.Prepared
+                                                                    (verifier.Error.Insts.CoreConvertFromCodecError o)
+                                                                    (core.result.Result.Err e))
+                                                            pure (r, i.scratch)
+                                                    | core.result.Result.Err e => do
+                                                      let r ←
+                                                        liftM
+                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              verifier.Prepared
+                                                              (verifier.Error.Insts.CoreConvertFromCodecError o)
+                                                              (core.result.Result.Err e))
+                                                      pure (r, i.scratch))
+                                  (fun i1 => do
+                                    let i2 ← liftM (a + i1)
+                                    let r ←
+                                      liftM
+                                          ((BorrowedClaimPrepared.NativeBuffers.install
+                                                (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                AspisS1ValuesOwnedInstallation.nativeValues
+                                                AspisS1ExtractedRoundChildren.children
+                                                (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)).op1
+                                            core.marker.CopyU8 i2 0#u8)
+                                    let r1 ←
+                                      liftM
+                                          (AspisR1CurrentCaller.core.result.Result.map_err
+                                            (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                              i.digest)
+                                            r ())
+                                    let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                                    match cf with
+                                      | core.ops.control_flow.ControlFlow.Continue val => do
+                                        let __x ← liftM (lift val.deref_mut)
+                                        match __x with
+                                          | (s, deref_mut_back) => do
+                                            let __x ← liftM (core.slice.Slice.split_at_mut s a)
+                                            match __x with
+                                              | ((semantic, y1), split_at_mut_back) => do
+                                                let i3 ←
+                                                  liftM
+                                                      (compact.OFF_SEMANTIC
+                                                        (BorrowedClaimPrepared.NativeBuffers.install
+                                                          (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                          AspisS1ValuesOwnedInstallation.nativeValues
+                                                          AspisS1ExtractedRoundChildren.children
+                                                          (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)))
+                                                let i4 ←
+                                                  liftM
+                                                      (compact.OFF_Y1
+                                                        (BorrowedClaimPrepared.NativeBuffers.install
+                                                          (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                          AspisS1ValuesOwnedInstallation.nativeValues
+                                                          AspisS1ExtractedRoundChildren.children
+                                                          (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)))
+                                                let s1 ←
+                                                  liftM
+                                                      (core.slice.index.Slice.index
+                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                        { start := i3, «end» := i4 })
+                                                let __x ←
+                                                  liftM
+                                                      ((BorrowedClaimPrepared.NativeBuffers.install
+                                                            (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                            AspisS1ValuesOwnedInstallation.nativeValues
+                                                            AspisS1ExtractedRoundChildren.children
+                                                            (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)).op10
+                                                        s1 semantic)
+                                                match __x with
+                                                  | (r2, semantic1) => do
+                                                    let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                                                    match cf1 with
+                                                      | core.ops.control_flow.ControlFlow.Continue a_1 => do
+                                                        let i5 ←
+                                                          liftM
+                                                              (compact.OFF_INACTIVE
+                                                                (BorrowedClaimPrepared.NativeBuffers.install
+                                                                  (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                                  AspisS1ValuesOwnedInstallation.nativeValues
+                                                                  AspisS1ExtractedRoundChildren.children
+                                                                  (ClaimsUnrolledFinish.install cfg.std
+                                                                    cfg.boundaries)))
+                                                        let s2 ←
+                                                          liftM
+                                                              (core.slice.index.Slice.index
+                                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                                { start := i4, «end» := i5 })
+                                                        let __x ←
+                                                          liftM
+                                                              ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                    (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                                    AspisS1ValuesOwnedInstallation.nativeValues
+                                                                    AspisS1ExtractedRoundChildren.children
+                                                                    (ClaimsUnrolledFinish.install cfg.std
+                                                                      cfg.boundaries)).op11
+                                                                s2 y1)
+                                                        match __x with
+                                                          | (r3, y11) => do
+                                                            let cf2 ←
+                                                              liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                                                            match cf2 with
+                                                              | core.ops.control_flow.ControlFlow.Continue a_2 =>
+                                                                have s3 := split_at_mut_back (semantic1, y11);
+                                                                have val1 := deref_mut_back s3;
+                                                                do
+                                                                let s4 ←
+                                                                  liftM
+                                                                      (alloc.vec.Vec.index
+                                                                        (core.slice.index.SliceIndexRangeToUsizeSlice
+                                                                          U8)
+                                                                        val1 { «end» := a })
+                                                                let s5 ←
+                                                                  liftM
+                                                                      (alloc.vec.Vec.index
+                                                                        (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                          U8)
+                                                                        val1 { start := a })
+                                                                let r4 ←
+                                                                  liftM
+                                                                      ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                            (AspisS1ValuesOwnedInstallation.withValues
+                                                                              cfg.base)
+                                                                            AspisS1ValuesOwnedInstallation.nativeValues
+                                                                            AspisS1ExtractedRoundChildren.children
+                                                                            (ClaimsUnrolledFinish.install cfg.std
+                                                                              cfg.boundaries)).op5
+                                                                        i.proof s4 s5)
+                                                                let cf3 ←
+                                                                  liftM (core.result.Result.Insts.CoreOpsTry.branch r4)
+                                                                match cf3 with
+                                                                  | core.ops.control_flow.ControlFlow.Continue v => do
+                                                                    let r5 ←
+                                                                      S1SemanticCodeInstallation.code
+                                                                          AspisS1ExtractedRoundChildren.children
+                                                                          (ClaimsUnrolledFinish.install cfg.std
+                                                                            cfg.boundaries)
+                                                                          i.digest i.publicValue v.semantic i.hash
+                                                                    let r6 ←
+                                                                      liftM
+                                                                          (AspisR1CurrentCaller.core.result.Result.map_err
+                                                                            (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                                              i.digest)
+                                                                            r5 ())
+                                                                    let cf4 ←
+                                                                      liftM
+                                                                          (core.result.Result.Insts.CoreOpsTry.branch
+                                                                            r6)
+                                                                    match cf4 with
+                                                                      |
+                                                                      core.ops.control_flow.ControlFlow.Continue val2 =>
+                                                                        do
+                                                                        liftM
+                                                                            (verifier.mark none verifier.Phase.Semantic)
+                                                                        BorrowedClaimPrepared.closedPreparationCode
+                                                                            i.digest val2 v i.hash i.scratch
+                                                                      |
+                                                                      core.ops.control_flow.ControlFlow.Break
+                                                                          residual =>
+                                                                        do
+                                                                        let r7 ←
+                                                                          liftM
+                                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                verifier.Prepared
+                                                                                (core.convert.FromSame verifier.Error)
+                                                                                residual)
+                                                                        pure (r7, i.scratch)
+                                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                    do
+                                                                    let r5 ←
+                                                                      liftM
+                                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                            verifier.Prepared
+                                                                            (core.convert.FromSame verifier.Error)
+                                                                            residual)
+                                                                    pure (r5, i.scratch)
+                                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                                let r4 ←
+                                                                  liftM
+                                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        verifier.Prepared
+                                                                        (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                          (BorrowedClaimPrepared.NativeBuffers.install
+                                                                            (AspisS1ValuesOwnedInstallation.withValues
+                                                                              cfg.base)
+                                                                            AspisS1ValuesOwnedInstallation.nativeValues
+                                                                            AspisS1ExtractedRoundChildren.children
+                                                                            (ClaimsUnrolledFinish.install cfg.std
+                                                                              cfg.boundaries)))
+                                                                        residual)
+                                                                pure (r4, i.scratch)
+                                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                                        let r3 ←
+                                                          liftM
+                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                verifier.Prepared
+                                                                (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                  (BorrowedClaimPrepared.NativeBuffers.install
+                                                                    (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                                    AspisS1ValuesOwnedInstallation.nativeValues
+                                                                    AspisS1ExtractedRoundChildren.children
+                                                                    (ClaimsUnrolledFinish.install cfg.std
+                                                                      cfg.boundaries)))
+                                                                residual)
+                                                        pure (r3, i.scratch)
+                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                        let r2 ←
+                                          liftM
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                        pure (r2, i.scratch))
+                                  fun a_1 =>
+                                  NLJ_RunAlgebra.bind_congr (liftM (a + a_1))
+                                    (fun total => do
+                                      let r ← liftM ((NLJ_Prepare.ops cfg).op1 core.marker.CopyU8 total 0#u8)
+                                      match r with
+                                        | core.result.Result.Err a =>
+                                          pure (core.result.Result.Err verifier.Error.Allocation, i.scratch)
+                                        | core.result.Result.Ok logical =>
+                                          have o := NLJ_Prepare.ops cfg;
+                                          do
+                                          let __x ← liftM (lift logical.deref_mut)
+                                          match __x with
+                                            | (bytes, vecBack) => do
+                                              let __x ← liftM (core.slice.Slice.split_at_mut bytes a)
+                                              match __x with
+                                                | ((semantic, y1), splitBack) =>
+                                                  have o := NLJ_Prepare.ops cfg;
+                                                  do
+                                                  let off ← liftM (compact.OFF_SEMANTIC o)
+                                                  let offY1 ← liftM (compact.OFF_Y1 o)
+                                                  let compressed ←
+                                                    liftM
+                                                        (core.slice.index.Slice.index
+                                                          (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                          { start := off, «end» := offY1 })
+                                                  have o : Ops := NLJ_Prepare.ops cfg
+                                                  let __x ← liftM (o.op10 compressed semantic)
+                                                  match __x with
+                                                    | (r, semanticAfter) =>
+                                                      match r with
+                                                      | core.result.Result.Ok a_2 =>
+                                                        have o := NLJ_Prepare.ops cfg;
+                                                        do
+                                                        let offInactive ← liftM (compact.OFF_INACTIVE o)
+                                                        let compressed ←
+                                                          liftM
+                                                              (core.slice.index.Slice.index
+                                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                                { start := offY1, «end» := offInactive })
+                                                        have o : Ops := NLJ_Prepare.ops cfg
+                                                        let __x ← liftM (o.op11 compressed y1)
+                                                        match __x with
+                                                          | (r, y1After) =>
+                                                            match r with
+                                                            | core.result.Result.Ok a_3 =>
+                                                              have o := NLJ_Prepare.ops cfg;
+                                                              have logical :=
+                                                                vecBack (splitBack (semanticAfter, y1After));
+                                                              do
+                                                              let semanticFull ←
+                                                                liftM
+                                                                    (alloc.vec.Vec.index
+                                                                      (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                                      logical { «end» := a })
+                                                              let y1Full ←
+                                                                liftM
+                                                                    (alloc.vec.Vec.index
+                                                                      (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                        U8)
+                                                                      logical { start := a })
+                                                              have o : Ops := NLJ_Prepare.ops cfg
+                                                              let r ← liftM (o.op5 i.proof semanticFull y1Full)
+                                                              match r with
+                                                                | core.result.Result.Err e =>
+                                                                  pure (core.result.Result.Err e, i.scratch)
+                                                                | core.result.Result.Ok v =>
+                                                                  have o := NLJ_Prepare.ops cfg;
+                                                                  do
+                                                                  let r ←
+                                                                    S1SemanticCodeInstallation.code
+                                                                        AspisS1ExtractedRoundChildren.children
+                                                                        (ClaimsUnrolledFinish.install cfg.std
+                                                                          cfg.boundaries)
+                                                                        i.digest i.publicValue v.semantic i.hash
+                                                                  have o : Ops := NLJ_Prepare.ops cfg
+                                                                  match r with
+                                                                    | core.result.Result.Err a =>
+                                                                      pure
+                                                                        (core.result.Result.Err verifier.Error.Semantic,
+                                                                          i.scratch)
+                                                                    | core.result.Result.Ok sem =>
+                                                                      have o := NLJ_Prepare.ops cfg;
+                                                                      do
+                                                                      liftM (verifier.mark none verifier.Phase.Semantic)
+                                                                      have o : Ops := NLJ_Prepare.ops cfg
+                                                                      BorrowedClaimPrepared.closedPreparationCode
+                                                                          i.digest sem v i.hash i.scratch
+                                                            | core.result.Result.Err e => do
+                                                              let r ←
+                                                                liftM
+                                                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      verifier.Prepared
+                                                                      (verifier.Error.Insts.CoreConvertFromCodecError o)
+                                                                      (core.result.Result.Err e))
+                                                              pure (r, i.scratch)
+                                                      | core.result.Result.Err e => do
+                                                        let r ←
+                                                          liftM
+                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                verifier.Prepared
+                                                                (verifier.Error.Insts.CoreConvertFromCodecError o)
+                                                                (core.result.Result.Err e))
+                                                        pure (r, i.scratch))
+                                    (fun i2 => do
+                                      let r ←
+                                        liftM
+                                            ((BorrowedClaimPrepared.NativeBuffers.install
+                                                  (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                  AspisS1ValuesOwnedInstallation.nativeValues
+                                                  AspisS1ExtractedRoundChildren.children
+                                                  (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)).op1
+                                              core.marker.CopyU8 i2 0#u8)
+                                      let r1 ←
+                                        liftM
+                                            (AspisR1CurrentCaller.core.result.Result.map_err
+                                              (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                i.digest)
+                                              r ())
+                                      let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                                      match cf with
+                                        | core.ops.control_flow.ControlFlow.Continue val => do
+                                          let __x ← liftM (lift val.deref_mut)
+                                          match __x with
+                                            | (s, deref_mut_back) => do
+                                              let __x ← liftM (core.slice.Slice.split_at_mut s a)
+                                              match __x with
+                                                | ((semantic, y1), split_at_mut_back) => do
+                                                  let i3 ←
+                                                    liftM
+                                                        (compact.OFF_SEMANTIC
+                                                          (BorrowedClaimPrepared.NativeBuffers.install
+                                                            (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                            AspisS1ValuesOwnedInstallation.nativeValues
+                                                            AspisS1ExtractedRoundChildren.children
+                                                            (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)))
+                                                  let i4 ←
+                                                    liftM
+                                                        (compact.OFF_Y1
+                                                          (BorrowedClaimPrepared.NativeBuffers.install
+                                                            (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                            AspisS1ValuesOwnedInstallation.nativeValues
+                                                            AspisS1ExtractedRoundChildren.children
+                                                            (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)))
+                                                  let s1 ←
+                                                    liftM
+                                                        (core.slice.index.Slice.index
+                                                          (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                          { start := i3, «end» := i4 })
+                                                  let __x ←
+                                                    liftM
+                                                        ((BorrowedClaimPrepared.NativeBuffers.install
+                                                              (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                              AspisS1ValuesOwnedInstallation.nativeValues
+                                                              AspisS1ExtractedRoundChildren.children
+                                                              (ClaimsUnrolledFinish.install cfg.std
+                                                                cfg.boundaries)).op10
+                                                          s1 semantic)
+                                                  match __x with
+                                                    | (r2, semantic1) => do
+                                                      let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                                                      match cf1 with
+                                                        | core.ops.control_flow.ControlFlow.Continue a_2 => do
+                                                          let i5 ←
+                                                            liftM
+                                                                (compact.OFF_INACTIVE
+                                                                  (BorrowedClaimPrepared.NativeBuffers.install
+                                                                    (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                                    AspisS1ValuesOwnedInstallation.nativeValues
+                                                                    AspisS1ExtractedRoundChildren.children
+                                                                    (ClaimsUnrolledFinish.install cfg.std
+                                                                      cfg.boundaries)))
+                                                          let s2 ←
+                                                            liftM
+                                                                (core.slice.index.Slice.index
+                                                                  (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                                  i.proof { start := i4, «end» := i5 })
+                                                          let __x ←
+                                                            liftM
+                                                                ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                      (AspisS1ValuesOwnedInstallation.withValues
+                                                                        cfg.base)
+                                                                      AspisS1ValuesOwnedInstallation.nativeValues
+                                                                      AspisS1ExtractedRoundChildren.children
+                                                                      (ClaimsUnrolledFinish.install cfg.std
+                                                                        cfg.boundaries)).op11
+                                                                  s2 y1)
+                                                          match __x with
+                                                            | (r3, y11) => do
+                                                              let cf2 ←
+                                                                liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                                                              match cf2 with
+                                                                | core.ops.control_flow.ControlFlow.Continue a_3 =>
+                                                                  have s3 := split_at_mut_back (semantic1, y11);
+                                                                  have val1 := deref_mut_back s3;
+                                                                  do
+                                                                  let s4 ←
+                                                                    liftM
+                                                                        (alloc.vec.Vec.index
+                                                                          (core.slice.index.SliceIndexRangeToUsizeSlice
+                                                                            U8)
+                                                                          val1 { «end» := a })
+                                                                  let s5 ←
+                                                                    liftM
+                                                                        (alloc.vec.Vec.index
+                                                                          (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                            U8)
+                                                                          val1 { start := a })
+                                                                  let r4 ←
+                                                                    liftM
+                                                                        ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                              (AspisS1ValuesOwnedInstallation.withValues
+                                                                                cfg.base)
+                                                                              AspisS1ValuesOwnedInstallation.nativeValues
+                                                                              AspisS1ExtractedRoundChildren.children
+                                                                              (ClaimsUnrolledFinish.install cfg.std
+                                                                                cfg.boundaries)).op5
+                                                                          i.proof s4 s5)
+                                                                  let cf3 ←
+                                                                    liftM
+                                                                        (core.result.Result.Insts.CoreOpsTry.branch r4)
+                                                                  match cf3 with
+                                                                    | core.ops.control_flow.ControlFlow.Continue v => do
+                                                                      let r5 ←
+                                                                        S1SemanticCodeInstallation.code
+                                                                            AspisS1ExtractedRoundChildren.children
+                                                                            (ClaimsUnrolledFinish.install cfg.std
+                                                                              cfg.boundaries)
+                                                                            i.digest i.publicValue v.semantic i.hash
+                                                                      let r6 ←
+                                                                        liftM
+                                                                            (AspisR1CurrentCaller.core.result.Result.map_err
+                                                                              (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                                                i.digest)
+                                                                              r5 ())
+                                                                      let cf4 ←
+                                                                        liftM
+                                                                            (core.result.Result.Insts.CoreOpsTry.branch
+                                                                              r6)
+                                                                      match cf4 with
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Continue
+                                                                            val2 =>
+                                                                          do
+                                                                          liftM
+                                                                              (verifier.mark none
+                                                                                verifier.Phase.Semantic)
+                                                                          BorrowedClaimPrepared.closedPreparationCode
+                                                                              i.digest val2 v i.hash i.scratch
+                                                                        |
+                                                                        core.ops.control_flow.ControlFlow.Break
+                                                                            residual =>
+                                                                          do
+                                                                          let r7 ←
+                                                                            liftM
+                                                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                  verifier.Prepared
+                                                                                  (core.convert.FromSame verifier.Error)
+                                                                                  residual)
+                                                                          pure (r7, i.scratch)
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      do
+                                                                      let r5 ←
+                                                                        liftM
+                                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                              verifier.Prepared
+                                                                              (core.convert.FromSame verifier.Error)
+                                                                              residual)
+                                                                      pure (r5, i.scratch)
+                                                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                                                  let r4 ←
+                                                                    liftM
+                                                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                          verifier.Prepared
+                                                                          (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                            (BorrowedClaimPrepared.NativeBuffers.install
+                                                                              (AspisS1ValuesOwnedInstallation.withValues
+                                                                                cfg.base)
+                                                                              AspisS1ValuesOwnedInstallation.nativeValues
+                                                                              AspisS1ExtractedRoundChildren.children
+                                                                              (ClaimsUnrolledFinish.install cfg.std
+                                                                                cfg.boundaries)))
+                                                                          residual)
+                                                                  pure (r4, i.scratch)
+                                                        | core.ops.control_flow.ControlFlow.Break residual => do
+                                                          let r3 ←
+                                                            liftM
+                                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                  verifier.Prepared
+                                                                  (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                    (BorrowedClaimPrepared.NativeBuffers.install
+                                                                      (AspisS1ValuesOwnedInstallation.withValues
+                                                                        cfg.base)
+                                                                      AspisS1ValuesOwnedInstallation.nativeValues
+                                                                      AspisS1ExtractedRoundChildren.children
+                                                                      (ClaimsUnrolledFinish.install cfg.std
+                                                                        cfg.boundaries)))
+                                                                  residual)
+                                                          pure (r3, i.scratch)
+                                        | core.ops.control_flow.ControlFlow.Break residual => do
+                                          let r2 ←
+                                            liftM
+                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                          pure (r2, i.scratch))
+                                    fun a_2 =>
+                                    NLJ_RunAlgebra.bind_congr
+                                      (liftM ((NLJ_Prepare.ops cfg).op1 core.marker.CopyU8 a_2 0#u8))
+                                      (fun r =>
+                                        match r with
+                                        | core.result.Result.Err a =>
+                                          pure (core.result.Result.Err verifier.Error.Allocation, i.scratch)
+                                        | core.result.Result.Ok logical =>
+                                          have o := NLJ_Prepare.ops cfg;
+                                          do
+                                          let __x ← liftM (lift logical.deref_mut)
+                                          match __x with
+                                            | (bytes, vecBack) => do
+                                              let __x ← liftM (core.slice.Slice.split_at_mut bytes a)
+                                              match __x with
+                                                | ((semantic, y1), splitBack) =>
+                                                  have o := NLJ_Prepare.ops cfg;
+                                                  do
+                                                  let off ← liftM (compact.OFF_SEMANTIC o)
+                                                  let offY1 ← liftM (compact.OFF_Y1 o)
+                                                  let compressed ←
+                                                    liftM
+                                                        (core.slice.index.Slice.index
+                                                          (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                          { start := off, «end» := offY1 })
+                                                  have o : Ops := NLJ_Prepare.ops cfg
+                                                  let __x ← liftM (o.op10 compressed semantic)
+                                                  match __x with
+                                                    | (r, semanticAfter) =>
+                                                      match r with
+                                                      | core.result.Result.Ok a_3 =>
+                                                        have o := NLJ_Prepare.ops cfg;
+                                                        do
+                                                        let offInactive ← liftM (compact.OFF_INACTIVE o)
+                                                        let compressed ←
+                                                          liftM
+                                                              (core.slice.index.Slice.index
+                                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                                { start := offY1, «end» := offInactive })
+                                                        have o : Ops := NLJ_Prepare.ops cfg
+                                                        let __x ← liftM (o.op11 compressed y1)
+                                                        match __x with
+                                                          | (r, y1After) =>
+                                                            match r with
+                                                            | core.result.Result.Ok a_4 =>
+                                                              have o := NLJ_Prepare.ops cfg;
+                                                              have logical :=
+                                                                vecBack (splitBack (semanticAfter, y1After));
+                                                              do
+                                                              let semanticFull ←
+                                                                liftM
+                                                                    (alloc.vec.Vec.index
+                                                                      (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                                                      logical { «end» := a })
+                                                              let y1Full ←
+                                                                liftM
+                                                                    (alloc.vec.Vec.index
+                                                                      (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                        U8)
+                                                                      logical { start := a })
+                                                              have o : Ops := NLJ_Prepare.ops cfg
+                                                              let r ← liftM (o.op5 i.proof semanticFull y1Full)
+                                                              match r with
+                                                                | core.result.Result.Err e =>
+                                                                  pure (core.result.Result.Err e, i.scratch)
+                                                                | core.result.Result.Ok v =>
+                                                                  have o := NLJ_Prepare.ops cfg;
+                                                                  do
+                                                                  let r ←
+                                                                    S1SemanticCodeInstallation.code
+                                                                        AspisS1ExtractedRoundChildren.children
+                                                                        (ClaimsUnrolledFinish.install cfg.std
+                                                                          cfg.boundaries)
+                                                                        i.digest i.publicValue v.semantic i.hash
+                                                                  have o : Ops := NLJ_Prepare.ops cfg
+                                                                  match r with
+                                                                    | core.result.Result.Err a =>
+                                                                      pure
+                                                                        (core.result.Result.Err verifier.Error.Semantic,
+                                                                          i.scratch)
+                                                                    | core.result.Result.Ok sem =>
+                                                                      have o := NLJ_Prepare.ops cfg;
+                                                                      do
+                                                                      liftM (verifier.mark none verifier.Phase.Semantic)
+                                                                      have o : Ops := NLJ_Prepare.ops cfg
+                                                                      BorrowedClaimPrepared.closedPreparationCode
+                                                                          i.digest sem v i.hash i.scratch
+                                                            | core.result.Result.Err e => do
+                                                              let r ←
+                                                                liftM
+                                                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      verifier.Prepared
+                                                                      (verifier.Error.Insts.CoreConvertFromCodecError o)
+                                                                      (core.result.Result.Err e))
+                                                              pure (r, i.scratch)
+                                                      | core.result.Result.Err e => do
+                                                        let r ←
+                                                          liftM
+                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                verifier.Prepared
+                                                                (verifier.Error.Insts.CoreConvertFromCodecError o)
+                                                                (core.result.Result.Err e))
+                                                        pure (r, i.scratch))
+                                      (fun r => do
+                                        let r1 ←
+                                          liftM
+                                              (AspisR1CurrentCaller.core.result.Result.map_err
+                                                (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                  i.digest)
+                                                r ())
+                                        let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                                        match cf with
+                                          | core.ops.control_flow.ControlFlow.Continue val => do
+                                            let __x ← liftM (lift val.deref_mut)
+                                            match __x with
+                                              | (s, deref_mut_back) => do
+                                                let __x ← liftM (core.slice.Slice.split_at_mut s a)
+                                                match __x with
+                                                  | ((semantic, y1), split_at_mut_back) => do
+                                                    let i3 ←
+                                                      liftM
+                                                          (compact.OFF_SEMANTIC
+                                                            (BorrowedClaimPrepared.NativeBuffers.install
+                                                              (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                              AspisS1ValuesOwnedInstallation.nativeValues
+                                                              AspisS1ExtractedRoundChildren.children
+                                                              (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)))
+                                                    let i4 ←
+                                                      liftM
+                                                          (compact.OFF_Y1
+                                                            (BorrowedClaimPrepared.NativeBuffers.install
+                                                              (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                              AspisS1ValuesOwnedInstallation.nativeValues
+                                                              AspisS1ExtractedRoundChildren.children
+                                                              (ClaimsUnrolledFinish.install cfg.std cfg.boundaries)))
+                                                    let s1 ←
+                                                      liftM
+                                                          (core.slice.index.Slice.index
+                                                            (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                            { start := i3, «end» := i4 })
+                                                    let __x ←
+                                                      liftM
+                                                          ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                                AspisS1ValuesOwnedInstallation.nativeValues
+                                                                AspisS1ExtractedRoundChildren.children
+                                                                (ClaimsUnrolledFinish.install cfg.std
+                                                                  cfg.boundaries)).op10
+                                                            s1 semantic)
+                                                    match __x with
+                                                      | (r2, semantic1) => do
+                                                        let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                                                        match cf1 with
+                                                          | core.ops.control_flow.ControlFlow.Continue a_3 => do
+                                                            let i5 ←
+                                                              liftM
+                                                                  (compact.OFF_INACTIVE
+                                                                    (BorrowedClaimPrepared.NativeBuffers.install
+                                                                      (AspisS1ValuesOwnedInstallation.withValues
+                                                                        cfg.base)
+                                                                      AspisS1ValuesOwnedInstallation.nativeValues
+                                                                      AspisS1ExtractedRoundChildren.children
+                                                                      (ClaimsUnrolledFinish.install cfg.std
+                                                                        cfg.boundaries)))
+                                                            let s2 ←
+                                                              liftM
+                                                                  (core.slice.index.Slice.index
+                                                                    (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                                    i.proof { start := i4, «end» := i5 })
+                                                            let __x ←
+                                                              liftM
+                                                                  ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                        (AspisS1ValuesOwnedInstallation.withValues
+                                                                          cfg.base)
+                                                                        AspisS1ValuesOwnedInstallation.nativeValues
+                                                                        AspisS1ExtractedRoundChildren.children
+                                                                        (ClaimsUnrolledFinish.install cfg.std
+                                                                          cfg.boundaries)).op11
+                                                                    s2 y1)
+                                                            match __x with
+                                                              | (r3, y11) => do
+                                                                let cf2 ←
+                                                                  liftM (core.result.Result.Insts.CoreOpsTry.branch r3)
+                                                                match cf2 with
+                                                                  | core.ops.control_flow.ControlFlow.Continue a_4 =>
+                                                                    have s3 := split_at_mut_back (semantic1, y11);
+                                                                    have val1 := deref_mut_back s3;
+                                                                    do
+                                                                    let s4 ←
+                                                                      liftM
+                                                                          (alloc.vec.Vec.index
+                                                                            (core.slice.index.SliceIndexRangeToUsizeSlice
+                                                                              U8)
+                                                                            val1 { «end» := a })
+                                                                    let s5 ←
+                                                                      liftM
+                                                                          (alloc.vec.Vec.index
+                                                                            (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                              U8)
+                                                                            val1 { start := a })
+                                                                    let r4 ←
+                                                                      liftM
+                                                                          ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                                (AspisS1ValuesOwnedInstallation.withValues
+                                                                                  cfg.base)
+                                                                                AspisS1ValuesOwnedInstallation.nativeValues
+                                                                                AspisS1ExtractedRoundChildren.children
+                                                                                (ClaimsUnrolledFinish.install cfg.std
+                                                                                  cfg.boundaries)).op5
+                                                                            i.proof s4 s5)
+                                                                    let cf3 ←
+                                                                      liftM
+                                                                          (core.result.Result.Insts.CoreOpsTry.branch
+                                                                            r4)
+                                                                    match cf3 with
+                                                                      | core.ops.control_flow.ControlFlow.Continue v =>
+                                                                        do
+                                                                        let r5 ←
+                                                                          S1SemanticCodeInstallation.code
+                                                                              AspisS1ExtractedRoundChildren.children
+                                                                              (ClaimsUnrolledFinish.install cfg.std
+                                                                                cfg.boundaries)
+                                                                              i.digest i.publicValue v.semantic i.hash
+                                                                        let r6 ←
+                                                                          liftM
+                                                                              (AspisR1CurrentCaller.core.result.Result.map_err
+                                                                                (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                                                  i.digest)
+                                                                                r5 ())
+                                                                        let cf4 ←
+                                                                          liftM
+                                                                              (core.result.Result.Insts.CoreOpsTry.branch
+                                                                                r6)
+                                                                        match cf4 with
+                                                                          |
+                                                                          core.ops.control_flow.ControlFlow.Continue
+                                                                              val2 =>
+                                                                            do
+                                                                            liftM
+                                                                                (verifier.mark none
+                                                                                  verifier.Phase.Semantic)
+                                                                            BorrowedClaimPrepared.closedPreparationCode
+                                                                                i.digest val2 v i.hash i.scratch
+                                                                          |
+                                                                          core.ops.control_flow.ControlFlow.Break
+                                                                              residual =>
+                                                                            do
+                                                                            let r7 ←
+                                                                              liftM
+                                                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                    verifier.Prepared
+                                                                                    (core.convert.FromSame
+                                                                                      verifier.Error)
+                                                                                    residual)
+                                                                            pure (r7, i.scratch)
+                                                                      |
+                                                                      core.ops.control_flow.ControlFlow.Break
+                                                                          residual =>
+                                                                        do
+                                                                        let r5 ←
+                                                                          liftM
+                                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                verifier.Prepared
+                                                                                (core.convert.FromSame verifier.Error)
+                                                                                residual)
+                                                                        pure (r5, i.scratch)
+                                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                    do
+                                                                    let r4 ←
+                                                                      liftM
+                                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                            verifier.Prepared
+                                                                            (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                              (BorrowedClaimPrepared.NativeBuffers.install
+                                                                                (AspisS1ValuesOwnedInstallation.withValues
+                                                                                  cfg.base)
+                                                                                AspisS1ValuesOwnedInstallation.nativeValues
+                                                                                AspisS1ExtractedRoundChildren.children
+                                                                                (ClaimsUnrolledFinish.install cfg.std
+                                                                                  cfg.boundaries)))
+                                                                            residual)
+                                                                    pure (r4, i.scratch)
+                                                          | core.ops.control_flow.ControlFlow.Break residual => do
+                                                            let r3 ←
+                                                              liftM
+                                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    verifier.Prepared
+                                                                    (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                      (BorrowedClaimPrepared.NativeBuffers.install
+                                                                        (AspisS1ValuesOwnedInstallation.withValues
+                                                                          cfg.base)
+                                                                        AspisS1ValuesOwnedInstallation.nativeValues
+                                                                        AspisS1ExtractedRoundChildren.children
+                                                                        (ClaimsUnrolledFinish.install cfg.std
+                                                                          cfg.boundaries)))
+                                                                    residual)
+                                                            pure (r3, i.scratch)
+                                          | core.ops.control_flow.ControlFlow.Break residual => do
+                                            let r2 ←
+                                              liftM
+                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+                                            pure (r2, i.scratch))
+                                      fun a_3 =>
+                                      tail_allocate.match_1.splitter
+                                        (fun r =>
+                                          a_3 = r →
+                                            run
+                                                (match a_3 with
+                                                | core.result.Result.Err a =>
+                                                  pure (core.result.Result.Err verifier.Error.Allocation, i.scratch)
+                                                | core.result.Result.Ok logical =>
+                                                  have o := NLJ_Prepare.ops cfg;
+                                                  do
+                                                  let __x ← liftM (lift logical.deref_mut)
+                                                  match __x with
+                                                    | (bytes, vecBack) => do
+                                                      let __x ← liftM (core.slice.Slice.split_at_mut bytes a)
+                                                      match __x with
+                                                        | ((semantic, y1), splitBack) =>
+                                                          have o := NLJ_Prepare.ops cfg;
+                                                          do
+                                                          let off ← liftM (compact.OFF_SEMANTIC o)
+                                                          let offY1 ← liftM (compact.OFF_Y1 o)
+                                                          let compressed ←
+                                                            liftM
+                                                                (core.slice.index.Slice.index
+                                                                  (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                                  i.proof { start := off, «end» := offY1 })
+                                                          have o : Ops := NLJ_Prepare.ops cfg
+                                                          let __x ← liftM (o.op10 compressed semantic)
+                                                          match __x with
+                                                            | (r, semanticAfter) =>
+                                                              match r with
+                                                              | core.result.Result.Ok a_4 =>
+                                                                have o := NLJ_Prepare.ops cfg;
+                                                                do
+                                                                let offInactive ← liftM (compact.OFF_INACTIVE o)
+                                                                let compressed ←
+                                                                  liftM
+                                                                      (core.slice.index.Slice.index
+                                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                                        i.proof
+                                                                        { start := offY1, «end» := offInactive })
+                                                                have o : Ops := NLJ_Prepare.ops cfg
+                                                                let __x ← liftM (o.op11 compressed y1)
+                                                                match __x with
+                                                                  | (r, y1After) =>
+                                                                    match r with
+                                                                    | core.result.Result.Ok a_5 =>
+                                                                      have o := NLJ_Prepare.ops cfg;
+                                                                      have logical :=
+                                                                        vecBack (splitBack (semanticAfter, y1After));
+                                                                      do
+                                                                      let semanticFull ←
+                                                                        liftM
+                                                                            (alloc.vec.Vec.index
+                                                                              (core.slice.index.SliceIndexRangeToUsizeSlice
+                                                                                U8)
+                                                                              logical { «end» := a })
+                                                                      let y1Full ←
+                                                                        liftM
+                                                                            (alloc.vec.Vec.index
+                                                                              (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                                U8)
+                                                                              logical { start := a })
+                                                                      have o : Ops := NLJ_Prepare.ops cfg
+                                                                      let r ← liftM (o.op5 i.proof semanticFull y1Full)
+                                                                      match r with
+                                                                        | core.result.Result.Err e =>
+                                                                          pure (core.result.Result.Err e, i.scratch)
+                                                                        | core.result.Result.Ok v =>
+                                                                          have o := NLJ_Prepare.ops cfg;
+                                                                          do
+                                                                          let r ←
+                                                                            S1SemanticCodeInstallation.code
+                                                                                AspisS1ExtractedRoundChildren.children
+                                                                                (ClaimsUnrolledFinish.install cfg.std
+                                                                                  cfg.boundaries)
+                                                                                i.digest i.publicValue v.semantic i.hash
+                                                                          have o : Ops := NLJ_Prepare.ops cfg
+                                                                          match r with
+                                                                            | core.result.Result.Err a =>
+                                                                              pure
+                                                                                (core.result.Result.Err
+                                                                                    verifier.Error.Semantic,
+                                                                                  i.scratch)
+                                                                            | core.result.Result.Ok sem =>
+                                                                              have o := NLJ_Prepare.ops cfg;
+                                                                              do
+                                                                              liftM
+                                                                                  (verifier.mark none
+                                                                                    verifier.Phase.Semantic)
+                                                                              have o : Ops := NLJ_Prepare.ops cfg
+                                                                              BorrowedClaimPrepared.closedPreparationCode
+                                                                                  i.digest sem v i.hash i.scratch
+                                                                    | core.result.Result.Err e => do
+                                                                      let r ←
+                                                                        liftM
+                                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                              verifier.Prepared
+                                                                              (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                                o)
+                                                                              (core.result.Result.Err e))
+                                                                      pure (r, i.scratch)
+                                                              | core.result.Result.Err e => do
+                                                                let r ←
+                                                                  liftM
+                                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        verifier.Prepared
+                                                                        (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                          o)
+                                                                        (core.result.Result.Err e))
+                                                                pure (r, i.scratch)) =
+                                              run do
+                                                let r1 ←
+                                                  liftM
+                                                      (AspisR1CurrentCaller.core.result.Result.map_err
+                                                        (verifier.candidate.prepare.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                          i.digest)
+                                                        a_3 ())
+                                                let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+                                                match cf with
+                                                  | core.ops.control_flow.ControlFlow.Continue val => do
+                                                    let __x ← liftM (lift val.deref_mut)
+                                                    match __x with
+                                                      | (s, deref_mut_back) => do
+                                                        let __x ← liftM (core.slice.Slice.split_at_mut s a)
+                                                        match __x with
+                                                          | ((semantic, y1), split_at_mut_back) => do
+                                                            let i3 ←
+                                                              liftM
+                                                                  (compact.OFF_SEMANTIC
+                                                                    (BorrowedClaimPrepared.NativeBuffers.install
+                                                                      (AspisS1ValuesOwnedInstallation.withValues
+                                                                        cfg.base)
+                                                                      AspisS1ValuesOwnedInstallation.nativeValues
+                                                                      AspisS1ExtractedRoundChildren.children
+                                                                      (ClaimsUnrolledFinish.install cfg.std
+                                                                        cfg.boundaries)))
+                                                            let i4 ←
+                                                              liftM
+                                                                  (compact.OFF_Y1
+                                                                    (BorrowedClaimPrepared.NativeBuffers.install
+                                                                      (AspisS1ValuesOwnedInstallation.withValues
+                                                                        cfg.base)
+                                                                      AspisS1ValuesOwnedInstallation.nativeValues
+                                                                      AspisS1ExtractedRoundChildren.children
+                                                                      (ClaimsUnrolledFinish.install cfg.std
+                                                                        cfg.boundaries)))
+                                                            let s1 ←
+                                                              liftM
+                                                                  (core.slice.index.Slice.index
+                                                                    (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                                    i.proof { start := i3, «end» := i4 })
+                                                            let __x ←
+                                                              liftM
+                                                                  ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                        (AspisS1ValuesOwnedInstallation.withValues
+                                                                          cfg.base)
+                                                                        AspisS1ValuesOwnedInstallation.nativeValues
+                                                                        AspisS1ExtractedRoundChildren.children
+                                                                        (ClaimsUnrolledFinish.install cfg.std
+                                                                          cfg.boundaries)).op10
+                                                                    s1 semantic)
+                                                            match __x with
+                                                              | (r2, semantic1) => do
+                                                                let cf1 ←
+                                                                  liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                                                                match cf1 with
+                                                                  | core.ops.control_flow.ControlFlow.Continue a_4 => do
+                                                                    let i5 ←
+                                                                      liftM
+                                                                          (compact.OFF_INACTIVE
+                                                                            (BorrowedClaimPrepared.NativeBuffers.install
+                                                                              (AspisS1ValuesOwnedInstallation.withValues
+                                                                                cfg.base)
+                                                                              AspisS1ValuesOwnedInstallation.nativeValues
+                                                                              AspisS1ExtractedRoundChildren.children
+                                                                              (ClaimsUnrolledFinish.install cfg.std
+                                                                                cfg.boundaries)))
+                                                                    let s2 ←
+                                                                      liftM
+                                                                          (core.slice.index.Slice.index
+                                                                            (core.slice.index.SliceIndexRangeUsizeSlice
+                                                                              U8)
+                                                                            i.proof { start := i4, «end» := i5 })
+                                                                    let __x ←
+                                                                      liftM
+                                                                          ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                                (AspisS1ValuesOwnedInstallation.withValues
+                                                                                  cfg.base)
+                                                                                AspisS1ValuesOwnedInstallation.nativeValues
+                                                                                AspisS1ExtractedRoundChildren.children
+                                                                                (ClaimsUnrolledFinish.install cfg.std
+                                                                                  cfg.boundaries)).op11
+                                                                            s2 y1)
+                                                                    match __x with
+                                                                      | (r3, y11) => do
+                                                                        let cf2 ←
+                                                                          liftM
+                                                                              (core.result.Result.Insts.CoreOpsTry.branch
+                                                                                r3)
+                                                                        match cf2 with
+                                                                          |
+                                                                          core.ops.control_flow.ControlFlow.Continue
+                                                                              a_5 =>
+                                                                            have s3 :=
+                                                                              split_at_mut_back (semantic1, y11);
+                                                                            have val1 := deref_mut_back s3;
+                                                                            do
+                                                                            let s4 ←
+                                                                              liftM
+                                                                                  (alloc.vec.Vec.index
+                                                                                    (core.slice.index.SliceIndexRangeToUsizeSlice
+                                                                                      U8)
+                                                                                    val1 { «end» := a })
+                                                                            let s5 ←
+                                                                              liftM
+                                                                                  (alloc.vec.Vec.index
+                                                                                    (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                                      U8)
+                                                                                    val1 { start := a })
+                                                                            let r4 ←
+                                                                              liftM
+                                                                                  ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                                        (AspisS1ValuesOwnedInstallation.withValues
+                                                                                          cfg.base)
+                                                                                        AspisS1ValuesOwnedInstallation.nativeValues
+                                                                                        AspisS1ExtractedRoundChildren.children
+                                                                                        (ClaimsUnrolledFinish.install
+                                                                                          cfg.std cfg.boundaries)).op5
+                                                                                    i.proof s4 s5)
+                                                                            let cf3 ←
+                                                                              liftM
+                                                                                  (core.result.Result.Insts.CoreOpsTry.branch
+                                                                                    r4)
+                                                                            match cf3 with
+                                                                              |
+                                                                              core.ops.control_flow.ControlFlow.Continue
+                                                                                  v =>
+                                                                                do
+                                                                                let r5 ←
+                                                                                  S1SemanticCodeInstallation.code
+                                                                                      AspisS1ExtractedRoundChildren.children
+                                                                                      (ClaimsUnrolledFinish.install
+                                                                                        cfg.std cfg.boundaries)
+                                                                                      i.digest i.publicValue v.semantic
+                                                                                      i.hash
+                                                                                let r6 ←
+                                                                                  liftM
+                                                                                      (AspisR1CurrentCaller.core.result.Result.map_err
+                                                                                        (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                                                          i.digest)
+                                                                                        r5 ())
+                                                                                let cf4 ←
+                                                                                  liftM
+                                                                                      (core.result.Result.Insts.CoreOpsTry.branch
+                                                                                        r6)
+                                                                                match cf4 with
+                                                                                  |
+                                                                                  core.ops.control_flow.ControlFlow.Continue
+                                                                                      val2 =>
+                                                                                    do
+                                                                                    liftM
+                                                                                        (verifier.mark none
+                                                                                          verifier.Phase.Semantic)
+                                                                                    BorrowedClaimPrepared.closedPreparationCode
+                                                                                        i.digest val2 v i.hash i.scratch
+                                                                                  |
+                                                                                  core.ops.control_flow.ControlFlow.Break
+                                                                                      residual =>
+                                                                                    do
+                                                                                    let r7 ←
+                                                                                      liftM
+                                                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                            verifier.Prepared
+                                                                                            (core.convert.FromSame
+                                                                                              verifier.Error)
+                                                                                            residual)
+                                                                                    pure (r7, i.scratch)
+                                                                              |
+                                                                              core.ops.control_flow.ControlFlow.Break
+                                                                                  residual =>
+                                                                                do
+                                                                                let r5 ←
+                                                                                  liftM
+                                                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                        verifier.Prepared
+                                                                                        (core.convert.FromSame
+                                                                                          verifier.Error)
+                                                                                        residual)
+                                                                                pure (r5, i.scratch)
+                                                                          |
+                                                                          core.ops.control_flow.ControlFlow.Break
+                                                                              residual =>
+                                                                            do
+                                                                            let r4 ←
+                                                                              liftM
+                                                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                    verifier.Prepared
+                                                                                    (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                                      (BorrowedClaimPrepared.NativeBuffers.install
+                                                                                        (AspisS1ValuesOwnedInstallation.withValues
+                                                                                          cfg.base)
+                                                                                        AspisS1ValuesOwnedInstallation.nativeValues
+                                                                                        AspisS1ExtractedRoundChildren.children
+                                                                                        (ClaimsUnrolledFinish.install
+                                                                                          cfg.std cfg.boundaries)))
+                                                                                    residual)
+                                                                            pure (r4, i.scratch)
+                                                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                    do
+                                                                    let r3 ←
+                                                                      liftM
+                                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                            verifier.Prepared
+                                                                            (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                              (BorrowedClaimPrepared.NativeBuffers.install
+                                                                                (AspisS1ValuesOwnedInstallation.withValues
+                                                                                  cfg.base)
+                                                                                AspisS1ValuesOwnedInstallation.nativeValues
+                                                                                AspisS1ExtractedRoundChildren.children
+                                                                                (ClaimsUnrolledFinish.install cfg.std
+                                                                                  cfg.boundaries)))
+                                                                            residual)
+                                                                    pure (r3, i.scratch)
+                                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                                    let r2 ←
+                                                      liftM
+                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            verifier.Prepared (core.convert.FromSame verifier.Error)
+                                                            residual)
+                                                    pure (r2, i.scratch))
+                                        a_3
+                                        (fun a_4 h =>
+                                          Eq.symm h ▸
+                                            id
+                                              (Eq.refl
+                                                (run
+                                                  (pure
+                                                    (core.result.Result.Err verifier.Error.Allocation, i.scratch)))))
+                                        (fun logical h =>
+                                          ⋯ ▸
+                                            id
+                                              (NLJ_RunAlgebra.bind_congr (liftM (lift logical.deref_mut))
+                                                (fun __x =>
+                                                  match __x with
+                                                  | (bytes, vecBack) => do
+                                                    let __x ← liftM (core.slice.Slice.split_at_mut bytes a)
+                                                    match __x with
+                                                      | ((semantic, y1), splitBack) =>
+                                                        have o := NLJ_Prepare.ops cfg;
+                                                        do
+                                                        let off ← liftM (compact.OFF_SEMANTIC o)
+                                                        let offY1 ← liftM (compact.OFF_Y1 o)
+                                                        let compressed ←
+                                                          liftM
+                                                              (core.slice.index.Slice.index
+                                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                                { start := off, «end» := offY1 })
+                                                        have o : Ops := NLJ_Prepare.ops cfg
+                                                        let __x ← liftM (o.op10 compressed semantic)
+                                                        match __x with
+                                                          | (r, semanticAfter) =>
+                                                            match r with
+                                                            | core.result.Result.Ok a_4 =>
+                                                              have o := NLJ_Prepare.ops cfg;
+                                                              do
+                                                              let offInactive ← liftM (compact.OFF_INACTIVE o)
+                                                              let compressed ←
+                                                                liftM
+                                                                    (core.slice.index.Slice.index
+                                                                      (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                                      i.proof { start := offY1, «end» := offInactive })
+                                                              have o : Ops := NLJ_Prepare.ops cfg
+                                                              let __x ← liftM (o.op11 compressed y1)
+                                                              match __x with
+                                                                | (r, y1After) =>
+                                                                  match r with
+                                                                  | core.result.Result.Ok a_5 =>
+                                                                    have o := NLJ_Prepare.ops cfg;
+                                                                    have logical :=
+                                                                      vecBack (splitBack (semanticAfter, y1After));
+                                                                    do
+                                                                    let semanticFull ←
+                                                                      liftM
+                                                                          (alloc.vec.Vec.index
+                                                                            (core.slice.index.SliceIndexRangeToUsizeSlice
+                                                                              U8)
+                                                                            logical { «end» := a })
+                                                                    let y1Full ←
+                                                                      liftM
+                                                                          (alloc.vec.Vec.index
+                                                                            (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                              U8)
+                                                                            logical { start := a })
+                                                                    have o : Ops := NLJ_Prepare.ops cfg
+                                                                    let r ← liftM (o.op5 i.proof semanticFull y1Full)
+                                                                    match r with
+                                                                      | core.result.Result.Err e =>
+                                                                        pure (core.result.Result.Err e, i.scratch)
+                                                                      | core.result.Result.Ok v =>
+                                                                        have o := NLJ_Prepare.ops cfg;
+                                                                        do
+                                                                        let r ←
+                                                                          S1SemanticCodeInstallation.code
+                                                                              AspisS1ExtractedRoundChildren.children
+                                                                              (ClaimsUnrolledFinish.install cfg.std
+                                                                                cfg.boundaries)
+                                                                              i.digest i.publicValue v.semantic i.hash
+                                                                        have o : Ops := NLJ_Prepare.ops cfg
+                                                                        match r with
+                                                                          | core.result.Result.Err a =>
+                                                                            pure
+                                                                              (core.result.Result.Err
+                                                                                  verifier.Error.Semantic,
+                                                                                i.scratch)
+                                                                          | core.result.Result.Ok sem =>
+                                                                            have o := NLJ_Prepare.ops cfg;
+                                                                            do
+                                                                            liftM
+                                                                                (verifier.mark none
+                                                                                  verifier.Phase.Semantic)
+                                                                            have o : Ops := NLJ_Prepare.ops cfg
+                                                                            BorrowedClaimPrepared.closedPreparationCode
+                                                                                i.digest sem v i.hash i.scratch
+                                                                  | core.result.Result.Err e => do
+                                                                    let r ←
+                                                                      liftM
+                                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                            verifier.Prepared
+                                                                            (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                              o)
+                                                                            (core.result.Result.Err e))
+                                                                    pure (r, i.scratch)
+                                                            | core.result.Result.Err e => do
+                                                              let r ←
+                                                                liftM
+                                                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                      verifier.Prepared
+                                                                      (verifier.Error.Insts.CoreConvertFromCodecError o)
+                                                                      (core.result.Result.Err e))
+                                                              pure (r, i.scratch))
+                                                (fun __x =>
+                                                  match __x with
+                                                  | (s, deref_mut_back) => do
+                                                    let __x ← liftM (core.slice.Slice.split_at_mut s a)
+                                                    match __x with
+                                                      | ((semantic, y1), split_at_mut_back) => do
+                                                        let i3 ←
+                                                          liftM
+                                                              (compact.OFF_SEMANTIC
+                                                                (BorrowedClaimPrepared.NativeBuffers.install
+                                                                  (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                                  AspisS1ValuesOwnedInstallation.nativeValues
+                                                                  AspisS1ExtractedRoundChildren.children
+                                                                  (ClaimsUnrolledFinish.install cfg.std
+                                                                    cfg.boundaries)))
+                                                        let i4 ←
+                                                          liftM
+                                                              (compact.OFF_Y1
+                                                                (BorrowedClaimPrepared.NativeBuffers.install
+                                                                  (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                                  AspisS1ValuesOwnedInstallation.nativeValues
+                                                                  AspisS1ExtractedRoundChildren.children
+                                                                  (ClaimsUnrolledFinish.install cfg.std
+                                                                    cfg.boundaries)))
+                                                        let s1 ←
+                                                          liftM
+                                                              (core.slice.index.Slice.index
+                                                                (core.slice.index.SliceIndexRangeUsizeSlice U8) i.proof
+                                                                { start := i3, «end» := i4 })
+                                                        let __x ←
+                                                          liftM
+                                                              ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                    (AspisS1ValuesOwnedInstallation.withValues cfg.base)
+                                                                    AspisS1ValuesOwnedInstallation.nativeValues
+                                                                    AspisS1ExtractedRoundChildren.children
+                                                                    (ClaimsUnrolledFinish.install cfg.std
+                                                                      cfg.boundaries)).op10
+                                                                s1 semantic)
+                                                        match __x with
+                                                          | (r2, semantic1) => do
+                                                            let cf1 ←
+                                                              liftM (core.result.Result.Insts.CoreOpsTry.branch r2)
+                                                            match cf1 with
+                                                              | core.ops.control_flow.ControlFlow.Continue a_4 => do
+                                                                let i5 ←
+                                                                  liftM
+                                                                      (compact.OFF_INACTIVE
+                                                                        (BorrowedClaimPrepared.NativeBuffers.install
+                                                                          (AspisS1ValuesOwnedInstallation.withValues
+                                                                            cfg.base)
+                                                                          AspisS1ValuesOwnedInstallation.nativeValues
+                                                                          AspisS1ExtractedRoundChildren.children
+                                                                          (ClaimsUnrolledFinish.install cfg.std
+                                                                            cfg.boundaries)))
+                                                                let s2 ←
+                                                                  liftM
+                                                                      (core.slice.index.Slice.index
+                                                                        (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                                        i.proof { start := i4, «end» := i5 })
+                                                                let __x ←
+                                                                  liftM
+                                                                      ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                            (AspisS1ValuesOwnedInstallation.withValues
+                                                                              cfg.base)
+                                                                            AspisS1ValuesOwnedInstallation.nativeValues
+                                                                            AspisS1ExtractedRoundChildren.children
+                                                                            (ClaimsUnrolledFinish.install cfg.std
+                                                                              cfg.boundaries)).op11
+                                                                        s2 y1)
+                                                                match __x with
+                                                                  | (r3, y11) => do
+                                                                    let cf2 ←
+                                                                      liftM
+                                                                          (core.result.Result.Insts.CoreOpsTry.branch
+                                                                            r3)
+                                                                    match cf2 with
+                                                                      |
+                                                                      core.ops.control_flow.ControlFlow.Continue a_5 =>
+                                                                        have s3 := split_at_mut_back (semantic1, y11);
+                                                                        have val1 := deref_mut_back s3;
+                                                                        do
+                                                                        let s4 ←
+                                                                          liftM
+                                                                              (alloc.vec.Vec.index
+                                                                                (core.slice.index.SliceIndexRangeToUsizeSlice
+                                                                                  U8)
+                                                                                val1 { «end» := a })
+                                                                        let s5 ←
+                                                                          liftM
+                                                                              (alloc.vec.Vec.index
+                                                                                (core.slice.index.SliceIndexRangeFromUsizeSlice
+                                                                                  U8)
+                                                                                val1 { start := a })
+                                                                        let r4 ←
+                                                                          liftM
+                                                                              ((BorrowedClaimPrepared.NativeBuffers.install
+                                                                                    (AspisS1ValuesOwnedInstallation.withValues
+                                                                                      cfg.base)
+                                                                                    AspisS1ValuesOwnedInstallation.nativeValues
+                                                                                    AspisS1ExtractedRoundChildren.children
+                                                                                    (ClaimsUnrolledFinish.install
+                                                                                      cfg.std cfg.boundaries)).op5
+                                                                                i.proof s4 s5)
+                                                                        let cf3 ←
+                                                                          liftM
+                                                                              (core.result.Result.Insts.CoreOpsTry.branch
+                                                                                r4)
+                                                                        match cf3 with
+                                                                          |
+                                                                          core.ops.control_flow.ControlFlow.Continue
+                                                                              v =>
+                                                                            do
+                                                                            let r5 ←
+                                                                              S1SemanticCodeInstallation.code
+                                                                                  AspisS1ExtractedRoundChildren.children
+                                                                                  (ClaimsUnrolledFinish.install cfg.std
+                                                                                    cfg.boundaries)
+                                                                                  i.digest i.publicValue v.semantic
+                                                                                  i.hash
+                                                                            let r6 ←
+                                                                              liftM
+                                                                                  (AspisR1CurrentCaller.core.result.Result.map_err
+                                                                                    (verifier.candidate.prepare.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                                                                                      i.digest)
+                                                                                    r5 ())
+                                                                            let cf4 ←
+                                                                              liftM
+                                                                                  (core.result.Result.Insts.CoreOpsTry.branch
+                                                                                    r6)
+                                                                            match cf4 with
+                                                                              |
+                                                                              core.ops.control_flow.ControlFlow.Continue
+                                                                                  val2 =>
+                                                                                do
+                                                                                liftM
+                                                                                    (verifier.mark none
+                                                                                      verifier.Phase.Semantic)
+                                                                                BorrowedClaimPrepared.closedPreparationCode
+                                                                                    i.digest val2 v i.hash i.scratch
+                                                                              |
+                                                                              core.ops.control_flow.ControlFlow.Break
+                                                                                  residual =>
+                                                                                do
+                                                                                let r7 ←
+                                                                                  liftM
+                                                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                        verifier.Prepared
+                                                                                        (core.convert.FromSame
+                                                                                          verifier.Error)
+                                                                                        residual)
+                                                                                pure (r7, i.scratch)
+                                                                          |
+                                                                          core.ops.control_flow.ControlFlow.Break
+                                                                              residual =>
+                                                                            do
+                                                                            let r5 ←
+                                                                              liftM
+                                                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                    verifier.Prepared
+                                                                                    (core.convert.FromSame
+                                                                                      verifier.Error)
+                                                                                    residual)
+                                                                            pure (r5, i.scratch)
+                                                                      |
+                                                                      core.ops.control_flow.ControlFlow.Break
+                                                                          residual =>
+                                                                        do
+                                                                        let r7 ←
+                                                                          liftM
+                                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                                verifier.Prepared
+                                                                                (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                                  (BorrowedClaimPrepared.NativeBuffers.install
+                                                                                    (AspisS1ValuesOwnedInstallation.withValues
+                                                                                      cfg.base)
+                                                                                    AspisS1ValuesOwnedInstallation.nativeValues
+                                                                                    AspisS1ExtractedRoundChildren.children
+                                                                                    (ClaimsUnrolledFinish.install
+                                                                                      cfg.std cfg.boundaries)))
+                                                                                residual)
+                                                                        pure (r7, i.scratch)
+                                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                                let r7 ←
+                                                                  liftM
+                                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        verifier.Prepared
+                                                                        (verifier.Error.Insts.CoreConvertFromCodecError
+                                                                          (BorrowedClaimPrepared.NativeBuffers.install
+                                                                            (AspisS1ValuesOwnedInstallation.withValues
+                                                                              cfg.base)
+                                                                            AspisS1ValuesOwnedInstallation.nativeValues
+                                                                            AspisS1ExtractedRoundChildren.children
+                                                                            (ClaimsUnrolledFinish.install cfg.std
+                                                                              cfg.boundaries)))
+                                                                        residual)
+                                                                pure (r7, i.scratch))
+                                                fun a_4 =>
+                                                NLJ_RunAlgebra.bind_congr
+                                                  (liftM (core.slice.Slice.split_at_mut a_4.1 a))
+                                                  (fun __x =>
+                                                    match ⋯ with
+                                                    | ⋯ => ⋯)
+                                                  ⋯ ⋯))
+                                        ⋯))))))))))))))
