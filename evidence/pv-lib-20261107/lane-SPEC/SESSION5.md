@@ -103,3 +103,10 @@ PV_LIB_SPEC_F220Full: whole Pre/MachineSpec/Post/Contract compiled49756;
 exact literal package prefix proposition plus comparison compiled in same module.
 No row proof or comparison implication claimed. Wall0:02.09;
 peak4711428KiB;swap0;standard summary axioms only.
+
+## thread:f316
+
+PV_LIB_SPEC_F316Full: whole Pre/MachineSpec/Post/Contract compiled49757;
+exact literal package prefix proposition plus comparison compiled in same module.
+No row proof or comparison implication claimed. Wall0:02.15;
+peak4711032KiB;swap0;standard summary axioms only.
