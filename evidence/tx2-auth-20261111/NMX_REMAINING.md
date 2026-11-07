@@ -1,3 +1,18 @@
+# Current resumption status
+
+Disk stop resolved. TX2:217 and234 both have candidate roots;234 source/effect
+fold,168 own-root audits, focused combined import and closure retention PASS.
+The frozen233 native and represented folds are instantiated with both complete
+child packets and LIBB module8. No child schema/library identity remains open.
+
+233 is NOT a full candidate: actual parent-site Box cuts, complete emitted
+effects association and all-Args canonical port remain (NMX_REV2_REMAINING
+items1–3). The represented bound is not a caller clause. This is the exact
+limit of242/241 readiness; see NMX_242_241_READINESS.md. No security target or
+CLOSED count is claimed here. No budget stop is asserted.
+
+Everything below is historical, superseded where inconsistent with this update.
+
 # Mandatory local-disk stop, after234 fresh emission
 
 Rule13 of supplied local-lean.txt requires no more launches after ENOSPC.

@@ -1,3 +1,18 @@
+# Current update after child/library completion
+
+TX2:234 candidate and both frozen233 instantiations now exist. Exact named
+roots, evidence and downstream requirements: NMX_242_241_READINESS.md.
+Items1–3 below remain OPEN. Items4 and5 are DISCHARGED by
+NMX_R3_Instantiated233.library / registry_packet / native / represented,
+NMX_R3_LaneInstance.packet and NMX_R3_RegistryArguments.same. The LIBB
+instances are supplied, not locally constructed. NMM is retired; do not poll it.
+Item6 below records the earlier disk-blocked broad revision2 gate plan. This
+resumption audits only its new instantiated roots and their actual combined
+import/loaded closure, recorded in NMX_233_VALIDATION.json; it does not claim
+an unrecorded broad revision2 audit. No old rev2 RSL object is loaded in new work.
+
+Everything below records the original open list for provenance.
+
 # Revision 2 remaining obligations
 
 TX2:233 is not a CANDIDATE. No row credit is requested. The target remains exactly `RSL.TX2_233.RowSpec_233`, Domain=True, at the original revised canonical owners.
