@@ -17,23 +17,25 @@ def admission(a):
     while True:
         r=ssh('python3', """import subprocess,pathlib,json
 names=subprocess.check_output(['systemctl','--user','list-units','--type=scope','--state=running','--no-legend','--plain'],text=True).splitlines()
-active=[]
+active=[];owned=[]
 for line in names:
  unit=line.split()[0]
  cg=subprocess.check_output(['systemctl','--user','show',unit,'-p','ControlGroup','--value'],text=True).strip()
  root=pathlib.Path('/sys/fs/cgroup')/cg.lstrip('/')
- hit=False
+ hit=False;own=False
  for f in root.rglob('cgroup.procs'):
   for pid in f.read_text().split():
-   try:hit |= str(pathlib.Path('/proc',pid,'cwd').resolve()).startswith('/home/dombarker/project-offloads/codex-')
+   try:
+    cwd=str(pathlib.Path('/proc',pid,'cwd').resolve());hit |= cwd.startswith('/home/dombarker/project-offloads/codex-');own |= cwd=='/home/dombarker/project-offloads/codex-cx-entry-wrap-20261111'
    except OSError:pass
  if hit:active.append(unit)
-print(json.dumps({'stream_a_scopes':active,'count':len(active)}))
+ if own:owned.append(unit)
+print(json.dumps({'stream_a_scopes':active,'count':len(active),'owned_scopes':owned}))
 """)
         assert r.returncode==0,r.stderr
         share=json.loads(r.stdout)
-        with (E/'NMW_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(kind='wait' if share['count']>=6 else 'share_check',attempt=a,**share))+'\n')
-        if share['count']<6:break
+        with (E/'NMW_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(kind='wait' if (share['count']>=6 or share['owned_scopes']) else 'share_check',attempt=a,**share))+'\n')
+        if share['count']<6 and not share['owned_scopes']:break
         print(json.dumps(dict(attempt=a,status='wait',reason='Stream A saturation',**share)),flush=True)
         for _ in range(3):time.sleep(60)
     for disk_retry in range(7):

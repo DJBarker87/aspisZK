@@ -2,8 +2,8 @@
 from NMW_transport import *
 import hashlib,re,shlex,sys,lzma
 sha=lambda b:hashlib.sha256(b).hexdigest()
-def run(a,kind,target,command=None,extra=None,env_extra=None):
-    assert ((a.startswith('NMW_L') and 1<=int(a[-3:])<=999) or (a.startswith('NMW_K') and 1<=int(a[-3:])<=999)) and not (E/a).exists()
+def _run(a,kind,target,command=None,extra=None,env_extra=None):
+    assert ((a.startswith('NMW_L') and 1<=int(a[-3:])<=999) or (a.startswith('NMW_E') and 1<=int(a[-3:])<=2) or (a.startswith('NMW_K') and 1<=int(a[-3:])<=999)) and not (E/a).exists()
     assert kind in ['lean','link','audit','inspect','extract','kani']
     if kind=='lean':
         done=[json.loads(l) for l in (E/'NMW_ATTEMPTS.jsonl').read_text().splitlines()]
@@ -72,6 +72,8 @@ if {kind!r}=='audit':
   for row in json.loads(p.read_text()).get('results',[]):
    q=b/('NEP_'+p.stem+'_'+row['root']+'_REACHABLE.txt')
    if q.is_file():names.append(q)
+if {kind!r}=='extract':
+ names += [p for p in (b/{target!r}).rglob('*') if p.is_file() and p.suffix not in ['.olean','.ir']]
 if {kind!r}=='inspect':
  names += [b/n for n in ['NMW_TOOL_PINS.json','NMW_RETENTION.json','NMW_EXPORT.json','NMW_CLOSURE_PINS.json.xz','NMW_CLOSURE_PINS.json.sha256','NMW_UNUSED_POOL_FINDING.json'] if (b/n).is_file()]
 out={{}}
@@ -108,5 +110,12 @@ print(json.dumps(out))
     print(json.dumps({k:rc[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True)
     if rc['exit_status'] and kind=='lean':print(json.dumps(dict(attempt=a,error_excerpt=out[a+'/stdout.log'][:1800])),flush=True)
     return rc
+def run(*args,**kwargs):
+    import os
+    guard=E/'NMW_CLIENT_ACTIVE'
+    fd=os.open(guard,os.O_CREAT|os.O_EXCL|os.O_WRONLY)
+    os.write(fd,str(os.getpid()).encode());os.close(fd)
+    try:return _run(*args,**kwargs)
+    finally:guard.unlink()
 if __name__=='__main__':
     r=run(*sys.argv[1:]);sys.exit(r['exit_status'])
