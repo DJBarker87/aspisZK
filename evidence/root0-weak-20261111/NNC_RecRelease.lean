@@ -1,4 +1,6 @@
-import RPx_FJv_DRelease
+import RPx_FJv_DR6Result
+import RPx_FJv_DBoundCaller
+import NNC_RecBinding
 set_option autoImplicit false
 noncomputable section
 open Aeneas Aeneas.Std Result
@@ -39,7 +41,6 @@ theorem remove {W F CoreError : Type}
     FJv_DResult.Outcome L e1 e2 w1 w2 adapterOps ops reserved queryOps geoOps stageBase finishOps B reservation program data1 data2 slot saved post1 post2 H driver prior events hashv
       (BinRawByteCollisionTargets.event SelectedTranscriptParams.params.iv (Q+2965)
         (eval H (Hiq_RecordedJoint.program account project select))) := by
-  dsimp only
   obtain ⟨f,s,outer,pre,middle,fs,ss,run,tx2,origin,calls,encoding,base,initial,selected,publicFacts,parser,
     version,writerKey,readerKey,physical,persistent,acceptance,nonvacuity,packet,safe,whole,caller⟩ := source
   refine ⟨f,s,outer,pre,middle,fs,ss,run,tx2,origin,calls.1,encoding,base,initial,selected,publicFacts,parser,
