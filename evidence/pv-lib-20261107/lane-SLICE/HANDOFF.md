@@ -93,3 +93,5 @@ Attempt 49639: PV_W5_F32Booleans, passed pinned focused replay.
 Attempt 49640: PV_W5_F32CallsCompletion, passed pinned focused replay.
 
 Attempt 49641: PV_W5_F32Entry, passed pinned focused replay.
+
+Attempt 49642: PV_W5_F32LiteralPrefix, passed pinned focused replay.
