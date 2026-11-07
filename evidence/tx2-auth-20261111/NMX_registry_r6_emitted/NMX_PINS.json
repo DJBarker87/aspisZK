@@ -1,0 +1,105 @@
+{
+  "aeneas_command": [
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended",
+    "-diagnose-translation",
+    "-sequential",
+    "-no-progress-bar",
+    "-abort-on-error",
+    "-backend",
+    "lean",
+    "-namespace",
+    "NMX_registry",
+    "-dest",
+    "/home/dombarker/project-offloads/codex-cx-tx2-auth-20261111/NMX_registry_r6_emitted/raw",
+    "-subdir",
+    "NMX_registry",
+    "-split-files",
+    "/home/dombarker/project-offloads/codex-cx-tx2-auth-20261111/NMX_registry_r6_emitted/registry.llbc"
+  ],
+  "candidate_sha256": "5164975df10f79e9810f9321b8130a9865eb9bb9b6b9de7011f4359ece98c794",
+  "charon_command": [
+    "/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--mir",
+    "built",
+    "--sysroot",
+    "default",
+    "--include",
+    "core::option::Option",
+    "--include",
+    "core::result::Result",
+    "--include",
+    "core::option::_::ok_or",
+    "--start-from",
+    "crate::r1_pool_adapter::owned::authenticate_invariant_release_registry",
+    "--opaque",
+    "crate::r1_pool_adapter::owned::require_readonly_account",
+    "--opaque",
+    "crate::r1_pool_adapter::deployment_ids::deployment_id",
+    "--opaque",
+    "crate::r1_pool_adapter::deployment_ids::program_id",
+    "--opaque",
+    "solana_account_info::AccountInfo",
+    "--dest-file",
+    "/home/dombarker/project-offloads/codex-cx-tx2-auth-20261111/NMX_registry_r5_emitted/registry.llbc",
+    "--",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-tx2-auth-20261111/NMX_registry_r5_src/programs/r1-cost-probe/Cargo.toml",
+    "--locked",
+    "--offline",
+    "--release",
+    "--lib",
+    "--jobs",
+    "1",
+    "--features",
+    "pool-adapter,private-leaf-salts"
+  ],
+  "charon_exit": 0,
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "llbc_sha256": "44630437baad081b172d85de02c66403b3aa12802d0ede9da0079944a629abfa",
+  "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+  "lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+  "manifest_sha256": "a905237a3dafab2ea6b82f905c63f20c7234a7060f8ed8d73c1aabb4a88b8575",
+  "opacity": [
+    {
+      "path": "crate::r1_pool_adapter::owned::require_readonly_account",
+      "why": "CLOSED owned helper at same account and owner; isolate helper loops from emitted registry body"
+    },
+    {
+      "path": "crate::r1_pool_adapter::deployment_ids::deployment_id",
+      "why": "CLOSED deployment-ID child; owner-authorized opacity after Aeneas type mismatch; install CLOSED root at same original arguments"
+    },
+    {
+      "path": "crate::r1_pool_adapter::deployment_ids::program_id",
+      "why": "CLOSED deployment-ID child; owner-authorized opacity after nested-borrow failure; install CLOSED root at same original arguments"
+    }
+  ],
+  "outputs": {
+    "raw/NMX_registry/TypesExternal_Template.lean": "d3636b3781005a8624fb665976eae69559a05858bf2eb99df9174afdfe5603d2",
+    "raw/NMX_registry/Types.lean": "f893c55c9927cb5e2f12450dd5a35ca322c3a0442acdc19466dbdd4105448884",
+    "raw/NMX_registry/FunsExternal_Template.lean": "eab61908ecec4a0efbca0ef62acfac5361c5b930e2a99d6d1bc0530b55b4d464",
+    "raw/NMX_registry/Funs.lean": "981dc42cce09cdb5c5557894bd2153226686fae761796682e955e075bcc974fa"
+  },
+  "root": "crate::r1_pool_adapter::owned::authenticate_invariant_release_registry",
+  "root_features": "pool-adapter,private-leaf-salts",
+  "root_owner": "aspis_r1_cost_probe_program",
+  "root_package": "programs/r1-cost-probe",
+  "tools": {
+    "aeneas-b59d5188-extended": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958",
+    "charon": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8"
+  },
+  "validation_resume": "NMX_E006: no Charon rerun; excluded-child reachability verified against prior pinned LLBC",
+  "opaque_exclusion_witness": {
+    "parent_name": "aspis_r1_cost_probe_program::r1_pool_adapter::deployment_ids::deployment_id",
+    "parent_current_body": "Opaque",
+    "child_name": "aspis_r1_cost_probe_program::r1_pool_adapter::deployment_ids::program_id",
+    "child_absent": true,
+    "previous_direct_call": true,
+    "previous_llbc_sha256": "1f7eb4ec2fcb9e33eb79ebc90efff38e8f9eb86cb9f786df633be49881594b24",
+    "same_parent_source_sha256": "97192085e5f3bf38ca687929f50b07f80982cc5f501caf008dfa03611f5bb8c5",
+    "both_explicit_opaque_flags": true
+  },
+  "aeneas_exit": 0
+}
