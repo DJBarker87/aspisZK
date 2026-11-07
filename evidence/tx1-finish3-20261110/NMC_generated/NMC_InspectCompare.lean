@@ -1,0 +1,3 @@
+import NMC_ValueFrame
+#print AspisR1PublicPreparation.aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31
+#print AspisR1PublicPreparation.FinishModel.pointEq

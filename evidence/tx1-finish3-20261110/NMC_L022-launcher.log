@@ -1,0 +1,41 @@
+{"attempt": "NMC_L022", "exit_status": 1, "wall_seconds": 43.88345080707222, "peak_rss_kib": "6318804", "swaps": "0", "print_axioms": ["'AspisR1.NMC_Origins.claims_written' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NMC_Origins.alpha_written' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMC_generated/NMC_OriginWrites.lean:34:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PreparedHashCode.erase (PreparedHashCode.bind ?code ?next)
+in the target expression
+  (PreparedHashCode.erase do
+      let r ← S1SemanticCode.rounds NJM_RoundJoin.R s.input.digest s.input.prefix1 s.input.transcript
+      pure
+          (returned s Event.mark2 r fun v =>
+            { running := some v.1, alpha := some v.2.1, transcript := some v.2.2, claims := s.locals.claims,
+              terminalReply := s.locals.terminalReply, terminal := s.locals.terminal, low := s.locals.low,
+              high := s.locals.high, blind := s.locals.blind, mask := s.locals.mask, extra := s
+...
+blind := s.locals.blind, mask := s.locals.mask, extra := s.locals.extra,
+              product := s.locals.product, partialValue := s.locals.partialValue, masked := s.locals.masked,
+              stateBefore := s.locals.stateBefore, z0 := s.locals.z0, beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1,
+              record25 := s.locals.record25, record26 := s.locals.record26, payload := s.locals.payload,
+              extraCell := s.locals.extraCell, root := s.locals.root })) =
+    ok (Sum.inr after)
+
+H : Type
+s after : State H
+atSite : s.next = Event.rounds
+head : (PreparedHashCode.run (step s)).2 = ok (Sum.inr after)
+actual :
+  (PreparedHashCode.erase do
+      let r ← S1SemanticCode.rounds NJM_RoundJoin.R s.input.digest s.input.prefix1 s.input.transcript
+      pure
+          (returned s Event.mark2 r fun v =>
+            { running := some v.1, alpha := some v.2.1, transcript := some v.2.2, claims := s.locals.claims,
+              terminalReply := s.locals.terminalReply, terminal := s.locals.terminal, low := s.locals.low,
+              high := s.locals.high, blind := s.locals.blind, mask := s.locals.mask, extra := s.locals.extra,
+              product := s.locals.product, partialValue := s.locals.partialValue, masked := s.locals.masked,
+              stateBefore := s.locals.stateBefore, z0 := s.locals.z0, beforeZ1 := s.locals.beforeZ1, z1 := s.locals.z1,
+              record25 := s.locals.record25, record26 := s.locals.record26, payload := s.locals.payload,
+              extraCell := s.locals.extraCell, root := s.locals.root })) =
+    ok (Sum.inr after)
+⊢ AlphaOrigin after
+'AspisR1.NMC_Origins.claims_written' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMC_Origins.alpha_written' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r659f821b21cf422b8cd9b47a3405516e.scope; invocation ID: ef3498e71fa643c6bbac7a30944eae02

@@ -1,0 +1,9 @@
+'AspisR1.NMC_Cut_terminalGuard.forward' depends on axioms: [propext, Classical.choice, Quot.sound]
+def AspisR1.NMC_Cut_terminalGuard.Contract : {A : Type} →
+  S2W_D189Wrappers.Allocator A → (Context A → NLC_Finish.Q → Observation A NMC_Models.Reply) → Prop :=
+fun {A} allocator native => Cut native (NMC_Models.terminalGuard allocator)
+theorem AspisR1.NMC_Cut_terminalGuard.forward : ∀ {A : Type} (allocator : S2W_D189Wrappers.Allocator A)
+  (native : Context A → NLC_Finish.Q → Observation A NMC_Models.Reply),
+  Contract allocator native →
+    ∀ (before : Context A) (args : NLC_Finish.Q), native before args = NMC_Models.terminalGuard allocator before args :=
+⋯

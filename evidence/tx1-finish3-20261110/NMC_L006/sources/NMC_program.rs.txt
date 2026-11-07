@@ -1,0 +1,101 @@
+//! One original owned parent through each entered native segment.
+use super::*;
+use aspis_core::{field::{QM31,CM31,M31},circle::SecureCirclePoint};
+use aspis_r1_cost_probe::{r1_semantic::NMC_segments as S,r1_wire::{NLI_factory,Challenges,Error}};
+use aspis_core::state_only_prefix::r0::{Challenges as Original,Error as PublicError};
+use aspis_r1_cost_probe::r1_semantic::NLI_rounds::KMX_copy_nonoverlapping;
+fn q()->QM31{let a:[u32;4]=kani::any();QM31{c0:CM31{a:M31(a[0]),b:M31(a[1])},c1:CM31{a:M31(a[2]),b:M31(a[3])}}}
+fn point()->SecureCirclePoint{SecureCirclePoint{x:q(),y:q()}}
+fn ch()->Challenges{Challenges{lambda:q(),chi:q(),theta:q(),zc:core::array::from_fn(|_|q()),mu:q(),eta:q()}}
+fn parent()->S::Parent<SolanaDigest>{S::Parent{running:q(),alpha:core::array::from_fn(|_|q()),transcript:NLI_factory::make(SolanaDigest,kani::any(),kani::any()),challenges:ch(),claims:Box::new(core::array::from_fn(|_|core::array::from_fn(|_|q()))),terminal:q(),mask:q(),extra:core::array::from_fn(|_|q()),before:core::array::from_fn(|_|q()),state:kani::any(),z0:point(),z1:point(),rest:kani::any(),reservation:kani::any()}}
+fn word(q:QM31,j:usize)->u32{match j{0=>q.c0.a.0,1=>q.c0.b.0,2=>q.c1.a.0,_=>q.c1.b.0}}
+// Every projection of the explicit parent, not a seed equality. Together
+// with the selector's finite coverage this is the complete value/frame law.
+fn observe(p:&S::Parent<SolanaDigest>,tag:u8,i:usize,j:usize)->u64{
+ match tag{0=>word(p.running,j)as u64,1=>word(p.alpha[i%10],j)as u64,2=>word(p.claims[i/29][i%29],j)as u64,
+ 3=>word(p.terminal,j)as u64,4=>word(p.mask,j)as u64,5=>word(p.extra[i%29],j)as u64,6=>word(p.before[i%29],j)as u64,
+ 7=>p.state[i%32]as u64,8=>word(p.z0.x,j)as u64,9=>word(p.z0.y,j)as u64,10=>word(p.z1.x,j)as u64,11=>word(p.z1.y,j)as u64,
+ 12=>p.rest[i%32]as u64,13=>p.reservation as u64,14=>(&*p.claims as *const [[QM31;29];3])as usize as u64,
+ 15=>NLI_factory::snapshot(&p.transcript).0[i%32]as u64,16=>NLI_factory::snapshot(&p.transcript).2 as u64,
+ 17=>word(p.challenges.lambda,j)as u64,18=>word(p.challenges.chi,j)as u64,19=>word(p.challenges.theta,j)as u64,
+ 20=>word(p.challenges.zc[i%10],j)as u64,21=>word(p.challenges.mu,j)as u64,_=>word(p.challenges.eta,j)as u64}
+}
+fn public_error()->PublicError{let tag:u8=kani::any();kani::assume(tag<11);match tag{0=>PublicError::Allocation,1=>PublicError::RowOrder{expected:kani::any(),actual:kani::any()},2=>PublicError::InvalidRow,3=>PublicError::Tag{row:kani::any()},4=>PublicError::Length{row:kani::any()},5=>PublicError::NonCanonical{row:kani::any(),value:kani::any()},6=>PublicError::Boundary{round:kani::any()},7=>PublicError::Terminal,8=>PublicError::EqualCirclePoints,9=>PublicError::TrailingBytes,_=>PublicError::Public}}
+fn error()->Error{let tag:u8=kani::any();kani::assume(tag<11);match tag{0=>Error::Allocation,1=>Error::RowOrder{expected:kani::any(),actual:kani::any()},2=>Error::InvalidRow,3=>Error::Tag{row:kani::any()},4=>Error::Length{row:kani::any()},5=>Error::NonCanonical{row:kani::any(),value:kani::any()},6=>Error::Boundary{round:kani::any()},7=>Error::Terminal,8=>Error::EqualCirclePoints,9=>Error::TrailingBytes,_=>Error::Public}}
+fn check(ok:bool,bad:bool){if bad{assert!(!ok)}else{assert!(ok)}}
+fn run(site:u8,bad:bool){
+ let mut p=parent();let tag:u8=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(tag<23&&i<87&&j<4);
+ let before=observe(&p,tag,i,j);
+ match site{
+ 0=>{let good:bool=kani::any();let value=q();let reply=if good{Ok(value)}else{Err(public_error())};
+ let expected=if tag==3{word(value,j)as u64}else{before};let out=S::map_public(&mut p,reply);
+ let law=match out{Ok(())=>good&&observe(&p,tag,i,j)==expected,Err(e)=>!good&&e==Error::Public&&observe(&p,tag,i,j)==before};check(law,bad)},
+ 1=>{let masked=q();let reject=p.running!=masked;let out=S::terminal_guard(&p,masked);let law=match out{Ok(())=>!reject&&observe(&p,tag,i,j)==before,Err(e)=>reject&&e==Error::Terminal&&observe(&p,tag,i,j)==before};check(law,bad)},
+ 2=>{let reject=p.z0==p.z1;let out=S::circle_guard(&p);let law=match out{Ok(())=>!reject&&observe(&p,tag,i,j)==before,Err(e)=>reject&&e==Error::EqualCirclePoints&&observe(&p,tag,i,j)==before};check(law,bad)},
+ 3|4=>{let at:usize=kani::any();kani::assume(at<if site==3{16}else{10});let expected=word(p.claims[0][if site==3{at}else{16+at}],j);let mut slot=core::mem::MaybeUninit::uninit();if site==3{S::low(&p,at,&mut slot)}else{S::high(&p,at,&mut slot)};let actual=unsafe{slot.assume_init()};check(word(actual,j)==expected&&observe(&p,tag,i,j)==before,bad)},
+ 5|6=>{let expected=word(if site==5{p.claims[0][27]}else{p.extra[28]},j);let value=if site==5{S::blind(&p)}else{S::extra28(&p)};check(word(value,j)==expected&&observe(&p,tag,i,j)==before,bad)},
+ 7=>{let expected=if tag==7{NLI_factory::snapshot(&p.transcript).0[i%32]as u64}else{before};S::state_before(&mut p);check(observe(&p,tag,i,j)==expected,bad)},
+ 8|9=>{let good:bool=kani::any();let values=core::array::from_fn(|_|q());let err=error();let reply=if good{Ok(values)}else{Err(err)};let expected=if tag==if site==8{5}else{6}{word(values[i%29],j)as u64}else{before};let out=S::decoded(&mut p,reply,site==9);let law=match out{Ok(())=>good&&observe(&p,tag,i,j)==expected,Err(e)=>!good&&e==err&&observe(&p,tag,i,j)==before};check(law,bad)},
+ _=>unreachable!(),
+ }
+}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn map_public_cut(){run(0,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn map_public_control(){run(0,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn terminal_guard_cut(){run(1,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn terminal_guard_control(){run(1,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn circle_guard_cut(){run(2,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn circle_guard_control(){run(2,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn low_cut(){run(3,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn low_control(){run(3,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn high_cut(){run(4,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn high_control(){run(4,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn blind_cut(){run(5,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn blind_control(){run(5,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn extra28_cut(){run(6,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn extra28_control(){run(6,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn state_before_cut(){run(7,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn state_before_control(){run(7,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn decode25_cut(){run(8,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn decode25_control(){run(8,true)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn decode26_cut(){run(9,false)}
+#[kani::proof] #[kani::unwind(90)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn decode26_control(){run(9,true)}

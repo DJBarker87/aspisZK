@@ -1,0 +1,45 @@
+//! Source-ordered cuts of frozen r1_semantic.rs:232-308.
+//! Explicit owned parent carrier. Child replies are LOCAL values, never statics.
+use super::*;
+use aspis_core::state_only_prefix::r0::{Challenges as Original,Error as PublicError};
+pub type Claims=Box<[[QM31;29];3]>;
+pub struct Parent<H:Digest32>{
+ pub running:QM31,pub alpha:[QM31;10],pub transcript:SemanticTranscript<H>,
+ pub challenges:Challenges,pub claims:Claims,
+ pub terminal:QM31,pub mask:QM31,pub extra:[QM31;29],pub before:[QM31;29],
+ pub state:[u8;32],pub z0:SecureCirclePoint,pub z1:SecureCirclePoint,
+ // Ghost disjoint rest-heap/allocator observation; no body writes it.
+ pub rest:[u8;32],pub reservation:usize,
+}
+pub struct TerminalLog{pub calls:usize,pub owner:usize,pub claims:[[QM31;29];3],pub alpha:[QM31;10],pub original:Original,pub reply:Result<QM31,PublicError>}
+impl TerminalLog{
+ fn terminal_qm31(&mut self,claims:&Claims,alpha:&[QM31;10],ch:&Original)->Result<QM31,PublicError>{
+  self.calls+=1;self.owner=(&**claims as *const [[QM31;29];3])as usize;
+  self.claims=**claims;self.alpha=*alpha;self.original=*ch;self.reply
+ }
+}
+// The actual terminal call's full Result is retained before map_err. The
+// borrowed public receiver is the cut point; its law is Actual256, not a stub.
+pub fn terminal<H:Digest32>(p:&Parent<H>,public:&mut TerminalLog)->Result<QM31,PublicError>{
+ let original_challenges=Original{lambda:p.challenges.lambda,chi:p.challenges.chi,theta:p.challenges.theta,zc:p.challenges.zc,mu:p.challenges.mu,eta:p.challenges.eta};
+ public.terminal_qm31(&p.claims,&p.alpha,&original_challenges)
+}
+pub fn map_public<H:Digest32>(p:&mut Parent<H>,reply:Result<QM31,PublicError>)->Result<(),Error>{
+ let terminal=reply.map_err(|_|Error::Public)?;p.terminal=terminal;Ok(())
+}
+pub fn terminal_guard<H:Digest32>(p:&Parent<H>,masked_terminal:QM31)->Result<(),Error>{
+ if p.running != masked_terminal {return Err(Error::Terminal);} Ok(())
+}
+pub fn circle_guard<H:Digest32>(p:&Parent<H>)->Result<(),Error>{
+ if p.z0 == p.z1 {return Err(Error::EqualCirclePoints);} Ok(())
+}
+pub fn low<H:Digest32>(p:&Parent<H>,i:usize,slot:&mut core::mem::MaybeUninit<QM31>){slot.write(p.claims[0][i]);}
+pub fn high<H:Digest32>(p:&Parent<H>,i:usize,slot:&mut core::mem::MaybeUninit<QM31>){slot.write(p.claims[0][16+i]);}
+pub fn blind<H:Digest32>(p:&Parent<H>)->QM31{p.claims[0][27]}
+pub fn extra28<H:Digest32>(p:&Parent<H>)->QM31{p.extra[28]}
+pub fn state_before<H:Digest32>(p:&mut Parent<H>){let state_before_z0=p.transcript.state();p.state=state_before_z0;}
+// At the returned-error frontier, the parent is still the last entered frame.
+// Its actual function-exit Drop is a separate segment, never a fabricated post.
+pub fn decoded<H:Digest32>(p:&mut Parent<H>,reply:Result<[QM31;29],Error>,second:bool)->Result<(),Error>{
+ let value=reply?;if second{p.before=value}else{p.extra=value};Ok(())
+}

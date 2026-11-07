@@ -1,0 +1,52 @@
+{"attempt": "NMC_L091", "exit_status": 1, "wall_seconds": 20.498312306124717, "peak_rss_kib": "6513936", "swaps": "0", "print_axioms": ["'AspisR1.NMC_Terminal.actual_arguments' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NMC_generated/NMC_TerminalAtState.lean:40:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (IDa_Deployed.boundaries input.reservation).claims input.prefix1
+in the target expression
+  match ClaimsUnrolledFinish.claims (NP6_StdModel.calls input.reservation) input.prefix1 with
+  | ok (core.result.Result.Ok c) => ∀ row ∈ ↑(mapArray (mapArray toQ) c), FIw_ArrayValue.canonical row
+  | x => True
+
+H : Type
+native : NJM_RoundsCut.Observations
+cut : NJM_RoundsCut.Cut native
+token frame : ℕ
+input : NLU.Input H
+domain : NLU.InputDomain input
+s : NLU.State H
+reached : NLU.Reachable input s
+atSite : s.machine.next = NLC_Finish.Event.terminal
+invariant : NLU.Invariant s ∧ s.m
+...
+l (mapArray toQ alpha) ∧
+            NLU_Terminal.nativeTerminal input.publicValue claims alpha input.challenges =
+              (IDa_Deployed.boundaries input.reservation).terminal input.publicValue claims alpha input.challenges
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    mapArray (mapArray toQ) c
+  has type
+    Std.Array (Std.Array NQ 29#usize) 3#usize
+  but is expected to have type
+    { l // l.length = ↑3#usize }
+  in the application
+    ↑(mapArray (mapArray toQ) c)
+'AspisR1.NMC_Terminal.actual_arguments' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem AspisR1.NMC_Terminal.actual_arguments : ∀ {H : Type} (native : NJM_RoundsCut.Observations),
+  NJM_RoundsCut.Cut native →
+    ∀ (token frame : ℕ) (input : NLU.Input H),
+      NLU.InputDomain input →
+        ∀ (s : NLU.State H),
+          NLU.Reachable input s →
+            s.machine.next = NLC_Finish.Event.terminal →
+              ∃ claims alpha,
+                s.machine.locals.claims = some claims ∧
+                  s.machine.locals.alpha = some alpha ∧
+                    (∀ row ∈ ↑(mapArray (mapArray toQ) claims), FIw_ArrayValue.canonical row) ∧
+                      FIw_ArrayValue.canonical (mapArray toQ alpha) ∧
+                        NLU_Terminal.nativeTerminal input.publicValue claims alpha input.challenges =
+                          (IDa_Deployed.boundaries input.reservation).terminal input.publicValue claims alpha
+                            input.challenges :=
+⋯
+
+Running as unit: run-re929929ecd494db7aef7e1a4f2077dba.scope; invocation ID: e4329a09962d468fb03257ba2974a2b6

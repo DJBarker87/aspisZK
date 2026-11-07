@@ -1,0 +1,43 @@
+{"attempt": "NMC_L098", "exit_status": 1, "wall_seconds": 22.68841422884725, "peak_rss_kib": "6292920", "swaps": "0", "print_axioms": ["'AspisR1.NMC_Records.written' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NMC_Records.some_slot' does not depend on any axioms"]}
+NMC_generated/NMC_RecordOrigins.lean:33:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  select (store ?record)
+in the target expression
+  select (put s event (store value)).locals = some record
+
+case ok.Ok.refl
+H : Type
+s : State H
+row : U8
+event : Event
+store : r1_wire.ValidatedRecord → Locals H
+select : Locals H → Option r1_wire.ValidatedRecord
+selected : ∀ (record : r1_wire.ValidatedRecord), select (store record) = some record
+value : r1_wire.ValidatedRecord
+child : s.input.prefix1.validated_record row = ok (core.result.Result.Ok value)
+head : (PreparedHashCode.run (step s row event store)).2 = ok (Sum.inr (put s event (store value)))
+actual : ok (Sum.inr (p
+...
+NMC_generated/NMC_RecordOrigins.lean:33:9: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  select (store ?record)
+in the target expression
+  select (put s event (store value)).locals = some record
+
+case ok.Ok.refl
+H : Type
+s : State H
+row : U8
+event : Event
+store : r1_wire.ValidatedRecord → Locals H
+select : Locals H → Option r1_wire.ValidatedRecord
+selected : ∀ (record : r1_wire.ValidatedRecord), select (store record) = some record
+value : r1_wire.ValidatedRecord
+child : s.input.prefix1.validated_record row = ok (core.result.Result.Ok value)
+head : (PreparedHashCode.run (step s row event store)).2 = ok (Sum.inr (put s event (store value)))
+actual : ok (Sum.inr (put s event (store value))) = ok (Sum.inr (put s event (store value)))
+record : r1_wire.ValidatedRecord
+stored : select (put s event (store value)).locals = some record
+⊢ (put s event (store value)).input.prefix1.validated_record row = ok (core.result.Result.Ok record)
+'AspisR1.NMC_Records.written' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NMC_Records.some_slot' does not depend on any axioms
+
+Running as unit: run-rfd1524069ff1406492c2d25f072c258f.scope; invocation ID: 2dd32d6c160b4cdaaf6298a5b3b58111

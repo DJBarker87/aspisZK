@@ -1,0 +1,41 @@
+'AspisR1.NMC_Records.unique' does not depend on any axioms
+'AspisR1.NMC_Records.decode25' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMC_Records.decode26' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMC_Records.circle0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMC_Records.circle1' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMC_Records.decode25 : ∀ {H : Type} (input : NLU.Input H),
+  NLU.InputDomain input →
+    ∀ (s : NLU.State H),
+      NLU.Reachable input s →
+        s.machine.next = Event.decode25 →
+          ∃ record, s.machine.locals.record25 = some record ∧ NKQ_RecordDomains.Ready record 29#usize 87#usize :=
+⋯
+theorem AspisR1.NMC_Records.decode26 : ∀ {H : Type} (input : NLU.Input H),
+  NLU.InputDomain input →
+    ∀ (s : NLU.State H),
+      NLU.Reachable input s →
+        s.machine.next = Event.decode26 →
+          ∃ record, s.machine.locals.record26 = some record ∧ NKQ_RecordDomains.Ready record 29#usize 0#usize :=
+⋯
+theorem AspisR1.NMC_Records.circle0 : ∀ {Pointer H : Type} (input : NLU.Input H),
+  NLU.InputDomain input →
+    ∀ (s : NLU.State H),
+      NLU.Reachable input s →
+        s.machine.next = Event.circle0 →
+          ∀ (template : NIX_DispatchCut.Pre Pointer),
+            ∃ record transcript,
+              s.machine.locals.record25 = some record ∧
+                s.machine.locals.transcript = some transcript ∧
+                  NJM_InvocationRoots.Circle input.digest template transcript record :=
+⋯
+theorem AspisR1.NMC_Records.circle1 : ∀ {Pointer H : Type} (input : NLU.Input H),
+  NLU.InputDomain input →
+    ∀ (s : NLU.State H),
+      NLU.Reachable input s →
+        s.machine.next = Event.circle1 →
+          ∀ (template : NIX_DispatchCut.Pre Pointer),
+            ∃ record transcript,
+              s.machine.locals.record26 = some record ∧
+                s.machine.locals.transcript = some transcript ∧
+                  NJM_InvocationRoots.Circle input.digest template transcript record :=
+⋯

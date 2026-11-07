@@ -1,0 +1,41 @@
+{"attempt": "NMC_L095", "exit_status": 1, "wall_seconds": 35.44221547897905, "peak_rss_kib": "6297232", "swaps": "0", "print_axioms": ["'AspisR1.NMC_RootStages.wrong_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NMC_RootStages.abort_frontier' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NMC_generated/NMC_RootStages.lean:30:112: error: unsolved goals
+A : Type
+before : Context A
+payload : Slice U8
+bad : payload.length ≠ 32
+⊢ (if h : False then ok (core.result.Result.Ok ⟨↑payload, ⋯⟩) else ok (core.result.Result.Err ())) =
+    ok (core.result.Result.Err ())
+NMC_generated/NMC_RootStages.lean:31:100: warning: This simp argument is unused:
+  dif_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵a̵r̵r̵a̵y̵.̵T̵r̵y̵F̵r̵o̵m̵A̵r̵r̵a̵y̵C̵o̵p̵y̵S̵l̵i̵c̵e̵.̵t̵r̵y̵_̵f̵r̵o̵m̵,̵s̵h̵o̵w̵ ̵¬̵p̵a̵y̵l̵o̵a̵d̵.̵l̵e̵n̵g̵t̵h̵=̵(̵3̵2̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵[̲c̲o̲r̲e̲.̲a̲r̲r̲a̲y̲.̲T̲r̲y̲F̲r̲o̲m̲A̲r̲r̲a̲y̲C̲o̲p̲y̲S̲l̲i̲c̲e̲.̲t̲r̲y̲_̲f̲r̲o̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲¬̲p̲a̲y̲l̲o̲a̲d̲
+...
+NMC_generated/NMC_RootStages.lean:30:112: error: unsolved goals
+A : Type
+before : Context A
+payload : Slice U8
+bad : payload.length ≠ 32
+⊢ (if h : False then ok (core.result.Result.Ok ⟨↑payload, ⋯⟩) else ok (core.result.Result.Err ())) =
+    ok (core.result.Result.Err ())
+NMC_generated/NMC_RootStages.lean:31:100: warning: This simp argument is unused:
+  dif_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵a̵r̵r̵a̵y̵.̵T̵r̵y̵F̵r̵o̵m̵A̵r̵r̵a̵y̵C̵o̵p̵y̵S̵l̵i̵c̵e̵.̵t̵r̵y̵_̵f̵r̵o̵m̵,̵s̵h̵o̵w̵ ̵¬̵p̵a̵y̵l̵o̵a̵d̵.̵l̵e̵n̵g̵t̵h̵=̵(̵3̵2̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵[̲c̲o̲r̲e̲.̲a̲r̲r̲a̲y̲.̲T̲r̲y̲F̲r̲o̲m̲A̲r̲r̲a̲y̲C̲o̲p̲y̲S̲l̲i̲c̲e̲.̲t̲r̲y̲_̲f̲r̲o̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲¬̲p̲a̲y̲l̲o̲a̲d̲.̲l̲e̲n̲g̲t̲h̲ ̲=̲ ̲(̲3̲2̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ from b̵a̵d̵,̵d̵i̵f̵_̵n̵e̵g̵]̵b̲a̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NMC_RootStages.wrong_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NMC_RootStages.abort_frontier' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMC_RootStages.wrong_length : ∀ {A : Type} (before : Context A) (payload : Slice U8),
+  payload.length ≠ 32 →
+    ∃ entered,
+      tryStage before payload = ok entered ∧
+        unwrapStage entered = UnwrapOutcome.aborted Error.panic entered ∧
+          entered.before = before ∧ entered.payload = payload ∧ entered.attempted = core.result.Result.Err () :=
+⋯
+
+Running as unit: run-r8b21fdb525dc4c05b5baa31d602720f1.scope; invocation ID: 61e6c6d1d9e84939a80af072a84362dd

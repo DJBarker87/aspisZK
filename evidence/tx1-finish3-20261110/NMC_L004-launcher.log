@@ -1,0 +1,44 @@
+{"attempt": "NMC_L004", "exit_status": 0, "wall_seconds": 36.164667676901445, "peak_rss_kib": "6524704", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.array.TryFromArrayCopySlice.try_from : {T : Type} →
+  (N : Aeneas.Std.Usize) →
+    Aeneas.Std.core.marker.Copy T →
+      Aeneas.Std.Slice T →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result (Aeneas.Std.Array T N) Aeneas.Std.core.array.TryFromSliceError) :=
+fun {T} N _copyInst s =>
+  if h0 : s.length = ↑N then Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ⟨↑s, ⋯⟩)
+  else Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err ())
+def AspisR1.IDa_Deployed.boundaries : AspisR1.NP6_StdModel.Reservation →
+  AspisR1PublicPreparation.FinishModel.Boundaries :=
+fun reservation =>
+  { fromFn := fun {T F} => AspisR1.OraclePortStdBuilder.fromFn, mask := As
+...
+eas.Std.Array Aeneas.Std.U8 32#usize)
+        Aeneas.Std.core.array.TryFromSliceError) :=
+fun {H} s => do
+  let payload ← liftM (AspisR1.NLC_Finish.read s.locals.payload)
+  liftM (Aeneas.Std.core.array.TryFromArrayCopySlice.try_from 32#usize Aeneas.Std.core.marker.CopyU8 payload)
+def AspisR1.NLC_Finish.rootUnwrap : {H : Type} →
+  AspisR1.NLC_Finish.State H →
+    Aeneas.Std.core.result.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize) Aeneas.Std.core.array.TryFromSliceError →
+      AspisR1PublicPreparation.PreparedHashCode.Code (AspisR1.NLC_Finish.Post H) :=
+fun {H} s attempt => do
+  let root ← liftM ((AspisR1.IDa_Deployed.boundaries s.input.reservation).unwrapRoot attempt)
+  pure
+      (Sum.inr
+        (AspisR1.NLC_Finish.put s AspisR1.NLC_Finish.Event.verified
+          (have __src := s.locals;
+          { running := __src.running, alpha := __src.alpha, transcript := __src.transcript, claims := __src.claims,
+            terminalReply := __src.terminalReply, terminal := __src.terminal, low := __src.low, high := __src.high,
+            blind := __src.blind, mask := __src.mask, extra := __src.extra, product := __src.product,
+            partialValue := __src.partialValue, masked := __src.masked, stateBefore := __src.stateBefore,
+            z0 := __src.z0, beforeZ1 := __src.beforeZ1, z1 := __src.z1, record25 := __src.record25,
+            record26 := __src.record26, payload := __src.payload, extraCell := __src.extraCell, root := some root })))
+def Aeneas.Std.core.result.Result.unwrap : {T E : Type} →
+  Aeneas.Std.core.fmt.Debug E → Aeneas.Std.core.result.Result T E → Aeneas.Std.Result T :=
+fun {T E} x e =>
+  match e with
+  | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.Result.ok x
+  | Aeneas.Std.core.result.Result.Err a => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+
+Running as unit: run-r49be2d69f43c4c23a6ab0aabb41869d2.scope; invocation ID: 65caf04c57c2474ca835eeb265809417

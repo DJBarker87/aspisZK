@@ -1,0 +1,55 @@
+import NMC_PartialFrames
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NMC_Partial
+open Aeneas Aeneas.Std Result AspisR1PublicPreparation NMC_Window NMC_Models
+def empty (n identity : Nat) : Partial n := ⟨identity,0,fun _=>none⟩
+def fill {n : Nat} (values : Fin n→NLC_Finish.Q) (identity : Nat) :
+ (count : Nat)→count≤n→Partial n
+ | 0,_=>empty n identity
+ | count+1,bound=>
+   let i : Fin n:=⟨count,by omega⟩
+   writePartial (fill values identity count (by omega)) i (values i)
+/-- Symbolic induction over the one native iteration. No full-buffer native
+run, concrete field evaluation or completed-array premise is used. -/
+theorem fill_spec {n : Nat} (values : Fin n→NLC_Finish.Q) (identity : Nat) :
+ ∀ count (bound : count≤n),
+ (fill values identity count bound).identity=identity ∧
+ (fill values identity count bound).initialized=count ∧
+ ∀ j,(fill values identity count bound).cells j=if j.val<count then some (values j) else none := by
+ intro count
+ induction count with
+ | zero=>
+   intro bound
+   refine ⟨rfl,rfl,?_⟩
+   intro j
+   simp only [fill,empty,show ¬j.val<0 by omega,ite_false]
+ | succ count ih=>
+   intro bound
+   have old:=ih (by omega)
+   refine ⟨old.1,rfl,?_⟩
+   intro j
+   let i : Fin n:=⟨count,by omega⟩
+   change (writePartial (fill values identity count (by omega)) i (values i)).cells j=_
+   by_cases same : j=i
+   · cases same
+     rw [write_cell]
+     simp only [i,show count<count+1 by omega,ite_true]
+   · rw [write_frame _ _ _ _ same,old.2.2]
+     have neq : j.val≠count := by intro h;apply same;apply Fin.ext;exact h
+     by_cases earlier : j.val<count
+     · simp only [earlier,show j.val<count+1 by omega,ite_true]
+     · simp only [earlier,show ¬j.val<count+1 by omega,ite_false]
+theorem complete {n : Nat} (values : Fin n→NLC_Finish.Q) (identity : Nat) :
+ (fill values identity n (Nat.le_refl n)).identity=identity ∧
+ (fill values identity n (Nat.le_refl n)).initialized=n ∧
+ ∀ j,(fill values identity n (Nat.le_refl n)).cells j=some (values j) := by
+ have result:=fill_spec values identity n (Nat.le_refl n)
+ refine ⟨result.1,result.2.1,?_⟩
+ intro j
+ simpa only [j.isLt,ite_true] using result.2.2 j
+#print axioms fill_spec
+#print axioms complete
+set_option pp.proofs false in #print complete
+end AspisR1.NMC_Partial
+end

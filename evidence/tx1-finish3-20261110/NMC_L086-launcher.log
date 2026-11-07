@@ -1,0 +1,37 @@
+{"attempt": "NMC_L086", "exit_status": 1, "wall_seconds": 25.926405479898676, "peak_rss_kib": "6301116", "swaps": "0", "print_axioms": ["'AspisR1.NMC_Records.written' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NMC_Records.some_slot' does not depend on any axioms"]}
+NMC_generated/NMC_RecordOrigins.lean:9:30: error: unexpected character; expected decimal number
+NMC_generated/NMC_RecordOrigins.lean:32:11: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case ok.Ok.refl
+H : Type
+s : State H
+row : U8
+event : Event
+store : r1_wire.ValidatedRecord → Locals H
+select : Locals H → Option r1_wire.ValidatedRecord
+selected : ∀ (record : r1_wire.ValidatedRecord), select (store record) = some record
+value : r1_wire.ValidatedRecord
+child : s.input.prefix1.validated_record row = ok (core.result.Result.Ok value)
+head : (PreparedHashCode.run (step s row event store)).2 = ok (Sum.inr (put s event (store value)))
+ac
+...
+NMC_generated/NMC_RecordOrigins.lean:9:30: error: unexpected character; expected decimal number
+NMC_generated/NMC_RecordOrigins.lean:32:11: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case ok.Ok.refl
+H : Type
+s : State H
+row : U8
+event : Event
+store : r1_wire.ValidatedRecord → Locals H
+select : Locals H → Option r1_wire.ValidatedRecord
+selected : ∀ (record : r1_wire.ValidatedRecord), select (store record) = some record
+value : r1_wire.ValidatedRecord
+child : s.input.prefix1.validated_record row = ok (core.result.Result.Ok value)
+head : (PreparedHashCode.run (step s row event store)).2 = ok (Sum.inr (put s event (store value)))
+actual : ok (Sum.inr (put s event (store value))) = ok (Sum.inr (put s event (store value)))
+⊢ Origin (put s event (store value)) row (select (put s event (store value)).locals)
+'AspisR1.NMC_Records.written' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NMC_Records.some_slot' does not depend on any axioms
+
+Running as unit: run-r5b469d37051a49e384d6011d763dfff2.scope; invocation ID: af1ae701e6034e32b3027e27169cb517
