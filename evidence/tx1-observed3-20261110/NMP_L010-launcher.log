@@ -1,0 +1,25 @@
+{"attempt": "NMP_L010", "exit_status": 0, "wall_seconds": 17.25145258801058, "peak_rss_kib": "6357324", "swaps": "0", "print_axioms": ["'AspisR1.NMP_Resource087.fold_eq' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NMP_Resource087.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.NMP_Resource087.fold_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMP_Resource087.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_Resource087.source : ∀ (cfg : NLJ_Prepare.Configuration) {H : Type} (i : NLJ_Prepare.Input H)
+  (objectId : ℕ) (before : NLZ_Resources.Heap) (out : Terminal NLJ_Prepare.Out) (log : PreparedHashCode.Log),
+  Chain (NLJ_Prepare.step cfg) objectId 12 (NLJ_Prepare.initial i) before out log →
+    run (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash i.scratch) =
+        (log, result out) ∧
+      ∀ (after : NLZ_Resources.Heap), finalHeap out = some afte
+...
+'AspisR1.NMP_Resource087.fold_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NMP_Resource087.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NMP_Resource087.source : ∀ (cfg : NLJ_Prepare.Configuration) {H : Type} (i : NLJ_Prepare.Input H)
+  (objectId : ℕ) (before : NLZ_Resources.Heap) (out : Terminal NLJ_Prepare.Out) (log : PreparedHashCode.Log),
+  Chain (NLJ_Prepare.step cfg) objectId 12 (NLJ_Prepare.initial i) before out log →
+    run (SdkD_PrepareSource.code cfg.base cfg.boundaries cfg.std i.digest i.publicValue i.proof i.hash i.scratch) =
+        (log, result out) ∧
+      ∀ (after : NLZ_Resources.Heap), finalHeap out = some after → after.objects objectId = before.objects objectId :=
+fun cfg {H} i objectId before out log chain =>
+  have v := value chain;
+  ⟨Eq.mp (congrArg (fun _a => _a = (log, result out)) (NLR_Prepare.source cfg i))
+      (Eq.mp (congrArg (fun _a => run _a = (log, result out)) (fold_eq cfg 12 (NLJ_Prepare.initial i))) v),
+    protected_return chain⟩
+
+Running as unit: run-rb4d1ec202b2e421eb53816c0bfe482b4.scope; invocation ID: b691ce0fc6734df2b7b5931e81c9ef04

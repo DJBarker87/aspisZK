@@ -17,7 +17,7 @@ base_errors=[]
 for n,h in expected.items():
  p=S/n;raw=p.read_bytes()
  if n=='crates/aspis-r1-cost-probe/src/lib.rs' and raw.startswith(b'#![cfg_attr(kani,feature(allocator_api))]\n'):raw=raw[len(b'#![cfg_attr(kani,feature(allocator_api))]\n'):]
- for module in ['NMP_native','NMP_factory','NMP_prepare']:
+ for module in ['NMP_native','NMP_factory','NMP_prepare','NMP_field']:
   for suffix in [('\n#[cfg(kani)]\npub(crate) mod '+module+';\n').encode(),('\n#[cfg(kani)]\n#[path = \"'+module+'.rs\"]\npub(crate) mod '+module+';\n').encode()]:
    if raw.endswith(suffix):raw=raw[:-len(suffix)]
  if hashlib.sha256(raw).hexdigest()!=h:base_errors.append(n)

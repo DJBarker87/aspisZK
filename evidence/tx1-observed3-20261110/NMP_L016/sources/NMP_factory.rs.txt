@@ -1,0 +1,6 @@
+use super::*;
+pub(crate) fn prefix<'a>(root:&'a[u8;32],records:[&'a[u8];27])->Prefix<'a>{Prefix{c1_root:root,records}}
+pub(crate) fn records<'a>(prefix:&Prefix<'a>)->[&'a[u8];27]{prefix.records}
+pub(crate) fn make<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->SemanticTranscript<H>{SemanticTranscript{state,hash,next_row}}
+pub(crate) fn snapshot<H:Digest32+Copy>(t:&SemanticTranscript<H>)->([u8;32],H,u8){(t.state,t.hash,t.next_row)}
+pub(crate) fn record<'a>(prefix:&Prefix<'a>,row:usize)->&'a[u8]{prefix.records[row]}
