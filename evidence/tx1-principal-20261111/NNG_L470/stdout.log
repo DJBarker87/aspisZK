@@ -1,0 +1,21 @@
+NNG_generated/NNG_SourcePublic137.lean:26:2: error: 'change' tactic failed, pattern
+  ?m.88 env (observation (NNG_Output137.decode a env) (NNG_Events137.events env) (NMT_CallTree.bind head k))
+is not definitionally equal to target
+  RSL.RE.bind (LIB_VLib.library.publicTranscript.run (a.public_, LIB_VCarriers.c1Root p))
+    (fun t0 =>
+      RSL.RE.bind (LIB_VLib.library.begin.run (p, t0)) fun r =>
+        RSL.Spec.call (RSL.TX1_136.Domain LIB_VLib.library) (RSL.TX1_136.Ref LIB_VLib.library)
+          { public_ := a.public_, prefix_ := p, transcript := r.2, challenges := r.1 })
+    env
+    (observation (NNG_Output137.decode a env) (NNG_Events137.events env)
+      (NMT_CallTree.bind
+        (invoke "TX1:131/public_transcript"
+          ((input a obs env).publicValue, (input a obs env).hash, (fromT13 (LIB_VCarriers.prefixRaw p)).c1_root)
+          ((calls env).publicTranscript (input a obs env).digest (input a obs env).publicValue (input a obs env).hash
+            (fromT13 (LIB_VCarriers.prefixRaw p)).c1_root))
+        fun reply =>
+        match reply with
+        | core.result.Result.Err e => pure (core.result.Result.Err e)
+        | core.result.Result.Ok t =>
+          NNG_Tree137.begin_ (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p)) t))
+'AspisR1.NNG_SourcePublic137.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

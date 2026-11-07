@@ -1,0 +1,53 @@
+import NNG_SourceBegin137
+import NNG_Splits137
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NNG_SourcePublic137
+open Aeneas Aeneas.Std Result NMP_prepare NMP_Transport NMT_CallTree NNG_Context137 NNG_Observed136
+open NNG_SourceStep136 NNG_DLawStep136
+
+theorem source (a : NNG_Data137.Args) (obs : RSL.Observer) (env : RSL.Env)
+    (domain : RSL.TX1_137.Domain NNG_Data137.VL a) (p : LIB_VCarriers.Prefix)
+    (parsed : LIB_VParsePrefix.eval a.bytes=.ok p) :
+    (RSL.RE.bind (LIB_VLib.library.publicTranscript.run (a.public_,LIB_VCarriers.c1Root p)) fun t0=>
+      RSL.RE.bind (LIB_VLib.library.begin.run (p,t0)) fun r=>
+      RSL.Spec.call (RSL.TX1_136.Domain LIB_VLib.library) (RSL.TX1_136.Ref LIB_VLib.library)
+        ⟨a.public_,p,r.2,r.1⟩) env
+      (observation (NNG_Output137.decode a env) (NNG_Events137.events env)
+        (NNG_Tree137.publicTranscript (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p)))) := by
+  let root := (fromT13 (LIB_VCarriers.prefixRaw p)).c1_root
+  let head := invoke "TX1:131/public_transcript"
+    ((input a obs env).publicValue,(input a obs env).hash,(fromT13 (LIB_VCarriers.prefixRaw p)).c1_root)
+    ((calls env).publicTranscript (input a obs env).digest (input a obs env).publicValue (input a obs env).hash
+      (fromT13 (LIB_VCarriers.prefixRaw p)).c1_root)
+  let k : core.result.Result (r1_wire.SemanticTranscript Unit) r1_wire.Error → Code (Output Unit) := fun reply=>
+    match reply with
+    | .Err e=>pure (.Err e)
+    | .Ok t=>NNG_Tree137.begin_ (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p)) t
+  rw [NNG_Splits137.publicTranscript]
+  have headLaw : (LIB_VLib.library.publicTranscript.run (a.public_,LIB_VCarriers.c1Root p)) env
+      (observation NNG_PublicProjection137.decode (NNG_Events137.events env) head) := by
+    dsimp only [head,NNG_Context137.input,NNG_Context137.calls]
+    change LIB_VPublicTranscript.publicTranscript.run (a.public_,LIB_VCarriers.c1Root p) env _
+    rw [←NNG_Occurrences137.publicTranscript env a.public_ p]
+    exact call_actual _ NNG_Events137.events _ _ _ env
+  unfold RSL.RE.bind
+  refine bind_sound head k NNG_PublicProjection137.decode (NNG_Output137.decode a env)
+    (NNG_Events137.events env) env
+    (LIB_VLib.library.publicTranscript.run (a.public_,LIB_VCarriers.c1Root p))
+    (fun reply => match reply with
+      | .error e=>RSL.Spec.pure (.error e)
+      | .ok t0=>RSL.RE.bind (LIB_VLib.library.begin.run (p,t0)) fun r=>
+        RSL.Spec.call (RSL.TX1_136.Domain LIB_VLib.library) (RSL.TX1_136.Ref LIB_VLib.library)
+          ⟨a.public_,p,r.2,r.1⟩) headLaw ?_
+  intro reply returned
+  have native := invoke_returned (NNG_Events137.events env) "TX1:131/public_transcript" _ _ _ returned
+  dsimp only [NNG_Context137.input,NNG_Context137.calls] at native
+  cases reply with
+  | Err e=>
+    change (⟨.ret (NNG_Output137.decode a env (.Err e)),[]⟩ : RSL.Obs _) = ⟨.ret (.error (toT12 e)),[]⟩
+    rw [NNG_Head137.error]
+  | Ok t=>
+    exact NNG_SourceBegin137.source a obs env domain p t parsed (NNG_StageValues137.public_eval env a.public_ p t native)
+#print axioms source
+end AspisR1.NNG_SourcePublic137

@@ -22,10 +22,11 @@ theorem source (a : NNG_Data137.Args) (obs : RSL.Observer) (env : RSL.Env)
     match pair.1 with
     | .Err e=>pure (.Err e)
     | .Ok c=>NNG_Tree137.mark1 (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p)) pair.2 c
-  change _ env (observation _ _ (NMT_CallTree.bind head k))
+  change (_ : RSL.Spec (Except LIB_VLib.library.WErr (RSL.Verified LIB_VLib.library))) env (observation _ _ (NMT_CallTree.bind head k))
   have borrow := LIB_VDomains.eval_prefix_bound a.bytes domain.2 p parsed
   have headLaw : (LIB_VLib.library.begin.run (p,toT10 t0)) env
       (observation (NNG_BeginProjection137.decode (NNG_Data137.fallback a env)) (NNG_Events137.events env) head) := by
+    change LIB_VBegin.begin_.run (p,toT10 t0) env _
     have law := NNG_Occurrences137.begin_ (NNG_Data137.fallback a env) env p (toT10 t0) borrow
     rw [toT10_inverse] at law
     rw [←law]
@@ -48,10 +49,10 @@ theorem source (a : NNG_Data137.Args) (obs : RSL.Observer) (env : RSL.Env)
       rw [raw,toT3_inverse]
     have fallback := NNG_Caller136From137.fallback_exact a env p (toT10 t0) c (toT10 after) parsed transcripted begun
     have childDomain := NNG_Caller136From137.finish_domain a env domain p (toT10 t0) c (toT10 after) parsed transcripted begun
-    change (RSL.Spec.call _ _ ⟨a.public_,p,toT10 after,c⟩) env
+    change (RSL.Spec.call (RSL.TX1_136.Domain LIB_VLib.library) (RSL.TX1_136.Ref LIB_VLib.library) ⟨a.public_,p,toT10 after,c⟩) env
       (observation _ _ (NNG_Tree137.mark1 (calls env) (input a obs env) (fromT13 (LIB_VCarriers.prefixRaw p)) after rawc))
     unfold NNG_Tree137.mark1
-    change _ env (observation _ _ (NMT_CallTree.bind (invoke "TX1:130/mark1" ((input a obs env).observer,1#u8) (.ok ())) (fun _=>_)))
+    change (_ : RSL.Spec (Except LIB_VLib.library.WErr (RSL.Verified LIB_VLib.library))) env (observation _ _ (NMT_CallTree.bind (invoke "TX1:130/mark1" ((input a obs env).observer,1#u8) (.ok ())) (fun _=>_)))
     rw [NNG_Head137.mark _ env _ _ _ (NNG_Events137.silent env _ _ _ (by decide) (by decide) (by decide))]
     have finish := NNG_FinishOccurrence137.occurrence a env p (toT10 after) c obs childDomain fallback
     rw [toT10_inverse,challenge] at finish
