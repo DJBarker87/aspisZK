@@ -70,3 +70,5 @@ D978 attempt 49903: PV_FN_W2_BinaryEnter: passing pinned replay.
 D978 attempt 49904: PV_FN_SLICE_f7_Into8: passing pinned replay.
 
 D978 attempt 49905: PV_FN_SLICE_f7_Suffix: passing pinned replay.
+
+D978 attempt 49906: PV_FN_W2_DropReturnOutcome: passing pinned replay.
