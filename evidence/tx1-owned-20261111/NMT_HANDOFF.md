@@ -1,3 +1,9 @@
+# NMT resumed run — active
+
+Continuation authorized 2026-11-07: zero new extraction; 250 new Lean/link/audit scopes (L061–L310); restricted Kani20 unchanged. Reuse E001–E003. Binding order345 then328 then094; each complete parameterized fold before next. Whole-tree erasure/normalization L049/L051 retired. New work splits call occurrences into small modules carrying parent state. Canonical RSL RowSpec087/094/328/345 are the targets; prior proposed NMT specs are support only. No new candidate yet.
+
+Prior run record follows unchanged:
+
 # NMT final handoff
 
 **Target not yet established. All three assigned rows remain OPEN.** No
