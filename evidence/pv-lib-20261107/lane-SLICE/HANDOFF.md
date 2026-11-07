@@ -33,3 +33,5 @@ Attempt 49609: PV_W5_F32PanicLeaf, passed pinned focused replay.
 Attempt 49610: PV_W5_LocalCall, passed pinned focused replay.
 
 Attempt 49611: PV_W5_F32OriginalSpecification, passed pinned focused replay.
+
+Attempt 49612: PV_W5_F32LiteralSpecification, passed pinned focused replay.
