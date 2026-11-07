@@ -6,7 +6,7 @@
 
 137: COMPLETE CANDIDATE L485; literal RowSpec with concrete audited136 child. Printed axioms standard. Focused raw ax2 audit50/50 and combined import PASS (L486–492).
 087: COMPLETE CANDIDATE L618; literal rev3 RowSpec with LIB_Instances.VL/P, all SAME child arguments/domains installed. Focused raw ax2 audit169 roots and combined NMQ+314 import PASS L619-L629. R4 remains own Domain087, discharged by094 canonical_scan.
-094: after087; install R4Discharge from canonical_scan, NMT emitted fold.
+094: complete candidate blocked by CONFIRMED installed parseShape domain mismatch (NNG_FINDING094.md, L634). Ref094 admits no observation at proof[]/k10 although Domain094 allows it and frozen parse_shape returns Err(Parse). LIB_ must deliver the length-rejection arm. Independent fresh carrier/source guard and reached087/R4 discharge continue; no RowSpec or LIB instance changed.
 328: after094; NMT emitted map-error fold.
 345: after328; NMT source fold, own input/domain discharge.
 344/333/330: after345 by NMV/NNF instantiation.

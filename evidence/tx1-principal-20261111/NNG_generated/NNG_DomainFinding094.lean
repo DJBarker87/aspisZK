@@ -22,7 +22,8 @@ theorem required_width (a : TX1_094.Args LIB_Instances.VL) (env : Env)
  unfold TX1_094.Ref at law
  have guard : (a.k != SPLIT)=false:=by rw [k];rfl
  rw [guard] at law
- simp only [RE.check,if_false,RE.seq_pure] at law
+ change Spec.bind (Spec.pure (.ok () : Except LIB_VCarriers.VErr Unit)) _ env o at law
+ rw [Spec.bind_pure] at law
  exact bind_inherits _ _ _ env o (fun before called=>called.1) law
 #print axioms required_width
 
