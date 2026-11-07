@@ -92,3 +92,30 @@ E004/L082 isolated stage2 also fails Aeneas's internal context joining.
 Both resumed extractions are spent. No body emitted, hence no (bc) body audit
 is claimed. Fallback eligibility under (bn) is established for these copies;
 next stage is small symbolic descriptor/local-window Kani and three controls.
+
+## Window fallback and full-carrier composition
+
+Initial native fission classes K035-K044: stage2 full child error/return;
+stage1 full child error, exclusive failure, copy success PASS; each wrapper's
+reply/argument/write-footprint controls FAIL at intended assertions. Exact
+source/input hashes and frozen graph/offline/post-lock receipts retained.
+K045/K046 combined strengthened checker timeouts earn no credit and are
+retired; replacement independent slice/Clock/Vec descriptor cuts are running.
+
+L083 NMV_WindowEval (SDK/std/runtime window laws and exact stopped/returned
+bind) PASS; L085 NMV_WindowClock exact runtime reply/event PASS; L087
+NMV_WindowStage.cut240/cut344 PASS; L088 NMV_WindowRoots.root240/root344,
+weak240/weak_sdk PASS. The roots now produce canonical RowSpecs for the
+window-interpreted fission execution, not an arbitrary supplied wrapper
+observation. Their only external laws are individual SDK/std/runtime laws in
+Windows and full child241/345 packets. No free whole-wrapper producer,
+child-success, endpoint or Root0 premise is introduced. Native-to-full-carrier
+cut association and TAS field checks remain the current gate; no row self-credit.
+L084/L086 are retained local elaboration errors, excluded; changed proofs
+pass with standard axioms. No existing proved module was edited.
+
+L090 NMV_NoWrite primitive effect algebra PASS after changed local equality
+orientation repair (L089 excluded). G2's event clause needs four individual
+PoolLib effect laws (scanProof/reconstruct/encodeStatement/emitResult), not
+only verifier w write-freeness. TAS_WIRING already flags part of this issue;
+no unconstrained library dictionary is silently assumed write-free.

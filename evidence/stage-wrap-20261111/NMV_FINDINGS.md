@@ -52,3 +52,21 @@ Native small carriers are explicit bounded diagnostic/call-boundary classes unti
   the two-extraction allowance is spent. This generic-log extraction family is
   retired. Proceed to (bn)'s explicit-window Kani fallback, retaining the exact
   mechanically checked copies. No body or post-loop-return audit pass is claimed.
+
+- NMV-K9: K045 combines two independent full ProgramError enum generators
+  (Clock and child), symbolic child Vec extents and whole-argument coordinate
+  checks. It times out at the unchanged90s external limit; no verdict/credit.
+  This cross-product shape is retired. Split into full child reply with
+  successful Clock, and full Clock reply with successful child. The source
+  wrapper is unchanged; each independent reply/argument/footprint check is
+  retained. No timeout/cap increase, no unchanged rerun. Reported parent/time
+  RSS is only the timeout wrapper, never aggregate CBMC memory.
+
+- NMV-K10: K046's strengthened whole-reply/whole-coordinate checker also
+  times out90s. Retire the combined checker family after its two failures;
+  do not run its remaining controls. Replacement is independent, disjoint
+  slice-descriptor forwarding (pointer+length, immutable input), full Clock
+  reply forwarding to an owned local slot, and checkpoint Vec descriptor
+  forwarding. Original K035-K044 full-child enum/control evidence is retained.
+  These cuts add the missing descriptor/Clock facts without another enum
+  cross product or native payload scan. Every buffer-content law stays Lean.
