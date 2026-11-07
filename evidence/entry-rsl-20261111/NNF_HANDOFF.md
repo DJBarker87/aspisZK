@@ -1,0 +1,13 @@
+# NNF dispatcher RSL handoff
+
+IN PROGRESS. Target not yet established; no row credit. Branch codex/cx-entry-rsl-20261107. Job is Lean only: 150 Lean/link/audit scopes, zero Kani, zero extraction. Only NNF_ modules and this directory change; no shipped code or trust row changes, no pushes.
+
+Stage 1 route: TX1:333/TX2:221 process and TX1:330/TX2:213 entry reuse NMW_E001/E002 fresh emitted bodies and NMW_Symbolic/NMW_Branches. This job is explicitly forbidden a new extraction. NMW_SOURCE_AUDIT.json already records frozen-source/normalized-body identity and (bc) post-loop-return inspection (neither body has a loop). RSL transport will interpret opaque child calls as complete RSL observations, not equality to the model on the stage2 arm. Both admitted routes must satisfy each full process RowSpec; all instruction strings must satisfy each entry RowSpec. V2Lib remains universally quantified (G1b), allowing TCK_WeakRoot0.weaken.
+
+Stage1/stage2 enter as the exact canonical RowSpec_344/RowSpec_240 parameters at unchanged original arguments. No child success, endpoint, native=model, global Root0, or hash-injectivity premise is authorized. TAS_Interfaces.NMW_Roots is the exact target; its Impl process/entry fields will be instantiated with the concrete interpretation of NMW emitted bodies. A generic arbitrary Impl cannot acquire semantics merely from child laws.
+
+Read/review basis: parent AGENTS Security and proof discipline, common/local Lean rules, S2 ownership/plan/diagnosis and S2LeadInterface; C3-BIN route B and (bm),(bl),(bj),(bf),(be),(bd),(aq); TCK_REPORT section2.4/G1b, TAS interfaces/wiring, ledger24 handoff/remaining (581/0/18), NMN handoff/remaining, canonical RSL modules and NMW folds/emission/audit/handoff; vertical slices. NMV sibling read-only review shows canonical wrapper transcription folds but no actual universal native producer or candidate wrapper root. No sibling worktree is touched.
+
+Validation will use the unchanged S2W runner, admitted capped serial scopes (6G/8G/swap0/tasks64, Lean -M7000), host free disk >=40GB and fewer than six active codex scopes. Exact source/dependency hashes, revision, target/status/wall/RSS/swap and standard-only #print axioms will be retained per attempt. Own-root raw ax2 and focused ledger24 combined import are required. No unchanged full regression.
+
+Retained trust: existing extraction/D188 (reclassified, not removed), runtime/SDK/std/allocator, persistence and L154 statement parameter. Frozen crates/program-r1/Cargo.lock 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387; Pool b936275465. No release or ELF reproduction claimed; no shipped edit means no rebuild trigger. Inherited ELF default f8c0ec72…, devnet63ad3e9c…, Pool e0e49c34…. No wallet/key/account/fund/authority action.
