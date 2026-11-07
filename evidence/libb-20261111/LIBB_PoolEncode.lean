@@ -10,7 +10,7 @@ abbrev terminal := AspisS6CurrentAdapterCarrier.toPoolV1PairForestTerminalStatem
 /-- The CLOSED encoder returns its 1880-byte array by value. No allocation
 site is inserted at this call. -/
 def code (s : LIBB_PoolCarriers.Statement) := AspisS6OuterNativeInstalled.encode (terminal s)
-def option := LIBB_V1DecoderValues.asOption (fun a : Array U8 1880#usize => LIB_Carriers.bytes a.to_slice)
+def option : core.result.Result (Array U8 1880#usize) AspisS6OuterNativeInstalled.Error → Option RSL.Bytes := LIBB_V1DecoderValues.asOption (fun a : Array U8 1880#usize => LIB_Carriers.bytes a.to_slice)
 def encodeStatement (s : LIBB_PoolCarriers.Statement) : RSL.Spec (Option RSL.Bytes) :=
  RSL.Spec.map option (NMS_R2N_Interpreted.liftResult (code s))
 def evaluator (s : LIBB_PoolCarriers.Statement) : Option RSL.Bytes :=
