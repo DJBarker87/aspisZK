@@ -1,299 +1,102 @@
-# Privacy library Lane A — session3 handoff
+# Privacy library Lane A — session4 handoff
 
-Branch codex/pv-lib-20261107; base5e397cb3878. PARTIAL; target not yet
-established. No ledger, package branch, checker, implementation, key, frozen
-spec or row consumer changed. Endpoint premises removed0/added0; trust and
-metrics unchanged. Two new exact-function lower semantics facts are explicit
-below; neither is an endpoint or T field. No push/merge/main operation.
+Branch codex/pv-lib-20261107; base639e27748cefb0ff11f4a3e44528dc404d325af6.
+PARTIAL; target not yet established. Work stopped at the assigned focused-ID
+budget, not at a proof of impossibility. No push, merge, ledger, package branch,
+checker, implementation, key or row-consumer change. Endpoint premises removed0,
+added0; trust, metrics and existing named semantics obligations unchanged.
+The exact focused-proof commit list through5dbbb9f8af6 is session4/COMMITS.txt;
+the final handoff commit changes evidence/maps only. Session3's handoff is retained in
+session4/INHERITED_HANDOFF_SESSION3.md.
 
-## Exact result and limits
+## Proved, with precise limits
 
-PLIB_MAP.json:170 slots,116 qualified INSTANTIATED graphs,49 MISSING,5
-SPEC-ERROR. MAP_DELTA.json records every changed slot and all40 assigned
-thread/typedDrop assessments. Six new qualified instances are f170→277/278/
-279/280, f537→612 and the typedDrop178 facet. This is not six closed rows or
-six complete source/runtime/caller refinements. Of the39 original thread
-MISSING slots,34 remain MISSING. All seven thread caller facets remain missing.
-Other lane deltas are not silently incorporated; the shared Markdown map and
-INSTANCES.json retain the historical session2 inventory.
+PV_LIB_A_OwnerStore.step is the D981 corrected thread machine: the actual
+OWNER-aware OwnInitInterpreterBridged step PLUS W4's five source-store meanings.
+Its neutral branch preserves registration14320, operator interpretation and
+bridged allocation with the SAME resources/encode. The old interpreters are
+untouched. Agreement is against OwnInitInterpreterBridged, not the raw
+SourceStoreInterpreter. MODEL_CORRECTION.md records before/after and reason.
 
-Twelve new library/support modules under lean/PV_LIB_A_*.lean export43 audited
-roots. Native graphs instantiate CLOSED9/10/93/167/277/278/279/280/612 at the
-provider definitions; graph laws are equality to deterministic functions,
-never the provider's relational Post. SourceWriters identifies W4's new
-interpreter graph and named meanings without a write-definedness premise.
-Malformed layouts and every full native answer are retained. Concrete Values,
-actual reference paths/age, native source values and caller histories remain
-unbound, so the five writer edges stay MISSING.
+Eleven new support/library modules export31 audited roots. WriterSites checks
+all eight emitted tokens and source operands with their generic metadata intact.
+WriterOrdinary derives catch exclusion from the token and binds the deterministic
+writer graph at the actual issued poll, without an ordinary/catch premise.
+Full answers, world/events, suspended frames and malformed-layout undefined
+branches are retained. No Store-transformer, desired-write premise, success
+premise or identity action is installed.
 
-PureCalls/PurePoll/PureValues bind f170's source operands, derive source-store
-purity from W4's existing named memory facts, transport the graph to the new
-interpreter poll, and carry world/source constructors to the delivered locals.
-No identity delta is selected. Full nullable-pointer/source/value invariant,
-actual original-handler and source/binary adequacy remain explicit lower
-obligations. f361/f270's279/280 instantiations keep their own generic metadata
-and remain missing. No f170 row or end-to-end source run is claimed.
+RangeWriter derives f15's local7 Range write directly from the source aggregate
+and typed reference; no Values or write-definedness hypothesis. Its preceding
+165 identity and continuous local-cell history still need composition. IntoIter
+and Vec runtime pointer/layout/reservation Values, native value laws and actual
+reference paths/age remain unbound. Thus all five writer edges remain MISSING.
 
-Unique612/UniqueBinding reuse the existing exact Unique Fact, check the literal
-CLOSED612 emitted token and transport every answer through the actual OWNER
-lift. Unsafe argument validity and enclosing537/458 composition are not proved.
-TypedDrop178 reuses W2's actual typed suffix run and f22 source projection/W5
-CLOSED Drop instantiation; the f6 prefix and full f7 row stay pending. Numbering
-exports actual outer thread entry, generic push and lower-frame bounds, not
-preservation along the full new-interpreter history.
+OwnerStoreTransport supplies one neutral-trace lift and the native registry
+frame. WriterRegistry derives that frame at every writer poll under the existing
+backend lift, including every stopped/pending reply. OwnerStoreActions proves
+source instructions/completions retain the OWNER step and its resource channel.
+This is not allocation coherence or a source-associated resource schedule.
 
-## Exact new lower facts, not hidden assumptions
+Caller124 discharges the literal CLOSED provider Pre from the caller's existing
+local Context, instantiates its graph at x.resources/x.encode, and obtains both
+actual atomic count fields from existing DocumentedFacts on the reached caller
+entry. It does not establish that entry cut or transport the entire specialized
+provider run. NameValidity covers both source Option constructors; Some's opaque
+String codec, ownership and word validity still require Builder270 provenance.
+ArcClone's later Valid/value/frame discharge remains missing. WriterNumbering
+reuses the slice numbering lemmas for local source-store changes, not complete
+OwnInit history. PrefixTransport reuses the existing symbolic induction at a
+finite cutoff; actual f6 delivery/resolver/handler facts remain missing.
 
-RANGE165_SEMANTICS.json pins both Rust toolchains. CLOSED165 admits a changed,
-source-shaped Range result; old_contract_allows_range/sourceRange_distinct
-prove that gap. The one named RangeIntoIter165 fact supplies documented self
-identity, source purity and returned world/event behavior. Its deterministic
-graph certificate does not prove the original handler or actual f15 history.
+## Shared map and Lane B
 
-RESIDUAL280_SEMANTICS.json pins from_residual and identity From on both
-toolchains. CLOSED280 admits a source-shaped Ok at an Err residual;
-old_contract_allows_ok/constructors_distinct prove the gap. One named280 world/
-constructor fact supplies that missing facet, alongside W4's existing memory
-fact. Reached residual-input provenance/original-handler adequacy remain
-unproved. Every stopped arm remains in the graphs. These are thread-16 lower
-semantics obligations, not new Rust extraction or native correspondence claims.
+Lane B's exact lane-SLICE/MAP_DELTA.json is folded into PLIB_MAP.json, including
+F32/F33, full typed runtime Drop178, Foundation entry support and12 waiting rows.
+No Lane B module/evidence file was edited. Map:170 slots,118 qualified
+INSTANTIATED graphs,35 MISSING-CHILD-LEMMA,12 WAITING-ON-ROW,5 SPEC-ERROR.
+Session4/MAP_DELTA.json records every changed slot and qualifications; the old
+lane-A/MAP_DELTA.json remains historical session3 evidence. No new Lane A slot
+or parent row is claimed closed. Existing pure277/278/279/280/612 graphs remain
+qualified; their full actual-source/caller adequacy is still open. The old
+shared Markdown map/INSTANCES inventory is historical, as before.
 
 ## Validation and resources
 
-All112 assigned focused IDs are spent:106 pass,6 repaired elaboration failures.
-Passing scopes comprise93 byte-identical pinned provider replays and13 new
-modules (12 library/support modules plus the unchanged strict-walker driver).
-Every passing focused compile has its own commit. Failed source versions and
-receipts are archived; no failed object is admitted. No OOM, timeout, cap
-increase, admission refusal, cold dependency build or unchanged regression.
-
-ONE strict raw audit49482 passed43/43 roots, zero unresolved and zero summary
-mismatches, only propext/Classical.choice/Quot.sound. Exit0; wall0:04.40;
-peak6813052KiB; swap0; source revision
-b25eb0257983b834744f42926b42dc5874f42a22. RAW_AUDIT.json, RAW_GRAPH_MANIFEST.json
-and compressed graph archive retain exact results. The prior walker/collector
-body is unchanged; only module/root arrays differ. Baseline49480/session2
-49481 evidence is reused, not replayed. VALIDATION.json checks all receipt
-source blobs/resolutions, source pins, own sources, raw roots, scope boundary,
-map delta and all33 frozen files. The failed-source guard hash and a
-whole-line historical non-reuse check are recorded there too. LAUNCHER_PROVENANCE
-records the executed guard and its final strengthening from per-target to
-line-wide refusal; no previously failed hash was reused. No complete-manifest, runtime, Kani, Rust,
-SBF or reproducible-build suite was rerun for these Lean-only changes.
-
-Host writes are only codex-pv-lib-20261107/lane-A. Parent/D937 caches are read-
-only and source/object hashes are checked before loads. Serial capped scopes:
-6G/8G/swap0/Tasks64/-M7000. Before each ID: standalone ssh STREAMB_SLOTS=3
-turn.sh; observed D977 host cap2 is respected. The requested base evidence/
-HANDOFF.md was absent; repository-root HANDOFF.md supplied the actual handoff.
-
-## Concrete next work
-
-NAME_REPLAY_STATUS.json records46/122 missing f361 name/actual124 dependencies
-replayed. This unused prefix has focused/source-hash evidence only; it is not
-covered by the43 own-root raw closure and needs its eventual consumer audit.
-76 remain; next is PV_THR2_OwnInitAllocationBridgedRetry. Reuse this
-private cache, never a cold package build. Availability is not impossibility.
-A new focused ID block is required. Raw49483 is unused only for genuinely
-new/changed roots; never rerun49482 unchanged. The generic f6 prefix lemma's
-BeforeReturn boundary is not a discharged BeforeDelivery transport instance.
-
-Finish actual writer Values/native/source bindings, f361 name/Arc/count caller
-facts, f6 resolver/handler transport and OwnInit numbering/history/resource/
-registry composition. Keep all five SPEC-ERROR facets and all18 OPEN/PARTIAL
-supplier edges qualified. Joint premise nonemptiness, complete29-contract
-comparisons and source/machine/binary adequacy remain unproved. REMAINING.md
-and FINDINGS.md give the exact limits; no library is consumed in row proofs.
-
-## Session4 in progress, base639e27748ce (D981/D982)
-49101 passed PV_LIB_A_OwnerStore: OWNER-aware OwnInitInterpreterBridged plus
-W4's five source-store meanings, symbolic away agreement, installed graph and
-all-answer world/event/suspended-stack effects. 49100 local elaboration failure
-is retained in session4/failed-49100.lean.xz; repaired source differs. Receipts
-under session4 include exact target/revision/exit/wall/RSS/swap/axioms.
-Only the own focused wrapper's accepted IDs are extended for491xx; old IDs
-49458–49479 already used and are not reused. No shared launcher changed.
-No actual Values/caller adequacy or endpoint closure is claimed.
-
-Session4 49102: pinned PV_THR2_OwnInitAllocationBridgedRetry passed; session4 receipt records resources/axioms.
-
-Session4 49103: pinned PV_THR2_OwnInitAllocationBridgedRun passed; session4 receipt records resources/axioms.
-
-Session4 49104: pinned PV_THR2_OwnInitAllocationBridgedFrontier passed; session4 receipt records resources/axioms.
-
-Session4 49105: pinned PV_THR2_BoxDynRegistry14756 passed; session4 receipt records resources/axioms.
-
-Session4 49106: pinned PV_THR2_OwnInitBridgedAtSite passed; session4 receipt records resources/axioms.
-
-Session4 49107: pinned PV_THR2_BoxDynBinaryLayout passed; session4 receipt records resources/axioms.
-
-Session4 49108: pinned PV_THR2_OwnInitBridgedPinned passed; session4 receipt records resources/axioms.
-
-Session4 49109: pinned PV_THR2_OwnInitBridgedAdequacy passed; session4 receipt records resources/axioms.
-
-Session4 49110: pinned PV_THR2_OwnInitActualAllocationOwnedBridged passed; session4 receipt records resources/axioms.
-
-Session4 49111: pinned PV_THR2_OwnInitBridgeTypedRepresentation passed; session4 receipt records resources/axioms.
-
-Session4 49112: pinned PV_EVHB_OrderedFamiliesEntry passed; session4 receipt records resources/axioms.
-
-Session4 49113: pinned PV_THR2_OrderedFamiliesEntryRefined passed; session4 receipt records resources/axioms.
-
-Session4 49114: pinned PV_THR2_TypedRepresentation_Thread passed; session4 receipt records resources/axioms.
-
-Session4 49115: pinned PV_FN_THREAD_f361SuffixLists passed; session4 receipt records resources/axioms.
-
-Session4 49116: pinned PV_FN_THREAD_f361PostInitChains passed; session4 receipt records resources/axioms.
-
-Session4 49117: pinned PV_FN_THREAD_f361PostInitCalls passed; session4 receipt records resources/axioms.
-
-Session4 49118: pinned PV_FN_THREAD_f361ReturnMatches passed; session4 receipt records resources/axioms.
-
-Session4 49119: pinned PV_FN_THREAD_f361ReturnAggregates passed; session4 receipt records resources/axioms.
-
-Session4 49120: pinned PV_FN_THREAD_f361Return passed; session4 receipt records resources/axioms.
-
-Session4 49121: pinned PV_FN_THREAD_f361PostInitComposition passed; session4 receipt records resources/axioms.
-
-Session4 49122: pinned PV_FN_THREAD_f361ErrorChains passed; session4 receipt records resources/axioms.
-
-Session4 49123: pinned PV_FN_THREAD_f361ErrorCall passed; session4 receipt records resources/axioms.
-
-Session4 49124: pinned PV_FN_THREAD_f361ErrorMatch passed; session4 receipt records resources/axioms.
-
-Session4 49125: pinned PV_FN_THREAD_LocalDrop passed; session4 receipt records resources/axioms.
-
-Session4 49126: pinned PV_FN_THREAD_LocalDropRun passed; session4 receipt records resources/axioms.
-
-Session4 49127: pinned PV_FN_THREAD_f361ErrorDrops passed; session4 receipt records resources/axioms.
-
-Session4 49128: pinned PV_FN_THREAD_ReturnWithTail passed; session4 receipt records resources/axioms.
-
-Session4 49129: pinned PV_FN_THREAD_f361ErrorReturn passed; session4 receipt records resources/axioms.
-
-Session4 49130: pinned PV_FN_THREAD_f361ErrorComposition passed; session4 receipt records resources/axioms.
-
-Session4 49131: pinned PV_FN_THREAD_f361Statement passed; session4 receipt records resources/axioms.
-
-Session4 49132: pinned PV_FN_THREAD_f361Call124 passed; session4 receipt records resources/axioms.
-
-Session4 49133: pinned PV_FN_THREAD_f361JoinStatements passed; session4 receipt records resources/axioms.
-
-Session4 49134: pinned PV_FN_THREAD_LocalSourceFrame passed; session4 receipt records resources/axioms.
-
-Session4 49135: pinned PV_FN_THREAD_ExpressionFrame passed; session4 receipt records resources/axioms.
-
-Session4 49136: pinned PV_FN_THREAD_SourceChainFrame passed; session4 receipt records resources/axioms.
-
-Session4 49137: pinned PV_FN_THREAD_f361OwnEntry passed; session4 receipt records resources/axioms.
-
-Session4 49138: pinned PV_THR2_PacketBoxImageAway passed; session4 receipt records resources/axioms.
-
-Session4 49139: pinned PV_THR2_PacketJoinedHandler passed; session4 receipt records resources/axioms.
-
-Session4 49140: pinned PV_THR2_PacketJoinedHandlerAway passed; session4 receipt records resources/axioms.
-
-Session4 49141: pinned PV_THR2_Packet12801ExecutableTable passed; session4 receipt records resources/axioms.
-
-Session4 49142: pinned PV_THR2_PacketJoinedTable passed; session4 receipt records resources/axioms.
-
-Session4 49143: pinned PV_THR2_JoinedCertDescriptor passed; session4 receipt records resources/axioms.
-
-Session4 49144: pinned PV_THR2_JoinedCertChunk0 passed; session4 receipt records resources/axioms.
-
-Session4 49145: pinned PV_THR2_JoinedCertDecidable passed; session4 receipt records resources/axioms.
-
-Session4 49146: pinned PV_THR2_JoinedCertChunk1 passed; session4 receipt records resources/axioms.
-
-Session4 49147: pinned PV_THR2_JoinedCertChunk8 passed; session4 receipt records resources/axioms.
-
-Session4 49148: pinned PV_THR2_JoinedCertChunk2 passed; session4 receipt records resources/axioms.
-
-Session4 49149: pinned PV_THR2_JoinedCertChunk3 passed; session4 receipt records resources/axioms.
-
-Session4 49150: pinned PV_THR2_JoinedCertChunk4 passed; session4 receipt records resources/axioms.
-
-Session4 49151: pinned PV_THR2_ReturnWaitingShape passed; session4 receipt records resources/axioms.
-
-Session4 49152: pinned PV_THR2_JoinedCertChunk5 passed; session4 receipt records resources/axioms.
-
-Session4 49153: pinned PV_THR2_JoinedCertChunk6 passed; session4 receipt records resources/axioms.
-
-Session4 49154: pinned PV_THR2_JoinedCertChunk7 passed; session4 receipt records resources/axioms.
-
-Session4 49155: pinned PV_THR2_JoinedCertChunk9 passed; session4 receipt records resources/axioms.
-
-Session4 49156: pinned PV_THR2_JoinedCertChunk10 passed; session4 receipt records resources/axioms.
-
-Session4 49157: pinned PV_THR2_JoinedCertChunk11 passed; session4 receipt records resources/axioms.
-
-Session4 49158: pinned PV_THR2_JoinedCertChunk12 passed; session4 receipt records resources/axioms.
-
-Session4 49159: pinned PV_THR2_JoinedCertChunk13 passed; session4 receipt records resources/axioms.
-
-Session4 49160: pinned PV_THR2_JoinedCertChunk14 passed; session4 receipt records resources/axioms.
-
-Session4 49161: pinned PV_THR2_JoinedCertChunk15 passed; session4 receipt records resources/axioms.
-
-Session4 49162: pinned PV_THR2_PacketJoinedTableAway passed; session4 receipt records resources/axioms.
-
-Session4 49163: pinned PV_THR2_PacketJoinedRetained121 passed; session4 receipt records resources/axioms.
-
-Session4 49164: pinned PV_THR2_HandlerExecutionAgreement passed; session4 receipt records resources/axioms.
-
-Session4 49165: pinned PV_THR2_InterpreterAgreement passed; session4 receipt records resources/axioms.
-
-Session4 49166: pinned PV_THR2_PacketJoinedPrefixAgreement passed; session4 receipt records resources/axioms.
-
-Session4 49167: pinned PV_FN_THREAD_JoinedPrefix passed; session4 receipt records resources/axioms.
-
-Session4 49168: pinned PV_FN_THREAD_f361Prefix passed; session4 receipt records resources/axioms.
-
-Session4 49169: pinned PV_FN_THREAD_f361OwnEntryPrefix passed; session4 receipt records resources/axioms.
-
-Session4 49170: pinned PV_FN_THREAD_f361OwnEntryProgress passed; session4 receipt records resources/axioms.
-
-Session4 49171: pinned PV_FN_THREAD_f361SelectedNative passed; session4 receipt records resources/axioms.
-
-Session4 49172: pinned PV_FN_THREAD_f213Frame passed; session4 receipt records resources/axioms.
-
-Session4 49173: pinned PV_FN_THREAD_f361NameEntryValidity passed; session4 receipt records resources/axioms.
-
-Session4 49174: pinned PV_THR2_PacketEnter124 passed; session4 receipt records resources/axioms.
-
-Session4 49175: pinned PV_THR2_Packet124CallData passed; session4 receipt records resources/axioms.
-
-Session4 49176: pinned PV_THR2_Packet12801Issue passed; session4 receipt records resources/axioms.
-
-Session4 49177: pinned PV_FN_THREAD_f361OwnEntry124Pre passed; session4 receipt records resources/axioms.
-
-Session4 49180 passed PV_LIB_A_OwnerStoreTransport; exact receipt/axioms in session4.
-
-Session4 49183 passed PV_LIB_A_WriterSites; exact receipt/axioms in session4.
-
-Session4 49185 passed PV_LIB_A_OwnerStoreActions; exact receipt/axioms in session4.
-
-Session4 49189 passed PV_LIB_A_RangeWriter; exact receipt/axioms in session4.
-
-Session4 49190 passed PV_LIB_A_WriterNumbering; exact receipt/axioms in session4.
-
-Session4 49192 passed PV_LIB_A_Caller124; exact receipt/axioms in session4.
-
-Session4 49194 passed PV_LIB_A_NameValidity; exact receipt/axioms in session4.
-
-Session4 49195 passed PV_LIB_A_PrefixTransport; exact receipt/axioms in session4.
-
-Session4 49196 passed PV_LIB_A_WriterOrdinary: catch exclusion is derived
-from the actual writer token; corrected-machine graph has no ordinary/catch
-premise. Runtime Values and continuous caller history remain explicit gaps.
-
-Session4 49197 passed PV_LIB_A_WriterRegistry.installed: at all five writer
-polls, the actual existing backend lift preserves next/places/receivers on
-every native answer. No separate catch or registry frame is assumed.
-
-Session4 49198 passed exact pinned PV_FN_THREAD_f6Entry replay. f6 transport
-cone remains partial; next unreplayed target is PV_FN_THREAD_f6Reply121.
-
-Session4 49199 passed the unchanged strict raw walker with31 new input roots.
-All100 fresh focused IDs49100–49199 are now spent; none of the historical
-49458–49479 IDs was reused. One raw runtime audit49890 is next.
+All100 fresh focused IDs49100–49199 spent:89 pass,11 repaired local elaboration
+failures (archived sources and receipts retained). Passing targets comprise77
+byte-identical pinned provider replays,11 new library/support modules and the
+unchanged raw-walker driver. Each passing focused compile has its own commit.
+The historical49458–49479 IDs were already spent and were not reused. Only the
+own focused launcher's accepted range was extended for491xx; guards, cohort
+checks, admission and caps are unchanged (LAUNCHER_PROVENANCE.json).
+
+ONE strict raw audit49890 passed31/31 roots: zero unresolved, zero summary
+mismatches, only propext/Classical.choice/Quot.sound. Exit0, wall0:13.94,
+peak6777692KiB, swap0; source revision
+5dbbb9f8af65a1aa73b2fa719a08cf194fbf678f. RAW_AUDIT.json and compressed graph
+archive preserve results. No unchanged audit/regression was repeated. Every
+scope was serial,6G/8G/swap0/Tasks64/-M7000, preceded by standalone ssh
+STREAMB_SLOTS=3 turn.sh and compliant admission. No OOM, timeout or refusal.
+VALIDATION.json checks all indexed source blobs, branch pins, scope boundaries,
+31 roots, map overlay and33 unchanged frozen files. One failed-source archive
+had captured a later local draft; it was corrected from receipt49181's exact
+index blob, with the old draft and correction note retained. No proof rerun.
+Host writes were confined to the own lane-A directory. No new semantics fact
+or extraction, Rust, SBF, Kani or full frozen-manifest replay was introduced.
+
+## Next concrete work
+
+The122-module name/f124 cone is now entirely available in the pinned private
+cache; NAME_REPLAY_STATUS.json records exact attempts/hashes. Availability is
+not actual-caller closure. The74-module f6 cone has6 available modules,68 still
+missing; next is PV_FN_THREAD_f6Reply121 (session4/F6_REPLAY_STATUS.json).
+A fresh focused-ID block is required; do not reuse any491xx or49458–49479 ID.
+Raw49891–49899 remain unused for genuinely new/changed roots only.
+
+First compose actual f15 local7/165 provenance into Range93, then derive the
+remaining writer Values/reference histories; complete the selected f361 cut,
+Builder name and ArcClone frame; derive actual f6 table/handler agreement;
+then complete OwnInit numbering/resource/registry history. Full29-contract
+comparison, joint nonemptiness and source/machine/binary adequacy remain open.
+No library was consumed in row proofs. Detailed limits: session4/QUALIFICATIONS.md.

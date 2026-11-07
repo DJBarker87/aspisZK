@@ -1,77 +1,78 @@
-# Remaining obligations after Lane A session 3
+# Remaining obligations after Lane A session4
 
-PARTIAL library; target not yet established. Frozen normative Markdown specs
-remain unchanged and are not 29 elaborated Lean contracts. PLIB_MAP.json now
-has170 slots:116 INSTANTIATED qualified provider graphs,49 MISSING-CHILD-LEMMA,
-5 SPEC-ERROR. The six added instances are graph/adaptor exports, not six closed
-rows or six complete source/caller adequacy results. No library is consumed in
-row proofs; endpoint premises removed0/added0. Shared PLIB_MAP.md and
-INSTANCES.json retain their session2 inventory; current Lane A additions and
-qualifications are in lane-A/MAP_DELTA.json and lane-A/HANDOFF.md. Other lane
-deltas have not been silently merged into this count.
+PARTIAL library; target not yet established. PLIB_MAP.json has170 slots:
+118 qualified INSTANTIATED graphs,35 MISSING-CHILD-LEMMA,12 WAITING-ON-ROW,
+5 SPEC-ERROR. Lane B's lane-SLICE/MAP_DELTA.json has been folded in verbatim;
+no Lane B files were edited. lane-A/session4/MAP_DELTA.json records current changes.
+The old shared Markdown map and INSTANCES inventory remain historical.
+No row/endpoint closure or library consumption in row proofs. Endpoint premises
+removed0/added0; no new T field or documented-semantics fact this session.
 
-## Lane A items1–3 remain partial
+## Corrected thread machine (D981)
 
-Of the original39 thread MISSING slots, five now have qualified graph exports
-(f170→277/278/279/280 and537→612);34 remain MISSING: nine CLOSED-provider edges,
-18 OPEN/PARTIAL-provider edges, and seven actual-caller facets. TypedDrop178's
-additional slice facet has a local suffix graph. These counts do not establish
-the remaining actual source/runtime/domain obligations on instantiated slots.
+Use PV_LIB_A_OwnerStore.step: OWNER-aware OwnInitInterpreterBridged plus W4's
+five source-store meanings at the eight native sites. The agreement and finite
+neutral-trace lift are against OwnInitInterpreterBridged. Source instructions
+retain registration14320, operators, bridged allocation and the same resource
+channel. The raw SourceStoreInterpreter is retained evidence for the writes,
+not the corrected thread-machine base. See lane-A/session4/MODEL_CORRECTION.md.
+Frozen prose files are unchanged; the lead-approved D981 correction is explicit
+in the map's thread-machine metadata and Lane A's before/after record.
 
-1. **Source writers9/10/93/167:** all five edges remain MISSING. Exact native
-   provider graphs and the new interpreter's graph with W4's named meanings
-   compile and pass strict audit. Malformed layouts remain undefined; every
-   full native reply is retained. Concrete pointer/layout/reservation Values,
-   actual reference paths/age, native returned values and continuous caller
-   bindings are not supplied. Never choose identity effects or assume
-   write-definedness. The upstream165 identity gap is demonstrated using two
-   source-constructed Range values; its new named exact-function semantics
-   graph is conditional support, not an original f15 derivation.
-2. **277/278/279/280/612:** new graphs, f170 source-operand/poll transport,
-   source-constructor/world facets and the612 exact-token/OWNER-lift binding
-   are compiled. The f361/f270 occurrences of279/280 remain four MISSING edges:
-   preserve their own emitted generic metadata and actual callers. Source/
-   binary adequacy, actual original-handler semantics, pointer/nullness/type
-   interpretation and source/value invariants required by full row composition
-   remain explicit lower obligations wherever not derived. New165 and280 facts
-   are inventoried in lane-A; neither adds a trust field or endpoint premise.
-3. **Actual caller facets:** name validity, ArcClone value/frame and atomic
-   counts; f6 machine transport; OwnInit numbering, resource environment and
-   registry/action composition remain MISSING. Numbering now has actual outer
-   thread-entry, generic child-push and lower-frame-bound exports, but no full
-   new-interpreter history invariant. The f6 generic transport lemma still uses
-   BeforeReturn, whereas the current interface requires BeforeDelivery; actual
-   resolver/handler agreement must be derived. TypedDrop178's graph reuses the
-   actual typed destructor/W5 Drop provider at the f7 suffix boundary; the f6
-   prefix and full f7 row remain pending. Source7 entry-reference validity is
-   still missing and must come from its Foundation caller.
+## Lane A: writer bindings and actual callers remain partial
 
-The122-module pinned f361 name/actual124 cone has a46-module passing focused
-prefix.76 modules remain before those targets; this is an availability result,
-not an impossibility theorem. The exact next target is
-PV_THR2_OwnInitAllocationBridgedRetry (NAME_REPLAY_PLAN gives dependency
-order). Reuse the private lane-A host cache and accepted receipts; no cold
-package build. All112 assigned focused IDs are spent (106 pass,6 repaired
-failures); additional focused work needs a newly assigned block. Do not use raw
-IDs as focused IDs. Raw49482 passed the43 new roots once; do not rerun unchanged.
+1. All five source-writer edges9/10/93/167 remain MISSING. Exact emitted
+   tokens/operand lists (including289's eighth site), issued-poll graph,
+   token-derived catch exclusion, full-reply effects and actual native registry
+   frame are now compiled/audited on the corrected OWNER step. Range93's local7
+   source-aggregate write is derived without Values or write-definedness.
+   Continuous165/local7 history, reference paths/age, native returned-value laws
+   and IntoIter/Vec pointer/layout/reservation Values still require source
+   binding. No identity effect or desired-write MachineSpec premise is allowed.
+2. Existing277/278/279/280/612 graph adapters remain qualified. f361/f270's
+   occurrences retain their own emitted generic metadata. Full actual source/
+   binary adequacy, original-handler semantics, source/value invariants and
+   continuous caller composition are still missing. Historical raw-interpreter
+   poll support is not silently promoted to full corrected-machine adequacy.
+3. All seven actual-caller facets remain MISSING. Caller124 now derives the
+   literal provider Pre from the local caller Context and binds graph/count
+   fields using existing actual-entry DocumentedFacts and x.resources/x.encode.
+   The actual selected cut, specialized-machine transport and later ArcClone
+   Valid/value/frame still need proof. Both name constructors are covered,
+   but Builder270 must establish Some's opaque String decoding, ownership and
+   word validity. The finite-prefix transport helper requires only agreement
+   before its cutoff; f6 must still derive its real delivery cutoff and actual
+   resolver/handler agreement. Local numbering/source-write counter lemmas do
+   not prove complete OwnInit history. Native registry framing and unchanged
+   resource-channel dispatch do not supply allocation coherence or a source-
+   associated allocation/reservation schedule.
 
-## Other remaining deliverables
+All100 focused IDs49100–49199 are spent (89 pass,11 repaired elaboration
+failures); historical49458–49479 were not reused. The122-module name/f124 cone
+is available in the private cache. The74-module f6 cone has6 available,68
+missing; next is PV_FN_THREAD_f6Reply121. Reuse cache and exact pinned sources;
+additional focused work needs a fresh assigned ID block. ONE raw audit49890
+passed31 new roots. Do not rerun it unchanged. Raw49891–49899 are unused.
 
-4. slice32/33 deterministic models remain missing in the shared map. Preserve
-   the session2 focused pinned preflights/replay order; incorporate the other
-   lane's evidence explicitly when ready.
+## Lane B and remaining shared deliverables
+
+4. Slice32/33 now have audited qualified deterministic bounded-run graphs;
+   full runtime typedDrop178 is also instantiated. These are not full f21/f7
+   or source7 closures. Foundation entry support assembles the exact existing
+   reference-validity obligation; the actual builder discharge remains MISSING.
+   The12 OPEN/PARTIAL child edges are WAITING-ON-ROW, exactly as Lane B recorded.
 5. Elaborate all29 frozen MachineSpec/Pre/Post contracts and compare them in
-   Lean with each package's compiled statement. Existing component/native
-   comparisons and library graphs are not that deliverable. Frozen prose may
-   change only for demonstrated source error through SPEC_CORRECTIONS.md.
+   Lean with each package's compiled statement. Component graphs/comparisons
+   do not complete that deliverable. Frozen prose changes require demonstrated
+   source error and an explicit correction record.
 6. Establish joint premise nonemptiness and source/machine/binary adequacy for
-   OwnInit and source7. Acyclic syntax and independently compiled graph fields
-   are insufficient. Actual handlers, typed builtin bindings, representation
-   transport and site/occurrence allocation/reservation schedules must be
-   discharged, never inferred from arbitrary full replies or footprints.
+   OwnInit/source7. Actual handlers, typed builtin bindings, representation
+   transport and occurrence-indexed allocation/reservation schedules remain
+   substantive obligations. Syntactic acyclicity and independently compiled
+   graphs do not establish them.
 
-All five SPEC-ERROR facets remain: old tagged-Box decode/all, false to_vec
-pending recognition, original-machine writes289/93, and the OwnInit Some-only
-draft. OwnInit still passes93/289 before14756; source7 has no listed native
-source-store writer. Retain allBridged, every outcome arm, prefix-only process
-abort and thread25 numbering; never compare summary/expanded activation counters.
+All five historical SPEC-ERROR facets remain qualified: tagged-Box old decode/
+all, false to_vec pending recognition, original-machine writes289/93 and the
+OwnInit Some-only draft. New machine support does not recompose those old row
+proofs. Retain allBridged, every outcome arm, prefix-only abort, thread25
+numbering and activation-counter abstraction across callee boundaries.
