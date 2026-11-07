@@ -196,3 +196,5 @@ Session4 49140: pinned PV_THR2_PacketJoinedHandlerAway passed; session4 receipt 
 Session4 49141: pinned PV_THR2_Packet12801ExecutableTable passed; session4 receipt records resources/axioms.
 
 Session4 49142: pinned PV_THR2_PacketJoinedTable passed; session4 receipt records resources/axioms.
+
+Session4 49143: pinned PV_THR2_JoinedCertDescriptor passed; session4 receipt records resources/axioms.
